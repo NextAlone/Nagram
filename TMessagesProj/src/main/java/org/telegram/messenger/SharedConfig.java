@@ -12,7 +12,6 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.os.Build;
 import android.os.Environment;
 import android.os.SystemClock;
@@ -21,8 +20,10 @@ import android.util.Base64;
 import android.util.SparseArray;
 
 import androidx.annotation.IntDef;
+import androidx.annotation.Nullable;
 import androidx.core.content.pm.ShortcutManagerCompat;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.SerializedData;
@@ -33,10 +34,14 @@ import java.io.File;
 import java.io.RandomAccessFile;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Locale;
+
+import top.qwq2333.nullgram.utils.AlertUtil;
+import top.qwq2333.nullgram.utils.StringUtils;
+import top.qwq2333.nullgram.utils.UIUtil;
 
 public class SharedConfig {
 
@@ -146,7 +151,9 @@ public class SharedConfig {
         loadConfig();
     }
 
-    public static class ProxyInfo {
+    public static class ProxyInfo implements Comparable<ProxyInfo> {
+
+        public int group;
 
         public String address;
         public int port;
@@ -159,6 +166,30 @@ public class SharedConfig {
         public boolean checking;
         public boolean available;
         public long availableCheckTime;
+
+        @Override
+        public int compareTo(ProxyInfo info) {
+
+            if (available && !info.available) {
+                return -1;
+            } else if (!available && info.available) {
+                return 1;
+            } else if (available && info.available) {
+                return (int) (ping - info.ping);
+            } else {
+                return hashCode() + "".compareTo(info.hashCode() + "");
+            }
+
+        }
+
+        public long subId;
+
+        public ProxyInfo() {
+            address = "";
+            password = "";
+            username = "";
+            secret = "";
+        }
 
         public ProxyInfo(String a, int p, String u, String pw, String s) {
             address = a;
@@ -179,9 +210,275 @@ public class SharedConfig {
                 secret = "";
             }
         }
+
+        public String getAddress() {
+
+            return address + ":" + port;
+
+        }
+
+        public String getType() {
+
+            if (!StringUtils.isBlank(secret)) {
+
+                return "MTProto";
+
+            } else {
+
+                return "Socks5";
+
+            }
+
+        }
+
+        private String remarks;
+
+        public String getRemarks() {
+
+            return remarks;
+
+        }
+
+        public void setRemarks(String remarks) {
+            this.remarks = remarks;
+            if (StringUtils.isBlank(remarks)) {
+                this.remarks = null;
+            }
+        }
+
+
+        public JSONObject toJsonInternal() throws JSONException {
+
+            JSONObject obj = new JSONObject();
+
+            if (!StringUtils.isBlank(remarks)) {
+                obj.put("remarks", remarks);
+            }
+
+            if (group != 0) {
+                obj.put("group", group);
+            }
+
+            obj.put("address", address);
+            obj.put("port", port);
+            if (StringUtils.isBlank(secret)) {
+                obj.put("type", "socks5");
+                if (!username.isEmpty()) {
+                    obj.put("username", username);
+                }
+                if (!password.isEmpty()) {
+                    obj.put("password", password);
+                }
+            } else {
+                obj.put("type", "mtproto");
+                obj.put("secret", secret);
+            }
+
+            return obj;
+
+        }
+
+        public static ProxyInfo fromJson(JSONObject obj) {
+
+            ProxyInfo info;
+
+            switch (obj.optString("type", "null")) {
+
+                case "socks5": {
+
+                    info = new ProxyInfo();
+
+                    info.group = obj.optInt("group", 0);
+                    info.address = obj.optString("address", "");
+                    info.port = obj.optInt("port", 443);
+                    info.username = obj.optString("username", "");
+                    info.password = obj.optString("password", "");
+
+                    info.remarks = obj.optString("remarks");
+
+                    if (StringUtils.isBlank(info.remarks)) info.remarks = null;
+
+                    info.group = obj.optInt("group", 0);
+
+                    break;
+
+                }
+
+                case "mtproto": {
+
+                    info = new ProxyInfo();
+
+                    info.address = obj.optString("address", "");
+                    info.port = obj.optInt("port", 443);
+                    info.secret = obj.optString("secret", "");
+
+                    info.remarks = obj.optString("remarks");
+
+                    if (StringUtils.isBlank(info.remarks)) info.remarks = null;
+
+                    info.group = obj.optInt("group", 0);
+
+                    break;
+
+                }
+
+
+                default: {
+
+                    throw new IllegalStateException("invalid proxy type " + obj.optString("type", "null"));
+
+                }
+
+            }
+
+            return info;
+
+        }
+
+        @Override
+        public int hashCode() {
+
+            return (address + port + username + password + secret).hashCode();
+
+        }
+
+        @Override
+        public boolean equals(@Nullable Object obj) {
+            return super.equals(obj) || (obj instanceof ProxyInfo && hashCode() == obj.hashCode());
+        }
     }
 
-    public static ArrayList<ProxyInfo> proxyList = new ArrayList<>();
+    public static boolean proxyEnabled;
+
+    public static void setProxyEnable(boolean enable) {
+
+        proxyEnabled = enable;
+
+        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+
+        preferences.edit().putBoolean("proxy_enabled", enable).commit();
+
+        ProxyInfo info = currentProxy;
+
+        if (info == null) {
+
+            info = new ProxyInfo();
+
+        }
+
+        ProxyInfo finalInfo = info;
+
+        UIUtil.runOnIoDispatcher(() -> {
+
+            try {
+
+                if (enable && finalInfo instanceof ExternalSocks5Proxy) {
+
+                    ((ExternalSocks5Proxy) finalInfo).start();
+
+                } else if (!enable && finalInfo instanceof ExternalSocks5Proxy) {
+
+                    ((ExternalSocks5Proxy) finalInfo).stop();
+
+                }
+
+            } catch (Exception e) {
+
+                FileLog.e(e);
+                AlertUtil.showToast(e);
+
+                return;
+
+            }
+
+            ConnectionsManager.setProxySettings(enable, finalInfo.address, finalInfo.port, finalInfo.username, finalInfo.password, finalInfo.secret);
+
+            UIUtil.runOnUIThread(() -> NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged));
+
+        });
+
+    }
+
+
+    public static void reloadProxyList() {
+        proxyListLoaded = false;
+        loadProxyList();
+
+        if (proxyEnabled && currentProxy == null) {
+            setProxyEnable(false);
+        }
+
+    }
+
+
+    public static LinkedList<ProxyInfo> proxyList = new LinkedList<>();
+
+    public static LinkedList<ProxyInfo> getProxyList() {
+
+        while (true) {
+
+            try {
+
+                return new LinkedList<>(proxyList);
+
+            } catch (Exception ignored) {
+            }
+
+        }
+
+    }
+
+
+    public abstract static class ExternalSocks5Proxy extends ProxyInfo {
+
+        public ExternalSocks5Proxy() {
+
+            address = "127.0.0.1";
+            username = "";
+            password = "";
+            secret = "";
+
+        }
+
+        public abstract boolean isStarted();
+
+        public abstract void start();
+
+        public abstract void stop();
+
+        @Override
+        public abstract String getAddress();
+
+        @Override
+        public abstract String getRemarks();
+
+        @Override
+        public abstract void setRemarks(String remarks);
+
+        @Override
+        public abstract String getType();
+
+        @Override
+        public abstract JSONObject toJsonInternal() throws JSONException;
+
+    }
+
+    public static void setCurrentProxy(@Nullable ProxyInfo info) {
+
+        if (currentProxy instanceof ExternalSocks5Proxy && !currentProxy.equals(info)) {
+            ((ExternalSocks5Proxy) currentProxy).stop();
+        }
+
+        currentProxy = info;
+
+        MessagesController.getGlobalMainSettings().edit()
+            .putInt("current_proxy", info == null ? 0 : info.hashCode())
+            .apply();
+
+        setProxyEnable(info != null);
+
+    }
+
     private static boolean proxyListLoaded;
     public static ProxyInfo currentProxy;
 
@@ -954,11 +1251,11 @@ public class SharedConfig {
             int count = data.readInt32(false);
             for (int a = 0; a < count; a++) {
                 ProxyInfo info = new ProxyInfo(
-                        data.readString(false),
-                        data.readInt32(false),
-                        data.readString(false),
-                        data.readString(false),
-                        data.readString(false));
+                    data.readString(false),
+                    data.readInt32(false),
+                    data.readString(false),
+                    data.readString(false),
+                    data.readString(false));
                 proxyList.add(info);
                 if (currentProxy == null && !TextUtils.isEmpty(proxyAddress)) {
                     if (proxyAddress.equals(info.address) && proxyPort == info.port && proxyUsername.equals(info.username) && proxyPassword.equals(info.password)) {
@@ -1101,11 +1398,12 @@ public class SharedConfig {
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({
-            PERFORMANCE_CLASS_LOW,
-            PERFORMANCE_CLASS_AVERAGE,
-            PERFORMANCE_CLASS_HIGH
+        PERFORMANCE_CLASS_LOW,
+        PERFORMANCE_CLASS_AVERAGE,
+        PERFORMANCE_CLASS_HIGH
     })
-    public @interface PerformanceClass {}
+    public @interface PerformanceClass {
+    }
 
     @PerformanceClass
     public static int getDevicePerformanceClass() {
@@ -1124,7 +1422,8 @@ public class SharedConfig {
                         freqResolved++;
                     }
                     reader.close();
-                } catch (Throwable ignore) {}
+                } catch (Throwable ignore) {
+                }
             }
             int maxCpuFreq = freqResolved == 0 ? -1 : (int) Math.ceil(totalCpuFreq / (float) freqResolved);
 
@@ -1165,6 +1464,7 @@ public class SharedConfig {
     public static boolean canBlurChat() {
         return BuildVars.DEBUG_VERSION && getDevicePerformanceClass() == PERFORMANCE_CLASS_HIGH;
     }
+
     public static boolean chatBlurEnabled() {
         return canBlurChat() && chatBlur;
     }

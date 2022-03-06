@@ -52,6 +52,7 @@ public class GeneralSettingActivity extends BaseFragment {
     private int disableInstantCameraRow;
     private int disableUndoRow;
     private int skipOpenLinkConfirmRow;
+    private int autoProxySwitchRow;
     private int general2Row;
 
 
@@ -132,6 +133,12 @@ public class GeneralSettingActivity extends BaseFragment {
                     ((TextCheckCell) view).setChecked(
                         ConfigManager.getBooleanOrFalse(Defines.skipOpenLinkConfirm));
                 }
+            } else if (position == autoProxySwitchRow) {
+                ConfigManager.toggleBoolean(Defines.autoSwitchProxy);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(
+                        ConfigManager.getBooleanOrFalse(Defines.autoSwitchProxy));
+                }
             }
         });
 
@@ -169,6 +176,7 @@ public class GeneralSettingActivity extends BaseFragment {
         disableInstantCameraRow = rowCount++;
         disableUndoRow = rowCount++;
         skipOpenLinkConfirmRow = rowCount++;
+        autoProxySwitchRow = rowCount++;
         general2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -327,6 +335,10 @@ public class GeneralSettingActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("skipOpenLinkConfirm",
                             R.string.skipOpenLinkConfirm), ConfigManager.getBooleanOrFalse(
                             Defines.skipOpenLinkConfirm), true);
+                    } else if (position == autoProxySwitchRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("autoProxySwitch",
+                            R.string.autoProxySwitch), ConfigManager.getBooleanOrFalse(
+                            Defines.autoSwitchProxy), true);
                     }
                     break;
                 }

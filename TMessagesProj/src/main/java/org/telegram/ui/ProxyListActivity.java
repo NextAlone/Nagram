@@ -25,6 +25,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.LocaleController;
@@ -46,13 +51,13 @@ import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import top.qwq2333.nullgram.utils.APKUtils;
+import top.qwq2333.nullgram.utils.AlertUtil;
+import top.qwq2333.nullgram.utils.LogUtilsKt;
+import top.qwq2333.nullgram.utils.UIUtil;
 
 public class ProxyListActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -498,6 +503,49 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 }
             }
         }
+    }
+
+    public void checkSingleProxy(SharedConfig.ProxyInfo proxyInfo, int repeat, Runnable callback) {
+        UIUtil.runOnIoDispatcher(() -> {
+            if (proxyInfo instanceof SharedConfig.ExternalSocks5Proxy && !((SharedConfig.ExternalSocks5Proxy) proxyInfo).isStarted()) {
+                try {
+                    ((SharedConfig.ExternalSocks5Proxy) proxyInfo).start();
+                } catch (Exception e) {
+                    LogUtilsKt.e(e);
+                    AlertUtil.showToast(e);
+                }
+                APKUtils.sleep(233L);
+            }
+            proxyInfo.proxyCheckPingId = ConnectionsManager.getInstance(currentAccount).checkProxy(proxyInfo.address, proxyInfo.port, proxyInfo.username, proxyInfo.password, proxyInfo.secret, time -> AndroidUtilities.runOnUIThread(() -> {
+                if (time == -1) {
+                    if (repeat > 0) {
+                        checkSingleProxy(proxyInfo, repeat - 1, callback);
+                    } else {
+                        proxyInfo.availableCheckTime = SystemClock.elapsedRealtime();
+                        proxyInfo.checking = false;
+                        proxyInfo.available = false;
+                        proxyInfo.ping = 0;
+                        if (proxyInfo instanceof SharedConfig.ExternalSocks5Proxy && proxyInfo != SharedConfig.currentProxy) {
+                            ((SharedConfig.ExternalSocks5Proxy) proxyInfo).stop();
+                        }
+                        if (callback != null) {
+                            UIUtil.runOnUIThread(callback);
+                        }
+                    }
+                } else {
+                    proxyInfo.availableCheckTime = SystemClock.elapsedRealtime();
+                    proxyInfo.checking = false;
+                    proxyInfo.ping = time;
+                    proxyInfo.available = true;
+                    if (proxyInfo instanceof SharedConfig.ExternalSocks5Proxy && proxyInfo != SharedConfig.currentProxy) {
+                        ((SharedConfig.ExternalSocks5Proxy) proxyInfo).stop();
+                    }
+                    if (callback != null) {
+                        UIUtil.runOnUIThread(callback);
+                    }
+                }
+            }));
+        });
     }
 
     private class ListAdapter extends RecyclerListView.SelectionAdapter {

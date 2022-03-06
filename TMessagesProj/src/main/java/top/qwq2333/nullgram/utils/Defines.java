@@ -49,6 +49,7 @@ public class Defines {
     public static final String disableUndo = "disableUndo";
     public static final String skipOpenLinkConfirm = "skipOpenLinkConfirm";
     public static final String maxRecentSticker = "maxRecentSticker";
+    public static final String autoSwitchProxy = "autoSwitchProxy";
 
     // Custom API
     public static final String customAPI = "customAPI";
@@ -92,6 +93,7 @@ public class Defines {
      * 数组中元素未找到的下标，值为-1
      */
     public static final int indexNotFound = -1;
+
     /**
      * 数组中是否包含元素
      *

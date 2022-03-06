@@ -47,4 +47,21 @@ public class APKUtils {
         throw new IllegalStateException("Directory Not Found");
     }
 
+    /**
+     * 挂起当前线程
+     *
+     * @param millis 挂起的毫秒数
+     * @return 被中断返回false，否则true
+     */
+    public static boolean sleep(long millis) {
+        if (millis > 0) {
+            try {
+                Thread.sleep(millis);
+            } catch (InterruptedException e) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
