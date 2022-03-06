@@ -16,7 +16,7 @@ Null的意思是*未初始化、未定义或者不存在*。以Nullgram为名，
 ### 我想加些功能
 太好哩!
 
-确认你已经读完并且理解了[the Development Document](.github/CONTRIBUTION.md)的内容。
+确认你已经读完并且理解了[the Development Document](.github/CONTRIBUTING.md)的内容。
 如果你还没读这玩意，**快去读**。
 
 然后创建Pull Request就行，一般来说我几天之内就会review。
