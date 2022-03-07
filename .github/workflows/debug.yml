@@ -18,6 +18,10 @@ jobs:
         with:
           submodules: 'recursive'
           fetch-depth: 0
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v1.12
+        with:
+          cmake-version: '3.22.1'
       - name: Prepare Java 16
         uses: actions/setup-java@v1
         with:
@@ -48,17 +52,17 @@ jobs:
         run: |
           sudo apt-get install bison gcc make curl ninja-build ccache -y
           echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
-
+          ln -s  ${ANDROID_HOME}/cmake/3.18.1/bin/ninja /opt/hostedtoolcache/cmake/3.22.1/x64/cmake-3.22.1-linux-x86_64/bin/
+          ccache -zp
+          ccache -o max_size=10G
+          ccache -o hash_dir=false
+          ccache -o compiler_check='%compiler% -dumpmachine; %compiler% -dumpversion'
       - name: Debug Build
         run: |
           echo -e "RELEASE_KEY_PASSWORD=${{ secrets.RELEASE_KEY_PASSWORD }}\nRELEASE_KEY_ALIAS=${{ secrets.RELEASE_KEY_ALIAS }}\nRELEASE_STORE_PASSWORD=${{ secrets.RELEASE_STORE_PASSWORD }}">>local.properties
           cat > service_account_credentials.json << EOF
           ${{ secrets.ANDROID_PUBLISHER_CREDENTIALS }}"
           EOF
-          ccache -zp
-          ccache -o max_size=10G
-          ccache -o hash_dir=false
-          ccache -o compiler_check='%compiler% -dumpmachine; %compiler% -dumpversion'
           ./gradlew TMessagesProj:assembleRelease
           ccache -s
           echo "APK_FILE=$(find TMessagesProj/build/outputs/apk -name '*arm64-v8a*.apk')" >> $GITHUB_ENV
@@ -101,6 +105,10 @@ jobs:
         with:
           submodules: 'recursive'
           fetch-depth: 0
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v1.12
+        with:
+          cmake-version: '3.22.1'
       - name: Prepare Java 16
         uses: actions/setup-java@v1
         with:
@@ -131,6 +139,7 @@ jobs:
         run: |
           sudo apt-get install bison gcc make curl ninja-build ccache -y
           echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
+          ln -s  ${ANDROID_HOME}/cmake/3.18.1/bin/ninja /opt/hostedtoolcache/cmake/3.22.1/x64/cmake-3.22.1-linux-x86_64/bin/
 
       - name: Debug Build
         run: |
@@ -138,12 +147,10 @@ jobs:
           cat > service_account_credentials.json << EOF
           ${{ secrets.ANDROID_PUBLISHER_CREDENTIALS }}"
           EOF
-          ccache -zp
           ccache -o max_size=10G
           ccache -o hash_dir=false
           ccache -o compiler_check='%compiler% -dumpmachine; %compiler% -dumpversion'
           ./gradlew :TMessagesProj:publishReleaseBundle
-          ccache -s
           echo "APK_FILE=$(find TMessagesProj/build/outputs/apk -name '*arm64-v8a*.apk')" >> $GITHUB_ENV
           echo "APK_FILE_ARMV7=$(find TMessagesProj/build/outputs/apk -name '*armeabi*.apk')" >> $GITHUB_ENV
           echo "APK_FILE_X86=$(find TMessagesProj/build/outputs/apk -name '*x86.apk')" >> $GITHUB_ENV
