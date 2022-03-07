@@ -184,7 +184,8 @@ public class ChatSettingActivity extends BaseFragment {
                     );
                 }
             } else if (position == maxRecentStickerRow) {
-                setMaxRecentSticker(view);
+                setMaxRecentSticker(view, position);
+                listAdapter.notifyItemChanged(position);
             }
         });
 
@@ -621,7 +622,7 @@ public class ChatSettingActivity extends BaseFragment {
     }
 
     @SuppressLint("SetTextI18n")
-    private void setMaxRecentSticker(View view) {
+    private void setMaxRecentSticker(View view, int pos) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
         builder.setTitle(LocaleController.getString("setMaxRecentSticker", R.string.setMaxRecentSticker));
 
@@ -666,6 +667,7 @@ public class ChatSettingActivity extends BaseFragment {
                             ConfigManager.putInt(Defines.maxRecentSticker, Integer.parseInt(editText.getText().toString()));
                     }
                 }
+                listAdapter.notifyItemChanged(pos);
             });
         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
         builder.show().setOnShowListener(dialog -> {
