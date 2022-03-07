@@ -153,10 +153,6 @@ android {
             proguardFiles 'proguard-rules.pro'
         }
     }
-    /* DO NOT MODIFY THIS LINE
-    OTHERWISE YOU WILL GET ANNOYED MERGE CONFLICT
-    defaultConfig.versionCode = 2566
-    */
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->

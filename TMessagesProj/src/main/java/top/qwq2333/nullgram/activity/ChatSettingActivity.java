@@ -66,6 +66,7 @@ public class ChatSettingActivity extends BaseFragment {
     private int disableQuickReactionRow;
     private int confirmToSendMediaMessagesRow;
     private int maxRecentStickerRow;
+    private int unreadBadgeOnBackButtonRow;
     private int chat2Row;
 
 
@@ -186,6 +187,13 @@ public class ChatSettingActivity extends BaseFragment {
             } else if (position == maxRecentStickerRow) {
                 setMaxRecentSticker(view, position);
                 listAdapter.notifyItemChanged(position);
+            } else if (position == unreadBadgeOnBackButtonRow) {
+                ConfigManager.toggleBoolean(Defines.unreadBadgeOnBackButton);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(
+                        ConfigManager.getBooleanOrFalse(Defines.unreadBadgeOnBackButton)
+                    );
+                }
             }
         });
 
@@ -231,6 +239,7 @@ public class ChatSettingActivity extends BaseFragment {
         disableQuickReactionRow = rowCount++;
         confirmToSendMediaMessagesRow = rowCount++;
         maxRecentStickerRow = rowCount++;
+        unreadBadgeOnBackButtonRow = rowCount++;
         chat2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -434,6 +443,12 @@ public class ChatSettingActivity extends BaseFragment {
                             LocaleController.getString("confirmToSendMediaMessages",
                                 R.string.confirmToSendMediaMessages),
                             ConfigManager.getBooleanOrFalse(Defines.confirmToSendMediaMessages),
+                            true);
+                    } else if (position == unreadBadgeOnBackButtonRow) {
+                        textCell.setTextAndCheck(
+                            LocaleController.getString("unreadBadgeOnBackButton",
+                                R.string.unreadBadgeOnBackButton),
+                            ConfigManager.getBooleanOrFalse(Defines.unreadBadgeOnBackButton),
                             true);
                     }
                     break;

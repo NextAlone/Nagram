@@ -50,6 +50,7 @@ public class Defines {
     public static final String skipOpenLinkConfirm = "skipOpenLinkConfirm";
     public static final String maxRecentSticker = "maxRecentSticker";
     public static final String autoSwitchProxy = "autoSwitchProxy";
+    public static final String unreadBadgeOnBackButton = "unreadBadgeOnBackButton";
 
     // Custom API
     public static final String customAPI = "customAPI";

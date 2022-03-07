@@ -17182,6 +17182,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
                 updateReactionsMentionButton(true);
             }
+        } else if (id == NotificationCenter.dialogsUnreadCounterChanged) {
+            if (actionBar != null) {
+                actionBar.unreadBadgeSetCount(getMessagesStorage().getMainUnreadCount());
+            }
         }
     }
 

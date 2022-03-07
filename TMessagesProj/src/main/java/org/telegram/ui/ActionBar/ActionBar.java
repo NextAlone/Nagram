@@ -20,9 +20,12 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.text.Layout;
 import android.text.SpannableString;
+import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.transition.ChangeBounds;
@@ -52,6 +55,9 @@ import org.telegram.ui.Components.SnowflakesEffect;
 
 import java.util.ArrayList;
 
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.utils.Defines;
+
 public class ActionBar extends FrameLayout {
 
     public static class ActionBarMenuOnItemClick {
@@ -64,7 +70,7 @@ public class ActionBar extends FrameLayout {
         }
     }
 
-    private ImageView backButtonImageView;
+    private UnreadImageView backButtonImageView;
     private SimpleTextView[] titleTextView = new SimpleTextView[2];
     private SimpleTextView subtitleTextView;
     private SimpleTextView additionalSubtitleTextView;
@@ -146,11 +152,11 @@ public class ActionBar extends FrameLayout {
         if (backButtonImageView != null) {
             return;
         }
-        backButtonImageView = new ImageView(getContext());
+        backButtonImageView = new UnreadImageView(getContext());
         backButtonImageView.setScaleType(ImageView.ScaleType.CENTER);
         backButtonImageView.setBackgroundDrawable(Theme.createSelectorDrawable(itemsBackgroundColor));
         if (itemsColor != 0) {
-            backButtonImageView.setColorFilter(new PorterDuffColorFilter(itemsColor, PorterDuff.Mode.MULTIPLY));
+            backButtonImageView.setColorFilter(new PorterDuffColorFilter(itemsColor, PorterDuff.Mode.SRC_IN));
         }
         backButtonImageView.setPadding(AndroidUtilities.dp(1), 0, 0, 0);
         addView(backButtonImageView, LayoutHelper.createFrame(54, 54, Gravity.LEFT | Gravity.TOP));
@@ -1567,5 +1573,53 @@ public class ActionBar extends FrameLayout {
             contentView.drawBlur(canvas, 0, rectTmp, blurScrimPaint, true);
         }
         super.dispatchDraw(canvas);
+    }
+
+    private StaticLayout countLayout;
+
+    private class UnreadImageView extends ImageView {
+        public UnreadImageView(Context context) {
+            super(context);
+        }
+
+        private int unreadCount = 0;
+        private RectF rect = new RectF();
+
+        @Override
+        public void onDraw(Canvas canvas) {
+            super.onDraw(canvas);
+            if (countLayout == null || unreadCount == 0)
+                return;
+
+            Paint paint = Theme.dialogs_countPaint;
+            String unreadCountString = unreadCount > 99 ? "99+" : Integer.toString(unreadCount);
+            int countWidth = Math.max(AndroidUtilities.dp(12), (int) Math.ceil(Theme.dialogs_countTextPaint.measureText(unreadCountString)));
+            int countLeft = getMeasuredWidth() - countWidth - AndroidUtilities.dp(20);
+            int countTop = 0;
+
+            int x = countLeft - AndroidUtilities.dp(5.5f);
+            rect.set(x, countTop, x + countWidth + AndroidUtilities.dp(11), countTop + AndroidUtilities.dp(23));
+            canvas.drawRoundRect(rect, 11.5f * AndroidUtilities.density, 11.5f * AndroidUtilities.density, paint);
+            canvas.save();
+            canvas.translate(countLeft, countTop + AndroidUtilities.dp(4));
+            countLayout.draw(canvas);
+            canvas.restore();
+        }
+
+        public void setUnread(int count) {
+            if (count != unreadCount) {
+                unreadCount = count;
+                String countString = (count > 99) && !ConfigManager.getBooleanOrFalse(Defines.showExactNumber) ? "99+" : Integer.toString(count);
+                int countWidth = count == 0 ? 0 : Math.max(AndroidUtilities.dp(12), (int) Math.ceil(Theme.dialogs_countTextPaint.measureText(countString)));
+                countLayout = new StaticLayout(countString, Theme.dialogs_countTextPaint, countWidth, Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+                invalidate();
+            }
+        }
+    }
+
+    public void unreadBadgeSetCount(int count) {
+        if (backButtonImageView != null && ConfigManager.getBooleanOrFalse(Defines.unreadBadgeOnBackButton)) {
+            backButtonImageView.setUnread(count);
+        }
     }
 }
