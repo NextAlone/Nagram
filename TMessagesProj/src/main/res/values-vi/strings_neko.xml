@@ -140,4 +140,6 @@
     <string name="showSpoilersDirectly">Hiện tin nhắn Spoiler trực tiếp</string>
     <string name="SaveToDownloadCount_zero">Đang lưu %1$d tệp vào tải xuống</string>
     <string name="SaveToDownloadCount_one">Đang lưu %1$d tệp vào tải xuống</string>
+    <string name="showBottomActionsWhenSelecting">Hiện hành động ở dưới cùng khi chọn</string>
+    <string name="channelLabel">kênh</string>
 </resources>

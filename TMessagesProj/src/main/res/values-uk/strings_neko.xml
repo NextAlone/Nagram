@@ -6,7 +6,7 @@
     <string name="HidePhone">Сховати мій номер телефону</string>
     <string name="Hide">Приховати</string>
     <string name="DeleteAllFromSelf">Видалити все від себе</string>
-    <string name="DeleteAllFromSelfAlert">Увага! Це ** видалить усі повідомлення ** з вас у цьому чаті для ** усіх ** учасників.</string>
+    <string name="DeleteAllFromSelfAlert">Увага! Це **видалить усі ваші повідомлення** в цьому чаті для **всіх** присутніх.</string>
     <string name="BotLogin">Логін бота</string>
     <string name="InvalidAccessToken">Недійсний маркер доступу</string>
     <string name="IgnoreBlocked">Ігнорувати заблокованих користувачів у групі</string>
@@ -16,7 +16,7 @@
     <string name="FirstLast">Ім\'я, прізвище</string>
     <string name="LastFirst">Прізвище, ім\'я</string>
     <string name="TypefaceUseDefault">Використовувати типовий системний шрифт</string>
-    <string name="NoQuoteForward">Не цитувати вперед</string>
+    <string name="NoQuoteForward">Переслати без посилання</string>
     <string name="Repeat">Повторити</string>
     <string name="AddToSavedMessages">Зберегти повідомлення</string>
     <string name="CreateMention">Створити згадку</string>
