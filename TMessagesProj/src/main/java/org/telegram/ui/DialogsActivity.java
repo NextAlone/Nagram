@@ -71,6 +71,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -78,8 +79,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScrollerCustom;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-import java.util.ArrayList;
-import java.util.Random;
+
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -115,7 +115,6 @@ import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.MenuDrawable;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -175,7 +174,13 @@ import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.SwipeGestureSettingsView;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.ViewPagerFixed;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+import kotlin.Unit;
 import top.qwq2333.nullgram.ui.AppLinkVerifyBottomSheet;
+import top.qwq2333.nullgram.ui.BottomBuilder;
 import top.qwq2333.nullgram.utils.PrivacyUtils;
 import top.qwq2333.nullgram.utils.UpdateUtil;
 
@@ -2351,8 +2356,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
                     linearLayout.setMinimumWidth(AndroidUtilities.dp(200));
                     linearLayout.setOrientation(LinearLayout.VERTICAL);
-                    scrimPopupWindowItems = new ActionBarMenuSubItem[3];
-                    for (int a = 0, N = (tabView.getId() == Integer.MAX_VALUE ? 2 : 3); a < N; a++) {
+                    scrimPopupWindowItems = new ActionBarMenuSubItem[4];
+                    for (int a = 0, N = (tabView.getId() == Integer.MAX_VALUE ? 3 : 4); a < 4; a++) {
                         ActionBarMenuSubItem cell = new ActionBarMenuSubItem(getParentActivity(), a == 0, a == N - 1);
                         if (a == 0) {
                             if (getMessagesController().dialogFilters.size() <= 1) {
@@ -2365,8 +2370,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             } else {
                                 cell.setTextAndIcon(LocaleController.getString("FilterEdit", R.string.FilterEdit), R.drawable.msg_edit);
                             }
+                        } else if (a == 2) {
+                            if (N == 3) continue;
+                            cell.setTextAndIcon(LocaleController.getString("FilterDeleteItem", R.string.FilterDeleteItem), R.drawable.baseline_delete_24);
                         } else {
-                            cell.setTextAndIcon(LocaleController.getString("FilterDeleteItem", R.string.FilterDeleteItem), R.drawable.msg_delete);
+                            cell.setTextAndIcon(LocaleController.getString("MarkAllAsRead", R.string.MarkAllAsRead), R.drawable.baseline_done_all_24);
                         }
                         scrimPopupWindowItems[a] = cell;
                         linearLayout.addView(cell);
@@ -2377,13 +2385,28 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                 filterTabsView.setIsEditing(true);
                                 showDoneItem(true);
                             } else if (i == 1) {
-                                if (N == 2) {
+                                if (N == 3) {
                                     presentFragment(new FiltersSetupActivity());
                                 } else {
                                     presentFragment(new FilterCreateActivity(dialogFilter));
                                 }
                             } else if (i == 2) {
                                 showDeleteAlert(dialogFilter);
+                            } else {
+                                if (dialogFilter == null) {
+                                    int folderId = tabView.getId() == Integer.MAX_VALUE ? 0 : -1;
+                                    getMessagesStorage().readAllDialogs(folderId);
+                                } else {
+                                    if (dialogFilter.dialogs.isEmpty()) {
+                                        getMessagesController().loadTabDialogs(dialogFilter);
+                                    }
+                                    for (TLRPC.Dialog dialog : dialogFilter.dialogs) {
+                                        if (dialog.unread_count == 0 && dialog.unread_mentions_count == 0)
+                                            continue;
+                                        getMessagesController().markDialogAsRead(dialog.id, dialog.top_message, dialog.top_message, dialog.last_message_date, false, 0, dialog.unread_count, true, 0);
+                                    }
+                                }
+
                             }
                             if (scrimPopupWindow != null) {
                                 scrimPopupWindow.dismiss();
@@ -5044,18 +5067,18 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         } else {
             if (dialog instanceof TLRPC.TL_dialogFolder) {
                 view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity());
+                BottomBuilder builder = new BottomBuilder(getParentActivity());
                 final boolean hasUnread = getMessagesStorage().getArchiveUnreadCount() != 0;
 
                 int[] icons = new int[]{
                         hasUnread ? R.drawable.menu_read : 0,
                         SharedConfig.archiveHidden ? R.drawable.chats_pin : R.drawable.chats_unpin,
                 };
-                CharSequence[] items = new CharSequence[]{
-                        hasUnread ? LocaleController.getString("MarkAllAsRead", R.string.MarkAllAsRead) : null,
-                        SharedConfig.archiveHidden ? LocaleController.getString("PinInTheList", R.string.PinInTheList) : LocaleController.getString("HideAboveTheList", R.string.HideAboveTheList)
+                String[] items = new String[]{
+                    hasUnread ? LocaleController.getString("MarkAllAsRead", R.string.MarkAllAsRead) : null,
+                    SharedConfig.archiveHidden ? LocaleController.getString("PinInTheList", R.string.PinInTheList) : LocaleController.getString("HideAboveTheList", R.string.HideAboveTheList)
                 };
-                builder.setItems(items, icons, (d, which) -> {
+                builder.addItems(items, icons, (which, t, c) -> {
                     if (which == 0) {
                         getMessagesStorage().readAllDialogs(1);
                     } else if (which == 1 && viewPages != null) {
@@ -5071,6 +5094,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             viewPages[a].listView.toggleArchiveHidden(true, dialogCell);
                         }
                     }
+                    return Unit.INSTANCE;
                 });
                 showDialog(builder.create());
                 return false;

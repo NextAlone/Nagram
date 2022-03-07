@@ -26207,6 +26207,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         startMessageUnselect();
                     }
                 }
+                if (actionBar != null) {
+                    actionBar.unreadBadgeSetCount(getMessagesStorage().getMainUnreadCount());
+                }
             }
 
             int position = holder.getAdapterPosition();
