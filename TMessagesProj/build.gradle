@@ -15,7 +15,7 @@ configurations.all {
     exclude group: 'androidx.recyclerview', module: 'recyclerview'
 }
 
-def isPreview = false
+def isPreview = true
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
 if (serviceAccountCredentialsFile.isFile()) {
@@ -137,6 +137,8 @@ android {
             storePassword keystorePwd != null ? keystorePwd : System.getenv("KEYSTORE_PASS")
             keyAlias alias != null ? alias : System.getenv("ALIAS_NAME")
             keyPassword pwd != null ? pwd : System.getenv("ALIAS_PASS")
+            enableV3Signing = true
+            enableV4Signing = true
         }
     }
 
