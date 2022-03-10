@@ -1,0 +1,40 @@
+name: Feature request/功能请求
+description: Feature request./提出你想要的功能。
+labels: [Feature]
+title: "[功能请求] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For further processing please fill in blanks.
+
+
+  - type: textarea
+    id: why
+    attributes:
+      description: A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+      label: Why do you think you need this feature
+    validations:
+      required: true
+
+  - type: textarea
+    id: details
+    attributes:
+      description: A clear and concise description of what you want to happen.
+      label: Describe the solution you'd like
+    validations:
+      required: true
+  - type: textarea
+    id: alias
+    attributes:
+      label: Describe alternatives you've considered
+      description:  A clear and concise description of any alternative solutions or features you've considered.
+    validations:
+      required: false
+
+  - type: textarea
+    id: related-feature
+    attributes:
+      label: Is your feature request related to a problem
+    validations:
+      required: false

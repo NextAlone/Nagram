@@ -1,0 +1,64 @@
+name: Bug report/反馈 Bug
+description: Report errors or unexpected behavior./反馈错误或异常行为。
+labels: ["Bug"]
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting bug to Nullgram
+        For further processing please fill in blanks.
+  - type: textarea
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        Steps to reproduce the behavior:
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. See error
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected behaviour
+      placeholder: Tell us what should happen
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Actual behaviour
+      placeholder: Tell us what happens instead
+    validations:
+      required: true
+  - type: textarea
+    id: smartphone
+    attributes:
+      label: Smartphone Information
+      placeholder: |
+        - Device: [e.g. MI6]
+        - OS: [e.g. Android8.1]
+        - Version [e.g. 5.15.0]
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Nullgram Version
+      placeholder:  vX.X.X.XXXXXXX
+    validations:
+      required: true
+  - type: checkboxes
+    id: latest
+    attributes:
+      label: Version requirement
+      options:
+        - label: I am using latest debug CI version of QAuxiliary and enable verbose log/我正在使用最新 CI 调试版本且启用详细日志
+          required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: For usage issues, please provide the log zip saved from manager; for activation issues, please provide [bugreport](https://developer.android.com/studio/debug/bug-report). Without log, the issue will be closed. /使用问题请提供从管理器保存的日志压缩包；激活问题请提供 [bugreport](https://developer.android.google.cn/studio/debug/bug-report?hl=zh-cn) 日志。无日志提交会被关闭。
+      placeholder: Upload logs by clicking the bar on the bottom. 
+    validations:
+      required: true
