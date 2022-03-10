@@ -114,5 +114,5 @@
     <string name="Number">Number</string>
     <string name="autoProxySwitch">Proxy Auto Switch</string>
     <string name="ignoreReactionMention">Ignore Reaction Mention</string>
-    <string name="ignoreReactionMentionDetails">It will auto set unread reaction mentions as read.\nIt will also sync to other devices.\nNotification will be still shown because it's controlled by Telegram Server.</string>
+    <string name="ignoreReactionMentionInfo">It will auto set unread reaction mentions as read.\nIt will also sync to other devices.\nNotification will be still shown because it\'s controlled by Telegram Server.</string>
 </resources>

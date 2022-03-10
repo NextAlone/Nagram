@@ -462,7 +462,7 @@ public class ChatSettingActivity extends BaseFragment {
                     } else if (position == ignoreReactionMentionRow) {
                         textCell.setTextAndValueAndCheck(LocaleController.getString("ignoreReactionMention",
                                 R.string.ignoreReactionMention),
-                            LocaleController.getString("ignoreReactionMentionDetails", R.string.ignoreReactionMentionDetails),
+                            LocaleController.getString("ignoreReactionMentionInfo", R.string.ignoreReactionMentionInfo),
                             ConfigManager.getBooleanOrFalse(Defines.ignoreReactionMention),
                             true, true);
                     }
