@@ -44,6 +44,8 @@ import android.os.SystemClock;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.SparseArray;
+import android.util.SparseBooleanArray;
+
 import androidx.collection.LongSparseArray;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -54,9 +56,6 @@ import androidx.core.content.LocusIdCompat;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
-import android.text.TextUtils;
-import android.util.SparseArray;
-import android.util.SparseBooleanArray;
 
 import org.telegram.messenger.support.LongSparseIntArray;
 import org.telegram.tgnet.ConnectionsManager;
@@ -72,12 +71,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-import org.telegram.messenger.support.LongSparseIntArray;
-import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.BubbleActivity;
-import org.telegram.ui.LaunchActivity;
-import org.telegram.ui.PopupNotificationActivity;
+
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.utils.Defines;
 
@@ -844,7 +838,7 @@ public class NotificationsController extends BaseController {
                         pushDialogsOverrideMention.put(originalDialogId, current == null ? 1 : current + 1);
                     }
                 }
-                if (messageObject.isReactionPush) {
+                if (messageObject.isReactionPush && ConfigManager.getBooleanOrFalse(Defines.ignoreReactionMention)) {
                     SparseBooleanArray sparseBooleanArray = new SparseBooleanArray();
                     sparseBooleanArray.put(mid, true);
                     getMessagesController().checkUnreadReactions(dialogId, sparseBooleanArray);

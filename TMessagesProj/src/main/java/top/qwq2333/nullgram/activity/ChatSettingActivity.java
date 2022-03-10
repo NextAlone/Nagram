@@ -67,6 +67,7 @@ public class ChatSettingActivity extends BaseFragment {
     private int confirmToSendMediaMessagesRow;
     private int maxRecentStickerRow;
     private int unreadBadgeOnBackButtonRow;
+    private int ignoreReactionMentionRow;
     private int chat2Row;
 
 
@@ -194,6 +195,13 @@ public class ChatSettingActivity extends BaseFragment {
                         ConfigManager.getBooleanOrFalse(Defines.unreadBadgeOnBackButton)
                     );
                 }
+            } else if (position == ignoreReactionMentionRow) {
+                ConfigManager.toggleBoolean(Defines.ignoreReactionMention);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(
+                        ConfigManager.getBooleanOrFalse(Defines.ignoreReactionMention)
+                    );
+                }
             }
         });
 
@@ -240,6 +248,7 @@ public class ChatSettingActivity extends BaseFragment {
         confirmToSendMediaMessagesRow = rowCount++;
         maxRecentStickerRow = rowCount++;
         unreadBadgeOnBackButtonRow = rowCount++;
+        ignoreReactionMentionRow = rowCount++;
         chat2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -450,6 +459,12 @@ public class ChatSettingActivity extends BaseFragment {
                                 R.string.unreadBadgeOnBackButton),
                             ConfigManager.getBooleanOrFalse(Defines.unreadBadgeOnBackButton),
                             true);
+                    } else if (position == ignoreReactionMentionRow) {
+                        textCell.setTextAndValueAndCheck(LocaleController.getString("ignoreReactionMention",
+                                R.string.ignoreReactionMention),
+                            LocaleController.getString("ignoreReactionMentionDetails", R.string.ignoreReactionMentionDetails),
+                            ConfigManager.getBooleanOrFalse(Defines.ignoreReactionMention),
+                            true, true);
                     }
                     break;
                 }

@@ -51,6 +51,7 @@ public class Defines {
     public static final String maxRecentSticker = "maxRecentSticker";
     public static final String autoSwitchProxy = "autoSwitchProxy";
     public static final String unreadBadgeOnBackButton = "unreadBadgeOnBackButton";
+    public static final String ignoreReactionMention = "ignoreReactionMention";
 
     // Custom API
     public static final String customAPI = "customAPI";

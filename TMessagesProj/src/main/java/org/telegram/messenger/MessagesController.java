@@ -69,6 +69,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.utils.Defines;
+
 public class MessagesController extends BaseController implements NotificationCenter.NotificationCenterDelegate {
 
     private ConcurrentHashMap<Long, TLRPC.Chat> chats = new ConcurrentHashMap<>(100, 1.0f, 2);
@@ -14018,6 +14021,14 @@ public class MessagesController extends BaseController implements NotificationCe
             ArrayList<Integer> newUnreadMessages = new ArrayList<>();
 
             StringBuilder stringBuilder = new StringBuilder();
+
+            if (ConfigManager.getBooleanOrFalse(Defines.ignoreReactionMention)){
+                for (int i = 0;i < unreadReactions.size();i++){
+                    markReactionsAsRead(unreadReactions.keyAt(i));
+                }
+                return;
+            }
+
             for (int i = 0; i < unreadReactions.size(); i++) {
                 int messageId = unreadReactions.keyAt(i);
                 if (stringBuilder.length() > 0) {
