@@ -55,7 +55,7 @@ public abstract class SeekBarAccessibilityDelegate extends View.AccessibilityDel
         return performAccessibilityActionInternal(null, action, args);
     }
 
-    private void postAccessibilityEventRunnable(@NonNull View host) {
+    public void postAccessibilityEventRunnable(@NonNull View host) {
         if (!ViewCompat.isAttachedToWindow(host)) {
             return;
         }
@@ -65,6 +65,7 @@ public abstract class SeekBarAccessibilityDelegate extends View.AccessibilityDel
             host.addOnAttachStateChangeListener(onAttachStateChangeListener);
         } else {
             host.removeCallbacks(runnable);
+            host.removeOnAttachStateChangeListener(onAttachStateChangeListener);
         }
         host.postDelayed(runnable, 400);
     }

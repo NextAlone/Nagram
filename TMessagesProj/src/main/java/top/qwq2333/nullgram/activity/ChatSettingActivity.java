@@ -1,14 +1,21 @@
 package top.qwq2333.nullgram.activity;
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.OpenableColumns;
+import android.text.TextPaint;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -22,6 +29,8 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.ActionBarMenu;
+import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -37,10 +46,12 @@ import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.SeekBarView;
 
 import java.util.ArrayList;
 
 import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.ui.StickerSizePreviewMessagesCell;
 import top.qwq2333.nullgram.utils.AlertUtil;
 import top.qwq2333.nullgram.utils.Defines;
 import top.qwq2333.nullgram.utils.NumberUtils;
@@ -50,8 +61,14 @@ public class ChatSettingActivity extends BaseFragment {
 
     private RecyclerListView listView;
     private ListAdapter listAdapter;
+    private ActionBarMenuItem resetItem;
+    private StickerSizeCell stickerSizeCell;
 
     private int rowCount;
+
+    private int stickerSizeHeaderRow;
+    private int stickerSizeRow;
+    private int stickerSize2Row;
 
     private int chatRow;
     private int ignoreBlockedUserMessagesRow;
@@ -88,6 +105,23 @@ public class ChatSettingActivity extends BaseFragment {
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
         }
+
+        ActionBarMenu menu = actionBar.createMenu();
+        resetItem = menu.addItem(0, R.drawable.msg_reset);
+        resetItem.setContentDescription(LocaleController.getString("ResetStickerSize", R.string.ResetStickerSize));
+        resetItem.setVisibility(ConfigManager.getFloatOrDefault(Defines.stickerSize,14.0f) != 14.0f ? View.VISIBLE : View.GONE);
+        resetItem.setTag(null);
+        resetItem.setOnClickListener(v -> {
+            AndroidUtilities.updateViewVisibilityAnimated(resetItem, false, 0.5f, true);
+            ValueAnimator animator = ValueAnimator.ofFloat(ConfigManager.getFloatOrDefault(Defines.stickerSize,14.0f), 14.0f);
+            animator.setDuration(150);
+            animator.addUpdateListener(valueAnimator -> {
+                ConfigManager.putFloat(Defines.stickerSize,(Float) valueAnimator.getAnimatedValue());
+                stickerSizeCell.invalidate();
+            });
+            animator.start();
+        });
+
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -231,6 +265,10 @@ public class ChatSettingActivity extends BaseFragment {
 
     private void updateRows() {
         rowCount = 0;
+
+        stickerSizeHeaderRow = rowCount++;
+        stickerSizeRow = rowCount++;
+        stickerSize2Row = rowCount++;
 
         chatRow = rowCount++;
         ignoreBlockedUserMessagesRow = rowCount++;
@@ -378,7 +416,11 @@ public class ChatSettingActivity extends BaseFragment {
                 case 2: {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-                    if (position == messageMenuRow) {
+                    if (position == stickerSizeRow) {
+                        textCell.setTextAndValue(LocaleController.getString("StickerSize", R.string.StickerSize),
+                            String.valueOf(Math.round(ConfigManager.getFloatOrDefault(Defines.stickerSize, 14.0f))),
+                            true);
+                    } else if (position == messageMenuRow) {
                         textCell.setText(
                             LocaleController.getString("MessageMenu", R.string.MessageMenu), false);
                     } else if (position == maxRecentStickerRow) {
@@ -472,6 +514,8 @@ public class ChatSettingActivity extends BaseFragment {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == chatRow) {
                         headerCell.setText(LocaleController.getString("Chat", R.string.Chat));
+                    } else if (position == stickerSizeHeaderRow) {
+                        headerCell.setText(LocaleController.getString("StickerSize", R.string.StickerSize));
                     }
                     break;
                 }
@@ -521,6 +565,10 @@ public class ChatSettingActivity extends BaseFragment {
                     view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider,
                         Theme.key_windowBackgroundGrayShadow));
                     break;
+                case 8:
+                    view = stickerSizeCell = new StickerSizeCell(mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
             }
             //noinspection ConstantConditions
             view.setLayoutParams(
@@ -531,12 +579,14 @@ public class ChatSettingActivity extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            if (position == chat2Row) {
+            if (position == chat2Row || position == stickerSize2Row) {
                 return 1;
             } else if (position == messageMenuRow || position == maxRecentStickerRow) {
                 return 2;
-            } else if (position == chatRow) {
+            } else if (position == chatRow || position == stickerSizeHeaderRow) {
                 return 4;
+            } else if (position == stickerSizeRow) {
+                return 8;
             }
             return 3;
         }
@@ -715,4 +765,91 @@ public class ChatSettingActivity extends BaseFragment {
         }
         editText.setSelection(0, editText.getText().length());
     }
+
+    private class StickerSizeCell extends FrameLayout {
+
+        private final StickerSizePreviewMessagesCell messagesCell;
+        private final SeekBarView sizeBar;
+        private final int startStickerSize = 2;
+        private final int endStickerSize = 20;
+
+        private final TextPaint textPaint;
+        private int lastWidth;
+
+        public StickerSizeCell(Context context) {
+            super(context);
+
+            setWillNotDraw(false);
+
+            textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+            textPaint.setTextSize(AndroidUtilities.dp(16));
+
+            sizeBar = new SeekBarView(context);
+            sizeBar.setReportChanges(true);
+            sizeBar.setDelegate(new SeekBarView.SeekBarViewDelegate() {
+                @Override
+                public void onSeekBarDrag(boolean stop, float progress) {
+                    sizeBar.getSeekBarAccessibilityDelegate().postAccessibilityEventRunnable(StickerSizeCell.this);
+                    ConfigManager.putFloat(Defines.stickerSize, startStickerSize + (endStickerSize - startStickerSize) * progress);
+                    StickerSizeCell.this.invalidate();
+                    if (resetItem.getVisibility() != VISIBLE) {
+                        AndroidUtilities.updateViewVisibilityAnimated(resetItem, true, 0.5f, true);
+                    }
+                }
+
+                @Override
+                public void onSeekBarPressed(boolean pressed) {
+
+                }
+            });
+            sizeBar.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
+            addView(sizeBar, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 38, Gravity.LEFT | Gravity.TOP, 9, 5, 43, 11));
+
+            messagesCell = new StickerSizePreviewMessagesCell(context, parentLayout);
+            messagesCell.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS);
+            addView(messagesCell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 53, 0, 0));
+        }
+
+        @Override
+        protected void onDraw(Canvas canvas) {
+            textPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
+            canvas.drawText(String.valueOf(Math.round(ConfigManager.getFloatOrDefault(Defines.stickerSize, 14.0f))), getMeasuredWidth() - AndroidUtilities.dp(39), AndroidUtilities.dp(28), textPaint);
+        }
+
+        @Override
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            int width = MeasureSpec.getSize(widthMeasureSpec);
+            if (lastWidth != width) {
+                sizeBar.setProgress((ConfigManager.getFloatOrDefault(Defines.stickerSize, 14.0f) - startStickerSize) / (float) (endStickerSize - startStickerSize));
+                lastWidth = width;
+            }
+        }
+
+        @Override
+        public void invalidate() {
+            super.invalidate();
+            lastWidth = -1;
+            messagesCell.invalidate();
+            sizeBar.invalidate();
+        }
+
+        @Override
+        public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
+            super.onInitializeAccessibilityEvent(event);
+            sizeBar.getSeekBarAccessibilityDelegate().onInitializeAccessibilityEvent(this, event);
+        }
+
+        @Override
+        public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+            super.onInitializeAccessibilityNodeInfo(info);
+            sizeBar.getSeekBarAccessibilityDelegate().onInitializeAccessibilityNodeInfoInternal(this, info);
+        }
+
+        @Override
+        public boolean performAccessibilityAction(int action, Bundle arguments) {
+            return super.performAccessibilityAction(action, arguments) || sizeBar.getSeekBarAccessibilityDelegate().performAccessibilityActionInternal(this, action, arguments);
+        }
+    }
+
 }

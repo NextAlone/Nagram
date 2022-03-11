@@ -102,6 +102,17 @@ public class ConfigManager {
     public static String getStringOrDefault(@NonNull String key, @Nullable String def) {
         return preferences.getString(key, def);
     }
+    /**
+     * 获取Float值
+     *
+     * @param key key
+     * @param def 默认值
+     * @return key所对应值
+     */
+    public static float getFloatOrDefault(@NonNull String key, float def) {
+        return preferences.getFloat(key, def);
+    }
+
 
     /**
      * 设置Int值
@@ -169,6 +180,23 @@ public class ConfigManager {
             }
         }
     }
+
+    /**
+     * 设置Float值
+     *
+     * @param key   key
+     * @param value 值
+     */
+    public static void putFloat(@NonNull String key, float value) {
+        synchronized (preferences) {
+            try {
+                preferences.edit().putFloat(key, value).apply();
+            } catch (Throwable thr) {
+                LogUtilsKt.e("putFloat: ", thr);
+            }
+        }
+    }
+
 
     /**
      * 切换boolean值 若原为false或未设置则切换为true 若原为true则切换为false
