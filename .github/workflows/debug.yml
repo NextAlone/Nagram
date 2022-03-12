@@ -408,7 +408,7 @@ jobs:
           apk=$(find TMessagesProj/build/outputs/apk/mini/release -name '*arm64-v8a*.apk' | head -n 1)
           curl http://127.0.0.1:8081/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument \
             -X POST \
-            -F chat_id="${{ secrets.HELPER_BOT_TARGET }}" \
+            -F chat_id="${{ secrets.TELEGRAM_CHANNEL }}" \
             -F document="@$apk" \
             -F caption="${{ github.event.head_commit.message }}\n$GITHUB_SHA" \
             --silent --show-error --fail >/dev/null
