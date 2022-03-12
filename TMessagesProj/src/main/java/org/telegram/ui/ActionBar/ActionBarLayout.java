@@ -191,8 +191,28 @@ public class ActionBarLayout extends FrameLayout {
         @Override
         public boolean dispatchTouchEvent(MotionEvent ev) {
             boolean passivePreview = inPreviewMode && previewMenu == null;
-            if ((passivePreview || transitionAnimationPreviewMode) && (ev.getActionMasked() == MotionEvent.ACTION_DOWN || ev.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN)) {
-                return false;
+            // if ((passivePreview || transitionAnimationPreviedispatchTouchEventwMode) && (ev.getActionMasked() == MotionEvent.ACTION_DOWN || ev.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN)) {
+            //     return false;
+            // }
+            if (inPreviewMode && previewMenu == null) {
+                View view = containerView.getChildAt(0);
+                if (view != null) {
+                    int y = (int) (view.getTop() + containerView.getTranslationY() - AndroidUtilities.dp(Build.VERSION.SDK_INT < 21 ? 20 : 0));
+                    y += AndroidUtilities.dp(24);
+                    if (ev.getY() <= y && ev.getAction() == MotionEvent.ACTION_DOWN) {
+                        movePreviewFragment(AndroidUtilities.dp(65));
+                    }
+                    boolean isValidTouch = ev.getX() >= AndroidUtilities.dp(8);
+                    isValidTouch &= ev.getX() <= view.getRight() - AndroidUtilities.dp(8);
+                    isValidTouch &= ev.getY() <= view.getBottom();
+                    isValidTouch &= ev.getY() >= y + AndroidUtilities.dp(70);
+                    if (!isValidTouch) {
+                        if (ev.getY() > view.getBottom() && ev.getAction() == MotionEvent.ACTION_DOWN) {
+                            finishPreviewFragment();
+                        }
+                        return false;
+                    }
+                }
             }
             //
             try {
