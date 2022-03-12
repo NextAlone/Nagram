@@ -66,16 +66,9 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.accessibility.AccessibilityNodeProvider;
 import android.view.animation.Interpolator;
 import android.widget.Toast;
+
 import androidx.core.graphics.ColorUtils;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Stack;
-import java.util.concurrent.atomic.AtomicReference;
+
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
@@ -148,6 +141,17 @@ import org.telegram.ui.Components.spoilers.SpoilerEffect;
 import org.telegram.ui.PhotoViewer;
 import org.telegram.ui.PinchToZoomHelper;
 import org.telegram.ui.SecretMediaViewer;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Stack;
+import java.util.concurrent.atomic.AtomicReference;
+
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.utils.Defines;
 
@@ -322,6 +326,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
 
         default void didPressBotButton(ChatMessageCell cell, TLRPC.KeyboardButton button) {
+        }
+
+        default boolean didLongPressBotButton(ChatMessageCell cell, TLRPC.KeyboardButton button) {
+            return false;
         }
 
         default void didPressReaction(ChatMessageCell cell, TLRPC.TL_reactionCount reaction, boolean longpress) {
@@ -6827,6 +6835,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             return true;
         }
         resetPressedLink(-1);
+        if (pressedBotButton != -1) {
+            BotButton button = botButtons.get(pressedBotButton);
+            if (button.button != null && delegate.didLongPressBotButton(this, button.button)) {
+                return true;
+            }
+        }
         if (buttonPressed != 0 || miniButtonPressed != 0 || videoButtonPressed != 0 || pressedBotButton != -1) {
             buttonPressed = 0;
             miniButtonPressed = 0;

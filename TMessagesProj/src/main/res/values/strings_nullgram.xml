@@ -121,4 +121,10 @@
     <string name="ResetStickerSize">Reset Sticker Size</string>
     <string name="EditUndo">Undo</string>
     <string name="EditRedo">Redo</string>
+    <string name="CopyTitle">Copy Title</string>
+    <string name="CopyCallback">Copy Callback Data</string>
+    <string name="CopyInlineQuery">Copy Inline Query</string>
+    <string name="CopyID">Copy ID</string>
+    <string name="SendCallback">Send Callback Data</string>
+    <string name="CallbackData">Callback Data</string>
 </resources>

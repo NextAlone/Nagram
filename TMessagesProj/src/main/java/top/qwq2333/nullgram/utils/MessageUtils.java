@@ -19,14 +19,18 @@
 
 package top.qwq2333.nullgram.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -47,13 +51,19 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.CheckBoxCell;
+import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.ByteBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 
@@ -331,6 +341,70 @@ public class MessageUtils extends BaseController {
                 return "Unknown";
         }
     }
+
+    private static final CharsetDecoder utf8Decoder = StandardCharsets.UTF_8.newDecoder();
+
+    @SuppressLint("SetTextI18n")
+    public void showSendCallbackDialog(ChatActivity fragment, Theme.ResourcesProvider resourcesProvider, byte[] originalData, MessageObject messageObject) {
+        Context context = fragment.getParentActivity();
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, resourcesProvider);
+        builder.setTitle(LocaleController.getString("SendCallback", R.string.SendCallback));
+
+        final EditTextBoldCursor editText = new EditTextBoldCursor(context) {
+            @Override
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64), MeasureSpec.EXACTLY));
+            }
+        };
+        editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+        try {
+            editText.setText(utf8Decoder.decode(ByteBuffer.wrap(originalData)).toString());
+        } catch (CharacterCodingException ignore) {
+        }
+        editText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack, resourcesProvider));
+        editText.setHintText(LocaleController.getString("CallbackData", R.string.CallbackData));
+        editText.setHeaderHintColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueHeader, resourcesProvider));
+        editText.setSingleLine(true);
+        editText.setFocusable(true);
+        editText.setTransformHintToHeader(true);
+        editText.setLineColors(Theme.getColor(Theme.key_windowBackgroundWhiteInputField, resourcesProvider), Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated, resourcesProvider), Theme.getColor(Theme.key_windowBackgroundWhiteRedText3, resourcesProvider));
+        editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        editText.setBackgroundDrawable(null);
+        editText.requestFocus();
+        editText.setPadding(0, 0, 0, 0);
+        builder.setView(editText);
+
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
+            var button = new TLRPC.TL_keyboardButtonCallback();
+            button.data = editText.getText().toString().getBytes(StandardCharsets.UTF_8);
+            getSendMessagesHelper().sendCallback(true, messageObject, button, fragment);
+        });
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.show().setOnShowListener(dialog -> {
+            editText.requestFocus();
+            AndroidUtilities.showKeyboard(editText);
+        });
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) editText.getLayoutParams();
+        if (layoutParams != null) {
+            if (layoutParams instanceof FrameLayout.LayoutParams) {
+                ((FrameLayout.LayoutParams) layoutParams).gravity = Gravity.CENTER_HORIZONTAL;
+            }
+            layoutParams.rightMargin = layoutParams.leftMargin = AndroidUtilities.dp(24);
+            layoutParams.height = AndroidUtilities.dp(36);
+            editText.setLayoutParams(layoutParams);
+        }
+        editText.setSelection(0, editText.getText().length());
+    }
+
+    public String getTextOrBase64(byte[] data) {
+        try {
+            return utf8Decoder.decode(ByteBuffer.wrap(data)).toString();
+        } catch (CharacterCodingException e) {
+            return Base64.encodeToString(data, Base64.NO_PADDING | Base64.NO_WRAP);
+        }
+    }
+
+
 
 
 }
