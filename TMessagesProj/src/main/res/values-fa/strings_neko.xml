@@ -121,6 +121,7 @@
     <string name="enablePublicProxy">پروکسی عمومی NekoX</string>
     <string name="autoUpdateSubInfo">بروزرسانی خودکار پروکسی‌های عمومی</string>
     <string name="hideSendAsChannel">مخفی کردن «ارسال به عنوان کانال»</string>
+    <string name="scrollableChatPreview">پیمایش پیشنمایش گفتگو</string>
     <string name="disableSwipeToNextChannel">غیرفعال کردن نمایش کانال بعدی با کشیدن انگشت</string>
     <string name="disableChoosingSticker">فرستادن «در‌حال‌نوشتن...» بجای «در‌حال‌انتخاب‌استیکر...»</string>
     <string name="hideGroupSticker">عدم نمایش استیکر گروه</string>

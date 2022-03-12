@@ -58,6 +58,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 public class ActionBarLayout extends FrameLayout {
@@ -85,6 +86,7 @@ public class ActionBarLayout extends FrameLayout {
 
         public LayoutContainer(Context context) {
             super(context);
+            setClickable(true);
             setWillNotDraw(false);
         }
 
@@ -190,11 +192,13 @@ public class ActionBarLayout extends FrameLayout {
 
         @Override
         public boolean dispatchTouchEvent(MotionEvent ev) {
+            boolean previewModeStatus = !NekoXConfig.scrollableChatPreview && inPreviewMode;
             boolean passivePreview = inPreviewMode && previewMenu == null;
-            // if ((passivePreview || transitionAnimationPreviedispatchTouchEventwMode) && (ev.getActionMasked() == MotionEvent.ACTION_DOWN || ev.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN)) {
-            //     return false;
-            // }
-            if (inPreviewMode && previewMenu == null) {
+            if ((passivePreview || transitionAnimationPreviedispatchTouchEventwMode) && (ev.getActionMasked() == MotionEvent.ACTION_DOWN || ev.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN)) {
+                return false;
+            }
+            
+            if (NekoXConfig.scrollableChatPreview && inPreviewMode && previewMenu == null) {
                 View view = containerView.getChildAt(0);
                 if (view != null) {
                     int y = (int) (view.getTop() + containerView.getTranslationY() - AndroidUtilities.dp(Build.VERSION.SDK_INT < 21 ? 20 : 0));

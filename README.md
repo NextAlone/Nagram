@@ -23,7 +23,7 @@ TeleTux is fork of NekoX with jalali calendar
 - The ( vmess / vmess1 / ss / ssr / trojan ) proxy link in the message can be clicked
 - Allow auto-disabling proxy when VPN is enabled
 - Proxy automatic switcher
-- Custom [Emoji packs](https://github.com/NekoX-Dev/NekoX/wiki/emoji)
+- Custom [Emoji packs](https://github.com/TeleTux/TeleTux/wiki/emoji)
 - Add stickers without sticker pack
 - Allow disabling vibration
 - Allow clicking on links in self profile
@@ -106,7 +106,10 @@ rustup target install armv7-linux-androideabi aarch64-linux-android i686-linux-a
 ```
 
 4. Build native dependencies: `./run init libs`
-5. Build external libraries and native code: `./run libs update`
+5. Build external libraries and native code:
+
+`./run libs update`
+
 6. Fill out `TELEGRAM_APP_ID` and `TELEGRAM_APP_HASH` in `local.properties`
 7. Replace TMessagesProj/google-services.json if you want fcm to work.
 8. Replace release.keystore with yours and fill out `ALIAS_NAME`, `KEYSTORE_PASS` and `ALIAS_PASS` in `local.properties` if you want a custom sign key.
