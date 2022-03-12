@@ -119,4 +119,6 @@
     <string name="StickerSizeDialogMessageReplyTo">get me some anime stuff pls.</string>
     <string name="StickerSizeDialogMessage">wow cute girl!</string>
     <string name="ResetStickerSize">Reset Sticker Size</string>
+    <string name="EditUndo">Undo</string>
+    <string name="EditRedo">Redo</string>
 </resources>

@@ -64,6 +64,7 @@ dependencies {
     implementation "com.jakewharton:process-phoenix:2.1.2"
     implementation group: 'de.psdev.licensesdialog', name: 'licensesdialog', version: '2.2.0'
     implementation "io.noties.markwon:core:4.6.2"
+    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:4.3'
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     implementation "androidx.core:core-ktx:1.6.0"
