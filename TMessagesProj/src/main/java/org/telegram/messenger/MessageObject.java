@@ -25,22 +25,9 @@ import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.util.Base64;
+
 import androidx.collection.LongSparseArray;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.StringReader;
-import java.net.URLEncoder;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
@@ -59,9 +46,26 @@ import org.telegram.ui.Components.URLSpanNoUnderlineBold;
 import org.telegram.ui.Components.URLSpanReplacement;
 import org.telegram.ui.Components.URLSpanUserMention;
 import org.telegram.ui.Components.spoilers.SpoilerEffect;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.StringReader;
+import java.net.URLEncoder;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import top.qwq2333.nullgram.config.ConfigManager;
-import top.qwq2333.nullgram.utils.Defines;
 import top.qwq2333.nullgram.ui.syntaxhighlight.SyntaxHighlight;
+import top.qwq2333.nullgram.utils.Defines;
 
 public class MessageObject {
 
@@ -3955,6 +3959,13 @@ public class MessageObject {
                             }
                         } else {
                             url = new URLSpanNoUnderline(charSequence.subSequence(start, end).toString());
+                            if (charSequence.charAt(start) == '#') {
+                                var run = new TextStyleSpan.TextStyleRun();
+                                run.start = start;
+                                run.end = end;
+                                run.urlEntity = new TLRPC.TL_messageEntityHashtag();
+                                SyntaxHighlight.highlight(run, spannable);
+                            }
                         }
                     }
                 }
