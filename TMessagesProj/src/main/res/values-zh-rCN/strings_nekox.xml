@@ -270,4 +270,13 @@
     <string name="showSeconds">以秒为单位显示时间戳</string>
     <string name="rememberAllBackMessages">记住所有点击的回复</string>
     <string name="ShareMessages">分享</string>
+    <string name="AutoCheckUpdatePreview">预览版（不稳定）</string>
+    <string name="AppUpdateNekoX">更新Nekogram X</string>
+    <string name="NekoXUpdateTranslationHint">长按以翻译更新日志</string>
+    <string name="channelAlias">频道别名</string>
+    <string name="labelChannelUser">标记频道匿名身份别名</string>
+    <string name="setChannelAliasName">标记别名</string>
+    <string name="channelAliasDetails">需启用标记频道匿名身份别名</string>
+    <string name="Name">输入别名</string>
+    <string name="labelChannelUserDetails">以频道匿名身份发言的用户将标记为“频道身份”</string>
 </resources>

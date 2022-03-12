@@ -1877,7 +1877,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             } else {
                 optionsButton.setVisibility(View.VISIBLE);
             }
-            if (MessagesController.getInstance(currentAccount).isChatNoForwards(messageObject.getChatId())) {
+            if (MessagesController.getInstance(currentAccount).isChatNoForwardsWithOverride(messageObject.getChatId())) {
                 optionsButton.hideSubItem(1);
                 optionsButton.hideSubItem(2);
                 optionsButton.hideSubItem(5);

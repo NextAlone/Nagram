@@ -2702,7 +2702,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
     private boolean checkTextSelection(MotionEvent event) {
         TextSelectionHelper.ChatListTextSelectionHelper textSelectionHelper = delegate.getTextSelectionHelper();
-        if (textSelectionHelper == null || MessagesController.getInstance(currentAccount).isChatNoForwards(currentMessageObject.getChatId()) || (currentMessageObject.messageOwner != null && currentMessageObject.messageOwner.noforwards)) {
+        if (textSelectionHelper == null || MessagesController.getInstance(currentAccount).isChatNoForwardsWithOverride(currentMessageObject.getChatId()) || (currentMessageObject.messageOwner != null && currentMessageObject.messageOwner.noforwards && !NekoXConfig.disableFlagSecure)) {
             return false;
         }
         boolean hasTextBlocks = currentMessageObject.textLayoutBlocks != null && !currentMessageObject.textLayoutBlocks.isEmpty();
@@ -3538,7 +3538,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             drawVideoSize = false;
             canStreamVideo = false;
             animatingNoSound = 0;
-            if (MessagesController.getInstance(currentAccount).isChatNoForwards(messageObject.getChatId()) || (messageObject.messageOwner != null && messageObject.messageOwner.noforwards)) {
+            if (MessagesController.getInstance(currentAccount).isChatNoForwardsWithOverride(messageObject.getChatId()) || (messageObject.messageOwner != null && messageObject.messageOwner.noforwards && !NekoXConfig.disableFlagSecure)) {
                 drawSideButton = 0;
             } else {
                 drawSideButton = !isRepliesChat && checkNeedDrawShareButton(messageObject) && (currentPosition == null || currentPosition.last) && !needHide ? 1 : 0;
@@ -6775,7 +6775,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     private void updateFlagSecure() {
-        boolean flagSecure = currentMessageObject != null && currentMessageObject.messageOwner != null && currentMessageObject.messageOwner.noforwards;
+        boolean flagSecure = currentMessageObject != null && currentMessageObject.messageOwner != null && currentMessageObject.messageOwner.noforwards && !NekoXConfig.disableFlagSecure;
         Activity activity = AndroidUtilities.findActivity(getContext());
         if (flagSecure && unregisterFlagSecure == null && activity != null) {
             unregisterFlagSecure = AndroidUtilities.registerFlagSecure(activity.getWindow());

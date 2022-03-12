@@ -43,9 +43,9 @@
     <string name="ChangeTranslateProvider">Змінити оператора</string>
     <string name="ProviderYandexTranslate">Яндекс.Перекладач</string>
     <string name="GoogleCloudTransKey">Ключ Google Cloud Translate</string>
-    <string name="GoogleCloudTransKeyNotice">Якщо ви встановите ключ Trans від Google, API перекладу в хмарі буде викликано замість відправлення підробки форми в веб-версію при перекладі (швидшого, стабільного і економії трафіку).</string>
-    <string name="TransToLang">Переклад цільової мови</string>
-    <string name="TransInputToLang">Цільова мова для введення перекладу</string>
+    <string name="GoogleCloudTransKeyNotice">Встановіть ключ Google Cloud Translation, щоб викликати хмарне API перекладу замість імітації надсилання форми у веб-версію (швидше, стабільніше й заощаджує трафік).</string>
+    <string name="TransToLang">Переклад на мову</string>
+    <string name="TransInputToLang">Переклад із мови</string>
     <string name="More">Більше</string>
     <string name="TeleTuxUpdatesChannel">Канал оновлень TeleTux</string>
     <string name="ShowIdAndDc">Показати ID / DC в профілі</string>
@@ -64,8 +64,8 @@
     <string name="DisableChatAction">Не надсилати мій статус вводу</string>
     <string name="FakeScreenshot">Зробіть знімок екрану</string>
     <string name="ImportPxy">Імпорт</string>
-    <string name="FilterNameUsers">Спільноти</string>
-    <string name="FilterNameUsersDescription">Лише повідомлення з приватних чатів</string>
+    <string name="FilterNameUsers">Особисті</string>
+    <string name="FilterNameUsersDescription">Лише повідомлення з особистих чатів</string>
     <string name="FilterNameContacts">Контакти</string>
     <string name="FilterNameContactsDescription">Лише повідомлення від збережених користувачів</string>
     <string name="FilterNameGroups">Групи</string>
@@ -78,7 +78,7 @@
     <string name="FilterNameUnmutedDescription">Лише повідомлення з неігнорованих чатів</string>
     <string name="FilterNameUnread2">Непрочитані</string>
     <string name="FilterNameUnreadDescription">Лише непрочитані повідомлення</string>
-    <string name="FilterNameUnmutedAndUnread">Заблоковано &amp; Непрочитане</string>
+    <string name="FilterNameUnmutedAndUnread">Непрочитані зі звуком</string>
     <string name="FilterNameUnmutedAndUnreadDescription">Лише непрочитані повідомлення із неігнорованих чатів</string>
     <string name="IgnoreMutedCount">Не лічити заглушених непрочитаних у вкладці теки</string>
     <string name="DialogsSettings">Налаштування діалогів</string>

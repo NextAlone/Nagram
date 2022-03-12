@@ -1020,19 +1020,19 @@ public class AlertsCreator {
         if (Browser.isInternalUrl(url, null) || !ask || NekoConfig.skipOpenLinkConfirm.Bool()) {
             Browser.openUrl(fragment.getParentActivity(), url, inlineReturn == 0, tryTelegraph);
         } else {
-            String urlFinal;
-            if (punycode) {
-                try {
-                    Uri uri = Uri.parse(url);
-                    String host = IDN.toASCII(uri.getHost(), IDN.ALLOW_UNASSIGNED);
-                    urlFinal = uri.getScheme() + "://" + host + uri.getPath();
-                } catch (Exception e) {
-                    FileLog.e(e);
-                    urlFinal = url;
-                }
-            } else {
-                urlFinal = url;
-            }
+            String urlFinal = url;
+//            if (punycode) {
+//                try {
+//                    Uri uri = Uri.parse(url);
+//                    String host = IDN.toASCII(uri.getHost(), IDN.ALLOW_UNASSIGNED);
+//                    urlFinal = uri.getScheme() + "://" + host + uri.getPath();
+//                } catch (Exception e) {
+//                    FileLog.e(e);
+//                    urlFinal = url;
+//                }
+//            } else {
+//                urlFinal = url;
+//            }
             AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity(), resourcesProvider);
             builder.setTitle(LocaleController.getString("OpenUrlTitle", R.string.OpenUrlTitle));
             String format = LocaleController.getString("OpenUrlAlert2", R.string.OpenUrlAlert2);

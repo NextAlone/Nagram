@@ -125,8 +125,8 @@
     <string name="ProxyInfoSS">Настройки Shadowsocks-прокси</string>
     <string name="SSPassword">Пароль</string>
     <string name="SSMethod">Метод шифрования</string>
-    <string name="SSPlugin">Плагин</string>
-    <string name="SSPluginOpts">Конфигурация плагина</string>
+    <string name="SSPlugin">Дополнение</string>
+    <string name="SSPluginOpts">Параметры дополнения</string>
     <string name="ProxyInfoSSR">Настройки ShadowsocksR-прокси</string>
     <string name="SSRProtocol">Протокол</string>
     <string name="SSRProtocolParams">Параметры протокола</string>

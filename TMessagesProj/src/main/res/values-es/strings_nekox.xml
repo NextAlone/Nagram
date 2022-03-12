@@ -72,7 +72,7 @@
     <string name="FilterNameGroupsDescription">Sólo mensajes de chats de grupo</string>
     <string name="FilterNameChannels">Canales</string>
     <string name="FilterNameChannelsDescription">Solo mensajes de canales</string>
-    <string name="FilterNameBots">Bots</string>
+    <string name="FilterNameBots">Robots</string>
     <string name="FilterNameBotsDescription">Solo mensajes de bots</string>
     <string name="FilterNameUnmuted">No silenciado</string>
     <string name="FilterNameUnmutedDescription">Solo mensajes de chats sin silenciar</string>
@@ -176,7 +176,7 @@
     <string name="OpenPGPApp">Proveedor OpenPGP</string>
     <string name="OpenPGPKey">Clave OpenPGP</string>
     <string name="None">Ninguna</string>
-    <string name="Sign">Signo</string>
+    <string name="Sign">Firma</string>
     <string name="PGPDecrypt">Descifrar mensaje</string>
     <string name="PGPVerify">Verificar mensaje</string>
     <string name="PGPImport">Importar clave pública</string>
@@ -215,7 +215,7 @@
     <string name="TextOrigin">Origen</string>
     <string name="TextReplace">Reemplazar</string>
     <string name="UnpinSticker">Desfijar</string>
-    <string name="ArchiveFiles">Ficheros de archivo</string>
+    <string name="ArchiveFiles">Archivar archivos</string>
     <string name="DisplayPersianCalendarByLatin">Mostrar el calendario persa en latín</string>
     <string name="SetPinnedSuffix">(Fijado)</string>
     <string name="AutoLockImmediately">Inmediatamente</string>
@@ -259,8 +259,21 @@
     <string name="VersionUpdateIgnore">Ignorar</string>
     <string name="EnableStickerPin">Habilitar el fijado de stickers</string>
     <string name="VersionUpdateNoUpdate">No actualizar.</string>
-    <string name="EnableStickerPinAbout">Fijar stickers y sincronizarlos con la nube incluso al añadir nuevos stickers.
+    <string name="EnableStickerPinAbout">Fijar stickers y sincronizar con la nube incluso cuando se agreguen nuevos stickers.
 \nEmparejado con Desactivar Favoritos y Recientes.</string>
-    <string name="EnableStickerPinTip">Esta función todavía está en desarrollo, la sincronización en la nube no podría trabajar como se espera.</string>
+    <string name="EnableStickerPinTip">Esta función todavía está en desarrollo, la sincronización en la nube podría no funcionar como se espera.</string>
     <string name="AutoCheckUpdateOFF">Desactivado</string>
+    <string name="AutoCheckUpdatePreview">Vista previa (inestable)</string>
+    <string name="AppUpdateNekoX">Actualización de Nekogram X</string>
+    <string name="NekoXUpdateTranslationHint">Pulse para traducir el registro de cambios</string>
+    <string name="showSeconds">Mostrar los segundos en la marca de tiempo</string>
+    <string name="ShareMessages">Compartir</string>
+    <string name="DisableInstantCamera">Deshabilitar la cámara instantánea</string>
+    <string name="rememberAllBackMessages">Recordar todas las respuestas en las que se hizo clic</string>
+    <string name="Name">Nombre</string>
+    <string name="channelAlias">Alias del canal</string>
+    <string name="labelChannelUser">Etiquetar al usuario del canal</string>
+    <string name="setChannelAliasName">Establecer alias</string>
+    <string name="channelAliasDetails">Requerir usuario habilitado con etiqueta del canal.</string>
+    <string name="labelChannelUserDetails">Si el remitente del mensaje es el Canal, se etiquetará como \"Canal\"</string>
 </resources>

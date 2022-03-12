@@ -6849,7 +6849,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             //otherItem.addSubItem(edit_avatar, R.drawable.photo_paint, LocaleController.getString("EditPhoto", R.string.EditPhoto));
             otherItem.addSubItem(delete_avatar, R.drawable.baseline_delete_24, LocaleController.getString("Delete", R.string.Delete));
         }
-        if (getMessagesController().isChatNoForwards(currentChat)) {
+        if (getMessagesController().isChatNoForwardsWithOverride(currentChat)) {
             otherItem.hideSubItem(gallery_menu_save);
         }
 

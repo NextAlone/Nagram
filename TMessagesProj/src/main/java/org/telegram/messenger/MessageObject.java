@@ -5834,8 +5834,9 @@ public class MessageObject {
                 && (
                 messageOwner.fwd_from.saved_from_peer == null
                         || messageOwner.fwd_from.from_id instanceof TLRPC.TL_peerChannel && messageOwner.fwd_from.saved_from_peer.channel_id != messageOwner.fwd_from.from_id.channel_id
-                        || messageOwner.fwd_from.from_id instanceof TLRPC.TL_peerUser
-                        || messageOwner.fwd_from.from_id == null && messageOwner.fwd_from.from_name != null
+                        || (((messageOwner.flags & TLRPC.MESSAGE_FLAG_REPLY) == 0) &&
+                        (messageOwner.fwd_from.from_id instanceof TLRPC.TL_peerUser
+                                || messageOwner.fwd_from.from_id == null && messageOwner.fwd_from.from_name != null))
         )
                 && UserConfig.getInstance(currentAccount).getClientUserId() != getDialogId();
     }
@@ -5896,7 +5897,7 @@ public class MessageObject {
     }
 
     public boolean canForwardMessage() {
-        return NekoXConfig.disableFlagSecure || !(messageOwner instanceof TLRPC.TL_message_secret) && !needDrawBluredPreview() && !isLiveLocation() && type != 16 && !isSponsored() && !messageOwner.noforwards;
+        return !(messageOwner instanceof TLRPC.TL_message_secret) && !needDrawBluredPreview() && !isLiveLocation() && type != 16 && !isSponsored() && !messageOwner.noforwards;
     }
 
     public boolean canEditMedia() {
