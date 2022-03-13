@@ -470,7 +470,7 @@ public class NekoConfig {
             disableGroupVoipAudioProcessing.setConfigBool(preferences.getBoolean("disableGroupVoipAudioProcessing", false));
         
         if (preferences.contains("scrollableChatPreview"))
-            scrollableChatPreview.setConfigBool(preferences.getBoolean("scrollableChatPreview", false));
+            scrollableChatPreview.setConfigBool(preferences.getBoolean("scrollableChatPreview", true));
     }
 
 }
