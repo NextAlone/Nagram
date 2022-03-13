@@ -31,7 +31,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Fetch Status
-        run: git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
+        run: |
+          sed -i 's/\/\///g' settings.gradle
+          git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
       - name: FFmpeg Cache
         id: cache
         uses: actions/cache@v2
@@ -63,7 +65,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Fetch Status
-        run: git submodule status TMessagesProj/jni/boringssl > boringssl_status
+        run: |
+          sed -i 's/\/\///g' settings.gradle
+          git submodule status TMessagesProj/jni/boringssl > boringssl_status
       - name: BoringSSL Cache
         id: cache
         uses: actions/cache@v2
@@ -103,6 +107,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Fetch Status
         run: |
+          sed -i 's/\/\///g' settings.gradle
           git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
           git submodule status TMessagesProj/jni/libvpx > libvpx_status
           git submodule status TMessagesProj/jni/boringssl > boringssl_status
@@ -159,7 +164,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Fetch Status
-        run: git submodule status v2ray > v2ray_status
+        run: |
+          sed -i 's/\/\///g' settings.gradle
+          git submodule status v2ray > v2ray_status
       - name: V2ray Cache
         id: cache
         uses: actions/cache@v2
@@ -192,7 +199,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Fetch Status
-        run: git submodule status ss-rust/src/main/rust/shadowsocks-rust > shadowsocks_status
+        run: |
+          sed -i 's/\/\///g' settings.gradle
+          git submodule status ss-rust/src/main/rust/shadowsocks-rust > shadowsocks_status
       - name: Shadowsocks Cache
         id: cache
         uses: actions/cache@v2
@@ -223,7 +232,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Fetch Status
-        run: git submodule status 'ssr-libev/*' > shadowsocksr_status
+        run: |
+          sed -i 's/\/\///g' settings.gradle
+          git submodule status 'ssr-libev/*' > shadowsocksr_status
       - name: ShadowsocksR Cache
         id: cache
         uses: actions/cache@v2
@@ -263,6 +274,7 @@ jobs:
         uses: android-actions/setup-android@v2
       - name: Fetch Status
         run: |
+          sed -i 's/\/\///g' settings.gradle
           git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
           git submodule status TMessagesProj/jni/boringssl > boringssl_status
           git submodule status ss-rust/src/main/rust/shadowsocks-rust > shadowsocks_status
