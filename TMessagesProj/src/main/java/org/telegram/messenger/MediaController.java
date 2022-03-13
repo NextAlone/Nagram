@@ -414,10 +414,10 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
     };
 
-    public final static int VIDEO_BITRATE_1080 = 6800_000;
-    public final static int VIDEO_BITRATE_720 = 2621_440;
-    public final static int VIDEO_BITRATE_480 = 1000_000;
-    public final static int VIDEO_BITRATE_360 = 750_000;
+    public final static int VIDEO_BITRATE_1080 = 14000_000;
+    public final static int VIDEO_BITRATE_720 = 9000_000;
+    public final static int VIDEO_BITRATE_480 = 5000_000;
+    public final static int VIDEO_BITRATE_360 = 3000_000;
 
     public final static String VIDEO_MIME_TYPE = "video/avc";
     public final static String AUIDO_MIME_TYPE = "audio/mp4a-latm";
@@ -4920,21 +4920,21 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         float minCompressFactor;
         int maxBitrate;
         if (Math.min(height, width) >= 1080) {
-            maxBitrate = 6800_000;
+            maxBitrate = 14000_000;
             compressFactor = 1f;
             minCompressFactor = 1f;
         } else if (Math.min(height, width) >= 720) {
-            maxBitrate = 3200_000;
+            maxBitrate = 9000_000;
             compressFactor = 1f;
             minCompressFactor = 1f;
         } else if (Math.min(height, width) >= 480) {
-            maxBitrate = 1000_000;
-            compressFactor = 0.8f;
-            minCompressFactor = 0.9f;
+            maxBitrate = 5000_000;
+            compressFactor = 1f;
+            minCompressFactor = 1f;
         } else {
-            maxBitrate = 750_000;
-            compressFactor = 0.6f;
-            minCompressFactor = 0.7f;
+            maxBitrate = 3000_000;
+            compressFactor = 1f;
+            minCompressFactor = 1f;
         }
         int remeasuredBitrate = (int) (originalBitrate / (Math.min(originalHeight / (float) (height), originalWidth / (float) (width))));
         remeasuredBitrate *= compressFactor;
