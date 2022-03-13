@@ -15,6 +15,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,7 +28,10 @@ import android.view.ViewParent;
 import android.view.Window;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.FrameLayout;
-import java.util.ArrayList;
+
+import androidx.annotation.CallSuper;
+import androidx.core.graphics.ColorUtils;
+
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -47,12 +51,15 @@ import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.Components.LayoutHelper;
+
+import java.util.ArrayList;
+
 import top.qwq2333.nullgram.utils.MessageUtils;
 
 public abstract class BaseFragment {
 
     private boolean isFinished;
-    private boolean finishing;
+    protected boolean finishing;
     protected Dialog visibleDialog;
     protected int currentAccount = UserConfig.selectedAccount;
 
@@ -69,6 +76,7 @@ public abstract class BaseFragment {
     protected Dialog parentDialog;
     protected boolean inTransitionAnimation = false;
     protected boolean fragmentBeginToShow;
+    private boolean removingFromStack;
 
     public BaseFragment() {
         classGuid = ConnectionsManager.generateClassGuid();
@@ -122,7 +130,7 @@ public abstract class BaseFragment {
         return inBubbleMode;
     }
 
-    public boolean getInPreviewMode() {
+    public boolean isInPreviewMode() {
         return inPreviewMode;
     }
 
@@ -285,12 +293,17 @@ public abstract class BaseFragment {
         return true;
     }
 
+    @CallSuper
     public void onFragmentDestroy() {
         getConnectionsManager().cancelRequestsForGuid(classGuid);
         getMessagesStorage().cancelTasksForGuid(classGuid);
         isFinished = true;
         if (actionBar != null) {
             actionBar.setEnabled(false);
+        }
+
+        if (hasForceLightStatusBar() && !AndroidUtilities.isTablet() && getParentLayout().getLastFragment() == this && getParentActivity() != null && !finishing) {
+            AndroidUtilities.setLightStatusBar(getParentActivity().getWindow(), Theme.getColor(Theme.key_actionBarDefault) == Color.WHITE);
         }
     }
 
@@ -304,10 +317,12 @@ public abstract class BaseFragment {
         }
     }
 
+    @CallSuper
     public void onResume() {
         isPaused = false;
     }
 
+    @CallSuper
     public void onPause() {
         if (actionBar != null) {
             actionBar.onPause();
@@ -649,6 +664,10 @@ public abstract class BaseFragment {
         return null;
     }
 
+    protected boolean shouldOverrideSlideTransition(boolean topFragment, boolean backAnimation) {
+        return false;
+    }
+
     protected void prepareFragmentToSlide(boolean topFragment, boolean beginSlide) {
 
     }
@@ -707,6 +726,13 @@ public abstract class BaseFragment {
         return Theme.getThemeDrawable(key);
     }
 
+    /**
+     * @return If this fragment should have light status bar even if it's disabled in debug settings
+     */
+    public boolean hasForceLightStatusBar() {
+        return false;
+    }
+
     public int getNavigationBarColor() {
         return Theme.getColor(Theme.key_windowBackgroundGray);
     }
@@ -739,4 +765,25 @@ public abstract class BaseFragment {
         return true;
     }
 
+    public boolean isRemovingFromStack() {
+        return removingFromStack;
+    }
+
+    public void setRemovingFromStack(boolean b) {
+        removingFromStack = b;
+    }
+
+    public boolean isLightStatusBar() {
+        if (hasForceLightStatusBar() && !Theme.getCurrentTheme().isDark()) {
+            return true;
+        }
+        Theme.ResourcesProvider resourcesProvider = getResourceProvider();
+        int color;
+        if (resourcesProvider != null) {
+            color = resourcesProvider.getColorOrDefault(Theme.key_actionBarDefault);
+        } else {
+            color = Theme.getColor(Theme.key_actionBarDefault, null, true);
+        }
+        return ColorUtils.calculateLuminance(color) > 0.7f;
+    }
 }

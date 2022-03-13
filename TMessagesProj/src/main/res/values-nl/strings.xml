@@ -2139,7 +2139,6 @@
     <string name="AuthAnotherClientInfo2">Gebruik Telegram Desktop om de QR-code te krijgen.</string>
     <string name="AuthAnotherClientInfo3">Scan de QR-Code om met je account te verbinden.</string>
     <string name="AuthAnotherClientUrl">Met deze code kun je iemand toestaan om in te loggen op je Telegram-account\n\nOm de login te bevestigen ga naar, Instellingen &gt; Apparaten &gt; Scan QR en scan de code.</string>
-    <string name="QRCodePermissionNoCamera">Telegram heeft toegang tot je camera nodig om QR-codes te scannen.</string>
     <string name="SetProfilePhoto">Profielfoto instellen</string>
     <string name="AppUpdate">Update Telegram</string>
     <string name="AppUpdateVersionAndSize">Version %1$s • %2$s</string>
@@ -3264,10 +3263,6 @@
     <string name="TosDeclineDeleteAccount">Let op, hiermee verwijder je je Telegram-account inclusief alle gegevens die zijn opgeslagen in de Telegram-cloud permanent.\n\nLet op: je kunt dit verzoek nu annuleren en je gegevens exporteren voordat je je account verwijderd, op die manier raak je niet alles kwijt. (Om dit te doen, maak gebruik van de meest recente versie van Telegram-desktop, ga naar Instellingen &gt; Geavanceerd &gt; Telegram-gegevens exporteren.)</string>
     <!--permissions-->
     <string name="PermissionContacts">Om vanaf al je apparaten contact te kunnen leggen met je vrienden zullen je contacten continu worden gesynchroniseerd met onze zwaar versleutelde Cloud-servers.</string>
-    <string name="PermissionStorage">Telegram heeft toegang tot je opslaggeheugen nodig zodat je foto\'s, video\'s, muziek en andere media kunt opslaan en versturen.</string>
-    <string name="PermissionNoAudio">Telegram heeft toegang tot je microfoon nodig om spraakberichten te kunnen verzenden.</string>
-    <string name="PermissionNoAudioVideo">Telegram heeft toegang tot je microfoon nodig om video op te nemen.</string>
-    <string name="PermissionNoCamera">Telegram heeft toegang tot je camera nodig zodat je foto\'s en video\'s kunt maken. Schakel dit in via instellingen.</string>
     <string name="PermissionNoLocation">Telegram heeft toegang tot je locatie nodig om deze te kunnen delen met je vrienden.</string>
     <string name="PermissionNoLocationPosition">Telegram heeft toegang tot je locatie nodig.</string>
     <string name="PermissionDrawAboveOtherApps">Telegram heeft de toestemming \'over andere apps tekenen\' nodig om video\'s af te spelen in beeld-in-beeld-modus.</string>
@@ -3442,8 +3437,6 @@
     <string name="VoipPeerVideoOutdated">Sorry, **%1$s** gebruikt een oude versie van Telegram die geen videogesprekken ondersteunt.</string>
     <string name="VoipPeerVideoOutdatedMakeVoice">Voer een spraakoproep</string>
     <string name="VoipRateCallAlert">Beoordeel de kwaliteit van je Telegram-oproep.</string>
-    <string name="VoipNeedMicPermission">Telegram heeft toegang tot je microfoon nodig zodat je kunt bellen.</string>
-    <string name="VoipNeedMicCameraPermission">Telegram heeft toegang nodig tot je microfoon en camera, zodat je video-oproepen kunt doen.</string>
     <string name="VoipNeedCameraPermission">Telegram needs access to your camera so that you can make video calls.</string>
     <string name="VoipFeedbackCommentHint">Optionele opmerking toevoegen</string>
     <string name="CallBack">Terugbellen</string>

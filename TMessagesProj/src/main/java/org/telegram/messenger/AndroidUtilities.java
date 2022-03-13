@@ -14,6 +14,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.KeyguardManager;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -30,6 +31,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.Matrix;
@@ -70,6 +72,7 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.Surface;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -89,44 +92,20 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
 import androidx.core.content.FileProvider;
+import androidx.dynamicanimation.animation.DynamicAnimation;
+import androidx.dynamicanimation.animation.SpringAnimation;
+import androidx.dynamicanimation.animation.SpringForce;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
+
 import com.android.internal.telephony.ITelephony;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
 import com.google.android.gms.tasks.Task;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.lang.ref.WeakReference;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.net.IDN;
-import java.nio.charset.StandardCharsets;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
@@ -138,6 +117,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
+import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.BackgroundGradientDrawable;
 import org.telegram.ui.Components.ForegroundColorSpanThemable;
 import org.telegram.ui.Components.ForegroundDetector;
@@ -150,8 +130,6 @@ import org.telegram.ui.Components.ShareAlert;
 import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.ThemePreviewActivity;
 import org.telegram.ui.WallpapersListActivity;
-import top.qwq2333.nullgram.config.ConfigManager;
-import top.qwq2333.nullgram.utils.Defines;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -184,7 +162,11 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.utils.Defines;
+
 public class AndroidUtilities {
+    public final static int LIGHT_STATUS_BAR_OVERLAY = 0x0f000000, DARK_STATUS_BAR_OVERLAY = 0x33000000;
 
     private static final Hashtable<String, Typeface> typefaceCache = new Hashtable<>();
     private static int prevOrientation = -10;
@@ -194,6 +176,7 @@ public class AndroidUtilities {
     private static final Object callLock = new Object();
 
     public static int statusBarHeight = 0;
+    public static int navigationBarHeight = 0;
     public static boolean firstConfigurationWas;
     public static float density = 1;
     public static Point displaySize = new Point();
@@ -212,8 +195,11 @@ public class AndroidUtilities {
     public static AccelerateInterpolator accelerateInterpolator = new AccelerateInterpolator();
     public static OvershootInterpolator overshootInterpolator = new OvershootInterpolator();
 
-    private static Boolean isTablet = null;
+    private static AccessibilityManager accessibilityManager;
+
+    private static Boolean isTablet = null, isSmallScreen = null;
     private static int adjustOwnerClassGuid = 0;
+    private static int altFocusableClassGuid = 0;
 
     private static Paint roundPaint;
     private static RectF bitmapRect;
@@ -233,24 +219,24 @@ public class AndroidUtilities {
             BAD_CHARS_MESSAGE_LONG_PATTERN = Pattern.compile("[\u0300-\u036f\u2066-\u2067]+");
             BAD_CHARS_MESSAGE_PATTERN = Pattern.compile("[\u2066-\u2067]+");
             final Pattern IP_ADDRESS = Pattern.compile(
-                    "((25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(25[0-5]|2[0-4]"
-                            + "[0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1]"
-                            + "[0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}"
-                            + "|[1-9][0-9]|[0-9]))");
+                "((25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(25[0-5]|2[0-4]"
+                    + "[0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1]"
+                    + "[0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}"
+                    + "|[1-9][0-9]|[0-9]))");
             final String IRI = "[" + GOOD_IRI_CHAR + "]([" + GOOD_IRI_CHAR + "\\-]{0,61}[" + GOOD_IRI_CHAR + "]){0,1}";
             final String GOOD_GTLD_CHAR = "a-zA-Z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF";
             final String GTLD = "[" + GOOD_GTLD_CHAR + "]{2,63}";
             final String HOST_NAME = "(" + IRI + "\\.)+" + GTLD;
             final Pattern DOMAIN_NAME = Pattern.compile("(" + HOST_NAME + "|" + IP_ADDRESS + ")");
             WEB_URL = Pattern.compile(
-                    "((?:(http|https|Http|Https|ton|tg):\\/\\/(?:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)"
-                            + "\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,64}(?:\\:(?:[a-zA-Z0-9\\$\\-\\_"
-                            + "\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,25})?\\@)?)?"
-                            + "(?:" + DOMAIN_NAME + ")"
-                            + "(?:\\:\\d{1,5})?)" // plus option port number
-                            + "(\\/(?:(?:[" + GOOD_IRI_CHAR + "\\;\\/\\?\\:\\@\\&\\=\\#\\~"  // plus option query params
-                            + "\\-\\.\\+\\!\\*\\'\\(\\)\\,\\_])|(?:\\%[a-fA-F0-9]{2}))*)?"
-                            + "(?:\\b|$)");
+                "((?:(http|https|Http|Https|ton|tg):\\/\\/(?:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)"
+                    + "\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,64}(?:\\:(?:[a-zA-Z0-9\\$\\-\\_"
+                    + "\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,25})?\\@)?)?"
+                    + "(?:" + DOMAIN_NAME + ")"
+                    + "(?:\\:\\d{1,5})?)" // plus option port number
+                    + "(\\/(?:(?:[" + GOOD_IRI_CHAR + "\\;\\/\\?\\:\\@\\&\\=\\#\\~"  // plus option query params
+                    + "\\-\\.\\+\\!\\*\\'\\(\\)\\,\\_])|(?:\\%[a-fA-F0-9]{2}))*)?"
+                    + "(?:\\b|$)");
         } catch (Exception e) {
             FileLog.e(e);
         }
@@ -261,14 +247,14 @@ public class AndroidUtilities {
         checkDisplaySize(ApplicationLoader.applicationContext, null);
     }
 
-    private static final int[] documentIcons = {
+    private static int[] documentIcons = {
         R.drawable.media_doc_blue,
         R.drawable.media_doc_green,
         R.drawable.media_doc_red,
         R.drawable.media_doc_yellow
     };
 
-    private static final int[] documentMediaIcons = {
+    private static int[] documentMediaIcons = {
         R.drawable.media_doc_blue_b,
         R.drawable.media_doc_green_b,
         R.drawable.media_doc_red_b,
@@ -470,7 +456,10 @@ public class AndroidUtilities {
         if (start == 0) {
             return true;
         }
-        return s.charAt(start - 1) != '@';
+        if (s.charAt(start - 1) == '@') {
+            return false;
+        }
+        return true;
     };
 
     public static boolean addLinks(Spannable text, int mask) {
@@ -559,10 +548,16 @@ public class AndroidUtilities {
             return;
         }
         AndroidUtilities.statusBarHeight = getStatusBarHeight(context);
+        AndroidUtilities.navigationBarHeight = getNavigationBarHeight(context);
     }
 
     public static int getStatusBarHeight(Context context) {
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        return resourceId > 0 ? context.getResources().getDimensionPixelSize(resourceId) : 0;
+    }
+
+    private static int getNavigationBarHeight(Context context) {
+        int resourceId = context.getResources().getIdentifier("navigation_bar_height", "dimen", "android");
         return resourceId > 0 ? context.getResources().getDimensionPixelSize(resourceId) : 0;
     }
 
@@ -724,15 +719,95 @@ public class AndroidUtilities {
         return new int[]{(int) (r * 255), (int) (g * 255), (int) (b * 255)};
     }
 
-    public static void lightColorMatrix(ColorMatrix colorMatrix, float addLightness) {
+    public static void adjustSaturationColorMatrix(ColorMatrix colorMatrix, float saturation) {
         if (colorMatrix == null) {
             return;
         }
-        float[] matrix = colorMatrix.getArray();
-        matrix[4] += addLightness;
-        matrix[9] += addLightness;
-        matrix[14] += addLightness;
-        colorMatrix.set(matrix);
+        float x = 1 + saturation;
+        final float lumR = 0.3086f;
+        final float lumG = 0.6094f;
+        final float lumB = 0.0820f;
+
+        colorMatrix.postConcat(new ColorMatrix(new float[] {
+            lumR*(1-x)+x,lumG*(1-x),lumB*(1-x),0,0,
+            lumR*(1-x),lumG*(1-x)+x,lumB*(1-x),0,0,
+            lumR*(1-x),lumG*(1-x),lumB*(1-x)+x,0,0,
+            0,0,0,1,0
+        }));
+    }
+    public static void adjustBrightnessColorMatrix(ColorMatrix colorMatrix, float brightness) {
+        if (colorMatrix == null) {
+            return;
+        }
+        brightness *= 255;
+        colorMatrix.postConcat(new ColorMatrix(new float[] {
+            1,0,0,0,brightness,
+            0,1,0,0,brightness,
+            0,0,1,0,brightness,
+            0,0,0,1,0
+        }));
+    }
+    public static void multiplyBrightnessColorMatrix(ColorMatrix colorMatrix, float v) {
+        if (colorMatrix == null) {
+            return;
+        }
+        colorMatrix.postConcat(new ColorMatrix(new float[] {
+            v,0,0,0,0,
+            0,v,0,0,0,
+            0,0,v,0,0,
+            0,0,0,1,0
+        }));
+    }
+
+    public static Bitmap snapshotView(View v) {
+        Bitmap bm = Bitmap.createBitmap(v.getWidth(), v.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bm);
+        v.draw(canvas);
+
+        int[] loc = new int[2];
+        v.getLocationInWindow(loc);
+        snapshotTextureViews(loc[0], loc[1], loc, canvas, v);
+
+        return bm;
+    }
+
+    private static void snapshotTextureViews(int rootX, int rootY, int[] loc, Canvas canvas, View v) {
+        if (v instanceof TextureView) {
+            TextureView tv = (TextureView) v;
+            tv.getLocationInWindow(loc);
+
+            Bitmap textureSnapshot = tv.getBitmap();
+            if (textureSnapshot != null) {
+                canvas.save();
+                canvas.drawBitmap(textureSnapshot, loc[0] - rootX, loc[1] - rootY, null);
+                canvas.restore();
+                textureSnapshot.recycle();
+            }
+        }
+        if (v instanceof ViewGroup) {
+            ViewGroup vg = (ViewGroup) v;
+            for (int i = 0; i < vg.getChildCount(); i++) {
+                snapshotTextureViews(rootX, rootY, loc, canvas, vg.getChildAt(i));
+            }
+        }
+    }
+
+    public static void requestAltFocusable(Activity activity, int classGuid) {
+        if (activity == null) {
+            return;
+        }
+        activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
+            WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+        altFocusableClassGuid = classGuid;
+    }
+
+    public static void removeAltFocusable(Activity activity, int classGuid) {
+        if (activity == null) {
+            return;
+        }
+        if (altFocusableClassGuid == classGuid) {
+            activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+        }
     }
 
     public static void requestAdjustResize(Activity activity, int classGuid) {
@@ -1165,7 +1240,7 @@ public class AndroidUtilities {
 
     public static byte[] getStringBytes(String src) {
         try {
-            return src.getBytes(StandardCharsets.UTF_8);
+            return src.getBytes("UTF-8");
         } catch (Exception ignore) {
 
         }
@@ -1177,8 +1252,7 @@ public class AndroidUtilities {
         try {
             InputStream stream;
             if (asset) {
-                AssetFileDescriptor fd = ApplicationLoader.applicationContext.getContentResolver()
-                    .openAssetFileDescriptor(uri, "r");
+                AssetFileDescriptor fd = ApplicationLoader.applicationContext.getContentResolver().openAssetFileDescriptor(uri, "r");
                 stream = fd.createInputStream();
             } else {
                 ContentResolver cr = ApplicationLoader.applicationContext.getContentResolver();
@@ -1188,8 +1262,7 @@ public class AndroidUtilities {
             ArrayList<VcardData> vcardDatas = new ArrayList<>();
             VcardData currentData = null;
 
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream,
-                StandardCharsets.UTF_8));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
             String line;
             String originalLine;
             String pendingLine = null;
@@ -1273,8 +1346,8 @@ public class AndroidUtilities {
                 String[] args;
                 if (idx >= 0) {
                     args = new String[]{
-                            line.substring(0, idx),
-                            line.substring(idx + 1).trim()
+                        line.substring(0, idx),
+                        line.substring(idx + 1).trim()
                     };
                 } else {
                     args = new String[]{line.trim()};
@@ -1716,20 +1789,18 @@ public class AndroidUtilities {
             if (roundMessageSize == 0) {
                 if (AndroidUtilities.isTablet()) {
                     roundMessageSize = (int) (AndroidUtilities.getMinTabletSide() * 0.6f);
-                    roundPlayingMessageSize =
-                        AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(28);
+                    roundPlayingMessageSize = (int) (AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(28));
                 } else {
-                    roundMessageSize = (int) (
-                        Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)
-                            * 0.6f);
-                    roundPlayingMessageSize =
-                        Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)
-                            - AndroidUtilities.dp(28);
+                    roundMessageSize = (int) (Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y) * 0.6f);
+                    roundPlayingMessageSize = (int) (Math.min(AndroidUtilities.displaySize.x, AndroidUtilities.displaySize.y)  - AndroidUtilities.dp(28));
                 }
                 roundMessageInset = dp(2);
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.e("density = " + density + " display size = " + displaySize.x + " " + displaySize.y + " " + displayMetrics.xdpi + "x" + displayMetrics.ydpi);
+                if (statusBarHeight == 0) {
+                    fillStatusBarHeight(context);
+                }
+                FileLog.e("density = " + density + " display size = " + displaySize.x + " " + displaySize.y + " " + displayMetrics.xdpi + "x" + displayMetrics.ydpi + ", screen layout: " + configuration.screenLayout + ", statusbar height: " + statusBarHeight + ", navbar height: " + navigationBarHeight);
             }
         } catch (Exception e) {
             FileLog.e(e);
@@ -1833,6 +1904,13 @@ public class AndroidUtilities {
         return isTablet;
     }
 
+    public static boolean isSmallScreen() {
+        if (isSmallScreen == null) {
+            isSmallScreen = (Math.max(displaySize.x, displaySize.y) - statusBarHeight - navigationBarHeight) / density <= 650;
+        }
+        return isSmallScreen;
+    }
+
     public static boolean isSmallTablet() {
         float minSide = Math.min(displaySize.x, displaySize.y) / density;
         return minSide <= 690;
@@ -1878,7 +1956,7 @@ public class AndroidUtilities {
     }*/
 
     private static Runnable unregisterRunnable;
-    private static final boolean hasCallPermissions = Build.VERSION.SDK_INT >= 23;
+    private static boolean hasCallPermissions = Build.VERSION.SDK_INT >= 23;
 
     @SuppressWarnings("unchecked")
     public static void endIncomingCall() {
@@ -1904,11 +1982,11 @@ public class AndroidUtilities {
             return null;
         }
         try (Cursor cursor = ApplicationLoader.applicationContext.getContentResolver().query(
-                CallLog.Calls.CONTENT_URI,
-                new String[]{CallLog.Calls.NUMBER, CallLog.Calls.DATE},
-                CallLog.Calls.TYPE + " IN (" + CallLog.Calls.MISSED_TYPE + "," + CallLog.Calls.INCOMING_TYPE + "," + CallLog.Calls.REJECTED_TYPE + ")",
-                null,
-                "date DESC LIMIT 5")) {
+            CallLog.Calls.CONTENT_URI,
+            new String[]{CallLog.Calls.NUMBER, CallLog.Calls.DATE},
+            CallLog.Calls.TYPE + " IN (" + CallLog.Calls.MISSED_TYPE + "," + CallLog.Calls.INCOMING_TYPE + "," + CallLog.Calls.REJECTED_TYPE + ")",
+            null,
+            "date DESC LIMIT 5")) {
             while (cursor.moveToNext()) {
                 String number = cursor.getString(0);
                 long date = cursor.getLong(1);
@@ -2239,9 +2317,9 @@ public class AndroidUtilities {
             FileLog.d("wasInBackground = " + wasInBackground + " appLocked = " + SharedConfig.appLocked + " autoLockIn = " + SharedConfig.autoLockIn + " lastPauseTime = " + SharedConfig.lastPauseTime + " uptime = " + uptime);
         }
         return SharedConfig.passcodeHash.length() > 0 && wasInBackground &&
-                (SharedConfig.appLocked ||
-                        SharedConfig.autoLockIn != 0 && SharedConfig.lastPauseTime != 0 && !SharedConfig.appLocked && (SharedConfig.lastPauseTime + SharedConfig.autoLockIn) <= uptime ||
-                        uptime + 5 < SharedConfig.lastPauseTime);
+            (SharedConfig.appLocked ||
+                SharedConfig.autoLockIn != 0 && SharedConfig.lastPauseTime != 0 && !SharedConfig.appLocked && (SharedConfig.lastPauseTime + SharedConfig.autoLockIn) <= uptime ||
+                uptime + 5 < SharedConfig.lastPauseTime);
     }
 
     public static void shakeView(final View view, final float x, final int num) {
@@ -2262,6 +2340,29 @@ public class AndroidUtilities {
             }
         });
         animatorSet.start();
+    }
+
+    public static void shakeViewSpring(View view) {
+        shakeViewSpring(view, 10, null);
+    }
+
+    public static void shakeViewSpring(View view, float shiftDp) {
+        shakeViewSpring(view, shiftDp, null);
+    }
+
+    public static void shakeViewSpring(View view, Runnable endCallback) {
+        shakeViewSpring(view, 10, endCallback);
+    }
+
+    public static void shakeViewSpring(View view, float shiftDp, Runnable endCallback) {
+        int shift = dp(shiftDp);
+        new SpringAnimation(view, DynamicAnimation.TRANSLATION_X, 0)
+            .setSpring(new SpringForce(0).setStiffness(600f))
+            .setStartVelocity(-shift * 100)
+            .addEndListener((animation, canceled, value, velocity) -> {
+                if (endCallback != null) endCallback.run();
+            })
+            .start();
     }
 
     /*public static String ellipsize(String text, int maxLines, int maxWidth, TextPaint paint) {
@@ -2324,6 +2425,10 @@ public class AndroidUtilities {
 
     public static void appCenterLog(Throwable e) {
 
+    }
+
+    public static boolean shouldShowClipboardToast() {
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.S || !OneUIUtilities.isOneUI();
     }
 
     public static void addToClipboard(CharSequence str) {
@@ -2418,7 +2523,7 @@ public class AndroidUtilities {
 
                     final String selection = "_id=?";
                     final String[] selectionArgs = new String[]{
-                            split[1]
+                        split[1]
                     };
 
                     return getDataColumn(ApplicationLoader.applicationContext, contentUri, selection, selectionArgs);
@@ -2438,7 +2543,7 @@ public class AndroidUtilities {
 
         final String column = "_data";
         final String[] projection = {
-                column
+            column
         };
         try (Cursor cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null)) {
             if (cursor != null && cursor.moveToFirst()) {
@@ -2536,6 +2641,17 @@ public class AndroidUtilities {
         }
 
         return builder;
+    }
+
+    public static boolean isKeyguardSecure() {
+        KeyguardManager km = (KeyguardManager) ApplicationLoader.applicationContext.getSystemService(Context.KEYGUARD_SERVICE);
+        return km.isKeyguardSecure();
+    }
+
+    public static boolean isSimAvailable() {
+        TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService(Context.TELEPHONY_SERVICE);
+        int state = tm.getSimState();
+        return state != TelephonyManager.SIM_STATE_ABSENT && state != TelephonyManager.SIM_STATE_UNKNOWN && tm.getPhoneType() != TelephonyManager.PHONE_TYPE_NONE && !isAirplaneModeOn();
     }
 
     public static boolean isAirplaneModeOn() {
@@ -2919,22 +3035,11 @@ public class AndroidUtilities {
                     }
                 }
             }
-            if (Build.VERSION.SDK_INT >= 26 && realMimeType != null && realMimeType.equals("application/vnd.android.package-archive") && !ApplicationLoader.applicationContext.getPackageManager().canRequestPackageInstalls()) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity, resourcesProvider);
-                builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-                builder.setMessage(LocaleController.getString("ApkRestricted", R.string.ApkRestricted));
-                builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialogInterface, i) -> {
-                    try {
-                        activity.startActivity(new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:" + activity.getPackageName())));
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                    }
-                });
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                builder.show();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && realMimeType != null && realMimeType.equals("application/vnd.android.package-archive") && !ApplicationLoader.applicationContext.getPackageManager().canRequestPackageInstalls()) {
+                AlertsCreator.createApkRestrictedDialog(activity, resourcesProvider).show();
                 return true;
             }
-            if (Build.VERSION.SDK_INT >= 24) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 intent.setDataAndType(FileProvider.getUriForFile(activity, BuildConfig.APPLICATION_ID + ".provider", f), realMimeType != null ? realMimeType : "text/plain");
             } else {
                 intent.setDataAndType(Uri.fromFile(f), realMimeType != null ? realMimeType : "text/plain");
@@ -2943,7 +3048,7 @@ public class AndroidUtilities {
                 try {
                     activity.startActivityForResult(intent, 500);
                 } catch (Exception e) {
-                    if (Build.VERSION.SDK_INT >= 24) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         intent.setDataAndType(FileProvider.getUriForFile(activity, BuildConfig.APPLICATION_ID + ".provider", f), "text/plain");
                     } else {
                         intent.setDataAndType(Uri.fromFile(f), "text/plain");
@@ -3159,6 +3264,13 @@ public class AndroidUtilities {
         }
     }
 
+    public static boolean isAccessibilityTouchExplorationEnabled() {
+        if (accessibilityManager == null) {
+            accessibilityManager = (AccessibilityManager) ApplicationLoader.applicationContext.getSystemService(Context.ACCESSIBILITY_SERVICE);
+        }
+        return accessibilityManager.isEnabled() && accessibilityManager.isTouchExplorationEnabled();
+    }
+
     public static boolean handleProxyIntent(Activity activity, Intent intent) {
         if (intent == null) {
             return false;
@@ -3238,7 +3350,10 @@ public class AndroidUtilities {
             return false;
         }
         float scale = Settings.Global.getFloat(ApplicationLoader.applicationContext.getContentResolver(), Settings.Global.ANIMATOR_DURATION_SCALE, 1.0f);
-        return !(scale <= 0.0f);
+        if (scale <= 0.0f) {
+            return false;
+        }
+        return true;
     }
 
     public static void showProxyAlert(Activity activity, final String address, final String port, final String user, final String password, final String secret) {
@@ -3550,7 +3665,7 @@ public class AndroidUtilities {
                 }
             }
             if (modes.length() > 0) {
-                link += "?mode=" + modes;
+                link += "?mode=" + modes.toString();
             }
         } else if (object instanceof WallpapersListActivity.ColorWallpaper) {
             WallpapersListActivity.ColorWallpaper wallPaper = (WallpapersListActivity.ColorWallpaper) object;
@@ -3617,12 +3732,47 @@ public class AndroidUtilities {
         return -1;
     }
 
+    public static int lerp(int a, int b, float f) {
+        return (int) (a + f * (b - a));
+    }
+
     public static float lerp(float a, float b, float f) {
         return a + f * (b - a);
     }
 
     public static float lerp(float[] ab, float f) {
         return lerp(ab[0], ab[1], f);
+    }
+
+    public static int lerpColor(int a, int b, float f) {
+        return Color.argb(
+            lerp(Color.alpha(a), Color.alpha(b), f),
+            lerp(Color.red(a), Color.red(b), f),
+            lerp(Color.green(a), Color.green(b), f),
+            lerp(Color.blue(a), Color.blue(b), f)
+        );
+    }
+
+    public static void lerp(RectF a, RectF b, float f, RectF to) {
+        if (to != null) {
+            to.set(
+                AndroidUtilities.lerp(a.left, b.left, f),
+                AndroidUtilities.lerp(a.top, b.top, f),
+                AndroidUtilities.lerp(a.right, b.right, f),
+                AndroidUtilities.lerp(a.bottom, b.bottom, f)
+            );
+        }
+    }
+
+    public static void lerp(Rect a, Rect b, float f, Rect to) {
+        if (to != null) {
+            to.set(
+                AndroidUtilities.lerp(a.left, b.left, f),
+                AndroidUtilities.lerp(a.top, b.top, f),
+                AndroidUtilities.lerp(a.right, b.right, f),
+                AndroidUtilities.lerp(a.bottom, b.bottom, f)
+            );
+        }
     }
 
     private static WeakReference<BaseFragment> flagSecureFragment;
@@ -3675,9 +3825,6 @@ public class AndroidUtilities {
         };
     }
     private static void updateFlagSecure(Window window) {
-        if (ConfigManager.getBooleanOrFalse(Defines.allowScreenshotOnNoForwardChat)){
-            return;
-        }
         if (Build.VERSION.SDK_INT >= 23) {
             if (window == null) {
                 return;
@@ -3725,41 +3872,7 @@ public class AndroidUtilities {
         return "";
     }
 
-    private static final char[] characters = new char[]{' ', ' ', '!', '"', '#', '%', '&', '\'',
-        '(', ')', '*', ',', '-', '.', '/', ':', ';', '?', '@', '[', '\\', ']', '_', '{', '}', '¡',
-        '§', '«', '¶', '·', '»', '¿', ';', '·', '՚', '՛', '՜', '՝', '՞', '՟', '։', '֊', '־', '׀',
-        '׃', '׆', '׳', '״', '؉', '؊', '،', '؍', '؛', '؞', '؟', '٪', '٫', '٬', '٭', '۔', '܀', '܁',
-        '܂', '܃', '܄', '܅', '܆', '܇', '܈', '܉', '܊', '܋', '܌', '܍', '߷', '߸', '߹', '࠰', '࠱', '࠲',
-        '࠳', '࠴', '࠵', '࠶', '࠷', '࠸', '࠹', '࠺', '࠻', '࠼', '࠽', '࠾', '࡞', '।', '॥', '॰', '৽', '੶',
-        '૰', '౷', '಄', '෴', '๏', '๚', '๛', '༄', '༅', '༆', '༇', '༈', '༉', '༊', '་', '༌', '།', '༎',
-        '༏', '༐', '༑', '༒', '༔', '༺', '༻', '༼', '༽', '྅', '࿐', '࿑', '࿒', '࿓', '࿔', '࿙', '࿚', '၊',
-        '။', '၌', '၍', '၎', '၏', '჻', '፠', '፡', '።', '፣', '፤', '፥', '፦', '፧', '፨', '᐀', '᙮', '᚛',
-        '᚜', '᛫', '᛬', '᛭', '᜵', '᜶', '។', '៕', '៖', '៘', '៙', '៚', '᠀', '᠁', '᠂', '᠃', '᠄', '᠅',
-        '᠆', '᠇', '᠈', '᠉', '᠊', '᥄', '᥅', '᨞', '᨟', '᪠', '᪡', '᪢', '᪣', '᪤', '᪥', '᪦', '᪨', '᪩',
-        '᪪', '᪫', '᪬', '᪭', '᭚', '᭛', '᭜', '᭝', '᭞', '᭟', '᭠', '᯼', '᯽', '᯾', '᯿', '᰻', '᰼', '᰽',
-        '᰾', '᰿', '᱾', '᱿', '᳀', '᳁', '᳂', '᳃', '᳄', '᳅', '᳆', '᳇', '᳓', '‐', '‑', '‒', '–', '—',
-        '―', '‖', '‗', '‘', '’', '‚', '‛', '“', '”', '„', '‟', '†', '‡', '•', '‣', '․', '‥', '…',
-        '‧', '‰', '‱', '′', '″', '‴', '‵', '‶', '‷', '‸', '‹', '›', '※', '‼', '‽', '‾', '‿', '⁀',
-        '⁁', '⁂', '⁃', '⁅', '⁆', '⁇', '⁈', '⁉', '⁊', '⁋', '⁌', '⁍', '⁎', '⁏', '⁐', '⁑', '⁓', '⁔',
-        '⁕', '⁖', '⁗', '⁘', '⁙', '⁚', '⁛', '⁜', '⁝', '⁞', '⁽', '⁾', '₍', '₎', '⌈', '⌉', '⌊', '⌋',
-        '〈', '〉', '❨', '❩', '❪', '❫', '❬', '❭', '❮', '❯', '❰', '❱', '❲', '❳', '❴', '❵', '⟅', '⟆',
-        '⟦', '⟧', '⟨', '⟩', '⟪', '⟫', '⟬', '⟭', '⟮', '⟯', '⦃', '⦄', '⦅', '⦆', '⦇', '⦈', '⦉', '⦊',
-        '⦋', '⦌', '⦍', '⦎', '⦏', '⦐', '⦑', '⦒', '⦓', '⦔', '⦕', '⦖', '⦗', '⦘', '⧘', '⧙', '⧚', '⧛',
-        '⧼', '⧽', '⳹', '⳺', '⳻', '⳼', '⳾', '⳿', '⵰', '⸀', '⸁', '⸂', '⸃', '⸄', '⸅', '⸆', '⸇', '⸈',
-        '⸉', '⸊', '⸋', '⸌', '⸍', '⸎', '⸏', '⸐', '⸑', '⸒', '⸓', '⸔', '⸕', '⸖', '⸗', '⸘', '⸙', '⸚',
-        '⸛', '⸜', '⸝', '⸞', '⸟', '⸠', '⸡', '⸢', '⸣', '⸤', '⸥', '⸦', '⸧', '⸨', '⸩', '⸪', '⸫', '⸬',
-        '⸭', '⸮', '⸰', '⸱', '⸲', '⸳', '⸴', '⸵', '⸶', '⸷', '⸸', '⸹', '⸺', '⸻', '⸼', '⸽', '⸾', '⸿',
-        '⹀', '⹁', '⹂', '⹃', '⹄', '⹅', '⹆', '⹇', '⹈', '⹉', '⹊', '⹋', '⹌', '⹍', '⹎', '⹏', '、', '。',
-        '〃', '〈', '〉', '《', '》', '「', '」', '『', '』', '【', '】', '〔', '〕', '〖', '〗', '〘', '〙', '〚',
-        '〛', '〜', '〝', '〞', '〟', '〰', '〽', '゠', '・', '꓾', '꓿', '꘍', '꘎', '꘏', '꙳', '꙾', '꛲', '꛳',
-        '꛴', '꛵', '꛶', '꛷', '꡴', '꡵', '꡶', '꡷', '꣎', '꣏', '꣸', '꣹', '꣺', '꣼', '꤮', '꤯', '꥟', '꧁',
-        '꧂', '꧃', '꧄', '꧅', '꧆', '꧇', '꧈', '꧉', '꧊', '꧋', '꧌', '꧍', '꧞', '꧟', '꩜', '꩝', '꩞', '꩟',
-        '꫞', '꫟', '꫰', '꫱', '꯫', '﴾', '﴿', '︐', '︑', '︒', '︓', '︔', '︕', '︖', '︗', '︘', '︙', '︰',
-        '︱', '︲', '︳', '︴', '︵', '︶', '︷', '︸', '︹', '︺', '︻', '︼', '︽', '︾', '︿', '﹀', '﹁', '﹂',
-        '﹃', '﹄', '﹅', '﹆', '﹇', '﹈', '﹉', '﹊', '﹋', '﹌', '﹍', '﹎', '﹏', '﹐', '﹑', '﹒', '﹔', '﹕',
-        '﹖', '﹗', '﹘', '﹙', '﹚', '﹛', '﹜', '﹝', '﹞', '﹟', '﹠', '﹡', '﹣', '﹨', '﹪', '﹫', '！', '＂',
-        '＃', '％', '＆', '＇', '（', '）', '＊', '，', '－', '．', '／', '：', '；', '？', '＠', '［', '＼', '］',
-        '＿', '｛', '｝', '｟', '｠', '｡', '｢', '｣', '､', '･'};
+    private static char[] characters = new char[] {' ', ' ', '!', '"', '#', '%', '&', '\'', '(', ')', '*', ',', '-', '.', '/', ':', ';', '?', '@', '[', '\\', ']', '_', '{', '}', '¡', '§', '«', '¶', '·', '»', '¿', ';', '·', '՚', '՛', '՜', '՝', '՞', '՟', '։', '֊', '־', '׀', '׃', '׆', '׳', '״', '؉', '؊', '،', '؍', '؛', '؞', '؟', '٪', '٫', '٬', '٭', '۔', '܀', '܁', '܂', '܃', '܄', '܅', '܆', '܇', '܈', '܉', '܊', '܋', '܌', '܍', '߷', '߸', '߹', '࠰', '࠱', '࠲', '࠳', '࠴', '࠵', '࠶', '࠷', '࠸', '࠹', '࠺', '࠻', '࠼', '࠽', '࠾', '࡞', '।', '॥', '॰', '৽', '੶', '૰', '౷', '಄', '෴', '๏', '๚', '๛', '༄', '༅', '༆', '༇', '༈', '༉', '༊', '་', '༌', '།', '༎', '༏', '༐', '༑', '༒', '༔', '༺', '༻', '༼', '༽', '྅', '࿐', '࿑', '࿒', '࿓', '࿔', '࿙', '࿚', '၊', '။', '၌', '၍', '၎', '၏', '჻', '፠', '፡', '።', '፣', '፤', '፥', '፦', '፧', '፨', '᐀', '᙮', '᚛', '᚜', '᛫', '᛬', '᛭', '᜵', '᜶', '។', '៕', '៖', '៘', '៙', '៚', '᠀', '᠁', '᠂', '᠃', '᠄', '᠅', '᠆', '᠇', '᠈', '᠉', '᠊', '᥄', '᥅', '᨞', '᨟', '᪠', '᪡', '᪢', '᪣', '᪤', '᪥', '᪦', '᪨', '᪩', '᪪', '᪫', '᪬', '᪭', '᭚', '᭛', '᭜', '᭝', '᭞', '᭟', '᭠', '᯼', '᯽', '᯾', '᯿', '᰻', '᰼', '᰽', '᰾', '᰿', '᱾', '᱿', '᳀', '᳁', '᳂', '᳃', '᳄', '᳅', '᳆', '᳇', '᳓', '‐', '‑', '‒', '–', '—', '―', '‖', '‗', '‘', '’', '‚', '‛', '“', '”', '„', '‟', '†', '‡', '•', '‣', '․', '‥', '…', '‧', '‰', '‱', '′', '″', '‴', '‵', '‶', '‷', '‸', '‹', '›', '※', '‼', '‽', '‾', '‿', '⁀', '⁁', '⁂', '⁃', '⁅', '⁆', '⁇', '⁈', '⁉', '⁊', '⁋', '⁌', '⁍', '⁎', '⁏', '⁐', '⁑', '⁓', '⁔', '⁕', '⁖', '⁗', '⁘', '⁙', '⁚', '⁛', '⁜', '⁝', '⁞', '⁽', '⁾', '₍', '₎', '⌈', '⌉', '⌊', '⌋', '〈', '〉', '❨', '❩', '❪', '❫', '❬', '❭', '❮', '❯', '❰', '❱', '❲', '❳', '❴', '❵', '⟅', '⟆', '⟦', '⟧', '⟨', '⟩', '⟪', '⟫', '⟬', '⟭', '⟮', '⟯', '⦃', '⦄', '⦅', '⦆', '⦇', '⦈', '⦉', '⦊', '⦋', '⦌', '⦍', '⦎', '⦏', '⦐', '⦑', '⦒', '⦓', '⦔', '⦕', '⦖', '⦗', '⦘', '⧘', '⧙', '⧚', '⧛', '⧼', '⧽', '⳹', '⳺', '⳻', '⳼', '⳾', '⳿', '⵰', '⸀', '⸁', '⸂', '⸃', '⸄', '⸅', '⸆', '⸇', '⸈', '⸉', '⸊', '⸋', '⸌', '⸍', '⸎', '⸏', '⸐', '⸑', '⸒', '⸓', '⸔', '⸕', '⸖', '⸗', '⸘', '⸙', '⸚', '⸛', '⸜', '⸝', '⸞', '⸟', '⸠', '⸡', '⸢', '⸣', '⸤', '⸥', '⸦', '⸧', '⸨', '⸩', '⸪', '⸫', '⸬', '⸭', '⸮', '⸰', '⸱', '⸲', '⸳', '⸴', '⸵', '⸶', '⸷', '⸸', '⸹', '⸺', '⸻', '⸼', '⸽', '⸾', '⸿', '⹀', '⹁', '⹂', '⹃', '⹄', '⹅', '⹆', '⹇', '⹈', '⹉', '⹊', '⹋', '⹌', '⹍', '⹎', '⹏', '、', '。', '〃', '〈', '〉', '《', '》', '「', '」', '『', '』', '【', '】', '〔', '〕', '〖', '〗', '〘', '〙', '〚', '〛', '〜', '〝', '〞', '〟', '〰', '〽', '゠', '・', '꓾', '꓿', '꘍', '꘎', '꘏', '꙳', '꙾', '꛲', '꛳', '꛴', '꛵', '꛶', '꛷', '꡴', '꡵', '꡶', '꡷', '꣎', '꣏', '꣸', '꣹', '꣺', '꣼', '꤮', '꤯', '꥟', '꧁', '꧂', '꧃', '꧄', '꧅', '꧆', '꧇', '꧈', '꧉', '꧊', '꧋', '꧌', '꧍', '꧞', '꧟', '꩜', '꩝', '꩞', '꩟', '꫞', '꫟', '꫰', '꫱', '꯫', '﴾', '﴿', '︐', '︑', '︒', '︓', '︔', '︕', '︖', '︗', '︘', '︙', '︰', '︱', '︲', '︳', '︴', '︵', '︶', '︷', '︸', '︹', '︺', '︻', '︼', '︽', '︾', '︿', '﹀', '﹁', '﹂', '﹃', '﹄', '﹅', '﹆', '﹇', '﹈', '﹉', '﹊', '﹋', '﹌', '﹍', '﹎', '﹏', '﹐', '﹑', '﹒', '﹔', '﹕', '﹖', '﹗', '﹘', '﹙', '﹚', '﹛', '﹜', '﹝', '﹞', '﹟', '﹠', '﹡', '﹣', '﹨', '﹪', '﹫', '！', '＂', '＃', '％', '＆', '＇', '（', '）', '＊', '，', '－', '．', '／', '：', '；', '？', '＠', '［', '＼', '］', '＿', '｛', '｝', '｟', '｠', '｡', '｢', '｣', '､', '･'};
     //private static String[] longCharacters = new String[] {"𐄀", "𐄁", "𐄂", "𐎟", "𐏐", "𐕯", "𐡗", "𐤟", "𐤿", "𐩐", "𐩑", "𐩒", "𐩓", "𐩔", "𐩕", "𐩖", "𐩗", "𐩘", "𐩿", "𐫰", "𐫱", "𐫲", "𐫳", "𐫴", "𐫵", "𐫶", "𐬹", "𐬺", "𐬻", "𐬼", "𐬽", "𐬾", "𐬿", "𐮙", "𐮚", "𐮛", "𐮜", "𐽕", "𐽖", "𐽗", "𐽘", "𐽙", "𑁇", "𑁈", "𑁉", "𑁊", "𑁋", "𑁌", "𑁍", "𑂻", "𑂼", "𑂾", "𑂿", "𑃀", "𑃁", "𑅀", "𑅁", "𑅂", "𑅃", "𑅴", "𑅵", "𑇅", "𑇆", "𑇇", "𑇈", "𑇍", "𑇛", "𑇝", "𑇞", "𑇟", "𑈸", "𑈹", "𑈺", "𑈻", "𑈼", "𑈽", "𑊩", "𑑋", "𑑌", "𑑍", "𑑎", "𑑏", "𑑛", "𑑝", "𑓆", "𑗁", "𑗂", "𑗃", "𑗄", "𑗅", "𑗆", "𑗇", "𑗈", "𑗉", "𑗊", "𑗋", "𑗌", "𑗍", "𑗎", "𑗏", "𑗐", "𑗑", "𑗒", "𑗓", "𑗔", "𑗕", "𑗖", "𑗗", "𑙁", "𑙂", "𑙃", "𑙠", "𑙡", "𑙢", "𑙣", "𑙤", "𑙥", "𑙦", "𑙧", "𑙨", "𑙩", "𑙪", "𑙫", "𑙬", "𑜼", "𑜽", "𑜾", "𑠻", "𑧢", "𑨿", "𑩀", "𑩁", "𑩂", "𑩃", "𑩄", "𑩅", "𑩆", "𑪚", "𑪛", "𑪜", "𑪞", "𑪟", "𑪠", "𑪡", "𑪢", "𑱁", "𑱂", "𑱃", "𑱄", "𑱅", "𑱰", "𑱱", "𑻷", "𑻸", "𑿿", "𒑰", "𒑱", "𒑲", "𒑳", "𒑴", "𖩮", "𖩯", "𖫵", "𖬷", "𖬸", "𖬹", "𖬺", "𖬻", "𖭄", "𖺗", "𖺘", "𖺙", "𖺚", "𖿢", "𛲟", "𝪇", "𝪈", "𝪉", "𝪊", "𝪋", "𞥞", "𞥟"};
     private static HashSet<Character> charactersMap;
 
@@ -3801,6 +3914,10 @@ public class AndroidUtilities {
     }
 
     public static void setLightStatusBar(Window window, boolean enable) {
+        setLightStatusBar(window, enable, false);
+    }
+
+    public static void setLightStatusBar(Window window, boolean enable, boolean forceTransparentStatusbar) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             final View decorView = window.getDecorView();
             int flags = decorView.getSystemUiVisibility();
@@ -3808,20 +3925,33 @@ public class AndroidUtilities {
                 if ((flags & View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) == 0) {
                     flags |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                     decorView.setSystemUiVisibility(flags);
-                    if (!SharedConfig.noStatusBar) {
-                        window.setStatusBarColor(0x0f000000);
-                    }
+                }
+                if (!SharedConfig.noStatusBar && !forceTransparentStatusbar) {
+                    window.setStatusBarColor(LIGHT_STATUS_BAR_OVERLAY);
+                } else {
+                    window.setStatusBarColor(Color.TRANSPARENT);
                 }
             } else {
                 if ((flags & View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) != 0) {
                     flags &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                     decorView.setSystemUiVisibility(flags);
-                    if (!SharedConfig.noStatusBar) {
-                        window.setStatusBarColor(0x33000000);
-                    }
+                }
+                if (!SharedConfig.noStatusBar && !forceTransparentStatusbar) {
+                    window.setStatusBarColor(DARK_STATUS_BAR_OVERLAY);
+                } else {
+                    window.setStatusBarColor(Color.TRANSPARENT);
                 }
             }
         }
+    }
+
+    public static boolean getLightNavigationBar(Window window) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            final View decorView = window.getDecorView();
+            int flags = decorView.getSystemUiVisibility();
+            return (flags & View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR) > 0;
+        }
+        return false;
     }
 
     public static void setLightNavigationBar(Window window, boolean enable) {
@@ -3907,7 +4037,7 @@ public class AndroidUtilities {
     }
 
     public static boolean checkInlinePermissions(Context context) {
-        return Build.VERSION.SDK_INT < 23 || Settings.canDrawOverlays(context);
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context);
     }
 
     public static void updateVisibleRows(RecyclerListView listView) {
@@ -4041,5 +4171,14 @@ public class AndroidUtilities {
             FileLog.e(e);
         }
         return null;
+    }
+
+    public static boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }

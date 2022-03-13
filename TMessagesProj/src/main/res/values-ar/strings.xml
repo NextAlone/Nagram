@@ -2139,7 +2139,6 @@
     <string name="AuthAnotherClientInfo2">افتح تيليجرام على سطح المكتب للحصول على رمز QR.</string>
     <string name="AuthAnotherClientInfo3">امسح رمز الـ QR لربط حسابك.</string>
     <string name="AuthAnotherClientUrl">يمكن استخدام هذا الرمز للسماح لشخص ما بتسجيل الدخول إلى حسابك في تيليجرام.\n\nلتأكيد عملية تسجيل الدخول؛ يرجى الذهاب إلى الإعدادات &gt; الأجهزة &gt; مسح QR وامسح الرمز.</string>
-    <string name="QRCodePermissionNoCamera">يحتاج تيليجرام الوصول إلى الكاميرا لتتمكن من مسح رمز QR.</string>
     <string name="SetProfilePhoto">"تعيين صورة للملف الشخصي "</string>
     <string name="AppUpdate">تحديث تيليجرام</string>
     <string name="AppUpdateVersionAndSize">الإصدار %1$s • %2$s</string>
@@ -3264,10 +3263,6 @@
     <string name="TosDeclineDeleteAccount">تحذير، سيؤدي هذا إلى حذف حسابك في تيليجرام بشكل نهائي بالإضافة لجميع البيانات التي تخزنها في سحابة تيليجرام.\n\nهام: يمكنك الإلغاء الآن وتصدير بياناتك قبل حذف حسابك عوضًا عن خسارتها كلها. (للقيام بذلك، افتح النسخة الأخيرة من تيليجرام لسطح المكتب وتوجه إلى الإعدادات &gt; إعدادات متقدمة &gt; تصدير بيانات تيليجرام.)</string>
     <!--permissions-->
     <string name="PermissionContacts">لكي تتمكن من التواصل مع أصدقائك عبر جميع أجهزتك، ستتم مزامنة جهات اتصالك باستمرار مع خوادم تيليجرام السحابية شديدة التشفير.</string>
-    <string name="PermissionStorage">يحتاج تيليجرام للوصول لذاكرة التخزين لتتمكن من إرسال وحفظ الصور، المقاطع المرئية، الصوتيات وغيرها من الوسائط.</string>
-    <string name="PermissionNoAudio">يحتاج تيليجرام الوصول للمايكروفون لتتمكن من إرسال الرسائل الصوتية.</string>
-    <string name="PermissionNoAudioVideo">يحتاج تيليجرام إلى استخدام الميكروفون من أجل تسجيل المقاطع المرئية.</string>
-    <string name="PermissionNoCamera">يحتاج تيليجرام للوصول للكاميرا لتتمكن من أخذ الصور والمقاطع المرئية. يرجى تفعيلها في الإعدادات.</string>
     <string name="PermissionNoLocation">يحتاج تيليجرام إلى السماح له بتحديد موقعك لتتمكن من مشاركته مع أصدقائك.</string>
     <string name="PermissionNoLocationPosition">يحتاج تيليجرام إلى صلاحية تحديد موقعك.</string>
     <string name="PermissionDrawAboveOtherApps">يحتاج تيليجرام إلى صلاحية الظهور فوق التطبيقات لتشغيل المقاطع المرئية في وضع (صورة في الصورة).</string>
@@ -3442,8 +3437,6 @@
     <string name="VoipPeerVideoOutdated">عذرًا، يستخدم **%1$s** إصدارًا قديمًا من تيليجرام لا يدعم المكالمات المرئية.</string>
     <string name="VoipPeerVideoOutdatedMakeVoice">إجراء مكالمة صوتية</string>
     <string name="VoipRateCallAlert">يرجى تقييم جودة مكالمتك في تيليجرام</string>
-    <string name="VoipNeedMicPermission">يحتاج تيليجرام إلى استخدام الميكروفون من أجل إجراء المكالمات.</string>
-    <string name="VoipNeedMicCameraPermission">"يحتاج تيليجرام الوصول إلى المايكروفون والكاميرا لتتمكن من إجراء المكالمات المرئية. "</string>
     <string name="VoipNeedCameraPermission">يحتاج تيليجرام الوصول إلى الكاميرا لتتمكن من إجراء مكالمات مرئية.</string>
     <string name="VoipFeedbackCommentHint">إضافة تعليق (اختياري)</string>
     <string name="CallBack">معاودة الاتصال</string>

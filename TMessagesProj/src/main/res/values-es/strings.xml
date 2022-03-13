@@ -2139,7 +2139,6 @@
     <string name="AuthAnotherClientInfo2">Inicia Telegram Desktop para obtener el código QR.</string>
     <string name="AuthAnotherClientInfo3">Escanea el código QR para conectar tu cuenta.</string>
     <string name="AuthAnotherClientUrl">Este código se puede utilizar para permitir que alguien inicie sesión en tu cuenta de Telegram.\n\nPara confirmar el inicio de sesión, ve a Ajustes &gt; Dispositivos &gt; Escanear QR y escanea el código.</string>
-    <string name="QRCodePermissionNoCamera">Telegram necesita acceso a tu cámara para que puedas escanear códigos QR.</string>
     <string name="SetProfilePhoto">Poner foto de perfil</string>
     <string name="AppUpdate">Actualizar Telegram</string>
     <string name="AppUpdateVersionAndSize">Versión %1$s • %2$s</string>
@@ -3264,10 +3263,6 @@
     <string name="TosDeclineDeleteAccount">Advertencia: Esto eliminará de forma irreversible tu cuenta de Telegram junto a todos los datos que almacenas en la nube de Telegram.\n\nImportante: Puedes cancelar ahora y exportar tus datos antes de eliminar tu cuenta en vez de perderlo todo. (Para hacerlo, abre la última versión de Telegram Desktop y ve a Ajustes &gt; Avanzados &gt; Exportar datos de Telegram).</string>
     <!--permissions-->
     <string name="PermissionContacts">Para que puedas comunicarte con tus amigos en todos tus dispositivos, tus contactos se sincronizarán continuamente con los servidores en la nube fuertemente cifrados de Telegram.</string>
-    <string name="PermissionStorage">Telegram necesita acceso al almacenamiento para que puedas enviar y guardar fotos, videos, música y otros archivos.</string>
-    <string name="PermissionNoAudio">Telegram necesita acceso a tu micrófono para que puedas enviar mensajes de voz.</string>
-    <string name="PermissionNoAudioVideo">Telegram necesita acceso a tu micrófono para que puedas grabar videos.</string>
-    <string name="PermissionNoCamera">Telegram necesita acceso a la cámara para que puedas tomar fotos y videos. Por favor, actívalo en Ajustes.</string>
     <string name="PermissionNoLocation">Telegram necesita acceso a tu ubicación para que puedas compartirla con tus amigos.</string>
     <string name="PermissionNoLocationPosition">Telegram necesita acceso a tu ubicación.</string>
     <string name="PermissionDrawAboveOtherApps">Telegram necesita acceso a mostrarse sobre otras aplicaciones para usar el modo imagen en imagen.</string>
@@ -3442,8 +3437,6 @@
     <string name="VoipPeerVideoOutdated">Lo sentimos, **%1$s** está usando una versión antigua de Telegram que no permite hacer videollamadas.</string>
     <string name="VoipPeerVideoOutdatedMakeVoice">Llamar por voz</string>
     <string name="VoipRateCallAlert">Por favor, evalúa la calidad de tu llamada de Telegram</string>
-    <string name="VoipNeedMicPermission">Telegram necesita acceso a tu micrófono para que puedas realizar llamadas.</string>
-    <string name="VoipNeedMicCameraPermission">Telegram necesita acceso a tu micrófono y cámara para que puedas hacer videollamadas.</string>
     <string name="VoipNeedCameraPermission">Telegram necesita acceso a tu cámara para que puedas hacer videollamadas.</string>
     <string name="VoipFeedbackCommentHint">Añade un comentario opcional</string>
     <string name="CallBack">Devolver llamada</string>

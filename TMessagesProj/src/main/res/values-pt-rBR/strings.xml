@@ -2139,7 +2139,6 @@
     <string name="AuthAnotherClientInfo2">Use o Telegram Desktop para obter o código QR.</string>
     <string name="AuthAnotherClientInfo3">Escaneie o código QR para conectar à sua conta.</string>
     <string name="AuthAnotherClientUrl">Esse código pode ser usado para permitir que alguém faça login em sua conta do Telegram.\n\nPara confirmar o login no Telegram, acesse Configurações &gt; Dispositivos &gt; Ler Código QR e escaneie o código.</string>
-    <string name="QRCodePermissionNoCamera">O Telegram precisa de acesso à sua câmera para que você possa escanear códigos QR.</string>
     <string name="SetProfilePhoto">Definir Foto do Perfil</string>
     <string name="AppUpdate">Atualizar o Telegram</string>
     <string name="AppUpdateVersionAndSize">Versão %1$s • %2$s</string>
@@ -3264,10 +3263,6 @@
     <string name="TosDeclineDeleteAccount">Atenção, isso apagará irreversivelmente sua conta do Telegram, juntamente com todos os dados armazenados na nuvem do Telegram.\n\nImportante: em vez de perder tudo, você pode Cancelar agora e exportar seus dados antes de apagar a conta. (Para fazer isso, abra o Telegram Desktop atualizado e vá em Configurações &gt; Exportar Dados do Telegram.)</string>
     <!--permissions-->
     <string name="PermissionContacts">Para que você se conecte aos seus amigos em todos os dispositivos, seus contatos serão sincronizados continuamente com os servidores fortemente criptografados do Telegram.</string>
-    <string name="PermissionStorage">O Telegram precisa de acesso ao armazenamento para que você possa enviar e salvar fotos, vídeos, músicas e outras mídias.</string>
-    <string name="PermissionNoAudio">O Telegram precisa de acesso ao microfone para que você possa enviar mensagens de voz.</string>
-    <string name="PermissionNoAudioVideo">Telegram precisa acessar seu microfone para que você possa gravar vídeos.</string>
-    <string name="PermissionNoCamera">O Telegram precisa de acesso à câmera para que você possa tirar fotos e vídeos. Por favor, ative a permissão nas Configurações.</string>
     <string name="PermissionNoLocation">Telegram precisa acessar sua localização para que você possa compartilhar com seus amigos.</string>
     <string name="PermissionNoLocationPosition">O Telegram precisa acessar sua localização</string>
     <string name="PermissionDrawAboveOtherApps">Para reproduzir vídeos no modo PiP, o Telegram precisa de acesso para aparecer sobre outros apps.</string>
@@ -3442,8 +3437,6 @@
     <string name="VoipPeerVideoOutdated">Desculpe, a versão do Telegram de **%1$s** é antiga e não faz videochamadas.</string>
     <string name="VoipPeerVideoOutdatedMakeVoice">Fazer chamada de voz</string>
     <string name="VoipRateCallAlert">Como estava a qualidade da sua chamada no Telegram?</string>
-    <string name="VoipNeedMicPermission">O Telegram precisa acessar seu microfone para poder fazer chamadas.</string>
-    <string name="VoipNeedMicCameraPermission">O Telegram precisa de acesso ao seu microfone e à câmera para que você possa fazer videochamadas.</string>
     <string name="VoipNeedCameraPermission">O Telegram precisa de acesso à sua câmera para você fazer chamadas de vídeo.</string>
     <string name="VoipFeedbackCommentHint">Adicionar um comentário opcional</string>
     <string name="CallBack">Ligar de Volta</string>

@@ -2139,7 +2139,6 @@
     <string name="AuthAnotherClientInfo2">Starte das Programm auf dem Computer, um deinen QR-Code zu erhalten.</string>
     <string name="AuthAnotherClientInfo3">Scanne den QR-Code mit deinem Handy, um dich mit deinem Konto zu verbinden.</string>
     <string name="AuthAnotherClientUrl">Mit diesem Code kann man sich bei deinem Telegram Konto anmelden.\n\nUm die Anmeldung zu bestätigen, in die Einstellungen von Telegram wechseln &gt; Geräte &gt; QR-Code scannen und den Code mit der Kamera scannen.</string>
-    <string name="QRCodePermissionNoCamera">Telegram benötigt zum Scannen von QR-Codes Zugriff auf deine Kamera.</string>
     <string name="SetProfilePhoto">Profilbild festlegen</string>
     <string name="AppUpdate">Telegram aktualisieren</string>
     <string name="AppUpdateVersionAndSize">Version %1$s • %2$s</string>
@@ -3264,10 +3263,6 @@
     <string name="TosDeclineDeleteAccount">Warnung! Das wird dein Telegram-Konto mit all deinen Daten aus der Telegram-Cloud unwiderruflich löschen.\n\nWichtig: Du kannst jetzt abbrechen und deine Daten vor der Löschung noch exportieren. (Öffne dazu die aktuellste Version von Telegram Desktop &gt; Einstellungen &gt; Erweitert &gt; Telegram-Daten exportieren.)</string>
     <!--permissions-->
     <string name="PermissionContacts">Damit du dich mit Freunden auf all deinen Geräten verbinden kannst, werden deine Kontakte durchgehend mit den stark verschlüsselten Cloud Servern von Telegram synchronisiert.</string>
-    <string name="PermissionStorage">Telegram benötigt Zugriff auf deinen Speicher, damit du Bilder, Videos und Musik senden und speichern kannst.</string>
-    <string name="PermissionNoAudio">"Telegram benötigt Zugriff auf dein Mikrofon, damit du Sprachnachrichten senden kannst. "</string>
-    <string name="PermissionNoAudioVideo">Telegram benötigt Zugriff auf dein Mikrofon, damit du Videos aufnehmen kannst.</string>
-    <string name="PermissionNoCamera">Telegram benötigt Zugriff auf deine Kamera, damit du Bilder und Videos aufnehmen kannst. Bitte aktiviere es in den Einstellungen.</string>
     <string name="PermissionNoLocation">"Telegram benötigt Zugriff auf deinen Standort, damit du ihn mit Freunden teilen kannst. "</string>
     <string name="PermissionNoLocationPosition">Telegram benötigt Zugriff auf deinen Standort.</string>
     <string name="PermissionDrawAboveOtherApps">Telegram braucht Zugriff auf die Funktion \'Über andere Apps einblenden\'. Nur so können Videos im Bild in Bild Modus wiedergegeben werden.</string>
@@ -3442,8 +3437,6 @@
     <string name="VoipPeerVideoOutdated">**%1$s** benutzt leider eine veraltete Version, die keine Videoanrufe unterstützt.</string>
     <string name="VoipPeerVideoOutdatedMakeVoice">Sprachanruf tätigen</string>
     <string name="VoipRateCallAlert">Bewerte bitte die Qualität deines Telegram-Anrufs</string>
-    <string name="VoipNeedMicPermission">Telegram benötigt für Sprachanrufe Zugriff auf dein Mikrofon.</string>
-    <string name="VoipNeedMicCameraPermission">Telegram benötigt Zugriff auf dein Mikrofon und deine Kamera, damit du Videoanrufe tätigen kannst.</string>
     <string name="VoipNeedCameraPermission">Telegram benötigt für Videoanrufe Zugriff auf deine Kamera.</string>
     <string name="VoipFeedbackCommentHint">Optionalen Kommentar hinzufügen</string>
     <string name="CallBack">Zurückrufen</string>

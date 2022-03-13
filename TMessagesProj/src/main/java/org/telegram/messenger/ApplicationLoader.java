@@ -32,18 +32,22 @@ import android.os.PowerManager;
 import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+
 import androidx.annotation.NonNull;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.firebase.messaging.FirebaseMessaging;
-import java.io.File;
-import java.util.HashMap;
+
 import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.ForegroundDetector;
-import top.qwq2333.nullgram.utils.AppcenterUtils;
 
+import java.io.File;
+import java.util.HashMap;
+
+import top.qwq2333.nullgram.utils.AppcenterUtils;
 
 public class ApplicationLoader extends Application {
 
@@ -54,6 +58,7 @@ public class ApplicationLoader extends Application {
 
     private static ConnectivityManager connectivityManager;
     private static volatile boolean applicationInited = false;
+    private static volatile  ConnectivityManager.NetworkCallback networkCallback;
     private static long lastNetworkCheckTypeTime;
     private static int lastKnownNetworkType = -1;
 
@@ -339,18 +344,20 @@ public class ApplicationLoader extends Application {
                 }
                 currentNetworkInfo = connectivityManager.getActiveNetworkInfo();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    connectivityManager.registerDefaultNetworkCallback(new ConnectivityManager.NetworkCallback() {
-                        @Override
-                        public void onAvailable(@NonNull Network network) {
-                            lastKnownNetworkType = -1;
-                        }
+                    if (networkCallback == null) {
+                        networkCallback = new ConnectivityManager.NetworkCallback() {
+                            @Override
+                            public void onAvailable(@NonNull Network network) {
+                                lastKnownNetworkType = -1;
+                            }
 
-                        @Override
-                        public void onCapabilitiesChanged(@NonNull Network network, @NonNull NetworkCapabilities networkCapabilities) {
-                            super.onCapabilitiesChanged(network, networkCapabilities);
-                            lastKnownNetworkType = -1;
-                        }
-                    });
+                            @Override
+                            public void onCapabilitiesChanged(@NonNull Network network, @NonNull NetworkCapabilities networkCapabilities) {
+                                lastKnownNetworkType = -1;
+                            }
+                        };
+                        connectivityManager.registerDefaultNetworkCallback(networkCallback);
+                    }
                 }
             } catch (Throwable ignore) {
 

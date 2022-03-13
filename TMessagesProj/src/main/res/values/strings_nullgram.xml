@@ -127,4 +127,7 @@
     <string name="CopyID">Copy ID</string>
     <string name="SendCallback">Send Callback Data</string>
     <string name="CallbackData">Callback Data</string>
+    <string name="TestBackend">Test Backend</string>
+    <string name="notAllowedWhenChannelAliasIsEnabled">You cannot disable it when Channel Alias is enabled!</string>
+    <string name="unreadBadgeOnBackButton">Unread Badge on Back Button</string>
 </resources>

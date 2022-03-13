@@ -2139,7 +2139,6 @@
     <string name="AuthAnotherClientInfo2">QR 코드를 받으려면 텔레그램 데스크탑을 실행하세요.</string>
     <string name="AuthAnotherClientInfo3">회원님의 계정을 연결하려면 QR 코드를 스캔하세요.</string>
     <string name="AuthAnotherClientUrl">이 코드는 누군가가 회원님의 텔레그램 계정에 로그인할 수 있도록 하는 데 사용될 수 있습니다.\n\n텔레그램 로그인을 인증하려면, 설정 &gt; 기기 &gt; QR 코드 스캔으로 이동하여 코드를 스캔해 주세요.</string>
-    <string name="QRCodePermissionNoCamera">QR 코드를 스캔하려면 텔레그램에게 카메라 접근 권한이 필요합니다.</string>
     <string name="SetProfilePhoto">프로필 사진 설정하기</string>
     <string name="AppUpdate">텔레그램 업데이트</string>
     <string name="AppUpdateVersionAndSize">버전  %1$s • %2$s</string>
@@ -3264,10 +3263,6 @@
     <string name="TosDeclineDeleteAccount">주의! 텔레그램 클라우드에 저장하신 모든 데이터와 함께 회원님의 텔레그램 계정이 삭제되며, 되돌릴 수 없습니다.\n\n중요: 지금 취소하여 계정을 삭제하기 전에 데이터를 내보내실 수 있습니다. (최신 텔레그램 데스크톱을 열고 설정 &gt; 고급 설정 &gt; 텔레그램 데이터 내보내기에서 진행하실 수 있습니다.)</string>
     <!--permissions-->
     <string name="PermissionContacts">회원님이 모든 기기에서 친구들과 연락하실 수 있도록, 텔레그램의 단단히 암호화된 클라우드 서비스로 연락처가 계속 동기화됩니다.</string>
-    <string name="PermissionStorage">사진, 동영상, 음악과 그 밖의 미디어를 보내고 저장하려면 텔레그램에게 저장 공간 접근 권한이 필요합니다.</string>
-    <string name="PermissionNoAudio">음성 메시지를 보내려면 텔레그램에게 마이크 접근 권한을 부여하셔야 합니다.</string>
-    <string name="PermissionNoAudioVideo">동영상을 녹화하려면 텔레그램에게 마이크 접근 권한을 부여하셔야 합니다.</string>
-    <string name="PermissionNoCamera">사진과 동영상을 촬영하려면 텔레그램에게 카메라 접근 권한을 부여하셔야 합니다. 설정에서 권한을 켜 주세요.</string>
     <string name="PermissionNoLocation">회원님의 위치를 친구들과 공유하려면 텔레그램에게 위치 접근 권한이 필요합니다.</string>
     <string name="PermissionNoLocationPosition">텔레그램이 위치 접근 권한이 필요합니다.</string>
     <string name="PermissionDrawAboveOtherApps">화면속화면 모드로 동영상을 재생하려면 텔레그램에게 다른 앱 위에 그릴 수 있는 권한을 부여하셔야 합니다.</string>
@@ -3442,8 +3437,6 @@
     <string name="VoipPeerVideoOutdated">%1$s 님의 앱이 영상 통화를 지원하지 않습니다. 전화를 거시기 전에 이 사용자가 앱을 업데이트해야 합니다.</string>
     <string name="VoipPeerVideoOutdatedMakeVoice">음성 통화 걸기</string>
     <string name="VoipRateCallAlert">텔레그램 전화의 품질을 평가해주세요.</string>
-    <string name="VoipNeedMicPermission">전화를 걸려면 텔레그램에게 마이크 접근 권한을 부여하셔야 합니다.</string>
-    <string name="VoipNeedMicCameraPermission">텔레그램이 영상 통화를 하기 위하여 기기의 마이크와 카메라에 접근이 필요합니다.</string>
     <string name="VoipNeedCameraPermission">텔레그램이 영상 통화를 하려면 카메라 접근 권한이 필요합니다.</string>
     <string name="VoipFeedbackCommentHint">코멘트를 추가하실 수 있습니다</string>
     <string name="CallBack">답신 전화</string>

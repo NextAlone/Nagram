@@ -43,9 +43,7 @@ object UpdateUtil {
         val updateChannel = messagesCollector.getUserOrChat(channelUsername)
 
         if (updateChannel is TLRPC.Chat) checkFollowChannel(
-            ctx,
-            currentAccount,
-            updateChannel
+            ctx, currentAccount, updateChannel
         ) else {
             connectionsManager.sendRequest(TLRPC.TL_contacts_resolveUsername().apply {
                 username = channelUsername
@@ -85,17 +83,11 @@ object UpdateUtil {
 
             builder.setPositiveButton(
                 LocaleController.getString(
-                    "ChannelJoin",
-                    R.string.ChannelJoin
+                    "ChannelJoin", R.string.ChannelJoin
                 )
             ) { _, _ ->
                 messagesCollector.addUserToChat(
-                    channel.id,
-                    userConfig.currentUser,
-                    0,
-                    null,
-                    null,
-                    null
+                    channel.id, userConfig.currentUser, 0, null, null, null
                 )
                 Browser.openUrl(ctx, "https://t.me/$channelUsername")
             }
@@ -104,8 +96,7 @@ object UpdateUtil {
 
             builder.setNeutralButton(
                 LocaleController.getString(
-                    "DoNotRemindAgain",
-                    R.string.DoNotRemindAgain
+                    "DoNotRemindAgain", R.string.DoNotRemindAgain
                 )
             ) { _, _ ->
                 ConfigManager.putBoolean(Defines.updateChannelSkip, true);

@@ -34,6 +34,10 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BaseController;
 import org.telegram.messenger.ChatObject;
@@ -65,6 +69,7 @@ import java.nio.charset.CharacterCodingException;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class MessageUtils extends BaseController {
@@ -404,7 +409,17 @@ public class MessageUtils extends BaseController {
         }
     }
 
-
-
+    public Bitmap createQR(String key) {
+        try {
+            HashMap<EncodeHintType, Object> hints = new HashMap<>();
+            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
+            hints.put(EncodeHintType.MARGIN, 0);
+            QRCodeWriter writer = new QRCodeWriter();
+            return writer.encode(key, 768, 768, hints, null);
+        } catch (Exception e) {
+            LogUtilsKt.e(e);
+        }
+        return null;
+    }
 
 }

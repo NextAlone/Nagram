@@ -19,6 +19,7 @@
 1264;AI;Anguilla;XXX XXXX
 1246;BB;Barbados;XXX XXXX
 1242;BS;Bahamas;XXX XXXX
+999;YL;Test Number;XX X XXXX
 998;UZ;Uzbekistan;XX XXXXXXX
 996;KG;Kyrgyzstan;XXX XXXXXX
 995;GE;Georgia;XXX XXX XXX

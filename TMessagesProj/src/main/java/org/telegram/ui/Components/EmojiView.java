@@ -75,6 +75,7 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.EmojiData;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
@@ -843,6 +844,7 @@ public class EmojiView extends FrameLayout implements
         public ImageViewEmoji(Context context) {
             super(context);
             setScaleType(ImageView.ScaleType.CENTER);
+            setBackground(Theme.createRadSelectorDrawable(getThemedColor(Theme.key_listSelector), AndroidUtilities.dp(2), AndroidUtilities.dp(2)));
         }
 
         private void sendEmoji(String override) {
@@ -1277,6 +1279,7 @@ public class EmojiView extends FrameLayout implements
         emojiGridView.setBottomGlowOffset(AndroidUtilities.dp(48));
         emojiGridView.setPadding(0, AndroidUtilities.dp(38), 0, AndroidUtilities.dp(44));
         emojiGridView.setGlowColor(getThemedColor(Theme.key_chat_emojiPanelBackground));
+        emojiGridView.setSelectorDrawableColor(0);
         emojiGridView.setClipToPadding(false);
         emojiLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
@@ -2030,7 +2033,7 @@ public class EmojiView extends FrameLayout implements
                 }
             });
 
-            typeTabs = new PagerSlidingTabStrip(context);
+            typeTabs = new PagerSlidingTabStrip(context, resourcesProvider);
             typeTabs.setViewPager(pager);
             typeTabs.setShouldExpand(false);
             typeTabs.setIndicatorHeight(0);
@@ -4282,7 +4285,7 @@ public class EmojiView extends FrameLayout implements
                         }
                     };
                     horizontalListView.setSelectorRadius(AndroidUtilities.dp(4));
-                    horizontalListView.setSelectorDrawableColor(Theme.getColor(Theme.key_listSelector));
+                    horizontalListView.setSelectorDrawableColor(getThemedColor(Theme.key_listSelector));
                     horizontalListView.setTag(9);
                     horizontalListView.setItemAnimator(null);
                     horizontalListView.setLayoutAnimation(null);
