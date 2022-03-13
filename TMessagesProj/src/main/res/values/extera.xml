@@ -4,4 +4,22 @@
     <string name="exteraAppName">exteraGram</string>
     <string name="exteraAppNameBeta">exteraGram β</string>
     <string name="exteraDebugMenu">¯\\_(ツ)_/¯</string>
+    <string name="MutualContact">mutual contact</string>
+    <string name="ToBeginning">To beginning</string>
+
+    <!-- Main Menu (about) -->
+    <string name="AboutExtera">About exteraGram</string>
+    <string name="AboutExteraDescription">Experimental Telegram client based on official Telegram sources!</string>
+    <string name="Website">exteraSquad Members</string>
+    <string name="Github">exteraGram\'s Source Code</string>
+    <string name="Channel">Telegram Channel</string>
+    <string name="Chat">Telegram Chat</string>
+    <string name="languageEnglish">English</string>
+    <string name="languageRussian">Russian</string>
+
+    <string name="Preferences">extera Preferences</string>
+    <string name="RestartRequired">Restart the app to take effect.</string>
+
+    <string name="Categories">Categories</string>
+    <string name="Chats">Chats</string>
 </resources>
