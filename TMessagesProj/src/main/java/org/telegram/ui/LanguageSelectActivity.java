@@ -469,7 +469,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         }
 
         private boolean getValue() {
-            return preferences.getBoolean("translate_button", false);
+            return preferences.getBoolean("translate_button", true);
         }
         private ArrayList<String> getRestrictedLanguages() {
             String currentLang = LocaleController.getInstance().getCurrentLocaleInfo().pluralLangCode;
