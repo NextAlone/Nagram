@@ -155,8 +155,8 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
 
                 if (!multiselect) {
                     if (scrollDown) {
-                        if (selectedView.getBottom() - dy < parentView.getMeasuredHeight()) {
-                            dy = selectedView.getBottom() - parentView.getMeasuredHeight();
+                        if (selectedView.getBottom() - dy < parentView.getMeasuredHeight() - getParentBottomPadding()) {
+                            dy = selectedView.getBottom() - parentView.getMeasuredHeight() + getParentBottomPadding();
                         }
                     } else {
                         if (selectedView.getTop() + dy > getParentTopPadding()) {
@@ -773,7 +773,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                         y -= selectedView.getTop();
                         x -= selectedView.getX();
 
-                        boolean canScrollDown = event.getY() - touchSlop > parentView.getMeasuredHeight() && (multiselect || selectedView.getBottom() > parentView.getMeasuredHeight());
+                        boolean canScrollDown = event.getY() - touchSlop > parentView.getMeasuredHeight() - getParentBottomPadding() && (multiselect || selectedView.getBottom() > parentView.getMeasuredHeight() - getParentBottomPadding());
                         boolean canScrollUp = event.getY() < ((View) parentView.getParent()).getTop() + getParentTopPadding() && (multiselect || selectedView.getTop() < getParentTopPadding());
                         if (canScrollDown || canScrollUp) {
                             if (!scrolling) {
@@ -2709,6 +2709,10 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
     }
 
     public int getParentTopPadding() {
+        return 0;
+    }
+
+    public int getParentBottomPadding() {
         return 0;
     }
 

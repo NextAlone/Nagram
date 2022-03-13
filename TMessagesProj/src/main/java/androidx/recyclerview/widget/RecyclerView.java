@@ -586,8 +586,16 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         topGlowOffset = offset;
     }
 
+    public int getTopGlowOffset() {
+        return topGlowOffset;
+    }
+
     public void setBottomGlowOffset(int offset) {
         bottomGlowOffset = offset;
+    }
+
+    public int getBottomGlowOffset() {
+        return bottomGlowOffset;
     }
 
     public void setGlowColor(int color) {
@@ -12707,8 +12715,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         @Retention(RetentionPolicy.SOURCE)
         public @interface AdapterChanges {}
         private ItemAnimatorListener mListener = null;
-        private ArrayList<ItemAnimatorFinishedListener> mFinishedListeners =
-                new ArrayList<ItemAnimatorFinishedListener>();
+        private ArrayList<ItemAnimatorFinishedListener> mFinishedListeners = new ArrayList<>();
 
         private long mAddDuration = 120;
         private long mRemoveDuration = 120;

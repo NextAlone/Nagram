@@ -128,7 +128,7 @@ public class NekoAccountSettingsActivity extends BaseFragment {
                         if (!editText.getText().toString().equals("YES")) return;
 
                         final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
-                        progressDialog.setCanCacnel(false);
+                        progressDialog.setCanCancel(false);
                         progressDialog.show();
 
                         // delete dialogs

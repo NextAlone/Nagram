@@ -549,7 +549,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
         AlertDialog pro = new AlertDialog(getParentActivity(), 3);
 
-        pro.setCanCacnel(false);
+        pro.setCanCancel(false);
 
         pro.show();
 
@@ -870,7 +870,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 if (which == MENU_EXPORT) {
 
                     AlertDialog pro = new AlertDialog(getParentActivity(), 3);
-                    pro.setCanCacnel(false);
+                    pro.setCanCancel(false);
                     pro.show();
 
                     UIUtil.runOnIoDispatcher(() -> {

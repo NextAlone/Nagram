@@ -43,13 +43,11 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
-import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
@@ -85,12 +83,13 @@ import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 
-public class CacheControlActivity extends BaseFragment {
+public class CacheControlActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private ListAdapter listAdapter;
     private RecyclerListView listView;
     @SuppressWarnings("FieldCanBeLocal")
     private LinearLayoutManager layoutManager;
+    AlertDialog progressDialog;
 
     private int databaseRow;
     private int databaseInfoRow;
@@ -132,7 +131,7 @@ public class CacheControlActivity extends BaseFragment {
     @Override
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
-
+        getNotificationCenter().addObserver(this, NotificationCenter.didClearDatabase);
         databaseSize = MessagesStorage.getInstance(currentAccount).getDatabaseSize();
 
         Utilities.globalQueue.postRunnable(() -> {
@@ -259,6 +258,16 @@ public class CacheControlActivity extends BaseFragment {
     @Override
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
+        getNotificationCenter().removeObserver(this, NotificationCenter.didClearDatabase);
+        try {
+            if (progressDialog != null) {
+                progressDialog.dismiss();
+            }
+
+        } catch (Exception e) {
+
+        }
+        progressDialog = null;
         canceled = true;
     }
 
@@ -277,7 +286,7 @@ public class CacheControlActivity extends BaseFragment {
 
     private void cleanupFolders() {
         final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
-        progressDialog.setCanCacnel(false);
+        progressDialog.setCanCancel(false);
         progressDialog.showDelayed(500);
         Utilities.globalQueue.postRunnable(() -> {
             boolean imagesCleared = false;
@@ -382,6 +391,9 @@ public class CacheControlActivity extends BaseFragment {
             totalDeviceSize = blocksTotal * blockSize;
             totalDeviceFreeSize = availableBlocks * blockSize;
             long finalClearedSize = clearedSize;
+
+            FileLoader.getInstance(currentAccount).checkCurrentDownloadsFiles();
+
             AndroidUtilities.runOnUIThread(() -> {
                 if (imagesClearedFinal) {
                     ImageLoader.getInstance().clearMemory();
@@ -431,7 +443,9 @@ public class CacheControlActivity extends BaseFragment {
                 return;
             }
 //            if (position == migrateOldFolderRow) {
-//                migrateOldFolder();
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//                    migrateOldFolder();
+//                }
 //            } else
             if (position == databaseRow) {
                 clearDatabase();
@@ -562,7 +576,7 @@ public class CacheControlActivity extends BaseFragment {
                 return Unit.INSTANCE;
             }
             final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
-            progressDialog.setCanCacnel(false);
+            progressDialog.setCanCancel(false);
             progressDialog.show();
             ConnectionsManager.reseting = true;
             UIUtil.runOnIoDispatcher(() -> {
@@ -594,112 +608,11 @@ public class CacheControlActivity extends BaseFragment {
             if (getParentActivity() == null) {
                 return Unit.INSTANCE;
             }
-            final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
-            progressDialog.setCanCacnel(false);
+            progressDialog = new AlertDialog(getParentActivity(), 3);
+            progressDialog.setCanCancel(false);
             progressDialog.showDelayed(233);
             MessagesController.getInstance(currentAccount).clearQueryTime();
-            MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(() -> {
-                long start = SystemClock.elapsedRealtime();
-
-                try {
-
-                    TranslateDb.clearAll();
-
-                    SQLiteDatabase database = MessagesStorage.getInstance(currentAccount).getDatabase();
-                    ArrayList<Long> dialogsToCleanup = new ArrayList<>();
-
-                    database.executeFast("DELETE FROM reaction_mentions").stepThis().dispose();
-                    database.executeFast("DELETE FROM reaction_mentions").stepThis().dispose();
-
-                    SQLiteCursor cursor = database.queryFinalized("SELECT did FROM dialogs WHERE 1");
-                    StringBuilder ids = new StringBuilder();
-                    while (cursor.next()) {
-                        long did = cursor.longValue(0);
-                        if (!DialogObject.isEncryptedDialog(did)) {
-                            dialogsToCleanup.add(did);
-                        }
-                    }
-                    cursor.dispose();
-
-                    SQLitePreparedStatement state5 = database.executeFast("REPLACE INTO messages_holes VALUES(?, ?, ?)");
-                    SQLitePreparedStatement state6 = database.executeFast("REPLACE INTO media_holes_v2 VALUES(?, ?, ?, ?)");
-
-                    database.beginTransaction();
-                    for (int a = 0; a < dialogsToCleanup.size(); a++) {
-                        Long did = dialogsToCleanup.get(a);
-                        int messagesCount = 0;
-                        cursor = database.queryFinalized("SELECT COUNT(mid) FROM messages_v2 WHERE uid = " + did);
-                        if (cursor.next()) {
-                            messagesCount = cursor.intValue(0);
-                        }
-                        cursor.dispose();
-                        if (messagesCount <= 2) {
-                            continue;
-                        }
-
-                        cursor = database.queryFinalized("SELECT last_mid_i, last_mid FROM dialogs WHERE did = " + did);
-                        int messageId = -1;
-                        if (cursor.next()) {
-                            long last_mid_i = cursor.longValue(0);
-                            long last_mid = cursor.longValue(1);
-                            SQLiteCursor cursor2 = database.queryFinalized("SELECT data FROM messages_v2 WHERE uid = " + did + " AND mid IN (" + last_mid_i + "," + last_mid + ")");
-                            try {
-                                while (cursor2.next()) {
-                                    NativeByteBuffer data = cursor2.byteBufferValue(0);
-                                    if (data != null) {
-                                        TLRPC.Message message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
-                                        if (message != null) {
-                                            messageId = message.id;
-                                            message.readAttachPath(data, UserConfig.getInstance(currentAccount).clientUserId);
-                                        }
-                                        data.reuse();
-                                    }
-                                }
-                            } catch (Exception e) {
-                                FileLog.e(e);
-                            }
-                            cursor2.dispose();
-
-                            database.executeFast("DELETE FROM messages_v2 WHERE uid = " + did + " AND mid != " + last_mid_i + " AND mid != " + last_mid).stepThis().dispose();
-                            database.executeFast("DELETE FROM messages_holes WHERE uid = " + did).stepThis().dispose();
-                            database.executeFast("DELETE FROM bot_keyboard WHERE uid = " + did).stepThis().dispose();
-                            database.executeFast("DELETE FROM media_counts_v2 WHERE uid = " + did).stepThis().dispose();
-                            database.executeFast("DELETE FROM media_v4 WHERE uid = " + did).stepThis().dispose();
-                            database.executeFast("DELETE FROM media_holes_v2 WHERE uid = " + did).stepThis().dispose();
-                            MediaDataController.getInstance(currentAccount).clearBotKeyboard(did, null);
-                            if (messageId != -1) {
-                                MessagesStorage.createFirstHoles(did, state5, state6, messageId);
-                            }
-                        }
-                        cursor.dispose();
-                    }
-
-                    state5.dispose();
-                    state6.dispose();
-                    database.commitTransaction();
-                    database.executeFast("PRAGMA journal_mode = DELETE").stepThis().dispose();
-                    database.executeFast("PRAGMA wal_checkpoint(FULL)").stepThis().dispose();
-                    database.executeFast("VACUUM").stepThis().dispose();
-                    database.executeFast("PRAGMA journal_mode = WAL").stepThis().dispose();
-                    database.executeFast("PRAGMA journal_size_limit = 1048576").stepThis().dispose();
-                } catch (Exception e) {
-                    FileLog.e(e);
-                } finally {
-                    ThreadUtil.sleep(2333L - (SystemClock.elapsedRealtime() - start));
-                    AndroidUtilities.runOnUIThread(() -> {
-                        try {
-                            progressDialog.dismiss();
-                        } catch (Exception e) {
-                            FileLog.e(e);
-                        }
-                        if (listAdapter != null) {
-                            databaseSize = MessagesStorage.getInstance(currentAccount).getDatabaseSize();
-                            listAdapter.notifyDataSetChanged();
-                        }
-                        NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.didClearDatabase);
-                    });
-                }
-            });
+            getMessagesStorage().clearLocalDatabase();
             return Unit.INSTANCE;
         });
         builder.addCancelItem();
@@ -711,6 +624,24 @@ public class CacheControlActivity extends BaseFragment {
         super.onResume();
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void didReceivedNotification(int id, int account, Object... args) {
+        if (id == NotificationCenter.didClearDatabase) {
+            try {
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+            progressDialog = null;
+            if (listAdapter != null) {
+                databaseSize = MessagesStorage.getInstance(currentAccount).getDatabaseSize();
+                listAdapter.notifyDataSetChanged();
+            }
         }
     }
 

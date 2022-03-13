@@ -37,6 +37,7 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
@@ -49,6 +50,8 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.BasePermissionsActivity;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PhotoAlbumPickerActivity;
 import org.telegram.ui.PhotoCropActivity;
@@ -64,6 +67,11 @@ import kotlin.Unit;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 
 public class ImageUpdater implements NotificationCenter.NotificationCenterDelegate, PhotoCropActivity.PhotoEditActivityDelegate {
+    private final static int ID_TAKE_PHOTO = 0,
+            ID_UPLOAD_FROM_GALLERY = 1,
+            ID_SEARCH_WEB = 2,
+            ID_REMOVE_PHOTO = 3,
+            ID_RECORD_VIDEO = 4;
 
     public BaseFragment parentFragment;
     private ImageUpdaterDelegate delegate;
@@ -492,7 +500,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         }
         try {
             if (Build.VERSION.SDK_INT >= 23 && parentFragment.getParentActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                parentFragment.getParentActivity().requestPermissions(new String[]{Manifest.permission.CAMERA}, 20);
+                parentFragment.getParentActivity().requestPermissions(new String[]{Manifest.permission.CAMERA}, BasePermissionsActivity.REQUEST_CODE_OPEN_CAMERA);
                 return;
             }
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -547,6 +555,9 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     public void onRequestPermissionsResultFragment(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 17 && chatAttachAlert != null) {
             chatAttachAlert.getPhotoLayout().checkCamera(false);
+            chatAttachAlert.getPhotoLayout().checkStorage();
+        } else if (requestCode == BasePermissionsActivity.REQUEST_CODE_EXTERNAL_STORAGE) {
+            chatAttachAlert.getPhotoLayout().checkStorage();
         }
     }
 
@@ -556,7 +567,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         }
         if (Build.VERSION.SDK_INT >= 23 && parentFragment.getParentActivity() != null) {
             if (parentFragment.getParentActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                parentFragment.getParentActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 4);
+                parentFragment.getParentActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, BasePermissionsActivity.REQUEST_CODE_EXTERNAL_STORAGE_FOR_AVATAR);
                 return;
             }
         }
@@ -663,6 +674,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 }
                 currentPicturePath = null;
             } else if (requestCode == 13) {
+                parentFragment.getParentActivity().overridePendingTransition(R.anim.alpha_in, R.anim.alpha_out);
                 PhotoViewer.getInstance().setParentActivity(parentFragment.getParentActivity());
                 int orientation = 0;
                 try {

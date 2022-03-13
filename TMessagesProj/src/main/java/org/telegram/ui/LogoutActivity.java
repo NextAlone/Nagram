@@ -125,7 +125,7 @@ public class LogoutActivity extends BaseFragment {
                     presentFragment(new LoginActivity(freeAccount));
                 }
             } else if (position == passcodeRow) {
-                presentFragment(new PasscodeActivity(0));
+                presentFragment(PasscodeActivity.determineOpenFragment());
             } else if (position == cacheRow) {
                 presentFragment(new CacheControlActivity());
             } else if (position == phoneRow) {
