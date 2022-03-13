@@ -58,7 +58,7 @@ import tw.nekomimi.nekogram.config.cell.ConfigCellTextCheck;
 import tw.nekomimi.nekogram.config.cell.ConfigCellTextDetail;
 import tw.nekomimi.nekogram.config.cell.ConfigCellTextInput;
 import xyz.nextalone.nagram.NaConfig;
-
+TMessagesProj/src/main/kotlin/xyz/nextalone/nagram/NaConfig.kt
 
 @SuppressLint("RtlHardcoded")
 public class NekoChatSettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -116,7 +116,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final AbstractConfigCell showSpoilersDirectlyRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showSpoilersDirectly));
     private final AbstractConfigCell showBottomActionsWhenSelectingRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showBottomActionsWhenSelecting));
     private final AbstractConfigCell combineMessageRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NaConfig.INSTANCE.getCombineMessage(), new String[]{
-            LocaleController.getString("combineMessageEnabledWithReply", R.string.CombineMessageEnabledWithReply),NaConfig
+            LocaleController.getString("combineMessageEnabledWithReply", R.string.CombineMessageEnabledWithReply),
             LocaleController.getString("combineMessageEnabled", R.string.CombineMessageEnabled),
             LocaleController.getString("combineMessageDisabled", R.string.CombineMessageDisabled)
     }, null));
