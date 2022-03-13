@@ -21652,11 +21652,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 } else if (selectedObject.isMusic() && !noforwardsOverride) {
                                     items.add(LocaleController.getString("SaveToMusic", R.string.SaveToMusic));
                                     options.add(OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC);
-                                    icons.add(R.drawable.msg_download);
+                                    icons.add(R.drawable.baseline_file_download_24);
                                 } else if (selectedObject.isDocument() && !noforwardsOverride) {
                                     items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
                                     options.add(OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC);
-                                    icons.add(R.drawable.msg_download);
+                                    icons.add(R.drawable.baseline_file_download_24);
                                 }
                             }
                         } else if (type == 3 && !noforwardsOverride) {
