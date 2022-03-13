@@ -248,6 +248,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        /* This weirdo shit breaks statusbar icons
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             getSplashScreen().setOnExitAnimationListener(splashScreenView -> {
                 ObjectAnimator animator = ObjectAnimator.ofFloat(splashScreenView, View.ALPHA, 1f, 0f);
@@ -261,7 +262,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                 });
                 animator.start();
             });
-        }
+        } */
 
         ApplicationLoader.postInitApplication();
         AndroidUtilities.checkDisplaySize(this, getResources().getConfiguration());

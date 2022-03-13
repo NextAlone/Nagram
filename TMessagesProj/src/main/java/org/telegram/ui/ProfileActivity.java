@@ -182,6 +182,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.ExteraPreferencesNav;
+
 public class ProfileActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, SharedMediaLayout.SharedMediaPreloaderDelegate, ImageUpdater.ImageUpdaterDelegate, SharedMediaLayout.Delegate {
 
     private RecyclerListView listView;
@@ -3251,7 +3254,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 writeButton.setImageResource(R.drawable.profile_newmsg);
                 writeButton.setContentDescription(LocaleController.getString("AccDescrOpenChat", R.string.AccDescrOpenChat));
             }
-        } else if (currentChat.megagroup) {
+        } else {
+            if (currentChat.megagroup) {
                 writeButton.setImageResource(R.drawable.msg_channel);
                 writeButton.setContentDescription(LocaleController.getString("OpenChannel2", R.string.OpenChannel2));
             } else {
@@ -7345,7 +7349,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     } else if (position == languageRow) {
                         textCell.setTextAndIcon(LocaleController.getString("Language", R.string.Language), R.drawable.menu_language, false);
                     } else if (position == exteraRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("exteraPreferences", R.string.exteraPreferences), R.drawable.menu_settings, true);
+                        textCell.setTextAndIcon(LocaleController.getString("Preferences", R.string.Preferences), R.drawable.menu_settings, true);
                     } else if (position == notificationRow) {
                         textCell.setTextAndIcon(LocaleController.getString("NotificationsAndSounds", R.string.NotificationsAndSounds), R.drawable.menu_notifications, true);
                     } else if (position == privacyRow) {
