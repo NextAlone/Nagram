@@ -19,8 +19,8 @@
 
     <application
         android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher_beta"
-        android:roundIcon="@mipmap/ic_launcher_beta"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher"
         android:label="@string/exteraAppName"
         android:theme="@style/Theme.TMessages.Start"
         android:name=".ApplicationLoader"
@@ -45,7 +45,8 @@
         <receiver
             tools:replace="android:enabled"
             android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
-            android:enabled="false">
+            android:enabled="false"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.measurement.UPLOAD" />
             </intent-filter>
