@@ -3,4 +3,5 @@
     <!-- exteraGram's Main Strings -->
     <string name="exteraAppName">exteraGram</string>
     <string name="exteraAppNameBeta">exteraGram β</string>
+    <string name="exteraDebugMenu">¯\\_(ツ)_/¯</string>
 </resources>
