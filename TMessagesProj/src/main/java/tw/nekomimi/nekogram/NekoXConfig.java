@@ -64,7 +64,7 @@ public class NekoXConfig {
 
 
     public static SharedPreferences preferences = NitritesKt.openMainSharedPreference("nekox_config");
-    public static boolean scrollableChatPreview = preferences.getBoolean("scrollableChatPreview", true);
+
     public static boolean developerMode = preferences.getBoolean("developer_mode", false);
 
     public static boolean disableFlagSecure = preferences.getBoolean("disable_flag_secure", false);
@@ -81,12 +81,6 @@ public class NekoXConfig {
 //    public static int customApi = preferences.getInt("custom_api", 0);
 //    public static int customAppId = preferences.getInt("custom_app_id", 0);
 //    public static String customAppHash = preferences.getString("custom_app_hash", "");
-
-    
-    public static void toggleScrollableChatPreview() {
-        scrollableChatPreview = !scrollableChatPreview;
-        preferences.edit().putBoolean("scrollableChatPreview", scrollableChatPreview).apply();
-    }
 
     public static void toggleDeveloperMode() {
         preferences.edit().putBoolean("developer_mode", developerMode = !developerMode).apply();
