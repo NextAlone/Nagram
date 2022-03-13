@@ -132,7 +132,8 @@ public class NekoXConfig {
     public static boolean isDeveloper() {
         if (hasDeveloper != null)
             return hasDeveloper;
-        hasDeveloper = true; // BuildVars.DEBUG_VERSION;
+            hasDeveloper = false;
+            if (BuildVars.DEBUG_VERSION) hasDeveloper = true;
         for (int acc : SharedConfig.activeAccounts) {
             long myId = UserConfig.getInstance(acc).clientUserId;
             if (ArrayUtil.contains(NekoXConfig.developers, myId)) {
