@@ -193,7 +193,7 @@ public class ActionBarLayout extends FrameLayout {
         @Override
         public boolean dispatchTouchEvent(MotionEvent ev) {
             boolean previewModeStatus = !NekoConfig.scrollableChatPreview.Bool() && inPreviewMode;
-            boolean passivePreview = inPreviewMode && previewMenu == null;
+            boolean passivePreview = previewModeStatus && previewMenu == null;
             if ((passivePreview || transitionAnimationPreviewMode) && (ev.getActionMasked() == MotionEvent.ACTION_DOWN || ev.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN)) {
                 return false;
             }
