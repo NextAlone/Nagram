@@ -27,7 +27,7 @@ object NaConfig {
     // Configs
     var forceCopy =
         addConfig(
-            "NaConfigForceCopy",
+            "ForceCopy",
             ConfigItem.configTypeBool,
             false
         )

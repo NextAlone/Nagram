@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="N_Config">TeleConf</string>
+    <string name="ForceCopy">کپی اجباری</string>
+    <string name="InvertReply">برگشت</string>
+    <string name="Great">عالی</string>
+    <string name="Poor">ضعیف</string>
+    <string name="CombineMessage">ترکیب پیام</string>
+    <string name="TextStyle">حالت متن</string>
+    <string name="CombineMessageEnabledWithReply">ترکیب پیام فعال شده با پاسخ</string>
+    <string name="CombineMessageEnabled">ترکیب پیام فعال شده</string>
+    <string name="CombineMessageDisabled">ترکیب پیام غیر‌فعال شده</string>
+</resources>

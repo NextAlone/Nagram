@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="N_Config">N-Config</string>
+    <string name="N_Config">TeleConf</string>
     <string name="ForceCopy">Force Copy</string>
     <string name="InvertReply">Invert</string>
     <string name="Great">Great</string>
