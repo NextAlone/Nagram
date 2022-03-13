@@ -2892,7 +2892,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         showDialog(builder.create());
                     } else {
                         try {
-                            Toast.makeText(getParentActivity(), "¯\\_(ツ)_/¯", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getParentActivity(), LocaleController.getString("exteraDebugMenu", R.string.exteraDebugMenu), Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
                             FileLog.e(e);
                         }
@@ -7103,7 +7103,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 }
                                 break;
                         }
-                        cell.setText(LocaleController.formatString("TelegramVersion", R.string.TelegramVersion, String.format(Locale.US, "v%s (%d) %s", pInfo.versionName, code, abi)));
+                        if (BuildVars.isBetaApp()) cell.setText("exteraGram β | v" + BuildConfig.VERSION_NAME);
+                            else cell.setText("exteraGram | v" + BuildConfig.VERSION_NAME);
                     } catch (Exception e) {
                         FileLog.e(e);
                     }

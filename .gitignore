@@ -1,6 +1,15 @@
-.idea/
+TMessagesProj/.externalNativeBuild/
 .gradle/
+.idea/
 build/
+.cxx/
 obj/
-*.iml
+
+output-metadata.json
 local.properties
+extera.jks
+API_KEYS
+
+*.hprof
+*.iml
+*.apk
