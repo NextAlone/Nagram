@@ -489,6 +489,8 @@ public class UserCell extends FrameLayout {
         if (adminTextView != null) {
             adminTextView.setTextColor(Theme.getColor(Theme.key_profile_creatorIcon));
         }
+
+        if (currentUser != null && currentUser.id != UserConfig.getInstance(currentAccount).getClientUserId() && currentUser.mutual_contact) statusTextView.setText(statusTextView.getText() + " (" + LocaleController.getString("MutualContact", R.string.MutualContact) + ")");
     }
 
     public void setSelfAsSavedMessages(boolean value) {

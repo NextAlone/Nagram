@@ -291,6 +291,8 @@ public class UserCell2 extends FrameLayout {
             imageView.setVisibility(currentDrawable == 0 ? GONE : VISIBLE);
             imageView.setImageResource(currentDrawable);
         }
+
+        if (currentUser != null && currentUser.id != UserConfig.getInstance(currentAccount).getClientUserId() && currentUser.mutual_contact) statusTextView.setText(statusTextView.getText() + " (" + LocaleController.getString("MutualContact", R.string.MutualContact) + ")");
     }
 
     @Override
