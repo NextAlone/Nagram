@@ -9,4 +9,9 @@ import org.telegram.messenger.ApplicationLoader
 object ExteraConfig {
 
     private val sharedPreferences: SharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE)
+
+    // Chats
+    // General
+    var dateOfForwardedMsg by sharedPreferences.boolean("dateOfForwardedMsg", false)
+
 }

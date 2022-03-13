@@ -22,4 +22,7 @@
 
     <string name="Categories">Categories</string>
     <string name="Chats">Chats</string>
+
+    <!-- Chats -->
+    <string name="DateOfForwardedMsg">Show date of forwarded message</string>
 </resources>
