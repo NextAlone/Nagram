@@ -24,6 +24,7 @@
     <string name="Chats">Chats</string>
 
     <!-- Chats -->
+    <string name="HideKeyboardOnScroll">Hide Keyboard on Scrolling</string>
     <string name="ArchiveOnPull">Open Archive on Pulldown</string>
     <string name="DateOfForwardedMsg">Show date of forwarded message</string>
 </resources>

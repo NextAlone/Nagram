@@ -275,6 +275,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.exteragram.messenger.ExteraConfig;
+
 @SuppressWarnings("unchecked")
 public class ChatActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, LocationActivity.LocationActivityDelegate, ChatAttachAlertDocumentLayout.DocumentSelectActivityDelegate {
 
@@ -5645,6 +5647,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         wasManualScroll = true;
                         scrollingChatListView = true;
                     } else if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                        if (ExteraConfig.INSTANCE.getHideKeyboardOnScroll()) AndroidUtilities.hideKeyboard(getParentActivity().getCurrentFocus());
                         pollHintCell = null;
                         wasManualScroll = true;
                         scrollingFloatingDate = true;

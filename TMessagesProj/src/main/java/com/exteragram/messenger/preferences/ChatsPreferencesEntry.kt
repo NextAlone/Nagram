@@ -11,6 +11,15 @@ class ChatsPreferencesEntry : BasePreferencesEntry {
     override fun getPreferences(bf: BaseFragment) = tgKitScreen(LocaleController.getString("Chats", R.string.Chats)) {
         category(LocaleController.getString("General", R.string.General)) {
             switch {
+                title = LocaleController.getString("HideKeyboardOnScroll", R.string.HideKeyboardOnScroll)
+
+                contract({
+                    return@contract ExteraConfig.hideKeyboardOnScroll
+                }) {
+                    ExteraConfig.hideKeyboardOnScroll = it
+                }
+            }
+            switch {
                 title = LocaleController.getString("ArchiveOnPull", R.string.ArchiveOnPull)
 
                 contract({

@@ -18,6 +18,7 @@ object ExteraConfig {
     // Chats
     // Stickers
     // General
+    var hideKeyboardOnScroll by sharedPreferences.boolean("hideKeyboardOnScroll", true)
     var archiveOnPull by sharedPreferences.boolean("archiveOnPull", true)
     var dateOfForwardedMsg by sharedPreferences.boolean("dateOfForwardedMsg", false)
     // Media
