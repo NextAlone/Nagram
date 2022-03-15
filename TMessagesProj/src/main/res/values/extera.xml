@@ -37,4 +37,7 @@
     <string name="HideKeyboardOnScroll">Hide Keyboard on Scrolling</string>
     <string name="ArchiveOnPull">Open Archive on Pulldown</string>
     <string name="DateOfForwardedMsg">Show date of forwarded message</string>
+
+    <string name="Media">Media</string>
+    <string name="RearVideoMessages">Rear Camera in Video Messages</string>
 </resources>

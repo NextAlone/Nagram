@@ -68,5 +68,16 @@ class ChatsPreferencesEntry : BasePreferencesEntry {
                 }
             }
         }
+        category(LocaleController.getString("Media", R.string.Media)) {
+            switch {
+                title = LocaleController.getString("RearVideoMessages", R.string.RearVideoMessages)
+
+                contract({
+                    return@contract ExteraConfig.rearVideoMessages
+                }) {
+                    ExteraConfig.rearVideoMessages = it
+                }
+            }
+        }
     }
 }

@@ -30,4 +30,5 @@ object ExteraConfig {
     var archiveOnPull by sharedPreferences.boolean("archiveOnPull", true)
     var dateOfForwardedMsg by sharedPreferences.boolean("dateOfForwardedMsg", false)
     // Media
+    var rearVideoMessages by sharedPreferences.boolean("rearVideoMessages", false)
 }
