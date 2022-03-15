@@ -42,8 +42,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
-//import android.telephony.TelephonyManager;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -83,7 +83,6 @@ import androidx.annotation.Nullable;
 import androidx.core.graphics.ColorUtils;
 
 import org.telegram.PhoneFormat.PhoneFormat;
-import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
@@ -107,7 +106,6 @@ import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -156,9 +154,15 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.StrUtil;
+import kotlin.Unit;
+import tw.nekomimi.nekogram.DataCenter;
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.ui.EditTextAutoFill;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
@@ -298,8 +302,8 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     private static final int menu_language = 3;
     private static final int menu_bot_login = 4;
     private static final int menu_other = 5;
-    //private int menu_custom_api = 6;
-//    private int menu_custom_dc = 7;
+    private int menu_custom_api = 6;
+    private int menu_custom_dc = 7;
     private static final int menu_qr_login = 8;
 
     TLRPC.TL_auth_exportLoginToken exportLoginTokenRequest = null;
@@ -620,8 +624,8 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         menu.addSubItem(menu_language, R.drawable.ic_translate, LocaleController.getString("Language", R.string.Language));
         menu.addSubItem(menu_bot_login, R.drawable.list_bot, LocaleController.getString("BotLogin", R.string.BotLogin));
         menu.addSubItem(menu_qr_login, R.drawable.wallet_qr, LocaleController.getString("ImportLogin", R.string.ImportLogin));
-//        otherItem.addSubItem(menu_custom_api, R.drawable.baseline_vpn_key_24, LocaleController.getString("CustomApi", R.string.CustomApi));
-//        menu.addSubItem(menu_custom_dc, R.drawable.baseline_sync_24, LocaleController.getString("CustomBackend", R.string.CustomBackend));
+        menu.addSubItem(menu_custom_api, R.drawable.baseline_vpn_key_24, LocaleController.getString("CustomApi", R.string.CustomApi));
+        menu.addSubItem(menu_custom_dc, R.drawable.baseline_sync_24, LocaleController.getString("CustomBackend", R.string.CustomBackend));
 
         menu.setOnClickListener(v -> {
             menu.toggleSubMenu();
@@ -636,6 +640,10 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             } else if (id == menu_qr_login) {
                 getConnectionsManager().cleanup(false);
                 regenerateLoginToken(false);
+            } else if (id == menu_custom_api) {
+                doCustomApi();
+            } else if (id == menu_custom_dc) {
+                doCustomDc();
             }
         });
         menu.setContentDescription(LocaleController.getString(R.string.items_other));
@@ -6536,4 +6544,149 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         }
     }
 
+    public void doCustomApi() {
+        AtomicInteger targetApi = new AtomicInteger(-1);
+        BottomBuilder builder = new BottomBuilder(getParentActivity());
+        EditText[] inputs = new EditText[2];
+        builder.addTitle(LocaleController.getString("CustomApi", R.string.CustomApi),
+                true,
+                LocaleController.getString("UseCustomApiNotice", R.string.UseCustomApiNotice));
+        builder.addRadioItem(LocaleController.getString("CustomApiNo", R.string.CustomApiNo), NekoXConfig.customApi == 0, (cell) -> {
+            targetApi.set(0);
+            builder.doRadioCheck(cell);
+            for (EditText input : inputs) {
+                input.setVisibility(View.GONE);
+            }
+            return Unit.INSTANCE;
+        });
+        builder.addRadioItem(LocaleController.getString("CustomApiOfficial", R.string.CustomApiOfficial), NekoXConfig.customApi == 1, (cell) -> {
+            targetApi.set(1);
+            builder.doRadioCheck(cell);
+            for (EditText input : inputs) {
+                input.setVisibility(View.GONE);
+            }
+            return Unit.INSTANCE;
+        });
+        builder.addRadioItem(LocaleController.getString("CustomApiTGX", R.string.CustomApiTGX), NekoXConfig.customApi == 2, (cell) -> {
+            targetApi.set(2);
+            builder.doRadioCheck(cell);
+            for (EditText input : inputs) {
+                input.setVisibility(View.GONE);
+            }
+            return Unit.INSTANCE;
+        });
+        builder.addRadioItem(LocaleController.getString("CustomApiInput", R.string.CustomApiInput), NekoXConfig.customApi > 2, (cell) -> {
+            targetApi.set(3);
+            builder.doRadioCheck(cell);
+            for (EditText input : inputs) {
+                input.setVisibility(View.VISIBLE);
+            }
+            return Unit.INSTANCE;
+        });
+        inputs[0] = builder.addEditText("App Id");
+        inputs[0].setInputType(InputType.TYPE_CLASS_NUMBER);
+        if (NekoXConfig.customAppId != 0) {
+            inputs[0].setText(NekoXConfig.customAppId + "");
+        }
+        inputs[0].addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (StrUtil.isBlank(s.toString())) {
+                    NekoXConfig.customAppId = 0;
+                } else if (!NumberUtil.isInteger(s.toString())) {
+                    inputs[0].setText("0");
+                } else {
+                    NekoXConfig.customAppId = NumberUtil.parseInt(s.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        inputs[1] = builder.addEditText("App Hash");
+        inputs[1].setFilters(new InputFilter[]{new InputFilter.LengthFilter(BuildVars.OFFICAL_APP_HASH.length())});
+        if (StrUtil.isNotBlank(NekoXConfig.customAppHash)) {
+            inputs[1].setText(NekoXConfig.customAppHash);
+        }
+        inputs[1].addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                NekoXConfig.customAppHash = s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        if (NekoXConfig.customApi <= 2) {
+            for (EditText input : inputs) {
+                input.setVisibility(View.GONE);
+            }
+        }
+        builder.addCancelButton();
+        builder.addButton(LocaleController.getString("Set", R.string.Set), (it) -> {
+            int target = targetApi.get();
+            if (target > 2) {
+                if (NekoXConfig.customAppId == 0) {
+                    inputs[0].requestFocus();
+                    AndroidUtilities.showKeyboard(inputs[0]);
+                    return Unit.INSTANCE;
+                } else if (StrUtil.isBlank(NekoXConfig.customAppHash)) {
+                    inputs[1].requestFocus();
+                    AndroidUtilities.showKeyboard(inputs[1]);
+                    return Unit.INSTANCE;
+                }
+            }
+            NekoXConfig.customApi = target;
+            NekoXConfig.saveCustomApi();
+            return Unit.INSTANCE;
+        });
+        builder.show();
+    }
+
+    public void doCustomDc() {
+        AtomicInteger targetDc = new AtomicInteger(-1);
+        BottomBuilder builder = new BottomBuilder(getParentActivity());
+        builder.addTitle(LocaleController.getString("CustomBackend", R.string.CustomBackend),
+                true,
+                LocaleController.getString("CustomBackendNotice", R.string.CustomBackendNotice));
+        int dcType;
+        if (ConnectionsManager.native_isTestBackend(currentAccount) != 0) {
+            dcType = 1;
+        } else {
+            dcType = 0;
+        }
+        builder.addRadioItem(LocaleController.getString("CustomBackendProduction", R.string.CustomBackendProduction), dcType == 0, (cell) -> {
+            targetDc.set(0);
+            builder.doRadioCheck(cell);
+            return Unit.INSTANCE;
+        });
+        builder.addRadioItem(LocaleController.getString("CustomBackendTestDC", R.string.CustomBackendTestDC), dcType == 1, (cell) -> {
+            targetDc.set(1);
+            builder.doRadioCheck(cell);
+            return Unit.INSTANCE;
+        });
+        builder.addCancelButton();
+        builder.addButton(LocaleController.getString("Set", R.string.Set), (it) -> {
+            int target = targetDc.get();
+            if (target == dcType) {
+                // do nothing
+            } else if (target == 0) {
+                DataCenter.applyOfficalDataCanter(currentAccount);
+            } else if (target == 1) {
+                DataCenter.applyTestDataCenter(currentAccount);
+            }
+            return Unit.INSTANCE;
+        });
+        builder.show();
+    }
 }
