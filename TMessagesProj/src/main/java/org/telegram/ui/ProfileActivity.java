@@ -5696,7 +5696,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     setAvatarSectionRow = rowCount++;
                 }
                 numberSectionRow = rowCount++;
-                numberRow = rowCount++;
+                numberRow = ExteraConfig.INSTANCE.getHidePhoneNumber() ? -1 : rowCount++;
                 setUsernameRow = rowCount++;
                 bioRow = rowCount++;
 

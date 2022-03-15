@@ -23,6 +23,9 @@
     <string name="Categories">Categories</string>
     <string name="Chats">Chats</string>
 
+    <!-- Appearance -->
+    <string name="HidePhoneNumber">Hide Phone Number</string>
+
     <!-- Chats -->
     <string name="HideKeyboardOnScroll">Hide Keyboard on Scrolling</string>
     <string name="ArchiveOnPull">Open Archive on Pulldown</string>

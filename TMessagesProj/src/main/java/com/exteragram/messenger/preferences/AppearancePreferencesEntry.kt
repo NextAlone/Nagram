@@ -12,9 +12,23 @@ import ua.itaysonlab.tgkit.ktx.*
 
 class AppearancePreferencesEntry : BasePreferencesEntry {
     override fun getPreferences(bf: BaseFragment) = tgKitScreen(LocaleController.getString("Appearance", R.string.Appearance)) {
-        category("There's nothing here.") {
+        category(LocaleController.getString("Application", R.string.Application)) {
             textDetail {
-                title = "But, it's not for long."
+                title = "There\'s nothing here..."
+                detail = "But, it\'s not for long!"
+            }
+        }
+
+        category(LocaleController.getString("General", R.string.General)) {
+            switch {
+                title = LocaleController.getString("HidePhoneNumber", R.string.HidePhoneNumber)
+                summary = LocaleController.getString("RestartRequired", R.string.RestartRequired)
+
+                contract({
+                    return@contract ExteraConfig.hidePhoneNumber
+                }) {
+                    ExteraConfig.hidePhoneNumber = it
+                }
             }
         }
     }

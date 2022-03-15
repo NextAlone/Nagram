@@ -50,6 +50,8 @@ import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.SnowflakesEffect;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class DrawerProfileCell extends FrameLayout {
 
     private BackupImageView avatarImageView;
@@ -330,7 +332,15 @@ public class DrawerProfileCell extends FrameLayout {
         accountsShown = accounts;
         setArrowState(false);
         nameTextView.setText(UserObject.getUserName(user));
-        phoneTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
+
+        if (!ExteraConfig.INSTANCE.getHidePhoneNumber()) {
+            phoneTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
+        } else if (!TextUtils.isEmpty(user.username)) {
+            phoneTextView.setText("@" + user.username);
+        } else {
+            phoneTextView.setText(LocaleController.getString("MobileHidden",R.string.MobileHidden));
+        }
+
         AvatarDrawable avatarDrawable = new AvatarDrawable(user);
         avatarDrawable.setColor(Theme.getColor(Theme.key_avatar_backgroundInProfileBlue));
         avatarImageView.setForUserOrChat(user, avatarDrawable);

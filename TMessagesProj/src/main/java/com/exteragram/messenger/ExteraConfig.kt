@@ -13,6 +13,7 @@ object ExteraConfig {
     // Appearance
     // Application
     // General
+    var hidePhoneNumber by sharedPreferences.boolean("hidePhoneNumber", false)
     // Drawer
 
     // Chats

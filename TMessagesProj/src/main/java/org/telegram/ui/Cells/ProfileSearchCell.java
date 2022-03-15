@@ -38,6 +38,8 @@ import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.NotificationsSettingsActivity;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class ProfileSearchCell extends BaseCell {
 
     private CharSequence currentName;
@@ -317,7 +319,9 @@ public class ProfileSearchCell extends BaseCell {
             nameString = nameString2.replace('\n', ' ');
         }
         if (nameString.length() == 0) {
-            if (user != null && user.phone != null && user.phone.length() != 0) {
+            if (ExteraConfig.INSTANCE.getHidePhoneNumber()) {
+                nameString = LocaleController.getString("MobileHidden", R.string.MobileHidden);
+            } else if (user != null && user.phone != null && user.phone.length() != 0) {
                 nameString = PhoneFormat.getInstance().format("+" + user.phone);
             } else {
                 nameString = LocaleController.getString("HiddenName", R.string.HiddenName);
