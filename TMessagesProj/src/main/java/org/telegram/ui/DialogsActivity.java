@@ -407,6 +407,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private final static int add_to_folder = 109;
     private final static int remove_from_folder = 110;
 
+
+    private final static int nekox_scanqr = 1003;
+
     private final static int ARCHIVE_ITEM_STATE_PINNED = 0;
     private final static int ARCHIVE_ITEM_STATE_SHOWED = 1;
     private final static int ARCHIVE_ITEM_STATE_HIDDEN = 2;
@@ -2089,7 +2092,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             updateProxyButton(false, false);
         }
 
-        scanItem = menu.addItem(3, R.drawable.wallet_qr);
+        scanItem = menu.addItem(nekox_scanqr, R.drawable.wallet_qr);
         scanItem.setContentDescription(LocaleController.getString("ScanQRCode", R.string.ScanQRCode));
         scanItem.setVisibility(View.GONE);
 
@@ -3917,22 +3920,21 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         updatePasscodeButton();
                     } else if (id == 2) {
                         presentFragment(new ProxyListActivity());
-                } else if (id == 3) {
-
-                    if (Build.VERSION.SDK_INT >= 23) {
-                        if (getParentActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                            getParentActivity().requestPermissions(new String[]{Manifest.permission.CAMERA}, 22);
-                            return;
+                    } else if (id == 3) {
+                        showSearch(true, true, true);
+                        actionBar.openSearchField(true);
+                    } else if (id == nekox_scanqr) {
+                        if (Build.VERSION.SDK_INT >= 23) {
+                            if (getParentActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                                getParentActivity().requestPermissions(new String[]{Manifest.permission.CAMERA}, 22);
+                                return;
+                            }
                         }
-                    }
-
                     CameraScanActivity.showAsSheet(DialogsActivity.this, new CameraScanActivity.CameraScanActivityDelegate() {
 
                         @Override
                         public void didFindQr(String text) {
-
                             ProxyUtil.showLinkAlert(getParentActivity(), text);
-
                         }
                     });
                 } else if (id >= 10 && id < 10 + accounts) {
