@@ -13,10 +13,6 @@ import ua.itaysonlab.tgkit.ktx.*
 class AppearancePreferencesEntry : BasePreferencesEntry {
     override fun getPreferences(bf: BaseFragment) = tgKitScreen(LocaleController.getString("Appearance", R.string.Appearance)) {
         category(LocaleController.getString("Application", R.string.Application)) {
-            textDetail {
-                title = "There\'s nothing here..."
-                detail = "But, it\'s not for long!"
-            }
             switch {
                 title = LocaleController.getString("TransparentStatusbar", R.string.TransparentStatusbar)
 
@@ -24,6 +20,16 @@ class AppearancePreferencesEntry : BasePreferencesEntry {
                     return@contract SharedConfig.noStatusBar
                 }) {
                     SharedConfig.toggleNoStatusBar()
+                }
+            }
+            switch {
+                title = LocaleController.getString("BlurForAllThemes", R.string.BlurForAllThemes)
+                summary = LocaleController.getString("RestartRequired", R.string.RestartRequired)
+
+                contract({
+                    return@contract ExteraConfig.blurForAllThemes
+                }) {
+                    ExteraConfig.blurForAllThemes = it
                 }
             }
         }

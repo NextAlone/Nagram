@@ -24,8 +24,8 @@
     <string name="Chats">Chats</string>
 
     <!-- Appearance -->
-    TransparentStatusbar
     <string name="TransparentStatusbar">Transparent Statusbar</string>
+    <string name="BlurForAllThemes">Blur for all themes</string>
 
     <string name="HideAllChats">Hide \"All Chats\" Tab</string>
     <string name="HideProxySponsor">Hide Proxy Sponsor</string>

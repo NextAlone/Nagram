@@ -12,6 +12,7 @@ object ExteraConfig {
 
     // Appearance
     // Application
+    var blurForAllThemes by sharedPreferences.boolean("blurForAllThemes", true)
     // General
     var hideAllChats by sharedPreferences.boolean("hideAllChats", false)
     var hideProxySponsor by sharedPreferences.boolean("hideProxySponsor", true)
