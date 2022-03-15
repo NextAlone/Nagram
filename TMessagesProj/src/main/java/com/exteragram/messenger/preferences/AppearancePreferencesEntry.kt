@@ -31,6 +31,15 @@ class AppearancePreferencesEntry : BasePreferencesEntry {
                 }
             }
             switch {
+                title = LocaleController.getString("HideProxySponsor", R.string.HideProxySponsor)
+
+                contract({
+                    return@contract ExteraConfig.hideProxySponsor
+                }) {
+                    ExteraConfig.hideProxySponsor = it
+                }
+            }
+            switch {
                 title = LocaleController.getString("HidePhoneNumber", R.string.HidePhoneNumber)
                 summary = LocaleController.getString("RestartRequired", R.string.RestartRequired)
 

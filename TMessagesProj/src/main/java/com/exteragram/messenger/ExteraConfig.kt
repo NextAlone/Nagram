@@ -14,6 +14,7 @@ object ExteraConfig {
     // Application
     // General
     var hideAllChats by sharedPreferences.boolean("hideAllChats", false)
+    var hideProxySponsor by sharedPreferences.boolean("hideProxySponsor", true)
     var hidePhoneNumber by sharedPreferences.boolean("hidePhoneNumber", false)
     var showID by sharedPreferences.boolean("showID", false)
     var chatsOnTitle by sharedPreferences.boolean("chatsOnTitle", true)
