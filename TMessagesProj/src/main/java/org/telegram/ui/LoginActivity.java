@@ -6356,6 +6356,8 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         editText.setBackgroundDrawable(null);
         editText.requestFocus();
         editText.setPadding(0, 0, 0, 0);
+        FrameLayout layout = new FrameLayout(context);
+        layout.addView(editText);
         ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) editText.getLayoutParams();
         if (layoutParams != null) {
             if (layoutParams instanceof FrameLayout.LayoutParams) {
@@ -6365,7 +6367,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             layoutParams.height = AndroidUtilities.dp(36);
             editText.setLayoutParams(layoutParams);
         }
-        builder.setView(editText);
+        builder.setView(layout);
 
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
             if (getParentActivity() == null) {
