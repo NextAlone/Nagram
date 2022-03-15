@@ -3936,6 +3936,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         public void didFindQr(String text) {
                             ProxyUtil.showLinkAlert(getParentActivity(), text);
                         }
+
+                        @Override
+                        public boolean processQr(String text, Runnable onLoadEnd) {
+                            onLoadEnd.run();
+                            return false;
+                        }
                     });
                 } else if (id >= 10 && id < 10 + accounts) {
                         if (getParentActivity() == null) {

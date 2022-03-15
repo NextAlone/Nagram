@@ -123,6 +123,7 @@ public class CameraScanActivity extends BaseFragment {
     //private BarcodeDetector visionQrReader;
 
     private boolean needGalleryButton;
+    private boolean any;
 
     private int currentType;
 
@@ -144,7 +145,13 @@ public class CameraScanActivity extends BaseFragment {
         }
     }
 
+    // Official Signature
     public static ActionBarLayout[] showAsSheet(BaseFragment parentFragment, boolean gallery, int type, CameraScanActivityDelegate cameraDelegate) {
+        return showAsSheet(parentFragment, gallery, type, cameraDelegate, false);
+    }
+
+    // Add the any parameter
+    public static ActionBarLayout[] showAsSheet(BaseFragment parentFragment, boolean gallery, int type, CameraScanActivityDelegate cameraDelegate, boolean any) {
         if (parentFragment == null || parentFragment.getParentActivity() == null) {
             return null;
         }
@@ -165,6 +172,7 @@ public class CameraScanActivity extends BaseFragment {
                     }
                 };
                 fragment.needGalleryButton = gallery;
+                fragment.any = any;
                 actionBarLayout[0].addFragmentToStack(fragment);
                 actionBarLayout[0].showLastFragment();
                 actionBarLayout[0].setPadding(backgroundPaddingLeft, 0, backgroundPaddingLeft, 0);
@@ -206,63 +214,7 @@ public class CameraScanActivity extends BaseFragment {
     }
 
     public static ActionBarLayout[] showAsSheet(BaseFragment parentFragment, CameraScanActivityDelegate cameraDelegate) {
-        if (parentFragment == null || parentFragment.getParentActivity() == null) {
-            return null;
-        }
-        ActionBarLayout[] actionBarLayout = new ActionBarLayout[]{new ActionBarLayout(parentFragment.getParentActivity())};
-        BottomSheet bottomSheet = new BottomSheet(parentFragment.getParentActivity(), false) {
-            CameraScanActivity fragment;
-            {
-                actionBarLayout[0].init(new ArrayList<>());
-                fragment = new CameraScanActivity(TYPE_QR) {
-                    @Override
-                    public void finishFragment() {
-                        dismiss();
-                    }
-
-                    @Override
-                    public void removeSelfFromStack() {
-                        dismiss();
-                    }
-                };
-                fragment.needGalleryButton = true;
-                actionBarLayout[0].addFragmentToStack(fragment);
-                actionBarLayout[0].showLastFragment();
-                actionBarLayout[0].setPadding(backgroundPaddingLeft, 0, backgroundPaddingLeft, 0);
-                fragment.setDelegate(cameraDelegate);
-                containerView = actionBarLayout[0];
-                setApplyBottomPadding(false);
-                setApplyBottomPadding(false);
-                setOnDismissListener(dialog -> fragment.onFragmentDestroy());
-            }
-
-            @Override
-            protected boolean canDismissWithSwipe() {
-                return false;
-            }
-
-            @Override
-            public void onBackPressed() {
-                if (actionBarLayout[0] == null || actionBarLayout[0].fragmentsStack.size() <= 1) {
-                    super.onBackPressed();
-                } else {
-                    actionBarLayout[0].onBackPressed();
-                }
-            }
-
-            @Override
-            public void dismiss() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    final Window window = fragment.getParentActivity().getWindow();
-                    fragment.updateNavigationBarColor(fragment.wasNavigationBarColor);
-                    AndroidUtilities.setLightNavigationBar(window, fragment.wasLightNavigationBar);
-                }
-                super.dismiss();
-                actionBarLayout[0] = null;
-            }
-        };
-        bottomSheet.show();
-        return actionBarLayout;
+        return showAsSheet(parentFragment, true, TYPE_QR, cameraDelegate, true);
     }
 
     public CameraScanActivity(int type) {
@@ -1017,11 +969,26 @@ public class CameraScanActivity extends BaseFragment {
                 return null;
             }
             text = result.getText();
-
+            if (result.getResultPoints() == null || result.getResultPoints().length == 0) {
+                bounds = null;
+            } else {
+                float minX = Float.MAX_VALUE,
+                        maxX = Float.MIN_VALUE,
+                        minY = Float.MAX_VALUE,
+                        maxY = Float.MIN_VALUE;
+                for (ResultPoint point : result.getResultPoints()) {
+                    minX = Math.min(minX, point.getX());
+                    maxX = Math.max(maxX, point.getX());
+                    minY = Math.min(minY, point.getY());
+                    maxY = Math.max(maxY, point.getY());
+                }
+                bounds.set(minX, minY, maxX, maxY);
+            }
             if (TextUtils.isEmpty(text)) {
                 onNoQrFound();
                 return null;
             }
+            if (any) return new QrResult(text, bounds);
             if (needGalleryButton) {
                 if (!text.startsWith("ton://transfer/")) {
                     //onNoWalletFound(bitmap != null);
