@@ -7789,16 +7789,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     } else if (position == switchBackendRow) {
                         textCell.setText("Switch Backend", false);
                     } else if (position == setAvatarRow) {
-<<<<<<< HEAD
-                        textCell.setTextAndIcon(LocaleController.getString("SetProfilePhoto", R.string.SetProfilePhoto), R.drawable.baseline_image_24, false);
+                        textCell.setTextAndIcon(LocaleController.getString("SetProfilePhoto", R.string.SetProfilePhoto), R.drawable.msg_addphoto, false);
                         textCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
                         textCell.getImageView().setPadding(0, 0, 0, AndroidUtilities.dp(8));
                         textCell.setImageLeft(12);
                         setAvatarCell = textCell;
-=======
-                        textCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
-                        textCell.setTextAndIcon(LocaleController.getString("SetProfilePhoto", R.string.SetProfilePhoto), R.drawable.msg_addphoto, false);
->>>>>>> 23f09916a (feat: change to outline icons)
                     }
                     break;
                 case VIEW_TYPE_NOTIFICATIONS_CHECK:
