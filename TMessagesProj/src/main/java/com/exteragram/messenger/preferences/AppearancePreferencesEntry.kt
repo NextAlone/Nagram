@@ -35,6 +35,16 @@ class AppearancePreferencesEntry : BasePreferencesEntry {
                 summary = LocaleController.getString("RestartRequired", R.string.RestartRequired)
 
                 contract({
+                    return@contract ExteraConfig.showID
+                }) {
+                    ExteraConfig.showID = it
+                }
+            }
+            switch {
+                title = LocaleController.getString("ChatsOnTitle", R.string.ChatsOnTitle)
+                summary = LocaleController.getString("RestartRequired", R.string.RestartRequired)
+
+                contract({
                     return@contract ExteraConfig.chatsOnTitle
                 }) {
                     ExteraConfig.chatsOnTitle = it

@@ -413,6 +413,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private int userInfoRow;
     private int channelInfoRow;
     private int usernameRow;
+    private int idRow;
     private int notificationsDividerRow;
     private int notificationsRow;
     private int infoSectionRow;
@@ -2605,7 +2606,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (getParentActivity() == null) {
                 return;
             }
-            if (position == settingsKeyRow) {
+            if (position == idRow && did != 0) {
+                try {
+                    android.content.ClipboardManager clipboard = (android.content.ClipboardManager) ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                    android.content.ClipData clip = android.content.ClipData.newPlainText("label", did + "");
+                    clipboard.setPrimaryClip(clip);
+                    Toast.makeText(getParentActivity(), LocaleController.getString("TextCopied", R.string.TextCopied), Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
+                return;
+            } else if (position == settingsKeyRow) {
                 Bundle args = new Bundle();
                 args.putInt("chat_id", DialogObject.getEncryptedChatId(dialogId));
                 presentFragment(new IdenticonActivity(args));
@@ -5611,6 +5622,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         numberSectionRow = -1;
         numberRow = -1;
         setUsernameRow = -1;
+        idRow = -1;
         bioRow = -1;
         phoneSuggestionSectionRow = -1;
         phoneSuggestionRow = -1;
@@ -5700,6 +5712,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 setUsernameRow = rowCount++;
                 bioRow = rowCount++;
 
+                if (ExteraConfig.INSTANCE.getShowID()) idRow = rowCount++;
                 settingsSectionRow = rowCount++;
 
                 Set<String> suggestions = getMessagesController().pendingSuggestions;
@@ -5755,6 +5768,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (user != null && !TextUtils.isEmpty(user.username)) {
                     usernameRow = rowCount++;
                 }
+                if (ExteraConfig.INSTANCE.getShowID()) idRow = rowCount++;
                 if (phoneRow != -1 || userInfoRow != -1 || usernameRow != -1) {
                     notificationsDividerRow = rowCount++;
                 }
@@ -5802,6 +5816,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     usernameRow = rowCount++;
                 }
             }
+            if (ExteraConfig.INSTANCE.getShowID()) idRow = rowCount++;
             if (infoHeaderRow != -1) {
                 notificationsDividerRow = rowCount++;
             }
@@ -7213,6 +7228,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             text = LocaleController.getString("PhoneHidden", R.string.PhoneHidden);
                         }
                         detailCell.setTextAndValue(text, LocaleController.getString("PhoneMobile", R.string.PhoneMobile), false);
+                    } else if (position == idRow) {
+                        final long did;
+                        if (dialogId != 0) {
+                            did = dialogId;
+                        } else if (userId != 0) {
+                            did = userId;
+                        } else {
+                            did = -chatId;
+                        }
+                        detailCell.setTextAndValue(did + "", "ID", false);
                     } else if (position == usernameRow) {
                         String text;
                         if (userId != 0) {
@@ -7256,11 +7281,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         String value;
                         if (userInfo == null || !TextUtils.isEmpty(userInfo.about)) {
                             value = userInfo == null ? LocaleController.getString("Loading", R.string.Loading) : userInfo.about;
-                            detailCell.setTextWithEmojiAndValue(value, LocaleController.getString("UserBio", R.string.UserBio), false);
+                            detailCell.setTextWithEmojiAndValue(value, LocaleController.getString("UserBio", R.string.UserBio), true);
                             detailCell.setContentDescriptionValueFirst(true);
                             currentBio = userInfo != null ? userInfo.about : null;
                         } else {
-                            detailCell.setTextAndValue(LocaleController.getString("UserBio", R.string.UserBio), LocaleController.getString("UserBioDetail", R.string.UserBioDetail), false);
+                            detailCell.setTextAndValue(LocaleController.getString("UserBio", R.string.UserBio), LocaleController.getString("UserBioDetail", R.string.UserBioDetail), true);
                             detailCell.setContentDescriptionValueFirst(false);
                             currentBio = null;
                         }
