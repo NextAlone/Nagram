@@ -34,6 +34,7 @@ jobs:
         run: |
           sed -i 's/\/\///g' settings.gradle
           git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
+          git submodule status TMessagesProj/jni/libvpx > libvpx_status
       - name: FFmpeg Cache
         id: cache
         uses: actions/cache@v2
@@ -364,19 +365,14 @@ jobs:
         run: |
           chmod +x telegram-bot-api-binary
           ./telegram-bot-api-binary --api-id=11535358 --api-hash=33d372962fadb01df47e6ceed4e33cd6 --local 2>&1 > /dev/null &
-          curl http://127.0.0.1:8081/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
-           -X POST \
-           -F chat_id="${{ secrets.TELEGRAM_CHANNEL }}" \
-           -F text="==== Release ====" \
-           --silent --show-error --fail >/dev/null
 
           # send media group via telegram bot api
           export mini64=$(find artifacts -name "*mini-arm64-v8a-release.apk")
           export mini32=$(find artifacts -name "*mini-armeabi-v7a-release.apk")
           export full64=$(find artifacts -name "*full-arm64-v8a-release.apk")
           export full32=$(find artifacts -name "*full-armeabi-v7a-release.apk")
-
-          curl -v "http://127.0.0.1:8081/bot${{ secrets.TELEGRAM_TOKEN  }}/sendMediaGroup?chat_id=${{ secrets.TELEGRAM_CHANNEL }}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2Fmini64%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2Fmini32%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2Ffull64%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2Ffull32%22%7D%5D" \
+          ESCAPED=`python3 -c 'import json,os,urllib.parse; msg = json.dumps(os.environ["COMMIT_MESSAGE"]); print(urllib.parse.quote(msg if len(msg) <= 1024 else json.dumps(os.environ["COMMIT_URL"])))'`
+          curl -v "http://127.0.0.1:8081/bot${{ secrets.TELEGRAM_TOKEN }}/sendMediaGroup?chat_id=${{ secrets.TELEGRAM_CHANNEL }}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2Fmini64%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2Fmini32%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2Ffull64%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2Ffull32%22%2C%22caption%22:${ESCAPED}7D%5D" \
             -F mini64="@$mini64" \
             -F mini32="@$mini32" \
             -F full64="@$full64" \
