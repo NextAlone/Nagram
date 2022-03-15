@@ -5645,6 +5645,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             photoHeight = (int) maxHeight;
                         }
                     }
+
+                    float modifier = ExteraConfig.INSTANCE.getStickerSize() / 100f;
+                    photoWidth = (int) (photoWidth * modifier);
+                    photoHeight = (int) (photoHeight * modifier);
+                    maxWidth = (int) (maxWidth * modifier);
+                    maxHeight = (int) (maxHeight * modifier);
+
                     Object parentObject = messageObject;
                     int w = (int) (photoWidth / AndroidUtilities.density);
                     int h = (int) (photoHeight / AndroidUtilities.density);

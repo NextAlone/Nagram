@@ -31,6 +31,8 @@
     <string name="ChatsOnTitle">\"Chats\" instead of \"exteraGram\"</string>
 
     <!-- Chats -->
+    <string name="StickerSize">Stickers size</string>
+
     <string name="HideKeyboardOnScroll">Hide Keyboard on Scrolling</string>
     <string name="ArchiveOnPull">Open Archive on Pulldown</string>
     <string name="DateOfForwardedMsg">Show date of forwarded message</string>
