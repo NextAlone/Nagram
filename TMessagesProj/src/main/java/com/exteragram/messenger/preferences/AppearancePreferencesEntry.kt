@@ -25,6 +25,16 @@ class AppearancePreferencesEntry : BasePreferencesEntry {
                 summary = LocaleController.getString("RestartRequired", R.string.RestartRequired)
 
                 contract({
+                    return@contract ExteraConfig.hideAllChats
+                }) {
+                    ExteraConfig.hideAllChats = it
+                }
+            }
+            switch {
+                title = LocaleController.getString("HidePhoneNumber", R.string.HidePhoneNumber)
+                summary = LocaleController.getString("RestartRequired", R.string.RestartRequired)
+
+                contract({
                     return@contract ExteraConfig.hidePhoneNumber
                 }) {
                     ExteraConfig.hidePhoneNumber = it
