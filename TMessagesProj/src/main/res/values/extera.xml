@@ -32,6 +32,7 @@
     <string name="HidePhoneNumber">Hide Phone Number</string>
     <string name="ShowID">Show ID in Profile</string>
     <string name="ChatsOnTitle">\"Chats\" instead of \"exteraGram\"</string>
+    <string name="ForceTabletMode">Force Tablet Mode</string>
 
     <!-- Chats -->
     <string name="StickerSize">Stickers size</string>

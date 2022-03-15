@@ -162,6 +162,8 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class AndroidUtilities {
     public final static int LIGHT_STATUS_BAR_OVERLAY = 0x0f000000, DARK_STATUS_BAR_OVERLAY = 0x33000000;
 
@@ -1895,6 +1897,7 @@ public class AndroidUtilities {
     }
 
     public static boolean isTablet() {
+        if (ExteraConfig.INSTANCE.getForceTabletMode()) isTablet = true;
         if (isTablet == null) {
             isTablet = ApplicationLoader.applicationContext != null && ApplicationLoader.applicationContext.getResources().getBoolean(R.bool.isTablet);
         }

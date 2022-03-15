@@ -19,6 +19,7 @@ object ExteraConfig {
     var hidePhoneNumber by sharedPreferences.boolean("hidePhoneNumber", false)
     var showID by sharedPreferences.boolean("showID", false)
     var chatsOnTitle by sharedPreferences.boolean("chatsOnTitle", true)
+    var forceTabletMode by sharedPreferences.boolean("ForceTabletMode", false)
     // Drawer
 
     // Chats

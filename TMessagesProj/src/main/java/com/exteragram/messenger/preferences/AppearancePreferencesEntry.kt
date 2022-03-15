@@ -83,6 +83,16 @@ class AppearancePreferencesEntry : BasePreferencesEntry {
                     ExteraConfig.chatsOnTitle = it
                 }
             }
+            switch {
+                title = LocaleController.getString("ForceTabletMode", R.string.ForceTabletMode)
+                summary = LocaleController.getString("RestartRequired", R.string.RestartRequired)
+
+                contract({
+                    return@contract ExteraConfig.forceTabletMode
+                }) {
+                    ExteraConfig.forceTabletMode = it
+                }
+            }
         }
     }
 }
