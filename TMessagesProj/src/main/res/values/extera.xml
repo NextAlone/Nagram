@@ -25,6 +25,7 @@
 
     <!-- Appearance -->
     <string name="HidePhoneNumber">Hide Phone Number</string>
+    <string name="ChatsOnTitle">\"Chats\" instead of \"exteraGram\"</string>
 
     <!-- Chats -->
     <string name="HideKeyboardOnScroll">Hide Keyboard on Scrolling</string>
