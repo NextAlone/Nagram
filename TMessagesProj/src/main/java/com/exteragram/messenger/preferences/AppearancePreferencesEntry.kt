@@ -21,7 +21,7 @@ class AppearancePreferencesEntry : BasePreferencesEntry {
 
         category(LocaleController.getString("General", R.string.General)) {
             switch {
-                title = LocaleController.getString("HidePhoneNumber", R.string.HidePhoneNumber)
+                title = LocaleController.getString("HideAllChats", R.string.HideAllChats)
                 summary = LocaleController.getString("RestartRequired", R.string.RestartRequired)
 
                 contract({
@@ -41,8 +41,7 @@ class AppearancePreferencesEntry : BasePreferencesEntry {
                 }
             }
             switch {
-                title = LocaleController.getString("ChatsOnTitle", R.string.ChatsOnTitle)
-                summary = LocaleController.getString("RestartRequired", R.string.RestartRequired)
+                title = LocaleController.getString("ShowID", R.string.ShowID)
 
                 contract({
                     return@contract ExteraConfig.showID
