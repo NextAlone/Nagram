@@ -8,6 +8,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.ResolveInfo;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.text.TextPaint;
 import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.Gravity;
@@ -48,14 +51,12 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.SeekBarView;
 import org.telegram.ui.Components.UndoView;
 
-import java.nio.file.InvalidPathException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
@@ -144,6 +145,11 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
             LocaleController.getString("Enable", R.string.Enable),
             LocaleController.getString("Disable", R.string.Disable)
     }, null));
+
+    private final AbstractConfigCell forceBlurInChatRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.forceBlurInChat));
+    private final AbstractConfigCell header_chatblur = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("ChatBlurAlphaValue")));
+    private final AbstractConfigCell chatBlurAlphaValueRow = cellGroup.appendCell(new ConfigCellCustom(ConfigCellCustom.CUSTOM_ITEM_CharBlurAlpha, NekoConfig.forceBlurInChat.Bool()));
+
     private final AbstractConfigCell divider5 = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell header6 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("PrivacyTitle")));
@@ -172,7 +178,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell displayPersianCalendarByLatinRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.displayPersianCalendarByLatin));
     private final AbstractConfigCell divider7 = cellGroup.appendCell(new ConfigCellDivider());
 
-
+    private ChatBlurAlphaSeekBar chatBlurAlphaSeekbar;
     private UndoView restartTooltip;
 
     @Override
@@ -367,6 +373,11 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
             } else if (key.equals(NekoConfig.disableAppBarShadow.getKey())) {
                 ActionBarLayout.headerShadowDrawable = (boolean) newValue ? null : parentLayout.getResources().getDrawable(R.drawable.header_shadow).mutate();
                 parentLayout.rebuildAllFragmentViews(true, true);
+            } else if (NekoConfig.forceBlurInChat.getKey().equals(key)) {
+                boolean enabled = (Boolean) newValue;
+                if (chatBlurAlphaSeekbar != null)
+                    chatBlurAlphaSeekbar.setEnabled(enabled);
+                ((ConfigCellCustom) chatBlurAlphaValueRow).enabled = enabled;
             }
         };
 
@@ -381,7 +392,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
     private class ConfigCellDrawerProfilePreview extends AbstractConfigCell {
         public int getType() {
-            return 999;
+            return ConfigCellCustom.CUSTOM_ITEM_ProfilePreview;
         }
 
         public boolean isEnabled() {
@@ -709,9 +720,14 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     view = new TextInfoPrivacyCell(mContext);
                     // view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
-                case 999:
+                case ConfigCellCustom.CUSTOM_ITEM_ProfilePreview:
                     view = profilePreviewCell = new DrawerProfilePreviewCell(mContext);
                     view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    break;
+                case ConfigCellCustom.CUSTOM_ITEM_CharBlurAlpha:
+                    view = chatBlurAlphaSeekbar = new ChatBlurAlphaSeekBar(mContext);
+                    chatBlurAlphaSeekbar.setEnabled(NekoConfig.forceBlurInChat.Bool());
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
             }
             //noinspection ConstantConditions
@@ -767,5 +783,66 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
 
         keyField.requestFocus();
         AndroidUtilities.showKeyboard(keyField);
+    }
+
+    private class ChatBlurAlphaSeekBar extends FrameLayout {
+
+        private final SeekBarView sizeBar;
+        private final TextPaint textPaint;
+        private boolean enabled = true;
+
+        public ChatBlurAlphaSeekBar(Context context) {
+            super(context);
+
+            setWillNotDraw(false);
+
+            textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+            textPaint.setTextSize(AndroidUtilities.dp(16));
+
+            sizeBar = new SeekBarView(context);
+            sizeBar.setReportChanges(true);
+            sizeBar.setDelegate(new SeekBarView.SeekBarViewDelegate() {
+                @Override
+                public void onSeekBarDrag(boolean stop, float progress) {
+                    NekoConfig.chatBlueAlphaValue.setConfigInt(Math.min(255, (int) (255 * progress)));
+                    invalidate();
+                }
+
+                @Override
+                public void onSeekBarPressed(boolean pressed) {
+
+                }
+            });
+            sizeBar.setOnTouchListener((v, event) -> !enabled);
+            sizeBar.setProgress(NekoConfig.chatBlueAlphaValue.Int());
+            addView(sizeBar, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 38, Gravity.LEFT | Gravity.TOP, 9, 5, 43, 11));
+        }
+
+        @Override
+        protected void onDraw(Canvas canvas) {
+            textPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
+            canvas.drawText(String.valueOf(NekoConfig.chatBlueAlphaValue.Int()), getMeasuredWidth() - AndroidUtilities.dp(39), AndroidUtilities.dp(28), textPaint);
+        }
+
+        @Override
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            sizeBar.setProgress((NekoConfig.chatBlueAlphaValue.Int() / 255.0f));
+        }
+
+        @Override
+        public void invalidate() {
+            super.invalidate();
+            sizeBar.invalidate();
+        }
+
+        @Override
+        public void setEnabled(boolean enabled) {
+            super.setEnabled(enabled);
+            this.enabled = enabled;
+            sizeBar.setAlpha(enabled ? 1.0f : 0.5f);
+            textPaint.setAlpha((int) ((enabled ? 1.0f : 0.3f) * 255));
+            this.invalidate();
+        }
     }
 }

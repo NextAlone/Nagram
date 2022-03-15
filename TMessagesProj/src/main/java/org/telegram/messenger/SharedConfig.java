@@ -54,6 +54,7 @@ import java.util.stream.Collectors;
 
 import cn.hutool.core.util.StrUtil;
 import okhttp3.HttpUrl;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.proxy.ProxyManager;
 import tw.nekomimi.nekogram.proxy.ShadowsocksLoader;
 import tw.nekomimi.nekogram.proxy.ShadowsocksRLoader;
@@ -1227,6 +1228,7 @@ public class SharedConfig {
             smoothKeyboard = preferences.getBoolean("smoothKeyboard2", true);
             pauseMusicOnRecord = preferences.getBoolean("pauseMusicOnRecord", false);
             chatBlur = preferences.getBoolean("chatBlur", true);
+            chatBlur = chatBlur || NekoConfig.forceBlurInChat.Bool();
             streamAllVideo = preferences.getBoolean("streamAllVideo", BuildVars.DEBUG_VERSION);
             streamMkv = preferences.getBoolean("streamMkv", false);
             suggestStickers = preferences.getInt("suggestStickers", 0);
@@ -1844,6 +1846,7 @@ public class SharedConfig {
 
     public static void toggleChatBlur() {
         chatBlur = !chatBlur;
+        if (NekoConfig.forceBlurInChat.Bool()) chatBlur = true;
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("chatBlur", chatBlur);
@@ -2329,10 +2332,10 @@ public class SharedConfig {
     }
 
     public static boolean canBlurChat() {
-        return getDevicePerformanceClass() == PERFORMANCE_CLASS_HIGH;
+        return getDevicePerformanceClass() == PERFORMANCE_CLASS_HIGH || NekoConfig.forceBlurInChat.Bool();
     }
     public static boolean chatBlurEnabled() {
-        return canBlurChat() && chatBlur;
+        return (canBlurChat() && chatBlur) || NekoConfig.forceBlurInChat.Bool();
     }
 
     public static class BackgroundActivityPrefs {
