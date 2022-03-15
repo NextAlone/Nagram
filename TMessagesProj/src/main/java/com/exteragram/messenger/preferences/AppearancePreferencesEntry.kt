@@ -17,6 +17,15 @@ class AppearancePreferencesEntry : BasePreferencesEntry {
                 title = "There\'s nothing here..."
                 detail = "But, it\'s not for long!"
             }
+            switch {
+                title = LocaleController.getString("TransparentStatusbar", R.string.TransparentStatusbar)
+
+                contract({
+                    return@contract SharedConfig.noStatusBar
+                }) {
+                    SharedConfig.toggleNoStatusBar()
+                }
+            }
         }
 
         category(LocaleController.getString("General", R.string.General)) {
