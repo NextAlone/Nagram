@@ -10,8 +10,15 @@ object ExteraConfig {
 
     private val sharedPreferences: SharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE)
 
-    // Chats
+    // Appearance
+    // Application
     // General
-    var dateOfForwardedMsg by sharedPreferences.boolean("dateOfForwardedMsg", false)
+    // Drawer
 
+    // Chats
+    // Stickers
+    // General
+    var archiveOnPull by sharedPreferences.boolean("archiveOnPull", true)
+    var dateOfForwardedMsg by sharedPreferences.boolean("dateOfForwardedMsg", false)
+    // Media
 }

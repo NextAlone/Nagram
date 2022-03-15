@@ -11,6 +11,15 @@ class ChatsPreferencesEntry : BasePreferencesEntry {
     override fun getPreferences(bf: BaseFragment) = tgKitScreen(LocaleController.getString("Chats", R.string.Chats)) {
         category(LocaleController.getString("General", R.string.General)) {
             switch {
+                title = LocaleController.getString("ArchiveOnPull", R.string.ArchiveOnPull)
+
+                contract({
+                    return@contract ExteraConfig.archiveOnPull
+                }) {
+                    ExteraConfig.archiveOnPull = it
+                }
+            }
+            switch {
                 title = LocaleController.getString("DateOfForwardedMsg", R.string.DateOfForwardedMsg)
 
                 contract({

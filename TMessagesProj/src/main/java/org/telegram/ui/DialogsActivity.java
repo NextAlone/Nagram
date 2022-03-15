@@ -183,6 +183,8 @@ import org.telegram.ui.Components.ViewPagerFixed;
 import java.io.File;
 import java.util.ArrayList;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class DialogsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private boolean canShowFilterTabsView;
@@ -1503,6 +1505,17 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                 }
                                 ((DialogCell) view).startOutAnimation();
                                 parentPage.archivePullViewState = ARCHIVE_ITEM_STATE_SHOWED;
+
+                                if (ExteraConfig.INSTANCE.getArchiveOnPull()) {
+                                    AndroidUtilities.runOnUIThread(() -> {
+                                        Bundle args = new Bundle();
+                                        args.putInt("folderId", 1);
+                                        args.putBoolean("onlySelect", onlySelect);
+                                        DialogsActivity dialogsActivity = new DialogsActivity(args);
+                                        dialogsActivity.setDelegate(delegate);
+                                        presentFragment(dialogsActivity, onlySelect);
+                                    }, 150);
+                                }
                             }
                         }
 

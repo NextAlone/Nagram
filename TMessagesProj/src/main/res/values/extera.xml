@@ -24,5 +24,6 @@
     <string name="Chats">Chats</string>
 
     <!-- Chats -->
+    <string name="ArchiveOnPull">Open Archive on Pulldown</string>
     <string name="DateOfForwardedMsg">Show date of forwarded message</string>
 </resources>
