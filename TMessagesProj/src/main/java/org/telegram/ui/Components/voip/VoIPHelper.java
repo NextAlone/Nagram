@@ -69,6 +69,10 @@ public class VoIPHelper {
 	private static final int VOIP_SUPPORT_ID = 4244000;
 
 	public static void startCall(TLRPC.User user, boolean videoCall, boolean canVideoCall, final Activity activity, TLRPC.UserFull userFull, AccountInstance accountInstance) {
+		startCall(user, videoCall, canVideoCall, activity, userFull, accountInstance, false);
+	}
+
+	public static void startCall(TLRPC.User user, boolean videoCall, boolean canVideoCall, final Activity activity, TLRPC.UserFull userFull, AccountInstance accountInstance, boolean confirmed) {
 		if (userFull != null && userFull.phone_calls_private) {
 			new AlertDialog.Builder(activity)
 					.setTitle(LocaleController.getString("VoipFailed", R.string.VoipFailed))
@@ -78,6 +82,18 @@ public class VoIPHelper {
 					.show();
 			return;
 		}
+
+		if (!confirmed) {
+			new AlertDialog.Builder(activity)
+					.setTitle(LocaleController.getString("ConfirmCall", R.string.ConfirmCall))
+					.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("CallTo", R.string.CallTo,
+							ContactsController.formatName(user.first_name, user.last_name))))
+					.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialog, which) -> startCall(user, videoCall, canVideoCall, activity, userFull, accountInstance, true))
+					.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null)
+					.show();
+			return;
+		}
+
 		if (ConnectionsManager.getInstance(UserConfig.selectedAccount).getConnectionState() != ConnectionsManager.ConnectionStateConnected) {
 			boolean isAirplaneMode = Settings.System.getInt(activity.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) != 0;
 			AlertDialog.Builder bldr = new AlertDialog.Builder(activity)

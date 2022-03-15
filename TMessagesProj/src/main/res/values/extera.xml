@@ -44,4 +44,7 @@
 
     <string name="Media">Media</string>
     <string name="RearVideoMessages">Rear Camera in Video Messages</string>
+
+    <string name="ConfirmCall">Confirm call</string>
+    <string name="CallTo">Call to **%1$s**?</string>
 </resources>
