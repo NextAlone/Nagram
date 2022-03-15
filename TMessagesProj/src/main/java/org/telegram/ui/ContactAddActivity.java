@@ -250,7 +250,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
             if (needAddException) {
                 checkBoxCell = new CheckBoxCell(getParentActivity(), 0);
                 checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                checkBoxCell.setText(LocaleController.formatString("SharePhoneNumberWith", R.string.SharePhoneNumberWith, UserObject.getFirstName(user)), "", true, false);
+                checkBoxCell.setText(LocaleController.formatString("SharePhoneNumberWith", R.string.SharePhoneNumberWith, UserObject.getFirstName(user)), "", false, false);
                 checkBoxCell.setPadding(AndroidUtilities.dp(7), 0, AndroidUtilities.dp(7), 0);
                 checkBoxCell.setOnClickListener(v -> checkBoxCell.setChecked(!checkBoxCell.isChecked(), true));
                 linearLayout.addView(checkBoxCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 10, 0, 0));
