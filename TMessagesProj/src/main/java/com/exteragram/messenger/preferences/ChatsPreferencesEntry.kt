@@ -29,6 +29,15 @@ class ChatsPreferencesEntry : BasePreferencesEntry {
                     }
                 }
             }
+            switch {
+                title = LocaleController.getString("StickerTime", R.string.StickerTime)
+
+                contract({
+                    return@contract ExteraConfig.hideStickerTime
+                }) {
+                    ExteraConfig.hideStickerTime = it
+                }
+            }
         }
         category(LocaleController.getString("General", R.string.General)) {
             switch {

@@ -23,6 +23,8 @@ object ExteraConfig {
     // Chats
     // Stickers
     var stickerSize by sharedPreferences.int("stickerSize", 100)
+    var hideStickerTime by sharedPreferences.boolean("hideStickerTime", false)
+
     // General
     var hideKeyboardOnScroll by sharedPreferences.boolean("hideKeyboardOnScroll", true)
     var archiveOnPull by sharedPreferences.boolean("archiveOnPull", true)
