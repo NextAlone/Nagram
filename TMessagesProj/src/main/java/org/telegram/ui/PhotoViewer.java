@@ -223,6 +223,7 @@ import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.Components.TextViewSwitcher;
 import org.telegram.ui.Components.Tooltip;
 import org.telegram.ui.Components.URLSpanReplacement;
+import org.telegram.ui.Components.URLSpanUserMention;
 import org.telegram.ui.Components.URLSpanUserMentionPhotoViewer;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.VideoEditTextureView;
@@ -5990,6 +5991,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         });
 
         mentionListView.setOnItemLongClickListener((view, position) -> {
+            int len = mentionsAdapter.getResultLength();
+            int start = mentionsAdapter.getResultStartPosition();
             Object object = mentionsAdapter.getItem(position);
             if (object instanceof String) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity, resourcesProvider);
@@ -5998,6 +6001,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), (dialogInterface, i) -> mentionsAdapter.clearRecentHashtags());
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 showAlertDialog(builder);
+                return true;
+            } else if (object instanceof TLRPC.User) {
+                TLRPC.User user = (TLRPC.User) object;
+                String name = UserObject.getFirstName(user);
+                Spannable spannable = new SpannableString(name + " ");
+                spannable.setSpan(new URLSpanUserMentionPhotoViewer("" + user.id, true), 0, spannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                captionEditText.replaceWithText(start, len, spannable, false);
                 return true;
             }
             return false;

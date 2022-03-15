@@ -6982,6 +6982,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (getParentActivity() == null || !mentionsAdapter.isLongClickEnabled()) {
                 return false;
             }
+            int len = mentionsAdapter.getResultLength();
+            int start = mentionsAdapter.getResultStartPosition();
             Object object = mentionsAdapter.getItem(position);
             if (object instanceof String) {
                 if (mentionsAdapter.isBotCommands()) {
@@ -6998,6 +7000,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), (dialogInterface, i) -> mentionsAdapter.clearRecentHashtags());
                     builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     showDialog(builder.create());
+                    return true;
+                }
+            } else if (object instanceof TLRPC.User) {
+                TLRPC.User user = (TLRPC.User) object;
+                if (!(searchingForUser && searchContainer.getVisibility() == View.VISIBLE) && user != null) {
+                    String name = UserObject.getFirstName(user, false);
+                    Spannable spannable = new SpannableString(name + " ");
+                    spannable.setSpan(new URLSpanUserMention("" + user.id, 3), 0, spannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    chatActivityEnterView.replaceWithText(start, len, spannable, false);
                     return true;
                 }
             }
