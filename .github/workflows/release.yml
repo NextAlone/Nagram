@@ -2,7 +2,7 @@ name: Release Build
 on:
   push:
     branches:
-      - NextAlone
+      - main
     paths-ignore:
       - '**.md'
       - '.github/**'
