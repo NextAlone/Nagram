@@ -11777,7 +11777,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 sideStartX -= offsetX;
             }
             if (drawSideButton == 3) {
-                if (!(enterTransitionInPorgress && !currentMessageObject.isVoice())) {
+                if (!(enterTransitionInProgress && !currentMessageObject.isVoice())) {
                     drawCommentButton(canvas, 1f);
                 }
             } else {
