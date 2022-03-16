@@ -39,44 +39,49 @@ public class InternalUpdater {
                 callback.apply(null, true);
                 return;
             }
-            TLRPC.messages_Messages res = (TLRPC.messages_Messages) response;
-            List<UpdateMetadata> metas = new ArrayList<>();
-            for (TLRPC.Message message : res.messages) {
-                if (!(message instanceof TLRPC.TL_message)) continue;
-                if (!message.message.startsWith("v")) continue;
-                String[] split = message.message.split(",");
-                if (split.length < 4) continue;
-                UpdateMetadata metaData = new UpdateMetadata(message.id, split);
-                metas.add(metaData);
-            }
-            Collections.sort(metas, (o1, o2) -> o2.versionCode - o1.versionCode); // versionCode Desc
-            UpdateMetadata found = null;
-            for (UpdateMetadata metaData : metas) {
-                if (metaData.versionCode <= localVersionCode) break;
-                if (NekoXConfig.autoUpdateReleaseChannel < 3 && metaData.versionName.contains("preview"))
-                    continue;
-                if (NekoXConfig.autoUpdateReleaseChannel < 2 && metaData.versionName.contains("rc"))
-                    continue;
-                found = metaData;
-                break;
-            }
-            if (found != null) {
+            try {
+                TLRPC.messages_Messages res = (TLRPC.messages_Messages) response;
+                List<UpdateMetadata> metas = new ArrayList<>();
                 for (TLRPC.Message message : res.messages) {
                     if (!(message instanceof TLRPC.TL_message)) continue;
-                    if (message.id == found.UpdateLogMessageID) {
-                        found.updateLog = message.message;
-                        found.updateLogEntities = message.entities;
-                        break;
+                    if (!message.message.startsWith("v")) continue;
+                    String[] split = message.message.split(",");
+                    if (split.length < 4) continue;
+                    UpdateMetadata metaData = new UpdateMetadata(message.id, split);
+                    metas.add(metaData);
+                }
+                Collections.sort(metas, (o1, o2) -> o2.versionCode - o1.versionCode); // versionCode Desc
+                UpdateMetadata found = null;
+                for (UpdateMetadata metaData : metas) {
+                    if (metaData.versionCode <= localVersionCode) break;
+                    if (NekoXConfig.autoUpdateReleaseChannel < 3 && metaData.versionName.contains("preview"))
+                        continue;
+                    if (NekoXConfig.autoUpdateReleaseChannel < 2 && metaData.versionName.contains("rc"))
+                        continue;
+                    found = metaData;
+                    break;
+                }
+                if (found != null) {
+                    for (TLRPC.Message message : res.messages) {
+                        if (!(message instanceof TLRPC.TL_message)) continue;
+                        if (message.id == found.UpdateLogMessageID) {
+                            found.updateLog = message.message;
+                            found.updateLogEntities = message.entities;
+                            break;
+                        }
                     }
                 }
+                if (found == null) {
+                    FileLog.d("Cannot find Update Metadata");
+                    callback.apply(null, false);
+                    return;
+                }
+                FileLog.w("Found Update Metadata " + found.versionName + " " + found.versionCode);
+                callback.apply(found, false);
+            } catch (Exception e) {
+                FileLog.e(e);
+                callback.apply(null, true);
             }
-            if (found == null) {
-                FileLog.d("Cannot find Update Metadata");
-                callback.apply(null, false);
-                return;
-            }
-            FileLog.w("Found Update Metadata " + found.versionName + " " + found.versionCode);
-            callback.apply(found, false);
         });
         if (req.peer.access_hash != 0) sendReq.run();
         else {
@@ -117,6 +122,7 @@ public class InternalUpdater {
                 callback.apply(null, err);
                 return;
             }
+
             TLRPC.TL_messages_getHistory req = new TLRPC.TL_messages_getHistory();
             req.peer = accountInstance.getMessagesController().getInputPeer(-CHANNEL_APKS_ID);
             req.min_id = metadata.apkChannelMessageID;
@@ -128,29 +134,35 @@ public class InternalUpdater {
                     callback.apply(null, true);
                     return;
                 }
-                TLRPC.messages_Messages res = (TLRPC.messages_Messages) response;
-                FileLog.d("Retrieve update messages, size:" + res.messages.size());
-                final String target = metadata.versionName + "-" + BuildConfig.FLAVOR + "-" + FileUtil.getAbi() + "-" + ("debug".equals(BuildConfig.BUILD_TYPE) ? "release" : BuildConfig.BUILD_TYPE) + ".apk";
-                for (int i = 0; i < res.messages.size(); i++) {
-                    if (res.messages.get(i).media == null) continue;
+                try {
+                    TLRPC.messages_Messages res = (TLRPC.messages_Messages) response;
+                    FileLog.d("Retrieve update messages, size:" + res.messages.size());
+                    final String target = metadata.versionName + "-" + BuildConfig.FLAVOR + "-" + FileUtil.getAbi() + "-" + ("debug".equals(BuildConfig.BUILD_TYPE) ? "release" : BuildConfig.BUILD_TYPE) + ".apk";
+                    for (int i = 0; i < res.messages.size(); i++) {
+                        if (res.messages.get(i).media == null) continue;
 
-                    TLRPC.Document apkDocument = res.messages.get(i).media.document;
-                    String fileName = apkDocument.attributes.size() == 0 ? "" : apkDocument.attributes.get(0).file_name;
-                    if (!fileName.contains(target))
-                        continue;
-                    TLRPC.TL_help_appUpdate update = new TLRPC.TL_help_appUpdate();
-                    update.version = metadata.versionName;
-                    update.document = apkDocument;
-                    update.can_not_skip = false;
-                    update.flags |= 2;
-                    if (metadata.updateLog != null) {
-                        update.text = metadata.updateLog;
-                        update.entities = metadata.updateLogEntities;
+                        TLRPC.Document apkDocument = res.messages.get(i).media.document;
+                        if (apkDocument.attributes == null) continue;
+                        String fileName = apkDocument.attributes.size() == 0 ? "" : apkDocument.attributes.get(0).file_name;
+                        if (!fileName.contains(target))
+                            continue;
+                        TLRPC.TL_help_appUpdate update = new TLRPC.TL_help_appUpdate();
+                        update.version = metadata.versionName;
+                        update.document = apkDocument;
+                        update.can_not_skip = false;
+                        update.flags |= 2;
+                        if (metadata.updateLog != null) {
+                            update.text = metadata.updateLog;
+                            update.entities = metadata.updateLogEntities;
+                        }
+                        callback.apply(update, false);
+                        return;
                     }
-                    callback.apply(update, false);
-                    return;
+                    callback.apply(null, false);
+                } catch (Exception e) {
+                    FileLog.e(e);
+                    callback.apply(null, true);
                 }
-                callback.apply(null, false);
             });
             if (req.peer.access_hash != 0) sendReq.run();
             else {

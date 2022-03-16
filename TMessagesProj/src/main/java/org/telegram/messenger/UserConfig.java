@@ -17,7 +17,6 @@ import android.util.SparseArray;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC;
 
-import java.io.File;
 import java.util.Arrays;
 
 public class UserConfig extends BaseController {
@@ -67,16 +66,6 @@ public class UserConfig extends BaseController {
     public volatile byte[] savedPasswordHash;
     public volatile byte[] savedSaltedPassword;
     public volatile long savedPasswordTime;
-
-    public String tonEncryptedData;
-    public String tonPublicKey;
-    public int tonPasscodeType = -1;
-    public byte[] tonPasscodeSalt;
-    public long tonPasscodeRetryInMs;
-    public long tonLastUptimeMillis;
-    public int tonBadPasscodeTries;
-    public String tonKeyName;
-    public boolean tonCreationFinished;
 
     private static SparseArray<UserConfig> Instance = new SparseArray<>();
 
@@ -149,7 +138,6 @@ public class UserConfig extends BaseController {
                     editor.putBoolean("deviceInfo", deviceInfo);
 
                     editor.putBoolean("filtersLoaded", filtersLoaded);
-
 
                     editor.putInt("6migrateOffsetId", migrateOffsetId);
                     if (migrateOffsetId != -1) {
@@ -271,25 +259,9 @@ public class UserConfig extends BaseController {
             official = preferences.getBoolean("official", false);
             deviceInfo = preferences.getBoolean("deviceInfo", true);
 
-            tonEncryptedData = preferences.getString("tonEncryptedData", null);
-            tonPublicKey = preferences.getString("tonPublicKey", null);
-            tonKeyName = preferences.getString("tonKeyName", "walletKey" + currentAccount);
-            tonCreationFinished = preferences.getBoolean("tonCreationFinished", true);
             sharingMyLocationUntil = preferences.getInt("sharingMyLocationUntil", 0);
             lastMyLocationShareTime = preferences.getInt("lastMyLocationShareTime", 0);
             filtersLoaded = preferences.getBoolean("filtersLoaded", false);
-            String salt = preferences.getString("tonPasscodeSalt", null);
-            if (salt != null) {
-                try {
-                    tonPasscodeSalt = Base64.decode(salt, Base64.DEFAULT);
-                    tonPasscodeType = preferences.getInt("tonPasscodeType", -1);
-                    tonPasscodeRetryInMs = preferences.getLong("tonPasscodeRetryInMs", 0);
-                    tonLastUptimeMillis = preferences.getLong("tonLastUptimeMillis", 0);
-                    tonBadPasscodeTries = preferences.getInt("tonBadPasscodeTries", 0);
-                } catch (Exception e) {
-                    FileLog.e(e);
-                }
-            }
 
             try {
                 String terms = preferences.getString("terms", null);
@@ -377,21 +349,8 @@ public class UserConfig extends BaseController {
         }
     }
 
-    public void clearTonConfig() {
-        tonEncryptedData = null;
-        tonKeyName = null;
-        tonPublicKey = null;
-        tonPasscodeType = -1;
-        tonPasscodeSalt = null;
-        tonCreationFinished = false;
-        tonPasscodeRetryInMs = 0;
-        tonLastUptimeMillis = 0;
-        tonBadPasscodeTries = 0;
-    }
-
     public void clearConfig() {
         getPreferences().edit().clear().apply();
-        clearTonConfig();
 
         sharingMyLocationUntil = 0;
         lastMyLocationShareTime = 0;

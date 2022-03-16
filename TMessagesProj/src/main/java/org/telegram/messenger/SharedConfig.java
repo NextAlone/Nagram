@@ -54,6 +54,7 @@ import java.util.stream.Collectors;
 
 import cn.hutool.core.util.StrUtil;
 import okhttp3.HttpUrl;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.proxy.ProxyManager;
 import tw.nekomimi.nekogram.proxy.ShadowsocksLoader;
 import tw.nekomimi.nekogram.proxy.ShadowsocksRLoader;
@@ -73,6 +74,15 @@ import static com.v2ray.ang.V2RayConfig.WS_PROTOCOL;
 import java.util.Locale;
 
 public class SharedConfig {
+    public final static int PASSCODE_TYPE_PIN = 0,
+            PASSCODE_TYPE_PASSWORD = 1;
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({
+            PASSCODE_TYPE_PIN,
+            PASSCODE_TYPE_PASSWORD
+    })
+    public @interface PasscodeType {}
 
     public static String pushString = "";
     public static String pushStringStatus = "";
@@ -84,15 +94,17 @@ public class SharedConfig {
 
     public static String directShareHash;
 
-    public static boolean saveIncomingPhotos;
+    @PasscodeType
+    public static int passcodeType;
     public static String passcodeHash = "";
     public static long passcodeRetryInMs;
     public static long lastUptimeMillis;
     public static int badPasscodeTries;
     public static byte[] passcodeSalt = new byte[0];
     public static boolean appLocked;
-    public static int passcodeType;
     public static int autoLockIn = 60 * 60;
+
+    public static boolean saveIncomingPhotos;
     public static boolean allowScreenCapture;
     public static int lastPauseTime;
     public static boolean isWaitingForPasscodeEnter;
@@ -142,7 +154,8 @@ public class SharedConfig {
     public static boolean pauseMusicOnRecord = true;
     public static boolean chatBlur = true;
     public static boolean noiseSupression;
-    public static boolean noStatusBar;
+    public static boolean noStatusBar = true;
+    public static boolean forceRtmpStream;
     public static boolean sortContactsByName;
     public static boolean sortFilesByName;
     public static boolean shuffleMusic;
@@ -1118,6 +1131,8 @@ public class SharedConfig {
                 return;
             }
 
+            BackgroundActivityPrefs.prefs = ApplicationLoader.applicationContext.getSharedPreferences("background_activity", Context.MODE_PRIVATE);
+
             SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", Context.MODE_PRIVATE);
             saveIncomingPhotos = preferences.getBoolean("saveIncomingPhotos", false);
             passcodeHash = preferences.getString("passcodeHash1", "");
@@ -1213,6 +1228,7 @@ public class SharedConfig {
             smoothKeyboard = preferences.getBoolean("smoothKeyboard2", true);
             pauseMusicOnRecord = preferences.getBoolean("pauseMusicOnRecord", false);
             chatBlur = preferences.getBoolean("chatBlur", true);
+            chatBlur = chatBlur || NekoConfig.forceBlurInChat.Bool();
             streamAllVideo = preferences.getBoolean("streamAllVideo", BuildVars.DEBUG_VERSION);
             streamMkv = preferences.getBoolean("streamMkv", false);
             suggestStickers = preferences.getInt("suggestStickers", 0);
@@ -1226,7 +1242,8 @@ public class SharedConfig {
             devicePerformanceClass = preferences.getInt("devicePerformanceClass", -1);
             loopStickers = preferences.getBoolean("loopStickers", true);
             keepMedia = preferences.getInt("keep_media", 2);
-            noStatusBar = preferences.getBoolean("noStatusBar", false);
+            noStatusBar = preferences.getBoolean("noStatusBar", true);
+            forceRtmpStream = preferences.getBoolean("forceRtmpStream", false);
             lastKeepMediaCheckTime = preferences.getInt("lastKeepMediaCheckTime", 0);
             lastLogsCheckTime = preferences.getInt("lastLogsCheckTime", 0);
             searchMessagesAsListHintShows = preferences.getInt("searchMessagesAsListHintShows", 0);
@@ -1402,7 +1419,7 @@ public class SharedConfig {
     public static void clearConfig() {
         saveIncomingPhotos = false;
         appLocked = false;
-        passcodeType = 0;
+        passcodeType = PASSCODE_TYPE_PIN;
         passcodeRetryInMs = 0;
         lastUptimeMillis = 0;
         badPasscodeTries = 0;
@@ -1600,6 +1617,14 @@ public class SharedConfig {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("noiseSupression", noiseSupression);
         editor.commit();
+    }
+
+    public static void toggleForceRTMPStream() {
+        forceRtmpStream = !forceRtmpStream;
+        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("forceRtmpStream", forceRtmpStream);
+        editor.apply();
     }
 
     public static void toggleNoStatusBar() {
@@ -1821,6 +1846,7 @@ public class SharedConfig {
 
     public static void toggleChatBlur() {
         chatBlur = !chatBlur;
+        if (NekoConfig.forceBlurInChat.Bool()) chatBlur = true;
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("chatBlur", chatBlur);
@@ -2306,9 +2332,21 @@ public class SharedConfig {
     }
 
     public static boolean canBlurChat() {
-        return BuildVars.DEBUG_VERSION && getDevicePerformanceClass() == PERFORMANCE_CLASS_HIGH;
+        return getDevicePerformanceClass() == PERFORMANCE_CLASS_HIGH || NekoConfig.forceBlurInChat.Bool();
     }
     public static boolean chatBlurEnabled() {
-        return canBlurChat() && chatBlur;
+        return (canBlurChat() && chatBlur) || NekoConfig.forceBlurInChat.Bool();
+    }
+
+    public static class BackgroundActivityPrefs {
+        private static SharedPreferences prefs;
+
+        public static long getLastCheckedBackgroundActivity() {
+            return prefs.getLong("last_checked", 0);
+        }
+
+        public static void setLastCheckedBackgroundActivity(long l) {
+            prefs.edit().putLong("last_checked", l).apply();
+        }
     }
 }

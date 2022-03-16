@@ -155,6 +155,7 @@ public class TextCell extends FrameLayout {
     }
 
     public void setText(String text, boolean divider) {
+        imageLeft = 21;
         textView.setText(text);
         valueTextView.setText(null);
         imageView.setVisibility(GONE);
@@ -165,6 +166,8 @@ public class TextCell extends FrameLayout {
     }
 
     public void setTextAndIcon(String text, int resId, boolean divider) {
+        imageLeft = 21;
+        offsetFromImage = 71;
         textView.setText(text);
         valueTextView.setText(null);
         if (resId != 0) {
@@ -201,7 +204,13 @@ public class TextCell extends FrameLayout {
         offsetFromImage = value;
     }
 
+    public void setImageLeft(int imageLeft) {
+        this.imageLeft = imageLeft;
+    }
+
     public void setTextAndValue(String text, String value, boolean divider) {
+        imageLeft = 21;
+        offsetFromImage = 71;
         textView.setText(text);
         valueTextView.setText(value);
         valueTextView.setVisibility(VISIBLE);
@@ -212,6 +221,8 @@ public class TextCell extends FrameLayout {
     }
 
     public void setTextAndValueAndIcon(String text, String value, int resId, boolean divider) {
+        imageLeft = 21;
+        offsetFromImage = 71;
         textView.setText(text);
         valueTextView.setText(value);
         valueTextView.setVisibility(VISIBLE);
@@ -224,6 +235,8 @@ public class TextCell extends FrameLayout {
     }
 
     public void setTextAndValueDrawable(String text, Drawable drawable, boolean divider) {
+        imageLeft = 21;
+        offsetFromImage = 71;
         textView.setText(text);
         valueTextView.setText(null);
         valueImageView.setVisibility(VISIBLE);

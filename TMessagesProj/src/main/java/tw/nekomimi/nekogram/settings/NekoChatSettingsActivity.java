@@ -65,7 +65,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final CellGroup cellGroup = new CellGroup(this);
 
     private final AbstractConfigCell header0 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("StickerSize")));
-    private final AbstractConfigCell stickerSizeRow = cellGroup.appendCell(new ConfigCellCustom(998, true));
+    private final AbstractConfigCell stickerSizeRow = cellGroup.appendCell(new ConfigCellCustom(ConfigCellCustom.CUSTOM_ITEM_StickerSize, true));
     private final AbstractConfigCell divider0 = cellGroup.appendCell(new ConfigCellDivider());
     private final AbstractConfigCell header1 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Chat")));
     private final AbstractConfigCell scrollableChatPreviewRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.scrollableChatPreview));
@@ -591,7 +591,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                     view = new TextInfoPrivacyCell(mContext);
                     // view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
-                case 998:
+                case ConfigCellCustom.CUSTOM_ITEM_StickerSize:
                     view = stickerSizeCell = new StickerSizeCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;

@@ -2661,7 +2661,7 @@ public boolean retriedToSend;
             return;
         }
         TLRPC.TL_messages_sendReaction req = new TLRPC.TL_messages_sendReaction();
-        if (messageObject.messageOwner.isThreadMessage) {
+        if (messageObject.messageOwner.isThreadMessage && messageObject.messageOwner.fwd_from != null) {
             req.peer = getMessagesController().getInputPeer(messageObject.getFromChatId());
             req.msg_id = messageObject.messageOwner.fwd_from.saved_from_msg_id;
         } else {

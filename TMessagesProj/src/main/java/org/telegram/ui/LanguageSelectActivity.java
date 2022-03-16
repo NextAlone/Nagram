@@ -449,7 +449,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             View view;
             switch (viewType) {
                 case 0: {
-                    view = new LanguageCell(mContext, false);
+                    view = new LanguageCell(mContext);
 //                    view = new TextRadioCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
@@ -499,7 +499,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                     } else {
                         textSettingsCell.setLanguage(LanguageSelectActivity.this, localeInfo, null, !last);
                     }
-                    textSettingsCell.setLanguageSelected(localeInfo == LocaleController.getInstance().getCurrentLocaleInfo());
+                    textSettingsCell.setLanguageSelected(localeInfo == LocaleController.getInstance().getCurrentLocaleInfo(), true);
                     break;
                 }
                 case 1: {

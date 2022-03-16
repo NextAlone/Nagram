@@ -1070,7 +1070,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         builder.addButton(LocaleController.getString("OK", R.string.OK), (it) -> {
             if (!toChange.isEmpty()) {
                 AlertDialog pro = AlertUtil.showProgress(getParentActivity());
-                pro.setCanCacnel(false);
+                pro.setCanCancel(false);
                 pro.show();
 
                 UIUtil.runOnIoDispatcher(() -> {
