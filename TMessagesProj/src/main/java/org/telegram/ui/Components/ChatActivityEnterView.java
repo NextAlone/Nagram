@@ -149,6 +149,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class ChatActivityEnterView extends BlurredFrameLayout implements NotificationCenter.NotificationCenterDelegate, SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate, StickersAlert.StickersAlertDelegate {
 
     public interface ChatActivityEnterViewDelegate {
@@ -6652,7 +6654,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         }
         boolean wasVisible = senderSelectView.getVisibility() == View.VISIBLE;
         boolean isVisible = delegate.getSendAsPeers() != null && defPeer != null && delegate.getSendAsPeers().peers.size() > 1 &&
-                !isEditingMessage() && !isRecordingAudioVideo() && recordedAudioPanel.getVisibility() != View.VISIBLE;
+                !isEditingMessage() && !isRecordingAudioVideo() && !ExteraConfig.hideSendAsChannel && recordedAudioPanel.getVisibility() != View.VISIBLE;
         int pad = AndroidUtilities.dp(2);
         MarginLayoutParams params = (MarginLayoutParams) senderSelectView.getLayoutParams();
         float startAlpha = isVisible ? 0 : 1;

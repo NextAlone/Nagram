@@ -29,6 +29,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
 import org.telegram.ui.Components.UndoView;
+import org.w3c.dom.Text;
 
 import com.exteragram.messenger.ExteraConfig;
 
@@ -45,6 +46,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
     private int stickersDividerRow;
 
     private int chatHeaderRow;
+    private int hideSendAsChannelRow;
     private int hideStickerTimeRow;
     private int hideKeyboardOnScrollRow;
     private int archiveOnPullRow;
@@ -156,6 +158,11 @@ public class ChatsPreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.hideStickerTime);
                 }
+            } else if (position == hideSendAsChannelRow) {
+                ExteraConfig.toggleHideSendAsChannel();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(ExteraConfig.hideSendAsChannel);
+                }
             } else if (position == hideKeyboardOnScrollRow) {
                 ExteraConfig.toggleHideKeyboardOnScroll();
                 if (view instanceof TextCheckCell) {
@@ -193,6 +200,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
         stickersDividerRow = rowCount++;
 
         chatHeaderRow = rowCount++;
+        hideSendAsChannelRow = rowCount++;
         hideStickerTimeRow = rowCount++;
         hideKeyboardOnScrollRow = rowCount++;
         archiveOnPullRow = rowCount++;
@@ -249,7 +257,9 @@ public class ChatsPreferencesEntry extends BaseFragment {
                     TextCheckCell textCheckCell = (TextCheckCell) holder.itemView;
                     textCheckCell.setEnabled(true, null);
                     if (position == hideStickerTimeRow) {
-                            textCheckCell.setTextAndCheck(LocaleController.getString("StickerTime", R.string.StickerTime), ExteraConfig.hideStickerTime, true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("StickerTime", R.string.StickerTime), ExteraConfig.hideStickerTime, true);
+                    } else if (position == hideSendAsChannelRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString("HideSendAsChannel", R.string.HideSendAsChannel), ExteraConfig.hideSendAsChannel, true);
                     } else if (position == hideKeyboardOnScrollRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("HideKeyboardOnScroll", R.string.HideKeyboardOnScroll), ExteraConfig.hideKeyboardOnScroll, true);
                     } else if (position == archiveOnPullRow) {
@@ -300,8 +310,8 @@ public class ChatsPreferencesEntry extends BaseFragment {
                 return 1;
             } else if (position == stickersHeaderRow || position == chatHeaderRow || position == mediaHeaderRow) {
                 return 2;
-            } else if (position == hideStickerTimeRow || position == hideKeyboardOnScrollRow || position == archiveOnPullRow ||
-                       position == dateOfForwardedMsgRow || position == rearVideoMessagesRow) {
+            } else if (position == hideStickerTimeRow || position == hideSendAsChannelRow || position == hideKeyboardOnScrollRow ||
+                       position == archiveOnPullRow || position == dateOfForwardedMsgRow || position == rearVideoMessagesRow) {
                 return 3;
             } else if (position == stickerSizeRow) {
                 return 4;

@@ -26,6 +26,7 @@ public class ExteraConfig {
     public static float stickerSize = 14.0f;
     public static boolean hideStickerTime;
 
+    public static boolean hideSendAsChannel;
     public static boolean hideKeyboardOnScroll;
     public static boolean archiveOnPull;
     public static boolean dateOfForwardedMsg;
@@ -59,6 +60,7 @@ public class ExteraConfig {
             stickerSize = preferences.getFloat("stickerSize", 14.0f);
             hideStickerTime = preferences.getBoolean("hideStickerTime", false);
 
+            hideSendAsChannel = preferences.getBoolean("hideSendAsChannel", false);
             hideKeyboardOnScroll = preferences.getBoolean("hideKeyboardOnScroll", true);
             archiveOnPull = preferences.getBoolean("archiveOnPull", true);
             dateOfForwardedMsg = preferences.getBoolean("dateOfForwardedMsg", false);
@@ -139,6 +141,14 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("hideStickerTime", hideStickerTime);
+        editor.commit();
+    }
+
+    public static void toggleHideSendAsChannel() {
+        hideSendAsChannel = !hideSendAsChannel;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("hideSendAsChannel", hideSendAsChannel);
         editor.commit();
     }
 
