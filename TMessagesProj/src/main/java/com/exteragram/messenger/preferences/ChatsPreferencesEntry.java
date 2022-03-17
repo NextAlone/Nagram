@@ -56,6 +56,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
     private int mediaHeaderRow;
     private int rearVideoMessagesRow;
     private int pauseOnMinimizeRow;
+    private int disablePlaybackRow;
     private int mediaDividerRow;
 
     private UndoView restartTooltip;
@@ -189,6 +190,11 @@ public class ChatsPreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.pauseOnMinimize);
                 }
+            } else if (position == disablePlaybackRow) {
+                ExteraConfig.toggleDisablePlayback();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(ExteraConfig.disablePlayback);
+                }
             }
         });
         restartTooltip = new UndoView(context);
@@ -216,6 +222,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
         mediaHeaderRow = rowCount++;
         rearVideoMessagesRow = rowCount++;
         pauseOnMinimizeRow = rowCount++;
+        disablePlaybackRow = rowCount++;
         mediaDividerRow = rowCount++;
 
         if (listAdapter != null && notify) {
@@ -277,6 +284,8 @@ public class ChatsPreferencesEntry extends BaseFragment {
                         textCheckCell.setTextAndCheck(LocaleController.getString("RearVideoMessages", R.string.RearVideoMessages), ExteraConfig.rearVideoMessages, true);
                     } else if (position == pauseOnMinimizeRow) {
                         textCheckCell.setTextAndValueAndCheck(LocaleController.getString("PauseOnMinimize", R.string.PauseOnMinimize), LocaleController.getString("POMDescription", R.string.POMDescription), ExteraConfig.pauseOnMinimize, true, true);
+                    } else if (position == disablePlaybackRow) {
+                        textCheckCell.setTextAndValueAndCheck(LocaleController.getString("DisablePlayback", R.string.DisablePlayback), LocaleController.getString("DPDescription", R.string.DPDescription), ExteraConfig.disablePlayback, true, true);
                     }
                     break;
             }
@@ -321,7 +330,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
                 return 2;
             } else if (position == hideStickerTimeRow || position == hideSendAsChannelRow || position == hideKeyboardOnScrollRow ||
                        position == archiveOnPullRow || position == dateOfForwardedMsgRow || position == rearVideoMessagesRow ||
-                       position == pauseOnMinimizeRow) {
+                       position == pauseOnMinimizeRow || position == disablePlaybackRow) {
                 return 3;
             } else if (position == stickerSizeRow) {
                 return 4;

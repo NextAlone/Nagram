@@ -33,6 +33,7 @@ public class ExteraConfig {
 
     public static boolean rearVideoMessages;
     public static boolean pauseOnMinimize;
+    public static boolean disablePlayback;
 
     private static boolean configLoaded;
 
@@ -66,7 +67,8 @@ public class ExteraConfig {
             dateOfForwardedMsg = preferences.getBoolean("dateOfForwardedMsg", false);
 
             rearVideoMessages = preferences.getBoolean("rearVideoMessages", false);
-            pauseOnMinimize = preferences.getBoolean("pauseOnMinimize", false);
+            pauseOnMinimize = preferences.getBoolean("pauseOnMinimize", true);
+            disablePlayback = preferences.getBoolean("disablePlayback", true);
 
             configLoaded = true;
         }
@@ -189,6 +191,13 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("pauseOnMinimize", pauseOnMinimize);
+        editor.commit();
+    }
+    public static void toggleDisablePlayback() {
+        disablePlayback = !disablePlayback;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("disablePlayback", disablePlayback);
         editor.commit();
     }
 }
