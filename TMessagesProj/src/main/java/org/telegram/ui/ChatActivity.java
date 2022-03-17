@@ -25021,6 +25021,22 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             StickersAlert alert = new StickersAlert(getParentActivity(), ChatActivity.this, message.getInputStickerSet(), null, bottomOverlayChat.getVisibility() != View.VISIBLE && (currentChat == null || ChatObject.canSendStickers(currentChat)) ? chatActivityEnterView : null, themeDelegate);
                             alert.setCalcMandatoryInsets(isKeyboardVisible());
                             showDialog(alert);
+                        } else if (message.type == MessageObject.TYPE_STICKER || message.type == MessageObject.TYPE_ANIMATED_STICKER) {
+                            int photoHeight = 0;
+                            int photoWidth = 0;
+                            TLRPC.Document document = message.getDocument();
+                            for (int a = 0, N = document.attributes.size(); a < N; a++) {
+                                TLRPC.DocumentAttribute attribute = document.attributes.get(a);
+                                if (attribute instanceof TLRPC.TL_documentAttributeImageSize) {
+                                    photoWidth = attribute.w;
+                                    photoHeight = attribute.h;
+                                    break;
+                                }
+                            }
+                            if (photoWidth > 512 || photoHeight > 512) {
+                                openPhotoViewerForMessage(cell, message);
+                            }
+                            return;
                         } else if (message.isVideo() || message.type == 1 || message.type == 0 && !message.isWebpageDocument() || message.isGif()) {
                             openPhotoViewerForMessage(cell, message);
                         } else if (message.type == 3) {

@@ -1,13 +1,17 @@
 package com.exteragram.messenger.preferences;
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.Bundle;
 import android.text.TextPaint;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -19,6 +23,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -29,7 +34,6 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
 import org.telegram.ui.Components.UndoView;
-import org.w3c.dom.Text;
 
 import com.exteragram.messenger.ExteraConfig;
 
@@ -61,15 +65,24 @@ public class ChatsPreferencesEntry extends BaseFragment {
 
     private UndoView restartTooltip;
 
+    @Override
+    public boolean onFragmentCreate() {
+        super.onFragmentCreate();
+        updateRowsId(true);
+        return true;
+    }
+
     private class StickerSizeCell extends FrameLayout {
 
-        private SeekBarView sizeBar;
-        private int startStickerSize = 2;
-        private int endStickerSize = 20;
+        private final StickerSizePreviewCell messagesCell;
+        private final SeekBarView sizeBar;
+        private final int startStickerSize = 2;
+        private final int endStickerSize = 20;
 
-        private TextPaint textPaint;
+        private final TextPaint textPaint;
+        private int lastWidth;
 
-        public StickerSizeCell(Context context) {
+        public StickerSizeCell (Context context) {
             super(context);
 
             setWillNotDraw(false);
@@ -82,8 +95,12 @@ public class ChatsPreferencesEntry extends BaseFragment {
             sizeBar.setDelegate(new SeekBarView.SeekBarViewDelegate() {
                 @Override
                 public void onSeekBarDrag(boolean stop, float progress) {
-                    ExteraConfig.setStickerSize(startStickerSize + (endStickerSize -  startStickerSize) * progress);
-                    listAdapter.notifyItemChanged(stickerSizeRow);
+                    sizeBar.getSeekBarAccessibilityDelegate().postAccessibilityEventRunnable(StickerSizeCell.this);
+                    ExteraConfig.setStickerSize(startStickerSize + (endStickerSize - startStickerSize) * progress);
+                    StickerSizeCell.this.invalidate();
+                    if (resetItem.getVisibility() != VISIBLE) {
+                        AndroidUtilities.updateViewVisibilityAnimated(resetItem, true, 0.5f, true);
+                    }
                 }
 
                 @Override
@@ -91,44 +108,82 @@ public class ChatsPreferencesEntry extends BaseFragment {
 
                 }
             });
+            sizeBar.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
             addView(sizeBar, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 38, Gravity.LEFT | Gravity.TOP, 9, 5, 43, 11));
+
+            messagesCell = new StickerSizePreviewCell(context, parentLayout);
+            messagesCell.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS);
+            addView(messagesCell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 53, 0, 0));
         }
 
         @Override
         protected void onDraw(Canvas canvas) {
             textPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
-            canvas.drawText("" + Math.round(ExteraConfig.stickerSize), getMeasuredWidth() - AndroidUtilities.dp(39), AndroidUtilities.dp(28), textPaint);
+            canvas.drawText(String.valueOf(Math.round(ExteraConfig.stickerSize)), getMeasuredWidth() - AndroidUtilities.dp(39), AndroidUtilities.dp(28), textPaint);
         }
 
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-            sizeBar.setProgress((ExteraConfig.stickerSize - startStickerSize) / (float) (endStickerSize - startStickerSize));
+            int width = MeasureSpec.getSize(widthMeasureSpec);
+            if (lastWidth != width) {
+                sizeBar.setProgress((ExteraConfig.stickerSize - startStickerSize) / (float) (endStickerSize - startStickerSize));
+                lastWidth = width;
+            }
         }
 
         @Override
         public void invalidate() {
             super.invalidate();
+            lastWidth = -1;
+            messagesCell.invalidate();
             sizeBar.invalidate();
         }
-    }
 
-    @Override
-    public boolean onFragmentCreate() {
-        super.onFragmentCreate();
-        updateRowsId(true);
-        return true;
+        @Override
+        public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
+            super.onInitializeAccessibilityEvent(event);
+            sizeBar.getSeekBarAccessibilityDelegate().onInitializeAccessibilityEvent(this, event);
+        }
+
+        @Override
+        public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+            super.onInitializeAccessibilityNodeInfo(info);
+            sizeBar.getSeekBarAccessibilityDelegate().onInitializeAccessibilityNodeInfoInternal(this, info);
+        }
+
+        @Override
+        public boolean performAccessibilityAction(int action, Bundle arguments) {
+            return super.performAccessibilityAction(action, arguments) || sizeBar.getSeekBarAccessibilityDelegate().performAccessibilityActionInternal(this, action, arguments);
+        }
     }
 
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setTitle(LocaleController.getString("Appearance", R.string.Appearance));
+        actionBar.setTitle(LocaleController.getString("Chats", R.string.Chats));
         actionBar.setAllowOverlayTitle(false);
 
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
         }
+
+        ActionBarMenu menu = actionBar.createMenu();
+        resetItem = menu.addItem(0, R.drawable.msg_reset);
+        resetItem.setContentDescription(LocaleController.getString("Reset", R.string.Reset));
+        resetItem.setVisibility(ExteraConfig.stickerSize != 14.0f ? View.VISIBLE : View.GONE);
+        resetItem.setTag(null);
+        resetItem.setOnClickListener(v -> {
+            AndroidUtilities.updateViewVisibilityAnimated(resetItem, false, 0.5f, true);
+            ValueAnimator animator = ValueAnimator.ofFloat(ExteraConfig.stickerSize, 14.0f);
+            animator.setDuration(200);
+            animator.addUpdateListener(valueAnimator -> {
+                ExteraConfig.setStickerSize((Float) valueAnimator.getAnimatedValue());
+                stickerSizeCell.invalidate();
+            });
+            animator.start();
+        });
+
 
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
@@ -311,7 +366,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 case 4:
-                    view = new StickerSizeCell(mContext);
+                    view = stickerSizeCell = new StickerSizeCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 default:
