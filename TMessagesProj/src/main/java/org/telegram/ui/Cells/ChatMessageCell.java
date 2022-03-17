@@ -5624,9 +5624,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     float maxHeight;
                     int maxWidth;
                     if (AndroidUtilities.isTablet()) {
-                        maxHeight = maxWidth = (int) (AndroidUtilities.getMinTabletSide() * 0.4f);
+                        maxHeight = maxWidth = (int) (AndroidUtilities.getMinTabletSide() * (0.4f + (ExteraConfig.stickerSize - 14.0f) / 40));
                     } else {
-                        maxHeight = maxWidth = (int) (Math.min(getParentWidth(), AndroidUtilities.displaySize.y) * 0.5f);
+                        maxHeight = maxWidth = (int) (Math.min(getParentWidth(), AndroidUtilities.displaySize.y) * (0.5f + (ExteraConfig.stickerSize - 14.0f) / 30));
                     }
                     String filter;
                     if (messageObject.isAnimatedEmoji() || messageObject.isDice()) {
@@ -5645,12 +5645,6 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             photoHeight = (int) maxHeight;
                         }
                     }
-
-                    float modifier = ExteraConfig.INSTANCE.getStickerSize() / 100f;
-                    photoWidth = (int) (photoWidth * modifier);
-                    photoHeight = (int) (photoHeight * modifier);
-                    maxWidth = (int) (maxWidth * modifier);
-                    maxHeight = (int) (maxHeight * modifier);
 
                     Object parentObject = messageObject;
                     int w = (int) (photoWidth / AndroidUtilities.density);
@@ -11150,7 +11144,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         if ((!autoPlayingMedia || !MediaController.getInstance().isPlayingMessageAndReadyToDraw(currentMessageObject) || isRoundVideo) && !transitionParams.animateBackgroundBoundsInner) {
             drawOverlays(canvas);
         }
-        if ((drawTime || !mediaBackground) && !forceNotDrawTime && !transitionParams.animateBackgroundBoundsInner && !(enterTransitionInProgress && !currentMessageObject.isVoice()) && (!currentMessageObject.isAnyKindOfSticker() || !ExteraConfig.INSTANCE.getHideStickerTime())) {
+        if ((drawTime || !mediaBackground) && !forceNotDrawTime && !transitionParams.animateBackgroundBoundsInner && !(enterTransitionInProgress && !currentMessageObject.isVoice()) && (!currentMessageObject.isAnyKindOfSticker() || !ExteraConfig.hideStickerTime)) {
             drawTime(canvas, 1f, false);
         }
 

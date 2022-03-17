@@ -319,7 +319,7 @@ public class ProfileSearchCell extends BaseCell {
             nameString = nameString2.replace('\n', ' ');
         }
         if (nameString.length() == 0) {
-            if (ExteraConfig.INSTANCE.getHidePhoneNumber()) {
+            if (ExteraConfig.hidePhoneNumber) {
                 nameString = LocaleController.getString("MobileHidden", R.string.MobileHidden);
             } else if (user != null && user.phone != null && user.phone.length() != 0) {
                 nameString = PhoneFormat.getInstance().format("+" + user.phone);

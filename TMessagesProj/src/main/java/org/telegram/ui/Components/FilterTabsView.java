@@ -1201,9 +1201,9 @@ public class FilterTabsView extends FrameLayout {
         if (!tabs.isEmpty()) {
             int width = MeasureSpec.getSize(widthMeasureSpec) - AndroidUtilities.dp(7) - AndroidUtilities.dp(7);
             Tab firstTab = tabs.get(0);
-            if (!ExteraConfig.INSTANCE.getHideAllChats()) firstTab.setTitle(LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
+            if (!ExteraConfig.hideAllChats) firstTab.setTitle(LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
             int tabWith = firstTab.getWidth(false);
-            if (!ExteraConfig.INSTANCE.getHideAllChats()) firstTab.setTitle(allTabsWidth > width ? LocaleController.getString("FilterAllChatsShort", R.string.FilterAllChatsShort) : LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
+            if (!ExteraConfig.hideAllChats) firstTab.setTitle(allTabsWidth > width ? LocaleController.getString("FilterAllChatsShort", R.string.FilterAllChatsShort) : LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
             int trueTabsWidth = allTabsWidth - tabWith;
             trueTabsWidth += firstTab.getWidth(false);
             int prevWidth = additionalTabWidth;
@@ -1354,7 +1354,7 @@ public class FilterTabsView extends FrameLayout {
                 invalidated = true;
                 requestLayout();
                 allTabsWidth = 0;
-                if (!ExteraConfig.INSTANCE.getHideAllChats()) tabs.get(0).setTitle(LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
+                if (!ExteraConfig.hideAllChats) tabs.get(0).setTitle(LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
                 for (int b = 0; b < N; b++) {
                     allTabsWidth += tabs.get(b).getWidth(true) + AndroidUtilities.dp(32);
                 }
@@ -1385,7 +1385,7 @@ public class FilterTabsView extends FrameLayout {
             listView.setItemAnimator(itemAnimator);
             adapter.notifyDataSetChanged();
             allTabsWidth = 0;
-            if (!ExteraConfig.INSTANCE.getHideAllChats()) tabs.get(0).setTitle(LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
+            if (ExteraConfig.hideAllChats) tabs.get(0).setTitle(LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
             for (int b = 0, N = tabs.size(); b < N; b++) {
                 allTabsWidth += tabs.get(b).getWidth(true) + AndroidUtilities.dp(32);
             }
@@ -1435,7 +1435,7 @@ public class FilterTabsView extends FrameLayout {
             int idx1 = fromIndex - 1;
             int idx2 = toIndex - 1;
             int count = tabs.size() - 1;
-            if (ExteraConfig.INSTANCE.getHideAllChats()) {
+            if (ExteraConfig.hideAllChats) {
                 idx1++;
                 idx2++;
                 count++;
@@ -1502,7 +1502,7 @@ public class FilterTabsView extends FrameLayout {
 
         @Override
         public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-            if (!isEditing || (!ExteraConfig.INSTANCE.getHideAllChats() && viewHolder.getAdapterPosition() == 0)) {
+            if (!isEditing || (ExteraConfig.hideAllChats && viewHolder.getAdapterPosition() == 0)) {
                 return makeMovementFlags(0, 0);
             }
             return makeMovementFlags(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, 0);
@@ -1510,7 +1510,7 @@ public class FilterTabsView extends FrameLayout {
 
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {
-            if (!ExteraConfig.INSTANCE.getHideAllChats() && (source.getAdapterPosition() == 0 || target.getAdapterPosition() == 0)) {
+            if (ExteraConfig.hideAllChats && (source.getAdapterPosition() == 0 || target.getAdapterPosition() == 0)) {
                 return false;
             }
             adapter.swapElements(source.getAdapterPosition(), target.getAdapterPosition());

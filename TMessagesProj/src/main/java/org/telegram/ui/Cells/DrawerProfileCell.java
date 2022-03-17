@@ -333,7 +333,7 @@ public class DrawerProfileCell extends FrameLayout {
         setArrowState(false);
         nameTextView.setText(UserObject.getUserName(user));
 
-        if (!ExteraConfig.INSTANCE.getHidePhoneNumber()) {
+        if (!ExteraConfig.hidePhoneNumber) {
             phoneTextView.setText(PhoneFormat.getInstance().format("+" + user.phone));
         } else if (!TextUtils.isEmpty(user.username)) {
             phoneTextView.setText("@" + user.username);

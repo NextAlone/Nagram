@@ -249,7 +249,7 @@ public class MessagesController extends BaseController implements NotificationCe
     private int nextTosCheckTime;
 
     public int secretWebpagePreview;
-    public boolean suggestContacts = true;
+    public boolean suggestContacts = false;
 
     private volatile static long lastThemeCheckTime;
     private Runnable themeCheckRunnable = Theme::checkAutoNightThemeConditions;
@@ -5766,7 +5766,7 @@ public class MessagesController extends BaseController implements NotificationCe
             } else if (response instanceof TLRPC.TL_help_promoData) {
                 TLRPC.TL_help_promoData res = (TLRPC.TL_help_promoData) response;
 
-                if (ExteraConfig.INSTANCE.getHideProxySponsor()) {
+                if (ExteraConfig.hideProxySponsor) {
                     noDialog = true;
                     return;
                 }

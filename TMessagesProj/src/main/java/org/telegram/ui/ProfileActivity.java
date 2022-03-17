@@ -183,7 +183,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import com.exteragram.messenger.ExteraConfig;
-import com.exteragram.messenger.ExteraPreferencesNav;
+import com.exteragram.messenger.preferences.MainPreferencesEntry;
 
 public class ProfileActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, SharedMediaLayout.SharedMediaPreloaderDelegate, ImageUpdater.ImageUpdaterDelegate, SharedMediaLayout.Delegate {
 
@@ -2743,7 +2743,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 fragment.setInfo(chatInfo);
                 presentFragment(fragment);
             } else if (position == exteraRow) {
-                presentFragment(ExteraPreferencesNav.createMainMenu());
+                presentFragment(new MainPreferencesEntry());
             } else if (position == notificationRow) {
                 presentFragment(new NotificationsSettingsActivity());
             } else if (position == privacyRow) {
@@ -3909,7 +3909,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             return true;
         } else if (position == phoneRow || position == numberRow) {
             final TLRPC.User user = getMessagesController().getUser(userId);
-            if (user == null || user.phone == null || user.phone.length() == 0 || getParentActivity() == null) {
+            if (user == null || user.phone == null || user.phone.length() == 0 || getParentActivity() == null ||
+                    (ExteraConfig.hidePhoneNumber && user.id == UserConfig.getInstance(currentAccount).getClientUserId())) {
                 return false;
             }
 
@@ -5708,11 +5709,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     setAvatarSectionRow = rowCount++;
                 }
                 numberSectionRow = rowCount++;
-                numberRow = ExteraConfig.INSTANCE.getHidePhoneNumber() ? -1 : rowCount++;
+                numberRow = ExteraConfig.hidePhoneNumber ? -1 : rowCount++;
                 setUsernameRow = rowCount++;
                 bioRow = rowCount++;
 
-                if (ExteraConfig.INSTANCE.getShowID()) idRow = rowCount++;
+                if (ExteraConfig.showID) idRow = rowCount++;
                 settingsSectionRow = rowCount++;
 
                 Set<String> suggestions = getMessagesController().pendingSuggestions;
@@ -5768,7 +5769,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (user != null && !TextUtils.isEmpty(user.username)) {
                     usernameRow = rowCount++;
                 }
-                if (ExteraConfig.INSTANCE.getShowID()) idRow = rowCount++;
+                if (ExteraConfig.showID) idRow = rowCount++;
                 if (phoneRow != -1 || userInfoRow != -1 || usernameRow != -1) {
                     notificationsDividerRow = rowCount++;
                 }
@@ -5816,7 +5817,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     usernameRow = rowCount++;
                 }
             }
-            if (ExteraConfig.INSTANCE.getShowID()) idRow = rowCount++;
+            if (ExteraConfig.showID) idRow = rowCount++;
             if (infoHeaderRow != -1) {
                 notificationsDividerRow = rowCount++;
             }
@@ -7222,7 +7223,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     if (position == phoneRow) {
                         String text;
                         final TLRPC.User user = getMessagesController().getUser(userId);
-                        if (!TextUtils.isEmpty(user.phone)) {
+                        if (!TextUtils.isEmpty(user.phone)
+                                && !(ExteraConfig.hidePhoneNumber && user.id == UserConfig.getInstance(currentAccount).getClientUserId())) {
                             text = PhoneFormat.getInstance().format("+" + user.phone);
                         } else {
                             text = LocaleController.getString("PhoneHidden", R.string.PhoneHidden);

@@ -1897,7 +1897,7 @@ public class AndroidUtilities {
     }
 
     public static boolean isTablet() {
-        if (ExteraConfig.INSTANCE.getForceTabletMode()) isTablet = true;
+        if (ExteraConfig.forceTabletMode) isTablet = true;
         if (isTablet == null) {
             isTablet = ApplicationLoader.applicationContext != null && ApplicationLoader.applicationContext.getResources().getBoolean(R.bool.isTablet);
         }

@@ -8,12 +8,11 @@
     <string name="ToBeginning">To beginning</string>
 
     <!-- Main Menu (about) -->
-    <string name="AboutExtera">About exteraGram</string>
+    <string name="About">About exteraGram</string>
     <string name="AboutExteraDescription">Experimental Telegram client based on official Telegram sources!</string>
-    <string name="Website">exteraSquad Members</string>
-    <string name="Github">exteraGram\'s Source Code</string>
-    <string name="Channel">Telegram Channel</string>
-    <string name="Chat">Telegram Chat</string>
+    <string name="SourceCode">exteraGram\'s Source Code</string>
+    <string name="Channel">Channel</string>
+    <string name="Chats">Chats</string>
     <string name="languageEnglish">English</string>
     <string name="languageRussian">Russian</string>
 
@@ -21,10 +20,9 @@
     <string name="RestartRequired">Restart the app to take effect.</string>
 
     <string name="Categories">Categories</string>
-    <string name="Chats">Chats</string>
 
     <!-- Appearance -->
-    <string name="TransparentStatusbar">Transparent Statusbar</string>
+    <string name="TransparentStatusBar">Transparent Status Bar</string>
     <string name="BlurForAllThemes">Blur for all themes</string>
 
     <string name="HideAllChats">Hide \"All Chats\" Tab</string>

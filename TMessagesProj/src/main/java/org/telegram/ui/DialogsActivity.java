@@ -1506,7 +1506,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                 ((DialogCell) view).startOutAnimation();
                                 parentPage.archivePullViewState = ARCHIVE_ITEM_STATE_SHOWED;
 
-                                if (ExteraConfig.INSTANCE.getArchiveOnPull()) {
+                                if (ExteraConfig.archiveOnPull) {
                                     AndroidUtilities.runOnUIThread(() -> {
                                         Bundle args = new Bundle();
                                         args.putInt("folderId", 1);
@@ -2187,9 +2187,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
             if (folderId != 0) {
                 actionBar.setTitle(LocaleController.getString("ArchivedChats", R.string.ArchivedChats));
-            } else if (BuildVars.DEBUG_VERSION && !ExteraConfig.INSTANCE.getChatsOnTitle()) {
+            } else if (BuildVars.DEBUG_VERSION && !ExteraConfig.chatsOnTitle) {
                 actionBar.setTitle(LocaleController.getString("AppNameBeta", R.string.AppNameBeta));
-            } else if (!ExteraConfig.INSTANCE.getChatsOnTitle()) {
+            } else if (!ExteraConfig.chatsOnTitle) {
                 actionBar.setTitle(LocaleController.getString("AppName", R.string.AppName));
             } else {
                 actionBar.setTitle(LocaleController.getString("SearchAllChatsShort", R.string.SearchAllChatsShort));
@@ -4144,12 +4144,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     filterTabsView.resetTabId();
                 }
                 filterTabsView.removeTabs();
-                if (!ExteraConfig.INSTANCE.getHideAllChats()) filterTabsView.addTab(Integer.MAX_VALUE, 0, LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
+                if (!ExteraConfig.hideAllChats) filterTabsView.addTab(Integer.MAX_VALUE, 0, LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
                 for (int a = 0, N = filters.size(); a < N; a++) {
                     filterTabsView.addTab(a, filters.get(a).localId, filters.get(a).name);
                 }
                 id = filterTabsView.getCurrentTabId();
-                boolean updateCurrentTab = ExteraConfig.INSTANCE.getHideAllChats();
+                boolean updateCurrentTab = ExteraConfig.hideAllChats;
                 if (id >= 0) {
                     if (viewPages[0].selectedType != id) {
                         updateCurrentTab = true;
