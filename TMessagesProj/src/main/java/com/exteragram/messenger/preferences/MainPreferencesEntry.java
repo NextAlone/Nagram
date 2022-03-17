@@ -2,6 +2,7 @@ package com.exteragram.messenger.preferences;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -181,9 +182,9 @@ public class MainPreferencesEntry extends BaseFragment {
                     textDetailCell.setMultilineDetail(true);
                     if (position == aboutExteraRow) {
                         if (BuildVars.isBetaApp()) {
-                            textDetailCell.setTextAndValue(LocaleController.getString("AppNameBeta", R.string.AppNameBeta), LocaleController.getString("AboutExteraDescription", R.string.AboutExteraDescription),  true);
+                            textDetailCell.setTextAndValue("exteraGram β | v" + BuildVars.BUILD_VERSION_STRING, LocaleController.getString("AboutExteraDescription", R.string.AboutExteraDescription),  true);
                         } else {
-                            textDetailCell.setTextAndValue(LocaleController.getString("AppName", R.string.AppName), LocaleController.getString("AboutExteraDescription", R.string.AboutExteraDescription),  true);
+                            textDetailCell.setTextAndValue("exteraGram | v" + BuildVars.BUILD_VERSION_STRING, LocaleController.getString("AboutExteraDescription", R.string.AboutExteraDescription),  true);
                         }
                     }
                     break;
