@@ -625,6 +625,11 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                 } else if (id == 13) {
                     Browser.openUrl(LaunchActivity.this, LocaleController.getString("TelegramFeaturesUrl", R.string.TelegramFeaturesUrl));
                     drawerLayoutContainer.closeDrawer(false);
+                } else if (id == 14) {
+                    Bundle args = new Bundle();
+                    args.putInt("folderId", 1);
+                    presentFragment(new DialogsActivity(args));
+                    drawerLayoutContainer.closeDrawer(false);
                 }
             }
         });
