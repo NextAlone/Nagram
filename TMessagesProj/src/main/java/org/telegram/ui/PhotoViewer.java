@@ -250,6 +250,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import com.exteragram.messenger.ExteraConfig;
+
 @SuppressWarnings("unchecked")
 public class PhotoViewer implements NotificationCenter.NotificationCenterDelegate, GestureDetector2.OnGestureListener, GestureDetector2.OnDoubleTapListener {
 
@@ -385,6 +387,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private boolean doneButtonPressed;
     boolean keyboardAnimationEnabled;
     private Theme.ResourcesProvider resourcesProvider;
+
+    private boolean pauseOnMinimize = false;
 
     private Runnable setLoadingRunnable = new Runnable() {
         @Override
@@ -13170,6 +13174,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         if (photoPaintView != null) {
             photoPaintView.onResume();
         }
+        if (pauseOnMinimize && ExteraConfig.pauseOnMinimize && videoPlayer != null && !videoPlayer.isPlaying()) {
+            pauseOnMinimize = false;
+            videoPlayer.play();
+        }
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
@@ -13188,6 +13196,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
         if (videoPlayer != null && playerLooping) {
             videoPlayer.setLooping(false);
+        }
+        if (ExteraConfig.pauseOnMinimize && videoPlayer != null && videoPlayer.isPlaying()) {
+            pauseOnMinimize = true;
+            videoPlayer.pause();
         }
     }
 

@@ -43,6 +43,8 @@
 
     <string name="Media">Media</string>
     <string name="RearVideoMessages">Rear Camera in Video Messages</string>
+    <string name="PauseOnMinimize">Autopause</string>
+    <string name="POMDescription">Pauses a video playback when device is locked or exteraGram is minimized</string>
 
     <string name="ConfirmCall">Confirm call</string>
     <string name="CallTo">Call to **%1$s**?</string>
