@@ -109,6 +109,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val noiseSuppressAndVoiceEnhance =
+        addConfig(
+            "NoiseSuppressAndVoiceEnhance",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     fun addConfig(
         k: String,

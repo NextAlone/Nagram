@@ -100,9 +100,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 
-import tw.nekomimi.nekogram.SaveToDownloadReceiver;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.SaveToDownloadReceiver;
+import xyz.nextalone.nagram.helper.AudioEnhance;
 
 public class MediaController implements AudioManager.OnAudioFocusChangeListener, NotificationCenter.NotificationCenterDelegate, SensorEventListener {
 
@@ -3505,6 +3506,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 recordReplyingMsg = replyToMsg;
                 recordReplyingTopMsg = replyToTopMsg;
                 fileBuffer.rewind();
+                AudioEnhance.INSTANCE.initVoiceEnhance(audioRecorder);
 
                 audioRecorder.startRecording();
             } catch (Exception e) {
@@ -3514,6 +3516,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 recordingAudioFile.delete();
                 recordingAudioFile = null;
                 try {
+                    AudioEnhance.INSTANCE.releaseVoiceEnhance();
                     audioRecorder.release();
                     audioRecorder = null;
                 } catch (Exception e2) {
@@ -3607,6 +3610,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             requestAudioFocus(false);
         }
         try {
+            AudioEnhance.INSTANCE.releaseVoiceEnhance();
             if (audioRecorder != null) {
                 audioRecorder.release();
                 audioRecorder = null;
