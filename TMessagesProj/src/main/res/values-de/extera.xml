@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- exteraGram's Main Strings -->
+    <string name="MutualContact">gegenseitiger Kontakt</string>
+    <string name="ToBeginning">Am Anfang</string>
+
+    <!-- Main Menu (about) -->
+    <string name="About">Über exteraGram</string>
+    <string name="AboutExteraDescription">Experimenteller Telegram-Client basierend auf offiziellen Telegram-Quellen!</string>
+    <string name="SourceCode">exteraGram\'s Quelltext</string>
+    <string name="Channel">Kanal</string>
+    <string name="Chats">Chats</string>
+
+    <string name="Preferences">extera Einstellungen</string>
+    <string name="RestartRequired">App neu starten, damit es wirksam wird.</string>
+
+    <string name="Categories">Kategorien</string>
+
+    <!-- Appearance -->
+    <string name="TransparentStatusBar">Transparente Status leiste</string>
+    <string name="BlurForAllThemes">Unschärfe in allen Themen</string>
+
+    <string name="HideAllChats">Tab \"Alle Chats\" ausblenden</string>
+    <string name="HideProxySponsor">Hide Proxy Sponsor</string>
+    <string name="HidePhoneNumber">Meine Telefonnummer ausblenden</string>
+    <string name="ShowID">ID im Profil anzeigen</string>
+    <string name="ChatsOnTitle">\"Chats\" statt \"exteraGram\"</string>
+    <string name="ForceTabletMode">Tablet-Modus erzwingen</string>
+
+    <!-- Chats -->
+    <string name="StickerSize">Stickergröße</string>
+    <string name="StickerTime">Zeit unter Aufklebern verbergen</string>
+
+    <string name="StickerSizeDialogMessageReplyTo">miaumiau</string>
+    <string name="StickerSizeDialogMessage">woah! er ist so süß owo ;—;</string>
+
+    <string name="HideSendAsChannel">\"Als Kanal senden\" ausblenden</string>
+    <string name="HideKeyboardOnScroll">Tastatur beim Scrollen ausblenden</string>
+    <string name="ArchiveOnPull">Archiv beim Herunterziehen öffnen</string>
+    <string name="DateOfForwardedMsg">Datum der weitergeleiteten Nachricht anzeigen</string>
+
+    <string name="Media">Media</string>
+    <string name="RearVideoMessages">Hintere Kamera für Videonachrichten</string>
+    <string name="PauseOnMinimize">Autopause</string>
+    <string name="POMDescription">Pausiert eine Videowiedergabe, wenn das Gerät gesperrt ist oder exteraGram minimiert wird</string>
+    <string name="DisablePlayback">Player öffnen</string>
+    <string name="DPDescription">Deaktiviert die Wiedergabe bei Lautstärketasten</string>
+
+    <string name="Drawer">Schublade</string>
+    <string name="Attention">ACHTUNG!</string>
+    <string name="AttentionDescription">DIESE ITEM KÖNNEN ODER ENTFERNT IN DER FUTURE!\nStarten Sie die App neu, um wirksam zu werden.</string>
+    <string name="PNDescription">Kann nicht angezeigt werden, wenn GPS deaktiviert ist.</string>
+
+    <string name="ConfirmCall">Anruf bestätigen</string>
+    <string name="CallTo">Anruf an **%1$s**?</string>
+</resources>

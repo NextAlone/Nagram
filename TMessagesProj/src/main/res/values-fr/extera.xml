@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- exteraGram's Main Strings -->
+    <string name="exteraAppName">exteraGram</string>
+    <string name="exteraAppNameBeta">exteraGram β</string>
+    <string name="exteraDebugMenu">¯\\_(ツ)_/¯</string>
+    <string name="MutualContact">contact mutuel</string>
+    <string name="ToBeginning">To beginning</string>
+    <!-- Main Menu (about) -->
+    <string name="AboutExtera">À propos d’exteraGram</string>
+    <string name="AboutExteraDescription">Client Telegram expérimental basé sur les sources officielles de Telegram!</string>
+    <string name="Website">membres de l\'exteraSquad</string>
+    <string name="Github">code source de l\'exteraGram</string>
+    <string name="Channel">Chaîne Telegram</string>
+    <string name="Chat">Bot Telgram</string>
+    <string name="languageEnglish">Anglais</string>
+    <string name="languageRussian">Russe</string>
+    <string name="Preferences">préférences extera</string>
+    <string name="RestartRequired">Redémarrer AirDroid pour prendre en compte les changements.</string>
+    <string name="Categories">Catégories</string>
+    <string name="Chats">Échanges</string>
+    <string name="Experimental">Expérimental</string>
+    <!-- Appearance -->
+    <string name="SystemFonts">Utiliser la police du système</string>
+    <string name="SystemEmoji">Utiliser les émojis du système</string>
+    <string name="HideAllChats">Masquer l\'onglet \"Toutes les discussions\"</string>
+    <string name="HidePhoneNumber">Cacher le numéro de téléphone</string>
+    <string name="HideProxySponsor">Cacher le sponsor du proxy</string>
+    <string name="ChatsOnTitle">\"Chats\" au lieu de \"exteraGram\"</string>
+    <string name="ShowID">Afficher dans le profil</string>
+    <string name="SB">Barre d\'état transparente</string>
+    <string name="SBDescription">seulement pour Android 6+</string>
+    <string name="ForceTabletMode">Forcer le mode Tablet Ui</string>
+    <string name="Drawer">Liste d\'applications</string>
+    <string name="Attention">ATTENTION!</string>
+    <string name="DrawerRR">CETTE OBJET PEUT ÊTRE CHANGÉE OU SUPPRIMER DANS LE FUTURE !\nRedémarrez l\'application pour prendre effet.</string>
+    <string name="PeopleNearbyDescription">Ne peut pas être affiché si le GPS est désactivé.</string>
+    <!-- Chats -->
+    <string name="StickerSize">Taille de l\'autocollant</string>
+    <string name="StickerTime">Masquer le temps sous les autocollants</string>
+    <string name="HideSendAsChannel">Masquer \"Envoyer en tant que Canal\"</string>
+    <string name="HideKeyboardOnScroll">Masquer le clavier lors du défilement</string>
+    <string name="DateOfForwardedMsg">Show date of forwarded message</string>
+    <string name="ShowSeconds">Show seconds in timestamps</string>
+    <string name="ArchiveOnPull">Ouvrir les archives dans le menu déroulant</string>
+    <string name="IncludeArchivedChatsInForwards">Inclure les chats archivés pour les transferts</string>
+    <string name="UnlimitedPinnedChats">Chats épinglés illimités</string>
+    <string name="UnlimitedPinnedChatsDescription">Épingler des conversations illimitées en désactivant la synchronisation.</string>
+    <string name="UnlimitedRecentStickers">Autocollants récents illimités</string>
+    <string name="Media">Lecteur</string>
+    <string name="HQVoiceMessage">Messages vocaux</string>
+    <string name="RearVideoMessages">Caméra arrière dans les messages vidéo</string>
+    <string name="Autopause">Pause automatique</string>
+    <string name="AutopauseDescription">Met en pause une lecture vidéo lorsque l\'appareil est verrouillé ou que l\'exteraGram est minimisé</string>
+    <string name="DisablePlayback">Désactiver la lecture</string>
+    <string name="DisablePlaybackDescription">Désactive la lecture lorsque le bouton de volume est enfoncé</string>
+    <string name="ConfirmCall">Confirmer l\'appel</string>
+    <string name="CallTo">Appeler à **%1$s**?</string>
+</resources>

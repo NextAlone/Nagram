@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- exteraGram's Main Strings -->
+    <string name="exteraAppName">exteraGram</string>
+    <string name="exteraAppNameBeta">exteraGram β</string>
+    <string name="exteraDebugMenu">¯\\_(ツ)_/¯</string>
+    <string name="MutualContact">相互の連絡先</string>
+    <string name="ToBeginning">To beginning</string>
+    <!-- Main Menu (about) -->
+    <string name="AboutExtera">外部グラムについて</string>
+    <string name="AboutExteraDescription">公式のTelegramのソースに基づいて実験的なTelegramクライアント！</string>
+    <string name="Website">外部分隊メンバー</string>
+    <string name="Github">exteraGramのソース コード</string>
+    <string name="Channel">Telegram チャンネル</string>
+    <string name="Chat">\? Telegramチャット</string>
+    <string name="languageEnglish">日本語</string>
+    <string name="languageRussian">ロシア語</string>
+    <string name="Preferences">extera の設定</string>
+    <string name="RestartRequired">有効にするには、AirDroidを再起動してください。</string>
+    <string name="Categories">カテゴリー</string>
+    <string name="Chats">チャット</string>
+    <string name="Experimental">実験</string>
+    <!-- Appearance -->
+    <string name="SystemFonts">Use System Font Size</string>
+    <string name="SystemEmoji">システムの絵文字を使う</string>
+    <string name="HideAllChats">「すべてのチャット」タブを隠す</string>
+    <string name="HidePhoneNumber">電話番号</string>
+    <string name="HideProxySponsor">プロキシスポンサーを隠す</string>
+    <string name="ChatsOnTitle">\"exteraGram\" の代わりに \"チャット\"</string>
+    <string name="ShowID">一般プロファイルを表示</string>
+    <string name="SB">透明なステータス バー</string>
+    <string name="SBDescription">Android 6以降のみ</string>
+    <string name="ForceTabletMode">タブレットUIの強制</string>
+    <string name="Drawer">ドロワー</string>
+    <string name="Attention">注意！</string>
+    <string name="DrawerRR">このアイテムは変更または削除された可能性があります！\n有効にするにはアプリを再起動してください。</string>
+    <string name="PeopleNearbyDescription">GPSが無効になっている場合、表示されないことがあります。</string>
+    <!-- Chats -->
+    <string name="StickerSize">ステッカーのサイズ</string>
+    <string name="StickerTime">ステッカーの下に時間を隠す</string>
+    <string name="HideSendAsChannel">「チャンネルとして送信」を非表示</string>
+    <string name="HideKeyboardOnScroll">スクロール時にキーボードを隠す</string>
+    <string name="DateOfForwardedMsg">Show date of forwarded message</string>
+    <string name="ShowSeconds">Show seconds in timestamps</string>
+    <string name="ArchiveOnPull">プルダウンでアーカイブを開く</string>
+    <string name="IncludeArchivedChatsInForwards">アーカイブされたチャットを転送対象に含める</string>
+    <string name="UnlimitedPinnedChats">無制限のピン留めチャット</string>
+    <string name="UnlimitedPinnedChatsDescription">同期をオフにしてチャットを無制限にピン留めする</string>
+    <string name="UnlimitedRecentStickers">最近のステッカーを無制限に追加する</string>
+    <string name="Media">メディア</string>
+    <string name="HQVoiceMessage">HQボイスメッセージ</string>
+    <string name="RearVideoMessages">ビデオメッセージの背面カメラ</string>
+    <string name="Autopause">Autopause</string>
+    <string name="AutopauseDescription">端末がロックされているときや外側のグラムが最小化されているときにビデオ再生を一時停止します</string>
+    <string name="DisablePlayback">プレイヤーを開く</string>
+    <string name="DisablePlaybackDescription">音量ボタンを押した時の再生を無効にする</string>
+    <string name="ConfirmCall">通話の確認</string>
+    <string name="CallTo">**%1$s**に電話しますか？</string>
+</resources>

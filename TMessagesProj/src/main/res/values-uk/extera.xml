@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- exteraGram's Main Strings -->
+    <string name="MutualContact">взаємний контакт</string>
+    <string name="ToBeginning">На початок</string>
+    
+    <!-- Main Menu (about) -->
+    <string name="AboutExtera">Про exteraGram</string>
+    <string name="AboutExteraDescription">Експерементальний клієнт Telegram, що працює на офіційному вихідному коді Telegram!</string>
+    <string name="Website">Команда exteraSquad</string>
+    <string name="Github">Вихідний код exteraGram</string>
+    <string name="Channel">Канал у Telegram</string>
+    <string name="Chat">Чат у Telegram</string>
+    <string name="languageEnglish">Англійська</string>
+    <string name="languageRussian">Російська</string>
+
+    <string name="Preferences">Налаштування extera</string>
+    <string name="RestartRequired">Перезапустіть застосунок, щоб зміни вступили в силу.</string>
+
+    <string name="Categories">Категорії</string>
+    <string name="Chats">Чати</string>
+    <string name="Experimental">Експериментально</string>
+
+    <!-- Appearance -->
+    <string name="SystemFonts">Використовувати системний шрифт</string>
+    <string name="SystemEmoji">Використовувати системні емодзі</string>
+
+    <string name="HideAllChats">Сховати \"Усі чати\"</string>
+    <string name="HidePhoneNumber">Сховати номер телефону</string>
+    <string name="HideProxySponsor">Сховати \"спонсора проксі\"</string>
+    <string name="ChatsOnTitle">"Чати" замість "exteraGram"</string>
+    <string name="ShowID">Показувати ID в профілі</string>
+    <string name="SB">Прозорий статусбар</string>
+    <string name="SBDescription">тільки для Android 6 та вище</string>
+    <string name="ForceTabletMode">Примусово увімкнути режим планшету</string>
+
+    <string name="Drawer">Бокове меню</string>
+    <string name="Attention">УВАГА!</string>
+    <string name="DrawerRR">ЦЕЙ РОЗДІЛ МОЖЕ БУТИ ЗМІНЕНИЙ АБО ВИДАЛЕНИЙ У МАЙБУТНЬОМУ!\nПерезапустіть застосунок, щоб зміни вступили в силу.</string>
+    <string name="PeopleNearbyDescription">Може не відображатися, якщо GPS вимкнено.</string>
+
+    <!-- Chats -->
+    <string name="StickerSize">Розмір стікеру</string>
+    <string name="StickerTime">Сховати час під стікером</string>
+
+    <string name="HideSendAsChannel">Сховати "Надсилати від імені"</string>
+    <string name="HideKeyboardOnScroll">Ховати клавіатуру при скролінгу</string>
+    <string name="ArchiveOnPull">Відкривати архів потягуванням вниз</string>
+    <string name="IncludeArchivedChatsInForwards">Показувати чати з архіву при пересиланні</string>
+    <string name="UnlimitedPinnedChats">Вимкнути ліміт закріплених чатів</string>
+    <string name="UnlimitedPinnedChatsDescription">Закріплювати чати без обмежень шляхом вимкнення синхронізації</string>
+    <string name="UnlimitedRecentStickers">Вимкнути ліміт нещодавних стікерів</string>
+
+    <string name="Media">Медіа</string>
+    <string name="HQVoiceMessage">Покращення якості голосових повідомлень</string>
+    <string name="RearVideoMessages">Записувати відео-повідомлення з передньої камери</string>
+    <string name="Autopause">Автопауза</string>
+    <string name="AutopauseDescription">Ставити відео на паузу, коли девайс заблоковано або exteraGram згорнуто</string>
+    <string name="DisablePlayback">Вимнкути програвання</string>
+    <string name="DisablePlaybackDescription">Вимикає програвання при натисканні кнопки гучності</string>
+
+    <string name="ConfirmCall">Підтвердження виклику</string>
+    <string name="CallTo">Подзвонити **%1$s**?</string>
+</resources>

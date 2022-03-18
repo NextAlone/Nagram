@@ -13,8 +13,6 @@
     <string name="SourceCode">exteraGram\'s Source Code</string>
     <string name="Channel">Channel</string>
     <string name="Chats">Chats</string>
-    <string name="languageEnglish">English</string>
-    <string name="languageRussian">Russian</string>
 
     <string name="Preferences">extera Preferences</string>
     <string name="RestartRequired">Restart the app to take effect.</string>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- exteraGram's Main Strings -->
+    <string name="exteraAppName">exteraGram</string>
+    <string name="exteraAppNameBeta">exteraGram β</string>
+    <string name="exteraDebugMenu">¯\\_(ツ)_/¯</string>
+    <string name="MutualContact">双向联系人</string>
+    <string name="ToBeginning">To beginning</string>
+    <!-- Main Menu (about) -->
+    <string name="AboutExtera">关于exteraGram</string>
+    <string name="AboutExteraDescription">基于官方Telegram源码制作的第三方客户端</string>
+    <string name="Website">exteraSquad开发成员</string>
+    <string name="Github">exteraGram开源代码</string>
+    <string name="Channel">Telegram通知频道</string>
+    <string name="Chat">Telegram交流群组</string>
+    <string name="languageEnglish">英语交流</string>
+    <string name="languageRussian">俄语交流</string>
+    <string name="Preferences">extera 设置</string>
+    <string name="RestartRequired">重启应用以生效</string>
+    <string name="Categories">设置分类</string>
+    <string name="Chats">对话</string>
+    <string name="Experimental">高级设置</string>
+    <!-- Appearance -->
+    <string name="SystemFonts">使用系统字体</string>
+    <string name="SystemEmoji">使用系统Emoji</string>
+    <string name="HideAllChats">隐藏“全部对话”栏</string>
+    <string name="HidePhoneNumber">隐藏手机号码</string>
+    <string name="HideProxySponsor">隐藏代理赞助频道</string>
+    <string name="ChatsOnTitle">主标题显示为“对话”</string>
+    <string name="ShowID">个人资料显示ID</string>
+    <string name="SB">使用完全透明的状态栏</string>
+    <string name="SBDescription">仅适用于 Android 6+</string>
+    <string name="ForceTabletMode">强制开启平板模式</string>
+    <string name="Drawer">侧边栏</string>
+    <string name="Attention">注意！</string>
+    <string name="DrawerRR">此功能将有可能更改或删除！\n重启应用程序以生效。</string>
+    <string name="PeopleNearbyDescription">如果GPS被禁用，可能不会显示。</string>
+    <!-- Chats -->
+    <string name="StickerSize">贴纸大小</string>
+    <string name="StickerTime">隐藏贴纸发送时间</string>
+    <string name="HideSendAsChannel">隐藏“以频道身份发言”</string>
+    <string name="HideKeyboardOnScroll">在浏览对话时隐藏键盘</string>
+    <string name="DateOfForwardedMsg">Show date of forwarded message</string>
+    <string name="ShowSeconds">Show seconds in timestamps</string>
+    <string name="ArchiveOnPull">下拉打开已归档对话</string>
+    <string name="IncludeArchivedChatsInForwards">转发页面显示归档对话</string>
+    <string name="UnlimitedPinnedChats">无限置顶的对话</string>
+    <string name="UnlimitedPinnedChatsDescription">关闭置顶对话同步以启用</string>
+    <string name="UnlimitedRecentStickers">无限的最近贴纸</string>
+    <string name="Media">媒体</string>
+    <string name="HQVoiceMessage">高清语音消息</string>
+    <string name="RearVideoMessages">视频留言默认使用后置摄像头</string>
+    <string name="Autopause">自动暂停播放</string>
+    <string name="AutopauseDescription">当锁定屏幕/切换到后台时暂停视频播放</string>
+    <string name="DisablePlayback">禁用快捷播放</string>
+    <string name="DisablePlaybackDescription">按下音量键时禁止声音外放</string>
+    <string name="ConfirmCall">呼叫前确认</string>
+    <string name="CallTo">是否呼叫**%1$s**？</string>
+</resources>

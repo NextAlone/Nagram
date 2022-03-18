@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- exteraGram's Main Strings -->
+    <string name="MutualContact">узаемны кантакт</string>
+    <string name="ToBeginning">Да пачатку</string>
+
+    <!-- Main Menu (about) -->
+    <string name="About">Аб exteraGram</string>
+    <string name="AboutExteraDescription">Эксперыментальны кліент Telegram на аснове афіцыйных крыніц Telegram!</string>
+    <string name="SourceCode">Зыходны код exteraGram</string>
+    <string name="Channel">Канал</string>
+    <string name="Chats">Чаты</string>
+
+    <string name="Preferences">Настройкі extera</string>
+    <string name="RestartRequired">Перазапусціце праграму, каб уступіць у сілу.</string>
+
+    <string name="Categories">Катыгорыі</string>
+
+    <!-- Appearance -->
+    <string name="TransparentStatusBar">Празрысты радок стану</string>
+    <string name="BlurForAllThemes">Размыццё для ўсіх тэм</string>
+
+    <string name="HideAllChats">Схаваць ўкладку \"Усе чаты\"</string>
+    <string name="HideProxySponsor">Схаваць спонсара проксі</string>
+    <string name="HidePhoneNumber">Схаваць нумар тэлефона</string>
+    <string name="ShowID">Паказаць ID у профілі</string>
+    <string name="ChatsOnTitle">\"Чаты\" замест \"exteraGram\"</string>
+    <string name="ForceTabletMode">Прымусовы рэжым планшэта</string>
+
+    <!-- Chats -->
+    <string name="StickerSize">Памер налепак</string>
+    <string name="StickerTime">Схавайце час пад налепкамі</string>
+
+    <string name="StickerSizeDialogMessageReplyTo">мяумяу</string>
+    <string name="StickerSizeDialogMessage">вау! ён такі мілы OwO ;—;</string>
+
+    <string name="HideSendAsChannel">Схаваць \"Адправіць як канал\"</string>
+    <string name="HideKeyboardOnScroll">Схаваць клавіятуру пры пракрутцы</string>
+    <string name="ArchiveOnPull">Адкрыйце архіў пры вопуску ўніз</string>
+    <string name="DateOfForwardedMsg">Паказаць дату перасланага паведамлення</string>
+
+    <string name="Media">Медыя</string>
+    <string name="RearVideoMessages">Задняя камера ў відэапаведамленнях</string>
+    <string name="PauseOnMinimize">Аўтапаўза</string>
+    <string name="POMDescription">Прыпыняе прайграванне відэа, калі прылада заблакіравана або exteraGram згорнуты</string>
+    <string name="DisablePlayback">Адключыць прайграванне</string>
+    <string name="DPDescription">Адключае прайграванне пры націску кнопкі гучнасці</string>
+
+    <string name="Drawer">Шуфляда</string>
+    <string name="Attention">УВАГА!</string>
+    <string name="AttentionDescription">ГЭТЫ ЭЛЕМЕНТ МОЖНА БЫЦЬ ЗМЕНЕНЫ АБО ВЫДАЛЕНЫ У БУДУЧАСЦІ!\nПеразапусціце праграму, каб уступіць у сілу.</string>
+    <string name="PNDescription">Можа не адлюстроўвацца, калі GPS адключаны.</string>
+
+    <string name="ConfirmCall">Пацвердзіце выклік</string>
+    <string name="CallTo">Патэлефанаваць на **%1$s**?</string>
+</resources>
