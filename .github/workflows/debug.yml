@@ -8,14 +8,6 @@ on:
       - '**.md'
       - '.github/**'
       - '!.github/workflows/debug.yml'
-  pull_request:
-    branches:
-      - dev
-  workflow_dispatch:
-    inputs:
-      artifacts:
-        description: 'y, if need artifacts'
-        required: false
 
 jobs:
   ffmpeg:
@@ -91,8 +83,6 @@ jobs:
         flavor:
           - armeabi-v7a
           - arm64-v8a
-          - x86
-          - x86_64
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -184,10 +174,6 @@ jobs:
     needs:
       - native
       - v2ray
-    strategy:
-      matrix:
-        flavor:
-          - MiniRelease
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -210,18 +196,6 @@ jobs:
           path: |
             TMessagesProj/src/main/libs
           key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-arm64-v8a
-      - name: Native Cache (x86)
-        uses: actions/cache@v2
-        with:
-          path: |
-            TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-x86
-      - name: Native Cache (x86_64)
-        uses: actions/cache@v2
-        with:
-          path: |
-            TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-x86_64
       - name: V2ray Cache
         uses: actions/cache@v2
         with:
@@ -242,100 +216,50 @@ jobs:
         run: |
           export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
           export DEBUG_BUILD=true
-          ./gradlew TMessagesProj:assemble${{ matrix.flavor }}
+          ./gradlew TMessagesProj:assembleMiniRelease
 
           echo "APK_FILE=$(find TMessagesProj/build/outputs/apk -name '*arm64-v8a*.apk')" >> $GITHUB_ENV
           echo "APK_FILE_ARMV7=$(find TMessagesProj/build/outputs/apk -name '*armeabi*.apk')" >> $GITHUB_ENV
-          echo "APK_FILE_X86=$(find TMessagesProj/build/outputs/apk -name '*x86-*.apk')" >> $GITHUB_ENV
-          echo "APK_FILE_X64=$(find TMessagesProj/build/outputs/apk -name '*x86_64*.apk')" >> $GITHUB_ENV
       - uses: actions/upload-artifact@v2
-        if: github.event.inputs.artifacts == 'y'
         name: Upload apk (arm64-v8a)
         with:
-          name: NekoX-${{ matrix.flavor }}-arm64-v8a
+          name: Nagram-arm64-v8a
           path: ${{ env.APK_FILE }}
       - uses: actions/upload-artifact@v2
-        if: github.event.inputs.artifacts == 'y'
         name: Upload apk (armeabi-v7a)
         with:
-          name: NekoX-${{ matrix.flavor }}-armeabi-v7a
+          name: Nagram-armeabi-v7a
           path: ${{ env.APK_FILE_ARMV7 }}
-      - uses: actions/upload-artifact@v2
-        if: github.event.inputs.artifacts == 'y'
-        name: Upload apk (x86_64)
-        with:
-          name: NekoX-${{ matrix.flavor }}-x86_64
-          path: ${{ env.APK_FILE_X64 }}
-      - uses: actions/upload-artifact@v2
-        if: github.event.inputs.artifacts == 'y'
-        name: Upload apk (x86)
-        with:
-          name: NekoX-${{ matrix.flavor }}-x86
-          path: ${{ env.APK_FILE_X86 }}
 
-  build-dev:
-    name: Gradle Build
+  upload:
+    name: Upload to Telegram
     runs-on: ubuntu-latest
     needs:
-      - native
-      - v2ray
+      - build
       - telegram-bot-api
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup Android SDK Tools
-        uses: android-actions/setup-android@v2
-      - name: Fetch Status
-        run: |
-          git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
-          git submodule status TMessagesProj/jni/boringssl > boringssl_status
-          git submodule status v2ray > v2ray_status
-      - name: Native Cache (arm64-v8a)
-        uses: actions/cache@v2
+      - name: Donwload Artifacts
+        uses: actions/download-artifact@v2
         with:
-          path: |
-            TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-arm64-v8a
-      - name: V2ray Cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            TMessagesProj/libs/libv2ray.aar
-          key: ${{ hashFiles('bin/libs/v2ray/*', 'v2ray_status') }}
-      - name: Configure Gradle
-        run: |
-          sed -i -e "s/16384/6144/g" gradle.properties
-          echo "sdk.dir=${ANDROID_HOME}" >> local.properties
-          echo "ndk.dir=${ANDROID_HOME}/ndk-bundle" >> local.properties
-      - name: Gradle cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle
-          key: gradle-${{ hashFiles('**/*.gradle') }}
+          path: artifacts
       - name: Download Telegram Bot API Binary
         uses: actions/download-artifact@master
         with:
           name: telegram-bot-api-binary
           path: .
-      - name: Debug Build
-        run: |
-          export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
-          export DEBUG_BUILD=true
-          export NATIVE_TARGET=arm64-v8a
-          ./gradlew TMessagesProj:assembleMiniRelease
-      - name: Send Build
+      - name: Send to Telegram
         run: |
           chmod +x telegram-bot-api-binary
           ./telegram-bot-api-binary --api-id=11535358 --api-hash=33d372962fadb01df47e6ceed4e33cd6 --local 2>&1 > /dev/null &
-          apk=$(find TMessagesProj/build/outputs/apk/mini/release -name '*arm64-v8a*.apk' | head -n 1)
+          export mini64=$(find artifacts -name "*arm64-v8a*" | tail -n 1)
+          echo $mini64
           curl http://127.0.0.1:8081/bot${{ secrets.HELPER_BOT_TOKEN }}/sendDocument \
             -X POST \
             -F chat_id="${{ secrets.HELPER_BOT_TARGET }}" \
-            -F document="@$apk" \
+            -F document="@$mini64" \
             -F caption="Test version, ${{ github.event.head_commit.message }}" \
             --silent --show-error --fail >/dev/null
           pkill telegram-bot
-
   telegram-bot-api:
     name: Telegram Bot API
     runs-on: ubuntu-latest
