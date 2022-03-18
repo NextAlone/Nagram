@@ -34,6 +34,8 @@ import java.util.Collections;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
 
     private Context mContext;
@@ -250,8 +252,8 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         int peopleNearbyIcon;
         if (eventType == 0) {
             newGroupIcon = R.drawable.menu_groups_ny;
-            //newSecretIcon = R.drawable.menu_secret_ny;
-            //newChannelIcon = R.drawable.menu_channel_ny;
+            newSecretIcon = R.drawable.menu_secret_ny;
+            newChannelIcon = R.drawable.menu_channel_ny;
             contactsIcon = R.drawable.menu_contacts_ny;
             callsIcon = R.drawable.menu_calls_ny;
             archiveIcon = R.drawable.msg_archive;
@@ -262,8 +264,8 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             peopleNearbyIcon = R.drawable.menu_nearby_ny;
         } else if (eventType == 1) {
             newGroupIcon = R.drawable.menu_groups_14;
-            //newSecretIcon = R.drawable.menu_secret_14;
-            //newChannelIcon = R.drawable.menu_broadcast_14;
+            newSecretIcon = R.drawable.menu_secret_14;
+            newChannelIcon = R.drawable.menu_broadcast_14;
             contactsIcon = R.drawable.menu_contacts_14;
             callsIcon = R.drawable.menu_calls_14;
             archiveIcon = R.drawable.msg_archive;
@@ -274,8 +276,8 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             peopleNearbyIcon = R.drawable.menu_secret_14;
         } else if (eventType == 2) {
             newGroupIcon = R.drawable.menu_groups_hw;
-            //newSecretIcon = R.drawable.menu_secret_hw;
-            //newChannelIcon = R.drawable.menu_broadcast_hw;
+            newSecretIcon = R.drawable.menu_secret_hw;
+            newChannelIcon = R.drawable.menu_broadcast_hw;
             contactsIcon = R.drawable.menu_contacts_hw;
             callsIcon = R.drawable.menu_calls_hw;
             archiveIcon = R.drawable.msg_archive;
@@ -286,8 +288,8 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             peopleNearbyIcon = R.drawable.menu_secret_hw;
         } else {
             newGroupIcon = R.drawable.menu_groups;
-            //newSecretIcon = R.drawable.menu_secret;
-            //newChannelIcon = R.drawable.menu_broadcast;
+            newSecretIcon = R.drawable.menu_secret;
+            newChannelIcon = R.drawable.menu_broadcast;
             contactsIcon = R.drawable.menu_contacts;
             callsIcon = R.drawable.menu_calls;
             archiveIcon = R.drawable.msg_archive;
@@ -297,18 +299,20 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             helpIcon = R.drawable.menu_help;
             peopleNearbyIcon = R.drawable.menu_nearby;
         }
-        items.add(new Item(2, LocaleController.getString("NewGroup", R.string.NewGroup), newGroupIcon));
-        //items.add(new Item(3, LocaleController.getString("NewSecretChat", R.string.NewSecretChat), newSecretIcon));
-        //items.add(new Item(4, LocaleController.getString("NewChannel", R.string.NewChannel), newChannelIcon));
-        items.add(new Item(6, LocaleController.getString("Contacts", R.string.Contacts), contactsIcon));
-        items.add(new Item(10, LocaleController.getString("Calls", R.string.Calls), callsIcon));
-        if (hasGps) items.add(new Item(12, LocaleController.getString("PeopleNearby", R.string.PeopleNearby), peopleNearbyIcon));
-        items.add(new Item(14, LocaleController.getString("ArchivedChats", R.string.ArchivedChats), archiveIcon));
-        items.add(new Item(11, LocaleController.getString("SavedMessages", R.string.SavedMessages), savedIcon));
+        if (ExteraConfig.newGroup) items.add(new Item(2, LocaleController.getString("NewGroup", R.string.NewGroup), newGroupIcon));
+        if (ExteraConfig.newSecretChat) items.add(new Item(3, LocaleController.getString("NewSecretChat", R.string.NewSecretChat), newSecretIcon));
+        if (ExteraConfig.newChannel) items.add(new Item(4, LocaleController.getString("NewChannel", R.string.NewChannel), newChannelIcon));
+        if (ExteraConfig.contacts) items.add(new Item(6, LocaleController.getString("Contacts", R.string.Contacts), contactsIcon));
+        if (ExteraConfig.calls) items.add(new Item(10, LocaleController.getString("Calls", R.string.Calls), callsIcon));
+        if (hasGps) {
+            if (ExteraConfig.peopleNearby) items.add(new Item(12, LocaleController.getString("PeopleNearby", R.string.PeopleNearby), peopleNearbyIcon));
+        }
+        if (ExteraConfig.archivedChats) items.add(new Item(14, LocaleController.getString("ArchivedChats", R.string.ArchivedChats), archiveIcon));
+        if (ExteraConfig.savedMessages) items.add(new Item(11, LocaleController.getString("SavedMessages", R.string.SavedMessages), savedIcon));
         items.add(new Item(8, LocaleController.getString("Settings", R.string.Settings), settingsIcon));
-        items.add(null); // divider
-        items.add(new Item(7, LocaleController.getString("InviteFriends", R.string.InviteFriends), inviteIcon));
-        items.add(new Item(13, LocaleController.getString("TelegramFeatures", R.string.TelegramFeatures), helpIcon));
+        if (ExteraConfig.inviteFriends || ExteraConfig.telegramFeatures) items.add(null);
+        if (ExteraConfig.inviteFriends) items.add(new Item(7, LocaleController.getString("InviteFriends", R.string.InviteFriends), inviteIcon));
+        if (ExteraConfig.telegramFeatures) items.add(new Item(13, LocaleController.getString("TelegramFeatures", R.string.TelegramFeatures), helpIcon));
     }
 
     public int getId(int position) {

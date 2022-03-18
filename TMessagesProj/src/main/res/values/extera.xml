@@ -51,6 +51,11 @@
     <string name="DisablePlayback">Disable playback</string>
     <string name="DPDescription">Disables playback when volume button is pressed</string>
 
+    <string name="Drawer">Drawer</string>
+    <string name="Attention">ATTENTION!</string>
+    <string name="AttentionDescription">THIS ITEM MAY BE CHANGED OR REMOVED IN THE FUTURE!\nRestart the app to take effect.</string>
+    <string name="PNDescription">May not be displayed if GPS is disabled.</string>
+
     <string name="ConfirmCall">Confirm call</string>
     <string name="CallTo">Call to **%1$s**?</string>
 </resources>

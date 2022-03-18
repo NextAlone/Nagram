@@ -35,6 +35,17 @@ public class ExteraConfig {
     public static boolean pauseOnMinimize;
     public static boolean disablePlayback;
 
+    public static boolean newGroup;
+    public static boolean newSecretChat;
+    public static boolean newChannel;
+    public static boolean contacts;
+    public static boolean calls;
+    public static boolean peopleNearby;
+    public static boolean archivedChats;
+    public static boolean savedMessages;
+    public static boolean inviteFriends;
+    public static boolean telegramFeatures;
+
     private static boolean configLoaded;
 
     static {
@@ -69,6 +80,17 @@ public class ExteraConfig {
             rearVideoMessages = preferences.getBoolean("rearVideoMessages", false);
             pauseOnMinimize = preferences.getBoolean("pauseOnMinimize", true);
             disablePlayback = preferences.getBoolean("disablePlayback", true);
+
+            newGroup = preferences.getBoolean("newGroup", true);
+            newSecretChat = preferences.getBoolean("newSecretChat", false);
+            newChannel = preferences.getBoolean("newChannel", false);
+            contacts = preferences.getBoolean("contacts", true);
+            calls = preferences.getBoolean("calls", false);
+            peopleNearby = preferences.getBoolean("peopleNearby", false);
+            archivedChats = preferences.getBoolean("archivedChats", true);
+            savedMessages = preferences.getBoolean("savedMessages", true);
+            inviteFriends = preferences.getBoolean("inviteFriends", false);
+            telegramFeatures = preferences.getBoolean("telegramFeatures", true);
 
             configLoaded = true;
         }
@@ -198,6 +220,85 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("disablePlayback", disablePlayback);
+        editor.commit();
+    }
+
+    public static void toggleNewGroup() {
+        newGroup = !newGroup;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("newGroup", newGroup);
+        editor.commit();
+    }
+
+    public static void toggleNewSecretChat() {
+        newSecretChat = !newSecretChat;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("newSecretChat", newSecretChat);
+        editor.commit();
+    }
+
+    public static void toggleNewChannel() {
+        newChannel = !newChannel;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("newChannel", newChannel);
+        editor.commit();
+    }
+
+    public static void toggleContacts() {
+        contacts = !contacts;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("contacts", contacts);
+        editor.commit();
+    }
+
+    public static void toggleCalls() {
+        calls = !calls;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("calls", calls);
+        editor.commit();
+    }
+
+    public static void togglePeopleNearby() {
+        peopleNearby = !peopleNearby;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("peopleNearby", peopleNearby);
+        editor.commit();
+    }
+
+    public static void toggleArchivedChats() {
+        archivedChats = !archivedChats;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("archivedChats", archivedChats);
+        editor.commit();
+    }
+
+    public static void toggleSavedMessages() {
+        savedMessages = !savedMessages;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("savedMessages", savedMessages);
+        editor.commit();
+    }
+
+    public static void toggleInviteFriends() {
+        inviteFriends = !inviteFriends;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("inviteFriends", inviteFriends);
+        editor.commit();
+    }
+    public static void toggleTelegramFeatures() {
+        telegramFeatures = !telegramFeatures;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("telegramFeatures", telegramFeatures);
         editor.commit();
     }
 }

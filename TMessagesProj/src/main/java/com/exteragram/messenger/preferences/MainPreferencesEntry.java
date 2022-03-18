@@ -37,6 +37,7 @@ public class MainPreferencesEntry extends BaseFragment {
     private int categoryHeaderRow;
     private int appearanceRow;
     private int chatsRow;
+    private int drawerRow;
 
     private int dividerInfoRow;
 
@@ -97,10 +98,12 @@ public class MainPreferencesEntry extends BaseFragment {
                 MessagesController.getInstance(currentAccount).openByUserName(("exteragram"), this, 1);
             } else if (position == groupRow) {
                 MessagesController.getInstance(currentAccount).openByUserName(("exterachat"), this, 1);
-            } else if (position == chatsRow) {
-                presentFragment(new ChatsPreferencesEntry());
             } else if (position == appearanceRow) {
                 presentFragment(new AppearancePreferencesEntry());
+            } else if (position == chatsRow) {
+                presentFragment(new ChatsPreferencesEntry());
+            } else if (position == drawerRow) {
+                presentFragment(new DrawerPreferencesEntry());
             }
         });
         return fragmentView;
@@ -121,6 +124,7 @@ public class MainPreferencesEntry extends BaseFragment {
         categoryHeaderRow = rowCount++;
         appearanceRow = rowCount++;
         chatsRow = rowCount++;
+        drawerRow = rowCount++;
 
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -166,6 +170,8 @@ public class MainPreferencesEntry extends BaseFragment {
                         textCell.setTextAndIcon(LocaleController.getString("Appearance", R.string.Appearance), R.drawable.msg_theme, true);
                     } else if (position == chatsRow) {
                         textCell.setTextAndIcon(LocaleController.getString("Chats", R.string.Chats), R.drawable.menu_chats, true);
+                    } else if (position == drawerRow) {
+                        textCell.setTextAndIcon(LocaleController.getString("Drawer", R.string.Drawer), R.drawable.msg_list, true);
                     }
                     textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                     break;
@@ -225,7 +231,7 @@ public class MainPreferencesEntry extends BaseFragment {
         public int getItemViewType(int position) {
             if (position == dividerInfoRow) {
                 return 1;
-            } else if (position == appearanceRow || position == chatsRow ||
+            } else if (position == appearanceRow || position == chatsRow || position == drawerRow ||
                        position == channelRow || position == groupRow || position == sourceCodeRow) {
                 return 2;
             } else if (position == infoHeaderRow || position == categoryHeaderRow) {
