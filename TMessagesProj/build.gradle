@@ -400,6 +400,10 @@ dependencies {
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.5"
 
 }
+dependencies {
+    // add for undo and redo
+    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:4.3'
+}
 
 apply plugin: "com.google.gms.google-services"
 apply plugin: "com.google.firebase.crashlytics"

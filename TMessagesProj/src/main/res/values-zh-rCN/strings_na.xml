@@ -10,4 +10,7 @@
     <string name="CombineMessageEnabledWithReply">合并并回复首条消息</string>
     <string name="CombineMessageEnabled">仅合并消息</string>
     <string name="CombineMessageDisabled">关闭</string>
+    <string name="TextUndoRedo">撤销/重做</string>
+    <string name="TextUndo">撤销</string>
+    <string name="TextRedo">重做</string>
 </resources>

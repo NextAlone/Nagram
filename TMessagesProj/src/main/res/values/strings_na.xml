@@ -10,4 +10,7 @@
     <string name="CombineMessageEnabledWithReply">Combine Message Enabled With Reply</string>
     <string name="CombineMessageEnabled">Combine Message Enabled</string>
     <string name="CombineMessageDisabled">Combine Message Disabled</string>
+    <string name="TextUndoRedo">Undo/Redo</string>
+    <string name="TextUndo">Undo</string>
+    <string name="TextRedo">Redo</string>
 </resources>
