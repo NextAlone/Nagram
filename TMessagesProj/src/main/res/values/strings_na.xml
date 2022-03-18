@@ -13,4 +13,5 @@
     <string name="TextUndoRedo">Undo/Redo</string>
     <string name="TextUndo">Undo</string>
     <string name="TextRedo">Redo</string>
+    <string name="NoiseSuppressAndVoiceEnhance">Noise Suppress And Voice Enhance</string>
 </resources>

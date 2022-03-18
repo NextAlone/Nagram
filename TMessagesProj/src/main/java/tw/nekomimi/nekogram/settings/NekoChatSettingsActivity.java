@@ -119,6 +119,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
             LocaleController.getString("combineMessageEnabled", R.string.CombineMessageEnabled),
             LocaleController.getString("combineMessageDisabled", R.string.CombineMessageDisabled)
     }, null));
+    private final AbstractConfigCell audioEnhanceRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getNoiseSuppressAndVoiceEnhance()));
     private final AbstractConfigCell divider1 = cellGroup.appendCell(new ConfigCellDivider());
     private final AbstractConfigCell header2 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("AutoDownload")));
     private final AbstractConfigCell win32Row = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableAutoDownloadingWin32Executable));
