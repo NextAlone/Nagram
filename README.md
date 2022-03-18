@@ -9,11 +9,13 @@ Nagram is a third-party Telegram client based on [NekoX](https://github.com/Neko
 
 ## Additional feature over NekoX
 
+1. Nice icon
 1. Combine message
-2. Editable text style 
-3. Forced copy
-4. Invert reply
-5. Quick reply in longClick menu
+1. Editable text style 
+1. Forced copy
+1. Invert reply
+1. Quick reply in longClick menu
+1. Undo and Redo
 
 ----
 
