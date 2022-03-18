@@ -230,7 +230,7 @@ public class LoginActivity extends BaseFragment {
     private boolean checkPermissions = true;
     private boolean checkShowPermissions = true;
     private boolean newAccount;
-    private boolean syncContacts = true;
+    private boolean syncContacts = false;
     private boolean testBackend = false;
 
     private boolean cancelAccountDeletionMode = false;
@@ -1911,7 +1911,7 @@ public class LoginActivity extends BaseFragment {
                     }
                     CheckBoxCell cell = (CheckBoxCell) v;
                     syncContacts = !syncContacts;
-                    cell.setChecked(syncContacts, true);
+                    cell.setChecked(syncContacts, false);
                     if (syncContacts) {
                         BulletinFactory.of(slideViewsContainer, null).createSimpleBulletin(R.raw.contacts_sync_on, LocaleController.getString("SyncContactsOn", R.string.SyncContactsOn)).show();
                     } else {
