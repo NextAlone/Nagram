@@ -25,7 +25,7 @@ dependencies {
     implementation "androidx.sharetarget:sharetarget:1.2.0-rc01"
     implementation 'com.google.android.material:material:1.5.0'
 
-    compileOnly 'org.checkerframework:checker-qual:3.21.1'
+    compileOnly 'org.checkerframework:checker-qual:3.21.3'
     compileOnly 'org.checkerframework:checker-compat-qual:2.5.5'
     implementation 'com.google.firebase:firebase-messaging:23.0.1'
     implementation 'com.google.firebase:firebase-config:21.0.2'
@@ -90,6 +90,17 @@ android {
         disable 'BlockedPrivateApi'
     }
 
+    configurations {
+        all {
+            exclude group: 'commons-logging', module: 'commons-logging'
+            exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+        }
+    }
+
+    dexOptions {
+        jumboMode = true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -104,13 +115,6 @@ android {
             keyAlias RELEASE_KEY_ALIAS
             keyPassword RELEASE_KEY_PASSWORD
         }
-
-        debug {
-            storeFile file("config/extera.jks")
-            storePassword RELEASE_STORE_PASSWORD
-            keyAlias RELEASE_KEY_ALIAS
-            keyPassword RELEASE_KEY_PASSWORD
-        }
     }
 
     packagingOptions {
@@ -119,9 +123,10 @@ android {
 
     buildTypes {
         debug {
-            debuggable true
+            debuggable false
             jniDebuggable true
             applicationIdSuffix ".beta"
+            signingConfig signingConfigs.release
             minifyEnabled true
             shrinkResources true
             multiDexEnabled true
@@ -133,6 +138,7 @@ android {
         release {
             debuggable false
             jniDebuggable false
+            signingConfig signingConfigs.release
             minifyEnabled true
             shrinkResources true
             multiDexEnabled true
