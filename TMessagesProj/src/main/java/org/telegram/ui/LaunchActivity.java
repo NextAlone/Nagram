@@ -535,7 +535,8 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
         sideMenu.setOnItemClickListener((view, position, x, y) -> {
             if (position == 0) {
                 DrawerProfileCell profileCell = (DrawerProfileCell) view;
-                if (profileCell.isInAvatar(x, y)) {
+                if (profileCell.isInAvatar(x, y)
+                    || MessagesController.getGlobalMainSettings().getBoolean("passcodeHideAccountSelect", false)) {
                     openSettings(profileCell.hasAvatar());
                 } else {
                     drawerLayoutAdapter.setAccountsShown(!drawerLayoutAdapter.isAccountsShown(), true);

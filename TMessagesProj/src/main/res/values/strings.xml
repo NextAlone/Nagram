@@ -5496,4 +5496,13 @@
     <string name="DeleteAllYourMessagesInfo">Are you sure you want **delete all your messages** from this chat?</string>
     <string name="ReallySure">Are you **really sure**?</string>
     <string name="DisableGlobalSearch">Disable Global Search</string>
+    <string name="ForkPasscodeSettingsTitle">Fork Client Passcode</string>
+    <string name="PasscodeHideSection">Hide this section from settings</string>
+    <string name="PasscodeHideSectionInfo">You will able to open it again ON LONG PRESS on "Fork Client Settings"</string>
+    <string name="PasscodeHideAccountSelect">Hide accounts from main menu</string>
+    <string name="PasscodeForAccount">Set passcode</string>
+    <string name="PasscodeForAccountInfo">Passcode will open THIS account</string>
+    <string name="PasscodeBadInfo">Sorry, firstly you have to turn on your local passcode in Privacy Settings.</string>
+    <string name="PasscodeClear">Clear all passcodes</string>
+    <string name="PasscodeCleared">Cleared</string>
 </resources>

@@ -147,6 +147,7 @@ public class ForkSettingsActivity extends BaseFragment {
     private int replaceForward;
     private int mentionByName;
     private int openArchiveOnPull;
+    private int passcodeRow;
     private int hideBottomButton;
     private int disableFlipPhotos;
     private int formatWithSeconds;
@@ -160,6 +161,12 @@ public class ForkSettingsActivity extends BaseFragment {
 
     private ArrayList<Integer> emptyRows = new ArrayList<Integer>();
     private int syncPinsRow;
+
+    private boolean longClicked = false;
+
+    public ForkSettingsActivity(boolean longClicked) {
+        this.longClicked = longClicked;
+    }
 
     private static int getIntLocale(String str) {
         try {
@@ -222,6 +229,14 @@ public class ForkSettingsActivity extends BaseFragment {
         sectionRows.add(rowCount++);
         inappCameraRow = rowCount++;
         systemCameraRow = rowCount++;
+
+        if (longClicked
+            || !MessagesController.getGlobalMainSettings().getBoolean("passcodeHideSection", false)) {
+            emptyRows.add(rowCount++);
+            passcodeRow = rowCount++;
+        } else {
+            passcodeRow = -1;
+        }
 
         emptyRows.add(rowCount++);
         sectionRows.add(rowCount++);
@@ -361,6 +376,8 @@ public class ForkSettingsActivity extends BaseFragment {
                         }
                         return null;
                     });
+            } else if (position == passcodeRow) {
+                presentFragment(new ForkSettingsPasscodeActivity());
             }
         });
 
@@ -397,6 +414,9 @@ public class ForkSettingsActivity extends BaseFragment {
                         String t = LocaleController.getString("EditAdminRank", R.string.EditAdminRank);
                         final String v = MessagesController.getGlobalMainSettings().getString("forkCustomTitle", "Fork Client");
                         textCell.setTextAndValue(t, v, false);
+                    } else if (position == passcodeRow) {
+                        String t = LocaleController.getString("ForkPasscodeSettingsTitle", R.string.ForkPasscodeSettingsTitle);
+                        textCell.setTextAndValue(t, "", false);
                     }
                     break;
                 }
@@ -506,6 +526,7 @@ public class ForkSettingsActivity extends BaseFragment {
                         || position == hideBottomButton
                         || position == syncPinsRow
                         || position == showNotificationContent
+                        || position == passcodeRow
                         || position == photoHasStickerRow;
             return fork;
         }
@@ -544,7 +565,8 @@ public class ForkSettingsActivity extends BaseFragment {
         public int getItemViewType(int position) {
             if (emptyRows.contains(position)) {
                 return 1;
-            } else if (position == customTitleRow) {
+            } else if (position == customTitleRow
+                    || position == passcodeRow) {
                 return 2;
             } else if (position == squareAvatarsRow
                 || position == hideSensitiveDataRow
