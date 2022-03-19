@@ -550,7 +550,8 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
         sideMenu.setOnItemClickListener((view, position, x, y) -> {
             if (position == 0) {
                 DrawerProfileCell profileCell = (DrawerProfileCell) view;
-                if (profileCell.isInAvatar(x, y)) {
+                if (profileCell.isInAvatar(x, y)
+                    || MessagesController.getGlobalMainSettings().getBoolean("passcodeHideAccountSelect", false)) {
                     openSettings(profileCell.hasAvatar());
                 } else {
                     drawerLayoutAdapter.setAccountsShown(!drawerLayoutAdapter.isAccountsShown(), true);
@@ -2457,7 +2458,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                 } else if (open_settings == 6) {
                     fragment = new EditWidgetActivity(open_widget_edit_type, open_widget_edit);
                 } else if (open_settings == 100) {
-                    fragment = new NekoSettingsActivity();
+                    fragment = new NekoSettingsActivity(true);
                 } else {
                     fragment = null;
                 }

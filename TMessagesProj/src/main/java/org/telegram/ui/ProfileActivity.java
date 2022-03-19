@@ -2834,13 +2834,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             } else if (position == devicesRow) {
                 presentFragment(new SessionsActivity(0));
             } else if (position == nekoRow) {
-                presentFragment(new NekoSettingsActivity());
+                presentFragment(new NekoSettingsActivity(false));
             } else if (position == questionRow) {
-                Browser.openUrl(getParentActivity(), "https://t.me/NekogramX");
+                Browser.openUrl(getParentActivity(), "https://t.me/TeleTux");
             } else if (position == faqRow) {
                 Browser.openUrl(getParentActivity(), NekoXConfig.FAQ_URL);
             } else if (position == policyRow) {
-                Browser.openUrl(getParentActivity(), "https://github.com/NekoX-Dev/NekoX/wiki/Privacy-Policy");
+                Browser.openUrl(getParentActivity(), "https://github.com/TeleTux/TeleTux/wiki/Privacy-Policy");
             } else if (position == sendLogsRow) {
                 sendLogs();
             } else if (position == clearLogsRow) {
@@ -3048,7 +3048,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     return Unit.INSTANCE;
                 });
                 builder.addItem(LocaleController.getString("SwitchVersion", R.string.SwitchVersion), R.drawable.baseline_replay_24, (it) -> {
-                    Browser.openUrl(ProfileActivity.this.getParentActivity(), "https://github.com/NekoX-Dev/NekoX/releases");
+                    Browser.openUrl(ProfileActivity.this.getParentActivity(), "https://github.com/TeleTuxv/TeleTux/releases");
                     return Unit.INSTANCE;
                 });
 
@@ -3127,6 +3127,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
             @Override
             public boolean onItemClick(View view, int position) {
+                if (position == nekoRow) {
+                    presentFragment(new NekoSettingsActivity(true));
+                    return true;
+                }
                 if (position == versionRow) {
                     pressCount++;
                     if (pressCount >= 2 || BuildVars.DEBUG_PRIVATE_VERSION) {

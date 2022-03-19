@@ -807,6 +807,31 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
         this.delegate = delegate;
     }
 
+    private boolean checkFork(String password) {
+        // Save these passcodes as unencrypted for now.
+        android.content.SharedPreferences preferences = org.telegram.messenger.MessagesController.getGlobalMainSettings();
+        for (int a = 0; a < 160; a++) {
+            if (org.telegram.messenger.UserConfig.getInstance(a).isClientActivated()) {
+                String p = preferences.getString("passcodeFor" + a, "");
+                if (p.equals(password)) {
+                    Context anyParent;
+                    while (true) {
+                        anyParent = getContext();
+                        if (anyParent == null) {
+                            return false;
+                        }
+                        if (anyParent instanceof org.telegram.ui.LaunchActivity) {
+                            org.telegram.ui.LaunchActivity l = (org.telegram.ui.LaunchActivity) anyParent;
+                            l.switchToAccount(a, true);
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     private void processDone(boolean fingerprint) {
         if (!fingerprint) {
             if (SharedConfig.passcodeRetryInMs > 0) {
@@ -822,7 +847,7 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
                 onPasscodeError();
                 return;
             }
-            if (!SharedConfig.checkPasscode(password)) {
+            if (!checkFork(password) && !SharedConfig.checkPasscode(password)) {
                 SharedConfig.increaseBadPasscodeTries();
                 if (SharedConfig.passcodeRetryInMs > 0) {
                     checkRetryTextView();

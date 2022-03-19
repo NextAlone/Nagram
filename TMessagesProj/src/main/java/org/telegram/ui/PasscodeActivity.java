@@ -167,6 +167,14 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
 
     private Runnable onShowKeyboardCallback;
 
+    private int passcodeForAccount = -1;
+
+    public PasscodeActivity(@PasscodeActivityType int type, int passcodeForAccount) {
+        super();
+        this.type = type;
+        this.passcodeForAccount = passcodeForAccount;
+    }
+
     public PasscodeActivity(@PasscodeActivityType int type) {
         super();
         this.type = type;
@@ -1023,6 +1031,14 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             }
 
             boolean isFirst = SharedConfig.passcodeHash.length() == 0;
+
+            if (passcodeForAccount != -1) {
+                android.content.SharedPreferences preferences = org.telegram.messenger.MessagesController.getGlobalMainSettings();
+                android.content.SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("passcodeFor" + currentAccount, firstPassword);
+                editor.commit();
+            } else {
+
             try {
                 SharedConfig.passcodeSalt = new byte[16];
                 Utilities.random.nextBytes(SharedConfig.passcodeSalt);
@@ -1035,6 +1051,9 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             } catch (Exception e) {
                 FileLog.e(e);
             }
+
+            }
+
             SharedConfig.allowScreenCapture = true;
             SharedConfig.passcodeType = currentPasswordType;
             SharedConfig.saveConfig();
@@ -1071,6 +1090,30 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 onPasscodeError();
                 return;
             }
+            //
+            android.content.SharedPreferences preferences = org.telegram.messenger.MessagesController.getGlobalMainSettings();
+            for (int a = 0; a < 160; a++) {
+                if (UserConfig.getInstance(a).isClientActivated()) {
+                    String p = preferences.getString("passcodeFor" + a, "");
+                    if (p.equals(passwordEditText.getText().toString())) {
+                        SharedConfig.badPasscodeTries = 0;
+
+                        android.app.Activity anyParent;
+                        while (true) {
+                            anyParent = getParentActivity();
+                            if (anyParent == null) {
+                                return;
+                            }
+                            if (anyParent instanceof LaunchActivity) {
+                                LaunchActivity l = (LaunchActivity) anyParent;
+                                l.switchToAccount(a, true);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            //
             if (!SharedConfig.checkPasscode(password)) {
                 SharedConfig.increaseBadPasscodeTries();
                 passwordEditText.setText("");
