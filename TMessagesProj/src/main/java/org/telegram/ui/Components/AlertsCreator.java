@@ -1649,11 +1649,11 @@ public class AlertsCreator {
         final String title;
         final String message;
         if (videoCall) {
-            title = LocaleController.getString("VideoCallAlertTitle", R.string.VideoCallAlertTitle);
-            message = LocaleController.formatString("VideoCallAlert", R.string.VideoCallAlert, UserObject.getUserName(user));
+            title = LocaleController.getString("ConfirmCall", R.string.ConfirmCall);
+            message = LocaleController.formatString("CallTo", R.string.CallTo, UserObject.getUserName(user));
         } else {
-            title = LocaleController.getString("CallAlertTitle", R.string.CallAlertTitle);
-            message = LocaleController.formatString("CallAlert", R.string.CallAlert, UserObject.getUserName(user));
+            title = LocaleController.getString("ConfirmCall", R.string.ConfirmCall);
+            message = LocaleController.formatString("CallTo", R.string.CallTo, UserObject.getUserName(user));
         }
 
         TextView messageTextView = new TextView(context);

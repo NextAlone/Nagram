@@ -84,13 +84,10 @@ public class VoIPHelper {
 		}
 
 		if (!confirmed) {
-			new AlertDialog.Builder(activity)
-					.setTitle(LocaleController.getString("ConfirmCall", R.string.ConfirmCall))
-					.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("CallTo", R.string.CallTo,
-							ContactsController.formatName(user.first_name, user.last_name))))
-					.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialog, which) -> startCall(user, videoCall, canVideoCall, activity, userFull, accountInstance, true))
-					.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null)
-					.show();
+			final BaseFragment lastFragment = ((LaunchActivity) activity).getActionBarLayout().getLastFragment();
+			if (lastFragment != null) {
+				AlertsCreator.createCallDialogAlert(lastFragment, lastFragment.getMessagesController().getUser(user.id), videoCall);
+			}
 			return;
 		}
 
