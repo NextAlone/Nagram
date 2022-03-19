@@ -31,6 +31,8 @@ public class ExteraConfig {
     public static boolean archiveOnPull;
     public static boolean dateOfForwardedMsg;
 
+    public static boolean disableReactions;
+
     public static boolean rearVideoMessages;
     public static boolean disableCamera;
     public static boolean pauseOnMinimize;
@@ -77,6 +79,8 @@ public class ExteraConfig {
             hideKeyboardOnScroll = preferences.getBoolean("hideKeyboardOnScroll", true);
             archiveOnPull = preferences.getBoolean("archiveOnPull", true);
             dateOfForwardedMsg = preferences.getBoolean("dateOfForwardedMsg", false);
+
+            disableReactions = preferences.getBoolean("disableReactions", false);
 
             rearVideoMessages = preferences.getBoolean("rearVideoMessages", false);
             disableCamera = preferences.getBoolean("disableCamera", false);
@@ -199,6 +203,14 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("dateOfForwardedMsg", dateOfForwardedMsg);
+        editor.commit();
+    }
+
+    public static void toggleDisableReactions() {
+        disableReactions = !disableReactions;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("disableReactions", disableReactions);
         editor.commit();
     }
 

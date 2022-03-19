@@ -36,9 +36,6 @@ import org.telegram.ui.Components.SeekBarView;
 import org.telegram.ui.Components.UndoView;
 
 import com.exteragram.messenger.ExteraConfig;
-import com.google.android.gms.vision.text.Text;
-
-import java.util.Locale;
 
 public class ChatsPreferencesEntry extends BaseFragment {
 
@@ -56,6 +53,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
     private int hideSendAsChannelRow;
     private int hideStickerTimeRow;
     private int hideKeyboardOnScrollRow;
+    private int disableReactionsRow;
     private int archiveOnPullRow;
     private int dateOfForwardedMsgRow;
     private int chatDividerRow;
@@ -239,6 +237,11 @@ public class ChatsPreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.dateOfForwardedMsg);
                 }
+            } else if (position == disableReactionsRow) {
+                ExteraConfig.toggleDisableReactions();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(ExteraConfig.disableReactions);
+                }
             } else if (position == rearVideoMessagesRow) {
                 ExteraConfig.toggleRearVideoMessages();
                 if (view instanceof TextCheckCell) {
@@ -279,6 +282,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
         hideSendAsChannelRow = rowCount++;
         hideStickerTimeRow = rowCount++;
         hideKeyboardOnScrollRow = rowCount++;
+        disableReactionsRow = rowCount++;
         archiveOnPullRow = rowCount++;
         dateOfForwardedMsgRow = rowCount++;
         chatDividerRow = rowCount++;
@@ -345,6 +349,8 @@ public class ChatsPreferencesEntry extends BaseFragment {
                         textCheckCell.setTextAndCheck(LocaleController.getString("ArchiveOnPull", R.string.ArchiveOnPull), ExteraConfig.archiveOnPull, true);
                     } else if (position == dateOfForwardedMsgRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("DateOfForwardedMsg", R.string.DateOfForwardedMsg), ExteraConfig.dateOfForwardedMsg, true);
+                    } else if (position == disableReactionsRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString("DisableReactions", R.string.DisableReactions), ExteraConfig.disableReactions, true);
                     } else if (position == rearVideoMessagesRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("RearVideoMessages", R.string.RearVideoMessages), ExteraConfig.rearVideoMessages, true);
                     } else if (position == disableCameraRow) {
@@ -396,8 +402,9 @@ public class ChatsPreferencesEntry extends BaseFragment {
             } else if (position == stickersHeaderRow || position == chatHeaderRow || position == mediaHeaderRow) {
                 return 2;
             } else if (position == hideStickerTimeRow || position == hideSendAsChannelRow || position == hideKeyboardOnScrollRow ||
-                       position == archiveOnPullRow || position == dateOfForwardedMsgRow || position == rearVideoMessagesRow ||
-                       position == disableCameraRow || position == pauseOnMinimizeRow || position == disablePlaybackRow) {
+                       position == archiveOnPullRow || position == dateOfForwardedMsgRow || position == disableReactionsRow ||
+                       position == rearVideoMessagesRow || position == disableCameraRow || position == pauseOnMinimizeRow ||
+                       position == disablePlaybackRow) {
                 return 3;
             } else if (position == stickerSizeRow) {
                 return 4;

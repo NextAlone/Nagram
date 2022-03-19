@@ -1424,6 +1424,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (reaction == null) {
                 return false;
             }
+            if (ExteraConfig.disableReactions) return false;
             boolean available = dialog_id >= 0;
             if (!available && chatInfo != null) {
                 for (String s : chatInfo.available_reactions) {
@@ -1452,6 +1453,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (reaction == null || cell.getMessageObject().isSponsored()) {
                 return;
             }
+            if (ExteraConfig.disableReactions) return;
             boolean available = dialog_id >= 0;
             if (!available && chatInfo != null) {
                 for (String s : chatInfo.available_reactions) {
