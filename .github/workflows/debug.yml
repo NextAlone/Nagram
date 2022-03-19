@@ -253,13 +253,7 @@ jobs:
           chmod +x telegram-bot-api-binary
           ./telegram-bot-api-binary --api-id=11535358 --api-hash=33d372962fadb01df47e6ceed4e33cd6 --local 2>&1 > /dev/null &
           export mini64=$(find artifacts -name "*arm64-v8a*" | tail -n 1)
-          echo $mini64
-          curl http://127.0.0.1:8081/bot${{ secrets.HELPER_BOT_TOKEN }}/sendDocument \
-            -X POST \
-            -F chat_id="${{ secrets.HELPER_BOT_TARGET }}" \
-            -F document="@$mini64" \
-            -F caption="Test version, ${{ github.event.head_commit.message }}" \
-            --silent --show-error --fail >/dev/null
+          curl -L -X POST http://127.0.0.1:8081/bot${{ secrets.HELPER_BOT_TOKEN }}/sendMediaGroup --form-string chat_id=${{ secrets.HELPER_BOT_TARGET }} --form apk=@"${mini64}" --form-string media="[{\"type\": \"document\",\"media\": \"attach://apk\",\"caption\": \"Test version, ${{ github.event.head_commit.message }}\",\"parse_mode\": \"Markdown\"}]" --show-error --fail >/dev/null
           pkill telegram-bot
   telegram-bot-api:
     name: Telegram Bot API
