@@ -32,6 +32,7 @@ public class ExteraConfig {
     public static boolean dateOfForwardedMsg;
 
     public static boolean rearVideoMessages;
+    public static boolean disableCamera;
     public static boolean pauseOnMinimize;
     public static boolean disablePlayback;
 
@@ -78,6 +79,7 @@ public class ExteraConfig {
             dateOfForwardedMsg = preferences.getBoolean("dateOfForwardedMsg", false);
 
             rearVideoMessages = preferences.getBoolean("rearVideoMessages", false);
+            disableCamera = preferences.getBoolean("disableCamera", false);
             pauseOnMinimize = preferences.getBoolean("pauseOnMinimize", true);
             disablePlayback = preferences.getBoolean("disablePlayback", true);
 
@@ -205,6 +207,14 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("rearVideoMessages", rearVideoMessages);
+        editor.commit();
+    }
+
+    public static void toggleDisableCamera() {
+        disableCamera = !disableCamera;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("disableCamera", disableCamera);
         editor.commit();
     }
 

@@ -36,6 +36,9 @@ import org.telegram.ui.Components.SeekBarView;
 import org.telegram.ui.Components.UndoView;
 
 import com.exteragram.messenger.ExteraConfig;
+import com.google.android.gms.vision.text.Text;
+
+import java.util.Locale;
 
 public class ChatsPreferencesEntry extends BaseFragment {
 
@@ -59,6 +62,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
 
     private int mediaHeaderRow;
     private int rearVideoMessagesRow;
+    private int disableCameraRow;
     private int pauseOnMinimizeRow;
     private int disablePlaybackRow;
     private int mediaDividerRow;
@@ -240,6 +244,11 @@ public class ChatsPreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.rearVideoMessages);
                 }
+            } else if (position == disableCameraRow) {
+                ExteraConfig.toggleDisableCamera();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(ExteraConfig.disableCamera);
+                }
             } else if (position == pauseOnMinimizeRow) {
                 ExteraConfig.togglePauseOnMinimize();
                 if (view instanceof TextCheckCell) {
@@ -276,6 +285,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
 
         mediaHeaderRow = rowCount++;
         rearVideoMessagesRow = rowCount++;
+        disableCameraRow = rowCount++;
         pauseOnMinimizeRow = rowCount++;
         disablePlaybackRow = rowCount++;
         mediaDividerRow = rowCount++;
@@ -337,6 +347,8 @@ public class ChatsPreferencesEntry extends BaseFragment {
                         textCheckCell.setTextAndCheck(LocaleController.getString("DateOfForwardedMsg", R.string.DateOfForwardedMsg), ExteraConfig.dateOfForwardedMsg, true);
                     } else if (position == rearVideoMessagesRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("RearVideoMessages", R.string.RearVideoMessages), ExteraConfig.rearVideoMessages, true);
+                    } else if (position == disableCameraRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString("DisableCamera", R.string.DisableCamera), ExteraConfig.disableCamera, true);
                     } else if (position == pauseOnMinimizeRow) {
                         textCheckCell.setTextAndValueAndCheck(LocaleController.getString("PauseOnMinimize", R.string.PauseOnMinimize), LocaleController.getString("POMDescription", R.string.POMDescription), ExteraConfig.pauseOnMinimize, true, true);
                     } else if (position == disablePlaybackRow) {
@@ -385,7 +397,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
                 return 2;
             } else if (position == hideStickerTimeRow || position == hideSendAsChannelRow || position == hideKeyboardOnScrollRow ||
                        position == archiveOnPullRow || position == dateOfForwardedMsgRow || position == rearVideoMessagesRow ||
-                       position == pauseOnMinimizeRow || position == disablePlaybackRow) {
+                       position == disableCameraRow || position == pauseOnMinimizeRow || position == disablePlaybackRow) {
                 return 3;
             } else if (position == stickerSizeRow) {
                 return 4;
