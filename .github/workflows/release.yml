@@ -372,15 +372,7 @@ jobs:
           export mini32=$(find artifacts -name "*mini-armeabi-v7a*")
           export full64=$(find artifacts -name "*full-arm64-v8a*")
           export full32=$(find artifacts -name "*full-armeabi-v7a*")
-          echo "$mini64"
-          curl -v "http://127.0.0.1:8081/bot${{ secrets.TELEGRAM_TOKEN  }}/sendMediaGroup?chat_id=${{ secrets.TELEGRAM_CHANNEL }}&media=%5B%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2Fmini64%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2Fmini32%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2Ffull64%22%7D%2C%7B%22type%22%3A%22document%22%2C%20%22media%22%3A%22attach%3A%2F%2Ffull32%22%7D%5D" \
-            -F mini64="@$mini64" \
-            -F mini32="@$mini32" \
-            -F full64="@$full64" \
-            -F full32="@$full32" \
-            --retry 5 \
-            --retry-delay 5 \
-            --silent --show-error --fail >/dev/null
+          curl -L -X POST http://127.0.0.1:8081/bot${{ secrets.HELPER_BOT_TOKEN }}/sendMediaGroup --form-string chat_id=${{ secrets.HELPER_BOT_TARGET }} --form mini64=@"${mini64}" --form mini32=@"${mini32}" --form full64=@"${full64}" --form full32=@"${full32}" --form-string media="[{\"type\": \"document\",\"media\": \"attach://mini64\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://mini32\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://full64\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://full32\",\"caption\": \"${{ github.event.head_commit.message }}\",\"parse_mode\": \"Markdown\"}]" --show-error --fail >/dev/null
 
           pkill telegram-bot
   telegram-bot-api:
