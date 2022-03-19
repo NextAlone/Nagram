@@ -3,6 +3,7 @@
     <!-- exteraGram's Main Strings -->
     <string name="MutualContact">узаемны кантакт</string>
     <string name="ToBeginning">Да пачатку</string>
+    <string name="SaveMessage">Захаваць паведамленне</string>
 
     <!-- Main Menu (about) -->
     <string name="About">Аб exteraGram</string>
@@ -31,16 +32,18 @@
     <string name="StickerSize">Памер налепак</string>
     <string name="StickerTime">Схавайце час пад налепкамі</string>
 
-    <string name="StickerSizeDialogMessageReplyTo">мяумяу</string>
-    <string name="StickerSizeDialogMessage">вау! ён такі мілы OwO ;—;</string>
+    <string name="StickerSizeDialogMessageReplyTo">мяу</string>
+    <string name="StickerSizeDialogMessage">вау, ён такі мілы!</string>
 
     <string name="HideSendAsChannel">Схаваць \"Адправіць як канал\"</string>
     <string name="HideKeyboardOnScroll">Схаваць клавіятуру пры пракрутцы</string>
+    <string name="DisableReactions">Адключыць рэакцыі</string>
     <string name="ArchiveOnPull">Адкрыйце архіў пры вопуску ўніз</string>
     <string name="DateOfForwardedMsg">Паказаць дату перасланага паведамлення</string>
 
     <string name="Media">Медыя</string>
     <string name="RearVideoMessages">Задняя камера ў відэапаведамленнях</string>
+    <string name="DisableCamera">Адключыць камеру ў меню выбару фота</string>
     <string name="PauseOnMinimize">Аўтапаўза</string>
     <string name="POMDescription">Прыпыняе прайграванне відэа, калі прылада заблакіравана або exteraGram згорнуты</string>
     <string name="DisablePlayback">Адключыць прайграванне</string>

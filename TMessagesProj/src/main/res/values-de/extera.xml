@@ -3,6 +3,7 @@
     <!-- exteraGram's Main Strings -->
     <string name="MutualContact">gegenseitiger Kontakt</string>
     <string name="ToBeginning">Am Anfang</string>
+    <string name="SaveMessage">Nachricht speichern</string>
 
     <!-- Main Menu (about) -->
     <string name="About">Über exteraGram</string>
@@ -31,16 +32,18 @@
     <string name="StickerSize">Stickergröße</string>
     <string name="StickerTime">Zeit unter Aufklebern verbergen</string>
 
-    <string name="StickerSizeDialogMessageReplyTo">miaumiau</string>
-    <string name="StickerSizeDialogMessage">woah! er ist so süß owo ;—;</string>
+    <string name="StickerSizeDialogMessageReplyTo">miau</string>
+    <string name="StickerSizeDialogMessage">woah, er ist so süß!</string>
 
     <string name="HideSendAsChannel">\"Als Kanal senden\" ausblenden</string>
     <string name="HideKeyboardOnScroll">Tastatur beim Scrollen ausblenden</string>
+    <string name="DisableReactions">Reaktionen deaktivieren</string>
     <string name="ArchiveOnPull">Archiv beim Herunterziehen öffnen</string>
     <string name="DateOfForwardedMsg">Datum der weitergeleiteten Nachricht anzeigen</string>
 
     <string name="Media">Media</string>
     <string name="RearVideoMessages">Hintere Kamera für Videonachrichten</string>
+    <string name="DisableCamera">Deaktivieren Sie die Kamera im Fotoauswahlmenü</string>
     <string name="PauseOnMinimize">Autopause</string>
     <string name="POMDescription">Pausiert eine Videowiedergabe, wenn das Gerät gesperrt ist oder exteraGram minimiert wird</string>
     <string name="DisablePlayback">Player öffnen</string>
