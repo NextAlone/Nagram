@@ -6,6 +6,7 @@
     <string name="exteraDebugMenu">¯\\_(ツ)_/¯</string>
     <string name="MutualContact">mutual contact</string>
     <string name="ToBeginning">To beginning</string>
+    <string name="SaveMessage">Save message</string>
 
     <!-- Main Menu (about) -->
     <string name="About">About exteraGram</string>

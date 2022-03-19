@@ -1236,6 +1236,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int delete_chat = 16;
     private final static int share_contact = 17;
     private final static int mute = 18;
+    private final static int save = 19;
     private final static int report = 21;
     private final static int star = 22;
     private final static int edit = 23;
@@ -2191,6 +2192,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             finishFragment();
                         }
                     }
+                } else if (id == save) {
+                    ArrayList<MessageObject> obj = new ArrayList<>();
+                    int m = 0;
+                    for (int a = 1; a >= 0; a--) {
+                        for (int b = 0; b < selectedMessagesIds[a].size(); b++) {
+                            obj.add(selectedMessagesIds[a].valueAt(b));
+                            m = b;
+                        }
+                    }
+                    SendMessagesHelper.getInstance(currentAccount).sendMessage(obj, UserConfig.getInstance(currentAccount).clientUserId, false, false, true, 0);
+                    undoView.showWithAction(getUserConfig().getClientUserId(), UndoView.ACTION_FWD_MESSAGES, m);
+                    clearSelectionMode();
                 } else if (id == copy) {
                     String str = "";
                     long previousUid = 0;
@@ -2840,6 +2853,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         selectedMessagesCountTextView.setOnTouchListener((v, event) -> true);
 
         if (currentEncryptedChat == null) {
+            actionModeViews.add(actionMode.addItemWithWidth(save, R.drawable.msg_archive, AndroidUtilities.dp(54), LocaleController.getString("SaveMessage", R.string.SaveMessage)));
             actionModeViews.add(actionMode.addItemWithWidth(save_to, R.drawable.msg_download, AndroidUtilities.dp(54), LocaleController.getString("SaveToMusic", R.string.SaveToMusic)));
             actionModeViews.add(actionMode.addItemWithWidth(edit, R.drawable.msg_edit, AndroidUtilities.dp(54), LocaleController.getString("Edit", R.string.Edit)));
             actionModeViews.add(actionMode.addItemWithWidth(star, R.drawable.msg_fave, AndroidUtilities.dp(54), LocaleController.getString("AddToFavorites", R.string.AddToFavorites)));
