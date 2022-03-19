@@ -120,6 +120,9 @@ public class VoIPHelper {
 			if (videoCall && activity.checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 				permissions.add(Manifest.permission.CAMERA);
 			}
+			if (Build.VERSION.SDK_INT >= 31 && activity.checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+				permissions.add(Manifest.permission.BLUETOOTH_CONNECT);
+			}
 			if (permissions.isEmpty()) {
 				initiateCall(user, null, null, videoCall, canVideoCall, false, null, activity, null, accountInstance);
 			} else {
@@ -162,6 +165,9 @@ public class VoIPHelper {
 			ArrayList<String> permissions = new ArrayList<>();
 			if (activity.checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
 				permissions.add(Manifest.permission.RECORD_AUDIO);
+			}
+			if (Build.VERSION.SDK_INT >= 31 && activity.checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+				permissions.add(Manifest.permission.BLUETOOTH_CONNECT);
 			}
 			if (permissions.isEmpty()) {
 				initiateCall(null, chat, hash, false, false, createCall, checkJoiner, activity, fragment, accountInstance);
