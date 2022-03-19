@@ -116,11 +116,13 @@ public class AppearancePreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.blurForAllThemes);
                 }
+                restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
             } else if (position == hideAllChatsRow) {
                 ExteraConfig.toggleHideAllChats();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.hideAllChats);
                 }
+                restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
             } else if (position == hideProxySponsorRow) {
                 ExteraConfig.toggleHideProxySponsor();
                 if (view instanceof TextCheckCell) {
@@ -141,11 +143,13 @@ public class AppearancePreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.chatsOnTitle);
                 }
+                restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
             } else if (position == forceTabletModeRow) {
                 ExteraConfig.toggleForceTabletMode();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.forceTabletMode);
                 }
+                restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
             }
         });
         restartTooltip = new UndoView(context);
@@ -218,19 +222,19 @@ public class AppearancePreferencesEntry extends BaseFragment {
                     if (position == transparentStatusBarRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("TransparentStatusBar", R.string.TransparentStatusBar), SharedConfig.noStatusBar, true);
                     } else if (position == blurForAllThemesRow) {
-                        textCheckCell.setTextAndValueAndCheck(LocaleController.getString("BlurForAllThemes", R.string.BlurForAllThemes), LocaleController.getString("RestartRequired", R.string.RestartRequired), ExteraConfig.blurForAllThemes, true, true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("BlurForAllThemes", R.string.BlurForAllThemes), ExteraConfig.blurForAllThemes, true);
                     } else if (position == hideAllChatsRow) {
-                        textCheckCell.setTextAndValueAndCheck(LocaleController.getString("HideAllChats", R.string.HideAllChats), LocaleController.getString("RestartRequired", R.string.RestartRequired), ExteraConfig.hideAllChats, true, true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("HideAllChats", R.string.HideAllChats), ExteraConfig.hideAllChats, true);
                     } else if (position == hideProxySponsorRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("HideProxySponsor", R.string.HideProxySponsor), ExteraConfig.hideProxySponsor, true);
                     } else if (position == hidePhoneNumberRow) {
-                        textCheckCell.setTextAndValueAndCheck(LocaleController.getString("HidePhoneNumber", R.string.HidePhoneNumber), LocaleController.getString("RestartRequired", R.string.RestartRequired), ExteraConfig.hidePhoneNumber, true, true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("HidePhoneNumber", R.string.HidePhoneNumber), ExteraConfig.hidePhoneNumber, true);
                     } else if (position == showIDRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("ShowID", R.string.ShowID), ExteraConfig.showID, true);
                     } else if (position == chatsOnTitleRow) {
-                        textCheckCell.setTextAndValueAndCheck(LocaleController.getString("ChatsOnTitle", R.string.ChatsOnTitle), LocaleController.getString("RestartRequired", R.string.RestartRequired), ExteraConfig.chatsOnTitle, true, true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("ChatsOnTitle", R.string.ChatsOnTitle), ExteraConfig.chatsOnTitle,  true);
                     } else if (position == forceTabletModeRow) {
-                        textCheckCell.setTextAndValueAndCheck(LocaleController.getString("ForceTabletMode", R.string.ForceTabletMode), LocaleController.getString("RestartRequired", R.string.RestartRequired), ExteraConfig.forceTabletMode, true, true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("ForceTabletMode", R.string.ForceTabletMode), ExteraConfig.forceTabletMode, true);
                     }
                     break;
             }
