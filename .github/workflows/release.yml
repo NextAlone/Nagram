@@ -365,14 +365,13 @@ jobs:
         run: |
           chmod +x telegram-bot-api-binary
           ./telegram-bot-api-binary --api-id=11535358 --api-hash=33d372962fadb01df47e6ceed4e33cd6 --local 2>&1 > /dev/null &
-          # send commit message via telegram bot api
-          curl -v -X POST http://127.0.0.1:8081/bot${{ secrets.TELEGRAM_TOKEN  }}/sendMessage -d chat_id=${{ secrets.TELEGRAM_CHANNEL }} -d text="${{ github.event.head_commit.message }}" 2>&1 > /dev/null
           # send release via telegram bot api
           export mini64=$(find artifacts -name "*mini-arm64-v8a*")
           export mini32=$(find artifacts -name "*mini-armeabi-v7a*")
           export full64=$(find artifacts -name "*full-arm64-v8a*")
           export full32=$(find artifacts -name "*full-armeabi-v7a*")
-          curl -L -X POST http://127.0.0.1:8081/bot${{ secrets.HELPER_BOT_TOKEN }}/sendMediaGroup --form-string chat_id=${{ secrets.HELPER_BOT_TARGET }} --form mini64=@"${mini64}" --form mini32=@"${mini32}" --form full64=@"${full64}" --form full32=@"${full32}" --form-string media="[{\"type\": \"document\",\"media\": \"attach://mini64\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://mini32\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://full64\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://full32\",\"caption\": \"${{ github.event.head_commit.message }}\",\"parse_mode\": \"Markdown\"}]" --show-error --fail >/dev/null
+          echo $mini64
+          curl --http0.9 http://127.0.0.1:8081/bot${{ secrets.HELPER_BOT_TOKEN }}/sendMediaGroup --form-string chat_id=${{ secrets.HELPER_BOT_TARGET }} --form apk1=@"${mini64}" --form apk2=@"${mini32}" --form apk3=@"${full64}" --form apk4=@"${full32}" --form-string media="[{\"type\": \"document\",\"media\": \"attach://apk1\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://apk2\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://apk3\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://apk4\",\"caption\": \"${{ github.event.head_commit.message }}\",\"parse_mode\": \"Markdown\"}]" --verbose >/dev/null
 
           pkill telegram-bot
   telegram-bot-api:
