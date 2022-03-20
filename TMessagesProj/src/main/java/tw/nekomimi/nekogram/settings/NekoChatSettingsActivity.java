@@ -244,10 +244,12 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                     ArrayList<Integer> types = new ArrayList<>();
                     arrayList.add(LocaleController.getString("Disable", R.string.Disable));
                     types.add(DoubleTap.DOUBLE_TAP_ACTION_NONE);
-                    arrayList.add(LocaleController.getString("Reactions", R.string.Reactions));
-                    types.add(DoubleTap.DOUBLE_TAP_ACTION_REACTION);
-                    //arrayList.add(LocaleController.getString("TranslateMessage", R.string.TranslateMessage));
-                    //types.add(DoubleTapConfig.DOUBLE_TAP_ACTION_TRANSLATE);
+                    arrayList.add(LocaleController.getString("SendReactions", R.string.SendReactions));
+                    types.add(DoubleTap.DOUBLE_TAP_ACTION_SEND_REACTIONS);
+                    arrayList.add(LocaleController.getString("ShowReactions", R.string.ShowReactions));
+                    types.add(DoubleTap.DOUBLE_TAP_ACTION_SHOW_REACTIONS);
+                    // arrayList.add(LocaleController.getString("TranslateMessage", R.string.TranslateMessage));
+                    // types.add(DoubleTap.DOUBLE_TAP_ACTION_TRANSLATE);
                     arrayList.add(LocaleController.getString("Reply", R.string.Reply));
                     types.add(DoubleTap.DOUBLE_TAP_ACTION_REPLY);
                     arrayList.add(LocaleController.getString("AddToSavedMessages", R.string.AddToSavedMessages));

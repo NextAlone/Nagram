@@ -9,20 +9,22 @@ object DoubleTap {
         HashMap()
     const val DOUBLE_TAP_ACTION_NONE =
         0
-    const val DOUBLE_TAP_ACTION_REACTION =
+    const val DOUBLE_TAP_ACTION_SEND_REACTIONS =
         1
-//    const val DOUBLE_TAP_ACTION_TRANSLATE =
-//        2
-    const val DOUBLE_TAP_ACTION_REPLY =
+    const val DOUBLE_TAP_ACTION_SHOW_REACTIONS =
         2
-    const val DOUBLE_TAP_ACTION_SAVE =
+//    const val DOUBLE_TAP_ACTION_TRANSLATE =
+//        3
+    const val DOUBLE_TAP_ACTION_REPLY =
         3
-    const val DOUBLE_TAP_ACTION_REPEAT =
+    const val DOUBLE_TAP_ACTION_SAVE =
         4
-    const val DOUBLE_TAP_ACTION_REPEAT_AS_COPY =
+    const val DOUBLE_TAP_ACTION_REPEAT =
         5
-    const val DOUBLE_TAP_ACTION_EDIT =
+    const val DOUBLE_TAP_ACTION_REPEAT_AS_COPY =
         6
+    const val DOUBLE_TAP_ACTION_EDIT =
+        7
 
     init {
         doubleTapActionMap[DOUBLE_TAP_ACTION_NONE] =
@@ -30,10 +32,15 @@ object DoubleTap {
                 "Disable",
                 R.string.Disable
             )
-        doubleTapActionMap[DOUBLE_TAP_ACTION_REACTION] =
+        doubleTapActionMap[DOUBLE_TAP_ACTION_SEND_REACTIONS] =
             LocaleController.getString(
-                "Reactions",
-                R.string.Reactions
+                "SendReactions",
+                R.string.SendReactions
+            )
+        doubleTapActionMap[DOUBLE_TAP_ACTION_SHOW_REACTIONS] =
+            LocaleController.getString(
+                "ShowReactions",
+                R.string.ShowReactions
             )
 //        doubleTapActionMap[DOUBLE_TAP_ACTION_TRANSLATE] =
 //            LocaleController.getString(
@@ -47,8 +54,8 @@ object DoubleTap {
             )
         doubleTapActionMap[DOUBLE_TAP_ACTION_SAVE] =
             LocaleController.getString(
-                "Save",
-                R.string.Save
+                "AddToSavedMessages",
+                R.string.AddToSavedMessages
             )
         doubleTapActionMap[DOUBLE_TAP_ACTION_REPEAT] =
             LocaleController.getString(
