@@ -13,18 +13,18 @@ object DoubleTap {
         1
     const val DOUBLE_TAP_ACTION_SHOW_REACTIONS =
         2
-//    const val DOUBLE_TAP_ACTION_TRANSLATE =
-//        3
-    const val DOUBLE_TAP_ACTION_REPLY =
+    const val DOUBLE_TAP_ACTION_TRANSLATE =
         3
-    const val DOUBLE_TAP_ACTION_SAVE =
+    const val DOUBLE_TAP_ACTION_REPLY =
         4
-    const val DOUBLE_TAP_ACTION_REPEAT =
+    const val DOUBLE_TAP_ACTION_SAVE =
         5
-    const val DOUBLE_TAP_ACTION_REPEAT_AS_COPY =
+    const val DOUBLE_TAP_ACTION_REPEAT =
         6
-    const val DOUBLE_TAP_ACTION_EDIT =
+    const val DOUBLE_TAP_ACTION_REPEAT_AS_COPY =
         7
+    const val DOUBLE_TAP_ACTION_EDIT =
+        8
 
     init {
         doubleTapActionMap[DOUBLE_TAP_ACTION_NONE] =
@@ -42,11 +42,11 @@ object DoubleTap {
                 "ShowReactions",
                 R.string.ShowReactions
             )
-//        doubleTapActionMap[DOUBLE_TAP_ACTION_TRANSLATE] =
-//            LocaleController.getString(
-//                "Translate",
-//                R.string.Translate
-//            )
+        doubleTapActionMap[DOUBLE_TAP_ACTION_TRANSLATE] =
+            LocaleController.getString(
+                "TranslateMessage",
+                R.string.TranslateMessage
+            )
         doubleTapActionMap[DOUBLE_TAP_ACTION_REPLY] =
             LocaleController.getString(
                 "Reply",

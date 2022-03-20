@@ -1526,8 +1526,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else {
                 var cell = (ChatMessageCell) view;
                 var message = cell.getMessageObject();
-                var messageGroup = getValidGroupedMessage(message);
-                var noforwards = getMessagesController().isChatNoForwards(currentChat) || message.messageOwner.noforwards;
+                selectedObject = message;
+                selectedObjectGroup = getValidGroupedMessage(message);
+                var noforwards = getMessagesController().isChatNoForwardsWithOverride(currentChat) || message.messageOwner.noforwards;
                 boolean allowChatActions = chatMode != MODE_SCHEDULED && (threadMessageObjects == null || !threadMessageObjects.contains(message)) &&
                         !message.isSponsored() && (getMessageType(message) != 1 || message.getDialogId() != mergeDialogId) &&
                         !(message.messageOwner.action instanceof TLRPC.TL_messageActionSecureValuesSent) &&
@@ -1535,10 +1536,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         (bottomOverlayChat == null || bottomOverlayChat.getVisibility() != View.VISIBLE) &&
                         (currentChat == null || ((!ChatObject.isNotInChat(currentChat) || isThreadChat()) && (!ChatObject.isChannel(currentChat) || ChatObject.canPost(currentChat) || currentChat.megagroup) && ChatObject.canSendMessages(currentChat)));
                 boolean allowEdit = message.canEditMessage(currentChat) && !chatActivityEnterView.hasAudioToSend() && message.getDialogId() != mergeDialogId;
-                if (allowEdit && messageGroup != null) {
+                if (allowEdit && selectedObjectGroup != null) {
                     int captionsCount = 0;
-                    for (int a = 0, N = messageGroup.messages.size(); a < N; a++) {
-                        MessageObject messageObject = messageGroup.messages.get(a);
+                    for (int a = 0, N = selectedObjectGroup.messages.size(); a < N; a++) {
+                        MessageObject messageObject = selectedObjectGroup.messages.get(a);
                         if (a == 0 || !TextUtils.isEmpty(messageObject.caption)) {
                             selectedObjectToEditCaption = messageObject;
                             if (!TextUtils.isEmpty(messageObject.caption)) {
@@ -1549,14 +1550,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     allowEdit = captionsCount < 2;
                 }
                 switch (NaConfig.INSTANCE.getDoubleTapAction().Int()) {
-//                    case DoubleTap.DOUBLE_TAP_ACTION_TRANSLATE:
-//                        if (NekoConfig.transType != NekoConfig.TRANS_TYPE_EXTERNAL || !noforwards) {
-//                            MessageObject messageObject = getMessageHelper().getMessageForTranslate(message, messageGroup);
-//                            if (messageObject != null) {
-//                                return true;
-//                            }
-//                        }
-//                        break;
+                    case DoubleTap.DOUBLE_TAP_ACTION_TRANSLATE:
+                        MessageObject messageObject = getMessageForTranslate();
+                        if (messageObject != null) {
+                            return true;
+                        }
+                        break;
                     case DoubleTap.DOUBLE_TAP_ACTION_REPLY:
                         return message.getId() > 0 && allowChatActions;
                     case DoubleTap.DOUBLE_TAP_ACTION_SAVE:
@@ -1564,12 +1563,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     case DoubleTap.DOUBLE_TAP_ACTION_REPEAT:
                         allowRepeat = allowChatActions &&
                                 (!isThreadChat() && !noforwards ||
-                                        getMessageHelper().getMessageForRepeat(message, messageGroup) != null);
+                                        getMessageHelper().getMessageForRepeat(message, selectedObjectGroup) != null);
                         return allowRepeat && !message.isSponsored() && chatMode != MODE_SCHEDULED && !message.needDrawBluredPreview() && !message.isLiveLocation() && message.type != 16;
                     case DoubleTap.DOUBLE_TAP_ACTION_REPEAT_AS_COPY:
                         allowRepeat = allowChatActions &&
                                 (!isThreadChat() && !noforwards ||
-                                        getMessageHelper().getMessageForRepeat(message, messageGroup) != null);
+                                        getMessageHelper().getMessageForRepeat(message, selectedObjectGroup) != null);
                         return allowRepeat && !message.isSponsored() && chatMode != MODE_SCHEDULED && !message.needDrawBluredPreview() && !message.isLiveLocation() && message.type != 16;
                     case DoubleTap.DOUBLE_TAP_ACTION_EDIT:
                         return allowEdit;
@@ -1619,6 +1618,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 selectedObject = message;
                 selectedObjectGroup = getValidGroupedMessage(message);
                 switch (NaConfig.INSTANCE.getDoubleTapAction().Int()) {
+                    case DoubleTap.DOUBLE_TAP_ACTION_TRANSLATE:
+                        MessageTransKt.translateMessages(ChatActivity.this);
+                        break;
                     case DoubleTap.DOUBLE_TAP_ACTION_REPLY:
                         processSelectedOption(OPTION_REPLY);
                         break;
