@@ -18,6 +18,8 @@
     <string name="Categories">Катыгорыі</string>
 
     <!-- Appearance -->
+    <string name="UseSystemFonts">Сістэмныя шрыфты</string>
+    <string name="UseSystemEmoji">Сістэмныя эмодзі</string>
     <string name="TransparentStatusBar">Празрысты радок стану</string>
     <string name="BlurForAllThemes">Размыццё для ўсіх тэм</string>
 

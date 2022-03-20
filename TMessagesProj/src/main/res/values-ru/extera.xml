@@ -18,6 +18,8 @@
     <string name="Categories">Категории</string>
 
     <!-- Appearance -->
+    <string name="UseSystemFonts">Системные шрифты</string>
+    <string name="UseSystemEmoji">Системные эмодзи</string>
     <string name="TransparentStatusBar">Прозрачная строка состояния</string>
     <string name="BlurForAllThemes">Размытие во всех темах</string>
 

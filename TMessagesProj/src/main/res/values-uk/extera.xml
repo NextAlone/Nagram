@@ -22,8 +22,8 @@
     <string name="Experimental">Експериментально</string>
 
     <!-- Appearance -->
-    <string name="SystemFonts">Використовувати системний шрифт</string>
-    <string name="SystemEmoji">Використовувати системні емодзі</string>
+    <string name="SystemFonts">Системний шрифт</string>
+    <string name="SystemEmoji">Системні емодзі</string>
 
     <string name="HideAllChats">Сховати \"Усі чати\"</string>
     <string name="HidePhoneNumber">Сховати номер телефону</string>

@@ -18,6 +18,8 @@
     <string name="Categories">Kategorien</string>
 
     <!-- Appearance -->
+    <string name="UseSystemFonts">Systemschriften</string>
+    <string name="UseSystemEmoji">System-Emoji</string>
     <string name="TransparentStatusBar">Transparente Status leiste</string>
     <string name="BlurForAllThemes">Unschärfe in allen Themen</string>
 
