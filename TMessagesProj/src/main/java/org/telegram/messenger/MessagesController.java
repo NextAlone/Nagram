@@ -2933,11 +2933,11 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public boolean isChatNoForwardsWithOverride(long chatId) {
-        return isChatNoForwards(getChat(chatId)) && !NekoXConfig.disableFlagSecure;
+        return isChatNoForwards(getChat(chatId)) && !NaConfig.INSTANCE.getForceCopy().Bool();
     }
 
     public boolean isChatNoForwardsWithOverride(TLRPC.Chat chat) {
-        return isChatNoForwards(chat) && !NekoXConfig.disableFlagSecure;
+        return isChatNoForwards(chat) && !NaConfig.INSTANCE.getForceCopy().Bool();
     }
 
     public TLRPC.User getUser(Long id) {
