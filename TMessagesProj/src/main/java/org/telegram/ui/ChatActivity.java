@@ -1504,7 +1504,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTap.DOUBLE_TAP_ACTION_NONE || !(view instanceof ChatMessageCell)) {
                 return false;
             }
-            if (NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTap.DOUBLE_TAP_ACTION_REACTION) {
+            if (NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTap.DOUBLE_TAP_ACTION_SEND_REACTIONS || NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTap.DOUBLE_TAP_ACTION_SHOW_REACTIONS) {
                 TLRPC.TL_availableReaction reaction = getMediaDataController().getReactionsMap().get(getMediaDataController().getDoubleTapReaction());
                 if (reaction == null) {
                     return false;
@@ -1549,20 +1549,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     allowEdit = captionsCount < 2;
                 }
                 switch (NaConfig.INSTANCE.getDoubleTapAction().Int()) {
-                    /*case NekoConfig.DOUBLE_TAP_ACTION_TRANSLATE:
-                        if (NekoConfig.transType != NekoConfig.TRANS_TYPE_EXTERNAL || !noforwards) {
-                            MessageObject messageObject = getMessageHelper().getMessageForTranslate(message, messageGroup);
-                            if (messageObject != null) {
-                                return true;
-                            }
-                        }
-                        break;
-
-                     */
+//                    case DoubleTap.DOUBLE_TAP_ACTION_TRANSLATE:
+//                        if (NekoConfig.transType != NekoConfig.TRANS_TYPE_EXTERNAL || !noforwards) {
+//                            MessageObject messageObject = getMessageHelper().getMessageForTranslate(message, messageGroup);
+//                            if (messageObject != null) {
+//                                return true;
+//                            }
+//                        }
+//                        break;
                     case DoubleTap.DOUBLE_TAP_ACTION_REPLY:
                         return message.getId() > 0 && allowChatActions;
                     case DoubleTap.DOUBLE_TAP_ACTION_SAVE:
-                        return !message.isSponsored() && chatMode != MODE_SCHEDULED && !message.needDrawBluredPreview() && !message.isLiveLocation() && message.type != 16 && !getMessagesController().isChatNoForwards(currentChat) && !UserObject.isUserSelf(currentUser);
+                        return !message.isSponsored() && chatMode != MODE_SCHEDULED && !message.needDrawBluredPreview() && !message.isLiveLocation() && message.type != 16 && !getMessagesController().isChatNoForwardsWithOverride(currentChat) && !UserObject.isUserSelf(currentUser);
                     case DoubleTap.DOUBLE_TAP_ACTION_REPEAT:
                         allowRepeat = allowChatActions &&
                                 (!isThreadChat() && !noforwards ||
@@ -1582,34 +1580,62 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         @Override
         public void onDoubleTap(View view, int position, float x, float y) {
-            if (!(view instanceof ChatMessageCell) || getParentActivity() == null || isSecretChat() || isInScheduleMode()) {
+            if (NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTap.DOUBLE_TAP_ACTION_NONE || !(view instanceof ChatMessageCell) || getParentActivity() == null) {
                 return;
             }
-            if (NekoConfig.reactions.Int() == 2) return;
-            if (NekoConfig.reactions.Int() == 1) {
+            if (NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTap.DOUBLE_TAP_ACTION_SHOW_REACTIONS) {
+                if (isSecretChat() || isInScheduleMode()) {
+                    return;
+                }
                 createMenu(view, true, false, x, y, true, true);
                 return;
-            }
-            ChatMessageCell cell = (ChatMessageCell) view;
-            MessageObject primaryMessage = cell.getPrimaryMessageObject();
-            ReactionsEffectOverlay.removeCurrent(false);
-            TLRPC.TL_availableReaction reaction = getMediaDataController().getReactionsMap().get(getMediaDataController().getDoubleTapReaction());
-            if (reaction == null || cell.getMessageObject().isSponsored()) {
-                return;
-            }
-            boolean available = dialog_id >= 0;
-            if (!available && chatInfo != null) {
-                for (String s : chatInfo.available_reactions) {
-                    if (s.equals(reaction.reaction)) {
-                        available = true;
-                        break;
+            } else if (NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTap.DOUBLE_TAP_ACTION_SEND_REACTIONS) {
+                if (isSecretChat() || isInScheduleMode()) {
+                    return;
+                }
+                ChatMessageCell cell = (ChatMessageCell) view;
+                MessageObject primaryMessage = cell.getPrimaryMessageObject();
+                ReactionsEffectOverlay.removeCurrent(false);
+                TLRPC.TL_availableReaction reaction = getMediaDataController().getReactionsMap().get(getMediaDataController().getDoubleTapReaction());
+                if (reaction == null || cell.getMessageObject().isSponsored()) {
+                    return;
+                }
+                boolean available = dialog_id >= 0;
+                if (!available && chatInfo != null) {
+                    for (String s : chatInfo.available_reactions) {
+                        if (s.equals(reaction.reaction)) {
+                            available = true;
+                            break;
+                        }
                     }
                 }
+                if (!available) {
+                    return;
+                }
+                selectReaction(primaryMessage, null, x, y, reaction, true, false);
+            } else {
+                var cell = (ChatMessageCell) view;
+                var message = cell.getMessageObject();
+                selectedObject = message;
+                selectedObjectGroup = getValidGroupedMessage(message);
+                switch (NaConfig.INSTANCE.getDoubleTapAction().Int()) {
+                    case DoubleTap.DOUBLE_TAP_ACTION_REPLY:
+                        processSelectedOption(OPTION_REPLY);
+                        break;
+                    case DoubleTap.DOUBLE_TAP_ACTION_SAVE:
+                        processSelectedOption(nkbtn_savemessage);
+                        break;
+                    case DoubleTap.DOUBLE_TAP_ACTION_REPEAT:
+                        processSelectedOption(nkbtn_repeat);
+                        break;
+                    case DoubleTap.DOUBLE_TAP_ACTION_REPEAT_AS_COPY:
+                        processSelectedOption(nkbtn_repeatascopy);
+                        break;
+                    case DoubleTap.DOUBLE_TAP_ACTION_EDIT:
+                        processSelectedOption(OPTION_EDIT);
+                        break;
+                }
             }
-            if (!available) {
-                return;
-            }
-            selectReaction(primaryMessage, null, x, y, reaction, true, false);
         }
     };
 
@@ -22101,19 +22127,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                             boolean allowRepeat = currentUser != null
                                     || (currentChat != null && ChatObject.canSendMessages(currentChat));
-                            if (allowRepeat && NekoConfig.showRepeat.Bool()) {
-                                if (!noforward) {
+                            if (allowRepeat && NekoConfig.showRepeat.Bool() && !noforwardOverride) {
                                     items.add(LocaleController.getString("Repeat", R.string.Repeat));
                                     options.add(nkbtn_repeat);
                                     icons.add(R.drawable.msg_repeat);
-                                    items.add(LocaleController.getString("RepeatAsCopy", R.string.RepeatAsCopy));
-                                    options.add(nkbtn_repeatascopy);
-                                    icons.add(R.drawable.msg_repeat);
-                                } else {
-                                    items.add(LocaleController.getString("RepeatAsCopy", R.string.RepeatAsCopy));
-                                    options.add(nkbtn_repeatascopy);
-                                    icons.add(R.drawable.msg_repeat);
-                                }
+                            }
+                            if (NaConfig.INSTANCE.getShowRepeatAsCopy().Bool()){
+                                items.add(LocaleController.getString("RepeatAsCopy", R.string.RepeatAsCopy));
+                                options.add(nkbtn_repeatascopy);
+                                icons.add(R.drawable.msg_repeat);
                             }
                             if (NaConfig.INSTANCE.getShowInvertReply().Bool()) {
                                 items.add(LocaleController.getString("InvertReply", R.string.InvertReply));
@@ -24136,11 +24158,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
             }
             case nkbtn_repeat: {
-                repeatMessage(true,false);
+                repeatMessage(true, false);
                 return 2;
             }
             case nkbtn_repeatascopy: {
-                repeatMessage(true,true);
+                repeatMessage(true, true);
                 return 2;
             }
             case nkbtn_invertReply: {
@@ -29334,10 +29356,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 return;
             presentFragment(new ChatActivity(args), true);
         } else if (id == nkbtn_repeat) {
-            repeatMessage(false,false);
+            repeatMessage(false, false);
             clearSelectionMode();
-        }else if (id == nkbtn_repeatascopy){
-            repeatMessage(false,true);
+        } else if (id == nkbtn_repeatascopy) {
+            repeatMessage(false, true);
             clearSelectionMode();
         } else if (id == nkbtn_invertReply) {
             invertReplyMessage(false);
@@ -29355,8 +29377,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 repeatMessage(false,false);
                 break;
             }
-            case nkbtn_repeatascopy:{
-                repeatMessage(false,true);
+            case nkbtn_repeatascopy: {
+                repeatMessage(false, true);
                 break;
             }
             case nkbtn_invertReply: {
@@ -29627,10 +29649,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
     }
 
-    private void repeatMessage(boolean isLongClick,boolean isRepeatasCopy) {
-        if (checkSlowMode(chatActivityEnterView.getSendButton())) {
-            return;
-        }
+        private void repeatMessage(boolean isLongClick, boolean isRepeatasCopy) {
+            if (checkSlowMode(chatActivityEnterView.getSendButton())) {
+                return;
+            }
         final ArrayList<MessageObject> messages = new ArrayList<>();
         if (selectedObject != null)
             messages.add(selectedObject);
@@ -29653,47 +29675,47 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         builder.setTitle(LocaleController.getString("Repeat", R.string.Repeat));
         builder.setMessage(LocaleController.getString("repeatConfirmText", R.string.repeatConfirmText));
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
-            if (isRepeatasCopy){
-                doRepeatMessage(isLongClick, messages,true);
-            }else{
-                doRepeatMessage(isLongClick, messages,false);
+            if (isRepeatasCopy) {
+                doRepeatMessage(isLongClick, messages, true);
+            } else {
+                doRepeatMessage(isLongClick, messages, false);
             }
         });
         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
         showDialog(builder.create());
     }
 
-    private void doRepeatMessage(boolean isLongClick, ArrayList<MessageObject> messages,boolean isRepeatasCopy) {
-        if (selectedObject != null && selectedObject.messageOwner != null && (isLongClick || isThreadChat() || getMessagesController().isChatNoForwards(currentChat) )) {
-            // If selected message contains `replyTo`:
-            // When longClick it will reply to the `replyMessage` of selectedMessage
-            // When not LongClick but in a threadchat: reply to the Thread
-            MessageObject replyTo = selectedObject.replyMessageObject != null ? isLongClick ? selectedObject.replyMessageObject : getThreadMessage() : getThreadMessage();
-            if (selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) {
-                CharSequence caption = getMessageCaption(selectedObject, selectedObjectGroup);
-                if (caption == null) {
-                    caption = getMessageContent(selectedObject, 0, false);
-                }
-                if (!TextUtils.isEmpty(caption)) {
+        private void doRepeatMessage(boolean isLongClick, ArrayList<MessageObject> messages, boolean isRepeatAsCopy) {
+            if (selectedObject != null && selectedObject.messageOwner != null && (isLongClick || isThreadChat() || getMessagesController().isChatNoForwards(currentChat))) {
+                // If selected message contains `replyTo`:
+                // When longClick it will reply to the `replyMessage` of selectedMessage
+                // When not LongClick but in a threadchat: reply to the Thread
+                MessageObject replyTo = selectedObject.replyMessageObject != null ? isLongClick ? selectedObject.replyMessageObject : getThreadMessage() : getThreadMessage();
+                if (selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) {
+                    CharSequence caption = getMessageCaption(selectedObject, selectedObjectGroup);
+                    if (caption == null) {
+                        caption = getMessageContent(selectedObject, 0, false);
+                    }
+                    if (!TextUtils.isEmpty(caption)) {
+                        SendMessagesHelper.getInstance(currentAccount)
+                                .sendMessage(caption.toString(), dialog_id, replyTo,
+                                        getThreadMessage(), null,
+                                        false, selectedObject.messageOwner.entities, null, null,
+                                        true, 0, null);
+                    }
+                } else if ((selectedObject.isSticker() || selectedObject.isAnimatedSticker()) && selectedObject.getDocument() != null) {
                     SendMessagesHelper.getInstance(currentAccount)
-                            .sendMessage(caption.toString(), dialog_id, replyTo,
-                                    getThreadMessage(), null,
-                                    false, selectedObject.messageOwner.entities, null, null,
-                                    true, 0, null);
+                            .sendSticker(selectedObject.getDocument(), null, dialog_id, replyTo, getThreadMessage(), null, null, true, 0);
                 }
-            } else if ((selectedObject.isSticker() || selectedObject.isAnimatedSticker()) && selectedObject.getDocument() != null) {
-                SendMessagesHelper.getInstance(currentAccount)
-                        .sendSticker(selectedObject.getDocument(), null, dialog_id, replyTo, getThreadMessage(), null, null, true, 0);
+                return;
             }
-            return;
-        }
 
-        if (isRepeatasCopy){
-            forwardMessages(messages, true, false, true, 0);
-        }else {
-            forwardMessages(messages, false, false, true, 0);
+            if (isRepeatAsCopy) {
+                forwardMessages(messages, true, false, true, 0);
+            } else {
+                forwardMessages(messages, false, false, true, 0);
+            }
         }
-    }
     
     public void invertReplyMessage(boolean isLongClick){
         if (checkSlowMode(chatActivityEnterView.getSendButton())) {

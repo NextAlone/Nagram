@@ -16,4 +16,6 @@
     <string name="NoiseSuppressAndVoiceEnhance">噪音抑制和语音增强</string>
     <string name="RepeatAsCopy">无引用复读</string>
     <string name="DoubleTapAction">双击操作</string>
+    <string name="SendReactions">表情回应</string>
+    <string name="ShowReactions">显示表情回应菜单</string>
 </resources>

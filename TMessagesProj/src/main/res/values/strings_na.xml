@@ -16,4 +16,6 @@
     <string name="NoiseSuppressAndVoiceEnhance">Noise Suppress And Voice Enhance</string>
     <string name="RepeatAsCopy">Repeat as Copy</string>
     <string name="DoubleTapAction">Double Tap Action</string>
+    <string name="SendReactions">Send Reactions</string>
+    <string name="ShowReactions">Show Reactions</string>
 </resources>
