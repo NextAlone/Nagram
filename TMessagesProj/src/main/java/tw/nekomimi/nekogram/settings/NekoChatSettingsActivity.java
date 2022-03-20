@@ -101,9 +101,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                     LocaleController.getString("MapPreviewProviderNobody", R.string.MapPreviewProviderNobody)
             }, null));
     private final AbstractConfigCell DoubleTapActionRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL,true));
-    private final AbstractConfigCell messageMenuRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString("MessageMenu"), null, null, () -> {
-        showMessageMenuAlert();
-    }));
+    private final AbstractConfigCell messageMenuRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString("MessageMenu"), null, null, this::showMessageMenuAlert));
     private final AbstractConfigCell textStyleRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString("TextStyle"), null, null, this::showTextStyleAlert));
     /*private final AbstractConfigCell reactionsRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.reactions,
             new String[]{
