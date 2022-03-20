@@ -8,13 +8,6 @@
 
 package org.telegram.messenger;
 
-import java.io.File;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Locale;
-
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -35,6 +28,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Locale;
+
 public class Emoji {
 
     private static HashMap<CharSequence, DrawableInfo> rects = new HashMap<>();
@@ -52,6 +52,7 @@ public class Emoji {
     private static boolean recentEmojiLoaded;
     private static Runnable invalidateUiRunnable = () -> NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.emojiLoaded);
     public static float emojiDrawingYOffset;
+    public static boolean emojiDrawingUseAlpha = true;
 
     private final static int MAX_RECENT_EMOJI_COUNT = 48;
 
@@ -251,18 +252,21 @@ public class Emoji {
 
         @Override
         public void draw(Canvas canvas) {
+
             Rect b;
             if (fullSize) {
                 b = getDrawRect();
             } else {
                 b = getBounds();
             }
+
             if (SharedConfig.useSystemEmoji) {
                 String emoji = fixEmoji(EmojiData.data[info.page][info.emojiIndex]);
                 textPaint.setTextSize(b.height() * 0.8f);
                 canvas.drawText(emoji,  0, emoji.length(), b.left, b.bottom - b.height() * 0.225f, textPaint);
                 return;
             }
+            
             if (!isLoaded()) {
                 loadEmoji(info.page, info.page2);
                 canvas.drawRect(getBounds(), placeholderPaint);
@@ -548,7 +552,7 @@ public class Emoji {
         @Override
         public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, Paint paint) {
             boolean restoreAlpha = false;
-            if (paint.getAlpha() != 255) {
+            if (paint.getAlpha() != 255 && emojiDrawingUseAlpha) {
                 restoreAlpha = true;
                 getDrawable().setAlpha(paint.getAlpha());
             }
