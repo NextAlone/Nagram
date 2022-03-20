@@ -57,6 +57,7 @@ import tw.nekomimi.nekogram.config.cell.ConfigCellSelectBox;
 import tw.nekomimi.nekogram.config.cell.ConfigCellTextCheck;
 import tw.nekomimi.nekogram.config.cell.ConfigCellTextDetail;
 import tw.nekomimi.nekogram.config.cell.ConfigCellTextInput;
+import xyz.nextalone.nagram.DoubleTapConfig;
 import xyz.nextalone.nagram.NaConfig;
 
 @SuppressLint("RtlHardcoded")
@@ -99,16 +100,19 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                     LocaleController.getString("MapPreviewProviderYandex", R.string.MapPreviewProviderYandex),
                     LocaleController.getString("MapPreviewProviderNobody", R.string.MapPreviewProviderNobody)
             }, null));
+    private final AbstractConfigCell DoubleTapActionRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL,true));
     private final AbstractConfigCell messageMenuRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString("MessageMenu"), null, null, () -> {
         showMessageMenuAlert();
     }));
     private final AbstractConfigCell textStyleRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString("TextStyle"), null, null, this::showTextStyleAlert));
-    private final AbstractConfigCell reactionsRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.reactions,
+    /*private final AbstractConfigCell reactionsRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.reactions,
             new String[]{
                     LocaleController.getString("doubleTapSendReactions", R.string.doubleTapSendReactions),
                     LocaleController.getString("doubleTapShowReactions", R.string.doubleTapShowReactions),
                     LocaleController.getString("ReactionsDisabled", R.string.ReactionsDisabled),
             }, null));
+
+     */
     private final AbstractConfigCell repeatConfirmRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.repeatConfirm));
     private final AbstractConfigCell rememberAllBackMessagesRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.rememberAllBackMessages));
     private final AbstractConfigCell hideSendAsChannelRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideSendAsChannel));
@@ -234,6 +238,32 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         return Unit.INSTANCE;
                     });
                     builder.show();
+                }else if (position == cellGroup.rows.indexOf(DoubleTapActionRow)) {
+                    ArrayList<String> arrayList = new ArrayList<>();
+                    ArrayList<Integer> types = new ArrayList<>();
+                    arrayList.add(LocaleController.getString("Disable", R.string.Disable));
+                    types.add(DoubleTapConfig.DOUBLE_TAP_ACTION_NONE);
+                    arrayList.add(LocaleController.getString("Reactions", R.string.Reactions));
+                    types.add(DoubleTapConfig.DOUBLE_TAP_ACTION_REACTION);
+                    //arrayList.add(LocaleController.getString("TranslateMessage", R.string.TranslateMessage));
+                    //types.add(DoubleTapConfig.DOUBLE_TAP_ACTION_TRANSLATE);
+                    arrayList.add(LocaleController.getString("Reply", R.string.Reply));
+                    types.add(DoubleTapConfig.DOUBLE_TAP_ACTION_REPLY);
+                    arrayList.add(LocaleController.getString("AddToSavedMessages", R.string.AddToSavedMessages));
+                    types.add(DoubleTapConfig.DOUBLE_TAP_ACTION_SAVE);
+                    arrayList.add(LocaleController.getString("Repeat", R.string.Repeat));
+                    types.add(DoubleTapConfig.DOUBLE_TAP_ACTION_REPEAT);
+                    arrayList.add(LocaleController.getString("RepeatasCopy", R.string.RepeatasCopy));
+                    types.add(DoubleTapConfig.DOUBLE_TAP_ACTION_REPEATASCOPY);
+                    arrayList.add(LocaleController.getString("Edit", R.string.Edit));
+                    types.add(DoubleTapConfig.DOUBLE_TAP_ACTION_EDIT);
+                    PopupBuilder builder = new PopupBuilder(view);
+                    builder.setItems(arrayList, (i,str) -> {
+                        NaConfig.INSTANCE.getDoubleTapAction().setConfigInt(types.get(i));
+                        listAdapter.notifyItemChanged(position);
+                        return Unit.INSTANCE;
+                    });
+                    builder.show();
                 }
             }
         });
@@ -349,42 +379,46 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                     break;
                 }
                 case 3: {
-                    textCell.setTextAndCheck(LocaleController.getString("InvertReply", R.string.InvertReply), NaConfig.INSTANCE.getShowInvertReply().Bool(), false);
+                    textCell.setChecked(NekoConfig.showRepeatasCopy.toggleConfigBool());
                     break;
                 }
                 case 4: {
+                    textCell.setTextAndCheck(LocaleController.getString("InvertReply", R.string.InvertReply), NaConfig.INSTANCE.getShowInvertReply().Bool(), false);
+                    break;
+                }
+                case 5: {
                     textCell.setTextAndCheck(LocaleController.getString("Great", R.string.Great), NaConfig.INSTANCE.getShowGreatOrPoor().Bool(), false);
                     break;
                 }
-                case 3 + 2: {
+                case 3 + 3: {
                     textCell.setTextAndCheck(LocaleController.getString("ViewHistory", R.string.ViewHistory), NekoConfig.showViewHistory.Bool(), false);
                     break;
                 }
-                case 4 + 2: {
+                case 4 + 3: {
                     textCell.setTextAndCheck(LocaleController.getString("Translate", R.string.Translate), NekoConfig.showTranslate.Bool(), false);
                     break;
                 }
-                case 5 + 2: {
+                case 5 + 3: {
                     textCell.setTextAndCheck(LocaleController.getString("ReportChat", R.string.ReportChat), NekoConfig.showReport.Bool(), false);
                     break;
                 }
-                case 6 + 2: {
+                case 6 + 3: {
                     textCell.setTextAndCheck(LocaleController.getString("EditAdminRights", R.string.EditAdminRights), NekoConfig.showAdminActions.Bool(), false);
                     break;
                 }
-                case 7 + 2: {
+                case 7 + 3: {
                     textCell.setTextAndCheck(LocaleController.getString("ChangePermissions", R.string.ChangePermissions), NekoConfig.showChangePermissions.Bool(), false);
                     break;
                 }
-                case 8 + 2: {
+                case 8 + 3: {
                     textCell.setTextAndCheck(LocaleController.getString("Hide", R.string.Hide), NekoConfig.showMessageHide.Bool(), false);
                     break;
                 }
-                case 9 + 2: {
+                case 9 + 3: {
                     textCell.setTextAndCheck(LocaleController.getString("ShareMessages", R.string.ShareMessages), NekoConfig.showShareMessages.Bool(), false);
                     break;
                 }
-                case 10 + 2: {
+                case 10 + 3: {
                     textCell.setTextAndCheck(LocaleController.getString("MessageDetails", R.string.MessageDetails), NekoConfig.showMessageDetails.Bool(), false);
                     break;
                 }
@@ -408,42 +442,46 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         break;
                     }
                     case 3: {
-                        textCell.setChecked(NaConfig.INSTANCE.getShowInvertReply().toggleConfigBool());
+                        textCell.setChecked(NekoConfig.showRepeatasCopy.toggleConfigBool());
                         break;
                     }
                     case 4: {
+                        textCell.setChecked(NaConfig.INSTANCE.getShowInvertReply().toggleConfigBool());
+                        break;
+                    }
+                    case 5: {
                         textCell.setChecked(NaConfig.INSTANCE.getShowGreatOrPoor().toggleConfigBool());
                         break;
                     }
-                    case 3 + 2: {
+                    case 3 + 3: {
                         textCell.setChecked(NekoConfig.showViewHistory.toggleConfigBool());
                         break;
                     }
-                    case 4 + 2: {
+                    case 4 + 3: {
                         textCell.setChecked(NekoConfig.showTranslate.toggleConfigBool());
                         break;
                     }
-                    case 5 + 2: {
+                    case 5 + 3: {
                         textCell.setChecked(NekoConfig.showReport.toggleConfigBool());
                         break;
                     }
-                    case 6 + 2: {
+                    case 6 + 3: {
                         textCell.setChecked(NekoConfig.showAdminActions.toggleConfigBool());
                         break;
                     }
-                    case 7 + 2: {
+                    case 7 + 3: {
                         textCell.setChecked(NekoConfig.showChangePermissions.toggleConfigBool());
                         break;
                     }
-                    case 8 + 2: {
+                    case 8 + 3: {
                         textCell.setChecked(NekoConfig.showMessageHide.toggleConfigBool());
                         break;
                     }
-                    case 9 + 2: {
+                    case 9 + 3: {
                         textCell.setChecked(NekoConfig.showShareMessages.toggleConfigBool());
                         break;
                     }
-                    case 10 + 2:{
+                    case 10 + 3:{
                         textCell.setChecked(NekoConfig.showMessageDetails.toggleConfigBool());
                         break;
                     }
@@ -685,6 +723,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                         if (position == cellGroup.rows.indexOf(maxRecentStickerCountRow)) {
                             textCell.setTextAndValue(LocaleController.getString("maxRecentStickerCount", R.string.maxRecentStickerCount), String.valueOf(NekoConfig.maxRecentStickerCount.Int()), true);
+                        }else if ( position == cellGroup.rows.indexOf(DoubleTapActionRow)) {
+                            textCell.setTextAndValue(LocaleController.getString("DoubleTapAction", R.string.DoubleTapAction), new DoubleTapConfig().doubleTapActionMap.get(NaConfig.INSTANCE.getDoubleTapAction().Int()), true);
                         }
                     }
                 } else {
