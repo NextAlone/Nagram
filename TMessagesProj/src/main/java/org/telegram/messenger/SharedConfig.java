@@ -260,6 +260,14 @@ public class SharedConfig {
         return value;
     }
 
+    public static void toggleUseSystemEmoji() {
+        useSystemEmoji = !useSystemEmoji;
+        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("useSystemEmoji", useSystemEmoji);
+        editor.commit();
+    }
+
     public static void loadConfig() {
         synchronized (sync) {
             if (configLoaded || ApplicationLoader.applicationContext == null) {

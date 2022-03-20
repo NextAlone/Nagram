@@ -22,6 +22,7 @@
 
     <!-- Appearance -->
     <string name="UseSystemFonts">Use system fonts</string>
+    <string name="UseSystemEmoji">Use system emoji</string>
     <string name="TransparentStatusBar">Transparent Status Bar</string>
     <string name="BlurForAllThemes">Blur for all themes</string>
 

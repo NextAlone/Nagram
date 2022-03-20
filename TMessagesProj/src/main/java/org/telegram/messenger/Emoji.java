@@ -27,6 +27,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Spannable;
 import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.DynamicDrawableSpan;
 import android.text.style.ImageSpan;
@@ -146,7 +147,10 @@ public class Emoji {
             if (ch >= 0xD83C && ch <= 0xD83E) {
                 if (ch == 0xD83C && a < length - 1) {
                     ch = emoji.charAt(a + 1);
-                    if (ch == 0xDE2F || ch == 0xDC04 || ch == 0xDE1A || ch == 0xDD7F) {
+                    if (ch == 0xDE2F || ch == 0xDC04 || ch == 0xDE1A ||
+                        ch == 0xDD7F || ch == 0xDFF3 || ch == 0xDF2B ||
+                        ch == 0xDC41 || ch == 0xDD75 || ch == 0xDFCC ||
+                        ch == 0xDFCB) {
                         emoji = emoji.substring(0, a + 2) + "\uFE0F" + emoji.substring(a + 2);
                         length++;
                         a += 2;
@@ -158,7 +162,7 @@ public class Emoji {
                 }
             } else if (ch == 0x20E3) {
                 return emoji;
-            } else if (ch >= 0x203C && ch <= 0x3299) {
+            } else if (ch >= 0x0023 && ch <= 0x3299) {
                 if (EmojiData.emojiToFE0FMap.containsKey(ch)) {
                     emoji = emoji.substring(0, a + 1) + "\uFE0F" + emoji.substring(a + 1);
                     length++;
@@ -225,6 +229,7 @@ public class Emoji {
         private boolean fullSize = false;
         private static Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
         private static Rect rect = new Rect();
+        private static TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
 
         public EmojiDrawable(DrawableInfo i) {
             info = i;
@@ -246,22 +251,22 @@ public class Emoji {
 
         @Override
         public void draw(Canvas canvas) {
-            /*if (MessagesController.getInstance().useSystemEmoji) {
-                //textPaint.setTextSize(getBounds().width());
-                canvas.drawText(EmojiData.data[info.page][info.emojiIndex], getBounds().left, getBounds().bottom, textPaint);
-                return;
-            }*/
-            if (!isLoaded()) {
-                loadEmoji(info.page, info.page2);
-                canvas.drawRect(getBounds(), placeholderPaint);
-                return;
-            }
-
             Rect b;
             if (fullSize) {
                 b = getDrawRect();
             } else {
                 b = getBounds();
+            }
+            if (SharedConfig.useSystemEmoji) {
+                String emoji = fixEmoji(EmojiData.data[info.page][info.emojiIndex]);
+                textPaint.setTextSize(b.height() * 0.8f);
+                canvas.drawText(emoji,  0, emoji.length(), b.left, b.bottom - b.height() * 0.225f, textPaint);
+                return;
+            }
+            if (!isLoaded()) {
+                loadEmoji(info.page, info.page2);
+                canvas.drawRect(getBounds(), placeholderPaint);
+                return;
             }
 
             if (!canvas.quickReject(b.left, b.top, b.right, b.bottom, Canvas.EdgeType.AA)) {
@@ -321,7 +326,7 @@ public class Emoji {
     }
 
     public static CharSequence replaceEmoji(CharSequence cs, Paint.FontMetricsInt fontMetrics, int size, boolean createNew, int[] emojiOnly) {
-        if (SharedConfig.useSystemEmoji || cs == null || cs.length() == 0) {
+        if (cs == null || cs.length() == 0) {
             return cs;
         }
         Spannable s;
@@ -459,12 +464,14 @@ public class Emoji {
                     if (emojiOnly != null) {
                         emojiOnly[0]++;
                     }
-                    CharSequence code = emojiCode.subSequence(0, emojiCode.length());
-                    drawable = Emoji.getEmojiDrawable(code);
-                    if (drawable != null) {
-                        span = new EmojiSpan(drawable, DynamicDrawableSpan.ALIGN_BOTTOM, size, fontMetrics);
-                        s.setSpan(span, startIndex, startIndex + startLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        emojiCount++;
+                    if (!SharedConfig.useSystemEmoji) {
+                        CharSequence code = emojiCode.subSequence(0, emojiCode.length());
+                        drawable = Emoji.getEmojiDrawable(code);
+                        if (drawable != null) {
+                            span = new EmojiSpan(drawable, DynamicDrawableSpan.ALIGN_BOTTOM, size, fontMetrics);
+                            s.setSpan(span, startIndex, startIndex + startLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            emojiCount++;
+                        }
                     }
                     startLength = 0;
                     startIndex = -1;
