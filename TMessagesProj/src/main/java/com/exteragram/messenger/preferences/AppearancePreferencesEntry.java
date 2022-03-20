@@ -37,6 +37,7 @@ public class AppearancePreferencesEntry extends BaseFragment {
     private ValueAnimator statusBarColorAnimate;
 
     private int applicationHeaderRow;
+    private int useSystemFontsRow;
     private int transparentStatusBarRow;
     private int blurForAllThemesRow;
     private int applicationDividerRow;
@@ -94,7 +95,13 @@ public class AppearancePreferencesEntry extends BaseFragment {
 
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         listView.setOnItemClickListener((view, position, x, y) -> {
-            if (position == transparentStatusBarRow) {
+            if (position == useSystemFontsRow) {
+                ExteraConfig.toggleUseSystemFonts();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(ExteraConfig.useSystemFonts);
+                }
+                restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
+            } else if (position == transparentStatusBarRow) {
                 SharedConfig.toggleNoStatusBar();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(SharedConfig.noStatusBar);
@@ -163,6 +170,7 @@ public class AppearancePreferencesEntry extends BaseFragment {
         rowCount = 0;
 
         applicationHeaderRow = rowCount++;
+        useSystemFontsRow = rowCount++;
         transparentStatusBarRow = rowCount++;
         blurForAllThemesRow = rowCount++;
         applicationDividerRow = rowCount++;
@@ -221,6 +229,8 @@ public class AppearancePreferencesEntry extends BaseFragment {
                     textCheckCell.setEnabled(true, null);
                     if (position == transparentStatusBarRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("TransparentStatusBar", R.string.TransparentStatusBar), SharedConfig.noStatusBar, true);
+                    } else if (position == useSystemFontsRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString("UseSystemFonts", R.string.UseSystemFonts), ExteraConfig.useSystemFonts, true);
                     } else if (position == blurForAllThemesRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("BlurForAllThemes", R.string.BlurForAllThemes), ExteraConfig.blurForAllThemes, true);
                     } else if (position == hideAllChatsRow) {
@@ -273,9 +283,9 @@ public class AppearancePreferencesEntry extends BaseFragment {
                 return 1;
             } else if (position == applicationHeaderRow || position == generalHeaderRow) {
                 return 2;
-            } else if (position == transparentStatusBarRow || position == blurForAllThemesRow || position == hideAllChatsRow ||
-                       position == hideProxySponsorRow || position == hidePhoneNumberRow || position == showIDRow ||
-                       position == chatsOnTitleRow || position == forceTabletModeRow) {
+            } else if (position == useSystemFontsRow || position == transparentStatusBarRow || position == blurForAllThemesRow ||
+                       position == hideAllChatsRow || position == hideProxySponsorRow || position == hidePhoneNumberRow ||
+                       position == showIDRow || position == chatsOnTitleRow || position == forceTabletModeRow) {
                 return 3;
             }
             return 1;

@@ -14,6 +14,7 @@ public class ExteraConfig {
 
     private static final Object sync = new Object();
 
+    public static boolean useSystemFonts;
     public static boolean blurForAllThemes;
 
     public static boolean hideAllChats;
@@ -63,6 +64,7 @@ public class ExteraConfig {
 
             SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
 
+            useSystemFonts = preferences.getBoolean("useSystemFonts", false);
             blurForAllThemes = preferences.getBoolean("blurForAllThemes", true);
 
             hideAllChats = preferences.getBoolean("hideAllChats", false);
@@ -100,6 +102,14 @@ public class ExteraConfig {
 
             configLoaded = true;
         }
+    }
+
+    public static void toggleUseSystemFonts() {
+        useSystemFonts = !useSystemFonts;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("useSystemFonts", useSystemFonts);
+        editor.commit();
     }
 
     public static void toggleBlurForAllThemes() {
