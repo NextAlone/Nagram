@@ -4969,38 +4969,26 @@ public class MessagesController extends BaseController implements NotificationCe
         });
     }
 
-    public void deleteUserChannelHistory(TLRPC.Chat chat, TLRPC.User user, int offset) {
+    public void deleteUserChannelHistory(TLRPC.Chat currentChat, TLRPC.User fromUser, TLRPC.Chat fromChat, int offset) {
+        long fromId = 0;
+        if (fromUser != null) {
+            fromId = fromUser.id;
+        } else if (fromChat != null){
+            fromId = fromChat.id;
+        }
         if (offset == 0) {
-            getMessagesStorage().deleteUserChatHistory(-chat.id, user.id);
+            getMessagesStorage().deleteUserChatHistory(-currentChat.id, fromId);
         }
         TLRPC.TL_channels_deleteParticipantHistory req = new TLRPC.TL_channels_deleteParticipantHistory();
-        req.channel = getInputChannel(chat);
-        req.participant = getInputPeer(user);
+        req.channel = getInputChannel(currentChat);
+        req.participant = fromUser != null ? getInputPeer(fromUser) : getInputPeer(fromChat);
         getConnectionsManager().sendRequest(req, (response, error) -> {
             if (error == null) {
                 TLRPC.TL_messages_affectedHistory res = (TLRPC.TL_messages_affectedHistory) response;
                 if (res.offset > 0) {
-                    deleteUserChannelHistory(chat, user, res.offset);
+                    deleteUserChannelHistory(currentChat, fromUser, fromChat, res.offset);
                 }
-                processNewChannelDifferenceParams(res.pts, res.pts_count, chat.id);
-            }
-        });
-    }
-
-    public void deleteChannelUserChatHistory(TLRPC.Chat chat, TLRPC.Chat fromChat, int offset) {
-        if (offset == 0) {
-            getMessagesStorage().deleteUserChatHistory(-chat.id, fromChat.id);
-        }
-        TLRPC.TL_channels_deleteParticipantHistory req = new TLRPC.TL_channels_deleteParticipantHistory();
-        req.channel = getInputChannel(chat);
-        req.participant = getInputPeer(fromChat);
-        getConnectionsManager().sendRequest(req, (response, error) -> {
-            if (error == null) {
-                TLRPC.TL_messages_affectedHistory res = (TLRPC.TL_messages_affectedHistory) response;
-                if (res.offset > 0) {
-                    deleteChannelUserChatHistory(chat, fromChat, res.offset);
-                }
-                processNewChannelDifferenceParams(res.pts, res.pts_count, chat.id);
+                processNewChannelDifferenceParams(res.pts, res.pts_count, currentChat.id);
             }
         });
     }
@@ -13428,7 +13416,6 @@ public class MessagesController extends BaseController implements NotificationCe
                         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.updateUserStatus, update);
                     } else if (baseUpdate instanceof TLRPC.TL_updateUserName) {
                         TLRPC.TL_updateUserName update = (TLRPC.TL_updateUserName) baseUpdate;
-                  
                         TLRPC.User currentUser = getUser(update.user_id);
                         if (currentUser != null) {
                             if (!UserObject.isContact(currentUser)) {

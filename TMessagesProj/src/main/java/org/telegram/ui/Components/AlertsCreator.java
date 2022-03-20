@@ -74,6 +74,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
+import org.telegram.messenger.OneUIUtilities;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.SharedConfig;
@@ -153,10 +154,11 @@ public class AlertsCreator {
 
     public static Dialog createBackgroundActivityDialog(Context ctx) {
         return new AlertDialog.Builder(ctx)
-                .setTitle(LocaleController.getString("AllowBackgroundActivity", R.string.AllowBackgroundActivity))
-                .setMessage(LocaleController.getString("AllowBackgroundActivityInfo", R.string.AllowBackgroundActivityInfo))
+                .setTitle(LocaleController.getString(R.string.AllowBackgroundActivity))
+                .setMessage(AndroidUtilities.replaceTags(LocaleController.getString(OneUIUtilities.isOneUI() ? Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ? R.string.AllowBackgroundActivityInfoOneUIAboveS :
+                        R.string.AllowBackgroundActivityInfoOneUIBelowS : R.string.AllowBackgroundActivityInfo)))
                 .setTopAnimation(R.raw.permission_request_apk, PERMISSIONS_REQUEST_TOP_ICON_SIZE, false, Theme.getColor(Theme.key_dialogTopBackground))
-                .setPositiveButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialogInterface, i) -> {
+                .setPositiveButton(LocaleController.getString(R.string.PermissionOpenSettings), (dialogInterface, i) -> {
                     try {
                         Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                         intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
@@ -4586,10 +4588,7 @@ public class AlertsCreator {
                     });
                 }
                 if (checks[2]) {
-                    if (userFinal != null)
-                        MessagesController.getInstance(currentAccount).deleteUserChannelHistory(chat, userFinal, 0);
-                    else
-                        MessagesController.getInstance(currentAccount).deleteChannelUserChatHistory(chat, chatFinal, 0);
+                    MessagesController.getInstance(currentAccount).deleteUserChannelHistory(chat, userFinal, chatFinal, 0);
                 }
             }
             if (onDelete != null) {

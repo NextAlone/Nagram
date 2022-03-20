@@ -818,11 +818,7 @@ public class FilterCreateActivity extends BaseFragment {
                     break;
                 }
                 case 2: {
-                    PollEditTextCell cell = new PollEditTextCell(mContext, false, null, view1 -> IconSelectorAlert.show(FilterCreateActivity.this, (emoticon) -> {
-                        newFilterEmoticon = emoticon;
-                        adapter.notifyItemChanged(nameRow);
-                        checkDoneButton(true);
-                    }));
+                    PollEditTextCell cell = new PollEditTextCell(mContext, null);
                     cell.createErrorTextView();
                     cell.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     cell.addTextWatcher(new TextWatcher() {
@@ -1041,12 +1037,6 @@ public class FilterCreateActivity extends BaseFragment {
                     } else {
                         holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     }
-                    break;
-                }
-                case 2: {
-                    PollEditTextCell cell = (PollEditTextCell) holder.itemView;
-                    cell.setIcon(FolderIconHelper.getTabIcon(newFilterEmoticon, false), newFilterEmoticon);
-                    break;
                 }
             }
         }
