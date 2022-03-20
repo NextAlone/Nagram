@@ -152,7 +152,7 @@ import java.util.Locale;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicReference;
 
-import com.exteragram.extras.ExteraExtras;
+import com.exteragram.messenger.extras.dateOfForwardedMsg;
 import com.exteragram.messenger.ExteraConfig;
 
 public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate, ImageReceiver.ImageReceiverDelegate, DownloadController.FileDownloadProgressListener, TextSelectionHelper.SelectableView, NotificationCenter.NotificationCenterDelegate {
@@ -10581,7 +10581,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     currentForwardNameString = currentForwardName;
                 }
 
-                currentForwardNameString = ExteraExtras.showForwardDate(messageObject, currentForwardNameString);
+                currentForwardNameString = dateOfForwardedMsg.showForwardDate(messageObject, currentForwardNameString);
                 forwardedNameWidth = getMaxNameWidth();
                 String forwardedString = getForwardedMessageText(messageObject);
                 if (hasPsaHint) {
@@ -10772,7 +10772,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             currentForwardNameString = currentForwardName;
                         }
 
-                        currentForwardNameString = ExteraExtras.showForwardDate(messageObject, currentForwardNameString);
+                        currentForwardNameString = dateOfForwardedMsg.showForwardDate(messageObject, currentForwardNameString);
                         name = getForwardedMessageText(messageObject);
                         String from = LocaleController.getString("From", R.string.From);
                         String fromFormattedString = LocaleController.getString("FromFormatted", R.string.FromFormatted);

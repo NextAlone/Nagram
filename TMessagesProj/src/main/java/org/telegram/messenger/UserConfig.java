@@ -21,7 +21,7 @@ import java.util.Arrays;
 public class UserConfig extends BaseController {
 
     public static int selectedAccount;
-    public final static int MAX_ACCOUNT_COUNT = 3;
+    public final static int MAX_ACCOUNT_COUNT = 8;
 
     private final Object sync = new Object();
     private boolean configLoaded;
@@ -242,7 +242,7 @@ public class UserConfig extends BaseController {
             ratingLoadTime = preferences.getInt("ratingLoadTime", 0);
             botRatingLoadTime = preferences.getInt("botRatingLoadTime", 0);
             loginTime = preferences.getInt("loginTime", currentAccount);
-            syncContacts = preferences.getBoolean("syncContacts", false);
+            syncContacts = preferences.getBoolean("syncContacts", true);
             suggestContacts = preferences.getBoolean("suggestContacts", true);
             hasSecureData = preferences.getBoolean("hasSecureData", false);
             notificationsSettingsLoaded = preferences.getBoolean("notificationsSettingsLoaded3", false);
@@ -362,7 +362,7 @@ public class UserConfig extends BaseController {
         botRatingLoadTime = 0;
         draftsLoaded = false;
         contactsReimported = true;
-        syncContacts = false;
+        syncContacts = true;
         suggestContacts = true;
         unreadDialogsLoaded = true;
         hasValidDialogLoadIds = true;

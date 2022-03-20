@@ -1,11 +1,11 @@
-package com.exteragram.extras
+package com.exteragram.messenger.extras
 
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.MessageObject
 
 import com.exteragram.messenger.ExteraConfig
 
-object ExteraExtras {
+object dateOfForwardedMsg {
     @JvmStatic
     fun showForwardDate(obj: MessageObject, orig: CharSequence): String {
         if (!ExteraConfig.dateOfForwardedMsg) {
