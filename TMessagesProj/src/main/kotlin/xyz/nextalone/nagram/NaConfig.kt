@@ -115,6 +115,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    var DoubleTapAction =
+        addConfig(
+            "DoubleTapAction",
+            ConfigItem.configTypeInt,
+            0
+        )
 
     fun addConfig(
         k: String,

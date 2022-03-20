@@ -69,6 +69,7 @@ public class NekoConfig {
     public static ConfigItem showMessageDetails = addConfig("showMessageDetails", configTypeBool, false);
     public static ConfigItem showTranslate = addConfig("showTranslate", configTypeBool, true);
     public static ConfigItem showRepeat = addConfig("showRepeat", configTypeBool, false);
+    public static ConfigItem showRepeatasCopy = addConfig("showRepeatasCopy",configTypeBool,false);
     public static ConfigItem showShareMessages = addConfig("showShareMessages", configTypeBool, false);
     public static ConfigItem showMessageHide = addConfig("showMessageHide", configTypeBool, false);
 
@@ -291,6 +292,8 @@ public class NekoConfig {
             showTranslate.setConfigBool(preferences.getBoolean("showTranslate", true));
         if (preferences.contains("showRepeat"))
             showRepeat.setConfigBool(preferences.getBoolean("showRepeat", false));
+        if (preferences.contains("showRepeatasCopy"))
+            showRepeatasCopy.setConfigBool(preferences.getBoolean("showRepeatasCopy",false));
         if (preferences.contains("showShareMessages"))
             showShareMessages.setConfigBool(preferences.getBoolean("showShareMessages", false));
         if (preferences.contains("showMessageHide"))
