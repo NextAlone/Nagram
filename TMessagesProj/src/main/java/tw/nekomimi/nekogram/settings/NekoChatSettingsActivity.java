@@ -45,10 +45,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import kotlin.Unit;
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.ui.PopupBuilder;
-import tw.nekomimi.nekogram.config.CellGroup;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.config.CellGroup;
 import tw.nekomimi.nekogram.config.cell.AbstractConfigCell;
 import tw.nekomimi.nekogram.config.cell.ConfigCellCustom;
 import tw.nekomimi.nekogram.config.cell.ConfigCellDivider;
@@ -57,8 +56,9 @@ import tw.nekomimi.nekogram.config.cell.ConfigCellSelectBox;
 import tw.nekomimi.nekogram.config.cell.ConfigCellTextCheck;
 import tw.nekomimi.nekogram.config.cell.ConfigCellTextDetail;
 import tw.nekomimi.nekogram.config.cell.ConfigCellTextInput;
-import xyz.nextalone.nagram.DoubleTapConfig;
+import tw.nekomimi.nekogram.ui.PopupBuilder;
 import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.helper.DoubleTap;
 
 @SuppressLint("RtlHardcoded")
 public class NekoChatSettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -239,27 +239,27 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         return Unit.INSTANCE;
                     });
                     builder.show();
-                }else if (position == cellGroup.rows.indexOf(DoubleTapActionRow)) {
+                } else if (position == cellGroup.rows.indexOf(DoubleTapActionRow)) {
                     ArrayList<String> arrayList = new ArrayList<>();
                     ArrayList<Integer> types = new ArrayList<>();
                     arrayList.add(LocaleController.getString("Disable", R.string.Disable));
-                    types.add(DoubleTapConfig.DOUBLE_TAP_ACTION_NONE);
+                    types.add(DoubleTap.DOUBLE_TAP_ACTION_NONE);
                     arrayList.add(LocaleController.getString("Reactions", R.string.Reactions));
-                    types.add(DoubleTapConfig.DOUBLE_TAP_ACTION_REACTION);
+                    types.add(DoubleTap.DOUBLE_TAP_ACTION_REACTION);
                     //arrayList.add(LocaleController.getString("TranslateMessage", R.string.TranslateMessage));
                     //types.add(DoubleTapConfig.DOUBLE_TAP_ACTION_TRANSLATE);
                     arrayList.add(LocaleController.getString("Reply", R.string.Reply));
-                    types.add(DoubleTapConfig.DOUBLE_TAP_ACTION_REPLY);
+                    types.add(DoubleTap.DOUBLE_TAP_ACTION_REPLY);
                     arrayList.add(LocaleController.getString("AddToSavedMessages", R.string.AddToSavedMessages));
-                    types.add(DoubleTapConfig.DOUBLE_TAP_ACTION_SAVE);
+                    types.add(DoubleTap.DOUBLE_TAP_ACTION_SAVE);
                     arrayList.add(LocaleController.getString("Repeat", R.string.Repeat));
-                    types.add(DoubleTapConfig.DOUBLE_TAP_ACTION_REPEAT);
-                    arrayList.add(LocaleController.getString("RepeatasCopy", R.string.RepeatasCopy));
-                    types.add(DoubleTapConfig.DOUBLE_TAP_ACTION_REPEATASCOPY);
+                    types.add(DoubleTap.DOUBLE_TAP_ACTION_REPEAT);
+                    arrayList.add(LocaleController.getString("RepeatAsCopy", R.string.RepeatAsCopy));
+                    types.add(DoubleTap.DOUBLE_TAP_ACTION_REPEAT_AS_COPY);
                     arrayList.add(LocaleController.getString("Edit", R.string.Edit));
-                    types.add(DoubleTapConfig.DOUBLE_TAP_ACTION_EDIT);
+                    types.add(DoubleTap.DOUBLE_TAP_ACTION_EDIT);
                     PopupBuilder builder = new PopupBuilder(view);
-                    builder.setItems(arrayList, (i,str) -> {
+                    builder.setItems(arrayList, (i, str) -> {
                         NaConfig.INSTANCE.getDoubleTapAction().setConfigInt(types.get(i));
                         listAdapter.notifyItemChanged(position);
                         return Unit.INSTANCE;
@@ -380,7 +380,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                     break;
                 }
                 case 3: {
-                    textCell.setChecked(NekoConfig.showRepeatasCopy.toggleConfigBool());
+                    textCell.setTextAndCheck(LocaleController.getString("RepeatAsCopy", R.string.RepeatAsCopy), NaConfig.INSTANCE.getShowRepeatAsCopy().Bool(), false);
                     break;
                 }
                 case 4: {
@@ -443,7 +443,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         break;
                     }
                     case 3: {
-                        textCell.setChecked(NekoConfig.showRepeatasCopy.toggleConfigBool());
+                        textCell.setChecked(NaConfig.INSTANCE.getShowRepeatAsCopy().toggleConfigBool());
                         break;
                     }
                     case 4: {
@@ -724,8 +724,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                         if (position == cellGroup.rows.indexOf(maxRecentStickerCountRow)) {
                             textCell.setTextAndValue(LocaleController.getString("maxRecentStickerCount", R.string.maxRecentStickerCount), String.valueOf(NekoConfig.maxRecentStickerCount.Int()), true);
-                        }else if ( position == cellGroup.rows.indexOf(DoubleTapActionRow)) {
-                            textCell.setTextAndValue(LocaleController.getString("DoubleTapAction", R.string.DoubleTapAction), new DoubleTapConfig().doubleTapActionMap.get(NaConfig.INSTANCE.getDoubleTapAction().Int()), true);
+                        } else if (position == cellGroup.rows.indexOf(DoubleTapActionRow)) {
+                            textCell.setTextAndValue(LocaleController.getString("DoubleTapAction", R.string.DoubleTapAction), DoubleTap.doubleTapActionMap.get(NaConfig.INSTANCE.getDoubleTapAction().Int()), true);
                         }
                     }
                 } else {

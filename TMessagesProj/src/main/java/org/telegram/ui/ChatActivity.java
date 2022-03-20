@@ -128,7 +128,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ForwardingMessagesParams;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
-//import org.telegram.messenger.LanguageDetector;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaDataController;
@@ -287,21 +286,21 @@ import java.util.regex.Pattern;
 
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
-import tw.nekomimi.nekogram.ui.BottomBuilder;
-import tw.nekomimi.nekogram.ui.MessageDetailsActivity;
-import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.parts.MessageTransKt;
 import tw.nekomimi.nekogram.parts.PollTransUpdatesKt;
 import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
 import tw.nekomimi.nekogram.transtale.Translator;
+import tw.nekomimi.nekogram.ui.BottomBuilder;
+import tw.nekomimi.nekogram.ui.MessageDetailsActivity;
 import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.PGPUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.TelegramUtil;
-import xyz.nextalone.nagram.DoubleTapConfig;
 import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.helper.DoubleTap;
 
 @SuppressWarnings("unchecked")
 public class ChatActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, LocationActivity.LocationActivityDelegate, ChatAttachAlertDocumentLayout.DocumentSelectActivityDelegate {
@@ -330,7 +329,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int nkbtn_deldlcache = 2013;
     private final static int nkbtn_view_history = 2014;
     private final static int nkbtn_repeat = 2015;
-    private final static int nkbtn_repeatascopy = 2025;
+    private final static int nkbtn_repeatascopy = 2027;
     private final static int nkbtn_stickerdl = 2016;
     private final static int nkbtn_unpin = 2017;
     private final static int nkbtn_view_in_chat = 2018;
@@ -1499,10 +1498,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         public boolean hasDoubleTap(View view, int position) {
             boolean allowRepeat;
-            if (NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTapConifig.DOUBLE_TAP_ACTION_NONE || !(view instanceof ChatMessageCell)) {
+            if (NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTap.DOUBLE_TAP_ACTION_NONE || !(view instanceof ChatMessageCell)) {
                 return false;
             }
-            if (NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTapConfig.DOUBLE_TAP_ACTION_REACTION) {
+            if (NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTap.DOUBLE_TAP_ACTION_REACTION) {
                 TLRPC.TL_availableReaction reaction = getMediaDataController().getReactionsMap().get(getMediaDataController().getDoubleTapReaction());
                 if (reaction == null) {
                     return false;
@@ -1557,21 +1556,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         break;
 
                      */
-                    case DoubleTapConfig.DOUBLE_TAP_ACTION_REPLY:
+                    case DoubleTap.DOUBLE_TAP_ACTION_REPLY:
                         return message.getId() > 0 && allowChatActions;
-                    case DoubleTapConfig.DOUBLE_TAP_ACTION_SAVE:
+                    case DoubleTap.DOUBLE_TAP_ACTION_SAVE:
                         return !message.isSponsored() && chatMode != MODE_SCHEDULED && !message.needDrawBluredPreview() && !message.isLiveLocation() && message.type != 16 && !getMessagesController().isChatNoForwards(currentChat) && !UserObject.isUserSelf(currentUser);
-                    case DoubleTapConfig.DOUBLE_TAP_ACTION_REPEAT:
+                    case DoubleTap.DOUBLE_TAP_ACTION_REPEAT:
                         allowRepeat = allowChatActions &&
                                 (!isThreadChat() && !noforwards ||
                                         getMessageHelper().getMessageForRepeat(message, messageGroup) != null);
                         return allowRepeat && !message.isSponsored() && chatMode != MODE_SCHEDULED && !message.needDrawBluredPreview() && !message.isLiveLocation() && message.type != 16;
-                    case DoubleTapConfig.DOUBLE_TAP_ACTION_REPEATASCOPY:
+                    case DoubleTap.DOUBLE_TAP_ACTION_REPEAT_AS_COPY:
                         allowRepeat = allowChatActions &&
                                 (!isThreadChat() && !noforwards ||
                                         getMessageHelper().getMessageForRepeat(message, messageGroup) != null);
                         return allowRepeat && !message.isSponsored() && chatMode != MODE_SCHEDULED && !message.needDrawBluredPreview() && !message.isLiveLocation() && message.type != 16;
-                    case DoubleTapConfig.DOUBLE_TAP_ACTION_EDIT:
+                    case DoubleTap.DOUBLE_TAP_ACTION_EDIT:
                         return allowEdit;
                 }
             }
@@ -3152,11 +3151,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             actionModeOtherItem.addSubItem(nkbtn_sharemessage, R.drawable.baseline_share_24, LocaleController.getString("ShareMessages", R.string.ShareMessages));
         actionModeOtherItem.addSubItem(nkbtn_unpin, R.drawable.deproko_baseline_pin_undo_24, LocaleController.getString("UnpinMessage", R.string.UnpinMessage));
         if (!noforward)
-            actionModeOtherItem.addSubItem(nkbtn_savemessage, R.drawable.baseline_bookmark_24, LocaleController.getString("AddToSavedMessages", R.string.AddToSavedMessages));
-        if (NekoConfig.showRepeat.Bool() && !noforward)
+            actionModeOtherItem.addSubItem(nkbtn_savemessage, R.drawable.menu_saved, LocaleController.getString("AddToSavedMessages", R.string.AddToSavedMessages));
+        if (NekoConfig.showRepeat.Bool() && !noforward) {
             actionModeOtherItem.addSubItem(nkbtn_repeat, R.drawable.msg_repeat, LocaleController.getString("Repeat", R.string.Repeat));
-            if(NekoConfig.showRepeatasCopy.Bool() && !noforward)
-                actionModeOtherItem.addSubItem(nkbtn_repeat, R.drawable.msg_repeat, LocaleController.getString("RepeatasCopy", R.string.Repeat));
+        }
+        if (NaConfig.INSTANCE.getShowRepeatAsCopy().Bool() && !noforward) {
+            actionModeOtherItem.addSubItem(nkbtn_repeatascopy, R.drawable.msg_repeat, LocaleController.getString("RepeatAsCopy", R.string.RepeatAsCopy));
+        }
         if (NekoConfig.showMessageHide.Bool()) {
             actionModeOtherItem.addSubItem(nkbtn_hide, R.drawable.baseline_remove_circle_24, LocaleController.getString("Hide", R.string.Hide));
         }
@@ -22055,16 +22056,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                             boolean allowRepeat = currentUser != null
                                     || (currentChat != null && ChatObject.canSendMessages(currentChat));
-                            if (allowRepeat && NekoConfig.showRepeat.Bool() ) {
-                                if (!noforward){
+                            if (allowRepeat && NekoConfig.showRepeat.Bool()) {
+                                if (!noforward) {
                                     items.add(LocaleController.getString("Repeat", R.string.Repeat));
                                     options.add(nkbtn_repeat);
                                     icons.add(R.drawable.msg_repeat);
-                                    items.add(LocaleController.getString("RepeatasCopy", R.string.RepeatasCopy));
+                                    items.add(LocaleController.getString("RepeatAsCopy", R.string.RepeatAsCopy));
                                     options.add(nkbtn_repeatascopy);
                                     icons.add(R.drawable.msg_repeat);
-                                }else{
-                                    items.add(LocaleController.getString("RepeatasCopy", R.string.RepeatasCopy));
+                                } else {
+                                    items.add(LocaleController.getString("RepeatAsCopy", R.string.RepeatAsCopy));
                                     options.add(nkbtn_repeatascopy);
                                     icons.add(R.drawable.msg_repeat);
                                 }

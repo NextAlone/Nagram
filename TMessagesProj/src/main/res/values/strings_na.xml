@@ -14,6 +14,6 @@
     <string name="TextUndo">Undo</string>
     <string name="TextRedo">Redo</string>
     <string name="NoiseSuppressAndVoiceEnhance">Noise Suppress And Voice Enhance</string>
-    <string name="RepeatasCopy">Repeat as Copy</string>
+    <string name="RepeatAsCopy">Repeat as Copy</string>
     <string name="DoubleTapAction">Double Tap Action</string>
 </resources>

@@ -115,7 +115,13 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
-    var DoubleTapAction =
+    val showRepeatAsCopy =
+        addConfig(
+            "RepeatAsCopy",
+            ConfigItem.configTypeBool,
+            false
+        )
+    var doubleTapAction =
         addConfig(
             "DoubleTapAction",
             ConfigItem.configTypeInt,
