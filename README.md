@@ -96,5 +96,8 @@ Is Nagram not in your language, or the translation is incorrect or incomplete? G
 ## Thanks
 
 - [NekoX](https://github.com/NekoX-Dev/NekoX)
+- [Nekogram](https://gitlab.com/Nekogram/Nekogram)
 - [Pigeongram](https://gitlab.com/JasonKhew96/Nekogram)
 - [Nullgram](https://github.com/qwq233/Nullgram)
+- [OwlGram](https://github.com/OwlGramDev/OwlGram)
+
