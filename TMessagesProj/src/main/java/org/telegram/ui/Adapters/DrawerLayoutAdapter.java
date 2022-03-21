@@ -247,6 +247,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         int archiveIcon;
         int savedIcon;
         int settingsIcon;
+        int scanQrIcon;
         int inviteIcon;
         int helpIcon;
         int peopleNearbyIcon;
@@ -259,6 +260,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             archiveIcon = R.drawable.msg_archive;
             savedIcon = R.drawable.menu_bookmarks_ny;
             settingsIcon = R.drawable.menu_settings_ny;
+            scanQrIcon = R.drawable.msg_qrcode;
             inviteIcon = R.drawable.menu_invite_ny;
             helpIcon = R.drawable.menu_help_ny;
             peopleNearbyIcon = R.drawable.menu_nearby_ny;
@@ -271,6 +273,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             archiveIcon = R.drawable.msg_archive;
             savedIcon = R.drawable.menu_bookmarks_14;
             settingsIcon = R.drawable.menu_settings_14;
+            scanQrIcon = R.drawable.msg_qrcode;
             inviteIcon = R.drawable.menu_secret_ny;
             helpIcon = R.drawable.menu_help;
             peopleNearbyIcon = R.drawable.menu_secret_14;
@@ -283,6 +286,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             archiveIcon = R.drawable.msg_archive;
             savedIcon = R.drawable.menu_bookmarks_hw;
             settingsIcon = R.drawable.menu_settings_hw;
+            scanQrIcon = R.drawable.msg_qrcode;
             inviteIcon = R.drawable.menu_invite_hw;
             helpIcon = R.drawable.menu_help_hw;
             peopleNearbyIcon = R.drawable.menu_secret_hw;
@@ -295,6 +299,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             archiveIcon = R.drawable.msg_archive;
             savedIcon = R.drawable.menu_saved;
             settingsIcon = R.drawable.menu_settings;
+            scanQrIcon = R.drawable.msg_qrcode;
             inviteIcon = R.drawable.menu_invite;
             helpIcon = R.drawable.menu_help;
             peopleNearbyIcon = R.drawable.menu_nearby;
@@ -310,7 +315,8 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         if (ExteraConfig.archivedChats) items.add(new Item(14, LocaleController.getString("ArchivedChats", R.string.ArchivedChats), archiveIcon));
         if (ExteraConfig.savedMessages) items.add(new Item(11, LocaleController.getString("SavedMessages", R.string.SavedMessages), savedIcon));
         items.add(new Item(8, LocaleController.getString("Settings", R.string.Settings), settingsIcon));
-        if (ExteraConfig.inviteFriends || ExteraConfig.telegramFeatures) items.add(null);
+        if (ExteraConfig.inviteFriends || ExteraConfig.telegramFeatures || ExteraConfig.scanQr) items.add(null);
+        if (ExteraConfig.scanQr) items.add(new Item(15, LocaleController.getString("AuthAnotherClient", R.string.AuthAnotherClient), scanQrIcon));
         if (ExteraConfig.inviteFriends) items.add(new Item(7, LocaleController.getString("InviteFriends", R.string.InviteFriends), inviteIcon));
         if (ExteraConfig.telegramFeatures) items.add(new Item(13, LocaleController.getString("TelegramFeatures", R.string.TelegramFeatures), helpIcon));
     }

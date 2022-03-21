@@ -44,6 +44,7 @@ public class DrawerPreferencesEntry extends BaseFragment {
     private int peopleNearbyRow;
     private int archivedChatsRow;
     private int savedMessagesRow;
+    private int scanQrRow;
     private int inviteFriendsRow;
     private int telegramFeaturesRow;
     private int drawerDividerRow;
@@ -134,6 +135,11 @@ public class DrawerPreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.savedMessages);
                 }
+            } else if (position == scanQrRow) {
+                ExteraConfig.toggleScanQr();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(ExteraConfig.scanQr);
+                }
             } else if (position == inviteFriendsRow) {
                 ExteraConfig.toggleInviteFriends();
                 if (view instanceof TextCheckCell) {
@@ -166,6 +172,7 @@ public class DrawerPreferencesEntry extends BaseFragment {
         peopleNearbyRow = rowCount++;
         archivedChatsRow = rowCount++;
         savedMessagesRow = rowCount++;
+        scanQrRow = rowCount++;
         inviteFriendsRow = rowCount++;
         telegramFeaturesRow = rowCount++;
         drawerDividerRow = rowCount++;
@@ -227,6 +234,8 @@ public class DrawerPreferencesEntry extends BaseFragment {
                         textCheckCell.setTextAndCheck(LocaleController.getString("ArchivedChats", R.string.ArchivedChats), ExteraConfig.archivedChats, true);
                     } else if (position == savedMessagesRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("SavedMessages", R.string.SavedMessages), ExteraConfig.savedMessages, true);
+                    } else if (position == scanQrRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString("AuthAnotherClient", R.string.AuthAnotherClient), ExteraConfig.scanQr, true);
                     } else if (position == inviteFriendsRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("InviteFriends", R.string.InviteFriends), ExteraConfig.inviteFriends, true);
                     } else if (position == telegramFeaturesRow) {
@@ -281,9 +290,9 @@ public class DrawerPreferencesEntry extends BaseFragment {
             } else if (position == drawerHeaderRow) {
                 return 2;
             } else if (position == newGroupRow || position == newSecretChatRow || position == newChannelRow ||
-                    position == contactsRow || position == callsRow || position == peopleNearbyRow ||
-                    position == archivedChatsRow || position == savedMessagesRow ||
-                    position == inviteFriendsRow || position == telegramFeaturesRow) {
+                       position == contactsRow || position == callsRow || position == peopleNearbyRow ||
+                       position == archivedChatsRow || position == savedMessagesRow ||
+                       position == scanQrRow || position == telegramFeaturesRow || position == inviteFriendsRow) {
                 return 3;
             } else if (position == attentionRow) {
                 return 4;

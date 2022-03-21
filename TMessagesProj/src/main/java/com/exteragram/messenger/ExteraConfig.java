@@ -47,6 +47,7 @@ public class ExteraConfig {
     public static boolean peopleNearby;
     public static boolean archivedChats;
     public static boolean savedMessages;
+    public static boolean scanQr;
     public static boolean inviteFriends;
     public static boolean telegramFeatures;
 
@@ -97,6 +98,7 @@ public class ExteraConfig {
             peopleNearby = preferences.getBoolean("peopleNearby", false);
             archivedChats = preferences.getBoolean("archivedChats", true);
             savedMessages = preferences.getBoolean("savedMessages", true);
+            scanQr = preferences.getBoolean("scanQr", true);
             inviteFriends = preferences.getBoolean("inviteFriends", false);
             telegramFeatures = preferences.getBoolean("telegramFeatures", true);
 
@@ -319,6 +321,14 @@ public class ExteraConfig {
         editor.commit();
     }
 
+    public static void toggleScanQr() {
+        scanQr = !scanQr;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("scanQr", scanQr);
+        editor.commit();
+    }
+
     public static void toggleInviteFriends() {
         inviteFriends = !inviteFriends;
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
@@ -326,6 +336,7 @@ public class ExteraConfig {
         editor.putBoolean("inviteFriends", inviteFriends);
         editor.commit();
     }
+
     public static void toggleTelegramFeatures() {
         telegramFeatures = !telegramFeatures;
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
