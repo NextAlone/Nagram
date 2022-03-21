@@ -127,6 +127,12 @@ object NaConfig {
             ConfigItem.configTypeInt,
             0
         )
+    val showReactions =
+        addConfig(
+            "Reactions",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     fun addConfig(
         k: String,
