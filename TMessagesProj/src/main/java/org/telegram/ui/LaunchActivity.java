@@ -166,6 +166,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import com.exteragram.messenger.preferences.MainPreferencesEntry;
 import com.exteragram.messenger.ExteraConfig;
 
 public class LaunchActivity extends BasePermissionsActivity implements ActionBarLayout.ActionBarLayoutDelegate, NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate {
@@ -2136,6 +2137,8 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                                         newContactName = data.getQueryParameter("name");
                                         newContactPhone = data.getQueryParameter("phone");
                                         newContact = true;
+                                    } else if ((url.startsWith("tg:extera") || url.startsWith("tg://extera"))) {
+                                        open_settings = 7;
                                     } else {
                                         unsupportedUrl = url.replace("tg://", "").replace("tg:", "");
                                         int index;
@@ -2397,6 +2400,8 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                     closePrevious = true;
                 } else if (open_settings == 6) {
                     fragment = new EditWidgetActivity(open_widget_edit_type, open_widget_edit);
+                } else if (open_settings == 7) {
+                    fragment = new MainPreferencesEntry();
                 } else {
                     fragment = null;
                 }
