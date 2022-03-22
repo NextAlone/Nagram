@@ -507,9 +507,7 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setText(LocaleController.getString("SourceCode", R.string.SourceCode), true);
                     } else if (position == translationRow) {
                         textCell.setText(LocaleController.getString("TransSite", R.string.TransSite), true);
-                    } else if (position == passcodeRow) {
-                        String t = LocaleController.getString("ForkPasscodeSettingsTitle", R.string.ForkPasscodeSettingsTitle);
-                        textCell.setTextAndValue(t, "", false);
+                        textCell.setTextAndValue(LocaleController.getString("ForkPasscodeSettingsTitle", R.string.ForkPasscodeSettingsTitle), "", false);
                     }
 
                     break;
