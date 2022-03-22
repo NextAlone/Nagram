@@ -511,6 +511,7 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setText(LocaleController.getString("SourceCode", R.string.SourceCode), true);
                     } else if (position == translationRow) {
                         textCell.setText(LocaleController.getString("TransSite", R.string.TransSite), true);
+                    }
                     break;
                 }
                 case 4: {
