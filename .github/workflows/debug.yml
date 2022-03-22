@@ -324,8 +324,7 @@ jobs:
           export DEBUG_BUILD=true
           ./gradlew TMessagesProj:assemble${{ matrix.flavor }}
 
-          APK=$(find TMessagesProj/build/outputs/apk -name '*arm64-v8a*.apk')
-          APK=$(dirname $APK)
+          APK=$(find TMessagesProj/build/outputs/apk -name 'Nagram*.apk')
           echo "APK=$APK" >> $GITHUB_ENV
       - uses: actions/upload-artifact@v2
         with:
