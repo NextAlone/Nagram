@@ -23,15 +23,15 @@
     <!-- Appearance -->
     <string name="UseSystemFonts">Use system fonts</string>
     <string name="UseSystemEmoji">Use system emoji</string>
-    <string name="TransparentStatusBar">Transparent Status Bar</string>
+    <string name="TransparentStatusBar">Transparent status bar</string>
     <string name="BlurForAllThemes">Blur for all themes</string>
 
-    <string name="HideAllChats">Hide \"All Chats\" Tab</string>
-    <string name="HideProxySponsor">Hide Proxy Sponsor</string>
-    <string name="HidePhoneNumber">Hide Phone Number</string>
+    <string name="HideAllChats">Hide \"All Chats\" tab</string>
+    <string name="HideProxySponsor">Hide proxy sponsor</string>
+    <string name="HidePhoneNumber">Hide phone number</string>
     <string name="ShowID">Show ID in Profile</string>
     <string name="ChatsOnTitle">\"Chats\" instead of \"exteraGram\"</string>
-    <string name="ForceTabletMode">Force Tablet Mode</string>
+    <string name="ForceTabletMode">Force tablet mode</string>
 
     <!-- Chats -->
     <string name="StickerSize">Stickers size</string>
@@ -41,14 +41,15 @@
     <string name="StickerSizeDialogMessage">woah, he is so cute!</string>
 
     <string name="HideSendAsChannel">Hide \"Send as Channel\"</string>
-    <string name="HideKeyboardOnScroll">Hide Keyboard on Scrolling</string>
+    <string name="HideKeyboardOnScroll">Hide keyboard on scrolling</string>
     <string name="DisableReactions">Disable reactions</string>
-    <string name="ArchiveOnPull">Open Archive on Pulldown</string>
+    <string name="ArchiveOnPull">Open archive on pulldown</string>
     <string name="DateOfForwardedMsg">Show date of forwarded message</string>
 
     <string name="Media">Media</string>
-    <string name="RearVideoMessages">Rear Camera in Video Messages</string>
+    <string name="RearVideoMessages">Rear camera in video messages</string>
     <string name="DisableCamera">Disable instant camera</string>
+    <string name="DisableProximityEvents">Disable proximity events</string>
     <string name="PauseOnMinimize">Autopause</string>
     <string name="POMDescription">Pauses a video playback when device is locked or exteraGram is minimized</string>
     <string name="DisablePlayback">Disable playback</string>

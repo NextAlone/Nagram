@@ -38,6 +38,7 @@ public class ExteraConfig {
     public static boolean disableCamera;
     public static boolean pauseOnMinimize;
     public static boolean disablePlayback;
+    public static boolean disableProximityEvents;
 
     public static boolean newGroup;
     public static boolean newSecretChat;
@@ -87,6 +88,7 @@ public class ExteraConfig {
 
             rearVideoMessages = preferences.getBoolean("rearVideoMessages", false);
             disableCamera = preferences.getBoolean("disableCamera", false);
+            disableProximityEvents = preferences.getBoolean("disableProximityEvents", false);
             pauseOnMinimize = preferences.getBoolean("pauseOnMinimize", true);
             disablePlayback = preferences.getBoolean("disablePlayback", true);
 
@@ -239,6 +241,14 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("disableCamera", disableCamera);
+        editor.commit();
+    }
+
+    public static void toggleDisableProximityEvents() {
+        disableProximityEvents = !disableProximityEvents;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("disableProximityEvents", disableProximityEvents);
         editor.commit();
     }
 

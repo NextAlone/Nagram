@@ -61,6 +61,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
     private int mediaHeaderRow;
     private int rearVideoMessagesRow;
     private int disableCameraRow;
+    private int disableProximityEventsRow;
     private int pauseOnMinimizeRow;
     private int disablePlaybackRow;
     private int mediaDividerRow;
@@ -252,6 +253,11 @@ public class ChatsPreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.disableCamera);
                 }
+            } else if (position == disableProximityEventsRow) {
+                ExteraConfig.toggleDisableProximityEvents();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(ExteraConfig.disableProximityEvents);
+                }
             } else if (position == pauseOnMinimizeRow) {
                 ExteraConfig.togglePauseOnMinimize();
                 if (view instanceof TextCheckCell) {
@@ -290,6 +296,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
         mediaHeaderRow = rowCount++;
         rearVideoMessagesRow = rowCount++;
         disableCameraRow = rowCount++;
+        disableProximityEventsRow = rowCount++;
         pauseOnMinimizeRow = rowCount++;
         disablePlaybackRow = rowCount++;
         mediaDividerRow = rowCount++;
@@ -355,6 +362,8 @@ public class ChatsPreferencesEntry extends BaseFragment {
                         textCheckCell.setTextAndCheck(LocaleController.getString("RearVideoMessages", R.string.RearVideoMessages), ExteraConfig.rearVideoMessages, true);
                     } else if (position == disableCameraRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("DisableCamera", R.string.DisableCamera), ExteraConfig.disableCamera, true);
+                    } else if (position == disableProximityEventsRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString("DisableProximityEvents", R.string.DisableProximityEvents), ExteraConfig.disableProximityEvents, true);
                     } else if (position == pauseOnMinimizeRow) {
                         textCheckCell.setTextAndValueAndCheck(LocaleController.getString("PauseOnMinimize", R.string.PauseOnMinimize), LocaleController.getString("POMDescription", R.string.POMDescription), ExteraConfig.pauseOnMinimize, true, true);
                     } else if (position == disablePlaybackRow) {
@@ -403,8 +412,8 @@ public class ChatsPreferencesEntry extends BaseFragment {
                 return 2;
             } else if (position == hideStickerTimeRow || position == hideSendAsChannelRow || position == hideKeyboardOnScrollRow ||
                        position == archiveOnPullRow || position == dateOfForwardedMsgRow || position == disableReactionsRow ||
-                       position == rearVideoMessagesRow || position == disableCameraRow || position == pauseOnMinimizeRow ||
-                       position == disablePlaybackRow) {
+                       position == rearVideoMessagesRow || position == disableCameraRow || position == disableProximityEventsRow ||
+                       position == pauseOnMinimizeRow || position == disablePlaybackRow) {
                 return 3;
             } else if (position == stickerSizeRow) {
                 return 4;
