@@ -352,6 +352,7 @@ add_library(webp STATIC
         libwebp/src/dsp/lossless_msa.c
         libwebp/src/dsp/lossless_neon.c
         libwebp/src/dsp/lossless_sse2.c
+        libwebp/src/dsp/lossless_sse41.c
         libwebp/src/dsp/rescaler.c
         libwebp/src/dsp/rescaler_mips32.c
         libwebp/src/dsp/rescaler_mips_dsp_r2.c
