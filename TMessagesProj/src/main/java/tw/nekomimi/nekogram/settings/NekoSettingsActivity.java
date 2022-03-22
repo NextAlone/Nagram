@@ -492,6 +492,8 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setTextAndIcon(LocaleController.getString("Experiment", R.string.Experiment), R.drawable.baseline_star_24, true);
                     } else if (position == accountRow) {
                         textCell.setTextAndIcon(LocaleController.getString("Account", R.string.Account), R.drawable.baseline_person_24, true);
+                    } else if (position == passcodeRow) {
+                        textCell.setText(LocaleController.getString("ForkPasscodeSettingsTitle", R.string.ForkPasscodeSettingsTitle), false);
                     }
                     break;
                 }
@@ -509,10 +511,6 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setText(LocaleController.getString("SourceCode", R.string.SourceCode), true);
                     } else if (position == translationRow) {
                         textCell.setText(LocaleController.getString("TransSite", R.string.TransSite), true);
-                    } else if (position == passcodeRow) {
-                        textCell.setText(LocaleController.getString("ForkPasscodeSettingsTitle", R.string.ForkPasscodeSettingsTitle), false);
-                    }
-
                     break;
                 }
                 case 4: {
