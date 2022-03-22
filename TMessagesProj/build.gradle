@@ -85,8 +85,13 @@ android {
                 enable false
                 universalApk true
             } else {
-                enable true
-                universalApk false
+                if (System.getenv("DEBUG_BUILD") == "true") {
+                    enable false
+                    universalApk true
+                } else {
+                    enable true
+                    universalApk false
+                }
                 if (!nativeTarget.isBlank()) {
                     reset()
                     include nativeTarget
