@@ -408,6 +408,8 @@ public class NekoSettingsActivity extends BaseFragment {
             || !MessagesController.getGlobalMainSettings().getBoolean("passcodeHideSection", false)) {
             //emptyRows.add(rowCount++);
             passcodeRow = rowCount++;
+        } else {
+            emptyRows.add(rowCount++);
         }
 
         if (listAdapter != null) {
@@ -507,7 +509,8 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setText(LocaleController.getString("SourceCode", R.string.SourceCode), true);
                     } else if (position == translationRow) {
                         textCell.setText(LocaleController.getString("TransSite", R.string.TransSite), true);
-                        textCell.setTextAndValue(LocaleController.getString("ForkPasscodeSettingsTitle", R.string.ForkPasscodeSettingsTitle), "", false);
+                    } else if (position == passcodeRow) {
+                        textCell.setText(LocaleController.getString("ForkPasscodeSettingsTitle", R.string.ForkPasscodeSettingsTitle), false);
                     }
 
                     break;
