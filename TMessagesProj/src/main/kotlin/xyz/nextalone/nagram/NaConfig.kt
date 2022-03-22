@@ -133,6 +133,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val scrollableChatPreview =
+        addConfig(
+            "ScrollableChatPreview",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     fun addConfig(
         k: String,

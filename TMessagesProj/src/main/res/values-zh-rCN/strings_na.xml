@@ -18,4 +18,5 @@
     <string name="DoubleTapAction">双击操作</string>
     <string name="SendReactions">表情回应</string>
     <string name="ShowReactions">显示表情回应菜单</string>
+    <string name="ScrollableChatPreview">可滑动聊天预览</string>
 </resources>
