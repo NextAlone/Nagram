@@ -11,7 +11,8 @@ Experimental Telegram client based on [official Telegram sources](https://github
 
  ## Thanks to:
 - [Telegram](https://github.com/DrKLO/Telegram)
-- [Catogram](https://github.com/Catogram/Catogram)
+- [Nekogram](https://gitlab.com/Nekogram/Nekogram)
+- [OwlGram](https://gitlab.com/OwlGramDev/OwlGram)
 
 ## Importing API hash and keys
 - You should get **YOUR OWN API KEY AND HASH** here: https://core.telegram.org/api/obtaining_api_id and create a file called `API_KEYS` in the source root directory. Also you should get **YOUR OWN MAPS API KEY** here: https://console.cloud.google.com/google/maps-apis/credentials and add it to this file.
