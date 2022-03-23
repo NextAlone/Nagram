@@ -243,6 +243,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.disableReactions);
                 }
+                restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
             } else if (position == rearVideoMessagesRow) {
                 ExteraConfig.toggleRearVideoMessages();
                 if (view instanceof TextCheckCell) {
@@ -268,6 +269,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.disablePlayback);
                 }
+                restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
             }
         });
         restartTooltip = new UndoView(context);
