@@ -36,7 +36,7 @@ public abstract class BaseCell extends ViewGroup {
             if (checkingForLongPress && getParent() != null && currentPressCount == pressCount) {
                 checkingForLongPress = false;
                 if (!NekoConfig.disableVibration.Bool()) {
-                    performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                    performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 }
                 if (onLongPress()) {
                     MotionEvent event = MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0, 0, 0);
@@ -56,6 +56,7 @@ public abstract class BaseCell extends ViewGroup {
         super(context);
         setWillNotDraw(false);
         setFocusable(true);
+        setHapticFeedbackEnabled(true);
     }
 
     public static void setDrawableBounds(Drawable drawable, int x, int y) {
