@@ -22071,7 +22071,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         }
                         if (chatMode != MODE_SCHEDULED) {
                             boolean allowViewHistory = currentUser == null
-                                    && (currentChat != null && !currentChat.broadcast && message.isFromUser());
+                                    && (currentChat != null && !currentChat.broadcast && !isThreadChat());
 
                             if (NekoConfig.showDeleteDownloadedFile.Bool() && TelegramUtil.messageObjectIsFile(type, selectedObject)) {
                                 items.add(LocaleController.getString("DeleteDownloadedFile", R.string.DeleteDownloadedFile));
@@ -29483,12 +29483,20 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
             case nkbtn_view_history: {
                 // same as "search_from_user_id"
-                TLRPC.User user = getMessagesController().getUser(selectedObject.messageOwner.from_id.user_id);
-                if (user != null) {
-                    openSearchWithText("");
-                    searchUserButton.callOnClick();
-                    searchUserMessages(user, null);
+                TLRPC.Peer peer = selectedObject.messageOwner.from_id;
+                openSearchWithText("");
+                if (peer.user_id!=0) {
+                    TLRPC.User user = getMessagesController().getUser(peer.user_id);
+                    searchUserMessages(user,null);
+                } else if (peer.chat_id!=0) {
+                    TLRPC.Chat chat = getMessagesController().getChat(peer.chat_id);
+                    searchUserMessages(null, chat);
+                } else if (peer.channel_id!=0) {
+                    // thanks to Nekogram
+                    TLRPC.Chat chat = getMessagesController().getChat(peer.channel_id);
+                    searchUserMessages(null, chat);
                 }
+                showMessagesSearchListView(true);
                 break;
             }
             case nkbtn_editAdmin: {
