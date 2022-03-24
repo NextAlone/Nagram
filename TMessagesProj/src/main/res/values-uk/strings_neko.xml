@@ -142,4 +142,6 @@
     <string name="SaveToDownloadCount_few">Зберігання %1$d файлів до завантажень</string>
     <string name="showBottomActionsWhenSelecting">Показати дії знизу при виділенні</string>
     <string name="channelLabel">канал</string>
+    <string name="forceBlurInChat">Примусове розмиття в чаті</string>
+    <string name="ChatBlurAlphaValue">Альфа розмиття в чаті</string>
 </resources>

@@ -142,4 +142,6 @@
     <string name="SaveToDownloadCount_other">%1$d קבצים נשמרים להורדות</string>
     <string name="showBottomActionsWhenSelecting">להציג את הפעולות התחתונות בעת בחירה</string>
     <string name="channelLabel">ערוץ</string>
+    <string name="forceBlurInChat">אילוץ הפעלת טשטוש צ׳אט</string>
+    <string name="ChatBlurAlphaValue">שקיפות טשטוש צ׳אט</string>
 </resources>
