@@ -29052,7 +29052,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("DeleteAllFromSelfAlert", R.string.DeleteAllFromSelfAlert)));
             builder.setPositiveButton(LocaleController.getString("DeleteAll", R.string.DeleteAll), (dialogInterface, i) -> {
                 if (ChatObject.isChannel(currentChat) && currentChat.megagroup && ChatObject.canUserDoAction(currentChat, ChatObject.ACTION_DELETE_MESSAGES)) {
-                    getMessagesController().deleteUserChannelHistory(currentChat, UserConfig.getInstance(currentAccount).getCurrentUser(), 0);
+                    getMessagesController().deleteUserChannelHistory(currentChat, UserConfig.getInstance(currentAccount).getCurrentUser(), null, 0);
                 } else {
                     getMessageHelper().deleteUserChannelHistoryWithSearch(getParentActivity(), dialog_id, UserConfig.getInstance(currentAccount).getCurrentUser());
                 }

@@ -142,7 +142,7 @@ public class NekoAccountSettingsActivity extends BaseFragment {
                                 TLRPC.Chat chat = getMessagesController().getChat(peer.channel_id);
                                 if (!chat.broadcast) {
                                     if (ChatObject.isChannel(chat) && chat.megagroup && ChatObject.canUserDoAction(chat, ChatObject.ACTION_DELETE_MESSAGES)) {
-                                        getMessagesController().deleteUserChannelHistory(chat, UserConfig.getInstance(currentAccount).getCurrentUser(), 0);
+                                        getMessagesController().deleteUserChannelHistory(chat, UserConfig.getInstance(currentAccount).getCurrentUser(), null, 0);
                                     } else {
                                         MessageHelper.getInstance(currentAccount).deleteUserChannelHistoryWithSearch(null, TLdialog.id, getMessagesController().getUser(getUserConfig().clientUserId));
                                     }
