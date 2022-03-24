@@ -254,7 +254,6 @@ jobs:
   build:
     name: Gradle Build
     runs-on: ubuntu-latest
-    if: ${{ !contains(github.event.head_commit.message, 'bump version') }}
     needs:
       - native
       - v2ray
@@ -334,6 +333,7 @@ jobs:
   upload:
     name: Upload to Telegram
     runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.head_commit.message, 'bump version') }}
     needs:
       - build
       - telegram-bot-api
