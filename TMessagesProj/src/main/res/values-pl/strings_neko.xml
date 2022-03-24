@@ -28,7 +28,7 @@
     <string name="NekogramRunning">Nekogram działa</string>
     <string name="EventType">Ustawienia ikon paska bocznego</string>
     <string name="ChristmasHat">Zawsze pokazuj kapelusz świąteczny</string>
-    <string name="ActionBarDecoration">Dekoracja paska tytułu</string>
+    <string name="ActionBarDecoration">Dekoracja nagłówka</string>
     <string name="DependsOnDate">Zależy od daty</string>
     <string name="Christmas">Boże narodzenie</string>
     <string name="Valentine">Walentynki</string>
@@ -118,7 +118,7 @@
     <string name="UseMediaStreamInVoip">Użyj strumienia mediów w VoIP</string>
     <string name="TakeGIFasVideo">Traktuj GIF jako Wideo</string>
     <string name="DontSendGreetingSticker">Nie wysyłaj naklejki na powitanie</string>
-    <string name="pressTitleToOpenAllChats">Dotknij tytuł aby otworzyć folder \"Wszystkie czaty\"</string>
+    <string name="pressTitleToOpenAllChats">Przytrzymaj tytułu aplikacji, aby otworzyć folder \"Wszystkie czaty\"</string>
     <string name="hideGroupSticker">Ukryj naklejki grupy</string>
     <string name="disableChoosingSticker">Wyślij wpisując zamiast wybierać naklejkę</string>
     <string name="disableRemoteEmojiInteractions">Wyłącz zdalne interakcje emoji</string>
@@ -142,4 +142,6 @@
     <string name="SaveToDownloadCount_zero">Zapisywanie %1$d plików do pobranych</string>
     <string name="showBottomActionsWhenSelecting">Pokaż działania u dołu podczas wybierania</string>
     <string name="channelLabel">kanał</string>
+    <string name="ChatBlurAlphaValue">Poziom rozmycia</string>
+    <string name="forceBlurInChat">Wymuś rozmycia interfejsu</string>
 </resources>

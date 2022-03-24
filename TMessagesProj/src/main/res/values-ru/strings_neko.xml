@@ -141,4 +141,8 @@
     <string name="customSavePathHint">Оставьте пустым, чтобы сохранять в Загрузки напрямую</string>
     <string name="reactions">Реакции в меню</string>
     <string name="customSavePath">Папка в загрузках</string>
+    <string name="channelLabel">канал</string>
+    <string name="showBottomActionsWhenSelecting">Показать нижние действия при выборе</string>
+    <string name="forceBlurInChat">Принудительно включить размытие чатов</string>
+    <string name="ChatBlurAlphaValue">Размытие чатов (Альфа)</string>
 </resources>

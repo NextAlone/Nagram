@@ -143,4 +143,6 @@
     <string name="doubleTapSendReactions">Enviar reação ao tocar duas vezes (padrão)</string>
     <string name="showBottomActionsWhenSelecting">Mostrar ações inferiores ao selecionar</string>
     <string name="channelLabel">canal</string>
+    <string name="ChatBlurAlphaValue">Chat Blur Alfa</string>
+    <string name="forceBlurInChat">Forçar a ativação do Chat Blur</string>
 </resources>
