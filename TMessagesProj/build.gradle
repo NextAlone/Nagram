@@ -79,8 +79,6 @@ dependencies {
 
 ext.abiCodes = ['armeabi-v7a':1, 'arm64-v8a':5, x86:2, x86_64:6, 'universal':0]
 
-def officialVersionName = "8.6.1"
-
 android {
     compileSdkVersion 31
     buildToolsVersion '32.0.0'
@@ -164,6 +162,8 @@ android {
             outputFileName = "Nullgram-${defaultConfig.versionName}-${abi}.apk"
         }
     }
+
+    def officialVersionName = "8.6.2"
 
     defaultConfig {
         minSdkVersion 21

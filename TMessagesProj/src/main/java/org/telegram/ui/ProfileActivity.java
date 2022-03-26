@@ -101,6 +101,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import kotlin.Unit;
 import org.telegram.PhoneFormat.PhoneFormat;
+import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildConfig;
@@ -122,6 +123,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
@@ -187,6 +189,7 @@ import org.telegram.ui.Components.voip.VoIPHelper;
 import top.qwq2333.nullgram.activity.MainSettingActivity;
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.ui.BottomBuilder;
+import top.qwq2333.nullgram.utils.APKUtils;
 import top.qwq2333.nullgram.utils.AlertUtil;
 import top.qwq2333.nullgram.utils.Defines;
 
@@ -699,7 +702,7 @@ public class ProfileActivity extends BaseFragment implements
             if (y1 != 0) {
                 if (previousTransitionFragment != null) {
                     AndroidUtilities.rectTmp2.set(0, 0, getMeasuredWidth(), y1);
-                    previousTransitionFragment.contentView.drawBlur(canvas, getY(), AndroidUtilities.rectTmp2, previousTransitionFragment.getActionBar().blurScrimPaint, true);
+                    previousTransitionFragment.contentView.drawBlurRect(canvas, getY(), AndroidUtilities.rectTmp2, previousTransitionFragment.getActionBar().blurScrimPaint, true);
                 }
                 paint.setColor(currentColor);
                 canvas.drawRect(0, 0, getMeasuredWidth(), y1, paint);
@@ -708,7 +711,7 @@ public class ProfileActivity extends BaseFragment implements
                 int color = Theme.getColor(Theme.key_windowBackgroundWhite);
                 paint.setColor(color);
                 AndroidUtilities.rectTmp2.set(0, y1, getMeasuredWidth(), (int) v);
-                contentView.drawBlur(canvas, getY(), AndroidUtilities.rectTmp2, paint, true);
+                contentView.drawBlurRect(canvas, getY(), AndroidUtilities.rectTmp2, paint, true);
             }
 
             if (parentLayout != null) {
@@ -2095,8 +2098,7 @@ public class ProfileActivity extends BaseFragment implements
                 if (pinchToZoomHelper.isInOverlayMode()) {
                     return pinchToZoomHelper.onTouchEvent(ev);
                 }
-                if (sharedMediaLayout != null && sharedMediaLayout.isInFastScroll()
-                    && sharedMediaLayout.isPinnedToTop()) {
+                if (sharedMediaLayout != null && sharedMediaLayout.isInFastScroll() && sharedMediaLayout.isPinnedToTop()) {
                     return sharedMediaLayout.dispatchFastScrollEvent(ev);
                 }
                 if (sharedMediaLayout != null && sharedMediaLayout.checkPinchToZoom(ev)) {
@@ -2106,7 +2108,7 @@ public class ProfileActivity extends BaseFragment implements
             }
 
             private boolean ignoreLayout;
-            private final Paint grayPaint = new Paint();
+            private Paint grayPaint = new Paint();
 
             @Override
             public boolean hasOverlappingRendering() {
@@ -2115,9 +2117,7 @@ public class ProfileActivity extends BaseFragment implements
 
             @Override
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                final int actionBarHeight =
-                    ActionBar.getCurrentActionBarHeight() + (actionBar.getOccupyStatusBar()
-                        ? AndroidUtilities.statusBarHeight : 0);
+                final int actionBarHeight = ActionBar.getCurrentActionBarHeight() + (actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0);
                 if (listView != null) {
                     FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) listView.getLayoutParams();
                     if (layoutParams.topMargin != actionBarHeight) {
@@ -2132,21 +2132,17 @@ public class ProfileActivity extends BaseFragment implements
                 }
 
                 int height = MeasureSpec.getSize(heightMeasureSpec);
-                super.onMeasure(widthMeasureSpec,
-                    MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
+                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
 
                 boolean changed = false;
-                if (lastMeasuredContentWidth != getMeasuredWidth()
-                    || lastMeasuredContentHeight != getMeasuredHeight()) {
-                    changed = lastMeasuredContentWidth != 0
-                        && lastMeasuredContentWidth != getMeasuredWidth();
+                if (lastMeasuredContentWidth != getMeasuredWidth() || lastMeasuredContentHeight != getMeasuredHeight()) {
+                    changed = lastMeasuredContentWidth != 0 && lastMeasuredContentWidth != getMeasuredWidth();
                     listContentHeight = 0;
                     int count = listAdapter.getItemCount();
                     lastMeasuredContentWidth = getMeasuredWidth();
                     lastMeasuredContentHeight = getMeasuredHeight();
                     int ws = MeasureSpec.makeMeasureSpec(getMeasuredWidth(), MeasureSpec.EXACTLY);
-                    int hs = MeasureSpec.makeMeasureSpec(listView.getMeasuredHeight(),
-                        MeasureSpec.UNSPECIFIED);
+                    int hs = MeasureSpec.makeMeasureSpec(listView.getMeasuredHeight(), MeasureSpec.UNSPECIFIED);
                     positionToOffset.clear();
                     for (int i = 0; i < count; i++) {
                         int type = listAdapter.getItemViewType(i);
@@ -2154,8 +2150,7 @@ public class ProfileActivity extends BaseFragment implements
                         if (type == ListAdapter.VIEW_TYPE_SHARED_MEDIA) {
                             listContentHeight += listView.getMeasuredHeight();
                         } else {
-                            RecyclerView.ViewHolder holder = listAdapter.createViewHolder(null,
-                                type);
+                            RecyclerView.ViewHolder holder = listAdapter.createViewHolder(null, type);
                             listAdapter.onBindViewHolder(holder, i);
                             holder.itemView.measure(ws, hs);
                             listContentHeight += holder.itemView.getMeasuredHeight();
@@ -2163,13 +2158,11 @@ public class ProfileActivity extends BaseFragment implements
                     }
 
                     if (emptyView != null) {
-                        ((LayoutParams) emptyView.getLayoutParams()).topMargin =
-                            AndroidUtilities.dp(88) + AndroidUtilities.statusBarHeight;
+                        ((LayoutParams) emptyView.getLayoutParams()).topMargin = AndroidUtilities.dp(88) + AndroidUtilities.statusBarHeight;
                     }
                 }
 
-                if (!fragmentOpened && (expandPhoto
-                    || openAnimationInProgress && playProfileAnimation == 2)) {
+                if (!fragmentOpened && (expandPhoto || openAnimationInProgress && playProfileAnimation == 2)) {
                     ignoreLayout = true;
 
                     if (expandPhoto) {
@@ -2180,9 +2173,7 @@ public class ProfileActivity extends BaseFragment implements
                         }
                         nameTextView[1].setTextColor(Color.WHITE);
                         onlineTextView[1].setTextColor(Color.argb(179, 255, 255, 255));
-                        idTextView.setTextColor(Color.argb(179, 255, 255, 255));
-                        actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR,
-                            false);
+                        actionBar.setItemsBackgroundColor(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, false);
                         actionBar.setItemsColor(Color.WHITE, false);
                         overlaysView.setOverlaysVisible();
                         overlaysView.setAlphaValue(1.0f, false);
@@ -2217,9 +2208,7 @@ public class ProfileActivity extends BaseFragment implements
                         paddingBottom = 0;
                     } else {
                         paddingTop = listView.getMeasuredWidth();
-                        paddingBottom = Math.max(0,
-                            getMeasuredHeight() - (listContentHeight + AndroidUtilities.dp(88)
-                                + actionBarHeight));
+                        paddingBottom = Math.max(0, getMeasuredHeight() - (listContentHeight + AndroidUtilities.dp(88) + actionBarHeight));
                     }
                     if (banFromGroup != 0) {
                         paddingBottom += AndroidUtilities.dp(48);
@@ -2231,8 +2220,7 @@ public class ProfileActivity extends BaseFragment implements
                     layoutManager.scrollToPositionWithOffset(0, -actionBarHeight);
                     listView.setPadding(0, paddingTop, 0, paddingBottom);
                     measureChildWithMargins(listView, widthMeasureSpec, 0, heightMeasureSpec, 0);
-                    listView.layout(0, actionBarHeight, listView.getMeasuredWidth(),
-                        actionBarHeight + listView.getMeasuredHeight());
+                    listView.layout(0, actionBarHeight, listView.getMeasuredWidth(), actionBarHeight + listView.getMeasuredHeight());
                     ignoreLayout = false;
                 } else if (fragmentOpened && !openAnimationInProgress && !firstLayout) {
                     ignoreLayout = true;
@@ -2244,9 +2232,7 @@ public class ProfileActivity extends BaseFragment implements
                         paddingBottom = 0;
                     } else {
                         paddingTop = listView.getMeasuredWidth();
-                        paddingBottom = Math.max(0,
-                            getMeasuredHeight() - (listContentHeight + AndroidUtilities.dp(88)
-                                + actionBarHeight));
+                        paddingBottom = Math.max(0, getMeasuredHeight() - (listContentHeight + AndroidUtilities.dp(88) + actionBarHeight));
                     }
                     if (banFromGroup != 0) {
                         paddingBottom += AndroidUtilities.dp(48);
@@ -2268,8 +2254,7 @@ public class ProfileActivity extends BaseFragment implements
                     if (view == null) {
                         view = listView.getChildAt(0);
                         if (view != null) {
-                            RecyclerView.ViewHolder holder = listView.findContainingViewHolder(
-                                view);
+                            RecyclerView.ViewHolder holder = listView.findContainingViewHolder(view);
                             pos = holder.getAdapterPosition();
                             if (pos == RecyclerView.NO_POSITION) {
                                 pos = holder.getPosition();
@@ -2287,8 +2272,7 @@ public class ProfileActivity extends BaseFragment implements
                         layout = true;
                     } else if (invalidateScroll || currentPaddingTop != paddingTop) {
                         if (savedScrollPosition >= 0) {
-                            layoutManager.scrollToPositionWithOffset(savedScrollPosition,
-                                savedScrollOffset - paddingTop);
+                            layoutManager.scrollToPositionWithOffset(savedScrollPosition, savedScrollOffset - paddingTop);
                         } else if ((!changed || !allowPullingDown) && view != null) {
                             if (pos == 0 && !allowPullingDown && top > AndroidUtilities.dp(88)) {
                                 top = AndroidUtilities.dp(88);
@@ -2296,21 +2280,17 @@ public class ProfileActivity extends BaseFragment implements
                             layoutManager.scrollToPositionWithOffset(pos, top - paddingTop);
                             layout = true;
                         } else {
-                            layoutManager.scrollToPositionWithOffset(0,
-                                AndroidUtilities.dp(88) - paddingTop);
+                            layoutManager.scrollToPositionWithOffset(0, AndroidUtilities.dp(88) - paddingTop);
                         }
                     }
-                    if (currentPaddingTop != paddingTop
-                        || listView.getPaddingBottom() != paddingBottom) {
+                    if (currentPaddingTop != paddingTop || listView.getPaddingBottom() != paddingBottom) {
                         listView.setPadding(0, paddingTop, 0, paddingBottom);
                         layout = true;
                     }
                     if (layout) {
-                        measureChildWithMargins(listView, widthMeasureSpec, 0, heightMeasureSpec,
-                            0);
+                        measureChildWithMargins(listView, widthMeasureSpec, 0, heightMeasureSpec, 0);
                         try {
-                            listView.layout(0, actionBarHeight, listView.getMeasuredWidth(),
-                                actionBarHeight + listView.getMeasuredHeight());
+                            listView.layout(0, actionBarHeight, listView.getMeasuredWidth(), actionBarHeight + listView.getMeasuredHeight());
                         } catch (Exception e) {
                             FileLog.e(e);
                         }
@@ -2337,8 +2317,7 @@ public class ProfileActivity extends BaseFragment implements
             }
 
             private final ArrayList<View> sortedChildren = new ArrayList<>();
-            private final Comparator<View> viewComparator = (view, view2) -> (int) (view.getY()
-                - view2.getY());
+            private final Comparator<View> viewComparator = (view, view2) -> (int) (view.getY() - view2.getY());
 
 
             @Override
@@ -2383,23 +2362,15 @@ public class ProfileActivity extends BaseFragment implements
                             continue;
                         }
                         if (hasBackground) {
-                            canvas.drawRect(listView.getX(), lastY,
-                                listView.getX() + listView.getMeasuredWidth(), currentY,
-                                grayPaint);
+                            canvas.drawRect(listView.getX(), lastY, listView.getX() + listView.getMeasuredWidth(), currentY, grayPaint);
                         } else {
                             if (alpha != 1f) {
-                                canvas.drawRect(listView.getX(), lastY,
-                                    listView.getX() + listView.getMeasuredWidth(), currentY,
-                                    grayPaint);
+                                canvas.drawRect(listView.getX(), lastY, listView.getX() + listView.getMeasuredWidth(), currentY, grayPaint);
                                 whitePaint.setAlpha((int) (255 * alpha));
-                                canvas.drawRect(listView.getX(), lastY,
-                                    listView.getX() + listView.getMeasuredWidth(), currentY,
-                                    whitePaint);
+                                canvas.drawRect(listView.getX(), lastY, listView.getX() + listView.getMeasuredWidth(), currentY, whitePaint);
                                 whitePaint.setAlpha(255);
                             } else {
-                                canvas.drawRect(listView.getX(), lastY,
-                                    listView.getX() + listView.getMeasuredWidth(), currentY,
-                                    whitePaint);
+                                canvas.drawRect(listView.getX(), lastY, listView.getX() + listView.getMeasuredWidth(), currentY, whitePaint);
                             }
                         }
                         hasBackground = currentHasBackground;
@@ -2408,47 +2379,35 @@ public class ProfileActivity extends BaseFragment implements
                     }
 
                     if (hasBackground) {
-                        canvas.drawRect(listView.getX(), lastY,
-                            listView.getX() + listView.getMeasuredWidth(), listView.getBottom(),
-                            grayPaint);
+                        canvas.drawRect(listView.getX(), lastY, listView.getX() + listView.getMeasuredWidth(), listView.getBottom(), grayPaint);
                     } else {
                         if (alpha != 1f) {
-                            canvas.drawRect(listView.getX(), lastY,
-                                listView.getX() + listView.getMeasuredWidth(),
-                                listView.getBottom(), grayPaint);
+                            canvas.drawRect(listView.getX(), lastY, listView.getX() + listView.getMeasuredWidth(), listView.getBottom(), grayPaint);
                             whitePaint.setAlpha((int) (255 * alpha));
-                            canvas.drawRect(listView.getX(), lastY,
-                                listView.getX() + listView.getMeasuredWidth(),
-                                listView.getBottom(), whitePaint);
+                            canvas.drawRect(listView.getX(), lastY, listView.getX() + listView.getMeasuredWidth(), listView.getBottom(), whitePaint);
                             whitePaint.setAlpha(255);
                         } else {
-                            canvas.drawRect(listView.getX(), lastY,
-                                listView.getX() + listView.getMeasuredWidth(),
-                                listView.getBottom(), whitePaint);
+                            canvas.drawRect(listView.getX(), lastY, listView.getX() + listView.getMeasuredWidth(), listView.getBottom(), whitePaint);
                         }
                     }
                 } else {
                     int top = searchListView.getTop();
-                    canvas.drawRect(0, top + extraHeight + searchTransitionOffset,
-                        getMeasuredWidth(), top + getMeasuredHeight(), whitePaint);
+                    canvas.drawRect(0, top + extraHeight + searchTransitionOffset, getMeasuredWidth(), top + getMeasuredHeight(), whitePaint);
                 }
                 super.dispatchDraw(canvas);
                 if (profileTransitionInProgress && parentLayout.fragmentsStack.size() > 1) {
-                    BaseFragment fragment = parentLayout.fragmentsStack.get(
-                        parentLayout.fragmentsStack.size() - 2);
+                    BaseFragment fragment = parentLayout.fragmentsStack.get(parentLayout.fragmentsStack.size() - 2);
                     if (fragment instanceof ChatActivity) {
                         ChatActivity chatActivity = (ChatActivity) fragment;
                         FragmentContextView fragmentContextView = chatActivity.getFragmentContextView();
 
                         if (fragmentContextView != null && fragmentContextView.isCallStyle()) {
-                            float progress = extraHeight / AndroidUtilities.dpf2(
-                                fragmentContextView.getStyleHeight());
+                            float progress = extraHeight / AndroidUtilities.dpf2(fragmentContextView.getStyleHeight());
                             if (progress > 1f) {
                                 progress = 1f;
                             }
                             canvas.save();
-                            canvas.translate(fragmentContextView.getX(),
-                                fragmentContextView.getY());
+                            canvas.translate(fragmentContextView.getX(), fragmentContextView.getY());
                             fragmentContextView.setDrawOverlay(true);
                             fragmentContextView.setCollapseTransition(true, extraHeight, progress);
                             fragmentContextView.draw(canvas);
@@ -2479,8 +2438,7 @@ public class ProfileActivity extends BaseFragment implements
 
             @Override
             protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
-                if (pinchToZoomHelper.isInOverlayMode() && (child == avatarContainer2
-                    || child == actionBar || child == writeButton)) {
+                if (pinchToZoomHelper.isInOverlayMode() && (child == avatarContainer2 || child == actionBar || child == writeButton)) {
                     return true;
                 }
                 return super.drawChild(canvas, child, drawingTime);
@@ -2525,7 +2483,7 @@ public class ProfileActivity extends BaseFragment implements
 
             @Override
             protected void drawBackgroundWithBlur(Canvas canvas, float y, Rect rectTmp2, Paint backgroundPaint) {
-                contentView.drawBlur(canvas, listView.getY() + getY() + y, rectTmp2, backgroundPaint, true);
+                contentView.drawBlurRect(canvas, listView.getY() + getY() + y, rectTmp2, backgroundPaint, true);
             }
 
             @Override
@@ -3973,7 +3931,7 @@ public class ProfileActivity extends BaseFragment implements
         avatarsViewPager.setPinchToZoomHelper(pinchToZoomHelper);
         scrimPaint.setAlpha(0);
         actionBarBackgroundPaint.setColor(Theme.getColor(Theme.key_listSelector));
-        contentView.blurBehindViews.add(sharedMediaLayout.scrollSlidingTextTabStrip);
+        contentView.blurBehindViews.add(sharedMediaLayout);
         return fragmentView;
     }
 
@@ -7493,6 +7451,10 @@ public class ProfileActivity extends BaseFragment implements
         removeSelfFromStack();
         TLRPC.User user = getMessagesController().getUser(userId);
         getSendMessagesHelper().sendMessage(user, did, null, null, null, null, true, 0);
+        if (!TextUtils.isEmpty(message)) {
+            AccountInstance accountInstance = AccountInstance.getInstance(currentAccount);
+            SendMessagesHelper.prepareSendingText(accountInstance, message.toString(), did, true, 0);
+        }
     }
 
     @Override
@@ -8204,35 +8166,13 @@ public class ProfileActivity extends BaseFragment implements
                             .getPackageInfo(
                                 ApplicationLoader.applicationContext.getPackageName(), 0);
                         int code = pInfo.versionCode / 10;
-                        String abi = "";
-                        switch (pInfo.versionCode % 10) {
-                            case 1:
-                            case 3:
-                                abi = "arm-v7a";
-                                break;
-                            case 2:
-                            case 4:
-                                abi = "x86";
-                                break;
-                            case 5:
-                            case 7:
-                                abi = "arm64-v8a";
-                                break;
-                            case 6:
-                            case 8:
-                                abi = "x86_64";
-                                break;
-                            case 0:
-                            case 9:
-                                abi = "universal " + Build.SUPPORTED_ABIS[0];
-                                break;
-                        }
+                        String abi = APKUtils.getAbi();
                         cell.setText(LocaleController.formatString("NullgramVersion",
                             R.string.NullgramVersion,
                             String.format(Locale.US, "v%s (%d) %s", pInfo.versionName, code,
                                 abi),
                             String.format(Locale.US, "v%s (%d)", BuildVars.BUILD_VERSION_STRING,
-                                BuildVars.BUILD_VERSION), "@Duang"));
+                                BuildVars.BUILD_VERSION)));
                     } catch (Exception e) {
                         FileLog.e(e);
                     }

@@ -11,6 +11,13 @@ package org.telegram.tgnet;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.text.TextUtils;
+
+import org.telegram.messenger.FileLoader;
+import org.telegram.messenger.FileLog;
+import org.telegram.messenger.ImageLoader;
+import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.Utilities;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 

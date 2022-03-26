@@ -507,10 +507,6 @@ public class CameraController implements MediaRecorder.OnInfoListener {
         });
     }
 
-    public boolean isPreviewRunning(final CameraSession session) {
-        return session != null && session.previewStarted;
-    }
-
 
     public void openRound(final CameraSession session, final SurfaceTexture texture, final Runnable callback, final Runnable configureCallback) {
         if (session == null || texture == null) {
@@ -819,8 +815,8 @@ public class CameraController implements MediaRecorder.OnInfoListener {
     }
 
     public static Size chooseOptimalSize(List<Size> choices, int width, int height, Size aspectRatio) {
-        List<Size> bigEnoughWithAspectRatio = new ArrayList<>();
-        List<Size> bigEnough = new ArrayList<>();
+        List<Size> bigEnoughWithAspectRatio = new ArrayList<>(choices.size());
+        List<Size> bigEnough = new ArrayList<>(choices.size());
         int w = aspectRatio.getWidth();
         int h = aspectRatio.getHeight();
         for (int a = 0; a < choices.size(); a++) {

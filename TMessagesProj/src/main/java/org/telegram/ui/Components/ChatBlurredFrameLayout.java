@@ -42,7 +42,7 @@ public class ChatBlurredFrameLayout extends FrameLayout {
                 y += view.getY();
                 view = (View) view.getParent();
             }
-            chatActivity.contentView.drawBlur(canvas, y, AndroidUtilities.rectTmp2, backgroundPaint, isTopView);
+            chatActivity.contentView.drawBlurRect(canvas, y, AndroidUtilities.rectTmp2, backgroundPaint, isTopView);
         }
         super.dispatchDraw(canvas);
     }

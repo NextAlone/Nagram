@@ -143,22 +143,22 @@ public class CodeNumberField extends EditTextBoldCursor {
                     .setStiffness(500)
                     .setDampingRatio(SpringForce.DAMPING_RATIO_LOW_BOUNCY)
                     .setFinalPosition(SPRING_MULTIPLIER))
-                .setStartValue(SPRING_MULTIPLIER)
-                .setStartVelocity(4000)
-                .start();
+                    .setStartValue(SPRING_MULTIPLIER)
+                    .setStartVelocity(4000)
+                    .start();
         } else successScaleProgress = 1f;
     }
 
     private void animateSpring(SpringAnimation anim, float progress) {
         if (anim.getSpring() != null && progress == anim.getSpring()
-            .getFinalPosition()) return;
+                .getFinalPosition()) return;
 
         anim.cancel();
         anim.setSpring(new SpringForce(progress)
                 .setStiffness(400f)
                 .setDampingRatio(SpringForce.DAMPING_RATIO_NO_BOUNCY)
                 .setFinalPosition(progress))
-            .start();
+                .start();
     }
 
     @Override

@@ -1033,7 +1033,28 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
 
                                 privacyCell.setText(spannableStringBuilder);
                             } else {
-                                privacyCell.setText(LocaleController.getString("PrivacyPhoneInfo", R.string.PrivacyPhoneInfo));
+                                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
+                                String phoneLinkStr = String.format(Locale.ENGLISH, "https://t.me/+%s", getUserConfig().getClientPhone());
+                                SpannableString phoneLink = new SpannableString(phoneLinkStr);
+                                phoneLink.setSpan(new ClickableSpan() {
+                                    @Override
+                                    public void onClick(@NonNull View view) {
+                                        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                                        android.content.ClipData clip = android.content.ClipData.newPlainText("label", phoneLinkStr);
+                                        clipboard.setPrimaryClip(clip);
+                                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+                                            BulletinFactory.of(PrivacyControlActivity.this).createCopyBulletin(LocaleController.getString("PhoneCopied", R.string.PhoneCopied)).show();
+                                        }
+                                    }
+                                }, 0, phoneLinkStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                                spannableStringBuilder.append(LocaleController.getString("PrivacyPhoneInfo", R.string.PrivacyPhoneInfo))
+                                        .append("\n\n")
+                                        .append(LocaleController.getString("PrivacyPhoneInfo4", R.string.PrivacyPhoneInfo4))
+                                        .append("\n")
+                                        .append(phoneLink);
+
+                                privacyCell.setText(spannableStringBuilder);
                             }
                         } else if (rulesType == PRIVACY_RULES_TYPE_FORWARDS) {
                             privacyCell.setText(LocaleController.getString("PrivacyForwardsInfo", R.string.PrivacyForwardsInfo));

@@ -63,6 +63,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+
+import org.checkerframework.checker.units.qual.A;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
@@ -88,6 +90,8 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.BasePermissionsActivity;
 import org.telegram.ui.Cells.PhotoAttachCameraCell;
@@ -133,8 +137,9 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     private int animateToPadding;
 
     private AnimatorSet cameraInitAnimation;
-    private CameraView cameraView;
-    private FrameLayout cameraIcon;
+    protected CameraView cameraView;
+    protected FrameLayout cameraIcon;
+    protected PhotoAttachCameraCell cameraCell;
     private TextView recordTime;
     private ImageView[] flashModeButton = new ImageView[2];
     private boolean flashAnimationInProgress;
@@ -1698,6 +1703,10 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         cameraExpanded = true;
         cameraView.setFpsLimit(-1);
         AndroidUtilities.hideKeyboard(this);
+        AndroidUtilities.setLightNavigationBar(parentAlert.getWindow(), false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            parentAlert.getWindow().setNavigationBarColor(0xff000000);
+        }
         if (animated) {
             setCameraOpenProgress(0);
             cameraAnimationInProgress = true;
@@ -2870,10 +2879,12 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             gridView.post(setScrollY);
         }
 
+        checkCameraViewPosition();
+
         try {
             if (cameraView != null) {
                 CameraSession cameraSession = cameraView.getCameraSession();
-                if (cameraSession != null && !CameraController.getInstance().isPreviewRunning(cameraSession)) {
+                if (cameraSession != null) {
                     CameraController.getInstance().startPreview(cameraSession);
                 }
             }
@@ -2950,7 +2961,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         try {
             if (cameraView != null) {
                 CameraSession cameraSession = cameraView.getCameraSession();
-                if (cameraSession != null && CameraController.getInstance().isPreviewRunning(cameraSession)) {
+                if (cameraSession != null) {
                     CameraController.getInstance().stopPreview(cameraSession);
                 }
             }
@@ -3361,7 +3372,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     break;
                 }
                 case 1: {
-                    PhotoAttachCameraCell cameraCell = (PhotoAttachCameraCell) holder.itemView;
+                    cameraCell = (PhotoAttachCameraCell) holder.itemView;
                     if (cameraView != null && cameraView.isInited() && !isHidden) {
                         cameraCell.setVisibility(View.INVISIBLE);
                     } else {
@@ -3397,7 +3408,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     }
                     break;
                 case 1:
-                    PhotoAttachCameraCell cameraCell = new PhotoAttachCameraCell(mContext, resourcesProvider);
+                    cameraCell = new PhotoAttachCameraCell(mContext, resourcesProvider);
                     if (Build.VERSION.SDK_INT >= 21) {
                         cameraCell.setOutlineProvider(new ViewOutlineProvider() {
                             @Override
