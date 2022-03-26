@@ -50,7 +50,6 @@ import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -67,6 +66,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.collection.LongSparseArray;
@@ -82,24 +82,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Locale;
-import java.util.Set;
-import java.util.concurrent.CountDownLatch;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-import kotlin.Unit;
+
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
@@ -186,6 +169,26 @@ import org.telegram.ui.Components.StickerEmptyView;
 import org.telegram.ui.Components.TimerDrawable;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.voip.VoIPHelper;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Locale;
+import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import kotlin.Unit;
 import top.qwq2333.nullgram.activity.MainSettingActivity;
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.ui.BottomBuilder;
@@ -417,7 +420,6 @@ public class ProfileActivity extends BaseFragment implements
     private int faqRow;
     private int policyRow;
     private int helpSectionCell;
-    private int debugHeaderRow;
     private int sendLogsRow;
     private int sendLastLogsRow;
     private int clearLogsRow;
@@ -6434,7 +6436,6 @@ public class ProfileActivity extends BaseFragment implements
         settingsSectionRow2 = -1;
         notificationRow = -1;
         nullRow = -1;
-        nullSectionRow = -1;
         languageRow = -1;
         privacyRow = -1;
         dataRow = -1;
@@ -6447,7 +6448,6 @@ public class ProfileActivity extends BaseFragment implements
         faqRow = -1;
         policyRow = -1;
         helpSectionCell = -1;
-        debugHeaderRow = -1;
         sendLogsRow = -1;
         sendLastLogsRow = -1;
         clearLogsRow = -1;
@@ -6519,6 +6519,9 @@ public class ProfileActivity extends BaseFragment implements
                 setUsernameRow = rowCount++;
                 bioRow = rowCount++;
 
+                nullSectionRow = rowCount++;
+                nullRow = rowCount++;
+
                 settingsSectionRow = rowCount++;
 
                 Set<String> suggestions = getMessagesController().pendingSuggestions;
@@ -6531,8 +6534,7 @@ public class ProfileActivity extends BaseFragment implements
                     passwordSuggestionSectionRow = rowCount++;
                 }
 
-                nullRow = rowCount++;
-                nullSectionRow = rowCount++;
+
 
                 settingsSectionRow2 = rowCount++;
                 notificationRow = rowCount++;
@@ -6552,8 +6554,8 @@ public class ProfileActivity extends BaseFragment implements
                 policyRow = rowCount++;
                 if (BuildVars.LOGS_ENABLED || BuildVars.DEBUG_PRIVATE_VERSION) {
                     helpSectionCell = rowCount++;
-                    debugHeaderRow = rowCount++;
                 }
+                /*
                 if (BuildVars.LOGS_ENABLED) {
                     sendLogsRow = rowCount++;
                     sendLastLogsRow = rowCount++;
@@ -6562,6 +6564,7 @@ public class ProfileActivity extends BaseFragment implements
                 if (BuildVars.DEBUG_PRIVATE_VERSION) {
                     switchBackendRow = rowCount++;
                 }
+                 */
                 versionRow = rowCount++;
             } else {
                 boolean hasInfo = userInfo != null && !TextUtils.isEmpty(userInfo.about)
@@ -8259,9 +8262,6 @@ public class ProfileActivity extends BaseFragment implements
                     } else if (position == helpHeaderRow) {
                         headerCell.setText(
                             LocaleController.getString("SettingsHelp", R.string.SettingsHelp));
-                    } else if (position == debugHeaderRow) {
-                        headerCell.setText(LocaleController.getString("SettingsDebug",
-                            R.string.SettingsDebug));
                     }
                     break;
                 case VIEW_TYPE_TEXT_DETAIL:
@@ -8778,7 +8778,7 @@ public class ProfileActivity extends BaseFragment implements
         @Override
         public int getItemViewType(int position) {
             if (position == infoHeaderRow || position == membersHeaderRow || position == settingsSectionRow2 ||
-                    position == numberSectionRow || position == helpHeaderRow || position == debugHeaderRow) {
+                    position == numberSectionRow || position == helpHeaderRow ) {
                 return VIEW_TYPE_HEADER;
             } else if (position == phoneRow || position == usernameRow || position == locationRow ||
                     position == numberRow || position == setUsernameRow || position == bioRow) {
@@ -8792,7 +8792,7 @@ public class ProfileActivity extends BaseFragment implements
                     position == languageRow || position == dataRow || position == chatRow ||
                     position == questionRow || position == devicesRow || position == filtersRow ||
                     position == faqRow || position == policyRow || position == sendLogsRow || position == sendLastLogsRow ||
-                    position == clearLogsRow || position == switchBackendRow || position == setAvatarRow) {
+                    position == clearLogsRow || position == switchBackendRow || position == setAvatarRow || position == nullRow) {
                 return VIEW_TYPE_TEXT;
             } else if (position == notificationsDividerRow) {
                 return VIEW_TYPE_DIVIDER;
@@ -8801,7 +8801,7 @@ public class ProfileActivity extends BaseFragment implements
             } else if (position == infoSectionRow || position == lastSectionRow || position == membersSectionRow ||
                     position == secretSettingsSectionRow || position == settingsSectionRow || position == devicesSectionRow ||
                     position == helpSectionCell || position == setAvatarSectionRow || position == passwordSuggestionSectionRow ||
-                    position == phoneSuggestionSectionRow) {
+                    position == phoneSuggestionSectionRow || position == nullSectionRow) {
                 return VIEW_TYPE_SHADOW;
             } else if (position >= membersStartRow && position < membersEndRow) {
                 return VIEW_TYPE_USER;
@@ -10192,7 +10192,6 @@ public class ProfileActivity extends BaseFragment implements
             put(++pointer, faqRow, sparseIntArray);
             put(++pointer, policyRow, sparseIntArray);
             put(++pointer, helpSectionCell, sparseIntArray);
-            put(++pointer, debugHeaderRow, sparseIntArray);
             put(++pointer, sendLogsRow, sparseIntArray);
             put(++pointer, sendLastLogsRow, sparseIntArray);
             put(++pointer, clearLogsRow, sparseIntArray);
