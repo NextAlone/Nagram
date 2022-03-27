@@ -1242,7 +1242,7 @@ public class SharedConfig {
             devicePerformanceClass = preferences.getInt("devicePerformanceClass", -1);
             loopStickers = preferences.getBoolean("loopStickers", true);
             keepMedia = preferences.getInt("keep_media", 2);
-            noStatusBar = preferences.getBoolean("noStatusBar", true);
+            noStatusBar = NekoConfig.transparentStatusBar.Bool();
             forceRtmpStream = preferences.getBoolean("forceRtmpStream", false);
             lastKeepMediaCheckTime = preferences.getInt("lastKeepMediaCheckTime", 0);
             lastLogsCheckTime = preferences.getInt("lastLogsCheckTime", 0);
@@ -1627,13 +1627,14 @@ public class SharedConfig {
         editor.apply();
     }
 
-    public static void toggleNoStatusBar() {
-        noStatusBar = !noStatusBar;
-        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("noStatusBar", noStatusBar);
-        editor.commit();
-    }
+//    public static void toggleNoStatusBar() {
+//        noStatusBar = !noStatusBar;
+//        noStatusBar |= NekoConfig.transparentStatusBar.Bool();
+//        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+//        SharedPreferences.Editor editor = preferences.edit();
+//        editor.putBoolean("noStatusBar", noStatusBar);
+//        editor.apply();
+//    }
 
     public static void toggleLoopStickers() {
         loopStickers = !loopStickers;

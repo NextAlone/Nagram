@@ -68,6 +68,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.collection.LongSparseArray;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
@@ -3160,7 +3161,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 SharedConfig.pauseMusicOnRecord ? LocaleController.getString("DebugMenuDisablePauseMusic", R.string.DebugMenuDisablePauseMusic) : LocaleController.getString("DebugMenuEnablePauseMusic", R.string.DebugMenuEnablePauseMusic),
                                 BuildVars.DEBUG_VERSION && !AndroidUtilities.isTablet() && Build.VERSION.SDK_INT >= 23 ? (SharedConfig.smoothKeyboard ? LocaleController.getString("DebugMenuDisableSmoothKeyboard", R.string.DebugMenuDisableSmoothKeyboard) : LocaleController.getString("DebugMenuEnableSmoothKeyboard", R.string.DebugMenuEnableSmoothKeyboard)) : null,
                                 BuildVars.DEBUG_PRIVATE_VERSION ? (SharedConfig.disableVoiceAudioEffects ? "Enable voip audio effects" : "Disable voip audio effects") : null,
-                                Build.VERSION.SDK_INT >= 21 ? (SharedConfig.noStatusBar ? "Show status bar background" : "Hide status bar background") : null,
+//                                Build.VERSION.SDK_INT >= 21 ? (SharedConfig.noStatusBar ? "Show status bar background" : "Hide status bar background") : null,
+                                null,
                                 "Scan accounts",
                                 BuildVars.DEBUG_PRIVATE_VERSION ? "Clean app update" : null,
                                 BuildVars.DEBUG_PRIVATE_VERSION ? "Reset suggestions" : null,
@@ -3205,6 +3207,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             } else if (which == 8) {
                                 SharedConfig.toggleRoundCamera16to9();
                             } else if (which == 9) {
+                                ((LaunchActivity) getParentActivity()).checkAppUpdate(true);
                             } else if (which == 10) {
                                 getMessagesStorage().readAllDialogs(-1);
                             } else if (which == 11) {
@@ -3217,14 +3220,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             } else if (which == 13) {
                                 SharedConfig.toggleDisableVoiceAudioEffects();
                             } else if (which == 14) {
-                                SharedConfig.toggleNoStatusBar();
-                                if (getParentActivity() != null && Build.VERSION.SDK_INT >= 21) {
-                                    if (SharedConfig.noStatusBar) {
-                                        getParentActivity().getWindow().setStatusBarColor(0);
-                                    } else {
-                                        getParentActivity().getWindow().setStatusBarColor(0x33000000);
-                                    }
-                                }
+//                                SharedConfig.toggleNoStatusBar();
+//                                if (getParentActivity() != null && Build.VERSION.SDK_INT >= 21) {
+//                                    if (SharedConfig.noStatusBar) {
+//                                        getParentActivity().getWindow().setStatusBarColor(0);
+//                                    } else {
+//                                        getParentActivity().getWindow().setStatusBarColor(0x33000000);
+//                                    }
+//                                }
                             } else if (which == 15) {
                                 SharedConfig.activeAccounts.clear();
                                 int maxAccounts;
@@ -3821,7 +3824,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         pinchToZoomHelper = new PinchToZoomHelper(decorView, frameLayout) {
 
             Paint statusBarPaint;
-
             @Override
             protected void invalidateViews() {
                 super.invalidateViews();
@@ -3845,7 +3847,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     if (actionBar.getOccupyStatusBar() && !SharedConfig.noStatusBar) {
                         if (statusBarPaint == null) {
                             statusBarPaint = new Paint();
-                            statusBarPaint.setColor(ColorUtils.setAlphaComponent(Color.BLACK, (int) (255 * 0.2f)));
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                statusBarPaint.setColor(getParentActivity().getWindow().getStatusBarColor());
+                            } else {
+                                statusBarPaint.setColor(ColorUtils.setAlphaComponent(Color.BLACK, (int) (255 * 0.2f)));
+                            }
                         }
                         canvas.drawRect(actionBar.getX(), actionBar.getY(), actionBar.getX() + actionBar.getMeasuredWidth(), actionBar.getY() + AndroidUtilities.statusBarHeight, statusBarPaint);
                     }
