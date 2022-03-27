@@ -113,7 +113,7 @@ public class NekoConfig {
     public static ConfigItem skipOpenLinkConfirm = addConfig("SkipOpenLinkConfirm", configTypeBool, false);
 
     public static ConfigItem ignoreMutedCount = addConfig("IgnoreMutedCount", configTypeBool, true);
-    public static ConfigItem useDefaultTheme = addConfig("UseDefaultTheme", configTypeBool, false);
+//    public static ConfigItem useDefaultTheme = addConfig("UseDefaultTheme", configTypeBool, false);
     public static ConfigItem showIdAndDc = addConfig("ShowIdAndDc", configTypeBool, false);
 
     public static ConfigItem googleCloudTranslateKey = addConfig("GoogleCloudTransKey", configTypeString, "");
@@ -370,8 +370,8 @@ public class NekoConfig {
 
         if (preferences.contains("ignore_muted_count"))
             ignoreMutedCount.setConfigBool(preferences.getBoolean("ignore_muted_count", true));
-        if (preferences.contains("use_default_theme"))
-            useDefaultTheme.setConfigBool(preferences.getBoolean("use_default_theme", false));
+//        if (preferences.contains("use_default_theme"))
+//            useDefaultTheme.setConfigBool(preferences.getBoolean("use_default_theme", false));
         if (preferences.contains("show_id_and_dc"))
             showIdAndDc.setConfigBool(preferences.getBoolean("show_id_and_dc", false));
 

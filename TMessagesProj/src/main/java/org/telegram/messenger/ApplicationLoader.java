@@ -321,7 +321,6 @@ public class ApplicationLoader extends Application {
             MessagesController.getInstance(account).putUser(user, true);
         }
         Utilities.stageQueue.postRunnable(() -> {
-            Theme.init(account);
             SendMessagesHelper.getInstance(account).checkUnsentMessages();
             ContactsController.getInstance(account).checkAppAccount();
             DownloadController.getInstance(account);

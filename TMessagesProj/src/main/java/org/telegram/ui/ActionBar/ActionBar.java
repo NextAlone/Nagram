@@ -260,6 +260,7 @@ public class ActionBar extends FrameLayout {
                     int y = titleView.getTextStartY() + Theme.getCurrentHolidayDrawableYOffset() + (int) Math.ceil((titleView.getTextHeight() - rect.height()) / 2.0f);
                     drawable.setBounds(x, y - drawable.getIntrinsicHeight(), x + drawable.getIntrinsicWidth(), y);
                     drawable.setAlpha((int) (255 * titleView.getAlpha()));
+                    drawable.setColorFilter(textPaint.getColor(), PorterDuff.Mode.MULTIPLY);
                     drawable.draw(canvas);
                     if (overlayTitleAnimationInProgress) {
                         child.invalidate();

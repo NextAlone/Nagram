@@ -1836,7 +1836,6 @@ public class Theme {
         }
     }
 
-
     public static class ThemeInfo implements NotificationCenter.NotificationCenterDelegate {
         public String name;
         public String pathToFile;
@@ -2608,7 +2607,6 @@ public class Theme {
             }
         }
     }
-
 
     public interface ResourcesProvider {
 
@@ -3873,7 +3871,6 @@ public class Theme {
     private static FragmentContextViewWavesDrawable fragmentContextViewWavesDrawable;
     private static RoundVideoProgressShadow roundPlayDrawable;
 
-
     static {
         defaultColors.put(key_dialogBackground, 0xffffffff);
         defaultColors.put(key_dialogBackgroundGray, 0xfff0f0f0);
@@ -4972,10 +4969,9 @@ public class Theme {
         themeInfo.previewBackgroundColor = 0xff95beec;
         themeInfo.previewInColor = 0xffffffff;
         themeInfo.previewOutColor = 0xffd0e6ff;
-        themeInfo.sortIndex = 1;
         themeInfo.firstAccentIsDefault = true;
-        if (NekoConfig.useDefaultTheme.Bool())
-            themeInfo.currentAccentId = DEFALT_THEME_ACCENT_ID;
+        themeInfo.currentAccentId = DEFALT_THEME_ACCENT_ID;
+        themeInfo.sortIndex = 1;
         themeInfo.setAccentColorOptions(
                 new int[]    { 0xFF5890C5,                     0xFF239853,                    0xFFCE5E82,                    0xFF7F63C3,                    0xFF2491AD,                    0xFF299C2F,                    0xFF8854B4,                    0xFF328ACF,                    0xFF43ACC7,                    0xFF52AC44,                    0xFFCD5F93,                    0xFFD28036,                    0xFF8366CC,                    0xFFCE4E57,                    0xFFD3AE40,                    0xFF7B88AB },
                 new int[]    { 0xFFB8E18D,                     0xFFFAFBCC,                    0xFFFFF9DC,                    0xFFC14F6E,                    0xFFD1BD1B,                    0xFFFFFAC9,                    0xFFFCF6D8,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000,                    0x00000000 },
@@ -5000,8 +4996,6 @@ public class Theme {
         themeInfo.previewInColor = Color.parseColor("#c0ffffff");
         themeInfo.previewOutColor = Color.parseColor("#3f51b5");
         themeInfo.sortIndex = 0;
-        if (!NekoConfig.useDefaultTheme.Bool())
-            themeInfo.currentAccentId = DEFALT_THEME_ACCENT_ID;
         themes.add(themeInfo);
         themesDict.put("NekoX", themeInfo);
 
@@ -5167,7 +5161,7 @@ public class Theme {
                 }
             }
 
-            theme = preferences.getString("nighttheme", "Night");
+            theme = preferences.getString("nighttheme", null);
             if ("Default".equals(theme)) {
                 applyingTheme = themesDict.get("Blue");
                 applyingTheme.currentAccentId = DEFALT_THEME_ACCENT_ID;
@@ -5474,12 +5468,6 @@ public class Theme {
             }
             return 0;
         });
-    }
-
-    public static void init(int a) {
-        SharedPreferences themeConfig = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
-        remoteThemesHash.put(a, themeConfig.getLong("2remoteThemesHash" + (a != 0 ? a : ""), 0));
-        lastLoadingThemesTime.put(a, themeConfig.getInt("lastLoadingThemesTime" + (a != 0 ? a : ""), 0));
     }
 
     private static Method StateListDrawable_getStateDrawableMethod;
