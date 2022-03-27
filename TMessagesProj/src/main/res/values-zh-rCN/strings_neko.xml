@@ -27,7 +27,7 @@
     <string name="DisableResidentNotification">果然通知栏还是太挤了</string>
     <string name="NekogramRunning">猫猫奔跑中</string>
     <string name="EventType">抽屉图标集</string>
-    <string name="ChristmasHat">每天显示圣诞帽</string>
+    <string name="ChristmasHat">一直显示圣诞帽</string>
     <string name="ActionBarDecoration">标题栏装饰</string>
     <string name="DependsOnDate">基于日期</string>
     <string name="Christmas">圣诞节</string>
@@ -92,7 +92,7 @@
     <string name="About">关于</string>
     <string name="IgnoreBlockedAbout">您将不会再看到被屏蔽的用户在群组中的消息。</string>
     <string name="GooglePlay">Google Play</string>
-    <string name="SourceCode">Github 上的源代码</string>
+    <string name="SourceCode">GitHub 上的源代码</string>
     <string name="ResetStickerSize">重置贴纸大小</string>
     <string name="RestartAppToTakeEffect">重启应用以生效。</string>
     <string name="DisableAppBarShadow">禁用标题栏阴影</string>

@@ -92,7 +92,7 @@
     <string name="About">Über</string>
     <string name="IgnoreBlockedAbout">Nachrichten von blockierten Benutzern werden in Gruppen nicht mehr angezeigt.</string>
     <string name="GooglePlay">Google Play</string>
-    <string name="SourceCode">Quellcode auf Github</string>
+    <string name="SourceCode">Quellcode auf GitHub</string>
     <string name="ResetStickerSize">Stickergröße zurücksetzen</string>
     <string name="RestartAppToTakeEffect">Starte die App neu, um wirksam zu werden.</string>
     <string name="DisableAppBarShadow">Schatten der Titelleiste deaktivieren</string>

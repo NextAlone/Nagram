@@ -105,7 +105,7 @@
     <string name="ProxyTypeVmess">VMess վստահված անձ</string>
     <string name="AddProxySocks5">Ավելացնել SOCKS5 վստահված անձը</string>
     <string name="AddProxyTelegram">Ավելացնել MTProto վստահված անձ</string>
-    <string name="AddProxyVmess">Ավելացնել Vmess վստահված անձը</string>
+    <string name="AddProxyVmess">Ավելացնել VMess վստահված անձը</string>
     <string name="AddProxySS">Ավելացնել Shadowsocks վստահված անձը</string>
     <string name="AddProxySSR">Ավելացնել ShadowsocksR վստահված անձ</string>
     <string name="AddProxyTrojan">Ավելացնել Trojan վստահված անձ</string>
@@ -113,7 +113,7 @@
     <string name="EditProxy">Փոխել վստահված անձը</string>
     <string name="ShareProxy">Համօգտագործել վստահված անձը</string>
     <string name="ProxyDelete">Deleteնջել վստահված անձը</string>
-    <string name="ProxyInfoVmess">Vmess վստահված անձի կարգավորումներ</string>
+    <string name="ProxyInfoVmess">VMess վստահված անձի կարգավորումներ</string>
     <string name="VmessUserId">օգտագործողի այ - Դի</string>
     <string name="VmessAlterId">Փոխել ID- ն</string>
     <string name="VmessSecurity">Անվտանգություն</string>

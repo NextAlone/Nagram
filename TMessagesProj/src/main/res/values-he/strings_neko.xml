@@ -92,8 +92,8 @@
     <string name="About">על אודות</string>
     <string name="IgnoreBlockedAbout">לא תראה עוד הודעות ממשתמשים חסומים בקבוצות.</string>
     <string name="GooglePlay">גוגל פליי</string>
-    <string name="SourceCode">קוד המקור ב- Github</string>
-    <string name="ResetStickerSize">אפס גודל מדבקה</string>
+    <string name="SourceCode">קוד המקור ב־GitHub</string>
+    <string name="ResetStickerSize">איפוס גודל מדבקה</string>
     <string name="RestartAppToTakeEffect">הפעל מחדש את האפליקציה כדי להיכנס לתוקף.</string>
     <string name="DisableAppBarShadow">השבת את צל סרגל הכותרת</string>
     <string name="BetaWarning">זוהי תכונה ** בטא ** המיושמת על ידי ** טלגרם **.</string>

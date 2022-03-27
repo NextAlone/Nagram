@@ -102,14 +102,14 @@
     <string name="ProxyTypeVmess">VMess-Proxy</string>
     <string name="AddProxySocks5">SOCKS5-Proxy hinzufügen</string>
     <string name="AddProxyTelegram">MTProto-Proxy hinzufügen</string>
-    <string name="AddProxyVmess">Vmess-Proxy hinzufügen</string>
+    <string name="AddProxyVmess">VMess-Proxy hinzufügen</string>
     <string name="AddProxySS">Shadowsocks-Proxy hinzufügen</string>
     <string name="AddProxySSR">ShadowsocksR-Proxy hinzufügen</string>
     <string name="SSPluginConflictingName">Mehrere Plugins verwenden diese ID: %s.</string>
     <string name="EditProxy">Proxy bearbeiten</string>
     <string name="ShareProxy">Proxy teilen</string>
     <string name="ProxyDelete">Proxy löschen</string>
-    <string name="ProxyInfoVmess">Vmess-Proxy-Einstellungen</string>
+    <string name="ProxyInfoVmess">VMess-Proxy-Einstellungen</string>
     <string name="VmessUserId">Benutzer-ID</string>
     <string name="VmessAlterId">ID ändern</string>
     <string name="VmessSecurity">Sicherheit</string>

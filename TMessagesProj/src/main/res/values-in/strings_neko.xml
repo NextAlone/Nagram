@@ -92,7 +92,7 @@
     <string name="About">Tentang</string>
     <string name="IgnoreBlockedAbout">Anda tidak akan lagi melihat pesan dari pengguna yang diblokir dalam grup.</string>
     <string name="GooglePlay">Google Play</string>
-    <string name="SourceCode">Kode sumber pada Github.com</string>
+    <string name="SourceCode">Kode sumber pada github.com</string>
     <string name="ResetStickerSize">Atur ulang ukuran stiker</string>
     <string name="RestartAppToTakeEffect">Hidupkan ulang aplikasi ini agar terlihat perbedaannya.</string>
     <string name="DisableAppBarShadow">Matikan bayangan pada judul bar</string>

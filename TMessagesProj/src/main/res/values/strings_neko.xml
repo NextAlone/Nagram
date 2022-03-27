@@ -27,10 +27,10 @@
     <string name="DisableResidentNotification">Disable resident notification</string>
     <string name="NekogramRunning">Nekogram is running</string>
     <string name="EventType">Sidebar icon set</string>
-    <string name="ChristmasHat">Show christmas hat everyday</string>
+    <string name="ChristmasHat">Show santa hat every day</string>
     <string name="ActionBarDecoration">Title bar decoration</string>
     <string name="DependsOnDate">Depends on date</string>
-    <string name="Christmas">Christmas</string>
+    <string name="Christmas">Yule</string>
     <string name="Valentine">Valentine\'s day</string>
     <string name="Snowflakes">Snowflakes</string>
     <string name="Fireworks">Fireworks</string>
@@ -92,7 +92,7 @@
     <string name="About">About</string>
     <string name="IgnoreBlockedAbout">You\'ll no longer see messages from blocked users in groups.</string>
     <string name="GooglePlay">Google Play</string>
-    <string name="SourceCode">Source code on Github</string>
+    <string name="SourceCode">Source code on GitHub</string>
     <string name="ResetStickerSize">Reset sticker size</string>
     <string name="RestartAppToTakeEffect">Restart the app to take effect.</string>
     <string name="DisableAppBarShadow">Disable title bar shadow</string>
@@ -101,7 +101,7 @@
     <string name="AutoPauseVideo">Auto pause video</string>
     <string name="AutoPauseVideoAbout">When lock screen/switch to background.</string>
     <string name="DisableProximityEvents">Disable proximity events</string>
-    <string name="IncreaseVoiceMessageQuality">Increase voice messages quality</string>
+    <string name="IncreaseVoiceMessageQuality">Increase the quality of voice messages</string>
     <string name="SelectBetween">Select between</string>
     <string name="AvatarAsBackground">Profile picture as background</string>
     <string name="BlurAvatarBackground">Blur profile picture</string>
@@ -138,7 +138,7 @@
     <string name="doubleTapSendReactions">Send Reaction when double tap (Default)</string>
     <string name="doubleTapShowReactions">Show reactions when double tap only</string>
     <string name="ReactionsDisabled">Disable</string>
-    <string name="customSavePath">Custom Save Path</string>
+    <string name="customSavePath">Custom Storage Path</string>
     <string name="customSavePathHint">Leave blank to save directly</string>
     <string name="showBottomActionsWhenSelecting">Show bottom actions when selecting</string>
     <string name="channelLabel">channel</string>

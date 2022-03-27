@@ -105,7 +105,7 @@
     <string name="ProxyTypeVmess">VMess Vekil Sunucu</string>
     <string name="AddProxySocks5">SOCKS5 Proxy Ekle</string>
     <string name="AddProxyTelegram">MTProto Proxy Ekle</string>
-    <string name="AddProxyVmess">Vmess Proxy Ekle</string>
+    <string name="AddProxyVmess">VMess Proxy Ekle</string>
     <string name="AddProxySS">Shadowsocks Proxy Ekle</string>
     <string name="AddProxySSR">ShadowsocksR Proxy Ekle</string>
     <string name="AddProxyTrojan">Trojan Proxy Ekle</string>
@@ -113,7 +113,7 @@
     <string name="EditProxy">Proxy Düzenle</string>
     <string name="ShareProxy">Proxy Paylaş</string>
     <string name="ProxyDelete">Proxy Sil</string>
-    <string name="ProxyInfoVmess">Vmess Proxy Ayarları</string>
+    <string name="ProxyInfoVmess">VMess Proxy Ayarları</string>
     <string name="VmessUserId">Kullanıcı Kimliği</string>
     <string name="VmessAlterId">Kimliği Değiştir</string>
     <string name="VmessSecurity">Güvenlik</string>

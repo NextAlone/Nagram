@@ -10,7 +10,7 @@
     <string name="BotLogin">Logowanie do bota</string>
     <string name="InvalidAccessToken">Nieprawidłowy token dostępu</string>
     <string name="IgnoreBlocked">Ignoruj zablokow. userów w grupie</string>
-    <string name="Connection">Połączenie</string>
+    <string name="Connection">Połączenia internetowe</string>
     <string name="Chat">Czat</string>
     <string name="NameOrder">Kolejność nazw</string>
     <string name="FirstLast">Pierwszy - ostatni</string>
@@ -21,7 +21,7 @@
     <string name="AddToSavedMessages">Zapisz wiadomość</string>
     <string name="CreateMention">Utwórz wzmiankę</string>
     <string name="ForceTabletMode">Wymuś tryb tabletu</string>
-    <string name="Prpr">Peropero</string>
+    <string name="Prpr">Dźwięk lizania</string>
     <string name="TransparentStatusBar">Przezroczysty pasek stanu</string>
     <string name="EnableResidentNotification">Pokaż stałe powiadomienie</string>
     <string name="DisableResidentNotification">Wyłącz stałe powiadomienie</string>
@@ -42,14 +42,14 @@
     <string name="ViewHistory">Zobacz historię</string>
     <string name="Nya">Miau!</string>
     <string name="SaveCacheToExternalFilesDir">Izolacja pamięci</string>
-    <string name="SaveCacheToExternalFilesDirAbout">Zapisz folder \"Telegram” w katalogu aplikacji, aby zachować porządek w pamięci współdzielonej.</string>
+    <string name="SaveCacheToExternalFilesDirAbout">Zapisz folder \"Telegram\" w katalogu aplikacji, aby zachować porządek w pamięci współdzielonej.</string>
     <string name="SensitiveDisableFiltering">Wyłącz filtrowanie wrażliwych treści</string>
     <string name="SensitiveAbout">Wyświetl wrażliwe media w publicznych kanałach na wszystkich urządzeniach.</string>
     <string name="StickerSize">Rozmiar naklejki</string>
     <string name="StickerSizeDialogMessageBigOne">Duży</string>
     <string name="StickerSizeDialogMessageSmallOne">Mały</string>
     <string name="StickerSizeDialogMessageReplyTo">Miau</string>
-    <string name="StickerSizeDialogName">Duang</string>
+    <string name="StickerSizeDialogName">Kociaczek</string>
     <string name="Experiment">Eksperymentalne</string>
     <string name="UnlimitedFavoredStickers">Nieograniczone ulubione naklejki</string>
     <string name="UnlimitedFavoredStickersAbout">Dodaj nielimitowaną ilość naklejek do ulubionych. Naklejki mogą nie być w stanie zsynchronizować się z innymi urządzeniami.</string>
@@ -59,10 +59,10 @@
     <string name="DeleteAccount">Usuń konto Telegram</string>
     <string name="TranslateFailed">Błąd serwera tłumaczenia</string>
     <string name="TranslationProvider">Dostawca tłumaczeń</string>
-    <string name="ProviderGoogleTranslate">Tłumacz Google</string>
-    <string name="ProviderGoogleTranslateCN">Google Tłumacz CN</string>
+    <string name="ProviderGoogleTranslate">Google</string>
+    <string name="ProviderGoogleTranslateCN">Google CN</string>
     <string name="TranslateApiUnsupported">Wybrany dostawca tłumaczeń nie obsługuje twojego języka.</string>
-    <string name="ProviderLingocloud">Lingocloud</string>
+    <string name="ProviderLingocloud">LingoCloud</string>
     <string name="UndoTranslate">Cofnij tłumaczenie</string>
     <string name="DisablePhotoViewerSideAction">Wyłącz funkcję obracania zdjęć poprzez kliknkęcie</string>
     <string name="BotToken">Token</string>
@@ -74,7 +74,7 @@
     <string name="UserRestrictionsSendGifs">Wyślij GIFy</string>
     <string name="ShowTabsOnForward">Pokaż foldery przy przekazywaniu</string>
     <string name="CheckAllAdministrated">Dodaj administrowane</string>
-    <string name="RearVideoMessages">Tylna kamera w wiadomościach wideo</string>
+    <string name="RearVideoMessages">Główna kamera w wiadomościach wideo</string>
     <string name="HideAllTab">Ukryj folder \"Wszystkie czaty\"</string>
     <string name="HideAllTabAbout">Naciśnij \"Wstecz\" na stronie głównej, aby go otworzyć.</string>
     <string name="TabTitleType">Pokaż na folderach</string>
@@ -92,7 +92,7 @@
     <string name="About">Informacje o Nekogram X</string>
     <string name="IgnoreBlockedAbout">Nie będziesz już widział wiadomości od zablokowanych użytkowników w grupach.</string>
     <string name="GooglePlay">Sklep Play</string>
-    <string name="SourceCode">Kod źródłowy na Githubie</string>
+    <string name="SourceCode">Kod źródłowy na GitHubie</string>
     <string name="ResetStickerSize">Zresetuj rozmiar naklejki</string>
     <string name="RestartAppToTakeEffect">Zrestartuj aplikację, aby zastosować zmiany.</string>
     <string name="DisableAppBarShadow">Wyłącz cień paska tytułu</string>
@@ -106,9 +106,9 @@
     <string name="AvatarAsBackground">Zdjęcie profilowe jako tło</string>
     <string name="BlurAvatarBackground">Rozmyj zdjęcie profilowe</string>
     <string name="DarkenAvatarBackground">Przyciemnij zdjęcie profilowe</string>
-    <string name="ProviderDeepLTranslate">Tłumacz DeepL</string>
-    <string name="ProviderMicrosoftTranslator">Tłumacz Microsoft</string>
-    <string name="ProviderYouDao">Tłumacz YouDao</string>
+    <string name="ProviderDeepLTranslate">DeepL</string>
+    <string name="ProviderMicrosoftTranslator">Bing</string>
+    <string name="ProviderYouDao">YouDao</string>
     <string name="customDoH">Własne ustawienia DoH</string>
     <string name="disableSwipeToNextChannel">Nie przełączaj na następny kanał po przesunięciu palcem</string>
     <string name="maxRecentStickerCount">Maks. ilość ostatnio używanych naklejek</string>
@@ -118,7 +118,7 @@
     <string name="UseMediaStreamInVoip">Użyj strumienia mediów w VoIP</string>
     <string name="TakeGIFasVideo">Traktuj GIF jako Wideo</string>
     <string name="DontSendGreetingSticker">Nie wysyłaj naklejki na powitanie</string>
-    <string name="pressTitleToOpenAllChats">Przytrzymaj tytułu aplikacji, aby otworzyć folder \"Wszystkie czaty\"</string>
+    <string name="pressTitleToOpenAllChats">Naciśnij tytuł aplikacji, aby otworzyć folder \"Wszystkie czaty\"</string>
     <string name="hideGroupSticker">Ukryj naklejki grupy</string>
     <string name="disableChoosingSticker">Wyślij wpisując zamiast wybierać naklejkę</string>
     <string name="disableRemoteEmojiInteractions">Wyłącz zdalne interakcje emoji</string>
@@ -127,10 +127,10 @@
     <string name="SaveToDownloadCount_other">Zapisywanie %1$d plików do pobranych</string>
     <string name="NekoGeneralNotification">Powiadomienie</string>
     <string name="disableNotificationBubbles">Wyłącz dymki w powiadomieniu</string>
-    <string name="doubleTapSendReactions">Wyślij reakcję po dwukrotnym dotknięciu (domyślne)</string>
-    <string name="doubleTapShowReactions">Pokaż reakcje tylko po dwukrotnym dotknięciu</string>
+    <string name="doubleTapSendReactions">Wyślij reakcję po podwójnym dotknięciu</string>
+    <string name="doubleTapShowReactions">Pokaż reakcje po dwukrotnym dotknięciu</string>
     <string name="ReactionsDisabled">Wyłącz</string>
-    <string name="customSavePath">Ścieżka zapisu plików</string>
+    <string name="customSavePath">Ścieżka przechowywania danych</string>
     <string name="customSavePathHint">Puste = bezpośredni zapis</string>
     <string name="reactions">Reakcje w menu</string>
     <string name="hideSendAsChannel">Ukryj wyślij jako kanał</string>

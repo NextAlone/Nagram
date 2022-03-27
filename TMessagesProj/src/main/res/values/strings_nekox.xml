@@ -51,10 +51,10 @@
     <string name="UseDefaultTheme">Use default theme *</string>
     <string name="NightMode">Night Mode</string>
     <string name="PrivacyNotice">Privacy warning</string>
-    <string name="PrivacyNoticePhoneVisible">It is detected that your mobile phone number is visible to anyone, which may cause government-controlled hackers to find your true identity, please turn it off!</string>
-    <string name="PrivacyNoticeAddByPhone">It is detected that you are not turned off the \"Allow find me through phone number\" Setting, which may cause a government-controlled hacker to find your true identity, please turn it off!</string>
-    <string name="PrivacyNoticeP2p">It is detected that you have not turned off the \"Allow P2p calls\" Setting, which may cause government-controlled hackers to find your true identity, please turn it off!</string>
-    <string name="PrivacyNotice2fa">It is detected that you have not set a password, which may cause government-controlled hackers to find your true identity, please set one!</string>
+    <string name="PrivacyNoticePhoneVisible">Your mobile phone number is visible to anyone, which lets government-controlled hackers find your true identity. Please turn it off!</string>
+    <string name="PrivacyNoticeAddByPhone">You have not turned off \"Allow finding me through my phone number\", which lets government-controlled hackers find your true identity. Please turn it off!</string>
+    <string name="PrivacyNoticeP2p">You have not turned off \"Allow P2P calls\", which lets government-controlled hackers find your true identity. Please turn it off!</string>
+    <string name="PrivacyNotice2fa">You have not set a password, which lets government-controlled hackers find your true identity. Please set one!</string>
     <string name="ApplySuggestion">OK, Apply it</string>
     <string name="DoNotRemindAgain">Don\'t remind again</string>
     <string name="RemoveTitleEmoji">Remove emoji in title</string>
@@ -77,7 +77,7 @@
     <string name="FilterNameUnmutedDescription">Only messages from unmuted chats</string>
     <string name="FilterNameUnread2">Unread</string>
     <string name="FilterNameUnreadDescription">Only unread messages</string>
-    <string name="FilterNameUnmutedAndUnread">Unmuted &amp; Unread</string>
+    <string name="FilterNameUnmutedAndUnread">Unmuted and Unread</string>
     <string name="FilterNameUnmutedAndUnreadDescription">Only unread messages from unmuted chats</string>
     <string name="IgnoreMutedCount">Ignore muted unread count in folder tab</string>
     <string name="DialogsSettings">Dialogs Settings</string>
@@ -95,7 +95,7 @@
     <string name="DisableProxyWhenVpnEnabled">Disable proxy when VPN enabled</string>
     <string name="UseProxyItem">Use sidebar proxy item instead of button</string>
     <string name="HideProxyByDefault">Hide proxy settings by default</string>
-    <string name="SkipOpenLinkConfirm">Skip open link confirm</string>
+    <string name="SkipOpenLinkConfirm">Skip open link confirmation</string>
     <string name="DeleteAllInChat">Delete all in chat</string>
     <string name="DeleteAllInChatAlert">Warning! This will **delete all messages** in this chat for **all** participants.</string>
     <string name="UnblockAll">Unblock All</string>
@@ -104,15 +104,15 @@
     <string name="ProxyTypeVmess">VMess Proxy</string>
     <string name="AddProxySocks5">Add SOCKS5 Proxy</string>
     <string name="AddProxyTelegram">Add MTProto Proxy</string>
-    <string name="AddProxyVmess">Add Vmess Proxy</string>
+    <string name="AddProxyVmess">Add VMess Proxy</string>
     <string name="AddProxySS">Add Shadowsocks Proxy</string>
     <string name="AddProxySSR">Add ShadowsocksR Proxy</string>
     <string name="AddProxyTrojan">Add Trojan Proxy</string>
-    <string name="SSPluginConflictingName">Several plugins use this id: %s.</string>
+    <string name="SSPluginConflictingName">Several plugins use this ID: %s.</string>
     <string name="EditProxy">Edit Proxy</string>
     <string name="ShareProxy">Share Proxy</string>
     <string name="ProxyDelete">Delete Proxy</string>
-    <string name="ProxyInfoVmess">Vmess Proxy Settings</string>
+    <string name="ProxyInfoVmess">VMess Proxy Settings</string>
     <string name="VmessUserId">User ID</string>
     <string name="VmessAlterId">Alter ID</string>
     <string name="VmessSecurity">Security</string>
@@ -157,9 +157,9 @@
     <string name="DeleteUnavailableServer">Delete unavailable servers</string>
     <string name="DeleteAllServerConfirm">Are you sure you want to **delete all servers**?</string>
     <string name="DeleteUnavailableServerConfirm">Are you sure you want to **delete unavailable servers**?</string>
-    <string name="MinApi21Required">Sorry, you need at least Android 5 (API21).</string>
-    <string name="MinApi23Required">Sorry, you need at least Android 6 (API23).</string>
-    <string name="MiniVersionAlert">Sorry, mini version not support this type of proxy, please switch version in settings.</string>
+    <string name="MinApi21Required">Sorry, you need at least Android 5 (API level 21).</string>
+    <string name="MinApi23Required">Sorry, you need at least Android 6 (API level 23).</string>
+    <string name="MiniVersionAlert">The mini version not support this type of proxy. Please switch version in the settings.</string>
     <string name="ImportProxyFromClipboard">Import From Clipboard</string>
     <string name="BrokenLink">Unknown / Broken Link</string>
     <string name="ShareQRCode">QR Code</string>
@@ -193,9 +193,9 @@
     <string name="QRLoginNotice">This QR code / link allows someone to log in to your Telegram account. Is this your own operation?</string>
     <string name="QRLoginConfirm">Confirm Login</string>
     <string name="StorageReset">Clear Storage</string>
-    <string name="StorageResetInfo">All data of this application will be permanently deleted (and try to log out of all accounts first).</string>
+    <string name="StorageResetInfo">All app data will be permanently deleted (after an attempt to log out of all accounts).</string>
     <string name="FCTitle">About application updates</string>
-    <string name="FCInfo">Follow our announcements and updates channel?</string>
+    <string name="FCInfo">Follow our announcement and update channel\?</string>
     <string name="OpenCC" translatable="false">OpenCC</string>
     <string name="CCTitle">OpenCC (Chinese Convert)</string>
     <string name="CCTarget">Target</string>
@@ -221,7 +221,7 @@
     <string name="ArchiveFiles">Archive files</string>
     <string name="EnableStickerPin">Enable Pinning Sticker</string>
     <string name="EnableStickerPinAbout">Pin Stickers and sync with cloud even when adding new stickers.\nPaired with Disable Favorite and Recent.</string>
-    <string name="EnableStickerPinTip">This function is still under development, syncing with cloud may not work as thought.</string>
+    <string name="EnableStickerPinTip">This function is under development. Syncing to cloud may not work.</string>
     <string name="PinSticker">Pin</string>
     <string name="UnpinSticker">Unpin</string>
     <string name="SetPinnedSuffix">(Pinned)</string>
@@ -235,10 +235,11 @@
     <string name="AutoLockImmediately">Immediately</string>
     <string name="BackupSettings">Backup settings</string>
     <string name="ImportSettings">Import settings</string>
-    <string name="ImportSettingsAlert">Are you sure you want to overwrite the settings\? Importing settings from unknown sources may cause the pin to be overwritten and cause the application to be locked.</string>
+    <string name="ImportSettingsAlert">Overwrite the settings\? Importing settings from unknown sources may cause the pin to be overwritten and the app to be locked.</string>
     <string name="nekoXPaymentRemovedToast">The payment function has been removed.</string>
     <string name="VersionUpdateTitle">New Version Available</string>
-    <string name="VersionUpdateVariantNotMatch">Version variants fail to match automatically.\nPlease download manually from GitHub.</string>
+    <string name="VersionUpdateVariantNotMatch">Could not match version variants automatically.
+\nPlease download manually from GitHub.</string>
     <string name="VersionUpdateConfirm">UPDATE</string>
     <string name="VersionUpdateIgnore">Ignore</string>
     <string name="VersionUpdateNotNow">Not now</string>
@@ -250,13 +251,13 @@
     <string name="AutoCheckUpdatePreview">Preview (Unstable)</string>
     <string name="unreadBadgeOnBackButton">Unread badge on back button</string>
     <string name="customPublicProxyIP">Set IP of public proxy</string>
-    <string name="customPublicProxyIPNotice">In some areas, specifying the IP of public proxy CDN(eg. Cloudflare) can speed up access.</string>
+    <string name="customPublicProxyIPNotice">In some areas specifying the IP of a public proxy CDN (e.g. Cloudflare) can speed up access.</string>
     <string name="DeleteDownloadedFileConfirm">Delete this file from local cache?</string>
     <string name="DeleteDownloadedFileSucceed">Deleted</string>
     <string name="DeleteDownloadedFileExternal">External file is skipped.</string>
-    <string name="update_download_soucre">Select download soucre</string>
+    <string name="update_download_soucre">Select download source</string>
     <string name="useCustomEmoji">Use Custom Emoji</string>
-    <string name="useCustomEmojiInvalid">Not a vaild emoji zip.</string>
+    <string name="useCustomEmojiInvalid">Not a vaild emoji ZIP-file.</string>
     <string name="repeatConfirm">Ask before repeat</string>
     <string name="repeatConfirmText">Are you sure to repeat?</string>
     <string name="valuesLargeAvatarInDrawer">Telegram Default\nAvatar as background\nBig avatar as background</string>
@@ -271,5 +272,5 @@
     <string name="channelAliasDetails">Require label channel user enabled.</string>
     <string name="setChannelAliasName">Set Alias</string>
     <string name="labelChannelUser">Label Channel User</string>
-    <string name="labelChannelUserDetails">If message sender is Channel,it will label it as \"Channel\"</string>
+    <string name="labelChannelUserDetails">If the message sender is \"Channel\", it will be labeled \"Channel\".</string>
 </resources>
