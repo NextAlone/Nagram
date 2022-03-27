@@ -238,7 +238,7 @@ public class WsSettingsActivity extends BaseFragment {
                     break;
                 case 1:
                     payloadField = cursor;
-                    cursor.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    cursor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
                     cursor.setHintText(LocaleController.getString("WsPayload", R.string.WsPayload));
                     cursor.setText(currentBean.getPayloadStr());
                     break;
