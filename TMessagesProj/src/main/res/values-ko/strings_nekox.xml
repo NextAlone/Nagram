@@ -105,7 +105,7 @@
     <string name="ProxyTypeVmess">VMess 프록시</string>
     <string name="AddProxySocks5">SOCKS5 프록시 추가</string>
     <string name="AddProxyTelegram">MTProto 프록시 추가</string>
-    <string name="AddProxyVmess">Vmess 프록시 추가</string>
+    <string name="AddProxyVmess">VMess 프록시 추가</string>
     <string name="AddProxySS">Shadowsocks 프록시 추가</string>
     <string name="AddProxySSR">ShadowsocksR 프록시 추가</string>
     <string name="AddProxyTrojan">트로이 목마 프록시 추가</string>
@@ -113,7 +113,7 @@
     <string name="EditProxy">프록시 편집</string>
     <string name="ShareProxy">프록시 공유</string>
     <string name="ProxyDelete">프록시 삭제</string>
-    <string name="ProxyInfoVmess">Vmess 프록시 설정</string>
+    <string name="ProxyInfoVmess">VMess 프록시 설정</string>
     <string name="VmessUserId">사용자 ID</string>
     <string name="VmessAlterId">ID 변경</string>
     <string name="VmessSecurity">보안</string>

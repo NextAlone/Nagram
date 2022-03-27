@@ -92,7 +92,7 @@
     <string name="About">О проекте</string>
     <string name="IgnoreBlockedAbout">Вы больше не будете видеть сообщения от заблокированных пользователей в группах.</string>
     <string name="GooglePlay">Google Play</string>
-    <string name="SourceCode">Исходный код на Github</string>
+    <string name="SourceCode">Исходный код на GitHub</string>
     <string name="ResetStickerSize">Размер стикеров по умолчанию</string>
     <string name="RestartAppToTakeEffect">Перезапустите приложение.</string>
     <string name="DisableAppBarShadow">Отключить тень заголовка</string>
@@ -141,4 +141,8 @@
     <string name="customSavePathHint">Оставьте пустым, чтобы сохранять в Загрузки напрямую</string>
     <string name="reactions">Реакции в меню</string>
     <string name="customSavePath">Папка в загрузках</string>
+    <string name="channelLabel">канал</string>
+    <string name="showBottomActionsWhenSelecting">Показать нижние действия при выборе</string>
+    <string name="forceBlurInChat">Принудительно включить размытие чатов</string>
+    <string name="ChatBlurAlphaValue">Размытие чатов (Альфа)</string>
 </resources>

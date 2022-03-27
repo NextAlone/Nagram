@@ -29,6 +29,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Locale;
+
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -57,6 +64,7 @@ public class Emoji {
     private static boolean recentEmojiLoaded;
     private static Runnable invalidateUiRunnable = () -> NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.emojiLoaded);
     public static float emojiDrawingYOffset;
+    public static boolean emojiDrawingUseAlpha = true;
 
     private final static int MAX_RECENT_EMOJI_COUNT = 48;
 
@@ -278,6 +286,11 @@ public class Emoji {
 
         @Override
         public void draw(Canvas canvas) {
+            if (!isLoaded()) {
+                loadEmoji(info.page, info.page2);
+                canvas.drawRect(getBounds(), placeholderPaint);
+                return;
+            }
 
             Rect b;
             if (fullSize) {
@@ -589,7 +602,7 @@ public class Emoji {
         @Override
         public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, Paint paint) {
             boolean restoreAlpha = false;
-            if (paint.getAlpha() != 255) {
+            if (paint.getAlpha() != 255 && emojiDrawingUseAlpha) {
                 restoreAlpha = true;
                 getDrawable().setAlpha(paint.getAlpha());
             }

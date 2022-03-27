@@ -27,7 +27,7 @@
     <string name="DisableResidentNotification">果然通知栏还是太挤了</string>
     <string name="TeleTuxRunning">猫猫奔跑中</string>
     <string name="EventType">抽屉图标集</string>
-    <string name="ChristmasHat">每天显示圣诞帽</string>
+    <string name="ChristmasHat">一直显示圣诞帽</string>
     <string name="ActionBarDecoration">标题栏装饰</string>
     <string name="DependsOnDate">基于日期</string>
     <string name="Christmas">圣诞节</string>
@@ -92,7 +92,7 @@
     <string name="About">关于</string>
     <string name="IgnoreBlockedAbout">您将不会再看到被屏蔽的用户在群组中的消息。</string>
     <string name="GooglePlay">Google Play</string>
-    <string name="SourceCode">Github 上的源代码</string>
+    <string name="SourceCode">GitHub 上的源代码</string>
     <string name="ResetStickerSize">重置贴纸大小</string>
     <string name="RestartAppToTakeEffect">重启应用以生效。</string>
     <string name="DisableAppBarShadow">禁用标题栏阴影</string>
@@ -136,11 +136,13 @@
     <string name="NekoGeneralNotification">通知</string>
     <string name="disableNotificationBubbles">禁用通知气泡</string>
     <string name="reactions">菜单回应</string>
-    <string name="doubleTapSendReactions">双击消息发送表情回应（默认）</string>
-    <string name="ReactionsDisabled">禁用</string>
-    <string name="customSavePath">自定义保存路径</string>
+    <string name="doubleTapSendReactions">双击消息发送表情回应(默认)</string>
+    <string name="ReactionsDisabled">禁用菜单回应</string>
+    <string name="customSavePath">更改保存路径下的子目录名称</string>
     <string name="customSavePathHint">留空则保存至上层目录</string>
     <string name="doubleTapShowReactions">双击消息打开表情回应菜单</string>
     <string name="showBottomActionsWhenSelecting">长按选中消息时，显示底部操作按钮</string>
     <string name="channelLabel">频道身份</string>
+    <string name="forceBlurInChat">强制启用聊天背景模糊</string>
+    <string name="ChatBlurAlphaValue">背景模糊度</string>
 </resources>

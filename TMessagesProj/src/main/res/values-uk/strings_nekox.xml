@@ -51,18 +51,18 @@
     <string name="ShowIdAndDc">Показати ID / DC в профілі</string>
     <string name="UseDefaultTheme">Використовувати стандартну тему *</string>
     <string name="NightMode">Нічний режим</string>
-    <string name="PrivacyNotice">Конфіденційність попередження</string>
-    <string name="PrivacyNoticePhoneVisible">Це виявлено, що ваш номер телефону видно будь-кому, що може викликати хакерів під контролем уряду знайти вашу справжню ідентичність, будь ласка, вимкніть його!</string>
+    <string name="PrivacyNotice">Загроза приватності</string>
+    <string name="PrivacyNoticePhoneVisible">Ваш номер телефону загальнодоступний, що спрощує виявлення вашої справжньої особи. Радимо сховати номер!</string>
     <string name="PrivacyNoticeAddByPhone">Виявлено, що ви не вимкнено налаштування \"Дозволити знайти мене через номер телефону\", що може призвести до того, що хакер, що контролюється державою, дізнається вашу справжню особу, вимкніть її!</string>
-    <string name="PrivacyNoticeP2p">Виявлено, що ви не вимкнули налаштування \"Дозволити дзвінки P2p\", що може змусити хакерів, які контролюються державою, знайти справжню особу, будь ласка, вимкніть її!</string>
-    <string name="PrivacyNotice2fa">Виявлено, що ви не встановили пароль, через що хакери під контролем уряду можуть знайти справжню особу, будь ласка, встановіть його!</string>
+    <string name="PrivacyNoticeP2p">Ви залишили налаштування безпеки «Виклики через Peer-to-Peer» увімкненим, що спрощує виявлення вашої справжньої особи. Радимо вимкнути!</string>
+    <string name="PrivacyNotice2fa">Ви не встановили пароль. Його відсутність спрощує виявлення вашої справжньої особи. Радимо встановити!</string>
     <string name="ApplySuggestion">Добре, застосувати</string>
     <string name="DoNotRemindAgain">Не нагадувати більше</string>
     <string name="RemoveTitleEmoji">Видаляти смайли в назві</string>
     <string name="TeleTuxProxy">Публічний проксі TeleTux</string>
     <string name="PublicPrefix">Загальнодоступна</string>
     <string name="DisableChatAction">Не надсилати мій статус вводу</string>
-    <string name="FakeScreenshot">Зробіть знімок екрану</string>
+    <string name="FakeScreenshot">Імітувати знімок екрану</string>
     <string name="ImportPxy">Імпорт</string>
     <string name="FilterNameUsers">Особисті</string>
     <string name="FilterNameUsersDescription">Лише повідомлення з особистих чатів</string>
@@ -96,7 +96,7 @@
     <string name="DisableProxyWhenVpnEnabled">Вимкнути проксі, коли ввімкнено VPN</string>
     <string name="UseProxyItem">Кнопка проксі в бічній панелі, не в заголовку</string>
     <string name="HideProxyByDefault">Приховати налаштування проксі за замовчуванням</string>
-    <string name="SkipOpenLinkConfirm">Підтвердити відкриття посилання</string>
+    <string name="SkipOpenLinkConfirm">Відкривати посилання без підтвердження</string>
     <string name="DeleteAllInChat">Видалити все у чаті</string>
     <string name="DeleteAllInChatAlert">Увага! Це **видалить усі повідомлення** в цьому чаті для **всіх ** учасників.</string>
     <string name="UnblockAll">Розблокувати всі</string>
@@ -105,7 +105,7 @@
     <string name="ProxyTypeVmess">VMess проксі</string>
     <string name="AddProxySocks5">Додати SOCKS5 проксі</string>
     <string name="AddProxyTelegram">Додати MTProto Proxy</string>
-    <string name="AddProxyVmess">Додати проксі Vmess</string>
+    <string name="AddProxyVmess">Додати проксі VMess</string>
     <string name="AddProxySS">Додати Shadowsocks проксі</string>
     <string name="AddProxySSR">Додати ShadowsocksR проксі</string>
     <string name="AddProxyTrojan">Додати Proxy Trojan</string>
@@ -113,7 +113,7 @@
     <string name="EditProxy">Редагувати проксі</string>
     <string name="ShareProxy">Поділитися через проксі</string>
     <string name="ProxyDelete">Видалити проксі</string>
-    <string name="ProxyInfoVmess">Параметри проксі Vmess</string>
+    <string name="ProxyInfoVmess">Параметри проксі VMess</string>
     <string name="VmessUserId">ID користувача</string>
     <string name="VmessAlterId">Змінити ідентифікатор</string>
     <string name="VmessSecurity">Безпека</string>
@@ -158,9 +158,9 @@
     <string name="DeleteUnavailableServer">Видалити недоступні сервери</string>
     <string name="DeleteAllServerConfirm">Ви дійсно бажаєте **видалити всі сервери**\?</string>
     <string name="DeleteUnavailableServerConfirm">Ви впевнені, що хочете ** видалити недоступні сервери **\?</string>
-    <string name="MinApi21Required">Необхідно хоча б Android 5 (API21).</string>
-    <string name="MinApi23Required">Вибачте, вам потрібно принаймні Android 6 (API23).</string>
-    <string name="MiniVersionAlert">Вибачте, міні-версія не підтримує цей тип проксі, будь ласка, увімкніть версію в налаштуваннях.</string>
+    <string name="MinApi21Required">Потрібен хоча б Android 5 (рівень API 21).</string>
+    <string name="MinApi23Required">Потрібен хоча б Android 6 (рівень API 23).</string>
+    <string name="MiniVersionAlert">Міні-версія не підтримує цей тип проксі. Оберіть іншу версію в налаштуваннях.</string>
     <string name="ImportProxyFromClipboard">Імпортувати з буфера обміну</string>
     <string name="BrokenLink">Невідоме / Пошкоджене посилання</string>
     <string name="ShareQRCode">QR-код</string>
@@ -193,9 +193,9 @@
     <string name="QRLoginNotice">Цей QR-код / посилання дозволяє комусь входити у ваш обліковий запис Telegram. Це ваша власна операція\?</string>
     <string name="QRLoginConfirm">Підтвердьте вхід</string>
     <string name="StorageReset">Очистити сховище</string>
-    <string name="StorageResetInfo">Усі дані цієї програми буде остаточно видалено (і спробуйте спочатку вийти з усіх облікових записів).</string>
+    <string name="StorageResetInfo">Усі дані застосунку буде видалено назовсім (після спроби вийти з усіх облікових записів).</string>
     <string name="FCTitle">Про оновлення програми</string>
-    <string name="FCInfo">Слідкуйте за нашими каналами оголошень та оновлень\?</string>
+    <string name="FCInfo">Підписатись на канал наших оголошень і оновлень\?</string>
     <string name="CCTitle">OpenCC (китайська конвертація)</string>
     <string name="CCTarget">Цільова</string>
     <string name="CCNo">Без ефекту</string>
@@ -219,8 +219,8 @@
     <string name="HideDeviceInfoOff">Модель пристрою буде завантажена вдруге, коли програма запуститься після входу в систему.</string>
     <string name="HideDeviceInfoOn">Ви можете змінити це в налаштуваннях пізніше.</string>
     <string name="nekoXPaymentRemovedToast">Функція оплати була видалена.</string>
-    <string name="ImportSettingsAlert">Чи дійсно ви впевнені, що хочете перезаписати налаштування\? Імпортування налаштувань з невідомих джерел може спричинити перезапис пін-коду і спричити блокування додатку.</string>
-    <string name="EnableStickerPinTip">Ця функція ще на стадії розробки, синхронізація з хмарним сховищем може не працювати належним чином.</string>
+    <string name="ImportSettingsAlert">Перезаписати налаштування\? Імпорт налаштувань із невідомих джерел може спричинити перезапис пін-коду й блокування застосунку.</string>
+    <string name="EnableStickerPinTip">Розробка функції триває. Синхронізація з хмарою може не працювати.</string>
     <string name="EnableStickerPinAbout">Закріпити стікери і синхронізувати з хмарним сховищем, навіть коли додаєте нові стікери.
 \nПов\'язано з вимкненням улюблених та недавніх стікерів.</string>
     <string name="EnableStickerPin">Ввімкнути закріплення стікеру</string>
@@ -248,7 +248,7 @@
     <string name="DeleteDownloadedFileSucceed">Видалено</string>
     <string name="repeatConfirm">Перепитувати щодо повтору</string>
     <string name="ShareMessages">Поширити</string>
-    <string name="useCustomEmojiInvalid">Хибний zip емодзі.</string>
+    <string name="useCustomEmojiInvalid">Хибний ZIP-файл емодзі.</string>
     <string name="valuesLargeAvatarInDrawer">Типово
 \nАватар як тло
 \nВеликий аватар як тло</string>
@@ -271,11 +271,11 @@
     <string name="update_download_soucre">Оберіть джерело завантаження</string>
     <string name="rememberAllBackMessages">Пам\'ятати натиснені відповіді</string>
     <string name="AutoCheckUpdatePreview">Передогляд (Нестабільно)</string>
-    <string name="NekoXUpdateTranslationHint">Натисніть щоб перекласти журнал змін</string>
+    <string name="NekoXUpdateTranslationHint">Торкніть, щоб перекласти журнал змін</string>
     <string name="AppUpdateNekoX">Оновити Nekogram X</string>
     <string name="Name">Ім\'я</string>
     <string name="channelAlias">Псевдонім каналу</string>
-    <string name="labelChannelUserDetails">Підписувати повідомлення з каналу відповідно</string>
+    <string name="labelChannelUserDetails">Підписувати повідомлення з каналу відповідно.</string>
     <string name="setChannelAliasName">Вкажіть псевдонім</string>
     <string name="labelChannelUser">Мітка користувача-каналу</string>
     <string name="channelAliasDetails">Якщо ввімкнена мітка користувача-каналу.</string>

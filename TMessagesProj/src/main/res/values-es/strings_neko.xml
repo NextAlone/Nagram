@@ -92,7 +92,7 @@
     <string name="About">Acerca de</string>
     <string name="IgnoreBlockedAbout">Ya no verás mensajes de usuarios bloqueados en grupos.</string>
     <string name="GooglePlay">Google Play</string>
-    <string name="SourceCode">Código fuente en Github</string>
+    <string name="SourceCode">Código fuente en GitHub</string>
     <string name="ResetStickerSize">Restablecer tamaño del sticker</string>
     <string name="RestartAppToTakeEffect">Reiniciar la app para que tenga efecto.</string>
     <string name="DisableAppBarShadow">Deshabilitar sombra de la barra de título</string>

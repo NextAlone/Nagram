@@ -105,7 +105,7 @@
     <string name="ProxyTypeVmess">VMessプロキシ</string>
     <string name="AddProxySocks5">SOCKS5プロキシを追加</string>
     <string name="AddProxyTelegram">MTProtoプロキシを追加</string>
-    <string name="AddProxyVmess">Vmessプロキシを追加</string>
+    <string name="AddProxyVmess">VMessプロキシを追加</string>
     <string name="AddProxySS">Shadowsocksプロキシを追加</string>
     <string name="AddProxySSR">ShadowsocksRプロキシを追加</string>
     <string name="AddProxyTrojan">トロイの木馬のプロキシを追加</string>
@@ -113,7 +113,7 @@
     <string name="EditProxy">プロキシを編集</string>
     <string name="ShareProxy">プロキシを共有</string>
     <string name="ProxyDelete">プロキシを削除</string>
-    <string name="ProxyInfoVmess">Vmessプロキシの設定</string>
+    <string name="ProxyInfoVmess">VMessプロキシの設定</string>
     <string name="VmessUserId">ユーザーID</string>
     <string name="VmessAlterId">Alter ID</string>
     <string name="VmessSecurity">セキュリティ</string>

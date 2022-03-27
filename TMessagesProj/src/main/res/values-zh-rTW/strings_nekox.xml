@@ -105,7 +105,7 @@
     <string name="ProxyTypeVmess">VMess 代理</string>
     <string name="AddProxySocks5">新增 SOCKS5 代理</string>
     <string name="AddProxyTelegram">新增 MTProto 代理</string>
-    <string name="AddProxyVmess">新增 Vmess 代理</string>
+    <string name="AddProxyVmess">新增 VMess 代理</string>
     <string name="AddProxySS">新增 Shadowsocks 代理</string>
     <string name="AddProxySSR">新增 ShadowsocksR 代理</string>
     <string name="AddProxyTrojan">新增 Trojan 代理</string>
@@ -113,7 +113,7 @@
     <string name="EditProxy">編輯代理</string>
     <string name="ShareProxy">分享代理</string>
     <string name="ProxyDelete">刪除代理</string>
-    <string name="ProxyInfoVmess">Vmess 代理設定</string>
+    <string name="ProxyInfoVmess">VMess 代理設定</string>
     <string name="VmessUserId">使用者ID</string>
     <string name="VmessAlterId">額外ID</string>
     <string name="VmessSecurity">加密方式</string>

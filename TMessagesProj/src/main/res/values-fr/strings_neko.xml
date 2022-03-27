@@ -43,7 +43,7 @@
     <string name="About">À propos</string>
     <string name="IgnoreBlockedAbout">Vous ne verrez plus les messages de vos utilisateurs bloqués dans les groupes.</string>
     <string name="GooglePlay">Google Play</string>
-    <string name="SourceCode">Code source sur Github</string>
+    <string name="SourceCode">Code source sur GitHub</string>
     <string name="BetaWarning">Il s\'agit d\'une fonctionnalité **bêta** implémentée par ** Telegram **.</string>
     <string name="AvatarAsBackground">Image de profil comme arrière-plan</string>
     <string name="BlurAvatarBackground">Flouter l\'image de profil</string>

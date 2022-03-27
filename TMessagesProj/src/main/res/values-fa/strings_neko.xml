@@ -144,4 +144,6 @@
     <string name="reactions">واکنش‌ها در منو</string>
     <string name="showBottomActionsWhenSelecting">نمایش اقدامات در پایین هنگام انتخاب</string>
     <string name="channelLabel">کانال</string>
+    <string name="forceBlurInChat">فعال کردن اجباری محو کردن چت</string>
+    <string name="ChatBlurAlphaValue">چت محو و بلوری آلفا</string>
 </resources>

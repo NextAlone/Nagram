@@ -4799,9 +4799,10 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
         if (framerate == 0) {
             framerate = 25;
-        }/* else if (framerate > 59) {
-            framerate = 59;
-        }*/
+        }
+//        else if (framerate > 59) {
+//            framerate = 59;
+//        }
 
         if (rotationValue == 90 || rotationValue == 270) {
             int temp = resultHeight;
@@ -4809,6 +4810,10 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             resultWidth = temp;
         }
 
+//        if (framerate > 30 && (Math.min(resultHeight, resultWidth) <= 480)) {
+//            framerate = 30;
+//        }
+//
         boolean needCompress = avatarStartTime != -1 || info.cropState != null || info.mediaEntities != null || info.paintPath != null || info.filterState != null ||
                 resultWidth != originalWidth || resultHeight != originalHeight || rotationValue != 0 || info.roundVideo || startTime != -1;
 
@@ -4903,12 +4908,12 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             minCompressFactor = 1f;
         } else if (Math.min(height, width) >= 720) {
             maxBitrate = 3200_000;
-            compressFactor = 1f;
-            minCompressFactor = 1f;
+            compressFactor = 1.0f;
+            minCompressFactor = 1.0f;
         } else if (Math.min(height, width) >= 480) {
             maxBitrate = 1000_000;
-            compressFactor = 0.8f;
-            minCompressFactor = 0.9f;
+            compressFactor = 0.7f;
+            minCompressFactor = 0.8f;
         } else {
             maxBitrate = 750_000;
             compressFactor = 0.6f;

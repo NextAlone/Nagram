@@ -92,7 +92,7 @@
     <string name="About">Thông tin thêm</string>
     <string name="IgnoreBlockedAbout">Bạn sẽ không còn thấy tin nhắn từ những người dùng bị chặn trong các nhóm.</string>
     <string name="GooglePlay">CH Play</string>
-    <string name="SourceCode">Mã nguồn trên Github</string>
+    <string name="SourceCode">Mã nguồn trên GitHub</string>
     <string name="ResetStickerSize">Đặt lại kích thước nhãn dán</string>
     <string name="RestartAppToTakeEffect">Khởi động lại ứng dụng để có hiệu lực.</string>
     <string name="DisableAppBarShadow">Vô hiệu hóa bóng thanh tiêu đề</string>

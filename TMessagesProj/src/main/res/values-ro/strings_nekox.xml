@@ -88,14 +88,14 @@
     <string name="ProxyTypeVmess">VMess Proxy</string>
     <string name="AddProxySocks5">Adaugă Proxy-ul SOCKS5</string>
     <string name="AddProxyTelegram">Adaugă Proxy-ul MTProto</string>
-    <string name="AddProxyVmess">Adaugă Proxy-ul Vmess</string>
+    <string name="AddProxyVmess">Adaugă Proxy-ul VMess</string>
     <string name="AddProxySS">Adaugă Proxy-ul Shadowsocks</string>
     <string name="AddProxySSR">Adaugă Proxy-ul ShadowsocksR</string>
     <string name="AddProxyTrojan">Adaugă Proxy-ul Trojan</string>
     <string name="EditProxy">Editați proxy</string>
     <string name="ShareProxy">Distribuiți proxy</string>
     <string name="ProxyDelete">Ștergeți proxy</string>
-    <string name="ProxyInfoVmess">Setări Proxyului Vmess</string>
+    <string name="ProxyInfoVmess">Setări Proxyului VMess</string>
     <string name="VmessUserId">ID utilizator</string>
     <string name="VmessSecurity">Securitate</string>
     <string name="VmessNetwork">Reţea</string>

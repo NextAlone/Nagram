@@ -105,7 +105,7 @@
     <string name="ProxyTypeVmess">VMess-прокси</string>
     <string name="AddProxySocks5">SOCKS5-прокси</string>
     <string name="AddProxyTelegram">MTProto-прокси</string>
-    <string name="AddProxyVmess">Vmess-прокси</string>
+    <string name="AddProxyVmess">VMess-прокси</string>
     <string name="AddProxySS">Shadowsocks-прокси</string>
     <string name="AddProxySSR">ShadowsocksR-прокси</string>
     <string name="AddProxyTrojan">Trojan-прокси</string>
@@ -113,7 +113,7 @@
     <string name="EditProxy">Изменить прокси</string>
     <string name="ShareProxy">Поделиться прокси</string>
     <string name="ProxyDelete">Удалить прокси</string>
-    <string name="ProxyInfoVmess">Настройки Vmess-прокси</string>
+    <string name="ProxyInfoVmess">Настройки VMess-прокси</string>
     <string name="VmessUserId">User Id</string>
     <string name="VmessAlterId">Alter Id</string>
     <string name="VmessSecurity">Безопасность</string>

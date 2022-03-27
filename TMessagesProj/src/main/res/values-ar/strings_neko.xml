@@ -27,10 +27,10 @@
     <string name="DisableResidentNotification">تعطيل سكان الإعلام</string>
     <string name="TeleTuxRunning">تطبيق نيكوجرام يعمل</string>
     <string name="EventType">مجموعة أيقونات الشريط الجانبي</string>
-    <string name="ChristmasHat">إظهار قبعة عيد الميلاد يومياً</string>
+    <string name="ChristmasHat">إظهار قبعة سانتا كل يوم</string>
     <string name="ActionBarDecoration">زينة شريط العنوان</string>
     <string name="DependsOnDate">يعتمد على التاريخ</string>
-    <string name="Christmas">عيد الميلاد</string>
+    <string name="Christmas">يول</string>
     <string name="Valentine">يوم الحب</string>
     <string name="Snowflakes">ندفات الثلج</string>
     <string name="Fireworks">ألعاب نارية</string>
@@ -92,7 +92,7 @@
     <string name="About">حول</string>
     <string name="IgnoreBlockedAbout">لن ترى بعد الآن رسائل من المستخدمين المحظورين في المجموعات.</string>
     <string name="GooglePlay">جوجل بلاي</string>
-    <string name="SourceCode">مصدر التعليمات البرمجية على Github</string>
+    <string name="SourceCode">مصدر التعليمات البرمجية على GitHub</string>
     <string name="ResetStickerSize">إعادة تعيين حجم ملصق</string>
     <string name="RestartAppToTakeEffect">إعادة تشغيل التطبيق لتصبح سارية المفعول.</string>
     <string name="DisableAppBarShadow">تعطيل ظل شريط العنوان</string>
@@ -143,4 +143,6 @@
     <string name="customSavePath">مسار الحفظ المخصص</string>
     <string name="showBottomActionsWhenSelecting">إظهار الإجراءات السفلية عند الاختيار</string>
     <string name="channelLabel">قناة</string>
+    <string name="forceBlurInChat">فرض تمكين شفافية المحادثة</string>
+    <string name="ChatBlurAlphaValue">نسبة شفافية المحادثة</string>
 </resources>

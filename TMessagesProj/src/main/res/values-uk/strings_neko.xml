@@ -27,10 +27,10 @@
     <string name="DisableResidentNotification">Вимкнути сповіщення резидента</string>
     <string name="TeleTuxRunning">Некограм працює</string>
     <string name="EventType">Набір іконок бічної панелі</string>
-    <string name="ChristmasHat">Показуйте різдвяну шапку щодня</string>
+    <string name="ChristmasHat">Шапка Санти щодня</string>
     <string name="ActionBarDecoration">Прикраса заголовка</string>
     <string name="DependsOnDate">Залежить від дати</string>
-    <string name="Christmas">Різдво</string>
+    <string name="Christmas">Коляда</string>
     <string name="Valentine">День святого Валентина</string>
     <string name="Snowflakes">Сніжинки</string>
     <string name="Fireworks">Феєрверк</string>
@@ -92,7 +92,7 @@
     <string name="About">Про програму</string>
     <string name="IgnoreBlockedAbout">Ви більше не будете бачити повідомлення від заблокованих користувачів в групі.</string>
     <string name="GooglePlay">Google Play</string>
-    <string name="SourceCode">Джерельний код на Github</string>
+    <string name="SourceCode">Джерельний код на GitHub</string>
     <string name="ResetStickerSize">Скинути розмір стікерів</string>
     <string name="RestartAppToTakeEffect">Перезапустіть програму, щоб зміни вступили в силу.</string>
     <string name="DisableAppBarShadow">Вимкнути тінь панелі заголовків</string>
@@ -142,4 +142,6 @@
     <string name="SaveToDownloadCount_few">Зберігання %1$d файлів до завантажень</string>
     <string name="showBottomActionsWhenSelecting">Показати дії знизу при виділенні</string>
     <string name="channelLabel">канал</string>
+    <string name="forceBlurInChat">Примусове розмиття в чаті</string>
+    <string name="ChatBlurAlphaValue">Альфа розмиття в чаті</string>
 </resources>

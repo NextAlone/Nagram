@@ -105,7 +105,7 @@
     <string name="ProxyTypeVmess">VMess 代理</string>
     <string name="AddProxySocks5">添加 SOCKS5 代理</string>
     <string name="AddProxyTelegram">添加 MTProto 代理</string>
-    <string name="AddProxyVmess">添加 Vmess 代理</string>
+    <string name="AddProxyVmess">添加 VMess 代理</string>
     <string name="AddProxySS">添加 Shadowsocks 代理</string>
     <string name="AddProxySSR">添加 ShadowsocksR 代理</string>
     <string name="AddProxyTrojan">添加 Trojan 代理</string>
@@ -113,7 +113,7 @@
     <string name="EditProxy">编辑代理</string>
     <string name="ShareProxy">分享代理</string>
     <string name="ProxyDelete">删除代理</string>
-    <string name="ProxyInfoVmess">Vmess 代理设置</string>
+    <string name="ProxyInfoVmess">VMess 代理设置</string>
     <string name="VmessUserId">用户ID</string>
     <string name="VmessAlterId">额外ID</string>
     <string name="VmessSecurity">加密方式</string>
@@ -253,7 +253,7 @@
     <string name="nekoXPaymentRemovedToast">支付功能已被移除。</string>
     <string name="unreadBadgeOnBackButton">聊天窗口返回按钮上显示未读数</string>
     <string name="customPublicProxyIP">设置公共代理的 IP</string>
-    <string name="customPublicProxyIPNotice">在某些地区，指定公共代理 CDN（例如 Cloudflare）的 IP 可以加快访问速度。</string>
+    <string name="customPublicProxyIPNotice">在某些地区，指定公共代理 CDN (例如 Cloudflare) 的 IP 可以加快访问速度。</string>
     <string name="DeleteDownloadedFileConfirm">从本地缓存中删除此文件？</string>
     <string name="DeleteDownloadedFileSucceed">已删除</string>
     <string name="DeleteDownloadedFileExternal">外部文件被跳过。</string>
@@ -270,7 +270,7 @@
     <string name="showSeconds">以秒为单位显示时间戳</string>
     <string name="rememberAllBackMessages">记住所有点击的回复</string>
     <string name="ShareMessages">分享</string>
-    <string name="AutoCheckUpdatePreview">预览版（不稳定）</string>
+    <string name="AutoCheckUpdatePreview">预览版(不稳定)</string>
     <string name="AppUpdateNekoX">更新Nekogram X</string>
     <string name="NekoXUpdateTranslationHint">长按以翻译更新日志</string>
     <string name="channelAlias">频道别名</string>

@@ -91,7 +91,7 @@
     <string name="About">Rólunk</string>
     <string name="IgnoreBlockedAbout">A továbbiakban nem jelennek meg csoportokban letiltott felhasználóktól érkező üzenetek.</string>
     <string name="GooglePlay">Google Play</string>
-    <string name="SourceCode">Forráskód a Githubon</string>
+    <string name="SourceCode">Forráskód a GitHubon</string>
     <string name="ResetStickerSize">A matrica méretének visszaállítása</string>
     <string name="RestartAppToTakeEffect">Indítsa újra az alkalmazást, hogy életbe lépjen.</string>
     <string name="DisableAppBarShadow">Tiltsa le a címsor árnyékát</string>

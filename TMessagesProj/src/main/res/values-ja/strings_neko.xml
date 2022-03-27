@@ -92,7 +92,7 @@
     <string name="About">約</string>
     <string name="IgnoreBlockedAbout">ブロックされたユーザーからのメッセージがグループに表示されなくなります。</string>
     <string name="GooglePlay">Google Play</string>
-    <string name="SourceCode">Github のソース コード</string>
+    <string name="SourceCode">GitHub のソース コード</string>
     <string name="ResetStickerSize">ステッカーのサイズをリセット</string>
     <string name="RestartAppToTakeEffect">有効にするにはアプリを再起動してください。</string>
     <string name="DisableAppBarShadow">タイトルバーの影を無効にする</string>

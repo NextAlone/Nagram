@@ -92,7 +92,7 @@
     <string name="About">Sobre</string>
     <string name="IgnoreBlockedAbout">Você não verá mais mensagens de usuários bloqueados em grupos.</string>
     <string name="GooglePlay">Google Play</string>
-    <string name="SourceCode">Código fonte no Github</string>
+    <string name="SourceCode">Código fonte no GitHub</string>
     <string name="ResetStickerSize">Redefinir tamanho do sticker</string>
     <string name="RestartAppToTakeEffect">Reinicie o aplicativo para tirar efeito.</string>
     <string name="DisableAppBarShadow">Desativar sombra da barra de título</string>
@@ -143,4 +143,6 @@
     <string name="doubleTapSendReactions">Enviar reação ao tocar duas vezes (padrão)</string>
     <string name="showBottomActionsWhenSelecting">Mostrar ações inferiores ao selecionar</string>
     <string name="channelLabel">canal</string>
+    <string name="ChatBlurAlphaValue">Chat Blur Alfa</string>
+    <string name="forceBlurInChat">Forçar a ativação do Chat Blur</string>
 </resources>

@@ -105,7 +105,7 @@
     <string name="ProxyTypeVmess">VMess Proxy</string>
     <string name="AddProxySocks5">Adja hozzá a SOCKS5 Proxy-t</string>
     <string name="AddProxyTelegram">Adja hozzá az MTProto Proxy-t</string>
-    <string name="AddProxyVmess">Adja hozzá a Vmess proxyt</string>
+    <string name="AddProxyVmess">Adja hozzá a VMess proxyt</string>
     <string name="AddProxySS">Adjon hozzá Shadowsocks Proxy-t</string>
     <string name="AddProxySSR">Adjon hozzá ShadowsocksR Proxy-t</string>
     <string name="AddProxyTrojan">Adja hozzá az Trojan Proxy-t</string>
@@ -113,7 +113,7 @@
     <string name="EditProxy">Proxy szerkesztése</string>
     <string name="ShareProxy">Proxy megosztása</string>
     <string name="ProxyDelete">Törölje a proxyt</string>
-    <string name="ProxyInfoVmess">Vmess Proxy beállítások</string>
+    <string name="ProxyInfoVmess">VMess Proxy beállítások</string>
     <string name="VmessUserId">Felhasználói azonosító</string>
     <string name="VmessAlterId">Alter Id</string>
     <string name="VmessSecurity">Biztonság</string>

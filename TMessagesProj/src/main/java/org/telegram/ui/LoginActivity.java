@@ -18,7 +18,6 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -292,8 +291,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     private Runnable[] editDoneCallback = new Runnable[2];
     private boolean[] postedEditDoneCallback = new boolean[2];
 
-    private static Map<String, PhoneNumberExclusionRule> phoneNumberExclusionRules = new HashMap<>();
-
     // NekoX Definitions
 
     ActionBarMenuItem menu = null;
@@ -309,12 +306,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     TLRPC.TL_auth_exportLoginToken exportLoginTokenRequest = null;
     AlertDialog exportLoginTokenProgress = null;
     android.app.AlertDialog exportLoginTokenDialog = null;
-
-
-    static {
-        phoneNumberExclusionRules.put("60", hintLengthFrom -> --hintLengthFrom);
-        phoneNumberExclusionRules.put("372", hintLengthFrom -> --hintLengthFrom);
-    }
 
     private static class ProgressView extends View {
 
@@ -620,11 +611,15 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         menu.setSubMenuOpenSide(1);
         menu.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)));
 
-        menu.addSubItem(menu_proxy, R.drawable.proxy_on, LocaleController.getString("Proxy", R.string.Proxy));
-        menu.addSubItem(menu_language, R.drawable.ic_translate, LocaleController.getString("Language", R.string.Language));
-        menu.addSubItem(menu_bot_login, R.drawable.list_bot, LocaleController.getString("BotLogin", R.string.BotLogin));
-        menu.addSubItem(menu_qr_login, R.drawable.wallet_qr, LocaleController.getString("ImportLogin", R.string.ImportLogin));
-        menu.addSubItem(menu_custom_api, R.drawable.baseline_vpn_key_24, LocaleController.getString("CustomApi", R.string.CustomApi));
+        menu.addSubItem(menu_proxy, R.drawable.proxy_on, LocaleController.getString("Proxy", R.string.Proxy))
+                .setContentDescription(LocaleController.getString("Proxy", R.string.Proxy));
+        menu.addSubItem(menu_language, R.drawable.ic_translate, LocaleController.getString("Language", R.string.Language))
+                .setContentDescription(LocaleController.getString("Language", R.string.Language));
+        menu.addSubItem(menu_bot_login, R.drawable.list_bot, LocaleController.getString("BotLogin", R.string.BotLogin))
+                .setContentDescription(LocaleController.getString("BotLogin", R.string.BotLogin));
+        menu.addSubItem(menu_qr_login, R.drawable.wallet_qr, LocaleController.getString("ImportLogin", R.string.ImportLogin))
+                .setContentDescription(LocaleController.getString("ImportLogin", R.string.ImportLogin));
+        otherItem.addSubItem(menu_custom_api, R.drawable.baseline_vpn_key_24, LocaleController.getString("CustomApi", R.string.CustomApi));
         menu.addSubItem(menu_custom_dc, R.drawable.baseline_sync_24, LocaleController.getString("CustomBackend", R.string.CustomBackend));
 
         menu.setOnClickListener(v -> {
@@ -1050,16 +1045,38 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         }
     }
 
-    public static void needShowInvalidAlert(BaseFragment fragment, final String phoneNumber, final boolean banned) {
+    public static void needShowInvalidAlert(BaseFragment fragment, String phoneNumber, boolean banned) {
+        needShowInvalidAlert(fragment, phoneNumber, null, banned);
+    }
+
+    public static void needShowInvalidAlert(BaseFragment fragment, String phoneNumber, PhoneInputData inputData, boolean banned) {
         if (fragment == null || fragment.getParentActivity() == null) {
             return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getParentActivity());
-        builder.setTitle(LocaleController.getString(R.string.RestorePasswordNoEmailTitle));
         if (banned) {
+            builder.setTitle(LocaleController.getString(R.string.RestorePasswordNoEmailTitle));
             builder.setMessage(LocaleController.getString("BannedPhoneNumber", R.string.BannedPhoneNumber));
         } else {
-            builder.setMessage(LocaleController.getString("InvalidPhoneNumber", R.string.InvalidPhoneNumber));
+            if (inputData != null && inputData.patterns != null && !inputData.patterns.isEmpty() && inputData.country != null) {
+                int patternLength = Integer.MAX_VALUE;
+                for (String pattern : inputData.patterns) {
+                    int length = pattern.replace(" ", "").length();
+                    if (length < patternLength) {
+                        patternLength = length;
+                    }
+                }
+                if (PhoneFormat.stripExceptNumbers(phoneNumber).length() - inputData.country.code.length() < patternLength) {
+                    builder.setTitle(LocaleController.getString(R.string.WrongNumberFormat));
+                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("ShortNumberInfo", R.string.ShortNumberInfo, inputData.country.name, inputData.phoneNumber)));
+                } else {
+                    builder.setTitle(LocaleController.getString(R.string.RestorePasswordNoEmailTitle));
+                    builder.setMessage(LocaleController.getString(R.string.InvalidPhoneNumber));
+                }
+            } else {
+                builder.setTitle(LocaleController.getString(R.string.RestorePasswordNoEmailTitle));
+                builder.setMessage(LocaleController.getString(R.string.InvalidPhoneNumber));
+            }
         }
         builder.setNeutralButton(LocaleController.getString("BotHelp", R.string.BotHelp), (dialog, which) -> {
             try {
@@ -1617,7 +1634,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
         private ArrayList<CountrySelectActivity.Country> countriesArray = new ArrayList<>();
         private HashMap<String, CountrySelectActivity.Country> codesMap = new HashMap<>();
-        private HashMap<String, String> phoneFormatMap = new HashMap<>();
+        private HashMap<String, List<String>> phoneFormatMap = new HashMap<>();
 
         private boolean ignoreSelection = false;
         private boolean ignoreOnTextChange = false;
@@ -2026,7 +2043,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                     countriesArray.add(0, countryWithCode);
                     codesMap.put(args[0], countryWithCode);
                     if (args.length > 3) {
-                        phoneFormatMap.put(args[0], args[3]);
+                        phoneFormatMap.put(args[0], Collections.singletonList(args[3]));
                     }
                     languageMap.put(args[1], args[2]);
                 }
@@ -2096,7 +2113,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                 countriesArray.add(countryWithCode);
                                 codesMap.put(c.country_codes.get(k).country_code, countryWithCode);
                                 if (c.country_codes.get(k).patterns.size() > 0) {
-                                    phoneFormatMap.put(c.country_codes.get(k).country_code, c.country_codes.get(k).patterns.get(0));
+                                    phoneFormatMap.put(c.country_codes.get(k).country_code, c.country_codes.get(k).patterns);
                                 }
                             }
                         }
@@ -2108,7 +2125,9 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
 
                         countriesArray.add(countryWithCode);
                         codesMap.put(test_code, countryWithCode);
-                        phoneFormatMap.put(test_code, "XX X XXXX");
+                        List<String> testCodeStr = new ArrayList<>();
+                        testCodeStr.add("XX X XXXX");
+                        phoneFormatMap.put(test_code, testCodeStr);
                     }
                 });
             }, ConnectionsManager.RequestFlagWithoutLogin | ConnectionsManager.RequestFlagFailOnServerErrors);
@@ -2195,8 +2214,12 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             }
             sb.append(country.name);
             setCountryButtonText(Emoji.replaceEmoji(sb, countryButton.getCurrentView().getPaint().getFontMetricsInt(), AndroidUtilities.dp(20), false));
-            String hint = phoneFormatMap.get(code);
-            phoneField.setHintText(hint != null ? hint.replace('X', '0') : null);
+            if (phoneFormatMap.get(code) != null && !phoneFormatMap.get(code).isEmpty()) {
+                String hint = phoneFormatMap.get(code).get(0);
+                phoneField.setHintText(hint != null ? hint.replace('X', '0') : null);
+            } else {
+                phoneField.setHintText(null);
+            }
         }
 
         private void setCountryButtonText(CharSequence cs) {
@@ -2263,25 +2286,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 return;
             }
             String phoneNumber = "+" + codeField.getText() + " " + phoneField.getText();
-            String hintText = phoneField.getHintText();
-            int hintLength = hintText != null ? hintText.length() : 0;
-            PhoneNumberExclusionRule exclusionRule = phoneNumberExclusionRules.get(codeField.getText().toString());
-            if (exclusionRule != null) {
-                hintLength = exclusionRule.modifyHintLengthRequirement(hintLength);
-            }
-            if (hintText != null && phoneField.length() < hintLength) {
-                new AlertDialog.Builder(getParentActivity())
-                        .setTitle(LocaleController.getString(R.string.WrongNumberFormat))
-                        .setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("ShortNumberInfo", R.string.ShortNumberInfo, currentCountry.name, phoneNumber)))
-                        .setPositiveButton(LocaleController.getString(R.string.OK), null)
-                        .setNegativeButton(LocaleController.getString(R.string.SettingsHelp), (dialog, which) -> {
-                            try {
-                                getParentActivity().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://telegram.org/faq")));
-                            } catch (ActivityNotFoundException ignored) {}
-                        }).show();
-                return;
-            }
-
+            String phoneCode = codeField.getText().toString();
             if (!confirmedNumber) {
                 if (AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y && !isCustomKeyboardVisible() && sizeNotifierFrameLayout.measureKeyboardHeight() > AndroidUtilities.dp(20)) {
                     keyboardHideCallback = () -> postDelayed(()-> onNextPressed(code), 200);
@@ -2544,6 +2549,10 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             }
             params.putString("phoneFormated", phone);
             nextPressed = true;
+            PhoneInputData phoneInputData = new PhoneInputData();
+            phoneInputData.phoneNumber = "+" + codeField.getText() + " " + phoneField.getText();
+            phoneInputData.country = currentCountry;
+            phoneInputData.patterns = phoneFormatMap.get(codeField.getText().toString());
             int reqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
                 nextPressed = false;
                 if (error == null) {
@@ -2648,13 +2657,13 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                 }
                             }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin);
                         } else if (error.text.contains("PHONE_NUMBER_INVALID")) {
-                            needShowInvalidAlert(LoginActivity.this, req.phone_number, false);
+                            needShowInvalidAlert(LoginActivity.this, req.phone_number, phoneInputData, false);
                         } else if (error.text.contains("PHONE_PASSWORD_FLOOD")) {
                             needShowAlert(LocaleController.getString(R.string.RestorePasswordNoEmailTitle), LocaleController.getString("FloodWait", R.string.FloodWait));
                         } else if (error.text.contains("PHONE_NUMBER_FLOOD")) {
                             needShowAlert(LocaleController.getString(R.string.RestorePasswordNoEmailTitle), LocaleController.getString("PhoneNumberFlood", R.string.PhoneNumberFlood));
                         } else if (error.text.contains("PHONE_NUMBER_BANNED")) {
-                            needShowInvalidAlert(LoginActivity.this, req.phone_number, true);
+                            needShowInvalidAlert(LoginActivity.this, req.phone_number, phoneInputData, true);
                         } else if (error.text.contains("PHONE_CODE_EMPTY") || error.text.contains("PHONE_CODE_INVALID")) {
                             needShowAlert(LocaleController.getString(R.string.RestorePasswordNoEmailTitle), LocaleController.getString("InvalidCode", R.string.InvalidCode));
                         } else if (error.text.contains("PHONE_CODE_EXPIRED")) {
@@ -6285,8 +6294,10 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         }
     }
 
-    private interface PhoneNumberExclusionRule {
-        int modifyHintLengthRequirement(int lengthFrom);
+    private final static class PhoneInputData {
+        private CountrySelectActivity.Country country;
+        private List<String> patterns;
+        private String phoneNumber;
     }
 
     @Override
