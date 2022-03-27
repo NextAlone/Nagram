@@ -128,7 +128,7 @@
     <string name="FilterNameUsers">ഉപയോക്താക്കൾ</string>
     <string name="FilterNameGroupsDescription">ഗ്രൂപ്പ് ചാറ്റുകളിൽ നിന്നുള്ള സന്ദേശങ്ങൾ മാത്രം</string>
     <string name="FilterNameUnreadDescription">വായിക്കാത്ത സന്ദേശങ്ങൾ മാത്രം</string>
-    <string name="AddProxyVmess">Vmess പ്രോക്സി ചേർക്കുക</string>
+    <string name="AddProxyVmess">VMess പ്രോക്സി ചേർക്കുക</string>
     <string name="DisableSystemAccount">സിസ്റ്റം അക്കൗണ്ട് പ്രവർത്തനരഹിതമാക്കുക</string>
     <string name="UnblockAllWarn">**എല്ലാ ഉപയോക്താക്കളെയും ബോട്ടുകളെയും** അൺബ്ലോക്ക് ചെയ്യണമെന്ന് തീർച്ചയാണോ\?</string>
     <string name="EditProxy">പ്രോക്സി തിരുത്തുക</string>

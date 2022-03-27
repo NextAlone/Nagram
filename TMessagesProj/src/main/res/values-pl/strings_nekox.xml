@@ -3,7 +3,7 @@
     <string name="Locked">Zablokowany</string>
     <string name="AccDescrChatAttachEnterMenu">Menu w polu wprowadzania czatu</string>
     <string name="ChatAttachEnterMenuRecordVideo">Nagrywanie wideo</string>
-    <string name="ChatAttachEnterMenuRecordAudio">Nagrywanie audio</string>
+    <string name="ChatAttachEnterMenuRecordAudio">Nagrywanie dźwięku</string>
     <string name="ChatAttachEnterMenuDisableLinkPreview">Wyłącz podgląd linku</string>
     <string name="ChatAttachEnterMenuEnableLinkPreview">Włącz podgląd linku</string>
     <string name="UseChatAttachEnterMenu">Użyj menu w polu wprowadzania</string>
@@ -52,10 +52,10 @@
     <string name="UseDefaultTheme">Użyj domyślnego motywu *</string>
     <string name="NightMode">Tryb nocny</string>
     <string name="PrivacyNotice">Ostrzeżenie o prywatności</string>
-    <string name="PrivacyNoticePhoneVisible">Wykryto, że Twój numer telefonu komórkowego jest widoczny dla każdego, co może spowodować, że hakerzy kontrolowani przez rząd znajdą Twoją prawdziwą tożsamość. Zaleca się wyłączyć tę opcję!</string>
+    <string name="PrivacyNoticePhoneVisible">Twój numer telefonu jest widoczny dla wszystkich, co umożliwia hakerom kontrolowanym przez rząd poznanie Twojej prawdziwej tożsamości. Zaleca się wyłączyć tę funkcję!</string>
     <string name="PrivacyNoticeAddByPhone">Wykryto, że opcja \"Kto może mnie znaleźć po moim numerze\?\" jest ustawiona na: «Wszyscy». Może to spowodować, że haker kontrolowany przez rząd znajdzie Twoją prawdziwą tożsamość. Zaleca się wyłączyć tę opcję!</string>
-    <string name="PrivacyNoticeP2p">Wykryto, że ustawiono opcję \"Użyj peer-to-peer z: Wszystkimi\". Może to spowodować, że hakerzy kontrolowani przez rząd mogą znaleźć Twoją prawdziwą tożsamość. Zaleca się wyłączyć tę opcję!</string>
-    <string name="PrivacyNotice2fa">Wykryto, że nie ustawiłeś hasła weryfikacji dwustopniowej. Może to spowodować, że hakerzy kontrolowani przez rząd znajdą Twoją prawdziwą tożsamość. Zaleca się ustawić hasło!</string>
+    <string name="PrivacyNoticeP2p">Użycie P2P podczas połączeń jest wykorzystywane z wszystkimi, co umożliwia hakerom kontrolowanym przez rząd poznanie twojej prawdziwej tożsamości. Zaleca się wyłączyć tę funkcję!</string>
+    <string name="PrivacyNotice2fa">Nie ustawiono hasła weryfikacji dwustopniowej, co umożliwia hakerom kontrolowanym przez rząd poznanie Twojej prawdziwej tożsamości. Ustaw je!</string>
     <string name="ApplySuggestion">Zastosuj</string>
     <string name="DoNotRemindAgain">Nie powiadamiaj</string>
     <string name="RemoveTitleEmoji">Usuń emotikony w tytule</string>
@@ -65,32 +65,32 @@
     <string name="FakeScreenshot">Symuluj zrzut ekranu</string>
     <string name="ImportPxy">Import</string>
     <string name="FilterNameUsers">Użytkownicy</string>
-    <string name="FilterNameUsersDescription">Tylko wiadomości z sekretnych czatów</string>
+    <string name="FilterNameUsersDescription">Wyłącznie czaty z użytkownikami</string>
     <string name="FilterNameContacts">Kontakty</string>
-    <string name="FilterNameContactsDescription">Tylko wiadomości od kontaktów</string>
+    <string name="FilterNameContactsDescription">Wyłącznie czaty z zapisanymi kontaktami</string>
     <string name="FilterNameGroups">Grupy</string>
-    <string name="FilterNameGroupsDescription">Tylko wiadomości z grup</string>
+    <string name="FilterNameGroupsDescription">Wyłącznie czaty grupowe</string>
     <string name="FilterNameChannels">Kanały</string>
-    <string name="FilterNameChannelsDescription">Tylko wiadomości z kanałów</string>
+    <string name="FilterNameChannelsDescription">Wyłącznie kanały</string>
     <string name="FilterNameBots">Boty</string>
-    <string name="FilterNameBotsDescription">Tylko wiadomości od botów</string>
+    <string name="FilterNameBotsDescription">Wyłącznie czaty z botami</string>
     <string name="FilterNameUnmuted">Niewyciszone</string>
-    <string name="FilterNameUnmutedDescription">Tylko wiadomości z niewyciszonych czatów</string>
+    <string name="FilterNameUnmutedDescription">Wyłącznie niewyciszone czaty</string>
     <string name="FilterNameUnread2">Nieprzeczytane</string>
-    <string name="FilterNameUnreadDescription">Tylko nieprzeczytane wiadomości</string>
+    <string name="FilterNameUnreadDescription">Wyłącznie nieprzeczytane czaty</string>
     <string name="FilterNameUnmutedAndUnread">Niewyciszone i nieprzeczytane</string>
-    <string name="FilterNameUnmutedAndUnreadDescription">Tylko nieprzeczytane wiadomości z niewyciszonych czatów</string>
+    <string name="FilterNameUnmutedAndUnreadDescription">Wyłącznie nieprzeczytane niewyciszone czaty</string>
     <string name="IgnoreMutedCount">Ignoruj liczbę wyciszonych i nieprzeczytanych w folderze</string>
     <string name="DialogsSettings">Ustawienia czatów</string>
     <string name="SortMenu">Ustawienia sortowania czatów</string>
     <string name="SortByUnread">Sortuj po nieprzeczytanych</string>
     <string name="SortByUnmuted">Sortuj po niewyciszonych</string>
-    <string name="SortByUser">Sortuj wg. nazwy użytkownika</string>
-    <string name="SortByContacts">Sortuj po kontaktach</string>
+    <string name="SortByUser">Sortuj wg. użytkownika</string>
+    <string name="SortByContacts">Sortuj wg. kontaktów</string>
     <string name="NekoXPushService">NekoX Push Service</string>
     <string name="EnablePushAlert">Proszę włączyć \"NekoX Push Service\"</string>
     <string name="DisablePushAlert">Proszę wyłączyć \"NekoX Push Service\"</string>
-    <string name="DisableUndo">Wyłącz Cofnij</string>
+    <string name="DisableUndo">Wyłącz kilkusekundowy dymek przywracania usuniętego czatu</string>
     <string name="DisableSystemAccount">Wyłącz konta systemowe</string>
     <string name="FilterMenu">Menu filtrowania czatów</string>
     <string name="DisableProxyWhenVpnEnabled">Wyłącz proxy, gdy VPN jest włączony</string>
@@ -105,7 +105,7 @@
     <string name="ProxyTypeVmess">Proxy VMess</string>
     <string name="AddProxySocks5">Dodaj Proxy SOCKS5</string>
     <string name="AddProxyTelegram">Dodaj Proxy MTProto</string>
-    <string name="AddProxyVmess">Dodaj Vmess Proxy</string>
+    <string name="AddProxyVmess">Dodaj VMess Proxy</string>
     <string name="AddProxySS">Dodaj Shadowsocks Proxy</string>
     <string name="AddProxySSR">Dodaj ShadowsocksR Proxy</string>
     <string name="AddProxyTrojan">Dodaj Trojan Proxy</string>
@@ -113,7 +113,7 @@
     <string name="EditProxy">Edytuj proxy</string>
     <string name="ShareProxy">Udostępnij proxy</string>
     <string name="ProxyDelete">Usuń proxy</string>
-    <string name="ProxyInfoVmess">Ustawienia Vmess Proxy</string>
+    <string name="ProxyInfoVmess">Ustawienia VMess Proxy</string>
     <string name="VmessUserId">ID użytkownika</string>
     <string name="VmessAlterId">Zmień ID</string>
     <string name="VmessSecurity">Bezpieczeństwo</string>
@@ -160,7 +160,7 @@
     <string name="DeleteUnavailableServerConfirm">Czy na pewno chcesz **usunąć niedostępne serwery**\?</string>
     <string name="MinApi21Required">Przepraszamy, ale potrzebujesz co najmniej Androida 5 (API21).</string>
     <string name="MinApi23Required">Przepraszamy, ale potrzebujesz co najmniej Androida 6 (API23).</string>
-    <string name="MiniVersionAlert">Przepraszamy, ale wersja mini nie obsługuje tego typu proxy, proszę zmienić wersję w ustawieniach.</string>
+    <string name="MiniVersionAlert">Wersja mini nie obsługuje tego typu proxy. Wersję aplikacji można przełączyć w ustawieniach.</string>
     <string name="ImportProxyFromClipboard">Importuj ze schowka</string>
     <string name="BrokenLink">Nieznany / uszkodzony link</string>
     <string name="ShareQRCode">Kod QR</string>
@@ -193,7 +193,7 @@
     <string name="QRLoginNotice">Ten kod QR / link pozwala komuś zalogować się na Twoje konto Telegram. Czy to jest Twoja własna operacja\?</string>
     <string name="QRLoginConfirm">Potwierdź logowanie</string>
     <string name="StorageReset">Wyczyść pamięć</string>
-    <string name="StorageResetInfo">Wszystkie dane tej aplikacji zostaną trwale usunięte (najpierw spróbuj wylogować się ze wszystkich kont).</string>
+    <string name="StorageResetInfo">Wszystkie dane aplikacji zostaną trwale usunięte (po próbie wylogowania się ze wszystkich kont).</string>
     <string name="FCTitle">Informacje o aktualizacjach aplikacji</string>
     <string name="FCInfo">Czy chcesz obserwować nasz kanał ogłoszeń i aktualizacji\?</string>
     <string name="CCTitle">OpenCC (Chiński Konwert)</string>
@@ -218,11 +218,11 @@
     <string name="VersionUpdateNotNow">Nie teraz</string>
     <string name="VersionUpdateIgnore">Ignoruj</string>
     <string name="VersionUpdateConfirm">AKTUALIZUJ</string>
-    <string name="VersionUpdateVariantNotMatch">Warianty wersji nie są zgodne.
-\nPobierz manualnie z GitHub.</string>
+    <string name="VersionUpdateVariantNotMatch">Nie udało się automatycznie dopasować wersji.
+\nNależy pobrać ręcznie z serwisu GitHub.</string>
     <string name="VersionUpdateTitle">Dostępna jest nowa wersja</string>
     <string name="nekoXPaymentRemovedToast">Funkcja opłat została wyłączona.</string>
-    <string name="ImportSettingsAlert">Na pewno nadpisać ustawienia\? Import ustawień z nieznanych źródeł może spowodować nadpisanie PIN-u oraz zablokowanie aplikacji.</string>
+    <string name="ImportSettingsAlert">Nadpisać ustawienia\? Importowanie ustawień z nieznanych źródeł może spowodować nadpisanie PIN-u i zablokowanie aplikacji.</string>
     <string name="ImportSettings">Importuj ustawienia</string>
     <string name="BackupSettings">Eksportuj ustawienia</string>
     <string name="AutoLockImmediately">Natychmiast</string>
@@ -236,7 +236,7 @@
     <string name="SetPinnedSuffix">(Przypięty)</string>
     <string name="UnpinSticker">Odepnij</string>
     <string name="PinSticker">Przypnij</string>
-    <string name="EnableStickerPinTip">Ta funkcja jest wciąż rozwijana, synchronizacja z chmurą może nie działać poprawnie.</string>
+    <string name="EnableStickerPinTip">Ta funkcja jest w trakcie opracowywania. Synchronizacja z chmurą może nie działać.</string>
     <string name="EnableStickerPinAbout">Przypinaj i synchronizuj naklejki z chmurą w przypadku dodawania nowych naklejek.
 \nOpcja powiązana z Wyłącz Ulubione oraz Ostatnio Używane.</string>
     <string name="EnableStickerPin">Włącz przypinanie naklejek</string>
@@ -260,7 +260,7 @@
     <string name="hideSponsoredMessage">Ukryj sponsorowane wiadomości</string>
     <string name="update_download_soucre">Wybierz źródło pobierania</string>
     <string name="customPublicProxyIP">Ustaw IP publicznego proxy</string>
-    <string name="customPublicProxyIPNotice">W niektórych obszarach, określenie IP publicznego serwera proxy CDN (np. Cloudflare) może przyspieszyć dostęp.</string>
+    <string name="customPublicProxyIPNotice">W niektórych obszarach podanie adresu IP publicznej sieci proxy CDN (np. Cloudflare) może przyspieszyć dostęp.</string>
     <string name="DeleteDownloadedFileConfirm">Usunąć ten plik z lokalnej pamięci podręcznej\?</string>
     <string name="valuesLargeAvatarInDrawer">Domyślne Telegrama
 \nAwatar jako tło
@@ -275,5 +275,5 @@
     <string name="channelAliasDetails">Wymagaj włączonego oznaczenia kanału użytkownika.</string>
     <string name="setChannelAliasName">Ustaw alias kanału</string>
     <string name="labelChannelUser">Oznaczenie kanału użytkownika</string>
-    <string name="labelChannelUserDetails">Jeśli nadawcą wiadomości jest kanał, zostanie on oznaczony jako \"Kanał\"</string>
+    <string name="labelChannelUserDetails">Jeśli nadawcą komunikatu jest \"Kanał\", zostanie on oznaczony jako \"Kanał\".</string>
 </resources>

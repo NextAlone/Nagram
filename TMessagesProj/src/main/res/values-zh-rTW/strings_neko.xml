@@ -92,7 +92,7 @@
     <string name="About">關於</string>
     <string name="IgnoreBlockedAbout">您將不會再看到被遮蔽的使用者在群組中的訊息。</string>
     <string name="GooglePlay">谷歌 Play 商店</string>
-    <string name="SourceCode">Github 上的原始碼</string>
+    <string name="SourceCode">GitHub 上的原始碼</string>
     <string name="ResetStickerSize">重置貼紙大小</string>
     <string name="RestartAppToTakeEffect">重啟應用以生效。</string>
     <string name="DisableAppBarShadow">禁用標題欄陰影</string>

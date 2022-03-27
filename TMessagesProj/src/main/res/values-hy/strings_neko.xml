@@ -92,7 +92,7 @@
     <string name="About">Մասին</string>
     <string name="IgnoreBlockedAbout">Դուք այլևս չեք տեսնի խմբերի արգելափակված օգտվողների հաղորդագրությունները:</string>
     <string name="GooglePlay">Google Play</string>
-    <string name="SourceCode">Աղբյուրի կոդը Github- ում</string>
+    <string name="SourceCode">Աղբյուրի կոդը GitHub- ում</string>
     <string name="ResetStickerSize">Վերակայել կպչուկի չափը</string>
     <string name="RestartAppToTakeEffect">Վերագործարկեք հավելվածն ՝ ուժի մեջ մտնելու համար:</string>
     <string name="DisableAppBarShadow">Անջատել վերնագրի տողի ստվերը</string>

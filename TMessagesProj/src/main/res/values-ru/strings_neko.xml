@@ -92,7 +92,7 @@
     <string name="About">О проекте</string>
     <string name="IgnoreBlockedAbout">Вы больше не будете видеть сообщения от заблокированных пользователей в группах.</string>
     <string name="GooglePlay">Google Play</string>
-    <string name="SourceCode">Исходный код на Github</string>
+    <string name="SourceCode">Исходный код на GitHub</string>
     <string name="ResetStickerSize">Размер стикеров по умолчанию</string>
     <string name="RestartAppToTakeEffect">Перезапустите приложение.</string>
     <string name="DisableAppBarShadow">Отключить тень заголовка</string>

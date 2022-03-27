@@ -150,7 +150,7 @@
     <string name="FilterNameBotsDescription">Pouze zprávy od robotů</string>
     <string name="SortByContacts">Seřadit Podle Kontaktů</string>
     <string name="NekoXProxy">NekoX Veřejná Proxy</string>
-    <string name="SSPluginConflictingName">Několik pluginů používá tuto id: %s.</string>
+    <string name="SSPluginConflictingName">Několik pluginů používá tuto ID: %s.</string>
     <string name="TransSite">Překládací Platforma</string>
     <string name="UnblockAllWarn">Jste si jisti že chcete odblokovat **všechny uživatele a roboty**\?</string>
     <string name="NoProxy">Nepřidali jste žádné proxy servery.</string>
@@ -159,10 +159,10 @@
     <string name="UnblockAll">Odblokovat Vše</string>
     <string name="PGPDecrypt">Dešifrovat Zprávu</string>
     <string name="SortByUnread">Seřadit Podle Nepřečtených</string>
-    <string name="ProxyInfoVmess">Vmess Proxy Nastavení</string>
+    <string name="ProxyInfoVmess">VMess Proxy Nastavení</string>
     <string name="SSPassword">Heslo</string>
     <string name="SubscriptionUpdating">Aktualizuji Předplatné</string>
-    <string name="AddProxyVmess">Přidat Vmess Proxy</string>
+    <string name="AddProxyVmess">Přidat VMess Proxy</string>
     <string name="ProxyInfoTrojan">Nastavení Trojan Proxy</string>
     <string name="None">Žádný</string>
     <string name="PrivacyNoticeP2p">Zjistili jsme, že jste nevypnuli \"Povolit P2P volání\" nastavení, které by mohlo způsobit že hacker kontrolovaný vládou najde vaší pravou identitu, prosíme vypněte jej!</string>

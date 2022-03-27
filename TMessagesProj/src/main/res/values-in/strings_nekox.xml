@@ -105,7 +105,7 @@
     <string name="ProxyTypeVmess">Proksi VMess</string>
     <string name="AddProxySocks5">Tambahkan Proxy SOCKS5</string>
     <string name="AddProxyTelegram">Tambahkan Proxy MTProto</string>
-    <string name="AddProxyVmess">Tambahkan Proxy Vmess</string>
+    <string name="AddProxyVmess">Tambahkan Proxy VMess</string>
     <string name="AddProxySS">Tambahkan Proxy Shadowsocks</string>
     <string name="AddProxySSR">Tambahkan Proxy ShadowsocksR</string>
     <string name="AddProxyTrojan">Tambahkan Proxy Trojan</string>
@@ -113,7 +113,7 @@
     <string name="EditProxy">Edit Proksi</string>
     <string name="ShareProxy">Bagikan Proxy</string>
     <string name="ProxyDelete">Hapus Proxy</string>
-    <string name="ProxyInfoVmess">Pengaturan Proxy Vmess</string>
+    <string name="ProxyInfoVmess">Pengaturan Proxy VMess</string>
     <string name="VmessUserId">ID pengguna</string>
     <string name="VmessAlterId">Ubah ID</string>
     <string name="VmessSecurity">Keamanan</string>
