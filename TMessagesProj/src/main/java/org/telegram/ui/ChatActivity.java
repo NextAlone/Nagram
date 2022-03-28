@@ -269,6 +269,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.InputStream;
+import java.io.RandomAccessFile;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14651,6 +14652,30 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                     if (videoPath == null) {
                         showAttachmentError();
+                    } else {
+                        File f = new File(videoPath);
+                        if (!f.canRead()) {
+                            // When the video file is located in a protected directory, and NekoX doesn't have the access permission to this directory, i.e. EACCES (Permission denied),
+                            //    copy it to the private temp directory
+                            FileLog.e("Failed to read input file " + videoPath + ", copy to private directory");
+                            try {
+                                final File file = AndroidUtilities.generateVideoPath();
+                                InputStream in = ApplicationLoader.applicationContext.getContentResolver().openInputStream(uri);
+                                FileOutputStream fos = new FileOutputStream(file);
+                                byte[] buffer = new byte[8 * 1024];
+                                int lengthRead;
+                                while ((lengthRead = in.read(buffer)) > 0) {
+                                    fos.write(buffer, 0, lengthRead);
+                                    fos.flush();
+                                }
+                                in.close();
+                                fos.close();
+                                videoPath = file.getAbsolutePath();
+                            } catch (Exception ex) {
+                                FileLog.e(ex);
+                                showAttachmentError();
+                            }
+                        }
                     }
                     if (paused) {
                         startVideoEdit = videoPath;
@@ -14664,8 +14689,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             SendMessagesHelper.prepareSendingPhoto(getAccountInstance(), null, uri, dialog_id, replyingMessageObject, getThreadMessage(), null, null, null, null, 0, editingMessageObject, notify, scheduleDate);
                         }, themeDelegate);
                     } else {
-                        fillEditingMediaWithCaption(null, null);
-                        SendMessagesHelper.prepareSendingPhoto(getAccountInstance(), null, uri, dialog_id, replyingMessageObject, getThreadMessage(), null, null, null, null, 0, editingMessageObject, true, 0);
+                        ArrayList<SendMessagesHelper.SendingMediaInfo> photos = new ArrayList<>();
+                        SendMessagesHelper.SendingMediaInfo info = new SendMessagesHelper.SendingMediaInfo();
+                        info.uri = uri;
+                        photos.add(info);
+                        openPhotosEditor(photos, null);
+//                        fillEditingMediaWithCaption(null, null);
+//                        SendMessagesHelper.prepareSendingPhoto(getAccountInstance(), null, uri, dialog_id, replyingMessageObject, getThreadMessage(), null, null, null, null, 0, editingMessageObject, true, 0);
                     }
                 }
                 afterMessageSend();
