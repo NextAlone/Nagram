@@ -90,13 +90,6 @@ android {
         disable 'BlockedPrivateApi'
     }
 
-    configurations {
-        all {
-            exclude group: 'commons-logging', module: 'commons-logging'
-            exclude group: 'org.apache.httpcomponents', module: 'httpclient'
-        }
-    }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
