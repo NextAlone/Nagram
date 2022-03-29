@@ -14853,8 +14853,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         info.uri = uri;
                         photos.add(info);
                         openPhotosEditor(photos, null);
-//                        fillEditingMediaWithCaption(null, null);
-//                        SendMessagesHelper.prepareSendingPhoto(getAccountInstance(), null, uri, dialog_id, replyingMessageObject, getThreadMessage(), null, null, null, null, 0, editingMessageObject, true, 0);
                     }
                 }
                 afterMessageSend();
