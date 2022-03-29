@@ -36,6 +36,7 @@
     <!-- Chats -->
     <string name="StickerSize">Stickers size</string>
     <string name="StickerTime">Hide time under stickers</string>
+    <string name="UnlimitedRecentStickers">Unlimited recent stickers</string>
 
     <string name="StickerSizeDialogMessageReplyTo">meowmeow</string>
     <string name="StickerSizeDialogMessage">woah, he is so cute!</string>

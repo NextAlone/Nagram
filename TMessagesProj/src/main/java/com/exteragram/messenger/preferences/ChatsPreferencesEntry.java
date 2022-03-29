@@ -45,13 +45,17 @@ public class ChatsPreferencesEntry extends BaseFragment {
     private ActionBarMenuItem resetItem;
     private StickerSizeCell stickerSizeCell;
 
-    private int stickersHeaderRow;
+    private int stickerSizeHeaderRow;
     private int stickerSizeRow;
+    private int stickerSizeDividerRow;
+
+    private int stickersHeaderRow;
+    private int hideStickerTimeRow;
+    private int unlimitedRecentStickersRow;
     private int stickersDividerRow;
 
     private int chatHeaderRow;
     private int hideSendAsChannelRow;
-    private int hideStickerTimeRow;
     private int hideKeyboardOnScrollRow;
     private int disableReactionsRow;
     private int archiveOnPullRow;
@@ -79,7 +83,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
 
         private final StickerSizePreviewCell messagesCell;
         private final SeekBarView sizeBar;
-        private final int startStickerSize = 2;
+        private final int startStickerSize = 8;
         private final int endStickerSize = 20;
 
         private final TextPaint textPaint;
@@ -218,6 +222,11 @@ public class ChatsPreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.hideStickerTime);
                 }
+            } else if (position == unlimitedRecentStickersRow) {
+                ExteraConfig.toggleUnlimitedRecentStickers();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(ExteraConfig.unlimitedRecentStickers);
+                }
             } else if (position == hideSendAsChannelRow) {
                 ExteraConfig.toggleHideSendAsChannel();
                 if (view instanceof TextCheckCell) {
@@ -282,13 +291,17 @@ public class ChatsPreferencesEntry extends BaseFragment {
     private void updateRowsId(boolean notify) {
         rowCount = 0;
 
-        stickersHeaderRow = rowCount++;
+        stickerSizeHeaderRow = rowCount++;
         stickerSizeRow = rowCount++;
+        stickerSizeDividerRow = rowCount++;
+
+        stickersHeaderRow = rowCount++;
+        hideStickerTimeRow = rowCount++;
+        unlimitedRecentStickersRow = rowCount++;
         stickersDividerRow = rowCount++;
 
         chatHeaderRow = rowCount++;
         hideSendAsChannelRow = rowCount++;
-        hideStickerTimeRow = rowCount++;
         hideKeyboardOnScrollRow = rowCount++;
         disableReactionsRow = rowCount++;
         archiveOnPullRow = rowCount++;
@@ -337,8 +350,10 @@ public class ChatsPreferencesEntry extends BaseFragment {
                     break;
                 case 2:
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
-                    if (position == stickersHeaderRow) {
+                    if (position == stickerSizeHeaderRow) {
                         headerCell.setText(LocaleController.getString("StickerSize", R.string.StickerSize));
+                    } else if (position == stickersHeaderRow) {
+                        headerCell.setText(LocaleController.getString("AccDescrStickers", R.string.AccDescrStickers));
                     } else if (position == chatHeaderRow) {
                         headerCell.setText(LocaleController.getString("Chats", R.string.Chats));
                     } else if (position == mediaHeaderRow) {
@@ -350,6 +365,8 @@ public class ChatsPreferencesEntry extends BaseFragment {
                     textCheckCell.setEnabled(true, null);
                     if (position == hideStickerTimeRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("StickerTime", R.string.StickerTime), ExteraConfig.hideStickerTime, true);
+                    } else if (position == unlimitedRecentStickersRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString("UnlimitedRecentStickers", R.string.UnlimitedRecentStickers), ExteraConfig.unlimitedRecentStickers, true);
                     } else if (position == hideSendAsChannelRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("HideSendAsChannel", R.string.HideSendAsChannel), ExteraConfig.hideSendAsChannel, true);
                     } else if (position == hideKeyboardOnScrollRow) {
@@ -408,14 +425,14 @@ public class ChatsPreferencesEntry extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            if (position == stickersDividerRow || position == chatDividerRow || position == mediaDividerRow) {
+            if (position == stickerSizeDividerRow || position == stickersDividerRow || position == chatDividerRow || position == mediaDividerRow) {
                 return 1;
-            } else if (position == stickersHeaderRow || position == chatHeaderRow || position == mediaHeaderRow) {
+            } else if (position == stickerSizeHeaderRow || position == stickersHeaderRow || position == chatHeaderRow || position == mediaHeaderRow) {
                 return 2;
-            } else if (position == hideStickerTimeRow || position == hideSendAsChannelRow || position == hideKeyboardOnScrollRow ||
-                       position == archiveOnPullRow || position == dateOfForwardedMsgRow || position == disableReactionsRow ||
-                       position == rearVideoMessagesRow || position == disableCameraRow || position == disableProximityEventsRow ||
-                       position == pauseOnMinimizeRow || position == disablePlaybackRow) {
+            } else if (position == hideStickerTimeRow || position == unlimitedRecentStickersRow || position == hideSendAsChannelRow ||
+                       position == hideKeyboardOnScrollRow || position == archiveOnPullRow || position == dateOfForwardedMsgRow ||
+                       position == disableReactionsRow || position == rearVideoMessagesRow || position == disableCameraRow ||
+                       position == disableProximityEventsRow || position == pauseOnMinimizeRow || position == disablePlaybackRow) {
                 return 3;
             } else if (position == stickerSizeRow) {
                 return 4;
