@@ -110,6 +110,7 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
@@ -5100,6 +5101,17 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             args.putInt("dialog_filter_id", filterId);
             if (AndroidUtilities.isTablet()) {
                 if (openedDialogId == dialogId && adapter != searchViewPager.dialogsSearchAdapter) {
+                    if (getParentActivity() instanceof LaunchActivity) {
+                        ActionBarLayout rightActionBarLayout = ((LaunchActivity) getParentActivity()).getRightActionBarLayout();
+                        if (rightActionBarLayout != null && rightActionBarLayout.fragmentsStack.size() > 0) {
+                            BaseFragment baseFragment = rightActionBarLayout.fragmentsStack.get(rightActionBarLayout.fragmentsStack.size() - 1);
+                            if (baseFragment instanceof ChatActivity) {
+                                ChatActivity chatActivity = (ChatActivity) baseFragment;
+                                if (chatActivity != null && chatActivity.getDialogId() == openedDialogId)
+                                    chatActivity.scrollToLastMessage(false);
+                            }
+                        }
+                    }
                     return;
                 }
                 if (viewPages != null) {
