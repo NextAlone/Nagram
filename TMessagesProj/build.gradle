@@ -84,10 +84,8 @@ android {
         }
     }
 
-    lintOptions {
-        disable 'MissingTranslation'
-        disable 'ExtraTranslation'
-        disable 'BlockedPrivateApi'
+    lint {
+        disable 'MissingTranslation', 'ExtraTranslation', 'BlockedPrivateApi'
     }
 
     compileOptions {
