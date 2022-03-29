@@ -4822,18 +4822,12 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
         if (framerate == 0) {
             framerate = 25;
-        } else if (framerate > 59) {
-            framerate = 59;
         }
 
         if (rotationValue == 90 || rotationValue == 270) {
             int temp = resultHeight;
             resultHeight = resultWidth;
             resultWidth = temp;
-        }
-
-        if (framerate > 30 && (Math.min(resultHeight, resultWidth) <= 480)) {
-            framerate = 30;
         }
 
         boolean needCompress = avatarStartTime != -1 || info.cropState != null || info.mediaEntities != null || info.paintPath != null || info.filterState != null ||
