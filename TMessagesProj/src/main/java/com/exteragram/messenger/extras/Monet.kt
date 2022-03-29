@@ -6,6 +6,7 @@ import android.os.Build
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.core.content.ContextCompat
 import com.google.android.material.color.MaterialColors
 
 object Monet {
@@ -13,28 +14,30 @@ object Monet {
 
     @ColorInt
     @JvmStatic
-    fun getAccentColor(ctx: Context): Int {
-        return reqAttrFromDevice(ctx, android.R.attr.colorAccent, default, 29)
+    fun getAccentColor(is_dark: Boolean, ctx: Context, @ColorInt accent: Int): Int {
+        return when {
+            Build.VERSION.SDK_INT >= 31 -> {
+                ContextCompat.getColor(ctx, accent)
+            }
+            else -> {
+                if (is_dark == true) return reqAttrFromDeviceDark(ctx, org.telegram.messenger.R.attr.colorPrimaryDark, default, 29) 
+                return reqAttrFromDevice(ctx, android.R.attr.colorAccent, default, 29)
+            }
+        }
     }
 
     @ColorInt
     @JvmStatic
-    fun getBackgroundColor(ctx: Context): Int {
-        return reqAttrFromDevice(ctx, android.R.attr.colorBackground, -1, 31)
-    }
-
-    @ColorInt
-    @JvmStatic
-    fun getAccentColorDark(ctx: Context): Int {
-        if (Build.VERSION.SDK_INT < 31) return getAccentColor(ctx)
-        return reqAttrFromDeviceDark(ctx, org.telegram.messenger.R.attr.colorPrimaryDark, default, 29)
-    }
-
-    @ColorInt
-    @JvmStatic
-    fun getBackgroundColorDark(ctx: Context): Int {
-        if (Build.VERSION.SDK_INT < 31) return getBackgroundColor(ctx)
-        return reqAttrFromDeviceDark(ctx, org.telegram.messenger.R.attr.colorSecondary, -1, 31)
+    fun getBackgroundColor(is_dark: Boolean, ctx: Context, @ColorInt accent: Int): Int {
+        return when {
+            Build.VERSION.SDK_INT >= 31 -> {
+                ContextCompat.getColor(ctx, accent)
+            }
+            else -> {
+                if (is_dark == true) return reqAttrFromDeviceDark(ctx, org.telegram.messenger.R.attr.colorSecondary, -1, 31)
+                return reqAttrFromDevice(ctx, android.R.attr.colorBackground, -1, 31)
+            }
+        }
     }
 
     @ColorInt

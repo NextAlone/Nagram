@@ -4958,10 +4958,10 @@ public class Theme {
 
         SharedPreferences themeConfig = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
 
-        Integer monetAccent = Monet.getAccentColor(ApplicationLoader.applicationContext.getApplicationContext());
-        Integer darkMonetAccent = Monet.getAccentColorDark(ApplicationLoader.applicationContext.getApplicationContext());
-        Integer monetBackground = Monet.getBackgroundColor(ApplicationLoader.applicationContext.getApplicationContext());
-        Integer darkMonetBackground = Monet.getBackgroundColorDark(ApplicationLoader.applicationContext.getApplicationContext());
+        Integer monetAccent = Monet.getAccentColor(false, ApplicationLoader.applicationContext.getApplicationContext(), android.R.color.system_accent1_400);
+        Integer darkMonetAccent = Monet.getAccentColor(true, ApplicationLoader.applicationContext.getApplicationContext(), android.R.color.system_accent1_400);
+        Integer monetBackground = Monet.getBackgroundColor(false, ApplicationLoader.applicationContext.getApplicationContext(), android.R.color.system_accent2_50);
+        Integer darkMonetBackground = Monet.getBackgroundColor(true, ApplicationLoader.applicationContext.getApplicationContext(), android.R.color.system_neutral2_900);
 
         boolean haveMbg = monetBackground != -1;
 
