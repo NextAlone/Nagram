@@ -2960,7 +2960,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
                 @Override
                 public void onLongClickRelease() {
-                    finishPreviewFragment();
+                    // finishPreviewFragment();
                 }
 
                 @Override
@@ -3274,7 +3274,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
             @Override
             public void onLongClickRelease() {
-                finishPreviewFragment();
+                // finishPreviewFragment();
             }
 
             @Override

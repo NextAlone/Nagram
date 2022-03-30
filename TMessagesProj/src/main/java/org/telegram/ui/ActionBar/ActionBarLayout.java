@@ -199,7 +199,7 @@ public class ActionBarLayout extends FrameLayout {
             if (NaConfig.INSTANCE.getScrollableChatPreview().Bool() && inPreviewMode && previewMenu == null) {
                 View view = containerView.getChildAt(0);
                 if (view != null) {
-                    int y = (int) (view.getTop() + containerView.getTranslationY() - AndroidUtilities.dp(Build.VERSION.SDK_INT < 21 ? 20 : 0));
+                    int y = (int) (view.getTop() + containerView.getTranslationY() - AndroidUtilities.dp(0));
                     y += AndroidUtilities.dp(24);
                     if (ev.getY() <= y && ev.getAction() == MotionEvent.ACTION_DOWN) {
                         movePreviewFragment(AndroidUtilities.dp(65));
@@ -216,7 +216,6 @@ public class ActionBarLayout extends FrameLayout {
                     }
                 }
             }
-            //
             try {
                 return (!passivePreview || this != containerView) && super.dispatchTouchEvent(ev);
             } catch (Throwable e) {
