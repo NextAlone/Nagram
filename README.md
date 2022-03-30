@@ -9,13 +9,15 @@ Nagram is a third-party Telegram client based on [NekoX](https://github.com/Neko
 
 ## Additional feature over NekoX
 
-1. Nice icon
-1. Combine message
-1. Editable text style 
-1. Forced copy
-1. Invert reply
-1. Quick reply in longClick menu
-1. Undo and Redo
+1. Nice icon (thanks to MaitungTM)
+2. Combine message
+3. Editable text style 
+4. Forced copy
+5. Invert reply
+6. Quick reply in longClick menu (thanks to @blxueya)
+7. Undo and Redo
+8. Scrollable chat preview (thanks to TeleTux)
+9. Noise suppress and voice enhance (thanks to )
 
 ----
 
@@ -99,5 +101,6 @@ Is Nagram not in your language, or the translation is incorrect or incomplete? G
 - [Nekogram](https://gitlab.com/Nekogram/Nekogram)
 - [Pigeongram](https://gitlab.com/JasonKhew96/Nekogram)
 - [Nullgram](https://github.com/qwq233/Nullgram)
+- [TeleTux](https://github.com/TeleTux/TeleTux)
 - [OwlGram](https://github.com/OwlGramDev/OwlGram)
 
