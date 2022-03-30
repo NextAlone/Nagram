@@ -85,12 +85,13 @@ android {
     }
 
     lint {
+        checkReleaseBuilds false
         disable 'MissingTranslation', 'ExtraTranslation', 'BlockedPrivateApi'
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
 
         coreLibraryDesugaringEnabled true
     }
@@ -118,7 +119,7 @@ android {
             shrinkResources true
             multiDexEnabled true
             zipAlignEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles 'proguard-rules.pro'
             buildConfigField 'boolean', 'DEBUG_VERSION', 'true'
         }
 
@@ -130,7 +131,7 @@ android {
             shrinkResources true
             multiDexEnabled true
             zipAlignEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles 'proguard-rules.pro'
         }
     }
 
@@ -232,8 +233,6 @@ android {
         minSdkVersion 21
         targetSdkVersion 32
         versionName "8.6.2"
-
-        vectorDrawables.generatedDensities = ['mdpi', 'hdpi', 'xhdpi', 'xxhdpi']
 
         // Obtain your own keys at:
         // Telegram: https://core.telegram.org/api/obtaining_api_id
