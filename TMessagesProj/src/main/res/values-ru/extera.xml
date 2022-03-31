@@ -28,11 +28,12 @@
     <string name="HidePhoneNumber">Скрыть номер телефона</string>
     <string name="ShowID">Показывать ID в профиле</string>
     <string name="ChatsOnTitle">\"Чаты\" вместо \"exteraGram\"</string>
-    <string name="ForceTabletMode">Принудительный планшетный режим</string>
+    <string name="ForceTabletMode">Планшетный режим</string>
 
     <!-- Chats -->
     <string name="StickerSize">Размер стикера</string>
     <string name="StickerTime">Скрыть время под стикером</string>
+    <string name="UnlimitedRecentStickers">Unlimited recent stickers</string>
 
     <string name="StickerSizeDialogMessageReplyTo">мяу</string>
     <string name="StickerSizeDialogMessage">ооо, ну какой же он милашкин!</string>
@@ -41,13 +42,14 @@
     <string name="HideKeyboardOnScroll">Скрыть клавиатуру при пролистывании</string>
     <string name="DisableReactions">Отключить реакции</string>
     <string name="ArchiveOnPull">Открыть архив при вытягивании</string>
-    <string name="DateOfForwardedMsg">Показывать дату пересланного сообщения</string>
+    <string name="DateOfForwardedMsg">Дата пересланного сообщения</string>
 
     <string name="Media">Медиа</string>
     <string name="RearVideoMessages">Задняя камера в видеосообщениях</string>
-    <string name="DisableCamera">Отключить камеру в меню выбора фото</string>
+    <string name="DisableCamera">Отключить камеру в галерее</string>
+    <string name="DisableProximityEvents">Отключить датчик приближения</string>
     <string name="PauseOnMinimize">Автопауза</string>
-    <string name="POMDescription">Останавливает видео, когда девайс блокируется или exteraGram сворачивается</string>
+    <string name="POMDescription">Останавливает видео, когда девайс блокируется или приложение сворачивается</string>
     <string name="DisablePlayback">Отключить проигрывание</string>
     <string name="DPDescription">Отключает проигрывание, когда кнопка громкости нажата</string>
 
@@ -55,6 +57,11 @@
     <string name="Attention">ВНИМАНИЕ!</string>
     <string name="AttentionDescription">ЭТОТ ПУНКТ МОЖЕТ БЫТЬ ИЗМЕНЕН ИЛИ УДАЛЕН В БУДУЩЕМ!\nПерезагрузите приложение, чтобы изменения вступили в силу.</string>
     <string name="PNDescription">Может не показываться, если GPS выключен.</string>
+
+    <string name="GenerateMonetTheme">Создать динамическую тему</string>
+    <string name="DarkMonetTheme">Тёмная</string>
+    <string name="LightMonetTheme">Светлая</string>
+    <string name="GMTDescription">Эта функция позволяет создать тему, основанную на системных цветах\n\nПосле нажатия на кнопку выберите чат, где будет сохранена тема</string>
 
     <string name="ConfirmCall">Подтверждение звонка</string>
     <string name="CallTo">Позвонить **%1$s**?</string>

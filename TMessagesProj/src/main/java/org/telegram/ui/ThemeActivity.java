@@ -92,6 +92,8 @@ import org.telegram.ui.Components.ShareAlert;
 import org.telegram.ui.Components.SwipeGestureSettingsView;
 import org.telegram.ui.Components.ThemeEditorView;
 
+import com.exteragram.messenger.extras.MonetThemeGenerator;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -184,7 +186,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     private int themePreviewRow;
     private int editThemeRow;
     private int createNewThemeRow;
-
+    private int generateMonetThemeRow;
     private int rowCount;
 
     private boolean updatingLocation;
@@ -521,6 +523,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         themePreviewRow = -1;
         editThemeRow = -1;
         createNewThemeRow = -1;
+        generateMonetThemeRow = -1;
 
         defaultThemes.clear();
         darkThemes.clear();
@@ -562,6 +565,9 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 editThemeRow = rowCount++;
             }
             createNewThemeRow = rowCount++;
+            if (Build.VERSION.SDK_INT >= 31) {
+                generateMonetThemeRow = rowCount++;
+            }
             swipeGestureInfoRow = rowCount++;
         } else if (currentType == THEME_TYPE_BASIC) {
             textSizeHeaderRow = rowCount++;
@@ -1170,6 +1176,14 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 createNewTheme();
             } else if (position == editThemeRow) {
                 editTheme();
+            } else if (position == generateMonetThemeRow) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                builder.setTitle(LocaleController.getString("GenerateMonetTheme", R.string.GenerateMonetTheme));
+                builder.setMessage(LocaleController.getString("GMTDescription", R.string.GMTDescription));
+                builder.setNegativeButton(LocaleController.getString("LightMonetTheme", R.string.LightMonetTheme), (dialog, which) -> MonetThemeGenerator.generateTheme("monet_light.attheme", "MonetLight.attheme", "Light", ApplicationLoader.applicationContext.getApplicationContext()));
+                builder.setPositiveButton(LocaleController.getString("DarkMonetTheme", R.string.DarkMonetTheme), (dialog, which) -> MonetThemeGenerator.generateTheme("monet_dark.attheme", "MonetDark.attheme", "Dark", ApplicationLoader.applicationContext.getApplicationContext()));
+                builder.setNeutralButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                showDialog(builder.create());
             }
         });
 
@@ -2183,6 +2197,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         cell.setTextAndIcon(LocaleController.getString("EditCurrentTheme", R.string.EditCurrentTheme), R.drawable.msg_theme, true);
                     } else if (position == createNewThemeRow) {
                         cell.setTextAndIcon(LocaleController.getString("CreateNewTheme", R.string.CreateNewTheme), R.drawable.msg_colors, false);
+                    } else if (position == generateMonetThemeRow) {
+                        cell.setTextAndIcon(LocaleController.getString("GenerateMonetTheme", R.string.GenerateMonetTheme), R.drawable.menu_palette, false);
                     }
                     break;
                 }
@@ -2254,7 +2270,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 return 12;
             } else if (position == bubbleRadiusRow) {
                 return 13;
-            } else if (position == backgroundRow || position == editThemeRow || position == createNewThemeRow) {
+            } else if (position == backgroundRow || position == editThemeRow || position == createNewThemeRow || position == generateMonetThemeRow) {
                 return 14;
             } else if (position == swipeGestureRow) {
                 return 15;
