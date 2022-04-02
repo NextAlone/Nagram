@@ -6330,7 +6330,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             pinnedMessageView.setBackgroundResource(R.drawable.blockpanel);
             pinnedMessageView.backgroundColor = getThemedColor(Theme.key_chat_topPanelBackground);
             pinnedMessageView.backgroundPaddingBottom = AndroidUtilities.dp(2);
-            pinnedMessageView.getBackground().mutate().setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_chat_topPanelBackground), PorterDuff.Mode.SRC_IN));
+            pinnedMessageView.getBackground().mutate().setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_chat_topPanelBackground), PorterDuff.Mode.MULTIPLY));
             contentView.addView(pinnedMessageView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 50, Gravity.TOP | Gravity.LEFT));
             pinnedMessageView.setOnClickListener(v -> {
                 wasManualScroll = true;
@@ -21520,15 +21520,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             "[\u231A\u231B\u2328\u23CF\u23E9-\u23F3\u23F8-\u23FA]\uFE0F?)+");
     }
 
+    // NekoX overload
     private void createMenu(View v, boolean single, boolean listView, float x, float y) {
         createMenu(v, single, listView, x, y, true);
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+    // NekoX overload
     private void createMenu(View v, boolean single, boolean listView, float x, float y, boolean searchGroup) {
         createMenu(v, single, listView, x, y, searchGroup, false);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void createMenu(View v, boolean single, boolean listView, float x, float y, boolean searchGroup, boolean onDoubleTapped) {
         if (actionBar.isActionModeShowed() || reportType >= 0) {
             return;
