@@ -71,11 +71,6 @@ jobs:
           echo "APK_FILE_X64=$(find TMessagesProj/build/outputs/apk -name '*x86_64*.apk')" >> $GITHUB_ENV
 
       - uses: actions/upload-artifact@v2
-        name: Upload apk
-        with:
-          name: Nullgram
-          path: TMessagesProj/build/outputs/apk/release/*
-      - uses: actions/upload-artifact@v2
         name: Upload apk (arm64-v8a)
         with:
           name: Nullgram-arm64-v8a
@@ -151,10 +146,6 @@ jobs:
           ccache -o hash_dir=false
           ccache -o compiler_check='%compiler% -dumpmachine; %compiler% -dumpversion'
           ./gradlew :TMessagesProj:publishReleaseBundle
-          echo "APK_FILE=$(find TMessagesProj/build/outputs/apk -name '*arm64-v8a*.apk')" >> $GITHUB_ENV
-          echo "APK_FILE_ARMV7=$(find TMessagesProj/build/outputs/apk -name '*armeabi*.apk')" >> $GITHUB_ENV
-          echo "APK_FILE_X86=$(find TMessagesProj/build/outputs/apk -name '*x86.apk')" >> $GITHUB_ENV
-          echo "APK_FILE_X64=$(find TMessagesProj/build/outputs/apk -name '*x86_64*.apk')" >> $GITHUB_ENV
 
 
           
@@ -177,25 +168,27 @@ jobs:
           path: .
 
       - name: find apk
-        run: echo "APK_FILE=$(find ${{steps.download.outputs.download-path}} -name '*arm64-v8a.apk')" >> $GITHUB_ENV
+        run: |
+            mkdir apks
+            find artifacts -name "*.apk" -exec cp {} apks \;
+            echo "APK_FILE_UPLOAD=$(find apks -name '*arm64-v8a*.apk')" >> $GITHUB_ENV
       - name: Get Apk Info
         id: apk
         uses: JantHsueh/get-apk-info-action@master
         with:
-          apkPath: ${{ env.APK_FILE }}
+          apkPath: ${{ env.APK_FILE_UPLOAD }}
 
       - name: Release
         run: |
           chmod +x telegram-bot-api-binary
           ./telegram-bot-api-binary --api-id=21724 --api-hash=3e0cb5efcd52300aec5994fdfc5bdc16 --local 2>&1 > /dev/null &
-          mkdir apks
-          find artifacts -name "*.apk" -exec cp {} apks \;
           curl https://gist.githubusercontent.com/qwq233/b6c300b531e07622286c6241d36f96f3/raw/6e92a5caf9c447826911e0428c9e4cbf0517ca0f/uploadCI.py -o uploadCI.py
           python uploadCI.py
         env:
             TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
             VERSION_CODE: ${{steps.apk.outputs.versionCode}}
-            VERSION_NAME: ${{steps.apk.outputs.versionName}}
+            VERSION_NAME: ${{steps.apk.outputs.versionNum}}
+            COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
 
   telegram-bot-api:
     name: Telegram Bot API
