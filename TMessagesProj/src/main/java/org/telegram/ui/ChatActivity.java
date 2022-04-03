@@ -27,7 +27,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -192,7 +191,6 @@ import org.telegram.ui.Components.ChatAttachAlert;
 import org.telegram.ui.Components.ChatAttachAlertDocumentLayout;
 import org.telegram.ui.Components.ChatAvatarContainer;
 import org.telegram.ui.Components.ChatBigEmptyView;
-import org.telegram.ui.Components.ChatBlurredFrameLayout;
 import org.telegram.ui.Components.ChatGreetingsView;
 import org.telegram.ui.Components.ChatScrimPopupContainerLayout;
 import org.telegram.ui.Components.ChatThemeBottomSheet;
@@ -13557,7 +13555,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (selectedMessagesIds[index].indexOfKey(messageObject.getId()) >= 0) {
                 selectedMessagesIds[index].remove(messageObject.getId());
                 if (reportType < 0) {
-                    if ((messageObject.type == 0 || messageObject.isAnimatedEmoji() || messageObject.caption != null) && !(messageObject.messageOwner != null && messageObject.messageOwner.noforwards)) {
+                    if ((messageObject.type == 0 || messageObject.isAnimatedEmoji() || messageObject.caption != null) && !(messageObject.messageOwner != null)) {
                         selectedMessagesCanCopyIds[index].remove(messageObject.getId());
                     }
                     if (!messageObject.isAnimatedEmoji() && (messageObject.isSticker() || messageObject.isAnimatedSticker()) && MessageObject.isStickerHasSet(messageObject.getDocument())) {
@@ -13594,7 +13592,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
                 selectedMessagesIds[index].put(messageObject.getId(), messageObject);
                 if (reportType < 0) {
-                    if ((messageObject.type == 0 || messageObject.isAnimatedEmoji() || messageObject.caption != null) && !(messageObject.messageOwner != null && messageObject.messageOwner.noforwards)) {
+                    if ((messageObject.type == 0 || messageObject.isAnimatedEmoji() || messageObject.caption != null) && !(messageObject.messageOwner != null)) {
                         selectedMessagesCanCopyIds[index].put(messageObject.getId(), messageObject);
                     }
                     if (!messageObject.isAnimatedEmoji() && (messageObject.isSticker() || messageObject.isAnimatedSticker()) && MessageObject.isStickerHasSet(messageObject.getDocument())) {
@@ -13715,7 +13713,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                 int copyVisible = copyItem.getVisibility();
                 int starVisible = starItem.getVisibility();
-                copyItem.setVisibility(!noforwards && selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
+                copyItem.setVisibility(selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
                 starItem.setVisibility(getMediaDataController().canAddStickerToFavorites() && (selectedMessagesCanStarIds[0].size() + selectedMessagesCanStarIds[1].size()) == selectedCount ? View.VISIBLE : View.GONE);
                 int newCopyVisible = copyItem.getVisibility();
                 int newStarVisible = starItem.getVisibility();
@@ -21219,7 +21217,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 if (type == -1) {
-                    if ((selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) && !noforwards) {
+                    if ((selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null)) {
                         items.add(LocaleController.getString("Copy", R.string.Copy));
                         options.add(OPTION_COPY);
                         icons.add(R.drawable.msg_copy);
@@ -21364,7 +21362,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     items.add(LocaleController.getString("SaveToMusic", R.string.SaveToMusic));
                                     options.add(OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC);
                                     icons.add(R.drawable.msg_download);
-                                } else if (selectedObject.isDocument() && !noforwards) {
+                                } else if (selectedObject.isDocument()) {
                                     items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
                                     options.add(OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC);
                                     icons.add(R.drawable.msg_download);
@@ -21425,10 +21423,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             items.add(LocaleController.getString("ApplyLocalizationFile", R.string.ApplyLocalizationFile));
                             options.add(5);
                             icons.add(R.drawable.msg_language);
+                            items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
+                            options.add(OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC);
+                            icons.add(R.drawable.msg_download);
                             if (!noforwards) {
-                                items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
-                                options.add(OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC);
-                                icons.add(R.drawable.msg_download);
                                 items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
                                 options.add(6);
                                 icons.add(R.drawable.msg_shareout);
@@ -21437,27 +21435,27 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             items.add(LocaleController.getString("ApplyThemeFile", R.string.ApplyThemeFile));
                             options.add(5);
                             icons.add(R.drawable.msg_theme);
+                            items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
+                            options.add(OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC);
+                            icons.add(R.drawable.msg_download);
                             if (!noforwards) {
-                                items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
-                                options.add(OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC);
-                                icons.add(R.drawable.msg_download);
                                 items.add(
                                     LocaleController.getString("ShareFile", R.string.ShareFile));
                                 options.add(6);
                                 icons.add(R.drawable.msg_shareout);
                             }
                         } else if (type == 100) {
+                            items.add(LocaleController.getString("SaveToDownloads",
+                                R.string.SaveToDownloads));
+                            options.add(10);
+                            icons.add(R.drawable.msg_download);
                             if (!getMessagesController().isChatNoForwards(currentChat)) {
-                                items.add(LocaleController.getString("SaveToDownloads",
-                                    R.string.SaveToDownloads));
-                                options.add(10);
-                                icons.add(R.drawable.msg_download);
                                 items.add(
                                     LocaleController.getString("ShareFile", R.string.ShareFile));
                                 options.add(6);
                                 icons.add(R.drawable.msg_shareout);
                             }
-                        } else if (type == 6 && !noforwards) {
+                        } else if (type == 6) {
                             if (ConfigManager.getBooleanOrFalse(Defines.showDeleteDownloadFiles)) {
                                 items.add(LocaleController.getString("DeleteDownloadedFile",
                                     R.string.DeleteDownloadedFile));
@@ -21470,9 +21468,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
                             options.add(OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC);
                             icons.add(R.drawable.msg_download);
-                            items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
-                            options.add(6);
-                            icons.add(R.drawable.msg_shareout);
+                            if (!noforwards) {
+                                items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
+                                options.add(6);
+                                icons.add(R.drawable.msg_shareout);
+                            }
                         } else if (type == 7) {
                             if (selectedObject.isMask()) {
                                 items.add(
@@ -21660,7 +21660,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             options.add(8);
                             icons.add(R.drawable.msg_reply);
                         }
-                        if ((selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) && !noforwards) {
+                        if ((selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null)) {
                             items.add(LocaleController.getString("Copy", R.string.Copy));
                             options.add(3);
                             icons.add(R.drawable.msg_copy);
@@ -21678,7 +21678,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             options.add(27);
                             icons.add(R.drawable.msg_viewreplies);
                         }
-                        if (type == 4 && !noforwards) {
+                        if (type == 4) {
                             if (selectedObject.isVideo()) {
                                 items.add(LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
                                 options.add(4);
@@ -21697,9 +21697,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 items.add(LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
                                 options.add(OPTION_SAVE_TO_DOWNLOADS_OR_MUSIC);
                                 icons.add(R.drawable.msg_download);
-                                items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
-                                options.add(6);
-                                icons.add(R.drawable.msg_shareout);
+                                if (!noforwards) {
+                                    items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
+                                    options.add(6);
+                                    icons.add(R.drawable.msg_shareout);
+                                }
                             } else {
                                 items.add(LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
                                 options.add(4);
@@ -24479,10 +24481,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         boolean noforwards = getMessagesController().isChatNoForwards(currentChat) || (messageObject != null && messageObject.messageOwner != null && messageObject.messageOwner.noforwards);
         if (url instanceof URLSpanMono) {
-            if (!noforwards) {
                 ((URLSpanMono) url).copyToClipboard();
                 getUndoView().showWithAction(0, UndoView.ACTION_TEXT_COPIED, null);
-            }
         } else if (url instanceof URLSpanUserMention) {
             TLRPC.User user = getMessagesController().getUser(Utilities.parseLong(((URLSpanUserMention) url).getURL()));
             if (user != null) {

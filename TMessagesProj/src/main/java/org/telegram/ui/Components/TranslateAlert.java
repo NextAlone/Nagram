@@ -511,7 +511,7 @@ public class TranslateAlert extends Dialog {
         };
         allTextsView.setTextColor(0x00000000);
         allTextsView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        allTextsView.setTextIsSelectable(!noforwards);
+        allTextsView.setTextIsSelectable(true);
         allTextsView.setHighlightColor(Theme.getColor(Theme.key_chat_inTextSelectionHighlight));
         int handleColor = Theme.getColor(Theme.key_chat_TextSelectionCursor);
         try {
@@ -661,7 +661,7 @@ public class TranslateAlert extends Dialog {
                             if (event.getAction() == MotionEvent.ACTION_UP && pressedLink == links[0]) {
                                 pressedLink.onClick(allTextsView);
                                 pressedLink = null;
-                                allTextsView.setTextIsSelectable(!noforwards);
+                                allTextsView.setTextIsSelectable(true);
                             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                                 pressedLink = links[0];
                             }
@@ -721,7 +721,7 @@ public class TranslateAlert extends Dialog {
                         setScrollY(scrollY);
                         if (event.getAction() == MotionEvent.ACTION_UP) {
                             scrolling = false;
-                            allTextsView.setTextIsSelectable(!noforwards);
+                            allTextsView.setTextIsSelectable(true);
                             maybeScrolling = false;
                             allowScroll = true;
                             scrollYTo(
@@ -739,7 +739,7 @@ public class TranslateAlert extends Dialog {
             }
             if (hasSelection() && maybeScrolling) {
                 scrolling = false;
-                allTextsView.setTextIsSelectable(!noforwards);
+                allTextsView.setTextIsSelectable(true);
                 maybeScrolling = false;
                 allowScroll = true;
                 scrollYTo(Math.round(fromScrollY));
@@ -845,7 +845,7 @@ public class TranslateAlert extends Dialog {
                 if (T <= 0f) {
                     dismissInternal();
                 } else if (setAfter) {
-                    allTextsView.setTextIsSelectable(!noforwards);
+                    allTextsView.setTextIsSelectable(true);
                     allTextsView.invalidate();
                     scrollView.stopNestedScroll();
                     openAnimation(T - 1f);
