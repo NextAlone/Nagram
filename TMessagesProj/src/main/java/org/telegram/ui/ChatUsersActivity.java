@@ -86,7 +86,6 @@ import org.telegram.ui.Components.UndoView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ChatUsersActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -135,7 +134,6 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     private int gigaConvertRow;
     private int gigaInfoRow;
 
-    private int recentActionsRow;
     private int addNewRow;
     private int addNew2Row;
     private int removedUsersRow;
@@ -446,7 +444,6 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         if (currentChat == null) {
             return;
         }
-        recentActionsRow = -1;
         addNewRow = -1;
         addNew2Row = -1;
         addNewSectionRow = -1;
@@ -514,7 +511,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 slowmodeSelectRow = rowCount++;
                 slowmodeInfoRow = rowCount++;
             }
-            if (ChatObject.isChannel(currentChat)) {
+            if (ChatObject.isChannel(currentChat) && ChatObject.hasAdminRights(currentChat)) {
                 if (participantsDivider2Row == -1) {
                     participantsDivider2Row = rowCount++;
                 }
@@ -573,7 +570,6 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             }
         } else if (type == TYPE_ADMIN) {
             if (ChatObject.isChannel(currentChat) && currentChat.megagroup && !currentChat.gigagroup && (info == null || info.participants_count <= 200)) {
-                recentActionsRow = rowCount++;
                 addNewSectionRow = rowCount++;
             }
 
@@ -1003,9 +999,6 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                         });
                         presentFragment(fragment);
                     }
-                    return;
-                } else if (position == recentActionsRow) {
-                    presentFragment(new ChannelAdminLogActivity(currentChat));
                     return;
                 } else if (position == removedUsersRow) {
                     Bundle args = new Bundle();
@@ -3300,8 +3293,6 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                                 actionCell.setText(LocaleController.getString("AddMember", R.string.AddMember), null, R.drawable.actions_addmember2, showDivider);
                             }
                         }
-                    } else if (position == recentActionsRow) {
-                        actionCell.setText(LocaleController.getString("EventLog", R.string.EventLog), null, R.drawable.group_log, false);
                     } else if (position == addNew2Row) {
                         actionCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
                         boolean showDivider = !(loadingUsers && !firstLoaded) && membersHeaderRow == -1 && !participants.isEmpty();
@@ -3421,7 +3412,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
 
         @Override
         public int getItemViewType(int position) {
-            if (position == addNewRow || position == addNew2Row || position == recentActionsRow || position == gigaConvertRow) {
+            if (position == addNewRow || position == addNew2Row || position == gigaConvertRow) {
                 return 2;
             } else if (position >= participantsStartRow && position < participantsEndRow ||
                     position >= botStartRow && position < botEndRow ||
@@ -3564,7 +3555,6 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         public void fillPositions(SparseIntArray sparseIntArray) {
             sparseIntArray.clear();
             int pointer = 0;
-            put(++pointer, recentActionsRow, sparseIntArray);
             put(++pointer, addNewRow, sparseIntArray);
             put(++pointer, addNew2Row, sparseIntArray);
             put(++pointer, addNewSectionRow, sparseIntArray);
