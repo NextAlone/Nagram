@@ -227,9 +227,9 @@ public class AppearancePreferencesEntry extends BaseFragment {
                 case 2:
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == applicationHeaderRow) {
-                        headerCell.setText(LocaleController.getString("Chats", R.string.Chats));
+                        headerCell.setText(LocaleController.getString("Appearance", R.string.Appearance));
                     } else if (position == generalHeaderRow) {
-                        headerCell.setText(LocaleController.getString("Media", R.string.Media));
+                        headerCell.setText(LocaleController.getString("General", R.string.General));
                     }
                     break;
                 case 3:
