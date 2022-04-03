@@ -68,6 +68,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import top.qwq2333.nullgram.helpers.EntitiesHelper;
+
 @SuppressLint({"RtlHardcoded", "NotifyDataSetChanged"})
 public class MessageDetailActivity extends BaseFragment implements
     NotificationCenter.NotificationCenterDelegate {
@@ -235,7 +237,7 @@ public class MessageDetailActivity extends BaseFragment implements
                     }
                 } else {
                     TextDetailSettingsCell textCell = (TextDetailSettingsCell) view;
-                    AndroidUtilities.addToClipboard(textCell.getValueTextView().getText());
+                    AndroidUtilities.addToClipboard(EntitiesHelper.commonizeSpans(textCell.getValueTextView().getText()));
                     BulletinFactory.of(this).createCopyBulletin(
                         LocaleController.formatString("TextCopied", R.string.TextCopied)).show();
                 }

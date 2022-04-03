@@ -55,11 +55,12 @@ import org.telegram.ui.ActionBar.FloatingToolbar;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ArticleViewer;
 import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.Components.LinkPath;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.RestrictedLanguagesSelectActivity;
 
 import java.util.ArrayList;
+
+import top.qwq2333.nullgram.helpers.EntitiesHelper;
 
 public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.SelectableView> {
 
@@ -1412,7 +1413,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
     protected CharSequence getSelectedText() {
         CharSequence text = getText(selectedView, false);
         if (text != null) {
-            return text.subSequence(selectionStart, selectionEnd);
+            return EntitiesHelper.commonizeSpans(text.subSequence(selectionStart, selectionEnd));
         }
         return null;
     }

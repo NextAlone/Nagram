@@ -15,7 +15,7 @@ configurations.all {
     exclude group: 'androidx.recyclerview', module: 'recyclerview'
 }
 
-def isPreview = false
+def isPreview = true
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
 if (serviceAccountCredentialsFile.isFile()) {
@@ -33,8 +33,8 @@ void setupPlay(boolean beta) {
 }
 
 dependencies {
-    implementation 'androidx.core:core:1.6.0'
-    implementation 'androidx.palette:palette:1.0.0'
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.palette:palette-ktx:1.0.0'
     implementation 'androidx.exifinterface:exifinterface:1.3.3'
     implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
     implementation 'androidx.multidex:multidex:2.0.1'
@@ -43,7 +43,7 @@ dependencies {
 
     compileOnly 'org.checkerframework:checker-qual:3.21.0'
     compileOnly 'org.checkerframework:checker-compat-qual:2.5.5'
-    implementation 'com.google.firebase:firebase-messaging:23.0.0'
+    implementation 'com.google.firebase:firebase-messaging:23.0.2'
     implementation 'com.google.firebase:firebase-config:21.0.1'
     implementation 'com.google.firebase:firebase-datatransport:18.1.1'
     implementation 'com.google.firebase:firebase-appindexing:20.0.0'
@@ -55,19 +55,19 @@ dependencies {
     implementation 'com.google.android.gms:play-services-wallet:18.1.3'
     implementation 'com.googlecode.mp4parser:isoparser:1.0.6'
     implementation 'com.stripe:stripe-android:2.0.2'
-    implementation 'com.google.mlkit:language-id:16.1.1'
+    implementation 'com.google.mlkit:language-id:17.0.3'
     implementation files('libs/libgsaverification-client.aar')
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
     implementation 'com.alibaba:fastjson:1.2.79'
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
-    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.9'
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.9.0'
     implementation "com.jakewharton:process-phoenix:2.1.2"
     implementation group: 'de.psdev.licensesdialog', name: 'licensesdialog', version: '2.2.0'
     implementation "io.noties.markwon:core:4.6.2"
     implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:4.3'
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
-    implementation "androidx.core:core-ktx:1.6.0"
+    implementation "androidx.core:core-ktx:1.7.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 

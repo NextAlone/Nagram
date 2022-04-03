@@ -33,6 +33,7 @@ import java.util.HashMap;
 
 import top.qwq2333.nullgram.ui.syntaxhighlight.prism4j.Prism4j;
 
+
 public abstract class Prism4jThemeBase implements Prism4jTheme {
 
     @ColorInt
@@ -49,9 +50,13 @@ public abstract class Prism4jThemeBase implements Prism4jTheme {
         return expected.equals(type) || expected.equals(alias);
     }
 
-    private final ColorHashMap colorHashMap;
+    private ColorHashMap colorHashMap;
 
     protected Prism4jThemeBase() {
+        updateColors();
+    }
+
+    public void updateColors() {
         this.colorHashMap = init();
     }
 

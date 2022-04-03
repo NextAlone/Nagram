@@ -17,6 +17,8 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.Theme;
 
+import top.qwq2333.nullgram.helpers.EntitiesHelper;
+
 public class URLSpanMono extends MetricAffectingSpan {
 
     private CharSequence currentMessage;
@@ -37,8 +39,16 @@ public class URLSpanMono extends MetricAffectingSpan {
         style = run;
     }
 
+    public CharSequence getTextToCopy() {
+        return EntitiesHelper.commonizeSpans(currentMessage.subSequence(currentStart, currentEnd));
+    }
+
     public void copyToClipboard() {
-        AndroidUtilities.addToClipboard(currentMessage.subSequence(currentStart, currentEnd).toString());
+        AndroidUtilities.addToClipboard(getTextToCopy());
+    }
+
+    public TextStyleSpan.TextStyleRun getStyle() {
+        return style;
     }
 
     @Override

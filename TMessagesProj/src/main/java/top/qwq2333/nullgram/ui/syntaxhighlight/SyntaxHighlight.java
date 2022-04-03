@@ -23,42 +23,49 @@ import android.graphics.Color;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.BackgroundColorSpan;
-import android.text.style.ForegroundColorSpan;
 
-import org.telegram.messenger.AndroidUtilities;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.TextStyleSpan;
 
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.ui.syntaxhighlight.prism4j.Prism4j;
 import top.qwq2333.nullgram.utils.Defines;
 
+
 public class SyntaxHighlight {
 
-    private static boolean lastDark;
+    private static final Prism4jThemeDefault theme = Prism4jThemeDefault.create();
     private static Prism4jSyntaxHighlight highlight;
 
     public static void highlight(TextStyleSpan.TextStyleRun run, Spannable spannable) {
-        if (!ConfigManager.getBooleanOrFalse(Defines.codeSyntaxHighlight)) {
-            return;
-        }
         if (run.urlEntity instanceof TLRPC.TL_messageEntityHashtag) {
-            try {
-                int color = Color.parseColor(spannable.subSequence(run.start, run.end).toString());
-                var light = AndroidUtilities.computePerceivedBrightness(color) > 0.725f;
-                spannable.setSpan(new ForegroundColorSpan(light ? Color.BLACK : Color.WHITE), run.start, run.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                spannable.setSpan(new BackgroundColorSpan(color), run.start, run.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            } catch (IllegalArgumentException ignore) {
+            var length = run.end - run.start;
+            if (length == 7 || length == 9) {
+                try {
+                    int color = Color.parseColor(spannable.subSequence(run.start, run.end).toString());
+                    spannable.setSpan(new ColorHighlightSpan(color, run), run.end - 1, run.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                } catch (IllegalArgumentException ignore) {
+                }
             }
-        } else if (!TextUtils.isEmpty(run.urlEntity.language)) {
-            boolean dark = Theme.getActiveTheme().isDark();
-            if (highlight == null || lastDark != dark) {
-                lastDark = dark;
-                highlight = Prism4jSyntaxHighlight.create(new Prism4j(new Prism4jGrammarLocator()), dark ? Prism4jThemeDarkula.create() : Prism4jThemeDefault.create());
+        } else if (ConfigManager.getBooleanOrFalse(Defines.codeSyntaxHighlight) && !TextUtils.isEmpty(run.urlEntity.language)) {
+            if (highlight == null) {
+                highlight = Prism4jSyntaxHighlight.create(new Prism4j(new Prism4jGrammarLocator()), theme);
             }
             highlight.highlight(run.urlEntity.language, spannable, run.start, run.end);
         }
     }
+
+    public static void highlight(String language, int start, int end, Spannable spannable) {
+        if (ConfigManager.getBooleanOrFalse(Defines.codeSyntaxHighlight) && !TextUtils.isEmpty(language)) {
+            if (highlight == null) {
+                highlight = Prism4jSyntaxHighlight.create(new Prism4j(new Prism4jGrammarLocator()), theme);
+            }
+            highlight.highlight(language, spannable, start, end);
+        }
+    }
+
+    public static void updateColors() {
+        theme.updateColors();
+    }
 }
+

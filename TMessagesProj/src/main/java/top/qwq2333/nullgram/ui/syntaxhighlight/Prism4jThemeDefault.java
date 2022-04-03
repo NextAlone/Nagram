@@ -47,7 +47,6 @@ public class Prism4jThemeDefault extends Prism4jThemeBase {
         this.background = background;
     }
 
-    @Override
     public int background() {
         return background;
     }

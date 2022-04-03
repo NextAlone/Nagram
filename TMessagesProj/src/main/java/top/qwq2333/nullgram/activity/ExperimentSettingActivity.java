@@ -46,6 +46,7 @@ public class ExperimentSettingActivity extends BaseFragment {
     private int blockSponsorAdsRow;
     private int syntaxHighlightRow;
     private int aliasChannelRow;
+    private int keepFormattingRow;
     private int experiment2Row;
 
 
@@ -112,6 +113,12 @@ public class ExperimentSettingActivity extends BaseFragment {
                     ((TextCheckCell) view).setChecked(
                         ConfigManager.getBooleanOrFalse(Defines.channelAlias));
                 }
+            } else if (position == keepFormattingRow) {
+                ConfigManager.toggleBoolean(Defines.keepCopyFormatting);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(
+                        ConfigManager.getBooleanOrFalse(Defines.keepCopyFormatting));
+                }
             }
         });
 
@@ -136,6 +143,7 @@ public class ExperimentSettingActivity extends BaseFragment {
         }
         syntaxHighlightRow = rowCount++;
         aliasChannelRow = rowCount++;
+        keepFormattingRow = rowCount++;
         experiment2Row = rowCount++;
 
         if (listAdapter != null) {
@@ -291,6 +299,11 @@ public class ExperimentSettingActivity extends BaseFragment {
                                 R.string.channelAliasDetails),
                             ConfigManager.getBooleanOrFalse(Defines.channelAlias), true,
                             true);
+                    } else if (position == keepFormattingRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("keepFormatting",
+                            R.string.keepFormatting), ConfigManager.getBooleanOrFalse(
+                            Defines.keepCopyFormatting), true);
+
                     }
                     break;
                 }

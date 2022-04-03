@@ -53,6 +53,7 @@ public class Defines {
     public static final String unreadBadgeOnBackButton = "unreadBadgeOnBackButton";
     public static final String ignoreReactionMention = "ignoreReactionMention";
     public static final String stickerSize = "customStickerSize";
+    public static final String keepCopyFormatting = "keepCopyFormatting";
 
     // Custom API
     public static final String customAPI = "customAPI";

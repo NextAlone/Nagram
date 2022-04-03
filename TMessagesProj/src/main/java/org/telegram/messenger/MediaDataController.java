@@ -75,14 +75,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.helpers.EntitiesHelper;
 import top.qwq2333.nullgram.utils.Defines;
 
 @SuppressWarnings("unchecked")
 public class MediaDataController extends BaseController {
     private static Pattern BOLD_PATTERN = Pattern.compile("\\*\\*(.+?)\\*\\*"),
-            ITALIC_PATTERN = Pattern.compile("__(.+?)__"),
-            SPOILER_PATTERN = Pattern.compile("\\|\\|(.+?)\\|\\|"),
-            STRIKE_PATTERN = Pattern.compile("~~(.+?)~~");
+        ITALIC_PATTERN = Pattern.compile("__(.+?)__"),
+        SPOILER_PATTERN = Pattern.compile("\\|\\|(.+?)\\|\\|"),
+        STRIKE_PATTERN = Pattern.compile("~~(.+?)~~");
 
     public static String SHORTCUT_CATEGORY = "org.telegram.messenger.SHORTCUT_SHARE";
 
@@ -2647,9 +2648,9 @@ public class MediaDataController extends BaseController {
                                         type = MEDIA_MUSIC;
                                     } else if (searchCounter.filter instanceof TLRPC.TL_inputMessagesFilterGif) {
                                         type = MEDIA_GIF;
-                                    }  else if (searchCounter.filter instanceof TLRPC.TL_inputMessagesFilterPhotos) {
+                                    } else if (searchCounter.filter instanceof TLRPC.TL_inputMessagesFilterPhotos) {
                                         type = MEDIA_PHOTOS_ONLY;
-                                    }  else if (searchCounter.filter instanceof TLRPC.TL_inputMessagesFilterVideo) {
+                                    } else if (searchCounter.filter instanceof TLRPC.TL_inputMessagesFilterVideo) {
                                         type = MEDIA_VIDEOS_ONLY;
                                     } else {
                                         continue;
@@ -3170,11 +3171,11 @@ public class MediaDataController extends BaseController {
                 intent.setAction("new_dialog");
                 ArrayList<ShortcutInfoCompat> arrayList = new ArrayList<>();
                 arrayList.add(new ShortcutInfoCompat.Builder(ApplicationLoader.applicationContext, "compose")
-                        .setShortLabel(LocaleController.getString("NewConversationShortcut", R.string.NewConversationShortcut))
-                        .setLongLabel(LocaleController.getString("NewConversationShortcut", R.string.NewConversationShortcut))
-                        .setIcon(IconCompat.createWithResource(ApplicationLoader.applicationContext, R.drawable.shortcut_compose))
-                        .setIntent(intent)
-                        .build());
+                    .setShortLabel(LocaleController.getString("NewConversationShortcut", R.string.NewConversationShortcut))
+                    .setLongLabel(LocaleController.getString("NewConversationShortcut", R.string.NewConversationShortcut))
+                    .setIcon(IconCompat.createWithResource(ApplicationLoader.applicationContext, R.drawable.shortcut_compose))
+                    .setIntent(intent)
+                    .build());
                 if (shortcutsToUpdate.contains("compose")) {
                     ShortcutManagerCompat.updateShortcuts(ApplicationLoader.applicationContext, arrayList);
                 } else {
@@ -3266,9 +3267,9 @@ public class MediaDataController extends BaseController {
                         name = " ";
                     }
                     ShortcutInfoCompat.Builder builder = new ShortcutInfoCompat.Builder(ApplicationLoader.applicationContext, id)
-                            .setShortLabel(name)
-                            .setLongLabel(name)
-                            .setIntent(shortcutIntent);
+                        .setShortLabel(name)
+                        .setLongLabel(name)
+                        .setIntent(shortcutIntent);
                     if (SharedConfig.directShare) {
                         builder.setCategories(category);
                     }
@@ -3755,9 +3756,9 @@ public class MediaDataController extends BaseController {
             }
             if (Build.VERSION.SDK_INT >= 26) {
                 ShortcutInfoCompat.Builder pinShortcutInfo =
-                        new ShortcutInfoCompat.Builder(ApplicationLoader.applicationContext, "sdid_" + dialogId)
-                                .setShortLabel(name)
-                                .setIntent(shortcutIntent);
+                    new ShortcutInfoCompat.Builder(ApplicationLoader.applicationContext, "sdid_" + dialogId)
+                        .setShortLabel(name)
+                        .setIntent(shortcutIntent);
 
                 if (bitmap != null) {
                     pinShortcutInfo.setIcon(IconCompat.createWithBitmap(bitmap));
@@ -4783,6 +4784,7 @@ public class MediaDataController extends BaseController {
         return entity;
     }
 
+
     public ArrayList<TLRPC.MessageEntity> getEntities(CharSequence[] message, boolean allowStrike) {
         if (message == null || message[0] == null) {
             return null;
@@ -4862,55 +4864,62 @@ public class MediaDataController extends BaseController {
 
         if (message[0] instanceof Spanned) {
             Spanned spannable = (Spanned) message[0];
-            TextStyleSpan[] spans = spannable.getSpans(0, message[0].length(), TextStyleSpan.class);
-            if (spans != null && spans.length > 0) {
-                for (int a = 0; a < spans.length; a++) {
-                    TextStyleSpan span = spans[a];
-                    int spanStart = spannable.getSpanStart(span);
-                    int spanEnd = spannable.getSpanEnd(span);
-                    if (checkInclusion(spanStart, entities, false) || checkInclusion(spanEnd, entities, true) || checkIntersection(spanStart, spanEnd, entities)) {
-                        continue;
+            if (EntitiesHelper.isEnabled()) {
+                if (entities == null) {
+                    entities = new ArrayList<>();
+                }
+                EntitiesHelper.getEntities(spannable, entities);
+            } else {
+                TextStyleSpan[] spans = spannable.getSpans(0, message[0].length(), TextStyleSpan.class);
+                if (spans != null && spans.length > 0) {
+                    for (int a = 0; a < spans.length; a++) {
+                        TextStyleSpan span = spans[a];
+                        int spanStart = spannable.getSpanStart(span);
+                        int spanEnd = spannable.getSpanEnd(span);
+                        if (checkInclusion(spanStart, entities, false) || checkInclusion(spanEnd, entities, true) || checkIntersection(spanStart, spanEnd, entities)) {
+                            continue;
+                        }
+                        if (entities == null) {
+                            entities = new ArrayList<>();
+                        }
+                        addStyle(span.getTextStyleRun(), spanStart, spanEnd, entities);
                     }
+                }
+
+                URLSpanUserMention[] spansMentions = spannable.getSpans(0, message[0].length(), URLSpanUserMention.class);
+                if (spansMentions != null && spansMentions.length > 0) {
                     if (entities == null) {
                         entities = new ArrayList<>();
                     }
-                    addStyle(span.getTextStyleRun(), spanStart, spanEnd, entities);
-                }
-            }
-
-            URLSpanUserMention[] spansMentions = spannable.getSpans(0, message[0].length(), URLSpanUserMention.class);
-            if (spansMentions != null && spansMentions.length > 0) {
-                if (entities == null) {
-                    entities = new ArrayList<>();
-                }
-                for (int b = 0; b < spansMentions.length; b++) {
-                    TLRPC.TL_inputMessageEntityMentionName entity = new TLRPC.TL_inputMessageEntityMentionName();
-                    entity.user_id = getMessagesController().getInputUser(Utilities.parseLong(spansMentions[b].getURL()));
-                    if (entity.user_id != null) {
-                        entity.offset = spannable.getSpanStart(spansMentions[b]);
-                        entity.length = Math.min(spannable.getSpanEnd(spansMentions[b]), message[0].length()) - entity.offset;
-                        if (message[0].charAt(entity.offset + entity.length - 1) == ' ') {
-                            entity.length--;
+                    for (int b = 0; b < spansMentions.length; b++) {
+                        TLRPC.TL_inputMessageEntityMentionName entity = new TLRPC.TL_inputMessageEntityMentionName();
+                        entity.user_id = getMessagesController().getInputUser(Utilities.parseLong(spansMentions[b].getURL()));
+                        if (entity.user_id != null) {
+                            entity.offset = spannable.getSpanStart(spansMentions[b]);
+                            entity.length = Math.min(spannable.getSpanEnd(spansMentions[b]), message[0].length()) - entity.offset;
+                            if (message[0].charAt(entity.offset + entity.length - 1) == ' ') {
+                                entity.length--;
+                            }
+                            entities.add(entity);
                         }
-                        entities.add(entity);
                     }
                 }
-            }
 
-            URLSpanReplacement[] spansUrlReplacement = spannable.getSpans(0, message[0].length(), URLSpanReplacement.class);
-            if (spansUrlReplacement != null && spansUrlReplacement.length > 0) {
-                if (entities == null) {
-                    entities = new ArrayList<>();
-                }
-                for (int b = 0; b < spansUrlReplacement.length; b++) {
-                    TLRPC.TL_messageEntityTextUrl entity = new TLRPC.TL_messageEntityTextUrl();
-                    entity.offset = spannable.getSpanStart(spansUrlReplacement[b]);
-                    entity.length = Math.min(spannable.getSpanEnd(spansUrlReplacement[b]), message[0].length()) - entity.offset;
-                    entity.url = spansUrlReplacement[b].getURL();
-                    entities.add(entity);
-                    TextStyleSpan.TextStyleRun style = spansUrlReplacement[b].getTextStyleRun();
-                    if (style != null) {
-                        addStyle(style, entity.offset, entity.offset + entity.length, entities);
+                URLSpanReplacement[] spansUrlReplacement = spannable.getSpans(0, message[0].length(), URLSpanReplacement.class);
+                if (spansUrlReplacement != null && spansUrlReplacement.length > 0) {
+                    if (entities == null) {
+                        entities = new ArrayList<>();
+                    }
+                    for (int b = 0; b < spansUrlReplacement.length; b++) {
+                        TLRPC.TL_messageEntityTextUrl entity = new TLRPC.TL_messageEntityTextUrl();
+                        entity.offset = spannable.getSpanStart(spansUrlReplacement[b]);
+                        entity.length = Math.min(spannable.getSpanEnd(spansUrlReplacement[b]), message[0].length()) - entity.offset;
+                        entity.url = spansUrlReplacement[b].getURL();
+                        entities.add(entity);
+                        TextStyleSpan.TextStyleRun style = spansUrlReplacement[b].getTextStyleRun();
+                        if (style != null) {
+                            addStyle(style, entity.offset, entity.offset + entity.length, entities);
+                        }
                     }
                 }
             }
@@ -5034,7 +5043,7 @@ public class MediaDataController extends BaseController {
         TLRPC.DraftMessage currentDraft = threads == null ? null : threads.get(threadId);
         if (!clean) {
             if (currentDraft != null && currentDraft.message.equals(draftMessage.message) && currentDraft.reply_to_msg_id == draftMessage.reply_to_msg_id && currentDraft.no_webpage == draftMessage.no_webpage ||
-                    currentDraft == null && TextUtils.isEmpty(draftMessage.message) && draftMessage.reply_to_msg_id == 0) {
+                currentDraft == null && TextUtils.isEmpty(draftMessage.message) && draftMessage.reply_to_msg_id == 0) {
                 return;
             }
         }
