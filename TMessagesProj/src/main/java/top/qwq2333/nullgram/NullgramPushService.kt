@@ -25,7 +25,7 @@ import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.KeepAliveJob
 
 @SuppressLint("OverrideAbstract")
-class NekoXPushService : NotificationListenerService() {
+class NullgramPushService : NotificationListenerService() {
 
     override fun onCreate() {
         super.onCreate()

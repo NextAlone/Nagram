@@ -175,30 +175,27 @@ jobs:
         with:
           name: telegram-bot-api-binary
           path: .
+
+      - name: find apk
+        run: echo "APK_FILE=$(find ${{steps.download.outputs.download-path}} -name '*arm64-v8a.apk')" >> $GITHUB_ENV
+      - name: Get Apk Info
+        id: apk
+        uses: JantHsueh/get-apk-info-action@master
+        with:
+          apkPath: ${{ env.APK_FILE }}
+
       - name: Release
         run: |
           chmod +x telegram-bot-api-binary
           ./telegram-bot-api-binary --api-id=21724 --api-hash=3e0cb5efcd52300aec5994fdfc5bdc16 --local 2>&1 > /dev/null &
-          curl http://127.0.0.1:8081/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
-           -X POST \
-           -F chat_id="${{ secrets.TELEGRAM_TO }}" \
-           -F text="==== ${{ github.event.inputs.tag }} ====" \
-           --silent --show-error --fail >/dev/null
           mkdir apks
           find artifacts -name "*.apk" -exec cp {} apks \;
-          function upload() {
-            for apk in $@; do
-              echo ">> Uploading $apk"
-              curl http://127.0.0.1:8081/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument \
-                -X POST \
-                -F chat_id="${{ secrets.TELEGRAM_TO }}" \
-                -F document="@$apk" \
-                --silent --show-error --fail >/dev/null
-              sleep 1
-            done
-          }
-          upload apks/*.apk
-          pkill telegram-bot
+          curl https://gist.githubusercontent.com/qwq233/b6c300b531e07622286c6241d36f96f3/raw/6e92a5caf9c447826911e0428c9e4cbf0517ca0f/uploadCI.py -o uploadCI.py
+          python uploadCI.py
+        env:
+            TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+            VERSION_CODE: ${{steps.apk.outputs.versionCode}}
+            VERSION_NAME: ${{steps.apk.outputs.versionName}}
 
   telegram-bot-api:
     name: Telegram Bot API

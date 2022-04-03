@@ -16,13 +16,40 @@ import top.qwq2333.nullgram.utils.LogUtilsKt;
 
 public class UpdateHelper {
 
-    static final int MAX_READ_COUNT = 20;
-    static final long CHANNEL_METADATA_ID = 1514826137;
-    static final String CHANNEL_METADATA_NAME = "NullgramMetaData";
-    static final long CHANNEL_APKS_ID = 1645976613;
-    static final String CHANNEL_APKS_NAME = "NullgramCI";
+    static final int MAX_READ_COUNT = 50;
+    static final long STABLE_METADATA_CHANNEL_ID = 1514826137;
+    static final String STABLE_METADATA_CHANNEL_NAME = "NullgramMetaData";
+    static final long PREVIEW_METADATA_CHANNEL_ID = 1524514483;
+    static final String PREVIEW_METADATA_CHANNEL_NAME = "PreviewMetaData";
+    static final long STABLE_UPDATE_CHANNEL_APKS_ID = 1645976613;
+    static final String STABLE_UPDATE_CHANNEL_APKS_NAME = "NullgramCI";
+    static final long PREVIEW_UPDATE_CHANNEL_APKS_ID = 1714986438;
+    static final String PREVIEW_UPDATE_CHANNEL_APKS_NAME = "NullgramAPKs";
 
     static void retrieveUpdateMetadata(retrieveUpdateMetadataCallback callback) {
+        long CHANNEL_METADATA_ID;
+        String CHANNEL_METADATA_NAME;
+        switch (ConfigManager.getIntOrDefault(Defines.updateChannel,-1)) {
+            case Defines.stableChannel:
+                CHANNEL_METADATA_ID = STABLE_METADATA_CHANNEL_ID;
+                CHANNEL_METADATA_NAME = STABLE_METADATA_CHANNEL_NAME;
+                break;
+
+            case Defines.ciChannel:
+                CHANNEL_METADATA_ID = PREVIEW_METADATA_CHANNEL_ID;
+                CHANNEL_METADATA_NAME = PREVIEW_METADATA_CHANNEL_NAME;
+                break;
+            default:
+                if (BuildConfig.VERSION_NAME.contains("preview")) {
+                    CHANNEL_METADATA_ID = PREVIEW_METADATA_CHANNEL_ID;
+                    CHANNEL_METADATA_NAME = PREVIEW_METADATA_CHANNEL_NAME;
+                } else {
+                    CHANNEL_METADATA_ID = STABLE_METADATA_CHANNEL_ID;
+                    CHANNEL_METADATA_NAME = STABLE_METADATA_CHANNEL_NAME;
+                }
+                break;
+        }
+
         final int localVersionCode = BuildConfig.VERSION_CODE;
         AccountInstance accountInstance = AccountInstance.getInstance(UserConfig.selectedAccount);
         TLRPC.TL_messages_getHistory req = new TLRPC.TL_messages_getHistory();
@@ -134,6 +161,28 @@ public class UpdateHelper {
     }
 
     public static void checkUpdate(checkUpdateCallback callback) {
+        long CHANNEL_APKS_ID;
+        String CHANNEL_APKS_NAME;
+        switch (ConfigManager.getIntOrDefault(Defines.updateChannel,-1)) {
+            case Defines.stableChannel:
+                CHANNEL_APKS_ID = STABLE_UPDATE_CHANNEL_APKS_ID;
+                CHANNEL_APKS_NAME = STABLE_UPDATE_CHANNEL_APKS_NAME;
+                break;
+
+            case Defines.ciChannel:
+                CHANNEL_APKS_ID = PREVIEW_UPDATE_CHANNEL_APKS_ID;
+                CHANNEL_APKS_NAME = PREVIEW_UPDATE_CHANNEL_APKS_NAME;
+                break;
+            default:
+                if (BuildConfig.VERSION_NAME.contains("preview")) {
+                    CHANNEL_APKS_ID = PREVIEW_UPDATE_CHANNEL_APKS_ID;
+                    CHANNEL_APKS_NAME = PREVIEW_UPDATE_CHANNEL_APKS_NAME;
+                } else {
+                    CHANNEL_APKS_ID = STABLE_UPDATE_CHANNEL_APKS_ID;
+                    CHANNEL_APKS_NAME = STABLE_UPDATE_CHANNEL_APKS_NAME;
+                }
+                break;
+        }
         AccountInstance accountInstance = AccountInstance.getInstance(
             UserConfig.selectedAccount);
         retrieveUpdateMetadata((metadata, err) -> {

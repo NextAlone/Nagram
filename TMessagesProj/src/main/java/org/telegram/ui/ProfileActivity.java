@@ -3005,32 +3005,45 @@ public class ProfileActivity extends BaseFragment implements
                         });
 
                         String currentChannel = " - ";
-                        switch (ConfigManager.getIntOrDefault(Defines.updateChannel,1)) {
+                        int currentUpdateChannel;
+                        switch (ConfigManager.getIntOrDefault(Defines.updateChannel, -1)) {
                             case Defines.disableAutoUpdate:
+                                currentUpdateChannel = Defines.disableAutoUpdate;
                                 currentChannel += LocaleController.getString("AutoCheckUpdateOFF", R.string.AutoCheckUpdateOFF);
                                 break;
                             case Defines.stableChannel:
+                                currentUpdateChannel = Defines.stableChannel;
                                 currentChannel += LocaleController.getString("AutoCheckUpdateStable", R.string.AutoCheckUpdateStable);
                                 break;
                             case Defines.ciChannel:
+                                currentUpdateChannel = Defines.ciChannel;
                                 currentChannel += LocaleController.getString("AutoCheckUpdatePreview", R.string.AutoCheckUpdatePreview);
                                 break;
+                            default:
+                                if (BuildConfig.VERSION_NAME.contains("preview")) {
+                                    currentUpdateChannel = Defines.ciChannel;
+                                    currentChannel += LocaleController.getString("AutoCheckUpdatePreview", R.string.AutoCheckUpdatePreview);
+
+                                } else {
+                                    currentUpdateChannel = Defines.stableChannel;
+                                    currentChannel += LocaleController.getString("AutoCheckUpdateStable", R.string.AutoCheckUpdateStable);
+                                }
                         }
 
                         builder.addItem(LocaleController.getString("AutoCheckUpdateSwitch", R.string.AutoCheckUpdateSwitch) + currentChannel, R.drawable.baseline_system_update_24, (it) -> {
                             BottomBuilder switchBuilder = new BottomBuilder(getParentActivity());
                             switchBuilder.addTitle(LocaleController.getString("AutoCheckUpdateSwitch", R.string.AutoCheckUpdateSwitch));
-                            switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdateOFF", R.string.AutoCheckUpdateOFF), ConfigManager.getIntOrDefault(Defines.updateChannel,Defines.stableChannel) == Defines.disableAutoUpdate, (radioButtonCell) -> {
+                            switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdateOFF", R.string.AutoCheckUpdateOFF), currentUpdateChannel == Defines.disableAutoUpdate, (radioButtonCell) -> {
                                 ConfigManager.putInt(Defines.updateChannel,Defines.disableAutoUpdate);
                                 switchBuilder.doRadioCheck(radioButtonCell);
                                 return Unit.INSTANCE;
                             });
-                            switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdateStable", R.string.AutoCheckUpdateStable), ConfigManager.getIntOrDefault(Defines.updateChannel,Defines.stableChannel) == Defines.stableChannel, (radioButtonCell) -> {
+                            switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdateStable", R.string.AutoCheckUpdateStable), currentUpdateChannel == Defines.stableChannel, (radioButtonCell) -> {
                                 ConfigManager.putInt(Defines.updateChannel,Defines.stableChannel);
                                 switchBuilder.doRadioCheck(radioButtonCell);
                                 return Unit.INSTANCE;
                             });
-                            switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdatePreview", R.string.AutoCheckUpdatePreview), ConfigManager.getIntOrDefault(Defines.updateChannel,Defines.stableChannel) == Defines.ciChannel, (radioButtonCell) -> {
+                            switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdatePreview", R.string.AutoCheckUpdatePreview), currentUpdateChannel == Defines.ciChannel, (radioButtonCell) -> {
                                 ConfigManager.putInt(Defines.updateChannel,Defines.ciChannel);
                                 switchBuilder.doRadioCheck(radioButtonCell);
                                 return Unit.INSTANCE;
