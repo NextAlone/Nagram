@@ -33,6 +33,8 @@ import androidx.core.util.Consumer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.exteragram.messenger.ExteraConfig;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.ImageLocation;
@@ -627,7 +629,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         Runnable longPressRunnable = new Runnable() {
             @Override
             public void run() {
-                performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                if (!ExteraConfig.disableVibration) performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 pressedReactionPosition = reactionsList.indexOf(currentReaction);
                 pressedReaction = currentReaction.reaction;
                 ReactionsContainerLayout.this.invalidate();

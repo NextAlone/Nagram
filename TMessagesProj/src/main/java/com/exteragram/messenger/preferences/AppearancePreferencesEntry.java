@@ -49,6 +49,7 @@ public class AppearancePreferencesEntry extends BaseFragment {
     private int hidePhoneNumberRow;
     private int showIDRow;
     private int chatsOnTitleRow;
+    private int disableVibrationRow;
     private int forceTabletModeRow;
     private int generalDividerRow;
 
@@ -158,6 +159,12 @@ public class AppearancePreferencesEntry extends BaseFragment {
                     ((TextCheckCell) view).setChecked(ExteraConfig.chatsOnTitle);
                 }
                 restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
+            } else if (position == disableVibrationRow) {
+                ExteraConfig.toggleDisableVibration();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(ExteraConfig.disableVibration);
+                }
+                restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
             } else if (position == forceTabletModeRow) {
                 ExteraConfig.toggleForceTabletMode();
                 if (view instanceof TextCheckCell) {
@@ -189,6 +196,7 @@ public class AppearancePreferencesEntry extends BaseFragment {
         hidePhoneNumberRow = rowCount++;
         showIDRow = rowCount++;
         chatsOnTitleRow = rowCount++;
+        disableVibrationRow = rowCount++;
         forceTabletModeRow = rowCount++;
         generalDividerRow = rowCount++;
 
@@ -252,7 +260,9 @@ public class AppearancePreferencesEntry extends BaseFragment {
                     } else if (position == showIDRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("ShowID", R.string.ShowID), ExteraConfig.showID, true);
                     } else if (position == chatsOnTitleRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("ChatsOnTitle", R.string.ChatsOnTitle), ExteraConfig.chatsOnTitle,  true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("ChatsOnTitle", R.string.ChatsOnTitle), ExteraConfig.chatsOnTitle, true);
+                    } else if (position == disableVibrationRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString("DisableVibration", R.string.DisableVibration), ExteraConfig.disableVibration, true);
                     } else if (position == forceTabletModeRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("ForceTabletMode", R.string.ForceTabletMode), ExteraConfig.forceTabletMode, true);
                     }
@@ -296,7 +306,7 @@ public class AppearancePreferencesEntry extends BaseFragment {
             } else if (position == useSystemFontsRow || position == useSystemEmojiRow || position == transparentStatusBarRow ||
                        position == blurForAllThemesRow || position == hideAllChatsRow || position == hideProxySponsorRow ||
                        position == hidePhoneNumberRow || position == showIDRow || position == chatsOnTitleRow ||
-                       position == forceTabletModeRow) {
+                       position == disableVibrationRow || position == forceTabletModeRow) {
                 return 3;
             }
             return 1;

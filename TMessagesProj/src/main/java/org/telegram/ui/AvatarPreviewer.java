@@ -27,6 +27,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.util.Consumer;
 import androidx.core.util.Preconditions;
 
+import com.exteragram.messenger.ExteraConfig;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLoader;
@@ -432,7 +434,7 @@ public class AvatarPreviewer {
                     } else {
                         moveProgress = Math.max(-1, Math.min(0f, (event.getY() - downY) / AndroidUtilities.dp(56)));
                         if (moveProgress == -1) {
-                            performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                            if (!ExteraConfig.disableVibration) performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                             moveAnimator = ValueAnimator.ofFloat(moveProgress, 0);
                             moveAnimator.setDuration(200);
                             moveAnimator.addUpdateListener(a -> {

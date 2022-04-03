@@ -62,6 +62,8 @@ import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class ContentPreviewViewer {
 
     private class FrameLayoutDrawer extends FrameLayout {
@@ -242,12 +244,13 @@ public class ContentPreviewViewer {
                     close();
                 });
                 visibleDialog.show();
-                containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                if (!ExteraConfig.disableVibration) containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 if (delegate != null && delegate.needRemove()) {
                     BottomSheet.BottomSheetCell cell = visibleDialog.getItemViews().get(0);
                     cell.setTextColor(getThemedColor(Theme.key_dialogTextRed));
                     cell.setIconColor(getThemedColor(Theme.key_dialogRedIcon));
                 }
+                if (!ExteraConfig.disableVibration) containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
             } else if (delegate != null) {
                 animateY = true;
                 visibleDialog = new BottomSheet(parentActivity, false) {
@@ -329,7 +332,7 @@ public class ContentPreviewViewer {
                     close();
                 });
                 visibleDialog.show();
-                containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                if (!ExteraConfig.disableVibration) containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 if (canDelete) {
                     visibleDialog.setItemColor(items.size() - 1, getThemedColor(Theme.key_dialogTextRed2), getThemedColor(Theme.key_dialogRedIcon));
                 }
@@ -615,7 +618,7 @@ public class ContentPreviewViewer {
                             contextLinkCell.setScaled(true);
                         }
                     }
-                    currentPreviewCell.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                    if (!ExteraConfig.disableVibration) currentPreviewCell.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 };
                 AndroidUtilities.runOnUIThread(openPreviewRunnable, 200);
                 return true;

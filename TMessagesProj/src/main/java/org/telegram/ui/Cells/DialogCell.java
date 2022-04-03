@@ -82,6 +82,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class DialogCell extends BaseCell {
 
     public boolean drawingForBlur;
@@ -2372,9 +2374,9 @@ public class DialogCell extends BaseCell {
         if (isSliding && !swipeCanceled) {
             boolean prevValue = drawRevealBackground;
             drawRevealBackground = Math.abs(translationX) >= getMeasuredWidth() * 0.45f;
-            if (prevValue != drawRevealBackground && archiveHidden == SharedConfig.archiveHidden) {
+            if (prevValue != drawRevealBackground && archiveHidden == SharedConfig.archiveHidden && !ExteraConfig.disableVibration) {
                 try {
-                    performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                    if (!ExteraConfig.disableVibration) performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 } catch (Exception ignore) {
 
                 }

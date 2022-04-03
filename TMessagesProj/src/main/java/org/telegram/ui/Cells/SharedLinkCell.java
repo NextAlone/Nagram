@@ -56,6 +56,8 @@ import java.util.Locale;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicReference;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class SharedLinkCell extends FrameLayout {
     private final static int SPOILER_TYPE_LINK = 0,
             SPOILER_TYPE_DESCRIPTION = 1,
@@ -88,7 +90,7 @@ public class SharedLinkCell extends FrameLayout {
         public void run() {
             if (checkingForLongPress && getParent() != null && currentPressCount == pressCount) {
                 checkingForLongPress = false;
-                performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                if (!ExteraConfig.disableVibration) performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 if (pressedLink >= 0) {
                     delegate.onLinkPress(links.get(pressedLink).toString(), true);
                 }

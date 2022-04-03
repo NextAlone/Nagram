@@ -25,7 +25,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.SystemClock;
-import android.os.Vibrator;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -65,6 +64,9 @@ import org.telegram.ui.ActionBar.Theme;
 
 import java.util.ArrayList;
 import java.util.Locale;
+
+import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.extras.Vibrate;
 
 public class PasscodeView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
@@ -130,7 +132,7 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
                 return;
             }
             try {
-                performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                if (!ExteraConfig.disableVibration) performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -251,7 +253,7 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
                 return false;
             }
             try {
-                performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                if (!ExteraConfig.disableVibration) performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -915,10 +917,7 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
     }
 
     private void onPasscodeError() {
-        Vibrator v = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
-        if (v != null) {
-            v.vibrate(200);
-        }
+        Vibrate.vibrate();
         shakeTextView(2, 0);
     }
 
@@ -1236,7 +1235,7 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
                     getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     imageView.setProgress(0);
                     imageView.playAnimation();
-                    AndroidUtilities.runOnUIThread(() -> imageView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING), 350);
+                    if (!ExteraConfig.disableVibration) AndroidUtilities.runOnUIThread(() -> imageView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING), 350);
                     AnimatorSet animatorSet = new AnimatorSet();
                     ArrayList<Animator> animators = new ArrayList<>();
                     int w = AndroidUtilities.displaySize.x;
@@ -1373,10 +1372,7 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
         fingerprintImageView.setImageResource(R.drawable.ic_fingerprint_error);
         fingerprintStatusTextView.setText(error);
         fingerprintStatusTextView.setTextColor(0xfff4511e);
-        Vibrator v = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
-        if (v != null) {
-            v.vibrate(200);
-        }
+        Vibrate.vibrate();
         AndroidUtilities.shakeView(fingerprintStatusTextView, 2, 0);
     }
 

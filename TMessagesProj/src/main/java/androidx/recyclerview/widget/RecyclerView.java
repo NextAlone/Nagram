@@ -95,6 +95,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.extras.Vibrate;
+
 /**
  * A flexible view for providing a limited window into a large data set.
  *
@@ -7007,6 +7010,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             try {
                 TraceCompat.beginSection(TRACE_CREATE_VIEW_TAG);
                 final VH holder = onCreateViewHolder(parent, viewType);
+                if (ExteraConfig.disableVibration) Vibrate.disableHapticFeedback(holder.itemView);
                 if (holder.itemView.getParent() != null) {
                     throw new IllegalStateException("ViewHolder views must not be attached when"
                             + " created. Ensure that you are not passing 'true' to the attachToRoot"

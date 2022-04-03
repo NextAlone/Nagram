@@ -44,6 +44,8 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.exteragram.messenger.ExteraConfig;
+
 /**
  * This is a utility class to add swipe to dismiss and drag & drop support to RecyclerView.
  * <p>
@@ -679,7 +681,7 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
             mSelected = selected;
 
             if (actionState == ACTION_STATE_DRAG) {
-                mSelected.itemView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                if (!ExteraConfig.disableVibration) mSelected.itemView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
             }
         }
         final ViewParent rvParent = mRecyclerView.getParent();

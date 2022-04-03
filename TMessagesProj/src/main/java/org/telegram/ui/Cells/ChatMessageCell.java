@@ -1938,7 +1938,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             float p = a / 360f;
             if (Math.abs(currentMessageObject.audioProgress - p) > 0.9f) {
                 if (roundSeekbarOutAlpha == 0) {
-                    performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                    if (!ExteraConfig.disableVibration) performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                 }
                 roundSeekbarOutAlpha = 1f;
                 roundSeekbarOutProgress = currentMessageObject.audioProgress;
@@ -5139,7 +5139,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 }
 
                 int maxVote = 0;
-                if (!animatePollAnswer && pollVoteInProgress && vibrateOnPollVote) {
+                if (!animatePollAnswer && pollVoteInProgress && vibrateOnPollVote && !ExteraConfig.disableVibration) {
                     performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 }
                 animatePollAnswerAlpha = animatePollAnswer = attachedToWindow && (pollVoteInProgress || pollUnvoteInProgress);

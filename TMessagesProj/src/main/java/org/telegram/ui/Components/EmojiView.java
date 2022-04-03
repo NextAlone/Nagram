@@ -112,6 +112,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class EmojiView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
     private ArrayList<View> views = new ArrayList<>();
@@ -1959,8 +1961,8 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 } else if (event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP) {
                     backspacePressed = false;
                     if (!backspaceOnce) {
-                        if (delegate != null && delegate.onBackspace()) {
-                            backspaceButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                        if (delegate != null && delegate.onBackspace() && !ExteraConfig.disableVibration) {
+                            if (!ExteraConfig.disableVibration) backspaceButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                         }
                     }
                 }
@@ -3164,8 +3166,8 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             if (!backspacePressed) {
                 return;
             }
-            if (delegate != null && delegate.onBackspace()) {
-                backspaceButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+            if (delegate != null && delegate.onBackspace() && !ExteraConfig.disableVibration) {
+                if (!ExteraConfig.disableVibration) backspaceButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
             }
             backspaceOnce = true;
             postBackspaceRunnable(Math.max(50, time - 100));

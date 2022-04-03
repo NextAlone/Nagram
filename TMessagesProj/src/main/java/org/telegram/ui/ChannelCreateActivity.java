@@ -18,7 +18,6 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -71,6 +70,8 @@ import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 
 import java.util.ArrayList;
+
+import com.exteragram.messenger.extras.Vibrate;
 
 public class ChannelCreateActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, ImageUpdater.ImageUpdaterDelegate {
 
@@ -256,10 +257,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                             return;
                         }
                         if (nameTextView.length() == 0) {
-                            Vibrator v = (Vibrator) getParentActivity().getSystemService(Context.VIBRATOR_SERVICE);
-                            if (v != null) {
-                                v.vibrate(200);
-                            }
+                            Vibrate.vibrate();
                             AndroidUtilities.shakeView(nameTextView, 2, 0);
                             return;
                         }
@@ -293,10 +291,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                                 return;
                             } else {
                                 if (!lastNameAvailable) {
-                                    Vibrator v = (Vibrator) getParentActivity().getSystemService(Context.VIBRATOR_SERVICE);
-                                    if (v != null) {
-                                        v.vibrate(200);
-                                    }
+                                    Vibrate.vibrate();
                                     AndroidUtilities.shakeView(checkTextView, 2, 0);
                                     return;
                                 } else {

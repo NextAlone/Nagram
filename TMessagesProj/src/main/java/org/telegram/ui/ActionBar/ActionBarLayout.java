@@ -55,6 +55,9 @@ import org.telegram.ui.Components.LayoutHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.extras.Vibrate;
+
 public class ActionBarLayout extends FrameLayout {
 
     public interface ActionBarLayoutDelegate {
@@ -677,6 +680,7 @@ public class ActionBarLayout extends FrameLayout {
         View fragmentView = lastFragment.fragmentView;
         if (fragmentView == null) {
             fragmentView = lastFragment.createView(parentActivity);
+            if (ExteraConfig.disableVibration) Vibrate.disableHapticFeedback(fragmentView);
         }
         ViewGroup parent = (ViewGroup) fragmentView.getParent();
         if (parent != null) {
@@ -1096,6 +1100,7 @@ public class ActionBarLayout extends FrameLayout {
         View fragmentView = fragment.fragmentView;
         if (fragmentView == null) {
             fragmentView = fragment.createView(parentActivity);
+            if (ExteraConfig.disableVibration) Vibrate.disableHapticFeedback(fragmentView);
         } else {
             ViewGroup parent = (ViewGroup) fragmentView.getParent();
             if (parent != null) {
@@ -1459,7 +1464,7 @@ public class ActionBarLayout extends FrameLayout {
                 }
             });
             animatorSet.start();
-            performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+            if (!ExteraConfig.disableVibration) performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
 
             fragment.setInPreviewMode(false);
         }
@@ -1505,6 +1510,7 @@ public class ActionBarLayout extends FrameLayout {
             View fragmentView = previousFragment.fragmentView;
             if (fragmentView == null) {
                 fragmentView = previousFragment.createView(parentActivity);
+                if (ExteraConfig.disableVibration) Vibrate.disableHapticFeedback(fragmentView);
             }
 
             if (!inPreviewMode) {
@@ -1693,6 +1699,7 @@ public class ActionBarLayout extends FrameLayout {
         View fragmentView = previousFragment.fragmentView;
         if (fragmentView == null) {
             fragmentView = previousFragment.createView(parentActivity);
+            if (ExteraConfig.disableVibration) Vibrate.disableHapticFeedback(fragmentView);
         } else {
             ViewGroup parent = (ViewGroup) fragmentView.getParent();
             if (parent != null) {

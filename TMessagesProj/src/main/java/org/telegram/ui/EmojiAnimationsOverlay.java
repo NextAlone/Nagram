@@ -6,6 +6,8 @@ import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.exteragram.messenger.ExteraConfig;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -206,7 +208,7 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
         if (bestView != null) {
             chatActivity.restartSticker(bestView);
             if (!EmojiData.hasEmojiSupportVibration(bestView.getMessageObject().getStickerEmoji())) {
-                bestView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                if (!ExteraConfig.disableVibration) bestView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
             }
             showAnimationForCell(bestView, animation, false, true);
         }
@@ -268,7 +270,7 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
         }
         boolean show = showAnimationForCell(view, -1, true, false);
         if (show && !EmojiData.hasEmojiSupportVibration(view.getMessageObject().getStickerEmoji())) {
-            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+            if (!ExteraConfig.disableVibration) view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
         }
 
         Integer printingType = MessagesController.getInstance(currentAccount).getPrintingStringType(dialogId, threadMsgId);
