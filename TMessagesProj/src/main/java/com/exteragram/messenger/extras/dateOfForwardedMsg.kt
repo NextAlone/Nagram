@@ -5,11 +5,10 @@ import org.telegram.messenger.MessageObject
 
 import com.exteragram.messenger.ExteraConfig
 
-object dateOfForwardedMsg {
+object DateOfForwardedMsg {
     @JvmStatic
     fun showForwardDate(obj: MessageObject, orig: CharSequence): String {
-        if (!ExteraConfig.dateOfForwardedMsg) {
-            return orig.toString()
-        } else return "$orig • ${LocaleController.formatDate(obj.messageOwner.fwd_from.date.toLong())}"
+        return if (!ExteraConfig.dateOfForwardedMsg) orig.toString()
+               else "$orig • ${LocaleController.formatDate(obj.messageOwner.fwd_from.date.toLong())}"
     }
 }
