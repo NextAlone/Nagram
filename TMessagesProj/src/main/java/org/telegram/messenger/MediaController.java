@@ -4919,19 +4919,19 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         float minCompressFactor;
         int maxBitrate;
         if (Math.min(height, width) >= 1080) {
-            maxBitrate = 14000_000;
+            maxBitrate = 12000_000;
             compressFactor = 1f;
             minCompressFactor = 1f;
         } else if (Math.min(height, width) >= 720) {
-            maxBitrate = 9000_000;
+            maxBitrate = 7500_000;
             compressFactor = 1f;
             minCompressFactor = 1f;
         } else if (Math.min(height, width) >= 480) {
-            maxBitrate = 5000_000;
+            maxBitrate = 4000_000;
             compressFactor = 1f;
             minCompressFactor = 1f;
         } else {
-            maxBitrate = 3000_000;
+            maxBitrate = 1000_000;
             compressFactor = 1f;
             minCompressFactor = 1f;
         }
