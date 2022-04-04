@@ -71,7 +71,7 @@ import top.qwq2333.nullgram.utils.AlertUtil;
 import top.qwq2333.nullgram.utils.Defines;
 import top.qwq2333.nullgram.utils.FileUtils;
 import top.qwq2333.nullgram.utils.JsonUtils;
-import top.qwq2333.nullgram.utils.LogUtilsKt;
+import top.qwq2333.nullgram.utils.LogUtils;
 import top.qwq2333.nullgram.utils.ShareUtil;
 
 @SuppressLint("NotifyDataSetChanged")
@@ -413,7 +413,7 @@ public class MainSettingActivity extends BaseFragment {
         } catch (JSONException e) {
             AlertUtil.showSimpleAlert(getParentActivity(), e);
         } catch (Exception e) {
-            LogUtilsKt.e(e);
+            LogUtils.e(e);
         }
 
     }

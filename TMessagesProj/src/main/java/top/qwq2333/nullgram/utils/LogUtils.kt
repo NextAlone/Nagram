@@ -21,98 +21,111 @@ package top.qwq2333.nullgram.utils
 
 import android.util.Log
 
-const val TAG = "Nullgram"
+object LogUtils {
+    const val TAG = "Nullgram"
 
-/**
- * 日志等级 Debug
- * @param msg 日志内容
- */
-fun d(msg: String) {
-    Log.d(TAG, msg)
-}
+    /**
+     * 日志等级 Debug
+     * @param msg 日志内容
+     */
+    @JvmStatic
+    fun d(msg: String) {
+        Log.d(TAG, msg)
+    }
 
-/**
- * 日志等级 Info
- * @param msg 日志内容
- */
-fun i(msg: String) {
-    Log.i(TAG, msg)
-}
+    /**
+     * 日志等级 Info
+     * @param msg 日志内容
+     */
+    @JvmStatic
+    fun i(msg: String) {
+        Log.i(TAG, msg)
+    }
 
-/**
- * 日志等级 Warn
- * @param msg 日志内容
- */
-fun w(msg: String) {
-    Log.w(TAG, msg)
-}
+    /**
+     * 日志等级 Warn
+     * @param msg 日志内容
+     */
+    @JvmStatic
+    fun w(msg: String) {
+        Log.w(TAG, msg)
+    }
 
-/**
- * 日志等级 Error
- * @param msg 日志内容
- */
-fun e(msg: String) {
-    Log.e(TAG, msg)
-}
+    /**
+     * 日志等级 Error
+     * @param msg 日志内容
+     */
+    @JvmStatic
+    fun e(msg: String) {
+        Log.e(TAG, msg)
+    }
 
-/**
- * 日志等级 Debug
- * @param throwable 异常
- * @param msg 日志内容
- */
-fun d(msg: String, throwable: Throwable) {
-    Log.i(TAG, msg, throwable)
-}
+    /**
+     * 日志等级 Debug
+     * @param throwable 异常
+     * @param msg 日志内容
+     */
+    @JvmStatic
+    fun d(msg: String, throwable: Throwable) {
+        Log.i(TAG, msg, throwable)
+    }
 
-/**
- * 日志等级 Info
- * @param throwable 异常
- * @param msg 日志内容
- */
-fun i(msg: String, throwable: Throwable) {
-    Log.i(TAG, msg, throwable)
-}
+    /**
+     * 日志等级 Info
+     * @param throwable 异常
+     * @param msg 日志内容
+     */
+    @JvmStatic
+    fun i(msg: String, throwable: Throwable) {
+        Log.i(TAG, msg, throwable)
+    }
 
-/**
- * 日志等级 Warn
- * @param throwable 异常
- * @param msg 日志内容
- */
-fun w(msg: String, throwable: Throwable) {
-    Log.w(TAG, msg, throwable)
-}
+    /**
+     * 日志等级 Warn
+     * @param throwable 异常
+     * @param msg 日志内容
+     */
+    @JvmStatic
+    fun w(msg: String, throwable: Throwable) {
+        Log.w(TAG, msg, throwable)
+    }
 
-/**
- * 日志等级 Error
- * @param throwable 异常
- * @param msg 日志内容
- */
-fun e(msg: String, throwable: Throwable) {
-    Log.e(TAG, msg, throwable)
-    AppcenterUtils.trackCrashes(throwable)
-}
+    /**
+     * 日志等级 Error
+     * @param throwable 异常
+     * @param msg 日志内容
+     */
+    @JvmStatic
+    fun e(msg: String, throwable: Throwable) {
+        Log.e(TAG, msg, throwable)
+        AppcenterUtils.trackCrashes(throwable)
+    }
 
-/**
- * 日志等级 Info
- * @param throwable 异常
- */
-fun i(throwable: Throwable) {
-    Log.i(TAG, "", throwable)
-}
+    /**
+     * 日志等级 Info
+     * @param throwable 异常
+     */
+    @JvmStatic
+    fun i(throwable: Throwable) {
+        Log.i(TAG, "", throwable)
+    }
 
-/**
- * 日志等级 Warn
- * @param throwable 异常
- */
-fun w(throwable: Throwable) {
-    Log.w(TAG, "", throwable)
-}
+    /**
+     * 日志等级 Warn
+     * @param throwable 异常
+     */
+    @JvmStatic
+    fun w(throwable: Throwable) {
+        Log.w(TAG, "", throwable)
+    }
 
-/**
- * 日志等级 Error
- * @param throwable 异常
- */
-fun e(throwable: Throwable) {
-    Log.e(TAG, "", throwable)
-    AppcenterUtils.trackCrashes(throwable)
+    /**
+     * 日志等级 Error
+     * @param throwable 异常
+     */
+    @JvmStatic
+    fun e(throwable: Throwable) {
+        Log.e(TAG, "", throwable)
+        AppcenterUtils.trackCrashes(throwable)
+    }
 }

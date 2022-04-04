@@ -23,7 +23,6 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -50,7 +49,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
@@ -107,7 +105,6 @@ import org.telegram.messenger.browser.Browser;
 import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.messenger.voip.VoIPPendingCall;
 import org.telegram.messenger.voip.VoIPService;
-import org.telegram.tgnet.AbstractSerializedData;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
@@ -168,10 +165,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.helpers.UpdateHelper;
 import top.qwq2333.nullgram.utils.Defines;
-import top.qwq2333.nullgram.utils.LogUtilsKt;
+import top.qwq2333.nullgram.utils.LogUtils;
 
 public class LaunchActivity extends BasePermissionsActivity implements ActionBarLayout.ActionBarLayoutDelegate, NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate {
 
@@ -2074,7 +2072,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                                                 push_user_id = userId;
                                             }
                                         } catch (Exception e) {
-                                            LogUtilsKt.e(e);
+                                            LogUtils.e(e);
                                         }
                                     } else if ((url.startsWith("tg:call") || url.startsWith("tg://call"))) {
                                         if (UserConfig.getInstance(currentAccount).isClientActivated()) {
@@ -3834,11 +3832,11 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             return;
         }
         ConfigManager.putLong(Defines.lastCheckUpdateTime, System.currentTimeMillis());
-        LogUtilsKt.d("checking update");
+        LogUtils.d("checking update");
         final int accountNum = currentAccount;
         UpdateHelper.checkUpdate((res, error) -> AndroidUtilities.runOnUIThread(() -> {
             if (res != null) {
-                LogUtilsKt.d("checkUpdate: res is not null");
+                LogUtils.d("checkUpdate: res is not null");
                 SharedConfig.setNewAppVersionAvailable(res);
                 if (res.can_not_skip) {
                     showUpdateActivity(accountNum, res, false);
@@ -3847,11 +3845,11 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                     try {
                         (new UpdateAppAlertDialog(LaunchActivity.this, res, accountNum)).show();
                     } catch (Exception e) {
-                        LogUtilsKt.e(e);
+                        LogUtils.e(e);
                     }
                 }
             } else {
-                LogUtilsKt.d("checkUpdate: res is null");
+                LogUtils.d("checkUpdate: res is null");
                 if (force) {
                     if (error) {
                         Toast.makeText(LaunchActivity.this,

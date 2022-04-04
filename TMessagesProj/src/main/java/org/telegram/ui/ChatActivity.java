@@ -280,7 +280,7 @@ import top.qwq2333.nullgram.activity.MessageDetailActivity;
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.helpers.EntitiesHelper;
 import top.qwq2333.nullgram.utils.Defines;
-import top.qwq2333.nullgram.utils.LogUtilsKt;
+import top.qwq2333.nullgram.utils.LogUtils;
 
 @SuppressWarnings("unchecked")
 public class ChatActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, LocationActivity.LocationActivityDelegate, ChatAttachAlertDocumentLayout.DocumentSelectActivityDelegate {
@@ -5967,7 +5967,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
                 showDialog(dialog);
             } catch (Exception e) {
-                LogUtilsKt.e(e);
+                LogUtils.e(e);
             }
             return true;
         });

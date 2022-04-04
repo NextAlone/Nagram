@@ -25,7 +25,7 @@
 
 5. Variable naming adopts camelcase.
 
-6. DO NOT USE FileLog. Use [LogUtilsKt](../TMessagesProj/src/main/java/top/qwq2333/nullgram/utils/LogUtils.kt) instead.
+6. DO NOT USE FileLog. Use [LogUtils](../TMessagesProj/src/main/java/top/qwq2333/nullgram/utils/LogUtils.kt) instead.
 
 7. Indent with 4 spaces.
 

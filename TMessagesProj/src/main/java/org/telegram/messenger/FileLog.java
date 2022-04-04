@@ -8,13 +8,15 @@
 
 package org.telegram.messenger;
 
+import org.telegram.messenger.time.FastDateFormat;
+
 import java.io.File;
 import java.io.OutputStreamWriter;
-import org.telegram.messenger.time.FastDateFormat;
-import top.qwq2333.nullgram.utils.LogUtilsKt;
+
+import top.qwq2333.nullgram.utils.LogUtils;
 
 /**
- * @deprecated use {@link LogUtilsKt} instead
+ * @deprecated use {@link LogUtils} instead
  */
 @Deprecated
 public class FileLog {
@@ -101,23 +103,23 @@ public class FileLog {
     }
 
     /**
-     * @deprecated use {@link LogUtilsKt#e(String, Throwable)} instead
+     * @deprecated use {@link LogUtils#e(String, Throwable)} instead
      */
     @Deprecated
     public static void e(final String message, final Throwable exception) {
-        LogUtilsKt.e(message, exception);
+        LogUtils.e(message, exception);
     }
 
     /**
-     * @deprecated use {@link LogUtilsKt#e(String msg)} instead
+     * @deprecated use {@link LogUtils#e(String msg)} instead
      */
     @Deprecated
     public static void e(final String message) {
-        LogUtilsKt.e(message);
+        LogUtils.e(message);
     }
 
     /**
-     * @deprecated use {@link LogUtilsKt#e(String, Throwable)} instead
+     * @deprecated use {@link LogUtils#e(String, Throwable)} instead
      */
     @Deprecated
     public static void e(final Throwable e) {
@@ -125,11 +127,11 @@ public class FileLog {
     }
 
     /**
-     * @deprecated use {@link LogUtilsKt#e(String, Throwable)} instead
+     * @deprecated use {@link LogUtils#e(String, Throwable)} instead
      */
     @Deprecated
     public static void e(final Throwable e, boolean logToAppCenter) {
-        LogUtilsKt.e(e);
+        LogUtils.e(e);
     }
 
     /**
@@ -138,15 +140,15 @@ public class FileLog {
      */
     @Deprecated
     public static void d(final String message) {
-        LogUtilsKt.d(message);
+        LogUtils.d(message);
     }
 
     /**
-     * @deprecated use {@link LogUtilsKt#w(String msg)} )} instead
+     * @deprecated use {@link LogUtils#w(String msg)} )} instead
      */
     @Deprecated
     public static void w(final String message) {
-        LogUtilsKt.w(message);
+        LogUtils.w(message);
     }
 
     /**

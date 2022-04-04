@@ -27,6 +27,8 @@
 -keep class com.google.android.exoplayer2.metadata.flac.PictureFrame { *; }
 -keep class com.google.android.exoplayer2.decoder.SimpleOutputBuffer { *; }
 
+-keepnames class org.telegram.tgnet.TLRPC$TL_* {}
+
 -dontwarn org.dizitart.no2.**  
 -dontwarn org.slf4j.** 
 -dontwarn org.h2.** 

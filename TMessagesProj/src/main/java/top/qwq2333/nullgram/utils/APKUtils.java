@@ -39,7 +39,7 @@ public class APKUtils {
             ZipEntry entry = entries.nextElement();
             String name = entry.getName();
             if (name.contains("lib")) {
-                LogUtilsKt.i("getAbi: " + entry.getName().split("/")[1]);
+                LogUtils.i("getAbi: " + entry.getName().split("/")[1]);
                 return entry.getName().split("/")[1];
             }
         }

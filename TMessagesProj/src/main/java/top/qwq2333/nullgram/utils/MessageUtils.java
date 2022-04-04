@@ -327,7 +327,7 @@ public class MessageUtils extends BaseController {
                     AndroidUtilities.runOnUIThread(callback);
                 }
             } catch (Exception e) {
-                LogUtilsKt.e(e);
+                LogUtils.e(e);
             }
         });
     }
@@ -417,7 +417,7 @@ public class MessageUtils extends BaseController {
             QRCodeWriter writer = new QRCodeWriter();
             return writer.encode(key, 768, 768, hints, null);
         } catch (Exception e) {
-            LogUtilsKt.e(e);
+            LogUtils.e(e);
         }
         return null;
     }

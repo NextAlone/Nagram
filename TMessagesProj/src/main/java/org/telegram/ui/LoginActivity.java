@@ -162,7 +162,7 @@ import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.ui.BottomBuilder;
 import top.qwq2333.nullgram.ui.EditTextAutoFill;
 import top.qwq2333.nullgram.utils.Defines;
-import top.qwq2333.nullgram.utils.LogUtilsKt;
+import top.qwq2333.nullgram.utils.LogUtils;
 import top.qwq2333.nullgram.utils.NumberUtils;
 import top.qwq2333.nullgram.utils.StringUtils;
 
@@ -2732,9 +2732,9 @@ public class LoginActivity extends BaseFragment {
                     break;
 
             }
-            LogUtilsKt.i("customAPI:" + ConfigManager.getIntOrDefault(Defines.customAPI,Defines.disableCustomAPI));
-            LogUtilsKt.i("appID:" + appId);
-            LogUtilsKt.i("appHash:" + appHash);
+            LogUtils.i("customAPI:" + ConfigManager.getIntOrDefault(Defines.customAPI,Defines.disableCustomAPI));
+            LogUtils.i("appID:" + appId);
+            LogUtils.i("appHash:" + appHash);
             req.api_hash = appHash;
             req.api_id = appId;
             req.phone_number = phone;
