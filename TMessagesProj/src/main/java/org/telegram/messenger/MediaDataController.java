@@ -1223,7 +1223,7 @@ public class MediaDataController extends BaseController {
     }
 
     public void loadFeaturedStickers(boolean cache, boolean force) {
-        if (ConfigManager.getBooleanOrFalse(Defines.disableTrendingSticker) || loadingFeaturedStickers) {
+        if (ConfigManager.getBooleanOrFalse(Defines.disableTrendingSticker) || getUserConfig().getCurrentUser().bot || loadingFeaturedStickers) {
             return;
         }
         loadingFeaturedStickers = true;
