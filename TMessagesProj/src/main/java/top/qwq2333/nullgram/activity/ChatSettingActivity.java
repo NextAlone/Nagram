@@ -85,6 +85,7 @@ public class ChatSettingActivity extends BaseFragment {
     private int maxRecentStickerRow;
     private int unreadBadgeOnBackButtonRow;
     private int ignoreReactionMentionRow;
+    private int showForwardDateRow;
     private int chat2Row;
 
 
@@ -236,6 +237,13 @@ public class ChatSettingActivity extends BaseFragment {
                         ConfigManager.getBooleanOrFalse(Defines.ignoreReactionMention)
                     );
                 }
+            } else if (position == showForwardDateRow) {
+                ConfigManager.toggleBoolean(Defines.dateOfForwardedMsg);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(
+                        ConfigManager.getBooleanOrFalse(Defines.dateOfForwardedMsg)
+                    );
+                }
             }
         });
 
@@ -287,6 +295,7 @@ public class ChatSettingActivity extends BaseFragment {
         maxRecentStickerRow = rowCount++;
         unreadBadgeOnBackButtonRow = rowCount++;
         ignoreReactionMentionRow = rowCount++;
+        showForwardDateRow = rowCount++;
         chat2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -507,6 +516,12 @@ public class ChatSettingActivity extends BaseFragment {
                             LocaleController.getString("ignoreReactionMentionInfo", R.string.ignoreReactionMentionInfo),
                             ConfigManager.getBooleanOrFalse(Defines.ignoreReactionMention),
                             true, true);
+                    } else if (position == showForwardDateRow) {
+                        textCell.setTextAndCheck(
+                            LocaleController.getString("showForwardDate",
+                                R.string.showForwardDate),
+                            ConfigManager.getBooleanOrFalse(Defines.dateOfForwardedMsg),
+                            true);
                     }
                     break;
                 }

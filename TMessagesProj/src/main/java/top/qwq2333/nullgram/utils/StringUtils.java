@@ -45,7 +45,6 @@ public class StringUtils {
      * @return 是否空白符
      * @see Character#isWhitespace(int)
      * @see Character#isSpaceChar(int)
-     * @since 4.0.10
      */
     public static boolean isBlankChar(int c) {
         return Character.isWhitespace(c) || Character.isSpaceChar(c) || c == '\ufeff' || c == '\u202a' || c == '\u0000';
@@ -59,7 +58,6 @@ public class StringUtils {
      * @return 是否空白符
      * @see Character#isWhitespace(int)
      * @see Character#isSpaceChar(int)
-     * @since 4.0.10
      */
     public static boolean isBlankChar(char c) {
         return isBlankChar((int) c);

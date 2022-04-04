@@ -5109,4 +5109,5 @@
     <string name="ReportChatPersonalDetails">Personal Details</string>
     <string name="PrivacyPhoneInfo4">This public link opens a chat with you:</string>
     <string name="keepFormatting">Keep text formatting when copy</string>
+    <string name="showForwardDate">Show date of forwarded message</string>
 </resources>

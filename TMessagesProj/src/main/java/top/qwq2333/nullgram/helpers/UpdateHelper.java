@@ -94,7 +94,7 @@ public class UpdateHelper {
                     }
                     if (releaseChannel < Defines.ciChannel && metaData.versionName.contains(
                         "preview")) {
-                        LogUtilsKt.i("Current Release Channe" + ConfigManager.getIntOrDefault(Defines.updateChannel, -1));
+                        LogUtilsKt.i("Current Release Channel: " + ConfigManager.getIntOrDefault(Defines.updateChannel, -1));
                         LogUtilsKt.i("Found preview metaData, but ignore.");
                         continue;
                     }
