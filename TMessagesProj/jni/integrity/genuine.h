@@ -7,7 +7,6 @@
 #define GOOGLE_PLAY_SIZE 0x058d
 #define GOOGLE_PLAY_HASH 0x8302fcc7
 
-#ifdef NDEBUG
 /* genuine false handler */
 #define GENUINE_FALSE_CRASH
 // #define GENUINE_FALSE_NATIVE
@@ -25,11 +24,11 @@
 // #define GENUINE_ODEX_NATIVE
 
 /* genuine dex handler */
-// #define GENUINE_DEX_CRASH
+#define GENUINE_DEX_CRASH
 // #define GENUINE_DEX_NATIVE
 
 /* genuine proxy handler */
-// #define GENUINE_PROXY_CRASH
+#define GENUINE_PROXY_CRASH
 // #define GENUINE_PROXY_NATIVE
 
 /* genuine error handler */
@@ -43,6 +42,5 @@
 /* genuine noapk handler */
 #define GENUINE_NOAPK_CRASH
 // #define GENUINE_NOAPK_NATIVE
-#endif
 
 bool checkGenuine(JNIEnv *env);

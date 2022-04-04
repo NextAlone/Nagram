@@ -153,7 +153,7 @@ public class GeneralSettingActivity extends BaseFragment {
                 }
                 getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
                 listAdapter.notifyItemChanged(drawerRow, new Object());
-            }  else if (position == showExactNumberRow) {
+            } else if (position == showExactNumberRow) {
                 ConfigManager.toggleBoolean(Defines.showExactNumber);
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(
@@ -213,8 +213,6 @@ public class GeneralSettingActivity extends BaseFragment {
     private void updateRows() {
         rowCount = 0;
 
-        generalRow = rowCount++;
-
         drawerRow = rowCount++;
         avatarAsDrawerBackgroundRow = rowCount++;
         if (ConfigManager.getBooleanOrFalse(Defines.avatarAsDrawerBackground)) {
@@ -227,6 +225,7 @@ public class GeneralSettingActivity extends BaseFragment {
         hidePhoneRow = rowCount++;
         drawer2Row = rowCount++;
 
+        generalRow = rowCount++;
         showBotAPIRow = rowCount++;
         showExactNumberRow = rowCount++;
         disableInstantCameraRow = rowCount++;
@@ -474,6 +473,7 @@ public class GeneralSettingActivity extends BaseFragment {
                     RecyclerView.LayoutParams.WRAP_CONTENT));
             return new RecyclerListView.Holder(view);
         }
+
         @Override
         public int getItemViewType(int position) {
             if (position == general2Row || position == drawer2Row) {
