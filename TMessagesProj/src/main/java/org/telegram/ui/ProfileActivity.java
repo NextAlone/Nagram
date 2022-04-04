@@ -2984,76 +2984,72 @@ public class ProfileActivity extends BaseFragment implements
             } else if (position == setAvatarRow) {
                 onWriteButtonClick();
             } else if (position == versionRow) {
-                    TextInfoPrivacyCell cell = (TextInfoPrivacyCell) view;
+                TextInfoPrivacyCell cell = (TextInfoPrivacyCell) view;
 
-                    BottomBuilder builder = new BottomBuilder(getParentActivity());
-                    String message = cell.getTextView().getText().toString();
-                    builder.addTitle(message);
-                    String finalMessage = message;
-                    builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.msg_copy, (it) -> {
-                        AndroidUtilities.addToClipboard(finalMessage);
-                        AlertUtil.showToast(LocaleController.getString("TextCopied", R.string.TextCopied));
-                        return Unit.INSTANCE;
-                    });
-                    builder.addItem(LocaleController.getString("SwitchVersion", R.string.SwitchVersion), R.drawable.msg_replace, (it) -> {
-                        Browser.openUrl(ProfileActivity.this.getParentActivity(), "https://github.com/qwq233/Nullgram/releases");
-                        return Unit.INSTANCE;
-                    });
-                        builder.addItem(LocaleController.getString("CheckUpdate", R.string.CheckUpdate), R.drawable.menu_search, (it) -> {
-                            Browser.openUrl(context, "tg://update");
-                            return Unit.INSTANCE;
-                        });
+                BottomBuilder builder = new BottomBuilder(getParentActivity());
+                String message = cell.getTextView().getText().toString();
+                builder.addTitle(message);
+                String finalMessage = message;
+                builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.msg_copy, (it) -> {
+                    AndroidUtilities.addToClipboard(finalMessage);
+                    AlertUtil.showToast(LocaleController.getString("TextCopied", R.string.TextCopied));
+                    return Unit.INSTANCE;
+                });
+                builder.addItem(LocaleController.getString("CheckUpdate", R.string.CheckUpdate), R.drawable.menu_search, (it) -> {
+                    Browser.openUrl(context, "tg://update");
+                    return Unit.INSTANCE;
+                });
 
-                        String currentChannel = " - ";
-                        int currentUpdateChannel;
-                        switch (ConfigManager.getIntOrDefault(Defines.updateChannel, -1)) {
-                            case Defines.disableAutoUpdate:
-                                currentUpdateChannel = Defines.disableAutoUpdate;
-                                currentChannel += LocaleController.getString("AutoCheckUpdateOFF", R.string.AutoCheckUpdateOFF);
-                                break;
-                            case Defines.stableChannel:
-                                currentUpdateChannel = Defines.stableChannel;
-                                currentChannel += LocaleController.getString("AutoCheckUpdateStable", R.string.AutoCheckUpdateStable);
-                                break;
-                            case Defines.ciChannel:
-                                currentUpdateChannel = Defines.ciChannel;
-                                currentChannel += LocaleController.getString("AutoCheckUpdatePreview", R.string.AutoCheckUpdatePreview);
-                                break;
-                            default:
-                                if (BuildConfig.VERSION_NAME.contains("preview")) {
-                                    currentUpdateChannel = Defines.ciChannel;
-                                    currentChannel += LocaleController.getString("AutoCheckUpdatePreview", R.string.AutoCheckUpdatePreview);
+                String currentChannel = " - ";
+                int currentUpdateChannel;
+                switch (ConfigManager.getIntOrDefault(Defines.updateChannel, -1)) {
+                    case Defines.disableAutoUpdate:
+                        currentUpdateChannel = Defines.disableAutoUpdate;
+                        currentChannel += LocaleController.getString("AutoCheckUpdateOFF", R.string.AutoCheckUpdateOFF);
+                        break;
+                    case Defines.stableChannel:
+                        currentUpdateChannel = Defines.stableChannel;
+                        currentChannel += LocaleController.getString("AutoCheckUpdateStable", R.string.AutoCheckUpdateStable);
+                        break;
+                    case Defines.ciChannel:
+                        currentUpdateChannel = Defines.ciChannel;
+                        currentChannel += LocaleController.getString("AutoCheckUpdatePreview", R.string.AutoCheckUpdatePreview);
+                        break;
+                    default:
+                        if (BuildConfig.VERSION_NAME.contains("preview")) {
+                            currentUpdateChannel = Defines.ciChannel;
+                            currentChannel += LocaleController.getString("AutoCheckUpdatePreview", R.string.AutoCheckUpdatePreview);
 
-                                } else {
-                                    currentUpdateChannel = Defines.stableChannel;
-                                    currentChannel += LocaleController.getString("AutoCheckUpdateStable", R.string.AutoCheckUpdateStable);
-                                }
+                        } else {
+                            currentUpdateChannel = Defines.stableChannel;
+                            currentChannel += LocaleController.getString("AutoCheckUpdateStable", R.string.AutoCheckUpdateStable);
                         }
+                }
 
-                        builder.addItem(LocaleController.getString("AutoCheckUpdateSwitch", R.string.AutoCheckUpdateSwitch) + currentChannel, R.drawable.baseline_system_update_24, (it) -> {
-                            BottomBuilder switchBuilder = new BottomBuilder(getParentActivity());
-                            switchBuilder.addTitle(LocaleController.getString("AutoCheckUpdateSwitch", R.string.AutoCheckUpdateSwitch));
-                            switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdateOFF", R.string.AutoCheckUpdateOFF), currentUpdateChannel == Defines.disableAutoUpdate, (radioButtonCell) -> {
-                                ConfigManager.putInt(Defines.updateChannel,Defines.disableAutoUpdate);
-                                switchBuilder.doRadioCheck(radioButtonCell);
-                                return Unit.INSTANCE;
-                            });
-                            switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdateStable", R.string.AutoCheckUpdateStable), currentUpdateChannel == Defines.stableChannel, (radioButtonCell) -> {
-                                ConfigManager.putInt(Defines.updateChannel,Defines.stableChannel);
-                                switchBuilder.doRadioCheck(radioButtonCell);
-                                return Unit.INSTANCE;
-                            });
-                            switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdatePreview", R.string.AutoCheckUpdatePreview), currentUpdateChannel == Defines.ciChannel, (radioButtonCell) -> {
-                                ConfigManager.putInt(Defines.updateChannel,Defines.ciChannel);
-                                switchBuilder.doRadioCheck(radioButtonCell);
-                                return Unit.INSTANCE;
-                            });
-                            showDialog(switchBuilder.create());
-                            return Unit.INSTANCE;
-                        });
+                builder.addItem(LocaleController.getString("AutoCheckUpdateSwitch", R.string.AutoCheckUpdateSwitch) + currentChannel, R.drawable.baseline_system_update_24, (it) -> {
+                    BottomBuilder switchBuilder = new BottomBuilder(getParentActivity());
+                    switchBuilder.addTitle(LocaleController.getString("AutoCheckUpdateSwitch", R.string.AutoCheckUpdateSwitch));
+                    switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdateOFF", R.string.AutoCheckUpdateOFF), currentUpdateChannel == Defines.disableAutoUpdate, (radioButtonCell) -> {
+                        ConfigManager.putInt(Defines.updateChannel, Defines.disableAutoUpdate);
+                        switchBuilder.doRadioCheck(radioButtonCell);
+                        return Unit.INSTANCE;
+                    });
+                    switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdateStable", R.string.AutoCheckUpdateStable), currentUpdateChannel == Defines.stableChannel, (radioButtonCell) -> {
+                        ConfigManager.putInt(Defines.updateChannel, Defines.stableChannel);
+                        switchBuilder.doRadioCheck(radioButtonCell);
+                        return Unit.INSTANCE;
+                    });
+                    switchBuilder.addRadioItem(LocaleController.getString("AutoCheckUpdatePreview", R.string.AutoCheckUpdatePreview), currentUpdateChannel == Defines.ciChannel, (radioButtonCell) -> {
+                        ConfigManager.putInt(Defines.updateChannel, Defines.ciChannel);
+                        switchBuilder.doRadioCheck(radioButtonCell);
+                        return Unit.INSTANCE;
+                    });
+                    showDialog(switchBuilder.create());
+                    return Unit.INSTANCE;
+                });
 
-                    builder.show();
-                } else {
+                builder.show();
+            } else {
                 processOnClickOrPress(position, view);
             }
         });
@@ -8038,7 +8034,7 @@ public class ProfileActivity extends BaseFragment implements
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view;
+            View view = null;
             switch (viewType) {
                 case VIEW_TYPE_HEADER: {
                     view = new HeaderCell(mContext, 23);
@@ -8170,8 +8166,7 @@ public class ProfileActivity extends BaseFragment implements
                     view = sharedMediaLayout;
                     break;
                 }
-                case VIEW_TYPE_VERSION:
-                default: {
+                case VIEW_TYPE_VERSION: {
                     TextInfoPrivacyCell cell = new TextInfoPrivacyCell(mContext, 10);
                     cell.getTextView().setGravity(Gravity.CENTER_HORIZONTAL);
                     cell.getTextView()
@@ -8198,6 +8193,9 @@ public class ProfileActivity extends BaseFragment implements
                     view.setBackgroundDrawable(
                         Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom,
                             Theme.key_windowBackgroundGrayShadow));
+                    break;
+                }
+                default: {
                     break;
                 }
                 case VIEW_TYPE_SUGGESTION: {
