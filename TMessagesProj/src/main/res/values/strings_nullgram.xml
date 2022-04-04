@@ -130,4 +130,8 @@
     <string name="TestBackend">Test Backend</string>
     <string name="notAllowedWhenChannelAliasIsEnabled">You cannot disable it when Channel Alias is enabled!</string>
     <string name="unreadBadgeOnBackButton">Unread Badge on Back Button</string>
+    <string name="keepFormatting">Keep text formatting when copy</string>
+    <string name="showForwardDate">Show date of forwarded message</string>
+    <string name="enchantAudio">Enchant Audio Quality</string>
+    <string name="enchantAudioDetails">This feature is supported by Android\'s audio system.\nWe do not guarantee major changes in sound quality.</string>
 </resources>

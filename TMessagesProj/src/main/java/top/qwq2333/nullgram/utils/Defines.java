@@ -55,6 +55,7 @@ public class Defines {
     public static final String stickerSize = "customStickerSize";
     public static final String keepCopyFormatting = "keepCopyFormatting";
     public static final String dateOfForwardedMsg = "dateOfForwardedMsg";
+    public static final String enchantAudio = "enchantAudio";
 
     // Custom API
     public static final String customAPI = "customAPI";

@@ -47,6 +47,7 @@ public class ExperimentSettingActivity extends BaseFragment {
     private int syntaxHighlightRow;
     private int aliasChannelRow;
     private int keepFormattingRow;
+    private int enchantAudioRow;
     private int experiment2Row;
 
 
@@ -119,6 +120,12 @@ public class ExperimentSettingActivity extends BaseFragment {
                     ((TextCheckCell) view).setChecked(
                         ConfigManager.getBooleanOrFalse(Defines.keepCopyFormatting));
                 }
+            } else if (position == enchantAudioRow) {
+                ConfigManager.toggleBoolean(Defines.enchantAudio);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(
+                        ConfigManager.getBooleanOrFalse(Defines.enchantAudio));
+                }
             }
         });
 
@@ -144,6 +151,7 @@ public class ExperimentSettingActivity extends BaseFragment {
         syntaxHighlightRow = rowCount++;
         aliasChannelRow = rowCount++;
         keepFormattingRow = rowCount++;
+        enchantAudioRow = rowCount++;
         experiment2Row = rowCount++;
 
         if (listAdapter != null) {
@@ -303,7 +311,14 @@ public class ExperimentSettingActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("keepFormatting",
                             R.string.keepFormatting), ConfigManager.getBooleanOrFalse(
                             Defines.keepCopyFormatting), true);
-
+                    } else if (position == enchantAudioRow) {
+                        textCell.setTextAndValueAndCheck(
+                            LocaleController.getString("enchantAudioRow",
+                                R.string.enchantAudio),
+                            LocaleController.getString("enchantAudioDetails",
+                                R.string.enchantAudioDetails),
+                            ConfigManager.getBooleanOrFalse(Defines.enchantAudio), true,
+                            true);
                     }
                     break;
                 }
