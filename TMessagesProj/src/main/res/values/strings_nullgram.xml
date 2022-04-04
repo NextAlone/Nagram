@@ -134,4 +134,7 @@
     <string name="showForwardDate">Show date of forwarded message</string>
     <string name="enchantAudio">Enchant Audio Quality</string>
     <string name="enchantAudioDetails">This feature is supported by Android\'s audio system.\nWe do not guarantee major changes in sound quality.</string>
+    <string name="AvatarAsBackground">Profile picture as background</string>
+    <string name="BlurAvatarBackground">Blur profile picture</string>
+    <string name="DarkenAvatarBackground">Darken profile picture</string>
 </resources>

@@ -135,27 +135,27 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     }
 
     private static final String[] projectionPhotos = {
-            MediaStore.Images.Media._ID,
-            MediaStore.Images.Media.BUCKET_ID,
-            MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
-            MediaStore.Images.Media.DATA,
-            Build.VERSION.SDK_INT > 28 ? MediaStore.Images.Media.DATE_MODIFIED : MediaStore.Images.Media.DATE_TAKEN,
-            MediaStore.Images.Media.ORIENTATION,
-            MediaStore.Images.Media.WIDTH,
-            MediaStore.Images.Media.HEIGHT,
-            MediaStore.Images.Media.SIZE
+        MediaStore.Images.Media._ID,
+        MediaStore.Images.Media.BUCKET_ID,
+        MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+        MediaStore.Images.Media.DATA,
+        Build.VERSION.SDK_INT > 28 ? MediaStore.Images.Media.DATE_MODIFIED : MediaStore.Images.Media.DATE_TAKEN,
+        MediaStore.Images.Media.ORIENTATION,
+        MediaStore.Images.Media.WIDTH,
+        MediaStore.Images.Media.HEIGHT,
+        MediaStore.Images.Media.SIZE
     };
 
     private static final String[] projectionVideo = {
-            MediaStore.Video.Media._ID,
-            MediaStore.Video.Media.BUCKET_ID,
-            MediaStore.Video.Media.BUCKET_DISPLAY_NAME,
-            MediaStore.Video.Media.DATA,
-            Build.VERSION.SDK_INT > 28 ? MediaStore.Images.Media.DATE_MODIFIED : MediaStore.Video.Media.DATE_TAKEN,
-            MediaStore.Video.Media.DURATION,
-            MediaStore.Video.Media.WIDTH,
-            MediaStore.Video.Media.HEIGHT,
-            MediaStore.Video.Media.SIZE
+        MediaStore.Video.Media._ID,
+        MediaStore.Video.Media.BUCKET_ID,
+        MediaStore.Video.Media.BUCKET_DISPLAY_NAME,
+        MediaStore.Video.Media.DATA,
+        Build.VERSION.SDK_INT > 28 ? MediaStore.Images.Media.DATE_MODIFIED : MediaStore.Video.Media.DATE_TAKEN,
+        MediaStore.Video.Media.DURATION,
+        MediaStore.Video.Media.WIDTH,
+        MediaStore.Video.Media.HEIGHT,
+        MediaStore.Video.Media.SIZE
     };
 
     public static class AudioEntry {
@@ -952,13 +952,13 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         });
 
         mediaProjections = new String[]{
-                MediaStore.Images.ImageColumns.DATA,
-                MediaStore.Images.ImageColumns.DISPLAY_NAME,
-                MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,
-                Build.VERSION.SDK_INT > 28 ? MediaStore.Images.ImageColumns.DATE_MODIFIED : MediaStore.Images.ImageColumns.DATE_TAKEN,
-                MediaStore.Images.ImageColumns.TITLE,
-                MediaStore.Images.ImageColumns.WIDTH,
-                MediaStore.Images.ImageColumns.HEIGHT
+            MediaStore.Images.ImageColumns.DATA,
+            MediaStore.Images.ImageColumns.DISPLAY_NAME,
+            MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,
+            Build.VERSION.SDK_INT > 28 ? MediaStore.Images.ImageColumns.DATE_MODIFIED : MediaStore.Images.ImageColumns.DATE_TAKEN,
+            MediaStore.Images.ImageColumns.TITLE,
+            MediaStore.Images.ImageColumns.WIDTH,
+            MediaStore.Images.ImageColumns.HEIGHT
         };
 
         ContentResolver contentResolver = ApplicationLoader.applicationContext.getContentResolver();
@@ -1189,9 +1189,9 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     int photoW = cursor.getInt(5);
                     int photoH = cursor.getInt(6);
                     if (data != null && data.toLowerCase().contains("screenshot") ||
-                            display_name != null && display_name.toLowerCase().contains("screenshot") ||
-                            album_name != null && album_name.toLowerCase().contains("screenshot") ||
-                            title != null && title.toLowerCase().contains("screenshot")) {
+                        display_name != null && display_name.toLowerCase().contains("screenshot") ||
+                        album_name != null && album_name.toLowerCase().contains("screenshot") ||
+                        title != null && title.toLowerCase().contains("screenshot")) {
                         try {
                             if (photoW == 0 || photoH == 0) {
                                 BitmapFactory.Options bmOptions = new BitmapFactory.Options();
@@ -2529,8 +2529,8 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             videoPlayer.setPlaybackSpeed(speed);
         }
         MessagesController.getGlobalMainSettings().edit()
-                .putFloat(music ? "musicPlaybackSpeed" : "playbackSpeed", speed)
-                .putFloat(music ? "fastMusicPlaybackSpeed" : "fastPlaybackSpeed", music ? fastMusicPlaybackSpeed : fastPlaybackSpeed).commit();
+            .putFloat(music ? "musicPlaybackSpeed" : "playbackSpeed", speed)
+            .putFloat(music ? "fastMusicPlaybackSpeed" : "fastPlaybackSpeed", music ? fastMusicPlaybackSpeed : fastPlaybackSpeed).commit();
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.messagePlayingSpeedChanged);
     }
 
@@ -3014,14 +3014,14 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     int reference = FileLoader.getInstance(messageObject.currentAccount).getFileReference(messageObject);
                     TLRPC.Document document = messageObject.getDocument();
                     String params = "?account=" + messageObject.currentAccount +
-                            "&id=" + document.id +
-                            "&hash=" + document.access_hash +
-                            "&dc=" + document.dc_id +
-                            "&size=" + document.size +
-                            "&mime=" + URLEncoder.encode(document.mime_type, "UTF-8") +
-                            "&rid=" + reference +
-                            "&name=" + URLEncoder.encode(FileLoader.getDocumentFileName(document), "UTF-8") +
-                            "&reference=" + Utilities.bytesToHex(document.file_reference != null ? document.file_reference : new byte[0]);
+                        "&id=" + document.id +
+                        "&hash=" + document.access_hash +
+                        "&dc=" + document.dc_id +
+                        "&size=" + document.size +
+                        "&mime=" + URLEncoder.encode(document.mime_type, "UTF-8") +
+                        "&rid=" + reference +
+                        "&name=" + URLEncoder.encode(FileLoader.getDocumentFileName(document), "UTF-8") +
+                        "&reference=" + Utilities.bytesToHex(document.file_reference != null ? document.file_reference : new byte[0]);
                     Uri uri = Uri.parse("tg://" + messageObject.getFileName() + params);
                     videoPlayer.preparePlayer(uri, "other");
                 } catch (Exception e) {
@@ -3117,14 +3117,14 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     int reference = FileLoader.getInstance(messageObject.currentAccount).getFileReference(messageObject);
                     TLRPC.Document document = messageObject.getDocument();
                     String params = "?account=" + messageObject.currentAccount +
-                            "&id=" + document.id +
-                            "&hash=" + document.access_hash +
-                            "&dc=" + document.dc_id +
-                            "&size=" + document.size +
-                            "&mime=" + URLEncoder.encode(document.mime_type, "UTF-8") +
-                            "&rid=" + reference +
-                            "&name=" + URLEncoder.encode(FileLoader.getDocumentFileName(document), "UTF-8") +
-                            "&reference=" + Utilities.bytesToHex(document.file_reference != null ? document.file_reference : new byte[0]);
+                        "&id=" + document.id +
+                        "&hash=" + document.access_hash +
+                        "&dc=" + document.dc_id +
+                        "&size=" + document.size +
+                        "&mime=" + URLEncoder.encode(document.mime_type, "UTF-8") +
+                        "&rid=" + reference +
+                        "&name=" + URLEncoder.encode(FileLoader.getDocumentFileName(document), "UTF-8") +
+                        "&reference=" + Utilities.bytesToHex(document.file_reference != null ? document.file_reference : new byte[0]);
                     Uri uri = Uri.parse("tg://" + messageObject.getFileName() + params);
                     audioPlayer.preparePlayer(uri, "other");
                     isStreamingCurrentAudio = true;

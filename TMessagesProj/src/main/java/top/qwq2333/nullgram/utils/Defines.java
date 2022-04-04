@@ -56,6 +56,9 @@ public class Defines {
     public static final String keepCopyFormatting = "keepCopyFormatting";
     public static final String dateOfForwardedMsg = "dateOfForwardedMsg";
     public static final String enchantAudio = "enchantAudio";
+    public static final String avatarAsDrawerBackground = "avatarAsDrawerBackground";
+    public static final String avatarBackgroundBlur = "avatarBackgroundBlur";
+    public static final String avatarBackgroundDarken = "avatarBackgroundDarken";
 
     // Custom API
     public static final String customAPI = "customAPI";
