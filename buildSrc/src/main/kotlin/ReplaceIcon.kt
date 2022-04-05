@@ -1,7 +1,10 @@
+
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import java.io.File
-import java.util.*
+import java.math.BigInteger
+import java.security.MessageDigest
+import kotlin.random.Random
 
 abstract class ReplaceIcon : DefaultTask() {
     @TaskAction
@@ -13,7 +16,10 @@ abstract class ReplaceIcon : DefaultTask() {
         val fileCount = iconFileDirs.fold(0) { i: Int, file: File ->
             i + file.listFiles()!!.size
         }
-        var number = Random().nextInt(fileCount)
+        val md5 = MessageDigest.getInstance("MD5")
+        val arrays = md5.digest(Common.getGitHeadRefsSuffix(project.rootProject).toByteArray(Charsets.UTF_8))
+        val bigInteger = BigInteger(1, arrays)
+        var number = Random(bigInteger.toInt()).nextInt(fileCount)
 
         //for (aNumber in 0..fileCount) {
         //var number = aNumber
