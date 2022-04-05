@@ -21196,6 +21196,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             options.add(13);
                             icons.add(R.drawable.msg_pin);
                         }
+                        if (message.messageOwner.forwards >= 1 && ChatObject.hasAdminRights(getCurrentChat())) {
+                            items.add(LocaleController.getString("ViewStats", R.string.ViewStats));
+                            options.add(28);
+                            icons.add(R.drawable.msg_stats);
+                        }
                         if (selectedObject != null && selectedObject.contentType == 0 && (messageText != null && messageText.length() > 0 && !selectedObject.isAnimatedEmoji() && !selectedObject.isDice()) && MessagesController.getGlobalMainSettings().getBoolean("translate_button", true)) {
                             items.add(LocaleController.getString("TranslateMessage", R.string.TranslateMessage));
                             options.add(29);
