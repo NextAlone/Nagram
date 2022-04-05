@@ -47,6 +47,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.view.inputmethod.EditorInfo;
+import android.view.HapticFeedbackConstants;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
@@ -94,6 +96,9 @@ import org.telegram.ui.Cells.AudioPlayerCell;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.LaunchActivity;
+import org.telegram.ui.Components.UndoView;
+
+import com.exteragram.messenger.ExteraConfig;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -134,12 +139,14 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     private ActionBarMenuSubItem shuffleListItem;
     private ActionBarMenuSubItem reverseOrderItem;
     private ImageView playButton;
+    private ImageView likeButton;
     private PlayPauseDrawable playPauseDrawable;
     private FrameLayout blurredView;
     private BackupImageView bigAlbumConver;
     private ActionBarMenuItem searchItem;
     private boolean blurredAnimationInProgress;
     private View[] buttons = new View[5];
+    private String ctsIdName;
 
     private boolean draggingSeekBar;
 
@@ -180,7 +187,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     private final static int menu_speed_normal = 2;
     private final static int menu_speed_fast = 3;
     private final static int menu_speed_veryfast = 4;
-
+    
     private final Runnable forwardSeek = new Runnable() {
         @Override
         public void run() {
@@ -238,7 +245,6 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         }
 
         parentActivity = (LaunchActivity) context;
-
         TAG = DownloadController.getInstance(currentAccount).generateObserverTag();
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.messagePlayingDidReset);
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
@@ -567,14 +573,14 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             protected TextView createTextView() {
                 final TextView textView = new TextView(context);
                 textView.setTextColor(getThemedColor(Theme.key_player_actionBarTitle));
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                 textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 textView.setEllipsize(TextUtils.TruncateAt.END);
                 textView.setSingleLine(true);
                 return textView;
             }
         };
-        playerLayout.addView(titleTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, 135, 20, 20, 0));
+        playerLayout.addView(titleTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.LEFT, 135, 20, 40, 0));
 
         authorTextView = new ClippingTextViewSwitcher(context) {
             @Override
@@ -1044,7 +1050,81 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         bottomView.addView(nextButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP));
         nextButton.setContentDescription(LocaleController.getString("Next", R.string.Next));
 
-        buttons[4] = optionsButton = new ActionBarMenuItem(context, null, 0, iconColor, false, resourcesProvider);
+        buttons[4] = likeButton = new ImageView(context);
+        likeButton.setScaleType(ImageView.ScaleType.CENTER);
+        likeButton.setImageResource(R.drawable.actions_reactions);
+        likeButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_player_button), PorterDuff.Mode.MULTIPLY));
+        if (Build.VERSION.SDK_INT >= 21) {
+            likeButton.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector), 1, AndroidUtilities.dp(24)));
+        }
+        bottomView.addView(likeButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP));
+        
+        String ctsId = Long.toString(ExteraConfig.channelToSave);
+        likeButton.setOnLongClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), resourcesProvider);
+            builder.setTitle(LocaleController.getString("EnterID", R.string.EnterID));
+            builder.setMessage(LocaleController.getString("ChannelToSaveDescription", R.string.ChannelToSaveDescription));
+            final EditTextBoldCursor editEnterID = new EditTextBoldCursor(getContext()) {
+                @Override
+                protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                    super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64), MeasureSpec.EXACTLY));
+                }
+            };
+            editEnterID.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+            editEnterID.setText(ctsId);
+            editEnterID.setTextColor(getThemedColor(Theme.key_dialogTextBlack));
+            editEnterID.setHintText("ID");
+            editEnterID.setHeaderHintColor(getThemedColor(Theme.key_windowBackgroundWhiteBlueHeader));
+            editEnterID.setSingleLine(true);
+            editEnterID.setFocusable(true);
+            editEnterID.setTransformHintToHeader(true);
+            editEnterID.setLineColors(getThemedColor(Theme.key_windowBackgroundWhiteInputField), getThemedColor(Theme.key_windowBackgroundWhiteInputFieldActivated), getThemedColor(Theme.key_windowBackgroundWhiteRedText3));
+            editEnterID.setImeOptions(EditorInfo.IME_ACTION_DONE);
+            editEnterID.setBackgroundDrawable(null);
+            editEnterID.requestFocus();
+            editEnterID.setPadding(0, 0, 0, 0);
+            builder.setView(editEnterID);
+            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
+                try {
+                    ExteraConfig.changeChannelToSave(Long.valueOf(editEnterID.getText().toString()));
+                } catch (NumberFormatException exception) {
+                    ExteraConfig.changeChannelToSave(UserConfig.getInstance(currentAccount).getClientUserId());
+                    return;
+                }
+                BulletinFactory.of((FrameLayout) containerView, resourcesProvider).createSimpleBulletin(R.raw.chats_infotip, LocaleController.getString("RestartRequired", R.string.RestartRequired)).show();
+            });
+            builder.setNeutralButton(LocaleController.getString("Default", R.string.Default), (dialogInterface, i) -> {
+                ExteraConfig.changeChannelToSave(UserConfig.getInstance(currentAccount).getClientUserId());
+                BulletinFactory.of((FrameLayout) containerView, resourcesProvider).createSimpleBulletin(R.raw.chats_infotip, LocaleController.getString("RestartRequired", R.string.RestartRequired)).show();
+            });
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            builder.show().setOnShowListener(dialog -> {
+                editEnterID.requestFocus();
+                AndroidUtilities.showKeyboard(editEnterID);
+            });
+            if (editEnterID != null) {
+                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) editEnterID.getLayoutParams();
+                if (layoutParams != null) {
+                    if (layoutParams instanceof FrameLayout.LayoutParams) {
+                        ((FrameLayout.LayoutParams) layoutParams).gravity = Gravity.CENTER_HORIZONTAL;
+                    }
+                    layoutParams.rightMargin = layoutParams.leftMargin = AndroidUtilities.dp(24);
+                    layoutParams.height = AndroidUtilities.dp(36);
+                    editEnterID.setLayoutParams(layoutParams);
+                }
+                editEnterID.setSelection(0, editEnterID.getText().length());
+            }
+            return true;
+        });
+        likeButton.setOnClickListener(v -> {
+            v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+            final ArrayList<MessageObject> likedTrack = new ArrayList<>();
+            likedTrack.add(MediaController.getInstance().getPlayingMessageObject());
+            SendMessagesHelper.getInstance(currentAccount).sendMessage(likedTrack, ExteraConfig.channelToSave, true, true, false, 0);
+            BulletinFactory.of((FrameLayout) containerView, resourcesProvider).createSimpleBulletin(R.raw.ic_save_to_music, LocaleController.getString("TrackSaved", R.string.TrackSaved)).show();
+        });
+        
+        optionsButton = new ActionBarMenuItem(context, null, 0, iconColor, false, resourcesProvider);
         optionsButton.setLongClickEnabled(false);
         optionsButton.setShowSubmenuByMove(false);
         optionsButton.setIcon(R.drawable.ic_ab_other);
@@ -1053,7 +1133,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         if (Build.VERSION.SDK_INT >= 21) {
             optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector), 1, AndroidUtilities.dp(18)));
         }
-        bottomView.addView(optionsButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP));
+        playerLayout.addView(optionsButton, LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.TOP, 0, 7, 0, 0));
         optionsButton.addSubItem(1, R.drawable.msg_forward, LocaleController.getString("Forward", R.string.Forward));
         optionsButton.addSubItem(2, R.drawable.msg_shareout, LocaleController.getString("ShareFile", R.string.ShareFile));
         optionsButton.addSubItem(5, R.drawable.msg_download, LocaleController.getString("SaveToMusic", R.string.SaveToMusic));
@@ -1917,9 +1997,10 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         }
     }
 
-    private void updateCover(MessageObject messageObject, boolean animated) {
+    public void updateCover(MessageObject messageObject, boolean animated) {
         final BackupImageView imageView = animated ? coverContainer.getNextImageView() : coverContainer.getImageView();
         final AudioInfo audioInfo = MediaController.getInstance().getAudioInfo();
+        final Theme.ResourcesProvider resourcesProvider;
         if (audioInfo != null && audioInfo.getCover() != null) {
             imageView.setImageBitmap(audioInfo.getCover());
             currentFile = null;
@@ -1934,9 +2015,8 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                 imageView.setImage(ImageLocation.getForPath(artworkUrl), null, thumbImageLocation, null, null, 0, 1, messageObject);
             } else if (thumbImageLocation != null) {
                 imageView.setImage(null, null, thumbImageLocation, null, null, 0, 1, messageObject);
-            } else {
-                imageView.setImageDrawable(null);
             }
+            if (!imageView.getImageReceiver().hasBitmapImage()) imageView.setImageResource(R.drawable.nocover, Theme.getColor(Theme.key_player_button));
             imageView.invalidate();
         }
         if (animated) {
@@ -2365,7 +2445,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
 
         protected abstract void onImageUpdated(ImageReceiver imageReceiver);
     }
-
+    
     public abstract static class ClippingTextViewSwitcher extends FrameLayout {
 
         private final TextView[] textViews = new TextView[2];

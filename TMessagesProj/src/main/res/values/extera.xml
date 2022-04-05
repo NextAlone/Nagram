@@ -66,6 +66,10 @@
     <string name="LightMonetTheme">Light</string>
     <string name="GMTDescription">This option will generate a theme based on system colors\n\nAfter clicking on the button, select the chat where to save the theme</string>
 
+    <string name="EnterID">Enter the ID</string>
+    <string name="TrackSaved">Track Saved</string>
+    <string name="ChannelToSaveDescription">Enter the ID of the channel/chat/user where the tracks will be saved</string>
+
     <string name="ConfirmCall">Confirm call</string>
     <string name="CallTo">Call to **%1$s**?</string>
 </resources>

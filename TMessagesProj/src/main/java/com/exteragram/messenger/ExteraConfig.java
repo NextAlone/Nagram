@@ -54,6 +54,8 @@ public class ExteraConfig {
     public static boolean scanQr;
     public static boolean inviteFriends;
     public static boolean telegramFeatures;
+    
+    public static long channelToSave = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
 
     private static boolean configLoaded;
 
@@ -109,7 +111,9 @@ public class ExteraConfig {
             scanQr = preferences.getBoolean("scanQr", true);
             inviteFriends = preferences.getBoolean("inviteFriends", false);
             telegramFeatures = preferences.getBoolean("telegramFeatures", true);
-
+            
+            channelToSave = preferences.getLong("channelToSave", UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId());
+            
             configLoaded = true;
         }
     }
@@ -366,6 +370,14 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("telegramFeatures", telegramFeatures);
+        editor.commit();
+    }
+    
+    public static void changeChannelToSave(long id) {
+        channelToSave = id;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putLong("channelToSave", channelToSave);
         editor.commit();
     }
 }
