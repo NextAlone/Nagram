@@ -352,6 +352,7 @@ jobs:
   build-dev:
     name: Gradle Build
     runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'pull_request' && success() }}
     needs:
       - native
       - v2ray
