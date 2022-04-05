@@ -14,6 +14,8 @@ public class ExteraConfig {
 
     private static final Object sync = new Object();
 
+    public static boolean scrollablePreview;
+
     public static boolean useSystemFonts;
     public static boolean disableVibration;
     public static boolean blurForAllThemes;
@@ -67,6 +69,8 @@ public class ExteraConfig {
             }
 
             SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+
+            scrollablePreview = preferences.getBoolean("scrollablePreview", true);
 
             useSystemFonts = preferences.getBoolean("useSystemFonts", false);
             disableVibration = preferences.getBoolean("disableVibration", false);
