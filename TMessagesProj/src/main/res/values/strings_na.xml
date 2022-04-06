@@ -19,4 +19,6 @@
     <string name="SendReactions">Send Reactions</string>
     <string name="ShowReactions">Show Reactions</string>
     <string name="ScrollableChatPreview">Scrollable Chat Preview</string>
+    <string name="CustomTitle">Custom Title</string>
+    <string name="CustomTitleHint">Leave blank to use Nagram</string>
 </resources>

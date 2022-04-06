@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Base64
 import org.telegram.messenger.ApplicationLoader
+import org.telegram.messenger.LocaleController
+import org.telegram.messenger.R
 import tw.nekomimi.nekogram.config.ConfigItem
 import java.io.ByteArrayInputStream
 import java.io.ObjectInputStream
@@ -139,6 +141,11 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val customTitle = addConfig(
+        "CustomTitle",
+        ConfigItem.configTypeString,
+        LocaleController.getString("NekoX", R.string.NekoX)
+    )
 
     fun addConfig(
         k: String,

@@ -19,4 +19,6 @@
     <string name="SendReactions">表情回应</string>
     <string name="ShowReactions">显示表情回应菜单</string>
     <string name="ScrollableChatPreview">可滑动聊天预览</string>
+    <string name="CustomTitle">自定义标题</string>
+    <string name="CustomTitleHint">留空则使用Nagram</string>
 </resources>
