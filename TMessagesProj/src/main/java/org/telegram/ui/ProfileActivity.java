@@ -3117,6 +3117,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (avatarBig != null) {
                 return;
             }
+            openAvatar();
+            return;
+        });
+        avatarImage.setOnLongClickListener(v -> {
+            if (avatarBig != null) {
+                return false;
+            }
             if (!AndroidUtilities.isTablet() && !isInLandscapeMode && avatarImage.getImageReceiver().hasNotThumb()) {
                 openingAvatar = true;
                 allowPullingDown = true;
@@ -3133,16 +3140,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         Integer offset = positionToOffset.get(holder.getAdapterPosition());
                         if (offset != null) {
                             listView.smoothScrollBy(0, -(offset + (listView.getPaddingTop() - child.getTop() - actionBar.getMeasuredHeight())), CubicBezierInterpolator.EASE_OUT_QUINT);
-                            return;
+                            return true;
                         }
                     }
                 }
-            }
-            openAvatar();
-        });
-        avatarImage.setOnLongClickListener(v -> {
-            if (avatarBig != null) {
-                return false;
             }
             openAvatar();
             return false;
