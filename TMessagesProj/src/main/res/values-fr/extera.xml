@@ -25,7 +25,6 @@
     <string name="SystemEmoji">Utiliser les émojis du système</string>
     <string name="HideAllChats">Masquer l\'onglet \"Toutes les discussions\"</string>
     <string name="HidePhoneNumber">Cacher le numéro de téléphone</string>
-    <string name="HideProxySponsor">Cacher le sponsor du proxy</string>
     <string name="ChatsOnTitle">\"Chats\" au lieu de \"exteraGram\"</string>
     <string name="ShowID">Afficher dans le profil</string>
     <string name="SB">Barre d\'état transparente</string>

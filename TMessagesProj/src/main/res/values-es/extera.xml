@@ -27,7 +27,6 @@
 
     <string name="HideAllChats">Ocultar la carpeta \"Todos\"</string>
     <string name="HidePhoneNumber">Ocultar mi número de teléfono</string>
-    <string name="HideProxySponsor">Ocultar patrocinador del proxy</string>
     <string name="ChatsOnTitle">\"Chats\" en lugar de \"exteraGram\"</string>
     <string name="ShowID">Mostrar ID en el perfil</string>
     <string name="SB">Barra de estado transparente</string>

@@ -25,7 +25,6 @@
     <string name="SystemEmoji">システムの絵文字を使う</string>
     <string name="HideAllChats">「すべてのチャット」タブを隠す</string>
     <string name="HidePhoneNumber">電話番号</string>
-    <string name="HideProxySponsor">プロキシスポンサーを隠す</string>
     <string name="ChatsOnTitle">\"exteraGram\" の代わりに \"チャット\"</string>
     <string name="ShowID">一般プロファイルを表示</string>
     <string name="SB">透明なステータス バー</string>

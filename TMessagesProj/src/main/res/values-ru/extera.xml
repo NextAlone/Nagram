@@ -24,7 +24,6 @@
     <string name="BlurForAllThemes">Размытие во всех темах</string>
 
     <string name="HideAllChats">Скрыть \"Все чаты\"</string>
-    <string name="HideProxySponsor">Скрыть спонсора прокси</string>
     <string name="HidePhoneNumber">Скрыть номер телефона</string>
     <string name="ShowID">Показывать ID в профиле</string>
     <string name="ChatsOnTitle">\"Чаты\" вместо \"exteraGram\"</string>

@@ -45,7 +45,6 @@ public class AppearancePreferencesEntry extends BaseFragment {
 
     private int generalHeaderRow;
     private int hideAllChatsRow;
-    private int hideProxySponsorRow;
     private int hidePhoneNumberRow;
     private int showIDRow;
     private int chatsOnTitleRow;
@@ -138,11 +137,6 @@ public class AppearancePreferencesEntry extends BaseFragment {
                     ((TextCheckCell) view).setChecked(ExteraConfig.hideAllChats);
                 }
                 restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
-            } else if (position == hideProxySponsorRow) {
-                ExteraConfig.toggleHideProxySponsor();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.hideProxySponsor);
-                }
             } else if (position == hidePhoneNumberRow) {
                 ExteraConfig.toggleHidePhoneNumber();
                 if (view instanceof TextCheckCell) {
@@ -192,7 +186,6 @@ public class AppearancePreferencesEntry extends BaseFragment {
 
         generalHeaderRow = rowCount++;
         hideAllChatsRow = rowCount++;
-        hideProxySponsorRow = rowCount++;
         hidePhoneNumberRow = rowCount++;
         showIDRow = rowCount++;
         chatsOnTitleRow = rowCount++;
@@ -253,8 +246,6 @@ public class AppearancePreferencesEntry extends BaseFragment {
                         textCheckCell.setTextAndCheck(LocaleController.getString("BlurForAllThemes", R.string.BlurForAllThemes), ExteraConfig.blurForAllThemes, false);
                     } else if (position == hideAllChatsRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("HideAllChats", R.string.HideAllChats), ExteraConfig.hideAllChats, true);
-                    } else if (position == hideProxySponsorRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("HideProxySponsor", R.string.HideProxySponsor), ExteraConfig.hideProxySponsor, true);
                     } else if (position == hidePhoneNumberRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("HidePhoneNumber", R.string.HidePhoneNumber), ExteraConfig.hidePhoneNumber, true);
                     } else if (position == showIDRow) {
@@ -304,9 +295,9 @@ public class AppearancePreferencesEntry extends BaseFragment {
             } else if (position == applicationHeaderRow || position == generalHeaderRow) {
                 return 2;
             } else if (position == useSystemFontsRow || position == useSystemEmojiRow || position == transparentStatusBarRow ||
-                       position == blurForAllThemesRow || position == hideAllChatsRow || position == hideProxySponsorRow ||
-                       position == hidePhoneNumberRow || position == showIDRow || position == chatsOnTitleRow ||
-                       position == disableVibrationRow || position == forceTabletModeRow) {
+                       position == blurForAllThemesRow || position == hideAllChatsRow || position == hidePhoneNumberRow ||
+                       position == showIDRow || position == chatsOnTitleRow || position == disableVibrationRow ||
+                       position == disableVibrationRow) {
                 return 3;
             }
             return 1;

@@ -21,7 +21,6 @@ public class ExteraConfig {
     public static boolean blurForAllThemes;
 
     public static boolean hideAllChats;
-    public static boolean hideProxySponsor;
     public static boolean hidePhoneNumber;
     public static boolean showID;
     public static boolean chatsOnTitle;
@@ -77,7 +76,6 @@ public class ExteraConfig {
             blurForAllThemes = preferences.getBoolean("blurForAllThemes", true);
 
             hideAllChats = preferences.getBoolean("hideAllChats", false);
-            hideProxySponsor = preferences.getBoolean("hideProxySponsor", true);
             hidePhoneNumber = preferences.getBoolean("hidePhoneNumber", false);
             showID = preferences.getBoolean("showID", false);
             chatsOnTitle = preferences.getBoolean("chatsOnTitle", true);
@@ -145,14 +143,6 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("hideAllChats", hideAllChats);
-        editor.commit();
-    }
-
-    public static void toggleHideProxySponsor() {
-        hideProxySponsor = !hideProxySponsor;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("hideProxySponsor", hideProxySponsor);
         editor.commit();
     }
 

@@ -25,7 +25,6 @@
     <string name="SystemEmoji">使用系统Emoji</string>
     <string name="HideAllChats">隐藏“全部对话”栏</string>
     <string name="HidePhoneNumber">隐藏手机号码</string>
-    <string name="HideProxySponsor">隐藏代理赞助频道</string>
     <string name="ChatsOnTitle">主标题显示为“对话”</string>
     <string name="ShowID">个人资料显示ID</string>
     <string name="SB">使用完全透明的状态栏</string>

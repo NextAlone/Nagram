@@ -5766,11 +5766,6 @@ public class MessagesController extends BaseController implements NotificationCe
             } else if (response instanceof TLRPC.TL_help_promoData) {
                 TLRPC.TL_help_promoData res = (TLRPC.TL_help_promoData) response;
 
-                if (ExteraConfig.hideProxySponsor) {
-                    noDialog = true;
-                    return;
-                }
-
                 long did;
                 if (res.peer.user_id != 0) {
                     did = res.peer.user_id;
