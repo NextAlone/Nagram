@@ -1,4 +1,4 @@
-package com.exteragram.messenger.preferences;
+package com.exteragram.messenger.preferences.cells;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

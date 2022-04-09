@@ -6,7 +6,7 @@
  * Copyright @immat0x1, 2022
  */
 
-package com.exteragram.messenger.preferences;
+package com.exteragram.messenger.preferences.cells;
 
 import android.content.Context;
 import android.graphics.Canvas;

@@ -36,6 +36,7 @@ import org.telegram.ui.Components.SeekBarView;
 import org.telegram.ui.Components.UndoView;
 
 import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.preferences.cells.StickerSizePreviewCell;
 
 public class ChatsPreferencesEntry extends BaseFragment {
 

@@ -26,6 +26,8 @@ import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
+import com.exteragram.messenger.preferences.cells.InfoSettingsCell;
+
 public class MainPreferencesEntry extends BaseFragment {
     private int rowCount;
     private ListAdapter listAdapter;
