@@ -21332,17 +21332,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             Rect rect = new Rect();
 
             List<TLRPC.TL_availableReaction> availableReacts = getMediaDataController().getEnabledReactionsList();
-            boolean isReactionsViewAvailable = !isSecretChat() && !isInScheduleMode() && currentUser == null && message.hasReactions() && (!ChatObject.isChannel(currentChat) || currentChat.megagroup) && !availableReacts.isEmpty() && message.messageOwner.reactions.can_see_list;
+            boolean isReactionsViewAvailable = !isSecretChat() && !isInScheduleMode() && currentUser == null && message.hasReactions() && (!ChatObject.isChannel(currentChat) || currentChat.megagroup) && !availableReacts.isEmpty() && message.messageOwner.reactions.can_see_list && !ExteraConfig.disableReactions;
             boolean isReactionsAvailable;
             if (message.isForwardedChannelPost()) {
                 TLRPC.ChatFull chatInfo = getMessagesController().getChatFull(-message.getFromChatId());
-                if (chatInfo == null) {
+                if (chatInfo == null && !ExteraConfig.disableReactions) {
                     isReactionsAvailable = true;
                 } else {
-                    isReactionsAvailable = !isSecretChat() && !isInScheduleMode() && message.isReactionsAvailable() && (chatInfo != null && !chatInfo.available_reactions.isEmpty()) && !availableReacts.isEmpty();
+                    isReactionsAvailable = !isSecretChat() && !isInScheduleMode() && message.isReactionsAvailable() && (chatInfo != null && !chatInfo.available_reactions.isEmpty()) && !availableReacts.isEmpty() && !ExteraConfig.disableReactions;
                 }
             } else {
-                isReactionsAvailable = !isSecretChat() && !isInScheduleMode() && message.isReactionsAvailable() && (chatInfo != null && !chatInfo.available_reactions.isEmpty() || (chatInfo == null && !ChatObject.isChannel(currentChat)) || currentUser != null) && !availableReacts.isEmpty();
+                isReactionsAvailable = !isSecretChat() && !isInScheduleMode() && message.isReactionsAvailable() && (chatInfo != null && !chatInfo.available_reactions.isEmpty() || (chatInfo == null && !ChatObject.isChannel(currentChat)) || currentUser != null) && !availableReacts.isEmpty() && !ExteraConfig.disableReactions;
             }
             boolean showMessageSeen = !isReactionsViewAvailable && !isInScheduleMode() && currentChat != null && message.isOutOwner() && message.isSent() && !message.isEditing() && !message.isSending() && !message.isSendError() && !message.isContentUnread() && !message.isUnread() && (ConnectionsManager.getInstance(currentAccount).getCurrentTime() - message.messageOwner.date < getMessagesController().chatReadMarkExpirePeriod) && (ChatObject.isMegagroup(currentChat) || !ChatObject.isChannel(currentChat)) && chatInfo != null && chatInfo.participants_count <= getMessagesController().chatReadMarkSizeThreshold && !(message.messageOwner.action instanceof TLRPC.TL_messageActionChatJoinedByRequest) && (v instanceof ChatMessageCell);
 
