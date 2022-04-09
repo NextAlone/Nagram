@@ -6,13 +6,13 @@
     <string name="SaveMessage">Сохранить сообщение</string>
 
     <!-- Main Menu (about) -->
-    <string name="About">Об exteraGram</string>
+    <string name="Links">Ссылки</string>
     <string name="AboutExteraDescription">Экспериментальный Telegram-клиент, основанный на официальном исходном коде Telegram!</string>
-    <string name="SourceCode">Исходный код exteraGram</string>
+    <string name="SourceCode">Исходный код</string>
     <string name="Channel">Канал в Telegram</string>
     <string name="Chats">Чаты</string>
 
-    <string name="Preferences">Настройки extera</string>
+    <string name="Preferences">Настройки exteraGram</string>
     <string name="RestartRequired">Перезагрузите приложение, чтобы изменения вступили в силу.</string>
 
     <string name="Categories">Категории</string>
@@ -28,12 +28,13 @@
     <string name="HidePhoneNumber">Скрыть номер телефона</string>
     <string name="ShowID">Показывать ID в профиле</string>
     <string name="ChatsOnTitle">\"Чаты\" вместо \"exteraGram\"</string>
+    <string name="DisableVibration">Отключить вибрацию</string>
     <string name="ForceTabletMode">Планшетный режим</string>
 
     <!-- Chats -->
     <string name="StickerSize">Размер стикера</string>
     <string name="StickerTime">Скрыть время под стикером</string>
-    <string name="UnlimitedRecentStickers">Unlimited recent stickers</string>
+    <string name="UnlimitedRecentStickers">Неограниченные стикеры</string>
 
     <string name="StickerSizeDialogMessageReplyTo">мяу</string>
     <string name="StickerSizeDialogMessage">ооо, ну какой же он милашкин!</string>
@@ -51,7 +52,7 @@
     <string name="PauseOnMinimize">Автопауза</string>
     <string name="POMDescription">Останавливает видео, когда девайс блокируется или приложение сворачивается</string>
     <string name="DisablePlayback">Отключить проигрывание</string>
-    <string name="DPDescription">Отключает проигрывание, когда кнопка громкости нажата</string>
+    <string name="DPDescription">Отключает автоматическое проигрывание видео при нажатии на кнопку громкости</string>
 
     <string name="Drawer">Боковое меню</string>
     <string name="Attention">ВНИМАНИЕ!</string>
@@ -62,6 +63,10 @@
     <string name="DarkMonetTheme">Тёмная</string>
     <string name="LightMonetTheme">Светлая</string>
     <string name="GMTDescription">Эта функция позволяет создать тему, основанную на системных цветах\n\nПосле нажатия на кнопку выберите чат, где будет сохранена тема</string>
+
+    <string name="EnterID">Введите ID</string>
+    <string name="TrackSaved">Трек сохранен</string>
+    <string name="ChannelToSaveDescription">Введите ID канала/чата/пользователя, куда будет сохраняться музыка</string>
 
     <string name="ConfirmCall">Подтверждение звонка</string>
     <string name="CallTo">Позвонить **%1$s**?</string>

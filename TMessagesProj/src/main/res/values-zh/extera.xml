@@ -7,7 +7,7 @@
     <string name="MutualContact">双向联系人</string>
     <string name="ToBeginning">To beginning</string>
     <!-- Main Menu (about) -->
-    <string name="AboutExtera">关于exteraGram</string>
+    <string name="Links">链接</string>
     <string name="AboutExteraDescription">基于官方Telegram源码制作的第三方客户端</string>
     <string name="Website">exteraSquad开发成员</string>
     <string name="Github">exteraGram开源代码</string>
@@ -15,7 +15,7 @@
     <string name="Chat">Telegram交流群组</string>
     <string name="languageEnglish">英语交流</string>
     <string name="languageRussian">俄语交流</string>
-    <string name="Preferences">extera 设置</string>
+    <string name="Preferences">exteraGram 设置</string>
     <string name="RestartRequired">重启应用以生效</string>
     <string name="Categories">设置分类</string>
     <string name="Chats">对话</string>

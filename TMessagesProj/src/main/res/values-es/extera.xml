@@ -5,7 +5,7 @@
     <string name="ToBeginning">Saltar al inicio</string>
 
     <!-- Main Menu (about) -->
-    <string name="AboutExtera">Acerca de exteraGram</string>
+    <string name="Links">Enlaces</string>
     <string name="AboutExteraDescription">¡Cliente experimental de Telegram basado en fuentes oficiales de Telegram!</string>
     <string name="Website">Miembros de exteraSquad</string>
     <string name="Github">Código fuente de exteraGram</string>
@@ -14,7 +14,7 @@
     <string name="languageEnglish">Inglés</string>
     <string name="languageRussian">Ruso</string>
 
-    <string name="Preferences">Preferencias de extera</string>
+    <string name="Preferences">Preferencias de exteraGram</string>
     <string name="RestartRequired">Reinicie la aplicación para que tenga efecto.</string>
 
     <string name="Categories">Categorías</string>

@@ -6,13 +6,13 @@
     <string name="SaveMessage">Захаваць паведамленне</string>
 
     <!-- Main Menu (about) -->
-    <string name="About">Аб exteraGram</string>
+    <string name="Links">Спасылкі</string>
     <string name="AboutExteraDescription">Эксперыментальны кліент Telegram на аснове афіцыйных крыніц Telegram!</string>
-    <string name="SourceCode">Зыходны код exteraGram</string>
+    <string name="SourceCode">Зыходны код</string>
     <string name="Channel">Канал</string>
     <string name="Chats">Чаты</string>
 
-    <string name="Preferences">Настройкі extera</string>
+    <string name="Preferences">Настройкі exteraGram</string>
     <string name="RestartRequired">Перазапусціце праграму, каб уступіць у сілу.</string>
 
     <string name="Categories">Катыгорыі</string>

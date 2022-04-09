@@ -5,7 +5,7 @@
     <string name="ToBeginning">На початок</string>
     
     <!-- Main Menu (about) -->
-    <string name="AboutExtera">Про exteraGram</string>
+    <string name="Links">Посилання</string>
     <string name="AboutExteraDescription">Експерементальний клієнт Telegram, що працює на офіційному вихідному коді Telegram!</string>
     <string name="Website">Команда exteraSquad</string>
     <string name="Github">Вихідний код exteraGram</string>
@@ -14,7 +14,7 @@
     <string name="languageEnglish">Англійська</string>
     <string name="languageRussian">Російська</string>
 
-    <string name="Preferences">Налаштування extera</string>
+    <string name="Preferences">Налаштування exteraGram</string>
     <string name="RestartRequired">Перезапустіть застосунок, щоб зміни вступили в силу.</string>
 
     <string name="Categories">Категорії</string>

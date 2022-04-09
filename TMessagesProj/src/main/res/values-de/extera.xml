@@ -6,13 +6,13 @@
     <string name="SaveMessage">Nachricht speichern</string>
 
     <!-- Main Menu (about) -->
-    <string name="About">Über exteraGram</string>
+    <string name="Links">Verknüpfungen</string>
     <string name="AboutExteraDescription">Experimenteller Telegram-Client basierend auf offiziellen Telegram-Quellen!</string>
-    <string name="SourceCode">exteraGram\'s Quelltext</string>
+    <string name="SourceCode">Quelltext</string>
     <string name="Channel">Kanal</string>
     <string name="Chats">Chats</string>
 
-    <string name="Preferences">extera Einstellungen</string>
+    <string name="Preferences">exteraGram Einstellungen</string>
     <string name="RestartRequired">App neu starten, damit es wirksam wird.</string>
 
     <string name="Categories">Kategorien</string>

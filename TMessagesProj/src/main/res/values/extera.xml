@@ -9,13 +9,13 @@
     <string name="SaveMessage">Save message</string>
 
     <!-- Main Menu (about) -->
-    <string name="About">About exteraGram</string>
+    <string name="Links">Links</string>
     <string name="AboutExteraDescription">Experimental Telegram client based on official Telegram sources!</string>
-    <string name="SourceCode">exteraGram\'s Source Code</string>
+    <string name="SourceCode">Source code</string>
     <string name="Channel">Channel</string>
     <string name="Chats">Chats</string>
 
-    <string name="Preferences">extera Preferences</string>
+    <string name="Preferences">exteraGram Preferences</string>
     <string name="RestartRequired">Restart the app to take effect.</string>
 
     <string name="Categories">Categories</string>

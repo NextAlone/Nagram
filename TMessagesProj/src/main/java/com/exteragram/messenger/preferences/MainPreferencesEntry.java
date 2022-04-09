@@ -23,11 +23,8 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCell;
-import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
-
-import com.exteragram.messenger.ExteraConfig;
 
 public class MainPreferencesEntry extends BaseFragment {
     private int rowCount;
@@ -39,6 +36,7 @@ public class MainPreferencesEntry extends BaseFragment {
     private int drawerRow;
 
     private int dividerInfoRow;
+    private int dividerExteraInfoRow;
 
     private int infoHeaderRow;
     private int aboutExteraRow;
@@ -111,19 +109,23 @@ public class MainPreferencesEntry extends BaseFragment {
     @SuppressLint("NotifyDataSetChanged")
     private void updateRowsId() {
         rowCount = 0;
-
-        infoHeaderRow = rowCount++;
+        
         aboutExteraRow = rowCount++;
-        sourceCodeRow = rowCount++;
-        channelRow = rowCount++;
-        groupRow = rowCount++;
-
-        dividerInfoRow = rowCount++;
+        
+        dividerExteraInfoRow = rowCount++;
 
         categoryHeaderRow = rowCount++;
         appearanceRow = rowCount++;
         chatsRow = rowCount++;
         drawerRow = rowCount++;
+
+        dividerInfoRow = rowCount++;
+
+        infoHeaderRow = rowCount++;
+        channelRow = rowCount++;
+        groupRow = rowCount++;
+        sourceCodeRow = rowCount++;
+
 
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -160,7 +162,7 @@ public class MainPreferencesEntry extends BaseFragment {
                 case 2:
                     TextCell textCell = (TextCell) holder.itemView;
                     if (position == sourceCodeRow) {
-                        textCell.setText(LocaleController.getString("SourceCode", R.string.SourceCode), true);
+                        textCell.setTextAndValueAndIcon(LocaleController.getString("SourceCode", R.string.SourceCode), "Github", R.drawable.msg_report_spam, false);
                     } else if (position == channelRow) {
                         textCell.setTextAndValueAndIcon(LocaleController.getString("Channel", R.string.Channel), "@exteragram", R.drawable.msg_channel, true);
                     } else if (position == groupRow) {
@@ -170,7 +172,7 @@ public class MainPreferencesEntry extends BaseFragment {
                     } else if (position == chatsRow) {
                         textCell.setTextAndIcon(LocaleController.getString("Chats", R.string.Chats), R.drawable.menu_chats, true);
                     } else if (position == drawerRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Drawer", R.string.Drawer), R.drawable.msg_list, true);
+                        textCell.setTextAndIcon(LocaleController.getString("Drawer", R.string.Drawer), R.drawable.msg_list, false);
                     }
                     textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                     break;
@@ -179,17 +181,17 @@ public class MainPreferencesEntry extends BaseFragment {
                     if (position == categoryHeaderRow) {
                         headerCell.setText(LocaleController.getString("Categories", R.string.Categories));
                     } else if (position == infoHeaderRow){
-                        headerCell.setText(LocaleController.getString("About", R.string.About));
+                        headerCell.setText(LocaleController.getString("Links", R.string.Links));
                     }
                     break;
                 case 4:
-                    TextDetailSettingsCell textDetailCell = (TextDetailSettingsCell) holder.itemView;
+                    InfoSettingsCell textDetailCell = (InfoSettingsCell) holder.itemView;
                     textDetailCell.setMultilineDetail(true);
                     if (position == aboutExteraRow) {
                         if (BuildVars.isBetaApp()) {
-                            textDetailCell.setTextAndValue("exteraGram β | v" + BuildVars.BUILD_VERSION_STRING, LocaleController.getString("AboutExteraDescription", R.string.AboutExteraDescription),  true);
+                            textDetailCell.setTextAndValueAndIcon("exteraGram β | v" + BuildVars.BUILD_VERSION_STRING, LocaleController.getString("AboutExteraDescription", R.string.AboutExteraDescription), R.drawable.ic_logo_foreground, false);
                         } else {
-                            textDetailCell.setTextAndValue("exteraGram | v" + BuildVars.BUILD_VERSION_STRING, LocaleController.getString("AboutExteraDescription", R.string.AboutExteraDescription),  true);
+                            textDetailCell.setTextAndValueAndIcon("exteraGram | v" + BuildVars.BUILD_VERSION_STRING, LocaleController.getString("AboutExteraDescription", R.string.AboutExteraDescription), R.drawable.ic_logo_foreground, false);
                         }
                     }
                     break;
@@ -216,7 +218,7 @@ public class MainPreferencesEntry extends BaseFragment {
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 case 4:
-                    view = new TextDetailSettingsCell(mContext);
+                    view = new InfoSettingsCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 default:
@@ -228,7 +230,7 @@ public class MainPreferencesEntry extends BaseFragment {
         }
         @Override
         public int getItemViewType(int position) {
-            if (position == dividerInfoRow) {
+            if (position == dividerInfoRow || position == dividerExteraInfoRow) {
                 return 1;
             } else if (position == appearanceRow || position == chatsRow || position == drawerRow ||
                        position == channelRow || position == groupRow || position == sourceCodeRow) {

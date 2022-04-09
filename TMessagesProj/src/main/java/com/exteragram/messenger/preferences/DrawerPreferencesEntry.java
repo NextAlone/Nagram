@@ -239,7 +239,7 @@ public class DrawerPreferencesEntry extends BaseFragment {
                     } else if (position == inviteFriendsRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("InviteFriends", R.string.InviteFriends), ExteraConfig.inviteFriends, true);
                     } else if (position == telegramFeaturesRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("TelegramFeatures", R.string.TelegramFeatures), ExteraConfig.telegramFeatures, true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("TelegramFeatures", R.string.TelegramFeatures), ExteraConfig.telegramFeatures, false);
                     }
                     break;
                 case 4:

@@ -7,7 +7,7 @@
     <string name="MutualContact">wzajemny kontakt</string>
     <string name="ToBeginning">To beginning</string>
     <!-- Main Menu (about) -->
-    <string name="AboutExtera">O ExteraGram</string>
+    <string name="Links">Spinki do mankietów</string>
     <string name="AboutExteraDescription">Eksperymentalny klient Telegram oparty na oficjalnych źródłach Telegram!</string>
     <string name="Website">członkowie oddziału zewnętrznego</string>
     <string name="Github">kod źródłowy zewnętrznego Gram-a</string>
@@ -15,7 +15,7 @@
     <string name="Chat">Telegram</string>
     <string name="languageEnglish">Angielski</string>
     <string name="languageRussian">Rosyjski</string>
-    <string name="Preferences">preferencje extera</string>
+    <string name="Preferences">preferencje exteraGram</string>
     <string name="RestartRequired">Zrestartuj AirDroid\'a, aby wprowadzić zmiany.</string>
     <string name="Categories">Kategorie</string>
     <string name="Chats">Czaty</string>

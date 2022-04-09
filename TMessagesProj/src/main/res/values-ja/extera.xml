@@ -7,7 +7,7 @@
     <string name="MutualContact">相互の連絡先</string>
     <string name="ToBeginning">To beginning</string>
     <!-- Main Menu (about) -->
-    <string name="AboutExtera">外部グラムについて</string>
+    <string name="Links">リンク</string>
     <string name="AboutExteraDescription">公式のTelegramのソースに基づいて実験的なTelegramクライアント！</string>
     <string name="Website">外部分隊メンバー</string>
     <string name="Github">exteraGramのソース コード</string>
@@ -15,7 +15,7 @@
     <string name="Chat">\? Telegramチャット</string>
     <string name="languageEnglish">日本語</string>
     <string name="languageRussian">ロシア語</string>
-    <string name="Preferences">extera の設定</string>
+    <string name="Preferences">exteraGram の設定</string>
     <string name="RestartRequired">有効にするには、AirDroidを再起動してください。</string>
     <string name="Categories">カテゴリー</string>
     <string name="Chats">チャット</string>
