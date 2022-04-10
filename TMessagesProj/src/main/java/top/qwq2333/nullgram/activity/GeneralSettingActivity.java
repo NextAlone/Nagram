@@ -478,7 +478,7 @@ public class GeneralSettingActivity extends BaseFragment {
         public int getItemViewType(int position) {
             if (position == general2Row || position == drawer2Row) {
                 return 1;
-            } else if ((position > drawer2Row && position < general2Row) || (position > drawerRow && position < drawer2Row)) {
+            } else if ((position > generalRow && position < general2Row) || (position > drawerRow && position < drawer2Row)) {
                 return 3;
             } else if (position == generalRow) {
                 return 4;
