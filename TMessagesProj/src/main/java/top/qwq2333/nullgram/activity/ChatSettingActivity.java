@@ -50,7 +50,9 @@ import org.telegram.ui.Components.SeekBarView;
 
 import java.util.ArrayList;
 
+import kotlin.Unit;
 import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.ui.BottomBuilder;
 import top.qwq2333.nullgram.ui.StickerSizePreviewMessagesCell;
 import top.qwq2333.nullgram.utils.AlertUtil;
 import top.qwq2333.nullgram.utils.Defines;
@@ -80,7 +82,7 @@ public class ChatSettingActivity extends BaseFragment {
     private int disableJumpToNextChannelRow;
     private int disableGreetingStickerRow;
     private int disableTrendingStickerRow;
-    private int disableQuickReactionRow;
+    private int customDoubleClickTapRow;
     private int confirmToSendMediaMessagesRow;
     private int maxRecentStickerRow;
     private int unreadBadgeOnBackButtonRow;
@@ -206,13 +208,45 @@ public class ChatSettingActivity extends BaseFragment {
                         ConfigManager.getBooleanOrFalse(Defines.disableTrendingSticker)
                     );
                 }
-            } else if (position == disableQuickReactionRow) {
-                ConfigManager.toggleBoolean(Defines.disableQuickReaction);
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.disableQuickReaction)
-                    );
-                }
+            } else if (position == customDoubleClickTapRow) {
+                final int currentConfig = ConfigManager.getIntOrDefault(Defines.doubleTab, Defines.doubleTabReaction);
+                BottomBuilder builder = new BottomBuilder(getParentActivity());
+
+                builder.addTitle(LocaleController.getString("customDoubleTap", R.string.customDoubleTap),
+                    true);
+
+                builder.addRadioItem(LocaleController.getString("Disable", R.string.Disable), currentConfig == Defines.doubleTabNone, (radioButtonCell) -> {
+                    ConfigManager.putInt(Defines.doubleTab, Defines.doubleTabNone);
+                    builder.doRadioCheck(radioButtonCell);
+                    return Unit.INSTANCE;
+                });
+                builder.addRadioItem(LocaleController.getString("Reactions", R.string.Reactions), currentConfig == Defines.doubleTabReaction, (radioButtonCell) -> {
+                    ConfigManager.putInt(Defines.doubleTab, Defines.doubleTabReaction);
+                    builder.doRadioCheck(radioButtonCell);
+                    return Unit.INSTANCE;
+                });
+                builder.addRadioItem(LocaleController.getString("Reply", R.string.Reply), currentConfig == Defines.doubleTabReply, (radioButtonCell) -> {
+                    ConfigManager.putInt(Defines.doubleTab, Defines.doubleTabReply);
+                    builder.doRadioCheck(radioButtonCell);
+                    return Unit.INSTANCE;
+                });
+                builder.addRadioItem(LocaleController.getString("Edit", R.string.Edit), currentConfig == Defines.doubleTabEdit, (radioButtonCell) -> {
+                    ConfigManager.putInt(Defines.doubleTab, Defines.doubleTabEdit);
+                    builder.doRadioCheck(radioButtonCell);
+                    return Unit.INSTANCE;
+                });
+                builder.addRadioItem(LocaleController.getString("saveMessages", R.string.saveMessages), currentConfig == Defines.doubleTabSaveMessages, (radioButtonCell) -> {
+                    ConfigManager.putInt(Defines.doubleTab, Defines.doubleTabSaveMessages);
+                    builder.doRadioCheck(radioButtonCell);
+                    return Unit.INSTANCE;
+                });
+                builder.addRadioItem(LocaleController.getString("Repeat", R.string.Repeat), currentConfig == Defines.doubleTabRepeat, (radioButtonCell) -> {
+                    ConfigManager.putInt(Defines.doubleTab, Defines.doubleTabRepeat);
+                    builder.doRadioCheck(radioButtonCell);
+                    return Unit.INSTANCE;
+                });
+
+                showDialog(builder.create());
             } else if (position == confirmToSendMediaMessagesRow) {
                 ConfigManager.toggleBoolean(Defines.confirmToSendMediaMessages);
                 if (view instanceof TextCheckCell) {
@@ -290,7 +324,7 @@ public class ChatSettingActivity extends BaseFragment {
         disableJumpToNextChannelRow = rowCount++;
         disableGreetingStickerRow = rowCount++;
         disableTrendingStickerRow = rowCount++;
-        disableQuickReactionRow = rowCount++;
+        customDoubleClickTapRow = rowCount++;
         confirmToSendMediaMessagesRow = rowCount++;
         maxRecentStickerRow = rowCount++;
         unreadBadgeOnBackButtonRow = rowCount++;
@@ -435,6 +469,11 @@ public class ChatSettingActivity extends BaseFragment {
                     } else if (position == maxRecentStickerRow) {
                         textCell.setTextAndValue(LocaleController.getString("maxRecentSticker", R.string.maxRecentSticker), String.valueOf(ConfigManager.getIntOrDefault(Defines.maxRecentSticker, 30)), true);
 
+                    } else if (position == customDoubleClickTapRow) {
+                        textCell.setText(
+                            LocaleController.getString("customDoubleTap",
+                                R.string.customDoubleTap),
+                            true);
                     }
                     break;
                 }
@@ -491,12 +530,6 @@ public class ChatSettingActivity extends BaseFragment {
                             LocaleController.getString("disableTrendingSticker",
                                 R.string.disableTrendingSticker),
                             ConfigManager.getBooleanOrFalse(Defines.disableTrendingSticker),
-                            true);
-                    } else if (position == disableQuickReactionRow) {
-                        textCell.setTextAndCheck(
-                            LocaleController.getString("disableQuickReaction",
-                                R.string.disableQuickReaction),
-                            ConfigManager.getBooleanOrFalse(Defines.disableQuickReaction),
                             true);
                     } else if (position == confirmToSendMediaMessagesRow) {
                         textCell.setTextAndCheck(
@@ -596,7 +629,7 @@ public class ChatSettingActivity extends BaseFragment {
         public int getItemViewType(int position) {
             if (position == chat2Row || position == stickerSize2Row) {
                 return 1;
-            } else if (position == messageMenuRow || position == maxRecentStickerRow) {
+            } else if (position == messageMenuRow || position == customDoubleClickTapRow || position == maxRecentStickerRow) {
                 return 2;
             } else if (position == chatRow || position == stickerSizeHeaderRow) {
                 return 4;

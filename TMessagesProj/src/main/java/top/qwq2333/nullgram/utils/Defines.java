@@ -78,6 +78,16 @@ public class Defines {
     public static final String showViewHistory = "showViewHistory";
     public static final String showRepeat = "showRepeat";
 
+    // custom double tap
+    public static final String doubleTab = "doubleTab";
+    public static final int doubleTabNone = 0;
+    public static final int doubleTabReaction = 1;
+    public static final int doubleTabReply = 2;
+    public static final int doubleTabSaveMessages = 3;
+    public static final int doubleTabRepeat = 4;
+    public static final int doubleTabEdit = 5;
+
+
     // Auto Update
     public static final String ignoredUpdateTag = "skipUpdate";
     public static final String lastCheckUpdateTime = "lastCheckUpdateTime";

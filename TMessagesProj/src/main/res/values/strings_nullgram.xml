@@ -94,7 +94,7 @@
     <string name="disableJumpToNextChannel">Disable Jump to Next Channel</string>
     <string name="disableGreetingSticker">Disable Greeting Sticker</string>
     <string name="disableTrendingSticker">Disable Trending Sticker</string>
-    <string name="disableQuickReaction">Disable Quick Reaction</string>
+    <string name="customDoubleTap">Custom Double Tap</string>
     <string name="OpenSource">OpenSource Software Licenses</string>
   <string name="disableCustonAPI">Don\'t use custom API</string>
     <string name="useOfficialAPI">Telegram</string>
