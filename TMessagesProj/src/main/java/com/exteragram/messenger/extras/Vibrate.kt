@@ -29,11 +29,11 @@ object Vibrate {
 
         if (ExteraConfig.disableVibration) return
 
-        if (!vibrator.hasVibrator()) return
-
         if (!::vibrator.isInitialized) {
             vibrator = ApplicationLoader.applicationContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         }
+
+        if (!vibrator.hasVibrator()) return
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             runCatching {
