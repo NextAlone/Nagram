@@ -2830,11 +2830,7 @@ std::unique_ptr<TLObject> ConnectionsManager::wrapInLayer(TLObject *object, Data
             if (!proxyAddress.empty() && !proxySecret.empty()) {
                 request->flags |= 1;
                 request->proxy = std::make_unique<TL_inputClientProxy>();
-                if (proxyAddress == "127.0.0.1") {
-                    request->proxy->address = "neko.services";
-                } else {
-                    request->proxy->address = proxyAddress;
-                }
+                request->proxy->address = proxyAddress;
                 request->proxy->port = proxyPort;
             }
 
