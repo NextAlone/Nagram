@@ -27,13 +27,13 @@
     <string name="DownloadFailed">Ошибка загрузки</string>
     <string name="Install">Установить</string>
     <string name="Ignore">Пропустить</string>
-    <string name="UpdateDownloaded">Обновление загружено</string>
+    <string name="UpdateDownloaded">Обновление загружено.</string>
     <string name="ProxyAutoSwitch">Автопереключение прокси</string>
     <string name="LinkedGroupChat">Привязанная группа</string>
     <string name="LinkedChannelChat">Привязанный канал</string>
     <string name="DevModeTitle">** Ваш аккаунт может быть заблокирован **</string>
     <string name="DevModeNotice">Мы не несем ответственности за использование функций разработчика.</string>
-    <string name="TapToDisable">Нажмите, чтобы скрыть уведомление</string>
+    <string name="TapToDisable">Нажмите, чтобы скрыть уведомление.</string>
     <string name="PlaceHolder">Бесполезное уведомление - пожалуйста, отключите</string>
     <string name="CustomBackend">Выбрать DC</string>
     <string name="CustomBackendNotice">Только для опытных пользователей! При одновременном логине на разных DC ваш аккаунт может быть удален, а номер заблокирован.</string>
@@ -44,18 +44,18 @@
     <string name="ProviderYandexTranslate">Яндекс</string>
     <string name="GoogleCloudTransKey">Ключ Google Translation API</string>
     <string name="GoogleCloudTransKeyNotice">Если вы ввели свой ключ, перевод будет быстрее и стабильнее.</string>
-    <string name="TransToLang">Переводить на:</string>
-    <string name="TransInputToLang">Переводить с:</string>
+    <string name="TransToLang">Язык перевода</string>
+    <string name="TransInputToLang">Переводить с</string>
     <string name="More">Ещё</string>
     <string name="NekoXUpdatesChannel">Канал обновлений NekoX</string>
     <string name="ShowIdAndDc">Отображать ID и DC в профиле</string>
     <string name="UseDefaultTheme">Использовать тему по умолчанию *</string>
     <string name="NightMode">Ночной режим</string>
     <string name="PrivacyNotice">Предупреждение</string>
-    <string name="PrivacyNoticePhoneVisible">Ваш номер телефона виден всем. Мы рекомендуем отключить это для повышения конфиденциальности.</string>
+    <string name="PrivacyNoticePhoneVisible">Номер вашего мобильного телефона виден всем, что позволяет хакерам узнать вашу истинную личность. Пожалуйста, отключите его!</string>
     <string name="PrivacyNoticeAddByPhone">Вас можно найти по номеру телефона. Мы рекомендуем отключить это для повышения конфиденциальности.</string>
-    <string name="PrivacyNoticeP2p">Вы включили **звонки p2p**. Мы рекомендуем отключить это для повышения конфиденциальности.</string>
-    <string name="PrivacyNotice2fa">Для повышения защиты аккаунта рекомендуем включить двухфакторную аутентификацию.</string>
+    <string name="PrivacyNoticeP2p">Вы не отключили функцию \"Разрешить P2P-вызовы\", позволяющая хакерам узнать вашу настоящую личность. Пожалуйста, отключите эту функцию!</string>
+    <string name="PrivacyNotice2fa">Для повышения защиты аккаунта рекомендуем включить двухэтапную аутентификацию.</string>
     <string name="ApplySuggestion">Ок</string>
     <string name="DoNotRemindAgain">Не напоминать</string>
     <string name="RemoveTitleEmoji">Убрать эмодзи из шапки</string>
@@ -79,7 +79,7 @@
     <string name="FilterNameUnread2">Непрочитанные</string>
     <string name="FilterNameUnreadDescription">Только непрочитанные сообщения</string>
     <string name="FilterNameUnmutedAndUnread">Новые со звуком</string>
-    <string name="FilterNameUnmutedAndUnreadDescription">Только новые с увед.</string>
+    <string name="FilterNameUnmutedAndUnreadDescription">Только непрочитанные сообщения из включенных чатов</string>
     <string name="IgnoreMutedCount">Не считать приглушенные во вкладках</string>
     <string name="DialogsSettings">Настройки чатов</string>
     <string name="SortMenu">Сортировка чатов</string>
@@ -120,7 +120,7 @@
     <string name="VmessNetwork">Сеть</string>
     <string name="VmessHeadType">Head Type</string>
     <string name="VmessRequestHost">Request Host / QUIC Security</string>
-    <string name="VmessPath">Path / QUIC Key</string>
+    <string name="VmessPath">Путь / Ключ QUIC</string>
     <string name="VmessTls">Использовать TLS</string>
     <string name="ProxyInfoSS">Настройки Shadowsocks-прокси</string>
     <string name="SSPassword">Пароль</string>
@@ -133,7 +133,7 @@
     <string name="SSRObfs">Obfs</string>
     <string name="SSRObfsParam">Параметры Obfs</string>
     <string name="ProxyInfoTrojan">Настройки Trojan-прокси</string>
-    <string name="TrojanSNI">SNI (Optional)</string>
+    <string name="TrojanSNI">SNI (необязательно)</string>
     <string name="ProxyRemarks">Примечания</string>
     <string name="RetestPing">Пересчитать все</string>
     <string name="ReorderByPing">Сортировать по пингу</string>
@@ -158,9 +158,9 @@
     <string name="DeleteUnavailableServer">Удалить недоступные</string>
     <string name="DeleteAllServerConfirm">Вы уверены, что хотите **удалить все прокси**\?</string>
     <string name="DeleteUnavailableServerConfirm">Вы уверены, что хотите ** удалить недоступные**\?</string>
-    <string name="MinApi21Required">Требуется Android 5 и выше (API21).</string>
-    <string name="MinApi23Required">Требуется Android 6 и выше (API23).</string>
-    <string name="MiniVersionAlert">Mini-версия не поддерживает этот тип прокси. Скачайте full-версию.</string>
+    <string name="MinApi21Required">Извините, вам нужен как минимум Android 5 (уровень API 21).</string>
+    <string name="MinApi23Required">Извините, вам нужен хотя бы Android 6 (уровень API 23).</string>
+    <string name="MiniVersionAlert">Mini-версия не поддерживает этот тип прокси. Переключите версию в настройках.</string>
     <string name="ImportProxyFromClipboard">Импорт из буфера</string>
     <string name="BrokenLink">Неверная ссылка</string>
     <string name="ShareQRCode">QR-код</string>
@@ -191,12 +191,12 @@
     <string name="UnpinMessagesAll">Открепить все сообщения</string>
     <string name="DismissForYourself">Скрыть для себя</string>
     <string name="ImportLogin">Вход по QR коду</string>
-    <string name="QRLoginNotice">Будьте внимательны, с помощью этого кода любой сможет войти в ваш аккаунт!</string>
+    <string name="QRLoginNotice">Этот QR-код/ссылка позволяет кому-либо войти в вашу учетную запись Telegram. Вы уверены\?</string>
     <string name="QRLoginConfirm">Подтвердить вход</string>
     <string name="StorageReset">Стереть все данные</string>
     <string name="StorageResetInfo">Все данные будут удалены (также вы выйдете из всех аккаунтов).</string>
-    <string name="FCTitle">Хотите подписаться\?</string>
-    <string name="FCInfo">Информация о новых версиях и ссылки доступны на канале @NekogramX.</string>
+    <string name="FCTitle">Об обновлениях приложения</string>
+    <string name="FCInfo">Подписаться на наш канал новостей и обновлений\?</string>
     <string name="CCTitle">OpenCC (китайский язык)</string>
     <string name="CCTarget">Цель</string>
     <string name="CCNo">Отсутствует</string>
@@ -214,13 +214,14 @@
     <string name="ReplaceText">Заменить</string>
     <string name="TextOrigin">Найти</string>
     <string name="TextReplace">Заменить на</string>
-    <string name="ReplaceRegex">Регуляр. выражен.</string>
+    <string name="ReplaceRegex">Используйте регулярные выражения</string>
     <string name="DisableTrending">Скрывать рекомендации стикеров</string>
     <string name="HideDeviceInfo">Скрыть модель устройства</string>
     <string name="HideDeviceInfoOff">Модель устройства будет обновлена при втором запуске приложения после входа в аккаунт.</string>
     <string name="HideDeviceInfoOn">Влияет на информацию в \"Активных сеансах\". Можно отключить позже.</string>
-    <string name="EnableStickerPinTip">Функция в разработке, синхронизация может работать с ошибками.</string>
-    <string name="EnableStickerPinAbout">Перейдите в «Стикеры и маски», чтобы закрепить стикерпак. Закреплённые всегда отображаются в начале списка стикеров.</string>
+    <string name="EnableStickerPinTip">Функция в разработке, облачная синхронизация может работать с ошибками.</string>
+    <string name="EnableStickerPinAbout">Закрепляйте стикеры и синхронизируйте их с облаком даже при добавлении новых стикеров.
+\nВ паре с Отключить Избранное и Недавнее.</string>
     <string name="EnableStickerPin">Включить закрепление стикерпаков</string>
     <string name="ArchiveFiles">Архивы</string>
     <string name="Win32ExecutableFiles">Исполняемые файлы Win32</string>
@@ -230,7 +231,7 @@
     <string name="PinSticker">Закрепить</string>
     <string name="AppLinkFDroid">F-Droid</string>
     <string name="DisplayPersianCalendarByLatin">Иранский календарь латиницей</string>
-    <string name="UsePersiancalendarInfo">Отключите для нормального отображения даты.</string>
+    <string name="UsePersiancalendarInfo">Отображать даты по солнечному календарю Хиджри</string>
     <string name="UsePersiancalendar">Иранский календарь</string>
     <string name="nekoXPaymentRemovedToast">Платежи через Telegram недоступны в NekoX.</string>
     <string name="ImportSettings">Импорт настроек</string>
@@ -239,7 +240,7 @@
     <string name="ProxyInfoWS">Настройки WebSocket</string>
     <string name="AddProxyWs">Добавить WebSocket Relay</string>
     <string name="WsPayload">Payload</string>
-    <string name="ImportSettingsAlert">Вы точно хотите перезаписать настройки\? Импорт настроек из ненадежных источников может привести к блокировке приложения.</string>
+    <string name="ImportSettingsAlert">Перезаписать настройки\? Импорт настроек из ненадежных источников может привести к блокировке приложения.</string>
     <string name="AutoCheckUpdateRc">RC</string>
     <string name="AutoCheckUpdateStable">Stable</string>
     <string name="AutoCheckUpdateSwitch">Автообновление</string>
@@ -248,7 +249,8 @@
     <string name="VersionUpdateNotNow">Не сейчас</string>
     <string name="VersionUpdateIgnore">Игнорировать</string>
     <string name="VersionUpdateConfirm">Обновить</string>
-    <string name="VersionUpdateVariantNotMatch">Невозможно определить вашу версию приложения. Скачайте обновление вручную.</string>
+    <string name="VersionUpdateVariantNotMatch">Невозможно определить вашу версию приложения.
+\nСкачайте обновление вручную.</string>
     <string name="VersionUpdateTitle">Доступна новая версия</string>
     <string name="repeatConfirmText">Вы хотите повторить сообщение\?</string>
     <string name="DeleteDownloadedFileConfirm">Удалить загруженный файл\?</string>
@@ -263,7 +265,7 @@
     <string name="customPublicProxyIPNotice">Иногда установка открытого прокси (например, Cloudflare), может ускорить доступ.</string>
     <string name="hideSponsoredMessage">Скрывать сообщения с меткой «спонсировано»</string>
     <string name="unreadBadgeOnBackButton">Счетчик непрочтённых рядом с кнопкой «Назад»</string>
-    <string name="useCustomEmojiInvalid">С zip-архивом эмодзи что-то не так.</string>
+    <string name="useCustomEmojiInvalid">С ZIP-архивом эмодзи что-то не так.</string>
     <string name="DeleteDownloadedFileSucceed">Удалено</string>
     <string name="DisableInstantCamera">Скрыть превью с камеры в панели «Прикрепить»</string>
     <string name="rememberAllBackMessages">Запомнить все нажатые ответы</string>
@@ -276,5 +278,5 @@
     <string name="channelAliasDetails">Сначала включите \"Помечать сообщения от каналов\".</string>
     <string name="setChannelAliasName">Добавить лычку</string>
     <string name="labelChannelUser">Помечать сообщения от каналов</string>
-    <string name="labelChannelUserDetails">Сообщения от имени каналов будут помечаться «лычка | канал»</string>
+    <string name="labelChannelUserDetails">Если отправителем является \"Канал\", оно будет помечено как \"Канал\".</string>
 </resources>

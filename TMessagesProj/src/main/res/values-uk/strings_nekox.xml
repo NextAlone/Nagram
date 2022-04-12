@@ -82,15 +82,15 @@
     <string name="FilterNameUnmutedAndUnreadDescription">Лише непрочитані повідомлення із неігнорованих чатів</string>
     <string name="IgnoreMutedCount">Не лічити заглушених непрочитаних у вкладці теки</string>
     <string name="DialogsSettings">Налаштування діалогів</string>
-    <string name="SortMenu">Діалогові параметри сортування</string>
+    <string name="SortMenu">Порядок діалогів</string>
     <string name="SortByUnread">Сортувати за непрочитаними</string>
-    <string name="SortByUnmuted">Сортувати за відключеними</string>
+    <string name="SortByUnmuted">Сортувати за ввімк. звуком</string>
     <string name="SortByUser">Сортувати за користувачем</string>
     <string name="SortByContacts">Сортувати за контактами</string>
     <string name="NekoXPushService">Push-сервіс NekoX</string>
-    <string name="EnablePushAlert">Будь ласка, увімкніть \"NekoX Push сервіс\"</string>
-    <string name="DisablePushAlert">Відключіть \"Push Service NekoX\"</string>
-    <string name="DisableUndo">Вимкнути відміну</string>
+    <string name="EnablePushAlert">Будь ласка, ввімкніть Push-сервіс NekoX</string>
+    <string name="DisablePushAlert">Будь ласка, вимкніть Push-сервіс NekoX</string>
+    <string name="DisableUndo">Вимкнути скасування</string>
     <string name="DisableSystemAccount">Вимкнути системний обліковий запис</string>
     <string name="FilterMenu">Меню фільтру діалогів</string>
     <string name="DisableProxyWhenVpnEnabled">Вимкнути проксі, коли ввімкнено VPN</string>
@@ -225,7 +225,7 @@
 \nПов\'язано з вимкненням улюблених та недавніх стікерів.</string>
     <string name="EnableStickerPin">Ввімкнути закріплення стікеру</string>
     <string name="ImportSettings">Імпортувати налаштування</string>
-    <string name="BackupSettings">Налаштування резервного копіювання</string>
+    <string name="BackupSettings">Експортувати налаштування</string>
     <string name="AutoLockImmediately">Негайно</string>
     <string name="WsPayload">Навантаження</string>
     <string name="ProxyInfoWS">Налаштування WebSocket проксі</string>

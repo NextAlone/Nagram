@@ -41,7 +41,7 @@
     <string name="CustomBackendTestDC">官方测试数据中心</string>
     <string name="AllowFlashCall">允许电话呼叫</string>
     <string name="ChangeTranslateProvider">修改翻译源</string>
-    <string name="ProviderYandexTranslate">Yandex.Translate</string>
+    <string name="ProviderYandexTranslate">Yandex.翻译</string>
     <string name="GoogleCloudTransKey">Google Cloud翻译密钥</string>
     <string name="GoogleCloudTransKeyNotice">如果您设置了一个Google Cloud密钥： 云翻译API将被调用，而不是提交模拟表单到网页版 (更快速、稳定和节省流量)。</string>
     <string name="TransToLang">目标翻译语言</string>
@@ -52,10 +52,10 @@
     <string name="UseDefaultTheme">使用默认主题 *</string>
     <string name="NightMode">夜间模式</string>
     <string name="PrivacyNotice">隐私警告</string>
-    <string name="PrivacyNoticePhoneVisible">检测到您的手机号码对任何人都可见, 这可能会导致政府控制的黑客找到您的真实身份，请关闭它！</string>
+    <string name="PrivacyNoticePhoneVisible">您的手机号码正对任何人都可见, 这可能会导致政府控制的黑客找到您的真实身份。请关闭它！</string>
     <string name="PrivacyNoticeAddByPhone">检测到您没有被关闭“允许通过电话号码找到我”设置， 这可能会导致政府控制的黑客找到您的真实身份，请关闭它！</string>
-    <string name="PrivacyNoticeP2p">检测到您没有关闭“允许 P2p 通话”设置， 这可能会导致政府控制的黑客找到您的真实身份，请关闭它！</string>
-    <string name="PrivacyNotice2fa">检测到您没有设置密码，这可能会导致政府控制的黑客找到您的真实身份，请设置一个！</string>
+    <string name="PrivacyNoticeP2p">您目前没有关闭“允许 P2p 通话”设置， 这可能会导致政府控制的黑客找到您的真实身份，请关闭它！</string>
+    <string name="PrivacyNotice2fa">您目前没有设置密码，这可能会导致政府控制的黑客找到您的真实身份，请设置一个！</string>
     <string name="ApplySuggestion">应用</string>
     <string name="DoNotRemindAgain">不再提醒</string>
     <string name="RemoveTitleEmoji">移除标题中的表情</string>
@@ -160,7 +160,7 @@
     <string name="DeleteUnavailableServerConfirm">您确定要**删除不可用的服务器**吗？</string>
     <string name="MinApi21Required">抱歉，您至少需要 Android 5 (API21)。</string>
     <string name="MinApi23Required">抱歉，您至少需要 Android 6 (API23)。</string>
-    <string name="MiniVersionAlert">抱歉，mini 版本不支持此类型的代理，请在设置中切换版本。</string>
+    <string name="MiniVersionAlert">mini 版本不支持此类型的代理，请在设置中切换版本。</string>
     <string name="ImportProxyFromClipboard">从剪贴板导入</string>
     <string name="BrokenLink">未知或损坏的链接</string>
     <string name="ShareQRCode">二维码</string>
@@ -193,7 +193,7 @@
     <string name="QRLoginNotice">此 二维码/链接 允许某人登录到您的 Telegram 帐户, 这是您自己的操作吗？</string>
     <string name="QRLoginConfirm">确认登录</string>
     <string name="StorageReset">清除存储</string>
-    <string name="StorageResetInfo">该应用程序的所有数据将被永久删除（并先尝试登出所有帐户）。</string>
+    <string name="StorageResetInfo">所有数据将在下次尝试退出登录所有账号后被永久删除。</string>
     <string name="FCTitle">关于本应用的更新</string>
     <string name="FCInfo">要关注我们的公告与更新频道吗 ？</string>
     <string name="CCTitle">OpenCC (简繁转换)</string>
@@ -234,7 +234,7 @@
     <string name="DisplayPersianCalendarByLatin">以拉丁字母显示波斯日历</string>
     <string name="AddProxyWs">添加 WebSocket 中继</string>
     <string name="ProxyInfoWS">WebSocket 中继设置</string>
-    <string name="WsPayload">Payload</string>
+    <string name="WsPayload">负载</string>
     <string name="AutoLockImmediately">立即</string>
     <string name="ImportSettings">导入设置</string>
     <string name="BackupSettings">备份设置</string>
@@ -244,11 +244,11 @@
     <string name="AutoCheckUpdateSwitch">自动更新</string>
     <string name="AutoCheckUpdateOFF">关闭</string>
     <string name="VersionUpdateNoUpdate">无更新。</string>
-    <string name="VersionUpdateNotNow">推迟</string>
+    <string name="VersionUpdateNotNow">以后再说</string>
     <string name="VersionUpdateIgnore">忽略</string>
     <string name="VersionUpdateConfirm">更新</string>
-    <string name="VersionUpdateVariantNotMatch">版本变体自动匹配失败。
-\n请从GitHub手动下载。</string>
+    <string name="VersionUpdateVariantNotMatch">版本自动检测失败，
+\n请手动从GitHub下载。</string>
     <string name="VersionUpdateTitle">新版本可用</string>
     <string name="nekoXPaymentRemovedToast">支付功能已被移除。</string>
     <string name="unreadBadgeOnBackButton">聊天窗口返回按钮上显示未读数</string>
@@ -259,7 +259,7 @@
     <string name="DeleteDownloadedFileExternal">外部文件被跳过。</string>
     <string name="update_download_soucre">选择更新源</string>
     <string name="useCustomEmoji">使用自定义 emoji</string>
-    <string name="useCustomEmojiInvalid">不是有效的 emoji zip 文件</string>
+    <string name="useCustomEmojiInvalid">非有效 emoji ZIP文件。</string>
     <string name="repeatConfirm">复读前确认</string>
     <string name="repeatConfirmText">确定要复读这条消息？</string>
     <string name="valuesLargeAvatarInDrawer">Telegram 默认
@@ -271,12 +271,12 @@
     <string name="rememberAllBackMessages">记住所有点击的回复</string>
     <string name="ShareMessages">分享</string>
     <string name="AutoCheckUpdatePreview">预览版(不稳定)</string>
-    <string name="AppUpdateNekoX">更新Nekogram X</string>
+    <string name="AppUpdateNekoX">更新 Nekogram X</string>
     <string name="NekoXUpdateTranslationHint">长按以翻译更新日志</string>
     <string name="channelAlias">频道别名</string>
     <string name="labelChannelUser">标记频道匿名身份别名</string>
     <string name="setChannelAliasName">标记别名</string>
-    <string name="channelAliasDetails">需启用标记频道匿名身份别名</string>
+    <string name="channelAliasDetails">需启用标记频道匿名身份别名。</string>
     <string name="Name">输入别名</string>
-    <string name="labelChannelUserDetails">以频道匿名身份发言的用户将标记为“频道身份”</string>
+    <string name="labelChannelUserDetails">以频道匿名身份发言的用户将标记为“频道”。</string>
 </resources>
