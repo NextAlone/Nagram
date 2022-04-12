@@ -267,4 +267,11 @@
     <string name="rememberAllBackMessages">Se souvenir de toutes les réponses cliquées</string>
     <string name="BackupSettings">Sauvegarder les paramètres</string>
     <string name="ArchiveFiles">Fichiers archives</string>
+    <string name="ShareMessages">Partager</string>
+    <string name="Name">Nom</string>
+    <string name="channelAliasDetails">Exiger que l\'utilisateur du canal d\'étiquetage soit activé.</string>
+    <string name="channelAlias">Alias de la chaîne</string>
+    <string name="NekoXUpdateTranslationHint">Appuyez pour traduire le journal des modifications</string>
+    <string name="AutoCheckUpdatePreview">Aperçu (instable)</string>
+    <string name="AppUpdateNekoX">Mettre à jour Nekogram X</string>
 </resources>

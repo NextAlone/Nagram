@@ -52,10 +52,10 @@
     <string name="UseDefaultTheme">استخدام السمة الافتراضية *</string>
     <string name="NightMode">الوضع الليلي</string>
     <string name="PrivacyNotice">تحذير الخصوصية</string>
-    <string name="PrivacyNoticePhoneVisible">تم اكتشاف أن رقم هاتفك المحمول مرئي لأي شخص، قد يتسبب في العثور على هويتك الحقيقية للقرصنة الذين تسيطر عليهم الحكومة، يرجى إيقافها!</string>
+    <string name="PrivacyNoticePhoneVisible">رقم هاتفك المحمول مرئي لأي شخص ، مما يتيح للمتسللين الذين تسيطر عليهم الحكومة العثور على هويتك الحقيقية. يرجى إيقاف تشغيله!</string>
     <string name="PrivacyNoticeAddByPhone">تم اكتشاف أنك لم تقم بإيقاف تشغيل إعدادات \"السماح بالعثور علي من خلال رقم الهاتف\"، قد يتسبب في العثور على هويتك الحقيقية للقرصنة التي تسيطر عليها الحكومة، يرجى إيقافها!</string>
-    <string name="PrivacyNoticeP2p">تم اكتشاف أنك لم تقم بإيقاف تشغيل إعدادات \"المكالمات من نظير لنظيرp2p\"، قد يتسبب في العثور على هويتك الحقيقية للقرصنة التي تسيطر عليها الحكومة، يرجى إيقافها!</string>
-    <string name="PrivacyNotice2fa">تم اكتشاف أنك لم تقم بإيقاف تشغيل إعدادات \"المكالمات من نظير لنظيرp2p\"، قد يتسبب في العثور على هويتك الحقيقية للقرصنة التي تسيطر عليها الحكومة، يرجى إيقافها!</string>
+    <string name="PrivacyNoticeP2p">لم تقم بإيقاف تشغيل \"السماح بمكالمات P2P\" ، والتي تتيح للمتسللين الذين تسيطر عليهم الحكومة العثور على هويتك الحقيقية. يرجى إيقاف تشغيله!</string>
+    <string name="PrivacyNotice2fa">لم تقم بتعيين كلمة مرور ، مما يتيح للمتسللين الذين تسيطر عليهم الحكومة العثور على هويتك الحقيقية. يرجى تعيين واحد!</string>
     <string name="ApplySuggestion">حسنًا، قم بتطبيقه</string>
     <string name="DoNotRemindAgain">لا تذكرني مرة أخرى</string>
     <string name="RemoveTitleEmoji">إزالة الرموز التعبيرية من العناوين</string>
@@ -160,7 +160,7 @@
     <string name="DeleteUnavailableServerConfirm">هل أنت متأكد من أنك تريد **حذف الخوادم غير المتاحة**؟</string>
     <string name="MinApi21Required">عذرا، تحتاج على الأقل إلى Android 5 (مستوى واجهة برمجة التطبيقات 21).</string>
     <string name="MinApi23Required">عذرا، تحتاج على الأقل إلى Android 6 (مستوى واجهة برمجة التطبيقات 23).</string>
-    <string name="MiniVersionAlert">عذرا، إصدار صغير لا تدعم هذا النوع من الوكيل، يرجى التبديل الإصدار في الإعدادات.</string>
+    <string name="MiniVersionAlert">الإصدار المصغر لا يدعم هذا النوع من الوكيل. يرجى تبديل الإصدار في الإعدادات.</string>
     <string name="ImportProxyFromClipboard">استيراد من الحافظة</string>
     <string name="BrokenLink">رابط غير معروف / مكسور</string>
     <string name="ShareQRCode">كود QR</string>
@@ -193,9 +193,9 @@
     <string name="QRLoginNotice">يسمح رمز / رابط QR هذا لشخص ما بتسجيل الدخول إلى حساب Telegram الخاص بك. هل هذه عمليتك الخاصة؟</string>
     <string name="QRLoginConfirm">تأكيد تسجيل الدخول</string>
     <string name="StorageReset">تخزين واضح</string>
-    <string name="StorageResetInfo">سيتم حذف جميع بيانات هذا التطبيق نهائيًا (وحاول تسجيل الخروج من جميع الحسابات أولاً).</string>
+    <string name="StorageResetInfo">سيتم حذف جميع بيانات التطبيق نهائيا (بعد محاولة تسجيل الخروج من جميع الحسابات).</string>
     <string name="FCTitle">حول تحديثات التطبيق</string>
-    <string name="FCInfo">اتبع إعلاناتنا و تحديثات القناة؟</string>
+    <string name="FCInfo">تابع قناتنا للإعلان والتحديث؟</string>
     <string name="CCTitle">OpenCC (تحويل صيني)</string>
     <string name="CCTarget">استهداف</string>
     <string name="CCNo">لا شيء</string>
@@ -221,7 +221,7 @@
     <string name="SetPinnedSuffix">(مثبت)</string>
     <string name="UnpinSticker">ألغِ التثبيت</string>
     <string name="PinSticker">تثبيت</string>
-    <string name="EnableStickerPinTip">لا تزال هذه الوظيفة قيد التطوير ، وقد لا تعمل المزامنة مع السحابة كما يعتقد.</string>
+    <string name="EnableStickerPinTip">وهذه الوظيفة قيد التطوير. قد لا تعمل المزامنة مع السحابة.</string>
     <string name="EnableStickerPinAbout">قم بتثبيت الملصقات والمزامنة مع السحابة حتى عند إضافة ملصقات جديدة.
 \nيقترن بتعطيل المفضلة والحديثة.</string>
     <string name="EnableStickerPin">تفعيل تثبيت الملصق</string>
@@ -236,7 +236,7 @@
     <string name="ProxyInfoWS">إعدادات ترحيل WebSocket</string>
     <string name="AddProxyWs">إضافة WebSocket Relay</string>
     <string name="nekoXPaymentRemovedToast">تمت إزالة وظيفة الدفع.</string>
-    <string name="ImportSettingsAlert">هل تريد بالتأكيد الكتابة فوق الإعدادات؟ استيراد الإعدادات من مصادر غير معروفة قد يؤدي إلى الكتابة فوق الدبوس ويتسبب في تأمين التطبيق.</string>
+    <string name="ImportSettingsAlert">الكتابة فوق الإعدادات؟ قد يؤدي استيراد الإعدادات من مصادر غير معروفة إلى الكتابة فوق الدبوس وقفل التطبيق.</string>
     <string name="ImportSettings">استيراد الإعدادات</string>
     <string name="BackupSettings">إعدادات النسخ الاحتياطي</string>
     <string name="AutoLockImmediately">فورا</string>
@@ -248,8 +248,8 @@
     <string name="VersionUpdateNotNow">ليس الآن</string>
     <string name="VersionUpdateIgnore">تجاهل</string>
     <string name="VersionUpdateConfirm">تحديث</string>
-    <string name="VersionUpdateVariantNotMatch">فشل متغيرات الإصدار في المطابقة تلقائيا.
-\nيرجى تحميل التطبيق يدويا من GitHub.</string>
+    <string name="VersionUpdateVariantNotMatch">تعذر مطابقة متغيرات الإصدار تلقائيا.
+\nيرجى التنزيل يدويا من GitHub.</string>
     <string name="VersionUpdateTitle">يتوفر إصدار جديد</string>
     <string name="unreadBadgeOnBackButton">شارة غير المقروءة على زر الرجوع</string>
     <string name="customPublicProxyIP">تعيين عنوان IP للوكيل العام</string>
@@ -263,7 +263,7 @@
     <string name="repeatConfirmText">هل أنت متأكد من التكرار؟</string>
     <string name="useCustomEmoji">استخدام الرموز التعبيرية المخصصة</string>
     <string name="useCustomEmojiInvalid">ليس ملف رمز تعبيري صالح ZIP.</string>
-    <string name="customPublicProxyIPNotice">في بعض المجالات، وتحديدا IP من CDN الوكيل العام(على سبيل المثال. Cloudflare) يمكن تسريع الوصول.</string>
+    <string name="customPublicProxyIPNotice">في بعض المناطق ، يمكن أن يؤدي تحديد عنوان IP الخاص ب CDN وكيل عام (مثل Cloudflare) إلى تسريع الوصول.</string>
     <string name="update_download_soucre">حدد مصدر التنزيل</string>
     <string name="DeleteDownloadedFileSucceed">محذوف</string>
     <string name="rememberAllBackMessages">تذكر جميع الردود التي تم النقر عليها</string>
@@ -278,5 +278,5 @@
     <string name="channelAliasDetails">طلب تمكين مستخدم قناة التسمية.</string>
     <string name="setChannelAliasName">تعيين الاسم المستعار</string>
     <string name="labelChannelUser">تسمية مستخدم القناة</string>
-    <string name="labelChannelUserDetails">إذا كان مرسل الرسالة هو القناة ، فسيتم تسميتها \"القناة\"</string>
+    <string name="labelChannelUserDetails">إذا كان مرسل الرسالة هو قناة، تصنيفه على أنه قناة.</string>
 </resources>

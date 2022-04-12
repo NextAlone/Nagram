@@ -2,8 +2,8 @@
 <resources>
     <string name="Locked">Terkunci</string>
     <string name="AccDescrChatAttachEnterMenu">Menu input obrolan</string>
-    <string name="ChatAttachEnterMenuRecordVideo">Merekam video</string>
-    <string name="ChatAttachEnterMenuRecordAudio">Merekam suara</string>
+    <string name="ChatAttachEnterMenuRecordVideo">Rekam Video</string>
+    <string name="ChatAttachEnterMenuRecordAudio">Rekam Suara</string>
     <string name="ChatAttachEnterMenuDisableLinkPreview">Matikan Pratinjau Tautan</string>
     <string name="ChatAttachEnterMenuEnableLinkPreview">Hidupkan Pratinjau Tautan</string>
     <string name="UseChatAttachEnterMenu">Gunakan menu input</string>

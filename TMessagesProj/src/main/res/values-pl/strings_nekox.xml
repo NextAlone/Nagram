@@ -64,7 +64,7 @@
     <string name="DisableChatAction">Nie wysyłaj mojego statusu wprowadzania</string>
     <string name="FakeScreenshot">Symuluj zrzut ekranu</string>
     <string name="ImportPxy">Import</string>
-    <string name="FilterNameUsers">Użytkownicy</string>
+    <string name="FilterNameUsers">Osoby</string>
     <string name="FilterNameUsersDescription">Wyłącznie czaty z użytkownikami</string>
     <string name="FilterNameContacts">Kontakty</string>
     <string name="FilterNameContactsDescription">Wyłącznie czaty z zapisanymi kontaktami</string>
@@ -80,7 +80,7 @@
     <string name="FilterNameUnreadDescription">Wyłącznie nieprzeczytane czaty</string>
     <string name="FilterNameUnmutedAndUnread">Niewyciszone i nieprzeczytane</string>
     <string name="FilterNameUnmutedAndUnreadDescription">Wyłącznie nieprzeczytane niewyciszone czaty</string>
-    <string name="IgnoreMutedCount">Ignoruj liczbę wyciszonych i nieprzeczytanych w folderze</string>
+    <string name="IgnoreMutedCount">Nie pokazuj licznika wyciszonych i nieprzeczytanych na kartach folderów</string>
     <string name="DialogsSettings">Ustawienia czatów</string>
     <string name="SortMenu">Ustawienia sortowania czatów</string>
     <string name="SortByUnread">Sortuj po nieprzeczytanych</string>
@@ -88,8 +88,8 @@
     <string name="SortByUser">Sortuj wg. użytkownika</string>
     <string name="SortByContacts">Sortuj wg. kontaktów</string>
     <string name="NekoXPushService">NekoX Push Service</string>
-    <string name="EnablePushAlert">Proszę włączyć \"NekoX Push Service\"</string>
-    <string name="DisablePushAlert">Proszę wyłączyć \"NekoX Push Service\"</string>
+    <string name="EnablePushAlert">Proszę włączyć „NekoX Push Service”</string>
+    <string name="DisablePushAlert">Proszę wyłączyć „NekoX Push Service”</string>
     <string name="DisableUndo">Wyłącz kilkusekundowy dymek przywracania usuniętego czatu</string>
     <string name="DisableSystemAccount">Wyłącz konta systemowe</string>
     <string name="FilterMenu">Menu filtrowania czatów</string>
@@ -237,8 +237,8 @@
     <string name="UnpinSticker">Odepnij</string>
     <string name="PinSticker">Przypnij</string>
     <string name="EnableStickerPinTip">Ta funkcja jest w trakcie opracowywania. Synchronizacja z chmurą może nie działać.</string>
-    <string name="EnableStickerPinAbout">Przypinaj i synchronizuj naklejki z chmurą w przypadku dodawania nowych naklejek.
-\nOpcja powiązana z Wyłącz Ulubione oraz Ostatnio Używane.</string>
+    <string name="EnableStickerPinAbout">Przypinaj naklejki i synchronizuj je z chmurą podczas dodawania nowych.
+\nW połączeniu z „Wyłącz Ulubione” i „Ostatnie”.</string>
     <string name="EnableStickerPin">Włącz przypinanie naklejek</string>
     <string name="ArchiveFiles">Pliki archiwalne</string>
     <string name="Win32ExecutableFiles">Pliki wykonywalne Win32</string>
@@ -266,7 +266,7 @@
 \nAwatar jako tło
 \nDuży awatar jako tło</string>
     <string name="ShareMessages">Udostępnij</string>
-    <string name="unreadBadgeOnBackButton">Licznik nieprzeczytanych na przycisku \"Wstecz\"</string>
+    <string name="unreadBadgeOnBackButton">Pokaż licznik nieprzeczytanych na przycisku wstecz</string>
     <string name="AppUpdateNekoX">Aktualizacja Nekogram X</string>
     <string name="NekoXUpdateTranslationHint">Naciśnij, aby przetłumaczyć dziennik zmian</string>
     <string name="AutoCheckUpdatePreview">Podgląd (niestabilne)</string>
@@ -274,6 +274,6 @@
     <string name="channelAlias">Alias kanału</string>
     <string name="channelAliasDetails">Wymagaj włączonego oznaczenia kanału użytkownika.</string>
     <string name="setChannelAliasName">Ustaw alias kanału</string>
-    <string name="labelChannelUser">Oznaczenie kanału użytkownika</string>
-    <string name="labelChannelUserDetails">Jeśli nadawcą komunikatu jest \"Kanał\", zostanie on oznaczony jako \"Kanał\".</string>
+    <string name="labelChannelUser">Oznacz kanały anonimowych użytkowników na czacie</string>
+    <string name="labelChannelUserDetails">Anonimowi użytkownicy na grupie zostaną oznaczeni jako „Kanał”.</string>
 </resources>

@@ -9,7 +9,7 @@
     <string name="DeleteAllFromSelfAlert">Ostrzeżenie! Spowoduje to **usunięcie wszystkich wiadomości od Ciebie** w tym czacie dla **wszystkich** członków.</string>
     <string name="BotLogin">Logowanie do bota</string>
     <string name="InvalidAccessToken">Nieprawidłowy token dostępu</string>
-    <string name="IgnoreBlocked">Ignoruj zablokow. userów w grupie</string>
+    <string name="IgnoreBlocked">Ukryj wiadomości od zablokowanego użytkownika</string>
     <string name="Connection">Połączenia internetowe</string>
     <string name="Chat">Czat</string>
     <string name="NameOrder">Kolejność nazw</string>
