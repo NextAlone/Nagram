@@ -276,4 +276,6 @@
     <string name="setChannelAliasName">Establecer alias</string>
     <string name="channelAliasDetails">Requerir usuario habilitado con etiqueta del canal.</string>
     <string name="labelChannelUserDetails">Si el remitente del mensaje es el Canal, se etiquetará como \"Canal\"</string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="OpenCC" translatable="false"></string>
 </resources>

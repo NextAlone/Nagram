@@ -279,4 +279,6 @@
     <string name="setChannelAliasName">تنظیم نام مستعار</string>
     <string name="labelChannelUser">علامت‌گذاری کاربر کانال</string>
     <string name="labelChannelUserDetails">اگر فرستنده پیام یک کانال باشد، این گزینه او را به‌عنوان یک \"کانال\" علامت‌گذاری می‌کند</string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="NekoX" translatable="false"></string>
 </resources>

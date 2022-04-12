@@ -279,4 +279,6 @@
     <string name="channelAlias">Alias saluran</string>
     <string name="channelAliasDetails">Wajibkan pengguna saluran label diaktifkan.</string>
     <string name="labelChannelUserDetails">jika pengirim pesan adalah channel, Itu akan ditandai sebagai \"Channel\"</string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="NekoX" translatable="false"></string>
 </resources>

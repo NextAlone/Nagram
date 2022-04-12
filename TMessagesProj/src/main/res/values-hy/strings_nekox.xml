@@ -240,4 +240,42 @@
     <string name="ArchiveFiles">Արխիվացնել ֆայլերը</string>
     <string name="Win32ExecutableFiles">Win32 գործադիր ֆայլեր</string>
     <string name="AutoDownload">Ավտոմատ ներբեռնում</string>
+    <string name="AutoCheckUpdatePreview"></string>
+    <string name="AppUpdateNekoX"></string>
+    <string name="hideSponsoredMessage"></string>
+    <string name="AutoCheckUpdateSwitch"></string>
+    <string name="unreadBadgeOnBackButton"></string>
+    <string name="VersionUpdateTitle"></string>
+    <string name="useCustomEmoji"></string>
+    <string name="VersionUpdateNotNow"></string>
+    <string name="VersionUpdateIgnore"></string>
+    <string name="AutoCheckUpdateOFF"></string>
+    <string name="channelAliasDetails"></string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="update_download_soucre"></string>
+    <string name="AutoCheckUpdateStable"></string>
+    <string name="NekoXUpdateTranslationHint"></string>
+    <string name="DisableInstantCamera"></string>
+    <string name="DeleteDownloadedFileExternal"></string>
+    <string name="labelChannelUserDetails"></string>
+    <string name="useCustomEmojiInvalid"></string>
+    <string name="customPublicProxyIPNotice"></string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="setChannelAliasName"></string>
+    <string name="repeatConfirm"></string>
+    <string name="rememberAllBackMessages"></string>
+    <string name="ShareMessages"></string>
+    <string name="channelAlias"></string>
+    <string name="VersionUpdateVariantNotMatch"></string>
+    <string name="VersionUpdateNoUpdate"></string>
+    <string name="valuesLargeAvatarInDrawer"></string>
+    <string name="labelChannelUser"></string>
+    <string name="showSeconds"></string>
+    <string name="VersionUpdateConfirm"></string>
+    <string name="DeleteDownloadedFileSucceed"></string>
+    <string name="DeleteDownloadedFileConfirm"></string>
+    <string name="AutoCheckUpdateRc"></string>
+    <string name="repeatConfirmText"></string>
+    <string name="customPublicProxyIP"></string>
+    <string name="Name"></string>
 </resources>
