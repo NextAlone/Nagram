@@ -330,7 +330,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int nkbtn_deldlcache = 2013;
     private final static int nkbtn_view_history = 2014;
     private final static int nkbtn_repeat = 2015;
-    private final static int nkbtn_repeatascopy = 2027;
     private final static int nkbtn_stickerdl = 2016;
     private final static int nkbtn_unpin = 2017;
     private final static int nkbtn_view_in_chat = 2018;
@@ -340,8 +339,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int nkbtn_PGPDecrypt = 2022;
     private final static int nkbtn_PGPImportPrivate = 2023;
     private final static int nkbtn_PGPImport = 2024;
-    private final static int nkbtn_invertReply = 2025;
-    private final static int nkbtn_greatOrPoor = 2026;
+    private final static int nkbtn_copy_link_in_pm = 2025;
+    private final static int nkbtn_invertReply = 2026;
+    private final static int nkbtn_greatOrPoor = 2027;
+    private final static int nkbtn_repeatascopy = 2028;
 
 
     protected TLRPC.Chat currentChat;
@@ -21862,6 +21863,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             options.add(22);
                             icons.add(R.drawable.msg_link);
                         }
+                        if (!selectedObject.isSponsored() && chatMode != MODE_SCHEDULED && currentUser != null && selectedObject.getDialogId() != mergeDialogId) {
+                            items.add(LocaleController.getString("CopyLink", R.string.CopyLink));
+                            options.add(nkbtn_copy_link_in_pm);
+                            icons.add(R.drawable.msg_link);
+                        }
                         if (type == 2) {
                             if (chatMode != MODE_SCHEDULED) {
                                 if (selectedObject.type == MessageObject.TYPE_POLL && !message.isPollClosed()) {
@@ -29671,6 +29677,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (!getMessagesController().checkCanOpenChat(args, ChatActivity.this))
                     return;
                 presentFragment(new ChatActivity(args), true);
+                break;
+
+            }
+            case nkbtn_copy_link_in_pm: {
+                try {
+                    String link_message = "tg://openmessage?user_id=" + currentUser.id + "&message_id=" + selectedObject.messageOwner.id;
+                    ClipboardManager clipboard = (ClipboardManager) ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("label", link_message);
+                    clipboard.setPrimaryClip(clip);
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
                 break;
 
             }
