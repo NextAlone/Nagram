@@ -339,6 +339,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int nkbtn_PGPDecrypt = 2022;
     private final static int nkbtn_PGPImportPrivate = 2023;
     private final static int nkbtn_PGPImport = 2024;
+    private final static int nkbtn_copy_link_in_pm = 2025;
 
     protected TLRPC.Chat currentChat;
     protected TLRPC.User currentUser;
@@ -21684,6 +21685,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             options.add(22);
                             icons.add(R.drawable.baseline_link_24);
                         }
+                        if (!selectedObject.isSponsored() && chatMode != MODE_SCHEDULED && currentUser != null && selectedObject.getDialogId() != mergeDialogId) {
+                            items.add(LocaleController.getString("CopyLink", R.string.CopyLink));
+                            options.add(nkbtn_copy_link_in_pm);
+                            icons.add(R.drawable.baseline_link_24);
+                        }
                         if (type == 2) {
                             if (chatMode != MODE_SCHEDULED) {
                                 if (selectedObject.type == MessageObject.TYPE_POLL && !message.isPollClosed()) {
@@ -29437,6 +29443,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (!getMessagesController().checkCanOpenChat(args, ChatActivity.this))
                     return;
                 presentFragment(new ChatActivity(args), true);
+                break;
+
+            }
+            case nkbtn_copy_link_in_pm: {
+                try {
+                    String link_message = "tg://openmessage?user_id=" + currentUser.id + "&message_id=" + selectedObject.messageOwner.id;
+                    ClipboardManager clipboard = (ClipboardManager) ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("label", link_message);
+                    clipboard.setPrimaryClip(clip);
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
                 break;
 
             }
