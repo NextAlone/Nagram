@@ -277,4 +277,6 @@
     <string name="setChannelAliasName">Добавить лычку</string>
     <string name="labelChannelUser">Помечать сообщения от каналов</string>
     <string name="labelChannelUserDetails">Сообщения от имени каналов будут помечаться «лычка | канал»</string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="OpenCC" translatable="false"></string>
 </resources>

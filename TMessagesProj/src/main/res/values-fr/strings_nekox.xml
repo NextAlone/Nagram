@@ -267,4 +267,16 @@
     <string name="rememberAllBackMessages">Se souvenir de toutes les réponses cliquées</string>
     <string name="BackupSettings">Sauvegarder les paramètres</string>
     <string name="ArchiveFiles">Fichiers archives</string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="channelAliasDetails"></string>
+    <string name="labelChannelUserDetails"></string>
+    <string name="channelAlias"></string>
+    <string name="ShareMessages"></string>
+    <string name="NekoXUpdateTranslationHint"></string>
+    <string name="setChannelAliasName"></string>
+    <string name="labelChannelUser"></string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="Name"></string>
+    <string name="AutoCheckUpdatePreview"></string>
+    <string name="AppUpdateNekoX"></string>
 </resources>

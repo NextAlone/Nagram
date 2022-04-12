@@ -275,4 +275,10 @@
     <string name="AppUpdateNekoX">Cập nhật Nekogram X</string>
     <string name="Name">Tên</string>
     <string name="channelAlias">Bí danh kênh</string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="channelAliasDetails"></string>
+    <string name="labelChannelUserDetails"></string>
+    <string name="labelChannelUser"></string>
+    <string name="setChannelAliasName"></string>
 </resources>

@@ -267,4 +267,15 @@
     <string name="showSeconds">Mostra i secondi nell\'orario</string>
     <string name="rememberAllBackMessages">Ricorda tutte le risposte cliccate</string>
     <string name="ShareMessages">Condividi</string>
+    <string name="AutoCheckUpdatePreview"></string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="Name"></string>
+    <string name="labelChannelUser"></string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="NekoXUpdateTranslationHint"></string>
+    <string name="channelAliasDetails"></string>
+    <string name="channelAlias"></string>
+    <string name="labelChannelUserDetails"></string>
+    <string name="setChannelAliasName"></string>
+    <string name="AppUpdateNekoX"></string>
 </resources>

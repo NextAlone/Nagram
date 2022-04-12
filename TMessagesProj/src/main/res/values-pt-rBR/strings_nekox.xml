@@ -279,4 +279,6 @@
     <string name="channelAliasDetails">Exigir usuário do canal de rótulo ativado.</string>
     <string name="Name">Nome</string>
     <string name="channelAlias">Alias do Canal</string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="OpenCC" translatable="false"></string>
 </resources>

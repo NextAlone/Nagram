@@ -275,4 +275,10 @@
     <string name="AppUpdateNekoX">עדכון Nekogram X</string>
     <string name="Name">שם</string>
     <string name="channelAlias">כינוי ערוץ</string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="labelChannelUser"></string>
+    <string name="labelChannelUserDetails"></string>
+    <string name="setChannelAliasName"></string>
+    <string name="channelAliasDetails"></string>
+    <string name="OpenCC" translatable="false"></string>
 </resources>

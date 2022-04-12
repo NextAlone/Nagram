@@ -266,4 +266,15 @@
 \nAvatar grande de fundo</string>
     <string name="hideSponsoredMessage">Ocultar mensagens patrocinadas</string>
     <string name="rememberAllBackMessages">Lembrar de todas as respostas clicadas</string>
+    <string name="AppUpdateNekoX"></string>
+    <string name="OpenCC" translatable="false"></string>
+    <string name="labelChannelUser"></string>
+    <string name="labelChannelUserDetails"></string>
+    <string name="NekoX" translatable="false"></string>
+    <string name="AutoCheckUpdatePreview"></string>
+    <string name="channelAlias"></string>
+    <string name="channelAliasDetails"></string>
+    <string name="setChannelAliasName"></string>
+    <string name="Name"></string>
+    <string name="NekoXUpdateTranslationHint"></string>
 </resources>
