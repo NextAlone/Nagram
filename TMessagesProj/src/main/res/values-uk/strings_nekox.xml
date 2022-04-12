@@ -279,6 +279,4 @@
     <string name="setChannelAliasName">Вкажіть псевдонім</string>
     <string name="labelChannelUser">Мітка користувача-каналу</string>
     <string name="channelAliasDetails">Якщо ввімкнена мітка користувача-каналу.</string>
-    <string name="OpenCC" translatable="false"></string>
-    <string name="NekoX" translatable="false"></string>
 </resources>

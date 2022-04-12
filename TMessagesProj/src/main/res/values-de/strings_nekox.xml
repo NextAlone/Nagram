@@ -270,15 +270,4 @@
     <string name="DeleteDownloadedFileSucceed">Gelöscht</string>
     <string name="update_download_soucre">Wähle die Quelle zum Herunterladen aus</string>
     <string name="Win32ExecutableFiles">Ausführbare Win32-Dateien</string>
-    <string name="OpenCC" translatable="false"></string>
-    <string name="AutoCheckUpdatePreview"></string>
-    <string name="NekoX" translatable="false"></string>
-    <string name="Name"></string>
-    <string name="channelAliasDetails"></string>
-    <string name="setChannelAliasName"></string>
-    <string name="labelChannelUser"></string>
-    <string name="AppUpdateNekoX"></string>
-    <string name="labelChannelUserDetails"></string>
-    <string name="channelAlias"></string>
-    <string name="NekoXUpdateTranslationHint"></string>
 </resources>

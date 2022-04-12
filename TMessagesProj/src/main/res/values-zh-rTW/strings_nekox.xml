@@ -267,15 +267,4 @@
     <string name="valuesLargeAvatarInDrawer">Telegram預設
 \n以頭像為背景
 \n以大頭像為背景</string>
-    <string name="AutoCheckUpdatePreview"></string>
-    <string name="NekoXUpdateTranslationHint"></string>
-    <string name="AppUpdateNekoX"></string>
-    <string name="NekoX" translatable="false"></string>
-    <string name="channelAlias"></string>
-    <string name="setChannelAliasName"></string>
-    <string name="OpenCC" translatable="false"></string>
-    <string name="channelAliasDetails"></string>
-    <string name="Name"></string>
-    <string name="labelChannelUserDetails"></string>
-    <string name="labelChannelUser"></string>
 </resources>

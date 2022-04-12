@@ -276,6 +276,4 @@
     <string name="setChannelAliasName">Ustaw alias kanału</string>
     <string name="labelChannelUser">Oznaczenie kanału użytkownika</string>
     <string name="labelChannelUserDetails">Jeśli nadawcą komunikatu jest \"Kanał\", zostanie on oznaczony jako \"Kanał\".</string>
-    <string name="OpenCC" translatable="false"></string>
-    <string name="NekoX" translatable="false"></string>
 </resources>

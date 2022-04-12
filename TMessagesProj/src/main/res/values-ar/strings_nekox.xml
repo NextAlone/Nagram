@@ -279,6 +279,4 @@
     <string name="setChannelAliasName">تعيين الاسم المستعار</string>
     <string name="labelChannelUser">تسمية مستخدم القناة</string>
     <string name="labelChannelUserDetails">إذا كان مرسل الرسالة هو القناة ، فسيتم تسميتها \"القناة\"</string>
-    <string name="OpenCC" translatable="false"></string>
-    <string name="NekoX" translatable="false"></string>
 </resources>

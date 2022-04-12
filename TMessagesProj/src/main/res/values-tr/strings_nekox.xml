@@ -254,29 +254,4 @@
     <string name="AutoCheckUpdatePreview">Önizleme (Kararsız)</string>
     <string name="ShareMessages">Paylaş</string>
     <string name="unreadBadgeOnBackButton">Geri düğmesinde okunmamış rozeti</string>
-    <string name="DisableInstantCamera"></string>
-    <string name="AppUpdateNekoX"></string>
-    <string name="NekoXUpdateTranslationHint"></string>
-    <string name="valuesLargeAvatarInDrawer"></string>
-    <string name="hideSponsoredMessage"></string>
-    <string name="rememberAllBackMessages"></string>
-    <string name="useCustomEmojiInvalid"></string>
-    <string name="customPublicProxyIP"></string>
-    <string name="repeatConfirmText"></string>
-    <string name="setChannelAliasName"></string>
-    <string name="OpenCC" translatable="false"></string>
-    <string name="customPublicProxyIPNotice"></string>
-    <string name="DeleteDownloadedFileExternal"></string>
-    <string name="labelChannelUser"></string>
-    <string name="Name"></string>
-    <string name="labelChannelUserDetails"></string>
-    <string name="showSeconds"></string>
-    <string name="DeleteDownloadedFileConfirm"></string>
-    <string name="NekoX" translatable="false"></string>
-    <string name="channelAlias"></string>
-    <string name="useCustomEmoji"></string>
-    <string name="channelAliasDetails"></string>
-    <string name="update_download_soucre"></string>
-    <string name="repeatConfirm"></string>
-    <string name="DeleteDownloadedFileSucceed"></string>
 </resources>
