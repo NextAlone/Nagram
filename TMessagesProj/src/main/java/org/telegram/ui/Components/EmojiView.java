@@ -1799,6 +1799,14 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     final MediaDataController mediaDataController = MediaDataController.getInstance(currentAccount);
 
                     swapListElements(stickerSets, index1, index2);
+
+                    if (stickersTab.tabsContainer != null) {
+                        for (int i = fromPosition; i <= toPosition && i < stickersTab.tabsContainer.getChildCount(); i++) {
+                            View v = stickersTab.tabsContainer.getChildAt(i);
+                            v.setTag(R.id.index_tag, i);
+                        }
+                    }
+
                     if (hasChatStickers) {
                         swapListElements(mediaDataController.getStickerSets(MediaDataController.TYPE_IMAGE), index1 - 1, index2 - 1);
                     } else {
