@@ -65,7 +65,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
     private Type type = Type.LINE;
     private LinearLayout.LayoutParams defaultTabLayoutParams;
     private LinearLayout.LayoutParams defaultExpandLayoutParams;
-    private LinearLayout tabsContainer;
+    public LinearLayout tabsContainer;
     private ScrollSlidingTabStripDelegate delegate;
     private HashMap<String, View> tabTypes = new HashMap<>();
     private HashMap<String, View> prevTypes = new HashMap<>();
