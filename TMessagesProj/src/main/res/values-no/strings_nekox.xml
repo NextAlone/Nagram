@@ -275,7 +275,4 @@
     <string name="PrivacyNotice2fa">Du har ikke satt et passord, noe som lar myndighetskontrollerte hackere ta rede på din sanne identitet. Sett et nå!</string>
     <string name="channelAliasDetails">Krev av etikett-kanalbruker er påslått.</string>
     <string name="labelChannelUser">Etikett-kanalbruker</string>
-    <string name="NekoX" translatable="false"></string>
-    <string name="OpenCC" translatable="false"></string>
-    <string name="PrivacyNoticeAddByPhone"></string>
 </resources>

@@ -238,43 +238,4 @@
     <string name="VersionUpdateNotNow">今ではありません</string>
     <string name="AutoLockImmediately">すぐに</string>
     <string name="PinSticker">ピン</string>
-    <string name="UsePersiancalendarInfo"></string>
-    <string name="AutoCheckUpdateRc"></string>
-    <string name="unreadBadgeOnBackButton"></string>
-    <string name="ShareMessages"></string>
-    <string name="NekoX" translatable="false"></string>
-    <string name="useCustomEmojiInvalid"></string>
-    <string name="labelChannelUser"></string>
-    <string name="EnableStickerPinTip"></string>
-    <string name="ImportSettingsAlert"></string>
-    <string name="customPublicProxyIP"></string>
-    <string name="OpenCC" translatable="false"></string>
-    <string name="VersionUpdateVariantNotMatch"></string>
-    <string name="repeatConfirm"></string>
-    <string name="valuesLargeAvatarInDrawer"></string>
-    <string name="NekoXUpdateTranslationHint"></string>
-    <string name="EnableStickerPinAbout"></string>
-    <string name="showSeconds"></string>
-    <string name="UnpinSticker"></string>
-    <string name="rememberAllBackMessages"></string>
-    <string name="DeleteDownloadedFileExternal"></string>
-    <string name="repeatConfirmText"></string>
-    <string name="WsPayload"></string>
-    <string name="EnableStickerPin"></string>
-    <string name="DisableInstantCamera"></string>
-    <string name="channelAlias"></string>
-    <string name="labelChannelUserDetails"></string>
-    <string name="setChannelAliasName"></string>
-    <string name="DeleteDownloadedFileConfirm"></string>
-    <string name="update_download_soucre"></string>
-    <string name="AutoCheckUpdatePreview"></string>
-    <string name="useCustomEmoji"></string>
-    <string name="Name"></string>
-    <string name="SetPinnedSuffix"></string>
-    <string name="channelAliasDetails"></string>
-    <string name="customPublicProxyIPNotice"></string>
-    <string name="VersionUpdateNoUpdate"></string>
-    <string name="DeleteDownloadedFileSucceed"></string>
-    <string name="hideSponsoredMessage"></string>
-    <string name="AppUpdateNekoX"></string>
 </resources>

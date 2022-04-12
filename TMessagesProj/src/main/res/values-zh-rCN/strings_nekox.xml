@@ -279,6 +279,4 @@
     <string name="channelAliasDetails">需启用标记频道匿名身份别名</string>
     <string name="Name">输入别名</string>
     <string name="labelChannelUserDetails">以频道匿名身份发言的用户将标记为“频道身份”</string>
-    <string name="NekoX" translatable="false"></string>
-    <string name="OpenCC" translatable="false"></string>
 </resources>
