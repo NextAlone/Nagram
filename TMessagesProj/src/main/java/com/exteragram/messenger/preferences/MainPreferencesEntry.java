@@ -27,15 +27,16 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
 import com.exteragram.messenger.preferences.cells.InfoSettingsCell;
+import com.exteragram.messenger.ExteraUtils;
 
 public class MainPreferencesEntry extends BaseFragment {
     private int rowCount;
     private ListAdapter listAdapter;
 
     private int categoryHeaderRow;
+    private int generalRow;
     private int appearanceRow;
     private int chatsRow;
-    private int drawerRow;
 
     private int dividerInfoRow;
     private int dividerExteraInfoRow;
@@ -104,8 +105,8 @@ public class MainPreferencesEntry extends BaseFragment {
                 presentFragment(new AppearancePreferencesEntry());
             } else if (position == chatsRow) {
                 presentFragment(new ChatsPreferencesEntry());
-            } else if (position == drawerRow) {
-                presentFragment(new DrawerPreferencesEntry());
+            } else if (position == generalRow) {
+                presentFragment(new GeneralPreferencesEntry());
             }
         });
         return fragmentView;
@@ -120,17 +121,17 @@ public class MainPreferencesEntry extends BaseFragment {
         dividerExteraInfoRow = rowCount++;
 
         categoryHeaderRow = rowCount++;
+        generalRow = rowCount++;
         appearanceRow = rowCount++;
         chatsRow = rowCount++;
-        drawerRow = rowCount++;
 
         dividerInfoRow = rowCount++;
 
         infoHeaderRow = rowCount++;
         channelRow = rowCount++;
         groupRow = rowCount++;
-        sourceCodeRow = rowCount++;
         crowdinRow = rowCount++;
+        sourceCodeRow = rowCount++;
 
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -166,20 +167,20 @@ public class MainPreferencesEntry extends BaseFragment {
                     break;
                 case 2:
                     TextCell textCell = (TextCell) holder.itemView;
-                    if (position == sourceCodeRow) {
-                        textCell.setTextAndValueAndIcon(LocaleController.getString("SourceCode", R.string.SourceCode), "Github", R.drawable.msg_report_spam, true);
-                    } else if (position == channelRow) {
-                        textCell.setTextAndValueAndIcon(LocaleController.getString("Channel", R.string.Channel), "@exteragram", R.drawable.msg_channel, true);
-                    } else if (position == groupRow) {
-                        textCell.setTextAndValueAndIcon(LocaleController.getString("Chats", R.string.Chats), "@exterachat", R.drawable.menu_groups, true);
-                    } else if (position == crowdinRow) {
-                        textCell.setTextAndValueAndIcon(LocaleController.getString("Crowdin", R.string.Crowdin), "Crowdin", R.drawable.msg_translate,false);
+                    if (position == generalRow) {
+                        textCell.setTextAndIcon(LocaleController.getString("General", R.string.General), R.drawable.msg_media, true);
                     } else if (position == appearanceRow) {
                         textCell.setTextAndIcon(LocaleController.getString("Appearance", R.string.Appearance), R.drawable.msg_theme, true);
                     } else if (position == chatsRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Chats", R.string.Chats), R.drawable.menu_chats, true);
-                    } else if (position == drawerRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Drawer", R.string.Drawer), R.drawable.msg_list, false);
+                        textCell.setTextAndIcon(LocaleController.getString("Chats", R.string.Chats), R.drawable.msg_discussion, false);
+                    } else if (position == channelRow) {
+                        textCell.setTextAndValueAndIcon(LocaleController.getString("Channel", R.string.Channel), "@exteragram", R.drawable.msg_channel, true);
+                    } else if (position == groupRow) {
+                        textCell.setTextAndValueAndIcon(LocaleController.getString("Chats", R.string.Chats), "@exterachat", R.drawable.msg_markread, true);
+                    } else if (position == crowdinRow) {
+                        textCell.setTextAndValueAndIcon(LocaleController.getString("Crowdin", R.string.Crowdin), "Crowdin", R.drawable.msg_translate, true);
+                    } else if (position == sourceCodeRow) {
+                        textCell.setTextAndValueAndIcon(LocaleController.getString("SourceCode", R.string.SourceCode), "Github", R.drawable.msg_delete, false);
                     }
                     textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                     break;
@@ -195,11 +196,7 @@ public class MainPreferencesEntry extends BaseFragment {
                     InfoSettingsCell textDetailCell = (InfoSettingsCell) holder.itemView;
                     textDetailCell.setMultilineDetail(true);
                     if (position == aboutExteraRow) {
-                        if (BuildVars.isBetaApp()) {
-                            textDetailCell.setTextAndValueAndIcon("exteraGram β | v" + BuildVars.BUILD_VERSION_STRING, LocaleController.getString("AboutExteraDescription", R.string.AboutExteraDescription), R.drawable.ic_logo_foreground, false);
-                        } else {
-                            textDetailCell.setTextAndValueAndIcon("exteraGram | v" + BuildVars.BUILD_VERSION_STRING, LocaleController.getString("AboutExteraDescription", R.string.AboutExteraDescription), R.drawable.ic_logo_foreground, false);
-                        }
+                        textDetailCell.setTextAndValueAndIcon(ExteraUtils.getAppName() + " | v" + BuildVars.BUILD_VERSION_STRING, LocaleController.getString("AboutExteraDescription", R.string.AboutExteraDescription), R.drawable.ic_logo_foreground, false);
                     }
                     break;
             }
@@ -208,7 +205,7 @@ public class MainPreferencesEntry extends BaseFragment {
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int type = holder.getItemViewType();
-            return type == 2 || type == 4;
+            return type == 2;
         }
 
         @NonNull
@@ -239,9 +236,9 @@ public class MainPreferencesEntry extends BaseFragment {
         public int getItemViewType(int position) {
             if (position == dividerInfoRow || position == dividerExteraInfoRow) {
                 return 1;
-            } else if (position == appearanceRow || position == chatsRow || position == drawerRow ||
-                       position == channelRow || position == groupRow || position == crowdinRow ||
-                       position == sourceCodeRow) {
+            } else if (position == generalRow || position == appearanceRow || position == chatsRow ||
+                      position == channelRow || position == groupRow || position == crowdinRow ||
+                      position == sourceCodeRow) {
                 return 2;
             } else if (position == infoHeaderRow || position == categoryHeaderRow) {
                 return 3;

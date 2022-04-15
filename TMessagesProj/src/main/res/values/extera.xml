@@ -32,15 +32,26 @@
     <string name="CenterTitle">Center title in action bar</string>
     <string name="NewSwitchStyle">Enable alternative switch style</string>
     <string name="TransparentNavBar">Transparent navigation bar</string>
+    <string name="TransparentNavBarValue">The navigation bar will not become completely transparent, it will only get the color of the Message Panel.</string>
     <string name="SquareFab">Square-shaped FAB</string>
+    <string name="SquareFabInfo">A floating action button (FAB) is a circular button that triggers the primary action in app\'s UI. It is located in the right bottom corner of the screen.</string>
 
+    <!-- General -->
+    <string name="DisableNumberRounding">Disable number rounding</string>
+    <string name="FormatTimeWithSeconds">Format time with seconds</string>
     <string name="HideAllChats">Hide \"All Chats\" tab</string>
     <string name="HideProxySponsor">Hide proxy sponsor</string>
-    <string name="HidePhoneNumber">Hide phone number</string>
-    <string name="ShowID">Show ID in Profile</string>
     <string name="ChatsOnTitle">\"Chats\" instead of \"exteraGram\"</string>
     <string name="DisableVibration">Disable vibration</string>
     <string name="ForceTabletMode">Force tablet mode</string>
+    <string name="ArchiveOnPull">Open archive on pulldown</string>
+    <string name="DisableUnarchiveSwipe">Disable \"Unarchive\" swipe</string>
+    <string name="ForcePacmanAnimation">Force Pac-Man animation</string>
+    <string name="ForcePacmanAnimationInfo">This requires the selected \"Archive\" swipe gesture in chat list.</string>
+    <string name="Profile">Profile</string>
+    <string name="HidePhoneNumber">Hide phone number</string>
+    <string name="ShowID">Show ID in Profile</string>
+    <string name="ShowDC">Show DC in Profile</string>
 
     <!-- Chats -->
     <string name="StickerSize">Stickers size</string>
@@ -56,7 +67,6 @@
     <string name="DisableReactions">Disable reactions</string>
     <string name="DisableGreetingSticker">Disable greeting sticker</string>
     <string name="DisableJumpToNextChannel">Disable \"Jump to next channel\"</string>
-    <string name="ArchiveOnPull">Open archive on pulldown</string>
     <string name="DateOfForwardedMsg">Show date of forwarded message</string>
     <string name="ShowMessageID">Show message ID</string>
 
@@ -90,4 +100,8 @@
 
     <string name="ConfirmCall">Confirm call</string>
     <string name="CallTo">Call to **%1$s**?</string>
+
+    <string name="formatterDay24HSec">HH:mm:ss</string>
+    <string name="formatterDay12HSec">h:mm:ss a</string>
+
 </resources>

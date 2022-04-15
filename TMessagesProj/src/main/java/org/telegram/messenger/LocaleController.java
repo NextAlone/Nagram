@@ -42,6 +42,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class LocaleController {
 
     static final int QUANTITY_OTHER = 0x0000;
@@ -1767,7 +1769,7 @@ public class LocaleController {
         formatterWeekLong = createFormatter(locale, getStringInternal("formatterWeekLong", R.string.formatterWeekLong), "EEEE");
         formatterScheduleDay = createFormatter(locale, getStringInternal("formatDateSchedule", R.string.formatDateSchedule), "MMM d");
         formatterScheduleYear = createFormatter(locale, getStringInternal("formatDateScheduleYear", R.string.formatDateScheduleYear), "MMM d yyyy");
-        formatterDay = createFormatter(lang.toLowerCase().equals("ar") || lang.toLowerCase().equals("ko") ? locale : Locale.US, is24HourFormat ? getStringInternal("formatterDay24H", R.string.formatterDay24H) : getStringInternal("formatterDay12H", R.string.formatterDay12H), is24HourFormat ? "HH:mm" : "h:mm a");
+        formatterDay = createFormatter(lang.toLowerCase().equals("ar") || lang.toLowerCase().equals("ko") ? locale : Locale.US, is24HourFormat ? (ExteraConfig.formatTimeWithSeconds ? getStringInternal("formatterDay24HSec", R.string.formatterDay24HSec) : getStringInternal("formatterDay24H", R.string.formatterDay24H)) : (ExteraConfig.formatTimeWithSeconds ? getStringInternal("formatterDay12HSec", R.string.formatterDay12HSec) : getStringInternal("formatterDay12H", R.string.formatterDay12H)), is24HourFormat ? (ExteraConfig.formatTimeWithSeconds ? "HH:mm:ss" : "HH:mm") : (ExteraConfig.formatTimeWithSeconds ? "h:mm:ss a" : "h:mm a"));
         formatterStats = createFormatter(locale, is24HourFormat ? getStringInternal("formatterStats24H", R.string.formatterStats24H) : getStringInternal("formatterStats12H", R.string.formatterStats12H), is24HourFormat ? "MMM dd yyyy, HH:mm" : "MMM dd yyyy, h:mm a");
         formatterBannedUntil = createFormatter(locale, is24HourFormat ? getStringInternal("formatterBannedUntil24H", R.string.formatterBannedUntil24H) : getStringInternal("formatterBannedUntil12H", R.string.formatterBannedUntil12H), is24HourFormat ? "MMM dd yyyy, HH:mm" : "MMM dd yyyy, h:mm a");
         formatterBannedUntilThisYear = createFormatter(locale, is24HourFormat ? getStringInternal("formatterBannedUntilThisYear24H", R.string.formatterBannedUntilThisYear24H) : getStringInternal("formatterBannedUntilThisYear12H", R.string.formatterBannedUntilThisYear12H), is24HourFormat ? "MMM dd, HH:mm" : "MMM dd, h:mm a");
@@ -1915,6 +1917,13 @@ public class LocaleController {
     }
 
     public static String formatShortNumber(int number, int[] rounded) {
+        if (ExteraConfig.disableNumberRounding) {
+            StringBuilder stringBuilder = new StringBuilder(String.format(Locale.US, "%d", number));
+            for (int n = stringBuilder.length() - 3; n > 0; n -= 3) {
+                stringBuilder.insert(n, ',');
+            }
+            return stringBuilder.toString();
+        }
         StringBuilder K = new StringBuilder();
         int lastDec = 0;
         int KCount = 0;

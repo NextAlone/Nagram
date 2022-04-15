@@ -62,7 +62,6 @@ public class ChatsPreferencesEntry extends BaseFragment {
     private int disableReactionsRow;
     private int disableGreetingStickerRow;
     private int disableJumpToNextChannelRow;
-    private int archiveOnPullRow;
     private int dateOfForwardedMsgRow;
     private int showMessageIDRow;
     private int chatDividerRow;
@@ -73,6 +72,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
     private int disableProximityEventsRow;
     private int pauseOnMinimizeRow;
     private int disablePlaybackRow;
+    private int mediaDividerRow;
 
     private UndoView restartTooltip;
 
@@ -87,7 +87,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
 
         private final StickerSizePreviewCell messagesCell;
         private final SeekBarView sizeBar;
-        private final int startStickerSize = 8;
+        private final int startStickerSize = 2;
         private final int endStickerSize = 20;
 
         private final TextPaint textPaint;
@@ -264,11 +264,6 @@ public class ChatsPreferencesEntry extends BaseFragment {
                     ((TextCheckCell) view).setChecked(ExteraConfig.disableJumpToNextChannel);
                 }
                 parentLayout.rebuildAllFragmentViews(false, false);
-            } else if (position == archiveOnPullRow) {
-                ExteraConfig.toggleArchiveOnPull();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.archiveOnPull);
-                }
             } else if (position == dateOfForwardedMsgRow) {
                 ExteraConfig.toggleDateOfForwardedMsg();
                 if (view instanceof TextCheckCell) {
@@ -332,7 +327,6 @@ public class ChatsPreferencesEntry extends BaseFragment {
         disableReactionsRow = rowCount++;
         disableGreetingStickerRow = rowCount++;
         disableJumpToNextChannelRow = rowCount++;
-        archiveOnPullRow = rowCount++;
         dateOfForwardedMsgRow = rowCount++;
         showMessageIDRow = rowCount++;
         chatDividerRow = rowCount++;
@@ -343,6 +337,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
         disableProximityEventsRow = rowCount++;
         pauseOnMinimizeRow = rowCount++;
         disablePlaybackRow = rowCount++;
+        mediaDividerRow = rowCount++;
 
         if (listAdapter != null && notify) {
             listAdapter.notifyDataSetChanged();
@@ -407,8 +402,6 @@ public class ChatsPreferencesEntry extends BaseFragment {
                         textCheckCell.setTextAndCheck(LocaleController.getString("DisableGreetingSticker", R.string.DisableGreetingSticker), ExteraConfig.disableGreetingSticker, true);
                     } else if (position == disableJumpToNextChannelRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("DisableJumpToNextChannel", R.string.DisableJumpToNextChannel), ExteraConfig.disableJumpToNextChannel, true);
-                    } else if (position == archiveOnPullRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("ArchiveOnPull", R.string.ArchiveOnPull), ExteraConfig.archiveOnPull, true);
                     } else if (position == dateOfForwardedMsgRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("DateOfForwardedMsg", R.string.DateOfForwardedMsg), ExteraConfig.dateOfForwardedMsg, true);
                     } else if (position == showMessageIDRow) {
@@ -431,7 +424,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int type = holder.getItemViewType();
-            return type == 3 || type == 7;
+            return type == 3;
         }
 
         @NonNull
@@ -461,16 +454,16 @@ public class ChatsPreferencesEntry extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            if (position == stickersDividerRow || position == chatDividerRow) {
+            if (position == stickersDividerRow || position == chatDividerRow || position == mediaDividerRow) {
                 return 1;
             } else if (position == stickerSizeHeaderRow || position == stickersHeaderRow || position == chatHeaderRow || position == mediaHeaderRow) {
                 return 2;
             } else if (position == hideStickerTimeRow || position == unlimitedRecentStickersRow || position == sendMessageBeforeSendStickerRow ||
-                    position == hideSendAsChannelRow || position == hideKeyboardOnScrollRow || position == disableReactionsRow ||
-                    position == disableGreetingStickerRow || position == disableJumpToNextChannelRow || position == archiveOnPullRow ||
-                    position == dateOfForwardedMsgRow || position == showMessageIDRow || position == rearVideoMessagesRow ||
-                    position == disableCameraRow || position == disableProximityEventsRow || position == pauseOnMinimizeRow ||
-                    position == disablePlaybackRow) {
+                      position == hideSendAsChannelRow || position == hideKeyboardOnScrollRow || position == disableReactionsRow ||
+                      position == disableGreetingStickerRow || position == disableJumpToNextChannelRow ||
+                      position == dateOfForwardedMsgRow || position == showMessageIDRow || position == rearVideoMessagesRow ||
+                      position == disableCameraRow || position == disableProximityEventsRow || position == pauseOnMinimizeRow ||
+                      position == disablePlaybackRow) {
                 return 3;
             } else if (position == stickerSizeRow) {
                 return 4;
