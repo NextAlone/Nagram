@@ -8,4 +8,5 @@
     <color name="widget_divider">#000000</color>
     <color name="widget_action_text">#75ADE5</color>
     <color name="widget_edit_text">#8D949B</color>
+    <color name="SplashBackground">#202124</color>
 </resources>
