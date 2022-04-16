@@ -1,0 +1,5 @@
+files:
+  - source: /TMessagesProj/src/main/res/values/strings*
+    ignore:
+      - /TMessagesProj/src/main/res/values-v*
+    translation: /TMessagesProj/src/main/res/values-%two_letters_code%/%original_file_name%
