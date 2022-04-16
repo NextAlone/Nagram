@@ -3,16 +3,17 @@ package com.exteragram.messenger;
 import android.app.Activity;
 import android.content.SharedPreferences;
 
-import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.R;
-import org.telegram.messenger.SharedConfig;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.messenger.UserConfig;
+
+import java.util.Arrays;
 
 public class ExteraConfig {
 
     private static final Object sync = new Object();
+
+    private static final int[] OFFICIAL_CHANNELS = {1233768168, 1524581881, 1571726392, 1632728092, 1638754701, 1779596027};
 
     public static boolean scrollablePreview;
 
@@ -116,6 +117,10 @@ public class ExteraConfig {
             
             configLoaded = true;
         }
+    }
+
+    public static boolean isExtera(TLRPC.Chat chat) {
+        return Arrays.stream(OFFICIAL_CHANNELS).anyMatch(id -> id == chat.id);
     }
 
     public static void toggleUseSystemFonts() {

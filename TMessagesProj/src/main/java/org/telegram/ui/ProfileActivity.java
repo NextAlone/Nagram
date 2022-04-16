@@ -6138,6 +6138,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         nameTextView[a].setRightDrawable(getScamDrawable(chat.scam ? 0 : 1));
                     } else if (chat.verified) {
                         nameTextView[a].setRightDrawable(getVerifiedCrossfadeDrawable());
+                    } else if (ExteraConfig.isExtera(chat)){
+                        nameTextView[a].setRightDrawable(Theme.profile_outlineArrow);
                     } else {
                         nameTextView[a].setRightDrawable(null);
                     }
