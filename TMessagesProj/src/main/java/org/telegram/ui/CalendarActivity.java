@@ -310,7 +310,7 @@ public class CalendarActivity extends BaseFragment {
                     selectDaysHint.showForView(bottomBar, true);
                     return;
                 }
-                AlertsCreator.createClearDaysDialogAlert(this, lastDaysSelected, getMessagesController().getUser(dialogId), new MessagesStorage.BooleanCallback() {
+                AlertsCreator.createClearDaysDialogAlert(this, lastDaysSelected, getMessagesController().getUser(dialogId), null, false, new MessagesStorage.BooleanCallback() {
                     @Override
                     public void run(boolean forAll) {
                         finishFragment();
@@ -745,7 +745,7 @@ public class CalendarActivity extends BaseFragment {
                                 if (parentLayout.fragmentsStack.size() >= 3) {
                                     BaseFragment fragment = parentLayout.fragmentsStack.get(parentLayout.fragmentsStack.size() - 3);
                                     if (fragment instanceof ChatActivity) {
-                                        AlertsCreator.createClearDaysDialogAlert(CalendarActivity.this, 1, getMessagesController().getUser(dialogId), new MessagesStorage.BooleanCallback() {
+                                        AlertsCreator.createClearDaysDialogAlert(CalendarActivity.this, 1, getMessagesController().getUser(dialogId), null, false, new MessagesStorage.BooleanCallback() {
                                             @Override
                                             public void run(boolean forAll) {
                                                 finishFragment();

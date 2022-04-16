@@ -202,7 +202,7 @@ android {
         }
     }
 
-    defaultConfig.versionCode = 2600
+    defaultConfig.versionCode = 2622
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
@@ -232,7 +232,7 @@ android {
 
         minSdkVersion 21
         targetSdkVersion 32
-        versionName "8.6.2"
+        versionName "8.7.0"
 
         // Obtain your own keys at:
         // Telegram: https://core.telegram.org/api/obtaining_api_id
