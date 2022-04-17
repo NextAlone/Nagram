@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -142,6 +143,8 @@ public class AppearancePreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.hidePhoneNumber);
                 }
+                parentLayout.rebuildAllFragmentViews(false, false);
+                getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
             } else if (position == showIDRow) {
                 ExteraConfig.toggleShowID();
                 if (view instanceof TextCheckCell) {
@@ -296,8 +299,7 @@ public class AppearancePreferencesEntry extends BaseFragment {
                 return 2;
             } else if (position == useSystemFontsRow || position == useSystemEmojiRow || position == transparentStatusBarRow ||
                        position == blurForAllThemesRow || position == hideAllChatsRow || position == hidePhoneNumberRow ||
-                       position == showIDRow || position == chatsOnTitleRow || position == disableVibrationRow ||
-                       position == disableVibrationRow) {
+                       position == showIDRow || position == chatsOnTitleRow || position == disableVibrationRow) {
                 return 3;
             }
             return 1;

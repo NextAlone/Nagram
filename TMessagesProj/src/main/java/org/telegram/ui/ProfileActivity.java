@@ -5863,7 +5863,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     setAvatarSectionRow = rowCount++;
                 }
                 numberSectionRow = rowCount++;
-                numberRow = ExteraConfig.hidePhoneNumber ? -1 : rowCount++;
+                numberRow = rowCount++;
                 setUsernameRow = rowCount++;
                 bioRow = rowCount++;
 
@@ -7430,8 +7430,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     if (position == phoneRow) {
                         String text;
                         final TLRPC.User user = getMessagesController().getUser(userId);
-                        if (!TextUtils.isEmpty(user.phone)
-                                && !(ExteraConfig.hidePhoneNumber && user.id == UserConfig.getInstance(currentAccount).getClientUserId())) {
+                        if (!TextUtils.isEmpty(user.phone) && !(ExteraConfig.hidePhoneNumber && user.id == UserConfig.getInstance(currentAccount).getClientUserId())) {
                             text = PhoneFormat.getInstance().format("+" + user.phone);
                         } else {
                             text = LocaleController.getString("PhoneHidden", R.string.PhoneHidden);
@@ -7469,7 +7468,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     } else if (position == numberRow) {
                         TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
                         String value;
-                        if (user != null && user.phone != null && user.phone.length() != 0) {
+                        if (ExteraConfig.hidePhoneNumber) {
+                            value = LocaleController.getString("MobileHidden", R.string.MobileHidden);
+                        } else if (user != null && user.phone != null && user.phone.length() != 0) {
                             value = PhoneFormat.getInstance().format("+" + user.phone);
                         } else {
                             value = LocaleController.getString("NumberUnknown", R.string.NumberUnknown);
