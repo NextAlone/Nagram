@@ -22057,7 +22057,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     popupLayout.getSwipeBack().setOnClickListener(e -> closeMenu());
                 }
 
-                final boolean translateButtonEnabled = MessagesController.getGlobalMainSettings().getBoolean("translate_button", false);
+                final boolean translateButtonEnabled = MessagesController.getGlobalMainSettings().getBoolean("translate_button", true);
                 scrimPopupWindowItems = new ActionBarMenuSubItem[items.size() + (selectedObject.isSponsored() ? 1 : 0)];
                 for (int a = 0, N = items.size(); a < N; a++) {
                     if (a == 0 && selectedObject.isSponsored()) {

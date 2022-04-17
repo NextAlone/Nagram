@@ -3685,7 +3685,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         textSelectionHelper = new TextSelectionHelper.ArticleTextSelectionHelper();
         textSelectionHelper.setParentView(listView[0]);
-        if (MessagesController.getGlobalMainSettings().getBoolean("translate_button", false)) {
+        if (MessagesController.getGlobalMainSettings().getBoolean("translate_button", true)) {
             textSelectionHelper.setOnTranslate((text, fromLang, toLang, onAlertDismiss) -> {
                 TranslateAlert.showAlert(parentActivity, parentFragment, fromLang, toLang, text, false, null, onAlertDismiss);
             });
