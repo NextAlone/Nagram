@@ -15,7 +15,7 @@ configurations.all {
     exclude group: 'androidx.recyclerview', module: 'recyclerview'
 }
 
-def isPreview = true
+def isPreview = false
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
 if (serviceAccountCredentialsFile.isFile()) {
