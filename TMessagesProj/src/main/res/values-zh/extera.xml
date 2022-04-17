@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- exteraGram's Main Strings -->
-    <string name="exteraAppName">exteraGram</string>
-    <string name="exteraAppNameBeta">exteraGram β</string>
-    <string name="exteraDebugMenu">¯\\_(ツ)_/¯</string>
     <string name="MutualContact">双向联系人</string>
     <string name="ToBeginning">To beginning</string>
+
     <!-- Main Menu (about) -->
     <string name="Links">链接</string>
     <string name="AboutExteraDescription">基于官方Telegram源码制作的第三方客户端</string>

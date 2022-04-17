@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- exteraGram's Main Strings -->
-    <string name="exteraAppName">exteraGram</string>
-    <string name="exteraAppNameBeta">exteraGram β</string>
-    <string name="exteraDebugMenu">¯\\_(ツ)_/¯</string>
     <string name="MutualContact">contact mutuel</string>
     <string name="ToBeginning">To beginning</string>
+
     <!-- Main Menu (about) -->
     <string name="Links">Liens</string>
     <string name="AboutExteraDescription">Client Telegram expérimental basé sur les sources officielles de Telegram!</string>
