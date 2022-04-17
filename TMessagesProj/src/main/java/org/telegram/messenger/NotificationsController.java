@@ -34,8 +34,6 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Build;
@@ -56,9 +54,6 @@ import androidx.core.content.LocusIdCompat;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
-import android.text.TextUtils;
-import android.util.SparseArray;
-import android.util.SparseBooleanArray;
 
 import org.telegram.messenger.support.LongSparseIntArray;
 import org.telegram.tgnet.ConnectionsManager;
@@ -136,6 +131,9 @@ public class NotificationsController extends BaseController {
 
     private final int notificationId;
     private final String notificationGroup;
+
+    public static final int SETTING_SOUND_ON = 0;
+    public static final int SETTING_SOUND_OFF = 1;
 
     static {
         if (Build.VERSION.SDK_INT >= 26 && ApplicationLoader.applicationContext != null) {
@@ -243,6 +241,40 @@ public class NotificationsController extends BaseController {
             } catch (Exception e) {
                 FileLog.e(e);
             }
+        }
+    }
+
+    public void muteUntil(long did, int selectedTimeInSeconds) {
+        if (did != 0) {
+            SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
+            SharedPreferences.Editor editor = preferences.edit();
+            long flags;
+            boolean defaultEnabled = NotificationsController.getInstance(currentAccount).isGlobalNotificationsEnabled(did);
+
+            if (selectedTimeInSeconds == Integer.MAX_VALUE) {
+                if (!defaultEnabled) {
+                    editor.remove("notify2_" + did);
+                    flags = 0;
+                } else {
+                    editor.putInt("notify2_" + did, 2);
+                    flags = 1;
+                }
+            } else {
+                editor.putInt("notify2_" + did, 3);
+                editor.putInt("notifyuntil_" + did,  getConnectionsManager().getCurrentTime() + selectedTimeInSeconds);
+                flags = ((long) selectedTimeInSeconds << 32) | 1;
+            }
+            NotificationsController.getInstance(currentAccount).removeNotificationsForDialog(did);
+            MessagesStorage.getInstance(currentAccount).setDialogFlags(did, flags);
+            editor.commit();
+            TLRPC.Dialog dialog = MessagesController.getInstance(currentAccount).dialogs_dict.get(did);
+            if (dialog != null) {
+                dialog.notify_settings = new TLRPC.TL_peerNotifySettings();
+                if (selectedTimeInSeconds != Integer.MAX_VALUE || defaultEnabled) {
+                    dialog.notify_settings.mute_until = selectedTimeInSeconds;
+                }
+            }
+            NotificationsController.getInstance(currentAccount).updateServerNotificationsSettings(did);
         }
     }
 
@@ -3071,6 +3103,10 @@ public class NotificationsController extends BaseController {
         boolean secretChat = !isDefault && DialogObject.isEncryptedDialog(dialogId);
         boolean shouldOverwrite = !isInApp && overwriteKey != null && preferences.getBoolean(overwriteKey, false);
 
+        String soundHash = Utilities.MD5(sound == null ? "NoSound" : sound.toString());
+        if (soundHash != null && soundHash.length() > 5) {
+            soundHash = soundHash.substring(0, 5);
+        }
         if (isSilent) {
             name = LocaleController.getString("NotificationsSilent", R.string.NotificationsSilent);
             key = "silent";
@@ -3089,6 +3125,7 @@ public class NotificationsController extends BaseController {
             }
             key = (isInApp ? "org.telegram.keyia" : "org.telegram.key") + dialogId;
         }
+        key += "_" + soundHash;
         String channelId = preferences.getString(key, null);
         String settings = preferences.getString(key + "_s", null);
         boolean edited = false;
@@ -3170,66 +3207,6 @@ public class NotificationsController extends BaseController {
                                     editor.putInt("priority_" + dialogId, priority);
                                 }
                             }
-                            edited = true;
-                        }
-                        if (channelSound == null && sound != null || channelSound != null && (sound == null || !TextUtils.equals(channelSound.toString(), sound.toString()))) {
-                            if (!isInApp) {
-                                if (editor == null) {
-                                    editor = preferences.edit();
-                                }
-                                String newSound;
-                                if (channelSound == null) {
-                                    newSound = "NoSound";
-                                    if (isDefault) {
-                                        if (type == TYPE_CHANNEL) {
-                                            editor.putString("ChannelSound", "NoSound");
-                                        } else if (type == TYPE_GROUP) {
-                                            editor.putString("GroupSound", "NoSound");
-                                        } else {
-                                            editor.putString("GlobalSound", "NoSound");
-                                        }
-                                    } else {
-                                        editor.putString("sound_" + dialogId, "NoSound");
-                                    }
-                                } else {
-                                    newSound = channelSound.toString();
-                                    Ringtone rng = RingtoneManager.getRingtone(ApplicationLoader.applicationContext, channelSound);
-                                    String ringtoneName = null;
-                                    if (rng != null) {
-                                        if (channelSound.equals(Settings.System.DEFAULT_RINGTONE_URI)) {
-                                            ringtoneName = LocaleController.getString("DefaultRingtone", R.string.DefaultRingtone);
-                                        } else {
-                                            ringtoneName = rng.getTitle(ApplicationLoader.applicationContext);
-                                        }
-                                        rng.stop();
-                                    }
-                                    if (ringtoneName != null) {
-                                        if (isDefault) {
-                                            if (type == TYPE_CHANNEL) {
-                                                editor.putString("ChannelSound", ringtoneName);
-                                            } else if (type == TYPE_GROUP) {
-                                                editor.putString("GroupSound", ringtoneName);
-                                            } else {
-                                                editor.putString("GlobalSound", ringtoneName);
-                                            }
-                                        } else {
-                                            editor.putString("sound_" + dialogId, ringtoneName);
-                                        }
-                                    }
-                                }
-                                if (isDefault) {
-                                    if (type == TYPE_CHANNEL) {
-                                        editor.putString("ChannelSoundPath", newSound);
-                                    } else if (type == TYPE_GROUP) {
-                                        editor.putString("GroupSoundPath", newSound);
-                                    } else {
-                                        editor.putString("GlobalSoundPath", newSound);
-                                    }
-                                } else {
-                                    editor.putString("sound_path_" + dialogId, newSound);
-                                }
-                            }
-                            sound = channelSound;
                             edited = true;
                         }
                         boolean hasVibration = !isEmptyVibration(vibrationPattern);
@@ -3340,7 +3317,11 @@ public class NotificationsController extends BaseController {
             AudioAttributes.Builder builder = new AudioAttributes.Builder();
             builder.setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION);
             builder.setUsage(AudioAttributes.USAGE_NOTIFICATION);
-            notificationChannel.setSound(sound, builder.build());
+            if (sound != null) {
+                notificationChannel.setSound(sound, builder.build());
+            } else {
+                notificationChannel.setSound(null, null);
+            }
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("create new channel " + channelId);
             }
@@ -3395,6 +3376,7 @@ public class NotificationsController extends BaseController {
             boolean notifyDisabled = false;
             int vibrate = 0;
             String soundPath = null;
+            boolean isInternalSoundFile = false;
             int ledColor = 0xff0000ff;
             int importance = 0;
 
@@ -3546,6 +3528,10 @@ public class NotificationsController extends BaseController {
                 }
             }
 
+            if (!notifyDisabled && !preferences.getBoolean("sound_enabled_" + dialog_id, true)) {
+                notifyDisabled = true;
+            }
+
             String defaultPath = Settings.System.DEFAULT_NOTIFICATION_URI.getPath();
 
             boolean isDefault = true;
@@ -3553,13 +3539,20 @@ public class NotificationsController extends BaseController {
             int chatType = TYPE_PRIVATE;
 
             String customSoundPath;
+            boolean customIsInternalSound = false;
             int customVibrate;
             int customImportance;
             Integer customLedColor;
             if (preferences.getBoolean("custom_" + dialog_id, false)) {
                 customVibrate = preferences.getInt("vibrate_" + dialog_id, 0);
                 customImportance = preferences.getInt("priority_" + dialog_id, 3);
-                customSoundPath = preferences.getString("sound_path_" + dialog_id, null);
+                long soundDocumentId = preferences.getLong("sound_document_id_" + dialog_id, 0);
+                if (soundDocumentId != 0) {
+                    customIsInternalSound = true;
+                    customSoundPath = getMediaDataController().ringtoneDataStore.getSoundPath(soundDocumentId);
+                } else {
+                    customSoundPath = preferences.getString("sound_path_" + dialog_id, null);
+                }
                 if (preferences.contains("color_" + dialog_id)) {
                     customLedColor = preferences.getInt("color_" + dialog_id, 0);
                 } else {
@@ -3575,20 +3568,38 @@ public class NotificationsController extends BaseController {
 
             if (chatId != 0) {
                 if (isChannel) {
-                    soundPath = preferences.getString("ChannelSoundPath", defaultPath);
+                    long soundDocumentId = preferences.getLong("ChannelSoundDocId", 0);
+                    if (soundDocumentId != 0) {
+                        isInternalSoundFile = true;
+                        soundPath = getMediaDataController().ringtoneDataStore.getSoundPath(soundDocumentId);
+                    } else {
+                        soundPath = preferences.getString("ChannelSoundPath", defaultPath);
+                    }
                     vibrate = preferences.getInt("vibrate_channel", 0);
                     importance = preferences.getInt("priority_channel", 1);
                     ledColor = preferences.getInt("ChannelLed", 0xff0000ff);
                     chatType = TYPE_CHANNEL;
                 } else {
-                    soundPath = preferences.getString("GroupSoundPath", defaultPath);
+                    long soundDocumentId = preferences.getLong("GroupSoundDocId", 0);
+                    if (soundDocumentId != 0) {
+                        isInternalSoundFile = true;
+                        soundPath = getMediaDataController().ringtoneDataStore.getSoundPath(soundDocumentId);
+                    } else {
+                        soundPath = preferences.getString("GroupSoundPath", defaultPath);
+                    }
                     vibrate = preferences.getInt("vibrate_group", 0);
                     importance = preferences.getInt("priority_group", 1);
                     ledColor = preferences.getInt("GroupLed", 0xff0000ff);
                     chatType = TYPE_GROUP;
                 }
             } else if (userId != 0) {
-                soundPath = preferences.getString("GlobalSoundPath", defaultPath);
+                long soundDocumentId = preferences.getLong("GlobalSoundDocId", 0);
+                if (soundDocumentId != 0) {
+                    isInternalSoundFile = true;
+                    soundPath = getMediaDataController().ringtoneDataStore.getSoundPath(soundDocumentId);
+                } else {
+                    soundPath = preferences.getString("GlobalSoundPath", defaultPath);
+                }
                 vibrate = preferences.getInt("vibrate_messages", 0);
                 importance = preferences.getInt("priority_messages", 1);
                 ledColor = preferences.getInt("MessagesLed", 0xff0000ff);
@@ -3598,7 +3609,8 @@ public class NotificationsController extends BaseController {
                 vibrateOnlyIfSilent = true;
                 vibrate = 0;
             }
-            if (customSoundPath != null && !TextUtils.equals(soundPath, customSoundPath)) {
+            if (!TextUtils.isEmpty(customSoundPath) && !TextUtils.equals(soundPath, customSoundPath)) {
+                isInternalSoundFile = customIsInternalSound;
                 soundPath = customSoundPath;
                 isDefault = false;
             }
@@ -3765,10 +3777,15 @@ public class NotificationsController extends BaseController {
                 }
                 if (soundPath != null && !soundPath.equals("NoSound")) {
                     if (Build.VERSION.SDK_INT >= 26) {
-                        if (soundPath.equals(defaultPath)) {
+                        if (soundPath.equals("Default") || soundPath.equals(defaultPath)) {
                             sound = Settings.System.DEFAULT_NOTIFICATION_URI;
                         } else {
-                            sound = Uri.parse(soundPath);
+                            if (isInternalSoundFile) {
+                                sound = FileProvider.getUriForFile(ApplicationLoader.applicationContext, BuildConfig.APPLICATION_ID + ".provider", new File(soundPath));
+                                ApplicationLoader.applicationContext.grantUriPermission("com.android.systemui", sound, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            } else {
+                                sound = Uri.parse(soundPath);
+                            }
                         }
                     } else {
                         if (soundPath.equals(defaultPath)) {
@@ -4591,6 +4608,7 @@ public class NotificationsController extends BaseController {
     public static final int SETTING_MUTE_2_DAYS = 2;
     public static final int SETTING_MUTE_FOREVER = 3;
     public static final int SETTING_MUTE_UNMUTE = 4;
+    public static final int SETTING_MUTE_CUSTOM = 5;
 
     public void clearDialogNotificationsSettings(long did) {
         SharedPreferences preferences = getAccountInstance().getNotificationsSettings();
@@ -4682,7 +4700,28 @@ public class NotificationsController extends BaseController {
             }
         }
 
+        long soundDocumentId = preferences.getLong("sound_document_id_" + dialogId, 0);
+        String soundPath =  preferences.getString("sound_path_" + dialogId, null);
+        req.settings.flags |= 8;
+        if (soundDocumentId != 0) {
+            TLRPC.TL_notificationSoundRingtone ringtoneSound = new TLRPC.TL_notificationSoundRingtone();
+            ringtoneSound.id = soundDocumentId;
+            req.settings.sound = ringtoneSound;
+        } else if (soundPath != null) {
+            if (soundPath.equals("NoSound")){
+                req.settings.sound = new TLRPC.TL_notificationSoundNone();
+            } else {
+                TLRPC.TL_notificationSoundLocal localSound = new TLRPC.TL_notificationSoundLocal();
+                localSound.title = preferences.getString("sound_" + dialogId, null);
+                localSound.data = soundPath;
+                req.settings.sound = localSound;
+            }
+        } else {
+            req.settings.sound = new TLRPC.TL_notificationSoundDefault();
+        }
+
         req.peer = new TLRPC.TL_inputNotifyPeer();
+
         ((TLRPC.TL_inputNotifyPeer) req.peer).peer = getMessagesController().getInputPeer(dialogId);
         getConnectionsManager().sendRequest(req, (response, error) -> {
 
@@ -4698,18 +4737,51 @@ public class NotificationsController extends BaseController {
         TLRPC.TL_account_updateNotifySettings req = new TLRPC.TL_account_updateNotifySettings();
         req.settings = new TLRPC.TL_inputPeerNotifySettings();
         req.settings.flags = 5;
+        String soundDocumentIdPref;
+        String soundPathPref;
+        String soundNamePref;
         if (type == TYPE_GROUP) {
             req.peer = new TLRPC.TL_inputNotifyChats();
             req.settings.mute_until = preferences.getInt("EnableGroup2", 0);
             req.settings.show_previews = preferences.getBoolean("EnablePreviewGroup", true);
+            soundNamePref = "GroupSound";
+            soundDocumentIdPref = "GroupSoundDocId";
+            soundPathPref = "GroupSoundPath";
         } else if (type == TYPE_PRIVATE) {
             req.peer = new TLRPC.TL_inputNotifyUsers();
             req.settings.mute_until = preferences.getInt("EnableAll2", 0);
             req.settings.show_previews = preferences.getBoolean("EnablePreviewAll", true);
+            soundNamePref = "GlobalSound";
+            soundDocumentIdPref = "GlobalSoundDocId";
+            soundPathPref = "GlobalSoundPath";
         } else {
             req.peer = new TLRPC.TL_inputNotifyBroadcasts();
             req.settings.mute_until = preferences.getInt("EnableChannel2", 0);
             req.settings.show_previews = preferences.getBoolean("EnablePreviewChannel", true);
+            soundNamePref = "ChannelSound";
+            soundDocumentIdPref = "ChannelSoundDocId";
+            soundPathPref = "ChannelSoundPath";
+        }
+
+        req.settings.flags |= 8;
+        long soundDocumentId = preferences.getLong(soundDocumentIdPref, 0);
+        String soundPath =  preferences.getString(soundPathPref, "NoSound");
+
+        if (soundDocumentId != 0) {
+            TLRPC.TL_notificationSoundRingtone ringtoneSound = new TLRPC.TL_notificationSoundRingtone();
+            ringtoneSound.id = soundDocumentId;
+            req.settings.sound = ringtoneSound;
+        } else if (soundPath != null) {
+            if (soundPath.equals("NoSound")){
+                req.settings.sound = new TLRPC.TL_notificationSoundNone();
+            } else {
+                TLRPC.TL_notificationSoundLocal localSound = new TLRPC.TL_notificationSoundLocal();
+                localSound.title = preferences.getString(soundNamePref, null);
+                localSound.data = soundPath;
+                req.settings.sound = localSound;
+            }
+        } else {
+            req.settings.sound = new TLRPC.TL_notificationSoundDefault();
         }
         getConnectionsManager().sendRequest(req, (response, error) -> {
 
@@ -4761,6 +4833,28 @@ public class NotificationsController extends BaseController {
             return "EnableAll2";
         } else {
             return "EnableChannel2";
+        }
+    }
+
+    public void muteDialog(long dialog_id, boolean mute) {
+        if (mute) {
+            NotificationsController.getInstance(currentAccount).muteUntil(dialog_id, Integer.MAX_VALUE);
+        } else {
+            boolean defaultEnabled = NotificationsController.getInstance(currentAccount).isGlobalNotificationsEnabled(dialog_id);
+            SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
+            SharedPreferences.Editor editor = preferences.edit();
+            if (defaultEnabled) {
+                editor.remove("notify2_" + dialog_id);
+            } else {
+                editor.putInt("notify2_" + dialog_id, 0);
+            }
+            getMessagesStorage().setDialogFlags(dialog_id, 0);
+            editor.apply();
+            TLRPC.Dialog dialog = getMessagesController().dialogs_dict.get(dialog_id);
+            if (dialog != null) {
+                dialog.notify_settings = new TLRPC.TL_peerNotifySettings();
+            }
+            updateServerNotificationsSettings(dialog_id);
         }
     }
 }

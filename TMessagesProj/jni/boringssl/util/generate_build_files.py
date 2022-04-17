@@ -18,8 +18,6 @@ import optparse
 import os
 import subprocess
 import sys
-import json
-
 
 # OS_ARCH_COMBOS maps from OS and platform to the OpenSSL assembly "style" for
 # that platform and the extension used by asm files.

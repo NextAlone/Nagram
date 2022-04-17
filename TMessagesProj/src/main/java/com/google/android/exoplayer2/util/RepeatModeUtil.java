@@ -16,7 +16,9 @@
 package com.google.android.exoplayer2.util;
 
 import androidx.annotation.IntDef;
+
 import com.google.android.exoplayer2.Player;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

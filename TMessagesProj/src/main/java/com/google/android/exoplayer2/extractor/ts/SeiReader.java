@@ -24,6 +24,7 @@ import com.google.android.exoplayer2.text.cea.CeaUtil;
 import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.ParsableByteArray;
+
 import java.util.List;
 
 /** Consumes SEI buffers, outputting contained CEA-608 messages to a {@link TrackOutput}. */

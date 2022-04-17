@@ -19,6 +19,7 @@ import static com.google.android.exoplayer2.util.Util.castNonNull;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.extractor.Extractor;
 import com.google.android.exoplayer2.extractor.ExtractorInput;
@@ -36,11 +37,13 @@ import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.FlacConstants;
 import com.google.android.exoplayer2.util.FlacStreamMetadata;
 import com.google.android.exoplayer2.util.ParsableByteArray;
+
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+
 import java.io.IOException;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 /**
  * Extracts data from FLAC container format.

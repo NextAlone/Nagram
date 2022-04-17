@@ -16,7 +16,9 @@
 package com.google.android.exoplayer2.trackselection;
 
 import android.util.Pair;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.Format;
@@ -29,8 +31,10 @@ import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.Clock;
-import java.util.List;
+
 import org.checkerframework.checker.nullness.compatqual.NullableType;
+
+import java.util.List;
 
 /**
  * Builder for a {@link TrackSelection.Factory} and {@link LoadControl} that implement buffer size

@@ -18,6 +18,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
@@ -42,13 +49,6 @@ import org.telegram.ui.ChatActivity;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSmoothScroller;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
 
 public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout {
 
@@ -433,11 +433,11 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
             if (chatActivity.isInScheduleMode()) {
                 AlertsCreator.createScheduleDatePickerDialog(chatActivity.getParentActivity(), chatActivity.getDialogId(), (notify, scheduleDate) -> {
                     delegate.sendPoll(poll, params, notify, scheduleDate);
-                    parentAlert.dismiss();
+                    parentAlert.dismiss(true);
                 });
             } else {
                 delegate.sendPoll(poll, params, true, 0);
-                parentAlert.dismiss();
+                parentAlert.dismiss(true);
             }
         }
     }

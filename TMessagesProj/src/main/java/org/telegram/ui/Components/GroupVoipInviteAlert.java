@@ -17,6 +17,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.collection.LongSparseArray;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
@@ -41,9 +44,6 @@ import org.telegram.ui.ChatUsersActivity;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-
-import androidx.collection.LongSparseArray;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class GroupVoipInviteAlert extends UsersAlertBase {
 

@@ -30,7 +30,8 @@
 """Unit test utilities for gtest_xml_output"""
 
 import re
-from xml.dom import minidom, Node
+from xml.dom import Node
+
 import gtest_test_utils
 
 GTEST_DEFAULT_OUTPUT_FILE = 'test_detail.xml'

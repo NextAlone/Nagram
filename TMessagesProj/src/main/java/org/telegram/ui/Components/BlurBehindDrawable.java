@@ -1,5 +1,7 @@
 package org.telegram.ui.Components;
 
+import static android.graphics.Canvas.ALL_SAVE_FLAG;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -14,8 +16,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
-
-import static android.graphics.Canvas.ALL_SAVE_FLAG;
 
 public class BlurBehindDrawable {
 

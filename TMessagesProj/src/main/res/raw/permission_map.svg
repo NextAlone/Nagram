@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="936px" height="354px" viewBox="0 0 936 354" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="936px"
+    height="354px"
+    viewBox="0 0 936 354"
+    version="1.1"
+    xmlns="http://www.w3.org/2000/svg">
     <g id="permission_map" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <rect id="Rectangle" fill="#EBEAE6" x="0" y="0" width="936" height="354"></rect>
         <path d="M791.127984,-0.147612793 L933.587984,-0.147612793 C934.84167,-0.147612793 935.857984,0.868700825 935.857984,2.12238721 L935.857984,107.582387 C935.857984,108.836074 934.84167,109.852387 933.587984,109.852387 L828.291985,109.852387 L791.127984,109.852387 C789.874297,109.852387 788.857984,108.836074 788.857984,107.582387 L788.857984,2.12238721 C788.857984,0.868700825 789.874297,-0.147612793 791.127984,-0.147612793 Z" id="Park" fill="#BCE5A3"></path>

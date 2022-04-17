@@ -19,10 +19,13 @@ import static com.google.android.exoplayer2.util.Util.castNonNull;
 
 import android.net.Uri;
 import android.util.Base64;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ParserException;
 import com.google.android.exoplayer2.util.Util;
+
 import java.io.IOException;
 import java.net.URLDecoder;
 

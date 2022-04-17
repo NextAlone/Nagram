@@ -19,7 +19,9 @@ import static com.google.android.exoplayer2.util.Assertions.checkArgument;
 import static com.google.android.exoplayer2.util.Assertions.checkState;
 
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.util.Log;
+
 import java.io.File;
 import java.util.TreeSet;
 

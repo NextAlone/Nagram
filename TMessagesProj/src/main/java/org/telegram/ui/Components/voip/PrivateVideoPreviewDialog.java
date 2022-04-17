@@ -27,6 +27,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.graphics.ColorUtils;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
@@ -46,10 +50,6 @@ import org.webrtc.RendererCommon;
 
 import java.io.File;
 import java.io.FileOutputStream;
-
-import androidx.core.graphics.ColorUtils;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
 @TargetApi(21)
 public abstract class PrivateVideoPreviewDialog extends FrameLayout implements VoIPService.StateListener {

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="178px" height="248px" viewBox="0 0 178 248" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="178px"
+    height="248px"
+    viewBox="0 0 178 248"
+    version="1.1"
+    xmlns="http://www.w3.org/2000/svg">
     <g id="permission_pin" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <circle id="Oval-Copy-2" fill="#FFFFFF" cx="89" cy="222" r="23"></circle>
         <circle id="Oval-Copy-2" fill="#4286F5" cx="89" cy="222" r="19"></circle>

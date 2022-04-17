@@ -41,11 +41,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
-import org.telegram.messenger.time.FastDateFormat;
-import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLObject;
-import org.telegram.tgnet.TLRPC;
-import org.xmlpull.v1.XmlPullParser;
+
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.utils.Defines;
 
@@ -956,13 +952,20 @@ public class LocaleController {
                 reloadLastFile = false;
             }
             if (!isLoadingRemote) {
-                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.reloadInterface);
+                if (init) {
+                    AndroidUtilities.runOnUIThread(() -> NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.reloadInterface));
+                } else {
+                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.reloadInterface);
+                }
             }
         } catch (Exception e) {
             FileLog.e(e);
             changingConfiguration = false;
         }
         recreateFormatters();
+        if (force) {
+            MediaDataController.getInstance(currentAccount).loadAttachMenuBots(false, true);
+        }
     }
 
     public LocaleInfo getCurrentLocaleInfo() {
@@ -1107,6 +1110,14 @@ public class LocaleController {
         }
     }
 
+    public static String formatString(@StringRes int res, Object... args) {
+        String key = resourcesCacheMap.get(res);
+        if (key == null) {
+            resourcesCacheMap.put(res, key = ApplicationLoader.applicationContext.getResources().getResourceEntryName(res));
+        }
+        return formatString(key, res, args);
+    }
+
     public static String formatString(String key, int res, Object... args) {
         return formatString(key, null, res, args);
     }
@@ -1143,9 +1154,7 @@ public class LocaleController {
             return LocaleController.formatPluralString("Hours", ttl / 60 / 60);
         } else if (ttl < 60 * 60 * 24 * 7) {
             return LocaleController.formatPluralString("Days", ttl / 60 / 60 / 24);
-        } else if (ttl >= 60 * 60 * 24 * 30 && ttl <= 60 * 60 * 24 * 31) {
-            return LocaleController.formatPluralString("Months", ttl / 60 / 60 / 24 / 30);
-        } else {
+        } else if (ttl < 60 * 60 * 24 * 31) {
             int days = ttl / 60 / 60 / 24;
             if (ttl % 7 == 0) {
                 return LocaleController.formatPluralString("Weeks", days / 7);
@@ -1154,6 +1163,8 @@ public class LocaleController {
                     LocaleController.formatPluralString("Weeks", days / 7),
                     LocaleController.formatPluralString("Days", days % 7));
             }
+        } else {
+            return LocaleController.formatPluralString("Months", ttl / 60 / 60 / 24 / 30);
         }
     }
 

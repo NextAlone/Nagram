@@ -10,7 +10,9 @@ package org.telegram.messenger;
 
 import android.os.SystemClock;
 import android.util.SparseArray;
+
 import androidx.annotation.UiThread;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -122,6 +124,7 @@ public class NotificationCenter {
     public static final int stickersImportProgressChanged = totalEvents++;
     public static final int stickersImportComplete = totalEvents++;
     public static final int dialogDeleted = totalEvents++;
+    public static final int webViewResultSent = totalEvents++;
 
     public static final int didGenerateFingerprintKeyPair = totalEvents++;
 
@@ -232,10 +235,14 @@ public class NotificationCenter {
     public static final int onEmojiInteractionsReceived = totalEvents++;
     public static final int emojiPreviewThemesChanged = totalEvents++;
     public static final int reactionsDidLoad = totalEvents++;
+    public static final int attachMenuBotsDidLoad = totalEvents++;
     public static final int chatAvailableReactionsUpdated = totalEvents++;
     public static final int dialogsUnreadReactionsCounterChanged = totalEvents++;
     public static final int onDatabaseOpened = totalEvents++;
     public static final int onDownloadingFilesChanged = totalEvents++;
+    public static final int onActivityResultReceived = totalEvents++;
+    public static final int onRequestPermissionResultReceived = totalEvents++;
+    public static final int onUserRingtonesUpdated = totalEvents++;
 
     private final SparseArray<ArrayList<NotificationCenterDelegate>> observers = new SparseArray<>();
     private final SparseArray<ArrayList<NotificationCenterDelegate>> removeAfterBroadcast = new SparseArray<>();

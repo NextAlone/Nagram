@@ -26,10 +26,13 @@ import android.os.BatteryManager;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.PowerManager;
+
 import androidx.annotation.IntDef;
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.Util;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

@@ -18,7 +18,9 @@ package com.google.android.exoplayer2.metadata.id3;
 import static com.google.android.exoplayer2.util.Util.castNonNull;
 
 import android.os.Parcel;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.util.Util;
 
 /** Internal ID3 frame that is intended for use by the player. */

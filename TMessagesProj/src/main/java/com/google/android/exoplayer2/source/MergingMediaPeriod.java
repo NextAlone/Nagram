@@ -16,15 +16,18 @@
 package com.google.android.exoplayer2.source;
 
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.util.Assertions;
+
+import org.checkerframework.checker.nullness.compatqual.NullableType;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.IdentityHashMap;
-import org.checkerframework.checker.nullness.compatqual.NullableType;
 
 /**
  * Merges multiple {@link MediaPeriod}s.

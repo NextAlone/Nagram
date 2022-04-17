@@ -28,14 +28,11 @@ import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.util.TypedValue;
 import android.view.ActionMode;
-import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.ExtractedText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,10 +41,10 @@ import androidx.core.graphics.ColorUtils;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
@@ -69,6 +66,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         void onWindowSizeChanged(int size);
         void onEmojiViewCloseStart();
         void onEmojiViewCloseEnd();
+        void onEmojiViewOpen();
     }
 
     private EditTextCaption messageEditText;
@@ -645,6 +643,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             }
 
             emojiView.setVisibility(VISIBLE);
+            delegate.onEmojiViewOpen();
 
             if (keyboardHeight <= 0) {
                 keyboardHeight = MessagesController.getGlobalEmojiSettings().getInt("kbd_height", AndroidUtilities.dp(200));

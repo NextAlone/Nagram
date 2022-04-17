@@ -28,7 +28,6 @@ import org.telegram.ui.ProfileActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class BackButtonMenu {

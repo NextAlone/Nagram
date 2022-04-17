@@ -18,6 +18,7 @@ package com.google.android.exoplayer2.extractor;
 import com.google.android.exoplayer2.ParserException;
 import com.google.android.exoplayer2.util.Log;
 import com.google.android.exoplayer2.util.ParsableByteArray;
+
 import java.util.Arrays;
 
 /** Utility methods for parsing Vorbis streams. */

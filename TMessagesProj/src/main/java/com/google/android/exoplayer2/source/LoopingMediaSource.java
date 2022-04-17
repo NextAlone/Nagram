@@ -16,6 +16,7 @@
 package com.google.android.exoplayer2.source;
 
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Player;
@@ -24,6 +25,7 @@ import com.google.android.exoplayer2.source.ShuffleOrder.UnshuffledShuffleOrder;
 import com.google.android.exoplayer2.upstream.Allocator;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.google.android.exoplayer2.util.Assertions;
+
 import java.util.HashMap;
 import java.util.Map;
 

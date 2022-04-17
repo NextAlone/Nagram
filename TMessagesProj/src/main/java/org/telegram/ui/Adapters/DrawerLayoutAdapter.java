@@ -13,30 +13,32 @@ import android.content.pm.PackageManager;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
+import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Cells.DrawerActionCell;
 import org.telegram.ui.Cells.DividerCell;
+import org.telegram.ui.Cells.DrawerActionCell;
 import org.telegram.ui.Cells.DrawerAddCell;
+import org.telegram.ui.Cells.DrawerProfileCell;
 import org.telegram.ui.Cells.DrawerUserCell;
 import org.telegram.ui.Cells.EmptyCell;
-import org.telegram.ui.Cells.DrawerProfileCell;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SideMenultItemAnimator;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
 
     private Context mContext;
+    private DrawerLayoutContainer mDrawerLayoutContainer;
     private ArrayList<Item> items = new ArrayList<>(11);
     private ArrayList<Integer> accountNumbers = new ArrayList<>();
     private boolean accountsShown;
@@ -44,8 +46,9 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
     private SideMenultItemAnimator itemAnimator;
     private boolean hasGps;
 
-    public DrawerLayoutAdapter(Context context, SideMenultItemAnimator animator) {
+    public DrawerLayoutAdapter(Context context, SideMenultItemAnimator animator, DrawerLayoutContainer drawerLayoutContainer) {
         mContext = context;
+        mDrawerLayoutContainer = drawerLayoutContainer;
         itemAnimator = animator;
         accountsShown = UserConfig.getActivatedAccountsCount() > 1 && MessagesController.getGlobalMainSettings().getBoolean("accountsShown", true);
         Theme.createCommonDialogResources(context);
@@ -116,7 +119,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         View view;
         switch (viewType) {
             case 0:
-                view = profileCell = new DrawerProfileCell(mContext);
+                view = profileCell = new DrawerProfileCell(mContext, mDrawerLayoutContainer);
                 break;
             case 2:
                 view = new DividerCell(mContext);
@@ -178,7 +181,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
                 return 4;
             } else {
                 if (accountNumbers.size() < UserConfig.MAX_ACCOUNT_COUNT) {
-                    if (i == accountNumbers.size()){
+                    if (i == accountNumbers.size()) {
                         return 5;
                     } else if (i == accountNumbers.size() + 1) {
                         return 2;

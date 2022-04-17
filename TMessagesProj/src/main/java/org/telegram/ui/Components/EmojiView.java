@@ -75,7 +75,6 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.EmojiData;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
@@ -455,9 +454,15 @@ public class EmojiView extends FrameLayout implements
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
-        stickersSearchField.searchEditText.setEnabled(enabled);
-        gifSearchField.searchEditText.setEnabled(enabled);
-        emojiSearchField.searchEditText.setEnabled(enabled);
+        if (stickersSearchField != null) {
+            stickersSearchField.searchEditText.setEnabled(enabled);
+        }
+        if (gifSearchField != null) {
+            gifSearchField.searchEditText.setEnabled(enabled);
+        }
+        if (emojiSearchField != null) {
+            emojiSearchField.searchEditText.setEnabled(enabled);
+        }
     }
 
     private class SearchField extends FrameLayout {

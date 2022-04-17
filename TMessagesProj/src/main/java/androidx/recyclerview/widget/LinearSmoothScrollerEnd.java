@@ -10,10 +10,11 @@ package androidx.recyclerview.widget;
 
 import android.content.Context;
 import android.graphics.PointF;
-import androidx.annotation.Nullable;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
+
+import androidx.annotation.Nullable;
 
 public class LinearSmoothScrollerEnd extends RecyclerView.SmoothScroller {
 

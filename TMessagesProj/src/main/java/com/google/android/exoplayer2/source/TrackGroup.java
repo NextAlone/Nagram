@@ -17,10 +17,13 @@ package com.google.android.exoplayer2.source;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.util.Assertions;
+
 import java.util.Arrays;
 
 // TODO: Add an allowMultipleStreams boolean to indicate where the one stream per group restriction

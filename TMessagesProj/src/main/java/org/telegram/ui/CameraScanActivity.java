@@ -27,15 +27,18 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.SystemClock;
+import android.text.Layout;
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ClickableSpan;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -81,6 +84,7 @@ import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkPath;
+import org.telegram.ui.Components.LinkSpanDrawable;
 import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 
@@ -196,11 +200,6 @@ public class CameraScanActivity extends BaseFragment {
 
             @Override
             public void dismiss() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    final Window window = fragment.getParentActivity().getWindow();
-                    fragment.updateNavigationBarColor(fragment.wasNavigationBarColor);
-                    AndroidUtilities.setLightNavigationBar(window, fragment.wasLightNavigationBar);
-                }
                 super.dismiss();
                 actionBarLayout[0] = null;
             }
@@ -234,49 +233,6 @@ public class CameraScanActivity extends BaseFragment {
             case SharedConfig.PERFORMANCE_CLASS_HIGH:
             default:
                 sps = 40;
-        }
-
-        switch (SharedConfig.getDevicePerformanceClass()) {
-            case SharedConfig.PERFORMANCE_CLASS_LOW:
-                sps = 8;
-                break;
-            case SharedConfig.PERFORMANCE_CLASS_AVERAGE:
-                sps = 24;
-                break;
-            case SharedConfig.PERFORMANCE_CLASS_HIGH:
-            default:
-                sps = 40;
-        }
-    }
-
-    private int wasNavigationBarColor;
-    private boolean wasLightNavigationBar;
-    private float navigationBarColorT = 0;
-    private ValueAnimator navigationBarColorAnimator;
-
-    @Override
-    public void onResume() {
-        final Window window = getParentActivity().getWindow();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            wasNavigationBarColor = window.getNavigationBarColor();
-            wasLightNavigationBar = AndroidUtilities.getLightNavigationBar(window);
-            AndroidUtilities.setLightNavigationBar(window, false);
-            updateNavigationBarColor(0xff000000);
-        }
-        super.onResume();
-    }
-
-    protected void updateNavigationBarColor(int color) {
-        if (Build.VERSION.SDK_INT >= 21) {
-            if (navigationBarColorAnimator != null) {
-                navigationBarColorAnimator.cancel();
-            }
-            final Window window = getParentActivity().getWindow();
-            navigationBarColorAnimator = ValueAnimator.ofArgb(window.getNavigationBarColor(), color);
-            navigationBarColorAnimator.addUpdateListener(a -> window.setNavigationBarColor((int) a.getAnimatedValue()));
-            navigationBarColorAnimator.setDuration(200);
-            navigationBarColorAnimator.setInterpolator(CubicBezierInterpolator.EASE_BOTH);
-            navigationBarColorAnimator.start();
         }
     }
 
@@ -415,7 +371,7 @@ public class CameraScanActivity extends BaseFragment {
                     canvas.drawRect(x, y, x + sizex, y + sizey, paint);
 
                     final int lineWidth = AndroidUtilities.lerp(0, AndroidUtilities.dp(4), Math.min(1, qrAppearingValue * 20f)),
-                              halfLineWidth = lineWidth / 2;
+                        halfLineWidth = lineWidth / 2;
                     final int lineLength = AndroidUtilities.lerp(Math.min(sizex, sizey), AndroidUtilities.dp(20), Math.min(1.2f, (float) Math.pow(qrAppearingValue, 1.8f)));
 
                     cornerPaint.setAlpha((int) (255 * Math.min(1, qrAppearingValue)));
@@ -466,7 +422,7 @@ public class CameraScanActivity extends BaseFragment {
         fragmentView = viewGroup;
 
         if (currentType == TYPE_QR || currentType == TYPE_QR_LOGIN) {
-            fragmentView.postDelayed(this::initCameraView, 200);
+            fragmentView.postDelayed(this::initCameraView, 350);
         } else {
             initCameraView();
         }
@@ -488,10 +444,12 @@ public class CameraScanActivity extends BaseFragment {
         }
 
         Paint selectionPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        selectionPaint.setPathEffect(LinkPath.roundedEffect);
-        selectionPaint.setColor(ColorUtils.setAlphaComponent(Color.WHITE, 50));
+        selectionPaint.setPathEffect(LinkPath.getRoundedEffect());
+        selectionPaint.setColor(ColorUtils.setAlphaComponent(Color.WHITE, 40));
         titleTextView = new TextView(context) {
             LinkPath textPath;
+            private LinkSpanDrawable<URLSpanNoUnderline> pressedLink;
+            LinkSpanDrawable.LinkCollector links = new LinkSpanDrawable.LinkCollector(this);
 
             @Override
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -509,7 +467,6 @@ public class CameraScanActivity extends BaseFragment {
                             int shift = getText() != null ? getPaint().baselineShift : 0;
                             textPath.setBaselineShift(shift != 0 ? shift + AndroidUtilities.dp(shift > 0 ? 5 : -2) : 0);
                             getLayout().getSelectionPath(start, end, textPath);
-                            textPath.onPathEnd();
                         }
                         textPath.setAllowReset(true);
                     }
@@ -517,9 +474,54 @@ public class CameraScanActivity extends BaseFragment {
             }
 
             @Override
+            public boolean onTouchEvent(MotionEvent e) {
+                final Layout textLayout = getLayout();
+                int textX = 0, textY = 0;
+                int x = (int) (e.getX() - textX);
+                int y = (int) (e.getY() - textY);
+                if (e.getAction() == MotionEvent.ACTION_DOWN || e.getAction() == MotionEvent.ACTION_UP) {
+                    final int line = textLayout.getLineForVertical(y);
+                    final int off = textLayout.getOffsetForHorizontal(line, x);
+
+                    final float left = textLayout.getLineLeft(line);
+                    if (left <= x && left + textLayout.getLineWidth(line) >= x && y >= 0 && y <= textLayout.getHeight()) {
+                        Spannable buffer = (Spannable) textLayout.getText();
+                        ClickableSpan[] link = buffer.getSpans(off, off, ClickableSpan.class);
+                        if (link.length != 0) {
+                            links.clear();
+                            if (e.getAction() == MotionEvent.ACTION_DOWN) {
+                                pressedLink = new LinkSpanDrawable(link[0], null, e.getX(), e.getY());
+                                pressedLink.setColor(0x2dffffff);
+                                links.addLink(pressedLink);
+                                int start = buffer.getSpanStart(pressedLink.getSpan());
+                                int end = buffer.getSpanEnd(pressedLink.getSpan());
+                                LinkPath path = pressedLink.obtainNewPath();
+                                path.setCurrentLayout(textLayout, start, textY);
+                                textLayout.getSelectionPath(start, end, path);
+                            } else if (e.getAction() == MotionEvent.ACTION_UP) {
+                                if (pressedLink != null && pressedLink.getSpan() == link[0]) {
+                                    link[0].onClick(this);
+                                }
+                                pressedLink = null;
+                            }
+                            return true;
+                        }
+                    }
+                }
+                if (e.getAction() == MotionEvent.ACTION_UP || e.getAction() == MotionEvent.ACTION_CANCEL) {
+                    links.clear();
+                    pressedLink = null;
+                }
+                return super.onTouchEvent(e);
+            }
+
+            @Override
             protected void onDraw(Canvas canvas) {
                 if (textPath != null) {
                     canvas.drawPath(textPath, selectionPaint);
+                }
+                if (links.draw(canvas)) {
+                    invalidate();
                 }
                 super.onDraw(canvas);
             }
@@ -556,8 +558,8 @@ public class CameraScanActivity extends BaseFragment {
                     SpannableStringBuilder spanned = new SpannableStringBuilder(text);
 
                     String[] links = new String[] {
-                        LocaleController.getString("AuthAnotherWebClientUrl", R.string.AuthAnotherWebClientUrl),
-                        LocaleController.getString("AuthAnotherClientDownloadClientUrl", R.string.AuthAnotherClientDownloadClientUrl)
+                        LocaleController.getString("AuthAnotherClientDownloadClientUrl", R.string.AuthAnotherClientDownloadClientUrl),
+                        LocaleController.getString("AuthAnotherWebClientUrl", R.string.AuthAnotherWebClientUrl)
                     };
                     for (int i = 0; i < links.length; ++i) {
                         text = spanned.toString();
@@ -570,15 +572,14 @@ public class CameraScanActivity extends BaseFragment {
                             spanned.replace(index1, index1 + 1, " ");
                             index1 += 1;
                             index2 += 1;
-                            spanned.setSpan(new URLSpanNoUnderline(links[i]), index1, index2 - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            spanned.setSpan(new URLSpanNoUnderline(links[i], true), index1, index2 - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                             spanned.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), index1, index2 - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         } else {
                             break;
                         }
                     }
 
-                    titleTextView.setLinkTextColor(Color.WHITE);
-                    titleTextView.setHighlightColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkSelection));
+                    titleTextView.setLinkTextColor(0xffffffff);
 
                     titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                     titleTextView.setLineSpacing(AndroidUtilities.dp(2), 1.0f);
@@ -820,9 +821,9 @@ public class CameraScanActivity extends BaseFragment {
         if (normalBounds == null) {
             normalBounds = new RectF();
         }
-        int width = AndroidUtilities.displaySize.x,
-                height = AndroidUtilities.displaySize.y,
-                side = (int) (Math.min(width, height) / 1.5f);
+        int width = Math.max(AndroidUtilities.displaySize.x, fragmentView.getWidth()),
+            height = Math.max(AndroidUtilities.displaySize.y, fragmentView.getHeight()),
+            side = (int) (Math.min(width, height) / 1.5f);
         normalBounds.set(
             (width - side) / 2f / (float) width,
             (height - side) / 2f / (float) height,
@@ -966,9 +967,9 @@ public class CameraScanActivity extends BaseFragment {
                 }
 
                 if (( // finish because...
-                      (recognizeIndex == 0 && res != null && res.bounds == null && !qrLoading) || // first recognition doesn't have bounds
-                      (SystemClock.elapsedRealtime() - recognizedStart > 1000 && !qrLoading) // got more than 1 second and nothing is loading
-                    ) && recognizedText != null) {
+                    (recognizeIndex == 0 && res != null && res.bounds == null && !qrLoading) || // first recognition doesn't have bounds
+                        (SystemClock.elapsedRealtime() - recognizedStart > 1000 && !qrLoading) // got more than 1 second and nothing is loading
+                ) && recognizedText != null) {
                     if (cameraView != null && cameraView.getCameraSession() != null) {
                         CameraController.getInstance().stopPreview(cameraView.getCameraSession());
                     }
@@ -1030,9 +1031,9 @@ public class CameraScanActivity extends BaseFragment {
                     } else {
 //                        bounds.set(code.getBoundingBox());
                         float minX = Float.MAX_VALUE,
-                              maxX = Float.MIN_VALUE,
-                              minY = Float.MAX_VALUE,
-                              maxY = Float.MIN_VALUE;
+                            maxX = Float.MIN_VALUE,
+                            minY = Float.MAX_VALUE,
+                            maxY = Float.MIN_VALUE;
                         for (Point point : code.cornerPoints) {
                             minX = Math.min(minX, point.x);
                             maxX = Math.max(maxX, point.x);
@@ -1068,9 +1069,9 @@ public class CameraScanActivity extends BaseFragment {
                     bounds = null;
                 } else {
                     float minX = Float.MAX_VALUE,
-                          maxX = Float.MIN_VALUE,
-                          minY = Float.MAX_VALUE,
-                          maxY = Float.MIN_VALUE;
+                        maxX = Float.MIN_VALUE,
+                        minY = Float.MAX_VALUE,
+                        maxY = Float.MIN_VALUE;
                     for (ResultPoint point : result.getResultPoints()) {
                         minX = Math.min(minX, point.getX());
                         maxX = Math.max(maxX, point.getX());

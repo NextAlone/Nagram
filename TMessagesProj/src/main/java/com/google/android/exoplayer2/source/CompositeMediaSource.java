@@ -16,12 +16,15 @@
 package com.google.android.exoplayer2.source;
 
 import android.os.Handler;
+
 import androidx.annotation.CallSuper;
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.Util;
+
 import java.io.IOException;
 import java.util.HashMap;
 

@@ -16,7 +16,9 @@
 package com.google.android.exoplayer2.audio;
 
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.PlaybackParameters;
+
 import java.nio.ByteBuffer;
 
 /** An overridable {@link AudioSink} implementation forwarding all methods to another sink. */

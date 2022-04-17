@@ -19,9 +19,9 @@ import hashlib
 import optparse
 import os
 import os.path
-import tarfile
 import shutil
 import sys
+import tarfile
 import zipfile
 
 

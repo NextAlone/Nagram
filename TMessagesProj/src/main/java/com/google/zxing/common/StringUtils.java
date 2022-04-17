@@ -16,10 +16,10 @@
 
 package com.google.zxing.common;
 
+import com.google.zxing.DecodeHintType;
+
 import java.nio.charset.Charset;
 import java.util.Map;
-
-import com.google.zxing.DecodeHintType;
 
 /**
  * Common string-related functions.

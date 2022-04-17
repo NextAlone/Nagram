@@ -31,18 +31,13 @@ import android.text.style.ReplacementSpan;
 import android.text.style.URLSpan;
 import android.view.View;
 import android.widget.TextView;
+
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.math.MathUtils;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Stack;
-import java.util.concurrent.atomic.AtomicReference;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LocaleController;
@@ -51,8 +46,14 @@ import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.Easings;
 import org.telegram.ui.Components.TextStyleSpan;
-import top.qwq2333.nullgram.config.ConfigManager;
-import top.qwq2333.nullgram.utils.Defines;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Stack;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class SpoilerEffect extends Drawable {
     public final static int MAX_PARTICLES_PER_ENTITY = measureMaxParticlesCount();
@@ -590,11 +591,8 @@ public class SpoilerEffect extends Drawable {
      * @param spoilers     Spoilers list to populate
      */
     public static void addSpoilers(@Nullable View v, Layout textLayout, @Nullable Stack<SpoilerEffect> spoilersPool, List<SpoilerEffect> spoilers) {
-        if (ConfigManager.getBooleanOrFalse(Defines.displaySpoilerMsgDirectly)){
-            return;
-        }
-        if (textLayout.getText() instanceof Spannable){
-            addSpoilers(v, textLayout, (Spannable) textLayout.getText(), spoilersPool, spoilers);
+        if (textLayout.getText() instanceof Spanned){
+            addSpoilers(v, textLayout, (Spanned) textLayout.getText(), spoilersPool, spoilers);
         }
     }
 

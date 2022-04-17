@@ -8,6 +8,9 @@
 
 package org.telegram.messenger;
 
+import static android.app.NotificationManager.EXTRA_BLOCKED_STATE;
+import static android.app.NotificationManager.EXTRA_NOTIFICATION_CHANNEL_ID;
+
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,9 +18,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.SystemClock;
 import android.text.TextUtils;
-
-import static android.app.NotificationManager.EXTRA_BLOCKED_STATE;
-import static android.app.NotificationManager.EXTRA_NOTIFICATION_CHANNEL_ID;
 
 @TargetApi(28)
 public class NotificationsDisabledReceiver extends BroadcastReceiver {

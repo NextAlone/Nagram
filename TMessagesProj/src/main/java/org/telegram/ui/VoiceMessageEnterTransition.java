@@ -10,10 +10,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader;
-import android.transition.Transition;
-import android.view.View;
 import android.view.animation.LinearInterpolator;
-import android.widget.FrameLayout;
 
 import androidx.core.graphics.ColorUtils;
 

@@ -19,15 +19,19 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+
 import androidx.annotation.WorkerThread;
+
 import com.google.android.exoplayer2.database.DatabaseIOException;
 import com.google.android.exoplayer2.database.DatabaseProvider;
 import com.google.android.exoplayer2.database.VersionTable;
 import com.google.android.exoplayer2.util.Assertions;
+
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 /** Maintains an index of cache file metadata. */
 /* package */ final class CacheFileMetadataIndex {

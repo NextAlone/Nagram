@@ -16,6 +16,7 @@
 package com.google.android.exoplayer2.video;
 
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.decoder.DecoderInputBuffer;
 
 /** Input buffer to a video decoder. */

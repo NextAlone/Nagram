@@ -17,6 +17,7 @@ package com.google.android.exoplayer2.util;
 
 import android.os.Handler;
 import android.os.Looper;
+
 import androidx.annotation.Nullable;
 
 /**

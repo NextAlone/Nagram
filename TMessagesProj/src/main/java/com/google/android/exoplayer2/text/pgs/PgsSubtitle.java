@@ -18,6 +18,7 @@ package com.google.android.exoplayer2.text.pgs;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.text.Cue;
 import com.google.android.exoplayer2.text.Subtitle;
+
 import java.util.List;
 
 /** A representation of a PGS subtitle. */

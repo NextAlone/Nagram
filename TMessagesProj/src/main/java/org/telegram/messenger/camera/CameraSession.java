@@ -11,7 +11,6 @@ package org.telegram.messenger.camera;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.ImageFormat;
 import android.graphics.Rect;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;

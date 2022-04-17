@@ -19,9 +19,12 @@ import static com.google.android.exoplayer2.util.Util.castNonNull;
 
 import android.net.Uri;
 import android.text.TextUtils;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.util.Assertions;
+
 import java.io.EOFException;
 import java.io.FileNotFoundException;
 import java.io.IOException;

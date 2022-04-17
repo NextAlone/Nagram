@@ -16,6 +16,7 @@
 package com.google.android.exoplayer2.database;
 
 import android.database.SQLException;
+
 import java.io.IOException;
 
 /** An {@link IOException} whose cause is an {@link SQLException}. */

@@ -21,6 +21,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.EmptyCell;
@@ -333,9 +334,12 @@ public class GeneralSettingActivity extends BaseFragment {
     private class ListAdapter extends RecyclerListView.SelectionAdapter {
 
         private final Context mContext;
+        private final DrawerLayoutContainer mDrawerLayoutContainer;
 
         public ListAdapter(Context context) {
             mContext = context;
+            mDrawerLayoutContainer = new DrawerLayoutContainer(mContext);
+
         }
 
         @Override
@@ -462,7 +466,7 @@ public class GeneralSettingActivity extends BaseFragment {
                         Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 8:
-                    profilePreviewCell = new DrawerProfilePreviewCell(mContext);
+                    profilePreviewCell = new DrawerProfilePreviewCell(mContext, mDrawerLayoutContainer);
                     profilePreviewCell.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     profilePreviewCell.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
                     return new RecyclerListView.Holder(profilePreviewCell);

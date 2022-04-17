@@ -114,6 +114,19 @@ public class HeaderCell extends LinearLayout {
         }
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+    }
+
+    public void setTextSize(float dip) {
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, dip);
+    }
+
+    public void setTextColor(int color) {
+        textView.setTextColor(color);
+    }
+
     public void setText(CharSequence text) {
         textView.setText(text);
     }

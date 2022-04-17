@@ -269,12 +269,13 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
         selectionPaint.setPathEffect(new CornerPathEffect(cornerRadius = AndroidUtilities.dp(6)));
     }
 
-    public interface OnTranslateListener {
-        public void run(CharSequence text, String fromLang, String toLang, Runnable onAlertDismiss);
-    }
     private OnTranslateListener onTranslateListener = null;
     public void setOnTranslate(OnTranslateListener listener) {
         onTranslateListener = listener;
+    }
+
+    public interface OnTranslateListener {
+        public void run(CharSequence text, String fromLang, String toLang, Runnable onAlertDismiss);
     }
 
 
@@ -1475,7 +1476,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
         }
         canvas.drawPath(selectionPath, selectionPaint);
 
-        final int R = (int) (cornerRadius * 1.66f);
+        final float R = cornerRadius * 1.9f;
         float startLeft = layout.getPrimaryHorizontal(selectionStart),
                 endLeft = layout.getPrimaryHorizontal(selectionEnd);
         float x, b;

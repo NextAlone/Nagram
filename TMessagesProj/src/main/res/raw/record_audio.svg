@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="557px" height="210px" viewBox="0 0 557 210" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="557px"
+    height="210px"
+    viewBox="0 0 557 210"
+    version="1.1"
+    xmlns="http://www.w3.org/2000/svg">
     <title>record_audio</title>
     <g id="record_audio" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <rect id="Rectangle" fill="#323940" x="0" y="0" width="557" height="210" rx="30.6382979"></rect>

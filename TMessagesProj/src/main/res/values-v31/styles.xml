@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2021 Google LLC
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     https://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+
+    <style name="Theme.TMessages.Start" parent="@android:style/Theme.Material">
+        <item name="android:actionBarStyle">@style/ActionBar.Transparent.TMessages.Start</item>
+        <item name="android:colorBackground">@android:color/white</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:colorPrimaryDark">#426482</item>
+        <item name="android:colorPrimary">#527da3</item>
+        <item name="android:navigationBarColor">#000000</item>
+        <item name="android:textViewStyle">@style/MyTextViewStyle</item>
+        <item name="android:forceDarkAllowed">false</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/tg_splash_320</item>
+        <item name="android:windowSplashScreenAnimationDuration">@integer/splash_screen_duration</item>
+        <item name="android:windowSplashScreenBackground">?android:windowBackground</item>
+    </style>
+
+    <!-- APP WIDGET -->
+
+    <style name="Base.Theme.TMessages.AppWidget" parent="android:Theme.DeviceDefault.DayNight" />
+
+    <style name="TMessages.AppWidget.Background" parent="Base.TMessages.AppWidget.Background">
+        <item name="android:clipToOutline">true</item>
+        <item name="android:background">@drawable/widget_background</item>
+    </style>
+
+    <style name="TMessages.AppWidget.Badge" parent="Base.TMessages.AppWidget.Badge">
+        <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
+    </style>
+
+</resources>

@@ -16,9 +16,12 @@
 package com.google.android.exoplayer2.upstream;
 
 import android.net.Uri;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.PriorityTaskManager;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;

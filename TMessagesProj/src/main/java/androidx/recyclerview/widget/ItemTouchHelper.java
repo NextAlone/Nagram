@@ -32,14 +32,14 @@ import android.view.ViewConfiguration;
 import android.view.ViewParent;
 import android.view.animation.Interpolator;
 
-import org.telegram.messenger.AndroidUtilities;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+
+import org.telegram.messenger.AndroidUtilities;
 
 import java.util.ArrayList;
 import java.util.List;

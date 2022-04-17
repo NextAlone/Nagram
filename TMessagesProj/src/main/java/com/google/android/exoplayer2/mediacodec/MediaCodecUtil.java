@@ -23,15 +23,20 @@ import android.media.MediaCodecList;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.util.SparseIntArray;
+
 import androidx.annotation.CheckResult;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.util.Log;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.exoplayer2.video.ColorInfo;
+
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -39,7 +44,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 
 /**
  * A utility class for querying the available codecs.

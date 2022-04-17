@@ -235,15 +235,8 @@ class BottomBuilder(val ctx: Context) {
         checkBoxCell.minimumHeight = AndroidUtilities.dp(50F)
         rootView.addView(checkBoxCell, LayoutHelper.createLinear(-1, -2))
 
-        if (valueText == null) {
+        checkBoxCell.setTextAndValue(text, valueText, true, value)
 
-            checkBoxCell.setTextAndValue(text, true, value)
-
-        } else {
-
-            checkBoxCell.setTextAndValueAndCheck(text, valueText, true, value)
-
-        }
 
         radioButtonGroup.add(checkBoxCell)
 

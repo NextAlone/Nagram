@@ -16,15 +16,20 @@
 package com.google.android.exoplayer2.upstream.cache;
 
 import android.os.ConditionVariable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.database.DatabaseIOException;
 import com.google.android.exoplayer2.database.DatabaseProvider;
 import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.Log;
 import com.google.android.exoplayer2.util.Util;
+
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -36,7 +41,6 @@ import java.util.NavigableSet;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 /**
  * A {@link Cache} implementation that maintains an in-memory representation.

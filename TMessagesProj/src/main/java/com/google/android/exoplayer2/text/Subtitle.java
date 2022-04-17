@@ -16,6 +16,7 @@
 package com.google.android.exoplayer2.text;
 
 import com.google.android.exoplayer2.C;
+
 import java.util.List;
 
 /**

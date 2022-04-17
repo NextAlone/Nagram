@@ -16,12 +16,15 @@
 package com.google.android.exoplayer2.source.hls;
 
 import android.net.Uri;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.extractor.Extractor;
 import com.google.android.exoplayer2.extractor.ExtractorInput;
 import com.google.android.exoplayer2.extractor.PositionHolder;
 import com.google.android.exoplayer2.util.TimestampAdjuster;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;

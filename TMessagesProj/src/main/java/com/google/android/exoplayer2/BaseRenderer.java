@@ -16,7 +16,9 @@
 package com.google.android.exoplayer2;
 
 import android.os.Looper;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.decoder.DecoderInputBuffer;
 import com.google.android.exoplayer2.drm.DrmInitData;
 import com.google.android.exoplayer2.drm.DrmSession;
@@ -26,6 +28,7 @@ import com.google.android.exoplayer2.source.SampleStream;
 import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.MediaClock;
 import com.google.android.exoplayer2.util.Util;
+
 import java.io.IOException;
 
 /**

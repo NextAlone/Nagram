@@ -22,9 +22,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.accessibility.CaptioningManager;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.util.Util;
+
 import java.util.Locale;
 
 /** Constraint parameters for track selection. */

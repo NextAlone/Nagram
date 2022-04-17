@@ -19,7 +19,9 @@ import static com.google.android.exoplayer2.offline.Download.STATE_QUEUED;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
+
 import com.google.android.exoplayer2.C;
+
 import java.io.File;
 import java.io.IOException;
 

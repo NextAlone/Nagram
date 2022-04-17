@@ -18,11 +18,14 @@ package com.google.android.exoplayer2.text.webvtt;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 import android.text.Layout.Alignment;
+
 import androidx.annotation.IntDef;
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.text.Cue;
 import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.Log;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 

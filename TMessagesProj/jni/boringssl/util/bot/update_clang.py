@@ -7,7 +7,6 @@
 
 import os
 import shutil
-import subprocess
 import stat
 import sys
 import tarfile

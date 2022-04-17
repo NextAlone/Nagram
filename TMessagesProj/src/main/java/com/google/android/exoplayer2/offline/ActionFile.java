@@ -16,10 +16,13 @@
 package com.google.android.exoplayer2.offline;
 
 import android.net.Uri;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.offline.DownloadRequest.UnsupportedRequestException;
 import com.google.android.exoplayer2.util.AtomicFile;
 import com.google.android.exoplayer2.util.Util;
+
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;

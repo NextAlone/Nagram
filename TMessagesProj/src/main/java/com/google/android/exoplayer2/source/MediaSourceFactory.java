@@ -16,10 +16,12 @@
 package com.google.android.exoplayer2.source;
 
 import android.net.Uri;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.drm.DrmSession;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.offline.StreamKey;
+
 import java.util.List;
 
 /** Factory for creating {@link MediaSource}s from URIs. */

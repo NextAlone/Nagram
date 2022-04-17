@@ -17,9 +17,12 @@ package com.google.android.exoplayer2.drm;
 
 import android.media.MediaDrmException;
 import android.os.PersistableBundle;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+
 import com.google.android.exoplayer2.util.Util;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

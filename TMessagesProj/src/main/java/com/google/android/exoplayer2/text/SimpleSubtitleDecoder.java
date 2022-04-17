@@ -16,9 +16,11 @@
 package com.google.android.exoplayer2.text;
 
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.decoder.SimpleDecoder;
 import com.google.android.exoplayer2.util.Assertions;
+
 import java.nio.ByteBuffer;
 
 /**

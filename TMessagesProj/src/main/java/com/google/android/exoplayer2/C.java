@@ -23,7 +23,9 @@ import android.media.AudioManager;
 import android.media.MediaCodec;
 import android.media.MediaFormat;
 import android.view.Surface;
+
 import androidx.annotation.IntDef;
+
 import com.google.android.exoplayer2.PlayerMessage.Target;
 import com.google.android.exoplayer2.audio.AuxEffectInfo;
 import com.google.android.exoplayer2.util.Util;
@@ -31,6 +33,7 @@ import com.google.android.exoplayer2.video.SimpleDecoderVideoRenderer;
 import com.google.android.exoplayer2.video.VideoDecoderOutputBufferRenderer;
 import com.google.android.exoplayer2.video.VideoFrameMetadataListener;
 import com.google.android.exoplayer2.video.spherical.CameraMotionListener;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

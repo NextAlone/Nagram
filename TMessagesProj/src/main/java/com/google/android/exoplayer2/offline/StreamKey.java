@@ -17,6 +17,7 @@ package com.google.android.exoplayer2.offline;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import androidx.annotation.Nullable;
 
 /**

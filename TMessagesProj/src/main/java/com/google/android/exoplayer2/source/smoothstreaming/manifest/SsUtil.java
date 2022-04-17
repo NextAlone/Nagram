@@ -16,6 +16,7 @@
 package com.google.android.exoplayer2.source.smoothstreaming.manifest;
 
 import android.net.Uri;
+
 import com.google.android.exoplayer2.util.Util;
 
 /** SmoothStreaming related utility methods. */

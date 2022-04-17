@@ -15,8 +15,6 @@
  */
 package androidx.recyclerview.widget;
 
-import org.telegram.messenger.FileLog;
-
 import static androidx.recyclerview.widget.ViewInfoStore.InfoRecord.FLAG_APPEAR;
 import static androidx.recyclerview.widget.ViewInfoStore.InfoRecord.FLAG_APPEAR_AND_DISAPPEAR;
 import static androidx.recyclerview.widget.ViewInfoStore.InfoRecord.FLAG_APPEAR_PRE_AND_POST;
@@ -31,6 +29,8 @@ import androidx.annotation.VisibleForTesting;
 import androidx.collection.ArrayMap;
 import androidx.collection.LongSparseArray;
 import androidx.core.util.Pools;
+
+import org.telegram.messenger.FileLog;
 /**
  * This class abstracts all tracking for Views to run animations.
  */

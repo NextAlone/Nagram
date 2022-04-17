@@ -16,7 +16,9 @@
 package com.google.android.exoplayer2.analytics;
 
 import android.view.Surface;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Format;
@@ -35,6 +37,7 @@ import com.google.android.exoplayer2.source.MediaSourceEventListener.LoadEventIn
 import com.google.android.exoplayer2.source.MediaSourceEventListener.MediaLoadData;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+
 import java.io.IOException;
 
 /**

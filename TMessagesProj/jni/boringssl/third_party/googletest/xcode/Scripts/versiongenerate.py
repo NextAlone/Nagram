@@ -49,8 +49,8 @@
        AC_INIT, including in comments and character strings.
 """
 
-import sys
 import re
+import sys
 
 # Read the command line argument (the output directory for Version.h)
 if (len(sys.argv) < 3):

@@ -18,9 +18,6 @@ import android.os.Build;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.util.Log;
-import android.util.LruCache;
-import android.util.Pair;
 
 import androidx.core.graphics.ColorUtils;
 
@@ -30,8 +27,6 @@ import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
-
-import java.util.Objects;
 
 public class AvatarDrawable extends Drawable {
 

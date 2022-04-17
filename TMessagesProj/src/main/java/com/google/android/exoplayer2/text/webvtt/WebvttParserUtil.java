@@ -16,9 +16,11 @@
 package com.google.android.exoplayer2.text.webvtt;
 
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.ParserException;
 import com.google.android.exoplayer2.util.ParsableByteArray;
 import com.google.android.exoplayer2.util.Util;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

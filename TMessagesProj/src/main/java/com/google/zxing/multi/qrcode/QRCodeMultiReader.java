@@ -34,10 +34,10 @@ import com.google.zxing.qrcode.decoder.QRCodeDecoderMetaData;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This implementation can detect and decode multiple QR Codes in an image.

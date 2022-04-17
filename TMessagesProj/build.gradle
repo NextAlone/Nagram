@@ -144,7 +144,6 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.release
-            applicationIdSuffix ".beta"
         }
 
         release {
@@ -163,7 +162,7 @@ android {
         }
     }
 
-    def officialVersionName = "8.6.2"
+    def officialVersionName = "8.7.0"
 
     defaultConfig {
         minSdkVersion 21

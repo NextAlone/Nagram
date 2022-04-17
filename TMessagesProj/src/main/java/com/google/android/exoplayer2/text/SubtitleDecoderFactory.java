@@ -16,6 +16,7 @@
 package com.google.android.exoplayer2.text;
 
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.text.cea.Cea608Decoder;
 import com.google.android.exoplayer2.text.cea.Cea708Decoder;

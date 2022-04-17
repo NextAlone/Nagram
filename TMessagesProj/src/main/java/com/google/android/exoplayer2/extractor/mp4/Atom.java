@@ -16,7 +16,9 @@
 package com.google.android.exoplayer2.extractor.mp4;
 
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.util.ParsableByteArray;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

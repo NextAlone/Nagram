@@ -17,8 +17,11 @@ package com.google.android.exoplayer2.text.ttml;
 
 import android.graphics.Typeface;
 import android.text.Layout;
+
 import androidx.annotation.IntDef;
+
 import com.google.android.exoplayer2.util.Assertions;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

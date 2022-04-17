@@ -19,8 +19,11 @@ import static com.google.android.exoplayer2.util.Util.castNonNull;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.metadata.Metadata;
+
 import java.util.Arrays;
 
 /** A picture parsed from a FLAC file. */

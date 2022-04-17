@@ -16,7 +16,9 @@
 package com.google.android.exoplayer2.ext.ffmpeg;
 
 import android.os.Handler;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Format;
@@ -29,8 +31,10 @@ import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.drm.ExoMediaCrypto;
 import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.MimeTypes;
-import java.util.Collections;
+
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+
+import java.util.Collections;
 
 /**
  * Decodes and renders audio using FFmpeg.

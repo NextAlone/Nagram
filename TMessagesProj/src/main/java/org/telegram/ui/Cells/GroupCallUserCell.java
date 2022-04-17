@@ -22,8 +22,9 @@ import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+
 import androidx.core.graphics.ColorUtils;
-import java.util.ArrayList;
+
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
@@ -46,6 +47,8 @@ import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.WaveDrawable;
+
+import java.util.ArrayList;
 
 public class GroupCallUserCell extends FrameLayout {
 

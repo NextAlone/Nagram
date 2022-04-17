@@ -16,7 +16,6 @@
 
 package org.telegram.ui.ActionBar;
 
-import android.accounts.AccountManager;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Point;
@@ -32,10 +31,7 @@ import android.view.WindowManager;
 import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 
-import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.UserConfig;
 
 import java.util.Arrays;
 

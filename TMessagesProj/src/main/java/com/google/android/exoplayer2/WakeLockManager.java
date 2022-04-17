@@ -19,7 +19,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.util.Log;
 
 /**

@@ -16,7 +16,9 @@
 package com.google.android.exoplayer2.drm;
 
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.util.Assertions;
+
 import java.util.Map;
 
 /** A {@link DrmSession} that's in a terminal error state. */

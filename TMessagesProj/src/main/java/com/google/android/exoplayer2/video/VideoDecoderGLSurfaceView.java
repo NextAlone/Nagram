@@ -18,6 +18,7 @@ package com.google.android.exoplayer2.video;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+
 import androidx.annotation.Nullable;
 
 /**

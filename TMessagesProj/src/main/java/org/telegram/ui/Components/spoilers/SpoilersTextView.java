@@ -12,10 +12,13 @@ import android.text.Layout;
 import android.text.Spanned;
 import android.view.MotionEvent;
 import android.widget.TextView;
+
+import org.telegram.messenger.AndroidUtilities;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import org.telegram.messenger.AndroidUtilities;
+
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.utils.Defines;
 

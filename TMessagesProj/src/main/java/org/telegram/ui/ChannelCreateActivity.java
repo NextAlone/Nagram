@@ -34,7 +34,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import java.util.ArrayList;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
@@ -69,6 +69,8 @@ import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
+
+import java.util.ArrayList;
 
 public class ChannelCreateActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, ImageUpdater.ImageUpdaterDelegate {
 
@@ -632,7 +634,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
             radioButtonCell1 = new RadioButtonCell(context);
             radioButtonCell1.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            radioButtonCell1.setTextAndValueAndCheck(
+            radioButtonCell1.setTextAndValue(
                 LocaleController.getString("ChannelPublic", R.string.ChannelPublic),
                 LocaleController.getString("ChannelPublicInfo", R.string.ChannelPublicInfo), false,
                 !isPrivate);
@@ -648,7 +650,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
             radioButtonCell2 = new RadioButtonCell(context);
             radioButtonCell2.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            radioButtonCell2.setTextAndValueAndCheck(
+            radioButtonCell2.setTextAndValue(
                 LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate),
                 LocaleController.getString("ChannelPrivateInfo", R.string.ChannelPrivateInfo),
                 false, isPrivate);

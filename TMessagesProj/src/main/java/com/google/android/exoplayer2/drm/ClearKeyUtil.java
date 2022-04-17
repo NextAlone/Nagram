@@ -17,6 +17,7 @@ package com.google.android.exoplayer2.drm;
 
 import com.google.android.exoplayer2.util.Log;
 import com.google.android.exoplayer2.util.Util;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

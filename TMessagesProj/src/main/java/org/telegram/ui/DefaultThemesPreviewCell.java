@@ -31,11 +31,11 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.DrawerProfileCell;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Components.ChatThemeBottomSheet;
-import org.telegram.ui.Components.ThemeSmallPreviewView;
 import org.telegram.ui.Components.FlickerLoadingView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.ThemeSmallPreviewView;
 
 import java.util.ArrayList;
 

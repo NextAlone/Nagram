@@ -16,8 +16,10 @@
 package com.google.android.exoplayer2.trackselection;
 
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.RendererConfiguration;
 import com.google.android.exoplayer2.util.Util;
+
 import org.checkerframework.checker.nullness.compatqual.NullableType;
 
 /**

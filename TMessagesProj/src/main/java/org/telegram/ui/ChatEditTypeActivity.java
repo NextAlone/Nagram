@@ -21,9 +21,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.concurrent.CountDownLatch;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
@@ -52,6 +50,10 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.InviteLinkBottomSheet;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkActionView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.CountDownLatch;
 
 public class ChatEditTypeActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -251,12 +253,12 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         radioButtonCell2 = new RadioButtonCell(context);
         radioButtonCell2.setBackgroundDrawable(Theme.getSelectorDrawable(false));
         if (isChannel) {
-            radioButtonCell2.setTextAndValueAndCheck(
+            radioButtonCell2.setTextAndValue(
                 LocaleController.getString("ChannelPrivate", R.string.ChannelPrivate),
                 LocaleController.getString("ChannelPrivateInfo", R.string.ChannelPrivateInfo),
                 false, isPrivate);
         } else {
-            radioButtonCell2.setTextAndValueAndCheck(
+            radioButtonCell2.setTextAndValue(
                 LocaleController.getString("MegaPrivate", R.string.MegaPrivate),
                 LocaleController.getString("MegaPrivateInfo", R.string.MegaPrivateInfo), false,
                 isPrivate);
@@ -274,12 +276,12 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         radioButtonCell1 = new RadioButtonCell(context);
         radioButtonCell1.setBackgroundDrawable(Theme.getSelectorDrawable(false));
         if (isChannel) {
-            radioButtonCell1.setTextAndValueAndCheck(
+            radioButtonCell1.setTextAndValue(
                 LocaleController.getString("ChannelPublic", R.string.ChannelPublic),
                 LocaleController.getString("ChannelPublicInfo", R.string.ChannelPublicInfo), false,
                 !isPrivate);
         } else {
-            radioButtonCell1.setTextAndValueAndCheck(
+            radioButtonCell1.setTextAndValue(
                 LocaleController.getString("MegaPublic", R.string.MegaPublic),
                 LocaleController.getString("MegaPublicInfo", R.string.MegaPublicInfo), false,
                 !isPrivate);

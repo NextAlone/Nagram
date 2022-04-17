@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="936px" height="372px" viewBox="0 0 936 372" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="936px"
+    height="372px"
+    viewBox="0 0 936 372"
+    version="1.1"
+    xmlns="http://www.w3.org/2000/svg">
     <title>Artboard</title>
     <g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <path d="M18,0 L918,0 C927.941125,-1.82615513e-15 936,8.0588745 936,18 L936,372 L936,372 L0,372 L0,18 C-1.21743675e-15,8.0588745 8.0588745,1.82615513e-15 18,0 Z" id="Rectangle" fill="#5FAAEC"></path>

@@ -16,7 +16,9 @@
 package com.google.android.exoplayer2.ext.flac;
 
 import android.os.Handler;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.audio.AudioProcessor;
@@ -30,6 +32,7 @@ import com.google.android.exoplayer2.util.FlacConstants;
 import com.google.android.exoplayer2.util.FlacStreamMetadata;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.Util;
+
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 /** Decodes and renders audio using the native Flac decoder. */

@@ -16,8 +16,11 @@
 package com.google.android.exoplayer2.source.hls;
 
 import android.net.Uri;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.util.Assertions;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 

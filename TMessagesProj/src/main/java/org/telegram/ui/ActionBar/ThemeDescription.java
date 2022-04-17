@@ -19,7 +19,6 @@ import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
-import android.text.Spanned;
 import android.text.SpannedString;
 import android.text.TextPaint;
 import android.view.View;
@@ -28,6 +27,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import androidx.viewpager.widget.ViewPager;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
@@ -62,8 +63,6 @@ import org.telegram.ui.Components.VideoTimelineView;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import androidx.viewpager.widget.ViewPager;
 
 public class ThemeDescription {
 

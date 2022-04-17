@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="480px" height="309px" viewBox="0 0 480 309" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="480px"
+    height="309px"
+    viewBox="0 0 480 309"
+    version="1.1"
+    xmlns="http://www.w3.org/2000/svg">
     <title>record_video_l</title>
     <g id="record_video_l" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <path d="M30.6382979,0 L449.361702,0 C466.282767,0 480,13.7172332 480,30.6382979 L480,278.361702 C480,295.282767 466.282767,309 449.361702,309 L30.6382979,309 C13.7172332,309 0,295.282767 0,278.361702 L0,30.6382979 C0,13.7172332 13.7172332,0 30.6382979,0 Z" id="Rectangle" fill="#323940"></path>

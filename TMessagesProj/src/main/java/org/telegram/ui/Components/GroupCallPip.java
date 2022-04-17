@@ -1,5 +1,7 @@
 package org.telegram.ui.Components;
 
+import static android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -37,8 +39,6 @@ import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.voip.RTMPStreamPipOverlay;
 import org.telegram.ui.GroupCallActivity;
-
-import static android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 
 public class GroupCallPip implements NotificationCenter.NotificationCenterDelegate {
 

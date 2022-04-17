@@ -17,12 +17,15 @@ package com.google.android.exoplayer2.decoder;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.C;
+
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.nio.ByteBuffer;
-import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 
 /**
  * Holds input for a decoder.

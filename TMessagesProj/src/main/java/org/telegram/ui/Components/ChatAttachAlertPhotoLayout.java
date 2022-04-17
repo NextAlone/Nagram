@@ -19,10 +19,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
@@ -34,6 +32,7 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -51,20 +50,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Keep;
-import androidx.core.graphics.ColorUtils;
 import androidx.exifinterface.media.ExifInterface;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 
-
-import org.checkerframework.checker.units.qual.A;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
@@ -90,8 +81,6 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.BasePermissionsActivity;
 import org.telegram.ui.Cells.PhotoAttachCameraCell;
@@ -99,14 +88,15 @@ import org.telegram.ui.Cells.PhotoAttachPermissionCell;
 import org.telegram.ui.Cells.PhotoAttachPhotoCell;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.PhotoViewer;
-import top.qwq2333.nullgram.config.ConfigManager;
-import top.qwq2333.nullgram.utils.Defines;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.utils.Defines;
 
 public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayout implements NotificationCenter.NotificationCenterDelegate {
 
@@ -842,14 +832,6 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     flashModeButton[a].layout(cx3 - flashModeButton[a].getMeasuredWidth() / 2, cy3 - flashModeButton[a].getMeasuredHeight() / 2, cx3 + flashModeButton[a].getMeasuredWidth() / 2, cy3 + flashModeButton[a].getMeasuredHeight() / 2);
                 }
             }
-
-            @Override
-            public void setAlpha(float alpha) {
-                super.setAlpha(alpha);
-                if (parentAlert != null) {
-                    parentAlert.setOverlayNavBarColor(ColorUtils.setAlphaComponent(Color.BLACK, (int) (alpha * 255)));
-                }
-            }
         };
         cameraPanel.setVisibility(View.GONE);
         cameraPanel.setAlpha(0.0f);
@@ -1483,7 +1465,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 selectedPhotos.clear();
                 adapter.notifyDataSetChanged();
                 cameraAttachAdapter.notifyDataSetChanged();
-                parentAlert.dismiss();
+                parentAlert.dismiss(true);
             }
 
             @Override
@@ -1704,9 +1686,6 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         cameraView.setFpsLimit(-1);
         AndroidUtilities.hideKeyboard(this);
         AndroidUtilities.setLightNavigationBar(parentAlert.getWindow(), false);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            parentAlert.getWindow().setNavigationBarColor(0xff000000);
-        }
         if (animated) {
             setCameraOpenProgress(0);
             cameraAnimationInProgress = true;
@@ -1809,9 +1788,6 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             cameraView.setFocusable(true);
             cameraView.setFpsLimit(30);
             if (Build.VERSION.SDK_INT >= 21) {
-                Path path = new Path();
-                float[] radii = new float[8];
-
                 cameraView.setOutlineProvider(new ViewOutlineProvider() {
                     @Override
                     public void getOutline(View view, Outline outline) {
@@ -2101,6 +2077,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             AndroidUtilities.cancelRunOnUIThread(zoomControlHideRunnable);
             zoomControlHideRunnable = null;
         }
+        AndroidUtilities.setLightNavigationBar(parentAlert.getWindow(), AndroidUtilities.computePerceivedBrightness(getThemedColor(Theme.key_windowBackgroundGray)) > 0.721);
         if (animated) {
             additionCloseCameraY = cameraView.getTranslationY();
 
@@ -2202,7 +2179,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         float startHeight = animateCameraValues[2];
         boolean isPortrait = AndroidUtilities.displaySize.x < AndroidUtilities.displaySize.y;
         float endWidth = parentAlert.getContainer().getWidth() - parentAlert.getLeftInset() - parentAlert.getRightInset();
-        float endHeight = parentAlert.getContainer().getHeight() - parentAlert.getBottomInset();
+        float endHeight = parentAlert.getContainer().getHeight();
 
         float fromX = cameraViewLocation[0];
         float fromY = cameraViewLocation[1];
@@ -2268,6 +2245,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             cameraIcon.setAlpha(0.0f);
         }
 
+        Log.i("caapl", "cameraViewH=" + cameraViewH + " (endHeight=" + endHeight + ") value=" + value);
         if (layoutParams.width != cameraViewW || layoutParams.height != cameraViewH) {
             layoutParams.width = cameraViewW;
             layoutParams.height = cameraViewH;
@@ -2445,9 +2423,11 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         return selectedPhotosOrder;
     }
 
-    public void updateSelected(HashMap<Object, Object> selectedPhotos, ArrayList<Object> photosOrder, boolean updateLayout) {
-        this.selectedPhotos = selectedPhotos;
-        this.selectedPhotosOrder = photosOrder;
+    public void updateSelected(HashMap<Object, Object> newSelectedPhotos, ArrayList<Object> newPhotosOrder, boolean updateLayout) {
+        selectedPhotos.clear();
+        selectedPhotos.putAll(newSelectedPhotos);
+        selectedPhotosOrder.clear();
+        selectedPhotosOrder.addAll(newPhotosOrder);
         if (updateLayout) {
             updatePhotosCounter(false);
             updateCheckedPhotoIndices();
@@ -2559,7 +2539,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                         parentAlert.baseFragment.startActivityForResult(photoPickerIntent, 1);
                     }
                 }
-                parentAlert.dismiss();
+                parentAlert.dismiss(true);
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -3097,7 +3077,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             return true;
         } else if (view == cameraView) {
             if (cameraOpened && !cameraAnimationInProgress) {
-                cameraView.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY));
+                cameraView.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(height + parentAlert.getBottomInset(), View.MeasureSpec.EXACTLY));
                 return true;
             }
         } else if (view == cameraPanel) {

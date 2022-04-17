@@ -17,6 +17,7 @@ package com.google.android.exoplayer2.audio;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.util.Util;
+
 import java.nio.ByteBuffer;
 
 /** Audio processor for trimming samples from the start/end of data. */

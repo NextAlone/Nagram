@@ -149,6 +149,7 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LineProgressView;
 import org.telegram.ui.Components.LinkPath;
+import org.telegram.ui.Components.LinkSpanDrawable;
 import org.telegram.ui.Components.MediaActionDrawable;
 import org.telegram.ui.Components.RadialProgress2;
 import org.telegram.ui.Components.RadioButton;
@@ -274,7 +275,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     private int pressCount = 0;
     private CheckForTap pendingCheckForTap = null;
 
-    private TextPaintUrlSpan pressedLink;
+    private LinkSpanDrawable<TextPaintUrlSpan> pressedLink;
+    private LinkSpanDrawable.LinkCollector links = new LinkSpanDrawable.LinkCollector();
     private BottomSheet linkSheet;
     private int pressedLayoutY;
     private DrawingText pressedLinkOwnerLayout;
@@ -380,6 +382,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     public class DrawingText implements TextSelectionHelper.TextLayoutBlock {
+        public View latestParentView;
+
         public StaticLayout textLayout;
         public LinkPath textPath;
         public LinkPath markPath;
@@ -392,7 +396,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         public int row;
         public CharSequence prefix;
 
-        public void draw(Canvas canvas) {
+        public void draw(Canvas canvas, View view) {
+            latestParentView = view;
+
             if (!searchResults.isEmpty()) {
                 SearchResult result = searchResults.get(currentSearchIndex);
                 if (result.block == parentBlock && (result.text == parentText || result.text instanceof String && parentText == null)) {
@@ -422,7 +428,21 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             if (markPath != null) {
                 canvas.drawPath(markPath, webpageMarkPaint);
             }
-            drawLayoutLink(canvas, this);
+            if (links.draw(canvas, this)) {
+                view.invalidate();
+            }
+            if (pressedLinkOwnerLayout == this && pressedLink == null && drawBlockSelection) {
+                float width;
+                float x;
+                if (getLineCount() == 1) {
+                    width = getLineWidth(0);
+                    x = getLineLeft(0);
+                } else {
+                    width = getWidth();
+                    x = 0;
+                }
+                canvas.drawRect(-AndroidUtilities.dp(2) + x, 0, x + width + AndroidUtilities.dp(2), getHeight(), urlPaint);
+            }
             textLayout.draw(canvas);
         }
 
@@ -1085,8 +1105,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             if (checkingForLongPress && windowView != null) {
                 checkingForLongPress = false;
                 if (pressedLink != null) {
-                    windowView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-                    showCopyPopup(pressedLink.getUrl());
+                    windowView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                    showCopyPopup(pressedLink.getSpan().getUrl());
                     pressedLink = null;
                     pressedLinkOwnerLayout = null;
                     if (pressedLinkOwnerView != null) {
@@ -1099,10 +1119,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         textSelectionHelper.trySelect(pressedLinkOwnerView);
                     }
                     if (textSelectionHelper.isSelectionMode()) {
-                        windowView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                        windowView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                     }
                 } else if (pressedLinkOwnerLayout != null && pressedLinkOwnerView != null) {
-                    windowView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                    windowView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);;
 
                     int[] location = new int[2];
                     pressedLinkOwnerView.getLocationInWindow(location);
@@ -1151,16 +1171,16 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         float lightness = (0.2126f * Color.red(color2) + 0.7152f * Color.green(color2) + 0.0722f * Color.blue(color2)) / 255.0f;
         webpageSearchPaint.setColor(lightness <= 0.705f ? 0xffd1982e : 0xffffe669);
         webpageUrlPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkSelection) & 0x33ffffff);
-        webpageUrlPaint.setPathEffect(LinkPath.roundedEffect);
+        webpageUrlPaint.setPathEffect(LinkPath.getRoundedEffect());
         urlPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkSelection) & 0x33ffffff);
-        urlPaint.setPathEffect(LinkPath.roundedEffect);
+        urlPaint.setPathEffect(LinkPath.getRoundedEffect());
         tableHalfLinePaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteInputField));
         tableLinePaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteInputField));
 
         photoBackgroundPaint.setColor(0x0f000000);
         dividerPaint.setColor(Theme.getColor(Theme.key_divider));
         webpageMarkPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkSelection) & 0x33ffffff);
-        webpageMarkPaint.setPathEffect(LinkPath.roundedEffect);
+        webpageMarkPaint.setPathEffect(LinkPath.getRoundedEffect());
 
         int color = Theme.getColor(Theme.key_switchTrack);
         int r = Color.red(color);
@@ -1229,6 +1249,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 AndroidUtilities.addToClipboard(url);
             }
         });
+        builder.setOnPreDismissListener(di -> links.clear());
         BottomSheet sheet = builder.create();
         showDialog(sheet);
     }
@@ -2580,26 +2601,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         return drawingText;
     }
 
-    private void drawLayoutLink(Canvas canvas, DrawingText layout) {
-        if (canvas == null || layout == null || pressedLinkOwnerLayout != layout) {
-            return;
-        }
-        if (pressedLink != null) {
-            canvas.drawPath(urlPath, urlPaint);
-        } else if (drawBlockSelection && layout != null) {
-            float width;
-            float x;
-            if (layout.getLineCount() == 1) {
-                width = layout.getLineWidth(0);
-                x = layout.getLineLeft(0);
-            } else {
-                width = layout.getWidth();
-                x = 0;
-            }
-            canvas.drawRect(-AndroidUtilities.dp(2) + x, 0, x + width + AndroidUtilities.dp(2), layout.getHeight(), urlPaint);
-        }
-    }
-
     private boolean checkLayoutForLinks(WebpageAdapter adapter, MotionEvent event, View parentView, DrawingText drawingText, int layoutX, int layoutY) {
         if (pageSwitchAnimation != null || parentView == null || !textSelectionHelper.isSelectable(parentView)) {
             return false;
@@ -2619,7 +2620,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
                 if (x >= layoutX + left && x <= left + layoutX + width && y >= layoutY && y <= layoutY + layout.getHeight()) {
                     pressedLinkOwnerLayout = drawingText;
-                    pressedLinkOwnerView = parentView;
                     pressedLayoutY = layoutY;
                     CharSequence text = layout.getText();
                     if (text instanceof Spannable) {
@@ -2633,26 +2633,32 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                                 Spannable buffer = (Spannable) layout.getText();
                                 TextPaintUrlSpan[] link = buffer.getSpans(off, off, TextPaintUrlSpan.class);
                                 if (link != null && link.length > 0) {
-                                    pressedLink = link[0];
-                                    int pressedStart = buffer.getSpanStart(pressedLink);
-                                    int pressedEnd = buffer.getSpanEnd(pressedLink);
+                                    TextPaintUrlSpan selectedLink = link[0];
+                                    int pressedStart = buffer.getSpanStart(selectedLink);
+                                    int pressedEnd = buffer.getSpanEnd(selectedLink);
                                     for (int a = 1; a < link.length; a++) {
                                         TextPaintUrlSpan span = link[a];
                                         int start = buffer.getSpanStart(span);
                                         int end = buffer.getSpanEnd(span);
                                         if (pressedStart > start || end > pressedEnd) {
-                                            pressedLink = span;
+                                            selectedLink = span;
                                             pressedStart = start;
                                             pressedEnd = end;
                                         }
                                     }
+                                    if (pressedLink != null) {
+                                        links.removeLink(pressedLink);
+                                    }
+                                    pressedLink = new LinkSpanDrawable<TextPaintUrlSpan>(selectedLink, null, x, y);
+                                    pressedLink.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkSelection) & 0x33ffffff);
+                                    links.addLink(pressedLink, pressedLinkOwnerLayout);
                                     try {
-                                        urlPath.setUseRoundRect(true);
-                                        urlPath.setCurrentLayout(layout, pressedStart, 0);
-                                        int shift = pressedLink.getTextPaint() != null ? pressedLink.getTextPaint().baselineShift : 0;
-                                        urlPath.setBaselineShift(shift != 0 ? shift + AndroidUtilities.dp(shift > 0 ? 5 : -2) : 0);
-                                        layout.getSelectionPath(pressedStart, pressedEnd, urlPath);
-                                        urlPath.onPathEnd();
+                                        LinkPath path = pressedLink.obtainNewPath();
+                                        path.setCurrentLayout(layout, pressedStart, 0);
+                                        TextPaint textPaint = selectedLink.getTextPaint();
+                                        int shift = textPaint != null ? textPaint.baselineShift : 0;
+                                        path.setBaselineShift(shift != 0 ? shift + AndroidUtilities.dp(shift > 0 ? 5 : -2) : 0);
+                                        layout.getSelectionPath(pressedStart, pressedEnd, path);
                                         parentView.invalidate();
                                     } catch (Exception e) {
                                         FileLog.e(e);
@@ -2667,7 +2673,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 if (pressedLink != null) {
                     removeLink = true;
-                    String url = pressedLink.getUrl();
+                    String url = pressedLink.getSpan().getUrl();
                     if (url != null) {
                         if (linkSheet != null) {
                             linkSheet.dismiss();
@@ -2701,7 +2707,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                             anchor = null;
                         }
                         if (!isAnchor) {
-                            openWebpageUrl(pressedLink.getUrl(), anchor);
+                            openWebpageUrl(pressedLink.getSpan().getUrl(), anchor);
                         }
                     }
                 }
@@ -2730,6 +2736,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             return;
         }
         View parentView = pressedLinkOwnerView;
+        links.clear();
         pressedLink = null;
         pressedLinkOwnerLayout = null;
         pressedLinkOwnerView = null;
@@ -6193,14 +6200,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 canvas.save();
                 canvas.translate(textX, textY);
                 drawTextSelection(canvas, this, count++);
-                captionLayout.draw(canvas);
+                captionLayout.draw(canvas, this);
                 canvas.restore();
             }
             if (creditLayout != null) {
                 canvas.save();
                 canvas.translate(textX, textY + creditOffset);
                 drawTextSelection(canvas, this, count);
-                creditLayout.draw(canvas);
+                creditLayout.draw(canvas, this);
                 canvas.restore();
             }
             if (currentBlock.level > 0) {
@@ -6559,7 +6566,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 titleLayout.y = seekBarY - AndroidUtilities.dp(16);
                 canvas.translate(titleLayout.x, titleLayout.y);
                 drawTextSelection(canvas, this, count++);
-                titleLayout.draw(canvas);
+                titleLayout.draw(canvas, this);
                 canvas.restore();
             }
             if (captionLayout != null) {
@@ -6568,7 +6575,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 captionLayout.y = textY;
                 canvas.translate(textX, textY);
                 drawTextSelection(canvas, this, count++);
-                captionLayout.draw(canvas);
+                captionLayout.draw(canvas, this);
                 canvas.restore();
             }
             if (creditLayout != null) {
@@ -6577,7 +6584,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 creditLayout.y = textY + creditOffset;
                 canvas.translate(textX, textY + creditOffset);
                 drawTextSelection(canvas, this, count);
-                creditLayout.draw(canvas);
+                creditLayout.draw(canvas, this);
                 canvas.restore();
             }
             if (currentBlock.level > 0) {
@@ -6890,14 +6897,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     canvas.save();
                     canvas.translate(AndroidUtilities.dp(18 + 14 + (avatarVisible ? 40 + 14 : 0)), AndroidUtilities.dp(dateLayout != null ? 10 : 19));
                     drawTextSelection(canvas, this, count++);
-                    nameLayout.draw(canvas);
+                    nameLayout.draw(canvas, this);
                     canvas.restore();
                 }
                 if (dateLayout != null) {
                     canvas.save();
                     canvas.translate(AndroidUtilities.dp(18 + 14 + (avatarVisible ? 40 + 14 : 0)), AndroidUtilities.dp(29));
                     drawTextSelection(canvas, this, count++);
-                    dateLayout.draw(canvas);
+                    dateLayout.draw(canvas, this);
                     canvas.restore();
                 }
                 canvas.drawRect(AndroidUtilities.dp(18), AndroidUtilities.dp(6), AndroidUtilities.dp(20), lineHeight - (currentBlock.level != 0 ? 0 : AndroidUtilities.dp(6)), quoteLinePaint);
@@ -6906,14 +6913,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 canvas.save();
                 canvas.translate(textX, textY);
                 drawTextSelection(canvas, this, count++);
-                captionLayout.draw(canvas);
+                captionLayout.draw(canvas, this);
                 canvas.restore();
             }
             if (creditLayout != null) {
                 canvas.save();
                 canvas.translate(textX, textY + creditOffset);
                 drawTextSelection(canvas, this, count);
-                creditLayout.draw(canvas);
+                creditLayout.draw(canvas, this);
                 canvas.restore();
             }
         }
@@ -7002,7 +7009,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 canvas.save();
                 canvas.translate(textX, textY);
                 drawTextSelection(canvas, this);
-                textLayout.draw(canvas);
+                textLayout.draw(canvas, this);
                 canvas.restore();
             }
             if (currentBlock.level > 0) {
@@ -7133,7 +7140,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
 
                 @Override
-                public TextureView onSwitchInlineMode(View controlsView, boolean inline, float aspectRatio, int rotation, boolean animated) {
+                public TextureView onSwitchInlineMode(View controlsView, boolean inline, int videoWidth, int videoHeight, int rotation, boolean animated) {
                     return null;
                 }
 
@@ -7434,14 +7441,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 canvas.save();
                 canvas.translate(textX, textY);
                 drawTextSelection(canvas, this, count++);
-                captionLayout.draw(canvas);
+                captionLayout.draw(canvas, this);
                 canvas.restore();
             }
             if (creditLayout != null) {
                 canvas.save();
                 canvas.translate(textX, textY + creditOffset);
                 drawTextSelection(canvas, this, count);
-                creditLayout.draw(canvas);
+                creditLayout.draw(canvas, this);
                 canvas.restore();
             }
             if (currentBlock.level > 0) {
@@ -7719,7 +7726,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 canvas.save();
                 canvas.translate(textX, textY);
                 drawTextSelection(canvas, this, 0);
-                titleLayout.draw(canvas);
+                titleLayout.draw(canvas, this);
                 canvas.restore();
             }
             if (currentBlock.level > 0) {
@@ -8323,14 +8330,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 canvas.save();
                 canvas.translate(textX, textY);
                 drawTextSelection(canvas, this, count++);
-                captionLayout.draw(canvas);
+                captionLayout.draw(canvas, this);
                 canvas.restore();
             }
             if (creditLayout != null) {
                 canvas.save();
                 canvas.translate(textX, textY + creditOffset);
                 drawTextSelection(canvas, this, count);
-                creditLayout.draw(canvas);
+                creditLayout.draw(canvas, this);
                 canvas.restore();
             }
             if (currentBlock.level > 0) {
@@ -8583,14 +8590,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 canvas.save();
                 canvas.translate(textX, textY);
                 drawTextSelection(canvas, this, count++);
-                captionLayout.draw(canvas);
+                captionLayout.draw(canvas, this);
                 canvas.restore();
             }
             if (creditLayout != null) {
                 canvas.save();
                 canvas.translate(textX, textY + creditOffset);
                 drawTextSelection(canvas, this, count);
-                creditLayout.draw(canvas);
+                creditLayout.draw(canvas, this);
                 canvas.restore();
             }
         }
@@ -8807,14 +8814,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 } else {
                     canvas.translate(AndroidUtilities.dp(15) + currentBlock.parent.maxNumWidth - (int) Math.ceil(currentBlock.numLayout.getLineWidth(0)) + currentBlock.parent.level * AndroidUtilities.dp(12), textY + numOffsetY - (drawDot ? AndroidUtilities.dp(1) : 0));
                 }
-                currentBlock.numLayout.draw(canvas);
+                currentBlock.numLayout.draw(canvas, this);
                 canvas.restore();
             }
             if (textLayout != null) {
                 canvas.save();
                 canvas.translate(textX, textY);
                 drawTextSelection(canvas,this);
-                textLayout.draw(canvas);
+                textLayout.draw(canvas, this);
                 canvas.restore();
             }
         }
@@ -9043,14 +9050,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 } else {
                     canvas.translate(AndroidUtilities.dp(18) + currentBlock.parent.maxNumWidth - (int) Math.ceil(currentBlock.numLayout.getLineWidth(0)) + currentBlock.parent.level * AndroidUtilities.dp(20), textY + numOffsetY);
                 }
-                currentBlock.numLayout.draw(canvas);
+                currentBlock.numLayout.draw(canvas, this);
                 canvas.restore();
             }
             if (textLayout != null) {
                 canvas.save();
                 canvas.translate(textX, textY);
                 drawTextSelection(canvas, this);
-                textLayout.draw(canvas);
+                textLayout.draw(canvas, this);
                 canvas.restore();
             }
         }
@@ -9159,7 +9166,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 canvas.save();
                 canvas.translate(textX, textY);
                 drawTextSelection(canvas,this);
-                textLayout.draw(canvas);
+                textLayout.draw(canvas, this);
                 canvas.restore();
             }
 
@@ -9266,7 +9273,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 canvas.save();
                 canvas.translate(textX, textY);
                 drawTextSelection(canvas, this);
-                textLayout.draw(canvas);
+                textLayout.draw(canvas, this);
                 canvas.restore();
             }
         }
@@ -9402,12 +9409,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             canvas.translate(textX, AndroidUtilities.dp(10));
             if (textLayout != null) {
                 drawTextSelection(canvas, this, count++);
-                textLayout.draw(canvas);
+                textLayout.draw(canvas, this);
             }
             if (textLayout2 != null) {
                 canvas.translate(0, textOffset);
                 drawTextSelection(canvas, this, count);
-                textLayout2.draw(canvas);
+                textLayout2.draw(canvas, this);
             }
             canvas.restore();
             if (divider) {
@@ -9480,7 +9487,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 canvas.save();
                 canvas.translate(textX, textY);
                 drawTextSelection(canvas, this);
-                textLayout.draw(canvas);
+                textLayout.draw(canvas, this);
                 canvas.restore();
             }
         }
@@ -9577,7 +9584,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 canvas.save();
                 canvas.translate(textX, textY);
                 drawTextSelection(canvas, this);
-                textLayout.draw(canvas);
+                textLayout.draw(canvas, this);
                 canvas.restore();
             }
         }
@@ -9666,14 +9673,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 canvas.save();
                 canvas.translate(textX, textY);
                 drawTextSelection(canvas, this, count++);
-                textLayout.draw(canvas);
+                textLayout.draw(canvas, this);
                 canvas.restore();
             }
             if (textLayout2 != null) {
                 canvas.save();
                 canvas.translate(textX, textY2);
                 drawTextSelection(canvas, this, count);
-                textLayout2.draw(canvas);
+                textLayout2.draw(canvas, this);
                 canvas.restore();
             }
         }
@@ -9777,14 +9784,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 canvas.save();
                 canvas.translate(textX, textY);
                 drawTextSelection(canvas, this, counter++);
-                textLayout.draw(canvas);
+                textLayout.draw(canvas, this);
                 canvas.restore();
             }
             if (textLayout2 != null) {
                 canvas.save();
                 canvas.translate(textX, textY2);
                 drawTextSelection(canvas, this, counter);
-                textLayout2.draw(canvas);
+                textLayout2.draw(canvas, this);
                 canvas.restore();
             }
             if (parentAdapter.isRtl) {
@@ -10078,14 +10085,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 canvas.save();
                 canvas.translate(textX, textY);
                 drawTextSelection(canvas,this, count++);
-                captionLayout.draw(canvas);
+                captionLayout.draw(canvas, this);
                 canvas.restore();
             }
             if (creditLayout != null) {
                 canvas.save();
                 canvas.translate(textX, textY + creditOffset);
                 drawTextSelection(canvas,this, count);
-                creditLayout.draw(canvas);
+                creditLayout.draw(canvas, this);
                 canvas.restore();
             }
             if (currentBlock.level > 0) {
@@ -10373,14 +10380,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 canvas.save();
                 canvas.translate(textX, textY);
                 drawTextSelection(canvas, this, count++);
-                captionLayout.draw(canvas);
+                captionLayout.draw(canvas, this);
                 canvas.restore();
             }
             if (creditLayout != null) {
                 canvas.save();
                 canvas.translate(textX, textY + creditOffset);
                 drawTextSelection(canvas, this, count);
-                creditLayout.draw(canvas);
+                creditLayout.draw(canvas, this);
                 canvas.restore();
             }
             if (currentBlock.level > 0) {
@@ -10584,7 +10591,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 if (currentType == 0) {
                     drawTextSelection(canvas, this);
                 }
-                textLayout.draw(canvas);
+                textLayout.draw(canvas, this);
                 canvas.restore();
             }
         }
@@ -10687,7 +10694,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 canvas.save();
                 canvas.translate(textX, textY);
                 drawTextSelection(canvas, this);
-                textLayout.draw(canvas);
+                textLayout.draw(canvas, this);
                 canvas.restore();
             }
         }
@@ -10769,7 +10776,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 canvas.save();
                 canvas.translate(textX, textY);
                 drawTextSelection(canvas,this);
-                textLayout.draw(canvas);
+                textLayout.draw(canvas, this);
                 canvas.restore();
             }
         }
@@ -10851,7 +10858,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 canvas.save();
                 canvas.translate(textX, textY);
                 drawTextSelection(canvas, this);
-                textLayout.draw(canvas);
+                textLayout.draw(canvas, this);
                 canvas.restore();
             }
         }
@@ -10930,7 +10937,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 canvas.save();
                 canvas.translate(textX, textY);
                 drawTextSelection(canvas, this);
-                textLayout.draw(canvas);
+                textLayout.draw(canvas, this);
                 canvas.restore();
             }
             if (currentBlock.level > 0) {
@@ -11011,7 +11018,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     if (textLayout != null) {
                         canvas.save();
                         drawTextSelection(canvas, BlockPreformattedCell.this);
-                        textLayout.draw(canvas);
+                        textLayout.draw(canvas, this);
                         canvas.restore();
                         textLayout.x = (int) getX();
                         textLayout.y = (int) getY();
@@ -11123,7 +11130,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 canvas.save();
                 canvas.translate(textX, textY);
                 drawTextSelection(canvas, this);
-                textLayout.draw(canvas);
+                textLayout.draw(canvas, this);
                 canvas.restore();
             }
         }

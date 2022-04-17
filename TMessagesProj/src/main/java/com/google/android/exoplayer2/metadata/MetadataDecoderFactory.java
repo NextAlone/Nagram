@@ -16,6 +16,7 @@
 package com.google.android.exoplayer2.metadata;
 
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.metadata.emsg.EventMessageDecoder;
 import com.google.android.exoplayer2.metadata.icy.IcyDecoder;

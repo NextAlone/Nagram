@@ -18,16 +18,20 @@ package com.google.android.exoplayer2.text.webvtt;
 import android.graphics.Typeface;
 import android.text.Layout;
 import android.text.TextUtils;
+
 import androidx.annotation.IntDef;
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.util.Util;
+
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 
 /**
  * Style object of a Css style block in a Webvtt file.

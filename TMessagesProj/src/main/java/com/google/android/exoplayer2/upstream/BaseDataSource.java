@@ -18,6 +18,7 @@ package com.google.android.exoplayer2.upstream;
 import static com.google.android.exoplayer2.util.Util.castNonNull;
 
 import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
 
 /**

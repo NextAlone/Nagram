@@ -16,7 +16,9 @@
 package com.google.android.exoplayer2.offline;
 
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.C;
+
 import java.io.IOException;
 
 /** Downloads and removes a piece of content. */

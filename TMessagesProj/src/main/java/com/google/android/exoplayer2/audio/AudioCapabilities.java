@@ -24,8 +24,11 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.provider.Settings.Global;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.util.Util;
+
 import java.util.Arrays;
 
 /** Represents the set of audio formats that a device is capable of playing. */

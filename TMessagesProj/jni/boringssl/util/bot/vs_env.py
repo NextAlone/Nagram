@@ -12,12 +12,12 @@
 # OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
 # CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+# vs_toolchain adds gyp to sys.path.
+import gyp.MSVSVersion
 import subprocess
 import sys
 
 import vs_toolchain
-# vs_toolchain adds gyp to sys.path.
-import gyp.MSVSVersion
 
 if len(sys.argv) < 2:
   print >>sys.stderr, "Usage: vs_env.py TARGET_ARCH CMD..."

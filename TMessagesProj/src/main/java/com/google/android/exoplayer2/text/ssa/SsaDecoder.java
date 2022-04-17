@@ -18,7 +18,9 @@ package com.google.android.exoplayer2.text.ssa;
 import static com.google.android.exoplayer2.util.Util.castNonNull;
 
 import android.text.Layout;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.text.Cue;
 import com.google.android.exoplayer2.text.SimpleSubtitleDecoder;
@@ -27,13 +29,15 @@ import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.Log;
 import com.google.android.exoplayer2.util.ParsableByteArray;
 import com.google.android.exoplayer2.util.Util;
+
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 /** A {@link SimpleSubtitleDecoder} for SSA/ASS. */
 public final class SsaDecoder extends SimpleSubtitleDecoder {

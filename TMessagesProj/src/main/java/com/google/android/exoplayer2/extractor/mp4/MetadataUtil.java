@@ -17,6 +17,7 @@ package com.google.android.exoplayer2.extractor.mp4;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.extractor.GaplessInfoHolder;

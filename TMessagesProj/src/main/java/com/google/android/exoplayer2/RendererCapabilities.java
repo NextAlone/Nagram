@@ -16,8 +16,11 @@
 package com.google.android.exoplayer2;
 
 import android.annotation.SuppressLint;
+
 import androidx.annotation.IntDef;
+
 import com.google.android.exoplayer2.util.MimeTypes;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

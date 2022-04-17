@@ -16,9 +16,11 @@
 package com.google.android.exoplayer2.trackselection;
 
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector.SelectionOverride;
 import com.google.android.exoplayer2.trackselection.TrackSelection.Definition;
+
 import org.checkerframework.checker.nullness.compatqual.NullableType;
 
 /** Track selection related utility methods. */
