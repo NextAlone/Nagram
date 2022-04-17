@@ -430,7 +430,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 value
             );
             showButtonCheck.setOnClickListener(e -> {
-                preferences.edit().putBoolean("translate_button", true);
+                preferences.edit().putBoolean("translate_button", !getValue()).apply();
             });
             addView(showButtonCheck, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
