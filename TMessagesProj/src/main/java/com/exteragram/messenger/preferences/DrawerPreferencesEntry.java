@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
-import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -28,6 +27,7 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UndoView;
 
 import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.preferences.cells.TextCheckWithIconCell;
 
 public class DrawerPreferencesEntry extends BaseFragment {
 
@@ -35,7 +35,6 @@ public class DrawerPreferencesEntry extends BaseFragment {
     private ListAdapter listAdapter;
 
     private int drawerHeaderRow;
-    private int attentionRow;
     private int newGroupRow;
     private int newSecretChatRow;
     private int newChannelRow;
@@ -93,62 +92,60 @@ public class DrawerPreferencesEntry extends BaseFragment {
 
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         listView.setOnItemClickListener((view, position, x, y) -> {
-            if (position == attentionRow) {
-                Browser.openUrl(getParentActivity(), "https://www.youtube.com/watch?v=dQw4w9WgXcQ");
-            } else if (position == newGroupRow) {
+            if (position == newGroupRow) {
                 ExteraConfig.toggleNewGroup();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.newGroup);
+                if (view instanceof TextCheckWithIconCell) {
+                    ((TextCheckWithIconCell) view).setChecked(ExteraConfig.newGroup);
                 }
             } else if (position == newSecretChatRow) {
                 ExteraConfig.toggleNewSecretChat();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.newSecretChat);
+                if (view instanceof TextCheckWithIconCell) {
+                    ((TextCheckWithIconCell) view).setChecked(ExteraConfig.newSecretChat);
                 }
             } else if (position == newChannelRow) {
                 ExteraConfig.toggleNewChannel();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.newChannel);
+                if (view instanceof TextCheckWithIconCell) {
+                    ((TextCheckWithIconCell) view).setChecked(ExteraConfig.newChannel);
                 }
             } else if (position == contactsRow) {
                 ExteraConfig.toggleContacts();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.contacts);
+                if (view instanceof TextCheckWithIconCell) {
+                    ((TextCheckWithIconCell) view).setChecked(ExteraConfig.contacts);
                 }
             } else if (position == callsRow) {
                 ExteraConfig.toggleCalls();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.calls);
+                if (view instanceof TextCheckWithIconCell) {
+                    ((TextCheckWithIconCell) view).setChecked(ExteraConfig.calls);
                 }
             } else if (position == peopleNearbyRow) {
                 ExteraConfig.togglePeopleNearby();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.peopleNearby);
+                if (view instanceof TextCheckWithIconCell) {
+                    ((TextCheckWithIconCell) view).setChecked(ExteraConfig.peopleNearby);
                 }
             } else if (position == archivedChatsRow) {
                 ExteraConfig.toggleArchivedChats();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.archivedChats);
+                if (view instanceof TextCheckWithIconCell) {
+                    ((TextCheckWithIconCell) view).setChecked(ExteraConfig.archivedChats);
                 }
             } else if (position == savedMessagesRow) {
                 ExteraConfig.toggleSavedMessages();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.savedMessages);
+                if (view instanceof TextCheckWithIconCell) {
+                    ((TextCheckWithIconCell) view).setChecked(ExteraConfig.savedMessages);
                 }
             } else if (position == scanQrRow) {
                 ExteraConfig.toggleScanQr();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.scanQr);
+                if (view instanceof TextCheckWithIconCell) {
+                    ((TextCheckWithIconCell) view).setChecked(ExteraConfig.scanQr);
                 }
             } else if (position == inviteFriendsRow) {
                 ExteraConfig.toggleInviteFriends();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.inviteFriends);
+                if (view instanceof TextCheckWithIconCell) {
+                    ((TextCheckWithIconCell) view).setChecked(ExteraConfig.inviteFriends);
                 }
             } else if (position == telegramFeaturesRow) {
                 ExteraConfig.toggleTelegramFeatures();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.telegramFeatures);
+                if (view instanceof TextCheckWithIconCell) {
+                    ((TextCheckWithIconCell) view).setChecked(ExteraConfig.telegramFeatures);
                 }
             }
         });
@@ -163,7 +160,6 @@ public class DrawerPreferencesEntry extends BaseFragment {
         rowCount = 0;
 
         drawerHeaderRow = rowCount++;
-        attentionRow = rowCount++;
         newGroupRow = rowCount++;
         newSecretChatRow = rowCount++;
         newChannelRow = rowCount++;
@@ -216,37 +212,30 @@ public class DrawerPreferencesEntry extends BaseFragment {
                     }
                     break;
                 case 3:
-                    TextCheckCell textCheckCell = (TextCheckCell) holder.itemView;
-                    textCheckCell.setEnabled(true, null);
+                    TextCheckWithIconCell textCheckWithIconCell = (TextCheckWithIconCell) holder.itemView;
+                    textCheckWithIconCell.setEnabled(true, null);
                     if (position == newGroupRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("NewGroup", R.string.NewGroup), ExteraConfig.newGroup, true);
+                        textCheckWithIconCell.setTextAndCheckAndIcon(LocaleController.getString("NewGroup", R.string.NewGroup), R.drawable.menu_groups, ExteraConfig.newGroup, true);
                     } else if (position == newSecretChatRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("NewSecretChat", R.string.NewSecretChat), ExteraConfig.newSecretChat, true);
+                        textCheckWithIconCell.setTextAndCheckAndIcon(LocaleController.getString("NewSecretChat", R.string.NewSecretChat), R.drawable.menu_secret, ExteraConfig.newSecretChat, true);
                     } else if (position == newChannelRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("NewChannel", R.string.NewChannel), ExteraConfig.newChannel, true);
+                        textCheckWithIconCell.setTextAndCheckAndIcon(LocaleController.getString("NewChannel", R.string.NewChannel), R.drawable.menu_broadcast, ExteraConfig.newChannel, true);
                     } else if (position == contactsRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("Contacts", R.string.Contacts), ExteraConfig.contacts, true);
+                        textCheckWithIconCell.setTextAndCheckAndIcon(LocaleController.getString("Contacts", R.string.Contacts), R.drawable.menu_contacts, ExteraConfig.contacts, true);
                     } else if (position == callsRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("Calls", R.string.Calls), ExteraConfig.calls, true);
+                        textCheckWithIconCell.setTextAndCheckAndIcon(LocaleController.getString("Calls", R.string.Calls), R.drawable.menu_calls, ExteraConfig.calls, true);
                     } else if (position == peopleNearbyRow) {
-                        textCheckCell.setTextAndValueAndCheck(LocaleController.getString("PeopleNearby", R.string.PeopleNearby), LocaleController.getString("PNDescription", R.string.PNDescription), ExteraConfig.peopleNearby, true, true);
+                        textCheckWithIconCell.setTextAndCheckAndIcon(LocaleController.getString("PeopleNearby", R.string.PeopleNearby), R.drawable.menu_nearby, ExteraConfig.peopleNearby, true);
                     } else if (position == archivedChatsRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("ArchivedChats", R.string.ArchivedChats), ExteraConfig.archivedChats, true);
+                        textCheckWithIconCell.setTextAndCheckAndIcon(LocaleController.getString("ArchivedChats", R.string.ArchivedChats), R.drawable.msg_archive, ExteraConfig.archivedChats, true);
                     } else if (position == savedMessagesRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("SavedMessages", R.string.SavedMessages), ExteraConfig.savedMessages, true);
+                        textCheckWithIconCell.setTextAndCheckAndIcon(LocaleController.getString("SavedMessages", R.string.SavedMessages), R.drawable.menu_saved, ExteraConfig.savedMessages, true);
                     } else if (position == scanQrRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("AuthAnotherClient", R.string.AuthAnotherClient), ExteraConfig.scanQr, true);
+                        textCheckWithIconCell.setTextAndCheckAndIcon(LocaleController.getString("AuthAnotherClient", R.string.AuthAnotherClient), R.drawable.msg_qrcode, ExteraConfig.scanQr, true);
                     } else if (position == inviteFriendsRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("InviteFriends", R.string.InviteFriends), ExteraConfig.inviteFriends, true);
+                        textCheckWithIconCell.setTextAndCheckAndIcon(LocaleController.getString("InviteFriends", R.string.InviteFriends), R.drawable.menu_invite, ExteraConfig.inviteFriends, true);
                     } else if (position == telegramFeaturesRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("TelegramFeatures", R.string.TelegramFeatures), ExteraConfig.telegramFeatures, false);
-                    }
-                    break;
-                case 4:
-                    TextDetailSettingsCell textDetailCell = (TextDetailSettingsCell) holder.itemView;
-                    textDetailCell.setMultilineDetail(true);
-                    if (position == attentionRow) {
-                        textDetailCell.setTextAndValue(LocaleController.getString("Attention", R.string.Attention), LocaleController.getString("AttentionDescription", R.string.AttentionDescription),  true);
+                        textCheckWithIconCell.setTextAndCheckAndIcon(LocaleController.getString("TelegramFeatures", R.string.TelegramFeatures), R.drawable.menu_help, ExteraConfig.telegramFeatures, false);
                     }
                     break;
             }
@@ -268,11 +257,7 @@ public class DrawerPreferencesEntry extends BaseFragment {
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 case 3:
-                    view = new TextCheckCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 4:
-                    view = new TextDetailSettingsCell(mContext);
+                    view = new TextCheckWithIconCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
                 default:
@@ -294,8 +279,6 @@ public class DrawerPreferencesEntry extends BaseFragment {
                        position == archivedChatsRow || position == savedMessagesRow ||
                        position == scanQrRow || position == telegramFeaturesRow || position == inviteFriendsRow) {
                 return 3;
-            } else if (position == attentionRow) {
-                return 4;
             }
             return 1;
         }
