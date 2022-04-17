@@ -86,7 +86,7 @@ public class ExteraConfig {
 
             stickerSize = preferences.getFloat("stickerSize", 14.0f);
             hideStickerTime = preferences.getBoolean("hideStickerTime", false);
-            unlimitedRecentStickers = preferences.getBoolean("UnlimitedRecentStickers", false);
+            unlimitedRecentStickers = preferences.getBoolean("unlimitedRecentStickers", false);
 
             hideSendAsChannel = preferences.getBoolean("hideSendAsChannel", false);
             hideKeyboardOnScroll = preferences.getBoolean("hideKeyboardOnScroll", true);
