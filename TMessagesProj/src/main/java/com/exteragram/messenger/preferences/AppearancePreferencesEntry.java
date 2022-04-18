@@ -3,6 +3,7 @@ package com.exteragram.messenger.preferences;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Parcelable;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
@@ -99,16 +101,30 @@ public class AppearancePreferencesEntry extends BaseFragment {
         listView.setOnItemClickListener((view, position, x, y) -> {
             if (position == useSystemFontsRow) {
                 ExteraConfig.toggleUseSystemFonts();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.useSystemFonts);
+                AndroidUtilities.clearTypefaceCache();
+
+                Parcelable recyclerViewState = null;
+                if (listView.getLayoutManager() != null) {
+                    recyclerViewState = listView.getLayoutManager().onSaveInstanceState();
                 }
-                restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
+
+                AlertDialog progressDialog = new AlertDialog(context, 3);
+                progressDialog.show();
+                AndroidUtilities.runOnUIThread(progressDialog::dismiss, 2000);
+
+                parentLayout.rebuildAllFragmentViews(true, true);
+                listView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
             } else if (position == useSystemEmojiRow) {
                 SharedConfig.toggleUseSystemEmoji();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(SharedConfig.useSystemEmoji);
                 }
-                restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
+
+                AlertDialog progressDialog = new AlertDialog(context, 3);
+                progressDialog.show();
+                AndroidUtilities.runOnUIThread(progressDialog::dismiss, 500);
+
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == transparentStatusBarRow) {
                 SharedConfig.toggleNoStatusBar();
                 if (view instanceof TextCheckCell) {
@@ -137,7 +153,12 @@ public class AppearancePreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.hideAllChats);
                 }
-                restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
+
+                AlertDialog progressDialog = new AlertDialog(context, 3);
+                progressDialog.show();
+                AndroidUtilities.runOnUIThread(progressDialog::dismiss, 500);
+
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == hidePhoneNumberRow) {
                 ExteraConfig.toggleHidePhoneNumber();
                 if (view instanceof TextCheckCell) {
@@ -150,12 +171,18 @@ public class AppearancePreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.showID);
                 }
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == chatsOnTitleRow) {
                 ExteraConfig.toggleChatsOnTitle();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.chatsOnTitle);
                 }
-                restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
+
+                AlertDialog progressDialog = new AlertDialog(context, 3);
+                progressDialog.show();
+                AndroidUtilities.runOnUIThread(progressDialog::dismiss, 500);
+
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == disableVibrationRow) {
                 ExteraConfig.toggleDisableVibration();
                 if (view instanceof TextCheckCell) {

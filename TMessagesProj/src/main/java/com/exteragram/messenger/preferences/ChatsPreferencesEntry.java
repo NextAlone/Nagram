@@ -25,6 +25,7 @@ import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
@@ -253,7 +254,11 @@ public class ChatsPreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.disableReactions);
                 }
-                restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
+                AlertDialog progressDialog = new AlertDialog(context, 3);
+                progressDialog.show();
+                AndroidUtilities.runOnUIThread(progressDialog::dismiss, 500);
+
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == rearVideoMessagesRow) {
                 ExteraConfig.toggleRearVideoMessages();
                 if (view instanceof TextCheckCell) {
