@@ -672,7 +672,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         durationTextView.setTextColor(getThemedColor(Theme.key_player_time));
         durationTextView.setGravity(Gravity.CENTER);
         durationTextView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
-        playerLayout.addView(durationTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.RIGHT, 0, 96, 20, 0));
+        playerLayout.addView(durationTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.RIGHT, 0, 98, 20, 0));
 
         playbackSpeedButton = new ActionBarMenuItem(context, null, 0, getThemedColor(Theme.key_dialogTextBlack), false, resourcesProvider);
         playbackSpeedButton.setLongClickEnabled(false);
@@ -701,7 +701,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         }
         playbackSpeedButton.setAdditionalXOffset(AndroidUtilities.dp(8));
         playbackSpeedButton.setShowedFromBottom(true);
-        playerLayout.addView(playbackSpeedButton, LayoutHelper.createFrame(36, 36, Gravity.TOP | Gravity.RIGHT, 0, 86, 20, 0));
+        playerLayout.addView(playbackSpeedButton, LayoutHelper.createFrame(36, 36, Gravity.TOP | Gravity.RIGHT, 0, 88, 20, 0));
         playbackSpeedButton.setOnClickListener(v -> {
             float currentPlaybackSpeed = MediaController.getInstance().getPlaybackSpeed(true);
             if (Math.abs(currentPlaybackSpeed - 1.0f) > 0.001f) {
@@ -1086,7 +1086,11 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             builder.setView(editEnterID);
             builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
                 try {
-                    ExteraConfig.changeChannelToSave(Long.valueOf(editEnterID.getText().toString()));
+                    if (Long.valueOf(editEnterID.getText().toString()) == 0) {
+                        ExteraConfig.changeChannelToSave(UserConfig.getInstance(currentAccount).getClientUserId());
+                    } else {
+                        ExteraConfig.changeChannelToSave(Long.valueOf(editEnterID.getText().toString()));
+                    }
                 } catch (NumberFormatException exception) {
                     ExteraConfig.changeChannelToSave(UserConfig.getInstance(currentAccount).getClientUserId());
                     return;
@@ -1985,11 +1989,13 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                 durationTextView.setText(duration != 0 ? AndroidUtilities.formatShortDuration(duration) : "-:--");
             }
 
-            if (duration > 60 * 10) {
+            /*if (duration > 60 * 10) {
                 playbackSpeedButton.setVisibility(View.VISIBLE);
             } else {
                 playbackSpeedButton.setVisibility(View.GONE);
-            }
+            }*/
+
+            playbackSpeedButton.setVisibility(View.VISIBLE);
 
             if (!sameMessageObject) {
                 preloadNeighboringThumbs();
