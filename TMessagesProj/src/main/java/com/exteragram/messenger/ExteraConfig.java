@@ -128,7 +128,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("useSystemFonts", useSystemFonts);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleDisableVibration() {
@@ -136,7 +136,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("disableVibration", disableVibration);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleBlurForAllThemes() {
@@ -144,7 +144,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("blurForAllThemes", blurForAllThemes);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleHideAllChats() {
@@ -152,7 +152,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("hideAllChats", hideAllChats);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleHidePhoneNumber() {
@@ -160,7 +160,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("hidePhoneNumber", hidePhoneNumber);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleShowID() {
@@ -168,7 +168,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("showID", showID);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleChatsOnTitle() {
@@ -176,7 +176,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("chatsOnTitle", chatsOnTitle);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleForceTabletMode() {
@@ -184,7 +184,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("forceTabletMode", forceTabletMode);
-        editor.commit();
+        editor.apply();
     }
 
     public static void setStickerSize(float size) {
@@ -192,7 +192,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putFloat("stickerSize", stickerSize);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleHideStickerTime() {
@@ -200,7 +200,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("hideStickerTime", hideStickerTime);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleUnlimitedRecentStickers() {
@@ -208,7 +208,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("unlimitedRecentStickers", unlimitedRecentStickers);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleHideSendAsChannel() {
@@ -216,7 +216,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("hideSendAsChannel", hideSendAsChannel);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleHideKeyboardOnScroll() {
@@ -224,7 +224,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("hideKeyboardOnScroll", hideKeyboardOnScroll);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleArchiveOnPull() {
@@ -232,7 +232,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("archiveOnPull", archiveOnPull);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleDateOfForwardedMsg() {
@@ -240,7 +240,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("dateOfForwardedMsg", dateOfForwardedMsg);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleDisableReactions() {
@@ -248,7 +248,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("disableReactions", disableReactions);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleRearVideoMessages() {
@@ -256,7 +256,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("rearVideoMessages", rearVideoMessages);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleDisableCamera() {
@@ -264,7 +264,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("disableCamera", disableCamera);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleDisableProximityEvents() {
@@ -272,7 +272,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("disableProximityEvents", disableProximityEvents);
-        editor.commit();
+        editor.apply();
     }
 
     public static void togglePauseOnMinimize() {
@@ -280,14 +280,14 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("pauseOnMinimize", pauseOnMinimize);
-        editor.commit();
+        editor.apply();
     }
     public static void toggleDisablePlayback() {
         disablePlayback = !disablePlayback;
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("disablePlayback", disablePlayback);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleNewGroup() {
@@ -295,7 +295,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("newGroup", newGroup);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleNewSecretChat() {
@@ -303,7 +303,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("newSecretChat", newSecretChat);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleNewChannel() {
@@ -311,7 +311,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("newChannel", newChannel);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleContacts() {
@@ -319,7 +319,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("contacts", contacts);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleCalls() {
@@ -327,7 +327,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("calls", calls);
-        editor.commit();
+        editor.apply();
     }
 
     public static void togglePeopleNearby() {
@@ -335,7 +335,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("peopleNearby", peopleNearby);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleArchivedChats() {
@@ -343,7 +343,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("archivedChats", archivedChats);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleSavedMessages() {
@@ -351,7 +351,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("savedMessages", savedMessages);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleScanQr() {
@@ -359,7 +359,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("scanQr", scanQr);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleInviteFriends() {
@@ -367,7 +367,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("inviteFriends", inviteFriends);
-        editor.commit();
+        editor.apply();
     }
 
     public static void toggleTelegramFeatures() {
@@ -375,7 +375,7 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("telegramFeatures", telegramFeatures);
-        editor.commit();
+        editor.apply();
     }
     
     public static void changeChannelToSave(long id) {
@@ -383,6 +383,6 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putLong("channelToSave", channelToSave);
-        editor.commit();
+        editor.apply();
     }
 }

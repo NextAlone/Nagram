@@ -1464,34 +1464,36 @@ public class AndroidUtilities {
 
     public static Typeface getTypeface(String assetPath) {
         synchronized (typefaceCache) {
-            if (ExteraConfig.useSystemFonts) {
-                if (assetPath.contains("medium") && assetPath.contains("italic")) {
-                    return Typeface.create((Typeface) null, Typeface.BOLD_ITALIC);
-                }
-                if (assetPath.contains("medium")) {
-                    return Typeface.create((Typeface) null, Typeface.BOLD);
-                }
-                if (assetPath.contains("italic")) {
-                    return Typeface.create((Typeface) null, Typeface.ITALIC);
-                }
-                return Typeface.create((Typeface) null, Typeface.NORMAL);
-            }
             if (!typefaceCache.containsKey(assetPath)) {
                 try {
-                    Typeface t;
-                    if (Build.VERSION.SDK_INT >= 26) {
-                        Typeface.Builder builder = new Typeface.Builder(ApplicationLoader.applicationContext.getAssets(), assetPath);
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+                    if (preferences.getBoolean("useSystemFonts", false)) {
+                        if (assetPath.contains("medium") && assetPath.contains("italic")) {
+                            return Typeface.create((Typeface) null, Typeface.BOLD_ITALIC);
+                        }
                         if (assetPath.contains("medium")) {
-                            builder.setWeight(700);
+                            return Typeface.create((Typeface) null, Typeface.BOLD);
                         }
                         if (assetPath.contains("italic")) {
-                            builder.setItalic(true);
+                            return Typeface.create((Typeface) null, Typeface.ITALIC);
                         }
-                        t = builder.build();
+                        return Typeface.create((Typeface) null, Typeface.NORMAL);
                     } else {
-                        t = Typeface.createFromAsset(ApplicationLoader.applicationContext.getAssets(), assetPath);
+                        Typeface t;
+                        if (Build.VERSION.SDK_INT >= 26) {
+                            Typeface.Builder builder = new Typeface.Builder(ApplicationLoader.applicationContext.getAssets(), assetPath);
+                            if (assetPath.contains("medium")) {
+                                builder.setWeight(700);
+                            }
+                            if (assetPath.contains("italic")) {
+                                builder.setItalic(true);
+                            }
+                            t = builder.build();
+                        } else {
+                            t = Typeface.createFromAsset(ApplicationLoader.applicationContext.getAssets(), assetPath);
+                        }
+                        typefaceCache.put(assetPath, t);
                     }
-                    typefaceCache.put(assetPath, t);
                 } catch (Exception e) {
                     if (BuildVars.LOGS_ENABLED) {
                         FileLog.e("Could not get typeface '" + assetPath + "' because " + e.getMessage());
@@ -1500,6 +1502,12 @@ public class AndroidUtilities {
                 }
             }
             return typefaceCache.get(assetPath);
+        }
+    }
+
+    public static void clearTypefaceCache() {
+        synchronized (typefaceCache) {
+            typefaceCache.clear();
         }
     }
 
