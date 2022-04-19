@@ -27,9 +27,9 @@ dependencies {
 
     compileOnly 'org.checkerframework:checker-qual:3.21.3'
     compileOnly 'org.checkerframework:checker-compat-qual:2.5.5'
-    implementation 'com.google.firebase:firebase-messaging:23.0.2'
+    implementation 'com.google.firebase:firebase-messaging:23.0.3'
     implementation 'com.google.firebase:firebase-config:21.0.2'
-    implementation 'com.google.firebase:firebase-datatransport:18.1.1'
+    implementation 'com.google.firebase:firebase-datatransport:18.1.2'
     implementation 'com.google.firebase:firebase-appindexing:20.0.0'
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
     implementation 'com.google.android.gms:play-services-auth:20.1.0'
@@ -60,6 +60,13 @@ static def getAppHash() {
     properties.load(new FileInputStream("./API_KEYS"))
 
     return "\"" + properties.get("APP_HASH") + "\""
+}
+
+static def getSmsHash() {
+    Properties properties = new Properties()
+    properties.load(new FileInputStream("./API_KEYS"))
+
+    return "\"" + properties.get("SMS_HASH") + "\""
 }
 
 static def getGoogleMapsAPI() {
@@ -238,6 +245,7 @@ android {
         // Telegram: https://core.telegram.org/api/obtaining_api_id
         buildConfigField 'int', 'APP_ID', getAppID()
         buildConfigField 'String', 'APP_HASH', getAppHash()
+        buildConfigField 'String', 'SMS_HASH', getSmsHash()
         // Google Console: https://console.cloud.google.com/google/maps-apis/credentials
         resValue 'string', 'MAPS_V2_API', getGoogleMapsAPI()
 
