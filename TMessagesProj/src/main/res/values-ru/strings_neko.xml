@@ -9,7 +9,7 @@
     <string name="DeleteAllFromSelfAlert">Внимание! Это удалит **все ваши сообщения** в этом чате для **всех**.</string>
     <string name="BotLogin">Вход по токену</string>
     <string name="InvalidAccessToken">Некорректный токен</string>
-    <string name="IgnoreBlocked">Скрыть сообщения заблокированных</string>
+    <string name="IgnoreBlocked">Скрыть сообщения от заблокированных пользователей</string>
     <string name="Connection">Сеть</string>
     <string name="Chat">Чат</string>
     <string name="NameOrder">Сортировать контакты</string>
