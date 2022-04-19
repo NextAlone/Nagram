@@ -32,6 +32,7 @@ public class RenderView extends TextureView {
         void onFinishedDrawing(boolean moved);
         void onFirstDraw();
         boolean shouldDraw();
+        void onTouch(int x, int y);
     }
 
     private RenderViewDelegate delegate;
@@ -51,6 +52,8 @@ public class RenderView extends TextureView {
     private Brush brush;
 
     private boolean shuttingDown;
+
+    public boolean isColorPicker = false;
 
     public RenderView(Context context, Painting paint, Bitmap b) {
         super(context);
@@ -154,6 +157,20 @@ public class RenderView extends TextureView {
         if (internal == null || !internal.initialized || !internal.ready) {
             return true;
         }
+
+        if (isColorPicker) {
+            int x = (int)event.getX();
+            int y = (int)event.getY();
+
+            if (x >= getWidth()) return false;
+            if (y >= getHeight()) return false;
+            if (x <= 0) return false;
+            if (y <= 0) return false;
+
+            delegate.onTouch(x, y);
+            return true;
+        }
+
         input.process(event, getScaleX());
         return true;
     }

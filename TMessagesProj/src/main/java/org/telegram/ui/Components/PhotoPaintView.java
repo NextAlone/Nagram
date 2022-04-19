@@ -181,6 +181,16 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 }
                 return draw;
             }
+
+            @Override
+            public void onTouch(int x, int y) {
+                final int finalX = (int)((float)x / (float)renderView.getWidth() * originalBitmap.getWidth());
+                final int finalY = (int)((float)y / (float)renderView.getHeight() * originalBitmap.getHeight());
+
+                final int pixel = originalBitmap.getPixel(finalX, finalY);
+                renderView.setColor(pixel);
+                colorPicker.setSwatchPaintColor(pixel);
+            }
         });
         renderView.setUndoStore(undoStore);
         renderView.setQueue(queue);
@@ -226,7 +236,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         };
         addView(selectionContainerView);
 
-        colorPicker = new ColorPicker(context);
+        colorPicker = new ColorPicker(context, originalBitmap == null);
         addView(colorPicker);
         colorPicker.setDelegate(new ColorPicker.ColorPickerDelegate() {
             @Override
@@ -266,6 +276,12 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             @Override
             public void onUndoPressed() {
                 undoStore.undo();
+            }
+
+            @Override
+            public boolean onColorPicker() {
+                renderView.isColorPicker = !renderView.isColorPicker;
+                return renderView.isColorPicker;
             }
         });
 
