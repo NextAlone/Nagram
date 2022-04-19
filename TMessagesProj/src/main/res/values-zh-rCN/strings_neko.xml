@@ -9,7 +9,7 @@
     <string name="DeleteAllFromSelfAlert">警告！这将为此会话中的 **所有人** 删除 **全部你发出的消息**。</string>
     <string name="BotLogin">机器人登录</string>
     <string name="InvalidAccessToken">无效的访问令牌</string>
-    <string name="IgnoreBlocked">忽略被屏蔽用户在群组内的发言</string>
+    <string name="IgnoreBlocked">忽略被屏蔽用户在群组内的消息</string>
     <string name="Connection">连接</string>
     <string name="Chat">聊天</string>
     <string name="NameOrder">姓名顺序</string>
@@ -138,7 +138,7 @@
     <string name="reactions">菜单回应</string>
     <string name="doubleTapSendReactions">双击消息发送表情回应(默认)</string>
     <string name="ReactionsDisabled">禁用菜单回应</string>
-    <string name="customSavePath">更改保存路径下的子目录名称</string>
+    <string name="customSavePath">自定义存储路径</string>
     <string name="customSavePathHint">留空则保存至上层目录</string>
     <string name="doubleTapShowReactions">双击消息打开表情回应菜单</string>
     <string name="showBottomActionsWhenSelecting">长按选中消息时，显示底部操作按钮</string>

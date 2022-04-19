@@ -9,7 +9,7 @@
     <string name="DeleteAllFromSelfAlert">אזהרה! פעולה זו **תמחק את כל ההודעות ששלחת** בצ׳אט הזה עבור **כל** המשתתפים.</string>
     <string name="BotLogin">כניסה לבוט</string>
     <string name="InvalidAccessToken">אסימון גישה לא חוקי</string>
-    <string name="IgnoreBlocked">התעלמות ממשתמשים חסומים בקבוצה</string>
+    <string name="IgnoreBlocked">הסתרת הודעות ממשתמשים חסומים</string>
     <string name="Connection">חיבור</string>
     <string name="Chat">לְשׂוֹחֵחַ</string>
     <string name="NameOrder">סדר שם</string>
@@ -27,10 +27,10 @@
     <string name="DisableResidentNotification">השבתת התראות תושבים</string>
     <string name="NekogramRunning">Nekogram פועל</string>
     <string name="EventType">ערכת אייקונים של סרגל הצד</string>
-    <string name="ChristmasHat">הצגת כובע חג המולד בכל יום</string>
+    <string name="ChristmasHat">הצגת כובע סנטה בכל יום</string>
     <string name="ActionBarDecoration">קישוט סרגל הכותרת</string>
     <string name="DependsOnDate">תלוי בתאריך</string>
-    <string name="Christmas">חַג הַמוֹלָד</string>
+    <string name="Christmas">חג המולד</string>
     <string name="Valentine">יום האהבה</string>
     <string name="Snowflakes">פתיתי שלג</string>
     <string name="Fireworks">זיקוקים</string>
@@ -101,7 +101,7 @@
     <string name="AutoPauseVideo">השהה וידאו אוטומטית</string>
     <string name="AutoPauseVideoAbout">כאשר נעילת מסך / מעבר לרקע.</string>
     <string name="DisableProximityEvents">השבת אירועי קרבה</string>
-    <string name="IncreaseVoiceMessageQuality">הגדל את איכות ההודעות הקוליות</string>
+    <string name="IncreaseVoiceMessageQuality">הגדלת איכות ההודעות הקוליות</string>
     <string name="SelectBetween">בחר בין</string>
     <string name="AvatarAsBackground">תמונת פרופיל כרקע</string>
     <string name="BlurAvatarBackground">טשטש תמונת פרופיל</string>
@@ -130,7 +130,7 @@
     <string name="disableNotificationBubbles">השבתת בועות בהתראה</string>
     <string name="doubleTapSendReactions">שליחת תחושה בנגיעה כפולה (ברירת מחדל)</string>
     <string name="ReactionsDisabled">השבתה</string>
-    <string name="customSavePath">נתיב שמירה משלך</string>
+    <string name="customSavePath">נתיב אחסון משלך</string>
     <string name="customSavePathHint">להשאיר ריק כדי לשמור ישירות</string>
     <string name="NekoGeneralNotification">התראה</string>
     <string name="doubleTapShowReactions">הצגת תחושות בנגיעה כפולה בלבד</string>
