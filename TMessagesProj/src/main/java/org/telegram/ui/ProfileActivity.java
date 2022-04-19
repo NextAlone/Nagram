@@ -336,6 +336,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private TLRPC.UserFull userInfo;
 
     private String currentBio;
+    private String clickableBio;
 
     private long selectedUser;
     private int onlineCount = -1;
@@ -2892,10 +2893,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 presentFragment(new LanguageSelectActivity());
             } else if (position == setUsernameRow) {
                 presentFragment(new ChangeUsernameActivity());
-            } else if (position == bioRow) {
-                if (userInfo != null) {
-                    presentFragment(new ChangeBioActivity());
-                }
             } else if (position == numberRow) {
                 presentFragment(new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_CHANGE_PHONE_NUMBER));
             } else if (position == setAvatarRow) {
@@ -4095,39 +4092,55 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             });
             showDialog(builder.create());
             return true;
-        } else if (position == channelInfoRow || position == userInfoRow || position == locationRow || position == bioRow) {
-            if (position == bioRow && (userInfo == null || TextUtils.isEmpty(userInfo.about))) {
-                return false;
+        } else if (position == bioRow) {
+            if (userInfo != null) {
+                presentFragment(new ChangeBioActivity());
             }
+        } else if (position == channelInfoRow || position == userInfoRow || position == locationRow) {
             if (view instanceof AboutLinkCell && ((AboutLinkCell) view).onClick()) {
                 return false;
             }
-            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-            builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy)}, (dialogInterface, i) -> {
+
+            String about;
+            if (clickableBio != null) {
+                about = clickableBio;
+            } else if (position == locationRow) {
+                about = chatInfo != null && chatInfo.location instanceof TLRPC.TL_channelLocation ? ((TLRPC.TL_channelLocation) chatInfo.location).address : null;
+            } else if (position == channelInfoRow) {
+                about = chatInfo != null ? chatInfo.about : null;
+            } else {
+                about = userInfo != null ? userInfo.about : null;
+            }
+
+            DialogInterface.OnClickListener onClickListener = (dialogInterface, i) -> {
                 try {
-                    String about;
-                    if (position == locationRow) {
-                        about = chatInfo != null && chatInfo.location instanceof TLRPC.TL_channelLocation ? ((TLRPC.TL_channelLocation) chatInfo.location).address : null;
-                    } else if (position == channelInfoRow) {
-                        about = chatInfo != null ? chatInfo.about : null;
-                    } else {
-                        about = userInfo != null ? userInfo.about : null;
-                    }
                     if (TextUtils.isEmpty(about)) {
                         return;
                     }
-                    AndroidUtilities.addToClipboard(about);
-                    if (position == bioRow) {
-                        BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("BioCopied", R.string.BioCopied)).show();
-                    } else {
-                        BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("TextCopied", R.string.TextCopied)).show();
+                    if (i == 0) {
+                        AndroidUtilities.addToClipboard(about);
+                        if (position == bioRow) {
+                            BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("BioCopied", R.string.BioCopied)).show();
+                        } else {
+                            BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("TextCopied", R.string.TextCopied)).show();
+                        }
+                    } else if (i == 1) {
+                        if (view instanceof AboutLinkCell) {
+                            AboutLinkCell aboutLinkCell = (AboutLinkCell) view;
+                            if (clickableBio != null) {
+                                aboutLinkCell.setTextAndValue(clickableBio, channelInfoRow != -1 ? null:LocaleController.getString("UserBio", R.string.UserBio), true);
+                                currentBio = clickableBio;
+                                clickableBio = null;
+                            }
+                        }
                     }
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
-            });
+            };
+            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+            builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy), null}, onClickListener);
             showDialog(builder.create());
-            return !(view instanceof AboutLinkCell);
         }
         return false;
     }
@@ -5088,7 +5101,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (uid == userId) {
                 userInfo = (TLRPC.UserFull) args[1];
                 if (imageUpdater != null) {
-                    if (!TextUtils.equals(userInfo.about, currentBio)) {
+                    if (!TextUtils.equals(userInfo.about, currentBio) && !TextUtils.equals(userInfo.about, clickableBio)) {
+                        clickableBio = null;
                         listAdapter.notifyItemChanged(bioRow);
                     }
                 } else {
@@ -5105,8 +5119,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         needLayout(true);
                     }
                 }
-                updateAutoDeleteItem();
-                updateTtlIcon();
+                updateTimeItem();
             }
         } else if (id == NotificationCenter.didReceiveNewMessages) {
             boolean scheduled = (Boolean) args[2];
@@ -7498,33 +7511,61 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         }
                         detailCell.setTextAndValue(value, LocaleController.getString("Username", R.string.Username), true);
                         detailCell.setContentDescriptionValueFirst(true);
-                    } else if (position == bioRow) {
-                        String value;
-                        if (userInfo == null || !TextUtils.isEmpty(userInfo.about)) {
-                            value = userInfo == null ? LocaleController.getString("Loading", R.string.Loading) : userInfo.about;
-                            detailCell.setTextWithEmojiAndValue(value, LocaleController.getString("UserBio", R.string.UserBio), true);
-                            detailCell.setContentDescriptionValueFirst(true);
-                            currentBio = userInfo != null ? userInfo.about : null;
-                        } else {
-                            detailCell.setTextAndValue(LocaleController.getString("UserBio", R.string.UserBio), LocaleController.getString("UserBioDetail", R.string.UserBioDetail), true);
-                            detailCell.setContentDescriptionValueFirst(false);
-                            currentBio = null;
-                        }
                     }
                     detailCell.setTag(position);
                     break;
                 case VIEW_TYPE_ABOUT_LINK:
                     AboutLinkCell aboutLinkCell = (AboutLinkCell) holder.itemView;
-                    if (position == userInfoRow) {
-                        aboutLinkCell.setTextAndValue(userInfo.about, LocaleController.getString("UserBio", R.string.UserBio), true);
+                    if (position == bioRow) {
+                        String value;
+                        if (userInfo == null || !TextUtils.isEmpty(userInfo.about)) {
+                            value = userInfo == null ? LocaleController.getString("Loading", R.string.Loading) : userInfo.about;
+                            if (clickableBio != null) {
+                                value = currentBio;
+                            }
+                            aboutLinkCell.setTextAndValue(value, LocaleController.getString("UserBio", R.string.UserBio), true);
+                            currentBio = userInfo != null ? userInfo.about : null;
+                        } else {
+                            aboutLinkCell.setTextAndValue( LocaleController.getString("UserBioDetail", R.string.UserBioDetail), LocaleController.getString("UserBio", R.string.UserBio), false);
+                            currentBio = null;
+                        }
+                    } else if (position == userInfoRow) {
+                        String about = userInfo.about;
+                        if (clickableBio != null) {
+                            about = currentBio;
+                        }
+                        aboutLinkCell.setTextAndValue(about, LocaleController.getString("UserBio", R.string.UserBio), true);
                     } else if (position == channelInfoRow) {
                         String text = chatInfo.about;
                         while (text.contains("\n\n\n")) {
                             text = text.replace("\n\n\n", "\n\n");
                         }
+                        if (clickableBio != null) {
+                            text = currentBio;
+                        }
                         aboutLinkCell.setText(text, true);
                     }
                     aboutLinkCell.setOnClickListener(e -> processOnClickOrPress(position, aboutLinkCell));
+                    aboutLinkCell.setOnLongClickListener(e -> {
+                        if (position == bioRow) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                            builder.setItems(new CharSequence[]{LocaleController.getString("Copy", R.string.Copy)}, (dialogInterface, i) -> {
+                                if (i == 0) {
+                                    try {
+                                        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                                        BulletinFactory.of(ProfileActivity.this).createCopyBulletin(LocaleController.getString("LinkCopied", R.string.LinkCopied)).show();
+                                        android.content.ClipData clip = android.content.ClipData.newPlainText("label", currentBio);
+                                        clipboard.setPrimaryClip(clip);
+                                    } catch (Exception a) {
+                                        FileLog.e(a);
+                                    }
+                                }
+                            });
+                            showDialog(builder.create());
+                            return true;
+                        }
+                        return false;
+                    });
                     break;
                 case VIEW_TYPE_TEXT:
                     TextCell textCell = (TextCell) holder.itemView;
@@ -7806,9 +7847,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     position == numberSectionRow || position == helpHeaderRow || position == debugHeaderRow) {
                 return VIEW_TYPE_HEADER;
             } else if (position == idRow || position == phoneRow || position == usernameRow || position == locationRow ||
-                    position == numberRow || position == setUsernameRow || position == bioRow) {
+                    position == numberRow || position == setUsernameRow) {
                 return VIEW_TYPE_TEXT_DETAIL;
-            } else if (position == userInfoRow || position == channelInfoRow) {
+            } else if (position == userInfoRow || position == channelInfoRow || position == bioRow) {
                 return VIEW_TYPE_ABOUT_LINK;
             } else if (position == settingsTimerRow || position == settingsKeyRow || position == reportRow ||
                     position == subscribersRow || position == subscribersRequestsRow || position == administratorsRow || position == blockedUsersRow ||
