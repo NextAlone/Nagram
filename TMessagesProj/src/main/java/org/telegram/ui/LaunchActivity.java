@@ -271,7 +271,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                 animator.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        splashScreenView.remove();
+//                        splashScreenView.remove();
                     }
                 });
                 animator.start();
