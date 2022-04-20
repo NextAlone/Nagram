@@ -56,11 +56,15 @@
     <string name="DisablePlayback">Disable playback</string>
     <string name="DPDescription">Disables playback when volume button is pressed</string>
 
+    <!-- Drawer -->
     <string name="Drawer">Drawer</string>
-    <string name="Attention">ATTENTION!</string>
-    <string name="AttentionDescription">THIS ITEM MAY BE CHANGED OR REMOVED IN THE FUTURE!\nRestart the app to take effect.</string>
-    <string name="PNDescription">May not be displayed if GPS is disabled.</string>
+    <string name="DrawerOptions">Drawer options</string>
+    <string name="DrawerIconPack">Icon pack</string>
+    <string name="NewYear">New Year</string>
+    <string name="ValentinesDay">Valentine\'s Day</string>
+    <string name="Halloween">Halloween</string>
 
+    <!-- Other -->
     <string name="GenerateMonetTheme">Generate Monet Theme</string>
     <string name="DarkMonetTheme">Dark</string>
     <string name="LightMonetTheme">Light</string>

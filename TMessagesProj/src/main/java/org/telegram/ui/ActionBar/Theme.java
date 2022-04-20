@@ -5625,11 +5625,11 @@ public class Theme {
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
 
         int eventType = -1;
-        if (monthOfYear == 11 && dayOfMonth >= 24 && dayOfMonth <= 31 || monthOfYear == 0 && dayOfMonth == 1) {
+        if ((monthOfYear == 11 && dayOfMonth >= 24 && dayOfMonth <= 31 || monthOfYear == 0 && dayOfMonth == 1) || (ExteraConfig.eventType == 1)) {
             eventType = 0;
-        } else if (monthOfYear == 1 && dayOfMonth == 14) {
+        } else if ((monthOfYear == 1 && dayOfMonth == 14) || (ExteraConfig.eventType == 2)) {
             eventType = 1;
-        } else if (monthOfYear == 9 && dayOfMonth >= 30 || monthOfYear == 10 && dayOfMonth == 1 && hour < 12) {
+        } else if ((monthOfYear == 9 && dayOfMonth >= 30 || monthOfYear == 10 && dayOfMonth == 1 && hour < 12) || (ExteraConfig.eventType == 3)) {
             eventType = 2;
         }
         return eventType;
