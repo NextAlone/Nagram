@@ -24,6 +24,7 @@
     <string name="BlurForAllThemes">Размытие во всех темах</string>
 
     <string name="HideAllChats">Скрыть \"Все чаты\"</string>
+    <string name="HideProxySponsor">Скрыть спонсора прокси</string>
     <string name="HidePhoneNumber">Скрыть номер телефона</string>
     <string name="ShowID">Показывать ID в профиле</string>
     <string name="ChatsOnTitle">\"Чаты\" вместо \"exteraGram\"</string>
@@ -53,11 +54,16 @@
     <string name="DisablePlayback">Отключить проигрывание</string>
     <string name="DPDescription">Отключает автоматическое проигрывание видео при нажатии на кнопку громкости</string>
 
+    <!-- Drawer -->
     <string name="Drawer">Боковое меню</string>
-    <string name="Attention">ВНИМАНИЕ!</string>
-    <string name="AttentionDescription">ЭТОТ ПУНКТ МОЖЕТ БЫТЬ ИЗМЕНЕН ИЛИ УДАЛЕН В БУДУЩЕМ!\nПерезагрузите приложение, чтобы изменения вступили в силу.</string>
-    <string name="PNDescription">Может не показываться, если GPS выключен.</string>
+    <string name="DrawerElements">Элементы бокового меню</string>
+    <string name="DrawerOptions">Иконки</string>
+    <string name="DrawerIconPack">Выбор стиля</string>
+    <string name="NewYear">Новый год</string>
+    <string name="ValentinesDay">День святого Валентина</string>
+    <string name="Halloween">Хэллоуин</string>
 
+    <!-- Other -->
     <string name="GenerateMonetTheme">Создать динамическую тему</string>
     <string name="DarkMonetTheme">Тёмная</string>
     <string name="LightMonetTheme">Светлая</string>

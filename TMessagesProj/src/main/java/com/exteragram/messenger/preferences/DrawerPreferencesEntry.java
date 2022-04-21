@@ -308,7 +308,7 @@ public class DrawerPreferencesEntry extends BaseFragment {
                 case 2:
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == drawerHeaderRow) {
-                        headerCell.setText(LocaleController.getString("Drawer", R.string.Drawer));
+                        headerCell.setText(LocaleController.getString("DrawerElements", R.string.DrawerElements));
                     } else if (position == iconsHeaderRow) {
                         headerCell.setText(LocaleController.getString("DrawerOptions", R.string.DrawerOptions));
                     }

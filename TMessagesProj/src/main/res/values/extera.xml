@@ -27,6 +27,7 @@
     <string name="BlurForAllThemes">Blur for all themes</string>
 
     <string name="HideAllChats">Hide \"All Chats\" tab</string>
+    <string name="HideProxySponsor">Hide proxy sponsor</string>
     <string name="HidePhoneNumber">Hide phone number</string>
     <string name="ShowID">Show ID in Profile</string>
     <string name="ChatsOnTitle">\"Chats\" instead of \"exteraGram\"</string>
@@ -58,6 +59,7 @@
 
     <!-- Drawer -->
     <string name="Drawer">Drawer</string>
+    <string name="DrawerElements">Drawer elements</string>
     <string name="DrawerOptions">Drawer options</string>
     <string name="DrawerIconPack">Icon pack</string>
     <string name="NewYear">New Year</string>
