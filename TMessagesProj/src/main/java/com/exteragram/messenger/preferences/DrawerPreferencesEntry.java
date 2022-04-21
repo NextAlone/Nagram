@@ -117,56 +117,78 @@ public class DrawerPreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckWithIconCell) {
                     ((TextCheckWithIconCell) view).setChecked(ExteraConfig.newGroup);
                 }
+
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == newSecretChatRow) {
                 ExteraConfig.toggleNewSecretChat();
                 if (view instanceof TextCheckWithIconCell) {
                     ((TextCheckWithIconCell) view).setChecked(ExteraConfig.newSecretChat);
                 }
+
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == newChannelRow) {
                 ExteraConfig.toggleNewChannel();
                 if (view instanceof TextCheckWithIconCell) {
                     ((TextCheckWithIconCell) view).setChecked(ExteraConfig.newChannel);
                 }
+
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == contactsRow) {
                 ExteraConfig.toggleContacts();
                 if (view instanceof TextCheckWithIconCell) {
                     ((TextCheckWithIconCell) view).setChecked(ExteraConfig.contacts);
                 }
+
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == callsRow) {
                 ExteraConfig.toggleCalls();
                 if (view instanceof TextCheckWithIconCell) {
                     ((TextCheckWithIconCell) view).setChecked(ExteraConfig.calls);
                 }
+
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == peopleNearbyRow) {
                 ExteraConfig.togglePeopleNearby();
                 if (view instanceof TextCheckWithIconCell) {
                     ((TextCheckWithIconCell) view).setChecked(ExteraConfig.peopleNearby);
                 }
+
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == archivedChatsRow) {
                 ExteraConfig.toggleArchivedChats();
                 if (view instanceof TextCheckWithIconCell) {
                     ((TextCheckWithIconCell) view).setChecked(ExteraConfig.archivedChats);
                 }
+
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == savedMessagesRow) {
                 ExteraConfig.toggleSavedMessages();
                 if (view instanceof TextCheckWithIconCell) {
                     ((TextCheckWithIconCell) view).setChecked(ExteraConfig.savedMessages);
                 }
+
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == scanQrRow) {
                 ExteraConfig.toggleScanQr();
                 if (view instanceof TextCheckWithIconCell) {
                     ((TextCheckWithIconCell) view).setChecked(ExteraConfig.scanQr);
                 }
+
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == inviteFriendsRow) {
                 ExteraConfig.toggleInviteFriends();
                 if (view instanceof TextCheckWithIconCell) {
                     ((TextCheckWithIconCell) view).setChecked(ExteraConfig.inviteFriends);
                 }
+
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == telegramFeaturesRow) {
                 ExteraConfig.toggleTelegramFeatures();
                 if (view instanceof TextCheckWithIconCell) {
                     ((TextCheckWithIconCell) view).setChecked(ExteraConfig.telegramFeatures);
                 }
+
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == eventChooserRow) {
                 if (getParentActivity() == null) {
                     return;
@@ -185,9 +207,15 @@ public class DrawerPreferencesEntry extends BaseFragment {
                         listAdapter.onBindViewHolder(holder, eventChooserRow);
                     }
                     Parcelable recyclerViewState = null;
+
                     if (listView.getLayoutManager() != null) {
                         recyclerViewState = listView.getLayoutManager().onSaveInstanceState();
                     }
+
+                    AlertDialog progressDialog = new AlertDialog(context, 3);
+                    progressDialog.show();
+                    AndroidUtilities.runOnUIThread(progressDialog::dismiss, 2000);
+
                     parentLayout.rebuildAllFragmentViews(true, true);
                     listView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
                 });
