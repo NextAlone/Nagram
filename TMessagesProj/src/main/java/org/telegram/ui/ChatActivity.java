@@ -22972,7 +22972,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
                 boolean isMusic = selectedObject.isMusic();
                 boolean isDocument = selectedObject.isDocument();
-                if (isMusic || isDocument) {
+                boolean isVideoMessage = selectedObject.isRoundVideo();
+                if ((isMusic || isDocument) && !isVideoMessage) {
                     ArrayList<MessageObject> messageObjects;
                     if (selectedObjectGroup != null) {
                         messageObjects = new ArrayList<>(selectedObjectGroup.messages);
@@ -22989,7 +22990,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         }
                     });
                 } else {
-                    boolean video = selectedObject.isVideo();
+                    boolean video = selectedObject.isVideo() || selectedObject.isRoundVideo();
                     boolean photo = selectedObject.isPhoto();
                     boolean gif = selectedObject.isGif();
                     String fileName = FileLoader.getDocumentFileName(selectedObject.getDocument());
