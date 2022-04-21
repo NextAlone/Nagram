@@ -278,12 +278,12 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             try {
                 setTaskDescription(new ActivityManager.TaskDescription(null, null, Theme.getColor(Theme.key_actionBarDefault) | 0xff000000));
-            } catch (Exception ignore) {
+            } catch (Throwable ignore) {
 
             }
             try {
                 getWindow().setNavigationBarColor(0xff000000);
-            } catch (Exception ignore) {
+            } catch (Throwable ignore) {
 
             }
         }
@@ -2981,6 +2981,8 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                                                         .setNegativeButton(LocaleController.getString(R.string.Cancel), null)
                                                         .show();
                                             }
+                                        } else {
+                                            BulletinFactory.of(mainFragmentsStack.get(mainFragmentsStack.size() - 1)).createErrorBulletin(LocaleController.getString(R.string.BotCantAddToAttachMenu)).show();
                                         }
                                     }));
                                 } else {

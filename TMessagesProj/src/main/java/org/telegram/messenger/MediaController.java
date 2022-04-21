@@ -4909,6 +4909,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 info.mediaEntities,
                 info.isPhoto,
                 info.cropState,
+                info.roundVideo,
                 callback);
 
 

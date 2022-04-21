@@ -20,8 +20,8 @@ public class BuildVars {
     public static boolean USE_CLOUD_STRINGS = true;
     public static boolean CHECK_UPDATES = false;
     public static boolean NO_SCOPED_STORAGE = Build.VERSION.SDK_INT <= 29;
-    public static int BUILD_VERSION = BuildConfig.VERSION_CODE;
-    public static String BUILD_VERSION_STRING = BuildConfig.VERSION_NAME;
+    public static int BUILD_VERSION = 2629;
+    public static String BUILD_VERSION_STRING = "8.7.1";
     public static int APP_ID = 4;
     public static String APP_HASH = "014b35b6184100b085b0d0572f9b5103";
 
@@ -29,6 +29,10 @@ public class BuildVars {
     public static String PLAYSTORE_APP_URL = "https://play.google.com/store/apps/details?id=org.telegram.messenger";
 
     static {
+        // Takes from build.config :shrug:
+        BUILD_VERSION = BuildConfig.VERSION_CODE;
+        BUILD_VERSION_STRING = BuildConfig.VERSION_NAME;
+
         APP_ID = BuildConfig.APP_ID; // Obtain your own APP_ID at https://core.telegram.org/api/obtaining_api_id
         APP_HASH = BuildConfig.APP_HASH; // Obtain your own APP_HASH at https://core.telegram.org/api/obtaining_api_id
         SMS_HASH = BuildConfig.SMS_HASH; // Obtain your own SMS_HASH with https://bit.ly/3rxcuTd
