@@ -137,6 +137,7 @@ public class DialogCell extends BaseCell {
         public int type;
         public int date;
         public boolean verified;
+        public boolean arrowed;
         public boolean isMedia;
         public boolean sent;
     }
@@ -290,6 +291,7 @@ public class DialogCell extends BaseCell {
     private StaticLayout mentionLayout;
 
     private boolean drawVerified;
+    private boolean drawArrow;
 
     private int drawScam;
 
@@ -644,6 +646,7 @@ public class DialogCell extends BaseCell {
         drawNameLock = false;
         drawNameBot = false;
         drawVerified = false;
+        drawArrow = false;
         drawScam = 0;
         drawPinBackground = false;
         hasMessageThumb = false;
@@ -706,8 +709,9 @@ public class DialogCell extends BaseCell {
                         nameLeft = AndroidUtilities.dp(18);
                     }
                 }
-            } else {
+            } else if (customDialog.type == 2) {
                 drawVerified = customDialog.verified;
+                drawArrow = customDialog.arrowed;
                 if (SharedConfig.drawDialogIcons && customDialog.type == 1) {
                     drawNameGroup = true;
                     if (useForceThreeLines || SharedConfig.useThreeLinesLayout) {
@@ -839,8 +843,10 @@ public class DialogCell extends BaseCell {
                         } else if (chat.fake) {
                             drawScam = 2;
                             Theme.dialogs_fakeDrawable.checkText();
-                        } else {
+                        } else if (chat.verified) {
                             drawVerified = chat.verified;
+                        } else {
+                            drawArrow = ExteraConfig.isExtera(chat);
                         }
                         if (SharedConfig.drawDialogIcons) {
                             if (useForceThreeLines || SharedConfig.useThreeLinesLayout) {
@@ -884,6 +890,8 @@ public class DialogCell extends BaseCell {
                         } else if (user.fake) {
                             drawScam = 2;
                             Theme.dialogs_fakeDrawable.checkText();
+                        } else if (user.id != UserConfig.getInstance(currentAccount).getClientUserId() && ExteraConfig.isExteraDev(user)) {
+                            drawArrow = ExteraConfig.isExteraDev(user);
                         } else {
                             drawVerified = user.verified;
                         }
@@ -1532,7 +1540,7 @@ public class DialogCell extends BaseCell {
             }
         }
 
-        if (dialogMuted && !drawVerified && drawScam == 0) {
+        if (dialogMuted && !drawVerified && !drawArrow && drawScam == 0) {
             int w = AndroidUtilities.dp(6) + Theme.dialogs_muteDrawable.getIntrinsicWidth();
             nameWidth -= w;
             if (LocaleController.isRTL) {
@@ -1540,6 +1548,12 @@ public class DialogCell extends BaseCell {
             }
         } else if (drawVerified) {
             int w = AndroidUtilities.dp(6) + Theme.dialogs_verifiedDrawable.getIntrinsicWidth();
+            nameWidth -= w;
+            if (LocaleController.isRTL) {
+                nameLeft += w;
+            }
+        } else if (drawArrow) {
+            int w = AndroidUtilities.dp(6) + Theme.dialogs_outlineArrowDrawable.getIntrinsicWidth();
             nameWidth -= w;
             if (LocaleController.isRTL) {
                 nameLeft += w;
@@ -1784,10 +1798,12 @@ public class DialogCell extends BaseCell {
             if (nameLayout != null && nameLayout.getLineCount() > 0) {
                 left = nameLayout.getLineLeft(0);
                 widthpx = Math.ceil(nameLayout.getLineWidth(0));
-                if (dialogMuted && !drawVerified && drawScam == 0) {
+                if (dialogMuted && !drawVerified && !drawArrow && drawScam == 0) {
                     nameMuteLeft = (int) (nameLeft + (nameWidth - widthpx) - AndroidUtilities.dp(6) - Theme.dialogs_muteDrawable.getIntrinsicWidth());
                 } else if (drawVerified) {
                     nameMuteLeft = (int) (nameLeft + (nameWidth - widthpx) - AndroidUtilities.dp(6) - Theme.dialogs_verifiedDrawable.getIntrinsicWidth());
+                } else if (drawArrow) {
+                    nameMuteLeft = (int) (nameLeft + (nameWidth - widthpx) - AndroidUtilities.dp(6) - Theme.dialogs_outlineArrowDrawable.getIntrinsicWidth());
                 } else if (drawScam != 0) {
                     nameMuteLeft = (int) (nameLeft + (nameWidth - widthpx) - AndroidUtilities.dp(6) - (drawScam == 1 ? Theme.dialogs_scamDrawable : Theme.dialogs_fakeDrawable).getIntrinsicWidth());
                 }
@@ -1834,7 +1850,7 @@ public class DialogCell extends BaseCell {
                         nameLeft -= (nameWidth - widthpx);
                     }
                 }
-                if (dialogMuted || drawVerified || drawScam != 0) {
+                if (dialogMuted || drawVerified || drawArrow || drawScam != 0) {
                     nameMuteLeft = (int) (nameLeft + left + AndroidUtilities.dp(6));
                 }
             }
@@ -2810,7 +2826,7 @@ public class DialogCell extends BaseCell {
             lastStatusDrawableParams = (this.drawClock ? 1 : 0) +  (this.drawCheck1 ? 2 : 0) + (this.drawCheck2 ? 4 : 0);
         }
 
-        if (dialogsType != 2 && (dialogMuted || dialogMutedProgress > 0) && !drawVerified && drawScam == 0) {
+        if (dialogsType != 2 && (dialogMuted || dialogMutedProgress > 0) && !drawVerified && !drawArrow && drawScam == 0) {
             if (dialogMuted && dialogMutedProgress != 1f) {
                 dialogMutedProgress += 16 / 150f;
                 if (dialogMutedProgress > 1f) {
@@ -2843,6 +2859,9 @@ public class DialogCell extends BaseCell {
             setDrawableBounds(Theme.dialogs_verifiedCheckDrawable, nameMuteLeft, AndroidUtilities.dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 12.5f : 16.5f));
             Theme.dialogs_verifiedDrawable.draw(canvas);
             Theme.dialogs_verifiedCheckDrawable.draw(canvas);
+        } else if (drawArrow) {
+            setDrawableBounds(Theme.dialogs_outlineArrowDrawable, nameMuteLeft, AndroidUtilities.dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 12.5f : 16.5f));
+            Theme.dialogs_outlineArrowDrawable.draw(canvas);
         } else if (drawScam != 0) {
             setDrawableBounds((drawScam == 1 ? Theme.dialogs_scamDrawable : Theme.dialogs_fakeDrawable), nameMuteLeft, AndroidUtilities.dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 12 : 15));
             (drawScam == 1 ? Theme.dialogs_scamDrawable : Theme.dialogs_fakeDrawable).draw(canvas);
