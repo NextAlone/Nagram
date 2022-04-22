@@ -507,7 +507,7 @@ public class ProfileActivity extends BaseFragment implements
 
         @Override
         public PhotoViewer.PlaceProviderObject getPlaceForPhoto(MessageObject messageObject,
-            TLRPC.FileLocation fileLocation, int index, boolean needPreview) {
+                                                                TLRPC.FileLocation fileLocation, int index, boolean needPreview) {
             if (fileLocation == null) {
                 return null;
             }
@@ -587,7 +587,7 @@ public class ProfileActivity extends BaseFragment implements
         }
 
         public void setForegroundImage(ImageLocation imageLocation, String imageFilter,
-            Drawable thumb) {
+                                       Drawable thumb) {
             foregroundImageReceiver.setImage(imageLocation, imageFilter, thumb, 0, null, null, 0);
             if (drawableHolder != null) {
                 drawableHolder.release();
@@ -1081,7 +1081,7 @@ public class ProfileActivity extends BaseFragment implements
 
         @Override
         public void onNestedScroll(View target, int dxConsumed, int dyConsumed, int dxUnconsumed,
-            int dyUnconsumed, int type, int[] consumed) {
+                                   int dyUnconsumed, int type, int[] consumed) {
             if (target == listView && sharedMediaLayoutAttached) {
                 RecyclerListView innerListView = sharedMediaLayout.getCurrentListView();
                 int top = sharedMediaLayout.getTop();
@@ -1094,7 +1094,7 @@ public class ProfileActivity extends BaseFragment implements
 
         @Override
         public void onNestedScroll(View target, int dxConsumed, int dyConsumed, int dxUnconsumed,
-            int dyUnconsumed, int type) {
+                                   int dyUnconsumed, int type) {
 
         }
 
@@ -1276,7 +1276,7 @@ public class ProfileActivity extends BaseFragment implements
 
                 @Override
                 public void onPageScrolled(int position, float positionOffset,
-                    int positionOffsetPixels) {
+                                           int positionOffsetPixels) {
                 }
 
                 @Override
@@ -1774,7 +1774,7 @@ public class ProfileActivity extends BaseFragment implements
                     leaveChatPressed();
                 } else if (id == event_log) {
                     presentFragment(new ChannelAdminLogActivity(currentChat));
-                } else if ( id == aliasChannelName){
+                } else if (id == aliasChannelName) {
                     setChannelAlias();
                 } else if (id == edit_channel) {
                     Bundle args = new Bundle();
@@ -1811,7 +1811,8 @@ public class ProfileActivity extends BaseFragment implements
                                     }
 
                                     @Override
-                                    public void didChangeOwner(TLRPC.User user) {}
+                                    public void didChangeOwner(TLRPC.User user) {
+                                    }
                                 });
                                 presentFragment(editRightsActivity);
                             }));
@@ -2757,7 +2758,7 @@ public class ProfileActivity extends BaseFragment implements
 
             @Override
             protected long getAddAnimationDelay(long removeDuration, long moveDuration,
-                long changeDuration) {
+                                                long changeDuration) {
                 return 0;
             }
 
@@ -2796,7 +2797,7 @@ public class ProfileActivity extends BaseFragment implements
 
             @Override
             public int scrollVerticallyBy(int dy, RecyclerView.Recycler recycler,
-                RecyclerView.State state) {
+                                          RecyclerView.State state) {
                 final View view = layoutManager.findViewByPosition(0);
                 if (view != null && !openingAvatar) {
                     final int canScroll = view.getTop() - AndroidUtilities.dp(88);
@@ -3184,26 +3185,26 @@ public class ProfileActivity extends BaseFragment implements
                             LocaleController.getString("DebugMenu", R.string.DebugMenu));
                         CharSequence[] items;
                         items = new CharSequence[]{
-                                LocaleController.getString("DebugMenuImportContacts", R.string.DebugMenuImportContacts),
-                                LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts),
-                                LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts),
-                                LocaleController.getString("DebugMenuResetDialogs", R.string.DebugMenuResetDialogs),
-                                BuildVars.DEBUG_VERSION ? null : (BuildVars.LOGS_ENABLED ? LocaleController.getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs)),
-                                SharedConfig.inappCamera ? LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera) : LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera),
-                                LocaleController.getString("DebugMenuClearMediaCache", R.string.DebugMenuClearMediaCache),
-                                LocaleController.getString("DebugMenuCallSettings", R.string.DebugMenuCallSettings),
-                                null,
-                                BuildVars.DEBUG_PRIVATE_VERSION || BuildVars.isStandaloneApp() ? LocaleController.getString("DebugMenuCheckAppUpdate", R.string.DebugMenuCheckAppUpdate) : null,
-                                LocaleController.getString("DebugMenuReadAllDialogs", R.string.DebugMenuReadAllDialogs),
-                                SharedConfig.pauseMusicOnRecord ? LocaleController.getString("DebugMenuDisablePauseMusic", R.string.DebugMenuDisablePauseMusic) : LocaleController.getString("DebugMenuEnablePauseMusic", R.string.DebugMenuEnablePauseMusic),
-                                BuildVars.DEBUG_VERSION && !AndroidUtilities.isTablet() && Build.VERSION.SDK_INT >= 23 ? (SharedConfig.smoothKeyboard ? LocaleController.getString("DebugMenuDisableSmoothKeyboard", R.string.DebugMenuDisableSmoothKeyboard) : LocaleController.getString("DebugMenuEnableSmoothKeyboard", R.string.DebugMenuEnableSmoothKeyboard)) : null,
-                                BuildVars.DEBUG_PRIVATE_VERSION ? (SharedConfig.disableVoiceAudioEffects ? "Enable voip audio effects" : "Disable voip audio effects") : null,
-                                Build.VERSION.SDK_INT >= 21 ? (SharedConfig.noStatusBar ? "Show status bar background" : "Hide status bar background") : null,
-                                BuildVars.DEBUG_PRIVATE_VERSION ? "Clean app update" : null,
-                                BuildVars.DEBUG_PRIVATE_VERSION ? "Reset suggestions" : null,
-                                BuildVars.DEBUG_PRIVATE_VERSION ? LocaleController.getString(SharedConfig.forceRtmpStream ? R.string.DebugMenuDisableForceRtmpStreamFlag : R.string.DebugMenuEnableForceRtmpStreamFlag) : null,
-                                BuildVars.DEBUG_PRIVATE_VERSION ? LocaleController.getString(R.string.DebugMenuClearWebViewCache) : null,
-                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ? LocaleController.getString(R.string.DebugMenuEnableWebViewDebug) : null
+                            LocaleController.getString("DebugMenuImportContacts", R.string.DebugMenuImportContacts),
+                            LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts),
+                            LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts),
+                            LocaleController.getString("DebugMenuResetDialogs", R.string.DebugMenuResetDialogs),
+                            BuildVars.DEBUG_VERSION ? null : (BuildVars.LOGS_ENABLED ? LocaleController.getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs)),
+                            SharedConfig.inappCamera ? LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera) : LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera),
+                            LocaleController.getString("DebugMenuClearMediaCache", R.string.DebugMenuClearMediaCache),
+                            LocaleController.getString("DebugMenuCallSettings", R.string.DebugMenuCallSettings),
+                            null,
+                            BuildVars.DEBUG_PRIVATE_VERSION || BuildVars.isStandaloneApp() ? LocaleController.getString("DebugMenuCheckAppUpdate", R.string.DebugMenuCheckAppUpdate) : null,
+                            LocaleController.getString("DebugMenuReadAllDialogs", R.string.DebugMenuReadAllDialogs),
+                            SharedConfig.pauseMusicOnRecord ? LocaleController.getString("DebugMenuDisablePauseMusic", R.string.DebugMenuDisablePauseMusic) : LocaleController.getString("DebugMenuEnablePauseMusic", R.string.DebugMenuEnablePauseMusic),
+                            BuildVars.DEBUG_VERSION && !AndroidUtilities.isTablet() && Build.VERSION.SDK_INT >= 23 ? (SharedConfig.smoothKeyboard ? LocaleController.getString("DebugMenuDisableSmoothKeyboard", R.string.DebugMenuDisableSmoothKeyboard) : LocaleController.getString("DebugMenuEnableSmoothKeyboard", R.string.DebugMenuEnableSmoothKeyboard)) : null,
+                            BuildVars.DEBUG_PRIVATE_VERSION ? (SharedConfig.disableVoiceAudioEffects ? "Enable voip audio effects" : "Disable voip audio effects") : null,
+                            Build.VERSION.SDK_INT >= 21 ? (SharedConfig.noStatusBar ? "Show status bar background" : "Hide status bar background") : null,
+                            BuildVars.DEBUG_PRIVATE_VERSION ? "Clean app update" : null,
+                            BuildVars.DEBUG_PRIVATE_VERSION ? "Reset suggestions" : null,
+                            BuildVars.DEBUG_PRIVATE_VERSION ? LocaleController.getString(SharedConfig.forceRtmpStream ? R.string.DebugMenuDisableForceRtmpStreamFlag : R.string.DebugMenuEnableForceRtmpStreamFlag) : null,
+                            BuildVars.DEBUG_PRIVATE_VERSION ? LocaleController.getString(R.string.DebugMenuClearWebViewCache) : null,
+                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ? LocaleController.getString(R.string.DebugMenuEnableWebViewDebug) : null
                         };
                         builder.setItems(items, (dialog, which) -> {
                             if (which == 0) {
@@ -3449,7 +3450,7 @@ public class ProfileActivity extends BaseFragment implements
                 fragment.setDelegate(new ChatRightsEditActivity.ChatRightsEditActivityDelegate() {
                     @Override
                     public void didSetRights(int rights, TLRPC.TL_chatAdminRights rightsAdmin,
-                        TLRPC.TL_chatBannedRights rightsBanned, String rank) {
+                                             TLRPC.TL_chatBannedRights rightsBanned, String rank) {
                         removeSelfFromStack();
                     }
 
@@ -3999,7 +4000,7 @@ public class ProfileActivity extends BaseFragment implements
 
             @Override
             protected void drawOverlays(Canvas canvas, float alpha, float parentOffsetX,
-                float parentOffsetY, float clipTop, float clipBottom) {
+                                        float parentOffsetY, float clipTop, float clipBottom) {
                 if (alpha > 0) {
                     AndroidUtilities.rectTmp.set(0, 0, avatarsViewPager.getMeasuredWidth(),
                         avatarsViewPager.getMeasuredHeight() + AndroidUtilities.dp(30));
@@ -4098,6 +4099,7 @@ public class ProfileActivity extends BaseFragment implements
     public TLRPC.Chat getCurrentChat() {
         return currentChat;
     }
+
     public TLRPC.UserFull getUserInfo() {
         return userInfo;
     }
@@ -4233,7 +4235,7 @@ public class ProfileActivity extends BaseFragment implements
     }
 
     public boolean onMemberClick(TLRPC.ChatParticipant participant, boolean isLong,
-        boolean resultOnly) {
+                                 boolean resultOnly) {
         if (getParentActivity() == null) {
             return false;
         }
@@ -4386,8 +4388,8 @@ public class ProfileActivity extends BaseFragment implements
     }
 
     private void openRightsEdit(int action, TLRPC.User user, TLRPC.ChatParticipant participant,
-        TLRPC.TL_chatAdminRights adminRights, TLRPC.TL_chatBannedRights bannedRights,
-        String rank, boolean editingAdmin) {
+                                TLRPC.TL_chatAdminRights adminRights, TLRPC.TL_chatBannedRights bannedRights,
+                                String rank, boolean editingAdmin) {
         boolean[] needShowBulletin = new boolean[1];
         ChatRightsEditActivity fragment = new ChatRightsEditActivity(user.id, chatId, adminRights, currentChat.default_banned_rights, bannedRights, rank, action, true, false, null) {
             @Override
@@ -4402,7 +4404,7 @@ public class ProfileActivity extends BaseFragment implements
         fragment.setDelegate(new ChatRightsEditActivity.ChatRightsEditActivityDelegate() {
             @Override
             public void didSetRights(int rights, TLRPC.TL_chatAdminRights rightsAdmin,
-                TLRPC.TL_chatBannedRights rightsBanned, String rank) {
+                                     TLRPC.TL_chatBannedRights rightsBanned, String rank) {
                 if (action == 0) {
                     if (participant instanceof TLRPC.TL_chatChannelParticipant) {
                         TLRPC.TL_chatChannelParticipant channelParticipant1 = ((TLRPC.TL_chatChannelParticipant) participant);
@@ -4454,7 +4456,7 @@ public class ProfileActivity extends BaseFragment implements
                             }
                             if (chatInfo != null && chatInfo.participants != null) {
                                 for (int a = 0; a < chatInfo.participants.participants.size();
-                                    a++) {
+                                     a++) {
                                     TLRPC.ChatParticipant p = chatInfo.participants.participants.get(
                                         a);
                                     if (p.user_id == participant.user_id) {
@@ -4720,12 +4722,12 @@ public class ProfileActivity extends BaseFragment implements
 
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK),
             (dialogInterface, i) -> {
-            if(editText.getText().toString().trim().equals("")){
-                ConfigManager.deleteValue(Defines.channelAliasPrefix + getCurrentChat().id);
-            } else {
-                ConfigManager.putString(Defines.channelAliasPrefix + getCurrentChat().id,
-                    editText.getText().toString());
-            }
+                if (editText.getText().toString().trim().equals("")) {
+                    ConfigManager.deleteValue(Defines.channelAliasPrefix + getCurrentChat().id);
+                } else {
+                    ConfigManager.putString(Defines.channelAliasPrefix + getCurrentChat().id,
+                        editText.getText().toString());
+                }
             });
         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
         builder.show().setOnShowListener(dialog -> {
@@ -5033,8 +5035,7 @@ public class ProfileActivity extends BaseFragment implements
             return;
         }
         if (sharedMediaLayoutAttached) {
-            sharedMediaLayout.setVisibleHeight(
-                listView.getMeasuredHeight() - sharedMediaLayout.getTop());
+            sharedMediaLayout.setVisibleHeight(listView.getMeasuredHeight() - sharedMediaLayout.getTop());
         }
 
         if (listView.getChildCount() <= 0 || openAnimationInProgress) {
@@ -5049,19 +5050,16 @@ public class ProfileActivity extends BaseFragment implements
                 break;
             }
         }
-        RecyclerListView.Holder holder = child == null ? null
-            : (RecyclerListView.Holder) listView.findContainingViewHolder(child);
+        RecyclerListView.Holder holder = child == null ? null : (RecyclerListView.Holder) listView.findContainingViewHolder(child);
         int top = child == null ? 0 : child.getTop();
-        int adapterPosition =
-            holder != null ? holder.getAdapterPosition() : RecyclerView.NO_POSITION;
+        int adapterPosition = holder != null ? holder.getAdapterPosition() : RecyclerView.NO_POSITION;
         if (top >= 0 && adapterPosition == 0) {
             newOffset = top;
         }
         boolean mediaHeaderVisible;
         boolean searchVisible = imageUpdater == null && actionBar.isSearchFieldVisible();
         if (sharedMediaRow != -1 && !searchVisible) {
-            holder = (RecyclerListView.Holder) listView.findViewHolderForAdapterPosition(
-                sharedMediaRow);
+            holder = (RecyclerListView.Holder) listView.findViewHolderForAdapterPosition(sharedMediaRow);
             mediaHeaderVisible = holder != null && holder.itemView.getTop() <= 0;
         } else {
             mediaHeaderVisible = searchVisible;
@@ -6709,7 +6707,6 @@ public class ProfileActivity extends BaseFragment implements
                 }
 
 
-
                 settingsSectionRow2 = rowCount++;
                 notificationRow = rowCount++;
                 privacyRow = rowCount++;
@@ -7390,14 +7387,14 @@ public class ProfileActivity extends BaseFragment implements
                                 !userBlocked ? LocaleController.getString("BotStop",
                                     R.string.BotStop)
                                     : LocaleController.getString("BotRestart",
-                                        R.string.BotRestart));
+                                    R.string.BotRestart));
                         } else {
                             otherItem.addSubItem(block_contact,
                                 R.drawable.msg_block,
                                 !userBlocked ? LocaleController.getString("BlockContact",
                                     R.string.BlockContact)
                                     : LocaleController.getString("Unblock",
-                                        R.string.Unblock));
+                                    R.string.Unblock));
                         }
                     }
                 } else {
@@ -7453,7 +7450,7 @@ public class ProfileActivity extends BaseFragment implements
                             chat.megagroup && !chat.gigagroup ? LocaleController.getString(
                                 "StartVoipChat", R.string.StartVoipChat)
                                 : LocaleController.getString("StartVoipChannel",
-                                    R.string.StartVoipChannel));
+                                R.string.StartVoipChannel));
                         hasVoiceChatItem = true;
                     }
                     if (chatInfo.can_view_stats) {
@@ -7481,7 +7478,7 @@ public class ProfileActivity extends BaseFragment implements
                         otherItem.addSubItem(share, R.drawable.msg_share,
                             LocaleController.getString("BotShare", R.string.BotShare));
                     }
-                    if (ConfigManager.getBooleanOrFalse(Defines.channelAlias)){
+                    if (ConfigManager.getBooleanOrFalse(Defines.channelAlias)) {
                         otherItem.addSubItem(aliasChannelName, R.drawable.ic_ab_fave,
                             LocaleController.getString("setChannelAliasName",
                                 R.string.setChannelAliasName));
@@ -7657,7 +7654,7 @@ public class ProfileActivity extends BaseFragment implements
 
     @Override
     public void didSelectDialogs(DialogsActivity fragment, ArrayList<Long> dids,
-        CharSequence message, boolean param) {
+                                 CharSequence message, boolean param) {
         long did = dids.get(0);
         Bundle args = new Bundle();
         args.putBoolean("scrollToTopOnResume", true);
@@ -7686,7 +7683,7 @@ public class ProfileActivity extends BaseFragment implements
 
     @Override
     public void onRequestPermissionsResultFragment(int requestCode, String[] permissions,
-        int[] grantResults) {
+                                                   int[] grantResults) {
         if (imageUpdater != null) {
             imageUpdater.onRequestPermissionsResultFragment(requestCode, permissions, grantResults);
         }
@@ -7939,8 +7936,8 @@ public class ProfileActivity extends BaseFragment implements
 
     @Override
     public void didUploadPhoto(final TLRPC.InputFile photo, final TLRPC.InputFile video,
-        double videoStartTimestamp, String videoPath, TLRPC.PhotoSize bigSize,
-        final TLRPC.PhotoSize smallSize) {
+                               double videoStartTimestamp, String videoPath, TLRPC.PhotoSize bigSize,
+                               final TLRPC.PhotoSize smallSize) {
         AndroidUtilities.runOnUIThread(() -> {
             if (photo != null || video != null) {
                 TLRPC.TL_photos_uploadProfilePhoto req = new TLRPC.TL_photos_uploadProfilePhoto();
@@ -8228,19 +8225,19 @@ public class ProfileActivity extends BaseFragment implements
 
     private class ListAdapter extends RecyclerListView.SelectionAdapter {
         private final static int VIEW_TYPE_HEADER = 1,
-                VIEW_TYPE_TEXT_DETAIL = 2,
-                VIEW_TYPE_ABOUT_LINK = 3,
-                VIEW_TYPE_TEXT = 4,
-                VIEW_TYPE_DIVIDER = 5,
-                VIEW_TYPE_NOTIFICATIONS_CHECK = 6,
-                VIEW_TYPE_SHADOW = 7,
-                VIEW_TYPE_USER = 8,
-                VIEW_TYPE_EMPTY = 11,
-                VIEW_TYPE_BOTTOM_PADDING = 12,
-                VIEW_TYPE_SHARED_MEDIA = 13,
-                VIEW_TYPE_VERSION = 14,
-                VIEW_TYPE_SUGGESTION = 15,
-                VIEW_TYPE_ADDTOGROUP_INFO = 17;
+            VIEW_TYPE_TEXT_DETAIL = 2,
+            VIEW_TYPE_ABOUT_LINK = 3,
+            VIEW_TYPE_TEXT = 4,
+            VIEW_TYPE_DIVIDER = 5,
+            VIEW_TYPE_NOTIFICATIONS_CHECK = 6,
+            VIEW_TYPE_SHADOW = 7,
+            VIEW_TYPE_USER = 8,
+            VIEW_TYPE_EMPTY = 11,
+            VIEW_TYPE_BOTTOM_PADDING = 12,
+            VIEW_TYPE_SHARED_MEDIA = 13,
+            VIEW_TYPE_VERSION = 14,
+            VIEW_TYPE_SUGGESTION = 15,
+            VIEW_TYPE_ADDTOGROUP_INFO = 17;
 
         private final Context mContext;
 
@@ -8400,9 +8397,9 @@ public class ProfileActivity extends BaseFragment implements
                         String abi = APKUtils.getAbi();
                         cell.setText(LocaleController.formatString("NullgramVersion",
                             R.string.NullgramVersion,
-                            String.format(Locale.US, "v%s (%d) %s", pInfo.versionName, code,
+                            String.format(Locale.US, "%s (%d) %s", pInfo.versionName, code,
                                 abi),
-                            String.format(Locale.US, "v%s (%d)", BuildVars.BUILD_VERSION_STRING,
+                            String.format(Locale.US, "%s (%d)", BuildVars.BUILD_VERSION_STRING,
                                 BuildVars.BUILD_VERSION)));
                     } catch (Exception e) {
                         FileLog.e(e);
@@ -8422,27 +8419,19 @@ public class ProfileActivity extends BaseFragment implements
                     view = new SettingsSuggestionCell(mContext) {
                         @Override
                         protected void onYesClick(int type) {
-                            getNotificationCenter().removeObserver(ProfileActivity.this,
-                                NotificationCenter.newSuggestionsAvailable);
-                            getMessagesController().removeSuggestion(0,
-                                type == SettingsSuggestionCell.TYPE_PHONE
-                                    ? "VALIDATE_PHONE_NUMBER" : "VALIDATE_PASSWORD");
-                            getNotificationCenter().addObserver(ProfileActivity.this,
-                                NotificationCenter.newSuggestionsAvailable);
-                            int oldRow =
-                                type == SettingsSuggestionCell.TYPE_PHONE ? phoneSuggestionRow
-                                    : passwordSuggestionRow;
+                            getNotificationCenter().removeObserver(ProfileActivity.this, NotificationCenter.newSuggestionsAvailable);
+                            getMessagesController().removeSuggestion(0, type == SettingsSuggestionCell.TYPE_PHONE ? "VALIDATE_PHONE_NUMBER" : "VALIDATE_PASSWORD");
+                            getNotificationCenter().addObserver(ProfileActivity.this, NotificationCenter.newSuggestionsAvailable);
+                            int oldRow = type == SettingsSuggestionCell.TYPE_PHONE ? phoneSuggestionRow : passwordSuggestionRow;
                             updateListAnimated(false);
                         }
 
                         @Override
                         protected void onNoClick(int type) {
                             if (type == SettingsSuggestionCell.TYPE_PHONE) {
-                                presentFragment(new ActionIntroActivity(
-                                    ActionIntroActivity.ACTION_TYPE_CHANGE_PHONE_NUMBER));
+                                presentFragment(new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_CHANGE_PHONE_NUMBER));
                             } else {
-                                presentFragment(new TwoStepVerificationSetupActivity(
-                                    TwoStepVerificationSetupActivity.TYPE_VERIFY, null));
+                                presentFragment(new TwoStepVerificationSetupActivity(TwoStepVerificationSetupActivity.TYPE_VERIFY, null));
                             }
                         }
                     };
@@ -8450,6 +8439,15 @@ public class ProfileActivity extends BaseFragment implements
                 }
             }
             if (viewType != VIEW_TYPE_SHARED_MEDIA) {
+                if (view == null) {
+                    if (sharedMediaLayout.getParent() != null) {
+                        ((ViewGroup) sharedMediaLayout.getParent()).removeView(sharedMediaLayout);
+                        view = sharedMediaLayout;
+                    } else {
+                        view = new View(mContext);
+                    }
+
+                }
                 view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
             }
             return new RecyclerListView.Holder(view);
@@ -8872,7 +8870,7 @@ public class ProfileActivity extends BaseFragment implements
                                 val = enabled ? LocaleController.getString("NotificationsOn",
                                     R.string.NotificationsOn)
                                     : LocaleController.getString("NotificationsOff",
-                                        R.string.NotificationsOff);
+                                    R.string.NotificationsOff);
                             }
                         }
                         if (val == null) {
@@ -9001,8 +8999,8 @@ public class ProfileActivity extends BaseFragment implements
             }
             int type = holder.getItemViewType();
             return type != VIEW_TYPE_HEADER && type != VIEW_TYPE_DIVIDER && type != VIEW_TYPE_SHADOW &&
-                    type != VIEW_TYPE_EMPTY && type != VIEW_TYPE_BOTTOM_PADDING && type != VIEW_TYPE_SHARED_MEDIA &&
-                    type != 9 && type != 10; // These are legacy ones, left for compatibility
+                type != VIEW_TYPE_EMPTY && type != VIEW_TYPE_BOTTOM_PADDING && type != VIEW_TYPE_SHARED_MEDIA &&
+                type != 9 && type != 10; // These are legacy ones, left for compatibility
         }
 
         @Override
@@ -9013,30 +9011,30 @@ public class ProfileActivity extends BaseFragment implements
         @Override
         public int getItemViewType(int position) {
             if (position == infoHeaderRow || position == membersHeaderRow || position == settingsSectionRow2 ||
-                    position == numberSectionRow || position == helpHeaderRow) {
+                position == numberSectionRow || position == helpHeaderRow) {
                 return VIEW_TYPE_HEADER;
             } else if (position == phoneRow || position == usernameRow || position == locationRow ||
-                    position == numberRow || position == setUsernameRow || position == bioRow) {
+                position == numberRow || position == setUsernameRow || position == bioRow) {
                 return VIEW_TYPE_TEXT_DETAIL;
             } else if (position == userInfoRow || position == channelInfoRow) {
                 return VIEW_TYPE_ABOUT_LINK;
             } else if (position == settingsTimerRow || position == settingsKeyRow || position == reportRow ||
-                    position == subscribersRow || position == subscribersRequestsRow || position == administratorsRow || position == blockedUsersRow ||
-                    position == addMemberRow || position == joinRow || position == unblockRow ||
-                    position == sendMessageRow || position == notificationRow || position == privacyRow ||
-                    position == languageRow || position == dataRow || position == chatRow ||
-                    position == questionRow || position == devicesRow || position == filtersRow ||
-                    position == faqRow || position == policyRow || position == sendLogsRow || position == sendLastLogsRow ||
-                    position == clearLogsRow || position == switchBackendRow || position == setAvatarRow || position == nullRow || position == addToGroupButtonRow) {
+                position == subscribersRow || position == subscribersRequestsRow || position == administratorsRow || position == blockedUsersRow ||
+                position == addMemberRow || position == joinRow || position == unblockRow ||
+                position == sendMessageRow || position == notificationRow || position == privacyRow ||
+                position == languageRow || position == dataRow || position == chatRow ||
+                position == questionRow || position == devicesRow || position == filtersRow ||
+                position == faqRow || position == policyRow || position == sendLogsRow || position == sendLastLogsRow ||
+                position == clearLogsRow || position == switchBackendRow || position == setAvatarRow || position == nullRow || position == addToGroupButtonRow) {
                 return VIEW_TYPE_TEXT;
             } else if (position == notificationsDividerRow) {
                 return VIEW_TYPE_DIVIDER;
             } else if (position == notificationsRow) {
                 return VIEW_TYPE_NOTIFICATIONS_CHECK;
             } else if (position == infoSectionRow || position == lastSectionRow || position == membersSectionRow ||
-                    position == secretSettingsSectionRow || position == settingsSectionRow || position == devicesSectionRow ||
-                    position == helpSectionCell || position == setAvatarSectionRow || position == passwordSuggestionSectionRow ||
-                    position == phoneSuggestionSectionRow || position == nullSectionRow) {
+                position == secretSettingsSectionRow || position == settingsSectionRow || position == devicesSectionRow ||
+                position == helpSectionCell || position == setAvatarSectionRow || position == passwordSuggestionSectionRow ||
+                position == phoneSuggestionSectionRow || position == nullSectionRow) {
                 return VIEW_TYPE_SHADOW;
             } else if (position >= membersStartRow && position < membersEndRow) {
                 return VIEW_TYPE_USER;
@@ -9078,12 +9076,12 @@ public class ProfileActivity extends BaseFragment implements
             }
 
             public SearchResult(int g, String search, String row, String pathArg1, int icon,
-                Runnable open) {
+                                Runnable open) {
                 this(g, search, row, pathArg1, null, icon, open);
             }
 
             public SearchResult(int g, String search, String row, String pathArg1, String pathArg2,
-                int icon, Runnable open) {
+                                int icon, Runnable open) {
                 guid = g;
                 searchTitle = search;
                 rowName = row;
@@ -9199,28 +9197,28 @@ public class ProfileActivity extends BaseFragment implements
                     R.string.NotificationsAndSounds), R.drawable.menu_notifications,
                 () -> presentFragment(new NotificationsSettingsActivity())),
 
-                new SearchResult(100, LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
-                new SearchResult(101, LocaleController.getString("BlockedUsers", R.string.BlockedUsers), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyUsersActivity())),
-                new SearchResult(105, LocaleController.getString("PrivacyPhone", R.string.PrivacyPhone), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_PHONE, true))),
-                new SearchResult(102, LocaleController.getString("PrivacyLastSeen", R.string.PrivacyLastSeen), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_LASTSEEN, true))),
-                new SearchResult(103, LocaleController.getString("PrivacyProfilePhoto", R.string.PrivacyProfilePhoto), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_PHOTO, true))),
-                new SearchResult(104, LocaleController.getString("PrivacyForwards", R.string.PrivacyForwards), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_FORWARDS, true))),
-                new SearchResult(122, LocaleController.getString("PrivacyP2P", R.string.PrivacyP2P), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_P2P, true))),
-                new SearchResult(106, LocaleController.getString("Calls", R.string.Calls), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_CALLS, true))),
-                new SearchResult(107, LocaleController.getString("GroupsAndChannels", R.string.GroupsAndChannels), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_INVITE, true))),
-                new SearchResult(108, LocaleController.getString("Passcode", R.string.Passcode), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(PasscodeActivity.determineOpenFragment())),
-                new SearchResult(109, LocaleController.getString("TwoStepVerification", R.string.TwoStepVerification), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new TwoStepVerificationActivity())),
-                new SearchResult(110, LocaleController.getString("SessionsTitle", R.string.SessionsTitle), R.drawable.menu_secret, () -> presentFragment(new SessionsActivity(0))),
-                getMessagesController().autoarchiveAvailable ? new SearchResult(121, LocaleController.getString("ArchiveAndMute", R.string.ArchiveAndMute), "newChatsRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())) : null,
-                new SearchResult(112, LocaleController.getString("DeleteAccountIfAwayFor2", R.string.DeleteAccountIfAwayFor2), "deleteAccountRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
-                new SearchResult(113, LocaleController.getString("PrivacyPaymentsClear", R.string.PrivacyPaymentsClear), "paymentsClearRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
-                new SearchResult(114, LocaleController.getString("WebSessionsTitle", R.string.WebSessionsTitle), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new SessionsActivity(1))),
-                new SearchResult(115, LocaleController.getString("SyncContactsDelete", R.string.SyncContactsDelete), "contactsDeleteRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
-                new SearchResult(116, LocaleController.getString("SyncContacts", R.string.SyncContacts), "contactsSyncRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
-                new SearchResult(117, LocaleController.getString("SuggestContacts", R.string.SuggestContacts), "contactsSuggestRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
-                new SearchResult(118, LocaleController.getString("MapPreviewProvider", R.string.MapPreviewProvider), "secretMapRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
-                new SearchResult(119, LocaleController.getString("SecretWebPage", R.string.SecretWebPage), "secretWebpageRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
-                new SearchResult(120, LocaleController.getString("Devices", R.string.Devices), R.drawable.menu_secret, () -> presentFragment(new SessionsActivity(0))),
+            new SearchResult(100, LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
+            new SearchResult(101, LocaleController.getString("BlockedUsers", R.string.BlockedUsers), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyUsersActivity())),
+            new SearchResult(105, LocaleController.getString("PrivacyPhone", R.string.PrivacyPhone), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_PHONE, true))),
+            new SearchResult(102, LocaleController.getString("PrivacyLastSeen", R.string.PrivacyLastSeen), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_LASTSEEN, true))),
+            new SearchResult(103, LocaleController.getString("PrivacyProfilePhoto", R.string.PrivacyProfilePhoto), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_PHOTO, true))),
+            new SearchResult(104, LocaleController.getString("PrivacyForwards", R.string.PrivacyForwards), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_FORWARDS, true))),
+            new SearchResult(122, LocaleController.getString("PrivacyP2P", R.string.PrivacyP2P), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_P2P, true))),
+            new SearchResult(106, LocaleController.getString("Calls", R.string.Calls), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_CALLS, true))),
+            new SearchResult(107, LocaleController.getString("GroupsAndChannels", R.string.GroupsAndChannels), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_INVITE, true))),
+            new SearchResult(108, LocaleController.getString("Passcode", R.string.Passcode), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(PasscodeActivity.determineOpenFragment())),
+            new SearchResult(109, LocaleController.getString("TwoStepVerification", R.string.TwoStepVerification), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new TwoStepVerificationActivity())),
+            new SearchResult(110, LocaleController.getString("SessionsTitle", R.string.SessionsTitle), R.drawable.menu_secret, () -> presentFragment(new SessionsActivity(0))),
+            getMessagesController().autoarchiveAvailable ? new SearchResult(121, LocaleController.getString("ArchiveAndMute", R.string.ArchiveAndMute), "newChatsRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())) : null,
+            new SearchResult(112, LocaleController.getString("DeleteAccountIfAwayFor2", R.string.DeleteAccountIfAwayFor2), "deleteAccountRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
+            new SearchResult(113, LocaleController.getString("PrivacyPaymentsClear", R.string.PrivacyPaymentsClear), "paymentsClearRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
+            new SearchResult(114, LocaleController.getString("WebSessionsTitle", R.string.WebSessionsTitle), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new SessionsActivity(1))),
+            new SearchResult(115, LocaleController.getString("SyncContactsDelete", R.string.SyncContactsDelete), "contactsDeleteRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
+            new SearchResult(116, LocaleController.getString("SyncContacts", R.string.SyncContacts), "contactsSyncRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
+            new SearchResult(117, LocaleController.getString("SuggestContacts", R.string.SuggestContacts), "contactsSuggestRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
+            new SearchResult(118, LocaleController.getString("MapPreviewProvider", R.string.MapPreviewProvider), "secretMapRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
+            new SearchResult(119, LocaleController.getString("SecretWebPage", R.string.SecretWebPage), "secretWebpageRow", LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.menu_secret, () -> presentFragment(new PrivacySettingsActivity())),
+            new SearchResult(120, LocaleController.getString("Devices", R.string.Devices), R.drawable.menu_secret, () -> presentFragment(new SessionsActivity(0))),
 
             new SearchResult(200,
                 LocaleController.getString("DataSettings", R.string.DataSettings),
@@ -9911,14 +9909,18 @@ public class ProfileActivity extends BaseFragment implements
         scrimView = view;
         dimBehindView(enable);
     }
+
     private void dimBehindView(View view, float value) {
         scrimView = view;
         dimBehindView(value);
     }
+
     private void dimBehindView(boolean enable) {
         dimBehindView(enable ? 0.2f : 0);
     }
+
     private AnimatorSet scrimAnimatorSet = null;
+
     private void dimBehindView(float value) {
         boolean enable = value > 0;
         fragmentView.invalidate();
@@ -10335,11 +10337,12 @@ public class ProfileActivity extends BaseFragment implements
             Drawable shadowDrawable = fragmentView.getContext().getResources().getDrawable(R.drawable.floating_shadow_profile).mutate();
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(Color.BLACK, PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable = new CombinedDrawable(shadowDrawable,
-                    Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_profile_actionBackground), Theme.getColor(Theme.key_profile_actionPressedBackground)),
-                    0, 0);
+                Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_profile_actionBackground), Theme.getColor(Theme.key_profile_actionPressedBackground)),
+                0, 0);
             combinedDrawable.setIconSize(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
             writeButton.setBackground(combinedDrawable);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
     private boolean isQrNeedVisible() {
