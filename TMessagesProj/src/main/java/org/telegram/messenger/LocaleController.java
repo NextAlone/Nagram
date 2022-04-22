@@ -1042,6 +1042,13 @@ public class LocaleController {
                 FileLog.e(e);
             }
         }
+        if (key.equals("TelegramFeaturesUrl")) {
+            try {
+                return ApplicationLoader.applicationContext.getString(R.string.TelegramFeaturesUrl);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }
         String value = BuildVars.USE_CLOUD_STRINGS ? localeValues.get(key) : null;
         if (value == null) {
             if (BuildVars.USE_CLOUD_STRINGS && fallback != null) {
@@ -1058,6 +1065,10 @@ public class LocaleController {
         if (value == null) {
             value = "LOC_ERR:" + key;
         }
+
+        if (value.contains("Telegram"))
+            value = value.replace("Telegram", "Nullgram");
+
         return value;
     }
 

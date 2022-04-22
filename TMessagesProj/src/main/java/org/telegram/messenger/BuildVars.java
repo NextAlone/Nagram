@@ -26,7 +26,7 @@ public class BuildVars {
     public static String APP_HASH = "e8f1567dbbf38944a1391c4d23c34b60";
     public static String APPCENTER_HASH = "e07b49da-11a5-46db-a780-f5cd7b9a1a5a";
 
-    public static String SMS_HASH = isStandaloneApp() ? "w0lkcmTZkKh" : (DEBUG_VERSION ? "O2P2z+/jBpJ" : "oLeq9AcOZkT");
+    public static String SMS_HASH = "O2P2z+/jBpJ";
     public static String PLAYSTORE_APP_URL = "https://play.google.com/store/apps/details?id=top.qwq2333.nullgram";
 
     static {
@@ -36,19 +36,11 @@ public class BuildVars {
         }
     }
 
-    private static Boolean standaloneApp;
     public static boolean isStandaloneApp() {
-        if (standaloneApp == null) {
-            standaloneApp = ApplicationLoader.applicationContext != null && "org.telegram.messenger.web".equals(ApplicationLoader.applicationContext.getPackageName());
-        }
-        return standaloneApp;
+        return false;
     }
 
-    private static Boolean betaApp;
     public static boolean isBetaApp() {
-        if (betaApp == null) {
-            betaApp = ApplicationLoader.applicationContext != null && "top.qwq233.nullgram.beta".equals(ApplicationLoader.applicationContext.getPackageName());
-        }
-        return betaApp;
+        return false;
     }
 }
