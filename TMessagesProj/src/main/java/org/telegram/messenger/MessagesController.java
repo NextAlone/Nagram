@@ -844,7 +844,10 @@ public class MessagesController extends BaseController implements NotificationCe
         showFiltersTooltip = mainPreferences.getBoolean("showFiltersTooltip", false);
         autoarchiveAvailable = mainPreferences.getBoolean("autoarchiveAvailable", false);
         groupCallVideoMaxParticipants = mainPreferences.getInt("groipCallVideoMaxParticipants", 30);
-        chatReadMarkSizeThreshold = mainPreferences.getInt("chatReadMarkSizeThreshold", 50);
+        chatReadMarkSizeThreshold = mainPreferences.getInt("chatReadMarkSizeThreshold", 100);
+        chatReadMarkExpirePeriod = mainPreferences.getInt("chatReadMarkExpirePeriod", 7 * 86400);
+        ringtoneDurationMax = mainPreferences.getInt("ringtoneDurationMax", 5);
+        ringtoneSizeMax = mainPreferences.getInt("ringtoneSizeMax", 1024_00);
         chatReadMarkExpirePeriod = mainPreferences.getInt("chatReadMarkExpirePeriod", 7 * 86400);
         ringtoneDurationMax = mainPreferences.getInt("ringtoneDurationMax", 5);
         ringtoneSizeMax = mainPreferences.getInt("ringtoneSizeMax", 1024_00);
@@ -10705,19 +10708,22 @@ public class MessagesController extends BaseController implements NotificationCe
                                     arr.add(obj);
                                 }
 
-                                AndroidUtilities.runOnUIThread(() -> {
-                                    for (int a = 0; a < messages.size(); a++) {
-                                        long key = messages.keyAt(a);
-                                        ArrayList<MessageObject> value = messages.valueAt(a);
-                                        updateInterfaceWithMessages(key, value, false);
-                                    }
-                                    getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload);
-                                });
                                 getMessagesStorage().getStorageQueue().postRunnable(() -> {
                                     if (!pushMessages.isEmpty()) {
                                         AndroidUtilities.runOnUIThread(() -> getNotificationsController().processNewMessages(pushMessages, !(res instanceof TLRPC.TL_updates_differenceSlice), false, null));
                                     }
                                     getMessagesStorage().putMessages(res.new_messages, true, false, false, getDownloadController().getAutodownloadMask(), false);
+
+                                    for (int a = 0; a < messages.size(); a++) {
+                                        long dialogId = messages.keyAt(a);
+                                        ArrayList<MessageObject> arr = messages.valueAt(a);
+                                        getMediaDataController().loadReplyMessagesForMessages(arr, dialogId, false, () -> {
+                                            AndroidUtilities.runOnUIThread(() -> {
+                                                updateInterfaceWithMessages(dialogId, arr, false);
+                                                getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload);
+                                            });
+                                        });
+                                    }
                                 });
 
                                 getSecretChatHelper().processPendingEncMessages();
@@ -13095,6 +13101,11 @@ public class MessagesController extends BaseController implements NotificationCe
                     updatesOnMainThread = new ArrayList<>();
                 }
                 updatesOnMainThread.add(baseUpdate);
+            } else if (baseUpdate instanceof TLRPC.TL_updateBotMenuButton) {
+                if (updatesOnMainThread == null) {
+                    updatesOnMainThread = new ArrayList<>();
+                }
+                updatesOnMainThread.add(baseUpdate);
             } else if (baseUpdate instanceof TLRPC.TL_updateReadChannelDiscussionInbox) {
                 if (updatesOnMainThread == null) {
                     updatesOnMainThread = new ArrayList<>();
@@ -13730,6 +13741,9 @@ public class MessagesController extends BaseController implements NotificationCe
                         getNotificationCenter().postNotificationName(NotificationCenter.webViewResultSent, resultSent.query_id);
                     } else if (baseUpdate instanceof TLRPC.TL_updateAttachMenuBots) {
                         getMediaDataController().loadAttachMenuBots(false, true);
+                    } else if (baseUpdate instanceof TLRPC.TL_updateBotMenuButton) {
+                        TLRPC.TL_updateBotMenuButton updateBotMenuButton = (TLRPC.TL_updateBotMenuButton) baseUpdate;
+                        getNotificationCenter().postNotificationName(NotificationCenter.updateBotMenuButton, updateBotMenuButton.bot_id, updateBotMenuButton.button);
                     } else if (baseUpdate instanceof TLRPC.TL_updateReadChannelDiscussionInbox) {
                         TLRPC.TL_updateReadChannelDiscussionInbox update = (TLRPC.TL_updateReadChannelDiscussionInbox) baseUpdate;
                         getNotificationCenter().postNotificationName(NotificationCenter.threadMessagesRead, -update.channel_id, update.top_msg_id, update.read_max_id, 0);

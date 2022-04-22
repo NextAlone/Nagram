@@ -6544,7 +6544,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     private boolean isNextButton = false;
     private AnimatorSet commentViewAnimator;
-
+    
     private void updateSelectedCount() {
         if (commentView != null) {
             if (selectedDialogs.isEmpty()) {
@@ -6562,13 +6562,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     commentViewAnimator = new AnimatorSet();
                     commentView.setTranslationY(0);
                     commentViewAnimator.playTogether(
-                        ObjectAnimator.ofFloat(commentView, View.TRANSLATION_Y, commentView.getMeasuredHeight()),
-                        ObjectAnimator.ofFloat(writeButtonContainer, View.SCALE_X, .2f),
-                        ObjectAnimator.ofFloat(writeButtonContainer, View.SCALE_Y, .2f),
-                        ObjectAnimator.ofFloat(writeButtonContainer, View.ALPHA, 0),
-                        ObjectAnimator.ofFloat(selectedCountView, View.SCALE_X, 0.2f),
-                        ObjectAnimator.ofFloat(selectedCountView, View.SCALE_Y, 0.2f),
-                        ObjectAnimator.ofFloat(selectedCountView, View.ALPHA, 0.0f)
+                            ObjectAnimator.ofFloat(commentView, View.TRANSLATION_Y, commentView.getMeasuredHeight()),
+                            ObjectAnimator.ofFloat(writeButtonContainer, View.SCALE_X, .2f),
+                            ObjectAnimator.ofFloat(writeButtonContainer, View.SCALE_Y, .2f),
+                            ObjectAnimator.ofFloat(writeButtonContainer, View.ALPHA, 0),
+                            ObjectAnimator.ofFloat(selectedCountView, View.SCALE_X, 0.2f),
+                            ObjectAnimator.ofFloat(selectedCountView, View.SCALE_Y, 0.2f),
+                            ObjectAnimator.ofFloat(selectedCountView, View.ALPHA, 0.0f)
                     );
                     commentViewAnimator.setDuration(180);
                     commentViewAnimator.setInterpolator(new DecelerateInterpolator());
@@ -6594,13 +6594,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     writeButtonContainer.setVisibility(View.VISIBLE);
                     commentViewAnimator = new AnimatorSet();
                     commentViewAnimator.playTogether(
-                        ObjectAnimator.ofFloat(commentView, View.TRANSLATION_Y, commentView.getMeasuredHeight(),0),
-                        ObjectAnimator.ofFloat(writeButtonContainer, View.SCALE_X, 1f),
-                        ObjectAnimator.ofFloat(writeButtonContainer, View.SCALE_Y, 1f),
-                        ObjectAnimator.ofFloat(writeButtonContainer, View.ALPHA, 1f),
-                        ObjectAnimator.ofFloat(selectedCountView, View.SCALE_X, 1f),
-                        ObjectAnimator.ofFloat(selectedCountView, View.SCALE_Y, 1f),
-                        ObjectAnimator.ofFloat(selectedCountView, View.ALPHA, 1f)
+                            ObjectAnimator.ofFloat(commentView, View.TRANSLATION_Y, commentView.getMeasuredHeight(),0),
+                            ObjectAnimator.ofFloat(writeButtonContainer, View.SCALE_X, 1f),
+                            ObjectAnimator.ofFloat(writeButtonContainer, View.SCALE_Y, 1f),
+                            ObjectAnimator.ofFloat(writeButtonContainer, View.ALPHA, 1f),
+                            ObjectAnimator.ofFloat(selectedCountView, View.SCALE_X, 1f),
+                            ObjectAnimator.ofFloat(selectedCountView, View.SCALE_Y, 1f),
+                            ObjectAnimator.ofFloat(selectedCountView, View.ALPHA, 1f)
                     );
                     commentViewAnimator.setDuration(180);
                     commentViewAnimator.setInterpolator(new DecelerateInterpolator());
@@ -7180,12 +7180,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
             floatingProgressAnimator = new AnimatorSet();
             floatingProgressAnimator.playTogether(
-                ObjectAnimator.ofFloat(floatingButton, View.ALPHA, visible ? 0f : 1f),
-                ObjectAnimator.ofFloat(floatingButton, View.SCALE_X, visible ? 0.1f : 1f),
-                ObjectAnimator.ofFloat(floatingButton, View.SCALE_Y, visible ? 0.1f : 1f),
-                ObjectAnimator.ofFloat(floatingProgressView, View.ALPHA, visible ? 1f : 0f),
-                ObjectAnimator.ofFloat(floatingProgressView, View.SCALE_X, visible ? 1f : 0.1f),
-                ObjectAnimator.ofFloat(floatingProgressView, View.SCALE_Y, visible ? 1f : 0.1f)
+                    ObjectAnimator.ofFloat(floatingButton, View.ALPHA, visible ? 0f : 1f),
+                    ObjectAnimator.ofFloat(floatingButton, View.SCALE_X, visible ? 0.1f : 1f),
+                    ObjectAnimator.ofFloat(floatingButton, View.SCALE_Y, visible ? 0.1f : 1f),
+                    ObjectAnimator.ofFloat(floatingProgressView, View.ALPHA, visible ? 1f : 0f),
+                    ObjectAnimator.ofFloat(floatingProgressView, View.SCALE_X, visible ? 1f : 0.1f),
+                    ObjectAnimator.ofFloat(floatingProgressView, View.SCALE_Y, visible ? 1f : 0.1f)
             );
             floatingProgressAnimator.addListener(new AnimatorListenerAdapter() {
                 @Override

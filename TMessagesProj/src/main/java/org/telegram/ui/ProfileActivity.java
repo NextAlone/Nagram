@@ -61,6 +61,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.webkit.WebStorage;
+import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -1598,6 +1599,14 @@ public class ProfileActivity extends BaseFragment implements
                 }
                 return super.onTouchEvent(event);
             }
+
+            @Override
+            public void setItemsColor(int color, boolean isActionMode) {
+                super.setItemsColor(color, isActionMode);
+                if (!isActionMode && ttlIconView != null) {
+                    ttlIconView.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                }
+            }
         };
         actionBar.setBackgroundColor(Color.TRANSPARENT);
         actionBar.setItemsBackgroundColor(AvatarDrawable.getButtonColorForId(userId != 0
@@ -2584,6 +2593,7 @@ public class ProfileActivity extends BaseFragment implements
         editItem.setContentDescription(LocaleController.getString("Edit", R.string.Edit));
         otherItem = menu.addItem(10, R.drawable.ic_ab_other);
         ttlIconView = new ImageView(context);
+        ttlIconView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_actionBarDefaultIcon), PorterDuff.Mode.MULTIPLY));
         AndroidUtilities.updateViewVisibilityAnimated(ttlIconView, false, 0.8f, false);
         ttlIconView.setImageResource(R.drawable.msg_mini_autodelete_timer);
         otherItem.addView(ttlIconView, LayoutHelper.createFrame(12, 12, Gravity.CENTER_VERTICAL | Gravity.LEFT, 8, 2, 0, 0));
@@ -2908,12 +2918,21 @@ public class ProfileActivity extends BaseFragment implements
 
                     @Override
                     public void muteFor(int timeInSeconds) {
-                        getNotificationsController().muteUntil(did, timeInSeconds);
-                        if (BulletinFactory.canShowBulletin(ProfileActivity.this)) {
-                            BulletinFactory.createMuteBulletin(ProfileActivity.this, NotificationsController.SETTING_MUTE_CUSTOM, timeInSeconds, getResourceProvider()).show();
-                        }
-                        if (notificationsRow >= 0) {
-                            listAdapter.notifyItemChanged(notificationsRow);
+                        if (timeInSeconds == 0) {
+                            if (getMessagesController().isDialogMuted(did)) {
+                                toggleMute();
+                            }
+                            if (BulletinFactory.canShowBulletin(ProfileActivity.this)) {
+                                BulletinFactory.createMuteBulletin(ProfileActivity.this, NotificationsController.SETTING_MUTE_UNMUTE, timeInSeconds, getResourceProvider()).show();
+                            }
+                        } else {
+                            getNotificationsController().muteUntil(did, timeInSeconds);
+                            if (BulletinFactory.canShowBulletin(ProfileActivity.this)) {
+                                BulletinFactory.createMuteBulletin(ProfileActivity.this, NotificationsController.SETTING_MUTE_CUSTOM, timeInSeconds, getResourceProvider()).show();
+                            }
+                            if (notificationsRow >= 0) {
+                                listAdapter.notifyItemChanged(notificationsRow);
+                            }
                         }
                     }
 
@@ -3183,7 +3202,8 @@ public class ProfileActivity extends BaseFragment implements
                                 BuildVars.DEBUG_PRIVATE_VERSION ? "Clean app update" : null,
                                 BuildVars.DEBUG_PRIVATE_VERSION ? "Reset suggestions" : null,
                                 BuildVars.DEBUG_PRIVATE_VERSION ? LocaleController.getString(SharedConfig.forceRtmpStream ? R.string.DebugMenuDisableForceRtmpStreamFlag : R.string.DebugMenuEnableForceRtmpStreamFlag) : null,
-                                BuildVars.DEBUG_PRIVATE_VERSION ? LocaleController.getString(R.string.DebugMenuClearWebViewCache) : null
+                                BuildVars.DEBUG_PRIVATE_VERSION ? LocaleController.getString(R.string.DebugMenuClearWebViewCache) : null,
+                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ? LocaleController.getString(R.string.DebugMenuEnableWebViewDebug) : null
                         };
                         builder.setItems(items, (dialog, which) -> {
                             if (which == 0) {
@@ -3271,6 +3291,11 @@ public class ProfileActivity extends BaseFragment implements
                                 ApplicationLoader.applicationContext.deleteDatabase("webview.db");
                                 ApplicationLoader.applicationContext.deleteDatabase("webviewCache.db");
                                 WebStorage.getInstance().deleteAllData();
+                            } else if (which == 19) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                                    WebView.setWebContentsDebuggingEnabled(true);
+                                    Toast.makeText(getParentActivity(), LocaleController.getString(R.string.DebugMenuWebViewDebugEnabled), Toast.LENGTH_SHORT).show();
+                                }
                             }
                         });
                         builder.setNegativeButton(
@@ -7378,6 +7403,10 @@ public class ProfileActivity extends BaseFragment implements
                 } else {
                     if (currentEncryptedChat == null) {
                         createAutoDeleteItem(context);
+                    }
+
+                    if (!TextUtils.isEmpty(user.phone)) {
+                        otherItem.addSubItem(share_contact, R.drawable.msg_share, LocaleController.getString("ShareContact", R.string.ShareContact));
                     }
 
                     if (!TextUtils.isEmpty(user.phone)) {

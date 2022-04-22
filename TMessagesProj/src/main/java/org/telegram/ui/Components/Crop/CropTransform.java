@@ -8,6 +8,8 @@
 
 package org.telegram.ui.Components.Crop;
 
+import androidx.annotation.NonNull;
+
 public class CropTransform {
 
     private boolean hasTransform;

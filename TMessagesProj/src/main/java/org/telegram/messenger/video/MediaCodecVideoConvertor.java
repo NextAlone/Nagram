@@ -7,6 +7,8 @@ import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.os.Build;
 
+import com.google.android.exoplayer2.util.Log;
+
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MediaController;
@@ -48,10 +50,11 @@ public class MediaCodecVideoConvertor {
                                 ArrayList<VideoEditedInfo.MediaEntity> mediaEntities,
                                 boolean isPhoto,
                                 MediaController.CropState cropState,
+                                boolean isRound,
                                 MediaController.VideoConvertorListener callback) {
         this.callback = callback;
         return convertVideoInternal(videoPath, cacheFile, rotationValue, isSecret, originalWidth, originalHeight,
-                resultWidth, resultHeight, framerate, bitrate, originalBitrate, startTime, endTime, avatarStartTime, duration, needCompress, false, savedFilterState, paintPath, mediaEntities, isPhoto, cropState);
+                resultWidth, resultHeight, framerate, bitrate, originalBitrate, startTime, endTime, avatarStartTime, duration, needCompress, false, savedFilterState, paintPath, mediaEntities, isPhoto, cropState, isRound);
     }
 
     public long getLastFrameTimestamp() {
@@ -71,7 +74,8 @@ public class MediaCodecVideoConvertor {
                                          String paintPath,
                                          ArrayList<VideoEditedInfo.MediaEntity> mediaEntities,
                                          boolean isPhoto,
-                                         MediaController.CropState cropState) {
+                                         MediaController.CropState cropState,
+                                         boolean isRound) {
 
         long time = System.currentTimeMillis();
         boolean error = false;
@@ -405,7 +409,9 @@ public class MediaCodecVideoConvertor {
 
                             decoder = MediaCodec.createDecoderByType(videoFormat.getString(MediaFormat.KEY_MIME));
                             outputSurface = new OutputSurface(savedFilterState, null, paintPath, mediaEntities, cropState, resultWidth, resultHeight, originalWidth, originalHeight, rotationValue, framerate, false);
-                            outputSurface.changeFragmentShader(createFragmentShader(originalWidth, originalHeight, resultWidth, resultHeight, true), createFragmentShader(originalWidth, originalHeight, resultWidth, resultHeight, false));
+                            if (!isRound && Math.max(resultHeight, resultHeight) / (float) Math.max(originalHeight, originalWidth) < 0.9f) {
+                                outputSurface.changeFragmentShader(createFragmentShader(originalWidth, originalHeight, resultWidth, resultHeight, true), createFragmentShader(originalWidth, originalHeight, resultWidth, resultHeight, false));
+                            }
                             decoder.configure(videoFormat, outputSurface.getSurface(), null, 0);
                             decoder.start();
 
@@ -798,7 +804,7 @@ public class MediaCodecVideoConvertor {
                     originalWidth, originalHeight,
                     resultWidth, resultHeight, framerate, bitrate, originalBitrate, startTime, endTime, avatarStartTime, duration,
                     needCompress, true, savedFilterState, paintPath, mediaEntities,
-                    isPhoto, cropState);
+                    isPhoto, cropState, isRound);
         }
 
         long timeLeft = System.currentTimeMillis() - time;

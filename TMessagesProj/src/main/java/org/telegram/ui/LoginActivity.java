@@ -291,7 +291,6 @@ public class LoginActivity extends BaseFragment {
     private Runnable[] editDoneCallback = new Runnable[2];
     private boolean[] postedEditDoneCallback = new boolean[2];
 
-
     private static class ProgressView extends View {
 
         private final Path path = new Path();
@@ -5236,8 +5235,8 @@ public class LoginActivity extends BaseFragment {
                 codeField[a].setPadding(padding, padding, padding, padding);
                 if (stage == 0) {
                     codeField[a].setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    codeField[a].setTransformationMethod(PasswordTransformationMethod.getInstance());
                 }
-                codeField[a].setTransformationMethod(PasswordTransformationMethod.getInstance());
                 codeField[a].setTypeface(Typeface.DEFAULT);
                 codeField[a].setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
 

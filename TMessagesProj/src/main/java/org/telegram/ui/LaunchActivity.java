@@ -296,12 +296,12 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             try {
                 setTaskDescription(new ActivityManager.TaskDescription(null, null, Theme.getColor(Theme.key_actionBarDefault) | 0xff000000));
-            } catch (Exception ignore) {
+            } catch (Throwable ignore) {
 
             }
             try {
                 getWindow().setNavigationBarColor(0xff000000);
-            } catch (Exception ignore) {
+            } catch (Throwable ignore) {
 
             }
         }
@@ -2939,7 +2939,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                                 if (user.bot_attach_menu) {
                                     TLRPC.TL_messages_getAttachMenuBot getAttachMenuBot = new TLRPC.TL_messages_getAttachMenuBot();
                                     getAttachMenuBot.bot = MessagesController.getInstance(intentAccount).getInputUser(res.peer.user_id);
-                                    ConnectionsManager.getInstance(intentAccount).sendRequest(getAttachMenuBot, (response1, error1) -> AndroidUtilities.runOnUIThread(() -> {
+                                    ConnectionsManager.getInstance(intentAccount).sendRequest(getAttachMenuBot, (response1, error1) -> AndroidUtilities.runOnUIThread(()->{
                                         if (response1 instanceof TLRPC.TL_attachMenuBotsBot) {
                                             TLRPC.TL_attachMenuBotsBot attachMenuBotsBot = (TLRPC.TL_attachMenuBotsBot) response1;
                                             MessagesController.getInstance(intentAccount).putUsers(attachMenuBotsBot.users, false);
@@ -2957,25 +2957,27 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                                                 introTopView.setBackgroundColor(Theme.getColor(Theme.key_dialogTopBackground));
                                                 introTopView.setAttachBot(attachMenuBot);
                                                 new AlertDialog.Builder(LaunchActivity.this)
-                                                    .setTopView(introTopView)
-                                                    .setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("BotRequestAttachPermission", R.string.BotRequestAttachPermission, UserObject.getUserName(user))))
-                                                    .setPositiveButton(LocaleController.getString(R.string.BotAddToMenu), (dialog, which) -> {
-                                                        TLRPC.TL_messages_toggleBotInAttachMenu botRequest = new TLRPC.TL_messages_toggleBotInAttachMenu();
-                                                        botRequest.bot = MessagesController.getInstance(intentAccount).getInputUser(res.peer.user_id);
-                                                        botRequest.enabled = true;
-                                                        ConnectionsManager.getInstance(intentAccount).sendRequest(botRequest, (response2, error2) -> AndroidUtilities.runOnUIThread(() -> {
-                                                            if (error2 == null) {
-                                                                MediaDataController.getInstance(intentAccount).loadAttachMenuBots(false, true);
+                                                        .setTopView(introTopView)
+                                                        .setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("BotRequestAttachPermission", R.string.BotRequestAttachPermission, UserObject.getUserName(user))))
+                                                        .setPositiveButton(LocaleController.getString(R.string.BotAddToMenu), (dialog, which) -> {
+                                                            TLRPC.TL_messages_toggleBotInAttachMenu botRequest = new TLRPC.TL_messages_toggleBotInAttachMenu();
+                                                            botRequest.bot = MessagesController.getInstance(intentAccount).getInputUser(res.peer.user_id);
+                                                            botRequest.enabled = true;
+                                                            ConnectionsManager.getInstance(intentAccount).sendRequest(botRequest, (response2, error2) -> AndroidUtilities.runOnUIThread(() -> {
+                                                                if (error2 == null) {
+                                                                    MediaDataController.getInstance(intentAccount).loadAttachMenuBots(false, true);
 
-                                                                if (lastFragment instanceof ChatActivity) {
-                                                                    ((ChatActivity) lastFragment).openAttachBotLayout(user.id, setAsAttachBot);
+                                                                    if (lastFragment instanceof ChatActivity) {
+                                                                        ((ChatActivity) lastFragment).openAttachBotLayout(user.id, setAsAttachBot);
+                                                                    }
                                                                 }
-                                                            }
-                                                        }), ConnectionsManager.RequestFlagInvokeAfter | ConnectionsManager.RequestFlagFailOnServerErrors);
-                                                    })
-                                                    .setNegativeButton(LocaleController.getString(R.string.Cancel), null)
-                                                    .show();
+                                                            }), ConnectionsManager.RequestFlagInvokeAfter | ConnectionsManager.RequestFlagFailOnServerErrors);
+                                                        })
+                                                        .setNegativeButton(LocaleController.getString(R.string.Cancel), null)
+                                                        .show();
                                             }
+                                        } else {
+                                            BulletinFactory.of(mainFragmentsStack.get(mainFragmentsStack.size() - 1)).createErrorBulletin(LocaleController.getString(R.string.BotCantAddToAttachMenu)).show();
                                         }
                                     }));
                                 } else {
@@ -3138,8 +3140,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                                             }
 
                                             @Override
-                                            public void didChangeOwner(TLRPC.User user) {
-                                            }
+                                            public void didChangeOwner(TLRPC.User user) {}
                                         });
                                         actionBarLayout.presentFragment(editRightsActivity, false);
                                     }));
@@ -3219,7 +3220,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                                                     voipLastFragment = lastFragment;
                                                 }
 
-                                                AndroidUtilities.runOnUIThread(() -> {
+                                                AndroidUtilities.runOnUIThread(()->{
                                                     if (livestream != null) {
                                                         AccountInstance accountInstance = AccountInstance.getInstance(currentAccount);
                                                         ChatObject.Call cachedCall = accountInstance.getMessagesController().getGroupCall(-dialog_id, false);
@@ -4874,7 +4875,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                             DrawerProfileCell.switchingTheme = false;
                         }
                     });
-                    AndroidUtilities.runOnUIThread(() -> {
+                    AndroidUtilities.runOnUIThread(()->{
                         if (isNavigationBarColorFrozen) {
                             isNavigationBarColorFrozen = false;
                             checkSystemBarColors(false, true);
@@ -5057,6 +5058,12 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                         BulletinFactory.of(fragment).createErrorBulletin((String) args[1]).show();
                     } else {
                         BulletinFactory.of(container, null).createErrorBulletin((String) args[1]).show();
+                    }
+                } if (type == Bulletin.TYPE_ERROR_SUBTITLE) {
+                    if (fragment != null) {
+                        BulletinFactory.of(fragment).createErrorBulletinSubtitle((String) args[1], (String) args[2], fragment.getResourceProvider()).show();
+                    } else {
+                        BulletinFactory.of(container, null).createErrorBulletinSubtitle((String) args[1], (String) args[2], null).show();
                     }
                 }
                 if (type == Bulletin.TYPE_ERROR_SUBTITLE) {

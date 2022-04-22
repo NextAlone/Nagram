@@ -4,14 +4,12 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
   workflow_dispatch:
 
 jobs:
   build:
     name: Gradle Build
+    if: ${{ github.event_name != 'pull_request' && success() && github.ref == 'refs/heads/master' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

@@ -1,0 +1,59 @@
+name: Build CI
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Gradle Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+          fetch-depth: 0
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v1.12
+        with:
+          cmake-version: '3.22.1'
+      - name: Prepare Java 16
+        uses: actions/setup-java@v1
+        with:
+          java-version: 16
+          java-package: jdk
+      - name: Setup Android SDK Tools
+        uses: android-actions/setup-android@v2
+        
+      - name: Native Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/.cxx
+            TMessagesProj/build/intermediates/cmake
+            TMessagesProj/build/intermediates/stripped_native_libs
+            TMessagesProj/build/intermediates/cxx
+            TMessagesProj/build/intermediates/merged_jni_libs
+            TMessagesProj/build/intermediates/merged_native_libs
+            ~/.cache/ccache
+            ~/.ccache
+          key: native-cache
+      - name: Gradle cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle
+          key: gradle-${{ hashFiles('**/*.gradle') }}
+      - name: Prepare Environment
+        run: |
+          sudo apt-get install bison gcc make curl ninja-build ccache -y
+          echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
+          ln -s  ${ANDROID_HOME}/cmake/3.18.1/bin/ninja /opt/hostedtoolcache/cmake/3.22.1/x64/cmake-3.22.1-linux-x86_64/bin/
+          ccache -zp
+          ccache -o max_size=10G
+          ccache -o hash_dir=false
+          ccache -o compiler_check='%compiler% -dumpmachine; %compiler% -dumpversion'
+      - name: Debug Build
+        run: |
+          ./gradlew TMessagesProj:assembleDebug
+          ccache -s

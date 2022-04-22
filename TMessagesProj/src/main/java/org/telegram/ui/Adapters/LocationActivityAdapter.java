@@ -15,10 +15,10 @@ import android.location.Location;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
 import android.widget.FrameLayout;
 
-import androidx.recyclerview.widget.RecyclerView;
-
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.MessageObject;
@@ -41,6 +41,10 @@ import org.telegram.ui.LocationActivity;
 
 import java.util.ArrayList;
 import java.util.Locale;
+
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.vision.Frame;
 
 public class LocationActivityAdapter extends BaseLocationAdapter implements LocationController.LocationFetchCallback {
 

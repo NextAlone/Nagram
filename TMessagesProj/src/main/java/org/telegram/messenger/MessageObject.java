@@ -6445,7 +6445,7 @@ public class MessageObject {
             for (int a = 0; a < getDocument().attributes.size(); a++) {
                 TLRPC.DocumentAttribute attribute = getDocument().attributes.get(a);
                 if (attribute instanceof TLRPC.TL_documentAttributeAudio) {
-                    if (attribute.duration < MessagesController.getInstance(currentAccount).ringtoneDurationMax * 2) {
+                    if (attribute.duration < 60) {
                         return true;
                     }
                 }

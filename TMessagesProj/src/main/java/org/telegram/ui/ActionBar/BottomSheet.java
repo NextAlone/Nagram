@@ -919,9 +919,6 @@ public class BottomSheet extends Dialog {
         super.onCreate(savedInstanceState);
 
         Window window = getWindow();
-        /*if (Build.VERSION.SDK_INT >= 30) {
-            window.setDecorFitsSystemWindows(true);
-        }*/
         window.setWindowAnimations(R.style.DialogNoAnimation);
         setContentView(container, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 

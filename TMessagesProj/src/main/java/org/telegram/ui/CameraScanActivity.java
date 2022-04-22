@@ -204,6 +204,7 @@ public class CameraScanActivity extends BaseFragment {
                 actionBarLayout[0] = null;
             }
         };
+        bottomSheet.setUseLightStatusBar(false);
         AndroidUtilities.setLightNavigationBar(bottomSheet.getWindow(), false);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             bottomSheet.getWindow().setNavigationBarColor(0xff000000);
@@ -371,7 +372,7 @@ public class CameraScanActivity extends BaseFragment {
                     canvas.drawRect(x, y, x + sizex, y + sizey, paint);
 
                     final int lineWidth = AndroidUtilities.lerp(0, AndroidUtilities.dp(4), Math.min(1, qrAppearingValue * 20f)),
-                        halfLineWidth = lineWidth / 2;
+                              halfLineWidth = lineWidth / 2;
                     final int lineLength = AndroidUtilities.lerp(Math.min(sizex, sizey), AndroidUtilities.dp(20), Math.min(1.2f, (float) Math.pow(qrAppearingValue, 1.8f)));
 
                     cornerPaint.setAlpha((int) (255 * Math.min(1, qrAppearingValue)));
@@ -433,6 +434,7 @@ public class CameraScanActivity extends BaseFragment {
         } else {
             actionBar.setBackgroundDrawable(null);
             actionBar.setAddToContainer(false);
+            actionBar.setTitleColor(0xffffffff);
             actionBar.setItemsColor(0xffffffff, false);
             actionBar.setItemsBackgroundColor(0x22ffffff, false);
             viewGroup.setBackgroundColor(Theme.getColor(Theme.key_wallet_blackBackground));
@@ -967,9 +969,9 @@ public class CameraScanActivity extends BaseFragment {
                 }
 
                 if (( // finish because...
-                    (recognizeIndex == 0 && res != null && res.bounds == null && !qrLoading) || // first recognition doesn't have bounds
-                        (SystemClock.elapsedRealtime() - recognizedStart > 1000 && !qrLoading) // got more than 1 second and nothing is loading
-                ) && recognizedText != null) {
+                      (recognizeIndex == 0 && res != null && res.bounds == null && !qrLoading) || // first recognition doesn't have bounds
+                      (SystemClock.elapsedRealtime() - recognizedStart > 1000 && !qrLoading) // got more than 1 second and nothing is loading
+                    ) && recognizedText != null) {
                     if (cameraView != null && cameraView.getCameraSession() != null) {
                         CameraController.getInstance().stopPreview(cameraView.getCameraSession());
                     }
@@ -1031,9 +1033,9 @@ public class CameraScanActivity extends BaseFragment {
                     } else {
 //                        bounds.set(code.getBoundingBox());
                         float minX = Float.MAX_VALUE,
-                            maxX = Float.MIN_VALUE,
-                            minY = Float.MAX_VALUE,
-                            maxY = Float.MIN_VALUE;
+                              maxX = Float.MIN_VALUE,
+                              minY = Float.MAX_VALUE,
+                              maxY = Float.MIN_VALUE;
                         for (Point point : code.cornerPoints) {
                             minX = Math.min(minX, point.x);
                             maxX = Math.max(maxX, point.x);
@@ -1069,9 +1071,9 @@ public class CameraScanActivity extends BaseFragment {
                     bounds = null;
                 } else {
                     float minX = Float.MAX_VALUE,
-                        maxX = Float.MIN_VALUE,
-                        minY = Float.MAX_VALUE,
-                        maxY = Float.MIN_VALUE;
+                          maxX = Float.MIN_VALUE,
+                          minY = Float.MAX_VALUE,
+                          maxY = Float.MIN_VALUE;
                     for (ResultPoint point : result.getResultPoints()) {
                         minX = Math.min(minX, point.getX());
                         maxX = Math.max(maxX, point.getX());
