@@ -143,7 +143,7 @@ jobs:
           ccache -o max_size=10G
           ccache -o hash_dir=false
           ccache -o compiler_check='%compiler% -dumpmachine; %compiler% -dumpversion'
-          ./gradlew :TMessagesProj:publishReleaseBundle
+          ./gradlew :TMessagesProj:publishPlayBundle
 
 
           

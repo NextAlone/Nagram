@@ -55,5 +55,5 @@ jobs:
           ccache -o compiler_check='%compiler% -dumpmachine; %compiler% -dumpversion'
       - name: Debug Build
         run: |
-          ./gradlew TMessagesProj:assembleDebug
+          ./gradlew TMessagesProj:assembleArm64Debug
           ccache -s
