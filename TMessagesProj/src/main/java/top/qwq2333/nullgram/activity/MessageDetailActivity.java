@@ -224,23 +224,10 @@ public class MessageDetailActivity extends BaseFragment implements
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener((view, position, x, y) -> {
             if (position != endRow) {
-                if (getMessagesController().isChatNoForwards(toChat) && (position == messageRow
-                    || position == captionRow)) {
-                    if (toChat.broadcast) {
-                        BulletinFactory.of(this).createErrorBulletin(
-                            LocaleController.getString("ForwardsRestrictedInfoChannel",
-                                R.string.ForwardsRestrictedInfoChannel)).show();
-                    } else {
-                        BulletinFactory.of(this).createErrorBulletin(
-                            LocaleController.getString("ForwardsRestrictedInfoGroup",
-                                R.string.ForwardsRestrictedInfoGroup)).show();
-                    }
-                } else {
-                    TextDetailSettingsCell textCell = (TextDetailSettingsCell) view;
-                    AndroidUtilities.addToClipboard(EntitiesHelper.commonizeSpans(textCell.getValueTextView().getText()));
-                    BulletinFactory.of(this).createCopyBulletin(
-                        LocaleController.formatString("TextCopied", R.string.TextCopied)).show();
-                }
+                TextDetailSettingsCell textCell = (TextDetailSettingsCell) view;
+                AndroidUtilities.addToClipboard(EntitiesHelper.commonizeSpans(textCell.getValueTextView().getText()));
+                BulletinFactory.of(this).createCopyBulletin(
+                    LocaleController.formatString("TextCopied", R.string.TextCopied)).show();
             }
 
         });
