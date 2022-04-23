@@ -89,6 +89,7 @@ public class ChatSettingActivity extends BaseFragment {
     private int ignoreReactionMentionRow;
     private int showForwardDateRow;
     private int hideTimeForStickerRow;
+    private int showMessageIDRow;
     private int chat2Row;
 
 
@@ -286,6 +287,13 @@ public class ChatSettingActivity extends BaseFragment {
                         ConfigManager.getBooleanOrFalse(Defines.hideTimeForSticker)
                     );
                 }
+            } else if (position == showMessageIDRow) {
+                ConfigManager.toggleBoolean(Defines.showMessageID);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(
+                        ConfigManager.getBooleanOrFalse(Defines.showMessageID)
+                    );
+                }
             }
         });
 
@@ -339,6 +347,7 @@ public class ChatSettingActivity extends BaseFragment {
         ignoreReactionMentionRow = rowCount++;
         showForwardDateRow = rowCount++;
         hideTimeForStickerRow = rowCount++;
+        showMessageIDRow = rowCount++;
         chat2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -569,6 +578,12 @@ public class ChatSettingActivity extends BaseFragment {
                             LocaleController.getString("showForwardName",
                                 R.string.hideTimeForSticker),
                             ConfigManager.getBooleanOrFalse(Defines.hideTimeForSticker),
+                            true);
+                    } else if (position == showMessageIDRow) {
+                        textCell.setTextAndCheck(
+                            LocaleController.getString("showMessageID",
+                                R.string.showMessageID),
+                            ConfigManager.getBooleanOrFalse(Defines.showMessageID),
                             true);
                     }
                     break;

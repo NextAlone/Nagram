@@ -60,6 +60,7 @@ public class Defines {
     public static final String avatarBackgroundBlur = "avatarBackgroundBlur";
     public static final String avatarBackgroundDarken = "avatarBackgroundDarken";
     public static final String hideTimeForSticker = "hideTimeForSticker";
+    public static final String showMessageID = "showMessageID";
 
     // Custom API
     public static final String customAPI = "customAPI";

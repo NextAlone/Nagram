@@ -10411,6 +10411,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             timeTextWidth += width;
             timeWidth += width;
         }
+        if (ConfigManager.getBooleanOrFalse(Defines.showMessageID) && messageObject.messageOwner != null)
+            currentTimeString = currentTimeString + " | " + messageObject.messageOwner.id;
     }
 
     private boolean shouldDrawSelectionOverlay() {
