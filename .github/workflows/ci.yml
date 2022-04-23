@@ -169,7 +169,7 @@ jobs:
         run: |
             mkdir apks
             find artifacts -name "*.apk" -exec cp {} apks \;
-            echo "APK_FILE_UPLOAD=$(find apks -name '*arm64-v8a*.apk')" >> $GITHUB_ENV
+            echo "APK_FILE_UPLOAD=$(find apks -name '*arm64*.apk')" >> $GITHUB_ENV
       - name: Get Apk Info
         id: apk
         uses: JantHsueh/get-apk-info-action@master
