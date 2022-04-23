@@ -63,8 +63,8 @@ jobs:
           EOF
           ./gradlew TMessagesProj:assembleRelease
           ccache -s
-          echo "APK_FILE=$(find TMessagesProj/build/outputs/apk -name '*arm64-v8a*.apk')" >> $GITHUB_ENV
-          echo "APK_FILE_ARMV7=$(find TMessagesProj/build/outputs/apk -name '*armeabi*.apk')" >> $GITHUB_ENV
+          echo "APK_FILE=$(find TMessagesProj/build/outputs/apk -name '*arm64*.apk')" >> $GITHUB_ENV
+          echo "APK_FILE_ARMV7=$(find TMessagesProj/build/outputs/apk -name '*arm32*.apk')" >> $GITHUB_ENV
           echo "APK_FILE_X86=$(find TMessagesProj/build/outputs/apk -name '*x86.apk')" >> $GITHUB_ENV
           echo "APK_FILE_X64=$(find TMessagesProj/build/outputs/apk -name '*x86_64*.apk')" >> $GITHUB_ENV
 
