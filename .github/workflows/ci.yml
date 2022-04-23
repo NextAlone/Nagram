@@ -180,7 +180,7 @@ jobs:
         run: |
           chmod +x telegram-bot-api-binary
           ./telegram-bot-api-binary --api-id=21724 --api-hash=3e0cb5efcd52300aec5994fdfc5bdc16 --local 2>&1 > /dev/null &
-          curl https://gist.githubusercontent.com/qwq233/b6c300b531e07622286c6241d36f96f3/raw/08d3b01bdb39d60e9e18373692619acc019556f8/uploadCI.py -o uploadCI.py
+          curl https://raw.githubusercontent.com/qwq233/qwq233/master/uploadCI.py -o uploadCI.py
           python uploadCI.py
         env:
             TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
