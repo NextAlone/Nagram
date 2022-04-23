@@ -10411,8 +10411,6 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             timeTextWidth += width;
             timeWidth += width;
         }
-        if (ConfigManager.getBooleanOrFalse(Defines.showMessageID) && messageObject.messageOwner != null)
-            currentTimeString = currentTimeString + " | " + messageObject.messageOwner.id;
     }
 
     private boolean shouldDrawSelectionOverlay() {
@@ -11308,7 +11306,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         if ((!autoPlayingMedia || !MediaController.getInstance().isPlayingMessageAndReadyToDraw(currentMessageObject) || isRoundVideo) && !transitionParams.animateBackgroundBoundsInner) {
             drawOverlays(canvas);
         }
-        if ((drawTime || !mediaBackground) && !forceNotDrawTime && !transitionParams.animateBackgroundBoundsInner && !(enterTransitionInProgress && !currentMessageObject.isVoice()) && ConfigManager.getBooleanOrFalse(Defines.hideTimeForSticker)) {
+        if ((drawTime || !mediaBackground) && !forceNotDrawTime && !transitionParams.animateBackgroundBoundsInner && !(enterTransitionInProgress && !currentMessageObject.isVoice()) && !ConfigManager.getBooleanOrFalse(Defines.hideTimeForSticker)) {
             drawTime(canvas, 1f, false);
         }
 
