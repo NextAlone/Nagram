@@ -69,8 +69,7 @@ public class AppLinkVerifyBottomSheet extends BottomSheet {
             return;
         }
         Context context = fragment.getParentActivity();
-        DomainVerificationManager manager = context.getSystemService(
-            DomainVerificationManager.class);
+        DomainVerificationManager manager = context.getSystemService(DomainVerificationManager.class);
         DomainVerificationUserState userState = null;
         try {
             userState = manager.getDomainVerificationUserState(context.getPackageName());
@@ -86,9 +85,7 @@ public class AppLinkVerifyBottomSheet extends BottomSheet {
         Map<String, Integer> hostToStateMap = userState.getHostToStateMap();
         for (String key : hostToStateMap.keySet()) {
             Integer stateValue = hostToStateMap.get(key);
-            if (stateValue == null
-                || stateValue == DomainVerificationUserState.DOMAIN_STATE_VERIFIED
-                || stateValue == DomainVerificationUserState.DOMAIN_STATE_SELECTED) {
+            if (stateValue == null || stateValue == DomainVerificationUserState.DOMAIN_STATE_VERIFIED || stateValue == DomainVerificationUserState.DOMAIN_STATE_SELECTED) {
                 continue;
             }
             hasUnverified = true;
@@ -107,19 +104,13 @@ public class AppLinkVerifyBottomSheet extends BottomSheet {
         FrameLayout frameLayout = new FrameLayout(context);
 
         ImageView closeView = new ImageView(context);
-        closeView.setBackground(
-            Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector)));
+        closeView.setBackground(Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector)));
         closeView.setColorFilter(Theme.getColor(Theme.key_sheet_other));
         closeView.setImageResource(R.drawable.ic_layer_close);
-        closeView.setOnClickListener((view) -> {
-            dismiss();
-            ConfigManager.putBoolean(Defines.verifyLinkTip, true);
-        });
+        closeView.setOnClickListener((view) -> dismiss());
         int closeViewPadding = AndroidUtilities.dp(8);
-        closeView.setPadding(closeViewPadding, closeViewPadding, closeViewPadding,
-            closeViewPadding);
-        frameLayout.addView(closeView,
-            LayoutHelper.createFrame(36, 36, Gravity.TOP | Gravity.END, 6, 8, 6, 0));
+        closeView.setPadding(closeViewPadding, closeViewPadding, closeViewPadding, closeViewPadding);
+        frameLayout.addView(closeView, LayoutHelper.createFrame(36, 36, Gravity.TOP | Gravity.END, 6, 8, 6, 0));
 
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -128,30 +119,22 @@ public class AppLinkVerifyBottomSheet extends BottomSheet {
         StickerImageView imageView = new StickerImageView(context, currentAccount);
         imageView.setStickerNum(3);
         imageView.getImageReceiver().setAutoRepeat(1);
-        linearLayout.addView(imageView,
-            LayoutHelper.createLinear(144, 144, Gravity.CENTER_HORIZONTAL, 0, 16, 0, 0));
+        linearLayout.addView(imageView, LayoutHelper.createLinear(144, 144, Gravity.CENTER_HORIZONTAL, 0, 16, 0, 0));
 
         TextView title = new TextView(context);
         title.setGravity(Gravity.START);
         title.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         title.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        title.setText(LocaleController.getString("AppLinkNotVerifiedTitle",
-            R.string.AppLinkNotVerifiedTitle));
-        linearLayout.addView(title,
-            LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 21,
-                30, 21, 0));
+        title.setText(LocaleController.getString("AppLinkNotVerifiedTitle", R.string.AppLinkNotVerifiedTitle));
+        linearLayout.addView(title, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 21, 30, 21, 0));
 
         TextView description = new TextView(context);
         description.setGravity(Gravity.START);
         description.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         description.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        description.setText(AndroidUtilities.replaceTags(
-            LocaleController.getString("AppLinkNotVerifiedMessage",
-                R.string.AppLinkNotVerifiedMessage)));
-        linearLayout.addView(description,
-            LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 21,
-                15, 21, 16));
+        description.setText(AndroidUtilities.replaceTags(LocaleController.getString("AppLinkNotVerifiedMessage", R.string.AppLinkNotVerifiedMessage)));
+        linearLayout.addView(description, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 21, 15, 21, 16));
 
         TextView buttonTextView = new TextView(context);
         buttonTextView.setPadding(AndroidUtilities.dp(34), 0, AndroidUtilities.dp(34), 0);
@@ -161,20 +144,27 @@ public class AppLinkVerifyBottomSheet extends BottomSheet {
         buttonTextView.setText(LocaleController.getString("GoToSettings", R.string.GoToSettings));
 
         buttonTextView.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText));
-        buttonTextView.setBackground(
-            Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6),
-                Theme.getColor(Theme.key_featuredStickers_addButton),
-                ColorUtils.setAlphaComponent(Theme.getColor(Theme.key_windowBackgroundWhite),
-                    120)));
+        buttonTextView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6), Theme.getColor(Theme.key_featuredStickers_addButton), ColorUtils.setAlphaComponent(Theme.getColor(Theme.key_windowBackgroundWhite), 120)));
 
-        linearLayout.addView(buttonTextView,
-            LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, 0, 16, 15, 16, 16));
+        linearLayout.addView(buttonTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, 0, 16, 15, 16, 8));
 
         buttonTextView.setOnClickListener(view -> {
-            Intent intent = new Intent(
-                android.provider.Settings.ACTION_APP_OPEN_BY_DEFAULT_SETTINGS,
+            Intent intent = new Intent(android.provider.Settings.ACTION_APP_OPEN_BY_DEFAULT_SETTINGS,
                 Uri.parse("package:" + context.getPackageName()));
             context.startActivity(intent);
+        });
+
+        TextView textView = new TextView(context);
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        textView.setText(LocaleController.getString("DontAskAgain", R.string.DontAskAgain));
+        textView.setTextColor(Theme.getColor(Theme.key_featuredStickers_addButton));
+
+        linearLayout.addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, 0, 16, 0, 16, 0));
+
+        textView.setOnClickListener(view -> {
+            dismiss();
+            ConfigManager.putBoolean(Defines.verifyLinkTip, true);
         });
 
         ScrollView scrollView = new ScrollView(context);
@@ -182,4 +172,5 @@ public class AppLinkVerifyBottomSheet extends BottomSheet {
         setCustomView(scrollView);
     }
 }
+
 
