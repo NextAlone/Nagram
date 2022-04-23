@@ -18,10 +18,10 @@ val isStable = false
 var serviceAccountCredentialsFile = File(rootProject.projectDir, "service_account_credentials.json")
 
 if (serviceAccountCredentialsFile.isFile()) {
-    setupPlay(!isStable)
+    setupPlay(isStable)
     play.serviceAccountCredentials.set(serviceAccountCredentialsFile)
 } else if (System.getenv().containsKey("ANDROID_PUBLISHER_CREDENTIALS")) {
-    setupPlay(!isStable)
+    setupPlay(isStable)
 }
 
 fun setupPlay(stable: Boolean) {
