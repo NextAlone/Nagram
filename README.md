@@ -1,6 +1,6 @@
 # Nullgram
 
-[![Telegram](https://img.shields.io/static/v1?label=Telegram&message=@NullgramClient&color=0088cc)](https://t.me/NullgramClient)[![Debug build](https://github.com/qwq233/Nullgram/actions/workflows/debug.yml/badge.svg?branch=master)](https://github.com/qwq233/Nullgram/actions/workflows/debug.yml)
+[![Telegram](https://img.shields.io/static/v1?label=Telegram&message=@NullgramClient&color=0088cc)](https://t.me/NullgramClient)[![Debug build](https://github.com/qwq233/Nullgram/actions/workflows/debug.yml/badge.svg?branch=master)](https://github.com/qwq233/Nullgram/actions/workflows/debug.yml)[![Crowdin](https://badges.crowdin.net/nullgram/localized.svg)](https://crowdin.com/project/nullgram)
 
 [中文](README_CN.md)
 
