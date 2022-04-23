@@ -14,7 +14,7 @@ configurations {
     }
 }
 
-val isStable = false
+val isStable = true
 var serviceAccountCredentialsFile = File(rootProject.projectDir, "service_account_credentials.json")
 
 if (serviceAccountCredentialsFile.isFile()) {
@@ -162,7 +162,6 @@ android {
 
         versionName = if (isStable) {
             "v" + officialVersionName + "-" + (Common.getGitHeadRefsSuffix(rootProject))
-
         } else {
             "v" + officialVersionName + "-preview-" + (Common.getGitHeadRefsSuffix(rootProject))
         }
