@@ -10346,6 +10346,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         } else {
             timeString = LocaleController.getInstance().formatterDay.format((long) (messageObject.messageOwner.date) * 1000);
         }
+        if (ConfigManager.getBooleanOrFalse(Defines.showMessageID) && messageObject.messageOwner != null)
+            timeString = messageObject.messageOwner.id + " | ";
         if (signString != null) {
             if (messageObject.messageOwner.fwd_from != null && messageObject.messageOwner.fwd_from.imported) {
                 currentTimeString = " " + timeString;
@@ -11306,7 +11308,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         if ((!autoPlayingMedia || !MediaController.getInstance().isPlayingMessageAndReadyToDraw(currentMessageObject) || isRoundVideo) && !transitionParams.animateBackgroundBoundsInner) {
             drawOverlays(canvas);
         }
-        if ((drawTime || !mediaBackground) && !forceNotDrawTime && !transitionParams.animateBackgroundBoundsInner && !(enterTransitionInProgress && !currentMessageObject.isVoice()) && !ConfigManager.getBooleanOrFalse(Defines.hideTimeForSticker)) {
+        if ((drawTime || !mediaBackground) && !forceNotDrawTime && !transitionParams.animateBackgroundBoundsInner && !(enterTransitionInProgress && !currentMessageObject.isVoice())
+            && !(ConfigManager.getBooleanOrFalse(Defines.hideTimeForSticker) && currentMessageObject.isAnyKindOfSticker())) {
             drawTime(canvas, 1f, false);
         }
 
