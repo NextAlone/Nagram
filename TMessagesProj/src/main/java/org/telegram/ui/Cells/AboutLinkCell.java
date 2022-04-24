@@ -73,6 +73,7 @@ public class AboutLinkCell extends FrameLayout {
     private FrameLayout showMoreTextBackgroundView;
     private FrameLayout bottomShadow;
     private Drawable showMoreBackgroundDrawable;
+    private boolean needDivider;
 
     private LinkSpanDrawable pressedLink;
     private LinkSpanDrawable.LinkCollector links;
@@ -331,11 +332,11 @@ public class AboutLinkCell extends FrameLayout {
         invalidate();
     }
 
-    public void setText(String text, boolean parseLinks) {
-        setTextAndValue(text, null, parseLinks);
+    public void setText(String text, boolean parseLinks, boolean divider) {
+        setTextAndValue(text, null, parseLinks, divider);
     }
 
-    public void setTextAndValue(String text, String value, boolean parseLinks) {
+    public void setTextAndValue(String text, String value, boolean parseLinks, boolean divider) {
         if (TextUtils.isEmpty(text) || TextUtils.equals(text, oldText)) {
             return;
         }
@@ -359,6 +360,7 @@ public class AboutLinkCell extends FrameLayout {
             valueTextView.setText(value);
             valueTextView.setVisibility(VISIBLE);
         }
+        needDivider = divider;
         if (wasValueVisibility != valueTextView.getVisibility()) {
             checkTextLayout(lastMaxWidth, true);
         }
@@ -706,6 +708,13 @@ public class AboutLinkCell extends FrameLayout {
     }
     private float easeInOutCubic(float x) {
         return x < 0.5 ? 4 * x * x * x : 1 - (float) Math.pow(-2 * x + 2, 3) / 2;
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        if (needDivider) {
+            canvas.drawLine(LocaleController.isRTL ? 0 : AndroidUtilities.dp(20), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
+        }
     }
 
     @Override

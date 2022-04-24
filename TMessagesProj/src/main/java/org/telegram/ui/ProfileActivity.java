@@ -4158,7 +4158,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         if (view instanceof AboutLinkCell) {
                             AboutLinkCell aboutLinkCell = (AboutLinkCell) view;
                             if (clickableBio != null) {
-                                aboutLinkCell.setTextAndValue(clickableBio, channelInfoRow != -1 ? null:LocaleController.getString("UserBio", R.string.UserBio), true);
+                                aboutLinkCell.setTextAndValue(clickableBio, channelInfoRow != -1 ? null:LocaleController.getString("UserBio", R.string.UserBio), true, true);
                                 currentBio = clickableBio;
                                 clickableBio = null;
                             }
@@ -7510,7 +7510,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         } else {
                             text = LocaleController.getString("PhoneHidden", R.string.PhoneHidden);
                         }
-                        detailCell.setTextAndValue(text, LocaleController.getString("PhoneMobile", R.string.PhoneMobile), false);
+                        detailCell.setTextAndValue(text, LocaleController.getString("PhoneMobile", R.string.PhoneMobile), true);
                     } else if (position == idRow) {
                         final long did;
                         if (dialogId != 0) {
@@ -7530,10 +7530,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             } else {
                                 text = "-";
                             }
-                            detailCell.setTextAndValue(text, LocaleController.getString("Username", R.string.Username), false);
+                            detailCell.setTextAndValue(text, LocaleController.getString("Username", R.string.Username), true);
                         } else if (currentChat != null) {
                             TLRPC.Chat chat = getMessagesController().getChat(chatId);
-                            detailCell.setTextAndValue(getMessagesController().linkPrefix + "/" + chat.username, LocaleController.getString("InviteLink", R.string.InviteLink), false);
+                            detailCell.setTextAndValue(getMessagesController().linkPrefix + "/" + chat.username, LocaleController.getString("InviteLink", R.string.InviteLink), true);
                         }
                     } else if (position == locationRow) {
                         if (chatInfo != null && chatInfo.location instanceof TLRPC.TL_channelLocation) {
@@ -7574,10 +7574,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             if (clickableBio != null) {
                                 value = currentBio;
                             }
-                            aboutLinkCell.setTextAndValue(value, LocaleController.getString("UserBio", R.string.UserBio), true);
+                            aboutLinkCell.setTextAndValue(value, LocaleController.getString("UserBio", R.string.UserBio), true, true);
                             currentBio = userInfo != null ? userInfo.about : null;
                         } else {
-                            aboutLinkCell.setTextAndValue( LocaleController.getString("UserBioDetail", R.string.UserBioDetail), LocaleController.getString("UserBio", R.string.UserBio), false);
+                            aboutLinkCell.setTextAndValue( LocaleController.getString("UserBioDetail", R.string.UserBioDetail), LocaleController.getString("UserBio", R.string.UserBio), true, true);
                             currentBio = null;
                         }
                     } else if (position == userInfoRow) {
@@ -7585,7 +7585,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         if (clickableBio != null) {
                             about = currentBio;
                         }
-                        aboutLinkCell.setTextAndValue(about, LocaleController.getString("UserBio", R.string.UserBio), true);
+                        aboutLinkCell.setTextAndValue(about, LocaleController.getString("UserBio", R.string.UserBio), true, true);
                     } else if (position == channelInfoRow) {
                         String text = chatInfo.about;
                         while (text.contains("\n\n\n")) {
@@ -7594,7 +7594,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         if (clickableBio != null) {
                             text = currentBio;
                         }
-                        aboutLinkCell.setText(text, true);
+                        aboutLinkCell.setText(text, true, true);
                     }
                     aboutLinkCell.setOnClickListener(e -> processOnClickOrPress(position, aboutLinkCell));
                     aboutLinkCell.setOnLongClickListener(e -> {
