@@ -24,6 +24,7 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "androidx.sharetarget:sharetarget:1.2.0-rc01"
     implementation 'com.google.android.material:material:1.5.0'
+    implementation 'com.google.android.gms:play-services-measurement:20.1.2'
 
     compileOnly 'org.checkerframework:checker-qual:3.21.3'
     compileOnly 'org.checkerframework:checker-compat-qual:2.5.5'
