@@ -456,7 +456,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
                 return 2;
             } else if (position == hideStickerTimeRow || position == unlimitedRecentStickersRow || position == hideSendAsChannelRow ||
                        position == hideKeyboardOnScrollRow || position == archiveOnPullRow || position == dateOfForwardedMsgRow ||
-                       position == disableReactionsRow || position == disableGreetingStickerRow || position = disableJumpToNextChannelRow ||
+                       position == disableReactionsRow || position == disableGreetingStickerRow || position == disableJumpToNextChannelRow ||
                        position == rearVideoMessagesRow || position == disableCameraRow || position == disableProximityEventsRow ||
                        position == pauseOnMinimizeRow || position == disablePlaybackRow) {
                 return 3;
