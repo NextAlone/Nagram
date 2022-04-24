@@ -738,7 +738,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             repeatButton.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector), 1, AndroidUtilities.dp(18)));
         }
         if (!messageObject.isVoice()) {
-        bottomView.addView(repeatButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP));
+            bottomView.addView(repeatButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP));
         }
         repeatButton.setOnClickListener(v -> {
             updateSubMenu();
@@ -926,7 +926,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             prevButton.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector), 1, AndroidUtilities.dp(22)));
         }
         if (!messageObject.isVoice()) {
-        bottomView.addView(prevButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP));
+            bottomView.addView(prevButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP));
         }
         prevButton.setContentDescription(LocaleController.getString("AccDescrPrevious", R.string.AccDescrPrevious));
 
@@ -1052,7 +1052,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             nextButton.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector), 1, AndroidUtilities.dp(22)));
         }
         if (!messageObject.isVoice()) {
-        bottomView.addView(nextButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP));
+            bottomView.addView(nextButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP));
         }
         nextButton.setContentDescription(LocaleController.getString("Next", R.string.Next));
 
@@ -1063,8 +1063,10 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         if (Build.VERSION.SDK_INT >= 21) {
             likeButton.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector), 1, AndroidUtilities.dp(24)));
         }
-        bottomView.addView(likeButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP));
-        
+        if (!messageObject.isVoice()) {
+            bottomView.addView(likeButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP));
+        }
+
         String ctsId = Long.toString(ExteraConfig.channelToSave);
         likeButton.setOnLongClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), resourcesProvider);
