@@ -31,6 +31,7 @@ public class ExteraConfig {
     public static float stickerSize = 14.0f;
     public static boolean hideStickerTime;
     public static boolean unlimitedRecentStickers;
+    public static boolean sendMessageBeforeSendSticker;
 
     public static boolean hideSendAsChannel;
     public static boolean hideKeyboardOnScroll;
@@ -59,7 +60,7 @@ public class ExteraConfig {
     public static boolean inviteFriends;
     public static boolean telegramFeatures;
     public static int eventType;
-    
+
     public static long channelToSave = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
 
     private static boolean configLoaded;
@@ -91,6 +92,7 @@ public class ExteraConfig {
             stickerSize = preferences.getFloat("stickerSize", 14.0f);
             hideStickerTime = preferences.getBoolean("hideStickerTime", false);
             unlimitedRecentStickers = preferences.getBoolean("unlimitedRecentStickers", false);
+            sendMessageBeforeSendSticker = preferences.getBoolean("sendMessageBeforeSendSticker", false);
 
             hideSendAsChannel = preferences.getBoolean("hideSendAsChannel", false);
             hideKeyboardOnScroll = preferences.getBoolean("hideKeyboardOnScroll", true);
@@ -121,7 +123,7 @@ public class ExteraConfig {
             eventType = preferences.getInt("eventType", 0);
 
             channelToSave = preferences.getLong("channelToSave", UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId());
-            
+
             configLoaded = true;
         }
     }
@@ -129,7 +131,7 @@ public class ExteraConfig {
     public static boolean isExtera(TLRPC.Chat chat) {
         return Arrays.stream(OFFICIAL_CHANNELS).anyMatch(id -> id == chat.id);
     }
-    
+
     public static boolean isExteraDev(TLRPC.User user) {
         return Arrays.stream(DEVS).anyMatch(id -> id == user.id);
     }
@@ -219,6 +221,14 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("unlimitedRecentStickers", unlimitedRecentStickers);
+        editor.apply();
+    }
+
+    public static void toggleSendMessageBeforeSendSticker() {
+        sendMessageBeforeSendSticker = !sendMessageBeforeSendSticker;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("sendMessageBeforeSendSticker", sendMessageBeforeSendSticker);
         editor.apply();
     }
 
@@ -412,7 +422,7 @@ public class ExteraConfig {
         editor.putBoolean("telegramFeatures", telegramFeatures);
         editor.apply();
     }
-    
+
     public static void changeChannelToSave(long id) {
         channelToSave = id;
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);

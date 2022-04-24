@@ -35,6 +35,7 @@
     <string name="StickerSize">Размер стикера</string>
     <string name="StickerTime">Скрыть время под стикером</string>
     <string name="UnlimitedRecentStickers">Неограниченные стикеры</string>
+    <string name="SendMessageBeforeSendSticker">Отправить сообщение перед отправкой стикера</string>
 
     <string name="StickerSizeDialogMessageReplyTo">мяу</string>
     <string name="StickerSizeDialogMessage">ооо, ну какой же он милашкин!</string>
