@@ -10287,6 +10287,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         } else {
             timeString = LocaleController.getInstance().formatterDay.format((long) (messageObject.messageOwner.date) * 1000);
         }
+        if (ExteraConfig.showMessageID && messageObject.messageOwner != null) {
+            timeString = timeString + " (" + messageObject.messageOwner.id + ")";
+        }
         if (signString != null) {
             if (messageObject.messageOwner.fwd_from != null && messageObject.messageOwner.fwd_from.imported) {
                 currentTimeString = " " + timeString;

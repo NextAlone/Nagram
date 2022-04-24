@@ -39,6 +39,7 @@ public class ExteraConfig {
     public static boolean disableJumpToNextChannel;
     public static boolean archiveOnPull;
     public static boolean dateOfForwardedMsg;
+    public static boolean showMessageID;
 
     public static boolean rearVideoMessages;
     public static boolean disableCamera;
@@ -98,6 +99,7 @@ public class ExteraConfig {
             disableGreetingSticker = preferences.getBoolean("disableGreetingSticker", false);
             archiveOnPull = preferences.getBoolean("archiveOnPull", true);
             dateOfForwardedMsg = preferences.getBoolean("dateOfForwardedMsg", false);
+            showMessageID = preferences.getBoolean("showMessageID", false);
 
             rearVideoMessages = preferences.getBoolean("rearVideoMessages", false);
             disableCamera = preferences.getBoolean("disableCamera", false);
@@ -273,6 +275,14 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("dateOfForwardedMsg", dateOfForwardedMsg);
+        editor.apply();
+    }
+
+    public static void toggleShowMessageID() {
+        showMessageID = !showMessageID;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("showMessageID", showMessageID);
         editor.apply();
     }
 

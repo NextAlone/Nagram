@@ -49,6 +49,7 @@
     <string name="DisableJumpToNextChannel">Disable \"Jump to next channel\"</string>
     <string name="ArchiveOnPull">Open archive on pulldown</string>
     <string name="DateOfForwardedMsg">Show date of forwarded message</string>
+    <string name="ShowMessageID">Show message ID</string>
 
     <string name="Media">Media</string>
     <string name="RearVideoMessages">Rear camera in video messages</string>
