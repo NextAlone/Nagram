@@ -25131,7 +25131,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             return;
         }
         boolean noforwards = getMessagesController().isChatNoForwards(currentChat) || (messageObject != null && messageObject.messageOwner != null && messageObject.messageOwner.noforwards);
-        boolean noforwardsOverride = noforwards && !NekoXConfig.disableFlagSecure;
+        boolean noforwardsOverride = noforwards && !NekoXConfig.disableFlagSecure && !NaConfig.INSTANCE.getForceCopy().Bool();
         if (url instanceof URLSpanMono) {
             if (!noforwardsOverride) {
                 ((URLSpanMono) url).copyToClipboard();
