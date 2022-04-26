@@ -146,6 +146,11 @@ object NaConfig {
         ConfigItem.configTypeString,
         LocaleController.getString("NekoX", R.string.NekoX)
     )
+    val CodeSyntaxHighlight = addConfig(
+        "CodeSyntaxHighlight",
+        ConfigItem.configTypeBool,
+        true
+    )
 
     fun addConfig(
         k: String,

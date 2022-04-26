@@ -35,11 +35,10 @@ import android.text.style.CharacterStyle;
 import android.util.SparseArray;
 import android.widget.Toast;
 
+import androidx.collection.LongSparseArray;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
-
-import androidx.collection.LongSparseArray;
 
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
@@ -4798,15 +4797,21 @@ public class MediaDataController extends BaseController {
         return runs;
     }
 
-    public void addStyle(int flags, int spanStart, int spanEnd, ArrayList<TLRPC.MessageEntity> entities) {
+    public void addStyle(TextStyleSpan.TextStyleRun styleRun, int spanStart, int spanEnd, ArrayList<TLRPC.MessageEntity> entities) {
+        int flags = styleRun.flags;
         if ((flags & TextStyleSpan.FLAG_STYLE_SPOILER) != 0)
             entities.add(setEntityStartEnd(new TLRPC.TL_messageEntitySpoiler(), spanStart, spanEnd));
         if ((flags & TextStyleSpan.FLAG_STYLE_BOLD) != 0)
             entities.add(setEntityStartEnd(new TLRPC.TL_messageEntityBold(), spanStart, spanEnd));
         if ((flags & TextStyleSpan.FLAG_STYLE_ITALIC) != 0)
             entities.add(setEntityStartEnd(new TLRPC.TL_messageEntityItalic(), spanStart, spanEnd));
-        if ((flags & TextStyleSpan.FLAG_STYLE_MONO) != 0)
-            entities.add(setEntityStartEnd(new TLRPC.TL_messageEntityCode(), spanStart, spanEnd));
+        if ((flags & TextStyleSpan.FLAG_STYLE_MONO) != 0) {
+            if (styleRun.urlEntity != null) {
+                entities.add(setEntityStartEnd(styleRun.urlEntity, spanStart, spanEnd));
+            } else {
+                entities.add(setEntityStartEnd(new TLRPC.TL_messageEntityCode(), spanStart, spanEnd));
+            }
+        }
         if ((flags & TextStyleSpan.FLAG_STYLE_STRIKE) != 0)
             entities.add(setEntityStartEnd(new TLRPC.TL_messageEntityStrike(), spanStart, spanEnd));
         if ((flags & TextStyleSpan.FLAG_STYLE_UNDERLINE) != 0)
@@ -4912,7 +4917,7 @@ public class MediaDataController extends BaseController {
                     if (entities == null) {
                         entities = new ArrayList<>();
                     }
-                    addStyle(span.getStyleFlags(), spanStart, spanEnd, entities);
+                    addStyle(span.getTextStyleRun(), spanStart, spanEnd, entities);
                 }
             }
 
@@ -4948,7 +4953,7 @@ public class MediaDataController extends BaseController {
                     entities.add(entity);
                     TextStyleSpan.TextStyleRun style = spansUrlReplacement[b].getTextStyleRun();
                     if (style != null) {
-                        addStyle(style.flags, entity.offset, entity.offset + entity.length, entities);
+                        addStyle(style, entity.offset, entity.offset + entity.length, entities);
                     }
                 }
             }

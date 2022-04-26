@@ -21,4 +21,8 @@
     <string name="ScrollableChatPreview">Scrollable Chat Preview</string>
     <string name="CustomTitle">Custom Title</string>
     <string name="CustomTitleHint">Leave blank to use Nagram</string>
+    <string name="codeSyntaxHighlight">Code syntax highlight</string>
+    <string name="CreateMono">Create Monospace</string>
+    <string name="CreateMonoLanguage">Code language</string>
+    <string name="codeSyntaxHighlightDetails">Thanks to prismjs and nekogram</string>
 </resources>
