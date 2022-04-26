@@ -4,7 +4,7 @@ apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
 def verName = "8.6.2"
-def verCode = 1101
+def verCode = 1102
 
 if (System.getenv("DEBUG_BUILD") == "true") {
     verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:%h -n 1").trim()
@@ -383,6 +383,8 @@ dependencies {
 dependencies {
     // add for undo and redo
     implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:4.3'
+    // add splash screen
+    implementation("androidx.core:core-splashscreen:1.0.0-beta02")
 }
 
 apply plugin: "com.google.gms.google-services"
