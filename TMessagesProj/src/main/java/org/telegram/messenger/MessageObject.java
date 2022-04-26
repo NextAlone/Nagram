@@ -28,7 +28,7 @@ import android.util.Base64;
 
 import androidx.collection.LongSparseArray;
 
-import com.blxueya.gugugramx.ui.syntaxhighlight.SyntaxHighlight;
+import xyz.nextalone.nagram.ui.syntaxhighlight.SyntaxHighlight;
 
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.browser.Browser;
