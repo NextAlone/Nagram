@@ -1,6 +1,7 @@
 package tw.nekomimi.nekogram.ui
 
 import android.content.Context
+import android.content.DialogInterface
 import android.text.TextUtils
 import android.util.TypedValue
 import android.view.Gravity
@@ -326,6 +327,16 @@ class BottomBuilder(val ctx: Context) {
     fun show() = builder.show()
     fun dismiss() {
         builder.dismissRunnable.run()
+    }
+
+    fun setOnPreDismissListener(onDismissListener: DialogInterface.OnDismissListener?): BottomBuilder {
+        builder.setOnPreDismissListener(onDismissListener)
+        return this
+    }
+
+    fun fixNavigationBar() : BottomBuilder{
+        builder.fixNavigationBar()
+        return this
     }
 
 }

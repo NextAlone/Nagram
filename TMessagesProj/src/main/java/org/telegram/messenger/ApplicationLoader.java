@@ -230,6 +230,7 @@ public class ApplicationLoader extends Application {
         applicationInited = true;
 
         SharedConfig.loadConfig();
+        SharedPrefsHelper.init(applicationContext);
         UserConfig.getInstance(0).loadConfig();
 
         LinkedList<Runnable> postRun = new LinkedList<>();

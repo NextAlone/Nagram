@@ -1908,12 +1908,16 @@ public class ImageLoader {
                 }
 
                 @Override
-                public void fileDidLoaded(final String location, final File finalFile, final int type) {
+                public void fileDidLoaded(final String location, final File finalFile, Object parentObject, final int type) {
                     fileProgresses.remove(location);
                     AndroidUtilities.runOnUIThread(() -> {
-                        if (SharedConfig.saveToGallery && telegramPath != null && finalFile != null && (location.endsWith(".mp4") || location.endsWith(".jpg"))) {
-                            if (finalFile.toString().startsWith(telegramPath.toString())) {
-                                AndroidUtilities.addMediaToGallery(finalFile.toString());
+                        if (SharedConfig.saveToGallery && finalFile != null && (location.endsWith(".mp4") || location.endsWith(".jpg"))) {
+                            if (parentObject instanceof MessageObject) {
+                                MessageObject messageObject = (MessageObject) parentObject;
+                                // test add only for peer dialogs
+                                if (messageObject.getDialogId() >= 0) {
+                                    AndroidUtilities.addMediaToGallery(finalFile.toString());
+                                }
                             }
                         }
                         NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.fileLoaded, location, finalFile);
@@ -3780,6 +3784,10 @@ public class ImageLoader {
             }
         }
         return null;
+    }
+
+    public DispatchQueue getCacheOutQueue() {
+        return cacheOutQueue;
     }
 
     public static class MessageThumb {

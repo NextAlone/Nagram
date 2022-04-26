@@ -1932,6 +1932,16 @@ public boolean retriedToSend;
                 objArr.add(newMsgObj);
                 arr.add(newMsg);
 
+                if (msgObj.replyMessageObject != null) {
+                    for (int i = 0; i < messages.size(); i++) {
+                        if (messages.get(i).getId() == msgObj.replyMessageObject.getId()) {
+                            newMsgObj.messageOwner.replyMessage = msgObj.replyMessageObject.messageOwner;
+                            newMsgObj.replyMessageObject = msgObj.replyMessageObject;
+                            break;
+                        }
+                    }
+                }
+
                 putToSendingMessages(newMsg, scheduleDate != 0);
                 boolean differentDialog = false;
 
@@ -2744,6 +2754,27 @@ public boolean retriedToSend;
                     passwordFragment.needHideProgress();
                     passwordFragment.finishFragment();
                 }
+
+                long uid = messageObject.getFromChatId();
+                if (messageObject.messageOwner.via_bot_id != 0) {
+                    uid = messageObject.messageOwner.via_bot_id;
+                }
+                String name = null;
+                if (uid > 0) {
+                    TLRPC.User user = getMessagesController().getUser(uid);
+                    if (user != null) {
+                        name = ContactsController.formatName(user.first_name, user.last_name);
+                    }
+                } else {
+                    TLRPC.Chat chat = getMessagesController().getChat(-uid);
+                    if (chat != null) {
+                        name = chat.title;
+                    }
+                }
+                if (name == null) {
+                    name = "bot";
+                }
+
                 if (button instanceof TLRPC.TL_keyboardButtonUrlAuth) {
                     if (response instanceof TLRPC.TL_urlAuthResultRequest) {
                         TLRPC.TL_urlAuthResultRequest res = (TLRPC.TL_urlAuthResultRequest) response;
@@ -2763,26 +2794,8 @@ public boolean retriedToSend;
                     if (!cacheFinal && res.cache_time != 0 && !button.requires_password) {
                         getMessagesStorage().saveBotCache(key, res);
                     }
+
                     if (res.message != null) {
-                        long uid = messageObject.getFromChatId();
-                        if (messageObject.messageOwner.via_bot_id != 0) {
-                            uid = messageObject.messageOwner.via_bot_id;
-                        }
-                        String name = null;
-                        if (uid > 0) {
-                            TLRPC.User user = getMessagesController().getUser(uid);
-                            if (user != null) {
-                                name = ContactsController.formatName(user.first_name, user.last_name);
-                            }
-                        } else {
-                            TLRPC.Chat chat = getMessagesController().getChat(-uid);
-                            if (chat != null) {
-                                name = chat.title;
-                            }
-                        }
-                        if (name == null) {
-                            name = "bot";
-                        }
                         if (res.alert) {
                             if (parentFragment.getParentActivity() == null) {
                                 return;
@@ -2798,10 +2811,6 @@ public boolean retriedToSend;
                     } else if (res.url != null) {
                         if (parentFragment.getParentActivity() == null) {
                             return;
-                        }
-                        long uid = messageObject.getFromChatId();
-                        if (messageObject.messageOwner.via_bot_id != 0) {
-                            uid = messageObject.messageOwner.via_bot_id;
                         }
                         TLRPC.User user = getMessagesController().getUser(uid);
                         boolean verified = user != null && user.verified;
@@ -7878,7 +7887,7 @@ public boolean retriedToSend;
             selectedCompression = compressionsCount;
         }
         boolean needCompress = false;
-        if (selectedCompression != compressionsCount - 1 || Math.max(videoEditedInfo.originalWidth, videoEditedInfo.originalHeight) > 1280) {
+        if (selectedCompression != compressionsCount || Math.max(videoEditedInfo.originalWidth, videoEditedInfo.originalHeight) > 1280) {
             needCompress = true;
             switch (selectedCompression) {
                 case 1:

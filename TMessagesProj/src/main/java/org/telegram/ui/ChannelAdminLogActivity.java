@@ -1112,7 +1112,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         return fragmentView;
     }
 
-    private void createMenu(View v) {
+    private boolean createMenu(View v) {
         MessageObject message = null;
         if (v instanceof ChatMessageCell) {
             message = ((ChatMessageCell) v).getMessageObject();
@@ -1120,12 +1120,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             message = ((ChatActionCell) v).getMessageObject();
         }
         if (message == null) {
-            return;
+            return false;
         }
         final int type = getMessageType(message);
         selectedObject = message;
         if (getParentActivity() == null) {
-            return;
+            return false;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
 
@@ -1145,7 +1145,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 }
                 if (stickerSet != null) {
                     showDialog(new StickersAlert(getParentActivity(), ChannelAdminLogActivity.this, stickerSet, null, null));
-                    return;
+                    return true;
                 }
             } else if (selectedObject.currentEvent != null && selectedObject.currentEvent.action instanceof TLRPC.TL_channelAdminLogEventActionChangeHistoryTTL) {
                 if (ChatObject.canUserDoAdminAction(currentChat, ChatObject.ACTION_DELETE_MESSAGES)) {
@@ -1239,7 +1239,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         }
 
         if (options.isEmpty()) {
-            return;
+            return false;
         }
         final CharSequence[] finalItems = items.toArray(new CharSequence[0]);
         builder.setItems(finalItems, (dialogInterface, i) -> {
@@ -1251,6 +1251,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
 
         builder.setTitle(LocaleController.getString("Message", R.string.Message));
         showDialog(builder.create());
+        return true;
     }
 
     private String getMessageContent(MessageObject messageObject, int previousUid, boolean name) {
@@ -2366,8 +2367,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     }
 
                     @Override
-                    public void didLongPress(ChatActionCell cell, float x, float y) {
-                        createMenu(cell);
+                    public boolean didLongPress(ChatActionCell cell, float x, float y) {
+                        return createMenu(cell);
                     }
 
                     @Override
@@ -2769,7 +2770,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         themeDescriptions.add(new ThemeDescription(chatListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{ChatActionCell.class}, Theme.chat_actionTextPaint, null, null, Theme.key_chat_serviceText));
         themeDescriptions.add(new ThemeDescription(chatListView, ThemeDescription.FLAG_LINKCOLOR, new Class[]{ChatActionCell.class}, Theme.chat_actionTextPaint, null, null, Theme.key_chat_serviceLink));
 
-        themeDescriptions.add(new ThemeDescription(chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_botCardDrawalbe, Theme.chat_shareIconDrawable, Theme.chat_botInlineDrawable, Theme.chat_botLinkDrawalbe, Theme.chat_goIconDrawable, Theme.chat_commentStickerDrawable}, null, Theme.key_chat_serviceIcon));
+        themeDescriptions.add(new ThemeDescription(chatListView, 0, new Class[]{ChatMessageCell.class}, null, new Drawable[]{Theme.chat_botCardDrawable, Theme.chat_shareIconDrawable, Theme.chat_botInlineDrawable, Theme.chat_botLinkDrawable, Theme.chat_goIconDrawable, Theme.chat_commentStickerDrawable}, null, Theme.key_chat_serviceIcon));
 
         themeDescriptions.add(new ThemeDescription(chatListView, 0, new Class[]{ChatMessageCell.class, ChatActionCell.class}, null, null, null, Theme.key_chat_serviceBackground));
         themeDescriptions.add(new ThemeDescription(chatListView, 0, new Class[]{ChatMessageCell.class, ChatActionCell.class}, null, null, null, Theme.key_chat_serviceBackgroundSelected));
