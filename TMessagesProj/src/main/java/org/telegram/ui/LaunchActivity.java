@@ -3072,7 +3072,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                                     MessagesController.getInstance(intentAccount).checkIsInChat(chat, user, (isInChatAlready, currentRights, currentRank) -> AndroidUtilities.runOnUIThread(() -> {
                                         TLRPC.TL_chatAdminRights requestingRights = null;
                                         if (botChatAdminParams != null) {
-                                            String[] adminParams = botChatAdminParams.split("\\+");
+                                            String[] adminParams = botChatAdminParams.split("\\+| ");
                                             requestingRights = new TLRPC.TL_chatAdminRights();
                                             final int count = adminParams.length;
                                             for (int i = 0; i < count; ++i) {
@@ -3088,12 +3088,14 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                                                         requestingRights.edit_messages = true;
                                                         break;
                                                     case "add_admins":
+                                                    case "promote_members":
                                                         requestingRights.add_admins = true;
                                                         break;
                                                     case "delete_messages":
                                                         requestingRights.delete_messages = true;
                                                         break;
                                                     case "ban_users":
+                                                    case "restrict_members":
                                                         requestingRights.ban_users = true;
                                                         break;
                                                     case "invite_users":
@@ -3102,8 +3104,12 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                                                     case "pin_messages":
                                                         requestingRights.pin_messages = true;
                                                         break;
+                                                    case "manage_video_chats":
                                                     case "manage_call":
                                                         requestingRights.manage_call = true;
+                                                        break;
+                                                    case "manage_chat":
+                                                        requestingRights.other = true;
                                                         break;
                                                     case "anonymous":
                                                         requestingRights.anonymous = true;
@@ -3129,6 +3135,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                                                 editRights.pin_messages = requestingRights.pin_messages || editRights.pin_messages;
                                                 editRights.manage_call = requestingRights.manage_call || editRights.manage_call;
                                                 editRights.anonymous = requestingRights.anonymous || editRights.anonymous;
+                                                editRights.other = requestingRights.other || editRights.other;
                                             }
                                         }
                                         ChatRightsEditActivity editRightsActivity = new ChatRightsEditActivity(user.id, -did, editRights, null, null, currentRank, ChatRightsEditActivity.TYPE_ADD_BOT, true, !isInChatAlready, null);
@@ -5060,13 +5067,6 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                         BulletinFactory.of(container, null).createErrorBulletin((String) args[1]).show();
                     }
                 } if (type == Bulletin.TYPE_ERROR_SUBTITLE) {
-                    if (fragment != null) {
-                        BulletinFactory.of(fragment).createErrorBulletinSubtitle((String) args[1], (String) args[2], fragment.getResourceProvider()).show();
-                    } else {
-                        BulletinFactory.of(container, null).createErrorBulletinSubtitle((String) args[1], (String) args[2], null).show();
-                    }
-                }
-                if (type == Bulletin.TYPE_ERROR_SUBTITLE) {
                     if (fragment != null) {
                         BulletinFactory.of(fragment).createErrorBulletinSubtitle((String) args[1], (String) args[2], fragment.getResourceProvider()).show();
                     } else {

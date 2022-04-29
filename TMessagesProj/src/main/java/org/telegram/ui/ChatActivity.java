@@ -24948,6 +24948,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (longPress) {
                 cell.resetPressedLink(-1);
             }
+            if (longPress) {
+                cell.resetPressedLink(-1);
+            }
         } else if (url instanceof URLSpanUserMention) {
             TLRPC.User user = getMessagesController().getUser(Utilities.parseLong(((URLSpanUserMention) url).getURL()));
             if (user != null) {

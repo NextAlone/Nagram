@@ -63,6 +63,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Objects;
 
+import androidx.collection.LongSparseArray;
+import androidx.recyclerview.widget.RecyclerView;
+
 public class MentionsAdapter extends RecyclerListView.SelectionAdapter implements NotificationCenter.NotificationCenterDelegate {
 
     public interface MentionsAdapterDelegate {

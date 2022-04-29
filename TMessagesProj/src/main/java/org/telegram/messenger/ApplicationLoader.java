@@ -26,7 +26,6 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.SystemClock;
@@ -34,7 +33,6 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
-import androidx.multidex.MultiDex;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -94,7 +92,7 @@ public class ApplicationLoader extends Application {
             }
         }
         HashMap<String, String> info = new HashMap<>();
-        info.put("OSversion", ""+ VERSION.SDK_INT);
+        info.put("OSversion", ""+ Build.VERSION.SDK_INT);
         info.put("versionName", BuildVars.BUILD_VERSION_STRING);
         info.put("versionCode", "" + BuildConfig.VERSION_CODE);
         AppcenterUtils.trackEvent("info",info);

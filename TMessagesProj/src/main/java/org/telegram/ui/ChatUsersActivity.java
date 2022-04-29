@@ -23,7 +23,6 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -87,6 +86,8 @@ import org.telegram.ui.Components.UndoView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import top.qwq2333.nullgram.utils.LogUtils;
 
 public class ChatUsersActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -2225,7 +2226,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     }
 
     private void loadChatParticipants(int offset, int count, boolean reset) {
-        Log.i("chat users", "loadChatParticipants(" + offset + ", " + count + ", " + reset + ")");
+        LogUtils.i("chat users: loadChatParticipants(" + offset + ", " + count + ", " + reset + ")");
         if (!ChatObject.isChannel(currentChat)) {
             loadingUsers = false;
             participants.clear();

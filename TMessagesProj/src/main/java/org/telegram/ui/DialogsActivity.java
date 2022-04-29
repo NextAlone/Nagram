@@ -309,6 +309,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private RecyclerView sideMenu;
     private ChatActivityEnterView commentView;
     private View commentViewBg;
+    private final boolean commentViewAnimated = false;
     private ImageView[] writeButton;
     private FrameLayout writeButtonContainer;
     private View selectedCountView;
@@ -872,9 +873,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             setBottomClip(paddingBottom);
             lastMeasuredTopPadding = topPadding;
 
-            for (int i = 0; i < count; i++) {
-                final View child = getChildAt(i);
-                if (child.getVisibility() == GONE) {
+            for (int i = -1; i < count; i++) {
+                final View child = i == -1 ? commentView : getChildAt(i);
+                if (child == null || child.getVisibility() == GONE) {
                     continue;
                 }
                 final FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) child.getLayoutParams();
@@ -949,6 +950,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             searchViewPager.setKeyboardHeight(keyboardSize);
             notifyHeightChanged();
             updateContextViewPosition();
+            updateCommentView();
         }
 
         @Override
@@ -3374,12 +3376,33 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     }
                     return super.dispatchTouchEvent(ev);
                 }
+                                @Override
+                public void setTranslationY(float translationY) {
+                    super.setTranslationY(translationY);
+                    if (!commentViewAnimated) {
+                        return;
+                    }
+                    if (commentViewBg != null) {
+                        commentViewBg.setTranslationY(translationY);
+                    }
+                    if (writeButtonContainer != null) {
+                        writeButtonContainer.setTranslationY(translationY);
+                    }
+                    if (selectedCountView != null) {
+                        selectedCountView.setTranslationY(translationY);
+                    }
+                }
             };
+            contentView.setClipChildren(false);
+            contentView.setClipToPadding(false);
             commentView.allowBlur = false;
             commentView.setAllowStickersAndGifs(false, false);
             commentView.setForceShowSendButton(true, false);
             commentView.setVisibility(View.GONE);
             commentView.getSendButton().setAlpha(0);
+            commentViewBg = new View(getParentActivity());
+            commentViewBg.setBackgroundColor(getThemedColor(Theme.key_chat_messagePanelBackground));
+            contentView.addView(commentViewBg, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 1600, Gravity.BOTTOM | Gravity.FILL_HORIZONTAL, 0, 0, 0, -1600));
             contentView.addView(commentView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.BOTTOM));
             commentViewBg = new View(getParentActivity());
             commentViewBg.setBackgroundColor(getThemedColor(Theme.key_chat_messagePanelBackground));
@@ -3401,6 +3424,20 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 @Override
                 public void onTextSelectionChanged(int start, int end) {
 
+                }
+
+                @Override
+                public void bottomPanelTranslationYChanged(float translation) {
+                    if (commentViewAnimated) {
+                        if (keyboardAnimator != null) {
+                            keyboardAnimator.cancel();
+                            keyboardAnimator = null;
+                        }
+                        if (commentView != null) {
+                            commentView.setTranslationY(translation);
+                            commentViewIgnoreTopUpdate = true;
+                        }
+                    }
                 }
 
                 @Override
@@ -3807,6 +3844,35 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             UpdateUtil.postCheckFollowChannel(getParentActivity(), currentAccount);
         actionBar.setDrawBlurBackground(contentView);
         return fragmentView;
+    }
+
+    private int commentViewPreviousTop = -1;
+    private ValueAnimator keyboardAnimator;
+    private boolean commentViewIgnoreTopUpdate = false;
+
+    private void updateCommentView() {
+        if (!commentViewAnimated || commentView == null) {
+            return;
+        }
+        int top = commentView.getTop();
+        if (commentViewPreviousTop > 0 && Math.abs(top - commentViewPreviousTop) > AndroidUtilities.dp(20) && !commentView.isPopupShowing()) {
+            if (commentViewIgnoreTopUpdate) {
+                commentViewIgnoreTopUpdate = false;
+                commentViewPreviousTop = top;
+                return;
+            }
+            if (keyboardAnimator != null) {
+                keyboardAnimator.cancel();
+            }
+            keyboardAnimator = ValueAnimator.ofFloat(commentViewPreviousTop - top, 0);
+            keyboardAnimator.addUpdateListener(a -> {
+                commentView.setTranslationY((float) a.getAnimatedValue());
+            });
+            keyboardAnimator.setDuration(AdjustPanLayoutHelper.keyboardDuration);
+            keyboardAnimator.setInterpolator(AdjustPanLayoutHelper.keyboardInterpolator);
+            keyboardAnimator.start();
+        }
+        commentViewPreviousTop = top;
     }
 
     private void updateAppUpdateViews(boolean animated) {
@@ -4367,30 +4433,30 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (getParentActivity() == null) {
                 return;
             }
-            if (MessagesController.getGlobalNotificationsSettings().getBoolean("askedAboutMiuiLockscreen", false)) {
+           if (MessagesController.getGlobalNotificationsSettings().getBoolean("askedAboutMiuiLockscreen", false)) {
                 return;
             }
             showDialog(new AlertDialog.Builder(getParentActivity())
-                .setTopAnimation(R.raw.permission_request_apk, AlertsCreator.PERMISSIONS_REQUEST_TOP_ICON_SIZE, false, Theme.getColor(Theme.key_dialogTopBackground))
-                .setMessage(LocaleController.getString("PermissionXiaomiLockscreen", R.string.PermissionXiaomiLockscreen))
-                .setPositiveButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
-                    Intent intent = XiaomiUtilities.getPermissionManagerIntent();
-                    if (intent != null) {
-                        try {
-                            getParentActivity().startActivity(intent);
-                        } catch (Exception x) {
+                    .setTopAnimation(R.raw.permission_request_apk, AlertsCreator.PERMISSIONS_REQUEST_TOP_ICON_SIZE, false, Theme.getColor(Theme.key_dialogTopBackground))
+                    .setMessage(LocaleController.getString("PermissionXiaomiLockscreen", R.string.PermissionXiaomiLockscreen))
+                    .setPositiveButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
+                        Intent intent = XiaomiUtilities.getPermissionManagerIntent();
+                        if (intent != null) {
                             try {
-                                intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
                                 getParentActivity().startActivity(intent);
-                            } catch (Exception xx) {
-                                FileLog.e(xx);
+                            } catch (Exception x) {
+                                try {
+                                    intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
+                                    getParentActivity().startActivity(intent);
+                                } catch (Exception xx) {
+                                    FileLog.e(xx);
+                                }
                             }
                         }
-                    }
-                })
-                .setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", R.string.ContactsPermissionAlertNotNow), (dialog, which) -> MessagesController.getGlobalNotificationsSettings().edit().putBoolean("askedAboutMiuiLockscreen", true).commit())
-                .create());
+                    })
+                    .setNegativeButton(LocaleController.getString("ContactsPermissionAlertNotNow", R.string.ContactsPermissionAlertNotNow), (dialog, which) -> MessagesController.getGlobalNotificationsSettings().edit().putBoolean("askedAboutMiuiLockscreen", true).commit())
+                    .create());
         }
         showFiltersHint();
         if (viewPages != null) {
@@ -7657,11 +7723,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         int[] location = new int[2];
         view.getLocationInWindow(location);
         int y;
-//        if (keyboardVisible && parentFragment.contentView.getMeasuredHeight() > AndroidUtilities.dp(58)) {
-//            y = location[1] + view.getMeasuredHeight();
-//        } else {
         y = location[1] - layout.getMeasuredHeight() - AndroidUtilities.dp(2);
-//        }
         sendPopupWindow.showAtLocation(view, Gravity.LEFT | Gravity.TOP, location[0] + view.getMeasuredWidth() - layout.getMeasuredWidth() + AndroidUtilities.dp(8), y);
         sendPopupWindow.dimBehind();
         view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
