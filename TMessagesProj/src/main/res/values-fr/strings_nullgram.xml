@@ -137,4 +137,6 @@
     <string name="AvatarAsBackground">Profile picture as background</string>
     <string name="BlurAvatarBackground">Blur profile picture</string>
     <string name="DarkenAvatarBackground">Darken profile picture</string>
+    <string name="hideTimeForSticker">Hide Time For Sticker</string>
+    <string name="showMessageID">Show Message ID</string>
 </resources>
