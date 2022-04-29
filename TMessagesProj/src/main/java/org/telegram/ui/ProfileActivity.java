@@ -8392,7 +8392,7 @@ public class ProfileActivity extends BaseFragment implements
                         PackageInfo pInfo = ApplicationLoader.applicationContext.getPackageManager()
                             .getPackageInfo(
                                 ApplicationLoader.applicationContext.getPackageName(), 0);
-                        int code = pInfo.versionCode / 10;
+                        int code = pInfo.versionCode;
                         String abi = APKUtils.getAbi();
                         cell.setText(LocaleController.formatString("NullgramVersion",
                             R.string.NullgramVersion,
