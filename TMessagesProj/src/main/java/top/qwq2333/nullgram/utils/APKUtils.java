@@ -40,7 +40,16 @@ public class APKUtils {
             String name = entry.getName();
             if (name.contains("lib")) {
                 LogUtils.i("getAbi: " + entry.getName().split("/")[1]);
-                return entry.getName().split("/")[1];
+                String target = entry.getName().split("/")[1];
+                if (target.contains("arm64")) {
+                    return "arm64";
+                } else if (target.contains("armeabi")) {
+                    return "arm32";
+                } else if (target.contains("x86") && !target.contains("x86_64")) {
+                    return "x86";
+                } else {
+                    return "x86_64";
+                }
             }
         }
 
