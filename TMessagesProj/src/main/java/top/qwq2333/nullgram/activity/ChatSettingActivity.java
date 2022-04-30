@@ -90,6 +90,7 @@ public class ChatSettingActivity extends BaseFragment {
     private int showForwardDateRow;
     private int hideTimeForStickerRow;
     private int showMessageIDRow;
+    private int hideQuickSendMediaBottomRow;
     private int chat2Row;
 
 
@@ -294,6 +295,13 @@ public class ChatSettingActivity extends BaseFragment {
                         ConfigManager.getBooleanOrFalse(Defines.showMessageID)
                     );
                 }
+            } else if (position == hideQuickSendMediaBottomRow) {
+                ConfigManager.toggleBoolean(Defines.hideQuickSendMediaBottom);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(
+                        ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)
+                    );
+                }
             }
         });
 
@@ -348,6 +356,7 @@ public class ChatSettingActivity extends BaseFragment {
         showForwardDateRow = rowCount++;
         hideTimeForStickerRow = rowCount++;
         showMessageIDRow = rowCount++;
+        hideQuickSendMediaBottomRow = rowCount++;
         chat2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -584,6 +593,12 @@ public class ChatSettingActivity extends BaseFragment {
                             LocaleController.getString("showMessageID",
                                 R.string.showMessageID),
                             ConfigManager.getBooleanOrFalse(Defines.showMessageID),
+                            true);
+                    } else if (position == hideQuickSendMediaBottomRow) {
+                        textCell.setTextAndCheck(
+                            LocaleController.getString("hideQuickSendMediaBottom",
+                                R.string.hideQuickSendMediaBottom),
+                            ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom),
                             true);
                     }
                     break;

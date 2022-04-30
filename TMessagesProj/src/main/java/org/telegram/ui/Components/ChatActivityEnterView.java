@@ -626,6 +626,9 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
     private Runnable recordAudioVideoRunnable = new Runnable() {
         @Override
         public void run() {
+            if (ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)) {
+                return;
+            }
             if (delegate == null || parentActivity == null) {
                 return;
             }
@@ -3021,11 +3024,11 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         return false;
                     }
                 }
-                if (hasRecordVideo) {
+                if (hasRecordVideo && !ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)) {
                     calledRecordRunnable = false;
                     recordAudioVideoRunnableStarted = true;
                     AndroidUtilities.runOnUIThread(recordAudioVideoRunnable, 150);
-                } else {
+                } else if (!ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)) {
                     recordAudioVideoRunnable.run();
                 }
             } else if (motionEvent.getAction() == MotionEvent.ACTION_UP || motionEvent.getAction() == MotionEvent.ACTION_CANCEL) {
@@ -3046,7 +3049,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     }
                     return false;
                 }
-                if (recordCircle.isSendButtonVisible() || recordedAudioPanel.getVisibility() == VISIBLE) {
+                if ((recordCircle.isSendButtonVisible() || recordedAudioPanel.getVisibility() == VISIBLE) && !ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)) {
                     if (recordAudioVideoRunnableStarted) {
                         AndroidUtilities.cancelRunOnUIThread(recordAudioVideoRunnable);
                     }
@@ -3067,7 +3070,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     recordingAudioVideo = false;
                     updateRecordIntefrace(RECORD_STATE_CANCEL_BY_GESTURE);
                 } else {
-                    if (recordAudioVideoRunnableStarted) {
+                    if (recordAudioVideoRunnableStarted && !ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)) {
                         AndroidUtilities.cancelRunOnUIThread(recordAudioVideoRunnable);
                         delegate.onSwitchRecordMode(videoSendButton.getTag() == null);
                         setRecordVideoButtonVisible(videoSendButton.getTag() == null, true);
@@ -3172,6 +3175,15 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             videoSendButton.setFocusable(true);
             videoSendButton.setAccessibilityDelegate(mediaMessageButtonsDelegate);
             audioVideoButtonContainer.addView(videoSendButton, LayoutHelper.createFrame(48, 48));
+        }
+
+        if (ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)) {
+            if (videoSendButton != null) {
+                videoSendButton.setVisibility(View.INVISIBLE);
+            }
+            if (audioSendButton != null) {
+                audioSendButton.setVisibility(View.INVISIBLE);
+            }
         }
 
         recordCircle = new RecordCircle(context);
@@ -3707,6 +3719,9 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
     }
 
     private void setRecordVideoButtonVisible(boolean visible, boolean animated) {
+        if (ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)) {
+            return;
+        }
         if (videoSendButton == null) {
             return;
         }
@@ -4379,7 +4394,10 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             }
             SharedPreferences preferences = MessagesController.getGlobalMainSettings();
             boolean currentModeVideo = preferences.getBoolean(isChannel ? "currentModeVideoChannel" : "currentModeVideo", isChannel);
-            setRecordVideoButtonVisible(currentModeVideo, false);
+            if (ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom))
+                setRecordVideoButtonVisible(false, false);
+            else
+                setRecordVideoButtonVisible(currentModeVideo, false);
         } else {
             setRecordVideoButtonVisible(false, false);
         }
@@ -4473,10 +4491,19 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         videoToSendMessageObject = null;
         videoTimelineView.destroy();
 
-        if (videoSendButton != null && isInVideoMode()) {
-            videoSendButton.setVisibility(View.VISIBLE);
-        } else if (audioSendButton != null) {
-            audioSendButton.setVisibility(View.VISIBLE);
+        if (ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)) {
+            if (videoSendButton != null) {
+                videoSendButton.setVisibility(View.INVISIBLE);
+            }
+            if (audioSendButton != null) {
+                audioSendButton.setVisibility(View.INVISIBLE);
+            }
+        } else {
+            if (videoSendButton != null && isInVideoMode()) {
+                videoSendButton.setVisibility(View.VISIBLE);
+            } else if (audioSendButton != null) {
+                audioSendButton.setVisibility(View.VISIBLE);
+            }
         }
 
         if (wasSent) {
@@ -5762,10 +5789,19 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             runningAnimationAudio = new AnimatorSet();
             //EXIT TRANSITION
             if (shouldShowFastTransition || recordState == RECORD_STATE_CANCEL_BY_TIME) {
-                if (videoSendButton != null && isInVideoMode()) {
-                    videoSendButton.setVisibility(View.VISIBLE);
-                } else if (audioSendButton != null) {
-                    audioSendButton.setVisibility(View.VISIBLE);
+                if (ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)) {
+                    if (videoSendButton != null) {
+                        videoSendButton.setVisibility(View.GONE);
+                    }
+                    if (audioSendButton != null) {
+                        audioSendButton.setVisibility(View.GONE);
+                    }
+                } else {
+                    if (videoSendButton != null && isInVideoMode()) {
+                        videoSendButton.setVisibility(View.VISIBLE);
+                    } else if (audioSendButton != null) {
+                        audioSendButton.setVisibility(View.VISIBLE);
+                    }
                 }
                 runningAnimationAudio.playTogether(
                         ObjectAnimator.ofFloat(emojiButton[0], View.SCALE_Y, 1),
@@ -5995,10 +6031,19 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 });
 
             } else if (recordState == RECORD_STATE_CANCEL || recordState == RECORD_STATE_CANCEL_BY_GESTURE) {
-                if (videoSendButton != null && isInVideoMode()) {
-                    videoSendButton.setVisibility(View.VISIBLE);
-                } else if (audioSendButton != null) {
-                    audioSendButton.setVisibility(View.VISIBLE);
+                if (ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)) {
+                    if (videoSendButton != null) {
+                        videoSendButton.setVisibility(View.GONE);
+                    }
+                    if (audioSendButton != null) {
+                        audioSendButton.setVisibility(View.GONE);
+                    }
+                } else {
+                    if (videoSendButton != null && isInVideoMode()) {
+                        videoSendButton.setVisibility(View.VISIBLE);
+                    } else if (audioSendButton != null) {
+                        audioSendButton.setVisibility(View.VISIBLE);
+                    }
                 }
                 recordIsCanceled = true;
                 AnimatorSet iconsAnimator = new AnimatorSet();
@@ -6065,16 +6110,19 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                                 ObjectAnimator.ofFloat(botButton, View.SCALE_Y, 1f)
                         );
                     }
-                    if (videoSendButton != null) {
-                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.ALPHA, isInVideoMode() ? 1 : 0));
-                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.SCALE_X, 1));
-                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.SCALE_Y, 1));
+                    if (!ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)) {
+                        if (videoSendButton != null) {
+                            iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.ALPHA, isInVideoMode() ? 1 : 0));
+                            iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.SCALE_X, 1));
+                            iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.SCALE_Y, 1));
+                        }
+                        if (audioSendButton != null) {
+                            iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.ALPHA, isInVideoMode() ? 0 : 1));
+                            iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.SCALE_X, 1));
+                            iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.SCALE_Y, 1));
+                        }
                     }
-                    if (audioSendButton != null) {
-                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.ALPHA, isInVideoMode() ? 0 : 1));
-                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.SCALE_X, 1));
-                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.SCALE_Y, 1));
-                    }
+
                     if (scheduledButton != null) {
                         iconsAnimator.playTogether(
                                 ObjectAnimator.ofFloat(scheduledButton, View.ALPHA, 1f),
@@ -6151,10 +6199,19 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 recordDot.playDeleteAnimation();
             } else {
 
-                if (videoSendButton != null && isInVideoMode()) {
-                    videoSendButton.setVisibility(View.VISIBLE);
-                } else if (audioSendButton != null) {
-                    audioSendButton.setVisibility(View.VISIBLE);
+                if (ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)) {
+                    if (videoSendButton != null) {
+                        videoSendButton.setVisibility(View.GONE);
+                    }
+                    if (audioSendButton != null) {
+                        audioSendButton.setVisibility(View.GONE);
+                    }
+                } else {
+                    if (videoSendButton != null && isInVideoMode()) {
+                        videoSendButton.setVisibility(View.VISIBLE);
+                    } else if (audioSendButton != null) {
+                        audioSendButton.setVisibility(View.VISIBLE);
+                    }
                 }
 
                 AnimatorSet iconsAnimator = new AnimatorSet();
@@ -6175,15 +6232,17 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                             ObjectAnimator.ofFloat(botCommandsMenuButton, View.SCALE_X, 1),
                             ObjectAnimator.ofFloat(botCommandsMenuButton, View.ALPHA, 1));
                 }
-                if (audioSendButton != null) {
-                    audioSendButton.setScaleX(1f);
-                    audioSendButton.setScaleY(1f);
-                    iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.ALPHA, isInVideoMode() ? 0 : 1));
-                }
-                if (videoSendButton != null) {
-                    videoSendButton.setScaleX(1f);
-                    videoSendButton.setScaleY(1f);
-                    iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.ALPHA, isInVideoMode() ? 1 : 0));
+                if (!ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)) {
+                    if (videoSendButton != null) {
+                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.ALPHA, isInVideoMode() ? 1 : 0));
+                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.SCALE_X, 1));
+                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.SCALE_Y, 1));
+                    }
+                    if (audioSendButton != null) {
+                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.ALPHA, isInVideoMode() ? 0 : 1));
+                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.SCALE_X, 1));
+                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.SCALE_Y, 1));
+                    }
                 }
                 if (attachLayout != null) {
                     attachLayout.setTranslationX(0);
