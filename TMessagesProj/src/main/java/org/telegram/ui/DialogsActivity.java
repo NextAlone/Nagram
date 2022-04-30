@@ -6344,7 +6344,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         } else {
             removeFromFolderItem.setVisibility(View.VISIBLE);
         }
-        if (filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE && filterTabsView.getCurrentTabId() == Integer.MAX_VALUE && !FiltersListBottomSheet.getCanAddDialogFilters(this, selectedDialogs).isEmpty()) {
+        if (filterTabsView != null && ((searchTabsView != null && searchTabsView.getVisibility() == View.VISIBLE) || (filterTabsView.getVisibility() == View.VISIBLE && filterTabsView.getCurrentTabId() == Integer.MAX_VALUE)) && !FiltersListBottomSheet.getCanAddDialogFilters(this, selectedDialogs).isEmpty()) {
             addToFolderItem.setVisibility(View.VISIBLE);
         } else {
             addToFolderItem.setVisibility(View.GONE);

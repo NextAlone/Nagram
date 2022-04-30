@@ -14,7 +14,7 @@ configurations {
     }
 }
 
-val isStable = true
+val isStable = false
 var serviceAccountCredentialsFile = File(rootProject.projectDir, "service_account_credentials.json")
 
 if (serviceAccountCredentialsFile.isFile()) {
