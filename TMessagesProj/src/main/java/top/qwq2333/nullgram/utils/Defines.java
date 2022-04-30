@@ -62,6 +62,7 @@ public class Defines {
     public static final String hideTimeForSticker = "hideTimeForSticker";
     public static final String showMessageID = "showMessageID";
     public static final String hideQuickSendMediaBottom = "hideQuickSendMediaButtom";
+    public static final String largeAvatarAsBackground = "largeAvatarAsBackground";
 
     // Custom API
     public static final String customAPI = "customAPI";

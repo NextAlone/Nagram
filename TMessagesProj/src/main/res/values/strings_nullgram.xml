@@ -140,4 +140,5 @@
     <string name="hideTimeForSticker">Hide Time For Sticker</string>
     <string name="showMessageID">Show Message ID</string>
     <string name="hideQuickSendMediaBottom">Hide Quick Send Media Bottom</string>
+    <string name="largeAvatarAsBackground">Large Avatar As Background</string>
 </resources>

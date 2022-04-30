@@ -56,6 +56,7 @@ public class GeneralSettingActivity extends BaseFragment {
     private int avatarAsDrawerBackgroundRow;
     private int avatarBackgroundBlurRow;
     private int avatarBackgroundDarkenRow;
+    private int largeAvatarAsBackgroundRow;
     private int hidePhoneRow;
     private int drawer2Row;
 
@@ -154,6 +155,14 @@ public class GeneralSettingActivity extends BaseFragment {
                 }
                 getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
                 listAdapter.notifyItemChanged(drawerRow, new Object());
+            } else if (position == largeAvatarAsBackgroundRow) {
+                ConfigManager.toggleBoolean(Defines.largeAvatarAsBackground);
+                getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
+                TransitionManager.beginDelayedTransition(profilePreviewCell);
+                listAdapter.notifyItemChanged(drawerRow, new Object());
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.largeAvatarAsBackground));
+                }
             } else if (position == showExactNumberRow) {
                 ConfigManager.toggleBoolean(Defines.showExactNumber);
                 if (view instanceof TextCheckCell) {
@@ -219,9 +228,11 @@ public class GeneralSettingActivity extends BaseFragment {
         if (ConfigManager.getBooleanOrFalse(Defines.avatarAsDrawerBackground)) {
             avatarBackgroundBlurRow = rowCount++;
             avatarBackgroundDarkenRow = rowCount++;
+            largeAvatarAsBackgroundRow = rowCount++;
         } else {
             avatarBackgroundBlurRow = -1;
             avatarBackgroundDarkenRow = -1;
+            largeAvatarAsBackgroundRow = -1;
         }
         hidePhoneRow = rowCount++;
         drawer2Row = rowCount++;
@@ -404,6 +415,8 @@ public class GeneralSettingActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("BlurAvatarBackground", R.string.BlurAvatarBackground), ConfigManager.getBooleanOrFalse(Defines.avatarBackgroundBlur), true);
                     } else if (position == avatarBackgroundDarkenRow) {
                         textCell.setTextAndCheck(LocaleController.getString("DarkenAvatarBackground", R.string.DarkenAvatarBackground), ConfigManager.getBooleanOrFalse(Defines.avatarBackgroundDarken), true);
+                    } else if (position == largeAvatarAsBackgroundRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("LargeAvatarAsBackground", R.string.largeAvatarAsBackground), ConfigManager.getBooleanOrFalse(Defines.largeAvatarAsBackground), true);
                     }
                     break;
                 }
