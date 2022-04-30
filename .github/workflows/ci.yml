@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - master
+    paths-ignore:
+        - '**.md'
+        - '**.txt'
+        - '.github/**'
+        - '!.github/workflows/**'
+        - "TMessagesProj/src/main/res/values**/**"
   workflow_dispatch:
 
 jobs:

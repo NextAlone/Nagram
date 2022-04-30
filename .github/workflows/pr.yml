@@ -4,6 +4,13 @@ on:
   pull_request:
     branches:
       - master
+    paths-ignore:
+      - '**.md'
+      - '**.txt'
+      - '.github/**'
+      - '!.github/workflows/**'
+      - "TMessagesProj/src/main/res/values**/**"
+
 
 jobs:
   build:
