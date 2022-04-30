@@ -67,6 +67,7 @@ public class GeneralSettingActivity extends BaseFragment {
     private int disableUndoRow;
     private int skipOpenLinkConfirmRow;
     private int autoProxySwitchRow;
+    private int useSystemEmojiRow;
     private int general2Row;
 
 
@@ -103,25 +104,21 @@ public class GeneralSettingActivity extends BaseFragment {
         FrameLayout frameLayout = (FrameLayout) fragmentView;
 
         listView = new RecyclerListView(context);
-        listView.setLayoutManager(
-            new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         listView.setVerticalScrollBarEnabled(false);
         listView.setAdapter(listAdapter);
         ((DefaultItemAnimator) listView.getItemAnimator()).setDelayAnimations(false);
-        frameLayout.addView(listView,
-            LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+        frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         listView.setOnItemClickListener((view, position, x, y) -> {
             if (position == showBotAPIRow) {
                 ConfigManager.toggleBoolean(Defines.showBotAPIID);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.showBotAPIID));
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.showBotAPIID));
                 }
             } else if (position == hidePhoneRow) {
                 ConfigManager.toggleBoolean(Defines.hidePhone);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.hidePhone));
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.hidePhone));
                 }
                 parentLayout.rebuildAllFragmentViews(false, false);
                 getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
@@ -166,32 +163,32 @@ public class GeneralSettingActivity extends BaseFragment {
             } else if (position == showExactNumberRow) {
                 ConfigManager.toggleBoolean(Defines.showExactNumber);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.showExactNumber));
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.showExactNumber));
                 }
             } else if (position == disableInstantCameraRow) {
                 ConfigManager.toggleBoolean(Defines.disableInstantCamera);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.disableInstantCamera));
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.disableInstantCamera));
                 }
             } else if (position == disableUndoRow) {
                 ConfigManager.toggleBoolean(Defines.disableUndo);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.disableUndo));
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.disableUndo));
                 }
             } else if (position == skipOpenLinkConfirmRow) {
                 ConfigManager.toggleBoolean(Defines.skipOpenLinkConfirm);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.skipOpenLinkConfirm));
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.skipOpenLinkConfirm));
                 }
             } else if (position == autoProxySwitchRow) {
                 ConfigManager.toggleBoolean(Defines.autoSwitchProxy);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.autoSwitchProxy));
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.autoSwitchProxy));
+                }
+            } else if (position == useSystemEmojiRow) {
+                ConfigManager.toggleBoolean(Defines.useSystemEmoji);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.useSystemEmoji));
                 }
             }
         });
@@ -210,8 +207,7 @@ public class GeneralSettingActivity extends BaseFragment {
     @SuppressLint("Range")
     public String getFileName(Uri uri) {
         String result = null;
-        try (Cursor cursor = getParentActivity().getContentResolver()
-            .query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null)) {
+        try (Cursor cursor = getParentActivity().getContentResolver().query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null)) {
             if (cursor != null && cursor.moveToFirst()) {
                 result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
             }
@@ -244,6 +240,7 @@ public class GeneralSettingActivity extends BaseFragment {
         disableUndoRow = rowCount++;
         skipOpenLinkConfirmRow = rowCount++;
         autoProxySwitchRow = rowCount++;
+        useSystemEmojiRow = rowCount++;
         general2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -253,91 +250,40 @@ public class GeneralSettingActivity extends BaseFragment {
     @Override
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> themeDescriptions = new ArrayList<>();
-        themeDescriptions.add(
-            new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR,
-                new Class[]{EmptyCell.class, TextSettingsCell.class, TextCheckCell.class,
-                    HeaderCell.class, TextDetailSettingsCell.class, NotificationsCheckCell.class},
-                null, null, null, Theme.key_windowBackgroundWhite));
-        themeDescriptions.add(
-            new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null,
-                null, Theme.key_windowBackgroundGray));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{EmptyCell.class, TextSettingsCell.class, TextCheckCell.class, HeaderCell.class, TextDetailSettingsCell.class, NotificationsCheckCell.class}, null, null, null, Theme.key_windowBackgroundWhite));
+        themeDescriptions.add(new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray));
 
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null,
-                null, Theme.key_avatar_backgroundActionBarBlue));
-        themeDescriptions.add(
-            new ThemeDescription(listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null,
-                null, Theme.key_avatar_backgroundActionBarBlue));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null,
-                null, Theme.key_avatar_actionBarIconBlue));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null,
-                null, Theme.key_actionBarDefaultTitle));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null,
-                null, null, Theme.key_avatar_actionBarSelectorBlue));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, null, null,
-                null, null, Theme.key_actionBarDefaultSubmenuBackground));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null,
-                null, Theme.key_actionBarDefaultSubmenuItem));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_avatar_backgroundActionBarBlue));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_avatar_backgroundActionBarBlue));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_avatar_actionBarIconBlue));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_avatar_actionBarSelectorBlue));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, null, null, null, null, Theme.key_actionBarDefaultSubmenuBackground));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null, null, Theme.key_actionBarDefaultSubmenuItem));
 
-        themeDescriptions.add(
-            new ThemeDescription(listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null,
-                Theme.key_listSelector));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector));
 
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{View.class}, Theme.dividerPaint, null,
-                null, Theme.key_divider));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider));
 
-        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_BACKGROUNDFILTER,
-            new Class[]{ShadowSectionCell.class}, null, null, null,
-            Theme.key_windowBackgroundGrayShadow));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow));
 
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class},
-            new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class},
-            new String[]{"valueTextView"}, null, null, null,
-            Theme.key_windowBackgroundWhiteValueText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteValueText));
 
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class},
-                new String[]{"textView"}, null, null, null,
-                Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class},
-                new String[]{"valueTextView"}, null, null, null,
-                Theme.key_windowBackgroundWhiteGrayText2));
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class},
-                new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack));
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class},
-                new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked));
 
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class},
-            new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class},
-            new String[]{"valueTextView"}, null, null, null,
-            Theme.key_windowBackgroundWhiteGrayText2));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class},
-            new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class},
-            new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked));
 
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{HeaderCell.class},
-            new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader));
 
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class},
-                new String[]{"textView"}, null, null, null,
-                Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class},
-                new String[]{"valueTextView"}, null, null, null,
-                Theme.key_windowBackgroundWhiteGrayText2));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
 
         return themeDescriptions;
     }
@@ -363,13 +309,9 @@ public class GeneralSettingActivity extends BaseFragment {
             switch (holder.getItemViewType()) {
                 case 1: {
                     if (position == general2Row) {
-                        holder.itemView.setBackground(
-                            Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom,
-                                Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     } else {
-                        holder.itemView.setBackground(
-                            Theme.getThemedDrawable(mContext, R.drawable.greydivider,
-                                Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
                 }
@@ -382,33 +324,19 @@ public class GeneralSettingActivity extends BaseFragment {
                     TextCheckCell textCell = (TextCheckCell) holder.itemView;
                     textCell.setEnabled(true, null);
                     if (position == showBotAPIRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("showBotAPIID",
-                            R.string.showBotAPIID), ConfigManager.getBooleanOrFalse(
-                            Defines.showBotAPIID), true);
+                        textCell.setTextAndCheck(LocaleController.getString("showBotAPIID", R.string.showBotAPIID), ConfigManager.getBooleanOrFalse(Defines.showBotAPIID), true);
                     } else if (position == hidePhoneRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("hidePhone",
-                            R.string.hidePhone), ConfigManager.getBooleanOrFalse(
-                            Defines.hidePhone), true);
+                        textCell.setTextAndCheck(LocaleController.getString("hidePhone", R.string.hidePhone), ConfigManager.getBooleanOrFalse(Defines.hidePhone), true);
                     } else if (position == showExactNumberRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("showExactNumber",
-                            R.string.showExactNumber), ConfigManager.getBooleanOrFalse(
-                            Defines.showExactNumber), true);
+                        textCell.setTextAndCheck(LocaleController.getString("showExactNumber", R.string.showExactNumber), ConfigManager.getBooleanOrFalse(Defines.showExactNumber), true);
                     } else if (position == disableInstantCameraRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("disableInstantCamera",
-                            R.string.disableInstantCamera), ConfigManager.getBooleanOrFalse(
-                            Defines.disableInstantCamera), true);
+                        textCell.setTextAndCheck(LocaleController.getString("disableInstantCamera", R.string.disableInstantCamera), ConfigManager.getBooleanOrFalse(Defines.disableInstantCamera), true);
                     } else if (position == disableUndoRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("disableUndo",
-                            R.string.disableUndo), ConfigManager.getBooleanOrFalse(
-                            Defines.disableUndo), true);
+                        textCell.setTextAndCheck(LocaleController.getString("disableUndo", R.string.disableUndo), ConfigManager.getBooleanOrFalse(Defines.disableUndo), true);
                     } else if (position == skipOpenLinkConfirmRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("skipOpenLinkConfirm",
-                            R.string.skipOpenLinkConfirm), ConfigManager.getBooleanOrFalse(
-                            Defines.skipOpenLinkConfirm), true);
+                        textCell.setTextAndCheck(LocaleController.getString("skipOpenLinkConfirm", R.string.skipOpenLinkConfirm), ConfigManager.getBooleanOrFalse(Defines.skipOpenLinkConfirm), true);
                     } else if (position == autoProxySwitchRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("autoProxySwitch",
-                            R.string.autoProxySwitch), ConfigManager.getBooleanOrFalse(
-                            Defines.autoSwitchProxy), true);
+                        textCell.setTextAndCheck(LocaleController.getString("autoProxySwitch", R.string.autoProxySwitch), ConfigManager.getBooleanOrFalse(Defines.autoSwitchProxy), true);
                     } else if (position == avatarAsDrawerBackgroundRow) {
                         textCell.setTextAndCheck(LocaleController.getString("AvatarAsBackground", R.string.AvatarAsBackground), ConfigManager.getBooleanOrFalse(Defines.avatarAsDrawerBackground), true);
                     } else if (position == avatarBackgroundBlurRow) {
@@ -417,6 +345,8 @@ public class GeneralSettingActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("DarkenAvatarBackground", R.string.DarkenAvatarBackground), ConfigManager.getBooleanOrFalse(Defines.avatarBackgroundDarken), true);
                     } else if (position == largeAvatarAsBackgroundRow) {
                         textCell.setTextAndCheck(LocaleController.getString("LargeAvatarAsBackground", R.string.largeAvatarAsBackground), ConfigManager.getBooleanOrFalse(Defines.largeAvatarAsBackground), true);
+                    } else if (position == useSystemEmojiRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("UseSystemEmoji", R.string.useSystemEmoji), ConfigManager.getBooleanOrFalse(Defines.useSystemEmoji), true);
                     }
                     break;
                 }
@@ -475,8 +405,7 @@ public class GeneralSettingActivity extends BaseFragment {
                     break;
                 case 7:
                     view = new TextInfoPrivacyCell(mContext);
-                    view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider,
-                        Theme.key_windowBackgroundGrayShadow));
+                    view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 8:
                     profilePreviewCell = new DrawerProfilePreviewCell(mContext, mDrawerLayoutContainer);
@@ -485,9 +414,7 @@ public class GeneralSettingActivity extends BaseFragment {
                     return new RecyclerListView.Holder(profilePreviewCell);
             }
             //noinspection ConstantConditions
-            view.setLayoutParams(
-                new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
-                    RecyclerView.LayoutParams.WRAP_CONTENT));
+            view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
             return new RecyclerListView.Holder(view);
         }
 

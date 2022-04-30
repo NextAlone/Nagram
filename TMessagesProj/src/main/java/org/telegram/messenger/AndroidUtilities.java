@@ -1465,6 +1465,24 @@ public class AndroidUtilities {
 
     public static Typeface getTypeface(String assetPath) {
         synchronized (typefaceCache) {
+            if (ConfigManager.getBooleanOrFalse(Defines.useSystemEmoji) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (assetPath.contains("medium") && assetPath.contains("italic")) {
+                    return Typeface.create("sans-serif-medium", Typeface.ITALIC);
+                }
+                if (assetPath.contains("medium")) {
+                    return Typeface.create("sans-serif-medium", Typeface.NORMAL);
+                }
+                if (assetPath.contains("italic")) {
+                    return Typeface.create((Typeface) null, Typeface.ITALIC);
+                }
+                if (assetPath.contains("mono")) {
+                    return Typeface.MONOSPACE;
+                }
+                if (assetPath.contains("mw_bold")) {
+                    return Typeface.create("serif", Typeface.BOLD);
+                }
+                //return Typeface.create((Typeface) null, Typeface.NORMAL);
+            }
             if (!typefaceCache.containsKey(assetPath)) {
                 try {
                     Typeface t;

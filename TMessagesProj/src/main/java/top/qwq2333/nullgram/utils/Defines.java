@@ -63,6 +63,7 @@ public class Defines {
     public static final String showMessageID = "showMessageID";
     public static final String hideQuickSendMediaBottom = "hideQuickSendMediaButtom";
     public static final String largeAvatarAsBackground = "largeAvatarAsBackground";
+    public static final String useSystemEmoji = "useSystemEmoji";
 
     // Custom API
     public static final String customAPI = "customAPI";
