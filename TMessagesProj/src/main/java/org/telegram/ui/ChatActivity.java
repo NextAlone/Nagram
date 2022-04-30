@@ -2389,12 +2389,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     if (getParentActivity() == null) {
                         return;
                     }
-                    showDialog(
-                        AlertsCreator.createTTLAlert(getParentActivity(), currentEncryptedChat,
-                            themeDelegate).create());
+                    showDialog(AlertsCreator.createTTLAlert(getParentActivity(), currentEncryptedChat, themeDelegate).create());
                 } else if (id == delete_history) {
-                    getMessageUtils().createDeleteHistoryAlert(ChatActivity.this, currentChat,
-                        mergeDialogId, themeDelegate);
+                    getMessageUtils().createDeleteHistoryAlert(ChatActivity.this, currentChat, mergeDialogId, themeDelegate);
                 } else if (id == clear_history || id == delete_chat || id == auto_delete_timer) {
                     if (getParentActivity() == null) {
                         return;
@@ -2963,6 +2960,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
             if (searchItem != null) {
                 headerItem.addSubItem(search, R.drawable.msg_search, LocaleController.getString("Search", R.string.Search), themeDelegate);
+            }
+            if (currentChat != null && (ChatObject.isMegagroup(currentChat) || !ChatObject.isChannel(currentChat))) {
+                headerItem.addSubItem(delete_history, R.drawable.msg_delete, LocaleController.getString("DeleteAllFromSelf", R.string.DeleteAllFromSelf));
             }
             if (currentChat != null && !currentChat.creator && !ChatObject.hasAdminRights(currentChat)) {
                 headerItem.addSubItem(report, R.drawable.msg_report, LocaleController.getString("ReportChat", R.string.ReportChat), themeDelegate);
