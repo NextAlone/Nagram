@@ -47,7 +47,6 @@ dependencies {
     implementation("com.google.firebase:firebase-config:21.0.2")
     implementation("com.google.firebase:firebase-datatransport:18.1.2")
     implementation("com.google.firebase:firebase-appindexing:20.0.0")
-    implementation("com.google.android.gms:play-services-maps:18.0.2")
     implementation("com.google.android.gms:play-services-auth:20.1.0")
     implementation("com.google.android.gms:play-services-vision:20.1.3")
     implementation("com.google.android.gms:play-services-wearable:17.1.0")
@@ -73,6 +72,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib-common
     implementation("org.jetbrains.kotlin:kotlin-stdlib-common:${Version.kotlin}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${Version.kotlin}")
+    implementation("org.osmdroid:osmdroid-android:6.1.11")
 }
 
 

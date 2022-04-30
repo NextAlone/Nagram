@@ -242,6 +242,10 @@ public class ApplicationLoader extends Application {
 
         applicationHandler = new Handler(applicationContext.getMainLooper());
 
+        org.osmdroid.config.Configuration.getInstance().setUserAgentValue("Nullgram" + BuildConfig.VERSION_NAME);
+        org.osmdroid.config.Configuration.getInstance().setOsmdroidBasePath(new File(ApplicationLoader.applicationContext.getCacheDir(), "osmdroid"));
+
+
         AndroidUtilities.runOnUIThread(ApplicationLoader::startPushService);
     }
 

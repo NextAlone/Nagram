@@ -12,6 +12,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.text.TextUtils;
 
+import org.osmdroid.util.TileSystemWebMercator;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
@@ -5096,6 +5097,16 @@ public class TLRPC {
             }
             if (result != null) {
                 result.readParams(stream, exception);
+            }
+            if (result.lat < TileSystemWebMercator.MinLatitude) {
+                result.lat = TileSystemWebMercator.MinLatitude;
+            } else if (result.lat > TileSystemWebMercator.MaxLatitude) {
+                result.lat = TileSystemWebMercator.MaxLatitude;
+            }
+            if (result._long < TileSystemWebMercator.MinLongitude) {
+                result._long = TileSystemWebMercator.MinLongitude;
+            } else if (result._long > TileSystemWebMercator.MaxLongitude) {
+                result._long = TileSystemWebMercator.MaxLongitude;
             }
             return result;
         }
