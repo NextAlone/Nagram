@@ -362,7 +362,6 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             }
         }
 
-        //TODO
         public void updatePositions() {
             if (mapView == null) {
                 return;
@@ -1295,7 +1294,6 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         };
         myLocationOverlay.enableMyLocation();
         myLocationOverlay.setDrawAccuracyEnabled(true);
-        //TODO
 
         mapView.addMapListener(new MapListener() {
             @Override
@@ -1311,7 +1309,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                             int min = locationType == LOCATION_TYPE_SEND ? 0 : AndroidUtilities.dp(66);
                             int top = view.getTop();
                             if (top < -min) {
-                                forceUpdate = mapView.getMapCenter(); //TODO. Strange variable
+                                forceUpdate = mapView.getMapCenter(); // Strange variable
                                 listView.smoothScrollBy(0, top + min);
                             }
                         }

@@ -26406,6 +26406,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 MessageObject message = messages.get(position - messagesStartRow);
                 View view = holder.itemView;
 
+                boolean fromUserBlocked = getMessagesController().blockePeers.indexOfKey(message.getFromChatId()) >= 0
+                    && ConfigManager.getBooleanOrFalse(Defines.ignoreBlockedUser);
+
+
                 if (view instanceof ChatMessageCell) {
                     final ChatMessageCell messageCell = (ChatMessageCell) view;
                     MessageObject.GroupedMessages groupedMessages = getValidGroupedMessage(message);
@@ -26762,6 +26766,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         if (chatListItemAnimator != null) {
                             chatListItemAnimator.onGreetingStickerTransition(holder, greetingsViewContainer);
                         }
+                    }
+                    if (fromUserBlocked){
+                        messageCell.setVisibility(View.GONE);
+                    } else {
+                        messageCell.setVisibility(View.VISIBLE);
                     }
                 } else if (view instanceof ChatActionCell) {
                     ChatActionCell actionCell = (ChatActionCell) view;
