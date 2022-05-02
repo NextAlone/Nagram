@@ -69,6 +69,7 @@ public class Defines {
     public static final String customQuickMessageDisplayName = "customQuickCommandDisplayName";
     public static final int customQuickMessageRow = 92;
     public static final String customQuickMsgSAR = "customQuickMessageSendAsReply";
+    public static final String scrollableChatPreview = "scrollableChatPreview";
 
     // Custom API
     public static final String customAPI = "customAPI";

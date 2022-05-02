@@ -55,6 +55,9 @@ import org.telegram.ui.Components.LayoutHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.utils.Defines;
+
 public class ActionBarLayout extends FrameLayout {
 
     public interface ActionBarLayoutDelegate {
@@ -81,6 +84,8 @@ public class ActionBarLayout extends FrameLayout {
         public LayoutContainer(Context context) {
             super(context);
             setWillNotDraw(false);
+            if (ConfigManager.getBooleanOrFalse(Defines.scrollableChatPreview))
+                setClickable(true);
         }
 
         @Override
@@ -188,6 +193,26 @@ public class ActionBarLayout extends FrameLayout {
             boolean passivePreview = inPreviewMode && previewMenu == null;
             if ((passivePreview || transitionAnimationPreviewMode) && (ev.getActionMasked() == MotionEvent.ACTION_DOWN || ev.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN)) {
                 return false;
+            }
+            if (ConfigManager.getBooleanOrFalse(Defines.scrollableChatPreview) && inPreviewMode && previewMenu == null) {
+                View view = containerView.getChildAt(0);
+                if (view != null) {
+                    int y = (int) (view.getTop() + containerView.getTranslationY() - AndroidUtilities.dp(Build.VERSION.SDK_INT < 21 ? 20 : 0));
+                    y += AndroidUtilities.dp(24);
+                    if (ev.getY() <= y && ev.getAction() == MotionEvent.ACTION_DOWN) {
+                        movePreviewFragment(AndroidUtilities.dp(65));
+                    }
+                    boolean isValidTouch = ev.getX() >= AndroidUtilities.dp(8);
+                    isValidTouch &= ev.getX() <= view.getRight() - AndroidUtilities.dp(8);
+                    isValidTouch &= ev.getY() <= view.getBottom();
+                    isValidTouch &= ev.getY() >= y + AndroidUtilities.dp(70);
+                    if (!isValidTouch) {
+                        if (ev.getY() > view.getBottom() && ev.getAction() == MotionEvent.ACTION_DOWN) {
+                            finishPreviewFragment();
+                        }
+                        return false;
+                    }
+                }
             }
             //
             try {
@@ -364,6 +389,7 @@ public class ActionBarLayout extends FrameLayout {
             fragment.setParentLayout(this);
         }
     }
+
     @Override
     public void onConfigurationChanged(android.content.res.Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -536,7 +562,7 @@ public class ActionBarLayout extends FrameLayout {
                 layerShadowDrawable.draw(canvas);
             } else if (child == containerViewBack) {
                 float opacity = MathUtils.clamp(widthOffset / (float) width, 0, 0.8f);
-                scrimPaint.setColor(Color.argb((int)(0x99 * opacity), 0x00, 0x00, 0x00));
+                scrimPaint.setColor(Color.argb((int) (0x99 * opacity), 0x00, 0x00, 0x00));
                 if (overrideWidthOffset != -1) {
                     canvas.drawRect(0, 0, getWidth(), getHeight(), scrimPaint);
                 } else {
@@ -789,8 +815,8 @@ public class ActionBarLayout extends FrameLayout {
                             int duration = Math.max((int) (200.0f / containerView.getMeasuredWidth() * distToMove), 50);
                             if (!overrideTransition) {
                                 animatorSet.playTogether(
-                                        ObjectAnimator.ofFloat(containerView, View.TRANSLATION_X, containerView.getMeasuredWidth()).setDuration(duration),
-                                        ObjectAnimator.ofFloat(this, "innerTranslationX", (float) containerView.getMeasuredWidth()).setDuration(duration)
+                                    ObjectAnimator.ofFloat(containerView, View.TRANSLATION_X, containerView.getMeasuredWidth()).setDuration(duration),
+                                    ObjectAnimator.ofFloat(this, "innerTranslationX", (float) containerView.getMeasuredWidth()).setDuration(duration)
                                 );
                             }
                         } else {
@@ -798,8 +824,8 @@ public class ActionBarLayout extends FrameLayout {
                             int duration = Math.max((int) (200.0f / containerView.getMeasuredWidth() * distToMove), 50);
                             if (!overrideTransition) {
                                 animatorSet.playTogether(
-                                        ObjectAnimator.ofFloat(containerView, View.TRANSLATION_X, 0).setDuration(duration),
-                                        ObjectAnimator.ofFloat(this, "innerTranslationX", 0.0f).setDuration(duration)
+                                    ObjectAnimator.ofFloat(containerView, View.TRANSLATION_X, 0).setDuration(duration),
+                                    ObjectAnimator.ofFloat(this, "innerTranslationX", 0.0f).setDuration(duration)
                                 );
                             }
                         }
@@ -1447,8 +1473,8 @@ public class ActionBarLayout extends FrameLayout {
 
             AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.playTogether(
-                    ObjectAnimator.ofFloat(fragment.fragmentView, View.SCALE_X, 1.0f, 1.05f, 1.0f),
-                    ObjectAnimator.ofFloat(fragment.fragmentView, View.SCALE_Y, 1.0f, 1.05f, 1.0f));
+                ObjectAnimator.ofFloat(fragment.fragmentView, View.SCALE_X, 1.0f, 1.05f, 1.0f),
+                ObjectAnimator.ofFloat(fragment.fragmentView, View.SCALE_Y, 1.0f, 1.05f, 1.0f));
             animatorSet.setDuration(200);
             animatorSet.setInterpolator(new CubicBezierInterpolator(0.42, 0.0, 0.58, 1.0));
             animatorSet.addListener(new AnimatorListenerAdapter() {
@@ -2169,12 +2195,12 @@ public class ActionBarLayout extends FrameLayout {
         HashMap<String, Integer> colors = new HashMap<>();
 
         String[] keysToSave = new String[]{
-                Theme.key_chat_outBubble,
-                Theme.key_chat_outBubbleGradient1,
-                Theme.key_chat_outBubbleGradient2,
-                Theme.key_chat_outBubbleGradient3,
-                Theme.key_chat_outBubbleGradientAnimated,
-                Theme.key_chat_outBubbleShadow
+            Theme.key_chat_outBubble,
+            Theme.key_chat_outBubbleGradient1,
+            Theme.key_chat_outBubbleGradient2,
+            Theme.key_chat_outBubbleGradient3,
+            Theme.key_chat_outBubbleGradientAnimated,
+            Theme.key_chat_outBubbleShadow
         };
 
         @Override

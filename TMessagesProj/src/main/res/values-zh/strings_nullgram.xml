@@ -141,4 +141,5 @@
     <string name="showMessageID">Show Message ID</string>
     <string name="hideQuickSendMediaBottom">Hide Quick Send Media Bottom</string>
     <string name="largeAvatarAsBackground">Large Avatar As Background</string>
+    <string name="scrollableChatPreview">可滑动聊天预览</string>
 </resources>
