@@ -164,7 +164,7 @@ public class EditTextCaption extends EditTextBoldCursor {
             return;
         }
 
-        if (!ConfigManager.getBooleanOrFalse(Defines.codeSyntaxHighlight)) {
+        if (!ConfigManager.getBooleanOrDefault(Defines.codeSyntaxHighlight, true)) {
             TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
             run.flags |= TextStyleSpan.FLAG_STYLE_MONO;
             applyTextStyleToSelection(new TextStyleSpan(run));

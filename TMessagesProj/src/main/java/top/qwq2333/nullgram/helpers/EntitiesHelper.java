@@ -178,7 +178,7 @@ public class EntitiesHelper {
         var editable = editTextCaption.getText();
         var resourcesProvider = editTextCaption.resourcesProvider;
         var context = editTextCaption.getContext();
-        if (style == Style.MENTION || style == Style.URL || (style == Style.MONO && ConfigManager.getBooleanOrFalse(Defines.codeSyntaxHighlight))) {
+        if (style == Style.MENTION || style == Style.URL || (style == Style.MONO && ConfigManager.getBooleanOrDefault(Defines.codeSyntaxHighlight, true))) {
             String title;
             String hint;
             String text;

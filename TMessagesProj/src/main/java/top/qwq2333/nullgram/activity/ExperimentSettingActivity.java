@@ -99,10 +99,11 @@ public class ExperimentSettingActivity extends BaseFragment {
                         ConfigManager.getBooleanOrFalse(Defines.blockSponsorAds));
                 }
             } else if (position == syntaxHighlightRow) {
-                ConfigManager.toggleBoolean(Defines.codeSyntaxHighlight);
+                ConfigManager.putBoolean(Defines.codeSyntaxHighlight,
+                    ConfigManager.getBooleanOrDefault(Defines.codeSyntaxHighlight, true));
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.codeSyntaxHighlight));
+                        ConfigManager.getBooleanOrDefault(Defines.codeSyntaxHighlight, true));
                 }
             } else if (position == aliasChannelRow) {
                 boolean currentStatus = ConfigManager.getBooleanOrFalse(Defines.channelAlias);
