@@ -64,6 +64,11 @@ public class Defines {
     public static final String hideQuickSendMediaBottom = "hideQuickSendMediaButtom";
     public static final String largeAvatarAsBackground = "largeAvatarAsBackground";
     public static final String useSystemEmoji = "useSystemEmoji";
+    public static final String customQuickMessage = "customQuickCommand";
+    public static final String customQuickMessageEnabled = "customQuickMessageEnabled";
+    public static final String customQuickMessageDisplayName = "customQuickCommandDisplayName";
+    public static final int customQuickMessageRow = 92;
+    public static final String customQuickMsgSAR = "customQuickMessageSendAsReply";
 
     // Custom API
     public static final String customAPI = "customAPI";

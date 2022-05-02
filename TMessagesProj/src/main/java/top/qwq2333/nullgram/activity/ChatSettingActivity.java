@@ -35,6 +35,7 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.NotificationsCheckCell;
@@ -57,6 +58,7 @@ import top.qwq2333.nullgram.ui.StickerSizePreviewMessagesCell;
 import top.qwq2333.nullgram.utils.AlertUtil;
 import top.qwq2333.nullgram.utils.Defines;
 import top.qwq2333.nullgram.utils.NumberUtils;
+import top.qwq2333.nullgram.utils.StringUtils;
 
 @SuppressLint("NotifyDataSetChanged")
 public class ChatSettingActivity extends BaseFragment {
@@ -91,6 +93,7 @@ public class ChatSettingActivity extends BaseFragment {
     private int hideTimeForStickerRow;
     private int showMessageIDRow;
     private int hideQuickSendMediaBottomRow;
+    private int customQuickMessageRow;
     private int chat2Row;
 
 
@@ -115,14 +118,14 @@ public class ChatSettingActivity extends BaseFragment {
         ActionBarMenu menu = actionBar.createMenu();
         resetItem = menu.addItem(0, R.drawable.msg_reset);
         resetItem.setContentDescription(LocaleController.getString("ResetStickerSize", R.string.ResetStickerSize));
-        resetItem.setVisibility(ConfigManager.getFloatOrDefault(Defines.stickerSize,14.0f) != 14.0f ? View.VISIBLE : View.GONE);
+        resetItem.setVisibility(ConfigManager.getFloatOrDefault(Defines.stickerSize, 14.0f) != 14.0f ? View.VISIBLE : View.GONE);
         resetItem.setTag(null);
         resetItem.setOnClickListener(v -> {
             AndroidUtilities.updateViewVisibilityAnimated(resetItem, false, 0.5f, true);
-            ValueAnimator animator = ValueAnimator.ofFloat(ConfigManager.getFloatOrDefault(Defines.stickerSize,14.0f), 14.0f);
+            ValueAnimator animator = ValueAnimator.ofFloat(ConfigManager.getFloatOrDefault(Defines.stickerSize, 14.0f), 14.0f);
             animator.setDuration(150);
             animator.addUpdateListener(valueAnimator -> {
-                ConfigManager.putFloat(Defines.stickerSize,(Float) valueAnimator.getAnimatedValue());
+                ConfigManager.putFloat(Defines.stickerSize, (Float) valueAnimator.getAnimatedValue());
                 stickerSizeCell.invalidate();
             });
             animator.start();
@@ -302,6 +305,9 @@ public class ChatSettingActivity extends BaseFragment {
                         ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)
                     );
                 }
+            } else if (position == customQuickMessageRow) {
+                setCustomQuickMessage();
+                listAdapter.notifyItemChanged(position);
             }
         });
 
@@ -357,6 +363,7 @@ public class ChatSettingActivity extends BaseFragment {
         hideTimeForStickerRow = rowCount++;
         showMessageIDRow = rowCount++;
         hideQuickSendMediaBottomRow = rowCount++;
+        customQuickMessageRow = rowCount++;
         chat2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -501,6 +508,8 @@ public class ChatSettingActivity extends BaseFragment {
                             LocaleController.getString("customDoubleTap",
                                 R.string.customDoubleTap),
                             true);
+                    } else if (position == customQuickMessageRow) {
+                        textCell.setText(LocaleController.getString("setCustomQuickMessage", R.string.setCustomQuickMessage), true);
                     }
                     break;
                 }
@@ -674,7 +683,8 @@ public class ChatSettingActivity extends BaseFragment {
         public int getItemViewType(int position) {
             if (position == chat2Row || position == stickerSize2Row) {
                 return 1;
-            } else if (position == messageMenuRow || position == customDoubleClickTapRow || position == maxRecentStickerRow) {
+            } else if (position == messageMenuRow || position == customDoubleClickTapRow || position == maxRecentStickerRow
+                || position == customQuickMessageRow) {
                 return 2;
             } else if (position == chatRow || position == stickerSizeHeaderRow) {
                 return 4;
@@ -831,11 +841,11 @@ public class ChatSettingActivity extends BaseFragment {
                 } else {
                     if (!NumberUtils.isInteger(editText.getText().toString())) {
                         AndroidUtilities.shakeView(view, 2, 0);
-                        AlertUtil.showToast("You must input a number!");
+                        AlertUtil.showToast(LocaleController.getString("notANumber", R.string.notANumber));
                     } else {
                         final int targetNum = Integer.parseInt(editText.getText().toString().trim());
                         if (targetNum > 150 || targetNum < 20)
-                            AlertUtil.showToast("Number should be >20 and 150<");
+                            AlertUtil.showToast(LocaleController.getString("numberInvalid", R.string.numberInvalid));
                         else
                             ConfigManager.putInt(Defines.maxRecentSticker, Integer.parseInt(editText.getText().toString()));
                     }
@@ -857,6 +867,114 @@ public class ChatSettingActivity extends BaseFragment {
             editText.setLayoutParams(layoutParams);
         }
         editText.setSelection(0, editText.getText().length());
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void setCustomQuickMessage() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+        builder.setTitle(LocaleController.getString("setCustomQuickMessage", R.string.setCustomQuickMessage));
+
+        LinearLayout layout = new LinearLayout(getParentActivity());
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        final EditTextBoldCursor setDisplayNameEditText = new EditTextBoldCursor(getParentActivity()) {
+            @Override
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                super.onMeasure(widthMeasureSpec,
+                    MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64), MeasureSpec.EXACTLY));
+            }
+        };
+
+        setDisplayNameEditText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+        setDisplayNameEditText.setTextColor(getThemedColor(Theme.key_dialogTextBlack));
+        setDisplayNameEditText.setHintText(
+            LocaleController.getString("Name", R.string.Name));
+        setDisplayNameEditText.setText(ConfigManager.getStringOrDefault(Defines.customQuickMessageDisplayName, ""));
+        setDisplayNameEditText.setHeaderHintColor(getThemedColor(Theme.key_windowBackgroundWhiteBlueHeader));
+        setDisplayNameEditText.setSingleLine(true);
+        setDisplayNameEditText.setFocusable(true);
+        setDisplayNameEditText.setTransformHintToHeader(true);
+        setDisplayNameEditText.setLineColors(getThemedColor(Theme.key_windowBackgroundWhiteInputField),
+            getThemedColor(Theme.key_windowBackgroundWhiteInputFieldActivated),
+            getThemedColor(Theme.key_windowBackgroundWhiteRedText3));
+        setDisplayNameEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        setDisplayNameEditText.setBackgroundDrawable(null);
+        setDisplayNameEditText.setPadding(0, 0, 0, 0);
+        layout.addView(setDisplayNameEditText);
+
+        final EditTextBoldCursor setMessageEditText = new EditTextBoldCursor(getParentActivity()) {
+            @Override
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                super.onMeasure(widthMeasureSpec,
+                    MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64), MeasureSpec.EXACTLY));
+            }
+        };
+        setMessageEditText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+        setMessageEditText.setTextColor(getThemedColor(Theme.key_dialogTextBlack));
+        setMessageEditText.setHintText(
+            LocaleController.getString("Message", R.string.Message));
+        setMessageEditText.setText(ConfigManager.getStringOrDefault(Defines.customQuickMessage, ""));
+        setMessageEditText.setHeaderHintColor(getThemedColor(Theme.key_windowBackgroundWhiteBlueHeader));
+        setMessageEditText.setSingleLine(false);
+        setMessageEditText.setFocusable(true);
+        setMessageEditText.setTransformHintToHeader(true);
+        setMessageEditText.setLineColors(getThemedColor(Theme.key_windowBackgroundWhiteInputField),
+            getThemedColor(Theme.key_windowBackgroundWhiteInputFieldActivated),
+            getThemedColor(Theme.key_windowBackgroundWhiteRedText3));
+        setMessageEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        setMessageEditText.setBackgroundDrawable(null);
+        setMessageEditText.setPadding(0, 0, 0, 0);
+        layout.addView(setMessageEditText);
+
+        CheckBoxCell cell = new CheckBoxCell(getParentActivity(), 1);
+        cell.setBackground(Theme.getSelectorDrawable(false));
+        cell.setText(LocaleController.getString("SendAsReply", R.string.SendAsReply), "", ConfigManager.getBooleanOrFalse(Defines.customQuickMsgSAR), false);
+        cell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16) : AndroidUtilities.dp(8), 0, LocaleController.isRTL ? AndroidUtilities.dp(8) : AndroidUtilities.dp(16), 0);
+        cell.setOnClickListener(v -> {
+            CheckBoxCell cell1 = (CheckBoxCell) v;
+            cell1.setChecked(!cell1.isChecked(), true);
+        });
+        layout.addView(cell);
+
+        builder.setView(layout);
+
+
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK),
+            (dialogInterface, i) -> {
+                if (StringUtils.isBlank(setDisplayNameEditText.getText().toString())
+                    || StringUtils.isBlank(setMessageEditText.getText().toString())) {
+                    AlertUtil.showToast(LocaleController.getString("emptyInput", R.string.emptyInput));
+                } else {
+                    ConfigManager.putString(Defines.customQuickMessageDisplayName, setDisplayNameEditText.getText().toString());
+                    ConfigManager.putString(Defines.customQuickMessage, setMessageEditText.getText().toString());
+                    ConfigManager.putBoolean(Defines.customQuickMessageEnabled, true);
+                    ConfigManager.putBoolean(Defines.customQuickMsgSAR, cell.isChecked());
+                }
+            });
+
+
+        builder.setNeutralButton(LocaleController.getString("Reset", R.string.Reset), (dialogInterface, i) -> {
+            ConfigManager.deleteValue(Defines.customQuickMessage);
+            ConfigManager.deleteValue(Defines.customQuickMessageDisplayName);
+            ConfigManager.putBoolean(Defines.customQuickMessageEnabled, false);
+        });
+
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.show().setOnShowListener(dialog -> {
+            setDisplayNameEditText.requestFocus();
+            AndroidUtilities.showKeyboard(setDisplayNameEditText);
+        });
+
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) setDisplayNameEditText.getLayoutParams();
+        if (layoutParams != null) {
+            if (layoutParams instanceof FrameLayout.LayoutParams) {
+                ((FrameLayout.LayoutParams) layoutParams).gravity = Gravity.CENTER_HORIZONTAL;
+            }
+            layoutParams.rightMargin = layoutParams.leftMargin = AndroidUtilities.dp(24);
+            layoutParams.height = AndroidUtilities.dp(36);
+            setDisplayNameEditText.setLayoutParams(layoutParams);
+        }
+        setDisplayNameEditText.setSelection(0, setDisplayNameEditText.getText().length());
     }
 
     private class StickerSizeCell extends FrameLayout {

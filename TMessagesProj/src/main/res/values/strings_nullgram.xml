@@ -142,4 +142,11 @@
     <string name="hideQuickSendMediaBottom">Hide Quick Send Media Bottom</string>
     <string name="largeAvatarAsBackground">Large Avatar As Background</string>
     <string name="useSystemEmoji">Use System Emoji</string>
+    <string name="Command">Command</string>
+    <string name="setCustomQuickMessage">Set Custom Quick Message</string>
+    <string name="emptyInput">You can\'t input nothing here</string>
+    <string name="numberInvalid"><![CDATA[Number should be >20 and 150<]]></string>
+    <string name="notANumber">You must input a number!</string>
+    <string name="notACommand">You must input a string!</string>
+    <string name="SendAsReply">Send As Reply</string>
 </resources>
