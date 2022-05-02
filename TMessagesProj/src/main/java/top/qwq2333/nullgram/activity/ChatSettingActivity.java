@@ -957,6 +957,7 @@ public class ChatSettingActivity extends BaseFragment {
             ConfigManager.deleteValue(Defines.customQuickMessage);
             ConfigManager.deleteValue(Defines.customQuickMessageDisplayName);
             ConfigManager.putBoolean(Defines.customQuickMessageEnabled, false);
+            ConfigManager.putBoolean(Defines.customQuickMsgSAR, false);
         });
 
         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
