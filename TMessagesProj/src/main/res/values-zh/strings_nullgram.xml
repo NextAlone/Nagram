@@ -137,9 +137,17 @@
     <string name="AvatarAsBackground">头像为背景</string>
     <string name="BlurAvatarBackground">虚化头像</string>
     <string name="DarkenAvatarBackground">暗色头像</string>
-    <string name="hideTimeForSticker">Hide Time For Sticker</string>
-    <string name="showMessageID">Show Message ID</string>
-    <string name="hideQuickSendMediaBottom">Hide Quick Send Media Bottom</string>
-    <string name="largeAvatarAsBackground">Large Avatar As Background</string>
-    <string name="scrollableChatPreview">可滑动聊天预览</string>
+    <string name="hideTimeForSticker">隐藏贴纸发送时间</string>
+    <string name="showMessageID">显示信息ID</string>
+    <string name="hideQuickSendMediaBottom">隐藏快速发送媒体按钮</string>
+    <string name="largeAvatarAsBackground">大头像为背景</string>
+    <string name="useSystemEmoji">使用系统Emoji字体</string>
+    <string name="Command">命令</string>
+    <string name="setCustomQuickMessage">设置自定义快速消息</string>
+    <string name="emptyInput">您不能在此输入空白内容</string>
+    <string name="numberInvalid"><![CDATA[数字应该是 >20 和 150<]]></string>
+    <string name="notANumber">您必须输入一个数字</string>
+    <string name="notACommand">您必须输入合法的字符</string>
+    <string name="SendAsReply">作为回复发送</string>
+    <string name="scrollableChatPreview">Scrollable Chat Preview</string>
 </resources>
