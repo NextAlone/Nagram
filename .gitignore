@@ -13,3 +13,4 @@ API_KEYS
 *.hprof
 *.iml
 *.apk
+*.DS_Store

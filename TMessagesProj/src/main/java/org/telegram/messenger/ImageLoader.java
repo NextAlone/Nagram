@@ -2145,9 +2145,10 @@ public class ImageLoader {
                 }
                 if (publicMediaDir != null && publicMediaDir.isDirectory()) {
                     try {
-                        File imagePath = new File(publicMediaDir, "Telegram Images");
+                        File imagePath = new File(publicMediaDir, "exteraGram Images");
                         imagePath.mkdir();
                         if (imagePath.isDirectory() && canMoveFiles(cachePath, imagePath, FileLoader.MEDIA_DIR_IMAGE)) {
+                            AndroidUtilities.createEmptyFile(new File(imagePath, ".nomedia"));
                             mediaDirs.put(FileLoader.MEDIA_DIR_IMAGE_PUBLIC, imagePath);
                             if (BuildVars.LOGS_ENABLED) {
                                 FileLog.d("image path = " + imagePath);
@@ -2158,9 +2159,10 @@ public class ImageLoader {
                     }
 
                     try {
-                        File videoPath = new File(publicMediaDir, "Telegram Video");
+                        File videoPath = new File(publicMediaDir, "exteraGram Video");
                         videoPath.mkdir();
                         if (videoPath.isDirectory() && canMoveFiles(cachePath, videoPath, FileLoader.MEDIA_DIR_VIDEO)) {
+                            AndroidUtilities.createEmptyFile(new File(videoPath, ".nomedia"));
                             mediaDirs.put(FileLoader.MEDIA_DIR_VIDEO_PUBLIC, videoPath);
                             if (BuildVars.LOGS_ENABLED) {
                                 FileLog.d("video path = " + videoPath);

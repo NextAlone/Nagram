@@ -2056,6 +2056,15 @@ public class LoginActivity extends BaseFragment {
                                 }
                             }
                         }
+                        CountrySelectActivity.Country countryWithCode = new CountrySelectActivity.Country();
+                        String test_code = "999";
+                        countryWithCode.name = "Test Number";
+                        countryWithCode.code = test_code;
+                        countryWithCode.shortname = "YL";
+
+                        countriesArray.add(countryWithCode);
+                        codesMap.put(test_code, countryWithCode);
+                        phoneFormatMap.put(test_code, Collections.singletonList("XX X XXXX"));
                     }
                 });
             }, ConnectionsManager.RequestFlagWithoutLogin | ConnectionsManager.RequestFlagFailOnServerErrors);
@@ -2387,7 +2396,13 @@ public class LoginActivity extends BaseFragment {
                 return;
             }
             String phone = PhoneFormat.stripExceptNumbers("" + codeField.getText() + phoneField.getText());
-            boolean testBackend = BuildVars.DEBUG_PRIVATE_VERSION && getConnectionsManager().isTestBackend();
+            if (!testBackend && "999".equals(codeField.getText().toString())) {
+                testBackend = true;
+                if (testBackendCheckBox != null) {
+                    testBackendCheckBox.setChecked(true, true);
+                }
+            }
+            boolean testBackend = /* BuildVars.DEBUG_PRIVATE_VERSION && */ getConnectionsManager().isTestBackend();
             if (testBackend != LoginActivity.this.testBackend) {
                 getConnectionsManager().switchBackend(false);
                 testBackend = LoginActivity.this.testBackend;
