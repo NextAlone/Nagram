@@ -32,8 +32,11 @@ MAPS_V2_API = abcdef01234567-abcdef012345678910111213
 ./gradlew assembleAfatRelease
 ```
 
+## exteraGram Localization
+Since **exteraGram** is a fork of **Telegram for Android** and most localizations follow translations of **Telegram for Android**, check it out [here](https://translations.telegram.org/en/android/). As for specialized strings for **exteraGram**, we use **Crowdin** to translate **exteraGram**. Join the project at [Crowdin](https://crowdin.com/project/exteralocales)!
+
  ## Thanks to:
 - [Telegram](https://github.com/DrKLO/Telegram)
 - [Catogram](https://github.com/Catogram/Catogram) and [Catogram X](https://github.com/CatogramX/CatogramX)
 - [Nekogram](https://gitlab.com/Nekogram/Nekogram) and [Nekogram X](https://github.com/NekoX-Dev/NekoX)
-- [OwlGram](https://gitlab.com/OwlGramDev/OwlGram)
+- [OwlGram](https://github.com/OwlGramDev/OwlGram)
