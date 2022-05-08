@@ -8,10 +8,10 @@
     <string name="ChatAttachEnterMenuEnableLinkPreview">Linkvorschau aktivieren</string>
     <string name="DisableLinkPreviewByDefault">Linkvorschau standardmäßig deaktivieren</string>
     <string name="CustomApi">Benutzerdefinierte API</string>
-    <string name="UseCustomApiNotice">Melden Sie sich mit der benutzerdefinierten API an. Wenn Sie sich nicht registrieren oder anmelden können, kann dies hilfreich sein.
+    <string name="UseCustomApiNotice">Mit benutzerdefinierten API anmelden. Wenn du dich nicht registrieren oder anmelden kannst, kann dies hilfreich sein.
 \n
 \nHinweis: fcm funktioniert nicht, wenn Sie die Release-Version verwenden.</string>
-    <string name="CustomApiNo">Verwenden Sie keine benutzerdefinierte API</string>
+    <string name="CustomApiNo">Keine benutzerdefinierte API verwenden</string>
     <string name="CustomApiOfficial">Telegram Android</string>
     <string name="CustomApiTGX">Telegram Android X</string>
     <string name="CustomApiInput">Manuelle Eingabe</string>
@@ -33,24 +33,24 @@
     <string name="TapToDisable">Zum Deaktivieren tippen. Du benötigst dies nicht.</string>
     <string name="PlaceHolder">Platzhalter - Bitte deaktivieren</string>
     <string name="CustomBackend">Benutzerdefiniertes Backend</string>
-    <string name="CustomBackendNotice">Diese Funktion richtet sich nur an erfahrene Benutzer. Wenn Du nicht weißt, was die folgenden Optionen bedeuten, ignoriere sie einfach.</string>
-    <string name="CustomBackendProduction">Offizielle Produktionsdatenbank</string>
-    <string name="CustomBackendTestDC">Offizielle Testdatenbank</string>
+    <string name="CustomBackendNotice">Diese Funktion richtet sich nur an erfahrene Benutzer. Wenn du nicht weißt, was die folgenden Optionen bedeuten, ignoriere sie einfach.</string>
+    <string name="CustomBackendProduction">Offizielles Produktions-Rechenzentrum</string>
+    <string name="CustomBackendTestDC">Offizielles Test-Rechenzentrum</string>
     <string name="AllowFlashCall">Flash-Anruf zulassen</string>
     <string name="ChangeTranslateProvider">Anbieter wechseln</string>
-    <string name="ProviderYandexTranslate">Yandex.Übersetzen</string>
+    <string name="ProviderYandexTranslate">Yandex.Translate</string>
     <string name="GoogleCloudTransKey">Google Cloud Übersetzungsschlüssel</string>
-    <string name="GoogleCloudTransKeyNotice">Wenn Sie einen Google Cloud-Translate-Schlüssel einrichten, wird die API für die Cloud-Übersetzung aufgerufen, anstatt beim Übersetzen ein gefälschtes Formular an die Web-Version zu senden (schneller, stabiler und datensparender).</string>
+    <string name="GoogleCloudTransKeyNotice">Wenn du einen Google Cloud Übersetzungsschlüssel einrichtest, wird beim Übersetzen die Cloud-Übersetzungs-API aufgerufen, anstatt ein gefälschtes Formular an die Webversion zu übermitteln (schneller, stabiler und spart Traffic).</string>
     <string name="TransToLang">Zielsprache der Übersetzung</string>
     <string name="TransInputToLang">Quellsprache der Übersetzung</string>
     <string name="More">Mehr</string>
-    <string name="NekoXUpdatesChannel">NekoX-Aktualisierungskanal</string>
+    <string name="NekoXUpdatesChannel">NekoX-Update-Kanal</string>
     <string name="ShowIdAndDc">ID/DC im Profil anzeigen</string>
     <string name="UseDefaultTheme">Standardthema verwenden*</string>
     <string name="NightMode">Nachtmodus</string>
     <string name="PrivacyNotice">Datenschutzwarnung</string>
     <string name="PrivacyNoticePhoneVisible">Es wurde festgestellt, dass deine Rufnummer für jeden sichtbar ist, was dazu führen kann, dass staatlich kontrollierte Hacker deine wahre Identität ermitteln können. Bitte deaktiviere dies!</string>
-    <string name="PrivacyNoticeAddByPhone">Es wurde festgestellt, dass Du die Option \"Erlaube, mich über die Handynummer zu finden\" nicht deaktiviert hast, was dazu führen kann, dass staatlich kontrollierte Hacker Deine wahre Identität ermitteln können. Bitte deaktiviere dies!</string>
+    <string name="PrivacyNoticeAddByPhone">Es wurde festgestellt, dass du die Option \"Erlaube mich über die Rufnummer zu finden\" nicht deaktiviert hast, was dazu führen kann, dass staatlich kontrollierte Hacker deine wahre Identität ermitteln können. Bitte deaktiviere dies!</string>
     <string name="PrivacyNoticeP2p">Du hast die Option \"P2P-Anrufe zulassen\" nicht ausgeschaltet. Dadurch können staatlich kontrollierte Hacker deine wahre Identität herausfinden. Bitte schalte sie aus!</string>
     <string name="PrivacyNotice2fa">Du hast kein Passwort festgelegt, so dass staatlich kontrollierte Hacker deine wahre Identität herausfinden können. Bitte eins festlegen!</string>
     <string name="ApplySuggestion">OK, anwenden</string>
@@ -214,9 +214,9 @@
     <string name="QRLoginNotice">Mit diesem QR-Code / Link können sich Personen bei Ihrem Telegrammkonto anmelden. Ist das Ihre eigene Operation\?</string>
     <string name="ProxyInfoTrojan">Trojaner-Proxy-Einstellungen</string>
     <string name="AddProxyTrojan">Trojaner-Proxy hinzufügen</string>
-    <string name="DisableLinkPreviewByDefaultNotice">Deaktivieren Sie die Linkvorschau-Anforderung standardmäßig während der Eingabe, um zu verhindern, dass der Server weiß, dass der Link über Telegram freigegeben wird.</string>
-    <string name="UseChatAttachEnterMenuNotice">Ändern Sie die Aufnahmetaste in ein Eingabemenü und fügen Sie einen Linkvorschau-Toggle hinzu.</string>
-    <string name="UseChatAttachEnterMenu">Verwenden Sie das Eingabemenü</string>
+    <string name="DisableLinkPreviewByDefaultNotice">Linkvorschau-Anforderung standardmäßig während der Eingabe deaktivieren, um zu verhindern, dass der Server weiß, dass der Link über Telegram freigegeben wird.</string>
+    <string name="UseChatAttachEnterMenuNotice">Aufnahmetaste in ein Eingabemenü ändern und Linkvorschau-Toggle hinzufügen.</string>
+    <string name="UseChatAttachEnterMenu">Eingabemenü verwenden</string>
     <string name="SetPinnedSuffix">(Angeheftet)</string>
     <string name="UnpinSticker">Loslösen</string>
     <string name="PinSticker">Anheften</string>
