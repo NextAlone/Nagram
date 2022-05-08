@@ -284,11 +284,6 @@ android {
         full {
             manifestPlaceholders = [is_full_version: "true"]
         }
-        miniPlay {
-            versionNameSuffix "-play"
-            versionCode verCode - 2
-            manifestPlaceholders = [is_full_version: "false"]
-        }
     }
 
     sourceSets.all { set ->
