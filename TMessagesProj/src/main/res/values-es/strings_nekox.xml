@@ -264,7 +264,7 @@
     <string name="EnableStickerPinTip">Esta función todavía está en desarrollo, la sincronización en la nube podría no funcionar como se espera.</string>
     <string name="AutoCheckUpdateOFF">Desactivado</string>
     <string name="AutoCheckUpdatePreview">Vista previa (inestable)</string>
-    <string name="AppUpdateNekoX">Actualización de Nekogram X</string>
+    <string name="AppUpdateNekoX">Actualización de Nagram</string>
     <string name="NekoXUpdateTranslationHint">Pulse para traducir el registro de cambios</string>
     <string name="showSeconds">Mostrar los segundos en la marca de tiempo</string>
     <string name="ShareMessages">Compartir</string>

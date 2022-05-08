@@ -272,7 +272,7 @@
     <string name="ShareMessages">Compartilhar</string>
     <string name="NekoXUpdateTranslationHint">Pressione para traduzir o histórico de alterações</string>
     <string name="AutoCheckUpdatePreview">Preview (Instável)</string>
-    <string name="AppUpdateNekoX">Atualizar Nekogram X</string>
+    <string name="AppUpdateNekoX">Atualizar Nagram</string>
     <string name="setChannelAliasName">Definir Alias</string>
     <string name="labelChannelUser">Marcar Usuário do Canal</string>
     <string name="labelChannelUserDetails">Se o remetente da mensagem for o Canal, ele será rotulado como \"Canal\"</string>

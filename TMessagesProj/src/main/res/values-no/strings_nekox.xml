@@ -142,7 +142,7 @@
     <string name="SubscriptionUrls">Nettadresser</string>
     <string name="SSRProtocolParams">Protokollparametre</string>
     <string name="hideSponsoredMessage">Skjul sponsormeldinger</string>
-    <string name="AppUpdateNekoX">Oppgrader Nekogram X</string>
+    <string name="AppUpdateNekoX">Oppgrader Nagram</string>
     <string name="NekoXUpdateTranslationHint">Trykk for å oversette endringsloggen</string>
     <string name="SSRObfs">Obfs</string>
     <string name="ProxyInfoTrojan">Trojan-mellomtjenerinnstillinger</string>

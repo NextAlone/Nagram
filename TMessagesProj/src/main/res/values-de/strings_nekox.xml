@@ -274,7 +274,7 @@
     <string name="Name">Name</string>
     <string name="setChannelAliasName">Kanalname festlegen</string>
     <string name="channelAliasDetails">Kanalbenutzerbezeichnung muss aktiviert sein.</string>
-    <string name="AppUpdateNekoX">Nekogram X aktualisieren</string>
+    <string name="AppUpdateNekoX">Nagram aktualisieren</string>
     <string name="AutoCheckUpdatePreview">Vorschau (instabil)</string>
     <string name="labelChannelUser">Kanalbenutzerbezeichnung</string>
     <string name="NekoXUpdateTranslationHint">Zum Übersetzen des Änderungsprotokolls betätigen</string>
