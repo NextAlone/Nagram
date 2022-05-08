@@ -21628,7 +21628,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             options.add(13);
                             icons.add(R.drawable.msg_pin);
                         }
-                        if (message.messageOwner.forwards >= 1 && ChatObject.hasAdminRights(getCurrentChat())) {
+                        boolean canViewStats = false;
+                        if (message.messageOwner.views > 0 || message.messageOwner.forwards > 0) {
+                            if (message.messageOwner.fwd_from != null && message.messageOwner.fwd_from.channel_post != 0) {
+                                TLRPC.Chat fwdChat = getMessagesController().getChat(message.messageOwner.fwd_from.from_id.channel_id);
+                                canViewStats = ChatObject.hasAdminRights(fwdChat);
+                            } else if (!message.isForwarded()) {
+                                canViewStats = ChatObject.hasAdminRights(getCurrentChat());
+                            }
+                        }
+                        if (canViewStats) {
                             items.add(LocaleController.getString("ViewStats", R.string.ViewStats));
                             options.add(28);
                             icons.add(R.drawable.msg_stats);
