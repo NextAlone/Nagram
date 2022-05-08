@@ -296,7 +296,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     private static final int menu_bot_login = 4;
     private static final int menu_other = 5;
     //private int menu_custom_api = 6;
-//    private int menu_custom_dc = 7;
+    private int menu_custom_dc = 7;
     private static final int menu_qr_login = 8;
 
     TLRPC.TL_auth_exportLoginToken exportLoginTokenRequest = null;
@@ -615,6 +615,8 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 .setContentDescription(LocaleController.getString("BotLogin", R.string.BotLogin));
         menu.addSubItem(menu_qr_login, R.drawable.wallet_qr, LocaleController.getString("ImportLogin", R.string.ImportLogin))
                 .setContentDescription(LocaleController.getString("ImportLogin", R.string.ImportLogin));
+        menu.addSubItem(menu_custom_dc, R.drawable.baseline_sync_24, LocaleController.getString("CustomBackend", R.string.CustomBackend))
+                .setContentDescription(LocaleController.getString("CustomBackend", R.string.CustomBackend));
 //        otherItem.addSubItem(menu_custom_api, R.drawable.baseline_vpn_key_24, LocaleController.getString("CustomApi", R.string.CustomApi));
 //        menu.addSubItem(menu_custom_dc, R.drawable.baseline_sync_24, LocaleController.getString("CustomBackend", R.string.CustomBackend));
 
@@ -631,6 +633,12 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             } else if (id == menu_qr_login) {
                 getConnectionsManager().cleanup(false);
                 regenerateLoginToken(false);
+            } else if (id == menu_custom_dc) {
+                PhoneView phoneView = (PhoneView)views[VIEW_PHONE_INPUT];
+                if (phoneView.testBackendCheckBox.getVisibility() == View.GONE)
+                    phoneView.testBackendCheckBox.setVisibility(View.VISIBLE);
+                else
+                    phoneView.testBackendCheckBox.setVisibility(View.GONE);
             }
         });
         menu.setContentDescription(LocaleController.getString(R.string.items_other));
@@ -2000,21 +2008,21 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 }
             });
 
+            testBackendCheckBox = new CheckBoxCell(context, 2);
+            testBackendCheckBox.setText("Test Backend", "", testBackend, false);
+            addView(testBackendCheckBox, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 16, 0, 16 + (LocaleController.isRTL && AndroidUtilities.isSmallScreen() ? Build.VERSION.SDK_INT >= 21 ? 56 : 60 : 0), 0));
+            bottomMargin -= 24;
+            testBackendCheckBox.setOnClickListener(v -> {
+                if (getParentActivity() == null) {
+                    return;
+                }
+                CheckBoxCell cell = (CheckBoxCell) v;
+                testBackend = !testBackend;
+                cell.setChecked(testBackend, true);
+            });
+//            testBackendCheckBox.setVisibility(BuildVars.DEBUG_VERSION ? VISIBLE : GONE);
+            testBackendCheckBox.setVisibility(GONE);
 
-            if (BuildVars.DEBUG_PRIVATE_VERSION) {
-                testBackendCheckBox = new CheckBoxCell(context, 2);
-                testBackendCheckBox.setText("Test Backend", "", testBackend, false);
-                addView(testBackendCheckBox, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 16, 0, 16 + (LocaleController.isRTL && AndroidUtilities.isSmallScreen() ? Build.VERSION.SDK_INT >= 21 ? 56 : 60 : 0), 0));
-                bottomMargin -= 24;
-                testBackendCheckBox.setOnClickListener(v -> {
-                    if (getParentActivity() == null) {
-                        return;
-                    }
-                    CheckBoxCell cell = (CheckBoxCell) v;
-                    testBackend = !testBackend;
-                    cell.setChecked(testBackend, true);
-                });
-            }
             if (bottomMargin > 0 && !AndroidUtilities.isSmallScreen()) {
                 Space bottomSpacer = new Space(context);
                 bottomSpacer.setMinimumHeight(AndroidUtilities.dp(bottomMargin));
