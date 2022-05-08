@@ -4669,46 +4669,6 @@ public class AndroidUtilities {
         }
     }
 
-    private static HashMap<Window, ValueAnimator> navigationBarColorAnimators;
-
-    public static void setNavigationBarColor(Window window, int color) {
-        setNavigationBarColor(window, color, true);
-    }
-
-    public static void setNavigationBarColor(Window window, int color, boolean animated) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (navigationBarColorAnimators != null) {
-                ValueAnimator animator = navigationBarColorAnimators.get(window);
-                if (animator != null) {
-                    animator.cancel();
-                    navigationBarColorAnimators.remove(window);
-                }
-            }
-
-            if (!animated) {
-                window.setNavigationBarColor(color);
-            } else {
-                ValueAnimator animator = ValueAnimator.ofArgb(window.getNavigationBarColor(), color);
-                animator.addUpdateListener(a -> window.setNavigationBarColor((int) a.getAnimatedValue()));
-                animator.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        if (navigationBarColorAnimators != null) {
-                            navigationBarColorAnimators.remove(window);
-                        }
-                    }
-                });
-                animator.setDuration(200);
-                animator.setInterpolator(CubicBezierInterpolator.DEFAULT);
-                animator.start();
-                if (navigationBarColorAnimators == null) {
-                    navigationBarColorAnimators = new HashMap<>();
-                }
-                navigationBarColorAnimators.put(window, animator);
-            }
-        }
-    }
-
     public static boolean checkHostForPunycode(String url) {
         if (url == null) {
             return false;
