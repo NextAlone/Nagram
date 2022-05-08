@@ -4,8 +4,7 @@ android {
     compileSdkVersion 31
 
     defaultConfig {
-        versionCode 9
-        versionName '13.0' // API-Version . minor
+        // API-Version . minor
         minSdkVersion 9
         targetSdkVersion 31
     }
