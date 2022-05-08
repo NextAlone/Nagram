@@ -314,6 +314,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private RadialProgressView progressBar;
     private ActionBarMenuSubItem addContactItem;
     private ActionBarMenuSubItem clearHistoryItem;
+    private ActionBarMenuSubItem toBeginning;
     private ClippingImageView animatingImageView;
     private RecyclerListView chatListView;
     private ChatListItemAnimator chatListItemAnimator;
@@ -1297,6 +1298,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int save_to = 25;
     private final static int auto_delete_timer = 26;
     private final static int change_colors = 27;
+    private final static int to_beginning = 28;
 
     private final static int bot_help = 30;
     private final static int bot_settings = 31;
@@ -2400,6 +2402,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     } catch (Exception e) {
                         FileLog.e(e);
                     }
+                } else if (id == to_beginning) {
+                    scrollToMessageId(1, 0, false, 0, true, 0);
                 } else if (id == report) {
                     AlertsCreator.createReportAlert(getParentActivity(), dialog_id, 0, ChatActivity.this, themeDelegate, null);
                 } else if (id == star) {
@@ -2926,6 +2930,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (currentEncryptedChat != null) {
                 timeItem2 = headerItem.addSubItem(chat_enc_timer, R.drawable.msg_timer, LocaleController.getString("SetTimer", R.string.SetTimer), themeDelegate);
             }
+
+            toBeginning = headerItem.addSubItem(to_beginning, R.drawable.msg_go_up, LocaleController.getString("ToBeginning", R.string.ToBeginning));
 
             clearHistoryItem = headerItem.addSubItem(clear_history, R.drawable.msg_clear, LocaleController.getString("ClearHistory", R.string.ClearHistory), themeDelegate);
 
