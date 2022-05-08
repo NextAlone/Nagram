@@ -76,6 +76,7 @@ import org.telegram.ui.Cells.ChatListCell;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.NotificationsCheckCell;
+import org.telegram.ui.Cells.RadioButtonCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextCheckCell;
@@ -135,6 +136,9 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     private int raiseToSpeakRow;
     private int sendByEnterRow;
     private int saveToGalleryRow;
+    private int saveToGalleryOption1Row;
+    private int saveToGalleryOption2Row;
+    private int saveToGallerySectionRow;
     private int distanceRow;
     private int enableAnimationsRow;
     private int settings2Row;
@@ -509,6 +513,9 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         raiseToSpeakRow = -1;
         sendByEnterRow = -1;
         saveToGalleryRow = -1;
+        saveToGalleryOption1Row = -1;
+        saveToGalleryOption2Row = -1;
+        saveToGallerySectionRow = -1;
         distanceRow = -1;
         settings2Row = -1;
         stickersRow = -1;
@@ -1999,6 +2006,9 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 case 18:
                     view = new TextSettingsCell(mContext);
                     break;
+                case 19:
+                    view = new RadioButtonCell(mContext);
+                    break;
             }
             return new RecyclerListView.Holder(view);
         }
@@ -2063,7 +2073,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     break;
                 }
                 case 3: {
-                    if (position == stickersSection2Row || position == nightTypeInfoRow && themeInfoRow == -1 || position == themeInfoRow && nightTypeInfoRow != -1) {
+                    if (position == stickersSection2Row || position == nightTypeInfoRow && themeInfoRow == -1 || position == themeInfoRow && nightTypeInfoRow != -1 || position == saveToGallerySectionRow) {
                         holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     } else {
                         holder.itemView.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
@@ -2212,6 +2222,16 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     }
                     break;
                 }
+                case 19:{
+                    RadioButtonCell radioCell = (RadioButtonCell) holder.itemView;
+                    if (position == saveToGalleryOption1Row) {
+                        radioCell.setTextAndValueAndCheck("save media only from peer chats", "",true, false);
+                    } else {
+                        radioCell.setTextAndValueAndCheck("save media from all chats", "",true, false);
+                    }
+
+                    break;
+                }
             }
         }
 
@@ -2236,7 +2256,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 return 2;
             } else if (position == themeInfoRow || position == nightTypeInfoRow || position == scheduleFromToInfoRow ||
                     position == stickersSection2Row || position == settings2Row || position == newThemeInfoRow ||
-                    position == chatListInfoRow || position == bubbleRadiusInfoRow || position == swipeGestureInfoRow) {
+                    position == chatListInfoRow || position == bubbleRadiusInfoRow || position == swipeGestureInfoRow || position == saveToGallerySectionRow) {
                 return 3;
             } else if (position == nightDisabledRow || position == nightScheduledRow || position == nightAutomaticRow || position == nightSystemDefaultRow) {
                 return 4;
@@ -2272,6 +2292,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 return 17;
             } else if (position == reactionsDoubleTapRow) {
                 return 18;
+            } else if (position == saveToGalleryOption1Row || position == saveToGalleryOption2Row) {
+                return 19;
             }
             return 1;
         }

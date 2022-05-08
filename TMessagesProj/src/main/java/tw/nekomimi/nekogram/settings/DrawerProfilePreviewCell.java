@@ -9,7 +9,7 @@ import org.telegram.ui.Cells.DrawerProfileCell;
 
 public class DrawerProfilePreviewCell extends DrawerProfileCell {
     public DrawerProfilePreviewCell(Context context) {
-        super(context);
+        super(context, null);
 
         arrowView.setVisibility(GONE);
     }

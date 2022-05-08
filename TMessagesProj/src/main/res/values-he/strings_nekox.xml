@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="Locked">נָעוּל</string>
-    <string name="AccDescrChatAttachEnterMenu">תפריט קלט צ\'אט</string>
+    <string name="Locked">נעול</string>
+    <string name="AccDescrChatAttachEnterMenu">תפריט קלט צ׳אט</string>
     <string name="ChatAttachEnterMenuRecordVideo">להקליט סרטון</string>
     <string name="ChatAttachEnterMenuRecordAudio">הקלט אודיו</string>
     <string name="ChatAttachEnterMenuDisableLinkPreview">השבת תצוגה מקדימה של קישור</string>

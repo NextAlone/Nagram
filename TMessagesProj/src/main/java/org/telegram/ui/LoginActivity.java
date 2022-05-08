@@ -619,8 +619,10 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 .setContentDescription(LocaleController.getString("BotLogin", R.string.BotLogin));
         menu.addSubItem(menu_qr_login, R.drawable.wallet_qr, LocaleController.getString("ImportLogin", R.string.ImportLogin))
                 .setContentDescription(LocaleController.getString("ImportLogin", R.string.ImportLogin));
-        menu.addSubItem(menu_custom_api, R.drawable.baseline_vpn_key_24, LocaleController.getString("CustomApi", R.string.CustomApi));
-        menu.addSubItem(menu_custom_dc, R.drawable.baseline_sync_24, LocaleController.getString("CustomBackend", R.string.CustomBackend));
+        menu.addSubItem(menu_custom_api, R.drawable.baseline_vpn_key_24, LocaleController.getString("CustomApi", R.string.CustomApi))
+                .setContentDescription(LocaleController.getString("CustomApi", R.string.CustomApi));
+        menu.addSubItem(menu_custom_dc, R.drawable.baseline_sync_24, LocaleController.getString("CustomBackend", R.string.CustomBackend))
+                .setContentDescription(LocaleController.getString("CustomBackend", R.string.CustomBackend));
 
         menu.setOnClickListener(v -> {
             menu.toggleSubMenu();
@@ -635,10 +637,14 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             } else if (id == menu_qr_login) {
                 getConnectionsManager().cleanup(false);
                 regenerateLoginToken(false);
+            } else if (id == menu_custom_dc) {
+                PhoneView phoneView = (PhoneView)views[VIEW_PHONE_INPUT];
+                if (phoneView.testBackendCheckBox.getVisibility() == View.GONE)
+                    phoneView.testBackendCheckBox.setVisibility(View.VISIBLE);
+                else
+                    phoneView.testBackendCheckBox.setVisibility(View.GONE);
             } else if (id == menu_custom_api) {
                 doCustomApi();
-            } else if (id == menu_custom_dc) {
-                doCustomDc();
             }
         });
         menu.setContentDescription(LocaleController.getString(R.string.items_other));
@@ -2008,21 +2014,21 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 }
             });
 
+            testBackendCheckBox = new CheckBoxCell(context, 2);
+            testBackendCheckBox.setText("Test Backend", "", testBackend, false);
+            addView(testBackendCheckBox, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 16, 0, 16 + (LocaleController.isRTL && AndroidUtilities.isSmallScreen() ? Build.VERSION.SDK_INT >= 21 ? 56 : 60 : 0), 0));
+            bottomMargin -= 24;
+            testBackendCheckBox.setOnClickListener(v -> {
+                if (getParentActivity() == null) {
+                    return;
+                }
+                CheckBoxCell cell = (CheckBoxCell) v;
+                testBackend = !testBackend;
+                cell.setChecked(testBackend, true);
+            });
+//            testBackendCheckBox.setVisibility(BuildVars.DEBUG_VERSION ? VISIBLE : GONE);
+            testBackendCheckBox.setVisibility(GONE);
 
-            if (BuildVars.DEBUG_PRIVATE_VERSION) {
-                testBackendCheckBox = new CheckBoxCell(context, 2);
-                testBackendCheckBox.setText("Test Backend", "", testBackend, false);
-                addView(testBackendCheckBox, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 16, 0, 16 + (LocaleController.isRTL && AndroidUtilities.isSmallScreen() ? Build.VERSION.SDK_INT >= 21 ? 56 : 60 : 0), 0));
-                bottomMargin -= 24;
-                testBackendCheckBox.setOnClickListener(v -> {
-                    if (getParentActivity() == null) {
-                        return;
-                    }
-                    CheckBoxCell cell = (CheckBoxCell) v;
-                    testBackend = !testBackend;
-                    cell.setChecked(testBackend, true);
-                });
-            }
             if (bottomMargin > 0 && !AndroidUtilities.isSmallScreen()) {
                 Space bottomSpacer = new Space(context);
                 bottomSpacer.setMinimumHeight(AndroidUtilities.dp(bottomMargin));
@@ -4913,8 +4919,8 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 codeField[a].setPadding(padding, padding, padding, padding);
                 if (stage == 0) {
                     codeField[a].setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    codeField[a].setTransformationMethod(PasswordTransformationMethod.getInstance());
                 }
-                codeField[a].setTransformationMethod(PasswordTransformationMethod.getInstance());
                 codeField[a].setTypeface(Typeface.DEFAULT);
                 codeField[a].setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
 
@@ -6659,43 +6665,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             }
             NekoXConfig.customApi = target;
             NekoXConfig.saveCustomApi();
-            return Unit.INSTANCE;
-        });
-        builder.show();
-    }
-
-    public void doCustomDc() {
-        AtomicInteger targetDc = new AtomicInteger(-1);
-        BottomBuilder builder = new BottomBuilder(getParentActivity());
-        builder.addTitle(LocaleController.getString("CustomBackend", R.string.CustomBackend),
-                true,
-                LocaleController.getString("CustomBackendNotice", R.string.CustomBackendNotice));
-        int dcType;
-        if (ConnectionsManager.native_isTestBackend(currentAccount) != 0) {
-            dcType = 1;
-        } else {
-            dcType = 0;
-        }
-        builder.addRadioItem(LocaleController.getString("CustomBackendProduction", R.string.CustomBackendProduction), dcType == 0, (cell) -> {
-            targetDc.set(0);
-            builder.doRadioCheck(cell);
-            return Unit.INSTANCE;
-        });
-        builder.addRadioItem(LocaleController.getString("CustomBackendTestDC", R.string.CustomBackendTestDC), dcType == 1, (cell) -> {
-            targetDc.set(1);
-            builder.doRadioCheck(cell);
-            return Unit.INSTANCE;
-        });
-        builder.addCancelButton();
-        builder.addButton(LocaleController.getString("Set", R.string.Set), (it) -> {
-            int target = targetDc.get();
-            if (target == dcType) {
-                // do nothing
-            } else if (target == 0) {
-                DataCenter.applyOfficalDataCanter(currentAccount);
-            } else if (target == 1) {
-                DataCenter.applyTestDataCenter(currentAccount);
-            }
             return Unit.INSTANCE;
         });
         builder.show();

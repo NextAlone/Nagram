@@ -24,6 +24,8 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
+import org.telegram.ui.ActionBar.ActionBarLayout;
+import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.DividerCell;
@@ -47,15 +49,17 @@ import tw.nekomimi.nekogram.NekoXConfig;
 public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter implements NotificationCenter.NotificationCenterDelegate {
 
     private Context mContext;
-    public ArrayList<Item> items = new ArrayList<>(11);
+    private DrawerLayoutContainer mDrawerLayoutContainer;
+    private ArrayList<Item> items = new ArrayList<>(11);
     private ArrayList<Integer> accountNumbers = new ArrayList<>();
     private boolean accountsShown;
     private DrawerProfileCell profileCell;
     private SideMenultItemAnimator itemAnimator;
     private boolean hasGps;
 
-    public DrawerLayoutAdapter(Context context, SideMenultItemAnimator animator) {
+    public DrawerLayoutAdapter(Context context, SideMenultItemAnimator animator, DrawerLayoutContainer drawerLayoutContainer) {
         mContext = context;
+        mDrawerLayoutContainer = drawerLayoutContainer;
         itemAnimator = animator;
         accountsShown = MessagesController.getGlobalMainSettings().getBoolean("accountsShown", true);
         Theme.createCommonDialogResources(context);
@@ -137,7 +141,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         View view;
         switch (viewType) {
             case 0:
-                view = profileCell = new DrawerProfileCell(mContext);
+                view = profileCell = new DrawerProfileCell(mContext, mDrawerLayoutContainer);
                 break;
             case 2:
                 view = new DividerCell(mContext);

@@ -133,4 +133,16 @@
     <string name="SaveToDownloadCount_few">Salvataggio di %1$d file nei download</string>
     <string name="SaveToDownloadCount_many">Salvataggio di %1$d file nei download</string>
     <string name="SaveToDownloadCount_other">Salvataggio di %1$d file nei download</string>
+    <string name="customSavePathHint">Lascia vuoto per salvare direttamente</string>
+    <string name="NekoGeneralNotification">Notifica</string>
+    <string name="disableNotificationBubbles">Disattiva le bolle delle notifiche</string>
+    <string name="reactions">Reazioni nel menu</string>
+    <string name="doubleTapSendReactions">Tocca due volte per inviare una reazione (predefinito)</string>
+    <string name="doubleTapShowReactions">Mostra le reazioni solo dopo il doppio tocco</string>
+    <string name="ReactionsDisabled">Disabilitare</string>
+    <string name="showBottomActionsWhenSelecting">Mostra le azioni inferiori alla selezione</string>
+    <string name="channelLabel">Canale</string>
+    <string name="customSavePath">Percorso di salvataggio personalizzato</string>
+    <string name="ChatBlurAlphaValue">Alpha della sfocatura in chat</string>
+    <string name="forceBlurInChat">Forza l\'attivazione della sfocatura in chat</string>
 </resources>

@@ -362,8 +362,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         LinearLayout linearLayoutInviteContainer = new LinearLayout(context);
         linearLayoutInviteContainer.setOrientation(LinearLayout.VERTICAL);
         linearLayout.addView(linearLayoutInviteContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-    
-        int count = NekoXConfig.developerMode ? 11 + 4 : 10 + 4;
+
+        int count = 11 + 4;
         for (int a = 0; a < count; a++) {
             TextCheckCell textCell = new TextCheckCell(context);
             switch (a) {

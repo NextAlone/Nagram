@@ -122,4 +122,22 @@
     <string name="maxRecentStickerCount">Nombre maximum de vignettes récentes</string>
     <string name="disableSwipeToNextChannel">Désactiver le glissement vers le canal suivant</string>
     <string name="disableChoosingSticker">Envoyer en tapant au lieu de choisir une vignette</string>
+    <string name="SaveToDownloadCount_other">Enregistrement de %1$d fichiers dans les téléchargements</string>
+    <string name="enablePublicProxy">Proxy public de NekoX</string>
+    <string name="customSavePath">Chemin de stockage personnalisé</string>
+    <string name="customSavePathHint">Laissez vide pour enregistrer directement</string>
+    <string name="NekoGeneralNotification">Notification</string>
+    <string name="autoUpdateSubInfo">Mettre à jour les proxies automatiquement</string>
+    <string name="SaveToDownloadCount_two">Enregistrement de %1$d fichiers dans les téléchargements</string>
+    <string name="SaveToDownloadCount_few">Enregistrement de %1$d fichiers dans les téléchargements</string>
+    <string name="SaveToDownloadCount_many">Enregistrement de %1$d fichiers dans les téléchargements</string>
+    <string name="disableNotificationBubbles">Désactiver les bulles dans les notifications</string>
+    <string name="doubleTapShowReactions">Afficher les réactions uniquement après un appui double</string>
+    <string name="ReactionsDisabled">Désactiver</string>
+    <string name="showBottomActionsWhenSelecting">Afficher les actions en bas lors de la sélection</string>
+    <string name="channelLabel">canal</string>
+    <string name="showSpoilersDirectly">Afficher directement les messages spoiler</string>
+    <string name="SaveToDownloadCount_zero">Enregistrement de %1$d fichiers dans les téléchargements</string>
+    <string name="SaveToDownloadCount_one">Enregistrement de %1$d fichier dans les téléchargements</string>
+    <string name="reactions">Réactions dans le menu</string>
 </resources>

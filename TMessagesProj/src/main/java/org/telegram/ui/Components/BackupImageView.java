@@ -11,6 +11,7 @@ package org.telegram.ui.Components;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
@@ -169,6 +170,7 @@ public class BackupImageView extends View {
     public void setSize(int w, int h) {
         width = w;
         height = h;
+        invalidate();
     }
 
     @Override
@@ -191,6 +193,10 @@ public class BackupImageView extends View {
             imageReceiver.setImageCoords(0, 0, getWidth(), getHeight());
         }
         imageReceiver.draw(canvas);
+    }
+
+    public void setColorFilter(ColorFilter colorFilter) {
+        imageReceiver.setColorFilter(colorFilter);
     }
 
     @Override

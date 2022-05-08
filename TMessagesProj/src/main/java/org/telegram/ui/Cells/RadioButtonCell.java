@@ -12,6 +12,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,7 +27,7 @@ public class RadioButtonCell extends LinearLayout {
 
     private LinearLayout textLayout;
     private TextView textView;
-    private TextView valueTextView;
+    public TextView valueTextView;
     private RadioButton radioButton;
     private boolean needDivider;
 
@@ -81,6 +82,11 @@ public class RadioButtonCell extends LinearLayout {
         }
         addView(radioButton, LayoutHelper.createLinear(22, 22, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL,0,0,21,0));
 
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
     }
 
     public void setTextAndValue(String text, boolean divider, boolean checked) {
