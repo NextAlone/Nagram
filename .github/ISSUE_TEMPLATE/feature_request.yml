@@ -1,7 +1,7 @@
 name: Feature request/功能请求
 description: Feature request./提出你想要的功能。
-labels: [Feature]
-title: "[功能请求] "
+labels: [feature]
+title: "[feature] "
 body:
   - type: markdown
     attributes:
