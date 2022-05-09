@@ -25,4 +25,5 @@
     <string name="CreateMono">Create Monospace</string>
     <string name="CreateMonoLanguage">Code language</string>
     <string name="CodeSyntaxHighlightDetails">Thanks to prismjs and Nekogram</string>
+    <string name="UseSystemUnlock">Passcode Unlock use system ui</string>
 </resources>

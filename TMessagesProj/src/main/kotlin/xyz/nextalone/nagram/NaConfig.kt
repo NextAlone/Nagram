@@ -146,6 +146,11 @@ object NaConfig {
         ConfigItem.configTypeString,
         LocaleController.getString("NekoX", R.string.NekoX)
     )
+    val useSystemUnlock = addConfig(
+            "UseSystemUnlock",
+            ConfigItem.configTypeBool,
+            true
+    )
     val CodeSyntaxHighlight = addConfig(
         "CodeSyntaxHighlight",
         ConfigItem.configTypeBool,
