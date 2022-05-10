@@ -122,7 +122,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     private RLottieDrawable muteDrawable;
     private ImageView closeButton;
     private ActionBarMenuItem playbackSpeedButton;
-    private ActionBarMenuSubItem[] speedItems = new ActionBarMenuSubItem[4];
+    private ActionBarMenuSubItem[] speedItems = new ActionBarMenuSubItem[8];
     private FragmentContextView additionalContextView;
     private TextView joinButton;
     private CellFlickerDrawable joinButtonFlicker;
@@ -203,6 +203,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     private final static int menu_speed_normal = 2;
     private final static int menu_speed_fast = 3;
     private final static int menu_speed_veryfast = 4;
+    private final static int menu_speed_110 = 5;
+    private final static int menu_speed_120 = 6;
+    private final static int menu_speed_125 = 7;
+    private final static int menu_speed_130 = 8;
 
     @Override
     public void onAudioSettingsChanged() {
@@ -427,6 +431,14 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     MediaController.getInstance().setPlaybackSpeed(isMusic, 1.0f);
                 } else if (id == menu_speed_fast) {
                     MediaController.getInstance().setPlaybackSpeed(isMusic, 1.5f);
+                } else if (id == menu_speed_110) {
+                    MediaController.getInstance().setPlaybackSpeed(true, 1.1f);
+                } else if (id == menu_speed_120) {
+                    MediaController.getInstance().setPlaybackSpeed(true, 1.2f);
+                } else if (id == menu_speed_125) {
+                    MediaController.getInstance().setPlaybackSpeed(true, 1.25f);
+                } else if (id == menu_speed_130) {
+                    MediaController.getInstance().setPlaybackSpeed(true, 1.3f);
                 } else {
                     MediaController.getInstance().setPlaybackSpeed(isMusic, 1.8f);
                 }
@@ -440,6 +452,12 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             speedItems[1] = playbackSpeedButton.addSubItem(menu_speed_normal, R.drawable.msg_speed_1, LocaleController.getString("SpeedNormal", R.string.SpeedNormal));
             speedItems[2] = playbackSpeedButton.addSubItem(menu_speed_fast, R.drawable.msg_speed_1_5, LocaleController.getString("SpeedFast", R.string.SpeedFast));
             speedItems[3] = playbackSpeedButton.addSubItem(menu_speed_veryfast, R.drawable.msg_speed_2, LocaleController.getString("SpeedVeryFast", R.string.SpeedVeryFast));
+            if (org.telegram.messenger.SharedConfig.isUserOwner()) {
+                speedItems[4] = playbackSpeedButton.addSubItem(menu_speed_110, 0, "1.1×");
+                speedItems[5] = playbackSpeedButton.addSubItem(menu_speed_120, 0, "1.2×");
+                speedItems[6] = playbackSpeedButton.addSubItem(menu_speed_125, 0, "1.25×");
+                speedItems[7] = playbackSpeedButton.addSubItem(menu_speed_130, 0, "1.3×");
+            }
             if (AndroidUtilities.density >= 3.0f) {
                 playbackSpeedButton.setPadding(0, 1, 0, 0);
             }
@@ -747,6 +765,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         }
         updateColors();
         for (int a = 0; a < speedItems.length; a++) {
+            if (speedItems[a] == null) {
+                continue;
+            }
             if (a == 0 && Math.abs(currentPlaybackSpeed - 0.5f) < 0.001f ||
                     a == 1 && Math.abs(currentPlaybackSpeed - 1.0f) < 0.001f ||
                     a == 2 && Math.abs(currentPlaybackSpeed - 1.5f) < 0.001f ||
