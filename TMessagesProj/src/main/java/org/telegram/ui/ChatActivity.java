@@ -22453,17 +22453,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     options.add(nkbtn_repeat);
                                     icons.add(R.drawable.msg_repeat);
                             }
-                            if (NaConfig.INSTANCE.getShowRepeatAsCopy().Bool()){
+                            if (allowRepeat && NaConfig.INSTANCE.getShowRepeatAsCopy().Bool() && !noforwardOverride){
                                 items.add(LocaleController.getString("RepeatAsCopy", R.string.RepeatAsCopy));
                                 options.add(nkbtn_repeatascopy);
                                 icons.add(R.drawable.msg_repeat);
                             }
-                            if (NaConfig.INSTANCE.getShowInvertReply().Bool()) {
+                            if (allowRepeat && NaConfig.INSTANCE.getShowInvertReply().Bool()) {
                                 items.add(LocaleController.getString("InvertReply", R.string.InvertReply));
                                 options.add(nkbtn_invertReply);
                                 icons.add(R.drawable.msg_reset);
                             }
-                            if (NaConfig.INSTANCE.getShowGreatOrPoor().Bool()) {
+                            if (allowRepeat && NaConfig.INSTANCE.getShowGreatOrPoor().Bool()) {
                                 items.add(LocaleController.getString("Great", R.string.Great));
                                 options.add(nkbtn_greatOrPoor);
                                 icons.add(R.drawable.msg_prpr);
