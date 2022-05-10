@@ -14193,7 +14193,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 int copyVisible = copyItem.getVisibility();
-                boolean noforwardsOverride = noforwards && !NekoXConfig.disableFlagSecure;
+                boolean noforwardsOverride = noforwards && !NekoXConfig.disableFlagSecure && !NaConfig.INSTANCE.getForceCopy().Bool();
                 copyItem.setVisibility(!noforwardsOverride && selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
                 combineMessageItem.setVisibility(selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? NaConfig.INSTANCE.getCombineMessage().Int() != 2 ? View.VISIBLE : View.GONE : View.GONE);
                 actionModeOtherItem.setSubItemVisibility(star, getMediaDataController().canAddStickerToFavorites() && (selectedMessagesCanStarIds[0].size() + selectedMessagesCanStarIds[1].size()) == selectedCount);
@@ -22021,7 +22021,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         allowPin = allowPin && message.getId() > 0 && (message.messageOwner.action == null || message.messageOwner.action instanceof TLRPC.TL_messageActionEmpty);
         boolean noforwards = getMessagesController().isChatNoForwards(currentChat) || message.messageOwner.noforwards;
-        boolean noforwardsOverride = noforwards && !NekoXConfig.disableFlagSecure;
+        boolean noforwardsOverride = noforwards && !NekoXConfig.disableFlagSecure && !NaConfig.INSTANCE.getForceCopy().Bool();
         boolean allowUnpin = message.getDialogId() != mergeDialogId && allowPin && (pinnedMessageObjects.containsKey(message.getId()) || groupedMessages != null && !groupedMessages.messages.isEmpty() && pinnedMessageObjects.containsKey(groupedMessages.messages.get(0).getId()));
         boolean allowEdit = message.canEditMessage(currentChat) && !chatActivityEnterView.hasAudioToSend() && message.getDialogId() != mergeDialogId;
         if (allowEdit && groupedMessages != null) {
@@ -22425,7 +22425,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                         }
                         boolean noforward = getMessagesController().isChatNoForwards(currentChat);
-                        boolean noforwardOverride = noforward && !NekoXConfig.disableFlagSecure;
+                        boolean noforwardOverride = noforward && !NekoXConfig.disableFlagSecure && !NaConfig.INSTANCE.getForceCopy().Bool();
                         if (!selectedObject.isSponsored() && chatMode != MODE_SCHEDULED && !selectedObject.needDrawBluredPreview() && !selectedObject.isLiveLocation() && selectedObject.type != 16 && !noforwards) {
                             items.add(LocaleController.getString("Forward", R.string.Forward));
                             options.add(2);

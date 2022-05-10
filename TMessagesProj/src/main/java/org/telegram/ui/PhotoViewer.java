@@ -255,6 +255,7 @@ import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
+import xyz.nextalone.nagram.NaConfig;
 
 @SuppressLint("WrongConstant")
 @SuppressWarnings("unchecked")
@@ -10452,7 +10453,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             isVideo = newMessageObject.isVideo();
             boolean isInvoice = newMessageObject.isInvoice();
             boolean noforwards = MessagesController.getInstance(currentAccount).isChatNoForwards(newMessageObject.getChatId()) || (newMessageObject.messageOwner != null && newMessageObject.messageOwner.noforwards);
-            boolean noforwardsOverride = noforwards && !NekoXConfig.disableFlagSecure;
+            boolean noforwardsOverride = noforwards && !NekoXConfig.disableFlagSecure && !NaConfig.INSTANCE.getForceCopy().Bool();
             if (isInvoice) {
                 setItemVisible(masksItem, false, true);
                 menuItem.hideSubItem(gallery_menu_delete);
