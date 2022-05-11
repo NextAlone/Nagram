@@ -38,8 +38,8 @@
     <string name="UnlimitedRecentStickers">Неограниченные стикеры</string>
     <string name="SendMessageBeforeSendSticker">Отправить сообщение перед отправкой стикера</string>
 
-    <string name="StickerSizeDialogMessageReplyTo">мяу</string>
-    <string name="StickerSizeDialogMessage">ооо, ну какой же он милашкин!</string>
+    <string name="StickerSizeDialogMessageReplyTo">жесть</string>
+    <string name="StickerSizeDialogMessage">ух-ты какой милый котик!</string>
 
     <string name="HideSendAsChannel">Скрыть \"Написать от имени…\"</string>
     <string name="HideKeyboardOnScroll">Скрыть клавиатуру при пролистывании</string>
