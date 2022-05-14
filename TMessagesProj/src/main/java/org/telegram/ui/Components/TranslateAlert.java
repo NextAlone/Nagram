@@ -96,6 +96,7 @@ public class TranslateAlert extends Dialog {
     private FrameLayout buttonShadowView;
     private TextView allTextsView;
     private FrameLayout textsContainerView;
+    private ImageView copyButton;
 
     private FrameLayout.LayoutParams titleLayout;
     private FrameLayout.LayoutParams subtitleLayout;
@@ -351,6 +352,21 @@ public class TranslateAlert extends Dialog {
         ));
         titleView.post(() -> {
             titleView.setPivotX(LocaleController.isRTL ? titleView.getWidth() : 0);
+        });
+
+        copyButton = new ImageView(context);
+        copyButton.setScaleType(ImageView.ScaleType.CENTER);
+        copyButton.setImageResource(R.drawable.msg_copy);
+        copyButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), PorterDuff.Mode.MULTIPLY));
+        if (Build.VERSION.SDK_INT >= 21) {
+            copyButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), 1, AndroidUtilities.dp(24)));
+        }
+        header.addView(copyButton, LayoutHelper.createFrame(48, 48, LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT | Gravity.TOP, LocaleController.isRTL ? 8 : 22, 22, LocaleController.isRTL ? 22 : 8, 0));
+        copyButton.setOnClickListener(v -> {
+            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE);
+            android.content.ClipData clip = android.content.ClipData.newPlainText("label", allTextsView.getText());
+            clipboard.setPrimaryClip(clip);
+            BulletinFactory.of(bulletinContainer, null).createCopyBulletin(LocaleController.getString("TextCopied", R.string.TextCopied)).show();
         });
 
         subtitleView = new LinearLayout(context);
