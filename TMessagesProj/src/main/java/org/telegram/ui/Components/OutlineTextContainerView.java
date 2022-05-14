@@ -86,6 +86,12 @@ public class OutlineTextContainerView extends FrameLayout {
         invalidate();
     }
 
+    public void setText(@NonNull String text, int number) {
+        this.mText = text;
+        setText(mText + " " + "(" + String.valueOf(number) + ")");
+        invalidate();
+    }
+
     private void setColor(int color) {
         outlinePaint.setColor(color);
         invalidate();
