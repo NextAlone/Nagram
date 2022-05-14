@@ -731,7 +731,7 @@ public class ContentPreviewViewer {
                         FileLog.e(e);
                     }
                     AndroidUtilities.cancelRunOnUIThread(showSheetRunnable);
-                    AndroidUtilities.runOnUIThread(showSheetRunnable, 1300);
+                    AndroidUtilities.runOnUIThread(showSheetRunnable, 300);
                 }
                 currentStickerSet = newSet;
                 TLRPC.PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90);
@@ -767,7 +767,7 @@ public class ContentPreviewViewer {
                         FileLog.e(e);
                     }
                     AndroidUtilities.cancelRunOnUIThread(showSheetRunnable);
-                    AndroidUtilities.runOnUIThread(showSheetRunnable, 1300);
+                    AndroidUtilities.runOnUIThread(showSheetRunnable, 300);
                 }
             }
         } else {
@@ -794,7 +794,7 @@ public class ContentPreviewViewer {
                 return;
             }
             AndroidUtilities.cancelRunOnUIThread(showSheetRunnable);
-            AndroidUtilities.runOnUIThread(showSheetRunnable, 2000);
+            AndroidUtilities.runOnUIThread(showSheetRunnable, 300);
         }
 
         currentContentType = contentType;
