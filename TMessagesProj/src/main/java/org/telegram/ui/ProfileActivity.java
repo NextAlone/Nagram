@@ -5839,8 +5839,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         setAvatarSectionRow = -1;
         numberSectionRow = -1;
         numberRow = -1;
-        setUsernameRow = -1;
         idRow = -1;
+        setUsernameRow = -1;
         bioRow = -1;
         phoneSuggestionSectionRow = -1;
         phoneSuggestionRow = -1;
@@ -5880,7 +5880,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         usernameRow = -1;
         settingsTimerRow = -1;
         settingsKeyRow = -1;
-        notificationsDividerRow = -1;
+        //notificationsDividerRow = -1;
         notificationsRow = -1;
         infoSectionRow = -1;
         secretSettingsSectionRow = -1;
@@ -5929,10 +5929,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
                 numberSectionRow = rowCount++;
                 numberRow = rowCount++;
+                if (ExteraConfig.showID) idRow = rowCount++;
                 setUsernameRow = rowCount++;
                 bioRow = rowCount++;
 
-                if (ExteraConfig.showID) idRow = rowCount++;
                 settingsSectionRow = rowCount++;
 
                 Set<String> suggestions = getMessagesController().pendingSuggestions;
@@ -5989,9 +5989,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     usernameRow = rowCount++;
                 }
                 if (ExteraConfig.showID) idRow = rowCount++;
-                if (phoneRow != -1 || userInfoRow != -1 || usernameRow != -1) {
-                    notificationsDividerRow = rowCount++;
-                }
+
+                //if (phoneRow != -1 || userInfoRow != -1 || usernameRow != -1) {
+                //    notificationsDividerRow = rowCount++;
+                //}
+
                 if (userId != getUserConfig().getClientUserId()) {
                     notificationsRow = rowCount++;
                 }
@@ -6042,9 +6044,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
             }
             if (ExteraConfig.showID) idRow = rowCount++;
-            if (infoHeaderRow != -1) {
-                notificationsDividerRow = rowCount++;
-            }
+
+            //if (infoHeaderRow != -1) {
+            //    notificationsDividerRow = rowCount++;
+            //}
+
             notificationsRow = rowCount++;
             infoSectionRow = rowCount++;
 
@@ -7520,7 +7524,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         } else {
                             did = -chatId;
                         }
-                        detailCell.setTextAndValue(did + "", "ID", false);
+                        detailCell.setTextAndValue(did + "", "ID", true);
                     } else if (position == usernameRow) {
                         String text;
                         if (userId != 0) {
@@ -7538,7 +7542,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     } else if (position == locationRow) {
                         if (chatInfo != null && chatInfo.location instanceof TLRPC.TL_channelLocation) {
                             TLRPC.TL_channelLocation location = (TLRPC.TL_channelLocation) chatInfo.location;
-                            detailCell.setTextAndValue(location.address, LocaleController.getString("AttachLocation", R.string.AttachLocation), false);
+                            detailCell.setTextAndValue(location.address, LocaleController.getString("AttachLocation", R.string.AttachLocation), true);
                         }
                     } else if (position == numberRow) {
                         TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
@@ -7574,10 +7578,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             if (clickableBio != null) {
                                 value = currentBio;
                             }
-                            aboutLinkCell.setTextAndValue(value, LocaleController.getString("UserBio", R.string.UserBio), true, true);
+                            aboutLinkCell.setTextAndValue(value, LocaleController.getString("UserBio", R.string.UserBio), true, false);
                             currentBio = userInfo != null ? userInfo.about : null;
                         } else {
-                            aboutLinkCell.setTextAndValue( LocaleController.getString("UserBioDetail", R.string.UserBioDetail), LocaleController.getString("UserBio", R.string.UserBio), true, true);
+                            aboutLinkCell.setTextAndValue(LocaleController.getString("UserBioDetail", R.string.UserBioDetail), LocaleController.getString("UserBio", R.string.UserBio), false, false);
                             currentBio = null;
                         }
                     } else if (position == userInfoRow) {
@@ -7911,8 +7915,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     position == faqRow || position == policyRow || position == sendLogsRow || position == sendLastLogsRow ||
                     position == clearLogsRow || position == switchBackendRow || position == setAvatarRow || position == addToGroupButtonRow) {
                 return VIEW_TYPE_TEXT;
-            } else if (position == notificationsDividerRow) {
-                return VIEW_TYPE_DIVIDER;
+            //} else if (position == notificationsDividerRow) {
+            //    return VIEW_TYPE_DIVIDER;
             } else if (position == notificationsRow) {
                 return VIEW_TYPE_NOTIFICATIONS_CHECK;
             } else if (position == infoSectionRow || position == lastSectionRow || position == membersSectionRow ||
@@ -8906,7 +8910,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             put(++pointer, channelInfoRow, sparseIntArray);
             put(++pointer, idRow, sparseIntArray);
             put(++pointer, usernameRow, sparseIntArray);
-            put(++pointer, notificationsDividerRow, sparseIntArray);
+            //put(++pointer, notificationsDividerRow, sparseIntArray);
             put(++pointer, notificationsRow, sparseIntArray);
             put(++pointer, infoSectionRow, sparseIntArray);
             put(++pointer, sendMessageRow, sparseIntArray);
