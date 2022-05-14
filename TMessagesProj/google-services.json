@@ -1,92 +1,33 @@
 {
   "project_info": {
-    "project_number": "500916746288",
-    "firebase_url": "https://exteragram-54480.firebaseio.com",
-    "project_id": "exteragram-54480",
-    "storage_bucket": "exteragram-54480.appspot.com"
+    "project_number": "153744097257",
+    "project_id": "exteragram-7fbe0",
+    "storage_bucket": "exteragram-7fbe0.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:657355553368:android:fe56d5e25868af5cd1682d",
-        "android_client_info": {
-          "package_name": "org.telegram.messenger"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "657355553368-lhp2u0f9c19pqkegs5u4b3brdprtbro4.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCC9qm_RXuqWNoNaUr-wMVwrE-OcAGBmBU"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "657355553368-lhp2u0f9c19pqkegs5u4b3brdprtbro4.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:657355553368:android:70182553e2154e01d1682d",
-        "android_client_info": {
-          "package_name": "org.telegram.messenger.beta"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "657355553368-lhp2u0f9c19pqkegs5u4b3brdprtbro4.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCC9qm_RXuqWNoNaUr-wMVwrE-OcAGBmBU"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "657355553368-lhp2u0f9c19pqkegs5u4b3brdprtbro4.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:500916746288:android:fcfb76a36e3ac72756d5f5",
+        "mobilesdk_app_id": "1:153744097257:android:284b989832b6cd10589578",
         "android_client_info": {
           "package_name": "com.exteragram.messenger"
         }
       },
       "oauth_client": [
         {
-          "client_id": "500916746288-abcnu4jmk77t763r0klnvv1stteiu518.apps.googleusercontent.com",
+          "client_id": "153744097257-ql35jfprr95tp6gv203fegtte392iqto.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDm05EYggmE2I8q-yhZNRcuWupd8201Gmk"
+          "current_key": "AIzaSyD-lq0HSqvWIkp9-gisI_NiZhF80UpB9m0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "500916746288-abcnu4jmk77t763r0klnvv1stteiu518.apps.googleusercontent.com",
+              "client_id": "153744097257-ql35jfprr95tp6gv203fegtte392iqto.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -95,27 +36,27 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:500916746288:android:e292f552c807da5756d5f5",
+        "mobilesdk_app_id": "1:153744097257:android:ef81854abb1cb095589578",
         "android_client_info": {
           "package_name": "com.exteragram.messenger.beta"
         }
       },
       "oauth_client": [
         {
-          "client_id": "500916746288-abcnu4jmk77t763r0klnvv1stteiu518.apps.googleusercontent.com",
+          "client_id": "153744097257-ql35jfprr95tp6gv203fegtte392iqto.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDm05EYggmE2I8q-yhZNRcuWupd8201Gmk"
+          "current_key": "AIzaSyD-lq0HSqvWIkp9-gisI_NiZhF80UpB9m0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "500916746288-abcnu4jmk77t763r0klnvv1stteiu518.apps.googleusercontent.com",
+              "client_id": "153744097257-ql35jfprr95tp6gv203fegtte392iqto.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
