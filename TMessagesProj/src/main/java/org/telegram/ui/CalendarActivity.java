@@ -64,6 +64,9 @@ import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.utils.Defines;
+
 public class CalendarActivity extends BaseFragment {
 
     public final static int TYPE_CHAT_ACTIVITY = 0;
@@ -203,13 +206,13 @@ public class CalendarActivity extends BaseFragment {
         contentView.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 0, 0, 36, 0, showBottomPanel ? 48 : 0));
 
         final String[] daysOfWeek = new String[]{
-                LocaleController.getString("CalendarWeekNameShortMonday", R.string.CalendarWeekNameShortMonday),
-                LocaleController.getString("CalendarWeekNameShortTuesday", R.string.CalendarWeekNameShortTuesday),
-                LocaleController.getString("CalendarWeekNameShortWednesday", R.string.CalendarWeekNameShortWednesday),
-                LocaleController.getString("CalendarWeekNameShortThursday", R.string.CalendarWeekNameShortThursday),
-                LocaleController.getString("CalendarWeekNameShortFriday", R.string.CalendarWeekNameShortFriday),
-                LocaleController.getString("CalendarWeekNameShortSaturday", R.string.CalendarWeekNameShortSaturday),
-                LocaleController.getString("CalendarWeekNameShortSunday", R.string.CalendarWeekNameShortSunday),
+            LocaleController.getString("CalendarWeekNameShortMonday", R.string.CalendarWeekNameShortMonday),
+            LocaleController.getString("CalendarWeekNameShortTuesday", R.string.CalendarWeekNameShortTuesday),
+            LocaleController.getString("CalendarWeekNameShortWednesday", R.string.CalendarWeekNameShortWednesday),
+            LocaleController.getString("CalendarWeekNameShortThursday", R.string.CalendarWeekNameShortThursday),
+            LocaleController.getString("CalendarWeekNameShortFriday", R.string.CalendarWeekNameShortFriday),
+            LocaleController.getString("CalendarWeekNameShortSaturday", R.string.CalendarWeekNameShortSaturday),
+            LocaleController.getString("CalendarWeekNameShortSunday", R.string.CalendarWeekNameShortSunday),
         };
 
 
@@ -693,7 +696,8 @@ public class CalendarActivity extends BaseFragment {
                     PeriodDay periodDay = getDayAtCoord(e.getX(), e.getY());
 
                     if (periodDay != null) {
-                        performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                        if (!ConfigManager.getBooleanOrFalse(Defines.disableVibration))
+                            performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
 
                         Bundle bundle = new Bundle();
                         if (dialogId > 0) {

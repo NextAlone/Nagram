@@ -98,7 +98,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 
+import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.utils.AudioUtils;
+import top.qwq2333.nullgram.utils.Defines;
+import top.qwq2333.nullgram.utils.LogUtils;
 
 public class MediaController implements AudioManager.OnAudioFocusChangeListener, NotificationCenter.NotificationCenterDelegate, SensorEventListener {
 
@@ -3464,9 +3467,10 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         requestAudioFocus(true);
 
         try {
-            feedbackView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-        } catch (Exception ignore) {
-
+            if (!ConfigManager.getBooleanOrFalse(Defines.disableVibration))
+                feedbackView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+        } catch (Exception e) {
+            LogUtils.e(e);
         }
 
         recordQueue.postRunnable(recordStartRunnable = () -> {
@@ -3653,9 +3657,10 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 stopRecordingInternal(0, false, 0);
             }
             try {
-                feedbackView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-            } catch (Exception ignore) {
-
+                if (!ConfigManager.getBooleanOrFalse(Defines.disableVibration))
+                    feedbackView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+            } catch (Exception e) {
+                LogUtils.e(e);
             }
             AndroidUtilities.runOnUIThread(() -> NotificationCenter.getInstance(recordingCurrentAccount).postNotificationName(NotificationCenter.recordStopped, recordingGuid, send == 2 ? 1 : 0));
         });

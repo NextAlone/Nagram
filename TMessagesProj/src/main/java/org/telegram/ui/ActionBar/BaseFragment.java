@@ -54,7 +54,10 @@ import org.telegram.ui.Components.LayoutHelper;
 
 import java.util.ArrayList;
 
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.utils.Defines;
 import top.qwq2333.nullgram.utils.MessageUtils;
+import top.qwq2333.nullgram.utils.VibrationUtils;
 
 public abstract class BaseFragment {
 
@@ -194,6 +197,8 @@ public abstract class BaseFragment {
     public void setParentFragment(BaseFragment fragment) {
         setParentLayout(fragment.parentLayout);
         fragmentView = createView(parentLayout.getContext());
+        if (ConfigManager.getBooleanOrFalse(Defines.disableVibration))
+            VibrationUtils.disableHapticFeedback(fragmentView);
     }
 
     protected void setParentLayout(ActionBarLayout layout) {

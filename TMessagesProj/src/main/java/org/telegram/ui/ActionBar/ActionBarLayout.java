@@ -57,6 +57,7 @@ import java.util.HashMap;
 
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.utils.Defines;
+import top.qwq2333.nullgram.utils.VibrationUtils;
 
 public class ActionBarLayout extends FrameLayout {
 
@@ -703,6 +704,8 @@ public class ActionBarLayout extends FrameLayout {
         View fragmentView = lastFragment.fragmentView;
         if (fragmentView == null) {
             fragmentView = lastFragment.createView(parentActivity);
+            if (ConfigManager.getBooleanOrFalse(Defines.disableVibration))
+                VibrationUtils.disableHapticFeedback(fragmentView);
         }
         ViewGroup parent = (ViewGroup) fragmentView.getParent();
         if (parent != null) {
@@ -1122,6 +1125,8 @@ public class ActionBarLayout extends FrameLayout {
         View fragmentView = fragment.fragmentView;
         if (fragmentView == null) {
             fragmentView = fragment.createView(parentActivity);
+            if (ConfigManager.getBooleanOrFalse(Defines.disableVibration))
+                VibrationUtils.disableHapticFeedback(fragmentView);
         } else {
             ViewGroup parent = (ViewGroup) fragmentView.getParent();
             if (parent != null) {
@@ -1485,7 +1490,8 @@ public class ActionBarLayout extends FrameLayout {
                 }
             });
             animatorSet.start();
-            performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+            if (!ConfigManager.getBooleanOrFalse(Defines.disableVibration))
+                performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
 
             fragment.setInPreviewMode(false);
         }
@@ -1531,6 +1537,8 @@ public class ActionBarLayout extends FrameLayout {
             View fragmentView = previousFragment.fragmentView;
             if (fragmentView == null) {
                 fragmentView = previousFragment.createView(parentActivity);
+                if (ConfigManager.getBooleanOrFalse(Defines.disableVibration))
+                    VibrationUtils.disableHapticFeedback(fragmentView);
             }
 
             if (!inPreviewMode) {
@@ -1719,6 +1727,8 @@ public class ActionBarLayout extends FrameLayout {
         View fragmentView = previousFragment.fragmentView;
         if (fragmentView == null) {
             fragmentView = previousFragment.createView(parentActivity);
+            if (ConfigManager.getBooleanOrFalse(Defines.disableVibration))
+                VibrationUtils.disableHapticFeedback(fragmentView);
         } else {
             ViewGroup parent = (ViewGroup) fragmentView.getParent();
             if (parent != null) {

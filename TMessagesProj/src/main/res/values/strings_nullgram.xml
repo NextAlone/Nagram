@@ -150,4 +150,5 @@
     <string name="notACommand">You must input a string!</string>
     <string name="SendAsReply">Send As Reply</string>
     <string name="scrollableChatPreview">Scrollable Chat Preview</string>
+    <string name="disableVibration">Disable Vibration</string>
 </resources>

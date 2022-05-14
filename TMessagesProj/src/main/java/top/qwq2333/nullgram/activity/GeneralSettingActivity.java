@@ -68,6 +68,7 @@ public class GeneralSettingActivity extends BaseFragment {
     private int skipOpenLinkConfirmRow;
     private int autoProxySwitchRow;
     private int useSystemEmojiRow;
+    private int disableVibrationRow;
     private int general2Row;
 
 
@@ -190,6 +191,11 @@ public class GeneralSettingActivity extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.useSystemEmoji));
                 }
+            } else if (position == disableVibrationRow) {
+                ConfigManager.toggleBoolean(Defines.disableVibration);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.disableVibration));
+                }
             }
         });
 
@@ -241,6 +247,7 @@ public class GeneralSettingActivity extends BaseFragment {
         skipOpenLinkConfirmRow = rowCount++;
         autoProxySwitchRow = rowCount++;
         useSystemEmojiRow = rowCount++;
+        disableVibrationRow = rowCount++;
         general2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -347,6 +354,8 @@ public class GeneralSettingActivity extends BaseFragment {
                         textCell.setTextAndCheck(LocaleController.getString("LargeAvatarAsBackground", R.string.largeAvatarAsBackground), ConfigManager.getBooleanOrFalse(Defines.largeAvatarAsBackground), true);
                     } else if (position == useSystemEmojiRow) {
                         textCell.setTextAndCheck(LocaleController.getString("UseSystemEmoji", R.string.useSystemEmoji), ConfigManager.getBooleanOrFalse(Defines.useSystemEmoji), true);
+                    } else if (position == disableVibrationRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("DisableVibration", R.string.disableVibration), ConfigManager.getBooleanOrFalse(Defines.disableVibration), true);
                     }
                     break;
                 }
