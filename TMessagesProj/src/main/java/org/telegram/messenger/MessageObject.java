@@ -6440,6 +6440,20 @@ public class MessageObject {
         return true;
     }
 
+    public boolean isBlockedMessage() {
+        var messagesController = MessagesController.getInstance(UserConfig.selectedAccount);
+        if (isSponsored() && ConfigManager.getBooleanOrFalse(Defines.blockSponsorAds))
+            return true;
+        if (ConfigManager.getBooleanOrFalse(Defines.ignoreBlockedUser)) {
+            if (messagesController.blockePeers.indexOfKey(getFromChatId()) >= 0 )
+                return true;
+            if (messageOwner.fwd_from != null && messageOwner.fwd_from.from_id != null
+                && messagesController.blockePeers.indexOfKey(MessageObject.getPeerId(messageOwner.fwd_from.from_id)) >= 0 )
+                return true;
+        }
+        return false;
+    }
+
     public boolean probablyRingtone() {
         if (getDocument() != null && RingtoneDataStore.ringtoneSupportedMimeType.contains(getDocument().mime_type) && getDocument().size < MessagesController.getInstance(currentAccount).ringtoneSizeMax * 2) {
             for (int a = 0; a < getDocument().attributes.size(); a++) {

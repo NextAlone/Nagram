@@ -991,8 +991,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private final boolean canDrawBackgroundInParent;
 
     private boolean isBlockedUserMessage() {
-        return (MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(currentMessageObject.getFromChatId()) >= 0 && ConfigManager.getBooleanOrFalse(Defines.ignoreBlockedUser))
-            || (currentMessageObject.isSponsored() && ConfigManager.getBooleanOrFalse(Defines.blockSponsorAds));
+        return currentMessageObject.isBlockedMessage();
     }
 
     // Public for enter transition
