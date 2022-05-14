@@ -183,10 +183,8 @@ import org.telegram.ui.Components.ViewPagerFixed;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Random;
 
 import com.exteragram.messenger.ExteraConfig;
-import com.exteragram.messenger.extras.SubToChannelSuggestion;
 import com.exteragram.messenger.extras.Vibrate;
 
 public class DialogsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -3797,9 +3795,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
         updateMenuButton(false);
         actionBar.setDrawBlurBackground(contentView);
-
-        if (new Random().nextInt(100) < 20) SubToChannelSuggestion.postCheckFollowToChannel(getParentActivity(), currentAccount);
-
         return fragmentView;
     }
 
