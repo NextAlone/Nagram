@@ -6,11 +6,13 @@
     <string name="SaveMessage">Сохранить сообщение</string>
 
     <!-- Main Menu (about) -->
+    <string name="exteraPrivacy">Политика конфиденциальности и FAQ </string>
     <string name="Links">Ссылки</string>
     <string name="AboutExteraDescription">Экспериментальный Telegram-клиент, основанный на официальном исходном коде Telegram!</string>
     <string name="SourceCode">Исходный код</string>
     <string name="Channel">Канал в Telegram</string>
     <string name="Chats">Чаты</string>
+    <string name="Crowdin">Перевод</string>
 
     <string name="Preferences">Настройки exteraGram</string>
     <string name="RestartRequired">Перезагрузите приложение, чтобы изменения вступили в силу.</string>

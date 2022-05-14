@@ -410,7 +410,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private int devicesSectionRow;
     private int helpHeaderRow;
     private int questionRow;
-    private int faqRow;
     private int policyRow;
     private int helpSectionCell;
     private int debugHeaderRow;
@@ -2883,11 +2882,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             } else if (position == devicesRow) {
                 presentFragment(new SessionsActivity(0));
             } else if (position == questionRow) {
-                showDialog(AlertsCreator.createSupportAlert(ProfileActivity.this));
-            } else if (position == faqRow) {
-                Browser.openUrl(getParentActivity(), LocaleController.getString("TelegramFaqUrl", R.string.TelegramFaqUrl));
+                Browser.openUrl(getParentActivity(), "https://t.me/itsv1eds");
             } else if (position == policyRow) {
-                Browser.openUrl(getParentActivity(), LocaleController.getString("PrivacyPolicyUrl", R.string.PrivacyPolicyUrl));
+                Browser.openUrl(getParentActivity(), LocaleController.getString("exteraPrivacyPolicyUrl", R.string.exteraPrivacyPolicyUrl));
             } else if (position == sendLogsRow) {
                 sendLogs(false);
             } else if (position == sendLastLogsRow) {
@@ -5859,7 +5856,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         devicesSectionRow = -1;
         helpHeaderRow = -1;
         questionRow = -1;
-        faqRow = -1;
         policyRow = -1;
         helpSectionCell = -1;
         debugHeaderRow = -1;
@@ -5959,7 +5955,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 devicesSectionRow = rowCount++;
                 helpHeaderRow = rowCount++;
                 questionRow = rowCount++;
-                faqRow = rowCount++;
                 policyRow = rowCount++;
                 if (BuildVars.LOGS_ENABLED || BuildVars.DEBUG_PRIVATE_VERSION) {
                     helpSectionCell = rowCount++;
@@ -7701,13 +7696,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     } else if (position == chatRow) {
                         textCell.setTextAndIcon(LocaleController.getString("ChatSettings", R.string.ChatSettings), R.drawable.menu_chats, true);
                     } else if (position == filtersRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Filters", R.string.Filters), R.drawable.menu_folders, true);
+                        textCell.setTextAndIcon(LocaleController.getString("Filters", R.string.Folders), R.drawable.menu_folders, true);
                     } else if (position == questionRow) {
                         textCell.setTextAndIcon(LocaleController.getString("AskAQuestion", R.string.AskAQuestion), R.drawable.menu_support2, true);
-                    } else if (position == faqRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("TelegramFAQ", R.string.TelegramFAQ), R.drawable.menu_help, true);
                     } else if (position == policyRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), R.drawable.menu_policy, false);
+                        textCell.setTextAndIcon(LocaleController.getString("exteraPrivacy", R.string.exteraPrivacy), R.drawable.menu_policy, false);
                     } else if (position == sendLogsRow) {
                         textCell.setText(LocaleController.getString("DebugSendLogs", R.string.DebugSendLogs), true);
                     } else if (position == sendLastLogsRow) {
@@ -7872,8 +7865,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         position == languageRow || position == setUsernameRow || position == bioRow ||
                         position == versionRow || position == dataRow || position == chatRow ||
                         position == questionRow || position == devicesRow || position == filtersRow ||
-                        position == faqRow || position == policyRow || position == sendLogsRow || position == sendLastLogsRow || position == exteraRow ||
-                        position == clearLogsRow || position == switchBackendRow || position == setAvatarRow || position == addToGroupButtonRow;
+                        position == policyRow || position == sendLogsRow || position == sendLastLogsRow ||
+                        position == exteraRow || position == clearLogsRow || position == switchBackendRow ||
+                        position == setAvatarRow || position == addToGroupButtonRow;
             }
             if (holder.itemView instanceof UserCell) {
                 UserCell userCell = (UserCell) holder.itemView;
@@ -7912,7 +7906,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     position == sendMessageRow || position == notificationRow || position == exteraRow || position == privacyRow ||
                     position == languageRow || position == dataRow || position == chatRow ||
                     position == questionRow || position == devicesRow || position == filtersRow ||
-                    position == faqRow || position == policyRow || position == sendLogsRow || position == sendLastLogsRow ||
+                    position == policyRow || position == sendLogsRow || position == sendLastLogsRow ||
                     position == clearLogsRow || position == switchBackendRow || position == setAvatarRow || position == addToGroupButtonRow) {
                 return VIEW_TYPE_TEXT;
             //} else if (position == notificationsDividerRow) {
@@ -8103,12 +8097,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 new SearchResult(316, LocaleController.getString("Masks", R.string.Masks), null, LocaleController.getString("ChatSettings", R.string.ChatSettings), LocaleController.getString("StickersAndMasks", R.string.StickersAndMasks), R.drawable.menu_chats, () -> presentFragment(new StickersActivity(MediaDataController.TYPE_MASK))),
                 new SearchResult(317, LocaleController.getString("ArchivedStickers", R.string.ArchivedStickers), null, LocaleController.getString("ChatSettings", R.string.ChatSettings), LocaleController.getString("StickersAndMasks", R.string.StickersAndMasks), R.drawable.menu_chats, () -> presentFragment(new ArchivedStickersActivity(MediaDataController.TYPE_IMAGE))),
                 new SearchResult(317, LocaleController.getString("ArchivedMasks", R.string.ArchivedMasks), null, LocaleController.getString("ChatSettings", R.string.ChatSettings), LocaleController.getString("StickersAndMasks", R.string.StickersAndMasks), R.drawable.menu_chats, () -> presentFragment(new ArchivedStickersActivity(MediaDataController.TYPE_MASK))),
-
                 new SearchResult(400, LocaleController.getString("Language", R.string.Language), R.drawable.menu_language, () -> presentFragment(new LanguageSelectActivity())),
-
                 new SearchResult(402, LocaleController.getString("AskAQuestion", R.string.AskAQuestion), LocaleController.getString("SettingsHelp", R.string.SettingsHelp), R.drawable.menu_help, () -> showDialog(AlertsCreator.createSupportAlert(ProfileActivity.this))),
-                new SearchResult(403, LocaleController.getString("TelegramFAQ", R.string.TelegramFAQ), LocaleController.getString("SettingsHelp", R.string.SettingsHelp), R.drawable.menu_help, () -> Browser.openUrl(getParentActivity(), LocaleController.getString("TelegramFaqUrl", R.string.TelegramFaqUrl))),
-                new SearchResult(404, LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), LocaleController.getString("SettingsHelp", R.string.SettingsHelp), R.drawable.menu_help, () -> Browser.openUrl(getParentActivity(), LocaleController.getString("PrivacyPolicyUrl", R.string.PrivacyPolicyUrl))),
+                new SearchResult(404, LocaleController.getString("exteraPrivacy", R.string.exteraPrivacy), LocaleController.getString("SettingsHelp", R.string.SettingsHelp), R.drawable.menu_help, () -> Browser.openUrl(getParentActivity(), LocaleController.getString("exteraPrivacyPolicyUrl", R.string.exteraPrivacyPolicyUrl))),
         };
         private ArrayList<MessagesController.FaqSearchResult> faqSearchArray = new ArrayList<>();
 
@@ -8892,7 +8883,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             put(++pointer, devicesSectionRow, sparseIntArray);
             put(++pointer, helpHeaderRow, sparseIntArray);
             put(++pointer, questionRow, sparseIntArray);
-            put(++pointer, faqRow, sparseIntArray);
             put(++pointer, policyRow, sparseIntArray);
             put(++pointer, helpSectionCell, sparseIntArray);
             put(++pointer, debugHeaderRow, sparseIntArray);

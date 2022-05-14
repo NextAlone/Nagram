@@ -45,6 +45,7 @@ public class MainPreferencesEntry extends BaseFragment {
     private int sourceCodeRow;
     private int channelRow;
     private int groupRow;
+    private int crowdinRow;
 
     @Override
     public boolean onFragmentCreate() {
@@ -90,13 +91,15 @@ public class MainPreferencesEntry extends BaseFragment {
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         listView.setOnItemClickListener((view, position, x, y) -> {
             if (position == aboutExteraRow) {
-                Browser.openUrl(getParentActivity(), "https://exterasquad.github.io/");
+                Browser.openUrl(getParentActivity(), "https://extera.codes/");
             } else if (position == sourceCodeRow) {
                 Browser.openUrl(getParentActivity(), "https://github.com/exteraSquad/exteraGram");
             } else if (position == channelRow) {
                 MessagesController.getInstance(currentAccount).openByUserName(("exteragram"), this, 1);
             } else if (position == groupRow) {
                 MessagesController.getInstance(currentAccount).openByUserName(("exterachat"), this, 1);
+            } else if (position == crowdinRow) {
+                Browser.openUrl(getParentActivity(), "https://crowdin.com/project/exteralocales");
             } else if (position == appearanceRow) {
                 presentFragment(new AppearancePreferencesEntry());
             } else if (position == chatsRow) {
@@ -127,6 +130,7 @@ public class MainPreferencesEntry extends BaseFragment {
         channelRow = rowCount++;
         groupRow = rowCount++;
         sourceCodeRow = rowCount++;
+        crowdinRow = rowCount++;
 
 
         if (listAdapter != null) {
@@ -164,11 +168,13 @@ public class MainPreferencesEntry extends BaseFragment {
                 case 2:
                     TextCell textCell = (TextCell) holder.itemView;
                     if (position == sourceCodeRow) {
-                        textCell.setTextAndValueAndIcon(LocaleController.getString("SourceCode", R.string.SourceCode), "Github", R.drawable.msg_report_spam, false);
+                        textCell.setTextAndValueAndIcon(LocaleController.getString("SourceCode", R.string.SourceCode), "Github", R.drawable.msg_report_spam, true);
                     } else if (position == channelRow) {
                         textCell.setTextAndValueAndIcon(LocaleController.getString("Channel", R.string.Channel), "@exteragram", R.drawable.msg_channel, true);
                     } else if (position == groupRow) {
                         textCell.setTextAndValueAndIcon(LocaleController.getString("Chats", R.string.Chats), "@exterachat", R.drawable.menu_groups, true);
+                    } else if (position == crowdinRow) {
+                        textCell.setTextAndValueAndIcon(LocaleController.getString("Crowdin", R.string.Crowdin), "Crowdin", R.drawable.msg_translate,false);
                     } else if (position == appearanceRow) {
                         textCell.setTextAndIcon(LocaleController.getString("Appearance", R.string.Appearance), R.drawable.msg_theme, true);
                     } else if (position == chatsRow) {
@@ -235,7 +241,8 @@ public class MainPreferencesEntry extends BaseFragment {
             if (position == dividerInfoRow || position == dividerExteraInfoRow) {
                 return 1;
             } else if (position == appearanceRow || position == chatsRow || position == drawerRow ||
-                       position == channelRow || position == groupRow || position == sourceCodeRow) {
+                       position == channelRow || position == groupRow || position == crowdinRow ||
+                       position == sourceCodeRow) {
                 return 2;
             } else if (position == infoHeaderRow || position == categoryHeaderRow) {
                 return 3;

@@ -9,11 +9,15 @@
     <string name="SaveMessage">Save message</string>
 
     <!-- Main Menu (about) -->
+    <string name="Folders">Folders</string>
+    <string name="exteraPrivacy">exteraGram Privacy Policy and FAQ</string>
+    <string name="exteraPrivacyPolicyUrl">https://extera.codes/privacy</string>
     <string name="Links">Links</string>
     <string name="AboutExteraDescription">Experimental Telegram client based on official Telegram sources!</string>
     <string name="SourceCode">Source code</string>
     <string name="Channel">Channel</string>
     <string name="Chats">Chats</string>
+    <string name="Crowdin">Translate</string>
 
     <string name="Preferences">exteraGram Preferences</string>
     <string name="RestartRequired">Restart the app to take effect.</string>

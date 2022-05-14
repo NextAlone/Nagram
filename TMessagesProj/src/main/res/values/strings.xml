@@ -2595,7 +2595,7 @@
     <string name="FilterRemoveInclusionText">Are you sure you want to remove \"%1$s\" from always included chats?</string>
     <string name="FilterRemoveInclusionChatText">Are you sure you want to remove \"%1$s\" from always included chats?</string>
     <string name="FilterRemoveInclusionUserText">Are you sure you want to remove \"%1$s\" from always included chats?</string>
-    <string name="FilterAvailableTitle">Chat folders</string>
+    <string name="FilterAvailableTitle">Folders</string>
     <string name="FilterAvailableText">Open *Settings / Folders* to organize your chats into folders.</string>
     <string name="FilterNameNonMuted">Not Muted</string>
     <string name="FilterNameUnread">Unread</string>
