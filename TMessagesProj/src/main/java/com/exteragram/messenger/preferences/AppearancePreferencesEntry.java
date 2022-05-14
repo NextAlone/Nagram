@@ -326,7 +326,7 @@ public class AppearancePreferencesEntry extends BaseFragment {
                 return 2;
             } else if (position == useSystemFontsRow || position == useSystemEmojiRow || position == transparentStatusBarRow ||
                        position == blurForAllThemesRow || position == hideAllChatsRow || position == hidePhoneNumberRow ||
-                       position == showIDRow || position == chatsOnTitleRow || position == disableVibrationRow) {
+                       position == showIDRow || position == chatsOnTitleRow || position == disableVibrationRow | position == forceTabletModeRow) {
                 return 3;
             }
             return 1;
