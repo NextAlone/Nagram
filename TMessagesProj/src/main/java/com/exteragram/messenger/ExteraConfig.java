@@ -61,7 +61,7 @@ public class ExteraConfig {
     public static boolean telegramFeatures;
     public static int eventType;
 
-    public static long channelToSave = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+    public static long channelToSave = 0;
 
     private static boolean configLoaded;
 

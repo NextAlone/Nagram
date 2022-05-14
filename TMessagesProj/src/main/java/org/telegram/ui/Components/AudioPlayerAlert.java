@@ -1132,6 +1132,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             final ArrayList<MessageObject> likedTrack = new ArrayList<>();
             likedTrack.add(MediaController.getInstance().getPlayingMessageObject());
+            if (ExteraConfig.channelToSave == 0) ExteraConfig.changeChannelToSave(UserConfig.getInstance(currentAccount).getClientUserId());
             SendMessagesHelper.getInstance(currentAccount).sendMessage(likedTrack, ExteraConfig.channelToSave, true, true, false, 0);
             BulletinFactory.of((FrameLayout) containerView, resourcesProvider).createSimpleBulletin(R.raw.ic_save_to_music, LocaleController.getString("TrackSaved", R.string.TrackSaved)).show();
         });
