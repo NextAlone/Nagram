@@ -2800,7 +2800,6 @@ public class Theme {
     public static Drawable dialogs_botDrawable;
     public static Drawable dialogs_muteDrawable;
     public static Drawable dialogs_verifiedDrawable;
-    public static Drawable dialogs_outlineArrowDrawable;
     public static ScamDrawable dialogs_scamDrawable;
     public static ScamDrawable dialogs_fakeDrawable;
     public static Drawable dialogs_verifiedCheckDrawable;
@@ -8297,7 +8296,6 @@ public class Theme {
             dialogs_verifiedDrawable = resources.getDrawable(R.drawable.verified_area).mutate();
             dialogs_scamDrawable = new ScamDrawable(11, 0);
             dialogs_fakeDrawable = new ScamDrawable(11, 1);
-            dialogs_outlineArrowDrawable = resources.getDrawable(R.drawable.ic_outline_arrow).mutate();
             dialogs_verifiedCheckDrawable = resources.getDrawable(R.drawable.verified_check).mutate();
             dialogs_mentionDrawable = resources.getDrawable(R.drawable.mentionchatslist);
             dialogs_reactionsMentionDrawable = resources.getDrawable(R.drawable.reactionchatslist);
@@ -8383,7 +8381,6 @@ public class Theme {
         setDrawableColorByKey(dialogs_holidayDrawable, key_actionBarDefaultTitle);
         setDrawableColorByKey(dialogs_scamDrawable, key_chats_draft);
         setDrawableColorByKey(dialogs_fakeDrawable, key_chats_draft);
-        setDrawableColorByKey(dialogs_outlineArrowDrawable, key_chats_verifiedBackground);
     }
 
     public static void destroyResources() {
