@@ -83,7 +83,7 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 24
+        minSdkVersion 21
         //noinspection ExpiredTargetSdkVersion,OldTargetApi
         targetSdkVersion 30
 
@@ -110,7 +110,7 @@ android {
             cmake {
                 // remove x86 x86_64
                 abiFilters "armeabi-v7a", "arm64-v8a"
-                arguments "-DANDROID_STL=c++_static", "-DANDROID_PLATFORM=android-16"
+                arguments "-DANDROID_STL=c++_static", "-DANDROID_PLATFORM=android-21"
             }
         }
     }
