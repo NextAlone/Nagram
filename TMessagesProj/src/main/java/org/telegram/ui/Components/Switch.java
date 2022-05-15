@@ -35,6 +35,8 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
+import com.exteragram.messenger.ExteraConfig;
+
 import java.lang.reflect.Method;
 
 public class Switch extends View {
@@ -355,12 +357,18 @@ public class Switch extends View {
         if (getVisibility() != VISIBLE) {
             return;
         }
-
+        int x;
+        float y;
         int width = AndroidUtilities.dp(31);
         int thumb = AndroidUtilities.dp(20);
-        int x = (getMeasuredWidth() - width) / 2;
-        float y = (getMeasuredHeight() - AndroidUtilities.dpf2(14)) / 2;
-        int tx = x + AndroidUtilities.dp(7) + (int) (AndroidUtilities.dp(17) * progress);
+        if (ExteraConfig.newSwitchStyle) {
+            x = 0;
+            y = getMeasuredHeight() / 2 - thumb / 2;
+        } else {
+            x = (getMeasuredWidth() - width) / 2;
+            y = (getMeasuredHeight() - AndroidUtilities.dpf2(14)) / 2;
+        }
+        int tx = ((getMeasuredWidth() - width) / 2) + AndroidUtilities.dp(7) + (int) (AndroidUtilities.dp(17) * progress);
         int ty = getMeasuredHeight() / 2;
 
 
@@ -424,10 +432,15 @@ public class Switch extends View {
             paint.setColor(color);
             paint2.setColor(color);
 
-            rectF.set(x, y, x + width, y + AndroidUtilities.dpf2(14));
-            canvasToDraw.drawRoundRect(rectF, AndroidUtilities.dpf2(7), AndroidUtilities.dpf2(7), paint);
-            canvasToDraw.drawCircle(tx, ty, AndroidUtilities.dpf2(10), paint);
-
+            if (ExteraConfig.newSwitchStyle) {
+                rectF.set(x, y, getMeasuredWidth(), getMeasuredHeight() / 2 + thumb / 2);
+                canvasToDraw.drawRoundRect(rectF, AndroidUtilities.dpf2(14), AndroidUtilities.dpf2(14), paint);
+                canvasToDraw.drawCircle(tx, ty, AndroidUtilities.dpf2(9), paint);
+            } else {
+                rectF.set(x, y, x + width, y + AndroidUtilities.dpf2(14));
+                canvasToDraw.drawRoundRect(rectF, AndroidUtilities.dpf2(7), AndroidUtilities.dpf2(7), paint);
+                canvasToDraw.drawCircle(tx, ty, AndroidUtilities.dpf2(10), paint);
+            }
             if (a == 0 && rippleDrawable != null) {
                 rippleDrawable.setBounds(tx - AndroidUtilities.dp(18), ty - AndroidUtilities.dp(18), tx + AndroidUtilities.dp(18), ty + AndroidUtilities.dp(18));
                 rippleDrawable.draw(canvasToDraw);

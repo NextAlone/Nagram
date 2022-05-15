@@ -25,6 +25,7 @@
     <string name="TransparentStatusBar">Прозрачная строка состояния</string>
     <string name="BlurForAllThemes">Размытие во всех темах</string>
     <string name="CenterTitle">Заголовок в центре</string>
+    <string name="NewSwitchStyle">Альтернативный стиль переключателей</string>
 
     <string name="HideAllChats">Скрыть \"Все чаты\"</string>
     <string name="HideProxySponsor">Скрыть спонсора прокси</string>

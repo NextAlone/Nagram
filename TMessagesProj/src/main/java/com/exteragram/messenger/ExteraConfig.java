@@ -22,6 +22,7 @@ public class ExteraConfig {
     public static boolean disableVibration;
     public static boolean blurForAllThemes;
     public static boolean centerTitle;
+    public static boolean newSwitchStyle;
 
     public static boolean hideAllChats;
     public static boolean hidePhoneNumber;
@@ -84,6 +85,7 @@ public class ExteraConfig {
             disableVibration = preferences.getBoolean("disableVibration", false);
             blurForAllThemes = preferences.getBoolean("blurForAllThemes", true);
             centerTitle = preferences.getBoolean("centerTitle", false);
+            newSwitchStyle = preferences.getBoolean("newSwitchStyle", false);
 
             hideAllChats = preferences.getBoolean("hideAllChats", false);
             hidePhoneNumber = preferences.getBoolean("hidePhoneNumber", false);
@@ -446,6 +448,14 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("centerTitle", centerTitle);
+        editor.apply();
+    }
+    
+    public static void toggleNewSwitchStyle() {
+        newSwitchStyle = !newSwitchStyle;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("newSwitchStyle", newSwitchStyle);
         editor.apply();
     }
 }
