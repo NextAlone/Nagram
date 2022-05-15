@@ -21,6 +21,7 @@ public class ExteraConfig {
     public static boolean useSystemFonts;
     public static boolean disableVibration;
     public static boolean blurForAllThemes;
+    public static boolean centerTitle;
 
     public static boolean hideAllChats;
     public static boolean hidePhoneNumber;
@@ -82,6 +83,7 @@ public class ExteraConfig {
             useSystemFonts = preferences.getBoolean("useSystemFonts", false);
             disableVibration = preferences.getBoolean("disableVibration", false);
             blurForAllThemes = preferences.getBoolean("blurForAllThemes", true);
+            centerTitle = preferences.getBoolean("centerTitle", false);
 
             hideAllChats = preferences.getBoolean("hideAllChats", false);
             hidePhoneNumber = preferences.getBoolean("hidePhoneNumber", false);
@@ -436,6 +438,14 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("eventType", eventType);
+        editor.apply();
+    }
+    
+    public static void toggleCenterTitle() {
+        centerTitle = !centerTitle;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("centerTitle", centerTitle);
         editor.apply();
     }
 }

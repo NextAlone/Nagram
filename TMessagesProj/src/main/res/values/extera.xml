@@ -29,6 +29,7 @@
     <string name="UseSystemEmoji">Use system emoji</string>
     <string name="TransparentStatusBar">Transparent status bar</string>
     <string name="BlurForAllThemes">Blur for all themes</string>
+    <string name="CenterTitle">Center title in action bar</string>
 
     <string name="HideAllChats">Hide \"All Chats\" tab</string>
     <string name="HideProxySponsor">Hide proxy sponsor</string>
