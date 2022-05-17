@@ -10402,7 +10402,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         if (ExteraConfig.centerTitle) menuItem.hideSubItem(gallery_menu_pip2);
                     }
                     setItemVisible(masksItem, !ExteraConfig.centerTitle ? shouldMasksItemBeVisible : false, !pipItemVisible);
-                    if (ExteraConfig.centerTitle) menuItem.showSubItem(gallery_menu_masks2);
+                    if (ExteraConfig.centerTitle && shouldMasksItemBeVisible) menuItem.showSubItem(gallery_menu_masks2);
                 }
                 final boolean shouldAutoPlayed = shouldMessageObjectAutoPlayed(newMessageObject);
                 if (!shouldAutoPlayed && TextUtils.isEmpty(placeProvider.getTitleFor(switchingToIndex))) {

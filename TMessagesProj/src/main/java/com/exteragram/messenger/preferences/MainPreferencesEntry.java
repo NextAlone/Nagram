@@ -132,7 +132,6 @@ public class MainPreferencesEntry extends BaseFragment {
         sourceCodeRow = rowCount++;
         crowdinRow = rowCount++;
 
-
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }

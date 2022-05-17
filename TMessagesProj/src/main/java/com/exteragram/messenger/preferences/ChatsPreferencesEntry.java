@@ -73,7 +73,6 @@ public class ChatsPreferencesEntry extends BaseFragment {
     private int disableProximityEventsRow;
     private int pauseOnMinimizeRow;
     private int disablePlaybackRow;
-    private int mediaDividerRow;
 
     private UndoView restartTooltip;
 
@@ -344,7 +343,6 @@ public class ChatsPreferencesEntry extends BaseFragment {
         disableProximityEventsRow = rowCount++;
         pauseOnMinimizeRow = rowCount++;
         disablePlaybackRow = rowCount++;
-        mediaDividerRow = rowCount++;
 
         if (listAdapter != null && notify) {
             listAdapter.notifyDataSetChanged();
@@ -463,7 +461,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            if (position == stickersDividerRow || position == chatDividerRow || position == mediaDividerRow) {
+            if (position == stickersDividerRow || position == chatDividerRow) {
                 return 1;
             } else if (position == stickerSizeHeaderRow || position == stickersHeaderRow || position == chatHeaderRow || position == mediaHeaderRow) {
                 return 2;

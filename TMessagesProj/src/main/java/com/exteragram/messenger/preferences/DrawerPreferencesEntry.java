@@ -53,7 +53,6 @@ public class DrawerPreferencesEntry extends BaseFragment {
     private int scanQrRow;
     private int inviteFriendsRow;
     private int telegramFeaturesRow;
-    private int drawerDividerRow;
 
     private int newGroupIcon;
     private int newSecretIcon;
@@ -233,7 +232,6 @@ public class DrawerPreferencesEntry extends BaseFragment {
         scanQrRow = rowCount++;
         inviteFriendsRow = rowCount++;
         telegramFeaturesRow = rowCount++;
-        drawerDividerRow = rowCount++;
 
         if (listAdapter != null && notify) {
             listAdapter.notifyDataSetChanged();
@@ -403,7 +401,7 @@ public class DrawerPreferencesEntry extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            if (position == drawerDividerRow || position == iconsDividerRow) {
+            if (position == iconsDividerRow) {
                 return 1;
             } else if (position == drawerHeaderRow || position == iconsHeaderRow) {
                 return 2;

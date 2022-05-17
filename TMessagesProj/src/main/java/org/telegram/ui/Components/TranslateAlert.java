@@ -361,7 +361,7 @@ public class TranslateAlert extends Dialog {
         if (Build.VERSION.SDK_INT >= 21) {
             copyButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), 1, AndroidUtilities.dp(24)));
         }
-        header.addView(copyButton, LayoutHelper.createFrame(48, 48, LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT | Gravity.TOP, LocaleController.isRTL ? 8 : 22, 22, LocaleController.isRTL ? 22 : 8, 0));
+        header.addView(copyButton, LayoutHelper.createFrame(48, 48, LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT | Gravity.TOP, LocaleController.isRTL ? 8 : 22, 4, LocaleController.isRTL ? 22 : 8, 0));
         copyButton.setOnClickListener(v -> {
             android.content.ClipboardManager clipboard = (android.content.ClipboardManager) ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE);
             android.content.ClipData clip = android.content.ClipData.newPlainText("label", allTextsView.getText());

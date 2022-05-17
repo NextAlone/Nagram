@@ -9271,7 +9271,7 @@ public class Theme {
 
             profile_verifiedDrawable = resources.getDrawable(R.drawable.verified_area).mutate();
             profile_verifiedCheckDrawable = resources.getDrawable(R.drawable.verified_check).mutate();
-            profile_outlineArrowDrawable = resources.getDrawable(R.drawable.ic_outline_arrow).mutate();
+            profile_outlineArrowDrawable = resources.getDrawable(R.drawable.ic_outline_arrow);
 
             applyProfileTheme();
         }
