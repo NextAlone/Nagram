@@ -1608,12 +1608,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         allowRepeat = allowChatActions &&
                                 (!isThreadChat() && !noforwards ||
                                         getMessageHelper().getMessageForRepeat(message, selectedObjectGroup) != null);
-                        return allowRepeat && !message.isSponsored() && chatMode != MODE_SCHEDULED && !message.needDrawBluredPreview() && !message.isLiveLocation() && message.type != 16;
+                        return allowRepeat && !ChatObject.isChannel(currentChat) && !message.isSponsored() && chatMode != MODE_SCHEDULED && !message.needDrawBluredPreview() && !message.isLiveLocation() && message.type != 16;
                     case DoubleTap.DOUBLE_TAP_ACTION_REPEAT_AS_COPY:
                         allowRepeat = allowChatActions &&
                                 (!isThreadChat() && !noforwards ||
                                         getMessageHelper().getMessageForRepeat(message, selectedObjectGroup) != null);
-                        return allowRepeat && !message.isSponsored() && chatMode != MODE_SCHEDULED && !message.needDrawBluredPreview() && !message.isLiveLocation() && message.type != 16;
+                        return allowRepeat && !ChatObject.isChannel(currentChat) && !message.isSponsored() && chatMode != MODE_SCHEDULED && !message.needDrawBluredPreview() && !message.isLiveLocation() && message.type != 16;
                     case DoubleTap.DOUBLE_TAP_ACTION_EDIT:
                         return allowEdit;
                 }
