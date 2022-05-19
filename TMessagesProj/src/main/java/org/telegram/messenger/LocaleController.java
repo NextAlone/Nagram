@@ -1546,6 +1546,25 @@ public class LocaleController {
         return "LOC_ERR: formatDate";
     }
 
+    public static String formatFwdDate(long date) {
+        try {
+            date *= 1000;
+            Calendar rightNow = Calendar.getInstance();
+            int year = rightNow.get(Calendar.YEAR);
+            rightNow.setTimeInMillis(date);
+            int dateYear = rightNow.get(Calendar.YEAR);
+            
+            if (dateYear == year) {
+                return LocaleController.formatString("formatFwdDate", R.string.formatFwdDate, getInstance().chatDate.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
+            } else {
+                return LocaleController.formatString("formatFwdDate", R.string.formatFwdDate, getInstance().chatFullDate.format(new Date(date)), getInstance().formatterDay.format(new Date(date)));
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        return "LOC_ERR: formatDate";
+    }
+
     public static String formatDateAudio(long date, boolean shortFormat) {
         try {
             date *= 1000;
