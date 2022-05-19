@@ -4053,6 +4053,8 @@ public class AndroidUtilities {
                     navigationBarColorAnimators.remove(window);
                 }
             }
+            
+            if (ExteraConfig.transparentNavBar) color = Theme.getColor(Theme.key_chat_messagePanelBackground);
 
             if (!animated) {
                 if (onUpdate != null) {

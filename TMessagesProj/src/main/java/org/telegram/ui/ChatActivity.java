@@ -27612,7 +27612,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     @Override
     public int getNavigationBarColor() {
-        return getThemedColor(Theme.key_windowBackgroundGray);
+        return getThemedColor(ExteraConfig.transparentNavBar ? Theme.key_chat_messagePanelBackground : Theme.key_windowBackgroundGray);
     }
 
     @Override

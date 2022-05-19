@@ -971,8 +971,8 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && checkNavigationBar) {
                 final Window window = getWindow();
-                int color = Theme.getColor(Theme.key_windowBackgroundGray, null, true);
-                if (window.getNavigationBarColor() != color) {
+                int color = Theme.getColor(ExteraConfig.transparentNavBar ? Theme.key_chat_messagePanelBackground : Theme.key_windowBackgroundGray, null, true);
+                if (window.getNavigationBarColor() != color || ExteraConfig.transparentNavBar) {
                     window.setNavigationBarColor(color);
                     final float brightness = AndroidUtilities.computePerceivedBrightness(color);
                     AndroidUtilities.setLightNavigationBar(getWindow(), brightness >= 0.721f);

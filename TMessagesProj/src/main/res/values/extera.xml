@@ -31,6 +31,7 @@
     <string name="BlurForAllThemes">Blur for all themes</string>
     <string name="CenterTitle">Center title in action bar</string>
     <string name="NewSwitchStyle">Enable alternative switch style</string>
+    <string name="TransparentNavBar">Transparent navigation bar</string>
 
     <string name="HideAllChats">Hide \"All Chats\" tab</string>
     <string name="HideProxySponsor">Hide proxy sponsor</string>

@@ -23,6 +23,7 @@ public class ExteraConfig {
     public static boolean blurForAllThemes;
     public static boolean centerTitle;
     public static boolean newSwitchStyle;
+    public static boolean transparentNavBar;
 
     public static boolean hideAllChats;
     public static boolean hidePhoneNumber;
@@ -86,6 +87,7 @@ public class ExteraConfig {
             blurForAllThemes = preferences.getBoolean("blurForAllThemes", true);
             centerTitle = preferences.getBoolean("centerTitle", false);
             newSwitchStyle = preferences.getBoolean("newSwitchStyle", false);
+            transparentNavBar = preferences.getBoolean("transparentNavBar", true);
 
             hideAllChats = preferences.getBoolean("hideAllChats", false);
             hidePhoneNumber = preferences.getBoolean("hidePhoneNumber", false);
@@ -456,6 +458,14 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("newSwitchStyle", newSwitchStyle);
+        editor.apply();
+    }
+    
+    public static void toggleTransparentNavBar() {
+        transparentNavBar = !transparentNavBar;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("transparentNavBar", transparentNavBar);
         editor.apply();
     }
 }
