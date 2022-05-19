@@ -4236,7 +4236,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     };
                     masksAlert.show();
                 } else if (id == gallery_menu_pip || id == gallery_menu_pip2) {
-                    if (pipItem.getAlpha() != 1.0f) {
+                    if (pipItem.getAlpha() != 1.0f && !ExteraConfig.centerTitle) {
                         return;
                     }
                     if (isEmbedVideo) {
