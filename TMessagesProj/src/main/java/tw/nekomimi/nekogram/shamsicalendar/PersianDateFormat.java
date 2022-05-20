@@ -16,7 +16,7 @@ public class PersianDateFormat {
    */
   private String[] key = {"a", "l", "j", "F", "Y", "H", "i", "s", "d", "g", "n", "m", "t", "w", "y",
       "z", "A",
-      "L","X","C","E","T","b","D","e","B","S"};
+      "L","X","C","E","T","b","D","e","B","S","k"};
   private String pattern;
   /**
    * key_parse for convert String to PersianDate
@@ -47,12 +47,16 @@ public class PersianDateFormat {
    * new patterns T for mounth name in latin ----- b for shortday in persian number ----- D for 4 digit year in persian number ---- e for short month in persian number
    */
 
+   /**
+   * new patterns k for day name in latin
+   */
+
 
 
   public static String format(PersianDate date, String pattern) {
     if(pattern == null) pattern="l j F Y H:i:s";
     String[] key = {"a", "l", "j", "F", "Y", "H", "i", "s", "d", "g", "n", "m", "t", "w", "y", "z",
-        "A", "L","X","C","E","T","b","D","e","B","S"};
+        "A", "L","X","C","E","T","b","D","e","B","S","k"};
     String year2;
     if (("" + date.getShYear()).length() == 2) {
       year2 = "" + date.getShYear();
@@ -79,8 +83,8 @@ public class PersianDateFormat {
         LanguageUtils.getPersianNumbers(String.valueOf(date.getShYear())),
         LanguageUtils.getPersianNumbers(String.valueOf( date.getShMonth())),
         LanguageUtils.getPersianNumbers(String.valueOf(textNumberFilterStatic("" + date.getHour()))),
-        LanguageUtils.getPersianNumbers(String.valueOf(textNumberFilterStatic("" + date.getMinute()))) 
-        
+        LanguageUtils.getPersianNumbers(String.valueOf(textNumberFilterStatic("" + date.getMinute())),
+        date.latindayNames()) 
 
     };
     for (int i = 0; i < key.length; i++) {
@@ -116,7 +120,8 @@ public class PersianDateFormat {
         LanguageUtils.getPersianNumbers(String.valueOf(date.getShYear())),
         LanguageUtils.getPersianNumbers(String.valueOf( date.getShMonth())),
         LanguageUtils.getPersianNumbers(String.valueOf(textNumberFilterStatic("" + date.getHour()))),
-        LanguageUtils.getPersianNumbers(String.valueOf(textNumberFilterStatic("" + date.getMinute()))) 
+        LanguageUtils.getPersianNumbers(String.valueOf(textNumberFilterStatic("" + date.getMinute())),
+        date.latindayNames())
     };
     return this.stringUtils(this.pattern, this.key, values);
   }
