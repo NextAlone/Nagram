@@ -1,10 +1,8 @@
 package top.qwq2333.nullgram.activity;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.os.SystemClock;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -17,7 +15,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,7 +29,6 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
@@ -47,8 +43,8 @@ import org.telegram.ui.Cells.TextRadioCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.BlurredRecyclerView;
-import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.Rect;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.URLSpanNoUnderline;
@@ -58,8 +54,16 @@ import java.util.Locale;
 
 import top.qwq2333.nullgram.utils.MessageUtils;
 
+public class DatacenterActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
-public class DatacenterActivity extends BaseFragment {
+    protected BlurredRecyclerView listView;
+    protected BaseListAdapter listAdapter;
+    protected LinearLayoutManager layoutManager;
+
+    protected int rowCount;
+    protected HashMap<String, Integer> rowMap = new HashMap<>(20);
+    protected HashMap<Integer, String> rowMapReverse = new HashMap<>(20);
+
     private final int dcToHighlight;
 
     private int headerRow;
@@ -72,24 +76,52 @@ public class DatacenterActivity extends BaseFragment {
         this.dcToHighlight = dcToHighlight;
     }
 
+    public View createView(Context context) {
+        fragmentView = new BlurContentView(context);
+        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+        SizeNotifierFrameLayout frameLayout = (SizeNotifierFrameLayout) fragmentView;
 
-    protected BlurredRecyclerView listView;
-    protected BaseListAdapter listAdapter;
-    protected LinearLayoutManager layoutManager;
+        actionBar.setDrawBlurBackground(frameLayout);
 
-    protected int rowCount;
-    protected HashMap<String, Integer> rowMap = new HashMap<>(20);
-    protected HashMap<Integer, String> rowMapReverse = new HashMap<>(20);
+        listView = new BlurredRecyclerView(context);
+        listView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                frameLayout.invalidateBlur();
+            }
+        });
+        listView.additionalClipBottom = AndroidUtilities.dp(200);
+        listView.setLayoutManager(layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        listView.setVerticalScrollBarEnabled(false);
+        //noinspection ConstantConditions
+        ((DefaultItemAnimator) listView.getItemAnimator()).setDelayAnimations(false);
+        frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
+        listAdapter = createAdapter(context);
+
+        listView.setAdapter(listAdapter);
+        listView.setOnItemClickListener(this::onItemClick);
+        listView.setOnItemLongClickListener((view, position, x, y) -> false);
+
+        if (dcToHighlight != 0) {
+            listView.highlightRow(() -> {
+                layoutManager.scrollToPositionWithOffset(datacentersRow + dcToHighlight, AndroidUtilities.dp(60));
+                return datacentersRow + dcToHighlight;
+            });
+        }
+        return fragmentView;
+    }
 
     @Override
     public boolean onFragmentCreate() {
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.proxyCheckDone);
         return super.onFragmentCreate();
     }
 
     @Override
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.proxyCheckDone);
     }
 
     protected void onItemClick(View view, int position, float x, float y) {
@@ -99,6 +131,65 @@ public class DatacenterActivity extends BaseFragment {
                 return;
             }
             checkDatacenter(datacenterInfo, true);
+        }
+    }
+
+    protected BaseListAdapter createAdapter(Context context) {
+        return new ListAdapter(context);
+    }
+
+    protected void updateRows() {
+        rowCount = 0;
+        rowMap.clear();
+
+        headerRow = rowCount++;
+        header2Row = rowCount++;
+
+        datacentersRow = rowCount++;
+        rowCount += 5;
+        datacenters2Row = rowCount++;
+
+        for (var datacenterInfo : MessageUtils.datacenterInfos) {
+            checkDatacenter(datacenterInfo, false);
+        }
+    }
+
+    private void checkDatacenter(MessageUtils.DatacenterInfo datacenterInfo, boolean force) {
+        if (datacenterInfo.checking) {
+            return;
+        }
+        if (!force && SystemClock.elapsedRealtime() - datacenterInfo.availableCheckTime < 2 * 60 * 1000) {
+            return;
+        }
+        datacenterInfo.checking = true;
+        int position = datacentersRow + MessageUtils.datacenterInfos.indexOf(datacenterInfo) + 1;
+        if (force) {
+            listAdapter.notifyItemChanged(position);
+        }
+        datacenterInfo.pingId = ConnectionsManager.getInstance(currentAccount).checkProxy("ping-test", datacenterInfo.id, null, null, null, time -> AndroidUtilities.runOnUIThread(() -> {
+            datacenterInfo.availableCheckTime = SystemClock.elapsedRealtime();
+            datacenterInfo.checking = false;
+            if (time == -1) {
+                datacenterInfo.available = false;
+                datacenterInfo.ping = 0;
+            } else {
+                datacenterInfo.ping = time;
+                datacenterInfo.available = true;
+            }
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxyCheckDone, null, datacenterInfo.id);
+        }));
+    }
+
+    protected String getActionBarTitle() {
+        return LocaleController.getString("DatacenterStatus", R.string.DatacenterStatus);
+    }
+
+    @Override
+    public void didReceivedNotification(int id, int account, Object... args) {
+        if (id == NotificationCenter.proxyCheckDone) {
+            if (listAdapter != null && args.length > 1) {
+                listAdapter.notifyItemChanged(datacentersRow + ((int) args[1]));
+            }
         }
     }
 
@@ -204,6 +295,20 @@ public class DatacenterActivity extends BaseFragment {
 
             setSticker();
         }
+
+        protected CharSequence getSpannedString(String key, int id, String url) {
+            var text = LocaleController.getString(key, id);
+            var builder = new SpannableStringBuilder(text);
+            int index1 = text.indexOf("**");
+            int index2 = text.lastIndexOf("**");
+            if (index1 >= 0 && index2 >= 0 && index1 != index2) {
+                builder.replace(index2, index2 + 2, "");
+                builder.replace(index1, index1 + 2, "");
+                builder.setSpan(new URLSpanNoUnderline(url), index1, index2 - 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            return builder;
+        }
+
 
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -341,235 +446,6 @@ public class DatacenterActivity extends BaseFragment {
         }
     }
 
-
-    @Override
-    public View createView(Context context) {
-        fragmentView = new BlurContentView(context);
-        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
-        SizeNotifierFrameLayout frameLayout = (SizeNotifierFrameLayout) fragmentView;
-
-        actionBar.setDrawBlurBackground(frameLayout);
-
-        listView = new BlurredRecyclerView(context);
-        listView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                frameLayout.invalidateBlur();
-            }
-        });
-        listView.additionalClipBottom = AndroidUtilities.dp(200);
-        listView.setLayoutManager(layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        listView.setVerticalScrollBarEnabled(false);
-        //noinspection ConstantConditions
-        ((DefaultItemAnimator) listView.getItemAnimator()).setDelayAnimations(false);
-        frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
-
-        listAdapter = createAdapter(context);
-
-        listView.setAdapter(listAdapter);
-        listView.setOnItemClickListener(this::onItemClick);
-        listView.setOnItemLongClickListener((view, position, x, y) -> {
-            if (onItemLongClick(view, position, x, y)) {
-                return true;
-            }
-            var holder = listView.findViewHolderForAdapterPosition(position);
-            var key = getKey();
-
-            return false;
-        });
-        if (dcToHighlight != 0) {
-            listView.highlightRow(() -> {
-                layoutManager.scrollToPositionWithOffset(datacentersRow + dcToHighlight, AndroidUtilities.dp(60));
-                return datacentersRow + dcToHighlight;
-            });
-        }
-        return fragmentView;
-    }
-
-    protected BaseListAdapter createAdapter(Context context) {
-        return new ListAdapter(context);
-    }
-
-
-    @Override
-    protected ActionBar createActionBar(Context context) {
-        ActionBar actionBar;
-        if (!hasWhiteActionBar()) {
-            actionBar = super.createActionBar(context);
-        } else {
-            actionBar = new ActionBar(context);
-            actionBar.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-            actionBar.setItemsColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), false);
-            actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_actionBarWhiteSelector), false);
-            actionBar.setTitleColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-            actionBar.setCastShadows(false);
-        }
-        actionBar.setTitle(getActionBarTitle());
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
-            @Override
-            public void onItemClick(int id) {
-                if (id == -1) {
-                    finishFragment();
-                }
-            }
-        });
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        if (AndroidUtilities.isTablet()) {
-            actionBar.setOccupyStatusBar(false);
-        }
-        return actionBar;
-    }
-
-    protected String getKey() {
-        return null;
-    }
-
-
-    protected boolean onItemLongClick(View view, int position, float x, float y) {
-        return false;
-    }
-
-
-    protected void showRestartBulletin() {
-        BulletinFactory.of(this).createErrorBulletin(LocaleController.formatString("RestartAppToTakeEffect", R.string.RestartAppToTakeEffect)).show();
-    }
-
-    private class BlurContentView extends SizeNotifierFrameLayout {
-
-        public BlurContentView(Context context) {
-            super(context);
-            needBlur = hasWhiteActionBar();
-            blurBehindViews.add(this);
-        }
-
-        @Override
-        protected void drawList(Canvas blurCanvas, boolean top) {
-            for (int j = 0; j < listView.getChildCount(); j++) {
-                View child = listView.getChildAt(j);
-                if (child.getY() < listView.blurTopPadding + AndroidUtilities.dp(100)) {
-                    int restore = blurCanvas.save();
-                    blurCanvas.translate(getX() + child.getX(), getY() + listView.getY() + child.getY());
-                    child.draw(blurCanvas);
-                    blurCanvas.restoreToCount(restore);
-                }
-            }
-        }
-
-        public Paint blurScrimPaint = new Paint();
-        Rect rectTmp = new Rect();
-
-        @Override
-        protected void dispatchDraw(Canvas canvas) {
-            super.dispatchDraw(canvas);
-            if (hasWhiteActionBar() && listView.canScrollVertically(-1)) {
-                rectTmp.set(0, 0, getMeasuredWidth(), 1);
-                blurScrimPaint.setColor(Theme.getColor(Theme.key_divider));
-                drawBlurRect(canvas, getY(), rectTmp, blurScrimPaint, true);
-            }
-        }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (listAdapter != null) {
-            listAdapter.notifyDataSetChanged();
-        }
-    }
-
-    protected boolean hasWhiteActionBar() {
-        return false;
-    }
-
-    protected CharSequence getSpannedString(String key, int id, String url) {
-        var text = LocaleController.getString(key, id);
-        var builder = new SpannableStringBuilder(text);
-        int index1 = text.indexOf("**");
-        int index2 = text.lastIndexOf("**");
-        if (index1 >= 0 && index2 >= 0 && index1 != index2) {
-            builder.replace(index2, index2 + 2, "");
-            builder.replace(index1, index1 + 2, "");
-            builder.setSpan(new URLSpanNoUnderline(url), index1, index2 - 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        return builder;
-    }
-
-    @Override
-    public boolean isLightStatusBar() {
-        if (!hasWhiteActionBar()) return super.isLightStatusBar();
-        int color = Theme.getColor(Theme.key_windowBackgroundWhite, null, true);
-        return ColorUtils.calculateLuminance(color) > 0.7f;
-    }
-
-    public void scrollToRow(String key, Runnable unknown) {
-        if (rowMap.containsKey(key)) {
-            listView.highlightRow(() -> {
-                //noinspection ConstantConditions
-                int position = rowMap.get(key);
-                layoutManager.scrollToPositionWithOffset(position, AndroidUtilities.dp(60));
-                return position;
-            });
-        } else {
-            unknown.run();
-        }
-    }
-
-    protected void updateRows() {
-        rowCount = 0;
-        rowMap.clear();
-
-        headerRow = rowCount++;
-        header2Row = rowCount++;
-
-        datacentersRow = rowCount++;
-        rowCount += 5;
-        datacenters2Row = rowCount++;
-
-        for (var datacenterInfo : MessageUtils.datacenterInfos) {
-            checkDatacenter(datacenterInfo, false);
-        }
-    }
-
-    private void checkDatacenter(MessageUtils.DatacenterInfo datacenterInfo, boolean force) {
-        if (datacenterInfo.checking) {
-            return;
-        }
-        if (!force && SystemClock.elapsedRealtime() - datacenterInfo.availableCheckTime < 2 * 60 * 1000) {
-            return;
-        }
-        datacenterInfo.checking = true;
-        int position = datacentersRow + MessageUtils.datacenterInfos.indexOf(datacenterInfo) + 1;
-        if (force) {
-            listAdapter.notifyItemChanged(position);
-        }
-        datacenterInfo.pingId = ConnectionsManager.getInstance(currentAccount).checkProxy("ping-test", datacenterInfo.id, null, null, null, time -> AndroidUtilities.runOnUIThread(() -> {
-            datacenterInfo.availableCheckTime = SystemClock.elapsedRealtime();
-            datacenterInfo.checking = false;
-            if (time == -1) {
-                datacenterInfo.available = false;
-                datacenterInfo.ping = 0;
-            } else {
-                datacenterInfo.ping = time;
-                datacenterInfo.available = true;
-            }
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxyCheckDone, null, datacenterInfo.id);
-        }));
-    }
-
-    protected String getActionBarTitle() {
-        return LocaleController.getString("DatacenterStatus", R.string.DatacenterStatus);
-    }
-
-    public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.proxyCheckDone) {
-            if (listAdapter != null && args.length > 1) {
-                listAdapter.notifyItemChanged(datacentersRow + ((int) args[1]));
-            }
-        }
-    }
-
-
     protected abstract class BaseListAdapter extends RecyclerListView.SelectionAdapter {
 
         protected final Context mContext;
@@ -639,4 +515,36 @@ public class DatacenterActivity extends BaseFragment {
             return new RecyclerListView.Holder(view);
         }
     }
+
+    private class BlurContentView extends SizeNotifierFrameLayout {
+
+        public BlurContentView(Context context) {
+            super(context);
+            needBlur = false;
+            blurBehindViews.add(this);
+        }
+
+        @Override
+        protected void drawList(Canvas blurCanvas, boolean top) {
+            for (int j = 0; j < listView.getChildCount(); j++) {
+                View child = listView.getChildAt(j);
+                if (child.getY() < listView.blurTopPadding + AndroidUtilities.dp(100)) {
+                    int restore = blurCanvas.save();
+                    blurCanvas.translate(getX() + child.getX(), getY() + listView.getY() + child.getY());
+                    child.draw(blurCanvas);
+                    blurCanvas.restoreToCount(restore);
+                }
+            }
+        }
+
+        public Paint blurScrimPaint = new Paint();
+        Rect rectTmp = new Rect();
+
+        @Override
+        protected void dispatchDraw(Canvas canvas) {
+            super.dispatchDraw(canvas);
+        }
+    }
+
+
 }
