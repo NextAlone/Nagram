@@ -29,6 +29,7 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
@@ -115,6 +116,7 @@ public class DatacenterActivity extends BaseFragment implements NotificationCent
     @Override
     public boolean onFragmentCreate() {
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.proxyCheckDone);
+        updateRows();
         return super.onFragmentCreate();
     }
 
@@ -264,6 +266,26 @@ public class DatacenterActivity extends BaseFragment implements NotificationCent
             return Integer.MAX_VALUE;
         }
     }
+
+    protected ActionBar createActionBar(Context context) {
+        ActionBar actionBar;
+        actionBar = super.createActionBar(context);
+        actionBar.setTitle(getActionBarTitle());
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+            @Override
+            public void onItemClick(int id) {
+                if (id == -1) {
+                    finishFragment();
+                }
+            }
+        });
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        if (AndroidUtilities.isTablet()) {
+            actionBar.setOccupyStatusBar(false);
+        }
+        return actionBar;
+    }
+
 
     private class DatacenterHeaderCell extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
