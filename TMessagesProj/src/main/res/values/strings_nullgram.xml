@@ -37,7 +37,7 @@
     <string name="DeleteAllFromSelfAdmin">With admin rights</string>
     <string name="DeleteAllFromSelf">Delete own messages</string>
     <string name="DeleteAllFromSelfAlert">Warning! This will **delete all messages from you** in this chat for **all** participants.</string>
-  <string name="MutualContactDescription">This contact is a mutual contact.</string>
+    <string name="MutualContactDescription">This contact is a mutual contact.</string>
     <string name="MutualContact">Mutual contact</string>
     <string name="SelectBetween">Select between</string>
     <string name="StickerSavedHint">Sticker saved to gallery</string>
@@ -77,11 +77,11 @@
     <string name="FCTitle">About application updates</string>
     <string name="FCInfo">Follow our announcements and updates channel?</string>
     <string name="SwitchVersion">Switch Release Channel</string>
-  <string name="BackupSettings">Backup Settings</string>
+    <string name="BackupSettings">Backup Settings</string>
     <string name="ImportSettings">Import Settings</string>
-  <string name="RestartAppToTakeEffect">Restart App To Take Effect</string>
+    <string name="RestartAppToTakeEffect">Restart App To Take Effect</string>
     <string name="ImportSettingsAlert">Are you sure you want to overwrite the settings? Importing settings from unknown sources may cause the pin to be overwritten and cause the application to be locked.</string>
-  <string name="PrivacyNotice2fa">It is detected that you have not set a password, which may cause government-controlled hackers to find your true identity, please set one!</string>
+    <string name="PrivacyNotice2fa">It is detected that you have not set a password, which may cause government-controlled hackers to find your true identity, please set one!</string>
     <string name="PrivacyNotice">Privacy warning</string>
     <string name="ApplySuggestion">OK, Apply it</string>
     <string name="PrivacyNoticeP2p">It is detected that you have not turned off the \"Allow P2p calls\" Setting, which may cause government-controlled hackers to find your true identity, please turn it off!</string>
@@ -96,7 +96,7 @@
     <string name="disableTrendingSticker">Disable Trending Sticker</string>
     <string name="customDoubleTap">Custom Double Tap</string>
     <string name="OpenSource">OpenSource Software Licenses</string>
-  <string name="disableCustonAPI">Don\'t use custom API</string>
+    <string name="disableCustomAPI">Don\'t use custom API</string>
     <string name="useOfficialAPI">Telegram</string>
     <string name="customAPI">Custom API</string>
     <string name="useCustomApiNotice">Log in using the custom api, if you are unable to register or log in, this may help.\n\nNote: fcm will not work if you are using the release version.</string>
@@ -151,4 +151,7 @@
     <string name="SendAsReply">Send As Reply</string>
     <string name="scrollableChatPreview">Scrollable Chat Preview</string>
     <string name="disableVibration">Disable Vibration</string>
+    <string name="DatacenterStatus">Datacenter status</string>
+    <string name="DatacenterStatusAbout">Check the status of Telegram\'s **datacenters**.</string>
+    <string name="DeleteAllFromSelfDone">All your messages have been deleted</string>
 </resources>

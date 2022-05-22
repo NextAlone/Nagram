@@ -5212,5 +5212,4 @@
     <string name="ClearForAll">Clear for all</string>
     <string name="ClearForMe">Clear for me</string>
     <string name="BotWebViewNotAvailablePlaceholder">WebView not available. Please update it to use WebView bots.</string>
-    <string name="DeleteAllFromSelfDone">All your messages have been deleted</string>
 </resources>

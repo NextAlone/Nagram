@@ -194,6 +194,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import kotlin.Unit;
+import top.qwq2333.nullgram.activity.DatacenterActivity;
 import top.qwq2333.nullgram.activity.MainSettingActivity;
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.ui.BottomBuilder;
@@ -6457,9 +6458,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             avatarImage.getImageReceiver().setVisible(!PhotoViewer.isShowingImage(photoBig), false);
 
             id = userId;
-            if (user.photo != null && user.photo.dc_id != 0) {
-                idTextView.setText("ID: " + id + ", DC: " + user.photo.dc_id);
-                idTextView.setOnClickListener(v -> showIdHint(user.photo.dc_id));
+            int dc = user.photo != null && user.photo.dc_id != 0 ? user.photo.dc_id : UserObject.isUserSelf(user) ? getConnectionsManager().getCurrentDatacenterId() : 0;
+            if (dc != 0) {
+                idTextView.setText("ID: " + id + ", DC: " + dc);
+                idTextView.setOnClickListener(v -> presentFragment(new DatacenterActivity(dc)));
             } else {
                 idTextView.setText("ID: " + id);
             }
@@ -9012,22 +9014,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 sparseIntArray.put(position, id);
             }
         }
-    }
-
-
-    private void showIdHint(int dc) {
-        if (getParentActivity() == null || avatarContainer2 == null || idHintView != null && idHintView.getVisibility() == View.VISIBLE) {
-            return;
-        }
-
-        if (idHintView == null) {
-            idHintView = new HintView(getParentActivity(), 100 + dc);
-            idHintView.setVisibility(View.GONE);
-            avatarContainer2.addView(idHintView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 10, 0, 10, 0));
-        }
-
-        idHintView.setText(getMessageUtils().getDCLocation(dc));
-        idHintView.showForView(idTextView, true);
     }
 
 

@@ -2093,7 +2093,7 @@ public class LoginActivity extends BaseFragment {
                                 R.string.useCustomApiNotice));
 
                         builder.addRadioItem(
-                            LocaleController.getString("disableCustonAPI", R.string.disableCustonAPI),
+                            LocaleController.getString("disableCustonAPI", R.string.disableCustomAPI),
                             ConfigManager.getIntOrDefault(Defines.customAPI, Defines.disableCustomAPI)
                                 == Defines.disableCustomAPI, (cell) -> {
                                 targetApi.set(0);

@@ -77,6 +77,14 @@ import java.util.concurrent.CountDownLatch;
 
 public class MessageUtils extends BaseController {
 
+    public static final ArrayList<DatacenterInfo> datacenterInfos = new ArrayList<>(5);
+
+    static {
+        for (int a = 1; a <= 5; a++) {
+            datacenterInfos.add(new DatacenterInfo(a));
+        }
+    }
+
     private static final MessageUtils[] Instance = new MessageUtils[UserConfig.MAX_ACCOUNT_COUNT];
 
     public MessageUtils(int num) {
@@ -363,7 +371,7 @@ public class MessageUtils extends BaseController {
         });
     }
 
-    public String getDCLocation(int dc) {
+    public static String getDCLocation(int dc) {
         switch (dc) {
             case 1:
             case 3:
@@ -377,6 +385,40 @@ public class MessageUtils extends BaseController {
                 return "Unknown";
         }
     }
+
+    public static String getDCName(int dc) {
+        switch (dc) {
+            case 1:
+                return "Pluto";
+            case 2:
+                return "Venus";
+            case 3:
+                return "Aurora";
+            case 4:
+                return "Vesta";
+            case 5:
+                return "Flora";
+            default:
+                return "Unknown";
+        }
+    }
+
+
+    public static class DatacenterInfo {
+
+        public int id;
+
+        public long pingId;
+        public long ping;
+        public boolean checking;
+        public boolean available;
+        public long availableCheckTime;
+
+        public DatacenterInfo(int i) {
+            id = i;
+        }
+    }
+
 
     private static final CharsetDecoder utf8Decoder = StandardCharsets.UTF_8.newDecoder();
 

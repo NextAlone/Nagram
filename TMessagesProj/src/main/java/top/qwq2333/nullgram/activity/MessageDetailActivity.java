@@ -69,10 +69,10 @@ import java.util.Date;
 import java.util.Locale;
 
 import top.qwq2333.nullgram.helpers.EntitiesHelper;
+import top.qwq2333.nullgram.utils.MessageUtils;
 
 @SuppressLint({"RtlHardcoded", "NotifyDataSetChanged"})
-public class MessageDetailActivity extends BaseFragment implements
-    NotificationCenter.NotificationCenterDelegate {
+public class MessageDetailActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private RecyclerListView listView;
     private ListAdapter listAdapter;
@@ -112,32 +112,25 @@ public class MessageDetailActivity extends BaseFragment implements
 
         if (messageObject.messageOwner.peer_id != null) {
             if (messageObject.messageOwner.peer_id.channel_id != 0) {
-                toChat = getMessagesController().getChat(
-                    messageObject.messageOwner.peer_id.channel_id);
+                toChat = getMessagesController().getChat(messageObject.messageOwner.peer_id.channel_id);
             } else if (messageObject.messageOwner.peer_id.chat_id != 0) {
-                toChat = getMessagesController().getChat(
-                    messageObject.messageOwner.peer_id.chat_id);
+                toChat = getMessagesController().getChat(messageObject.messageOwner.peer_id.chat_id);
             }
         }
-        if (messageObject.messageOwner.fwd_from != null
-            && messageObject.messageOwner.fwd_from.from_id != null) {
+        if (messageObject.messageOwner.fwd_from != null && messageObject.messageOwner.fwd_from.from_id != null) {
             if (messageObject.messageOwner.fwd_from.from_id.channel_id != 0) {
-                forwardFromChat = getMessagesController().getChat(
-                    messageObject.messageOwner.fwd_from.from_id.channel_id);
+                forwardFromChat = getMessagesController().getChat(messageObject.messageOwner.fwd_from.from_id.channel_id);
             } else if (messageObject.messageOwner.fwd_from.from_id.chat_id != 0) {
-                forwardFromChat = getMessagesController().getChat(
-                    messageObject.messageOwner.fwd_from.from_id.chat_id);
+                forwardFromChat = getMessagesController().getChat(messageObject.messageOwner.fwd_from.from_id.chat_id);
             } else if (messageObject.messageOwner.fwd_from.from_id.user_id != 0) {
-                forwardFromUser = getMessagesController().getUser(
-                    messageObject.messageOwner.fwd_from.from_id.user_id);
+                forwardFromUser = getMessagesController().getUser(messageObject.messageOwner.fwd_from.from_id.user_id);
             }
         }
 
         if (messageObject.messageOwner.from_id.user_id != 0) {
             fromUser = getMessagesController().getUser(messageObject.messageOwner.from_id.user_id);
         } else if (messageObject.messageOwner.from_id.channel_id != 0) {
-            fromChat = getMessagesController().getChat(
-                messageObject.messageOwner.from_id.channel_id);
+            fromChat = getMessagesController().getChat(messageObject.messageOwner.from_id.channel_id);
         }
 
         filePath = messageObject.messageOwner.attachPath;
@@ -162,15 +155,11 @@ public class MessageDetailActivity extends BaseFragment implements
             }
         }
 
-        if (messageObject.messageOwner.media != null
-            && messageObject.messageOwner.media.document != null) {
+        if (messageObject.messageOwner.media != null && messageObject.messageOwner.media.document != null) {
             if (TextUtils.isEmpty(messageObject.messageOwner.media.document.file_name)) {
-                for (int a = 0; a < messageObject.messageOwner.media.document.attributes.size();
-                     a++) {
-                    if (messageObject.messageOwner.media.document.attributes.get(
-                        a) instanceof TLRPC.TL_documentAttributeFilename) {
-                        fileName = messageObject.messageOwner.media.document.attributes.get(
-                            a).file_name;
+                for (int a = 0; a < messageObject.messageOwner.media.document.attributes.size(); a++) {
+                    if (messageObject.messageOwner.media.document.attributes.get(a) instanceof TLRPC.TL_documentAttributeFilename) {
+                        fileName = messageObject.messageOwner.media.document.attributes.get(a).file_name;
                     }
                 }
             } else {
@@ -216,18 +205,14 @@ public class MessageDetailActivity extends BaseFragment implements
 
         listView = new RecyclerListView(context);
         listView.setVerticalScrollBarEnabled(false);
-        listView.setLayoutManager(
-            new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        frameLayout.addView(listView,
-            LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT,
-                Gravity.TOP | Gravity.LEFT));
+        listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener((view, position, x, y) -> {
             if (position != endRow) {
                 TextDetailSettingsCell textCell = (TextDetailSettingsCell) view;
                 AndroidUtilities.addToClipboard(EntitiesHelper.commonizeSpans(textCell.getValueTextView().getText()));
-                BulletinFactory.of(this).createCopyBulletin(
-                    LocaleController.formatString("TextCopied", R.string.TextCopied)).show();
+                BulletinFactory.of(this).createCopyBulletin(LocaleController.formatString("TextCopied", R.string.TextCopied)).show();
             }
 
         });
@@ -237,9 +222,7 @@ public class MessageDetailActivity extends BaseFragment implements
                 intent.setType("application/octet-stream");
                 if (Build.VERSION.SDK_INT >= 24) {
                     try {
-                        intent.putExtra(Intent.EXTRA_STREAM,
-                            FileProvider.getUriForFile(getParentActivity(),
-                                BuildConfig.APPLICATION_ID + ".provider", new File(filePath)));
+                        intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(getParentActivity(), BuildConfig.APPLICATION_ID + ".provider", new File(filePath)));
                         intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     } catch (Exception ignore) {
                         intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(filePath)));
@@ -247,8 +230,7 @@ public class MessageDetailActivity extends BaseFragment implements
                 } else {
                     intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(filePath)));
                 }
-                startActivityForResult(Intent.createChooser(intent,
-                    LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
+                startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
             } else if (position == channelRow || position == groupRow) {
                 if (toChat != null) {
                     Bundle args = new Bundle();
@@ -285,9 +267,7 @@ public class MessageDetailActivity extends BaseFragment implements
                 LinearLayout ll = new LinearLayout(context);
                 ll.setOrientation(LinearLayout.VERTICAL);
 
-                AlertDialog dialog = new AlertDialog.Builder(context)
-                    .setView(ll)
-                    .create();
+                AlertDialog dialog = new AlertDialog.Builder(context).setView(ll).create();
 
                 for (TLRPC.TL_restrictionReason reason : reasons) {
                     TextDetailSettingsCell cell = new TextDetailSettingsCell(context);
@@ -296,17 +276,22 @@ public class MessageDetailActivity extends BaseFragment implements
                     cell.setOnClickListener(v1 -> {
                         dialog.dismiss();
                         AndroidUtilities.addToClipboard(cell.getValueTextView().getText());
-                        BulletinFactory.of(this).createCopyBulletin(
-                                LocaleController.formatString("TextCopied", R.string.TextCopied))
-                            .show();
+                        BulletinFactory.of(this).createCopyBulletin(LocaleController.formatString("TextCopied", R.string.TextCopied)).show();
                     });
                     cell.setTextAndValue(reason.reason + "-" + reason.platform, reason.text, false);
 
-                    ll.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT,
-                        LayoutHelper.WRAP_CONTENT));
+                    ll.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
                 }
 
                 showDialog(dialog);
+            } else if (position == dcRow) {
+                int dc = 0;
+                if (messageObject.messageOwner.media.photo != null && messageObject.messageOwner.media.photo.dc_id > 0) {
+                    dc = messageObject.messageOwner.media.photo.dc_id;
+                } else if (messageObject.messageOwner.media.document != null && messageObject.messageOwner.media.document.dc_id > 0) {
+                    dc = messageObject.messageOwner.media.document.dc_id;
+                }
+                presentFragment(new DatacenterActivity(dc));
             } else {
                 return false;
             }
@@ -331,9 +316,7 @@ public class MessageDetailActivity extends BaseFragment implements
         captionRow = TextUtils.isEmpty(messageObject.caption) ? -1 : rowCount++;
         groupRow = toChat != null && !toChat.broadcast ? rowCount++ : -1;
         channelRow = toChat != null && toChat.broadcast ? rowCount++ : -1;
-        fromRow =
-            fromUser != null || fromChat != null || messageObject.messageOwner.post_author != null
-                ? rowCount++ : -1;
+        fromRow = fromUser != null || fromChat != null || messageObject.messageOwner.post_author != null ? rowCount++ : -1;
         botRow = fromUser != null && fromUser.bot ? rowCount++ : -1;
         dateRow = messageObject.messageOwner.date != 0 ? rowCount++ : -1;
         editedRow = messageObject.messageOwner.edit_date != 0 ? rowCount++ : -1;
@@ -341,18 +324,12 @@ public class MessageDetailActivity extends BaseFragment implements
         fileNameRow = TextUtils.isEmpty(fileName) ? -1 : rowCount++;
         filePathRow = TextUtils.isEmpty(filePath) ? -1 : rowCount++;
         fileSizeRow = messageObject.getSize() != 0 ? rowCount++ : -1;
-        if (messageObject.messageOwner.media != null && (
-            (messageObject.messageOwner.media.photo != null
-                && messageObject.messageOwner.media.photo.dc_id > 0) ||
-                (messageObject.messageOwner.media.document != null
-                    && messageObject.messageOwner.media.document.dc_id > 0)
-        )) {
+        if (messageObject.messageOwner.media != null && ((messageObject.messageOwner.media.photo != null && messageObject.messageOwner.media.photo.dc_id > 0) || (messageObject.messageOwner.media.document != null && messageObject.messageOwner.media.document.dc_id > 0))) {
             dcRow = rowCount++;
         } else {
             dcRow = -1;
         }
-        restrictionReasonRow =
-            messageObject.messageOwner.restriction_reason.isEmpty() ? -1 : rowCount++;
+        restrictionReasonRow = messageObject.messageOwner.restriction_reason.isEmpty() ? -1 : rowCount++;
         forwardsRow = messageObject.messageOwner.forwards > 0 ? rowCount++ : -1;
         sponsoredRow = messageObject.isSponsored() ? rowCount++ : -1;
         endRow = rowCount++;
@@ -364,91 +341,40 @@ public class MessageDetailActivity extends BaseFragment implements
     @Override
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> themeDescriptions = new ArrayList<>();
-        themeDescriptions.add(
-            new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR,
-                new Class[]{EmptyCell.class, TextSettingsCell.class, TextCheckCell.class,
-                    HeaderCell.class, TextDetailSettingsCell.class, NotificationsCheckCell.class},
-                null, null, null, Theme.key_windowBackgroundWhite));
-        themeDescriptions.add(
-            new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null,
-                null, Theme.key_windowBackgroundGray));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{EmptyCell.class, TextSettingsCell.class, TextCheckCell.class, HeaderCell.class, TextDetailSettingsCell.class, NotificationsCheckCell.class}, null, null, null, Theme.key_windowBackgroundWhite));
+        themeDescriptions.add(new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray));
 
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null,
-                null, Theme.key_avatar_backgroundActionBarBlue));
-        themeDescriptions.add(
-            new ThemeDescription(listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null,
-                null, Theme.key_avatar_backgroundActionBarBlue));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null,
-                null, Theme.key_avatar_actionBarIconBlue));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null,
-                null, Theme.key_actionBarDefaultTitle));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null,
-                null, null, Theme.key_avatar_actionBarSelectorBlue));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, null, null,
-                null, null, Theme.key_actionBarDefaultSubmenuBackground));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null,
-                null, Theme.key_actionBarDefaultSubmenuItem));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_avatar_backgroundActionBarBlue));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_avatar_backgroundActionBarBlue));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_avatar_actionBarIconBlue));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_avatar_actionBarSelectorBlue));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, null, null, null, null, Theme.key_actionBarDefaultSubmenuBackground));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null, null, Theme.key_actionBarDefaultSubmenuItem));
 
-        themeDescriptions.add(
-            new ThemeDescription(listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null,
-                Theme.key_listSelector));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector));
 
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{View.class}, Theme.dividerPaint, null,
-                null, Theme.key_divider));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider));
 
-        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_BACKGROUNDFILTER,
-            new Class[]{ShadowSectionCell.class}, null, null, null,
-            Theme.key_windowBackgroundGrayShadow));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow));
 
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class},
-            new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class},
-            new String[]{"valueTextView"}, null, null, null,
-            Theme.key_windowBackgroundWhiteValueText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteValueText));
 
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class},
-                new String[]{"textView"}, null, null, null,
-                Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class},
-                new String[]{"valueTextView"}, null, null, null,
-                Theme.key_windowBackgroundWhiteGrayText2));
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class},
-                new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack));
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class},
-                new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked));
 
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class},
-            new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class},
-            new String[]{"valueTextView"}, null, null, null,
-            Theme.key_windowBackgroundWhiteGrayText2));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class},
-            new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class},
-            new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked));
 
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{HeaderCell.class},
-            new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader));
 
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class},
-                new String[]{"textView"}, null, null, null,
-                Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class},
-                new String[]{"valueTextView"}, null, null, null,
-                Theme.key_windowBackgroundWhiteGrayText2));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
 
         return themeDescriptions;
     }
@@ -485,9 +411,7 @@ public class MessageDetailActivity extends BaseFragment implements
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             switch (holder.getItemViewType()) {
                 case 1: {
-                    holder.itemView.setBackground(
-                        Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom,
-                            Theme.key_windowBackgroundGrayShadow));
+                    holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 }
                 case 2: {
@@ -495,8 +419,7 @@ public class MessageDetailActivity extends BaseFragment implements
                     textCell.setMultilineDetail(true);
                     boolean divider = position + 1 != endRow;
                     if (position == idRow) {
-                        textCell.setTextAndValue("ID",
-                            String.valueOf(messageObject.messageOwner.id), divider);
+                        textCell.setTextAndValue("ID", String.valueOf(messageObject.messageOwner.id), divider);
                     } else if (position == messageRow) {
                         textCell.setTextAndValue("Message", messageObject.messageText, divider);
                     } else if (position == captionRow) {
@@ -511,13 +434,11 @@ public class MessageDetailActivity extends BaseFragment implements
                             builder.append("\n");
                         }
                         builder.append(toChat.id);
-                        textCell.setTextAndValue(position == channelRow ? "Channel" : "Group",
-                            builder.toString(), divider);
+                        textCell.setTextAndValue(position == channelRow ? "Channel" : "Group", builder.toString(), divider);
                     } else if (position == fromRow) {
                         StringBuilder builder = new StringBuilder();
                         if (fromUser != null) {
-                            builder.append(ContactsController.formatName(fromUser.first_name,
-                                fromUser.last_name));
+                            builder.append(ContactsController.formatName(fromUser.first_name, fromUser.last_name));
                             builder.append("\n");
                             if (!TextUtils.isEmpty(fromUser.username)) {
                                 builder.append("@");
@@ -542,29 +463,15 @@ public class MessageDetailActivity extends BaseFragment implements
                         textCell.setTextAndValue("Bot", "Yes", divider);
                     } else if (position == dateRow) {
                         long date = (long) messageObject.messageOwner.date * 1000;
-                        textCell.setTextAndValue(
-                            messageObject.scheduled ? "Scheduled date" : "Date",
-                            messageObject.messageOwner.date == 0x7ffffffe ? "When online"
-                                : LocaleController.formatString("formatDateAtTime",
-                                R.string.formatDateAtTime,
-                                LocaleController.getInstance().formatterYear.format(
-                                    new Date(date)),
-                                LocaleController.getInstance().formatterDayWithSeconds.format(
-                                    new Date(date))), divider);
+                        textCell.setTextAndValue(messageObject.scheduled ? "Scheduled date" : "Date", messageObject.messageOwner.date == 0x7ffffffe ? "When online" : LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(new Date(date)), LocaleController.getInstance().formatterDayWithSeconds.format(new Date(date))), divider);
                     } else if (position == editedRow) {
                         long date = (long) messageObject.messageOwner.edit_date * 1000;
-                        textCell.setTextAndValue("Edited",
-                            LocaleController.formatString("formatDateAtTime",
-                                R.string.formatDateAtTime,
-                                LocaleController.getInstance().formatterYear.format(new Date(date)),
-                                LocaleController.getInstance().formatterDayWithSeconds.format(
-                                    new Date(date))), divider);
+                        textCell.setTextAndValue("Edited", LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(new Date(date)), LocaleController.getInstance().formatterDayWithSeconds.format(new Date(date))), divider);
                     } else if (position == forwardRow) {
                         StringBuilder builder = new StringBuilder();
                         if (messageObject.messageOwner.fwd_from.from_id != null) {
                             if (messageObject.messageOwner.fwd_from.from_id.channel_id != 0) {
-                                TLRPC.Chat chat = getMessagesController().getChat(
-                                    messageObject.messageOwner.fwd_from.from_id.channel_id);
+                                TLRPC.Chat chat = getMessagesController().getChat(messageObject.messageOwner.fwd_from.from_id.channel_id);
                                 builder.append(chat.title);
                                 builder.append("\n");
                                 if (!TextUtils.isEmpty(chat.username)) {
@@ -574,10 +481,8 @@ public class MessageDetailActivity extends BaseFragment implements
                                 }
                                 builder.append(chat.id);
                             } else if (messageObject.messageOwner.fwd_from.from_id.user_id != 0) {
-                                TLRPC.User user = getMessagesController().getUser(
-                                    messageObject.messageOwner.fwd_from.from_id.user_id);
-                                builder.append(
-                                    ContactsController.formatName(user.first_name, user.last_name));
+                                TLRPC.User user = getMessagesController().getUser(messageObject.messageOwner.fwd_from.from_id.user_id);
+                                builder.append(ContactsController.formatName(user.first_name, user.last_name));
                                 builder.append("\n");
                                 if (!TextUtils.isEmpty(user.username)) {
                                     builder.append("@");
@@ -586,8 +491,7 @@ public class MessageDetailActivity extends BaseFragment implements
                                 }
                                 builder.append(user.id);
                             } else if (messageObject.messageOwner.fwd_from.from_id.chat_id != 0) {
-                                TLRPC.Chat chat = getMessagesController().getChat(
-                                    messageObject.messageOwner.fwd_from.from_id.chat_id);
+                                TLRPC.Chat chat = getMessagesController().getChat(messageObject.messageOwner.fwd_from.from_id.chat_id);
                                 builder.append(chat.title);
                                 builder.append("\n");
                                 if (!TextUtils.isEmpty(chat.username)) {
@@ -597,8 +501,7 @@ public class MessageDetailActivity extends BaseFragment implements
                                 }
                                 builder.append(chat.id);
                             }
-                        } else if (!TextUtils.isEmpty(
-                            messageObject.messageOwner.fwd_from.from_name)) {
+                        } else if (!TextUtils.isEmpty(messageObject.messageOwner.fwd_from.from_name)) {
                             builder.append(messageObject.messageOwner.fwd_from.from_name);
                         }
                         textCell.setTextAndValue("Forward from", builder.toString(), divider);
@@ -607,19 +510,16 @@ public class MessageDetailActivity extends BaseFragment implements
                     } else if (position == filePathRow) {
                         textCell.setTextAndValue("File path", filePath, divider);
                     } else if (position == fileSizeRow) {
-                        textCell.setTextAndValue("File size",
-                            AndroidUtilities.formatFileSize(messageObject.getSize()), divider);
+                        textCell.setTextAndValue("File size", AndroidUtilities.formatFileSize(messageObject.getSize()), divider);
                     } else if (position == dcRow) {
                         int dc = 0;
-                        if (messageObject.messageOwner.media.photo != null
-                            && messageObject.messageOwner.media.photo.dc_id > 0) {
+                        if (messageObject.messageOwner.media.photo != null && messageObject.messageOwner.media.photo.dc_id > 0) {
                             dc = messageObject.messageOwner.media.photo.dc_id;
-                        } else if (messageObject.messageOwner.media.document != null
-                            && messageObject.messageOwner.media.document.dc_id > 0) {
+                        } else if (messageObject.messageOwner.media.document != null && messageObject.messageOwner.media.document.dc_id > 0) {
                             dc = messageObject.messageOwner.media.document.dc_id;
                         }
-                        textCell.setTextAndValue("DC", String.format(Locale.US, "%d, %s", dc,
-                            getMessageUtils().getDCLocation(dc)), divider);
+                        textCell.setTextAndValue("DC", String.format(Locale.US, "%d, %s", dc, MessageUtils.getDCLocation(dc)), divider);
+                        textCell.setTextAndValue("DC", String.format(Locale.US, "DC%d %s, %s", dc, MessageUtils.getDCName(dc), MessageUtils.getDCLocation(dc)), divider);
                     } else if (position == restrictionReasonRow) {
                         ArrayList<TLRPC.TL_restrictionReason> reasons = messageObject.messageOwner.restriction_reason;
                         StringBuilder value = new StringBuilder();
@@ -633,9 +533,7 @@ public class MessageDetailActivity extends BaseFragment implements
                         }
                         textCell.setTextAndValue("Restriction reason", value.toString(), divider);
                     } else if (position == forwardsRow) {
-                        textCell.setTextAndValue("Forwards",
-                            String.format(Locale.US, "%d", messageObject.messageOwner.forwards),
-                            divider);
+                        textCell.setTextAndValue("Forwards", String.format(Locale.US, "%d", messageObject.messageOwner.forwards), divider);
                     } else if (position == sponsoredRow) {
                         textCell.setTextAndValue("Sponsored", "Yes", divider);
                     }
@@ -664,9 +562,7 @@ public class MessageDetailActivity extends BaseFragment implements
                     break;
             }
             //noinspection ConstantConditions
-            view.setLayoutParams(
-                new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
-                    RecyclerView.LayoutParams.WRAP_CONTENT));
+            view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
             return new RecyclerListView.Holder(view);
         }
 
