@@ -7,7 +7,7 @@ obj/
 
 output-metadata.json
 local.properties
-extera.jks
+*.jks
 API_KEYS
 
 *.hprof

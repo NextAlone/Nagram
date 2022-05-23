@@ -21,14 +21,14 @@ dependencies {
     implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation "androidx.sharetarget:sharetarget:1.2.0-rc01"
-    implementation 'com.google.android.material:material:1.5.0'
-    implementation 'com.google.android.gms:play-services-measurement:20.1.2'
+    implementation 'com.google.android.material:material:1.6.0'
+    implementation 'com.google.android.gms:play-services-measurement:21.0.0'
 
     compileOnly 'org.checkerframework:checker-qual:3.21.3'
     compileOnly 'org.checkerframework:checker-compat-qual:2.5.5'
-    implementation 'com.google.firebase:firebase-messaging:23.0.3'
-    implementation 'com.google.firebase:firebase-config:21.0.2'
-    implementation 'com.google.firebase:firebase-datatransport:18.1.2'
+    implementation 'com.google.firebase:firebase-messaging:23.0.5'
+    implementation 'com.google.firebase:firebase-config:21.1.0'
+    implementation 'com.google.firebase:firebase-datatransport:18.1.4'
     implementation 'com.google.firebase:firebase-appindexing:20.0.0'
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
     implementation 'com.google.android.gms:play-services-auth:20.2.0'
@@ -81,7 +81,12 @@ android {
     buildToolsVersion '32.1.0-rc1'
     ndkVersion "21.4.7075529"
 
-    defaultConfig.applicationId = "com.exteragram.messenger"
+    defaultConfig {
+        applicationId = "com.exteragram.messenger"
+        ndk {
+            abiFilters 'arm64-v8a'
+        }
+    }
 
     sourceSets.main.jniLibs.srcDirs = ['./jni/']
 
