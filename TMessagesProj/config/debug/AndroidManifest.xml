@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="org.telegram.messenger"
     android:installLocation="auto">
 
     <uses-feature android:name="android.hardware.location.gps" android:required="false" />
@@ -23,6 +22,8 @@
 
     <application
         android:allowBackup="false"
+        android:fullBackupContent="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
         android:icon="@mipmap/ic_launcher_beta"
         android:roundIcon="@mipmap/ic_launcher_beta"
         android:label="@string/exteraAppNameBeta"
@@ -32,10 +33,11 @@
         android:largeHeap="true"
         android:supportsRtl="false"
         android:requestLegacyExternalStorage="true"
-        tools:replace="android:supportsRtl">
+        tools:replace="android:supportsRtl"
+        tools:ignore="UnusedAttribute">
 
         <service
-            android:name=".GcmPushListenerService">
+            android:name=".GcmPushListenerService" android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

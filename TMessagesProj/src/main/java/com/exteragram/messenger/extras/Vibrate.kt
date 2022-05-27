@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.os.VibratorManager
 import android.view.View
 import android.view.ViewGroup
 
@@ -30,7 +31,16 @@ object Vibrate {
         if (ExteraConfig.disableVibration) return
 
         if (!::vibrator.isInitialized) {
-            vibrator = ApplicationLoader.applicationContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            // Use new VibratorManager service for API >= 31
+            vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                val vibratorManager =
+                    ApplicationLoader.applicationContext.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+                vibratorManager.defaultVibrator
+            } else {
+                // Backward compatibility for API < 31
+                @Suppress("DEPRECATION")
+                ApplicationLoader.applicationContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            }
         }
 
         if (!vibrator.hasVibrator()) return
@@ -42,6 +52,8 @@ object Vibrate {
             }
         } else {
             runCatching {
+                // Backward compatibility for API < 26
+                @Suppress("DEPRECATION")
                 vibrator.vibrate(time)
             }
         }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-    package="org.telegram.messenger"
     android:installLocation="auto">
 
     <supports-screens android:anyDensity="true"
@@ -75,6 +74,8 @@
     <application
         android:name=".ApplicationLoader"
         android:allowBackup="false"
+        android:fullBackupContent="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
         android:hardwareAccelerated="@bool/useHardwareAcceleration"
         android:largeHeap="true"
         android:theme="@style/Theme.TMessages.Start"
@@ -84,7 +85,8 @@
         android:preserveLegacyExternalStorage="true"
         android:allowAudioPlaybackCapture="true"
         android:exported="true"
-        tools:replace="android:supportsRtl">
+        tools:replace="android:supportsRtl"
+        tools:ignore="UnusedAttribute">
 
         <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="@string/MAPS_V2_API" />
 

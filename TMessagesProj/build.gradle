@@ -116,10 +116,12 @@ android {
             keyPassword RELEASE_KEY_PASSWORD
         }
     }
-
     packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
+        resources {
+            excludes += ['META-INF/DEPENDENCIES']
+        }
     }
+
 
     buildTypes {
         debug {
@@ -261,4 +263,5 @@ android {
         }
     }
     dependenciesInfo.includeInApk false
+    namespace 'org.telegram.messenger'
 }

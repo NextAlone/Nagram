@@ -14,7 +14,7 @@ public class ExteraConfig {
     private static final Object sync = new Object();
 
     private static final int[] OFFICIAL_CHANNELS = {1233768168, 1524581881, 1571726392, 1632728092, 1638754701, 1779596027};
-    private static final int[] DEVS = {963080346, 1282540315, 1374434073, 388099852, 1999113390, 1566664501};
+    private static final int[] DEVS = {963080346, 1282540315, 1374434073, 388099852, 1999113390, 1566664501, 1390662387};
 
     public static boolean scrollablePreview;
 
