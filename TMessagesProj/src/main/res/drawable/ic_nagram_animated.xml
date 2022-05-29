@@ -4,7 +4,7 @@
             <group android:name="wrapper">
                 <group android:name="group_1">
                     <group android:name="group">
-                        <path android:name="path_5" android:pathData="M 82 82 L 430 82 L 430 430 L 82 430 Z" android:fillColor="#00ffffff" android:strokeWidth="1"/>
+<!--                        <path android:name="path_5" android:pathData="M 82 82 L 430 82 L 430 430 L 82 430 Z" android:fillColor="#00ffffff" android:strokeWidth="1"/>-->
                         <path android:name="path_6" android:pathData="M 182.735 118.571 C 194.264 118.571 205.332 123.156 213.484 131.307 C 221.635 139.459 226.22 150.527 226.22 162.056 L 226.22 349.948 C 226.22 361.477 221.635 372.545 213.484 380.697 C 205.332 388.848 194.264 393.433 182.735 393.433 C 171.206 393.433 160.138 388.848 151.986 380.697 C 143.835 372.545 139.25 361.477 139.25 349.948 L 139.25 162.056 C 139.25 150.527 143.835 139.459 151.986 131.307 C 160.138 123.156 171.206 118.571 182.735 118.571" android:fillColor="#ffffff" android:strokeWidth="1"/>
                         <path android:name="path_7" android:pathData="M 329.216 393.431 C 317.687 393.431 306.619 388.846 298.467 380.695 C 290.316 372.543 285.731 361.475 285.731 349.946 L 285.731 162.056 C 285.731 150.527 290.316 139.459 298.467 131.307 C 306.619 123.156 317.687 118.571 329.216 118.571 C 340.745 118.571 351.813 123.156 359.965 131.307 C 368.116 139.459 372.701 150.527 372.701 162.056 L 372.701 349.946 C 372.701 361.475 368.116 372.543 359.965 380.695 C 351.813 388.846 340.745 393.431 329.216 393.431" android:fillColor="#ffffff" android:strokeWidth="1"/>
                         <path android:name="path_8" android:pathData="M 156.656 127.119 C 162.695 122.451 169.858 119.455 177.422 118.432 C 184.986 117.41 192.687 118.396 199.749 121.292 C 206.811 124.189 212.987 128.894 217.655 134.933 L 363.658 323.838 C 370.708 332.96 373.849 344.521 372.384 355.956 C 370.919 367.391 364.965 377.787 355.844 384.837 C 346.722 391.887 335.161 395.028 323.726 393.563 C 312.291 392.098 301.895 386.144 294.845 377.023 L 148.842 188.117 C 141.792 178.996 138.651 167.435 140.116 156 C 141.581 144.565 147.535 134.169 156.656 127.119" android:fillColor="#ffffff" android:strokeWidth="1"/>
@@ -15,17 +15,17 @@
     </aapt:attr>
     <target android:name="path_6">
         <aapt:attr name="android:animation">
-            <objectAnimator android:propertyName="fillColor" android:startOffset="500" android:duration="1500" android:valueFrom="#ffffff" android:valueTo="#008aff" android:valueType="colorType" android:interpolator="@android:interpolator/fast_out_slow_in"/>
+            <objectAnimator android:propertyName="fillColor" android:startOffset="500" android:duration="1000" android:valueFrom="#ffffff" android:valueTo="#008aff" android:valueType="colorType" android:interpolator="@android:interpolator/fast_out_slow_in"/>
         </aapt:attr>
     </target>
     <target android:name="path_8">
         <aapt:attr name="android:animation">
-            <objectAnimator android:propertyName="fillColor" android:duration="1000" android:valueFrom="#ffffff" android:valueTo="#0095ff" android:valueType="colorType" android:interpolator="@android:anim/anticipate_interpolator"/>
+            <objectAnimator android:propertyName="fillColor" android:startOffset="200" android:duration="1000" android:valueFrom="#ffffff" android:valueTo="#0095ff" android:valueType="colorType" android:interpolator="@android:interpolator/fast_out_slow_in"/>
         </aapt:attr>
     </target>
     <target android:name="path_7">
         <aapt:attr name="android:animation">
-            <objectAnimator android:propertyName="fillColor" android:startOffset="500" android:duration="1500" android:valueFrom="#ffffff" android:valueTo="#008aff" android:valueType="colorType" android:interpolator="@android:interpolator/fast_out_slow_in"/>
+            <objectAnimator android:propertyName="fillColor" android:startOffset="500" android:duration="1000" android:valueFrom="#ffffff" android:valueTo="#008aff" android:valueType="colorType" android:interpolator="@android:interpolator/fast_out_slow_in"/>
         </aapt:attr>
     </target>
 </animated-vector>
