@@ -17,7 +17,7 @@ configurations {
 val isStable = false
 var serviceAccountCredentialsFile = File(rootProject.projectDir, "service_account_credentials.json")
 
-if (serviceAccountCredentialsFile.isFile()) {
+if (serviceAccountCredentialsFile.isFile) {
     setupPlay(isStable)
     play.serviceAccountCredentials.set(serviceAccountCredentialsFile)
 } else if (System.getenv().containsKey("ANDROID_PUBLISHER_CREDENTIALS")) {
@@ -41,23 +41,23 @@ dependencies {
     implementation("androidx.interpolator:interpolator:1.0.0")
     implementation("androidx.sharetarget:sharetarget:1.1.0")
 
-    compileOnly("org.checkerframework:checker-qual:3.21.0")
+    compileOnly("org.checkerframework:checker-qual:3.22.0")
     compileOnly("org.checkerframework:checker-compat-qual:2.5.5")
-    implementation("com.google.firebase:firebase-messaging:23.0.3")
-    implementation("com.google.firebase:firebase-config:21.0.2")
-    implementation("com.google.firebase:firebase-datatransport:18.1.2")
+    implementation("com.google.firebase:firebase-messaging:23.0.5")
+    implementation("com.google.firebase:firebase-config:21.1.0")
+    implementation("com.google.firebase:firebase-datatransport:18.1.4")
     implementation("com.google.firebase:firebase-appindexing:20.0.0")
-    implementation("com.google.android.gms:play-services-auth:20.1.0")
+    implementation("com.google.android.gms:play-services-auth:20.2.0")
     implementation("com.google.android.gms:play-services-vision:20.1.3")
     implementation("com.google.android.gms:play-services-wearable:17.1.0")
     implementation("com.google.android.gms:play-services-location:19.0.1")
     implementation("com.google.android.gms:play-services-wallet:19.1.0")
-    implementation("com.googlecode.mp4parser:isoparser:1.0.6")
-    implementation("com.stripe:stripe-android:2.0.2")
+    implementation("com.googlecode.mp4parser:isoparser:1.1.22")
+    implementation("com.stripe:stripe-android:20.4.0")
     implementation("com.google.mlkit:language-id:17.0.3")
     implementation(files("libs/libgsaverification-client.aar"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")
-    implementation("com.alibaba:fastjson:1.2.79")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.2")
+    implementation("com.alibaba:fastjson:2.0.5.graal")
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     implementation("com.google.code.gson:gson:2.9.0")
     implementation("com.jakewharton:process-phoenix:2.1.2")
@@ -72,7 +72,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib-common
     implementation("org.jetbrains.kotlin:kotlin-stdlib-common:${Version.kotlin}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${Version.kotlin}")
-    implementation("org.osmdroid:osmdroid-android:6.1.11")
+    implementation("org.osmdroid:osmdroid-android:6.1.13")
 }
 
 
