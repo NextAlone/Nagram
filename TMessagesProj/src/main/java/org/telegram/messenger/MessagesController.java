@@ -14163,13 +14163,6 @@ public class MessagesController extends BaseController implements NotificationCe
 
             StringBuilder stringBuilder = new StringBuilder();
 
-            if (ConfigManager.getBooleanOrFalse(Defines.ignoreReactionMention)){
-                for (int i = 0;i < unreadReactions.size();i++){
-                    markReactionsAsRead(unreadReactions.keyAt(i));
-                }
-                return;
-            }
-
             for (int i = 0; i < unreadReactions.size(); i++) {
                 int messageId = unreadReactions.keyAt(i);
                 if (stringBuilder.length() > 0) {
@@ -14256,6 +14249,13 @@ public class MessagesController extends BaseController implements NotificationCe
                 });
             }
         });
+
+        if (ConfigManager.getBooleanOrFalse(Defines.ignoreReactionMention)) {
+            for (int i = 0; i < unreadReactions.size(); i++) {
+                markReactionsAsRead(unreadReactions.keyAt(i));
+            }
+            return;
+        }
     }
 
     public boolean isDialogMuted(long dialogId) {
