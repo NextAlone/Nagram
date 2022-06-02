@@ -162,5 +162,5 @@
     <string name="linkUser">Link User</string>
     <string name="overrideChannelAlias">Override Channel Alias</string>
     <string name="overrideChannelAliasDetails">If linked user is set it will override channel alias.</string>
-    <string name="labelChannelInChat">Label Channel In Chat</string>
+    <string name="labelChannelInChat">Label Linked User In Chat</string>
 </resources>
