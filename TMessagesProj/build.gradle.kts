@@ -53,7 +53,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:19.0.1")
     implementation("com.google.android.gms:play-services-wallet:19.1.0")
     implementation("com.googlecode.mp4parser:isoparser:1.1.22")
-    implementation("com.stripe:stripe-android:20.4.0")
+    implementation("com.stripe:stripe-android:2.0.2")
     implementation("com.google.mlkit:language-id:17.0.3")
     implementation(files("libs/libgsaverification-client.aar"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.2")
