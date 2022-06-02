@@ -202,6 +202,9 @@ import top.qwq2333.nullgram.utils.APKUtils;
 import top.qwq2333.nullgram.utils.AlertUtil;
 import top.qwq2333.nullgram.utils.Defines;
 import top.qwq2333.nullgram.utils.LogUtils;
+import top.qwq2333.nullgram.utils.NumberUtils;
+import top.qwq2333.nullgram.utils.StringUtils;
+import top.qwq2333.nullgram.utils.Utils;
 
 public class ProfileActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, SharedMediaLayout.SharedMediaPreloaderDelegate, ImageUpdater.ImageUpdaterDelegate, SharedMediaLayout.Delegate {
 
@@ -386,6 +389,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private final static int view_discussion = 22;
     private final static int event_log = 23;
     private final static int aliasChannelName = 24;
+    private final static int setLinkedUser = 25;
 
     private final static int edit_name = 30;
     private final static int logout = 31;
@@ -443,6 +447,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private int channelInfoRow;
     private int usernameRow;
     private int restrictionReasonRow;
+    private int linkedUserRow;
     private int notificationsDividerRow;
     private int notificationsRow;
     private int infoSectionRow;
@@ -1697,6 +1702,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     presentFragment(new ChannelAdminLogActivity(currentChat));
                 } else if (id == aliasChannelName) {
                     setChannelAlias();
+                } else if (id == setLinkedUser) {
+                    setLinkedUser();
                 } else if (id == edit_channel) {
                     Bundle args = new Bundle();
                     args.putLong("chat_id", chatId);
@@ -3016,26 +3023,26 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         builder.setTitle(LocaleController.getString("DebugMenu", R.string.DebugMenu));
                         CharSequence[] items;
                         items = new CharSequence[]{
-                                LocaleController.getString("DebugMenuImportContacts", R.string.DebugMenuImportContacts),
-                                LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts),
-                                LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts),
-                                LocaleController.getString("DebugMenuResetDialogs", R.string.DebugMenuResetDialogs),
-                                BuildVars.DEBUG_VERSION ? null : (BuildVars.LOGS_ENABLED ? LocaleController.getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs)),
-                                SharedConfig.inappCamera ? LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera) : LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera),
-                                LocaleController.getString("DebugMenuClearMediaCache", R.string.DebugMenuClearMediaCache),
-                                LocaleController.getString("DebugMenuCallSettings", R.string.DebugMenuCallSettings),
-                                null,
-                                BuildVars.DEBUG_PRIVATE_VERSION || BuildVars.isStandaloneApp() ? LocaleController.getString("DebugMenuCheckAppUpdate", R.string.DebugMenuCheckAppUpdate) : null,
-                                LocaleController.getString("DebugMenuReadAllDialogs", R.string.DebugMenuReadAllDialogs),
-                                SharedConfig.pauseMusicOnRecord ? LocaleController.getString("DebugMenuDisablePauseMusic", R.string.DebugMenuDisablePauseMusic) : LocaleController.getString("DebugMenuEnablePauseMusic", R.string.DebugMenuEnablePauseMusic),
-                                BuildVars.DEBUG_VERSION && !AndroidUtilities.isTablet() && Build.VERSION.SDK_INT >= 23 ? (SharedConfig.smoothKeyboard ? LocaleController.getString("DebugMenuDisableSmoothKeyboard", R.string.DebugMenuDisableSmoothKeyboard) : LocaleController.getString("DebugMenuEnableSmoothKeyboard", R.string.DebugMenuEnableSmoothKeyboard)) : null,
-                                BuildVars.DEBUG_PRIVATE_VERSION ? (SharedConfig.disableVoiceAudioEffects ? "Enable voip audio effects" : "Disable voip audio effects") : null,
-                                Build.VERSION.SDK_INT >= 21 ? (SharedConfig.noStatusBar ? "Show status bar background" : "Hide status bar background") : null,
-                                BuildVars.DEBUG_PRIVATE_VERSION ? "Clean app update" : null,
-                                BuildVars.DEBUG_PRIVATE_VERSION ? "Reset suggestions" : null,
-                                BuildVars.DEBUG_PRIVATE_VERSION ? LocaleController.getString(SharedConfig.forceRtmpStream ? R.string.DebugMenuDisableForceRtmpStreamFlag : R.string.DebugMenuEnableForceRtmpStreamFlag) : null,
-                                BuildVars.DEBUG_PRIVATE_VERSION ? LocaleController.getString(R.string.DebugMenuClearWebViewCache) : null,
-                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ? LocaleController.getString(R.string.DebugMenuEnableWebViewDebug) : null
+                            LocaleController.getString("DebugMenuImportContacts", R.string.DebugMenuImportContacts),
+                            LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts),
+                            LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts),
+                            LocaleController.getString("DebugMenuResetDialogs", R.string.DebugMenuResetDialogs),
+                            BuildVars.DEBUG_VERSION ? null : (BuildVars.LOGS_ENABLED ? LocaleController.getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs)),
+                            SharedConfig.inappCamera ? LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera) : LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera),
+                            LocaleController.getString("DebugMenuClearMediaCache", R.string.DebugMenuClearMediaCache),
+                            LocaleController.getString("DebugMenuCallSettings", R.string.DebugMenuCallSettings),
+                            null,
+                            BuildVars.DEBUG_PRIVATE_VERSION || BuildVars.isStandaloneApp() ? LocaleController.getString("DebugMenuCheckAppUpdate", R.string.DebugMenuCheckAppUpdate) : null,
+                            LocaleController.getString("DebugMenuReadAllDialogs", R.string.DebugMenuReadAllDialogs),
+                            SharedConfig.pauseMusicOnRecord ? LocaleController.getString("DebugMenuDisablePauseMusic", R.string.DebugMenuDisablePauseMusic) : LocaleController.getString("DebugMenuEnablePauseMusic", R.string.DebugMenuEnablePauseMusic),
+                            BuildVars.DEBUG_VERSION && !AndroidUtilities.isTablet() && Build.VERSION.SDK_INT >= 23 ? (SharedConfig.smoothKeyboard ? LocaleController.getString("DebugMenuDisableSmoothKeyboard", R.string.DebugMenuDisableSmoothKeyboard) : LocaleController.getString("DebugMenuEnableSmoothKeyboard", R.string.DebugMenuEnableSmoothKeyboard)) : null,
+                            BuildVars.DEBUG_PRIVATE_VERSION ? (SharedConfig.disableVoiceAudioEffects ? "Enable voip audio effects" : "Disable voip audio effects") : null,
+                            Build.VERSION.SDK_INT >= 21 ? (SharedConfig.noStatusBar ? "Show status bar background" : "Hide status bar background") : null,
+                            BuildVars.DEBUG_PRIVATE_VERSION ? "Clean app update" : null,
+                            BuildVars.DEBUG_PRIVATE_VERSION ? "Reset suggestions" : null,
+                            BuildVars.DEBUG_PRIVATE_VERSION ? LocaleController.getString(SharedConfig.forceRtmpStream ? R.string.DebugMenuDisableForceRtmpStreamFlag : R.string.DebugMenuEnableForceRtmpStreamFlag) : null,
+                            BuildVars.DEBUG_PRIVATE_VERSION ? LocaleController.getString(R.string.DebugMenuClearWebViewCache) : null,
+                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ? LocaleController.getString(R.string.DebugMenuEnableWebViewDebug) : null
                         };
                         builder.setItems(items, (dialog, which) -> {
                             if (which == 0) {
@@ -4199,6 +4206,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
 
             showDialog(dialog);
+        } else if (position == linkedUserRow) {
+            Browser.openUrl(getParentActivity(), "tg://user?id=" + ConfigManager.getLongOrDefault(Defines.linkedUserPrefix + getCurrentChat().id, 1578562490L));
         } else if (position == phoneRow || position == numberRow) {
             final TLRPC.User user = getMessagesController().getUser(userId);
             if (user == null || user.phone == null || user.phone.length() == 0 || getParentActivity() == null) {
@@ -4338,6 +4347,76 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
         });
         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.show().setOnShowListener(dialog -> {
+            editText.requestFocus();
+            AndroidUtilities.showKeyboard(editText);
+        });
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) editText.getLayoutParams();
+        if (layoutParams != null) {
+            if (layoutParams instanceof FrameLayout.LayoutParams) {
+                ((FrameLayout.LayoutParams) layoutParams).gravity = Gravity.CENTER_HORIZONTAL;
+            }
+            layoutParams.rightMargin = layoutParams.leftMargin = AndroidUtilities.dp(24);
+            layoutParams.height = AndroidUtilities.dp(36);
+            editText.setLayoutParams(layoutParams);
+        }
+        editText.setSelection(0, editText.getText().length());
+    }
+
+    private void setLinkedUser() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+        builder.setTitle(LocaleController.getString("setLinkedUser", R.string.setLinkedUser));
+
+        final EditTextBoldCursor editText = new EditTextBoldCursor(getParentActivity()) {
+            @Override
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64), MeasureSpec.EXACTLY));
+            }
+        };
+        editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+        editText.setTextColor(getThemedColor(Theme.key_dialogTextBlack));
+        editText.setHintText(LocaleController.getString("UserIDOrBotID", R.string.UserIDOrBotID));
+        if (!ConfigManager.getStringOrDefault(Defines.channelAliasPrefix + getCurrentChat().id, "").equals("")) {
+            editText.setText(ConfigManager.getStringOrDefault(Defines.channelAliasPrefix + getCurrentChat().id, ""));
+        }
+        editText.setHeaderHintColor(getThemedColor(Theme.key_windowBackgroundWhiteBlueHeader));
+        editText.setSingleLine(true);
+        editText.setFocusable(true);
+        editText.setTransformHintToHeader(true);
+        editText.setLineColors(getThemedColor(Theme.key_windowBackgroundWhiteInputField), getThemedColor(Theme.key_windowBackgroundWhiteInputFieldActivated), getThemedColor(Theme.key_windowBackgroundWhiteRedText3));
+        editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        editText.setBackgroundDrawable(null);
+        editText.requestFocus();
+        editText.setPadding(0, 0, 0, 0);
+        builder.setView(editText);
+
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
+            if (StringUtils.isBlank(editText.getText().toString())) {
+                ConfigManager.deleteValue(Defines.linkedUserPrefix + getCurrentChat().id);
+            } else {
+                if (NumberUtils.isLong(editText.getText().toString())) {
+                    long id = Long.parseLong(editText.getText().toString());
+                    if (id < 0L) {
+                        id = Utils.getUserIDFromBotID(id, true);
+                    }
+                    final TLRPC.User user = getMessagesController().getUser(id);
+                    if (user == null || (user.last_name == null && user.first_name == null)) {
+                        BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("unableToFindUser", R.string.unableToFindUser)).show();
+                    } else {
+                        ConfigManager.putLong(Defines.linkedUserPrefix + getCurrentChat().id, id);
+                    }
+                } else {
+                    BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("notANumber", R.string.notANumber)).show();
+                }
+            }
+        });
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+
+        builder.setNeutralButton(LocaleController.getString("Clear", R.string.Clear), (dialogInterface, i) -> {
+            ConfigManager.deleteValue(Defines.linkedUserPrefix + getCurrentChat().id);
+        });
+
+
         builder.show().setOnShowListener(dialog -> {
             editText.requestFocus();
             AndroidUtilities.showKeyboard(editText);
@@ -6053,6 +6132,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         channelInfoRow = -1;
         usernameRow = -1;
         restrictionReasonRow = -1;
+        linkedUserRow = -1;
         settingsTimerRow = -1;
         settingsKeyRow = -1;
         notificationsDividerRow = -1;
@@ -6222,6 +6302,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
                 if (!currentChat.restriction_reason.isEmpty()) {
                     restrictionReasonRow = rowCount++;
+                }
+                if (ConfigManager.getBooleanOrFalse(Defines.linkedUser) && ConfigManager.getLongOrDefault(Defines.linkedUserPrefix + getCurrentChat().id, 1145141919810L) != 1145141919810L) {
+                    linkedUserRow = rowCount++;
                 }
             }
             if (infoHeaderRow != -1) {
@@ -6624,11 +6707,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             avatarImage.getImageReceiver().setVisible(!PhotoViewer.isShowingImage(photoBig), false);
 
             if (ConfigManager.getBooleanOrFalse(Defines.showBotAPIID)) {
-                if (ChatObject.isChannel(chat)) {
-                    id = -1000000000000L - chat.id;
-                } else {
-                    id = -chat.id;
-                }
+                id = Utils.getBotIDFromUserID(chatId, ChatObject.isChannel(chat));
             } else {
                 id = chatId;
             }
@@ -6766,6 +6845,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     }
                     if (ConfigManager.getBooleanOrFalse(Defines.channelAlias)) {
                         otherItem.addSubItem(aliasChannelName, R.drawable.ic_ab_fave, LocaleController.getString("setChannelAliasName", R.string.setChannelAliasName));
+                    }
+                    if (ConfigManager.getBooleanOrFalse(Defines.linkedUser)) {
+                        otherItem.addSubItem(setLinkedUser, R.drawable.ic_ab_fave, LocaleController.getString("setLinkedUser", R.string.setLinkedUser));
                     }
                     if (chatInfo != null && chatInfo.linked_chat_id != 0) {
                         otherItem.addSubItem(view_discussion, R.drawable.msg_discussion, LocaleController.getString("ViewDiscussion", R.string.ViewDiscussion));
@@ -7453,19 +7535,19 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     private class ListAdapter extends RecyclerListView.SelectionAdapter {
         private final static int VIEW_TYPE_HEADER = 1,
-                VIEW_TYPE_TEXT_DETAIL = 2,
-                VIEW_TYPE_ABOUT_LINK = 3,
-                VIEW_TYPE_TEXT = 4,
-                VIEW_TYPE_DIVIDER = 5,
-                VIEW_TYPE_NOTIFICATIONS_CHECK = 6,
-                VIEW_TYPE_SHADOW = 7,
-                VIEW_TYPE_USER = 8,
-                VIEW_TYPE_EMPTY = 11,
-                VIEW_TYPE_BOTTOM_PADDING = 12,
-                VIEW_TYPE_SHARED_MEDIA = 13,
-                VIEW_TYPE_VERSION = 14,
-                VIEW_TYPE_SUGGESTION = 15,
-                VIEW_TYPE_ADDTOGROUP_INFO = 17;
+            VIEW_TYPE_TEXT_DETAIL = 2,
+            VIEW_TYPE_ABOUT_LINK = 3,
+            VIEW_TYPE_TEXT = 4,
+            VIEW_TYPE_DIVIDER = 5,
+            VIEW_TYPE_NOTIFICATIONS_CHECK = 6,
+            VIEW_TYPE_SHADOW = 7,
+            VIEW_TYPE_USER = 8,
+            VIEW_TYPE_EMPTY = 11,
+            VIEW_TYPE_BOTTOM_PADDING = 12,
+            VIEW_TYPE_SHARED_MEDIA = 13,
+            VIEW_TYPE_VERSION = 14,
+            VIEW_TYPE_SUGGESTION = 15,
+            VIEW_TYPE_ADDTOGROUP_INFO = 17;
 
         private final Context mContext;
 
@@ -7741,6 +7823,20 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             }
                         }
                         detailCell.setTextAndValue(value.toString(), LocaleController.getString("RestrictionReason", R.string.RestrictionReason), false);
+                    } else if (position == linkedUserRow) {
+                        final TLRPC.User user = getMessagesController().getUser(ConfigManager.getLongOrDefault(Defines.linkedUserPrefix + getCurrentChat().id, 1578562490L));
+                        String nickname;
+                        if (user.first_name != null && user.last_name != null) {
+                            nickname = user.first_name + user.last_name;
+                        } else {
+                            if (user.first_name != null) {
+                                nickname = user.first_name;
+                            } else {
+                                nickname = user.last_name;
+                            }
+                        }
+
+                        detailCell.setTextAndValue(nickname, LocaleController.getString("LinkedUser", R.string.linkedUser), false);
                     } else if (position == locationRow) {
                         if (chatInfo != null && chatInfo.location instanceof TLRPC.TL_channelLocation) {
                             TLRPC.TL_channelLocation location = (TLRPC.TL_channelLocation) chatInfo.location;
@@ -8065,7 +8161,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         public int getItemViewType(int position) {
             if (position == infoHeaderRow || position == membersHeaderRow || position == settingsSectionRow2 || position == numberSectionRow || position == helpHeaderRow) {
                 return VIEW_TYPE_HEADER;
-            } else if (position == phoneRow || position == usernameRow || position == locationRow || position == numberRow || position == setUsernameRow || position == bioRow || position == restrictionReasonRow) {
+            } else if (position == phoneRow || position == usernameRow || position == locationRow || position == numberRow || position == setUsernameRow || position == bioRow
+                || position == restrictionReasonRow || position == linkedUserRow) {
                 return VIEW_TYPE_TEXT_DETAIL;
             } else if (position == userInfoRow || position == channelInfoRow) {
                 return VIEW_TYPE_ABOUT_LINK;
@@ -8986,6 +9083,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             put(++pointer, channelInfoRow, sparseIntArray);
             put(++pointer, usernameRow, sparseIntArray);
             put(++pointer, restrictionReasonRow, sparseIntArray);
+            put(++pointer, linkedUserRow, sparseIntArray);
             put(++pointer, notificationsDividerRow, sparseIntArray);
             put(++pointer, notificationsRow, sparseIntArray);
             put(++pointer, infoSectionRow, sparseIntArray);

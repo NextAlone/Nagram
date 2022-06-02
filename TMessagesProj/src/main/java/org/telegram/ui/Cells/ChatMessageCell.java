@@ -157,6 +157,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.utils.Defines;
+import top.qwq2333.nullgram.utils.StringUtils;
 import top.qwq2333.nullgram.utils.Utils;
 
 public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate, ImageReceiver.ImageReceiverDelegate, DownloadController.FileDownloadProgressListener, TextSelectionHelper.SelectableView, NotificationCenter.NotificationCenterDelegate {
@@ -6760,7 +6761,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         if (isBlockedUserMessage()) {
             totalHeight = 0;
             avatarDrawable.setVisible(false, true);
-            avatarImage.setVisible(false,false);
+            avatarImage.setVisible(false, false);
         }
         updateWaveform();
         updateButtonState(false, dataChanged && !messageObject.cancelEditing, true);
@@ -10608,13 +10609,54 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 if (ConfigManager.getBooleanOrFalse(Defines.channelAlias)) {
                     String aliasName = ConfigManager.getStringOrDefault(Defines.channelAliasPrefix
                         + currentMessageObject.messageOwner.from_id.channel_id, null);
-                    if (aliasName != null) {
-                        adminString = aliasName + " | Channel";
+
+                    String nickname = null;
+                    if (ConfigManager.getBooleanOrFalse(Defines.linkedUser)
+                        && ConfigManager.getLongOrDefault(Defines.linkedUserPrefix + currentMessageObject.messageOwner.from_id.channel_id, 1145141919810L) != 1145141919810L
+                        && ConfigManager.getBooleanOrFalse(Defines.overrideChannelAlias)) {
+                        final TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(ConfigManager.getLongOrDefault(Defines.linkedUserPrefix + currentMessageObject.messageOwner.from_id.channel_id, 1578562490L));
+
+                        if (user.first_name != null && user.last_name != null) {
+                            nickname = user.first_name + user.last_name;
+                        } else {
+                            if (user.first_name != null) {
+                                nickname = user.first_name;
+                            } else {
+                                nickname = user.last_name;
+                            }
+                        }
+
+                    }
+                    if (nickname != null) {
+                        adminString = StringUtils.ellipsis(nickname, 20) + " | Channel";
+                    } else if (aliasName != null) {
+                        adminString = StringUtils.ellipsis(aliasName, 20) + " | Channel";
                     } else {
                         adminString = "Channel";
                     }
                 } else {
-                    adminString = "Channel";
+
+                    String nickname = null;
+                    if (ConfigManager.getBooleanOrFalse(Defines.linkedUser)
+                        && ConfigManager.getLongOrDefault(Defines.linkedUserPrefix + currentMessageObject.messageOwner.from_id.channel_id, 1145141919810L) != 1145141919810L
+                        && ConfigManager.getBooleanOrFalse(Defines.overrideChannelAlias)) {
+                        final TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(ConfigManager.getLongOrDefault(Defines.linkedUserPrefix + currentMessageObject.messageOwner.from_id.channel_id, 1578562490L));
+
+                        if (user.first_name != null && user.last_name != null) {
+                            nickname = user.first_name + user.last_name;
+                        } else {
+                            if (user.first_name != null) {
+                                nickname = user.first_name;
+                            } else {
+                                nickname = user.last_name;
+                            }
+                        }
+                    }
+                    if (nickname != null) {
+                        adminString = StringUtils.ellipsis(nickname, 20) + " | Channel";
+                    } else {
+                        adminString = "Channel";
+                    }
                 }
                 adminWidth = (int) Math.ceil(Theme.chat_adminPaint.measureText(adminString));
                 nameWidth -= adminWidth;

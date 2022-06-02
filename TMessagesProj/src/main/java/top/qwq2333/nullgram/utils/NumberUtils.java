@@ -5,6 +5,23 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 
 public class NumberUtils {
+
+    /**
+     * 判断String是否是整数<br>
+     * 支持10进制
+     *
+     * @param str String
+     * @return 是否为整数
+     */
+    public static boolean isLong(String str) {
+        try {
+            Long.parseLong(str);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * 判断String是否是整数<br>
      * 支持10进制

@@ -37,6 +37,9 @@ public class Defines {
     public static final String codeSyntaxHighlight = "codeSyntaxHighlight";
     public static final String channelAlias = "aliasChannel"; // ignore typo
     public static final String channelAliasPrefix = "aliasChannelName_"; // ignore typo
+    public static final String linkedUser = "linkedUser";
+    public static final String linkedUserPrefix = "linkedUser_";
+    public static final String overrideChannelAlias = "overrideChannelAlias";
     public static final String hidePhone = "hidePhone";
     public static final String disableJumpToNextChannel = "disableJumpToNextChannel";
     public static final String verifyLinkTip = "verifyLinkTip";

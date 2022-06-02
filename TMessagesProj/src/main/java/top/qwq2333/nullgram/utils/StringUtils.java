@@ -1,5 +1,7 @@
 package top.qwq2333.nullgram.utils;
 
+import androidx.annotation.NonNull;
+
 public class StringUtils {
     /**
      * <p>字符串是否为空白，空白的定义如下：</p>
@@ -61,5 +63,25 @@ public class StringUtils {
      */
     public static boolean isBlankChar(char c) {
         return isBlankChar((int) c);
+    }
+
+    /**
+     * Return a string with a maximum length of <code>length</code> characters.
+     * If there are more than <code>length</code> characters, then string ends with an ellipsis ("...").
+     *
+     * @param text   text
+     * @param length maximum length you want
+     * @return Return a string with a maximum length of <code>length</code> characters.
+     */
+    @NonNull
+    public static String ellipsis(@NonNull final String text, int length) {
+        // The letters [iIl1] are slim enough to only count as half a character.
+        length += Math.ceil(text.replaceAll("[^iIl]", "").length() / 2.0d);
+
+        if (text.length() > length) {
+            return text.substring(0, length - 3) + "...";
+        }
+
+        return text;
     }
 }

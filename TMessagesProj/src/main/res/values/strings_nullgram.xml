@@ -154,4 +154,13 @@
     <string name="DatacenterStatus">Datacenter status</string>
     <string name="DatacenterStatusAbout">Check the status of Telegram\'s **datacenters**.</string>
     <string name="DeleteAllFromSelfDone">All your messages have been deleted</string>
+    <string name="setLinkedUser">Set Linked User</string>
+    <string name="UserIDOrBotID">Enter User ID or Bot ID</string>
+    <string name="unableToFindUser">Unable to Find this User</string>
+    <string name="linkedUser">Linked User</string>
+    <string name="linkUserDetails">Link users to channels.\nIt will show the linked user in the linked channel\'s profile</string>
+    <string name="linkUser">Link User</string>
+    <string name="overrideChannelAlias">Override Channel Alias</string>
+    <string name="overrideChannelAliasDetails">If linked user is set it will override channel alias.</string>
+    <string name="labelChannelInChat">Label Channel In Chat</string>
 </resources>

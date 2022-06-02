@@ -148,40 +148,34 @@ public class ChatSettingActivity extends BaseFragment {
         FrameLayout frameLayout = (FrameLayout) fragmentView;
 
         listView = new RecyclerListView(context);
-        listView.setLayoutManager(
-            new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         listView.setVerticalScrollBarEnabled(false);
         listView.setAdapter(listAdapter);
         ((DefaultItemAnimator) listView.getItemAnimator()).setDelayAnimations(false);
-        frameLayout.addView(listView,
-            LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+        frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         listView.setOnItemClickListener((view, position, x, y) -> {
             if (position == ignoreBlockedUserMessagesRow) {
                 ConfigManager.toggleBoolean(Defines.ignoreBlockedUser);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.ignoreBlockedUser));
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.ignoreBlockedUser));
                 }
             } else if (position == hideGroupStickerRow) {
                 ConfigManager.toggleBoolean(Defines.hideGroupSticker);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.hideGroupSticker));
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.hideGroupSticker));
                 }
             } else if (position == messageMenuRow) {
                 showMessageMenuAlert();
             } else if (position == allowScreenshotOnNoForwardChatRow) {
                 ConfigManager.toggleBoolean(Defines.allowScreenshotOnNoForwardChat);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.allowScreenshotOnNoForwardChat));
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.allowScreenshotOnNoForwardChat));
                 }
             } else if (position == labelChannelUserRow) {
                 if (!ConfigManager.getBooleanOrFalse(Defines.channelAlias)) {
                     ConfigManager.toggleBoolean(Defines.labelChannelUser);
                     if (view instanceof TextCheckCell) {
-                        ((TextCheckCell) view).setChecked(
-                            ConfigManager.getBooleanOrFalse(Defines.labelChannelUser));
+                        ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.labelChannelUser));
                     }
                 } else {
                     AndroidUtilities.shakeView(view, 2, 0);
@@ -190,37 +184,28 @@ public class ChatSettingActivity extends BaseFragment {
             } else if (position == displaySpoilerDirectlyRow) {
                 ConfigManager.toggleBoolean(Defines.displaySpoilerMsgDirectly);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.displaySpoilerMsgDirectly)
-                    );
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.displaySpoilerMsgDirectly));
                 }
             } else if (position == disableJumpToNextChannelRow) {
                 ConfigManager.toggleBoolean(Defines.disableJumpToNextChannel);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.disableJumpToNextChannel)
-                    );
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.disableJumpToNextChannel));
                 }
             } else if (position == disableGreetingStickerRow) {
                 ConfigManager.toggleBoolean(Defines.disableGreetingSticker);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.disableGreetingSticker)
-                    );
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.disableGreetingSticker));
                 }
             } else if (position == disableTrendingStickerRow) {
                 ConfigManager.toggleBoolean(Defines.disableTrendingSticker);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.disableTrendingSticker)
-                    );
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.disableTrendingSticker));
                 }
             } else if (position == customDoubleClickTapRow) {
                 final int currentConfig = ConfigManager.getIntOrDefault(Defines.doubleTab, Defines.doubleTabReaction);
                 BottomBuilder builder = new BottomBuilder(getParentActivity());
 
-                builder.addTitle(LocaleController.getString("customDoubleTap", R.string.customDoubleTap),
-                    true);
+                builder.addTitle(LocaleController.getString("customDoubleTap", R.string.customDoubleTap), true);
 
                 builder.addRadioItem(LocaleController.getString("Disable", R.string.Disable), currentConfig == Defines.doubleTabNone, (radioButtonCell) -> {
                     ConfigManager.putInt(Defines.doubleTab, Defines.doubleTabNone);
@@ -257,9 +242,7 @@ public class ChatSettingActivity extends BaseFragment {
             } else if (position == confirmToSendMediaMessagesRow) {
                 ConfigManager.toggleBoolean(Defines.confirmToSendMediaMessages);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.confirmToSendMediaMessages)
-                    );
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.confirmToSendMediaMessages));
                 }
             } else if (position == maxRecentStickerRow) {
                 setMaxRecentSticker(view, position);
@@ -267,44 +250,32 @@ public class ChatSettingActivity extends BaseFragment {
             } else if (position == unreadBadgeOnBackButtonRow) {
                 ConfigManager.toggleBoolean(Defines.unreadBadgeOnBackButton);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.unreadBadgeOnBackButton)
-                    );
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.unreadBadgeOnBackButton));
                 }
             } else if (position == ignoreReactionMentionRow) {
                 ConfigManager.toggleBoolean(Defines.ignoreReactionMention);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.ignoreReactionMention)
-                    );
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.ignoreReactionMention));
                 }
             } else if (position == showForwardDateRow) {
                 ConfigManager.toggleBoolean(Defines.dateOfForwardedMsg);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.dateOfForwardedMsg)
-                    );
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.dateOfForwardedMsg));
                 }
             } else if (position == hideTimeForStickerRow) {
                 ConfigManager.toggleBoolean(Defines.hideTimeForSticker);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.hideTimeForSticker)
-                    );
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.hideTimeForSticker));
                 }
             } else if (position == showMessageIDRow) {
                 ConfigManager.toggleBoolean(Defines.showMessageID);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.showMessageID)
-                    );
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.showMessageID));
                 }
             } else if (position == hideQuickSendMediaBottomRow) {
                 ConfigManager.toggleBoolean(Defines.hideQuickSendMediaBottom);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)
-                    );
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom));
                 }
             } else if (position == customQuickMessageRow) {
                 setCustomQuickMessage();
@@ -312,9 +283,7 @@ public class ChatSettingActivity extends BaseFragment {
             } else if (position == scrollableChatPreviewRow) {
                 ConfigManager.toggleBoolean(Defines.scrollableChatPreview);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.scrollableChatPreview)
-                    );
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.scrollableChatPreview));
                 }
             }
         });
@@ -333,8 +302,7 @@ public class ChatSettingActivity extends BaseFragment {
     @SuppressLint("Range")
     public String getFileName(Uri uri) {
         String result = null;
-        try (Cursor cursor = getParentActivity().getContentResolver()
-            .query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null)) {
+        try (Cursor cursor = getParentActivity().getContentResolver().query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null)) {
             if (cursor != null && cursor.moveToFirst()) {
                 result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
             }
@@ -382,91 +350,40 @@ public class ChatSettingActivity extends BaseFragment {
     @Override
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> themeDescriptions = new ArrayList<>();
-        themeDescriptions.add(
-            new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR,
-                new Class[]{EmptyCell.class, TextSettingsCell.class, TextCheckCell.class,
-                    HeaderCell.class, TextDetailSettingsCell.class, NotificationsCheckCell.class},
-                null, null, null, Theme.key_windowBackgroundWhite));
-        themeDescriptions.add(
-            new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null,
-                null, Theme.key_windowBackgroundGray));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{EmptyCell.class, TextSettingsCell.class, TextCheckCell.class, HeaderCell.class, TextDetailSettingsCell.class, NotificationsCheckCell.class}, null, null, null, Theme.key_windowBackgroundWhite));
+        themeDescriptions.add(new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray));
 
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null,
-                null, Theme.key_avatar_backgroundActionBarBlue));
-        themeDescriptions.add(
-            new ThemeDescription(listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null,
-                null, Theme.key_avatar_backgroundActionBarBlue));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null,
-                null, Theme.key_avatar_actionBarIconBlue));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null,
-                null, Theme.key_actionBarDefaultTitle));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null,
-                null, null, Theme.key_avatar_actionBarSelectorBlue));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, null, null,
-                null, null, Theme.key_actionBarDefaultSubmenuBackground));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null,
-                null, Theme.key_actionBarDefaultSubmenuItem));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_avatar_backgroundActionBarBlue));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_avatar_backgroundActionBarBlue));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_avatar_actionBarIconBlue));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_avatar_actionBarSelectorBlue));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, null, null, null, null, Theme.key_actionBarDefaultSubmenuBackground));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null, null, Theme.key_actionBarDefaultSubmenuItem));
 
-        themeDescriptions.add(
-            new ThemeDescription(listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null,
-                Theme.key_listSelector));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector));
 
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{View.class}, Theme.dividerPaint, null,
-                null, Theme.key_divider));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider));
 
-        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_BACKGROUNDFILTER,
-            new Class[]{ShadowSectionCell.class}, null, null, null,
-            Theme.key_windowBackgroundGrayShadow));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow));
 
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class},
-            new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class},
-            new String[]{"valueTextView"}, null, null, null,
-            Theme.key_windowBackgroundWhiteValueText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteValueText));
 
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class},
-                new String[]{"textView"}, null, null, null,
-                Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class},
-                new String[]{"valueTextView"}, null, null, null,
-                Theme.key_windowBackgroundWhiteGrayText2));
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class},
-                new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack));
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class},
-                new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked));
 
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class},
-            new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class},
-            new String[]{"valueTextView"}, null, null, null,
-            Theme.key_windowBackgroundWhiteGrayText2));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class},
-            new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class},
-            new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked));
 
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{HeaderCell.class},
-            new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader));
 
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class},
-                new String[]{"textView"}, null, null, null,
-                Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class},
-                new String[]{"valueTextView"}, null, null, null,
-                Theme.key_windowBackgroundWhiteGrayText2));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
 
         return themeDescriptions;
     }
@@ -489,13 +406,9 @@ public class ChatSettingActivity extends BaseFragment {
             switch (holder.getItemViewType()) {
                 case 1: {
                     if (position == chat2Row) {
-                        holder.itemView.setBackground(
-                            Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom,
-                                Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     } else {
-                        holder.itemView.setBackground(
-                            Theme.getThemedDrawable(mContext, R.drawable.greydivider,
-                                Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
                 }
@@ -503,20 +416,14 @@ public class ChatSettingActivity extends BaseFragment {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                     if (position == stickerSizeRow) {
-                        textCell.setTextAndValue(LocaleController.getString("StickerSize", R.string.StickerSize),
-                            String.valueOf(Math.round(ConfigManager.getFloatOrDefault(Defines.stickerSize, 14.0f))),
-                            true);
+                        textCell.setTextAndValue(LocaleController.getString("StickerSize", R.string.StickerSize), String.valueOf(Math.round(ConfigManager.getFloatOrDefault(Defines.stickerSize, 14.0f))), true);
                     } else if (position == messageMenuRow) {
-                        textCell.setText(
-                            LocaleController.getString("MessageMenu", R.string.MessageMenu), false);
+                        textCell.setText(LocaleController.getString("MessageMenu", R.string.MessageMenu), false);
                     } else if (position == maxRecentStickerRow) {
                         textCell.setTextAndValue(LocaleController.getString("maxRecentSticker", R.string.maxRecentSticker), String.valueOf(ConfigManager.getIntOrDefault(Defines.maxRecentSticker, 30)), true);
 
                     } else if (position == customDoubleClickTapRow) {
-                        textCell.setText(
-                            LocaleController.getString("customDoubleTap",
-                                R.string.customDoubleTap),
-                            true);
+                        textCell.setText(LocaleController.getString("customDoubleTap", R.string.customDoubleTap), true);
                     } else if (position == customQuickMessageRow) {
                         textCell.setText(LocaleController.getString("setCustomQuickMessage", R.string.setCustomQuickMessage), true);
                     }
@@ -526,104 +433,40 @@ public class ChatSettingActivity extends BaseFragment {
                     TextCheckCell textCell = (TextCheckCell) holder.itemView;
                     textCell.setEnabled(true, null);
                     if (position == ignoreBlockedUserMessagesRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("ignoreBlockedUser",
-                            R.string.ignoreBlockedUser), ConfigManager.getBooleanOrFalse(
-                            Defines.ignoreBlockedUser), true);
+                        textCell.setTextAndCheck(LocaleController.getString("ignoreBlockedUser", R.string.ignoreBlockedUser), ConfigManager.getBooleanOrFalse(Defines.ignoreBlockedUser), true);
                     } else if (position == hideGroupStickerRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("hideGroupSticker",
-                            R.string.hideGroupSticker), ConfigManager.getBooleanOrFalse(
-                            Defines.hideGroupSticker), true);
+                        textCell.setTextAndCheck(LocaleController.getString("hideGroupSticker", R.string.hideGroupSticker), ConfigManager.getBooleanOrFalse(Defines.hideGroupSticker), true);
                     } else if (position == allowScreenshotOnNoForwardChatRow) {
-                        textCell.setTextAndValueAndCheck(
-                            LocaleController.getString("allowScreenshotOnNoForwardChat",
-                                R.string.allowScreenshotOnNoForwardChat),
-                            LocaleController.getString("allowScreenshotOnNoForwardChatWarning",
-                                R.string.allowScreenshotOnNoForwardChatWarning),
-                            ConfigManager.getBooleanOrFalse(Defines.allowScreenshotOnNoForwardChat),
-                            true, true);
+                        textCell.setTextAndValueAndCheck(LocaleController.getString("allowScreenshotOnNoForwardChat", R.string.allowScreenshotOnNoForwardChat), LocaleController.getString("allowScreenshotOnNoForwardChatWarning", R.string.allowScreenshotOnNoForwardChatWarning), ConfigManager.getBooleanOrFalse(Defines.allowScreenshotOnNoForwardChat), true, true);
                     } else if (position == labelChannelUserRow) {
                         if (ConfigManager.getBooleanOrFalse(Defines.channelAlias)) {
                             textCell.setEnabled(false, null);
                         }
-                        textCell.setTextAndValueAndCheck(
-                            LocaleController.getString("labelChannelUser",
-                                R.string.labelChannelUser),
-                            LocaleController.getString("labelChannelUser",
-                                R.string.labelChannelUserDetails),
-                            ConfigManager.getBooleanOrFalse(Defines.labelChannelUser),
-                            true, true);
+                        textCell.setTextAndValueAndCheck(LocaleController.getString("labelChannelUser", R.string.labelChannelUser), LocaleController.getString("labelChannelUser", R.string.labelChannelUserDetails), ConfigManager.getBooleanOrFalse(Defines.labelChannelUser), true, true);
                     } else if (position == displaySpoilerDirectlyRow) {
-                        textCell.setTextAndCheck(
-                            LocaleController.getString("displaySpoilerDirectly",
-                                R.string.displaySpoilerDirectly),
-                            ConfigManager.getBooleanOrFalse(Defines.displaySpoilerMsgDirectly),
-                            true);
+                        textCell.setTextAndCheck(LocaleController.getString("displaySpoilerDirectly", R.string.displaySpoilerDirectly), ConfigManager.getBooleanOrFalse(Defines.displaySpoilerMsgDirectly), true);
                     } else if (position == disableJumpToNextChannelRow) {
-                        textCell.setTextAndCheck(
-                            LocaleController.getString("disableJumpToNextChannel",
-                                R.string.disableJumpToNextChannel),
-                            ConfigManager.getBooleanOrFalse(Defines.disableJumpToNextChannel),
-                            true);
+                        textCell.setTextAndCheck(LocaleController.getString("disableJumpToNextChannel", R.string.disableJumpToNextChannel), ConfigManager.getBooleanOrFalse(Defines.disableJumpToNextChannel), true);
                     } else if (position == disableGreetingStickerRow) {
-                        textCell.setTextAndCheck(
-                            LocaleController.getString("disableGreetingSticker",
-                                R.string.disableGreetingSticker),
-                            ConfigManager.getBooleanOrFalse(Defines.disableGreetingSticker),
-                            true);
+                        textCell.setTextAndCheck(LocaleController.getString("disableGreetingSticker", R.string.disableGreetingSticker), ConfigManager.getBooleanOrFalse(Defines.disableGreetingSticker), true);
                     } else if (position == disableTrendingStickerRow) {
-                        textCell.setTextAndCheck(
-                            LocaleController.getString("disableTrendingSticker",
-                                R.string.disableTrendingSticker),
-                            ConfigManager.getBooleanOrFalse(Defines.disableTrendingSticker),
-                            true);
+                        textCell.setTextAndCheck(LocaleController.getString("disableTrendingSticker", R.string.disableTrendingSticker), ConfigManager.getBooleanOrFalse(Defines.disableTrendingSticker), true);
                     } else if (position == confirmToSendMediaMessagesRow) {
-                        textCell.setTextAndCheck(
-                            LocaleController.getString("confirmToSendMediaMessages",
-                                R.string.confirmToSendMediaMessages),
-                            ConfigManager.getBooleanOrFalse(Defines.confirmToSendMediaMessages),
-                            true);
+                        textCell.setTextAndCheck(LocaleController.getString("confirmToSendMediaMessages", R.string.confirmToSendMediaMessages), ConfigManager.getBooleanOrFalse(Defines.confirmToSendMediaMessages), true);
                     } else if (position == unreadBadgeOnBackButtonRow) {
-                        textCell.setTextAndCheck(
-                            LocaleController.getString("unreadBadgeOnBackButton",
-                                R.string.unreadBadgeOnBackButton),
-                            ConfigManager.getBooleanOrFalse(Defines.unreadBadgeOnBackButton),
-                            true);
+                        textCell.setTextAndCheck(LocaleController.getString("unreadBadgeOnBackButton", R.string.unreadBadgeOnBackButton), ConfigManager.getBooleanOrFalse(Defines.unreadBadgeOnBackButton), true);
                     } else if (position == ignoreReactionMentionRow) {
-                        textCell.setTextAndValueAndCheck(LocaleController.getString("ignoreReactionMention",
-                                R.string.ignoreReactionMention),
-                            LocaleController.getString("ignoreReactionMentionInfo", R.string.ignoreReactionMentionInfo),
-                            ConfigManager.getBooleanOrFalse(Defines.ignoreReactionMention),
-                            true, true);
+                        textCell.setTextAndValueAndCheck(LocaleController.getString("ignoreReactionMention", R.string.ignoreReactionMention), LocaleController.getString("ignoreReactionMentionInfo", R.string.ignoreReactionMentionInfo), ConfigManager.getBooleanOrFalse(Defines.ignoreReactionMention), true, true);
                     } else if (position == showForwardDateRow) {
-                        textCell.setTextAndCheck(
-                            LocaleController.getString("showForwardDate",
-                                R.string.showForwardDate),
-                            ConfigManager.getBooleanOrFalse(Defines.dateOfForwardedMsg),
-                            true);
+                        textCell.setTextAndCheck(LocaleController.getString("showForwardDate", R.string.showForwardDate), ConfigManager.getBooleanOrFalse(Defines.dateOfForwardedMsg), true);
                     } else if (position == hideTimeForStickerRow) {
-                        textCell.setTextAndCheck(
-                            LocaleController.getString("showForwardName",
-                                R.string.hideTimeForSticker),
-                            ConfigManager.getBooleanOrFalse(Defines.hideTimeForSticker),
-                            true);
+                        textCell.setTextAndCheck(LocaleController.getString("showForwardName", R.string.hideTimeForSticker), ConfigManager.getBooleanOrFalse(Defines.hideTimeForSticker), true);
                     } else if (position == showMessageIDRow) {
-                        textCell.setTextAndCheck(
-                            LocaleController.getString("showMessageID",
-                                R.string.showMessageID),
-                            ConfigManager.getBooleanOrFalse(Defines.showMessageID),
-                            true);
+                        textCell.setTextAndCheck(LocaleController.getString("showMessageID", R.string.showMessageID), ConfigManager.getBooleanOrFalse(Defines.showMessageID), true);
                     } else if (position == hideQuickSendMediaBottomRow) {
-                        textCell.setTextAndCheck(
-                            LocaleController.getString("hideQuickSendMediaBottom",
-                                R.string.hideQuickSendMediaBottom),
-                            ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom),
-                            true);
+                        textCell.setTextAndCheck(LocaleController.getString("hideQuickSendMediaBottom", R.string.hideQuickSendMediaBottom), ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom), true);
                     } else if (position == scrollableChatPreviewRow) {
-                        textCell.setTextAndCheck(
-                            LocaleController.getString("scrollableChatPreview",
-                                R.string.scrollableChatPreview),
-                            ConfigManager.getBooleanOrFalse(Defines.scrollableChatPreview),
-                            true);
+                        textCell.setTextAndCheck(LocaleController.getString("scrollableChatPreview", R.string.scrollableChatPreview), ConfigManager.getBooleanOrFalse(Defines.scrollableChatPreview), true);
                     }
                     break;
                 }
@@ -679,8 +522,7 @@ public class ChatSettingActivity extends BaseFragment {
                     break;
                 case 7:
                     view = new TextInfoPrivacyCell(mContext);
-                    view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider,
-                        Theme.key_windowBackgroundGrayShadow));
+                    view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 8:
                     view = stickerSizeCell = new StickerSizeCell(mContext);
@@ -688,9 +530,7 @@ public class ChatSettingActivity extends BaseFragment {
                     break;
             }
             //noinspection ConstantConditions
-            view.setLayoutParams(
-                new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
-                    RecyclerView.LayoutParams.WRAP_CONTENT));
+            view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
             return new RecyclerListView.Holder(view);
         }
 
@@ -698,8 +538,7 @@ public class ChatSettingActivity extends BaseFragment {
         public int getItemViewType(int position) {
             if (position == chat2Row || position == stickerSize2Row) {
                 return 1;
-            } else if (position == messageMenuRow || position == customDoubleClickTapRow || position == maxRecentStickerRow
-                || position == customQuickMessageRow) {
+            } else if (position == messageMenuRow || position == customDoubleClickTapRow || position == maxRecentStickerRow || position == customQuickMessageRow) {
                 return 2;
             } else if (position == chatRow || position == stickerSizeHeaderRow) {
                 return 4;
@@ -723,92 +562,71 @@ public class ChatSettingActivity extends BaseFragment {
 
         LinearLayout linearLayoutInviteContainer = new LinearLayout(context);
         linearLayoutInviteContainer.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.addView(linearLayoutInviteContainer,
-            LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        linearLayout.addView(linearLayoutInviteContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         int count = 6;
         for (int a = 0; a < count; a++) {
             TextCheckCell textCell = new TextCheckCell(context);
             switch (a) {
                 case 0: {
-                    textCell.setTextAndCheck(LocaleController.getString("DeleteDownloadedFile",
-                            R.string.DeleteDownloadedFile),
-                        ConfigManager.getBooleanOrFalse(Defines.showDeleteDownloadFiles), false);
+                    textCell.setTextAndCheck(LocaleController.getString("DeleteDownloadedFile", R.string.DeleteDownloadedFile), ConfigManager.getBooleanOrFalse(Defines.showDeleteDownloadFiles), false);
                     break;
                 }
                 case 1: {
-                    textCell.setTextAndCheck(
-                        LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward),
-                        ConfigManager.getBooleanOrDefault(Defines.showNoQuoteForward, true), false);
+                    textCell.setTextAndCheck(LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward), ConfigManager.getBooleanOrDefault(Defines.showNoQuoteForward, true), false);
                     break;
                 }
                 case 2: {
-                    textCell.setTextAndCheck(
-                        LocaleController.getString("saveMessages", R.string.saveMessages),
-                        ConfigManager.getBooleanOrFalse(Defines.showSaveMessages), false);
+                    textCell.setTextAndCheck(LocaleController.getString("saveMessages", R.string.saveMessages), ConfigManager.getBooleanOrFalse(Defines.showSaveMessages), false);
                     break;
                 }
                 case 3: {
-                    textCell.setTextAndCheck(LocaleController.getString("Repeat", R.string.Repeat),
-                        ConfigManager.getBooleanOrDefault(Defines.showRepeat, true), false);
+                    textCell.setTextAndCheck(LocaleController.getString("Repeat", R.string.Repeat), ConfigManager.getBooleanOrDefault(Defines.showRepeat, true), false);
                     break;
                 }
                 case 4: {
-                    textCell.setTextAndCheck(
-                        LocaleController.getString("ViewHistory", R.string.ViewHistory),
-                        ConfigManager.getBooleanOrFalse(Defines.showViewHistory), false);
+                    textCell.setTextAndCheck(LocaleController.getString("ViewHistory", R.string.ViewHistory), ConfigManager.getBooleanOrFalse(Defines.showViewHistory), false);
                     break;
                 }
                 case 5: {
-                    textCell.setTextAndCheck(
-                        LocaleController.getString("MessageDetails", R.string.MessageDetails),
-                        ConfigManager.getBooleanOrFalse(Defines.showMessagesDetail), false);
+                    textCell.setTextAndCheck(LocaleController.getString("MessageDetails", R.string.MessageDetails), ConfigManager.getBooleanOrFalse(Defines.showMessagesDetail), false);
                     break;
                 }
             }
             textCell.setTag(a);
             textCell.setBackground(Theme.getSelectorDrawable(false));
-            linearLayoutInviteContainer.addView(textCell,
-                LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+            linearLayoutInviteContainer.addView(textCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             textCell.setOnClickListener(v2 -> {
                 Integer tag = (Integer) v2.getTag();
                 switch (tag) {
                     case 0: {
                         ConfigManager.toggleBoolean(Defines.showDeleteDownloadFiles);
-                        textCell.setChecked(
-                            ConfigManager.getBooleanOrFalse(Defines.showDeleteDownloadFiles));
+                        textCell.setChecked(ConfigManager.getBooleanOrFalse(Defines.showDeleteDownloadFiles));
                         break;
                     }
                     case 1: {
-                        ConfigManager.putBoolean(Defines.showNoQuoteForward,
-                            !ConfigManager.getBooleanOrDefault(Defines.showNoQuoteForward, true));
-                        textCell.setChecked(
-                            ConfigManager.getBooleanOrDefault(Defines.showNoQuoteForward, true));
+                        ConfigManager.putBoolean(Defines.showNoQuoteForward, !ConfigManager.getBooleanOrDefault(Defines.showNoQuoteForward, true));
+                        textCell.setChecked(ConfigManager.getBooleanOrDefault(Defines.showNoQuoteForward, true));
                         break;
                     }
                     case 2: {
                         ConfigManager.toggleBoolean(Defines.showSaveMessages);
-                        textCell.setChecked(
-                            ConfigManager.getBooleanOrFalse(Defines.showSaveMessages));
+                        textCell.setChecked(ConfigManager.getBooleanOrFalse(Defines.showSaveMessages));
                         break;
                     }
                     case 3: {
-                        ConfigManager.putBoolean(Defines.showRepeat,
-                            !ConfigManager.getBooleanOrDefault(Defines.showRepeat, true));
-                        textCell.setChecked(
-                            ConfigManager.getBooleanOrDefault(Defines.showRepeat, true));
+                        ConfigManager.putBoolean(Defines.showRepeat, !ConfigManager.getBooleanOrDefault(Defines.showRepeat, true));
+                        textCell.setChecked(ConfigManager.getBooleanOrDefault(Defines.showRepeat, true));
                         break;
                     }
                     case 4: {
                         ConfigManager.toggleBoolean(Defines.showViewHistory);
-                        textCell.setChecked(
-                            ConfigManager.getBooleanOrFalse(Defines.showViewHistory));
+                        textCell.setChecked(ConfigManager.getBooleanOrFalse(Defines.showViewHistory));
                         break;
                     }
                     case 5: {
                         ConfigManager.toggleBoolean(Defines.showMessagesDetail);
-                        textCell.setChecked(
-                            ConfigManager.getBooleanOrFalse(Defines.showMessagesDetail));
+                        textCell.setChecked(ConfigManager.getBooleanOrFalse(Defines.showMessagesDetail));
                         break;
                     }
                 }
@@ -827,46 +645,41 @@ public class ChatSettingActivity extends BaseFragment {
         final EditTextBoldCursor editText = new EditTextBoldCursor(getParentActivity()) {
             @Override
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                super.onMeasure(widthMeasureSpec,
-                    MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64), MeasureSpec.EXACTLY));
+                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64), MeasureSpec.EXACTLY));
             }
         };
         editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         editText.setTextColor(getThemedColor(Theme.key_dialogTextBlack));
-        editText.setHintText(
-            LocaleController.getString("Number", R.string.Number));
+        editText.setHintText(LocaleController.getString("Number", R.string.Number));
         editText.setText(ConfigManager.getIntOrDefault(Defines.maxRecentSticker, 30) + "");
         editText.setHeaderHintColor(getThemedColor(Theme.key_windowBackgroundWhiteBlueHeader));
         editText.setSingleLine(true);
         editText.setFocusable(true);
         editText.setTransformHintToHeader(true);
-        editText.setLineColors(getThemedColor(Theme.key_windowBackgroundWhiteInputField),
-            getThemedColor(Theme.key_windowBackgroundWhiteInputFieldActivated),
-            getThemedColor(Theme.key_windowBackgroundWhiteRedText3));
+        editText.setLineColors(getThemedColor(Theme.key_windowBackgroundWhiteInputField), getThemedColor(Theme.key_windowBackgroundWhiteInputFieldActivated), getThemedColor(Theme.key_windowBackgroundWhiteRedText3));
         editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
         editText.setBackgroundDrawable(null);
         editText.requestFocus();
         editText.setPadding(0, 0, 0, 0);
         builder.setView(editText);
 
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK),
-            (dialogInterface, i) -> {
-                if (editText.getText().toString().trim().equals("")) {
-                    ConfigManager.putInt(Defines.maxRecentSticker, 20);
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
+            if (editText.getText().toString().trim().equals("")) {
+                ConfigManager.putInt(Defines.maxRecentSticker, 20);
+            } else {
+                if (!NumberUtils.isInteger(editText.getText().toString())) {
+                    AndroidUtilities.shakeView(view, 2, 0);
+                    AlertUtil.showToast(LocaleController.getString("notANumber", R.string.notANumber));
                 } else {
-                    if (!NumberUtils.isInteger(editText.getText().toString())) {
-                        AndroidUtilities.shakeView(view, 2, 0);
-                        AlertUtil.showToast(LocaleController.getString("notANumber", R.string.notANumber));
-                    } else {
-                        final int targetNum = Integer.parseInt(editText.getText().toString().trim());
-                        if (targetNum > 150 || targetNum < 20)
-                            AlertUtil.showToast(LocaleController.getString("numberInvalid", R.string.numberInvalid));
-                        else
-                            ConfigManager.putInt(Defines.maxRecentSticker, Integer.parseInt(editText.getText().toString()));
-                    }
+                    final int targetNum = Integer.parseInt(editText.getText().toString().trim());
+                    if (targetNum > 150 || targetNum < 20)
+                        AlertUtil.showToast(LocaleController.getString("numberInvalid", R.string.numberInvalid));
+                    else
+                        ConfigManager.putInt(Defines.maxRecentSticker, Integer.parseInt(editText.getText().toString()));
                 }
-                listAdapter.notifyItemChanged(pos);
-            });
+            }
+            listAdapter.notifyItemChanged(pos);
+        });
         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
         builder.show().setOnShowListener(dialog -> {
             editText.requestFocus();
@@ -895,23 +708,19 @@ public class ChatSettingActivity extends BaseFragment {
         final EditTextBoldCursor setDisplayNameEditText = new EditTextBoldCursor(getParentActivity()) {
             @Override
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                super.onMeasure(widthMeasureSpec,
-                    MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64), MeasureSpec.EXACTLY));
+                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64), MeasureSpec.EXACTLY));
             }
         };
 
         setDisplayNameEditText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         setDisplayNameEditText.setTextColor(getThemedColor(Theme.key_dialogTextBlack));
-        setDisplayNameEditText.setHintText(
-            LocaleController.getString("Name", R.string.Name));
+        setDisplayNameEditText.setHintText(LocaleController.getString("Name", R.string.Name));
         setDisplayNameEditText.setText(ConfigManager.getStringOrDefault(Defines.customQuickMessageDisplayName, ""));
         setDisplayNameEditText.setHeaderHintColor(getThemedColor(Theme.key_windowBackgroundWhiteBlueHeader));
         setDisplayNameEditText.setSingleLine(true);
         setDisplayNameEditText.setFocusable(true);
         setDisplayNameEditText.setTransformHintToHeader(true);
-        setDisplayNameEditText.setLineColors(getThemedColor(Theme.key_windowBackgroundWhiteInputField),
-            getThemedColor(Theme.key_windowBackgroundWhiteInputFieldActivated),
-            getThemedColor(Theme.key_windowBackgroundWhiteRedText3));
+        setDisplayNameEditText.setLineColors(getThemedColor(Theme.key_windowBackgroundWhiteInputField), getThemedColor(Theme.key_windowBackgroundWhiteInputFieldActivated), getThemedColor(Theme.key_windowBackgroundWhiteRedText3));
         setDisplayNameEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
         setDisplayNameEditText.setBackgroundDrawable(null);
         setDisplayNameEditText.setPadding(0, 0, 0, 0);
@@ -920,22 +729,18 @@ public class ChatSettingActivity extends BaseFragment {
         final EditTextBoldCursor setMessageEditText = new EditTextBoldCursor(getParentActivity()) {
             @Override
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                super.onMeasure(widthMeasureSpec,
-                    MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64), MeasureSpec.EXACTLY));
+                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64), MeasureSpec.EXACTLY));
             }
         };
         setMessageEditText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         setMessageEditText.setTextColor(getThemedColor(Theme.key_dialogTextBlack));
-        setMessageEditText.setHintText(
-            LocaleController.getString("Message", R.string.Message));
+        setMessageEditText.setHintText(LocaleController.getString("Message", R.string.Message));
         setMessageEditText.setText(ConfigManager.getStringOrDefault(Defines.customQuickMessage, ""));
         setMessageEditText.setHeaderHintColor(getThemedColor(Theme.key_windowBackgroundWhiteBlueHeader));
         setMessageEditText.setSingleLine(false);
         setMessageEditText.setFocusable(true);
         setMessageEditText.setTransformHintToHeader(true);
-        setMessageEditText.setLineColors(getThemedColor(Theme.key_windowBackgroundWhiteInputField),
-            getThemedColor(Theme.key_windowBackgroundWhiteInputFieldActivated),
-            getThemedColor(Theme.key_windowBackgroundWhiteRedText3));
+        setMessageEditText.setLineColors(getThemedColor(Theme.key_windowBackgroundWhiteInputField), getThemedColor(Theme.key_windowBackgroundWhiteInputFieldActivated), getThemedColor(Theme.key_windowBackgroundWhiteRedText3));
         setMessageEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
         setMessageEditText.setBackgroundDrawable(null);
         setMessageEditText.setPadding(0, 0, 0, 0);
@@ -954,18 +759,16 @@ public class ChatSettingActivity extends BaseFragment {
         builder.setView(layout);
 
 
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK),
-            (dialogInterface, i) -> {
-                if (StringUtils.isBlank(setDisplayNameEditText.getText().toString())
-                    || StringUtils.isBlank(setMessageEditText.getText().toString())) {
-                    AlertUtil.showToast(LocaleController.getString("emptyInput", R.string.emptyInput));
-                } else {
-                    ConfigManager.putString(Defines.customQuickMessageDisplayName, setDisplayNameEditText.getText().toString());
-                    ConfigManager.putString(Defines.customQuickMessage, setMessageEditText.getText().toString());
-                    ConfigManager.putBoolean(Defines.customQuickMessageEnabled, true);
-                    ConfigManager.putBoolean(Defines.customQuickMsgSAR, cell.isChecked());
-                }
-            });
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
+            if (StringUtils.isBlank(setDisplayNameEditText.getText().toString()) || StringUtils.isBlank(setMessageEditText.getText().toString())) {
+                AlertUtil.showToast(LocaleController.getString("emptyInput", R.string.emptyInput));
+            } else {
+                ConfigManager.putString(Defines.customQuickMessageDisplayName, setDisplayNameEditText.getText().toString());
+                ConfigManager.putString(Defines.customQuickMessage, setMessageEditText.getText().toString());
+                ConfigManager.putBoolean(Defines.customQuickMessageEnabled, true);
+                ConfigManager.putBoolean(Defines.customQuickMsgSAR, cell.isChecked());
+            }
+        });
 
 
         builder.setNeutralButton(LocaleController.getString("Reset", R.string.Reset), (dialogInterface, i) -> {

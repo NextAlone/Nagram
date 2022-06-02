@@ -48,6 +48,8 @@ public class ExperimentSettingActivity extends BaseFragment {
     private int aliasChannelRow;
     private int keepFormattingRow;
     private int enchantAudioRow;
+    private int linkedUserRow;
+    private int overrideChannelAliasRow;
     private int experiment2Row;
 
 
@@ -84,26 +86,21 @@ public class ExperimentSettingActivity extends BaseFragment {
         FrameLayout frameLayout = (FrameLayout) fragmentView;
 
         listView = new RecyclerListView(context);
-        listView.setLayoutManager(
-            new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         listView.setVerticalScrollBarEnabled(false);
         listView.setAdapter(listAdapter);
         ((DefaultItemAnimator) listView.getItemAnimator()).setDelayAnimations(false);
-        frameLayout.addView(listView,
-            LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+        frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         listView.setOnItemClickListener((view, position, x, y) -> {
             if (position == blockSponsorAdsRow) {
                 ConfigManager.toggleBoolean(Defines.blockSponsorAds);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.blockSponsorAds));
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.blockSponsorAds));
                 }
             } else if (position == syntaxHighlightRow) {
-                ConfigManager.putBoolean(Defines.codeSyntaxHighlight,
-                    ConfigManager.getBooleanOrDefault(Defines.codeSyntaxHighlight, true));
+                ConfigManager.putBoolean(Defines.codeSyntaxHighlight, ConfigManager.getBooleanOrDefault(Defines.codeSyntaxHighlight, true));
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrDefault(Defines.codeSyntaxHighlight, true));
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrDefault(Defines.codeSyntaxHighlight, true));
                 }
             } else if (position == aliasChannelRow) {
                 boolean currentStatus = ConfigManager.getBooleanOrFalse(Defines.channelAlias);
@@ -112,20 +109,27 @@ public class ExperimentSettingActivity extends BaseFragment {
                 }
                 ConfigManager.toggleBoolean(Defines.channelAlias);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.channelAlias));
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.channelAlias));
                 }
             } else if (position == keepFormattingRow) {
                 ConfigManager.toggleBoolean(Defines.keepCopyFormatting);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.keepCopyFormatting));
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.keepCopyFormatting));
                 }
             } else if (position == enchantAudioRow) {
                 ConfigManager.toggleBoolean(Defines.enchantAudio);
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(
-                        ConfigManager.getBooleanOrFalse(Defines.enchantAudio));
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.enchantAudio));
+                }
+            } else if (position == linkedUserRow) {
+                ConfigManager.toggleBoolean(Defines.linkedUser);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.linkedUser));
+                }
+            } else if (position == overrideChannelAliasRow) {
+                ConfigManager.toggleBoolean(Defines.overrideChannelAlias);
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.overrideChannelAlias));
                 }
             }
         });
@@ -153,6 +157,12 @@ public class ExperimentSettingActivity extends BaseFragment {
         aliasChannelRow = rowCount++;
         keepFormattingRow = rowCount++;
         enchantAudioRow = rowCount++;
+        linkedUserRow = rowCount++;
+        if (ConfigManager.getBooleanOrFalse(Defines.linkedUser) && ConfigManager.getBooleanOrFalse(Defines.labelChannelUser)) {
+            overrideChannelAliasRow = rowCount++;
+        } else {
+            overrideChannelAliasRow = -1;
+        }
         experiment2Row = rowCount++;
 
         if (listAdapter != null) {
@@ -163,91 +173,40 @@ public class ExperimentSettingActivity extends BaseFragment {
     @Override
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> themeDescriptions = new ArrayList<>();
-        themeDescriptions.add(
-            new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR,
-                new Class[]{EmptyCell.class, TextSettingsCell.class, TextCheckCell.class,
-                    HeaderCell.class, TextDetailSettingsCell.class, NotificationsCheckCell.class},
-                null, null, null, Theme.key_windowBackgroundWhite));
-        themeDescriptions.add(
-            new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null,
-                null, Theme.key_windowBackgroundGray));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{EmptyCell.class, TextSettingsCell.class, TextCheckCell.class, HeaderCell.class, TextDetailSettingsCell.class, NotificationsCheckCell.class}, null, null, null, Theme.key_windowBackgroundWhite));
+        themeDescriptions.add(new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray));
 
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null,
-                null, Theme.key_avatar_backgroundActionBarBlue));
-        themeDescriptions.add(
-            new ThemeDescription(listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null,
-                null, Theme.key_avatar_backgroundActionBarBlue));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null,
-                null, Theme.key_avatar_actionBarIconBlue));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null,
-                null, Theme.key_actionBarDefaultTitle));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null,
-                null, null, Theme.key_avatar_actionBarSelectorBlue));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, null, null,
-                null, null, Theme.key_actionBarDefaultSubmenuBackground));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null,
-                null, Theme.key_actionBarDefaultSubmenuItem));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_avatar_backgroundActionBarBlue));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_avatar_backgroundActionBarBlue));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_avatar_actionBarIconBlue));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_avatar_actionBarSelectorBlue));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, null, null, null, null, Theme.key_actionBarDefaultSubmenuBackground));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null, null, Theme.key_actionBarDefaultSubmenuItem));
 
-        themeDescriptions.add(
-            new ThemeDescription(listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null,
-                Theme.key_listSelector));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector));
 
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{View.class}, Theme.dividerPaint, null,
-                null, Theme.key_divider));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider));
 
-        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_BACKGROUNDFILTER,
-            new Class[]{ShadowSectionCell.class}, null, null, null,
-            Theme.key_windowBackgroundGrayShadow));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow));
 
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class},
-            new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class},
-            new String[]{"valueTextView"}, null, null, null,
-            Theme.key_windowBackgroundWhiteValueText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteValueText));
 
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class},
-                new String[]{"textView"}, null, null, null,
-                Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class},
-                new String[]{"valueTextView"}, null, null, null,
-                Theme.key_windowBackgroundWhiteGrayText2));
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class},
-                new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack));
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class},
-                new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked));
 
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class},
-            new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class},
-            new String[]{"valueTextView"}, null, null, null,
-            Theme.key_windowBackgroundWhiteGrayText2));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class},
-            new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class},
-            new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked));
 
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{HeaderCell.class},
-            new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader));
 
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class},
-                new String[]{"textView"}, null, null, null,
-                Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class},
-                new String[]{"valueTextView"}, null, null, null,
-                Theme.key_windowBackgroundWhiteGrayText2));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
 
         return themeDescriptions;
     }
@@ -270,13 +229,9 @@ public class ExperimentSettingActivity extends BaseFragment {
             switch (holder.getItemViewType()) {
                 case 1: {
                     if (position == experiment2Row) {
-                        holder.itemView.setBackground(
-                            Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom,
-                                Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     } else {
-                        holder.itemView.setBackground(
-                            Theme.getThemedDrawable(mContext, R.drawable.greydivider,
-                                Theme.key_windowBackgroundGrayShadow));
+                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
                 }
@@ -289,45 +244,31 @@ public class ExperimentSettingActivity extends BaseFragment {
                     TextCheckCell textCell = (TextCheckCell) holder.itemView;
                     textCell.setEnabled(true, null);
                     if (position == blockSponsorAdsRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("blockSponsorAds",
-                            R.string.blockSponsorAds), ConfigManager.getBooleanOrFalse(
-                            Defines.blockSponsorAds), true);
+                        textCell.setTextAndCheck(LocaleController.getString("blockSponsorAds", R.string.blockSponsorAds), ConfigManager.getBooleanOrFalse(Defines.blockSponsorAds), true);
                     } else if (position == syntaxHighlightRow) {
-                        textCell.setTextAndValueAndCheck(
-                            LocaleController.getString("codeSyntaxHighlight",
-                                R.string.codeSyntaxHighlight),
-                            LocaleController.getString("codeSyntaxHighlightDetails",
-                                R.string.codeSyntaxHighlightDetails),
-                            ConfigManager.getBooleanOrFalse(Defines.codeSyntaxHighlight), true,
-                            true);
+                        textCell.setTextAndValueAndCheck(LocaleController.getString("codeSyntaxHighlight", R.string.codeSyntaxHighlight), LocaleController.getString("codeSyntaxHighlightDetails", R.string.codeSyntaxHighlightDetails), ConfigManager.getBooleanOrFalse(Defines.codeSyntaxHighlight), true, true);
                     } else if (position == aliasChannelRow) {
-                        textCell.setTextAndValueAndCheck(
-                            LocaleController.getString("channelAlias",
-                                R.string.channelAlias),
-                            LocaleController.getString("channelAliasDetails",
-                                R.string.channelAliasDetails),
-                            ConfigManager.getBooleanOrFalse(Defines.channelAlias), true,
-                            true);
+                        textCell.setTextAndValueAndCheck(LocaleController.getString("channelAlias", R.string.channelAlias), LocaleController.getString("channelAliasDetails", R.string.channelAliasDetails), ConfigManager.getBooleanOrFalse(Defines.channelAlias), true, true);
                     } else if (position == keepFormattingRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("keepFormatting",
-                            R.string.keepFormatting), ConfigManager.getBooleanOrFalse(
-                            Defines.keepCopyFormatting), true);
+                        textCell.setTextAndCheck(LocaleController.getString("keepFormatting", R.string.keepFormatting), ConfigManager.getBooleanOrFalse(Defines.keepCopyFormatting), true);
                     } else if (position == enchantAudioRow) {
+                        textCell.setTextAndValueAndCheck(LocaleController.getString("enchantAudioRow", R.string.enchantAudio), LocaleController.getString("enchantAudioDetails", R.string.enchantAudioDetails), ConfigManager.getBooleanOrFalse(Defines.enchantAudio), true, true);
+                    } else if (position == linkedUserRow) {
+                        textCell.setTextAndValueAndCheck(LocaleController.getString("linkUser", R.string.linkUser), LocaleController.getString("linkUserDetails", R.string.linkUserDetails), ConfigManager.getBooleanOrFalse(Defines.linkedUser), true, true);
+                    } else if (position == overrideChannelAliasRow) {
                         textCell.setTextAndValueAndCheck(
-                            LocaleController.getString("enchantAudioRow",
-                                R.string.enchantAudio),
-                            LocaleController.getString("enchantAudioDetails",
-                                R.string.enchantAudioDetails),
-                            ConfigManager.getBooleanOrFalse(Defines.enchantAudio), true,
-                            true);
+                            ConfigManager.getBooleanOrFalse(Defines.channelAlias) ?
+                                LocaleController.getString("overrideChannelAlias", R.string.overrideChannelAlias) :
+                                LocaleController.getString("labelChannelInChat", R.string.labelChannelInChat),
+                            LocaleController.getString("overrideChannelAliasDetails", R.string.overrideChannelAliasDetails),
+                            ConfigManager.getBooleanOrFalse(Defines.overrideChannelAlias), true, true);
                     }
                     break;
                 }
                 case 4: {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == experimentRow) {
-                        headerCell.setText(
-                            LocaleController.getString("Experiment", R.string.Experiment));
+                        headerCell.setText(LocaleController.getString("Experiment", R.string.Experiment));
                     }
                     break;
                 }
@@ -374,14 +315,11 @@ public class ExperimentSettingActivity extends BaseFragment {
                     break;
                 case 7:
                     view = new TextInfoPrivacyCell(mContext);
-                    view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider,
-                        Theme.key_windowBackgroundGrayShadow));
+                    view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
             }
             //noinspection ConstantConditions
-            view.setLayoutParams(
-                new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
-                    RecyclerView.LayoutParams.WRAP_CONTENT));
+            view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
             return new RecyclerListView.Holder(view);
         }
 
