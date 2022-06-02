@@ -10616,14 +10616,20 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         && ConfigManager.getBooleanOrFalse(Defines.overrideChannelAlias)) {
                         final TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(ConfigManager.getLongOrDefault(Defines.linkedUserPrefix + currentMessageObject.messageOwner.from_id.channel_id, 1578562490L));
 
-                        if (user.first_name != null && user.last_name != null) {
-                            nickname = user.first_name + user.last_name;
-                        } else {
-                            if (user.first_name != null) {
-                                nickname = user.first_name;
+                        if (user != null) {
+                            if (user.first_name != null && user.last_name != null) {
+                                nickname = user.first_name + user.last_name;
                             } else {
-                                nickname = user.last_name;
+                                if (user.first_name != null) {
+                                    nickname = user.first_name;
+                                } else if (user.last_name != null) {
+                                    nickname = user.last_name;
+                                } else {
+                                    nickname = "NOT_FOUND";
+                                }
                             }
+                        } else {
+                            nickname = "NOT_FOUND";
                         }
 
                     }

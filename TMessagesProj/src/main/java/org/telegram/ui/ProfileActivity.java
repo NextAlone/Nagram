@@ -7826,14 +7826,20 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     } else if (position == linkedUserRow) {
                         final TLRPC.User user = getMessagesController().getUser(ConfigManager.getLongOrDefault(Defines.linkedUserPrefix + getCurrentChat().id, 1578562490L));
                         String nickname;
-                        if (user.first_name != null && user.last_name != null) {
-                            nickname = user.first_name + user.last_name;
-                        } else {
-                            if (user.first_name != null) {
-                                nickname = user.first_name;
+                        if (user != null) {
+                            if (user.first_name != null && user.last_name != null) {
+                                nickname = user.first_name + user.last_name;
                             } else {
-                                nickname = user.last_name;
+                                if (user.first_name != null) {
+                                    nickname = user.first_name;
+                                } else if (user.last_name != null) {
+                                    nickname = user.last_name;
+                                } else {
+                                    nickname = "NOT_FOUND";
+                                }
                             }
+                        } else {
+                            nickname = "NOT_FOUND";
                         }
 
                         detailCell.setTextAndValue(nickname, LocaleController.getString("LinkedUser", R.string.linkedUser), false);
