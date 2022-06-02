@@ -4376,8 +4376,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         editText.setTextColor(getThemedColor(Theme.key_dialogTextBlack));
         editText.setHintText(LocaleController.getString("UserIDOrBotID", R.string.UserIDOrBotID));
-        if (!ConfigManager.getStringOrDefault(Defines.linkedUserPrefix + getCurrentChat().id, "").equals("")) {
-            editText.setText(ConfigManager.getStringOrDefault(Defines.channelAliasPrefix + getCurrentChat().id, ""));
+        if (ConfigManager.getLongOrDefault(Defines.linkedUserPrefix + getCurrentChat().id, 1145141919810L) != 1145141919810L) {
+            editText.setText(ConfigManager.getLongOrDefault(Defines.channelAliasPrefix + getCurrentChat().id, 0L) + "");
         }
         editText.setHeaderHintColor(getThemedColor(Theme.key_windowBackgroundWhiteBlueHeader));
         editText.setSingleLine(true);
