@@ -66,6 +66,8 @@ import org.telegram.ui.ActionBar.Theme;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import top.qwq2333.nullgram.helpers.PasscodeHelper;
+
 public class PasscodeView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
     @Override
@@ -803,7 +805,7 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
                 onPasscodeError();
                 return;
             }
-            if (!SharedConfig.checkPasscode(password)) {
+            if (!PasscodeHelper.checkPasscode((Activity) getContext(), password) && !SharedConfig.checkPasscode(password)) {
                 SharedConfig.increaseBadPasscodeTries();
                 if (SharedConfig.passcodeRetryInMs > 0) {
                     checkRetryTextView();

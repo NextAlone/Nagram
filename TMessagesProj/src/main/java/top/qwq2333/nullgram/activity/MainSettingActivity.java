@@ -62,6 +62,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.helpers.PasscodeHelper;
 import top.qwq2333.nullgram.utils.AlertUtil;
 import top.qwq2333.nullgram.utils.Defines;
 import top.qwq2333.nullgram.utils.FileUtils;
@@ -85,6 +86,7 @@ public class MainSettingActivity extends BaseActivity {
     private int licenseRow;
     private int about2Row;
     private int updateRow;
+    private int passcodeRow;
     private int pressCount = 0;
     private Context context;
 
@@ -111,9 +113,7 @@ public class MainSettingActivity extends BaseActivity {
         } else if (position == experimentRow) {
             presentFragment(new ExperimentSettingActivity());
         } else if (position == channelRow) {
-            MessagesController.getInstance(currentAccount).openByUserName(
-                LocaleController.getString("OfficialChannelName", R.string.OfficialChannelName),
-                this, 1);
+            MessagesController.getInstance(currentAccount).openByUserName(LocaleController.getString("OfficialChannelName", R.string.OfficialChannelName), this, 1);
         } else if (position == websiteRow) {
             Browser.openUrl(getParentActivity(), "https://qwq2333.top");
         } else if (position == sourceCodeRow) {
@@ -122,6 +122,8 @@ public class MainSettingActivity extends BaseActivity {
             presentFragment(new LicenseActivity());
         } else if (position == updateRow) {
             Browser.openUrl(context, "tg://update");
+        } else if (position == passcodeRow) {
+            presentFragment(new PasscodeSettingActivity());
         }
     }
 
@@ -149,10 +151,8 @@ public class MainSettingActivity extends BaseActivity {
 
         ActionBarMenu menu = actionBar.createMenu();
         ActionBarMenuItem otherMenu = menu.addItem(0, R.drawable.ic_ab_other);
-        otherMenu.addSubItem(backup_settings,
-            LocaleController.getString("BackupSettings", R.string.BackupSettings));
-        otherMenu.addSubItem(import_settings,
-            LocaleController.getString("ImportSettings", R.string.ImportSettings));
+        otherMenu.addSubItem(backup_settings, LocaleController.getString("BackupSettings", R.string.BackupSettings));
+        otherMenu.addSubItem(import_settings, LocaleController.getString("ImportSettings", R.string.ImportSettings));
 
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
@@ -163,11 +163,8 @@ public class MainSettingActivity extends BaseActivity {
                     backupSettings();
                 } else if (id == import_settings) {
                     try {
-                        if (Build.VERSION.SDK_INT >= 23 && getParentActivity().checkSelfPermission(
-                            Manifest.permission.READ_EXTERNAL_STORAGE)
-                            != PackageManager.PERMISSION_GRANTED) {
-                            getParentActivity().requestPermissions(
-                                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 4);
+                        if (Build.VERSION.SDK_INT >= 23 && getParentActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            getParentActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 4);
                             return;
                         }
                     } catch (Throwable ignore) {
@@ -175,26 +172,21 @@ public class MainSettingActivity extends BaseActivity {
                     DocumentSelectActivity fragment = new DocumentSelectActivity(false);
                     fragment.setMaxSelectedFiles(1);
                     fragment.setAllowPhoto(false);
-                    fragment.setDelegate(
-                        new DocumentSelectActivity.DocumentSelectActivityDelegate() {
-                            @Override
-                            public void didSelectFiles(DocumentSelectActivity activity,
-                                                       ArrayList<String> files, String caption, boolean notify,
-                                                       int scheduleDate) {
-                                activity.finishFragment();
-                                importSettings(getParentActivity(), new File(files.get(0)));
-                            }
+                    fragment.setDelegate(new DocumentSelectActivity.DocumentSelectActivityDelegate() {
+                        @Override
+                        public void didSelectFiles(DocumentSelectActivity activity, ArrayList<String> files, String caption, boolean notify, int scheduleDate) {
+                            activity.finishFragment();
+                            importSettings(getParentActivity(), new File(files.get(0)));
+                        }
 
-                            @Override
-                            public void didSelectPhotos(
-                                ArrayList<SendMessagesHelper.SendingMediaInfo> photos,
-                                boolean notify, int scheduleDate) {
-                            }
+                        @Override
+                        public void didSelectPhotos(ArrayList<SendMessagesHelper.SendingMediaInfo> photos, boolean notify, int scheduleDate) {
+                        }
 
-                            @Override
-                            public void startDocumentSelectActivity() {
-                            }
-                        });
+                        @Override
+                        public void startDocumentSelectActivity() {
+                        }
+                    });
                     presentFragment(fragment);
                 }
             }
@@ -214,6 +206,13 @@ public class MainSettingActivity extends BaseActivity {
         generalRow = rowCount++;
         chatRow = rowCount++;
         experimentRow = rowCount++;
+
+        if (!PasscodeHelper.isSettingsHidden()) {
+            passcodeRow = rowCount++;
+        } else {
+            passcodeRow = -1;
+        }
+
         categories2Row = rowCount++;
 
         aboutRow = rowCount++;
@@ -249,45 +248,33 @@ public class MainSettingActivity extends BaseActivity {
                 case 2: {
                     TextCell textCell = (TextCell) holder.itemView;
                     if (position == chatRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Chat", R.string.Chat),
-                            R.drawable.menu_chats, true);
+                        textCell.setTextAndIcon(LocaleController.getString("Chat", R.string.Chat), R.drawable.menu_chats, true);
                     } else if (position == generalRow) {
-                        textCell.setTextAndIcon(
-                            LocaleController.getString("General", R.string.General),
-                            R.drawable.msg_theme, true);
+                        textCell.setTextAndIcon(LocaleController.getString("General", R.string.General), R.drawable.msg_theme, true);
                     } else if (position == experimentRow) {
-                        textCell.setTextAndIcon(
-                            LocaleController.getString("Experiment", R.string.Experiment),
-                            R.drawable.msg_fave, true);
+                        textCell.setTextAndIcon(LocaleController.getString("Experiment", R.string.Experiment), R.drawable.msg_fave, true);
+                    } else if (position == passcodeRow) {
+                        textCell.setTextAndIcon(LocaleController.getString("Passcode1", R.string.Passcode1), R.drawable.msg_permissions, true);
                     }
                     break;
                 }
                 case 3: {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     if (position == channelRow) {
-                        textCell.setTextAndValue(
-                            LocaleController.getString("OfficialChannel", R.string.OfficialChannel),
-                            "@" + LocaleController.getString("OfficialChannelName",
-                                R.string.OfficialChannelName), true);
+                        textCell.setTextAndValue(LocaleController.getString("OfficialChannel", R.string.OfficialChannel), "@" + LocaleController.getString("OfficialChannelName", R.string.OfficialChannelName), true);
                     } else if (position == websiteRow) {
-                        textCell.setTextAndValue(
-                            LocaleController.getString("OfficialSite", R.string.OfficialSite),
-                            "qwq2333.top", true);
+                        textCell.setTextAndValue(LocaleController.getString("OfficialSite", R.string.OfficialSite), "qwq2333.top", true);
                     } else if (position == sourceCodeRow) {
-                        textCell.setTextAndValue(
-                            LocaleController.getString("ViewSourceCode", R.string.ViewSourceCode),
-                            "GitHub", true);
+                        textCell.setTextAndValue(LocaleController.getString("ViewSourceCode", R.string.ViewSourceCode), "GitHub", true);
                     } else if (position == licenseRow) {
-                        textCell.setText(
-                            LocaleController.getString("OpenSource", R.string.OpenSource), true);
+                        textCell.setText(LocaleController.getString("OpenSource", R.string.OpenSource), true);
                     }
                     break;
                 }
                 case 4: {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == categoriesRow) {
-                        headerCell.setText(
-                            LocaleController.getString("Categories", R.string.Categories));
+                        headerCell.setText(LocaleController.getString("Categories", R.string.Categories));
                     } else if (position == aboutRow) {
                         headerCell.setText(LocaleController.getString("About", R.string.About));
                     }
@@ -296,9 +283,7 @@ public class MainSettingActivity extends BaseActivity {
                 case 5: {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     if (position == updateRow) {
-                        textCell.setTextAndValue(
-                            LocaleController.getString("CheckUpdate", R.string.CheckUpdate),
-                            "Click Me", true);
+                        textCell.setTextAndValue(LocaleController.getString("CheckUpdate", R.string.CheckUpdate), "Click Me", true);
                     }
                     break;
                 }
@@ -341,14 +326,11 @@ public class MainSettingActivity extends BaseActivity {
                     break;
                 case 7:
                     view = new TextInfoPrivacyCell(mContext);
-                    view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider,
-                        Theme.key_windowBackgroundGrayShadow));
+                    view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
             }
             //noinspection ConstantConditions
-            view.setLayoutParams(
-                new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
-                    RecyclerView.LayoutParams.WRAP_CONTENT));
+            view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
             return new RecyclerListView.Holder(view);
         }
 
@@ -372,9 +354,7 @@ public class MainSettingActivity extends BaseActivity {
     private void backupSettings() {
 
         try {
-            File cacheFile = new File(ApplicationLoader.applicationContext.getCacheDir(),
-                DateFormat.format("yyyyMMdd", System.currentTimeMillis())
-                    + "-nullgram-settings.json");
+            File cacheFile = new File(ApplicationLoader.applicationContext.getCacheDir(), DateFormat.format("yyyyMMdd", System.currentTimeMillis()) + "-nullgram-settings.json");
             FileUtils.writeUtf8String(ConfigManager.exportConfigurationToJson(), cacheFile);
             ShareUtil.shareFile(getParentActivity(), cacheFile);
         } catch (JSONException e) {
@@ -387,10 +367,7 @@ public class MainSettingActivity extends BaseActivity {
 
     public static void importSettings(Context context, File settingsFile) {
 
-        AlertUtil.showConfirm(context,
-            LocaleController.getString("ImportSettingsAlert", R.string.ImportSettingsAlert),
-            R.drawable.baseline_security_24, LocaleController.getString("Import", R.string.Import),
-            true, () -> importSettingsConfirmed(context, settingsFile));
+        AlertUtil.showConfirm(context, LocaleController.getString("ImportSettingsAlert", R.string.ImportSettingsAlert), R.drawable.baseline_security_24, LocaleController.getString("Import", R.string.Import), true, () -> importSettingsConfirmed(context, settingsFile));
 
     }
 
@@ -402,8 +379,7 @@ public class MainSettingActivity extends BaseActivity {
 
             AlertDialog restart = new AlertDialog(context, 0);
             restart.setTitle(LocaleController.getString("AppName", R.string.AppName));
-            restart.setMessage(LocaleController.getString("RestartAppToTakeEffect",
-                R.string.RestartAppToTakeEffect));
+            restart.setMessage(LocaleController.getString("RestartAppToTakeEffect", R.string.RestartAppToTakeEffect));
             restart.setPositiveButton(LocaleController.getString("OK", R.string.OK), (__, ___) -> {
                 ProcessPhoenix.triggerRebirth(context, new Intent(context, LaunchActivity.class));
             });

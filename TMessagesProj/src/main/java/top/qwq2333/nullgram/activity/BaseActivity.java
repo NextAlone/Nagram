@@ -200,7 +200,8 @@ public abstract class BaseActivity extends BaseFragment {
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int type = holder.getItemViewType();
-            return type == 2 || type == 3 || type == 5 || type == 6 || type == 8 | type == 9 || type == 10 || type == 11 || type == 12;
+            return type == 2 || type == 3 || type == 5 || type == 6 || type == 8 | type == 9 || type == 10
+                || type == 11 || type == 12;
         }
 
         @NonNull
@@ -245,6 +246,10 @@ public abstract class BaseActivity extends BaseFragment {
                     break;
                 case 10:
                     view = new TextRadioCell(mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
+                case 11:
+                    view = new PasscodeSettingActivity.AccountCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
             }

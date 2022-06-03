@@ -11,6 +11,7 @@ import top.qwq2333.nullgram.activity.ChatSettingActivity;
 import top.qwq2333.nullgram.activity.ExperimentSettingActivity;
 import top.qwq2333.nullgram.activity.GeneralSettingActivity;
 import top.qwq2333.nullgram.activity.MainSettingActivity;
+import top.qwq2333.nullgram.activity.PasscodeSettingActivity;
 
 public class SettingsHelper {
 
@@ -27,6 +28,8 @@ public class SettingsHelper {
         BaseActivity fragment;
         if (segments.size() == 1) {
             fragment = new MainSettingActivity();
+        } else if (PasscodeHelper.getSettingsKey().equals(segments.get(1))) {
+            fragment = new PasscodeSettingActivity();
         } else {
             switch (segments.get(1)) {
                 case "chat":

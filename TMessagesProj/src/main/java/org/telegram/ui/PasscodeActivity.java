@@ -93,15 +93,17 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import top.qwq2333.nullgram.helpers.PasscodeHelper;
+
 public class PasscodeActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     public final static int TYPE_MANAGE_CODE_SETTINGS = 0,
-            TYPE_SETUP_CODE = 1,
-            TYPE_ENTER_CODE_TO_MANAGE_SETTINGS = 2;
+        TYPE_SETUP_CODE = 1,
+        TYPE_ENTER_CODE_TO_MANAGE_SETTINGS = 2;
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({
-            TYPE_MANAGE_CODE_SETTINGS,
-            TYPE_SETUP_CODE,
+        TYPE_MANAGE_CODE_SETTINGS,
+        TYPE_SETUP_CODE,
             TYPE_ENTER_CODE_TO_MANAGE_SETTINGS
     })
     public @interface PasscodeActivityType {}
@@ -160,6 +162,15 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
     };
 
     private Runnable onShowKeyboardCallback;
+
+    private int account = -1;
+
+    public PasscodeActivity(@PasscodeActivityType int type, int account) {
+        super();
+        this.type = type;
+        this.account = account;
+    }
+
 
     public PasscodeActivity(@PasscodeActivityType int type) {
         super();
@@ -1002,25 +1013,31 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 onPasscodeError();
 
                 codeFieldContainer.removeCallbacks(hidePasscodesDoNotMatch);
-                codeFieldContainer.post(()->{
+                codeFieldContainer.post(() -> {
                     codeFieldContainer.postDelayed(hidePasscodesDoNotMatch, 3000);
                     postedHidePasscodesDoNotMatch = true;
                 });
                 return;
             }
 
-            boolean isFirst = SharedConfig.passcodeHash.length() == 0;
-            try {
-                SharedConfig.passcodeSalt = new byte[16];
-                Utilities.random.nextBytes(SharedConfig.passcodeSalt);
-                byte[] passcodeBytes = firstPassword.getBytes("UTF-8");
-                byte[] bytes = new byte[32 + passcodeBytes.length];
-                System.arraycopy(SharedConfig.passcodeSalt, 0, bytes, 0, 16);
-                System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
-                System.arraycopy(SharedConfig.passcodeSalt, 0, bytes, passcodeBytes.length + 16, 16);
-                SharedConfig.passcodeHash = Utilities.bytesToHex(Utilities.computeSHA256(bytes, 0, bytes.length));
-            } catch (Exception e) {
-                FileLog.e(e);
+            boolean isFirst;
+            if (account != -1) {
+                isFirst = false;
+                PasscodeHelper.setPasscodeForAccount(firstPassword, account);
+            } else {
+                isFirst = SharedConfig.passcodeHash.length() == 0;
+                try {
+                    SharedConfig.passcodeSalt = new byte[16];
+                    Utilities.random.nextBytes(SharedConfig.passcodeSalt);
+                    byte[] passcodeBytes = firstPassword.getBytes("UTF-8");
+                    byte[] bytes = new byte[32 + passcodeBytes.length];
+                    System.arraycopy(SharedConfig.passcodeSalt, 0, bytes, 0, 16);
+                    System.arraycopy(passcodeBytes, 0, bytes, 16, passcodeBytes.length);
+                    System.arraycopy(SharedConfig.passcodeSalt, 0, bytes, passcodeBytes.length + 16, 16);
+                    SharedConfig.passcodeHash = Utilities.bytesToHex(Utilities.computeSHA256(bytes, 0, bytes.length));
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
             }
             SharedConfig.allowScreenCapture = true;
             SharedConfig.passcodeType = currentPasswordType;
@@ -1058,7 +1075,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 onPasscodeError();
                 return;
             }
-            if (!SharedConfig.checkPasscode(password)) {
+            if (!PasscodeHelper.checkPasscode(getParentActivity(), password) && !SharedConfig.checkPasscode(password)) {
                 SharedConfig.increaseBadPasscodeTries();
                 passwordEditText.setText("");
                 for (CodeNumberField f : codeFieldContainer.codeField) {

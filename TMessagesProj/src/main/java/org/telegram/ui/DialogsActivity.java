@@ -186,6 +186,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import kotlin.Unit;
+import top.qwq2333.nullgram.helpers.PasscodeHelper;
 import top.qwq2333.nullgram.ui.AppLinkVerifyBottomSheet;
 import top.qwq2333.nullgram.ui.BottomBuilder;
 import top.qwq2333.nullgram.utils.PrivacyUtils;
@@ -2620,6 +2621,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             imageView.setImage(ImageLocation.getForUserOrChat(user, ImageLocation.TYPE_SMALL), "50_50", ImageLocation.getForUserOrChat(user, ImageLocation.TYPE_STRIPPED), "50_50", avatarDrawable, user);
 
             for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+                if (PasscodeHelper.isAccountHidden(a)) continue;
                 TLRPC.User u = AccountInstance.getInstance(a).getUserConfig().getCurrentUser();
                 if (u != null) {
                     AccountSelectCell cell = new AccountSelectCell(context, false);

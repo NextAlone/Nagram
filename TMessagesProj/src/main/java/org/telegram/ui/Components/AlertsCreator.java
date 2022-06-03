@@ -123,6 +123,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.helpers.PasscodeHelper;
 import top.qwq2333.nullgram.utils.Defines;
 
 public class AlertsCreator {
@@ -4687,6 +4688,7 @@ public class AlertsCreator {
         final LinearLayout linearLayout = new LinearLayout(parentActivity);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+            if (PasscodeHelper.isAccountHidden(a)) continue;
             TLRPC.User u = UserConfig.getInstance(a).getCurrentUser();
             if (u != null) {
                 AccountSelectCell cell = new AccountSelectCell(parentActivity, false);
