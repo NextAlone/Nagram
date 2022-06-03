@@ -120,6 +120,11 @@ public class DatacenterActivity extends BaseActivity implements NotificationCent
         return false;
     }
 
+    @Override
+    protected String getKey() {
+        return "datacenter";
+    }
+
     protected BaseListAdapter createAdapter(Context context) {
         return new ListAdapter(context);
     }

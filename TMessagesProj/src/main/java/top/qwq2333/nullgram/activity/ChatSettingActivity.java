@@ -277,6 +277,11 @@ public class ChatSettingActivity extends BaseActivity {
         return false;
     }
 
+    @Override
+    protected String getKey() {
+        return "c";
+    }
+
 
     @Override
     protected void updateRows() {

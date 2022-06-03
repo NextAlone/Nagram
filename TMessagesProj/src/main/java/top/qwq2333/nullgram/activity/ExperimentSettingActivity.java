@@ -90,6 +90,11 @@ public class ExperimentSettingActivity extends BaseActivity {
     }
 
     @Override
+    protected String getKey() {
+        return "e";
+    }
+
+    @Override
     protected void updateRows() {
         super.updateRows();
 

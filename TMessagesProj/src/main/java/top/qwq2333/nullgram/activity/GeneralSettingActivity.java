@@ -160,6 +160,11 @@ public class GeneralSettingActivity extends BaseActivity {
         return false;
     }
 
+    @Override
+    protected String getKey() {
+        return "g";
+    }
+
     protected void updateRows() {
         super.updateRows();
 

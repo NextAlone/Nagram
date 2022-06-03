@@ -139,6 +139,11 @@ public class MainSettingActivity extends BaseActivity {
     }
 
     @Override
+    protected String getKey() {
+        return "";
+    }
+
+    @Override
     public View createView(Context mContext) {
         fragmentView = super.createView(mContext);
 

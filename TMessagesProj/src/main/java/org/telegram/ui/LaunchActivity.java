@@ -168,6 +168,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.helpers.SettingsHelper;
 import top.qwq2333.nullgram.helpers.UpdateHelper;
 import top.qwq2333.nullgram.utils.Defines;
 import top.qwq2333.nullgram.utils.LogUtils;
@@ -1743,6 +1744,17 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                                                 }
                                             } else if (path.startsWith("addstickers/")) {
                                                 sticker = path.replace("addstickers/", "");
+                                            } else if (path.startsWith("nullsettings/")) {
+                                                SettingsHelper.processDeepLink(data, fragment -> {
+                                                    AndroidUtilities.runOnUIThread(() -> presentFragment(fragment, false, false));
+                                                    if (AndroidUtilities.isTablet()) {
+                                                        actionBarLayout.showLastFragment();
+                                                        rightActionBarLayout.showLastFragment();
+                                                        drawerLayoutContainer.setAllowOpenDrawer(false, false);
+                                                    } else {
+                                                        drawerLayoutContainer.setAllowOpenDrawer(true, false);
+                                                    }
+                                                }, () -> showBulletin(factory -> factory.createErrorBulletin(LocaleController.getString("UnknownSettings", R.string.UnknownSettings))));
                                             } else if (path.startsWith("msg/") || path.startsWith("share/")) {
                                                 message = data.getQueryParameter("url");
                                                 if (message == null) {
@@ -2075,6 +2087,19 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                                         }
                                     } else if ((url.startsWith("tg:calllog") || url.startsWith("tg://calllog"))) {
                                         showCallLog = true;
+                                    } else if (url.startsWith("tg:null") || url.startsWith("tg://null")) {
+                                        url = url.replace("tg:null", "tg://t.me/nullsettings").replace("tg://null", "tg://t.me/nullsettings");
+                                        data = Uri.parse(url);
+                                        SettingsHelper.processDeepLink(data, fragment -> {
+                                            AndroidUtilities.runOnUIThread(() -> presentFragment(fragment, false, false));
+                                            if (AndroidUtilities.isTablet()) {
+                                                actionBarLayout.showLastFragment();
+                                                rightActionBarLayout.showLastFragment();
+                                                drawerLayoutContainer.setAllowOpenDrawer(false, false);
+                                            } else {
+                                                drawerLayoutContainer.setAllowOpenDrawer(true, false);
+                                            }
+                                        }, () -> showBulletin(factory -> factory.createErrorBulletin(LocaleController.getString("UnknownSettings", R.string.UnknownSettings))));
                                     } else if (url.startsWith("tg:user") || url.startsWith("tg://user")) {
                                         try {
                                             url = url.replace("tg:user", "tg://telegram.org").replace("tg://user", "tg://telegram.org");

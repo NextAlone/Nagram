@@ -14,8 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -31,12 +33,14 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextRadioCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.BlurredRecyclerView;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 public abstract class BaseActivity extends BaseFragment {
     protected BlurredRecyclerView listView;
@@ -55,6 +59,7 @@ public abstract class BaseActivity extends BaseFragment {
 
     protected abstract boolean onItemLongClick(View view, int position, float x, float y);
 
+    protected abstract String getKey();
 
     @Override
     public boolean onFragmentCreate() {
@@ -105,9 +110,34 @@ public abstract class BaseActivity extends BaseFragment {
             if (onItemLongClick(view, position, x, y)) {
                 return true;
             }
+            var holder = listView.findViewHolderForAdapterPosition(position);
+            var key = getKey();
+            if (key != null && holder != null && listAdapter.isEnabled(holder) && rowMapReverse.containsKey(position)) {
+                showDialog(new AlertDialog.Builder(context)
+                    .setItems(
+                        new CharSequence[]{LocaleController.getString("CopyLink", R.string.CopyLink)},
+                        (dialogInterface, i) -> {
+                            AndroidUtilities.addToClipboard(String.format(Locale.getDefault(), "https://%s/nullgram/%s?r=%s", getMessagesController().linkPrefix, getKey(), rowMapReverse.get(position)));
+                            BulletinFactory.of(BaseActivity.this).createCopyLinkBulletin().show();
+                        })
+                    .create());
+                return true;
+            }
             return false;
         });
         return fragmentView;
+    }
+
+    public void scrollToRow(String key, Runnable unknown) {
+        if (rowMap.containsKey(key)) {
+            listView.highlightRow(() -> {
+                int position = rowMap.get(key);
+                layoutManager.scrollToPositionWithOffset(position, AndroidUtilities.dp(60));
+                return position;
+            });
+        } else {
+            unknown.run();
+        }
     }
 
     protected boolean hasWhiteActionBar() {

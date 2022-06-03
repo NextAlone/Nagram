@@ -259,6 +259,11 @@ public class MessageDetailActivity extends BaseActivity implements NotificationC
     }
 
     @Override
+    protected String getKey() {
+        return "msgdetails";
+    }
+
+    @Override
     public View createView(Context mContext) {
         context = mContext;
         return super.createView(mContext);
