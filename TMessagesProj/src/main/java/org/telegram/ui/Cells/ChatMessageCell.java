@@ -10634,9 +10634,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
                     }
                     if (nickname != null) {
-                        adminString = StringUtils.ellipsis(nickname, 20) + " | Channel";
+                        adminString = StringUtils.ellipsis(nickname, 15) + " | Channel";
                     } else if (aliasName != null) {
-                        adminString = StringUtils.ellipsis(aliasName, 20) + " | Channel";
+                        adminString = StringUtils.ellipsis(aliasName, 15) + " | Channel";
                     } else {
                         adminString = "Channel";
                     }
@@ -10659,7 +10659,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         }
                     }
                     if (nickname != null) {
-                        adminString = StringUtils.ellipsis(nickname, 20) + " | Channel";
+                        adminString = StringUtils.ellipsis(nickname, 15) + " | Channel";
                     } else {
                         adminString = "Channel";
                     }
