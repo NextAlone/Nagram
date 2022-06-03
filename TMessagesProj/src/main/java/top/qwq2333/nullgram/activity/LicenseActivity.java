@@ -79,18 +79,10 @@ public class LicenseActivity extends BaseFragment {
             }
         });
 
-        Notice markwon = new Notice("Markwon", "https://github.com/noties/Markwon",
-            "Copyright 2017 Dimitry Ivanov (mail@dimitryivanov.ru)", new ApacheSoftwareLicense20());
-        Notice nekogram = new Notice("Nekogram", "https://gitlab.com/Nekogram/Nekogram",
-            "Author: NekoInverter", new GnuGeneralPublicLicense20());
-        Notice nekox = new Notice("NekoX",
-            "https://github.com/NekoX-dev/NekoX",
-            "Author: NekoX-Dev",
-            new GnuGeneralPublicLicense20());
-        Notice genuine = new Notice("Genuine",
-            "https://github.com/brevent/genuine",
-            "Copyright brevent",
-            new CCBYNCSA40());
+        Notice markwon = new Notice("Markwon", "https://github.com/noties/Markwon", "Copyright 2017 Dimitry Ivanov (mail@dimitryivanov.ru)", new ApacheSoftwareLicense20());
+        Notice nekogram = new Notice("Nekogram", "https://gitlab.com/Nekogram/Nekogram", "Author: NekoInverter", new GnuGeneralPublicLicense20());
+        Notice nekox = new Notice("NekoX", "https://github.com/NekoX-dev/NekoX", "Author: NekoX-Dev", new GnuGeneralPublicLicense20());
+        Notice genuine = new Notice("Genuine", "https://github.com/brevent/genuine", "Copyright brevent", new CCBYNCSA40());
         notices.addNotice(markwon);
         notices.addNotice(nekogram);
         notices.addNotice(nekox);
@@ -133,10 +125,8 @@ public class LicenseActivity extends BaseFragment {
                     title = convertView.findViewById(R.id.sLicenseItem_title);
                     licenseView = convertView.findViewById(R.id.sLicenseItem_licensePrev);
                 }
-                markwon.setMarkdown(title,
-                    "- " + notice.getName() + "  \n(<" + notice.getUrl() + ">)");
-                licenseView.setText(notice.getCopyright() + "\n\n" + notice.getLicense()
-                    .getSummaryText(context));
+                markwon.setMarkdown(title, "- " + notice.getName() + "  \n(<" + notice.getUrl() + ">)");
+                licenseView.setText(notice.getCopyright() + "\n\n" + notice.getLicense().getSummaryText(context));
                 return convertView;
             }
         };
@@ -150,8 +140,7 @@ public class LicenseActivity extends BaseFragment {
         fragmentView = new FrameLayout(context);
         fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = (FrameLayout) fragmentView;
-        frameLayout.addView(listView,
-            LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+        frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         return fragmentView;
 
     }
@@ -167,91 +156,40 @@ public class LicenseActivity extends BaseFragment {
     @Override
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> themeDescriptions = new ArrayList<>();
-        themeDescriptions.add(
-            new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR,
-                new Class[]{EmptyCell.class, TextSettingsCell.class, TextCheckCell.class,
-                    HeaderCell.class, TextDetailSettingsCell.class, NotificationsCheckCell.class},
-                null, null, null, Theme.key_windowBackgroundWhite));
-        themeDescriptions.add(
-            new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null,
-                null, Theme.key_windowBackgroundGray));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{EmptyCell.class, TextSettingsCell.class, TextCheckCell.class, HeaderCell.class, TextDetailSettingsCell.class, NotificationsCheckCell.class}, null, null, null, Theme.key_windowBackgroundWhite));
+        themeDescriptions.add(new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray));
 
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null,
-                null, Theme.key_avatar_backgroundActionBarBlue));
-        themeDescriptions.add(
-            new ThemeDescription(listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null,
-                null, Theme.key_avatar_backgroundActionBarBlue));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null,
-                null, Theme.key_avatar_actionBarIconBlue));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null,
-                null, Theme.key_actionBarDefaultTitle));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null,
-                null, null, Theme.key_avatar_actionBarSelectorBlue));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, null, null,
-                null, null, Theme.key_actionBarDefaultSubmenuBackground));
-        themeDescriptions.add(
-            new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null,
-                null, Theme.key_actionBarDefaultSubmenuItem));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_avatar_backgroundActionBarBlue));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_avatar_backgroundActionBarBlue));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_avatar_actionBarIconBlue));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_avatar_actionBarSelectorBlue));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, null, null, null, null, Theme.key_actionBarDefaultSubmenuBackground));
+        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null, null, Theme.key_actionBarDefaultSubmenuItem));
 
-        themeDescriptions.add(
-            new ThemeDescription(listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null,
-                Theme.key_listSelector));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector));
 
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{View.class}, Theme.dividerPaint, null,
-                null, Theme.key_divider));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider));
 
-        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_BACKGROUNDFILTER,
-            new Class[]{ShadowSectionCell.class}, null, null, null,
-            Theme.key_windowBackgroundGrayShadow));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow));
 
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class},
-            new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class},
-            new String[]{"valueTextView"}, null, null, null,
-            Theme.key_windowBackgroundWhiteValueText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteValueText));
 
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class},
-                new String[]{"textView"}, null, null, null,
-                Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class},
-                new String[]{"valueTextView"}, null, null, null,
-                Theme.key_windowBackgroundWhiteGrayText2));
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class},
-                new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack));
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class},
-                new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked));
 
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class},
-            new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class},
-            new String[]{"valueTextView"}, null, null, null,
-            Theme.key_windowBackgroundWhiteGrayText2));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class},
-            new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class},
-            new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked));
 
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{HeaderCell.class},
-            new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader));
 
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class},
-                new String[]{"textView"}, null, null, null,
-                Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(
-            new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class},
-                new String[]{"valueTextView"}, null, null, null,
-                Theme.key_windowBackgroundWhiteGrayText2));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
 
         return themeDescriptions;
     }

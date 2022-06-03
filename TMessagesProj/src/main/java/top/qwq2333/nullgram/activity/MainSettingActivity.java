@@ -28,11 +28,8 @@ import android.os.Build;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonObject;
@@ -50,7 +47,6 @@ import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
@@ -58,7 +54,6 @@ import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
-import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.DocumentSelectActivity;
 import org.telegram.ui.LaunchActivity;
@@ -75,12 +70,7 @@ import top.qwq2333.nullgram.utils.LogUtils;
 import top.qwq2333.nullgram.utils.ShareUtil;
 
 @SuppressLint("NotifyDataSetChanged")
-public class MainSettingActivity extends BaseFragment {
-
-    private RecyclerListView listView;
-    private ListAdapter listAdapter;
-
-    private int rowCount;
+public class MainSettingActivity extends BaseActivity {
 
     private int categoriesRow;
     private int generalRow;
@@ -95,34 +85,69 @@ public class MainSettingActivity extends BaseFragment {
     private int licenseRow;
     private int about2Row;
     private int updateRow;
-
-
-    @Override
-    public boolean onFragmentCreate() {
-        super.onFragmentCreate();
-
-        updateRows();
-
-        return true;
-    }
+    private int pressCount = 0;
+    private Context context;
 
     private static final int backup_settings = 1;
     private static final int import_settings = 2;
 
     @Override
-    public View createView(Context context) {
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setTitle(LocaleController.getString("NullSettings", R.string.NullSettings));
+    protected BaseListAdapter createAdapter(Context context) {
+        return new ListAdapter(context);
+    }
+
+    @Override
+    protected String getActionBarTitle() {
+        return LocaleController.getString("NullSettings", R.string.NullSettings);
+    }
+
+    @Override
+    protected void onItemClick(View view, int position, float x, float y) {
+
+        if (position == chatRow) {
+            presentFragment(new ChatSettingActivity());
+        } else if (position == generalRow) {
+            presentFragment(new GeneralSettingActivity());
+        } else if (position == experimentRow) {
+            presentFragment(new ExperimentSettingActivity());
+        } else if (position == channelRow) {
+            MessagesController.getInstance(currentAccount).openByUserName(
+                LocaleController.getString("OfficialChannelName", R.string.OfficialChannelName),
+                this, 1);
+        } else if (position == websiteRow) {
+            Browser.openUrl(getParentActivity(), "https://qwq2333.top");
+        } else if (position == sourceCodeRow) {
+            Browser.openUrl(getParentActivity(), "https://github.com/qwq233/Nullgram");
+        } else if (position == licenseRow) {
+            presentFragment(new LicenseActivity());
+        } else if (position == updateRow) {
+            Browser.openUrl(context, "tg://update");
+        }
+    }
+
+    @Override
+    protected boolean onItemLongClick(View view, int position, float x, float y) {
+        if (position == experimentRow) {
+            pressCount++;
+            if (pressCount >= 2) {
+                ConfigManager.toggleBoolean(Defines.showHiddenSettings);
+                AndroidUtilities.shakeView(view, 2, 0);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public View createView(Context mContext) {
+        fragmentView = super.createView(mContext);
+
         ActionBarMenu menu = actionBar.createMenu();
         ActionBarMenuItem otherMenu = menu.addItem(0, R.drawable.ic_ab_other);
         otherMenu.addSubItem(backup_settings,
             LocaleController.getString("BackupSettings", R.string.BackupSettings));
         otherMenu.addSubItem(import_settings,
             LocaleController.getString("ImportSettings", R.string.ImportSettings));
-
-        if (AndroidUtilities.isTablet()) {
-            actionBar.setOccupyStatusBar(false);
-        }
 
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
@@ -170,70 +195,16 @@ public class MainSettingActivity extends BaseFragment {
             }
         });
 
-        listAdapter = new ListAdapter(context);
-
-        fragmentView = new FrameLayout(context);
-        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
-        FrameLayout frameLayout = (FrameLayout) fragmentView;
-
-        listView = new RecyclerListView(context);
-        listView.setLayoutManager(
-            new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        listView.setVerticalScrollBarEnabled(false);
-        listView.setAdapter(listAdapter);
-        ((DefaultItemAnimator) listView.getItemAnimator()).setDelayAnimations(false);
-        frameLayout.addView(listView,
-            LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
-        listView.setOnItemClickListener((view, position, x, y) -> {
-            if (position == chatRow) {
-                presentFragment(new ChatSettingActivity());
-            } else if (position == generalRow) {
-                presentFragment(new GeneralSettingActivity());
-            } else if (position == experimentRow) {
-                presentFragment(new ExperimentSettingActivity());
-            } else if (position == channelRow) {
-                MessagesController.getInstance(currentAccount).openByUserName(
-                    LocaleController.getString("OfficialChannelName", R.string.OfficialChannelName),
-                    this, 1);
-            } else if (position == websiteRow) {
-                Browser.openUrl(getParentActivity(), "https://qwq2333.top");
-            } else if (position == sourceCodeRow) {
-                Browser.openUrl(getParentActivity(), "https://github.com/qwq233/Nullgram");
-            } else if (position == licenseRow) {
-                presentFragment(new LicenseActivity());
-            } else if (position == updateRow) {
-                Browser.openUrl(context, "tg://update");
-            }
-        });
-        listView.setOnItemLongClickListener(new RecyclerListView.OnItemLongClickListener() {
-            private int pressCount = 0;
-
-            @Override
-            public boolean onItemClick(View view, int position) {
-                if (position == experimentRow) {
-                    pressCount++;
-                    if (pressCount >= 2) {
-                        ConfigManager.toggleBoolean(Defines.showHiddenSettings);
-                        AndroidUtilities.shakeView(view, 2, 0);
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
+        context = mContext;
 
         return fragmentView;
     }
 
+
     @Override
-    public void onResume() {
-        super.onResume();
+    protected void updateRows() {
+        super.updateRows();
 
-    }
-
-
-    private void updateRows() {
-        rowCount = 0;
         categoriesRow = rowCount++;
         generalRow = rowCount++;
         chatRow = rowCount++;
@@ -254,18 +225,9 @@ public class MainSettingActivity extends BaseFragment {
         }
     }
 
-
-    @Override
-    public void onFragmentDestroy() {
-        super.onFragmentDestroy();
-    }
-
-    private class ListAdapter extends RecyclerListView.SelectionAdapter {
-
-        private final Context mContext;
-
+    private class ListAdapter extends BaseListAdapter {
         public ListAdapter(Context context) {
-            mContext = context;
+            super(context);
         }
 
         @Override

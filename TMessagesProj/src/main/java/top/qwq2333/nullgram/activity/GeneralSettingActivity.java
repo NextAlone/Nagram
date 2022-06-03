@@ -2,29 +2,18 @@ package top.qwq2333.nullgram.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
-import android.provider.OpenableColumns;
 import android.transition.TransitionManager;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
-import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.DrawerLayoutContainer;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.ActionBar.ThemeDescription;
-import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.NotificationsCheckCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
@@ -32,23 +21,16 @@ import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
-import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
-
-import java.util.ArrayList;
 
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.ui.DrawerProfilePreviewCell;
 import top.qwq2333.nullgram.utils.Defines;
 
 @SuppressLint("NotifyDataSetChanged")
-public class GeneralSettingActivity extends BaseFragment {
+public class GeneralSettingActivity extends BaseActivity {
 
     private DrawerProfilePreviewCell profilePreviewCell;
-    private RecyclerListView listView;
-    private ListAdapter listAdapter;
-
-    private int rowCount;
 
     private int generalRow;
 
@@ -73,157 +55,113 @@ public class GeneralSettingActivity extends BaseFragment {
 
 
     @Override
-    public boolean onFragmentCreate() {
-        super.onFragmentCreate();
-
-        updateRows();
-
-        return true;
+    protected BaseListAdapter createAdapter(Context context) {
+        return new ListAdapter(context);
     }
 
     @Override
-    public View createView(Context context) {
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setTitle(LocaleController.getString("General", R.string.General));
-
-        if (AndroidUtilities.isTablet()) {
-            actionBar.setOccupyStatusBar(false);
-        }
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
-            @Override
-            public void onItemClick(int id) {
-                if (id == -1) {
-                    finishFragment();
-                }
-            }
-        });
-
-        listAdapter = new ListAdapter(context);
-
-        fragmentView = new FrameLayout(context);
-        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
-        FrameLayout frameLayout = (FrameLayout) fragmentView;
-
-        listView = new RecyclerListView(context);
-        listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        listView.setVerticalScrollBarEnabled(false);
-        listView.setAdapter(listAdapter);
-        ((DefaultItemAnimator) listView.getItemAnimator()).setDelayAnimations(false);
-        frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
-        listView.setOnItemClickListener((view, position, x, y) -> {
-            if (position == showBotAPIRow) {
-                ConfigManager.toggleBoolean(Defines.showBotAPIID);
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.showBotAPIID));
-                }
-            } else if (position == hidePhoneRow) {
-                ConfigManager.toggleBoolean(Defines.hidePhone);
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.hidePhone));
-                }
-                parentLayout.rebuildAllFragmentViews(false, false);
-                getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
-                listAdapter.notifyItemChanged(drawerRow, new Object());
-            } else if (position == avatarAsDrawerBackgroundRow) {
-                ConfigManager.toggleBoolean(Defines.avatarAsDrawerBackground);
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.avatarAsDrawerBackground));
-                }
-                getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
-                TransitionManager.beginDelayedTransition(profilePreviewCell);
-                listAdapter.notifyItemChanged(drawerRow, new Object());
-                if (ConfigManager.getBooleanOrFalse(Defines.avatarAsDrawerBackground)) {
-                    updateRows();
-                    listAdapter.notifyItemRangeInserted(avatarBackgroundBlurRow, 2);
-                } else {
-                    listAdapter.notifyItemRangeRemoved(avatarBackgroundBlurRow, 2);
-                    updateRows();
-                }
-            } else if (position == avatarBackgroundBlurRow) {
-                ConfigManager.toggleBoolean(Defines.avatarBackgroundBlur);
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.avatarBackgroundBlur));
-                }
-                getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
-                listAdapter.notifyItemChanged(drawerRow, new Object());
-            } else if (position == avatarBackgroundDarkenRow) {
-                ConfigManager.toggleBoolean(Defines.avatarBackgroundDarken);
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.avatarBackgroundDarken));
-                }
-                getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
-                listAdapter.notifyItemChanged(drawerRow, new Object());
-            } else if (position == largeAvatarAsBackgroundRow) {
-                ConfigManager.toggleBoolean(Defines.largeAvatarAsBackground);
-                getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
-                TransitionManager.beginDelayedTransition(profilePreviewCell);
-                listAdapter.notifyItemChanged(drawerRow, new Object());
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.largeAvatarAsBackground));
-                }
-            } else if (position == showExactNumberRow) {
-                ConfigManager.toggleBoolean(Defines.showExactNumber);
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.showExactNumber));
-                }
-            } else if (position == disableInstantCameraRow) {
-                ConfigManager.toggleBoolean(Defines.disableInstantCamera);
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.disableInstantCamera));
-                }
-            } else if (position == disableUndoRow) {
-                ConfigManager.toggleBoolean(Defines.disableUndo);
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.disableUndo));
-                }
-            } else if (position == skipOpenLinkConfirmRow) {
-                ConfigManager.toggleBoolean(Defines.skipOpenLinkConfirm);
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.skipOpenLinkConfirm));
-                }
-            } else if (position == autoProxySwitchRow) {
-                ConfigManager.toggleBoolean(Defines.autoSwitchProxy);
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.autoSwitchProxy));
-                }
-            } else if (position == useSystemEmojiRow) {
-                ConfigManager.toggleBoolean(Defines.useSystemEmoji);
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.useSystemEmoji));
-                }
-            } else if (position == disableVibrationRow) {
-                ConfigManager.toggleBoolean(Defines.disableVibration);
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.disableVibration));
-                }
-            }
-        });
-
-        return fragmentView;
+    protected String getActionBarTitle() {
+        return LocaleController.getString("General", R.string.General);
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (listAdapter != null) {
-            listAdapter.notifyDataSetChanged();
-        }
-    }
-
-    @SuppressLint("Range")
-    public String getFileName(Uri uri) {
-        String result = null;
-        try (Cursor cursor = getParentActivity().getContentResolver().query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null)) {
-            if (cursor != null && cursor.moveToFirst()) {
-                result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+    protected void onItemClick(View view, int position, float x, float y) {
+        if (position == showBotAPIRow) {
+            ConfigManager.toggleBoolean(Defines.showBotAPIID);
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.showBotAPIID));
+            }
+        } else if (position == hidePhoneRow) {
+            ConfigManager.toggleBoolean(Defines.hidePhone);
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.hidePhone));
+            }
+            parentLayout.rebuildAllFragmentViews(false, false);
+            getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
+            listAdapter.notifyItemChanged(drawerRow, new Object());
+        } else if (position == avatarAsDrawerBackgroundRow) {
+            ConfigManager.toggleBoolean(Defines.avatarAsDrawerBackground);
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.avatarAsDrawerBackground));
+            }
+            getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
+            TransitionManager.beginDelayedTransition(profilePreviewCell);
+            listAdapter.notifyItemChanged(drawerRow, new Object());
+            if (ConfigManager.getBooleanOrFalse(Defines.avatarAsDrawerBackground)) {
+                updateRows();
+                listAdapter.notifyItemRangeInserted(avatarBackgroundBlurRow, 2);
+            } else {
+                listAdapter.notifyItemRangeRemoved(avatarBackgroundBlurRow, 2);
+                updateRows();
+            }
+        } else if (position == avatarBackgroundBlurRow) {
+            ConfigManager.toggleBoolean(Defines.avatarBackgroundBlur);
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.avatarBackgroundBlur));
+            }
+            getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
+            listAdapter.notifyItemChanged(drawerRow, new Object());
+        } else if (position == avatarBackgroundDarkenRow) {
+            ConfigManager.toggleBoolean(Defines.avatarBackgroundDarken);
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.avatarBackgroundDarken));
+            }
+            getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
+            listAdapter.notifyItemChanged(drawerRow, new Object());
+        } else if (position == largeAvatarAsBackgroundRow) {
+            ConfigManager.toggleBoolean(Defines.largeAvatarAsBackground);
+            getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
+            TransitionManager.beginDelayedTransition(profilePreviewCell);
+            listAdapter.notifyItemChanged(drawerRow, new Object());
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.largeAvatarAsBackground));
+            }
+        } else if (position == showExactNumberRow) {
+            ConfigManager.toggleBoolean(Defines.showExactNumber);
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.showExactNumber));
+            }
+        } else if (position == disableInstantCameraRow) {
+            ConfigManager.toggleBoolean(Defines.disableInstantCamera);
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.disableInstantCamera));
+            }
+        } else if (position == disableUndoRow) {
+            ConfigManager.toggleBoolean(Defines.disableUndo);
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.disableUndo));
+            }
+        } else if (position == skipOpenLinkConfirmRow) {
+            ConfigManager.toggleBoolean(Defines.skipOpenLinkConfirm);
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.skipOpenLinkConfirm));
+            }
+        } else if (position == autoProxySwitchRow) {
+            ConfigManager.toggleBoolean(Defines.autoSwitchProxy);
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.autoSwitchProxy));
+            }
+        } else if (position == useSystemEmojiRow) {
+            ConfigManager.toggleBoolean(Defines.useSystemEmoji);
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.useSystemEmoji));
+            }
+        } else if (position == disableVibrationRow) {
+            ConfigManager.toggleBoolean(Defines.disableVibration);
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.disableVibration));
             }
         }
-        return result;
+
     }
 
+    @Override
+    protected boolean onItemLongClick(View view, int position, float x, float y) {
+        return false;
+    }
 
-    private void updateRows() {
-        rowCount = 0;
+    protected void updateRows() {
+        super.updateRows();
 
         drawerRow = rowCount++;
         avatarAsDrawerBackgroundRow = rowCount++;
@@ -254,54 +192,11 @@ public class GeneralSettingActivity extends BaseFragment {
         }
     }
 
-    @Override
-    public ArrayList<ThemeDescription> getThemeDescriptions() {
-        ArrayList<ThemeDescription> themeDescriptions = new ArrayList<>();
-        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{EmptyCell.class, TextSettingsCell.class, TextCheckCell.class, HeaderCell.class, TextDetailSettingsCell.class, NotificationsCheckCell.class}, null, null, null, Theme.key_windowBackgroundWhite));
-        themeDescriptions.add(new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray));
-
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_avatar_backgroundActionBarBlue));
-        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_avatar_backgroundActionBarBlue));
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_avatar_actionBarIconBlue));
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle));
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_avatar_actionBarSelectorBlue));
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, null, null, null, null, Theme.key_actionBarDefaultSubmenuBackground));
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null, null, Theme.key_actionBarDefaultSubmenuItem));
-
-        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector));
-
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider));
-
-        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow));
-
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteValueText));
-
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked));
-
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrack));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, null, null, null, Theme.key_switchTrackChecked));
-
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader));
-
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
-        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextDetailSettingsCell.class}, new String[]{"valueTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
-
-        return themeDescriptions;
-    }
-
-    private class ListAdapter extends RecyclerListView.SelectionAdapter {
-
-        private final Context mContext;
+    private class ListAdapter extends BaseListAdapter {
         private final DrawerLayoutContainer mDrawerLayoutContainer;
 
         public ListAdapter(Context context) {
-            mContext = context;
+            super(context);
             mDrawerLayoutContainer = new DrawerLayoutContainer(mContext);
 
         }

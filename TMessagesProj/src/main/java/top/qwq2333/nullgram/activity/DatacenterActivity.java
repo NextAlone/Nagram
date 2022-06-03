@@ -2,7 +2,6 @@ package top.qwq2333.nullgram.activity;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.os.SystemClock;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -30,41 +29,20 @@ import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
-import org.telegram.ui.Cells.NotificationsCheckCell;
-import org.telegram.ui.Cells.ShadowSectionCell;
-import org.telegram.ui.Cells.TextCell;
-import org.telegram.ui.Cells.TextCheckCell;
-import org.telegram.ui.Cells.TextCheckbox2Cell;
-import org.telegram.ui.Cells.TextDetailSettingsCell;
-import org.telegram.ui.Cells.TextInfoPrivacyCell;
-import org.telegram.ui.Cells.TextRadioCell;
-import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.BlurredRecyclerView;
 import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.Components.Rect;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 
-import java.util.HashMap;
 import java.util.Locale;
 
 import top.qwq2333.nullgram.utils.MessageUtils;
 
-public class DatacenterActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
-
-    protected BlurredRecyclerView listView;
-    protected BaseListAdapter listAdapter;
-    protected LinearLayoutManager layoutManager;
-
-    protected int rowCount;
-    protected HashMap<String, Integer> rowMap = new HashMap<>(20);
-    protected HashMap<Integer, String> rowMapReverse = new HashMap<>(20);
-
+public class DatacenterActivity extends BaseActivity implements NotificationCenter.NotificationCenterDelegate {
     private final int dcToHighlight;
 
     private int headerRow;
@@ -134,6 +112,12 @@ public class DatacenterActivity extends BaseFragment implements NotificationCent
             }
             checkDatacenter(datacenterInfo, true);
         }
+    }
+
+    @Override
+    protected boolean onItemLongClick(View view, int position, float x, float y) {
+        // ignore
+        return false;
     }
 
     protected BaseListAdapter createAdapter(Context context) {
@@ -465,106 +449,6 @@ public class DatacenterActivity extends BaseFragment implements NotificationCent
             if (needDivider) {
                 canvas.drawLine(LocaleController.isRTL ? 0 : AndroidUtilities.dp(20), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
             }
-        }
-    }
-
-    protected abstract class BaseListAdapter extends RecyclerListView.SelectionAdapter {
-
-        protected final Context mContext;
-
-        public BaseListAdapter(Context context) {
-            mContext = context;
-        }
-
-        @Override
-        public int getItemCount() {
-            return rowCount;
-        }
-
-        @Override
-        public boolean isEnabled(RecyclerView.ViewHolder holder) {
-            int type = holder.getItemViewType();
-            return type == 2 || type == 3 || type == 5 || type == 6 || type == 8 | type == 9 || type == 10 || type == 11 || type == 12;
-        }
-
-        @NonNull
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = null;
-            switch (viewType) {
-                case 1:
-                    view = new ShadowSectionCell(mContext);
-                    break;
-                case 2:
-                    view = new TextSettingsCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 3:
-                    view = new TextCheckCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 4:
-                    view = new HeaderCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 5:
-                    view = new NotificationsCheckCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 6:
-                    view = new TextDetailSettingsCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 7:
-                    view = new TextInfoPrivacyCell(mContext);
-                    view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
-                    break;
-                case 8:
-                    view = new TextCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 9:
-                    view = new TextCheckbox2Cell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 10:
-                    view = new TextRadioCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-            }
-            //noinspection ConstantConditions
-            view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
-            return new RecyclerListView.Holder(view);
-        }
-    }
-
-    private class BlurContentView extends SizeNotifierFrameLayout {
-
-        public BlurContentView(Context context) {
-            super(context);
-            needBlur = false;
-            blurBehindViews.add(this);
-        }
-
-        @Override
-        protected void drawList(Canvas blurCanvas, boolean top) {
-            for (int j = 0; j < listView.getChildCount(); j++) {
-                View child = listView.getChildAt(j);
-                if (child.getY() < listView.blurTopPadding + AndroidUtilities.dp(100)) {
-                    int restore = blurCanvas.save();
-                    blurCanvas.translate(getX() + child.getX(), getY() + listView.getY() + child.getY());
-                    child.draw(blurCanvas);
-                    blurCanvas.restoreToCount(restore);
-                }
-            }
-        }
-
-        public Paint blurScrimPaint = new Paint();
-        Rect rectTmp = new Rect();
-
-        @Override
-        protected void dispatchDraw(Canvas canvas) {
-            super.dispatchDraw(canvas);
         }
     }
 
