@@ -94,6 +94,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.exteragram.messenger.extras.Vibrate;
+import com.exteragram.messenger.ExteraUtils;
 
 public class PasscodeActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     public final static int TYPE_MANAGE_CODE_SETTINGS = 0,
@@ -677,7 +678,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 floatingButtonContainer.setContentDescription(LocaleController.getString(R.string.Next));
                 floatingButtonContainer.addView(floatingButtonIcon, LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 56 : 60, Build.VERSION.SDK_INT >= 21 ? 56 : 60));
 
-                Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(56), Theme.getColor(Theme.key_chats_actionBackground), Theme.getColor(Theme.key_chats_actionPressedBackground));
+                Drawable drawable = ExteraUtils.drawFab();
                 if (Build.VERSION.SDK_INT < 21) {
                     Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.floating_shadow).mutate();
                     shadowDrawable.setColorFilter(new PorterDuffColorFilter(0xff000000, PorterDuff.Mode.MULTIPLY));

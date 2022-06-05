@@ -13,8 +13,8 @@ public class ExteraConfig {
 
     private static final Object sync = new Object();
 
-    private static final int[] OFFICIAL_CHANNELS = {1233768168, 1524581881, 1571726392, 1632728092, 1638754701, 1779596027};
-    private static final int[] DEVS = {963080346, 1282540315, 1374434073, 388099852, 1999113390, 1566664501, 1390662387};
+    private static final int[] OFFICIAL_CHANNELS = {1233768168, 1524581881, 1571726392, 1632728092, 1638754701, 1779596027, 1172503281};
+    private static final int[] DEVS = {963080346, 1282540315, 1374434073, 388099852, 1999113390, 1566664501};
 
     public static boolean scrollablePreview;
 
@@ -24,6 +24,7 @@ public class ExteraConfig {
     public static boolean centerTitle;
     public static boolean newSwitchStyle;
     public static boolean transparentNavBar;
+    public static boolean squareFab;
 
     public static boolean hideAllChats;
     public static boolean hidePhoneNumber;
@@ -82,12 +83,13 @@ public class ExteraConfig {
 
             scrollablePreview = preferences.getBoolean("scrollablePreview", true);
 
-            useSystemFonts = preferences.getBoolean("useSystemFonts", false);
+            useSystemFonts = preferences.getBoolean("useSystemFonts", true);
             disableVibration = preferences.getBoolean("disableVibration", false);
             blurForAllThemes = preferences.getBoolean("blurForAllThemes", true);
             centerTitle = preferences.getBoolean("centerTitle", false);
             newSwitchStyle = preferences.getBoolean("newSwitchStyle", false);
-            transparentNavBar = preferences.getBoolean("transparentNavBar", true);
+            transparentNavBar = preferences.getBoolean("transparentNavBar", false);
+            squareFab = preferences.getBoolean("squareFab", false);
 
             hideAllChats = preferences.getBoolean("hideAllChats", false);
             hidePhoneNumber = preferences.getBoolean("hidePhoneNumber", false);
@@ -466,6 +468,14 @@ public class ExteraConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("transparentNavBar", transparentNavBar);
+        editor.apply();
+    }
+
+    public static void toggleSquareFab() {
+        squareFab = !squareFab;
+        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("squareFab", squareFab);
         editor.apply();
     }
 }

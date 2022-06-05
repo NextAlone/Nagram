@@ -47,6 +47,7 @@ public class AppearancePreferencesEntry extends BaseFragment {
     private int centerTitleRow;
     private int newSwitchStyleRow;
     private int transparentNavBarRow;
+    private int squareFabRow;
     private int applicationDividerRow;
 
     private int generalHeaderRow;
@@ -206,6 +207,21 @@ public class AppearancePreferencesEntry extends BaseFragment {
                 Parcelable recyclerViewState = null;
                 if (listView.getLayoutManager() != null) recyclerViewState = listView.getLayoutManager().onSaveInstanceState();
                 parentLayout.rebuildAllFragmentViews(true, true);
+                AlertDialog progressDialog = new AlertDialog(context, 3);
+                progressDialog.show();
+                AndroidUtilities.runOnUIThread(progressDialog::dismiss, 400);
+                listView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+            } else if (position == squareFabRow) {
+                ExteraConfig.toggleSquareFab();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(ExteraConfig.squareFab);
+                }
+                Parcelable recyclerViewState = null;
+                if (listView.getLayoutManager() != null) recyclerViewState = listView.getLayoutManager().onSaveInstanceState();
+                parentLayout.rebuildAllFragmentViews(true, true);
+                AlertDialog progressDialog = new AlertDialog(context, 3);
+                progressDialog.show();
+                AndroidUtilities.runOnUIThread(progressDialog::dismiss, 400);
                 listView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
             }
         });
@@ -227,6 +243,7 @@ public class AppearancePreferencesEntry extends BaseFragment {
         centerTitleRow = rowCount++;
         newSwitchStyleRow = rowCount++;
         transparentNavBarRow = rowCount++;
+        squareFabRow = rowCount++;
         applicationDividerRow = rowCount++;
 
         generalHeaderRow = rowCount++;
@@ -293,7 +310,9 @@ public class AppearancePreferencesEntry extends BaseFragment {
                     } else if (position == newSwitchStyleRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("NewSwitchStyle", R.string.NewSwitchStyle), ExteraConfig.newSwitchStyle, true);
                     } else if (position == transparentNavBarRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("TransparentNavBar", R.string.TransparentNavBar), ExteraConfig.transparentNavBar, false);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("TransparentNavBar", R.string.TransparentNavBar), ExteraConfig.transparentNavBar, true);
+                    } else if (position == squareFabRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString("SquareFab", R.string.SquareFab), ExteraConfig.squareFab, false);
                     } else if (position == hideAllChatsRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("HideAllChats", R.string.HideAllChats), ExteraConfig.hideAllChats, true);
                     } else if (position == hidePhoneNumberRow) {
@@ -345,7 +364,7 @@ public class AppearancePreferencesEntry extends BaseFragment {
             } else if (position == applicationHeaderRow || position == generalHeaderRow) {
                 return 2;
             } else if (position == useSystemFontsRow || position == useSystemEmojiRow || position == transparentStatusBarRow || position == transparentNavBarRow ||
-                       position == blurForAllThemesRow || position == centerTitleRow || position == newSwitchStyleRow || position == hideAllChatsRow ||
+                       position == squareFabRow || position == blurForAllThemesRow || position == centerTitleRow || position == newSwitchStyleRow || position == hideAllChatsRow ||
                        position == hidePhoneNumberRow || position == showIDRow || position == chatsOnTitleRow || position == disableVibrationRow || position == forceTabletModeRow) {
                 return 3;
             }
