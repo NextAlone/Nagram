@@ -55,7 +55,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import top.qwq2333.nullgram.utils.DatabaseUtils;
-import top.qwq2333.nullgram.utils.LogUtils;
+import top.qwq2333.nullgram.utils.Log;
 import top.qwq2333.nullgram.utils.ProxyUtils;
 
 public class ConnectionsManager extends BaseController {
@@ -277,11 +277,11 @@ public class ConnectionsManager extends BaseController {
         final int requestToken = lastRequestToken.getAndIncrement();
         Utilities.stageQueue.postRunnable(() -> {
             if (BuildVars.LOGS_ENABLED) {
-                LogUtils.d("send request " + object + " with token = " + requestToken);
+                Log.d("send request " + object + " with token = " + requestToken);
             }
             var user = getUserConfig().getCurrentUser();
             if (user != null && user.bot && DatabaseUtils.isUserOnlyMethod(object)) {
-                FileLog.d("skip send request " + object + " user only method");
+                Log.d("skip send request " + object + " user only method");
                 Utilities.stageQueue.postRunnable(() -> {
                     var error = new TLRPC.TL_error();
                     error.code = 400;
@@ -294,7 +294,6 @@ public class ConnectionsManager extends BaseController {
                 });
                 return;
             }
-
             try {
                 NativeByteBuffer buffer = new NativeByteBuffer(object.getObjectSize());
                 object.serializeToStream(buffer);
@@ -312,15 +311,13 @@ public class ConnectionsManager extends BaseController {
                             error = new TLRPC.TL_error();
                             error.code = errorCode;
                             error.text = errorText;
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.e(object + " got error " + error.code + " " + error.text);
-                            }
+                            Log.e(object + " got error " + error.code + " " + error.text);
                         }
                         if (resp != null) {
                             resp.networkType = networkType;
                         }
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.d("java received " + resp + " error = " + error);
+                            Log.d("java received " + resp + " error = " + error);
                         }
                         final TLObject finalResponse = resp;
                         final TLRPC.TL_error finalError = error;
@@ -335,11 +332,11 @@ public class ConnectionsManager extends BaseController {
                             }
                         });
                     } catch (Exception e) {
-                        FileLog.e(e);
+                        Log.e(e);
                     }
                 }, onQuickAck, onWriteToSocket, flags, datacenterId, connetionType, immediate, requestToken);
             } catch (Exception e) {
-                FileLog.e(e);
+                Log.e(e);
             }
         });
         return requestToken;
@@ -563,7 +560,7 @@ public class ConnectionsManager extends BaseController {
                 AccountInstance.getInstance(currentAccount).getNotificationCenter().postNotificationName(NotificationCenter.didUpdateConnectionState);
             });
         } catch (Exception e) {
-            LogUtils.e(e);
+            Log.e(e);
         }
     }
 

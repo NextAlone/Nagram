@@ -48,7 +48,7 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
 
-import top.qwq2333.nullgram.utils.LogUtils;
+import top.qwq2333.nullgram.utils.Log;
 
 public class MessagesStorage extends BaseController {
 
@@ -5584,17 +5584,17 @@ public class MessagesStorage extends BaseController {
                             data.reuse();
                         }
                     } catch (Exception e) {
-                        LogUtils.e(e);
+                        Log.e(e);
                     }
                 }
                 cursor.dispose();
             } catch (Exception e) {
-                LogUtils.e(e);
+                Log.e(e);
             } finally {
                 try {
                     requestDelegate.run(result, null);
                 } catch (Throwable thr) {
-                    LogUtils.e(thr);
+                    Log.e(thr);
                 }
             }
         });

@@ -21,7 +21,7 @@ package top.qwq2333.nullgram.utils
 
 import android.util.Log
 
-object LogUtils {
+object Log {
     const val TAG = "Nullgram"
 
     /**

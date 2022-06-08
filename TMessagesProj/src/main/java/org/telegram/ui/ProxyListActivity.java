@@ -56,7 +56,7 @@ import java.util.List;
 
 import top.qwq2333.nullgram.utils.APKUtils;
 import top.qwq2333.nullgram.utils.AlertUtil;
-import top.qwq2333.nullgram.utils.LogUtils;
+import top.qwq2333.nullgram.utils.Log;
 import top.qwq2333.nullgram.utils.UIUtil;
 
 public class ProxyListActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -511,7 +511,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 try {
                     ((SharedConfig.ExternalSocks5Proxy) proxyInfo).start();
                 } catch (Exception e) {
-                    LogUtils.e(e);
+                    Log.e(e);
                     AlertUtil.showToast(e);
                 }
                 APKUtils.sleep(233L);

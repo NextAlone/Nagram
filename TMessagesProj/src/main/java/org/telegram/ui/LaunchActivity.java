@@ -171,7 +171,7 @@ import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.helpers.SettingsHelper;
 import top.qwq2333.nullgram.helpers.UpdateHelper;
 import top.qwq2333.nullgram.utils.Defines;
-import top.qwq2333.nullgram.utils.LogUtils;
+import top.qwq2333.nullgram.utils.Log;
 
 public class LaunchActivity extends BasePermissionsActivity implements ActionBarLayout.ActionBarLayoutDelegate, NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate {
     public static boolean isResumed;
@@ -2109,7 +2109,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                                                 push_user_id = userId;
                                             }
                                         } catch (Exception e) {
-                                            LogUtils.e(e);
+                                            Log.e(e);
                                         }
                                     } else if ((url.startsWith("tg:call") || url.startsWith("tg://call"))) {
                                         if (UserConfig.getInstance(currentAccount).isClientActivated()) {
@@ -4043,11 +4043,11 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             return;
         }
         ConfigManager.putLong(Defines.lastCheckUpdateTime, System.currentTimeMillis());
-        LogUtils.d("checking update");
+        Log.d("checking update");
         final int accountNum = currentAccount;
         UpdateHelper.checkUpdate((res, error) -> AndroidUtilities.runOnUIThread(() -> {
             if (res != null) {
-                LogUtils.d("checkUpdate: res is not null");
+                Log.d("checkUpdate: res is not null");
                 SharedConfig.setNewAppVersionAvailable(res);
                 if (res.can_not_skip) {
                     showUpdateActivity(accountNum, res, false);
@@ -4056,11 +4056,11 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                     try {
                         (new UpdateAppAlertDialog(LaunchActivity.this, res, accountNum)).show();
                     } catch (Exception e) {
-                        LogUtils.e(e);
+                        Log.e(e);
                     }
                 }
             } else {
-                LogUtils.d("checkUpdate: res is null");
+                Log.d("checkUpdate: res is null");
                 if (force) {
                     if (error) {
                         Toast.makeText(LaunchActivity.this,

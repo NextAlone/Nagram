@@ -163,7 +163,7 @@ import top.qwq2333.nullgram.helpers.PasscodeHelper;
 import top.qwq2333.nullgram.ui.BottomBuilder;
 import top.qwq2333.nullgram.ui.EditTextAutoFill;
 import top.qwq2333.nullgram.utils.Defines;
-import top.qwq2333.nullgram.utils.LogUtils;
+import top.qwq2333.nullgram.utils.Log;
 import top.qwq2333.nullgram.utils.NumberUtils;
 import top.qwq2333.nullgram.utils.StringUtils;
 
@@ -2719,9 +2719,9 @@ public class LoginActivity extends BaseFragment {
                     break;
 
             }
-            LogUtils.i("customAPI:" + ConfigManager.getIntOrDefault(Defines.customAPI,Defines.disableCustomAPI));
-            LogUtils.i("appID:" + appId);
-            LogUtils.i("appHash:" + appHash);
+            Log.i("customAPI:" + ConfigManager.getIntOrDefault(Defines.customAPI, Defines.disableCustomAPI));
+            Log.i("appID:" + appId);
+            Log.i("appHash:" + appHash);
             req.api_hash = appHash;
             req.api_id = appId;
             req.phone_number = phone;

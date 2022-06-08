@@ -94,7 +94,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.StringTokenizer;
 
-import top.qwq2333.nullgram.utils.LogUtils;
+import top.qwq2333.nullgram.utils.Log;
 
 public class DocumentSelectActivity extends BaseFragment {
 
@@ -1470,7 +1470,7 @@ public class DocumentSelectActivity extends BaseFragment {
                 items.add(fs);
             }
         } catch (Exception e) {
-            LogUtils.e(e);
+            Log.e(e);
         }
 
         if (allowPhoto) {

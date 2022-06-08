@@ -41,7 +41,7 @@ import java.util.function.Function;
 
 import kotlin.text.StringsKt;
 import top.qwq2333.nullgram.utils.AppcenterUtils;
-import top.qwq2333.nullgram.utils.LogUtils;
+import top.qwq2333.nullgram.utils.Log;
 
 public class ConfigManager {
 
@@ -125,7 +125,7 @@ public class ConfigManager {
             try {
                 preferences.edit().putInt(key, value).apply();
             } catch (Throwable thr) {
-                LogUtils.e("putInt: ", thr);
+                Log.e("putInt: ", thr);
             }
         }
     }
@@ -141,7 +141,7 @@ public class ConfigManager {
             try {
                 preferences.edit().putLong(key, value).apply();
             } catch (Throwable thr) {
-                LogUtils.e("putLong: ", thr);
+                Log.e("putLong: ", thr);
             }
         }
     }
@@ -157,7 +157,7 @@ public class ConfigManager {
             try {
                 preferences.edit().putBoolean(key, value).apply();
             } catch (Throwable thr) {
-                LogUtils.e("putBoolean: ", thr);
+                Log.e("putBoolean: ", thr);
             }
         }
     }
@@ -176,7 +176,7 @@ public class ConfigManager {
                 }
                 preferences.edit().putString(key, value).apply();
             } catch (Throwable thr) {
-                LogUtils.e("putString: ", thr);
+                Log.e("putString: ", thr);
             }
         }
     }
@@ -192,7 +192,7 @@ public class ConfigManager {
             try {
                 preferences.edit().putFloat(key, value).apply();
             } catch (Throwable thr) {
-                LogUtils.e("putFloat: ", thr);
+                Log.e("putFloat: ", thr);
             }
         }
     }
@@ -213,7 +213,7 @@ public class ConfigManager {
                 map.put("status", Boolean.toString(!originValue));
                 AppcenterUtils.trackEvent("toogleBoolean", map);
             } catch (Throwable thr) {
-                LogUtils.e(thr);
+                Log.e(thr);
             }
         }
     }
@@ -228,7 +228,7 @@ public class ConfigManager {
             try {
                 preferences.edit().remove(key).apply();
             } catch (Throwable thr) {
-                LogUtils.e(thr);
+                Log.e(thr);
             }
         }
     }

@@ -13,10 +13,10 @@ import org.telegram.messenger.time.FastDateFormat;
 import java.io.File;
 import java.io.OutputStreamWriter;
 
-import top.qwq2333.nullgram.utils.LogUtils;
+import top.qwq2333.nullgram.utils.Log;
 
 /**
- * @deprecated use {@link LogUtils} instead
+ * @deprecated use {@link Log} instead
  */
 @Deprecated
 public class FileLog {
@@ -103,23 +103,23 @@ public class FileLog {
     }
 
     /**
-     * @deprecated use {@link LogUtils#e(String, Throwable)} instead
+     * @deprecated use {@link Log#e(String, Throwable)} instead
      */
     @Deprecated
     public static void e(final String message, final Throwable exception) {
-        LogUtils.e(message, exception);
+        Log.e(message, exception);
     }
 
     /**
-     * @deprecated use {@link LogUtils#e(String msg)} instead
+     * @deprecated use {@link Log#e(String msg)} instead
      */
     @Deprecated
     public static void e(final String message) {
-        LogUtils.e(message);
+        Log.e(message);
     }
 
     /**
-     * @deprecated use {@link LogUtils#e(String, Throwable)} instead
+     * @deprecated use {@link Log#e(String, Throwable)} instead
      */
     @Deprecated
     public static void e(final Throwable e) {
@@ -127,11 +127,11 @@ public class FileLog {
     }
 
     /**
-     * @deprecated use {@link LogUtils#e(String, Throwable)} instead
+     * @deprecated use {@link Log#e(String, Throwable)} instead
      */
     @Deprecated
     public static void e(final Throwable e, boolean logToAppCenter) {
-        LogUtils.e(e);
+        Log.e(e);
     }
 
     /**
@@ -140,15 +140,15 @@ public class FileLog {
      */
     @Deprecated
     public static void d(final String message) {
-        LogUtils.d(message);
+        Log.d(message);
     }
 
     /**
-     * @deprecated use {@link LogUtils#w(String msg)} )} instead
+     * @deprecated use {@link Log#w(String msg)} )} instead
      */
     @Deprecated
     public static void w(final String message) {
-        LogUtils.w(message);
+        Log.w(message);
     }
 
     /**

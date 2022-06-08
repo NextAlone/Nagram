@@ -61,7 +61,7 @@ import org.telegram.ui.ThemeActivity;
 
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.utils.Defines;
-import top.qwq2333.nullgram.utils.LogUtils;
+import top.qwq2333.nullgram.utils.Log;
 
 public class DrawerProfileCell extends FrameLayout {
 
@@ -291,7 +291,7 @@ public class DrawerProfileCell extends FrameLayout {
                 super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(heightBase, MeasureSpec.EXACTLY));
             } catch (Exception e) {
                 setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), heightBase);
-                LogUtils.e(e);
+                Log.e(e);
             }
         }
     }

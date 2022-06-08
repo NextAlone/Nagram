@@ -12,7 +12,7 @@ import java.util.List;
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.utils.APKUtils;
 import top.qwq2333.nullgram.utils.Defines;
-import top.qwq2333.nullgram.utils.LogUtils;
+import top.qwq2333.nullgram.utils.Log;
 
 public class UpdateHelper {
 
@@ -59,7 +59,7 @@ public class UpdateHelper {
         Runnable sendReq = () -> accountInstance.getConnectionsManager()
             .sendRequest(req, (response, error) -> {
                 if (error != null) {
-                    LogUtils.e("Error when retrieving update metadata from channel " + error);
+                    Log.e("Error when retrieving update metadata from channel " + error);
                     callback.apply(null, true);
                     return;
                 }
@@ -67,16 +67,16 @@ public class UpdateHelper {
                 List<UpdateMetadata> metas = new ArrayList<>();
                 for (TLRPC.Message message : res.messages) {
                     if (!(message instanceof TLRPC.TL_message)) {
-                        LogUtils.i("CheckUpdate: Not TL_message");
+                        Log.i("CheckUpdate: Not TL_message");
                         continue;
                     }
                     if (!message.message.startsWith("v")) {
-                        LogUtils.i("CheckUpdate: Not startsWith v");
+                        Log.i("CheckUpdate: Not startsWith v");
                         continue;
                     }
                     String[] split = message.message.split(",");
                     if (split.length < 4) {
-                        LogUtils.i("CheckUpdate: split < 4");
+                        Log.i("CheckUpdate: split < 4");
                         continue;
                     }
                     UpdateMetadata metaData = new UpdateMetadata(message.id, split);
@@ -89,13 +89,13 @@ public class UpdateHelper {
                     Defines.stableChannel);
                 for (UpdateMetadata metaData : metas) {
                     if (metaData.versionCode <= localVersionCode) {
-                        LogUtils.i("versionCode <= localVersionCode , ignore.");
+                        Log.i("versionCode <= localVersionCode , ignore.");
                         break;
                     }
                     if (releaseChannel < Defines.ciChannel && metaData.versionName.contains(
                         "preview")) {
-                        LogUtils.i("Current Release Channel: " + ConfigManager.getIntOrDefault(Defines.updateChannel, -1));
-                        LogUtils.i("Found preview metaData, but ignore.");
+                        Log.i("Current Release Channel: " + ConfigManager.getIntOrDefault(Defines.updateChannel, -1));
+                        Log.i("Found preview metaData, but ignore.");
                         continue;
                     }
                     found = metaData;
@@ -114,11 +114,11 @@ public class UpdateHelper {
                     }
                 }
                 if (found == null) {
-                    LogUtils.d("Cannot find Update Metadata");
+                    Log.d("Cannot find Update Metadata");
                     callback.apply(null, false);
                     return;
                 }
-                LogUtils.i(
+                Log.i(
                     "Found Update Metadata " + found.versionName + " " + found.versionCode);
                 callback.apply(found, false);
             });
@@ -129,13 +129,13 @@ public class UpdateHelper {
             resolve.username = CHANNEL_METADATA_NAME;
             accountInstance.getConnectionsManager().sendRequest(resolve, (response1, error1) -> {
                 if (error1 != null) {
-                    LogUtils.e("Error when checking update, unable to resolve metadata channel "
+                    Log.e("Error when checking update, unable to resolve metadata channel "
                         + error1.text);
                     callback.apply(null, true);
                     return;
                 }
                 if (!(response1 instanceof TLRPC.TL_contacts_resolvedPeer)) {
-                    LogUtils.e(
+                    Log.e(
                         "Error when checking update, unable to resolve metadata channel, unexpected responseType "
                             + response1.getClass().getName());
                     callback.apply(null, true);
@@ -147,7 +147,7 @@ public class UpdateHelper {
                 accountInstance.getMessagesStorage()
                     .putUsersAndChats(resolvedPeer.users, resolvedPeer.chats, false, true);
                 if ((resolvedPeer.chats == null || resolvedPeer.chats.size() == 0)) {
-                    LogUtils.e(
+                    Log.e(
                         "Error when checking update, unable to resolve metadata channel, unexpected resolvedChat ");
                     callback.apply(null, true);
                     return;
@@ -187,7 +187,7 @@ public class UpdateHelper {
             UserConfig.selectedAccount);
         retrieveUpdateMetadata((metadata, err) -> {
             if (metadata == null) {
-                LogUtils.d("checkUpdate: metadata is null");
+                Log.d("checkUpdate: metadata is null");
                 callback.apply(null, err);
                 return;
             }
@@ -200,24 +200,24 @@ public class UpdateHelper {
                 .sendRequest(req, (response, error) -> {
                     try {
                         if (error != null) {
-                            LogUtils.e("Error when getting update document " + error.text);
+                            Log.e("Error when getting update document " + error.text);
                             callback.apply(null, true);
                             return;
                         }
                         TLRPC.messages_Messages res = (TLRPC.messages_Messages) response;
-                        LogUtils.d("Retrieve update messages, size:" + res.messages.size());
+                        Log.d("Retrieve update messages, size:" + res.messages.size());
                         final String target = APKUtils.getAbi() + ".apk";
-                        LogUtils.d("target:" + target);
+                        Log.d("target:" + target);
                         for (int i = 0; i < res.messages.size(); i++) {
                             if (res.messages.get(i).media == null) {
-                                LogUtils.i("CheckUpdate: res.messages.get(i).media == null");
+                                Log.i("CheckUpdate: res.messages.get(i).media == null");
                                 continue;
                             }
 
                             TLRPC.Document apkDocument = res.messages.get(i).media.document;
                             String fileName = apkDocument.attributes.size() == 0 ? ""
                                 : apkDocument.attributes.get(0).file_name;
-                            LogUtils.d("file_name： " + apkDocument.attributes.get(0).file_name);
+                            Log.d("file_name： " + apkDocument.attributes.get(0).file_name);
                             if (!(fileName.contains(APKUtils.getAbi()) && fileName.contains(
                                 metadata.versionName))) {
                                 continue;
@@ -236,7 +236,7 @@ public class UpdateHelper {
                         }
                         callback.apply(null, false);
                     } catch (Exception e) {
-                        LogUtils.e(e);
+                        Log.e(e);
                     }
                 });
             if (req.peer.access_hash != 0) {
@@ -247,14 +247,14 @@ public class UpdateHelper {
                 accountInstance.getConnectionsManager()
                     .sendRequest(resolve, (response1, error1) -> {
                         if (error1 != null) {
-                            LogUtils.e(
+                            Log.e(
                                 "Error when checking update, unable to resolve metadata channel "
                                     + error1);
                             callback.apply(null, true);
                             return;
                         }
                         if (!(response1 instanceof TLRPC.TL_contacts_resolvedPeer)) {
-                            LogUtils.e(
+                            Log.e(
                                 "Error when checking update, unable to resolve metadata channel, unexpected responseType "
                                     + response1.getClass().getName());
                             callback.apply(null, true);
@@ -269,7 +269,7 @@ public class UpdateHelper {
                             .putUsersAndChats(resolvedPeer.users, resolvedPeer.chats, false,
                                 true);
                         if ((resolvedPeer.chats == null || resolvedPeer.chats.size() == 0)) {
-                            LogUtils.e(
+                            Log.e(
                                 "Error when checking update, unable to resolve metadata channel, unexpected resolvedChat ");
                             callback.apply(null, true);
                             return;

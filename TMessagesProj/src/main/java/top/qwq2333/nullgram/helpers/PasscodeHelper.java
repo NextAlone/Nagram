@@ -12,7 +12,7 @@ import org.telegram.ui.LaunchActivity;
 
 import java.util.Objects;
 
-import top.qwq2333.nullgram.utils.LogUtils;
+import top.qwq2333.nullgram.utils.Log;
 import top.qwq2333.nullgram.utils.Utils;
 
 public class PasscodeHelper {
@@ -53,7 +53,7 @@ public class PasscodeHelper {
         try {
             return Objects.equals(passcodeHash, Utils.getSecurePassword(inputPasscode, passcodeSaltString));
         } catch (Exception e) {
-            LogUtils.e(e);
+            Log.e(e);
         }
         return false;
     }
@@ -94,7 +94,7 @@ public class PasscodeHelper {
                 .putString("passcodeSalt" + account, Base64.encodeToString(passcodeSalt, Base64.DEFAULT))
                 .apply();
         } catch (Exception e) {
-            LogUtils.e(e);
+            Log.e(e);
         }
     }
 

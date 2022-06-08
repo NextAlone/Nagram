@@ -201,7 +201,7 @@ import top.qwq2333.nullgram.ui.BottomBuilder;
 import top.qwq2333.nullgram.utils.APKUtils;
 import top.qwq2333.nullgram.utils.AlertUtil;
 import top.qwq2333.nullgram.utils.Defines;
-import top.qwq2333.nullgram.utils.LogUtils;
+import top.qwq2333.nullgram.utils.Log;
 import top.qwq2333.nullgram.utils.NumberUtils;
 import top.qwq2333.nullgram.utils.StringUtils;
 import top.qwq2333.nullgram.utils.Utils;
@@ -4168,7 +4168,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         clipboard.setPrimaryClip(clip);
 
                     } catch (Exception e) {
-                        LogUtils.e(e);
+                        Log.e(e);
                     }
                 }
             });

@@ -87,7 +87,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import top.qwq2333.nullgram.utils.LogUtils;
+import top.qwq2333.nullgram.utils.Log;
 
 public class ChatUsersActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -2226,7 +2226,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     }
 
     private void loadChatParticipants(int offset, int count, boolean reset) {
-        LogUtils.i("chat users: loadChatParticipants(" + offset + ", " + count + ", " + reset + ")");
+        Log.i("chat users: loadChatParticipants(" + offset + ", " + count + ", " + reset + ")");
         if (!ChatObject.isChannel(currentChat)) {
             loadingUsers = false;
             participants.clear();
