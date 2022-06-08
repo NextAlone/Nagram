@@ -55,6 +55,8 @@ import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.folder.FolderIconHelper;
 
+import tw.nekomimi.nekogram.folder.FolderIconHelper;
+
 public class FiltersSetupActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private RecyclerListView listView;
