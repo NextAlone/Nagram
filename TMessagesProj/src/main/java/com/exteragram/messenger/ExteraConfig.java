@@ -16,8 +16,6 @@ public class ExteraConfig {
     private static final int[] OFFICIAL_CHANNELS = {1233768168, 1524581881, 1571726392, 1632728092, 1638754701, 1779596027, 1172503281};
     private static final int[] DEVS = {963080346, 1282540315, 1374434073, 388099852, 1999113390, 1566664501};
 
-    public static boolean scrollablePreview;
-
     public static boolean useSystemFonts;
     public static boolean disableVibration;
     public static boolean blurForAllThemes;
@@ -80,8 +78,6 @@ public class ExteraConfig {
             }
 
             SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE);
-
-            scrollablePreview = preferences.getBoolean("scrollablePreview", true);
 
             useSystemFonts = preferences.getBoolean("useSystemFonts", true);
             disableVibration = preferences.getBoolean("disableVibration", false);
