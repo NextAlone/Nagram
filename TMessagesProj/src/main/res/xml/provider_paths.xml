@@ -2,5 +2,4 @@
 <paths>
     <external-path name="media" path="."/>
     <root-path name="external_files" path="/storage/" />
-    <cache-path name="cache" path="/" />
 </paths>
