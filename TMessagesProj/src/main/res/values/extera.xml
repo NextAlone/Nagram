@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- exteraGram's Main Strings -->
-    <string name="exteraAppName">exteraGram</string>
-    <string name="exteraAppNameBeta">exteraGram β</string>
-    <string name="exteraDebugMenu">¯\\_(ツ)_/¯</string>
+    <string name="exteraAppName" translatable="false">exteraGram</string>
+    <string name="exteraAppNameBeta" translatable="false">exteraGram β</string>
+    <string name="exteraDebugMenu" translatable="false">¯\_(ツ)_/¯</string>
     <string name="MutualContact">mutual contact</string>
     <string name="ToBeginning">To beginning</string>
     <string name="SaveMessage">Save message</string>
 
     <!-- Main Menu (about) -->
-    <string name="Folders">Folders</string>
+    <string name="Folders" translatable="false">Folders</string>
     <string name="exteraPrivacy">exteraGram Privacy Policy and FAQ</string>
-    <string name="exteraPrivacyPolicyUrl">https://extera.codes/privacy</string>
+    <string name="exteraPrivacyPolicyUrl" translatable="false">https://extera.codes/faq</string>
     <string name="Links">Links</string>
     <string name="AboutExteraDescription">Experimental Telegram client based on official Telegram sources!</string>
-    <string name="SourceCode">Source code</string>
     <string name="Channel">Channel</string>
     <string name="Chats">Chats</string>
     <string name="Crowdin">Translate</string>
+    <string name="SourceCode">Source code</string>
 
     <string name="Preferences">exteraGram Preferences</string>
     <string name="RestartRequired">Restart the app to take effect.</string>
@@ -40,7 +40,6 @@
     <string name="DisableNumberRounding">Disable number rounding</string>
     <string name="FormatTimeWithSeconds">Format time with seconds</string>
     <string name="HideAllChats">Hide \"All Chats\" tab</string>
-    <string name="HideProxySponsor">Hide proxy sponsor</string>
     <string name="ChatsOnTitle">\"Chats\" instead of \"exteraGram\"</string>
     <string name="DisableVibration">Disable vibration</string>
     <string name="ForceTabletMode">Force tablet mode</string>
@@ -75,12 +74,11 @@
     <string name="DisableCamera">Disable instant camera</string>
     <string name="DisableProximityEvents">Disable proximity events</string>
     <string name="PauseOnMinimize">Autopause</string>
-    <string name="POMDescription">Pauses a video playback when device is locked or exteraGram is minimized</string>
+    <string name="POMDescription">Pauses a video playback when device is locked or exteraGram is minimized.</string>
     <string name="DisablePlayback">Disable playback</string>
-    <string name="DPDescription">Disables playback when volume button is pressed</string>
+    <string name="DPDescription">Disables playback when volume button is pressed.</string>
 
     <!-- Drawer -->
-    <string name="Drawer">Drawer</string>
     <string name="DrawerElements">Drawer elements</string>
     <string name="DrawerOptions">Drawer options</string>
     <string name="DrawerIconPack">Icon pack</string>
@@ -89,11 +87,6 @@
     <string name="Halloween">Halloween</string>
 
     <!-- Other -->
-    <string name="GenerateMonetTheme">Generate Monet Theme</string>
-    <string name="DarkMonetTheme">Dark</string>
-    <string name="LightMonetTheme">Light</string>
-    <string name="GMTDescription">This option will generate a theme based on system colors\n\nAfter clicking on the button, select the chat where to save the theme</string>
-
     <string name="EnterID">Enter the ID</string>
     <string name="TrackSaved">Track Saved</string>
     <string name="ChannelToSaveDescription">Enter the ID of the channel/chat/user where the tracks will be saved</string>
@@ -101,7 +94,6 @@
     <string name="ConfirmCall">Confirm call</string>
     <string name="CallTo">Call to **%1$s**?</string>
 
-    <string name="formatterDay24HSec">HH:mm:ss</string>
-    <string name="formatterDay12HSec">h:mm:ss a</string>
-
+    <string name="formatterDay24HSec" translatable="false">HH:mm:ss</string>
+    <string name="formatterDay12HSec" translatable="false">h:mm:ss a</string>
 </resources>

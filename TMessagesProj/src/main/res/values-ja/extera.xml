@@ -2,55 +2,80 @@
 <resources>
     <!-- exteraGram's Main Strings -->
     <string name="MutualContact">相互の連絡先</string>
-    <string name="ToBeginning">To beginning</string>
-
+    <string name="ToBeginning">始めるまで</string>
+    <string name="SaveMessage">保存用メッセージに追加</string>
     <!-- Main Menu (about) -->
+    <string name="exteraPrivacy">exteraGramプライバシーポリシーとFAQ</string>
     <string name="Links">リンク</string>
     <string name="AboutExteraDescription">公式のTelegramのソースに基づいて実験的なTelegramクライアント！</string>
-    <string name="Website">外部分隊メンバー</string>
-    <string name="Github">exteraGramのソース コード</string>
-    <string name="Channel">Telegram チャンネル</string>
-    <string name="Chat">\? Telegramチャット</string>
-    <string name="languageEnglish">日本語</string>
-    <string name="languageRussian">ロシア語</string>
-    <string name="Preferences">exteraGram の設定</string>
-    <string name="RestartRequired">有効にするには、AirDroidを再起動してください。</string>
-    <string name="Categories">カテゴリー</string>
+    <string name="Channel">チャンネル</string>
     <string name="Chats">チャット</string>
-    <string name="Experimental">実験</string>
+    <string name="Crowdin">翻訳</string>
+    <string name="SourceCode">ソースコード</string>
+    <string name="Preferences">exteraGram設定</string>
+    <string name="RestartRequired">アプリを再起動して有効化します</string>
+    <string name="Categories">カテゴリー</string>
     <!-- Appearance -->
-    <string name="SystemFonts">Use System Font Size</string>
-    <string name="SystemEmoji">システムの絵文字を使う</string>
-    <string name="HideAllChats">「すべてのチャット」タブを隠す</string>
+    <string name="UseSystemFonts">システムフォント変更</string>
+    <string name="UseSystemEmoji">システムの絵文字を使う</string>
+    <string name="TransparentStatusBar">完全に透明なステータスバーを使う</string>
+    <string name="BlurForAllThemes">すべてのテーマをぼかす</string>
+    <string name="CenterTitle">アクションバーのタイトルを中心にする</string>
+    <string name="NewSwitchStyle">代替スイッチのスタイルを有効にする</string>
+    <string name="TransparentNavBar">透過ナビゲーションバー</string>
+    <string name="TransparentNavBarValue">ナビゲーションバーは完全に透明にはなりません。メッセージパネルの色だけを取得します。</string>
+    <string name="SquareFab">正方形のFAB</string>
+    <string name="SquareFabInfo">フローティングアクションボタン (FAB) は、アプリの UI で主要なアクションをトリガーする円形のボタンです。 画面の右下隅にあります。</string>
+    <!-- General -->
+    <string name="DisableNumberRounding">番号の丸めを無効にする</string>
+    <string name="FormatTimeWithSeconds">時間を秒で書式設定</string>
+    <string name="HideAllChats">「すべてのチャット」タブを非表示にする</string>
+    <string name="HideProxySponsor">プロキシスポンサーを隠す</string>
+    <string name="ChatsOnTitle">\"exteraGram\" の代わりに \"Chats\"</string>
+    <string name="DisableVibration">バイブレーションを無効</string>
+    <string name="ForceTabletMode">タブレットモードを強制する</string>
+    <string name="ArchiveOnPull">保管したチャットをプルダウンで開く</string>
+    <string name="DisableUnarchiveSwipe">\"アンアーカイブ\" スワイプを無効にする</string>
+    <string name="ForcePacmanAnimation">パックマンアニメーションを強制する</string>
+    <string name="ForcePacmanAnimationInfo">チャットリストで選択した「アーカイブ」スワイプジェスチャーが必要です。</string>
+    <string name="Profile">プロフィール</string>
     <string name="HidePhoneNumber">電話番号</string>
-    <string name="ChatsOnTitle">\"exteraGram\" の代わりに \"チャット\"</string>
     <string name="ShowID">一般プロファイルを表示</string>
-    <string name="SB">透明なステータス バー</string>
-    <string name="SBDescription">Android 6以降のみ</string>
-    <string name="ForceTabletMode">タブレットUIの強制</string>
-    <string name="Drawer">ドロワー</string>
-    <string name="Attention">注意！</string>
-    <string name="DrawerRR">このアイテムは変更または削除された可能性があります！\n有効にするにはアプリを再起動してください。</string>
-    <string name="PeopleNearbyDescription">GPSが無効になっている場合、表示されないことがあります。</string>
+    <string name="ShowDC">プロフィールにDCを表示</string>
     <!-- Chats -->
     <string name="StickerSize">ステッカーのサイズ</string>
     <string name="StickerTime">ステッカーの下に時間を隠す</string>
+    <string name="UnlimitedRecentStickers">最近のステッカーを無制限に追加する</string>
+    <string name="SendMessageBeforeSendSticker">ステッカーを送信する前にメッセージを送信</string>
+    <string name="StickerSizeDialogMessageReplyTo">わぁ~!</string>
+    <string name="StickerSizeDialogMessage">うわ~かわいい!</string>
     <string name="HideSendAsChannel">「チャンネルとして送信」を非表示</string>
     <string name="HideKeyboardOnScroll">スクロール時にキーボードを隠す</string>
-    <string name="DateOfForwardedMsg">Show date of forwarded message</string>
-    <string name="ShowSeconds">Show seconds in timestamps</string>
-    <string name="ArchiveOnPull">プルダウンでアーカイブを開く</string>
-    <string name="IncludeArchivedChatsInForwards">アーカイブされたチャットを転送対象に含める</string>
-    <string name="UnlimitedPinnedChats">無制限のピン留めチャット</string>
-    <string name="UnlimitedPinnedChatsDescription">同期をオフにしてチャットを無制限にピン留めする</string>
-    <string name="UnlimitedRecentStickers">最近のステッカーを無制限に追加する</string>
+    <string name="DisableReactions">リアクションを無効にする</string>
+    <string name="DisableGreetingSticker">グリーティングステッカーを無効にする</string>
+    <string name="DisableJumpToNextChannel">「次のチャンネルへジャンプ」を無効にする</string>
+    <string name="DateOfForwardedMsg">転送メッセージの日付を表示</string>
+    <string name="ShowMessageID">メッセージIDを表示</string>
     <string name="Media">メディア</string>
-    <string name="HQVoiceMessage">HQボイスメッセージ</string>
-    <string name="RearVideoMessages">ビデオメッセージの背面カメラ</string>
-    <string name="Autopause">Autopause</string>
-    <string name="AutopauseDescription">端末がロックされているときや外側のグラムが最小化されているときにビデオ再生を一時停止します</string>
+    <string name="RearVideoMessages">ビデオメッセージでリアカメラを使用する</string>
+    <string name="DisableCamera">インスタントカメラを無効にする</string>
+    <string name="DisableProximityEvents">近接イベントを無効にする</string>
+    <string name="PauseOnMinimize">Autopause</string>
+    <string name="POMDescription">端末がロックされているときや外側のグラムが最小化されているときにビデオ再生を一時停止します</string>
     <string name="DisablePlayback">プレイヤーを開く</string>
-    <string name="DisablePlaybackDescription">音量ボタンを押した時の再生を無効にする</string>
+    <string name="DPDescription">音量ボタンを押した時の再生を無効にする</string>
+    <!-- Drawer -->
+    <string name="Drawer">ドロワー</string>
+    <string name="DrawerElements">ドロワーの要素</string>
+    <string name="DrawerOptions">ドロワーのオプション</string>
+    <string name="DrawerIconPack">アイコンパック</string>
+    <string name="NewYear">元日</string>
+    <string name="ValentinesDay">バレンタインデー</string>
+    <string name="Halloween">ハロウィン</string>
+    <!-- Other -->
+    <string name="EnterID">ユーザ ID を入力してください</string>
+    <string name="TrackSaved">トラックが保存されました</string>
+    <string name="ChannelToSaveDescription">トラックを保存するチャンネル/チャット/ユーザーのIDを入力してください</string>
     <string name="ConfirmCall">通話の確認</string>
     <string name="CallTo">**%1$s**に電話しますか？</string>
 </resources>

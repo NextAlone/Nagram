@@ -3,61 +3,79 @@
     <!-- exteraGram's Main Strings -->
     <string name="MutualContact">взаємний контакт</string>
     <string name="ToBeginning">На початок</string>
-    
+    <string name="SaveMessage">Зберегти повідомлення</string>
     <!-- Main Menu (about) -->
+    <string name="exteraPrivacy">політика конфіденційності та питання безпеки exteraGram</string>
     <string name="Links">Посилання</string>
-    <string name="AboutExteraDescription">Експерементальний клієнт Telegram, що працює на офіційному вихідному коді Telegram!</string>
-    <string name="Website">Команда exteraSquad</string>
-    <string name="Github">Вихідний код exteraGram</string>
-    <string name="Channel">Канал у Telegram</string>
-    <string name="Chat">Чат у Telegram</string>
-    <string name="languageEnglish">Англійська</string>
-    <string name="languageRussian">Російська</string>
-
-    <string name="Preferences">Налаштування exteraGram</string>
-    <string name="RestartRequired">Перезапустіть застосунок, щоб зміни вступили в силу.</string>
-
+    <string name="AboutExteraDescription">Експериментальний клієнт Telegram заснований на офіційних джерелах Telegram!</string>
+    <string name="Channel">Канал</string>
+    <string name="Chats">Бесіди</string>
+    <string name="Crowdin">Перекладати</string>
+    <string name="SourceCode">Вихідний код</string>
+    <string name="Preferences">параметри exteraGram</string>
+    <string name="RestartRequired">Перезапустіть програму, щоб зміни вступили в силу.</string>
     <string name="Categories">Категорії</string>
-    <string name="Chats">Чати</string>
-    <string name="Experimental">Експериментально</string>
-
     <!-- Appearance -->
-    <string name="SystemFonts">Системний шрифт</string>
-    <string name="SystemEmoji">Системні емодзі</string>
-
-    <string name="HideAllChats">Сховати \"Усі чати\"</string>
-    <string name="HidePhoneNumber">Сховати номер телефону</string>
-    <string name="ChatsOnTitle">"Чати" замість "exteraGram"</string>
-    <string name="ShowID">Показувати ID в профілі</string>
-    <string name="SB">Прозорий статусбар</string>
-    <string name="SBDescription">тільки для Android 6 та вище</string>
-    <string name="ForceTabletMode">Примусово увімкнути режим планшету</string>
-
-    <string name="Drawer">Бокове меню</string>
-    <string name="Attention">УВАГА!</string>
-    <string name="DrawerRR">ЦЕЙ РОЗДІЛ МОЖЕ БУТИ ЗМІНЕНИЙ АБО ВИДАЛЕНИЙ У МАЙБУТНЬОМУ!\nПерезапустіть застосунок, щоб зміни вступили в силу.</string>
-    <string name="PeopleNearbyDescription">Може не відображатися, якщо GPS вимкнено.</string>
-
+    <string name="UseSystemFonts">Використовувати системні шрифти</string>
+    <string name="UseSystemEmoji">Використовувати системні емодзі</string>
+    <string name="TransparentStatusBar">Прозорий рядок стану</string>
+    <string name="BlurForAllThemes">Розмиття для всіх тем</string>
+    <string name="CenterTitle">Центрувати заголовок в панелі дій</string>
+    <string name="NewSwitchStyle">Увімкнути альтернативний стиль перемикання</string>
+    <string name="TransparentNavBar">Прозора панель навігації</string>
+    <string name="TransparentNavBarValue">Панель навігації не стане повністю прозорою, вона отримає тільки колір панелі Повідомлення.</string>
+    <string name="SquareFab">Двовимірна кнопка</string>
+    <string name="SquareFabInfo">Кнопка з плаваючою дією (ЗВ) - кругла кнопка, що викликає первинну дію в інтерфейсі додатка. Він розташований в правому нижньому куті екрану.</string>
+    <!-- General -->
+    <string name="DisableNumberRounding">Вимкнути округлення чисел</string>
+    <string name="FormatTimeWithSeconds">Форматувати час з секундами</string>
+    <string name="HideAllChats">Сховати вкладку \"Усі чати\"</string>
+    <string name="HideProxySponsor">Приховати спонсора проксі</string>
+    <string name="ChatsOnTitle">\"Чати\" замість \"exteraGram\"</string>
+    <string name="DisableVibration">Вимкнути вібрацію</string>
+    <string name="ForceTabletMode">Примусовий режим планшета</string>
+    <string name="ArchiveOnPull">Відкрити архів при витягуванні</string>
+    <string name="DisableUnarchiveSwipe">Вимкнути свайп «Розархівувати»</string>
+    <string name="ForcePacmanAnimation">Примусова анімація Pac-Man</string>
+    <string name="ForcePacmanAnimationInfo">Для цього потрібно вибрати \"Архівувати\" свайп з жестом у списку чатів.</string>
+    <string name="Profile">Профіль</string>
+    <string name="HidePhoneNumber">Приховати номер телефону</string>
+    <string name="ShowID">ID чату в профілі</string>
+    <string name="ShowDC">Показати DC в профілі</string>
     <!-- Chats -->
-    <string name="StickerSize">Розмір стікеру</string>
-    <string name="StickerTime">Сховати час під стікером</string>
-
-    <string name="HideSendAsChannel">Сховати "Надсилати від імені"</string>
-    <string name="HideKeyboardOnScroll">Ховати клавіатуру при скролінгу</string>
-    <string name="ArchiveOnPull">Відкривати архів потягуванням вниз</string>
-    <string name="IncludeArchivedChatsInForwards">Показувати чати з архіву при пересиланні</string>
-    <string name="UnlimitedPinnedChats">Вимкнути ліміт закріплених чатів</string>
-    <string name="UnlimitedPinnedChatsDescription">Закріплювати чати без обмежень шляхом вимкнення синхронізації</string>
-    <string name="UnlimitedRecentStickers">Вимкнути ліміт нещодавних стікерів</string>
-
+    <string name="StickerSize">Розмір наліпок</string>
+    <string name="StickerTime">Ховати час наліпок</string>
+    <string name="UnlimitedRecentStickers">Необмежені улюблені Наклейки</string>
+    <string name="SendMessageBeforeSendSticker">Надіслати повідомлення перед відправкою наклейки</string>
+    <string name="StickerSizeDialogMessageReplyTo">овва</string>
+    <string name="StickerSizeDialogMessage">Дивно, він такий милий!</string>
+    <string name="HideSendAsChannel">Сховати надсилання як канал</string>
+    <string name="HideKeyboardOnScroll">Приховати клавіатуру на прокрутці чату</string>
+    <string name="DisableReactions">Вимкнути реакції</string>
+    <string name="DisableGreetingSticker">Не слати вітальної наліпки</string>
+    <string name="DisableJumpToNextChannel">Вимкнути гортання до наступного каналу</string>
+    <string name="DateOfForwardedMsg">Показувати дату пересланого повідомлення</string>
+    <string name="ShowMessageID">Показати ідентифікатор повідомлення</string>
     <string name="Media">Медіа</string>
-    <string name="HQVoiceMessage">Покращення якості голосових повідомлень</string>
-    <string name="RearVideoMessages">Записувати відео-повідомлення з передньої камери</string>
-    <string name="Autopause">Автопауза</string>
-    <string name="AutopauseDescription">Ставити відео на паузу, коли девайс заблоковано або exteraGram згорнуто</string>
-    <string name="DisablePlayback">Вимнкути програвання</string>
-    <string name="DisablePlaybackDescription">Вимикає програвання при натисканні кнопки гучності</string>
-
-    <string name="ConfirmCall">Підтвердження виклику</string>
-    <string name="CallTo">Подзвонити **%1$s**?</string>
+    <string name="RearVideoMessages">Задня камера у відеоповідомленнях</string>
+    <string name="DisableCamera">Вимкнути миттєву камеру</string>
+    <string name="DisableProximityEvents">Вимкнути події наближення</string>
+    <string name="PauseOnMinimize">Автопауза</string>
+    <string name="POMDescription">Призупиняє відтворення відео, коли пристрій заблоковано або згорнуто exteraGram</string>
+    <string name="DisablePlayback">Вимкнути відтворення</string>
+    <string name="DPDescription">Вимикає відтворення при натисканні кнопки гучності</string>
+    <!-- Drawer -->
+    <string name="Drawer">Меню</string>
+    <string name="DrawerElements">Елементи меню</string>
+    <string name="DrawerOptions">Параметри меню</string>
+    <string name="DrawerIconPack">Набір значків</string>
+    <string name="NewYear">Новий рік</string>
+    <string name="ValentinesDay">День Святого Валентина</string>
+    <string name="Halloween">Хеллоуїн</string>
+    <!-- Other -->
+    <string name="EnterID">Введіть ID</string>
+    <string name="TrackSaved">Пісню збережено</string>
+    <string name="ChannelToSaveDescription">Введіть ID каналу/чату/користувача, де будуть збережені треки</string>
+    <string name="ConfirmCall">Підтвердити дзвінок</string>
+    <string name="CallTo">Зателефонувати до **%1$s**?</string>
 </resources>

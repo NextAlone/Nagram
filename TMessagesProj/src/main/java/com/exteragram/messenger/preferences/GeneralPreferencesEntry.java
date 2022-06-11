@@ -241,7 +241,7 @@ public class GeneralPreferencesEntry extends BaseFragment {
                     if (position == generalHeaderRow) {
                         headerCell.setText(LocaleController.getString("General", R.string.General));
                     } else if (position == archiveHeaderRow) {
-                        headerCell.setText(LocaleController.getString("Archive", R.string.Archive));
+                        headerCell.setText(LocaleController.getString("ArchivedChats", R.string.ArchivedChats));
                     } else if (position == profileHeaderRow) {
                         headerCell.setText(LocaleController.getString("Profile", R.string.Profile));
                     }

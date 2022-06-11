@@ -2,55 +2,80 @@
 <resources>
     <!-- exteraGram's Main Strings -->
     <string name="MutualContact">contact mutuel</string>
-    <string name="ToBeginning">To beginning</string>
-
+    <string name="ToBeginning">Au début</string>
+    <string name="SaveMessage">Enregistrer le message</string>
     <!-- Main Menu (about) -->
+    <string name="exteraPrivacy">Politique de confidentialité et FAQ de exteraGram</string>
     <string name="Links">Liens</string>
     <string name="AboutExteraDescription">Client Telegram expérimental basé sur les sources officielles de Telegram!</string>
-    <string name="Website">membres de l\'exteraSquad</string>
-    <string name="Github">code source de l\'exteraGram</string>
     <string name="Channel">Chaîne Telegram</string>
-    <string name="Chat">Bot Telgram</string>
-    <string name="languageEnglish">Anglais</string>
-    <string name="languageRussian">Russe</string>
+    <string name="Chats">Échanges</string>
+    <string name="Crowdin">Traduire</string>
+    <string name="SourceCode">Code source</string>
     <string name="Preferences">préférences exteraGram</string>
     <string name="RestartRequired">Redémarrer AirDroid pour prendre en compte les changements.</string>
     <string name="Categories">Catégories</string>
-    <string name="Chats">Échanges</string>
-    <string name="Experimental">Expérimental</string>
     <!-- Appearance -->
-    <string name="SystemFonts">Utiliser la police du système</string>
-    <string name="SystemEmoji">Utiliser les émojis du système</string>
+    <string name="UseSystemFonts">Utiliser la police du système</string>
+    <string name="UseSystemEmoji">Utiliser les émojis du système</string>
+    <string name="TransparentStatusBar">Barre de notifications transparente</string>
+    <string name="BlurForAllThemes">Flou pour tous les thèmes</string>
+    <string name="CenterTitle">Centrer le titre dans la barre d\'action</string>
+    <string name="NewSwitchStyle">Activer le style de changement alternatif</string>
+    <string name="TransparentNavBar">Barre de navigation transparente</string>
+    <string name="TransparentNavBarValue">La barre de navigation ne deviendra pas complètement transparente, elle ne prendra que la couleur du panneau de messages.</string>
+    <string name="SquareFab">FAB en forme de carré</string>
+    <string name="SquareFabInfo">Un bouton d\'action flottant (FAB) est un bouton circulaire qui déclenche l\'action principale dans l\'interface d\'application. Il se trouve dans le coin inférieur droit de l\'écran.</string>
+    <!-- General -->
+    <string name="DisableNumberRounding">Désactiver l\'arrondi des nombres</string>
+    <string name="FormatTimeWithSeconds">Afficher l\'heure avec les secondes</string>
     <string name="HideAllChats">Masquer l\'onglet \"Toutes les discussions\"</string>
-    <string name="HidePhoneNumber">Cacher le numéro de téléphone</string>
+    <string name="HideProxySponsor">Cacher le sponsor du proxy</string>
     <string name="ChatsOnTitle">\"Chats\" au lieu de \"exteraGram\"</string>
-    <string name="ShowID">Afficher dans le profil</string>
-    <string name="SB">Barre d\'état transparente</string>
-    <string name="SBDescription">seulement pour Android 6+</string>
+    <string name="DisableVibration">Désactiver les vibrations</string>
     <string name="ForceTabletMode">Forcer le mode Tablet Ui</string>
-    <string name="Drawer">Liste d\'applications</string>
-    <string name="Attention">ATTENTION!</string>
-    <string name="DrawerRR">CETTE OBJET PEUT ÊTRE CHANGÉE OU SUPPRIMER DANS LE FUTURE !\nRedémarrez l\'application pour prendre effet.</string>
-    <string name="PeopleNearbyDescription">Ne peut pas être affiché si le GPS est désactivé.</string>
+    <string name="ArchiveOnPull">Ouvrir les archives dans le menu déroulant</string>
+    <string name="DisableUnarchiveSwipe">Désactiver le balayage \"Déarchive\"</string>
+    <string name="ForcePacmanAnimation">Forcer l\'animation de Pac-Man</string>
+    <string name="ForcePacmanAnimationInfo">Cela nécessite le geste de balayage sélectionné dans la liste de chat.</string>
+    <string name="Profile">Profil</string>
+    <string name="HidePhoneNumber">Cacher le numéro de téléphone</string>
+    <string name="ShowID">Afficher dans le profil</string>
+    <string name="ShowDC">Afficher dans le profil</string>
     <!-- Chats -->
     <string name="StickerSize">Taille de l\'autocollant</string>
     <string name="StickerTime">Masquer le temps sous les autocollants</string>
+    <string name="UnlimitedRecentStickers">Autocollants récents illimités</string>
+    <string name="SendMessageBeforeSendSticker">Envoyer un message avant d\'envoyer un autocollant</string>
+    <string name="StickerSizeDialogMessageReplyTo">wow</string>
+    <string name="StickerSizeDialogMessage">woah, il est si mignon!</string>
     <string name="HideSendAsChannel">Masquer \"Envoyer en tant que Canal\"</string>
     <string name="HideKeyboardOnScroll">Masquer le clavier lors du défilement</string>
-    <string name="DateOfForwardedMsg">Show date of forwarded message</string>
-    <string name="ShowSeconds">Show seconds in timestamps</string>
-    <string name="ArchiveOnPull">Ouvrir les archives dans le menu déroulant</string>
-    <string name="IncludeArchivedChatsInForwards">Inclure les chats archivés pour les transferts</string>
-    <string name="UnlimitedPinnedChats">Chats épinglés illimités</string>
-    <string name="UnlimitedPinnedChatsDescription">Épingler des conversations illimitées en désactivant la synchronisation.</string>
-    <string name="UnlimitedRecentStickers">Autocollants récents illimités</string>
+    <string name="DisableReactions">Désactiver les réactions</string>
+    <string name="DisableGreetingSticker">Désactiver l\'autocollant d\'accueil</string>
+    <string name="DisableJumpToNextChannel">Désactiver \"Aller au canal suivant\"</string>
+    <string name="DateOfForwardedMsg">Afficher la date de transfert du message</string>
+    <string name="ShowMessageID">Afficher les messages</string>
     <string name="Media">Lecteur</string>
-    <string name="HQVoiceMessage">Messages vocaux</string>
     <string name="RearVideoMessages">Caméra arrière dans les messages vidéo</string>
-    <string name="Autopause">Pause automatique</string>
-    <string name="AutopauseDescription">Met en pause une lecture vidéo lorsque l\'appareil est verrouillé ou que l\'exteraGram est minimisé</string>
+    <string name="DisableCamera">Désactiver la caméra instantanée</string>
+    <string name="DisableProximityEvents">Désactiver les événements de proximité</string>
+    <string name="PauseOnMinimize">Pause automatique</string>
+    <string name="POMDescription">Met en pause une lecture vidéo lorsque l\'appareil est verrouillé ou que l\'exteraGram est minimisé</string>
     <string name="DisablePlayback">Désactiver la lecture</string>
-    <string name="DisablePlaybackDescription">Désactive la lecture lorsque le bouton de volume est enfoncé</string>
+    <string name="DPDescription">Désactive la lecture lorsque le bouton de volume est enfoncé</string>
+    <!-- Drawer -->
+    <string name="Drawer">Liste d\'applications</string>
+    <string name="DrawerElements">Éléments du tiroir</string>
+    <string name="DrawerOptions">Tri tiroir</string>
+    <string name="DrawerIconPack">Pack d\'icônes</string>
+    <string name="NewYear">Nouvel an</string>
+    <string name="ValentinesDay">Valentine\'s Day</string>
+    <string name="Halloween">Halloween</string>
+    <!-- Other -->
+    <string name="EnterID">Entrer l\'ID De L\'utilisateur</string>
+    <string name="TrackSaved">Piste enregistrée</string>
+    <string name="ChannelToSaveDescription">Entrez l\'ID du canal/chat/utilisateur où les pistes seront sauvegardées</string>
     <string name="ConfirmCall">Confirmer l\'appel</string>
     <string name="CallTo">Appeler à **%1$s**?</string>
 </resources>

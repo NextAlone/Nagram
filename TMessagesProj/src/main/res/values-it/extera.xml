@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- exteraGram's Main Strings -->
+    <string name="MutualContact">contatto reciproco</string>
+    <string name="ToBeginning">Vai all\'inizio</string>
+    <string name="SaveMessage">Salva messaggio</string>
+    <!-- Main Menu (about) -->
+    <string name="exteraPrivacy">exteraGram Privacy Policy e FAQ</string>
+    <string name="Links">Links</string>
+    <string name="AboutExteraDescription">Client Telegram sperimentale basato su risorse ufficiali di Telegram!</string>
+    <string name="Channel">Canale</string>
+    <string name="Chats">Chat</string>
+    <string name="Crowdin">Traduci</string>
+    <string name="SourceCode">Codice sorgente di exteraGram</string>
+    <string name="Preferences">Preferenze di extera</string>
+    <string name="RestartRequired">Riavvia l\'applicazione per applicare le modifiche.</string>
+    <string name="Categories">Categorie</string>
+    <!-- Appearance -->
+    <string name="UseSystemFonts">Usa il font di sistema</string>
+    <string name="UseSystemEmoji">Usa le emoji di sistema</string>
+    <string name="TransparentStatusBar">Barra di stato trasparente</string>
+    <string name="BlurForAllThemes">Blur per tutti i temi</string>
+    <string name="CenterTitle">Centra titolo nella barra delle azioni</string>
+    <string name="NewSwitchStyle">Abilita lo stile alternativo</string>
+    <string name="TransparentNavBar">Barra di Navigazione Trasparente</string>
+    <string name="TransparentNavBarValue">La barra di navigazione non diventerà completamente trasparente, otterrà solo il colore del Pannello messaggi.</string>
+    <string name="SquareFab">FAB a forma quadrata</string>
+    <string name="SquareFabInfo">Un pulsante di azione fluttuante (FAB) è un pulsante circolare che attiva l\'azione primaria nell\'interfaccia utente dell\'app. Si trova nell\'angolo inferiore destro dello schermo.</string>
+    <!-- General -->
+    <string name="DisableNumberRounding">Disattiva l\'arrotondamento dei numeri</string>
+    <string name="FormatTimeWithSeconds">Mostra i secondi nell\'orario</string>
+    <string name="HideAllChats">Nascondi la cartella \"Tutte le chat\"</string>
+    <string name="HideProxySponsor">Nascondi sponsor del proxy</string>
+    <string name="ChatsOnTitle">\"Chat\" invece di \"exteraGram\"</string>
+    <string name="DisableVibration">Disattiva vibrazioni</string>
+    <string name="ForceTabletMode">Forza modalità tablet</string>
+    <string name="ArchiveOnPull">Apri l\'archivio scorrendo verso il basso</string>
+    <string name="DisableUnarchiveSwipe">Disabilita lo scorrimento \"Unarchive\"</string>
+    <string name="ForcePacmanAnimation">Forza l\'animazione di Pac-Man</string>
+    <string name="ForcePacmanAnimationInfo">Questo richiede lo scorrimento \"Archive\" selezionato nella lista di chat.</string>
+    <string name="Profile">Profilo</string>
+    <string name="HidePhoneNumber">Nascondi il numero di telefono</string>
+    <string name="ShowID">Mostra ID nel profilo</string>
+    <string name="ShowDC">Mostra DC nel profilo</string>
+    <!-- Chats -->
+    <string name="StickerSize">Dimensione sticker</string>
+    <string name="StickerTime">Nascondi l\'orario sotto gli sticker</string>
+    <string name="UnlimitedRecentStickers">Sticker preferiti illimitati</string>
+    <string name="SendMessageBeforeSendSticker">Invia messaggio prima di inviare adesivo</string>
+    <string name="StickerSizeDialogMessageReplyTo">meowmeow</string>
+    <string name="StickerSizeDialogMessage">woah, è così carino!</string>
+    <string name="HideSendAsChannel">Nascondi \"Invia come canale\"</string>
+    <string name="HideKeyboardOnScroll">Nascondi la tastiera mentre scorri</string>
+    <string name="DisableReactions">Disabilita le reazioni</string>
+    <string name="DisableGreetingSticker">Disabilita l\'adesivo di auguri</string>
+    <string name="DisableJumpToNextChannel">Disabilita \"Vai al canale successivo\"</string>
+    <string name="DateOfForwardedMsg">Mostra data dei messaggi inoltrati</string>
+    <string name="ShowMessageID">Mostra ID messaggio</string>
+    <string name="Media">Media</string>
+    <string name="RearVideoMessages">Fotocamera posteriore nei video messaggi</string>
+    <string name="DisableCamera">Disabilita fotocamera istantanea</string>
+    <string name="DisableProximityEvents">Disabilita eventi di prossimità</string>
+    <string name="PauseOnMinimize">Pausa automatica</string>
+    <string name="POMDescription">Mette in pausa la riproduzione video quando il dispositivo è bloccato o exteraGram è minimizzato</string>
+    <string name="DisablePlayback">Disabilita riproduzione</string>
+    <string name="DPDescription">Disabilita la riproduzione quando viene premuto il tasto volume</string>
+    <!-- Drawer -->
+    <string name="Drawer">Menu</string>
+    <string name="DrawerElements">Elementi del cassetto</string>
+    <string name="DrawerOptions">Opzioni del cassetto</string>
+    <string name="DrawerIconPack">Pacchetto icone</string>
+    <string name="NewYear">Anno nuovo</string>
+    <string name="ValentinesDay">San Valentino</string>
+    <string name="Halloween">Halloween</string>
+    <!-- Other -->
+    <string name="EnterID">Inserisci l\'ID</string>
+    <string name="TrackSaved">Traccia Salvata</string>
+    <string name="ChannelToSaveDescription">Inserisci l\'ID del canale/chat/utente in cui le tracce saranno salvate</string>
+    <string name="ConfirmCall">Conferma chiamata</string>
+    <string name="CallTo">Chiamata a **%1$s**?</string>
+</resources>

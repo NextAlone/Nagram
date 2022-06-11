@@ -2,59 +2,80 @@
 <resources>
     <!-- exteraGram's Main Strings -->
     <string name="MutualContact">gegenseitiger Kontakt</string>
-    <string name="ToBeginning">Am Anfang</string>
+    <string name="ToBeginning">Zu Anfang</string>
     <string name="SaveMessage">Nachricht speichern</string>
-
     <!-- Main Menu (about) -->
-    <string name="Links">Verknüpfungen</string>
+    <string name="exteraPrivacy">exteraGram Datenschutzerklärung und FAQ</string>
+    <string name="Links">Links</string>
     <string name="AboutExteraDescription">Experimenteller Telegram-Client basierend auf offiziellen Telegram-Quellen!</string>
-    <string name="SourceCode">Quelltext</string>
     <string name="Channel">Kanal</string>
     <string name="Chats">Chats</string>
-
+    <string name="Crowdin">Übersetzen</string>
+    <string name="SourceCode">Quellcode</string>
     <string name="Preferences">exteraGram Einstellungen</string>
     <string name="RestartRequired">App neu starten, damit es wirksam wird.</string>
-
     <string name="Categories">Kategorien</string>
-
     <!-- Appearance -->
-    <string name="UseSystemFonts">Systemschriften</string>
-    <string name="UseSystemEmoji">System-Emoji</string>
-    <string name="TransparentStatusBar">Transparente Status leiste</string>
-    <string name="BlurForAllThemes">Unschärfe in allen Themen</string>
-
-    <string name="HideAllChats">Tab \"Alle Chats\" ausblenden</string>
-    <string name="HidePhoneNumber">Meine Telefonnummer ausblenden</string>
-    <string name="ShowID">ID im Profil anzeigen</string>
+    <string name="UseSystemFonts">Systemschrift nutzen</string>
+    <string name="UseSystemEmoji">System-Emojis verwenden</string>
+    <string name="TransparentStatusBar">Transparente Statusleiste</string>
+    <string name="BlurForAllThemes">Unschärfe für alle Themen</string>
+    <string name="CenterTitle">Titel in Aktionsleiste zentrieren</string>
+    <string name="NewSwitchStyle">Alternativer Schalter-Stil aktivieren</string>
+    <string name="TransparentNavBar">transparente Navigationsleiste</string>
+    <string name="TransparentNavBarValue">Die Navigationsleiste wird nicht vollständig transparent, sie erhält nur die Farbe des Nachrichtenfensters.</string>
+    <string name="SquareFab">Quadratform FAB</string>
+    <string name="SquareFabInfo">Eine schwebende Aktionstaste (FAB) ist eine kreisförmige Schaltfläche, die die primäre Aktion in der App-Benutzeroberfläche auslöst. Sie befindet sich in der rechten unteren Ecke des Bildschirms.</string>
+    <!-- General -->
+    <string name="DisableNumberRounding">Nummernrundung deaktivieren</string>
+    <string name="FormatTimeWithSeconds">Zeit mit Sekunden formatieren</string>
+    <string name="HideAllChats">Tab Alle Chat-Tabs ausblenden</string>
+    <string name="HideProxySponsor">Proxy-Sponsor ausblenden</string>
     <string name="ChatsOnTitle">\"Chats\" statt \"exteraGram\"</string>
+    <string name="DisableVibration">Vibration deaktivieren</string>
     <string name="ForceTabletMode">Tablet-Modus erzwingen</string>
-
+    <string name="ArchiveOnPull">Archiv beim Herunterziehen öffnen</string>
+    <string name="DisableUnarchiveSwipe">\"Unarchivieren\" wischen deaktivieren</string>
+    <string name="ForcePacmanAnimation">Pac-Man Animation erzwingen</string>
+    <string name="ForcePacmanAnimationInfo">Dies erfordert die ausgewählte \"Archiv\"-Geste in der Chat-Liste.</string>
+    <string name="Profile">Profil</string>
+    <string name="HidePhoneNumber">Meine Telefonnummer ausblenden</string>
+    <string name="ShowID">Chat-ID im Profil</string>
+    <string name="ShowDC">Zeige DC im Profil</string>
     <!-- Chats -->
     <string name="StickerSize">Stickergröße</string>
     <string name="StickerTime">Zeit unter Aufklebern verbergen</string>
-
+    <string name="UnlimitedRecentStickers">Unbegrenzte Lieblingssticker</string>
+    <string name="SendMessageBeforeSendSticker">Nachricht vor dem Senden des Aufklebers senden</string>
     <string name="StickerSizeDialogMessageReplyTo">wow</string>
     <string name="StickerSizeDialogMessage">woah, er ist so süß!</string>
-
     <string name="HideSendAsChannel">\"Als Kanal senden\" ausblenden</string>
     <string name="HideKeyboardOnScroll">Tastatur beim Scrollen ausblenden</string>
     <string name="DisableReactions">Reaktionen deaktivieren</string>
-    <string name="ArchiveOnPull">Archiv beim Herunterziehen öffnen</string>
+    <string name="DisableGreetingSticker">Grußsticker deaktivieren</string>
+    <string name="DisableJumpToNextChannel">Sprung zum nächsten Kanal - deaktivieren</string>
     <string name="DateOfForwardedMsg">Datum der weitergeleiteten Nachricht anzeigen</string>
-
+    <string name="ShowMessageID">Nachrichten-ID anzeigen</string>
     <string name="Media">Media</string>
-    <string name="RearVideoMessages">Hintere Kamera für Videonachrichten</string>
-    <string name="DisableCamera">Deaktivieren Sie die Kamera im Fotoauswahlmenü</string>
+    <string name="RearVideoMessages">Rückkamera in Videonachrichten</string>
+    <string name="DisableCamera">Sofortbildkamera deaktivieren</string>
+    <string name="DisableProximityEvents">Näherungssensor deaktivieren</string>
     <string name="PauseOnMinimize">Autopause</string>
     <string name="POMDescription">Pausiert eine Videowiedergabe, wenn das Gerät gesperrt ist oder exteraGram minimiert wird</string>
     <string name="DisablePlayback">Player öffnen</string>
     <string name="DPDescription">Deaktiviert die Wiedergabe bei Lautstärketasten</string>
-
+    <!-- Drawer -->
     <string name="Drawer">Schublade</string>
-    <string name="Attention">ACHTUNG!</string>
-    <string name="AttentionDescription">DIESE ITEM KÖNNEN ODER ENTFERNT IN DER FUTURE!\nStarten Sie die App neu, um wirksam zu werden.</string>
-    <string name="PNDescription">Kann nicht angezeigt werden, wenn GPS deaktiviert ist.</string>
-
+    <string name="DrawerElements">Drawer-Elemente</string>
+    <string name="DrawerOptions">Drawer Optionen</string>
+    <string name="DrawerIconPack">Symbolpaket</string>
+    <string name="NewYear">Neujahr</string>
+    <string name="ValentinesDay">Valentinstag</string>
+    <string name="Halloween">Halloween</string>
+    <!-- Other -->
+    <string name="EnterID">Geben Sie die Benutzer-ID ein</string>
+    <string name="TrackSaved">Strecke gespeichert</string>
+    <string name="ChannelToSaveDescription">Geben Sie die ID des Channel/Chat/Benutzers ein, in dem die Tracks gespeichert werden</string>
     <string name="ConfirmCall">Anruf bestätigen</string>
     <string name="CallTo">Anruf an **%1$s**?</string>
 </resources>

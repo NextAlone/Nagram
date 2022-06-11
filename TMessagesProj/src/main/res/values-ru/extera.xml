@@ -6,13 +6,13 @@
     <string name="SaveMessage">Сохранить сообщение</string>
 
     <!-- Main Menu (about) -->
-    <string name="exteraPrivacy">Политика конфиденциальности и FAQ </string>
+    <string name="exteraPrivacy">Политика конфиденциальности и FAQ</string>
     <string name="Links">Ссылки</string>
-    <string name="AboutExteraDescription">Экспериментальный Telegram-клиент, основанный на официальном исходном коде Telegram!</string>
-    <string name="SourceCode">Исходный код</string>
-    <string name="Channel">Канал в Telegram</string>
+    <string name="AboutExteraDescription">Экспериментальный Telegram-клиент, основанный на официальном исходном коде Telegram</string>
+    <string name="Channel">Канал</string>
     <string name="Chats">Чаты</string>
     <string name="Crowdin">Перевод</string>
+    <string name="SourceCode">Исходный код</string>
 
     <string name="Preferences">Настройки exteraGram</string>
     <string name="RestartRequired">Перезагрузите приложение, чтобы изменения вступили в силу.</string>
@@ -24,62 +24,68 @@
     <string name="UseSystemEmoji">Системные эмодзи</string>
     <string name="TransparentStatusBar">Прозрачная строка состояния</string>
     <string name="BlurForAllThemes">Размытие во всех темах</string>
-    <string name="CenterTitle">Заголовок в центре</string>
+    <string name="CenterTitle">Заголовок по центру</string>
     <string name="NewSwitchStyle">Альтернативный стиль переключателей</string>
+    <string name="TransparentNavBar">Прозрачная панель навигации</string>
+    <string name="TransparentNavBarValue">Панель навигации не станет полностью прозрачной, она лишь приобретет цвет панели отправки сообщений.</string>
+    <string name="SquareFab">Квадратный FAB</string>
+    <string name="SquareFabInfo">Floating action button (FAB) — это круглая кнопка, запускающая основное действие в интерфейсе приложения. Она расположена в правом нижнем углу экрана.</string>
 
+    <!-- General -->
+    <string name="DisableNumberRounding">Отключить округление чисел</string>
+    <string name="FormatTimeWithSeconds">Показывать время с секундами</string>
     <string name="HideAllChats">Скрыть \"Все чаты\"</string>
-    <string name="HideProxySponsor">Скрыть спонсора прокси</string>
-    <string name="HidePhoneNumber">Скрыть номер телефона</string>
-    <string name="ShowID">Показывать ID в профиле</string>
     <string name="ChatsOnTitle">\"Чаты\" вместо \"exteraGram\"</string>
     <string name="DisableVibration">Отключить вибрацию</string>
     <string name="ForceTabletMode">Планшетный режим</string>
+    <string name="ArchiveOnPull">Открывать архив при вытягивании</string>
+    <string name="DisableUnarchiveSwipe">Отключить жест \"Вернуть\"</string>
+    <string name="ForcePacmanAnimation">Pac-Man анимация</string>
+    <string name="ForcePacmanAnimationInfo">Для этого нужно выбрать \"Архивировать\" в \"Смахивание влево в списке чатов\".</string>
+    <string name="Profile">Профиль</string>
+    <string name="HidePhoneNumber">Скрыть номер телефона</string>
+    <string name="ShowID">Показывать ID в профиле</string>
+    <string name="ShowDC">Показывать DC в профиле</string>
 
     <!-- Chats -->
     <string name="StickerSize">Размер стикера</string>
     <string name="StickerTime">Скрыть время под стикером</string>
-    <string name="UnlimitedRecentStickers">Неограниченные стикеры</string>
-    <string name="SendMessageBeforeSendSticker">Отправить сообщение перед отправкой стикера</string>
+    <string name="UnlimitedRecentStickers">Бесконечные недавние стикеры</string>
+    <string name="SendMessageBeforeSendSticker">Отправлять сообщение перед отправкой стикера</string>
 
     <string name="StickerSizeDialogMessageReplyTo">жесть</string>
     <string name="StickerSizeDialogMessage">ух-ты какой милый котик!</string>
 
     <string name="HideSendAsChannel">Скрыть \"Написать от имени…\"</string>
-    <string name="HideKeyboardOnScroll">Скрыть клавиатуру при пролистывании</string>
+    <string name="HideKeyboardOnScroll">Скрывать клавиатуру при пролистывании</string>
     <string name="DisableGreetingSticker">Скрыть приветственный стикер</string>
     <string name="DisableJumpToNextChannel">Отключить \"Перейти в новый канал\"</string>
     <string name="DisableReactions">Отключить реакции</string>
-    <string name="ArchiveOnPull">Открыть архив при вытягивании</string>
     <string name="DateOfForwardedMsg">Дата пересланного сообщения</string>
-    <string name="ShowMessageID">Показать ID сообщения</string>
+    <string name="ShowMessageID">Показывать ID сообщения</string>
 
     <string name="Media">Медиа</string>
     <string name="RearVideoMessages">Задняя камера в видеосообщениях</string>
     <string name="DisableCamera">Отключить камеру в галерее</string>
     <string name="DisableProximityEvents">Отключить датчик приближения</string>
     <string name="PauseOnMinimize">Автопауза</string>
-    <string name="POMDescription">Останавливает видео, когда девайс блокируется или приложение сворачивается</string>
-    <string name="DisablePlayback">Отключить проигрывание</string>
-    <string name="DPDescription">Отключает автоматическое проигрывание видео при нажатии на кнопку громкости</string>
+    <string name="POMDescription">Останавливает видео, когда девайс блокируется или приложение сворачивается.</string>
+    <string name="DisablePlayback">Отключить автопроигрывание</string>
+    <string name="DPDescription">Отключает автоматическое проигрывание видео при нажатии на кнопку громкости.</string>
 
     <!-- Drawer -->
     <string name="Drawer">Боковое меню</string>
     <string name="DrawerElements">Элементы бокового меню</string>
-    <string name="DrawerOptions">Иконки</string>
+    <string name="DrawerOptions">Настройки бокового меню</string>
     <string name="DrawerIconPack">Выбор стиля</string>
     <string name="NewYear">Новый год</string>
     <string name="ValentinesDay">День святого Валентина</string>
     <string name="Halloween">Хэллоуин</string>
 
     <!-- Other -->
-    <string name="GenerateMonetTheme">Создать динамическую тему</string>
-    <string name="DarkMonetTheme">Тёмная</string>
-    <string name="LightMonetTheme">Светлая</string>
-    <string name="GMTDescription">Эта функция позволяет создать тему, основанную на системных цветах\n\nПосле нажатия на кнопку выберите чат, где будет сохранена тема</string>
-
     <string name="EnterID">Введите ID</string>
     <string name="TrackSaved">Трек сохранен</string>
-    <string name="ChannelToSaveDescription">Введите ID канала/чата/пользователя, куда будет сохраняться музыка</string>
+    <string name="ChannelToSaveDescription">Введите ID канала/чата/пользователя, куда будет сохраняться музыка.</string>
 
     <string name="ConfirmCall">Подтверждение звонка</string>
     <string name="CallTo">Позвонить **%1$s**?</string>

@@ -3,61 +3,79 @@
     <!-- exteraGram's Main Strings -->
     <string name="MutualContact">contacto mutuo</string>
     <string name="ToBeginning">Saltar al inicio</string>
-
+    <string name="SaveMessage">Guardar mensaje</string>
     <!-- Main Menu (about) -->
+    <string name="exteraPrivacy">Política de privacidad de OutaGram y FAQ</string>
     <string name="Links">Enlaces</string>
     <string name="AboutExteraDescription">¡Cliente experimental de Telegram basado en fuentes oficiales de Telegram!</string>
-    <string name="Website">Miembros de exteraSquad</string>
-    <string name="Github">Código fuente de exteraGram</string>
-    <string name="Channel">Canal de Telegram</string>
-    <string name="Chat">Chat de Telegram</string>
-    <string name="languageEnglish">Inglés</string>
-    <string name="languageRussian">Ruso</string>
-
-    <string name="Preferences">Preferencias de exteraGram</string>
-    <string name="RestartRequired">Reinicie la aplicación para que tenga efecto.</string>
-
-    <string name="Categories">Categorías</string>
+    <string name="Channel">Canal</string>
     <string name="Chats">Chats</string>
-    <string name="Experimental">Experimental</string>
-
+    <string name="Crowdin">Traducir</string>
+    <string name="SourceCode">Código fuente de exteraGram</string>
+    <string name="Preferences">exteraGram Preferencias</string>
+    <string name="RestartRequired">Reinicie la app para que tenga efecto.</string>
+    <string name="Categories">Categorías</string>
     <!-- Appearance -->
-    <string name="SystemFonts">Usar fuentes del sistema</string>
-    <string name="SystemEmoji">Usar emojis del sistema</string>
-
-    <string name="HideAllChats">Ocultar la carpeta \"Todos\"</string>
-    <string name="HidePhoneNumber">Ocultar mi número de teléfono</string>
+    <string name="UseSystemFonts">Usar fuentes del sistema</string>
+    <string name="UseSystemEmoji">Usar emojis del sistema</string>
+    <string name="TransparentStatusBar">Barra de estado transparente</string>
+    <string name="BlurForAllThemes">Desenfoque para todos los temas</string>
+    <string name="CenterTitle">Centrar título en la barra de acción</string>
+    <string name="NewSwitchStyle">Habilitar estilo alternativo de interruptor</string>
+    <string name="TransparentNavBar">Barra de navegación transparente</string>
+    <string name="TransparentNavBarValue">La barra de navegación no será completamente transparente, sólo obtendrá el color del Panel de Mensajes.</string>
+    <string name="SquareFab">FAB en forma cuadrado</string>
+    <string name="SquareFabInfo">Un botón de acción flotante (FAB) es un botón circular que activa la acción primaria en la interfaz de usuario de la aplicación. Se encuentra en la esquina inferior derecha de la pantalla.</string>
+    <!-- General -->
+    <string name="DisableNumberRounding">Desactivar redondeo de número</string>
+    <string name="FormatTimeWithSeconds">Formato de tiempo con segundos</string>
+    <string name="HideAllChats">Ocultar pestaña \"Todos los chats\"</string>
+    <string name="HideProxySponsor">Ocultar patrocinador del proxy</string>
     <string name="ChatsOnTitle">\"Chats\" en lugar de \"exteraGram\"</string>
-    <string name="ShowID">Mostrar ID en el perfil</string>
-    <string name="SB">Barra de estado transparente</string>
-    <string name="SBDescription">solo para Android 6+</string>
+    <string name="DisableVibration">Desactivar las vibraciones</string>
     <string name="ForceTabletMode">Forzar modo tablet</string>
-
-    <string name="Drawer">Cajón</string>
-    <string name="Attention">¡ATENCIÓN!</string>
-    <string name="DrawerRR">¡ESTE OBJETO PUEDE SER CAMBIADO O ELIMINADO EN EL FUTURO!\nReinicia la aplicación para que tenga efecto.</string>
-    <string name="PeopleNearbyDescription">Puede no mostrarse si el GPS está desactivado.</string>
-
+    <string name="ArchiveOnPull">Abrir archivados al desplegar</string>
+    <string name="DisableUnarchiveSwipe">Desactivar el deslizado \"Desarchivar\"</string>
+    <string name="ForcePacmanAnimation">Forzar la animación Pac-Man</string>
+    <string name="ForcePacmanAnimationInfo">Esto requiere que el gesto de \"Archivar\" seleccionado desliza en la lista de chat.</string>
+    <string name="Profile">Perfil</string>
+    <string name="HidePhoneNumber">Ocultar número de teléfono</string>
+    <string name="ShowID">Mostrar ID en el perfil</string>
+    <string name="ShowDC">Mostrar DC en el perfil</string>
     <!-- Chats -->
-    <string name="StickerSize">Tamaño de sticker</string>
+    <string name="StickerSize">Tamaño de stickers</string>
     <string name="StickerTime">Ocultar el tiempo debajo de los stickers</string>
-
-    <string name="HideSendAsChannel">Ocultar \"Enviar como canal\"</string>
-    <string name="HideKeyboardOnScroll">Ocultar teclado en desplazamiento</string>
-    <string name="ArchiveOnPull">Abrir archivo al deslizar hacia abajo</string>
-    <string name="IncludeArchivedChatsInForwards">Incluye chats archivados para reenvíos</string>
-    <string name="UnlimitedPinnedChats">Chats fijados ilimitados</string>
-    <string name="UnlimitedPinnedChatsDescription">Fijar chats ilimitados desactivando la sincronización.</string>
     <string name="UnlimitedRecentStickers">Stickers recientes ilimitados</string>
-
-    <string name="Media">Archivos multimedia</string>
-    <string name="HQVoiceMessage">Mensajes de voz en HQ</string>
-    <string name="RearVideoMessages">Usar cámara trasera en videomensajes</string>
-    <string name="Autopause">Pausar automáticamente</string>
-    <string name="AutopauseDescription">Pausa la reproducción de video cuando el dispositivo está bloqueado o exteraGram se minimiza</string>
+    <string name="SendMessageBeforeSendSticker">Enviar mensaje antes de enviar sticker</string>
+    <string name="StickerSizeDialogMessageReplyTo">meowmeow</string>
+    <string name="StickerSizeDialogMessage">¡woah, es tan lindo!</string>
+    <string name="HideSendAsChannel">Ocultar \"Enviar como canal\"</string>
+    <string name="HideKeyboardOnScroll">Ocultar teclado al desplazarse</string>
+    <string name="DisableReactions">Desactivar reacciones</string>
+    <string name="DisableGreetingSticker">Desactivar Sticker de Saludo</string>
+    <string name="DisableJumpToNextChannel">Desactivar \"Ir al canal siguiente\"</string>
+    <string name="DateOfForwardedMsg">Mostrar fecha de un mensaje reenviado</string>
+    <string name="ShowMessageID">Mostrar mensaje</string>
+    <string name="Media">Medios</string>
+    <string name="RearVideoMessages">Cámara trasera en videomensajes</string>
+    <string name="DisableCamera">Deshabilitar cámara instantánea</string>
+    <string name="DisableProximityEvents">Deshabilitar eventos de proximidad</string>
+    <string name="PauseOnMinimize">Autopausar</string>
+    <string name="POMDescription">Pausa la reproducción de video cuando el dispositivo está bloqueado o exteraGram se minimiza</string>
     <string name="DisablePlayback">Desactivar reproducción</string>
-    <string name="DisablePlaybackDescription">Desactiva la reproducción cuando se presiona el botón de volumen</string>
-
+    <string name="DPDescription">Deshabilita la reproducción cuando se presiona el botón de volumen</string>
+    <!-- Drawer -->
+    <string name="Drawer">Cajón</string>
+    <string name="DrawerElements">Elementos del arrastre</string>
+    <string name="DrawerOptions">Opciones de marcador</string>
+    <string name="DrawerIconPack">Pack de iconos</string>
+    <string name="NewYear">Año Nuevo</string>
+    <string name="ValentinesDay">Día de San Valentín</string>
+    <string name="Halloween">Halloween</string>
+    <!-- Other -->
+    <string name="EnterID">Introduzca el ID</string>
+    <string name="TrackSaved">Pista guardada</string>
+    <string name="ChannelToSaveDescription">Ingrese el ID del canal/chat/usuario donde se guardarán las pistas</string>
     <string name="ConfirmCall">Confirmar llamada</string>
     <string name="CallTo">¿Llamar a **%1$s**?</string>
 </resources>
