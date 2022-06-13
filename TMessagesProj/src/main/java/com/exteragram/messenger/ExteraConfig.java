@@ -50,6 +50,7 @@ public class ExteraConfig {
     public static boolean disableJumpToNextChannel;
     public static boolean dateOfForwardedMsg;
     public static boolean showMessageID;
+    public static boolean zalgoFilter;
 
     public static boolean rearVideoMessages;
     public static boolean disableCamera;
@@ -118,6 +119,7 @@ public class ExteraConfig {
             disableGreetingSticker = preferences.getBoolean("disableGreetingSticker", false);
             dateOfForwardedMsg = preferences.getBoolean("dateOfForwardedMsg", false);
             showMessageID = preferences.getBoolean("showMessageID", false);
+            zalgoFilter = preferences.getBoolean("zalgoFilter", true);
 
             rearVideoMessages = preferences.getBoolean("rearVideoMessages", false);
             disableCamera = preferences.getBoolean("disableCamera", false);
@@ -416,5 +418,11 @@ public class ExteraConfig {
         formatTimeWithSeconds ^= true;
         SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
         editor.putBoolean("formatTimeWithSeconds", formatTimeWithSeconds).apply();
+    }
+
+    public static void toggleZalgoFilter() {
+        zalgoFilter ^= true;
+        SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
+        editor.putBoolean("zalgoFilter", zalgoFilter).apply();
     }
 }

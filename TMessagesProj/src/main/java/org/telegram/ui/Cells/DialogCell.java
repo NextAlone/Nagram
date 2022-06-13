@@ -83,6 +83,7 @@ import java.util.List;
 import java.util.Stack;
 
 import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.ExteraUtils;
 
 public class DialogCell extends BaseCell {
 
@@ -575,7 +576,7 @@ public class DialogCell extends BaseCell {
             }
             String title;
             if (currentChat != null) {
-                title = currentChat.title.replace('\n', ' ');
+                title = ExteraUtils.zalgoFilter(currentChat.title.replace('\n', ' '));
             } else if (currentUser != null) {
                 if (UserObject.isDeleted(currentUser)) {
                     title = LocaleController.getString("HiddenName", R.string.HiddenName);
@@ -1116,7 +1117,7 @@ public class DialogCell extends BaseCell {
                                 if (!TextUtils.isEmpty(restrictionReason)) {
                                     stringBuilder = SpannableStringBuilder.valueOf(String.format(messageFormat, restrictionReason, messageNameString));
                                 } else if (message.caption != null) {
-                                    CharSequence mess = message.caption.toString();
+                                    CharSequence mess = ExteraUtils.zalgoFilter(message.caption);
                                     if (mess.length() > 150) {
                                         mess = mess.subSequence(0, 150);
                                     }
@@ -1172,7 +1173,7 @@ public class DialogCell extends BaseCell {
                                         FileLog.e(e);
                                     }
                                 } else if (message.messageOwner.message != null) {
-                                    CharSequence mess = message.messageOwner.message;
+                                    CharSequence mess = ExteraUtils.zalgoFilter(message.messageOwner.message);
                                     if (message.hasHighlightedWords()) {
                                         if (message.messageTrimmedToHighlight != null) {
                                             mess = message.messageTrimmedToHighlight;
@@ -1333,7 +1334,6 @@ public class DialogCell extends BaseCell {
                     }
                 }
             }
-
             if (draftMessage != null) {
                 timeString = LocaleController.stringForMessageListDate(draftMessage.date);
             } else if (lastMessageDate != 0) {
@@ -1465,7 +1465,7 @@ public class DialogCell extends BaseCell {
                 }
             }
         }
-
+        nameString = ExteraUtils.zalgoFilter(nameString);
         int timeWidth;
         if (drawTime) {
             timeWidth = (int) Math.ceil(Theme.dialogs_timePaint.measureText(timeString));
@@ -1559,6 +1559,7 @@ public class DialogCell extends BaseCell {
                     nameStringFinal = s;
                 }
             }
+            nameStringFinal = nameStringFinal;
             nameLayout = new StaticLayout(nameStringFinal, Theme.dialogs_namePaint[paintIndex], nameWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         } catch (Exception e) {
             FileLog.e(e);

@@ -1720,7 +1720,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         } else {
                             AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                             builder.setTitle(LocaleController.getString("AddBot", R.string.AddBot));
-                            String chatName = chat == null ? "" : chat.title;
+                            String chatName = chat == null ? "" : ExteraUtils.zalgoFilter(chat.title);
                             builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AddMembersAlertNamesText", R.string.AddMembersAlertNamesText, UserObject.getUserName(user), chatName)));
                             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                             builder.setPositiveButton(LocaleController.getString("AddBot", R.string.AddBot), (di, i) -> {
@@ -4164,7 +4164,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         if (view instanceof AboutLinkCell) {
                             AboutLinkCell aboutLinkCell = (AboutLinkCell) view;
                             if (clickableBio != null) {
-                                aboutLinkCell.setTextAndValue(clickableBio, channelInfoRow != -1 ? null:LocaleController.getString("UserBio", R.string.UserBio), true, true);
+                                aboutLinkCell.setTextAndValue(ExteraUtils.zalgoFilter(clickableBio), channelInfoRow != -1 ? null:LocaleController.getString("UserBio", R.string.UserBio), true, true);
                                 currentBio = clickableBio;
                                 clickableBio = null;
                             }
@@ -6371,7 +6371,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     continue;
                 }
                 if (chat.title != null) {
-                    if (nameTextView[a].setText(chat.title)) {
+                    if (nameTextView[a].setText(ExteraUtils.zalgoFilter(chat.title))) {
                         changed = true;
                     }
                 }
@@ -7596,7 +7596,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             if (clickableBio != null) {
                                 value = currentBio;
                             }
-                            aboutLinkCell.setTextAndValue(value, LocaleController.getString("UserBio", R.string.UserBio), true, false);
+                            aboutLinkCell.setTextAndValue(ExteraUtils.zalgoFilter(value), LocaleController.getString("UserBio", R.string.UserBio), true, false);
                             currentBio = userInfo != null ? userInfo.about : null;
                         } else {
                             aboutLinkCell.setTextAndValue(LocaleController.getString("UserBioDetail", R.string.UserBioDetail), LocaleController.getString("UserBio", R.string.UserBio), false, false);
@@ -7607,7 +7607,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         if (clickableBio != null) {
                             about = currentBio;
                         }
-                        aboutLinkCell.setTextAndValue(about, LocaleController.getString("UserBio", R.string.UserBio), true, true);
+                        aboutLinkCell.setTextAndValue(ExteraUtils.zalgoFilter(about), LocaleController.getString("UserBio", R.string.UserBio), true, true);
                     } else if (position == channelInfoRow) {
                         String text = chatInfo.about;
                         while (text.contains("\n\n\n")) {
@@ -7616,7 +7616,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         if (clickableBio != null) {
                             text = currentBio;
                         }
-                        aboutLinkCell.setText(text, true, true);
+                        aboutLinkCell.setText(ExteraUtils.zalgoFilter(text), true, true);
                     }
                     aboutLinkCell.setOnClickListener(e -> processOnClickOrPress(position, aboutLinkCell));
                     aboutLinkCell.setOnLongClickListener(e -> {

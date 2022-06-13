@@ -39,6 +39,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.NotificationsSettingsActivity;
 
 import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.ExteraUtils;
 
 public class ProfileSearchCell extends BaseCell {
 
@@ -555,6 +556,7 @@ public class ProfileSearchCell extends BaseCell {
                 } else {
                     newName = chat.title;
                 }
+                newName = ExteraUtils.zalgoFilter(newName);
                 if (!newName.equals(lastName)) {
                     continueUpdate = true;
                 }
@@ -581,7 +583,7 @@ public class ProfileSearchCell extends BaseCell {
         } else if (chat != null) {
             lastName = chat.title;
         }
-
+        lastName = ExteraUtils.zalgoFilter(lastName);
         lastAvatar = photo;
 
         if (getMeasuredWidth() != 0 || getMeasuredHeight() != 0) {

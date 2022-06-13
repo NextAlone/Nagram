@@ -75,4 +75,20 @@ public class ExteraUtils {
         String beta = BuildVars.isBetaApp() ? " β" : "";
         return LocaleController.getString("exteraAppName", R.string.exteraAppName) + beta;
     }
+    
+    public static String zalgoFilter(CharSequence text) {
+        if (text != null) {
+            return zalgoFilter(text.toString());
+        } else {
+            return "";
+        }
+    }
+
+    public static String zalgoFilter(String text) {
+        if (ExteraConfig.zalgoFilter) {
+		    return text.replaceAll("(?i)([aeiouy]̈)|[̀-ͯ҉]", "").replaceAll("[\\p{Mn}]", "");
+		} else {
+		    return text;
+		}
+    }
 }

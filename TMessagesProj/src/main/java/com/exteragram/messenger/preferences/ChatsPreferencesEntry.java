@@ -31,12 +31,14 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCheckCell;
+import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
 import org.telegram.ui.Components.UndoView;
 
 import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.ExteraUtils;
 import com.exteragram.messenger.preferences.cells.StickerSizePreviewCell;
 
 public class ChatsPreferencesEntry extends BaseFragment {
@@ -64,7 +66,8 @@ public class ChatsPreferencesEntry extends BaseFragment {
     private int disableJumpToNextChannelRow;
     private int dateOfForwardedMsgRow;
     private int showMessageIDRow;
-    private int chatDividerRow;
+    private int zalgoFilterRow;
+    private int zalgoFilterInfoRow;
 
     private int mediaHeaderRow;
     private int rearVideoMessagesRow;
@@ -75,6 +78,8 @@ public class ChatsPreferencesEntry extends BaseFragment {
     private int mediaDividerRow;
 
     private UndoView restartTooltip;
+    
+    private int zalgoInfoTapCount = 0;
 
     @Override
     public boolean onFragmentCreate() {
@@ -274,6 +279,12 @@ public class ChatsPreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.showMessageID);
                 }
+            } else if (position == zalgoFilterRow) {
+                ExteraConfig.toggleZalgoFilter();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(ExteraConfig.zalgoFilter);
+                }
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == rearVideoMessagesRow) {
                 ExteraConfig.toggleRearVideoMessages();
                 if (view instanceof TextCheckCell) {
@@ -329,7 +340,8 @@ public class ChatsPreferencesEntry extends BaseFragment {
         disableJumpToNextChannelRow = rowCount++;
         dateOfForwardedMsgRow = rowCount++;
         showMessageIDRow = rowCount++;
-        chatDividerRow = rowCount++;
+        zalgoFilterRow = rowCount++;
+        zalgoFilterInfoRow = rowCount++;
 
         mediaHeaderRow = rowCount++;
         rearVideoMessagesRow = rowCount++;
@@ -405,7 +417,9 @@ public class ChatsPreferencesEntry extends BaseFragment {
                     } else if (position == dateOfForwardedMsgRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("DateOfForwardedMsg", R.string.DateOfForwardedMsg), ExteraConfig.dateOfForwardedMsg, true);
                     } else if (position == showMessageIDRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("ShowMessageID", R.string.ShowMessageID), ExteraConfig.showMessageID, false);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("ShowMessageID", R.string.ShowMessageID), ExteraConfig.showMessageID, true);
+                    } else if (position == zalgoFilterRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString("ZalgoFilter", R.string.ZalgoFilter), ExteraConfig.zalgoFilter, false);
                     } else if (position == rearVideoMessagesRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("RearVideoMessages", R.string.RearVideoMessages), ExteraConfig.rearVideoMessages, true);
                     } else if (position == disableCameraRow) {
@@ -416,6 +430,12 @@ public class ChatsPreferencesEntry extends BaseFragment {
                         textCheckCell.setTextAndValueAndCheck(LocaleController.getString("PauseOnMinimize", R.string.PauseOnMinimize), LocaleController.getString("POMDescription", R.string.POMDescription), ExteraConfig.pauseOnMinimize, true, true);
                     } else if (position == disablePlaybackRow) {
                         textCheckCell.setTextAndValueAndCheck(LocaleController.getString("DisablePlayback", R.string.DisablePlayback), LocaleController.getString("DPDescription", R.string.DPDescription), ExteraConfig.disablePlayback, true, false);
+                    }
+                    break;
+                case 5:
+                    TextInfoPrivacyCell cell = (TextInfoPrivacyCell) holder.itemView;
+                    if (position == zalgoFilterInfoRow) {
+                        cell.setText(ExteraUtils.zalgoFilter(LocaleController.getString("ZalgoFilterInfo", R.string.ZalgoFilterInfo)));
                     }
                     break;
             }
@@ -444,6 +464,10 @@ public class ChatsPreferencesEntry extends BaseFragment {
                     view = stickerSizeCell = new StickerSizeCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
+                case 5:
+                    view = new TextInfoPrivacyCell(mContext);
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    break;
                 default:
                     view = new ShadowSectionCell(mContext);
                     break;
@@ -454,19 +478,21 @@ public class ChatsPreferencesEntry extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            if (position == stickersDividerRow || position == chatDividerRow || position == mediaDividerRow) {
+            if (position == stickersDividerRow || position == mediaDividerRow) {
                 return 1;
             } else if (position == stickerSizeHeaderRow || position == stickersHeaderRow || position == chatHeaderRow || position == mediaHeaderRow) {
                 return 2;
             } else if (position == hideStickerTimeRow || position == unlimitedRecentStickersRow || position == sendMessageBeforeSendStickerRow ||
                       position == hideSendAsChannelRow || position == hideKeyboardOnScrollRow || position == disableReactionsRow ||
                       position == disableGreetingStickerRow || position == disableJumpToNextChannelRow ||
-                      position == dateOfForwardedMsgRow || position == showMessageIDRow || position == rearVideoMessagesRow ||
+                      position == dateOfForwardedMsgRow || position == showMessageIDRow || position == zalgoFilterRow || position == rearVideoMessagesRow ||
                       position == disableCameraRow || position == disableProximityEventsRow || position == pauseOnMinimizeRow ||
                       position == disablePlaybackRow) {
                 return 3;
             } else if (position == stickerSizeRow) {
                 return 4;
+            } else if (position == zalgoFilterInfoRow) {
+                return 5;
             }
             return 1;
         }

@@ -13,6 +13,8 @@ import android.text.TextUtils;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.tgnet.TLRPC;
 
+import com.exteragram.messenger.ExteraUtils;
+
 public class UserObject {
 
     public static boolean isDeleted(TLRPC.User user) {
@@ -57,7 +59,7 @@ public class UserObject {
         } else if (!allowShort && name.length() <= 2) {
             return ContactsController.formatName(user.first_name, user.last_name);
         }
-        return !TextUtils.isEmpty(name) ? name : LocaleController.getString("HiddenName", R.string.HiddenName);
+        return !TextUtils.isEmpty(name) ? ExteraUtils.zalgoFilter(name) : LocaleController.getString("HiddenName", R.string.HiddenName);
     }
 
     public static boolean hasPhoto(TLRPC.User user) {

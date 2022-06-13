@@ -64,6 +64,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.exteragram.messenger.ExteraUtils;
+
 public class MessageObject {
 
     public static final int MESSAGE_SEND_STATE_SENT = 0;
@@ -3175,9 +3177,9 @@ public class MessageObject {
                 } else {
                     messageText = messageOwner.message;
                 }
+                messageText = ExteraUtils.zalgoFilter(messageText);
             }
         }
-
         if (messageText == null) {
             messageText = "";
         }
