@@ -4,7 +4,7 @@ apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
 def verName = "8.7.4"
-def verCode = 1104
+def verCode = 1105
 
 if (System.getenv("DEBUG_BUILD") == "true") {
     verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:%h -n 1").trim()
@@ -108,8 +108,6 @@ android {
 
         externalNativeBuild {
             cmake {
-                // remove x86 x86_64
-                abiFilters "armeabi-v7a", "arm64-v8a"
                 arguments "-DANDROID_STL=c++_static", "-DANDROID_PLATFORM=android-21"
             }
         }
