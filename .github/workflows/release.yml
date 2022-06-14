@@ -326,7 +326,7 @@ jobs:
       - name: Fix Gradle Memoery
         run: |
           sed -i -e "s/16384/6144/g" gradle.properties
-          echo "ndk.dir=${ANDROID_HOME}/ndk-bundle" > local.properties
+          echo "ndk.dir=${ANDROID_HOME}/ndk/21.4.7075529" > local.properties
       - name: Gradle cache
         uses: actions/cache@v2
         with:
