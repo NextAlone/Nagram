@@ -53,6 +53,7 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
@@ -67,6 +68,7 @@ import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.Bulletin;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -200,9 +202,13 @@ public class MessageUtils extends BaseController {
 
         builder.setPositiveButton(LocaleController.getString("DeleteAll", R.string.DeleteAll), (dialogInterface, i) -> {
             if (cell != null && cell.isChecked()) {
-                showDeleteHistoryBulletin(fragment, 0, false, () -> getMessagesController().deleteUserChannelHistory(chat, getUserConfig().getCurrentUser(), null, 0), resourcesProvider);
+                getMessagesController().deleteUserChannelHistory(chat, getUserConfig().getCurrentUser(), null, 0);
             } else {
-                deleteUserHistoryWithSearch(fragment, -chat.id, mergeDialogId, (count, deleteAction) -> showDeleteHistoryBulletin(fragment, count, true, deleteAction, resourcesProvider));
+                deleteUserHistoryWithSearch(fragment, -chat.id, mergeDialogId, count -> {
+                    if (BulletinFactory.canShowBulletin(fragment)) {
+                        BulletinFactory.createDeleteMessagesBulletin(fragment, count, resourcesProvider).show();
+                    }
+                });
             }
         });
         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -214,7 +220,8 @@ public class MessageUtils extends BaseController {
         }
     }
 
-    public void deleteUserHistoryWithSearch(BaseFragment fragment, final long dialogId, final long mergeDialogId, SearchMessagesResultCallback callback) {
+
+    public void deleteUserHistoryWithSearch(BaseFragment fragment, final long dialogId, final long mergeDialogId, MessagesStorage.IntCallback callback) {
         Utilities.globalQueue.postRunnable(() -> {
             ArrayList<Integer> messageIds = new ArrayList<>();
             var latch = new CountDownLatch(1);
@@ -232,22 +239,20 @@ public class MessageUtils extends BaseController {
                 for (int i = 0; i < N; i += 100) {
                     lists.add(new ArrayList<>(messageIds.subList(i, Math.min(N, i + 100))));
                 }
-                var deleteAction = new Runnable() {
-                    @Override
-                    public void run() {
-                        for (ArrayList<Integer> list : lists) {
-                            getMessagesController().deleteMessages(list, null, null, dialogId, true, false);
-                        }
+                AndroidUtilities.runOnUIThread(() -> {
+                    for (ArrayList<Integer> list : lists) {
+                        getMessagesController().deleteMessages(list, null, null, dialogId, true, false);
                     }
-                };
-                AndroidUtilities.runOnUIThread(callback != null ? () -> callback.run(messageIds.size(), deleteAction) : deleteAction);
+                    if (callback != null) {
+                        callback.run(messageIds.size());
+                    }
+                });
             }
             if (mergeDialogId != 0) {
                 deleteUserHistoryWithSearch(fragment, mergeDialogId, 0, null);
             }
         });
     }
-
 
     public void doSearchMessages(BaseFragment fragment, CountDownLatch latch, ArrayList<Integer> messageIds, TLRPC.InputPeer peer, TLRPC.InputPeer fromId, int offsetId, long hash) {
         var req = new TLRPC.TL_messages_search();
