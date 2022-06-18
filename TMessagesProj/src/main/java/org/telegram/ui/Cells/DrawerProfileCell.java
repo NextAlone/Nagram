@@ -282,9 +282,9 @@ public class DrawerProfileCell extends FrameLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int heightBase = ConfigManager.getBooleanOrFalse(Defines.largeAvatarAsBackground) ? MeasureSpec.getSize(widthMeasureSpec) : AndroidUtilities.dp(148);
+        int heightBase = ConfigManager.getBooleanOrFalse(Defines.avatarAsDrawerBackground) && ConfigManager.getBooleanOrFalse(Defines.largeAvatarAsBackground) ? MeasureSpec.getSize(widthMeasureSpec) : AndroidUtilities.dp(148);
         if (Build.VERSION.SDK_INT >= 21) {
-            heightBase -= ConfigManager.getBooleanOrFalse(Defines.largeAvatarAsBackground) ? AndroidUtilities.statusBarHeight : 0;
+            heightBase -= ConfigManager.getBooleanOrFalse(Defines.avatarAsDrawerBackground) && ConfigManager.getBooleanOrFalse(Defines.largeAvatarAsBackground) ? AndroidUtilities.statusBarHeight : 0;
             super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(heightBase + AndroidUtilities.statusBarHeight, MeasureSpec.EXACTLY));
         } else {
             try {
