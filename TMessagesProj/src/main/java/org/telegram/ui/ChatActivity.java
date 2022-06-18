@@ -21848,6 +21848,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     items.add(LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
                                     options.add(4);
                                     icons.add(R.drawable.msg_gallery);
+                                    if (ConfigManager.getBooleanOrFalse(Defines.showCopyPhoto)) {
+                                        items.add(LocaleController.getString("CopyPhoto", R.string.CopyPhoto));
+                                        options.add(86);
+                                        icons.add(R.drawable.msg_copy);
+                                    }
                                 }
                             }
                         } else if (type == 5) {
@@ -23808,6 +23813,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel),
                     null);
                 showDialog(builder.create());
+                break;
+            }
+            case 86: {
+                getMessageUtils().addMessageToClipboard(selectedObject, () -> {
+                    if (BulletinFactory.canShowBulletin(ChatActivity.this)) {
+                        BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("PhotoCopied", R.string.PhotoCopied)).show();
+                    }
+                });
                 break;
             }
             case 87: {

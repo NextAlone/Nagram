@@ -92,6 +92,7 @@ public class Defines {
     public static final String showSaveMessages = "showSaveMessages";
     public static final String showViewHistory = "showViewHistory";
     public static final String showRepeat = "showRepeat";
+    public static final String showCopyPhoto = "showCopyPhoto";
 
     // custom double tap
     public static final String doubleTab = "doubleTab";

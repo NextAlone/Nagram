@@ -493,7 +493,7 @@ public class ChatSettingActivity extends BaseActivity {
         linearLayoutInviteContainer.setOrientation(LinearLayout.VERTICAL);
         linearLayout.addView(linearLayoutInviteContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
-        int count = 6;
+        int count = 7;
         for (int a = 0; a < count; a++) {
             TextCheckCell textCell = new TextCheckCell(context);
             switch (a) {
@@ -519,6 +519,10 @@ public class ChatSettingActivity extends BaseActivity {
                 }
                 case 5: {
                     textCell.setTextAndCheck(LocaleController.getString("MessageDetails", R.string.MessageDetails), ConfigManager.getBooleanOrFalse(Defines.showMessagesDetail), false);
+                    break;
+                }
+                case 6: {
+                    textCell.setTextAndCheck(LocaleController.getString("CopyPhoto", R.string.CopyPhoto), ConfigManager.getBooleanOrFalse(Defines.showCopyPhoto), false);
                     break;
                 }
             }
@@ -556,6 +560,11 @@ public class ChatSettingActivity extends BaseActivity {
                     case 5: {
                         ConfigManager.toggleBoolean(Defines.showMessagesDetail);
                         textCell.setChecked(ConfigManager.getBooleanOrFalse(Defines.showMessagesDetail));
+                        break;
+                    }
+                    case 6: {
+                        ConfigManager.toggleBoolean(Defines.showCopyPhoto);
+                        textCell.setChecked(ConfigManager.getBooleanOrFalse(Defines.showCopyPhoto));
                         break;
                     }
                 }
