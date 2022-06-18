@@ -156,6 +156,11 @@ object NaConfig {
         ConfigItem.configTypeBool,
         true
     )
+    val DisableNoforwards = addConfig(
+        "DisableNoforwards",
+        ConfigItem.configTypeBool,
+        false
+    )
 
     fun addConfig(
         k: String,
