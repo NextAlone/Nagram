@@ -1,11 +1,10 @@
-package tw.nekomimi.nekogram.proxy
+package tw.nekomimi.nekogram.proxy.tcp2ws
 
 import cn.hutool.core.codec.Base64
 import cn.hutool.core.util.StrUtil
 import okhttp3.Dns
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
-import tw.nekomimi.nekogram.proxy.tcp2ws.Tcp2wsServer
 import tw.nekomimi.nekogram.NekoConfig
 import java.net.InetAddress
 
@@ -68,23 +67,6 @@ class WsLoader {
                 builder.fragment(remarks)
             }
             return builder.build().toString().replace("http://", if (tls) "wss://" else "ws://")
-        }
-    }
-
-    // For OKHttp in ProxyHandler.java
-    class CustomDns : Dns {
-        override fun lookup(hostname: String): List<InetAddress> {
-            val list = ArrayList<InetAddress>()
-            val ip = NekoConfig.customPublicProxyIP.String()
-            if (StrUtil.isBlank(ip)) {
-                return Dns.SYSTEM.lookup(hostname)
-            }
-            return try {
-                list.add(InetAddress.getByName(ip))
-                list
-            } catch (e: Exception) {
-                Dns.SYSTEM.lookup(hostname)
-            }
         }
     }
 
