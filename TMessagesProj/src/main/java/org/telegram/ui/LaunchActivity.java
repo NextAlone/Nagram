@@ -912,29 +912,19 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
         MediaController.getInstance().setBaseActivity(this, true);
 
         UIUtil.runOnIoDispatcher(() -> {
-
-            ExternalGcm.checkUpdate(this);
-
-            if (NekoConfig.autoUpdateSubInfo.Bool()) for (SubInfo subInfo : SubManager.getSubList().find()) {
-
-                if (subInfo == null || !subInfo.enable) continue;
-
-                try {
-
-                    subInfo.proxies = subInfo.reloadProxies();
-                    subInfo.lastFetch = System.currentTimeMillis();
-
-                    SubManager.getSubList().update(subInfo, true);
-                    SharedConfig.reloadProxyList();
-
-                } catch (IOException allTriesFailed) {
-
-                    FileLog.e(allTriesFailed);
-
+//            ExternalGcm.checkUpdate(this);
+            if (NekoConfig.autoUpdateSubInfo.Bool())
+                for (SubInfo subInfo : SubManager.getSubList().find()) {
+                    if (subInfo == null || !subInfo.enable) continue;
+                    try {
+                        subInfo.proxies = subInfo.reloadProxies();
+                        subInfo.lastFetch = System.currentTimeMillis();
+                        SubManager.getSubList().update(subInfo, true);
+                        SharedConfig.reloadProxyList();
+                    } catch (IOException allTriesFailed) {
+                        FileLog.e(allTriesFailed);
+                    }
                 }
-
-            }
-
         });
         //FileLog.d("UI create time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
 

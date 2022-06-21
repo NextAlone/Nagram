@@ -20,20 +20,16 @@ fun loadProxiesPublic(urls: List<String>, exceptions: MutableMap<String, Excepti
         return emptyList()
     // Try DoH first ( github.com is often blocked
     try {
-        var content = DnsFactory.getTxts("nachonekodayo.sekai.icu").joinToString()
+        val content = DnsFactory.getTxts("nachonekodayo.sekai.icu").joinToString()
 
         val proxiesString = StrUtil.getSubString(content, "#NekoXStart#", "#NekoXEnd#")
         if (proxiesString.equals(content)) {
             throw Exception("DoH get public proxy: Not found")
         }
 
-        val proxies = parseProxies(proxiesString)
-        if (proxies.count() == 0) {
-            throw Exception("DoH get public proxy: Empty")
-        }
-        return proxies
+        return parseProxies(proxiesString)
     } catch (e: Exception) {
-        FileLog.e(e.stackTraceToString())
+        FileLog.e(e)
     }
 
     // Try Other Urls

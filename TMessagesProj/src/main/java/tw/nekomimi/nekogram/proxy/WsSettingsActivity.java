@@ -43,6 +43,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import java.util.ArrayList;
 
 import cn.hutool.core.util.StrUtil;
+import tw.nekomimi.nekogram.proxy.tcp2ws.WsLoader;
 
 public class WsSettingsActivity extends BaseFragment {
 

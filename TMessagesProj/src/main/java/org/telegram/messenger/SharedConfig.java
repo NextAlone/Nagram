@@ -59,7 +59,7 @@ import tw.nekomimi.nekogram.proxy.ProxyManager;
 import tw.nekomimi.nekogram.proxy.ShadowsocksLoader;
 import tw.nekomimi.nekogram.proxy.ShadowsocksRLoader;
 import tw.nekomimi.nekogram.proxy.VmessLoader;
-import tw.nekomimi.nekogram.proxy.WsLoader;
+import tw.nekomimi.nekogram.proxy.tcp2ws.WsLoader;
 import tw.nekomimi.nekogram.proxy.SubInfo;
 import tw.nekomimi.nekogram.proxy.SubManager;
 import tw.nekomimi.nekogram.utils.AlertUtil;
