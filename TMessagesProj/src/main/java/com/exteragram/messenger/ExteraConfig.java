@@ -28,7 +28,6 @@ public class ExteraConfig {
 
     public static boolean disableNumberRounding;
     public static boolean formatTimeWithSeconds;
-    public static boolean hideAllChats;
     public static boolean chatsOnTitle;
     public static boolean forceTabletMode;
     public static boolean archiveOnPull;
@@ -97,7 +96,6 @@ public class ExteraConfig {
 
             disableNumberRounding = preferences.getBoolean("disableNumberRounding", false);
             formatTimeWithSeconds = preferences.getBoolean("formatTimeWithSeconds", false);
-            hideAllChats = preferences.getBoolean("hideAllChats", false);
             chatsOnTitle = preferences.getBoolean("chatsOnTitle", false);
             forceTabletMode = preferences.getBoolean("forceTabletMode", false);
             archiveOnPull = preferences.getBoolean("archiveOnPull", false);
@@ -170,12 +168,6 @@ public class ExteraConfig {
         blurForAllThemes ^= true;
         SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
         editor.putBoolean("blurForAllThemes", blurForAllThemes).apply();
-    }
-
-    public static void toggleHideAllChats() {
-        hideAllChats ^= true;
-        SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
-        editor.putBoolean("hideAllChats", hideAllChats).apply();
     }
 
     public static void toggleHidePhoneNumber() {

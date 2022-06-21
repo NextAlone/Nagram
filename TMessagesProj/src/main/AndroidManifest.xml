@@ -67,6 +67,7 @@
     <uses-permission android:name="com.oppo.launcher.permission.WRITE_SETTINGS"/>
     <uses-permission android:name="me.everything.badger.permission.BADGE_COUNT_READ"/>
     <uses-permission android:name="me.everything.badger.permission.BADGE_COUNT_WRITE"/>
+    <uses-permission android:name="com.android.vending.BILLING"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:node="replace" />
 
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
@@ -85,11 +86,96 @@
         android:preserveLegacyExternalStorage="true"
         android:allowAudioPlaybackCapture="true"
         android:exported="true"
-        tools:replace="android:supportsRtl"
-        tools:ignore="UnusedAttribute">
-
+        tools:replace="android:supportsRtl">
         <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="@string/MAPS_V2_API" />
 
+        <activity-alias
+            android:enabled="true"
+            android:name="com.exteragram.messenger.DefaultIcon"
+            android:targetActivity="org.telegram.ui.LaunchActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:enabled="false"
+            android:name="com.exteragram.messenger.NoxIcon"
+            android:targetActivity="org.telegram.ui.LaunchActivity"
+            android:icon="@mipmap/ic2_launcher"
+            android:roundIcon="@mipmap/ic2_launcher_round"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:enabled="false"
+            android:name="com.exteragram.messenger.PremiumIcon"
+            android:targetActivity="org.telegram.ui.LaunchActivity"
+            android:icon="@mipmap/ic3_launcher"
+            android:roundIcon="@mipmap/ic3_launcher_round"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:enabled="false"
+            android:name="com.exteragram.messenger.AquaIcon"
+            android:targetActivity="org.telegram.ui.LaunchActivity"
+            android:icon="@mipmap/ic4_launcher"
+            android:roundIcon="@mipmap/ic4_launcher_round"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:enabled="false"
+            android:name="com.exteragram.messenger.TurboIcon"
+            android:targetActivity="org.telegram.ui.LaunchActivity"
+            android:icon="@mipmap/ic5_launcher"
+            android:roundIcon="@mipmap/ic5_launcher_round"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity-alias
+            android:enabled="false"
+            android:name="com.exteragram.messenger.VintageIcon"
+            android:targetActivity="org.telegram.ui.LaunchActivity"
+            android:icon="@mipmap/ic6_launcher"
+            android:roundIcon="@mipmap/ic6_launcher_round"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
         <activity
             android:name="org.telegram.ui.LaunchActivity"
             android:theme="@style/Theme.TMessages.Start"
@@ -100,8 +186,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>

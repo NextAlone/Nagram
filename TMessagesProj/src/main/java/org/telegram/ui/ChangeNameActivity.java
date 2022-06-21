@@ -48,10 +48,18 @@ public class ChangeNameActivity extends BaseFragment {
     private View headerLabelView;
     private View doneButton;
 
+    private Theme.ResourcesProvider resourcesProvider;
+
     private final static int done_button = 1;
+
+    public ChangeNameActivity(Theme.ResourcesProvider resourcesProvider) {
+        this.resourcesProvider = resourcesProvider;
+    }
 
     @Override
     public View createView(Context context) {
+        actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_avatar_actionBarSelectorBlue, resourcesProvider), false);
+        actionBar.setItemsColor(Theme.getColor(Theme.key_actionBarDefaultIcon, resourcesProvider), false);
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
         actionBar.setTitle(LocaleController.getString("EditName", R.string.EditName));
@@ -70,7 +78,7 @@ public class ChangeNameActivity extends BaseFragment {
         });
 
         ActionBarMenu menu = actionBar.createMenu();
-        doneButton = menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56), LocaleController.getString("Done", R.string.Done));
+        doneButton = menu.addItemWithWidth(done_button, R.drawable.ic_ab_done, AndroidUtilities.dp(56), LocaleController.getString("Done", R.string.Done));
 
         TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(UserConfig.getInstance(currentAccount).getClientUserId());
         if (user == null) {
@@ -87,15 +95,20 @@ public class ChangeNameActivity extends BaseFragment {
         firstNameFieldContainer.setText(LocaleController.getString(R.string.FirstName));
         linearLayout.addView(firstNameFieldContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL, 24, 24, 24, 0));
 
-        firstNameField = new EditTextBoldCursor(context);
+        firstNameField = new EditTextBoldCursor(context) {
+            @Override
+            protected Theme.ResourcesProvider getResourcesProvider() {
+                return resourcesProvider;
+            }
+        };
         firstNameField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-        firstNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+        firstNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider));
+        firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText, resourcesProvider));
         firstNameField.setBackground(null);
         firstNameField.setSingleLine(true);
         firstNameField.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
         firstNameField.setImeOptions(EditorInfo.IME_ACTION_NEXT);
-        firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated));
+        firstNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated, resourcesProvider));
         firstNameField.setCursorWidth(1.5f);
         firstNameField.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
         firstNameField.setOnFocusChangeListener((v, hasFocus) -> firstNameFieldContainer.animateSelection(hasFocus ? 1 : 0));
@@ -116,15 +129,20 @@ public class ChangeNameActivity extends BaseFragment {
         lastNameFieldContainer.setText(LocaleController.getString(R.string.LastName));
         linearLayout.addView(lastNameFieldContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL, 24, 24, 24, 0));
 
-        lastNameField = new EditTextBoldCursor(context);
+        lastNameField = new EditTextBoldCursor(context) {
+            @Override
+            protected Theme.ResourcesProvider getResourcesProvider() {
+                return resourcesProvider;
+            }
+        };
         lastNameField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-        lastNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        lastNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
+        lastNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider));
+        lastNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText, resourcesProvider));
         lastNameField.setBackground(null);
         lastNameField.setSingleLine(true);
         lastNameField.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_AUTO_CORRECT);
         lastNameField.setImeOptions(EditorInfo.IME_ACTION_NEXT);
-        lastNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated));
+        lastNameField.setCursorColor(Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated, resourcesProvider));
         lastNameField.setCursorWidth(1.5f);
         lastNameField.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
         lastNameField.setOnFocusChangeListener((v, hasFocus) -> lastNameFieldContainer.animateSelection(hasFocus ? 1 : 0));
@@ -185,6 +203,11 @@ public class ChangeNameActivity extends BaseFragment {
         ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
 
         });
+    }
+
+    @Override
+    public Theme.ResourcesProvider getResourceProvider() {
+        return resourcesProvider;
     }
 
     @Override

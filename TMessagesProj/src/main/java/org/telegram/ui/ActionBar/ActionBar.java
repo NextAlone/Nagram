@@ -71,12 +71,14 @@ public class ActionBar extends FrameLayout {
     }
 
     private ImageView backButtonImageView;
+    private Drawable backButtonDrawable;
     private SimpleTextView[] titleTextView = new SimpleTextView[2];
     private SimpleTextView subtitleTextView;
     private SimpleTextView additionalSubtitleTextView;
     private View actionModeTop;
     private int actionModeColor;
     private int actionBarColor;
+    private boolean isMenuOffsetSuppressed;
     private ActionBarMenu menu;
     private ActionBarMenu actionMode;
     private String actionModeTag;
@@ -86,6 +88,7 @@ public class ActionBar extends FrameLayout {
     private boolean addToContainer = true;
     private boolean clipContent;
     private boolean interceptTouches = true;
+    private boolean forceSkipTouches;
     private int extraHeight;
     private AnimatorSet actionModeAnimation;
     private View actionModeExtraView;
@@ -128,6 +131,11 @@ public class ActionBar extends FrameLayout {
 
     private View.OnTouchListener interceptTouchEventListener;
     private final Theme.ResourcesProvider resourcesProvider;
+
+    SizeNotifierFrameLayout contentView;
+    boolean blurredBackground;
+    public Paint blurScrimPaint = new Paint();
+    Rect rectTmp = new Rect();
 
     EllipsizeSpanAnimator ellipsizeSpanAnimator = new EllipsizeSpanAnimator(this);
 
@@ -173,12 +181,16 @@ public class ActionBar extends FrameLayout {
         backButtonImageView.setContentDescription(LocaleController.getString("AccDescrGoBack", R.string.AccDescrGoBack));
     }
 
+    public Drawable getBackButtonDrawable() {
+        return backButtonDrawable;
+    }
+
     public void setBackButtonDrawable(Drawable drawable) {
         if (backButtonImageView == null) {
             createBackButtonImage();
         }
         backButtonImageView.setVisibility(drawable == null ? GONE : VISIBLE);
-        backButtonImageView.setImageDrawable(drawable);
+        backButtonImageView.setImageDrawable(backButtonDrawable = drawable);
         if (drawable instanceof BackDrawable) {
             BackDrawable backDrawable = (BackDrawable) drawable;
             backDrawable.setRotation(isActionModeShowed() ? 1 : 0, false);
@@ -1041,13 +1053,19 @@ public class ActionBar extends FrameLayout {
                 menu.measure(menuWidth, actionBarHeightSpec);
                 int itemsWidth = menu.getItemsMeasuredWidth();
                 menuWidth = MeasureSpec.makeMeasureSpec(width - AndroidUtilities.dp(AndroidUtilities.isTablet() ? 74 : 66) + menu.getItemsMeasuredWidth(), MeasureSpec.EXACTLY);
-                menu.translateXItems(-itemsWidth);
+                if (!isMenuOffsetSuppressed) {
+                    menu.translateXItems(-itemsWidth);
+                }
             } else if (isSearchFieldVisible) {
                 menuWidth = MeasureSpec.makeMeasureSpec(width - AndroidUtilities.dp(AndroidUtilities.isTablet() ? 74 : 66), MeasureSpec.EXACTLY);
-                menu.translateXItems(0);
+                if (!isMenuOffsetSuppressed) {
+                    menu.translateXItems(0);
+                }
             } else {
                 menuWidth = MeasureSpec.makeMeasureSpec(width, MeasureSpec.AT_MOST);
-                menu.translateXItems(0);
+                if (!isMenuOffsetSuppressed) {
+                    menu.translateXItems(0);
+                }
             }
             menu.measure(menuWidth, actionBarHeightSpec);
 
@@ -1108,6 +1126,10 @@ public class ActionBar extends FrameLayout {
             }
             measureChildWithMargins(child, widthMeasureSpec, 0, MeasureSpec.makeMeasureSpec(getMeasuredHeight(), MeasureSpec.EXACTLY), 0);
         }
+    }
+
+    public void setMenuOffsetSuppressed(boolean menuOffsetSuppressed) {
+        isMenuOffsetSuppressed = menuOffsetSuppressed;
     }
 
     @Override
@@ -1392,6 +1414,9 @@ public class ActionBar extends FrameLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (forceSkipTouches) {
+            return false;
+        }
         return super.onTouchEvent(event) || interceptTouches;
     }
 
@@ -1577,9 +1602,6 @@ public class ActionBar extends FrameLayout {
         return color != null ? color : Theme.getColor(key);
     }
 
-    SizeNotifierFrameLayout contentView;
-    boolean blurredBackground;
-
     public void setDrawBlurBackground(SizeNotifierFrameLayout contentView) {
         blurredBackground = true;
         this.contentView = contentView;
@@ -1587,8 +1609,6 @@ public class ActionBar extends FrameLayout {
         setBackground(null);
     }
 
-    public Paint blurScrimPaint = new Paint();
-    Rect rectTmp = new Rect();
     @Override
     protected void dispatchDraw(Canvas canvas) {
         if (blurredBackground && actionBarColor != Color.TRANSPARENT) {
@@ -1597,5 +1617,9 @@ public class ActionBar extends FrameLayout {
             contentView.drawBlurRect(canvas, getY(), rectTmp, blurScrimPaint, true);
         }
         super.dispatchDraw(canvas);
+    }
+
+    public void setForceSkipTouches(boolean forceSkipTouches) {
+        this.forceSkipTouches = forceSkipTouches;
     }
 }

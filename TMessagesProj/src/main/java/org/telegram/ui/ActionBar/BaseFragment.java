@@ -234,13 +234,15 @@ public abstract class BaseFragment {
             }
             if (parentLayout != null && actionBar == null) {
                 actionBar = createActionBar(parentLayout.getContext());
-                actionBar.parentFragment = this;
+                if (actionBar != null) {
+                    actionBar.parentFragment = this;
+                }
             }
         }
     }
 
     protected ActionBar createActionBar(Context context) {
-        ActionBar actionBar = new ActionBar(context);
+        ActionBar actionBar = new ActionBar(context, getResourceProvider());
         actionBar.setBackgroundColor(getThemedColor(Theme.key_actionBarDefault));
         actionBar.setItemsBackgroundColor(getThemedColor(Theme.key_actionBarDefaultSelector), false);
         actionBar.setItemsBackgroundColor(getThemedColor(Theme.key_actionBarActionModeDefaultSelector), true);
@@ -319,6 +321,8 @@ public abstract class BaseFragment {
         }
     }
 
+    public void onUserLeaveHint() {}
+
     @CallSuper
     public void onResume() {
         isPaused = false;
@@ -393,7 +397,7 @@ public abstract class BaseFragment {
         return allowPresentFragment() && parentLayout != null && parentLayout.presentFragmentAsPreview(fragment);
     }
 
-    public boolean presentFragmentAsPreviewWithMenu(BaseFragment fragment, View menu) {
+    public boolean presentFragmentAsPreviewWithMenu(BaseFragment fragment, ActionBarPopupWindow.ActionBarPopupWindowLayout menu) {
         return allowPresentFragment() && parentLayout != null && parentLayout.presentFragmentAsPreviewWithMenu(fragment, menu);
     }
 

@@ -39,7 +39,6 @@
     <!-- General -->
     <string name="DisableNumberRounding">Disable number rounding</string>
     <string name="FormatTimeWithSeconds">Format time with seconds</string>
-    <string name="HideAllChats">Hide \"All Chats\" tab</string>
     <string name="ChatsOnTitle">\"Chats\" instead of \"exteraGram\"</string>
     <string name="DisableVibration">Disable vibration</string>
     <string name="ForceTabletMode">Force tablet mode</string>

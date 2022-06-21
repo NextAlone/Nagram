@@ -38,12 +38,15 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
@@ -70,9 +73,6 @@ import org.telegram.ui.Components.SizeNotifierFrameLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.ExteraUtils;
@@ -467,7 +467,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                         sendPopupWindow.dismiss();
                     }
                 });
-                sendPopupLayout.setShownFromBotton(false);
+                sendPopupLayout.setShownFromBottom(false);
 
                 itemCells = new ActionBarMenuSubItem[2];
                 for (int a = 0; a < 2; a++) {
@@ -478,9 +478,9 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                     itemCells[a] = new ActionBarMenuSubItem(getParentActivity(), a == 0, a ==  1);
                     if (num == 0) {
                         if (UserObject.isUserSelf(user)) {
-                            itemCells[a].setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.msg_schedule);
+                            itemCells[a].setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.msg_calendar2);
                         } else {
-                            itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.msg_schedule);
+                            itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.msg_calendar2);
                         }
                     } else {
                         itemCells[a].setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);

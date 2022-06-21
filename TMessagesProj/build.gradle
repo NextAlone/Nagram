@@ -40,6 +40,7 @@ dependencies {
     implementation 'com.googlecode.mp4parser:isoparser:1.0.6'
     implementation 'com.stripe:stripe-android:2.0.2'
     implementation 'com.google.mlkit:language-id:17.0.3'
+    implementation 'com.android.billingclient:billing:5.0.0'
     implementation files('libs/libgsaverification-client.aar')
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
@@ -216,7 +217,7 @@ android {
         }
     }
 
-    defaultConfig.versionCode = 2636
+    defaultConfig.versionCode = 2702
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
@@ -245,7 +246,7 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 32
-        versionName "8.7.4"
+        versionName "8.8.2"
 
         // Obtain your own keys at:
         // Telegram: https://core.telegram.org/api/obtaining_api_id

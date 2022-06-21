@@ -19,6 +19,7 @@ import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -77,7 +78,7 @@ public class ChangeBioActivity extends BaseFragment {
         });
 
         ActionBarMenu menu = actionBar.createMenu();
-        doneButton = menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56));
+        doneButton = menu.addItemWithWidth(done_button, R.drawable.ic_ab_done, AndroidUtilities.dp(56));
         doneButton.setContentDescription(LocaleController.getString("Done", R.string.Done));
 
         fragmentView = new LinearLayout(context);
@@ -89,7 +90,15 @@ public class ChangeBioActivity extends BaseFragment {
         firstNameFieldContainer.setText(LocaleController.getString(R.string.UserBio));
         linearLayout.addView(firstNameFieldContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL, 24, 24, 24, 0));
 
-        firstNameField = new EditTextBoldCursor(context);
+        firstNameField = new EditTextBoldCursor(context) {
+            @Override
+            public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+                super.onInitializeAccessibilityNodeInfo(info);
+                Editable s = getEditableText();
+                int number = getMessagesController().getAboutLimit() - Character.codePointCount(s, 0, s.length());
+                info.setText(getText() + ", " + LocaleController.formatPluralString("PeopleJoinedRemaining", number));
+            }
+        };
         firstNameField.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         firstNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
@@ -116,7 +125,7 @@ public class ChangeBioActivity extends BaseFragment {
         });
 
         InputFilter[] inputFilters = new InputFilter[1];
-        inputFilters[0] = new CodepointsLengthInputFilter(70) {
+        inputFilters[0] = new CodepointsLengthInputFilter(getMessagesController().getAboutLimit()) {
             @Override
             public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
                 if (source != null && source.length() > 0 && TextUtils.indexOf(source, '\n') == source.length() - 1) {
@@ -153,11 +162,11 @@ public class ChangeBioActivity extends BaseFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                firstNameFieldContainer.setText(LocaleController.getString(R.string.UserBio), 70 - Character.codePointCount(s, 0, s.length()));
+                firstNameFieldContainer.setText(LocaleController.getString(R.string.UserBio), getMessagesController().getAboutLimit() - Character.codePointCount(s, 0, s.length()));
             }
         });
 
-        firstNameFieldContainer.setText(LocaleController.getString(R.string.UserBio), 70);
+        firstNameFieldContainer.setText(LocaleController.getString(R.string.UserBio), getMessagesController().getAboutLimit());
 
         helpTextView = new TextView(context);
         helpTextView.setFocusable(true);

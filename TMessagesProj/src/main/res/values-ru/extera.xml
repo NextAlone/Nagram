@@ -34,7 +34,6 @@
     <!-- General -->
     <string name="DisableNumberRounding">Отключить округление чисел</string>
     <string name="FormatTimeWithSeconds">Показывать время с секундами</string>
-    <string name="HideAllChats">Скрыть \"Все чаты\"</string>
     <string name="ChatsOnTitle">\"Чаты\" вместо \"exteraGram\"</string>
     <string name="DisableVibration">Отключить вибрацию</string>
     <string name="ForceTabletMode">Планшетный режим</string>

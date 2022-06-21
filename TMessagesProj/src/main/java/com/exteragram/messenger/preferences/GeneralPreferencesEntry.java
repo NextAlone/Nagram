@@ -41,7 +41,6 @@ public class GeneralPreferencesEntry extends BaseFragment {
     private int generalHeaderRow;
     private int formatTimeWithSecondsRow;
     private int disableNumberRoundingRow;
-    private int hideAllChatsRow;
     private int chatsOnTitleRow;
     private int disableVibrationRow;
     private int forceTabletModeRow;
@@ -113,12 +112,6 @@ public class GeneralPreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.formatTimeWithSeconds);
                 } 
-            } else if (position == hideAllChatsRow) {
-                ExteraConfig.toggleHideAllChats();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.hideAllChats);
-                } 
-                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == chatsOnTitleRow) {
                 ExteraConfig.toggleChatsOnTitle();
                 if (view instanceof TextCheckCell) {
@@ -186,7 +179,6 @@ public class GeneralPreferencesEntry extends BaseFragment {
         generalHeaderRow = rowCount++;
         disableNumberRoundingRow = rowCount++;
         formatTimeWithSecondsRow = rowCount++;
-        hideAllChatsRow = rowCount++;
         chatsOnTitleRow = rowCount++;
         disableVibrationRow = rowCount++;
         forceTabletModeRow = rowCount++;
@@ -253,8 +245,6 @@ public class GeneralPreferencesEntry extends BaseFragment {
                         textCheckCell.setTextAndValueAndCheck(LocaleController.getString("DisableNumberRounding", R.string.DisableNumberRounding), "1.23K -> 1,234", ExteraConfig.disableNumberRounding, true, true);
                     } else if (position == formatTimeWithSecondsRow) {
                         textCheckCell.setTextAndValueAndCheck(LocaleController.getString("FormatTimeWithSeconds", R.string.FormatTimeWithSeconds), "12:34 -> 12:34:56", ExteraConfig.formatTimeWithSeconds, true, true);
-                    } else if (position == hideAllChatsRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("HideAllChats", R.string.HideAllChats), ExteraConfig.hideAllChats, true);
                     } else if (position == chatsOnTitleRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("ChatsOnTitle", R.string.ChatsOnTitle), ExteraConfig.chatsOnTitle, true);
                     } else if (position == disableVibrationRow) {
@@ -321,7 +311,7 @@ public class GeneralPreferencesEntry extends BaseFragment {
                 return 1;
             } else if (position == generalHeaderRow || position == archiveHeaderRow || position == profileHeaderRow) {
                 return 2;
-            } else if (position == disableNumberRoundingRow || position == formatTimeWithSecondsRow || position == hideAllChatsRow || position == hidePhoneNumberRow || position == showIDRow || position == showDCRow || position == chatsOnTitleRow || position == archiveOnPullRow ||
+            } else if (position == disableNumberRoundingRow || position == formatTimeWithSecondsRow || position == hidePhoneNumberRow || position == showIDRow || position == showDCRow || position == chatsOnTitleRow || position == archiveOnPullRow ||
                       position == disableVibrationRow || position == forceTabletModeRow || position == disableUnarchiveSwipeRow || position == forcePacmanAnimationRow) {
                 return 3;
             } else if (position == forcePacmanAnimationInfoRow) {
