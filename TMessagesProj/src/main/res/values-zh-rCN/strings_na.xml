@@ -27,4 +27,6 @@
     <string name="CodeSyntaxHighlightDetails">感谢 prismjs and Nekogram</string>
     <string name="UseSystemUnlock">锁定码解锁使用系统界面</string>
     <string name="DisableNoforwards">禁用转发限制</string>
+    <string name="CopyPhoto">复制图片</string>
+    <string name="PhotoCopied">图片已复制到剪贴板</string>
 </resources>

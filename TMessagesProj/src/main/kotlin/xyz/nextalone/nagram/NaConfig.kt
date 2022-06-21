@@ -129,6 +129,12 @@ object NaConfig {
             ConfigItem.configTypeInt,
             0
         )
+    val showCopyPhoto =
+        addConfig(
+            "CopyPhoto",
+            ConfigItem.configTypeBool,
+            false
+        )
     val showReactions =
         addConfig(
             "Reactions",
