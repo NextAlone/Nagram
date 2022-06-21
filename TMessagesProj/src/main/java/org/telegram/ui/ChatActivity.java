@@ -2940,7 +2940,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     if (threadMessageId == 0 && !UserObject.isReplyUser(currentUser) || threadMessageObject != null && threadMessageObject.getRepliesCount() == 0) {
                         searchItem.setVisibility(View.GONE);
                     }
-                    viewInChatItem.setVisibility(View.VISIBLE);
+                    if (viewInChatItem != null)
+                        viewInChatItem.setVisibility(View.VISIBLE);
                     searchItemVisible = false;
                     getMediaDataController().clearFoundMessageObjects();
                     if (messagesSearchAdapter != null) {
@@ -24932,7 +24933,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 audioCallIconItem.setVisibility(View.GONE);
             }
             searchItemVisible = true;
-            viewInChatItem.setVisibility(View.GONE);
+            if (viewInChatItem != null)
+                viewInChatItem.setVisibility(View.GONE);
             updateSearchButtons(0, 0, -1);
             updateBottomOverlay();
         }
