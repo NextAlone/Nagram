@@ -374,6 +374,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private ActionBarMenuItem editTextItem;
     private ActionBarMenuItem searchItem;
     private ActionBarMenuItem searchIconItem;
+    private ActionBarMenuItem viewInChatItem;
     private ActionBarMenuItem audioCallIconItem;
     private boolean searchItemVisible;
     private RadialProgressView progressBar;
@@ -2850,8 +2851,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         ActionBarMenu menu = actionBar.createMenu();
 
-        if (isThreadChat() && threadMessageId != 0 && isComments) {
-            menu.addItem(nkbtn_view_in_chat, R.drawable.msg_viewreplies);
+        if (isThreadChat() && threadMessageId != 0) {
+            viewInChatItem = menu.addItem(nkbtn_view_in_chat, R.drawable.msg_viewreplies, themeDelegate);
         }
 
         if (currentEncryptedChat == null && chatMode == 0 && reportType < 0) {
@@ -2939,6 +2940,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     if (threadMessageId == 0 && !UserObject.isReplyUser(currentUser) || threadMessageObject != null && threadMessageObject.getRepliesCount() == 0) {
                         searchItem.setVisibility(View.GONE);
                     }
+                    viewInChatItem.setVisibility(View.VISIBLE);
                     searchItemVisible = false;
                     getMediaDataController().clearFoundMessageObjects();
                     if (messagesSearchAdapter != null) {
@@ -24930,6 +24932,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 audioCallIconItem.setVisibility(View.GONE);
             }
             searchItemVisible = true;
+            viewInChatItem.setVisibility(View.GONE);
             updateSearchButtons(0, 0, -1);
             updateBottomOverlay();
         }
