@@ -38,9 +38,9 @@ import androidx.annotation.NonNull;
 import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.billingclient.api.BillingClient;
-import com.android.billingclient.api.BillingFlowParams;
-import com.android.billingclient.api.ProductDetails;
+//import com.android.billingclient.api.BillingClient;
+//import com.android.billingclient.api.BillingFlowParams;
+//import com.android.billingclient.api.ProductDetails;
 
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
@@ -572,6 +572,8 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
             return;
         }
 
+        return;
+        /*
         if (BillingController.PREMIUM_PRODUCT_DETAILS == null) {
             return;
         }
@@ -618,6 +620,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 }
             });
         });
+        */
     }
 
     public static String getPremiumButtonText(int currentAccount) {
@@ -641,6 +644,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         }
 
         String price = null;
+        /*
         if (BillingController.PREMIUM_PRODUCT_DETAILS != null) {
             List<ProductDetails.SubscriptionOfferDetails> details = BillingController.PREMIUM_PRODUCT_DETAILS.getSubscriptionOfferDetails();
             if (!details.isEmpty()) {
@@ -653,6 +657,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 }
             }
         }
+        */
 
         if (price == null) {
             return LocaleController.getString(R.string.Loading);

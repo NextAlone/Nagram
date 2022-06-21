@@ -52,7 +52,7 @@ public class BuildVars {
     public static String USER_REPO = BuildConfig.USER_REPO;
 
     public static boolean useInvoiceBilling() {
-        return DEBUG_VERSION || isStandaloneApp() || isBetaApp();
+        return true; //DEBUG_VERSION || isStandaloneApp() || isBetaApp();
     }
 
     private static Boolean standaloneApp;
