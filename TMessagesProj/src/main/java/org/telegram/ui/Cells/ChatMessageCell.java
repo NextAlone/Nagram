@@ -10843,26 +10843,26 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     } else if (messageObject.customReplyName != null) {
                         name = messageObject.customReplyName;
                     } else {
-                        name = messageObject.replyMessageObject.getForwardedName();
-                        if (name == null) {
-                            long fromId = messageObject.replyMessageObject.getFromChatId();
-                            if (fromId > 0) {
-                                TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(fromId);
-                                if (user != null) {
-                                    name = UserObject.getUserName(user);
-                                }
-                            } else if (fromId < 0) {
-                                TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-fromId);
-                                if (chat != null) {
-                                    name = chat.title;
-                                }
-                            } else {
-                                TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(messageObject.replyMessageObject.messageOwner.peer_id.channel_id);
-                                if (chat != null) {
-                                    name = chat.title;
-                                }
+//                        name = messageObject.replyMessageObject.getForwardedName();
+//                        if (name == null) {
+                        long fromId = messageObject.replyMessageObject.getFromChatId();
+                        if (fromId > 0) {
+                            TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(fromId);
+                            if (user != null) {
+                                name = UserObject.getUserName(user);
+                            }
+                        } else if (fromId < 0) {
+                            TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-fromId);
+                            if (chat != null) {
+                                name = chat.title;
+                            }
+                        } else {
+                            TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(messageObject.replyMessageObject.messageOwner.peer_id.channel_id);
+                            if (chat != null) {
+                                name = chat.title;
                             }
                         }
+//                        }
                     }
 
                     if (name == null) {
