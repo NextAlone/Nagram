@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:height="108dp"
+    android:width="108dp"
+    android:viewportWidth="108.0"
+    android:viewportHeight="108.0">
+    <path
+        android:fillColor="@color/ic_foreground_monet"
+        android:pathData="M65.513,39.057C68.404,38.103 70.119,39.65 69.2,42.553C66.889,49.848 62.356,63.156 59.473,71.559C58.719,73.755 55.225,73.67 54.349,71.519C52.845,67.83 50.629,63.536 47.606,60.406C44.715,57.413 40.668,55.25 37.074,53.771C34.885,52.871 34.808,49.192 37.056,48.45L65.513,39.057Z" />
+</vector>

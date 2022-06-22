@@ -3,7 +3,7 @@
     <!-- exteraGram's Main Strings -->
     <string name="exteraAppName" translatable="false">exteraGram</string>
     <string name="exteraAppNameBeta" translatable="false">exteraGram β</string>
-    <string name="exteraDebugMenu" translatable="false">¯\_(ツ)_/¯</string>
+    <string name="exteraDebugMenu" translatable="false">¯\\_(ツ)_/¯</string>
     <string name="MutualContact">mutual contact</string>
     <string name="ToBeginning">To beginning</string>
     <string name="SaveMessage">Save message</string>
@@ -95,6 +95,13 @@
     <string name="ConfirmCall">Confirm call</string>
     <string name="CallTo">Call to **%1$s**?</string>
 
+<<<<<<< HEAD
     <string name="formatterDay24HSec" translatable="false">HH:mm:ss</string>
     <string name="formatterDay12HSec" translatable="false">h:mm:ss a</string>
+=======
+    <string name="formatterDay24HSec">HH:mm:ss</string>
+    <string name="formatterDay12HSec">h:mm:ss a</string>
+
+    <string name="AppIconMonet">Monet</string>
+>>>>>>> 928f7954e ([icons] add monet icon, improve selector)
 </resources>

@@ -104,10 +104,10 @@
 
         <activity-alias
             android:enabled="false"
-            android:name="com.exteragram.messenger.NoxIcon"
+            android:name="com.exteragram.messenger.MonetIcon"
             android:targetActivity="org.telegram.ui.LaunchActivity"
-            android:icon="@mipmap/ic2_launcher"
-            android:roundIcon="@mipmap/ic2_launcher_round"
+            android:icon="@mipmap/ic_launcher_monet"
+            android:roundIcon="@mipmap/ic_launcher_monet"
             android:exported="true">
 
             <intent-filter>

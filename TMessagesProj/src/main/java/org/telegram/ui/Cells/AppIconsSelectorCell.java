@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -49,7 +50,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AppIconsSelectorCell extends RecyclerListView implements NotificationCenter.NotificationCenterDelegate {
-    public final static float ICONS_ROUND_RADIUS = 18;
+    public final static float ICONS_ROUND_RADIUS = 100;
 
     private List<LauncherIconController.LauncherIcon> availableIcons = new ArrayList<>();
     private LinearLayoutManager linearLayoutManager;
@@ -78,6 +79,7 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
             public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
                 IconHolderView holderView = (IconHolderView) holder.itemView;
                 LauncherIconController.LauncherIcon icon = availableIcons.get(position);
+                if (icon == LauncherIconController.LauncherIcon.MONET && Build.VERSION.SDK_INT < 31) return;
                 holderView.bind(icon);
                 holderView.iconView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(ICONS_ROUND_RADIUS), Color.TRANSPARENT, Theme.getColor(Theme.key_listSelector), Color.BLACK));
                 holderView.iconView.setForeground(icon.foreground);
@@ -152,6 +154,7 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
     private void updateIconsVisibility() {
         availableIcons.clear();
         availableIcons.addAll(Arrays.asList(LauncherIconController.LauncherIcon.values()));
+        if (Build.VERSION.SDK_INT < 31) availableIcons.removeIf(p -> p.equals(LauncherIconController.LauncherIcon.MONET));
         if (MessagesController.getInstance(currentAccount).premiumLocked) {
             for (int i = 0; i < availableIcons.size(); i++) {
                 if (availableIcons.get(i).premium) {

@@ -13,6 +13,7 @@ import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.LauncherIconController;
 
 import java.util.LinkedHashMap;
 
@@ -124,6 +125,7 @@ public class MonetHelper {
                     Theme.applyTheme(Theme.getActiveTheme());
                 }
             }
+            LauncherIconController.updateMonetIcon();
         }
     }
 

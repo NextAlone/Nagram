@@ -161,6 +161,7 @@ import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Components.UpdateAppAlertDialog;
 import org.telegram.ui.Components.VerticalPositionAutoAnimator;
 import org.telegram.ui.Components.voip.VoIPHelper;
+import org.telegram.ui.LauncherIconController;
 import org.webrtc.voiceengine.WebRtcAudioTrack;
 
 import java.io.BufferedReader;
@@ -963,6 +964,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             MonetHelper.registerReceiver(this);
+            LauncherIconController.updateMonetIcon();
         }
     }
 
@@ -4852,6 +4854,9 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
         }
         if (Theme.selectedAutoNightType == Theme.AUTO_NIGHT_TYPE_SYSTEM) {
             Theme.checkAutoNightThemeConditions();
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            LauncherIconController.updateMonetIcon();
         }
     }
 
