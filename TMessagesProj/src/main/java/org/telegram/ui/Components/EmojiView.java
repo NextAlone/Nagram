@@ -4268,7 +4268,9 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             }
             Object pack = rowStartPack.get(row);
             if (pack instanceof String) {
-                if ("recent".equals(pack)) {
+                if ("premium".equals(pack)) {
+                    return premiumTabNum;
+                } else if ("recent".equals(pack)) {
                     return recentTabNum;
                 } else {
                     return favTabNum;
@@ -4479,7 +4481,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 }
                 case 5: {
                     StickerSetNameCell cell = (StickerSetNameCell) holder.itemView;
-                    cell.setText(LocaleController.getString("FeaturedStickers", R.string.FeaturedStickers), R.drawable.msg_close);
+                    cell.setText(MediaDataController.getInstance(currentAccount).loadFeaturedPremium ? LocaleController.getString("FeaturedStickersPremium", R.string.FeaturedStickersPremium) : LocaleController.getString("FeaturedStickers", R.string.FeaturedStickers), R.drawable.msg_close);
                     break;
                 }
             }
@@ -4569,7 +4571,13 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     if (pack != null) {
                         rowStartPack.put(startRow + b, pack);
                     } else {
-                        rowStartPack.put(startRow + b, a == -1 ? "recent" : "fav");
+                        if (a == -1) {
+                            rowStartPack.put(startRow + b, "premium");
+                        } else if (a == -2) {
+                            rowStartPack.put(startRow + b, "recent");
+                        } else {
+                            rowStartPack.put(startRow + b, "fav");
+                        }
                     }
                 }
                 totalItems += count * stickersPerRow + 1;
