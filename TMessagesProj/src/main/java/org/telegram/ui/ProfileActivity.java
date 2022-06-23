@@ -4189,7 +4189,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
             final String[] fromLanguage = new String[1];
             fromLanguage[0] = "und";
-            final boolean translateButtonEnabled = MessagesController.getGlobalMainSettings().getBoolean("translate_button", false);
+            final boolean translateButtonEnabled = MessagesController.getGlobalMainSettings().getBoolean("translate_button", true);
             final boolean[] withTranslate = new boolean[1];
             withTranslate[0] = position == bioRow || position == channelInfoRow || position == userInfoRow;
             final String toLang = LocaleController.getInstance().getCurrentLocale().getLanguage();

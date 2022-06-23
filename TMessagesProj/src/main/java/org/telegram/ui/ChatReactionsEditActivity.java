@@ -254,14 +254,18 @@ public class ChatReactionsEditActivity extends BaseFragment implements Notificat
                 Theme.key_switchTrackBlue,
                 Theme.key_switchTrackBlueChecked,
                 Theme.key_switchTrackBlueThumb,
-                Theme.key_switchTrackBlueThumbChecked
+                Theme.key_switchTrackBlueThumbChecked,
+                Theme.key_switchTrack,
+                Theme.key_switchTrackChecked,
+                Theme.key_windowBackgroundWhite
         );
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private void updateColors() {
         contentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
-        enableReactionsCell.setColors(Theme.key_windowBackgroundCheckText, Theme.key_switchTrackBlue, Theme.key_switchTrackBlueChecked, Theme.key_switchTrackBlueThumb, Theme.key_switchTrackBlueThumbChecked);
+        enableReactionsCell.setColors(Theme.key_windowBackgroundCheckText, Theme.key_switchTrack, Theme.key_windowBackgroundWhite, Theme.key_windowBackgroundWhite, Theme.key_switchTrackChecked);
+        // switchKey, switchKeyChecked, switchThumb, switchThumbChecked
         listAdapter.notifyDataSetChanged();
     }
 

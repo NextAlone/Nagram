@@ -7510,7 +7510,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             if (aspectRatioFrameLayout.getVisibility() != View.VISIBLE) {
                 aspectRatioFrameLayout.setVisibility(View.VISIBLE);
             }
-            if ((!pipItem.isEnabled() && pipItem.getVisibility() == View.VISIBLE) || menuItem.isSubItemVisible(gallery_menu_pip2)) {
+            if (!pipItem.isEnabled() && (pipItem.getVisibility() == View.VISIBLE || menuItem.isSubItemVisible(gallery_menu_pip2))) {
                 pipAvailable = true;
                 pipItem.setEnabled(true);
                 if (!ExteraConfig.centerTitle) pipItem.animate().alpha(1.0f).setDuration(175).withEndAction(null).start();
@@ -10369,6 +10369,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         menuItem.hideSubItem(gallery_menu_openin);
         menuItem.hideSubItem(gallery_menu_savegif);
         menuItem.hideSubItem(gallery_menu_masks2);
+        menuItem.hideSubItem(gallery_menu_pip2);
         menuItem.hideSubItem(gallery_menu_edit_avatar);
         menuItem.hideSubItem(gallery_menu_set_as_main);
         menuItem.hideSubItem(gallery_menu_delete);
