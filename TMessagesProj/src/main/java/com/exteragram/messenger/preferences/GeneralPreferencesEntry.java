@@ -106,12 +106,14 @@ public class GeneralPreferencesEntry extends BaseFragment {
                 ExteraConfig.toggleDisableNumberRounding();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.disableNumberRounding);
-                } 
+                }
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == formatTimeWithSecondsRow) {
                 ExteraConfig.toggleFormatTimeWithSeconds();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.formatTimeWithSeconds);
-                } 
+                }
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == chatsOnTitleRow) {
                 ExteraConfig.toggleChatsOnTitle();
                 if (view instanceof TextCheckCell) {
@@ -145,6 +147,7 @@ public class GeneralPreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.forcePacmanAnimation);
                 }
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == hidePhoneNumberRow) {
                 ExteraConfig.toggleHidePhoneNumber();
                 if (view instanceof TextCheckCell) {

@@ -194,25 +194,13 @@ public class AppearancePreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.newSwitchStyle);
                 }
-                Parcelable recyclerViewState = null;
-                if (listView.getLayoutManager() != null) recyclerViewState = listView.getLayoutManager().onSaveInstanceState();
                 parentLayout.rebuildAllFragmentViews(true, true);
-                AlertDialog progressDialog = new AlertDialog(context, 3);
-                progressDialog.show();
-                AndroidUtilities.runOnUIThread(progressDialog::dismiss, 400);
-                listView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
             } else if (position == squareFabRow) {
                 ExteraConfig.toggleSquareFab();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.squareFab);
                 }
-                Parcelable recyclerViewState = null;
-                if (listView.getLayoutManager() != null) recyclerViewState = listView.getLayoutManager().onSaveInstanceState();
                 parentLayout.rebuildAllFragmentViews(true, true);
-                AlertDialog progressDialog = new AlertDialog(context, 3);
-                progressDialog.show();
-                AndroidUtilities.runOnUIThread(progressDialog::dismiss, 400);
-                listView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
             } else if (position == newGroupRow) {
                 ExteraConfig.toggleDrawerElements(1);
                 if (view instanceof TextCheckWithIconCell) {

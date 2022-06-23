@@ -231,6 +231,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.hideStickerTime);
                 }
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == unlimitedRecentStickersRow) {
                 ExteraConfig.toggleUnlimitedRecentStickers();
                 if (view instanceof TextCheckCell) {
