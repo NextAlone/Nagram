@@ -154,6 +154,8 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     private boolean currentAudioFinishedLoading;
 
     private boolean scrollToSong = true;
+    
+    private boolean noCover = false;
 
     private int searchOpenPosition = -1;
     private int searchOpenOffset;
@@ -1603,7 +1605,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
 
     private void showAlbumCover(boolean show, boolean animated) {
         if (show) {
-            if (blurredView.getVisibility() == View.VISIBLE || blurredAnimationInProgress) {
+            if (blurredView.getVisibility() == View.VISIBLE || blurredAnimationInProgress || noCover) {
                 return;
             }
             blurredView.setTag(1);
@@ -2062,7 +2064,12 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             } else if (thumbImageLocation != null) {
                 imageView.setImage(null, null, thumbImageLocation, null, null, 0, 1, messageObject);
             }
-            if (!imageView.getImageReceiver().hasBitmapImage()) imageView.setImageResource(R.drawable.nocover, Theme.getColor(Theme.key_player_button));
+            if (!imageView.getImageReceiver().hasBitmapImage()) {
+                noCover = true;
+                imageView.setImageResource(R.drawable.nocover, Theme.getColor(Theme.key_player_button));
+            } else {
+                noCover = false;
+            }
             imageView.invalidate();
         }
         if (animated) {

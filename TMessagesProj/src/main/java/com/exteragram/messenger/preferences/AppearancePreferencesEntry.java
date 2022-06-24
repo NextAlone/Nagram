@@ -192,15 +192,15 @@ public class AppearancePreferencesEntry extends BaseFragment {
             } else if (position == transparentNavBarRow) {
                 ExteraConfig.toggleTransparentNavBar();
                 if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.newSwitchStyle);
+                    ((TextCheckCell) view).setChecked(ExteraConfig.transparentNavBar);
                 }
-                parentLayout.rebuildAllFragmentViews(true, true);
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == squareFabRow) {
                 ExteraConfig.toggleSquareFab();
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.squareFab);
                 }
-                parentLayout.rebuildAllFragmentViews(true, true);
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == newGroupRow) {
                 ExteraConfig.toggleDrawerElements(1);
                 if (view instanceof TextCheckWithIconCell) {
