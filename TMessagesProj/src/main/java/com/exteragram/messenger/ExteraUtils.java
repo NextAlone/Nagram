@@ -8,10 +8,13 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.TLObject;
+
 
 import com.exteragram.messenger.ExteraConfig;
 
@@ -90,5 +93,13 @@ public class ExteraUtils {
 		} else {
 		    return text;
 		}
+    }
+
+    public static boolean checkSubFor(long id) {
+        TLRPC.Chat chat = MessagesController.getInstance(UserConfig.selectedAccount).getChat(id);
+        if (chat != null && !chat.left && !chat.kicked) {
+            return true;
+        }
+        return false;
     }
 }

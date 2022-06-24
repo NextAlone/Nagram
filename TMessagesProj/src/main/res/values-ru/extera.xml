@@ -90,4 +90,11 @@
 
     <string name="ConfirmCall">Подтверждение звонка</string>
     <string name="CallTo">Позвонить **%1$s**?</string>
+
+    <string name="AppIconInverted">Инверсия</string>
+    <string name="AppIconMonet">Monet</string>
+    <string name="AppIconGradient">Градиент</string>
+    <string name="AppIconPixel">Пиксельная</string>
+    <string name="AppIconGoogle">Google</string>
+    <string name="AppIconRed">Красный бля</string>
 </resources>

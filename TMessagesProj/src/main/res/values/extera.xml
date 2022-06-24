@@ -99,5 +99,10 @@
     <string name="formatterDay24HSec" translatable="false">HH:mm:ss</string>
     <string name="formatterDay12HSec" translatable="false">h:mm:ss a</string>
 
+    <string name="AppIconInverted">Inverted</string>
     <string name="AppIconMonet" translatable="false">Monet</string>
+    <string name="AppIconGradient">Gradient</string>
+    <string name="AppIconPixel">Pixel</string>
+    <string name="AppIconGoogle" translatable="false">Google</string>
+    <string name="AppIconRed" translatable="false">RedEbalo</string>
 </resources>

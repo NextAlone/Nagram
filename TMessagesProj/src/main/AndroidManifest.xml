@@ -116,13 +116,12 @@
                 <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
             </intent-filter>
         </activity-alias>
-
         <activity-alias
             android:enabled="false"
-            android:name="com.exteragram.messenger.PremiumIcon"
+            android:name="com.exteragram.messenger.InvertedIcon"
             android:targetActivity="org.telegram.ui.LaunchActivity"
-            android:icon="@mipmap/ic3_launcher"
-            android:roundIcon="@mipmap/ic3_launcher_round"
+            android:icon="@mipmap/ic_launcher_inverted"
+            android:roundIcon="@mipmap/ic_launcher_inverted"
             android:exported="true">
 
             <intent-filter>
@@ -134,10 +133,10 @@
 
         <activity-alias
             android:enabled="false"
-            android:name="com.exteragram.messenger.AquaIcon"
+            android:name="com.exteragram.messenger.GradientIcon"
             android:targetActivity="org.telegram.ui.LaunchActivity"
-            android:icon="@mipmap/ic4_launcher"
-            android:roundIcon="@mipmap/ic4_launcher_round"
+            android:icon="@mipmap/ic_launcher_gradient"
+            android:roundIcon="@mipmap/ic_launcher_gradient"
             android:exported="true">
 
             <intent-filter>
@@ -149,10 +148,10 @@
 
         <activity-alias
             android:enabled="false"
-            android:name="com.exteragram.messenger.TurboIcon"
+            android:name="com.exteragram.messenger.PixelIcon"
             android:targetActivity="org.telegram.ui.LaunchActivity"
-            android:icon="@mipmap/ic5_launcher"
-            android:roundIcon="@mipmap/ic5_launcher_round"
+            android:icon="@mipmap/ic_launcher_pixel"
+            android:roundIcon="@mipmap/ic_launcher_pixel"
             android:exported="true">
 
             <intent-filter>
@@ -162,12 +161,13 @@
             </intent-filter>
         </activity-alias>
 
+        
         <activity-alias
             android:enabled="false"
-            android:name="com.exteragram.messenger.VintageIcon"
+            android:name="com.exteragram.messenger.GoogleIcon"
             android:targetActivity="org.telegram.ui.LaunchActivity"
-            android:icon="@mipmap/ic6_launcher"
-            android:roundIcon="@mipmap/ic6_launcher_round"
+            android:icon="@mipmap/ic_launcher_google"
+            android:roundIcon="@mipmap/ic_launcher_google"
             android:exported="true">
 
             <intent-filter>
@@ -176,6 +176,23 @@
                 <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
             </intent-filter>
         </activity-alias>
+
+                
+        <activity-alias
+            android:enabled="false"
+            android:name="com.exteragram.messenger.RedIcon"
+            android:targetActivity="org.telegram.ui.LaunchActivity"
+            android:icon="@mipmap/ic_launcher_red"
+            android:roundIcon="@mipmap/ic_launcher_red"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
         <activity
             android:name="org.telegram.ui.LaunchActivity"
             android:theme="@style/Theme.TMessages.Start"

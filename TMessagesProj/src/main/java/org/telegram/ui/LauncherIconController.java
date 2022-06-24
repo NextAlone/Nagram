@@ -44,10 +44,11 @@ public class LauncherIconController {
     public enum LauncherIcon {
         DEFAULT("DefaultIcon", BuildVars.isBetaApp() ? R.color.ic_background_beta : R.color.ic_background, R.drawable.ic_foreground, R.string.AppIconDefault),
         MONET("MonetIcon", R.color.ic_background_monet, R.drawable.ic_foreground_monet, R.string.AppIconMonet),
-        PREMIUM("PremiumIcon", R.mipmap.ic3_background, R.drawable.ic_foreground, R.string.AppIconPremium),
-        AQUA("AquaIcon", R.mipmap.ic4_background, R.drawable.ic_foreground, R.string.AppIconAqua),
-        TURBO("TurboIcon", R.mipmap.ic5_background, R.drawable.ic_foreground, R.string.AppIconTurbo),
-        VINTAGE("VintageIcon", R.mipmap.ic6_background, R.drawable.ic_foreground, R.string.AppIconVintage);
+        INVERTED("InvertedIcon", BuildVars.isBetaApp() ? R.mipmap.ic_background_beta_inverted : R.mipmap.ic_background_inverted, BuildVars.isBetaApp() ? R.mipmap.ic_foreground_beta_inverted : R.mipmap.ic_foreground_inverted, R.string.AppIconInverted),
+        GRADIENT("GradientIcon", R.mipmap.ic_background_gradient, R.drawable.ic_foreground, R.string.AppIconGradient),
+        PIXEL("PixelIcon", R.mipmap.ic_background_pixel, R.mipmap.ic_foreground_pixel, R.string.AppIconPixel),
+        GOOGLE("GoogleIcon", R.mipmap.ic_background_google, R.mipmap.ic_foreground_google, R.string.AppIconGoogle),
+        RED("RedIcon", R.mipmap.ic_background_red, R.mipmap.ic_foreground_red, R.string.AppIconRed);
 
         public final String key;
         public final int background;
