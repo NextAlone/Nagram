@@ -12187,23 +12187,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
                 formwardingNameText = userNames;
                 if (type == -1 || type == 0 || type == 10 || type == 11) {
-                    if (messageObjectsToForward.size() == 1 && messageObjectsToForward.get(0).messageText != null) {
-                        MessageObject messageObject = messageObjectsToForward.get(0);
-                        if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
-                            replyNameTextView.setText(messageObject.messageOwner.media.game.title);
-                        } else {
-                            String mess = messageObject.messageText.toString();
-                            if (mess.length() > 150) {
-                                mess = mess.substring(0, 150);
-                            }
-                            mess = mess.replace('\n', ' ');
-                            replyNameTextView.setText(mess);
-                        }
-                    } else {
-                        replyNameTextView.setText(LocaleController.formatPluralString("PreviewForwardMessagesCount", messageObjectsToForward.size()));
-                    }
+                    replyNameTextView.setText(LocaleController.formatPluralString("PreviewForwardMessagesCount", messageObjectsToForward.size()));
                 } else if (type == 1) {
-                    replyNameTextView.setText(LocaleController.formatPluralString("ForwardedPhoto", messageObjectsToForward.size()));
+                    replyNameTextView.setText(LocaleController.formatPluralString("PreviewForwardPhoto", messageObjectsToForward.size()));
                     if (messageObjectsToForward.size() == 1) {
                         messageObjectToReply = messageObjectsToForward.get(0);
                     }
