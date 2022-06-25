@@ -3978,7 +3978,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     boolean result = true;
                     final String folderName = NekoConfig.customSavePath.String();
                     if (Build.VERSION.SDK_INT >= 29) {
-                        result = saveFileInternal(type, sourceFile, null);
+                        result = saveFileInternal(type, sourceFile, name);
                     } else {
                         File destFile;
                         if (type == 0) {

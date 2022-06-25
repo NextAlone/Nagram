@@ -232,10 +232,17 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
     }
 
     private void invalidateActionBar() {
-        int subtitleColor = ColorUtils.blendARGB(getColor(Theme.key_actionBarDefaultSubtitle), getColor(Theme.key_windowBackgroundWhiteGrayText), actionBarTransitionProgress);
         ChatActivity chatActivity = parentEnterView.getParentFragment();
+        if (chatActivity == null || getVisibility() != VISIBLE) {
+            return;
+        }
+
+        ChatAvatarContainer avatarContainer = chatActivity.getAvatarContainer();
+        String subtitleDefaultColorKey = avatarContainer.getLastSubtitleColorKey() == null ? Theme.key_actionBarDefaultSubtitle : avatarContainer.getLastSubtitleColorKey();
+        int subtitleColor = ColorUtils.blendARGB(getColor(subtitleDefaultColorKey), getColor(Theme.key_windowBackgroundWhiteGrayText), actionBarTransitionProgress);
         ActionBar actionBar = chatActivity.getActionBar();
-        actionBar.setBackgroundColor(ColorUtils.blendARGB(getColor(Theme.key_actionBarDefault), getColor(Theme.key_windowBackgroundWhite), actionBarTransitionProgress));
+        int backgroundColor = ColorUtils.blendARGB(getColor(Theme.key_actionBarDefault), getColor(Theme.key_windowBackgroundWhite), actionBarTransitionProgress);
+        actionBar.setBackgroundColor(backgroundColor);
         actionBar.setItemsColor(ColorUtils.blendARGB(getColor(Theme.key_actionBarDefaultIcon), getColor(Theme.key_windowBackgroundWhiteBlackText), actionBarTransitionProgress), false);
         actionBar.setItemsBackgroundColor(ColorUtils.blendARGB(getColor(Theme.key_actionBarDefaultSelector), getColor(Theme.key_actionBarWhiteSelector), actionBarTransitionProgress), false);
         actionBar.setSubtitleColor(subtitleColor);
