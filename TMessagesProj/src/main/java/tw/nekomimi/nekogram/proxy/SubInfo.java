@@ -11,12 +11,14 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import cn.hutool.core.util.StrUtil;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.parts.ProxyLoadsKt;
 
 @Index("id")
@@ -47,7 +49,18 @@ public class SubInfo implements Mappable {
         HashMap<String, Exception> exceptions = new HashMap<>();
 
         try {
-            return id == SubManager.publicProxySubID ? ProxyLoadsKt.loadProxiesPublic(urls, exceptions) : ProxyLoadsKt.loadProxies(urls, exceptions);
+            if (id == SubManager.publicProxySubID) {
+                if (!NekoConfig.enablePublicProxy.Bool())
+                    return new ArrayList<>();
+                List<String> pubs = ProxyLoadsKt.loadProxiesPublic(urls, exceptions);
+                if (!NekoConfig.enablePublicProxy.Bool())
+                    return new ArrayList<>();
+                else
+                    return pubs;
+            } else {
+                return ProxyLoadsKt.loadProxies(urls, exceptions);
+            }
+//            return id == SubManager.publicProxySubID ?  :
         } catch (Exception ignored) {
         }
 
