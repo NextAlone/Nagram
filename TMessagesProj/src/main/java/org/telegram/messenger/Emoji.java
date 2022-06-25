@@ -517,7 +517,7 @@ public class Emoji {
 
     public static CharSequence replaceEmoji(CharSequence cs, Paint.FontMetricsInt fontMetrics, int size, boolean createNew, int[] emojiOnly, boolean allowAnimated, AtomicReference<WeakReference<View>> viewRef) {
         allowAnimated = false;
-        if (SharedConfig.useSystemEmoji || cs == null || cs.length() == 0) {
+        if (cs == null || cs.length() == 0) {
             return cs;
         }
         Spannable s;
@@ -535,7 +535,7 @@ public class Emoji {
 
             try {
                 drawable = Emoji.getEmojiDrawable(emojiRange.code);
-                if (drawable != null) {
+                if (drawable != null && !SharedConfig.useSystemEmoji) {
                     span = new EmojiSpan(drawable, DynamicDrawableSpan.ALIGN_BOTTOM, size, fontMetrics);
                     s.setSpan(span, emojiRange.start, emojiRange.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
