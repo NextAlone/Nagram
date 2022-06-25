@@ -925,7 +925,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                         FileLog.e(allTriesFailed);
                     }
                 }
-        });
+        }, 4000);
         //FileLog.d("UI create time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
