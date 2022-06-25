@@ -670,6 +670,10 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         }
     }
 
+    public String getLastSubtitleColorKey() {
+        return lastSubtitleColorKey;
+    }
+
     public void setChatAvatar(TLRPC.Chat chat) {
         avatarDrawable.setInfo(chat);
         if (avatarImageView != null) {
