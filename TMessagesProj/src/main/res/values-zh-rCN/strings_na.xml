@@ -29,4 +29,5 @@
     <string name="DisableNoforwards">禁用转发限制</string>
     <string name="CopyPhoto">复制图片</string>
     <string name="PhotoCopied">图片已复制到剪贴板</string>
+    <string name="ToTheBeginning">回到顶部</string>
 </resources>

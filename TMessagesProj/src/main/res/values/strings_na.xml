@@ -29,4 +29,5 @@
     <string name="DisableNoforwards">Disable noforwards</string>
     <string name="CopyPhoto">Copy Photo</string>
     <string name="PhotoCopied">Photo copied to Clipboard</string>
+    <string name="ToTheBeginning">To the beginning</string>
 </resources>

@@ -382,6 +382,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private ActionBarMenuSubItem addContactItem;
     private ActionBarMenuSubItem shareKeyItem;
     private ActionBarMenuSubItem clearHistoryItem;
+    private ActionBarMenuSubItem toTheBeginning;
     private ClippingImageView animatingImageView;
     public RecyclerListView chatListView;
     private ChatListItemAnimator chatListItemAnimator;
@@ -1359,6 +1360,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int save_to = 25;
     private final static int auto_delete_timer = 26;
     private final static int change_colors = 27;
+    private final static int to_the_beginning = 28;
 
     private final static int bot_help = 30;
     private final static int bot_settings = 31;
@@ -2625,6 +2627,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     } catch (Exception e) {
                         FileLog.e(e);
                     }
+                } else if (id == to_the_beginning) {
+                    scrollToMessageId(1, 0, false, 0, true, 0);
                 } else if (id == report) {
                     AlertsCreator.createReportAlert(getParentActivity(), dialog_id, 0, ChatActivity.this, themeDelegate, null);
                 } else if (id == star) {
@@ -3217,6 +3221,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else if (currentChat == null && !currentUser.self || ChatObject.canUserDoAdminAction(currentChat, ChatObject.ACTION_DELETE_MESSAGES)) {
                 headerItem.addSubItem(auto_delete_timer, R.drawable.msg_timer, LocaleController.getString("AutoDeleteSetTimer", R.string.AutoDeleteSetTimer));
             }
+
+            toTheBeginning = headerItem.addSubItem(to_the_beginning, R.drawable.msg_go_up, LocaleController.getString("ToTheBeginning", R.string.ToTheBeginning));
 
             clearHistoryItem = headerItem.addSubItem(clear_history, R.drawable.msg_clear, LocaleController.getString("ClearHistory", R.string.ClearHistory), themeDelegate);
 
