@@ -135,7 +135,7 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
                 try {
                     Bitmap bitmap = null;
                     if (photoPath != null) {
-                        File path = FileLoader.getPathToAttach(photoPath, true);
+                        File path = FileLoader.getInstance(UserConfig.selectedAccount).getPathToAttach(photoPath, true);
                         bitmap = BitmapFactory.decodeFile(path.toString());
                     }
 

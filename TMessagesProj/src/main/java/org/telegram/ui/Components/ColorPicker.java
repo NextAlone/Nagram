@@ -391,7 +391,7 @@ public class ColorPicker extends FrameLayout {
 
         addButton = new ImageView(getContext());
         addButton.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 1));
-        addButton.setImageResource(R.drawable.themes_addcolor);
+        addButton.setImageResource(R.drawable.msg_add);
         addButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.MULTIPLY));
         addButton.setScaleType(ImageView.ScaleType.CENTER);
         addButton.setOnClickListener(v -> {
@@ -485,7 +485,7 @@ public class ColorPicker extends FrameLayout {
             }
         };
         clearButton.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_dialogButtonSelector), 1));
-        clearButton.setImageResource(R.drawable.themes_deletecolor);
+        clearButton.setImageResource(R.drawable.msg_close);
         clearButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.MULTIPLY));
         clearButton.setAlpha(0.0f);
         clearButton.setScaleX(0.0f);

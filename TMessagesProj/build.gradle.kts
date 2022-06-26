@@ -14,7 +14,7 @@ configurations {
     }
 }
 
-val isStable = false
+val isStable = true
 var serviceAccountCredentialsFile = File(rootProject.projectDir, "service_account_credentials.json")
 
 if (serviceAccountCredentialsFile.isFile) {
@@ -73,6 +73,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-common:${Version.kotlin}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${Version.kotlin}")
     implementation("org.osmdroid:osmdroid-android:6.1.13")
+    implementation("com.android.billingclient:billing:5.0.0")
 }
 
 
@@ -154,7 +155,7 @@ android {
         }
     }
 
-    val officialVersionName = "8.7.4"
+    val officialVersionName = "8.8.3"
 
     defaultConfig {
         minSdk = 21

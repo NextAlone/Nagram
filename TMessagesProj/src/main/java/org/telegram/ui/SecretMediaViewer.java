@@ -95,6 +95,19 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
         protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
             return child != aspectRatioFrameLayout && super.drawChild(canvas, child, drawingTime);
         }
+
+
+        @Override
+        protected void onAttachedToWindow() {
+            super.onAttachedToWindow();
+            centerImage.onAttachedToWindow();
+        }
+
+        @Override
+        protected void onDetachedFromWindow() {
+            super.onDetachedFromWindow();
+            centerImage.onDetachedFromWindow();
+        }
     }
 
     private class SecretDeleteTimer extends FrameLayout {
@@ -793,7 +806,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
                 if (f.exists()) {
                     preparePlayer(f);
                 } else {
-                    File file = FileLoader.getPathToMessage(messageObject.messageOwner);
+                    File file = FileLoader.getInstance(currentAccount).getPathToMessage(messageObject.messageOwner);
                     File encryptedFile = new File(file.getAbsolutePath() + ".enc");
                     if (encryptedFile.exists()) {
                         file = encryptedFile;

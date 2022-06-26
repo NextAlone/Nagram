@@ -79,6 +79,10 @@ public class VoiceMessageEnterTransition implements MessageEnterTransitionContai
                 recordCircle.skipDraw = false;
             }
         });
+
+        if (messageView.getSeekBarWaveform() != null) {
+            messageView.getSeekBarWaveform().setSent();
+        }
     }
 
     public void start() {

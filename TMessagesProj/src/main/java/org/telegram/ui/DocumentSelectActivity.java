@@ -779,7 +779,7 @@ public class DocumentSelectActivity extends BaseFragment {
                         if (UserObject.isUserSelf(user)) {
                             itemCells[a].setTextAndIcon(
                                 LocaleController.getString("SetReminder", R.string.SetReminder),
-                                R.drawable.menu_date);
+                                R.drawable.calendar_date);
                         } else {
                             itemCells[a].setTextAndIcon(
                                 LocaleController.getString("ScheduleMessage",

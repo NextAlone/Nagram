@@ -31,7 +31,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Build;
 import android.text.Html;
 import android.text.TextUtils;
@@ -273,11 +272,11 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                 if (chatActivity.isInScheduleMode()) {
                     AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), chatActivity.getDialogId(), (notify, scheduleDate) -> {
                         delegate.didSelectLocation(location.venue, locationType, notify, scheduleDate);
-                        parentAlert.dismiss();
+                        parentAlert.dismiss(true);
                     }, resourcesProvider);
                 } else {
                     delegate.didSelectLocation(location.venue, locationType, true, 0);
-                    parentAlert.dismiss();
+                    parentAlert.dismiss(true);
                 }
             });
 
@@ -588,7 +587,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             });
         }
         mapTypeButton.setBackgroundDrawable(drawable);
-        mapTypeButton.setIcon(R.drawable.location_type);
+        mapTypeButton.setIcon(R.drawable.msg_map_type);
         mapViewClip.addView(mapTypeButton, LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 40 : 44, Build.VERSION.SDK_INT >= 21 ? 40 : 44, Gravity.RIGHT | Gravity.TOP, 0, 12, 12, 0));
         mapTypeButton.setOnClickListener(v -> mapTypeButton.toggleSubMenu());
         mapTypeButton.setDelegate(id -> {
@@ -645,7 +644,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             });
         }
         locationButton.setBackgroundDrawable(drawable);
-        locationButton.setImageResource(R.drawable.location_current);
+        locationButton.setImageResource(R.drawable.msg_current_location);
         locationButton.setScaleType(ImageView.ScaleType.CENTER);
         locationButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_location_actionActiveIcon), PorterDuff.Mode.SRC_IN));
         locationButton.setTag(Theme.key_location_actionActiveIcon);
@@ -657,7 +656,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                 Activity activity = getParentActivity();
                 if (activity != null) {
                     if (activity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        showPermissionAlert(false);
+                        AlertsCreator.createLocationRequiredDialog(getParentActivity(), true).show();
                         return;
                     }
                 }
@@ -785,23 +784,23 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                         if (chatActivity.isInScheduleMode()) {
                             AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), chatActivity.getDialogId(), (notify, scheduleDate) -> {
                                 delegate.didSelectLocation(location, locationType, notify, scheduleDate);
-                                parentAlert.dismiss();
+                                parentAlert.dismiss(true);
                             }, resourcesProvider);
                         } else {
                             delegate.didSelectLocation(location, locationType, true, 0);
-                            parentAlert.dismiss();
+                            parentAlert.dismiss(true);
                         }
                     }
                 } else if (locationDenied) {
-                    showPermissionAlert(true);
+                    AlertsCreator.createLocationRequiredDialog(getParentActivity(), true).show();
                 }
             } else if (position == 2 && locationType == LOCATION_TYPE_SEND_WITH_LIVE) {
                 if (getLocationController().isSharingLocation(dialogId)) {
                     getLocationController().removeSharingLocation(dialogId);
-                    parentAlert.dismiss();
+                    parentAlert.dismiss(true);
                 } else {
                     if (myLocation == null && locationDenied) {
-                        showPermissionAlert(true);
+                        AlertsCreator.createLocationRequiredDialog(getParentActivity(), true).show();
                     } else {
                         openShareLiveLocation();
                     }
@@ -812,11 +811,11 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                     if (chatActivity.isInScheduleMode()) {
                         AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), chatActivity.getDialogId(), (notify, scheduleDate) -> {
                             delegate.didSelectLocation((TLRPC.TL_messageMediaVenue) object, locationType, notify, scheduleDate);
-                            parentAlert.dismiss();
+                            parentAlert.dismiss(true);
                         }, resourcesProvider);
                     } else {
                         delegate.didSelectLocation((TLRPC.TL_messageMediaVenue) object, locationType, true, 0);
-                        parentAlert.dismiss();
+                        parentAlert.dismiss(true);
                     }
                 } else if (object instanceof LiveLocation) {
                     LiveLocation liveLocation = (LiveLocation) object;
@@ -940,11 +939,11 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                 if (chatActivity.isInScheduleMode()) {
                     AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), chatActivity.getDialogId(), (notify, scheduleDate) -> {
                         delegate.didSelectLocation(object, locationType, notify, scheduleDate);
-                        parentAlert.dismiss();
+                        parentAlert.dismiss(true);
                     }, resourcesProvider);
                 } else {
                     delegate.didSelectLocation(object, locationType, true, 0);
-                    parentAlert.dismiss();
+                    parentAlert.dismiss(true);
                 }
             }
         });
@@ -1171,7 +1170,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             location.geo._long = AndroidUtilities.fixLocationCoord(myLocation.getLongitude());
             location.period = param;
             delegate.didSelectLocation(location, locationType, true, 0);
-            parentAlert.dismiss();
+            parentAlert.dismiss(true);
         }, resourcesProvider).show();
     }
 
@@ -1354,7 +1353,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                 LocationManager lm = (LocationManager) ApplicationLoader.applicationContext.getSystemService(Context.LOCATION_SERVICE);
                 if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity(), resourcesProvider);
-                    builder.setTitle(LocaleController.getString("GpsDisabledAlertTitle", R.string.GpsDisabledAlertTitle));
+                    builder.setTopAnimation(R.raw.permission_request_location, AlertsCreator.PERMISSIONS_REQUEST_TOP_ICON_SIZE, false, Theme.getColor(Theme.key_dialogTopBackground));
                     builder.setMessage(LocaleController.getString("GpsDisabledAlertText", R.string.GpsDisabledAlertText));
                     builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", R.string.ConnectingToProxyEnable), (dialog, id) -> {
                         if (getParentActivity() == null) {
@@ -1384,33 +1383,6 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             lastPressedVenue = null;
             lastPressedMarkerView = null;
         }
-    }
-
-    private void showPermissionAlert(boolean byButton) {
-        if (getParentActivity() == null) {
-            return;
-        }
-        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity(), resourcesProvider);
-        builder.setTitle(LocaleController.getString("AppName", R.string.AppName));
-        if (byButton) {
-            builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", R.string.PermissionNoLocationPosition));
-        } else {
-            builder.setMessage(LocaleController.getString("PermissionNoLocation", R.string.PermissionNoLocation));
-        }
-        builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), (dialog, which) -> {
-            if (getParentActivity() == null) {
-                return;
-            }
-            try {
-                Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
-                getParentActivity().startActivity(intent);
-            } catch (Exception e) {
-                FileLog.e(e);
-            }
-        });
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-        builder.show();
     }
 
     private void showResults() {
@@ -1503,6 +1475,18 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                 if (location != null) {
                     final IMapController controller = mapView.getController();
                     controller.setCenter(location);
+                }
+            }
+
+            if (locationDenied && isTypeSend()) {
+//                adapter.setOverScrollHeight(overScrollHeight + top);
+//                // TODO(dkaraush): fix ripple effect on buttons
+                final int count = adapter.getItemCount();
+                for (int i = 1; i < count; ++i) {
+                    holder = listView.findViewHolderForAdapterPosition(i);
+                    if (holder != null) {
+                        holder.itemView.setTranslationY(listView.getPaddingTop() - top);
+                    }
                 }
             }
 

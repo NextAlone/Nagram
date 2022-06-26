@@ -570,7 +570,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 otherItem = menu.addItem(0, R.drawable.ic_ab_other);
                 otherItem.addSubItem(open_in, R.drawable.msg_openin, LocaleController.getString("OpenInExternalApp", R.string.OpenInExternalApp));
                 if (!getLocationController().isSharingLocation(dialogId)) {
-                    otherItem.addSubItem(share_live_location, R.drawable.menu_location, LocaleController.getString("SendLiveLocationMenu", R.string.SendLiveLocationMenu));
+                    otherItem.addSubItem(share_live_location, R.drawable.msg_location, LocaleController.getString("SendLiveLocationMenu", R.string.SendLiveLocationMenu));
                 }
                 otherItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
             }
@@ -756,7 +756,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             });
         }
         mapTypeButton.setBackgroundDrawable(drawable);
-        mapTypeButton.setIcon(R.drawable.location_type);
+        mapTypeButton.setIcon(R.drawable.msg_map_type);
         mapViewClip.addView(mapTypeButton, LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 40 : 44, Build.VERSION.SDK_INT >= 21 ? 40 : 44, Gravity.RIGHT | Gravity.TOP, 0, 12, 12, 0));
         mapTypeButton.setOnClickListener(v -> mapTypeButton.toggleSubMenu());
         mapTypeButton.setDelegate(id -> {
@@ -813,7 +813,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             });
         }
         locationButton.setBackgroundDrawable(drawable);
-        locationButton.setImageResource(R.drawable.location_current);
+        locationButton.setImageResource(R.drawable.msg_current_location);
         locationButton.setScaleType(ImageView.ScaleType.CENTER);
         locationButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_location_actionActiveIcon), PorterDuff.Mode.MULTIPLY));
         locationButton.setTag(Theme.key_location_actionActiveIcon);
@@ -1398,7 +1398,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             RectF bitmapRect = new RectF();
             canvas.save();
             if (photo != null) {
-                File path = FileLoader.getPathToAttach(photo, true);
+                File path = getFileLoader().getPathToAttach(photo, true);
                 Bitmap bitmap = BitmapFactory.decodeFile(path.toString());
                 if (bitmap != null) {
                     BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
@@ -2516,6 +2516,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
             if (mapView != null && mapsInitialized) {
                 myLocationOverlay.enableMyLocation();
+            }
+        } else if (id == NotificationCenter.locationPermissionDenied) {
+            locationDenied = true;
+            if (adapter != null) {
+                adapter.setMyLocationDenied(locationDenied);
             }
         } else if (id == NotificationCenter.locationPermissionDenied) {
             locationDenied = true;

@@ -645,7 +645,7 @@ public class CalendarActivity extends BaseFragment {
                             }
                         } else {
                             PeriodDay day = getDayAtCoord(e.getX(), e.getY());
-                            if (parentLayout.fragmentsStack.size() >= 2) {
+                            if (day != null && parentLayout.fragmentsStack.size() >= 2) {
                                 BaseFragment fragment = parentLayout.fragmentsStack.get(parentLayout.fragmentsStack.size() - 2);
                                 if (fragment instanceof ChatActivity) {
                                     finishFragment();
@@ -783,7 +783,6 @@ public class CalendarActivity extends BaseFragment {
                         prepareBlurBitmap();
 
                         presentFragmentAsPreviewWithMenu(chatActivity, previewMenu);
-
                     }
                 }
             });

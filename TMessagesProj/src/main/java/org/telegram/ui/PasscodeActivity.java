@@ -97,13 +97,13 @@ import top.qwq2333.nullgram.helpers.PasscodeHelper;
 
 public class PasscodeActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     public final static int TYPE_MANAGE_CODE_SETTINGS = 0,
-        TYPE_SETUP_CODE = 1,
-        TYPE_ENTER_CODE_TO_MANAGE_SETTINGS = 2;
+            TYPE_SETUP_CODE = 1,
+            TYPE_ENTER_CODE_TO_MANAGE_SETTINGS = 2;
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({
-        TYPE_MANAGE_CODE_SETTINGS,
-        TYPE_SETUP_CODE,
+            TYPE_MANAGE_CODE_SETTINGS,
+            TYPE_SETUP_CODE,
             TYPE_ENTER_CODE_TO_MANAGE_SETTINGS
     })
     public @interface PasscodeActivityType {}
@@ -431,6 +431,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 frameLayout.addView(innerLinearLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
                 lockImageView = new RLottieImageView(context);
+                lockImageView.setFocusable(false);
                 lockImageView.setAnimation(R.raw.tsv_setup_intro, 120, 120);
                 lockImageView.setAutoRepeat(false);
                 lockImageView.playAnimation();

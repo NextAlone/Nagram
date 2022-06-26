@@ -297,7 +297,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                 }
                 Bitmap bitmap = null;
                 if (avatar != null) {
-                    bitmap = createRoundBitmap(FileLoader.getPathToAttach(avatar, true));
+                    bitmap = createRoundBitmap(FileLoader.getInstance(currentAccount).getPathToAttach(avatar, true));
                     if (bitmap != null) {
                         builder.setIconBitmap(bitmap);
                     }

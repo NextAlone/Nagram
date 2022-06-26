@@ -186,6 +186,9 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             }
             return (currentCount = 0);
         }
+        if (dialogsCount == 0 && messagesController.isLoadingDialogs(folderId)) {
+            return (currentCount = 0);
+        }
         int count = dialogsCount;
         if (dialogsType == 7 || dialogsType == 8) {
             if (dialogsCount == 0) {
@@ -418,7 +421,11 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             case VIEW_TYPE_CONTACTS_FLICKER:
                 FlickerLoadingView flickerLoadingView = new FlickerLoadingView(mContext);
                 flickerLoadingView.setIsSingleCell(true);
-                flickerLoadingView.setViewType(viewType == VIEW_TYPE_CONTACTS_FLICKER ? FlickerLoadingView.CONTACT_TYPE : FlickerLoadingView.DIALOG_CELL_TYPE);
+                int flickerType = viewType == VIEW_TYPE_CONTACTS_FLICKER ? FlickerLoadingView.CONTACT_TYPE : FlickerLoadingView.DIALOG_CELL_TYPE;
+                flickerLoadingView.setViewType(flickerType);
+                if (flickerType == FlickerLoadingView.CONTACT_TYPE) {
+                    flickerLoadingView.setIgnoreHeightCheck(true);
+                }
                 if (viewType == VIEW_TYPE_CONTACTS_FLICKER) {
                     flickerLoadingView.setItemsCount((int) (AndroidUtilities.displaySize.y * 0.5f / AndroidUtilities.dp(64)));
                 }
@@ -703,25 +710,17 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                 cell.setTextSize(14);
                 cell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
                 cell.setBackgroundColor(Theme.getColor(Theme.key_graySection));
-                try {
-                    MessagesController messagesController = AccountInstance.getInstance(currentAccount).getMessagesController();
-                    int j = 0;
-                    if (messagesController.dialogsMyChannels.size() > 0) {
-                        if (i == j) {
-                            cell.setText(LocaleController.getString("MyChannels", R.string.MyChannels));
-                        }
-                        j += 1 + messagesController.dialogsMyChannels.size();
-                    }
-                    if (messagesController.dialogsMyGroups.size() > 0) {
-                        if (i == j) {
-                            cell.setText(LocaleController.getString("MyGroups", R.string.MyGroups));
-                        }
-                        j += 1 + messagesController.dialogsMyGroups.size();
-                    }
-                    if (messagesController.dialogsCanAddUsers.size() > 0 && i == j) {
+                switch (((DialogsActivity.DialogsHeader) getItem(i)).headerType) {
+                    case DialogsActivity.DialogsHeader.HEADER_TYPE_MY_CHANNELS:
+                        cell.setText(LocaleController.getString("MyChannels", R.string.MyChannels));
+                        break;
+                    case DialogsActivity.DialogsHeader.HEADER_TYPE_MY_GROUPS:
+                        cell.setText(LocaleController.getString("MyGroups", R.string.MyGroups));
+                        break;
+                    case DialogsActivity.DialogsHeader.HEADER_TYPE_GROUPS:
                         cell.setText(LocaleController.getString("FilterGroups", R.string.FilterGroups));
-                    }
-                } catch (Exception ignore) {}
+                        break;
+                }
                 break;
             }
             case VIEW_TYPE_NEW_CHAT_HINT: {
@@ -740,7 +739,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             case VIEW_TYPE_TEXT: {
                 TextCell cell = (TextCell) holder.itemView;
                 cell.setColors(Theme.key_windowBackgroundWhiteBlueText4, Theme.key_windowBackgroundWhiteBlueText4);
-                cell.setTextAndIcon(LocaleController.getString("CreateGroupForImport", R.string.CreateGroupForImport), R.drawable.groups_create, dialogsCount != 0);
+                cell.setTextAndIcon(LocaleController.getString("CreateGroupForImport", R.string.CreateGroupForImport), R.drawable.msg_groups_create, dialogsCount != 0);
                 cell.setIsInDialogs();
                 cell.setOffsetFromImage(75);
                 break;
@@ -839,7 +838,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
         } else if (i > size) {
             return VIEW_TYPE_LAST_EMPTY;
         }
-        if (dialogsType == 2 && getItem(i) == null) {
+        if (dialogsType == 2 && getItem(i) instanceof DialogsActivity.DialogsHeader) {
             return VIEW_TYPE_HEADER_2;
         }
         return VIEW_TYPE_DIALOG;

@@ -37,7 +37,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
@@ -126,14 +125,14 @@ public class MessageDetailActivity extends BaseActivity implements NotificationC
             }
         }
         if (TextUtils.isEmpty(filePath)) {
-            filePath = FileLoader.getPathToMessage(messageObject.messageOwner).toString();
+            filePath = getFileLoader().getPathToMessage(messageObject.messageOwner).toString();
             File temp = new File(filePath);
             if (!temp.exists()) {
                 filePath = null;
             }
         }
         if (TextUtils.isEmpty(filePath)) {
-            filePath = FileLoader.getPathToAttach(messageObject.getDocument(), true).toString();
+            filePath = getFileLoader().getPathToAttach(messageObject.getDocument(), true).toString();
             File temp = new File(filePath);
             if (!temp.isFile()) {
                 filePath = null;

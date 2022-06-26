@@ -85,6 +85,10 @@ public class ActionBarMenu extends LinearLayout {
         return addItem(id, icon, null, isActionMode ? parentActionBar.itemsActionModeBackgroundColor : parentActionBar.itemsBackgroundColor, null, width, null);
     }
 
+    public ActionBarMenuItem addItemWithWidth(int id, Drawable drawable, int width, CharSequence title) {
+        return addItem(id, 0, null, isActionMode ? parentActionBar.itemsActionModeBackgroundColor : parentActionBar.itemsBackgroundColor, drawable, width, title);
+    }
+
     public ActionBarMenuItem addItemWithWidth(int id, int icon, int width, CharSequence title) {
         return addItem(id, icon, null, isActionMode ? parentActionBar.itemsActionModeBackgroundColor : parentActionBar.itemsBackgroundColor, null, width, title);
     }
@@ -366,7 +370,7 @@ public class ActionBarMenu extends LinearLayout {
         return false;
     }
 
-    public void translateXItems(int offset) {
+    public void translateXItems(float offset) {
         int count = getChildCount();
         for (int a = 0; a < count; a++) {
             View view = getChildAt(a);

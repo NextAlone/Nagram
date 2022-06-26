@@ -18,6 +18,7 @@ import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -48,8 +49,10 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.InviteLinkBottomSheet;
+import org.telegram.ui.Components.JoinToSendSettingsView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkActionView;
+import org.telegram.ui.Components.Premium.LimitReachedBottomSheet;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -87,6 +90,8 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     private HeaderCell saveHeaderCell;
     private TextCheckCell saveRestrictCell;
     private TextInfoPrivacyCell saveRestrictInfoCell;
+
+    private JoinToSendSettingsView joinContainer;
 
     private boolean isPrivate;
 
@@ -148,7 +153,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             req.channel = new TLRPC.TL_inputChannelEmpty();
             getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
                 canCreatePublic = error == null || !error.text.equals("CHANNELS_ADMIN_PUBLIC_TOO_MUCH");
-                if (!canCreatePublic) {
+                if (!canCreatePublic && getUserConfig().isPremium()) {
                     loadAdminedChannels();
                 }
             }));
@@ -211,7 +216,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         });
 
         ActionBarMenu menu = actionBar.createMenu();
-        doneButton = menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56), LocaleController.getString("Done", R.string.Done));
+        doneButton = menu.addItemWithWidth(done_button, R.drawable.ic_ab_done, AndroidUtilities.dp(56), LocaleController.getString("Done", R.string.Done));
 
         fragmentView = new ScrollView(context) {
             @Override
@@ -291,6 +296,10 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             if (!isPrivate) {
                 return;
             }
+            if (!canCreatePublic) {
+                showPremiumIncreaseLimitDialog();
+                return;
+            }
             isPrivate = false;
             updatePrivatePublic();
         });
@@ -332,7 +341,19 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
         publicContainer.addView(editText, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, 36));
 
-        usernameTextView = new EditTextBoldCursor(context);
+        usernameTextView = new EditTextBoldCursor(context) {
+            @Override
+            public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+                super.onInitializeAccessibilityNodeInfo(info);
+                StringBuilder sb = new StringBuilder();
+                sb.append(getText());
+                if (checkTextView != null && checkTextView.getTextView() != null && !TextUtils.isEmpty(checkTextView.getTextView().getText())) {
+                    sb.append("\n");
+                    sb.append(checkTextView.getTextView().getText());
+                }
+                info.setText(sb);
+            }
+        };
         usernameTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         usernameTextView.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText));
         usernameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
@@ -394,6 +415,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         linearLayout.addView(checkTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
 
         typeInfoCell = new TextInfoPrivacyCell(context);
+        typeInfoCell.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
         linearLayout.addView(typeInfoCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         loadingAdminedCell = new LoadingCell(context);
@@ -410,7 +432,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
 
         manageLinksTextView = new TextCell(context);
         manageLinksTextView.setBackgroundDrawable(Theme.getSelectorDrawable(true));
-        manageLinksTextView.setTextAndIcon(LocaleController.getString("ManageInviteLinks", R.string.ManageInviteLinks), R.drawable.actions_link, false);
+        manageLinksTextView.setTextAndIcon(LocaleController.getString("ManageInviteLinks", R.string.ManageInviteLinks), R.drawable.msg_link2, false);
         manageLinksTextView.setOnClickListener(v -> {
             ManageLinksActivity fragment = new ManageLinksActivity(chatId, 0, 0);
             fragment.setInfo(info, invite);
@@ -420,6 +442,9 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
 
         manageLinksInfoCell = new TextInfoPrivacyCell(context);
         linearLayout.addView(manageLinksInfoCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+
+        joinContainer = new JoinToSendSettingsView(context, currentChat);
+        linearLayout.addView(joinContainer);
 
         saveContainer = new LinearLayout(context);
         saveContainer.setOrientation(LinearLayout.VERTICAL);
@@ -458,6 +483,19 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         return fragmentView;
     }
 
+    private void showPremiumIncreaseLimitDialog() {
+        if (getParentActivity() == null) {
+            return;
+        }
+        LimitReachedBottomSheet limitReachedBottomSheet = new LimitReachedBottomSheet(this, getParentActivity(), LimitReachedBottomSheet.TYPE_PUBLIC_LINKS, currentAccount);
+        limitReachedBottomSheet.parentIsChannel = isChannel;
+        limitReachedBottomSheet.onSuccessRunnable = () -> {
+            canCreatePublic = true;
+            updatePrivatePublic();
+        };
+        showDialog(limitReachedBottomSheet);
+    }
+
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.chatInfoDidLoad) {
@@ -485,8 +523,36 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         if (currentChat.noforwards != isSaveRestricted) {
             getMessagesController().toggleChatNoForwards(chatId, currentChat.noforwards = isSaveRestricted);
         }
-        if (trySetUsername()) {
+        if (trySetUsername() && tryUpdateJoinSettings()) {
             finishFragment();
+        }
+    }
+
+    private boolean tryUpdateJoinSettings() {
+        if (isChannel || joinContainer == null) {
+            return true;
+        }
+        if (getParentActivity() == null) {
+            return false;
+        }
+        boolean needToMigrate = !ChatObject.isChannel(currentChat) && (joinContainer.isJoinToSend || joinContainer.isJoinRequest);
+        if (needToMigrate) {
+            getMessagesController().convertToMegaGroup(getParentActivity(), chatId, this, param -> {
+                if (param != 0) {
+                    chatId = param;
+                    currentChat = getMessagesController().getChat(param);
+                    processDone();
+                }
+            });
+            return false;
+        } else {
+            if (currentChat.join_to_send != joinContainer.isJoinToSend) {
+                getMessagesController().toggleChatJoinToSend(chatId, currentChat.join_to_send = joinContainer.isJoinToSend, null, null);
+            }
+            if (currentChat.join_request != joinContainer.isJoinRequest) {
+                getMessagesController().toggleChatJoinRequest(chatId, currentChat.join_request = joinContainer.isJoinRequest, null, null);
+            }
+            return true;
         }
     }
 
@@ -573,7 +639,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
                             }, ConnectionsManager.RequestFlagInvokeAfter);
                         });
                         showDialog(builder.create());
-                    });
+                    }, false, 0);
                     adminedChannelCell.setChannel(res.chats.get(a), a == res.chats.size() - 1);
                     adminedChannelCells.add(adminedChannelCell);
                     adminnedChannelsLayout.addView(adminedChannelCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 72));
@@ -587,7 +653,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         if (sectionCell2 == null) {
             return;
         }
-        if (!isPrivate && !canCreatePublic) {
+        if (!isPrivate && !canCreatePublic && getUserConfig().isPremium()) {
             typeInfoCell.setText(LocaleController.getString("ChangePublicLimitReached", R.string.ChangePublicLimitReached));
             typeInfoCell.setTag(Theme.key_windowBackgroundWhiteRedText4);
             typeInfoCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText4));
@@ -635,10 +701,10 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             permanentLinkView.setLink(invite != null ? invite.link : null);
             permanentLinkView.loadUsers(invite, chatId);
             checkTextView.setVisibility(!isPrivate && checkTextView.length() != 0 ? View.VISIBLE : View.GONE);
+            manageLinksInfoCell.setText(LocaleController.getString("ManageLinksInfoHelp", R.string.ManageLinksInfoHelp));
             if (isPrivate) {
                 typeInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(typeInfoCell.getContext(), R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                 manageLinksInfoCell.setBackground(Theme.getThemedDrawable(typeInfoCell.getContext(), R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
-                manageLinksInfoCell.setText(LocaleController.getString("ManageLinksInfoHelp", R.string.ManageLinksInfoHelp));
             } else {
                 typeInfoCell.setBackgroundDrawable(checkTextView.getVisibility() == View.VISIBLE ? null : Theme.getThemedDrawable(typeInfoCell.getContext(), R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
             }
@@ -646,6 +712,9 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         radioButtonCell1.setChecked(!isPrivate, true);
         radioButtonCell2.setChecked(isPrivate, true);
         usernameTextView.clearFocus();
+        if (joinContainer != null) {
+            joinContainer.setVisibility(!isChannel && !isPrivate ? View.VISIBLE : View.GONE);
+        }
         checkDoneButton();
     }
 
@@ -731,7 +800,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
                     } else {
                         if (error != null && error.text.equals("CHANNELS_ADMIN_PUBLIC_TOO_MUCH")) {
                             canCreatePublic = false;
-                            loadAdminedChannels();
+                            showPremiumIncreaseLimitDialog();
                         } else {
                             checkTextView.setText(LocaleController.getString("LinkInUse", R.string.LinkInUse));
                         }

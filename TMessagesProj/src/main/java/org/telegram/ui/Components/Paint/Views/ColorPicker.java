@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import androidx.annotation.Keep;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Paint.Swatch;
@@ -73,9 +74,7 @@ public class ColorPicker extends FrameLayout {
             1.0f
     };
 
-    private PorterDuffColorFilter colorPickerFilter = new PorterDuffColorFilter(0xff51bdf3, PorterDuff.Mode.MULTIPLY);
-    private ImageView colorPickerButton;
-    private ImageView settingsButton;
+    public ImageView settingsButton;
     private ImageView undoButton;
     private Drawable shadowDrawable;
 
@@ -89,6 +88,8 @@ public class ColorPicker extends FrameLayout {
     private float weight = 0.016773745f;
     private float draggingFactor;
     private boolean dragging;
+    private ImageView colorPickerButton;
+    private PorterDuffColorFilter colorPickerFilter = new PorterDuffColorFilter(0xff51bdf3, PorterDuff.Mode.MULTIPLY);
 
     public ColorPicker(Context context, final boolean isVideo) {
         super(context);
@@ -99,6 +100,7 @@ public class ColorPicker extends FrameLayout {
         swatchStrokePaint.setStrokeWidth(AndroidUtilities.dp(1));
 
         settingsButton = new ImageView(context);
+        settingsButton.setContentDescription(LocaleController.getString("AccDescrBrushType", R.string.AccDescrBrushType));
         settingsButton.setScaleType(ImageView.ScaleType.CENTER);
         settingsButton.setImageResource(R.drawable.photo_paint_brush);
         addView(settingsButton, LayoutHelper.createFrame(settingsWidth, 52));
@@ -130,6 +132,7 @@ public class ColorPicker extends FrameLayout {
         });
 
         undoButton = new ImageView(context);
+        undoButton.setContentDescription(LocaleController.getString("Undo", R.string.Undo));
         undoButton.setScaleType(ImageView.ScaleType.CENTER);
         undoButton.setImageResource(R.drawable.photo_undo);
         addView(undoButton, LayoutHelper.createFrame(46, 52));

@@ -27,6 +27,10 @@ class DrawerProfilePreviewCell(context: Context?, drawerLayoutContainer: DrawerL
         return false
     }
 
+    override fun didReceivedNotification(id: Int, account: Int, vararg args: Any?) {
+        super.didReceivedNotification(id, account, *args)
+    }
+
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         return false
     }

@@ -25,6 +25,7 @@ import androidx.core.view.ViewCompat;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -33,36 +34,44 @@ import java.util.ArrayList;
 public class HeaderCell extends LinearLayout {
 
     private final TextView textView;
-    private final TextView textView2;
-    private final int height = 40;
+    private SimpleTextView textView2;
+    private int height = 40;
     private final Theme.ResourcesProvider resourcesProvider;
 
     public HeaderCell(Context context) {
-        this(context, Theme.key_windowBackgroundWhiteBlueHeader, 21, 15, false, false, null);
+        this(context, Theme.key_windowBackgroundWhiteBlueHeader, 21, 15, 0, false, false, null);
     }
 
     public HeaderCell(Context context, Theme.ResourcesProvider resourcesProvider) {
-        this(context, Theme.key_windowBackgroundWhiteBlueHeader, 21, 15, false, false,
+        this(context, Theme.key_windowBackgroundWhiteBlueHeader, 21, 15, 0, false, false,
             resourcesProvider);
     }
 
     public HeaderCell(Context context, int padding) {
-        this(context, Theme.key_windowBackgroundWhiteBlueHeader, padding, 15, false, false, null);
+        this(context, Theme.key_windowBackgroundWhiteBlueHeader, padding, 15, 0, false, false, null);
     }
 
-    public HeaderCell(Context context, String textColorKey, int padding, int topMargin,
-        boolean text2) {
-        this(context, textColorKey, padding, topMargin, text2, false, null);
+    public HeaderCell(Context context, int padding, Theme.ResourcesProvider resourcesProvider) {
+        this(context, Theme.key_windowBackgroundWhiteBlueHeader, padding, 15, false, resourcesProvider);
     }
 
-    public HeaderCell(Context context, String textColorKey, int padding, int topMargin,
-        boolean text2, boolean bigTitle) {
-        this(context, textColorKey, padding, topMargin, text2, bigTitle, null);
+    public HeaderCell(Context context, String textColorKey, int padding, int topMargin, boolean text2) {
+        this(context, textColorKey, padding, topMargin, text2, null);
     }
 
+    public HeaderCell(Context context, String textColorKey, int padding, int topMargin, boolean text2, Theme.ResourcesProvider resourcesProvider) {
+        this(context, textColorKey, padding, topMargin, 0, text2, resourcesProvider);
+    }
 
-    public HeaderCell(Context context, String textColorKey, int padding, int topMargin,
-        boolean text2, boolean bigTitle, Theme.ResourcesProvider resourcesProvider) {
+    public HeaderCell(Context context, String textColorKey, int padding, int topMargin, boolean text2, boolean bigTitle) {
+        this(context, textColorKey, padding, topMargin, 0, text2, bigTitle, null);
+    }
+
+    public HeaderCell(Context context, String textColorKey, int padding, int topMargin, int bottomMargin, boolean text2, Theme.ResourcesProvider resourcesProvider) {
+        this(context, textColorKey, padding, topMargin, bottomMargin, text2, false, resourcesProvider);
+    }
+
+    public HeaderCell(Context context, String textColorKey, int padding, int topMargin, int bottomMargin, boolean text2, boolean bigTitle, Theme.ResourcesProvider resourcesProvider) {
         super(context);
         this.resourcesProvider = resourcesProvider;
 
@@ -80,16 +89,13 @@ public class HeaderCell extends LinearLayout {
             (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
         textView.setTextColor(getThemedColor(textColorKey));
         textView.setTag(textColorKey);
-        addView(textView, LayoutHelper.createLinear(-1, -2));
+        addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, padding, topMargin, padding, text2 ? 0 : bottomMargin));
 
-        textView2 = new TextView(getContext());
-        textView2.setTextSize(13);
-        textView2.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
-        textView2.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        addView(textView2, LayoutHelper.createLinear(-2, -2, 0, 4, 0, 0));
-
-        if (!text2) {
-            textView2.setVisibility(View.GONE);
+        if (text2) {
+            textView2 = new SimpleTextView(getContext());
+            textView2.setTextSize(13);
+            textView2.setGravity((LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP);
+            addView(textView2, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP, padding, 21, padding, bottomMargin));
         }
 
         ViewCompat.setAccessibilityHeading(this, true);
@@ -102,13 +108,12 @@ public class HeaderCell extends LinearLayout {
     }
 
     public void setHeight(int value) {
-        textView.setMinHeight(
-            AndroidUtilities.dp(value) - ((LayoutParams) textView.getLayoutParams()).topMargin);
+        textView.setMinHeight(AndroidUtilities.dp(height = value) - ((LayoutParams) textView.getLayoutParams()).topMargin);
     }
 
     public void setEnabled(boolean value, ArrayList<Animator> animators) {
         if (animators != null) {
-            animators.add(ObjectAnimator.ofFloat(textView, "alpha", value ? 1.0f : 0.5f));
+            animators.add(ObjectAnimator.ofFloat(textView, View.ALPHA, value ? 1.0f : 0.5f));
         } else {
             textView.setAlpha(value ? 1.0f : 0.5f);
         }
@@ -132,8 +137,8 @@ public class HeaderCell extends LinearLayout {
     }
 
     public void setText2(CharSequence text) {
-        if (textView2.getVisibility() != View.VISIBLE) {
-            textView2.setVisibility(View.VISIBLE);
+        if (textView2 == null) {
+            return;
         }
         textView2.setText(text);
     }
@@ -142,19 +147,22 @@ public class HeaderCell extends LinearLayout {
         return textView;
     }
 
-    public TextView getTextView2() {
+    public SimpleTextView getTextView2() {
         return textView2;
     }
 
     @Override
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
         super.onInitializeAccessibilityNodeInfo(info);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            info.setHeading(true);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             AccessibilityNodeInfo.CollectionItemInfo collection = info.getCollectionItemInfo();
             if (collection != null) {
                 info.setCollectionItemInfo(AccessibilityNodeInfo.CollectionItemInfo.obtain(collection.getRowIndex(), collection.getRowSpan(), collection.getColumnIndex(), collection.getColumnSpan(), true));
             }
         }
+        info.setEnabled(true);
     }
 
     private int getThemedColor(String key) {
