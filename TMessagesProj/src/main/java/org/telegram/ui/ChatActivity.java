@@ -23239,11 +23239,11 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                         checks = new boolean[]{false, true};
                     } else {
                         builder.setMessage(LocaleController.getString("PinMessageAlert", R.string.PinMessageAlert));
-                        checks = new boolean[]{true, true};
+                        checks = new boolean[]{false, true};
                         FrameLayout frameLayout = new FrameLayout(getParentActivity());
                         CheckBoxCell cell = new CheckBoxCell(getParentActivity(), 1, themeDelegate);
                         cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                        cell.setText(LocaleController.getString("PinNotify", R.string.PinNotify), "", true, false);
+                        cell.setText(LocaleController.getString("PinNotify", R.string.PinNotify), "", false, false);
                         cell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(8) : 0, 0, LocaleController.isRTL ? 0 : AndroidUtilities.dp(8), 0);
                         frameLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.TOP | Gravity.LEFT, 8, 0, 8, 0));
                         cell.setOnClickListener(v -> {
