@@ -30,4 +30,5 @@
     <string name="CopyPhoto">复制图片</string>
     <string name="PhotoCopied">图片已复制到剪贴板</string>
     <string name="ToTheBeginning">回到顶部</string>
+    <string name="DateOfForwardedMsg">显示转发消息日期</string>
 </resources>

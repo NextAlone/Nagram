@@ -167,6 +167,11 @@ object NaConfig {
         ConfigItem.configTypeBool,
         false
     )
+    val DateOfForwardedMsg = addConfig(
+        "DateOfForwardedMsg",
+        ConfigItem.configTypeBool,
+        false
+    )
 
     fun addConfig(
         k: String,

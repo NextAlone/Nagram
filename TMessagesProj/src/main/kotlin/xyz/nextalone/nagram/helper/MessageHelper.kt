@@ -13,6 +13,8 @@ import org.telegram.tgnet.TLRPC.*
 import java.io.File
 import java.io.FileOutputStream
 
+import xyz.nextalone.nagram.NaConfig
+
 
 object MessageHelper {
 
@@ -61,6 +63,12 @@ object MessageHelper {
         } catch (e: Exception) {
             FileLog.e(e)
         }
+    }
 
+    @JvmStatic
+    fun showForwardDate(obj: MessageObject, orig: CharSequence): String {
+        return if (!NaConfig.DateOfForwardedMsg.Bool()) {
+            orig.toString()
+        } else "$orig • ${LocaleController.formatDate(obj.messageOwner.fwd_from.date.toLong())}"
     }
 }
