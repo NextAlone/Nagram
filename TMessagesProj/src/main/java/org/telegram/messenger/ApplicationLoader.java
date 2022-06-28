@@ -35,7 +35,6 @@ import androidx.annotation.NonNull;
 import androidx.multidex.MultiDex;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -310,7 +309,7 @@ public class ApplicationLoader extends Application {
 
     private boolean checkPlayServices() {
         try {
-            int resultCode = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
+            int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
             return resultCode == ConnectionResult.SUCCESS;
         } catch (Exception e) {
             FileLog.e(e);

@@ -2081,6 +2081,7 @@ public class LoginActivity extends BaseFragment {
                                 }
                             }
                         }
+
                         if (activityMode == MODE_CHANGE_PHONE_NUMBER) {
                             String number = PhoneFormat.stripExceptNumbers(UserConfig.getInstance(currentAccount).getClientPhone());
                             boolean ok = false;
