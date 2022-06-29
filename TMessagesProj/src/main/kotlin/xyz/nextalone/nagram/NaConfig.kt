@@ -27,79 +27,79 @@ object NaConfig {
         ArrayList<ConfigItem>()
 
     // Configs
-    var forceCopy =
+    val forceCopy =
         addConfig(
             "ForceCopy",
             ConfigItem.configTypeBool,
             false
         )
-    var showInvertReply =
+    val showInvertReply =
         addConfig(
             "InvertReply",
             ConfigItem.configTypeBool,
             false
         )
-    var showGreatOrPoor =
+    val showGreatOrPoor =
         addConfig(
             "GreatOrPoor",
             ConfigItem.configTypeBool,
             false
         )
-    var showTextBold =
+    val showTextBold =
         addConfig(
             "TextBold",
             ConfigItem.configTypeBool,
             true
         )
-    var showTextItalic =
+    val showTextItalic =
         addConfig(
             "TextItalic",
             ConfigItem.configTypeBool,
             true
         )
-    var showTextMono =
+    val showTextMono =
         addConfig(
             "TextMonospace",
             ConfigItem.configTypeBool,
             true
         )
-    var showTextStrikethrough =
+    val showTextStrikethrough =
         addConfig(
             "TextStrikethrough",
             ConfigItem.configTypeBool,
             true
         )
-    var showTextUnderline =
+    val showTextUnderline =
         addConfig(
             "TextUnderline",
             ConfigItem.configTypeBool,
             true
         )
-    var showTextSpoiler =
+    val showTextSpoiler =
         addConfig(
             "TextSpoiler",
             ConfigItem.configTypeBool,
             true
         )
-    var showTextCreateLink =
+    val showTextCreateLink =
         addConfig(
             "TextLink",
             ConfigItem.configTypeBool,
             true
         )
-    var showTextCreateMention =
+    val showTextCreateMention =
         addConfig(
             "TextCreateMention",
             ConfigItem.configTypeBool,
             true
         )
-    var showTextRegular =
+    val showTextRegular =
         addConfig(
             "TextRegular",
             ConfigItem.configTypeBool,
             true
         )
-    var combineMessage =
+    val combineMessage =
         addConfig(
             "CombineMessage",
             ConfigItem.configTypeInt,
@@ -123,7 +123,7 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
-    var doubleTapAction =
+    val doubleTapAction =
         addConfig(
             "DoubleTapAction",
             ConfigItem.configTypeInt,
