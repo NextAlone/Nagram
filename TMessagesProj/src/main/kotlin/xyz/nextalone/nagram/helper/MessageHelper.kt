@@ -67,8 +67,13 @@ object MessageHelper {
 
     @JvmStatic
     fun showForwardDate(obj: MessageObject, orig: CharSequence): String {
+        val date: Long = obj.messageOwner.fwd_from.date.toLong()
+        val day: String = LocaleController.formatDate(date)
+        val time: String = LocaleController.getInstance().formatterDay.format(date * 1000)
         return if (!NaConfig.DateOfForwardedMsg.Bool()) {
             orig.toString()
-        } else "$orig • ${LocaleController.formatDate(obj.messageOwner.fwd_from.date.toLong())}"
+        } else {
+            if (day == time) {"$orig · $day"} else "$orig · $day $time"
+        }
     }
 }
