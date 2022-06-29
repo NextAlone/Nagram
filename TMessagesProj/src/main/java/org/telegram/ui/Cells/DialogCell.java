@@ -84,7 +84,6 @@ import java.util.Stack;
 
 import tw.nekomimi.nekogram.ui.MessageHelper;
 import tw.nekomimi.nekogram.NekoConfig;
-import xyz.nextalone.nagram.NaConfig;
 
 public class DialogCell extends BaseCell {
 
@@ -1099,9 +1098,9 @@ public class DialogCell extends BaseCell {
                             if (chat != null && chat.id > 0 && fromChat == null && (!ChatObject.isChannel(chat) || ChatObject.isMegagroup(chat))) {
                                 if (message.isOutOwner()) {
                                     messageNameString = LocaleController.getString("FromYou", R.string.FromYou);
-                                    // NekoX: fix show forwarded name as sender
-                                } else if (message != null && message.messageOwner.fwd_from != null && message.messageOwner.fwd_from.from_name != null && !NaConfig.INSTANCE.getShowForwarderName().Bool()) {
-                                    messageNameString = message.messageOwner.fwd_from.from_name;
+                                // NekoX: fix show forwarded name as sender
+                                /*} else if (message != null && message.messageOwner.fwd_from != null && message.messageOwner.fwd_from.from_name != null) {
+                                    messageNameString = message.messageOwner.fwd_from.from_name;*/
                                 } else if (fromUser != null) {
                                     if (useForceThreeLines || SharedConfig.useThreeLinesLayout) {
                                         if (UserObject.isDeleted(fromUser)) {
