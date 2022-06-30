@@ -110,8 +110,8 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     private TextCheckCell signCell;
 
     private FrameLayout stickersContainer;
-    private TextSettingsCell stickersCell;
-    private TextInfoPrivacyCell stickersInfoCell3;
+    private TextCell stickersCell;
+    private TextInfoPrivacyCell stickersInfoCell;
 
     private LinearLayout infoContainer;
     private TextCell membersCell;
@@ -785,7 +785,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
 
         ActionBarMenu menu = actionBar.createMenu();
         if (ChatObject.canChangeChatInfo(currentChat) || signCell != null || historyCell != null) {
-            doneButton = menu.addItemWithWidth(done_button, R.drawable.ic_done, AndroidUtilities.dp(56));
+            doneButton = menu.addItemWithWidth(done_button, R.drawable.ic_ab_done, AndroidUtilities.dp(56));
             doneButton.setContentDescription(LocaleController.getString("Done", R.string.Done));
         }
 
@@ -863,7 +863,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         if ((ChatObject.isChannel(currentChat) || currentChat.gigagroup) && ChatObject.hasAdminRights(currentChat)) {
             logCell = new TextCell(context);
             logCell.setText(LocaleController.getString("EventLog", R.string.EventLog), false);
-            logCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+            logCell.setBackground(Theme.getSelectorDrawable(false));
             logCell.setOnClickListener(v -> presentFragment(new ChannelAdminLogActivity(currentChat)));
         }
 
@@ -903,19 +903,34 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             stickersContainer.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
             linearLayout1.addView(stickersContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
-            stickersCell = new TextSettingsCell(context);
-            stickersCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-            stickersCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+            stickersCell = new TextCell(context);
+            stickersCell.setBackground(Theme.getSelectorDrawable(false));
+            stickersCell.setOnClickListener(v -> presentFragment(new ChannelAdminLogActivity(currentChat)));
+            stickersCell.setPrioritizeTitleOverValue(true);
             stickersContainer.addView(stickersCell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             stickersCell.setOnClickListener(v -> {
                 GroupStickersActivity groupStickersActivity = new GroupStickersActivity(currentChat.id);
                 groupStickersActivity.setInfo(info);
                 presentFragment(groupStickersActivity);
             });
+        } else if (logCell != null) {
+            infoContainer.addView(logCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        }
 
-            stickersInfoCell3 = new TextInfoPrivacyCell(context);
-            stickersInfoCell3.setText(LocaleController.getString("GroupStickersInfo", R.string.GroupStickersInfo));
-            linearLayout1.addView(stickersInfoCell3, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        if (!ChatObject.hasAdminRights(currentChat)) {
+            infoContainer.setVisibility(View.GONE);
+            settingsTopSectionCell.setVisibility(View.GONE);
+        }
+
+        if (stickersCell == null) {
+            infoSectionCell = new ShadowSectionCell(context);
+            linearLayout1.addView(infoSectionCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        }
+
+        if (!isChannel && info != null && info.can_set_stickers) {
+            stickersInfoCell = new TextInfoPrivacyCell(context);
+            stickersInfoCell.setText(LocaleController.getString(R.string.GroupStickersInfo));
+            linearLayout1.addView(stickersInfoCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
         }
 
         if (currentChat.creator) {
@@ -943,21 +958,15 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             }, null));
 
             deleteInfoCell = new ShadowSectionCell(context);
-            deleteInfoCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+            deleteInfoCell.setBackground(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
             linearLayout1.addView(deleteInfoCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-        } else {
-            if (!isChannel) {
-                if (stickersInfoCell3 == null) {
-                    infoSectionCell.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
-                }
-            }
         }
 
-        if (stickersInfoCell3 != null) {
+        if (stickersInfoCell != null) {
             if (deleteInfoCell == null) {
-                stickersInfoCell3.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                stickersInfoCell.setBackground(Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
             } else {
-                stickersInfoCell3.setBackgroundDrawable(Theme.getThemedDrawable(context, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                stickersInfoCell.setBackground(Theme.getThemedDrawable(context, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
             }
         }
 
@@ -1183,7 +1192,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         if (info != null) {
             if (ChatObject.isChannel(currentChat) && info.hidden_prehistory != historyHidden) {
                 info.hidden_prehistory = historyHidden;
-                getMessagesController().toogleChannelInvitesHistory(chatId, historyHidden);
+                getMessagesController().toggleChannelInvitesHistory(chatId, historyHidden);
             }
         }
 
@@ -1208,7 +1217,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         }
         if (signMessages != currentChat.signatures) {
             currentChat.signatures = true;
-            getMessagesController().toogleChannelSignatures(chatId, signMessages);
+            getMessagesController().toggleChannelSignatures(chatId, signMessages);
         }
         finishFragment();
     }
@@ -1402,14 +1411,6 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             historyCell.setTextAndValue(LocaleController.getString("ChatHistory", R.string.ChatHistory), type, false);
         }
 
-        if (stickersCell != null) {
-            if (info != null && info.stickerset != null) {
-                stickersCell.setTextAndValue(LocaleController.getString("GroupStickers", R.string.GroupStickers), info.stickerset.title, false);
-            } else {
-                stickersCell.setText(LocaleController.getString("GroupStickers", R.string.GroupStickers), false);
-            }
-        }
-
         if (membersCell != null) {
             if (info != null) {
                 if (memberRequestsCell != null) {
@@ -1490,7 +1491,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                 } else {
                     membersCell.setText(LocaleController.getString("ChannelMembers", R.string.ChannelMembers), logCell != null && logCell.getVisibility() == View.VISIBLE);
                     if (currentChat.gigagroup) {
-                        blockCell.setTextAndIcon(LocaleController.getString("ChannelBlacklist", R.string.ChannelBlacklist), R.drawable.actions_removed, logCell != null && logCell.getVisibility() == View.VISIBLE);
+                        blockCell.setTextAndIcon(LocaleController.getString("ChannelBlacklist", R.string.ChannelBlacklist), R.drawable.msg_chats_remove, logCell != null && logCell.getVisibility() == View.VISIBLE);
                     } else {
                         blockCell.setText(LocaleController.getString("ChannelPermissions", R.string.ChannelPermissions), true);
                     }
@@ -1511,11 +1512,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         }
 
         if (stickersCell != null && info != null) {
-            if (info.stickerset != null) {
-                stickersCell.setTextAndValue(LocaleController.getString("GroupStickers", R.string.GroupStickers), info.stickerset.title, false);
-            } else {
-                stickersCell.setText(LocaleController.getString("GroupStickers", R.string.GroupStickers), false);
-            }
+            stickersCell.setTextAndValueAndIcon(LocaleController.getString(R.string.GroupStickers), info.stickerset != null ? info.stickerset.title : LocaleController.getString(R.string.Add), R.drawable.msg_sticker, false);
         }
     }
 
@@ -1601,7 +1598,6 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         themeDescriptions.add(new ThemeDescription(settingsTopSectionCell, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow));
         themeDescriptions.add(new ThemeDescription(settingsSectionCell, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow));
         themeDescriptions.add(new ThemeDescription(deleteInfoCell, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow));
-        themeDescriptions.add(new ThemeDescription(infoSectionCell, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow));
 
         themeDescriptions.add(new ThemeDescription(signCell, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector));
         themeDescriptions.add(new ThemeDescription(signCell, 0, new Class[]{TextCheckCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
@@ -1613,8 +1609,8 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         themeDescriptions.add(new ThemeDescription(stickersCell, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector));
         themeDescriptions.add(new ThemeDescription(stickersCell, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
 
-        themeDescriptions.add(new ThemeDescription(stickersInfoCell3, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow));
-        themeDescriptions.add(new ThemeDescription(stickersInfoCell3, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4));
+        themeDescriptions.add(new ThemeDescription(stickersInfoCell, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow));
+        themeDescriptions.add(new ThemeDescription(stickersInfoCell, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText4));
 
         themeDescriptions.add(new ThemeDescription(null, 0, null, null, Theme.avatarDrawables, cellDelegate, Theme.key_avatar_text));
         themeDescriptions.add(new ThemeDescription(null, 0, null, null, null, cellDelegate, Theme.key_avatar_backgroundRed));

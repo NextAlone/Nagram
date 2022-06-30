@@ -42,6 +42,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.jetbrains.annotations.NotNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
@@ -476,7 +479,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                         sendPopupWindow.dismiss();
                     }
                 });
-                sendPopupLayout.setShownFromBotton(false);
+                sendPopupLayout.setShownFromBottom(false);
 
                 itemCells = new ActionBarMenuSubItem[2];
                 for (int a = 0; a < 3; a++) {

@@ -17,6 +17,7 @@ import android.os.Build;
 @SuppressWarnings("ConstantConditions")
 public class BuildVars {
 
+    public static final boolean IS_BILLING_UNAVAILABLE = false;
     public static boolean DEBUG_VERSION = BuildConfig.BUILD_TYPE.equals("debug");
     public static boolean DEBUG_PRIVATE_VERSION = DEBUG_VERSION;
     public static boolean LOGS_ENABLED = DEBUG_PRIVATE_VERSION;

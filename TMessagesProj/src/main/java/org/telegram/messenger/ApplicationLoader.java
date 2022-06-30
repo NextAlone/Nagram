@@ -41,6 +41,7 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.ForegroundDetector;
+import org.telegram.ui.LauncherIconController;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -388,7 +389,7 @@ public class ApplicationLoader extends Application {
         org.osmdroid.config.Configuration.getInstance().setOsmdroidBasePath(new File(ApplicationLoader.applicationContext.getCacheDir(), "osmdroid"));
 
         startPushService();
-
+LauncherIconController.tryFixLauncherIconIfNeeded();
     }
 
     public static void startPushService() {

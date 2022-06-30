@@ -18,6 +18,9 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DownloadController;
@@ -47,9 +50,6 @@ import org.telegram.ui.Components.voip.VoIPHelper;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import kotlin.Unit;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
@@ -95,6 +95,12 @@ public class DataSettingsActivity extends BaseFragment {
     private int proxySection2Row;
     private int clearDraftsRow;
     private int clearDraftsSectionRow;
+    private int saveToGallerySectionRow;
+    private int saveToGalleryPeerRow;
+    private int saveToGalleryChannelsRow;
+    private int saveToGalleryGroupsRow;
+    private int saveToGalleryDividerRow;
+
     private int rowCount;
 
     @Override
@@ -115,6 +121,13 @@ public class DataSettingsActivity extends BaseFragment {
         roamingRow = rowCount++;
         resetDownloadRow = rowCount++;
         mediaDownloadSection2Row = rowCount++;
+
+        saveToGallerySectionRow = rowCount++;
+        saveToGalleryPeerRow = rowCount++;
+        saveToGalleryGroupsRow = rowCount++;
+        saveToGalleryChannelsRow = rowCount++;
+        saveToGalleryDividerRow = rowCount++;
+
         autoplayHeaderRow = rowCount++;
         autoplayGifsRow = rowCount++;
         autoplayVideoRow = rowCount++;
@@ -129,6 +142,7 @@ public class DataSettingsActivity extends BaseFragment {
             enableMkvRow = -1;
         }
         enableAllStreamInfoRow = rowCount++;
+
         enableCacheStreamRow = -1;//rowCount++;
         callsSectionRow = rowCount++;
         useLessDataForCallsRow = rowCount++;
@@ -172,7 +186,19 @@ public class DataSettingsActivity extends BaseFragment {
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener((view, position, x, y) -> {
-            if (position == mobileRow || position == roamingRow || position == wifiRow) {
+            if (position == saveToGalleryGroupsRow || position == saveToGalleryChannelsRow || position == saveToGalleryPeerRow) {
+                int flag;
+                if (position == saveToGalleryGroupsRow) {
+                    flag = SharedConfig.SAVE_TO_GALLERY_FLAG_GROUP;
+                } else if (position == saveToGalleryChannelsRow) {
+                    flag = SharedConfig.SAVE_TO_GALLERY_FLAG_CHANNELS;
+                } else {
+                    flag = SharedConfig.SAVE_TO_GALLERY_FLAG_PEER;
+                }
+                SharedConfig.toggleSaveToGalleryFlag(flag);
+                TextCheckCell textCheckCell = (TextCheckCell) view;
+                textCheckCell.setChecked((SharedConfig.saveToGalleryFlags & flag) != 0);
+            } else if (position == mobileRow || position == roamingRow || position == wifiRow) {
                 if (LocaleController.isRTL && x <= AndroidUtilities.dp(76) || !LocaleController.isRTL && x >= view.getMeasuredWidth() - AndroidUtilities.dp(76)) {
                     boolean wasEnabled = listAdapter.isRowEnabled(resetDownloadRow);
 
@@ -509,6 +535,8 @@ public class DataSettingsActivity extends BaseFragment {
                         headerCell.setText(LocaleController.getString("Streaming", R.string.Streaming));
                     } else if (position == autoplayHeaderRow) {
                         headerCell.setText(LocaleController.getString("AutoplayMedia", R.string.AutoplayMedia));
+                    } else if (position == saveToGallerySectionRow) {
+                        headerCell.setText(LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
                     }
                     break;
                 }
@@ -526,6 +554,12 @@ public class DataSettingsActivity extends BaseFragment {
                         checkCell.setTextAndCheck(LocaleController.getString("AutoplayGIF", R.string.AutoplayGIF), SharedConfig.autoplayGifs, true);
                     } else if (position == autoplayVideoRow) {
                         checkCell.setTextAndCheck(LocaleController.getString("AutoplayVideo", R.string.AutoplayVideo), SharedConfig.autoplayVideo, false);
+                    } else if (position == saveToGalleryPeerRow) {
+                        checkCell.setTextAndCheck(LocaleController.getString("SaveToGalleryPrivate", R.string.SaveToGalleryPrivate), (SharedConfig.saveToGalleryFlags & SharedConfig.SAVE_TO_GALLERY_FLAG_PEER) != 0, true);
+                    } else if (position == saveToGalleryGroupsRow) {
+                        checkCell.setTextAndCheck(LocaleController.getString("SaveToGalleryGroups", R.string.SaveToGalleryGroups), (SharedConfig.saveToGalleryFlags & SharedConfig.SAVE_TO_GALLERY_FLAG_GROUP) != 0, true);
+                    } else if (position == saveToGalleryChannelsRow) {
+                        checkCell.setTextAndCheck(LocaleController.getString("SaveToGalleryChannels", R.string.SaveToGalleryChannels), (SharedConfig.saveToGalleryFlags & SharedConfig.SAVE_TO_GALLERY_FLAG_CHANNELS) != 0, false);
                     }
                     break;
                 }
@@ -633,7 +667,7 @@ public class DataSettingsActivity extends BaseFragment {
             }
             return position == mobileRow || position == roamingRow || position == wifiRow || position == storageUsageRow || position == useLessDataForCallsRow || position == dataUsageRow || position == proxyRow || position == clearDraftsRow ||
                     position == enableCacheStreamRow || position == enableStreamRow || position == enableAllStreamRow || position == enableMkvRow || position == quickRepliesRow || position == autoplayVideoRow || position == autoplayGifsRow ||
-                    position == storageNumRow;
+                    position == storageNumRow || position == saveToGalleryGroupsRow || position == saveToGalleryPeerRow || position == saveToGalleryChannelsRow;
         }
 
         @Override
@@ -676,11 +710,11 @@ public class DataSettingsActivity extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            if (position == mediaDownloadSection2Row || position == usageSection2Row || position == callsSection2Row || position == proxySection2Row || position == autoplaySectionRow || position == clearDraftsSectionRow) {
+            if (position == mediaDownloadSection2Row || position == usageSection2Row || position == callsSection2Row || position == proxySection2Row || position == autoplaySectionRow || position == clearDraftsSectionRow || position == saveToGalleryDividerRow) {
                 return 0;
-            } else if (position == mediaDownloadSectionRow || position == streamSectionRow || position == callsSectionRow || position == usageSectionRow || position == proxySectionRow || position == autoplayHeaderRow) {
+            } else if (position == mediaDownloadSectionRow || position == streamSectionRow || position == callsSectionRow || position == usageSectionRow || position == proxySectionRow || position == autoplayHeaderRow || position == saveToGallerySectionRow) {
                 return 2;
-            } else if (position == enableCacheStreamRow || position == enableStreamRow || position == enableAllStreamRow || position == enableMkvRow || position == autoplayGifsRow || position == autoplayVideoRow) {
+            } else if (position == enableCacheStreamRow || position == enableStreamRow || position == enableAllStreamRow || position == enableMkvRow || position == autoplayGifsRow || position == autoplayVideoRow || position == saveToGalleryGroupsRow || position == saveToGalleryPeerRow || position == saveToGalleryChannelsRow) {
                 return 3;
             } else if (position == enableAllStreamInfoRow) {
                 return 4;

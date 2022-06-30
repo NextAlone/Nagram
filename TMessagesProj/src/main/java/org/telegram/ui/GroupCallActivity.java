@@ -43,6 +43,7 @@ import android.text.InputType;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Property;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -381,6 +382,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
     private HashMap<View, Float> buttonsAnimationParamsX = new HashMap<>();
     private HashMap<View, Float> buttonsAnimationParamsY = new HashMap<>();
     boolean animateButtonsOnNextLayout;
+
+    private Runnable onUserLeaveHintListener = this::onUserLeaveHint;
 
     private Runnable updateSchedeulRunnable = new Runnable() {
         @Override
@@ -1064,6 +1067,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
 
     @Override
     public void dismiss() {
+        parentActivity.removeOnUserLeaveHintListener(onUserLeaveHintListener);
         parentActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         groupCallUiVisible = false;
         if (groupVoipInviteAlert != null) {
@@ -1263,7 +1267,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                             if (child instanceof ActionBarMenuSubItem && child.getTag() != null && (Integer) child.getTag() == 10) {
                                 ((ActionBarMenuSubItem) child).setTextAndIcon(
                                         TextUtils.isEmpty(participant.about) ? LocaleController.getString("VoipAddDescription", R.string.VoipAddDescription) : LocaleController.getString("VoipEditDescription", R.string.VoipEditDescription),
-                                        TextUtils.isEmpty(participant.about) ? R.drawable.msg_addbio : R.drawable.msg_bio
+                                        TextUtils.isEmpty(participant.about) ? R.drawable.msg_addbio : R.drawable.msg_info
                                 );
                             }
                         }
@@ -1304,7 +1308,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                             if (child instanceof ActionBarMenuSubItem && child.getTag() != null && (Integer) child.getTag() == 10) {
                                 ((ActionBarMenuSubItem) child).setTextAndIcon(
                                         TextUtils.isEmpty(participant.about) ? LocaleController.getString("VoipAddBio", R.string.VoipAddBio) : LocaleController.getString("VoipEditBio", R.string.VoipEditBio),
-                                        TextUtils.isEmpty(participant.about) ? R.drawable.msg_addbio : R.drawable.msg_bio
+                                        TextUtils.isEmpty(participant.about) ? R.drawable.msg_addbio : R.drawable.msg_info
                                 );
                             }
                         }
@@ -1741,6 +1745,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 return true;
             }
         });
+        drawDoubleNavigationBar = true;
         drawNavigationBar = true;
         if (Build.VERSION.SDK_INT >= 30) {
             getWindow().setNavigationBarColor(0xff000000);
@@ -1761,7 +1766,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             BaseFragment fragment = parentActivity.getActionBarLayout().fragmentsStack.get(parentActivity.getActionBarLayout().fragmentsStack.size() - 1);
             if (anyEnterEventSent) {
                 if (fragment instanceof ChatActivity) {
-                    ((ChatActivity) fragment).onEditTextDialogClose(true);
+                    ((ChatActivity) fragment).onEditTextDialogClose(true, true);
                 }
             }
         });
@@ -2168,6 +2173,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     BottomSheet bottomSheet = builder.create();
 
                     bottomSheet.setBackgroundColor(Theme.getColor(Theme.key_voipgroup_listViewBackgroundUnscrolled));
+                    bottomSheet.fixNavigationBar(Theme.getColor(Theme.key_voipgroup_listViewBackgroundUnscrolled));
                     int selectedPosition;
                     if (service.getCurrentAudioRoute() == VoIPService.AUDIO_ROUTE_SPEAKER) {
                         selectedPosition = 0;
@@ -2183,6 +2189,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                         int color;
                         if (i == selectedPosition) {
                             color = Theme.getColor(Theme.key_voipgroup_listeningText);
+                            cell.isSelected = true;
                         } else {
                             color = Theme.getColor(Theme.key_voipgroup_nameText);
                         }
@@ -6065,6 +6072,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
     }
 
     ObjectAnimator subtitleYAnimator;
+    ObjectAnimator additionalSubtitleYAnimator;
 
     public void invalidateActionBarAlpha() {
         actionBar.setAlpha((actionBar.getTag() != null ? 1f : 0f) * (1f - renderersContainer.progressToFullscreenMode));
@@ -6106,7 +6114,6 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     .setInterpolator(CubicBezierInterpolator.DEFAULT)
                     .start();
 
-
             if (subtitleYAnimator != null) {
                 subtitleYAnimator.removeAllListeners();
                 subtitleYAnimator.cancel();
@@ -6123,11 +6130,13 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             });
             subtitleYAnimator.start();
 
-            actionBar.getAdditionalSubtitleTextView().animate()
-                    .translationY(show ? 0.0f : AndroidUtilities.dp(20))
-                    .setDuration(300)
-                    .setInterpolator(CubicBezierInterpolator.DEFAULT)
-                    .start();
+            if (additionalSubtitleYAnimator != null) {
+                additionalSubtitleYAnimator.cancel();
+            }
+            additionalSubtitleYAnimator = ObjectAnimator.ofFloat(actionBar.getAdditionalSubtitleTextView(), View.TRANSLATION_Y, show ? 0.0f : AndroidUtilities.dp(20));
+            additionalSubtitleYAnimator.setDuration(300);
+            additionalSubtitleYAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
+            additionalSubtitleYAnimator.start();
 
             actionBarAnimation = new AnimatorSet();
             actionBarAnimation.setDuration(140);
@@ -7321,7 +7330,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             } else {
                 items.add(TextUtils.isEmpty(participant.about) ? LocaleController.getString("VoipAddDescription", R.string.VoipAddDescription) : LocaleController.getString("VoipEditDescription", R.string.VoipEditDescription));
             }
-            icons.add(TextUtils.isEmpty(participant.about) ? R.drawable.msg_addbio : R.drawable.msg_bio);
+            icons.add(TextUtils.isEmpty(participant.about) ? R.drawable.msg_addbio : R.drawable.msg_info);
             options.add(10);
 
             items.add(peerId > 0 ? LocaleController.getString("VoipEditName", R.string.VoipEditName) : LocaleController.getString("VoipEditTitle", R.string.VoipEditTitle));
@@ -7955,7 +7964,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     if (ChatObject.isChannel(currentChat) && !currentChat.megagroup && !TextUtils.isEmpty(currentChat.username)) {
                         textCell.setTextAndIcon(LocaleController.getString("VoipGroupShareLink", R.string.VoipGroupShareLink), R.drawable.msg_link, false);
                     } else {
-                        textCell.setTextAndIcon(LocaleController.getString("VoipGroupInviteMember", R.string.VoipGroupInviteMember), R.drawable.actions_addmember2, false);
+                        textCell.setTextAndIcon(LocaleController.getString("VoipGroupInviteMember", R.string.VoipGroupInviteMember), R.drawable.msg_contact_add, false);
                     }
                     break;
                 case VIEW_TYPE_PARTICIPANT: {
@@ -8392,8 +8401,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                                 }
 
                                 if (small != null && avatar != null) {
-                                    File destFile = FileLoader.getPathToAttach(small, true);
-                                    File src = FileLoader.getPathToAttach(avatar, true);
+                                    File destFile = FileLoader.getInstance(currentAccount).getPathToAttach(small, true);
+                                    File src = FileLoader.getInstance(currentAccount).getPathToAttach(avatar, true);
                                     src.renameTo(destFile);
                                     String oldKey = avatar.volume_id + "_" + avatar.local_id + "@50_50";
                                     String newKey = small.location.volume_id + "_" + small.location.local_id + "@50_50";
@@ -8401,12 +8410,12 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                                 }
 
                                 if (big != null && avatarBig != null) {
-                                    File destFile = FileLoader.getPathToAttach(big, true);
-                                    File src = FileLoader.getPathToAttach(avatarBig, true);
+                                    File destFile = FileLoader.getInstance(currentAccount).getPathToAttach(big, true);
+                                    File src = FileLoader.getInstance(currentAccount).getPathToAttach(avatarBig, true);
                                     src.renameTo(destFile);
                                 }
                                 if (videoSize != null && videoPath != null) {
-                                    File destFile = FileLoader.getPathToAttach(videoSize, "mp4", true);
+                                    File destFile = FileLoader.getInstance(currentAccount).getPathToAttach(videoSize, "mp4", true);
                                     File src = new File(videoPath);
                                     src.renameTo(destFile);
                                 }
@@ -8615,6 +8624,20 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
     @Override
     protected boolean canDismissWithTouchOutside() {
         return !renderersContainer.inFullscreenMode;
+    }
+
+    private void onUserLeaveHint() {
+        if (isRtmpStream() && AndroidUtilities.checkInlinePermissions(parentActivity) && !RTMPStreamPipOverlay.isVisible()) {
+            dismiss();
+            AndroidUtilities.runOnUIThread(RTMPStreamPipOverlay::show, 100);
+        }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        parentActivity.addOnUserLeaveHintListener(onUserLeaveHintListener);
     }
 
     public void onResume() {

@@ -334,9 +334,4 @@ class BottomBuilder(val ctx: Context) {
         return this
     }
 
-    fun fixNavigationBar() : BottomBuilder{
-        builder.fixNavigationBar()
-        return this
-    }
-
 }

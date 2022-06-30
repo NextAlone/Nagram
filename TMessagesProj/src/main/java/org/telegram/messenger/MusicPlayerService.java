@@ -241,7 +241,7 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
                 albumArt = loadArtworkFromUrl(artworkUrlBig, false, !forBitmap);
             }
         } else {
-            loadingFilePath = FileLoader.getPathToAttach(messageObject.getDocument()).getAbsolutePath();
+            loadingFilePath = FileLoader.getInstance(UserConfig.selectedAccount).getPathToAttach(messageObject.getDocument()).getAbsolutePath();
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

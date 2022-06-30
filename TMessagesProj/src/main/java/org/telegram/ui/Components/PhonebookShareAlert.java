@@ -37,6 +37,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.widget.NestedScrollView;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ContactsController;
@@ -55,8 +57,6 @@ import org.telegram.ui.ChatActivity;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
-
-import androidx.core.widget.NestedScrollView;
 
 public class PhonebookShareAlert extends BottomSheet {
 
@@ -556,13 +556,13 @@ public class PhonebookShareAlert extends BottomSheet {
                             final Bulletin.SimpleLayout layout = new Bulletin.SimpleLayout(context, resourcesProvider);
                             if (item.type == 0) {
                                 layout.textView.setText(LocaleController.getString("PhoneCopied", R.string.PhoneCopied));
-                                layout.imageView.setImageResource(R.drawable.menu_calls);
+                                layout.imageView.setImageResource(R.drawable.msg_calls);
                             } else if (item.type == 1) {
                                 layout.textView.setText(LocaleController.getString("EmailCopied", R.string.EmailCopied));
-                                layout.imageView.setImageResource(R.drawable.menu_mail);
+                                layout.imageView.setImageResource(R.drawable.msg_mention);
                             } else {
                                 layout.textView.setText(LocaleController.getString("TextCopied", R.string.TextCopied));
-                                layout.imageView.setImageResource(R.drawable.menu_info);
+                                layout.imageView.setImageResource(R.drawable.msg_info);
                             }
                             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
                                 Bulletin.make((FrameLayout) containerView, layout, Bulletin.DURATION_SHORT).show();
@@ -1066,19 +1066,19 @@ public class PhonebookShareAlert extends BottomSheet {
                     } else if (item.type == 3) {
                         icon = R.drawable.baseline_link_24;
                     } else if (item.type == 4) {
-                        icon = R.drawable.profile_info;
+                        icon = R.drawable.msg_info;
                     } else if (item.type == 5) {
                         icon = R.drawable.baseline_date_range_24;
                     } else if (item.type == 6) {
                         if ("ORG".equalsIgnoreCase(item.getRawType(true))) {
-                            icon = R.drawable.menu_work;
+                            icon = R.drawable.msg_work;
                         } else {
-                            icon = R.drawable.menu_jobtitle;
+                            icon = R.drawable.msg_jobtitle;
                         }
                     } else if (item.type == 20) {
-                        icon = R.drawable.menu_info;
+                        icon = R.drawable.msg_info;
                     } else {
-                        icon = R.drawable.menu_info;
+                        icon = R.drawable.msg_info;
                     }
                 }
                 cell.setVCardItem(item, icon, position != getItemCount() - 1);

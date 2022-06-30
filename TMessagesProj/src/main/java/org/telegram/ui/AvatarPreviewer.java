@@ -387,6 +387,7 @@ public class AvatarPreviewer {
         @Override
         protected void onAttachedToWindow() {
             super.onAttachedToWindow();
+            imageReceiver.onAttachedToWindow();
             NotificationCenter.getInstance(UserConfig.selectedAccount).addObserver(this, NotificationCenter.fileLoaded);
             NotificationCenter.getInstance(UserConfig.selectedAccount).addObserver(this, NotificationCenter.fileLoadProgressChanged);
         }
@@ -394,6 +395,7 @@ public class AvatarPreviewer {
         @Override
         protected void onDetachedFromWindow() {
             super.onDetachedFromWindow();
+            imageReceiver.onDetachedFromWindow();
             NotificationCenter.getInstance(UserConfig.selectedAccount).removeObserver(this, NotificationCenter.fileLoaded);
             NotificationCenter.getInstance(UserConfig.selectedAccount).removeObserver(this, NotificationCenter.fileLoadProgressChanged);
         }

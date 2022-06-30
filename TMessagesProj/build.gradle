@@ -10,8 +10,8 @@ if (System.getenv("DEBUG_BUILD") == "true") {
     verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1").trim()
 }
 
-def officialVer = "8.7.4"
-def officialCode = 2636
+def officialVer = "8.8.3"
+def officialCode = 2705
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 

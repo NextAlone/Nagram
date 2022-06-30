@@ -8,12 +8,16 @@
 
 package org.telegram.ui;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
@@ -69,7 +73,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     @Override
     public boolean onFragmentCreate() {
         fillLanguages();
-        LocaleController.getInstance().loadRemoteLanguages(currentAccount);
+        LocaleController.getInstance().loadRemoteLanguages(currentAccount, false);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.suggestedLangpack);
         return super.onFragmentCreate();
     }

@@ -94,7 +94,7 @@ class FeedRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, N
             rv.setViewVisibility(R.id.feed_widget_item_image, View.GONE);
         } else {
             TLRPC.PhotoSize size = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize());
-            File f = FileLoader.getPathToAttach(size);
+            File f = FileLoader.getInstance(UserConfig.selectedAccount).getPathToAttach(size);
             if (f.exists()) {
                 rv.setViewVisibility(R.id.feed_widget_item_image, View.VISIBLE);
                 Uri uri = FileProvider.getUriForFile(mContext, BuildConfig.APPLICATION_ID + ".provider", f);
