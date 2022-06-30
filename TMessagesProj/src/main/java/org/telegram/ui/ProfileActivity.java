@@ -47,7 +47,6 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.text.util.Linkify;
 import android.util.Property;
 import android.util.SparseIntArray;
 import android.util.TypedValue;
@@ -1051,7 +1050,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         @Override
         public void onPhotosLoaded() {
-            updateProfileData();
+            updateProfileData(false);
         }
 
         @Override
@@ -1989,7 +1988,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         userConfig.setCurrentUser(user);
                         userConfig.saveConfig(true);
                         NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
-                        updateProfileData();
+                        updateProfileData(true);
                     }
                     avatarsViewPager.commitMoveToBegin();
                 } else if (id == edit_avatar) {
@@ -3760,7 +3759,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         };
         mediaCounterTextView.setAlpha(0.0f);
         avatarContainer2.addView(mediaCounterTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 118, 0, 8, 0));
-        updateProfileData();
+        updateProfileData(true);
 
         writeButton = new RLottieImageView(context);
 
@@ -5464,7 +5463,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             boolean infoChanged = (mask & MessagesController.UPDATE_MASK_AVATAR) != 0 || (mask & MessagesController.UPDATE_MASK_NAME) != 0 || (mask & MessagesController.UPDATE_MASK_STATUS) != 0;
             if (userId != 0) {
                 if (infoChanged) {
-                    updateProfileData();
+                    updateProfileData(true);
                 }
                 if ((mask & MessagesController.UPDATE_MASK_PHONE) != 0) {
                     if (listView != null) {
@@ -5481,7 +5480,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     } else {
                         updateOnlineCount(true);
                     }
-                    updateProfileData();
+                    updateProfileData(true);
                 }
                 if (infoChanged) {
                     if (listView != null) {
@@ -5502,7 +5501,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
             chatInfo.online_count = (Integer) args[1];
             updateOnlineCount(true);
-            updateProfileData();
+            updateProfileData(false);
         } else if (id == NotificationCenter.contactsDidLoad) {
             createActionBarMenu(true);
         } else if (id == NotificationCenter.encryptedChatCreated) {
@@ -5732,7 +5731,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             setParentActivityTitle(LocaleController.getString("Settings", R.string.Settings));
         }
 
-        updateProfileData();
+        updateProfileData(true);
         fixLayout();
         if (nameTextView[1] != null) {
             setParentActivityTitle(nameTextView[1].getText());
@@ -5928,7 +5927,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         topView.invalidate();
 
         needLayout(true);
-        fragmentView.invalidate();
+        if (fragmentView != null) {
+            fragmentView.invalidate();
+        }
 
         if (aboutLinkCell != null) {
             aboutLinkCell.invalidate();
@@ -6637,7 +6638,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         return premuimCrossfadeDrawable;
     }
 
-    private void updateProfileData() {
+    private void updateProfileData(boolean reload) {
         if (avatarContainer == null || nameTextView == null) {
             return;
         }
@@ -6669,7 +6670,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             final ImageLocation thumbLocation = ImageLocation.getForUserOrChat(user, ImageLocation.TYPE_SMALL);
             final ImageLocation videoThumbLocation = ImageLocation.getForUserOrChat(user, ImageLocation.TYPE_VIDEO_THUMB);
             final ImageLocation videoLocation = avatarsViewPager.getCurrentVideoLocation(thumbLocation, imageLocation);
-            avatarsViewPager.initIfEmpty(imageLocation, thumbLocation);
+            avatarsViewPager.initIfEmpty(imageLocation, thumbLocation, reload);
             if (avatarBig == null) {
                 if (videoThumbLocation != null) {
                     avatarImage.getImageReceiver().setVideoThumbIsSame(true);
@@ -6937,7 +6938,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             final ImageLocation imageLocation = ImageLocation.getForUserOrChat(chat, ImageLocation.TYPE_BIG);
             final ImageLocation thumbLocation = ImageLocation.getForUserOrChat(chat, ImageLocation.TYPE_SMALL);
             final ImageLocation videoLocation = avatarsViewPager.getCurrentVideoLocation(thumbLocation, imageLocation);
-            boolean initied = avatarsViewPager.initIfEmpty(imageLocation, thumbLocation);
+            boolean initied = avatarsViewPager.initIfEmpty(imageLocation, thumbLocation, reload);
             if ((imageLocation == null || initied) && isPulledDown) {
                 final View view = layoutManager.findViewByPosition(0);
                 if (view != null) {
@@ -7635,7 +7636,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     avatar = null;
                     avatarBig = null;
                     avatarsViewPager.setCreateThumbFromParent(false);
-                    updateProfileData();
+                    updateProfileData(true);
                     showAvatarProgress(false, true);
                     getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, MessagesController.UPDATE_MASK_ALL);
                     getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);

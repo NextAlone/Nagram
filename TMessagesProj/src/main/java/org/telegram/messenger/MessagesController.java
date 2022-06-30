@@ -969,11 +969,12 @@ public class MessagesController extends BaseController implements NotificationCe
         return 0;
     };
 
+    private static final Object lockObject = new Object();
     private static SparseArray<MessagesController> Instance = new SparseArray<>();
     public static MessagesController getInstance(int num) {
         MessagesController localInstance = Instance.get(num);
         if (localInstance == null) {
-            synchronized (lockObjects[num]) {
+            synchronized (lockObject) {
                 localInstance = Instance.get(num);
                 if (localInstance == null) {
                     Instance.put(num, localInstance = new MessagesController(num));
@@ -1738,6 +1739,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 SharedPreferences.Editor editor = mainPreferences.edit();
                 boolean changed = false;
                 boolean keelAliveChanged = false;
+                resetAppConfig();
                 TLRPC.TL_jsonObject object = (TLRPC.TL_jsonObject) response;
                 for (int a = 0, N = object.value.size(); a < N; a++) {
                     TLRPC.TL_jsonObjectValue value = object.value.get(a);
@@ -2522,6 +2524,11 @@ public class MessagesController extends BaseController implements NotificationCe
             }
             loadingAppConfig = false;
         }));
+    }
+
+    private void resetAppConfig() {
+        getfileExperimentalParams = false;
+        mainPreferences.edit().remove("getfileExperimentalParams");
     }
 
     private boolean savePremiumFeaturesPreviewOrder(SharedPreferences.Editor editor, ArrayList<TLRPC.JSONValue> value) {
@@ -9347,7 +9354,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         }
                         MessageObject oldMsg = dialogMessage.get(key);
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.d("processDialogsUpdate oldMsg " + oldMsg + " old top_message = " + currentDialog.top_message + " new top_message = " + value.top_message);
+                            FileLog.d("processDialogsUpdate oldMsg " + oldMsg + " old top_message = " + currentDialog.top_message + " new top_message = " + value.top_message + "  unread_count =" + currentDialog.unread_count + " fromCache=" + fromCache);
                             FileLog.d("processDialogsUpdate oldMsgDeleted " + (oldMsg != null && oldMsg.deleted));
                         }
                         if (oldMsg == null || currentDialog.top_message > 0) {

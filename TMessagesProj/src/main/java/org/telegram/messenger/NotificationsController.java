@@ -148,11 +148,17 @@ public class NotificationsController extends BaseController {
     }
 
     private static SparseArray<NotificationsController> Instance = new SparseArray<>();
+    private static final Object[] lockObjects = new Object[UserConfig.MAX_ACCOUNT_COUNT];
+    static {
+        for (int i = 0; i < UserConfig.MAX_ACCOUNT_COUNT; i++) {
+            lockObjects[i] = new Object();
+        }
+    }
 
     public static NotificationsController getInstance(int num) {
         NotificationsController localInstance = Instance.get(num);
         if (localInstance == null) {
-            synchronized (NotificationsController.class) {
+            synchronized (lockObjects[num]) {
                 localInstance = Instance.get(num);
                 if (localInstance == null) {
                     Instance.put(num, localInstance = new NotificationsController(num));
