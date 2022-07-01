@@ -158,6 +158,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 
+import xyz.nextalone.nagram.NaConfig;
 import xyz.nextalone.nagram.helper.MessageHelper;
 
 import static xyz.nextalone.nagram.helper.MessageHelper.showForwardDate;
@@ -10350,6 +10351,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             timeString = LocaleController.getInstance().formatterDay.format((long) (messageObject.messageOwner.date) * 1000);
         } else {
             timeString = messageObject.messageOwner.date + "";
+        }
+        if (NaConfig.INSTANCE.getShowMessageID().Bool() && messageObject.messageOwner != null && (isChat || isMegagroup || ChatObject.isChannel(currentChat))) {
+            timeString = timeString + " | " + messageObject.messageOwner.id;
         }
         if (signString != null) {
             if (messageObject.messageOwner.fwd_from != null && messageObject.messageOwner.fwd_from.imported) {

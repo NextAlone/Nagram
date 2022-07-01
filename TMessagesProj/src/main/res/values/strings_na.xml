@@ -31,4 +31,5 @@
     <string name="PhotoCopied">Photo copied to Clipboard</string>
     <string name="ToTheBeginning">To the beginning</string>
     <string name="DateOfForwardedMsg">Show date of forward message</string>
+    <string name="ShowMessageID">Show message ID</string>
 </resources>
