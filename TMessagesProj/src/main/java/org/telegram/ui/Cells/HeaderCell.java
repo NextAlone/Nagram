@@ -16,9 +16,8 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.core.view.ViewCompat;
@@ -31,7 +30,7 @@ import org.telegram.ui.Components.LayoutHelper;
 
 import java.util.ArrayList;
 
-public class HeaderCell extends LinearLayout {
+public class HeaderCell extends FrameLayout {
 
     private final TextView textView;
     private SimpleTextView textView2;
@@ -39,16 +38,15 @@ public class HeaderCell extends LinearLayout {
     private final Theme.ResourcesProvider resourcesProvider;
 
     public HeaderCell(Context context) {
-        this(context, Theme.key_windowBackgroundWhiteBlueHeader, 21, 15, 0, false, false, null);
+        this(context, Theme.key_windowBackgroundWhiteBlueHeader, 21, 15, false, null);
     }
 
     public HeaderCell(Context context, Theme.ResourcesProvider resourcesProvider) {
-        this(context, Theme.key_windowBackgroundWhiteBlueHeader, 21, 15, 0, false, false,
-            resourcesProvider);
+        this(context, Theme.key_windowBackgroundWhiteBlueHeader, 21, 15, false, resourcesProvider);
     }
 
     public HeaderCell(Context context, int padding) {
-        this(context, Theme.key_windowBackgroundWhiteBlueHeader, padding, 15, 0, false, false, null);
+        this(context, Theme.key_windowBackgroundWhiteBlueHeader, padding, 15, false, null);
     }
 
     public HeaderCell(Context context, int padding, Theme.ResourcesProvider resourcesProvider) {
@@ -75,18 +73,16 @@ public class HeaderCell extends LinearLayout {
         super(context);
         this.resourcesProvider = resourcesProvider;
 
-        setOrientation(LinearLayout.VERTICAL);
-        setPadding(AndroidUtilities.dp(padding), AndroidUtilities.dp(topMargin),
-            AndroidUtilities.dp(padding), 0);
-
         textView = new TextView(getContext());
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         if (bigTitle) {
             textView.setTypeface(AndroidUtilities.getTypeface("fonts/mw_bold.ttf"));
+        } else {
+            textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         }
         textView.setEllipsize(TextUtils.TruncateAt.END);
-        textView.setGravity(
-            (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
+        textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
+        textView.setMinHeight(AndroidUtilities.dp(height - topMargin));
         textView.setTextColor(getThemedColor(textColorKey));
         textView.setTag(textColorKey);
         addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, padding, topMargin, padding, text2 ? 0 : bottomMargin));
@@ -99,12 +95,6 @@ public class HeaderCell extends LinearLayout {
         }
 
         ViewCompat.setAccessibilityHeading(this, true);
-    }
-
-    @Override
-    public void setLayoutParams(ViewGroup.LayoutParams params) {
-        params.width = -1;
-        super.setLayoutParams(params);
     }
 
     public void setHeight(int value) {
