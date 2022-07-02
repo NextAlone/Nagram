@@ -600,9 +600,10 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             swipeGestureRow = rowCount++;
             swipeGestureInfoRow = rowCount++;
 
-            appIconHeaderRow = rowCount++;
-            appIconSelectorRow = rowCount++;
-            appIconShadowRow = rowCount++;
+            // no use so hide it
+            appIconHeaderRow = -1;
+            appIconSelectorRow = -1;
+            appIconShadowRow = -1;
 
             settingsRow = rowCount++;
             nightThemeRow = rowCount++;
