@@ -130,7 +130,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
     public final static int PREMIUM_FEATURE_ANIMATED_AVATARS = 7;
     public final static int PREMIUM_FEATURE_VOICE_TO_TEXT = 8;
     public final static int PREMIUM_FEATURE_ADVANCED_CHAT_MANAGEMENT = 9;
-    public final static int PREMIUM_FEATURE_APPLICATION_ICONS = 10;
+    // public final static int PREMIUM_FEATURE_APPLICATION_ICONS = 10;
     private int statusBarHeight;
     private int firstViewHeight;
     private boolean isDialogVisible;
@@ -172,8 +172,8 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 return PREMIUM_FEATURE_PROFILE_BADGE;
             case "animated_userpics":
                 return PREMIUM_FEATURE_ANIMATED_AVATARS;
-            case "app_icons":
-                return PREMIUM_FEATURE_APPLICATION_ICONS;
+            // case "app_icons":
+            // return PREMIUM_FEATURE_APPLICATION_ICONS;
         }
         return -1;
     }
@@ -200,8 +200,8 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 return "profile_badge";
             case PREMIUM_FEATURE_ANIMATED_AVATARS:
                 return "animated_userpics";
-            case PREMIUM_FEATURE_APPLICATION_ICONS:
-                return "app_icons";
+            // case PREMIUM_FEATURE_APPLICATION_ICONS:
+            // return "app_icons";
         }
         return null;
     }
@@ -516,7 +516,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_ADVANCED_CHAT_MANAGEMENT, R.drawable.msg_premium_tools, LocaleController.getString("PremiumPreviewAdvancedChatManagement", R.string.PremiumPreviewAdvancedChatManagement), LocaleController.getString("PremiumPreviewAdvancedChatManagementDescription", R.string.PremiumPreviewAdvancedChatManagementDescription)));
         premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_PROFILE_BADGE, R.drawable.msg_premium_badge, LocaleController.getString("PremiumPreviewProfileBadge", R.string.PremiumPreviewProfileBadge), LocaleController.getString("PremiumPreviewProfileBadgeDescription", R.string.PremiumPreviewProfileBadgeDescription)));
         premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_ANIMATED_AVATARS, R.drawable.msg_premium_avatar, LocaleController.getString("PremiumPreviewAnimatedProfiles", R.string.PremiumPreviewAnimatedProfiles), LocaleController.getString("PremiumPreviewAnimatedProfilesDescription", R.string.PremiumPreviewAnimatedProfilesDescription)));
-        premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_APPLICATION_ICONS, R.drawable.msg_premium_icons, LocaleController.getString("PremiumPreviewAppIcon", R.string.PremiumPreviewAppIcon), LocaleController.getString("PremiumPreviewAppIconDescription", R.string.PremiumPreviewAppIconDescription)));
+        // premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_APPLICATION_ICONS, R.drawable.msg_premium_icons, LocaleController.getString("PremiumPreviewAppIcon", R.string.PremiumPreviewAppIcon), LocaleController.getString("PremiumPreviewAppIconDescription", R.string.PremiumPreviewAppIconDescription)));
 
         if (messagesController.premiumFeaturesTypesToPosition.size() > 0) {
             for (int i = 0; i < premiumFeatures.size(); i++) {
