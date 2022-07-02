@@ -83,7 +83,7 @@ public class TranslateAlert2 extends BottomSheet {
     public RecyclerListView listView;
     private LinearLayoutManager layoutManager;
     private View paddingView;
-    //    private FrameLayout container;
+//    private FrameLayout container;
     private TextView titleView;
     private LinearLayout subtitleView;
     private InlineLoadingTextView subtitleFromView;
@@ -92,14 +92,14 @@ public class TranslateAlert2 extends BottomSheet {
     private ImageView backButton;
     private HeaderView header;
     private FrameLayout headerShadowView;
-    //    private NestedScrollView scrollView;
+//    private NestedScrollView scrollView;
     private TextBlocksLayout textsView;
     private TextView buttonTextView;
     private FrameLayout buttonContainerView;
     private FrameLayout buttonView;
     private FrameLayout buttonShadowView;
     private TextView allTextsView;
-    //    private FrameLayout textsContainerView;
+//    private FrameLayout textsContainerView;
     private FrameLayout bulletinContainer;
 
 //    private FrameLayout.LayoutParams titleLayout;
@@ -920,7 +920,7 @@ public class TranslateAlert2 extends BottomSheet {
                     for (int i = 0; i < urlSpans.length; ++i) {
                         URLSpan urlSpan = urlSpans[i];
                         int start = spannable.getSpanStart(urlSpan),
-                            end = spannable.getSpanEnd(urlSpan);
+                                end = spannable.getSpanEnd(urlSpan);
                         if (start == -1 || end == -1) {
                             continue;
                         }
@@ -957,29 +957,29 @@ public class TranslateAlert2 extends BottomSheet {
                     for (int i = 0; i < urlSpans.length; ++i) {
                         URLSpan urlSpan = urlSpans[i];
                         int start = spannable.getSpanStart(urlSpan),
-                            end = spannable.getSpanEnd(urlSpan);
+                                end = spannable.getSpanEnd(urlSpan);
                         if (start == -1 || end == -1) {
                             continue;
                         }
                         spannable.removeSpan(urlSpan);
                         spannable.setSpan(
-                            new ClickableSpan() {
-                                @Override
-                                public void onClick(@NonNull View view) {
-                                    AlertsCreator.showOpenUrlAlert(fragment, urlSpan.getURL(), false, false);
-                                }
+                                new ClickableSpan() {
+                                    @Override
+                                    public void onClick(@NonNull View view) {
+                                        AlertsCreator.showOpenUrlAlert(fragment, urlSpan.getURL(), false, false);
+                                    }
 
-                                @Override
-                                public void updateDrawState(@NonNull TextPaint ds) {
-                                    int alpha = Math.min(ds.getAlpha(), ds.getColor() >> 24 & 0xff);
-                                    if (!(urlSpan instanceof URLSpanNoUnderline))
-                                        ds.setUnderlineText(true);
-                                    ds.setColor(Theme.getColor(Theme.key_dialogTextLink));
-                                    ds.setAlpha(alpha);
-                                }
-                            },
-                            start, end,
-                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                                    @Override
+                                    public void updateDrawState(@NonNull TextPaint ds) {
+                                        int alpha = Math.min(ds.getAlpha(), ds.getColor() >> 24 & 0xff);
+                                        if (!(urlSpan instanceof URLSpanNoUnderline))
+                                            ds.setUnderlineText(true);
+                                        ds.setColor(Theme.getColor(Theme.key_dialogTextLink));
+                                        ds.setAlpha(alpha);
+                                    }
+                                },
+                                start, end,
+                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                         );
                     }
 
@@ -1275,8 +1275,8 @@ public class TranslateAlert2 extends BottomSheet {
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             final int count = getBlocksCount();
             final int innerWidthMeasureSpec = MeasureSpec.makeMeasureSpec(
-                MeasureSpec.getSize(widthMeasureSpec) - getPaddingLeft() - getPaddingRight(),
-                MeasureSpec.getMode(widthMeasureSpec)
+                    MeasureSpec.getSize(widthMeasureSpec) - getPaddingLeft() - getPaddingRight(),
+                    MeasureSpec.getMode(widthMeasureSpec)
             );
             for (int i = 0; i < count; ++i) {
                 LoadingTextView2 block = getBlockAt(i);
@@ -1301,14 +1301,14 @@ public class TranslateAlert2 extends BottomSheet {
             }
 
             wholeTextView.measure(
-                MeasureSpec.makeMeasureSpec(r - l - getPaddingLeft() - getPaddingRight(), MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(b - t - getPaddingTop() - getPaddingBottom(), MeasureSpec.EXACTLY)
+                    MeasureSpec.makeMeasureSpec(r - l - getPaddingLeft() - getPaddingRight(), MeasureSpec.EXACTLY),
+                    MeasureSpec.makeMeasureSpec(b - t - getPaddingTop() - getPaddingBottom(), MeasureSpec.EXACTLY)
             );
             wholeTextView.layout(
-                getPaddingLeft(),
-                getPaddingTop(),
-                (r - l) - getPaddingRight(),
-                getPaddingTop() + wholeTextView.getMeasuredHeight()
+                    getPaddingLeft(),
+                    getPaddingTop(),
+                    (r - l) - getPaddingRight(),
+                    getPaddingTop() + wholeTextView.getMeasuredHeight()
             );
         }
     }
@@ -1316,7 +1316,7 @@ public class TranslateAlert2 extends BottomSheet {
     public static class InlineLoadingTextView extends ViewGroup {
 
         public static final int paddingHorizontal = dp(4),
-            paddingVertical = 0;
+                                paddingVertical = 0;
 
 
         public boolean showLoadingText = true;
@@ -1364,7 +1364,7 @@ public class TranslateAlert2 extends BottomSheet {
             addView(toTextView);
 
             int c1 = Theme.getColor(Theme.key_dialogBackground),
-                c2 = Theme.getColor(Theme.key_dialogBackgroundGray);
+                    c2 = Theme.getColor(Theme.key_dialogBackgroundGray);
             LinearGradient gradient = new LinearGradient(0, 0, gradientWidth, 0, new int[]{ c1, c2, c1 }, new float[] { 0, 0.67f, 1f }, Shader.TileMode.REPEAT);
             loadingPaint.setShader(gradient);
 
@@ -1379,14 +1379,14 @@ public class TranslateAlert2 extends BottomSheet {
             fromTextView.measure(0, 0);
             toTextView.measure(0, 0);
             super.onMeasure(
-                MeasureSpec.makeMeasureSpec(
-                    (int) AndroidUtilities.lerp(fromTextView.getMeasuredWidth(), toTextView.getMeasuredWidth(), loadingT) + getPaddingLeft() + getPaddingRight(),
-                    MeasureSpec.EXACTLY
-                ),
-                MeasureSpec.makeMeasureSpec(
-                    Math.max(fromTextView.getMeasuredHeight(), toTextView.getMeasuredHeight()),
-                    MeasureSpec.EXACTLY
-                )
+                    MeasureSpec.makeMeasureSpec(
+                            (int) AndroidUtilities.lerp(fromTextView.getMeasuredWidth(), toTextView.getMeasuredWidth(), loadingT) + getPaddingLeft() + getPaddingRight(),
+                            MeasureSpec.EXACTLY
+                    ),
+                    MeasureSpec.makeMeasureSpec(
+                            Math.max(fromTextView.getMeasuredHeight(), toTextView.getMeasuredHeight()),
+                            MeasureSpec.EXACTLY
+                    )
             );
         }
 
@@ -1474,9 +1474,9 @@ public class TranslateAlert2 extends BottomSheet {
 
         private final RectF rect = new RectF();
         private final Path inPath = new Path(),
-            tempPath = new Path(),
-            loadingPath = new Path(),
-            shadePath = new Path();
+                tempPath = new Path(),
+                loadingPath = new Path(),
+                shadePath = new Path();
         private final Paint loadingPaint = new Paint();
         private final float gradientWidth = dp(350f);
         @Override
@@ -1484,12 +1484,12 @@ public class TranslateAlert2 extends BottomSheet {
             float w = getWidth(), h = getHeight();
 
             float cx = LocaleController.isRTL ? Math.max(w / 2f, w - 8f) : Math.min(w / 2f, 8f),
-                cy = Math.min(h / 2f, 8f),
-                R = (float) Math.sqrt(Math.max(
-                    Math.max(cx*cx + cy*cy, (w-cx)*(w-cx) + cy*cy),
-                    Math.max(cx*cx + (h-cy)*(h-cy), (w-cx)*(w-cx) + (h-cy)*(h-cy))
-                )),
-                r = loadingT * R;
+                    cy = Math.min(h / 2f, 8f),
+                    R = (float) Math.sqrt(Math.max(
+                            Math.max(cx*cx + cy*cy, (w-cx)*(w-cx) + cy*cy),
+                            Math.max(cx*cx + (h-cy)*(h-cy), (w-cx)*(w-cx) + (h-cy)*(h-cy))
+                    )),
+                    r = loadingT * R;
             inPath.reset();
             inPath.addCircle(cx, cy, r, Path.Direction.CW);
 
@@ -1544,7 +1544,7 @@ public class TranslateAlert2 extends BottomSheet {
     public static class LoadingTextView2 extends ViewGroup {
 
         public static final int paddingHorizontal = dp(4),
-            paddingVertical = dp(1.5f);
+                                paddingVertical = dp(1.5f);
 
         public boolean showLoadingText = true;
 
@@ -1593,7 +1593,7 @@ public class TranslateAlert2 extends BottomSheet {
             addView(toTextView);
 
             int c1 = Theme.getColor(Theme.key_dialogBackground),
-                c2 = Theme.getColor(Theme.key_dialogBackgroundGray);
+                    c2 = Theme.getColor(Theme.key_dialogBackgroundGray);
             LinearGradient gradient = new LinearGradient(0, 0, gradientWidth, 0, new int[]{ c1, c2, c1 }, new float[] { 0, 0.67f, 1f }, Shader.TileMode.REPEAT);
             loadingPaint.setShader(gradient);
 
@@ -1663,7 +1663,7 @@ public class TranslateAlert2 extends BottomSheet {
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             int width = MeasureSpec.getSize(widthMeasureSpec),
-                innerWidth = width - getPaddingLeft() - getPaddingRight();
+                    innerWidth = width - getPaddingLeft() - getPaddingRight();
             if (fromTextView.getMeasuredWidth() <= 0 || lastWidth != innerWidth) {
                 measureChild(fromTextView, innerWidth);
                 updateLoadingPath();
@@ -1673,8 +1673,8 @@ public class TranslateAlert2 extends BottomSheet {
             }
             lastWidth = innerWidth;
             super.onMeasure(
-                MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(height(), MeasureSpec.EXACTLY)
+                    MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+                    MeasureSpec.makeMeasureSpec(height(), MeasureSpec.EXACTLY)
             );
         }
 
@@ -1716,11 +1716,11 @@ public class TranslateAlert2 extends BottomSheet {
                     final int lineCount = loadingLayout.getLineCount();
                     for (int i = 0; i < lineCount; ++i) {
                         float s = loadingLayout.getLineLeft(i),
-                            e = loadingLayout.getLineRight(i),
-                            l = Math.min(s, e),
-                            r = Math.max(s, e);
+                                e = loadingLayout.getLineRight(i),
+                                l = Math.min(s, e),
+                                r = Math.max(s, e);
                         int start = loadingLayout.getLineStart(i),
-                            end = loadingLayout.getLineEnd(i);
+                                end = loadingLayout.getLineEnd(i);
                         boolean hasNonEmptyChar = false;
                         for (int j = start; j < end; ++j) {
                             char c = text.charAt(j);
@@ -1745,9 +1745,9 @@ public class TranslateAlert2 extends BottomSheet {
 
         private final RectF rect = new RectF();
         private final Path inPath = new Path(),
-            tempPath = new Path(),
-            loadingPath = new Path(),
-            shadePath = new Path();
+                tempPath = new Path(),
+                loadingPath = new Path(),
+                shadePath = new Path();
         private final Paint loadingPaint = new Paint();
         private final float gradientWidth = dp(350f);
         @Override
@@ -1755,12 +1755,12 @@ public class TranslateAlert2 extends BottomSheet {
             float w = getWidth(), h = getHeight();
 
             float cx = LocaleController.isRTL ? Math.max(w / 2f, w - 8f) : Math.min(w / 2f, 8f),
-                cy = Math.min(h / 2f, 8f),
-                R = (float) Math.sqrt(Math.max(
-                    Math.max(cx*cx + cy*cy, (w-cx)*(w-cx) + cy*cy),
-                    Math.max(cx*cx + (h-cy)*(h-cy), (w-cx)*(w-cx) + (h-cy)*(h-cy))
-                )),
-                r = loadingT * R;
+                    cy = Math.min(h / 2f, 8f),
+                    R = (float) Math.sqrt(Math.max(
+                            Math.max(cx*cx + cy*cy, (w-cx)*(w-cx) + cy*cy),
+                            Math.max(cx*cx + (h-cy)*(h-cy), (w-cx)*(w-cx) + (h-cy)*(h-cy))
+                    )),
+                    r = loadingT * R;
             inPath.reset();
             inPath.addCircle(cx, cy, r, Path.Direction.CW);
 

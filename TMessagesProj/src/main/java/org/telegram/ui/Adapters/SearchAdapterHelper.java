@@ -30,6 +30,7 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ChatUsersActivity;
 import org.telegram.ui.Components.ShareAlert;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

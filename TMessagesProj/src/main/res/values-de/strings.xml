@@ -540,7 +540,6 @@
     <string name="EditCantEditPermissionsPublic">Diese Berechtigung ist in öffentlichen Gruppen nicht verfügbar.</string>
     <string name="UserRemovedBy">Entfernt von %1$s</string>
     <string name="UserRestrictions">Nutzerberechtigungen</string>
-    <string name="UserRestrictionsDisabled">In den Gruppenberechtigungen ist diese Option für alle deaktiviert worden</string>
     <string name="UserRestrictionsCanDo">Was kann dieser Nutzer machen?</string>
     <string name="UserRestrictionsRead">Nachrichten lesen</string>
     <string name="UserRestrictionsSend">Nachrichten senden</string>

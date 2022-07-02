@@ -41,7 +41,6 @@ import android.os.PowerManager;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 
@@ -145,12 +144,18 @@ public class NotificationsController extends BaseController {
         audioManager = (AudioManager) ApplicationLoader.applicationContext.getSystemService(Context.AUDIO_SERVICE);
     }
     
-    private static final NotificationsController[] Instance = new NotificationsController[UserConfig.MAX_ACCOUNT_COUNT];
+    private static volatile NotificationsController[] Instance = new NotificationsController[UserConfig.MAX_ACCOUNT_COUNT];
+    private static final Object[] lockObjects = new Object[UserConfig.MAX_ACCOUNT_COUNT];
+    static {
+        for (int i = 0; i < UserConfig.MAX_ACCOUNT_COUNT; i++) {
+            lockObjects[i] = new Object();
+        }
+    }
 
     public static NotificationsController getInstance(int num) {
         NotificationsController localInstance = Instance[num];
         if (localInstance == null) {
-            synchronized (NotificationsController.class) {
+            synchronized (lockObjects[num]) {
                 localInstance = Instance[num];
                 if (localInstance == null) {
                     Instance[num] = localInstance = new NotificationsController(num);

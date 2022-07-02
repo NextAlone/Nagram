@@ -66,6 +66,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.EmojiThemes;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Cells.AppIconsSelectorCell;
 import org.telegram.ui.Cells.BrightnessControlCell;
 import org.telegram.ui.Cells.ChatListCell;
 import org.telegram.ui.Cells.ChatMessageCell;
@@ -1054,11 +1055,6 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 });
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 showDialog(builder.create());
-            } else if (position == chatBlurRow) {
-                SharedConfig.toggleChatBlur();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(SharedConfig.chatBlurEnabled());
-                }
             } else if (position == chatBlurRow) {
                 SharedConfig.toggleChatBlur();
                 if (view instanceof TextCheckCell) {
@@ -2291,7 +2287,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> themeDescriptions = new ArrayList<>();
 
-        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class, TextCheckCell.class, HeaderCell.class, BrightnessControlCell.class, ThemeTypeCell.class, TextSizeCell.class, BubbleRadiusCell.class, ChatListCell.class, NotificationsCheckCell.class, ThemesHorizontalListCell.class, TintRecyclerListView.class, TextCell.class, SwipeGestureSettingsView.class, DefaultThemesPreviewCell.class}, null, null, null, Theme.key_windowBackgroundWhite));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{TextSettingsCell.class, TextCheckCell.class, HeaderCell.class, BrightnessControlCell.class, ThemeTypeCell.class, TextSizeCell.class, BubbleRadiusCell.class, ChatListCell.class, NotificationsCheckCell.class, ThemesHorizontalListCell.class, TintRecyclerListView.class, TextCell.class, SwipeGestureSettingsView.class, DefaultThemesPreviewCell.class, AppIconsSelectorCell.class}, null, null, null, Theme.key_windowBackgroundWhite));
         themeDescriptions.add(new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray));
 
         themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_actionBarDefault));
@@ -2375,6 +2371,37 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSizeCell.class}, null, null, null, Theme.key_chat_outTimeText));
         themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSizeCell.class}, null, null, null, Theme.key_chat_inTimeSelectedText));
         themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{TextSizeCell.class}, null, null, null, Theme.key_chat_outTimeSelectedText));
+
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{AppIconsSelectorCell.class}, null, null, null, Theme.key_windowBackgroundWhite));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{AppIconsSelectorCell.class}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{AppIconsSelectorCell.class}, null, null, null, Theme.key_windowBackgroundWhiteHintText));
+        themeDescriptions.add(new ThemeDescription(listView, 0, new Class[]{AppIconsSelectorCell.class}, null, null, null, Theme.key_windowBackgroundWhiteValueText));
+        themeDescriptions.addAll(SimpleThemeDescription.createThemeDescriptions(() -> {
+            for (int i = 0; i < listView.getChildCount(); i++) {
+                View ch = listView.getChildAt(i);
+                if (ch instanceof AppIconsSelectorCell) {
+                    ((AppIconsSelectorCell) ch).getAdapter().notifyDataSetChanged();
+                }
+            }
+            for (int i = 0; i < listView.getCachedChildCount(); i++) {
+                View ch = listView.getCachedChildAt(i);
+                if (ch instanceof AppIconsSelectorCell) {
+                    ((AppIconsSelectorCell) ch).getAdapter().notifyDataSetChanged();
+                }
+            }
+            for (int i = 0; i < listView.getHiddenChildCount(); i++) {
+                View ch = listView.getHiddenChildAt(i);
+                if (ch instanceof AppIconsSelectorCell) {
+                    ((AppIconsSelectorCell) ch).getAdapter().notifyDataSetChanged();
+                }
+            }
+            for (int i = 0; i < listView.getAttachedScrapChildCount(); i++) {
+                View ch = listView.getAttachedScrapChildAt(i);
+                if (ch instanceof AppIconsSelectorCell) {
+                    ((AppIconsSelectorCell) ch).getAdapter().notifyDataSetChanged();
+                }
+            }
+        }, Theme.key_windowBackgroundWhiteHintText, Theme.key_windowBackgroundWhiteBlackText, Theme.key_windowBackgroundWhiteValueText));
 
         return themeDescriptions;
     }

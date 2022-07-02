@@ -540,7 +540,6 @@
     <string name="EditCantEditPermissionsPublic">هذه الصلاحية ليست متاحةً في المجموعات العامة.</string>
     <string name="UserRemovedBy">تمت إزالته من قبل %1$s</string>
     <string name="UserRestrictions">صلاحيات المستخدم</string>
-    <string name="UserRestrictionsDisabled">تم تعطيل هذا الخيار لجميع الأعضاء في صلاحيات المجموعة.</string>
     <string name="UserRestrictionsCanDo">ما هي صلاحيات هذا المستخدم؟</string>
     <string name="UserRestrictionsRead">قراءة الرسائل</string>
     <string name="UserRestrictionsSend">إرسال الرسائل</string>

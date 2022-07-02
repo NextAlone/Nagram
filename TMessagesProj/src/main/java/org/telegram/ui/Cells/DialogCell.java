@@ -32,7 +32,6 @@ import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
 import android.text.style.ReplacementSpan;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -87,6 +86,7 @@ import java.util.Stack;
 
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.utils.Defines;
+import top.qwq2333.nullgram.utils.Log;
 
 
 public class DialogCell extends BaseCell {
@@ -828,7 +828,7 @@ public class DialogCell extends BaseCell {
                             drawScam = 2;
                             Theme.dialogs_fakeDrawable.checkText();
                         } else {
-                            drawVerified = chat.verifiedExtended();
+                            drawVerified = chat.verified;
                         }
                     } else if (user != null) {
                         if (user.scam) {
@@ -1652,17 +1652,6 @@ public class DialogCell extends BaseCell {
                     messageNameLeft += w;
                 }
             }
-            if (drawReactionMention) {
-                int w = AndroidUtilities.dp(24);
-                messageWidth -= w;
-                if (!LocaleController.isRTL) {
-                    reactionMentionLeft = getMeasuredWidth() - AndroidUtilities.dp(32) - (mentionWidth != 0 ? (mentionWidth + AndroidUtilities.dp(18)) : 0) - (countWidth != 0 ? countWidth + AndroidUtilities.dp(18) : 0);
-                } else {
-                    reactionMentionLeft = AndroidUtilities.dp(20) + (countWidth != 0 ? countWidth + AndroidUtilities.dp(18) : 0);
-                    messageLeft += w;
-                    messageNameLeft += w;
-                }
-            }
         } else {
             if (drawPin) {
                 int w = Theme.dialogs_pinnedDrawable.getIntrinsicWidth() + AndroidUtilities.dp(8);
@@ -2084,31 +2073,29 @@ public class DialogCell extends BaseCell {
             if (isDialogCell) {
                 TLRPC.Dialog dialog = MessagesController.getInstance(currentAccount).dialogs_dict.get(currentDialogId);
                 if (dialog != null) {
-                    if (mask == 0) {
-                        clearingDialog = MessagesController.getInstance(currentAccount).isClearingDialog(dialog.id);
-                        message = MessagesController.getInstance(currentAccount).dialogMessage.get(dialog.id);
-                        lastUnreadState = message != null && message.isUnread();
-                        if (dialog instanceof TLRPC.TL_dialogFolder) {
-                            unreadCount = MessagesStorage.getInstance(currentAccount).getArchiveUnreadCount();
-                            mentionCount = 0;
-                            reactionMentionCount = 0;
-                        } else {
-                            unreadCount = dialog.unread_count;
-                            mentionCount = dialog.unread_mentions_count;
-                            reactionMentionCount = dialog.unread_reactions_count;
-                        }
-                        markUnread = dialog.unread_mark;
-                        currentEditDate = message != null ? message.messageOwner.edit_date : 0;
-                        lastMessageDate = dialog.last_message_date;
-                        if (dialogsType == 7 || dialogsType == 8) {
-                            MessagesController.DialogFilter filter = MessagesController.getInstance(currentAccount).selectedDialogFilter[dialogsType == 8 ? 1 : 0];
-                            drawPin = filter != null && filter.pinnedDialogs.indexOfKey(dialog.id) >= 0;
-                        } else {
-                            drawPin = currentDialogFolderId == 0 && dialog.pinned;
-                        }
-                        if (message != null) {
-                            lastSendState = message.messageOwner.send_state;
-                        }
+                    clearingDialog = MessagesController.getInstance(currentAccount).isClearingDialog(dialog.id);
+                    message = MessagesController.getInstance(currentAccount).dialogMessage.get(dialog.id);
+                    lastUnreadState = message != null && message.isUnread();
+                    if (dialog instanceof TLRPC.TL_dialogFolder) {
+                        unreadCount = MessagesStorage.getInstance(currentAccount).getArchiveUnreadCount();
+                        mentionCount = 0;
+                        reactionMentionCount = 0;
+                    } else {
+                        unreadCount = dialog.unread_count;
+                        mentionCount = dialog.unread_mentions_count;
+                        reactionMentionCount = dialog.unread_reactions_count;
+                    }
+                    markUnread = dialog.unread_mark;
+                    currentEditDate = message != null ? message.messageOwner.edit_date : 0;
+                    lastMessageDate = dialog.last_message_date;
+                    if (dialogsType == 7 || dialogsType == 8) {
+                        MessagesController.DialogFilter filter = MessagesController.getInstance(currentAccount).selectedDialogFilter[dialogsType == 8 ? 1 : 0];
+                        drawPin = filter != null && filter.pinnedDialogs.indexOfKey(dialog.id) >= 0;
+                    } else {
+                        drawPin = currentDialogFolderId == 0 && dialog.pinned;
+                    }
+                    if (message != null) {
+                        lastSendState = message.messageOwner.send_state;
                     }
                 } else {
                     unreadCount = 0;

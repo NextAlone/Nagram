@@ -23,7 +23,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.util.Log;
+import top.qwq2333.nullgram.utils.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;

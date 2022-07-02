@@ -552,6 +552,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
     private boolean allowContextBotPanel;
     private boolean allowContextBotPanelSecond = true;
     private AnimatorSet runningAnimation;
+    private int runningAnimationIndex = -1;
 
     private MessageObject selectedObjectToEditCaption;
     private MessageObject selectedObject;
@@ -6727,7 +6728,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
         reactionsMentiondownButton = new FrameLayout(context);
         contentView.addView(reactionsMentiondownButton, LayoutHelper.createFrame(46, 61, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, 7, 5));
 
-        mentionContainer = new MentionsContainerView(context, dialog_id, threadMessageId, contentView, themeDelegate) {
+        mentionContainer = new MentionsContainerView(context, dialog_id, threadMessageId, ChatActivity.this, themeDelegate) {
 
             @Override
             protected boolean canOpen() {
@@ -10268,9 +10269,11 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                     ObjectAnimator.ofFloat(stickersPanel, View.ALPHA, show ? 0.0f : 1.0f, show ? 1.0f : 0.0f)
                 );
                 runningAnimation.setDuration(150);
+                runningAnimationIndex = getNotificationCenter().setAnimationInProgress(runningAnimationIndex, null);
                 runningAnimation.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
+                        getNotificationCenter().onAnimationFinish(runningAnimationIndex);
                         if (runningAnimation != null && runningAnimation.equals(animation)) {
                             if (!show) {
                                 stickersAdapter.clearSearch();
@@ -21743,7 +21746,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                             icons.add(R.drawable.msg_download);
                             if (!noforwards) {
                                 items.add(LocaleController.getString("ShareFile", R.string.ShareFile));
-                                options.add(6);
+                                options.add(OPTION_SHARE);
                                 icons.add(R.drawable.msg_shareout);
                             }
                         } else if (type == 7) {
@@ -24112,8 +24115,6 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
             return !chatActivityEnterView.hidePopup(true);
         } else if (chatActivityEnterView != null && chatActivityEnterView.hasBotWebView() && chatActivityEnterView.botCommandsMenuIsShowing() && chatActivityEnterView.onBotWebViewBackPressed()) {
             return false;
-        } else if (chatActivityEnterView != null && chatActivityEnterView.hasBotWebView() && chatActivityEnterView.botCommandsMenuIsShowing() && chatActivityEnterView.onBotWebViewBackPressed()) {
-            return false;
         } else if (chatActivityEnterView != null && chatActivityEnterView.botCommandsMenuIsShowing()) {
             chatActivityEnterView.hideBotCommands();
             return false;
@@ -25065,6 +25066,9 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
             if (longPress && cell != null) {
                 cell.resetPressedLink(-1);
             }
+            if (longPress && cell != null) {
+                cell.resetPressedLink(-1);
+            }
         } else if (url instanceof URLSpanUserMention) {
             TLRPC.User user = getMessagesController().getUser(Utilities.parseLong(((URLSpanUserMention) url).getURL()));
             if (user != null) {
@@ -25917,7 +25921,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                                             ProfileActivity fragment = new ProfileActivity(args);
                                             presentFragment(fragment);
                                             closeMenu();
-                                         }), LayoutHelper.createFrame(240, LayoutHelper.WRAP_CONTENT));
+                                        }), LayoutHelper.createFrame(240, LayoutHelper.WRAP_CONTENT));
 
                                 scrimPopupWindow = new ActionBarPopupWindow(scrimPopupContainerLayout, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT) {
                                     @Override

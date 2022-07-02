@@ -540,7 +540,6 @@
     <string name="EditCantEditPermissionsPublic">Dit recht is niet beschikbaar in publieke groepen.</string>
     <string name="UserRemovedBy">Verwijderd door %1$s</string>
     <string name="UserRestrictions">Gebruikersrechten</string>
-    <string name="UserRestrictionsDisabled">Deze optie is voor alle leden uitgeschakeld via de groepsrechten</string>
     <string name="UserRestrictionsCanDo">Wat mag dit lid?</string>
     <string name="UserRestrictionsRead">Berichten lezen</string>
     <string name="UserRestrictionsSend">Berichten versturen</string>

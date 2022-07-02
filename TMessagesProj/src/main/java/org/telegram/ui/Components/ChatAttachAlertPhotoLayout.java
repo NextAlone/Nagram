@@ -33,7 +33,7 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
+import top.qwq2333.nullgram.utils.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -2289,7 +2289,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             cameraIcon.setAlpha(0.0f);
         }
 
-        Log.i("caapl", "cameraViewH=" + cameraViewH + " (endHeight=" + endHeight + ") value=" + value);
+        Log.i("caapl: cameraViewH=" + cameraViewH + " (endHeight=" + endHeight + ") value=" + value);
         if (layoutParams.width != cameraViewW || layoutParams.height != cameraViewH) {
             layoutParams.width = cameraViewW;
             layoutParams.height = cameraViewH;

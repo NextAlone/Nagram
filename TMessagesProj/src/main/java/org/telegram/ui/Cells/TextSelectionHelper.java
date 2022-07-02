@@ -1518,9 +1518,9 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
         }
 
         float startLeft = layout.getPrimaryHorizontal(selectionStart),
-            endRight = layout.getPrimaryHorizontal(selectionEnd);
+                endRight = layout.getPrimaryHorizontal(selectionEnd);
         float startBottom = layout.getLineBottom(startLine),
-            endBottom = layout.getLineBottom(endLine);
+                endBottom = layout.getLineBottom(endLine);
 
         if (hasStart && hasEnd && startBottom == endBottom && Math.abs(endRight - startLeft) < R) {
             float left = Math.min(startLeft, endRight), right = Math.max(startLeft, endRight);

@@ -5444,37 +5444,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             return true;
         } else {
             if (dialog instanceof TLRPC.TL_dialogFolder) {
-                view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                BottomBuilder builder = new BottomBuilder(getParentActivity());
-                final boolean hasUnread = getMessagesStorage().getArchiveUnreadCount() != 0;
-
-                int[] icons = new int[]{
-                    hasUnread ? R.drawable.menu_read : 0,
-                    SharedConfig.archiveHidden ? R.drawable.chats_pin : R.drawable.chats_unpin,
-                };
-                String[] items = new String[]{
-                    hasUnread ? LocaleController.getString("MarkAllAsRead", R.string.MarkAllAsRead) : null,
-                    SharedConfig.archiveHidden ? LocaleController.getString("PinInTheList", R.string.PinInTheList) : LocaleController.getString("HideAboveTheList", R.string.HideAboveTheList)
-                };
-                builder.addItems(items, icons, (which, t, c) -> {
-                    if (which == 0) {
-                        getMessagesStorage().readAllDialogs(1);
-                    } else if (which == 1 && viewPages != null) {
-                        for (int a = 0; a < viewPages.length; a++) {
-                            if (viewPages[a].dialogsType != 0 || viewPages[a].getVisibility() != View.VISIBLE) {
-                                continue;
-                            }
-                            View child = viewPages[a].listView.getChildAt(0);
-                            DialogCell dialogCell = null;
-                            if (child instanceof DialogCell && ((DialogCell) child).isFolderCell()) {
-                                dialogCell = (DialogCell) child;
-                            }
-                            viewPages[a].listView.toggleArchiveHidden(true, dialogCell);
-                        }
-                    }
-                    return Unit.INSTANCE;
-                });
-                showDialog(builder.create());
+                onArchiveLongPress(view);
                 return false;
             }
             if (actionBar.isActionModeShowed() && isDialogPinned(dialog)) {
@@ -5487,18 +5457,18 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     private void onArchiveLongPress(View view) {
         view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-        BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity());
+        BottomBuilder builder = new BottomBuilder(getParentActivity());
         final boolean hasUnread = getMessagesStorage().getArchiveUnreadCount() != 0;
 
         int[] icons = new int[]{
-                hasUnread ? R.drawable.msg_markread : 0,
-                SharedConfig.archiveHidden ? R.drawable.chats_pin : R.drawable.chats_unpin,
+            hasUnread ? R.drawable.menu_read : 0,
+            SharedConfig.archiveHidden ? R.drawable.chats_pin : R.drawable.chats_unpin,
         };
-        CharSequence[] items = new CharSequence[]{
-                hasUnread ? LocaleController.getString("MarkAllAsRead", R.string.MarkAllAsRead) : null,
-                SharedConfig.archiveHidden ? LocaleController.getString("PinInTheList", R.string.PinInTheList) : LocaleController.getString("HideAboveTheList", R.string.HideAboveTheList)
+        String[] items = new String[]{
+            hasUnread ? LocaleController.getString("MarkAllAsRead", R.string.MarkAllAsRead) : null,
+            SharedConfig.archiveHidden ? LocaleController.getString("PinInTheList", R.string.PinInTheList) : LocaleController.getString("HideAboveTheList", R.string.HideAboveTheList)
         };
-        builder.setItems(items, icons, (d, which) -> {
+        builder.addItems(items, icons, (which, t, c) -> {
             if (which == 0) {
                 getMessagesStorage().readAllDialogs(1);
             } else if (which == 1 && viewPages != null) {
@@ -5514,7 +5484,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     viewPages[a].listView.toggleArchiveHidden(true, dialogCell);
                 }
             }
+            return Unit.INSTANCE;
         });
+
         showDialog(builder.create());
     }
 
@@ -8893,4 +8865,3 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         return ColorUtils.calculateLuminance(color) > 0.7f;
     }
 }
-

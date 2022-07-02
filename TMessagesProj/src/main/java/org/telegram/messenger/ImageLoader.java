@@ -2229,33 +2229,6 @@ public class ImageLoader {
                         FileLog.e(e);
                     }
                 }
-                if (publicMediaDir != null && publicMediaDir.isDirectory()) {
-                    try {
-                        File imagePath = new File(publicMediaDir, "Telegram Images");
-                        imagePath.mkdir();
-                        if (imagePath.isDirectory() && canMoveFiles(cachePath, imagePath, FileLoader.MEDIA_DIR_IMAGE)) {
-                            mediaDirs.put(FileLoader.MEDIA_DIR_IMAGE_PUBLIC, imagePath);
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("image path = " + imagePath);
-                            }
-                        }
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                    }
-
-                    try {
-                        File videoPath = new File(publicMediaDir, "Telegram Video");
-                        videoPath.mkdir();
-                        if (videoPath.isDirectory() && canMoveFiles(cachePath, videoPath, FileLoader.MEDIA_DIR_VIDEO)) {
-                            mediaDirs.put(FileLoader.MEDIA_DIR_VIDEO_PUBLIC, videoPath);
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("video path = " + videoPath);
-                            }
-                        }
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                    }
-                }
             } else {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("this Android can't rename files");

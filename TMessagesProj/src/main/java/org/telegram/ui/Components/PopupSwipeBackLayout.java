@@ -233,11 +233,6 @@ public class PopupSwipeBackLayout extends FrameLayout {
             return true;
         }
 
-        if (act == MotionEvent.ACTION_DOWN && !mRect.contains(ev.getX(), ev.getY())) {
-            callOnClick();
-            return true;
-        }
-
         if (currentForegroundIndex < 0 || currentForegroundIndex >= getChildCount()) {
             return super.dispatchTouchEvent(ev);
         }

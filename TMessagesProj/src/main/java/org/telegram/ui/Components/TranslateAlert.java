@@ -200,13 +200,13 @@ public class TranslateAlert extends Dialog {
         int textsViewHeight = textsView == null ? 0 : textsView.getMeasuredHeight();
         int height =
             textsViewHeight +
-                dp(
-                    66 + // header
-                        1 +  // button separator
-                        16 + // button top padding
-                        48 + // button
-                        16   // button bottom padding
-                );
+            dp(
+                66 + // header
+                1 +  // button separator
+                16 + // button top padding
+                48 + // button
+                16   // button bottom padding
+            );
         if (firstMinHeight < 0 && textsViewHeight > 0)
             firstMinHeight = height;
         if (firstMinHeight > 0 && textBlocks.size() > 1 && !full)
@@ -216,7 +216,7 @@ public class TranslateAlert extends Dialog {
     private boolean canExpand() {
         return (
             textsView.getBlocksCount() < textBlocks.size() ||
-                minHeight(true) >= (AndroidUtilities.displayMetrics.heightPixels * heightMaxPercent)
+            minHeight(true) >= (AndroidUtilities.displayMetrics.heightPixels * heightMaxPercent)
         );
     }
     private void updateCanExpand() {
@@ -475,7 +475,7 @@ public class TranslateAlert extends Dialog {
                 if (id == android.R.id.copy && isFocused()) {
                     android.content.ClipboardManager clipboard = (android.content.ClipboardManager) ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE);
                     android.content.ClipData clip = android.content.ClipData.newPlainText(
-                        "label",
+                    "label",
                         getText().subSequence(
                             Math.max(0, Math.min(getSelectionStart(), getSelectionEnd())),
                             Math.max(0, Math.max(getSelectionStart(), getSelectionEnd()))
@@ -683,8 +683,8 @@ public class TranslateAlert extends Dialog {
             if (pressedLink == null && /*!(scrollRect.contains((int) x, (int) y) && !canExpand() && containerOpenAnimationT < .5f && !scrolling) &&*/ !hasSelection()) {
                 if (
                     !backRect.contains((int) x, (int) y) &&
-                        !buttonRect.contains((int) x, (int) y) &&
-                        event.getAction() == MotionEvent.ACTION_DOWN
+                    !buttonRect.contains((int) x, (int) y) &&
+                    event.getAction() == MotionEvent.ACTION_DOWN
                 ) {
                     fromScrollRect = scrollRect.contains((int) x, (int) y) && (containerOpenAnimationT > 0 || !canExpand());
                     maybeScrolling = true;
@@ -708,7 +708,7 @@ public class TranslateAlert extends Dialog {
                         allowScroll = false;
                     }
                     float fullHeight = AndroidUtilities.displayMetrics.heightPixels,
-                        minHeight = Math.min(minHeight(), fullHeight * heightMaxPercent);
+                          minHeight = Math.min(minHeight(), fullHeight * heightMaxPercent);
                     float scrollYPx = minHeight * (1f - -Math.min(Math.max(fromScrollY, -1), 0)) + (fullHeight - minHeight) * Math.min(1, Math.max(fromScrollY, 0)) + dy;
                     float scrollY = scrollYPx > minHeight ? (scrollYPx - minHeight) / (fullHeight - minHeight) : -(1f - scrollYPx / minHeight);
                     if (!canExpand()) {
@@ -772,8 +772,8 @@ public class TranslateAlert extends Dialog {
         if (Build.VERSION.SDK_INT >= 21) {
             params.flags |=
                 WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN |
-                    WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR |
-                    WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS;
+                WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR |
+                WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS;
         }
         params.flags |= WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         params.height = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -875,7 +875,7 @@ public class TranslateAlert extends Dialog {
             return null;
         }
         LocaleController.LocaleInfo thisLanguageInfo = LocaleController.getInstance().getBuiltinLanguageByPlural(locale),
-            currentLanguageInfo = LocaleController.getInstance().getCurrentLocaleInfo();
+                                    currentLanguageInfo = LocaleController.getInstance().getCurrentLocaleInfo();
         if (thisLanguageInfo == null) {
             return null;
         }
@@ -1327,7 +1327,7 @@ public class TranslateAlert extends Dialog {
     public static class InlineLoadingTextView extends ViewGroup {
 
         public static final int paddingHorizontal = dp(6),
-            paddingVertical = 0;
+                                paddingVertical = 0;
 
 
         public boolean showLoadingText = true;
@@ -1488,9 +1488,9 @@ public class TranslateAlert extends Dialog {
 
         private final RectF rect = new RectF();
         private final Path inPath = new Path(),
-            tempPath = new Path(),
-            loadingPath = new Path(),
-            shadePath = new Path();
+                tempPath = new Path(),
+                loadingPath = new Path(),
+                shadePath = new Path();
         private final Paint loadingPaint = new Paint();
         private final float gradientWidth = dp(350f);
         @Override
@@ -1498,12 +1498,12 @@ public class TranslateAlert extends Dialog {
             float w = getWidth(), h = getHeight();
 
             float cx = LocaleController.isRTL ? Math.max(w / 2f, w - 8f) : Math.min(w / 2f, 8f),
-                cy = Math.min(h / 2f, 8f),
-                R = (float) Math.sqrt(Math.max(
-                    Math.max(cx*cx + cy*cy, (w-cx)*(w-cx) + cy*cy),
-                    Math.max(cx*cx + (h-cy)*(h-cy), (w-cx)*(w-cx) + (h-cy)*(h-cy))
-                )),
-                r = loadingT * R;
+                    cy = Math.min(h / 2f, 8f),
+                    R = (float) Math.sqrt(Math.max(
+                        Math.max(cx*cx + cy*cy, (w-cx)*(w-cx) + cy*cy),
+                        Math.max(cx*cx + (h-cy)*(h-cy), (w-cx)*(w-cx) + (h-cy)*(h-cy))
+                    )),
+                    r = loadingT * R;
             inPath.reset();
             inPath.addCircle(cx, cy, r, Path.Direction.CW);
 
@@ -1558,7 +1558,7 @@ public class TranslateAlert extends Dialog {
     public static class LoadingTextView2 extends ViewGroup {
 
         public static final int paddingHorizontal = dp(6),
-            paddingVertical = dp(1.5f);
+                                paddingVertical = dp(1.5f);
 
         public boolean showLoadingText = true;
 
@@ -1735,11 +1735,11 @@ public class TranslateAlert extends Dialog {
                     final int lineCount = loadingLayout.getLineCount();
                     for (int i = 0; i < lineCount; ++i) {
                         float s = loadingLayout.getLineLeft(i),
-                            e = loadingLayout.getLineRight(i),
-                            l = Math.min(s, e),
-                            r = Math.max(s, e);
+                              e = loadingLayout.getLineRight(i),
+                              l = Math.min(s, e),
+                              r = Math.max(s, e);
                         int start = loadingLayout.getLineStart(i),
-                            end = loadingLayout.getLineEnd(i);
+                              end = loadingLayout.getLineEnd(i);
                         boolean hasNonEmptyChar = false;
                         for (int j = start; j < end; ++j) {
                             char c = text.charAt(j);
@@ -1764,9 +1764,9 @@ public class TranslateAlert extends Dialog {
 
         private final RectF rect = new RectF();
         private final Path inPath = new Path(),
-            tempPath = new Path(),
-            loadingPath = new Path(),
-            shadePath = new Path();
+                           tempPath = new Path(),
+                           loadingPath = new Path(),
+                           shadePath = new Path();
         private final Paint loadingPaint = new Paint();
         private final float gradientWidth = dp(350f);
         @Override
@@ -1774,12 +1774,12 @@ public class TranslateAlert extends Dialog {
             float w = getWidth(), h = getHeight();
 
             float cx = LocaleController.isRTL ? Math.max(w / 2f, w - 8f) : Math.min(w / 2f, 8f),
-                cy = Math.min(h / 2f, 8f),
-                R = (float) Math.sqrt(Math.max(
+                  cy = Math.min(h / 2f, 8f),
+                  R = (float) Math.sqrt(Math.max(
                     Math.max(cx*cx + cy*cy, (w-cx)*(w-cx) + cy*cy),
                     Math.max(cx*cx + (h-cy)*(h-cy), (w-cx)*(w-cx) + (h-cy)*(h-cy))
-                )),
-                r = loadingT * R;
+                  )),
+                  r = loadingT * R;
             inPath.reset();
             inPath.addCircle(cx, cy, r, Path.Direction.CW);
 

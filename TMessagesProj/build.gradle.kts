@@ -155,7 +155,7 @@ android {
         }
     }
 
-    val officialVersionName = "8.8.3"
+    val officialVersionName = "8.8.4"
 
     defaultConfig {
         minSdk = 21

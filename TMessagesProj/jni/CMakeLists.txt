@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.6.0)
+project(tmessages)
 
 find_program(CCACHE ccache)
 

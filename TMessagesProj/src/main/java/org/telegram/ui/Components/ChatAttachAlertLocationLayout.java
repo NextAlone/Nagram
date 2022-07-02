@@ -104,6 +104,10 @@ import java.util.List;
 import kotlin.Unit;
 import top.qwq2333.nullgram.ui.BottomBuilder;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.RecyclerView;
+
 public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLayout implements NotificationCenter.NotificationCenterDelegate {
 
     private ImageView locationButton;
@@ -1501,6 +1505,18 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                     }
                 }
             }
+
+            if (locationDenied && isTypeSend()) {
+//                adapter.setOverScrollHeight(overScrollHeight + top);
+//                // TODO(dkaraush): fix ripple effect on buttons
+                final int count = adapter.getItemCount();
+                for (int i = 1; i < count; ++i) {
+                    holder = listView.findViewHolderForAdapterPosition(i);
+                    if (holder != null) {
+                        holder.itemView.setTranslationY(listView.getPaddingTop() - top);
+                    }
+                }
+            }
         }
     }
 
@@ -1616,6 +1632,11 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             }
             if (mapView != null && mapsInitialized) {
                 myLocationOverlay.enableMyLocation();
+            }
+        } else if (id == NotificationCenter.locationPermissionDenied) {
+            locationDenied = true;
+            if (adapter != null) {
+                adapter.setMyLocationDenied(locationDenied);
             }
         } else if (id == NotificationCenter.locationPermissionDenied) {
             locationDenied = true;

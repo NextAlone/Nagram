@@ -540,7 +540,6 @@
     <string name="EditCantEditPermissionsPublic">이 권한은 공개 그룹에서 부여되지 않습니다.</string>
     <string name="UserRemovedBy">%1$s 님이 추방함</string>
     <string name="UserRestrictions">사용자 권한</string>
-    <string name="UserRestrictionsDisabled">이 설정은 그룹 권한을 가진 참가자 모두에게서 꺼져 있습니다</string>
     <string name="UserRestrictionsCanDo">이 사용자가 할 수 있는 일</string>
     <string name="UserRestrictionsRead">메시지 읽기</string>
     <string name="UserRestrictionsSend">메시지 보내기</string>

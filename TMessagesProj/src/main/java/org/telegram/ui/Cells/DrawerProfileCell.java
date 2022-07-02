@@ -435,7 +435,6 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
                 gradientTools.y2 = -0.2f;
                 gradientTools.exactly = true;
             }
-
             gradientTools.gradientMatrix(0, 0, getMeasuredWidth(), getMeasuredHeight(), 0, 0);
             gradientTools.paint.setAlpha((int) (drawPremiumProgress * 255));
             canvas.drawRect(0, 0, getMeasuredWidth(), getMeasuredHeight(), gradientTools.paint);

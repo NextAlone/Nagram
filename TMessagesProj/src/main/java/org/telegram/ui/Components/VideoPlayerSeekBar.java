@@ -21,6 +21,7 @@ import android.text.Spanned;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
+import top.qwq2333.nullgram.utils.Log;
 import android.util.Pair;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;

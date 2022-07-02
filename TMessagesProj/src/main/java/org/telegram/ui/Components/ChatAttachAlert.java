@@ -4034,44 +4034,6 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             }
             return;
         }
-        if (commentTextView != null) {
-            AndroidUtilities.hideKeyboard(commentTextView.getEditText());
-        }
-        botAttachLayouts.clear();
-        if (!allowPassConfirmationAlert && baseFragment != null && currentAttachLayout.getSelectedItemsCount() > 0) {
-            if (confirmationAlertShown) {
-                return;
-            }
-            confirmationAlertShown = true;
-            AlertDialog dialog =
-                new AlertDialog.Builder(baseFragment.getParentActivity(), parentThemeDelegate)
-                    .setTitle(LocaleController.getString("DiscardSelectionAlertTitle", R.string.DiscardSelectionAlertTitle))
-                    .setMessage(LocaleController.getString("DiscardSelectionAlertMessage", R.string.DiscardSelectionAlertMessage))
-                    .setPositiveButton(LocaleController.getString("PassportDiscard", R.string.PassportDiscard), (dialogInterface, i) -> {
-                        allowPassConfirmationAlert = true;
-                        dismiss();
-                    })
-                    .setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null)
-                    .setOnCancelListener(di -> {
-                        if (appearSpringAnimation != null) {
-                            appearSpringAnimation.cancel();
-                        }
-                        appearSpringAnimation = new SpringAnimation(super.containerView, DynamicAnimation.TRANSLATION_Y, 0);
-                        appearSpringAnimation.getSpring().setDampingRatio(1.5f);
-                        appearSpringAnimation.getSpring().setStiffness(1500.0f);
-                        appearSpringAnimation.start();
-                    })
-                    .setOnPreDismissListener(di -> {
-                        confirmationAlertShown = false;
-                    })
-                    .create();
-            dialog.show();
-            TextView button = (TextView) dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-            if (button != null) {
-                button.setTextColor(getThemedColor(Theme.key_dialogTextRed2));
-            }
-            return;
-        }
         for (int a = 0; a < layouts.length; a++) {
             if (layouts[a] != null && currentAttachLayout != layouts[a]) {
                 layouts[a].onDismiss();

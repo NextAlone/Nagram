@@ -44,6 +44,7 @@ import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
+import top.qwq2333.nullgram.utils.Log;
 import android.util.TypedValue;
 import android.view.ActionMode;
 import android.view.Gravity;
@@ -180,7 +181,6 @@ import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.helpers.SettingsHelper;
 import top.qwq2333.nullgram.helpers.UpdateHelper;
 import top.qwq2333.nullgram.utils.Defines;
-import top.qwq2333.nullgram.utils.Log;
 
 public class LaunchActivity extends BasePermissionsActivity implements ActionBarLayout.ActionBarLayoutDelegate, NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate {
     public static boolean isResumed;
@@ -582,13 +582,6 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                 if (freeAccounts > 0 && availableAccount != null) {
                     presentFragment(new LoginActivity(availableAccount));
                     drawerLayoutContainer.closeDrawer(false);
-                } else if (!UserConfig.hasPremiumOnAccounts()) {
-                    if (actionBarLayout.fragmentsStack.size() > 0) {
-                        BaseFragment fragment = actionBarLayout.fragmentsStack.get(0);
-                        LimitReachedBottomSheet limitReachedBottomSheet = new LimitReachedBottomSheet(fragment, this, TYPE_ACCOUNTS, currentAccount);
-                        fragment.showDialog(limitReachedBottomSheet);
-                        limitReachedBottomSheet.onShowPremiumScreenRunnable = () -> drawerLayoutContainer.closeDrawer(false);
-                    }
                 }
 
             } else {
@@ -5337,12 +5330,6 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                             Bulletin.make(container, layout, duration).show();
                         }
                         break;
-                    }
-                } if (type == Bulletin.TYPE_ERROR_SUBTITLE) {
-                    if (fragment != null) {
-                        BulletinFactory.of(fragment).createErrorBulletinSubtitle((String) args[1], (String) args[2], fragment.getResourceProvider()).show();
-                    } else {
-                        BulletinFactory.of(container, null).createErrorBulletinSubtitle((String) args[1], (String) args[2], null).show();
                     }
                 }
             }

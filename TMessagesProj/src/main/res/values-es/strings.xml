@@ -540,7 +540,6 @@
     <string name="EditCantEditPermissionsPublic">Este permiso no está disponible en grupos públicos.</string>
     <string name="UserRemovedBy">Eliminado por %1$s</string>
     <string name="UserRestrictions">Permisos del usuario</string>
-    <string name="UserRestrictionsDisabled">Esta opción está desactivada para todos los miembros en Permisos de grupo</string>
     <string name="UserRestrictionsCanDo">¿Qué puede hacer este usuario?</string>
     <string name="UserRestrictionsRead">Leer mensajes</string>
     <string name="UserRestrictionsSend">Enviar mensajes</string>

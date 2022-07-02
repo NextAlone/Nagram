@@ -105,11 +105,17 @@ public class MediaDataController extends BaseController {
     public static String SHORTCUT_CATEGORY = "org.telegram.messenger.SHORTCUT_SHARE";
 
     private static volatile MediaDataController[] Instance = new MediaDataController[UserConfig.MAX_ACCOUNT_COUNT];
+    private static final Object[] lockObjects = new Object[UserConfig.MAX_ACCOUNT_COUNT];
+    static {
+        for (int i = 0; i < UserConfig.MAX_ACCOUNT_COUNT; i++) {
+            lockObjects[i] = new Object();
+        }
+    }
 
     public static MediaDataController getInstance(int num) {
         MediaDataController localInstance = Instance[num];
         if (localInstance == null) {
-            synchronized (MediaDataController.class) {
+            synchronized (lockObjects) {
                 localInstance = Instance[num];
                 if (localInstance == null) {
                     Instance[num] = localInstance = new MediaDataController(num);
@@ -5263,6 +5269,26 @@ public class MediaDataController extends BaseController {
                         if (style != null) {
                             addStyle(style, entity.offset, entity.offset + entity.length, entities);
                         }
+                    }
+                }
+            }
+
+            if (spannable instanceof Spannable) {
+                AndroidUtilities.addLinks((Spannable) spannable, Linkify.WEB_URLS);
+                URLSpan[] spansUrl = spannable.getSpans(0, message[0].length(), URLSpan.class);
+                if (spansUrl != null && spansUrl.length > 0) {
+                    if (entities == null) {
+                        entities = new ArrayList<>();
+                    }
+                    for (int b = 0; b < spansUrl.length; b++) {
+                        if (spansUrl[b] instanceof URLSpanReplacement || spansUrl[b] instanceof URLSpanUserMention) {
+                            continue;
+                        }
+                        TLRPC.TL_messageEntityUrl entity = new TLRPC.TL_messageEntityUrl();
+                        entity.offset = spannable.getSpanStart(spansUrl[b]);
+                        entity.length = Math.min(spannable.getSpanEnd(spansUrl[b]), message[0].length()) - entity.offset;
+                        entity.url = spansUrl[b].getURL();
+                        entities.add(entity);
                     }
                 }
             }
