@@ -53,6 +53,7 @@ public class Defines {
     public static final String maxRecentSticker = "maxRecentSticker";
     public static final String autoSwitchProxy = "autoSwitchProxy";
     public static final String unreadBadgeOnBackButton = "unreadBadgeOnBackButton";
+    public static final String disableSendTyping = "disableSendTyping";
     public static final String ignoreReactionMention = "ignoreReactionMention";
     public static final String stickerSize = "customStickerSize";
     public static final String keepCopyFormatting = "keepCopyFormatting";
