@@ -45,7 +45,6 @@ public class Defines {
     public static final String verifyLinkTip = "verifyLinkTip";
     public static final String showExactNumber = "showExactNumber";
     public static final String disableTrendingSticker = "disableTrendingSticker";
-    public static final String disableQuickReaction = "disableQuickReaction";
     public static final String disableInstantCamera = "disableInstantCamera";
     public static final String showHiddenSettings = "showHiddenSettings";
     public static final String confirmToSendMediaMessages = "confirmToSendMediaMessages";

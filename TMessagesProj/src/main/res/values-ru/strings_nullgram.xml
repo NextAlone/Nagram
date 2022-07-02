@@ -97,7 +97,7 @@
     <string name="customDoubleTap">Пользовательский двойной тап</string>
     <string name="OpenSource">Лицензии на ПО с открытым исходным кодом</string>
     <string name="disableCustomAPI">Не использовать пользовательский API</string>
-    <string name="useOfficialAPI">Telegram</string>
+    <string name="useOfficialAPI">TELEOFFICAL</string>
     <string name="customAPI">Пользовательский API</string>
     <string name="useCustomApiNotice">Войдите в систему, используя пользовательский api, если вы не можете зарегистрироваться или войти, это может помочь.\n
 \nПримечание: FCM не будет работать, если вы используете публичную версию.</string>

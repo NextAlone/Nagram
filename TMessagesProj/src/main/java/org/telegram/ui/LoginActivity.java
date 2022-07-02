@@ -1978,7 +1978,7 @@ public class LoginActivity extends BaseFragment {
 
             if (activityMode == MODE_LOGIN) {
                 testBackendCheckBox = new CheckBoxCell(context, 2);
-                testBackendCheckBox.setText("Test Backend", "", testBackend, false);
+                testBackendCheckBox.setText(LocaleController.getString("TestBackend", R.string.TestBackend), "", testBackend, false);
                 addView(testBackendCheckBox, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 16, 0, 16 + (LocaleController.isRTL && AndroidUtilities.isSmallScreen() ? Build.VERSION.SDK_INT >= 21 ? 56 : 60 : 0), 0));
                 bottomMargin -= 24;
                 testBackendCheckBox.setOnClickListener(v -> {
@@ -1986,38 +1986,15 @@ public class LoginActivity extends BaseFragment {
                         return;
                     }
                     CheckBoxCell cell = (CheckBoxCell) v;
-                    syncContacts = !syncContacts;
-                    cell.setChecked(syncContacts, true);
-                    if (syncContacts) {
-                        BulletinFactory.of(slideViewsContainer, null).createSimpleBulletin(R.raw.contacts_sync_on, LocaleController.getString("SyncContactsOn", R.string.SyncContactsOn)).show();
+                    testBackend = !testBackend;
+                    cell.setChecked(testBackend, true);
+                    if (testBackend) {
+                        BulletinFactory.of(slideViewsContainer, null).createSimpleBulletin(R.raw.chats_infotip, LocaleController.getString("TestBackendOn", R.string.TestBackendOn)).show();
                     } else {
-                        BulletinFactory.of(slideViewsContainer, null).createSimpleBulletin(R.raw.contacts_sync_off, LocaleController.getString("SyncContactsOff", R.string.SyncContactsOff)).show();
+                        BulletinFactory.of(slideViewsContainer, null).createSimpleBulletin(R.raw.chats_infotip, LocaleController.getString("TestBackendOff", R.string.TestBackendOff)).show();
                     }
                 });
             }
-            if (bottomMargin > 0 && !AndroidUtilities.isSmallScreen()) {
-                Space bottomSpacer = new Space(context);
-                bottomSpacer.setMinimumHeight(AndroidUtilities.dp(bottomMargin));
-                addView(bottomSpacer, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
-            }
-
-            testBackendCheckBox = new CheckBoxCell(context, 2);
-            testBackendCheckBox.setText(LocaleController.getString("TestBackend", R.string.TestBackend), "", testBackend, false);
-            addView(testBackendCheckBox, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 16, 0, 16 + (LocaleController.isRTL && AndroidUtilities.isSmallScreen() ? Build.VERSION.SDK_INT >= 21 ? 56 : 60 : 0), 0));
-            bottomMargin -= 24;
-            testBackendCheckBox.setOnClickListener(v -> {
-                if (getParentActivity() == null) {
-                    return;
-                }
-                CheckBoxCell cell = (CheckBoxCell) v;
-                testBackend = !testBackend;
-                cell.setChecked(testBackend, true);
-                if (testBackend) {
-                    BulletinFactory.of(slideViewsContainer, null).createSimpleBulletin(R.raw.chats_infotip, LocaleController.getString("TestBackendOn", R.string.TestBackendOn)).show();
-                } else {
-                    BulletinFactory.of(slideViewsContainer, null).createSimpleBulletin(R.raw.chats_infotip, LocaleController.getString("TestBackendOff", R.string.TestBackendOff)).show();
-                }
-            });
             if (bottomMargin > 0 && !AndroidUtilities.isSmallScreen()) {
                 Space bottomSpacer = new Space(context);
                 bottomSpacer.setMinimumHeight(AndroidUtilities.dp(bottomMargin));
@@ -2033,7 +2010,7 @@ public class LoginActivity extends BaseFragment {
             optionsButton.addSubItem(1, LocaleController.getString("BotLogin", R.string.BotLogin));
             optionsButton.addSubItem(2, LocaleController.getString("QRLoginTitle", R.string.QRLoginTitle));
             if (ConfigManager.getBooleanOrFalse(Defines.showHiddenSettings))
-            optionsButton.addSubItem(3, LocaleController.getString("CustomApiLogin", R.string.customAPI));
+                optionsButton.addSubItem(3, LocaleController.getString("CustomApiLogin", R.string.customAPI));
             optionsButton.setDelegate(new ActionBarMenuItem.ActionBarMenuItemDelegate() {
                 @Override
                 public void onItemClick(int id) {
@@ -2118,87 +2095,71 @@ public class LoginActivity extends BaseFragment {
                         }
                     } else if (id == 2) {
                         exportLoginToken(true);
-                    } if (id == 3 && ConfigManager.getBooleanOrFalse(
-                        Defines.showHiddenSettings)) {
+                    }
+                    if (id == 3 && ConfigManager.getBooleanOrFalse(Defines.showHiddenSettings)) {
                         AtomicInteger targetApi = new AtomicInteger(-1);
 
                         BottomBuilder builder = new BottomBuilder(getParentActivity());
 
                         EditText[] inputs = new EditText[2];
 
-                        builder.addTitle(LocaleController.getString("customAPI", R.string.customAPI),
-                            true,
-                            LocaleController.getString("useCustomApiNotice",
-                                R.string.useCustomApiNotice));
+                        builder.addTitle(LocaleController.getString("customAPI", R.string.customAPI), true, LocaleController.getString("useCustomApiNotice", R.string.useCustomApiNotice));
 
-                        builder.addRadioItem(
-                            LocaleController.getString("disableCustonAPI", R.string.disableCustomAPI),
-                            ConfigManager.getIntOrDefault(Defines.customAPI, Defines.disableCustomAPI)
-                                == Defines.disableCustomAPI, (cell) -> {
-                                targetApi.set(0);
-                                builder.doRadioCheck(cell);
-                                for (EditText input : inputs) {
-                                    input.setVisibility(View.GONE);
-                                }
-                                return Unit.INSTANCE;
-                            });
+                        builder.addRadioItem(LocaleController.getString("disableCustonAPI", R.string.disableCustomAPI), ConfigManager.getIntOrDefault(Defines.customAPI, Defines.disableCustomAPI) == Defines.disableCustomAPI, (cell) -> {
+                            targetApi.set(0);
+                            builder.doRadioCheck(cell);
+                            for (EditText input : inputs) {
+                                input.setVisibility(View.GONE);
+                            }
+                            return Unit.INSTANCE;
+                        });
 
-                        builder.addRadioItem(
-                            LocaleController.getString("useOfficialAPI", R.string.useOfficialAPI),
-                            ConfigManager.getIntOrDefault(Defines.customAPI, Defines.disableCustomAPI)
-                                == Defines.useTelegramAPI, (cell) -> {
+                        builder.addRadioItem(LocaleController.getString("useOfficialAPI", R.string.useOfficialAPI), ConfigManager.getIntOrDefault(Defines.customAPI, Defines.disableCustomAPI) == Defines.useTelegramAPI, (cell) -> {
 
-                                targetApi.set(1);
+                            targetApi.set(1);
 
-                                builder.doRadioCheck(cell);
+                            builder.doRadioCheck(cell);
 
-                                for (EditText input : inputs) {
-                                    input.setVisibility(View.GONE);
-                                }
+                            for (EditText input : inputs) {
+                                input.setVisibility(View.GONE);
+                            }
 
-                                return Unit.INSTANCE;
+                            return Unit.INSTANCE;
 
-                            });
+                        });
 
-                        builder.addRadioItem(
-                            LocaleController.getString("useCustomAPI", R.string.useCustomAPI),
-                            ConfigManager.getIntOrDefault(Defines.customAPI, Defines.disableCustomAPI)
-                                == Defines.useCustomAPI, (cell) -> {
+                        builder.addRadioItem(LocaleController.getString("useCustomAPI", R.string.useCustomAPI), ConfigManager.getIntOrDefault(Defines.customAPI, Defines.disableCustomAPI) == Defines.useCustomAPI, (cell) -> {
 
-                                targetApi.set(3);
+                            targetApi.set(3);
 
-                                builder.doRadioCheck(cell);
+                            builder.doRadioCheck(cell);
 
-                                for (EditText input : inputs) {
-                                    input.setVisibility(View.VISIBLE);
-                                }
+                            for (EditText input : inputs) {
+                                input.setVisibility(View.VISIBLE);
+                            }
 
-                                return Unit.INSTANCE;
+                            return Unit.INSTANCE;
 
-                            });
+                        });
 
                         inputs[0] = builder.addEditText("App Id");
                         inputs[0].setInputType(InputType.TYPE_CLASS_NUMBER);
                         if (ConfigManager.getIntOrDefault(Defines.customAppId, 0) != 0) {
-                            inputs[0].setText(
-                                ConfigManager.getIntOrDefault(Defines.customAppId, 0) + "");
+                            inputs[0].setText(ConfigManager.getIntOrDefault(Defines.customAppId, 0) + "");
                         }
                         inputs[0].addTextChangedListener(new TextWatcher() {
                             @Override
-                            public void beforeTextChanged(CharSequence s, int start, int count,
-                                                          int after) {
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                             }
 
                             @Override
-                            public void onTextChanged(CharSequence s, int start, int before,
-                                                      int count) {
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
                                 if (StringUtils.isBlank(s.toString())) {
                                     ConfigManager.putInt(Defines.customAppId, 0);
                                 } else if (!NumberUtils.isInteger(s.toString())) {
                                     inputs[0].setText("0");
                                 } else {
-                                    ConfigManager.putInt(Defines.customAppId,
-                                        NumberUtils.parseInt(s.toString()));
+                                    ConfigManager.putInt(Defines.customAppId, NumberUtils.parseInt(s.toString()));
                                 }
                             }
 
@@ -2208,20 +2169,17 @@ public class LoginActivity extends BaseFragment {
                         });
 
                         inputs[1] = builder.addEditText("App Hash");
-                        inputs[1].setFilters(new InputFilter[]{
-                            new InputFilter.LengthFilter(Defines.telegramHash.length())});
+                        inputs[1].setFilters(new InputFilter[]{new InputFilter.LengthFilter(Defines.telegramHash.length())});
                         if (!StringUtils.isBlank(ConfigManager.getStringOrDefault(Defines.customAppHash, null))) {
                             inputs[1].setText(ConfigManager.getStringOrDefault(Defines.customAppHash, "It shouldn't be happened"));
                         }
                         inputs[1].addTextChangedListener(new TextWatcher() {
                             @Override
-                            public void beforeTextChanged(CharSequence s, int start, int count,
-                                                          int after) {
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                             }
 
                             @Override
-                            public void onTextChanged(CharSequence s, int start, int before,
-                                                      int count) {
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
                                 ConfigManager.putString(Defines.customAppHash, s.toString());
                             }
 

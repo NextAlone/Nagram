@@ -97,7 +97,7 @@
     <string name="customDoubleTap">自定义双击模式</string>
     <string name="OpenSource">开源软件许可协议</string>
     <string name="disableCustomAPI">不要使用自定义 API</string>
-    <string name="useOfficialAPI">Telegram</string>
+    <string name="useOfficialAPI">TELEOFFICAL</string>
     <string name="customAPI">自定义 API</string>
     <string name="useCustomApiNotice">使用自定义api登录，如果您不能注册或登录，这可能会有所帮助。\n\n注意：fcm 将无法工作。</string>
     <string name="useCustomAPI">手动输入</string>

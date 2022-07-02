@@ -97,7 +97,7 @@
     <string name="customDoubleTap">Personalizza doppio tap</string>
     <string name="OpenSource">Licenze open source</string>
     <string name="disableCustomAPI">Non usare API custom</string>
-    <string name="useOfficialAPI">Telegram</string>
+    <string name="useOfficialAPI">TELEOFFICAL</string>
     <string name="customAPI">API custom</string>
     <string name="useCustomApiNotice">Nel caso non sei in grado di registrarti o effettuare il login, puoi usare le API custom.\n\nNota bene: FCM non funzionerà se utilizzi la versione release.</string>
     <string name="useCustomAPI">Inserimento manuale</string>

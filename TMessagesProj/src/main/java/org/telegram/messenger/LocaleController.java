@@ -1066,6 +1066,9 @@ public class LocaleController {
             value = "LOC_ERR:" + key;
         }
 
+        if (value.contains("TELEOFFICAL"))
+            value = value.replace("TELEOFFICAL", "Telegram");
+
         if (value.contains("Telegram"))
             value = value.replace("Telegram", "Nullgram");
 

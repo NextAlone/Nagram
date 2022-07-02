@@ -25,7 +25,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import top.qwq2333.nullgram.utils.Log;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
@@ -1666,7 +1665,7 @@ public class ActionBarLayout extends FrameLayout {
         }
 
         if (previousFragment != null) {
-            AndroidUtilities.setLightStatusBar(parentActivity.getWindow(), Theme.getColor(Theme.key_actionBarDefault) == Color.WHITE || (previousFragment.hasForceLightStatusBar() && !Theme.getCurrentTheme().isDark()), previousFragment.hasForceLightStatusBar());
+            AndroidUtilities.setLightStatusBar(parentActivity.getWindow(), previousFragment.isLightStatusBar(), previousFragment.hasForceLightStatusBar());
             LayoutContainer temp = containerView;
             containerView = containerViewBack;
             containerViewBack = temp;

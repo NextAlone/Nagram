@@ -97,7 +97,7 @@
     <string name="customDoubleTap">Custom Double Tap</string>
     <string name="OpenSource">OpenSource Software Licenses</string>
     <string name="disableCustomAPI">Don\'t use custom API</string>
-    <string name="useOfficialAPI">Telegram</string>
+    <string name="useOfficialAPI">TELEOFFICAL</string>
     <string name="customAPI">Custom API</string>
     <string name="useCustomApiNotice">Log in using the custom api, if you are unable to register or log in, this may help.\n\nNote: fcm will not work if you are using the release version.</string>
     <string name="useCustomAPI">Manual input</string>
