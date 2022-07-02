@@ -73,6 +73,7 @@ public class Defines {
     public static final String customQuickMsgSAR = "customQuickMessageSendAsReply";
     public static final String scrollableChatPreview = "scrollableChatPreview";
     public static final String disableVibration = "disableVibration";
+    public static final String aospEmojiFont = "NotoColorEmoji.ttf";
 
     // Custom API
     public static final String customAPI = "customAPI";

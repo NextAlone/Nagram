@@ -13,7 +13,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -34,17 +33,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.palette.graphics.Palette;
 import androidx.core.content.ContextCompat;
+import androidx.palette.graphics.Palette;
 
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
-import org.telegram.messenger.Emoji;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
@@ -510,11 +508,6 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
             imageReceiver.setImage(imageLocation, "512_512", null, null, new ColorDrawable(0x00000000), 0, null, user, 1);
             avatarImageView.setVisibility(INVISIBLE);
             if (ConfigManager.getBooleanOrFalse(Defines.largeAvatarAsBackground)) {
-                // add shadow
-                nameTextView.setShadowLayer(6.0f, 2.0f, 2.0f, Color.BLACK);
-                phoneTextView.getTextView().setShadowLayer(6.0f, 2.0f, 2.0f, Color.BLACK);
-
-                // correct the position of night button
                 LayoutParams lp = ConfigManager.getBooleanOrFalse(Defines.largeAvatarAsBackground) ?
                     LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.TOP, 0, AndroidUtilities.statusBarHeight / getResources().getDisplayMetrics().density, 6, 0) :
                     LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.BOTTOM, 0, 10, 6, 90);

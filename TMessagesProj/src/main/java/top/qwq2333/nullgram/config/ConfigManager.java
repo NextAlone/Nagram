@@ -35,12 +35,10 @@ import org.json.JSONObject;
 import org.telegram.messenger.ApplicationLoader;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 import kotlin.text.StringsKt;
-import top.qwq2333.nullgram.utils.AppcenterUtils;
 import top.qwq2333.nullgram.utils.Log;
 
 public class ConfigManager {
@@ -208,10 +206,6 @@ public class ConfigManager {
             try {
                 boolean originValue = preferences.getBoolean(key, false);
                 preferences.edit().putBoolean(key, !originValue).apply();
-                HashMap<String, String> map = new HashMap<>();
-                map.put("function", key);
-                map.put("status", Boolean.toString(!originValue));
-                AppcenterUtils.trackEvent("toogleBoolean", map);
             } catch (Throwable thr) {
                 Log.e(thr);
             }

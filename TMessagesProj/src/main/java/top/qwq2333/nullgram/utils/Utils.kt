@@ -1,12 +1,18 @@
 package top.qwq2333.nullgram.utils
 
+import android.graphics.Typeface
 import android.util.Base64
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.MessageObject
 import top.qwq2333.nullgram.config.ConfigManager
+import java.io.BufferedReader
+import java.io.FileReader
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.security.SecureRandom
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
 
 object Utils {
 
@@ -55,6 +61,44 @@ object Utils {
         val salt = ByteArray(32)
         random.nextBytes(salt)
         return salt
+    }
+
+    @JvmStatic
+    var loadSystemEmojiFailed = false
+
+    @JvmStatic
+    private var systemEmojiTypeface: Typeface? = null
+
+    @JvmStatic
+    fun getSystemEmojiTypeface(): Typeface? {
+        if (!loadSystemEmojiFailed && systemEmojiTypeface == null) {
+            try {
+                val p: Pattern = Pattern.compile(">(.*emoji.*)</font>", Pattern.CASE_INSENSITIVE)
+                val br = BufferedReader(FileReader("/system/etc/fonts.xml"))
+                var line: String?
+                while (br.readLine().also { line = it } != null) {
+                    val m: Matcher = p.matcher(line)
+                    if (m.find()) {
+                        systemEmojiTypeface = Typeface.createFromFile("/system/fonts/" + m.group(1))
+                        Log.d("emoji font file fonts.xml = " + m.group(1))
+                        break
+                    }
+                }
+                br.close()
+            } catch (e: Exception) {
+                Log.e(e)
+            }
+            if (systemEmojiTypeface == null) {
+                try {
+                    systemEmojiTypeface = Typeface.createFromFile("/system/fonts/${Defines.aospEmojiFont}")
+                    Log.d("emoji font file = ${Defines.aospEmojiFont}")
+                } catch (e: Exception) {
+                    Log.e(e)
+                    loadSystemEmojiFailed = true
+                }
+            }
+        }
+        return systemEmojiTypeface
     }
 
 }
