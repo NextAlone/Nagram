@@ -39,10 +39,8 @@ import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.ColoredImageSpan;
 import org.telegram.ui.Components.Easings;
 import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.LauncherIconController;
-import org.telegram.ui.PremiumPreviewFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -111,7 +109,7 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
             IconHolderView holderView = (IconHolderView) view;
             LauncherIconController.LauncherIcon icon = availableIcons.get(position);
             if (icon.premium && !UserConfig.hasPremiumOnAccounts()) {
-                fragment.showDialog(new PremiumFeatureBottomSheet(fragment, PremiumPreviewFragment.PREMIUM_FEATURE_APPLICATION_ICONS, true));
+//                fragment.showDialog(new PremiumFeatureBottomSheet(fragment, PremiumPreviewFragment.PREMIUM_FEATURE_APPLICATION_ICONS, true));
                 return;
             }
 
