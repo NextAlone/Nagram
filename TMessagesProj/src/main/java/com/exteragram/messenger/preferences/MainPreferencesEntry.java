@@ -38,8 +38,8 @@ public class MainPreferencesEntry extends BaseFragment {
     private int appearanceRow;
     private int chatsRow;
 
-    private int dividerInfoRow;
-    private int dividerExteraInfoRow;
+    private int categoryDividerRow;
+    private int aboutExteraDividerRow;
 
     private int infoHeaderRow;
     private int aboutExteraRow;
@@ -47,6 +47,7 @@ public class MainPreferencesEntry extends BaseFragment {
     private int channelRow;
     private int groupRow;
     private int crowdinRow;
+    private int infoDividerRow;
 
     @Override
     public boolean onFragmentCreate() {
@@ -117,21 +118,20 @@ public class MainPreferencesEntry extends BaseFragment {
         rowCount = 0;
         
         aboutExteraRow = rowCount++;
-        
-        dividerExteraInfoRow = rowCount++;
+        aboutExteraDividerRow = rowCount++;
 
         categoryHeaderRow = rowCount++;
         generalRow = rowCount++;
         appearanceRow = rowCount++;
         chatsRow = rowCount++;
-
-        dividerInfoRow = rowCount++;
+        categoryDividerRow = rowCount++;
 
         infoHeaderRow = rowCount++;
         channelRow = rowCount++;
         groupRow = rowCount++;
         crowdinRow = rowCount++;
         sourceCodeRow = rowCount++;
+        infoDividerRow = rowCount++;
 
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -163,7 +163,11 @@ public class MainPreferencesEntry extends BaseFragment {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             switch (holder.getItemViewType()) {
                 case 1:
-                    holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    if (position == infoDividerRow) {
+                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    } else {
+                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    }
                     break;
                 case 2:
                     TextCell textCell = (TextCell) holder.itemView;
@@ -194,10 +198,6 @@ public class MainPreferencesEntry extends BaseFragment {
                     break;
                 case 4:
                     InfoSettingsCell textDetailCell = (InfoSettingsCell) holder.itemView;
-                    textDetailCell.setMultilineDetail(true);
-                    if (position == aboutExteraRow) {
-                        textDetailCell.setTextAndValueAndIcon(ExteraUtils.getAppName() + " | v" + BuildVars.BUILD_VERSION_STRING, LocaleController.getString("AboutExteraDescription", R.string.AboutExteraDescription), R.drawable.ic_logo_foreground, false);
-                    }
                     break;
             }
         }
@@ -234,7 +234,7 @@ public class MainPreferencesEntry extends BaseFragment {
         }
         @Override
         public int getItemViewType(int position) {
-            if (position == dividerInfoRow || position == dividerExteraInfoRow) {
+            if (position == categoryDividerRow || position == aboutExteraDividerRow || position == infoDividerRow) {
                 return 1;
             } else if (position == generalRow || position == appearanceRow || position == chatsRow ||
                       position == channelRow || position == groupRow || position == crowdinRow ||

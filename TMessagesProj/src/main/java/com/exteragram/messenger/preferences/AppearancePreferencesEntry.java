@@ -415,7 +415,11 @@ public class AppearancePreferencesEntry extends BaseFragment {
             }
             switch (holder.getItemViewType()) {
                 case 1:
-                    holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    if (position == drawerDividerRow) {
+                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    } else {
+                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    }
                     break;
                 case 2:
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
