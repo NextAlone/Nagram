@@ -52,6 +52,9 @@ import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.parts.ProxySwitcher;
 import tw.nekomimi.nekogram.utils.DnsFactory;
+import tw.nekomimi.nekogram.ErrorDatabase;
+
+import xyz.nextalone.nagram.NaConfig;
 
 public class ConnectionsManager extends BaseController {
 
@@ -304,6 +307,9 @@ public class ConnectionsManager extends BaseController {
                             error.text = errorText;
                             if (BuildVars.LOGS_ENABLED) {
                                 FileLog.e(object + " got error " + error.code + " " + error.text);
+                            }
+                            if (NaConfig.INSTANCE.getShowRPCError().Bool()) {
+                                ErrorDatabase.showErrorToast(object, errorText);
                             }
                         }
                         if (resp != null) {
