@@ -1614,9 +1614,6 @@ public class MessagesController extends BaseController implements NotificationCe
             return;
         }
         loadingSuggestedFilters = true;
-
-        /*
-
         TLRPC.TL_messages_getSuggestedDialogFilters req = new TLRPC.TL_messages_getSuggestedDialogFilters();
         getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
             loadingSuggestedFilters = false;
@@ -1627,29 +1624,15 @@ public class MessagesController extends BaseController implements NotificationCe
                     suggestedFilters.add((TLRPC.TL_dialogFilterSuggested) vector.objects.get(a));
                 }
             }
+            s:
+            for (TLRPC.TL_dialogFilterSuggested suggested : InternalFilters.internalFilters) {
+                for (DialogFilter filter : dialogFilters) {
+                    if (suggested.filter.flags == filter.flags) continue s;
+                }
+                suggestedFilters.add(suggested);
+            }
             getNotificationCenter().postNotificationName(NotificationCenter.suggestedFiltersLoaded);
         }));
-
-         */
-
-        suggestedFilters.clear();
-
-        s:
-        for (TLRPC.TL_dialogFilterSuggested suggested : InternalFilters.internalFilters) {
-
-            for (DialogFilter filter : dialogFilters) {
-
-                if (suggested.filter.flags == filter.flags) continue s;
-
-            }
-
-            suggestedFilters.add(suggested);
-
-        }
-
-        loadingSuggestedFilters = false;
-        getNotificationCenter().postNotificationName(NotificationCenter.suggestedFiltersLoaded);
-
     }
 
     public void loadRemoteFilters(boolean force) {

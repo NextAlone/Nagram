@@ -1,6 +1,7 @@
 package org.telegram.tgnet;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;

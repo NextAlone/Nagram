@@ -26,6 +26,7 @@ import androidx.core.view.ViewCompat;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -39,15 +40,15 @@ public class HeaderCell extends LinearLayout {
     private final Theme.ResourcesProvider resourcesProvider;
 
     public HeaderCell(Context context) {
-        this(context, Theme.key_windowBackgroundWhiteBlueHeader, 21, 15, false, false, null);
+        this(context, Theme.key_windowBackgroundWhiteBlueHeader, 21, 15, false, null);
     }
 
     public HeaderCell(Context context, Theme.ResourcesProvider resourcesProvider) {
-        this(context, Theme.key_windowBackgroundWhiteBlueHeader, 21, 15, false, false, resourcesProvider);
+        this(context, Theme.key_windowBackgroundWhiteBlueHeader, 21, 15, false, resourcesProvider);
     }
 
     public HeaderCell(Context context, int padding) {
-        this(context, Theme.key_windowBackgroundWhiteBlueHeader, padding, 15, false, false, null);
+        this(context, Theme.key_windowBackgroundWhiteBlueHeader, padding, 15, false, null);
     }
 
     public HeaderCell(Context context, int padding, Theme.ResourcesProvider resourcesProvider) {
@@ -55,15 +56,10 @@ public class HeaderCell extends LinearLayout {
     }
 
     public HeaderCell(Context context, String textColorKey, int padding, int topMargin, boolean text2) {
-        this(context, textColorKey, padding, topMargin, text2, false, null);
+        this(context, textColorKey, padding, topMargin, text2, null);
     }
 
-    public HeaderCell(Context context, String textColorKey, int padding, int topMargin, boolean text2, boolean bigTitle) {
-        this(context, textColorKey, padding, topMargin, text2, bigTitle, null);
-    }
-
-
-    public HeaderCell(Context context, String textColorKey, int padding, int topMargin, boolean text2, boolean bigTitle, Theme.ResourcesProvider resourcesProvider) {
+    public HeaderCell(Context context, String textColorKey, int padding, int topMargin, boolean text2, Theme.ResourcesProvider resourcesProvider) {
         this(context, textColorKey, padding, topMargin, 0, text2, resourcesProvider);
     }
 
@@ -76,9 +72,7 @@ public class HeaderCell extends LinearLayout {
 
         textView = new TextView(getContext());
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-        if (bigTitle) {
-            textView.setTypeface(AndroidUtilities.getTypeface("fonts/mw_bold.ttf"));
-        }
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         textView.setEllipsize(TextUtils.TruncateAt.END);
         textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
         textView.setTextColor(getThemedColor(textColorKey));
@@ -94,6 +88,16 @@ public class HeaderCell extends LinearLayout {
         if (!text2) textView2.setVisibility(View.GONE);
 
         ViewCompat.setAccessibilityHeading(this, true);
+    }
+
+    // NekoX: BottomSheet BigTitle, move big title from constructor to here
+    public HeaderCell setBigTitle(boolean enabled) {
+        if (enabled) {
+            textView.setTypeface(AndroidUtilities.getTypeface("fonts/mw_bold.ttf"));
+        } else {
+            textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        }
+        return this;
     }
 
     @Override

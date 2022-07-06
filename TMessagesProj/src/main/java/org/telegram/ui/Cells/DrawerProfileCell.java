@@ -405,7 +405,6 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
                 shadowView.setVisibility(visibility);
             }
             super.onDraw(canvas);
-            darkBackColor = Theme.getColor(Theme.key_listSelector);
         }
 
 

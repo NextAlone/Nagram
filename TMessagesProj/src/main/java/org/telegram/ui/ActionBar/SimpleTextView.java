@@ -27,6 +27,7 @@ import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.method.MovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;

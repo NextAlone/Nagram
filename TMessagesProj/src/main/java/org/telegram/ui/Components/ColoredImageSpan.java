@@ -36,13 +36,13 @@ public class ColoredImageSpan extends ReplacementSpan {
         drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
     }
 
-//    public ColoredImageSpan(@NonNull Drawable drawable, int drawableColor) {
-//        this.drawable = drawable;
-//        this.drawableColor = drawableColor;
-//        this.override = true;
-//        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-//        drawable.setColorFilter(new PorterDuffColorFilter(drawableColor, PorterDuff.Mode.SRC_IN));
-//    }
+    public ColoredImageSpan(@NonNull Drawable drawable, int drawableColor) {
+        this.drawable = drawable;
+        this.drawableColor = drawableColor;
+        this.usePaintColor = true;
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        drawable.setColorFilter(new PorterDuffColorFilter(drawableColor, PorterDuff.Mode.SRC_IN));
+    }
 
     public void setSize(int size) {
         this.size = size;

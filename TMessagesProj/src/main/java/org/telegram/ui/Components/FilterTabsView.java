@@ -1737,22 +1737,25 @@ public class FilterTabsView extends FrameLayout {
         if (show == showAllChatsTab)
             return;
         showAllChatsTab = show;
-        removeTabs();
-        if (showAllChatsTab)
-            addTab(Integer.MAX_VALUE, , LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
         ArrayList<MessagesController.DialogFilter> filters = AccountInstance.getInstance(UserConfig.selectedAccount).getMessagesController().dialogFilters;
+        removeTabs();
         for (int a = 0, N = filters.size(); a < N; a++) {
             MessagesController.DialogFilter dialogFilter = filters.get(a);
-            switch (NekoConfig.tabsTitleType.Int()) {
-                case NekoXConfig.TITLE_TYPE_TEXT:
-                    addTab(a, filters.get(a).localId, dialogFilter.name);
-                    break;
-                case NekoXConfig.TITLE_TYPE_ICON:
-                    addTab(a, filters.get(a).localId, dialogFilter.emoticon != null ? dialogFilter.emoticon : "📂");
-                    break;
-                case NekoXConfig.TITLE_TYPE_MIX:
-                    addTab(a, filters.get(a).localId, dialogFilter.emoticon != null ? dialogFilter.emoticon + " " + dialogFilter.name : "📂 " + dialogFilter.name);
-                    break;
+            if (filters.get(a).isDefault()) {
+                if (showAllChatsTab)
+                    addTab(a, 0, LocaleController.getString("FilterAllChats", R.string.FilterAllChats), true,  filters.get(a).locked);
+            } else {
+                switch (NekoConfig.tabsTitleType.Int()) {
+                    case NekoXConfig.TITLE_TYPE_TEXT:
+                        addTab(a, filters.get(a).localId, dialogFilter.name, false, false);
+                        break;
+                    case NekoXConfig.TITLE_TYPE_ICON:
+                        addTab(a, filters.get(a).localId, dialogFilter.emoticon != null ? dialogFilter.emoticon : "📂", false, false);
+                        break;
+                    case NekoXConfig.TITLE_TYPE_MIX:
+                        addTab(a, filters.get(a).localId, dialogFilter.emoticon != null ? dialogFilter.emoticon + " " + dialogFilter.name : "📂 " + dialogFilter.name, false, false);
+                        break;
+                }
             }
         }
         finishAddingTabs(true);

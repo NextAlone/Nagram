@@ -2598,7 +2598,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             if (activityMode == MODE_CHANGE_PHONE_NUMBER) {
                 TLRPC.TL_account_sendChangePhoneCode changePhoneCode = new TLRPC.TL_account_sendChangePhoneCode();
                 changePhoneCode.phone_number = phone;
-                changePhoneCode.settings = settings;
+                changePhoneCode.settings = req.settings;
                 reqFinal = changePhoneCode;
             } else {
                 ConnectionsManager.getInstance(currentAccount).cleanup(false);

@@ -25395,7 +25395,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
             if (str.startsWith("@")) {
                 String username = str.substring(1).toLowerCase();
                 if (currentChat != null && !TextUtils.isEmpty(currentChat.username) && username.equals(currentChat.username.toLowerCase()) ||
-                    currentUser != null && !TextUtils.isEmpty(currentUser.username) && username.equals(currentUser.username.toLowerCase())) {
+                        currentUser != null && !TextUtils.isEmpty(currentUser.username) && username.equals(currentUser.username.toLowerCase())) {
                     Bundle args = new Bundle();
                     if (currentChat != null) {
                         args.putLong("chat_id", currentChat.id);
@@ -25427,11 +25427,12 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                     presentFragment(fragment);
                 }
             } else {
-                if (qr) {
-                ProxyUtil.showQrDialog(getParentActivity(), str);
-                return;
+//                if (qr) {
+//                    ProxyUtil.showQrDialog(getParentActivity(), str);
+//                    return;
+//                }
+                processExternalUrl(0, str, false);
             }
-            processExternalUrl(0, str, false);}
         }
     }
 
@@ -29700,7 +29701,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
             builder.setTitle(LocaleController.getString("ConvertGroupAlertWarning", R.string.ConvertGroupAlertWarning));
             builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> getMessagesController().convertToMegaGroup(getParentActivity(), currentChat.id, ChatActivity.this, chatNew -> {
                 if (chatNew != 0) {
-                    getMessagesController().toogleChannelInvitesHistory(chatNew, false);
+                    getMessagesController().toggleChannelInvitesHistory(chatNew, false);
                 }
             }));
             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -29787,7 +29788,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                         }
                     }
                     if (path == null || path.length() == 0) {
-                        path = FileLoader.getPathToMessage(so.messageOwner).toString();
+                        path = FileLoader.getInstance(currentAccount).getPathToMessage(so.messageOwner).toString();
                     }
 
                     File file = new File(path);

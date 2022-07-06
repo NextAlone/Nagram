@@ -11,21 +11,21 @@ public class InternalFilters {
 
     public static LinkedList<TLRPC.TL_dialogFilterSuggested> internalFilters = new LinkedList<>();
 
-    public static final TLRPC.TL_dialogFilter usersFilter;
+    public static final TLRPC.DialogFilter usersFilter;
 
-    public static final TLRPC.TL_dialogFilter contactsFilter;
+    public static final TLRPC.DialogFilter contactsFilter;
 
-    public static final TLRPC.TL_dialogFilter groupsFilter;
+    public static final TLRPC.DialogFilter groupsFilter;
 
-    public static final TLRPC.TL_dialogFilter channelsFilter;
+    public static final TLRPC.DialogFilter channelsFilter;
 
-    public static final TLRPC.TL_dialogFilter botsFilter;
+    public static final TLRPC.DialogFilter botsFilter;
 
-    public static final TLRPC.TL_dialogFilter unmutedFilter;
+    public static final TLRPC.DialogFilter unmutedFilter;
 
-    public static final TLRPC.TL_dialogFilter unreadFilter;
+    public static final TLRPC.DialogFilter unreadFilter;
 
-    public static final TLRPC.TL_dialogFilter unmutedAndUnreadFilter;
+    public static final TLRPC.DialogFilter unmutedAndUnreadFilter;
 
     static {
 
@@ -156,13 +156,13 @@ public class InternalFilters {
     @FunctionalInterface
     interface FilterBuilder {
 
-        void apply(TLRPC.TL_dialogFilter filter);
+        void apply(TLRPC.DialogFilter filter);
 
     }
 
     private static int currId = 10;
 
-    private static TLRPC.TL_dialogFilter mkFilter(String name, String description, int flag, FilterBuilder builder) {
+    private static TLRPC.DialogFilter mkFilter(String name, String description, int flag, FilterBuilder builder) {
 
         TLRPC.TL_dialogFilterSuggested suggestedFilter = new TLRPC.TL_dialogFilterSuggested();
 

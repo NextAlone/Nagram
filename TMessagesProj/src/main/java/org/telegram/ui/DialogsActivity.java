@@ -4278,22 +4278,21 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     filterTabsView.resetTabId();
                 }
                 filterTabsView.removeTabs();
-                if (filterTabsView.showAllChatsTab)
-                    filterTabsView.addTab(Integer.MAX_VALUE, 0, LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
                 for (int a = 0, N = filters.size(); a < N; a++) {
                     MessagesController.DialogFilter dialogFilter = filters.get(a);
                     if (filters.get(a).isDefault()) {
-                        filterTabsView.addTab(a, 0, LocaleController.getString("FilterAllChats", R.string.FilterAllChats), true,  filters.get(a).locked);
+                        if (filterTabsView.showAllChatsTab)
+                            filterTabsView.addTab(a, 0, LocaleController.getString("FilterAllChats", R.string.FilterAllChats), true,  filters.get(a).locked);
                     } else {
                         switch (NekoConfig.tabsTitleType.Int()) {
                             case NekoXConfig.TITLE_TYPE_TEXT:
-                                filterTabsView.addTab(a, filters.get(a).localId, dialogFilter.name);
+                                filterTabsView.addTab(a, filters.get(a).localId, dialogFilter.name, false, false);
                                 break;
                             case NekoXConfig.TITLE_TYPE_ICON:
-                                filterTabsView.addTab(a, filters.get(a).localId, dialogFilter.emoticon != null ? dialogFilter.emoticon : "📂");
+                                filterTabsView.addTab(a, filters.get(a).localId, dialogFilter.emoticon != null ? dialogFilter.emoticon : "📂", false, false);
                                 break;
                             case NekoXConfig.TITLE_TYPE_MIX:
-                                filterTabsView.addTab(a, filters.get(a).localId, dialogFilter.emoticon != null ? dialogFilter.emoticon + " " + dialogFilter.name : "📂 " + dialogFilter.name);
+                                filterTabsView.addTab(a, filters.get(a).localId, dialogFilter.emoticon != null ? dialogFilter.emoticon + " " + dialogFilter.name : "📂 " + dialogFilter.name, false, false);
                                 break;
                         }                    }
                 }
@@ -5455,7 +5454,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
 
-    private boolean showChatPreview(DialogCell cell) {
+    public boolean showChatPreview(DialogCell cell) {
         long dialogId = cell.getDialogId();
         Bundle args = new Bundle();
         int message_id = cell.getMessageId();
@@ -7159,15 +7158,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             layoutManager.scrollToPositionWithOffset(1, 0);
         }
 
-        if (viewPages[a].selectedType >= 0 &&
-                        viewPages[a].selectedType < getMessagesController().dialogFilters.size() &&
-                        getMessagesController().dialogFilters.get(viewPages[a].selectedType) != null &&
-                        getMessagesController().selectedDialogFilter[viewPages[a].dialogsType == 8 ? 1 : 0] != null &&
-                        getMessagesController().dialogFilters.get(viewPages[a].selectedType).id !=
-                                getMessagesController().selectedDialogFilter[viewPages[a].dialogsType == 8 ? 1 : 0].id) {
-                    getMessagesController().selectDialogFilter(getMessagesController().dialogFilters.get(viewPages[a].selectedType), viewPages[a].dialogsType == 8 ? 1 : 0);
-                    viewPages[a].dialogsAdapter.notifyDataSetChanged();
-                } else if (viewPage.dialogsAdapter.isDataSetChanged() || newMessage) {
+        // NekoX TODO: Remove satouriko's fix wrong tab dialogs after forward
+        if (viewPage.dialogsAdapter.isDataSetChanged() || newMessage) {
             viewPage.dialogsAdapter.updateHasHints();
             int newItemCount = viewPage.dialogsAdapter.getItemCount();
             if (newItemCount == 1 && oldItemCount == 1 && viewPage.dialogsAdapter.getItemViewType(0) == 5) {

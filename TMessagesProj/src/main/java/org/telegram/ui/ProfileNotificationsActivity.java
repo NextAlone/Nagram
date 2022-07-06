@@ -33,17 +33,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
-import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -54,8 +48,6 @@ import org.telegram.messenger.R;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -104,8 +96,8 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
     private int priorityRow;
     private int priorityInfoRow;
     private int popupRow;
-//    private int popupEnabledRow;
-//    private int popupDisabledRow;
+    private int popupEnabledRow;
+    private int popupDisabledRow;
     private int popupInfoRow;
     private int callsRow;
     private int ringtoneRow;
@@ -116,13 +108,6 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
     private int ledInfoRow;
     private int customResetRow;
     private int customResetShadowRow;
-
-    private int disableMentionNotificationsRow;
-    private int disableMentionNotificationsInfoRow;
-
-    private int disablePinnedNotificationsRow;
-    private int disablePinnedNotificationsInfoRow;
-
     private int rowCount;
 
     private boolean needReset;
@@ -181,19 +166,21 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         }
         priorityInfoRow = rowCount++;
         boolean isChannel;
-        boolean isPrivate = false;
         if (DialogObject.isChatDialog(dialogId)) {
             TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-dialogId);
             isChannel = ChatObject.isChannel(chat) && !chat.megagroup;
         } else {
             isChannel = false;
-            isPrivate = true;
         }
         if (!DialogObject.isEncryptedDialog(dialogId) && !isChannel) {
             popupRow = rowCount++;
+            popupEnabledRow = rowCount++;
+            popupDisabledRow = rowCount++;
             popupInfoRow = rowCount++;
         } else {
             popupRow = -1;
+            popupEnabledRow = -1;
+            popupDisabledRow = -1;
             popupInfoRow = -1;
         }
 
@@ -466,7 +453,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         adapter.notifyItemChanged(colorRow);
                     }
                 }, resourcesProvider));
-            } /* else if (position == popupEnabledRow) {
+            } else if (position == popupEnabledRow) {
                 MessagesController.getNotificationsSettings(currentAccount).edit().putInt("popup_" + dialogId, 1).apply();
                 ((RadioCell) view).setChecked(true, true);
                 view = listView.findViewWithTag(2);
@@ -480,7 +467,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                 if (view != null) {
                     ((RadioCell) view).setChecked(false, true);
                 }
-            } */
+            }
         });
 
         return fragmentView;
@@ -592,7 +579,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         break;
                     }
                     case ListAdapter.VIEW_TYPE_TEXT_CHECK: {
-                        if (position == previewRow || position == popupRow) {
+                        if (position == previewRow) {
                             TextCheckCell checkCell = (TextCheckCell) holder.itemView;
                             checkCell.setEnabled(notificationsEnabled, animators);
                         }
@@ -692,11 +679,8 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
                     break;
                 case VIEW_TYPE_USER:
-                    TextCheckCell checkBoxCell = new TextCheckCell(context);
-                    checkBoxCell.setHeight(56);
-                    checkBoxCell.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                    checkBoxCell.setColors(Theme.key_windowBackgroundCheckText, Theme.key_switchTrackBlue, Theme.key_switchTrackBlueChecked, Theme.key_switchTrackBlueThumb, Theme.key_switchTrackBlueThumbChecked);
-                    view = checkBoxCell;
+                    view = new UserCell2(context, 4, 0, resourcesProvider);
+                    view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
                     break;
                 case VIEW_TYPE_SHADOW:
                     view = new ShadowSectionCell(context, resourcesProvider);
@@ -718,6 +702,8 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == generalRow) {
                         headerCell.setText(LocaleController.getString("General", R.string.General));
+                    } else if (position == popupRow) {
+                        headerCell.setText(LocaleController.getString("ProfilePopupNotification", R.string.ProfilePopupNotification));
                     } else if (position == ledRow) {
                         headerCell.setText(LocaleController.getString("NotificationsLed", R.string.NotificationsLed));
                     } else if (position == callsRow) {
@@ -885,17 +871,6 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         checkCell.setTextAndCheck(LocaleController.getString("Notifications", R.string.Notifications), notificationsEnabled, true);
                     } else if (position == previewRow) {
                         checkCell.setTextAndCheck(LocaleController.getString("MessagePreview", R.string.MessagePreview), preferences.getBoolean("content_preview_" + dialogId, true), true);
-                    } else if (position == popupRow) {
-                        int popup = preferences.getInt("popup_" + dialogId, 0);
-                        if (popup == 0) {
-                            popup = preferences.getInt((int) dialogId < 0 ? "popupGroup" : "popupAll", 0);
-                            if (popup != 0) {
-                                popup = 1;
-                            } else {
-                                popup = 2;
-                            }
-                        }
-                        checkCell.setTextAndCheck(LocaleController.getString("ProfilePopupNotification", R.string.ProfilePopupNotification), popup == 1, false);
                     }
                     break;
                 }
@@ -936,7 +911,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                 }
                 case VIEW_TYPE_TEXT_CHECK: {
                     TextCheckCell checkCell = (TextCheckCell) holder.itemView;
-                    if (holder.getAdapterPosition() == previewRow || holder.getAdapterPosition() == popupRow) {
+                    if (holder.getAdapterPosition() == previewRow) {
                         checkCell.setEnabled(notificationsEnabled, null);
                     } else {
                         checkCell.setEnabled(true, null);
@@ -947,7 +922,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
 
         @Override
         public int getItemViewType(int position) {
-            if (position == generalRow || position == ledRow || position == callsRow) {
+            if (position == generalRow || position == popupRow || position == ledRow || position == callsRow) {
                 return VIEW_TYPE_HEADER;
             } else if (position == soundRow || position == vibrateRow || position == priorityRow || position == smartRow || position == ringtoneRow || position == callsVibrateRow || position == customResetRow) {
                 return VIEW_TYPE_TEXT_SETTINGS;
@@ -961,7 +936,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                 return VIEW_TYPE_USER;
             } else if (position == avatarSectionRow || position == customResetShadowRow) {
                 return VIEW_TYPE_SHADOW;
-            } else if (position == enableRow || position == previewRow || position == popupRow) {
+            } else if (position == enableRow || position == previewRow) {
                 return VIEW_TYPE_TEXT_CHECK;
             }
             return VIEW_TYPE_HEADER;

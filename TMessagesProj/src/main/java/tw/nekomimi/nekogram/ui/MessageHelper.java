@@ -368,14 +368,14 @@ public class MessageHelper extends BaseController {
             }
         }
         if (TextUtils.isEmpty(path)) {
-            path = FileLoader.getPathToMessage(messageObject.messageOwner).toString();
+            path = FileLoader.getInstance(currentAccount).getPathToMessage(messageObject.messageOwner).toString();
             File temp = new File(path);
             if (!temp.exists()) {
                 path = null;
             }
         }
         if (TextUtils.isEmpty(path)) {
-            path = FileLoader.getPathToAttach(messageObject.getDocument(), true).toString();
+            path = FileLoader.getInstance(currentAccount).getPathToAttach(messageObject.getDocument(), true).toString();
         }
         if (!TextUtils.isEmpty(path)) {
             if (messageObject.isVideoSticker()) {
@@ -395,7 +395,7 @@ public class MessageHelper extends BaseController {
     }
 
     public void saveStickerToGallery(Context context, TLRPC.Document document) {
-        String path = FileLoader.getPathToAttach(document, true).toString();
+        String path = FileLoader.getInstance(currentAccount).getPathToAttach(document, true).toString();
 
         if (!TextUtils.isEmpty(path)) {
             if (MessageObject.isVideoSticker(document)) {

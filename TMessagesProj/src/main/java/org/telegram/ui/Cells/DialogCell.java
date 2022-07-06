@@ -3454,7 +3454,6 @@ public class DialogCell extends BaseCell {
             } else {
                 sb.append(messageString);
             }
-            info.setContentDescription(sb.toString());
         }
     }
 
