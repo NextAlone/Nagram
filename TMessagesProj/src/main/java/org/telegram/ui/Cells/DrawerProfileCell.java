@@ -419,28 +419,30 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
 //                canvas.drawCircle(darkThemeView.getX() + darkThemeView.getMeasuredWidth() / 2, darkThemeView.getY() + darkThemeView.getMeasuredHeight() / 2, AndroidUtilities.dp(17), backPaint);
 //            }
 //        }
-        if (drawPremium && drawPremiumProgress != 1f) {
-            drawPremiumProgress += 16 / 220f;
-        } else if (!drawPremium && drawPremiumProgress != 0) {
-            drawPremiumProgress -= 16 / 220f;
-        }
-        drawPremiumProgress = Utilities.clamp(drawPremiumProgress, 1f, 0);
-        if (drawPremiumProgress != 0) {
-            if (gradientTools == null) {
-                gradientTools = new PremiumGradient.GradientTools(Theme.key_premiumGradientBottomSheet1, Theme.key_premiumGradientBottomSheet2, Theme.key_premiumGradientBottomSheet3, null);
-                gradientTools.x1 = 0;
-                gradientTools.y1 = 1.1f;
-                gradientTools.x2 = 1.5f;
-                gradientTools.y2 = -0.2f;
-                gradientTools.exactly = true;
+        if(NekoConfig.largeAvatarInDrawer.Int() == 0) {
+            if (drawPremium && drawPremiumProgress != 1f) {
+                drawPremiumProgress += 16 / 220f;
+            } else if (!drawPremium && drawPremiumProgress != 0) {
+                drawPremiumProgress -= 16 / 220f;
             }
-            gradientTools.gradientMatrix(0, 0, getMeasuredWidth(), getMeasuredHeight(), 0, 0);
-            gradientTools.paint.setAlpha((int) (drawPremiumProgress * 255));
-            canvas.drawRect(0, 0, getMeasuredWidth(), getMeasuredHeight(), gradientTools.paint);
-            if (starParticlesDrawable != null) {
-                starParticlesDrawable.onDraw(canvas, drawPremiumProgress);
+            drawPremiumProgress = Utilities.clamp(drawPremiumProgress, 1f, 0);
+            if (drawPremiumProgress != 0) {
+                if (gradientTools == null) {
+                    gradientTools = new PremiumGradient.GradientTools(Theme.key_premiumGradientBottomSheet1, Theme.key_premiumGradientBottomSheet2, Theme.key_premiumGradientBottomSheet3, null);
+                    gradientTools.x1 = 0;
+                    gradientTools.y1 = 1.1f;
+                    gradientTools.x2 = 1.5f;
+                    gradientTools.y2 = -0.2f;
+                    gradientTools.exactly = true;
+                }
+                gradientTools.gradientMatrix(0, 0, getMeasuredWidth(), getMeasuredHeight(), 0, 0);
+                gradientTools.paint.setAlpha((int) (drawPremiumProgress * 255));
+                canvas.drawRect(0, 0, getMeasuredWidth(), getMeasuredHeight(), gradientTools.paint);
+                if (starParticlesDrawable != null) {
+                    starParticlesDrawable.onDraw(canvas, drawPremiumProgress);
+                }
+                invalidate();
             }
-            invalidate();
         }
 
         if (snowflakesEffect != null) {
