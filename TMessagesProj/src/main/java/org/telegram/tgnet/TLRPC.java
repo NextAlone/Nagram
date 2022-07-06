@@ -26,7 +26,6 @@ import java.util.List;
 
 import cn.hutool.core.util.ArrayUtil;
 import tw.nekomimi.nekogram.NekoXConfig;
-import xyz.nextalone.nagram.NaConfig;
 
 @SuppressWarnings("unchecked")
 public class TLRPC {
@@ -38986,7 +38985,7 @@ public class TLRPC {
             deactivated = (flags & 32) != 0;
             call_active = (flags & 8388608) != 0;
             call_not_empty = (flags & 16777216) != 0;
-            noforwards = (flags & 33554432) != 0 && !NaConfig.INSTANCE.getDisableNoforwards().Bool();
+            noforwards = (flags & 33554432) != 0;
             id = stream.readInt64(exception);
             title = stream.readString(exception);
             photo = ChatPhoto.TLdeserialize(stream, stream.readInt32(exception), exception);
@@ -39267,7 +39266,7 @@ public class TLRPC {
             call_not_empty = (flags & 16777216) != 0;
             fake = (flags & 33554432) != 0;
             gigagroup = (flags & 67108864) != 0;
-            noforwards = (flags & 134217728) != 0 && !NaConfig.INSTANCE.getDisableNoforwards().Bool();
+            noforwards = (flags & 134217728) != 0;
             id = stream.readInt64(exception);
             if ((flags & 8192) != 0) {
                 access_hash = stream.readInt64(exception);
@@ -55189,7 +55188,7 @@ public class TLRPC {
             legacy = (flags & 524288) != 0;
             edit_hide = (flags & 2097152) != 0;
             pinned = (flags & 16777216) != 0;
-            noforwards = (flags & 67108864) != 0 && !NaConfig.INSTANCE.getDisableNoforwards().Bool();
+            noforwards = (flags & 67108864) != 0;
             id = stream.readInt32(exception);
             if ((flags & 256) != 0) {
                 from_id = Peer.TLdeserialize(stream, stream.readInt32(exception), exception);
@@ -55372,7 +55371,7 @@ public class TLRPC {
             legacy = (flags & 524288) != 0;
             edit_hide = (flags & 2097152) != 0;
             pinned = (flags & 16777216) != 0;
-            noforwards = (flags & 67108864) != 0 && !NaConfig.INSTANCE.getDisableNoforwards().Bool();
+            noforwards = (flags & 67108864) != 0;
             id = stream.readInt32(exception);
             if ((flags & 256) != 0) {
                 from_id = Peer.TLdeserialize(stream, stream.readInt32(exception), exception);

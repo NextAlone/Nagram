@@ -162,11 +162,6 @@ object NaConfig {
         ConfigItem.configTypeBool,
         true
     )
-    val DisableNoforwards = addConfig(
-        "DisableNoforwards",
-        ConfigItem.configTypeBool,
-        false
-    )
     val DateOfForwardedMsg = addConfig(
         "DateOfForwardedMsg",
         ConfigItem.configTypeBool,

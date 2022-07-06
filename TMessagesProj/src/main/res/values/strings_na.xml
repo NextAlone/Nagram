@@ -26,7 +26,6 @@
     <string name="CreateMonoLanguage">Code language</string>
     <string name="CodeSyntaxHighlightDetails">Thanks to prismjs and Nekogram</string>
     <string name="UseSystemUnlock">Passcode Unlock use system ui</string>
-    <string name="DisableNoforwards">Disable noforwards</string>
     <string name="CopyPhoto">Copy Photo</string>
     <string name="PhotoCopied">Photo copied to Clipboard</string>
     <string name="ToTheBeginning">To the beginning</string>
