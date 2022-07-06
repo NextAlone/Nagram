@@ -196,8 +196,10 @@ public class TextCell extends FrameLayout {
         if (resId != 0) {
             imageView.setImageResource(resId);
             imageView.setVisibility(VISIBLE);
+            imageView.setPadding(0, AndroidUtilities.dp(7), 0, 0);
+        } else {
+            imageView.setVisibility(GONE);
         }
-        imageView.setPadding(0, AndroidUtilities.dp(7), 0, 0);
         valueTextView.setVisibility(GONE);
         valueImageView.setVisibility(GONE);
         needDivider = divider;
