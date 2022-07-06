@@ -3088,9 +3088,9 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
 
             if (currentEncryptedChat != null) {
                 timeItem2 = headerItem.addSubItem(chat_enc_timer, R.drawable.baseline_timer_24, LocaleController.getString("SetTimer", R.string.SetTimer), themeDelegate);
-            } else if (currentChat == null && !currentUser.self || ChatObject.canUserDoAdminAction(currentChat, ChatObject.ACTION_DELETE_MESSAGES)) {
+            } /*else if (currentChat == null && !currentUser.self || ChatObject.canUserDoAdminAction(currentChat, ChatObject.ACTION_DELETE_MESSAGES)) {
                 headerItem.addSubItem(auto_delete_timer, R.drawable.baseline_timer_24, LocaleController.getString("AutoDeleteSetTimer", R.string.AutoDeleteSetTimer));
-            }
+            }*/
 
             clearHistoryItem = headerItem.addSubItem(clear_history, R.drawable.msg_clear, LocaleController.getString("ClearHistory", R.string.ClearHistory), themeDelegate);
 
