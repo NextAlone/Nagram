@@ -95,6 +95,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.exteragram.messenger.extras.Vibrate;
 import com.exteragram.messenger.ExteraUtils;
+import com.exteragram.messenger.ExteraConfig;
 
 public class PasscodeActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     public final static int TYPE_MANAGE_CODE_SETTINGS = 0,
@@ -653,7 +654,11 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                         @SuppressLint("NewApi")
                         @Override
                         public void getOutline(View view, Outline outline) {
-                            outline.setOval(0, 0, AndroidUtilities.dp(56), AndroidUtilities.dp(56));
+                            if (ExteraConfig.squareFab) {
+                                outline.setRoundRect(0, 0, AndroidUtilities.dp(56), AndroidUtilities.dp(56), AndroidUtilities.dp(16));
+                            } else {
+                                outline.setOval(0, 0, AndroidUtilities.dp(56), AndroidUtilities.dp(56));
+                            }
                         }
                     });
                 }

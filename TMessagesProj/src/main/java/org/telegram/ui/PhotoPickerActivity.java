@@ -1057,7 +1057,11 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                     @SuppressLint("NewApi")
                     @Override
                     public void getOutline(View view, Outline outline) {
-                        outline.setOval(0, 0, AndroidUtilities.dp(56), AndroidUtilities.dp(56));
+                        if (ExteraConfig.squareFab) {
+                            outline.setRoundRect(0, 0, AndroidUtilities.dp(56), AndroidUtilities.dp(56), AndroidUtilities.dp(16));
+                        } else {
+                            outline.setOval(0, 0, AndroidUtilities.dp(56), AndroidUtilities.dp(56));
+                        }
                     }
                 });
             }

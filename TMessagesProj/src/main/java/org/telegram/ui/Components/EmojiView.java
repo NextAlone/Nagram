@@ -2186,7 +2186,11 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     @SuppressLint("NewApi")
                     @Override
                     public void getOutline(View view, Outline outline) {
-                        outline.setOval(0, 0, AndroidUtilities.dp(40), AndroidUtilities.dp(40));
+                        if (ExteraConfig.squareFab) {
+                            outline.setRoundRect(0, 0, AndroidUtilities.dp(40), AndroidUtilities.dp(40), AndroidUtilities.dp(16));
+                        } else {
+                            outline.setOval(0, 0, AndroidUtilities.dp(40), AndroidUtilities.dp(40));
+                        }
                     }
                 });
             }
