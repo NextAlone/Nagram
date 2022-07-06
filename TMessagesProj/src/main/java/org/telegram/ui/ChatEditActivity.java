@@ -913,9 +913,10 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                 groupStickersActivity.setInfo(info);
                 presentFragment(groupStickersActivity);
             });
-        } else if (logCell != null) {
-            infoContainer.addView(logCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
         }
+//        else if (logCell != null) {
+//            infoContainer.addView(logCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+//        }
 
         if (!ChatObject.hasAdminRights(currentChat)) {
             infoContainer.setVisibility(View.GONE);
