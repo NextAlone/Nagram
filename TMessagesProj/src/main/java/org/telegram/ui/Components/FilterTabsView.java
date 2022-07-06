@@ -397,10 +397,10 @@ public class FilterTabsView extends FrameLayout {
                 if (!TextUtils.equals(currentTab.emoticon, currentEmoticon)) {
                     currentEmoticon = currentTab.emoticon;
                     android.graphics.Rect bounds = new android.graphics.Rect(0, 0, emoticonWidth, emoticonWidth);
-                    activeIcon = getResources().getDrawable(FolderIconHelper.getTabIcon(currentTab.emoticon, true)).mutate();
+                    activeIcon = getResources().getDrawable(FolderIconHelper.getTabIcon(currentTab.emoticon)).mutate();
                     activeIcon.setTint(Theme.getColor(activeTextColorKey));
                     activeIcon.setBounds(bounds);
-                    icon = getResources().getDrawable(FolderIconHelper.getTabIcon(currentTab.emoticon, false)).mutate();
+                    icon = getResources().getDrawable(FolderIconHelper.getTabIcon(currentTab.emoticon)).mutate();
                     icon.setTint(Theme.getColor(unactiveTextColorKey));
                     icon.setBounds(bounds);
                 }
@@ -735,10 +735,10 @@ public class FilterTabsView extends FrameLayout {
                     int emoticonWidth = FolderIconHelper.getIconWidth();
                     boolean active = selectedTabId == currentTab.id;
                     android.graphics.Rect bounds = new android.graphics.Rect(0, 0, emoticonWidth, emoticonWidth);
-                    iconAnimateOutDrawable = getResources().getDrawable(FolderIconHelper.getTabIcon(lastEmoticon, active)).mutate();
+                    iconAnimateOutDrawable = getResources().getDrawable(FolderIconHelper.getTabIcon(lastEmoticon)).mutate();
                     iconAnimateOutDrawable.setTint(Theme.getColor(active ? activeTextColorKey : unactiveTextColorKey));
                     iconAnimateOutDrawable.setBounds(bounds);
-                    iconAnimateInDrawable = getResources().getDrawable(FolderIconHelper.getTabIcon(currentTab.emoticon, active)).mutate();
+                    iconAnimateInDrawable = getResources().getDrawable(FolderIconHelper.getTabIcon(currentTab.emoticon)).mutate();
                     iconAnimateInDrawable.setTint(Theme.getColor(active ? activeTextColorKey : unactiveTextColorKey));
                     iconAnimateInDrawable.setBounds(bounds);
                     animateIconChange = true;
@@ -1254,7 +1254,7 @@ public class FilterTabsView extends FrameLayout {
         selectedTabId = -1;
     }
 
-    public void addTab(int id, int stableId, String text, boolean isDefault, boolean isLocked, String emoticon) {
+    public void addTab(int id, int stableId, String text, String emoticon, boolean isDefault, boolean isLocked) {
         int position = tabs.size();
         if (position == 0 && selectedTabId == -1) {
             selectedTabId = id;
@@ -1868,17 +1868,17 @@ public class FilterTabsView extends FrameLayout {
             MessagesController.DialogFilter dialogFilter = filters.get(a);
             if (filters.get(a).isDefault()) {
                 if (showAllChatsTab)
-                    addTab(a, 0, LocaleController.getString("FilterAllChats", R.string.FilterAllChats), true,  filters.get(a).locked,null);
+                    addTab(a, 0, LocaleController.getString("FilterAllChats", R.string.FilterAllChats), null, true, filters.get(a).locked);
             } else {
                 switch (NekoConfig.tabsTitleType.Int()) {
                     case NekoXConfig.TITLE_TYPE_TEXT:
-                        addTab(a, filters.get(a).localId, filters.get(a).name, false, false, dialogFilter.name);
+                        addTab(a, filters.get(a).localId, filters.get(a).name, dialogFilter.name, false, false);
                         break;
                     case NekoXConfig.TITLE_TYPE_ICON:
-                        addTab(a, filters.get(a).localId, filters.get(a).name, false, false, dialogFilter.emoticon != null ? dialogFilter.emoticon : "\uD83D\uDCC1");
+                        addTab(a, filters.get(a).localId, filters.get(a).name, dialogFilter.emoticon != null ? dialogFilter.emoticon : "\uD83D\uDCC1", false, false);
                         break;
                     case NekoXConfig.TITLE_TYPE_MIX:
-                        addTab(a, filters.get(a).localId, filters.get(a).name, false, false, dialogFilter.emoticon != null ? dialogFilter.emoticon : "\uD83D\uDCC1 " + dialogFilter.name);
+                        addTab(a, filters.get(a).localId, filters.get(a).name, dialogFilter.emoticon != null ? dialogFilter.emoticon : "\uD83D\uDCC1 " + dialogFilter.name, false, false);
                         break;
                 }
             }

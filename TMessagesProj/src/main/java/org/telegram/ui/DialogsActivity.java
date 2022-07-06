@@ -4283,17 +4283,17 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     MessagesController.DialogFilter dialogFilter = filters.get(a);
                     if (filters.get(a).isDefault()) {
                         if (filterTabsView.showAllChatsTab)
-                            filterTabsView.addTab(a, 0, LocaleController.getString("FilterAllChats", R.string.FilterAllChats), true,  filters.get(a).locked, null);
+                            filterTabsView.addTab(a, 0, LocaleController.getString("FilterAllChats", R.string.FilterAllChats), "\uD83D\uDCAC", true, filters.get(a).locked);
                     } else {
                         switch (NekoConfig.tabsTitleType.Int()) {
                             case NekoXConfig.TITLE_TYPE_TEXT:
-                                filterTabsView.addTab(a, filters.get(a).localId, filters.get(a).name, false, false, dialogFilter.name);
+                                filterTabsView.addTab(a, filters.get(a).localId, filters.get(a).name, dialogFilter.name, false, false);
                                 break;
                             case NekoXConfig.TITLE_TYPE_ICON:
-                                filterTabsView.addTab(a, filters.get(a).localId, filters.get(a).name, false, false, dialogFilter.emoticon != null ? dialogFilter.emoticon : "📂");
+                                filterTabsView.addTab(a, filters.get(a).localId, filters.get(a).name, dialogFilter.emoticon != null ? dialogFilter.emoticon : "📂", false, false);
                                 break;
                             case NekoXConfig.TITLE_TYPE_MIX:
-                                filterTabsView.addTab(a, filters.get(a).localId, filters.get(a).name, false, false, dialogFilter.emoticon != null ? dialogFilter.emoticon : "\uD83D\uDCC1 " + dialogFilter.name);
+                                filterTabsView.addTab(a, filters.get(a).localId, filters.get(a).name, dialogFilter.emoticon != null ? dialogFilter.emoticon : "\uD83D\uDCC1 " + dialogFilter.name, false, false);
                                 break;
                         }
                     }

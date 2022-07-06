@@ -65,7 +65,7 @@ public class IconSelectorAlert {
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             var imageView = (ImageView) holder.itemView;
             imageView.setTag(icons[position]);
-            imageView.setImageResource(FolderIconHelper.getTabIcon(icons[position], false));
+            imageView.setImageResource(FolderIconHelper.getTabIcon(icons[position]));
         }
 
         @Override
