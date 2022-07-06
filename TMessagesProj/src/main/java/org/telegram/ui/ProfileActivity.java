@@ -8132,7 +8132,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     } else if (position == policyRow) {
                         textCell.setTextAndIcon(LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), R.drawable.menu_policy, true);
                     } else if (position == sendLogsRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("DebugSendLogs", R.string.DebugSendLogs), R.drawable.baseline_bug_report_24, true);
+                        textCell.setTextAndIcon(LocaleController.getString("DebugSendLogs", R.string.DebugSendLogs), R.drawable.menu_support2, true);
                     } else if (position == sendLastLogsRow) {
                         textCell.setText(LocaleController.getString("DebugSendLastLogs", R.string.DebugSendLastLogs), true);
                     } else if (position == clearLogsRow) {
