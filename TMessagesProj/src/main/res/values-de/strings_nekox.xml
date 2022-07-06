@@ -44,7 +44,7 @@
     <string name="TransToLang">Zielsprache der Übersetzung</string>
     <string name="TransInputToLang">Quellsprache der Übersetzung</string>
     <string name="More">Mehr</string>
-    <string name="NekoXUpdatesChannel">NekoX-Update-Kanal</string>
+    <string name="NekoXUpdatesChannel">Nagram-Update-Kanal</string>
     <string name="ShowIdAndDc">ID/DC im Profil anzeigen</string>
     <string name="UseDefaultTheme">Standardthema verwenden*</string>
     <string name="NightMode">Nachtmodus</string>
@@ -84,9 +84,9 @@
     <string name="SortByUnmuted">Nach nicht Stummgeschalteten sortieren</string>
     <string name="SortByUser">Nach Nutzern sortieren</string>
     <string name="SortByContacts">Nach Kontakten sortieren</string>
-    <string name="NekoXPushService">NekoX Push-Service</string>
-    <string name="EnablePushAlert">Bitte aktiviere den \"NekoX Push-Service\"</string>
-    <string name="DisablePushAlert">Bitte deaktiviere den \"NekoX Push-Service\"</string>
+    <string name="NekoXPushService">Nagram Push-Service</string>
+    <string name="EnablePushAlert">Bitte aktiviere den \"Nagram Push-Service\"</string>
+    <string name="DisablePushAlert">Bitte deaktiviere den \"Nagram Push-Service\"</string>
     <string name="DisableUndo">Rückgängig machen deaktivieren</string>
     <string name="DisableSystemAccount">Systemkonto deaktivieren</string>
     <string name="FilterMenu">Dialog Filtermenü</string>
@@ -164,7 +164,7 @@
     <string name="DisableDeveloperMode">Entwicklermodus deaktivieren</string>
     <string name="DeveloperSettings">Entwickleroptionen</string>
     <string name="LoginSettings">Anmeldeeinstellungen</string>
-    <string name="NekoXFaq">NekoX FAQ</string>
+    <string name="NekoXFaq">Nagram FAQ</string>
     <string name="TransSite">Plattform übersetzen</string>
     <string name="OpenKayChain">OpenPGP-Client</string>
     <string name="OpenPGPApp">OpenPGP-Anbieter</string>

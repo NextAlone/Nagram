@@ -47,7 +47,7 @@
     <string name="TransToLang">اللغة الهدف للترجمة</string>
     <string name="TransInputToLang">اللغة الهدف لإدخال الترجمة</string>
     <string name="More">المزيد</string>
-    <string name="NekoXUpdatesChannel">قناة تحديثات Nekox</string>
+    <string name="NekoXUpdatesChannel">قناة تحديثات Nagram</string>
     <string name="ShowIdAndDc">إظهار ID / DC في الملف الشخصی</string>
     <string name="UseDefaultTheme">استخدام السمة الافتراضية *</string>
     <string name="NightMode">الوضع الليلي</string>
@@ -87,9 +87,9 @@
     <string name="SortByUnmuted">فرز حسب الغير مكتوم</string>
     <string name="SortByUser">فرز حسب المستخدم</string>
     <string name="SortByContacts">فرز حسب جهات الاتصال</string>
-    <string name="NekoXPushService">خدمة دفع NekoX</string>
-    <string name="EnablePushAlert">الرجاء تمكين \"خدمة دفع NekoX\"</string>
-    <string name="DisablePushAlert">الرجاء تعطيل \"خدمة دفع Nekox\"</string>
+    <string name="NekoXPushService">خدمة دفع Nagram</string>
+    <string name="EnablePushAlert">الرجاء تمكين \"خدمة دفع Nagram\"</string>
+    <string name="DisablePushAlert">الرجاء تعطيل \"خدمة دفع Nagram\"</string>
     <string name="DisableUndo">تعطيل التراجع</string>
     <string name="DisableSystemAccount">تعطيل الحساب الخاص بالنظام</string>
     <string name="FilterMenu">قائمة عوامل تصفية الحوار</string>
@@ -170,7 +170,7 @@
     <string name="DisableDeveloperMode">تعطيل وضع المطور</string>
     <string name="DeveloperSettings">إعدادات المطور</string>
     <string name="LoginSettings">إعدادات الدخول</string>
-    <string name="NekoXFaq">أسئلة NekoX الشائعة</string>
+    <string name="NekoXFaq">أسئلة Nagram الشائعة</string>
     <string name="TransSite">ترجمة النظام الأساسي</string>
     <string name="OpenKayChain">عميل OpenPGP</string>
     <string name="OpenPGPApp">موفر OpenPGP</string>

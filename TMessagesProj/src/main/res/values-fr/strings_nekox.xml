@@ -74,7 +74,7 @@
     <string name="SortByUnmuted">Trier par Démuté</string>
     <string name="SortByUser">Trier par Utilisateur</string>
     <string name="SortByContacts">Trier par Contacts</string>
-    <string name="NekoXPushService">Service Push NekoX</string>
+    <string name="NekoXPushService">Service Push Nagram</string>
     <string name="EnablePushAlert">Veuillez activer le service \"NekoX Push\"</string>
     <string name="DisablePushAlert">Veuillez désactiver le service \"NekoX Push\"</string>
     <string name="DisableUndo">Désactiver l\'annulation</string>

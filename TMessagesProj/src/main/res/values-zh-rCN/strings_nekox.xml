@@ -47,7 +47,7 @@
     <string name="TransToLang">目标翻译语言</string>
     <string name="TransInputToLang">输入翻译目标语言</string>
     <string name="More">更多</string>
-    <string name="NekoXUpdatesChannel">NekoX 更新频道</string>
+    <string name="NekoXUpdatesChannel">Nagram 更新频道</string>
     <string name="ShowIdAndDc">在个人资料中显示 ID/ DC</string>
     <string name="UseDefaultTheme">使用默认主题 *</string>
     <string name="NightMode">夜间模式</string>
@@ -87,9 +87,9 @@
     <string name="SortByUnmuted">可通知优先排序</string>
     <string name="SortByUser">用户优先排序</string>
     <string name="SortByContacts">联系人优先排序</string>
-    <string name="NekoXPushService">NekoX 通知服务</string>
-    <string name="EnablePushAlert">请启用 \"NekoX 通知服务\"</string>
-    <string name="DisablePushAlert">请禁用 \"NekoX 通知服务\"</string>
+    <string name="NekoXPushService">Nagram 通知服务</string>
+    <string name="EnablePushAlert">请启用 \"Nagram 通知服务\"</string>
+    <string name="DisablePushAlert">请禁用 \"Nagram 通知服务\"</string>
     <string name="DisableUndo">禁用五秒内后悔</string>
     <string name="DisableSystemAccount">禁用系统帐户</string>
     <string name="FilterMenu">分类菜单</string>
