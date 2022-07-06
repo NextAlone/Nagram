@@ -434,8 +434,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private int privacyRow;
     private int dataRow;
     private int chatRow;
-    private int stickersRow;
     private int filtersRow;
+    private int stickersRow;
     private int devicesRow;
     private int devicesSectionRow;
     private int helpHeaderRow;
@@ -3136,6 +3136,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 });
                 showDialog(builder.create());
             } else if (position == setAvatarRow) {
+                onWriteButtonClick();
             } else if (position == versionRow) {
                 TextInfoPrivacyCell cell = (TextInfoPrivacyCell) view;
 
@@ -4515,9 +4516,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             showDialog(builder.create());
             return true;
         } else if (position == channelInfoRow || position == userInfoRow || position == locationRow || position == bioRow) {
-            if (position == bioRow) {
-                presentFragment(new ChangeBioActivity());
-                return true;
+            if (position == bioRow && (userInfo == null || TextUtils.isEmpty(userInfo.about))) {
+                return false;
             }
             if (view instanceof AboutLinkCell && ((AboutLinkCell) view).onClick()) {
                 return false;
@@ -6315,7 +6315,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         privacyRow = -1;
         dataRow = -1;
         chatRow = -1;
-        stickersRow = -1;
         filtersRow = -1;
         stickersRow = -1;
         devicesRow = -1;
@@ -8030,6 +8029,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             aboutLinkCell.setTextAndValue(LocaleController.getString("UserBioDetail", R.string.UserBioDetail), LocaleController.getString("UserBio", R.string.UserBio), false);
                             currentBio = null;
                         }
+//                        aboutLinkCell.setMoreButtonDisabled(true);
+                    }
+                    if (position == bioRow) {
+                        aboutLinkCell.setOnClickListener(e -> {
+                            if (userInfo != null) {
+                                presentFragment(new ChangeBioActivity());
+                            }
+                        });
+                    } else {
+                        aboutLinkCell.setOnClickListener(e -> processOnClickOrPress(position, aboutLinkCell));
                     }
                     break;
                 case VIEW_TYPE_PREMIUM_TEXT_CELL:
@@ -8129,6 +8138,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         textCell.setTextAndIcon(LocaleController.getString("DebugClearLogs", R.string.DebugClearLogs), R.drawable.baseline_delete_sweep_24, switchBackendRow != -1);
                     } else if (position == switchBackendRow) {
                         textCell.setText("Switch Backend", false);
+                    } else if (position == devicesRow) {
+                        textCell.setTextAndIcon(LocaleController.getString("Devices", R.string.Devices), R.drawable.menu_devices, true);
                     } else if (position == setAvatarRow) {
                         textCell.setTextAndIcon(LocaleController.getString("SetProfilePhoto", R.string.SetProfilePhoto), R.drawable.baseline_image_24, false);
                         textCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);

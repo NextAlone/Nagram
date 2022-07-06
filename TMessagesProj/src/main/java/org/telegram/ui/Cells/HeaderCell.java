@@ -67,9 +67,6 @@ public class HeaderCell extends LinearLayout {
         super(context);
         this.resourcesProvider = resourcesProvider;
 
-        setOrientation(LinearLayout.VERTICAL);
-        setPadding(AndroidUtilities.dp(padding), AndroidUtilities.dp(topMargin), AndroidUtilities.dp(padding), 0);
-
         textView = new TextView(getContext());
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -107,7 +104,7 @@ public class HeaderCell extends LinearLayout {
     }
 
     public void setHeight(int value) {
-        textView.setMinHeight(AndroidUtilities.dp(value) - ((LayoutParams) textView.getLayoutParams()).topMargin);
+        textView.setMinHeight(AndroidUtilities.dp(height = value) - ((LayoutParams) textView.getLayoutParams()).topMargin);
     }
 
     public void setEnabled(boolean value, ArrayList<Animator> animators) {
