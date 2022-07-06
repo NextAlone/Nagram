@@ -131,27 +131,30 @@ public class LogoutActivity extends BaseFragment {
             } else if (position == phoneRow) {
                 presentFragment(new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_CHANGE_PHONE_NUMBER));
             } else if (position == supportRow) {
-                showDialog(AlertsCreator.createSupportAlert(LogoutActivity.this));
+                showDialog(AlertsCreator.createSupportAlert(LogoutActivity.this, null));
             } else if (position == logoutRow) {
                 if (getParentActivity() == null) {
                     return;
                 }
-                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                UserConfig userConfig = getUserConfig();
-                builder.setMessage(LocaleController.getString("AreYouSureLogout", R.string.AreYouSureLogout));
-                builder.setTitle(LocaleController.getString("LogOut", R.string.LogOut));
-                builder.setPositiveButton(LocaleController.getString("LogOut", R.string.LogOut), (dialogInterface, i) -> MessagesController.getInstance(currentAccount).performLogout(1));
-                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                AlertDialog alertDialog = builder.create();
-                showDialog(alertDialog);
-                TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                if (button != null) {
-                    button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
-                }
+                showDialog(makeLogOutDialog(getParentActivity(), currentAccount));
             }
         });
 
         return fragmentView;
+    }
+
+    public static AlertDialog makeLogOutDialog(Context context, int currentAccount) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(LocaleController.getString("AreYouSureLogout", R.string.AreYouSureLogout));
+        builder.setTitle(LocaleController.getString("LogOut", R.string.LogOut));
+        builder.setPositiveButton(LocaleController.getString("LogOut", R.string.LogOut), (dialogInterface, i) -> MessagesController.getInstance(currentAccount).performLogout(1));
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        AlertDialog alertDialog = builder.create();
+        TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        if (button != null) {
+            button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
+        }
+        return alertDialog;
     }
 
     @Override

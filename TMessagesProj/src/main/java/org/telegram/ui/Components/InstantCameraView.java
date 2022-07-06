@@ -99,6 +99,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -158,7 +159,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private CameraGLThread cameraThread;
     private Size previewSize;
     private Size pictureSize;
-    private Size aspectRatio = SharedConfig.roundCamera16to9 ? new Size(16, 9) : new Size(4, 3);
+    private Size aspectRatio = SharedConfig.roundCamera16to9 ? new Size(1, 1) : new Size(4, 3);
     private TextureView textureView;
     private BackupImageView textureOverlayView;
     private CameraSession cameraSession;
@@ -181,21 +182,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     "   vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n" +
                     "}\n";
 
-    private static final String FRAGMENT_SHADER =
-            "#extension GL_OES_EGL_image_external : require\n" +
-                    "precision highp float;\n" +
-                    "varying vec2 vTextureCoord;\n" +
-                    "uniform float scaleX;\n" +
-                    "uniform float scaleY;\n" +
-                    "uniform float alpha;\n" +
-                    "uniform samplerExternalOES sTexture;\n" +
-                    "void main() {\n" +
-                    "   vec2 coord = vec2((vTextureCoord.x - 0.5) * scaleX, (vTextureCoord.y - 0.5) * scaleY);\n" +
-                    "   float coef = ceil(clamp(0.2601 - dot(coord, coord), 0.0, 1.0));\n" +
-                    "   vec3 color = texture2D(sTexture, vTextureCoord).rgb * coef + (1.0 - step(0.001, coef));\n" +
-                    "   gl_FragColor = vec4(color * alpha, alpha);\n" +
-                    "}\n";
-
     private static final String FRAGMENT_SCREEN_SHADER =
             "#extension GL_OES_EGL_image_external : require\n" +
                     "precision lowp float;\n" +
@@ -207,8 +193,12 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
     private FloatBuffer vertexBuffer;
     private FloatBuffer textureBuffer;
+    private FloatBuffer oldTextureTextureBuffer;
     private float scaleX;
     private float scaleY;
+
+    private Size oldTexturePreviewSize;
+
     private boolean flipAnimationInProgress;
 
     private View parentView;
@@ -228,6 +218,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private boolean isMessageTransition;
     private boolean updateTextureViewSize;
     private final Theme.ResourcesProvider resourcesProvider;
+
+    private final static int audioSampleRate = 48000;
 
     @SuppressLint("ClickableViewAccessibility")
     public InstantCameraView(Context context, ChatActivity parentFragment, Theme.ResourcesProvider resourcesProvider) {
@@ -381,7 +373,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     float rad = AndroidUtilities.rectTmp.width() / 2f;
                     canvas.drawRoundRect(AndroidUtilities.rectTmp, rad, rad, blackoutPaint);
                     AndroidUtilities.rectTmp.inset(AndroidUtilities.dp(1), AndroidUtilities.dp(1));
-                    flickerDrawable.draw(canvas, AndroidUtilities.rectTmp, rad);
+                    flickerDrawable.draw(canvas, AndroidUtilities.rectTmp, rad, null);
                     invalidate();
                 }
             }
@@ -557,7 +549,6 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
 
-
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             switchCameraDrawable = (AnimatedVectorDrawable) ContextCompat.getDrawable(getContext(), R.drawable.avd_flip);
             switchCameraButton.setImageDrawable(switchCameraDrawable);
@@ -624,7 +615,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
             @Override
             public void onSurfaceTextureSizeChanged(SurfaceTexture surface, final int width, final int height) {
-
+                if (cameraThread != null) {
+                    cameraThread.surfaceWidth = width;
+                    cameraThread.surfaceHeight = height;
+                    cameraThread.updateScale();
+                }
             }
 
             @Override
@@ -936,8 +931,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
         ArrayList<Size> previewSizes = selectedCamera.getPreviewSizes();
         ArrayList<Size> pictureSizes = selectedCamera.getPictureSizes();
-        previewSize = CameraController.chooseOptimalSize(previewSizes, 480, 270, aspectRatio);
-        pictureSize = CameraController.chooseOptimalSize(pictureSizes, 480, 270, aspectRatio);
+        previewSize = chooseOptimalSize(previewSizes);
+        pictureSize = chooseOptimalSize(pictureSizes);
         if (previewSize.mWidth != pictureSize.mWidth) {
             boolean found = false;
             for (int a = previewSizes.size() - 1; a >= 0; a--) {
@@ -978,6 +973,34 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             FileLog.d("preview w = " + previewSize.mWidth + " h = " + previewSize.mHeight);
         }
         return true;
+    }
+
+    private Size chooseOptimalSize(ArrayList<Size> previewSizes) {
+        ArrayList<Size> sortedSizes = new ArrayList<>();
+        for (int i = 0; i < previewSizes.size(); i++) {
+            if (Math.max(previewSizes.get(i).mHeight, previewSizes.get(i).mWidth) <= 1200 && Math.min(previewSizes.get(i).mHeight, previewSizes.get(i).mWidth) >= 320) {
+                sortedSizes.add(previewSizes.get(i));
+            }
+        }
+        if (sortedSizes.isEmpty() || SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_LOW || SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_AVERAGE) {
+            if (!sortedSizes.isEmpty()) {
+                return CameraController.chooseOptimalSize(sortedSizes, 480, 270, aspectRatio);
+            } else {
+                return CameraController.chooseOptimalSize(previewSizes, 480, 270, aspectRatio);
+            }
+        }
+        Collections.sort(sortedSizes, (o1, o2) -> {
+            float a1 = Math.abs(1f - Math.min(o1.mHeight, o1.mWidth) / (float) Math.max(o1.mHeight, o1.mWidth));
+            float a2 = Math.abs(1f - Math.min(o2.mHeight, o2.mWidth) / (float) Math.max(o2.mHeight, o2.mWidth));
+
+            if (a1 < a2) {
+                return -1;
+            } else if (a1 > a2) {
+                return 1;
+            }
+            return 0;
+        });
+        return sortedSizes.get(0);
     }
 
     private void createCamera(final SurfaceTexture surfaceTexture) {
@@ -1119,10 +1142,20 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
         private VideoRecorder videoEncoder;
 
+        private int surfaceWidth;
+        private int surfaceHeight;
+
         public CameraGLThread(SurfaceTexture surface, int surfaceWidth, int surfaceHeight) {
             super("CameraGLThread");
             surfaceTexture = surface;
 
+            this.surfaceWidth = surfaceWidth;
+            this.surfaceHeight = surfaceHeight;
+
+            updateScale();
+        }
+
+        private void updateScale() {
             int width = previewSize.getWidth();
             int height = previewSize.getHeight();
 
@@ -1130,13 +1163,19 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
             width *= scale;
             height *= scale;
-            if (width > height) {
+
+            if (width == height) {
+                scaleX = 1f;
+                scaleY = 1f;
+            } else if (width > height) {
                 scaleX = 1.0f;
                 scaleY = width / (float) surfaceHeight;
             } else {
                 scaleX = height / (float) surfaceWidth;
                 scaleY = 1.0f;
             }
+            FileLog.d("camera scaleX = " + scaleX + " scaleY = " + scaleY);
+
         }
 
         private boolean initGL() {
@@ -1303,6 +1342,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             if (handler != null) {
                 sendMessage(handler.obtainMessage(DO_REINIT_MESSAGE), 0);
             }
+            updateScale();
         }
 
         public void finish() {
@@ -1420,20 +1460,37 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         oldCameraTexture[0] = cameraTexture[0];
                         cameraTextureAlpha = 0.0f;
                         cameraTexture[0] = 0;
+                        oldTextureTextureBuffer = textureBuffer.duplicate();
+                        oldTexturePreviewSize = previewSize;
                     }
                     cameraId++;
                     cameraReady = false;
 
                     GLES20.glGenTextures(1, cameraTexture, 0);
                     GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, cameraTexture[0]);
-                    GLES20.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
-                    GLES20.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+                    GLES20.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+                    GLES20.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
                     GLES20.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
                     GLES20.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
 
                     cameraSurface = new SurfaceTexture(cameraTexture[0]);
                     cameraSurface.setOnFrameAvailableListener(surfaceTexture -> requestRender());
                     createCamera(cameraSurface);
+
+                    cameraThread.updateScale();
+
+                    float tX = 1.0f / scaleX / 2.0f;
+                    float tY = 1.0f / scaleY / 2.0f;
+
+                    float[] texData = {
+                            0.5f - tX, 0.5f - tY,
+                            0.5f + tX, 0.5f - tY,
+                            0.5f - tX, 0.5f + tY,
+                            0.5f + tX, 0.5f + tY
+                    };
+
+                    textureBuffer = ByteBuffer.allocateDirect(texData.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+                    textureBuffer.put(texData).position(0);
                     break;
                 }
                 case DO_SETSESSION_MESSAGE: {
@@ -1608,8 +1665,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         private int textureMatrixHandle;
         private int positionHandle;
         private int textureHandle;
-        private int scaleXHandle;
-        private int scaleYHandle;
+        private int resolutionHandle;
+        private int previewSizeHandle;
         private int alphaHandle;
         private int zeroTimeStamps;
         private Integer lastCameraId = 0;
@@ -1676,7 +1733,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         }
                         buffer.offset[a] = audioPresentationTimeUs;
                         buffer.read[a] = readResult;
-                        int bufferDurationUs = 1000000 * readResult / 44100 / 2;
+                        int bufferDurationUs = 1000000 * readResult / audioSampleRate / 2;
                         audioPresentationTimeUs += bufferDurationUs;
                     }
                     if (buffer.results >= 0 || buffer.last) {
@@ -1946,25 +2003,38 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             videoLast = timestampNanos;
 
             GLES20.glUseProgram(drawProgram);
-            GLES20.glVertexAttribPointer(positionHandle, 3, GLES20.GL_FLOAT, false, 12, vertexBuffer);
-            GLES20.glEnableVertexAttribArray(positionHandle);
-            GLES20.glVertexAttribPointer(textureHandle, 2, GLES20.GL_FLOAT, false, 8, textureBuffer);
-            GLES20.glEnableVertexAttribArray(textureHandle);
-            GLES20.glUniform1f(scaleXHandle, scaleX);
-            GLES20.glUniform1f(scaleYHandle, scaleY);
             GLES20.glUniformMatrix4fv(vertexMatrixHandle, 1, false, mMVPMatrix, 0);
 
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+            GLES20.glEnableVertexAttribArray(positionHandle);
+            GLES20.glEnableVertexAttribArray(textureHandle);
+
+            GLES20.glUniform2f(resolutionHandle, videoWidth, videoHeight);
+
             if (oldCameraTexture[0] != 0) {
                 if (!blendEnabled) {
                     GLES20.glEnable(GLES20.GL_BLEND);
                     blendEnabled = true;
                 }
+                if (oldTexturePreviewSize != null) {
+                    GLES20.glUniform2f(previewSizeHandle, oldTexturePreviewSize.getWidth(), oldTexturePreviewSize.getHeight());
+                }
+                GLES20.glVertexAttribPointer(textureHandle, 2, GLES20.GL_FLOAT, false, 8, oldTextureTextureBuffer);
+
                 GLES20.glUniformMatrix4fv(textureMatrixHandle, 1, false, moldSTMatrix, 0);
                 GLES20.glUniform1f(alphaHandle, 1.0f);
                 GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, oldCameraTexture[0]);
                 GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
             }
+
+
+            if (previewSize != null) {
+                GLES20.glUniform2f(previewSizeHandle, previewSize.getWidth(), previewSize.getHeight());
+            }
+
+            GLES20.glVertexAttribPointer(positionHandle, 3, GLES20.GL_FLOAT, false, 12, vertexBuffer);
+            GLES20.glVertexAttribPointer(textureHandle, 2, GLES20.GL_FLOAT, false, 8, textureBuffer);
+
             GLES20.glUniformMatrix4fv(textureMatrixHandle, 1, false, mSTMatrix, 0);
             GLES20.glUniform1f(alphaHandle, cameraTextureAlpha);
             GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, cameraTexture[0]);
@@ -2012,14 +2082,19 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             public void run() {
                 final TextureView textureView = InstantCameraView.this.textureView;
                 if (textureView != null) {
-                    final Bitmap bitmap = textureView.getBitmap(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
-                    AndroidUtilities.runOnUIThread(() -> {
-                        if ((bitmap == null || bitmap.getPixel(0, 0) == 0) && keyframeThumbs.size() > 1) {
-                            keyframeThumbs.add(keyframeThumbs.get(keyframeThumbs.size() - 1));
-                        } else {
-                            keyframeThumbs.add(bitmap);
-                        }
-                    });
+                    try {
+                        final Bitmap bitmap = textureView.getBitmap(AndroidUtilities.dp(56), AndroidUtilities.dp(56));
+                        AndroidUtilities.runOnUIThread(() -> {
+                            if ((bitmap == null || bitmap.getPixel(0, 0) == 0) && keyframeThumbs.size() > 1) {
+                                keyframeThumbs.add(keyframeThumbs.get(keyframeThumbs.size() - 1));
+                            } else {
+                                keyframeThumbs.add(bitmap);
+                            }
+                        });
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                    }
+
                 }
             }
         }
@@ -2173,7 +2248,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
         private void prepareEncoder() {
             try {
-                int recordBufferSize = AudioRecord.getMinBufferSize(44100, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
+                int recordBufferSize = AudioRecord.getMinBufferSize(audioSampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
                 if (recordBufferSize <= 0) {
                     recordBufferSize = 3584;
                 }
@@ -2184,7 +2259,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 for (int a = 0; a < 3; a++) {
                     buffers.add(new AudioBufferInfo());
                 }
-                audioRecorder = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, 44100, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
+                audioRecorder = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, audioSampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
                 audioRecorder.startRecording();
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("initied audio record with channels " + audioRecorder.getChannelCount() + " sample rate = " + audioRecorder.getSampleRate() + " bufferSize = " + bufferSize);
@@ -2198,7 +2273,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
                 MediaFormat audioFormat = new MediaFormat();
                 audioFormat.setString(MediaFormat.KEY_MIME, AUDIO_MIME_TYPE);
-                audioFormat.setInteger(MediaFormat.KEY_SAMPLE_RATE, 44100);
+                audioFormat.setInteger(MediaFormat.KEY_SAMPLE_RATE, audioSampleRate);
                 audioFormat.setInteger(MediaFormat.KEY_CHANNEL_COUNT, 1);
                 audioFormat.setInteger(MediaFormat.KEY_BIT_RATE, MessagesController.getInstance(currentAccount).roundAudioBitrate * 1024);
                 audioFormat.setInteger(MediaFormat.KEY_MAX_INPUT_SIZE, 2048 * AudioBufferInfo.MAX_SAMPLES);
@@ -2318,7 +2393,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 
             int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, VERTEX_SHADER);
-            int fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, FRAGMENT_SHADER);
+            int fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, createFragmentShader(previewSize));
             if (vertexShader != 0 && fragmentShader != 0) {
                 drawProgram = GLES20.glCreateProgram();
                 GLES20.glAttachShader(drawProgram, vertexShader);
@@ -2332,8 +2407,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 } else {
                     positionHandle = GLES20.glGetAttribLocation(drawProgram, "aPosition");
                     textureHandle = GLES20.glGetAttribLocation(drawProgram, "aTextureCoord");
-                    scaleXHandle = GLES20.glGetUniformLocation(drawProgram, "scaleX");
-                    scaleYHandle = GLES20.glGetUniformLocation(drawProgram, "scaleY");
+                    previewSizeHandle = GLES20.glGetUniformLocation(drawProgram, "preview");
+                    resolutionHandle = GLES20.glGetUniformLocation(drawProgram, "resolution");
                     alphaHandle = GLES20.glGetUniformLocation(drawProgram, "alpha");
                     vertexMatrixHandle = GLES20.glGetUniformLocation(drawProgram, "uMVPMatrix");
                     textureMatrixHandle = GLES20.glGetUniformLocation(drawProgram, "uSTMatrix");
@@ -2525,6 +2600,56 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
     }
 
+    private String createFragmentShader(Size previewSize) {
+        if (SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_LOW || SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_AVERAGE || Math.max(previewSize.getHeight(), previewSize.getWidth()) * 0.7f < MessagesController.getInstance(currentAccount).roundVideoSize) {
+            return "#extension GL_OES_EGL_image_external : require\n" +
+                    "precision highp float;\n" +
+                    "varying vec2 vTextureCoord;\n" +
+                    "uniform float alpha;\n" +
+                    "uniform vec2 preview;\n" +
+                    "uniform vec2 resolution;\n" +
+                    "uniform samplerExternalOES sTexture;\n" +
+                    "void main() {\n" +
+                    "   vec4 textColor = texture2D(sTexture, vTextureCoord);\n" +
+                    "   vec2 coord = resolution * 0.5;\n" +
+                    "   float radius = 0.51 * resolution.x;\n" +
+                    "   float d = length(coord - gl_FragCoord.xy) - radius;\n" +
+                    "   float t = clamp(d, 0.0, 1.0);\n" +
+                    "   vec3 color = mix(textColor.rgb, vec3(1, 1, 1), t);\n" +
+                    "   gl_FragColor = vec4(color * alpha, alpha);\n" +
+                    "}\n";
+        }
+        //apply box blur
+        return "#extension GL_OES_EGL_image_external : require\n" +
+                "precision highp float;\n" +
+                "varying vec2 vTextureCoord;\n" +
+                "uniform vec2 resolution;\n" +
+                "uniform vec2 preview;\n" +
+                "uniform float alpha;\n" +
+                "const float kernel = 1.0;\n" +
+
+                "uniform samplerExternalOES sTexture;\n" +
+                "void main() {\n" +
+                "   float pixelSizeX = 1.0 / preview.x;\n" +
+                "   float pixelSizeY = 1.0 / preview.y;\n" +
+                "   vec3 accumulation = vec3(0);\n" +
+                "   vec3 weightsum = vec3(0);\n" +
+                "   for (float x = -kernel; x < kernel; x++){\n" +
+                "       for (float y = -kernel; y < kernel; y++){\n" +
+                "           accumulation += texture2D(sTexture, vTextureCoord + vec2(x * pixelSizeX, y * pixelSizeY)).xyz;\n" +
+                "           weightsum += 1.0;\n" +
+                "       }\n" +
+                "   }\n" +
+                "   vec4 textColor = vec4(accumulation / weightsum, 1.0);\n" +
+                "   vec2 coord = resolution * 0.5;\n" +
+                "   float radius = 0.51 * resolution.x;\n" +
+                "   float d = length(coord - gl_FragCoord.xy) - radius;\n" +
+                "   float t = clamp(d, 0.0, 1.0);\n" +
+                "   vec3 color = mix(textColor.rgb, vec3(1, 1, 1), t);\n" +
+                "   gl_FragColor = vec4(color * alpha, alpha);\n" +
+                "}\n";
+    }
+
     public class InstantViewCameraContainer extends FrameLayout {
 
         ImageReceiver imageReceiver;
@@ -2644,6 +2769,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     }
 
     ValueAnimator finishZoomTransition;
+
     public void finishZoom() {
         if (finishZoomTransition != null) {
             return;

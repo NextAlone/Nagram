@@ -81,11 +81,9 @@ class BottomBuilder(val ctx: Context) {
 
     fun addTitle(title: CharSequence, bigTitle: Boolean, subTitle: CharSequence?): HeaderCell {
 
-        val headerCell = if (bigTitle) {
-            HeaderCell(ctx, Theme.key_dialogTextBlue2, 23, 15, false, true)
-        } else {
-            HeaderCell(ctx, Theme.key_dialogTextGray2, 16, 12, false)
-        }
+        val headerCell = HeaderCell(ctx, Theme.key_dialogTextBlue2, 23, 15, false)
+
+        headerCell.setBigTitle(bigTitle)
 
         headerCell.setText(if (title is String) AndroidUtilities.replaceTags(title) else title)
 
@@ -331,11 +329,6 @@ class BottomBuilder(val ctx: Context) {
 
     fun setOnPreDismissListener(onDismissListener: DialogInterface.OnDismissListener?): BottomBuilder {
         builder.setOnPreDismissListener(onDismissListener)
-        return this
-    }
-
-    fun fixNavigationBar() : BottomBuilder{
-        builder.fixNavigationBar()
         return this
     }
 

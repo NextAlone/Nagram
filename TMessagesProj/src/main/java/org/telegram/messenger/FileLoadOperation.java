@@ -8,9 +8,6 @@
 
 package org.telegram.messenger;
 
-import android.util.SparseArray;
-import android.util.SparseIntArray;
-
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLObject;
@@ -23,6 +20,7 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.concurrent.CountDownLatch;
 import java.util.zip.GZIPInputStream;
@@ -32,27 +30,29 @@ public class FileLoadOperation {
 
     protected static class RequestInfo {
         private int requestToken;
-        private int offset;
+        private long offset;
         private TLRPC.TL_upload_file response;
         private TLRPC.TL_upload_webFile responseWeb;
         private TLRPC.TL_upload_cdnFile responseCdn;
     }
 
     public static class Range {
-        private int start;
-        private int end;
+        private long start;
+        private long end;
 
-        private Range(int s, int e) {
+        private Range(long s, long e) {
             start = s;
             end = e;
         }
     }
 
-    private static class PreloadRange {
-        private int fileOffset;
-        private int length;
+    private static final Object lockObject = new Object();
 
-        private PreloadRange(int o, int l) {
+    private static class PreloadRange {
+        private long fileOffset;
+        private long length;
+
+        private PreloadRange(long o, long l) {
             fileOffset = o;
             length = l;
         }
@@ -65,21 +65,26 @@ public class FileLoadOperation {
     private final static int stateFailed = 2;
     private final static int stateFinished = 3;
 
-    private final static int downloadChunkSize = 1024 * 32;
-    private final static int downloadChunkSizeBig = 1024 * 128;
-    private final static int cdnChunkCheckSize = 1024 * 128;
-    private final static int maxDownloadRequests = BuildVars.DEBUG_PRIVATE_VERSION ? 8 : 4;
-    private final static int maxDownloadRequestsBig = BuildVars.DEBUG_PRIVATE_VERSION ? 8 : 4;
-    private final static int bigFileSizeFrom = 1024 * 1024;
-    private final static int maxCdnParts = (int) (FileLoader.MAX_FILE_SIZE / downloadChunkSizeBig);
+    private int downloadChunkSize = 1024 * 32;
+    private int downloadChunkSizeBig = 1024 * 128;
+    private int cdnChunkCheckSize = 1024 * 128;
+    private int maxDownloadRequests = 4;
+    private int maxDownloadRequestsBig = 4;
+    private int bigFileSizeFrom = 10 * 1024 * 1024;
+    private int maxCdnParts = (int) (FileLoader.DEFAULT_MAX_FILE_SIZE / downloadChunkSizeBig);
+
+    //load small parts for stream
+    private int downloadChunkSizeAnimation = 1024 * 128;
+    private int maxDownloadRequestsAnimation = 4;
 
     private final static int preloadMaxBytes = 2 * 1024 * 1024;
 
     private String fileName;
+    private String storeFileName;
     private int currentQueueType;
 
-    private SparseArray<PreloadRange> preloadedBytesRanges;
-    private SparseIntArray requestedPreloadedBytesRanges;
+    private HashMap<Long, PreloadRange> preloadedBytesRanges;
+    private HashMap<Long, Integer> requestedPreloadedBytesRanges;
     private RandomAccessFile preloadStream;
     private int preloadStreamFileOffset;
     private int totalPreloadedBytes;
@@ -87,12 +92,12 @@ public class FileLoadOperation {
     private boolean preloadFinished;
     private File cacheFilePreload;
     private boolean supportsPreloading;
-    private int nextPreloadDownloadOffset;
-    private int nextAtomOffset;
-    private int foundMoovSize;
-    private int preloadNotRequestedBytesCount;
+    private long nextPreloadDownloadOffset;
+    private long nextAtomOffset;
+    private long foundMoovSize;
+    private long preloadNotRequestedBytesCount;
     private int moovFound;
-    private byte[] preloadTempBuffer = new byte[16];
+    private byte[] preloadTempBuffer = new byte[24];
     private int preloadTempBufferCount;
 
     private boolean nextPartWasPreloaded;
@@ -103,7 +108,7 @@ public class FileLoadOperation {
     private volatile ArrayList<Range> notLoadedBytesRangesCopy;
     private ArrayList<Range> notRequestedBytesRanges;
     private ArrayList<Range> notCheckedCdnRanges;
-    private int requestedBytesCount;
+    private long requestedBytesCount;
 
     private int currentAccount;
     private boolean started;
@@ -114,11 +119,11 @@ public class FileLoadOperation {
     private WebFile webFile;
     private volatile int state = stateIdle;
     private volatile boolean paused;
-    private int downloadedBytes;
-    private int totalBytesCount;
-    private int bytesCountPadding;
-    private int streamStartOffset;
-    private int streamPriorityStartOffset;
+    private long downloadedBytes;
+    private long totalBytesCount;
+    private long bytesCountPadding;
+    private long streamStartOffset;
+    private long streamPriorityStartOffset;
     private RequestInfo priorityRequestInfo;
     private FileLoadOperationDelegate delegate;
     private byte[] key;
@@ -133,9 +138,9 @@ public class FileLoadOperation {
 
     public Object parentObject;
 
-    private SparseArray<TLRPC.TL_fileHash> cdnHashes;
+    private HashMap<Long, TLRPC.TL_fileHash> cdnHashes;
 
-    private boolean forceBig;
+    private boolean isStream;
 
     private byte[] encryptKey;
     private byte[] encryptIv;
@@ -172,16 +177,34 @@ public class FileLoadOperation {
     private boolean ungzip;
 
     private int currentType;
+    public FilePathDatabase.PathData pathSaveData;
+    private long startTime;
 
     public interface FileLoadOperationDelegate {
         void didFinishLoadingFile(FileLoadOperation operation, File finalFile);
         void didFailedLoadingFile(FileLoadOperation operation, int state);
         void didChangedLoadProgress(FileLoadOperation operation, long uploadedSize, long totalSize);
+        void saveFilePath(FilePathDatabase.PathData pathSaveData, File cacheFileFinal);
+        boolean hasAnotherRefOnFile(String path);
     }
 
-    public FileLoadOperation(ImageLocation imageLocation, Object parent, String extension, int size) {
+    private void updateParams() {
+        if (MessagesController.getInstance(currentAccount).getfileExperimentalParams) {
+            downloadChunkSizeBig = 1024 * 512;
+            maxDownloadRequests = 8;
+            maxDownloadRequestsBig = 8;
+        } else {
+            downloadChunkSizeBig = 1024 * 128;
+            maxDownloadRequests = 4;
+            maxDownloadRequestsBig = 4;
+        }
+        maxCdnParts = (int) (FileLoader.DEFAULT_MAX_FILE_SIZE / downloadChunkSizeBig);
+    }
+
+    public FileLoadOperation(ImageLocation imageLocation, Object parent, String extension, long size) {
+        updateParams();
         parentObject = parent;
-        forceBig = imageLocation.imageType == FileLoader.IMAGE_TYPE_ANIMATION;
+        isStream = imageLocation.imageType == FileLoader.IMAGE_TYPE_ANIMATION;
         if (imageLocation.isEncrypted()) {
             location = new TLRPC.TL_inputEncryptedFileLocation();
             location.id = imageLocation.location.volume_id;
@@ -251,6 +274,7 @@ public class FileLoadOperation {
     }
 
     public FileLoadOperation(SecureDocument secureDocument) {
+        updateParams();
         location = new TLRPC.TL_inputSecureFileLocation();
         location.id = secureDocument.secureFile.id;
         location.access_hash = secureDocument.secureFile.access_hash;
@@ -262,6 +286,7 @@ public class FileLoadOperation {
     }
 
     public FileLoadOperation(int instance, WebFile webDocument) {
+        updateParams();
         currentAccount = instance;
         webFile = webDocument;
         webLocation = webDocument.location;
@@ -282,6 +307,7 @@ public class FileLoadOperation {
     }
 
     public FileLoadOperation(TLRPC.Document documentLocation, Object parent) {
+        updateParams();
         try {
             parentObject = parent;
             if (documentLocation instanceof TLRPC.TL_documentEncrypted) {
@@ -369,11 +395,12 @@ public class FileLoadOperation {
         return priority;
     }
 
-    public void setPaths(int instance, String name, int queueType, File store, File temp) {
+    public void setPaths(int instance, String name, int queueType, File store, File temp, String finalName) {
         storePath = store;
         tempPath = temp;
         currentAccount = instance;
         fileName = name;
+        storeFileName = finalName;
         currentQueueType = queueType;
     }
 
@@ -389,7 +416,7 @@ public class FileLoadOperation {
         return currentType;
     }
 
-    private void removePart(ArrayList<Range> ranges, int start, int end) {
+    private void removePart(ArrayList<Range> ranges, long start, long end) {
         if (ranges == null || end < start) {
             return;
         }
@@ -430,7 +457,7 @@ public class FileLoadOperation {
         }
     }
 
-    private void addPart(ArrayList<Range> ranges, int start, int end, boolean save) {
+    private void addPart(ArrayList<Range> ranges, long start, long end, boolean save) {
         if (ranges == null || end < start) {
             return;
         }
@@ -471,22 +498,26 @@ public class FileLoadOperation {
                     filePartsStream.writeInt(count);
                     for (int a = 0; a < count; a++) {
                         range = ranges.get(a);
-                        filePartsStream.writeInt(range.start);
-                        filePartsStream.writeInt(range.end);
+                        filePartsStream.writeLong(range.start);
+                        filePartsStream.writeLong(range.end);
                     }
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
-                if (streamListeners != null) {
-                    count = streamListeners.size();
-                    for (int a = 0; a < count; a++) {
-                        streamListeners.get(a).newDataAvailable();
-                    }
-                }
+                notifyStreamListeners();
             } else {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.e(cacheFileFinal + " downloaded duplicate file part " + start + " - " + end);
                 }
+            }
+        }
+    }
+
+    private void notifyStreamListeners() {
+        if (streamListeners != null) {
+            int count = streamListeners.size();
+            for (int a = 0; a < count; a++) {
+                streamListeners.get(a).newDataAvailable();
             }
         }
     }
@@ -514,10 +545,13 @@ public class FileLoadOperation {
         return result[0];
     }
 
-    private int getDownloadedLengthFromOffsetInternal(ArrayList<Range> ranges, final int offset, final int length) {
+    private long getDownloadedLengthFromOffsetInternal(ArrayList<Range> ranges, final long offset, final long length) {
         if (ranges == null || state == stateFinished || ranges.isEmpty()) {
-            if (downloadedBytes == 0) {
+            if (state == stateFinished) {
                 return length;
+            }
+            if (downloadedBytes == 0) {
+                return 0;
             } else {
                 return Math.min(length, Math.max(downloadedBytes - offset, 0));
             }
@@ -525,7 +559,7 @@ public class FileLoadOperation {
             int count = ranges.size();
             Range range;
             Range minRange = null;
-            int availableLength = length;
+            long availableLength = length;
             for (int a = 0; a < count; a++) {
                 range = ranges.get(a);
                 if (offset <= range.start && (minRange == null || range.start < minRange.start)) {
@@ -554,9 +588,9 @@ public class FileLoadOperation {
         return progress + getDownloadedLengthFromOffsetInternal(ranges, (int) (totalBytesCount * progress), totalBytesCount) / (float) totalBytesCount;
     }
 
-    protected int[] getDownloadedLengthFromOffset(final int offset, final int length) {
+    protected long[] getDownloadedLengthFromOffset(final int offset, final long length) {
         final CountDownLatch countDownLatch = new CountDownLatch(1);
-        final int[] result = new int[2];
+        final long[] result = new long[2];
         Utilities.stageQueue.postRunnable(() -> {
             result[0] = getDownloadedLengthFromOffsetInternal(notLoadedBytesRanges, offset, length);
             if (state == stateFinished) {
@@ -603,10 +637,16 @@ public class FileLoadOperation {
         return start(null, 0, false);
     }
 
-    public boolean start(final FileLoadOperationStream stream, final int streamOffset, final boolean steamPriority) {
+    public boolean start(final FileLoadOperationStream stream, final long streamOffset, final boolean steamPriority) {
+        startTime = System.currentTimeMillis();
+        updateParams();
         if (currentDownloadChunkSize == 0) {
-            currentDownloadChunkSize = totalBytesCount >= bigFileSizeFrom || forceBig ? downloadChunkSizeBig : downloadChunkSize;
-            currentMaxDownloadRequests = totalBytesCount >= bigFileSizeFrom || forceBig ? maxDownloadRequestsBig : maxDownloadRequests;
+            if (isStream) {
+                currentDownloadChunkSize = downloadChunkSizeAnimation;
+                currentMaxDownloadRequests = maxDownloadRequestsAnimation;
+            }
+            currentDownloadChunkSize = totalBytesCount >= bigFileSizeFrom || isStream ? downloadChunkSizeBig : downloadChunkSize;
+            currentMaxDownloadRequests = totalBytesCount >= bigFileSizeFrom || isStream ? maxDownloadRequestsBig : maxDownloadRequests;
         }
         final boolean alreadyStarted = state != stateIdle;
         final boolean wasPaused = paused;
@@ -617,7 +657,7 @@ public class FileLoadOperation {
                     streamListeners = new ArrayList<>();
                 }
                 if (steamPriority) {
-                    int offset = streamOffset / currentDownloadChunkSize * currentDownloadChunkSize;
+                    long offset = (streamOffset / (long) currentDownloadChunkSize) * (long) currentDownloadChunkSize;
                     if (priorityRequestInfo != null && priorityRequestInfo.offset != offset) {
                         requestInfos.remove(priorityRequestInfo);
                         requestedBytesCount -= currentDownloadChunkSize;
@@ -677,13 +717,13 @@ public class FileLoadOperation {
                 fileNameTemp = md5 + ".temp.enc";
                 fileNameFinal = md5 + "." + ext + ".enc";
                 if (key != null) {
-                    fileNameIv = md5 + ".iv.enc";
+                    fileNameIv = md5 + "_64.iv.enc";
                 }
             } else {
                 fileNameTemp = md5 + ".temp";
                 fileNameFinal = md5 + "." + ext;
                 if (key != null) {
-                    fileNameIv = md5 + ".iv";
+                    fileNameIv = md5 + "_64.iv";
                 }
             }
         } else {
@@ -697,18 +737,18 @@ public class FileLoadOperation {
                     fileNameTemp = location.volume_id + "_" + location.local_id + ".temp.enc";
                     fileNameFinal = location.volume_id + "_" + location.local_id + "." + ext + ".enc";
                     if (key != null) {
-                        fileNameIv = location.volume_id + "_" + location.local_id + ".iv.enc";
+                        fileNameIv = location.volume_id + "_" + location.local_id + "_64.iv.enc";
                     }
                 } else {
                     fileNameTemp = location.volume_id + "_" + location.local_id + ".temp";
                     fileNameFinal = location.volume_id + "_" + location.local_id + "." + ext;
                     if (key != null) {
-                        fileNameIv = location.volume_id + "_" + location.local_id + ".iv";
+                        fileNameIv = location.volume_id + "_" + location.local_id + "_64.iv";
                     }
                     if (notLoadedBytesRanges != null) {
-                        fileNameParts = location.volume_id + "_" + location.local_id + ".pt";
+                        fileNameParts = location.volume_id + "_" + location.local_id + "_64.pt";
                     }
-                    fileNamePreload = location.volume_id + "_" + location.local_id + ".preload";
+                    fileNamePreload = location.volume_id + "_" + location.local_id + "_64.preload";
                 }
             } else {
                 if (datacenterId == 0 || location.id == 0) {
@@ -719,18 +759,18 @@ public class FileLoadOperation {
                     fileNameTemp = datacenterId + "_" + location.id + ".temp.enc";
                     fileNameFinal = datacenterId + "_" + location.id + ext + ".enc";
                     if (key != null) {
-                        fileNameIv = datacenterId + "_" + location.id + ".iv.enc";
+                        fileNameIv = datacenterId + "_" + location.id + "_64.iv.enc";
                     }
                 } else {
                     fileNameTemp = datacenterId + "_" + location.id + ".temp";
                     fileNameFinal = datacenterId + "_" + location.id + ext;
                     if (key != null) {
-                        fileNameIv = datacenterId + "_" + location.id + ".iv";
+                        fileNameIv = datacenterId + "_" + location.id + "_64.iv";
                     }
                     if (notLoadedBytesRanges != null) {
-                        fileNameParts = datacenterId + "_" + location.id + ".pt";
+                        fileNameParts = datacenterId + "_" + location.id + "_64.pt";
                     }
-                    fileNamePreload = datacenterId + "_" + location.id + ".preload";
+                    fileNamePreload = datacenterId + "_" + location.id + "_64.preload";
                 }
             }
         }
@@ -745,11 +785,17 @@ public class FileLoadOperation {
         } else if (fileName != null && !encryptFile) {
             cacheFileFinal = new File(storePath, fileName);
         } else {
-            cacheFileFinal = new File(storePath, fileNameFinal);
+            if (!encryptFile) {
+                cacheFileFinal = new File(storePath, storeFileName);
+            } else {
+                cacheFileFinal = new File(storePath, fileNameFinal);
+            }
         }
         boolean finalFileExist = cacheFileFinal.exists();
         if (finalFileExist && (parentObject instanceof TLRPC.TL_theme || totalBytesCount != 0 && totalBytesCount != cacheFileFinal.length())) {
-            cacheFileFinal.delete();
+            if (!delegate.hasAnotherRefOnFile(cacheFileFinal.toString())) {
+                cacheFileFinal.delete();
+            }
             finalFileExist = false;
         }
 
@@ -795,51 +841,51 @@ public class FileLoadOperation {
                 try {
                     preloadStream = new RandomAccessFile(cacheFilePreload, "rws");
                     long len = preloadStream.length();
-                    int readOffset = 0;
+                    long readOffset = 0;
                     preloadStreamFileOffset = 1;
                     if (len - readOffset > 1) {
                         preloaded[0] = preloadStream.readByte() != 0;
                         readOffset += 1;
                         while (readOffset < len) {
-                            if (len - readOffset < 4) {
+                            if (len - readOffset < 8) {
                                 break;
                             }
-                            int offset = preloadStream.readInt();
-                            readOffset += 4;
-                            if (len - readOffset < 4 || offset < 0 || offset > totalBytesCount) {
+                            long offset = preloadStream.readLong();
+                            readOffset += 8;
+                            if (len - readOffset < 8 || offset < 0 || offset > totalBytesCount) {
                                 break;
                             }
-                            int size = preloadStream.readInt();
-                            readOffset += 4;
+                            long size = preloadStream.readLong();
+                            readOffset += 8;
                             if (len - readOffset < size || size > currentDownloadChunkSize) {
                                 break;
                             }
                             PreloadRange range = new PreloadRange(readOffset, size);
                             readOffset += size;
                             preloadStream.seek(readOffset);
-                            if (len - readOffset < 12) {
+                            if (len - readOffset < 24) {
                                 break;
                             }
-                            foundMoovSize = preloadStream.readInt();
+                            foundMoovSize = preloadStream.readLong();
                             if (foundMoovSize != 0) {
                                 moovFound = nextPreloadDownloadOffset > totalBytesCount / 2 ? 2 : 1;
                                 preloadNotRequestedBytesCount = foundMoovSize;
                             }
-                            nextPreloadDownloadOffset = preloadStream.readInt();
-                            nextAtomOffset = preloadStream.readInt();
-                            readOffset += 12;
+                            nextPreloadDownloadOffset = preloadStream.readLong();
+                            nextAtomOffset = preloadStream.readLong();
+                            readOffset += 24;
 
                             if (preloadedBytesRanges == null) {
-                                preloadedBytesRanges = new SparseArray<>();
+                                preloadedBytesRanges = new HashMap<>();
                             }
                             if (requestedPreloadedBytesRanges == null) {
-                                requestedPreloadedBytesRanges = new SparseIntArray();
+                                requestedPreloadedBytesRanges = new HashMap<>();
                             }
                             preloadedBytesRanges.put(offset, range);
                             requestedPreloadedBytesRanges.put(offset, 1);
 
                             totalPreloadedBytes += size;
-                            preloadStreamFileOffset += 20 + size;
+                            preloadStreamFileOffset += 36 + size;
                         }
                     }
                     preloadStream.seek(preloadStreamFileOffset);
@@ -874,8 +920,8 @@ public class FileLoadOperation {
                         int count = filePartsStream.readInt();
                         if (count <= len / 2) {
                             for (int a = 0; a < count; a++) {
-                                int start = filePartsStream.readInt();
-                                int end = filePartsStream.readInt();
+                                long start = filePartsStream.readLong();
+                                long end = filePartsStream.readLong();
                                 notLoadedBytesRanges.add(new Range(start, end));
                                 notRequestedBytesRanges.add(new Range(start, end));
                             }
@@ -892,9 +938,9 @@ public class FileLoadOperation {
                 } else {
                     long totalDownloadedLen = cacheFileTemp.length();
                     if (fileNameIv != null && (totalDownloadedLen % currentDownloadChunkSize) != 0) {
-                        requestedBytesCount = downloadedBytes = 0;
+                        requestedBytesCount =  0;
                     } else {
-                        requestedBytesCount = downloadedBytes = ((int) cacheFileTemp.length()) / currentDownloadChunkSize * currentDownloadChunkSize;
+                        requestedBytesCount = downloadedBytes = (cacheFileTemp.length()) / ((long) currentDownloadChunkSize) * currentDownloadChunkSize;
                     }
                     if (notLoadedBytesRanges != null && notLoadedBytesRanges.isEmpty()) {
                         notLoadedBytesRanges.add(new Range(downloadedBytes, totalBytesCount));
@@ -930,8 +976,8 @@ public class FileLoadOperation {
                     fiv = new RandomAccessFile(cacheIvTemp, "rws");
                     if (downloadedBytes != 0 && !newKeyGenerated) {
                         long len = cacheIvTemp.length();
-                        if (len > 0 && len % 32 == 0) {
-                            fiv.read(iv, 0, 32);
+                        if (len > 0 && len % 64 == 0) {
+                            fiv.read(iv, 0, 64);
                         } else {
                             requestedBytesCount = downloadedBytes = 0;
                         }
@@ -951,7 +997,7 @@ public class FileLoadOperation {
                     fileOutputStream.seek(downloadedBytes);
                 }
             } catch (Exception e) {
-                FileLog.e(e);
+                FileLog.e(e, false);
             }
             if (fileOutputStream == null) {
                 onFail(true, 0);
@@ -973,6 +1019,9 @@ public class FileLoadOperation {
             started = true;
             try {
                 onFinishLoadingFile(false);
+                if (pathSaveData != null) {
+                    delegate.saveFilePath(pathSaveData, null);
+                }
             } catch (Exception e) {
                 onFail(true, 0);
             }
@@ -1175,6 +1224,7 @@ public class FileLoadOperation {
             return;
         }
         state = stateFinished;
+        notifyStreamListeners();
         cleanup();
         if (isPreloadVideoOperation) {
             preloadFinished = true;
@@ -1223,6 +1273,23 @@ public class FileLoadOperation {
                         }
                     } else {
                         try {
+                            if (pathSaveData != null) {
+                                synchronized (lockObject) {
+                                    cacheFileFinal = new File(storePath, storeFileName);
+                                    int count = 1;
+                                    while (cacheFileFinal.exists()) {
+                                        int lastDotIndex = storeFileName.lastIndexOf('.');
+                                        String newFileName;
+                                        if (lastDotIndex > 0) {
+                                            newFileName = storeFileName.substring(0, lastDotIndex) + " (" + count + ")" + storeFileName.substring(lastDotIndex);
+                                        } else {
+                                            newFileName = storeFileName + " (" + count + ")";
+                                        }
+                                        cacheFileFinal = new File(storePath, newFileName);
+                                        count++;
+                                    }
+                                }
+                            }
                             renameResult = cacheFileTemp.renameTo(cacheFileFinal);
                         } catch (Exception e) {
                             renameResult = false;
@@ -1246,6 +1313,10 @@ public class FileLoadOperation {
                             return;
                         }
                         cacheFileFinal = cacheFileTemp;
+                    } else {
+                        if (pathSaveData != null && cacheFileFinal.exists()) {
+                            delegate.saveFilePath(pathSaveData, cacheFileFinal);
+                        }
                     }
                 } else {
                     onFail(false, 0);
@@ -1253,7 +1324,7 @@ public class FileLoadOperation {
                 }
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("finished downloading file to " + cacheFileFinal);
+                FileLog.d("finished downloading file to " + cacheFileFinal + " time = " + (System.currentTimeMillis() - startTime));
             }
             if (increment) {
                 if (currentType == ConnectionsManager.FileTypeAudio) {
@@ -1281,15 +1352,21 @@ public class FileLoadOperation {
         }
     }
 
-    private int findNextPreloadDownloadOffset(int atomOffset, int partOffset, NativeByteBuffer partBuffer) {
+    private long findNextPreloadDownloadOffset(long atomOffset, long partOffset, NativeByteBuffer partBuffer) {
         int partSize = partBuffer.limit();
         while (true) {
             if (atomOffset < partOffset - (preloadTempBuffer != null ? 16 : 0) || atomOffset >= partOffset + partSize) {
                 return 0;
             }
             if (atomOffset >= partOffset + partSize - 16) {
-                preloadTempBufferCount = partOffset + partSize - atomOffset;
-                partBuffer.position(partBuffer.limit() - preloadTempBufferCount);
+                long count = partOffset + partSize - atomOffset;
+                if (count > Integer.MAX_VALUE) {
+                    throw new RuntimeException("!!!");
+                }
+                preloadTempBufferCount = (int) count;
+                long position = partBuffer.limit() - preloadTempBufferCount;
+
+                partBuffer.position((int) position);
                 partBuffer.readBytes(preloadTempBuffer, 0, preloadTempBufferCount, false);
                 return partOffset + partSize;
             }
@@ -1298,10 +1375,15 @@ public class FileLoadOperation {
                 partBuffer.readBytes(preloadTempBuffer, preloadTempBufferCount, 16 - preloadTempBufferCount, false);
                 preloadTempBufferCount = 0;
             } else {
-                partBuffer.position(atomOffset - partOffset);
+                long count = atomOffset - partOffset;
+                if (count > Integer.MAX_VALUE) {
+                    throw new RuntimeException("!!!");
+                }
+                partBuffer.position((int) count);
                 partBuffer.readBytes(preloadTempBuffer, 0, 16, false);
             }
             int atomSize = (((int) preloadTempBuffer[0] & 0xFF) << 24) + (((int) preloadTempBuffer[1] & 0xFF) << 16) + (((int) preloadTempBuffer[2] & 0xFF) << 8) + ((int) preloadTempBuffer[3] & 0xFF);
+
             if (atomSize == 0) {
                 return 0;
             } else if (atomSize == 1) {
@@ -1317,7 +1399,7 @@ public class FileLoadOperation {
         }
     }
 
-    private void requestFileOffsets(int offset) {
+    private void requestFileOffsets(long offset) {
         if (requestingCdnOffsets) {
             return;
         }
@@ -1333,7 +1415,7 @@ public class FileLoadOperation {
                 TLRPC.Vector vector = (TLRPC.Vector) response;
                 if (!vector.objects.isEmpty()) {
                     if (cdnHashes == null) {
-                        cdnHashes = new SparseArray<>();
+                        cdnHashes = new HashMap<>();
                     }
                     for (int a = 0; a < vector.objects.size(); a++) {
                         TLRPC.TL_fileHash hash = (TLRPC.TL_fileHash) vector.objects.get(a);
@@ -1366,7 +1448,7 @@ public class FileLoadOperation {
     protected boolean processRequestResult(RequestInfo requestInfo, TLRPC.TL_error error) {
         if (state != stateDownloading) {
             if (BuildVars.DEBUG_VERSION) {
-                FileLog.d("trying to write to finished file " + cacheFileFinal + " offset " + requestInfo.offset);
+                FileLog.e(new Exception("trying to write to finished file " + cacheFileFinal + " offset " + requestInfo.offset));
             }
             return false;
         }
@@ -1393,8 +1475,8 @@ public class FileLoadOperation {
                 }
                 int currentBytesSize = bytes.limit();
                 if (isCdn) {
-                    int cdnCheckPart = requestInfo.offset / cdnChunkCheckSize;
-                    int fileOffset = cdnCheckPart * cdnChunkCheckSize;
+                    long cdnCheckPart = requestInfo.offset / cdnChunkCheckSize;
+                    long fileOffset = cdnCheckPart * cdnChunkCheckSize;
                     TLRPC.TL_fileHash hash = cdnHashes != null ? cdnHashes.get(fileOffset) : null;
                     if (hash == null) {
                         delayRequestInfo(requestInfo);
@@ -1404,7 +1486,7 @@ public class FileLoadOperation {
                 }
 
                 if (requestInfo.responseCdn != null) {
-                    int offset = requestInfo.offset / 16;
+                    long offset = requestInfo.offset / 16;
                     cdnIv[15] = (byte) (offset & 0xff);
                     cdnIv[14] = (byte) ((offset >> 8) & 0xff);
                     cdnIv[13] = (byte) ((offset >> 16) & 0xff);
@@ -1414,16 +1496,16 @@ public class FileLoadOperation {
 
                 boolean finishedDownloading;
                 if (isPreloadVideoOperation) {
-                    preloadStream.writeInt(requestInfo.offset);
-                    preloadStream.writeInt(currentBytesSize);
-                    preloadStreamFileOffset += 8;
+                    preloadStream.writeLong(requestInfo.offset);
+                    preloadStream.writeLong(currentBytesSize);
+                    preloadStreamFileOffset += 16;
                     FileChannel channel = preloadStream.getChannel();
                     channel.write(bytes.buffer);
                     if (BuildVars.DEBUG_VERSION) {
                         FileLog.d("save preload file part " + cacheFilePreload + " offset " + requestInfo.offset + " size " + currentBytesSize);
                     }
                     if (preloadedBytesRanges == null) {
-                        preloadedBytesRanges = new SparseArray<>();
+                        preloadedBytesRanges = new HashMap<>();
                     }
                     preloadedBytesRanges.put(requestInfo.offset, new PreloadRange(preloadStreamFileOffset, currentBytesSize));
 
@@ -1431,7 +1513,7 @@ public class FileLoadOperation {
                     preloadStreamFileOffset += currentBytesSize;
 
                     if (moovFound == 0) {
-                        int offset = findNextPreloadDownloadOffset(nextAtomOffset, requestInfo.offset, bytes);
+                        long offset = findNextPreloadDownloadOffset(nextAtomOffset, requestInfo.offset, bytes);
                         if (offset < 0) {
                             offset *= -1;
                             nextPreloadDownloadOffset += currentDownloadChunkSize;
@@ -1444,14 +1526,14 @@ public class FileLoadOperation {
                             }
                             nextPreloadDownloadOffset = -1;
                         } else {
-                            nextPreloadDownloadOffset = offset / currentDownloadChunkSize * currentDownloadChunkSize;
+                            nextPreloadDownloadOffset += currentDownloadChunkSize;
                         }
                         nextAtomOffset = offset;
                     }
-                    preloadStream.writeInt(foundMoovSize);
-                    preloadStream.writeInt(nextPreloadDownloadOffset);
-                    preloadStream.writeInt(nextAtomOffset);
-                    preloadStreamFileOffset += 12;
+                    preloadStream.writeLong(foundMoovSize);
+                    preloadStream.writeLong(nextPreloadDownloadOffset);
+                    preloadStream.writeLong(nextAtomOffset);
+                    preloadStreamFileOffset += 24;
                     finishedDownloading = nextPreloadDownloadOffset == 0 || moovFound != 0 && foundMoovSize < 0 || totalPreloadedBytes > preloadMaxBytes || nextPreloadDownloadOffset >= totalBytesCount;
                     if (finishedDownloading) {
                         preloadStream.seek(0);
@@ -1469,11 +1551,15 @@ public class FileLoadOperation {
                     if (key != null) {
                         Utilities.aesIgeEncryption(bytes.buffer, key, iv, false, true, 0, bytes.limit());
                         if (finishedDownloading && bytesCountPadding != 0) {
-                            bytes.limit(bytes.limit() - bytesCountPadding);
+                            long limit = bytes.limit() - bytesCountPadding;
+                            if (BuildVars.DEBUG_VERSION && limit > Integer.MAX_VALUE) {
+                                throw new RuntimeException("Out of limit" + limit);
+                            }
+                            bytes.limit((int) (limit));
                         }
                     }
                     if (encryptFile) {
-                        int offset = requestInfo.offset / 16;
+                        long offset = requestInfo.offset / 16;
                         encryptIv[15] = (byte) (offset & 0xff);
                         encryptIv[14] = (byte) ((offset >> 8) & 0xff);
                         encryptIv[13] = (byte) ((offset >> 16) & 0xff);
@@ -1491,7 +1577,7 @@ public class FileLoadOperation {
                     channel.write(bytes.buffer);
                     addPart(notLoadedBytesRanges, requestInfo.offset, requestInfo.offset + currentBytesSize, true);
                     if (isCdn) {
-                        int cdnCheckPart = requestInfo.offset / cdnChunkCheckSize;
+                        long cdnCheckPart = requestInfo.offset / cdnChunkCheckSize;
 
                         int size = notCheckedCdnRanges.size();
                         Range range;
@@ -1504,8 +1590,8 @@ public class FileLoadOperation {
                             }
                         }
                         if (!checked) {
-                            int fileOffset = cdnCheckPart * cdnChunkCheckSize;
-                            int availableSize = getDownloadedLengthFromOffsetInternal(notLoadedBytesRanges, fileOffset, cdnChunkCheckSize);
+                            long fileOffset = cdnCheckPart * cdnChunkCheckSize;
+                            long availableSize = getDownloadedLengthFromOffsetInternal(notLoadedBytesRanges, fileOffset, cdnChunkCheckSize);
                             if (availableSize != 0 && (availableSize == cdnChunkCheckSize || totalBytesCount > 0 && availableSize == totalBytesCount - fileOffset || totalBytesCount <= 0 && finishedDownloading)) {
                                 TLRPC.TL_fileHash hash = cdnHashes.get(fileOffset);
                                 if (fileReadStream == null) {
@@ -1513,10 +1599,13 @@ public class FileLoadOperation {
                                     fileReadStream = new RandomAccessFile(cacheFileTemp, "r");
                                 }
                                 fileReadStream.seek(fileOffset);
-                                fileReadStream.readFully(cdnCheckBytes, 0, availableSize);
+                                if (BuildVars.DEBUG_VERSION && availableSize > Integer.MAX_VALUE) {
+                                    throw new RuntimeException("!!!");
+                                }
+                                fileReadStream.readFully(cdnCheckBytes, 0, (int) availableSize);
 
                                 if (encryptFile) {
-                                    int offset = fileOffset / 16;
+                                    long offset = fileOffset / 16;
                                     encryptIv[15] = (byte) (offset & 0xff);
                                     encryptIv[14] = (byte) ((offset >> 8) & 0xff);
                                     encryptIv[13] = (byte) ((offset >> 16) & 0xff);
@@ -1639,12 +1728,12 @@ public class FileLoadOperation {
     }
 
     private void clearOperaion(RequestInfo currentInfo, boolean preloadChanged) {
-        int minOffset = Integer.MAX_VALUE;
+        long minOffset = Long.MAX_VALUE;
         for (int a = 0; a < requestInfos.size(); a++) {
             RequestInfo info = requestInfos.get(a);
             minOffset = Math.min(info.offset, minOffset);
             if (isPreloadVideoOperation) {
-                requestedPreloadedBytesRanges.delete(info.offset);
+                requestedPreloadedBytesRanges.remove(info.offset);
             } else {
                 removePart(notRequestedBytesRanges, info.offset, info.offset + currentDownloadChunkSize);
             }
@@ -1659,7 +1748,7 @@ public class FileLoadOperation {
         for (int a = 0; a < delayedRequestInfos.size(); a++) {
             RequestInfo info = delayedRequestInfos.get(a);
             if (isPreloadVideoOperation) {
-                requestedPreloadedBytesRanges.delete(info.offset);
+                requestedPreloadedBytesRanges.remove(info.offset);
             } else {
                 removePart(notRequestedBytesRanges, info.offset, info.offset + currentDownloadChunkSize);
             }
@@ -1713,7 +1802,7 @@ public class FileLoadOperation {
         }
 
         for (int a = 0; a < count; a++) {
-            int downloadOffset;
+            long downloadOffset;
             if (isPreloadVideoOperation) {
                 if (moovFound != 0 && preloadNotRequestedBytesCount <= 0) {
                     return;
@@ -1723,7 +1812,7 @@ public class FileLoadOperation {
                     boolean found = false;
                     int tries = preloadMaxBytes / currentDownloadChunkSize + 2;
                     while (tries != 0) {
-                        if (requestedPreloadedBytesRanges.get(downloadOffset, 0) == 0) {
+                        if (!requestedPreloadedBytesRanges.containsKey(downloadOffset)) {
                             found = true;
                             break;
                         }
@@ -1743,7 +1832,7 @@ public class FileLoadOperation {
                     downloadOffset = nextPreloadDownloadOffset;
                 }
                 if (requestedPreloadedBytesRanges == null) {
-                    requestedPreloadedBytesRanges = new SparseIntArray();
+                    requestedPreloadedBytesRanges = new HashMap<>();
                 }
                 requestedPreloadedBytesRanges.put(downloadOffset, 1);
                 if (BuildVars.DEBUG_VERSION) {
@@ -1752,27 +1841,27 @@ public class FileLoadOperation {
                 preloadNotRequestedBytesCount -= currentDownloadChunkSize;
             } else {
                 if (notRequestedBytesRanges != null) {
-                    int sreamOffset = streamPriorityStartOffset != 0 ? streamPriorityStartOffset : streamStartOffset;
+                    long streamOffset = streamPriorityStartOffset != 0 ? streamPriorityStartOffset : streamStartOffset;
                     int size = notRequestedBytesRanges.size();
-                    int minStart = Integer.MAX_VALUE;
-                    int minStreamStart = Integer.MAX_VALUE;
+                    long minStart = Long.MAX_VALUE;
+                    long minStreamStart = Long.MAX_VALUE;
                     for (int b = 0; b < size; b++) {
                         Range range = notRequestedBytesRanges.get(b);
-                        if (sreamOffset != 0) {
-                            if (range.start <= sreamOffset && range.end > sreamOffset) {
-                                minStreamStart = sreamOffset;
-                                minStart = Integer.MAX_VALUE;
+                        if (streamOffset != 0) {
+                            if (range.start <= streamOffset && range.end > streamOffset) {
+                                minStreamStart = streamOffset;
+                                minStart = Long.MAX_VALUE;
                                 break;
                             }
-                            if (sreamOffset < range.start && range.start < minStreamStart) {
+                            if (streamOffset < range.start && range.start < minStreamStart) {
                                 minStreamStart = range.start;
                             }
                         }
                         minStart = Math.min(minStart, range.start);
                     }
-                    if (minStreamStart != Integer.MAX_VALUE) {
+                    if (minStreamStart != Long.MAX_VALUE) {
                         downloadOffset = minStreamStart;
-                    } else if (minStart != Integer.MAX_VALUE) {
+                    } else if (minStart != Long.MAX_VALUE) {
                         downloadOffset = minStart;
                     } else {
                         break;
@@ -1803,7 +1892,7 @@ public class FileLoadOperation {
                 if (webLocation != null) {
                     TLRPC.TL_upload_getWebFile req = new TLRPC.TL_upload_getWebFile();
                     req.location = webLocation;
-                    req.offset = downloadOffset;
+                    req.offset = (int) downloadOffset;
                     req.limit = currentDownloadChunkSize;
                     request = req;
                 } else {
@@ -1825,7 +1914,10 @@ public class FileLoadOperation {
                 if (range != null) {
                     requestInfo.response = new TLRPC.TL_upload_file();
                     try {
-                        NativeByteBuffer buffer = new NativeByteBuffer(range.length);
+                        if (BuildVars.DEBUG_VERSION && range.length > Integer.MAX_VALUE) {
+                            throw new RuntimeException("cast long to integer");
+                        }
+                        NativeByteBuffer buffer = new NativeByteBuffer((int) range.length);
                         preloadStream.seek(range.fileOffset);
                         preloadStream.getChannel().read(buffer.buffer);
                         buffer.buffer.position(0);
@@ -1840,6 +1932,7 @@ public class FileLoadOperation {
                     }
                 }
             }
+
             if (streamPriorityStartOffset != 0) {
                 if (BuildVars.DEBUG_VERSION) {
                     FileLog.d("frame get offset = " + streamPriorityStartOffset);
@@ -1882,7 +1975,7 @@ public class FileLoadOperation {
                     TLRPC.TL_upload_fileCdnRedirect res = (TLRPC.TL_upload_fileCdnRedirect) response;
                     if (!res.file_hashes.isEmpty()) {
                         if (cdnHashes == null) {
-                            cdnHashes = new SparseArray<>();
+                            cdnHashes = new HashMap<>();
                         }
                         for (int a1 = 0; a1 < res.file_hashes.size(); a1++) {
                             TLRPC.TL_fileHash hash = res.file_hashes.get(a1);
@@ -1921,7 +2014,7 @@ public class FileLoadOperation {
                                 TLRPC.Vector vector = (TLRPC.Vector) response1;
                                 if (!vector.objects.isEmpty()) {
                                     if (cdnHashes == null) {
-                                        cdnHashes = new SparseArray<>();
+                                        cdnHashes = new HashMap<>();
                                     }
                                     for (int a1 = 0; a1 < vector.objects.size(); a1++) {
                                         TLRPC.TL_fileHash hash = (TLRPC.TL_fileHash) vector.objects.get(a1);

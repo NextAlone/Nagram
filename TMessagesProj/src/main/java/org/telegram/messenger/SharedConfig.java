@@ -19,6 +19,7 @@ import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.SparseArray;
+import android.webkit.WebView;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.pm.ShortcutManagerCompat;
@@ -84,6 +85,10 @@ public class SharedConfig {
     })
     public @interface PasscodeType {}
 
+    public final static int SAVE_TO_GALLERY_FLAG_PEER = 1;
+    public final static int SAVE_TO_GALLERY_FLAG_GROUP = 2;
+    public final static int SAVE_TO_GALLERY_FLAG_CHANNELS = 4;
+
     public static String pushString = "";
     public static String pushStringStatus = "";
     public static long pushStringGetTimeStart;
@@ -135,7 +140,7 @@ public class SharedConfig {
     private static final Object sync = new Object();
     private static final Object localIdSync = new Object();
 
-    public static boolean saveToGallery;
+    public static int saveToGalleryFlags;
     public static int mapPreviewType = 2;
     public static boolean chatBubbles = Build.VERSION.SDK_INT >= 30;
     public static boolean autoplayGifs = true;
@@ -156,6 +161,7 @@ public class SharedConfig {
     public static boolean noiseSupression;
     public static boolean noStatusBar = true;
     public static boolean forceRtmpStream;
+    public static boolean debugWebView;
     public static boolean sortContactsByName;
     public static boolean sortFilesByName;
     public static boolean shuffleMusic;
@@ -1206,7 +1212,13 @@ public class SharedConfig {
             }
 
             preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
-            saveToGallery = preferences.getBoolean("save_gallery", false);
+            boolean saveToGalleryLegacy = preferences.getBoolean("save_gallery", false);
+            if (saveToGalleryLegacy && BuildVars.NO_SCOPED_STORAGE) {
+                saveToGalleryFlags = SAVE_TO_GALLERY_FLAG_PEER + SAVE_TO_GALLERY_FLAG_CHANNELS + SAVE_TO_GALLERY_FLAG_GROUP;
+                preferences.edit().remove("save_gallery").putInt("save_gallery_flags", saveToGalleryFlags).apply();
+            } else {
+                saveToGalleryFlags = preferences.getInt("save_gallery_flags", 0);
+            }
             autoplayGifs = preferences.getBoolean("autoplay_gif", true);
             autoplayVideo = preferences.getBoolean("autoplay_video", true);
             mapPreviewType = preferences.getInt("mapPreviewType", 2);
@@ -1244,6 +1256,7 @@ public class SharedConfig {
             keepMedia = preferences.getInt("keep_media", 2);
             noStatusBar = NekoConfig.transparentStatusBar.Bool();
             forceRtmpStream = preferences.getBoolean("forceRtmpStream", false);
+            debugWebView = preferences.getBoolean("debugWebView", false);
             lastKeepMediaCheckTime = preferences.getInt("lastKeepMediaCheckTime", 0);
             lastLogsCheckTime = preferences.getInt("lastLogsCheckTime", 0);
             searchMessagesAsListHintShows = preferences.getInt("searchMessagesAsListHintShows", 0);
@@ -1300,6 +1313,13 @@ public class SharedConfig {
 
             configLoaded = true;
 
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && debugWebView) {
+                    WebView.setWebContentsDebuggingEnabled(true);
+                }
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
         }
 
     }
@@ -1494,7 +1514,7 @@ public class SharedConfig {
         editor.commit();
     }
 
-    public static void removeScheduledOrNoSuoundHint() {
+    public static void removeScheduledOrNoSoundHint() {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("scheduledOrNoSoundHintShows", 3);
@@ -1627,6 +1647,17 @@ public class SharedConfig {
         editor.apply();
     }
 
+    public static void toggleDebugWebView() {
+        debugWebView = !debugWebView;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WebView.setWebContentsDebuggingEnabled(debugWebView);
+        }
+        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("debugWebView", debugWebView);
+        editor.apply();
+    }
+
 //    public static void toggleNoStatusBar() {
 //        noStatusBar = !noStatusBar;
 //        noStatusBar |= NekoConfig.transparentStatusBar.Bool();
@@ -1682,12 +1713,14 @@ public class SharedConfig {
         editor.commit();
     }
 
-    public static void toggleSaveToGallery() {
-        saveToGallery = !saveToGallery;
+    public static void toggleSaveToGalleryFlag(int flag) {
+        if ((saveToGalleryFlags & flag) != 0) {
+            saveToGalleryFlags &= ~flag;
+        } else {
+            saveToGalleryFlags |= flag;
+        }
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("save_gallery", saveToGallery);
-        editor.commit();
+        preferences.edit().putInt("save_gallery_flags", saveToGalleryFlags).apply();
         ImageLoader.getInstance().checkMediaPaths();
         ImageLoader.getInstance().getCacheOutQueue().postRunnable(() -> {
             checkSaveToGalleryFiles();
@@ -2209,7 +2242,7 @@ public class SharedConfig {
                 File videoPath = new File(telegramPath, "videos");
                 videoPath.mkdirs();
 
-                if (saveToGallery) {
+                if (saveToGalleryFlags != 0 || !BuildVars.NO_SCOPED_STORAGE) {
                     if (imagePath.isDirectory()) {
                         new File(imagePath, ".nomedia").delete();
                     }
@@ -2309,7 +2342,7 @@ public class SharedConfig {
                 devicePerformanceClass = PERFORMANCE_CLASS_HIGH;
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("device performance info (cpu_count = " + cpuCount + ", freq = " + maxCpuFreq + ", memoryClass = " + memoryClass + ", android version " + androidVersion + ")");
+                FileLog.d("device performance info selected_class = " + devicePerformanceClass + " (cpu_count = " + cpuCount + ", freq = " + maxCpuFreq + ", memoryClass = " + memoryClass + ", android version " + androidVersion + ")");
             }
         }
 
@@ -2338,6 +2371,7 @@ public class SharedConfig {
     public static boolean canBlurChat() {
         return getDevicePerformanceClass() == PERFORMANCE_CLASS_HIGH || NekoConfig.forceBlurInChat.Bool();
     }
+
     public static boolean chatBlurEnabled() {
         return (canBlurChat() && chatBlur) || NekoConfig.forceBlurInChat.Bool();
     }

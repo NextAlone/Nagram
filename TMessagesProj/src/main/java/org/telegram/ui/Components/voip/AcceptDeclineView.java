@@ -500,13 +500,16 @@ public class AcceptDeclineView extends View {
         this.screenWasWakeup = screenWasWakeup;
     }
 
-    private abstract class AcceptDeclineAccessibilityNodeProvider extends AccessibilityNodeProvider {
+    public static abstract class AcceptDeclineAccessibilityNodeProvider extends AccessibilityNodeProvider {
 
         private final View hostView;
         private final int virtualViewsCount;
         private final Rect rect = new Rect();
         private final AccessibilityManager accessibilityManager;
-        private AcceptDeclineAccessibilityNodeProvider(View hostView, int virtualViewsCount) {
+
+        private int currentFocusedVirtualViewId = View.NO_ID;
+
+        protected AcceptDeclineAccessibilityNodeProvider(View hostView, int virtualViewsCount) {
             this.hostView = hostView;
             this.virtualViewsCount = virtualViewsCount;
             this.accessibilityManager = ContextCompat.getSystemService(hostView.getContext(), AccessibilityManager.class);

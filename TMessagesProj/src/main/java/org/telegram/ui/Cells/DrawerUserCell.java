@@ -11,32 +11,34 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.RectF;
-import android.text.TextUtils;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.ImageLocation;
+import org.telegram.messenger.Emoji;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.EmojiTextView;
 import org.telegram.ui.Components.GroupCreateCheckBox;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.Premium.PremiumGradient;
 
-public class DrawerUserCell extends FrameLayout {
+public class DrawerUserCell extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
-    private TextView textView;
+    private SimpleTextView textView;
     private BackupImageView imageView;
     private AvatarDrawable avatarDrawable;
     private GroupCreateCheckBox checkBox;
@@ -54,16 +56,13 @@ public class DrawerUserCell extends FrameLayout {
         imageView.setRoundRadius(AndroidUtilities.dp(18));
         addView(imageView, LayoutHelper.createFrame(36, 36, Gravity.LEFT | Gravity.TOP, 14, 6, 0, 0));
 
-        textView = new EmojiTextView(context);
+        textView = new SimpleTextView(context);
         textView.setTextColor(Theme.getColor(Theme.key_chats_menuItemText));
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+        textView.setTextSize(15);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        textView.setLines(1);
         textView.setMaxLines(1);
-        textView.setSingleLine(true);
         textView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-        textView.setEllipsize(TextUtils.TruncateAt.END);
-        addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 72, 0, 60, 0));
+        addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.CENTER_VERTICAL, 72, 0, 60, 0));
 
         checkBox = new GroupCreateCheckBox(context);
         checkBox.setChecked(true, false);
@@ -84,6 +83,30 @@ public class DrawerUserCell extends FrameLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         textView.setTextColor(Theme.getColor(Theme.key_chats_menuItemText));
+        for (int i = 0; i < UserConfig.MAX_ACCOUNT_COUNT; i++){
+            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.currentUserPremiumStatusChanged);
+        }
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        for (int i = 0; i < UserConfig.MAX_ACCOUNT_COUNT; i++){
+            NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.currentUserPremiumStatusChanged);
+        }
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
+    }
+
+    @Override
+    public void didReceivedNotification(int id, int account, Object... args) {
+        if (id == NotificationCenter.currentUserPremiumStatusChanged) {
+            if (account == accountNumber) {
+                setAccount(accountNumber);
+            }
+        } else if (id == NotificationCenter.emojiLoaded) {
+            textView.invalidate();
+        }
     }
 
     public void setAccount(int account) {
@@ -93,7 +116,17 @@ public class DrawerUserCell extends FrameLayout {
             return;
         }
         avatarDrawable.setInfo(user);
-        textView.setText(UserObject.getUserName(user));
+        CharSequence text = ContactsController.formatName(user.first_name, user.last_name);
+        try {
+            text = Emoji.replaceEmoji(text, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20), false);
+        } catch (Exception ignore) {}
+        textView.setText(text);
+        if (MessagesController.getInstance(account).isPremiumUser(user)) {
+            textView.setDrawablePadding(AndroidUtilities.dp(6));
+            textView.setRightDrawable(PremiumGradient.getInstance().premiumStarDrawableMini);
+        } else {
+            textView.setRightDrawable(null);
+        }
         imageView.getImageReceiver().setCurrentAccount(account);
         imageView.setForUserOrChat(user, avatarDrawable);
         checkBox.setVisibility(account == UserConfig.selectedAccount ? VISIBLE : INVISIBLE);

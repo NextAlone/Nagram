@@ -23,6 +23,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Editable;
@@ -30,6 +31,7 @@ import android.text.InputFilter;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
@@ -51,6 +53,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.jetbrains.annotations.NotNull;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
@@ -89,12 +94,13 @@ import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.EditTextEmoji;
-import org.telegram.ui.Components.EmptyTextProgressView;
+import org.telegram.ui.Components.FlickerLoadingView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.RecyclerViewItemRangeSelector;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
+import org.telegram.ui.Components.StickerEmptyView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -158,7 +164,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     private RecyclerListView listView;
     private ListAdapter listAdapter;
     private GridLayoutManager layoutManager;
-    private EmptyTextProgressView emptyView;
+    private StickerEmptyView emptyView;
+    private FlickerLoadingView flickerView;
     private ActionBarMenuItem searchItem;
     private ActionBarMenuSubItem showAsListItem;
     private int itemSize = 100;
@@ -566,10 +573,16 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                             ConnectionsManager.getInstance(currentAccount).cancelRequest(imageReqId, true);
                             imageReqId = 0;
                         }
-                        emptyView.setText(LocaleController.getString("NoRecentSearches", R.string.NoRecentSearches));
+                        emptyView.title.setText(LocaleController.getString("NoRecentSearches", R.string.NoRecentSearches));
+                        emptyView.showProgress(false);
                         updateSearchInterface();
+                    } else {
+                        AndroidUtilities.cancelRunOnUIThread(updateSearch);
+                        AndroidUtilities.runOnUIThread(updateSearch, 1200);
                     }
                 }
+
+                Runnable updateSearch = () -> processSearch(searchItem.getSearchField());
 
                 @Override
                 public void onSearchPressed(EditText editText) {
@@ -913,18 +926,36 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             listView.addOnItemTouchListener(itemRangeSelector);
         }
 
-        emptyView = new EmptyTextProgressView(context);
-        emptyView.setTextColor(0xff93999d);
-        emptyView.setProgressBarColor(0xff527da3);
+        flickerView = new FlickerLoadingView(context, getResourceProvider()) {
+            @Override
+            public int getViewType() {
+                return PHOTOS_TYPE;
+            }
+
+            @Override
+            public int getColumnsCount() {
+                return 3;
+            }
+        };
+        flickerView.setAlpha(0);
+        flickerView.setVisibility(View.GONE);
+
+        emptyView = new StickerEmptyView(context, flickerView, StickerEmptyView.STICKER_TYPE_SEARCH, getResourceProvider());
+        emptyView.setAnimateLayoutChange(true);
+        emptyView.title.setTypeface(Typeface.DEFAULT);
+        emptyView.title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        emptyView.title.setTextColor(getThemedColor(Theme.key_windowBackgroundWhiteGrayText));
+        emptyView.addView(flickerView, 0);
         if (selectedAlbum != null) {
-            emptyView.setShowAtCenter(false);
-            emptyView.setText(LocaleController.getString("NoPhotos", R.string.NoPhotos));
+//            emptyView.setShowAtCenter(false);
+            emptyView.title.setText(LocaleController.getString("NoPhotos", R.string.NoPhotos));
         } else {
-            emptyView.setShowAtTop(true);
-            emptyView.setPadding(0, AndroidUtilities.dp(200), 0, 0);
-            emptyView.setText(LocaleController.getString("NoRecentSearches", R.string.NoRecentSearches));
+//            emptyView.setShowAtTop(true);
+//            emptyView.setPadding(0, AndroidUtilities.dp(200), 0, 0);
+            emptyView.title.setText(LocaleController.getString("NoRecentSearches", R.string.NoRecentSearches));
         }
-        sizeNotifierFrameLayout.addView(emptyView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 0, 0, selectPhotoType != PhotoAlbumPickerActivity.SELECT_TYPE_ALL ? 0 : 48));
+        emptyView.showProgress(false, false);
+        sizeNotifierFrameLayout.addView(emptyView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 0, 126, 0, 0));
 
         listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -1084,7 +1115,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                             sendPopupWindow.dismiss();
                         }
                     });
-                    sendPopupLayout.setShownFromBotton(false);
+                    sendPopupLayout.setShownFromBottom(false);
 
                     itemCells = new ActionBarMenuSubItem[2];
                     for (int a = 0; a < 3; a++) {
@@ -1202,6 +1233,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         allowIndices = (selectedAlbum != null || type == 0 || type == 1) && allowOrder;
 
         listView.setEmptyView(emptyView);
+        listView.setAnimateEmptyView(true, 0);
         updatePhotosButton(0);
 
         return fragmentView;
@@ -1264,10 +1296,10 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         if (commentTextView.isPopupShowing()) {
             fragmentView.setTranslationY(y);
             listView.setTranslationY(0);
-            emptyView.setTranslationY(0);
+//            emptyView.setTranslationY(0);
         } else {
             listView.setTranslationY(y);
-            emptyView.setTranslationY(y);
+//            emptyView.setTranslationY(y);
         }
     }
 
@@ -1317,6 +1349,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }
+        emptyView.showProgress(false);
         saveRecentSearch();
     }
 
@@ -1389,23 +1422,26 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         }
     }
 
+    private void addToRecentSearches(String query) {
+        for (int a = 0, N = recentSearches.size(); a < N; a++) {
+            String str = recentSearches.get(a);
+            if (str.equalsIgnoreCase(query)) {
+                recentSearches.remove(a);
+                break;
+            }
+        }
+        recentSearches.add(0, query);
+        while (recentSearches.size() > 20) {
+            recentSearches.remove(recentSearches.size() - 1);
+        }
+        saveRecentSearch();
+    }
+
     private void processSearch(EditText editText) {
         if (editText.getText().length() == 0) {
             return;
         }
         String text = editText.getText().toString();
-        for (int a = 0, N = recentSearches.size(); a < N; a++) {
-            String str = recentSearches.get(a);
-            if (str.equalsIgnoreCase(text)) {
-                recentSearches.remove(a);
-                break;
-            }
-        }
-        recentSearches.add(0, text);
-        while (recentSearches.size() > 20) {
-            recentSearches.remove(recentSearches.size() - 1);
-        }
-        saveRecentSearch();
         searchResult.clear();
         searchResultKeys.clear();
         imageSearchEndReached = true;
@@ -1413,9 +1449,9 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         lastSearchString = text;
         if (lastSearchString.length() == 0) {
             lastSearchString = null;
-            emptyView.setText(LocaleController.getString("NoRecentSearches", R.string.NoRecentSearches));
+            emptyView.title.setText(LocaleController.getString("NoRecentSearches", R.string.NoRecentSearches));
         } else {
-            emptyView.setText(LocaleController.getString("NoResult", R.string.NoResult));
+            emptyView.title.setText(LocaleController.formatString("NoResultFoundFor", R.string.NoResultFoundFor, lastSearchString));
         }
         updateSearchInterface();
     }
@@ -1631,10 +1667,10 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }
-        if (searching && searchResult.isEmpty()) {
-            emptyView.showProgress();
+        if (searching || recentSearches.size() > 0 && (lastSearchString == null || TextUtils.isEmpty(lastSearchString))) {
+            emptyView.showProgress(true);
         } else {
-            emptyView.showTextView();
+            emptyView.showProgress(false);
         }
     }
 
@@ -1699,6 +1735,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
 
         final int token = ++lastSearchToken;
         imageReqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+            addToRecentSearches(query);
             if (token != lastSearchToken) {
                 return;
             }
@@ -1792,10 +1829,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             } else if (imageSearchEndReached) {
                 listAdapter.notifyItemRemoved(searchResult.size() - 1);
             }
-            if (searching && searchResult.isEmpty()) {
-                emptyView.showProgress();
-            } else {
-                emptyView.showTextView();
+            if (searchResult.size() <= 0) {
+                emptyView.showProgress(false);
             }
         }));
         ConnectionsManager.getInstance(currentAccount).bindRequestToGuid(imageReqId, classGuid);

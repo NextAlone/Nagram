@@ -39,13 +39,9 @@
 #define NETWORK_TYPE_ROAMING 2
 
 class TLObject;
-
 class TL_error;
-
 class Request;
-
 class TL_message;
-
 class TL_config;
 class NativeByteBuffer;
 class Handshake;

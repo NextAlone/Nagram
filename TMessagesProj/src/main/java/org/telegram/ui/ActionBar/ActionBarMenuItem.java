@@ -29,6 +29,7 @@ import android.transition.TransitionManager;
 import android.transition.TransitionSet;
 import android.transition.TransitionValues;
 import android.transition.Visibility;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.ActionMode;
 import android.view.Gravity;
@@ -59,6 +60,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.XiaomiUtilities;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Adapters.FiltersView;
 import org.telegram.ui.Components.BackupImageView;
@@ -379,7 +381,7 @@ public class ActionBarMenuItem extends FrameLayout {
         if (popupLayout == null) {
             return;
         }
-        popupLayout.setShownFromBotton(value);
+        popupLayout.setShownFromBottom(value);
     }
 
     public void addSubItem(View view, int width, int height) {
@@ -791,7 +793,7 @@ public class ActionBarMenuItem extends FrameLayout {
                         }
                     }
                 }
-                clearSearchFilters();
+//                clearSearchFilters();
             }
             if (listener != null) {
                 listener.onSearchCollapse();
@@ -1333,6 +1335,8 @@ public class ActionBarMenuItem extends FrameLayout {
 
             searchField.setImeOptions(EditorInfo.IME_FLAG_NO_FULLSCREEN | EditorInfo.IME_ACTION_SEARCH);
             searchField.setTextIsSelectable(false);
+            searchField.setHighlightColor(getThemedColor(Theme.key_chat_inTextSelectionHighlight));
+            searchField.setHandlesColor(getThemedColor(Theme.key_chat_TextSelectionCursor));
 
             searchFilterLayout = new LinearLayout(getContext());
             searchFilterLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -1720,11 +1724,17 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     public void showSubItem(int id) {
+        showSubItem(id, false);
+    }
+
+    public void showSubItem(int id, boolean animated) {
         if (popupLayout == null) {
             return;
         }
         View view = popupLayout.findViewWithTag(id);
         if (view != null && view.getVisibility() != VISIBLE) {
+            view.setAlpha(0);
+            view.animate().alpha(1f).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(150).start();
             view.setVisibility(VISIBLE);
             measurePopup = true;
         }
@@ -1774,6 +1784,13 @@ public class ActionBarMenuItem extends FrameLayout {
                 }
             }
         }
+        if (searchField != null) {
+            searchField.setCursorColor(getThemedColor(Theme.key_actionBarDefaultSearch));
+            searchField.setHintTextColor(getThemedColor(Theme.key_actionBarDefaultSearchPlaceholder));
+            searchField.setTextColor(getThemedColor(Theme.key_actionBarDefaultSearch));
+            searchField.setHighlightColor(getThemedColor(Theme.key_chat_inTextSelectionHighlight));
+            searchField.setHandlesColor(getThemedColor(Theme.key_chat_TextSelectionCursor));
+        }
     }
 
     public void collapseSearchFilters() {
@@ -1781,7 +1798,7 @@ public class ActionBarMenuItem extends FrameLayout {
         onFiltersChanged();
     }
 
-    public void setTransitionOffset(int offset) {
+    public void setTransitionOffset(float offset) {
         this.transitionOffset = offset;
         setTranslationX(0);
     }
@@ -1942,13 +1959,13 @@ public class ActionBarMenuItem extends FrameLayout {
 
     public ActionBarPopupWindow.GapView addColoredGap() {
         createPopupLayout();
-        ActionBarPopupWindow.GapView gap = new ActionBarPopupWindow.GapView(getContext(), Theme.key_graySection);
+        ActionBarPopupWindow.GapView gap = new ActionBarPopupWindow.GapView(getContext(), resourcesProvider, Theme.key_actionBarDefaultSubmenuSeparator);
         gap.setTag(R.id.fit_width_tag, 1);
         popupLayout.addView(gap, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 8));
         return gap;
     }
 
-    public static ActionBarMenuSubItem addItem(ActionBarPopupWindow.ActionBarPopupWindowLayout windowLayout, int icon, String text, boolean needCheck, Theme.ResourcesProvider resourcesProvider) {
+    public static ActionBarMenuSubItem addItem(ActionBarPopupWindow.ActionBarPopupWindowLayout windowLayout, int icon, CharSequence text, boolean needCheck, Theme.ResourcesProvider resourcesProvider) {
         ActionBarMenuSubItem cell = new ActionBarMenuSubItem(windowLayout.getContext(), needCheck, false, false, resourcesProvider);
         cell.setTextAndIcon(text, icon);
         cell.setMinimumWidth(AndroidUtilities.dp(196));

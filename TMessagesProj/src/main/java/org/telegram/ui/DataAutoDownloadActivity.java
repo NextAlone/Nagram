@@ -582,8 +582,8 @@ public class DataAutoDownloadActivity extends BaseFragment {
                     break;
                 }
             }
-            int size1 = (video1 ? o1.sizes[index1] : 0) + (doc1 ? o1.sizes[index2] : 0);
-            int size2 = (video2 ? o2.sizes[index1] : 0) + (doc2 ? o2.sizes[index2] : 0);
+            long size1 = (video1 ? o1.sizes[index1] : 0) + (doc1 ? o1.sizes[index2] : 0);
+            long size2 = (video2 ? o2.sizes[index1] : 0) + (doc2 ? o2.sizes[index2] : 0);
             if (size1 > size2) {
                 return 1;
             } else if (size1 < size2) {
@@ -697,7 +697,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                     } else {
                         preset = DownloadController.getInstance(currentAccount).getCurrentRoamingPreset();
                     }
-                    int maxSize = preset.sizes[DownloadController.typeToIndex(type)];
+                    long maxSize = preset.sizes[DownloadController.typeToIndex(type)];
 
                     int count = 0;
                     StringBuilder builder = new StringBuilder();
