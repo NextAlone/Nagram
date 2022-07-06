@@ -8124,7 +8124,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     } else if (position == nekoRow) {
                         textCell.setTextAndIcon(LocaleController.getString("NekoSettings", R.string.NekoSettings), R.drawable.menu_settings, true);
                     } else if (position == filtersRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Filters", R.string.Filters), R.drawable.menu_folders, true);
+                        textCell.setTextAndIcon(LocaleController.getString("Filters", R.string.Filters), R.drawable.msg_folders, true);
                     } else if (position == questionRow) {
                         textCell.setTextAndIcon(LocaleController.getString("NekoXUpdatesChannel", R.string.NekoXUpdatesChannel), R.drawable.menu_channel_ny, true);
                     } else if (position == faqRow) {

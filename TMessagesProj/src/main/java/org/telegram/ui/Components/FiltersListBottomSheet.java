@@ -405,7 +405,7 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
                 } else if ((filter.flags & MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS) == MessagesController.DIALOG_FILTER_FLAG_BOTS) {
                     icon = R.drawable.menu_bots;
                 } else {
-                    icon = R.drawable.menu_folders;
+                    icon = R.drawable.msg_folders;
                 }
                 cell.setTextAndIcon(filter.name, icon);
             } else {

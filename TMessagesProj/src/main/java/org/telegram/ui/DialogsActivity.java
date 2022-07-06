@@ -4283,19 +4283,20 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     MessagesController.DialogFilter dialogFilter = filters.get(a);
                     if (filters.get(a).isDefault()) {
                         if (filterTabsView.showAllChatsTab)
-                            filterTabsView.addTab(a, 0, LocaleController.getString("FilterAllChats", R.string.FilterAllChats), true,  filters.get(a).locked);
+                            filterTabsView.addTab(a, 0, LocaleController.getString("FilterAllChats", R.string.FilterAllChats), true,  filters.get(a).locked, null);
                     } else {
                         switch (NekoConfig.tabsTitleType.Int()) {
                             case NekoXConfig.TITLE_TYPE_TEXT:
-                                filterTabsView.addTab(a, filters.get(a).localId, filters.get(a).name, dialogFilter.name, false, false);
+                                filterTabsView.addTab(a, filters.get(a).localId, filters.get(a).name, false, false, dialogFilter.name);
                                 break;
                             case NekoXConfig.TITLE_TYPE_ICON:
-                                filterTabsView.addTab(a, filters.get(a).localId, filters.get(a).name, dialogFilter.emoticon != null ? dialogFilter.emoticon : "📂", false, false);
+                                filterTabsView.addTab(a, filters.get(a).localId, filters.get(a).name, false, false, dialogFilter.emoticon != null ? dialogFilter.emoticon : "📂");
                                 break;
                             case NekoXConfig.TITLE_TYPE_MIX:
-                                filterTabsView.addTab(a, filters.get(a).localId, filters.get(a).name, dialogFilter.emoticon != null ? dialogFilter.emoticon : "\uD83D\uDCC1 " + dialogFilter.name, false, false);
+                                filterTabsView.addTab(a, filters.get(a).localId, filters.get(a).name, false, false, dialogFilter.emoticon != null ? dialogFilter.emoticon : "\uD83D\uDCC1 " + dialogFilter.name);
                                 break;
-                        }                    }
+                        }
+                    }
                 }
                 boolean updateCurrentTab = NekoConfig.hideAllTab.Bool();
                 if (stableId >= 0) {
@@ -5710,7 +5711,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         getUndoView().showWithAction(0, UndoView.ACTION_UNPIN_DIALOGS, 1, 1600, null, null);
                     }
                     if (filter != null) {
-                        FilterCreateActivity.saveFilterToServer(filter, filter.flags, filter.name, filter.alwaysShow, filter.neverShow, filter.pinnedDialogs, false, false, true, true, false, DialogsActivity.this, null);
+                        FilterCreateActivity.saveFilterToServer(filter, filter.flags, null, filter.name, filter.alwaysShow, filter.neverShow, filter.pinnedDialogs, false, false, true, true, false, DialogsActivity.this, null);
                     }
                     getMessagesController().reorderPinnedDialogs(folderId, null, 0);
                     updateCounters(true);

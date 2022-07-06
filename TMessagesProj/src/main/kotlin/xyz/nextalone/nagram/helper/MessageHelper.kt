@@ -1,23 +1,16 @@
 package xyz.nextalone.nagram.helper
 
-import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.text.TextUtils
 import androidx.core.content.FileProvider
 import org.telegram.messenger.*
-import org.telegram.tgnet.TLRPC.*
-import java.io.File
-import java.io.FileOutputStream
-
 import xyz.nextalone.nagram.NaConfig
+import java.io.File
 
 
 object MessageHelper {
-
     fun getPathToMessage(messageObject: MessageObject): String? {
         var path = messageObject.messageOwner.attachPath
         if (!TextUtils.isEmpty(path)) {
@@ -27,15 +20,13 @@ object MessageHelper {
             }
         }
         if (TextUtils.isEmpty(path)) {
-            path = FileLoader.getPathToMessage(messageObject.messageOwner).toString()
-            val temp = File(path)
+            val temp = FileLoader.getInstance(messageObject.currentAccount).getPathToMessage(messageObject.messageOwner)
             if (!temp.exists()) {
                 path = null
             }
         }
         if (TextUtils.isEmpty(path)) {
-            path = FileLoader.getPathToAttach(messageObject.document, true).toString()
-            val temp = File(path)
+            val temp = FileLoader.getInstance(messageObject.currentAccount).getPathToAttach(messageObject.document, true)
             if (!temp.exists()) {
                 return null
             }

@@ -79,18 +79,21 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
     private boolean needDivider;
 
     public UserCell(Context context, int padding, int checkbox, boolean admin) {
-        this(context, padding, checkbox, admin, false, null);
+        this(context, padding, checkbox, admin, false, null, false);
     }
 
     public UserCell(Context context, int padding, int checkbox, boolean admin, Theme.ResourcesProvider resourcesProvider) {
-        this(context, padding, checkbox, admin, false, resourcesProvider);
+        this(context, padding, checkbox, admin, false, resourcesProvider, false);
     }
 
     public UserCell(Context context, int padding, int checkbox, boolean admin, boolean needAddButton) {
         this(context, padding, checkbox, admin, needAddButton, null, false);
     }
 
-    public UserCell(Context context, int padding, int checkbox, boolean admin, boolean needAddButton, Theme.ResourcesProvider resourcesProvider, , boolean needMutualIcon) {
+    public UserCell(Context context, int padding, int checkbox, boolean admin, boolean needAddButton, Theme.ResourcesProvider resourcesProvider) {
+        this(context, padding, checkbox, admin, needAddButton, resourcesProvider, false);
+    }
+    public UserCell(Context context, int padding, int checkbox, boolean admin, boolean needAddButton, Theme.ResourcesProvider resourcesProvider, boolean needMutualIcon) {
         super(context);
         this.resourcesProvider = resourcesProvider;
 
@@ -240,7 +243,9 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             if (name != null && nameTextView != null) {
                 name = Emoji.replaceEmoji(name, nameTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(18), false);
             }
-        } catch (Exception ignore) {}
+        } catch (
+                Exception ignore) {
+        }
         currentName = name;
         currentObject = object;
         currentDrawable = resId;
@@ -483,7 +488,9 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             if (name != null) {
                 try {
                     name = Emoji.replaceEmoji(lastName, nameTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(18), false);
-                } catch (Exception ignore) {}
+                } catch (
+                        Exception ignore) {
+                }
             }
             nameTextView.setText(name);
         }
