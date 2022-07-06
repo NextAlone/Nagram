@@ -8029,7 +8029,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             aboutLinkCell.setTextAndValue(LocaleController.getString("UserBioDetail", R.string.UserBioDetail), LocaleController.getString("UserBio", R.string.UserBio), false);
                             currentBio = null;
                         }
-//                        aboutLinkCell.setMoreButtonDisabled(true);
+//                      aboutLinkCell.setMoreButtonDisabled(true);
                     }
                     if (position == bioRow) {
                         aboutLinkCell.setOnClickListener(e -> {

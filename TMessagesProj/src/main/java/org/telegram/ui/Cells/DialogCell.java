@@ -2076,9 +2076,10 @@ public class DialogCell extends BaseCell {
             if (isDialogCell) {
                 TLRPC.Dialog dialog = MessagesController.getInstance(currentAccount).dialogs_dict.get(currentDialogId);
                 if (dialog != null) {
-                    clearingDialog = MessagesController.getInstance(currentAccount).isClearingDialog(dialog.id);
-                    message = MessagesController.getInstance(currentAccount).dialogMessage.get(dialog.id);
-                    if (message != null && NekoConfig.ignoreBlocked.Bool() && MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(message.getSenderId()) >= 0) {
+                    if (mask == 0) {
+                        clearingDialog = MessagesController.getInstance(currentAccount).isClearingDialog(dialog.id);
+                        message = MessagesController.getInstance(currentAccount).dialogMessage.get(dialog.id);
+                        if (message != null && NekoConfig.ignoreBlocked.Bool() && MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(message.getSenderId()) >= 0) {
                             if (MessagesController.getInstance(currentAccount).dialogMessageFromUnblocked.get(dialog.id) != null)
                                 message = MessagesController.getInstance(currentAccount).dialogMessageFromUnblocked.get(dialog.id);
                             else {
@@ -2108,7 +2109,7 @@ public class DialogCell extends BaseCell {
                         }
                         if (message != null) {
                             lastSendState = message.messageOwner.send_state;
-
+}
                     }
                 } else {
                     unreadCount = 0;
@@ -2170,7 +2171,7 @@ public class DialogCell extends BaseCell {
                         continueUpdate = true;
                     }
                 }
-                if (!continueUpdate && (mask & MessagesController.UPDATE_MASK_READ_DIALOG_MESSAGE) != 0) {
+                if (!continueUpdate) {
                     if (message != null && lastUnreadState != message.isUnread()) {
                         lastUnreadState = message.isUnread();
                         continueUpdate = true;
