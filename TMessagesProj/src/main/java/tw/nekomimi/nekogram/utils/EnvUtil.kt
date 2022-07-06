@@ -41,7 +41,7 @@ object EnvUtil {
             }
 
             if (Build.VERSION.SDK_INT < 30) {
-                add(Environment.getExternalStoragePublicDirectory("NekoX"))
+                add(Environment.getExternalStoragePublicDirectory("Nagram"))
             }
 
         }.map { it.path }.toTypedArray()
