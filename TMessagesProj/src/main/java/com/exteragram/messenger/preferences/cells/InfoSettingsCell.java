@@ -56,7 +56,7 @@ public class InfoSettingsCell extends FrameLayout {
         valueTextView.setMaxLines(0);
         valueTextView.setSingleLine(false);
         valueTextView.setPadding(0, 0, 0, 0);
-        addView(valueTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER | Gravity.TOP, 70, 178, 70, 20));
+        addView(valueTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER | Gravity.TOP, 60, 178, 60, 20));
 
         imageView = new ImageView(context);
         imageView.setScaleType(ImageView.ScaleType.CENTER);

@@ -180,7 +180,7 @@ public class MainPreferencesEntry extends BaseFragment {
                     } else if (position == channelRow) {
                         textCell.setTextAndValueAndIcon(LocaleController.getString("Channel", R.string.Channel), "@exteragram", R.drawable.msg_channel, true);
                     } else if (position == groupRow) {
-                        textCell.setTextAndValueAndIcon(LocaleController.getString("Chats", R.string.Chats), "@exterachat", R.drawable.msg_markread, true);
+                        textCell.setTextAndValueAndIcon(LocaleController.getString("Chats", R.string.Chats), "@exterachat", R.drawable.msg_markunread, true);
                     } else if (position == crowdinRow) {
                         textCell.setTextAndValueAndIcon(LocaleController.getString("Crowdin", R.string.Crowdin), "Crowdin", R.drawable.msg_translate, true);
                     } else if (position == sourceCodeRow) {

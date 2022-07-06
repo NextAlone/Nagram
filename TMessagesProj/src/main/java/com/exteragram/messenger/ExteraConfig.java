@@ -88,7 +88,7 @@ public class ExteraConfig {
 
             useSystemFonts = preferences.getBoolean("useSystemFonts", true);
             disableVibration = preferences.getBoolean("disableVibration", false);
-            blurForAllThemes = preferences.getBoolean("blurForAllThemes", true);
+            blurForAllThemes = preferences.getBoolean("blurForAllThemes", false);
             centerTitle = preferences.getBoolean("centerTitle", false);
             newSwitchStyle = preferences.getBoolean("newSwitchStyle", false);
             transparentNavBar = preferences.getBoolean("transparentNavBar", false);
@@ -99,7 +99,7 @@ public class ExteraConfig {
             chatsOnTitle = preferences.getBoolean("chatsOnTitle", false);
             forceTabletMode = preferences.getBoolean("forceTabletMode", false);
             archiveOnPull = preferences.getBoolean("archiveOnPull", false);
-            disableUnarchiveSwipe = preferences.getBoolean("disableUnarchiveSwipe", false);
+            disableUnarchiveSwipe = preferences.getBoolean("disableUnarchiveSwipe", true);
             forcePacmanAnimation = preferences.getBoolean("forcePacmanAnimation", false);
             hidePhoneNumber = preferences.getBoolean("hidePhoneNumber", false);
             showID = preferences.getBoolean("showID", true);

@@ -6834,6 +6834,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
             if (getParentActivity() == null || !mentionContainer.getAdapter().isLongClickEnabled()) {
                 return false;
             }
+            position--;
             int len = mentionContainer.getAdapter().getResultLength();
             int start = mentionContainer.getAdapter().getResultStartPosition();
             Object object = mentionContainer.getAdapter().getItem(position);
@@ -11290,9 +11291,8 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                     }
                     name = chat.title;
                 }
-                name = ExteraUtils.zalgoFilter(name);
                 replyIconImageView.setImageResource(R.drawable.msg_panel_reply);
-                replyNameTextView.setText(name);
+                replyNameTextView.setText(ExteraUtils.zalgoFilter(name));
                 replyIconImageView.setContentDescription(LocaleController.getString("AccDescrReplying", R.string.AccDescrReplying));
                 replyCloseImageView.setContentDescription(LocaleController.getString("AccDescrCancelReply", R.string.AccDescrCancelReply));
 
@@ -13411,32 +13411,34 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
             return;
         }
         addToSelectedMessages(message, outside);
-
-        // For selecting messages between the first and the last.
-        ArrayList<Integer> ids = new ArrayList<>();
-        for (int a = 1; a >= 0; a--) {
-            for (int b = 0; b < selectedMessagesIds[a].size(); b++) {
-                ids.add(selectedMessagesIds[a].keyAt(b));
-            }
-        }
-        Integer msgId = message.getId();
-        if (ids.contains(msgId)) {
-            if (!selectedMessagesIds[0].withTouch.contains(msgId)) {
-                ArrayList<Integer> sortIds = selectedMessagesIds[0].withTouch;
-                Collections.sort(sortIds);
-                // If there's a new extreme value,
-                // we should mark as 'withTouch' all selected messages.
-                if (sortIds.get(0) <= msgId || sortIds.get(sortIds.size() - 1) >= msgId) {
-                    selectedMessagesIds[0].withTouch.clear();
-                    for (Integer id : ids) {
-                        selectedMessagesIds[0].withTouch.add(id);
-                    }
-                } else {
-                    selectedMessagesIds[0].withTouch.add(msgId);
+        
+        if (reportType < 0) {
+            // For selecting messages between the first and the last.
+            ArrayList<Integer> ids = new ArrayList<>();
+            for (int a = 1; a >= 0; a--) {
+                for (int b = 0; b < selectedMessagesIds[a].size(); b++) {
+                    ids.add(selectedMessagesIds[a].keyAt(b));
                 }
             }
-        } else {
-            selectedMessagesIds[0].withTouch.remove(msgId);
+            Integer msgId = message.getId();
+            if (ids.contains(msgId)) {
+                if (!selectedMessagesIds[0].withTouch.contains(msgId)) {
+                    ArrayList<Integer> sortIds = selectedMessagesIds[0].withTouch;
+                    Collections.sort(sortIds);
+                    // If there's a new extreme value,
+                    // we should mark as 'withTouch' all selected messages.
+                    if (sortIds.get(0) <= msgId || sortIds.get(sortIds.size() - 1) >= msgId) {
+                        selectedMessagesIds[0].withTouch.clear();
+                        for (Integer id : ids) {
+                            selectedMessagesIds[0].withTouch.add(id);
+                        }
+                    } else {
+                        selectedMessagesIds[0].withTouch.add(msgId);
+                    }
+                }
+            } else {
+                selectedMessagesIds[0].withTouch.remove(msgId);
+            }
         }
         updateActionModeTitle();
         updateVisibleRows();

@@ -3254,7 +3254,7 @@ public class MessageObject {
                 } else {
                     messageText = messageOwner.message;
                 }
-                messageText = ExteraUtils.zalgoFilter(messageText);
+                messageText = ExteraUtils.zalgoFilter(messageOwner.message);
             }
         }
         if (messageText == null) {

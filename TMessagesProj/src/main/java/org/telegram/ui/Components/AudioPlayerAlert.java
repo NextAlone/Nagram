@@ -2053,6 +2053,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             imageView.setImageBitmap(audioInfo.getCover());
             currentFile = null;
             currentAudioFinishedLoading = true;
+            noCover = false;
         } else {
             TLRPC.Document document = messageObject.getDocument();
             currentFile = FileLoader.getAttachFileName(document);

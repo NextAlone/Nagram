@@ -80,15 +80,17 @@ public class ExteraUtils {
     }
     
     public static String zalgoFilter(CharSequence text) {
-        if (text != null) {
-            return zalgoFilter(text.toString());
-        } else {
+        if (text == null) {
             return "";
+        } else {
+            return zalgoFilter(text.toString());
         }
     }
 
     public static String zalgoFilter(String text) {
-        if (ExteraConfig.zalgoFilter) {
+        if (text == null) {
+            return "";
+        } else if (ExteraConfig.zalgoFilter && text.matches(".*\\p{Mn}{4}.*")) {
 		    return text.replaceAll("(?i)([aeiouy]̈)|[̀-ͯ҉]", "").replaceAll("[\\p{Mn}]", "");
 		} else {
 		    return text;
