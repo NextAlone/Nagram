@@ -579,6 +579,9 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
 //                if (!UserConfig.hasPremiumOnAccounts()) {
 //                    freeAccounts -= (UserConfig.MAX_ACCOUNT_COUNT - UserConfig.MAX_ACCOUNT_DEFAULT_COUNT);
 //                }
+                if (freeAccount > 0) {
+                    presentFragment(new LoginActivity(freeAccount));
+                }
                 drawerLayoutContainer.closeDrawer(false);
             } else if (view instanceof DrawerActionCheckCell) {
                 int id = drawerLayoutAdapter.getId(position);
