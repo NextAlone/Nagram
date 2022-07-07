@@ -32,5 +32,5 @@
     <string name="DateOfForwardedMsg">Show date of forward message</string>
     <string name="ShowMessageID">Show message ID</string>
     <string name="ShowRPCError">Toast all RPC errors</string>
-    <string name="showServicesTime">Show timestamp in service messages</string>
+    <string name="ShowServicesTime">Show timestamp in service messages</string>
 </resources>
