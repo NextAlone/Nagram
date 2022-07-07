@@ -120,7 +120,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final AbstractConfigCell header3 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Folder")));
     private final AbstractConfigCell showTabsOnForwardRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showTabsOnForward));
     private final AbstractConfigCell hideAllTabRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideAllTab, LocaleController.getString("HideAllTabAbout")));
-    private final AbstractConfigCell pressTitleToOpenAllChatsRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.pressTitleToOpenAllChats));
+//    private final AbstractConfigCell pressTitleToOpenAllChatsRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.pressTitleToOpenAllChats));
     private final AbstractConfigCell tabsTitleTypeRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.tabsTitleType,
             new String[]{
                     LocaleController.getString("TabTitleTypeText", R.string.TabTitleTypeText),
@@ -234,8 +234,6 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         // Cells: Set OnSettingChanged Callbacks
         cellGroup.callBackSettingsChanged = (key, newValue) -> {
             if (key.equals(NekoConfig.hideAllTab.getKey())) {
-                getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
-            } else if (key.equals(NekoConfig.pressTitleToOpenAllChats.getKey())) {
                 getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
             } else if (key.equals(NekoConfig.tabsTitleType.getKey())) {
                 getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);

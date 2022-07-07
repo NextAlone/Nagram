@@ -76,6 +76,7 @@ public class FilterTabsView extends FrameLayout {
 
     public interface FilterTabsViewDelegate {
         void onPageSelected(Tab tab, boolean forward);
+
         void onPageScrolled(float progress);
 
         void onSamePageSelected();
@@ -232,8 +233,8 @@ public class FilterTabsView extends FrameLayout {
         @SuppressLint("DrawAllocation")
         @Override
         protected void onDraw(Canvas canvas) {
-//            boolean reorderEnabled = (!currentTab.isDefault || UserConfig.getInstance(UserConfig.selectedAccount).isPremium());
-            boolean reorderEnabled = (!currentTab.isDefault);
+            boolean reorderEnabled = (!currentTab.isDefault || UserConfig.getInstance(UserConfig.selectedAccount).isPremium());
+//            boolean reorderEnabled = (!currentTab.isDefault);
             // TODO: NekoX try to unlock
             boolean showRemove = !currentTab.isDefault && reorderEnabled;
             if (reorderEnabled && editingAnimationProgress != 0) {
@@ -1080,7 +1081,7 @@ public class FilterTabsView extends FrameLayout {
             delegate.onPageSelected(tab, scrollingForward);
         }
         scrollToChild(position);
-        if (NekoConfig.hideAllTab.Bool() && showAllChatsTab && !currentTabIsDefault())
+        if (NekoConfig.hideAllTab.Bool() && !currentTabIsDefault())
             toggleAllTabs(false);
     }
 
@@ -1089,6 +1090,13 @@ public class FilterTabsView extends FrameLayout {
             return;
         }
         scrollToTab(tabs.get(0), 0);
+    }
+
+    public void selectDefaultTab() {
+        Tab defaultTab = findDefaultTab();
+        if (defaultTab == null) return;
+        if (defaultTab.id == getCurrentTabId()) return;
+        scrollToTab(defaultTab, defaultTab.id);
     }
 
     public void setAnimationIdicatorProgress(float value) {
@@ -1341,7 +1349,7 @@ public class FilterTabsView extends FrameLayout {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
-    private Tab findDefaultTab() {
+    public Tab findDefaultTab() {
         for (int i = 0; i < tabs.size(); i++) {
             if (tabs.get(i).isDefault) {
                 return tabs.get(i);
@@ -1488,8 +1496,7 @@ public class FilterTabsView extends FrameLayout {
                 invalidated = true;
                 requestLayout();
                 allTabsWidth = 0;
-                if (showAllChatsTab)
-                    findDefaultTab().setTitle(LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
+                findDefaultTab().setTitle(LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
                 for (int b = 0; b < N; b++) {
                     allTabsWidth += tabs.get(b).getWidth(true) + AndroidUtilities.dp(32);
                 }
@@ -1520,8 +1527,7 @@ public class FilterTabsView extends FrameLayout {
             listView.setItemAnimator(itemAnimator);
             adapter.notifyDataSetChanged();
             allTabsWidth = 0;
-            if (showAllChatsTab)
-                findDefaultTab().setTitle(LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
+            findDefaultTab().setTitle(LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
             for (int b = 0, N = tabs.size(); b < N; b++) {
                 allTabsWidth += tabs.get(b).getWidth(true) + AndroidUtilities.dp(32);
             }
@@ -1642,7 +1648,7 @@ public class FilterTabsView extends FrameLayout {
 
         @Override
         public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-            if (!isEditing || ((showAllChatsTab && viewHolder.getAdapterPosition() == 0) && !NekoConfig.pressTitleToOpenAllChats.Bool())) {
+            if (!isEditing || (viewHolder.getAdapterPosition() == 0 && tabs.get(0).isDefault && !UserConfig.getInstance(UserConfig.selectedAccount).isPremium())) {
                 return makeMovementFlags(0, 0);
             }
             return makeMovementFlags(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, 0);
@@ -1650,7 +1656,7 @@ public class FilterTabsView extends FrameLayout {
 
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {
-            if (showAllChatsTab && (source.getAdapterPosition() == 0 || target.getAdapterPosition() == 0)) {
+            if ((source.getAdapterPosition() == 0 || target.getAdapterPosition() == 0) && !UserConfig.getInstance(UserConfig.selectedAccount).isPremium()) {
                 return false;
             }
             adapter.swapElements(source.getAdapterPosition(), target.getAdapterPosition());
@@ -1746,7 +1752,7 @@ public class FilterTabsView extends FrameLayout {
             MessagesController.DialogFilter dialogFilter = filters.get(a);
             if (filters.get(a).isDefault()) {
                 if (showAllChatsTab)
-                    addTab(a, 0, LocaleController.getString("FilterAllChats", R.string.FilterAllChats), true,  filters.get(a).locked);
+                    addTab(a, 0, LocaleController.getString("FilterAllChats", R.string.FilterAllChats), true,  false);
             } else {
                 switch (NekoConfig.tabsTitleType.Int()) {
                     case NekoXConfig.TITLE_TYPE_TEXT:
