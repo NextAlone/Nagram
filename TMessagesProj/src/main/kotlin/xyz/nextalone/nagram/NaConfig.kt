@@ -141,6 +141,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val showServicesTime =
+        addConfig(
+            "showServicesTime",
+            ConfigItem.configTypeBool,
+            true
+        )
     val scrollableChatPreview =
         addConfig(
             "ScrollableChatPreview",
