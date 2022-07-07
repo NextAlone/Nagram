@@ -409,6 +409,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     private int topPadding;
     private int lastMeasuredTopPadding;
+
     private int folderId;
 
     private final static int pin = 100;
@@ -1560,7 +1561,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                     }
                                 }
                                 ((DialogCell) view).startOutAnimation();
-
                                 parentPage.archivePullViewState = ARCHIVE_ITEM_STATE_SHOWED;
 
                                 if (NekoConfig.openArchiveOnPull.Bool()) {
@@ -2275,9 +2275,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
             actionBar.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefault));
             actionBar.setOnLongClickListener(v -> {
-                if (NekoConfig.hideAllTab.Bool() && NekoConfig.pressTitleToOpenAllChats.Bool() && filterTabsView != null && filterTabsView.getCurrentTabId() != Integer.MAX_VALUE) {
+                if (NekoConfig.hideAllTab.Bool() && filterTabsView != null && filterTabsView.getDefaultTabId() != filterTabsView.getCurrentTabId()) {
                     filterTabsView.toggleAllTabs(true);
-                    filterTabsView.selectFirstTab();
+                    filterTabsView.selectDefaultTab();
                 }
                 return false;
             });
@@ -2293,9 +2293,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             } else {
                 actionBar.setTitle(NaConfig.INSTANCE.getCustomTitle().String());
                 actionBar.setOnLongClickListener(v -> {
-                    if (NekoConfig.hideAllTab.Bool() && NekoConfig.pressTitleToOpenAllChats.Bool() && filterTabsView != null && filterTabsView.getCurrentTabId() != Integer.MAX_VALUE) {
+                    if (NekoConfig.hideAllTab.Bool() && filterTabsView != null && filterTabsView.getCurrentTabId() != Integer.MAX_VALUE) {
                         filterTabsView.toggleAllTabs(true);
-                        filterTabsView.selectFirstTab();
+                        filterTabsView.selectDefaultTab();
                     }
                     return false;
                 });
@@ -2594,7 +2594,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             }
                         });
                     }
-
                     scrollView.addView(linearLayout, LayoutHelper.createScroll(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP));
                     scrimPopupWindow = new ActionBarPopupWindow(popupLayout, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT) {
                         @Override
@@ -4582,16 +4581,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             return false;
         } else if (filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE && !tabsAnimationInProgress && !filterTabsView.isAnimatingIndicator()
                 && !startedTracking && !filterTabsView.isFirstTabSelected()) {
-            if(!NekoConfig.hideAllTab.Bool()){
-                filterTabsView.selectFirstTab();
-                return false;
-            }
-            if (!NekoConfig.pressTitleToOpenAllChats.Bool() && filterTabsView != null) {
-                // not hideAllTab OR hideAllTab but not pressTitleToOpenAllChats
-                filterTabsView.toggleAllTabs(true);
-                filterTabsView.selectFirstTab();
-                return false;
-            }
+            // NekoX: remove scroll tabs when press back
         } else if (commentView != null && commentView.isPopupShowing()) {
             commentView.hidePopup(true);
             return false;
