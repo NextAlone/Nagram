@@ -478,8 +478,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private VideoPlayerControlFrameLayout videoPlayerControlFrameLayout;
     private Animator videoPlayerControlAnimator;
     private boolean videoPlayerControlVisible = true;
-    private int[] videoPlayerCurrentTime = new int[2];
-    private int[] videoPlayerTotalTime = new int[2];
+    private int[] videoPlayerCurrentTime = new int[3];
+    private int[] videoPlayerTotalTime = new int[3];
     private SimpleTextView videoPlayerTime;
     private ImageView exitFullscreenButton;
     private VideoPlayerSeekBar videoPlayerSeekbar;
@@ -847,6 +847,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         }
                     }
                     updateVideoPlayerTime();
+                    videoPlayerSeekbarView.requestLayout();
                 }
 //                    if (!videoPlayer.isLooping() && videoPlayer.getDuration() != C.TIME_UNSET) {
 //                        if (videoPlayer.getCurrentPosition() > videoPlayer.getDuration() - FirstFrameView.fadeDuration) {
@@ -2544,6 +2545,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             int extraWidth;
+            int size;
             ignoreLayout = true;
             LayoutParams layoutParams = (LayoutParams) videoPlayerTime.getLayoutParams();
             if (parentWidth > parentHeight) {
@@ -2571,8 +2573,15 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 duration = 0;
             }
             duration /= 1000;
-            int size = (int) Math.ceil(videoPlayerTime.getPaint().measureText(String.format(Locale.ROOT, "%02d:%02d / %02d:%02d", duration / 60, duration % 60, duration / 60, duration % 60)));
-            videoPlayerSeekbar.setSize(getMeasuredWidth() - AndroidUtilities.dp(2 + 14) - size - extraWidth, getMeasuredHeight());
+            if (duration >= 3600) {
+                int hours = (int) Math.floor(duration / 3600);
+                int minutes = (int) Math.floor(duration % 3600 / 60);
+                int seconds = (int) duration % 60;
+                size = (int) Math.ceil(videoPlayerTime.getPaint().measureText(String.format(Locale.ROOT, "%02d:%02d:%02d / %02d:%02d:%02d", hours, minutes, seconds, hours, minutes, seconds)));
+            } else {
+                size = (int) Math.ceil(videoPlayerTime.getPaint().measureText(String.format(Locale.ROOT, "%02d:%02d / %02d:%02d", duration / 60, duration % 60, duration / 60, duration % 60)));
+            }
+            videoPlayerSeekbar.setSize(getMeasuredWidth() - AndroidUtilities.dp(16) - size - extraWidth, getMeasuredHeight());
         }
 
         @Override
@@ -7332,10 +7341,21 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             }
             current /= 1000;
             total /= 1000;
-            videoPlayerCurrentTime[0] = (int) (current / 60);
-            videoPlayerCurrentTime[1] = (int) (current % 60);
-            videoPlayerTotalTime[0] = (int) (total / 60);
-            videoPlayerTotalTime[1] = (int) (total % 60);
+            if (total >= 3600) {
+                videoPlayerCurrentTime[0] = (int) Math.floor(current % 3600 / 60);
+                videoPlayerCurrentTime[1] = (int) (current % 60);
+                videoPlayerCurrentTime[2] = (int) Math.floor(current / 3600);
+                videoPlayerTotalTime[0] =  (int) Math.floor(total % 3600 / 60);
+                videoPlayerTotalTime[1] = (int) (total % 60);
+                videoPlayerTotalTime[2] = (int) Math.floor(total / 3600);
+                videoPlayerTime.setText(String.format(Locale.ROOT, "%02d:%02d:%02d / %02d:%02d:%02d", videoPlayerCurrentTime[2], videoPlayerCurrentTime[0], videoPlayerCurrentTime[1], videoPlayerTotalTime[2], videoPlayerTotalTime[0], videoPlayerTotalTime[1]));
+                return;
+            } else {
+                videoPlayerCurrentTime[0] = (int) (current / 60);
+                videoPlayerCurrentTime[1] = (int) (current % 60);
+                videoPlayerTotalTime[0] = (int) (total / 60);
+                videoPlayerTotalTime[1] = (int) (total % 60);
+            }
         }
         videoPlayerTime.setText(String.format(Locale.ROOT, "%02d:%02d / %02d:%02d", videoPlayerCurrentTime[0], videoPlayerCurrentTime[1], videoPlayerTotalTime[0], videoPlayerTotalTime[1]));
     }
