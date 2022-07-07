@@ -143,7 +143,7 @@ object NaConfig {
         )
     val showServicesTime =
         addConfig(
-            "showServicesTime",
+            "ShowServicesTime",
             ConfigItem.configTypeBool,
             true
         )

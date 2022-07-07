@@ -266,7 +266,6 @@
     <string name="DisableInstantCamera">Disable instant camera</string>
     <string name="showSeconds">Show timestamp in seconds</string>
     <string name="AppUpdateNekoX">Update Nagram</string>
-    <string name="showServicesTime">Show timestamp in service messages</string>
     <string name="NekoXUpdateTranslationHint">Press to translate the change log</string>
     <string name="Name">Name</string>
     <string name="channelAlias">Channel Alias</string>

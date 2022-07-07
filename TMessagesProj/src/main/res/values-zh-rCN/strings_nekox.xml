@@ -268,7 +268,6 @@
     <string name="hideSponsoredMessage">隐藏赞助消息</string>
     <string name="DisableInstantCamera">禁用相机即时预览</string>
     <string name="showSeconds">以秒为单位显示时间戳</string>
-    <string name="showServicesTime">显示服务消息时间</string>
     <string name="rememberAllBackMessages">记住所有点击的回复</string>
     <string name="ShareMessages">分享</string>
     <string name="AutoCheckUpdatePreview">预览版(不稳定)</string>

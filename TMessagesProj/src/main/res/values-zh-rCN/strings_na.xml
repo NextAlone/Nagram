@@ -32,4 +32,5 @@
     <string name="DateOfForwardedMsg">显示转发消息日期</string>
     <string name="ShowMessageID">显示消息 ID</string>
     <string name="ShowRPCError">显示 RPC 错误</string>
+    <string name="ShowServicesTime">显示服务消息时间</string>
 </resources>
