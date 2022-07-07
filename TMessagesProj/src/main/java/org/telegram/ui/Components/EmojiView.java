@@ -1765,7 +1765,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     }
                 }
             });
-            stickersGridView.setPadding(0, AndroidUtilities.dp(4 + 36), 0, AndroidUtilities.dp(44));
+            stickersGridView.setPadding(0, AndroidUtilities.dp(4 + 48), 0, AndroidUtilities.dp(44));
             stickersGridView.setClipToPadding(false);
             views.add(stickersContainer);
             stickersSearchGridAdapter = new StickersSearchGridAdapter(context);
@@ -1890,7 +1890,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             canvas.clipRect(0, searchProgressOffset, getMeasuredWidth(), getMeasuredHeight());
                         }
                         paint.setColor(getThemedColor(Theme.key_actionBarDefaultSubmenuBackground));
-                        canvas.drawRect(0, 0, getMeasuredWidth(), AndroidUtilities.dp(36) + stickersTab.getExpandedOffset(), paint);
+                        canvas.drawRect(0, 0, getMeasuredWidth(), AndroidUtilities.dp(48) + stickersTab.getExpandedOffset(), paint);
                         super.dispatchDraw(canvas);
                         stickersTab.drawOverlays(canvas);
                         canvas.restore();
@@ -1902,10 +1902,10 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                         updateStickerTabsPosition();
                     }
                 };
-                stickersTabContainer.addView(stickersTab, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 36, Gravity.LEFT | Gravity.TOP));
+                stickersTabContainer.addView(stickersTab, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.TOP));
                 parentView.addView(stickersTabContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             } else {
-                stickersContainer.addView(stickersTab, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 36, Gravity.LEFT | Gravity.TOP));
+                stickersContainer.addView(stickersTab, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.TOP));
             }
             updateStickerTabs();
             stickersTab.setDelegate(page -> {
