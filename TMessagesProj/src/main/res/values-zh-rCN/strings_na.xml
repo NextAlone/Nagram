@@ -33,4 +33,5 @@
     <string name="ShowMessageID">显示消息 ID</string>
     <string name="ShowRPCError">显示 RPC 错误</string>
     <string name="ShowServicesTime">显示服务消息时间</string>
+    <string name="ShowPremiumStickersAnimation">显示 Premium 贴纸动画</string>
 </resources>

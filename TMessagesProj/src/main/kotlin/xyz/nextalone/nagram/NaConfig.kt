@@ -183,6 +183,11 @@ object NaConfig {
         ConfigItem.configTypeBool,
         false
     )
+    val showPremiumStickersAnimation = addConfig(
+        "ShowPremiumStickersAnimation",
+        ConfigItem.configTypeBool,
+        true
+    )
 
     fun addConfig(
         k: String,
