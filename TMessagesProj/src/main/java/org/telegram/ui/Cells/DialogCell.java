@@ -1026,7 +1026,7 @@ public class DialogCell extends BaseCell {
                                     }
                                 }
                             }
-                            if (chat != null && chat.id > 0 && fromChat == null && (!ChatObject.isChannel(chat) || ChatObject.isMegagroup(chat))) {
+                            if (chat != null && chat.id > 0 && (!ChatObject.isChannel(chat) || ChatObject.isMegagroup(chat))) {
                                 if (message.isOutOwner()) {
                                     messageNameString = LocaleController.getString("FromYou", R.string.FromYou);
                                 // NekoX: fix show forwarded name as sender
@@ -1042,8 +1042,10 @@ public class DialogCell extends BaseCell {
                                     } else {
                                         messageNameString = UserObject.getFirstName(fromUser).replace("\n", "");
                                     }
+                                } else if (fromChat != null){
+                                    messageNameString = fromChat.title.replace("\n", "");
                                 } else {
-                                    messageNameString = "DELETED";
+                                    messageNameString = LocaleController.getString("HiddenName", R.string.HiddenName);
                                 }
                                 checkMessage = false;
                                 SpannableStringBuilder stringBuilder;
