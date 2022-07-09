@@ -188,6 +188,11 @@ object NaConfig {
         ConfigItem.configTypeBool,
         true
     )
+    val showPremiumStarInChat = addConfig(
+        "ShowPremiumStarInChat",
+        ConfigItem.configTypeBool,
+        true
+    )
 
     fun addConfig(
         k: String,

@@ -13,6 +13,8 @@ import android.text.TextUtils;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.tgnet.TLRPC;
 
+import xyz.nextalone.nagram.NaConfig;
+
 public class UserObject {
 
     public static boolean isDeleted(TLRPC.User user) {
@@ -36,11 +38,19 @@ public class UserObject {
     }
 
     public static String getUserName(TLRPC.User user) {
+        return getUserName(user, false);
+    }
+
+    public static String getUserName(TLRPC.User user, boolean showPremium) {
         if (user == null || isDeleted(user)) {
             return LocaleController.getString("HiddenName", R.string.HiddenName);
         }
         String name = ContactsController.formatName(user.first_name, user.last_name);
-        return name.length() != 0 || TextUtils.isEmpty(user.phone) ? name : PhoneFormat.getInstance().format("+" + user.phone);
+        String final_name = name;
+        if (showPremium && user.premium && NaConfig.INSTANCE.getShowPremiumStarInChat().Bool()){
+            final_name = "⭐️ " + name;
+        }
+        return name.length() != 0 || TextUtils.isEmpty(user.phone) ? final_name : PhoneFormat.getInstance().format("+" + user.phone);
     }
 
     public static String getFirstName(TLRPC.User user) {
