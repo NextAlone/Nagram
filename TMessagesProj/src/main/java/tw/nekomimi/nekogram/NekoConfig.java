@@ -189,6 +189,9 @@ public class NekoConfig {
     public static ConfigItem useOSMDroidMap = addConfig("useOSMDroidMap", configTypeBool, !BuildVars.isGServicesCompiled);
     public static ConfigItem mapDriftingFixForGoogleMaps = addConfig("mapDriftingFixForGoogleMaps", configTypeBool, true);
 
+    // priv branch changes
+    public static ConfigItem localPremium = addConfig("localPremium", configTypeBool, false);
+
     static {
         loadConfig(false);
         checkMigrate(false);

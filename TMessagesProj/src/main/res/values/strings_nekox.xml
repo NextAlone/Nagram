@@ -277,4 +277,5 @@
     <string name="ConfirmSettings">Confirmation</string>
     <string name="InteractionSettings">Interaction</string>
     <string name="nekoxPremiumGiftRemoved">Premium Gift is removed in NekoX.</string>
+    <string name="localPremium">Local Premium</string>
 </resources>

@@ -23,6 +23,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class UserConfig extends BaseController {
 
     public static int selectedAccount;
@@ -273,7 +275,7 @@ public class UserConfig extends BaseController {
     private void checkPremiumSelf(TLRPC.User oldUser, TLRPC.User newUser) {
         if (oldUser == null || (newUser != null && oldUser.premium != newUser.premium)) {
             AndroidUtilities.runOnUIThread(() -> {
-                getMessagesController().updatePremium(newUser.premium);
+                getMessagesController().updatePremium(newUser.premium || NekoConfig.localPremium.Bool());
                 NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.currentUserPremiumStatusChanged);
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.premiumStatusChangedGlobal);
 
@@ -520,7 +522,7 @@ public class UserConfig extends BaseController {
         if (currentUser == null) {
             return false;
         }
-        return currentUser.premium;
+        return currentUser.premium || NekoConfig.localPremium.Bool();
     }
 
     public Long getEmojiStatus() {
