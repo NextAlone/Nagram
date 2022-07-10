@@ -1327,7 +1327,7 @@ public class FilterTabsView extends FrameLayout {
             Tab firstTab = findDefaultTab();
             int tabWith = 0;
             int trueTabsWidth = allTabsWidth ;
-            if (showAllChatsTab) {
+            if (showAllChatsTab && firstTab != null) {
                 tabWith = firstTab.getWidth(false);
                 trueTabsWidth = allTabsWidth - tabWith;
                 firstTab.setTitle(allTabsWidth > width ? LocaleController.getString("FilterAllChatsShort", R.string.FilterAllChatsShort) : LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
