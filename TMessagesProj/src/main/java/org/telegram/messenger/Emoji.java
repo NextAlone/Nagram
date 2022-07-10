@@ -546,6 +546,9 @@ public class Emoji {
     public static CharSequence replaceEmoji(CharSequence cs, Paint.FontMetricsInt fontMetrics, int size, boolean createNew, int[] emojiOnly, boolean allowAnimated, AtomicReference<WeakReference<View>> viewRef) {
         allowAnimated = false;
         if (NekoConfig.useSystemEmoji.Bool() || cs.length() == 0) {
+            if (cs instanceof Spannable) {
+                return cs;
+            }
             return Spannable.Factory.getInstance().newSpannable(cs.toString());
         }
         Spannable s;
