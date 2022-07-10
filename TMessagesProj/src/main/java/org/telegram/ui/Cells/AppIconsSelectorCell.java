@@ -81,6 +81,7 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
                 holderView.bind(icon);
                 holderView.iconView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(ICONS_ROUND_RADIUS), Color.TRANSPARENT, Theme.getColor(Theme.key_listSelector), Color.BLACK));
                 holderView.iconView.setForeground(icon.foreground);
+                holderView.iconView.setIsNekoXIcon(icon.isNekoX());
             }
 
             @Override
@@ -289,6 +290,7 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
     }
 
     public static class AdaptiveIconImageView extends ImageView {
+        private boolean isNekoXIcon = false;
         private Drawable foreground;
         private Path path = new Path();
         private int outerPadding = AndroidUtilities.dp(5);
@@ -301,6 +303,10 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
         public void setForeground(int res) {
             foreground = ContextCompat.getDrawable(getContext(), res);
             invalidate();
+        }
+
+        public void setIsNekoXIcon(boolean value) {
+            this.isNekoXIcon = value;
         }
 
         @Override
@@ -325,11 +331,12 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
         public void draw(Canvas canvas) {
             canvas.save();
             canvas.clipPath(path);
-            canvas.scale(1f + backgroundOuterPadding / (float) getWidth(), 1f + backgroundOuterPadding / (float) getHeight(), getWidth() / 2f, getHeight() / 2f);
+            if (!this.isNekoXIcon)
+                canvas.scale(1f + backgroundOuterPadding / (float) getWidth(), 1f + backgroundOuterPadding / (float) getHeight(), getWidth() / 2f, getHeight() / 2f);
             super.draw(canvas);
             canvas.restore();
 
-            if (foreground != null) {
+            if (foreground != null && !this.isNekoXIcon) {
                 foreground.setBounds(-outerPadding, -outerPadding, getWidth() + outerPadding, getHeight() + outerPadding);
                 foreground.draw(canvas);
             }
