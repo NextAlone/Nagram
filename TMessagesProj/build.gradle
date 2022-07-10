@@ -3,8 +3,8 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
-def verName = "8.8.5-preview02"
-def verCode = 645
+def verName = "8.8.5-preview05"
+def verCode = 660
 
 if (System.getenv("DEBUG_BUILD") == "true") {
     verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1").trim()
