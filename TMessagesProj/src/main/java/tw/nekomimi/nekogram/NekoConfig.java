@@ -187,6 +187,9 @@ public class NekoConfig {
     public static ConfigItem disableGroupVoipAudioProcessing = addConfig("disableGroupVoipAudioProcessing", configTypeBool, false);
     public static ConfigItem enhancedFileLoader = addConfig("enhancedFileLoader", configTypeBool, false);
 
+    // priv branch changes
+    public static ConfigItem localPremium = addConfig("localPremium", configTypeBool, false);
+
     static {
         loadConfig(false);
         checkMigrate(false);
