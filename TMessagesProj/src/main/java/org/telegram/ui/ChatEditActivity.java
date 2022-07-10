@@ -918,11 +918,6 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
 //            infoContainer.addView(logCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 //        }
 
-        if (!ChatObject.hasAdminRights(currentChat)) {
-            infoContainer.setVisibility(View.GONE);
-            settingsTopSectionCell.setVisibility(View.GONE);
-        }
-
         if (stickersCell == null) {
             infoSectionCell = new ShadowSectionCell(context);
             linearLayout1.addView(infoSectionCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));

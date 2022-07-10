@@ -54,13 +54,11 @@ object EnvUtil {
             // https://github.com/NekoX-Dev/NekoX/issues/284
             NekoConfig.cachePath.setConfigString(availableDirectories[2]);
         }
-
         var telegramPath = File(NekoConfig.cachePath.String())
-
         if (telegramPath.isDirectory || telegramPath.mkdirs()) {
-
             return telegramPath
-
+        } else {
+            NekoConfig.cachePath.setConfigString(availableDirectories[2])
         }
 
         // fallback
