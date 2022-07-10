@@ -19,6 +19,8 @@ import org.telegram.tgnet.TLRPC;
 
 import java.util.Arrays;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class UserConfig extends BaseController {
 
     public static int selectedAccount;
@@ -247,7 +249,7 @@ public class UserConfig extends BaseController {
     private void checkPremium(TLRPC.User oldUser, TLRPC.User newUser) {
         if (oldUser == null || (newUser != null && oldUser.premium != newUser.premium)) {
             AndroidUtilities.runOnUIThread(() -> {
-                getMessagesController().updatePremium(newUser.premium);
+                getMessagesController().updatePremium(newUser.premium || NekoConfig.localPremium.Bool());
                 NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.currentUserPremiumStatusChanged);
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.premiumStatusChangedGlobal);
 
@@ -475,6 +477,6 @@ public class UserConfig extends BaseController {
         if (currentUser == null) {
             return false;
         }
-        return currentUser.premium;
+        return currentUser.premium || NekoConfig.localPremium.Bool();
     }
 }
