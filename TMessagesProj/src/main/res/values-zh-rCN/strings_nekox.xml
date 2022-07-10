@@ -282,4 +282,5 @@
     <string name="StickerSettings">贴纸</string>
     <string name="ConfirmSettings">操作确认</string>
     <string name="InteractionSettings">交互</string>
+    <string name="localPremium">本地大会员</string>
 </resources>

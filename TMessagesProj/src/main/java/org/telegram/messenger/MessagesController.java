@@ -492,7 +492,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public boolean isPremiumUser(TLRPC.User currentUser) {
-        return !premiumLocked && currentUser.premium;
+        return NekoConfig.localPremium.Bool() || (!premiumLocked && currentUser.premium);
     }
 
 
@@ -1123,6 +1123,8 @@ public class MessagesController extends BaseController implements NotificationCe
         premiumInvoiceSlug = mainPreferences.getString("premiumInvoiceSlug", null);
         premiumBotUsername = mainPreferences.getString("premiumBotUsername", null);
         premiumLocked = mainPreferences.getBoolean("premiumLocked", false);
+        if (NekoConfig.localPremium.Bool())
+            premiumLocked = false;
 
         loadPremiumFeaturesPreviewOrder(mainPreferences.getString("premiumFeaturesTypesToPosition", null));
         if (pendingSuggestions != null) {
@@ -1735,6 +1737,8 @@ public class MessagesController extends BaseController implements NotificationCe
                             if (value.value instanceof TLRPC.TL_jsonBool) {
                                 if (premiumLocked != ((TLRPC.TL_jsonBool) value.value).value) {
                                     premiumLocked = ((TLRPC.TL_jsonBool) value.value).value;
+                                    if (NekoConfig.localPremium.Bool())
+                                        premiumLocked = false;
                                     editor.putBoolean("premiumLocked", premiumLocked);
                                     changed = true;
                                 }
