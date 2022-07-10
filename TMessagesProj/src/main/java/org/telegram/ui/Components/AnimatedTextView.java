@@ -708,6 +708,7 @@ public class AnimatedTextView extends View {
         int height = MeasureSpec.getSize(heightMeasureSpec);
         if (lastMaxWidth != width) {
             drawable.setBounds(getPaddingLeft(), getPaddingTop(), width - getPaddingRight(), height - getPaddingBottom());
+            lastMaxWidth = width;
             setText(drawable.getText(), false);
         }
         lastMaxWidth = width;
