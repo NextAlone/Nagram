@@ -14,7 +14,7 @@ configurations {
     }
 }
 
-val isStable = false
+val isStable = true
 var serviceAccountCredentialsFile = File(rootProject.projectDir, "service_account_credentials.json")
 
 if (serviceAccountCredentialsFile.isFile) {
@@ -39,7 +39,7 @@ dependencies {
     implementation("androidx.dynamicanimation:dynamicanimation:1.0.0")
     implementation("androidx.multidex:multidex:2.0.1")
     implementation("androidx.interpolator:interpolator:1.0.0")
-    implementation("androidx.sharetarget:sharetarget:1.1.0")
+    implementation("androidx.sharetarget:sharetarget:1.2.0-rc01")
 
     compileOnly("org.checkerframework:checker-qual:3.22.0")
     compileOnly("org.checkerframework:checker-compat-qual:2.5.5")
@@ -66,7 +66,7 @@ dependencies {
     implementation("io.noties.markwon:core:4.6.2")
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.3")
 
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.0")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
     implementation("androidx.core:core-ktx:1.8.0")
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib-common
