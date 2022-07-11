@@ -11,34 +11,42 @@ import java.io.File
 
 
 object MessageHelper {
-    fun getPathToMessage(messageObject: MessageObject): String? {
+    fun getPathToMessage(messageObject: MessageObject): File? {
         var path = messageObject.messageOwner.attachPath
         if (!TextUtils.isEmpty(path)) {
-            val temp = File(path)
-            if (!temp.exists()) {
+            val file = File(path)
+            if (file.exists()) {
+                return file
+            } else {
                 path = null
             }
         }
         if (TextUtils.isEmpty(path)) {
-            val temp = FileLoader.getInstance(messageObject.currentAccount).getPathToMessage(messageObject.messageOwner)
-            if (!temp.exists()) {
+            val file = FileLoader.getInstance(messageObject.currentAccount).getPathToMessage(messageObject.messageOwner)
+            if (file != null && file.exists()) {
+                return file
+            } else {
                 path = null
             }
         }
         if (TextUtils.isEmpty(path)) {
-            val temp = FileLoader.getInstance(messageObject.currentAccount).getPathToAttach(messageObject.document, true)
-            if (!temp.exists()) {
-                return null
+            val file = FileLoader.getInstance(messageObject.currentAccount).getPathToAttach(messageObject.document, true)
+            return if (file != null && file.exists()) {
+                file
+            } else {
+                null
             }
         }
-        return path
+        return null
     }
 
 
     fun addMessageToClipboard(selectedObject: MessageObject, callback: Runnable) {
-        val path = getPathToMessage(selectedObject)
-        if (!TextUtils.isEmpty(path)) {
-            addFileToClipboard(File(path), callback)
+        val file = getPathToMessage(selectedObject)
+        if (file != null) {
+            if (file.exists()) {
+                addFileToClipboard(file, callback)
+            }
         }
     }
 

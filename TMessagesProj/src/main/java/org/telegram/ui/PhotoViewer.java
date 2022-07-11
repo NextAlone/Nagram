@@ -4585,12 +4585,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     if (currentMessageObject != null) {
                         if (currentMessageObject.messageOwner.media instanceof TLRPC.TL_messageMediaWebPage && currentMessageObject.messageOwner.media.webpage != null && currentMessageObject.messageOwner.media.webpage.document == null) {
                             TLObject fileLocation = getFileLocation(currentIndex, null);
-                            f = FileLoader.getInstance(currentMessageObject.currentAccount).getPathToAttach(fileLocation, true);
+                            f = FileLoader.getInstance(currentAccount).getPathToAttach(fileLocation, true);
                         } else {
-                            f = FileLoader.getInstance(currentMessageObject.currentAccount).getPathToMessage(currentMessageObject.messageOwner);
+                            f = FileLoader.getInstance(currentAccount).getPathToMessage(currentMessageObject.messageOwner);
                         }
                     } else if (currentFileLocationVideo != null) {
-                        f = FileLoader.getInstance(currentMessageObject.currentAccount).getPathToAttach(getFileLocation(currentFileLocationVideo), getFileLocationExt(currentFileLocationVideo), avatarsDialogId != 0 || isEvent);
+                        f = FileLoader.getInstance(currentAccount).getPathToAttach(getFileLocation(currentFileLocationVideo), getFileLocationExt(currentFileLocationVideo), avatarsDialogId != 0 || isEvent);
                     } else if (pageBlocksAdapter != null) {
                         f = pageBlocksAdapter.getFile(currentIndex);
                     }
