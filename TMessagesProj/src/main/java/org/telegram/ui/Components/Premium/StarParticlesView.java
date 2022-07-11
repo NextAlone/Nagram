@@ -491,7 +491,7 @@ public class StarParticlesView extends View {
                 double a = Math.atan2(x - rect.centerX(), y - rect.centerY());
                 vecX = (float) Math.sin(a);
                 vecY = (float) Math.cos(a);
-                if (type == PremiumPreviewFragment.PREMIUM_FEATURE_ADVANCED_CHAT_MANAGEMENT || type == PremiumPreviewFragment.PREMIUM_FEATURE_ADS || type == PremiumPreviewFragment.PREMIUM_FEATURE_ANIMATED_AVATARS) {
+                if (svg) {
                     alpha = (int) (120 * ((50 + Utilities.fastRandom.nextInt(50)) / 100f));
                 } else {
                     alpha = (int) (255 * ((50 + Utilities.fastRandom.nextInt(50)) / 100f));

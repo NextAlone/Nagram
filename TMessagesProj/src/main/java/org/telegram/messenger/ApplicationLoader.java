@@ -33,7 +33,6 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
-import androidx.multidex.MultiDex;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -224,6 +223,7 @@ public class ApplicationLoader extends Application {
 
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("app start time = " + (startTime = SystemClock.elapsedRealtime()));
+            FileLog.d("buildVersion = " + BuildVars.BUILD_VERSION);
         }
         if (applicationContext == null) {
             applicationContext = getApplicationContext();
@@ -273,10 +273,14 @@ public class ApplicationLoader extends Application {
             }
         } else {
             applicationContext.stopService(new Intent(applicationContext, NotificationsService.class));
-
-            PendingIntent pintent = PendingIntent.getService(applicationContext, 0, new Intent(applicationContext, NotificationsService.class), 0);
+            PendingIntent pIntent;
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S) {
+                pIntent = PendingIntent.getService(applicationContext, 0, new Intent(applicationContext, NotificationsService.class), PendingIntent.FLAG_MUTABLE);
+            } else {
+                pIntent = PendingIntent.getService(applicationContext, 0, new Intent(applicationContext, NotificationsService.class), 0);
+            }
             AlarmManager alarm = (AlarmManager)applicationContext.getSystemService(Context.ALARM_SERVICE);
-            alarm.cancel(pintent);
+            alarm.cancel(pIntent);
         }
     }
 
@@ -296,15 +300,6 @@ public class ApplicationLoader extends Application {
         AndroidUtilities.runOnUIThread(() -> {
             if (hasPlayServices = checkPlayServices()) {
                 final String currentPushString = SharedConfig.pushString;
-                if (!TextUtils.isEmpty(currentPushString)) {
-                    if (BuildVars.DEBUG_PRIVATE_VERSION && BuildVars.LOGS_ENABLED) {
-                        FileLog.d("GCM regId = " + currentPushString);
-                    }
-                } else {
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.d("GCM Registration not found.");
-                    }
-                }
                 Utilities.globalQueue.postRunnable(() -> {
                     try {
                         SharedConfig.pushStringGetTimeStart = SystemClock.elapsedRealtime();

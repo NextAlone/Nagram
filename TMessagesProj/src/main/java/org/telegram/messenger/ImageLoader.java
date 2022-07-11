@@ -1739,7 +1739,7 @@ public class ImageLoader {
                 final ArrayList<ImageReceiver> finalImageReceiverArray = new ArrayList<>(imageReceiverArray);
                 final ArrayList<Integer> finalImageReceiverGuidsArray = new ArrayList<>(imageReceiverGuidsArray);
                 AndroidUtilities.runOnUIThread(() -> {
-                    if (image instanceof AnimatedFileDrawable) {
+                    if (image instanceof AnimatedFileDrawable && !((AnimatedFileDrawable) image).isWebmSticker) {
                         boolean imageSet = false;
                         AnimatedFileDrawable fileDrawable = (AnimatedFileDrawable) image;
                         for (int a = 0; a < finalImageReceiverArray.size(); a++) {

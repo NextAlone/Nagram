@@ -9,8 +9,6 @@ import top.qwq2333.nullgram.utils.Log;
 
 import androidx.annotation.NonNull;
 
-import androidx.annotation.NonNull;
-
 public class CrossfadeDrawable extends Drawable {
 
     private final Drawable topDrawable;

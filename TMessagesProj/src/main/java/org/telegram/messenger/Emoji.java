@@ -24,10 +24,19 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.DynamicDrawableSpan;
 import android.text.style.ImageSpan;
+import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Cells.ChatMessageCell;
+
+import java.io.File;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -334,7 +343,6 @@ public class Emoji {
             this.end = end;
             this.code = code;
         }
-
         int start;
         int end;
         CharSequence code;

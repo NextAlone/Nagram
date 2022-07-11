@@ -1517,6 +1517,18 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                     }
                 }
             }
+
+            if (locationDenied && isTypeSend()) {
+//                adapter.setOverScrollHeight(overScrollHeight + top);
+//                // TODO(dkaraush): fix ripple effect on buttons
+                final int count = adapter.getItemCount();
+                for (int i = 1; i < count; ++i) {
+                    holder = listView.findViewHolderForAdapterPosition(i);
+                    if (holder != null) {
+                        holder.itemView.setTranslationY(listView.getPaddingTop() - top);
+                    }
+                }
+            }
         }
     }
 
@@ -1632,6 +1644,11 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             }
             if (mapView != null && mapsInitialized) {
                 myLocationOverlay.enableMyLocation();
+            }
+        } else if (id == NotificationCenter.locationPermissionDenied) {
+            locationDenied = true;
+            if (adapter != null) {
+                adapter.setMyLocationDenied(locationDenied);
             }
         } else if (id == NotificationCenter.locationPermissionDenied) {
             locationDenied = true;

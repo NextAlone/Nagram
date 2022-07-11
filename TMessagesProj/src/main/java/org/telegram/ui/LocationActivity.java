@@ -2532,6 +2532,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             if (adapter != null) {
                 adapter.setMyLocationDenied(locationDenied);
             }
+        } else if (id == NotificationCenter.locationPermissionDenied) {
+            locationDenied = true;
+            if (adapter != null) {
+                adapter.setMyLocationDenied(locationDenied);
+            }
         } else if (id == NotificationCenter.liveLocationsChanged) {
             if (adapter != null) {
                 adapter.updateLiveLocationCell();

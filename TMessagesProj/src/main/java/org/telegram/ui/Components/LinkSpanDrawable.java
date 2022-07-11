@@ -20,7 +20,6 @@ import android.text.SpannableString;
 import android.text.StaticLayout;
 import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
-import top.qwq2333.nullgram.utils.Log;
 import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;

@@ -3793,9 +3793,6 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                             super.drawChild(canvas, reactionsMentiondownButton, SystemClock.uptimeMillis());
                         }
                     }
-                    if (reactionsMentiondownButton != null && reactionsMentiondownButton.getTag() != null) {
-                        super.drawChild(canvas, reactionsMentiondownButton, SystemClock.uptimeMillis());
-                    }
                     if (floatingDateView != null && floatingDateView.getTag() != null) {
                         super.drawChild(canvas, floatingDateView, SystemClock.uptimeMillis());
                     }
@@ -10757,76 +10754,6 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
         if (chatListView == null) {
             return;
         }
-        int count = chatListView.getChildCount();
-        int firstMessagePosition = -1;
-        int lastMessagePosition = -1;
-        for (int a = 0; a < count; a++) {
-            View child = chatListView.getChildAt(a);
-            if (!(child instanceof ChatMessageCell)) {
-                continue;
-            }
-            RecyclerListView.ViewHolder holder = chatListView.findContainingViewHolder(child);
-            if (holder != null) {
-                int p = holder.getAdapterPosition();
-                if (firstMessagePosition == -1) {
-                    firstMessagePosition = p;
-                }
-                lastMessagePosition = p;
-            }
-
-            ChatMessageCell cell = (ChatMessageCell) child;
-            MessageObject object = cell.getMessageObject();
-            if (object == null || object.mediaExists || !object.isSent() || object.loadingCancelled) {
-                continue;
-            }
-            TLRPC.Document document = object.getDocument();
-            if (document == null) {
-                continue;
-            }
-            int canDownload;
-            if (!MessageObject.isStickerDocument(document) && !MessageObject.isAnimatedStickerDocument(document, true) && !MessageObject.isGifDocument(document) && !MessageObject.isRoundVideoDocument(document)
-                && (canDownload = getDownloadController().canDownloadMedia(object.messageOwner)) != 0) {
-                if (canDownload == 2) {
-                    if (currentEncryptedChat == null && !object.shouldEncryptPhotoOrVideo() && object.canStreamVideo()) {
-                        getFileLoader().loadFile(document, object, 0, 10);
-                    }
-                } else {
-                    int cacheType;
-                    if (object.isWallpaper() || object.isTheme()) {
-                        cacheType = 1;
-                    } else if (MessageObject.isVideoDocument(document) && object.shouldEncryptPhotoOrVideo()) {
-                        cacheType = 2;
-                    } else {
-                        cacheType = 0;
-                    }
-                    getFileLoader().loadFile(document, object, 0, cacheType);
-                    cell.updateButtonState(false, true, false);
-                }
-            }
-        }
-        if (firstMessagePosition != -1) {
-            int lastPosition;
-            if (scrollUp) {
-                firstMessagePosition = lastPosition = lastMessagePosition;
-                firstMessagePosition = Math.min(firstMessagePosition + 10, chatAdapter.messagesEndRow);
-                for (int a = lastPosition, N = messages.size(); a < firstMessagePosition; a++) {
-                    int n = a - chatAdapter.messagesStartRow;
-                    if (n < 0 || n >= N) {
-                        continue;
-                    }
-                    checkAutoDownloadMessage(messages.get(n));
-                }
-            } else {
-                lastPosition = Math.max(firstMessagePosition - 20, chatAdapter.messagesStartRow);
-                for (int a = firstMessagePosition - 1, N = messages.size(); a >= lastPosition; a--) {
-                    int n = a - chatAdapter.messagesStartRow;
-                    if (n < 0 || n >= N) {
-                        continue;
-                    }
-                    checkAutoDownloadMessage(messages.get(n));
-                }
-            }
-        }
         showNoSoundHint();
     }
 
@@ -12218,8 +12145,14 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                 messageCell.isBlurred = (view.getY() < clipTop && view.getY() + view.getMeasuredHeight() > clipTop) || (view.getY() + view.getMeasuredHeight() > chatListView.getMeasuredHeight() - blurredViewBottomOffset && view.getY() < chatListView.getMeasuredHeight() - blurredViewBottomOffset);
             }
 
-            if (bottom <= clipTop - chatListViewPaddingVisibleOffset || top > chatListView.getMeasuredHeight()) {
+            if (bottom <= clipTop - chatListViewPaddingVisibleOffset || top > chatListView.getMeasuredHeight() - blurredViewBottomOffset) {
+                if (messageCell != null) {
+                    messageCell.setVisibleOnScreen(false);
+                }
                 continue;
+            }
+            if (messageCell != null) {
+                messageCell.setVisibleOnScreen(true);
             }
 
             int viewTop = top >= 0 ? 0 : -top;
@@ -21524,9 +21457,9 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                             options.add(OPTION_PIN);
                             icons.add(R.drawable.msg_pin);
                         }
-                        if (selectedObject != null && selectedObject.contentType == 0 && (selectedObject.messageText != null && selectedObject.messageText.length() > 0 && !selectedObject.isAnimatedEmoji() && !selectedObject.isDice())) {
+                        if (selectedObject != null && selectedObject.contentType == 0 && (messageTextToTranslate != null && messageTextToTranslate.length() > 0 && !selectedObject.isAnimatedEmoji() && !selectedObject.isDice())) {
                             items.add(LocaleController.getString("TranslateMessage", R.string.TranslateMessage));
-                            options.add(29);
+                            options.add(OPTION_TRANSLATE);
                             icons.add(R.drawable.msg_translate);
                         }
                         if (message.canEditMessage(currentChat)) {
@@ -25069,6 +25002,9 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
             if (longPress && cell != null) {
                 cell.resetPressedLink(-1);
             }
+            if (longPress && cell != null) {
+                cell.resetPressedLink(-1);
+            }
         } else if (url instanceof URLSpanUserMention) {
             TLRPC.User user = getMessagesController().getUser(Utilities.parseLong(((URLSpanUserMention) url).getURL()));
             if (user != null) {
@@ -25479,6 +25415,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                     view = new ChatMessageCell(mContext, true, themeDelegate);
                 }
                 ChatMessageCell chatMessageCell = (ChatMessageCell) view;
+                chatMessageCell.shouldCheckVisibleOnScreen = true;
                 chatMessageCell.setDelegate(new ChatMessageCell.ChatMessageCellDelegate() {
 
                     @Override
