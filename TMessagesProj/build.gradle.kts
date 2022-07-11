@@ -33,7 +33,7 @@ fun setupPlay(stable: Boolean) {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.7.0")
+    implementation("androidx.core:core-ktx:1.8.0")
     implementation("androidx.palette:palette-ktx:1.0.0")
     implementation("androidx.exifinterface:exifinterface:1.3.3")
     implementation("androidx.dynamicanimation:dynamicanimation:1.0.0")
@@ -43,18 +43,18 @@ dependencies {
 
     compileOnly("org.checkerframework:checker-qual:3.22.0")
     compileOnly("org.checkerframework:checker-compat-qual:2.5.5")
-    implementation("com.google.firebase:firebase-messaging:23.0.5")
+    implementation("com.google.firebase:firebase-messaging:23.0.6")
     implementation("com.google.firebase:firebase-config:21.1.0")
-    implementation("com.google.firebase:firebase-datatransport:18.1.4")
+    implementation("com.google.firebase:firebase-datatransport:18.1.5")
     implementation("com.google.firebase:firebase-appindexing:20.0.0")
     implementation("com.google.android.gms:play-services-auth:20.2.0")
     implementation("com.google.android.gms:play-services-vision:20.1.3")
     implementation("com.google.android.gms:play-services-wearable:17.1.0")
-    implementation("com.google.android.gms:play-services-location:19.0.1")
+    implementation("com.google.android.gms:play-services-location:20.0.0")
     implementation("com.google.android.gms:play-services-wallet:19.1.0")
     implementation("com.googlecode.mp4parser:isoparser:1.1.22")
     implementation("com.stripe:stripe-android:2.0.2")
-    implementation("com.google.mlkit:language-id:17.0.3")
+    implementation("com.google.mlkit:language-id:17.0.4")
     implementation(files("libs/libgsaverification-client.aar"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.2")
     implementation("com.alibaba:fastjson:2.0.5.graal")
@@ -66,8 +66,8 @@ dependencies {
     implementation("io.noties.markwon:core:4.6.2")
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.3")
 
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
-    implementation("androidx.core:core-ktx:1.7.0")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.0")
+    implementation("androidx.core:core-ktx:1.8.0")
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib-common
     implementation("org.jetbrains.kotlin:kotlin-stdlib-common:${Version.kotlin}")
@@ -84,7 +84,7 @@ dependencies {
 }
 
 android {
-    compileSdk = 31
+    compileSdk = 32
     buildToolsVersion = "32.0.0"
     ndkVersion = "21.4.7075529"
 
@@ -159,7 +159,7 @@ android {
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 30
+        targetSdk = 32
 
         versionName = if (isStable) {
             "v" + officialVersionName + "-" + (Common.getGitHeadRefsSuffix(rootProject))
