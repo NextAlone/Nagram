@@ -33,6 +33,7 @@ public class ExperimentSettingActivity extends BaseActivity {
 
     private int premiumRow;
     private int hidePremiumStickerAnimRow;
+    private int fastSpeedUploadRow;
     private int premium2Row;
 
     private int experiment2Row;
@@ -125,9 +126,10 @@ public class ExperimentSettingActivity extends BaseActivity {
         }
 
         if (ConfigManager.getBooleanOrFalse(Defines.showHiddenSettings)) {
-            premium2Row = rowCount++;
-            hidePremiumStickerAnimRow = rowCount++;
             premiumRow = rowCount++;
+            hidePremiumStickerAnimRow = rowCount++;
+            fastSpeedUploadRow = rowCount++;
+            premium2Row = rowCount++;
         }
 
         experiment2Row = rowCount++;
@@ -201,6 +203,8 @@ public class ExperimentSettingActivity extends BaseActivity {
                             ConfigManager.getBooleanOrFalse(Defines.overrideChannelAlias), true, true);
                     } else if (position == hidePremiumStickerAnimRow) {
                         textCell.setTextAndCheck(LocaleController.getString("hidePremiumStickerAnim", R.string.hidePremiumStickerAnim), ConfigManager.getBooleanOrFalse(Defines.hidePremiumStickerAnim), true);
+                    } else if (position == fastSpeedUploadRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("fastSpeedUpload", R.string.fastSpeedUpload), ConfigManager.getBooleanOrFalse(Defines.hidePremiumStickerAnim), true);
                     }
                     break;
                 }
