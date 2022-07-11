@@ -500,7 +500,7 @@ public class Switch extends View {
             alpha = (int) (a1 + (a2 - a1) * colorProgress);
             paint.setColor(((alpha & 0xff) << 24) | ((red & 0xff) << 16) | ((green & 0xff) << 8) | (blue & 0xff));
 
-            canvasToDraw.drawCircle(tx, ty, AndroidUtilities.dp(8), paint);
+            canvasToDraw.drawCircle(tx, ty, AndroidUtilities.dp(ExteraConfig.newSwitchStyle ? 7 : 8), paint);
 
             if (a == 0) {
                 if (iconDrawable != null) {
@@ -563,7 +563,8 @@ public class Switch extends View {
         try {
             if (isHapticFeedbackEnabled() && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-/*              final Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+/*
+                final Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
                 int slightAmplitude = OneUIUtilities.isOneUI() ? 5 : 15;
                 VibrationEffect vibrationEffect = VibrationEffect.createWaveform(
                         toCheck ? new long[] { 80, 25, 15 } : new long[] { 25, 80, 10 },
@@ -571,7 +572,8 @@ public class Switch extends View {
                         -1
                 );
                 vibrator.cancel();
-                vibrator.vibrate(vibrationEffect); */
+                vibrator.vibrate(vibrationEffect);
+*/
                 semHaptics = true;
             }
         } catch (Exception ignore) {}
