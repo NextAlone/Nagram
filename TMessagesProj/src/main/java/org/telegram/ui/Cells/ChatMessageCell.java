@@ -2825,9 +2825,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
     private boolean checkPinchToZoom(MotionEvent ev) {
         PinchToZoomHelper pinchToZoomHelper = delegate == null ? null : delegate.getPinchToZoomHelper();
-        if (currentMessageObject == null || !photoImage.hasNotThumb() || pinchToZoomHelper == null || currentMessageObject.isSticker() ||
+        if (currentMessageObject == null || !photoImage.hasNotThumb() || pinchToZoomHelper == null ||
                 currentMessageObject.isAnimatedEmoji() || (currentMessageObject.isVideo() && !autoPlayingMedia) ||
-                isRoundVideo || currentMessageObject.isAnimatedSticker() || (currentMessageObject.isDocument() && !currentMessageObject.isGif()) || currentMessageObject.needDrawBluredPreview()) {
+                isRoundVideo || (currentMessageObject.isDocument() && !currentMessageObject.isGif()) || currentMessageObject.needDrawBluredPreview()) {
             return false;
         }
         return pinchToZoomHelper.checkPinchToZoom(ev, this, photoImage, currentMessageObject);
@@ -5945,8 +5945,14 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     availableTimeWidth = photoWidth - AndroidUtilities.dp(14);
                     backgroundWidth = photoWidth + AndroidUtilities.dp(12);
 
-                    photoImage.setRoundRadius(0);
                     canChangeRadius = false;
+                    if (ExteraConfig.stickerForm == 1) {
+                        photoImage.setRoundRadius(AndroidUtilities.dp(6));
+                    } else if (ExteraConfig.stickerForm == 2) {
+                        canChangeRadius = true;
+                    } else {
+                        photoImage.setRoundRadius(AndroidUtilities.dp(0));
+                    }
                     if (!messageObject.isOutOwner() && MessageObject.isPremiumSticker(messageObject.getDocument())) {
                         flipImage = true;
                     }
@@ -7980,6 +7986,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     }
                 }
             }
+            if (currentMessageObject.isAnyKindOfSticker()) {
+                if (!currentMessageObject.isOutOwner()) {
+                    timeX -= AndroidUtilities.dp(8f);
+                } else {
+                    timeX -= AndroidUtilities.dp(0.5f);
+                }
+            }
             timeX -= getExtraTimeX();
 
             if ((currentMessageObject.messageOwner.flags & TLRPC.MESSAGE_FLAG_HAS_VIEWS) != 0) {
@@ -8136,6 +8149,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
             if (currentMessageObject.type != 0) {
                 x -= AndroidUtilities.dp(2);
+            }
+            if (currentMessageObject.isAnyKindOfSticker()) {
+                if (currentMessageObject.isOutOwner()) {
+                    x += AndroidUtilities.dp(5.5f);
+                } else {
+                    x -= AndroidUtilities.dp(1.2f);
+                }
             }
             if (!transitionParams.imageChangeBoundsTransition || transitionParams.updatePhotoImageX) {
                 transitionParams.updatePhotoImageX = false;
@@ -11523,7 +11543,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         if ((!autoPlayingMedia || !MediaController.getInstance().isPlayingMessageAndReadyToDraw(currentMessageObject) || isRoundVideo) && !transitionParams.animateBackgroundBoundsInner) {
             drawOverlays(canvas);
         }
-        if ((drawTime || !mediaBackground) && !forceNotDrawTime && !transitionParams.animateBackgroundBoundsInner && !(enterTransitionInProgress && !currentMessageObject.isVoice()) && (!currentMessageObject.isAnyKindOfSticker() || !ExteraConfig.hideStickerTime)) {
+        if ((drawTime || !mediaBackground) && !forceNotDrawTime && !transitionParams.animateBackgroundBoundsInner && !(enterTransitionInProgress && !currentMessageObject.isVoice())) {
             drawTime(canvas, 1f, false);
         }
 
@@ -13102,7 +13122,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     public void drawTime(Canvas canvas, float alpha, boolean fromParent) {
-        if (!drawFromPinchToZoom && delegate != null && delegate.getPinchToZoomHelper() != null && delegate.getPinchToZoomHelper().isInOverlayModeFor(this) && shouldDrawTimeOnMedia()) {
+        if ((!drawFromPinchToZoom && delegate != null && delegate.getPinchToZoomHelper() != null && delegate.getPinchToZoomHelper().isInOverlayModeFor(this) && shouldDrawTimeOnMedia()) || (ExteraConfig.hideStickerTime && !isDrawSelectionBackground() && currentMessageObject.isAnyKindOfSticker())) {
             return;
         }
         for (int i = 0; i < 2; i++) {
@@ -13224,7 +13244,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             Theme.chat_timePaint.setAlpha((int) (255 * timeAlpha * alpha));
 
             int r;
-            if (documentAttachType != DOCUMENT_ATTACH_TYPE_ROUND && documentAttachType != DOCUMENT_ATTACH_TYPE_STICKER) {
+            if ((documentAttachType != DOCUMENT_ATTACH_TYPE_ROUND && documentAttachType != DOCUMENT_ATTACH_TYPE_STICKER) || (documentAttachType == DOCUMENT_ATTACH_TYPE_STICKER && ExteraConfig.stickerForm == 2)) {
                 int[] rad = photoImage.getRoundRadius();
                 r = Math.min(AndroidUtilities.dp(8), Math.max(rad[2], rad[3]));
                 bigRadius = SharedConfig.bubbleRadius >= 10;

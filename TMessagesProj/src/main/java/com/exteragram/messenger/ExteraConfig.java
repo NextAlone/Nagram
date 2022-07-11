@@ -38,6 +38,7 @@ public class ExteraConfig {
     public static boolean showDC;
 
     public static float stickerSize = 14.0f;
+    public static int stickerForm;
     public static boolean hideStickerTime;
     public static boolean unlimitedRecentStickers;
     public static boolean sendMessageBeforeSendSticker;
@@ -97,6 +98,7 @@ public class ExteraConfig {
             showDC = preferences.getBoolean("showDC", false);
 
             stickerSize = preferences.getFloat("stickerSize", 14.0f);
+            stickerForm = preferences.getInt("stickerForm", 0);
             hideStickerTime = preferences.getBoolean("hideStickerTime", false);
             unlimitedRecentStickers = preferences.getBoolean("unlimitedRecentStickers", false);
             sendMessageBeforeSendSticker = preferences.getBoolean("sendMessageBeforeSendSticker", false);
@@ -360,5 +362,10 @@ public class ExteraConfig {
     public static void toggleZalgoFilter() {
         SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
         editor.putBoolean("zalgoFilter", zalgoFilter ^= true).apply();
+    }
+
+    public static void setStickerForm(int form) {
+        SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
+        editor.putInt("stickerForm", stickerForm = form).apply();
     }
 }

@@ -40,6 +40,7 @@ import org.telegram.ui.Components.UndoView;
 import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.ExteraUtils;
 import com.exteragram.messenger.preferences.cells.StickerSizePreviewCell;
+import com.exteragram.messenger.preferences.cells.StickerFormCell;
 
 public class ChatsPreferencesEntry extends BaseFragment {
 
@@ -52,6 +53,10 @@ public class ChatsPreferencesEntry extends BaseFragment {
     private int stickerSizeHeaderRow;
     private int stickerSizeRow;
 
+    private int stickerFormHeaderRow;
+    private int stickerFormRow;
+    private int stickerFormDividerRow;
+    
     private int stickersHeaderRow;
     private int hideStickerTimeRow;
     private int unlimitedRecentStickersRow;
@@ -78,8 +83,6 @@ public class ChatsPreferencesEntry extends BaseFragment {
     private int mediaDividerRow;
 
     private UndoView restartTooltip;
-    
-    private int zalgoInfoTapCount = 0;
 
     @Override
     public boolean onFragmentCreate() {
@@ -92,7 +95,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
 
         private final StickerSizePreviewCell messagesCell;
         private final SeekBarView sizeBar;
-        private final int startStickerSize = 2;
+        private final int startStickerSize = 4;
         private final int endStickerSize = 20;
 
         private final TextPaint textPaint;
@@ -231,7 +234,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.hideStickerTime);
                 }
-                parentLayout.rebuildAllFragmentViews(false, false);
+                stickerSizeCell.invalidate();
             } else if (position == unlimitedRecentStickersRow) {
                 ExteraConfig.toggleUnlimitedRecentStickers();
                 if (view instanceof TextCheckCell) {
@@ -327,6 +330,10 @@ public class ChatsPreferencesEntry extends BaseFragment {
         stickerSizeHeaderRow = rowCount++;
         stickerSizeRow = rowCount++;
 
+        stickerFormHeaderRow = rowCount++;
+        stickerFormRow = rowCount++;
+        stickerFormDividerRow = rowCount++;
+
         stickersHeaderRow = rowCount++;
         hideStickerTimeRow = rowCount++;
         unlimitedRecentStickersRow = rowCount++;
@@ -398,6 +405,8 @@ public class ChatsPreferencesEntry extends BaseFragment {
                         headerCell.setText(LocaleController.getString("Chats", R.string.Chats));
                     } else if (position == mediaHeaderRow) {
                         headerCell.setText(LocaleController.getString("Media", R.string.Media));
+                    } else if (position == stickerFormHeaderRow) {
+                        headerCell.setText(LocaleController.getString("StickerForm", R.string.StickerForm));
                     }
                     break;
                 case 3:
@@ -440,7 +449,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
                 case 5:
                     TextInfoPrivacyCell cell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == zalgoFilterInfoRow) {
-                        cell.setText(ExteraUtils.zalgoFilter(LocaleController.getString("ZalgoFilterInfo", R.string.ZalgoFilterInfo)));
+                        cell.setText(LocaleController.getString("ZalgoFilterInfo", R.string.ZalgoFilterInfo));
                     }
                     break;
             }
@@ -473,6 +482,16 @@ public class ChatsPreferencesEntry extends BaseFragment {
                     view = new TextInfoPrivacyCell(mContext);
                     view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
+                case 6:
+                    view = new StickerFormCell(mContext) {
+                        @Override
+                        protected void updateStickerPreview() {
+                            parentLayout.rebuildAllFragmentViews(false, false);
+                            stickerSizeCell.invalidate();
+                        }
+                    };
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
                 default:
                     view = new ShadowSectionCell(mContext);
                     break;
@@ -483,9 +502,9 @@ public class ChatsPreferencesEntry extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            if (position == stickersDividerRow || position == mediaDividerRow) {
+            if (position == stickersDividerRow || position == mediaDividerRow || position == stickerFormDividerRow) {
                 return 1;
-            } else if (position == stickerSizeHeaderRow || position == stickersHeaderRow || position == chatHeaderRow || position == mediaHeaderRow) {
+            } else if (position == stickerSizeHeaderRow || position == stickersHeaderRow || position == chatHeaderRow || position == mediaHeaderRow || position == stickerFormHeaderRow) {
                 return 2;
             } else if (position == hideStickerTimeRow || position == unlimitedRecentStickersRow || position == sendMessageBeforeSendStickerRow ||
                       position == hideSendAsChannelRow || position == hideKeyboardOnScrollRow || position == disableReactionsRow ||
@@ -498,6 +517,8 @@ public class ChatsPreferencesEntry extends BaseFragment {
                 return 4;
             } else if (position == zalgoFilterInfoRow) {
                 return 5;
+            } else if (position == stickerFormRow) {
+                return 6;
             }
             return 1;
         }

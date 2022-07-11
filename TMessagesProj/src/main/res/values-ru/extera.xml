@@ -48,12 +48,14 @@
 
     <!-- Chats -->
     <string name="StickerSize">Размер стикера</string>
+    <string name="StickerSizeDialogMessageReplyTo">жесть</string>
+    <string name="StickerSizeDialogMessage">ого, он такой милый!</string>
+    <string name="StickerForm">Форма стикера</string>
+    <string name="StickerFormRounded">Закруглённый</string>
+    <string name="StickerFormRoundedMsg">Сообщение</string>
     <string name="StickerTime">Скрыть время под стикером</string>
     <string name="UnlimitedRecentStickers">Бесконечные недавние стикеры</string>
-    <string name="SendMessageBeforeSendSticker">Отправлять сообщение перед отправкой стикера</string>
-
-    <string name="StickerSizeDialogMessageReplyTo">жесть</string>
-    <string name="StickerSizeDialogMessage">ух-ты какой милый котик!</string>
+    <string name="SendMessageBeforeSendSticker">Отправлять сообщение перед стикером</string>
 
     <string name="HideSendAsChannel">Скрыть \"Написать от имени…\"</string>
     <string name="HideKeyboardOnScroll">Скрывать клавиатуру при пролистывании</string>

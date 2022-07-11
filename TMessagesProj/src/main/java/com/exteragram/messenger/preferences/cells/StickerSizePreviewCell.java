@@ -66,7 +66,7 @@ public class StickerSizePreviewCell extends LinearLayout {
         message.media.document.access_hash = 0;
         message.media.document.date = date;
         TLRPC.TL_documentAttributeSticker attributeSticker = new TLRPC.TL_documentAttributeSticker();
-        attributeSticker.alt = "🐱";
+        attributeSticker.alt = "🐾";
         message.media.document.attributes.add(attributeSticker);
         TLRPC.TL_documentAttributeImageSize attributeImageSize = new TLRPC.TL_documentAttributeImageSize();
         attributeImageSize.h = 512;
@@ -81,7 +81,7 @@ public class StickerSizePreviewCell extends LinearLayout {
 
         message = new TLRPC.TL_message();
         message.message = LocaleController.getString("StickerSizeDialogMessageReplyTo", R.string.StickerSizeDialogMessageReplyTo);
-        message.date = date + 1270;
+        message.date = date + 10;
         message.dialog_id = -1;
         message.flags = 259;
         message.id = 2;
@@ -94,7 +94,7 @@ public class StickerSizePreviewCell extends LinearLayout {
 
         message = new TLRPC.TL_message();
         message.message = LocaleController.getString("StickerSizeDialogMessage", R.string.StickerSizeDialogMessage);
-        message.date = date + 1270;
+        message.date = date + 120;
         message.dialog_id = -1;
         message.flags = 259;
         message.id = 2;

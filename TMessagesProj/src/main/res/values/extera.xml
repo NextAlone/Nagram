@@ -54,12 +54,14 @@
 
     <!-- Chats -->
     <string name="StickerSize">Stickers size</string>
+    <string name="StickerSizeDialogMessageReplyTo">wow</string>
+    <string name="StickerSizeDialogMessage">woah, he is so cute!</string>
+    <string name="StickerForm">Sticker form</string>
+    <string name="StickerFormRounded">Rounded</string>
+    <string name="StickerFormRoundedMsg">Message</string>
     <string name="StickerTime">Hide time under stickers</string>
     <string name="UnlimitedRecentStickers">Unlimited recent stickers</string>
     <string name="SendMessageBeforeSendSticker">Send message before send sticker</string>
-
-    <string name="StickerSizeDialogMessageReplyTo">wow</string>
-    <string name="StickerSizeDialogMessage">woah, he is so cute!</string>
 
     <string name="HideSendAsChannel">Hide \"Send as Channel\"</string>
     <string name="HideKeyboardOnScroll">Hide keyboard on scrolling</string>
