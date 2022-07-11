@@ -515,7 +515,7 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
                     } else if (currentMessageObject.currentEvent != null){
                         long date = currentMessageObject.currentEvent.date;
                         String timestamp = LocaleController.getInstance().formatterDay.format(date * 1000);
-                        text += " · " + timestamp;
+                        text += " " + timestamp;
                     }
                 }
             }
