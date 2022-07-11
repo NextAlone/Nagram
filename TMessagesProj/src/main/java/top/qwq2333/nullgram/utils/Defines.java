@@ -75,6 +75,7 @@ public class Defines {
     public static final String scrollableChatPreview = "scrollableChatPreview";
     public static final String disableVibration = "disableVibration";
     public static final String aospEmojiFont = "NotoColorEmoji.ttf";
+    public static final String hidePremiumStickerAnim = "hidePremiumStickerAnim";
 
     // Custom API
     public static final String customAPI = "customAPI";

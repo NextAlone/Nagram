@@ -3,9 +3,7 @@ package top.qwq2333.nullgram.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
-import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.LocaleController;
@@ -13,12 +11,8 @@ import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.NotificationsCheckCell;
-import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCheckCell;
-import org.telegram.ui.Cells.TextDetailSettingsCell;
-import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
-import org.telegram.ui.Components.RecyclerListView;
 
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.utils.Defines;
@@ -36,6 +30,11 @@ public class ExperimentSettingActivity extends BaseActivity {
     private int enchantAudioRow;
     private int linkedUserRow;
     private int overrideChannelAliasRow;
+
+    private int premiumRow;
+    private int hidePremiumStickerAnimRow;
+    private int premium2Row;
+
     private int experiment2Row;
 
 
@@ -85,6 +84,11 @@ public class ExperimentSettingActivity extends BaseActivity {
             if (view instanceof TextCheckCell) {
                 ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.overrideChannelAlias));
             }
+        } else if (position == hidePremiumStickerAnimRow) {
+            ConfigManager.toggleBoolean(Defines.hidePremiumStickerAnim);
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.hidePremiumStickerAnim));
+            }
         }
 
     }
@@ -119,6 +123,13 @@ public class ExperimentSettingActivity extends BaseActivity {
         } else {
             overrideChannelAliasRow = -1;
         }
+
+        if (ConfigManager.getBooleanOrFalse(Defines.showHiddenSettings)) {
+            premium2Row = rowCount++;
+            hidePremiumStickerAnimRow = rowCount++;
+            premiumRow = rowCount++;
+        }
+
         experiment2Row = rowCount++;
 
         if (listAdapter != null) {
@@ -188,6 +199,8 @@ public class ExperimentSettingActivity extends BaseActivity {
                                 LocaleController.getString("labelChannelInChat", R.string.labelChannelInChat),
                             LocaleController.getString("overrideChannelAliasDetails", R.string.overrideChannelAliasDetails),
                             ConfigManager.getBooleanOrFalse(Defines.overrideChannelAlias), true, true);
+                    } else if (position == hidePremiumStickerAnimRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("hidePremiumStickerAnim", R.string.hidePremiumStickerAnim), ConfigManager.getBooleanOrFalse(Defines.hidePremiumStickerAnim), true);
                     }
                     break;
                 }
@@ -195,6 +208,8 @@ public class ExperimentSettingActivity extends BaseActivity {
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == experimentRow) {
                         headerCell.setText(LocaleController.getString("Experiment", R.string.Experiment));
+                    } else if (position == premiumRow) {
+                        headerCell.setText(LocaleController.getString("Premium", R.string.premium));
                     }
                     break;
                 }
@@ -206,54 +221,10 @@ public class ExperimentSettingActivity extends BaseActivity {
         }
 
         @Override
-        public boolean isEnabled(RecyclerView.ViewHolder holder) {
-            int type = holder.getItemViewType();
-            return type == 2 || type == 3 || type == 6 || type == 5;
-        }
-
-        @NonNull
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = null;
-            switch (viewType) {
-                case 1:
-                    view = new ShadowSectionCell(mContext);
-                    break;
-                case 2:
-                    view = new TextSettingsCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 3:
-                    view = new TextCheckCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 4:
-                    view = new HeaderCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 5:
-                    view = new NotificationsCheckCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 6:
-                    view = new TextDetailSettingsCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 7:
-                    view = new TextInfoPrivacyCell(mContext);
-                    view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
-                    break;
-            }
-            //noinspection ConstantConditions
-            view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
-            return new RecyclerListView.Holder(view);
-        }
-
-        @Override
         public int getItemViewType(int position) {
-            if (position == experiment2Row) {
+            if (position == experiment2Row || position == premium2Row) {
                 return 1;
-            } else if (position == experimentRow) {
+            } else if (position == experimentRow || position == premiumRow) {
                 return 4;
             }
             return 3;

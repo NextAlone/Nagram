@@ -272,6 +272,8 @@ public class MessageObject {
         if (document == null || document.thumbs == null) {
             return false;
         }
+        if (ConfigManager.getBooleanOrFalse(Defines.hidePremiumStickerAnim))
+            return false;
         for (int i = 0; i < document.video_thumbs.size(); i++) {
             if ("f".equals(document.video_thumbs.get(i).type)) {
                 return true;

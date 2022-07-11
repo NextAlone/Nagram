@@ -184,4 +184,6 @@
     <string name="PasscodePanicCodeAbout">Use the panic code to log out accounts if something goes wrong.</string>
     <string name="PhotoCopied">Photo Copied</string>
     <string name="CopyPhoto">Copy Photo</string>
+    <string name="hidePremiumStickerAnim">Hide Premium Sticker Animation</string>
+    <string name="premium">Premium</string>
 </resources>
