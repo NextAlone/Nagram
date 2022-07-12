@@ -68,6 +68,7 @@ public class HeaderCell extends LinearLayout {
         this.resourcesProvider = resourcesProvider;
 
         setOrientation(LinearLayout.VERTICAL);
+        setPadding(AndroidUtilities.dp(padding), AndroidUtilities.dp(topMargin), AndroidUtilities.dp(padding), 0);
 
         textView = new TextView(getContext());
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
@@ -83,7 +84,7 @@ public class HeaderCell extends LinearLayout {
         textView2.setTextSize(13);
         textView2.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
         textView2.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        addView(textView2, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, padding, 21, padding, bottomMargin));
+        addView(textView2, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 4, 0, bottomMargin));
 
         if (!text2) textView2.setVisibility(View.GONE);
 
