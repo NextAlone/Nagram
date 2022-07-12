@@ -90,6 +90,11 @@ public class ExperimentSettingActivity extends BaseActivity {
             if (view instanceof TextCheckCell) {
                 ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.hidePremiumStickerAnim));
             }
+        } else if (position == fastSpeedUploadRow) {
+            ConfigManager.toggleBoolean(Defines.fastSpeedUpload);
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.fastSpeedUpload));
+            }
         }
 
     }
@@ -204,7 +209,7 @@ public class ExperimentSettingActivity extends BaseActivity {
                     } else if (position == hidePremiumStickerAnimRow) {
                         textCell.setTextAndCheck(LocaleController.getString("hidePremiumStickerAnim", R.string.hidePremiumStickerAnim), ConfigManager.getBooleanOrFalse(Defines.hidePremiumStickerAnim), true);
                     } else if (position == fastSpeedUploadRow) {
-                        textCell.setTextAndCheck(LocaleController.getString("fastSpeedUpload", R.string.fastSpeedUpload), ConfigManager.getBooleanOrFalse(Defines.hidePremiumStickerAnim), true);
+                        textCell.setTextAndCheck(LocaleController.getString("fastSpeedUpload", R.string.fastSpeedUpload), ConfigManager.getBooleanOrFalse(Defines.fastSpeedUpload), true);
                     }
                     break;
                 }

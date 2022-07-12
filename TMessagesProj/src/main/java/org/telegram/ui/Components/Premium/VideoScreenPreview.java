@@ -59,7 +59,9 @@ public class VideoScreenPreview extends FrameLayout implements PagerHeaderView, 
             retriever.setDataSource(ApplicationLoader.applicationContext, Uri.fromFile(file));
             int width = Integer.valueOf(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH));
             int height = Integer.valueOf(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));
-            retriever.release();
+            try {
+                retriever.release();
+            } catch (Exception ignore) {}
             aspectRatio = width / (float) height;
 
             if (allowPlay) {

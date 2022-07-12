@@ -7829,7 +7829,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             } finally {
                 try {
                     retriever.release();
-                } catch (RuntimeException ex) {
+                } catch (Exception ignore) {
                     // Ignore failures while cleaning up.
                 }
             }
