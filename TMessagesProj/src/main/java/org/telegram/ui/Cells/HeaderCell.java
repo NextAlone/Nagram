@@ -67,9 +67,6 @@ public class HeaderCell extends LinearLayout {
         super(context);
         this.resourcesProvider = resourcesProvider;
 
-        setOrientation(LinearLayout.VERTICAL);
-        setPadding(AndroidUtilities.dp(padding), AndroidUtilities.dp(topMargin), AndroidUtilities.dp(padding), 0);
-
         textView = new TextView(getContext());
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -77,13 +74,13 @@ public class HeaderCell extends LinearLayout {
         textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
         textView.setTextColor(getThemedColor(textColorKey));
         textView.setTag(textColorKey);
-        addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 0, topMargin, padding, text2 ? 0 : bottomMargin));
+        addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, padding, topMargin, padding, text2 ? 0 : bottomMargin));
 
         textView2 = new TextView(getContext());
         textView2.setTextSize(13);
         textView2.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
         textView2.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        addView(textView2, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 4, 0, bottomMargin));
+        addView(textView2, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, padding, 21, padding, bottomMargin));
 
         if (!text2) textView2.setVisibility(View.GONE);
 
