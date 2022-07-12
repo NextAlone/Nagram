@@ -1409,7 +1409,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
             if (textSelectionHelper.isTryingSelect() || textSelectionHelper.isSelectionMode() || inPreviewMode) {
                 return false;
             }
-            if((scrimPopupWindow != null && NekoConfig.reactions.Int() == 1))
+            if((scrimPopupWindow != null && NaConfig.INSTANCE.getDoubleTapAction().Int()==DoubleTap.DOUBLE_TAP_ACTION_SHOW_REACTIONS))
                 return false;
             wasManualScroll = true;
             boolean result = true;
