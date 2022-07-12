@@ -67,6 +67,8 @@ public class HeaderCell extends LinearLayout {
         super(context);
         this.resourcesProvider = resourcesProvider;
 
+        setOrientation(LinearLayout.VERTICAL);
+
         textView = new TextView(getContext());
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
