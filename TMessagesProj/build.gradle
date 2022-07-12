@@ -66,13 +66,8 @@ android {
                 enable false
                 universalApk true
             } else {
-                if (System.getenv("DEBUG_BUILD") == "true") {
-                    enable false
-                    universalApk true
-                } else {
-                    enable true
-                    universalApk false
-                }
+                enable true
+                universalApk false
                 if (!nativeTarget.isBlank()) {
                     reset()
                     include nativeTarget
@@ -391,6 +386,8 @@ android {
         if (task.name.startsWith("uploadCrashlyticsMappingFile")) {
             task.enabled = false
         } else if (task.name.contains("Crashlytics") && task.name.contains("NoGcm")) {
+            task.enabled = false
+        } else if (task.name.endsWith("GoogleServices") && task.name.contains("NoGcm")) {
             task.enabled = false
         }
     }
