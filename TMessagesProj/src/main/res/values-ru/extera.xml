@@ -93,6 +93,8 @@
     <string name="ConfirmCall">Подтверждение звонка</string>
     <string name="CallTo">Позвонить **%1$s**?</string>
 
+    <string name="AppIconRelease">Релизная</string>
+    <string name="AppIconBeta">Бета</string>
     <string name="AppIconInverted">Инверсия</string>
     <string name="AppIconMonet">Monet</string>
     <string name="AppIconGradient">Градиент</string>

@@ -101,6 +101,8 @@
     <string name="formatterDay24HSec" translatable="false">HH:mm:ss</string>
     <string name="formatterDay12HSec" translatable="false">h:mm:ss a</string>
 
+    <string name="AppIconRelease">Release</string>
+    <string name="AppIconBeta">Beta</string>
     <string name="AppIconInverted">Inverted</string>
     <string name="AppIconMonet" translatable="false">Monet</string>
     <string name="AppIconGradient">Gradient</string>

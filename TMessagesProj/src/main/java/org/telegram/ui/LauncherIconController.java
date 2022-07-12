@@ -43,6 +43,7 @@ public class LauncherIconController {
 
     public enum LauncherIcon {
         DEFAULT("DefaultIcon", BuildVars.isBetaApp() ? R.color.ic_background_beta : R.color.ic_background, R.drawable.ic_foreground, R.string.AppIconDefault),
+        REVERTED("RevertedIcon", BuildVars.isBetaApp() ? R.color.ic_background : R.color.ic_background_beta, R.drawable.ic_foreground, BuildVars.isBetaApp() ? R.string.AppIconRelease : R.string.AppIconBeta),
         MONET("MonetIcon", R.color.ic_background_monet, R.drawable.ic_foreground_monet, R.string.AppIconMonet),
         INVERTED("InvertedIcon", BuildVars.isBetaApp() ? R.mipmap.ic_background_beta_inverted : R.mipmap.ic_background_inverted, BuildVars.isBetaApp() ? R.mipmap.ic_foreground_beta_inverted : R.mipmap.ic_foreground_inverted, R.string.AppIconInverted),
         GRADIENT("GradientIcon", R.mipmap.ic_background_gradient, R.drawable.ic_foreground, R.string.AppIconGradient),
