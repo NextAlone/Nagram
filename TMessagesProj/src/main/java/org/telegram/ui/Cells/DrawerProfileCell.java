@@ -733,7 +733,7 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
             text = Emoji.replaceEmoji(text, nameTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(22), false);
         } catch (Exception ignore) {}
 
-        drawPremium = false;//user.premium || NekoConfig.localPremium.Bool();
+        drawPremium = false;//user.premium;
         nameTextView.setText(text);
         if (user.emoji_status instanceof TLRPC.TL_emojiStatusUntil && ((TLRPC.TL_emojiStatusUntil) user.emoji_status).until > (int) (System.currentTimeMillis() / 1000)) {
             animatedStatus.animate().alpha(1).setDuration(200).start();
