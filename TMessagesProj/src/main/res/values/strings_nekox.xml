@@ -215,11 +215,11 @@
     <string name="TextOrigin">Origin</string>
     <string name="TextReplace">Replace</string>
     <string name="ReplaceRegex">Use regex</string>
-    <string name="DisableTrending">Disable Trending</string>
+    <string name="DisableTrending">Disable trending</string>
     <string name="AutoDownload">AutoDownload</string>
     <string name="Win32ExecutableFiles">Win32 executable files</string>
     <string name="ArchiveFiles">Archive files</string>
-    <string name="EnableStickerPin">Enable Pinning Sticker</string>
+    <string name="EnableStickerPin">Enable pinning sticker</string>
     <string name="EnableStickerPinAbout">Pin Stickers and sync with cloud even when adding new stickers.\nPaired with Disable Favorite and Recent.</string>
     <string name="EnableStickerPinTip">This function is under development. Syncing to cloud may not work.</string>
     <string name="PinSticker">Pin</string>
@@ -256,7 +256,7 @@
     <string name="DeleteDownloadedFileSucceed">Deleted</string>
     <string name="DeleteDownloadedFileExternal">External file is skipped.</string>
     <string name="update_download_soucre">Select download source</string>
-    <string name="useCustomEmoji">Use Custom Emoji</string>
+    <string name="useCustomEmoji">Use custom emoji</string>
     <string name="useCustomEmojiInvalid">Not a vaild emoji ZIP-file.</string>
     <string name="repeatConfirm">Ask before repeat</string>
     <string name="repeatConfirmText">Are you sure to repeat?</string>
@@ -268,9 +268,12 @@
     <string name="AppUpdateNekoX">Update Nagram</string>
     <string name="NekoXUpdateTranslationHint">Press to translate the change log</string>
     <string name="Name">Name</string>
-    <string name="channelAlias">Channel Alias</string>
+    <string name="channelAlias">Channel alias</string>
     <string name="channelAliasDetails">Require label channel user enabled.</string>
     <string name="setChannelAliasName">Set Alias</string>
-    <string name="labelChannelUser">Label Channel User</string>
+    <string name="labelChannelUser">Label channel user</string>
     <string name="labelChannelUserDetails">If the message sender is \"Channel\", it will be labeled \"Channel\".</string>
+    <string name="StickerSettings">Sticker</string>
+    <string name="ConfirmSettings">Confirmation</string>
+    <string name="InteractionSettings">Interaction</string>
 </resources>

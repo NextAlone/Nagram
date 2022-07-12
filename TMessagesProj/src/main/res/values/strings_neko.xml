@@ -64,7 +64,7 @@
     <string name="TranslateApiUnsupported">The translation provider you selected don\'t support your language.</string>
     <string name="ProviderLingocloud">Lingocloud</string>
     <string name="UndoTranslate">Undo translate</string>
-    <string name="DisablePhotoViewerSideAction">Disable Flip Photos by tapping</string>
+    <string name="DisablePhotoViewerSideAction">Disable flip photos by tapping</string>
     <string name="BotToken">Token</string>
     <string name="UnlimitedPinnedDialogs">Unlimited pinned dialogs</string>
     <string name="UnlimitedPinnedDialogsAbout">Pin unlimited dialogs by turn their sync off.</string>
@@ -74,7 +74,7 @@
     <string name="UserRestrictionsSendGifs">Send GIFs</string>
     <string name="ShowTabsOnForward">Show tabs on forward</string>
     <string name="CheckAllAdministrated">Add administrated</string>
-    <string name="RearVideoMessages">Rear camera in Video Messages</string>
+    <string name="RearVideoMessages">Rear camera in video messages</string>
     <string name="HideAllTab">Hide \"All Chats\" tab</string>
     <string name="HideAllTabAbout">Press \"Back\" on home page to open it.</string>
     <string name="TabTitleType">Show on tabs</string>
@@ -144,6 +144,7 @@
     <string name="channelLabel">channel</string>
     <string name="forceBlurInChat">Force enable Chat Blur</string>
     <string name="ChatBlurAlphaValue">Chat Blur Alpha</string>
+    <string name="disablePremiumStickerAnimation">Disable premium sticker animation</string>
     <string name="SelectAnIcon">Choose an icon</string>
     <string name="MutualContact">Mutual contact</string>
     <string name="MutualContactDescription">This contact is a mutual contact.</string>

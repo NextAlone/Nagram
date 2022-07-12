@@ -34,10 +34,10 @@
     <string name="Valentine">情人节</string>
     <string name="Snowflakes">雪花</string>
     <string name="Fireworks">烟花</string>
-    <string name="DeleteDownloadedFile">删除缓存的文件</string>
-    <string name="TestBackend">异世界</string>
+    <string name="DeleteDownloadedFile">删除已缓存的文件</string>
+    <string name="TestBackend">测试后端服务器</string>
     <string name="TestBackendOn">此账户将连接至测试后端服务器。</string>
-    <string name="TestBackendOff">此账户将连接至生产后端服务器。</string>
+    <string name="TestBackendOff">此账户将连接至产品后端服务器。</string>
     <string name="HideProxySponsorChannel">隐藏代理赞助商频道</string>
     <string name="ViewHistory">显示历史消息</string>
     <string name="Nya">喵！</string>
@@ -49,7 +49,7 @@
     <string name="StickerSizeDialogMessageBigOne">一大只</string>
     <string name="StickerSizeDialogMessageSmallOne">一小只</string>
     <string name="StickerSizeDialogMessageReplyTo">喵</string>
-    <string name="StickerSizeDialogName">呆瓜</string>
+    <string name="StickerSizeDialogName">Duang~(拟声)</string>
     <string name="Experiment">实验性功能</string>
     <string name="UnlimitedFavoredStickers">无限的收藏贴纸</string>
     <string name="UnlimitedFavoredStickersAbout">向收藏夹添加无限贴纸，贴纸可能将不能同步到其它设备。</string>
@@ -60,7 +60,7 @@
     <string name="TranslateFailed">翻译服务器错误</string>
     <string name="TranslationProvider">翻译源</string>
     <string name="ProviderGoogleTranslate">Google 翻译</string>
-    <string name="ProviderGoogleTranslateCN">Google 中国翻译</string>
+    <string name="ProviderGoogleTranslateCN">Google 中文翻译</string>
     <string name="TranslateApiUnsupported">您选择的翻译源不支持您的语言。</string>
     <string name="ProviderLingocloud">彩云小译</string>
     <string name="UndoTranslate">撤销翻译</string>
@@ -91,7 +91,7 @@
     <string name="OfficialChannel">官方频道</string>
     <string name="About">关于</string>
     <string name="IgnoreBlockedAbout">您将不会再看到被屏蔽的用户在群组中的消息。</string>
-    <string name="GooglePlay">Google Play</string>
+    <string name="GooglePlay">谷歌商店</string>
     <string name="SourceCode">GitHub 上的源代码</string>
     <string name="ResetStickerSize">重置贴纸大小</string>
     <string name="RestartAppToTakeEffect">重启应用以生效。</string>
@@ -102,7 +102,7 @@
     <string name="AutoPauseVideoAbout">当锁定屏幕/切换到后台时。</string>
     <string name="DisableProximityEvents">禁用距离传感器事件</string>
     <string name="IncreaseVoiceMessageQuality">提高语音消息质量</string>
-    <string name="SelectBetween">选择之间的</string>
+    <string name="SelectBetween">在…中选择</string>
     <string name="AvatarAsBackground">使用头像作为背景</string>
     <string name="BlurAvatarBackground">模糊头像</string>
     <string name="DarkenAvatarBackground">暗色头像</string>
@@ -139,8 +139,8 @@
     <string name="doubleTapSendReactions">双击消息发送表情回应(默认)</string>
     <string name="ReactionsDisabled">禁用菜单回应</string>
     <string name="customSavePath">自定义存储路径</string>
-    <string name="customSavePathHint">留空则保存至上层目录</string>
-    <string name="doubleTapShowReactions">双击消息打开表情回应菜单</string>
+    <string name="customSavePathHint">留空以直接保存</string>
+    <string name="doubleTapShowReactions">仅在双击消息时打开表情回应菜单</string>
     <string name="showBottomActionsWhenSelecting">长按选中消息时，显示底部操作按钮</string>
     <string name="channelLabel">频道身份</string>
     <string name="forceBlurInChat">强制启用聊天背景模糊</string>

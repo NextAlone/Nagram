@@ -2,8 +2,8 @@
 <resources>
     <string name="Locked">Đã khóa</string>
     <string name="AccDescrChatAttachEnterMenu">Menu nhập trò chuyện</string>
-    <string name="ChatAttachEnterMenuRecordVideo">Quay video</string>
-    <string name="ChatAttachEnterMenuRecordAudio">Quay audio</string>
+    <string name="ChatAttachEnterMenuRecordVideo">Ghi lại video</string>
+    <string name="ChatAttachEnterMenuRecordAudio">Ghi lại âm thanh</string>
     <string name="ChatAttachEnterMenuDisableLinkPreview">Tắt xem trước liên kết</string>
     <string name="ChatAttachEnterMenuEnableLinkPreview">Bật xem trước liên kết</string>
     <string name="UseChatAttachEnterMenu">Sử dụng menu đầu vào</string>

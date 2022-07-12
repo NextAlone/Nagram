@@ -279,6 +279,8 @@ public class ContentPreviewViewer {
                             MediaDataController.getInstance(currentAccount).addRecentSticker(MediaDataController.TYPE_IMAGE, parentObject, currentDocument, (int) (System.currentTimeMillis() / 1000), true);
                         } else if (actions.get(which) == 5) {
                             delegate.remove(importingSticker);
+                        } else if (actions.get(which) == nkbtn_stickerdl) {
+                            MessageHelper.getInstance(currentAccount).saveStickerToGallery(parentActivity, currentDocument);
                         }
                         if (popupWindow != null) {
                             popupWindow.dismiss();
