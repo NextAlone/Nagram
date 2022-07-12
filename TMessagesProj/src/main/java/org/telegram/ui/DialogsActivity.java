@@ -4581,7 +4581,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             return false;
         } else if (filterTabsView != null && filterTabsView.getVisibility() == View.VISIBLE && !tabsAnimationInProgress && !filterTabsView.isAnimatingIndicator()
                 && !startedTracking && !filterTabsView.isFirstTabSelected()) {
-            // NekoX: remove scroll tabs when press back
+            if (!NekoConfig.hideAllTab.Bool()){
+                filterTabsView.selectFirstTab();
+                return false;
+            }
         } else if (commentView != null && commentView.isPopupShowing()) {
             commentView.hidePopup(true);
             return false;

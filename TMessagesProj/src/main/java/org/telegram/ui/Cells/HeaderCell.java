@@ -76,7 +76,8 @@ public class HeaderCell extends LinearLayout {
         textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
         textView.setTextColor(getThemedColor(textColorKey));
         textView.setTag(textColorKey);
-        addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, padding, topMargin, padding, text2 ? 0 : bottomMargin));
+//        addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, padding, topMargin, padding, text2 ? 0 : bottomMargin));
+        addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
         textView2 = new TextView(getContext());
         textView2.setTextSize(13);
@@ -106,7 +107,7 @@ public class HeaderCell extends LinearLayout {
     }
 
     public void setHeight(int value) {
-        textView.setMinHeight(AndroidUtilities.dp(height = value) - ((LayoutParams) textView.getLayoutParams()).topMargin);
+        textView.setMinHeight(AndroidUtilities.dp(value) - ((LayoutParams) textView.getLayoutParams()).topMargin);
     }
 
     public void setEnabled(boolean value, ArrayList<Animator> animators) {
