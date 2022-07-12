@@ -93,7 +93,6 @@ jobs:
     needs:
       - ffmpeg
       - boringssl
-      - check
     strategy:
       matrix:
         flavor:
@@ -316,7 +315,6 @@ jobs:
         run: |
           sed -i -e "s/16384/6144/g" gradle.properties
           echo "sdk.dir=${ANDROID_HOME}" >> local.properties
-#          echo "ndk.dir=${ANDROID_HOME}/ndk-bundle" >> local.properties
       - name: Gradle cache
         uses: actions/cache@v2
         with:
@@ -328,15 +326,15 @@ jobs:
           export DEBUG_BUILD=true
           ./gradlew TMessagesProj:assemble${{ matrix.flavor }}
 
-          APK=$(find TMessagesProj/build/outputs/apk -name 'Nagram*.apk')
+          APK=$(find TMessagesProj/build/outputs/apk -name '*arm64-v8a*.apk')
+          APK=$(dirname $APK)
           echo "APK=$APK" >> $GITHUB_ENV
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.flavor }}
           path: ${{ env.APK }}
-
   upload:
-    name: Upload to Telegram
+    name: Upload debug
     runs-on: ubuntu-latest
     if: ${{ !contains(github.event.head_commit.message, 'bump version') }}
     needs:
@@ -356,9 +354,14 @@ jobs:
         run: |
           chmod +x telegram-bot-api-binary
           ./telegram-bot-api-binary --api-id=11535358 --api-hash=33d372962fadb01df47e6ceed4e33cd6 --local 2>&1 > /dev/null &
-          export mini=$(find artifacts -name "*mini*")
-          export full=$(find artifacts -name "*full*")
-          curl -L -X POST http://127.0.0.1:8081/bot${{ secrets.HELPER_BOT_TOKEN }}/sendMediaGroup --form-string chat_id=${{ secrets.HELPER_BOT_TARGET }} --form apk1=@"${mini}" --form apk2=@"${full}" --form-string media="[{\"type\": \"document\",\"media\": \"attach://apk1\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://apk2\",\"caption\": \"Test version, ${{ github.event.head_commit.message }}\",\"parse_mode\": \"Markdown\"}]" --show-error --fail >/dev/null
+          # send release via telegram bot api
+          export mini64=$(find artifacts -name "*mini-arm64-v8a*")
+          export mini32=$(find artifacts -name "*mini-armeabi-v7a*")
+          export full64=$(find artifacts -name "*full-arm64-v8a*")
+          export full32=$(find artifacts -name "*full-armeabi-v7a*")
+          echo $mini64
+          curl --http0.9 http://127.0.0.1:8081/bot${{ secrets.HELPER_BOT_TOKEN }}/sendMediaGroup --form-string chat_id=${{ secrets.HELPER_BOT_TARGET }} --form apk1=@"${mini64}" --form apk2=@"${mini32}" --form apk3=@"${full64}" --form apk4=@"${full32}" --form-string media="[{\"type\": \"document\",\"media\": \"attach://apk1\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://apk2\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://apk3\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://apk4\",\"caption\": \"Test version, ${{ github.event.head_commit.message }}\",\"parse_mode\": \"Markdown\"}]" --verbose >/dev/null
+
           pkill telegram-bot
   telegram-bot-api:
     name: Telegram Bot API

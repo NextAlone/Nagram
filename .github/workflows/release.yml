@@ -101,8 +101,6 @@ jobs:
         flavor:
           - armeabi-v7a
           - arm64-v8a
-          - x86
-          - x86_64
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -298,18 +296,6 @@ jobs:
           path: |
             TMessagesProj/src/main/libs
           key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-arm64-v8a
-      - name: Native Cache (x86)
-        uses: actions/cache@v2
-        with:
-          path: |
-            TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-x86
-      - name: Native Cache (x86_64)
-        uses: actions/cache@v2
-        with:
-          path: |
-            TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-x86_64
       - name: V2ray Cache
         uses: actions/cache@v2
         with:
@@ -328,10 +314,10 @@ jobs:
           path: |
             TMessagesProj/libs/ssr-libev-release.aar
           key: ${{ hashFiles('shadowsocksr_status') }}
-      - name: Fix Gradle Memoery
+      - name: Configure Gradle
         run: |
           sed -i -e "s/16384/6144/g" gradle.properties
-#          echo "ndk.dir=${ANDROID_HOME}/ndk-bundle" > local.properties
+          echo "sdk.dir=${ANDROID_HOME}" >> local.properties
       - name: Gradle cache
         uses: actions/cache@v2
         with:
@@ -350,7 +336,7 @@ jobs:
           name: ${{ matrix.flavor }}
           path: ${{ env.APK }}
   upload:
-    name: Upload Release
+    name: Upload release
     if: github.event.inputs.upload != 'y'
     runs-on: ubuntu-latest
     needs:
@@ -366,7 +352,7 @@ jobs:
         with:
           name: telegram-bot-api-binary
           path: .
-      - name: Release
+      - name: Send to Telegram
         run: |
           chmod +x telegram-bot-api-binary
           ./telegram-bot-api-binary --api-id=11535358 --api-hash=33d372962fadb01df47e6ceed4e33cd6 --local 2>&1 > /dev/null &
