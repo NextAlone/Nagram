@@ -489,7 +489,7 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
             text = Emoji.replaceEmoji(text, nameTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(22), false);
         } catch (Exception ignore) {}
 
-        drawPremium = user.premium || NekoConfig.localPremium.Bool();
+        drawPremium = user.premium;
         // NekoX: test during merge, official value: false
         if (text != null && drawPremium) {
             SpannableStringBuilder spannableStringBuilder = SpannableStringBuilder.valueOf(text);
