@@ -289,6 +289,7 @@ import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.helpers.EntitiesHelper;
 import top.qwq2333.nullgram.utils.Defines;
 import top.qwq2333.nullgram.utils.Log;
+import top.qwq2333.nullgram.utils.PermissionUtils;
 
 @SuppressWarnings("unchecked")
 public class
@@ -11008,14 +11009,8 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                 FileLog.e(e);
             }
         } else if (which == attach_gallery) {
-            if (Build.VERSION.SDK_INT >= 23 &&
-                getParentActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                try {
-                    getParentActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, BasePermissionsActivity.REQUEST_CODE_EXTERNAL_STORAGE);
-                } catch (Throwable ignore) {
-
-                }
+            if (!PermissionUtils.isImagesAndVideoPermissionGranted()) {
+                PermissionUtils.requestImagesAndVideoPermission(getParentActivity());
                 return;
             }
             boolean allowGifs;

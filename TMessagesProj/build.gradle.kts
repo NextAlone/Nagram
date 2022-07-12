@@ -84,7 +84,7 @@ dependencies {
 }
 
 android {
-    compileSdk = 32
+    compileSdk = 33
     buildToolsVersion = "32.0.0"
     ndkVersion = "21.4.7075529"
 
@@ -104,9 +104,7 @@ android {
     lint {
         checkReleaseBuilds = false
         disable += listOf(
-            "MissingTranslation",
-            "ExtraTranslation",
-            "BlockedPrivateApi"
+            "MissingTranslation", "ExtraTranslation", "BlockedPrivateApi"
         )
     }
 
@@ -137,10 +135,9 @@ android {
     signingConfigs {
         create("release") {
             storeFile = File(projectDir, "config/release.keystore")
-            storePassword =
-                (if (keystorePwd != null) keystorePwd else System.getenv("KEYSTORE_PASS"));
-            keyAlias = (if (alias != null) alias else System.getenv("ALIAS_NAME"))
-            keyPassword = (if (pwd != null) pwd else System.getenv("ALIAS_PASS"))
+            storePassword = (keystorePwd ?: System.getenv("KEYSTORE_PASS"));
+            keyAlias = (alias ?: System.getenv("ALIAS_NAME"))
+            keyPassword = (pwd ?: System.getenv("ALIAS_PASS"))
             enableV3Signing = true
             enableV4Signing = true
         }
@@ -159,7 +156,7 @@ android {
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 32
+        targetSdk = 33
 
         versionName = if (isStable) {
             "v" + officialVersionName + "-" + (Common.getGitHeadRefsSuffix(rootProject))
@@ -238,6 +235,5 @@ android {
 }
 
 
-tasks.register<ReplaceIcon>("replaceIcon") {
-}
+tasks.register<ReplaceIcon>("replaceIcon") {}
 tasks.getByName("preBuild").dependsOn(tasks.getByName("replaceIcon"))
