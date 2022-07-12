@@ -317,6 +317,9 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
     }
 
     public boolean onTapItem(ChatMessageCell view, ChatActivity chatActivity) {
+        if (NekoConfig.disablePremiumStickerAnimation.Bool()) {
+            return false;
+        }
         if (chatActivity.isSecretChat() || view.getMessageObject() == null || view.getMessageObject().getId() < 0) {
             return false;
         }
