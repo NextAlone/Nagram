@@ -3615,9 +3615,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         }
         int bottom = top + Theme.chat_composeShadowDrawable.getIntrinsicHeight();
 
-        Theme.chat_composeShadowDrawable.setAlpha((int) (composeShadowAlpha * 0xFF));
-        Theme.chat_composeShadowDrawable.setBounds(0, top, getMeasuredWidth(), bottom);
-        Theme.chat_composeShadowDrawable.draw(canvas);
+        canvas.drawLine(0, bottom - 1, getMeasuredWidth(), bottom - 1, Theme.dividerPaint);
         bottom += chatSearchExpandOffset;
         if (allowBlur) {
             backgroundPaint.setColor(getThemedColor(Theme.key_chat_messagePanelBackground));

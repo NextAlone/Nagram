@@ -77,7 +77,6 @@ public class DrawerLayoutContainer extends FrameLayout {
     private boolean inLayout;
     private int minDrawerMargin;
     private float scrimOpacity;
-    private Drawable shadowLeft;
     private boolean allowOpenDrawer;
     private boolean allowOpenDrawerBySwipe = true;
 
@@ -139,7 +138,6 @@ public class DrawerLayoutContainer extends FrameLayout {
             setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
 
-        shadowLeft = getResources().getDrawable(R.drawable.menu_shadow);
     }
 
     @SuppressLint("NewApi")
@@ -706,13 +704,6 @@ public class DrawerLayoutContainer extends FrameLayout {
             if (indexOfChild(child) == lastVisibleChild) {
                 scrimPaint.setColor((int) (((0x99000000 & 0xff000000) >>> 24) * scrimOpacity) << 24);
                 canvas.drawRect(clipLeft, 0, clipRight, getHeight(), scrimPaint);
-            }
-        } else if (shadowLeft != null) {
-            final float alpha = Math.max(0, Math.min(drawerPosition / AndroidUtilities.dp(20), 1.0f));
-            if (alpha != 0) {
-                shadowLeft.setBounds((int) drawerPosition, child.getTop(), (int) drawerPosition + shadowLeft.getIntrinsicWidth(), child.getBottom());
-                shadowLeft.setAlpha((int) (0xff * alpha));
-                shadowLeft.draw(canvas);
             }
         }
         return result;

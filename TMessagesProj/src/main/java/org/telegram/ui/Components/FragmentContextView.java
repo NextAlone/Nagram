@@ -125,7 +125,6 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     private ChatActivity chatActivity;
     private View applyingView;
     private FrameLayout frameLayout;
-    private View shadow;
     private View selector;
     private RLottieImageView importingImageView;
     private RLottieImageView muteButton;
@@ -315,16 +314,13 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     timeLayout.draw(canvas);
                     canvas.restore();
                 }
+                canvas.drawLine(0, AndroidUtilities.dp(getStyleHeight()) - 1, getMeasuredWidth(), AndroidUtilities.dp(getStyleHeight()) - 1, Theme.dividerPaint);
             }
         };
         addView(frameLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 36, Gravity.TOP | Gravity.LEFT, 0, 0, 0, 0));
 
         selector = new View(context);
         frameLayout.addView(selector, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
-
-        shadow = new View(context);
-        shadow.setBackgroundResource(R.drawable.blockpanel_shadow);
-        addView(shadow, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 2, Gravity.LEFT | Gravity.TOP, 0, 36, 0, 0));
 
         int iconColor = getThemedColor(Theme.key_inappPlayerPlayPause);
 
@@ -979,7 +975,6 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             avatars.setLayoutParams(LayoutHelper.createFrame(108, getStyleHeight(), Gravity.LEFT | Gravity.TOP));
         }
         frameLayout.setLayoutParams(LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, getStyleHeight(), Gravity.TOP | Gravity.LEFT, 0, 0, 0, 0));
-        shadow.setLayoutParams(LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 2, Gravity.LEFT | Gravity.TOP, 0, getStyleHeight(), 0, 0));
 
         if (topPadding > 0 && topPadding != AndroidUtilities.dp2(getStyleHeight())) {
             updatePaddings();

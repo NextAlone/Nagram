@@ -116,9 +116,8 @@ public class ActionBarLayout extends FrameLayout {
                     }
                 }
                 boolean result = super.drawChild(canvas, child, drawingTime);
-                if (actionBarHeight != 0 && headerShadowDrawable != null) {
-                    headerShadowDrawable.setBounds(0, actionBarY + actionBarHeight, getMeasuredWidth(), actionBarY + actionBarHeight + headerShadowDrawable.getIntrinsicHeight());
-                    headerShadowDrawable.draw(canvas);
+                if (actionBarHeight != 0) {
+                    canvas.drawLine(0, actionBarY + actionBarHeight, getMeasuredWidth(), actionBarY + actionBarHeight, Theme.dividerPaint);
                 }
                 return result;
             }
@@ -331,8 +330,6 @@ public class ActionBarLayout extends FrameLayout {
         }
     }
 
-    private static Drawable headerShadowDrawable;
-    private static Drawable layerShadowDrawable;
     private static Paint scrimPaint;
 
     private Runnable waitingForKeyboardCloseRunnable;
@@ -423,12 +420,7 @@ public class ActionBarLayout extends FrameLayout {
     public ActionBarLayout(Context context) {
         super(context);
         parentActivity = (Activity) context;
-
-        if (layerShadowDrawable == null) {
-            layerShadowDrawable = getResources().getDrawable(R.drawable.layer_shadow);
-            headerShadowDrawable = null;
-            scrimPaint = new Paint();
-        }
+        scrimPaint = new Paint();
     }
 
     public void init(ArrayList<BaseFragment> stack) {
@@ -481,17 +473,7 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     public void drawHeaderShadow(Canvas canvas, int alpha, int y) {
-        if (headerShadowDrawable != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                if (headerShadowDrawable.getAlpha() != alpha) {
-                    headerShadowDrawable.setAlpha(alpha);
-                }
-            } else {
-                headerShadowDrawable.setAlpha(alpha);
-            }
-            headerShadowDrawable.setBounds(0, y, getMeasuredWidth(), y + headerShadowDrawable.getIntrinsicHeight());
-            headerShadowDrawable.draw(canvas);
-        }
+        canvas.drawLine(0, y, getMeasuredWidth(), y, Theme.dividerPaint);
     }
 
     @Keep
@@ -626,12 +608,7 @@ public class ActionBarLayout extends FrameLayout {
 
         if (translationX != 0 || overrideWidthOffset != -1) {
             int widthOffset = overrideWidthOffset != -1 ? overrideWidthOffset : width - translationX;
-            if (child == containerView) {
-                float alpha = MathUtils.clamp(widthOffset / (float) AndroidUtilities.dp(20), 0, 1f);
-                layerShadowDrawable.setBounds(translationX - layerShadowDrawable.getIntrinsicWidth(), child.getTop(), translationX, child.getBottom());
-                layerShadowDrawable.setAlpha((int) (0xff * alpha));
-                layerShadowDrawable.draw(canvas);
-            } else if (child == containerViewBack) {
+            if (child == containerViewBack) {
                 float opacity = MathUtils.clamp(widthOffset / (float) width, 0, 0.8f);
                 scrimPaint.setColor(Color.argb((int)(0x99 * opacity), 0x00, 0x00, 0x00));
                 if (overrideWidthOffset != -1) {

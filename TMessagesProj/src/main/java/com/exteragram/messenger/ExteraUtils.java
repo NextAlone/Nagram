@@ -15,7 +15,6 @@ import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.TLObject;
 
-
 import com.exteragram.messenger.ExteraConfig;
 
 public class ExteraUtils {
