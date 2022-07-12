@@ -55,8 +55,8 @@
     <string name="PrivacyNoticePhoneVisible">Se ha detectado que tu número de teléfono es visible para cualquier persona, que puede hacer que los hackers controlados por el gobierno encuentren su verdadera identidad, ¡desactívela!</string>
     <string name="PrivacyNoticeAddByPhone">No está desactivado el ajuste \"Permitir encontrarme a través del número de teléfono\", lo que puede hacer que un hacker controlado por el gobierno encuentre su verdadera identidad, ¡Desactivala!</string>
     <string name="PrivacyNoticeP2p">Se detecta que no ha desactivado la configuración \"Permitir llamadas P2P\", lo que puede hacer que los piratas informáticos controlados por el gobierno encuentren su verdadera identidad, ¡desactívela!</string>
-    <string name="PrivacyNotice2fa">Se detecta que no ha establecido una contraseña, lo que puede causar que los hackers controlados por el gobierno encuentren su verdadera identidad, ¡por favor configure una!</string>
-    <string name="ApplySuggestion">OK, aplícalo</string>
+    <string name="PrivacyNotice2fa">No has establecido una contraseña, lo que permite a los hackers controlados por el gobierno encontrar tu verdadera identidad. Por favor, pon una!</string>
+    <string name="ApplySuggestion">Ok, aplícalo</string>
     <string name="DoNotRemindAgain">No volver a recordar</string>
     <string name="RemoveTitleEmoji">Eliminar emoji en el título</string>
     <string name="NekoXProxy">Proxy público de NekoX</string>
@@ -268,7 +268,7 @@
     <string name="NekoXUpdateTranslationHint">Pulse para traducir el registro de cambios</string>
     <string name="showSeconds">Mostrar los segundos en la marca de tiempo</string>
     <string name="ShareMessages">Compartir</string>
-    <string name="DisableInstantCamera">Deshabilitar la cámara instantánea</string>
+    <string name="DisableInstantCamera">"Desactivar la cámara  instantánea"</string>
     <string name="rememberAllBackMessages">Recordar todas las respuestas en las que se hizo clic</string>
     <string name="Name">Nombre</string>
     <string name="channelAlias">Alias del canal</string>

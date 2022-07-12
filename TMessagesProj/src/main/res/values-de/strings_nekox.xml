@@ -53,7 +53,7 @@
     <string name="PrivacyNoticeAddByPhone">Es wurde festgestellt, dass du die Option \"Erlaube mich über die Rufnummer zu finden\" nicht deaktiviert hast, was dazu führen kann, dass staatlich kontrollierte Hacker deine wahre Identität ermitteln können. Bitte deaktiviere dies!</string>
     <string name="PrivacyNoticeP2p">Du hast die Option \"P2P-Anrufe zulassen\" nicht ausgeschaltet. Dadurch können staatlich kontrollierte Hacker deine wahre Identität herausfinden. Bitte schalte sie aus!</string>
     <string name="PrivacyNotice2fa">Du hast kein Passwort festgelegt, so dass staatlich kontrollierte Hacker deine wahre Identität herausfinden können. Bitte eins festlegen!</string>
-    <string name="ApplySuggestion">OK, anwenden</string>
+    <string name="ApplySuggestion">Okay, anwenden</string>
     <string name="DoNotRemindAgain">Nicht mehr erinnern</string>
     <string name="RemoveTitleEmoji">Emoji im Titel entfernen</string>
     <string name="NekoXProxy">Öffentlicher NekoX-Proxy</string>

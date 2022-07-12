@@ -99,8 +99,8 @@
     <string name="SkipOpenLinkConfirm">غیرفعال کردن کادر تایید باز شدن لینک</string>
     <string name="DeleteAllInChat">حذف همه در این گفتگو</string>
     <string name="DeleteAllInChatAlert">هشدار! با این کار **تمام پیام‌ها** در این گفتگو برای **همه** حضار حذف می‌شود.</string>
-    <string name="UnblockAll">آنـبلاک همه</string>
-    <string name="UnblockAllWarn">آیا از آنـبلاک **همه کاربران و ربات‌ها** اطمینان دارید؟</string>
+    <string name="UnblockAll">آنبلاک همه</string>
+    <string name="UnblockAllWarn">آیا از آنبلاک**همه کاربران و ربات‌ها** اطمینان دارید؟</string>
     <string name="BlockedListEmpty">شما هیچ فردی را مسدود نکرده‌اید :)</string>
     <string name="ProxyTypeVmess">پروکسی VMess</string>
     <string name="AddProxySocks5">افزودن پروکسی SOCKS5</string>
@@ -119,8 +119,8 @@
     <string name="VmessSecurity">امنیت</string>
     <string name="VmessNetwork">شبکه</string>
     <string name="VmessHeadType">نوع Head</string>
-    <string name="VmessRequestHost">Request Host / QUIC Security</string>
-    <string name="VmessPath">Path / QUIC Key</string>
+    <string name="VmessRequestHost">درخواست Host / امنیت QUIC</string>
+    <string name="VmessPath">کلید Path / QUIC</string>
     <string name="VmessTls">استفاده از TLS</string>
     <string name="ProxyInfoSS">تنظیمات پروکسی Shadowsocks</string>
     <string name="SSPassword">کلمه‌عبور</string>
@@ -160,7 +160,7 @@
     <string name="DeleteUnavailableServerConfirm">آیا اطمینان دارید که **سرورهای غیرقابل‌دسترس حذف شوند**؟</string>
     <string name="MinApi21Required">متأسفیم، حداقل Android 5 لازم است.</string>
     <string name="MinApi23Required">متأسفیم، حداقل Android 6 لازم است.</string>
-    <string name="MiniVersionAlert">متأسفیم، نسخه مینی (mini) از این نوع پروکسی پشتیبانی نمی‌کند. لطفا نسخه را در تنظیمات تغییر دهید.</string>
+    <string name="MiniVersionAlert">نسخه مینی (mini) از این نوع پروکسی پشتیبانی نمی‌کند. لطفا نسخه را در تنظیمات تغییر دهید.</string>
     <string name="ImportProxyFromClipboard">وارد کردن از کلیپ‌بورد</string>
     <string name="BrokenLink">لینک خراب / ناشناخته</string>
     <string name="ShareQRCode">کد QR</string>
@@ -174,7 +174,7 @@
     <string name="TransSite">پلتفرم ترجمه</string>
     <string name="OpenKayChain">OpenPGP Client</string>
     <string name="OpenPGPApp">OpenPGP Provider</string>
-    <string name="OpenPGPKey">OpenPGP Key</string>
+    <string name="OpenPGPKey">کلید OpenPGP</string>
     <string name="None">هیچ کدام</string>
     <string name="Sign">امضا</string>
     <string name="PGPDecrypt">رمزگشایی پیام</string>
@@ -191,11 +191,11 @@
     <string name="DismissForYourself">لغو کردن برای خودتان</string>
     <string name="ImportLogin">ورود از طریق کد QR</string>
     <string name="QRLoginNotice">این کد / لینک QR به کسی اجازه می‌دهد تا به حساب تلگرام شما وارد شود. آیا این درخواست شماست؟</string>
-    <string name="QRLoginConfirm">پرسیدن ورود</string>
+    <string name="QRLoginConfirm">تایید ورود</string>
     <string name="StorageReset">پاکسازی حافظه</string>
     <string name="StorageResetInfo">تمام اطلاعات این برنامه برای همیشه حذف خواهد شد (و ابتدا سعی کنید از همه حساب‌ها خارج شوید).</string>
     <string name="FCTitle">درباره به‌روزرسانی های برنامه</string>
-    <string name="FCInfo">مایل به دنبال کردن کانال‌های اطلاع‌رسانی و به‌روزرسانی ما هستید؟</string>
+    <string name="FCInfo">مایل به دنبال کردن کانال اطلاع‌رسانی و بروزرسانی ما هستید؟</string>
     <string name="CCTitle">OpenCC (تبدیل چینی)</string>
     <string name="CCTarget">هدف</string>
     <string name="CCNo">هیچ کدام</string>
@@ -206,7 +206,7 @@
     <string name="CCSP">چینی ساده شده (چین)</string>
     <string name="CCJP">کانجی ژاپنی جدید (Shinjitai)</string>
     <string name="UserRestrictionsSendGames">ارسال بازی‌ها</string>
-    <string name="UserRestrictionsSendInline">ارسال ازطریق ربات‌های اینلاین</string>
+    <string name="UserRestrictionsSendInline">ارسال از طریق ربات‌های اینلاین</string>
     <string name="AcceptSecretChat">پذیرش گفتگوی محرمانه جدید</string>
     <string name="TabletMode">حالت تبلت</string>
     <string name="TabletModeDefault">بستگی به دستگاه دارد</string>
@@ -219,12 +219,12 @@
     <string name="HideDeviceInfoOff">پس از ورود به حسابتان وقتی بار دوم وارد برنامه شوید مدل دستگاه ارسال می شود.</string>
     <string name="HideDeviceInfoOn">بعدا می توانید این مورد را در تنظیمات تغییر دهید.</string>
     <string name="AutoDownload">دانلود خودکار</string>
-    <string name="SetPinnedSuffix">(پین شده)</string>
-    <string name="UnpinSticker">لغو پین</string>
+    <string name="SetPinnedSuffix">(پین شده)</string>
+    <string name="UnpinSticker">لغو پین</string>
     <string name="PinSticker">پین</string>
     <string name="EnableStickerPinTip">این عملکرد هنوز درحال توسعه است، همگام‌سازی ابری ممکن است آن‌طور که مورد انتظار است کار نکند.</string>
     <string name="EnableStickerPinAbout">استیکرها پین و همگام‌سازی ابری شوند، حتی حین افزودن استیکر‌های جدید.
-\nبستگی داره به غیرفعال بودن استیکر‌های محبوب و اخیر.</string>
+\nبه غیرفعال بودن استیکر‌های اخیر و مورد علاقه بستگی دارد.</string>
     <string name="EnableStickerPin">فعالسازی پین‌کردن استیکر</string>
     <string name="ArchiveFiles">فایل‌های آرشیو</string>
     <string name="Win32ExecutableFiles">فایل‌های قابل اجرای ویندوزی</string>
@@ -238,7 +238,7 @@
     <string name="BackupSettings">پشتیبان‌گیری از تنظیمات</string>
     <string name="AutoLockImmediately">بلافاصله</string>
     <string name="nekoXPaymentRemovedToast">سیستم پرداخت حذف شده است.</string>
-    <string name="ImportSettingsAlert">آیا از بازنویسی تنظیمات اطمینان دارید؟ وارد کردن تنظیمات از منابع ناشناس ممکن است باعث بازنویسی سنجاق‌شده‌ها، درنتیجه باعث قفل‌شدن برنامه شود.</string>
+    <string name="ImportSettingsAlert">آیا از بازنویسی تنظیمات اطمینان دارید؟ وارد کردن تنظیمات از منابع ناشناس ممکن است باعث بازنویسی پین کد، درنتیجه باعث قفل‌شدن برنامه شود.</string>
     <string name="ImportSettings">وارد کردن تنظیمات</string>
     <string name="AutoCheckUpdateRc">کاندیدای انتشار</string>
     <string name="AutoCheckUpdateStable">پایدار</string>
@@ -246,29 +246,29 @@
     <string name="AutoCheckUpdateOFF">خاموش</string>
     <string name="VersionUpdateNoUpdate">به‌روزرسانی موجود نیست.</string>
     <string name="VersionUpdateNotNow">الان نه</string>
-    <string name="VersionUpdateIgnore">نادیده گرفتن</string>
+    <string name="VersionUpdateIgnore">نادیده بگیر</string>
     <string name="VersionUpdateConfirm">به‌روزرسانی</string>
-    <string name="VersionUpdateVariantNotMatch">نوع نسخه بطور خودکار تشخیص داده نشد.
-\nلطفا بصورت دستی از گیت‌هاب دانلود کنید.</string>
-    <string name="VersionUpdateTitle">نسخه جدیدی موجود است</string>
-    <string name="customPublicProxyIP">تنظیم آی‌پی پروکسی عمومی</string>
+    <string name="VersionUpdateVariantNotMatch">نوع نسخه به طور خودکار تشخیص داده نشد.
+\nلطفا به صورت دستی از GitHub دانلود کنید.</string>
+    <string name="VersionUpdateTitle">نسخه جدید موجود است</string>
+    <string name="customPublicProxyIP">تنظیم IP پروکسی عمومی</string>
     <string name="ShareMessages">اشتراک‌گذاری</string>
     <string name="unreadBadgeOnBackButton">نمایش علامت پیام‌های خوانده نشده روی دکمه بازگشت</string>
-    <string name="customPublicProxyIPNotice">در بعضی از مناطق، تنظیم آی‌پی سی‌دی‌ان پروکسی عمومی (مثل کلادفلیر) می‌تواند سرعت دسترسی را بهبود بخشد.</string>
+    <string name="customPublicProxyIPNotice">در برخی مناطق، تنظیم IP پروکسی عمومی CDN (مانند Cloudflare) می‌تواند سرعت دسترسی را بهبود بخشد.</string>
     <string name="DeleteDownloadedFileSucceed">حذف شده</string>
     <string name="DeleteDownloadedFileConfirm">این فایل از حافظه‌نهان حذف شود؟</string>
     <string name="useCustomEmojiInvalid">فایل ایموجی معتبر نیست.</string>
-    <string name="DeleteDownloadedFileExternal">فایل خارجی رد شده است.</string>
+    <string name="DeleteDownloadedFileExternal">فایل بیرونی رد شده است.</string>
     <string name="update_download_soucre">انتخاب منبع دانلود</string>
     <string name="hideSponsoredMessage">مخفی کردن پیامهای تبلیغاتی</string>
     <string name="rememberAllBackMessages">بخاطر داشتن همه ریپلای‌های کلیک شده</string>
     <string name="useCustomEmoji">استفاده از ایموجی سفارشی</string>
     <string name="valuesLargeAvatarInDrawer">پیشفرض تلگرام
-\nتصویر پروفایل بعنوان پس‌زمینه
-\nتصویر بزرگ پروفایل بعنوان پس‌زمینه</string>
+\nتصویر پروفایل به عنوان پس‌زمینه
+\nتصویر بزرگ پروفایل به عنوان پس‌زمینه</string>
     <string name="DisableInstantCamera">غیرفعال کردن دوربین فوری</string>
-    <string name="repeatConfirmText">آیا از تکرارپیام اطمینان دارید؟</string>
-    <string name="repeatConfirm">قبل از تکرارپیام بپرسد</string>
+    <string name="repeatConfirmText">آیا از تکرار پیام اطمینان دارید؟</string>
+    <string name="repeatConfirm">پرسیدن قبل از تکرار پیام</string>
     <string name="showSeconds">نمایش ثانیه حین نمایش زمان</string>
     <string name="AutoCheckUpdatePreview">پیش‌نمایش (ناپایدار)</string>
     <string name="AppUpdateNekoX">به‌روزرسانی نکوگرام ایکس</string>
@@ -278,5 +278,5 @@
     <string name="channelAliasDetails">لازم است علامت‌گذاری کاربر کانال فعال شود.</string>
     <string name="setChannelAliasName">تنظیم نام مستعار</string>
     <string name="labelChannelUser">علامت‌گذاری کاربر کانال</string>
-    <string name="labelChannelUserDetails">اگر فرستنده پیام یک کانال باشد، این گزینه او را به‌عنوان یک \"کانال\" علامت‌گذاری می‌کند</string>
+    <string name="labelChannelUserDetails">اگر فرستنده پیام یک \"کانال\" باشد، به‌عنوان یک \"کانال\" علامت‌گذاری خواهد شد.</string>
 </resources>

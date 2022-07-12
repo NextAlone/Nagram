@@ -35,7 +35,7 @@
     <string name="Snowflakes">Copos de nieve</string>
     <string name="Fireworks">Fuegos artificiales</string>
     <string name="DeleteDownloadedFile">Borrar archivo descargado</string>
-    <string name="TestBackend">Backend de Prueba</string>
+    <string name="TestBackend">Menú contextual</string>
     <string name="TestBackendOn">Esta cuenta se conectará con el backend de prueba.</string>
     <string name="TestBackendOff">Esta cuenta se conectará con el backend de producción.</string>
     <string name="HideProxySponsorChannel">Ocultar patrocinador del proxy</string>

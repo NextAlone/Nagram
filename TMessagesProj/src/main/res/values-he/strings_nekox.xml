@@ -275,4 +275,8 @@
     <string name="AppUpdateNekoX">עדכון Nekogram X</string>
     <string name="Name">שם</string>
     <string name="channelAlias">כינוי ערוץ</string>
+    <string name="channelAliasDetails">דרישת הוספת תווית על משתמשים בערוצים פעילה.</string>
+    <string name="setChannelAliasName">הגדרת כינוי</string>
+    <string name="labelChannelUserDetails">אם שולח ההודעה הוא „ערוץ”, יתווסף הסימון „ערוץ”.</string>
+    <string name="labelChannelUser">הוספת תווית על משתמש בערוץ</string>
 </resources>

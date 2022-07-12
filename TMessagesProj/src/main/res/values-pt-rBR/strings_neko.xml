@@ -35,13 +35,13 @@
     <string name="Snowflakes">Flocos de neve</string>
     <string name="Fireworks">Fogo de artifício</string>
     <string name="DeleteDownloadedFile">Excluir arquivo baixado</string>
-    <string name="TestBackend">Teste de back-end</string>
+    <string name="TestBackend">Teste de Back-end</string>
     <string name="TestBackendOn">Esta conta se conectará ao servidor de testes do Telegram.</string>
     <string name="TestBackendOff">Esta conta se conectará ao back-end de produção.</string>
     <string name="HideProxySponsorChannel">Ocultar canal do patrocinador do proxy</string>
     <string name="ViewHistory">Ver histórico</string>
     <string name="Nya">Miau!</string>
-    <string name="SaveCacheToExternalFilesDir">Armazenamento de isolamento</string>
+    <string name="SaveCacheToExternalFilesDir">Isolamento de armazenamento</string>
     <string name="SaveCacheToExternalFilesDirAbout">Salve a pasta \"Telegram\" no diretório específico do aplicativo para manter a organização do armazenamento compartilhado.</string>
     <string name="SensitiveDisableFiltering">Desabilitar filtragem de conteúdo sensível</string>
     <string name="SensitiveAbout">Exiba mídia sensível em canais públicos em todos os seus dispositivos.</string>
@@ -85,7 +85,7 @@
     <string name="ConfirmAVMessage">Confirme o envio de vídeo/mensagem de voz</string>
     <string name="AskBeforeCalling">Perguntar antes de ligar</string>
     <string name="ConfirmCall">Confirmar chamada</string>
-    <string name="CallTo">Chamada para **%1$s**?</string>
+    <string name="CallTo">Chamada para **%1$s**\?</string>
     <string name="DisableNumberRounding">Desativar arredondamento</string>
     <string name="Categories">Categorias</string>
     <string name="OfficialChannel">Canal oficial</string>
