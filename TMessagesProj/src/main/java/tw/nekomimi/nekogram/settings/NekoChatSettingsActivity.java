@@ -83,8 +83,11 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final AbstractConfigCell hideSendAsChannelRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideSendAsChannel));
     private final AbstractConfigCell showSpoilersDirectlyRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showSpoilersDirectly));
     private final AbstractConfigCell showServicesTime = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowServicesTime()));
-    private final AbstractConfigCell maxRecentStickerCountRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final AbstractConfigCell combineMessageRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NaConfig.INSTANCE.getCombineMessage(), new String[]{
+            LocaleController.getString("combineMessageEnabledWithReply", R.string.CombineMessageEnabledWithReply),
+            LocaleController.getString("combineMessageEnabled", R.string.CombineMessageEnabled),
+            LocaleController.getString("combineMessageDisabled", R.string.CombineMessageDisabled)
+    }, null));
     private final AbstractConfigCell scrollableChatPreviewRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getScrollableChatPreview()));
     private final AbstractConfigCell dateOfForwardMsgRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDateOfForwardedMsg()));
     private final AbstractConfigCell showMessageIDRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowMessageID()));
