@@ -1623,13 +1623,11 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                         return !message.isSponsored() && chatMode != MODE_SCHEDULED && !message.needDrawBluredPreview() && !message.isLiveLocation() && message.type != 16 && !getMessagesController().isChatNoForwardsWithOverride(currentChat) && !UserObject.isUserSelf(currentUser);
                     case DoubleTap.DOUBLE_TAP_ACTION_REPEAT:
                         allowRepeat = allowChatActions && (currentChat == null || ((!ChatObject.isNotInChat(currentChat) || isThreadChat()) && (!ChatObject.isChannel(currentChat) || currentChat.megagroup) && ChatObject.canSendMessages(currentChat))) &&
-                                (!isThreadChat() && !noforwards ||
-                                        getMessageHelper().getMessageForRepeat(message, selectedObjectGroup) != null);
+                                (!isThreadChat() && !noforwards || getMessageHelper().getMessageForRepeat(message, selectedObjectGroup) != null);
                         return allowRepeat && !message.isSponsored() && chatMode != MODE_SCHEDULED && !message.needDrawBluredPreview() && !message.isLiveLocation() && message.type != 16;
                     case DoubleTap.DOUBLE_TAP_ACTION_REPEAT_AS_COPY:
                         allowRepeat = allowChatActions && (currentChat == null || ((!ChatObject.isNotInChat(currentChat) || isThreadChat()) && (!ChatObject.isChannel(currentChat) || currentChat.megagroup) && ChatObject.canSendMessages(currentChat))) &&
-                                (!isThreadChat() && !noforwards ||
-                                        getMessageHelper().getMessageForRepeat(message, selectedObjectGroup) != null);
+                                (!isThreadChat() || getMessageHelper().getMessageForRepeat(message, selectedObjectGroup) != null);
                         return allowRepeat && !message.isSponsored() && chatMode != MODE_SCHEDULED && !message.needDrawBluredPreview() && !message.isLiveLocation() && message.type != 16;
                     case DoubleTap.DOUBLE_TAP_ACTION_EDIT:
                         return allowEdit;
