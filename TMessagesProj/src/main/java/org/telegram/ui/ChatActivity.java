@@ -25248,24 +25248,28 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
 
     private void openClickableLink(CharacterStyle url, String str, boolean longPress, final ChatMessageCell cell, final MessageObject messageObject) {
         if (longPress) {
-            BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity(), false, themeDelegate);
+            BottomBuilder builder = new BottomBuilder(getParentActivity(), false);
             int timestamp = -1;
             if (str.startsWith("video?")) {
                 timestamp = Utilities.parseInt(str);
             }
             if (timestamp >= 0) {
-                builder.setTitle(AndroidUtilities.formatDuration(timestamp, false));
+                builder.addTitle(AndroidUtilities.formatDuration(timestamp, false));
             } else {
                 String formattedUrl = str;
                 try {
                     formattedUrl = URLDecoder.decode(str.replaceAll("\\+", "%2b"), "UTF-8");
                 } catch (Exception ignore) {}
-                builder.setTitle(formattedUrl);
-                builder.setTitleMultipleLines(true);
+                builder.addTitle(formattedUrl);
+//                builder.setTitleMultipleLines(true);
             }
             final int finalTimestamp = timestamp;
-            boolean noforwards = getMessagesController().isChatNoForwards(currentChat) || (messageObject != null && messageObject.messageOwner != null && messageObject.messageOwner.noforwards);
-            builder.setItems(noforwards ? new CharSequence[] {LocaleController.getString("Open", R.string.Open)} : new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, (dialog, which) -> {
+//            boolean noforwards = getMessagesController().isChatNoForwards(currentChat) || (messageObject != null && messageObject.messageOwner != null && messageObject.messageOwner.noforwards);
+            builder.addItems(new String[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)},
+            new int[]{
+                    R.drawable.baseline_open_in_browser_24,
+                    R.drawable.baseline_content_copy_24,
+            }, (which, _text, ign) -> {
                 if (which == 0) {
                     if (str.startsWith("video?")) {
                         didPressMessageUrl(url, false, messageObject, cell);
@@ -25305,7 +25309,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                             }
                         }
                         if (link == null) {
-                            return;
+                            return Unit.INSTANCE;
                         }
                         AndroidUtilities.addToClipboard(link);
                     } else {
@@ -25320,6 +25324,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                     }
 
                 }
+                return Unit.INSTANCE;
             });
             builder.setOnPreDismissListener(di -> {
                 if (cell != null) {
