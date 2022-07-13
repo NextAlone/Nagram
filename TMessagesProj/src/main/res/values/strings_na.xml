@@ -36,4 +36,8 @@
     <string name="ShowPremiumStickersAnimation">Show premium stickers Animation</string>
     <string name="ShowPremiumStarInChat">Show Premium Star In Chat</string>
     <string name="ShowPremiumAvatarAnimation">Show Premium Avatar Animation</string>
+    <string name="AppIconGoogle">Google</string>
+    <string name="AppIconColorful">Colorful</string>
+    <string name="AppIconDarkGreen">Dark Green</string>
+    <string name="AppIconNeon">Neon</string>
 </resources>
