@@ -335,6 +335,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
     private BlurredFrameLayout bottomMessagesActionContainer;
     private TextView forwardButton;
     private TextView replyButton;
+    private TextView selectButton;
     private FrameLayout emptyViewContainer;
     private ChatGreetingsView greetingsViewContainer;
     public SizeNotifierFrameLayout contentView;
@@ -533,6 +534,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
     private AnimatorSet replyButtonAnimation;
     private AnimatorSet editButtonAnimation;
     private AnimatorSet forwardButtonAnimation;
+    private AnimatorSet selectButtonAnimation;
 
     private int lastStableId = 10;
 
@@ -1292,7 +1294,6 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
 
     private final static int copy = 10;
     private final static int forward = 11;
-    private final static int select_between = 112;
     private final static int delete = 12;
     private final static int chat_enc_timer = 13;
     private final static int chat_menu_attach = 14;
@@ -2317,25 +2318,6 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                         return;
                     }
                     createDeleteMessagesAlert(null, null);
-                } else if (id == select_between) {
-                    // For selecting messages between the first and the last.
-                    ArrayList<Integer> ids = new ArrayList<>();
-                    for (int a = 1; a >= 0; a--) {
-                        for (int b = 0; b < selectedMessagesIds[a].size(); b++) {
-                            ids.add(selectedMessagesIds[a].keyAt(b));
-                        }
-                    }
-                    Collections.sort(ids);
-                    Integer begin = ids.get(0);
-                    Integer end = ids.get(ids.size() - 1);
-                    for (int i = 0; i < messages.size(); i++) {
-                        Integer msgId = messages.get(i).getId();
-                        if (msgId > begin && msgId < end && !selectedMessagesIds[0].withTouch.contains(msgId)) {
-                            addToSelectedMessages(messages.get(i), false);
-                            updateActionModeTitle();
-                            updateVisibleRows();
-                        }
-                    }
                 } else if (id == forward) {
                     openForward(true);
                 } else if (id == save_to) {
@@ -3027,7 +3009,6 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
             actionModeViews.add(actionMode.addItemWithWidth(edit, R.drawable.msg_edit, AndroidUtilities.dp(54), LocaleController.getString("Edit", R.string.Edit)));
             actionModeViews.add(actionMode.addItemWithWidth(star, R.drawable.msg_fave, AndroidUtilities.dp(54), LocaleController.getString("AddToFavorites", R.string.AddToFavorites)));
             actionModeViews.add(actionMode.addItemWithWidth(copy, R.drawable.msg_copy, AndroidUtilities.dp(54), LocaleController.getString("Copy", R.string.Copy)));
-            actionModeViews.add(actionMode.addItemWithWidth(select_between, R.drawable.select_between, AndroidUtilities.dp(54), LocaleController.getString("Edit", R.string.Edit)));
             actionModeViews.add(actionMode.addItemWithWidth(forward, R.drawable.msg_forward, AndroidUtilities.dp(54), LocaleController.getString("Forward", R.string.Forward)));
             actionModeViews.add(actionMode.addItemWithWidth(delete, R.drawable.msg_delete, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete)));
         } else {
@@ -3036,7 +3017,6 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
             actionModeViews.add(actionMode.addItemWithWidth(copy, R.drawable.msg_copy, AndroidUtilities.dp(54), LocaleController.getString("Copy", R.string.Copy)));
             actionModeViews.add(actionMode.addItemWithWidth(delete, R.drawable.msg_delete, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete)));
         }
-        updateMultipleSelection(actionMode);
         actionMode.getItem(edit).setVisibility(canEditMessagesCount == 1 && selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1 ? View.VISIBLE : View.GONE);
         actionMode.getItem(copy).setVisibility(!getMessagesController().isChatNoForwards(currentChat) && selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
         actionMode.getItem(star).setVisibility(selectedMessagesCanStarIds[0].size() + selectedMessagesCanStarIds[1].size() != 0 ? View.VISIBLE : View.GONE);
@@ -8218,6 +8198,39 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
         bottomOverlayImage.setContentDescription(LocaleController.getString("SettingsHelp", R.string.SettingsHelp));
         bottomOverlayImage.setOnClickListener(v -> undoView.showWithAction(dialog_id, UndoView.ACTION_TEXT_INFO, LocaleController.getString("BroadcastGroupInfo", R.string.BroadcastGroupInfo)));
 
+        selectButton = new TextView(context);
+        selectButton.setText(LocaleController.getString("Select", R.string.Select));
+        selectButton.setGravity(Gravity.CENTER_VERTICAL);
+        selectButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+        selectButton.setPadding(AndroidUtilities.dp(14), 0, AndroidUtilities.dp(21), 0);
+        selectButton.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(Theme.key_actionBarActionModeDefaultSelector), 3));
+        selectButton.setTextColor(getThemedColor(Theme.key_actionBarActionModeDefaultIcon));
+        selectButton.setCompoundDrawablePadding(AndroidUtilities.dp(7));
+        selectButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        Drawable image = context.getResources().getDrawable(R.drawable.select_between).mutate();
+        image.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_actionBarActionModeDefaultIcon), PorterDuff.Mode.MULTIPLY));
+        selectButton.setCompoundDrawablesWithIntrinsicBounds(image, null, null, null);
+        selectButton.setOnClickListener(v -> {
+            ArrayList<Integer> ids = new ArrayList<>();
+            for (int a = 1; a >= 0; a--) {
+                for (int b = 0; b < selectedMessagesIds[a].size(); b++) {
+                    ids.add(selectedMessagesIds[a].keyAt(b));
+                }
+            }
+            Collections.sort(ids);
+            Integer begin = ids.get(0);
+            Integer end = ids.get(ids.size() - 1);
+            for (int i = 0; i < messages.size(); i++) {
+                Integer msgId = messages.get(i).getId();
+                if (msgId > begin && msgId < end && !selectedMessagesIds[0].withTouch.contains(msgId)) {
+                    addToSelectedMessages(messages.get(i), false);
+                    updateActionModeTitle();
+                    updateVisibleRows();
+                }
+            }
+        });
+        bottomMessagesActionContainer.addView(selectButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));
+
         replyButton = new TextView(context);
         replyButton.setText(LocaleController.getString("Reply", R.string.Reply));
         replyButton.setGravity(Gravity.CENTER_VERTICAL);
@@ -8227,7 +8240,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
         replyButton.setTextColor(getThemedColor(Theme.key_actionBarActionModeDefaultIcon));
         replyButton.setCompoundDrawablePadding(AndroidUtilities.dp(7));
         replyButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        Drawable image = context.getResources().getDrawable(R.drawable.input_reply).mutate();
+        image = context.getResources().getDrawable(R.drawable.input_reply).mutate();
         image.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_actionBarActionModeDefaultIcon), PorterDuff.Mode.MULTIPLY));
         replyButton.setCompoundDrawablesWithIntrinsicBounds(image, null, null, null);
         replyButton.setOnClickListener(v -> {
@@ -13347,6 +13360,49 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                     }
                 }
 
+                if (selectButton != null) {
+                    int newSelectVisibility = selectedMessagesIds[0].size() > 1 ? View.VISIBLE : View.GONE;
+
+                    if (selectButton.getVisibility() != newSelectVisibility) {
+                        if (selectButtonAnimation != null) {
+                            selectButtonAnimation.cancel();
+                        }
+                        selectButtonAnimation = new AnimatorSet();
+                        if (newSelectVisibility == View.VISIBLE) {
+                            selectButton.setVisibility(newSelectVisibility);
+                            selectButtonAnimation.playTogether(
+                                    ObjectAnimator.ofFloat(selectButton, View.ALPHA, 1.0f),
+                                    ObjectAnimator.ofFloat(selectButton, View.SCALE_Y, 1.0f)
+                            );
+                        } else {
+                            selectButtonAnimation.playTogether(
+                                    ObjectAnimator.ofFloat(selectButton, View.ALPHA, 0.0f),
+                                    ObjectAnimator.ofFloat(selectButton, View.SCALE_Y, 0.0f)
+                            );
+                        }
+                        selectButtonAnimation.setDuration(100);
+                        int newSelectVisibilityFinal = newSelectVisibility;
+                        selectButtonAnimation.addListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                if (selectButtonAnimation != null && selectButtonAnimation.equals(animation)) {
+                                    if (newSelectVisibilityFinal == View.GONE) {
+                                        selectButton.setVisibility(View.GONE);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+                                if (selectButtonAnimation != null && selectButtonAnimation.equals(animation)) {
+                                    selectButtonAnimation = null;
+                                }
+                            }
+                        });
+                        selectButtonAnimation.start();
+                    }
+                }
+
                 if (editItem != null) {
                     if (copyVisible != newCopyVisible || starVisible != newStarVisible) {
                         if (newEditVisibility == View.VISIBLE) {
@@ -13470,7 +13526,6 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                 bottomOverlayChatText.setEnabled(true);
             }
         }
-        updateMultipleSelection(actionBar.createActionMode());
     }
 
     private void updateTitle() {
@@ -22498,7 +22553,6 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
         addToSelectedMessages(message, listView);
         selectedMessagesIds[0].withTouch.clear();
         selectedMessagesIds[0].withTouch.add(message.getId());
-        updateMultipleSelection(actionMode);
 
         if (chatActivityEnterView != null) {
             chatActivityEnterView.preventInput = true;
@@ -22540,18 +22594,6 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
             scrimViewAlphaAnimator.setDuration(150);
             scrimViewAlphaAnimator.start();
         }
-    }
-
-    private void updateMultipleSelection(ActionBarMenu actionMode) {
-        if (actionMode == null) {
-            return;
-        }
-        View item = actionMode.getItem(select_between);
-        if (item == null) {
-            return;
-        }
-        final boolean t = selectedMessagesIds[0].withTouch.size() > 1;
-        item.setVisibility(t ? View.VISIBLE : View.GONE);
     }
 
     Runnable updateReactionRunnable;
@@ -27384,6 +27426,8 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
         themeDescriptions.add(new ThemeDescription(replyButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_actionBarActionModeDefaultSelector));
         themeDescriptions.add(new ThemeDescription(forwardButton, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, Theme.key_actionBarActionModeDefaultIcon));
         themeDescriptions.add(new ThemeDescription(forwardButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_actionBarActionModeDefaultSelector));
+        themeDescriptions.add(new ThemeDescription(selectButton, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_IMAGECOLOR, null, null, null, null, Theme.key_actionBarActionModeDefaultIcon));
+        themeDescriptions.add(new ThemeDescription(selectButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, null, null, null, null, Theme.key_actionBarActionModeDefaultSelector));
 
         themeDescriptions.add(new ThemeDescription(bottomOverlayText, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_chat_secretChatStatusText));
         themeDescriptions.add(new ThemeDescription(bottomOverlayChatText, 0, null, null, null, null, Theme.key_chat_fieldOverlayText));
