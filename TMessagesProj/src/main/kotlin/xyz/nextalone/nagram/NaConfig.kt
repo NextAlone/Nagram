@@ -12,7 +12,7 @@ import java.io.ObjectInputStream
 
 
 object NaConfig {
-    private const val TAG =
+    public const val TAG =
         "NextAlone"
     val preferences: SharedPreferences =
         ApplicationLoader.applicationContext.getSharedPreferences(
@@ -183,11 +183,6 @@ object NaConfig {
         ConfigItem.configTypeBool,
         false
     )
-    val showPremiumStickersAnimation = addConfig(
-        "ShowPremiumStickersAnimation",
-        ConfigItem.configTypeBool,
-        true
-    )
     val showPremiumStarInChat = addConfig(
         "ShowPremiumStarInChat",
         ConfigItem.configTypeBool,
@@ -199,7 +194,7 @@ object NaConfig {
         true
     )
 
-    fun addConfig(
+    private fun addConfig(
         k: String,
         t: Int,
         d: Any?
