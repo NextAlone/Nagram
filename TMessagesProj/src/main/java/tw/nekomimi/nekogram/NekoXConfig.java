@@ -46,6 +46,7 @@ public class NekoXConfig {
             380570774, // Haruhi
             784901712, // NextAlone
             457896977, // Queally
+            782954985, // MaiTungTM
     };
 
     public static final int TITLE_TYPE_TEXT = 0;
