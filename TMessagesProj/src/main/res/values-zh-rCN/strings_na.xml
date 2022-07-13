@@ -35,4 +35,5 @@
     <string name="ShowServicesTime">显示服务消息时间</string>
     <string name="ShowPremiumStickersAnimation">显示 Premium 贴纸动画</string>
     <string name="ShowPremiumStarInChat">在消息上显示 Premium 用户标识</string>
+    <string name="ShowPremiumAvatarAnimation">显示 Premium 动态头像</string>
 </resources>

@@ -35,4 +35,5 @@
     <string name="ShowServicesTime">Show timestamp in service messages</string>
     <string name="ShowPremiumStickersAnimation">Show premium stickers Animation</string>
     <string name="ShowPremiumStarInChat">Show Premium Star In Chat</string>
+    <string name="ShowPremiumAvatarAnimation">Show Premium Avatar Animation</string>
 </resources>

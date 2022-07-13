@@ -193,6 +193,11 @@ object NaConfig {
         ConfigItem.configTypeBool,
         true
     )
+    val showPremiumAvatarAnimation = addConfig(
+        "ShowPremiumAvatarAnimation",
+        ConfigItem.configTypeBool,
+        true
+    )
 
     fun addConfig(
         k: String,
