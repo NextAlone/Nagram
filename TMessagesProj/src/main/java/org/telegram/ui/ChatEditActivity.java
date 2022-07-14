@@ -1140,6 +1140,22 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         return count;
     }
 
+    private int getChannelAdminCount() {
+        if (info == null || info.participants == null || info.participants.participants == null) {
+            return 1;
+        }
+        int count = 0;
+        for (int a = 0, N = info.participants.participants.size(); a < N; a++) {
+            TLRPC.ChatParticipant chatParticipant = info.participants.participants.get(a);
+            TLRPC.ChannelParticipant channelParticipant = ((TLRPC.TL_chatChannelParticipant) chatParticipant).channelParticipant;
+            if (channelParticipant instanceof TLRPC.TL_channelParticipantAdmin ||
+                    channelParticipant instanceof TLRPC.TL_channelParticipantCreator) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     private void getRealChannelAdminCount() {
         TLRPC.TL_channels_getParticipants req = new TLRPC.TL_channels_getParticipants();
         req.channel = getMessagesController().getInputChannel(chatId);
@@ -1469,14 +1485,16 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                         memberRequestsCell.setTextAndValueAndIcon(LocaleController.getString("MemberRequests", R.string.MemberRequests), String.format("%d", info.requests_pending), R.drawable.msg_requests, logCell != null && logCell.getVisibility() == View.VISIBLE);
                     }
                 }
-                // NekoX: read admins count
-                String adminCount = "" ;
-                if (info.participants != null) {
-                    if (ChatObject.isChannel(currentChat) && !ChatObject.hasAdminRights(currentChat) && info.participants.participants.size() != info.participants_count) {
+                if (ChatObject.hasAdminRights(currentChat)) {
+                    adminCell.setTextAndValueAndIcon(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators), String.format("%d", ChatObject.isChannel(currentChat) ? info.admins_count : getAdminCount()), R.drawable.msg_admins, true);
+                } else {
+                    if (ChatObject.isChannel(currentChat) && info.participants != null && info.participants.participants != null && info.participants.participants.size() != info.participants_count && realAdminCount == 0) {
+                        adminCell.setTextAndIcon(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators), R.drawable.msg_admins, true);
                         getRealChannelAdminCount();
+                    } else {
+                        adminCell.setTextAndValueAndIcon(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators), String.format("%d", ChatObject.isChannel(currentChat) ? realAdminCount == 0 ? getChannelAdminCount() : realAdminCount : getAdminCount()), R.drawable.msg_admins, true);
                     }
                 }
-                adminCell.setTextAndValueAndIcon(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators), String.format("%d", ChatObject.isChannel(currentChat) ? info.admins_count : getAdminCount()), R.drawable.msg_admins, true);
             } else {
                 if (isChannel) {
                     membersCell.setTextAndIcon(LocaleController.getString("ChannelSubscribers", R.string.ChannelSubscribers), R.drawable.msg_groups, true);
