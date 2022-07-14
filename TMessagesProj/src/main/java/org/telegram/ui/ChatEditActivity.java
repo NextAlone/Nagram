@@ -1145,9 +1145,12 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         req.channel = getMessagesController().getInputChannel(chatId);
         req.filter = new TLRPC.TL_channelParticipantsAdmins();
         int reqId = getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+            if (adminCell == null || response == null) {
+                return;
+            }
             TLRPC.TL_channels_channelParticipants res = (TLRPC.TL_channels_channelParticipants) response;
             realAdminCount = res.count;
-            adminCell.setTextAndValueAndIcon(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators), String.format("%d", res.count), R.drawable.msg_admins, true);
+            adminCell.setTextAndValueAndIcon(LocaleController.getString("ChannelAdministrators", R.string.ChannelAdministrators), String.format("%d", res.count), R.drawable.msg_admin_add, true);
         }));
         getConnectionsManager().bindRequestToGuid(reqId, classGuid);
     }
