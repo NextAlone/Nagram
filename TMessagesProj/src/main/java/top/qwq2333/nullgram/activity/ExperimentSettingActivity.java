@@ -131,10 +131,10 @@ public class ExperimentSettingActivity extends BaseActivity {
         }
 
         if (ConfigManager.getBooleanOrFalse(Defines.showHiddenSettings)) {
+            premium2Row = rowCount++;
             premiumRow = rowCount++;
             hidePremiumStickerAnimRow = rowCount++;
             fastSpeedUploadRow = rowCount++;
-            premium2Row = rowCount++;
         }
 
         experiment2Row = rowCount++;
