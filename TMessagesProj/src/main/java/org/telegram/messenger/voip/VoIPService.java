@@ -139,7 +139,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import kotlin.Unit;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.ui.BottomBuilder;
 
 @SuppressLint("NewApi")
 public class VoIPService extends Service implements SensorEventListener, AudioManager.OnAudioFocusChangeListener, VoIPController.ConnectionStateListener, NotificationCenter.NotificationCenterDelegate {
@@ -2662,20 +2664,21 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 
 	public void toggleSpeakerphoneOrShowRouteSheet(Context context, boolean fromOverlayWindow) {
 		if (isBluetoothHeadsetConnected() && hasEarpiece()) {
-			BottomSheet.Builder builder = new BottomSheet.Builder(context)
-					.setTitle(LocaleController.getString("VoipOutputDevices", R.string.VoipOutputDevices), true)
-					.setItems(new CharSequence[]{
-									LocaleController.getString("VoipAudioRoutingSpeaker", R.string.VoipAudioRoutingSpeaker),
-									isHeadsetPlugged ? LocaleController.getString("VoipAudioRoutingHeadset", R.string.VoipAudioRoutingHeadset) : LocaleController.getString("VoipAudioRoutingEarpiece", R.string.VoipAudioRoutingEarpiece),
-									currentBluetoothDeviceName != null ? currentBluetoothDeviceName : LocaleController.getString("VoipAudioRoutingBluetooth", R.string.VoipAudioRoutingBluetooth)},
-							new int[]{R.drawable.calls_menu_speaker,
-									isHeadsetPlugged ? R.drawable.calls_menu_headset : R.drawable.calls_menu_phone,
-									R.drawable.calls_menu_bluetooth}, (dialog, which) -> {
-								if (getSharedInstance() == null) {
-									return;
-								}
-								setAudioOutput(which);
-							});
+			BottomBuilder builder = new BottomBuilder(context);
+			builder.addTitle(LocaleController.getString("VoipOutputDevices", R.string.VoipOutputDevices), true);
+			builder.addItems(new String[]{
+							LocaleController.getString("VoipAudioRoutingSpeaker", R.string.VoipAudioRoutingSpeaker),
+							isHeadsetPlugged ? LocaleController.getString("VoipAudioRoutingHeadset", R.string.VoipAudioRoutingHeadset) : LocaleController.getString("VoipAudioRoutingEarpiece", R.string.VoipAudioRoutingEarpiece),
+							currentBluetoothDeviceName != null ? currentBluetoothDeviceName : LocaleController.getString("VoipAudioRoutingBluetooth", R.string.VoipAudioRoutingBluetooth)},
+					new int[]{R.drawable.calls_menu_speaker,
+							isHeadsetPlugged ? R.drawable.calls_menu_headset : R.drawable.calls_menu_phone,
+							R.drawable.calls_menu_bluetooth}, (which, dialog, __) -> {
+						if (getSharedInstance() == null) {
+							return Unit.INSTANCE;
+						}
+						setAudioOutput(which);
+						return Unit.INSTANCE;
+					});
 
 			BottomSheet bottomSheet = builder.create();
 			if (fromOverlayWindow) {
