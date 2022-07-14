@@ -20,9 +20,10 @@ object Dialogs {
 
     @JvmStatic
     public fun CreateVoiceCaptionAlert(
-            context: Context,
-            timestamps: ArrayList<String>,
-            finish: (String) -> Unit) {
+        context: Context,
+        timestamps: ArrayList<String>,
+        finish: (String) -> Unit
+    ) {
         val captionString = LocaleController.getString("Caption", R.string.Caption);
 
         val builder = AlertDialog.Builder(context);
@@ -49,7 +50,12 @@ object Dialogs {
 
         textLayout.addView(editText, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 36))
         builder.setView(textLayout);
-        builder.setPositiveButton(LocaleController.getString("Send", R.string.Send)) { _: DialogInterface?, _: Int ->
+        builder.setPositiveButton(
+            LocaleController.getString(
+                "Send",
+                R.string.Send
+            )
+        ) { _: DialogInterface?, _: Int ->
             finish(editText.text.toString());
         }
         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);

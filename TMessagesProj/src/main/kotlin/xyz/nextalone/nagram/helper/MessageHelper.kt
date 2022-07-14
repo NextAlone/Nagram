@@ -22,7 +22,8 @@ object MessageHelper {
             }
         }
         if (TextUtils.isEmpty(path)) {
-            val file = FileLoader.getInstance(messageObject.currentAccount).getPathToMessage(messageObject.messageOwner)
+            val file = FileLoader.getInstance(messageObject.currentAccount)
+                .getPathToMessage(messageObject.messageOwner)
             if (file != null && file.exists()) {
                 return file
             } else {
@@ -30,7 +31,8 @@ object MessageHelper {
             }
         }
         if (TextUtils.isEmpty(path)) {
-            val file = FileLoader.getInstance(messageObject.currentAccount).getPathToAttach(messageObject.document, true)
+            val file = FileLoader.getInstance(messageObject.currentAccount)
+                .getPathToAttach(messageObject.document, true)
             return if (file != null && file.exists()) {
                 file
             } else {
@@ -55,7 +57,11 @@ object MessageHelper {
         try {
             val context = ApplicationLoader.applicationContext
             val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", file!!)
+            val uri = FileProvider.getUriForFile(
+                context,
+                BuildConfig.APPLICATION_ID + ".provider",
+                file!!
+            )
             val clip = ClipData.newUri(context.contentResolver, "label", uri)
             clipboard.setPrimaryClip(clip)
             callback.run()
@@ -72,7 +78,9 @@ object MessageHelper {
         return if (!NaConfig.DateOfForwardedMsg.Bool()) {
             orig.toString()
         } else {
-            if (day == time) {"$orig · $day"} else "$orig · $day $time"
+            if (day == time) {
+                "$orig · $day"
+            } else "$orig · $day $time"
         }
     }
 }

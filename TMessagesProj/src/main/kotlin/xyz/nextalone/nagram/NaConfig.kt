@@ -12,7 +12,7 @@ import java.io.ObjectInputStream
 
 
 object NaConfig {
-    public const val TAG =
+    const val TAG =
         "NextAlone"
     val preferences: SharedPreferences =
         ApplicationLoader.applicationContext.getSharedPreferences(
@@ -159,9 +159,9 @@ object NaConfig {
         LocaleController.getString("NekoX", R.string.NekoX)
     )
     val useSystemUnlock = addConfig(
-            "UseSystemUnlock",
-            ConfigItem.configTypeBool,
-            true
+        "UseSystemUnlock",
+        ConfigItem.configTypeBool,
+        true
     )
     val CodeSyntaxHighlight = addConfig(
         "CodeSyntaxHighlight",
