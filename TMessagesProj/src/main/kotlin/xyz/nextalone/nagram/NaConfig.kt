@@ -193,6 +193,11 @@ object NaConfig {
         ConfigItem.configTypeBool,
         true
     )
+    val alwaysSaveChatOffset = addConfig(
+        "AlwaysSaveChatOffset",
+        ConfigItem.configTypeBool,
+        true
+    )
 
     private fun addConfig(
         k: String,

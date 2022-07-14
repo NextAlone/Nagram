@@ -183,9 +183,9 @@ import org.telegram.ui.Cells.TextSelectionHelper;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AnimatedFileDrawable;
 import org.telegram.ui.Components.AnimationProperties;
-import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.AttachBotIntroTopView;
 import org.telegram.ui.Components.AutoDeletePopupWrapper;
+import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackButtonMenu;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.BlurBehindDrawable;
@@ -276,7 +276,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.InputStream;
-import java.io.RandomAccessFile;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21316,23 +21315,25 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                             }
                             boolean ignore = false;
                             int count = 0;
-                            for (int a = position - 1; a >= chatAdapter.messagesStartRow; a--) {
-                                int num = a - chatAdapter.messagesStartRow;
-                                if (num < 0 || num >= messages.size()) {
-                                    continue;
+                            if (!NaConfig.INSTANCE.getAlwaysSaveChatOffset().Bool()){
+                                for (int a = position - 1; a >= chatAdapter.messagesStartRow; a--) {
+                                    int num = a - chatAdapter.messagesStartRow;
+                                    if (num < 0 || num >= messages.size()) {
+                                        continue;
+                                    }
+                                    MessageObject messageObject = messages.get(num);
+                                    if (messageObject.getId() == 0) {
+                                        continue;
+                                    }
+                                    if ((!messageObject.isOut() || messageObject.messageOwner.from_scheduled) && messageObject.isUnread()) {
+                                        ignore = true;
+                                        messageId = 0;
+                                    }
+                                    if (count > 2) {
+                                        break;
+                                    }
+                                    count++;
                                 }
-                                MessageObject messageObject = messages.get(num);
-                                if (messageObject.getId() == 0) {
-                                    continue;
-                                }
-                                if ((!messageObject.isOut() || messageObject.messageOwner.from_scheduled) && messageObject.isUnread()) {
-                                    ignore = true;
-                                    messageId = 0;
-                                }
-                                if (count > 2) {
-                                    break;
-                                }
-                                count++;
                             }
                             if (holder != null && !ignore) {
                                 if (holder.itemView instanceof ChatMessageCell) {

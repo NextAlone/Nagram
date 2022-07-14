@@ -36,6 +36,7 @@
     <string name="ShowPremiumStickersAnimation">显示 Premium 贴纸动画</string>
     <string name="ShowPremiumStarInChat">在消息上显示 Premium 用户标识</string>
     <string name="ShowPremiumAvatarAnimation">显示 Premium 动态头像</string>
+    <string name="AlwaysSaveChatOffset">总是保存聊天记录的偏移量</string>
     <string name="AppIconColorful">缤纷</string>
     <string name="AppIconDarkGreen">深翠</string>
     <string name="AppIconNeon">霓虹</string>
