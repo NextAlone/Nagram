@@ -11311,7 +11311,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                     name = chat.title;
                 }
                 replyIconImageView.setImageResource(R.drawable.msg_panel_reply);
-                replyNameTextView.setText(ExteraUtils.zalgoFilter(name));
+                replyNameTextView.setText(name);
                 replyIconImageView.setContentDescription(LocaleController.getString("AccDescrReplying", R.string.AccDescrReplying));
                 replyCloseImageView.setContentDescription(LocaleController.getString("AccDescrCancelReply", R.string.AccDescrCancelReply));
 
@@ -19629,7 +19629,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                     if (user != null) {
                         nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
                     } else if (chat != null) {
-                        nameTextView.setText(ExteraUtils.zalgoFilter(chat.title));
+                        nameTextView.setText(chat.title);
                     }
                 } else {
                     if (pinnedMessageObject.isInvoice() &&

@@ -77,23 +77,20 @@ public class ExteraUtils {
         String beta = BuildVars.isBetaApp() ? " β" : "";
         return LocaleController.getString("exteraAppName", R.string.exteraAppName) + beta;
     }
-    
-    public static String zalgoFilter(CharSequence text) {
-        if (text == null) {
-            return "";
-        } else {
-            return zalgoFilter(text.toString());
-        }
-    }
 
     public static String zalgoFilter(String text) {
         if (text == null) {
             return "";
         } else if (ExteraConfig.zalgoFilter && text.matches(".*\\p{Mn}{4}.*")) {
-		    return text.replaceAll("(?i)([aeiouy]̈)|[̀-ͯ҉]", "").replaceAll("[\\p{Mn}]", "");
-		} else {
-		    return text;
-		}
+            String finalString = text.replaceAll("(?i)([aeiouy]̈)|[̀-ͯ҉]|[\\p{Mn}]", "");
+            if (finalString == null || finalString.equals("")) {
+                return LocaleController.getString("CacheEmpty", R.string.CacheEmpty);
+            } else {
+                return finalString;
+            }
+        } else {
+            return text;
+        }
     }
 
     public static boolean checkSubFor(long id) {

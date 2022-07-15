@@ -39,8 +39,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.exteragram.messenger.ExteraUtils;
-
 public class ContactsController extends BaseController {
 
     private Account systemAccount;
@@ -2699,6 +2697,6 @@ public class ContactsController extends BaseController {
                 result.append(firstName);
             }
         }
-        return ExteraUtils.zalgoFilter(result);
+        return result.toString();
     }
 }

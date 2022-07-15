@@ -85,7 +85,6 @@ import java.util.List;
 import java.util.Stack;
 
 import com.exteragram.messenger.ExteraConfig;
-import com.exteragram.messenger.ExteraUtils;
 
 public class DialogCell extends BaseCell {
 
@@ -589,7 +588,7 @@ public class DialogCell extends BaseCell {
             }
             String title;
             if (currentChat != null) {
-                title = ExteraUtils.zalgoFilter(currentChat.title.replace('\n', ' '));
+                title = currentChat.title.replace('\n', ' ');
             } else if (currentUser != null) {
                 if (UserObject.isDeleted(currentUser)) {
                     title = LocaleController.getString("HiddenName", R.string.HiddenName);
@@ -1049,7 +1048,7 @@ public class DialogCell extends BaseCell {
                                 if (!TextUtils.isEmpty(restrictionReason)) {
                                     stringBuilder = SpannableStringBuilder.valueOf(String.format(messageFormat, restrictionReason, messageNameString));
                                 } else if (message.caption != null) {
-                                    CharSequence mess = ExteraUtils.zalgoFilter(message.caption);
+                                    CharSequence mess = message.caption;
                                     String emoji;
                                     if (!needEmoji) {
                                         emoji = "";
@@ -1123,7 +1122,7 @@ public class DialogCell extends BaseCell {
                                         FileLog.e(e);
                                     }
                                 } else if (message.messageOwner.message != null) {
-                                    CharSequence mess = ExteraUtils.zalgoFilter(message.messageOwner.message);
+                                    CharSequence mess = message.messageOwner.message;
                                     if (message.hasHighlightedWords()) {
                                         if (message.messageTrimmedToHighlight != null) {
                                             mess = message.messageTrimmedToHighlight;
@@ -1420,7 +1419,7 @@ public class DialogCell extends BaseCell {
                 }
             }
         }
-        nameString = ExteraUtils.zalgoFilter(nameString);
+        nameString = nameString;
         int timeWidth;
         if (drawTime) {
             timeWidth = (int) Math.ceil(Theme.dialogs_timePaint.measureText(timeString));

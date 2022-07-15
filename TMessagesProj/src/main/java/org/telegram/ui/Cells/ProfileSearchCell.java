@@ -41,7 +41,6 @@ import org.telegram.ui.Components.Premium.PremiumGradient;
 import org.telegram.ui.NotificationsSettingsActivity;
 
 import com.exteragram.messenger.ExteraConfig;
-import com.exteragram.messenger.ExteraUtils;
 
 public class ProfileSearchCell extends BaseCell implements NotificationCenter.NotificationCenterDelegate {
 
@@ -553,7 +552,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
                 } else {
                     newName = chat.title;
                 }
-                newName = ExteraUtils.zalgoFilter(newName);
+                newName = newName;
                 if (!newName.equals(lastName)) {
                     continueUpdate = true;
                 }
@@ -580,7 +579,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
         } else if (chat != null) {
             lastName = chat.title;
         }
-        lastName = ExteraUtils.zalgoFilter(lastName);
+        lastName = lastName;
         lastAvatar = photo;
 
         if (getMeasuredWidth() != 0 || getMeasuredHeight() != 0) {

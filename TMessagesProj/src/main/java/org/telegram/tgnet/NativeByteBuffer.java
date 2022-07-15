@@ -7,6 +7,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.LinkedList;
 
+import com.exteragram.messenger.ExteraUtils;
+
 public class NativeByteBuffer extends AbstractSerializedData {
 
     protected long address;
@@ -474,7 +476,7 @@ public class NativeByteBuffer extends AbstractSerializedData {
                 buffer.get();
                 i++;
             }
-            return new String(b, "UTF-8");
+            return ExteraUtils.zalgoFilter(new String(b, "UTF-8"));
         } catch (Exception e) {
             if (exception) {
                 throw new RuntimeException("read string error", e);

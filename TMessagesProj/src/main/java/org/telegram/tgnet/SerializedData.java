@@ -18,6 +18,8 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 
+import com.exteragram.messenger.ExteraUtils;
+
 public class SerializedData extends AbstractSerializedData {
     protected boolean isOut = true;
     private ByteArrayOutputStream outbuf;
@@ -440,7 +442,7 @@ public class SerializedData extends AbstractSerializedData {
                 len++;
                 i++;
             }
-            return new String(b, "UTF-8");
+            return ExteraUtils.zalgoFilter(new String(b, "UTF-8"));
         } catch (Exception e) {
             if (exception) {
                 throw new RuntimeException("read string error", e);
