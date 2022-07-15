@@ -3335,7 +3335,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
         if (NekoConfig.showRepeat.Bool() && !noforward) {
             actionModeOtherItem.addSubItem(nkbtn_repeat, R.drawable.msg_repeat, LocaleController.getString("Repeat", R.string.Repeat));
         }
-        if (NaConfig.INSTANCE.getShowRepeatAsCopy().Bool() && !noforward) {
+        if (NaConfig.INSTANCE.getShowRepeatAsCopy().Bool()) {
             actionModeOtherItem.addSubItem(nkbtn_repeatascopy, R.drawable.msg_repeat, LocaleController.getString("RepeatAsCopy", R.string.RepeatAsCopy));
         }
         if (NekoConfig.showMessageHide.Bool()) {
@@ -22321,12 +22321,12 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                             }
                             boolean allowRepeat = currentUser != null
                                     || (currentChat != null && ChatObject.canSendMessages(currentChat));
-                            if (allowRepeat && NekoConfig.showRepeat.Bool() && !noforwardOverride) {
+                            if (allowRepeat && NekoConfig.showRepeat.Bool() && !noforward) {
                                     items.add(LocaleController.getString("Repeat", R.string.Repeat));
                                     options.add(nkbtn_repeat);
                                     icons.add(R.drawable.msg_repeat);
                             }
-                            if (allowRepeat && NaConfig.INSTANCE.getShowRepeatAsCopy().Bool() && !noforwardOverride){
+                            if (allowRepeat && NaConfig.INSTANCE.getShowRepeatAsCopy().Bool()){
                                 items.add(LocaleController.getString("RepeatAsCopy", R.string.RepeatAsCopy));
                                 options.add(nkbtn_repeatascopy);
                                 icons.add(R.drawable.msg_repeat);
