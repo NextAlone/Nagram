@@ -102,6 +102,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
             }, null));
     private final AbstractConfigCell DoubleTapActionRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final AbstractConfigCell messageMenuRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString("MessageMenu"), null, null, this::showMessageMenuAlert));
+    private final AbstractConfigCell autoReplaceRepeatRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getAutoReplaceRepeat()));
     private final AbstractConfigCell textStyleRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString("TextStyle"), null, null, this::showTextStyleAlert));
     private final AbstractConfigCell dividerChat = cellGroup.appendCell(new ConfigCellDivider());
 
@@ -203,6 +204,10 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
             NekoConfig.disableChatAction.setConfigBool(false);
             NekoConfig.disableChoosingSticker.setConfigBool(false);
             NekoConfig.ignoreBlocked.setConfigBool(false);
+        }
+        if (!NekoConfig.showRepeat.Bool() || NaConfig.INSTANCE.getShowRepeatAsCopy().Bool()){
+            cellGroup.rows.remove(autoReplaceRepeatRow);
+            NaConfig.INSTANCE.getAutoReplaceRepeat().setConfigBool(false);
         }
 
         listAdapter = new ListAdapter(context);

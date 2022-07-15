@@ -198,6 +198,11 @@ object NaConfig {
         ConfigItem.configTypeBool,
         true
     )
+    val autoReplaceRepeat = addConfig(
+        "AutoReplaceRepeat",
+        ConfigItem.configTypeBool,
+        true
+    )
 
     private fun addConfig(
         k: String,

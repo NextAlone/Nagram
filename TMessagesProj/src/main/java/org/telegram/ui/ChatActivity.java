@@ -3335,7 +3335,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
         if (NekoConfig.showRepeat.Bool() && !noforward) {
             actionModeOtherItem.addSubItem(nkbtn_repeat, R.drawable.msg_repeat, LocaleController.getString("Repeat", R.string.Repeat));
         }
-        if (NaConfig.INSTANCE.getShowRepeatAsCopy().Bool()) {
+        if (NaConfig.INSTANCE.getShowRepeatAsCopy().Bool() || (NaConfig.INSTANCE.getAutoReplaceRepeat().Bool() && noforward)) {
             actionModeOtherItem.addSubItem(nkbtn_repeatascopy, R.drawable.msg_repeat, LocaleController.getString("RepeatAsCopy", R.string.RepeatAsCopy));
         }
         if (NekoConfig.showMessageHide.Bool()) {
@@ -22326,7 +22326,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                                     options.add(nkbtn_repeat);
                                     icons.add(R.drawable.msg_repeat);
                             }
-                            if (allowRepeat && NaConfig.INSTANCE.getShowRepeatAsCopy().Bool()){
+                            if (allowRepeat && (NaConfig.INSTANCE.getShowRepeatAsCopy().Bool() || (NaConfig.INSTANCE.getAutoReplaceRepeat().Bool() && noforward))){
                                 items.add(LocaleController.getString("RepeatAsCopy", R.string.RepeatAsCopy));
                                 options.add(nkbtn_repeatascopy);
                                 icons.add(R.drawable.msg_repeat);
