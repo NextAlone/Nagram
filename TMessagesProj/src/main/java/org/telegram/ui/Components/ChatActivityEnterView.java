@@ -2386,7 +2386,8 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 botCommandsMenuButton.setOpened(open);
                 try {
                     performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                } catch (Exception ignore) {}
+                } catch (Exception ignore) {
+                }
                 if (hasBotWebView()) {
                     if (open) {
                         if (emojiViewVisible || botKeyboardViewVisible) {
@@ -3199,6 +3200,10 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             return true;
         });
 
+        if (ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)) {
+            audioVideoButtonContainer.setVisibility(View.GONE);
+        }
+
         audioSendButton = new ImageView(context);
         audioSendButton.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         audioSendButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.MULTIPLY));
@@ -3221,15 +3226,6 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             videoSendButton.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
             videoSendButton.setAccessibilityDelegate(mediaMessageButtonsDelegate);
             audioVideoButtonContainer.addView(videoSendButton, LayoutHelper.createFrame(48, 48));
-        }
-
-        if (ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)) {
-            if (videoSendButton != null) {
-                videoSendButton.setVisibility(View.INVISIBLE);
-            }
-            if (audioSendButton != null) {
-                audioSendButton.setVisibility(View.INVISIBLE);
-            }
         }
 
         recordCircle = new RecordCircle(context);
@@ -4559,19 +4555,10 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         videoToSendMessageObject = null;
         videoTimelineView.destroy();
 
-        if (ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)) {
-            if (videoSendButton != null) {
-                videoSendButton.setVisibility(View.INVISIBLE);
-            }
-            if (audioSendButton != null) {
-                audioSendButton.setVisibility(View.INVISIBLE);
-            }
-        } else {
-            if (videoSendButton != null && isInVideoMode()) {
-                videoSendButton.setVisibility(View.VISIBLE);
-            } else if (audioSendButton != null) {
-                audioSendButton.setVisibility(View.VISIBLE);
-            }
+        if (videoSendButton != null && isInVideoMode()) {
+            videoSendButton.setVisibility(View.VISIBLE);
+        } else if (audioSendButton != null) {
+            audioSendButton.setVisibility(View.VISIBLE);
         }
 
         if (wasSent) {
@@ -5857,37 +5844,28 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             runningAnimationAudio = new AnimatorSet();
             //EXIT TRANSITION
             if (shouldShowFastTransition || recordState == RECORD_STATE_CANCEL_BY_TIME) {
-                if (ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)) {
-                    if (videoSendButton != null) {
-                        videoSendButton.setVisibility(View.GONE);
-                    }
-                    if (audioSendButton != null) {
-                        audioSendButton.setVisibility(View.GONE);
-                    }
-                } else {
-                    if (videoSendButton != null && isInVideoMode()) {
-                        videoSendButton.setVisibility(View.VISIBLE);
-                    } else if (audioSendButton != null) {
-                        audioSendButton.setVisibility(View.VISIBLE);
-                    }
+                if (videoSendButton != null && isInVideoMode()) {
+                    videoSendButton.setVisibility(View.VISIBLE);
+                } else if (audioSendButton != null) {
+                    audioSendButton.setVisibility(View.VISIBLE);
                 }
                 runningAnimationAudio.playTogether(
-                        ObjectAnimator.ofFloat(emojiButton[0], View.SCALE_Y, 1),
-                        ObjectAnimator.ofFloat(emojiButton[0], View.SCALE_X, 1),
-                        ObjectAnimator.ofFloat(emojiButton[0], View.ALPHA, 1),
-                        ObjectAnimator.ofFloat(emojiButton[1], View.SCALE_Y, 1),
-                        ObjectAnimator.ofFloat(emojiButton[1], View.SCALE_X, 1),
-                        ObjectAnimator.ofFloat(emojiButton[1], View.ALPHA, 1),
-                        ObjectAnimator.ofFloat(recordDot, View.SCALE_Y, 0),
-                        ObjectAnimator.ofFloat(recordDot, View.SCALE_X, 0),
-                        ObjectAnimator.ofFloat(recordCircle, recordCircleScale, 0.0f),
-                        ObjectAnimator.ofFloat(audioVideoButtonContainer, View.ALPHA, 1.0f),
-                        ObjectAnimator.ofFloat(recordTimerView, View.ALPHA, 0.0f),
-                        ObjectAnimator.ofFloat(recordCircle, recordCircleScale, 0.0f),
-                        ObjectAnimator.ofFloat(audioVideoButtonContainer, View.ALPHA, 1.0f),
-                        ObjectAnimator.ofFloat(messageEditText, View.ALPHA, 1),
-                        ObjectAnimator.ofFloat(messageEditText, View.TRANSLATION_X, 0),
-                        ObjectAnimator.ofFloat(recordCircle, "slideToCancelProgress", 1f)
+                    ObjectAnimator.ofFloat(emojiButton[0], View.SCALE_Y, 1),
+                    ObjectAnimator.ofFloat(emojiButton[0], View.SCALE_X, 1),
+                    ObjectAnimator.ofFloat(emojiButton[0], View.ALPHA, 1),
+                    ObjectAnimator.ofFloat(emojiButton[1], View.SCALE_Y, 1),
+                    ObjectAnimator.ofFloat(emojiButton[1], View.SCALE_X, 1),
+                    ObjectAnimator.ofFloat(emojiButton[1], View.ALPHA, 1),
+                    ObjectAnimator.ofFloat(recordDot, View.SCALE_Y, 0),
+                    ObjectAnimator.ofFloat(recordDot, View.SCALE_X, 0),
+                    ObjectAnimator.ofFloat(recordCircle, recordCircleScale, 0.0f),
+                    ObjectAnimator.ofFloat(audioVideoButtonContainer, View.ALPHA, 1.0f),
+                    ObjectAnimator.ofFloat(recordTimerView, View.ALPHA, 0.0f),
+                    ObjectAnimator.ofFloat(recordCircle, recordCircleScale, 0.0f),
+                    ObjectAnimator.ofFloat(audioVideoButtonContainer, View.ALPHA, 1.0f),
+                    ObjectAnimator.ofFloat(messageEditText, View.ALPHA, 1),
+                    ObjectAnimator.ofFloat(messageEditText, View.TRANSLATION_X, 0),
+                    ObjectAnimator.ofFloat(recordCircle, "slideToCancelProgress", 1f)
                 );
                 if (botCommandsMenuButton != null) {
                     runningAnimationAudio.playTogether(
@@ -6099,31 +6077,22 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 });
 
             } else if (recordState == RECORD_STATE_CANCEL || recordState == RECORD_STATE_CANCEL_BY_GESTURE) {
-                if (ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)) {
-                    if (videoSendButton != null) {
-                        videoSendButton.setVisibility(View.GONE);
-                    }
-                    if (audioSendButton != null) {
-                        audioSendButton.setVisibility(View.GONE);
-                    }
-                } else {
-                    if (videoSendButton != null && isInVideoMode()) {
-                        videoSendButton.setVisibility(View.VISIBLE);
-                    } else if (audioSendButton != null) {
-                        audioSendButton.setVisibility(View.VISIBLE);
-                    }
+                if (videoSendButton != null && isInVideoMode()) {
+                    videoSendButton.setVisibility(View.VISIBLE);
+                } else if (audioSendButton != null) {
+                    audioSendButton.setVisibility(View.VISIBLE);
                 }
                 recordIsCanceled = true;
                 AnimatorSet iconsAnimator = new AnimatorSet();
                 iconsAnimator.playTogether(
-                        ObjectAnimator.ofFloat(emojiButton[0], View.SCALE_Y, 1),
-                        ObjectAnimator.ofFloat(emojiButton[0], View.SCALE_X, 1),
-                        ObjectAnimator.ofFloat(emojiButton[0], View.ALPHA, 1),
-                        ObjectAnimator.ofFloat(emojiButton[1], View.SCALE_Y, 1),
-                        ObjectAnimator.ofFloat(emojiButton[1], View.SCALE_X, 1),
-                        ObjectAnimator.ofFloat(emojiButton[1], View.ALPHA, 1),
-                        ObjectAnimator.ofFloat(recordDot, View.SCALE_Y, 0),
-                        ObjectAnimator.ofFloat(recordDot, View.SCALE_X, 0)
+                    ObjectAnimator.ofFloat(emojiButton[0], View.SCALE_Y, 1),
+                    ObjectAnimator.ofFloat(emojiButton[0], View.SCALE_X, 1),
+                    ObjectAnimator.ofFloat(emojiButton[0], View.ALPHA, 1),
+                    ObjectAnimator.ofFloat(emojiButton[1], View.SCALE_Y, 1),
+                    ObjectAnimator.ofFloat(emojiButton[1], View.SCALE_X, 1),
+                    ObjectAnimator.ofFloat(emojiButton[1], View.ALPHA, 1),
+                    ObjectAnimator.ofFloat(recordDot, View.SCALE_Y, 0),
+                    ObjectAnimator.ofFloat(recordDot, View.SCALE_X, 0)
                 );
 
                 if (botCommandsMenuButton != null) {
@@ -6168,33 +6137,31 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     }
                     if (attachButton != null) {
                         iconsAnimator.playTogether(
-                                ObjectAnimator.ofFloat(attachButton, View.SCALE_X, 1f),
-                                ObjectAnimator.ofFloat(attachButton, View.SCALE_Y, 1f)
+                            ObjectAnimator.ofFloat(attachButton, View.SCALE_X, 1f),
+                            ObjectAnimator.ofFloat(attachButton, View.SCALE_Y, 1f)
                         );
                     }
                     if (botButton != null) {
                         iconsAnimator.playTogether(
-                                ObjectAnimator.ofFloat(botButton, View.SCALE_X, 1f),
-                                ObjectAnimator.ofFloat(botButton, View.SCALE_Y, 1f)
+                            ObjectAnimator.ofFloat(botButton, View.SCALE_X, 1f),
+                            ObjectAnimator.ofFloat(botButton, View.SCALE_Y, 1f)
                         );
                     }
-                    if (!ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)) {
-                        if (videoSendButton != null) {
-                            iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.ALPHA, isInVideoMode() ? 1 : 0));
-                            iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.SCALE_X, 1));
-                            iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.SCALE_Y, 1));
-                        }
-                        if (audioSendButton != null) {
-                            iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.ALPHA, isInVideoMode() ? 0 : 1));
-                            iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.SCALE_X, 1));
-                            iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.SCALE_Y, 1));
-                        }
+                    if (videoSendButton != null) {
+                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.ALPHA, isInVideoMode() ? 1 : 0));
+                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.SCALE_X, 1));
+                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.SCALE_Y, 1));
+                    }
+                    if (audioSendButton != null) {
+                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.ALPHA, isInVideoMode() ? 0 : 1));
+                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.SCALE_X, 1));
+                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.SCALE_Y, 1));
                     }
 
                     if (scheduledButton != null) {
                         iconsAnimator.playTogether(
-                                ObjectAnimator.ofFloat(scheduledButton, View.ALPHA, 1f),
-                                ObjectAnimator.ofFloat(scheduledButton, View.TRANSLATION_X, 0)
+                            ObjectAnimator.ofFloat(scheduledButton, View.ALPHA, 1f),
+                            ObjectAnimator.ofFloat(scheduledButton, View.TRANSLATION_X, 0)
                         );
                     }
                 } else {
@@ -6266,56 +6233,44 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 }
                 recordDot.playDeleteAnimation();
             } else {
-
-                if (ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)) {
-                    if (videoSendButton != null) {
-                        videoSendButton.setVisibility(View.GONE);
-                    }
-                    if (audioSendButton != null) {
-                        audioSendButton.setVisibility(View.GONE);
-                    }
-                } else {
-                    if (videoSendButton != null && isInVideoMode()) {
-                        videoSendButton.setVisibility(View.VISIBLE);
-                    } else if (audioSendButton != null) {
-                        audioSendButton.setVisibility(View.VISIBLE);
-                    }
+                if (videoSendButton != null && isInVideoMode()) {
+                    videoSendButton.setVisibility(View.VISIBLE);
+                } else if (audioSendButton != null) {
+                    audioSendButton.setVisibility(View.VISIBLE);
                 }
 
                 AnimatorSet iconsAnimator = new AnimatorSet();
                 iconsAnimator.playTogether(
-                        ObjectAnimator.ofFloat(emojiButton[0], View.SCALE_Y, 1),
-                        ObjectAnimator.ofFloat(emojiButton[0], View.SCALE_X, 1),
-                        ObjectAnimator.ofFloat(emojiButton[0], View.ALPHA, 1),
-                        ObjectAnimator.ofFloat(emojiButton[1], View.SCALE_Y, 1),
-                        ObjectAnimator.ofFloat(emojiButton[1], View.SCALE_X, 1),
-                        ObjectAnimator.ofFloat(emojiButton[1], View.ALPHA, 1),
-                        ObjectAnimator.ofFloat(recordDot, View.SCALE_Y, 0),
-                        ObjectAnimator.ofFloat(recordDot, View.SCALE_X, 0),
-                        ObjectAnimator.ofFloat(audioVideoButtonContainer, View.ALPHA, 1.0f)
+                    ObjectAnimator.ofFloat(emojiButton[0], View.SCALE_Y, 1),
+                    ObjectAnimator.ofFloat(emojiButton[0], View.SCALE_X, 1),
+                    ObjectAnimator.ofFloat(emojiButton[0], View.ALPHA, 1),
+                    ObjectAnimator.ofFloat(emojiButton[1], View.SCALE_Y, 1),
+                    ObjectAnimator.ofFloat(emojiButton[1], View.SCALE_X, 1),
+                    ObjectAnimator.ofFloat(emojiButton[1], View.ALPHA, 1),
+                    ObjectAnimator.ofFloat(recordDot, View.SCALE_Y, 0),
+                    ObjectAnimator.ofFloat(recordDot, View.SCALE_X, 0),
+                    ObjectAnimator.ofFloat(audioVideoButtonContainer, View.ALPHA, 1.0f)
                 );
                 if (botCommandsMenuButton != null) {
                     iconsAnimator.playTogether(
-                            ObjectAnimator.ofFloat(botCommandsMenuButton, View.SCALE_Y, 1),
-                            ObjectAnimator.ofFloat(botCommandsMenuButton, View.SCALE_X, 1),
-                            ObjectAnimator.ofFloat(botCommandsMenuButton, View.ALPHA, 1));
+                        ObjectAnimator.ofFloat(botCommandsMenuButton, View.SCALE_Y, 1),
+                        ObjectAnimator.ofFloat(botCommandsMenuButton, View.SCALE_X, 1),
+                        ObjectAnimator.ofFloat(botCommandsMenuButton, View.ALPHA, 1));
                 }
-                if (!ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom)) {
-                    if (videoSendButton != null) {
-                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.ALPHA, isInVideoMode() ? 1 : 0));
-                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.SCALE_X, 1));
-                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.SCALE_Y, 1));
-                    }
-                    if (audioSendButton != null) {
-                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.ALPHA, isInVideoMode() ? 0 : 1));
-                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.SCALE_X, 1));
-                        iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.SCALE_Y, 1));
-                    }
+                if (videoSendButton != null) {
+                    iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.ALPHA, isInVideoMode() ? 1 : 0));
+                    iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.SCALE_X, 1));
+                    iconsAnimator.playTogether(ObjectAnimator.ofFloat(videoSendButton, View.SCALE_Y, 1));
+                }
+                if (audioSendButton != null) {
+                    iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.ALPHA, isInVideoMode() ? 0 : 1));
+                    iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.SCALE_X, 1));
+                    iconsAnimator.playTogether(ObjectAnimator.ofFloat(audioSendButton, View.SCALE_Y, 1));
                 }
                 if (attachLayout != null) {
                     attachLayout.setTranslationX(0);
                     iconsAnimator.playTogether(
-                            ObjectAnimator.ofFloat(attachLayout, View.ALPHA, 1f)
+                        ObjectAnimator.ofFloat(attachLayout, View.ALPHA, 1f)
                     );
                 }
                 if (scheduledButton != null) {
