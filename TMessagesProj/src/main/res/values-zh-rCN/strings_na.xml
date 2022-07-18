@@ -22,7 +22,7 @@
     <string name="CustomTitle">自定义标题</string>
     <string name="CustomTitleHint">留空则使用Nagram</string>
     <string name="CodeSyntaxHighlight">代码语法高亮</string>
-    <string name="CreateMono">创建等款</string>
+    <string name="CreateMono">创建等宽</string>
     <string name="CreateMonoLanguage">等宽语言</string>
     <string name="CodeSyntaxHighlightDetails">感谢 prismjs and Nekogram</string>
     <string name="UseSystemUnlock">锁定码解锁使用系统界面</string>
