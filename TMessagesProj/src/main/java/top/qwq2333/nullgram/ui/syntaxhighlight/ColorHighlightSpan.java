@@ -54,4 +54,3 @@ public class ColorHighlightSpan extends ReplacementSpan {
         canvas.drawRoundRect(paddingLeft, paddingTop, paddingLeft + size, paddingTop + size, radius, radius, colorPaint);
     }
 }
-

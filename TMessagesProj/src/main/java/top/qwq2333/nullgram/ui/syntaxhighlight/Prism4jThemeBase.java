@@ -1,22 +1,3 @@
-/*
- * Copyright (C) 2019-2022 qwq233 <qwq233@qwq2333.top>
- * https://github.com/qwq233/Nullgram
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with this software.
- *  If not, see
- * <https://www.gnu.org/licenses/>
- */
-
 package top.qwq2333.nullgram.ui.syntaxhighlight;
 
 import android.text.Spannable;
@@ -31,8 +12,7 @@ import androidx.annotation.Nullable;
 
 import java.util.HashMap;
 
-import top.qwq2333.nullgram.ui.syntaxhighlight.prism4j.Prism4j;
-
+import io.noties.prism4j.Syntax;
 
 public abstract class Prism4jThemeBase implements Prism4jTheme {
 
@@ -67,23 +47,15 @@ public abstract class Prism4jThemeBase implements Prism4jTheme {
     protected int color(@NonNull String language, @NonNull String type, @Nullable String alias) {
 
         Color color = colorHashMap.get(type);
-        if (color == null
-            && alias != null) {
+        if (color == null && alias != null) {
             color = colorHashMap.get(alias);
         }
 
-        return color != null
-            ? color.color
-            : 0;
+        return color != null ? color.color : 0;
     }
 
     @Override
-    public void apply(
-        @NonNull String language,
-        @NonNull Prism4j.Syntax syntax,
-        @NonNull Spannable spannable,
-        int start,
-        int end) {
+    public void apply(@NonNull String language, @NonNull Syntax syntax, @NonNull Spannable spannable, int start, int end) {
 
         final String type = syntax.type();
         final String alias = syntax.alias();
@@ -95,14 +67,7 @@ public abstract class Prism4jThemeBase implements Prism4jTheme {
     }
 
     @SuppressWarnings("unused")
-    protected void applyColor(
-        @NonNull String language,
-        @NonNull String type,
-        @Nullable String alias,
-        @ColorInt int color,
-        @NonNull Spannable spannable,
-        int start,
-        int end) {
+    protected void applyColor(@NonNull String language, @NonNull String type, @Nullable String alias, @ColorInt int color, @NonNull Spannable spannable, int start, int end) {
         spannable.setSpan(new ForegroundColorSpan(color), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
@@ -130,10 +95,7 @@ public abstract class Prism4jThemeBase implements Prism4jTheme {
         }
 
         @NonNull
-        protected ColorHashMap add(
-            @ColorInt int color,
-            @NonNull String name1,
-            @NonNull String name2) {
+        protected ColorHashMap add(@ColorInt int color, @NonNull String name1, @NonNull String name2) {
             final Color c = Color.of(color);
             put(name1, c);
             put(name2, c);
@@ -141,11 +103,7 @@ public abstract class Prism4jThemeBase implements Prism4jTheme {
         }
 
         @NonNull
-        protected ColorHashMap add(
-            @ColorInt int color,
-            @NonNull String name1,
-            @NonNull String name2,
-            @NonNull String name3) {
+        protected ColorHashMap add(@ColorInt int color, @NonNull String name1, @NonNull String name2, @NonNull String name3) {
             final Color c = Color.of(color);
             put(name1, c);
             put(name2, c);

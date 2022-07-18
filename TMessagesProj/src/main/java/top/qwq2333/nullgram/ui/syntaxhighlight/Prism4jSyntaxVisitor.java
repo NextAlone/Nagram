@@ -1,32 +1,14 @@
-/*
- * Copyright (C) 2019-2022 qwq233 <qwq233@qwq2333.top>
- * https://github.com/qwq233/Nullgram
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with this software.
- *  If not, see
- * <https://www.gnu.org/licenses/>
- */
-
 package top.qwq2333.nullgram.ui.syntaxhighlight;
 
 import android.text.Spannable;
 
 import androidx.annotation.NonNull;
 
-import top.qwq2333.nullgram.ui.syntaxhighlight.prism4j.AbsVisitor;
-import top.qwq2333.nullgram.ui.syntaxhighlight.prism4j.Prism4j;
+import io.noties.prism4j.Syntax;
+import io.noties.prism4j.Text;
+import io.noties.prism4j.Visitor;
 
-class Prism4jSyntaxVisitor extends AbsVisitor {
+class Prism4jSyntaxVisitor extends Visitor {
 
     private final String language;
     private final Prism4jTheme theme;
@@ -35,10 +17,10 @@ class Prism4jSyntaxVisitor extends AbsVisitor {
     private int currentPos;
 
     Prism4jSyntaxVisitor(
-        @NonNull String language,
-        @NonNull Prism4jTheme theme,
-        @NonNull Spannable spannable,
-        int start) {
+            @NonNull String language,
+            @NonNull Prism4jTheme theme,
+            @NonNull Spannable spannable,
+            int start) {
         this.language = language;
         this.theme = theme;
         this.spannable = spannable;
@@ -47,12 +29,12 @@ class Prism4jSyntaxVisitor extends AbsVisitor {
     }
 
     @Override
-    protected void visitText(@NonNull Prism4j.Text text) {
+    protected void visitText(@NonNull Text text) {
         currentPos += text.textLength();
     }
 
     @Override
-    protected void visitSyntax(@NonNull Prism4j.Syntax syntax) {
+    protected void visitSyntax(@NonNull Syntax syntax) {
         final int start = currentPos;
         visit(syntax.children());
         final int end = currentPos;

@@ -60,7 +60,7 @@ dependencies {
     implementation("com.stripe:stripe-android:2.0.2")
     implementation("com.google.mlkit:language-id:17.0.4")
     implementation(files("libs/libgsaverification-client.aar"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     implementation("com.alibaba:fastjson:2.0.5.graal")
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     implementation("com.google.code.gson:gson:2.9.0")
@@ -69,8 +69,9 @@ dependencies {
     implementation("de.psdev.licensesdialog:licensesdialog:2.2.0")
     implementation("io.noties.markwon:core:4.6.2")
     implementation("org.lsposed.hiddenapibypass:hiddenapibypass:4.3")
+    implementation("org.codeberg.qwerty287:prism4j:003cb5e380")
 
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.0")
     implementation("androidx.core:core-ktx:1.8.0")
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib
     // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib-common

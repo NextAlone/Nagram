@@ -1,54 +1,21 @@
-/*
- * Copyright (C) 2019-2022 qwq233 <qwq233@qwq2333.top>
- * https://github.com/qwq233/Nullgram
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with this software.
- *  If not, see
- * <https://www.gnu.org/licenses/>
- */
-
 package top.qwq2333.nullgram.ui.syntaxhighlight;
 
+import android.graphics.Typeface;
 import android.text.Spannable;
 import android.text.Spanned;
-import android.text.style.BackgroundColorSpan;
+import android.text.style.StyleSpan;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.telegram.ui.Components.TextStyleSpan;
+import org.telegram.ui.ActionBar.Theme;
 
 public class Prism4jThemeDefault extends Prism4jThemeBase {
 
     @NonNull
     public static Prism4jThemeDefault create() {
-        return new Prism4jThemeDefault(0xFFf5f2f0);
-    }
-
-    @NonNull
-    public static Prism4jThemeDefault create(@ColorInt int background) {
-        return new Prism4jThemeDefault(background);
-    }
-
-    private final int background;
-
-    public Prism4jThemeDefault(@ColorInt int background) {
-        this.background = background;
-    }
-
-    public int background() {
-        return background;
+        return new Prism4jThemeDefault();
     }
 
     @Override
@@ -60,49 +27,58 @@ public class Prism4jThemeDefault extends Prism4jThemeBase {
     @Override
     protected ColorHashMap init() {
         return new ColorHashMap()
-            .add(0xFF708090, "comment", "prolog", "doctype", "cdata")
-            .add(0xFF999999, "punctuation")
-            .add(0xFF990055, "property", "tag", "boolean", "number", "constant", "symbol", "deleted")
-            .add(0xFF669900, "selector", "attr-name", "string", "char", "builtin", "inserted")
-            .add(0xFF9a6e3a, "operator", "entity", "url")
-            .add(0xFF0077aa, "atrule", "attr-value", "keyword")
-            .add(0xFFDD4A68, "function", "class-name")
-            .add(0xFFee9900, "regex", "important", "variable");
+                .add(Theme.getColor(Theme.key_codehighlight_annotation), "annotation")
+                .add(Theme.getColor(Theme.key_codehighlight_atrule), "atrule")
+                .add(Theme.getColor(Theme.key_codehighlight_attr_name), "attr-name")
+                .add(Theme.getColor(Theme.key_codehighlight_attr_value), "attr-value")
+                .add(Theme.getColor(Theme.key_codehighlight_boolean), "boolean")
+                .add(Theme.getColor(Theme.key_codehighlight_builtin), "builtin")
+                .add(Theme.getColor(Theme.key_codehighlight_cdata), "cdata")
+                .add(Theme.getColor(Theme.key_codehighlight_char), "char")
+                .add(Theme.getColor(Theme.key_codehighlight_class_name), "class-name")
+                .add(Theme.getColor(Theme.key_codehighlight_comment), "comment")
+                .add(Theme.getColor(Theme.key_codehighlight_constant), "constant")
+                .add(Theme.getColor(Theme.key_codehighlight_deleted), "deleted")
+                .add(Theme.getColor(Theme.key_codehighlight_delimiter), "delimiter")
+                .add(Theme.getColor(Theme.key_codehighlight_doctype), "doctype")
+                .add(Theme.getColor(Theme.key_codehighlight_entity), "entity")
+                .add(Theme.getColor(Theme.key_codehighlight_function), "function")
+                .add(Theme.getColor(Theme.key_codehighlight_important), "important")
+                .add(Theme.getColor(Theme.key_codehighlight_inserted), "inserted")
+                .add(Theme.getColor(Theme.key_codehighlight_keyword), "keyword")
+                .add(Theme.getColor(Theme.key_codehighlight_number), "number")
+                .add(Theme.getColor(Theme.key_codehighlight_operator), "operator")
+                .add(Theme.getColor(Theme.key_codehighlight_prolog), "prolog")
+                .add(Theme.getColor(Theme.key_codehighlight_property), "property")
+                .add(Theme.getColor(Theme.key_codehighlight_punctuation), "punctuation")
+                .add(Theme.getColor(Theme.key_codehighlight_regex), "regex")
+                .add(Theme.getColor(Theme.key_codehighlight_selector), "selector")
+                .add(Theme.getColor(Theme.key_codehighlight_string), "string")
+                .add(Theme.getColor(Theme.key_codehighlight_symbol), "symbol")
+                .add(Theme.getColor(Theme.key_codehighlight_tag), "tag")
+                .add(Theme.getColor(Theme.key_codehighlight_url), "url")
+                .add(Theme.getColor(Theme.key_codehighlight_variable), "variable");
     }
 
     @Override
     protected void applyColor(
-        @NonNull String language,
-        @NonNull String type,
-        @Nullable String alias,
-        @ColorInt int color,
-        @NonNull Spannable spannable,
-        int start,
-        int end) {
-
-        if ("css".equals(language) && isOfType("string", type, alias)) {
-            super.applyColor(language, type, alias, 0xFF9a6e3a, spannable, start, end);
-            spannable.setSpan(new BackgroundColorSpan(0x80ffffff), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            return;
-        }
-
-        if (isOfType("namespace", type, alias)) {
-            color = applyAlpha(.7F, color);
-        }
+            @NonNull String language,
+            @NonNull String type,
+            @Nullable String alias,
+            @ColorInt int color,
+            @NonNull Spannable spannable,
+            int start,
+            int end) {
 
         super.applyColor(language, type, alias, color, spannable, start, end);
 
         if (isOfType("important", type, alias)
-            || isOfType("bold", type, alias)) {
-            var run = new TextStyleSpan.TextStyleRun();
-            run.flags |= TextStyleSpan.FLAG_STYLE_BOLD;
-            spannable.setSpan(new TextStyleSpan(run), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                || isOfType("bold", type, alias)) {
+            spannable.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE | Spanned.SPAN_COMPOSING);
         }
 
         if (isOfType("italic", type, alias)) {
-            var run = new TextStyleSpan.TextStyleRun();
-            run.flags |= TextStyleSpan.FLAG_STYLE_ITALIC;
-            spannable.setSpan(new TextStyleSpan(run), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new StyleSpan(Typeface.ITALIC), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE | Spanned.SPAN_COMPOSING);
         }
     }
 }
