@@ -70,18 +70,18 @@ import top.qwq2333.nullgram.utils.Log;
 
 public class DrawerProfileCell extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
-    private final BackupImageView avatarImageView;
-    private final TextView nameTextView;
+    private BackupImageView avatarImageView;
+    private TextView nameTextView;
     private AudioPlayerAlert.ClippingTextViewSwitcher phoneTextView;
-    private final ImageView shadowView;
-    private final ImageView arrowView;
-    private final RLottieImageView darkThemeView;
-    private final RLottieDrawable sunDrawable;
+    private ImageView shadowView;
+    private ImageView arrowView;
+    private RLottieImageView darkThemeView;
+    private RLottieDrawable sunDrawable;
 
-    private final Rect srcRect = new Rect();
-    private final Rect destRect = new Rect();
-    private final Paint paint = new Paint();
-    private final Paint backPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Rect srcRect = new Rect();
+    private Rect destRect = new Rect();
+    private Paint paint = new Paint();
+    private Paint backPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Integer currentColor;
     private Integer currentMoonColor;
     private SnowflakesEffect snowflakesEffect;
@@ -91,14 +91,13 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
     public boolean drawPremium;
     public float drawPremiumProgress;
 
-    private Bitmap lastBitmap;
-    private TLRPC.User user;
-    private boolean avatarAsDrawerBackground = false;
-
     StarParticlesView.Drawable starParticlesDrawable;
     PremiumGradient.GradientTools gradientTools;
 
-    private ImageReceiver imageReceiver;
+    private final ImageReceiver imageReceiver;
+    private Bitmap lastBitmap;
+    private TLRPC.User user;
+    private boolean avatarAsDrawerBackground = false;
 
     public DrawerProfileCell(Context context, DrawerLayoutContainer drawerLayoutContainer) {
         super(context);
@@ -374,7 +373,7 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
                 imageReceiver.setImageCoords(0, 0, getWidth(), getHeight());
                 imageReceiver.draw(canvas);
                 darkBackColor = Theme.getColor(Theme.key_listSelector);
-            } if (backgroundDrawable instanceof ColorDrawable || backgroundDrawable instanceof GradientDrawable) {
+            } else if (backgroundDrawable instanceof ColorDrawable || backgroundDrawable instanceof GradientDrawable) {
                 backgroundDrawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
                 backgroundDrawable.draw(canvas);
                 darkBackColor = Theme.getColor(Theme.key_listSelector);
