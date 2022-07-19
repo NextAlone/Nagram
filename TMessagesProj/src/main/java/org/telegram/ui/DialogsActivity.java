@@ -185,9 +185,11 @@ import java.io.File;
 import java.util.ArrayList;
 
 import kotlin.Unit;
+import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.helpers.PasscodeHelper;
 import top.qwq2333.nullgram.ui.AppLinkVerifyBottomSheet;
 import top.qwq2333.nullgram.ui.BottomBuilder;
+import top.qwq2333.nullgram.utils.Defines;
 
 public class DialogsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     public final static int DIALOGS_TYPE_START_ATTACH_BOT = 14;
@@ -806,7 +808,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     if (filterTabsView != null && filterTabsView.getVisibility() == VISIBLE) {
                         h = heightSize - inputFieldHeight + AndroidUtilities.dp(2) - AndroidUtilities.dp(44) - topPadding;
                     } else {
-                        h = heightSize - inputFieldHeight + AndroidUtilities.dp(2) - (onlySelect ? 0 : actionBar.getMeasuredHeight()) - topPadding;
+                        h = heightSize - inputFieldHeight + AndroidUtilities.dp(2) - ((onlySelect && !(initialDialogsType == 3 && ConfigManager.getBooleanOrFalse(Defines.showTabsOnForward))) ? 0 : actionBar.getMeasuredHeight()) - topPadding;
                     }
                     int paddingBottom = 0;
                     if (keyboardSize > AndroidUtilities.dp(20)) {
@@ -830,7 +832,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     searchViewPager.setTranslationY(0);
                     int contentWidthSpec = View.MeasureSpec.makeMeasureSpec(widthSize, View.MeasureSpec.EXACTLY);
                     int h = View.MeasureSpec.getSize(heightMeasureSpec) + keyboardSize;
-                    int contentHeightSpec = View.MeasureSpec.makeMeasureSpec(Math.max(AndroidUtilities.dp(10), h - inputFieldHeight + AndroidUtilities.dp(2) - (onlySelect ? 0 : actionBar.getMeasuredHeight()) - topPadding) - (searchTabsView == null ? 0 : AndroidUtilities.dp(44)), View.MeasureSpec.EXACTLY);
+                    int contentHeightSpec = View.MeasureSpec.makeMeasureSpec(Math.max(AndroidUtilities.dp(10), h - inputFieldHeight + AndroidUtilities.dp(2) - (onlySelect && !(initialDialogsType == 3 && ConfigManager.getBooleanOrFalse(Defines.showTabsOnForward)) ? 0 : actionBar.getMeasuredHeight()) - topPadding) - (searchTabsView == null ? 0 : AndroidUtilities.dp(44)), View.MeasureSpec.EXACTLY);
                     child.measure(contentWidthSpec, contentHeightSpec);
                     child.setPivotX(child.getMeasuredWidth() / 2);
                 } else if (commentView != null && commentView.isPopupView(child)) {
@@ -950,11 +952,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 } else if (child == filterTabsView || child == searchTabsView || child == filtersView) {
                     childTop = actionBar.getMeasuredHeight();
                 } else if (child == searchViewPager) {
-                    childTop = (onlySelect ? 0 : actionBar.getMeasuredHeight()) + topPadding + (searchTabsView == null ? 0 : AndroidUtilities.dp(44));
+                    childTop = (onlySelect && !(initialDialogsType == 3 && ConfigManager.getBooleanOrFalse(Defines.showTabsOnForward)) ? 0 : actionBar.getMeasuredHeight()) + topPadding + (searchTabsView == null ? 0 : AndroidUtilities.dp(44));
                 } else if (child instanceof DatabaseMigrationHint) {
                     childTop = actionBar.getMeasuredHeight();
                 } else if (child instanceof ViewPage) {
-                    if (!onlySelect) {
+                    if ((initialDialogsType == 3 && ConfigManager.getBooleanOrFalse(Defines.showTabsOnForward)) || !onlySelect) {
                         if (filterTabsView != null && filterTabsView.getVisibility() == VISIBLE) {
                             childTop = AndroidUtilities.dp(44);
                         } else {
@@ -1391,7 +1393,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         @Override
         protected void onMeasure(int widthSpec, int heightSpec) {
             int t = 0;
-            if (!onlySelect) {
+            if ((initialDialogsType == 3 && ConfigManager.getBooleanOrFalse(Defines.showTabsOnForward)) || !onlySelect) {
                 if (filterTabsView != null && filterTabsView.getVisibility() == VISIBLE) {
                     t = AndroidUtilities.dp(44);
                 } else {
@@ -1410,7 +1412,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     ignoreLayout = false;
                 }
             }
-            if (!onlySelect) {
+            if ((initialDialogsType == 3 && ConfigManager.getBooleanOrFalse(Defines.showTabsOnForward)) || !onlySelect) {
                 ignoreLayout = true;
                 if (filterTabsView != null && filterTabsView.getVisibility() == VISIBLE) {
                     t = ActionBar.getCurrentActionBarHeight() + (actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0);
@@ -1434,7 +1436,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
             checkIfAdapterValid();
             super.onMeasure(widthSpec, heightSpec);
-            if (!onlySelect) {
+            if ((initialDialogsType == 3 && ConfigManager.getBooleanOrFalse(Defines.showTabsOnForward)) || !onlySelect) {
                 if (appliedPaddingTop != t && viewPages != null && viewPages.length > 1) {
                     viewPages[1].setTranslationX(viewPages[0].getMeasuredWidth());
                 }
@@ -2284,7 +2286,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 actionBar.setSupportsHolidayImage(true);
             }
         }
-        if (!onlySelect) {
+        if ((initialDialogsType == 3 && ConfigManager.getBooleanOrFalse(Defines.showTabsOnForward)) || !onlySelect) {
             actionBar.setAddToContainer(false);
             actionBar.setCastShadows(false);
             actionBar.setClipContent(true);
@@ -2296,7 +2298,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             scrollToTop();
         });
 
-        if (initialDialogsType == 0 && folderId == 0 && !onlySelect && TextUtils.isEmpty(searchString)) {
+        if ((initialDialogsType == 3 && ConfigManager.getBooleanOrFalse(Defines.showTabsOnForward)) || initialDialogsType == 0 && folderId == 0 && !onlySelect && TextUtils.isEmpty(searchString)) {
             scrimPaint = new Paint() {
                 @Override
                 public void setAlpha(int a) {
@@ -2683,7 +2685,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         ContentView contentView = new ContentView(context);
         fragmentView = contentView;
 
-        int pagesCount = folderId == 0 && initialDialogsType == 0 && !onlySelect ? 2 : 1;
+        int pagesCount = (initialDialogsType == 3 && ConfigManager.getBooleanOrFalse(Defines.showTabsOnForward)) || (folderId == 0 && initialDialogsType == 0 && !onlySelect) ? 2 : 1;
         viewPages = new ViewPage[pagesCount];
         for (int a = 0; a < pagesCount; a++) {
             final ViewPage viewPage = new ViewPage(context) {
@@ -3696,7 +3698,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (filterTabsView != null) {
             contentView.addView(filterTabsView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 44));
         }
-        if (!onlySelect) {
+        if ((initialDialogsType == 3 && ConfigManager.getBooleanOrFalse(Defines.showTabsOnForward)) || !onlySelect) {
             final FrameLayout.LayoutParams layoutParams = LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT);
             if (inPreviewMode && Build.VERSION.SDK_INT >= 21) {
                 layoutParams.topMargin = AndroidUtilities.statusBarHeight;
@@ -8858,6 +8860,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
             }
         }
+    }
+
+    @Override
+    public boolean isSwipeBackEnabled(MotionEvent event) {
+        return !((initialDialogsType == 3 && ConfigManager.getBooleanOrFalse(Defines.showTabsOnForward)) && viewPages[0].selectedType != filterTabsView.getFirstTabId());
     }
 
     @Override

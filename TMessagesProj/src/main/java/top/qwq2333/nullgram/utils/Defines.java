@@ -77,6 +77,7 @@ public class Defines {
     public static final String aospEmojiFont = "NotoColorEmoji.ttf";
     public static final String hidePremiumStickerAnim = "hidePremiumStickerAnim";
     public static final String fastSpeedUpload = "fastSpeedUpload";
+    public static final String showTabsOnForward = "showTabsOnForward";
 
     // Custom API
     public static final String customAPI = "customAPI";

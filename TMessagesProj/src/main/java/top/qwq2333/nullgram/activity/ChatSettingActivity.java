@@ -81,6 +81,7 @@ public class ChatSettingActivity extends BaseActivity {
     private int hideQuickSendMediaBottomRow;
     private int customQuickMessageRow;
     private int scrollableChatPreviewRow;
+    private int showTabsOnForwardRow;
     private int chat2Row;
 
 
@@ -268,6 +269,11 @@ public class ChatSettingActivity extends BaseActivity {
             if (view instanceof TextCheckCell) {
                 ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.scrollableChatPreview));
             }
+        } else if (position == showTabsOnForwardRow) {
+            ConfigManager.toggleBoolean(Defines.showTabsOnForward);
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.showTabsOnForward));
+            }
         }
 
     }
@@ -314,6 +320,7 @@ public class ChatSettingActivity extends BaseActivity {
         hideQuickSendMediaBottomRow = rowCount++;
         customQuickMessageRow = rowCount++;
         scrollableChatPreviewRow = rowCount++;
+        showTabsOnForwardRow = rowCount++;
         chat2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -396,6 +403,8 @@ public class ChatSettingActivity extends BaseActivity {
                         textCell.setTextAndCheck(LocaleController.getString("hideQuickSendMediaBottom", R.string.hideQuickSendMediaBottom), ConfigManager.getBooleanOrFalse(Defines.hideQuickSendMediaBottom), true);
                     } else if (position == scrollableChatPreviewRow) {
                         textCell.setTextAndCheck(LocaleController.getString("scrollableChatPreview", R.string.scrollableChatPreview), ConfigManager.getBooleanOrFalse(Defines.scrollableChatPreview), true);
+                    } else if (position == showTabsOnForwardRow) {
+                        textCell.setTextAndCheck(LocaleController.getString("showTabsOnForward", R.string.showTabsOnForward), ConfigManager.getBooleanOrFalse(Defines.showTabsOnForward), true);
                     }
                     break;
                 }
