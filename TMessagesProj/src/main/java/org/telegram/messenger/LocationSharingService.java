@@ -134,14 +134,7 @@ public class LocationSharingService extends Service implements NotificationCente
             Intent intent2 = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
             intent2.setAction("org.tmessages.openlocations");
             intent2.addCategory(Intent.CATEGORY_LAUNCHER);
-            PendingIntent contentIntent;
-
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S) {
-                contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent2, PendingIntent.FLAG_MUTABLE);
-            } else {
-                contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent2, 0);
-            }
-
+            PendingIntent contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent2, Build.VERSION.SDK_INT > Build.VERSION_CODES.S ? PendingIntent.FLAG_MUTABLE : 0);
             builder = new NotificationCompat.Builder(ApplicationLoader.applicationContext);
             builder.setWhen(System.currentTimeMillis());
             builder.setSmallIcon(R.drawable.live_loc);
@@ -150,12 +143,7 @@ public class LocationSharingService extends Service implements NotificationCente
             builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
             builder.setContentTitle(LocaleController.getString("AppName", R.string.AppName));
             Intent stopIntent = new Intent(ApplicationLoader.applicationContext, StopLiveLocationReceiver.class);
-
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S) {
-                builder.addAction(0, LocaleController.getString("StopLiveLocation", R.string.StopLiveLocation), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, stopIntent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT));
-            } else {
-                builder.addAction(0, LocaleController.getString("StopLiveLocation", R.string.StopLiveLocation), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT));
-            }
+            builder.addAction(0, LocaleController.getString("StopLiveLocation", R.string.StopLiveLocation), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 2, stopIntent, Build.VERSION.SDK_INT > Build.VERSION_CODES.S ? PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT: PendingIntent.FLAG_UPDATE_CURRENT));
         }
 
         updateNotification(false);
