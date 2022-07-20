@@ -105,6 +105,7 @@ import androidx.dynamicanimation.animation.SpringForce;
 import androidx.recyclerview.widget.ChatListItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import xyz.nextalone.nagram.NaConfig;
 import xyz.nextalone.nagram.helper.Dialogs;
 import xyz.nextalone.nagram.ui.syntaxhighlight.SyntaxHighlight;
 
@@ -8194,7 +8195,17 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     }
                     if (gif instanceof TLRPC.Document) {
                         TLRPC.Document document = (TLRPC.Document) gif;
-                        SendMessagesHelper.getInstance(currentAccount).sendSticker(document, query, dialog_id, replyingMessageObject, getThreadMessage(), parent, null, notify, scheduleDate);
+                        if (NaConfig.INSTANCE.getAutoInsertGIFCaption().Bool()) {
+                            ArrayList<TLRPC.MessageEntity> entities = MediaDataController.getInstance(currentAccount).getEntities(new CharSequence[]{AndroidUtilities.getTrimmedString(messageEditText.getText())}, supportsSendingNewEntities());
+                            String caption = messageEditText.getText().toString();
+                            if (caption.startsWith("@gif")) {
+                                caption = "";
+                            }
+                            SendMessagesHelper.getInstance(currentAccount).sendSticker(document, query, dialog_id, replyingMessageObject, getThreadMessage(), parent, null, notify, scheduleDate, caption, entities);
+                            messageEditText.setText("");
+                        } else {
+                            SendMessagesHelper.getInstance(currentAccount).sendSticker(document, query, dialog_id, replyingMessageObject, getThreadMessage(), parent, null, notify, scheduleDate);
+                        }
                         MediaDataController.getInstance(currentAccount).addRecentGif(document, (int) (System.currentTimeMillis() / 1000), true);
                         if (DialogObject.isEncryptedDialog(dialog_id)) {
                             accountInstance.getMessagesController().saveGif(parent, document);

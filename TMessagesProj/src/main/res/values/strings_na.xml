@@ -42,4 +42,5 @@
     <string name="AppIconColorful">Colorful</string>
     <string name="AppIconDarkGreen">Dark Green</string>
     <string name="AppIconNeon">Neon</string>
+    <string name="AutoInsertGIFCaption">Auto insert caption before GIF send</string>
 </resources>
