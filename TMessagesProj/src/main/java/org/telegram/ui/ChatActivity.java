@@ -29859,9 +29859,8 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
             builder.setPositiveButton(LocaleController.getString("DeleteAll", R.string.DeleteAll), (dialogInterface, i) -> {
                 if (ChatObject.isChannel(currentChat) && currentChat.megagroup && ChatObject.canUserDoAction(currentChat, ChatObject.ACTION_DELETE_MESSAGES)) {
                     getMessagesController().deleteUserChannelHistory(currentChat, UserConfig.getInstance(currentAccount).getCurrentUser(), null, 0);
-                } else {
-                    getMessageHelper().deleteUserChannelHistoryWithSearch(getParentActivity(), dialog_id, UserConfig.getInstance(currentAccount).getCurrentUser());
                 }
+                getMessageHelper().deleteUserChannelHistoryWithSearch(getParentActivity(), dialog_id, UserConfig.getInstance(currentAccount).getCurrentUser());
             });
             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
             AlertDialog alertDialog = builder.create();
