@@ -47,7 +47,6 @@ public class FolderIconHelper {
         folderIcons.put("\uD83D\uDC51", R.drawable.filter_crown);
         folderIcons.put("\uD83C\uDF39", R.drawable.filter_flower);
         folderIcons.put("\uD83C\uDFE0", R.drawable.filter_home);
-        folderIcons.put("\u2764", R.drawable.filter_love);
         folderIcons.put("\uD83C\uDFAD", R.drawable.filter_mask);
         folderIcons.put("\uD83C\uDF78", R.drawable.filter_party);
         folderIcons.put("\uD83D\uDCC8", R.drawable.filter_trade);
