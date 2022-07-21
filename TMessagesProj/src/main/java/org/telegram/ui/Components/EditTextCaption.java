@@ -177,6 +177,7 @@ public class EditTextCaption extends EditTextBoldCursor {
             editText.setLineColors(getThemedColor(Theme.key_windowBackgroundWhiteInputField), getThemedColor(Theme.key_windowBackgroundWhiteInputFieldActivated), getThemedColor(Theme.key_windowBackgroundWhiteRedText3));
             editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
             editText.setBackgroundDrawable(null);
+            editText.setText(NaConfig.INSTANCE.getDefaultMonoLanguage().String());
             editText.requestFocus();
             editText.setPadding(0, 0, 0, 0);
             builder.setView(editText);

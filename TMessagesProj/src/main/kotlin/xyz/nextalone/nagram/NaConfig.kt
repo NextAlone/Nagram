@@ -208,6 +208,11 @@ object NaConfig {
         ConfigItem.configTypeBool,
         true
     )
+    val defaultMonoLanguage = addConfig(
+        "DefaultMonoLanguage",
+        ConfigItem.configTypeString,
+        ""
+    )
 
     private fun addConfig(
         k: String,
