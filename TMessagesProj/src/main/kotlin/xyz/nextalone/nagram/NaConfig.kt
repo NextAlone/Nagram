@@ -213,6 +213,11 @@ object NaConfig {
         ConfigItem.configTypeString,
         ""
     )
+    val disableGlobalSearch = addConfig(
+        "DisableGlobalSearch",
+        ConfigItem.configTypeBool,
+        false
+    )
 
     private fun addConfig(
         k: String,

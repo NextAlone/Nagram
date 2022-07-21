@@ -10,6 +10,8 @@ package org.telegram.ui.Adapters;
 
 import android.util.Pair;
 
+import androidx.collection.LongSparseArray;
+
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLitePreparedStatement;
@@ -28,7 +30,6 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ChatUsersActivity;
 import org.telegram.ui.Components.ShareAlert;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,7 +37,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import androidx.collection.LongSparseArray;
+import xyz.nextalone.nagram.NaConfig;
 
 public class SearchAdapterHelper {
 
@@ -578,6 +579,9 @@ public class SearchAdapterHelper {
     }
 
     public ArrayList<TLObject> getGlobalSearch() {
+        if (NaConfig.INSTANCE.getDisableGlobalSearch().Bool()) {
+            return new ArrayList<TLObject>();
+        }
         return globalSearch;
     }
 

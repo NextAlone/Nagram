@@ -44,4 +44,5 @@
     <string name="AppIconNeon">Neon</string>
     <string name="AutoInsertGIFCaption">Auto insert caption before GIF send</string>
     <string name="DefaultMonoLanguage">Custom default code language</string>
+    <string name="DisableGlobalSearch">Disable Global Search</string>
 </resources>
