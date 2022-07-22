@@ -92,6 +92,8 @@
     <string name="Halloween">Halloween</string>
 
     <!-- Other -->
+    <string name="OpenPremiumBot">Open official bot</string>
+
     <string name="Select">Select</string>
 
     <string name="EnterID">Enter the ID</string>

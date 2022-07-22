@@ -14,7 +14,9 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
+import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
@@ -58,10 +60,23 @@ public class PremiumNotAvailableBottomSheet extends BottomSheet {
             }
         });
 
+        TextView buttonTextViewBot = new TextView(context);
+        buttonTextViewBot.setPadding(AndroidUtilities.dp(34), 0, AndroidUtilities.dp(34), 0);
+        buttonTextViewBot.setGravity(Gravity.CENTER);
+        buttonTextViewBot.setTextColor(Theme.getColor(Theme.key_featuredStickers_addButton));
+        buttonTextViewBot.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        buttonTextViewBot.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        buttonTextViewBot.setBackground(Theme.AdaptiveRipple.filledRect(Theme.key_dialogBackground, 8));
+        buttonTextViewBot.setText(LocaleController.getString(R.string.OpenPremiumBot));
+        buttonTextViewBot.setOnClickListener(v -> {
+            MessagesController.getInstance(UserConfig.selectedAccount).openByUserName(("PremiumBot"), fragment, 1);
+        });
+
         FrameLayout buttonContainer = new FrameLayout(context);
-        buttonContainer.addView(buttonTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.CENTER_VERTICAL, 16, 0, 16, 0));
+        buttonContainer.addView(buttonTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.TOP, 16, 0, 16, 0));
+        buttonContainer.addView(buttonTextViewBot, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.TOP, 16, 56, 16, 0));
         buttonContainer.setBackgroundColor(getThemedColor(Theme.key_dialogBackground));
-        linearLayout.addView(buttonContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 68, Gravity.BOTTOM));
+        linearLayout.addView(buttonContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 104, Gravity.BOTTOM));
 
         title.setText(AndroidUtilities.replaceTags(LocaleController.getString(R.string.SubscribeToPremiumOfficialAppNeeded)));
         description.setText(AndroidUtilities.replaceTags(LocaleController.getString(R.string.SubscribeToPremiumOfficialAppNeededDescription)));
