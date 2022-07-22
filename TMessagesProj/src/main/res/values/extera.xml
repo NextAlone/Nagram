@@ -61,6 +61,7 @@
     <string name="StickerFormRoundedMsg">Message</string>
     <string name="StickerTime">Hide time under stickers</string>
     <string name="UnlimitedRecentStickers">Unlimited recent stickers</string>
+    <string name="PremiumAutoPlayback">Premium auto-playback</string>
     <string name="SendMessageBeforeSendSticker">Send message before send sticker</string>
 
     <string name="HideSendAsChannel">Hide \"Send as Channel\"</string>
@@ -77,7 +78,7 @@
     <string name="RearVideoMessages">Rear camera in video messages</string>
     <string name="DisableCamera">Disable instant camera</string>
     <string name="DisableProximityEvents">Disable proximity events</string>
-    <string name="PauseOnMinimize">Autopause</string>
+    <string name="PauseOnMinimize">Auto-pause</string>
     <string name="POMDescription">Pauses a video playback when device is locked or exteraGram is minimized.</string>
     <string name="DisablePlayback">Disable playback</string>
     <string name="DPDescription">Disables playback when volume button is pressed.</string>

@@ -12049,7 +12049,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                 }
                 getDownloadController().checkUnviewedDownloads(messageCell.getId(), dialog_id);
 
-                if ((chatListItemAnimator == null || !chatListItemAnimator.isRunning()) && (!messageObject.isOutOwner() || messageObject.forcePlayEffect) && messageObject.messageOwner.media != null && !messageObject.messageOwner.media.nopremium && !messageObject.messageOwner.premiumEffectWasPlayed && messageObject.isPremiumSticker() && emojiAnimationsOverlay.isIdle() && emojiAnimationsOverlay.checkPosition(messageCell, chatListViewPaddingTop, chatListView.getMeasuredHeight() - blurredViewBottomOffset)) {
+                if ((chatListItemAnimator == null || !chatListItemAnimator.isRunning()) && (!messageObject.isOutOwner() || messageObject.forcePlayEffect) && messageObject.messageOwner.media != null && !messageObject.messageOwner.media.nopremium && !messageObject.messageOwner.premiumEffectWasPlayed && messageObject.isPremiumSticker() && emojiAnimationsOverlay.isIdle() && emojiAnimationsOverlay.checkPosition(messageCell, chatListViewPaddingTop, chatListView.getMeasuredHeight() - blurredViewBottomOffset) && ExteraConfig.premiumAutoPlayback) {
                     emojiAnimationsOverlay.onTapItem(messageCell, ChatActivity.this);
                 }
             } else if (view instanceof ChatActionCell) {

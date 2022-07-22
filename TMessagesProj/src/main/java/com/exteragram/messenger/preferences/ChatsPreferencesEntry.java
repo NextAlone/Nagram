@@ -60,6 +60,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
     private int stickersHeaderRow;
     private int hideStickerTimeRow;
     private int unlimitedRecentStickersRow;
+    private int premiumAutoPlaybackRow;
     private int sendMessageBeforeSendStickerRow;
     private int stickersDividerRow;
 
@@ -245,6 +246,11 @@ public class ChatsPreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.sendMessageBeforeSendSticker);
                 }
+            } else if (position == premiumAutoPlaybackRow) {
+                ExteraConfig.togglePremiumAutoPlayback();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(ExteraConfig.premiumAutoPlayback);
+                }
             } else if (position == hideSendAsChannelRow) {
                 ExteraConfig.toggleHideSendAsChannel();
                 if (view instanceof TextCheckCell) {
@@ -337,6 +343,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
         stickersHeaderRow = rowCount++;
         hideStickerTimeRow = rowCount++;
         unlimitedRecentStickersRow = rowCount++;
+        premiumAutoPlaybackRow = rowCount++;
         sendMessageBeforeSendStickerRow = rowCount++;
         stickersDividerRow = rowCount++;
 
@@ -416,6 +423,8 @@ public class ChatsPreferencesEntry extends BaseFragment {
                         textCheckCell.setTextAndCheck(LocaleController.getString("StickerTime", R.string.StickerTime), ExteraConfig.hideStickerTime, true);
                     } else if (position == unlimitedRecentStickersRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("UnlimitedRecentStickers", R.string.UnlimitedRecentStickers), ExteraConfig.unlimitedRecentStickers, true);
+                    } else if (position == premiumAutoPlaybackRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString("PremiumAutoPlayback", R.string.PremiumAutoPlayback), ExteraConfig.premiumAutoPlayback, true);
                     } else if (position == sendMessageBeforeSendStickerRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("SendMessageBeforeSendSticker", R.string.SendMessageBeforeSendSticker), ExteraConfig.sendMessageBeforeSendSticker, false);
                     } else if (position == hideSendAsChannelRow) {
@@ -506,7 +515,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
                 return 1;
             } else if (position == stickerSizeHeaderRow || position == stickersHeaderRow || position == chatHeaderRow || position == mediaHeaderRow || position == stickerFormHeaderRow) {
                 return 2;
-            } else if (position == hideStickerTimeRow || position == unlimitedRecentStickersRow || position == sendMessageBeforeSendStickerRow ||
+            } else if (position == hideStickerTimeRow || position == unlimitedRecentStickersRow || position == premiumAutoPlaybackRow || position == sendMessageBeforeSendStickerRow ||
                       position == hideSendAsChannelRow || position == hideKeyboardOnScrollRow || position == disableReactionsRow ||
                       position == disableGreetingStickerRow || position == disableJumpToNextChannelRow ||
                       position == dateOfForwardedMsgRow || position == showMessageIDRow || position == zalgoFilterRow || position == rearVideoMessagesRow ||

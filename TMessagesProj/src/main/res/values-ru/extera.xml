@@ -55,6 +55,7 @@
     <string name="StickerFormRoundedMsg">Сообщение</string>
     <string name="StickerTime">Скрыть время под стикером</string>
     <string name="UnlimitedRecentStickers">Бесконечные недавние стикеры</string>
+    <string name="PremiumAutoPlayback">Авто-анимация премиум стикеров</string>
     <string name="SendMessageBeforeSendSticker">Отправлять сообщение перед стикером</string>
 
     <string name="HideSendAsChannel">Скрыть \"Написать от имени…\"</string>
@@ -71,9 +72,9 @@
     <string name="RearVideoMessages">Задняя камера в видеосообщениях</string>
     <string name="DisableCamera">Отключить камеру в галерее</string>
     <string name="DisableProximityEvents">Отключить датчик приближения</string>
-    <string name="PauseOnMinimize">Автопауза</string>
+    <string name="PauseOnMinimize">Авто-пауза</string>
     <string name="POMDescription">Останавливает видео, когда девайс блокируется или приложение сворачивается.</string>
-    <string name="DisablePlayback">Отключить автопроигрывание</string>
+    <string name="DisablePlayback">Отключить авто-проигрывание</string>
     <string name="DPDescription">Отключает автоматическое проигрывание видео при нажатии на кнопку громкости.</string>
 
     <!-- Drawer -->
