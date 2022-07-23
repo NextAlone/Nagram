@@ -163,17 +163,17 @@ object NaConfig {
         ConfigItem.configTypeBool,
         true
     )
-    val CodeSyntaxHighlight = addConfig(
+    val codeSyntaxHighlight = addConfig(
         "CodeSyntaxHighlight",
         ConfigItem.configTypeBool,
         true
     )
-    val DateOfForwardedMsg = addConfig(
+    val dateOfForwardedMsg = addConfig(
         "DateOfForwardedMsg",
         ConfigItem.configTypeBool,
         false
     )
-    val ShowMessageID = addConfig(
+    val showMessageID = addConfig(
         "ShowMessageID",
         ConfigItem.configTypeBool,
         false
