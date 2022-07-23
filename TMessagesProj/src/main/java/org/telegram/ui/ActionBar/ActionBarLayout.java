@@ -41,6 +41,7 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 
 import androidx.annotation.Keep;
+
 import androidx.core.graphics.ColorUtils;
 import androidx.core.math.MathUtils;
 
@@ -61,7 +62,6 @@ import java.util.HashMap;
 
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
-import xyz.nextalone.nagram.NaConfig;
 
 public class ActionBarLayout extends FrameLayout {
 
@@ -92,7 +92,6 @@ public class ActionBarLayout extends FrameLayout {
 
         public LayoutContainer(Context context) {
             super(context);
-            setClickable(true);
             setWillNotDraw(false);
         }
 
@@ -205,30 +204,9 @@ public class ActionBarLayout extends FrameLayout {
         @Override
         public boolean dispatchTouchEvent(MotionEvent ev) {
             processMenuButtonsTouch(ev);
-            boolean previewModeStatus = !NaConfig.INSTANCE.getScrollableChatPreview().Bool() && inPreviewMode;
-            boolean passivePreview = previewModeStatus && previewMenu == null;
+            boolean passivePreview = inPreviewMode && previewMenu == null;
             if ((passivePreview || transitionAnimationPreviewMode) && (ev.getActionMasked() == MotionEvent.ACTION_DOWN || ev.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN)) {
                 return false;
-            }
-            if (NaConfig.INSTANCE.getScrollableChatPreview().Bool() && inPreviewMode && previewMenu == null) {
-                View view = containerView.getChildAt(0);
-                if (view != null) {
-                    int y = (int) (view.getTop() + containerView.getTranslationY() - AndroidUtilities.dp(0));
-                    y += AndroidUtilities.dp(24);
-                    if (ev.getY() <= y && ev.getAction() == MotionEvent.ACTION_DOWN) {
-                        movePreviewFragment(AndroidUtilities.dp(65));
-                    }
-                    boolean isValidTouch = ev.getX() >= AndroidUtilities.dp(8);
-                    isValidTouch &= ev.getX() <= view.getRight() - AndroidUtilities.dp(8);
-                    isValidTouch &= ev.getY() <= view.getBottom();
-                    isValidTouch &= ev.getY() >= y + AndroidUtilities.dp(70);
-                    if (!isValidTouch) {
-                        if (ev.getY() > view.getBottom() && ev.getAction() == MotionEvent.ACTION_DOWN) {
-                            finishPreviewFragment();
-                        }
-                        return false;
-                    }
-                }
             }
             try {
                 return (!passivePreview || this != containerView) && super.dispatchTouchEvent(ev);

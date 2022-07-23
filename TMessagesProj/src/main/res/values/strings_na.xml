@@ -18,7 +18,6 @@
     <string name="DoubleTapAction">Double Tap Action</string>
     <string name="SendReactions">Send Reactions</string>
     <string name="ShowReactions">Show Reactions</string>
-    <string name="ScrollableChatPreview">Scrollable Chat Preview</string>
     <string name="CustomTitle">Custom Title</string>
     <string name="CustomTitleHint">Leave blank to use Nagram</string>
     <string name="CodeSyntaxHighlight">Code syntax highlight</string>
