@@ -75,7 +75,7 @@ object MessageHelper {
         val date: Long = obj.messageOwner.fwd_from.date.toLong()
         val day: String = LocaleController.formatDate(date)
         val time: String = LocaleController.getInstance().formatterDay.format(date * 1000)
-        return if (!NaConfig.dateOfForwardedMsg.Bool()) {
+        return if (!NaConfig.dateOfForwardedMsg.Bool() || date == 0L) {
             orig
         } else {
             if (day == time) {
