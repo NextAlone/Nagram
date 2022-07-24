@@ -508,7 +508,7 @@ public class NotificationCenter {
             DelayedPost delayedPost = new DelayedPost(id, args);
             delayedPosts.add(delayedPost);
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.e("delay post notification " + id + " with args count = " + args.length);
+                FileLog.d("delay post notification " + id + " with args count = " + args.length);
             }
             return;
         }
