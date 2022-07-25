@@ -3236,7 +3236,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                 headerItem.addSubItem(change_colors, R.drawable.msg_colors, LocaleController.getString("ChangeColors", R.string.ChangeColors), themeDelegate);
             }
 
-            if (ChatObject.isMegagroup(currentChat) || currentChat != null && !ChatObject.isChannel(currentChat)) {
+            if ((ChatObject.isMegagroup(currentChat) || currentChat != null && !ChatObject.isChannel(currentChat)) || currentUser != null) {
                 headerItem.addSubItem(nkheaderbtn_zibi, R.drawable.msg_delete, LocaleController.getString("DeleteAllFromSelf", R.string.DeleteAllFromSelf));
             }
 
@@ -29840,8 +29840,13 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
             BackupImageView imageView = new BackupImageView(context);
             imageView.setRoundRadius(AndroidUtilities.dp(20));
             frameLayout.addView(imageView, LayoutHelper.createFrame(40, 40, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 22, 5, 22, 0));
-            avatarDrawable.setInfo(currentChat);
-            imageView.setImage(ImageLocation.getForChat(currentChat, ImageLocation.TYPE_SMALL), "50_50", avatarDrawable, currentChat);
+            if (currentChat != null) {
+                avatarDrawable.setInfo(currentChat);
+                imageView.setImage(ImageLocation.getForChat(currentChat, ImageLocation.TYPE_SMALL), "50_50", avatarDrawable, currentChat);
+            } else if (currentUser != null) {
+                avatarDrawable.setInfo(currentUser);
+                imageView.setImage(ImageLocation.getForUser(currentUser, ImageLocation.TYPE_SMALL), "50_50", avatarDrawable, currentUser);
+            }
             TextView textView = new TextView(context);
             textView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
