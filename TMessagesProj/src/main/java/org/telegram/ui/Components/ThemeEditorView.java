@@ -72,6 +72,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.TextColorThemeCell;
 import org.telegram.ui.LaunchActivity;
+import org.telegram.ui.Components.OutlineTextContainerView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -295,11 +296,11 @@ public class ThemeEditorView {
             private Paint colorWheelPaint;
             private Paint valueSliderPaint;
             private Paint circlePaint;
-            private Drawable circleDrawable;
 
             private Bitmap colorWheelBitmap;
 
-            private EditTextBoldCursor[] colorEditText = new EditTextBoldCursor[4];
+            private EditTextBoldCursor[] colorEditText = new EditTextBoldCursor[2];
+            private OutlineTextContainerView[] outlineContainer = new OutlineTextContainerView[2];
 
             private int colorWheelRadius;
 
@@ -321,7 +322,6 @@ public class ThemeEditorView {
                 setWillNotDraw(false);
 
                 circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-                circleDrawable = context.getResources().getDrawable(R.drawable.knob_shadow).mutate();
 
                 colorWheelPaint = new Paint();
                 colorWheelPaint.setAntiAlias(true);
@@ -334,34 +334,39 @@ public class ThemeEditorView {
                 linearLayout = new LinearLayout(context);
                 linearLayout.setOrientation(LinearLayout.HORIZONTAL);
                 addView(linearLayout, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP));
-                for (int a = 0; a < 4; a++) {
+                for (int a = 0; a < 2; a++) {
+                    outlineContainer[a] = new OutlineTextContainerView(context);
+                    outlineContainer[a].setUseDefaultColor(true);
+                    outlineContainer[a].updateColor();
+                    outlineContainer[a].setText(a == 0 ? "HEX" : "B%");
+                    linearLayout.addView(outlineContainer[a], LayoutHelper.createLinear(a == 0 ? 125 : 65, 48, 0, 0, a == 0 ? 16 : 0, 0));
+
                     colorEditText[a] = new EditTextBoldCursor(context);
-                    colorEditText[a].setInputType(InputType.TYPE_CLASS_NUMBER);
                     colorEditText[a].setTextColor(0xff212121);
                     colorEditText[a].setCursorColor(0xff212121);
                     colorEditText[a].setCursorSize(AndroidUtilities.dp(20));
                     colorEditText[a].setCursorWidth(1.5f);
                     colorEditText[a].setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
                     colorEditText[a].setBackground(null);
-                    colorEditText[a].setLineColors(Theme.getColor(Theme.key_dialogInputField), Theme.getColor(Theme.key_dialogInputFieldActivated), Theme.getColor(Theme.key_dialogTextRed2));
                     colorEditText[a].setMaxLines(1);
                     colorEditText[a].setTag(a);
+                    final int p = AndroidUtilities.dp(2);
+                    colorEditText[a].setPadding(p, p, p, p);
                     colorEditText[a].setGravity(Gravity.CENTER);
                     if (a == 0) {
-                        colorEditText[a].setHint("red");
-                    } else if (a == 1) {
-                        colorEditText[a].setHint("green");
-                    } else if (a == 2) {
-                        colorEditText[a].setHint("blue");
-                    } else if (a == 3) {
-                        colorEditText[a].setHint("alpha");
+                        colorEditText[a].setInputType(InputType.TYPE_CLASS_TEXT);
+                    } else {
+                        colorEditText[a].setInputType(InputType.TYPE_CLASS_NUMBER);
                     }
-                    colorEditText[a].setImeOptions((a == 3 ? EditorInfo.IME_ACTION_DONE : EditorInfo.IME_ACTION_NEXT) | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+                    colorEditText[a].setImeOptions((a == 1 ? EditorInfo.IME_ACTION_DONE : EditorInfo.IME_ACTION_NEXT) | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        
                     InputFilter[] inputFilters = new InputFilter[1];
-                    inputFilters[0] = new InputFilter.LengthFilter(3);
+                    inputFilters[0] = new InputFilter.LengthFilter(a == 0 ? 9 : 3);
                     colorEditText[a].setFilters(inputFilters);
                     final int num = a;
-                    linearLayout.addView(colorEditText[a], LayoutHelper.createLinear(55, 36, 0, 0, a != 3 ? 16 : 0, 0));
+                    colorEditText[num].setOnFocusChangeListener((v, hasFocus) -> outlineContainer[num].animateSelection(hasFocus ? 1 : 0));
+                    outlineContainer[a].addView(colorEditText[a], LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 42));
+                    outlineContainer[a].attachEditText(colorEditText[a]);
                     colorEditText[a].addTextChangedListener(new TextWatcher() {
                         @Override
                         public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -379,27 +384,43 @@ public class ThemeEditorView {
                                 return;
                             }
                             ignoreTextChange = true;
-                            int color = Utilities.parseInt(editable.toString());
-                            if (color < 0) {
-                                color = 0;
-                                colorEditText[num].setText("" + color);
-                                colorEditText[num].setSelection(colorEditText[num].length());
-                            } else if (color > 255) {
-                                color = 255;
-                                colorEditText[num].setText("" + color);
-                                colorEditText[num].setSelection(colorEditText[num].length());
+                            // thx neko
+                            if (num == 0) {
+                                for (int i = 0; i < editable.length(); i++) {
+                                    char c = editable.charAt(i);
+                                    if (!(c == '#' && i == 0 || c >= '0' && c <= '9' || c >= 'a' && c <= 'f' || c >= 'A' && c <= 'F')) {
+                                        editable.replace(i, i + 1, "");
+                                        i--;
+                                    }
+                                }
+                                if (editable.length() == 0 || editable.charAt(0) != '#') {
+                                    editable.insert(0, "#");
+                                }
+                                if (editable.length() != 9) {
+                                    ignoreTextChange = false;
+                                    return;
+                                }
+                                try {
+                                    setColor(Color.parseColor(editable.toString()));
+                                } catch (IllegalArgumentException e) {
+                                    setColor(0xffffffff);
+                                }
+                            } else {
+                                int alphaValue = Utilities.parseInt(editable.toString());
+                                if (alphaValue > 100 || alphaValue < 0) {
+                                    if (alphaValue > 100) {
+                                        alphaValue = 100;
+                                    } else {
+                                        alphaValue = 0;
+                                    }
+                                    editable.replace(0, editable.length(), alphaValue + "");
+                                }
+                                colorHSV[2] = alphaValue / 100.0f;
                             }
-                            int currentColor = getColor();
-                            if (num == 2) {
-                                currentColor = (currentColor & 0xffffff00) | (color & 0xff);
-                            } else if (num == 1) {
-                                currentColor = (currentColor & 0xffff00ff) | ((color & 0xff) << 8);
-                            } else if (num == 0) {
-                                currentColor = (currentColor & 0xff00ffff) | ((color & 0xff) << 16);
-                            } else if (num == 3) {
-                                currentColor = (currentColor & 0x00ffffff) | ((color & 0xff) << 24);
-                            }
-                            setColor(currentColor);
+                            int color = getColor();
+                            colorEditText[0].setTextKeepState(String.format("#%02x%02x%02x%02x", (byte) Color.alpha(color), (byte) Color.red(color), (byte) Color.green(color), (byte) Color.blue(color)).toUpperCase());
+                            colorEditText[1].setTextKeepState(String.valueOf((int) (100 * colorHSV[2])));
+                            setColor(color);
                             for (int a = 0; a < currentThemeDesription.size(); a++) {
                                 currentThemeDesription.get(a).setColor(getColor(), false);
                             }
@@ -422,14 +443,14 @@ public class ThemeEditorView {
                 int widthSize = MeasureSpec.getSize(widthMeasureSpec);
                 int heightSize = MeasureSpec.getSize(heightMeasureSpec);
                 int size = Math.min(widthSize, heightSize);
-                measureChild(linearLayout, widthMeasureSpec, heightMeasureSpec);
+                measureChild(linearLayout, MeasureSpec.makeMeasureSpec(widthSize - AndroidUtilities.dp(42), MeasureSpec.EXACTLY), heightMeasureSpec);
                 setMeasuredDimension(size, size);
             }
 
             @Override
             protected void onDraw(Canvas canvas) {
                 int centerX = getWidth() / 2 - paramValueSliderWidth * 2;
-                int centerY = getHeight() / 2 - AndroidUtilities.dp(8);
+                int centerY = getHeight() / 2;
 
                 canvas.drawBitmap(colorWheelBitmap, centerX - colorWheelRadius, centerY - colorWheelRadius, null);
 
@@ -453,7 +474,7 @@ public class ThemeEditorView {
                     colorGradient = new LinearGradient(x, y, x + width, y + height, new int[]{Color.BLACK, Color.HSVToColor(hsvTemp)}, null, Shader.TileMode.CLAMP);
                 }
                 valueSliderPaint.setShader(colorGradient);
-                canvas.drawRect(x, y, x + width, y + height, valueSliderPaint);
+                canvas.drawRoundRect(x, y, x + width, y + height, 100, 100, valueSliderPaint);
                 drawPointerArrow(canvas, x + width / 2, (int) (y + colorHSV[2] * height), Color.HSVToColor(colorHSV));
 
                 x += paramValueSliderWidth * 2;
@@ -462,15 +483,15 @@ public class ThemeEditorView {
                     alphaGradient = new LinearGradient(x, y, x + width, y + height, new int[]{color, color & 0x00ffffff}, null, Shader.TileMode.CLAMP);
                 }
                 valueSliderPaint.setShader(alphaGradient);
-                canvas.drawRect(x, y, x + width, y + height, valueSliderPaint);
+                canvas.drawRoundRect(x, y, x + width, y + height, 100, 100, valueSliderPaint);
                 drawPointerArrow(canvas, x + width / 2, (int) (y + (1.0f - alpha) * height), (Color.HSVToColor(colorHSV) & 0x00ffffff) | ((int) (255 * alpha) << 24));
             }
 
             private void drawPointerArrow(Canvas canvas, int x, int y, int color) {
                 int side = AndroidUtilities.dp(13);
-                circleDrawable.setBounds(x - side, y - side, x + side, y + side);
-                circleDrawable.draw(canvas);
 
+                circlePaint.setColor(0xff707070);
+                canvas.drawCircle(x, y, AndroidUtilities.dp(11.5f), circlePaint);
                 circlePaint.setColor(0xffffffff);
                 canvas.drawCircle(x, y, AndroidUtilities.dp(11), circlePaint);
                 circlePaint.setColor(color);
@@ -583,17 +604,11 @@ public class ThemeEditorView {
                                 }
                                 currentThemeDesription.get(a).setColor(color, false);
                             }
-                            int red = Color.red(color);
-                            int green = Color.green(color);
-                            int blue = Color.blue(color);
-                            int a = Color.alpha(color);
                             if (!ignoreTextChange) {
                                 ignoreTextChange = true;
-                                colorEditText[0].setText("" + red);
-                                colorEditText[1].setText("" + green);
-                                colorEditText[2].setText("" + blue);
-                                colorEditText[3].setText("" + a);
-                                for (int b = 0; b < 4; b++) {
+                                colorEditText[0].setTextKeepState(String.format("#%02x%02x%02x%02x", (byte) Color.alpha(color), (byte) Color.red(color), (byte) Color.green(color), (byte) Color.blue(color)).toUpperCase());
+                                colorEditText[1].setTextKeepState(String.valueOf((int) (100 * colorHSV[2])));
+                                for (int b = 0; b < 2; b++) {
                                     colorEditText[b].setSelection(colorEditText[b].length());
                                 }
                                 ignoreTextChange = false;
@@ -613,17 +628,12 @@ public class ThemeEditorView {
             }
 
             public void setColor(int color) {
-                int red = Color.red(color);
-                int green = Color.green(color);
-                int blue = Color.blue(color);
                 int a = Color.alpha(color);
                 if (!ignoreTextChange) {
                     ignoreTextChange = true;
-                    colorEditText[0].setText("" + red);
-                    colorEditText[1].setText("" + green);
-                    colorEditText[2].setText("" + blue);
-                    colorEditText[3].setText("" + a);
-                    for (int b = 0; b < 4; b++) {
+                    colorEditText[0].setTextKeepState(String.format("#%02x%02x%02x%02x", (byte) Color.alpha(color), (byte) Color.red(color), (byte) Color.green(color), (byte) Color.blue(color)).toUpperCase());
+                    colorEditText[1].setTextKeepState(String.valueOf((int) (100 * colorHSV[2])));
+                    for (int b = 0; b < 2; b++) {
                         colorEditText[b].setSelection(colorEditText[b].length());
                     }
                     ignoreTextChange = false;
@@ -708,7 +718,7 @@ public class ThemeEditorView {
                 @Override
                 protected void onDraw(Canvas canvas) {
                     int y = scrollOffsetY - backgroundPaddingTop + AndroidUtilities.dp(6);
-                    int top = scrollOffsetY - backgroundPaddingTop - AndroidUtilities.dp(13);
+                    int top = scrollOffsetY - backgroundPaddingTop - AndroidUtilities.dp(8);
                     int height = getMeasuredHeight() + AndroidUtilities.dp(30) + backgroundPaddingTop;
                     int statusBarHeight = 0;
                     float radProgress = 1.0f;
