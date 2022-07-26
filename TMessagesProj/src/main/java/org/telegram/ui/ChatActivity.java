@@ -3327,7 +3327,9 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
         boolean noforward = getMessagesController().isChatNoForwardsWithOverride(currentChat);
 
         if (currentEncryptedChat == null || !noforward) {
-            actionModeOtherItem.addSubItem(nkbtn_forward_noquote, R.drawable.msg_forward_noquote, LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward));
+            if (NaConfig.INSTANCE.getShowNoQuoteForward().Bool()) {
+                actionModeOtherItem.addSubItem(nkbtn_forward_noquote, R.drawable.msg_forward_noquote, LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward));
+            }
             actionModeOtherItem.addSubItem(star, R.drawable.msg_fave, LocaleController.getString("AddToFavorites", R.string.AddToFavorites));
             actionModeOtherItem.addSubItem(save_to, R.drawable.msg_download, LocaleController.getString("SaveToMusic", R.string.SaveToMusic));
         }
@@ -13773,7 +13775,9 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                 }
 
                 if (chatMode == MODE_SCHEDULED) {
-                    actionModeOtherItem.setSubItemVisibility(nkbtn_forward_noquote, false);
+                    if (NaConfig.INSTANCE.getShowNoQuoteForward().Bool()) {
+                        actionModeOtherItem.setSubItemVisibility(nkbtn_forward_noquote, false);
+                    }
                     actionModeOtherItem.setSubItemVisibility(nkbtn_savemessage, false);
                 }
 
@@ -22311,7 +22315,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                             icons.add(R.drawable.msg_forward);
                         }
                         if (chatMode != MODE_SCHEDULED && !selectedObject.needDrawBluredPreview() && !selectedObject.isLiveLocation() && selectedObject.type != 16) {
-                            if (!noforward) {
+                            if (!noforward && NaConfig.INSTANCE.getShowNoQuoteForward().Bool()) {
                                 items.add(LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward));
                                 options.add(nkbtn_forward_noquote);
                                 icons.add(R.drawable.msg_forward_noquote);
@@ -23431,7 +23435,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
         if (item != null) {
             item.setVisibility(View.VISIBLE);
         }
-        if (chatMode != MODE_SCHEDULED)
+        if (chatMode != MODE_SCHEDULED && NaConfig.INSTANCE.getShowNoQuoteForward().Bool())
             actionModeOtherItem.showSubItem(nkbtn_forward_noquote);
         item = actionMode.getItem(delete);
         if (item != null) {
