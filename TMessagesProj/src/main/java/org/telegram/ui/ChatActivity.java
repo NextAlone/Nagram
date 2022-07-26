@@ -53,6 +53,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -83,6 +84,7 @@ import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.DecelerateInterpolator;
+import android.view.inputmethod.EditorInfo;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -388,6 +390,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
     private ActionBarMenuSubItem shareKeyItem;
     private ActionBarMenuSubItem clearHistoryItem;
     private ActionBarMenuSubItem toTheBeginning;
+    private ActionBarMenuSubItem toTheMessage;
     private ClippingImageView animatingImageView;
     public RecyclerListView chatListView;
     private ChatListItemAnimator chatListItemAnimator;
@@ -1369,6 +1372,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
     private final static int auto_delete_timer = 26;
     private final static int change_colors = 27;
     private final static int to_the_beginning = 28;
+    private final static int to_the_message = 29;
 
     private final static int bot_help = 30;
     private final static int bot_settings = 31;
@@ -2646,6 +2650,8 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                     }
                 } else if (id == to_the_beginning) {
                     scrollToMessageId(1, 0, false, 0, true, 0);
+                } else if (id == to_the_message){
+                    setScrollToMessage();
                 } else if (id == report) {
                     AlertsCreator.createReportAlert(getParentActivity(), dialog_id, 0, ChatActivity.this, themeDelegate, null);
                 } else if (id == star) {
@@ -3229,7 +3235,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
             }*/
 
             toTheBeginning = headerItem.addSubItem(to_the_beginning, R.drawable.msg_go_up, LocaleController.getString("ToTheBeginning", R.string.ToTheBeginning));
-
+            toTheMessage = headerItem.addSubItem(to_the_message, R.drawable.msg_go_up, LocaleController.getString("ToTheMessage", R.string.ToTheMessage));
             clearHistoryItem = headerItem.addSubItem(clear_history, R.drawable.msg_clear, LocaleController.getString("ClearHistory", R.string.ClearHistory), themeDelegate);
 
             if (themeDelegate.isThemeChangeAvailable()) {
@@ -30338,5 +30344,56 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
             return;
         }
         getSendMessagesHelper().sendMessage(isLongClick ? "破烂" : "好耶", dialog_id, selectedObject, threadMessageObject, null, false, null, null, null, true, 0, null);
+    }
+    
+    public void setScrollToMessage(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+        builder.setTitle(LocaleController.getString("InputMessageId", R.string.InputMessageId));
+        final EditTextBoldCursor editText = new EditTextBoldCursor(getParentActivity()) {
+            @Override
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                super.onMeasure(widthMeasureSpec,
+                        MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64), MeasureSpec.EXACTLY));
+            }
+        };
+        editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+        editText.setTextColor(getThemedColor(Theme.key_dialogTextBlack));
+        editText.setFocusable(true);
+        editText.setLineColors(getThemedColor(Theme.key_windowBackgroundWhiteInputField),
+                getThemedColor(Theme.key_windowBackgroundWhiteInputFieldActivated),
+                getThemedColor(Theme.key_windowBackgroundWhiteRedText3));
+        editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        editText.setBackgroundDrawable(null);
+        editText.requestFocus();
+        editText.setPadding(0, 0, 0, 0);
+        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+        builder.setView(editText);
+    
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK),
+                (dialogInterface, i) -> {
+                    try {
+                        if (Integer.parseInt(editText.getText().toString()) > 0) {
+                            scrollToMessageId(Integer.parseInt(editText.getText().toString()), 0, false, 0, true, 0);
+                        }
+                    } catch (NumberFormatException ignored) {
+                    }
+                });
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setOnDismissListener(dialog -> {
+            chatActivityEnterView.getEditField().clearFocus();
+        });
+        builder.show().setOnShowListener(dialog -> {
+            editText.requestFocus();
+            AndroidUtilities.showKeyboard(editText);
+        });
+        ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) editText.getLayoutParams();
+        if (layoutParams != null) {
+            if (layoutParams instanceof FrameLayout.LayoutParams) {
+                ((FrameLayout.LayoutParams) layoutParams).gravity = Gravity.CENTER_HORIZONTAL;
+            }
+            layoutParams.rightMargin = layoutParams.leftMargin = AndroidUtilities.dp(24);
+            layoutParams.height = AndroidUtilities.dp(36);
+            editText.setLayoutParams(layoutParams);
+        }
     }
 }

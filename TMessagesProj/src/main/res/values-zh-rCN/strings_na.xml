@@ -43,4 +43,6 @@
     <string name="AutoInsertGIFCaption">在 GIF 发送时自动插入草稿</string>
     <string name="DefaultMonoLanguage">自定义默认语法高亮语言</string>
     <string name="DisableGlobalSearch">禁用全局搜索</string>
+    <string name="InputMessageId">输入消息 ID</string>
+    <string name="ToTheMessage">回到消息</string>
 </resources>
