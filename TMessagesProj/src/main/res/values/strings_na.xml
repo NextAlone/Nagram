@@ -46,4 +46,5 @@
     <string name="DisableGlobalSearch">Disable Global Search</string>
     <string name="InputMessageId">Input Message Id</string>
     <string name="ToTheMessage">To the message</string>
+    <string name="HideOriginAfterTranslation">Hide origin after translation</string>
 </resources>

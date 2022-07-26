@@ -111,6 +111,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell googleCloudTranslateKeyRow = cellGroup.appendCell(new ConfigCellTextDetail(NekoConfig.googleCloudTranslateKey, (view, position) -> {
         customDialog_BottomInputString(position, NekoConfig.googleCloudTranslateKey, LocaleController.getString("GoogleCloudTransKeyNotice"), "Key");
     }, LocaleController.getString("UsernameEmpty", R.string.UsernameEmpty)));
+    private final AbstractConfigCell hideOriginAfterTranslationRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getHideOriginAfterTranslation()));
     private final AbstractConfigCell divider2 = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell headerFolder = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Folder")));

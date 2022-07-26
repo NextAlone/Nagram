@@ -12,6 +12,7 @@ import tw.nekomimi.nekogram.utils.AlertUtil
 import tw.nekomimi.nekogram.utils.UIUtil
 import tw.nekomimi.nekogram.utils.uDismiss
 import tw.nekomimi.nekogram.utils.uUpdate
+import xyz.nextalone.nagram.NaConfig
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
@@ -53,7 +54,7 @@ fun MessageObject.translateFinished(locale: Locale): Int {
 
         val question = db.query(pool.question) ?: return 0
 
-        pool.translatedQuestion = pool.question + "\n\n--------\n\n" + question
+        pool.translatedQuestion = if (!NaConfig.hideOriginAfterTranslation.Bool()) pool.question + "\n\n--------\n\n" else "" + question
 
         pool.answers.forEach {
 
@@ -68,7 +69,7 @@ fun MessageObject.translateFinished(locale: Locale): Int {
         val text = db.query(messageOwner.message.takeIf { !it.isNullOrBlank() } ?: return 1)
                 ?: return 0
 
-        messageOwner.translatedMessage = messageOwner.message + "\n\n--------\n\n" + text
+        messageOwner.translatedMessage = if(!NaConfig.hideOriginAfterTranslation.Bool()) messageOwner.message + "\n\n--------\n\n" else "" + text
 
     }
 
@@ -191,7 +192,8 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
 
                     }
 
-                    pool.translatedQuestion = pool.question + "\n\n--------\n\n" + question
+                    pool.translatedQuestion =
+                        if (!NaConfig.hideOriginAfterTranslation.Bool()) pool.question + "\n\n--------\n\n" else "" + question
 
                     pool.answers.forEach {
 
@@ -266,7 +268,8 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
 
                     }
 
-                    selectedObject.messageOwner.translatedMessage = selectedObject.messageOwner.message + "\n\n--------\n\n" + text
+                    selectedObject.messageOwner.translatedMessage =
+                        if (!NaConfig.hideOriginAfterTranslation.Bool()) selectedObject.messageOwner.message + "\n\n--------\n\n" else "" + text
 
                 }
 
