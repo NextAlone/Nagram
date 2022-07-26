@@ -2125,6 +2125,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         messageEditText.setSingleLine(false);
         messageEditText.setMaxLines(6);
         messageEditText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+        messageEditText.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
         messageEditText.setGravity(Gravity.BOTTOM);
         messageEditText.setPadding(0, AndroidUtilities.dp(11), 0, AndroidUtilities.dp(12));
         messageEditText.setBackgroundDrawable(null);

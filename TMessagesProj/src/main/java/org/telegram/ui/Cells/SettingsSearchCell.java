@@ -77,6 +77,7 @@ public class SettingsSearchCell extends FrameLayout {
         textView = new TextView(context);
         textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
         textView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
         textView.setLines(1);
         textView.setMaxLines(1);
@@ -87,6 +88,7 @@ public class SettingsSearchCell extends FrameLayout {
         valueTextView = new TextView(context);
         valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         valueTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+        valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
         valueTextView.setLines(1);
         valueTextView.setMaxLines(1);
         valueTextView.setSingleLine(true);

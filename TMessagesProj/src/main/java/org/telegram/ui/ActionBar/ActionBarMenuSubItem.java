@@ -79,6 +79,7 @@ public class ActionBarMenuSubItem extends FrameLayout {
         textView.setEllipsize(TextUtils.TruncateAt.END);
         textView.setTextColor(textColor);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
         addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL));
 
         if (needCheck) {

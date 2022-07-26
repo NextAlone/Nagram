@@ -8633,7 +8633,9 @@ public class Theme {
                 dialogs_nameEncryptedPaint[a] = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
                 dialogs_nameEncryptedPaint[a].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 dialogs_messagePaint[a] = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
+                dialogs_messagePaint[a].setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
                 dialogs_messagePrintingPaint[a] = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
+                dialogs_messagePrintingPaint[a].setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
             }
             dialogs_searchNamePaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
             dialogs_searchNamePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -8642,6 +8644,7 @@ public class Theme {
             dialogs_messageNamePaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
             dialogs_messageNamePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             dialogs_timePaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
+            dialogs_timePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
             dialogs_archiveTextPaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
             dialogs_archiveTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             dialogs_archiveTextPaintSmall = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
@@ -8793,6 +8796,7 @@ public class Theme {
             chat_msgTextPaintTwoEmoji.setTextSize(AndroidUtilities.dp(24));
             chat_msgTextPaintThreeEmoji.setTextSize(AndroidUtilities.dp(20));
             chat_msgTextPaint.setTextSize(AndroidUtilities.dp(SharedConfig.fontSize));
+            chat_msgTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
             chat_msgGameTextPaint.setTextSize(AndroidUtilities.dp(14));
             chat_msgBotButtonPaint.setTextSize(AndroidUtilities.dp(15));
         }
@@ -8829,6 +8833,7 @@ public class Theme {
             chat_radialProgress2Paint.setStrokeCap(Paint.Cap.ROUND);
             chat_radialProgress2Paint.setStyle(Paint.Style.STROKE);
             chat_audioTimePaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
+            chat_audioTimePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
             chat_livePaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
             chat_livePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             chat_audioTitlePaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
@@ -8844,13 +8849,17 @@ public class Theme {
             chat_gamePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             chat_shipmentPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
             chat_timePaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
+            chat_timePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
             chat_adminPaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
+            chat_adminPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
             chat_namePaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
             chat_namePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             chat_forwardNamePaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
+            chat_forwardNamePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
             chat_replyNamePaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
             chat_replyNamePaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             chat_replyTextPaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
+            chat_replyTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
             chat_instantViewPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
             chat_instantViewPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             chat_instantViewRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -9604,6 +9613,7 @@ public class Theme {
         }
 
         profile_aboutTextPaint.setTextSize(AndroidUtilities.dp(16));
+        profile_aboutTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
     }
 
     private static ColorFilter currentShareColorFilter;

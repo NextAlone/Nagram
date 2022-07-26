@@ -76,6 +76,7 @@ public class SessionBottomSheet extends BottomSheet {
         TextView timeView = new TextView(context);
         timeView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
         timeView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
+        timeView.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
         timeView.setGravity(Gravity.CENTER);
         linearLayout.addView(timeView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL, 21, 4, 21, 21));
 
@@ -385,12 +386,14 @@ public class SessionBottomSheet extends BottomSheet {
 
             valueText = new TextView(context);
             valueText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+            valueText.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
             valueText.setGravity(Gravity.LEFT);
             valueText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             linearLayout.addView(valueText, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 0, 0, needSwitch ? 46 : 0, 0));
 
             descriptionText = new TextView(context);
             descriptionText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
+            descriptionText.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
             descriptionText.setGravity(Gravity.LEFT);
             descriptionText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
             linearLayout.addView(descriptionText, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 0, 4, needSwitch ? 46 : 0, 0));

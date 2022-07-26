@@ -62,6 +62,7 @@ public class TextCell extends FrameLayout {
         textView = new SimpleTextView(context);
         textView.setTextColor(Theme.getColor(dialog ? Theme.key_dialogTextBlack : Theme.key_windowBackgroundWhiteBlackText, resourcesProvider));
         textView.setTextSize(16);
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
         textView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
         textView.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
         addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT));
@@ -69,6 +70,7 @@ public class TextCell extends FrameLayout {
         valueTextView = new SimpleTextView(context);
         valueTextView.setTextColor(Theme.getColor(dialog ? Theme.key_dialogTextBlue2 : Theme.key_windowBackgroundWhiteValueText, resourcesProvider));
         valueTextView.setTextSize(16);
+        valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
         valueTextView.setGravity(LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT);
         valueTextView.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
         addView(valueTextView);

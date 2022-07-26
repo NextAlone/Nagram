@@ -172,6 +172,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         subtitleTextView.setTextColor(getThemedColor(Theme.key_actionBarDefaultSubtitle));
         subtitleTextView.setTag(Theme.key_actionBarDefaultSubtitle);
         subtitleTextView.setTextSize(14);
+        subtitleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
         subtitleTextView.setGravity(Gravity.LEFT);
         addView(subtitleTextView);
 
@@ -532,7 +533,6 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             exteraArrow.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_profile_verifiedBackground), PorterDuff.Mode.MULTIPLY));
             titleTextView.setRightDrawable(exteraArrow);
             titleTextView.setRightDrawableTopPadding(-AndroidUtilities.dp(0.5f));
-            titleTextView.setRightDrawableLeftPadding(-AndroidUtilities.dp(3f));
             rightDrawableIsScamOrVerified = true;
         } else if (verified) {
             Drawable verifiedBackground = getResources().getDrawable(R.drawable.verified_area).mutate();

@@ -164,6 +164,7 @@ public class AboutLinkCell extends FrameLayout {
         valueTextView.setVisibility(GONE);
         valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2, resourcesProvider));
         valueTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+        valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
         valueTextView.setLines(1);
         valueTextView.setMaxLines(1);
         valueTextView.setSingleLine(true);
@@ -207,6 +208,7 @@ public class AboutLinkCell extends FrameLayout {
         };
         showMoreTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText, resourcesProvider));
         showMoreTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        showMoreTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
         showMoreTextView.setLines(1);
         showMoreTextView.setMaxLines(1);
         showMoreTextView.setSingleLine(true);

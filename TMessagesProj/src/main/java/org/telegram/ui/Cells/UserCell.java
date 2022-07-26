@@ -127,6 +127,7 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
 
         statusTextView = new SimpleTextView(context);
         statusTextView.setTextSize(15);
+        statusTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
         statusTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
         addView(statusTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 20, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 28 + additionalPadding : (64 + padding), 32, LocaleController.isRTL ? (64 + padding) : 28 + additionalPadding, 0));
 

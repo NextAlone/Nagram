@@ -623,6 +623,7 @@ public class DialogCell extends BaseCell {
             Theme.dialogs_namePaint[1].setTextSize(AndroidUtilities.dp(16));
             Theme.dialogs_nameEncryptedPaint[1].setTextSize(AndroidUtilities.dp(16));
             Theme.dialogs_messagePaint[1].setTextSize(AndroidUtilities.dp(15));
+            Theme.dialogs_messagePaint[1].setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
             Theme.dialogs_messagePrintingPaint[1].setTextSize(AndroidUtilities.dp(15));
 
             Theme.dialogs_messagePaint[1].setColor(Theme.dialogs_messagePaint[1].linkColor = Theme.getColor(Theme.key_chats_message_threeLines, resourcesProvider));
@@ -632,6 +633,7 @@ public class DialogCell extends BaseCell {
             Theme.dialogs_namePaint[0].setTextSize(AndroidUtilities.dp(17));
             Theme.dialogs_nameEncryptedPaint[0].setTextSize(AndroidUtilities.dp(17));
             Theme.dialogs_messagePaint[0].setTextSize(AndroidUtilities.dp(16));
+            Theme.dialogs_messagePaint[0].setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
             Theme.dialogs_messagePrintingPaint[0].setTextSize(AndroidUtilities.dp(16));
 
             Theme.dialogs_messagePaint[0].setColor(Theme.dialogs_messagePaint[0].linkColor = Theme.getColor(Theme.key_chats_message, resourcesProvider));

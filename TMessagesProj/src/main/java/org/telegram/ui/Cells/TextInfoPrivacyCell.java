@@ -68,6 +68,7 @@ public class TextInfoPrivacyCell extends FrameLayout {
             }
         };
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
         textView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
         textView.setPadding(0, AndroidUtilities.dp(10), 0, AndroidUtilities.dp(17));
         textView.setMovementMethod(LinkMovementMethod.getInstance());

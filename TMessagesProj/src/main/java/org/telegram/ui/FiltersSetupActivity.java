@@ -86,6 +86,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
 
             textView = new SimpleTextView(context);
             textView.setTextSize(16);
+            textView.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
             textView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
             textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText2));
             textView.setTag(Theme.key_windowBackgroundWhiteBlueText2);
@@ -144,6 +145,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             textView = new TextView(context);
             textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+            textView.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
             textView.setLines(1);
             textView.setMaxLines(1);
             textView.setSingleLine(true);
@@ -154,6 +156,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             valueTextView = new TextView(context);
             valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
             valueTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+            valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
             valueTextView.setLines(1);
             valueTextView.setMaxLines(1);
             valueTextView.setSingleLine(true);
@@ -235,6 +238,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             messageTextView = new TextView(context);
             messageTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4));
             messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+            messageTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
             messageTextView.setGravity(Gravity.CENTER);
             messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("CreateNewFilterInfo", R.string.CreateNewFilterInfo)));
             addView(messageTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 40, 121, 40, 24));
@@ -275,6 +279,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             textView = new SimpleTextView(context);
             textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             textView.setTextSize(16);
+            textView.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
             textView.setMaxLines(1);
             textView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
             Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.other_lockedfolders2);
@@ -285,6 +290,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             valueTextView = new TextView(context);
             valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
             valueTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+            valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
             valueTextView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
             valueTextView.setLines(1);
             valueTextView.setMaxLines(1);
