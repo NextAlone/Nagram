@@ -16059,6 +16059,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     public int getCurrentBackgroundLeft() {
+        if (currentBackgroundDrawable == null) {
+            return 0;
+        }
         int left = currentBackgroundDrawable.getBounds().left;
         if (!currentMessageObject.isOutOwner() && transitionParams.changePinnedBottomProgress != 1 && (!mediaBackground && !drawPinnedBottom)) {
             left -= AndroidUtilities.dp(6);
