@@ -6305,7 +6305,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     private Drawable getArrowDrawable() {
         if (arrowDrawable == null) {
-            arrowDrawable = Theme.profile_outlineArrowDrawable.getConstantState().newDrawable().mutate();
+            arrowDrawable = Theme.profile_outlineArrowDrawable.getConstantState().newDrawable();
             arrowDrawable.setColorFilter(Theme.getColor(Theme.key_chats_verifiedBackground), PorterDuff.Mode.MULTIPLY);
         }
         return arrowDrawable;
@@ -6429,7 +6429,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 Drawable rightIcon = null;
                 boolean rightIconIsPremium = false;
                 if (a == 0) {
-                    if (user.scam || user.fake) {
+                    if (ExteraConfig.isExteraDev(user)){
+                        rightIcon = getArrowDrawable();
+                    } else if (user.scam || user.fake) {
                         rightIcon = getScamDrawable(user.scam ? 0 : 1);
                         nameTextViewRightDrawableContentDescription = LocaleController.getString("ScamMessage", R.string.ScamMessage);
                     } else if (user.verified) {
@@ -6446,6 +6448,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         rightIcon = null;
                         nameTextViewRightDrawableContentDescription = null;
                     }
+                } else if (ExteraConfig.isExteraDev(user)){
+                    rightIcon = getArrowDrawable();
                 } else if (user.scam || user.fake) {
                     rightIcon = getScamDrawable(user.scam ? 0 : 1);
                 } else if (user.verified) {
@@ -6453,11 +6457,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 } else if (getMessagesController().isPremiumUser(user)) {
                     rightIconIsPremium = true;
                     rightIcon = getPremiumCrossfadeDrawable();
-                } else if (ExteraConfig.isExteraDev(user)){
-                    rightIcon = getArrowDrawable();
                 }
                 nameTextView[a].setLeftDrawable(leftIcon);
                 nameTextView[a].setRightDrawable(rightIcon);
+                if (rightIcon == getArrowDrawable()) {
+                    nameTextView[a].setRightDrawableTopPadding(-AndroidUtilities.dp(0.5f));
+                }
                 if (a == 0) {
                     nameTextView[a].setCanHideRightDrawable(rightIconIsPremium);
                 }
@@ -6583,6 +6588,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         nameTextView[a].setRightDrawable(getScamDrawable(chat.scam ? 0 : 1));
                     } else if (chat.verified) {
                         nameTextView[a].setRightDrawable(getVerifiedCrossfadeDrawable());
+                    } else if (ExteraConfig.isExtera(chat)){
+                        nameTextView[a].setRightDrawable(getArrowDrawable());
                     } else if (getMessagesController().isDialogMuted(-chatId)) {
                         nameTextView[a].setRightDrawable(getThemedDrawable(Theme.key_drawable_muteIconDrawable));
                     } else {

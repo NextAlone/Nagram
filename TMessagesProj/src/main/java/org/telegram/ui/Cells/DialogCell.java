@@ -139,6 +139,7 @@ public class DialogCell extends BaseCell {
         public int type;
         public int date;
         public boolean verified;
+        public boolean arrowed;
         public boolean isMedia;
         public boolean sent;
     }
@@ -289,6 +290,7 @@ public class DialogCell extends BaseCell {
     private StaticLayout mentionLayout;
 
     private boolean drawVerified;
+    private boolean drawArrow;
     private boolean drawPremium;
 
     private int drawScam;
@@ -653,6 +655,7 @@ public class DialogCell extends BaseCell {
 
         drawNameLock = false;
         drawVerified = false;
+        drawArrow = false;
         drawPremium = false;
         drawScam = 0;
         drawPinBackground = false;
@@ -718,6 +721,7 @@ public class DialogCell extends BaseCell {
                 }
             } else {
                 drawVerified = customDialog.verified;
+                drawArrow = customDialog.arrowed;
                 if (useForceThreeLines || SharedConfig.useThreeLinesLayout) {
                     if (!LocaleController.isRTL) {
                         nameLeft = AndroidUtilities.dp(72 + 6);
@@ -826,6 +830,8 @@ public class DialogCell extends BaseCell {
                         } else if (chat.fake) {
                             drawScam = 2;
                             Theme.dialogs_fakeDrawable.checkText();
+                        } else if (ExteraConfig.isExtera(chat)) {
+                            drawArrow = true;
                         } else {
                             drawVerified = chat.verified;
                         }
@@ -836,6 +842,8 @@ public class DialogCell extends BaseCell {
                         } else if (user.fake) {
                             drawScam = 2;
                             Theme.dialogs_fakeDrawable.checkText();
+                        } else if (user.id != UserConfig.getInstance(currentAccount).getClientUserId() && ExteraConfig.isExteraDev(user)) {
+                            drawArrow = true;
                         } else {
                             drawVerified = user.verified;
                         }
@@ -1478,7 +1486,7 @@ public class DialogCell extends BaseCell {
             }
         }
 
-        if (dialogMuted && !drawVerified && drawScam == 0) {
+        if (dialogMuted && !drawVerified && !drawArrow && drawScam == 0) {
             int w = AndroidUtilities.dp(6) + Theme.dialogs_muteDrawable.getIntrinsicWidth();
             nameWidth -= w;
             if (LocaleController.isRTL) {
@@ -1486,6 +1494,12 @@ public class DialogCell extends BaseCell {
             }
         } else if (drawVerified) {
             int w = AndroidUtilities.dp(6) + Theme.dialogs_verifiedDrawable.getIntrinsicWidth();
+            nameWidth -= w;
+            if (LocaleController.isRTL) {
+                nameLeft += w;
+            }
+        } else if (drawArrow) {
+            int w = AndroidUtilities.dp(6) + Theme.dialogs_outlineArrowDrawable.getIntrinsicWidth();
             nameWidth -= w;
             if (LocaleController.isRTL) {
                 nameLeft += w;
@@ -1754,10 +1768,12 @@ public class DialogCell extends BaseCell {
             if (nameLayout != null && nameLayout.getLineCount() > 0) {
                 left = nameLayout.getLineLeft(0);
                 widthpx = Math.ceil(nameLayout.getLineWidth(0));
-                if (dialogMuted && !drawVerified && drawScam == 0) {
+                if (dialogMuted && !drawVerified && !drawArrow && drawScam == 0) {
                     nameMuteLeft = (int) (nameLeft + (nameWidth - widthpx) - AndroidUtilities.dp(6) - Theme.dialogs_muteDrawable.getIntrinsicWidth());
                 } else if (drawVerified) {
                     nameMuteLeft = (int) (nameLeft + (nameWidth - widthpx) - AndroidUtilities.dp(6) - Theme.dialogs_verifiedDrawable.getIntrinsicWidth());
+                } else if (drawArrow) {
+                    nameMuteLeft = (int) (nameLeft + (nameWidth - widthpx) - AndroidUtilities.dp(6) - Theme.dialogs_outlineArrowDrawable.getIntrinsicWidth());
                 } else if (drawPremium) {
                     nameMuteLeft = (int) (nameLeft + (nameWidth - widthpx) - AndroidUtilities.dp(6) - PremiumGradient.getInstance().premiumStarDrawableMini.getIntrinsicWidth());
                 } else if (drawScam != 0) {
@@ -1806,7 +1822,7 @@ public class DialogCell extends BaseCell {
                         nameLeft -= (nameWidth - widthpx);
                     }
                 }
-                if (dialogMuted || drawVerified || drawPremium || drawScam != 0) {
+                if (dialogMuted || drawVerified || drawPremium || drawArrow || drawScam != 0) {
                     nameMuteLeft = (int) (nameLeft + left + AndroidUtilities.dp(6));
                 }
             }
@@ -2773,7 +2789,7 @@ public class DialogCell extends BaseCell {
             lastStatusDrawableParams = (this.drawClock ? 1 : 0) +  (this.drawCheck1 ? 2 : 0) + (this.drawCheck2 ? 4 : 0);
         }
 
-        if (dialogsType != 2 && (dialogMuted || dialogMutedProgress > 0) && !drawVerified && drawScam == 0 && !drawPremium) {
+        if (dialogsType != 2 && (dialogMuted || dialogMutedProgress > 0) && !drawVerified && drawScam == 0 && !drawArrow && !drawPremium) {
             if (dialogMuted && dialogMutedProgress != 1f) {
                 dialogMutedProgress += 16 / 150f;
                 if (dialogMutedProgress > 1f) {
@@ -2806,6 +2822,9 @@ public class DialogCell extends BaseCell {
             setDrawableBounds(Theme.dialogs_verifiedCheckDrawable, nameMuteLeft - AndroidUtilities.dp(1), AndroidUtilities.dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 13.5f : 16.5f));
             Theme.dialogs_verifiedDrawable.draw(canvas);
             Theme.dialogs_verifiedCheckDrawable.draw(canvas);
+        } else if (drawArrow) {
+            setDrawableBounds(Theme.dialogs_outlineArrowDrawable, nameMuteLeft - AndroidUtilities.dp(3), AndroidUtilities.dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 10f : 13f));
+            Theme.dialogs_outlineArrowDrawable.draw(canvas);
         } else if (drawPremium) {
             Drawable premiumDrawable = PremiumGradient.getInstance().premiumStarDrawableMini;
             setDrawableBounds(premiumDrawable, nameMuteLeft - AndroidUtilities.dp(1), AndroidUtilities.dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 12.5f : 15.5f));

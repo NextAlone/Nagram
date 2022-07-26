@@ -16,7 +16,7 @@ public class ExteraConfig {
     private static final Object sync = new Object();
 
     private static final int[] OFFICIAL_CHANNELS = {1233768168, 1524581881, 1571726392, 1632728092, 1638754701, 1779596027, 1172503281};
-    private static final int[] DEVS = {963080346, 1282540315, 1374434073, 388099852, 1972014627};
+    private static final int[] DEVS = {963080346, 1282540315, 1374434073, 388099852, 1972014627, 168769611};
 
     public static boolean useSystemFonts;
     public static boolean disableVibration;

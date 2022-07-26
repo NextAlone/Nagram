@@ -41,6 +41,8 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Premium.PremiumGradient;
 import org.telegram.ui.NotificationsSettingsActivity;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class UserCell extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
     private BackupImageView avatarImageView;
@@ -472,7 +474,10 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             }
             nameTextView.setText(name);
         }
-        if (currentUser != null && MessagesController.getInstance(currentAccount).isPremiumUser(currentUser)) {
+        if (currentUser != null && ExteraConfig.isExteraDev(currentUser)) {
+            nameTextView.setRightDrawable(Theme.dialogs_outlineArrowDrawable);
+            nameTextView.setRightDrawableTopPadding(-AndroidUtilities.dp(0.5f));
+        } else if (currentUser != null && MessagesController.getInstance(currentAccount).isPremiumUser(currentUser)) {
             nameTextView.setRightDrawable(PremiumGradient.getInstance().premiumStarDrawableMini);
             nameTextView.setRightDrawableTopPadding(-AndroidUtilities.dp(0.5f));
         } else {

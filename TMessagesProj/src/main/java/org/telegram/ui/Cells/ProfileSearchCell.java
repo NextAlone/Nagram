@@ -86,6 +86,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
 
     private boolean drawCheck;
     private boolean drawPremium;
+    private boolean drawArrow;
 
     private int statusLeft;
     private StaticLayout statusLayout;
@@ -257,6 +258,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
         drawNameLock = false;
         drawCheck = false;
         drawPremium = false;
+        drawArrow = false;
 
         if (encryptedChat != null) {
             drawNameLock = true;
@@ -273,6 +275,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
             if (chat != null) {
                 dialog_id = -chat.id;
                 drawCheck = chat.verified;
+                drawArrow = ExteraConfig.isExtera(chat);
                 if (!LocaleController.isRTL) {
                     nameLeft = AndroidUtilities.dp(AndroidUtilities.leftBaseline);
                 } else {
@@ -287,6 +290,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
                 }
                 nameLockTop = AndroidUtilities.dp(21);
                 drawCheck = user.verified;
+                drawArrow = ExteraConfig.isExteraDev(user);
                 drawPremium = !user.self && MessagesController.getInstance(currentAccount).isPremiumUser(user);
             }
         }
@@ -614,9 +618,9 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
             canvas.translate(nameLeft, nameTop);
             nameLayout.draw(canvas);
             canvas.restore();
-            if (drawCheck || drawPremium) {
+            if (drawCheck || drawPremium || drawArrow) {
                 int x;
-                Drawable drawable = drawCheck ? Theme.dialogs_verifiedDrawable : PremiumGradient.getInstance().premiumStarDrawableMini;
+                Drawable drawable = drawArrow ? Theme.dialogs_outlineArrowDrawable : (drawCheck ? Theme.dialogs_verifiedDrawable : PremiumGradient.getInstance().premiumStarDrawableMini);
                 if (LocaleController.isRTL) {
                     if (nameLayout.getLineLeft(0) == 0) {
                         x = nameLeft - AndroidUtilities.dp(6) - drawable.getIntrinsicWidth();
@@ -627,7 +631,10 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
                 } else {
                     x = (int) (nameLeft + nameLayout.getLineRight(0) + AndroidUtilities.dp(6));
                 }
-                if (drawCheck) {
+                if (drawArrow) {
+                    setDrawableBounds(Theme.dialogs_outlineArrowDrawable, x - AndroidUtilities.dp(3), nameTop);
+                    Theme.dialogs_outlineArrowDrawable.draw(canvas);
+                } else if (drawCheck) {
                     setDrawableBounds(Theme.dialogs_verifiedDrawable, x, nameTop + AndroidUtilities.dp(3));
                     setDrawableBounds(Theme.dialogs_verifiedCheckDrawable, x, nameTop + AndroidUtilities.dp(3));
                     Theme.dialogs_verifiedDrawable.draw(canvas);

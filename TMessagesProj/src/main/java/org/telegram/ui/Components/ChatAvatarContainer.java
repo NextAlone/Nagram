@@ -510,10 +510,10 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     }
 
     public void setTitle(CharSequence value) {
-        setTitle(value, false, false, false, false);
+        setTitle(value, false, false, false, false, false);
     }
 
-    public void setTitle(CharSequence value, boolean scam, boolean fake, boolean verified, boolean premium) {
+    public void setTitle(CharSequence value, boolean scam, boolean fake, boolean verified, boolean premium, boolean arrow) {
         if (value != null) {
             value = Emoji.replaceEmoji(value, titleTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(24), false);
         }
@@ -527,6 +527,13 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 rightDrawableContentDescription = LocaleController.getString("ScamMessage", R.string.ScamMessage);
                 rightDrawableIsScamOrVerified = true;
             }
+        } else if (arrow) {
+            Drawable exteraArrow = getResources().getDrawable(R.drawable.ic_outline_arrow);
+            exteraArrow.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_profile_verifiedBackground), PorterDuff.Mode.MULTIPLY));
+            titleTextView.setRightDrawable(exteraArrow);
+            titleTextView.setRightDrawableTopPadding(-AndroidUtilities.dp(0.5f));
+            titleTextView.setRightDrawableLeftPadding(-AndroidUtilities.dp(3f));
+            rightDrawableIsScamOrVerified = true;
         } else if (verified) {
             Drawable verifiedBackground = getResources().getDrawable(R.drawable.verified_area).mutate();
             verifiedBackground.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_profile_verifiedBackground), PorterDuff.Mode.MULTIPLY));
