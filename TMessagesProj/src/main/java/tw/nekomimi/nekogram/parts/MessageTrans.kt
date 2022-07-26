@@ -54,7 +54,8 @@ fun MessageObject.translateFinished(locale: Locale): Int {
 
         val question = db.query(pool.question) ?: return 0
 
-        pool.translatedQuestion = if (!NaConfig.hideOriginAfterTranslation.Bool()) pool.question + "\n\n--------\n\n" else "" + question
+        pool.translatedQuestion =
+            "${if (!NaConfig.hideOriginAfterTranslation.Bool()) pool.question + "\n\n--------\n\n" else ""}$question"
 
         pool.answers.forEach {
 
@@ -69,7 +70,8 @@ fun MessageObject.translateFinished(locale: Locale): Int {
         val text = db.query(messageOwner.message.takeIf { !it.isNullOrBlank() } ?: return 1)
                 ?: return 0
 
-        messageOwner.translatedMessage = if(!NaConfig.hideOriginAfterTranslation.Bool()) messageOwner.message + "\n\n--------\n\n" else "" + text
+        messageOwner.translatedMessage =
+            "${if (!NaConfig.hideOriginAfterTranslation.Bool()) messageOwner.message + "\n\n--------\n\n" else ""}$text"
 
     }
 
@@ -193,7 +195,7 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
                     }
 
                     pool.translatedQuestion =
-                        if (!NaConfig.hideOriginAfterTranslation.Bool()) pool.question + "\n\n--------\n\n" else "" + question
+                        "${if (!NaConfig.hideOriginAfterTranslation.Bool()) pool.question + "\n\n--------\n\n" else ""}$question"
 
                     pool.answers.forEach {
 
@@ -269,7 +271,7 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
                     }
 
                     selectedObject.messageOwner.translatedMessage =
-                        if (!NaConfig.hideOriginAfterTranslation.Bool()) selectedObject.messageOwner.message + "\n\n--------\n\n" else "" + text
+                        "${if (!NaConfig.hideOriginAfterTranslation.Bool()) selectedObject.messageOwner.message + "\n\n--------\n\n" else ""}$text"
 
                 }
 
