@@ -26,7 +26,7 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:icon="@mipmap/ic_launcher_beta"
         android:roundIcon="@mipmap/ic_launcher_beta"
-        android:label="@string/exteraAppNameBeta"
+        android:label="@string/exteraAppName"
         android:theme="@style/Theme.TMessages.Start"
         android:name=".ApplicationLoader"
         android:hardwareAccelerated="@bool/useHardwareAcceleration"

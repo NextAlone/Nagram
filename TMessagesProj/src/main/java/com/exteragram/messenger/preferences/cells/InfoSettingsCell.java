@@ -38,7 +38,7 @@ public class InfoSettingsCell extends FrameLayout {
 
         textView = new TextView(context);
         textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         textView.setText(ExteraUtils.getAppName() + " | v" + BuildVars.BUILD_VERSION_STRING);
         textView.setLines(1);
