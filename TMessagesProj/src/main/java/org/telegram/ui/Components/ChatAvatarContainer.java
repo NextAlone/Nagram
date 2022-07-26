@@ -51,6 +51,8 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.ProfileActivity;
 
+import xyz.nextalone.nagram.helper.MessageHelper;
+
 public class ChatAvatarContainer extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
     private BackupImageView avatarImageView;
@@ -521,7 +523,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         if (value != null) {
             value = Emoji.replaceEmoji(value, titleTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(24), false);
         }
-        titleTextView.setText(value);
+        titleTextView.setText(MessageHelper.INSTANCE.zalgoFilter(value));
         titleTextView.setCanHideRightDrawable(false);
         if (scam || fake) {
             if (!(titleTextView.getRightDrawable() instanceof ScamDrawable)) {

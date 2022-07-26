@@ -14,6 +14,7 @@ import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.tgnet.TLRPC;
 
 import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.helper.MessageHelper;
 
 public class UserObject {
 
@@ -59,7 +60,7 @@ public class UserObject {
         } else if (!allowShort && name.length() <= 2) {
             return ContactsController.formatName(user.first_name, user.last_name);
         }
-        return !TextUtils.isEmpty(name) ? name : LocaleController.getString("HiddenName", R.string.HiddenName);
+        return !TextUtils.isEmpty(name) ? MessageHelper.INSTANCE.zalgoFilter(name) : LocaleController.getString("HiddenName", R.string.HiddenName);
     }
 
     public static boolean hasPhoto(TLRPC.User user) {

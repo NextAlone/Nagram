@@ -223,6 +223,11 @@ object NaConfig {
         ConfigItem.configTypeBool,
         false
     )
+    val zalgoFilter = addConfig(
+        "ZalgoFilter",
+        ConfigItem.configTypeBool,
+        false
+    )
 
     private fun addConfig(
         k: String,

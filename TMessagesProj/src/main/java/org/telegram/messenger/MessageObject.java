@@ -39,6 +39,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.collection.LongSparseArray;
 
+import xyz.nextalone.nagram.helper.MessageHelper;
 import xyz.nextalone.nagram.ui.syntaxhighlight.SyntaxHighlight;
 
 import org.telegram.PhoneFormat.PhoneFormat;
@@ -3266,6 +3267,7 @@ public class MessageObject {
                 } else {
                     messageText = messageOwner.message;
                 }
+                messageText = MessageHelper.INSTANCE.zalgoFilter(messageText);
             }
         }
 

@@ -40,6 +40,8 @@ import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.Premium.PremiumGradient;
 import org.telegram.ui.NotificationsSettingsActivity;
 
+import xyz.nextalone.nagram.helper.MessageHelper;
+
 public class ProfileSearchCell extends BaseCell implements NotificationCenter.NotificationCenterDelegate {
 
     private CharSequence currentName;
@@ -548,6 +550,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
                 } else {
                     newName = chat.title;
                 }
+                newName = MessageHelper.INSTANCE.zalgoFilter(newName);
                 if (!newName.equals(lastName)) {
                     continueUpdate = true;
                 }
@@ -575,6 +578,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
             lastName = chat.title;
         }
 
+        lastName = MessageHelper.INSTANCE.zalgoFilter(lastName);
         lastAvatar = photo;
 
         if (getMeasuredWidth() != 0 || getMeasuredHeight() != 0) {

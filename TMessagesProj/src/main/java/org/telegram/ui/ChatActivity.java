@@ -11858,6 +11858,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                     }
                     name = chat.title;
                 }
+                name = MessageHelper.INSTANCE.zalgoFilter(name);
                 replyIconImageView.setImageResource(R.drawable.msg_panel_reply);
                 replyNameTextView.setText(name);
                 replyIconImageView.setContentDescription(LocaleController.getString("AccDescrReplying", R.string.AccDescrReplying));
@@ -20301,7 +20302,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                     if (user != null) {
                         nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
                     } else if (chat != null) {
-                        nameTextView.setText(chat.title);
+                        nameTextView.setText(MessageHelper.INSTANCE.zalgoFilter(chat.title));
                     }
                 } else {
                     if (pinnedMessageObject.isInvoice() &&

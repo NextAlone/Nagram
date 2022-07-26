@@ -83,4 +83,33 @@ object MessageHelper {
             } else "$orig · $day $time"
         }
     }
+
+    fun zalgoFilter(
+        text: CharSequence?
+    ): String {
+        return if (text != null) {
+            zalgoFilter(
+                text.toString()
+            )
+        } else {
+            ""
+        }
+    }
+
+    fun zalgoFilter(
+        text: String
+    ): String {
+        return if (NaConfig.zalgoFilter.Bool()) {
+            text.replace(
+                "(?i)([aeiouy]̈)|[̀-ͯ҉]".toRegex(),
+                ""
+            )
+                .replace(
+                    "[\\p{Mn}]".toRegex(),
+                    ""
+                )
+        } else {
+            text
+        }
+    }
 }
