@@ -4284,17 +4284,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         if (filterTabsView.showAllChatsTab)
                             filterTabsView.addTab(a, 0, LocaleController.getString("FilterAllChats", R.string.FilterAllChats), "\uD83D\uDCAC", true, filters.get(a).locked);
                     } else {
-                        switch (NekoConfig.tabsTitleType.Int()) {
-                            case NekoXConfig.TITLE_TYPE_TEXT:
-                                filterTabsView.addTab(a, filters.get(a).localId, filters.get(a).name, dialogFilter.name, false, false);
-                                break;
-                            case NekoXConfig.TITLE_TYPE_ICON:
-                                filterTabsView.addTab(a, filters.get(a).localId, filters.get(a).name, dialogFilter.emoticon != null ? dialogFilter.emoticon : "📂", false, false);
-                                break;
-                            case NekoXConfig.TITLE_TYPE_MIX:
-                                filterTabsView.addTab(a, filters.get(a).localId, filters.get(a).name, dialogFilter.emoticon != null ? dialogFilter.emoticon : "\uD83D\uDCC1 " + dialogFilter.name, false, false);
-                                break;
-                        }
+                        filterTabsView.addTab(a, filters.get(a).localId, filters.get(a).name, filters.get(a).emoticon == null ? "\uD83D\uDCC1" : filters.get(a).emoticon, false,  filters.get(a).locked);
                     }
                 }
                 boolean updateCurrentTab = NekoConfig.hideAllTab.Bool();
@@ -4304,11 +4294,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         viewPages[0].selectedType = id;
                     }
                 }
-                for (int a = 0; a < viewPages.length; a++) {
-                    if (viewPages[a].selectedType >= filters.size()) {
-                        viewPages[a].selectedType = filters.size();
+                for (ViewPage viewPage : viewPages) {
+                    if (viewPage.selectedType >= filters.size()) {
+                        viewPage.selectedType = filters.size() - 1;
                     }
-                    viewPages[a].listView.setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING);
+                    viewPage.listView.setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING);
                 }
                 filterTabsView.finishAddingTabs(animatedUpdateItems);
                 if (updateCurrentTab) {
@@ -5421,7 +5411,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         final boolean hasUnread = getMessagesStorage().getArchiveUnreadCount() != 0;
 
         int[] icons = new int[]{
-                hasUnread ? R.drawable.menu_read : 0,
+                hasUnread ? R.drawable.msg_markread : 0,
                 SharedConfig.archiveHidden ? R.drawable.chats_pin : R.drawable.chats_unpin,
         };
         CharSequence[] items = new CharSequence[]{
@@ -5704,7 +5694,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         getUndoView().showWithAction(0, UndoView.ACTION_UNPIN_DIALOGS, 1, 1600, null, null);
                     }
                     if (filter != null) {
-                        FilterCreateActivity.saveFilterToServer(filter, filter.flags, null, filter.name, filter.alwaysShow, filter.neverShow, filter.pinnedDialogs, false, false, true, true, false, DialogsActivity.this, null);
+                        FilterCreateActivity.saveFilterToServer(filter, filter.flags, filter.emoticon, filter.name, filter.alwaysShow, filter.neverShow, filter.pinnedDialogs, false, false, true, true, false, DialogsActivity.this, null);
                     }
                     getMessagesController().reorderPinnedDialogs(folderId, null, 0);
                     updateCounters(true);

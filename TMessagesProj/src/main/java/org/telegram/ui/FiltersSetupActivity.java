@@ -45,7 +45,6 @@ import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Components.CombinedDrawable;
-import org.telegram.ui.Components.EmojiTextView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Premium.LimitReachedBottomSheet;
 import org.telegram.ui.Components.ProgressButton;
@@ -53,6 +52,8 @@ import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
+
+import tw.nekomimi.nekogram.folder.FolderIconHelper;
 
 public class FiltersSetupActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -419,6 +420,10 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
         updateRows(true);
         getMessagesController().loadRemoteFilters(true);
         getNotificationCenter().addObserver(this, NotificationCenter.dialogFiltersUpdated);
+        getNotificationCenter().addObserver(this, NotificationCenter.suggestedFiltersLoaded);
+        if (getMessagesController().suggestedFilters.isEmpty()) {
+            getMessagesController().loadSuggestedFilters();
+        }
         return super.onFragmentCreate();
     }
 
@@ -571,10 +576,6 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 adapter.notifyDataSetChanged();
             } else {
                adapter.notifyItemRangeChanged(0, rowCount);
-            }
-            getNotificationCenter().addObserver(this, NotificationCenter.suggestedFiltersLoaded);
-            if (getMessagesController().suggestedFilters.isEmpty()) {
-                getMessagesController().loadSuggestedFilters();
             }
         } else if (id == NotificationCenter.suggestedFiltersLoaded) {
             updateRows(true);
@@ -770,6 +771,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                         if (suggested.filter.exclude_muted) {
                             filter.flags |= MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED;
                         }
+                        filter.emoticon = TextUtils.isEmpty(suggested.filter.emoticon) ? FolderIconHelper.getEmoticonFromFlags(filter.flags).second : suggested.filter.emoticon;
                         ignoreUpdates = true;
                         FilterCreateActivity.saveFilterToServer(filter, filter.flags, filter.emoticon, filter.name, filter.alwaysShow, filter.neverShow, filter.pinnedDialogs, true, true, true, true, false, FiltersSetupActivity.this, () -> {
                             getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
