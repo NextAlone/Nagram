@@ -125,7 +125,7 @@ public class SubSettingsActivity extends BaseFragment {
 
                     AlertUtil.showConfirm(getParentActivity(),
                             LocaleController.getString("SubscriptionDelete", R.string.SubscriptionDelete),
-                            R.drawable.baseline_delete_24, LocaleController.getString("Delete", R.string.Delete),
+                            R.drawable.msg_delete, LocaleController.getString("Delete", R.string.Delete),
                             true, () -> {
 
                                 AlertDialog pro = AlertUtil.showProgress(getParentActivity());
@@ -159,7 +159,7 @@ public class SubSettingsActivity extends BaseFragment {
 
         if (subInfo.id != 0) {
 
-            menu.addItem(menu_delete, R.drawable.baseline_delete_24, AndroidUtilities.dp(56)).setContentDescription(LocaleController.getString("Delete", R.string.Delete));
+            menu.addItem(menu_delete, R.drawable.msg_delete, AndroidUtilities.dp(56)).setContentDescription(LocaleController.getString("Delete", R.string.Delete));
 
         }
 

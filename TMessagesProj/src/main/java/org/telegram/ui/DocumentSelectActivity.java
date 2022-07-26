@@ -649,11 +649,11 @@ public class DocumentSelectActivity extends BaseFragment {
 
         if (allowPhoto) {
 
-            writeButton.setImageResource(R.drawable.baseline_send_24);
+            writeButton.setImageResource(R.drawable.msg_send);
 
         } else {
 
-            writeButton.setImageResource(R.drawable.baseline_check_24);
+            writeButton.setImageResource(R.drawable.msg_check);
 
         }
 
@@ -723,12 +723,12 @@ public class DocumentSelectActivity extends BaseFragment {
                         itemCells[a].setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
                     } else if (num == 1) {
                         if (UserObject.isUserSelf(user)) {
-                            itemCells[a].setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.baseline_date_range_24);
+                            itemCells[a].setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.menu_date);
                         } else {
-                            itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.baseline_date_range_24);
+                            itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.menu_date);
                         }
                     } else if (num == 2) {
-                        itemCells[a].setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.baseline_notifications_off_24);
+                        itemCells[a].setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);
                     }
                     itemCells[a].setMinimumWidth(AndroidUtilities.dp(196));
 

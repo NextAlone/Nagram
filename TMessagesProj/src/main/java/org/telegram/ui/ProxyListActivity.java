@@ -572,7 +572,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 } else if (id == menu_delete_all) {
                     AlertUtil.showConfirm(getParentActivity(),
                             LocaleController.getString("DeleteAllServer", R.string.DeleteAllServer),
-                            R.drawable.baseline_delete_24, LocaleController.getString("Delete", R.string.Delete),
+                            R.drawable.msg_delete, LocaleController.getString("Delete", R.string.Delete),
                             true, () -> {
                                 SharedConfig.deleteAllProxy();
                                 updateRows(true);
@@ -580,7 +580,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 } else if (id == menu_delete_unavailable) {
                     AlertUtil.showConfirm(getParentActivity(),
                             LocaleController.getString("DeleteUnavailableServer", R.string.DeleteUnavailableServer),
-                            R.drawable.baseline_delete_24, LocaleController.getString("Delete", R.string.Delete),
+                            R.drawable.msg_delete, LocaleController.getString("Delete", R.string.Delete),
                             true, () -> {
                                 deleteUnavailableProxy();
                             });
@@ -754,11 +754,11 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 }, new int[]{
 
                         R.drawable.group_edit,
-                        R.drawable.baseline_share_24,
+                        R.drawable.msg_shareout,
                         R.drawable.wallet_qr,
-                        R.drawable.baseline_link_24,
-                        R.drawable.baseline_delete_24,
-                        R.drawable.baseline_cancel_24
+                        R.drawable.msg_link,
+                        R.drawable.msg_delete,
+                        R.drawable.msg_cancel
 
                 }, (i, text, cell) -> {
 
@@ -791,7 +791,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     } else if (i == 4) {
                         AlertUtil.showConfirm(getParentActivity(),
                                 LocaleController.getString("DeleteProxy", R.string.DeleteProxy),
-                                R.drawable.baseline_delete_24, LocaleController.getString("Delete", R.string.Delete),
+                                R.drawable.msg_delete, LocaleController.getString("Delete", R.string.Delete),
                                 true, () -> {
 
                                     SharedConfig.deleteProxy(info);

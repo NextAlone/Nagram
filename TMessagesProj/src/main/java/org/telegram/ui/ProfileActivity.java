@@ -3007,17 +3007,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     });
                 }
 
-                builder.addItem(LocaleController.getString("Edit", R.string.Edit), R.drawable.baseline_edit_24, __ -> {
+                builder.addItem(LocaleController.getString("Edit", R.string.Edit), R.drawable.msg_edit, __ -> {
                     presentFragment(new ChangeUsernameActivity());
                     return Unit.INSTANCE;
                 });
 
-                builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
+                builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.msg_copy, __ -> {
                     AlertUtil.copyAndAlert("@" + user.username);
                     return Unit.INSTANCE;
                 });
 
-                builder.addItem(LocaleController.getString("CopyLink", R.string.CopyLink), R.drawable.baseline_link_24, __ -> {
+                builder.addItem(LocaleController.getString("CopyLink", R.string.CopyLink), R.drawable.msg_link, __ -> {
                     AlertUtil.copyAndAlert("https://t.me/" + user.username);
                     return Unit.INSTANCE;
                 });
@@ -3030,7 +3030,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
             } else if (position == channelInfoRow || position == userInfoRow || position == locationRow) {
                 BottomBuilder builder = new BottomBuilder(getParentActivity());
-                builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
+                builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.msg_copy, __ -> {
                     try {
                         String about;
                         if (position == locationRow) {
@@ -3076,19 +3076,19 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 number = PhoneFormat.getInstance().format("+" + user.phone);
                 BottomBuilder builder = new BottomBuilder(getParentActivity());
                 builder.addTitle(number);
-                builder.addItem(LocaleController.getString("Edit", R.string.Edit), R.drawable.baseline_edit_24, __ -> {
+                builder.addItem(LocaleController.getString("Edit", R.string.Edit), R.drawable.msg_edit, __ -> {
                     presentFragment(new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_CHANGE_PHONE_NUMBER));
                     return Unit.INSTANCE;
                 });
-                builder.addItem(LocaleController.getString("Call", R.string.Call), R.drawable.baseline_call_24, __ -> {
+                builder.addItem(LocaleController.getString("Call", R.string.Call), R.drawable.msg_calls, __ -> {
                     AlertUtil.call(user.phone);
                     return Unit.INSTANCE;
                 });
-                builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
+                builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.msg_copy, __ -> {
                     AlertUtil.copyAndAlert(number);
                     return Unit.INSTANCE;
                 });
-                builder.addItem(LocaleController.getString("ShareContact", R.string.ShareContact), R.drawable.baseline_forward_24, __ -> {
+                builder.addItem(LocaleController.getString("ShareContact", R.string.ShareContact), R.drawable.msg_share, __ -> {
                     Bundle args = new Bundle();
                     args.putBoolean("onlySelect", true);
                     args.putInt("dialogsType", 3);
@@ -3099,7 +3099,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     presentFragment(fragment);
                     return Unit.INSTANCE;
                 });
-                builder.addItem(LocaleController.getString("Hide", R.string.Hide), R.drawable.baseline_remove_circle_24, __ -> {
+                builder.addItem(LocaleController.getString("Hide", R.string.Hide), R.drawable.msg_disable, __ -> {
                     hideNumber = true;
                     updateListAnimated(false);
                     return Unit.INSTANCE;
@@ -3110,15 +3110,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 String number = PhoneFormat.getInstance().format("+" + user.phone);
                 BottomBuilder builder = new BottomBuilder(getParentActivity());
                 builder.addTitle(number);
-                builder.addItem(LocaleController.getString("Call", R.string.Call), R.drawable.baseline_call_24, __ -> {
+                builder.addItem(LocaleController.getString("Call", R.string.Call), R.drawable.msg_calls, __ -> {
                     AlertUtil.call(user.phone);
                     return Unit.INSTANCE;
                 });
-                builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
+                builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.msg_copy, __ -> {
                     AlertUtil.copyAndAlert(number);
                     return Unit.INSTANCE;
                 });
-                builder.addItem(LocaleController.getString("ShareContact", R.string.ShareContact), R.drawable.baseline_forward_24, __ -> {
+                builder.addItem(LocaleController.getString("ShareContact", R.string.ShareContact), R.drawable.msg_share,
+                        __ -> {
                     Bundle args = new Bundle();
                     args.putBoolean("onlySelect", true);
                     args.putInt("dialogsType", 3);
@@ -3129,7 +3130,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     presentFragment(fragment);
                     return Unit.INSTANCE;
                 });
-                builder.addItem(LocaleController.getString("Hide", R.string.Hide), R.drawable.baseline_remove_circle_24, __ -> {
+                builder.addItem(LocaleController.getString("Hide", R.string.Hide), R.drawable.msg_disable, __ -> {
                     hideNumber = true;
                     updateListAnimated(false);
                     return Unit.INSTANCE;
@@ -3152,7 +3153,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
                 builder.addTitle(message);
                 String finalMessage = message;
-                builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, (it) -> {
+                builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.msg_copy, (it) -> {
                     AndroidUtilities.addToClipboard(finalMessage);
                     AlertUtil.showToast(LocaleController.getString("TextCopied", R.string.TextCopied));
                     return Unit.INSTANCE;
@@ -3165,13 +3166,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     updateListAnimated(false);
                     return Unit.INSTANCE;
                 });
-                builder.addItem(LocaleController.getString("SwitchVersion", R.string.SwitchVersion), R.drawable.baseline_replay_24, (it) -> {
+                builder.addItem(LocaleController.getString("SwitchVersion", R.string.SwitchVersion), R.drawable.msg_retry,
+                        (it) -> {
                     Browser.openUrl(ProfileActivity.this.getParentActivity(), "https://github.com/NextAlone/Nagram/releases");
                     return Unit.INSTANCE;
                 });
 
                 if (!BuildVars.isFdroid && !BuildVars.isPlay) {
-                    builder.addItem(LocaleController.getString("CheckUpdate", R.string.CheckUpdate), R.drawable.baseline_search_24, (it) -> {
+                    builder.addItem(LocaleController.getString("CheckUpdate", R.string.CheckUpdate), R.drawable.msg_search,
+                            (it) -> {
                         Browser.openUrl(context, "tg://update");
                         return Unit.INSTANCE;
                     });
@@ -4447,7 +4450,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             });
 
             if (chatInfo != null && chatInfo.can_set_username) {
-                builder.addItem(LocaleController.getString("Edit", R.string.Edit), R.drawable.baseline_edit_24, __ -> {
+                builder.addItem(LocaleController.getString("Edit", R.string.Edit), R.drawable.msg_edit, __ -> {
                     ChatEditTypeActivity fragment = new ChatEditTypeActivity(chatId, chatInfo.can_set_location);
                     fragment.setInfo(chatInfo);
                     presentFragment(fragment);
@@ -4455,12 +4458,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 });
             }
 
-            builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
+            builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.msg_copy, __ -> {
                 AlertUtil.copyAndAlert("@" + username);
                 return Unit.INSTANCE;
             });
 
-            builder.addItem(LocaleController.getString("CopyLink", R.string.CopyLink), R.drawable.baseline_link_24, __ -> {
+            builder.addItem(LocaleController.getString("CopyLink", R.string.CopyLink), R.drawable.msg_link, __ -> {
                 AlertUtil.copyAndAlert("https://t.me/" + username);
                 return Unit.INSTANCE;
             });
@@ -4525,7 +4528,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 return false;
             }
             BottomBuilder builder = new BottomBuilder(getParentActivity());
-            builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.baseline_content_copy_24, __ -> {
+            builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.msg_copy, __ -> {
                 try {
                     String about;
                     if (position == locationRow) {
@@ -6998,7 +7001,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         return Unit.INSTANCE;
                     });
                 }
-                builder.addItem(LocaleController.getString("Hide", R.string.Hide), R.drawable.baseline_remove_circle_24, __ -> {
+                builder.addItem(LocaleController.getString("Hide", R.string.Hide), R.drawable.msg_disable, __ -> {
                     idTextView.setVisibility(View.GONE);
                     return Unit.INSTANCE;
                 });
