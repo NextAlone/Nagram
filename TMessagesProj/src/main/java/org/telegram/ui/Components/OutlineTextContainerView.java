@@ -105,7 +105,7 @@ public class OutlineTextContainerView extends FrameLayout {
     }
 
     public void updateColor() {
-        int textSelectionColor = ColorUtils.blendARGB(useDefaultColor ? 0xff212121 : Theme.getColor(Theme.key_windowBackgroundWhiteHintText), useDefaultColor ? 0xff19a7e8 : Theme.getColor(Theme.key_windowBackgroundWhiteValueText), selectionProgress);
+        int textSelectionColor = ColorUtils.blendARGB(useDefaultColor ? 0xff212121 : Theme.getColor(Theme.key_windowBackgroundWhiteHintText), useDefaultColor ? 0xff19a7e8 : Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated), selectionProgress);
         int selectionColor = ColorUtils.blendARGB(useDefaultColor ? 0xff212121 : Theme.getColor(Theme.key_windowBackgroundWhiteInputField), useDefaultColor ? 0xff19a7e8 : Theme.getColor(Theme.key_windowBackgroundWhiteInputFieldActivated), selectionProgress);
         textPaint.setColor(ColorUtils.blendARGB(textSelectionColor, Theme.getColor(Theme.key_dialogTextRed), errorProgress));
         setColor(ColorUtils.blendARGB(selectionColor, Theme.getColor(Theme.key_dialogTextRed), errorProgress));

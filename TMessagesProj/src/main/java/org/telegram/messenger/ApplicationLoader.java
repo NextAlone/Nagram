@@ -37,6 +37,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
@@ -91,7 +92,7 @@ public class ApplicationLoader extends Application {
         } catch (Exception e) {
             FileLog.e(e);
         }
-        return new File("/data/data/org.telegram.messenger/files");
+        return new File(BuildVars.isBetaApp() ? "/data/data/com.exteragram.messenger.beta/files" : "/data/data/com.exteragram.messenger/files");
     }
 
     public static void postInitApplication() {
