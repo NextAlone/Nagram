@@ -19,9 +19,9 @@ import org.telegram.ui.Components.LayoutHelper
 import java.util.*
 
 
-class BottomBuilder(val ctx: Context, val needFocus: Boolean = true) {
+class BottomBuilder(val ctx: Context, val needFocus: Boolean = true, val bgColor: Int = Theme.getColor(Theme.key_dialogBackground)) {
     constructor(ctx: Context) : this(ctx, true) {}
-
+    constructor(ctx: Context, needFocus: Boolean) : this(ctx, needFocus, Theme.getColor(Theme.key_dialogBackground)) {}
     val builder = BottomSheet.Builder(ctx, needFocus)
 
     private val rootView = LinearLayout(ctx).apply {
@@ -48,7 +48,7 @@ class BottomBuilder(val ctx: Context, val needFocus: Boolean = true) {
 
         FrameLayout(ctx).apply {
 
-            setBackgroundColor(Theme.getColor(Theme.key_dialogBackground))
+            setBackgroundColor(bgColor)
 
             this@BottomBuilder.rootView.addView(this, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 50, Gravity.LEFT or Gravity.BOTTOM))
 

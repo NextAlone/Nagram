@@ -27,7 +27,6 @@ import android.text.StaticLayout;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
-import android.text.util.Linkify;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
@@ -50,11 +49,10 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AlertsCreator;
-import org.telegram.ui.Components.EmojiTextView;
 import org.telegram.ui.Components.BulletinFactory;
+import org.telegram.ui.Components.EmojiTextView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkPath;
 import org.telegram.ui.Components.LinkSpanDrawable;
@@ -62,6 +60,9 @@ import org.telegram.ui.Components.StaticLayoutEx;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 
 import java.util.concurrent.atomic.AtomicReference;
+
+import kotlin.Unit;
+import tw.nekomimi.nekogram.ui.BottomBuilder;
 
 public class AboutLinkCell extends FrameLayout {
 
@@ -400,24 +401,30 @@ public class AboutLinkCell extends FrameLayout {
                 } catch (Exception ignore) {}
 
                 ClickableSpan pressedLinkFinal = (ClickableSpan) pressedLink.getSpan();
-                BottomSheet.Builder builder = new BottomSheet.Builder(parentFragment.getParentActivity());
-                builder.setTitle(url);
-                builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, (dialog, which) -> {
-                    if (which == 0) {
-                        onLinkClick(pressedLinkFinal);
-                    } else if (which == 1) {
-                        AndroidUtilities.addToClipboard(url);
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-                            if (url.startsWith("@")) {
-                                BulletinFactory.of(parentFragment).createSimpleBulletin(R.raw.copy, LocaleController.getString("UsernameCopied", R.string.UsernameCopied)).show();
-                            } else if (url.startsWith("#") || url.startsWith("$")) {
-                                BulletinFactory.of(parentFragment).createSimpleBulletin(R.raw.copy, LocaleController.getString("HashtagCopied", R.string.HashtagCopied)).show();
-                            } else {
-                                BulletinFactory.of(parentFragment).createSimpleBulletin(R.raw.copy, LocaleController.getString("LinkCopied", R.string.LinkCopied)).show();
+                BottomBuilder builder = new BottomBuilder(parentFragment.getParentActivity());
+                builder.addTitle(url);
+                builder.addItems(new String[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)},
+                        new int[]{R.drawable.msg_openin, R.drawable.msg_copy},
+                        (which, __, ___) -> {
+                            if (which == 0) {
+                                onLinkClick(pressedLinkFinal);
+                            } else if (which == 1) {
+                                AndroidUtilities.addToClipboard(url);
+                                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+                                    if (url.startsWith("@")) {
+                                        BulletinFactory.of(parentFragment).createSimpleBulletin(R.raw.copy,
+                                                LocaleController.getString("UsernameCopied", R.string.UsernameCopied)).show();
+                                    } else if (url.startsWith("#") || url.startsWith("$")) {
+                                        BulletinFactory.of(parentFragment).createSimpleBulletin(R.raw.copy,
+                                                LocaleController.getString("HashtagCopied", R.string.HashtagCopied)).show();
+                                    } else {
+                                        BulletinFactory.of(parentFragment).createSimpleBulletin(R.raw.copy,
+                                                LocaleController.getString("LinkCopied", R.string.LinkCopied)).show();
+                                    }
+                                }
                             }
-                        }
-                    }
-                });
+                            return Unit.INSTANCE;
+                        });
                 builder.setOnPreDismissListener(di -> resetPressedLink());
                 builder.show();
 

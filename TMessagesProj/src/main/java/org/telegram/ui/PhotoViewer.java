@@ -68,7 +68,6 @@ import android.transition.TransitionManager;
 import android.transition.TransitionSet;
 import android.transition.TransitionValues;
 import android.util.FloatProperty;
-import android.util.Log;
 import android.util.Property;
 import android.util.Range;
 import android.util.SparseArray;
@@ -257,6 +256,7 @@ import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
+import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import xyz.nextalone.nagram.NaConfig;
@@ -654,7 +654,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
     private void onLinkLongPress(URLSpan link, TextView widget, Runnable onDismiss) {
         int timestamp = -1;
-        BottomSheet.Builder builder = new BottomSheet.Builder(parentActivity, false, resourcesProvider, 0xff1C2229);
+        BottomBuilder builder = new BottomBuilder(parentActivity, false, 0xff1C2229);
         if (link.getURL().startsWith("video?")) {
             try {
                 String timestampStr = link.getURL().substring(link.getURL().indexOf('?') + 1);
@@ -664,12 +664,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             }
         }
         if (timestamp >= 0) {
-            builder.setTitle(AndroidUtilities.formatDuration(timestamp, false));
+            builder.addTitle(AndroidUtilities.formatDuration(timestamp, false));
         } else {
-            builder.setTitle(link.getURL());
+            builder.addTitle(link.getURL());
         }
         final int finalTimestamp = timestamp;
-        builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)}, (dialog, which) -> {
+        builder.addItems(new String[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy)},
+                new int[]{R.drawable.msg_openin, R.drawable.msg_copy}, (which,__,___ ) -> {
             if (which == 0) {
                 onLinkClick(link, widget);
             } else if (which == 1) {
@@ -728,6 +729,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     BulletinFactory.of(containerView, resourcesProvider).createSimpleBulletin(R.raw.voip_invite, bulletinMessage).show();
                 }
             }
+            return Unit.INSTANCE;
         });
         builder.setOnPreDismissListener(di -> onDismiss.run());
         BottomSheet bottomSheet = builder.create();
