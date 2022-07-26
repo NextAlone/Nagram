@@ -2923,6 +2923,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 sendLogs(true);
             } else if (position == clearLogsRow) {
                 FileLog.cleanupLogs();
+                ((TextCell) view).setValue(FileLog.getLogDirSize());
             } else if (position == switchBackendRow) {
                 if (getParentActivity() == null) {
                     return;
@@ -2970,7 +2971,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 LocaleController.getString("DebugMenuReloadContacts", R.string.DebugMenuReloadContacts),
                                 LocaleController.getString("DebugMenuResetContacts", R.string.DebugMenuResetContacts),
                                 LocaleController.getString("DebugMenuResetDialogs", R.string.DebugMenuResetDialogs),
-                                BuildVars.DEBUG_VERSION ? null : (BuildVars.LOGS_ENABLED ? LocaleController.getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs)),
+                                BuildVars.LOGS_ENABLED ? LocaleController.getString("DebugMenuDisableLogs", R.string.DebugMenuDisableLogs) : LocaleController.getString("DebugMenuEnableLogs", R.string.DebugMenuEnableLogs),
                                 SharedConfig.inappCamera ? LocaleController.getString("DebugMenuDisableCamera", R.string.DebugMenuDisableCamera) : LocaleController.getString("DebugMenuEnableCamera", R.string.DebugMenuEnableCamera),
                                 LocaleController.getString("DebugMenuClearMediaCache", R.string.DebugMenuClearMediaCache),
                                 LocaleController.getString("DebugMenuCallSettings", R.string.DebugMenuCallSettings),
@@ -2999,10 +3000,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             } else if (which == 3) {
                                 getMessagesController().forceResetDialogs();
                             } else if (which == 4) {
-                                BuildVars.LOGS_ENABLED = !BuildVars.LOGS_ENABLED;
-                                SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
-                                sharedPreferences.edit().putBoolean("logsEnabled", BuildVars.LOGS_ENABLED).commit();
-                                updateRowsIds();
+                                ExteraConfig.toggleLogging();
+                                if (BuildVars.LOGS_ENABLED) {
+                                    updateRowsIds();
+                                    listAdapter.notifyItemRangeInserted(helpSectionCell, 6);
+                                } else {
+                                    listAdapter.notifyItemRangeRemoved(helpSectionCell, 6);
+                                    updateRowsIds();
+                                }
                                 listAdapter.notifyDataSetChanged();
                             } else if (which == 5) {
                                 SharedConfig.toggleInappCamera();
@@ -6103,17 +6108,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 helpHeaderRow = rowCount++;
                 questionRow = rowCount++;
                 policyRow = rowCount++;
-                if (BuildVars.LOGS_ENABLED || BuildVars.DEBUG_PRIVATE_VERSION) {
+                if (BuildVars.LOGS_ENABLED) {
                     helpSectionCell = rowCount++;
                     debugHeaderRow = rowCount++;
-                }
-                if (BuildVars.LOGS_ENABLED) {
+                    switchBackendRow = rowCount++;
                     sendLogsRow = rowCount++;
                     sendLastLogsRow = rowCount++;
                     clearLogsRow = rowCount++;
-                }
-                if (BuildVars.DEBUG_PRIVATE_VERSION) {
-                    switchBackendRow = rowCount++;
                 }
                 versionRow = rowCount++;
             } else {
@@ -7910,9 +7911,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     } else if (position == sendLastLogsRow) {
                         textCell.setText(LocaleController.getString("DebugSendLastLogs", R.string.DebugSendLastLogs), true);
                     } else if (position == clearLogsRow) {
-                        textCell.setText(LocaleController.getString("DebugClearLogs", R.string.DebugClearLogs), switchBackendRow != -1);
+                        textCell.setTextAndValue(LocaleController.getString("DebugClearLogs", R.string.DebugClearLogs), FileLog.getLogDirSize(), false);
                     } else if (position == switchBackendRow) {
-                        textCell.setText("Switch Backend", false);
+                        textCell.setText("Switch Backend", true);
                     } else if (position == devicesRow) {
                         textCell.setTextAndIcon(LocaleController.getString("Devices", R.string.Devices), R.drawable.menu_devices, true);
                     } else if (position == setAvatarRow) {

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.FileLog;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.messenger.UserConfig;
 
@@ -15,17 +17,17 @@ public class ExteraConfig {
 
     private static final Object sync = new Object();
 
-    private static final int[] OFFICIAL_CHANNELS = {1233768168, 1524581881, 1571726392, 1632728092, 1638754701, 1779596027, 1172503281};
-    private static final int[] DEVS = {963080346, 1282540315, 1374434073, 388099852, 1972014627, 168769611};
-
+    // appearance 
     public static boolean useSystemFonts;
-    public static boolean disableVibration;
     public static boolean blurForAllThemes;
     public static boolean centerTitle;
     public static boolean newSwitchStyle;
     public static boolean transparentNavBar;
     public static boolean squareFab;
+    public static int eventType;
+    public static boolean newGroup, newSecretChat, newChannel, contacts, calls, peopleNearby, archivedChats, savedMessages, scanQr, inviteFriends, telegramFeatures;
 
+    // general
     public static boolean disableNumberRounding;
     public static boolean formatTimeWithSeconds;
     public static boolean chatsOnTitle;
@@ -36,7 +38,9 @@ public class ExteraConfig {
     public static boolean hidePhoneNumber;
     public static boolean showID;
     public static boolean showDC;
+    public static boolean disableVibration;
 
+    // chats
     public static float stickerSize = 14.0f;
     public static int stickerForm;
     public static boolean hideStickerTime;
@@ -59,10 +63,9 @@ public class ExteraConfig {
     public static boolean disablePlayback;
     public static boolean disableProximityEvents;
 
-    public static boolean newGroup, newSecretChat, newChannel, contacts, calls, peopleNearby, archivedChats, savedMessages, scanQr, inviteFriends, telegramFeatures;
-
-    public static int eventType;
-
+    // other
+    private static final int[] OFFICIAL_CHANNELS = {1233768168, 1524581881, 1571726392, 1632728092, 1638754701, 1779596027, 1172503281};
+    private static final int[] DEVS = {963080346, 1282540315, 1374434073, 388099852, 1972014627, 168769611};
     public static long channelToSave;
 
     private static boolean configLoaded;
@@ -374,5 +377,11 @@ public class ExteraConfig {
     public static void setStickerForm(int form) {
         SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
         editor.putInt("stickerForm", stickerForm = form).apply();
+    }
+
+    public static void toggleLogging() {
+        SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Activity.MODE_PRIVATE).edit();
+        editor.putBoolean("logsEnabled", BuildVars.LOGS_ENABLED ^= true).apply();
+        if (!BuildVars.LOGS_ENABLED) FileLog.cleanupLogs();
     }
 }

@@ -12,11 +12,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class BuildVars {
 
     public static boolean DEBUG_VERSION = BuildConfig.BUILD_TYPE.equals("debug");
-    public static boolean LOGS_ENABLED = BuildConfig.BUILD_TYPE.equals("debug");
-    public static boolean DEBUG_PRIVATE_VERSION = BuildConfig.BUILD_TYPE.equals("debug");
+    public static boolean LOGS_ENABLED = DEBUG_VERSION;
+    public static boolean DEBUG_PRIVATE_VERSION = DEBUG_VERSION;
     public static boolean USE_CLOUD_STRINGS = true;
     public static boolean CHECK_UPDATES = false;
     public static boolean NO_SCOPED_STORAGE = Build.VERSION.SDK_INT <= 29;
@@ -32,23 +34,19 @@ public class BuildVars {
     public static boolean IS_BILLING_UNAVAILABLE = true;
 
     static {
-        // Takes from build.config :shrug:
         BUILD_VERSION = BuildConfig.VERSION_CODE;
         BUILD_VERSION_STRING = BuildConfig.VERSION_NAME;
 
-        APP_ID = BuildConfig.APP_ID; // Obtain your own APP_ID at https://core.telegram.org/api/obtaining_api_id
-        APP_HASH = BuildConfig.APP_HASH; // Obtain your own APP_HASH at https://core.telegram.org/api/obtaining_api_id
+        APP_ID = BuildConfig.APP_ID;
+        // Obtain your own APP_ID at https://core.telegram.org/api/obtaining_api_id
+        APP_HASH = BuildConfig.APP_HASH;
+        // Obtain your own APP_HASH at https://core.telegram.org/api/obtaining_api_id
         SMS_HASH = isBetaApp() ? "2P1CNXYRAK6" : "UfajQkYoxTu";
         // Using our SMS_HASH you will not be able to get the SMS Retriever to work, generate your own keys with https://raw.githubusercontent.com/googlearchive/android-credentials/master/sms-verification/bin/sms_retriever_hash_v9.sh
-
-        if (ApplicationLoader.applicationContext != null) {
-            SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Context.MODE_PRIVATE);
-            LOGS_ENABLED = DEBUG_VERSION = sharedPreferences.getBoolean("logsEnabled", DEBUG_VERSION);
-        }
     }
 
     public static boolean useInvoiceBilling() {
-        return DEBUG_VERSION || isStandaloneApp() || isBetaApp();
+        return DEBUG_VERSION || isStandaloneApp();
     }
 
     public static boolean isStandaloneApp() {
@@ -56,6 +54,6 @@ public class BuildVars {
     }
 
     public static boolean isBetaApp() {
-        return BuildConfig.BUILD_TYPE.equals("debug");
+        return DEBUG_VERSION;
     }
 }

@@ -243,6 +243,10 @@ public class TextCell extends FrameLayout {
         setWillNotDraw(!needDivider);
     }
 
+    public void setValue(String value) {
+        valueTextView.setText(value);
+    }
+
     public void setTextAndValueAndIcon(String text, String value, int resId, boolean divider) {
         imageLeft = 21;
         offsetFromImage = 71;

@@ -37,6 +37,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.FilesMigrationService;
@@ -380,6 +381,9 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                     stickersSize = getDirectorySize(new File(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_CACHE), "acache"), documentsMusicType);
                 }
             }
+            
+            if (BuildVars.LOGS_ENABLED) FileLog.cleanupLogs();
+
             final boolean imagesClearedFinal = imagesCleared;
             totalSize = cacheSize + videoSize + audioSize + photoSize + documentsSize + musicSize + stickersSize;
 

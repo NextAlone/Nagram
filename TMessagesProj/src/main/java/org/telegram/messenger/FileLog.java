@@ -10,6 +10,9 @@ package org.telegram.messenger;
 
 import android.util.Log;
 
+import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.Utilities;
 import org.telegram.messenger.time.FastDateFormat;
 import org.telegram.messenger.video.MediaCodecVideoConvertor;
 
@@ -232,6 +235,15 @@ public class FileLog {
         }
     }
 
+    public static String getLogDirSize() {
+        File sdCard = ApplicationLoader.applicationContext.getExternalFilesDir(null);
+        if (sdCard == null) {
+            return "N/A";
+        }
+        File dir = new File (sdCard.getAbsolutePath() + "/logs");
+        return AndroidUtilities.formatFileSize(Utilities.getDirSize(dir.getAbsolutePath(), 5, false), true);
+    }
+
     public static void cleanupLogs() {
         ensureInitied();
         File sdCard = ApplicationLoader.applicationContext.getExternalFilesDir(null);
@@ -243,14 +255,16 @@ public class FileLog {
         if (files != null) {
             for (int a = 0; a < files.length; a++) {
                 File file = files[a];
-                if (getInstance().currentFile != null && file.getAbsolutePath().equals(getInstance().currentFile.getAbsolutePath())) {
-                    continue;
-                }
-                if (getInstance().networkFile != null && file.getAbsolutePath().equals(getInstance().networkFile.getAbsolutePath())) {
-                    continue;
-                }
-                if (getInstance().tonlibFile != null && file.getAbsolutePath().equals(getInstance().tonlibFile.getAbsolutePath())) {
-                    continue;
+                if (BuildVars.LOGS_ENABLED) {
+                    if (getInstance().currentFile != null && file.getAbsolutePath().equals(getInstance().currentFile.getAbsolutePath())) {
+                        continue;
+                    }
+                    if (getInstance().networkFile != null && file.getAbsolutePath().equals(getInstance().networkFile.getAbsolutePath())) {
+                        continue;
+                    }
+                    if (getInstance().tonlibFile != null && file.getAbsolutePath().equals(getInstance().tonlibFile.getAbsolutePath())) {
+                        continue;
+                    }
                 }
                 file.delete();
             }
