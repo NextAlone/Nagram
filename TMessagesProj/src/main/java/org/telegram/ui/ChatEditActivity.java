@@ -1142,7 +1142,10 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
 
     private int getChannelAdminCount() {
         if (info == null || info.participants == null || info.participants.participants == null) {
-            return 1;
+            if (realAdminCount != 0)
+                return realAdminCount;
+            getRealChannelAdminCount();
+            return 0;
         }
         int count = 0;
         for (int a = 0, N = info.participants.participants.size(); a < N; a++) {
@@ -1153,10 +1156,10 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                 count++;
             }
         }
+        realAdminCount = count;
         return count;
     }
 
-    @Deprecated
     private void getRealChannelAdminCount() {
         TLRPC.TL_channels_getParticipants req = new TLRPC.TL_channels_getParticipants();
         req.channel = getMessagesController().getInputChannel(chatId);
