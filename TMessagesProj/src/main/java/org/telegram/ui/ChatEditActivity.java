@@ -1504,7 +1504,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                 } else {
                     membersCell.setText(LocaleController.getString("ChannelMembers", R.string.ChannelMembers), logCell != null && logCell.getVisibility() == View.VISIBLE);
                     if (currentChat.gigagroup) {
-                        blockCell.setTextAndIcon(LocaleController.getString("ChannelBlacklist", R.string.ChannelBlacklist), R.drawable.msg_chats_remove, logCell != null && logCell.getVisibility() == View.VISIBLE);
+                        blockCell.setText(LocaleController.getString("ChannelBlacklist", R.string.ChannelBlacklist), logCell != null && logCell.getVisibility() == View.VISIBLE);
                     } else {
                         blockCell.setText(LocaleController.getString("ChannelPermissions", R.string.ChannelPermissions), true);
                     }
@@ -1525,7 +1525,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         }
 
         if (stickersCell != null && info != null) {
-            stickersCell.setTextAndValueAndIcon(LocaleController.getString(R.string.GroupStickers), info.stickerset != null ? info.stickerset.title : LocaleController.getString(R.string.Add), R.drawable.msg_sticker, false);
+            stickersCell.setTextAndValue(LocaleController.getString(R.string.GroupStickers), info.stickerset != null ? info.stickerset.title : LocaleController.getString(R.string.Add), false);
         }
     }
 
