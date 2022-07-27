@@ -8767,6 +8767,8 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
             reactionsMentionCount = dialog.unread_reactions_count;
             updateReactionsMentionButton(false);
         }
+        BackButtonMenu.addToAccessedDialogs(currentAccount, currentChat, currentUser, dialog_id, dialogFolderId, dialogFilterId);
+
         return fragmentView;
     }
 

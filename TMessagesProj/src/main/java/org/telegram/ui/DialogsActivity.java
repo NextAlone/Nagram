@@ -148,6 +148,7 @@ import org.telegram.ui.Cells.UserCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.AvatarDrawable;
+import org.telegram.ui.Components.BackButtonMenu;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.BlurredRecyclerView;
 import org.telegram.ui.Components.Bulletin;
@@ -3874,6 +3875,58 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         } else {
             showSearch(false, false, false);
         }
+        View backButton = actionBar.getBackButton();
+        backButton.setOnLongClickListener(e -> {
+            scrimPopupWindow = BackButtonMenu.showHistory(this, backButton);
+            final ActionBarPopupWindow scrimPopupWindowBack = scrimPopupWindow;
+            if (scrimPopupWindow != null) {
+                scrimPopupWindow.setOnDismissListener(() -> {
+                    if (scrimPopupWindow != scrimPopupWindowBack) {
+                        return;
+                    }
+                    if (scrimAnimatorSet != null) {
+                        scrimAnimatorSet.cancel();
+                        scrimAnimatorSet = null;
+                    }
+                    scrimAnimatorSet = new AnimatorSet();
+                    scrimViewAppearing = false;
+                    ArrayList<Animator> animators = new ArrayList<>();
+                    animators.add(ObjectAnimator.ofInt(scrimPaint, AnimationProperties.PAINT_ALPHA, 0));
+                    scrimAnimatorSet.playTogether(animators);
+                    scrimAnimatorSet.setDuration(220);
+                    scrimAnimatorSet.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            if (scrimView != null) {
+                                scrimView.setBackground(null);
+                                scrimView = null;
+                            }
+                            if (fragmentView != null) {
+                                fragmentView.invalidate();
+                            }
+                        }
+                    });
+                    scrimAnimatorSet.start();
+                    scrimPopupWindow = null;
+                    scrimPopupWindowItems = null;
+                });
+                if (scrimAnimatorSet != null) {
+                    scrimAnimatorSet.cancel();
+                } else {
+                    scrimAnimatorSet = new AnimatorSet();
+                }
+                fragmentView.invalidate();
+                scrimViewAppearing = true;
+                ArrayList<Animator> animators = new ArrayList<>();
+                animators.add(ObjectAnimator.ofInt(scrimPaint, AnimationProperties.PAINT_ALPHA, 0, 50));
+                scrimAnimatorSet.playTogether(animators);
+                scrimAnimatorSet.setDuration(150);
+                scrimAnimatorSet.start();
+                return true;
+            } else {
+                return false;
+            }
+        });
 
         updateMenuButton(false);
         actionBar.setDrawBlurBackground(contentView);
