@@ -4109,6 +4109,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     user.photo.photo_big.dc_id = user.photo.dc_id;
                 }
                 PhotoViewer.getInstance().openPhoto(user.photo.photo_big, provider);
+            } else {
+                // NekoX: move openMenu from avatarImage.setOnClickListener to here.
+                // avatarImage's onClick event should call this openAvatar method.
+                if (userId == UserConfig.getInstance(currentAccount).getClientUserId() && imageUpdater != null) {
+                    imageUpdater.openMenu(false, () -> MessagesController.getInstance(currentAccount).deleteUserPhoto(null), dialog -> {
+                    });
+                }
             }
         } else if (chatId != 0) {
             TLRPC.Chat chat = getMessagesController().getChat(chatId);
