@@ -124,6 +124,7 @@ android {
             zipAlignEnabled true
             proguardFiles 'proguard-rules.pro'
             buildConfigField 'boolean', 'DEBUG_VERSION', 'true'
+            ext.enableCrashlytics = false
         }
 
         release {
@@ -135,6 +136,7 @@ android {
             multiDexEnabled true
             zipAlignEnabled true
             proguardFiles 'proguard-rules.pro'
+            crunchPngs false
         }
     }
 
