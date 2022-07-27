@@ -386,9 +386,9 @@ jobs:
             ./telegram-bot-api-binary --api-id=21724 --api-hash=3e0cb5efcd52300aec5994fdfc5bdc16 --local 2>&1 > /dev/null &
           }
           start
-          curl http://127.0.0.1:8081/ & start
-          curl http://127.0.0.1:8081/ & start
-          curl http://127.0.0.1:8081/ & start
+          curl http://127.0.0.1:8081/ || start
+          curl http://127.0.0.1:8081/ || start
+          curl http://127.0.0.1:8081/ || start
           curl http://127.0.0.1:8081/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
            -X POST \
            -F chat_id="${{ secrets.TELEGRAM_CHANNEL }}" \
