@@ -16623,7 +16623,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
     private Drawable getThemedDrawable(String key) {
         Drawable drawable = resourcesProvider != null ? resourcesProvider.getDrawable(key) : null;
-        return drawable != null ? drawable : Theme.getThemeDrawable(key);
+        final Drawable ret = drawable != null ? drawable : Theme.getThemeDrawable(key);
+        if (ret == null) {
+            FileLog.e("getThemedDrawable failed with key:" + key);
+            FileLog.e(new Exception());
+        }
+        return ret;
     }
 
     private Paint getThemedPaint(String paintKey) {
