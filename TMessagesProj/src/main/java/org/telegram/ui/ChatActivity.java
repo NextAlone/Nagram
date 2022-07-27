@@ -11858,9 +11858,8 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                     }
                     name = chat.title;
                 }
-                name = MessageHelper.INSTANCE.zalgoFilter(name);
                 replyIconImageView.setImageResource(R.drawable.msg_panel_reply);
-                replyNameTextView.setText(name);
+                replyNameTextView.setText(MessageHelper.INSTANCE.zalgoFilter(name));
                 replyIconImageView.setContentDescription(LocaleController.getString("AccDescrReplying", R.string.AccDescrReplying));
                 replyCloseImageView.setContentDescription(LocaleController.getString("AccDescrCancelReply", R.string.AccDescrCancelReply));
 

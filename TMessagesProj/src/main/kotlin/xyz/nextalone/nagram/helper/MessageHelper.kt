@@ -86,20 +86,25 @@ object MessageHelper {
 
     fun zalgoFilter(
         text: CharSequence?
-    ): String {
-        return if (text != null) {
+    ): String? {
+        return if (text == null) {
+            ""
+        } else {
             zalgoFilter(
                 text.toString()
             )
-        } else {
-            ""
         }
     }
 
     fun zalgoFilter(
-        text: String
+        text: String?
     ): String {
-        return if (NaConfig.zalgoFilter.Bool()) {
+        return if (text == null) {
+            ""
+        } else if (NaConfig.zalgoFilter.Bool() && text.matches(
+                ".*\\p{Mn}{4}.*".toRegex()
+            )
+        ) {
             text.replace(
                 "(?i)([aeiouy]̈)|[̀-ͯ҉]".toRegex(),
                 ""
