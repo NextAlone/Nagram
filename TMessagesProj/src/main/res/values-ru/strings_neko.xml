@@ -145,4 +145,5 @@
     <string name="showBottomActionsWhenSelecting">Показывать действия снизу при выборе</string>
     <string name="forceBlurInChat">Принудительно включить размытие чатов</string>
     <string name="ChatBlurAlphaValue">Размытие чатов (Альфа)</string>
+    <string name="disablePremiumStickerAnimation">Отключить анимацию премиум стикеров</string>
 </resources>

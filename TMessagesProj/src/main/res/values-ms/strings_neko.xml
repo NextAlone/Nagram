@@ -1,2 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="NekoSettings">Tetapan Neko</string>
+    <string name="IPv6">Menyambung melalui IPv6</string>
+    <string name="MessageMenu">Menu mesej</string>
+    <string name="HidePhone">Sembunyikan nombor telefon saya</string>
+    <string name="Hide">Sembunyikan</string>
+    <string name="DeleteAllFromSelf">Padam semua dari diri anda</string>
+    <string name="DeleteAllFromSelfAlert">Amaran! Ini akan **memadam semua mesej daripada anda** dalam bual ini untuk **semua** ahli.</string>
+    <string name="Connection">Sambungan</string>
+    <string name="IgnoreBlocked">Sembunyikan mesej dari pengguna disekat</string>
+    <string name="Chat">Bual</string>
+    <string name="InvalidAccessToken">Token akses tak sah</string>
+    <string name="BotLogin">Log masuk Bot</string>
+</resources>
