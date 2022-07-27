@@ -69,7 +69,7 @@ public class NekoXConfig {
     public static boolean keepOnlineStatus = preferences.getBoolean("keepOnlineStatus", false);
 
     public static int autoUpdateReleaseChannel = preferences.getInt("autoUpdateReleaseChannel", 2);
-    public static String ignoredUpdateTag = preferences.getString("ignoredUpdateTag", "");
+//    public static String ignoredUpdateTag = preferences.getString("ignoredUpdateTag", "");
 //    public static long nextUpdateCheck = preferences.getLong("nextUpdateCheckTimestamp", 0);
 
 //    public static int customApi = preferences.getInt("custom_api", 0);
@@ -115,17 +115,9 @@ public class NekoXConfig {
         preferences.edit().putInt("autoUpdateReleaseChannel", autoUpdateReleaseChannel = channel).apply();
     }
 
-    public static void setIgnoredUpdateTag(String ignored) {
-        preferences.edit().putString("ignoredUpdateTag", ignoredUpdateTag = ignored).apply();
-    }
-
     public static String currentAppHash() {
         return BuildConfig.APP_HASH;
     }
-
-//    public static void setNextUpdateCheck(long timestamp) {
-//        preferences.edit().putLong("nextUpdateCheckTimestamp", nextUpdateCheck = timestamp).apply();
-//    }
 
     public static boolean isDeveloper() {
         if (hasDeveloper != null)

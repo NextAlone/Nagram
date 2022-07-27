@@ -44,6 +44,7 @@ public class NekoConfig {
 
     public static ConfigItem enablePublicProxy = addConfig("enablePublicProxy", configTypeBool, true);
     public static ConfigItem autoUpdateSubInfo = addConfig("autoUpdateSubInfo", configTypeBool, true);
+    public static ConfigItem lastUpdateCheckTime = addConfig("lastUpdateCheckTime", configTypeLong, 0L);
 
     // From NekoConfig
     public static ConfigItem useIPv6 = addConfig("IPv6", configTypeBool, false);
