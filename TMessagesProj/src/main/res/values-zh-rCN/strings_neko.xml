@@ -145,4 +145,5 @@
     <string name="channelLabel">频道身份</string>
     <string name="forceBlurInChat">强制启用聊天背景模糊</string>
     <string name="ChatBlurAlphaValue">背景模糊度</string>
+    <string name="disablePremiumStickerAnimation">禁用会员贴纸动画</string>
 </resources>

@@ -214,7 +214,7 @@
     <string name="TextOrigin">Menşei</string>
     <string name="TextReplace">Değiştir</string>
     <string name="ReplaceRegex">Düzenli ifade kullan</string>
-    <string name="DisableTrending">Trend Olanları Devre Dışı Bırak</string>
+    <string name="DisableTrending">Trendleri devre dışı bırak</string>
     <string name="HideDeviceInfo">Cihaz modelini gizle</string>
     <string name="HideDeviceInfoOff">Cihaz modeli, oturum açtıktan sonra uygulama ikinci kez başlatıldığında yüklenecektir.</string>
     <string name="HideDeviceInfoOn">Bunu daha sonra ayarlarda değiştirebilirsiniz.</string>
@@ -239,7 +239,7 @@
     <string name="EnableStickerPinTip">Bu işlev hala geliştirilme aşamasındadır, bulut ile eşzamanlama düşünüldüğü gibi çalışmayabilir.</string>
     <string name="EnableStickerPinAbout">Çıkartmaları sabitleyin ve yeni çıkartmalar eklerken bile bulut ile eşzamanlayın.
 \nSık Kullanılanları ve Son Kullanılanları Devre Dışı Bırak özellikleri ile eşleştirilir.</string>
-    <string name="EnableStickerPin">Çıkartmaları Sabitlemeyi Etkinleştir</string>
+    <string name="EnableStickerPin">Çıkartma sabitlemeyi etkinleştir</string>
     <string name="AutoCheckUpdateRc">Sürüm Adayı</string>
     <string name="AutoCheckUpdateStable">Kararlı</string>
     <string name="AutoCheckUpdateSwitch">Otomatik Güncelleme</string>
@@ -264,7 +264,7 @@
     <string name="repeatConfirmText">Tekrarlamak istediğinize emin misiniz\?</string>
     <string name="DisableInstantCamera">Hızlı kamerayı devre dışı bırak</string>
     <string name="labelChannelUserDetails">Mesajı gönderen \"Kanal\" ise, bu \"Kanal\" olarak etiketlenir.</string>
-    <string name="channelAlias">Kanal Takma Adı</string>
+    <string name="channelAlias">Kanal takma adı</string>
     <string name="setChannelAliasName">Takma Ad Ayarla</string>
     <string name="customPublicProxyIP">Herkese açık vekil sunucunun IP adresini ayarla</string>
     <string name="DeleteDownloadedFileSucceed">Silindi</string>
@@ -277,6 +277,9 @@
     <string name="rememberAllBackMessages">Tıklanmış bütün yanıtları hatırla</string>
     <string name="NekoXUpdateTranslationHint">Değişim günlüğünü çevirmek için dokunun</string>
     <string name="Name">Ad</string>
-    <string name="labelChannelUser">Kanal Kullanıcısı Etiketi</string>
+    <string name="labelChannelUser">Kanal kullanıcısı etiketi</string>
     <string name="channelAliasDetails">Kanal kullanıcısı etiketi özelliğinin etkinleştirilmesine ihtiyaç duyar.</string>
+    <string name="InteractionSettings">Etkileşim</string>
+    <string name="StickerSettings">Çıkartma</string>
+    <string name="ConfirmSettings">Doğrulama</string>
 </resources>

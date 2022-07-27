@@ -4293,15 +4293,15 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
     public void checkAppUpdate(boolean force) {
         if (BuildVars.isFdroid || BuildVars.isPlay) return;
         if (NekoXConfig.autoUpdateReleaseChannel == 0) return;
-        if (!force && System.currentTimeMillis() < SharedConfig.lastUpdateCheckTime + 1000L * 60 * 60) return;
-        SharedConfig.lastUpdateCheckTime = System.currentTimeMillis();
-        SharedConfig.saveConfig();
+        if (!force && System.currentTimeMillis() < NekoConfig.lastUpdateCheckTime.Long() + 48 * 60 * 60 * 1000L) return;
+        NekoConfig.lastUpdateCheckTime.setConfigLong(System.currentTimeMillis());
         FileLog.d("checking update");
 
         final int accountNum = currentAccount;
         InternalUpdater.checkUpdate((res, error) -> AndroidUtilities.runOnUIThread(() -> {
             if (res != null) {
                 SharedConfig.setNewAppVersionAvailable(res);
+                SharedConfig.saveConfig();
                 if (res.can_not_skip) {
                     showUpdateActivity(accountNum, res, false);
                 } else {

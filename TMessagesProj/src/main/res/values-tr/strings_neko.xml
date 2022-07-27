@@ -144,4 +144,5 @@
     <string name="showBottomActionsWhenSelecting">Seçerken alt eylemleri göster</string>
     <string name="forceBlurInChat">Sohbet bulanıklaştırmayı zorla etkinleştir</string>
     <string name="ChatBlurAlphaValue">Sohbet bulanıklaştırması opaklığı</string>
+    <string name="disablePremiumStickerAnimation">Premium çıkartma animasyonunu devre dışı bırak</string>
 </resources>

@@ -135,6 +135,7 @@ public class ContentPreviewViewer {
     private final static int CONTENT_TYPE_STICKER = 0;
     private final static int CONTENT_TYPE_GIF = 1;
 
+    private final static int nkbtn_send_without_sound = 100;
     private final static int nkbtn_stickerdl = 110;
 
     private static TextPaint textPaint;
@@ -212,7 +213,7 @@ public class ContentPreviewViewer {
                     if (delegate.needSend() && !delegate.isInScheduleMode()) {
                         items.add(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound));
                         icons.add(R.drawable.input_notify_off);
-                        actions.add(100);
+                        actions.add(nkbtn_send_without_sound);
                     }
                     if (delegate.canSchedule()) {
                         items.add(LocaleController.getString("Schedule", R.string.Schedule));
@@ -259,7 +260,7 @@ public class ContentPreviewViewer {
                             return;
                         }
                         int which = (int) v.getTag();
-                        if (actions.get(which) == 0 || actions.get(which) == 6) {
+                        if (actions.get(which) == 0 || actions.get(which) == nkbtn_send_without_sound) {
                             if (delegate != null) {
                                 delegate.sendSticker(currentDocument, currentQuery, parentObject, actions.get(which) == 0, 0);
                             }
@@ -359,7 +360,7 @@ public class ContentPreviewViewer {
                 if (delegate.needSend() && !delegate.isInScheduleMode()) {
                     items.add(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound));
                     icons.add(R.drawable.input_notify_off);
-                    actions.add(100);
+                    actions.add(nkbtn_send_without_sound);
                 }
                 if (delegate.canSchedule()) {
                     items.add(LocaleController.getString("Schedule", R.string.Schedule));
@@ -394,7 +395,7 @@ public class ContentPreviewViewer {
                         return;
                     }
                     int which = (int) v.getTag();
-                    if (actions.get(which) == 0 || actions.get(which) == 100) {
+                    if (actions.get(which) == 0 || actions.get(which) == nkbtn_send_without_sound) {
                         delegate.sendGif(currentDocument != null ? currentDocument : inlineResult, parentObject, actions.get(which) == 0, 0);
                     } else if (actions.get(which) == 1) {
                         MediaDataController.getInstance(currentAccount).removeRecentGif(currentDocument);
