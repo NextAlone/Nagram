@@ -4102,6 +4102,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     user.photo.photo_big.dc_id = user.photo.dc_id;
                 }
                 PhotoViewer.getInstance().openPhoto(user.photo.photo_big, provider);
+            } else {
+                // NekoX: move openMenu from avatarImage.setOnClickListener to here.
+                // avatarImage's onClick event should call this openAvatar method.
+                if (userId == UserConfig.getInstance(currentAccount).getClientUserId() && imageUpdater != null) {
+                    imageUpdater.openMenu(false, () -> MessagesController.getInstance(currentAccount).deleteUserPhoto(null), dialog -> {
+                    });
+                }
             }
         } else if (chatId != 0) {
             TLRPC.Chat chat = getMessagesController().getChat(chatId);
@@ -4125,38 +4132,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         if (userId != 0) {
             if (imageUpdater != null) {
                 presentFragment(new ChangeNameActivity(resourcesProvider));
-                //TODO: MERGE CONFLICT
-                /*
-                TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(UserConfig.getInstance(currentAccount).getClientUserId());
-                if (user == null) {
-                    user = UserConfig.getInstance(currentAccount).getCurrentUser();
-                }
-                if (user == null) {
-                    return;
-                }
-                imageUpdater.openMenu(user.photo != null && user.photo.photo_big != null && !(user.photo instanceof TLRPC.TL_userProfilePhotoEmpty), () -> {
-                    MessagesController.getInstance(currentAccount).deleteUserPhoto(null);
-                    cameraDrawable.setCurrentFrame(0);
-                    cellCameraDrawable.setCurrentFrame(0);
-                }, dialog -> {
-                    if (!imageUpdater.isUploadingImage()) {
-                        cameraDrawable.setCustomEndFrame(86);
-                        cellCameraDrawable.setCustomEndFrame(86);
-                        writeButton.playAnimation();
-                        if (setAvatarCell != null) {
-                            setAvatarCell.getImageView().playAnimation();
-                        }
-                    } else {
-                        cameraDrawable.setCurrentFrame(0, false);
-                        cellCameraDrawable.setCurrentFrame(0, false);
-                    }
-                });
-                cameraDrawable.setCurrentFrame(0);
-                cameraDrawable.setCustomEndFrame(43);
-                cellCameraDrawable.setCurrentFrame(0);
-                cellCameraDrawable.setCustomEndFrame(43);
-                writeButton.playAnimation();
-                */
             } else {
                 if (playProfileAnimation != 0 && parentLayout.fragmentsStack.get(parentLayout.fragmentsStack.size() - 2) instanceof ChatActivity) {
                     finishFragment();
