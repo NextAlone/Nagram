@@ -49,4 +49,5 @@
     <string name="HideOriginAfterTranslation">Hide origin after translation</string>
     <string name="ZalgoFilter">Filter \"Zalgo\" symbols</string>
     <string name="ZalgoFilterNotice">All \"Z̷͍͌ā̸̜l̸̞̂g̷̝͘o̶̩̓\" symbols in nicknames or messages will be removed.</string>
+    <string name="CustomChannelLabel">Custom default channel label</string>
 </resources>
