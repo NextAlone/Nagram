@@ -768,10 +768,14 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
             loadTexture(R.drawable.intro_powerful_star, 18);
             loadTexture(R.drawable.intro_private_door, 19);
             loadTexture(R.drawable.intro_private_screw, 20);
-            loadTexture(R.drawable.intro_tg_plane, 21);
+            loadTexture(R.drawable.intro_etg_arrow, 21);
             loadTexture(v -> {
                 Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-                paint.setColor(0xFF2CA5E0); // It's logo color, it should not be colored by the theme
+                if (BuildVars.isBetaApp()) {
+                    paint.setColor(0xFF747F9F);
+                } else {
+                    paint.setColor(0xFFF54142);
+                }
                 int size = AndroidUtilities.dp(ICON_HEIGHT_DP);
                 Bitmap bm = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
                 Canvas c = new Canvas(bm);
