@@ -148,4 +148,6 @@
     <string name="SelectAnIcon">Choose an icon</string>
     <string name="MutualContact">Mutual contact</string>
     <string name="MutualContactDescription">This contact is a mutual contact.</string>
+    <string name="DatacenterStatusAbout">Check the status of Telegram\'s **datacenters**.</string>
+    <string name="DatacenterStatus">Datacenter status</string>
 </resources>

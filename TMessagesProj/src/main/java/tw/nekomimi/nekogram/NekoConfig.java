@@ -30,6 +30,7 @@ public class NekoConfig {
 
     private static boolean configLoaded = false;
     private static final ArrayList<ConfigItem> configs = new ArrayList<>();
+    public static final ArrayList<DatacenterInfo> datacenterInfos = new ArrayList<>(5);
 
     // Configs
     public static ConfigItem migrate = addConfig("NekoConfigMigrate", configTypeBool, false);
@@ -252,6 +253,9 @@ public class NekoConfig {
                     }
                 }
             }
+            for (int a = 1; a <= 5; a++) {
+                datacenterInfos.add(new DatacenterInfo(a));
+            }
             configLoaded = true;
         }
     }
@@ -472,4 +476,18 @@ public class NekoConfig {
             disableGroupVoipAudioProcessing.setConfigBool(preferences.getBoolean("disableGroupVoipAudioProcessing", false));
     }
 
+    public static class DatacenterInfo {
+
+        public int id;
+
+        public long pingId;
+        public long ping;
+        public boolean checking;
+        public boolean available;
+        public long availableCheckTime;
+
+        public DatacenterInfo(int i) {
+            id = i;
+        }
+    }
 }

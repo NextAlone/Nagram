@@ -201,6 +201,7 @@ import kotlin.Unit;
 import libv2ray.Libv2ray;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.InternalUpdater;
+import tw.nekomimi.nekogram.DatacenterActivity;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.settings.NekoXSettingActivity;
@@ -6673,6 +6674,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
 
         long id = 0;
+        int dc = 0;
         if (userId != 0) {
             TLRPC.User user = getMessagesController().getUser(userId);
             if (user == null) return;
@@ -6796,10 +6798,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
             }
 
-            if (user.photo != null && user.photo.dc_id != 0) {
-                idTextView.setText("ID: " + userId + ", DC: " + user.photo.dc_id);
-            } else if (UserObject.isUserSelf(user) && getMessagesController().thisDc > 0) {
-                idTextView.setText("ID: " + user.id + ", DC: " + getMessagesController().thisDc);
+            dc = user.photo != null && user.photo.dc_id != 0 ? user.photo.dc_id : UserObject.isUserSelf(user) ? getConnectionsManager().getCurrentDatacenterId() : 0;
+            if (dc != 0) {
+                idTextView.setText("ID: " + userId + ", DC: " + dc);
             } else {
                 idTextView.setText("ID: " + userId);
             }
@@ -6976,13 +6977,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
             avatarImage.getImageReceiver().setVisible(!PhotoViewer.isShowingImage(photoBig), false);
             if (chat.photo != null && chat.photo.dc_id != 0) {
-                idTextView.setText("ID: " + chatId + ", DC: " + chat.photo.dc_id);
+                dc = chat.photo.dc_id;
+                idTextView.setText("ID: " + chatId + ", DC: " + dc);
             } else {
                 idTextView.setText("ID: " + chatId);
             }
         }
         if (id != 0) {
             long finalId = id;
+            int finalDc = dc;
             idTextView.setOnClickListener(v -> {
                 BottomBuilder builder = new BottomBuilder(getParentActivity());
                 builder.addTitle(finalId + "");
@@ -7006,6 +7009,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 } else {
                     builder.addItem(LocaleController.getString("CopyLink", R.string.CopyLink) + " (Android)", R.drawable.profile_link, __ -> {
                         AlertUtil.copyLinkAndAlert("tg://openmessage?chat_id=" + finalId);
+                        return Unit.INSTANCE;
+                    });
+                }
+                if (finalDc != 0) {
+                    builder.addItem(LocaleController.getString("DatacenterStatus", R.string.DatacenterStatus), R.drawable.msg_stats, __ -> {
+                        idTextView.setVisibility(View.GONE);
+                        presentFragment(new DatacenterActivity(finalDc));
                         return Unit.INSTANCE;
                     });
                 }

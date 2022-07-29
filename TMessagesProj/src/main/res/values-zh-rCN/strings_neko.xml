@@ -146,4 +146,6 @@
     <string name="forceBlurInChat">强制启用聊天背景模糊</string>
     <string name="ChatBlurAlphaValue">背景模糊度</string>
     <string name="disablePremiumStickerAnimation">禁用会员贴纸动画</string>
+    <string name="DatacenterStatusAbout">检查 Telegram 的**数据中心**的状态。</string>
+    <string name="DatacenterStatus">数据中心状态</string>
 </resources>

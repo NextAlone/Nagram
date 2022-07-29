@@ -10994,9 +10994,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     }
                     String dateString = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(new Date(date)), LocaleController.getInstance().formatterDay.format(new Date(date)));
                     if (newMessageObject.messageOwner.media.document != null) {
-                        dateString = String.format(Locale.US, "%s @DC%d", dateString, newMessageObject.messageOwner.media.document.dc_id);
+                        int dc = newMessageObject.messageOwner.media.document.dc_id;
+                        dateString = String.format(Locale.US, "%s @DC%d %s, %s", dateString, dc, MessageHelper.getDCName(dc), MessageHelper.getDCLocation(dc));
                     } else if (newMessageObject.messageOwner.media.photo != null) {
-                        dateString = String.format(Locale.US, "%s @DC%d", dateString, newMessageObject.messageOwner.media.photo.dc_id);
+                        int dc = newMessageObject.messageOwner.media.photo.dc_id;
+                        dateString = String.format(Locale.US, "%s @DC%d %s, %s", dateString, dc, MessageHelper.getDCName(dc), MessageHelper.getDCLocation(dc));
                     }
                     if (newFileName != null && isVideo) {
                         dateTextView.setText(String.format("%s (%s)", dateString, AndroidUtilities.formatFileSize(newMessageObject.getDocument().size)), animated);
@@ -11163,7 +11165,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             long date = (long) avatar.date * 1000;
             if (date != 0) {
                 String dateString = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(new Date(date)), LocaleController.getInstance().formatterDay.format(new Date(date)));
-                dateString = String.format(Locale.US, "%s @DC%d", dateString, avatarsArr.get(switchingToIndex).dc_id);
+                int dc = avatarsArr.get(switchingToIndex).dc_id;
+                dateString = String.format(Locale.US, "%s @DC%d %s, %s", dateString, dc, MessageHelper.getDCName(dc), MessageHelper.getDCLocation(dc));
                 dateTextView.setText(dateString);
             }
             if (canEditAvatar && !avatarsArr.isEmpty()) {

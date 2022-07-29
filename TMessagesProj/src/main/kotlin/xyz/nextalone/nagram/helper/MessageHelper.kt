@@ -117,4 +117,26 @@ object MessageHelper {
             text
         }
     }
+
+    @JvmStatic
+    fun getDCLocation(dc: Int): String {
+        return when (dc) {
+            1, 3 -> "Miami"
+            2, 4 -> "Amsterdam"
+            5 -> "Singapore"
+            else -> "Unknown"
+        }
+    }
+
+    @JvmStatic
+    fun getDCName(dc: Int): String {
+        return when (dc) {
+            1 -> "Pluto"
+            2 -> "Venus"
+            3 -> "Aurora"
+            4 -> "Vesta"
+            5 -> "Flora"
+            else -> "Unknown"
+        }
+    }
 }
