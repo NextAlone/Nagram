@@ -23,8 +23,11 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.RecyclerListView;
 
+import java.util.ArrayList;
+
 import top.qwq2333.nullgram.config.ConfigManager;
 import top.qwq2333.nullgram.ui.DrawerProfilePreviewCell;
+import top.qwq2333.nullgram.ui.PopupBuilder;
 import top.qwq2333.nullgram.utils.Defines;
 
 @SuppressLint("NotifyDataSetChanged")
@@ -51,6 +54,7 @@ public class GeneralSettingActivity extends BaseActivity {
     private int autoProxySwitchRow;
     private int useSystemEmojiRow;
     private int disableVibrationRow;
+    private int tabsTitleTypeRow;
     private int general2Row;
 
 
@@ -151,6 +155,20 @@ public class GeneralSettingActivity extends BaseActivity {
             if (view instanceof TextCheckCell) {
                 ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.disableVibration));
             }
+        } else if (position == tabsTitleTypeRow) {
+            ArrayList<String> arrayList = new ArrayList<>();
+            ArrayList<Integer> types = new ArrayList<>();
+            arrayList.add(LocaleController.getString("TabTitleTypeText", R.string.TabTitleTypeText));
+            types.add(Defines.tabMenuText);
+            arrayList.add(LocaleController.getString("TabTitleTypeIcon", R.string.TabTitleTypeIcon));
+            types.add(Defines.tabMenuIcon);
+            arrayList.add(LocaleController.getString("TabTitleTypeMix", R.string.TabTitleTypeMix));
+            types.add(Defines.tabMenuMix);
+            PopupBuilder.show(arrayList, LocaleController.getString("TabTitleType", R.string.TabTitleType), types.indexOf(ConfigManager.getIntOrDefault(Defines.tabMenu, Defines.tabMenuMix)), getParentActivity(), view, i -> {
+                ConfigManager.putInt(Defines.tabMenu, types.get(i));
+                listAdapter.notifyItemChanged(tabsTitleTypeRow);
+                getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
+            });
         }
 
     }
@@ -191,6 +209,7 @@ public class GeneralSettingActivity extends BaseActivity {
         autoProxySwitchRow = rowCount++;
         useSystemEmojiRow = rowCount++;
         disableVibrationRow = rowCount++;
+        tabsTitleTypeRow = rowCount++;
         general2Row = rowCount++;
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
@@ -225,6 +244,21 @@ public class GeneralSettingActivity extends BaseActivity {
                 case 2: {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                    if (position == tabsTitleTypeRow) {
+                        String value;
+                        switch (ConfigManager.getIntOrDefault(Defines.tabMenu, Defines.tabMenuMix)) {
+                            case Defines.tabMenuText:
+                                value = LocaleController.getString("TabTitleTypeText", R.string.TabTitleTypeText);
+                                break;
+                            case Defines.tabMenuIcon:
+                                value = LocaleController.getString("TabTitleTypeIcon", R.string.TabTitleTypeIcon);
+                                break;
+                            case Defines.tabMenuMix:
+                            default:
+                                value = LocaleController.getString("TabTitleTypeMix", R.string.TabTitleTypeMix);
+                        }
+                        textCell.setTextAndValue(LocaleController.getString("TabTitleType", R.string.TabTitleType), value, false);
+                    }
                     break;
                 }
                 case 3: {
@@ -331,6 +365,8 @@ public class GeneralSettingActivity extends BaseActivity {
         public int getItemViewType(int position) {
             if (position == general2Row || position == drawer2Row) {
                 return 1;
+            } else if (position == tabsTitleTypeRow) {
+                return 2;
             } else if ((position > generalRow && position < general2Row) || (position > drawerRow && position < drawer2Row)) {
                 return 3;
             } else if (position == generalRow) {

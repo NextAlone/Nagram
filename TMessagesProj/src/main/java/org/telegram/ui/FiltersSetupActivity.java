@@ -53,6 +53,8 @@ import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
 
+import top.qwq2333.nullgram.helpers.FolderIconHelper;
+
 public class FiltersSetupActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private RecyclerListView listView;
@@ -573,7 +575,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             if (rowCount != this.rowCount) {
                 adapter.notifyDataSetChanged();
             } else {
-               adapter.notifyItemRangeChanged(0, rowCount);
+                adapter.notifyItemRangeChanged(0, rowCount);
             }
         } else if (id == NotificationCenter.suggestedFiltersLoaded) {
             updateRows(true);
@@ -628,12 +630,12 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                         paint.setTextSize(AndroidUtilities.dp(20));
                         builder1.setTitle(Emoji.replaceEmoji(filter.name, paint.getFontMetricsInt(), AndroidUtilities.dp(20), false));
                         final CharSequence[] items = new CharSequence[]{
-                                LocaleController.getString("FilterEditItem", R.string.FilterEditItem),
-                                LocaleController.getString("FilterDeleteItem", R.string.FilterDeleteItem),
+                            LocaleController.getString("FilterEditItem", R.string.FilterEditItem),
+                            LocaleController.getString("FilterDeleteItem", R.string.FilterDeleteItem),
                         };
                         final int[] icons = new int[]{
-                                R.drawable.msg_edit,
-                                R.drawable.msg_delete
+                            R.drawable.msg_edit,
+                            R.drawable.msg_delete
                         };
                         builder1.setItems(items, icons, (dialog, which) -> {
                             if (which == 0) {
@@ -769,8 +771,9 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                         if (suggested.filter.exclude_muted) {
                             filter.flags |= MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED;
                         }
+                        filter.emoticon = TextUtils.isEmpty(suggested.filter.emoticon) ? FolderIconHelper.getEmoticonFromFlags(filter.flags).second : suggested.filter.emoticon;
                         ignoreUpdates = true;
-                        FilterCreateActivity.saveFilterToServer(filter, filter.flags, filter.name, filter.alwaysShow, filter.neverShow, filter.pinnedDialogs, true, true, true, true, false, FiltersSetupActivity.this, () -> {
+                        FilterCreateActivity.saveFilterToServer(filter, filter.flags, filter.emoticon, filter.name, filter.alwaysShow, filter.neverShow, filter.pinnedDialogs, true, true, true, true, false, FiltersSetupActivity.this, () -> {
                             getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
                             ignoreUpdates = false;
                             ArrayList<TLRPC.TL_dialogFilterSuggested> suggestedFilters = getMessagesController().suggestedFilters;

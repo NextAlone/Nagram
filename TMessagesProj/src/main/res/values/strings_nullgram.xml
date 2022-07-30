@@ -188,4 +188,9 @@
     <string name="premium">Premium</string>
     <string name="fastSpeedUpload">Fasten upload speed</string>
     <string name="showTabsOnForward">Show Tabs On Forward</string>
+    <string name="TabTitleType">Show on tabs</string>
+    <string name="TabTitleTypeTip">Icons are cloud-synced by Telegram.</string>
+    <string name="TabTitleTypeText">Titles</string>
+    <string name="TabTitleTypeIcon">Icons</string>
+    <string name="TabTitleTypeMix">Icons with titles</string>
 </resources>

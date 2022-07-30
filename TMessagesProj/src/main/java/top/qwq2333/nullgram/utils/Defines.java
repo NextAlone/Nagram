@@ -119,6 +119,12 @@ public class Defines {
     public static final int ciChannel = 2;
     public static final String updateChannelSkip = "updateChannelSkip";
 
+    // Tab Menu
+    public static final String tabMenu = "tabMenu";
+    public static final int tabMenuText = 0;
+    public static final int tabMenuMix = 1;
+    public static final int tabMenuIcon = 2;
+
     // Misc
     public static final long[] officialID = {
         966253902,  // Developer
