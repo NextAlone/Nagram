@@ -20,6 +20,8 @@ import org.telegram.ui.Components.RLottieDrawable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import xyz.nextalone.nagram.NaConfig;
+
 public class DownloadProgressIcon extends View implements NotificationCenter.NotificationCenterDelegate {
 
     Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -105,6 +107,17 @@ public class DownloadProgressIcon extends View implements NotificationCenter.Not
         canvas.clipRect(0, 0, getMeasuredWidth(), cy - r);
         if (progress != 1f) {
             showCompletedIcon = false;
+        }
+        boolean has_file = false;
+        DownloadController downloadController = DownloadController.getInstance(currentAccount);
+        for (int i = 0; i < downloadController.downloadingFiles.size(); i++){
+            if (FileLoader.getInstance(currentAccount).isLoadingFile(downloadController.downloadingFiles.get(i).getFileName())) {
+                has_file = true;
+                break;
+            }
+        }
+        if (!has_file && NaConfig.INSTANCE.getAlwaysShowDownloadIcon().Bool()) {
+            showCompletedIcon = true;
         }
         if (showCompletedIcon) {
             downloadCompleteImageReceiver.draw(canvas);

@@ -6839,10 +6839,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             return;
         }
         boolean showDownloads = false;
-        for (int i = 0; i < getDownloadController().downloadingFiles.size(); i++){
-            if (getFileLoader().isLoadingFile(getDownloadController().downloadingFiles.get(i).getFileName())) {
-                showDownloads = true;
-                break;
+        if (NaConfig.INSTANCE.getAlwaysShowDownloadIcon().Bool()) {
+            showDownloads = true;
+        } else {
+            for (int i = 0; i < getDownloadController().downloadingFiles.size(); i++){
+                if (getFileLoader().isLoadingFile(getDownloadController().downloadingFiles.get(i).getFileName())) {
+                    showDownloads = true;
+                    break;
+                }
             }
         }
         if (!searching && (getDownloadController().hasUnviewedDownloads() || showDownloads || (downloadsItem.getVisibility() == View.VISIBLE && downloadsItem.getAlpha() == 1 && !force))) {

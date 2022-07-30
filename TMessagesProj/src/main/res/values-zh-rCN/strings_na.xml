@@ -49,4 +49,5 @@
     <string name="ZalgoFilter">过滤 \"Zalgo\" 符号</string>
     <string name="ZalgoFilterNotice">昵称和消息中的 \"Z̷͍͌ā̸̜l̸̞̂g̷̝͘o̶̩̓\" 符号将被过滤</string>
     <string name="CustomChannelLabel">自定义频道默认别名</string>
+    <string name="AlwaysShowDownloadIcon">一直显示下载管理器</string>
 </resources>
