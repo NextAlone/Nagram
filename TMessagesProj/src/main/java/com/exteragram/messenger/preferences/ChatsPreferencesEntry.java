@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
@@ -42,10 +43,11 @@ import com.exteragram.messenger.ExteraUtils;
 import com.exteragram.messenger.preferences.cells.StickerSizePreviewCell;
 import com.exteragram.messenger.preferences.cells.StickerFormCell;
 
-public class ChatsPreferencesEntry extends BaseFragment {
+public class ChatsPreferencesEntry extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private int rowCount;
     private ListAdapter listAdapter;
+    private RecyclerListView listView;
 
     private ActionBarMenuItem resetItem;
     private StickerSizeCell stickerSizeCell;
@@ -88,8 +90,24 @@ public class ChatsPreferencesEntry extends BaseFragment {
     @Override
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
         updateRowsId(true);
         return true;
+    }
+
+    @Override
+    public void didReceivedNotification(int id, int account, Object... args) {
+        if (id == NotificationCenter.emojiLoaded) {
+            if (listView != null) {
+                listView.invalidateViews();
+            }
+        }
+    }
+
+    @Override
+    public void onFragmentDestroy() {
+        super.onFragmentDestroy();
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
     }
 
     private class StickerSizeCell extends FrameLayout {
@@ -219,7 +237,7 @@ public class ChatsPreferencesEntry extends BaseFragment {
         fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = (FrameLayout) fragmentView;
 
-        RecyclerListView listView = new RecyclerListView(context);
+        listView = new RecyclerListView(context);
         listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         listView.setVerticalScrollBarEnabled(false);
         listView.setAdapter(listAdapter);

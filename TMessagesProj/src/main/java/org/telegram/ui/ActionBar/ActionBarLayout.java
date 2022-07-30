@@ -116,10 +116,24 @@ public class ActionBarLayout extends FrameLayout {
                     }
                 }
                 boolean result = super.drawChild(canvas, child, drawingTime);
-                if (actionBarHeight != 0) {
-                    canvas.drawLine(0, actionBarY + actionBarHeight, getMeasuredWidth(), actionBarY + actionBarHeight, Theme.dividerPaint);
-                }
                 return result;
+            }
+        }
+
+        @Override
+        protected void dispatchDraw(Canvas canvas) {
+            super.dispatchDraw(canvas);
+            int count = getChildCount();
+            int actionBarHeight = 0;
+            for (int a = 0; a < count; a++) {
+                View child = getChildAt(a);
+                if (child instanceof ActionBar) {
+                    actionBarHeight = child.getMeasuredHeight();
+                    if (actionBarHeight!= 0) {
+                        canvas.drawLine(0, actionBarHeight, getMeasuredWidth(), actionBarHeight, Theme.dividerPaint);
+                    }
+                    break;
+                }
             }
         }
 

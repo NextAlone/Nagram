@@ -6,8 +6,10 @@ import android.content.SharedPreferences;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
-import org.telegram.tgnet.TLRPC;
+import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.TLRPC;
 
 import com.exteragram.messenger.ExteraUtils;
 
@@ -367,6 +369,8 @@ public class ExteraConfig {
     public static void toggleZalgoFilter() {
         SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
         editor.putBoolean("zalgoFilter", zalgoFilter ^= true).apply();
+        MessagesController.getInstance(UserConfig.selectedAccount).clearQueryTime();
+        MessagesStorage.getInstance(UserConfig.selectedAccount).clearLocalDatabase();
     }
 
     public static void togglePremiumAutoPlayback() {

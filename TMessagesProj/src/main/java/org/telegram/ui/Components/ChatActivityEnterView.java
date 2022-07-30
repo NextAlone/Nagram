@@ -3616,7 +3616,6 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         }
         int bottom = top + Theme.chat_composeShadowDrawable.getIntrinsicHeight();
 
-        canvas.drawLine(0, bottom - 1, getMeasuredWidth(), bottom - 1, Theme.dividerPaint);
         bottom += chatSearchExpandOffset;
         if (allowBlur) {
             backgroundPaint.setColor(getThemedColor(Theme.key_chat_messagePanelBackground));
@@ -3629,6 +3628,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         } else {
             canvas.drawRect(0, bottom, getWidth(), getHeight(), getThemedPaint(Theme.key_paint_chatComposeBackground));
         }
+        canvas.drawLine(0, bottom - 1, getWidth(), bottom - 1, Theme.dividerPaint);
     }
 
     @Override

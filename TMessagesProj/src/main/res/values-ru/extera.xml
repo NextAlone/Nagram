@@ -66,7 +66,7 @@
     <string name="DateOfForwardedMsg">Дата пересланного сообщения</string>
     <string name="ShowMessageID">Показывать ID сообщения</string>
     <string name="ZalgoFilter">Фильтровать \"Zalgo\" символы</string>
-    <string name="ZalgoFilterInfo">Все \"Z̷͍͌ā̸̜l̸̞̂g̷̝͘o̶̩̓\" символы в именах или сообщениях будут удалены.</string>
+    <string name="ZalgoFilterInfo">Все \"Z̷͍͌ā̸̜l̸̞̂g̷̝͘o̶̩̓\" символы в именах или сообщениях будут удалены. Кэш сообщений будет очищен.</string>
 
     <string name="Media">Медиа</string>
     <string name="RearVideoMessages">Задняя камера в видеосообщениях</string>

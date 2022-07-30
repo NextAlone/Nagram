@@ -56,6 +56,7 @@ import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.support.LongSparseIntArray;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
@@ -3860,16 +3861,7 @@ public class NotificationsController extends BaseController {
     }
 
     private int setNotificationColor() {
-        Configuration configuration = ApplicationLoader.applicationContext.getResources().getConfiguration();
-        int nightModeFlags = configuration.uiMode & Configuration.UI_MODE_NIGHT_MASK;
-
-        switch (nightModeFlags) {
-            case Configuration.UI_MODE_NIGHT_YES:
-                return 0xffffffff;
-            case Configuration.UI_MODE_NIGHT_NO:
-                return 0xff11acfa;
-        }
-        return 0xff11acfa;
+        return BuildVars.isBetaApp() ? 0xff747f9f : 0xfff54142;
     }
 
     private boolean isSilentMessage(MessageObject messageObject) {

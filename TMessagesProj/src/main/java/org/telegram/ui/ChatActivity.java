@@ -6141,7 +6141,8 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                 }
 
                 @Override
-                public void onDraw(Canvas canvas) {
+                protected void dispatchDraw(Canvas canvas) {
+                    super.dispatchDraw(canvas);
                     canvas.drawLine(0, getMeasuredHeight() - AndroidUtilities.dp(2), getMeasuredWidth(), getMeasuredHeight() - AndroidUtilities.dp(2), Theme.dividerPaint);
                 }
             };
@@ -6350,7 +6351,8 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
             }
 
             @Override
-            public void onDraw(Canvas canvas) {
+            protected void dispatchDraw(Canvas canvas) {
+                super.dispatchDraw(canvas);
                 canvas.drawLine(0, getMeasuredHeight() - AndroidUtilities.dp(2), getMeasuredWidth(), getMeasuredHeight() - AndroidUtilities.dp(2), Theme.dividerPaint);
             }
         };
@@ -8015,8 +8017,8 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
             @Override
             public void onDraw(Canvas canvas) {
                 int bottom = Theme.chat_composeShadowDrawable.getIntrinsicHeight();
-                canvas.drawLine(0, bottom - 1, getMeasuredWidth(), bottom - 1, Theme.dividerPaint);
                 canvas.drawRect(0, bottom, getMeasuredWidth(), getMeasuredHeight(), getThemedPaint(Theme.key_paint_chatComposeBackground));
+                canvas.drawLine(0, bottom, getMeasuredWidth(), bottom, Theme.dividerPaint);
             }
         };
         bottomOverlay.setWillNotDraw(false);
@@ -8048,7 +8050,6 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
             @Override
             protected void dispatchDraw(Canvas canvas) {
                 int bottom = Theme.chat_composeShadowDrawable.getIntrinsicHeight();
-                canvas.drawLine(0, bottom - 1, getMeasuredWidth(), bottom - 1, Theme.dividerPaint);
                 if (SharedConfig.chatBlurEnabled()) {
                     if (backgroundPaint == null) {
                         backgroundPaint = new Paint();
@@ -8060,6 +8061,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                     canvas.drawRect(0, bottom, getMeasuredWidth(), getMeasuredHeight(), getThemedPaint(Theme.key_paint_chatComposeBackground));
                 }
                 super.dispatchDraw(canvas);
+                canvas.drawLine(0, bottom, getMeasuredWidth(), bottom, Theme.dividerPaint);
             }
         };
         bottomOverlayChat.isTopView = false;
