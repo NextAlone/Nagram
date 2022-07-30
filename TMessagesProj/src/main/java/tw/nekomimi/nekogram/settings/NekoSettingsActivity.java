@@ -58,6 +58,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import kotlin.text.StringsKt;
+import tw.nekomimi.nekogram.DatacenterActivity;
 import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
@@ -84,6 +85,7 @@ public class NekoSettingsActivity extends BaseFragment {
 //    private int googlePlayRow;
     private int sourceCodeRow;
     private int translationRow;
+    private int datacenterStatusRow;
     private int about2Row;
 
     @Override
@@ -181,6 +183,8 @@ public class NekoSettingsActivity extends BaseFragment {
 //                Browser.openUrl(getParentActivity(), "https://play.google.com/store/apps/details?id=nekox.messenger");
             } else if (position == sourceCodeRow) {
                 Browser.openUrl(getParentActivity(), "https://github.com/NextAlone/NagramX");
+            } else if (position == datacenterStatusRow) {
+                presentFragment(new DatacenterActivity(0));
             }
         });
 
@@ -388,6 +392,7 @@ public class NekoSettingsActivity extends BaseFragment {
 //        }
         sourceCodeRow = rowCount++;
         translationRow = rowCount++;
+        datacenterStatusRow = rowCount++;
         about2Row = rowCount++;
 
         if (listAdapter != null) {
@@ -485,6 +490,8 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setText(LocaleController.getString("SourceCode", R.string.SourceCode), true);
                     } else if (position == translationRow) {
                         textCell.setText(LocaleController.getString("TransSite", R.string.TransSite), true);
+                    } else if (position == datacenterStatusRow) {
+                        textCell.setText(LocaleController.getString("DatacenterStatus", R.string.DatacenterStatus), true);
                     }
                     break;
                 }
