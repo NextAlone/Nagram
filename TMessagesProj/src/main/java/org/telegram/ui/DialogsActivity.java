@@ -2521,8 +2521,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
                     linearLayout.setMinimumWidth(AndroidUtilities.dp(200));
                     linearLayout.setOrientation(LinearLayout.VERTICAL);
-                    scrimPopupWindowItems = new ActionBarMenuSubItem[3];
-                    for (int a = 0, N = (tabView.getId() == filterTabsView.getDefaultTabId() ? 2 : 3); a < N; a++) {
+                    scrimPopupWindowItems = new ActionBarMenuSubItem[4];
+                    for (int a = 0, N = (tabView.getId() == Integer.MAX_VALUE ? 3 : 4); a < 4; a++) {
                         ActionBarMenuSubItem cell = new ActionBarMenuSubItem(getParentActivity(), a == 0, a == N - 1);
                         if (a == 0) {
                             if (getMessagesController().dialogFilters.size() <= 1) {
@@ -2535,8 +2535,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             } else {
                                 cell.setTextAndIcon(LocaleController.getString("FilterEdit", R.string.FilterEdit), R.drawable.msg_edit);
                             }
+                        } else if (a == 2) {
+                            if (N == 3) continue;
+                            cell.setTextAndIcon(LocaleController.getString("FilterDeleteItem", R.string.FilterDeleteItem), R.drawable.baseline_delete_24);
                         } else {
-                            cell.setTextAndIcon(LocaleController.getString("FilterDeleteItem", R.string.FilterDeleteItem), R.drawable.msg_delete);
+                            cell.setTextAndIcon(LocaleController.getString("MarkAllAsRead", R.string.MarkAllAsRead), R.drawable.baseline_done_all_24);
                         }
                         scrimPopupWindowItems[a] = cell;
                         linearLayout.addView(cell);
@@ -2547,13 +2550,28 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                 filterTabsView.setIsEditing(true);
                                 showDoneItem(true);
                             } else if (i == 1) {
-                                if (N == 2) {
+                                if (N == 3) {
                                     presentFragment(new FiltersSetupActivity());
                                 } else {
                                     presentFragment(new FilterCreateActivity(dialogFilter));
                                 }
                             } else if (i == 2) {
                                 showDeleteAlert(dialogFilter);
+                            } else {
+                                if (dialogFilter == null) {
+                                    int folderId = tabView.getId() == Integer.MAX_VALUE ? 0 : -1;
+                                    getMessagesStorage().readAllDialogs(folderId);
+                                } else {
+                                    if (dialogFilter.dialogs.isEmpty()) {
+                                        getMessagesController().loadTabDialogs(dialogFilter);
+                                    }
+                                    for (TLRPC.Dialog dialog : dialogFilter.dialogs) {
+                                        if (dialog.unread_count == 0 && dialog.unread_mentions_count == 0)
+                                            continue;
+                                        getMessagesController().markDialogAsRead(dialog.id, dialog.top_message, dialog.top_message, dialog.last_message_date, false, 0, dialog.unread_count, true, 0);
+                                    }
+                                }
+
                             }
                             if (scrimPopupWindow != null) {
                                 scrimPopupWindow.dismiss();
