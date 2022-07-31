@@ -120,6 +120,7 @@ public class Defines {
     public static final String updateChannelSkip = "updateChannelSkip";
 
     // Tab Menu
+    public static final String hasUpdateDialogFilterDatabase = "hasUpdateDialogFilterDatabase";
     public static final String tabMenu = "tabMenu";
     public static final int tabMenuText = 0;
     public static final int tabMenuMix = 1;
