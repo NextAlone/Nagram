@@ -6564,32 +6564,15 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
         });
 
         mentiondownButton.setOnLongClickListener(view -> {
-            scrimPopupWindow = ReadAllMentionsMenu.show(ReadAllMentionsMenu.TYPE_MENTIONS, getParentActivity(), contentView, view, getResourceProvider(), () -> {
-                for (int a = 0; a < messages.size(); a++) {
-                    MessageObject messageObject = messages.get(a);
-                    if (messageObject.messageOwner.mentioned && !messageObject.isContentUnread()) {
-                        messageObject.setContentIsRead();
-                    }
+            for (int a = 0; a < messages.size(); a++) {
+                MessageObject messageObject = messages.get(a);
+                if (messageObject.messageOwner.mentioned && !messageObject.isContentUnread()) {
+                    messageObject.setContentIsRead();
                 }
-                newMentionsCount = 0;
-                getMessagesController().markMentionsAsRead(dialog_id);
-                hasAllMentionsLocal = true;
-                showMentionDownButton(false, true);
-                if (scrimPopupWindow != null) {
-                    scrimPopupWindow.dismiss();
-                }
-            });
-            dimBehindView(mentiondownButton, true);
-            scrimPopupWindow.setOnDismissListener(() -> {
-                scrimPopupWindow = null;
-                menuDeleteItem = null;
-                scrimPopupWindowItems = null;
-                chatLayoutManager.setCanScrollVertically(true);
-                dimBehindView(false);
-                if (chatActivityEnterView != null) {
-                    chatActivityEnterView.getEditField().setAllowDrawCursor(true);
-                }
-            });
+            }
+            newMentionsCount = 0;
+            getMessagesController().markMentionsAsRead(dialog_id);
+            hasAllMentionsLocal = true;
             if (!ExteraConfig.disableVibration) view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             return true;
         });
@@ -6948,28 +6931,12 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
             });
         });
         reactionsMentiondownButton.setOnLongClickListener(view -> {
-            scrimPopupWindow = ReadAllMentionsMenu.show(ReadAllMentionsMenu.TYPE_REACTIONS, getParentActivity(), contentView, view, getResourceProvider(), () -> {
-                for (int i = 0; i < messages.size(); i++) {
-                    messages.get(i).markReactionsAsRead();
-                }
-                reactionsMentionCount = 0;
-                updateReactionsMentionButton(true);
-                getMessagesController().markReactionsAsRead(dialog_id);
-                if (scrimPopupWindow != null) {
-                    scrimPopupWindow.dismiss();
-                }
-            });
-            dimBehindView(reactionsMentiondownButton, true);
-            scrimPopupWindow.setOnDismissListener(() -> {
-                scrimPopupWindow = null;
-                menuDeleteItem = null;
-                scrimPopupWindowItems = null;
-                chatLayoutManager.setCanScrollVertically(true);
-                dimBehindView(false);
-                if (chatActivityEnterView != null) {
-                    chatActivityEnterView.getEditField().setAllowDrawCursor(true);
-                }
-            });
+            for (int i = 0; i < messages.size(); i++) {
+                messages.get(i).markReactionsAsRead();
+            }
+            reactionsMentionCount = 0;
+            updateReactionsMentionButton(true);
+            getMessagesController().markReactionsAsRead(dialog_id);
             if (!ExteraConfig.disableVibration) view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             return false;
         });
