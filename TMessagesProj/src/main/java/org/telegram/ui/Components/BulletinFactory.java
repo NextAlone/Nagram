@@ -134,7 +134,7 @@ public final class BulletinFactory {
     public Bulletin createSimpleBulletin(int iconRawId, String text) {
         final Bulletin.LottieLayout layout = new Bulletin.LottieLayout(getContext(), resourcesProvider);
         layout.setAnimation(iconRawId, 36, 36);
-        layout.textView.setText(text);
+        layout.textView.setText(AndroidUtilities.replaceTags(text));
         layout.textView.setSingleLine(false);
         layout.textView.setMaxLines(2);
         return create(layout, Bulletin.DURATION_SHORT);

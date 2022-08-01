@@ -1498,22 +1498,31 @@ public class AndroidUtilities {
     public static Typeface getTypeface(String assetPath) {
         synchronized (typefaceCache) {
             if (ExteraConfig.useSystemFonts) {
-                if (assetPath.contains("medium") && assetPath.contains("italic")) {
-                    return Typeface.create("sans-serif-medium", Typeface.ITALIC);
-                }
-                if (assetPath.contains("medium")) {
-                    return Typeface.create("sans-serif-medium", Typeface.NORMAL);
-                }
-                if (assetPath.contains("italic")) {
-                    return Typeface.create((Typeface) null, Typeface.ITALIC);
-                }
                 if (assetPath.contains("mono")) {
                     return Typeface.MONOSPACE;
+                } else if (assetPath.contains("mw_bold")) {
+                    return Typeface.create(Typeface.SERIF, Typeface.BOLD);
+                } else if (Build.VERSION.SDK_INT >= 28) {
+                    if (assetPath.contains("medium") && assetPath.contains("italic")) {
+                        return Typeface.create(Typeface.SANS_SERIF, 500, true);
+                    } else if (assetPath.contains("medium")) {
+                        return Typeface.create(Typeface.SANS_SERIF, 500, false);
+                    } else if (assetPath.contains("italic")) {
+                        return Typeface.create(Typeface.SANS_SERIF, 400, true);
+                    } else {
+                        return Typeface.create(Typeface.SANS_SERIF, 400, false);
+                    }
+                } else {
+                    if (assetPath.contains("medium") && assetPath.contains("italic")) {
+                        return Typeface.create("sans-serif-medium", Typeface.ITALIC);
+                    } else if (assetPath.contains("medium")) {
+                        return Typeface.create("sans-serif-medium", Typeface.NORMAL);
+                    } else if (assetPath.contains("italic")) {
+                        return Typeface.create("sans-serif", Typeface.ITALIC);
+                    } else {
+                        return Typeface.create("sans-serif", Typeface.NORMAL);
+                    }
                 }
-                if (assetPath.contains("mw_bold")) {
-                    return Typeface.create("serif", Typeface.BOLD);
-                }
-                return Typeface.create((Typeface) null, Typeface.NORMAL);
             }
             if (!typefaceCache.containsKey(assetPath)) {
                 try {

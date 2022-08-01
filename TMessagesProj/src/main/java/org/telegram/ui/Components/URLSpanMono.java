@@ -56,7 +56,7 @@ public class URLSpanMono extends MetricAffectingSpan {
     public void updateDrawState(TextPaint p) {
         p.setTextSize(AndroidUtilities.dp(SharedConfig.fontSize - 1));
         if (currentType == 2) {
-            p.setColor(0xffffffff);
+            p.setColor(Theme.getColor(Theme.key_chats_message));
         } else if (currentType == 1) {
             p.setColor(Theme.getColor(Theme.key_chat_messageTextOut));
         } else {

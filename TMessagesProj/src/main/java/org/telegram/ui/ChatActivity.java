@@ -21570,7 +21570,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                             icons.add(R.drawable.msg_pin);
                         }
                         boolean canViewStats = false;
-                        if (message.messageOwner.views > 0 || message.messageOwner.forwards > 0) {
+                        if (message.messageOwner.views > 0 && message.messageOwner.forwards > 0) {
                             if (message.messageOwner.fwd_from != null && message.messageOwner.fwd_from.channel_post != 0) {
                                 TLRPC.Chat fwdChat = getMessagesController().getChat(message.messageOwner.fwd_from.from_id.channel_id);
                                 canViewStats = ChatObject.hasAdminRights(fwdChat);

@@ -8,7 +8,7 @@
     <!-- Main Menu (about) -->
     <string name="exteraPrivacy">Политика конфиденциальности и FAQ</string>
     <string name="Links">Ссылки</string>
-    <string name="AboutExteraDescription">Экспериментальный Telegram-клиент, основанный на официальном исходном коде Telegram</string>
+    <string name="AboutExteraDescription">Экспериментальный Telegram-клиент, основанный на официальном исходном коде Telegram!</string>
     <string name="Channel">Канал</string>
     <string name="Chats">Чаты</string>
     <string name="Crowdin">Перевод</string>
@@ -92,8 +92,9 @@
     <string name="Select">Выбрать</string>
 
     <string name="EnterID">Введите ID</string>
-    <string name="TrackSaved">Трек сохранен</string>
+    <string name="TrackSaved">Трек сохранен в **%1$s**.</string>
     <string name="ChannelToSaveDescription">Введите ID канала/чата/пользователя, куда будет сохраняться музыка.</string>
+    <string name="Unknown">Неизвестно</string>
 
     <string name="ConfirmCall">Подтверждение звонка</string>
     <string name="CallTo">Позвонить **%1$s**?</string>

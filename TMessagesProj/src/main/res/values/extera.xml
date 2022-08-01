@@ -97,8 +97,9 @@
     <string name="Select">Select</string>
 
     <string name="EnterID">Enter the ID</string>
-    <string name="TrackSaved">Track Saved</string>
+    <string name="TrackSaved">Track saved to **%1$s**.</string>
     <string name="ChannelToSaveDescription">Enter the ID of the channel/chat/user where the tracks will be saved</string>
+    <string name="Unknown">Unknown</string>
 
     <string name="ConfirmCall">Confirm call</string>
     <string name="CallTo">Call to **%1$s**?</string>

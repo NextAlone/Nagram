@@ -177,7 +177,7 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
             }
         }
         try {
-            if ((currentMessageObject.isVoice() || currentMessageObject.isRoundVideo())) {
+            if (currentMessageObject.isVoice() || currentMessageObject.isRoundVideo()) {
                 CharSequence duration = AndroidUtilities.formatDuration(currentMessageObject.getDuration(), false) + " / " + currentMessageObject.getMusicAuthor().replace('\n', ' ');
                 TextPaint paint = viewType == VIEW_TYPE_GLOBAL_SEARCH ? description2TextPaint : Theme.chat_contextResult_descriptionTextPaint;
                 duration = TextUtils.ellipsize(duration, paint, maxWidth, TextUtils.TruncateAt.END);

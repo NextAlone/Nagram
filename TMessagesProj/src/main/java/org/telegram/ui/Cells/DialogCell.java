@@ -1429,7 +1429,6 @@ public class DialogCell extends BaseCell {
                 }
             }
         }
-        nameString = nameString;
         int timeWidth;
         if (drawTime) {
             timeWidth = (int) Math.ceil(Theme.dialogs_timePaint.measureText(timeString));

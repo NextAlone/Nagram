@@ -1770,8 +1770,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 }
 
                 boolean speedVisible = playbackSpeedButton.getVisibility() == View.GONE ? false : true;
-                titleTextView.setText(messageObject.getMusicTitle(), !create && wasVisible && isMusic);
-                subtitleTextView.setText(messageObject.getMusicAuthor(), !create && wasVisible && isMusic);
+                titleTextView.setText(isMusic ? messageObject.getMusicTitle() : messageObject.getMusicAuthor(), !create && wasVisible && isMusic);
+                subtitleTextView.setText(isMusic ? messageObject.getMusicAuthor() : messageObject.getMusicTitle(), !create && wasVisible && isMusic);
 
                 coverContainer.setVisibility(isMusic ? VISIBLE : GONE);
                 nextButton.setVisibility(isMusic ? VISIBLE : GONE);

@@ -17,7 +17,7 @@ import com.exteragram.messenger.ExteraConfig;
 public class BuildVars {
 
     public static boolean DEBUG_VERSION = BuildConfig.BUILD_TYPE.equals("debug");
-    public static boolean LOGS_ENABLED = DEBUG_VERSION;
+    public static boolean LOGS_ENABLED = ExteraConfig.getLogging();
     public static boolean DEBUG_PRIVATE_VERSION = DEBUG_VERSION;
     public static boolean USE_CLOUD_STRINGS = true;
     public static boolean CHECK_UPDATES = false;

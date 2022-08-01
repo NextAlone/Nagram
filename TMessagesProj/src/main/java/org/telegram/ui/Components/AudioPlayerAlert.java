@@ -101,6 +101,7 @@ import org.telegram.ui.Components.UndoView;
 import com.exteragram.messenger.ExteraConfig;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -146,7 +147,6 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     private ActionBarMenuItem searchItem;
     private boolean blurredAnimationInProgress;
     private View[] buttons = new View[5];
-    private String ctsIdName;
 
     private boolean draggingSeekBar;
 
@@ -1070,8 +1070,8 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             bottomView.addView(likeButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP));
         }
 
-        String ctsId = Long.toString(ExteraConfig.channelToSave);
         likeButton.setOnLongClickListener(v -> {
+            Long uid = UserConfig.getInstance(currentAccount).getClientUserId();
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), resourcesProvider);
             builder.setTitle(LocaleController.getString("EnterID", R.string.EnterID));
             builder.setMessage(LocaleController.getString("ChannelToSaveDescription", R.string.ChannelToSaveDescription));
@@ -1082,7 +1082,8 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                 }
             };
             editEnterID.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-            editEnterID.setText(ctsId);
+            if (ExteraConfig.channelToSave == 0) ExteraConfig.setChannelToSave(uid);
+            editEnterID.setText(Long.toString(ExteraConfig.channelToSave));
             editEnterID.setTextColor(getThemedColor(Theme.key_dialogTextBlack));
             editEnterID.setHintText("ID");
             editEnterID.setHeaderHintColor(getThemedColor(Theme.key_windowBackgroundWhiteBlueHeader));
@@ -1097,20 +1098,14 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             builder.setView(editEnterID);
             builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
                 try {
-                    if (Long.valueOf(editEnterID.getText().toString()) == 0) {
-                        ExteraConfig.changeChannelToSave(UserConfig.getInstance(currentAccount).getClientUserId());
-                    } else {
-                        ExteraConfig.changeChannelToSave(Long.valueOf(editEnterID.getText().toString()));
-                    }
+                    ExteraConfig.setChannelToSave(Long.valueOf(editEnterID.getText().toString()));
                 } catch (NumberFormatException exception) {
-                    ExteraConfig.changeChannelToSave(UserConfig.getInstance(currentAccount).getClientUserId());
+                    ExteraConfig.setChannelToSave(uid);
                     return;
                 }
-                BulletinFactory.of((FrameLayout) containerView, resourcesProvider).createSimpleBulletin(R.raw.chats_infotip, LocaleController.getString("RestartRequired", R.string.RestartRequired)).show();
             });
             builder.setNeutralButton(LocaleController.getString("Default", R.string.Default), (dialogInterface, i) -> {
-                ExteraConfig.changeChannelToSave(UserConfig.getInstance(currentAccount).getClientUserId());
-                BulletinFactory.of((FrameLayout) containerView, resourcesProvider).createSimpleBulletin(R.raw.chats_infotip, LocaleController.getString("RestartRequired", R.string.RestartRequired)).show();
+                ExteraConfig.setChannelToSave(uid);
             });
             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
             builder.show().setOnShowListener(dialog -> {
@@ -1133,11 +1128,27 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         });
         likeButton.setOnClickListener(v -> {
             v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-            final ArrayList<MessageObject> likedTrack = new ArrayList<>();
-            likedTrack.add(MediaController.getInstance().getPlayingMessageObject());
-            if (ExteraConfig.channelToSave == 0) ExteraConfig.changeChannelToSave(UserConfig.getInstance(currentAccount).getClientUserId());
-            SendMessagesHelper.getInstance(currentAccount).sendMessage(likedTrack, ExteraConfig.channelToSave, true, true, false, 0);
-            BulletinFactory.of((FrameLayout) containerView, resourcesProvider).createSimpleBulletin(R.raw.ic_save_to_music, LocaleController.getString("TrackSaved", R.string.TrackSaved)).show();
+            if (ExteraConfig.channelToSave == 0) ExteraConfig.setChannelToSave(UserConfig.getInstance(currentAccount).getClientUserId());
+            ArrayList<MessageObject> liked = new ArrayList<MessageObject>(Arrays.asList(MediaController.getInstance().getPlayingMessageObject()));
+            SendMessagesHelper.getInstance(currentAccount).sendMessage(liked, ExteraConfig.channelToSave, true, true, false, 0);
+
+            long did = ExteraConfig.channelToSave;
+            String name = LocaleController.getString("Unknown", R.string.Unknown);
+            if (DialogObject.isEncryptedDialog(did)) {
+                TLRPC.EncryptedChat encryptedChat = MessagesController.getInstance(currentAccount).getEncryptedChat(DialogObject.getEncryptedChatId(did));
+                if (encryptedChat != null) {
+                    TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(encryptedChat.user_id);
+                    if (user != null) name = ContactsController.formatName(user.first_name, user.last_name);
+                }
+            } else if (DialogObject.isUserDialog(did)) {
+                TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(did);
+                if (user != null) name = ContactsController.formatName(user.first_name, user.last_name);
+            } else {
+                TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-did);
+                if (chat != null) name = chat.title;
+            }
+            name = did == UserConfig.getInstance(currentAccount).getClientUserId() ? LocaleController.getString("SavedMessages", R.string.SavedMessages) : name;
+            BulletinFactory.of((FrameLayout) containerView, resourcesProvider).createSimpleBulletin(R.raw.ic_save_to_music, LocaleController.formatString("TrackSaved", R.string.TrackSaved, name)).show();
         });
         
         optionsButton = new ActionBarMenuItem(context, null, 0, iconColor, false, resourcesProvider);
@@ -2031,13 +2042,11 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                 durationTextView.setText(duration != 0 ? AndroidUtilities.formatShortDuration(duration) : "-:--");
             }
 
-            /*if (duration > 60 * 10) {
+            if (duration > 1800) {
                 playbackSpeedButton.setVisibility(View.VISIBLE);
             } else {
                 playbackSpeedButton.setVisibility(View.GONE);
-            }*/
-
-            playbackSpeedButton.setVisibility(View.VISIBLE);
+            }
 
             if (!sameMessageObject) {
                 preloadNeighboringThumbs();

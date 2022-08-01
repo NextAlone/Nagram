@@ -798,7 +798,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 if (child instanceof DatabaseMigrationHint) {
                     int contentWidthSpec = View.MeasureSpec.makeMeasureSpec(widthSize, View.MeasureSpec.EXACTLY);
                     int h = View.MeasureSpec.getSize(heightMeasureSpec) + keyboardSize;
-                    int contentHeightSpec = View.MeasureSpec.makeMeasureSpec(Math.max(AndroidUtilities.dp(10), h - inputFieldHeight + AndroidUtilities.dp(2) - (onlySelect && initialDialogsType != 3 ? 0 : actionBar.getMeasuredHeight()) - topPadding) - (searchTabsView == null ? 0 : AndroidUtilities.dp(44)), View.MeasureSpec.EXACTLY);
+                    int contentHeightSpec = View.MeasureSpec.makeMeasureSpec(Math.max(AndroidUtilities.dp(10), h - inputFieldHeight + AndroidUtilities.dp(2) - actionBar.getMeasuredHeight()), View.MeasureSpec.EXACTLY);
                     child.measure(contentWidthSpec, contentHeightSpec);
                 } else if (child instanceof ViewPage) {
                     int contentWidthSpec = View.MeasureSpec.makeMeasureSpec(widthSize, View.MeasureSpec.EXACTLY);
@@ -806,7 +806,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     if (filterTabsView != null && filterTabsView.getVisibility() == VISIBLE) {
                         h = heightSize - inputFieldHeight + AndroidUtilities.dp(2) - AndroidUtilities.dp(44) - topPadding;
                     } else {
-                        h = heightSize - inputFieldHeight + AndroidUtilities.dp(2) - ((onlySelect && initialDialogsType != 3) ? 0 : actionBar.getMeasuredHeight()) - topPadding;
+                        h = heightSize - inputFieldHeight + AndroidUtilities.dp(2) - (onlySelect && initialDialogsType != 3 ? 0 : actionBar.getMeasuredHeight()) - topPadding;
                     }
 
                     if (filtersTabAnimator != null && filterTabsView != null && filterTabsView.getVisibility() == VISIBLE) {
@@ -822,7 +822,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 } else if (child == searchViewPager) {
                     searchViewPager.setTranslationY(0);
                     int contentWidthSpec = View.MeasureSpec.makeMeasureSpec(widthSize, View.MeasureSpec.EXACTLY);
-                    int contentHeightSpec = View.MeasureSpec.makeMeasureSpec(Math.max(AndroidUtilities.dp(10), heightSize - inputFieldHeight + AndroidUtilities.dp(2) - (onlySelect && initialDialogsType != 3 ? 0 : actionBar.getMeasuredHeight()) - topPadding), View.MeasureSpec.EXACTLY);
+                    int h = View.MeasureSpec.getSize(heightMeasureSpec) + keyboardSize;
+                    int contentHeightSpec = View.MeasureSpec.makeMeasureSpec(Math.max(AndroidUtilities.dp(10), h - inputFieldHeight + AndroidUtilities.dp(2) - (onlySelect && initialDialogsType != 3 ? 0 : actionBar.getMeasuredHeight()) - topPadding) - (searchTabsView == null ? 0 : AndroidUtilities.dp(44)), View.MeasureSpec.EXACTLY);
                     child.measure(contentWidthSpec, contentHeightSpec);
                     child.setPivotX(child.getMeasuredWidth() / 2);
                 } else if (commentView != null && commentView.isPopupView(child)) {
@@ -1354,6 +1355,25 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         @Override
         protected void onMeasure(int widthSpec, int heightSpec) {
             int t = 0;
+            if (initialDialogsType == 3 || !onlySelect) {
+                if (filterTabsView != null && filterTabsView.getVisibility() == VISIBLE) {
+                    t = AndroidUtilities.dp(44);
+                } else {
+                    t = actionBar.getMeasuredHeight();
+                }
+            }
+
+            int pos = parentPage.layoutManager.findFirstVisibleItemPosition();
+            if (pos != RecyclerView.NO_POSITION && !dialogsListFrozen && parentPage.itemTouchhelper.isIdle()) {
+                RecyclerView.ViewHolder holder = parentPage.listView.findViewHolderForAdapterPosition(pos);
+                if (holder != null) {
+                    int top = holder.itemView.getTop();
+
+                    ignoreLayout = true;
+                    parentPage.layoutManager.scrollToPositionWithOffset(pos, (int) (top - lastListPadding + scrollAdditionalOffset));
+                    ignoreLayout = false;
+                }
+            }
             if (initialDialogsType == 3 || !onlySelect) {
                 ignoreLayout = true;
                 if (filterTabsView != null && filterTabsView.getVisibility() == VISIBLE) {

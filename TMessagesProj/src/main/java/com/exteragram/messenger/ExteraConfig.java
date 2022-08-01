@@ -316,7 +316,7 @@ public class ExteraConfig {
         }
     }
 
-    public static void changeChannelToSave(long id) {
+    public static void setChannelToSave(long id) {
         SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
         editor.putLong("channelToSave", channelToSave = id).apply();
     }
@@ -387,5 +387,10 @@ public class ExteraConfig {
         SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Activity.MODE_PRIVATE).edit();
         editor.putBoolean("logsEnabled", BuildVars.LOGS_ENABLED ^= true).apply();
         if (!BuildVars.LOGS_ENABLED) FileLog.cleanupLogs();
+    }
+
+    public static boolean getLogging() {
+        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Activity.MODE_PRIVATE);
+        return sharedPreferences.getBoolean("logsEnabled", BuildVars.DEBUG_VERSION);
     }
 }

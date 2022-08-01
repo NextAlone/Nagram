@@ -2009,7 +2009,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         };
         backspaceButton.setHapticFeedbackEnabled(true);
         backspaceButton.setImageResource(R.drawable.smiles_tab_clear);
-        backspaceButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_chats_actionIcon), PorterDuff.Mode.MULTIPLY));
+        backspaceButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_chat_emojiPanelBackspace), PorterDuff.Mode.MULTIPLY));
         backspaceButton.setScaleType(ImageView.ScaleType.CENTER);
         backspaceButton.setContentDescription(LocaleController.getString("AccDescrBackspace", R.string.AccDescrBackspace));
         backspaceButton.setFocusable(true);
@@ -2196,6 +2196,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             }
             backspaceButton.setPadding(0, 0, AndroidUtilities.dp(2), 0);
             backspaceButton.setBackground(drawable);
+            backspaceButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_chats_actionIcon), PorterDuff.Mode.MULTIPLY));
             backspaceButton.setContentDescription(LocaleController.getString("AccDescrBackspace", R.string.AccDescrBackspace));
             backspaceButton.setFocusable(true);
             bottomTabContainer.addView(backspaceButton, LayoutHelper.createFrame((Build.VERSION.SDK_INT >= 21 ? 40 : 44), (Build.VERSION.SDK_INT >= 21 ? 40 : 44), Gravity.LEFT | Gravity.TOP, 10, 0, 10, 0));
@@ -3585,10 +3586,12 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             gifTabs.setBackgroundColor(getThemedColor(Theme.key_chat_emojiPanelBackground));
         }
         if (backspaceButton != null) {
-            backspaceButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_chats_actionIcon), PorterDuff.Mode.MULTIPLY));
             if (emojiSearchField == null) {
                 Theme.setSelectorDrawableColor(backspaceButton.getBackground(), getThemedColor(Theme.key_chat_emojiPanelBackground), false);
                 Theme.setSelectorDrawableColor(backspaceButton.getBackground(), getThemedColor(Theme.key_chat_emojiPanelBackground), true);
+                backspaceButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_chats_actionIcon), PorterDuff.Mode.MULTIPLY));
+            } else {
+                backspaceButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_chat_emojiPanelBackspace), PorterDuff.Mode.MULTIPLY));
             }
         }
         if (stickerSettingsButton != null) {

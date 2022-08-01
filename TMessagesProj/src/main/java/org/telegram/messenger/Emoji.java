@@ -281,12 +281,6 @@ public class Emoji {
                 canvas.drawText(emoji,  0, emoji.length(), b.left, b.bottom - b.height() * 0.225f, textPaint);
                 return;
             }
-            
-            if (!isLoaded()) {
-                loadEmoji(info.page, info.page2);
-                canvas.drawRect(getBounds(), placeholderPaint);
-                return;
-            }
 
             if (!canvas.quickReject(b.left, b.top, b.right, b.bottom, Canvas.EdgeType.AA)) {
                 canvas.drawBitmap(emojiBmp[info.page][info.page2], null, b, paint);
