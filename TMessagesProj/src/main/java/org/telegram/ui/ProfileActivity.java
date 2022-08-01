@@ -2709,23 +2709,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             listView.stopScroll();
             if (position == idRow && did != 0) {
                 try {
-                    android.content.ClipboardManager clipboard = (android.content.ClipboardManager) ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                    android.content.ClipData clip = android.content.ClipData.newPlainText("label", did + "");
-                    clipboard.setPrimaryClip(clip);
+                    AndroidUtilities.addToClipboard(did + "");
                     BulletinFactory.of(this).createCopyBulletin(LocaleController.formatString("TextCopied", R.string.TextCopied)).show();
-                } catch (Exception e) {
-                    FileLog.e(e);
-                }
+                } catch (Exception ignore) {}
                 return;
             } else if (position == dcRow) {
                 try {
-                    android.content.ClipboardManager clipboard = (android.content.ClipboardManager) ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                    android.content.ClipData clip = android.content.ClipData.newPlainText("label", ddc + "");
-                    clipboard.setPrimaryClip(clip);
+                    AndroidUtilities.addToClipboard(ddc + "");
                     BulletinFactory.of(this).createCopyBulletin(LocaleController.formatString("TextCopied", R.string.TextCopied)).show();
-                } catch (Exception e) {
-                    FileLog.e(e);
-                }
+                } catch (Exception ignore) {}
                 return;
             } else if (position == settingsKeyRow) {
                 Bundle args = new Bundle();
@@ -4126,7 +4118,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 return false;
             }
             try {
-                android.content.ClipboardManager clipboard = (android.content.ClipboardManager) ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE);
                 String text;
                 if (userId != 0) {
                     text = "@" + username;
@@ -4135,8 +4126,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     text = "https://" + MessagesController.getInstance(UserConfig.selectedAccount).linkPrefix + "/" + username;
                     BulletinFactory.of(this).createCopyLinkBulletin(LocaleController.getString("LinkCopied", R.string.LinkCopied), resourcesProvider).show();
                 }
-                android.content.ClipData clip = android.content.ClipData.newPlainText("label", text);
-                clipboard.setPrimaryClip(clip);
+                AndroidUtilities.addToClipboard(text);
             } catch (Exception e) {
                 FileLog.e(e);
             }
@@ -4177,9 +4167,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     }
                 } else if (i == 1) {
                     try {
-                        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                        android.content.ClipData clip = android.content.ClipData.newPlainText("label", "+" + user.phone);
-                        clipboard.setPrimaryClip(clip);
+                        AndroidUtilities.addToClipboard("+" + user.phone);
                         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
                             BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("PhoneCopied", R.string.PhoneCopied)).show();
                         }
