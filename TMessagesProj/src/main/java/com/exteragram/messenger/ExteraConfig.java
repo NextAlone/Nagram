@@ -57,6 +57,7 @@ public class ExteraConfig {
     public static boolean disableJumpToNextChannel;
     public static boolean dateOfForwardedMsg;
     public static boolean showMessageID;
+    public static boolean showActionTimestamps;
     public static boolean zalgoFilter;
 
     public static boolean rearVideoMessages;
@@ -117,6 +118,7 @@ public class ExteraConfig {
             disableGreetingSticker = preferences.getBoolean("disableGreetingSticker", false);
             dateOfForwardedMsg = preferences.getBoolean("dateOfForwardedMsg", false);
             showMessageID = preferences.getBoolean("showMessageID", false);
+            showActionTimestamps = preferences.getBoolean("showActionTimestamps", true);
             zalgoFilter = preferences.getBoolean("zalgoFilter", true);
 
             rearVideoMessages = preferences.getBoolean("rearVideoMessages", false);
@@ -392,5 +394,10 @@ public class ExteraConfig {
     public static boolean getLogging() {
         SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("systemConfig", Activity.MODE_PRIVATE);
         return sharedPreferences.getBoolean("logsEnabled", BuildVars.DEBUG_VERSION);
+    }
+
+    public static void toggleShowActionTimestamps() {
+        SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
+        editor.putBoolean("showActionTimestamps", showActionTimestamps ^= true).apply();
     }
 }

@@ -58,6 +58,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class ChatActionCell extends BaseCell implements DownloadController.FileDownloadProgressListener, NotificationCenter.NotificationCenterDelegate {
 
     @Override
@@ -506,6 +508,12 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
                 }
             } else {
                 text = currentMessageObject.messageText;
+                if (currentMessageObject.messageOwner != null && ExteraConfig.showActionTimestamps) {
+                    if (text.charAt(text.length() - 1) != ':' && (currentMessageObject.currentEvent != null || currentMessageObject.messageOwner.action != null)) {
+                        long date = currentMessageObject.messageOwner.date;
+                        text += " " + LocaleController.formatString("TodayAtFormatted", R.string.TodayAtFormatted, LocaleController.getInstance().formatterDay.format(date * 1000));
+                    }
+                }
             }
         } else {
             text = customText;

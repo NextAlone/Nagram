@@ -74,6 +74,7 @@ public class ChatsPreferencesEntry extends BaseFragment implements NotificationC
     private int disableJumpToNextChannelRow;
     private int dateOfForwardedMsgRow;
     private int showMessageIDRow;
+    private int showActionTimestampsRow;
     private int zalgoFilterRow;
     private int zalgoFilterInfoRow;
 
@@ -307,6 +308,12 @@ public class ChatsPreferencesEntry extends BaseFragment implements NotificationC
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.showMessageID);
                 }
+            } else if (position == showActionTimestampsRow) {
+                ExteraConfig.toggleShowActionTimestamps();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(ExteraConfig.showActionTimestamps);
+                }
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (position == zalgoFilterRow) {
                 ExteraConfig.toggleZalgoFilter();
                 if (view instanceof TextCheckCell) {
@@ -373,6 +380,7 @@ public class ChatsPreferencesEntry extends BaseFragment implements NotificationC
         disableJumpToNextChannelRow = rowCount++;
         dateOfForwardedMsgRow = rowCount++;
         showMessageIDRow = rowCount++;
+        showActionTimestampsRow = rowCount++;
         zalgoFilterRow = rowCount++;
         zalgoFilterInfoRow = rowCount++;
 
@@ -459,6 +467,8 @@ public class ChatsPreferencesEntry extends BaseFragment implements NotificationC
                         textCheckCell.setTextAndCheck(LocaleController.getString("DateOfForwardedMsg", R.string.DateOfForwardedMsg), ExteraConfig.dateOfForwardedMsg, true);
                     } else if (position == showMessageIDRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("ShowMessageID", R.string.ShowMessageID), ExteraConfig.showMessageID, true);
+                    } else if (position == showActionTimestampsRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString("ShowActionTimestamps", R.string.ShowActionTimestamps), ExteraConfig.showActionTimestamps, true);
                     } else if (position == zalgoFilterRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("ZalgoFilter", R.string.ZalgoFilter), ExteraConfig.zalgoFilter, false);
                     } else if (position == rearVideoMessagesRow) {
@@ -536,7 +546,7 @@ public class ChatsPreferencesEntry extends BaseFragment implements NotificationC
             } else if (position == hideStickerTimeRow || position == unlimitedRecentStickersRow || position == premiumAutoPlaybackRow || position == sendMessageBeforeSendStickerRow ||
                       position == hideSendAsChannelRow || position == hideKeyboardOnScrollRow || position == disableReactionsRow ||
                       position == disableGreetingStickerRow || position == disableJumpToNextChannelRow ||
-                      position == dateOfForwardedMsgRow || position == showMessageIDRow || position == zalgoFilterRow || position == rearVideoMessagesRow ||
+                      position == dateOfForwardedMsgRow || position == showMessageIDRow || position == showActionTimestampsRow || position == zalgoFilterRow || position == rearVideoMessagesRow ||
                       position == disableCameraRow || position == disableProximityEventsRow || position == pauseOnMinimizeRow ||
                       position == disablePlaybackRow) {
                 return 3;

@@ -71,6 +71,7 @@
     <string name="DisableJumpToNextChannel">Disable \"Jump to next channel\"</string>
     <string name="DateOfForwardedMsg">Show date of forwarded message</string>
     <string name="ShowMessageID">Show message ID</string>
+    <string name="ShowActionTimestamps">Show timestamps for actions</string>
     <string name="ZalgoFilter">Filter \"Zalgo\" symbols</string>
     <string name="ZalgoFilterInfo">All \"Z̷͍͌ā̸̜l̸̞̂g̷̝͘o̶̩̓\" symbols in nicknames or messages will be removed. Messages cache will be cleared.</string>
 
