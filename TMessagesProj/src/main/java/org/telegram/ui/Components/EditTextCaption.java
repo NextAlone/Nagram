@@ -354,6 +354,10 @@ public class EditTextCaption extends EditTextBoldCursor {
         } else if (itemId == R.id.menu_italic) {
             makeSelectedItalic();
             return true;
+        } else if (itemId == R.id.menu_bold_italic) {
+            makeSelectedBold();
+            makeSelectedItalic();
+            return true;
         } else if (itemId == R.id.menu_mono) {
             makeSelectedMono();
             return true;
@@ -488,6 +492,7 @@ public class EditTextCaption extends EditTextBoldCursor {
             infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(R.id.menu_spoiler, LocaleController.getString("Spoiler", R.string.Spoiler)));
             infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(R.id.menu_bold, LocaleController.getString("Bold", R.string.Bold)));
             infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(R.id.menu_italic, LocaleController.getString("Italic", R.string.Italic)));
+            infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(R.id.menu_bold_italic, LocaleController.getString("BoldItalic", R.string.BoldItalic)));
             infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(R.id.menu_mono, LocaleController.getString("Mono", R.string.Mono)));
             infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(R.id.menu_strike, LocaleController.getString("Strike", R.string.Strike)));
             infoCompat.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(R.id.menu_underline, LocaleController.getString("Underline", R.string.Underline)));

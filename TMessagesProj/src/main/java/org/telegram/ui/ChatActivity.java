@@ -1328,6 +1328,7 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
     private final static int text_strike = 55;
     private final static int text_underline = 56;
     private final static int text_spoiler = 57;
+    private final static int text_bold_italic = 58;
 
     private final static int search = 40;
 
@@ -2466,6 +2467,12 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
                         chatActivityEnterView.getEditField().setSelectionOverride(editTextStart, editTextEnd);
                         chatActivityEnterView.getEditField().makeSelectedItalic();
                     }
+                } else if (id == text_bold_italic) {
+                    if (chatActivityEnterView != null) {
+                        chatActivityEnterView.getEditField().setSelectionOverride(editTextStart, editTextEnd);
+                        chatActivityEnterView.getEditField().makeSelectedItalic();
+                        chatActivityEnterView.getEditField().makeSelectedBold();
+                    }
                 } else if (id == text_spoiler) {
                     if (chatActivityEnterView != null) {
                         chatActivityEnterView.getEditField().setSelectionOverride(editTextStart, editTextEnd);
@@ -2804,6 +2811,9 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
         stringBuilder = new SpannableStringBuilder(LocaleController.getString("Italic", R.string.Italic));
         stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         editTextItem.addSubItem(text_italic, stringBuilder);
+        stringBuilder = new SpannableStringBuilder(LocaleController.getString("BoldItalic", R.string.BoldItalic));
+        stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmediumitalic.ttf")), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        editTextItem.addSubItem(text_bold_italic, stringBuilder);
         stringBuilder = new SpannableStringBuilder(LocaleController.getString("Mono", R.string.Mono));
         stringBuilder.setSpan(new TypefaceSpan(Typeface.MONOSPACE), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         editTextItem.addSubItem(text_mono, stringBuilder);
@@ -18807,6 +18817,9 @@ ChatActivity extends BaseFragment implements NotificationCenter.NotificationCent
         stringBuilder = new SpannableStringBuilder(LocaleController.getString("Italic", R.string.Italic));
         stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/ritalic.ttf")), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         menu.add(R.id.menu_groupbolditalic, R.id.menu_italic, order++, stringBuilder);
+        stringBuilder = new SpannableStringBuilder(LocaleController.getString("BoldItalic", R.string.BoldItalic));
+        stringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmediumitalic.ttf")), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        menu.add(R.id.menu_groupbolditalic, R.id.menu_bold_italic, order++, stringBuilder);
         stringBuilder = new SpannableStringBuilder(LocaleController.getString("Mono", R.string.Mono));
         stringBuilder.setSpan(new TypefaceSpan(Typeface.MONOSPACE), 0, stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         menu.add(R.id.menu_groupbolditalic, R.id.menu_mono, order++, stringBuilder);

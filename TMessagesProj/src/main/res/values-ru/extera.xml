@@ -87,6 +87,8 @@
     <string name="Halloween">Хэллоуин</string>
 
     <!-- Other -->
+    <string name="BoldItalic">Жирный курсив</string>
+
     <string name="OpenPremiumBot">Открыть официального бота</string>
 
     <string name="Select">Выбрать</string>
