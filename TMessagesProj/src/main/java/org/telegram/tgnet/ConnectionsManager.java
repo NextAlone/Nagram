@@ -416,8 +416,6 @@ SharedPreferences mainPreferences;
 
         Utilities.stageQueue.postRunnable(() -> {
 
-            SharedConfig.loadProxyList();
-
             if (SharedConfig.proxyEnabled && SharedConfig.currentProxy != null) {
                 if (SharedConfig.currentProxy instanceof SharedConfig.ExternalSocks5Proxy) {
                     ((SharedConfig.ExternalSocks5Proxy) SharedConfig.currentProxy).start();
