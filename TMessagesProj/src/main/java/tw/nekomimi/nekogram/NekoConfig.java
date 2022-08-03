@@ -185,6 +185,7 @@ public class NekoConfig {
     public static ConfigItem useMediaStreamInVoip = addConfig("UseMediaStreamInVoip", configTypeBool, false);
     public static ConfigItem customAudioBitrate = addConfig("customAudioBitrate", configTypeInt, 32);
     public static ConfigItem disableGroupVoipAudioProcessing = addConfig("disableGroupVoipAudioProcessing", configTypeBool, false);
+    public static ConfigItem enhancedFileLoader = addConfig("enhancedFileLoader", configTypeBool, false);
 
     static {
         loadConfig(false);

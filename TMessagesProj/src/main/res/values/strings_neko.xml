@@ -145,4 +145,5 @@
     <string name="forceBlurInChat">Force enable Chat Blur</string>
     <string name="ChatBlurAlphaValue">Chat Blur Alpha</string>
     <string name="disablePremiumStickerAnimation">Disable premium sticker animation</string>
+    <string name="enhancedFileLoader">Enhance Download speed</string>
 </resources>
