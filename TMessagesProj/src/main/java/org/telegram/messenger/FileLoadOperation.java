@@ -1745,6 +1745,7 @@ public class FileLoadOperation {
     }
 
     protected void onFail(boolean thread, final int reason) {
+        FileLog.e(new Exception("file load failed"));
         cleanup();
         state = reason == 1 ? stateCanceled : stateFailed;
         if (delegate != null) {
