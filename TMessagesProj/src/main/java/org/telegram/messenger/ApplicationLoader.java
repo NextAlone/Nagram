@@ -273,9 +273,12 @@ public class ApplicationLoader extends Application {
             }
         } else {
             applicationContext.stopService(new Intent(applicationContext, NotificationsService.class));
-            PendingIntent pIntent = PendingIntent.getService(applicationContext, 0, new Intent(applicationContext, NotificationsService.class), Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ? PendingIntent.FLAG_MUTABLE : 0);
-            AlarmManager alarm = (AlarmManager)applicationContext.getSystemService(Context.ALARM_SERVICE);
-            alarm.cancel(pIntent);
+            try {
+                PendingIntent pIntent = PendingIntent.getService(applicationContext, 0, new Intent(applicationContext, NotificationsService.class), Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ? PendingIntent.FLAG_MUTABLE : 0);
+                AlarmManager alarm = (AlarmManager) applicationContext.getSystemService(Context.ALARM_SERVICE);
+                alarm.cancel(pIntent);
+            } catch (Throwable ignore) {
+            }
         }
     }
 
