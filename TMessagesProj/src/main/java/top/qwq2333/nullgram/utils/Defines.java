@@ -78,6 +78,7 @@ public class Defines {
     public static final String hidePremiumStickerAnim = "hidePremiumStickerAnim";
     public static final String fastSpeedUpload = "fastSpeedUpload";
     public static final String showTabsOnForward = "showTabsOnForward";
+    public static final String modifyDownloadSpeed = "modifyDownloadSpeed";
 
     // Custom API
     public static final String customAPI = "customAPI";

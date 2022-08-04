@@ -26,6 +26,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipException;
 
+import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.utils.Defines;
+
 public class FileLoadOperation {
 
     protected static class RequestInfo {
@@ -66,10 +69,11 @@ public class FileLoadOperation {
     private final static int stateFinished = 3;
 
     private int downloadChunkSize = 1024 * 32;
-    private int downloadChunkSizeBig = 1024 * 128;
+    private int downloadChunkSizeBig = 1024 * ConfigManager.getIntOrDefault(Defines.modifyDownloadSpeed, 512);
+    ;
     private int cdnChunkCheckSize = 1024 * 128;
-    private int maxDownloadRequests = 4;
-    private int maxDownloadRequestsBig = 4;
+    private int maxDownloadRequests = 8;
+    private int maxDownloadRequestsBig = 8;
     private int bigFileSizeFrom = 10 * 1024 * 1024;
     private int maxCdnParts = (int) (FileLoader.DEFAULT_MAX_FILE_SIZE / downloadChunkSizeBig);
 
@@ -182,22 +186,22 @@ public class FileLoadOperation {
 
     public interface FileLoadOperationDelegate {
         void didFinishLoadingFile(FileLoadOperation operation, File finalFile);
+
         void didFailedLoadingFile(FileLoadOperation operation, int state);
+
         void didChangedLoadProgress(FileLoadOperation operation, long uploadedSize, long totalSize);
+
         void saveFilePath(FilePathDatabase.PathData pathSaveData, File cacheFileFinal);
+
         boolean hasAnotherRefOnFile(String path);
     }
 
     private void updateParams() {
-        if (MessagesController.getInstance(currentAccount).getfileExperimentalParams) {
-            downloadChunkSizeBig = 1024 * 512;
-            maxDownloadRequests = 8;
-            maxDownloadRequestsBig = 8;
-        } else {
-            downloadChunkSizeBig = 1024 * 128;
-            maxDownloadRequests = 4;
-            maxDownloadRequestsBig = 4;
-        }
+
+        downloadChunkSizeBig = 1024 * ConfigManager.getIntOrDefault(Defines.modifyDownloadSpeed, 512);
+        maxDownloadRequests = 8;
+        maxDownloadRequestsBig = 8;
+
         maxCdnParts = (int) (FileLoader.DEFAULT_MAX_FILE_SIZE / downloadChunkSizeBig);
     }
 
@@ -936,7 +940,7 @@ public class FileLoadOperation {
                 } else {
                     long totalDownloadedLen = cacheFileTemp.length();
                     if (fileNameIv != null && (totalDownloadedLen % currentDownloadChunkSize) != 0) {
-                        requestedBytesCount =  0;
+                        requestedBytesCount = 0;
                     } else {
                         requestedBytesCount = downloadedBytes = (cacheFileTemp.length()) / ((long) currentDownloadChunkSize) * currentDownloadChunkSize;
                     }
@@ -1791,10 +1795,10 @@ public class FileLoadOperation {
 
     protected void startDownloadRequest() {
         if (paused || reuploadingCdn ||
-                state != stateDownloading ||
-                streamPriorityStartOffset == 0 && (
-                        !nextPartWasPreloaded && (requestInfos.size() + delayedRequestInfos.size() >= currentMaxDownloadRequests) ||
-                        isPreloadVideoOperation && (requestedBytesCount > preloadMaxBytes || moovFound != 0 && requestInfos.size() > 0))) {
+            state != stateDownloading ||
+            streamPriorityStartOffset == 0 && (
+                !nextPartWasPreloaded && (requestInfos.size() + delayedRequestInfos.size() >= currentMaxDownloadRequests) ||
+                    isPreloadVideoOperation && (requestedBytesCount > preloadMaxBytes || moovFound != 0 && requestInfos.size() > 0))) {
             return;
         }
         int count = 1;

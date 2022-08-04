@@ -14,8 +14,12 @@ import org.telegram.ui.Cells.NotificationsCheckCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 
+import java.util.ArrayList;
+
 import top.qwq2333.nullgram.config.ConfigManager;
+import top.qwq2333.nullgram.ui.PopupBuilder;
 import top.qwq2333.nullgram.utils.Defines;
+import top.qwq2333.nullgram.utils.Log;
 
 @SuppressLint("NotifyDataSetChanged")
 public class ExperimentSettingActivity extends BaseActivity {
@@ -34,6 +38,7 @@ public class ExperimentSettingActivity extends BaseActivity {
     private int premiumRow;
     private int hidePremiumStickerAnimRow;
     private int fastSpeedUploadRow;
+    private int modifyDownloadSpeedRow;
     private int premium2Row;
 
     private int experiment2Row;
@@ -95,6 +100,18 @@ public class ExperimentSettingActivity extends BaseActivity {
             if (view instanceof TextCheckCell) {
                 ((TextCheckCell) view).setChecked(ConfigManager.getBooleanOrFalse(Defines.fastSpeedUpload));
             }
+        } else if (position == modifyDownloadSpeedRow) {
+            int[] speeds = new int[]{128, 256, 384, 512, 768, 1024};
+            ArrayList<String> speedsStr = new ArrayList<>();
+            for (int speed : speeds) {
+                speedsStr.add(speed + " Kb/s");
+            }
+            PopupBuilder.show(speedsStr, LocaleController.getString("modifyDownloadSpeed", R.string.modifyDownloadSpeed), speedsStr.indexOf(ConfigManager.getIntOrDefault(Defines.modifyDownloadSpeed, 512) + " Kb/s"), getParentActivity(), view, i -> {
+                Log.i("speeds[i]: " + speeds[i]);
+                Log.i("i: " + i);
+                ConfigManager.putInt(Defines.modifyDownloadSpeed, speeds[i]);
+                listAdapter.notifyItemChanged(modifyDownloadSpeedRow);
+            });
         }
 
     }
@@ -135,6 +152,7 @@ public class ExperimentSettingActivity extends BaseActivity {
             premiumRow = rowCount++;
             hidePremiumStickerAnimRow = rowCount++;
             fastSpeedUploadRow = rowCount++;
+            modifyDownloadSpeedRow = rowCount++;
         }
 
         experiment2Row = rowCount++;
@@ -180,6 +198,9 @@ public class ExperimentSettingActivity extends BaseActivity {
                 case 2: {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                    if (position == modifyDownloadSpeedRow) {
+                        textCell.setTextAndValue(LocaleController.getString("modifyDownloadSpeed", R.string.modifyDownloadSpeed), String.valueOf(ConfigManager.getIntOrDefault(Defines.modifyDownloadSpeed, 128) + " Kb/s"), false);
+                    }
                     break;
                 }
                 case 3: {
@@ -233,6 +254,8 @@ public class ExperimentSettingActivity extends BaseActivity {
         public int getItemViewType(int position) {
             if (position == experiment2Row || position == premium2Row) {
                 return 1;
+            } else if (position == modifyDownloadSpeedRow) {
+                return 2;
             } else if (position == experimentRow || position == premiumRow) {
                 return 4;
             }
