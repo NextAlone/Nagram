@@ -153,7 +153,7 @@
     <string name="scrollableChatPreview">Прокручиваемый предпросмотр чатов</string>
     <string name="disableVibration">Отключить вибрацию</string>
     <string name="DatacenterStatus">Статус дата-центра</string>
-    <string name="DatacenterStatusAbout">Проверьте состояние **датацентров** Telegram.</string>
+    <string name="DatacenterStatusAbout">Проверьте состояние **датацентров** TELEOFFICAL.</string>
     <string name="DeleteAllFromSelfDone">Все ваши сообщения были удалены</string>
     <string name="setLinkedUser">Выбрать связанного пользователя</string>
     <string name="UserIDOrBotID">Введите ID пользователя или ID бота</string>
@@ -189,4 +189,10 @@
     <string name="premium">Premium</string>
     <string name="fastSpeedUpload">Ускорение скорости загрузки</string>
     <string name="showTabsOnForward">Показывать вкладки при пересылке</string>
+    <string name="TabTitleType">Показывать на вкладках</string>
+    <string name="TabTitleTypeTip">Значки синхронизируются с облаком Telegram и видны на каждом устройстве.</string>
+    <string name="TabTitleTypeText">Названия</string>
+    <string name="TabTitleTypeIcon">Значки</string>
+    <string name="TabTitleTypeMix">Значки с названиями</string>
+    <string name="modifyDownloadSpeed">Изменить скорость загрузки</string>
 </resources>
