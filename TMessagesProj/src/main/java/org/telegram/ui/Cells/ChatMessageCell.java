@@ -157,6 +157,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -10905,25 +10906,20 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             if (user.first_name != null && user.last_name != null) {
                                 nickname = user.first_name + user.last_name;
                             } else {
-                                if (user.first_name != null) {
-                                    nickname = user.first_name;
-                                } else if (user.last_name != null) {
-                                    nickname = user.last_name;
-                                } else {
-                                    nickname = "NOT_FOUND";
-                                }
+                                nickname = Objects.requireNonNullElseGet(user.first_name, () -> Objects.requireNonNullElse(user.last_name, "NOT_FOUND"));
                             }
                         } else {
                             nickname = "NOT_FOUND";
                         }
-
                     }
+
+                    final String text = currentMessageObject.getChatId() == -currentMessageObject.getSenderId() ? "Anonymous" : "Channel";
                     if (nickname != null) {
-                        adminString = StringUtils.ellipsis(nickname, 15) + " | Channel";
+                        adminString = StringUtils.ellipsis(nickname, 15) +  " | " + text;
                     } else if (aliasName != null) {
-                        adminString = StringUtils.ellipsis(aliasName, 15) + " | Channel";
+                        adminString = StringUtils.ellipsis(aliasName, 15) + " | " + text;
                     } else {
-                        adminString = "Channel";
+                        adminString = text;
                     }
                 } else {
 
@@ -10943,10 +10939,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             }
                         }
                     }
+
+                    final String text = currentMessageObject.getChatId() == -currentMessageObject.getSenderId() ? "Anonymous" : "Channel";
                     if (nickname != null) {
-                        adminString = StringUtils.ellipsis(nickname, 15) + " | Channel";
+                        adminString = StringUtils.ellipsis(nickname, 15) + " | " + text;
                     } else {
-                        adminString = "Channel";
+                        adminString = text;
                     }
                 }
                 adminWidth = (int) Math.ceil(Theme.chat_adminPaint.measureText(adminString));
