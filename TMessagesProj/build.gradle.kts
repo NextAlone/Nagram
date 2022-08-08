@@ -91,7 +91,7 @@ dependencies {
 android {
     compileSdk = 33
     buildToolsVersion = "32.0.0"
-    ndkVersion = "21.4.7075529"
+    ndkVersion = "25.0.8775105"
 
     defaultConfig.applicationId = "top.qwq2333.nullgram"
 
