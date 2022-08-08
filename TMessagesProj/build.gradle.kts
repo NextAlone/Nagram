@@ -93,7 +93,6 @@ dependencies {
 android {
     compileSdk = 33
     buildToolsVersion = "32.0.0"
-    ndkVersion = "21.4.7075529"
 
     defaultConfig.applicationId = "top.qwq2333.nullgram"
 
@@ -193,37 +192,62 @@ android {
         create("arm32") {
             dimension = "abi"
             buildConfigField("boolean", "isPlay", "false")
-            ndk {
-                abiFilters.add("armeabi-v7a")
+            splits {
+                abi {
+                    isEnable = true
+                    reset()
+                    include("armeabi-v7a")
+                    isUniversalApk = false
+                }
             }
         }
         create("arm64") {
             dimension = "abi"
             buildConfigField("boolean", "isPlay", "false")
-            ndk {
-                abiFilters.add("arm64-v8a")
+            splits {
+                abi {
+                    isEnable = true
+                    reset()
+                    include("arm64-v8a")
+                    isUniversalApk = false
+                }
             }
         }
         create("x86") {
             dimension = "abi"
             buildConfigField("boolean", "isPlay", "false")
-            ndk {
-                abiFilters.add("x86")
+            splits {
+                abi {
+                    isEnable = true
+                    reset()
+                    include("x86")
+                    isUniversalApk = false
+                }
             }
         }
         create("x86_64") {
             dimension = "abi"
             buildConfigField("boolean", "isPlay", "false")
-            ndk {
-                abiFilters.add("x86_64")
+            splits {
+                abi {
+                    isEnable = true
+                    reset()
+                    include("x86_64")
+                    isUniversalApk = false
+                }
             }
         }
 
         create("play") {
             dimension = "abi"
             buildConfigField("boolean", "isPlay", "true")
-            ndk {
-                abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64"))
+            splits {
+                abi {
+                    isEnable = true
+                    reset()
+                    include("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+                    isUniversalApk = false
+                }
             }
         }
     }
