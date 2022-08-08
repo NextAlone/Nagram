@@ -96,7 +96,7 @@ public class ConfigManager {
      * @param def 默认值
      * @return key所对应值
      */
-    @NonNull
+    @Nullable
     public static String getStringOrDefault(@NonNull String key, @Nullable String def) {
         return preferences.getString(key, def);
     }
