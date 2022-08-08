@@ -34,7 +34,6 @@
 -dontwarn org.h2.** 
 -dontwarn org.objenesis.** 
 -dontwarn com.fasterxml.jackson.** 
--dontwarn com.alibaba.fastjson.**
 -dontwarn org.springframework.** 
 -dontwarn org.thymeleaf.** 
 -dontwarn org.tinylog.** 
