@@ -1,4 +1,4 @@
-
+@file:Suppress("UnstableApiUsage")
 plugins {
     `kotlin-dsl`
 }
