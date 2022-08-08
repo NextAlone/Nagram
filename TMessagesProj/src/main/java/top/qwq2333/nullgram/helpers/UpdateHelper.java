@@ -22,9 +22,9 @@ public class UpdateHelper {
     static final long PREVIEW_METADATA_CHANNEL_ID = 1524514483;
     static final String PREVIEW_METADATA_CHANNEL_NAME = "PreviewMetaData";
     static final long STABLE_UPDATE_CHANNEL_APKS_ID = 1645976613;
-    static final String STABLE_UPDATE_CHANNEL_APKS_NAME = "NullgramCI";
+    static final String STABLE_UPDATE_CHANNEL_APKS_NAME = "NullgramAPKs";
     static final long PREVIEW_UPDATE_CHANNEL_APKS_ID = 1714986438;
-    static final String PREVIEW_UPDATE_CHANNEL_APKS_NAME = "NullgramAPKs";
+    static final String PREVIEW_UPDATE_CHANNEL_APKS_NAME = "NullgramCI";
 
     static void retrieveUpdateMetadata(retrieveUpdateMetadataCallback callback) {
         long CHANNEL_METADATA_ID;
