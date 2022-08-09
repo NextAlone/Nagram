@@ -104,9 +104,9 @@ public class ExperimentSettingActivity extends BaseActivity {
             int[] speeds = new int[]{128, 256, 384, 512, 768, 1024};
             ArrayList<String> speedsStr = new ArrayList<>();
             for (int speed : speeds) {
-                speedsStr.add(speed + " Kb/s");
+                speedsStr.add(speed + " Kb/block");
             }
-            PopupBuilder.show(speedsStr, LocaleController.getString("modifyDownloadSpeed", R.string.modifyDownloadSpeed), speedsStr.indexOf(ConfigManager.getIntOrDefault(Defines.modifyDownloadSpeed, 512) + " Kb/s"), getParentActivity(), view, i -> {
+            PopupBuilder.show(speedsStr, LocaleController.getString("modifyDownloadSpeed", R.string.modifyDownloadSpeed), speedsStr.indexOf(ConfigManager.getIntOrDefault(Defines.modifyDownloadSpeed, 512) + " Kb/block"), getParentActivity(), view, i -> {
                 Log.i("speeds[i]: " + speeds[i]);
                 Log.i("i: " + i);
                 ConfigManager.putInt(Defines.modifyDownloadSpeed, speeds[i]);
@@ -199,7 +199,7 @@ public class ExperimentSettingActivity extends BaseActivity {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                     if (position == modifyDownloadSpeedRow) {
-                        textCell.setTextAndValue(LocaleController.getString("modifyDownloadSpeed", R.string.modifyDownloadSpeed), String.valueOf(ConfigManager.getIntOrDefault(Defines.modifyDownloadSpeed, 128) + " Kb/s"), false);
+                        textCell.setTextAndValue(LocaleController.getString("modifyDownloadSpeed", R.string.modifyDownloadSpeed), String.valueOf(ConfigManager.getIntOrDefault(Defines.modifyDownloadSpeed, 128) + " Kb/block"), false);
                     }
                     break;
                 }
