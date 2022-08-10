@@ -3,6 +3,7 @@ package com.exteragram.messenger;
 import android.app.Activity;
 import android.content.SharedPreferences;
 
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
@@ -19,7 +20,7 @@ public class ExteraConfig {
 
     private static final Object sync = new Object();
 
-    // appearance 
+    // appearance
     public static boolean useSystemFonts;
     public static boolean blurForAllThemes;
     public static boolean centerTitle;
@@ -30,6 +31,7 @@ public class ExteraConfig {
     public static boolean newGroup, newSecretChat, newChannel, contacts, calls, peopleNearby, archivedChats, savedMessages, scanQr, inviteFriends, telegramFeatures;
 
     // general
+    public static float avatarCorners = 30.0f;
     public static boolean disableNumberRounding;
     public static boolean formatTimeWithSeconds;
     public static boolean chatsOnTitle;
@@ -93,6 +95,7 @@ public class ExteraConfig {
             transparentNavBar = preferences.getBoolean("transparentNavBar", false);
             squareFab = preferences.getBoolean("squareFab", false);
 
+            avatarCorners = preferences.getFloat("avatarCorners", 30.0f);
             disableNumberRounding = preferences.getBoolean("disableNumberRounding", false);
             formatTimeWithSeconds = preferences.getBoolean("formatTimeWithSeconds", false);
             chatsOnTitle = preferences.getBoolean("chatsOnTitle", false);
@@ -192,6 +195,23 @@ public class ExteraConfig {
     public static void toggleForceTabletMode() {
         SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
         editor.putBoolean("forceTabletMode", forceTabletMode ^= true).apply();
+    }
+
+    public static void setAvatarCorners(float size) {
+        SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
+        editor.putFloat("avatarCorners", avatarCorners = size).apply();
+    }
+
+    public static int getAvatarCorners(float size) {
+        return getAvatarCorners(size, false);
+    }
+
+    public static int getAvatarCorners(float size, boolean toPx) {
+        if (toPx) {
+            size /= AndroidUtilities.density;
+        }
+        size /= 56.0f;
+        return AndroidUtilities.dp(avatarCorners * size);
     }
 
     public static void setStickerSize(float size) {

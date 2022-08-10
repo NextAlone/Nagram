@@ -27,6 +27,8 @@ import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBoxSquare;
 import org.telegram.ui.Components.LayoutHelper;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class CheckBoxUserCell extends FrameLayout {
 
     private TextView textView;
@@ -52,7 +54,7 @@ public class CheckBoxUserCell extends FrameLayout {
 
         avatarDrawable = new AvatarDrawable();
         imageView = new BackupImageView(context);
-        imageView.setRoundRadius(AndroidUtilities.dp(36));
+        imageView.setRoundRadius(ExteraConfig.getAvatarCorners(36));
         addView(imageView, LayoutHelper.createFrame(36, 36, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 48, 7, 48, 0));
 
         checkBox = new CheckBoxSquare(context, alert, null);

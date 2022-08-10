@@ -36,6 +36,8 @@ import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.LayoutHelper;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class ShareDialogCell extends FrameLayout {
 
     private BackupImageView imageView;
@@ -64,10 +66,11 @@ public class ShareDialogCell extends FrameLayout {
         currentType = type;
 
         imageView = new BackupImageView(context);
-        imageView.setRoundRadius(AndroidUtilities.dp(28));
         if (type == TYPE_CREATE) {
+            imageView.setRoundRadius(ExteraConfig.getAvatarCorners(48));
             addView(imageView, LayoutHelper.createFrame(48, 48, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 7, 0, 0));
         } else {
+            imageView.setRoundRadius(ExteraConfig.getAvatarCorners(56));
             addView(imageView, LayoutHelper.createFrame(56, 56, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 7, 0, 0));
         }
 
@@ -198,7 +201,8 @@ public class ShareDialogCell extends FrameLayout {
         int cy = imageView.getTop() + imageView.getMeasuredHeight() / 2;
         Theme.checkboxSquare_checkPaint.setColor(getThemedColor(Theme.key_dialogRoundCheckBox));
         Theme.checkboxSquare_checkPaint.setAlpha((int) (checkBox.getProgress() * 255));
-        canvas.drawCircle(cx, cy, AndroidUtilities.dp(currentType == TYPE_CREATE ? 24 : 28), Theme.checkboxSquare_checkPaint);
+        int cr = AndroidUtilities.dp(currentType == TYPE_CREATE ? 24 : 28);
+        canvas.drawRoundRect(cx + cr, cy + cr, cx - cr, cy - cr, ExteraConfig.getAvatarCorners(cr * 2, true), ExteraConfig.getAvatarCorners(cr * 2, true), Theme.checkboxSquare_checkPaint);
         super.onDraw(canvas);
     }
 

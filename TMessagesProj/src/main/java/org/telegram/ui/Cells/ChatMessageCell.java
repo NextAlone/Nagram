@@ -1079,7 +1079,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         backgroundDrawable = new MessageBackgroundDrawable(this);
         avatarImage = new ImageReceiver();
         avatarImage.setAllowLoadingOnAttachedOnly(true);
-        avatarImage.setRoundRadius(AndroidUtilities.dp(21));
+        avatarImage.setRoundRadius(ExteraConfig.getAvatarCorners(42));
         avatarDrawable = new AvatarDrawable();
         replyImageReceiver = new ImageReceiver(this);
         replyImageReceiver.setAllowLoadingOnAttachedOnly(true);
@@ -1153,7 +1153,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         pollAvatarImagesVisible = new boolean[3];
         for (int a = 0; a < pollAvatarImages.length; a++) {
             pollAvatarImages[a] = new ImageReceiver(this);
-            pollAvatarImages[a].setRoundRadius(AndroidUtilities.dp(8));
+            pollAvatarImages[a].setRoundRadius(ExteraConfig.getAvatarCorners(16));
             pollAvatarDrawables[a] = new AvatarDrawable();
             pollAvatarDrawables[a].setTextSize(AndroidUtilities.dp(6));
         }
@@ -1174,7 +1174,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         commentAvatarImagesVisible = new boolean[3];
         for (int a = 0; a < commentAvatarImages.length; a++) {
             commentAvatarImages[a] = new ImageReceiver(this);
-            commentAvatarImages[a].setRoundRadius(AndroidUtilities.dp(12));
+            commentAvatarImages[a].setRoundRadius(ExteraConfig.getAvatarCorners(24));
             commentAvatarDrawables[a] = new AvatarDrawable();
             commentAvatarDrawables[a].setTextSize(AndroidUtilities.dp(8));
         }
@@ -5101,7 +5101,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 drawName = messageObject.isFromGroup() && messageObject.isSupergroup() || messageObject.isImportedForward() && messageObject.messageOwner.fwd_from.from_id == null;
                 drawForwardedName = !isRepliesChat;
                 drawPhotoImage = true;
-                photoImage.setRoundRadius(AndroidUtilities.dp(22));
+                photoImage.setRoundRadius(ExteraConfig.getAvatarCorners(44));
                 canChangeRadius = false;
                 if (AndroidUtilities.isTablet()) {
                     backgroundWidth = Math.min(AndroidUtilities.getMinTabletSide() - AndroidUtilities.dp(drawAvatar ? 102 : 50), AndroidUtilities.dp(270));
@@ -12861,7 +12861,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         commentAvatarImages[a].setImageX(ax + toAdd * a);
                         commentAvatarImages[a].setImageY(y - AndroidUtilities.dp(4) + (pinnedBottom ? AndroidUtilities.dp(2) : 0));
                         if (a != commentAvatarImages.length - 1) {
-                            canvas.drawCircle(commentAvatarImages[a].getCenterX(), commentAvatarImages[a].getCenterY(), AndroidUtilities.dp(13), currentBackgroundDrawable.getPaint());
+                            canvas.drawRoundRect(commentAvatarImages[a].getCenterX() - AndroidUtilities.dp(13), commentAvatarImages[a].getCenterY() - AndroidUtilities.dp(13), commentAvatarImages[a].getCenterX() + AndroidUtilities.dp(13), commentAvatarImages[a].getCenterY() + AndroidUtilities.dp(13), ExteraConfig.getAvatarCorners(26), ExteraConfig.getAvatarCorners(26), currentBackgroundDrawable.getPaint());
                         }
                         commentAvatarImages[a].draw(canvas);
                         drawnAvatars = true;
@@ -14414,7 +14414,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         pollAvatarImages[a].setImageX(ax + toAdd * a);
                         pollAvatarImages[a].setImageY(y - AndroidUtilities.dp(1));
                         if (a != pollAvatarImages.length - 1) {
-                            canvas.drawCircle(pollAvatarImages[a].getCenterX(), pollAvatarImages[a].getCenterY(), AndroidUtilities.dp(9), currentBackgroundDrawable.getPaint());
+                            canvas.drawRoundRect(pollAvatarImages[a].getCenterX() - AndroidUtilities.dp(9), pollAvatarImages[a].getCenterY() - AndroidUtilities.dp(9), pollAvatarImages[a].getCenterX() + AndroidUtilities.dp(9), pollAvatarImages[a].getCenterY() + AndroidUtilities.dp(9), ExteraConfig.getAvatarCorners(18), ExteraConfig.getAvatarCorners(18), currentBackgroundDrawable.getPaint());
                         }
                         if (animatePollAvatars && animatePollAnswerAlpha) {
                             float alpha = Math.min(pollUnvoteInProgress ? (1.0f - pollAnimationProgress) / 0.3f : pollAnimationProgress, 1.0f);

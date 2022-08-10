@@ -32,6 +32,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class ReactionsLayoutInBubble {
 
     private final static int ANIMATION_TYPE_IN = 1;
@@ -495,7 +497,7 @@ public class ReactionsLayoutInBubble {
                 w = (int) (width * progress + animateFromWidth * (1f - progress));
             }
             AndroidUtilities.rectTmp.set(0, 0, w, height);
-            float rad = height / 2f;
+            float rad = ExteraConfig.getAvatarCorners(height, true);
             if (drawServiceShaderBackground) {
                 Paint paint1 = getThemedPaint(Theme.key_paint_chatActionBackground);
                 Paint paint2 = Theme.chat_actionBackgroundGradientDarkenPaint;

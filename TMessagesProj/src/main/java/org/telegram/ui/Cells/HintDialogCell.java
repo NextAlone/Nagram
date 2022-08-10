@@ -32,6 +32,8 @@ import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.CounterView;
 import org.telegram.ui.Components.LayoutHelper;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class HintDialogCell extends FrameLayout {
 
     private BackupImageView imageView;
@@ -56,7 +58,7 @@ public class HintDialogCell extends FrameLayout {
         this.drawCheckbox = drawCheckbox;
 
         imageView = new BackupImageView(context);
-        imageView.setRoundRadius(AndroidUtilities.dp(27));
+        imageView.setRoundRadius(ExteraConfig.getAvatarCorners(54));
         addView(imageView, LayoutHelper.createFrame(54, 54, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 7, 0, 0));
 
         nameTextView = new TextView(context);

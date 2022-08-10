@@ -56,6 +56,8 @@ import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class ChatLinkActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private ListAdapter listViewAdapter;
@@ -520,7 +522,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         avatarDrawable.setTextSize(AndroidUtilities.dp(12));
 
         BackupImageView imageView = new BackupImageView(getParentActivity());
-        imageView.setRoundRadius(AndroidUtilities.dp(20));
+        imageView.setRoundRadius(ExteraConfig.getAvatarCorners(40));
         frameLayout2.addView(imageView, LayoutHelper.createFrame(40, 40, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 22, 5, 22, 0));
 
         TextView textView = new TextView(getParentActivity());

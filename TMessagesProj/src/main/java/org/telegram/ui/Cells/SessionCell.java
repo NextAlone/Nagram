@@ -47,6 +47,8 @@ import org.telegram.ui.Components.LayoutHelper;
 
 import java.util.Locale;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class SessionCell extends FrameLayout {
 
     private TextView nameTextView;
@@ -78,15 +80,15 @@ public class SessionCell extends FrameLayout {
             avatarDrawable.setTextSize(AndroidUtilities.dp(10));
 
             imageView = new BackupImageView(context);
-            imageView.setRoundRadius(AndroidUtilities.dp(10));
+            imageView.setRoundRadius(ExteraConfig.getAvatarCorners(20));
             addView(imageView, LayoutHelper.createFrame(20, 20, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 0 : 21), 13, (LocaleController.isRTL ? 21 : 0), 0));
         } else {
             placeholderImageView = new BackupImageView(context);
-            placeholderImageView.setRoundRadius(AndroidUtilities.dp(10));
+            placeholderImageView.setRoundRadius(ExteraConfig.getAvatarCorners(42));
             addView(placeholderImageView, LayoutHelper.createFrame(42, 42, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 0 : 16), 13, (LocaleController.isRTL ? 16 : 0), 0));
 
             imageView = new BackupImageView(context);
-            imageView.setRoundRadius(AndroidUtilities.dp(10));
+            imageView.setRoundRadius(ExteraConfig.getAvatarCorners(42));
             addView(imageView, LayoutHelper.createFrame(42, 42, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 0 : 16), 13, (LocaleController.isRTL ? 16 : 0), 0));
 
             addView(linearLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 30, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 15 : 72), 11, (LocaleController.isRTL ? 72 : 15), 0));

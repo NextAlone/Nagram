@@ -58,6 +58,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class PhonebookShareAlert extends BottomSheet {
 
     private ListAdapter listAdapter;
@@ -115,7 +117,7 @@ public class PhonebookShareAlert extends BottomSheet {
             avatarDrawable.setInfo(currentUser);
 
             BackupImageView avatarImageView = new BackupImageView(context);
-            avatarImageView.setRoundRadius(AndroidUtilities.dp(40));
+            avatarImageView.setRoundRadius(ExteraConfig.getAvatarCorners(80));
             avatarImageView.setForUserOrChat(currentUser, avatarDrawable);
             addView(avatarImageView, LayoutHelper.createLinear(80, 80, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 32, 0, 0));
 

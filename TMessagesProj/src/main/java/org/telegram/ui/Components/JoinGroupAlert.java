@@ -41,6 +41,8 @@ import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class JoinGroupAlert extends BottomSheet {
 
     private TLRPC.ChatInvite chatInvite;
@@ -89,7 +91,7 @@ public class JoinGroupAlert extends BottomSheet {
         int participants_count = 0;
 
         BackupImageView avatarImageView = new BackupImageView(context);
-        avatarImageView.setRoundRadius(AndroidUtilities.dp(35));
+        avatarImageView.setRoundRadius(ExteraConfig.getAvatarCorners(70));
         linearLayout.addView(avatarImageView, LayoutHelper.createLinear(70, 70, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 29, 0, 0));
 
         if (chatInvite != null) {

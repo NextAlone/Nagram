@@ -218,12 +218,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private RLottieImageView writeButton;
     private AnimatorSet writeButtonAnimation;
     private AnimatorSet qrItemAnimation;
+    private Drawable arrow;
     private Drawable lockIconDrawable;
     private Drawable verifiedDrawable;
     private Drawable premiumStarDrawable;
-    private Drawable arrowDrawable;
     private Drawable verifiedCheckDrawable;
     private CrossfadeDrawable verifiedCrossfadeDrawable;
+    private CrossfadeDrawable arrowDrawable;
     private CrossfadeDrawable premuimCrossfadeDrawable;
     private ScamDrawable scamDrawable;
     private UndoView undoView;
@@ -3266,7 +3267,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
         };
         avatarImage.getImageReceiver().setAllowDecodeSingleFrame(true);
-        avatarImage.setRoundRadius(AndroidUtilities.dp(21));
+        avatarImage.setRoundRadius(ExteraConfig.getAvatarCorners(42));
         avatarImage.setPivotX(0);
         avatarImage.setPivotY(0);
         avatarContainer.addView(avatarImage, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
@@ -3544,7 +3545,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             avatarContainer.setScaleY(avatarScale);
             avatarContainer.setTranslationX(AndroidUtilities.lerp(avatarX, 0f, value));
             avatarContainer.setTranslationY(AndroidUtilities.lerp((float) Math.ceil(avatarY), 0f, value));
-            avatarImage.setRoundRadius((int) AndroidUtilities.lerp(AndroidUtilities.dpf2(21f), 0f, value));
+            avatarImage.setRoundRadius((int) AndroidUtilities.lerp(ExteraConfig.getAvatarCorners(42), 0f, value));
             if (searchItem != null) {
                 searchItem.setAlpha(1.0f - value);
                 searchItem.setScaleY(1.0f - value);
@@ -3572,7 +3573,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
 
             if (arrowDrawable != null) {
-                arrowDrawable.setColorFilter(ColorUtils.blendARGB(Theme.getColor(Theme.key_chats_verifiedBackground), Color.WHITE, value), PorterDuff.Mode.MULTIPLY);
+                arrowDrawable.setProgress(value);
             }
 
             if (verifiedCrossfadeDrawable != null) {
@@ -4866,7 +4867,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
                 avatarScale = AndroidUtilities.lerp(1.0f, (42f + 42f + 18f) / 42f, animationProgress);
 
-                avatarImage.setRoundRadius((int) AndroidUtilities.lerp(AndroidUtilities.dpf2(21f), 0f, animationProgress));
+                avatarImage.setRoundRadius((int) AndroidUtilities.lerp(ExteraConfig.getAvatarCorners(42), 0f, animationProgress));
                 avatarContainer.setTranslationX(AndroidUtilities.lerp(avX, 0, animationProgress));
                 avatarContainer.setTranslationY(AndroidUtilities.lerp((float) Math.ceil(avY), 0f, animationProgress));
                 float extra = (avatarContainer.getMeasuredWidth() - AndroidUtilities.dp(42)) * avatarScale;
@@ -4881,11 +4882,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (scamDrawable != null) {
                     scamDrawable.setColor(ColorUtils.blendARGB(getThemedColor(Theme.key_avatar_subtitleInProfileBlue), Color.argb(179, 255, 255, 255), animationProgress));
                 }
-                if (arrowDrawable != null) {
-                    arrowDrawable.setColorFilter(ColorUtils.blendARGB(Theme.getColor(Theme.key_chats_verifiedBackground), Color.WHITE, animationProgress), PorterDuff.Mode.MULTIPLY);
-                }
                 if (lockIconDrawable != null) {
                     lockIconDrawable.setColorFilter(ColorUtils.blendARGB(getThemedColor(Theme.key_chat_lockIcon), Color.WHITE, animationProgress), PorterDuff.Mode.MULTIPLY);
+                }
+                if (arrowDrawable != null) {
+                    arrowDrawable.setProgress(animationProgress);
+                    nameTextView[1].invalidate();
                 }
                 if (verifiedCrossfadeDrawable != null) {
                     verifiedCrossfadeDrawable.setProgress(animationProgress);
@@ -6294,8 +6296,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     private Drawable getArrowDrawable() {
         if (arrowDrawable == null) {
-            arrowDrawable = Theme.profile_outlineArrowDrawable.getConstantState().newDrawable();
-            arrowDrawable.setColorFilter(Theme.getColor(Theme.key_chats_verifiedBackground), PorterDuff.Mode.MULTIPLY);
+            arrow = Theme.profile_outlineArrowDrawable.getConstantState().newDrawable().mutate();
+            arrow.setColorFilter(getThemedColor(Theme.key_profile_verifiedBackground), PorterDuff.Mode.MULTIPLY);
+            arrowDrawable = new CrossfadeDrawable(arrow, ContextCompat.getDrawable(getParentActivity(), R.drawable.ic_outline_arrow).mutate());
         }
         return arrowDrawable;
     }
@@ -7877,7 +7880,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         textCell.setTextAndIcon(LocaleController.getString("Language", R.string.Language), R.drawable.msg_language, false);
                         textCell.setImageLeft(23);
                     } else if (position == exteraRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Preferences", R.string.Preferences), R.drawable.msg_settings, true);
+                        textCell.setTextAndIcon(LocaleController.getString("Preferences", R.string.Preferences), R.drawable.etg_settings, true);
                     } else if (position == notificationRow) {
                         textCell.setTextAndIcon(LocaleController.getString("NotificationsAndSounds", R.string.NotificationsAndSounds), R.drawable.msg_notifications, true);
                     } else if (position == privacyRow) {
@@ -8800,9 +8803,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
                 if (lockIconDrawable != null) {
                     lockIconDrawable.setColorFilter(getThemedColor(Theme.key_chat_lockIcon), PorterDuff.Mode.MULTIPLY);
-                }
-                if (arrowDrawable != null) {
-                    arrowDrawable.setColorFilter(Theme.getColor(Theme.key_chats_verifiedBackground), PorterDuff.Mode.MULTIPLY);
                 }
                 if (scamDrawable != null) {
                     scamDrawable.setColor(getThemedColor(Theme.key_avatar_subtitleInProfileBlue));

@@ -25,6 +25,8 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.ui.ActionBar.Theme;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class PullForegroundDrawable {
 
     public final static float SNAP_HEIGHT = 0.85f;
@@ -208,11 +210,11 @@ public class PullForegroundDrawable {
             float outBackgroundRadius = outRadius + (cell.getWidth() - outRadius) * (1f - outProgress) + (outRadius * bounceP);
 
             if (!(accentRevalProgress == 1f || accentRevalProgressOut == 1)) {
-                canvas.drawCircle(cX, cY, outBackgroundRadius, backgroundPaint);
+                canvas.drawRoundRect(cX - outBackgroundRadius, cY - outBackgroundRadius, cX + outBackgroundRadius, cY + outBackgroundRadius, ExteraConfig.getAvatarCorners(outBackgroundRadius * 2, true), ExteraConfig.getAvatarCorners(outBackgroundRadius * 2, true), backgroundPaint);
             }
             circleClipPath.reset();
             rectF.set(cX - outBackgroundRadius, cY - outBackgroundRadius, cX + outBackgroundRadius, cY + outBackgroundRadius);
-            circleClipPath.addOval(rectF, Path.Direction.CW);
+            circleClipPath.addRoundRect(rectF, ExteraConfig.getAvatarCorners(outBackgroundRadius * 2, true), ExteraConfig.getAvatarCorners(outBackgroundRadius * 2, true), Path.Direction.CW);
             canvas.clipPath(circleClipPath);
         }
 
@@ -220,26 +222,26 @@ public class PullForegroundDrawable {
             if (accentRevalProgressOut > accentRevalProgress) {
                 canvas.save();
                 canvas.translate((cX - smallCircleX) * (outProgress), (cY - smallCircleY) * (outProgress));
-                canvas.drawCircle(smallCircleX, smallCircleY, cell.getWidth() * accentRevalProgressOut, backgroundPaint);
+                canvas.drawRoundRect(smallCircleX - cell.getWidth() * accentRevalProgressOut, smallCircleY - cell.getWidth() * accentRevalProgressOut, smallCircleX + cell.getWidth() * accentRevalProgressOut, smallCircleY + cell.getWidth() * accentRevalProgressOut, ExteraConfig.getAvatarCorners(cell.getWidth() * accentRevalProgressOut * 2, true), ExteraConfig.getAvatarCorners(cell.getWidth() * accentRevalProgressOut * 2, true), backgroundPaint);
                 canvas.restore();
             }
             if (accentRevalProgress > 0f) {
                 canvas.save();
                 canvas.translate((cX - smallCircleX) * (outProgress), (cY - smallCircleY) * (outProgress));
-                canvas.drawCircle(smallCircleX, smallCircleY, cell.getWidth() * accentRevalProgress, paintBackgroundAccent);
+                canvas.drawRoundRect(smallCircleX - cell.getWidth() * accentRevalProgress, smallCircleY - cell.getWidth() * accentRevalProgress, smallCircleX + cell.getWidth() * accentRevalProgress, smallCircleY + cell.getWidth() * accentRevalProgress, ExteraConfig.getAvatarCorners(cell.getWidth() * accentRevalProgress * 2, true), ExteraConfig.getAvatarCorners(cell.getWidth() * accentRevalProgress * 2, true), paintBackgroundAccent);
                 canvas.restore();
             }
         } else {
             if (accentRevalProgress > accentRevalProgressOut) {
                 canvas.save();
                 canvas.translate((cX - smallCircleX) * (outProgress), (cY - smallCircleY) * (outProgress));
-                canvas.drawCircle(smallCircleX, smallCircleY, cell.getWidth() * accentRevalProgress, paintBackgroundAccent);
+                canvas.drawRoundRect(smallCircleX - cell.getWidth() * accentRevalProgress, smallCircleY - cell.getWidth() * accentRevalProgress, smallCircleX + cell.getWidth() * accentRevalProgress, smallCircleY + cell.getWidth() * accentRevalProgress, ExteraConfig.getAvatarCorners(cell.getWidth() * accentRevalProgress * 2, true), ExteraConfig.getAvatarCorners(cell.getWidth() * accentRevalProgress * 2, true), paintBackgroundAccent);
                 canvas.restore();
             }
             if (accentRevalProgressOut > 0f) {
                 canvas.save();
                 canvas.translate((cX - smallCircleX) * (outProgress), (cY - smallCircleY) * (outProgress));
-                canvas.drawCircle(smallCircleX, smallCircleY, cell.getWidth() * accentRevalProgressOut, backgroundPaint);
+                canvas.drawRoundRect(smallCircleX - cell.getWidth() * accentRevalProgressOut, smallCircleY - cell.getWidth() * accentRevalProgressOut, smallCircleX + cell.getWidth() * accentRevalProgressOut, smallCircleY + cell.getWidth() * accentRevalProgressOut, ExteraConfig.getAvatarCorners(cell.getWidth() * accentRevalProgressOut * 2, true), ExteraConfig.getAvatarCorners(cell.getWidth() * accentRevalProgressOut * 2, true), backgroundPaint);
                 canvas.restore();
             }
         }

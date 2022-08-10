@@ -33,6 +33,8 @@ import org.telegram.ui.ActionBar.Theme;
 
 import java.util.Objects;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class AvatarDrawable extends Drawable {
 
     private TextPaint namePaint;
@@ -309,12 +311,13 @@ public class AvatarDrawable extends Drawable {
         Theme.avatar_backgroundPaint.setColor(ColorUtils.setAlphaComponent(getColor(), alpha));
         canvas.save();
         canvas.translate(bounds.left, bounds.top);
-        canvas.drawCircle(size / 2.0f, size / 2.0f, size / 2.0f, Theme.avatar_backgroundPaint);
+        canvas.drawRoundRect(0, 0, size, size, ExteraConfig.getAvatarCorners(size, true), ExteraConfig.getAvatarCorners(size, true), Theme.avatar_backgroundPaint);
 
         if (avatarType == AVATAR_TYPE_ARCHIVED) {
             if (archivedAvatarProgress != 0) {
                 Theme.avatar_backgroundPaint.setColor(ColorUtils.setAlphaComponent(getThemedColor(Theme.key_avatar_backgroundArchived), alpha));
-                canvas.drawCircle(size / 2.0f, size / 2.0f, size / 2.0f * archivedAvatarProgress, Theme.avatar_backgroundPaint);
+                canvas.drawRoundRect(0, 0, size * archivedAvatarProgress, size * archivedAvatarProgress, ExteraConfig.getAvatarCorners(size * archivedAvatarProgress, true), ExteraConfig.getAvatarCorners(size * archivedAvatarProgress, true), Theme.avatar_backgroundPaint);
+
                 if (Theme.dialogs_archiveAvatarDrawableRecolored) {
                     Theme.dialogs_archiveAvatarDrawable.beginApplyLayerColors();
                     Theme.dialogs_archiveAvatarDrawable.setLayerColor("Arrow1.**", Theme.getNonAnimatedColor(Theme.key_avatar_backgroundArchived));

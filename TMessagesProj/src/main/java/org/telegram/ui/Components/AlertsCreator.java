@@ -1260,7 +1260,7 @@ public class AlertsCreator {
         avatarDrawable.setTextSize(AndroidUtilities.dp(12));
 
         BackupImageView imageView = new BackupImageView(context);
-        imageView.setRoundRadius(AndroidUtilities.dp(20));
+        imageView.setRoundRadius(ExteraConfig.getAvatarCorners(40));
         frameLayout.addView(imageView, LayoutHelper.createFrame(40, 40, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 22, 5, 22, 0));
 
         TextView textView = new TextView(context);
@@ -1367,7 +1367,7 @@ public class AlertsCreator {
         avatarDrawable.setTextSize(AndroidUtilities.dp(12));
 
         BackupImageView imageView = new BackupImageView(context);
-        imageView.setRoundRadius(AndroidUtilities.dp(20));
+        imageView.setRoundRadius(ExteraConfig.getAvatarCorners(40));
         frameLayout.addView(imageView, LayoutHelper.createFrame(40, 40, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 22, 5, 22, 0));
 
         TextView textView = new TextView(context);
@@ -1744,7 +1744,7 @@ public class AlertsCreator {
         avatarDrawable.setInfo(user);
 
         BackupImageView imageView = new BackupImageView(context);
-        imageView.setRoundRadius(AndroidUtilities.dp(20));
+        imageView.setRoundRadius(ExteraConfig.getAvatarCorners(40));
         imageView.setForUserOrChat(user, avatarDrawable);
         frameLayout.addView(imageView, LayoutHelper.createFrame(40, 40, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 22, 5, 22, 0));
 
@@ -4236,7 +4236,7 @@ public class AlertsCreator {
         frameLayout.addView(pin, LayoutHelper.createFrame(60, 82, Gravity.CENTER, 0, 0, 0, 0));
 
         BackupImageView imageView = new BackupImageView(activity);
-        imageView.setRoundRadius(AndroidUtilities.dp(26));
+        imageView.setRoundRadius(ExteraConfig.getAvatarCorners(52));
         imageView.setForUserOrChat(selfUser, new AvatarDrawable(selfUser));
         frameLayout.addView(imageView, LayoutHelper.createFrame(52, 52, Gravity.CENTER, 0, 0, 0, 11));
 

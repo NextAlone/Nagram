@@ -32,6 +32,8 @@ import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class AccountSelectCell extends FrameLayout {
 
     private TextView textView;
@@ -49,7 +51,7 @@ public class AccountSelectCell extends FrameLayout {
         avatarDrawable.setTextSize(AndroidUtilities.dp(12));
 
         imageView = new BackupImageView(context);
-        imageView.setRoundRadius(AndroidUtilities.dp(18));
+        imageView.setRoundRadius(ExteraConfig.getAvatarCorners(36));
         addView(imageView, LayoutHelper.createFrame(36, 36, Gravity.LEFT | Gravity.TOP, 10, 10, 0, 0));
 
         textView = new TextView(context);

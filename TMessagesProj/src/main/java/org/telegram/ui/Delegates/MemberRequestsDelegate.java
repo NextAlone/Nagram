@@ -78,6 +78,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener {
 
     public final boolean isChannel;
@@ -466,7 +468,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
                     onImportersChanged(query, false, true);
                     if (isApproved) {
                         Bulletin.MultiLineLayout layout = new Bulletin.MultiLineLayout(fragment.getParentActivity(), fragment.getResourceProvider());
-                        layout.imageView.setRoundRadius(AndroidUtilities.dp(15));
+                        layout.imageView.setRoundRadius(ExteraConfig.getAvatarCorners(32));
                         layout.imageView.setForUserOrChat(user, new AvatarDrawable(user));
                         String userName = UserObject.getFirstName(user);
                         String message = isChannel

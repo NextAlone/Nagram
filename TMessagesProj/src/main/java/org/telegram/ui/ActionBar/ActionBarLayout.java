@@ -116,24 +116,8 @@ public class ActionBarLayout extends FrameLayout {
                     }
                 }
                 boolean result = super.drawChild(canvas, child, drawingTime);
+                if (actionBarHeight != 0) canvas.drawLine(0, actionBarHeight + 1, getMeasuredWidth(), actionBarHeight + 1, Theme.dividerPaint);
                 return result;
-            }
-        }
-
-        @Override
-        protected void dispatchDraw(Canvas canvas) {
-            super.dispatchDraw(canvas);
-            int count = getChildCount();
-            int actionBarHeight = 0;
-            for (int a = 0; a < count; a++) {
-                View child = getChildAt(a);
-                if (child instanceof ActionBar) {
-                    actionBarHeight = child.getMeasuredHeight();
-                    if (actionBarHeight!= 0) {
-                        canvas.drawLine(0, actionBarHeight, getMeasuredWidth(), actionBarHeight, Theme.dividerPaint);
-                    }
-                    break;
-                }
             }
         }
 
@@ -239,6 +223,7 @@ public class ActionBarLayout extends FrameLayout {
                 canvas.drawRect(0, getMeasuredHeight() - fragmentPanTranslationOffset - 3, getMeasuredWidth(), getMeasuredHeight(), backgroundPaint);
             }
             super.onDraw(canvas);
+            canvas.drawLine(0, getMeasuredHeight(), getMeasuredWidth(), getMeasuredHeight(), Theme.dividerPaint);
         }
 
         public void setFragmentPanTranslationOffset(int fragmentPanTranslationOffset) {

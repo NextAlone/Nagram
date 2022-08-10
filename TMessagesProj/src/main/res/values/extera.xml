@@ -38,6 +38,7 @@
     <string name="SquareFabInfo">A floating action button (FAB) is a circular button that triggers the primary action in app\'s UI. It is located in the right bottom corner of the screen.</string>
 
     <!-- General -->
+    <string name="AvatarCorners">Avatar corners</string>
     <string name="DisableNumberRounding">Disable number rounding</string>
     <string name="FormatTimeWithSeconds">Format time with seconds</string>
     <string name="ChatsOnTitle">\"Chats\" instead of \"exteraGram\"</string>
@@ -93,7 +94,7 @@
     <string name="Halloween">Halloween</string>
 
     <!-- Other -->
-    <string name="BoldItalic">Bold Italic</string>
+    <string name="BoldItalic">Bold italic</string>
 
     <string name="OpenPremiumBot">Open official bot</string>
 

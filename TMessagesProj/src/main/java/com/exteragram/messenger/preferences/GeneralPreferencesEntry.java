@@ -2,11 +2,21 @@ package com.exteragram.messenger.preferences;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Region;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.os.Bundle;
+import android.text.TextPaint;
 import android.os.Parcelable;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityNodeInfo;
 
 import androidx.annotation.NonNull;
 import androidx.core.graphics.ColorUtils;
@@ -29,6 +39,7 @@ import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.SeekBarView;
 import org.telegram.ui.Components.UndoView;
 
 import com.exteragram.messenger.ExteraConfig;
@@ -37,6 +48,12 @@ public class GeneralPreferencesEntry extends BaseFragment {
 
     private int rowCount;
     private ListAdapter listAdapter;
+
+    private AvatarCornersCell avatarCornersCell;
+    
+    private int avatarCornersHeaderRow;
+    private int avatarCornersRow;
+    private int avatarCornersDividerRow;
 
     private int generalHeaderRow;
     private int formatTimeWithSecondsRow;
@@ -59,6 +76,127 @@ public class GeneralPreferencesEntry extends BaseFragment {
     private int forcePacmanAnimationInfoRow;
 
     private UndoView restartTooltip;
+
+    private class AvatarCornersCell extends FrameLayout {
+
+        private final SeekBarView sizeBar;
+        private final FrameLayout preview;
+        private final int startCornersSize = 0;
+        private final int endCornersSize = 30;
+
+        private final TextPaint textPaint;
+        private int lastWidth;
+
+        public AvatarCornersCell(Context context) {
+            super(context);
+
+            setWillNotDraw(false);
+
+            textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+
+            sizeBar = new SeekBarView(context);
+            sizeBar.setReportChanges(true);
+            sizeBar.setDelegate(new SeekBarView.SeekBarViewDelegate() {
+                @Override
+                public void onSeekBarDrag(boolean stop, float progress) {
+                    sizeBar.getSeekBarAccessibilityDelegate().postAccessibilityEventRunnable(AvatarCornersCell.this);
+                    ExteraConfig.setAvatarCorners(startCornersSize + (endCornersSize - startCornersSize) * progress);
+                    AvatarCornersCell.this.invalidate();
+                    preview.invalidate();
+                    parentLayout.rebuildAllFragmentViews(false, false);
+                }
+
+                @Override
+                public void onSeekBarPressed(boolean pressed) {
+
+                }
+            });
+            sizeBar.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
+            addView(sizeBar, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 38, Gravity.LEFT | Gravity.TOP, 9, 5, 43, 11));
+
+            preview = new FrameLayout(context) {
+                @Override
+                protected void onDraw(Canvas canvas) {
+                    super.onDraw(canvas);
+                    int color = Theme.getColor(Theme.key_switchTrack);
+                    int r = Color.red(color);
+                    int g = Color.green(color);
+                    int b = Color.blue(color);
+
+                    int w = getMeasuredWidth();
+                    int h = getMeasuredHeight();
+
+                    Theme.dialogs_onlineCirclePaint.setColor(Color.argb(41, r, g, b));
+                    canvas.drawRoundRect(0, 0, w, h, AndroidUtilities.dp(6), AndroidUtilities.dp(6), Theme.dialogs_onlineCirclePaint);
+                    canvas.drawRoundRect(AndroidUtilities.dp(92), h / 2.0f + AndroidUtilities.dp(8), AndroidUtilities.dp(230), h / 2.0f + AndroidUtilities.dp(18), w / 2.0f, w / 2.0f, Theme.dialogs_onlineCirclePaint);
+
+                    Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor(Theme.key_chats_onlineCircle));
+                    canvas.drawCircle(AndroidUtilities.dp(69), h / 2.0f + AndroidUtilities.dp(21), AndroidUtilities.dp(7), Theme.dialogs_onlineCirclePaint);
+
+                    Path online = new Path();
+                    online.addCircle(AndroidUtilities.dp(69), h / 2.0f + AndroidUtilities.dp(21), AndroidUtilities.dp(12), Path.Direction.CCW);
+                    canvas.clipPath(online, Region.Op.DIFFERENCE);
+
+                    Theme.dialogs_onlineCirclePaint.setColor(Color.argb(90, r, g, b));
+                    canvas.drawRoundRect(AndroidUtilities.dp(21), h / 2.0f - AndroidUtilities.dp(28), AndroidUtilities.dp(77), h / 2.0f + AndroidUtilities.dp(28), ExteraConfig.getAvatarCorners(56), ExteraConfig.getAvatarCorners(56), Theme.dialogs_onlineCirclePaint);
+                    canvas.drawCircle(AndroidUtilities.dp(70), h / 2.0f + AndroidUtilities.dp(22), AndroidUtilities.dp(8), Theme.dialogs_onlineCirclePaint);
+                    canvas.drawRoundRect(AndroidUtilities.dp(92), h / 2.0f - AndroidUtilities.dp(8), AndroidUtilities.dp(170), h / 2.0f - AndroidUtilities.dp(18), w / 2.0f, w / 2.0f, Theme.dialogs_onlineCirclePaint);
+
+                    textPaint.setTextSize(AndroidUtilities.dp(14));
+                    textPaint.setColor(Color.argb(91, r, g, b));
+                    textPaint.setTextAlign(Paint.Align.RIGHT);
+                    textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                    canvas.drawText(LocaleController.getInstance().formatterDay.format(System.currentTimeMillis()), w - AndroidUtilities.dp(20), h / 2.0f - AndroidUtilities.dp(8), textPaint);
+                }
+            };
+            preview.setWillNotDraw(false);
+            addView(preview, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 90, Gravity.TOP | Gravity.CENTER, 21, 50, 21, 10));
+        }
+
+        @Override
+        protected void onDraw(Canvas canvas) {
+            textPaint.setTextSize(AndroidUtilities.dp(16));
+            textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
+            textPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
+            textPaint.setTextAlign(Paint.Align.LEFT);
+            canvas.drawText(String.valueOf(Math.round(ExteraConfig.avatarCorners)), getMeasuredWidth() - AndroidUtilities.dp(39), AndroidUtilities.dp(28), textPaint);
+        }
+
+        @Override
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            int width = MeasureSpec.getSize(widthMeasureSpec);
+            if (lastWidth != width) {
+                sizeBar.setProgress((ExteraConfig.avatarCorners - startCornersSize) / (float) (endCornersSize - startCornersSize));
+                lastWidth = width;
+            }
+        }
+
+        @Override
+        public void invalidate() {
+            super.invalidate();
+            lastWidth = -1;
+            sizeBar.invalidate();
+            preview.invalidate();
+        }
+
+        @Override
+        public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
+            super.onInitializeAccessibilityEvent(event);
+            sizeBar.getSeekBarAccessibilityDelegate().onInitializeAccessibilityEvent(this, event);
+        }
+
+        @Override
+        public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+            super.onInitializeAccessibilityNodeInfo(info);
+            sizeBar.getSeekBarAccessibilityDelegate().onInitializeAccessibilityNodeInfoInternal(this, info);
+        }
+
+        @Override
+        public boolean performAccessibilityAction(int action, Bundle arguments) {
+            return super.performAccessibilityAction(action, arguments) || sizeBar.getSeekBarAccessibilityDelegate().performAccessibilityActionInternal(this, action, arguments);
+        }
+    }
 
     @Override
     public boolean onFragmentCreate() {
@@ -113,7 +251,9 @@ public class GeneralPreferencesEntry extends BaseFragment {
                 if (view instanceof TextCheckCell) {
                     ((TextCheckCell) view).setChecked(ExteraConfig.formatTimeWithSeconds);
                 }
+                LocaleController.getInstance().recreateFormatters();
                 parentLayout.rebuildAllFragmentViews(false, false);
+                avatarCornersCell.invalidate();
             } else if (position == chatsOnTitleRow) {
                 ExteraConfig.toggleChatsOnTitle();
                 if (view instanceof TextCheckCell) {
@@ -179,6 +319,10 @@ public class GeneralPreferencesEntry extends BaseFragment {
     private void updateRowsId(boolean notify) {
         rowCount = 0;
 
+        avatarCornersHeaderRow = rowCount++;
+        avatarCornersRow = rowCount++;
+        avatarCornersDividerRow = rowCount++;
+        
         generalHeaderRow = rowCount++;
         disableNumberRoundingRow = rowCount++;
         formatTimeWithSecondsRow = rowCount++;
@@ -239,6 +383,8 @@ public class GeneralPreferencesEntry extends BaseFragment {
                         headerCell.setText(LocaleController.getString("ArchivedChats", R.string.ArchivedChats));
                     } else if (position == profileHeaderRow) {
                         headerCell.setText(LocaleController.getString("Profile", R.string.Profile));
+                    } else if (position == avatarCornersHeaderRow) {
+                        headerCell.setText(LocaleController.getString("AvatarCorners", R.string.AvatarCorners));
                     }
                     break;
                 case 3:
@@ -302,6 +448,10 @@ public class GeneralPreferencesEntry extends BaseFragment {
                 case 4:
                     view = new TextInfoPrivacyCell(mContext);
                     break;
+                case 5:
+                    view = avatarCornersCell = new AvatarCornersCell(mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
                 default:
                     view = new ShadowSectionCell(mContext);
                     break;
@@ -312,15 +462,17 @@ public class GeneralPreferencesEntry extends BaseFragment {
 
         @Override
         public int getItemViewType(int position) {
-            if (position == generalDividerRow || position == profileDividerRow) {
+            if (position == generalDividerRow || position == profileDividerRow || position == avatarCornersDividerRow) {
                 return 1;
-            } else if (position == generalHeaderRow || position == archiveHeaderRow || position == profileHeaderRow) {
+            } else if (position == generalHeaderRow || position == archiveHeaderRow || position == profileHeaderRow || position == avatarCornersHeaderRow) {
                 return 2;
             } else if (position == disableNumberRoundingRow || position == formatTimeWithSecondsRow || position == hidePhoneNumberRow || position == showIDRow || position == showDCRow || position == chatsOnTitleRow || position == archiveOnPullRow ||
                       position == disableVibrationRow || position == forceTabletModeRow || position == disableUnarchiveSwipeRow || position == forcePacmanAnimationRow) {
                 return 3;
             } else if (position == forcePacmanAnimationInfoRow) {
                 return 4;
+            } else if (position == avatarCornersRow) {
+                return 5;
             }
             return 1;
         }

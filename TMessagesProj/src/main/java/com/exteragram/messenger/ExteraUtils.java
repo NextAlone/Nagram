@@ -95,9 +95,6 @@ public class ExteraUtils {
 
     public static boolean checkSubFor(long id) {
         TLRPC.Chat chat = MessagesController.getInstance(UserConfig.selectedAccount).getChat(id);
-        if (chat != null && !chat.left && !chat.kicked) {
-            return true;
-        }
-        return false;
+        return chat != null && !chat.left && !chat.kicked;
     }
 }

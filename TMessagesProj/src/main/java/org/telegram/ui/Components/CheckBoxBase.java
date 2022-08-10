@@ -87,11 +87,11 @@ public class CheckBoxBase {
         checkPaint.setStrokeCap(Paint.Cap.ROUND);
         checkPaint.setStyle(Paint.Style.STROKE);
         checkPaint.setStrokeJoin(Paint.Join.ROUND);
-        checkPaint.setStrokeWidth(AndroidUtilities.dp(1.9f));
+        checkPaint.setStrokeWidth(AndroidUtilities.dp(2f));
 
         backgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         backgroundPaint.setStyle(Paint.Style.STROKE);
-        backgroundPaint.setStrokeWidth(AndroidUtilities.dp(1.2f));
+        backgroundPaint.setStrokeWidth(AndroidUtilities.dp(1.3f));
 
         drawBitmap = Bitmap.createBitmap(AndroidUtilities.dp(size), AndroidUtilities.dp(size), Bitmap.Config.ARGB_4444);
         bitmapCanvas = new Canvas(drawBitmap);

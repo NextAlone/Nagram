@@ -36,6 +36,8 @@ import org.telegram.ui.ActionBar.Theme;
 
 import androidx.core.graphics.ColorUtils;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class GroupCreateSpan extends View {
 
     private long uid;
@@ -167,7 +169,7 @@ public class GroupCreateSpan extends View {
         }
 
         imageReceiver = new ImageReceiver();
-        imageReceiver.setRoundRadius(AndroidUtilities.dp(16));
+        imageReceiver.setRoundRadius(ExteraConfig.getAvatarCorners(32));
         imageReceiver.setParentView(this);
         imageReceiver.setImageCoords(0, 0, AndroidUtilities.dp(32), AndroidUtilities.dp(32));
 

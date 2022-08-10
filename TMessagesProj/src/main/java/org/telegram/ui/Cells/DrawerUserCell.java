@@ -32,6 +32,8 @@ import org.telegram.ui.Components.GroupCreateCheckBox;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Premium.PremiumGradient;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class DrawerUserCell extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
     private SimpleTextView textView;
@@ -49,7 +51,7 @@ public class DrawerUserCell extends FrameLayout implements NotificationCenter.No
         avatarDrawable.setTextSize(AndroidUtilities.dp(12));
 
         imageView = new BackupImageView(context);
-        imageView.setRoundRadius(AndroidUtilities.dp(18));
+        imageView.setRoundRadius(ExteraConfig.getAvatarCorners(36));
         addView(imageView, LayoutHelper.createFrame(36, 36, Gravity.LEFT | Gravity.TOP, 14, 6, 0, 0));
 
         textView = new SimpleTextView(context);

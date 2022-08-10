@@ -121,7 +121,7 @@ public class ChatsPreferencesEntry extends BaseFragment implements NotificationC
         private final TextPaint textPaint;
         private int lastWidth;
 
-        public StickerSizeCell (Context context) {
+        public StickerSizeCell(Context context) {
             super(context);
 
             setWillNotDraw(false);

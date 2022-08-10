@@ -27,6 +27,8 @@ import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class MentionCell extends LinearLayout {
 
     private BackupImageView imageView;
@@ -44,7 +46,7 @@ public class MentionCell extends LinearLayout {
         avatarDrawable.setTextSize(AndroidUtilities.dp(12));
 
         imageView = new BackupImageView(context);
-        imageView.setRoundRadius(AndroidUtilities.dp(14));
+        imageView.setRoundRadius(ExteraConfig.getAvatarCorners(28));
         addView(imageView, LayoutHelper.createLinear(28, 28, 12, 4, 0, 0));
 
         nameTextView = new TextView(context);

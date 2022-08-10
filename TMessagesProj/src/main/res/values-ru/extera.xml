@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- exteraGram's Main Strings -->
+    <string name="UpdateExteraGram">Это сообщение не поддерживается вашей версией exteraGram. Обновите приложение, чтобы увидеть: https://github.com/exteraSquad/exteraGram/releases/latest</string>
     <string name="MutualContact">взаимный контакт</string>
     <string name="ToBeginning">В начало</string>
     <string name="SaveMessage">Сохранить сообщение</string>
@@ -32,6 +33,7 @@
     <string name="SquareFabInfo">Floating action button (FAB) — это круглая кнопка, запускающая основное действие в интерфейсе приложения. Она расположена в правом нижнем углу экрана.</string>
 
     <!-- General -->
+    <string name="AvatarCorners">Закругление аватарок</string>
     <string name="DisableNumberRounding">Отключить округление чисел</string>
     <string name="FormatTimeWithSeconds">Показывать время с секундами</string>
     <string name="ChatsOnTitle">\"Чаты\" вместо \"exteraGram\"</string>
