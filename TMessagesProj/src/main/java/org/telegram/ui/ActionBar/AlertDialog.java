@@ -190,7 +190,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             if (icon != 0) {
                 imageView.setImageResource(icon);
                 imageView.setVisibility(VISIBLE);
-                textView.setPadding(LocaleController.isRTL ? 0 : AndroidUtilities.dp(56), 0, LocaleController.isRTL ? AndroidUtilities.dp(56) : 0, 0);
+                textView.setPadding(LocaleController.isRTL ? 0 : AndroidUtilities.dp(46), 0, LocaleController.isRTL ? AndroidUtilities.dp(46) : 0, 0);
             } else {
                 imageView.setVisibility(INVISIBLE);
                 textView.setPadding(0, 0, 0, 0);

@@ -278,6 +278,11 @@ public class AppearancePreferencesEntry extends BaseFragment {
                         LocaleController.getString("NewYear", R.string.NewYear),
                         LocaleController.getString("ValentinesDay", R.string.ValentinesDay),
                         LocaleController.getString("Halloween", R.string.Halloween)
+                }, new int[] {
+                        R.drawable.msg_block,
+                        R.drawable.msg_settings_ny,
+                        R.drawable.msg_saved_14,
+                        R.drawable.msg_contacts_hw
                 }, (dialog, which) -> {
                     ExteraConfig.setEventType(which);
                     RecyclerView.ViewHolder holder = listView.findViewHolderForAdapterPosition(eventChooserRow);
