@@ -600,10 +600,9 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             swipeGestureRow = rowCount++;
             swipeGestureInfoRow = rowCount++;
 
-            // no use so hide it
-            appIconHeaderRow = -1;
-            appIconSelectorRow = -1;
-            appIconShadowRow = -1;
+            appIconHeaderRow = rowCount++;
+            appIconSelectorRow = rowCount++;
+            appIconShadowRow = rowCount++;
 
             settingsRow = rowCount++;
             nightThemeRow = rowCount++;
@@ -2004,6 +2003,10 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 case TYPE_SAVE_TO_GALLERY:
                     view = new RadioButtonCell(mContext);
                     break;
+                case TYPE_APP_ICON: {
+                    view = new AppIconsSelectorCell(mContext, ThemeActivity.this, currentAccount);
+                    break;
+                }
             }
             return new RecyclerListView.Holder(view);
         }
