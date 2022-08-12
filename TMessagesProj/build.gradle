@@ -75,7 +75,28 @@ android {
     buildToolsVersion '32.1.0-rc1'
     ndkVersion "21.4.7075529"
 
-    defaultConfig.applicationId = "com.exteragram.messenger"
+    defaultConfig.applicationId = APP_PACKAGE
+    defaultConfig.versionCode = Integer.parseInt(APP_VERSION_CODE)
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 32
+        versionName APP_VERSION_NAME
+
+        // Obtain your own keys at:
+        // Telegram: https://core.telegram.org/api/obtaining_api_id
+        buildConfigField 'int', 'APP_ID', getAppID()
+        buildConfigField 'String', 'APP_HASH', getAppHash()
+        // Google Console: https://console.cloud.google.com/google/maps-apis/credentials
+        resValue 'string', 'MAPS_V2_API', getGoogleMapsAPI()
+
+        externalNativeBuild {
+            cmake {
+                version '3.10.2'
+                arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-21'
+            }
+        }
+    }
 
     sourceSets.main.jniLibs.srcDirs = ['./jni/']
 
@@ -122,7 +143,8 @@ android {
             shrinkResources true
             multiDexEnabled true
             zipAlignEnabled true
-            proguardFiles 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            ndk.debugSymbolLevel = 'FULL'
             buildConfigField 'boolean', 'DEBUG_VERSION', 'true'
             ext.enableCrashlytics = false
         }
@@ -135,7 +157,8 @@ android {
             shrinkResources true
             multiDexEnabled true
             zipAlignEnabled true
-            proguardFiles 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            ndk.debugSymbolLevel = 'FULL'
             crunchPngs false
         }
     }
@@ -207,8 +230,6 @@ android {
         }
     }
 
-    defaultConfig.versionCode = 2721
-
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
             def buildType = variant.productFlavors[0].name
@@ -233,24 +254,5 @@ android {
         }
     }
 
-    defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 32
-        versionName "8.8.5"
-
-        // Obtain your own keys at:
-        // Telegram: https://core.telegram.org/api/obtaining_api_id
-        buildConfigField 'int', 'APP_ID', getAppID()
-        buildConfigField 'String', 'APP_HASH', getAppHash()
-        // Google Console: https://console.cloud.google.com/google/maps-apis/credentials
-        resValue 'string', 'MAPS_V2_API', getGoogleMapsAPI()
-
-        externalNativeBuild {
-            cmake {
-                version '3.10.2'
-                arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-21'
-            }
-        }
-    }
     dependenciesInfo.includeInApk false
 }

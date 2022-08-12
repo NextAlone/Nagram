@@ -37,6 +37,7 @@ public abstract class BaseCell extends ViewGroup {
                 checkingForLongPress = false;
                 if (!ExteraConfig.disableVibration) performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 if (onLongPress()) {
+                    performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                     MotionEvent event = MotionEvent.obtain(0, 0, MotionEvent.ACTION_CANCEL, 0, 0, 0);
                     onTouchEvent(event);
                     event.recycle();

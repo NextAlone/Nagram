@@ -286,6 +286,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         invalidateShaders();
 
         bgPaint.setColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground, resourcesProvider));
+        MediaDataController.getInstance(currentAccount).preloadReactions();
     }
 
     private boolean showUnlockPremiumButton() {
@@ -452,6 +453,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         shadow.draw(canvas);
         canvas.drawCircle(cx, cy, sr, bgPaint);*/
         canvas.restore();
+        invalidate();
     }
 
     private void checkPressedProgressForOtherViews(View view) {

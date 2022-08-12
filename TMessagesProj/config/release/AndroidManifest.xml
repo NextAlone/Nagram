@@ -22,8 +22,6 @@
 
     <application
         android:allowBackup="false"
-        android:fullBackupContent="false"
-        android:dataExtractionRules="@xml/data_extraction_rules"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher"
         android:label="@string/exteraAppName"
@@ -33,11 +31,10 @@
         android:largeHeap="true"
         android:supportsRtl="false"
         android:requestLegacyExternalStorage="true"
-        tools:replace="android:supportsRtl"
-        tools:ignore="UnusedAttribute">
+        tools:replace="android:supportsRtl">
 
         <service
-            android:name=".GcmPushListenerService" android:exported="false">
+            android:name="org.telegram.messenger.GcmPushListenerService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
