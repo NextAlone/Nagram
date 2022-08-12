@@ -678,7 +678,7 @@ public class LocationController extends BaseController implements NotificationCe
                     NativeByteBuffer data = cursor.byteBufferValue(4);
                     if (data != null) {
                         info.messageObject = new MessageObject(currentAccount, TLRPC.Message.TLdeserialize(data, data.readInt32(false), false), false, false);
-                        MessagesStorage.addUsersAndChatsFromMessage(info.messageObject.messageOwner, usersToLoad, chatsToLoad);
+                        MessagesStorage.addUsersAndChatsFromMessage(info.messageObject.messageOwner, usersToLoad, chatsToLoad, null);
                         data.reuse();
                     }
                     result.add(info);

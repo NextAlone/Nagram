@@ -153,9 +153,12 @@ public class FilePathDatabase {
                         // FileLog.d("get file path id=" + documentId + " dc=" + dc + " type=" + type + " path=" + res[0]);
                         
                     }
-                    cursor.dispose();
                 } catch (SQLiteException e) {
                     FileLog.e(e);
+                } finally {
+                    if (cursor != null) {
+                        cursor.dispose();
+                    }
                 }
                 syncLatch.countDown();
             });
@@ -174,9 +177,12 @@ public class FilePathDatabase {
                     // FileLog.d("get file path id=" + documentId + " dc=" + dc + " type=" + type + " path=" + res);
                     
                 }
-                cursor.dispose();
             } catch (SQLiteException e) {
                 FileLog.e(e);
+            } finally {
+                if (cursor != null) {
+                    cursor.dispose();
+                }
             }
             return res;
         }
@@ -188,8 +194,13 @@ public class FilePathDatabase {
                 // FileLog.d("put file path id=" + id + " dc=" + dc + " type=" + type + " path=" + path);
             // }
             SQLitePreparedStatement state = null;
+            SQLitePreparedStatement deleteState = null;
             try {
                 if (path != null) {
+                    deleteState = database.executeFast("DELETE FROM paths WHERE path = ?");
+                    deleteState.bindString(1, path);
+                    deleteState.step();
+
                     state = database.executeFast("REPLACE INTO paths VALUES(?, ?, ?, ?)");
                     state.requery();
                     state.bindLong(1, id);
@@ -197,11 +208,19 @@ public class FilePathDatabase {
                     state.bindInteger(3, type);
                     state.bindString(4, path);
                     state.step();
+                    state.dispose();
                 } else {
                     database.executeFast("DELETE FROM paths WHERE document_id = " + id + " AND dc_id = " + dc + " AND type = " + type).stepThis().dispose();
                 }
             } catch (SQLiteException e) {
                 FileLog.e(e);
+            } finally {
+                if (deleteState != null) {
+                    deleteState.dispose();
+                }
+                if (state != null) {
+                    state.dispose();
+                }
             }
         });
     }

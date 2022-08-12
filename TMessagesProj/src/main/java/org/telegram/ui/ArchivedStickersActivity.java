@@ -208,6 +208,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         req.offset_id = sets.isEmpty() ? 0 : sets.get(sets.size() - 1).set.id;
         req.limit = 15;
         req.masks = currentType == MediaDataController.TYPE_MASK;
+        req.emojis = currentType == MediaDataController.TYPE_EMOJIPACKS;
         int reqId = getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
             if (error == null) {
                 processResponse((TLRPC.TL_messages_archivedStickers) response);

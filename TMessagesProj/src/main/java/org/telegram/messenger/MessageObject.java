@@ -49,6 +49,8 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Components.RLottieDrawable;
+import org.telegram.ui.Components.AnimatedEmojiDrawable;
+import org.telegram.ui.Components.AnimatedEmojiSpan;
 import org.telegram.ui.Components.TextStyleSpan;
 import org.telegram.ui.Components.TranscribeButton;
 import org.telegram.ui.Components.TypefaceSpan;
@@ -96,6 +98,8 @@ public class MessageObject {
     public static final int TYPE_STICKER = 13;
     public static final int TYPE_ANIMATED_STICKER = 15;
     public static final int TYPE_POLL = 17;
+    public static final int TYPE_GIFT_PREMIUM = 18;
+    public static final int TYPE_EMOJIS = 19;
 
     public int localType;
     public String localName;
@@ -108,6 +112,8 @@ public class MessageObject {
     public boolean localEdit;
     public TLRPC.Message messageOwner;
     public TLRPC.Document emojiAnimatedSticker;
+    public Long emojiAnimatedStickerId;
+    private boolean emojiAnimatedStickerLoading;
     public String emojiAnimatedStickerColor;
     public CharSequence messageText;
     public CharSequence linkDescription;
@@ -171,6 +177,7 @@ public class MessageObject {
     public int stableId;
 
     public boolean wasUnread;
+    public boolean playedGiftAnimation;
 
     public boolean hadAnimationNotReadyLoading;
 
@@ -184,6 +191,7 @@ public class MessageObject {
     public CharSequence editingMessage;
     public ArrayList<TLRPC.MessageEntity> editingMessageEntities;
     public boolean editingMessageSearchWebPage;
+    public ArrayList<TLRPC.MessageEntity> webPageDescriptionEntities;
 
     public String previousMessage;
     public TLRPC.MessageMedia previousMedia;
@@ -208,7 +216,9 @@ public class MessageObject {
 
     public SendAnimationData sendAnimationData;
 
+    private boolean hasUnwrappedEmoji;
     private int emojiOnlyCount;
+    private int totalAnimatedEmojiCount;
     private boolean layoutCreated;
     private int generatedWithMinSize;
     private float generatedWithDensity;
@@ -334,6 +344,13 @@ public class MessageObject {
             }
         }
         return null;
+    }
+
+    public void copyStableParams(MessageObject old) {
+        stableId = old.stableId;
+        messageOwner.premiumEffectWasPlayed = old.messageOwner.premiumEffectWasPlayed;
+        forcePlayEffect = old.forcePlayEffect;
+        wasJustSent = old.wasJustSent;
     }
 
     public static class SendAnimationData {
@@ -1001,6 +1018,7 @@ public class MessageObject {
     }
 
     private static final int LINES_PER_BLOCK = 10;
+    private static final int LINES_PER_BLOCK_WITH_EMOJI = 5;
 
     public ArrayList<TextLayoutBlock> textLayoutBlocks;
 
@@ -1084,10 +1102,28 @@ public class MessageObject {
                 paint = Theme.chat_msgTextPaint;
             }
             int[] emojiOnly = allowsBigEmoji() ? new int[1] : null;
-            messageText = Emoji.replaceEmoji(messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20), false, emojiOnly, contentType == 0, viewRef);
+            messageText = Emoji.replaceEmoji(messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20), false, emojiOnly);
+            messageText = replaceAnimatedEmoji(messageText, messageOwner.entities, paint.getFontMetricsInt());
+            if (emojiOnly != null && emojiOnly[0] > 1) {
+                replaceEmojiToLottieFrame(messageText, emojiOnly);
+            }
             checkEmojiOnly(emojiOnly);
-            emojiAnimatedSticker = null;
-            if (emojiOnlyCount == 1 && !(message.media instanceof TLRPC.TL_messageMediaWebPage) && !(message.media instanceof TLRPC.TL_messageMediaInvoice) && message.entities.isEmpty() && (message.media instanceof TLRPC.TL_messageMediaEmpty || message.media == null) && messageOwner.grouped_id == 0) {
+            checkBigAnimatedEmoji();
+            setType();
+            createPathThumb();
+        }
+        layoutCreated = generateLayout;
+        generateThumbs(false);
+        if (checkMediaExists) {
+            checkMediaExistance();
+        }
+    }
+
+    private void checkBigAnimatedEmoji() {
+        emojiAnimatedSticker = null;
+        emojiAnimatedStickerId = null;
+        if (emojiOnlyCount == 1 && !(messageOwner.media instanceof TLRPC.TL_messageMediaWebPage) && !(messageOwner.media instanceof TLRPC.TL_messageMediaInvoice) && (messageOwner.media instanceof TLRPC.TL_messageMediaEmpty || messageOwner.media == null) && this.messageOwner.grouped_id == 0) {
+            if (messageOwner.entities.isEmpty()) {
                 CharSequence emoji = messageText;
                 int index;
                 if ((index = TextUtils.indexOf(emoji, "\uD83C\uDFFB")) >= 0) {
@@ -1115,23 +1151,28 @@ public class MessageObject {
                 if (TextUtils.isEmpty(emojiAnimatedStickerColor) || EmojiData.emojiColoredMap.contains(emoji.toString())) {
                     emojiAnimatedSticker = MediaDataController.getInstance(currentAccount).getEmojiAnimatedSticker(emoji);
                 }
+            } else if (messageOwner.entities.size() == 1 && messageOwner.entities.get(0) instanceof TLRPC.TL_messageEntityCustomEmoji) {
+                try {
+                    emojiAnimatedStickerId = ((TLRPC.TL_messageEntityCustomEmoji) messageOwner.entities.get(0)).document_id;
+                    emojiAnimatedSticker = AnimatedEmojiDrawable.findDocument(currentAccount, emojiAnimatedStickerId);
+                    if (emojiAnimatedSticker == null && messageText instanceof Spanned) {
+                        AnimatedEmojiSpan[] animatedEmojiSpans = ((Spanned) messageText).getSpans(0, messageText.length(), AnimatedEmojiSpan.class);
+                        if (animatedEmojiSpans != null && animatedEmojiSpans.length == 1) {
+                            emojiAnimatedSticker = animatedEmojiSpans[0].document;
+                        }
+                    }
+                } catch (Exception ignore) {}
             }
-            if (emojiAnimatedSticker == null) {
-                generateLayout(fromUser);
-            } else {
-                type = 1000;
-                if (isSticker()) {
-                    type = TYPE_STICKER;
-                } else if (isAnimatedSticker()) {
-                    type = TYPE_ANIMATED_STICKER;
-                }
-            }
-            createPathThumb();
         }
-        layoutCreated = generateLayout;
-        generateThumbs(false);
-        if (checkMediaExists) {
-            checkMediaExistance();
+        if (emojiAnimatedSticker == null && emojiAnimatedStickerId == null) {
+            generateLayout(null);
+        } else {
+            type = 1000;
+            if (isSticker()) {
+                type = TYPE_STICKER;
+            } else if (isAnimatedSticker()) {
+                type = TYPE_ANIMATED_STICKER;
+            }
         }
     }
 
@@ -1186,32 +1227,90 @@ public class MessageObject {
     }
 
     private void checkEmojiOnly(int[] emojiOnly) {
-        if (emojiOnly != null && emojiOnly[0] >= 1 && emojiOnly[0] <= 3) {
+        checkEmojiOnly(emojiOnly == null ? null : emojiOnly[0]);
+    }
+
+    private void checkEmojiOnly(Integer emojiOnly) {
+        if (emojiOnly != null && emojiOnly >= 1) {
+            Emoji.EmojiSpan[] spans = ((Spannable) messageText).getSpans(0, messageText.length(), Emoji.EmojiSpan.class);
+            AnimatedEmojiSpan[] aspans = ((Spannable) messageText).getSpans(0, messageText.length(), AnimatedEmojiSpan.class);
+            emojiOnlyCount = Math.max(emojiOnly, (spans == null ? 0 : spans.length) + (aspans == null ? 0 : aspans.length));
+            totalAnimatedEmojiCount = aspans == null ? 0 : aspans.length;
+            int animatedEmojiCount = 0;
+            if (aspans != null) {
+                for (int i = 0; i < aspans.length; ++i) {
+                    if (!aspans[i].standard) {
+                        animatedEmojiCount++;
+                    }
+                }
+            }
+            hasUnwrappedEmoji = emojiOnlyCount - (spans == null ? 0 : spans.length) - (aspans == null ? 0 : aspans.length) > 0;
+            if (emojiOnlyCount == 0 || hasUnwrappedEmoji) {
+                if (aspans != null && aspans.length > 0) {
+                    for (int a = 0; a < aspans.length; a++) {
+                        aspans[a].replaceFontMetrics(Theme.chat_msgTextPaint.getFontMetricsInt(), (int) (Theme.chat_msgTextPaint.getTextSize() + AndroidUtilities.dp(4)), -1);
+                    }
+                }
+                return;
+            }
+            boolean large = emojiOnlyCount == animatedEmojiCount;
+            int cacheType = -1;
             TextPaint emojiPaint;
-            int size;
-            switch (emojiOnly[0]) {
+            switch (emojiOnlyCount) {
+                case 0:
                 case 1:
-                    emojiPaint = Theme.chat_msgTextPaintOneEmoji;
-                    size = AndroidUtilities.dp(32);
-                    emojiOnlyCount = 1;
+                    emojiPaint = large ? Theme.chat_msgTextPaintEmoji[0] : Theme.chat_msgTextPaintEmoji[2];
                     break;
                 case 2:
-                    emojiPaint = Theme.chat_msgTextPaintTwoEmoji;
-                    size = AndroidUtilities.dp(28);
-                    emojiOnlyCount = 2;
+                    cacheType = AnimatedEmojiDrawable.CACHE_TYPE_MESSAGES_LARGE;
+                    emojiPaint = large ? Theme.chat_msgTextPaintEmoji[0] : Theme.chat_msgTextPaintEmoji[2];
                     break;
                 case 3:
+                    cacheType = AnimatedEmojiDrawable.CACHE_TYPE_MESSAGES_LARGE;
+                    emojiPaint = large ? Theme.chat_msgTextPaintEmoji[1] : Theme.chat_msgTextPaintEmoji[3];
+                    break;
+                case 4:
+                    cacheType = AnimatedEmojiDrawable.CACHE_TYPE_MESSAGES_LARGE;
+                    emojiPaint = large ? Theme.chat_msgTextPaintEmoji[2] : Theme.chat_msgTextPaintEmoji[4];
+                    break;
+                case 5:
+                    cacheType = AnimatedEmojiDrawable.CACHE_TYPE_KEYBOARD;
+                    emojiPaint = large ? Theme.chat_msgTextPaintEmoji[3] : Theme.chat_msgTextPaintEmoji[5];
+                    break;
+                case 6:
+                    cacheType = AnimatedEmojiDrawable.CACHE_TYPE_KEYBOARD;
+                    emojiPaint = large ? Theme.chat_msgTextPaintEmoji[4] : Theme.chat_msgTextPaintEmoji[5];
+                    break;
+                case 7:
+                case 8:
+                case 9:
                 default:
-                    emojiPaint = Theme.chat_msgTextPaintThreeEmoji;
-                    size = AndroidUtilities.dp(24);
-                    emojiOnlyCount = 3;
+                    if (emojiOnlyCount > 9) {
+                        cacheType = AnimatedEmojiDrawable.CACHE_TYPE_MESSAGES;
+                    }
+                    emojiPaint = Theme.chat_msgTextPaintEmoji[5];
                     break;
             }
-            Emoji.EmojiSpan[] spans = ((Spannable) messageText).getSpans(0, messageText.length(), Emoji.EmojiSpan.class);
+            int size = (int) (emojiPaint.getTextSize() + AndroidUtilities.dp(large ? 4 : 4));
             if (spans != null && spans.length > 0) {
                 for (int a = 0; a < spans.length; a++) {
                     spans[a].replaceFontMetrics(emojiPaint.getFontMetricsInt(), size);
                 }
+            }
+            if (aspans != null && aspans.length > 0) {
+                for (int a = 0; a < aspans.length; a++) {
+                    aspans[a].replaceFontMetrics(emojiPaint.getFontMetricsInt(), size, cacheType);
+                }
+            }
+        } else {
+            AnimatedEmojiSpan[] aspans = ((Spannable) messageText).getSpans(0, messageText.length(), AnimatedEmojiSpan.class);
+            if (aspans != null && aspans.length > 0) {
+                totalAnimatedEmojiCount = aspans.length;
+                for (int a = 0; a < aspans.length; a++) {
+                    aspans[a].replaceFontMetrics(Theme.chat_msgTextPaint.getFontMetricsInt(), (int) (Theme.chat_msgTextPaint.getTextSize() + AndroidUtilities.dp(4)), -1);
+                }
+            } else {
+                totalAnimatedEmojiCount = 0;
             }
         }
     }
@@ -1237,6 +1336,7 @@ public class MessageObject {
         peer_id.channel_id = chat.id;
 
         TLRPC.Message message = null;
+        ArrayList<TLRPC.MessageEntity> webPageDescriptionEntities = null;
         if (event.action instanceof TLRPC.TL_channelAdminLogEventActionChangeTitle) {
             String title = ((TLRPC.TL_channelAdminLogEventActionChangeTitle) event.action).new_value;
             if (chat.megagroup) {
@@ -1829,6 +1929,7 @@ public class MessageObject {
                         message.media.webpage.description = LocaleController.getString("EventLogOriginalCaptionEmpty", R.string.EventLogOriginalCaptionEmpty);
                     } else {
                         message.media.webpage.description = oldMessage.message;
+                        webPageDescriptionEntities = oldMessage.entities;
                     }
                 }
             } else {
@@ -1838,6 +1939,7 @@ public class MessageObject {
                     message.media = new TLRPC.TL_messageMediaEmpty();
                 } else {
                     message.message = newMessage.message;
+                    message.entities = newMessage.entities;
                     message.media = new TLRPC.TL_messageMediaWebPage();
                     message.media.webpage = new TLRPC.TL_webPage();
                     message.media.webpage.site_name = LocaleController.getString("EventLogOriginalMessages", R.string.EventLogOriginalMessages);
@@ -1845,6 +1947,7 @@ public class MessageObject {
                         message.media.webpage.description = LocaleController.getString("EventLogOriginalCaptionEmpty", R.string.EventLogOriginalCaptionEmpty);
                     } else {
                         message.media.webpage.description = oldMessage.message;
+                        webPageDescriptionEntities = oldMessage.entities;
                     }
                 }
             }
@@ -2060,6 +2163,11 @@ public class MessageObject {
             } else {
                 contentType = -1;
             }
+            if (webPageDescriptionEntities != null) {
+                messageObject.webPageDescriptionEntities = webPageDescriptionEntities;
+                messageObject.linkDescription = null;
+                messageObject.generateLinkDescription();
+            }
         }
         if (contentType >= 0) {
             createDateArray(currentAccount, event, messageObjects, messagesByDays, addToEnd);
@@ -2076,19 +2184,25 @@ public class MessageObject {
             messageText = "";
         }
 
-        setType();
-        measureInlineBotButtons();
-        generateCaption();
-
         TextPaint paint;
         if (messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
             paint = Theme.chat_msgGameTextPaint;
         } else {
             paint = Theme.chat_msgTextPaint;
         }
+
         int[] emojiOnly = allowsBigEmoji() ? new int[1] : null;
-        messageText = Emoji.replaceEmoji(messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20), false, emojiOnly, contentType == 0, viewRef);
+        messageText = Emoji.replaceEmoji(messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20), false, emojiOnly);
+        messageText = replaceAnimatedEmoji(messageText, messageOwner.entities, paint.getFontMetricsInt());
+        if (emojiOnly != null && emojiOnly[0] > 1) {
+            replaceEmojiToLottieFrame(messageText, emojiOnly);
+        }
         checkEmojiOnly(emojiOnly);
+
+        setType();
+        measureInlineBotButtons();
+        generateCaption();
+
         if (mediaController.isPlayingMessage(this)) {
             MessageObject player = mediaController.getPlayingMessageObject();
             audioProgress = player.audioProgress;
@@ -2163,9 +2277,14 @@ public class MessageObject {
             paint = Theme.chat_msgTextPaint;
         }
         int[] emojiOnly = allowsBigEmoji() ? new int[1] : null;
-        messageText = Emoji.replaceEmoji(messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20), false, emojiOnly, contentType == 0, viewRef);
+        messageText = Emoji.replaceEmoji(messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20), false, emojiOnly);
+        messageText = replaceAnimatedEmoji(messageText, messageOwner.entities, paint.getFontMetricsInt());
+        if (emojiOnly != null && emojiOnly[0] > 1) {
+            replaceEmojiToLottieFrame(messageText, emojiOnly);
+        }
         checkEmojiOnly(emojiOnly);
         generateLayout(fromUser);
+        setType();
     }
 
     private boolean allowsBigEmoji() {
@@ -2285,14 +2404,26 @@ public class MessageObject {
                 messageText = replaceWithLink(LocaleController.getString("ActionPinnedPhoto", R.string.ActionPinnedPhoto), "un1", fromUser != null ? fromUser : chat);
             } else if (replyMessageObject.messageOwner.media instanceof TLRPC.TL_messageMediaGame) {
                 messageText = replaceWithLink(LocaleController.formatString("ActionPinnedGame", R.string.ActionPinnedGame, "\uD83C\uDFAE " + replyMessageObject.messageOwner.media.game.title), "un1", fromUser != null ? fromUser : chat);
-                messageText = Emoji.replaceEmoji(messageText, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false, contentType == 0, viewRef);
+                messageText = Emoji.replaceEmoji(messageText, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false);
             } else if (replyMessageObject.messageText != null && replyMessageObject.messageText.length() > 0) {
-                CharSequence mess = replyMessageObject.messageText;
+                CharSequence mess = AnimatedEmojiSpan.cloneSpans(replyMessageObject.messageText);
+                boolean ellipsize = false;
                 if (mess.length() > 20) {
-                    mess = mess.subSequence(0, 20) + "...";
+                    mess = mess.subSequence(0, 20);
+                    ellipsize = true;
                 }
-                mess = Emoji.replaceEmoji(mess, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false, contentType == 0, viewRef);
+                mess = Emoji.replaceEmoji(mess, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false);
+                if (replyMessageObject != null && replyMessageObject.messageOwner != null) {
+                    mess = replaceAnimatedEmoji(mess, replyMessageObject.messageOwner.entities, Theme.chat_msgTextPaint.getFontMetricsInt());
+                }
                 MediaDataController.addTextStyleRuns(replyMessageObject, (Spannable) mess);
+                if (ellipsize) {
+                    if (mess instanceof SpannableStringBuilder) {
+                        ((SpannableStringBuilder) mess).append("...");
+                    } else if (mess != null) {
+                        mess = new SpannableStringBuilder(mess).append("...");
+                    }
+                }
                 messageText = replaceWithLink(AndroidUtilities.formatSpannable(LocaleController.getString("ActionPinnedText", R.string.ActionPinnedText), mess), "un1", fromUser != null ? fromUser : chat);
             } else {
                 messageText = replaceWithLink(LocaleController.getString("ActionPinnedNoText", R.string.ActionPinnedNoText), "un1", fromUser != null ? fromUser : chat);
@@ -2388,6 +2519,19 @@ public class MessageObject {
             media.results.solution_entities = results.solution_entities;
             media.results.flags |= 16;
         }
+    }
+
+    public void loadAnimatedEmojiDocument() {
+        if (emojiAnimatedSticker != null || emojiAnimatedStickerId == null || emojiAnimatedStickerLoading) {
+            return;
+        }
+        emojiAnimatedStickerLoading = true;
+        AnimatedEmojiDrawable.getDocumentFetcher(currentAccount).fetchDocument(emojiAnimatedStickerId, document -> {
+            AndroidUtilities.runOnUIThread(() -> {
+                this.emojiAnimatedSticker = document;
+                NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.animatedEmojiDocumentLoaded, this);
+            });
+        });
     }
 
     public boolean isPollClosed() {
@@ -2629,7 +2773,7 @@ public class MessageObject {
                         if (str == null) {
                             str = "";
                         }
-                        text = Emoji.replaceEmoji(str, Theme.chat_msgBotButtonPaint.getFontMetricsInt(), AndroidUtilities.dp(15), false, contentType == 0, viewRef);
+                        text = Emoji.replaceEmoji(str, Theme.chat_msgBotButtonPaint.getFontMetricsInt(), AndroidUtilities.dp(15), false);
                     }
                     StaticLayout staticLayout = new StaticLayout(text, Theme.chat_msgBotButtonPaint, AndroidUtilities.dp(2000), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                     if (staticLayout.getLineCount() > 0) {
@@ -2649,7 +2793,7 @@ public class MessageObject {
                 TLRPC.TL_reactionCount reactionCount = messageOwner.reactions.results.get(a);
                 int maxButtonSize = 0;
                 botButtonsLayout.append(0).append(a);
-                CharSequence text = Emoji.replaceEmoji(String.format("%d %s", reactionCount.count, reactionCount.reaction), Theme.chat_msgBotButtonPaint.getFontMetricsInt(), AndroidUtilities.dp(15), false, contentType == 0, viewRef);
+                CharSequence text = Emoji.replaceEmoji(String.format("%d %s", reactionCount.count, reactionCount.reaction), Theme.chat_msgBotButtonPaint.getFontMetricsInt(), AndroidUtilities.dp(15), false);
                 StaticLayout staticLayout = new StaticLayout(text, Theme.chat_msgBotButtonPaint, AndroidUtilities.dp(2000), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 if (staticLayout.getLineCount() > 0) {
                     float width = staticLayout.getLineWidth(0);
@@ -2898,6 +3042,18 @@ public class MessageObject {
                         messageText = LocaleController.getString("ActionInviteYou", R.string.ActionInviteYou);
                     } else {
                         messageText = replaceWithLink(LocaleController.getString("ActionInviteUser", R.string.ActionInviteUser), "un1", fromObject);
+                    }
+                } else if (messageOwner.action instanceof TLRPC.TL_messageActionGiftPremium) {
+                    if (fromObject instanceof TLRPC.User && ((TLRPC.User) fromObject).self) {
+                        TLRPC.User user = getUser(users, sUsers, messageOwner.peer_id.user_id);
+                        messageText = replaceWithLink(AndroidUtilities.replaceTags(LocaleController.getString(R.string.ActionGiftOutbound)), "un1", user);
+                    } else {
+                        messageText = replaceWithLink(AndroidUtilities.replaceTags(LocaleController.getString(R.string.ActionGiftInbound)), "un1", fromObject);
+                    }
+                    int i = messageText.toString().indexOf("un2");
+                    if (i != -1) {
+                        SpannableStringBuilder sb = SpannableStringBuilder.valueOf(messageText);
+                        messageText = sb.replace(i, i + 3, BillingController.getInstance().formatCurrency(messageOwner.action.amount, messageOwner.action.currency));
                     }
                 } else if (messageOwner.action instanceof TLRPC.TL_messageActionChatEditPhoto) {
                     TLRPC.Chat chat = messageOwner.peer_id != null && messageOwner.peer_id.channel_id != 0 ? getChat(chats, sChats, messageOwner.peer_id.channel_id) : null;
@@ -3284,12 +3440,14 @@ public class MessageObject {
         if (messageOwner instanceof TLRPC.TL_message || messageOwner instanceof TLRPC.TL_messageForwarded_old2) {
             if (isRestrictedMessage) {
                 type = 0;
-            } else if (emojiAnimatedSticker != null) {
+            } else if (emojiAnimatedSticker != null || emojiAnimatedStickerId != null) {
                 if (isSticker()) {
                     type = TYPE_STICKER;
                 } else {
                     type = TYPE_ANIMATED_STICKER;
                 }
+            } else if (!isDice() && emojiOnlyCount >= 1 && !hasUnwrappedEmoji) {
+                type = TYPE_EMOJIS;
             } else if (isMediaEmpty()) {
                 type = 0;
                 if (TextUtils.isEmpty(messageText) && eventId == 0) {
@@ -3353,6 +3511,9 @@ public class MessageObject {
         } else if (messageOwner instanceof TLRPC.TL_messageService) {
             if (messageOwner.action instanceof TLRPC.TL_messageActionLoginUnknownLocation) {
                 type = 0;
+            } else if (messageOwner.action instanceof TLRPC.TL_messageActionGiftPremium) {
+                contentType = 1;
+                type = TYPE_GIFT_PREMIUM;
             } else if (messageOwner.action instanceof TLRPC.TL_messageActionChatEditPhoto || messageOwner.action instanceof TLRPC.TL_messageActionUserUpdatedPhoto) {
                 contentType = 1;
                 type = 11;
@@ -3374,14 +3535,14 @@ public class MessageObject {
                 type = 10;
             }
         }
-        if (oldType != 1000 && oldType != type) {
+        if (oldType != 1000 && oldType != type && type != TYPE_EMOJIS) {
             updateMessageText(MessagesController.getInstance(currentAccount).getUsers(), MessagesController.getInstance(currentAccount).getChats(), null, null);
             generateThumbs(false);
         }
     }
 
     public boolean checkLayout() {
-        if (type != 0 || messageOwner.peer_id == null || messageText == null || messageText.length() == 0) {
+        if (type != 0 && type != TYPE_EMOJIS || messageOwner.peer_id == null || messageText == null || messageText.length() == 0) {
             return false;
         }
         if (layoutCreated) {
@@ -3403,9 +3564,14 @@ public class MessageObject {
                 paint = Theme.chat_msgTextPaint;
             }
             int[] emojiOnly = allowsBigEmoji() ? new int[1] : null;
-            messageText = Emoji.replaceEmoji(messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20), false, emojiOnly, contentType == 0, viewRef);
+            messageText = Emoji.replaceEmoji(messageText, paint.getFontMetricsInt(), AndroidUtilities.dp(20), false, emojiOnly);
+            messageText = replaceAnimatedEmoji(messageText, messageOwner.entities, paint.getFontMetricsInt());
+            if (emojiOnly != null && emojiOnly[0] > 1) {
+                replaceEmojiToLottieFrame(messageText, emojiOnly);
+            }
             checkEmojiOnly(emojiOnly);
-            generateLayout(fromUser);
+            checkBigAnimatedEmoji();
+            setType();
             return true;
         }
         return false;
@@ -3584,7 +3750,7 @@ public class MessageObject {
                 }
                 photoThumbsObject = messageOwner.action.photo;
             }
-        } else if (emojiAnimatedSticker != null) {
+        } else if (emojiAnimatedSticker != null || emojiAnimatedStickerId != null) {
             if (TextUtils.isEmpty(emojiAnimatedStickerColor) && isDocumentHasThumb(emojiAnimatedSticker)) {
                 if (!update || photoThumbs == null) {
                     photoThumbs = new ArrayList<>();
@@ -3908,7 +4074,11 @@ public class MessageObject {
                     FileLog.e(e);
                 }
             }
-            linkDescription = Emoji.replaceEmoji(linkDescription, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false, contentType == 0, viewRef);
+            linkDescription = Emoji.replaceEmoji(linkDescription, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false);
+            if (webPageDescriptionEntities != null) {
+                addEntitiesToText(linkDescription, webPageDescriptionEntities, isOut(), false, false, true);
+                replaceAnimatedEmoji(linkDescription, webPageDescriptionEntities, Theme.chat_msgTextPaint.getFontMetricsInt());
+            }
             if (hashtagsType != 0) {
                 if (!(linkDescription instanceof Spannable)) {
                     linkDescription = new SpannableStringBuilder(linkDescription);
@@ -3935,7 +4105,7 @@ public class MessageObject {
         }
         CharSequence text = messageOwner.voiceTranscription;
         if (!TextUtils.isEmpty(text)) {
-            text = Emoji.replaceEmoji(text, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false, contentType == 0, viewRef);
+            text = Emoji.replaceEmoji(text, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false);
         }
         return text;
     }
@@ -3968,7 +4138,8 @@ public class MessageObject {
             return;
         }
         if (!isMediaEmpty() && !(messageOwner.media instanceof TLRPC.TL_messageMediaGame) && !TextUtils.isEmpty(messageOwner.message)) {
-            caption = Emoji.replaceEmoji(messageOwner.message, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false, contentType == 0, viewRef);
+            caption = Emoji.replaceEmoji(messageOwner.message, Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false);
+            caption = replaceAnimatedEmoji(caption, messageOwner.entities, Theme.chat_msgTextPaint.getFontMetricsInt());
 
             boolean hasEntities;
             if (messageOwner.send_state != MESSAGE_SEND_STATE_SENT) {
@@ -4249,6 +4420,74 @@ public class MessageObject {
         }
     }
 
+    public void replaceEmojiToLottieFrame(CharSequence text, int[] emojiOnly) {
+        if (!(text instanceof Spannable)) {
+            return;
+        }
+        Spannable spannable = (Spannable) text;
+        Emoji.EmojiSpan[] spans = spannable.getSpans(0, spannable.length(), Emoji.EmojiSpan.class);
+        AnimatedEmojiSpan[] aspans = spannable.getSpans(0, spannable.length(), AnimatedEmojiSpan.class);
+
+        if (spans == null || (emojiOnly == null ? 0 : emojiOnly[0]) - spans.length - (aspans == null ? 0 : aspans.length) > 0) {
+            return;
+        }
+        for (int i = 0; i < spans.length; ++i) {
+            TLRPC.Document lottieDocument = MediaDataController.getInstance(currentAccount).getEmojiAnimatedSticker(spans[i].emoji);
+            if (lottieDocument != null) {
+                int start = spannable.getSpanStart(spans[i]);
+                int end = spannable.getSpanEnd(spans[i]);
+                spannable.removeSpan(spans[i]);
+                AnimatedEmojiSpan span = new AnimatedEmojiSpan(lottieDocument, spans[i].fontMetrics);
+                span.standard = true;
+                spannable.setSpan(span, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+    }
+
+    public static Spannable replaceAnimatedEmoji(CharSequence text, ArrayList<TLRPC.MessageEntity> entities, Paint.FontMetricsInt fontMetricsInt) {
+        Spannable spannable = text instanceof Spannable ? (Spannable) text : new SpannableString(text);
+        if (entities == null) {
+            return spannable;
+        }
+        Emoji.EmojiSpan[] emojiSpans = spannable.getSpans(0, spannable.length(), Emoji.EmojiSpan.class);
+        for (int i = 0; i < entities.size(); ++i) {
+            TLRPC.MessageEntity messageEntity = entities.get(i);
+            if (messageEntity instanceof TLRPC.TL_messageEntityCustomEmoji) {
+                TLRPC.TL_messageEntityCustomEmoji entity = (TLRPC.TL_messageEntityCustomEmoji) messageEntity;
+                for (int j = 0; j < emojiSpans.length; ++j) {
+                    Emoji.EmojiSpan span = emojiSpans[j];
+                    if (span != null) {
+                        int start = spannable.getSpanStart(span);
+                        int end = spannable.getSpanEnd(span);
+
+                        if (entity.offset == start && entity.length == (end - start)) {
+                            spannable.removeSpan(span);
+                            emojiSpans[j] = null;
+                        }
+                    }
+                }
+
+                if (messageEntity.offset + messageEntity.length <= spannable.length()) {
+                    AnimatedEmojiSpan[] animatedSpans = spannable.getSpans(messageEntity.offset, messageEntity.offset + messageEntity.length, AnimatedEmojiSpan.class);
+                    if (animatedSpans != null && animatedSpans.length > 0) {
+                        for (int j = 0; j < animatedSpans.length; ++j) {
+                            spannable.removeSpan(animatedSpans[j]);
+                        }
+                    }
+
+                    AnimatedEmojiSpan span;
+                    if (entity.document != null) {
+                        span = new AnimatedEmojiSpan(entity.document, fontMetricsInt);
+                    } else {
+                        span = new AnimatedEmojiSpan(entity.document_id, fontMetricsInt);
+                    }
+                    spannable.setSpan(span, messageEntity.offset, messageEntity.offset + messageEntity.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            }
+        }
+        return spannable;
+    }
+
     public static boolean addEntitiesToText(CharSequence text, ArrayList<TLRPC.MessageEntity> entities, boolean out, boolean usernames, boolean photoViewer, boolean useManualParse) {
         if (!(text instanceof Spannable)) {
             return false;
@@ -4298,7 +4537,8 @@ public class MessageObject {
                     entity instanceof TLRPC.TL_messageEntityMentionName ||
                     entity instanceof TLRPC.TL_inputMessageEntityMentionName ||
                     entity instanceof TLRPC.TL_messageEntityTextUrl ||
-                    entity instanceof TLRPC.TL_messageEntitySpoiler) {
+                    entity instanceof TLRPC.TL_messageEntitySpoiler ||
+                    entity instanceof TLRPC.TL_messageEntityCustomEmoji) {
                 if (spans != null && spans.length > 0) {
                     for (int b = 0; b < spans.length; b++) {
                         if (spans[b] == null) {
@@ -4312,6 +4552,10 @@ public class MessageObject {
                         }
                     }
                 }
+            }
+
+            if (entity instanceof TLRPC.TL_messageEntityCustomEmoji) {
+                continue;
             }
 
             TextStyleSpan.TextStyleRun newRun = new TextStyleSpan.TextStyleRun();
@@ -4493,7 +4737,7 @@ public class MessageObject {
             return false;
         } else if (messageOwner.fwd_from != null && !isOutOwner() && messageOwner.fwd_from.saved_from_peer != null && getDialogId() == UserConfig.getInstance(currentAccount).getClientUserId()) {
             return true;
-        } else if (type == TYPE_STICKER || type == TYPE_ANIMATED_STICKER) {
+        } else if (type == TYPE_STICKER || type == TYPE_ANIMATED_STICKER || type == TYPE_EMOJIS) {
             return false;
         } else if (messageOwner.fwd_from != null && messageOwner.fwd_from.from_id instanceof TLRPC.TL_peerChannel && !isOutOwner()) {
             return true;
@@ -4561,11 +4805,14 @@ public class MessageObject {
                 maxWidth -= AndroidUtilities.dp(10);
             }
         }
+        if (emojiOnlyCount >= 1 && totalAnimatedEmojiCount <= 100 && (emojiOnlyCount - totalAnimatedEmojiCount) < (SharedConfig.getDevicePerformanceClass() >= SharedConfig.PERFORMANCE_CLASS_HIGH ? 100 : 50) && (hasValidReplyMessageObject() || isForwarded())) {
+            maxWidth = Math.min(maxWidth, (int) (generatedWithMinSize * .65f));
+        }
         return maxWidth;
     }
 
     public void generateLayout(TLRPC.User fromUser) {
-        if (type != 0 || messageOwner.peer_id == null || TextUtils.isEmpty(messageText)) {
+        if (type != 0 && type != TYPE_EMOJIS || messageOwner.peer_id == null || TextUtils.isEmpty(messageText)) {
             return;
         }
 
@@ -4627,15 +4874,16 @@ public class MessageObject {
             paint = Theme.chat_msgTextPaint;
         }
 
+        Layout.Alignment align = Layout.Alignment.ALIGN_NORMAL; //type == TYPE_EMOJIS && isOut() ? Layout.Alignment.ALIGN_OPPOSITE : Layout.Alignment.ALIGN_NORMAL;
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 textLayout = StaticLayout.Builder.obtain(messageText, 0, messageText.length(), paint, maxWidth)
                         .setBreakStrategy(StaticLayout.BREAK_STRATEGY_HIGH_QUALITY)
                         .setHyphenationFrequency(StaticLayout.HYPHENATION_FREQUENCY_NONE)
-                        .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                        .setAlignment(align)
                         .build();
             } else {
-                textLayout = new StaticLayout(messageText, paint, maxWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                textLayout = new StaticLayout(messageText, paint, maxWidth, align, 1.0f, 0.0f, false);
             }
         } catch (Exception e) {
             FileLog.e(e);
@@ -4644,22 +4892,24 @@ public class MessageObject {
 
         textHeight = textLayout.getHeight();
         linesCount = textLayout.getLineCount();
+        int linesPreBlock = totalAnimatedEmojiCount >= 50 ? LINES_PER_BLOCK_WITH_EMOJI : LINES_PER_BLOCK;
 
         int blocksCount;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        boolean singleLayout = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && totalAnimatedEmojiCount < 50;
+        if (singleLayout) {
             blocksCount = 1;
         } else {
-            blocksCount = (int) Math.ceil((float) linesCount / LINES_PER_BLOCK);
+            blocksCount = (int) Math.ceil((float) linesCount / linesPreBlock);
         }
         int linesOffset = 0;
         float prevOffset = 0;
 
         for (int a = 0; a < blocksCount; a++) {
             int currentBlockLinesCount;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (singleLayout) {
                 currentBlockLinesCount = linesCount;
             } else {
-                currentBlockLinesCount = Math.min(LINES_PER_BLOCK, linesCount - linesOffset);
+                currentBlockLinesCount = Math.min(linesPreBlock, linesCount - linesOffset);
             }
             TextLayoutBlock block = new TextLayoutBlock();
 
@@ -4701,10 +4951,10 @@ public class MessageObject {
                         block.textLayout = StaticLayout.Builder.obtain(sb, 0, sb.length(), paint, maxWidth + AndroidUtilities.dp(2))
                                 .setBreakStrategy(StaticLayout.BREAK_STRATEGY_HIGH_QUALITY)
                                 .setHyphenationFrequency(StaticLayout.HYPHENATION_FREQUENCY_NONE)
-                                .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                                .setAlignment(align)
                                 .build();
                     } else {
-                        block.textLayout = new StaticLayout(sb, 0, sb.length(), paint, maxWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                        block.textLayout = new StaticLayout(sb, 0, sb.length(), paint, maxWidth, align, 1.0f, 0.0f, false);
                     }
 
                     block.textYOffset = textLayout.getLineTop(linesOffset);
@@ -5237,6 +5487,8 @@ public class MessageObject {
                 TLRPC.DocumentAttribute attribute = document.attributes.get(a);
                 if (attribute instanceof TLRPC.TL_documentAttributeSticker) {
                     return attribute.stickerset instanceof TLRPC.TL_inputStickerSetShortName;
+                } else if (attribute instanceof TLRPC.TL_documentAttributeCustomEmoji) {
+                    return true;
                 }
             }
         }
@@ -5463,7 +5715,8 @@ public class MessageObject {
         }
         for (int a = 0, N = document.attributes.size(); a < N; a++) {
             TLRPC.DocumentAttribute attribute = document.attributes.get(a);
-            if (attribute instanceof TLRPC.TL_documentAttributeSticker) {
+            if (attribute instanceof TLRPC.TL_documentAttributeSticker ||
+                attribute instanceof TLRPC.TL_documentAttributeCustomEmoji) {
                 if (attribute.stickerset instanceof TLRPC.TL_inputStickerSetEmpty) {
                     return null;
                 }
@@ -5471,6 +5724,80 @@ public class MessageObject {
             }
         }
         return null;
+    }
+
+    public static String findAnimatedEmojiEmoticon(TLRPC.Document document) {
+        return findAnimatedEmojiEmoticon(document, "\uD83D\uDE00");
+    }
+
+    public static String findAnimatedEmojiEmoticon(TLRPC.Document document, String fallback) {
+        if (document == null) {
+            return fallback;
+        }
+        for (int a = 0, N = document.attributes.size(); a < N; a++) {
+            TLRPC.DocumentAttribute attribute = document.attributes.get(a);
+            if (attribute instanceof TLRPC.TL_documentAttributeCustomEmoji ||
+                attribute instanceof TLRPC.TL_documentAttributeSticker) {
+                return attribute.alt;
+            }
+        }
+        return fallback;
+    }
+
+    public static boolean isAnimatedEmoji(TLRPC.Document document) {
+        if (document == null) {
+            return false;
+        }
+        for (int a = 0, N = document.attributes.size(); a < N; a++) {
+            TLRPC.DocumentAttribute attribute = document.attributes.get(a);
+            if (attribute instanceof TLRPC.TL_documentAttributeCustomEmoji) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isFreeEmoji(TLRPC.Document document) {
+        if (document == null) {
+            return false;
+        }
+        for (int a = 0, N = document.attributes.size(); a < N; a++) {
+            TLRPC.DocumentAttribute attribute = document.attributes.get(a);
+            if (attribute instanceof TLRPC.TL_documentAttributeCustomEmoji) {
+                return ((TLRPC.TL_documentAttributeCustomEmoji) attribute).free;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isPremiumEmojiPack(TLRPC.TL_messages_stickerSet set) {
+        if (set != null && set.set != null && !set.set.emojis) {
+            return false;
+        }
+        if (set != null && set.documents != null) {
+            for (int i = 0; i < set.documents.size(); ++i) {
+                if (!MessageObject.isFreeEmoji(set.documents.get(i))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    public static boolean isPremiumEmojiPack(TLRPC.StickerSetCovered covered) {
+        if (covered != null && covered.set != null && !covered.set.emojis) {
+            return false;
+        }
+        ArrayList<TLRPC.Document> documents = covered instanceof TLRPC.TL_stickerSetFullCovered ? ((TLRPC.TL_stickerSetFullCovered) covered).documents : covered.covers;
+        if (covered != null && documents != null) {
+            for (int i = 0; i < documents.size(); ++i) {
+                if (!MessageObject.isFreeEmoji(documents.get(i))) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static long getStickerSetId(TLRPC.Document document) {
@@ -5536,10 +5863,12 @@ public class MessageObject {
             return AndroidUtilities.dp(82);
         } else if (type == 10) {
             return AndroidUtilities.dp(30);
-        } else if (type == 11) {
+        } else if (type == 11 || type == TYPE_GIFT_PREMIUM) {
             return AndroidUtilities.dp(50);
         } else if (type == TYPE_ROUND_VIDEO) {
             return AndroidUtilities.roundMessageSize;
+        } else if (type == TYPE_EMOJIS) {
+            return textHeight + AndroidUtilities.dp(30);
         } else if (type == TYPE_STICKER || type == TYPE_ANIMATED_STICKER) {
             float maxHeight = AndroidUtilities.displaySize.y * 0.4f;
             float maxWidth;
@@ -5551,12 +5880,14 @@ public class MessageObject {
             int photoHeight = 0;
             int photoWidth = 0;
             TLRPC.Document document = getDocument();
-            for (int a = 0, N = document.attributes.size(); a < N; a++) {
-                TLRPC.DocumentAttribute attribute = document.attributes.get(a);
-                if (attribute instanceof TLRPC.TL_documentAttributeImageSize) {
-                    photoWidth = attribute.w;
-                    photoHeight = attribute.h;
-                    break;
+            if (document != null) {
+                for (int a = 0, N = document.attributes.size(); a < N; a++) {
+                    TLRPC.DocumentAttribute attribute = document.attributes.get(a);
+                    if (attribute instanceof TLRPC.TL_documentAttributeImageSize) {
+                        photoWidth = attribute.w;
+                        photoHeight = attribute.h;
+                        break;
+                    }
                 }
             }
             if (photoWidth == 0) {
@@ -5624,7 +5955,8 @@ public class MessageObject {
         }
         for (int a = 0; a < document.attributes.size(); a++) {
             TLRPC.DocumentAttribute attribute = document.attributes.get(a);
-            if (attribute instanceof TLRPC.TL_documentAttributeSticker) {
+            if (attribute instanceof TLRPC.TL_documentAttributeSticker ||
+                attribute instanceof TLRPC.TL_documentAttributeCustomEmoji) {
                 return attribute.alt != null && attribute.alt.length() > 0 ? attribute.alt : null;
             }
         }
@@ -5636,7 +5968,11 @@ public class MessageObject {
     }
 
     public boolean isAnimatedEmoji() {
-        return emojiAnimatedSticker != null;
+        return emojiAnimatedSticker != null || emojiAnimatedStickerId != null;
+    }
+
+    public boolean isAnimatedAnimatedEmoji() {
+        return isAnimatedEmoji() && isAnimatedEmoji(getDocument());
     }
 
     public boolean isDice() {
@@ -5676,15 +6012,26 @@ public class MessageObject {
         if (isSecretChat && messageOwner.stickerVerified != 1) {
             return false;
         }
+        if (emojiAnimatedStickerId != null && emojiAnimatedSticker == null) {
+            return true;
+        }
         return isAnimatedStickerDocument(getDocument(), emojiAnimatedSticker != null || !isSecretChat || isOut());
     }
 
     public boolean isAnyKindOfSticker() {
-        return type == TYPE_STICKER || type == TYPE_ANIMATED_STICKER;
+        return type == TYPE_STICKER || type == TYPE_ANIMATED_STICKER || type == TYPE_EMOJIS;
     }
 
     public boolean shouldDrawWithoutBackground() {
-        return type == TYPE_STICKER || type == TYPE_ANIMATED_STICKER || type == TYPE_ROUND_VIDEO;
+        return type == TYPE_STICKER || type == TYPE_ANIMATED_STICKER || type == TYPE_ROUND_VIDEO || type == TYPE_EMOJIS;
+    }
+
+    public boolean isAnimatedEmojiStickers() {
+        return type == TYPE_EMOJIS;
+    }
+
+    public boolean isAnimatedEmojiStickerSingle() {
+        return emojiAnimatedStickerId != null;
     }
 
     public boolean isLocation() {

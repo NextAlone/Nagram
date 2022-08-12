@@ -48,6 +48,7 @@ public class SharedConfig {
     public final static int PASSCODE_TYPE_PIN = 0,
             PASSCODE_TYPE_PASSWORD = 1;
 
+
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({
             PASSCODE_TYPE_PIN,
@@ -59,6 +60,8 @@ public class SharedConfig {
     public final static int SAVE_TO_GALLERY_FLAG_GROUP = 2;
     public final static int SAVE_TO_GALLERY_FLAG_CHANNELS = 4;
 
+    @PushListenerController.PushType
+    public static int pushType = PushListenerController.PUSH_TYPE_FIREBASE;
     public static String pushString = "";
     public static String pushStringStatus = "";
     public static long pushStringGetTimeStart;
@@ -86,6 +89,7 @@ public class SharedConfig {
     public static boolean useFingerprint = true;
     public static String lastUpdateVersion;
     public static int suggestStickers;
+    public static boolean suggestAnimatedEmoji;
     public static boolean loopStickers;
     public static int keepMedia = 2;
     public static int lastKeepMediaCheckTime;
@@ -519,6 +523,7 @@ public class SharedConfig {
                 editor.putBoolean("useFingerprint", useFingerprint);
                 editor.putBoolean("allowScreenCapture", allowScreenCapture);
                 editor.putString("pushString2", pushString);
+                editor.putInt("pushType", pushType);
                 editor.putBoolean("pushStatSent", pushStatSent);
                 editor.putString("pushAuthKey", pushAuthKey != null ? Base64.encodeToString(pushAuthKey, Base64.DEFAULT) : "");
                 editor.putInt("lastLocalId", lastLocalId);
@@ -586,6 +591,7 @@ public class SharedConfig {
             allowScreenCapture = preferences.getBoolean("allowScreenCapture", false);
             lastLocalId = preferences.getInt("lastLocalId", -210000);
             pushString = preferences.getString("pushString2", "");
+            pushType = preferences.getInt("pushType", PushListenerController.PUSH_TYPE_FIREBASE);
             pushStatSent = preferences.getBoolean("pushStatSent", false);
             passportConfigJson = preferences.getString("passportConfigJson", "");
             passportConfigHash = preferences.getInt("passportConfigHash", 0);
@@ -663,6 +669,7 @@ public class SharedConfig {
             streamAllVideo = preferences.getBoolean("streamAllVideo", BuildVars.DEBUG_VERSION);
             streamMkv = preferences.getBoolean("streamMkv", false);
             suggestStickers = preferences.getInt("suggestStickers", 0);
+            suggestAnimatedEmoji = preferences.getBoolean("suggestAnimatedEmoji", true);
             sortContactsByName = preferences.getBoolean("sortContactsByName", false);
             sortFilesByName = preferences.getBoolean("sortFilesByName", false);
             noSoundHintShowed = preferences.getBoolean("noSoundHintShowed", false);
@@ -1063,6 +1070,14 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("allowBigEmoji", allowBigEmoji);
+        editor.commit();
+    }
+
+    public static void toggleSuggestAnimatedEmoji() {
+        suggestAnimatedEmoji = !suggestAnimatedEmoji;
+        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("suggestAnimatedEmoji", suggestAnimatedEmoji);
         editor.commit();
     }
 
@@ -1538,5 +1553,9 @@ public class SharedConfig {
         public static void setLastCheckedBackgroundActivity(long l) {
             prefs.edit().putLong("last_checked", l).apply();
         }
+    }
+
+    public static boolean animationsEnabled() {
+        return MessagesController.getGlobalMainSettings().getBoolean("view_animations", true);
     }
 }

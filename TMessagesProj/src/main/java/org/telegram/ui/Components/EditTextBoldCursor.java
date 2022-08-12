@@ -41,6 +41,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.ColorUtils;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 
 import org.lsposed.hiddenapibypass.HiddenApiBypass;
@@ -85,6 +86,7 @@ public class EditTextBoldCursor extends EditTextEffects {
     private static Method getVerticalOffsetMethod;
     private static Class editorClass;
     private static Field mCursorDrawableResField;
+    private static Method mEditorInvalidateDisplayList;
 
     private Drawable mCursorDrawable;
     private Object editor;
@@ -398,9 +400,11 @@ public class EditTextBoldCursor extends EditTextEffects {
                 try {
                     mShowCursorField = editorClass.getDeclaredField("mShowCursor");
                     mShowCursorField.setAccessible(true);
-                } catch (Exception ignore) {
-
-                }
+                } catch (Exception ignore) {}
+                try {
+                    mEditorInvalidateDisplayList = editorClass.getDeclaredMethod("invalidateTextDisplayList");
+                    mEditorInvalidateDisplayList.setAccessible(true);
+                } catch (Exception ignore) {}
                 getVerticalOffsetMethod = TextView.class.getDeclaredMethod("getVerticalOffset", boolean.class);
                 getVerticalOffsetMethod.setAccessible(true);
             }
@@ -701,6 +705,20 @@ public class EditTextBoldCursor extends EditTextEffects {
         return super.onTouchEvent(event);
     }
 
+    public void invalidateForce() {
+        if (!isHardwareAccelerated()) {
+            invalidate();
+            return;
+        }
+        try {
+            // on hardware accelerated edittext to invalidate imagespan display list must be invalidated
+            if (mEditorInvalidateDisplayList != null && editor != null) {
+                mEditorInvalidateDisplayList.invoke(editor);
+            }
+        } catch (Exception ignore) {};
+        invalidate();
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         if ((length() == 0 || transformHintToHeader) && hintLayout != null && (hintVisible || hintAlpha != 0)) {
@@ -749,7 +767,7 @@ public class EditTextBoldCursor extends EditTextEffects {
                 }
                 canvas.scale(scale, scale);
                 canvas.translate(0, -AndroidUtilities.dp(22) * headerAnimationProgress);
-                getPaint().setColor(AndroidUtilities.lerpColor(hintColor, headerHintColor, headerAnimationProgress));
+                getPaint().setColor(ColorUtils.blendARGB(hintColor, headerHintColor, headerAnimationProgress));
             } else {
                 getPaint().setColor(hintColor);
                 getPaint().setAlpha((int) (255 * hintAlpha * (Color.alpha(hintColor) / 255.0f)));

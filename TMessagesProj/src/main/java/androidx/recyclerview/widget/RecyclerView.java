@@ -2368,6 +2368,35 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
     }
 
     /**
+     * Animate a scroll by the given amount of pixels along either axis.
+     *
+     * @param dx Pixels to scroll horizontally
+     * @param dy Pixels to scroll vertically
+     * @param duration Duration of scrolling
+     * @param interpolator {@link Interpolator} to be used for scrolling. If it is
+     *                     {@code null}, RecyclerView is going to use the default interpolator.
+     */
+    public void smoothScrollBy(@Px int dx, @Px int dy, int duration, @Nullable Interpolator interpolator) {
+        if (mLayout == null) {
+            Log.e(TAG, "Cannot smooth scroll without a LayoutManager set. "
+                    + "Call setLayoutManager with a non-null argument.");
+            return;
+        }
+        if (mLayoutSuppressed) {
+            return;
+        }
+        if (!mLayout.canScrollHorizontally()) {
+            dx = 0;
+        }
+        if (!mLayout.canScrollVertically()) {
+            dy = 0;
+        }
+        if (dx != 0 || dy != 0) {
+            mViewFlinger.smoothScrollBy(dx, dy, duration, interpolator);
+        }
+    }
+
+    /**
      * Begin a standard fling with an initial velocity along each axis in pixels per second.
      * If the velocity given is below the system-defined minimum this method will return false
      * and no fling will occur.
@@ -4107,7 +4136,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             try {
                 for (int i = mChildHelper.getChildCount() - 1; i >= 0; i--) {
                     ViewHolder holder = getChildViewHolderInt(mChildHelper.getChildAt(i));
-                    if (holder.shouldIgnore()) {
+                    if (holder == null || holder.shouldIgnore()) {
                         continue;
                     }
                     long key = getChangedHolderKey(holder);
@@ -4152,7 +4181,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
                 StringBuilder builder = new StringBuilder();
                 for (int i = mChildHelper.getChildCount() - 1; i >= 0; i--) {
                     ViewHolder holder = getChildViewHolderInt(mChildHelper.getChildAt(i));
-                    if (holder.shouldIgnore()) {
+                    if (holder == null || holder.shouldIgnore()) {
                         continue;
                     }
                     builder.append("Holder at" + i + " " + holder + "\n");
@@ -4268,7 +4297,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
         int maxPositionPreLayout = Integer.MIN_VALUE;
         for (int i = 0; i < count; ++i) {
             final ViewHolder holder = getChildViewHolderInt(mChildHelper.getChildAt(i));
-            if (holder.shouldIgnore()) {
+            if (holder == null || holder.shouldIgnore()) {
                 continue;
             }
             final int pos = holder.getLayoutPosition();
@@ -10248,7 +10277,7 @@ public class RecyclerView extends ViewGroup implements ScrollingView,
             }
         }
 
-        void onSmoothScrollerStopped(SmoothScroller smoothScroller) {
+        public void onSmoothScrollerStopped(SmoothScroller smoothScroller) {
             if (mSmoothScroller == smoothScroller) {
                 mSmoothScroller = null;
             }
