@@ -17,14 +17,13 @@ configurations {
     }
 }
 
-val isStable = false
 var serviceAccountCredentialsFile = File(rootProject.projectDir, "service_account_credentials.json")
 
 if (serviceAccountCredentialsFile.isFile) {
-    setupPlay(isStable)
+    setupPlay(Version.isStable)
     play.serviceAccountCredentials.set(serviceAccountCredentialsFile)
 } else if (System.getenv().containsKey("ANDROID_PUBLISHER_CREDENTIALS")) {
-    setupPlay(isStable)
+    setupPlay(Version.isStable)
 }
 
 fun setupPlay(stable: Boolean) {
@@ -117,13 +116,6 @@ android {
         resources.excludes += "**"
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-
-        isCoreLibraryDesugaringEnabled = true
-    }
-
     kotlinOptions {
         jvmTarget = Version.JavaVersion
     }
@@ -157,21 +149,7 @@ android {
         }
     }
 
-    val officialVersionName = "8.8.5"
-
     defaultConfig {
-        minSdk = 21
-        targetSdk = 33
-
-        versionName = if (isStable) {
-            "v" + officialVersionName + "-" + (Common.getGitHeadRefsSuffix(rootProject))
-        } else {
-            "v" + officialVersionName + "-preview-" + (Common.getGitHeadRefsSuffix(rootProject))
-        }
-
-
-        versionCode = Common.getBuildVersionCode(rootProject)
-
         externalNativeBuild {
             cmake {
                 version = "3.22.1"

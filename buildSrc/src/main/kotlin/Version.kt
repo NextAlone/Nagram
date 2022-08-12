@@ -5,4 +5,10 @@ object Version {
 
     @JvmStatic
     val JavaVersion = "11"
+
+    @JvmStatic
+    val officialVersionName = "8.8.5"
+
+    @JvmStatic
+    val isStable = false
 }
