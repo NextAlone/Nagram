@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="N_Config">N-設定</string>
+    <string name="ForceCopy">強制複製</string>
+    <string name="InvertReply">反轉</string>
+    <string name="Great">好耶</string>
+    <string name="Poor">破爛</string>
+    <string name="CombineMessage">合併訊息</string>
+    <string name="TextStyle">文字樣式</string>
+    <string name="CombineMessageEnabledWithReply">合併並回復首條訊息</string>
+    <string name="CombineMessageEnabled">僅合併訊息</string>
+    <string name="CombineMessageDisabled">關閉</string>
+    <string name="TextUndoRedo">撤銷/重做</string>
+    <string name="TextUndo">撤銷</string>
+    <string name="TextRedo">重做</string>
+    <string name="NoiseSuppressAndVoiceEnhance">噪音抑制和語音增強</string>
+    <string name="RepeatAsCopy">無引用復讀</string>
+    <string name="DoubleTapAction">雙擊操作</string>
+    <string name="SendReactions">表情回應</string>
+    <string name="ShowReactions">顯示錶情回應選單</string>
+    <string name="ScrollableChatPreview">可滑動聊天預覽</string>
+    <string name="CustomTitle">自定義標題</string>
+    <string name="CustomTitleHint">留空則使用Nagram</string>
+    <string name="CodeSyntaxHighlight">程式碼語法高亮</string>
+    <string name="CreateMono">建立等寬</string>
+    <string name="CreateMonoLanguage">等寬語言</string>
+    <string name="CodeSyntaxHighlightDetails">感謝 prismjs and Nekogram</string>
+    <string name="UseSystemUnlock">鎖定碼解鎖使用系統介面</string>
+    <string name="CopyPhoto">複製圖片</string>
+    <string name="PhotoCopied">圖片已複製到剪貼簿</string>
+    <string name="ToTheBeginning">回到頂部</string>
+    <string name="DateOfForwardedMsg">顯示轉發訊息日期</string>
+    <string name="ShowMessageID">顯示訊息 ID</string>
+    <string name="ShowRPCError">顯示 RPC 錯誤</string>
+    <string name="ShowServicesTime">顯示服務訊息時間</string>
+    <string name="ShowPremiumStickersAnimation">顯示 Premium 貼紙動畫</string>
+    <string name="ShowPremiumStarInChat">在訊息上顯示 Premium 使用者標識</string>
+    <string name="ShowPremiumAvatarAnimation">顯示 Premium 動態頭像</string>
+    <string name="AlwaysSaveChatOffset">總是儲存聊天記錄的偏移量</string>
+    <string name="AutoReplaceRepeat">自動替換復讀為無引用復讀</string>
+    <string name="AppIconColorful">繽紛</string>
+    <string name="AppIconDarkGreen">深翠</string>
+    <string name="AppIconNeon">霓虹</string>
+</resources>
