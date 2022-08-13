@@ -1551,7 +1551,6 @@ public class DialogCell extends BaseCell {
                     nameStringFinal = s;
                 }
             }
-            nameStringFinal = nameStringFinal;
             nameLayout = new StaticLayout(nameStringFinal, Theme.dialogs_namePaint[paintIndex], nameWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         } catch (Exception e) {
             FileLog.e(e);

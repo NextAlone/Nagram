@@ -556,7 +556,6 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
                 } else {
                     newName = chat.title;
                 }
-                newName = newName;
                 if (!newName.equals(lastName)) {
                     continueUpdate = true;
                 }
@@ -583,7 +582,6 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
         } else if (chat != null) {
             lastName = chat.title;
         }
-        lastName = lastName;
         lastAvatar = photo;
 
         if (getMeasuredWidth() != 0 || getMeasuredHeight() != 0) {
