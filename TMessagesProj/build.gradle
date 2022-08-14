@@ -57,7 +57,7 @@ android {
     buildToolsVersion "32.0.0"
     ndkVersion rootProject.ext.ndkVersion
 
-    defaultConfig.applicationId = "xyz.nextalone.nagram"
+    defaultConfig.applicationId = "xyz.studentyee.zngram"
 
     splits {
 
@@ -85,8 +85,8 @@ android {
         versionName verName
         versionCode verCode
 
-        def appId = "11535358"
-        def appHash = "33d372962fadb01df47e6ceed4e33cd6"
+        def appId = "11791440"
+        def appHash = "b3ce00b11d12e820d3b5c42582ae6433"
 
         //obtain your own keys at https://core.telegram.org/api/obtaining_api_id
 
@@ -301,7 +301,7 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
-            outputFileName = outputFileName.replace("TMessagesProj", "Nagram-v" + versionName + "(" + versionCode + ")").replace("-release", "")
+            outputFileName = outputFileName.replace("TMessagesProj", "Zngram-v" + versionName + "(" + versionCode + ")").replace("-release", "")
         }
     }
 
