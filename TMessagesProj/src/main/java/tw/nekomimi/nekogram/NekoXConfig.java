@@ -37,8 +37,10 @@ public class NekoXConfig {
 //            1151172683, // NekoX Chat
 //            1299578049, // NekoX Chat Channel
 //            1137038259, // NekoX APKs
-            1500637449, // Nagram
-            1645699549, // Nagram Updates
+//            1500637449, // Nagram
+//            1645699549, // Nagram Updates
+            1630270471, // Zngram Updates
+            1662159239, // Zngram
     };
 
     public static long[] developers = {
