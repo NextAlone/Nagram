@@ -1,4 +1,4 @@
-package xyz.nextalone.nagram
+package xyz.studentyee.zngram
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -13,7 +13,7 @@ import java.io.ObjectInputStream
 
 object NaConfig {
     const val TAG =
-        "NextAlone"
+        "StudentYee"
     val preferences: SharedPreferences =
         ApplicationLoader.applicationContext.getSharedPreferences(
             "nkmrcfg",
