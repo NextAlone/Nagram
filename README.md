@@ -1,11 +1,11 @@
-# Nagram
+# Zngram
 
-Nagram is a third-party Telegram client based on [NekoX](https://github.com/NekoX-Dev/NekoX) with some modifications.
+Zngram is a third-party Telegram client based on [Nagram](https://github.com/NextAlone/Nagram) with some modifications.
 
-- Official Site: <https://nextalone.xyz>
-- Telegram Update Channel: <https://t.me/nagram_channel>
-- Releases: <https://github.com/NextAlone/Nagram/releases>
-- Issues here: <https://github.com/NextAlone/Nagram/issues>
+- Official Site: <https://gram.xinzer.cafe>
+- Telegram Update Channel: <https://t.me/Zngram_offical>
+- Releases: <https://github.com/StudentYee/Zngram/releases>
+- Issues here: <https://github.com/StudentYee/Zngram/issues>
 
 ## Additional feature over NekoX
 
@@ -97,6 +97,7 @@ Is Nagram not in your language, or the translation is incorrect or incomplete? G
 
 ## Thanks
 
+- [Nagram](https://github.com/NextAlone/Nagram)
 - [NekoX](https://github.com/NekoX-Dev/NekoX)
 - [Nekogram](https://gitlab.com/Nekogram/Nekogram)
 - [Pigeongram](https://gitlab.com/JasonKhew96/Nekogram)
