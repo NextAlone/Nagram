@@ -61,6 +61,7 @@ public class GeneralPreferencesEntry extends BaseFragment {
     private int chatsOnTitleRow;
     private int disableVibrationRow;
     private int forceTabletModeRow;
+    private int disableAnimatedAvatarsRow;
     private int generalDividerRow;
 
     private int profileHeaderRow;
@@ -272,6 +273,11 @@ public class GeneralPreferencesEntry extends BaseFragment {
                     ((TextCheckCell) view).setChecked(ExteraConfig.forceTabletMode);
                 }
                 restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
+            } else if (position == disableAnimatedAvatarsRow) {
+                ExteraConfig.toggleDisableAnimatedAvatars();
+                if (view instanceof TextCheckCell) {
+                    ((TextCheckCell) view).setChecked(ExteraConfig.disableAnimatedAvatars);
+                }
             } else if (position == archiveOnPullRow) {
                 ExteraConfig.toggleArchiveOnPull();
                 if (view instanceof TextCheckCell) {
@@ -328,6 +334,7 @@ public class GeneralPreferencesEntry extends BaseFragment {
         formatTimeWithSecondsRow = rowCount++;
         chatsOnTitleRow = rowCount++;
         disableVibrationRow = rowCount++;
+        disableAnimatedAvatarsRow = rowCount++;
         forceTabletModeRow = rowCount++;
         generalDividerRow = rowCount++;
 
@@ -398,6 +405,8 @@ public class GeneralPreferencesEntry extends BaseFragment {
                         textCheckCell.setTextAndCheck(LocaleController.getString("ChatsOnTitle", R.string.ChatsOnTitle), ExteraConfig.chatsOnTitle, true);
                     } else if (position == disableVibrationRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("DisableVibration", R.string.DisableVibration), ExteraConfig.disableVibration, true);
+                    } else if (position == disableAnimatedAvatarsRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString("DisableAnimatedAvatars", R.string.DisableAnimatedAvatars), ExteraConfig.disableAnimatedAvatars, true);
                     } else if (position == forceTabletModeRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("ForceTabletMode", R.string.ForceTabletMode), ExteraConfig.forceTabletMode, false);
                     } else if (position == disableUnarchiveSwipeRow) {
@@ -467,7 +476,7 @@ public class GeneralPreferencesEntry extends BaseFragment {
             } else if (position == generalHeaderRow || position == archiveHeaderRow || position == profileHeaderRow || position == avatarCornersHeaderRow) {
                 return 2;
             } else if (position == disableNumberRoundingRow || position == formatTimeWithSecondsRow || position == hidePhoneNumberRow || position == showIDRow || position == showDCRow || position == chatsOnTitleRow || position == archiveOnPullRow ||
-                      position == disableVibrationRow || position == forceTabletModeRow || position == disableUnarchiveSwipeRow || position == forcePacmanAnimationRow) {
+                      position == disableVibrationRow || position == forceTabletModeRow || position == disableUnarchiveSwipeRow || position == forcePacmanAnimationRow || position == disableAnimatedAvatarsRow) {
                 return 3;
             } else if (position == forcePacmanAnimationInfoRow) {
                 return 4;

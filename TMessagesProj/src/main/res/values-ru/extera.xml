@@ -39,6 +39,7 @@
     <string name="ChatsOnTitle">\"Чаты\" вместо \"exteraGram\"</string>
     <string name="DisableVibration">Отключить вибрацию</string>
     <string name="ForceTabletMode">Планшетный режим</string>
+    <string name="DisableAnimatedAvatars">Отключить анимированные аватарки</string>
     <string name="ArchiveOnPull">Открывать архив при вытягивании</string>
     <string name="DisableUnarchiveSwipe">Отключить жест \"Вернуть\"</string>
     <string name="ForcePacmanAnimation">Pac-Man анимация</string>

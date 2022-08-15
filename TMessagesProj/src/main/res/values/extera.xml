@@ -44,6 +44,7 @@
     <string name="ChatsOnTitle">\"Chats\" instead of \"exteraGram\"</string>
     <string name="DisableVibration">Disable vibration</string>
     <string name="ForceTabletMode">Force tablet mode</string>
+    <string name="DisableAnimatedAvatars">Disable animated avatars</string>
     <string name="ArchiveOnPull">Open archive on pulldown</string>
     <string name="DisableUnarchiveSwipe">Disable \"Unarchive\" swipe</string>
     <string name="ForcePacmanAnimation">Force Pac-Man animation</string>

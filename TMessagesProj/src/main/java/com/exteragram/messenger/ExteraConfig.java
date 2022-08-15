@@ -43,6 +43,7 @@ public class ExteraConfig {
     public static boolean showID;
     public static boolean showDC;
     public static boolean disableVibration;
+    public static boolean disableAnimatedAvatars;
 
     // chats
     public static float stickerSize = 14.0f;
@@ -100,6 +101,7 @@ public class ExteraConfig {
             formatTimeWithSeconds = preferences.getBoolean("formatTimeWithSeconds", false);
             chatsOnTitle = preferences.getBoolean("chatsOnTitle", false);
             forceTabletMode = preferences.getBoolean("forceTabletMode", false);
+            disableAnimatedAvatars = preferences.getBoolean("disableAnimatedAvatars", false);
             archiveOnPull = preferences.getBoolean("archiveOnPull", false);
             disableUnarchiveSwipe = preferences.getBoolean("disableUnarchiveSwipe", true);
             forcePacmanAnimation = preferences.getBoolean("forcePacmanAnimation", false);
@@ -419,5 +421,10 @@ public class ExteraConfig {
     public static void toggleShowActionTimestamps() {
         SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
         editor.putBoolean("showActionTimestamps", showActionTimestamps ^= true).apply();
+    }
+
+    public static void toggleDisableAnimatedAvatars() {
+        SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
+        editor.putBoolean("disableAnimatedAvatars", disableAnimatedAvatars ^= true).apply();
     }
 }
