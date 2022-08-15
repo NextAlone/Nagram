@@ -136,7 +136,8 @@ import java.util.concurrent.CountDownLatch;
 
 import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.extras.Monet;
-import tw.nekomimi.nekogram.helpers.MonetHelper;
+import com.exteragram.messenger.extras.MonetHelper;
+
 public class Theme {
 
     public static final String DEFAULT_BACKGROUND_SLUG = "d";
@@ -8619,7 +8620,7 @@ public class Theme {
                                     } catch (Exception ignore) {
                                         value = Utilities.parseInt(param);
                                     }
-                                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && (param.startsWith("a") || param.startsWith("n"))) {
+                                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && (param.startsWith("a") || param.startsWith("n") || param.startsWith("monet"))) {
                                     value = MonetHelper.getColor(param.trim());
                                 } else {
                                     value = Utilities.parseInt(param);

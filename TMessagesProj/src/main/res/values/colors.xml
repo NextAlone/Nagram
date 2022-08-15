@@ -10,4 +10,8 @@
     <color name="widget_edit_text">#999999</color>
     <color name="ic_background">#F54142</color>
     <color name="ic_background_beta">#747F9F</color>
+    <color name="monetRedLight">#B3261E</color>
+    <color name="monetRedDark">#F2B8B5</color>
+    <color name="colorCallGreen">#4CAF50</color>
+    <color name="colorCallRed">#EF5350</color>
 </resources>

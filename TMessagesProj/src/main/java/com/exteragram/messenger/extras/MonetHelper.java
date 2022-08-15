@@ -1,4 +1,6 @@
-package tw.nekomimi.nekogram.helpers;
+// all credits to @Nekogram
+
+package com.exteragram.messenger.extras;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,6 +14,7 @@ import androidx.annotation.RequiresApi;
 import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.LauncherIconController;
 
@@ -25,7 +28,6 @@ public class MonetHelper {
 
     static {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            ids.put("a1_0", android.R.color.system_accent1_0);
             ids.put("a1_10", android.R.color.system_accent1_10);
             ids.put("a1_50", android.R.color.system_accent1_50);
             ids.put("a1_100", android.R.color.system_accent1_100);
@@ -37,8 +39,6 @@ public class MonetHelper {
             ids.put("a1_700", android.R.color.system_accent1_700);
             ids.put("a1_800", android.R.color.system_accent1_800);
             ids.put("a1_900", android.R.color.system_accent1_900);
-            ids.put("a1_1000", android.R.color.system_accent1_1000);
-            ids.put("a2_0", android.R.color.system_accent2_0);
             ids.put("a2_10", android.R.color.system_accent2_10);
             ids.put("a2_50", android.R.color.system_accent2_50);
             ids.put("a2_100", android.R.color.system_accent2_100);
@@ -50,8 +50,6 @@ public class MonetHelper {
             ids.put("a2_700", android.R.color.system_accent2_700);
             ids.put("a2_800", android.R.color.system_accent2_800);
             ids.put("a2_900", android.R.color.system_accent2_900);
-            ids.put("a2_1000", android.R.color.system_accent2_1000);
-            ids.put("a3_0", android.R.color.system_accent3_0);
             ids.put("a3_10", android.R.color.system_accent3_10);
             ids.put("a3_50", android.R.color.system_accent3_50);
             ids.put("a3_100", android.R.color.system_accent3_100);
@@ -63,8 +61,6 @@ public class MonetHelper {
             ids.put("a3_700", android.R.color.system_accent3_700);
             ids.put("a3_800", android.R.color.system_accent3_800);
             ids.put("a3_900", android.R.color.system_accent3_900);
-            ids.put("a3_1000", android.R.color.system_accent3_1000);
-            ids.put("n1_0", android.R.color.system_neutral1_0);
             ids.put("n1_10", android.R.color.system_neutral1_10);
             ids.put("n1_50", android.R.color.system_neutral1_50);
             ids.put("n1_100", android.R.color.system_neutral1_100);
@@ -76,8 +72,6 @@ public class MonetHelper {
             ids.put("n1_700", android.R.color.system_neutral1_700);
             ids.put("n1_800", android.R.color.system_neutral1_800);
             ids.put("n1_900", android.R.color.system_neutral1_900);
-            ids.put("n1_1000", android.R.color.system_neutral1_1000);
-            ids.put("n2_0", android.R.color.system_neutral2_0);
             ids.put("n2_10", android.R.color.system_neutral2_10);
             ids.put("n2_50", android.R.color.system_neutral2_50);
             ids.put("n2_100", android.R.color.system_neutral2_100);
@@ -89,7 +83,12 @@ public class MonetHelper {
             ids.put("n2_700", android.R.color.system_neutral2_700);
             ids.put("n2_800", android.R.color.system_neutral2_800);
             ids.put("n2_900", android.R.color.system_neutral2_900);
-            ids.put("n2_1000", android.R.color.system_neutral2_1000);
+            ids.put("monetBlack", android.R.color.black);
+            ids.put("monetWhite", android.R.color.white);
+            ids.put("monetRedDark", R.color.monetRedDark);
+            ids.put("monetRedLight", R.color.monetRedLight);
+            ids.put("monetRedCall", R.color.colorCallRed);
+            ids.put("monetGreenCall", R.color.colorCallGreen);
         }
     }
 

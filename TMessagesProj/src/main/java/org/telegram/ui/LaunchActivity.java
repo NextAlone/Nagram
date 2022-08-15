@@ -178,7 +178,8 @@ import java.util.regex.Pattern;
 
 import com.exteragram.messenger.preferences.MainPreferencesEntry;
 import com.exteragram.messenger.ExteraConfig;
-import tw.nekomimi.nekogram.helpers.MonetHelper;
+import com.exteragram.messenger.extras.MonetHelper;
+
 public class LaunchActivity extends BasePermissionsActivity implements ActionBarLayout.ActionBarLayoutDelegate, NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate {
     public static boolean isResumed;
     public static Runnable onResumeStaticCallback;
