@@ -545,7 +545,7 @@ public class Emoji {
             } catch (Exception e) {
                 FileLog.e(e);
             }
-            int limitCount = SharedConfig.getDevicePerformanceClass() >= SharedConfig.PERFORMANCE_CLASS_HIGH ? 100 : 50;
+            int limitCount = SharedConfig.getDevicePerformanceClass() >= SharedConfig.PERFORMANCE_CLASS_HIGH ? 200 : 100;
             if ((Build.VERSION.SDK_INT < 23 || Build.VERSION.SDK_INT >= 29)/* && !BuildVars.DEBUG_PRIVATE_VERSION*/ && (i + 1) >= limitCount) {
                 break;
             }
