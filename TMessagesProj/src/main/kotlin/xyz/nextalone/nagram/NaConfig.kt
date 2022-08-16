@@ -186,7 +186,7 @@ object NaConfig {
     val showPremiumStarInChat = addConfig(
         "ShowPremiumStarInChat",
         ConfigItem.configTypeBool,
-        true
+        false
     )
     val showPremiumAvatarAnimation = addConfig(
         "ShowPremiumAvatarAnimation",
@@ -240,6 +240,11 @@ object NaConfig {
     )
     val useExperimentalFileLoader = addConfig(
         "UseExperimentalFileLoader",
+        ConfigItem.configTypeBool,
+        false
+    )
+    val showPhotoOpenInExternalApp = addConfig(
+        "ShowPhotoOpenInExternalApp",
         ConfigItem.configTypeBool,
         false
     )

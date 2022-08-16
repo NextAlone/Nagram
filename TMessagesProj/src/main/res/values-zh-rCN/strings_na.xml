@@ -51,4 +51,5 @@
     <string name="CustomChannelLabel">自定义频道默认别名</string>
     <string name="AlwaysShowDownloadIcon">一直显示下载管理器</string>
     <string name="UseExperimentalFileLoader">下载速度加成</string>
+    <string name="ShowPhotoOpenInExternalApp">查看图片可以使用其他应用打开</string>
 </resources>

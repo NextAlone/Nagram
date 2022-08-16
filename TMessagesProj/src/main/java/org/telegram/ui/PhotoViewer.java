@@ -10950,7 +10950,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 } else {
                     speedItem.setVisibility(View.GONE);
                     speedGap.setVisibility(View.GONE);
-                    menuItem.hideSubItem(gallery_menu_openin);
+                    if (NaConfig.INSTANCE.getShowPhotoOpenInExternalApp().Bool()) {
+                        menuItem.showSubItem(gallery_menu_openin);
+                    } else {
+                        menuItem.hideSubItem(gallery_menu_openin);
+                    }
                     menuItem.checkHideMenuItem();
                     final boolean pipItemVisible = pipItem.getVisibility() == View.VISIBLE;
                     final boolean shouldMasksItemBeVisible = newMessageObject.hasAttachedStickers() && !DialogObject.isEncryptedDialog(newMessageObject.getDialogId());
@@ -11440,7 +11444,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     setItemVisible(pipItem, true, true);
                 }
             } else {
-                menuItem.hideSubItem(gallery_menu_openin);
+                if (NaConfig.INSTANCE.getShowPhotoOpenInExternalApp().Bool()) {
+                    menuItem.showSubItem(gallery_menu_openin);
+                } else {
+                    menuItem.hideSubItem(gallery_menu_openin);
+                }
                 setItemVisible(pipItem, false, true);
             }
             if (bottomLayout.getVisibility() != View.GONE) {

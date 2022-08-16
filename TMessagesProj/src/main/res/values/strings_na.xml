@@ -52,4 +52,5 @@
     <string name="CustomChannelLabel">Custom default channel label</string>
     <string name="AlwaysShowDownloadIcon">Always Show Download Icon</string>
     <string name="UseExperimentalFileLoader">Use Experimental FileLoader</string>
+    <string name="ShowPhotoOpenInExternalApp">Show Open In External App When Open Photo</string>
 </resources>
