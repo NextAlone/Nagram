@@ -2286,6 +2286,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 actionBar.setBackButtonDrawable(backDrawable = new BackDrawable(false));
             } else {
                 actionBar.setBackButtonDrawable(menuDrawable = new MenuDrawable());
+                menuDrawable.setRoundCap();
                 actionBar.setBackButtonContentDescription(LocaleController.getString("AccDescrOpenMenu", R.string.AccDescrOpenMenu));
             }
             if (folderId != 0) {
@@ -3503,7 +3504,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             contentView.setClipToPadding(false);
             commentView.allowBlur = false;
             commentView.forceSmoothKeyboard(true);
-            commentView.setAllowStickersAndGifs(false, false);
+            commentView.setAllowStickersAndGifs(true, false, false);
             commentView.setForceShowSendButton(true, false);
             commentView.setPadding(0, 0, AndroidUtilities.dp(20), 0);
             commentView.setVisibility(View.GONE);
@@ -4326,8 +4327,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 updateFilterTabsVisibility(animated);
                 int id = filterTabsView.getCurrentTabId();
                 int stableId = filterTabsView.getCurrentTabStableId();
+                boolean selectWithStableId = false;
                 if (id != filterTabsView.getDefaultTabId() && id >= filters.size()) {
                     filterTabsView.resetTabId();
+                    selectWithStableId = true;
                 }
                 filterTabsView.removeTabs();
                 for (int a = 0, N = filters.size(); a < N; a++) {
@@ -4353,6 +4356,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     if (filterTabsView.getStableId(viewPages[0].selectedType) != stableId) {
                         updateCurrentTab = true;
                         viewPages[0].selectedType = id;
+                    }
+                    if (selectWithStableId) {
+                        filterTabsView.selectTabWithStableId(stableId);
                     }
                 }
                 for (int a = 0; a < viewPages.length; a++) {

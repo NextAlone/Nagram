@@ -23,11 +23,14 @@ public class StickerTabView extends FrameLayout {
     public final static int ICON_TYPE = 1;
     public final static int EMOJI_TYPE = 2;
 
-    public final static int SMALL_WIDTH = 52;
-    public final static int SMALL_HEIGHT = 48;
+    public final static int SMALL_WIDTH = 33;
+    public final static int SMALL_HEIGHT = 36;
+//    public final static int SMALL_WIDTH = 52;
+//    public final static int SMALL_HEIGHT = 48;
 
-    private final static int IMAGE_SMALL_SIZE = 36;
+    public final static int IMAGE_SMALL_SIZE = 36;
     private final static int EMOJI_SMALL_SIZE = 30;
+    public final static int IMAGE_ICON_SMALL_SIZE = 24;
 
     public int type;
     public float dragOffset;
@@ -47,6 +50,7 @@ public class StickerTabView extends FrameLayout {
     ValueAnimator dragOffsetAnimator;
     float lastLeft;
     boolean hasSavedLeft;
+    private float textWidth;
 
     public StickerTabView(Context context, int type) {
         super(context);
@@ -56,22 +60,34 @@ public class StickerTabView extends FrameLayout {
             imageView = new BackupImageView(getContext());
             imageView.setLayerNum(1);
             imageView.setAspectFit(false);
+            imageView.setRoundRadius(AndroidUtilities.dp(6));
             addView(imageView, LayoutHelper.createFrame(EMOJI_SMALL_SIZE, EMOJI_SMALL_SIZE, Gravity.CENTER));
             visibleView = imageView;
         } else if (type == ICON_TYPE) {
             iconView = new ImageView(context);
             iconView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            addView(iconView, LayoutHelper.createFrame(24, 24, Gravity.CENTER));
+            addView(iconView, LayoutHelper.createFrame(IMAGE_ICON_SMALL_SIZE, IMAGE_ICON_SMALL_SIZE, Gravity.CENTER));
             visibleView = iconView;
         } else {
             imageView = new BackupImageView(getContext());
             imageView.setLayerNum(1);
             imageView.setAspectFit(true);
+            imageView.setRoundRadius(AndroidUtilities.dp(6));
             addView(imageView, LayoutHelper.createFrame(IMAGE_SMALL_SIZE, IMAGE_SMALL_SIZE, Gravity.CENTER));
             visibleView = imageView;
         }
 
-        textView = new TextView(context);
+        textView = new TextView(context) {
+            @Override
+            public void setText(CharSequence text, BufferType type) {
+                super.setText(text, type);
+            }
+        };
+        textView.addOnLayoutChangeListener((v, a, b, c, d, e, f, g, h) -> {
+            if (textView != null && textView.getLayout() != null) {
+                textWidth = textView.getLayout().getLineWidth(0);
+            }
+        });
         textView.setLines(1);
         textView.setEllipsize(TextUtils.TruncateAt.END);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
@@ -82,13 +98,17 @@ public class StickerTabView extends FrameLayout {
         textView.setVisibility(View.GONE);
     }
 
+    public float getTextWidth() {
+        return textWidth;
+    }
+
     public void setExpanded(boolean expanded) {
         if (type == EMOJI_TYPE) {
             return;
         }
         this.expanded = expanded;
-        float size = type == ICON_TYPE ? 24 : IMAGE_SMALL_SIZE;
-        float sizeExpanded = type == ICON_TYPE ? 38 : 56;
+        float size = type == ICON_TYPE ? IMAGE_ICON_SMALL_SIZE : IMAGE_SMALL_SIZE;
+        float sizeExpanded = type == ICON_TYPE ? 38 : 44;
 
         visibleView.getLayoutParams().width = AndroidUtilities.dp(expanded ? sizeExpanded : size);
         visibleView.getLayoutParams().height = AndroidUtilities.dp(expanded ? sizeExpanded : size);
@@ -105,11 +125,11 @@ public class StickerTabView extends FrameLayout {
             return;
         }
         if (expanded) {
-            float size = type == ICON_TYPE ? 24 : IMAGE_SMALL_SIZE;
-            float sizeExpanded = type == ICON_TYPE ? 38 : 56;
+            float size = type == ICON_TYPE ? IMAGE_ICON_SMALL_SIZE : IMAGE_SMALL_SIZE;
+            float sizeExpanded = type == ICON_TYPE ? 38 : 44;
             float fromX = AndroidUtilities.dp(SMALL_WIDTH - size) / 2f;
             float fromY = AndroidUtilities.dp(SMALL_HEIGHT - size) / 2f;
-            float toX = AndroidUtilities.dp(86 - sizeExpanded) / 2f;
+            float toX = AndroidUtilities.dp(ScrollSlidingTabStrip.EXPANDED_WIDTH - sizeExpanded) / 2f;
             float toY = AndroidUtilities.dp(SMALL_HEIGHT + 50 - sizeExpanded) / 2f;
 
             visibleView.setTranslationY((fromY - toY) * (1 - expandProgress) - AndroidUtilities.dp(8) * expandProgress);

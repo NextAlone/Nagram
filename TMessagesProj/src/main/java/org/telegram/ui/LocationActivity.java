@@ -41,6 +41,8 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.opengl.GLES20;
+import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.SparseArray;
@@ -64,31 +66,13 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.osmdroid.api.IGeoPoint;
-import org.osmdroid.api.IMapController;
-import org.osmdroid.config.Configuration;
-import org.osmdroid.events.MapListener;
-import org.osmdroid.events.ScrollEvent;
-import org.osmdroid.events.ZoomEvent;
-import org.osmdroid.tileprovider.tilesource.ITileSource;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.tileprovider.tilesource.XYTileSource;
-import org.osmdroid.util.BoundingBox;
-import org.osmdroid.views.MapView;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.Projection;
-import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.Polygon;
-import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
-import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
-import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
-
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.IMapsProvider;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.MessageObject;
@@ -128,6 +112,7 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UndoView;
 
 import java.io.File;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -155,15 +140,14 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
     private boolean proximityAnimationInProgress;
 
-    private MapView mapView;
-    private BoundingBox moveToBounds;
-    private IGeoPoint forceUpdate;
+    private IMapsProvider.IMap map;
+    private IMapsProvider.ICameraUpdate moveToBounds;
+    private IMapsProvider.IMapView mapView;
+    private IMapsProvider.ICameraUpdate forceUpdate;
+    private boolean hasScreenshot;
     private float yOffset;
 
-    private Polygon proximityCircle;
-    private GeoPoint proximityCircleCenter;
-    private double proximityCircleRadius;
-
+    private IMapsProvider.ICircle proximityCircle;
     private double previousRadius;
 
     private boolean scrolling;
@@ -202,7 +186,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
     private AnimatorSet animatorSet;
 
-    private Marker lastPressedMarker;
+    private IMapsProvider.IMarker lastPressedMarker;
     private VenueLocation lastPressedVenue;
     private FrameLayout lastPressedMarkerView;
 
@@ -252,7 +236,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
     public static class VenueLocation {
         public int num;
-        public Marker marker;
+        public IMapsProvider.IMarker marker;
         public TLRPC.TL_messageMediaVenue venue;
     }
 
@@ -261,8 +245,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         public TLRPC.Message object;
         public TLRPC.User user;
         public TLRPC.Chat chat;
-        public Marker marker;
-        public Marker directionMarker;
+        public IMapsProvider.IMarker marker;
+        public IMapsProvider.IMarker directionMarker;
         public boolean hasRotation;
     }
 
@@ -298,13 +282,13 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
     public class MapOverlayView extends FrameLayout {
 
-        private HashMap<Marker, View> views = new HashMap<>();
+        private HashMap<IMapsProvider.IMarker, View> views = new HashMap<>();
 
         public MapOverlayView(Context context) {
             super(context);
         }
 
-        public void addInfoView(Marker marker, VenueLocation location) {
+        public void addInfoView(IMapsProvider.IMarker marker, VenueLocation location) {
             if (location == null || lastPressedVenue == location) {
                 return;
             }
@@ -407,11 +391,10 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
             views.put(marker, frameLayout);
 
-            final IMapController controller = mapView.getController();
-            controller.animateTo(marker.getPosition(), mapView.getZoomLevelDouble(), 300L);
+            map.animateCamera(ApplicationLoader.getMapsProvider().newCameraUpdateLatLng(marker.getPosition()), 300, null);
         }
 
-        public void removeInfoView(Marker marker) {
+        public void removeInfoView(IMapsProvider.IMarker marker) {
             View view = views.get(marker);
             if (view != null) {
                 removeView(view);
@@ -419,16 +402,15 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
         }
 
-        //TODO
         public void updatePositions() {
-            if (mapView == null) {
+            if (map == null) {
                 return;
             }
-            Projection projection = mapView.getProjection();
-            for (HashMap.Entry<Marker, View> entry : views.entrySet()) {
-                Marker marker = entry.getKey();
+            IMapsProvider.IProjection projection = map.getProjection();
+            for (HashMap.Entry<IMapsProvider.IMarker, View> entry : views.entrySet()) {
+                IMapsProvider.IMarker marker = entry.getKey();
                 View view = entry.getValue();
-                Point point = projection.toPixels(marker.getPosition(), null);
+                Point point = projection.toScreenLocation(marker.getPosition());
                 view.setTranslationX(point.x - view.getMeasuredWidth() / 2);
                 view.setTranslationY(point.y - view.getMeasuredHeight() + AndroidUtilities.dp(22));
             }
@@ -468,9 +450,20 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         getNotificationCenter().removeObserver(this, NotificationCenter.closeChats);
         getNotificationCenter().removeObserver(this, NotificationCenter.didReceiveNewMessages);
         getNotificationCenter().removeObserver(this, NotificationCenter.replaceMessagesObjects);
-        // TODO
-        // proper exit, like upstream does with
-        // setMyLocationEnabled(false);
+        try {
+            if (map != null) {
+                map.setMyLocationEnabled(false);
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        try {
+            if (mapView != null) {
+                mapView.onDestroy();
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
         if (undoView[0] != null) {
             undoView[0].hide(true, 0);
         }
@@ -764,34 +757,15 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         mapViewClip.addView(mapTypeButton, LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 40 : 44, Build.VERSION.SDK_INT >= 21 ? 40 : 44, Gravity.RIGHT | Gravity.TOP, 0, 12, 12, 0));
         mapTypeButton.setOnClickListener(v -> mapTypeButton.toggleSubMenu());
         mapTypeButton.setDelegate(id -> {
-            if (mapView == null) {
+            if (map == null) {
                 return;
             }
-            if (id == map_list_menu_osm) {
-                attributionOverlay.setText(Html.fromHtml("© <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors"));
-                mapView.setTileSource(TileSourceFactory.MAPNIK);
-            } else if (id == map_list_menu_wiki) {
-                // Create a custom tile source
-                ITileSource tileSource = new XYTileSource(
-                        "Wikimedia", 0, 19,
-                        256, ".png",
-                        new String[]{"https://maps.wikimedia.org/osm-intl/"},
-                        "© OpenStreetMap contributors");
-                attributionOverlay.setText(Html.fromHtml("© <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors"));
-                mapView.setTileSource(tileSource);
-            } else if (id == map_list_menu_cartodark) {
-                // Create a custom tile source
-                ITileSource tileSource = new XYTileSource(
-                        "Carto Dark", 0, 20,
-                        256, ".png",
-                        new String[]{
-                                "https://cartodb-basemaps-a.global.ssl.fastly.net/dark_all/",
-                                "https://cartodb-basemaps-b.global.ssl.fastly.net/dark_all/",
-                                "https://cartodb-basemaps-c.global.ssl.fastly.net/dark_all/",
-                                "https://cartodb-basemaps-d.global.ssl.fastly.net/dark_all/"},
-                        "© OpenStreetMap contributors, © CARTO");
-                attributionOverlay.setText(Html.fromHtml("© <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors, © <a href=\"https://carto.com/attributions\">CARTO</a>"));
-                mapView.setTileSource(tileSource);
+            if (id == map_list_menu_map) {
+                map.setMapType(IMapsProvider.MAP_TYPE_NORMAL);
+            } else if (id == map_list_menu_satellite) {
+                map.setMapType(IMapsProvider.MAP_TYPE_SATELLITE);
+            } else if (id == map_list_menu_hybrid) {
+                map.setMapType(IMapsProvider.MAP_TYPE_HYBRID);
             }
         });
         mapViewClip.addView(getAttributionOverlay(context), LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.BOTTOM, LocaleController.isRTL ? 0 : 4, 0, LocaleController.isRTL ? 4 : 0, 20));
@@ -839,19 +813,17 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 return;
             }
             if (messageObject != null || chatLocation != null) {
-                if (myLocation != null && mapView != null) {
-                    final IMapController controller = mapView.getController();
-                    controller.animateTo(new GeoPoint(myLocation.getLatitude(), myLocation.getLongitude()), mapView.getMaxZoomLevel() - 2, null);
+                if (myLocation != null && map != null) {
+                    map.animateCamera(ApplicationLoader.getMapsProvider().newCameraUpdateLatLngZoom(new IMapsProvider.LatLng(myLocation.getLatitude(), myLocation.getLongitude()), map.getMaxZoomLevel() - 4));
                 }
             } else {
-                if (myLocation != null && mapView != null) {
+                if (myLocation != null && map != null) {
                     locationButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_location_actionActiveIcon), PorterDuff.Mode.MULTIPLY));
                     locationButton.setTag(Theme.key_location_actionActiveIcon);
                     adapter.setCustomLocation(null);
                     userLocationMoved = false;
                     showSearchPlacesButton(false);
-                    final IMapController controller = mapView.getController();
-                    controller.animateTo(new GeoPoint(myLocation.getLatitude(), myLocation.getLongitude()));
+                    map.animateCamera(ApplicationLoader.getMapsProvider().newCameraUpdateLatLng(new IMapsProvider.LatLng(myLocation.getLatitude(), myLocation.getLongitude())));
                     if (searchedForCustomLocations) {
                         if (myLocation != null) {
                             adapter.searchPlacesWithQuery(null, myLocation, true, true);
@@ -891,7 +863,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         proximityButton.setContentDescription(LocaleController.getString("AccDescrLocationNotify", R.string.AccDescrLocationNotify));
         mapViewClip.addView(proximityButton, LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 40 : 44, Build.VERSION.SDK_INT >= 21 ? 40 : 44, Gravity.RIGHT | Gravity.TOP, 0, 12 + 50, 12, 0));
         proximityButton.setOnClickListener(v -> {
-            if (getParentActivity() == null || myLocation == null || !checkGpsEnabled() || mapView == null) {
+            if (getParentActivity() == null || myLocation == null || !checkGpsEnabled() || map == null) {
                 return;
             }
             if (hintView != null) {
@@ -1063,14 +1035,12 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     }
                 }
             } else if (locationType == LOCATION_TYPE_GROUP_VIEW) {
-                if (mapView != null) {
-                    final IMapController controller = mapView.getController();
-                    controller.animateTo(new GeoPoint(chatLocation.geo_point.lat, chatLocation.geo_point._long), mapView.getMaxZoomLevel() - 2, null);
+                if (map != null) {
+                    map.animateCamera(ApplicationLoader.getMapsProvider().newCameraUpdateLatLngZoom(new IMapsProvider.LatLng(chatLocation.geo_point.lat, chatLocation.geo_point._long), map.getMaxZoomLevel() - 4));
                 }
             } else if (position == 1 && messageObject != null && (!messageObject.isLiveLocation() || locationType == LOCATION_TYPE_LIVE_VIEW)) {
-                if (mapView != null) {
-                    final IMapController controller = mapView.getController();
-                    controller.animateTo(new GeoPoint(messageObject.messageOwner.media.geo.lat, messageObject.messageOwner.media.geo._long), mapView.getMaxZoomLevel() - 2, null);
+                if (map != null) {
+                    map.animateCamera(ApplicationLoader.getMapsProvider().newCameraUpdateLatLngZoom(new IMapsProvider.LatLng(messageObject.messageOwner.media.geo.lat, messageObject.messageOwner.media.geo._long), map.getMaxZoomLevel() - 4));
                 }
             } else if (position == 1 && locationType != 2) {
                 if (delegate != null && userLocation != null) {
@@ -1113,8 +1083,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     }
                 } else if (object instanceof LiveLocation) {
                     LiveLocation liveLocation = (LiveLocation) object;
-                    final IMapController controller = mapView.getController();
-                    controller.animateTo(liveLocation.marker.getPosition(), mapView.getMaxZoomLevel() - 2, null);
+                    map.animateCamera(ApplicationLoader.getMapsProvider().newCameraUpdateLatLngZoom(liveLocation.marker.getPosition(), map.getMaxZoomLevel() - 4));
                 }
             }
         });
@@ -1123,92 +1092,95 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
         frameLayout.addView(mapViewClip, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP));
 
-        mapView = new MapView(context) {
-
-            @Override
-            public boolean dispatchTouchEvent(MotionEvent ev) {
-                MotionEvent eventToRecycle = null;
-                if (yOffset != 0) {
-                    ev = eventToRecycle = MotionEvent.obtain(ev);
-                    eventToRecycle.offsetLocation(0, -yOffset / 2);
-                }
-                boolean result = super.dispatchTouchEvent(ev);
-                if (eventToRecycle != null) {
-                    eventToRecycle.recycle();
-                }
-                return result;
+        mapView = ApplicationLoader.getMapsProvider().onCreateMapView(context);
+        mapView.setOnDispatchTouchEventInterceptor((ev, origMethod) -> {
+            MotionEvent eventToRecycle = null;
+            if (yOffset != 0) {
+                ev = eventToRecycle = MotionEvent.obtain(ev);
+                eventToRecycle.offsetLocation(0, -yOffset / 2);
             }
-
-            @Override
-            public boolean onTouchEvent(MotionEvent ev) {
-                if (messageObject == null && chatLocation == null) {
-                    if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-                        if (animatorSet != null) {
-                            animatorSet.cancel();
-                        }
-                        animatorSet = new AnimatorSet();
-                        animatorSet.setDuration(200);
-                        animatorSet.playTogether(ObjectAnimator.ofFloat(markerImageView, View.TRANSLATION_Y, markerTop - AndroidUtilities.dp(10)));
-                        animatorSet.start();
-                    } else if (ev.getAction() == MotionEvent.ACTION_UP) {
-                        if (animatorSet != null) {
-                            animatorSet.cancel();
-                        }
-                        yOffset = 0;
-                        animatorSet = new AnimatorSet();
-                        animatorSet.setDuration(200);
-                        animatorSet.playTogether(ObjectAnimator.ofFloat(markerImageView, View.TRANSLATION_Y, markerTop));
-                        animatorSet.start();
-                        adapter.fetchLocationAddress();
-                    }
-                    if (ev.getAction() == MotionEvent.ACTION_MOVE) {
-                        if (!userLocationMoved) {
-                            locationButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_location_actionIcon), PorterDuff.Mode.MULTIPLY));
-                            locationButton.setTag(Theme.key_location_actionIcon);
-                            userLocationMoved = true;
-                        }
-                        if (mapView != null) {
-                            if (userLocation != null) {
-                                userLocation.setLatitude(mapView.getMapCenter().getLatitude());
-                                userLocation.setLongitude(mapView.getMapCenter().getLongitude());
-                            }
-                        }
-                        adapter.setCustomLocation(userLocation);
-                    }
-                }
-                return super.onTouchEvent(ev);
+            boolean result = origMethod.call(ev);
+            if (eventToRecycle != null) {
+                eventToRecycle.recycle();
             }
-
-            @Override
-            protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-                super.onLayout(changed, left, top, right, bottom);
-                AndroidUtilities.runOnUIThread(() -> {
-                    if (moveToBounds != null) {
-                        mapView.zoomToBoundingBox(moveToBounds, false, AndroidUtilities.dp(80 + 33));
-                        moveToBounds = null;
-                    }
-                });
-            }
-        };
-
-        AndroidUtilities.runOnUIThread(() -> {
-            if (mapView != null && getParentActivity() != null) {
-                mapView.setPadding(AndroidUtilities.dp(70), 0, AndroidUtilities.dp(70), AndroidUtilities.dp(10));
-                onMapInit();
-                mapsInitialized = true;
-                if (isActiveThemeDark()) {
-                    /*currentMapStyleDark = true;
-                    MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(ApplicationLoader.applicationContext, R.raw.mapstyle_night);
-                    googleMap.setMapStyle(style);
-                    */
-                    //TODO Dark?
-                }
-                if (onResumeCalled) {
-                    mapView.onResume();
-                }
-            }
+            return result;
         });
-
+        mapView.setOnInterceptTouchEventInterceptor((ev, origMethod) -> {
+            if (messageObject == null && chatLocation == null) {
+                if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (animatorSet != null) {
+                        animatorSet.cancel();
+                    }
+                    animatorSet = new AnimatorSet();
+                    animatorSet.setDuration(200);
+                    animatorSet.playTogether(ObjectAnimator.ofFloat(markerImageView, View.TRANSLATION_Y, markerTop - AndroidUtilities.dp(10)));
+                    animatorSet.start();
+                } else if (ev.getAction() == MotionEvent.ACTION_UP) {
+                    if (animatorSet != null) {
+                        animatorSet.cancel();
+                    }
+                    yOffset = 0;
+                    animatorSet = new AnimatorSet();
+                    animatorSet.setDuration(200);
+                    animatorSet.playTogether(ObjectAnimator.ofFloat(markerImageView, View.TRANSLATION_Y, markerTop));
+                    animatorSet.start();
+                    adapter.fetchLocationAddress();
+                }
+                if (ev.getAction() == MotionEvent.ACTION_MOVE) {
+                    if (!userLocationMoved) {
+                        locationButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_location_actionIcon), PorterDuff.Mode.MULTIPLY));
+                        locationButton.setTag(Theme.key_location_actionIcon);
+                        userLocationMoved = true;
+                    }
+                    if (map != null) {
+                        if (userLocation != null) {
+                            userLocation.setLatitude(map.getCameraPosition().target.latitude);
+                            userLocation.setLongitude(map.getCameraPosition().target.longitude);
+                        }
+                    }
+                    adapter.setCustomLocation(userLocation);
+                }
+            }
+            return origMethod.call(ev);
+        });
+        mapView.setOnLayoutListener(()-> AndroidUtilities.runOnUIThread(() -> {
+            if (moveToBounds != null) {
+                map.moveCamera(moveToBounds);
+                moveToBounds = null;
+            }
+        }));
+        IMapsProvider.IMapView map = mapView;
+        new Thread(() -> {
+            try {
+                map.onCreate(null);
+            } catch (Exception e) {
+                //this will cause exception, but will preload google maps?
+            }
+            AndroidUtilities.runOnUIThread(() -> {
+                if (mapView != null && getParentActivity() != null) {
+                    try {
+                        map.onCreate(null);
+                        ApplicationLoader.getMapsProvider().initializeMaps(ApplicationLoader.applicationContext);
+                        mapView.getMapAsync(map1 -> {
+                            this.map = map1;
+                            if (isActiveThemeDark()) {
+                                currentMapStyleDark = true;
+                                IMapsProvider.IMapStyleOptions style = ApplicationLoader.getMapsProvider().loadRawResourceStyle(ApplicationLoader.applicationContext, R.raw.mapstyle_night);
+                                this.map.setMapStyle(style);
+                            }
+                            this.map.setPadding(AndroidUtilities.dp(70), 0, AndroidUtilities.dp(70), AndroidUtilities.dp(10));
+                            onMapInit();
+                        });
+                        mapsInitialized = true;
+                        if (onResumeCalled) {
+                            mapView.onResume();
+                        }
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                    }
+                }
+            });
+        }).start();
 
         if (messageObject == null && chatLocation == null) {
             if (chat != null && locationType == LOCATION_TYPE_GROUP && dialogId != 0) {
@@ -1502,8 +1474,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             getLocationController().setProximityLocation(dialogId, radius, true);
             return true;
         }, () -> {
-            if (mapView != null) {
-                mapView.setPadding(AndroidUtilities.dp(70), 0, AndroidUtilities.dp(70), AndroidUtilities.dp(10));
+            if (map != null) {
+                map.setPadding(AndroidUtilities.dp(70), 0, AndroidUtilities.dp(70), AndroidUtilities.dp(10));
             }
             if (!proximitySheet.getRadiusSet()) {
                 if (previousRadius > 0) {
@@ -1604,16 +1576,14 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         for (int a = 0, N = places.size(); a < N; a++) {
             TLRPC.TL_messageMediaVenue venue = places.get(a);
             try {
-                Marker marker = new Marker(mapView);
-                marker.setPosition(new GeoPoint(venue.geo.lat, venue.geo._long));
-                marker.setIcon(new BitmapDrawable(getParentActivity().getResources(), createPlaceBitmap(a)));
-                marker.setAnchor(0.5f, 0.5f);
-                mapView.getOverlays().add(marker);
-                marker.setTitle(venue.title);
-                marker.setSnippet(venue.address);
+                IMapsProvider.IMarkerOptions options = ApplicationLoader.getMapsProvider().onCreateMarkerOptions().position(new IMapsProvider.LatLng(venue.geo.lat, venue.geo._long));
+                options.icon(createPlaceBitmap(a));
+                options.anchor(0.5f, 0.5f);
+                options.title(venue.title);
+                options.snippet(venue.address);
                 VenueLocation venueLocation = new VenueLocation();
                 venueLocation.num = a;
-                venueLocation.marker = marker;
+                venueLocation.marker = map.addMarker(options);
                 venueLocation.venue = venue;
                 placeMarkers.add(venueLocation);
                 marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
@@ -1637,7 +1607,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
     private LiveLocation addUserMarker(TLRPC.Message message) {
         LiveLocation liveLocation;
-        GeoPoint latLng = new GeoPoint(message.media.geo.lat, message.media.geo._long);
+        IMapsProvider.LatLng latLng = new IMapsProvider.LatLng(message.media.geo.lat, message.media.geo._long);
         if ((liveLocation = markersMap.get(MessageObject.getFromChatId(message))) == null) {
             liveLocation = new LiveLocation();
             liveLocation.object = message;
@@ -1655,39 +1625,25 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
 
             try {
-                Marker marker = new Marker(mapView);
-                marker.setPosition(latLng);
-                // InfoWindow workaround
-                marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-                    @Override
-                    public boolean onMarkerClick(Marker marker, MapView mapView) {
-                        return false;
-                    }
-                });
+                IMapsProvider.IMarkerOptions options = ApplicationLoader.getMapsProvider().onCreateMarkerOptions().position(latLng);
                 Bitmap bitmap = createUserBitmap(liveLocation);
                 if (bitmap != null) {
-                    marker.setIcon(new BitmapDrawable(getParentActivity().getResources(), bitmap));
-                    marker.setAnchor(0.5f, 0.907f);
-                    mapView.getOverlays().add(marker);
-                    liveLocation.marker = marker;
+                    options.icon(bitmap);
+                    options.anchor(0.5f, 0.907f);
+                    liveLocation.marker = map.addMarker(options);
 
                     if (!UserObject.isUserSelf(liveLocation.user)) {
-                        Marker directionMarker = new Marker(mapView);
-
-                        directionMarker.setPosition(latLng);
-                        directionMarker.setFlat(true);
-                        directionMarker.setIcon(getParentActivity().getResources().getDrawable(R.drawable.map_pin_circle));
-                        directionMarker.setAnchor(0.5f, 0.5f);
-                        mapView.getOverlayManager().add(directionMarker);
-                        liveLocation.directionMarker = directionMarker;
+                        IMapsProvider.IMarkerOptions dirOptions = ApplicationLoader.getMapsProvider().onCreateMarkerOptions().position(latLng).flat(true);
+                        dirOptions.anchor(0.5f, 0.5f);
+                        liveLocation.directionMarker = map.addMarker(dirOptions);
 
                         if (message.media.heading != 0) {
                             liveLocation.directionMarker.setRotation(message.media.heading);
-                            liveLocation.directionMarker.setIcon(getParentActivity().getResources().getDrawable(R.drawable.map_pin_cone2));
+                            liveLocation.directionMarker.setIcon(R.drawable.map_pin_cone2);
                             liveLocation.hasRotation = true;
                         } else {
                             liveLocation.directionMarker.setRotation(0);
-                            liveLocation.directionMarker.setIcon(getParentActivity().getResources().getDrawable(R.drawable.map_pin_circle));
+                            liveLocation.directionMarker.setIcon(R.drawable.map_pin_circle);
                             liveLocation.hasRotation = false;
                         }
                     }
@@ -1695,7 +1651,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     markersMap.put(liveLocation.id, liveLocation);
                     LocationController.SharingLocationInfo myInfo = getLocationController().getSharingLocationInfo(dialogId);
                     if (liveLocation.id == getUserConfig().getClientUserId() && myInfo != null && liveLocation.object.id == myInfo.mid && myLocation != null) {
-                        GeoPoint latLng1 = new GeoPoint(myLocation.getLatitude(), myLocation.getLongitude());
+                        IMapsProvider.LatLng latLng1 = new IMapsProvider.LatLng(myLocation.getLatitude(), myLocation.getLongitude());
                         liveLocation.marker.setPosition(latLng1);
                     }
                 }
@@ -1713,7 +1669,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     private LiveLocation addUserMarker(TLRPC.TL_channelLocation location) {
-        GeoPoint latLng = new GeoPoint(location.geo_point.lat, location.geo_point._long);
+        IMapsProvider.LatLng latLng = new IMapsProvider.LatLng(location.geo_point.lat, location.geo_point._long);
         LiveLocation liveLocation = new LiveLocation();
         if (DialogObject.isUserDialog(dialogId)) {
             liveLocation.user = getMessagesController().getUser(dialogId);
@@ -1723,31 +1679,18 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         liveLocation.id = dialogId;
 
         try {
-            Marker marker = new Marker(mapView);
-            marker.setPosition(latLng);
-            // InfoWindow workaround
-            marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(Marker marker, MapView mapView) {
-                    return false;
-                }
-            });
+            IMapsProvider.IMarkerOptions options = ApplicationLoader.getMapsProvider().onCreateMarkerOptions().position(latLng);
             Bitmap bitmap = createUserBitmap(liveLocation);
             if (bitmap != null) {
-                marker.setIcon(new BitmapDrawable(getParentActivity().getResources(), bitmap));
-                marker.setAnchor(0.5f, 0.907f);
-                mapView.getOverlays().add(marker);
-                liveLocation.marker = marker;
+                options.icon(bitmap);
+                options.anchor(0.5f, 0.907f);
+                liveLocation.marker = map.addMarker(options);
 
                 if (!UserObject.isUserSelf(liveLocation.user)) {
-                    Marker directionMarker = new Marker(mapView);
-                    ;
-                    directionMarker.setPosition(latLng);
-                    directionMarker.setFlat(true);
-                    directionMarker.setIcon(getParentActivity().getResources().getDrawable(R.drawable.map_pin_circle));
-                    directionMarker.setAnchor(0.5f, 0.5f);
-                    mapView.getOverlayManager().add(directionMarker);
-                    liveLocation.directionMarker = directionMarker;
+                    IMapsProvider.IMarkerOptions dirOptions = ApplicationLoader.getMapsProvider().onCreateMarkerOptions().position(latLng).flat(true);
+                    dirOptions.icon(R.drawable.map_pin_circle);
+                    dirOptions.anchor(0.5f, 0.5f);
+                    liveLocation.directionMarker = map.addMarker(dirOptions);
                 }
                 markers.add(liveLocation);
                 markersMap.put(liveLocation.id, liveLocation);
@@ -1760,7 +1703,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     private void onMapInit() {
-        if (mapView == null) {
+        if (map == null) {
             return;
         }
 
@@ -1775,44 +1718,30 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
         if (chatLocation != null) {
             LiveLocation liveLocation = addUserMarker(chatLocation);
-            controller.setCenter(liveLocation.marker.getPosition());
-            controller.setZoom(mapView.getMaxZoomLevel() - 2);
+            map.moveCamera(ApplicationLoader.getMapsProvider().newCameraUpdateLatLngZoom(liveLocation.marker.getPosition(), map.getMaxZoomLevel() - 4));
         } else if (messageObject != null) {
             if (messageObject.isLiveLocation()) {
                 LiveLocation liveLocation = addUserMarker(messageObject.messageOwner);
                 if (!getRecentLocations()) {
-                    controller.setCenter(liveLocation.marker.getPosition());
-                    controller.setZoom(mapView.getMaxZoomLevel() - 2);
+                    map.moveCamera(ApplicationLoader.getMapsProvider().newCameraUpdateLatLngZoom(liveLocation.marker.getPosition(), map.getMaxZoomLevel() - 4));
                 }
             } else {
-                GeoPoint latLng = new GeoPoint(userLocation.getLatitude(), userLocation.getLongitude());
-                Marker marker = new Marker(mapView);
-                marker.setPosition(latLng);
-                // InfoWindow workaround
-                marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-                    @Override
-                    public boolean onMarkerClick(Marker marker, MapView mapView) {
-                        return false;
-                    }
-                });
-                if (Build.VERSION.SDK_INT >= 21) {
-                    marker.setIcon(getParentActivity().getDrawable(R.drawable.map_pin));
-                } else {
-                    marker.setIcon(getParentActivity().getResources().getDrawable(R.drawable.map_pin2));
+                IMapsProvider.LatLng latLng = new IMapsProvider.LatLng(userLocation.getLatitude(), userLocation.getLongitude());
+                try {
+                    map.addMarker(ApplicationLoader.getMapsProvider().onCreateMarkerOptions().position(latLng).icon(R.drawable.map_pin2));
+                } catch (Exception e) {
+                    FileLog.e(e);
                 }
-                marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-                mapView.getOverlays().add(marker);
-                controller.setCenter(latLng);
-                controller.setZoom(mapView.getMaxZoomLevel() - 2);
+                IMapsProvider.ICameraUpdate position = ApplicationLoader.getMapsProvider().newCameraUpdateLatLngZoom(latLng, map.getMaxZoomLevel() - 4);
+                map.moveCamera(position);
                 firstFocus = false;
                 getRecentLocations();
             }
         } else {
             userLocation = new Location("network");
             if (initialLocation != null) {
-                GeoPoint latLng = new GeoPoint(initialLocation.geo_point.lat, initialLocation.geo_point._long);
-                controller.setCenter(latLng);
-                controller.setZoom(mapView.getMaxZoomLevel() - 2);
+                IMapsProvider.LatLng latLng = new IMapsProvider.LatLng(initialLocation.geo_point.lat, initialLocation.geo_point._long);
+                map.moveCamera(ApplicationLoader.getMapsProvider().newCameraUpdateLatLngZoom(latLng, map.getMaxZoomLevel() - 4));
                 userLocation.setLatitude(initialLocation.geo_point.lat);
                 userLocation.setLongitude(initialLocation.geo_point._long);
                 adapter.setCustomLocation(userLocation);
@@ -1822,34 +1751,16 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
         }
 
-        GpsMyLocationProvider imlp = new GpsMyLocationProvider(getParentActivity());
-        imlp.setLocationUpdateMinDistance(10);
-        imlp.setLocationUpdateMinTime(10000);
-        imlp.addLocationSource(LocationManager.NETWORK_PROVIDER);
-        myLocationOverlay = new MyLocationNewOverlay(imlp, mapView) {
-            @Override
-            public void onLocationChanged(final Location location, IMyLocationProvider source) {
-                super.onLocationChanged(location, source);
-                if (location != null) {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            positionMarker(location);
-                            LocationController.getInstance(currentAccount).setGoogleMapLocation(location, isFirstLocation);
-                            isFirstLocation = false;
-                        }
-                    });
-                }
-            }
-        };
-        myLocationOverlay.enableMyLocation();
-        myLocationOverlay.setDrawAccuracyEnabled(true);
-        myLocationOverlay.setPersonIcon(BitmapFactory.decodeResource(getParentActivity().getResources(),R.drawable.map_pin_circle));
-        //TODO
-
-        mapView.addMapListener(new MapListener() {
-            @Override
-            public boolean onScroll(ScrollEvent event) {
+        try {
+            map.setMyLocationEnabled(true);
+        } catch (Exception e) {
+            FileLog.e(e, false);
+        }
+        map.getUiSettings().setMyLocationButtonEnabled(false);
+        map.getUiSettings().setZoomControlsEnabled(false);
+        map.getUiSettings().setCompassEnabled(false);
+        map.setOnCameraMoveStartedListener(reason -> {
+            if (reason == IMapsProvider.OnCameraMoveStartedListener.REASON_GESTURE) {
                 showSearchPlacesButton(true);
                 removeInfoView();
 
@@ -1861,7 +1772,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                             int min = locationType == LOCATION_TYPE_SEND ? 0 : AndroidUtilities.dp(66);
                             int top = view.getTop();
                             if (top < -min) {
-                                forceUpdate = mapView.getMapCenter(); //TODO. Strange variable
+                                IMapsProvider.CameraPosition cameraPosition = map.getCameraPosition();
+                                forceUpdate = ApplicationLoader.getMapsProvider().newCameraUpdateLatLngZoom(cameraPosition.target, cameraPosition.zoom);
                                 listView.smoothScrollBy(0, top + min);
                             }
                         }
@@ -1875,26 +1787,25 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 return false;
             }
         });
-        myLocationOverlay.runOnFirstFix(new Runnable() {
-            public void run() {
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        positionMarker(myLocationOverlay.getLastFix());
-                        getLocationController().getInstance(currentAccount).setGoogleMapLocation(myLocationOverlay.getLastFix(), isFirstLocation);
-                        isFirstLocation = false;
-                    }
-                });
+        map.setOnMyLocationChangeListener(location -> {
+            positionMarker(location);
+            getLocationController().setMapLocation(location, isFirstLocation);
+            isFirstLocation = false;
+        });
+        map.setOnMarkerClickListener(marker -> {
+            if (!(marker.getTag() instanceof VenueLocation)) {
+                return true;
+            }
+            markerImageView.setVisibility(View.INVISIBLE);
+            if (!userLocationMoved) {
+                locationButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_location_actionIcon), PorterDuff.Mode.MULTIPLY));
+                locationButton.setTag(Theme.key_location_actionIcon);
+                userLocationMoved = true;
             }
         });
-        mapView.getOverlays().add(myLocationOverlay);
-        mapView.addMapListener(new MapListener() {
-            @Override
-            public boolean onScroll(ScrollEvent event) {
-                if (overlayView != null) {
-                    overlayView.updatePositions();
-                }
-                return false;
+        map.setOnCameraMoveListener(() -> {
+            if (overlayView != null) {
+                overlayView.updatePositions();
             }
 
             @Override
@@ -1948,16 +1859,14 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     private void createCircle(int meters) {
-        if (mapView == null) {
+        if (map == null) {
             return;
         }
+        List<IMapsProvider.PatternItem> PATTERN_POLYGON_ALPHA = Arrays.asList(new IMapsProvider.PatternItem.Gap(20), new IMapsProvider.PatternItem.Dash(20));
 
-        proximityCircleCenter = new GeoPoint(myLocation.getLatitude(), myLocation.getLongitude());
-        proximityCircleRadius = meters;
-
-        proximityCircle = new Polygon();
-        proximityCircle.setPoints(Polygon.pointsAsCircle(proximityCircleCenter, meters));
-
+        IMapsProvider.ICircleOptions circleOptions = ApplicationLoader.getMapsProvider().onCreateCircleOptions();
+        circleOptions.center(new IMapsProvider.LatLng(myLocation.getLatitude(), myLocation.getLongitude()));
+        circleOptions.radius(meters);
         if (isActiveThemeDark()) {
             proximityCircle.getOutlinePaint().setColor(0x9666A3D7);
             proximityCircle.getFillPaint().setColor(0x1c66A3D7);
@@ -1965,11 +1874,9 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             proximityCircle.getOutlinePaint().setColor(0x964286F5);
             proximityCircle.getOutlinePaint().setColor(0x1c4286F5);
         }
-
-        // TODO: set dash /gap
-        proximityCircle.getOutlinePaint().setStrokeWidth(2);
-        mapView.getOverlayManager().add(proximityCircle);
-
+        circleOptions.strokePattern(PATTERN_POLYGON_ALPHA);
+        circleOptions.strokeWidth(2);
+        proximityCircle = map.addCircle(circleOptions);
     }
 
     private void removeInfoView() {
@@ -2013,15 +1920,15 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
         if (isOpen && !backward) {
             try {
-                if (mapView.getParent() instanceof ViewGroup) {
-                    ViewGroup viewGroup = (ViewGroup) mapView.getParent();
-                    viewGroup.removeView(mapView);
+                if (mapView.getView().getParent() instanceof ViewGroup) {
+                    ViewGroup viewGroup = (ViewGroup) mapView.getView().getParent();
+                    viewGroup.removeView(mapView.getView());
                 }
             } catch (Exception ignore) {
 
             }
             if (mapViewClip != null) {
-                mapViewClip.addView(mapView, 0, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, overScrollHeight + AndroidUtilities.dp(10), Gravity.TOP | Gravity.LEFT));
+                mapViewClip.addView(mapView.getView(), 0, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, overScrollHeight + AndroidUtilities.dp(10), Gravity.TOP | Gravity.LEFT));
                 if (overlayView != null) {
                     try {
                         if (overlayView.getParent() instanceof ViewGroup) {
@@ -2036,7 +1943,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 updateClipView(false);
                 maybeShowProximityHint();
             } else if (fragmentView != null) {
-                ((FrameLayout) fragmentView).addView(mapView, 0, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
+                ((FrameLayout) fragmentView).addView(mapView.getView(), 0, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
             }
         }
     }
@@ -2088,16 +1995,16 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mapViewClip.getLayoutParams();
         if (layoutParams != null) {
             if (height <= 0) {
-                if (mapView.getVisibility() == View.VISIBLE) {
-                    mapView.setVisibility(View.INVISIBLE);
+                if (mapView.getView().getVisibility() == View.VISIBLE) {
+                    mapView.getView().setVisibility(View.INVISIBLE);
                     mapViewClip.setVisibility(View.INVISIBLE);
                     if (overlayView != null) {
                         overlayView.setVisibility(View.INVISIBLE);
                     }
                 }
             } else {
-                if (mapView.getVisibility() == View.INVISIBLE) {
-                    mapView.setVisibility(View.VISIBLE);
+                if (mapView.getView().getVisibility() == View.INVISIBLE) {
+                    mapView.getView().setVisibility(View.VISIBLE);
                     mapViewClip.setVisibility(View.VISIBLE);
                     if (overlayView != null) {
                         overlayView.setVisibility(View.VISIBLE);
@@ -2106,7 +2013,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
 
             mapViewClip.setTranslationY(Math.min(0, top));
-            mapView.setTranslationY(Math.max(0, -top / 2));
+            mapView.getView().setTranslationY(Math.max(0, -top / 2));
             if (overlayView != null) {
                 overlayView.setTranslationY(Math.max(0, -top / 2));
             }
@@ -2123,13 +2030,13 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 markerImageView.setTranslationY(markerTop = -top - AndroidUtilities.dp(markerImageView.getTag() == null ? 48 : 69) + height / 2);
             }
             if (!fromLayout) {
-                layoutParams = (FrameLayout.LayoutParams) mapView.getLayoutParams();
+                layoutParams = (FrameLayout.LayoutParams) mapView.getView().getLayoutParams();
                 if (layoutParams != null && layoutParams.height != overScrollHeight + AndroidUtilities.dp(10)) {
                     layoutParams.height = overScrollHeight + AndroidUtilities.dp(10);
-                    if (mapView != null) {
-                        mapView.setPadding(AndroidUtilities.dp(70), 0, AndroidUtilities.dp(70), AndroidUtilities.dp(10));
+                    if (map != null) {
+                        map.setPadding(AndroidUtilities.dp(70), 0, AndroidUtilities.dp(70), AndroidUtilities.dp(10));
                     }
-                    mapView.setLayoutParams(layoutParams);
+                    mapView.getView().setLayoutParams(layoutParams);
                 }
                 if (overlayView != null) {
                     layoutParams = (FrameLayout.LayoutParams) overlayView.getLayoutParams();
@@ -2171,13 +2078,13 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
 
             adapter.setOverScrollHeight(overScrollHeight);
-            layoutParams = (FrameLayout.LayoutParams) mapView.getLayoutParams();
+            layoutParams = (FrameLayout.LayoutParams) mapView.getView().getLayoutParams();
             if (layoutParams != null) {
                 layoutParams.height = overScrollHeight + AndroidUtilities.dp(10);
-                if (mapView != null) {
-                    mapView.setPadding(AndroidUtilities.dp(70), 0, AndroidUtilities.dp(70), AndroidUtilities.dp(10));
+                if (map != null) {
+                    map.setPadding(AndroidUtilities.dp(70), 0, AndroidUtilities.dp(70), AndroidUtilities.dp(10));
                 }
-                mapView.setLayoutParams(layoutParams);
+                mapView.getView().setLayoutParams(layoutParams);
             }
             if (overlayView != null) {
                 layoutParams = (FrameLayout.LayoutParams) overlayView.getLayoutParams();
@@ -2209,6 +2116,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         }
     }
 
+    @SuppressLint("MissingPermission")
     private Location getLastLocation() {
         if (Build.VERSION.SDK_INT >= 23 && getParentActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && getParentActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return null;
@@ -2234,14 +2142,14 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         LiveLocation liveLocation = markersMap.get(getUserConfig().getClientUserId());
         LocationController.SharingLocationInfo myInfo = getLocationController().getSharingLocationInfo(dialogId);
         if (liveLocation != null && myInfo != null && liveLocation.object.id == myInfo.mid) {
-            GeoPoint latLng = new GeoPoint(location.getLatitude(), location.getLongitude());
+            IMapsProvider.LatLng latLng = new IMapsProvider.LatLng(location.getLatitude(), location.getLongitude());
             liveLocation.marker.setPosition(latLng);
             if (liveLocation.directionMarker != null) {
                 liveLocation.directionMarker.setPosition(latLng);
             }
         }
-        if (messageObject == null && chatLocation == null && mapView != null) {
-            GeoPoint latLng = new GeoPoint(location.getLatitude(), location.getLongitude());
+        if (messageObject == null && chatLocation == null && map != null) {
+            IMapsProvider.LatLng latLng = new IMapsProvider.LatLng(location.getLatitude(), location.getLongitude());
             if (adapter != null) {
                 if (!searchedForCustomLocations && locationType != LOCATION_TYPE_GROUP) {
                     adapter.searchPlacesWithQuery(null, myLocation, true);
@@ -2251,13 +2159,12 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             if (!userLocationMoved) {
                 userLocation = new Location(location);
                 if (firstWas) {
-                    final IMapController controller = mapView.getController();
-                    controller.animateTo(latLng);
+                    IMapsProvider.ICameraUpdate position = ApplicationLoader.getMapsProvider().newCameraUpdateLatLng(latLng);
+                    map.animateCamera(position);
                 } else {
                     firstWas = true;
-                    final IMapController controller = mapView.getController();
-                    controller.setZoom(mapView.getMaxZoomLevel() - 2);
-                    controller.setCenter(latLng);
+                    IMapsProvider.ICameraUpdate position = ApplicationLoader.getMapsProvider().newCameraUpdateLatLngZoom(latLng, map.getMaxZoomLevel() - 4);
+                    map.moveCamera(position);
                 }
             }
         } else {
@@ -2267,8 +2174,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             proximitySheet.updateText(true, true);
         }
         if (proximityCircle != null) {
-            proximityCircleCenter = new GeoPoint(myLocation.getLatitude(), myLocation.getLongitude());
-            proximityCircle.setPoints(Polygon.pointsAsCircle(proximityCircleCenter, proximityCircleRadius));
+            proximityCircle.setCenter(new IMapsProvider.LatLng(myLocation.getLatitude(), myLocation.getLongitude()));
         }
     }
 
@@ -2292,10 +2198,10 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
     private static final double EARTHRADIUS = 6366198;
 
-    private static GeoPoint move(GeoPoint startLL, double toNorth, double toEast) {
-        double lonDiff = meterToLongitude(toEast, startLL.getLatitude());
+    private static IMapsProvider.LatLng move(IMapsProvider.LatLng startLL, double toNorth, double toEast) {
+        double lonDiff = meterToLongitude(toEast, startLL.latitude);
         double latDiff = meterToLatitude(toNorth);
-        return new GeoPoint(startLL.getLatitude() + latDiff, startLL.getLongitude() + lonDiff);
+        return new IMapsProvider.LatLng(startLL.latitude + latDiff, startLL.longitude + lonDiff);
     }
 
     private static double meterToLongitude(double meterToEast, double latitude) {
@@ -2312,15 +2218,17 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     private void fetchRecentLocations(ArrayList<TLRPC.Message> messages) {
-        BoundingBox builder = null;
-        List<GeoPoint> geoPoints = new ArrayList<>();
+        IMapsProvider.ILatLngBoundsBuilder builder = null;
+        if (firstFocus) {
+            builder = ApplicationLoader.getMapsProvider().onCreateLatLngBoundsBuilder();
+        }
         int date = getConnectionsManager().getCurrentTime();
         for (int a = 0; a < messages.size(); a++) {
             TLRPC.Message message = messages.get(a);
             if (message.date + message.media.period > date) {
-                if (firstFocus) {
-                    GeoPoint latLng = new GeoPoint(message.media.geo.lat, message.media.geo._long);
-                    geoPoints.add(latLng);
+                if (builder != null) {
+                    IMapsProvider.LatLng latLng = new IMapsProvider.LatLng(message.media.geo.lat, message.media.geo._long);
+                    builder.include(latLng);
                 }
                 addUserMarker(message);
                 if (proximityButton.getVisibility() != View.GONE && MessageObject.getFromChatId(message) != getUserConfig().getClientUserId()) {
@@ -2345,20 +2253,17 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             adapter.setLiveLocations(markers);
             if (messageObject.isLiveLocation()) {
                 try {
-                    BoundingBox bounds = builder;
-                    GeoPoint center = bounds.getCenterWithDateLine(); //TODO check
-                    GeoPoint northEast = move(center, 100, 100);
-                    GeoPoint southWest = move(center, -100, -100);
-                    geoPoints.add(southWest);
-                    geoPoints.add(northEast);
-                    if (geoPoints.size() > 0) {
-                        builder = BoundingBox.fromGeoPoints(geoPoints);
-                    }
-                    bounds = builder;
+                    IMapsProvider.ILatLngBounds bounds = builder.build();
+                    IMapsProvider.LatLng center = bounds.getCenter();
+                    IMapsProvider.LatLng northEast = move(center, 100, 100);
+                    IMapsProvider.LatLng southWest = move(center, -100, -100);
+                    builder.include(southWest);
+                    builder.include(northEast);
+                    bounds = builder.build();
                     if (messages.size() > 1) {
                         try {
-                            moveToBounds = bounds;
-                            mapView.zoomToBoundingBox(bounds, false, AndroidUtilities.dp(80 + 33));
+                            moveToBounds = ApplicationLoader.getMapsProvider().newCameraUpdateLatLngBounds(bounds, AndroidUtilities.dp(80 + 33));
+                            map.moveCamera(moveToBounds);
                             moveToBounds = null;
                         } catch (Exception e) {
                             FileLog.e(e);
@@ -2372,31 +2277,25 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     private void moveToBounds(int radius, boolean self, boolean animated) {
-        BoundingBox builder = null;
-        List<GeoPoint> geoPoints = new ArrayList<>();
-        geoPoints.add(new GeoPoint(myLocation.getLatitude(), myLocation.getLongitude()));
-        if (geoPoints.size() > 0) {
-            builder = BoundingBox.fromGeoPoints(geoPoints);
-        }
+        IMapsProvider.ILatLngBoundsBuilder builder = ApplicationLoader.getMapsProvider().onCreateLatLngBoundsBuilder();
+        builder.include(new IMapsProvider.LatLng(myLocation.getLatitude(), myLocation.getLongitude()));
         if (self) {
             try {
-                BoundingBox bounds = builder;
-                GeoPoint center = bounds.getCenterWithDateLine(); //TODO check
-                GeoPoint northEast = move(center, 100, 100);
-                GeoPoint southWest = move(center, -100, -100);
-                geoPoints.add(southWest);
-                geoPoints.add(northEast);
-                if (geoPoints.size() > 0) {
-                    builder = BoundingBox.fromGeoPoints(geoPoints);
-                }
-                bounds = builder;
+                radius = Math.max(radius, 250);
+                IMapsProvider.ILatLngBounds bounds = builder.build();
+                IMapsProvider.LatLng center = bounds.getCenter();
+                IMapsProvider.LatLng northEast = move(center, radius, radius);
+                IMapsProvider.LatLng southWest = move(center, -radius, -radius);
+                builder.include(southWest);
+                builder.include(northEast);
+                bounds = builder.build();
                 try {
                     int height = (int) (proximitySheet.getCustomView().getMeasuredHeight() - AndroidUtilities.dp(40) + mapViewClip.getTranslationY());
-                    mapView.setPadding(AndroidUtilities.dp(70), 0, AndroidUtilities.dp(70), height);
+                    map.setPadding(AndroidUtilities.dp(70), 0, AndroidUtilities.dp(70), height);
                     if (animated) {
-                        mapView.zoomToBoundingBox(bounds, true, AndroidUtilities.dp(60), mapView.getMaxZoomLevel(), 500L);
+                        map.animateCamera(ApplicationLoader.getMapsProvider().newCameraUpdateLatLngBounds(bounds, 0), 500, null);
                     } else {
-                        mapView.zoomToBoundingBox(bounds, false, AndroidUtilities.dp(60));
+                        map.moveCamera(ApplicationLoader.getMapsProvider().newCameraUpdateLatLngBounds(bounds, 0));
                     }
                 } catch (Exception e) {
                     FileLog.e(e);
@@ -2409,25 +2308,22 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             for (int a = 0, N = markers.size(); a < N; a++) {
                 TLRPC.Message message = markers.get(a).object;
                 if (message.date + message.media.period > date) {
-                    GeoPoint latLng = new GeoPoint(message.media.geo.lat, message.media.geo._long);
-                    geoPoints.add(latLng);
+                    IMapsProvider.LatLng latLng = new IMapsProvider.LatLng(message.media.geo.lat, message.media.geo._long);
+                    builder.include(latLng);
                 }
             }
             try {
-                BoundingBox bounds = builder;
-                GeoPoint center = bounds.getCenterWithDateLine(); //TODO check
-                GeoPoint northEast = move(center, 100, 100);
-                GeoPoint southWest = move(center, -100, -100);
-                geoPoints.add(southWest);
-                geoPoints.add(northEast);
-                if (geoPoints.size() > 0) {
-                    builder = BoundingBox.fromGeoPoints(geoPoints);
-                }
-                bounds = builder;
+                IMapsProvider.ILatLngBounds bounds = builder.build();
+                IMapsProvider.LatLng center = bounds.getCenter();
+                IMapsProvider.LatLng northEast = move(center, 100, 100);
+                IMapsProvider.LatLng southWest = move(center, -100, -100);
+                builder.include(southWest);
+                builder.include(northEast);
+                bounds = builder.build();
                 try {
                     int height = proximitySheet.getCustomView().getMeasuredHeight() - AndroidUtilities.dp(100);
-                    mapView.setPadding(AndroidUtilities.dp(70), 0, AndroidUtilities.dp(70), height);
-                    mapView.zoomToBoundingBox(bounds, false, AndroidUtilities.dp(60));
+                    map.setPadding(AndroidUtilities.dp(70), 0, AndroidUtilities.dp(70), height);
+                    map.moveCamera(ApplicationLoader.getMapsProvider().newCameraUpdateLatLngBounds(bounds, 0));
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
@@ -2457,7 +2353,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         getConnectionsManager().sendRequest(req, (response, error) -> {
             if (response != null) {
                 AndroidUtilities.runOnUIThread(() -> {
-                    if (mapView == null) {
+                    if (map == null) {
                         return;
                     }
                     TLRPC.messages_Messages res = (TLRPC.messages_Messages) response;
@@ -2490,11 +2386,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         return messages != null;
     }
 
-    private double bearingBetweenLocations(GeoPoint latLng1, GeoPoint latLng2) {
-        double lat1 = latLng1.getLatitude() * Math.PI / 180;
-        double long1 = latLng1.getLongitude() * Math.PI / 180;
-        double lat2 = latLng2.getLatitude() * Math.PI / 180;
-        double long2 = latLng2.getLongitude() * Math.PI / 180;
+    private double bearingBetweenLocations(IMapsProvider.LatLng latLng1, IMapsProvider.LatLng latLng2) {
+        double lat1 = latLng1.latitude * Math.PI / 180;
+        double long1 = latLng1.longitude * Math.PI / 180;
+        double lat2 = latLng2.latitude * Math.PI / 180;
+        double long2 = latLng2.longitude * Math.PI / 180;
         double dLon = (long2 - long1);
 
         double y = Math.sin(dLon) * Math.cos(lat2);
@@ -2518,8 +2414,12 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             if (adapter != null) {
                 adapter.setMyLocationDenied(locationDenied);
             }
-            if (mapView != null && mapsInitialized) {
-                myLocationOverlay.enableMyLocation();
+            if (map != null) {
+                try {
+                    map.setMyLocationEnabled(true);
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
             }
         } else if (id == NotificationCenter.locationPermissionDenied) {
             locationDenied = true;
@@ -2576,21 +2476,21 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     LocationController.SharingLocationInfo myInfo = getLocationController().getSharingLocationInfo(did);
                     if (myInfo == null || myInfo.mid != messageObject.getId()) {
                         liveLocation.object = messageObject.messageOwner;
-                        GeoPoint latLng = new GeoPoint(messageObject.messageOwner.media.geo.lat, messageObject.messageOwner.media.geo._long);
+                        IMapsProvider.LatLng latLng = new IMapsProvider.LatLng(messageObject.messageOwner.media.geo.lat, messageObject.messageOwner.media.geo._long);
                         liveLocation.marker.setPosition(latLng);
                         if (liveLocation.directionMarker != null) {
-                            GeoPoint oldLocation = liveLocation.directionMarker.getPosition();
+                            IMapsProvider.LatLng oldLocation = liveLocation.directionMarker.getPosition();
                             liveLocation.directionMarker.setPosition(latLng);
                             if (messageObject.messageOwner.media.heading != 0) {
                                 liveLocation.directionMarker.setRotation(messageObject.messageOwner.media.heading);
                                 if (!liveLocation.hasRotation) {
-                                    liveLocation.directionMarker.setIcon(getParentActivity().getResources().getDrawable(R.drawable.map_pin_cone2));
+                                    liveLocation.directionMarker.setIcon(R.drawable.map_pin_cone2);
                                     liveLocation.hasRotation = true;
                                 }
                             } else {
                                 if (liveLocation.hasRotation) {
                                     liveLocation.directionMarker.setRotation(0);
-                                    liveLocation.directionMarker.setIcon(getParentActivity().getResources().getDrawable(R.drawable.map_pin_circle));
+                                    liveLocation.directionMarker.setIcon(R.drawable.map_pin_circle);
                                     liveLocation.hasRotation = false;
                                 }
                             }
@@ -2634,7 +2534,67 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             proximitySheet.dismiss();
             return false;
         }
+        if (onCheckGlScreenshot()) {
+            return false;
+        }
+
         return super.onBackPressed();
+    }
+
+    @Override
+    public void finishFragment(boolean animated) {
+        if (onCheckGlScreenshot()) {
+            return;
+        }
+
+        super.finishFragment(animated);
+    }
+
+    private boolean onCheckGlScreenshot() {
+        if (mapView != null && mapView.getGlSurfaceView() != null && !hasScreenshot) {
+            GLSurfaceView glSurfaceView = mapView.getGlSurfaceView();
+            glSurfaceView.queueEvent(() -> {
+                if (glSurfaceView.getWidth() == 0 || glSurfaceView.getHeight() == 0) {
+                    return;
+                }
+                ByteBuffer buffer = ByteBuffer.allocateDirect(glSurfaceView.getWidth() * glSurfaceView.getHeight() * 4);
+                GLES20.glReadPixels(0, 0, glSurfaceView.getWidth(), glSurfaceView.getHeight(), GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, buffer);
+                Bitmap bitmap = Bitmap.createBitmap(glSurfaceView.getWidth(), glSurfaceView.getHeight(), Bitmap.Config.ARGB_8888);
+                bitmap.copyPixelsFromBuffer(buffer);
+
+                Matrix flipVertically = new Matrix();
+                flipVertically.preScale(1, -1);
+
+                Bitmap flippedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), flipVertically, false);
+                bitmap.recycle();
+
+                AndroidUtilities.runOnUIThread(()->{
+                    ImageView snapshotView = new ImageView(getContext());
+                    snapshotView.setImageBitmap(flippedBitmap);
+
+                    ViewGroup parent = (ViewGroup) glSurfaceView.getParent();
+                    try {
+                        parent.addView(snapshotView, parent.indexOfChild(glSurfaceView));
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                    }
+
+                    AndroidUtilities.runOnUIThread(()->{
+                        try {
+                            parent.removeView(glSurfaceView);
+                        } catch (Exception e) {
+                            FileLog.e(e);
+                        }
+
+                        hasScreenshot = true;
+
+                        finishFragment();
+                    }, 100);
+                });
+            });
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -2659,6 +2619,13 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             myLocationOverlay.enableMyLocation();
         }
         onResumeCalled = true;
+        if (map != null) {
+            try {
+                map.setMyLocationEnabled(true);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        }
         fixLayoutInternal(true);
         if (checkPermission && Build.VERSION.SDK_INT >= 23) {
             Activity activity = getParentActivity();
@@ -2679,6 +2646,19 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     public void onRequestPermissionsResultFragment(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 30) {
             openShareLiveLocation(askWithRadius);
+        }
+    }
+
+    @Override
+    public boolean hasForceLightStatusBar() {
+        return true;
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        if (mapView != null && mapsInitialized) {
+            mapView.onLowMemory();
         }
     }
 
@@ -2709,11 +2689,12 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_dialogBackground), PorterDuff.Mode.MULTIPLY));
             shadow.invalidate();
 
-            if (mapView != null) {
+            if (map != null) {
                 if (isActiveThemeDark()) {
                     if (!currentMapStyleDark) {
                         currentMapStyleDark = true;
-                        // TODO dark
+                        IMapsProvider.IMapStyleOptions style = ApplicationLoader.getMapsProvider().loadRawResourceStyle(ApplicationLoader.applicationContext, R.raw.mapstyle_night);
+                        map.setMapStyle(style);
                         if (proximityCircle != null) {
                             proximityCircle.getOutlinePaint().setColor(0xffffffff);
                             proximityCircle.getFillPaint().setColor(0x20ffffff);
@@ -2722,7 +2703,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 } else {
                     if (currentMapStyleDark) {
                         currentMapStyleDark = false;
-                        // TODO dark
+                        map.setMapStyle(null);
                         if (proximityCircle != null) {
                             proximityCircle.getOutlinePaint().setColor(0xff000000);
                             proximityCircle.getFillPaint().setColor(0x20000000);

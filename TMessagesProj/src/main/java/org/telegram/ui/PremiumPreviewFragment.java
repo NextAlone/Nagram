@@ -80,10 +80,8 @@ import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.Components.URLSpanReplacement;
 import org.telegram.ui.Components.URLSpanUserMention;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Currency;
 import java.util.List;
 
 public class PremiumPreviewFragment extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -126,6 +124,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
     public final static int PREMIUM_FEATURE_VOICE_TO_TEXT = 8;
     public final static int PREMIUM_FEATURE_ADVANCED_CHAT_MANAGEMENT = 9;
     public final static int PREMIUM_FEATURE_APPLICATION_ICONS = 10;
+    public final static int PREMIUM_FEATURE_ANIMATED_EMOJI = 11;
     private int statusBarHeight;
     private int firstViewHeight;
     private boolean isDialogVisible;
@@ -145,7 +144,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
     private boolean forcePremium;
     float progressToFull;
 
-    public static int severStringToFeatureType(String s) {
+    public static int serverStringToFeatureType(String s) {
         switch (s) {
             case "double_limits":
                 return PREMIUM_FEATURE_LIMITS;
@@ -169,6 +168,8 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 return PREMIUM_FEATURE_ANIMATED_AVATARS;
             case "app_icons":
                 return PREMIUM_FEATURE_APPLICATION_ICONS;
+            case "animated_emoji":
+                return PREMIUM_FEATURE_ANIMATED_EMOJI;
         }
         return -1;
     }
@@ -187,6 +188,8 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 return "no_ads";
             case PREMIUM_FEATURE_REACTIONS:
                 return "unique_reactions";
+            case PREMIUM_FEATURE_ANIMATED_EMOJI:
+                return "animated_emoji";
             case PREMIUM_FEATURE_STICKERS:
                 return "premium_stickers";
             case PREMIUM_FEATURE_ADVANCED_CHAT_MANAGEMENT:
@@ -215,7 +218,18 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
     @Override
     public View createView(Context context) {
         hasOwnBackground = true;
-        shader = new LinearGradient(0, 0, 0, 100, new int[]{0xffF38926, 0xffDB5C9D, 0xffA767FF, 0xff55A5FF}, new float[]{0f, 0.32f, 0.5f, 1f}, Shader.TileMode.CLAMP);
+        shader = new LinearGradient(
+            0, 0, 0, 100,
+            new int[]{
+                Theme.getColor(Theme.key_premiumGradient4),
+                Theme.getColor(Theme.key_premiumGradient3),
+                Theme.getColor(Theme.key_premiumGradient2),
+                Theme.getColor(Theme.key_premiumGradient1),
+                Theme.getColor(Theme.key_premiumGradient0)
+            },
+            new float[]{0f, 0.32f, 0.5f, 0.7f, 1f},
+            Shader.TileMode.CLAMP
+        );
         shader.setLocalMatrix(matrix);
         gradientPaint.setShader(shader);
 
@@ -508,6 +522,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_ADS, R.drawable.msg_premium_ads, LocaleController.getString("PremiumPreviewNoAds", R.string.PremiumPreviewNoAds), LocaleController.getString("PremiumPreviewNoAdsDescription", R.string.PremiumPreviewNoAdsDescription)));
         premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_REACTIONS, R.drawable.msg_premium_reactions, LocaleController.getString("PremiumPreviewReactions", R.string.PremiumPreviewReactions), LocaleController.getString("PremiumPreviewReactionsDescription", R.string.PremiumPreviewReactionsDescription)));
         premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_STICKERS, R.drawable.msg_premium_stickers, LocaleController.getString("PremiumPreviewStickers", R.string.PremiumPreviewStickers), LocaleController.getString("PremiumPreviewStickersDescription", R.string.PremiumPreviewStickersDescription)));
+        premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_ANIMATED_EMOJI, R.drawable.msg_premium_emoji, LocaleController.getString("PremiumPreviewEmoji", R.string.PremiumPreviewEmoji), LocaleController.getString("PremiumPreviewEmojiDescription", R.string.PremiumPreviewEmojiDescription)));
         premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_ADVANCED_CHAT_MANAGEMENT, R.drawable.msg_premium_tools, LocaleController.getString("PremiumPreviewAdvancedChatManagement", R.string.PremiumPreviewAdvancedChatManagement), LocaleController.getString("PremiumPreviewAdvancedChatManagementDescription", R.string.PremiumPreviewAdvancedChatManagementDescription)));
         premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_PROFILE_BADGE, R.drawable.msg_premium_badge, LocaleController.getString("PremiumPreviewProfileBadge", R.string.PremiumPreviewProfileBadge), LocaleController.getString("PremiumPreviewProfileBadgeDescription", R.string.PremiumPreviewProfileBadgeDescription)));
         premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_ANIMATED_AVATARS, R.drawable.msg_premium_avatar, LocaleController.getString("PremiumPreviewAnimatedProfiles", R.string.PremiumPreviewAnimatedProfiles), LocaleController.getString("PremiumPreviewAnimatedProfilesDescription", R.string.PremiumPreviewAnimatedProfilesDescription)));
@@ -515,6 +530,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
 
         if (messagesController.premiumFeaturesTypesToPosition.size() > 0) {
             for (int i = 0; i < premiumFeatures.size(); i++) {
+                messagesController.premiumFeaturesTypesToPosition.append(PREMIUM_FEATURE_ANIMATED_EMOJI, 6);
                 if (messagesController.premiumFeaturesTypesToPosition.get(premiumFeatures.get(i).type, -1) == -1) {
                     premiumFeatures.remove(i);
                     i--;

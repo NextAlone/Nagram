@@ -58,6 +58,8 @@ import static android.os.Build.VERSION.SDK_INT;
 public class ApplicationLoader extends Application {
     private static PendingIntent pendingIntent;
 
+    private static ApplicationLoader applicationLoaderInstance;
+
     @SuppressLint("StaticFieldLeak")
     public static volatile Context applicationContext;
 
@@ -80,7 +82,9 @@ public class ApplicationLoader extends Application {
     public static boolean canDrawOverlays;
     public static volatile long mainInterfacePausedStageQueueTime;
 
-    public static boolean hasPlayServices;
+    private static PushListenerController.IPushListenerServiceProvider pushProvider;
+    private static IMapsProvider mapsProvider;
+    private static ILocationServiceProvider locationServiceProvider;
 
 
     @Override
@@ -186,6 +190,57 @@ public class ApplicationLoader extends Application {
             return exempt(new String[]{"L"});
         }
     }
+
+    public static ILocationServiceProvider getLocationServiceProvider() {
+        if (locationServiceProvider == null) {
+            locationServiceProvider = applicationLoaderInstance.onCreateLocationServiceProvider();
+            locationServiceProvider.init(applicationContext);
+        }
+        return locationServiceProvider;
+    }
+
+    protected ILocationServiceProvider onCreateLocationServiceProvider() {
+        return new GoogleLocationProvider();
+    }
+
+    public static IMapsProvider getMapsProvider() {
+        if (mapsProvider == null) {
+            mapsProvider = applicationLoaderInstance.onCreateMapsProvider();
+        }
+        return mapsProvider;
+    }
+
+    protected IMapsProvider onCreateMapsProvider() {
+        return new GoogleMapsProvider();
+    }
+
+    public static PushListenerController.IPushListenerServiceProvider getPushProvider() {
+        if (pushProvider == null) {
+            pushProvider = applicationLoaderInstance.onCreatePushProvider();
+        }
+        return pushProvider;
+    }
+
+    protected PushListenerController.IPushListenerServiceProvider onCreatePushProvider() {
+        return PushListenerController.GooglePushListenerServiceProvider.INSTANCE;
+    }
+
+    public static String getApplicationId() {
+        return BuildConfig.APPLICATION_ID;
+    }
+
+//    protected String onGetApplicationId() {
+//        return null;
+//    }
+
+    public static boolean isHuaweiStoreBuild() {
+        return applicationLoaderInstance.isHuaweiBuild();
+    }
+
+    protected boolean isHuaweiBuild() {
+        return false;
+    }
+
 
     @SuppressLint("SdCardPath")
     public static File getDataDirFixed() {
@@ -337,7 +392,7 @@ public class ApplicationLoader extends Application {
 
     @Override
     public void onCreate() {
-
+        applicationLoaderInstance = this;
         try {
             applicationContext = getApplicationContext();
         } catch (Throwable ignore) {
