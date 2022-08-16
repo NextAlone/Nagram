@@ -1,4 +1,4 @@
-package xyz.nextalone.nagram.helper
+package xyz.studentyee.zngram.helper
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -6,7 +6,7 @@ import android.content.Context
 import android.text.TextUtils
 import androidx.core.content.FileProvider
 import org.telegram.messenger.*
-import xyz.nextalone.nagram.NaConfig
+import xyz.studentyee.zngram.ZnConfig
 import java.io.File
 
 
