@@ -53,4 +53,6 @@
     <string name="AlwaysShowDownloadIcon">Always Show Download Icon</string>
     <string name="UseExperimentalFileLoader">Use Experimental FileLoader</string>
     <string name="ShowPhotoOpenInExternalApp">Show Open In External App When Open Photo</string>
+    <string name="QuickToggleAnonymous">Quick toggle anonymous</string>
+    <string name="QuickToggleAnonymousNotice">If you\'re owner of the group</string>
 </resources>

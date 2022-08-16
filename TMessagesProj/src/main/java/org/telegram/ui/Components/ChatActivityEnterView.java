@@ -2671,6 +2671,23 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 senderSelectPopupWindow = new SenderSelectPopup(context, parentFragment, controller, chatFull, delegate.getSendAsPeers(), (recyclerView, senderView, peer) -> {
                     if (senderSelectPopupWindow == null) return;
                     if (chatFull != null) {
+                        var chat = controller.getChat(chatFull.id);
+                        if (chat != null && chat.creator) {
+                            var self = UserConfig.getInstance(currentAccount).getCurrentUser();
+
+                            if (peer.channel_id == chat.id) {
+                                var rights = chat.admin_rights;
+                                rights.anonymous = true;
+                                var rank = MessagesController.getInstance(currentAccount).getAdminRank(chat.id, self.id);
+                                MessagesController.getInstance(currentAccount).setUserAdminRole(chat.id, self, rights,  rank, false, parentFragment, false, false, null, null);
+                            } else if (peer.user_id == self.id) {
+                                var rights = chat.admin_rights;
+                                rights.anonymous = false;
+                                var rank = MessagesController.getInstance(currentAccount).getAdminRank(chat.id, self.id);
+                                MessagesController.getInstance(currentAccount).setUserAdminRole(chat.id, self, rights,  rank, false, parentFragment, false, false, null, null);
+                            }
+                        }
+
                         chatFull.default_send_as = peer;
                         updateSendAsButton();
                     }

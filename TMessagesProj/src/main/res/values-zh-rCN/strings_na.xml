@@ -52,4 +52,6 @@
     <string name="AlwaysShowDownloadIcon">一直显示下载管理器</string>
     <string name="UseExperimentalFileLoader">下载速度加成</string>
     <string name="ShowPhotoOpenInExternalApp">查看图片可以使用其他应用打开</string>
+    <string name="QuickToggleAnonymous">快速切换匿名发言</string>
+    <string name="QuickToggleAnonymousNotice">如果你是群组的所有者的话</string>
 </resources>
