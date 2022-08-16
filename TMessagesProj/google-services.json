@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "454087305870",
-    "project_id": "nekogram-2753b",
-    "storage_bucket": "nekogram-2753b.appspot.com"
+    "project_number": "213681008144",
+    "project_id": "zngram-e01a1",
+    "storage_bucket": "zngram-e01a1.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:454087305870:android:5c8d8e9f3a9a0e37eb37df",
+        "mobilesdk_app_id": "1:213681008144:android:529a6a333d30327a766495",
         "android_client_info": {
-          "package_name": "xyz.nextalone.nagram"
+          "package_name": "xyz.studentyee.zngram"
         }
       },
       "oauth_client": [
         {
-          "client_id": "454087305870-i68bog5e0h2uq2553friqpl7ullqnuuo.apps.googleusercontent.com",
+          "client_id": "213681008144-idf2jtmor19lg9ql860nid2otg7bin8k.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCPNxXY201baapXdQZCpdhLYVJ8LYN1bK8"
+          "current_key": "AIzaSyAw049b4JqYr5JengkmXSt2D5BOz_76sE8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "454087305870-i68bog5e0h2uq2553friqpl7ullqnuuo.apps.googleusercontent.com",
+              "client_id": "213681008144-idf2jtmor19lg9ql860nid2otg7bin8k.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
