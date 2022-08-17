@@ -72,7 +72,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.graphics.ColorUtils;
-import androidx.core.content.ContextCompat;
 
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AccountInstance;
@@ -115,7 +114,6 @@ import org.telegram.ui.Components.AudioVisualizerDrawable;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackgroundGradientDrawable;
 import org.telegram.ui.Components.CheckBoxBase;
-import org.telegram.ui.Components.ColoredImageSpan;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EmptyStubSpan;
 import org.telegram.ui.Components.FloatSeekBarAccessibilityDelegate;
@@ -10917,13 +10915,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             } else {
                 currentNameString = "";
             }
-            int PremiumStarWidth = 0;
-            if (currentUser != null) {
-                if (currentUser.premium && NaConfig.INSTANCE.getShowPremiumStarInChat().Bool()) {
-                    PremiumStarWidth = (int) Math.ceil(Theme.chat_namePaint.measureText("  "));
-                }
-            }
-            CharSequence nameStringFinal = TextUtils.ellipsize(currentNameString.replace('\n', ' ').replace('\u200F', ' '), Theme.chat_namePaint, nameWidth - (viaBot ? viaWidth : 0) - PremiumStarWidth, TextUtils.TruncateAt.END);
+            CharSequence nameStringFinal = TextUtils.ellipsize(currentNameString.replace('\n', ' ').replace('\u200F', ' '), Theme.chat_namePaint, nameWidth - (viaBot ? viaWidth : 0), TextUtils.TruncateAt.END);
             if (viaBot) {
                 viaNameWidth = (int) Math.ceil(Theme.chat_namePaint.measureText(nameStringFinal, 0, nameStringFinal.length()));
                 if (viaNameWidth != 0) {
@@ -10947,18 +10939,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     stringBuilder.setSpan(viaSpan2 = new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf"), 0, color), 1 + viaBotString.length(), stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     nameStringFinal = stringBuilder;
                 }
-                nameStringFinal = TextUtils.ellipsize(nameStringFinal, Theme.chat_namePaint, nameWidth - PremiumStarWidth, TextUtils.TruncateAt.END);
+                nameStringFinal = TextUtils.ellipsize(nameStringFinal, Theme.chat_namePaint, nameWidth, TextUtils.TruncateAt.END);
             }
             try {
                 nameStringFinal = Emoji.replaceEmoji(nameStringFinal, Theme.chat_namePaint.getFontMetricsInt(), AndroidUtilities.dp(14), false);
             } catch (Exception ignore) {}
-            if (nameStringFinal != null && currentUser != null) {
-                if (currentUser.premium && NaConfig.INSTANCE.getShowPremiumStarInChat().Bool()) {
-                    SpannableStringBuilder spannableStringBuilder = SpannableStringBuilder.valueOf(String.format("  %s", nameStringFinal));
-                    spannableStringBuilder.setSpan(new ColoredImageSpan(ContextCompat.getDrawable(getContext(), R.drawable.msg_premium_liststar)), 0, 1, 0);
-                    nameStringFinal = spannableStringBuilder;
-                }
-            }
             try {
                 nameLayout = new StaticLayout(nameStringFinal, Theme.chat_namePaint, nameWidth + AndroidUtilities.dp(2), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 if (nameLayout.getLineCount() > 0) {
@@ -11098,7 +11083,6 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 CharSequence stringFinalText = null;
 
                 String name = null;
-                boolean showReplyPremiumStar = false;
                 if ((!isThreadChat || messageObject.getReplyTopMsgId() != 0) && messageObject.hasValidReplyMessageObject()) {
                     lastReplyMessage = messageObject.replyMessageObject.messageOwner;
                     int cacheType = 1;
@@ -11148,20 +11132,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             } else {
                                 TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(messageObject.sendAsPeer.user_id);
                                 name = UserObject.getUserName(user);
-                                if (user != null) {
-                                    if (user.premium) {
-                                        showReplyPremiumStar = true;
-                                    }
-                                }
                             }
                         } else {
                             TLRPC.User user = AccountInstance.getInstance(currentAccount).getUserConfig().getCurrentUser();
                             name = UserObject.getUserName(user);
-                            if (user != null) {
-                                if (user.premium) {
-                                    showReplyPremiumStar = true;
-                                }
-                            }
                         }
                     } else if (messageObject.customReplyName != null) {
                         name = messageObject.customReplyName;
@@ -11173,9 +11147,6 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(fromId);
                             if (user != null) {
                                 name = UserObject.getUserName(user);
-                                if (user.premium) {
-                                    showReplyPremiumStar = true;
-                                }
                             }
                         } else if (fromId < 0) {
                             TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-fromId);
@@ -11247,9 +11218,6 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                             }
                         } else if (currentForwardUser != null) {
                             currentForwardNameString = UserObject.getUserName(currentForwardUser);
-                            if (currentForwardUser.premium) {
-                                showReplyPremiumStar = true;
-                            }
                         } else {
                             currentForwardNameString = currentForwardName;
                         }
@@ -11267,22 +11235,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         forwardNameCenterX = fromWidth + (int) Math.ceil(Theme.chat_replyNamePaint.measureText(n, 0, n.length())) / 2;
                     }
                 }
-                int PremiumStarWidth = 0;
-                if (showReplyPremiumStar && NaConfig.INSTANCE.getShowPremiumStarInChat().Bool()) {
-                    PremiumStarWidth = (int) Math.ceil(Theme.chat_replyNamePaint.measureText("  "));
-                }
-                CharSequence stringFinalName = name == null ? "" : TextUtils.ellipsize(name.replace('\n', ' '), Theme.chat_replyNamePaint, maxWidth - PremiumStarWidth, TextUtils.TruncateAt.END);
+                CharSequence stringFinalName = name == null ? "" : TextUtils.ellipsize(name.replace('\n', ' '), Theme.chat_replyNamePaint, maxWidth, TextUtils.TruncateAt.END);
                 try {
                     stringFinalName = Emoji.replaceEmoji(stringFinalName, Theme.chat_replyNamePaint.getFontMetricsInt(), AndroidUtilities.dp(14), false);
                 } catch (Exception ignore) {}
                 try {
-                    replyNameWidth = AndroidUtilities.dp(4 + (needReplyImage ? 44 : 0)) + PremiumStarWidth;
+                    replyNameWidth = AndroidUtilities.dp(4 + (needReplyImage ? 44 : 0));
                     if (stringFinalName != null) {
-                        if (showReplyPremiumStar && NaConfig.INSTANCE.getShowPremiumStarInChat().Bool()) {
-                            SpannableStringBuilder spannableStringBuilder = SpannableStringBuilder.valueOf(String.format("  %s", stringFinalName));
-                            spannableStringBuilder.setSpan(new ColoredImageSpan(ContextCompat.getDrawable(getContext(), R.drawable.msg_premium_liststar)), 0, 1, 0);
-                            stringFinalName = spannableStringBuilder;
-                        }
                         replyNameLayout = new StaticLayout(stringFinalName, Theme.chat_replyNamePaint, maxWidth + AndroidUtilities.dp(6), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                         if (replyNameLayout.getLineCount() > 0) {
                             replyNameWidth += (int) Math.ceil(replyNameLayout.getLineWidth(0)) + AndroidUtilities.dp(8);
