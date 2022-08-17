@@ -58,8 +58,8 @@ import java.util.Map;
 import java.util.function.Function;
 
 import kotlin.text.StringsKt;
+
 import tw.nekomimi.nekogram.DatacenterActivity;
-import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.GsonUtil;

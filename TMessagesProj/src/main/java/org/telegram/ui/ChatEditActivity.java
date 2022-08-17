@@ -547,7 +547,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             frameLayout.addView(avatarImage, LayoutHelper.createFrame(64, 64, Gravity.TOP | (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT), LocaleController.isRTL ? 0 : 16, 12, LocaleController.isRTL ? 16 : 0, 12));
         }
 
-        nameTextView = new EditTextEmoji(context, sizeNotifierFrameLayout, this, EditTextEmoji.STYLE_FRAGMENT);
+        nameTextView = new EditTextEmoji(context, sizeNotifierFrameLayout, this, EditTextEmoji.STYLE_FRAGMENT, false);
         if (isChannel) {
             nameTextView.setHint(LocaleController.getString("EnterChannelName", R.string.EnterChannelName));
         } else {
@@ -677,7 +677,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             locationCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             typeEditContainer.addView(locationCell, LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             locationCell.setOnClickListener(v -> {
-                if (!AndroidUtilities.isGoogleMapsInstalled(ChatEditActivity.this)) {
+                if (!AndroidUtilities.isMapsInstalled(ChatEditActivity.this)) {
                     return;
                 }
                 LocationActivity fragment = new LocationActivity(LocationActivity.LOCATION_TYPE_GROUP);
@@ -1142,7 +1142,10 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
 
     private int getChannelAdminCount() {
         if (info == null || info.participants == null || info.participants.participants == null) {
-            return 1;
+            if (realAdminCount != 0)
+                return realAdminCount;
+            getRealChannelAdminCount();
+            return 0;
         }
         int count = 0;
         for (int a = 0, N = info.participants.participants.size(); a < N; a++) {
@@ -1153,6 +1156,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                 count++;
             }
         }
+        realAdminCount = count;
         return count;
     }
 
@@ -1502,7 +1506,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                 } else {
                     membersCell.setTextAndIcon(LocaleController.getString("ChannelMembers", R.string.ChannelMembers), R.drawable.msg_groups, logCell != null && logCell.getVisibility() == View.VISIBLE);
                     if (currentChat.gigagroup) {
-                        blockCell.setTextAndIcon(LocaleController.getString("ChannelBlacklist", R.string.ChannelBlacklist), R.drawable.msg_chats_remove, logCell != null && logCell.getVisibility() == View.VISIBLE);
+                        blockCell.setText(LocaleController.getString("ChannelBlacklist", R.string.ChannelBlacklist), logCell != null && logCell.getVisibility() == View.VISIBLE);
                     } else {
                         blockCell.setTextAndIcon(LocaleController.getString("ChannelPermissions", R.string.ChannelPermissions), R.drawable.msg_permissions, true);
                     }
@@ -1523,7 +1527,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         }
 
         if (stickersCell != null && info != null) {
-            stickersCell.setTextAndValueAndIcon(LocaleController.getString(R.string.GroupStickers), info.stickerset != null ? info.stickerset.title : LocaleController.getString(R.string.Add), R.drawable.msg_sticker, false);
+            stickersCell.setTextAndValue(LocaleController.getString(R.string.GroupStickers), info.stickerset != null ? info.stickerset.title : LocaleController.getString(R.string.Add), false);
         }
     }
 

@@ -150,4 +150,5 @@
     <string name="MutualContactDescription">This contact is a mutual contact.</string>
     <string name="DatacenterStatusAbout">Check the status of Telegram\'s **datacenters**.</string>
     <string name="DatacenterStatus">Datacenter status</string>
+    <string name="enhancedFileLoader">Enhance Download speed</string>
 </resources>

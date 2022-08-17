@@ -80,6 +80,7 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
             (input) -> input.isEmpty() ? (String) NaConfig.INSTANCE.getCustomChannelLabel().defaultValue : input));
 
     private final AbstractConfigCell smoothKeyboardRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.smoothKeyboard));
+    private final AbstractConfigCell enhancedFileLoaderRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.enhancedFileLoader));
     private final AbstractConfigCell mediaPreviewRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.mediaPreview));
     private final AbstractConfigCell proxyAutoSwitchRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.proxyAutoSwitch));
     private final AbstractConfigCell disableFilteringRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_CHECK, true));
@@ -95,7 +96,6 @@ public class NekoExperimentalSettingsActivity extends BaseFragment {
     private final AbstractConfigCell forceCopyRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getForceCopy()));
     private final AbstractConfigCell audioEnhanceRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getNoiseSuppressAndVoiceEnhance()));
     private final AbstractConfigCell showRPCErrorRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowRPCError()));
-    private final AbstractConfigCell useExperimentalFileLoaderRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getUseExperimentalFileLoader()));
     private final AbstractConfigCell divider1 = cellGroup.appendCell(new ConfigCellDivider());
 
     private UndoView tooltip;

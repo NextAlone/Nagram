@@ -17,7 +17,11 @@ import android.util.SparseArray;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 
 import tw.nekomimi.nekogram.NekoConfig;
 
@@ -65,6 +69,12 @@ public class UserConfig extends BaseController {
     public long autoDownloadConfigLoadTime;
     public boolean official;
     public boolean deviceInfo;
+
+    public List<String> awaitBillingProductIds = new ArrayList<>();
+    public TLRPC.InputStorePaymentPurpose billingPaymentPurpose;
+
+    public String premiumGiftsStickerPack;
+    public long lastUpdatedPremiumGiftsStickerPack;
 
     public volatile byte[] savedPasswordHash;
     public volatile byte[] savedSaltedPassword;
@@ -154,6 +164,17 @@ public class UserConfig extends BaseController {
                     editor.putBoolean("deviceInfo", deviceInfo);
 
                     editor.putBoolean("filtersLoaded", filtersLoaded);
+                    editor.putStringSet("awaitBillingProductIds", new HashSet<>(awaitBillingProductIds));
+                    if (billingPaymentPurpose != null) {
+                        SerializedData data = new SerializedData(billingPaymentPurpose.getObjectSize());
+                        billingPaymentPurpose.serializeToStream(data);
+                        editor.putString("billingPaymentPurpose", Base64.encodeToString(data.toByteArray(), Base64.DEFAULT));
+                        data.cleanup();
+                    } else {
+                        editor.remove("billingPaymentPurpose");
+                    }
+                    editor.putString("premiumGiftsStickerPack", premiumGiftsStickerPack);
+                    editor.putLong("lastUpdatedPremiumGiftsStickerPack", lastUpdatedPremiumGiftsStickerPack);
 
                     editor.putInt("6migrateOffsetId", migrateOffsetId);
                     if (migrateOffsetId != -1) {
@@ -292,6 +313,20 @@ public class UserConfig extends BaseController {
             sharingMyLocationUntil = preferences.getInt("sharingMyLocationUntil", 0);
             lastMyLocationShareTime = preferences.getInt("lastMyLocationShareTime", 0);
             filtersLoaded = preferences.getBoolean("filtersLoaded", false);
+            awaitBillingProductIds = new ArrayList<>(preferences.getStringSet("awaitBillingProductIds", Collections.emptySet()));
+            if (preferences.contains("billingPaymentPurpose")) {
+                String purpose = preferences.getString("billingPaymentPurpose", null);
+                if (purpose != null) {
+                    byte[] arr = Base64.decode(purpose, Base64.DEFAULT);
+                    if (arr != null) {
+                        SerializedData data = new SerializedData();
+                        billingPaymentPurpose = TLRPC.InputStorePaymentPurpose.TLdeserialize(data, data.readInt32(false), false);
+                        data.cleanup();
+                    }
+                }
+            }
+            premiumGiftsStickerPack = preferences.getString("premiumGiftsStickerPack", null);
+            lastUpdatedPremiumGiftsStickerPack = preferences.getLong("lastUpdatedPremiumGiftsStickerPack", 0);
 
             try {
                 String terms = preferences.getString("terms", null);

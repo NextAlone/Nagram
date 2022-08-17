@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.graphics.ColorUtils;
@@ -23,6 +24,7 @@ import androidx.recyclerview.widget.ChatListItemAnimator;
 
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
@@ -36,6 +38,7 @@ import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
 
@@ -96,6 +99,8 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
     private int overrideActionBarBackground;
     private boolean overrideBackgroundColor;
 
+    private boolean needCloseConfirmation;
+
     private Runnable pollRunnable = () -> {
         if (!dismissed) {
             TLRPC.TL_messages_prolongWebView prolongWebView = new TLRPC.TL_messages_prolongWebView();
@@ -135,6 +140,11 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
             @Override
             public void onCloseRequested(Runnable callback) {
                 dismiss(callback);
+            }
+
+            @Override
+            public void onWebAppSetupClosingBehavior(boolean needConfirmation) {
+                BotWebViewMenuContainer.this.needCloseConfirmation = needConfirmation;
             }
 
             @Override
@@ -279,7 +289,11 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
         });
         swipeContainer.setScrollEndListener(()-> webViewContainer.invalidateViewPortHeight(true));
         swipeContainer.addView(webViewContainer);
-        swipeContainer.setDelegate(this::dismiss);
+        swipeContainer.setDelegate(() -> {
+            if (!onCheckDismissByUser()) {
+                swipeContainer.stickTo(0);
+            }
+        });
         swipeContainer.setTopActionBarOffsetY(ActionBar.getCurrentActionBarHeight() + AndroidUtilities.statusBarHeight - AndroidUtilities.dp(24));
         swipeContainer.setSwipeOffsetAnimationDisallowed(true);
         swipeContainer.setIsKeyboardVisible(obj -> parentEnterView.getSizeNotifierLayout().getKeyboardHeight() >= AndroidUtilities.dp(20));
@@ -330,7 +344,39 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
     }
 
     public boolean onBackPressed() {
-        return webViewContainer.onBackPressed();
+        if (webViewContainer.onBackPressed()) {
+            return true;
+        }
+
+        if (getVisibility() == VISIBLE) {
+            onCheckDismissByUser();
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean onCheckDismissByUser() {
+        if (needCloseConfirmation) {
+            String botName = null;
+            TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(botId);
+            if (user != null) {
+                botName = ContactsController.formatName(user.first_name, user.last_name);
+            }
+            AlertDialog dialog = new AlertDialog.Builder(getContext())
+                    .setTitle(botName)
+                    .setMessage(LocaleController.getString(R.string.BotWebViewChangesMayNotBeSaved))
+                    .setPositiveButton(LocaleController.getString(R.string.BotWebViewCloseAnyway), (dialog2, which) -> dismiss())
+                    .setNegativeButton(LocaleController.getString(R.string.Cancel), null)
+                    .create();
+            dialog.show();
+            TextView textView = (TextView) dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            textView.setTextColor(getColor(Theme.key_dialogTextRed));
+            return false;
+        } else {
+            dismiss();
+            return true;
+        }
     }
 
     private void animateBotButton(boolean isVisible) {
@@ -392,7 +438,7 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
                         public void onItemClick(int id) {
                             if (id == -1) {
                                 if (!webViewContainer.onBackPressed()) {
-                                    dismiss();
+                                    onCheckDismissByUser();
                                 }
                             } else if (id == R.id.menu_reload_page) {
                                 if (webViewContainer.getWebView() != null) {
@@ -545,7 +591,7 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN && event.getY() <= AndroidUtilities.lerp(swipeContainer.getTranslationY() + AndroidUtilities.dp(24), 0, actionBarTransitionProgress)) {
-            dismiss();
+            onCheckDismissByUser();
             return true;
         }
         return super.onTouchEvent(event);
@@ -712,6 +758,7 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
     public void onDismiss() {
         setVisibility(GONE);
 
+        needCloseConfirmation = false;
         overrideActionBarBackground = 0;
         overrideActionBarBackgroundProgress = 0;
         actionBarPaint.setColor(getColor(Theme.key_windowBackgroundWhite));

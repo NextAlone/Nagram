@@ -51,7 +51,6 @@
     <string name="ZalgoFilterNotice">All \"Z̷͍͌ā̸̜l̸̞̂g̷̝͘o̶̩̓\" symbols in nicknames or messages will be removed.</string>
     <string name="CustomChannelLabel">Custom default channel label</string>
     <string name="AlwaysShowDownloadIcon">Always Show Download Icon</string>
-    <string name="UseExperimentalFileLoader">Use Experimental FileLoader</string>
     <string name="ShowPhotoOpenInExternalApp">Show Open In External App When Open Photo</string>
     <string name="QuickToggleAnonymous">Quick toggle anonymous</string>
     <string name="QuickToggleAnonymousNotice">If you\'re owner of the group</string>

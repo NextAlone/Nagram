@@ -3,15 +3,15 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
-def verName = "8.8.5"
-def verCode = 1110
+def verName = "8.9.3"
+def verCode = 1111
 
 if (System.getenv("DEBUG_BUILD") == "true") {
     verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:%h -n 1").trim()
 }
 
-def officialVer = "8.8.5"
-def officialCode = 2721
+def officialVer = "8.9.3"
+def officialCode = 2757
 
 configurations {
     compile.exclude module: "support-v4"
@@ -169,7 +169,7 @@ android {
             debuggable true
             jniDebuggable true
             multiDexEnabled true
-            zipAlignEnabled true;
+            zipAlignEnabled true
             signingConfig keystorePwd == null ? signingConfigs.debug : signingConfigs.release
             ndk.debugSymbolLevel = "FULL"
         }
@@ -308,9 +308,9 @@ android {
 }
 
 def okHttpVersion = "5.0.0-alpha.9"
-def fcmVersion = "21.1.0"
-def crashlyticsVersion = "18.2.0"
-def playCoreVersion = "1.10.1"
+def fcmVersion = "23.0.7"
+def crashlyticsVersion = "18.2.12"
+def playCoreVersion = "1.10.3"
 
 dependencies {
 
@@ -356,6 +356,11 @@ dependencies {
     compileOnly "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
     compileOnly "com.google.android.play:core:$playCoreVersion"
 
+    // TODO: Remove in nogcm vesion
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation 'com.google.android.gms:play-services-location:20.0.0'
+
+
     debugImplementation "com.google.firebase:firebase-messaging:$fcmVersion"
     debugImplementation "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
     debugImplementation "com.google.android.play:core:$playCoreVersion"
@@ -367,7 +372,7 @@ dependencies {
     testImplementation "androidx.test:core:1.4.0"
     testImplementation "org.robolectric:robolectric:4.5.1"
 
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.5"
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.0"
 
 }
 dependencies {

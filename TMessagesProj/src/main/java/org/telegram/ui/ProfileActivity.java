@@ -52,6 +52,7 @@ import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -176,6 +177,7 @@ import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.ScamDrawable;
+import org.telegram.ui.Components.ShareAlert;
 import org.telegram.ui.Components.SharedMediaLayout;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.StickerEmptyView;
@@ -411,6 +413,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private final static int delete_avatar = 35;
     private final static int add_photo = 36;
     private final static int qr_button = 37;
+//    private final static int gift_premium = 38;
 
     private Rect rect = new Rect();
 
@@ -1912,7 +1915,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     presentFragment(fragment);
                 } else if (id == view_discussion) {
                     openDiscussion();
-                } else if (id == start_secret_chat) {
+                } /*else if (id == gift_premium) {
+                    showDialog(new GiftPremiumBottomSheet(ProfileActivity.this, getMessagesController().getUser(userId)));
+                } */ else if (id == start_secret_chat) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity(), resourcesProvider);
                     builder.setTitle(LocaleController.getString("AreYouSureSecretChatTitle", R.string.AreYouSureSecretChatTitle));
                     builder.setMessage(LocaleController.getString("AreYouSureSecretChat", R.string.AreYouSureSecretChat));
@@ -3652,6 +3657,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         timeItem.setScaleType(ImageView.ScaleType.CENTER);
         timeItem.setAlpha(0.0f);
         timeItem.setImageDrawable(timerDrawable = new TimerDrawable(context, null));
+        timeItem.setTranslationY(-1);
         frameLayout.addView(timeItem, LayoutHelper.createFrame(34, 34, Gravity.TOP | Gravity.LEFT));
 
         showAvatarProgress(false, false);
@@ -7098,7 +7104,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     otherItem.addSubItem(delete_contact, R.drawable.msg_delete, LocaleController.getString("DeleteContact", R.string.DeleteContact));
                 }
                 if (!UserObject.isDeleted(user) && !isBot && currentEncryptedChat == null && !userBlocked && userId != 333000 && userId != 777000 && userId != 42777) {
-                    otherItem.addSubItem(start_secret_chat, R.drawable.msg_start_secret, LocaleController.getString("StartEncryptedChat", R.string.StartEncryptedChat));
+//                    if (!user.premium && !BuildVars.IS_BILLING_UNAVAILABLE && !user.self && userInfo != null && !getMessagesController().premiumLocked && !userInfo.premium_gifts.isEmpty()) {
+//                        otherItem.addSubItem(gift_premium, R.drawable.msg_gift_premium, LocaleController.getString(R.string.GiftPremium));
+//                    }
+                    otherItem.addSubItem(start_secret_chat, R.drawable.baseline_lock_24, LocaleController.getString("StartEncryptedChat", R.string.StartEncryptedChat));
                 }
                 if (StrUtil.isNotBlank(user.username)) {
                     otherItem.addSubItem(qr_code, R.drawable.wallet_qr, LocaleController.getString("ShareQRCode", R.string.ShareQRCode));
@@ -8499,6 +8508,18 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 new SearchResult(122, LocaleController.getString("PrivacyP2P", R.string.PrivacyP2P), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.msg_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_P2P, true))),
                 new SearchResult(106, LocaleController.getString("Calls", R.string.Calls), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.msg_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_CALLS, true))),
                 new SearchResult(107, LocaleController.getString("GroupsAndChannels", R.string.GroupsAndChannels), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.msg_secret, () -> presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_INVITE, true))),
+                new SearchResult(123, LocaleController.getString("PrivacyVoiceMessages", R.string.PrivacyVoiceMessages), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.msg_secret, () -> {
+                    if (!getUserConfig().isPremium()) {
+                        try {
+                            fragmentView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                        } catch (Exception e) {
+                            FileLog.e(e);
+                        }
+                        BulletinFactory.of(ProfileActivity.this).createRestrictVoiceMessagesPremiumBulletin().show();
+                        return;
+                    }
+                    presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_VOICE_MESSAGES, true));
+                }),
                 new SearchResult(108, LocaleController.getString("Passcode", R.string.Passcode), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.msg_secret, () -> presentFragment(PasscodeActivity.determineOpenFragment())),
                 new SearchResult(109, LocaleController.getString("TwoStepVerification", R.string.TwoStepVerification), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.msg_secret, () -> presentFragment(new TwoStepVerificationActivity())),
                 new SearchResult(110, LocaleController.getString("SessionsTitle", R.string.SessionsTitle), R.drawable.msg_secret, () -> presentFragment(new SessionsActivity(0))),
