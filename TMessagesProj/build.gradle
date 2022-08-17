@@ -97,7 +97,7 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 19
         //noinspection ExpiredTargetSdkVersion,OldTargetApi
         targetSdkVersion 30
 
@@ -338,9 +338,9 @@ android {
 }
 
 def okHttpVersion = "5.0.0-alpha.9"
-def fcmVersion = "21.1.0"
-def crashlyticsVersion = "18.2.0"
-def playCoreVersion = "1.10.1"
+def fcmVersion = "23.0.7"
+def crashlyticsVersion = "18.2.12"
+def playCoreVersion = "1.10.3"
 
 dependencies {
 
@@ -397,7 +397,7 @@ dependencies {
     testImplementation "androidx.test:core:1.4.0"
     testImplementation "org.robolectric:robolectric:4.5.1"
 
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.5"
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.0"
 
 }
 
