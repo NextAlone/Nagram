@@ -276,4 +276,5 @@
     <string name="StickerSettings">Sticker</string>
     <string name="ConfirmSettings">Confirmation</string>
     <string name="InteractionSettings">Interaction</string>
+    <string name="nekoxPremiumGiftRemoved">Premium Gift is removed in NekoX.</string>
 </resources>

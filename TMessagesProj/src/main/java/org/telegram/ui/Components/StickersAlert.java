@@ -1067,7 +1067,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             for (int i = 0, size = gridView.getChildCount(); i < size; i++) {
                 final View child = gridView.getChildAt(i);
                 if (child instanceof StickerEmojiCell) {
-                    Bitmap bitmap = ((StickerEmojiCell) child).getImageView().getImageReceiver().getBitmap();
+                    Bitmap bitmap = ((StickerEmojiCell) child).getImageView().getBitmap();
                     if (bitmap == null) continue;
                     ProxyUtil.showQrDialog(getContext(), stickersUrl, imageSize -> Bitmap.createScaledBitmap(bitmap,imageSize,imageSize, true));
                     return;

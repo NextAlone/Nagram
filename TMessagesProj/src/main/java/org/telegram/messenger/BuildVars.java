@@ -54,4 +54,8 @@ public class BuildVars {
             LOGS_ENABLED = DEBUG_VERSION = sharedPreferences.getBoolean("logsEnabled", DEBUG_VERSION);
         }
     }
+
+    public static boolean useInvoiceBilling() {
+        return true;
+    }
 }

@@ -421,6 +421,8 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
     private Drawable sendButtonDrawable;
     private Drawable inactinveSendButtonDrawable;
     private Drawable sendButtonInverseDrawable;
+    private ActionBarPopupWindow sendPopupWindow;
+    private ActionBarPopupWindow.ActionBarPopupWindowLayout sendPopupLayout;
     private ImageView cancelBotButton;
     private ChatActivityEnterViewAnimatedIconView emojiButton;
     private ImageView expandStickersButton;
@@ -3123,13 +3125,11 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         audioVideoButtonContainer.setSoundEffectsEnabled(false);
         sendButtonContainer.addView(audioVideoButtonContainer, LayoutHelper.createFrame(48, 48));
         if (NekoConfig.useChatAttachMediaMenu.Bool()) {
-            audioVideoButtonContainer.setFocusable(true);
-            audioVideoButtonContainer.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
             audioVideoButtonContainer.setOnClickListener(v -> {
                 if (recordCircle.isSendButtonVisible()) {
                     if (!hasRecordVideo || calledRecordRunnable) {
                         startedDraggingX = -1;
-                        if (hasRecordVideo && videoSendButton.getTag() != null) {
+                        if (hasRecordVideo && audioVideoButtonContainer.getTag() != null) {
                             delegate.needStartRecordVideo(1, true, 0);
                         } else {
                             if (recordingAudioVideo && isInScheduleMode()) {
@@ -3148,6 +3148,8 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             });
         } else {
             audioVideoButtonContainer.setOnTouchListener((view, motionEvent) -> {
+                audioVideoButtonContainer.setFocusable(true);
+                audioVideoButtonContainer.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     if (recordCircle.isSendButtonVisible()) {
                         if (!hasRecordVideo || calledRecordRunnable) {
@@ -3172,7 +3174,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     }
                     if (parentFragment != null) {
                         TLRPC.Chat chat = parentFragment.getCurrentChat();
-                    TLRPC.UserFull userFull = parentFragment.getCurrentUserInfo();
+                        TLRPC.UserFull userFull = parentFragment.getCurrentUserInfo();
                         if (chat != null && !ChatObject.canSendMedia(chat) || userFull != null && userFull.voice_messages_forbidden) {
                             delegate.needShowMediaBanHint();
                             return true;
@@ -3322,7 +3324,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         audioVideoSendButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.SRC_IN));
 
         if (Build.VERSION.SDK_INT >= 21 && NekoConfig.useChatAttachMediaMenu.Bool()) {
-            audioVideoSendButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)));
+            audioVideoSendButton.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)));
         }
 
         audioVideoButtonContainer.addView(audioVideoSendButton, LayoutHelper.createFrame(48, 48));
@@ -3817,10 +3819,10 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     }
                 }
 
-                videoSendButton.setTag(null);
+                audioVideoSendButton.setTag(null);
                 recordAudioVideoRunnable.run();
-                delegate.onSwitchRecordMode(videoSendButton.getTag() == null);
-                setRecordVideoButtonVisible(videoSendButton.getTag() == null, true);
+                delegate.onSwitchRecordMode(audioVideoSendButton.getTag() == null);
+                setRecordVideoButtonVisible(audioVideoSendButton.getTag() == null, true);
                 if (!NekoConfig.disableVibration.Bool()) {
                     performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                 }
@@ -3849,10 +3851,10 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         }
                     }
 
-                    videoSendButton.setTag(1);
+                    audioVideoSendButton.setTag(1);
                     recordAudioVideoRunnable.run();
-                    delegate.onSwitchRecordMode(videoSendButton.getTag() == null);
-                    setRecordVideoButtonVisible(videoSendButton.getTag() == null, true);
+                    delegate.onSwitchRecordMode(audioVideoSendButton.getTag() == null);
+                    setRecordVideoButtonVisible(audioVideoSendButton.getTag() == null, true);
                     if (!NekoConfig.disableVibration.Bool()) {
                         performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                     }
@@ -4035,9 +4037,6 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         menuPopupWindow.dimBehind();
 
     }
-
-    private ActionBarPopupWindow sendPopupWindow;
-    private ActionBarPopupWindow.ActionBarPopupWindowLayout sendPopupLayout;
 
     private boolean onSendLongClick(View view) {
         if (isInScheduleMode()) {
@@ -4369,14 +4368,8 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         if (audioVideoSendButton == null) {
             return;
         }
-        if (NekoConfig.useChatAttachMediaMenu.Bool()) visible = animated = false;
-
-        videoSendButton.setTag(visible ? 1 : null);
-
-        if (audioVideoButtonAnimation != null) {
-            audioVideoButtonAnimation.cancel();
-            audioVideoButtonAnimation = null;
-        }
+//        if (NekoConfig.useChatAttachMediaMenu.Bool()) visible = animated = false;
+        audioVideoSendButton.setTag(visible ? 1 : null);
 
         isInVideoMode = visible;
 
@@ -6428,8 +6421,6 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             moveToSendStateRunnable = null;
         }
         recordCircle.voiceEnterTransitionInProgress = false;
-
-        boolean isVid = isInVideoMode() && !NekoConfig.useChatAttachMediaMenu.Bool();
 
         if (recordingAudioVideo) {
             if (recordInterfaceState == 1) {

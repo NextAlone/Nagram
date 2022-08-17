@@ -51,7 +51,7 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView {
     ArrayList<PremiumPreviewFragment.PremiumFeatureData> premiumFeatures = new ArrayList<>();
     int currentAccount;
     TLRPC.User user;
-    GiftPremiumBottomSheet.GiftTier giftTier;
+//    GiftPremiumBottomSheet.GiftTier giftTier;
     boolean isOutboundGift;
 
     PremiumFeatureCell dummyCell;
@@ -87,21 +87,21 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView {
     boolean animateConfetti;
     FrameLayout buttonContainer;
 
-    public PremiumPreviewBottomSheet(BaseFragment fragment, int currentAccount, TLRPC.User user) {
-        this(fragment, currentAccount, user, null);
-    }
+//    public PremiumPreviewBottomSheet(BaseFragment fragment, int currentAccount, TLRPC.User user) {
+//        this(fragment, currentAccount, user, null);
+//    }
 
-    public PremiumPreviewBottomSheet(BaseFragment fragment, int currentAccount, TLRPC.User user, GiftPremiumBottomSheet.GiftTier gift) {
+    public PremiumPreviewBottomSheet(BaseFragment fragment, int currentAccount, TLRPC.User user) {
         super(fragment, false, false);
         this.fragment = fragment;
         topPadding = 0.26f;
         this.user = user;
         this.currentAccount = currentAccount;
-        this.giftTier = gift;
+//        this.giftTier = gift;
         dummyCell = new PremiumFeatureCell(getContext());
         PremiumPreviewFragment.fillPremiumFeaturesList(premiumFeatures, currentAccount);
 
-        if (giftTier != null || UserConfig.getInstance(currentAccount).isPremium()) {
+        if (UserConfig.getInstance(currentAccount).isPremium()) {
             buttonContainer.setVisibility(View.GONE);
         }
 
@@ -119,9 +119,9 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView {
         rowCount += premiumFeatures.size();
         featuresEndRow = rowCount;
         sectionRow = rowCount++;
-        if (!UserConfig.getInstance(currentAccount).isPremium() && gift == null) {
-            buttonRow = rowCount++;
-        }
+//        if (!UserConfig.getInstance(currentAccount).isPremium() && gift == null) {
+//            buttonRow = rowCount++;
+//        }
         recyclerListView.setPadding(AndroidUtilities.dp(6), 0, AndroidUtilities.dp(6), 0);
         recyclerListView.setOnItemClickListener((view, position) -> {
             if (view instanceof PremiumFeatureCell) {
@@ -266,18 +266,18 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView {
                     subtitleView.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
                     linearLayout.addView(subtitleView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, 0, 16, 9, 16, 20));
 
-                    if (giftTier != null) {
-                        if (isOutboundGift) {
-                            titleView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(R.string.TelegramPremiumUserGiftedPremiumOutboundDialogTitle, user != null ? user.first_name : "", giftTier.getMonths()), null));
-                            subtitleView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(R.string.TelegramPremiumUserGiftedPremiumOutboundDialogSubtitle, user != null ? user.first_name : ""), null));
-                        } else {
-                            titleView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(R.string.TelegramPremiumUserGiftedPremiumDialogTitle, user != null ? user.first_name : "", giftTier.getMonths()), null));
-                            subtitleView.setText(AndroidUtilities.replaceTags(LocaleController.getString(R.string.TelegramPremiumUserGiftedPremiumDialogSubtitle)));
-                        }
-                    } else {
+//                    if (giftTier != null) {
+//                        if (isOutboundGift) {
+//                            titleView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(R.string.TelegramPremiumUserGiftedPremiumOutboundDialogTitle, user != null ? user.first_name : "", giftTier.getMonths()), null));
+//                            subtitleView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(R.string.TelegramPremiumUserGiftedPremiumOutboundDialogSubtitle, user != null ? user.first_name : ""), null));
+//                        } else {
+//                            titleView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(R.string.TelegramPremiumUserGiftedPremiumDialogTitle, user != null ? user.first_name : "", giftTier.getMonths()), null));
+//                            subtitleView.setText(AndroidUtilities.replaceTags(LocaleController.getString(R.string.TelegramPremiumUserGiftedPremiumDialogSubtitle)));
+//                        }
+//                    } else {
                         titleView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(R.string.TelegramPremiumUserDialogTitle, ContactsController.formatName(user.first_name, user.last_name)), null));
                         subtitleView.setText(AndroidUtilities.replaceTags(LocaleController.getString(R.string.TelegramPremiumUserDialogSubtitle)));
-                    }
+//                    }
 
                     starParticlesView = new StarParticlesView(context);
                     FrameLayout frameLayout = new FrameLayout(context) {

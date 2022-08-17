@@ -2556,7 +2556,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             req.settings = new TLRPC.TL_codeSettings();
             req.settings.allow_flashcall = simcardAvailable && allowCall && allowCancelCall && allowReadCallLog;
             req.settings.allow_missed_call = simcardAvailable && allowCall;
-            req.settings.allow_app_hash = PushListenerController.GooglePushListenerServiceProvider.INSTANCE.hasServices();
+            req.settings.allow_app_hash = PushListenerController.getProvider().hasServices();
             ArrayList<TLRPC.TL_auth_loggedOut> tokens = MessagesController.getSavedLogOutTokens();
             if (tokens != null) {
                 for (int i = 0; i < tokens.size(); i++) {

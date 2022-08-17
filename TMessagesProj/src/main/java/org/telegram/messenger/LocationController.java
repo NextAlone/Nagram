@@ -24,8 +24,6 @@ import android.util.LongSparseArray;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 
-import androidx.collection.LongSparseArray;
-
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.tgnet.NativeByteBuffer;
@@ -48,6 +46,7 @@ public class LocationController extends BaseController implements NotificationCe
     private GpsLocationListener gpsLocationListener = new GpsLocationListener();
     private GpsLocationListener networkLocationListener = new GpsLocationListener();
     private GpsLocationListener passiveLocationListener = new GpsLocationListener();
+    private FusedLocationListener fusedLocationListener = new FusedLocationListener();
     private Location lastKnownLocation;
     private long lastLocationSendTime;
     private boolean locationSentSinceLastMapUpdate = true;

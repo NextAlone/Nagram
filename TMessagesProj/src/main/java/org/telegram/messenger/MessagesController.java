@@ -80,7 +80,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
 import cn.hutool.core.thread.ThreadUtil;
-import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.ui.InternalFilters;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;

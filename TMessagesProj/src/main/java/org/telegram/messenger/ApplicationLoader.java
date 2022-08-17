@@ -48,7 +48,6 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.LinkedList;
 
-import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.parts.SignturesKt;
 import tw.nekomimi.nekogram.utils.FileUtil;
@@ -95,100 +94,9 @@ public class ApplicationLoader extends Application {
             applicationContext = getApplicationContext();
         } catch (Throwable ignore) {
         }
-        if (SDK_INT >= Build.VERSION_CODES.P) {
-            Reflection.unseal(base);
-        }
         Thread.currentThread().setUncaughtExceptionHandler((thread, error) -> {
             Log.e("nekox", "from " + thread.toString(), error);
         });
-    }
-
-    /**
-     * @author weishu
-     * @date 2018/6/7.
-     */
-    public static class Reflection {
-        private static final String TAG = "Reflection";
-
-        private static Object sVmRuntime;
-        private static Method setHiddenApiExemptions;
-
-        static {
-            if (SDK_INT >= Build.VERSION_CODES.P) {
-                try {
-                    Method forName = Class.class.getDeclaredMethod("forName", String.class);
-                    Method getDeclaredMethod = Class.class.getDeclaredMethod("getDeclaredMethod", String.class, Class[].class);
-
-                    Class<?> vmRuntimeClass = (Class<?>) forName.invoke(null, "dalvik.system.VMRuntime");
-                    Method getRuntime = (Method) getDeclaredMethod.invoke(vmRuntimeClass, "getRuntime", null);
-                    setHiddenApiExemptions = (Method) getDeclaredMethod.invoke(vmRuntimeClass, "setHiddenApiExemptions", new Class[]{String[].class});
-                    sVmRuntime = getRuntime.invoke(null);
-                } catch (Throwable e) {
-                    FileLog.e("reflect bootstrap failed:", e);
-                }
-            }
-
-        }
-
-        private static int UNKNOWN = -9999;
-
-        private static final int ERROR_SET_APPLICATION_FAILED = -20;
-
-        private static final int ERROR_EXEMPT_FAILED = -21;
-
-        private static int unsealed = UNKNOWN;
-
-        public static int unseal(Context context) {
-            if (SDK_INT < 28) {
-                // Below Android P, ignore
-                return 0;
-            }
-
-            // try exempt API first.
-            if (exemptAll()) {
-                return 0;
-            } else {
-                return ERROR_EXEMPT_FAILED;
-            }
-        }
-
-        /**
-         * make the method exempted from hidden API check.
-         *
-         * @param method the method signature prefix.
-         * @return true if success.
-         */
-        public static boolean exempt(String method) {
-            return exempt(new String[]{method});
-        }
-
-        /**
-         * make specific methods exempted from hidden API check.
-         *
-         * @param methods the method signature prefix, such as "Ldalvik/system", "Landroid" or even "L"
-         * @return true if success
-         */
-        public static boolean exempt(String... methods) {
-            if (sVmRuntime == null || setHiddenApiExemptions == null) {
-                return false;
-            }
-
-            try {
-                setHiddenApiExemptions.invoke(sVmRuntime, new Object[]{methods});
-                return true;
-            } catch (Throwable e) {
-                return false;
-            }
-        }
-
-        /**
-         * Make all hidden API exempted.
-         *
-         * @return true if success.
-         */
-        public static boolean exemptAll() {
-            return exempt(new String[]{"L"});
-        }
     }
 
     public static ILocationServiceProvider getLocationServiceProvider() {
@@ -222,25 +130,12 @@ public class ApplicationLoader extends Application {
     }
 
     protected PushListenerController.IPushListenerServiceProvider onCreatePushProvider() {
-        return PushListenerController.GooglePushListenerServiceProvider.INSTANCE;
+        return PushListenerController.getProvider();
     }
 
     public static String getApplicationId() {
         return BuildConfig.APPLICATION_ID;
     }
-
-//    protected String onGetApplicationId() {
-//        return null;
-//    }
-
-    public static boolean isHuaweiStoreBuild() {
-        return applicationLoaderInstance.isHuaweiBuild();
-    }
-
-    protected boolean isHuaweiBuild() {
-        return false;
-    }
-
 
     @SuppressLint("SdCardPath")
     public static File getDataDirFixed() {
@@ -260,23 +155,15 @@ public class ApplicationLoader extends Application {
     }
 
     public static File getFilesDirFixed() {
-
         File filesDir = new File(getDataDirFixed(), "files");
-
         FileUtil.initDir(filesDir);
-
         return filesDir;
-
     }
 
     public static File getCacheDirFixed() {
-
         File filesDir = new File(getDataDirFixed(), "cache");
-
         FileUtil.initDir(filesDir);
-
         return filesDir;
-
     }
 
     public static void postInitApplication() {
@@ -286,10 +173,9 @@ public class ApplicationLoader extends Application {
         applicationInited = true;
 
         SharedConfig.loadConfig();
+        LocaleController.getInstance();
         SharedPrefsHelper.init(applicationContext);
         UserConfig.getInstance(0).loadConfig();
-
-        LinkedList<Runnable> postRun = new LinkedList<>();
 
         try {
             connectivityManager = (ConnectivityManager) ApplicationLoader.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -339,26 +225,27 @@ public class ApplicationLoader extends Application {
             e.printStackTrace();
         }
 
+        LinkedList<Runnable> postRun = new LinkedList<>();
         for (int a : SharedConfig.activeAccounts) {
             final int finalA = a;
             Runnable initRunnable = () -> loadAccount(finalA);
-            if (finalA == UserConfig.selectedAccount) initRunnable.run();
+            if (finalA == UserConfig.selectedAccount) {
+                initRunnable.run();
+                ChatThemeController.init();
+            }
             else postRun.add(initRunnable);
-        }
-
-        if (BuildVars.LOGS_ENABLED) {
-            FileLog.d("app initied");
         }
         for (Runnable runnable : postRun) {
             Utilities.stageQueue.postRunnable(runnable);
         }
-        Utilities.stageQueue.postRunnable(ExternalGcm::initPlayServices);
+        // init fcm
+        initPushServices();
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("app initied");
+        }
     }
 
-    private static final HashSet<Integer> loadedAccounts = new HashSet<>();
-
     public static void loadAccount(int account) {
-        if (!loadedAccounts.add(account)) return;
         UserConfig inst = UserConfig.getInstance(account);
         inst.loadConfig();
         if (!inst.isClientActivated()) {
@@ -368,7 +255,7 @@ public class ApplicationLoader extends Application {
         }
 
         MessagesController.getInstance(account);
-        if (account == 0) {
+        if ("".equals(SharedConfig.pushStringStatus)) {
             SharedConfig.pushStringStatus = "__FIREBASE_GENERATING_SINCE_" + ConnectionsManager.getInstance(account).getCurrentTime() + "__";
         } else {
             ConnectionsManager.getInstance(account);
@@ -382,8 +269,6 @@ public class ApplicationLoader extends Application {
             ContactsController.getInstance(account).checkAppAccount();
             DownloadController.getInstance(account);
         });
-
-        ChatThemeController.init();
     }
 
     public ApplicationLoader() {
@@ -398,10 +283,6 @@ public class ApplicationLoader extends Application {
         } catch (Throwable ignore) {
         }
 
-        if (BuildVars.isPlay && ExternalGcm.checkSplit(this)) {
-            return; // Skip app initialization.
-        }
-
         super.onCreate();
 
         if (BuildVars.LOGS_ENABLED) {
@@ -412,16 +293,7 @@ public class ApplicationLoader extends Application {
             applicationContext = getApplicationContext();
         }
 
-        // Since static init is thread-safe, no lock is needed there.
-        Utilities.stageQueue.postRunnable(() -> {
-            SignturesKt.checkMT(this);
-        });
-
-        try {
-            Class.forName("org.robolectric.android.internal.AndroidTestEnvironment");
-            return;
-        } catch (ClassNotFoundException ignored) {
-        }
+        Utilities.stageQueue.postRunnable(() -> SignturesKt.checkMT(this));
 
         NativeLoader.initNativeLibs(ApplicationLoader.applicationContext);
         ConnectionsManager.native_setJava(false);
@@ -444,16 +316,16 @@ public class ApplicationLoader extends Application {
         org.osmdroid.config.Configuration.getInstance().setUserAgentValue("Telegram-FOSS ( NekoX ) " + BuildConfig.VERSION_NAME);
         org.osmdroid.config.Configuration.getInstance().setOsmdroidBasePath(new File(ApplicationLoader.applicationContext.getCacheDir(), "osmdroid"));
 
-        startPushService();
-LauncherIconController.tryFixLauncherIconIfNeeded();
+        LauncherIconController.tryFixLauncherIconIfNeeded();
     }
 
+    // Local Push Service, TFoss implementation
     public static void startPushService() {
         Utilities.stageQueue.postRunnable(ApplicationLoader::startPushServiceInternal);
     }
 
     private static void startPushServiceInternal() {
-        if (ExternalGcm.checkPlayServices()) {
+        if (PushListenerController.getProvider().hasServices()) {
             return;
         }
         SharedPreferences preferences = MessagesController.getNotificationsSettings(UserConfig.selectedAccount);
@@ -501,6 +373,21 @@ LauncherIconController.tryFixLauncherIconIfNeeded();
                 alarm.cancel(pendingIntent);
             }
         });
+    }
+
+    private static void initPushServices() {
+        AndroidUtilities.runOnUIThread(() -> {
+            if (getPushProvider().hasServices()) {
+                getPushProvider().onRequestPushToken();
+            } else {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("No valid " + getPushProvider().getLogTitle() + " APK found.");
+                }
+                SharedConfig.pushStringStatus = "__NO_GOOGLE_PLAY_SERVICES__";
+                PushListenerController.sendRegistrationToServer(getPushProvider().getPushType(), null);
+                startPushService();
+            }
+        }, 1000);
     }
 
     @Override

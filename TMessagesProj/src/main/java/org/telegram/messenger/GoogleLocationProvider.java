@@ -109,7 +109,7 @@ public class GoogleLocationProvider implements ILocationServiceProvider {
 
     @Override
     public boolean checkServices() {
-        return PushListenerController.GooglePushListenerServiceProvider.INSTANCE.hasServices();
+        return PushListenerController.getProvider().hasServices();
     }
 
     public final static class GoogleLocationRequest implements ILocationRequest {

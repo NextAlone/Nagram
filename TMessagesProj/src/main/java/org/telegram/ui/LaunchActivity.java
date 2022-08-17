@@ -181,7 +181,6 @@ import kotlin.Unit;
 import kotlin.text.StringsKt;
 import tw.nekomimi.nekogram.InternalUpdater;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
-import tw.nekomimi.nekogram.ExternalGcm;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
@@ -2310,7 +2309,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                                 req.hash = phoneHash;
                                 req.settings = new TLRPC.TL_codeSettings();
                                 req.settings.allow_flashcall = false;
-                                req.settings.allow_app_hash = PushListenerController.GooglePushListenerServiceProvider.INSTANCE.hasServices();
+                                req.settings.allow_app_hash = PushListenerController.getProvider().hasServices();
 
                                 Bundle params = new Bundle();
                                 params.putString("phone", phone);
