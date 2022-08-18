@@ -98,13 +98,14 @@ class BottomBuilder(val ctx: Context, val needFocus: Boolean = true, val bgColor
         val checkBoxCell = TextCheckCell(ctx, 21, !switch)
         checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false))
         checkBoxCell.minimumHeight = AndroidUtilities.dp(50F)
-        rootView.addView(checkBoxCell, LayoutHelper.createLinear(-1, -2))
 
         if (valueText == null) {
             checkBoxCell.setTextAndCheck(text, value, true)
         } else {
             checkBoxCell.setTextAndValueAndCheck(text, valueText, value, true, true)
         }
+
+        rootView.addView(checkBoxCell, LayoutHelper.createLinear(-1, -2))
 
         checkBoxCell.setOnClickListener {
             val target = !checkBoxCell.isChecked
@@ -119,7 +120,6 @@ class BottomBuilder(val ctx: Context, val needFocus: Boolean = true, val bgColor
         }
 
         return checkBoxCell
-
     }
 
     @JvmOverloads
