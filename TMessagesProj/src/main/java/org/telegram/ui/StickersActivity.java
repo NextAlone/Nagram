@@ -401,11 +401,11 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         selectedCountTextView.setOnTouchListener((v, event) -> true);
 
         shareMenuItem = actionMode.addItemWithWidth(MENU_SHARE, R.drawable.msg_share, AndroidUtilities.dp(54));
-        exportMenuItem = actionMode.addItemWithWidth(MENU_EXPORT, R.drawable.baseline_file_download_24, AndroidUtilities.dp(54));
+        exportMenuItem = actionMode.addItemWithWidth(MENU_EXPORT, R.drawable.msg_download, AndroidUtilities.dp(54));
         if (currentType != MediaDataController.TYPE_EMOJIPACKS) {
-            archiveMenuItem = actionMode.addItemWithWidth(MENU_ARCHIVE, R.drawable.baseline_archive_24, AndroidUtilities.dp(54));
+            archiveMenuItem = actionMode.addItemWithWidth(MENU_ARCHIVE, R.drawable.msg_archive, AndroidUtilities.dp(54));
         }
-        deleteMenuItem = actionMode.addItemWithWidth(MENU_DELETE, R.drawable.baseline_delete_24, AndroidUtilities.dp(54));
+        deleteMenuItem = actionMode.addItemWithWidth(MENU_DELETE, R.drawable.msg_delete, AndroidUtilities.dp(54));
 
         ArrayList<TLRPC.TL_messages_stickerSet> sets = new ArrayList<>(MessagesController.getInstance(currentAccount).filterPremiumStickers(MediaDataController.getInstance(currentAccount).getStickerSets(currentType)));
         List<TLRPC.StickerSetCovered> featured = getFeaturedSets();
