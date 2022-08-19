@@ -17,10 +17,9 @@
     <string name="RepeatAsCopy">無引用復讀</string>
     <string name="DoubleTapAction">雙擊操作</string>
     <string name="SendReactions">表情回應</string>
-    <string name="ShowReactions">顯示錶情回應選單</string>
-    <string name="ScrollableChatPreview">可滑動聊天預覽</string>
+    <string name="ShowReactions">顯示表情回應選單</string>
     <string name="CustomTitle">自定義標題</string>
-    <string name="CustomTitleHint">留空則使用Nagram</string>
+    <string name="CustomTitleHint">留空則使用 Nagram</string>
     <string name="CodeSyntaxHighlight">程式碼語法高亮</string>
     <string name="CreateMono">建立等寬</string>
     <string name="CreateMonoLanguage">等寬語言</string>
@@ -38,7 +37,22 @@
     <string name="ShowPremiumAvatarAnimation">顯示 Premium 動態頭像</string>
     <string name="AlwaysSaveChatOffset">總是儲存聊天記錄的偏移量</string>
     <string name="AutoReplaceRepeat">自動替換復讀為無引用復讀</string>
+    <string name="AppIconGoogle">Google</string>
     <string name="AppIconColorful">繽紛</string>
     <string name="AppIconDarkGreen">深翠</string>
     <string name="AppIconNeon">霓虹</string>
+    <string name="AutoInsertGIFCaption">在 GIF 傳送時自動插入草稿</string>
+    <string name="DefaultMonoLanguage">自定義預設語法高亮語言</string>
+    <string name="DisableGlobalSearch">禁用全域性搜尋</string>
+    <string name="InputMessageId">輸入訊息 ID</string>
+    <string name="ToTheMessage">回到訊息</string>
+    <string name="HideOriginAfterTranslation">翻譯後隱藏原文</string>
+    <string name="ZalgoFilter">過濾「Zalgo」符號</string>
+    <string name="ZalgoFilterNotice">所有暱稱或資訊中的「Z̷͍͌ā̸̜l̸̞̂g̷̝͘o̩̓」符號將被刪除以避免影響閱讀。</string>
+    <string name="CustomChannelLabel">自定頻道預設標籤</string>
+    <string name="AlwaysShowDownloadIcon">總是顯示下載圖示</string>
+    <string name="ShowPhotoOpenInExternalApp">使用外部應用程式開啟相片</string>
+    <string name="QuickToggleAnonymous">快速切換匿名發言</string>
+    <string name="QuickToggleAnonymousNotice">如果你是頻道的持有者則可以使用頻道匿名發言</string>
+    <string name="OnlyShowBuiltInEmoji">只顯示內建表情符號</string>
 </resources>

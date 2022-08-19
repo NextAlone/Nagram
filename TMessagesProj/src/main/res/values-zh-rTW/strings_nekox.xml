@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="NekoX" translatable="false">Nagram</string>
     <string name="Locked">已鎖定</string>
     <string name="AccDescrChatAttachEnterMenu">聊天輸入選單</string>
     <string name="ChatAttachEnterMenuRecordVideo">錄製影片</string>
@@ -9,9 +10,9 @@
     <string name="UseChatAttachEnterMenu">使用輸入選單</string>
     <string name="UseChatAttachEnterMenuNotice">將錄製按鈕更改為輸入選單，另增加一個連結預覽開關。</string>
     <string name="DisableLinkPreviewByDefault">預設禁用連結預覽</string>
-    <string name="DisableLinkPreviewByDefaultNotice">預設情況下, 在輸入過程中禁用連結預覽請求，以防止伺服器知道該連結在 Telegram 被分享。</string>
+    <string name="DisableLinkPreviewByDefaultNotice">預設情況下，在輸入過程中禁用連結預覽請求，以防止伺服器知道該連結在 Telegram 被分享。</string>
     <string name="CustomApi">自定義 API</string>
-    <string name="UseCustomApiNotice">使用自定義 Api 登入，如果您無法註冊或登入，這可能會有幫助。
+    <string name="UseCustomApiNotice">使用自定義 API 登入，如果您無法註冊或登入，這可能會有幫助。
 \n
 \n注意：如果您正在使用 release 版本，谷歌雲推送將無法工作。</string>
     <string name="CustomApiNo">不使用自定義 API</string>
@@ -31,9 +32,9 @@
     <string name="ProxyAutoSwitch">代理自動切換</string>
     <string name="LinkedGroupChat">連結的群組</string>
     <string name="LinkedChannelChat">連結的頻道</string>
-    <string name="DevModeTitle">**您的電報賬號可能被封禁**</string>
+    <string name="DevModeTitle">**您的 Telegram 賬號可能被封禁**</string>
     <string name="DevModeNotice">對於開發者功能的任何不當使用，我們概不負責。</string>
-    <string name="TapToDisable">點選以禁用, 這個通知不需要顯示.</string>
+    <string name="TapToDisable">點選以禁用，這個通知不需要顯示。</string>
     <string name="PlaceHolder">佔位符 - 請禁用</string>
     <string name="CustomBackend">自定義後端</string>
     <string name="CustomBackendNotice">此功能僅提供給專業使用者，如果您不知道以下選項代表什麼，請忽略它。</string>
@@ -43,7 +44,7 @@
     <string name="ChangeTranslateProvider">修改翻譯源</string>
     <string name="ProviderYandexTranslate">Yandex 翻譯</string>
     <string name="GoogleCloudTransKey">Google 雲翻譯金鑰</string>
-    <string name="GoogleCloudTransKeyNotice">如果您設定了一個谷歌雲金鑰： 雲翻譯API將被呼叫，而不是模擬表單提交到網頁版 (快速、穩定和節省流量)。</string>
+    <string name="GoogleCloudTransKeyNotice">如果您設定了一個 Google 雲金鑰： Google 雲 API 將被呼叫，而不是模擬提交到網頁版 (快速、穩定和節省流量)。</string>
     <string name="TransToLang">翻譯目標語言</string>
     <string name="TransInputToLang">輸入翻譯目標語言</string>
     <string name="More">更多</string>
@@ -52,9 +53,9 @@
     <string name="UseDefaultTheme">使用預設主題 *</string>
     <string name="NightMode">夜間模式</string>
     <string name="PrivacyNotice">隱私警告</string>
-    <string name="PrivacyNoticePhoneVisible">檢測到您的手機號碼對任何人都可見, 這可能會導致政府控制的駭客找到您的真實身份，請關閉它！</string>
-    <string name="PrivacyNoticeAddByPhone">檢測到您沒有被關閉“允許透過電話號碼找到我”設定， 這可能會導致政府控制的駭客找到您的真實身份，請關閉它！</string>
-    <string name="PrivacyNoticeP2p">檢測到您沒有關閉“允許 P2p 通話”設定， 這可能會導致政府控制的駭客找到您的真實身份，請關閉它！</string>
+    <string name="PrivacyNoticePhoneVisible">檢測到您的手機號碼對任何人都可見，這可能會導致政府控制的駭客找到您的真實身份，請關閉它！</string>
+    <string name="PrivacyNoticeAddByPhone">檢測到您沒有被關閉“允許透過電話號碼找到我”設定，這可能會導致政府控制的駭客找到您的真實身份，請關閉它！</string>
+    <string name="PrivacyNoticeP2p">檢測到您沒有關閉「允許 P2p 通話」設定，這可能會導致政府控制的駭客找到您的真實身份，請關閉它！</string>
     <string name="PrivacyNotice2fa">檢測到您沒有設定密碼，這可能會導致政府控制的駭客找到您的真實身份，請設定一個！</string>
     <string name="ApplySuggestion">應用</string>
     <string name="DoNotRemindAgain">不再提醒</string>
@@ -88,10 +89,10 @@
     <string name="SortByUser">使用者優先排序</string>
     <string name="SortByContacts">聯絡人優先排序</string>
     <string name="NekoXPushService">NekoX 通知服務</string>
-    <string name="EnablePushAlert">請啟用 \"NekoX 通知服務\"</string>
-    <string name="DisablePushAlert">請禁用 \"NekoX 通知服務\"</string>
+    <string name="EnablePushAlert">請啟用「NekoX 通知服務」</string>
+    <string name="DisablePushAlert">請禁用「NekoX 通知服務」</string>
     <string name="DisableUndo">禁用五秒內後悔</string>
-    <string name="DisableSystemAccount">禁用系統帳戶</string>
+    <string name="DisableSystemAccount">禁用系統帳號</string>
     <string name="FilterMenu">分類選單</string>
     <string name="DisableProxyWhenVpnEnabled">啟用 VPN 時禁用代理</string>
     <string name="UseProxyItem">使用側滑欄代理項而不是按鈕</string>
@@ -163,9 +164,9 @@
     <string name="MiniVersionAlert">抱歉，mini 版本不支援此型別的代理，請在設定中切換版本。</string>
     <string name="ImportProxyFromClipboard">從剪貼簿匯入</string>
     <string name="BrokenLink">未知或損壞的連結</string>
-    <string name="ShareQRCode">二維碼</string>
-    <string name="ScanQRCode">掃描二維碼</string>
-    <string name="NoQrFound">未找到二維碼</string>
+    <string name="ShareQRCode">QR Code</string>
+    <string name="ScanQRCode">掃描 QR Code</string>
+    <string name="NoQrFound">未找到 QR Code</string>
     <string name="EnableDeveloperMode">啟用開發者模式</string>
     <string name="DisableDeveloperMode">禁用開發者模式</string>
     <string name="DeveloperSettings">開發者設定</string>
@@ -182,20 +183,22 @@
     <string name="PGPImport">匯入公鑰</string>
     <string name="PGPImportPrivate">匯入私鑰</string>
     <string name="ShareMyKey">分享我的公鑰</string>
+    <string name="ShareMessages">分享</string>
     <string name="DisableVibration">禁用振動</string>
     <string name="IgnoreContentRestrictions">忽略內容限制</string>
-    <string name="IgnoreContentRestrictionsNotice">忽略本地訊息的 Android 限制。 這可能會在將來被伺服器禁止，您需要自己評估此選項的本地合法性。</string>
+    <string name="IgnoreContentRestrictionsNotice">忽略本地訊息的 Android 限制。這可能會在將來被伺服器禁止，您需要自己評估此選項的本地合法性。</string>
     <string name="SendCommentAfterForward">轉發後傳送評論</string>
     <string name="UnpinMessageX">解除訊息置頂</string>
     <string name="UnpinMessagesAll">解除置頂所有訊息</string>
     <string name="DismissForYourself">暫時對自己隱藏</string>
     <string name="ImportLogin">二維碼登入</string>
-    <string name="QRLoginNotice">此 二維碼/連結 允許某人登入到您的 Telegram 帳戶, 這是您自己的操作嗎？</string>
+    <string name="QRLoginNotice">此「QR Code/連結」允許某人登入到您的 Telegram 帳號, 這是您自己的操作嗎？</string>
     <string name="QRLoginConfirm">確認登入</string>
     <string name="StorageReset">清除儲存</string>
-    <string name="StorageResetInfo">該應用程式的所有資料將被永久刪除（並先嘗試登出所有帳戶）。</string>
+    <string name="StorageResetInfo">該應用程式的所有資料將被永久刪除 (並先嘗試登出所有帳號)。</string>
     <string name="FCTitle">關於本應用之更新</string>
     <string name="FCInfo">要跟隨我們的公告與更新頻道嗎 ？</string>
+    <string name="OpenCC" translatable="false">OpenCC</string>
     <string name="CCTitle">OpenCC (簡繁轉換)</string>
     <string name="CCTarget">目標</string>
     <string name="CCNo">無</string>
@@ -215,19 +218,16 @@
     <string name="TextReplace">替換</string>
     <string name="ReplaceRegex">正規表示式</string>
     <string name="DisableTrending">禁用趨勢推薦</string>
-    <string name="HideDeviceInfo">隱藏裝置型號</string>
-    <string name="HideDeviceInfoOff">裝置型號將在登入後的應用第二次啟動時上載。</string>
-    <string name="HideDeviceInfoOn">您可以稍後在設定中進行更改此。</string>
-    <string name="ArchiveFiles">壓縮檔案</string>
-    <string name="Win32ExecutableFiles">Win32 可執行檔案</string>
     <string name="AutoDownload">自動下載</string>
-    <string name="SetPinnedSuffix">(置頂)</string>
-    <string name="UnpinSticker">取消置頂</string>
-    <string name="PinSticker">置頂</string>
-    <string name="EnableStickerPinTip">此功能仍在開發中，雲同步可能無法正常工作。</string>
+    <string name="Win32ExecutableFiles">Win32 可執行檔案</string>
+    <string name="ArchiveFiles">壓縮檔案</string>
+    <string name="EnableStickerPin">此功能仍在開發中，雲同步可能無法正常工作。</string>
     <string name="EnableStickerPinAbout">固定貼紙並在新增新貼紙時與雲同步。
-\n與 \"禁用收藏夾和最近\" 配對。</string>
-    <string name="EnableStickerPin">啟用貼紙集置頂</string>
+\n與「禁用收藏夾和最近」配對。</string>
+    <string name="EnableStickerPinTip">此功能仍在開發中，雲同步可能無法正常工作。</string>
+    <string name="PinSticker">置頂</string>
+    <string name="UnpinSticker">取消置頂</string>
+    <string name="SetPinnedSuffix">(置頂)</string>
     <string name="AppLinkFDroid">F-Droid</string>
     <string name="UsePersiancalendar">使用伊朗歷</string>
     <string name="UsePersiancalendarInfo">用太陽回曆顯示日期</string>
@@ -236,21 +236,22 @@
     <string name="ProxyInfoWS">WebSocket 中繼設定</string>
     <string name="WsPayload">負載</string>
     <string name="AutoLockImmediately">立即</string>
-    <string name="ImportSettings">匯入設定</string>
-    <string name="BackupSettings">備份設定</string>
-    <string name="ImportSettingsAlert">確定要覆蓋設定嗎？從未知來源匯入設定可能導致PIN被覆蓋從而導致應用被鎖定。</string>
-    <string name="AutoCheckUpdateRc">候選版</string>
-    <string name="AutoCheckUpdateStable">穩定版</string>
-    <string name="AutoCheckUpdateSwitch">自動更新</string>
-    <string name="AutoCheckUpdateOFF">關閉</string>
-    <string name="VersionUpdateNoUpdate">無更新。</string>
-    <string name="VersionUpdateNotNow">以後再說</string>
-    <string name="VersionUpdateIgnore">忽略</string>
-    <string name="VersionUpdateConfirm">更新</string>
+    <string name="BackupSettings">匯入設定</string>
+    <string name="ImportSettings">備份設定</string>
+    <string name="ImportSettingsAlert">確定要覆蓋設定嗎？從未知來源匯入設定可能導致 PIN 被覆蓋從而導致應用被鎖定。</string>
+    <string name="nekoXPaymentRemovedToast">支付功能已被移除。</string>
+    <string name="VersionUpdateTitle">新版本可用</string>
     <string name="VersionUpdateVariantNotMatch">版本自動檢測失敗，
 \n請手動從GitHub下載。</string>
-    <string name="VersionUpdateTitle">新版本可用</string>
-    <string name="nekoXPaymentRemovedToast">支付功能已被移除。</string>
+    <string name="VersionUpdateConfirm">更新</string>
+    <string name="VersionUpdateIgnore">忽略</string>
+    <string name="VersionUpdateNotNow">以後再說</string>
+    <string name="VersionUpdateNoUpdate">無更新。</string>
+    <string name="AutoCheckUpdateOFF">關閉</string>
+    <string name="AutoCheckUpdateSwitch">自動更新</string>
+    <string name="AutoCheckUpdateStable">穩定版</string>
+    <string name="AutoCheckUpdateRc">候選版</string>
+    <string name="AutoCheckUpdatePreview">預覽版(不穩定)</string>
     <string name="unreadBadgeOnBackButton">聊天視窗返回按鈕上顯示未讀數</string>
     <string name="customPublicProxyIP">設定公共代理的 IP</string>
     <string name="customPublicProxyIPNotice">在某些地區，指定公共代理 CDN (例如 Cloudflare) 的 IP 可以加快訪問速度。</string>
@@ -266,21 +267,20 @@
 \n使用頭像作為背景
 \n使用大隻頭像作為背景</string>
     <string name="hideSponsoredMessage">隱藏贊助訊息</string>
+    <string name="rememberAllBackMessages">記住所有點選的回覆</string>
     <string name="DisableInstantCamera">禁用相機即時預覽</string>
     <string name="showSeconds">以秒為單位顯示時間戳</string>
-    <string name="rememberAllBackMessages">記住所有點選的回覆</string>
-    <string name="ShareMessages">分享</string>
-    <string name="AutoCheckUpdatePreview">預覽版(不穩定)</string>
     <string name="AppUpdateNekoX">更新 Nagram</string>
     <string name="NekoXUpdateTranslationHint">長按以翻譯更新日誌</string>
-    <string name="channelAlias">頻道別名</string>
-    <string name="labelChannelUser">標記頻道匿名身份別名</string>
-    <string name="setChannelAliasName">標記別名</string>
-    <string name="channelAliasDetails">需啟用標記頻道匿名身份別名。</string>
     <string name="Name">輸入別名</string>
-    <string name="labelChannelUserDetails">以頻道匿名身份發言的使用者將標記為“頻道”。</string>
+    <string name="channelAlias">頻道別名</string>
+    <string name="channelAliasDetails">需啟用標記頻道匿名身份別名。</string>
+    <string name="setChannelAliasName">標記別名</string>
+    <string name="labelChannelUser">標記頻道匿名身份別名</string>
+    <string name="labelChannelUserDetails">以頻道匿名身份發言的使用者將標記為「頻道」。</string>
     <string name="StickerSettings">貼紙</string>
     <string name="ConfirmSettings">操作確認</string>
     <string name="InteractionSettings">互動</string>
     <string name="localPremium">本地大會員</string>
+    <string name="nekoxPremiumGiftRemoved">大會員在 NekoX 中被刪除。</string>
 </resources>
