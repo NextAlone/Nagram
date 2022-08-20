@@ -325,7 +325,11 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
         }
         first = false;
         ArrayList<EmojiView.EmojiPack> emojiPacks = parent.getEmojipacks();
-        if (emojiPacks == null || NaConfig.INSTANCE.getOnlyShowBuiltInEmoji().Bool()) {
+        if (emojiPacks == null) {
+            return;
+        }
+        final boolean isPremium = UserConfig.getInstance(UserConfig.selectedAccount).isPremium();
+        if (NaConfig.INSTANCE.getOnlyShowBuiltInEmoji().Bool() && !isPremium) {
             return;
         }
         if (emojipackTabs == null) {
@@ -338,7 +342,6 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
             appearAnimation = null;
         }
         appearCount = emojiPacks.size();
-        final boolean isPremium = UserConfig.getInstance(UserConfig.selectedAccount).isPremium();
         for (int i = 0; i < emojipackTabs.size(); ++i) {
             EmojiTabButton emojipackTab = emojipackTabs.get(i);
             EmojiView.EmojiPack pack = null;

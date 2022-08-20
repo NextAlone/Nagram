@@ -53,5 +53,5 @@
     <string name="ShowPhotoOpenInExternalApp">查看图片可以使用其他应用打开</string>
     <string name="QuickToggleAnonymous">快速切换匿名发言</string>
     <string name="QuickToggleAnonymousNotice">如果你是群组的所有者的话</string>
-    <string name="OnlyShowBuiltInEmoji">仅显示内置 Emoji</string>
+    <string name="OnlyShowBuiltInEmoji">非大会员仅显示内置 Emoji</string>
 </resources>
