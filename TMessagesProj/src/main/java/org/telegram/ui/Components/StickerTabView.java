@@ -25,11 +25,8 @@ public class StickerTabView extends FrameLayout {
 
     public final static int SMALL_WIDTH = 33;
     public final static int SMALL_HEIGHT = 36;
-//    public final static int SMALL_WIDTH = 52;
-//    public final static int SMALL_HEIGHT = 48;
 
-    public final static int IMAGE_SMALL_SIZE = 36;
-    private final static int EMOJI_SMALL_SIZE = 30;
+    public final static int IMAGE_SMALL_SIZE = 26;
     public final static int IMAGE_ICON_SMALL_SIZE = 24;
 
     public int type;
@@ -61,7 +58,7 @@ public class StickerTabView extends FrameLayout {
             imageView.setLayerNum(1);
             imageView.setAspectFit(false);
             imageView.setRoundRadius(AndroidUtilities.dp(6));
-            addView(imageView, LayoutHelper.createFrame(EMOJI_SMALL_SIZE, EMOJI_SMALL_SIZE, Gravity.CENTER));
+            addView(imageView, LayoutHelper.createFrame(IMAGE_SMALL_SIZE, IMAGE_SMALL_SIZE, Gravity.CENTER));
             visibleView = imageView;
         } else if (type == ICON_TYPE) {
             iconView = new ImageView(context);
