@@ -253,6 +253,11 @@ object NaConfig {
         ConfigItem.configTypeBool,
         false
     )
+    val realHideTimeForSticker = addConfig(
+        "RealHideTimeForSticker",
+        ConfigItem.configTypeBool,
+        false
+    )
 
     private fun addConfig(
         k: String,
