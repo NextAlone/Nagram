@@ -1324,9 +1324,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         }
         writeButtonContainer.addView(writeButton, LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 56 : 60, Build.VERSION.SDK_INT >= 21 ? 56 : 60, Gravity.LEFT | Gravity.TOP, Build.VERSION.SDK_INT >= 21 ? 2 : 0, 0, 0, 0));
         writeButton.setOnClickListener(v -> sendInternal(true));
-        writeButton.setOnLongClickListener(v -> {
-            return onSendLongClick(writeButton);
-        });
+        writeButton.setOnLongClickListener(v -> onSendLongClick(writeButton));
 
         textPaint.setTextSize(AndroidUtilities.dp(12));
         textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -1502,7 +1500,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 showSendersNameView.setTextColor(getThemedColor(Theme.key_voipgroup_nameText));
             }
             sendPopupLayout1.addView(showSendersNameView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
-            showSendersNameView.setTextAndIcon(false ? LocaleController.getString("ShowSenderNames", R.string.ShowSenderNames) : LocaleController.getString("ShowSendersName", R.string.ShowSendersName), 0);
+            showSendersNameView.setTextAndIcon(LocaleController.getString("ShowSendersName", R.string.ShowSendersName), 0);
             showSendersNameView.setChecked(showSendersName = true);
 
             ActionBarMenuSubItem hideSendersNameView = new ActionBarMenuSubItem(getContext(), true, false, true, resourcesProvider);
@@ -1510,7 +1508,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 hideSendersNameView.setTextColor(getThemedColor(Theme.key_voipgroup_nameText));
             }
             sendPopupLayout1.addView(hideSendersNameView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
-            hideSendersNameView.setTextAndIcon(false ? LocaleController.getString("HideSenderNames", R.string.HideSenderNames) : LocaleController.getString("HideSendersName", R.string.HideSendersName), 0);
+            hideSendersNameView.setTextAndIcon(LocaleController.getString("HideSendersName", R.string.HideSendersName), 0);
             hideSendersNameView.setChecked(!showSendersName);
             showSendersNameView.setOnClickListener(e -> {
                 showSendersNameView.setChecked(showSendersName = true);
@@ -1626,13 +1624,16 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             List<Long> removeKeys = new ArrayList<>();
             for (int a = 0; a < selectedDialogs.size(); a++) {
                 long key = selectedDialogs.keyAt(a);
+                int result = 0;
                 if (NekoConfig.sendCommentAfterForward.Bool()) {
-                    SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, false, false, true, 0);
+                    result = SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, !showSendersName,false, withSound, 0);
                 }
                 if (frameLayout2.getTag() != null && commentTextView.length() > 0) {
                     SendMessagesHelper.getInstance(currentAccount).sendMessage(text[0] == null ? null : text[0].toString(), key, null, null, null, true, entities, null, null, withSound, 0, null);
                 }
-                int result = SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, !showSendersName,false, true, 0);
+                if (!NekoConfig.sendCommentAfterForward.Bool()) {
+                    result = SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, !showSendersName,false, withSound, 0);
+                }
                 if (result != 0) {
                     removeKeys.add(key);
                 }
@@ -1642,9 +1643,6 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                     if (result != 0) {
                         break;
                     }
-                }
-                if (!NekoConfig.sendCommentAfterForward.Bool()) {
-                    SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, false, false, true, 0);
                 }
             }
             for (long key : removeKeys) {
