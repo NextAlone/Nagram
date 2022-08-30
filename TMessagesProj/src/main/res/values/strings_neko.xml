@@ -146,4 +146,6 @@
     <string name="ChatBlurAlphaValue">Chat Blur Alpha</string>
     <string name="disablePremiumStickerAnimation">Disable premium sticker animation</string>
     <string name="enhancedFileLoader">Enhance Download speed</string>
+    <string name="mapDriftingFixForGoogleMaps">Fix Google Maps drifting in China</string>
+    <string name="useOSMDroidMap">Use OSMDroid Map</string>
 </resources>

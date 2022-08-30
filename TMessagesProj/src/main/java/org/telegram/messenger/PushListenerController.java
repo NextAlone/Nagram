@@ -1311,7 +1311,7 @@ public class PushListenerController {
     public static IPushListenerServiceProvider getProvider() {
         if (instance != null)
             return instance;
-        if (BuildConfig.BUILD_TYPE.equals("debug") || BuildConfig.BUILD_TYPE.equals("release")) {
+        if (BuildVars.isGServicesCompiled) {
             try {
                 instance = (IPushListenerServiceProvider) Class.forName("org.telegram.messenger.GooglePushListenerServiceProvider").newInstance();
             } catch (Exception e) {

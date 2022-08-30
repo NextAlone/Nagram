@@ -57,8 +57,6 @@ import static android.os.Build.VERSION.SDK_INT;
 public class ApplicationLoader extends Application {
     private static PendingIntent pendingIntent;
 
-    private static ApplicationLoader applicationLoaderInstance;
-
     @SuppressLint("StaticFieldLeak")
     public static volatile Context applicationContext;
 
@@ -85,7 +83,6 @@ public class ApplicationLoader extends Application {
     private static IMapsProvider mapsProvider;
     private static ILocationServiceProvider locationServiceProvider;
 
-
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -101,36 +98,24 @@ public class ApplicationLoader extends Application {
 
     public static ILocationServiceProvider getLocationServiceProvider() {
         if (locationServiceProvider == null) {
-            locationServiceProvider = applicationLoaderInstance.onCreateLocationServiceProvider();
+            locationServiceProvider = new GoogleLocationProvider();
             locationServiceProvider.init(applicationContext);
         }
         return locationServiceProvider;
     }
 
-    protected ILocationServiceProvider onCreateLocationServiceProvider() {
-        return new GoogleLocationProvider();
-    }
-
     public static IMapsProvider getMapsProvider() {
         if (mapsProvider == null) {
-            mapsProvider = applicationLoaderInstance.onCreateMapsProvider();
+            mapsProvider = new GoogleMapsProvider();
         }
         return mapsProvider;
     }
 
-    protected IMapsProvider onCreateMapsProvider() {
-        return new GoogleMapsProvider();
-    }
-
     public static PushListenerController.IPushListenerServiceProvider getPushProvider() {
         if (pushProvider == null) {
-            pushProvider = applicationLoaderInstance.onCreatePushProvider();
+            pushProvider = PushListenerController.getProvider();
         }
         return pushProvider;
-    }
-
-    protected PushListenerController.IPushListenerServiceProvider onCreatePushProvider() {
-        return PushListenerController.getProvider();
     }
 
     public static String getApplicationId() {
@@ -277,7 +262,6 @@ public class ApplicationLoader extends Application {
 
     @Override
     public void onCreate() {
-        applicationLoaderInstance = this;
         try {
             applicationContext = getApplicationContext();
         } catch (Throwable ignore) {

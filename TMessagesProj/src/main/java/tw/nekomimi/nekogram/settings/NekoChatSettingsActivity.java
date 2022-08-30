@@ -80,12 +80,6 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final AbstractConfigCell labelChannelUserRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.labelChannelUser));
     private final AbstractConfigCell hideSendAsChannelRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideSendAsChannel));
     private final AbstractConfigCell showSpoilersDirectlyRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showSpoilersDirectly));
-    private final AbstractConfigCell mapPreviewRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.mapPreviewProvider,
-            new String[]{
-                    LocaleController.getString("MapPreviewProviderTelegram", R.string.MapPreviewProviderTelegram),
-                    LocaleController.getString("MapPreviewProviderYandex", R.string.MapPreviewProviderYandex),
-                    LocaleController.getString("MapPreviewProviderNobody", R.string.MapPreviewProviderNobody)
-            }, null));
     private final AbstractConfigCell messageMenuRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString("MessageMenu"), null, null, () -> {
         showMessageMenuAlert();
     }));
