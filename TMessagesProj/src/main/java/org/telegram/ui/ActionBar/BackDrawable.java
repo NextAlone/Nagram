@@ -146,7 +146,7 @@ public class BackDrawable extends Drawable {
 
     @Override
     public void setColorFilter(ColorFilter cf) {
-        paint.setColorFilter(cf);
+//        paint.setColorFilter(cf);
     }
 
     @Override
