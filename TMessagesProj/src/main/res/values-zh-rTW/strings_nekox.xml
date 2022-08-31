@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoX" translatable="false">Nekogram X</string>
     <string name="Locked">已鎖定</string>
     <string name="AccDescrChatAttachEnterMenu">聊天輸入選單</string>
     <string name="ChatAttachEnterMenuRecordVideo">錄製影片</string>
@@ -46,7 +45,7 @@
     <string name="TransToLang">翻譯目標語言</string>
     <string name="TransInputToLang">輸入翻譯目標語言</string>
     <string name="More">更多</string>
-    <string name="NekoXUpdatesChannel">NekoX 更新頻道</string>
+    <string name="NekoXUpdatesChannel">Nagram 更新頻道</string>
     <string name="ShowIdAndDc">在個人資料中顯示 ID / DC</string>
     <string name="UseDefaultTheme">使用預設主題 *</string>
     <string name="NightMode">夜間模式</string>
@@ -87,8 +86,8 @@
     <string name="SortByUser">使用者優先排序</string>
     <string name="SortByContacts">聯絡人優先排序</string>
     <string name="NekoXPushService">NekoX 通知服務</string>
-    <string name="EnablePushAlert">請啟用「NekoX 通知服務」</string>
-    <string name="DisablePushAlert">請停用「NekoX 通知服務」</string>
+    <string name="EnablePushAlert">請啟用「Nagram 通知服務」</string>
+    <string name="DisablePushAlert">請停用「Nagram 通知服務」</string>
     <string name="DisableUndo">停用五秒內後悔</string>
     <string name="DisableSystemAccount">停用系統帳戶</string>
     <string name="FilterMenu">分類選單</string>
@@ -268,7 +267,7 @@
     <string name="rememberAllBackMessages">記住所有已點擊的回覆</string>
     <string name="DisableInstantCamera">停用相機即時預覽</string>
     <string name="showSeconds">以秒數顯示時間戳</string>
-    <string name="AppUpdateNekoX">更新 Nekogram X</string>
+    <string name="AppUpdateNekoX">更新 Nagram</string>
     <string name="NekoXUpdateTranslationHint">長按以翻譯更新日誌</string>
     <string name="Name">輸入別名</string>
     <string name="channelAlias">頻道別名</string>
