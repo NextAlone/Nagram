@@ -1032,6 +1032,7 @@ public class LocaleController {
             Locale.setDefault(currentLocale);
             android.content.res.Configuration config = new android.content.res.Configuration();
             config.locale = currentLocale;
+            FileLog.e("update locale to " + config.locale);
             ApplicationLoader.applicationContext.getResources().updateConfiguration(config, ApplicationLoader.applicationContext.getResources().getDisplayMetrics());
             changingConfiguration = false;
             if (reloadLastFile) {
@@ -2268,6 +2269,7 @@ public class LocaleController {
                         editor.apply();
 
                         localeValues = valuesToSet;
+                        FileLog.e(new Exception("save remote locale"));
                         currentLocale = newLocale;
                         currentLocaleInfo = localeInfo;
                         if (!TextUtils.isEmpty(currentLocaleInfo.pluralLangCode)) {
@@ -2283,6 +2285,7 @@ public class LocaleController {
                         Locale.setDefault(currentLocale);
                         Configuration config = new Configuration();
                         config.locale = currentLocale;
+                        FileLog.e("update locale to " + config.locale);
                         ApplicationLoader.applicationContext.getResources().updateConfiguration(config, ApplicationLoader.applicationContext.getResources().getDisplayMetrics());
                         changingConfiguration = false;
                     }

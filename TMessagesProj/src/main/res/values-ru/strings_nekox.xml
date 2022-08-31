@@ -222,7 +222,7 @@
     <string name="EnableStickerPinTip">Функция в разработке, облачная синхронизация может работать с ошибками.</string>
     <string name="EnableStickerPinAbout">Закрепляйте стикеры и синхронизируйте их с облаком даже при добавлении новых стикеров.
 \nВ паре с «Отключить» «Избранное» и «Недавнее».</string>
-    <string name="EnableStickerPin">Включить закрепление наборов стикеров</string>
+    <string name="EnableStickerPin">Включить закрепление стикера</string>
     <string name="ArchiveFiles">Архивы</string>
     <string name="Win32ExecutableFiles">Исполняемые файлы Win32</string>
     <string name="AutoDownload">Автозагрузка</string>
@@ -279,4 +279,7 @@
     <string name="setChannelAliasName">Добавить лычку</string>
     <string name="labelChannelUser">Помечать сообщения от каналов</string>
     <string name="labelChannelUserDetails">Если отправителем является «Канал», оно будет помечено как «Канал».</string>
+    <string name="StickerSettings">Стикеры</string>
+    <string name="ConfirmSettings">Подтверждение</string>
+    <string name="InteractionSettings">Взаимодействие</string>
 </resources>

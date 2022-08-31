@@ -144,4 +144,5 @@
     <string name="channelLabel">kanał</string>
     <string name="ChatBlurAlphaValue">Poziom rozmycia</string>
     <string name="forceBlurInChat">Wymuś rozmycia interfejsu</string>
+    <string name="disablePremiumStickerAnimation">Wyłącz animację naklejek premium</string>
 </resources>

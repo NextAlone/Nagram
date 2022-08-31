@@ -243,7 +243,7 @@
     <string name="ArchiveFiles">Pliki archiwalne</string>
     <string name="Win32ExecutableFiles">Pliki wykonywalne Win32</string>
     <string name="AutoDownload">Zapisuj automatycznie</string>
-    <string name="DisableTrending">Ukryj popularne naklejki</string>
+    <string name="DisableTrending">Wyłącz popularne naklejki</string>
     <string name="ReplaceRegex">Używaj regex</string>
     <string name="TextReplace">Zastąp</string>
     <string name="TextOrigin">Źródło</string>
@@ -256,7 +256,7 @@
     <string name="repeatConfirmText">Czy na pewno powtórzyć\?</string>
     <string name="repeatConfirm">Zapytaj przed powtórzeniem</string>
     <string name="DeleteDownloadedFileSucceed">Usunięto</string>
-    <string name="useCustomEmoji">Użyj niestandardowych Emoji</string>
+    <string name="useCustomEmoji">Użyj innego zestawu emotikon</string>
     <string name="hideSponsoredMessage">Ukryj sponsorowane wiadomości</string>
     <string name="update_download_soucre">Wybierz źródło pobierania</string>
     <string name="customPublicProxyIP">Ustaw IP publicznego proxy</string>
@@ -276,4 +276,7 @@
     <string name="setChannelAliasName">Ustaw alias kanału</string>
     <string name="labelChannelUser">Oznacz kanały użytkowników na czacie</string>
     <string name="labelChannelUserDetails">Wiadomość wysłana przez kanał będzie oznaczona jako „Kanał”.</string>
+    <string name="ConfirmSettings">Potwierdzenia</string>
+    <string name="InteractionSettings">Interakcje</string>
+    <string name="StickerSettings">Naklejki</string>
 </resources>

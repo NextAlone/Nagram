@@ -1,3 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="Locked">Dikunci</string>
+    <string name="ChatAttachEnterMenuRecordAudio">Rakam Audio</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">Hidupkan Pratonton Pautan</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">Lumpuhkan Pratonton Pautan</string>
+    <string name="ChatAttachEnterMenuRecordVideo">Rakam Video</string>
+    <string name="AccDescrChatAttachEnterMenu">Menu input bual</string>
+    <string name="CustomApi">API Tersuai</string>
+    <string name="UseChatAttachEnterMenuNotice">Tukar butang rakam ke menu input, dan tambah suis pratonton pautan.</string>
+    <string name="DisableLinkPreviewByDefault">Lumpuhkan Pratonton Pautan sebagai lalai</string>
+    <string name="DisableLinkPreviewByDefaultNotice">Lumpuhkan permintaan pratonton pautan semasa input secara lalai untuk menghalang pelayan daripada mengetahui bahawa pautan itu dikongsi melalui Telegram.</string>
+    <string name="UseChatAttachEnterMenu">Guna menu input</string>
 </resources>

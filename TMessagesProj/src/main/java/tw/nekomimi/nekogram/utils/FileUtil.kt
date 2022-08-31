@@ -143,6 +143,8 @@ object FileUtil {
 
                     }
 
+                    it.closeQuietly()
+
                 }
 
             }

@@ -484,7 +484,7 @@ public class AndroidUtilities {
     }
 
     public static boolean isMapsInstalled(BaseFragment baseFragment) {
-        return false;
+        return true;
     }
 
     private static class LinkSpec {

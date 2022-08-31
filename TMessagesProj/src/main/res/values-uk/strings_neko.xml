@@ -65,12 +65,12 @@
     <string name="ProviderLingocloud">Lingocloud</string>
     <string name="UndoTranslate">Скасувати переклад</string>
     <string name="DisablePhotoViewerSideAction">Вимкнути гортання світлин дотиком</string>
-    <string name="BotToken">Маркер</string>
+    <string name="BotToken">Токен</string>
     <string name="UnlimitedPinnedDialogs">Необмежені прикріплені діалоги</string>
     <string name="UnlimitedPinnedDialogsAbout">Прикріплюйте скільки завгодно діалогів. Їхню синхронізацію буде вимкнено.</string>
     <string name="OpenArchiveOnPull">Гортання донизу одразу відкриває архів</string>
     <string name="HideKeyboardOnChatScroll">Приховати клавіатуру на прокрутці чату</string>
-    <string name="UserRestrictionsSendStickers2">Надіслати наліпки</string>
+    <string name="UserRestrictionsSendStickers2">Надіслати стікери</string>
     <string name="UserRestrictionsSendGifs">Надіслати GIF</string>
     <string name="ShowTabsOnForward">Вкладки при пересиланні</string>
     <string name="CheckAllAdministrated">Додати адміністративну</string>
@@ -144,4 +144,5 @@
     <string name="channelLabel">канал</string>
     <string name="forceBlurInChat">Примусове розмиття в чаті</string>
     <string name="ChatBlurAlphaValue">Альфа розмиття в чаті</string>
+    <string name="disablePremiumStickerAnimation">Вимкнути анімацію преміум-стікерів</string>
 </resources>

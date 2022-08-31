@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.openintents.openpgp.OpenPgpError;
 import org.openintents.openpgp.util.OpenPgpApi;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -92,7 +93,28 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell hidePhoneRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hidePhone));
     private final AbstractConfigCell divider0 = cellGroup.appendCell(new ConfigCellDivider());
 
-    private final AbstractConfigCell header1 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Connection")));
+    private final AbstractConfigCell headerTranslation = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Translate")));
+    private final AbstractConfigCell translationProviderRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final AbstractConfigCell translateToLangRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final AbstractConfigCell translateInputToLangRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final AbstractConfigCell googleCloudTranslateKeyRow = cellGroup.appendCell(new ConfigCellTextDetail(NekoConfig.googleCloudTranslateKey, (view, position) -> {
+        customDialog_BottomInputString(position, NekoConfig.googleCloudTranslateKey, LocaleController.getString("GoogleCloudTransKeyNotice"), "Key");
+    }, LocaleController.getString("UsernameEmpty", R.string.UsernameEmpty)));
+    private final AbstractConfigCell hideOriginAfterTranslationRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getHideOriginAfterTranslation()));
+    private final AbstractConfigCell dividerTranslation = cellGroup.appendCell(new ConfigCellDivider());
+
+    private final AbstractConfigCell headerMap = cellGroup.appendCell(new ConfigCellHeader("Map"));
+    private final AbstractConfigCell useOSMDroidMapRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useOSMDroidMap));
+    private final AbstractConfigCell mapDriftingFixForGoogleMapsRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.mapDriftingFixForGoogleMaps));
+    private final AbstractConfigCell mapPreviewRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.mapPreviewProvider,
+            new String[]{
+                    LocaleController.getString("MapPreviewProviderTelegram", R.string.MapPreviewProviderTelegram),
+                    LocaleController.getString("MapPreviewProviderYandex", R.string.MapPreviewProviderYandex),
+                    LocaleController.getString("MapPreviewProviderNobody", R.string.MapPreviewProviderNobody)
+            }, null));
+    private final AbstractConfigCell dividerMap = cellGroup.appendCell(new ConfigCellDivider());
+
+    private final AbstractConfigCell headerConnection = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Connection")));
     private final AbstractConfigCell useIPv6Row = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useIPv6));
     private final AbstractConfigCell useProxyItemRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useProxyItem));
     private final AbstractConfigCell hideProxyByDefaultRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideProxyByDefault));
@@ -102,17 +124,7 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell customPublicProxyIPRow = cellGroup.appendCell(new ConfigCellTextDetail(NekoConfig.customPublicProxyIP, (view, position) -> {
         customDialog_BottomInputString(position, NekoConfig.customPublicProxyIP, LocaleController.getString("customPublicProxyIPNotice"), "IP");
     }, LocaleController.getString("UsernameEmpty", R.string.UsernameEmpty)));
-    private final AbstractConfigCell divider1 = cellGroup.appendCell(new ConfigCellDivider());
-
-    private final AbstractConfigCell header2 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Translate")));
-    private final AbstractConfigCell translationProviderRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
-    private final AbstractConfigCell translateToLangRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
-    private final AbstractConfigCell translateInputToLangRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
-    private final AbstractConfigCell googleCloudTranslateKeyRow = cellGroup.appendCell(new ConfigCellTextDetail(NekoConfig.googleCloudTranslateKey, (view, position) -> {
-        customDialog_BottomInputString(position, NekoConfig.googleCloudTranslateKey, LocaleController.getString("GoogleCloudTransKeyNotice"), "Key");
-    }, LocaleController.getString("UsernameEmpty", R.string.UsernameEmpty)));
-    private final AbstractConfigCell hideOriginAfterTranslationRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getHideOriginAfterTranslation()));
-    private final AbstractConfigCell divider2 = cellGroup.appendCell(new ConfigCellDivider());
+    private final AbstractConfigCell dividerConnection = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell headerFolder = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Folder")));
     private final AbstractConfigCell showTabsOnForwardRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showTabsOnForward));
@@ -400,6 +412,10 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 if (chatBlurAlphaSeekbar != null)
                     chatBlurAlphaSeekbar.setEnabled(enabled);
                 ((ConfigCellCustom) chatBlurAlphaValueRow).enabled = enabled;
+            } else if (NekoConfig.useOSMDroidMap.getKey().equals(key)) {
+                boolean enabled = (Boolean) newValue;
+                ((ConfigCellTextCheck) mapDriftingFixForGoogleMapsRow).setEnabled(!enabled);
+                listAdapter.notifyItemChanged(cellGroup.rows.indexOf(mapDriftingFixForGoogleMapsRow));
             }
         };
 
@@ -762,11 +778,17 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         if (!NekoXConfig.isDeveloper())
             cellGroup.rows.remove(hideSponsoredMessageRow);
 
+        if (!BuildVars.isGServicesCompiled) {
+            NekoConfig.useOSMDroidMap.setConfigBool(true);
+            ((ConfigCellTextCheck) useOSMDroidMapRow).setEnabled(false);
+            cellGroup.rows.remove(mapDriftingFixForGoogleMapsRow);
+        }
+
         boolean enabled;
 
         enabled = NekoConfig.largeAvatarInDrawer.Int() > 0;
-        ((ConfigCellTextCheck) avatarBackgroundBlurRow).enabled = enabled;
-        ((ConfigCellTextCheck) avatarBackgroundDarkenRow).enabled = enabled;
+        ((ConfigCellTextCheck) avatarBackgroundBlurRow).setEnabled(enabled);
+        ((ConfigCellTextCheck) avatarBackgroundDarkenRow).setEnabled(enabled);
     }
 
     //Custom dialogs

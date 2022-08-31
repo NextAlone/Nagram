@@ -12,7 +12,7 @@ public class ConfigCellTextCheck extends AbstractConfigCell {
     private final ConfigItem bindConfig;
     private final String title;
     private final String subtitle;
-    public boolean enabled = true;
+    private boolean enabled = true;
     public TextCheckCell cell; //TODO getCell() in NekomuraTGCell
 
     public ConfigCellTextCheck(ConfigItem bind) {
@@ -39,6 +39,12 @@ public class ConfigCellTextCheck extends AbstractConfigCell {
 
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        if (this.cell != null)
+            this.cell.setEnabled(this.enabled);
     }
 
     public void onBindViewHolder(RecyclerView.ViewHolder holder) {
