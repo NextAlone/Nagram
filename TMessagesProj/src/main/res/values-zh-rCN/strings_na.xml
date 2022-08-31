@@ -55,4 +55,5 @@
     <string name="QuickToggleAnonymousNotice">如果你是群组的所有者的话</string>
     <string name="OnlyShowBuiltInEmoji">非大会员仅显示内置 Emoji</string>
     <string name="RealHideTimeForSticker">真正的隐藏贴纸发送时间</string>
+    <string name="HideTitle">隐藏标题和头像</string>
 </resources>

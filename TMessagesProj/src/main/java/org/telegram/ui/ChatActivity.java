@@ -242,7 +242,6 @@ import org.telegram.ui.Components.PipRoundVideoView;
 import org.telegram.ui.Components.PollVotesAlert;
 import org.telegram.ui.Components.PopupSwipeBackLayout;
 import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
-import org.telegram.ui.Components.Premium.PremiumPreviewBottomSheet;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.ReactedHeaderView;
@@ -332,6 +331,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int nkheaderbtn_share_key = 2006;
     private final static int nkheaderbtn_upgrade = 2007;
 
+    private final static int nkheaderbtn_hide_title = 2029;
+
     // shared with actionbar
     private final static int nkbtn_translate = 2008;
     private final static int nkbtn_hide = 2009;
@@ -394,6 +395,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private ActionBarMenuSubItem clearHistoryItem;
     private ActionBarMenuSubItem toTheBeginning;
     private ActionBarMenuSubItem toTheMessage;
+    private ActionBarMenuSubItem hideTitleItem;
     private ClippingImageView animatingImageView;
     public RecyclerListView chatListView;
     private ChatListItemAnimator chatListItemAnimator;
@@ -3227,6 +3229,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             toTheBeginning = headerItem.addSubItem(to_the_beginning, R.drawable.ic_upward, LocaleController.getString("ToTheBeginning", R.string.ToTheBeginning));
             toTheMessage = headerItem.addSubItem(to_the_message, R.drawable.msg_go_up, LocaleController.getString("ToTheMessage", R.string.ToTheMessage));
             clearHistoryItem = headerItem.addSubItem(clear_history, R.drawable.msg_clear, LocaleController.getString("ClearHistory", R.string.ClearHistory), themeDelegate);
+            hideTitleItem = headerItem.addSubItem(nkheaderbtn_hide_title, R.drawable.hide_title, LocaleController.getString("HideTitle", R.string.HideTitle), themeDelegate);
 
             if (themeDelegate.isThemeChangeAvailable()) {
                 headerItem.addSubItem(change_colors, R.drawable.msg_colors, LocaleController.getString("ChangeColors", R.string.ChangeColors), themeDelegate);
@@ -30015,6 +30018,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         } else if (id == nkbtn_greatOrPoor) {
             sendGreatOrGreat(false);
             clearSelectionMode();
+        } else if (id == nkheaderbtn_hide_title) {
+            if (avatarContainer != null) {
+                avatarContainer.setTitle("");
+                BackupImageView avatarImageView = avatarContainer.getAvatarImageView();
+                if (avatarImageView != null) {
+                    avatarImageView.setVisibility(android.view.View.GONE);
+                }
+            }
+            hideTitleItem.setVisibility(android.view.View.GONE);
         }
     }
 

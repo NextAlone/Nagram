@@ -56,4 +56,5 @@
     <string name="QuickToggleAnonymousNotice">If you\'re owner of the group</string>
     <string name="OnlyShowBuiltInEmoji">Only Show Built-in Emoji</string>
     <string name="RealHideTimeForSticker">Real hide time for stickers</string>
+    <string name="HideTitle">Hide Title</string>
 </resources>
