@@ -5000,4 +5000,13 @@ public class AndroidUtilities {
         }
         return (st > 0 || len < text.length()) ? text.subSequence(st, len) : text;
     }
+
+    public static int getTransparentColor(int color, float opacity){
+        int alpha = Color.alpha(color);
+        int red = Color.red(color);
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+        alpha *= opacity;
+        return Color.argb(alpha, red, green, blue);
+    }
 }
