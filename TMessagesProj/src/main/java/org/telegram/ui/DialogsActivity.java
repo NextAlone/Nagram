@@ -2458,6 +2458,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
                 @Override
                 public int getTabCounter(int tabId) {
+                    if (NaConfig.INSTANCE.getIgnoreFolderCount().Bool()) {
+                        return 0;
+                    }
                     if (tabId == filterTabsView.getDefaultTabId()) {
                         return getMessagesStorage().getMainUnreadCount();
                     }

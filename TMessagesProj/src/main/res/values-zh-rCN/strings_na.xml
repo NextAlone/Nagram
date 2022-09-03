@@ -56,4 +56,5 @@
     <string name="OnlyShowBuiltInEmoji">非大会员仅显示内置 Emoji</string>
     <string name="RealHideTimeForSticker">真正的隐藏贴纸发送时间</string>
     <string name="HideTitle">隐藏标题和头像</string>
+    <string name="IgnoreFolderCount">忽略文件夹标签上的未读计数</string>
 </resources>

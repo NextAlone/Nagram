@@ -57,4 +57,5 @@
     <string name="OnlyShowBuiltInEmoji">Only Show Built-in Emoji</string>
     <string name="RealHideTimeForSticker">Real hide time for stickers</string>
     <string name="HideTitle">Hide Title</string>
+    <string name="IgnoreFolderCount">Ignore Folder Count</string>
 </resources>
