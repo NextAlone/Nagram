@@ -788,7 +788,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                     } else if (position == qrCodeRow) {
                         textCell.setColors(Theme.key_windowBackgroundWhiteBlueText4, Theme.key_windowBackgroundWhiteBlueText4);
                         textCell.setTag(Theme.key_windowBackgroundWhiteBlueText4);
-                        textCell.setTextAndIcon(LocaleController.getString("AuthAnotherClient", R.string.AuthAnotherClient), R.drawable.wallet_qr, !sessions.isEmpty());
+                        textCell.setTextAndIcon(LocaleController.getString("AuthAnotherClient", R.string.AuthAnotherClient), R.drawable.msg_qrcode, !sessions.isEmpty());
                     }
                     break;
                 case VIEW_TYPE_INFO:

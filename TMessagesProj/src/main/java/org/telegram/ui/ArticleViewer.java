@@ -1226,7 +1226,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         builder.addTitle(urlFinal);
         builder.addItems(
                 new String[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy), LocaleController.getString("ShareQRCode", R.string.ShareQRCode)},
-                new int[]{R.drawable.msg_openin, R.drawable.msg_copy, R.drawable.wallet_qr}, (which, text, cell) -> {
+                new int[]{R.drawable.msg_openin, R.drawable.msg_copy, R.drawable.msg_qrcode}, (which, text, cell) -> {
                     if (parentActivity == null) return Unit.INSTANCE;
                     if (which == 0 || which == 2) {
                         int index;

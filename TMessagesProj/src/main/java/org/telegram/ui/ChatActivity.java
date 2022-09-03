@@ -25870,7 +25870,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         new int[]{
                                 R.drawable.msg_openin,
                                 R.drawable.msg_copy,
-                                R.drawable.wallet_qr,
+                                R.drawable.msg_qrcode,
                                 R.drawable.msg_shareout
                         },
                         (which, text, __) -> {

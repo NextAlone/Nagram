@@ -4884,7 +4884,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 builder.addTitle(urlFinal);
                 builder.addItems(
                         new String[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy), LocaleController.getString("ShareQRCode", R.string.ShareQRCode)},
-                        new int[]{R.drawable.msg_openin, R.drawable.msg_copy, R.drawable.wallet_qr}, (which, text, __) -> {
+                        new int[]{R.drawable.msg_openin, R.drawable.msg_copy, R.drawable.msg_qrcode}, (which, text, __) -> {
                             if (which == 0 || which == 2) {
                                 if (which == 0) {
                                     openUrl(urlFinal);

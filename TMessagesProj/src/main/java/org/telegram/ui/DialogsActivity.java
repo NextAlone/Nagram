@@ -2144,7 +2144,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             updateProxyButton(false, false);
         }
 
-        scanItem = menu.addItem(nekox_scanqr, R.drawable.wallet_qr);
+        scanItem = menu.addItem(nekox_scanqr, R.drawable.msg_qrcode);
         scanItem.setContentDescription(LocaleController.getString("ScanQRCode", R.string.ScanQRCode));
         scanItem.setVisibility(View.GONE);
 

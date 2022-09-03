@@ -755,7 +755,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
                         R.drawable.group_edit,
                         R.drawable.msg_shareout,
-                        R.drawable.wallet_qr,
+                        R.drawable.msg_qrcode,
                         R.drawable.msg_link,
                         R.drawable.msg_delete,
                         R.drawable.msg_cancel
