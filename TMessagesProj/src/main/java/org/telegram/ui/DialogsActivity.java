@@ -5469,18 +5469,19 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private void onArchiveLongPress(View view) {
         if (!NekoConfig.disableVibration.Bool()) {
             view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-        }        BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity());
+        }
+        BottomBuilder builder = new BottomBuilder(getParentActivity());
         final boolean hasUnread = getMessagesStorage().getArchiveUnreadCount() != 0;
 
         int[] icons = new int[]{
                 hasUnread ? R.drawable.msg_markread : 0,
                 SharedConfig.archiveHidden ? R.drawable.chats_pin : R.drawable.chats_unpin,
         };
-        CharSequence[] items = new CharSequence[]{
+        String[] items = new String[]{
                 hasUnread ? LocaleController.getString("MarkAllAsRead", R.string.MarkAllAsRead) : null,
                 SharedConfig.archiveHidden ? LocaleController.getString("PinInTheList", R.string.PinInTheList) : LocaleController.getString("HideAboveTheList", R.string.HideAboveTheList)
         };
-        builder.setItems(items, icons, (d, which) -> {
+        builder.addItems(items, icons, (which, d, __) -> {
             if (which == 0) {
                 getMessagesStorage().readAllDialogs(1);
             } else if (which == 1 && viewPages != null) {
@@ -5496,6 +5497,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     viewPages[a].listView.toggleArchiveHidden(true, dialogCell);
                 }
             }
+            return Unit.INSTANCE;
         });
         showDialog(builder.create());
     }
