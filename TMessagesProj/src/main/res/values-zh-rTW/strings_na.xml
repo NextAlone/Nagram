@@ -41,4 +41,9 @@
     <string name="AppIconColorful">繽紛</string>
     <string name="AppIconDarkGreen">深翠</string>
     <string name="AppIconNeon">霓虹</string>
+    <string name="HideOriginAfterTranslation">翻譯後隱藏原文</string>
+    <string name="AlwaysShowDownloadIcon">始終顯示下載管理器</string>
+    <string name="ShowPhotoOpenInExternalApp">使用其他應用打開圖片</string>
+    <string name="QuickToggleAnonymous">快速切換匿名發言</string>
+    <string name="QuickToggleAnonymousNotice">如果你是群組的所有者的話</string>
 </resources>
