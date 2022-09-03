@@ -7107,7 +7107,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 //                    if (!user.premium && !BuildVars.IS_BILLING_UNAVAILABLE && !user.self && userInfo != null && !getMessagesController().premiumLocked && !userInfo.premium_gifts.isEmpty()) {
 //                        otherItem.addSubItem(gift_premium, R.drawable.msg_gift_premium, LocaleController.getString(R.string.GiftPremium));
 //                    }
-                    otherItem.addSubItem(start_secret_chat, R.drawable.baseline_lock_24, LocaleController.getString("StartEncryptedChat", R.string.StartEncryptedChat));
+                    otherItem.addSubItem(start_secret_chat, R.drawable.menu_secret, LocaleController.getString("StartEncryptedChat", R.string.StartEncryptedChat));
                 }
                 if (StrUtil.isNotBlank(user.username)) {
                     otherItem.addSubItem(qr_code, R.drawable.wallet_qr, LocaleController.getString("ShareQRCode", R.string.ShareQRCode));
