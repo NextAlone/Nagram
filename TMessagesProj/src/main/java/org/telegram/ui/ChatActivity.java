@@ -216,8 +216,8 @@ import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.EditTextCaption;
 import org.telegram.ui.Components.EmbedBottomSheet;
-import org.telegram.ui.Components.EmojiTextView;
 import org.telegram.ui.Components.EmojiPacksAlert;
+import org.telegram.ui.Components.EmojiTextView;
 import org.telegram.ui.Components.EmojiView;
 import org.telegram.ui.Components.ExtendedGridLayoutManager;
 import org.telegram.ui.Components.FireworksOverlay;
@@ -30328,29 +30328,31 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
         }
     }
-
-        private void repeatMessage(boolean isLongClick, boolean isRepeatasCopy) {
-            if (checkSlowMode(chatActivityEnterView.getSendButton())) {
-                return;
-            }
+    
+    private void repeatMessage(boolean isLongClick, boolean isRepeatasCopy) {
+        if (checkSlowMode(chatActivityEnterView.getSendButton())) {
+            return;
+        }
         final ArrayList<MessageObject> messages = new ArrayList<>();
-        if (selectedObject != null)
+        if (selectedObject != null) {
             messages.add(selectedObject);
-        else {
-            for (int k = 0; k < selectedMessagesIds[0].size(); k++)
-                if (selectedMessagesIds[0].get(selectedMessagesIds[0].keyAt(k)) != null)
+        } else {
+            for (int k = 0; k < selectedMessagesIds[0].size(); k++) {
+                if (selectedMessagesIds[0].get(selectedMessagesIds[0].keyAt(k)) != null) {
                     messages.add(selectedMessagesIds[0].get(selectedMessagesIds[0].keyAt(k)));
+                }
+            }
         }
         if (!NekoConfig.repeatConfirm.Bool()) {
-            if (isRepeatasCopy){
-                doRepeatMessage(isLongClick, messages,true);
+            if (isRepeatasCopy) {
+                doRepeatMessage(isLongClick, messages, true);
                 return;
-            }else{
-                doRepeatMessage(isLongClick, messages,false);
+            } else {
+                doRepeatMessage(isLongClick, messages, false);
                 return;
             }
         }
-
+        
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
         builder.setTitle(LocaleController.getString("Repeat", R.string.Repeat));
         builder.setMessage(LocaleController.getString("repeatConfirmText", R.string.repeatConfirmText));
@@ -30364,46 +30366,50 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
         showDialog(builder.create());
     }
-
-        private void doRepeatMessage(boolean isLongClick, ArrayList<MessageObject> messages, boolean isRepeatAsCopy) {
-            if (selectedObject != null && selectedObject.messageOwner != null && (isLongClick || isThreadChat() || getMessagesController().isChatNoForwards(currentChat))) {
-                // If selected message contains `replyTo`:
-                // When longClick it will reply to the `replyMessage` of selectedMessage
-                // When not LongClick but in a threadchat: reply to the Thread
-                MessageObject replyTo = selectedObject.replyMessageObject != null ? isLongClick ? selectedObject.replyMessageObject : getThreadMessage() : getThreadMessage();
-                if (selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) {
-                    CharSequence caption = getMessageCaption(selectedObject, selectedObjectGroup);
-                    if (caption == null) {
-                        caption = getMessageContent(selectedObject, 0, false);
-                    }
-                    if (!TextUtils.isEmpty(caption)) {
-                        SendMessagesHelper.getInstance(currentAccount)
-                                .sendMessage(caption.toString(), dialog_id, replyTo,
-                                        getThreadMessage(), null,
-                                        false, selectedObject.messageOwner.entities, null, null,
-                                        true, 0, null);
-                    }
-                } else if ((selectedObject.isSticker() || selectedObject.isAnimatedSticker()) && selectedObject.getDocument() != null) {
-                    SendMessagesHelper.getInstance(currentAccount)
-                            .sendSticker(selectedObject.getDocument(), null, dialog_id, replyTo, getThreadMessage(), null, null, true, 0);
+    
+    private void doRepeatMessage(boolean isLongClick, ArrayList<MessageObject> messages, boolean isRepeatAsCopy) {
+        if (selectedObject != null && selectedObject.messageOwner != null && (isLongClick || isThreadChat() || getMessagesController().isChatNoForwards(currentChat))) {
+            // If selected message contains `replyTo`:
+            // When longClick it will reply to the `replyMessage` of selectedMessage
+            // When not LongClick but in a threadchat: reply to the Thread
+            MessageObject replyTo = selectedObject.replyMessageObject != null ? isLongClick ?
+             selectedObject.replyMessageObject : getThreadMessage() : getThreadMessage();
+            if (selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject,
+selectedObjectGroup) != null) {
+                CharSequence caption = getMessageCaption(selectedObject, selectedObjectGroup);
+                if (caption == null) {
+                    caption = getMessageContent(selectedObject, 0, false);
                 }
-                return;
+                if (!TextUtils.isEmpty(caption)) {
+                    SendMessagesHelper.getInstance(currentAccount)
+                            .sendMessage(caption.toString(), dialog_id, replyTo,
+                                    getThreadMessage(), null,
+                                    false, selectedObject.messageOwner.entities, null, null,
+                                    true, 0, null);
+                }
+            } else if ((selectedObject.isSticker() || selectedObject.isAnimatedSticker()) && selectedObject.getDocument() != null) {
+                SendMessagesHelper.getInstance(currentAccount)
+                        .sendSticker(selectedObject.getDocument(), null, dialog_id, replyTo, getThreadMessage(), null
+, null, true, 0);
             }
-
-            if (isRepeatAsCopy) {
-                forwardMessages(messages, true, false, true, 0);
-            } else {
-                forwardMessages(messages, false, false, true, 0);
-            }
+            return;
         }
-
-    public void invertReplyMessage(boolean isLongClick){
+        
+        if (isRepeatAsCopy) {
+            forwardMessages(messages, true, false, true, 0);
+        } else {
+            forwardMessages(messages, false, false, true, 0);
+        }
+    }
+    
+    public void invertReplyMessage(boolean isLongClick) {
         if (checkSlowMode(chatActivityEnterView.getSendButton())) {
             return;
         }
         if (selectedObject != null) {
             MessageObject replyTo = isLongClick ? selectedObject : getThreadMessage();
-            if (selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) {
+            if (selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject,
+             selectedObjectGroup) != null) {
                 CharSequence caption = getMessageCaption(selectedObject, selectedObjectGroup);
                 if (caption == null) {
                     caption = getMessageContent(selectedObject, 0, false);
@@ -30433,19 +30439,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
             } else if ((selectedObject.isSticker() || selectedObject.isAnimatedSticker()) && selectedObject.getDocument() != null) {
                 SendMessagesHelper.getInstance(currentAccount)
-                        .sendSticker(selectedObject.getDocument(), null, dialog_id, replyTo, getThreadMessage(), null, null, true, 0);
+                        .sendSticker(selectedObject.getDocument(), null, dialog_id, replyTo, getThreadMessage(), null
+                        , null, true, 0);
             }
         }
     }
-
+    
     public void sendGreatOrGreat(boolean isLongClick) {
         if (checkSlowMode(chatActivityEnterView.getSendButton())) {
             return;
         }
-        getSendMessagesHelper().sendMessage(isLongClick ? "破烂" : "好耶", dialog_id, selectedObject, threadMessageObject, null, false, null, null, null, true, 0, null);
+        getSendMessagesHelper().sendMessage(isLongClick ? "破烂" : "好耶", dialog_id, selectedObject, threadMessageObject
+        , null, false, null, null, null, true, 0, null);
     }
     
-    public void setScrollToMessage(){
+    public void setScrollToMessage() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
         builder.setTitle(LocaleController.getString("InputMessageId", R.string.InputMessageId));
         final EditTextBoldCursor editText = new EditTextBoldCursor(getParentActivity()) {
@@ -30467,7 +30475,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         editText.setPadding(0, 0, 0, 0);
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
         builder.setView(editText);
-    
+        
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK),
                 (dialogInterface, i) -> {
                     try {
