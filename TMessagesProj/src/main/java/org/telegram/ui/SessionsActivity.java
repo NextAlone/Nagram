@@ -18,7 +18,6 @@ import android.os.Build;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.util.Base64;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -26,10 +25,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -39,7 +34,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
@@ -49,7 +43,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
-import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
@@ -57,6 +50,8 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.ActionBarMenu;
+import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -77,7 +72,6 @@ import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.FlickerLoadingView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkSpanDrawable;
-import org.telegram.ui.Components.RecyclerItemsEnterAnimator;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.Components.UndoView;
@@ -85,8 +79,7 @@ import org.telegram.ui.Components.UndoView;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
+import tw.nekomimi.nekogram.utils.ProxyUtil;
 
 public class SessionsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -167,7 +160,35 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 }
             }
         });
-
+        ActionBarMenu menu = actionBar.createMenu();
+        ActionBarMenuItem item = menu.addItem(0, R.drawable.msg_qrcode);
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+            @Override
+            public void onItemClick(int id) {
+            if (id == -1) {
+                finishFragment();
+            } else if (id == 0) {
+                if (Build.VERSION.SDK_INT >= 23) {
+                    if (getParentActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        getParentActivity().requestPermissions(new String[]{Manifest.permission.CAMERA}, 22);
+                        return;
+                    }
+                }
+                CameraScanActivity.showAsSheet(SessionsActivity.this, new CameraScanActivity.CameraScanActivityDelegate() {
+                    @Override
+                    public void didFindQr(String text) {
+                        ProxyUtil.showLinkAlert(getParentActivity(), text);
+                    }
+    
+                    @Override
+                    public boolean processQr(String text, Runnable onLoadEnd) {
+                        onLoadEnd.run();
+                        return false;
+                    }
+                });
+            }
+            }
+        });
         listAdapter = new ListAdapter(context);
 
         fragmentView = new FrameLayout(context);
