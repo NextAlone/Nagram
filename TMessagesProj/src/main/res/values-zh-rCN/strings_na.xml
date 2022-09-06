@@ -57,4 +57,7 @@
     <string name="RealHideTimeForSticker">真正的隐藏贴纸发送时间</string>
     <string name="HideTitle">隐藏标题和头像</string>
     <string name="IgnoreFolderCount">忽略文件夹标签上的未读计数</string>
+    <string name="SendWithoutMarkdown">禁用 Markdown</string>
+    <string name="SaveWithoutMarkdown">禁用 Markdown</string>
+    <string name="SendAsEmoji">禁用小游戏</string>
 </resources>

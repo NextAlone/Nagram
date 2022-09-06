@@ -6,6 +6,8 @@ import android.content.Context
 import android.text.TextUtils
 import androidx.core.content.FileProvider
 import org.telegram.messenger.*
+import org.telegram.tgnet.TLRPC.Chat
+import org.telegram.ui.ChatActivity
 import xyz.nextalone.nagram.NaConfig
 import java.io.File
 
@@ -138,5 +140,28 @@ object MessageHelper {
             5 -> "Flora"
             else -> "Unknown"
         }
+    }
+
+    @JvmStatic
+    fun containsMarkdown(text: CharSequence?): Boolean {
+        val newText = AndroidUtilities.getTrimmedString(text)
+        val message = arrayOf(AndroidUtilities.getTrimmedString(newText))
+        return MediaDataController.getInstance(UserConfig.selectedAccount)
+            .getEntities(message, true).size > 0
+    }
+
+    @JvmStatic
+    fun canSendAsDice(text: String, parentFragment: ChatActivity, dialog_id: Long): Boolean {
+        var canSendGames = true
+        if (DialogObject.isChatDialog(dialog_id)) {
+            val chat: Chat = parentFragment.getMessagesController().getChat(-dialog_id)
+            canSendGames = ChatObject.canSendStickers(chat)
+        }
+        return canSendGames && parentFragment.getMessagesController().diceEmojies.contains(
+            text.replace(
+                "\ufe0f",
+                ""
+            )
+        )
     }
 }
