@@ -11788,7 +11788,15 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         if ((!autoPlayingMedia || !MediaController.getInstance().isPlayingMessageAndReadyToDraw(currentMessageObject) || isRoundVideo) && !transitionParams.animateBackgroundBoundsInner) {
             drawOverlays(canvas);
         }
-        if ((drawTime || !mediaBackground) && !forceNotDrawTime && !transitionParams.animateBackgroundBoundsInner && !(enterTransitionInProgress && !currentMessageObject.isVoice()) && (!currentMessageObject.isAnyKindOfSticker() || !NekoConfig.hideTimeForSticker.Bool())) {
+        boolean should_draw_time = true;
+        if (currentMessageObject.isAnyKindOfSticker()) {
+            if (NekoConfig.hideTimeForSticker.Bool()) {
+                should_draw_time = false;
+            } else if (NaConfig.INSTANCE.getRealHideTimeForSticker().Bool() && !currentMessageObject.isOut()) {
+                should_draw_time = false;
+            }
+        }
+        if ((drawTime || !mediaBackground) && !forceNotDrawTime && !transitionParams.animateBackgroundBoundsInner && !(enterTransitionInProgress && !currentMessageObject.isVoice()) && should_draw_time) {
             drawTime(canvas, 1f, false);
         }
 
