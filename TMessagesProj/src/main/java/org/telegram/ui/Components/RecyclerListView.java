@@ -54,6 +54,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.Theme;
 
 import java.lang.annotation.Retention;
@@ -128,6 +129,7 @@ public class RecyclerListView extends RecyclerView {
     private boolean selfOnLayout;
 
     public boolean scrollingByUser;
+    public boolean scrolledByUserOnce;
 
     private GestureDetectorFixDoubleTap gestureDetector;
     private View currentChildView;
@@ -169,7 +171,7 @@ public class RecyclerListView extends RecyclerView {
     HashSet<Integer> selectedPositions;
     RecyclerItemsEnterAnimator itemsEnterAnimator;
 
-    Consumer<Canvas> selectorTransformer;
+    protected Consumer<Canvas> selectorTransformer;
 
     protected final Theme.ResourcesProvider resourcesProvider;
 
@@ -1196,7 +1198,7 @@ public class RecyclerListView extends RecyclerView {
         disableHighlightState = value;
     }
 
-    protected View getPressedChildView() {
+    public View getPressedChildView() {
         return currentChildView;
     }
 
@@ -1358,6 +1360,9 @@ public class RecyclerListView extends RecyclerView {
                     onScrollListener.onScrollStateChanged(recyclerView, newState);
                 }
                 scrollingByUser = newState == SCROLL_STATE_DRAGGING || newState == SCROLL_STATE_SETTLING;
+                if (scrollingByUser) {
+                    scrolledByUserOnce = true;
+                }
             }
 
             @Override
@@ -1688,13 +1693,23 @@ public class RecyclerListView extends RecyclerView {
     }
 
     public void setOnItemLongClickListener(OnItemLongClickListener listener) {
+        setOnItemLongClickListener(listener, ViewConfiguration.getLongPressTimeout());
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener listener, long duration) {
         onItemLongClickListener = listener;
         gestureDetector.setIsLongpressEnabled(listener != null);
+        gestureDetector.setLongpressDuration(duration);
     }
 
     public void setOnItemLongClickListener(OnItemLongClickListenerExtended listener) {
+        setOnItemLongClickListener(listener, ViewConfiguration.getLongPressTimeout());
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListenerExtended listener, long duration) {
         onItemLongClickListenerExtended = listener;
         gestureDetector.setIsLongpressEnabled(listener != null);
+        gestureDetector.setLongpressDuration(duration);
     }
 
     public void setEmptyView(View view) {
@@ -1839,7 +1854,7 @@ public class RecyclerListView extends RecyclerView {
         }
         boolean emptyViewVisible = emptyViewIsVisible();
         int newVisibility = emptyViewVisible ? VISIBLE : GONE;
-        if (!animateEmptyView) {
+        if (!animateEmptyView || !SharedConfig.animationsEnabled()) {
             animated = false;
         }
         if (animated) {

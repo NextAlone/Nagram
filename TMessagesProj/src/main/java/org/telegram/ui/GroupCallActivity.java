@@ -1321,6 +1321,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             int mask = (int) args[0];
             if ((mask & MessagesController.UPDATE_MASK_CHAT_NAME) != 0) {
                 applyCallParticipantUpdates(true);
+            }
+            if ((mask & MessagesController.UPDATE_MASK_CHAT_NAME) != 0 || (mask & MessagesController.UPDATE_MASK_EMOJI_STATUS) != 0) {
                 AndroidUtilities.updateVisibleRows(listView);
             }
         } else if (id == NotificationCenter.groupCallScreencastStateChanged) {
@@ -7039,11 +7041,11 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 builder.setPositiveButton(LocaleController.getString("VoipGroupUserRemove", R.string.VoipGroupUserRemove), (dialogInterface, i) -> {
                     if (object instanceof TLRPC.User) {
                         TLRPC.User user = (TLRPC.User) object;
-                        accountInstance.getMessagesController().deleteParticipantFromChat(currentChat.id, user, null);
+                        accountInstance.getMessagesController().deleteParticipantFromChat(currentChat.id, user);
                         getUndoView().showWithAction(0, UndoView.ACTION_VOIP_REMOVED, user, null, null, null);
                     } else {
                         TLRPC.Chat chat = (TLRPC.Chat) object;
-                        accountInstance.getMessagesController().deleteParticipantFromChat(currentChat.id, null, chat, null, false, false);
+                        accountInstance.getMessagesController().deleteParticipantFromChat(currentChat.id, null, chat, false, false);
                         getUndoView().showWithAction(0, UndoView.ACTION_VOIP_REMOVED, chat, null, null, null);
                     }
                 });
@@ -7158,6 +7160,9 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             view = new GroupCallUserCell(groupCallGridCell.getContext());
             long selfPeerId = MessageObject.getPeerId(selfPeer);
             view.setData(accountInstance, groupCallGridCell.getParticipant().participant, call, selfPeerId, null, false);
+            if (view.rightDrawable != null) {
+                view.rightDrawable.play();
+            }
             hasScrimAnchorView = false;
             scrimGridView = groupCallGridCell;
             scrimRenderer = groupCallGridCell.getRenderer();
@@ -7175,6 +7180,9 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             view = new GroupCallUserCell(groupCallFullscreenCell.getContext());
             long selfPeerId = MessageObject.getPeerId(selfPeer);
             view.setData(accountInstance, groupCallFullscreenCell.getParticipant(), call, selfPeerId, null, false);
+            if (view.rightDrawable != null) {
+                view.rightDrawable.play();
+            }
             hasScrimAnchorView = false;
             scrimFullscreenView = groupCallFullscreenCell;
             scrimRenderer = groupCallFullscreenCell.getRenderer();
