@@ -10,7 +10,6 @@
     <string name="SaveMessage">Save message</string>
 
     <!-- Main Menu (about) -->
-    <string name="Folders" translatable="false">Folders</string>
     <string name="exteraPrivacy">exteraGram Privacy Policy and FAQ</string>
     <string name="exteraPrivacyPolicyUrl" translatable="false">https://extera.codes/faq</string>
     <string name="Links">Links</string>
@@ -31,7 +30,7 @@
     <string name="TransparentStatusBar">Transparent status bar</string>
     <string name="BlurForAllThemes">Blur for all themes</string>
     <string name="CenterTitle">Center title in action bar</string>
-    <string name="NewSwitchStyle">Enable alternative switch style</string>
+    <string name="NewSwitchStyle">Alternative switch style</string>
     <string name="TransparentNavBar">Transparent navigation bar</string>
     <string name="TransparentNavBarValue">The navigation bar will not become completely transparent, it will only get the color of the Message Panel.</string>
     <string name="SquareFab">Square-shaped FAB</string>
@@ -58,13 +57,13 @@
     <string name="StickerSize">Stickers size</string>
     <string name="StickerSizeDialogMessageReplyTo">wow</string>
     <string name="StickerSizeDialogMessage">woah, he is so cute!</string>
-    <string name="StickerForm">Sticker form</string>
+    <string name="StickerForm">Stickers shape</string>
     <string name="StickerFormRounded">Rounded</string>
     <string name="StickerFormRoundedMsg">Message</string>
-    <string name="StickerTime">Hide time under stickers</string>
+    <string name="StickerTime">Hide time on stickers</string>
     <string name="UnlimitedRecentStickers">Unlimited recent stickers</string>
     <string name="PremiumAutoPlayback">Premium auto-playback</string>
-    <string name="SendMessageBeforeSendSticker">Send message before send sticker</string>
+    <string name="SendMessageBeforeSendSticker">Send message before sticker</string>
 
     <string name="HideSendAsChannel">Hide \"Send as Channel\"</string>
     <string name="HideKeyboardOnScroll">Hide keyboard on scrolling</string>
@@ -93,6 +92,24 @@
     <string name="NewYear">New Year</string>
     <string name="ValentinesDay">Valentine\'s Day</string>
     <string name="Halloween">Halloween</string>
+
+    <!-- Updates -->
+    <string name="Updates">Updates</string>
+    <string name="UpdateAvailable">Update available!</string>
+    <string name="CheckOnLaunch">Check on launch</string>
+    <string name="NoUpdates">Updates not found.</string>
+    <string name="CheckForUpdates">Check for updates</string>
+    <string name="CurrentVersion">Current version</string>
+    <string name="Version">Version</string>
+    <string name="UpdateSize">Update size</string>
+    <string name="Changelog">Changelog:</string>
+    <string name="BuildType">Build type</string>
+    <string name="BTRelease">Release</string>
+    <string name="BTBeta">Beta</string>
+    <string name="ClearUpdatesCache">Clear updates cache</string>
+    <string name="ClearedUpdatesCache">Cleared **%1$s** of cache.</string>
+    <string name="NothingToClear">Nothing to clear.</string>
+    <string name="LastCheck">Last check</string>
 
     <!-- Other -->
     <string name="BoldItalic">Bold italic</string>

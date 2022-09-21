@@ -176,9 +176,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import com.exteragram.messenger.preferences.MainPreferencesEntry;
+import com.exteragram.messenger.preferences.MainPreferencesActivity;
 import com.exteragram.messenger.ExteraConfig;
-import com.exteragram.messenger.extras.MonetHelper;
+import com.exteragram.messenger.updater.UpdaterUtils;
+import com.exteragram.messenger.monet.MonetHelper;
 
 public class LaunchActivity extends BasePermissionsActivity implements ActionBarLayout.ActionBarLayoutDelegate, NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate {
     public static boolean isResumed;
@@ -971,6 +972,10 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             MonetHelper.registerReceiver(this);
             LauncherIconController.updateMonetIcon();
         }
+
+        if (ExteraConfig.checkUpdatesOnLaunch) {
+            UpdaterUtils.checkUpdates(this, false);
+        }
     }
 
     public void addOnUserLeaveHintListener(Runnable callback) {
@@ -1387,6 +1392,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
         int open_widget_edit_type = -1;
         int open_new_dialog = 0;
         long dialogId = 0;
+        boolean checkUpdates = false;
         boolean showDialogsList = false;
         boolean showPlayer = false;
         boolean showLocations = false;
@@ -2243,6 +2249,8 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                                         newContact = true;
                                     } else if ((url.startsWith("tg:extera") || url.startsWith("tg://extera"))) {
                                         open_settings = 7;
+                                    } else if ((url.startsWith("tg:update") || url.startsWith("tg://update"))) {
+                                        checkUpdates = true;
                                     } else {
                                         unsupportedUrl = url.replace("tg://", "").replace("tg:", "");
                                         int index;
@@ -2506,7 +2514,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                 } else if (open_settings == 6) {
                     fragment = new EditWidgetActivity(open_widget_edit_type, open_widget_edit);
                 } else if (open_settings == 7) {
-                    fragment = new MainPreferencesEntry();
+                    fragment = new MainPreferencesActivity();
                 } else {
                     fragment = null;
                 }
@@ -2586,6 +2594,12 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                     drawerLayoutContainer.setAllowOpenDrawer(true, false);
                 }
                 pushOpened = true;
+            } else if (checkUpdates) {
+                BaseFragment currentFragment = !mainFragmentsStack.isEmpty() ? mainFragmentsStack.get(mainFragmentsStack.size() - 1) : null;
+                if (currentFragment != null && (currentFragment.isRemovingFromStack() || currentFragment.isInPreviewMode())) {
+                    currentFragment = mainFragmentsStack.size() > 1 ? mainFragmentsStack.get(mainFragmentsStack.size() - 2) : null;
+                }
+                UpdaterUtils.checkUpdates(currentFragment.getParentActivity(), false, () -> showBulletin(factory -> factory.createErrorBulletin(LocaleController.getString("NoUpdates", R.string.NoUpdates))), null);
             } else if (newContact) {
                 final NewContactActivity fragment = new NewContactActivity();
                 if (newContactName != null) {
@@ -4303,7 +4317,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                                 FileLog.e(e);
                             }
                         }
-                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.appUpdateAvailable);
+                        //NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.appUpdateAvailable);
                     }
                 });
             }

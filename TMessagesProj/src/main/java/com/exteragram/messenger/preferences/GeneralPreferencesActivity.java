@@ -1,16 +1,25 @@
+/*
+
+ This is the source code of exteraGram for Android.
+
+ We do not and cannot prevent the use of our code,
+ but be respectful and credit the original author.
+
+ Copyright @immat0x1, 2022.
+
+*/
+
 package com.exteragram.messenger.preferences;
 
-import android.annotation.SuppressLint;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Region;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Bundle;
 import android.text.TextPaint;
-import android.os.Parcelable;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,19 +28,14 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import androidx.annotation.NonNull;
-import androidx.core.graphics.ColorUtils;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
-import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
@@ -40,17 +44,15 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
-import org.telegram.ui.Components.UndoView;
 
 import com.exteragram.messenger.ExteraConfig;
 
-public class GeneralPreferencesEntry extends BaseFragment {
-
-    private int rowCount;
-    private ListAdapter listAdapter;
+public class GeneralPreferencesActivity extends BasePreferencesActivity {
 
     private AvatarCornersCell avatarCornersCell;
-    
+
+    private ValueAnimator statusBarColorAnimate;
+
     private int avatarCornersHeaderRow;
     private int avatarCornersRow;
     private int avatarCornersDividerRow;
@@ -76,14 +78,13 @@ public class GeneralPreferencesEntry extends BaseFragment {
     private int forcePacmanAnimationRow;
     private int forcePacmanAnimationInfoRow;
 
-    private UndoView restartTooltip;
-
-    private class AvatarCornersCell extends FrameLayout {
+    public class AvatarCornersCell extends FrameLayout {
 
         private final SeekBarView sizeBar;
         private final FrameLayout preview;
         private final int startCornersSize = 0;
         private final int endCornersSize = 30;
+        private final long time = System.currentTimeMillis();
 
         private final TextPaint textPaint;
         private int lastWidth;
@@ -147,7 +148,7 @@ public class GeneralPreferencesEntry extends BaseFragment {
                     textPaint.setColor(Color.argb(91, r, g, b));
                     textPaint.setTextAlign(Paint.Align.RIGHT);
                     textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                    canvas.drawText(LocaleController.getInstance().formatterDay.format(System.currentTimeMillis()), w - AndroidUtilities.dp(20), h / 2.0f - AndroidUtilities.dp(8), textPaint);
+                    canvas.drawText(LocaleController.getInstance().formatterDay.format(time), w - AndroidUtilities.dp(20), h / 2.0f - AndroidUtilities.dp(8), textPaint);
                 }
             };
             preview.setWillNotDraw(false);
@@ -200,180 +201,145 @@ public class GeneralPreferencesEntry extends BaseFragment {
     }
 
     @Override
-    public boolean onFragmentCreate() {
-        super.onFragmentCreate();
-        updateRowsId(true);
-        return true;
-    }
+    protected void updateRowsId() {
+        super.updateRowsId();
 
-    @Override
-    public View createView(Context context) {
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setTitle(LocaleController.getString("General", R.string.General));
-        actionBar.setAllowOverlayTitle(false);
-
-        if (AndroidUtilities.isTablet()) {
-            actionBar.setOccupyStatusBar(false);
-        }
-
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
-            @Override
-            public void onItemClick(int id) {
-                if (id == -1) {
-                    finishFragment();
-                }
-            }
-        });
-
-        listAdapter = new ListAdapter(context);
-        fragmentView = new FrameLayout(context);
-        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
-        FrameLayout frameLayout = (FrameLayout) fragmentView;
-
-        RecyclerListView listView = new RecyclerListView(context);
-        listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        listView.setVerticalScrollBarEnabled(false);
-        listView.setAdapter(listAdapter);
-
-        if (listView.getItemAnimator() != null) {
-            ((DefaultItemAnimator) listView.getItemAnimator()).setDelayAnimations(false);
-        }
-
-        frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
-        listView.setOnItemClickListener((view, position, x, y) -> {
-            if (position == disableNumberRoundingRow) {
-                ExteraConfig.toggleDisableNumberRounding();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.disableNumberRounding);
-                }
-                parentLayout.rebuildAllFragmentViews(false, false);
-            } else if (position == formatTimeWithSecondsRow) {
-                ExteraConfig.toggleFormatTimeWithSeconds();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.formatTimeWithSeconds);
-                }
-                LocaleController.getInstance().recreateFormatters();
-                parentLayout.rebuildAllFragmentViews(false, false);
-                avatarCornersCell.invalidate();
-            } else if (position == chatsOnTitleRow) {
-                ExteraConfig.toggleChatsOnTitle();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.chatsOnTitle);
-                }
-                parentLayout.rebuildAllFragmentViews(false, false);
-            } else if (position == disableVibrationRow) {
-                ExteraConfig.toggleDisableVibration();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.disableVibration);
-                }
-                restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
-            } else if (position == forceTabletModeRow) {
-                ExteraConfig.toggleForceTabletMode();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.forceTabletMode);
-                }
-                restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
-            } else if (position == disableAnimatedAvatarsRow) {
-                ExteraConfig.toggleDisableAnimatedAvatars();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.disableAnimatedAvatars);
-                }
-            } else if (position == archiveOnPullRow) {
-                ExteraConfig.toggleArchiveOnPull();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.archiveOnPull);
-                }
-            } else if (position == disableUnarchiveSwipeRow) {
-                ExteraConfig.toggleDisableUnarchiveSwipe();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.disableUnarchiveSwipe);
-                }
-            } else if (position == forcePacmanAnimationRow) {
-                ExteraConfig.toggleForcePacmanAnimation();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.forcePacmanAnimation);
-                }
-                parentLayout.rebuildAllFragmentViews(false, false);
-            } else if (position == hidePhoneNumberRow) {
-                ExteraConfig.toggleHidePhoneNumber();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.hidePhoneNumber);
-                }
-                parentLayout.rebuildAllFragmentViews(false, false);
-                getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
-            } else if (position == showIDRow) {
-                ExteraConfig.toggleShowID();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.showID);
-                }
-                parentLayout.rebuildAllFragmentViews(false, false);
-            } else if (position == showDCRow) {
-                ExteraConfig.toggleShowDC();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.showDC);
-                }
-                parentLayout.rebuildAllFragmentViews(false, false);
-            }
-        });
-        restartTooltip = new UndoView(context);
-        restartTooltip.setInfoText(LocaleController.formatString("RestartRequired", R.string.RestartRequired));
-        frameLayout.addView(restartTooltip, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 8, 0, 8, 8));
-        return fragmentView;
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private void updateRowsId(boolean notify) {
-        rowCount = 0;
-
-        avatarCornersHeaderRow = rowCount++;
-        avatarCornersRow = rowCount++;
-        avatarCornersDividerRow = rowCount++;
+        avatarCornersHeaderRow = newRow();
+        avatarCornersRow = newRow();
+        avatarCornersDividerRow = newRow();
         
-        generalHeaderRow = rowCount++;
-        disableNumberRoundingRow = rowCount++;
-        formatTimeWithSecondsRow = rowCount++;
-        chatsOnTitleRow = rowCount++;
-        disableVibrationRow = rowCount++;
-        disableAnimatedAvatarsRow = rowCount++;
-        forceTabletModeRow = rowCount++;
-        generalDividerRow = rowCount++;
+        generalHeaderRow = newRow();
+        disableNumberRoundingRow = newRow();
+        formatTimeWithSecondsRow = newRow();
+        chatsOnTitleRow = newRow();
+        disableVibrationRow = newRow();
+        disableAnimatedAvatarsRow = newRow();
+        forceTabletModeRow = newRow();
+        generalDividerRow = newRow();
 
-        profileHeaderRow = rowCount++;
-        hidePhoneNumberRow = rowCount++;
-        showIDRow = rowCount++;
-        showDCRow = rowCount++;
-        profileDividerRow = rowCount++;
+        profileHeaderRow = newRow();
+        hidePhoneNumberRow = newRow();
+        showIDRow = newRow();
+        showDCRow = newRow();
+        profileDividerRow = newRow();
 
-        archiveHeaderRow = rowCount++;
-        archiveOnPullRow = rowCount++;
-        disableUnarchiveSwipeRow = rowCount++;
-        forcePacmanAnimationRow = rowCount++;
-        forcePacmanAnimationInfoRow = rowCount++;
-
-        if (listAdapter != null && notify) {
-            listAdapter.notifyDataSetChanged();
-        }
+        archiveHeaderRow = newRow();
+        archiveOnPullRow = newRow();
+        disableUnarchiveSwipeRow = newRow();
+        forcePacmanAnimationRow = newRow();
+        forcePacmanAnimationInfoRow = newRow();
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     @Override
-    public void onResume() {
-        super.onResume();
-        if (listAdapter != null) {
-            listAdapter.notifyDataSetChanged();
+    protected void onItemClick(View view, int position, float x, float y) {
+        if (position == disableNumberRoundingRow) {
+            ExteraConfig.toggleDisableNumberRounding();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.disableNumberRounding);
+            }
+            parentLayout.rebuildAllFragmentViews(false, false);
+        } else if (position == formatTimeWithSecondsRow) {
+            ExteraConfig.toggleFormatTimeWithSeconds();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.formatTimeWithSeconds);
+            }
+            LocaleController.getInstance().recreateFormatters();
+            parentLayout.rebuildAllFragmentViews(false, false);
+            avatarCornersCell.invalidate();
+        } else if (position == chatsOnTitleRow) {
+            ExteraConfig.toggleChatsOnTitle();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.chatsOnTitle);
+            }
+            parentLayout.rebuildAllFragmentViews(false, false);
+        } else if (position == disableVibrationRow) {
+            ExteraConfig.toggleDisableVibration();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.disableVibration);
+            }
+            showBulletin();
+        } else if (position == forceTabletModeRow) {
+            ExteraConfig.toggleForceTabletMode();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.forceTabletMode);
+            }
+            showBulletin();
+        } else if (position == disableAnimatedAvatarsRow) {
+            ExteraConfig.toggleDisableAnimatedAvatars();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.disableAnimatedAvatars);
+            }
+        } else if (position == archiveOnPullRow) {
+            ExteraConfig.toggleArchiveOnPull();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.archiveOnPull);
+            }
+        } else if (position == disableUnarchiveSwipeRow) {
+            ExteraConfig.toggleDisableUnarchiveSwipe();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.disableUnarchiveSwipe);
+            }
+        } else if (position == forcePacmanAnimationRow) {
+            ExteraConfig.toggleForcePacmanAnimation();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.forcePacmanAnimation);
+            }
+            parentLayout.rebuildAllFragmentViews(false, false);
+        } else if (position == hidePhoneNumberRow) {
+            ExteraConfig.toggleHidePhoneNumber();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.hidePhoneNumber);
+            }
+            parentLayout.rebuildAllFragmentViews(false, false);
+            getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
+        } else if (position == showIDRow) {
+            ExteraConfig.toggleShowID();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.showID);
+            }
+            parentLayout.rebuildAllFragmentViews(false, false);
+        } else if (position == showDCRow) {
+            ExteraConfig.toggleShowDC();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.showDC);
+            }
+            parentLayout.rebuildAllFragmentViews(false, false);
         }
     }
 
-    private class ListAdapter extends RecyclerListView.SelectionAdapter {
-        private final Context mContext;
+    @Override
+    protected String getTitle() {
+        return LocaleController.getString("General", R.string.General);
+    }
+
+    @Override
+    protected BaseListAdapter createAdapter(Context context) {
+        return new ListAdapter(context);
+    }
+
+    private class ListAdapter extends BaseListAdapter {
 
         public ListAdapter(Context context) {
-            mContext = context;
+            super(context);
         }
 
         @Override
         public int getItemCount() {
             return rowCount;
+        }
+
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int type) {
+            switch (type) {
+                case 9:
+                    avatarCornersCell = new AvatarCornersCell(mContext);
+                    avatarCornersCell.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    avatarCornersCell.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
+                    return new RecyclerListView.Holder(avatarCornersCell);
+                default:
+                    return super.onCreateViewHolder(parent, type);
+            }
         }
 
         @Override
@@ -382,7 +348,7 @@ public class GeneralPreferencesEntry extends BaseFragment {
                 case 1:
                     holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
-                case 2:
+                case 3:
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == generalHeaderRow) {
                         headerCell.setText(LocaleController.getString("General", R.string.General));
@@ -394,7 +360,7 @@ public class GeneralPreferencesEntry extends BaseFragment {
                         headerCell.setText(LocaleController.getString("AvatarCorners", R.string.AvatarCorners));
                     }
                     break;
-                case 3:
+                case 5:
                     TextCheckCell textCheckCell = (TextCheckCell) holder.itemView;
                     textCheckCell.setEnabled(true, null);
                     if (position == disableNumberRoundingRow) {
@@ -423,7 +389,7 @@ public class GeneralPreferencesEntry extends BaseFragment {
                         textCheckCell.setTextAndCheck(LocaleController.getString("ShowDC", R.string.ShowDC), ExteraConfig.showDC, false);
                     }
                     break;
-                case 4:
+                case 8:
                     TextInfoPrivacyCell cell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == forcePacmanAnimationInfoRow) {
                         cell.setText(LocaleController.getString("ForcePacmanAnimationInfo", R.string.ForcePacmanAnimationInfo));
@@ -436,54 +402,17 @@ public class GeneralPreferencesEntry extends BaseFragment {
         }
 
         @Override
-        public boolean isEnabled(RecyclerView.ViewHolder holder) {
-            int type = holder.getItemViewType();
-            return type == 3;
-        }
-
-        @NonNull
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view;
-            switch (viewType) {
-                case 2:
-                    view = new HeaderCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 3:
-                    view = new TextCheckCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 4:
-                    view = new TextInfoPrivacyCell(mContext);
-                    break;
-                case 5:
-                    view = avatarCornersCell = new AvatarCornersCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                default:
-                    view = new ShadowSectionCell(mContext);
-                    break;
-            }
-            view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
-            return new RecyclerListView.Holder(view);
-        }
-
-        @Override
         public int getItemViewType(int position) {
             if (position == generalDividerRow || position == profileDividerRow || position == avatarCornersDividerRow) {
                 return 1;
             } else if (position == generalHeaderRow || position == archiveHeaderRow || position == profileHeaderRow || position == avatarCornersHeaderRow) {
-                return 2;
-            } else if (position == disableNumberRoundingRow || position == formatTimeWithSecondsRow || position == hidePhoneNumberRow || position == showIDRow || position == showDCRow || position == chatsOnTitleRow || position == archiveOnPullRow ||
-                      position == disableVibrationRow || position == forceTabletModeRow || position == disableUnarchiveSwipeRow || position == forcePacmanAnimationRow || position == disableAnimatedAvatarsRow) {
                 return 3;
             } else if (position == forcePacmanAnimationInfoRow) {
-                return 4;
+                return 8;
             } else if (position == avatarCornersRow) {
-                return 5;
+                return 9;
             }
-            return 1;
+            return 5;
         }
     }
 }

@@ -364,8 +364,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
             lt = (1f - Math.max(CLIP_PROGRESS, transitionProgress));
         }
         rect.set(getPaddingLeft() + (getWidth() - getPaddingRight()) * lt, getPaddingTop() + recyclerListView.getMeasuredHeight() * (1f - otherViewsScale), (getWidth() - getPaddingRight()) * rt, getHeight() - getPaddingBottom());
-        //radius = rect.height() / 2f;
-        radius = AndroidUtilities.dp(6);
+        radius = rect.height() / 2f;
         shadow.setBounds((int) (getPaddingLeft() + (getWidth() - getPaddingRight() + shadowPad.right) * lt - shadowPad.left), getPaddingTop() - shadowPad.top, (int) ((getWidth() - getPaddingRight() + shadowPad.right) * rt), getHeight() - getPaddingBottom() + shadowPad.bottom);
         shadow.draw(canvas);
         canvas.restoreToCount(s);

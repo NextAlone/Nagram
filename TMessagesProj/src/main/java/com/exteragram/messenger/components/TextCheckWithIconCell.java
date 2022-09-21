@@ -1,4 +1,15 @@
-package com.exteragram.messenger.preferences.cells;
+/*
+
+ This is the source code of exteraGram for Android.
+
+ We do not and cannot prevent the use of our code,
+ but be respectful and credit the original author.
+
+ Copyright @immat0x1, 2022.
+
+*/
+
+package com.exteragram.messenger.components;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -34,6 +45,7 @@ import org.telegram.ui.Components.RLottieImageView;
 import java.util.ArrayList;
 
 public class TextCheckWithIconCell extends FrameLayout {
+
     private boolean isAnimatingToThumbInsteadOfTouch;
 
     private TextView textView;

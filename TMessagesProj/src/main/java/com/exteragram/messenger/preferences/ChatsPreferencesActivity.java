@@ -1,33 +1,42 @@
+/*
+
+ This is the source code of exteraGram for Android.
+
+ We do not and cannot prevent the use of our code,
+ but be respectful and credit the original author.
+
+ Copyright @immat0x1, 2022.
+
+*/
+
 package com.exteragram.messenger.preferences;
 
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Region;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.os.Bundle;
 import android.text.TextPaint;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
-import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
-import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
@@ -36,21 +45,16 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
-import org.telegram.ui.Components.UndoView;
 
 import com.exteragram.messenger.ExteraConfig;
-import com.exteragram.messenger.ExteraUtils;
-import com.exteragram.messenger.preferences.cells.StickerSizePreviewCell;
-import com.exteragram.messenger.preferences.cells.StickerFormCell;
+import com.exteragram.messenger.components.StickerSizePreviewCell;
+import com.exteragram.messenger.components.StickerFormCell;
 
-public class ChatsPreferencesEntry extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
-
-    private int rowCount;
-    private ListAdapter listAdapter;
-    private RecyclerListView listView;
+public class ChatsPreferencesActivity extends BasePreferencesActivity implements NotificationCenter.NotificationCenterDelegate {
 
     private ActionBarMenuItem resetItem;
     private StickerSizeCell stickerSizeCell;
+    private StickerFormCell stickerFormCell;
 
     private int stickerSizeHeaderRow;
     private int stickerSizeRow;
@@ -85,31 +89,6 @@ public class ChatsPreferencesEntry extends BaseFragment implements NotificationC
     private int pauseOnMinimizeRow;
     private int disablePlaybackRow;
     private int mediaDividerRow;
-
-    private UndoView restartTooltip;
-
-    @Override
-    public boolean onFragmentCreate() {
-        super.onFragmentCreate();
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
-        updateRowsId(true);
-        return true;
-    }
-
-    @Override
-    public void didReceivedNotification(int id, int account, Object... args) {
-        if (id == NotificationCenter.emojiLoaded) {
-            if (listView != null) {
-                listView.invalidateViews();
-            }
-        }
-    }
-
-    @Override
-    public void onFragmentDestroy() {
-        super.onFragmentDestroy();
-        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
-    }
 
     private class StickerSizeCell extends FrameLayout {
 
@@ -199,13 +178,7 @@ public class ChatsPreferencesEntry extends BaseFragment implements NotificationC
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setTitle(LocaleController.getString("Chats", R.string.Chats));
-        actionBar.setAllowOverlayTitle(false);
-
-        if (AndroidUtilities.isTablet()) {
-            actionBar.setOccupyStatusBar(false);
-        }
+        View fragmentView = super.createView(context);
 
         ActionBarMenu menu = actionBar.createMenu();
         resetItem = menu.addItem(0, R.drawable.msg_reset);
@@ -223,199 +196,216 @@ public class ChatsPreferencesEntry extends BaseFragment implements NotificationC
             animator.start();
         });
 
-
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
-            @Override
-            public void onItemClick(int id) {
-                if (id == -1) {
-                    finishFragment();
-                }
-            }
-        });
-
-        listAdapter = new ListAdapter(context);
-        fragmentView = new FrameLayout(context);
-        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
-        FrameLayout frameLayout = (FrameLayout) fragmentView;
-
-        listView = new RecyclerListView(context);
-        listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        listView.setVerticalScrollBarEnabled(false);
-        listView.setAdapter(listAdapter);
-
-        if (listView.getItemAnimator() != null) {
-            ((DefaultItemAnimator) listView.getItemAnimator()).setDelayAnimations(false);
-        }
-
-        frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
-        listView.setOnItemClickListener((view, position, x, y) -> {
-            if (position == hideStickerTimeRow) {
-                ExteraConfig.toggleHideStickerTime();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.hideStickerTime);
-                }
-                stickerSizeCell.invalidate();
-            } else if (position == unlimitedRecentStickersRow) {
-                ExteraConfig.toggleUnlimitedRecentStickers();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.unlimitedRecentStickers);
-                }
-            } else if (position == sendMessageBeforeSendStickerRow) {
-                ExteraConfig.toggleSendMessageBeforeSendSticker();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.sendMessageBeforeSendSticker);
-                }
-            } else if (position == premiumAutoPlaybackRow) {
-                ExteraConfig.togglePremiumAutoPlayback();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.premiumAutoPlayback);
-                }
-            } else if (position == hideSendAsChannelRow) {
-                ExteraConfig.toggleHideSendAsChannel();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.hideSendAsChannel);
-                }
-            } else if (position == hideKeyboardOnScrollRow) {
-                ExteraConfig.toggleHideKeyboardOnScroll();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.hideKeyboardOnScroll);
-                }
-            } else if (position == disableReactionsRow) {
-                ExteraConfig.toggleDisableReactions();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.disableReactions);
-                }
-                parentLayout.rebuildAllFragmentViews(false, false);
-            } else if (position == disableGreetingStickerRow) {
-                ExteraConfig.toggleDisableGreetingSticker();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.disableGreetingSticker);
-                }
-                parentLayout.rebuildAllFragmentViews(false, false);
-            } else if (position == disableJumpToNextChannelRow) {
-                ExteraConfig.toggleDisableJumpToNextChannel();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.disableJumpToNextChannel);
-                }
-                parentLayout.rebuildAllFragmentViews(false, false);
-            } else if (position == dateOfForwardedMsgRow) {
-                ExteraConfig.toggleDateOfForwardedMsg();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.dateOfForwardedMsg);
-                }
-            } else if (position == showMessageIDRow) {
-                ExteraConfig.toggleShowMessageID();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.showMessageID);
-                }
-            } else if (position == showActionTimestampsRow) {
-                ExteraConfig.toggleShowActionTimestamps();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.showActionTimestamps);
-                }
-                parentLayout.rebuildAllFragmentViews(false, false);
-            } else if (position == zalgoFilterRow) {
-                ExteraConfig.toggleZalgoFilter();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.zalgoFilter);
-                }
-                parentLayout.rebuildAllFragmentViews(false, false);
-            } else if (position == rearVideoMessagesRow) {
-                ExteraConfig.toggleRearVideoMessages();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.rearVideoMessages);
-                }
-            } else if (position == disableCameraRow) {
-                ExteraConfig.toggleDisableCamera();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.disableCamera);
-                }
-            } else if (position == disableProximityEventsRow) {
-                ExteraConfig.toggleDisableProximityEvents();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.disableProximityEvents);
-                }
-            } else if (position == pauseOnMinimizeRow) {
-                ExteraConfig.togglePauseOnMinimize();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.pauseOnMinimize);
-                }
-            } else if (position == disablePlaybackRow) {
-                ExteraConfig.toggleDisablePlayback();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(ExteraConfig.disablePlayback);
-                }
-                restartTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
-            }
-        });
-        restartTooltip = new UndoView(context);
-        restartTooltip.setInfoText(LocaleController.formatString("RestartRequired", R.string.RestartRequired));
-        frameLayout.addView(restartTooltip, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 8, 0, 8, 8));
         return fragmentView;
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private void updateRowsId(boolean notify) {
-        rowCount = 0;
-
-        stickerSizeHeaderRow = rowCount++;
-        stickerSizeRow = rowCount++;
-
-        stickerFormHeaderRow = rowCount++;
-        stickerFormRow = rowCount++;
-        stickerFormDividerRow = rowCount++;
-
-        stickersHeaderRow = rowCount++;
-        hideStickerTimeRow = rowCount++;
-        unlimitedRecentStickersRow = rowCount++;
-        premiumAutoPlaybackRow = rowCount++;
-        sendMessageBeforeSendStickerRow = rowCount++;
-        stickersDividerRow = rowCount++;
-
-        chatHeaderRow = rowCount++;
-        hideSendAsChannelRow = rowCount++;
-        hideKeyboardOnScrollRow = rowCount++;
-        disableReactionsRow = rowCount++;
-        disableGreetingStickerRow = rowCount++;
-        disableJumpToNextChannelRow = rowCount++;
-        dateOfForwardedMsgRow = rowCount++;
-        showMessageIDRow = rowCount++;
-        showActionTimestampsRow = rowCount++;
-        zalgoFilterRow = rowCount++;
-        zalgoFilterInfoRow = rowCount++;
-
-        mediaHeaderRow = rowCount++;
-        rearVideoMessagesRow = rowCount++;
-        disableCameraRow = rowCount++;
-        disableProximityEventsRow = rowCount++;
-        pauseOnMinimizeRow = rowCount++;
-        disablePlaybackRow = rowCount++;
-        mediaDividerRow = rowCount++;
-
-        if (listAdapter != null && notify) {
-            listAdapter.notifyDataSetChanged();
-        }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
     @Override
-    public void onResume() {
-        super.onResume();
-        if (listAdapter != null) {
-            listAdapter.notifyDataSetChanged();
+    public boolean onFragmentCreate() {
+        super.onFragmentCreate();
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
+        return true;
+    }
+
+    @Override
+    public void didReceivedNotification(int id, int account, Object... args) {
+        if (id == NotificationCenter.emojiLoaded) {
+            if (getListView() != null) {
+                getListView().invalidateViews();
+            }
         }
     }
 
-    private class ListAdapter extends RecyclerListView.SelectionAdapter {
-        private final Context mContext;
+    @Override
+    public void onFragmentDestroy() {
+        super.onFragmentDestroy();
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
+    }
+
+    @Override
+    protected void updateRowsId() {
+        super.updateRowsId();
+
+        stickerSizeHeaderRow = newRow();
+        stickerSizeRow = newRow();
+
+        stickerFormHeaderRow = newRow();
+        stickerFormRow = newRow();
+        stickerFormDividerRow = newRow();
+
+        stickersHeaderRow = newRow();
+        hideStickerTimeRow = newRow();
+        unlimitedRecentStickersRow = newRow();
+        premiumAutoPlaybackRow = newRow();
+        sendMessageBeforeSendStickerRow = newRow();
+        stickersDividerRow = newRow();
+
+        chatHeaderRow = newRow();
+        hideSendAsChannelRow = newRow();
+        hideKeyboardOnScrollRow = newRow();
+        disableReactionsRow = newRow();
+        disableGreetingStickerRow = newRow();
+        disableJumpToNextChannelRow = newRow();
+        dateOfForwardedMsgRow = newRow();
+        showMessageIDRow = newRow();
+        showActionTimestampsRow = newRow();
+        zalgoFilterRow = newRow();
+        zalgoFilterInfoRow = newRow();
+
+        mediaHeaderRow = newRow();
+        rearVideoMessagesRow = newRow();
+        disableCameraRow = newRow();
+        disableProximityEventsRow = newRow();
+        pauseOnMinimizeRow = newRow();
+        disablePlaybackRow = newRow();
+        mediaDividerRow = newRow();
+    }
+
+    @Override
+    protected void onItemClick(View view, int position, float x, float y) {
+        if (position == hideStickerTimeRow) {
+            ExteraConfig.toggleHideStickerTime();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.hideStickerTime);
+            }
+            stickerSizeCell.invalidate();
+        } else if (position == unlimitedRecentStickersRow) {
+            ExteraConfig.toggleUnlimitedRecentStickers();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.unlimitedRecentStickers);
+            }
+        } else if (position == sendMessageBeforeSendStickerRow) {
+            ExteraConfig.toggleSendMessageBeforeSendSticker();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.sendMessageBeforeSendSticker);
+            }
+        } else if (position == premiumAutoPlaybackRow) {
+            ExteraConfig.togglePremiumAutoPlayback();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.premiumAutoPlayback);
+            }
+        } else if (position == hideSendAsChannelRow) {
+            ExteraConfig.toggleHideSendAsChannel();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.hideSendAsChannel);
+            }
+        } else if (position == hideKeyboardOnScrollRow) {
+            ExteraConfig.toggleHideKeyboardOnScroll();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.hideKeyboardOnScroll);
+            }
+        } else if (position == disableReactionsRow) {
+            ExteraConfig.toggleDisableReactions();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.disableReactions);
+            }
+            parentLayout.rebuildAllFragmentViews(false, false);
+        } else if (position == disableGreetingStickerRow) {
+            ExteraConfig.toggleDisableGreetingSticker();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.disableGreetingSticker);
+            }
+            parentLayout.rebuildAllFragmentViews(false, false);
+        } else if (position == disableJumpToNextChannelRow) {
+            ExteraConfig.toggleDisableJumpToNextChannel();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.disableJumpToNextChannel);
+            }
+            parentLayout.rebuildAllFragmentViews(false, false);
+        } else if (position == dateOfForwardedMsgRow) {
+            ExteraConfig.toggleDateOfForwardedMsg();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.dateOfForwardedMsg);
+            }
+        } else if (position == showMessageIDRow) {
+            ExteraConfig.toggleShowMessageID();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.showMessageID);
+            }
+        } else if (position == showActionTimestampsRow) {
+            ExteraConfig.toggleShowActionTimestamps();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.showActionTimestamps);
+            }
+            parentLayout.rebuildAllFragmentViews(false, false);
+        } else if (position == zalgoFilterRow) {
+            ExteraConfig.toggleZalgoFilter();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.zalgoFilter);
+            }
+            parentLayout.rebuildAllFragmentViews(false, false);
+        } else if (position == rearVideoMessagesRow) {
+            ExteraConfig.toggleRearVideoMessages();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.rearVideoMessages);
+            }
+        } else if (position == disableCameraRow) {
+            ExteraConfig.toggleDisableCamera();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.disableCamera);
+            }
+        } else if (position == disableProximityEventsRow) {
+            ExteraConfig.toggleDisableProximityEvents();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.disableProximityEvents);
+            }
+        } else if (position == pauseOnMinimizeRow) {
+            ExteraConfig.togglePauseOnMinimize();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.pauseOnMinimize);
+            }
+        } else if (position == disablePlaybackRow) {
+            ExteraConfig.toggleDisablePlayback();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.disablePlayback);
+            }
+            showBulletin();
+        }
+    }
+
+    @Override
+    protected String getTitle() {
+        return LocaleController.getString("Chats", R.string.Chats);
+    }
+
+    @Override
+    protected BaseListAdapter createAdapter(Context context) {
+        return new ListAdapter(context);
+    }
+
+    private class ListAdapter extends BaseListAdapter {
 
         public ListAdapter(Context context) {
-            mContext = context;
+            super(context);
         }
 
         @Override
         public int getItemCount() {
             return rowCount;
+        }
+
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int type) {
+            switch (type) {
+                case 10:
+                    stickerFormCell = new StickerFormCell(mContext) {
+                        @Override
+                        protected void updateStickerPreview() {
+                            parentLayout.rebuildAllFragmentViews(false, false);
+                            stickerSizeCell.invalidate();
+                        }
+                    };
+                    stickerFormCell.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    stickerFormCell.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
+                    return new RecyclerListView.Holder(stickerFormCell);
+                case 11:
+                    stickerSizeCell = new StickerSizeCell(mContext);
+                    stickerSizeCell.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    stickerSizeCell.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
+                    return new RecyclerListView.Holder(stickerSizeCell);
+                default:
+                    return super.onCreateViewHolder(parent, type);
+            }
         }
 
         @Override
@@ -428,7 +418,7 @@ public class ChatsPreferencesEntry extends BaseFragment implements NotificationC
                         holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
-                case 2:
+                case 3:
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == stickerSizeHeaderRow) {
                         headerCell.setText(LocaleController.getString("StickerSize", R.string.StickerSize));
@@ -442,7 +432,7 @@ public class ChatsPreferencesEntry extends BaseFragment implements NotificationC
                         headerCell.setText(LocaleController.getString("StickerForm", R.string.StickerForm));
                     }
                     break;
-                case 3:
+                case 5:
                     TextCheckCell textCheckCell = (TextCheckCell) holder.itemView;
                     textCheckCell.setEnabled(true, null);
                     if (position == hideStickerTimeRow) {
@@ -483,7 +473,7 @@ public class ChatsPreferencesEntry extends BaseFragment implements NotificationC
                         textCheckCell.setTextAndValueAndCheck(LocaleController.getString("DisablePlayback", R.string.DisablePlayback), LocaleController.getString("DPDescription", R.string.DPDescription), ExteraConfig.disablePlayback, true, false);
                     }
                     break;
-                case 5:
+                case 8:
                     TextInfoPrivacyCell cell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == zalgoFilterInfoRow) {
                         cell.setText(LocaleController.getString("ZalgoFilterInfo", R.string.ZalgoFilterInfo));
@@ -493,71 +483,19 @@ public class ChatsPreferencesEntry extends BaseFragment implements NotificationC
         }
 
         @Override
-        public boolean isEnabled(RecyclerView.ViewHolder holder) {
-            int type = holder.getItemViewType();
-            return type == 3;
-        }
-
-        @NonNull
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view;
-            switch (viewType) {
-                case 2:
-                    view = new HeaderCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 3:
-                    view = new TextCheckCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 4:
-                    view = stickerSizeCell = new StickerSizeCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 5:
-                    view = new TextInfoPrivacyCell(mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
-                    break;
-                case 6:
-                    view = new StickerFormCell(mContext) {
-                        @Override
-                        protected void updateStickerPreview() {
-                            parentLayout.rebuildAllFragmentViews(false, false);
-                            stickerSizeCell.invalidate();
-                        }
-                    };
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                default:
-                    view = new ShadowSectionCell(mContext);
-                    break;
-            }
-            view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
-            return new RecyclerListView.Holder(view);
-        }
-
-        @Override
         public int getItemViewType(int position) {
             if (position == stickersDividerRow || position == mediaDividerRow || position == stickerFormDividerRow) {
                 return 1;
             } else if (position == stickerSizeHeaderRow || position == stickersHeaderRow || position == chatHeaderRow || position == mediaHeaderRow || position == stickerFormHeaderRow) {
-                return 2;
-            } else if (position == hideStickerTimeRow || position == unlimitedRecentStickersRow || position == premiumAutoPlaybackRow || position == sendMessageBeforeSendStickerRow ||
-                      position == hideSendAsChannelRow || position == hideKeyboardOnScrollRow || position == disableReactionsRow ||
-                      position == disableGreetingStickerRow || position == disableJumpToNextChannelRow ||
-                      position == dateOfForwardedMsgRow || position == showMessageIDRow || position == showActionTimestampsRow || position == zalgoFilterRow || position == rearVideoMessagesRow ||
-                      position == disableCameraRow || position == disableProximityEventsRow || position == pauseOnMinimizeRow ||
-                      position == disablePlaybackRow) {
                 return 3;
-            } else if (position == stickerSizeRow) {
-                return 4;
             } else if (position == zalgoFilterInfoRow) {
-                return 5;
+                return 8;
             } else if (position == stickerFormRow) {
-                return 6;
+                return 10;
+            } else if (position == stickerSizeRow) {
+                return 11;
             }
-            return 1;
+            return 5;
         }
     }
 }

@@ -1196,7 +1196,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             commentAvatarImages[a] = new ImageReceiver(this);
             commentAvatarImages[a].setRoundRadius(ExteraConfig.getAvatarCorners(24));
             commentAvatarDrawables[a] = new AvatarDrawable();
-            commentAvatarDrawables[a].setTextSize(AndroidUtilities.dp(8));
+            commentAvatarDrawables[a].setTextSize(AndroidUtilities.dp(18));
         }
     }
 
@@ -2846,7 +2846,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private boolean checkPinchToZoom(MotionEvent ev) {
         PinchToZoomHelper pinchToZoomHelper = delegate == null ? null : delegate.getPinchToZoomHelper();
         if (currentMessageObject == null || !photoImage.hasNotThumb() || pinchToZoomHelper == null ||
-                currentMessageObject.isAnimatedEmoji() || (currentMessageObject.isVideo() && !autoPlayingMedia) ||
+                (currentMessageObject.isVideo() && !autoPlayingMedia) ||
                 isRoundVideo || (currentMessageObject.isDocument() && !currentMessageObject.isGif()) || currentMessageObject.needDrawBluredPreview()) {
             return false;
         }
@@ -8535,7 +8535,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     textX -= AndroidUtilities.dp(4);
                 }
             } else {
-                textY = AndroidUtilities.dp(8) + namesOffset;
+                textY = AndroidUtilities.dp(9.5f) + namesOffset;
             }
             unmovedTextX = textX;
             if (currentMessageObject.textXOffset != 0 && replyNameLayout != null) {

@@ -1,12 +1,15 @@
 /*
- * This is the source code of exteraGram for Android (8.6.2)
- * It is licensed under GNU GPL v. 2 or later.
- * You should have received a copy of the license in this archive (see LICENSE).
- *
- * Copyright @immat0x1, 2022
- */
 
-package com.exteragram.messenger.preferences.cells;
+ This is the source code of exteraGram for Android.
+
+ We do not and cannot prevent the use of our code,
+ but be respectful and credit the original author.
+
+ Copyright @immat0x1, 2022.
+
+*/
+
+package com.exteragram.messenger.components;
 
 import android.content.Context;
 import android.graphics.Canvas;

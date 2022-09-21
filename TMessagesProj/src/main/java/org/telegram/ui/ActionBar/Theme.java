@@ -135,8 +135,8 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
 import com.exteragram.messenger.ExteraConfig;
-import com.exteragram.messenger.extras.Monet;
-import com.exteragram.messenger.extras.MonetHelper;
+import com.exteragram.messenger.monet.MonetAccent;
+import com.exteragram.messenger.monet.MonetHelper;
 
 public class Theme {
 
@@ -5101,10 +5101,10 @@ public class Theme {
 
         SharedPreferences themeConfig = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
 
-        Integer monetAccent = Monet.getAccentColor(false, ApplicationLoader.applicationContext.getApplicationContext(), android.R.color.system_accent1_400);
-        Integer darkMonetAccent = Monet.getAccentColor(true, ApplicationLoader.applicationContext.getApplicationContext(), android.R.color.system_accent1_400);
-        Integer monetBackground = Monet.getBackgroundColor(false, ApplicationLoader.applicationContext.getApplicationContext(), android.R.color.system_accent2_50);
-        Integer darkMonetBackground = Monet.getBackgroundColor(true, ApplicationLoader.applicationContext.getApplicationContext(), android.R.color.system_neutral2_900);
+        Integer monetAccent = MonetAccent.getAccentColor(false, ApplicationLoader.applicationContext.getApplicationContext(), android.R.color.system_accent1_400);
+        Integer darkMonetAccent = MonetAccent.getAccentColor(true, ApplicationLoader.applicationContext.getApplicationContext(), android.R.color.system_accent1_400);
+        Integer monetBackground = MonetAccent.getBackgroundColor(false, ApplicationLoader.applicationContext.getApplicationContext(), android.R.color.system_accent2_50);
+        Integer darkMonetBackground = MonetAccent.getBackgroundColor(true, ApplicationLoader.applicationContext.getApplicationContext(), android.R.color.system_neutral2_900);
 
         boolean haveMbg = monetBackground != -1;
 
@@ -6093,7 +6093,8 @@ public class Theme {
                 maskType == RIPPLE_MASK_CIRCLE_TO_BOUND_CORNER ||
                 maskType == RIPPLE_MASK_CIRCLE_AUTO ||
                 maskType == 6 ||
-                maskType == RIPPLE_MASK_ROUNDRECT_6DP
+                maskType == RIPPLE_MASK_ROUNDRECT_6DP ||
+                maskType == 100
             ) {
                 maskPaint.setColor(0xffffffff);
                 maskDrawable = new Drawable() {
@@ -6103,7 +6104,13 @@ public class Theme {
                     @Override
                     public void draw(Canvas canvas) {
                         android.graphics.Rect bounds = getBounds();
-                        if (maskType == RIPPLE_MASK_ROUNDRECT_6DP) {
+                        if (maskType == 100) {
+                            if (rect == null) {
+                                rect = new RectF();
+                            }
+                            rect.set(bounds);
+                            canvas.drawRoundRect(rect, radius, radius, maskPaint);
+                        } else if (maskType == RIPPLE_MASK_ROUNDRECT_6DP) {
                             if (rect == null) {
                                 rect = new RectF();
                             }

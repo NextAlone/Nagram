@@ -49,7 +49,7 @@ public class MentionCell extends LinearLayout {
         setOrientation(HORIZONTAL);
 
         avatarDrawable = new AvatarDrawable();
-        avatarDrawable.setTextSize(AndroidUtilities.dp(12));
+        avatarDrawable.setTextSize(AndroidUtilities.dp(16));
 
         imageView = new BackupImageView(context);
         imageView.setRoundRadius(ExteraConfig.getAvatarCorners(28));

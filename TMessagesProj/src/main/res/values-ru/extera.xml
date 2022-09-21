@@ -50,11 +50,11 @@
     <string name="ShowDC">Показывать DC в профиле</string>
 
     <!-- Chats -->
-    <string name="StickerSize">Размер стикера</string>
+    <string name="StickerSize">Размер стикеров</string>
     <string name="StickerSizeDialogMessageReplyTo">жесть</string>
     <string name="StickerSizeDialogMessage">ого, он такой милый!</string>
-    <string name="StickerForm">Форма стикера</string>
-    <string name="StickerFormRounded">Закруглённый</string>
+    <string name="StickerForm">Форма стикеров</string>
+    <string name="StickerFormRounded">Закруглённая</string>
     <string name="StickerFormRoundedMsg">Сообщение</string>
     <string name="StickerTime">Скрыть время под стикером</string>
     <string name="UnlimitedRecentStickers">Бесконечные недавние стикеры</string>
@@ -62,7 +62,7 @@
     <string name="SendMessageBeforeSendSticker">Отправлять сообщение перед стикером</string>
 
     <string name="HideSendAsChannel">Скрыть \"Написать от имени…\"</string>
-    <string name="HideKeyboardOnScroll">Скрывать клавиатуру при пролистывании</string>
+    <string name="HideKeyboardOnScroll">Скрывать клавиатуру при скролле</string>
     <string name="DisableGreetingSticker">Скрыть приветственный стикер</string>
     <string name="DisableJumpToNextChannel">Отключить \"Перейти в новый канал\"</string>
     <string name="DisableReactions">Отключить реакции</string>
@@ -82,13 +82,30 @@
     <string name="DPDescription">Отключает автоматическое проигрывание видео при нажатии на кнопку громкости.</string>
 
     <!-- Drawer -->
-    <string name="Drawer">Боковое меню</string>
     <string name="DrawerElements">Элементы бокового меню</string>
     <string name="DrawerOptions">Настройки бокового меню</string>
     <string name="DrawerIconPack">Выбор стиля</string>
     <string name="NewYear">Новый год</string>
     <string name="ValentinesDay">День святого Валентина</string>
     <string name="Halloween">Хэллоуин</string>
+
+    <!-- Updates -->
+    <string name="Updates">Обновления</string>
+    <string name="UpdateAvailable">Доступно обновление!</string>
+    <string name="CheckOnLaunch">Проверять при запуске</string>
+    <string name="NoUpdates">Обновлений не найдено.</string>
+    <string name="CheckForUpdates">Проверить обновления</string>
+    <string name="CurrentVersion">Текущая версия</string>
+    <string name="Version">Версия</string>
+    <string name="UpdateSize">Размер обновления</string>
+    <string name="Changelog">Список изменений:</string>
+    <string name="BuildType">Тип сборки</string>
+    <string name="BTRelease">Релиз</string>
+    <string name="BTBeta">Бета</string>
+    <string name="ClearUpdatesCache">Очистить кэш обновлений</string>
+    <string name="ClearedUpdatesCache">Очищено **%1$s** кэша.</string>
+    <string name="NothingToClear">Нечего очищать.</string>
+    <string name="LastCheck">Последняя проверка</string>
 
     <!-- Other -->
     <string name="BoldItalic">Жирный курсив</string>

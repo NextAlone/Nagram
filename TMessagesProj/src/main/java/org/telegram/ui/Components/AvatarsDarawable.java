@@ -255,13 +255,13 @@ public class AvatarsDarawable {
             currentStates[a].imageReceiver = new ImageReceiver(parent);
             currentStates[a].imageReceiver.setRoundRadius(ExteraConfig.getAvatarCorners(24));
             currentStates[a].avatarDrawable = new AvatarDrawable();
-            currentStates[a].avatarDrawable.setTextSize(AndroidUtilities.dp(12));
+            currentStates[a].avatarDrawable.setTextSize(AndroidUtilities.dp(16));
 
             animatingStates[a] = new DrawingState();
             animatingStates[a].imageReceiver = new ImageReceiver(parent);
             animatingStates[a].imageReceiver.setRoundRadius(ExteraConfig.getAvatarCorners(24));
             animatingStates[a].avatarDrawable = new AvatarDrawable();
-            animatingStates[a].avatarDrawable.setTextSize(AndroidUtilities.dp(12));
+            animatingStates[a].avatarDrawable.setTextSize(AndroidUtilities.dp(16));
         }
         isInCall = inCall;
         xRefP.setColor(0);

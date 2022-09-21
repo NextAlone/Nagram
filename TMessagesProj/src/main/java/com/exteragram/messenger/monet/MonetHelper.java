@@ -1,6 +1,6 @@
 // all credits to @Nekogram
 
-package com.exteragram.messenger.extras;
+package com.exteragram.messenger.monet;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,6 +22,7 @@ import java.util.LinkedHashMap;
 
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class MonetHelper {
+
     private static final LinkedHashMap<String, Integer> ids = new LinkedHashMap<>();
     private static final String ACTION_OVERLAY_CHANGED = "android.intent.action.OVERLAY_CHANGED";
     private static final OverlayChangeReceiver overlayChangeReceiver = new OverlayChangeReceiver();

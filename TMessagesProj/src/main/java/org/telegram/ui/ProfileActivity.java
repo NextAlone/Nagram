@@ -204,7 +204,7 @@ import java.util.zip.ZipOutputStream;
 
 import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.ExteraUtils;
-import com.exteragram.messenger.preferences.MainPreferencesEntry;
+import com.exteragram.messenger.preferences.MainPreferencesActivity;
 
 public class ProfileActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, SharedMediaLayout.SharedMediaPreloaderDelegate, ImageUpdater.ImageUpdaterDelegate, SharedMediaLayout.Delegate {
 
@@ -2896,7 +2896,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 fragment.setInfo(chatInfo);
                 presentFragment(fragment);
             } else if (position == exteraRow) {
-                presentFragment(new MainPreferencesEntry());
+                presentFragment(new MainPreferencesActivity());
             } else if (position == notificationRow) {
                 presentFragment(new NotificationsSettingsActivity());
             } else if (position == privacyRow) {
@@ -2974,7 +2974,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 LocaleController.getString("DebugMenuClearMediaCache", R.string.DebugMenuClearMediaCache),
                                 LocaleController.getString("DebugMenuCallSettings", R.string.DebugMenuCallSettings),
                                 null,
-                                BuildVars.DEBUG_PRIVATE_VERSION || BuildVars.isStandaloneApp() ? LocaleController.getString("DebugMenuCheckAppUpdate", R.string.DebugMenuCheckAppUpdate) : null,
+                                null,
                                 LocaleController.getString("DebugMenuReadAllDialogs", R.string.DebugMenuReadAllDialogs),
                                 SharedConfig.pauseMusicOnRecord ? LocaleController.getString("DebugMenuDisablePauseMusic", R.string.DebugMenuDisablePauseMusic) : LocaleController.getString("DebugMenuEnablePauseMusic", R.string.DebugMenuEnablePauseMusic),
                                 BuildVars.DEBUG_VERSION && !AndroidUtilities.isTablet() && Build.VERSION.SDK_INT >= 23 ? (SharedConfig.smoothKeyboard ? LocaleController.getString("DebugMenuDisableSmoothKeyboard", R.string.DebugMenuDisableSmoothKeyboard) : LocaleController.getString("DebugMenuEnableSmoothKeyboard", R.string.DebugMenuEnableSmoothKeyboard)) : null,
@@ -3053,7 +3053,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             } else if (which == 15) {
                                 SharedConfig.pendingAppUpdate = null;
                                 SharedConfig.saveConfig();
-                                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.appUpdateAvailable);
+                                //NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.appUpdateAvailable);
                             } else if (which == 16) {
                                 Set<String> suggestions = getMessagesController().pendingSuggestions;
                                 suggestions.add("VALIDATE_PHONE_NUMBER");

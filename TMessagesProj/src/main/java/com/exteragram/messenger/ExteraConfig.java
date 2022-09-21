@@ -1,3 +1,14 @@
+/*
+
+ This is the source code of exteraGram for Android.
+
+ We do not and cannot prevent the use of our code,
+ but be respectful and credit the original author.
+
+ Copyright @immat0x1, 2022.
+
+*/
+
 package com.exteragram.messenger;
 
 import android.app.Activity;
@@ -11,8 +22,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
-
-import com.exteragram.messenger.ExteraUtils;
 
 import java.util.Arrays;
 
@@ -69,6 +78,11 @@ public class ExteraConfig {
     public static boolean disablePlayback;
     public static boolean disableProximityEvents;
 
+    // updates
+    public static long lastUpdateCheckTime;
+    public static long updateScheduleTimestamp;
+    public static boolean checkUpdatesOnLaunch;
+
     // other
     private static final int[] OFFICIAL_CHANNELS = {1233768168, 1524581881, 1571726392, 1632728092, 1638754701, 1779596027, 1172503281};
     private static final int[] DEVS = {963080346, 1282540315, 1374434073, 388099852, 1972014627, 168769611};
@@ -124,7 +138,7 @@ public class ExteraConfig {
             dateOfForwardedMsg = preferences.getBoolean("dateOfForwardedMsg", false);
             showMessageID = preferences.getBoolean("showMessageID", false);
             showActionTimestamps = preferences.getBoolean("showActionTimestamps", true);
-            zalgoFilter = preferences.getBoolean("zalgoFilter", true);
+            zalgoFilter = preferences.getBoolean("zalgoFilter", false);
 
             rearVideoMessages = preferences.getBoolean("rearVideoMessages", false);
             disableCamera = preferences.getBoolean("disableCamera", false);
@@ -145,6 +159,10 @@ public class ExteraConfig {
             telegramFeatures = preferences.getBoolean("telegramFeatures", true);
             eventType = preferences.getInt("eventType", 0);
 
+            lastUpdateCheckTime = preferences.getLong("lastUpdateCheckTime", 0);
+            updateScheduleTimestamp = preferences.getLong("updateScheduleTimestamp", 0);
+            checkUpdatesOnLaunch = preferences.getBoolean("checkUpdatesOnLaunch", true);
+
             channelToSave = preferences.getLong("channelToSave", 0);
 
             configLoaded = true;
@@ -157,6 +175,21 @@ public class ExteraConfig {
 
     public static boolean isExteraDev(TLRPC.User user) {
         return Arrays.stream(DEVS).anyMatch(id -> id == user.id);
+    }
+
+    public static void scheduleUpdate() {
+        SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
+        editor.putLong("updateScheduleTimestamp", updateScheduleTimestamp = System.currentTimeMillis()).apply();
+    }
+
+    public static void updateLastCheckUpdateTime() {
+        SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
+        editor.putLong("lastUpdateCheckTime", lastUpdateCheckTime = System.currentTimeMillis()).apply();
+    }
+
+    public static void toggleCheckUpdatesOnLaunch() {
+        SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
+        editor.putBoolean("checkUpdatesOnLaunch", checkUpdatesOnLaunch ^= true).apply();
     }
 
     public static void toggleUseSystemFonts() {

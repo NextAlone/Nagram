@@ -458,7 +458,7 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         } else if (messageObject.type == 11) {
             imageReceiver.setAllowStartLottieAnimation(true);
             imageReceiver.setDelegate(null);
-            imageReceiver.setRoundRadius(AndroidUtilities.roundMessageSize / 2);
+            imageReceiver.setRoundRadius(ExteraConfig.getAvatarCorners(AndroidUtilities.roundMessageSize, true));
             long id = messageObject.getDialogId();
             avatarDrawable.setInfo(id, null, null);
             if (messageObject.messageOwner.action instanceof TLRPC.TL_messageActionUserUpdatedPhoto) {

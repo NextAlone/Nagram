@@ -1,4 +1,15 @@
-package com.exteragram.messenger.extras;
+/*
+
+ This is the source code of exteraGram for Android.
+
+ We do not and cannot prevent the use of our code,
+ but be respectful and credit the original author.
+
+ Copyright @immat0x1, 2022.
+
+*/
+
+package com.exteragram.messenger.monet;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -10,7 +21,8 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.color.MaterialColors;
 import org.telegram.messenger.R;
 
-public class Monet {
+public class MonetAccent {
+
     private final static int defaultColor = Color.argb(0xFF, 0x3D, 0xDC, 0x84);
     private static ContextThemeWrapper ctxWrapper;
 

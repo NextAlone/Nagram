@@ -255,7 +255,7 @@ public final class BulletinFactory {
     public Bulletin createErrorBulletin(CharSequence errorMessage, Theme.ResourcesProvider resourcesProvider) {
         Bulletin.LottieLayout layout = new Bulletin.LottieLayout(getContext(), resourcesProvider);
         layout.setAnimation(R.raw.chats_infotip);
-        layout.textView.setText(errorMessage);
+        layout.textView.setText(AndroidUtilities.replaceTags(errorMessage.toString()));
         layout.textView.setSingleLine(false);
         layout.textView.setMaxLines(2);
         return create(layout, Bulletin.DURATION_SHORT);
