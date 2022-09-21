@@ -926,6 +926,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         childTop = lp.topMargin;
                 }
 
+
                 if (commentView != null && commentView.isPopupView(child)) {
                     if (AndroidUtilities.isInMultiwindow) {
                         childTop = commentView.getTop() - child.getMeasuredHeight() + AndroidUtilities.dp(1);
@@ -949,6 +950,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     childTop += topPadding;
                 } else if (child instanceof FragmentContextView) {
                     childTop += actionBar.getMeasuredHeight();
+                } else if (child == floatingButtonContainer && selectAnimatedEmojiDialog != null) {
+                    childTop += keyboardSize;
                 }
                 child.layout(childLeft, childTop, childLeft + width, childTop + height);
             }
@@ -4002,7 +4005,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     public void showSelectStatusDialog() {
-        if (selectAnimatedEmojiDialog != null) {
+        if (selectAnimatedEmojiDialog != null || SharedConfig.appLocked) {
             return;
         }
         final SelectAnimatedEmojiDialog.SelectAnimatedEmojiDialogWindow[] popup = new SelectAnimatedEmojiDialog.SelectAnimatedEmojiDialogWindow[1];

@@ -4858,7 +4858,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
     public boolean processSendingText(CharSequence text, boolean notify, int scheduleDate) {
         int[] emojiOnly = new int[1];
         Emoji.parseEmojis(text, emojiOnly);
-        boolean hasOnlyEmoji = emojiOnly[0] <= 100;
+        boolean hasOnlyEmoji = emojiOnly[0] > 0;
         if (!hasOnlyEmoji) {
             text = AndroidUtilities.getTrimmedString(text);
         }
@@ -8280,6 +8280,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             }
             if (messageEditText != null) {
                 messageEditText.postInvalidate();
+                messageEditText.invalidateForce();
             }
         } else if (id == NotificationCenter.recordProgressChanged) {
             int guid = (Integer) args[0];
