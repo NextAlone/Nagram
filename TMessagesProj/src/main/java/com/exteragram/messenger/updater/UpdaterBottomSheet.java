@@ -232,7 +232,7 @@ public class UpdaterBottomSheet extends BottomSheet {
             checkUpdatesButton.setOnClickListener(v -> {
                 UpdaterUtils.checkUpdates(context, true, () -> {
                     BulletinFactory.of(getContainer(), null).createErrorBulletin(LocaleController.getString("NoUpdates", R.string.NoUpdates)).show();
-                    timeView.setText(LocaleController.formatDateTime(ExteraConfig.lastUpdateCheckTime / 1000));
+                    timeView.setText(LocaleController.getString("LastCheck", R.string.LastCheck) + ": " + LocaleController.formatDateTime(ExteraConfig.lastUpdateCheckTime / 1000));
                 }, () -> dismiss());
             });
             linearLayout.addView(checkUpdatesButton, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, 0, 16, 15, 16, 16));

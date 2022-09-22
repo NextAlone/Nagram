@@ -40,7 +40,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-wallet:19.1.0'
     implementation 'com.googlecode.mp4parser:isoparser:1.0.6'
     implementation 'com.stripe:stripe-android:2.0.2'
-    implementation 'com.google.mlkit:language-id:17.0.3'
+    implementation 'com.google.mlkit:language-id:16.1.1'
     implementation 'com.android.billingclient:billing:5.0.0'
     implementation files('libs/libgsaverification-client.aar')
 
@@ -71,8 +71,8 @@ static def getGoogleMapsAPI() {
 }
 
 android {
-    compileSdkVersion 32
-    buildToolsVersion '32.1.0-rc1'
+    compileSdkVersion 33
+    buildToolsVersion '33.0.0'
     ndkVersion "21.4.7075529"
     namespace 'org.telegram.messenger'
 
@@ -81,7 +81,7 @@ android {
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionName APP_VERSION_NAME
 
         // Obtain your own keys at:

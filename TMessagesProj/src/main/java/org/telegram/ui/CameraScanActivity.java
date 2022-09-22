@@ -91,6 +91,8 @@ import org.telegram.ui.Components.URLSpanNoUnderline;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
+import com.exteragram.messenger.extras.PermissionUtils;
+
 @TargetApi(18)
 public class CameraScanActivity extends BaseFragment {
 
@@ -618,8 +620,8 @@ public class CameraScanActivity extends BaseFragment {
                         return;
                     }
                     if (Build.VERSION.SDK_INT >= 23) {
-                        if (getParentActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                            getParentActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, BasePermissionsActivity.REQUEST_CODE_EXTERNAL_STORAGE);
+                        if (!PermissionUtils.isImagesAndVideoPermissionGranted()) {
+                            PermissionUtils.requestImagesAndVideoPermission(getParentActivity());
                             return;
                         }
                     }

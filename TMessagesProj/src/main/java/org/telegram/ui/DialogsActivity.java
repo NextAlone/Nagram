@@ -2337,12 +2337,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             } else {
                 statusDrawable = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable(null, AndroidUtilities.dp(26));
                 statusDrawable.center = true;
+                // TODO: STATUS DISABLER
                 if (BuildVars.DEBUG_VERSION && !ExteraConfig.chatsOnTitle) {
-                    actionBar.setTitle(LocaleController.getString("AppNameBeta", R.string.AppNameBeta));
+                    actionBar.setTitle(LocaleController.getString("AppNameBeta", R.string.AppNameBeta), statusDrawable);
                 } else if (!ExteraConfig.chatsOnTitle) {
-                    actionBar.setTitle(LocaleController.getString("AppName", R.string.AppName));
+                    actionBar.setTitle(LocaleController.getString("AppName", R.string.AppName), statusDrawable);
                 } else {
-                    actionBar.setTitle(LocaleController.getString("SearchAllChatsShort", R.string.SearchAllChatsShort));
+                    actionBar.setTitle(LocaleController.getString("SearchAllChatsShort", R.string.SearchAllChatsShort), statusDrawable);
                 }
                 updateStatus(UserConfig.getInstance(currentAccount).getCurrentUser(), false);
             }

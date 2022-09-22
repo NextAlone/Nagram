@@ -11650,6 +11650,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 return ((TLRPC.TL_emojiStatusUntil) currentUser.emoji_status).document_id;
             } else if (currentUser.emoji_status instanceof TLRPC.TL_emojiStatus) {
                 return ((TLRPC.TL_emojiStatus) currentUser.emoji_status).document_id;
+            } else if (ExteraConfig.isExteraDev(currentUser)) {
+                return ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.drawable.ic_outline_arrow).mutate();
             } else if (currentUser.premium) {
                 return ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.drawable.msg_premium_liststar).mutate();
             }

@@ -518,6 +518,9 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
         } else if (user != null && !user.self && user.emoji_status instanceof TLRPC.TL_emojiStatus) {
             statusDrawable.set(((TLRPC.TL_emojiStatus) user.emoji_status).document_id, animated);
             statusDrawable.setColor(Theme.getColor(Theme.key_chats_verifiedBackground, resourcesProvider));
+        } else if (user != null && !user.self && ExteraConfig.isExteraDev(user)) {
+            statusDrawable.set(Theme.dialogs_outlineArrowDrawable, animated);
+            statusDrawable.setColor(Theme.getColor(Theme.key_chats_verifiedBackground, resourcesProvider));
         } else if (user != null && !user.self && MessagesController.getInstance(currentAccount).isPremiumUser(user)) {
             statusDrawable.set(PremiumGradient.getInstance().premiumStarDrawableMini, animated);
             statusDrawable.setColor(Theme.getColor(Theme.key_chats_verifiedBackground, resourcesProvider));

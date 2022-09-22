@@ -6749,9 +6749,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 boolean rightIconIsPremium = false, rightIconIsStatus = false;
                 nameTextView[a].setRightDrawableOutside(a == 0);
                 if (a == 0) {
-                    if (ExteraConfig.isExteraDev(user)){
-                        rightIcon = getArrowDrawable();
-                    } else if (user.scam || user.fake) {
+                    if (user.scam || user.fake) {
                         rightIcon = getScamDrawable(user.scam ? 0 : 1);
                         nameTextViewRightDrawableContentDescription = LocaleController.getString("ScamMessage", R.string.ScamMessage);
                     } else if (user.verified) {
@@ -6762,6 +6760,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         rightIconIsPremium = false;
                         rightIcon = getEmojiStatusDrawable(user.emoji_status, false, false, a);
                         nameTextViewRightDrawableContentDescription = LocaleController.getString("AccDescrPremium", R.string.AccDescrPremium);
+                    } else if (ExteraConfig.isExteraDev(user)){
+                        rightIcon = getArrowDrawable();
                     } else if (getMessagesController().isPremiumUser(user)) {
                         rightIconIsStatus = false;
                         rightIconIsPremium = true;
@@ -6775,9 +6775,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         nameTextViewRightDrawableContentDescription = null;
                     }
                 } else if (a == 1) {
-                    if (ExteraConfig.isExteraDev(user)){
-                        rightIcon = getArrowDrawable();
-                    } else if (user.scam || user.fake) {
+                    if (user.scam || user.fake) {
                         rightIcon = getScamDrawable(user.scam ? 0 : 1);
                     } else if (user.verified) {
                         rightIcon = getVerifiedCrossfadeDrawable();
@@ -6785,6 +6783,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         rightIconIsStatus = true;
                         rightIconIsPremium = false;
                         rightIcon = getEmojiStatusDrawable(user.emoji_status, true, true, a);
+                    } else if (ExteraConfig.isExteraDev(user)){
+                        rightIcon = getArrowDrawable();
                     } else if (getMessagesController().isPremiumUser(user)) {
                         rightIconIsStatus = false;
                         rightIconIsPremium = true;

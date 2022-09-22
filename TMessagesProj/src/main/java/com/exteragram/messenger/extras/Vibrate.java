@@ -55,8 +55,7 @@ public class Vibrate {
         if (!vibrator.hasVibrator()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 try {
-                    VibrationEffect effect = VibrationEffect.createOneShot(time, VibrationEffect.DEFAULT_AMPLITUDE);
-                    vibrator.vibrate(effect, null);
+                    vibrator.vibrate(VibrationEffect.createOneShot(time, VibrationEffect.DEFAULT_AMPLITUDE));
                 } catch (Exception e) {
                     FileLog.e("Failed to vibrate");
                 }

@@ -112,6 +112,7 @@ import java.util.Objects;
 
 import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.ExteraUtils;
+import com.exteragram.messenger.extras.PermissionUtils;
 
 public class ChatAttachAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate, BottomSheet.BottomSheetDelegateInterface {
 
@@ -1944,14 +1945,14 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 if (num == 1) {
                     showLayout(photoLayout);
                 } else if (num == 3) {
-                    if (Build.VERSION.SDK_INT >= 23 && baseFragment.getParentActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        baseFragment.getParentActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, BasePermissionsActivity.REQUEST_CODE_EXTERNAL_STORAGE);
+                    if (Build.VERSION.SDK_INT >= 23 && !PermissionUtils.isAudioPermissionGranted()) {
+                        PermissionUtils.requestAudioPermission(baseFragment.getParentActivity());
                         return;
                     }
                     openAudioLayout(true);
                 } else if (num == 4) {
-                    if (Build.VERSION.SDK_INT >= 23 && baseFragment.getParentActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        baseFragment.getParentActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, BasePermissionsActivity.REQUEST_CODE_EXTERNAL_STORAGE);
+                    if (Build.VERSION.SDK_INT >= 23 && !PermissionUtils.isStoragePermissionGranted()) {
+                        PermissionUtils.requestStoragePermission(baseFragment.getParentActivity());
                         return;
                     }
                     openDocumentsLayout(true);

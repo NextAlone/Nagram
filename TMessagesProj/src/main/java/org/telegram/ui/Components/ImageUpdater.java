@@ -60,6 +60,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.exteragram.messenger.extras.PermissionUtils;
+
 public class ImageUpdater implements NotificationCenter.NotificationCenterDelegate, PhotoCropActivity.PhotoEditActivityDelegate {
     private final static int ID_TAKE_PHOTO = 0,
             ID_UPLOAD_FROM_GALLERY = 1,
@@ -577,8 +579,12 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             return;
         }
         if (Build.VERSION.SDK_INT >= 23 && parentFragment.getParentActivity() != null) {
-            if (parentFragment.getParentActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                parentFragment.getParentActivity().requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, BasePermissionsActivity.REQUEST_CODE_EXTERNAL_STORAGE_FOR_AVATAR);
+            if (canSelectVideo ? !PermissionUtils.isImagesAndVideoPermissionGranted() : !PermissionUtils.isImagesPermissionGranted()) {
+                if (canSelectVideo) {
+                    PermissionUtils.requestImagesAndVideoPermission(parentFragment.getParentActivity(), BasePermissionsActivity.REQUEST_CODE_EXTERNAL_STORAGE_FOR_AVATAR);
+                } else {
+                    PermissionUtils.requestImagesPermission(parentFragment.getParentActivity(), BasePermissionsActivity.REQUEST_CODE_EXTERNAL_STORAGE_FOR_AVATAR);
+                }
                 return;
             }
         }

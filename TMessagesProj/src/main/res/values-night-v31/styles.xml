@@ -29,20 +29,7 @@
         <item name="android:forceDarkAllowed">false</item>
         <item name="android:windowSplashScreenAnimatedIcon">@drawable/etg_splash</item>
         <item name="android:windowSplashScreenAnimationDuration">@integer/splash_screen_duration</item>
-        <item name="android:windowSplashScreenBackground">?android:windowBackground</item>
-    </style>
-
-    <!-- APP WIDGET -->
-
-    <style name="Base.Theme.TMessages.AppWidget" parent="android:Theme.DeviceDefault.DayNight" />
-
-    <style name="TMessages.AppWidget.Background" parent="Base.TMessages.AppWidget.Background">
-        <item name="android:clipToOutline">true</item>
-        <item name="android:background">@drawable/widget_background</item>
-    </style>
-
-    <style name="TMessages.AppWidget.Badge" parent="Base.TMessages.AppWidget.Badge">
-        <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
+        <item name="android:windowSplashScreenBackground">#181818</item>
     </style>
 
 </resources>

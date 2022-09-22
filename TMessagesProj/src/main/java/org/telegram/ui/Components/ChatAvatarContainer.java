@@ -551,12 +551,6 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 rightDrawableContentDescription = LocaleController.getString("ScamMessage", R.string.ScamMessage);
                 rightDrawableIsScamOrVerified = true;
             }
-        } else if (arrow) {
-            Drawable exteraArrow = getResources().getDrawable(R.drawable.ic_outline_arrow);
-            exteraArrow.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_profile_verifiedBackground), PorterDuff.Mode.MULTIPLY));
-            titleTextView.setRightDrawable(exteraArrow);
-            titleTextView.setRightDrawableTopPadding(-AndroidUtilities.dp(0.5f));
-            rightDrawableIsScamOrVerified = true;
         } else if (verified) {
             Drawable verifiedBackground = getResources().getDrawable(R.drawable.verified_area).mutate();
             verifiedBackground.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_profile_verifiedBackground), PorterDuff.Mode.MULTIPLY));
@@ -580,6 +574,12 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 emojiStatusDrawable.set(((TLRPC.TL_emojiStatus) emojiStatus).document_id, animated);
             } else if (emojiStatus instanceof TLRPC.TL_emojiStatusUntil && ((TLRPC.TL_emojiStatusUntil) emojiStatus).until > (int) (System.currentTimeMillis() / 1000)) {
                 emojiStatusDrawable.set(((TLRPC.TL_emojiStatusUntil) emojiStatus).document_id, animated);
+            } else if (arrow) {
+                Drawable exteraArrow = ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.drawable.ic_outline_arrow).mutate();
+                exteraArrow.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_profile_verifiedBackground), PorterDuff.Mode.MULTIPLY));
+                titleTextView.setRightDrawable(exteraArrow);
+                titleTextView.setRightDrawableTopPadding(-AndroidUtilities.dp(0.5f));
+                rightDrawableIsScamOrVerified = true;
             } else {
                 Drawable drawable = ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.drawable.msg_premium_liststar).mutate();
                 drawable.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_profile_verifiedBackground), PorterDuff.Mode.MULTIPLY));
@@ -590,6 +590,12 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
 //            titleTextView.setRightPadding(titleTextView.getPaddingRight());
             rightDrawableIsScamOrVerified = true;
             rightDrawableContentDescription = LocaleController.getString("AccDescrPremium", R.string.AccDescrPremium);
+        } else if (arrow) {
+            Drawable exteraArrow = getResources().getDrawable(R.drawable.ic_outline_arrow).mutate();
+            exteraArrow.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_profile_verifiedBackground), PorterDuff.Mode.MULTIPLY));
+            titleTextView.setRightDrawable(exteraArrow);
+            titleTextView.setRightDrawableTopPadding(-AndroidUtilities.dp(0.5f));
+            rightDrawableIsScamOrVerified = true;
         } else if (titleTextView.getRightDrawable() instanceof ScamDrawable) {
             titleTextView.setRightDrawable(null);
 //            titleTextView.setRightPadding(0);
