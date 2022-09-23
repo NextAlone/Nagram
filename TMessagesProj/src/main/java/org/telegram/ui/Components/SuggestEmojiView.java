@@ -399,7 +399,8 @@ public class SuggestEmojiView extends FrameLayout implements NotificationCenter.
                             editable.removeSpan(emojiSpans[j]);
                         }
                     }
-                    editable.replace(i, i + replacingLength, emoji);
+                    editable.insert(i + replacingLength, emoji);
+                    //editable.replace(i, i + replacingLength, emoji);
                 } else {
                     break;
                 }
