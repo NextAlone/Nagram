@@ -209,8 +209,9 @@ public abstract class BasePreferencesActivity extends BaseFragment {
                     view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
                 // case 9: General > AvatarCornersCell
-                // case 10: Chats > StickerFormCell
+                // case 10: Chats > StickerShapeCell
                 // case 11: Chats > StickerSizeCell
+                // case 12: Appearance > FabShapeCell
             }
             view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
             return new RecyclerListView.Holder(view);

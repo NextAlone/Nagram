@@ -32,9 +32,9 @@ import org.telegram.ui.Components.RadioButton;
 
 import com.exteragram.messenger.ExteraConfig;
 
-public class StickerFormCell extends LinearLayout {
+public class StickerShapeCell extends LinearLayout {
 
-    private class StickerForm extends FrameLayout {
+    private class StickerShape extends FrameLayout {
 
         private RadioButton button;
         private boolean isRounded;
@@ -42,7 +42,7 @@ public class StickerFormCell extends LinearLayout {
         private RectF rect = new RectF();
         private TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
 
-        public StickerForm(Context context, boolean rounded, boolean roundedAsMsg) {
+        public StickerShape(Context context, boolean rounded, boolean roundedAsMsg) {
             super(context);
             setWillNotDraw(false);
 
@@ -55,12 +55,12 @@ public class StickerFormCell extends LinearLayout {
                 @Override
                 public void invalidate() {
                     super.invalidate();
-                    StickerForm.this.invalidate();
+                    StickerShape.this.invalidate();
                 }
             };
             button.setSize(AndroidUtilities.dp(20));
             addView(button, LayoutHelper.createFrame(22, 22, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 0, 0, 40));
-            button.setChecked(!isRounded && !isRoundedAsMsg && ExteraConfig.stickerForm == 0 || isRounded && ExteraConfig.stickerForm == 1 || isRoundedAsMsg && ExteraConfig.stickerForm == 2, false);
+            button.setChecked(!isRounded && !isRoundedAsMsg && ExteraConfig.stickerShape == 0 || isRounded && ExteraConfig.stickerShape == 1 || isRoundedAsMsg && ExteraConfig.stickerShape == 2, false);
         }
 
         @Override
@@ -84,9 +84,9 @@ public class StickerFormCell extends LinearLayout {
 
             String text;
             if (isRounded) {
-                text = LocaleController.getString("StickerFormRounded", R.string.StickerFormRounded);
+                text = LocaleController.getString("StickerShapeRounded", R.string.StickerShapeRounded);
             } else if (isRoundedAsMsg) {
-                text = LocaleController.getString("StickerFormRoundedMsg", R.string.StickerFormRoundedMsg);
+                text = LocaleController.getString("StickerShapeRoundedMsg", R.string.StickerShapeRoundedMsg);
             } else {
                 text = LocaleController.getString("Default", R.string.Default);
             }
@@ -106,9 +106,9 @@ public class StickerFormCell extends LinearLayout {
         }
     }
 
-    private StickerForm[] stickerForm = new StickerForm[3];
+    private StickerShape[] stickerShape = new StickerShape[3];
 
-    public StickerFormCell(Context context) {
+    public StickerShapeCell(Context context) {
         super(context);
         setOrientation(HORIZONTAL);
         setPadding(AndroidUtilities.dp(13), AndroidUtilities.dp(10), AndroidUtilities.dp(13), 0);
@@ -116,26 +116,25 @@ public class StickerFormCell extends LinearLayout {
         for (int a = 0; a < 3; a++) {
             boolean rounded = a == 1;
             boolean roundedAsMsg = a == 2;
-            stickerForm[a] = new StickerForm(context, rounded, roundedAsMsg);
-            addView(stickerForm[a], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 0.5f, 8, 0, 8, 0));
-            stickerForm[a].setOnClickListener(v -> {
+            stickerShape[a] = new StickerShape(context, rounded, roundedAsMsg);
+            addView(stickerShape[a], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 0.5f, 8, 0, 8, 0));
+            stickerShape[a].setOnClickListener(v -> {
                 for (int b = 0; b < 3; b++) {
-                    stickerForm[b].button.setChecked(stickerForm[b] == v, true);
+                    stickerShape[b].button.setChecked(stickerShape[b] == v, true);
                 }
-                ExteraConfig.setStickerForm(rounded ? 1 : (roundedAsMsg ? 2 : 0));
+                ExteraConfig.setStickerShape(rounded ? 1 : (roundedAsMsg ? 2 : 0));
                 updateStickerPreview();
             });
         }
     }
 
-    protected void updateStickerPreview() {
-    }
+    protected void updateStickerPreview() {};
 
     @Override
     public void invalidate() {
         super.invalidate();
         for (int a = 0; a < 3; a++) {
-            stickerForm[a].invalidate();
+            stickerShape[a].invalidate();
         }
     }
 

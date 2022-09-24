@@ -56,7 +56,7 @@ public class ExteraConfig {
 
     // chats
     public static float stickerSize = 14.0f;
-    public static int stickerForm;
+    public static int stickerShape;
     public static boolean hideStickerTime;
     public static boolean unlimitedRecentStickers;
     public static boolean sendMessageBeforeSendSticker;
@@ -124,7 +124,7 @@ public class ExteraConfig {
             showDC = preferences.getBoolean("showDC", false);
 
             stickerSize = preferences.getFloat("stickerSize", 14.0f);
-            stickerForm = preferences.getInt("stickerForm", 0);
+            stickerShape = preferences.getInt("stickerShape", 0);
             hideStickerTime = preferences.getBoolean("hideStickerTime", false);
             unlimitedRecentStickers = preferences.getBoolean("unlimitedRecentStickers", false);
             sendMessageBeforeSendSticker = preferences.getBoolean("sendMessageBeforeSendSticker", false);
@@ -398,9 +398,9 @@ public class ExteraConfig {
         editor.putBoolean("transparentNavBar", transparentNavBar ^= true).apply();
     }
 
-    public static void toggleSquareFab() {
+    public static void setSquareFab(boolean square) {
         SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
-        editor.putBoolean("squareFab", squareFab ^= true).apply();
+        editor.putBoolean("squareFab", squareFab = square).apply();
     }
 
     public static void toggleDisableUnarchiveSwipe() {
@@ -435,9 +435,9 @@ public class ExteraConfig {
         editor.putBoolean("premiumAutoPlayback", premiumAutoPlayback ^= true).apply();
     }
 
-    public static void setStickerForm(int form) {
+    public static void setStickerShape(int shape) {
         SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
-        editor.putInt("stickerForm", stickerForm = form).apply();
+        editor.putInt("stickerShape", stickerShape = shape).apply();
     }
 
     public static void toggleLogging() {

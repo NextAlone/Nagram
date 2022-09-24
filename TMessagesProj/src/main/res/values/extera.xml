@@ -32,9 +32,7 @@
     <string name="CenterTitle">Center title in action bar</string>
     <string name="NewSwitchStyle">Alternative switch style</string>
     <string name="TransparentNavBar">Transparent navigation bar</string>
-    <string name="TransparentNavBarValue">The navigation bar will not become completely transparent, it will only get the color of the Message Panel.</string>
-    <string name="SquareFab">Square-shaped FAB</string>
-    <string name="SquareFabInfo">A floating action button (FAB) is a circular button that triggers the primary action in app\'s UI. It is located in the right bottom corner of the screen.</string>
+    <string name="TransparentNavBarInfo">The navigation bar will not become completely transparent, it will only get the color of the Message Panel.</string>
 
     <!-- General -->
     <string name="AvatarCorners">Avatar corners</string>
@@ -57,9 +55,9 @@
     <string name="StickerSize">Stickers size</string>
     <string name="StickerSizeDialogMessageReplyTo">wow</string>
     <string name="StickerSizeDialogMessage">woah, he is so cute!</string>
-    <string name="StickerForm">Stickers shape</string>
-    <string name="StickerFormRounded">Rounded</string>
-    <string name="StickerFormRoundedMsg">Message</string>
+    <string name="StickerShape">Stickers shape</string>
+    <string name="StickerShapeRounded">Rounded</string>
+    <string name="StickerShapeRoundedMsg">Message</string>
     <string name="StickerTime">Hide time on stickers</string>
     <string name="UnlimitedRecentStickers">Unlimited recent stickers</string>
     <string name="PremiumAutoPlayback">Premium auto-playback</string>

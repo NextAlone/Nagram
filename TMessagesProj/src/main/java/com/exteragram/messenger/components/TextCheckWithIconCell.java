@@ -17,7 +17,6 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
 import android.util.Property;
@@ -39,7 +38,6 @@ import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Switch;
-import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
 
 import java.util.ArrayList;
@@ -172,34 +170,6 @@ public class TextCheckWithIconCell extends FrameLayout {
         super.setBackgroundColor(color);
     }
 
-    public void setBackgroundColorAnimated(boolean checked, int color) {
-        if (animator != null) {
-            animator.cancel();
-            animator = null;
-        }
-        if (animatedColorBackground != 0) {
-            setBackgroundColor(animatedColorBackground);
-        }
-        if (animationPaint == null) {
-            animationPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        }
-        checkBox.setOverrideColor(checked ? 1 : 2);
-        animatedColorBackground = color;
-        animationPaint.setColor(animatedColorBackground);
-        animationProgress = 0.0f;
-        animator = ObjectAnimator.ofFloat(this, ANIMATION_PROGRESS, 0.0f, 1.0f);
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                setBackgroundColor(animatedColorBackground);
-                animatedColorBackground = 0;
-                invalidate();
-            }
-        });
-        animator.setInterpolator(CubicBezierInterpolator.EASE_OUT);
-        animator.setDuration(240).start();
-    }
-
     private void setAnimationProgress(float value) {
         animationProgress = value;
         float tx = getLastTouchX();
@@ -208,32 +178,6 @@ public class TextCheckWithIconCell extends FrameLayout {
         int cy = getMeasuredHeight() / 2;
         float animatedRad = rad * animationProgress;
         checkBox.setOverrideColorProgress(cx, cy, animatedRad);
-    }
-
-    public void setBackgroundColorAnimatedReverse(int color) {
-        if (animator != null) {
-            animator.cancel();
-            animator = null;
-        }
-
-        int from = animatedColorBackground != 0 ? animatedColorBackground : getBackground() instanceof ColorDrawable ? ((ColorDrawable) getBackground()).getColor() : 0;
-        if (animationPaint == null) animationPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        animationPaint.setColor(from);
-
-        setBackgroundColor(color);
-        checkBox.setOverrideColor(1);
-        animatedColorBackground = color;
-        animator = ObjectAnimator.ofFloat(this, ANIMATION_PROGRESS, 1, 0).setDuration(240);
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                setBackgroundColor(color);
-                animatedColorBackground = 0;
-                invalidate();
-            }
-        });
-        animator.setInterpolator(CubicBezierInterpolator.EASE_OUT);
-        animator.start();
     }
 
     private float getLastTouchX() {
@@ -253,10 +197,6 @@ public class TextCheckWithIconCell extends FrameLayout {
         if (needDivider) {
             canvas.drawLine(LocaleController.isRTL ? 0 : AndroidUtilities.dp(70), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(70) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
         }
-    }
-
-    public void setAnimatingToThumbInsteadOfTouch(boolean animatingToThumbInsteadOfTouch) {
-        isAnimatingToThumbInsteadOfTouch = animatingToThumbInsteadOfTouch;
     }
 
     @Override

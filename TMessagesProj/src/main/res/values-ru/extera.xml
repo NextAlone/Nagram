@@ -28,9 +28,7 @@
     <string name="CenterTitle">Заголовок по центру</string>
     <string name="NewSwitchStyle">Альтернативный стиль переключателей</string>
     <string name="TransparentNavBar">Прозрачная панель навигации</string>
-    <string name="TransparentNavBarValue">Панель навигации не станет полностью прозрачной, она лишь приобретет цвет панели отправки сообщений.</string>
-    <string name="SquareFab">Квадратный FAB</string>
-    <string name="SquareFabInfo">Floating action button (FAB) — это круглая кнопка, запускающая основное действие в интерфейсе приложения. Она расположена в правом нижнем углу экрана.</string>
+    <string name="TransparentNavBarInfo">Панель навигации не станет полностью прозрачной, она лишь приобретет цвет панели отправки сообщений.</string>
 
     <!-- General -->
     <string name="AvatarCorners">Закругление аватарок</string>
@@ -53,9 +51,9 @@
     <string name="StickerSize">Размер стикеров</string>
     <string name="StickerSizeDialogMessageReplyTo">жесть</string>
     <string name="StickerSizeDialogMessage">ого, он такой милый!</string>
-    <string name="StickerForm">Форма стикеров</string>
-    <string name="StickerFormRounded">Закруглённая</string>
-    <string name="StickerFormRoundedMsg">Сообщение</string>
+    <string name="StickerShape">Форма стикеров</string>
+    <string name="StickerShapeRounded">Закруглённая</string>
+    <string name="StickerShapeRoundedMsg">Сообщение</string>
     <string name="StickerTime">Скрыть время под стикером</string>
     <string name="UnlimitedRecentStickers">Бесконечные недавние стикеры</string>
     <string name="PremiumAutoPlayback">Авто-анимация премиум стикеров</string>

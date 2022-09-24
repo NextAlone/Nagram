@@ -6162,9 +6162,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     backgroundWidth = photoWidth + AndroidUtilities.dp(12);
 
                     canChangeRadius = false;
-                    if (ExteraConfig.stickerForm == 1) {
+                    if (ExteraConfig.stickerShape == 1) {
                         photoImage.setRoundRadius(AndroidUtilities.dp(6));
-                    } else if (ExteraConfig.stickerForm == 2) {
+                    } else if (ExteraConfig.stickerShape == 2) {
                         canChangeRadius = true;
                     } else {
                         photoImage.setRoundRadius(AndroidUtilities.dp(0));
@@ -13851,7 +13851,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             Theme.chat_timePaint.setAlpha((int) (255 * timeAlpha * alpha));
 
             int r;
-            if ((documentAttachType != DOCUMENT_ATTACH_TYPE_ROUND && documentAttachType != DOCUMENT_ATTACH_TYPE_STICKER && currentMessageObject.type != MessageObject.TYPE_EMOJIS) || (documentAttachType == DOCUMENT_ATTACH_TYPE_STICKER && ExteraConfig.stickerForm == 2)) {
+            if ((documentAttachType != DOCUMENT_ATTACH_TYPE_ROUND && documentAttachType != DOCUMENT_ATTACH_TYPE_STICKER && currentMessageObject.type != MessageObject.TYPE_EMOJIS) || (documentAttachType == DOCUMENT_ATTACH_TYPE_STICKER && ExteraConfig.stickerShape == 2)) {
                 int[] rad = photoImage.getRoundRadius();
                 r = Math.min(AndroidUtilities.dp(8), Math.max(rad[2], rad[3]));
                 bigRadius = SharedConfig.bubbleRadius >= 10;

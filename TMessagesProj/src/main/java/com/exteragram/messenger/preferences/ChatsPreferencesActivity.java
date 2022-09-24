@@ -48,20 +48,20 @@ import org.telegram.ui.Components.SeekBarView;
 
 import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.components.StickerSizePreviewCell;
-import com.exteragram.messenger.components.StickerFormCell;
+import com.exteragram.messenger.components.StickerShapeCell;
 
 public class ChatsPreferencesActivity extends BasePreferencesActivity implements NotificationCenter.NotificationCenterDelegate {
 
     private ActionBarMenuItem resetItem;
     private StickerSizeCell stickerSizeCell;
-    private StickerFormCell stickerFormCell;
+    private StickerShapeCell stickerShapeCell;
 
     private int stickerSizeHeaderRow;
     private int stickerSizeRow;
 
-    private int stickerFormHeaderRow;
-    private int stickerFormRow;
-    private int stickerFormDividerRow;
+    private int stickerShapeHeaderRow;
+    private int stickerShapeRow;
+    private int stickerShapeDividerRow;
     
     private int stickersHeaderRow;
     private int hideStickerTimeRow;
@@ -228,9 +228,9 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
         stickerSizeHeaderRow = newRow();
         stickerSizeRow = newRow();
 
-        stickerFormHeaderRow = newRow();
-        stickerFormRow = newRow();
-        stickerFormDividerRow = newRow();
+        stickerShapeHeaderRow = newRow();
+        stickerShapeRow = newRow();
+        stickerShapeDividerRow = newRow();
 
         stickersHeaderRow = newRow();
         hideStickerTimeRow = newRow();
@@ -388,16 +388,16 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int type) {
             switch (type) {
                 case 10:
-                    stickerFormCell = new StickerFormCell(mContext) {
+                    stickerShapeCell = new StickerShapeCell(mContext) {
                         @Override
                         protected void updateStickerPreview() {
                             parentLayout.rebuildAllFragmentViews(false, false);
                             stickerSizeCell.invalidate();
                         }
                     };
-                    stickerFormCell.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    stickerFormCell.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
-                    return new RecyclerListView.Holder(stickerFormCell);
+                    stickerShapeCell.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    stickerShapeCell.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
+                    return new RecyclerListView.Holder(stickerShapeCell);
                 case 11:
                     stickerSizeCell = new StickerSizeCell(mContext);
                     stickerSizeCell.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
@@ -428,8 +428,8 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                         headerCell.setText(LocaleController.getString("Chats", R.string.Chats));
                     } else if (position == mediaHeaderRow) {
                         headerCell.setText(LocaleController.getString("Media", R.string.Media));
-                    } else if (position == stickerFormHeaderRow) {
-                        headerCell.setText(LocaleController.getString("StickerForm", R.string.StickerForm));
+                    } else if (position == stickerShapeHeaderRow) {
+                        headerCell.setText(LocaleController.getString("StickerShape", R.string.StickerShape));
                     }
                     break;
                 case 5:
@@ -484,13 +484,13 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
 
         @Override
         public int getItemViewType(int position) {
-            if (position == stickersDividerRow || position == mediaDividerRow || position == stickerFormDividerRow) {
+            if (position == stickersDividerRow || position == mediaDividerRow || position == stickerShapeDividerRow) {
                 return 1;
-            } else if (position == stickerSizeHeaderRow || position == stickersHeaderRow || position == chatHeaderRow || position == mediaHeaderRow || position == stickerFormHeaderRow) {
+            } else if (position == stickerSizeHeaderRow || position == stickersHeaderRow || position == chatHeaderRow || position == mediaHeaderRow || position == stickerShapeHeaderRow) {
                 return 3;
             } else if (position == zalgoFilterInfoRow) {
                 return 8;
-            } else if (position == stickerFormRow) {
+            } else if (position == stickerShapeRow) {
                 return 10;
             } else if (position == stickerSizeRow) {
                 return 11;

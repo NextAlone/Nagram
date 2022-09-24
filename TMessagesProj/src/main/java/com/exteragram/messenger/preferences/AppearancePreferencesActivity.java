@@ -16,8 +16,10 @@ import android.content.Context;
 import android.os.Parcelable;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
 import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,17 +35,22 @@ import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.Components.RecyclerListView;
 
 import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.ExteraUtils;
+import com.exteragram.messenger.components.FabShapeCell;
 import com.exteragram.messenger.components.TextCheckWithIconCell;
 
 public class AppearancePreferencesActivity extends BasePreferencesActivity {
+
+    private FabShapeCell fabShapeCell;
 
     private ValueAnimator statusBarColorAnimate;
     private Parcelable recyclerViewState = null;
 
     private int applicationHeaderRow;
+    private int fabShapeRow;
     private int useSystemFontsRow;
     private int useSystemEmojiRow;
     private int transparentStatusBarRow;
@@ -51,8 +58,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
     private int centerTitleRow;
     private int newSwitchStyleRow;
     private int transparentNavBarRow;
-    private int squareFabRow;
-    private int squareFabInfoRow;
+    private int transparentNavBarInfoRow;
 
     private int iconsHeaderRow;
     private int eventChooserRow;
@@ -77,6 +83,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
         super.updateRowsId();
 
         applicationHeaderRow = newRow();
+        fabShapeRow = newRow();
         useSystemFontsRow = newRow();
         useSystemEmojiRow = newRow();
         transparentStatusBarRow = newRow();
@@ -84,8 +91,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
         centerTitleRow = newRow();
         newSwitchStyleRow = newRow();
         transparentNavBarRow = newRow();
-        squareFabRow = newRow();
-        squareFabInfoRow = newRow();
+        transparentNavBarInfoRow = newRow();
 
         iconsHeaderRow = newRow();
         eventChooserRow = newRow();
@@ -160,12 +166,6 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
             ExteraConfig.toggleTransparentNavBar();
             if (view instanceof TextCheckCell) {
                 ((TextCheckCell) view).setChecked(ExteraConfig.transparentNavBar);
-            }
-            parentLayout.rebuildAllFragmentViews(false, false);
-        } else if (position == squareFabRow) {
-            ExteraConfig.toggleSquareFab();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.squareFab);
             }
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == newGroupRow) {
@@ -286,6 +286,26 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
             return rowCount;
         }
 
+
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int type) {
+            switch (type) {
+                case 12:
+                    fabShapeCell = new FabShapeCell(mContext) {
+                        @Override
+                        protected void rebuildFragments() {
+                            parentLayout.rebuildAllFragmentViews(false, false);
+                        }
+                    };
+                    fabShapeCell.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    fabShapeCell.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
+                    return new RecyclerListView.Holder(fabShapeCell);
+                default:
+                    return super.onCreateViewHolder(parent, type);
+            }
+        }
+
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             switch (holder.getItemViewType()) {
@@ -322,9 +342,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                     } else if (position == newSwitchStyleRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("NewSwitchStyle", R.string.NewSwitchStyle), ExteraConfig.newSwitchStyle, true);
                     } else if (position == transparentNavBarRow) {
-                        textCheckCell.setTextAndValueAndCheck(LocaleController.getString("TransparentNavBar", R.string.TransparentNavBar), LocaleController.getString("TransparentNavBarValue", R.string.TransparentNavBarValue), ExteraConfig.transparentNavBar, true, true);
-                    } else if (position == squareFabRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("SquareFab", R.string.SquareFab), ExteraConfig.squareFab, false);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("TransparentNavBar", R.string.TransparentNavBar), ExteraConfig.transparentNavBar, false);
                     }
                     break;
                 case 6:
@@ -373,8 +391,8 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                     break;
                 case 8:
                     TextInfoPrivacyCell cell = (TextInfoPrivacyCell) holder.itemView;
-                    if (position == squareFabInfoRow) {
-                        cell.setText(LocaleController.getString("SquareFabInfo", R.string.SquareFabInfo));
+                    if (position == transparentNavBarInfoRow) {
+                        cell.setText(LocaleController.getString("TransparentNavBarInfo", R.string.TransparentNavBarInfo));
                     }
                     break;
             }
@@ -387,12 +405,14 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
             } else if (position == applicationHeaderRow || position == drawerHeaderRow || position == iconsHeaderRow) {
                 return 3;
             } else if (position == useSystemFontsRow || position == useSystemEmojiRow || position == transparentStatusBarRow || position == transparentNavBarRow ||
-                      position == squareFabRow || position == blurForAllThemesRow || position == centerTitleRow || position == newSwitchStyleRow) {
+                      position == blurForAllThemesRow || position == centerTitleRow || position == newSwitchStyleRow) {
                 return 5;
             } else if (position == eventChooserRow) {
                 return 7;
-            } else if (position == squareFabInfoRow) {
+            } else if (position == transparentNavBarInfoRow) {
                 return 8;
+            } else if (position == fabShapeRow) {
+                return 12;
             }
             return 6;
         }
