@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+ This is the source code of exteraGram for Android.
+
+ We do not and cannot prevent the use of our code,
+ but be respectful and credit the original author.
+
+ Copyright @immat0x1, @itsv1eds, 2022.
+
+-->
+
+<resources>
+    <!-- exteraGram's Main Strings -->
+    <string name="UpdateExteraGram">Esta mensagem não é suportada na sua versão do exteraGram. Atualize o aplicativo para visualizar: https://github.com/exteraSquad/exteraGram/releases/latest</string>
+    <string name="MutualContact">contato mútuo</string>
+    <string name="ToBeginning">Para o início</string>
+    <string name="SaveMessage">Salvar Mensagem</string>
+    <!-- Main Menu (about) -->
+    <string name="exteraPrivacy">exteraGram Política de Privacidade e FAQ</string>
+    <string name="Links">Links</string>
+    <string name="AboutExteraDescription">Cliente Experimental do Telegram baseado em fontes oficiais do Telegram!</string>
+    <string name="Channel">Canal</string>
+    <string name="Chats">Conversas</string>
+    <string name="Crowdin">Traduza</string>
+    <string name="SourceCode">Código-fonte</string>
+    <string name="Preferences">Preferências exteraGram</string>
+    <string name="RestartRequired">Reinicie a app para fazer efeito.</string>
+    <string name="Categories">Categorias</string>
+    <!-- Appearance -->
+    <string name="UseSystemFonts">Usar fontes do sistema</string>
+    <string name="UseSystemEmoji">Usar emojis do sistema</string>
+    <string name="TransparentStatusBar">Barra de status transparente</string>
+    <string name="BlurForAllThemes">Blur para todos os temas</string>
+    <string name="CenterTitle">Centralizar título na barra de ação</string>
+    <string name="NewSwitchStyle">Estilo alternativo do switch</string>
+    <string name="DisableDividers">Desativar divisores</string>
+    <string name="TransparentNavBar">Barra de navegação transparente</string>
+    <string name="TransparentNavBarInfo">A barra de navegação não ficará completamente transparente, só terá a cor do Painel de Mensagens.</string>
+    <!-- General -->
+    <string name="AvatarCorners">Cantos dos avatares</string>
+    <string name="DisableNumberRounding">Desativar arredondamento de números</string>
+    <string name="FormatTimeWithSeconds">Formatar a hora com segundos</string>
+    <string name="ChatsOnTitle">\"Conversas\" em vez de \"exteraGram\"</string>
+    <string name="DisableVibration">Desabilitar vibração</string>
+    <string name="ForceTabletMode">Forçar modo tablet</string>
+    <string name="DisableAnimatedAvatars">Desativar avatares animados</string>
+    <string name="ArchiveOnPull">Abrir Conversas Arquivadas ao deslizar pra cima</string>
+    <string name="DisableUnarchiveSwipe">Desativar \"Desarquivar\" ao deslizar</string>
+    <string name="ForcePacmanAnimation">Forçar Animação do Pac-Man</string>
+    <string name="ForcePacmanAnimationInfo">Isto requer o gesto de deslizar \"Arquivar\" selecionado na lista de conversas.</string>
+    <string name="Profile">Perfil</string>
+    <string name="HidePhoneNumber">Ocultar número do telefone</string>
+    <string name="ShowID">Mostrar ID no perfil</string>
+    <string name="ShowDC">Mostrar DC no Perfil</string>
+    <!-- Chats -->
+    <string name="StickerSize">Tamanho das figurinhas</string>
+    <string name="StickerSizeDialogMessageReplyTo">uau</string>
+    <string name="StickerSizeDialogMessage">uau, ele é tão fofo!</string>
+    <string name="StickerShape">Formato das figurinhas</string>
+    <string name="StickerShapeRounded">Arredondado</string>
+    <string name="StickerShapeRoundedMsg">Mensagem</string>
+    <string name="StickerTime">Ocultar Horário nas Figurinhas</string>
+    <string name="UnlimitedRecentStickers">Figurinhas recentes ilimitadas</string>
+    <string name="PremiumAutoPlayback">Reprodução automática premium</string>
+    <string name="SendMessageBeforeSendSticker">Enviar mensagem antes de figurinhas</string>
+    <string name="HideSendAsChannel">Ocultar \"Enviar como Canal\"</string>
+    <string name="HideKeyboardOnScroll">Ocultar teclado ao rolar no chat</string>
+    <string name="DisableReactions">Desativar reações</string>
+    <string name="DisableGreetingSticker">Desativar figurinha de saudação</string>
+    <string name="DisableJumpToNextChannel">Desativar \"Pular para o Próximo Canal\"</string>
+    <string name="DateOfForwardedMsg">Mostrar a data da mensagem encaminhada</string>
+    <string name="ShowMessageID">Mostrar ID da mensagem</string>
+    <string name="ShowActionTimestamps">Mostrar data e hora de ações</string>
+    <string name="ZalgoFilter">Filtrar símbolos \"Zalgo\"</string>
+    <string name="ZalgoFilterInfo">Todos os símbolos de \"\"Z̷͍͌ā̸̜l̸̞̂g̷̝͘o̶̩̓\" em nomes ou mensagens serão removidos. O cache de mensagens será limpo.</string>
+    <string name="Media">Mídia</string>
+    <string name="RearVideoMessages">Câmera traseira em mensagens de vídeo</string>
+    <string name="DisableCamera">Desativar câmara instantânea</string>
+    <string name="DisableProximityEvents">Desativar eventos de proximidade</string>
+    <string name="PauseOnMinimize">Pausa automática</string>
+    <string name="POMDescription">Pausa uma reprodução de vídeo quando o dispositivo está bloqueado ou exteraGram está minimizado.</string>
+    <string name="DisablePlayback">Desativar a reprodução</string>
+    <string name="DPDescription">Desativa a reprodução quando o botão de volume é pressionado.</string>
+    <!-- Drawer -->
+    <string name="DrawerElements">Elementos do menu</string>
+    <string name="DrawerOptions">Opções do menu</string>
+    <string name="DrawerIconPack">Pacote de ícones</string>
+    <string name="NewYear">Ano Novo</string>
+    <string name="ValentinesDay">Dia dos Namorados</string>
+    <string name="Halloween">Dia das Bruxas</string>
+    <!-- Updates -->
+    <string name="Updates">Atualizações</string>
+    <string name="UpdateAvailable">Atualização disponível!</string>
+    <string name="CheckOnLaunch">Verificar ao iniciar</string>
+    <string name="NoUpdates">Atualizações não encontradas.</string>
+    <string name="CheckForUpdates">Verifique se há atualizações</string>
+    <string name="CurrentVersion">Versão atual</string>
+    <string name="Version">Versão</string>
+    <string name="UpdateSize">Tamanho da atualização</string>
+    <string name="Changelog">Alterações:</string>
+    <string name="BuildType">Tipo da versão</string>
+    <string name="BTRelease">Release</string>
+    <string name="BTBeta">Beta</string>
+    <string name="ClearUpdatesCache">Limpar cache das atualizações</string>
+    <string name="ClearedUpdatesCache">Removido **%1$s** do cache.</string>
+    <string name="NothingToClear">Nada para limpar.</string>
+    <string name="LastCheck">Última verificação</string>
+    <!-- Other -->
+    <string name="BoldItalic">Negrito Itálico</string>
+    <string name="OpenPremiumBot">Abrir bot oficial</string>
+    <string name="Select">Selecionar</string>
+    <string name="EnterID">Insira o ID</string>
+    <string name="TrackSaved">Faixa salva em **%1$s**.</string>
+    <string name="ChannelToSaveDescription">Digite o ID do Canal/Grupo/Conversa onde as faixas serão salvas</string>
+    <string name="Unknown">Desconhecido</string>
+    <string name="ConfirmCall">Confirmar ligação</string>
+    <string name="CallTo">Ligar para **%1$s**?</string>
+    <string name="AppIconRelease">Release</string>
+    <string name="AppIconBeta">Beta</string>
+    <string name="AppIconInverted">Invertido</string>
+    <string name="AppIconMonet">Monet</string>
+    <string name="AppIconGradient">Gradiente</string>
+    <string name="AppIconPixel">Pixel</string>
+    <string name="AppIconGoogle">Google</string>
+    <string name="AppIconRed">RedEbalo</string>
+</resources>

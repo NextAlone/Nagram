@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
-This is the source code of exteraGram for Android.
 
-We do not and cannot prevent the use of our code,
-but be respectful and credit the authors.
+ This is the source code of exteraGram for Android.
 
-Copyright @immat0x1, @itsv1eds 2022.
- -->
+ We do not and cannot prevent the use of our code,
+ but be respectful and credit the original author.
+
+ Copyright @immat0x1, @itsv1eds, 2022.
+
+-->
+
 <resources>
     <!-- exteraGram's Main Strings -->
     <string name="UpdateExteraGram">Це повідомлення не підтримується у вашій версії exteraGram. Оновіть застосунок для перегляду: https://github.com/exteraSquad/exteraGram/releases/latest</string>
