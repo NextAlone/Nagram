@@ -42,6 +42,8 @@ import org.telegram.ui.Components.RLottieImageView;
 
 import java.util.ArrayList;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class TextCheckWithIconCell extends FrameLayout {
 
     private boolean isAnimatingToThumbInsteadOfTouch;
@@ -194,7 +196,7 @@ public class TextCheckWithIconCell extends FrameLayout {
             float animatedRad = rad * animationProgress;
             canvas.drawCircle(cx, cy, animatedRad, animationPaint);
         }
-        if (needDivider) {
+        if (needDivider && !ExteraConfig.disableDividers) {
             canvas.drawLine(LocaleController.isRTL ? 0 : AndroidUtilities.dp(70), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(70) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
         }
     }

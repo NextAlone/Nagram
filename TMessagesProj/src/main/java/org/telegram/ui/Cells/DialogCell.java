@@ -3299,7 +3299,7 @@ public class DialogCell extends BaseCell {
             canvas.restore();
         }
 
-        if (useSeparator) {
+        if (useSeparator && !ExteraConfig.disableDividers) {
             int left;
             if (fullSeparator || currentDialogFolderId != 0 && archiveHidden && !fullSeparator2 || fullSeparator2 && !archiveHidden) {
                 left = 0;

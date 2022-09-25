@@ -32,6 +32,8 @@ import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.FlickerLoadingView;
 import org.telegram.ui.Components.LayoutHelper;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class LocationCell extends FrameLayout {
 
     private TextView nameTextView;
@@ -179,7 +181,7 @@ public class LocationCell extends FrameLayout {
         canvas.restore();
         super.onDraw(canvas);
 
-        if (needDivider) {
+        if (needDivider && !ExteraConfig.disableDividers) {
             canvas.drawLine(
                 LocaleController.isRTL ? 0 : AndroidUtilities.dp(72),
                 getHeight() - 1,

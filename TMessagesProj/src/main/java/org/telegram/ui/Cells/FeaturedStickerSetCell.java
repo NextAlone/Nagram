@@ -44,6 +44,8 @@ import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.ProgressButton;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class FeaturedStickerSetCell extends FrameLayout {
 
     private TextView textView;
@@ -319,7 +321,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (needDivider) {
+        if (needDivider && !ExteraConfig.disableDividers) {
             canvas.drawLine(0, getHeight() - 1, getWidth() - getPaddingRight(), getHeight() - 1, Theme.dividerPaint);
         }
     }

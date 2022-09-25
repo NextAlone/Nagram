@@ -30,6 +30,8 @@ import org.telegram.ui.Components.CheckBoxBase;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.PremiumPreviewFragment;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class PremiumTierCell extends ViewGroup {
     private CheckBox2 checkBox;
     private TextView titleView;
@@ -111,7 +113,7 @@ public class PremiumTierCell extends ViewGroup {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (hasDivider) {
+        if (hasDivider && !ExteraConfig.disableDividers) {
             if (LocaleController.isRTL) {
                 canvas.drawLine(0, getHeight() - 1, titleView.getRight(), getHeight() - 1, Theme.dividerPaint);
             } else {

@@ -36,6 +36,8 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.Switch;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class SessionBottomSheet extends BottomSheet {
 
     TLRPC.TL_authorization session;
@@ -409,7 +411,7 @@ public class SessionBottomSheet extends BottomSheet {
         @Override
         protected void dispatchDraw(Canvas canvas) {
             super.dispatchDraw(canvas);
-            if (needDivider) {
+            if (needDivider && !ExteraConfig.disableDividers) {
                 canvas.drawRect(AndroidUtilities.dp(64), getMeasuredHeight() - 1, getMeasuredWidth(), getMeasuredHeight(), Theme.dividerPaint);
             }
         }

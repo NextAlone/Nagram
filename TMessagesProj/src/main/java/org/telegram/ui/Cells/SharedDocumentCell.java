@@ -57,6 +57,8 @@ import java.io.File;
 import java.util.Date;
 import java.util.Locale;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class SharedDocumentCell extends FrameLayout implements DownloadController.FileDownloadProgressListener {
 
     private ImageView placeholderImageView;
@@ -742,7 +744,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
     }
 
     private void drawDivider(Canvas canvas) {
-        if (needDivider) {
+        if (needDivider && !ExteraConfig.disableDividers) {
             canvas.drawLine(AndroidUtilities.dp(72), getHeight() - 1, getWidth() - getPaddingRight(), getHeight() - 1, Theme.dividerPaint);
         }
     }

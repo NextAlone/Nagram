@@ -17,6 +17,8 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class HashtagSearchCell extends TextView {
 
     private boolean needDivider;
@@ -41,7 +43,7 @@ public class HashtagSearchCell extends TextView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (needDivider) {
+        if (needDivider && !ExteraConfig.disableDividers) {
             canvas.drawLine(0, getHeight() - 1, getWidth(), getHeight() - 1, Theme.dividerPaint);
         }
     }

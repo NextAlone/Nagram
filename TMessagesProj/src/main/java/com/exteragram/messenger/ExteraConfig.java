@@ -34,6 +34,7 @@ public class ExteraConfig {
     public static boolean blurForAllThemes;
     public static boolean centerTitle;
     public static boolean newSwitchStyle;
+    public static boolean disableDividers;
     public static boolean transparentNavBar;
     public static boolean squareFab;
     public static int eventType;
@@ -106,6 +107,7 @@ public class ExteraConfig {
             disableVibration = preferences.getBoolean("disableVibration", false);
             blurForAllThemes = preferences.getBoolean("blurForAllThemes", false);
             centerTitle = preferences.getBoolean("centerTitle", false);
+            disableDividers = preferences.getBoolean("disableDividers", false);
             newSwitchStyle = preferences.getBoolean("newSwitchStyle", false);
             transparentNavBar = preferences.getBoolean("transparentNavBar", false);
             squareFab = preferences.getBoolean("squareFab", false);
@@ -459,5 +461,10 @@ public class ExteraConfig {
     public static void toggleDisableAnimatedAvatars() {
         SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
         editor.putBoolean("disableAnimatedAvatars", disableAnimatedAvatars ^= true).apply();
+    }
+
+    public static void toggleDisableDividers() {
+        SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
+        editor.putBoolean("disableDividers", disableDividers ^= true).apply();
     }
 }

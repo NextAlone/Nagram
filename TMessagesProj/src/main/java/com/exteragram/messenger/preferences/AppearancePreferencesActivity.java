@@ -57,6 +57,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
     private int blurForAllThemesRow;
     private int centerTitleRow;
     private int newSwitchStyleRow;
+    private int disableDividersRow;
     private int transparentNavBarRow;
     private int transparentNavBarInfoRow;
 
@@ -90,6 +91,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
         blurForAllThemesRow = newRow();
         centerTitleRow = newRow();
         newSwitchStyleRow = newRow();
+        disableDividersRow = newRow();
         transparentNavBarRow = newRow();
         transparentNavBarInfoRow = newRow();
 
@@ -158,6 +160,14 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
             ExteraConfig.toggleNewSwitchStyle();
             if (view instanceof TextCheckCell) {
                 ((TextCheckCell) view).setChecked(ExteraConfig.newSwitchStyle);
+            }
+            if (getListView().getLayoutManager() != null) recyclerViewState = getListView().getLayoutManager().onSaveInstanceState();
+            parentLayout.rebuildAllFragmentViews(true, true);
+            getListView().getLayoutManager().onRestoreInstanceState(recyclerViewState);
+        } else if (position == disableDividersRow) {
+            ExteraConfig.toggleDisableDividers();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.disableDividers);
             }
             if (getListView().getLayoutManager() != null) recyclerViewState = getListView().getLayoutManager().onSaveInstanceState();
             parentLayout.rebuildAllFragmentViews(true, true);
@@ -341,6 +351,8 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                         textCheckCell.setTextAndCheck(LocaleController.getString("CenterTitle", R.string.CenterTitle), ExteraConfig.centerTitle, true);
                     } else if (position == newSwitchStyleRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("NewSwitchStyle", R.string.NewSwitchStyle), ExteraConfig.newSwitchStyle, true);
+                    } else if (position == disableDividersRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString("DisableDividers", R.string.DisableDividers), ExteraConfig.disableDividers, true);
                     } else if (position == transparentNavBarRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("TransparentNavBar", R.string.TransparentNavBar), ExteraConfig.transparentNavBar, false);
                     }
@@ -405,7 +417,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
             } else if (position == applicationHeaderRow || position == drawerHeaderRow || position == iconsHeaderRow) {
                 return 3;
             } else if (position == useSystemFontsRow || position == useSystemEmojiRow || position == transparentStatusBarRow || position == transparentNavBarRow ||
-                      position == blurForAllThemesRow || position == centerTitleRow || position == newSwitchStyleRow) {
+                      position == blurForAllThemesRow || position == centerTitleRow || position == newSwitchStyleRow || position == disableDividersRow) {
                 return 5;
             } else if (position == eventChooserRow) {
                 return 7;

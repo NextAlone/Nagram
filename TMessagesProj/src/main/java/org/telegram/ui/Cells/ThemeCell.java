@@ -33,6 +33,8 @@ import org.telegram.ui.Components.LayoutHelper;
 import java.io.File;
 import java.io.FileInputStream;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class ThemeCell extends FrameLayout {
 
     private TextView textView;
@@ -218,7 +220,7 @@ public class ThemeCell extends FrameLayout {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (needDivider) {
+        if (needDivider && !ExteraConfig.disableDividers) {
             canvas.drawLine(LocaleController.isRTL ? 0 : AndroidUtilities.dp(20), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
         }
         int x = AndroidUtilities.dp(16 + 15);

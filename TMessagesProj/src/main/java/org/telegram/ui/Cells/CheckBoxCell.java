@@ -25,6 +25,8 @@ import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.CheckBoxSquare;
 import org.telegram.ui.Components.LayoutHelper;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class CheckBoxCell extends FrameLayout {
 
     public final static int TYPE_CHECK_BOX_ROUND = 4;
@@ -237,7 +239,7 @@ public class CheckBoxCell extends FrameLayout {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (needDivider) {
+        if (needDivider && !ExteraConfig.disableDividers) {
             int offset = currentType == TYPE_CHECK_BOX_ROUND ? 50 : 20;
             canvas.drawLine(LocaleController.isRTL ? 0 : AndroidUtilities.dp(offset), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(offset) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
         }

@@ -41,6 +41,8 @@ import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.List;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class FeaturedStickerSetInfoCell extends FrameLayout {
 
     private boolean canAddRemove;
@@ -319,7 +321,7 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
             paint.setColor(getThemedColor(Theme.key_featuredStickers_unread));
             canvas.drawCircle(nameTextView.getRight() + AndroidUtilities.dp(12), AndroidUtilities.dp(20), AndroidUtilities.dp(4) * unreadProgress, paint);
         }
-        if (needDivider) {
+        if (needDivider && !ExteraConfig.disableDividers) {
             canvas.drawLine(0, 0, getWidth(), 0, Theme.dividerPaint);
         }
     }

@@ -116,7 +116,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
         this.chatId = chatId;
         this.permanent = permanent;
         this.isChannel = isChannel;
-        fixNavigationBar(getThemedColor(Theme.key_graySection));
+        fixNavigationBar();
 
         if (this.users == null) {
             this.users = new HashMap<>();

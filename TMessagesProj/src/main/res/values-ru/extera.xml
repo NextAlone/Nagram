@@ -27,6 +27,7 @@
     <string name="BlurForAllThemes">Размытие во всех темах</string>
     <string name="CenterTitle">Заголовок по центру</string>
     <string name="NewSwitchStyle">Альтернативный стиль переключателей</string>
+    <string name="DisableDividers">Отключить разделители</string>
     <string name="TransparentNavBar">Прозрачная панель навигации</string>
     <string name="TransparentNavBarInfo">Панель навигации не станет полностью прозрачной, она лишь приобретет цвет панели отправки сообщений.</string>
 

@@ -59,6 +59,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class ContextLinkCell extends FrameLayout implements DownloadController.FileDownloadProgressListener {
 
     private final static int DOCUMENT_ATTACH_TYPE_NONE = 0;
@@ -823,7 +825,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             radialProgress.draw(canvas);
         }
 
-        if (needDivider && !mediaWebpage) {
+        if (needDivider && !mediaWebpage && !ExteraConfig.disableDividers) {
             if (LocaleController.isRTL) {
                 canvas.drawLine(0, getMeasuredHeight() - 1, getMeasuredWidth() - AndroidUtilities.dp(AndroidUtilities.leftBaseline), getMeasuredHeight() - 1, Theme.dividerPaint);
             } else {

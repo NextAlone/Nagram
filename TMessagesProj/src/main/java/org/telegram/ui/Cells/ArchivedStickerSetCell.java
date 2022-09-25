@@ -42,6 +42,8 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.ProgressButton;
 import org.telegram.ui.Components.ViewHelper;
 
+import com.exteragram.messenger.ExteraConfig;
+
 @SuppressLint("ViewConstructor")
 public class ArchivedStickerSetCell extends FrameLayout implements Checkable {
 
@@ -137,7 +139,7 @@ public class ArchivedStickerSetCell extends FrameLayout implements Checkable {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (needDivider) {
+        if (needDivider && !ExteraConfig.disableDividers) {
             canvas.drawLine(0, getHeight() - 1, getWidth() - getPaddingRight(), getHeight() - 1, Theme.dividerPaint);
         }
     }

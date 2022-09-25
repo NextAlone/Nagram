@@ -62,6 +62,8 @@ import org.telegram.ui.Components.URLSpanNoUnderline;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class AboutLinkCell extends FrameLayout {
 
     private StaticLayout textLayout;
@@ -729,7 +731,7 @@ public class AboutLinkCell extends FrameLayout {
     }
     @Override
     protected void onDraw(Canvas canvas) {
-        if (needDivider) {
+        if (needDivider && !ExteraConfig.disableDividers) {
             canvas.drawLine(LocaleController.isRTL ? 0 : AndroidUtilities.dp(20), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
         }
     }

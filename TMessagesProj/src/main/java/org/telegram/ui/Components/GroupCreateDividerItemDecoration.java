@@ -18,6 +18,8 @@ import org.telegram.ui.Cells.GroupCreateSectionCell;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class GroupCreateDividerItemDecoration extends RecyclerView.ItemDecoration {
 
     private boolean searching;
@@ -49,7 +51,7 @@ public class GroupCreateDividerItemDecoration extends RecyclerView.ItemDecoratio
                 continue;
             }
             top = child.getBottom();
-            canvas.drawLine(LocaleController.isRTL ? 0 : AndroidUtilities.dp(72), top, width - (LocaleController.isRTL ? AndroidUtilities.dp(72) : 0), top, Theme.dividerPaint);
+            if (!ExteraConfig.disableDividers) canvas.drawLine(LocaleController.isRTL ? 0 : AndroidUtilities.dp(72), top, width - (LocaleController.isRTL ? AndroidUtilities.dp(72) : 0), top, Theme.dividerPaint);
         }
     }
 

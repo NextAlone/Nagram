@@ -31,6 +31,7 @@
     <string name="BlurForAllThemes">Blur for all themes</string>
     <string name="CenterTitle">Center title in action bar</string>
     <string name="NewSwitchStyle">Alternative switch style</string>
+    <string name="DisableDividers">Disable dividers</string>
     <string name="TransparentNavBar">Transparent navigation bar</string>
     <string name="TransparentNavBarInfo">The navigation bar will not become completely transparent, it will only get the color of the Message Panel.</string>
 

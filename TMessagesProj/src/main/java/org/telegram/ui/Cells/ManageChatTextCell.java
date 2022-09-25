@@ -21,6 +21,8 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 
+import com.exteragram.messenger.ExteraConfig;
+
 public class ManageChatTextCell extends FrameLayout {
 
     private SimpleTextView textView;
@@ -123,7 +125,7 @@ public class ManageChatTextCell extends FrameLayout {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (divider) {
+        if (divider && !ExteraConfig.disableDividers) {
             if (dividerColor != null) {
                 Theme.dividerExtraPaint.setColor(Theme.getColor(dividerColor));
             }
