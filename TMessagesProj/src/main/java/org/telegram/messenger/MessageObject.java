@@ -31,6 +31,7 @@ import android.util.Base64;
 
 import androidx.collection.LongSparseArray;
 
+import xyz.nextalone.nagram.NaConfig;
 import xyz.nextalone.nagram.helper.MessageHelper;
 import xyz.nextalone.nagram.ui.syntaxhighlight.SyntaxHighlight;
 
@@ -69,6 +70,7 @@ import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -6239,6 +6241,10 @@ public class MessageObject {
                             return null;
                         }
                         try {
+                            String custom_api = NaConfig.INSTANCE.getCustomArtworkApi().String();
+                            if (!Objects.equals(custom_api, "")) {
+                                return custom_api + URLEncoder.encode(performer + " - " + title, "UTF-8");
+                            }
                             return "athumb://itunes.apple.com/search?term=" + URLEncoder.encode(performer + " - " + title, "UTF-8") + "&entity=song&limit=4" + (small ? "&s=1" : "");
                         } catch (Exception ignore) {
 

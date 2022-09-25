@@ -60,4 +60,5 @@
     <string name="SendWithoutMarkdown">禁用 Markdown</string>
     <string name="SaveWithoutMarkdown">禁用 Markdown</string>
     <string name="SendAsEmoji">禁用小游戏</string>
+    <string name="CustomArtworkApi">自定义音乐封面 API</string>
 </resources>
