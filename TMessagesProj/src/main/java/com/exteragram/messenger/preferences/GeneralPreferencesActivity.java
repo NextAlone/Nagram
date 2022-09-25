@@ -27,6 +27,7 @@ import android.widget.FrameLayout;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import androidx.core.graphics.ColorUtils;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -87,6 +88,7 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
         private final long time = System.currentTimeMillis();
 
         private final TextPaint textPaint;
+        private Paint outlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         private int lastWidth;
 
         public AvatarCornersCell(Context context) {
@@ -128,31 +130,39 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
                     int w = getMeasuredWidth();
                     int h = getMeasuredHeight();
 
-                    Theme.dialogs_onlineCirclePaint.setColor(Color.argb(41, r, g, b));
+                    Theme.dialogs_onlineCirclePaint.setColor(Color.argb(20, r, g, b));
                     canvas.drawRoundRect(0, 0, w, h, AndroidUtilities.dp(6), AndroidUtilities.dp(6), Theme.dialogs_onlineCirclePaint);
-                    canvas.drawRoundRect(AndroidUtilities.dp(92), h / 2.0f + AndroidUtilities.dp(8), AndroidUtilities.dp(230), h / 2.0f + AndroidUtilities.dp(18), w / 2.0f, w / 2.0f, Theme.dialogs_onlineCirclePaint);
+
+                    outlinePaint.setStyle(Paint.Style.STROKE);
+                    outlinePaint.setColor(ColorUtils.setAlphaComponent(Theme.getColor(Theme.key_switchTrack), 0x3F));
+                    outlinePaint.setStrokeWidth(Math.max(2, AndroidUtilities.dp(0.5f)));
+                    float stroke = outlinePaint.getStrokeWidth();
+                    canvas.drawRoundRect(stroke, stroke, w - stroke, h - stroke, AndroidUtilities.dp(6), AndroidUtilities.dp(6), outlinePaint);
 
                     Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor(Theme.key_chats_onlineCircle));
                     canvas.drawCircle(AndroidUtilities.dp(69), h / 2.0f + AndroidUtilities.dp(21), AndroidUtilities.dp(7), Theme.dialogs_onlineCirclePaint);
+
+                    Theme.dialogs_onlineCirclePaint.setColor(Color.argb(204, r, g, b));
+                    canvas.drawRoundRect(AndroidUtilities.dp(92), h / 2.0f - AndroidUtilities.dp(8), AndroidUtilities.dp(170), h / 2.0f - AndroidUtilities.dp(16), w / 2.0f, w / 2.0f, Theme.dialogs_onlineCirclePaint);
 
                     Path online = new Path();
                     online.addCircle(AndroidUtilities.dp(69), h / 2.0f + AndroidUtilities.dp(21), AndroidUtilities.dp(12), Path.Direction.CCW);
                     canvas.clipPath(online, Region.Op.DIFFERENCE);
 
                     Theme.dialogs_onlineCirclePaint.setColor(Color.argb(90, r, g, b));
+                    canvas.drawRoundRect(AndroidUtilities.dp(92), h / 2.0f + AndroidUtilities.dp(8), AndroidUtilities.dp(230), h / 2.0f + AndroidUtilities.dp(16), w / 2.0f, w / 2.0f, Theme.dialogs_onlineCirclePaint);
                     canvas.drawRoundRect(AndroidUtilities.dp(21), h / 2.0f - AndroidUtilities.dp(28), AndroidUtilities.dp(77), h / 2.0f + AndroidUtilities.dp(28), ExteraConfig.getAvatarCorners(56), ExteraConfig.getAvatarCorners(56), Theme.dialogs_onlineCirclePaint);
                     canvas.drawCircle(AndroidUtilities.dp(70), h / 2.0f + AndroidUtilities.dp(22), AndroidUtilities.dp(8), Theme.dialogs_onlineCirclePaint);
-                    canvas.drawRoundRect(AndroidUtilities.dp(92), h / 2.0f - AndroidUtilities.dp(8), AndroidUtilities.dp(170), h / 2.0f - AndroidUtilities.dp(18), w / 2.0f, w / 2.0f, Theme.dialogs_onlineCirclePaint);
 
                     textPaint.setTextSize(AndroidUtilities.dp(14));
                     textPaint.setColor(Color.argb(91, r, g, b));
                     textPaint.setTextAlign(Paint.Align.RIGHT);
                     textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                    canvas.drawText(LocaleController.getInstance().formatterDay.format(time), w - AndroidUtilities.dp(20), h / 2.0f - AndroidUtilities.dp(8), textPaint);
+                    canvas.drawText(LocaleController.getInstance().formatterDay.format(time), w - AndroidUtilities.dp(20), h / 2.0f - AndroidUtilities.dp(6), textPaint);
                 }
             };
             preview.setWillNotDraw(false);
-            addView(preview, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 90, Gravity.TOP | Gravity.CENTER, 21, 50, 21, 10));
+            addView(preview, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 80, Gravity.TOP | Gravity.CENTER, 21, 50, 21, 10));
         }
 
         @Override

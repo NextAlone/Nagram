@@ -11,14 +11,15 @@
 
 package com.exteragram.messenger.components;
 
+import androidx.core.graphics.ColorUtils;
+
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.RectF;
 import android.text.TextPaint;
-import android.view.Gravity;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
@@ -27,8 +28,8 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.Easings;
 import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.Components.RadioButton;
 
 import com.exteragram.messenger.ExteraConfig;
 
@@ -36,11 +37,12 @@ public class StickerShapeCell extends LinearLayout {
 
     private class StickerShape extends FrameLayout {
 
-        private RadioButton button;
         private boolean isRounded;
         private boolean isRoundedAsMsg;
-        private RectF rect = new RectF();
         private TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        private RectF rect = new RectF();
+        private Paint outlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private float progress;
 
         public StickerShape(Context context, boolean rounded, boolean roundedAsMsg) {
             super(context);
@@ -51,16 +53,11 @@ public class StickerShapeCell extends LinearLayout {
 
             textPaint.setTextSize(AndroidUtilities.dp(13));
 
-            button = new RadioButton(context) {
-                @Override
-                public void invalidate() {
-                    super.invalidate();
-                    StickerShape.this.invalidate();
-                }
-            };
-            button.setSize(AndroidUtilities.dp(20));
-            addView(button, LayoutHelper.createFrame(22, 22, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 0, 0, 40));
-            button.setChecked(!isRounded && !isRoundedAsMsg && ExteraConfig.stickerShape == 0 || isRounded && ExteraConfig.stickerShape == 1 || isRoundedAsMsg && ExteraConfig.stickerShape == 2, false);
+            outlinePaint.setStyle(Paint.Style.STROKE);
+            outlinePaint.setColor(ColorUtils.setAlphaComponent(Theme.getColor(Theme.key_switchTrack), 0x3F));
+            outlinePaint.setStrokeWidth(Math.max(2, AndroidUtilities.dp(0.5f)));
+
+            setSelected(!isRounded && !isRoundedAsMsg && ExteraConfig.stickerShape == 0 || isRounded && ExteraConfig.stickerShape == 1 || isRoundedAsMsg && ExteraConfig.stickerShape == 2, false);
         }
 
         @Override
@@ -70,17 +67,13 @@ public class StickerShapeCell extends LinearLayout {
             int g = Color.green(color);
             int b = Color.blue(color);
 
-            button.setColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_radioBackgroundChecked));
-
-            rect.set(AndroidUtilities.dp(1), AndroidUtilities.dp(1), getMeasuredWidth() - AndroidUtilities.dp(1), AndroidUtilities.dp(100));
-            Theme.chat_instantViewRectPaint.setColor(Color.argb((int) (43 * button.getProgress()), r, g, b));
-            canvas.drawRoundRect(rect, AndroidUtilities.dp(6), AndroidUtilities.dp(6), Theme.chat_instantViewRectPaint);
-
-            rect.set(0, 0, getMeasuredWidth(), AndroidUtilities.dp(100));
-            Theme.dialogs_onlineCirclePaint.setColor(Color.argb((int) (31 * (1.0f - button.getProgress())), r, g, b));
+            rect.set(0, 0, getMeasuredWidth(), AndroidUtilities.dp(80));
+            Theme.dialogs_onlineCirclePaint.setColor(Color.argb(20, r, g, b));
             canvas.drawRoundRect(rect, AndroidUtilities.dp(6), AndroidUtilities.dp(6), Theme.dialogs_onlineCirclePaint);
 
-            rect.set(AndroidUtilities.dp(10), AndroidUtilities.dp(7), getMeasuredWidth() - AndroidUtilities.dp(10), getMeasuredHeight() - AndroidUtilities.dp(70));
+            float stroke = outlinePaint.getStrokeWidth();
+            rect.set(stroke, stroke, getMeasuredWidth() - stroke, AndroidUtilities.dp(80) - stroke);
+            canvas.drawRoundRect(rect, AndroidUtilities.dp(6), AndroidUtilities.dp(6), outlinePaint);
 
             String text;
             if (isRounded) {
@@ -93,8 +86,9 @@ public class StickerShapeCell extends LinearLayout {
             int width = (int) Math.ceil(textPaint.measureText(text));
 
             textPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-            canvas.drawText(text, (getMeasuredWidth() - width) / 2, AndroidUtilities.dp(120), textPaint);
+            canvas.drawText(text, (getMeasuredWidth() - width) / 2, AndroidUtilities.dp(102), textPaint);
 
+            rect.set(AndroidUtilities.dp(10), AndroidUtilities.dp(10), getMeasuredWidth() - AndroidUtilities.dp(10), AndroidUtilities.dp(70));
             Theme.dialogs_onlineCirclePaint.setColor(Color.argb(90, r, g, b));
             if (!isRounded && !isRoundedAsMsg) {
                 canvas.drawRoundRect(rect, AndroidUtilities.dp(0), AndroidUtilities.dp(0), Theme.dialogs_onlineCirclePaint);
@@ -102,6 +96,30 @@ public class StickerShapeCell extends LinearLayout {
                 canvas.drawRoundRect(rect, AndroidUtilities.dp(6), AndroidUtilities.dp(6), Theme.dialogs_onlineCirclePaint);
             } else if (isRoundedAsMsg) {
                 canvas.drawRoundRect(rect, AndroidUtilities.dp(SharedConfig.bubbleRadius), AndroidUtilities.dp(SharedConfig.bubbleRadius), Theme.dialogs_onlineCirclePaint);
+            }
+        }
+
+        private void setProgress(float progress) {
+            this.progress = progress;
+
+            outlinePaint.setColor(ColorUtils.blendARGB(ColorUtils.setAlphaComponent(Theme.getColor(Theme.key_switchTrack), 0x3F), Theme.getColor(Theme.key_windowBackgroundWhiteValueText), progress));
+            outlinePaint.setStrokeWidth(Math.max(2, AndroidUtilities.dp(AndroidUtilities.lerp(0.5f, 2f, progress))));
+            invalidate();
+        }
+
+        private void setSelected(boolean selected, boolean animate) {
+            float to = selected ? 1 : 0;
+            if (to == progress && animate) {
+                return;
+            }
+
+            if (animate) {
+                ValueAnimator animator = ValueAnimator.ofFloat(progress, to).setDuration(250);
+                animator.setInterpolator(Easings.easeInOutQuad);
+                animator.addUpdateListener(animation -> setProgress((Float) animation.getAnimatedValue()));
+                animator.start();
+            } else {
+                setProgress(to);
             }
         }
     }
@@ -120,15 +138,13 @@ public class StickerShapeCell extends LinearLayout {
             addView(stickerShape[a], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 0.5f, 8, 0, 8, 0));
             stickerShape[a].setOnClickListener(v -> {
                 for (int b = 0; b < 3; b++) {
-                    stickerShape[b].button.setChecked(stickerShape[b] == v, true);
+                    stickerShape[b].setSelected(v == stickerShape[b], true);
                 }
                 ExteraConfig.setStickerShape(rounded ? 1 : (roundedAsMsg ? 2 : 0));
                 updateStickerPreview();
             });
         }
     }
-
-    protected void updateStickerPreview() {};
 
     @Override
     public void invalidate() {
@@ -138,8 +154,10 @@ public class StickerShapeCell extends LinearLayout {
         }
     }
 
+    protected void updateStickerPreview() {};
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(143), MeasureSpec.EXACTLY));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(130), MeasureSpec.EXACTLY));
     }
 }
