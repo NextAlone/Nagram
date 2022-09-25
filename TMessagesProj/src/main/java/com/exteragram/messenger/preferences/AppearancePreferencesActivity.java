@@ -28,6 +28,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
@@ -48,6 +49,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
 
     private ValueAnimator statusBarColorAnimate;
     private Parcelable recyclerViewState = null;
+    private UserConfig me = UserConfig.getInstance(UserConfig.selectedAccount);
 
     private int applicationHeaderRow;
     private int fabShapeRow;
@@ -66,6 +68,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
     private int iconsDividerRow;
 
     private int drawerHeaderRow;
+    private int statusRow;
     private int newGroupRow;
     private int newSecretChatRow;
     private int newChannelRow;
@@ -100,6 +103,8 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
         iconsDividerRow = newRow();
     
         drawerHeaderRow = newRow();
+        
+        if (me != null && me.isPremium()) statusRow = newRow();
         newGroupRow = newRow();
         newSecretChatRow = newRow();
         newChannelRow = newRow();
@@ -182,6 +187,12 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
             ExteraConfig.toggleDrawerElements(1);
             if (view instanceof TextCheckWithIconCell) {
                 ((TextCheckWithIconCell) view).setChecked(ExteraConfig.newGroup);
+            }
+            parentLayout.rebuildAllFragmentViews(false, false);
+        } else if (position == statusRow) {
+            ExteraConfig.toggleDrawerElements(12);
+            if (view instanceof TextCheckWithIconCell) {
+                ((TextCheckWithIconCell) view).setChecked(ExteraConfig.changeStatus);
             }
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == newSecretChatRow) {
@@ -361,7 +372,9 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                     TextCheckWithIconCell textCheckWithIconCell = (TextCheckWithIconCell) holder.itemView;
                     textCheckWithIconCell.setEnabled(true, null);
                     int[] icons = ExteraUtils.getDrawerIconPack();
-                    if (position == newGroupRow) {
+                    if (position == statusRow) {
+                        textCheckWithIconCell.setTextAndCheckAndIcon(LocaleController.getString("ChangeEmojiStatus", R.string.ChangeEmojiStatus), R.drawable.msg_status_edit, ExteraConfig.changeStatus, true);
+                    } else if (position == newGroupRow) {
                         textCheckWithIconCell.setTextAndCheckAndIcon(LocaleController.getString("NewGroup", R.string.NewGroup), icons[0], ExteraConfig.newGroup, true);
                     } else if (position == newSecretChatRow) {
                         textCheckWithIconCell.setTextAndCheckAndIcon(LocaleController.getString("NewSecretChat", R.string.NewSecretChat), icons[1], ExteraConfig.newSecretChat, true);

@@ -38,7 +38,7 @@ public class ExteraConfig {
     public static boolean transparentNavBar;
     public static boolean squareFab;
     public static int eventType;
-    public static boolean newGroup, newSecretChat, newChannel, contacts, calls, peopleNearby, archivedChats, savedMessages, scanQr, inviteFriends, telegramFeatures;
+    public static boolean changeStatus, newGroup, newSecretChat, newChannel, contacts, calls, peopleNearby, archivedChats, savedMessages, scanQr, inviteFriends, telegramFeatures;
 
     // general
     public static float avatarCorners = 30.0f;
@@ -148,6 +148,7 @@ public class ExteraConfig {
             pauseOnMinimize = preferences.getBoolean("pauseOnMinimize", true);
             disablePlayback = preferences.getBoolean("disablePlayback", true);
 
+            changeStatus = preferences.getBoolean("changeStatus", true);
             newGroup = preferences.getBoolean("newGroup", true);
             newSecretChat = preferences.getBoolean("newSecretChat", false);
             newChannel = preferences.getBoolean("newChannel", false);
@@ -371,6 +372,9 @@ public class ExteraConfig {
                 break;
             case 11:
                 editor.putBoolean("telegramFeatures", telegramFeatures ^= true).apply();
+                break;
+            case 12:
+                editor.putBoolean("changeStatus", changeStatus ^= true).apply();
                 break;
         }
     }
