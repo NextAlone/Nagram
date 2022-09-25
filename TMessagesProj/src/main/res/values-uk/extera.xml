@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+This is the source code of exteraGram for Android.
+
+We do not and cannot prevent the use of our code,
+but be respectful and credit the authors.
+
+Copyright @immat0x1, @itsv1eds 2022.
+ -->
 <resources>
     <!-- exteraGram's Main Strings -->
+    <string name="UpdateExteraGram">Це повідомлення не підтримується у вашій версії exteraGram. Оновіть застосунок для перегляду: https://github.com/exteraSquad/exteraGram/releases/latest</string>
     <string name="MutualContact">взаємний контакт</string>
     <string name="ToBeginning">На початок</string>
     <string name="SaveMessage">Зберегти повідомлення</string>
@@ -22,18 +31,17 @@
     <string name="BlurForAllThemes">Розмиття для всіх тем</string>
     <string name="CenterTitle">Центрувати заголовок в панелі дій</string>
     <string name="NewSwitchStyle">Увімкнути альтернативний стиль перемикання</string>
+    <string name="DisableDividers">Відключити розділювачі</string>
     <string name="TransparentNavBar">Прозора панель навігації</string>
-    <string name="TransparentNavBarValue">Панель навігації не стане повністю прозорою, вона отримає тільки колір панелі Повідомлення.</string>
-    <string name="SquareFab">Двовимірна кнопка</string>
-    <string name="SquareFabInfo">Кнопка з плаваючою дією (ЗВ) - кругла кнопка, що викликає первинну дію в інтерфейсі додатка. Він розташований в правому нижньому куті екрану.</string>
+    <string name="TransparentNavBarInfo">Панель навігації не стане повністю прозорою, вона отримає тільки колір панель надсилання повідомлення.</string>
     <!-- General -->
+    <string name="AvatarCorners">Закруглення аватарок</string>
     <string name="DisableNumberRounding">Вимкнути округлення чисел</string>
     <string name="FormatTimeWithSeconds">Форматувати час з секундами</string>
-    <string name="HideAllChats">Сховати вкладку \"Усі чати\"</string>
-    <string name="HideProxySponsor">Приховати спонсора проксі</string>
     <string name="ChatsOnTitle">\"Чати\" замість \"exteraGram\"</string>
     <string name="DisableVibration">Вимкнути вібрацію</string>
     <string name="ForceTabletMode">Примусовий режим планшета</string>
+    <string name="DisableAnimatedAvatars">Вимкнути анімовані аватарки</string>
     <string name="ArchiveOnPull">Відкрити архів при витягуванні</string>
     <string name="DisableUnarchiveSwipe">Вимкнути свайп «Розархівувати»</string>
     <string name="ForcePacmanAnimation">Примусова анімація Pac-Man</string>
@@ -44,11 +52,15 @@
     <string name="ShowDC">Показати DC в профілі</string>
     <!-- Chats -->
     <string name="StickerSize">Розмір наліпок</string>
-    <string name="StickerTime">Ховати час наліпок</string>
-    <string name="UnlimitedRecentStickers">Необмежені улюблені Наклейки</string>
-    <string name="SendMessageBeforeSendSticker">Надіслати повідомлення перед відправкою наклейки</string>
     <string name="StickerSizeDialogMessageReplyTo">овва</string>
     <string name="StickerSizeDialogMessage">Дивно, він такий милий!</string>
+    <string name="StickerShape">Форма наліпки</string>
+    <string name="StickerShapeRounded">Закруглений</string>
+    <string name="StickerShapeRoundedMsg">Повідомлення</string>
+    <string name="StickerTime">Ховати час наліпок</string>
+    <string name="UnlimitedRecentStickers">Необмежені улюблені Наклейки</string>
+    <string name="PremiumAutoPlayback">Авто анімація преміум стікерів</string>
+    <string name="SendMessageBeforeSendSticker">Надіслати повідомлення перед відправкою наклейки</string>
     <string name="HideSendAsChannel">Сховати надсилання як канал</string>
     <string name="HideKeyboardOnScroll">Приховати клавіатуру на прокрутці чату</string>
     <string name="DisableReactions">Вимкнути реакції</string>
@@ -56,6 +68,9 @@
     <string name="DisableJumpToNextChannel">Вимкнути гортання до наступного каналу</string>
     <string name="DateOfForwardedMsg">Показувати дату пересланого повідомлення</string>
     <string name="ShowMessageID">Показати ідентифікатор повідомлення</string>
+    <string name="ShowActionTimestamps">Показувати час для дій</string>
+    <string name="ZalgoFilter">Фільтр символів «Zalgo»</string>
+    <string name="ZalgoFilterInfo">Всі символи \"Z̷͍͌ā̸̜l̸̞̂g̷̝͘o̶̩̓\" в ніках та повідомленнях будуть видалені. Буде очищено кеш повідомлень.</string>
     <string name="Media">Медіа</string>
     <string name="RearVideoMessages">Задня камера у відеоповідомленнях</string>
     <string name="DisableCamera">Вимкнути миттєву камеру</string>
@@ -65,17 +80,45 @@
     <string name="DisablePlayback">Вимкнути відтворення</string>
     <string name="DPDescription">Вимикає відтворення при натисканні кнопки гучності</string>
     <!-- Drawer -->
-    <string name="Drawer">Меню</string>
     <string name="DrawerElements">Елементи меню</string>
     <string name="DrawerOptions">Параметри меню</string>
     <string name="DrawerIconPack">Набір значків</string>
     <string name="NewYear">Новий рік</string>
     <string name="ValentinesDay">День Святого Валентина</string>
     <string name="Halloween">Хеллоуїн</string>
+    <!-- Updates -->
+    <string name="Updates">Обновления</string>
+    <string name="UpdateAvailable">Доступне обновлення!</string>
+    <string name="CheckOnLaunch">Перевірити при запуску</string>
+    <string name="NoUpdates">Оновлення не знайдено.</string>
+    <string name="CheckForUpdates">Перевірте наявність оновлень</string>
+    <string name="CurrentVersion">Поточна версія</string>
+    <string name="Version">Версія</string>
+    <string name="UpdateSize">Розмір оновлення</string>
+    <string name="Changelog">Список змін:</string>
+    <string name="BuildType">Тип збірки</string>
+    <string name="BTRelease">Реліз</string>
+    <string name="BTBeta">Бета</string>
+    <string name="ClearUpdatesCache">Очистити кеш оновлень</string>
+    <string name="ClearedUpdatesCache">Очищено **%1$s** з кешу.</string>
+    <string name="NothingToClear">Очищення не потрібно.</string>
+    <string name="LastCheck">Остання перевірка</string>
     <!-- Other -->
+    <string name="BoldItalic">Жирний курсив</string>
+    <string name="OpenPremiumBot">Відкрити офіційного бота</string>
+    <string name="Select">Вибрати</string>
     <string name="EnterID">Введіть ID</string>
     <string name="TrackSaved">Пісню збережено</string>
     <string name="ChannelToSaveDescription">Введіть ID каналу/чату/користувача, де будуть збережені треки</string>
+    <string name="Unknown">Невідомо</string>
     <string name="ConfirmCall">Підтвердити дзвінок</string>
     <string name="CallTo">Зателефонувати до **%1$s**?</string>
+    <string name="AppIconRelease">Реліз</string>
+    <string name="AppIconBeta">Бета</string>
+    <string name="AppIconInverted">Інвертований</string>
+    <string name="AppIconMonet">Monet</string>
+    <string name="AppIconGradient">Градієнт</string>
+    <string name="AppIconPixel">Піксель</string>
+    <string name="AppIconGoogle">Google</string>
+    <string name="AppIconRed">Червоне Єбало</string>
 </resources>

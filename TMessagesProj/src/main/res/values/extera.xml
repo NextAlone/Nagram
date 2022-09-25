@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+This is the source code of exteraGram for Android.
+
+We do not and cannot prevent the use of our code,
+but be respectful and credit the authors.
+
+Copyright @immat0x1, @itsv1eds 2022.
+ -->
 <resources>
     <!-- exteraGram's Main Strings -->
     <string name="exteraAppName" translatable="false">exteraGram</string>
