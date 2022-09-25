@@ -148,5 +148,5 @@
     <string name="disablePremiumStickerAnimation">禁用会员贴纸动画</string>
     <string name="DatacenterStatusAbout">检查 Telegram 的**数据中心**的状态。</string>
     <string name="DatacenterStatus">数据中心状态</string>
-    <string name="enhancedFileLoader">加速下载</string>
+    <string name="enhancedFileLoader">加速上传和下载</string>
 </resources>
