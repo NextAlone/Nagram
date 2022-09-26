@@ -1570,10 +1570,6 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
             }
         }
 
-        public void recycle() {
-            NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.groupStickersDidLoad);
-        }
-
         public String getTitle(int index) {
             if (index < 0 || index >= stickerSets.size()) {
                 return null;
