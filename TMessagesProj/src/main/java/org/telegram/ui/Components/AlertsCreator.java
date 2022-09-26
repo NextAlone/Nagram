@@ -486,6 +486,12 @@ public class AlertsCreator {
                     showSimpleToast(fragment, error.text);
                     break;
             }
+        } else if (request instanceof TLRPC.TL_messages_hideChatJoinRequest) {
+            if ("USER_CHANNELS_TOO_MUCH".equals(error.text)) {
+                showAddUserAlert(error.text, fragment, true, request);
+            } else {
+                showSimpleToast(fragment, error.text);
+            }
         }
 
         return null;
