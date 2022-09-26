@@ -28,7 +28,6 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
-import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
@@ -49,7 +48,6 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
 
     private ValueAnimator statusBarColorAnimate;
     private Parcelable recyclerViewState = null;
-    private UserConfig me = UserConfig.getInstance(UserConfig.selectedAccount);
 
     private int applicationHeaderRow;
     private int fabShapeRow;
@@ -104,7 +102,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
     
         drawerHeaderRow = newRow();
         
-        if (me != null && me.isPremium()) statusRow = newRow();
+        statusRow = getUserConfig().isPremium() ? newRow() : -1;
         newGroupRow = newRow();
         newSecretChatRow = newRow();
         newChannelRow = newRow();

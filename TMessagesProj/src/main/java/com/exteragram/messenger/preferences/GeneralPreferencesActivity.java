@@ -64,7 +64,6 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
     private int chatsOnTitleRow;
     private int disableVibrationRow;
     private int forceTabletModeRow;
-    private int disableAnimatedAvatarsRow;
     private int generalDividerRow;
 
     private int profileHeaderRow;
@@ -72,6 +71,12 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
     private int showDCRow;
     private int hidePhoneNumberRow;
     private int profileDividerRow;
+
+    private int premiumHeaderRow;
+    private int disableAnimatedAvatarsRow;
+    private int premiumAutoPlaybackRow;
+    private int hidePremiumStickersTabRow;
+    private int premiumDividerRow;
 
     private int archiveHeaderRow;
     private int archiveOnPullRow;
@@ -223,7 +228,6 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
         formatTimeWithSecondsRow = newRow();
         chatsOnTitleRow = newRow();
         disableVibrationRow = newRow();
-        disableAnimatedAvatarsRow = newRow();
         forceTabletModeRow = newRow();
         generalDividerRow = newRow();
 
@@ -232,6 +236,12 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
         showIDRow = newRow();
         showDCRow = newRow();
         profileDividerRow = newRow();
+
+        premiumHeaderRow = newRow();
+        disableAnimatedAvatarsRow = newRow();
+        premiumAutoPlaybackRow = newRow();
+        hidePremiumStickersTabRow = getUserConfig().isPremium() ? newRow() : -1;
+        premiumDividerRow = newRow();
 
         archiveHeaderRow = newRow();
         archiveOnPullRow = newRow();
@@ -314,6 +324,16 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
                 ((TextCheckCell) view).setChecked(ExteraConfig.showDC);
             }
             parentLayout.rebuildAllFragmentViews(false, false);
+        } else if (position == premiumAutoPlaybackRow) {
+            ExteraConfig.togglePremiumAutoPlayback();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.premiumAutoPlayback);
+            }
+        } else if (position == hidePremiumStickersTabRow) {
+            ExteraConfig.toggleHidePremiumStickersTab();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.hidePremiumStickersTab);
+            }
         }
     }
 
@@ -368,6 +388,8 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
                         headerCell.setText(LocaleController.getString("Profile", R.string.Profile));
                     } else if (position == avatarCornersHeaderRow) {
                         headerCell.setText(LocaleController.getString("AvatarCorners", R.string.AvatarCorners));
+                    } else if (position == premiumHeaderRow) {
+                        headerCell.setText(LocaleController.getString("TelegramPremium", R.string.TelegramPremium));
                     }
                     break;
                 case 5:
@@ -397,6 +419,10 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
                         textCheckCell.setTextAndCheck(LocaleController.getString("ShowID", R.string.ShowID), ExteraConfig.showID, true);
                     } else if (position == showDCRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("ShowDC", R.string.ShowDC), ExteraConfig.showDC, false);
+                    } else if (position == premiumAutoPlaybackRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString("PremiumAutoPlayback", R.string.PremiumAutoPlayback), ExteraConfig.premiumAutoPlayback, hidePremiumStickersTabRow != -1);
+                    } else if (position == hidePremiumStickersTabRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString("HidePremiumStickersTab", R.string.HidePremiumStickersTab), ExteraConfig.hidePremiumStickersTab, false);
                     }
                     break;
                 case 8:
@@ -413,9 +439,10 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
 
         @Override
         public int getItemViewType(int position) {
-            if (position == generalDividerRow || position == profileDividerRow || position == avatarCornersDividerRow) {
+            if (position == generalDividerRow || position == profileDividerRow || position == avatarCornersDividerRow || position == premiumDividerRow) {
                 return 1;
-            } else if (position == generalHeaderRow || position == archiveHeaderRow || position == profileHeaderRow || position == avatarCornersHeaderRow) {
+            } else if (position == generalHeaderRow || position == archiveHeaderRow || position == profileHeaderRow ||
+                       position == premiumHeaderRow || position == avatarCornersHeaderRow) {
                 return 3;
             } else if (position == forcePacmanAnimationInfoRow) {
                 return 8;

@@ -35,7 +35,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
-import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.Theme;
@@ -57,8 +56,6 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
     private StickerSizeCell stickerSizeCell;
     private StickerShapeCell stickerShapeCell;
 
-    private UserConfig me = UserConfig.getInstance(UserConfig.selectedAccount);
-
     private int stickerSizeHeaderRow;
     private int stickerSizeRow;
 
@@ -69,8 +66,6 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
     private int stickersHeaderRow;
     private int hideStickerTimeRow;
     private int unlimitedRecentStickersRow;
-    private int premiumAutoPlaybackRow;
-    private int hidePremiumStickersTabRow;
     private int sendMessageBeforeSendStickerRow;
     private int stickersDividerRow;
 
@@ -239,8 +234,6 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
         stickersHeaderRow = newRow();
         hideStickerTimeRow = newRow();
         unlimitedRecentStickersRow = newRow();
-        premiumAutoPlaybackRow = newRow();
-        if (me != null && me.isPremium()) hidePremiumStickersTabRow = newRow();
         sendMessageBeforeSendStickerRow = newRow();
         stickersDividerRow = newRow();
 
@@ -282,16 +275,6 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
             ExteraConfig.toggleSendMessageBeforeSendSticker();
             if (view instanceof TextCheckCell) {
                 ((TextCheckCell) view).setChecked(ExteraConfig.sendMessageBeforeSendSticker);
-            }
-        } else if (position == premiumAutoPlaybackRow) {
-            ExteraConfig.togglePremiumAutoPlayback();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.premiumAutoPlayback);
-            }
-        } else if (position == hidePremiumStickersTabRow) {
-            ExteraConfig.toggleHidePremiumStickersTab();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.hidePremiumStickersTab);
             }
         } else if (position == hideSendAsChannelRow) {
             ExteraConfig.toggleHideSendAsChannel();
@@ -449,10 +432,6 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                         textCheckCell.setTextAndCheck(LocaleController.getString("StickerTime", R.string.StickerTime), ExteraConfig.hideStickerTime, true);
                     } else if (position == unlimitedRecentStickersRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("UnlimitedRecentStickers", R.string.UnlimitedRecentStickers), ExteraConfig.unlimitedRecentStickers, true);
-                    } else if (position == premiumAutoPlaybackRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("PremiumAutoPlayback", R.string.PremiumAutoPlayback), ExteraConfig.premiumAutoPlayback, true);
-                    } else if (position == hidePremiumStickersTabRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("HidePremiumStickersTab", R.string.HidePremiumStickersTab), ExteraConfig.hidePremiumStickersTab, true);
                     } else if (position == sendMessageBeforeSendStickerRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("SendMessageBeforeSendSticker", R.string.SendMessageBeforeSendSticker), ExteraConfig.sendMessageBeforeSendSticker, false);
                     } else if (position == hideSendAsChannelRow) {
