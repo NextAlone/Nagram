@@ -62,6 +62,7 @@ public class ExteraConfig {
     public static boolean unlimitedRecentStickers;
     public static boolean sendMessageBeforeSendSticker;
     public static boolean premiumAutoPlayback;
+    public static boolean hidePremiumStickersTab;
 
     public static boolean hideSendAsChannel;
     public static boolean hideKeyboardOnScroll;
@@ -131,6 +132,7 @@ public class ExteraConfig {
             unlimitedRecentStickers = preferences.getBoolean("unlimitedRecentStickers", false);
             sendMessageBeforeSendSticker = preferences.getBoolean("sendMessageBeforeSendSticker", false);
             premiumAutoPlayback = preferences.getBoolean("premiumAutoPlayback", false);
+            hidePremiumStickersTab = preferences.getBoolean("hidePremiumStickersTab", false);
 
             hideSendAsChannel = preferences.getBoolean("hideSendAsChannel", false);
             hideKeyboardOnScroll = preferences.getBoolean("hideKeyboardOnScroll", true);
@@ -470,5 +472,10 @@ public class ExteraConfig {
     public static void toggleDisableDividers() {
         SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
         editor.putBoolean("disableDividers", disableDividers ^= true).apply();
+    }
+
+    public static void toggleHidePremiumStickersTab() {
+        SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
+        editor.putBoolean("hidePremiumStickersTab", hidePremiumStickersTab ^= true).apply();
     }
 }

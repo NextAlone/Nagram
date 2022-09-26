@@ -70,6 +70,7 @@
     <string name="StickerTime">Скрыть время под стикером</string>
     <string name="UnlimitedRecentStickers">Бесконечные недавние стикеры</string>
     <string name="PremiumAutoPlayback">Авто-анимация премиум стикеров</string>
+    <string name="HidePremiumStickersTab">Скрыть вкладку премиум стикеров</string>
     <string name="SendMessageBeforeSendSticker">Отправлять сообщение перед стикером</string>
 
     <string name="HideSendAsChannel">Скрыть \"Написать от имени…\"</string>

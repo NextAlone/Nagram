@@ -515,7 +515,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public TLRPC.TL_messages_stickerSet filterPremiumStickers(TLRPC.TL_messages_stickerSet stickerSet) {
-        if (!premiumLocked || stickerSet == null) {
+        if (!premiumLocked || stickerSet == null || ExteraConfig.hidePremiumStickersTab) {
             return stickerSet;
         }
         try {

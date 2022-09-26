@@ -74,6 +74,7 @@
     <string name="StickerTime">Hide time on stickers</string>
     <string name="UnlimitedRecentStickers">Unlimited recent stickers</string>
     <string name="PremiumAutoPlayback">Premium auto-playback</string>
+    <string name="HidePremiumStickersTab">Hide premium stickers tab</string>
     <string name="SendMessageBeforeSendSticker">Send message before sticker</string>
 
     <string name="HideSendAsChannel">Hide \"Send as Channel\"</string>
