@@ -88,11 +88,11 @@ public class ExteraUtils {
     }
 
     public static String zalgoFilter(String text) {
-        if (text == null || text.isEmpty()) {
+        if (text == null && text.isEmpty()) {
             return "";
         } else if (ExteraConfig.zalgoFilter && text.matches(".*\\p{Mn}{3}.*")) {
             String finalString = text.replaceAll("(?i)([aeiouy]̈)|[̀-ͯ҉]|[\\p{Mn}]", "");
-            if (finalString == null || finalString.isEmpty()) {
+            if (finalString == null && finalString.isEmpty()) {
                 return LocaleController.getString("EventLogOriginalCaptionEmpty", R.string.EventLogOriginalCaptionEmpty);
             } else {
                 return finalString;

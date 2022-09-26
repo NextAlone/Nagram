@@ -247,11 +247,11 @@ public class ExteraConfig {
     }
 
     public static int getAvatarCorners(float size, boolean toPx) {
-        if (toPx) {
-            size /= AndroidUtilities.density;
+        if (avatarCorners == 0) {
+            return 0;
+        } else {
+            return (int) (avatarCorners * (size / 56.0f) * (toPx ? 1 : AndroidUtilities.density));
         }
-        size /= 56.0f;
-        return AndroidUtilities.dp(avatarCorners * size);
     }
 
     public static void setStickerSize(float size) {

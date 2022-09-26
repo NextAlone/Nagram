@@ -153,6 +153,7 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
 
         arrowView = new ImageView(context);
         arrowView.setScaleType(ImageView.ScaleType.CENTER);
+        arrowView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuName), PorterDuff.Mode.MULTIPLY));
         arrowView.setImageResource(R.drawable.msg_expand);
         addView(arrowView, LayoutHelper.createFrame(59, 59, Gravity.RIGHT | Gravity.BOTTOM));
         setArrowState(false);
@@ -223,6 +224,7 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
                 sunDrawable.setCustomEndFrame(0);
             }
             darkThemeView.playAnimation();
+            // TODO: dialog like in tgx
             if (Theme.selectedAutoNightType != Theme.AUTO_NIGHT_TYPE_NONE) {
                 Toast.makeText(getContext(), LocaleController.getString("AutoNightModeOff", R.string.AutoNightModeOff), Toast.LENGTH_SHORT).show();
                 Theme.selectedAutoNightType = Theme.AUTO_NIGHT_TYPE_NONE;

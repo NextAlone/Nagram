@@ -809,7 +809,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             attachButtonPaint.setStrokeWidth(AndroidUtilities.dp(3) * scale);
             attachButtonPaint.setAlpha(Math.round(255f * checkedState));
             float width = radius - 0.5f * attachButtonPaint.getStrokeWidth();
-            canvas.drawRoundRect(cx - width, cy - width, cx + width, cy + width, ExteraConfig.getAvatarCorners(width * 2, true), ExteraConfig.getAvatarCorners(width * 2, true), attachButtonPaint);
+            canvas.drawRoundRect(cx - width, cy - width, cx + width, cy + width, ExteraConfig.getAvatarCorners(48), ExteraConfig.getAvatarCorners(48), attachButtonPaint);
 
             width = radius - AndroidUtilities.dp(5) * checkedState;
             attachButtonPaint.setAlpha(255);
@@ -928,7 +928,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 attachButtonPaint.setStrokeWidth(AndroidUtilities.dp(3) * scale);
                 attachButtonPaint.setAlpha(Math.round(255f * checkedState));
                 float width = radius - 0.5f * attachButtonPaint.getStrokeWidth();
-                canvas.drawRoundRect(cx - width, cy - width, cx + width, cy + width, ExteraConfig.getAvatarCorners(width * 2, true), ExteraConfig.getAvatarCorners(width * 2, true), attachButtonPaint);
+                canvas.drawRoundRect(cx - width, cy - width, cx + width, cy + width, ExteraConfig.getAvatarCorners(48), ExteraConfig.getAvatarCorners(48), attachButtonPaint);
 
                 width = radius - AndroidUtilities.dp(5) * checkedState;
                 attachButtonPaint.setAlpha(255);
@@ -1035,8 +1035,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                             break;
                     }
                 }
-                textColor = ColorUtils.setAlphaComponent(textColor, 0xFF);
-                iconBackgroundColor = ColorUtils.setAlphaComponent(iconBackgroundColor, 0xFF);
+                textColor = ColorUtils.setAlphaComponent(Theme.getCurrentTheme().isMonet() ? getThemedColor(Theme.key_chat_attachFileText) : textColor, 0xFF);
+                iconBackgroundColor = ColorUtils.setAlphaComponent(Theme.getCurrentTheme().isMonet() ? getThemedColor(Theme.key_chat_attachFileBackground) : iconBackgroundColor, 0xFF);
 
                 TLRPC.Document iconDoc = icon.icon;
                 imageView.getImageReceiver().setAllowStartLottieAnimation(false);
