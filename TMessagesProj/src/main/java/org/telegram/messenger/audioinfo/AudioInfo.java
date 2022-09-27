@@ -26,6 +26,8 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 
+import xyz.nextalone.nagram.helper.audio.GenAudioInfo;
+
 public abstract class AudioInfo {
 	protected String brand;			// brand, e.g. "M4A", "ID3", ...
 	protected String version;		// version, e.g. "0", "2.3.0", ... 
@@ -145,7 +147,11 @@ public abstract class AudioInfo {
             if (header[4] == 'f' && header[5] == 't' && header[6] == 'y' && header[7] == 'p') {
                 return new M4AInfo(input);
             } else if (file.getAbsolutePath().endsWith("mp3")) {
-                return new MP3Info(input, file.length());
+				return new MP3Info(input, file.length());
+			} else if (file.getAbsolutePath().endsWith("flac")) {
+				return new GenAudioInfo(file, "FLAC");
+			} else if (file.getAbsolutePath().endsWith("ogg")) {
+				return new GenAudioInfo(file, "OGG");
             } else {
             	return null;
 			}
