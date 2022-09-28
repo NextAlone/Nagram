@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.PatternMatcher;
 
@@ -95,9 +96,17 @@ public class MonetHelper {
 
     public static int getColor(String color) {
         try {
+            int c, id, alpha = 100;
+            boolean withAlpha = false;
+            if (color.matches(".*[\\(\\)].*")) {
+                withAlpha = true;
+                alpha = Integer.parseInt(color.substring(color.indexOf("(") + 1, color.indexOf(")")));
+                color = color.substring(0, color.indexOf("("));
+            }
             //noinspection ConstantConditions
-            int id = ids.getOrDefault(color, 0);
-            return ApplicationLoader.applicationContext.getColor(id);
+            id = ids.getOrDefault(color, 0);
+            c = ApplicationLoader.applicationContext.getColor(id);
+            return withAlpha ? Color.argb(Color.alpha(c) * alpha / 100, Color.red(c), Color.green(c), Color.blue(c)) : c;
         } catch (Exception e) {
             Log.e("Theme", "Error loading color " + color);
             e.printStackTrace();
