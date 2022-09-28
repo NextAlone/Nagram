@@ -163,7 +163,7 @@ public class BottomSheet extends Dialog {
     private boolean disableScroll;
     private float currentPanTranslationY;
 
-    protected String navBarColorKey = ExteraConfig.transparentNavBar ? Theme.key_chat_messagePanelBackground : Theme.key_windowBackgroundGray;
+    protected String navBarColorKey = Theme.key_windowBackgroundGray;
     protected int navBarColor;
 
     private OnDismissListener onHideListener;

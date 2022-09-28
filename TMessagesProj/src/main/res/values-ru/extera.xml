@@ -50,7 +50,6 @@
     <string name="ChatsOnTitle">\"Чаты\" вместо \"exteraGram\"</string>
     <string name="DisableVibration">Отключить вибрацию</string>
     <string name="ForceTabletMode">Планшетный режим</string>
-    <string name="DisableAnimatedAvatars">Отключить анимированные аватарки</string>
     <string name="ArchiveOnPull">Открывать архив при вытягивании</string>
     <string name="DisableUnarchiveSwipe">Отключить жест \"Вернуть\"</string>
     <string name="ForcePacmanAnimation">Pac-Man анимация</string>
@@ -59,6 +58,10 @@
     <string name="HidePhoneNumber">Скрыть номер телефона</string>
     <string name="ShowID">Показывать ID в профиле</string>
     <string name="ShowDC">Показывать DC в профиле</string>
+    <string name="HidePremiumStickersTab">Скрыть вкладку премиум стикеров</string>
+    <string name="HideFeaturedEmojisTabs">Скрыть избранные премиум эмодзи</string>
+    <string name="PremiumAutoPlayback">Авто-анимация премиум стикеров</string>
+    <string name="DisableAnimatedAvatars">Отключить анимированные аватарки</string>
 
     <!-- Chats -->
     <string name="StickerSize">Размер стикеров</string>
@@ -69,8 +72,6 @@
     <string name="StickerShapeRoundedMsg">Сообщение</string>
     <string name="StickerTime">Скрыть время под стикером</string>
     <string name="UnlimitedRecentStickers">Бесконечные недавние стикеры</string>
-    <string name="PremiumAutoPlayback">Авто-анимация премиум стикеров</string>
-    <string name="HidePremiumStickersTab">Скрыть вкладку премиум стикеров</string>
     <string name="SendMessageBeforeSendSticker">Отправлять сообщение перед стикером</string>
 
     <string name="HideSendAsChannel">Скрыть \"Написать от имени…\"</string>

@@ -6789,7 +6789,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             featuredEmojiSets.clear();
             for (int a = 0, N = featured.size(); a < N; a++) {
                 TLRPC.StickerSetCovered set = featured.get(a);
-                if (!mediaDataController.isStickerPackInstalled(set.set.id) || installedEmojiSets.contains(set.set.id)) {
+                if ((!mediaDataController.isStickerPackInstalled(set.set.id) || installedEmojiSets.contains(set.set.id)) && !ExteraConfig.hideFeaturedEmojisTabs) {
                     featuredEmojiSets.add(set);
                 }
             }

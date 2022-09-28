@@ -63,6 +63,7 @@ public class ExteraConfig {
     public static boolean sendMessageBeforeSendSticker;
     public static boolean premiumAutoPlayback;
     public static boolean hidePremiumStickersTab;
+    public static boolean hideFeaturedEmojisTabs;
 
     public static boolean hideSendAsChannel;
     public static boolean hideKeyboardOnScroll;
@@ -133,6 +134,7 @@ public class ExteraConfig {
             sendMessageBeforeSendSticker = preferences.getBoolean("sendMessageBeforeSendSticker", false);
             premiumAutoPlayback = preferences.getBoolean("premiumAutoPlayback", false);
             hidePremiumStickersTab = preferences.getBoolean("hidePremiumStickersTab", false);
+            hideFeaturedEmojisTabs = preferences.getBoolean("hideFeaturedEmojisTabs", false);
 
             hideSendAsChannel = preferences.getBoolean("hideSendAsChannel", false);
             hideKeyboardOnScroll = preferences.getBoolean("hideKeyboardOnScroll", true);
@@ -477,5 +479,10 @@ public class ExteraConfig {
     public static void toggleHidePremiumStickersTab() {
         SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
         editor.putBoolean("hidePremiumStickersTab", hidePremiumStickersTab ^= true).apply();
+    }
+
+    public static void toggleHideFeaturedEmojisTabs() {
+        SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
+        editor.putBoolean("hideFeaturedEmojisTabs", hideFeaturedEmojisTabs ^= true).apply();
     }
 }

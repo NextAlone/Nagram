@@ -27,7 +27,6 @@
     <string name="Links">Links</string>
     <string name="AboutExteraDescription">Experimental Telegram client based on official Telegram sources!</string>
     <string name="Channel">Channel</string>
-    <string name="Chats">Chats</string>
     <string name="Crowdin">Translate</string>
     <string name="SourceCode">Source code</string>
 
@@ -54,7 +53,6 @@
     <string name="ChatsOnTitle">\"Chats\" instead of \"exteraGram\"</string>
     <string name="DisableVibration">Disable vibration</string>
     <string name="ForceTabletMode">Force tablet mode</string>
-    <string name="DisableAnimatedAvatars">Disable animated avatars</string>
     <string name="ArchiveOnPull">Open archive on pulldown</string>
     <string name="DisableUnarchiveSwipe">Disable \"Unarchive\" swipe</string>
     <string name="ForcePacmanAnimation">Force Pac-Man animation</string>
@@ -63,6 +61,10 @@
     <string name="HidePhoneNumber">Hide phone number</string>
     <string name="ShowID">Show ID in Profile</string>
     <string name="ShowDC">Show DC in Profile</string>
+    <string name="HidePremiumStickersTab">Hide premium stickers tab</string>
+    <string name="HideFeaturedEmojisTabs">Hide featured premium emojis</string>
+    <string name="PremiumAutoPlayback">Premium auto-playback</string>
+    <string name="DisableAnimatedAvatars">Disable animated avatars</string>
 
     <!-- Chats -->
     <string name="StickerSize">Stickers size</string>
@@ -73,8 +75,6 @@
     <string name="StickerShapeRoundedMsg">Message</string>
     <string name="StickerTime">Hide time on stickers</string>
     <string name="UnlimitedRecentStickers">Unlimited recent stickers</string>
-    <string name="PremiumAutoPlayback">Premium auto-playback</string>
-    <string name="HidePremiumStickersTab">Hide premium stickers tab</string>
     <string name="SendMessageBeforeSendSticker">Send message before sticker</string>
 
     <string name="HideSendAsChannel">Hide \"Send as Channel\"</string>

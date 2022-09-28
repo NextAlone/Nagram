@@ -76,6 +76,7 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
     private int disableAnimatedAvatarsRow;
     private int premiumAutoPlaybackRow;
     private int hidePremiumStickersTabRow;
+    private int hideFeaturedEmojisTabsRow;
     private int premiumDividerRow;
 
     private int archiveHeaderRow;
@@ -241,6 +242,7 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
         disableAnimatedAvatarsRow = newRow();
         premiumAutoPlaybackRow = newRow();
         hidePremiumStickersTabRow = getUserConfig().isPremium() ? newRow() : -1;
+        hideFeaturedEmojisTabsRow = newRow();
         premiumDividerRow = newRow();
 
         archiveHeaderRow = newRow();
@@ -334,6 +336,11 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
             if (view instanceof TextCheckCell) {
                 ((TextCheckCell) view).setChecked(ExteraConfig.hidePremiumStickersTab);
             }
+        } else if (position == hideFeaturedEmojisTabsRow) {
+            ExteraConfig.toggleHideFeaturedEmojisTabs();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.hideFeaturedEmojisTabs);
+            }
         }
     }
 
@@ -420,9 +427,11 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
                     } else if (position == showDCRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("ShowDC", R.string.ShowDC), ExteraConfig.showDC, false);
                     } else if (position == premiumAutoPlaybackRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("PremiumAutoPlayback", R.string.PremiumAutoPlayback), ExteraConfig.premiumAutoPlayback, hidePremiumStickersTabRow != -1);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("PremiumAutoPlayback", R.string.PremiumAutoPlayback), ExteraConfig.premiumAutoPlayback, true);
                     } else if (position == hidePremiumStickersTabRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("HidePremiumStickersTab", R.string.HidePremiumStickersTab), ExteraConfig.hidePremiumStickersTab, false);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("HidePremiumStickersTab", R.string.HidePremiumStickersTab), ExteraConfig.hidePremiumStickersTab, true);
+                    } else if (position == hideFeaturedEmojisTabsRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString("HideFeaturedEmojisTabs", R.string.HideFeaturedEmojisTabs), ExteraConfig.hideFeaturedEmojisTabs, false);
                     }
                     break;
                 case 8:

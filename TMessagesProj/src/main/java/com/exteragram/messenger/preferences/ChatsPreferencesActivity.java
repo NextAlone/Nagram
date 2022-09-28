@@ -357,7 +357,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
 
     @Override
     protected String getTitle() {
-        return LocaleController.getString("Chats", R.string.Chats);
+        return LocaleController.getString("SearchAllChatsShort", R.string.SearchAllChatsShort);
     }
 
     @Override
@@ -418,7 +418,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                     } else if (position == stickersHeaderRow) {
                         headerCell.setText(LocaleController.getString("AccDescrStickers", R.string.AccDescrStickers));
                     } else if (position == chatHeaderRow) {
-                        headerCell.setText(LocaleController.getString("Chats", R.string.Chats));
+                        headerCell.setText(LocaleController.getString("SearchAllChatsShort", R.string.SearchAllChatsShort));
                     } else if (position == mediaHeaderRow) {
                         headerCell.setText(LocaleController.getString("Media", R.string.Media));
                     } else if (position == stickerShapeHeaderRow) {
