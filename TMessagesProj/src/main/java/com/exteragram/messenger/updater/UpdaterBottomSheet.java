@@ -40,6 +40,7 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.BottomSheet;
+import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextCheckCell;
@@ -88,17 +89,17 @@ public class UpdaterBottomSheet extends BottomSheet {
             header.addView(imageView, LayoutHelper.createFrame(60, 60, Gravity.LEFT | Gravity.CENTER_VERTICAL));
         }
 
-        TextView nameView = new TextView(context);
-        nameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        SimpleTextView nameView = new SimpleTextView(context);
+        nameView.setTextSize(20);
         nameView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         nameView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         nameView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
         nameView.setText(available ? LocaleController.getString("UpdateAvailable", R.string.UpdateAvailable) : ExteraUtils.getAppName());
         header.addView(nameView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 30, Gravity.LEFT, available ? 75 : 0, 5, 0, 0));
 
-        TextView timeView = new TextView(context);
+        SimpleTextView timeView = new SimpleTextView(context);
         timeView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
-        timeView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
+        timeView.setTextSize(13);
         timeView.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
         timeView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
         timeView.setText(available ? args[4] : LocaleController.getString("LastCheck", R.string.LastCheck) + ": " + LocaleController.formatDateTime(ExteraConfig.lastUpdateCheckTime / 1000));
