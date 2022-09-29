@@ -52,7 +52,6 @@ import com.exteragram.messenger.ExteraUtils;
 
 public class UpdaterUtils {
 
-    public static String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36";
     private static String uri = "https://api.github.com/repos/exteraSquad/exteraGram/releases/latest";
     private static String downloadURL = null;
     public static String version, changelog, size, uploadDate;
@@ -64,6 +63,22 @@ public class UpdaterUtils {
     public static boolean updateDownloaded = false;
 
     private static OutputStreamWriter streamWriter = null;
+
+    private static String[] userAgents = {
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 10_0 like Mac OS X) AppleWebKit/602.1.38 (KHTML, like Gecko) Version/10.0 Mobile/14A5297c Safari/602.1",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36,gzip(gfe)",
+        "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)",
+        "Mozilla/5.0 (Linux; Android 6.0; Nexus 7 Build/MRA51D) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.133 Safari/537.36",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/600.8.9 (KHTML, like Gecko) Version/8.0.8 Safari/600.8.9",
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/44.0.2403.89 Chrome/44.0.2403.89 Safari/537.36",
+        "Mozilla/5.0 (Linux; Android 5.0.2; SAMSUNG SM-G920F Build/LRX22G) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/3.0 Chrome/38.0.2125.102 Mobile Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; rv:40.0) Gecko/20100101 Firefox/40.0"
+    };
+
+    public static String getRandomUserAgent() {
+        int randomNum = Utilities.random.nextInt(userAgents.length);
+        return userAgents[randomNum];
+    }
 
     public static void checkDirs() {
         File externalDir = ApplicationLoader.applicationContext.getExternalFilesDir(null);
@@ -105,7 +120,7 @@ public class UpdaterUtils {
                 if (BuildVars.isBetaApp()) uri = uri.replace("/exteraGram/", "/exteraGram-Beta/");
                 connection = (HttpURLConnection) new URI(uri).toURL().openConnection();
                 connection.setRequestMethod("GET");
-                connection.setRequestProperty("User-Agent", userAgent);
+                connection.setRequestProperty("User-Agent", getRandomUserAgent());
                 connection.setRequestProperty("Content-Type", "application/json");
 
                 StringBuilder textBuilder = new StringBuilder();
@@ -219,7 +234,7 @@ public class UpdaterUtils {
             if (v[i] == null) {
                 return false;
             }
-            if (Integer.parseInt(v[i]) < 999) {
+            if (Integer.parseInt(v[i]) <= 999) {
                 v[i] += "0";
             }
         }
@@ -283,7 +298,7 @@ public class UpdaterUtils {
                 uri += Uri.encode(text.toString());
                 connection = (HttpURLConnection) new URI(uri).toURL().openConnection();
                 connection.setRequestMethod("GET");
-                connection.setRequestProperty("User-Agent", userAgent);
+                connection.setRequestProperty("User-Agent", getRandomUserAgent());
                 connection.setRequestProperty("Content-Type", "application/json");
 
                 StringBuilder textBuilder = new StringBuilder();
