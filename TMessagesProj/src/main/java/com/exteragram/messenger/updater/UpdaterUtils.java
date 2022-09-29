@@ -87,6 +87,11 @@ public class UpdaterUtils {
         public void run();
     }
     public static void checkUpdates(Context context, boolean manual, OnUpdateNotFound onUpdateNotFound, OnUpdateFound onUpdateFound) {
+
+        if (BuildVars.PM_BUILD) {
+            return;
+        }
+
         Utilities.globalQueue.postRunnable(() -> {
 
             HttpURLConnection connection = null;
