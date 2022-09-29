@@ -54,7 +54,7 @@ public class UpdaterUtils {
 
     public static String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36";
     private static String uri = "https://api.github.com/repos/exteraSquad/exteraGram/releases/latest";
-    private static String universal, universalSize, downloadURL = null;
+    private static String downloadURL = null;
     public static String version, changelog, size, uploadDate;
     public static File otaPath, versionPath, apkFile;
 
@@ -127,16 +127,10 @@ public class UpdaterUtils {
                         link.contains("arm7") && cpu.equals("armeabi-v7a") ||
                         link.contains("x86") && cpu.equals("x86") ||
                         link.contains("x64") && cpu.equals("x86_64") ||
-                        link.contains("beta") && BuildVars.isBetaApp()) {
+                        link.contains("beta") && BuildVars.isBetaApp() ||
+                        link.contains("universal") && !BuildVars.isBetaApp()) {
                         break;
-                    } else if (link.contains("universal")) {
-                        universal = link;
-                        universalSize = size;
                     }
-                }
-                if (downloadURL == null) {
-                    downloadURL = universal;
-                    size = universalSize;
                 }
                 version = obj.getString("tag_name");
                 changelog = obj.getString("body");
