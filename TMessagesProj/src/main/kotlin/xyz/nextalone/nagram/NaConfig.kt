@@ -316,6 +316,12 @@ object NaConfig {
             )
 
         )
+    val customEditedMessage =
+        addConfig(
+            "CustomEditedMessage",
+            ConfigItem.configTypeString,
+            ""
+        )
 
     private fun addConfig(
         k: String,
@@ -421,7 +427,7 @@ object NaConfig {
                                     )
                                 )
                             o.value =
-                                ois.readObject() as HashMap<Int?, Int?>
+                                ois.readObject() as HashMap<*, *>
                             if (o.value == null) {
                                 o.value =
                                     HashMap<Int, Int>()

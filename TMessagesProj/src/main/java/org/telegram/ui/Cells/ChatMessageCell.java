@@ -10835,7 +10835,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         } else if (currentMessageObject.scheduled && currentMessageObject.messageOwner.date == 0x7FFFFFFE) {
             timeString = "";
         } else if (edited) {
-            timeString = LocaleController.getString("EditedMessage", R.string.EditedMessage) + " " + LocaleController.getInstance().formatterDay.format((long) (messageObject.messageOwner.date) * 1000);
+            String customStr = NaConfig.INSTANCE.getCustomEditedMessage().String();
+            timeString = (customStr.equals("") ? LocaleController.getString("EditedMessage", R.string.EditedMessage) : customStr) + " " + LocaleController.getInstance().formatterDay.format((long) (messageObject.messageOwner.date) * 1000);
         } else if (LocaleController.getInstance().formatterDay != null && LocaleController.getInstance().formatterYear != null) {
             timeString = LocaleController.getInstance().formatterDay.format((long) (messageObject.messageOwner.date) * 1000);
         } else {
@@ -16679,7 +16680,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 }
             }
             if (edited && !lastDrawingEdited && timeLayout != null) {
-                String editedStr = LocaleController.getString("EditedMessage", R.string.EditedMessage);
+                String customStr = NaConfig.INSTANCE.getCustomEditedMessage().String();
+                String editedStr = customStr.equals("") ? LocaleController.getString("EditedMessage", R.string.EditedMessage) : customStr;
                 String text = timeLayout.getText().toString();
                 int i = text.indexOf(editedStr);
                 if (i >= 0) {
