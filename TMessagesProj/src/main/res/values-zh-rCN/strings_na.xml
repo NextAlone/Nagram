@@ -61,4 +61,8 @@
     <string name="SaveWithoutMarkdown">禁用 Markdown</string>
     <string name="SendAsEmoji">禁用小游戏</string>
     <string name="CustomArtworkApi">自定义音乐封面 API</string>
+    <string name="CustomGreat">自定义快捷回复词</string>
+    <string name="CustomGreatHint">默认好耶</string>
+    <string name="CustomPoor">自定义长按快捷回复词</string>
+    <string name="CustomPoorHint">默认破烂</string>
 </resources>

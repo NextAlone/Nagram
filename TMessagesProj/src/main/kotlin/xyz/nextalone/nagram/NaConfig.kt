@@ -153,121 +153,169 @@ object NaConfig {
             ConfigItem.configTypeBool,
             true
         )
-    val customTitle = addConfig(
-        "CustomTitle",
-        ConfigItem.configTypeString,
-        LocaleController.getString("NekoX", R.string.NekoX)
-    )
-    val useSystemUnlock = addConfig(
-        "UseSystemUnlock",
-        ConfigItem.configTypeBool,
-        true
-    )
-    val codeSyntaxHighlight = addConfig(
-        "CodeSyntaxHighlight",
-        ConfigItem.configTypeBool,
-        true
-    )
-    val dateOfForwardedMsg = addConfig(
-        "DateOfForwardedMsg",
-        ConfigItem.configTypeBool,
-        false
-    )
-    val showMessageID = addConfig(
-        "ShowMessageID",
-        ConfigItem.configTypeBool,
-        false
-    )
-    val showRPCError = addConfig(
-        "ShowRPCError",
-        ConfigItem.configTypeBool,
-        false
-    )
-    val showPremiumStarInChat = addConfig(
-        "ShowPremiumStarInChat",
-        ConfigItem.configTypeBool,
-        false
-    )
-    val showPremiumAvatarAnimation = addConfig(
-        "ShowPremiumAvatarAnimation",
-        ConfigItem.configTypeBool,
-        true
-    )
-    val alwaysSaveChatOffset = addConfig(
-        "AlwaysSaveChatOffset",
-        ConfigItem.configTypeBool,
-        true
-    )
-    val autoReplaceRepeat = addConfig(
-        "AutoReplaceRepeat",
-        ConfigItem.configTypeBool,
-        true
-    )
-    val autoInsertGIFCaption = addConfig(
-        "AutoInsertGIFCaption",
-        ConfigItem.configTypeBool,
-        true
-    )
-    val defaultMonoLanguage = addConfig(
-        "DefaultMonoLanguage",
-        ConfigItem.configTypeString,
-        ""
-    )
-    val disableGlobalSearch = addConfig(
-        "DisableGlobalSearch",
-        ConfigItem.configTypeBool,
-        false
-    )
-    val hideOriginAfterTranslation: ConfigItem = addConfig(
-        "HideOriginAfterTranslation",
-        ConfigItem.configTypeBool,
-        false
-    )
-    val zalgoFilter = addConfig(
-        "ZalgoFilter",
-        ConfigItem.configTypeBool,
-        false
-    )
-    val customChannelLabel = addConfig(
-        "CustomChannelLabel",
-        ConfigItem.configTypeString,
-        LocaleController.getString("channelLabel", R.string.channelLabel)
-    )
-    val alwaysShowDownloadIcon = addConfig(
-        "AlwaysShowDownloadIcon",
-        ConfigItem.configTypeBool,
-        false
-    )
-    val showPhotoOpenInExternalApp = addConfig(
-        "ShowPhotoOpenInExternalApp",
-        ConfigItem.configTypeBool,
-        false
-    )
-    val quickToggleAnonymous = addConfig(
-        "QuickToggleAnonymous",
-        ConfigItem.configTypeBool,
-        false
-    )
-    val onlyShowBuiltInEmoji = addConfig(
-        "OnlyShowBuiltInEmoji",
-        ConfigItem.configTypeBool,
-        false
-    )
-    val realHideTimeForSticker = addConfig(
-        "RealHideTimeForSticker",
-        ConfigItem.configTypeBool,
-        false
-    )
-    val ignoreFolderCount = addConfig(
-        "IgnoreFolderCount",
-        ConfigItem.configTypeBool,
-        false
-    )
-    val customArtworkApi = addConfig(
-        "CustomArtworkApi",
-        ConfigItem.configTypeString,
-        ""
-    )
+    val customTitle =
+        addConfig(
+            "CustomTitle",
+            ConfigItem.configTypeString,
+            LocaleController.getString(
+                "NekoX",
+                R.string.NekoX
+            )
+        )
+    val useSystemUnlock =
+        addConfig(
+            "UseSystemUnlock",
+            ConfigItem.configTypeBool,
+            true
+        )
+    val codeSyntaxHighlight =
+        addConfig(
+            "CodeSyntaxHighlight",
+            ConfigItem.configTypeBool,
+            true
+        )
+    val dateOfForwardedMsg =
+        addConfig(
+            "DateOfForwardedMsg",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val showMessageID =
+        addConfig(
+            "ShowMessageID",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val showRPCError =
+        addConfig(
+            "ShowRPCError",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val showPremiumStarInChat =
+        addConfig(
+            "ShowPremiumStarInChat",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val showPremiumAvatarAnimation =
+        addConfig(
+            "ShowPremiumAvatarAnimation",
+            ConfigItem.configTypeBool,
+            true
+        )
+    val alwaysSaveChatOffset =
+        addConfig(
+            "AlwaysSaveChatOffset",
+            ConfigItem.configTypeBool,
+            true
+        )
+    val autoReplaceRepeat =
+        addConfig(
+            "AutoReplaceRepeat",
+            ConfigItem.configTypeBool,
+            true
+        )
+    val autoInsertGIFCaption =
+        addConfig(
+            "AutoInsertGIFCaption",
+            ConfigItem.configTypeBool,
+            true
+        )
+    val defaultMonoLanguage =
+        addConfig(
+            "DefaultMonoLanguage",
+            ConfigItem.configTypeString,
+            ""
+        )
+    val disableGlobalSearch =
+        addConfig(
+            "DisableGlobalSearch",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val hideOriginAfterTranslation: ConfigItem =
+        addConfig(
+            "HideOriginAfterTranslation",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val zalgoFilter =
+        addConfig(
+            "ZalgoFilter",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val customChannelLabel =
+        addConfig(
+            "CustomChannelLabel",
+            ConfigItem.configTypeString,
+            LocaleController.getString(
+                "channelLabel",
+                R.string.channelLabel
+            )
+        )
+    val alwaysShowDownloadIcon =
+        addConfig(
+            "AlwaysShowDownloadIcon",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val showPhotoOpenInExternalApp =
+        addConfig(
+            "ShowPhotoOpenInExternalApp",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val quickToggleAnonymous =
+        addConfig(
+            "QuickToggleAnonymous",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val onlyShowBuiltInEmoji =
+        addConfig(
+            "OnlyShowBuiltInEmoji",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val realHideTimeForSticker =
+        addConfig(
+            "RealHideTimeForSticker",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val ignoreFolderCount =
+        addConfig(
+            "IgnoreFolderCount",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val customArtworkApi =
+        addConfig(
+            "CustomArtworkApi",
+            ConfigItem.configTypeString,
+            ""
+        )
+    val customGreat =
+        addConfig(
+            "CustomGreat",
+            ConfigItem.configTypeString,
+            LocaleController.getString(
+                "Great",
+                R.string.Great
+            )
+        )
+    val CustomPoor =
+        addConfig(
+            "CustomPoor",
+            ConfigItem.configTypeString,
+            LocaleController.getString(
+                "Pool",
+                R.string.Poor
+            )
+
+        )
 
     private fun addConfig(
         k: String,
