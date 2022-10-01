@@ -498,9 +498,13 @@ public class Switch extends View {
             alpha = (int) (a1 + (a2 - a1) * colorProgress);
             paint.setColor(((alpha & 0xff) << 24) | ((red & 0xff) << 16) | ((green & 0xff) << 8) | (blue & 0xff));
 
-            canvasToDraw.drawCircle(tx, ty, AndroidUtilities.dp(ExteraConfig.newSwitchStyle ? 7 : 8), paint);
+            if (ExteraConfig.newSwitchStyle) {
+                canvasToDraw.drawCircle(tx, ty, AndroidUtilities.dp(2) * progress + AndroidUtilities.dp(5), paint);
+            } else {
+                canvasToDraw.drawCircle(tx, ty, AndroidUtilities.dp(8), paint);
+            }
 
-            if (a == 0) {
+            if (a == 0 && !ExteraConfig.newSwitchStyle) {
                 if (iconDrawable != null) {
                     iconDrawable.setBounds(tx - iconDrawable.getIntrinsicWidth() / 2, ty - iconDrawable.getIntrinsicHeight() / 2, tx + iconDrawable.getIntrinsicWidth() / 2, ty + iconDrawable.getIntrinsicHeight() / 2);
                     iconDrawable.draw(canvasToDraw);
