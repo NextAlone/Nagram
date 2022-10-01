@@ -279,7 +279,7 @@ public class Emoji {
             if (SharedConfig.useSystemEmoji) {
                 String emoji = fixEmoji(EmojiData.data[info.page][info.emojiIndex]);
                 textPaint.setTextSize(b.height() * 0.8f);
-                canvas.drawText(emoji,  0, emoji.length(), b.left, b.bottom - b.height() * 0.225f, textPaint);
+                canvas.drawText(emoji, 0, emoji.length(), b.left, b.bottom - b.height() * 0.225f, textPaint);
                 return;
             }
 
@@ -537,7 +537,7 @@ public class Emoji {
                     }
                 }
                 drawable = Emoji.getEmojiDrawable(emojiRange.code);
-                if (drawable != null && !SharedConfig.useSystemEmoji) {
+                if (drawable != null) {
                     span = new EmojiSpan(drawable, DynamicDrawableSpan.ALIGN_BOTTOM, size, fontMetrics);
                     span.emoji = emojiRange.code == null ? null : emojiRange.code.toString();
                     s.setSpan(span, emojiRange.start, emojiRange.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

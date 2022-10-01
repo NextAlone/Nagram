@@ -46,6 +46,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Adapters.FiltersView;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.CubicBezierInterpolator;
@@ -399,10 +400,12 @@ public class ActionBar extends FrameLayout {
         if (titleTextView[0] != null) {
             titleTextView[0].setVisibility(value != null && !isSearchFieldVisible ? VISIBLE : INVISIBLE);
             titleTextView[0].setText(lastTitle = value);
-            titleTextView[0].setRightDrawable(lastRightDrawable = rightDrawable);
-            titleTextView[0].setRightDrawableOnClick(rightDrawableOnClickListener);
-            if (rightDrawable instanceof AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable) {
-                ((AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable) rightDrawable).setParentView(titleTextView[0]);
+            if (UserConfig.getInstance(UserConfig.selectedAccount).isPremium()) {
+                titleTextView[0].setRightDrawable(lastRightDrawable = rightDrawable);
+                titleTextView[0].setRightDrawableOnClick(rightDrawableOnClickListener);
+                if (rightDrawable instanceof AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable) {
+                    ((AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable) rightDrawable).setParentView(titleTextView[0]);
+                }
             }
         }
         fromBottom = false;
@@ -1071,8 +1074,6 @@ public class ActionBar extends FrameLayout {
             textLeft = AndroidUtilities.dp(AndroidUtilities.isTablet() ? 26 : 18);
         }
 
-        if (ExteraConfig.centerTitle) textLeft = 0;
-
         if (menu != null && menu.getVisibility() != GONE) {
             int menuWidth;
             boolean searchFieldIsVisible = menu.searchFieldVisible();
@@ -1101,7 +1102,7 @@ public class ActionBar extends FrameLayout {
 
         for (int i = 0; i < 2; i++) {
             if (titleTextView[0] != null && titleTextView[0].getVisibility() != GONE || subtitleTextView != null && subtitleTextView.getVisibility() != GONE) {
-                int availableWidth = ExteraConfig.centerTitle ? width : width - (menu != null ? menu.getMeasuredWidth() : 0) - AndroidUtilities.dp(16) - textLeft - titleRightMargin;
+                int availableWidth = ExteraConfig.centerTitle ? (width - AndroidUtilities.dp(120)) : width - (menu != null ? menu.getMeasuredWidth() : 0) - AndroidUtilities.dp(16) - textLeft - titleRightMargin;
                 if (((fromBottom && i == 0) || (!fromBottom && i == 1)) && overlayTitleAnimation && titleAnimationRunning) {
                     titleTextView[i].setTextSize(!AndroidUtilities.isTablet() && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 18 : 20);
                 } else {
@@ -1172,8 +1173,6 @@ public class ActionBar extends FrameLayout {
             textLeft = AndroidUtilities.dp(AndroidUtilities.isTablet() ? 26 : 18);
         }
 
-        if (ExteraConfig.centerTitle) textLeft = 0;
-
         if (menu != null && menu.getVisibility() != GONE) {
             int menuLeft = menu.searchFieldVisible() ? AndroidUtilities.dp(AndroidUtilities.isTablet() ? 74 : 66) : (right - left) - menu.getMeasuredWidth();
             menu.layout(menuLeft, additionalTop, menuLeft + menu.getMeasuredWidth(), additionalTop + menu.getMeasuredHeight());
@@ -1191,17 +1190,29 @@ public class ActionBar extends FrameLayout {
                         textTop = (getCurrentActionBarHeight() - titleTextView[i].getTextHeight()) / 2;
                     }
                 }
-                titleTextView[i].layout(textLeft, additionalTop + textTop - titleTextView[i].getPaddingTop(), textLeft + titleTextView[i].getMeasuredWidth(), additionalTop + textTop + titleTextView[i].getTextHeight() - titleTextView[i].getPaddingTop() + titleTextView[i].getPaddingBottom());
+                if (ExteraConfig.centerTitle) {
+                    titleTextView[i].layout(getMeasuredWidth() / 2 - titleTextView[i].getMeasuredWidth() / 2, additionalTop + textTop - titleTextView[i].getPaddingTop(), getMeasuredWidth() / 2 + titleTextView[i].getMeasuredWidth() / 2, additionalTop + textTop + titleTextView[i].getTextHeight() - titleTextView[i].getPaddingTop() + titleTextView[i].getPaddingBottom());
+                } else {
+                    titleTextView[i].layout(textLeft, additionalTop + textTop - titleTextView[i].getPaddingTop(), textLeft + titleTextView[i].getMeasuredWidth(), additionalTop + textTop + titleTextView[i].getTextHeight() - titleTextView[i].getPaddingTop() + titleTextView[i].getPaddingBottom());
+                }
             }
         }
         if (subtitleTextView != null && subtitleTextView.getVisibility() != GONE) {
             int textTop = getCurrentActionBarHeight() / 2 + (getCurrentActionBarHeight() / 2 - subtitleTextView.getTextHeight()) / 2 - AndroidUtilities.dp(!AndroidUtilities.isTablet() && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 1 : 1);
-            subtitleTextView.layout(textLeft, additionalTop + textTop, textLeft + subtitleTextView.getMeasuredWidth(), additionalTop + textTop + subtitleTextView.getTextHeight());
+            if (ExteraConfig.centerTitle) {
+                subtitleTextView.layout(getMeasuredWidth() / 2 - subtitleTextView.getMeasuredWidth() / 2, additionalTop + textTop, getMeasuredWidth() / 2 + subtitleTextView.getMeasuredWidth() / 2, additionalTop + textTop + subtitleTextView.getTextHeight());
+            } else {
+                subtitleTextView.layout(textLeft, additionalTop + textTop, textLeft + subtitleTextView.getMeasuredWidth(), additionalTop + textTop + subtitleTextView.getTextHeight());
+            }
         }
 
         if (additionalSubtitleTextView != null && additionalSubtitleTextView.getVisibility() != GONE) {
             int textTop = getCurrentActionBarHeight() / 2 + (getCurrentActionBarHeight() / 2 - additionalSubtitleTextView.getTextHeight()) / 2 - AndroidUtilities.dp(!AndroidUtilities.isTablet() && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 1 : 1);
-            additionalSubtitleTextView.layout(textLeft, additionalTop + textTop, textLeft + additionalSubtitleTextView.getMeasuredWidth(), additionalTop + textTop + additionalSubtitleTextView.getTextHeight());
+            if (ExteraConfig.centerTitle) {
+                additionalSubtitleTextView.layout(getMeasuredWidth() / 2 - additionalSubtitleTextView.getMeasuredWidth() / 2, additionalTop + textTop, getMeasuredWidth() / 2 + additionalSubtitleTextView.getMeasuredWidth() / 2, additionalTop + textTop + additionalSubtitleTextView.getTextHeight());
+            } else {
+                additionalSubtitleTextView.layout(textLeft, additionalTop + textTop, textLeft + additionalSubtitleTextView.getMeasuredWidth(), additionalTop + textTop + additionalSubtitleTextView.getTextHeight());
+            }
         }
 
         int childCount = getChildCount();
