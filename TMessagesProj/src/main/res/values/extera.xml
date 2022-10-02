@@ -48,6 +48,9 @@
 
     <!-- General -->
     <string name="AvatarCorners">Avatar corners</string>
+    <string name="DownloadSpeedBoost">Download speed boost</string>
+    <string name="UploadSpeedBoost">Upload speed boost</string>
+    <string name="Ultra">Ultra</string>
     <string name="DisableNumberRounding">Disable number rounding</string>
     <string name="FormatTimeWithSeconds">Format time with seconds</string>
     <string name="ChatsOnTitle">\"Chats\" instead of \"exteraGram\"</string>

@@ -212,6 +212,7 @@ public abstract class BasePreferencesActivity extends BaseFragment {
                 // case 10: Chats > StickerShapeCell
                 // case 11: Chats > StickerSizeCell
                 // case 12: Appearance > FabShapeCell
+                // case 13: General > DownloadSpeedChooser
             }
             view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
             return new RecyclerListView.Holder(view);

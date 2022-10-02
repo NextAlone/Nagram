@@ -45,6 +45,9 @@
 
     <!-- General -->
     <string name="AvatarCorners">Закругление аватарок</string>
+    <string name="DownloadSpeedBoost">Увеличение скорости загрузки</string>
+    <string name="UploadSpeedBoost">Увеличение скорости выгрузки</string>
+    <string name="Ultra">Ультра</string>
     <string name="DisableNumberRounding">Отключить округление чисел</string>
     <string name="FormatTimeWithSeconds">Показывать время с секундами</string>
     <string name="ChatsOnTitle">\"Чаты\" вместо \"exteraGram\"</string>

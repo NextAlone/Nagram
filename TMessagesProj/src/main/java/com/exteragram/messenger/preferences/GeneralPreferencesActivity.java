@@ -13,21 +13,11 @@ package com.exteragram.messenger.preferences;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Region;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.os.Bundle;
-import android.text.TextPaint;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.view.accessibility.AccessibilityEvent;
-import android.view.accessibility.AccessibilityNodeInfo;
 
-import androidx.core.graphics.ColorUtils;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,27 +26,22 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
-import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
-import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.Components.SeekBarView;
+import org.telegram.ui.Components.SlideChooseView;
 
 import com.exteragram.messenger.ExteraConfig;
 
 public class GeneralPreferencesActivity extends BasePreferencesActivity {
 
-    private AvatarCornersCell avatarCornersCell;
-
-    private ValueAnimator statusBarColorAnimate;
-
-    private int avatarCornersHeaderRow;
-    private int avatarCornersRow;
-    private int avatarCornersDividerRow;
+    private int speedBoostersHeaderRow;
+    private int downloadSpeedChooserRow;
+    private int uploadSpeedBoostRow;
+    private int speedBoostersDividerRow;
 
     private int generalHeaderRow;
     private int formatTimeWithSecondsRow;
@@ -85,145 +70,15 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
     private int forcePacmanAnimationRow;
     private int forcePacmanAnimationInfoRow;
 
-    public class AvatarCornersCell extends FrameLayout {
-
-        private final SeekBarView sizeBar;
-        private final FrameLayout preview;
-        private final int startCornersSize = 0;
-        private final int endCornersSize = 30;
-        private final long time = System.currentTimeMillis();
-
-        private final TextPaint textPaint;
-        private Paint outlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        private int lastWidth;
-
-        public AvatarCornersCell(Context context) {
-            super(context);
-
-            setWillNotDraw(false);
-
-            textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-
-            sizeBar = new SeekBarView(context);
-            sizeBar.setReportChanges(true);
-            sizeBar.setDelegate(new SeekBarView.SeekBarViewDelegate() {
-                @Override
-                public void onSeekBarDrag(boolean stop, float progress) {
-                    sizeBar.getSeekBarAccessibilityDelegate().postAccessibilityEventRunnable(AvatarCornersCell.this);
-                    ExteraConfig.setAvatarCorners(startCornersSize + (endCornersSize - startCornersSize) * progress);
-                    AvatarCornersCell.this.invalidate();
-                    preview.invalidate();
-                    parentLayout.rebuildAllFragmentViews(false, false);
-                }
-
-                @Override
-                public void onSeekBarPressed(boolean pressed) {
-
-                }
-            });
-            sizeBar.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
-            addView(sizeBar, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 38, Gravity.LEFT | Gravity.TOP, 9, 5, 43, 11));
-
-            preview = new FrameLayout(context) {
-                @Override
-                protected void onDraw(Canvas canvas) {
-                    super.onDraw(canvas);
-                    int color = Theme.getColor(Theme.key_switchTrack);
-                    int r = Color.red(color);
-                    int g = Color.green(color);
-                    int b = Color.blue(color);
-
-                    int w = getMeasuredWidth();
-                    int h = getMeasuredHeight();
-
-                    Theme.dialogs_onlineCirclePaint.setColor(Color.argb(20, r, g, b));
-                    canvas.drawRoundRect(0, 0, w, h, AndroidUtilities.dp(6), AndroidUtilities.dp(6), Theme.dialogs_onlineCirclePaint);
-
-                    outlinePaint.setStyle(Paint.Style.STROKE);
-                    outlinePaint.setColor(ColorUtils.setAlphaComponent(Theme.getColor(Theme.key_switchTrack), 0x3F));
-                    outlinePaint.setStrokeWidth(Math.max(2, AndroidUtilities.dp(0.5f)));
-                    float stroke = outlinePaint.getStrokeWidth();
-                    canvas.drawRoundRect(stroke, stroke, w - stroke, h - stroke, AndroidUtilities.dp(6), AndroidUtilities.dp(6), outlinePaint);
-
-                    Theme.dialogs_onlineCirclePaint.setColor(Theme.getColor(Theme.key_chats_onlineCircle));
-                    canvas.drawCircle(AndroidUtilities.dp(69), h / 2.0f + AndroidUtilities.dp(21), AndroidUtilities.dp(7), Theme.dialogs_onlineCirclePaint);
-
-                    Theme.dialogs_onlineCirclePaint.setColor(Color.argb(204, r, g, b));
-                    canvas.drawRoundRect(AndroidUtilities.dp(92), h / 2.0f - AndroidUtilities.dp(8), AndroidUtilities.dp(170), h / 2.0f - AndroidUtilities.dp(16), w / 2.0f, w / 2.0f, Theme.dialogs_onlineCirclePaint);
-
-                    Path online = new Path();
-                    online.addCircle(AndroidUtilities.dp(69), h / 2.0f + AndroidUtilities.dp(21), AndroidUtilities.dp(12), Path.Direction.CCW);
-                    canvas.clipPath(online, Region.Op.DIFFERENCE);
-
-                    Theme.dialogs_onlineCirclePaint.setColor(Color.argb(90, r, g, b));
-                    canvas.drawRoundRect(AndroidUtilities.dp(92), h / 2.0f + AndroidUtilities.dp(8), AndroidUtilities.dp(230), h / 2.0f + AndroidUtilities.dp(16), w / 2.0f, w / 2.0f, Theme.dialogs_onlineCirclePaint);
-                    canvas.drawRoundRect(AndroidUtilities.dp(21), h / 2.0f - AndroidUtilities.dp(28), AndroidUtilities.dp(77), h / 2.0f + AndroidUtilities.dp(28), ExteraConfig.getAvatarCorners(56), ExteraConfig.getAvatarCorners(56), Theme.dialogs_onlineCirclePaint);
-                    canvas.drawCircle(AndroidUtilities.dp(70), h / 2.0f + AndroidUtilities.dp(22), AndroidUtilities.dp(8), Theme.dialogs_onlineCirclePaint);
-
-                    textPaint.setTextSize(AndroidUtilities.dp(14));
-                    textPaint.setColor(Color.argb(91, r, g, b));
-                    textPaint.setTextAlign(Paint.Align.RIGHT);
-                    textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                    canvas.drawText(LocaleController.getInstance().formatterDay.format(time), w - AndroidUtilities.dp(20), h / 2.0f - AndroidUtilities.dp(6), textPaint);
-                }
-            };
-            preview.setWillNotDraw(false);
-            addView(preview, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 80, Gravity.TOP | Gravity.CENTER, 21, 50, 21, 10));
-        }
-
-        @Override
-        protected void onDraw(Canvas canvas) {
-            textPaint.setTextSize(AndroidUtilities.dp(16));
-            textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
-            textPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
-            textPaint.setTextAlign(Paint.Align.LEFT);
-            canvas.drawText(String.valueOf(Math.round(ExteraConfig.avatarCorners)), getMeasuredWidth() - AndroidUtilities.dp(39), AndroidUtilities.dp(28), textPaint);
-        }
-
-        @Override
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-            int width = MeasureSpec.getSize(widthMeasureSpec);
-            if (lastWidth != width) {
-                sizeBar.setProgress((ExteraConfig.avatarCorners - startCornersSize) / (float) (endCornersSize - startCornersSize));
-                lastWidth = width;
-            }
-        }
-
-        @Override
-        public void invalidate() {
-            super.invalidate();
-            lastWidth = -1;
-            sizeBar.invalidate();
-            preview.invalidate();
-        }
-
-        @Override
-        public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
-            super.onInitializeAccessibilityEvent(event);
-            sizeBar.getSeekBarAccessibilityDelegate().onInitializeAccessibilityEvent(this, event);
-        }
-
-        @Override
-        public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
-            super.onInitializeAccessibilityNodeInfo(info);
-            sizeBar.getSeekBarAccessibilityDelegate().onInitializeAccessibilityNodeInfoInternal(this, info);
-        }
-
-        @Override
-        public boolean performAccessibilityAction(int action, Bundle arguments) {
-            return super.performAccessibilityAction(action, arguments) || sizeBar.getSeekBarAccessibilityDelegate().performAccessibilityActionInternal(this, action, arguments);
-        }
-    }
-
     @Override
     protected void updateRowsId() {
         super.updateRowsId();
 
-        avatarCornersHeaderRow = newRow();
-        avatarCornersRow = newRow();
-        avatarCornersDividerRow = newRow();
-        
+        speedBoostersHeaderRow = newRow();
+        downloadSpeedChooserRow = newRow();
+        uploadSpeedBoostRow = newRow();
+        speedBoostersDividerRow = newRow();
+
         generalHeaderRow = newRow();
         disableNumberRoundingRow = newRow();
         formatTimeWithSecondsRow = newRow();
@@ -267,7 +122,6 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
             }
             LocaleController.getInstance().recreateFormatters();
             parentLayout.rebuildAllFragmentViews(false, false);
-            avatarCornersCell.invalidate();
         } else if (position == chatsOnTitleRow) {
             ExteraConfig.toggleChatsOnTitle();
             if (view instanceof TextCheckCell) {
@@ -341,6 +195,11 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
             if (view instanceof TextCheckCell) {
                 ((TextCheckCell) view).setChecked(ExteraConfig.hideFeaturedEmojisTabs);
             }
+        } else if (position == uploadSpeedBoostRow) {
+            ExteraConfig.toggleUploadSpeedBoost();
+            if (view instanceof TextCheckCell) {
+                ((TextCheckCell) view).setChecked(ExteraConfig.uploadSpeedBoost);
+            }
         }
     }
 
@@ -369,11 +228,10 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int type) {
             switch (type) {
-                case 9:
-                    avatarCornersCell = new AvatarCornersCell(mContext);
-                    avatarCornersCell.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    avatarCornersCell.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
-                    return new RecyclerListView.Holder(avatarCornersCell);
+                case 13:
+                    SlideChooseView slideChooseView = new SlideChooseView(mContext);
+                    slideChooseView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    return new RecyclerListView.Holder(slideChooseView);
                 default:
                     return super.onCreateViewHolder(parent, type);
             }
@@ -393,10 +251,10 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
                         headerCell.setText(LocaleController.getString("ArchivedChats", R.string.ArchivedChats));
                     } else if (position == profileHeaderRow) {
                         headerCell.setText(LocaleController.getString("Profile", R.string.Profile));
-                    } else if (position == avatarCornersHeaderRow) {
-                        headerCell.setText(LocaleController.getString("AvatarCorners", R.string.AvatarCorners));
                     } else if (position == premiumHeaderRow) {
                         headerCell.setText(LocaleController.getString("TelegramPremium", R.string.TelegramPremium));
+                    } else if (position == speedBoostersHeaderRow) {
+                        headerCell.setText(LocaleController.getString("DownloadSpeedBoost", R.string.DownloadSpeedBoost));
                     }
                     break;
                 case 5:
@@ -432,15 +290,25 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
                         textCheckCell.setTextAndCheck(LocaleController.getString("HidePremiumStickersTab", R.string.HidePremiumStickersTab), ExteraConfig.hidePremiumStickersTab, true);
                     } else if (position == hideFeaturedEmojisTabsRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("HideFeaturedEmojisTabs", R.string.HideFeaturedEmojisTabs), ExteraConfig.hideFeaturedEmojisTabs, false);
+                    } else if (position == uploadSpeedBoostRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString("UploadSpeedBoost", R.string.UploadSpeedBoost), ExteraConfig.uploadSpeedBoost, false);
                     }
                     break;
                 case 8:
                     TextInfoPrivacyCell cell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == forcePacmanAnimationInfoRow) {
                         cell.setText(LocaleController.getString("ForcePacmanAnimationInfo", R.string.ForcePacmanAnimationInfo));
-                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        cell.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     } else {
-                        holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        cell.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    }
+                    break;
+                case 13:
+                    SlideChooseView slide = (SlideChooseView) holder.itemView;
+                    if (position == downloadSpeedChooserRow) {
+                        slide.setNeedDivider(true);
+                        slide.setCallback(index -> ExteraConfig.setDownloadSpeedBoost(index));
+                        slide.setOptions(ExteraConfig.downloadSpeedBoost, LocaleController.getString("BlurOff", R.string.BlurOff), LocaleController.getString("SpeedFast", R.string.SpeedFast), LocaleController.getString("Ultra", R.string.Ultra));
                     }
                     break;
             }
@@ -448,15 +316,16 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
 
         @Override
         public int getItemViewType(int position) {
-            if (position == generalDividerRow || position == profileDividerRow || position == avatarCornersDividerRow || position == premiumDividerRow) {
+            if (position == generalDividerRow || position == profileDividerRow ||
+                position == premiumDividerRow || position == speedBoostersDividerRow) {
                 return 1;
             } else if (position == generalHeaderRow || position == archiveHeaderRow || position == profileHeaderRow ||
-                       position == premiumHeaderRow || position == avatarCornersHeaderRow) {
+                       position == premiumHeaderRow || position == speedBoostersHeaderRow) {
                 return 3;
             } else if (position == forcePacmanAnimationInfoRow) {
                 return 8;
-            } else if (position == avatarCornersRow) {
-                return 9;
+            } else if (position == downloadSpeedChooserRow) {
+                return 13;
             }
             return 5;
         }

@@ -42,6 +42,8 @@ public class ExteraConfig {
 
     // general
     public static float avatarCorners = 30.0f;
+    public static int downloadSpeedBoost;
+    public static boolean uploadSpeedBoost;
     public static boolean disableNumberRounding;
     public static boolean formatTimeWithSeconds;
     public static boolean chatsOnTitle;
@@ -115,6 +117,8 @@ public class ExteraConfig {
             squareFab = preferences.getBoolean("squareFab", false);
 
             avatarCorners = preferences.getFloat("avatarCorners", 30.0f);
+            downloadSpeedBoost = preferences.getInt("downloadSpeedBoost", 0);
+            uploadSpeedBoost = preferences.getBoolean("uploadSpeedBoost", false);
             disableNumberRounding = preferences.getBoolean("disableNumberRounding", false);
             formatTimeWithSeconds = preferences.getBoolean("formatTimeWithSeconds", false);
             chatsOnTitle = preferences.getBoolean("chatsOnTitle", false);
@@ -484,5 +488,15 @@ public class ExteraConfig {
     public static void toggleHideFeaturedEmojisTabs() {
         SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
         editor.putBoolean("hideFeaturedEmojisTabs", hideFeaturedEmojisTabs ^= true).apply();
+    }
+    
+    public static void setDownloadSpeedBoost(int boost) {
+        SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
+        editor.putInt("downloadSpeedBoost", downloadSpeedBoost = boost).apply();
+    }
+
+    public static void toggleUploadSpeedBoost() {
+        SharedPreferences.Editor editor = ApplicationLoader.applicationContext.getSharedPreferences("exteraconfig", Activity.MODE_PRIVATE).edit();
+        editor.putBoolean("uploadSpeedBoost", uploadSpeedBoost ^= true).apply();
     }
 }
