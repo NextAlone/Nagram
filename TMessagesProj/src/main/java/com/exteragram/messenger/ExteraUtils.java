@@ -25,6 +25,8 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
 
+import java.util.Objects;
+
 public class ExteraUtils {
 
     public static Drawable drawFab() {
@@ -34,9 +36,8 @@ public class ExteraUtils {
     public static Drawable drawFab(boolean altColor) {
         int r = AndroidUtilities.dp(ExteraConfig.squareFab ? 16 : 100);
         int c = Theme.getColor(altColor ? Theme.key_dialogFloatingButton : Theme.key_chats_actionBackground);
-        int pc = Theme.getColor(altColor ? (Build.VERSION.SDK_INT >= 21 ? Theme.key_dialogFloatingButtonPressed : Theme.key_dialogFloatingButton) : Theme.key_chats_actionPressedBackground);
-        Drawable fab = Theme.createSimpleSelectorRoundRectDrawable(r, c, pc);
-        return fab;
+        int pc = Theme.getColor(altColor ? Theme.key_dialogFloatingButtonPressed : Theme.key_chats_actionPressedBackground);
+        return Theme.createSimpleSelectorRoundRectDrawable(r, c, pc);
     }
 
     public static String getDC(TLRPC.User user) {
@@ -88,18 +89,11 @@ public class ExteraUtils {
     }
 
     public static String zalgoFilter(String text) {
-        if (text == null && text.isEmpty()) {
-            return "";
-        } else if (ExteraConfig.zalgoFilter && text.matches(".*\\p{Mn}{3}.*")) {
-            String finalString = text.replaceAll("(?i)([aeiouy]̈)|[̀-ͯ҉]|[\\p{Mn}]", "");
-            if (finalString == null && finalString.isEmpty()) {
-                return LocaleController.getString("EventLogOriginalCaptionEmpty", R.string.EventLogOriginalCaptionEmpty);
-            } else {
-                return finalString;
-            }
-        } else {
+        if (!ExteraConfig.zalgoFilter || !text.matches(".*\\p{Mn}{3}.*")) {
             return text;
         }
+        String finalString = text.replaceAll("(?i)([aeiouy]̈)|[̀-ͯ҉]|[\\p{Mn}]", "");
+        return finalString.isEmpty() ? LocaleController.getString("EventLogOriginalCaptionEmpty", R.string.EventLogOriginalCaptionEmpty) : finalString;
     }
 
     public static boolean checkSubFor(long id) {

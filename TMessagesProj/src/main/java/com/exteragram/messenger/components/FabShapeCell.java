@@ -11,8 +11,6 @@
 
 package com.exteragram.messenger.components;
 
-import androidx.core.graphics.ColorUtils;
-
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -22,22 +20,22 @@ import android.graphics.RectF;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import androidx.core.graphics.ColorUtils;
+
+import com.exteragram.messenger.ExteraConfig;
+
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.Easings;
 import org.telegram.ui.Components.LayoutHelper;
 
-import com.exteragram.messenger.ExteraConfig;
-
 public class FabShapeCell extends LinearLayout {
 
-    private class FabShape extends FrameLayout {
+    private static class FabShape extends FrameLayout {
 
-        private RectF rect = new RectF();
-        private Paint outlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        private boolean squareFab;
+        private final RectF rect = new RectF();
+        private final Paint outlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final boolean squareFab;
         private float progress;
 
         public FabShape(Context context, boolean square) {
@@ -110,7 +108,7 @@ public class FabShapeCell extends LinearLayout {
         }
     }
 
-    private FabShape[] fabShape = new FabShape[2];
+    private final FabShape[] fabShape = new FabShape[2];
 
     public FabShapeCell(Context context) {
         super(context);
@@ -125,7 +123,7 @@ public class FabShapeCell extends LinearLayout {
                 for (int b = 0; b < 2; b++) {
                     fabShape[b].setSelected(v == fabShape[b], true);
                 }
-                ExteraConfig.setSquareFab(square);
+                ExteraConfig.editor.putBoolean("squareFab", ExteraConfig.squareFab = square).apply();
                 rebuildFragments();
             });
         }
@@ -139,7 +137,7 @@ public class FabShapeCell extends LinearLayout {
         }
     }
 
-    protected void rebuildFragments() {};
+    protected void rebuildFragments() {}
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

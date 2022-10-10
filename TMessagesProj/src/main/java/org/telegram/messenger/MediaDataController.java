@@ -65,7 +65,6 @@ import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.ChatThemeBottomSheet;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.Reactions.ReactionsEffectOverlay;
-import org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble;
 import org.telegram.ui.Components.Reactions.ReactionsUtils;
 import org.telegram.ui.Components.StickerSetBulletinLayout;
 import org.telegram.ui.Components.StickersArchiveAlert;
@@ -416,7 +415,7 @@ public class MediaDataController extends BaseController {
                         date = c.intValue(2);
                     }
                 } catch (Exception e) {
-                    FileLog.e(e, false);
+                    FileLog.e(e);
                 } finally {
                     if (c != null) {
                         c.dispose();
@@ -503,7 +502,7 @@ public class MediaDataController extends BaseController {
                         date = c.intValue(1);
                     }
                 } catch (Exception e) {
-                    FileLog.e(e, false);
+                    FileLog.e(e);
                 } finally {
                     if (c != null) {
                         c.dispose();
@@ -594,7 +593,7 @@ public class MediaDataController extends BaseController {
                         date = c.intValue(2);
                     }
                 } catch (Exception e) {
-                    FileLog.e(e, false);
+                    FileLog.e(e);
                 } finally {
                     if (c != null) {
                         c.dispose();

@@ -73,7 +73,7 @@
     <uses-permission android:name="me.everything.badger.permission.BADGE_COUNT_READ"/>
     <uses-permission android:name="me.everything.badger.permission.BADGE_COUNT_WRITE"/>
     <uses-permission android:name="com.android.vending.BILLING"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:node="replace" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:node="replace" tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
 
     <queries>
@@ -93,7 +93,7 @@
         android:allowAudioPlaybackCapture="true"
         android:enableOnBackInvokedCallback="false"
         android:exported="true"
-        tools:replace="android:supportsRtl">
+        tools:replace="android:supportsRtl" >
         <meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="@string/MAPS_V2_API" />
 
         <activity-alias
@@ -257,7 +257,8 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="*/*"/>
             </intent-filter>
-            <intent-filter>
+            <intent-filter android:scheme="http"
+                tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="vnd.android.cursor.item/vnd.org.telegram.messenger.android.profile" />

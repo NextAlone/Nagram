@@ -64,7 +64,6 @@
     <string name="StickerTime">Ховати час наліпок</string>
     <string name="UnlimitedRecentStickers">Необмежені улюблені Наклейки</string>
     <string name="PremiumAutoPlayback">Авто анімація преміум стікерів</string>
-    <string name="SendMessageBeforeSendSticker">Надіслати повідомлення перед відправкою наклейки</string>
     <string name="HideSendAsChannel">Сховати надсилання як канал</string>
     <string name="HideKeyboardOnScroll">Приховати клавіатуру на прокрутці чату</string>
     <string name="DisableReactions">Вимкнути реакції</string>

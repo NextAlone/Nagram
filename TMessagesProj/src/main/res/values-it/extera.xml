@@ -46,7 +46,6 @@
     <string name="StickerSize">Dimensione sticker</string>
     <string name="StickerTime">Nascondi l\'orario sotto gli sticker</string>
     <string name="UnlimitedRecentStickers">Sticker preferiti illimitati</string>
-    <string name="SendMessageBeforeSendSticker">Invia messaggio prima di inviare adesivo</string>
     <string name="StickerSizeDialogMessageReplyTo">meowmeow</string>
     <string name="StickerSizeDialogMessage">woah, è così carino!</string>
     <string name="HideSendAsChannel">Nascondi \"Invia come canale\"</string>

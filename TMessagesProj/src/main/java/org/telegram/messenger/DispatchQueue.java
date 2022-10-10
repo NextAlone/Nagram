@@ -52,7 +52,7 @@ public class DispatchQueue extends Thread {
             syncLatch.await();
             handler.removeCallbacks(runnable);
         } catch (Exception e) {
-            FileLog.e(e, false);
+            FileLog.e(e);
         }
     }
 
@@ -63,7 +63,7 @@ public class DispatchQueue extends Thread {
                 handler.removeCallbacks(runnables[i]);
             }
         } catch (Exception e) {
-            FileLog.e(e, false);
+            FileLog.e(e);
         }
     }
 
@@ -76,7 +76,7 @@ public class DispatchQueue extends Thread {
         try {
             syncLatch.await();
         } catch (Exception e) {
-            FileLog.e(e, false);
+            FileLog.e(e);
         }
         if (delay <= 0) {
             return handler.post(runnable);
@@ -90,7 +90,7 @@ public class DispatchQueue extends Thread {
             syncLatch.await();
             handler.removeCallbacksAndMessages(null);
         } catch (Exception e) {
-            FileLog.e(e, false);
+            FileLog.e(e);
         }
     }
 

@@ -10,11 +10,7 @@ package org.telegram.messenger;
 
 import android.util.Log;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.Utilities;
 import org.telegram.messenger.time.FastDateFormat;
-import org.telegram.messenger.video.MediaCodecVideoConvertor;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -162,15 +158,8 @@ public class FileLog {
     }
 
     public static void e(final Throwable e) {
-        e(e, true);
-    }
-
-    public static void e(final Throwable e, boolean logToAppCenter) {
         if (!BuildVars.LOGS_ENABLED) {
             return;
-        }
-        if (BuildVars.DEBUG_VERSION && needSent(e) && logToAppCenter) {
-            AndroidUtilities.appCenterLog(e);
         }
         ensureInitied();
         e.printStackTrace();
@@ -179,9 +168,8 @@ public class FileLog {
                 try {
                     getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + e + "\n");
                     StackTraceElement[] stack = e.getStackTrace();
-                    for (int a = 0; a < stack.length; a++) {
-                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + stack[a] + "\n");
-                    }
+                    for (StackTraceElement stackTraceElement : stack)
+                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + stackTraceElement + "\n");
                     getInstance().streamWriter.flush();
                 } catch (Exception e1) {
                     e1.printStackTrace();
@@ -193,15 +181,8 @@ public class FileLog {
     }
 
     public static void fatal(final Throwable e) {
-        fatal(e, true);
-    }
-
-    public static void fatal(final Throwable e, boolean logToAppCenter) {
         if (!BuildVars.LOGS_ENABLED) {
             return;
-        }
-        if (BuildVars.DEBUG_VERSION && needSent(e) && logToAppCenter) {
-            AndroidUtilities.appCenterLog(e);
         }
         ensureInitied();
         e.printStackTrace();
@@ -210,8 +191,8 @@ public class FileLog {
                 try {
                     getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + e + "\n");
                     StackTraceElement[] stack = e.getStackTrace();
-                    for (int a = 0; a < stack.length; a++) {
-                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + stack[a] + "\n");
+                    for (StackTraceElement stackTraceElement : stack) {
+                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + stackTraceElement + "\n");
                     }
                     getInstance().streamWriter.flush();
                 } catch (Exception e1) {
@@ -228,13 +209,6 @@ public class FileLog {
                 System.exit(2);
             }
         }
-    }
-
-    private static boolean needSent(Throwable e) {
-        if (e instanceof InterruptedException || e instanceof MediaCodecVideoConvertor.ConversionCanceledException) {
-            return false;
-        }
-        return true;
     }
 
     public static void d(final String message) {
@@ -291,8 +265,7 @@ public class FileLog {
         File dir = new File (sdCard.getAbsolutePath() + "/logs");
         File[] files = dir.listFiles();
         if (files != null) {
-            for (int a = 0; a < files.length; a++) {
-                File file = files[a];
+            for (File file : files) {
                 if (BuildVars.LOGS_ENABLED) {
                     if (getInstance().currentFile != null && file.getAbsolutePath().equals(getInstance().currentFile.getAbsolutePath())) {
                         continue;

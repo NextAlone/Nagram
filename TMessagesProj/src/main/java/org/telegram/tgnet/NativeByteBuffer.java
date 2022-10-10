@@ -1,13 +1,14 @@
 package org.telegram.tgnet;
 
+import static com.exteragram.messenger.ExteraUtils.zalgoFilter;
+
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
-
-import com.exteragram.messenger.ExteraUtils;
 
 public class NativeByteBuffer extends AbstractSerializedData {
 
@@ -17,7 +18,7 @@ public class NativeByteBuffer extends AbstractSerializedData {
     private int len;
     public boolean reused = true;
 
-    private static final ThreadLocal<LinkedList<NativeByteBuffer>> addressWrappers = new ThreadLocal<LinkedList<NativeByteBuffer>>() {
+    private static final ThreadLocal<LinkedList<NativeByteBuffer>> addressWrappers = new ThreadLocal<>() {
         @Override
         protected LinkedList<NativeByteBuffer> initialValue() {
             return new LinkedList<>();
@@ -483,7 +484,7 @@ public class NativeByteBuffer extends AbstractSerializedData {
                 buffer.get();
                 i++;
             }
-            return ExteraUtils.zalgoFilter(new String(b, "UTF-8"));
+            return zalgoFilter(new String(b, StandardCharsets.UTF_8));
         } catch (Exception e) {
             if (exception) {
                 throw new RuntimeException("read string error", e);

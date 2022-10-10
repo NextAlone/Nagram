@@ -27,9 +27,11 @@ import com.exteragram.messenger.ExteraConfig;
 public class Vibrate {
 
     private final static long time = 200L;
-    private static Vibrator vibrator;
 
     public static void disableHapticFeedback(View view) {
+        if (view == null) {
+            return;
+        }
         view.setHapticFeedbackEnabled(false);
         if (view instanceof ViewGroup) {
             for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
@@ -45,6 +47,7 @@ public class Vibrate {
             return;
         }
 
+        Vibrator vibrator;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             VibratorManager vibratorManager = (VibratorManager) ApplicationLoader.applicationContext.getSystemService(Context.VIBRATOR_MANAGER_SERVICE);
             vibrator = vibratorManager.getDefaultVibrator();

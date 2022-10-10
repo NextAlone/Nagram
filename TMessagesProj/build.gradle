@@ -147,7 +147,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             ndk.debugSymbolLevel = 'FULL'
             buildConfigField 'boolean', 'DEBUG_VERSION', 'true'
-            ext.enableCrashlytics = false
         }
 
         release {

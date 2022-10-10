@@ -323,9 +323,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         frameLayout.addView(selector, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
         int iconColor = getThemedColor(Theme.key_inappPlayerPlayPause);
+        int divColor = getThemedColor(Theme.key_chat_topPanelLine);
 
         divider = new View(context);
-        divider.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(6), ColorUtils.setAlphaComponent(iconColor, (int) ((Color.alpha(iconColor) / 255f) * 76))));
+        divider.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(6), ColorUtils.setAlphaComponent(divColor, (int) ((Color.alpha(divColor) / 255f) * 76))));
         addView(divider, LayoutHelper.createFrame(2, 32, Gravity.TOP | Gravity.LEFT, 8, 8, 0, 8));
         
         coverContainer = new CoverContainer(context) {};

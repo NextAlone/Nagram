@@ -14,47 +14,41 @@ package com.exteragram.messenger.preferences;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Region;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.os.Bundle;
 import android.text.TextPaint;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.components.StickerShapeCell;
+import com.exteragram.messenger.components.StickerSizePreviewCell;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
-import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
-import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
 
-import com.exteragram.messenger.ExteraConfig;
-import com.exteragram.messenger.components.StickerSizePreviewCell;
-import com.exteragram.messenger.components.StickerShapeCell;
-
 public class ChatsPreferencesActivity extends BasePreferencesActivity implements NotificationCenter.NotificationCenterDelegate {
 
     private ActionBarMenuItem resetItem;
     private StickerSizeCell stickerSizeCell;
-    private StickerShapeCell stickerShapeCell;
 
     private int stickerSizeHeaderRow;
     private int stickerSizeRow;
@@ -66,7 +60,6 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
     private int stickersHeaderRow;
     private int hideStickerTimeRow;
     private int unlimitedRecentStickersRow;
-    private int sendMessageBeforeSendStickerRow;
     private int stickersDividerRow;
 
     private int chatHeaderRow;
@@ -113,7 +106,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                 @Override
                 public void onSeekBarDrag(boolean stop, float progress) {
                     sizeBar.getSeekBarAccessibilityDelegate().postAccessibilityEventRunnable(StickerSizeCell.this);
-                    ExteraConfig.setStickerSize(startStickerSize + (endStickerSize - startStickerSize) * progress);
+                    ExteraConfig.editor.putFloat("stickerSize", ExteraConfig.stickerSize = startStickerSize + (endStickerSize - startStickerSize) * progress).apply();
                     StickerSizeCell.this.invalidate();
                     if (resetItem.getVisibility() != VISIBLE) {
                         AndroidUtilities.updateViewVisibilityAnimated(resetItem, true, 0.5f, true);
@@ -189,7 +182,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
             ValueAnimator animator = ValueAnimator.ofFloat(ExteraConfig.stickerSize, 14.0f);
             animator.setDuration(200);
             animator.addUpdateListener(valueAnimator -> {
-                ExteraConfig.setStickerSize((Float) valueAnimator.getAnimatedValue());
+                ExteraConfig.editor.putFloat("stickerSize", ExteraConfig.stickerSize = (Float) valueAnimator.getAnimatedValue()).apply();
                 stickerSizeCell.invalidate();
             });
             animator.start();
@@ -234,7 +227,6 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
         stickersHeaderRow = newRow();
         hideStickerTimeRow = newRow();
         unlimitedRecentStickersRow = newRow();
-        sendMessageBeforeSendStickerRow = newRow();
         stickersDividerRow = newRow();
 
         chatHeaderRow = newRow();
@@ -261,96 +253,61 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
     @Override
     protected void onItemClick(View view, int position, float x, float y) {
         if (position == hideStickerTimeRow) {
-            ExteraConfig.toggleHideStickerTime();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.hideStickerTime);
-            }
+            ExteraConfig.editor.putBoolean("hideStickerTime", ExteraConfig.hideStickerTime ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.hideStickerTime);
             stickerSizeCell.invalidate();
         } else if (position == unlimitedRecentStickersRow) {
-            ExteraConfig.toggleUnlimitedRecentStickers();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.unlimitedRecentStickers);
-            }
-        } else if (position == sendMessageBeforeSendStickerRow) {
-            ExteraConfig.toggleSendMessageBeforeSendSticker();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.sendMessageBeforeSendSticker);
-            }
+            ExteraConfig.editor.putBoolean("unlimitedRecentStickers", ExteraConfig.unlimitedRecentStickers ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.unlimitedRecentStickers);
         } else if (position == hideSendAsChannelRow) {
-            ExteraConfig.toggleHideSendAsChannel();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.hideSendAsChannel);
-            }
+            ExteraConfig.editor.putBoolean("hideSendAsChannel", ExteraConfig.hideSendAsChannel ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.hideSendAsChannel);
         } else if (position == hideKeyboardOnScrollRow) {
-            ExteraConfig.toggleHideKeyboardOnScroll();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.hideKeyboardOnScroll);
-            }
+            ExteraConfig.editor.putBoolean("hideKeyboardOnScroll", ExteraConfig.hideKeyboardOnScroll ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.hideKeyboardOnScroll);
         } else if (position == disableReactionsRow) {
-            ExteraConfig.toggleDisableReactions();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.disableReactions);
-            }
+            ExteraConfig.editor.putBoolean("disableReactions", ExteraConfig.disableReactions ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.disableReactions);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == disableGreetingStickerRow) {
-            ExteraConfig.toggleDisableGreetingSticker();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.disableGreetingSticker);
-            }
+            ExteraConfig.editor.putBoolean("disableGreetingSticker", ExteraConfig.disableGreetingSticker ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.disableGreetingSticker);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == disableJumpToNextChannelRow) {
-            ExteraConfig.toggleDisableJumpToNextChannel();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.disableJumpToNextChannel);
-            }
+            ExteraConfig.editor.putBoolean("disableJumpToNextChannel", ExteraConfig.disableJumpToNextChannel ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.disableJumpToNextChannel);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == dateOfForwardedMsgRow) {
-            ExteraConfig.toggleDateOfForwardedMsg();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.dateOfForwardedMsg);
-            }
+            ExteraConfig.editor.putBoolean("dateOfForwardedMsg", ExteraConfig.dateOfForwardedMsg ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.dateOfForwardedMsg);
         } else if (position == showMessageIDRow) {
-            ExteraConfig.toggleShowMessageID();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.showMessageID);
-            }
+            ExteraConfig.editor.putBoolean("showMessageID", ExteraConfig.showMessageID ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.showMessageID);
         } else if (position == showActionTimestampsRow) {
-            ExteraConfig.toggleShowActionTimestamps();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.showActionTimestamps);
-            }
+            ExteraConfig.editor.putBoolean("showActionTimestamps", ExteraConfig.showActionTimestamps ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.showActionTimestamps);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == zalgoFilterRow) {
-            ExteraConfig.toggleZalgoFilter();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.zalgoFilter);
-            }
+            ExteraConfig.editor.putBoolean("zalgoFilter", ExteraConfig.zalgoFilter ^= true).apply();
+            getMessagesController().clearQueryTime();
+            getMessagesStorage().clearLocalDatabase();
+            ((TextCheckCell) view).setChecked(ExteraConfig.zalgoFilter);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == rearVideoMessagesRow) {
-            ExteraConfig.toggleRearVideoMessages();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.rearVideoMessages);
-            }
+            ExteraConfig.editor.putBoolean("rearVideoMessages", ExteraConfig.rearVideoMessages ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.rearVideoMessages);
         } else if (position == disableCameraRow) {
-            ExteraConfig.toggleDisableCamera();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.disableCamera);
-            }
+            ExteraConfig.editor.putBoolean("disableCamera", ExteraConfig.disableCamera ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.disableCamera);
         } else if (position == disableProximityEventsRow) {
-            ExteraConfig.toggleDisableProximityEvents();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.disableProximityEvents);
-            }
+            ExteraConfig.editor.putBoolean("disableProximityEvents", ExteraConfig.disableProximityEvents ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.disableProximityEvents);
         } else if (position == pauseOnMinimizeRow) {
-            ExteraConfig.togglePauseOnMinimize();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.pauseOnMinimize);
-            }
+            ExteraConfig.editor.putBoolean("pauseOnMinimize", ExteraConfig.pauseOnMinimize ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.pauseOnMinimize);
         } else if (position == disablePlaybackRow) {
-            ExteraConfig.toggleDisablePlayback();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.disablePlayback);
-            }
+            ExteraConfig.editor.putBoolean("disablePlayback", ExteraConfig.disablePlayback ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.disablePlayback);
             showBulletin();
         }
     }
@@ -381,7 +338,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int type) {
             switch (type) {
                 case 10:
-                    stickerShapeCell = new StickerShapeCell(mContext) {
+                    StickerShapeCell stickerShapeCell = new StickerShapeCell(mContext) {
                         @Override
                         protected void updateStickerPreview() {
                             parentLayout.rebuildAllFragmentViews(false, false);
@@ -431,9 +388,7 @@ public class ChatsPreferencesActivity extends BasePreferencesActivity implements
                     if (position == hideStickerTimeRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("StickerTime", R.string.StickerTime), ExteraConfig.hideStickerTime, true);
                     } else if (position == unlimitedRecentStickersRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("UnlimitedRecentStickers", R.string.UnlimitedRecentStickers), ExteraConfig.unlimitedRecentStickers, true);
-                    } else if (position == sendMessageBeforeSendStickerRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString("SendMessageBeforeSendSticker", R.string.SendMessageBeforeSendSticker), ExteraConfig.sendMessageBeforeSendSticker, false);
+                        textCheckCell.setTextAndCheck(LocaleController.getString("UnlimitedRecentStickers", R.string.UnlimitedRecentStickers), ExteraConfig.unlimitedRecentStickers, false);
                     } else if (position == hideSendAsChannelRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("HideSendAsChannel", R.string.HideSendAsChannel), ExteraConfig.hideSendAsChannel, true);
                     } else if (position == hideKeyboardOnScrollRow) {

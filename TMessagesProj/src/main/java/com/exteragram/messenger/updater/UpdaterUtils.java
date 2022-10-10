@@ -13,42 +13,40 @@
 
 package com.exteragram.messenger.updater;
 
+import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import androidx.core.content.FileProvider;
-import android.os.Build;
+import android.content.pm.PackageInfo;
 import android.net.Uri;
-import android.view.View;
-import android.widget.FrameLayout;
+import android.os.Build;
 
+import androidx.core.content.FileProvider;
+
+import com.exteragram.messenger.ExteraConfig;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
-import org.telegram.ui.ActionBar.BaseFragment;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AlertsCreator;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URI;
-import java.nio.charset.Charset;
-import java.util.Date;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-
-import org.json.JSONObject;
-import org.json.JSONArray;
-import org.json.JSONTokener;
-
-import com.exteragram.messenger.ExteraConfig;
-import com.exteragram.messenger.ExteraUtils;
+import java.util.Date;
+import java.util.Objects;
 
 public class UpdaterUtils {
 
@@ -58,13 +56,11 @@ public class UpdaterUtils {
     public static File otaPath, versionPath, apkFile;
 
     private static long id = 0L;
-    private static long updateCheckInterval = 3600000L; // 1 hour
+    private static final long updateCheckInterval = 3600000L; // 1 hour
 
     public static boolean updateDownloaded = false;
 
-    private static OutputStreamWriter streamWriter = null;
-
-    private static String[] userAgents = {
+    private static final String[] userAgents = {
         "Mozilla/5.0 (iPhone; CPU iPhone OS 10_0 like Mac OS X) AppleWebKit/602.1.38 (KHTML, like Gecko) Version/10.0 Mobile/14A5297c Safari/602.1",
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36,gzip(gfe)",
         "Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)",
@@ -95,11 +91,11 @@ public class UpdaterUtils {
     public static void checkUpdates(Context context, boolean manual) {
         checkUpdates(context, manual, () -> {}, () -> {});
     }
-    public static interface OnUpdateNotFound {
-        public void run();
+    public interface OnUpdateNotFound {
+        void run();
     }
-    public static interface OnUpdateFound {
-        public void run();
+    public interface OnUpdateFound {
+        void run();
     }
     public static void checkUpdates(Context context, boolean manual, OnUpdateNotFound onUpdateNotFound, OnUpdateFound onUpdateFound) {
 
@@ -108,9 +104,7 @@ public class UpdaterUtils {
         }
 
         Utilities.globalQueue.postRunnable(() -> {
-
-            HttpURLConnection connection = null;
-            ExteraConfig.updateLastCheckUpdateTime();
+            ExteraConfig.editor.putLong("lastUpdateCheckTime", ExteraConfig.lastUpdateCheckTime = System.currentTimeMillis()).apply();
 
             if (id != 0L || (System.currentTimeMillis() - ExteraConfig.updateScheduleTimestamp < updateCheckInterval && !manual)) {
                 return;
@@ -118,14 +112,14 @@ public class UpdaterUtils {
 
             try {
                 if (BuildVars.isBetaApp()) uri = uri.replace("/exteraGram/", "/exteraGram-Beta/");
-                connection = (HttpURLConnection) new URI(uri).toURL().openConnection();
+                HttpURLConnection connection = (HttpURLConnection) new URI(uri).toURL().openConnection();
                 connection.setRequestMethod("GET");
                 connection.setRequestProperty("User-Agent", getRandomUserAgent());
                 connection.setRequestProperty("Content-Type", "application/json");
 
                 StringBuilder textBuilder = new StringBuilder();
-                try (Reader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), Charset.forName("UTF-8")))) {
-                    int c = 0;
+                try (Reader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+                    int c;
                     while ((c = reader.read()) != -1) {
                         textBuilder.append((char) c);
                     }
@@ -138,23 +132,50 @@ public class UpdaterUtils {
                     return;
                 }
 
-                String link;
-                final String cpu = Build.SUPPORTED_ABIS[0];
+                String link, cpu = null;
+                try {
+                    PackageInfo info = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
+                    switch (info.versionCode % 10) {
+                        case 1:
+                        case 3:
+                            cpu = "arm-v7a";
+                            break;
+                        case 2:
+                        case 4:
+                            cpu = "x86";
+                            break;
+                        case 5:
+                        case 7:
+                            cpu = "arm64-v8a";
+                            break;
+                        case 6:
+                        case 8:
+                            cpu = "x86_64";
+                            break;
+                        case 0:
+                        case 9:
+                            cpu = "universal";
+                            break;
+                    }
+                } catch (Exception e) {
+                    cpu = Build.SUPPORTED_ABIS[0];
+                }
+
                 for (int i = 0; i < arr.length(); i++) {
                     downloadURL = link = arr.getJSONObject(i).getString("browser_download_url");
                     size = AndroidUtilities.formatFileSize(arr.getJSONObject(i).getLong("size"));
-                    if (link.contains("arm64") && cpu.equals("arm64-v8a") ||
-                        link.contains("arm7") && cpu.equals("armeabi-v7a") ||
-                        link.contains("x86") && cpu.equals("x86") ||
-                        link.contains("x64") && cpu.equals("x86_64") ||
-                        link.contains("beta") && BuildVars.isBetaApp() ||
-                        link.contains("universal") && !BuildVars.isBetaApp()) {
+                    if (link.contains("arm64") && Objects.equals(cpu, "arm64-v8a") ||
+                        link.contains("arm7") && Objects.equals(cpu, "armeabi-v7a") ||
+                        link.contains("x86") && Objects.equals(cpu, "x86") ||
+                        link.contains("x64") && Objects.equals(cpu, "x86_64") ||
+                        link.contains("universal") && Objects.equals(cpu, "universal") && !BuildVars.isBetaApp() ||
+                        link.contains("beta") && BuildVars.isBetaApp()) {
                         break;
                     }
                 }
                 version = obj.getString("tag_name");
                 changelog = obj.getString("body");
-                uploadDate = obj.getString("published_at").replaceAll("T|Z", " ");
+                uploadDate = obj.getString("published_at").replaceAll("[TZ]", " ");
                 uploadDate = LocaleController.formatDateTime(getMillisFromDate(uploadDate, "yyyy-M-dd hh:mm:ss") / 1000);
 
                 if (isNewVersion(BuildVars.BUILD_VERSION_STRING, version)) {
@@ -167,7 +188,7 @@ public class UpdaterUtils {
                     });
                 } else {
                     if (onUpdateNotFound != null) {
-                        AndroidUtilities.runOnUIThread(() -> onUpdateNotFound.run());
+                        AndroidUtilities.runOnUIThread(onUpdateNotFound::run);
                     }
                 }
             } catch (Exception e) {
@@ -203,7 +224,6 @@ public class UpdaterUtils {
         if (!file.exists()) {
             return;
         }
-        DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
         Intent install = new Intent(Intent.ACTION_VIEW);
         Uri fileUri;
         if (Build.VERSION.SDK_INT >= 24) {
@@ -231,9 +251,6 @@ public class UpdaterUtils {
         }
         for (int i = 0; i < 2; i++) {
             v[i] = v[i].replaceAll("[^0-9]+", "");
-            if (v[i] == null) {
-                return false;
-            }
             if (Integer.parseInt(v[i]) <= 999) {
                 v[i] += "0";
             }
@@ -257,18 +274,17 @@ public class UpdaterUtils {
             for (File f: files) {
                 if (f.isDirectory()) {
                     cleanFolder(f);
-                    f.delete();
-                } else {
-                    f.delete();
                 }
+                f.delete();
             }
         }
     }
 
     public static long getMillisFromDate(String d, String format) {
-        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat(format);
         try {
            Date date = sdf.parse(d);
+           assert date != null;
            return date.getTime();
         } catch (Exception ignore) {
            return 1L;
@@ -281,16 +297,16 @@ public class UpdaterUtils {
     }
 */
 
-    public static interface OnTranslationSuccess {
-        public void run(String translated);
+    public interface OnTranslationSuccess {
+        void run(String translated);
     }
-    public static interface OnTranslationFail {
-        public void run();
+    public interface OnTranslationFail {
+        void run();
     }
     public static void translate(CharSequence text, OnTranslationSuccess onSuccess, OnTranslationFail onFail) {
         Utilities.globalQueue.postRunnable(() -> {
-            String uri = "";
-            HttpURLConnection connection = null;
+            String uri;
+            HttpURLConnection connection;
             try {
                 uri = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=";
                 uri += Uri.encode(LocaleController.getInstance().getCurrentLocale().getLanguage());
@@ -302,8 +318,8 @@ public class UpdaterUtils {
                 connection.setRequestProperty("Content-Type", "application/json");
 
                 StringBuilder textBuilder = new StringBuilder();
-                try (Reader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), Charset.forName("UTF-8")))) {
-                    int c = 0;
+                try (Reader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+                    int c;
                     while ((c = reader.read()) != -1) textBuilder.append((char) c);
                 }
                 JSONTokener tokener = new JSONTokener(textBuilder.toString());
@@ -318,7 +334,7 @@ public class UpdaterUtils {
                 if (onSuccess != null) AndroidUtilities.runOnUIThread(() -> onSuccess.run(result.toString()));
             } catch (Exception e) {
                 e.printStackTrace();
-                if (onFail != null) AndroidUtilities.runOnUIThread(() -> onFail.run());
+                if (onFail != null) AndroidUtilities.runOnUIThread(onFail::run);
             }
         });
     }
@@ -327,13 +343,13 @@ public class UpdaterUtils {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction() == DownloadManager.ACTION_DOWNLOAD_COMPLETE) {
+            if (Objects.equals(intent.getAction(), DownloadManager.ACTION_DOWNLOAD_COMPLETE)) {
                 if (id == intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)) {
                     installApk(context, apkFile.getAbsolutePath());
                     id = 0L;
                     updateDownloaded = false;
                 }
-            } else if (intent.getAction() == DownloadManager.ACTION_NOTIFICATION_CLICKED) {
+            } else if (Objects.equals(intent.getAction(), DownloadManager.ACTION_NOTIFICATION_CLICKED)) {
                 Intent viewDownloadIntent = new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS);
                 viewDownloadIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(viewDownloadIntent);

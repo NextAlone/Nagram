@@ -46,7 +46,6 @@
     <string name="StickerSize">Tamaño de stickers</string>
     <string name="StickerTime">Ocultar el tiempo debajo de los stickers</string>
     <string name="UnlimitedRecentStickers">Stickers recientes ilimitados</string>
-    <string name="SendMessageBeforeSendSticker">Enviar mensaje antes de enviar sticker</string>
     <string name="StickerSizeDialogMessageReplyTo">meowmeow</string>
     <string name="StickerSizeDialogMessage">¡woah, es tan lindo!</string>
     <string name="HideSendAsChannel">Ocultar \"Enviar como canal\"</string>

@@ -17,6 +17,6 @@ public class GoogleVoiceClientService extends SearchActionVerificationClientServ
 
     @Override
     public void performAction(Intent intent, boolean isVerified, Bundle options) {
-        AndroidUtilities.googleVoiceClientService_performAction(intent, isVerified, options);
+        AndroidUtilities.googleVoiceClientService_performAction(intent, isVerified);
     }
 }

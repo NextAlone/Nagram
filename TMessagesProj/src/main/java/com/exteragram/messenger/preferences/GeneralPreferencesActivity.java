@@ -11,30 +11,24 @@
 
 package com.exteragram.messenger.preferences;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
+import com.exteragram.messenger.ExteraConfig;
+
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
-import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SlideChooseView;
-
-import com.exteragram.messenger.ExteraConfig;
 
 public class GeneralPreferencesActivity extends BasePreferencesActivity {
 
@@ -110,96 +104,64 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
     @Override
     protected void onItemClick(View view, int position, float x, float y) {
         if (position == disableNumberRoundingRow) {
-            ExteraConfig.toggleDisableNumberRounding();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.disableNumberRounding);
-            }
+            ExteraConfig.editor.putBoolean("disableNumberRounding", ExteraConfig.disableNumberRounding ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.disableNumberRounding);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == formatTimeWithSecondsRow) {
-            ExteraConfig.toggleFormatTimeWithSeconds();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.formatTimeWithSeconds);
-            }
+            ExteraConfig.editor.putBoolean("formatTimeWithSeconds", ExteraConfig.formatTimeWithSeconds ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.formatTimeWithSeconds);
             LocaleController.getInstance().recreateFormatters();
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == chatsOnTitleRow) {
-            ExteraConfig.toggleChatsOnTitle();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.chatsOnTitle);
-            }
+            ExteraConfig.editor.putBoolean("chatsOnTitle", ExteraConfig.chatsOnTitle ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.chatsOnTitle);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == disableVibrationRow) {
-            ExteraConfig.toggleDisableVibration();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.disableVibration);
-            }
+            ExteraConfig.editor.putBoolean("disableVibration", ExteraConfig.disableVibration ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.disableVibration);
             showBulletin();
         } else if (position == forceTabletModeRow) {
-            ExteraConfig.toggleForceTabletMode();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.forceTabletMode);
-            }
+            ExteraConfig.editor.putBoolean("forceTabletMode", ExteraConfig.forceTabletMode ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.forceTabletMode);
             showBulletin();
         } else if (position == disableAnimatedAvatarsRow) {
-            ExteraConfig.toggleDisableAnimatedAvatars();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.disableAnimatedAvatars);
-            }
+            ExteraConfig.editor.putBoolean("disableAnimatedAvatars", ExteraConfig.disableAnimatedAvatars ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.disableAnimatedAvatars);
         } else if (position == archiveOnPullRow) {
-            ExteraConfig.toggleArchiveOnPull();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.archiveOnPull);
-            }
+            ExteraConfig.editor.putBoolean("archiveOnPull", ExteraConfig.archiveOnPull ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.archiveOnPull);
         } else if (position == disableUnarchiveSwipeRow) {
-            ExteraConfig.toggleDisableUnarchiveSwipe();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.disableUnarchiveSwipe);
-            }
+            ExteraConfig.editor.putBoolean("disableUnarchiveSwipe", ExteraConfig.disableUnarchiveSwipe ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.disableUnarchiveSwipe);
         } else if (position == forcePacmanAnimationRow) {
-            ExteraConfig.toggleForcePacmanAnimation();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.forcePacmanAnimation);
-            }
+            ExteraConfig.editor.putBoolean("forcePacmanAnimation", ExteraConfig.forcePacmanAnimation ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.forcePacmanAnimation);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == hidePhoneNumberRow) {
-            ExteraConfig.toggleHidePhoneNumber();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.hidePhoneNumber);
-            }
+            ExteraConfig.editor.putBoolean("hidePhoneNumber", ExteraConfig.hidePhoneNumber ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.hidePhoneNumber);
             parentLayout.rebuildAllFragmentViews(false, false);
             getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
         } else if (position == showIDRow) {
-            ExteraConfig.toggleShowID();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.showID);
-            }
+            ExteraConfig.editor.putBoolean("showID", ExteraConfig.showID ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.showID);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == showDCRow) {
-            ExteraConfig.toggleShowDC();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.showDC);
-            }
+            ExteraConfig.editor.putBoolean("showDC", ExteraConfig.showDC ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.showDC);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == premiumAutoPlaybackRow) {
-            ExteraConfig.togglePremiumAutoPlayback();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.premiumAutoPlayback);
-            }
+            ExteraConfig.editor.putBoolean("premiumAutoPlayback", ExteraConfig.premiumAutoPlayback ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.premiumAutoPlayback);
         } else if (position == hidePremiumStickersTabRow) {
-            ExteraConfig.toggleHidePremiumStickersTab();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.hidePremiumStickersTab);
-            }
+            ExteraConfig.editor.putBoolean("hidePremiumStickersTab", ExteraConfig.hidePremiumStickersTab ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.hidePremiumStickersTab);
         } else if (position == hideFeaturedEmojisTabsRow) {
-            ExteraConfig.toggleHideFeaturedEmojisTabs();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.hideFeaturedEmojisTabs);
-            }
+            ExteraConfig.editor.putBoolean("hideFeaturedEmojisTabs", ExteraConfig.hideFeaturedEmojisTabs ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.hideFeaturedEmojisTabs);
         } else if (position == uploadSpeedBoostRow) {
-            ExteraConfig.toggleUploadSpeedBoost();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.uploadSpeedBoost);
-            }
+            ExteraConfig.editor.putBoolean("uploadSpeedBoost", ExteraConfig.uploadSpeedBoost ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.uploadSpeedBoost);
         }
     }
 
@@ -227,18 +189,16 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int type) {
-            switch (type) {
-                case 13:
-                    SlideChooseView slideChooseView = new SlideChooseView(mContext);
-                    slideChooseView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    return new RecyclerListView.Holder(slideChooseView);
-                default:
-                    return super.onCreateViewHolder(parent, type);
+            if (type == 13) {
+                SlideChooseView slideChooseView = new SlideChooseView(mContext);
+                slideChooseView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                return new RecyclerListView.Holder(slideChooseView);
             }
+            return super.onCreateViewHolder(parent, type);
         }
 
         @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             switch (holder.getItemViewType()) {
                 case 1:
                     holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
@@ -307,7 +267,7 @@ public class GeneralPreferencesActivity extends BasePreferencesActivity {
                     SlideChooseView slide = (SlideChooseView) holder.itemView;
                     if (position == downloadSpeedChooserRow) {
                         slide.setNeedDivider(true);
-                        slide.setCallback(index -> ExteraConfig.setDownloadSpeedBoost(index));
+                        slide.setCallback(index -> ExteraConfig.editor.putInt("downloadSpeedBoost", ExteraConfig.downloadSpeedBoost = index).apply());
                         slide.setOptions(ExteraConfig.downloadSpeedBoost, LocaleController.getString("BlurOff", R.string.BlurOff), LocaleController.getString("SpeedFast", R.string.SpeedFast), LocaleController.getString("Ultra", R.string.Ultra));
                     }
                     break;

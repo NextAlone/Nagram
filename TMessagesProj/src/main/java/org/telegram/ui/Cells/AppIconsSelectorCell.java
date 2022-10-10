@@ -81,8 +81,11 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
             public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
                 IconHolderView holderView = (IconHolderView) holder.itemView;
                 LauncherIconController.LauncherIcon icon = availableIcons.get(position);
-                if (icon == LauncherIconController.LauncherIcon.MONET && Build.VERSION.SDK_INT < 31) return;
-                if (icon == LauncherIconController.LauncherIcon.RED && !ExteraUtils.checkSubFor(1178248235)) return;
+                if (icon == LauncherIconController.LauncherIcon.MONET && (Build.VERSION.SDK_INT < 31 || Build.VERSION.SDK_INT > 32)) {
+                    return;
+                } else if (icon == LauncherIconController.LauncherIcon.RED && !ExteraUtils.checkSubFor(1178248235)) {
+                    return;
+                }
                 holderView.bind(icon);
                 holderView.iconView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(ICONS_ROUND_RADIUS), Color.TRANSPARENT, Theme.getColor(Theme.key_listSelector), Color.BLACK));
                 holderView.iconView.setForeground(icon.foreground);
@@ -157,8 +160,12 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
     private void updateIconsVisibility() {
         availableIcons.clear();
         availableIcons.addAll(Arrays.asList(LauncherIconController.LauncherIcon.values()));
-        if (Build.VERSION.SDK_INT < 31) availableIcons.removeIf(p -> p.equals(LauncherIconController.LauncherIcon.MONET));
-        if (!ExteraUtils.checkSubFor(1178248235)) availableIcons.removeIf(p -> p.equals(LauncherIconController.LauncherIcon.RED));
+        if (Build.VERSION.SDK_INT < 31 || Build.VERSION.SDK_INT > 32) {
+            availableIcons.removeIf(p -> p.equals(LauncherIconController.LauncherIcon.MONET));
+        }
+        if (!ExteraUtils.checkSubFor(1178248235)) {
+            availableIcons.removeIf(p -> p.equals(LauncherIconController.LauncherIcon.RED));
+        }
         if (MessagesController.getInstance(currentAccount).premiumLocked) {
             for (int i = 0; i < availableIcons.size(); i++) {
                 if (availableIcons.get(i).premium) {

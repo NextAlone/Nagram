@@ -11,24 +11,20 @@
 
 package com.exteragram.messenger.preferences;
 
-import android.app.Activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.FrameLayout;
-import android.widget.TextView;
-import android.text.TextUtils;
-import android.util.TypedValue;
 
 import androidx.annotation.NonNull;
-import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.exteragram.messenger.components.InfoSettingsCell;
+import com.exteragram.messenger.components.TextCheckWithIconCell;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -36,23 +32,15 @@ import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextCheckCell;
-import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
-
-import java.util.ArrayList;
-
-import com.exteragram.messenger.ExteraConfig;
-import com.exteragram.messenger.components.InfoSettingsCell;
-import com.exteragram.messenger.components.TextCheckWithIconCell;
 
 public abstract class BasePreferencesActivity extends BaseFragment {
 
@@ -128,7 +116,9 @@ public abstract class BasePreferencesActivity extends BaseFragment {
         listView.setAdapter(listAdapter);
 
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP, 0, 0, 0, 0));
-        ((DefaultItemAnimator) listView.getItemAnimator()).setDelayAnimations(false);
+        if (listView.getItemAnimator() != null) {
+            ((DefaultItemAnimator) listView.getItemAnimator()).setDelayAnimations(false);
+        }
 
         listView.setOnItemClickListener(this::onItemClick);
 
@@ -175,7 +165,7 @@ public abstract class BasePreferencesActivity extends BaseFragment {
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = null;
+            View view;
             switch (viewType) {
                 case 1:
                     view = new ShadowSectionCell(mContext);
@@ -206,13 +196,14 @@ public abstract class BasePreferencesActivity extends BaseFragment {
                     break;
                 case 8:
                     view = new TextInfoPrivacyCell(mContext);
-                    view.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
-                // case 9: General > AvatarCornersCell
+                // case 9: Appearance > AvatarCornersCell
                 // case 10: Chats > StickerShapeCell
                 // case 11: Chats > StickerSizeCell
                 // case 12: Appearance > FabShapeCell
                 // case 13: General > DownloadSpeedChooser
+                default:
+                    throw new IllegalStateException("Unexpected value: " + viewType);
             }
             view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
             return new RecyclerListView.Holder(view);

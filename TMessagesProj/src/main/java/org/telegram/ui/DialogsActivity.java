@@ -190,7 +190,6 @@ import java.util.ArrayList;
 
 import com.exteragram.messenger.ExteraConfig;
 import com.exteragram.messenger.ExteraUtils;
-import com.exteragram.messenger.extras.Vibrate;
 
 public class DialogsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     public final static int DIALOGS_TYPE_START_ATTACH_BOT = 14;
@@ -3848,7 +3847,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 if (!SharedConfig.isAppUpdateAvailable()) {
                     return;
                 }
-                AndroidUtilities.openForView(SharedConfig.pendingAppUpdate.document, true, getParentActivity());
+                AndroidUtilities.openForView(SharedConfig.pendingAppUpdate.document, getParentActivity());
             });
 
             updateLayoutIcon = new RadialProgress2(updateLayout);

@@ -857,7 +857,7 @@ public class FileLoader extends BaseController {
         try {
             semaphore.await();
         } catch (Exception e) {
-            FileLog.e(e, false);
+            FileLog.e(e);
         }
         return result[0];
     }

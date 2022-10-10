@@ -386,7 +386,7 @@ public class ImageLoader {
                         }
                     }
                 } catch (Exception e) {
-                    FileLog.e(e, false);
+                    FileLog.e(e);
                 }
                 httpConnectionStream = httpConnection.getInputStream();
 
@@ -432,7 +432,7 @@ public class ImageLoader {
                 } else if (e instanceof FileNotFoundException) {
                     canRetry = false;
                 }
-                FileLog.e(e, false);
+                FileLog.e(e);
             } finally {
                 try {
                     if (httpConnection != null) {
@@ -566,7 +566,7 @@ public class ImageLoader {
                     } else if (e instanceof InterruptedIOException) {
                         sentLogs = false;
                     }
-                    FileLog.e(e, sentLogs);
+                    FileLog.e(e);
                 }
             }
 
@@ -950,7 +950,7 @@ public class ImageLoader {
                             compressed = true;
                         }
                     } catch (Exception e) {
-                        FileLog.e(e, false);
+                        FileLog.e(e);
                     } finally {
                         if (randomAccessFile != null) {
                             try {
@@ -1251,7 +1251,7 @@ public class ImageLoader {
                     if (e instanceof FileNotFoundException) {
                         sentLog = false;
                     }
-                    FileLog.e(e, sentLog);
+                    FileLog.e(e);
                 }
 
                 if (cacheImage.type == ImageReceiver.TYPE_THUMB) {

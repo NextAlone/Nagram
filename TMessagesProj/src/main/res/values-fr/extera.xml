@@ -46,7 +46,6 @@
     <string name="StickerSize">Taille de l\'autocollant</string>
     <string name="StickerTime">Masquer le temps sous les autocollants</string>
     <string name="UnlimitedRecentStickers">Autocollants récents illimités</string>
-    <string name="SendMessageBeforeSendSticker">Envoyer un message avant d\'envoyer un autocollant</string>
     <string name="StickerSizeDialogMessageReplyTo">wow</string>
     <string name="StickerSizeDialogMessage">woah, il est si mignon!</string>
     <string name="HideSendAsChannel">Masquer \"Envoyer en tant que Canal\"</string>

@@ -1026,7 +1026,7 @@ public class FileLoadOperation {
                     fileOutputStream.seek(downloadedBytes);
                 }
             } catch (Exception e) {
-                FileLog.e(e, false);
+                FileLog.e(e);
             }
             if (fileOutputStream == null) {
                 onFail(true, 0);

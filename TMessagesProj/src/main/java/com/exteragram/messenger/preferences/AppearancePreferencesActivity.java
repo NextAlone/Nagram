@@ -12,35 +12,40 @@
 package com.exteragram.messenger.preferences;
 
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Canvas;
-import android.graphics.Region;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Region;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextPaint;
-import android.view.accessibility.AccessibilityEvent;
-import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.ExteraUtils;
+import com.exteragram.messenger.components.FabShapeCell;
+import com.exteragram.messenger.components.TextCheckWithIconCell;
+
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
-import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
@@ -48,15 +53,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
 
-import com.exteragram.messenger.ExteraConfig;
-import com.exteragram.messenger.ExteraUtils;
-import com.exteragram.messenger.components.FabShapeCell;
-import com.exteragram.messenger.components.TextCheckWithIconCell;
-
 public class AppearancePreferencesActivity extends BasePreferencesActivity {
-
-    private AvatarCornersCell avatarCornersCell;
-    private FabShapeCell fabShapeCell;
 
     private ValueAnimator statusBarColorAnimate;
     private Parcelable recyclerViewState = null;
@@ -96,6 +93,18 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
     private int telegramFeaturesRow;
     private int drawerDividerRow;
 
+    private void onClick(DialogInterface dialog, int which) {
+        ExteraConfig.editor.putInt("eventType", ExteraConfig.eventType = which).apply();
+        RecyclerView.ViewHolder holder = getListView().findViewHolderForAdapterPosition(eventChooserRow);
+        if (holder != null) {
+            listAdapter.onBindViewHolder(holder, eventChooserRow);
+        }
+        if (getListView().getLayoutManager() != null)
+            recyclerViewState = getListView().getLayoutManager().onSaveInstanceState();
+        parentLayout.rebuildAllFragmentViews(true, true);
+        getListView().getLayoutManager().onRestoreInstanceState(recyclerViewState);
+    }
+
     public class AvatarCornersCell extends FrameLayout {
 
         private final SeekBarView sizeBar;
@@ -105,7 +114,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
         private final long time = System.currentTimeMillis();
 
         private final TextPaint textPaint;
-        private Paint outlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final Paint outlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         private int lastWidth;
 
         public AvatarCornersCell(Context context) {
@@ -121,7 +130,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                 @Override
                 public void onSeekBarDrag(boolean stop, float progress) {
                     sizeBar.getSeekBarAccessibilityDelegate().postAccessibilityEventRunnable(AvatarCornersCell.this);
-                    ExteraConfig.setAvatarCorners(startCornersSize + (endCornersSize - startCornersSize) * progress);
+                    ExteraConfig.editor.putFloat("avatarCorners", ExteraConfig.avatarCorners = startCornersSize + (endCornersSize - startCornersSize) * progress).apply();
                     AvatarCornersCell.this.invalidate();
                     preview.invalidate();
                     parentLayout.rebuildAllFragmentViews(false, false);
@@ -162,7 +171,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                     Theme.dialogs_onlineCirclePaint.setColor(Color.argb(204, r, g, b));
                     canvas.drawRoundRect(AndroidUtilities.dp(92), h / 2.0f - AndroidUtilities.dp(8), AndroidUtilities.dp(170), h / 2.0f - AndroidUtilities.dp(16), w / 2.0f, w / 2.0f, Theme.dialogs_onlineCirclePaint);
 
-                    Path online = new Path();
+                    @SuppressLint("DrawAllocation") Path online = new Path();
                     online.addCircle(AndroidUtilities.dp(69), h / 2.0f + AndroidUtilities.dp(21), AndroidUtilities.dp(12), Path.Direction.CCW);
                     canvas.clipPath(online, Region.Op.DIFFERENCE);
 
@@ -183,7 +192,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
         }
 
         @Override
-        protected void onDraw(Canvas canvas) {
+        protected void onDraw(@NonNull Canvas canvas) {
             textPaint.setTextSize(AndroidUtilities.dp(16));
             textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
             textPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
@@ -271,22 +280,18 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
     @Override
     protected void onItemClick(View view, int position, float x, float y) {
         if (position == useSystemFontsRow) {
-            ExteraConfig.toggleUseSystemFonts();
+            ExteraConfig.editor.putBoolean("useSystemFonts", ExteraConfig.useSystemFonts ^= true).apply();
             AndroidUtilities.clearTypefaceCache();
             if (getListView().getLayoutManager() != null) recyclerViewState = getListView().getLayoutManager().onSaveInstanceState();
             parentLayout.rebuildAllFragmentViews(true, true);
             getListView().getLayoutManager().onRestoreInstanceState(recyclerViewState);
         } else if (position == useSystemEmojiRow) {
             SharedConfig.toggleUseSystemEmoji();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(SharedConfig.useSystemEmoji);
-            }
+            ((TextCheckCell) view).setChecked(SharedConfig.useSystemEmoji);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == transparentStatusBarRow) {
             SharedConfig.toggleNoStatusBar();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(SharedConfig.noStatusBar);
-            }
+            ((TextCheckCell) view).setChecked(SharedConfig.noStatusBar);
             int color = Theme.getColor(Theme.key_actionBarDefault, null, true);
             int alpha = ColorUtils.calculateLuminance(color) > 0.7f ? 0x0f : 0x33;
             if (statusBarColorAnimate != null && statusBarColorAnimate.isRunning()) {
@@ -297,112 +302,78 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
             statusBarColorAnimate.addUpdateListener(animation -> getParentActivity().getWindow().setStatusBarColor(ColorUtils.setAlphaComponent(0, (int) animation.getAnimatedValue())));
             statusBarColorAnimate.start();
         } else if (position == blurForAllThemesRow) {
-            ExteraConfig.toggleBlurForAllThemes();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.blurForAllThemes);
-            }
+            ExteraConfig.editor.putBoolean("blurForAllThemes", ExteraConfig.blurForAllThemes ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.blurForAllThemes);
             showBulletin();
         } else if (position == centerTitleRow) {
-            ExteraConfig.toggleCenterTitle();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.centerTitle);
-            }
+            ExteraConfig.editor.putBoolean("centerTitle", ExteraConfig.centerTitle ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.centerTitle);
             if (getListView().getLayoutManager() != null) recyclerViewState = getListView().getLayoutManager().onSaveInstanceState();
             parentLayout.rebuildAllFragmentViews(true, true);
             getListView().getLayoutManager().onRestoreInstanceState(recyclerViewState);
         } else if (position == newSwitchStyleRow) {
-            ExteraConfig.toggleNewSwitchStyle();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.newSwitchStyle);
-            }
+            ExteraConfig.editor.putBoolean("newSwitchStyle", ExteraConfig.newSwitchStyle ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.newSwitchStyle);
             if (getListView().getLayoutManager() != null) recyclerViewState = getListView().getLayoutManager().onSaveInstanceState();
             parentLayout.rebuildAllFragmentViews(true, true);
             getListView().getLayoutManager().onRestoreInstanceState(recyclerViewState);
         } else if (position == disableDividersRow) {
-            ExteraConfig.toggleDisableDividers();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.disableDividers);
-            }
+            ExteraConfig.editor.putBoolean("disableDividers", ExteraConfig.disableDividers ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.disableDividers);
             if (getListView().getLayoutManager() != null) recyclerViewState = getListView().getLayoutManager().onSaveInstanceState();
             parentLayout.rebuildAllFragmentViews(true, true);
             getListView().getLayoutManager().onRestoreInstanceState(recyclerViewState);
         } else if (position == transparentNavBarRow) {
-            ExteraConfig.toggleTransparentNavBar();
-            if (view instanceof TextCheckCell) {
-                ((TextCheckCell) view).setChecked(ExteraConfig.transparentNavBar);
-            }
-            parentLayout.rebuildAllFragmentViews(false, false);
-        } else if (position == newGroupRow) {
-            ExteraConfig.toggleDrawerElements(1);
-            if (view instanceof TextCheckWithIconCell) {
-                ((TextCheckWithIconCell) view).setChecked(ExteraConfig.newGroup);
-            }
+            ExteraConfig.editor.putBoolean("transparentNavBar", ExteraConfig.transparentNavBar ^= true).apply();
+            ((TextCheckCell) view).setChecked(ExteraConfig.transparentNavBar);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == statusRow) {
             ExteraConfig.toggleDrawerElements(12);
-            if (view instanceof TextCheckWithIconCell) {
-                ((TextCheckWithIconCell) view).setChecked(ExteraConfig.changeStatus);
-            }
+            ((TextCheckWithIconCell) view).setChecked(ExteraConfig.changeStatus);
+            parentLayout.rebuildAllFragmentViews(false, false);
+        } else if (position == newGroupRow) {
+            ExteraConfig.toggleDrawerElements(1);
+            ((TextCheckWithIconCell) view).setChecked(ExteraConfig.newGroup);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == newSecretChatRow) {
             ExteraConfig.toggleDrawerElements(2);
-            if (view instanceof TextCheckWithIconCell) {
-                ((TextCheckWithIconCell) view).setChecked(ExteraConfig.newSecretChat);
-            }
+            ((TextCheckWithIconCell) view).setChecked(ExteraConfig.newSecretChat);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == newChannelRow) {
             ExteraConfig.toggleDrawerElements(3);
-            if (view instanceof TextCheckWithIconCell) {
-                ((TextCheckWithIconCell) view).setChecked(ExteraConfig.newChannel);
-            }
+            ((TextCheckWithIconCell) view).setChecked(ExteraConfig.newChannel);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == contactsRow) {
             ExteraConfig.toggleDrawerElements(4);
-            if (view instanceof TextCheckWithIconCell) {
-                ((TextCheckWithIconCell) view).setChecked(ExteraConfig.contacts);
-            }
+            ((TextCheckWithIconCell) view).setChecked(ExteraConfig.contacts);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == callsRow) {
             ExteraConfig.toggleDrawerElements(5);
-            if (view instanceof TextCheckWithIconCell) {
-                ((TextCheckWithIconCell) view).setChecked(ExteraConfig.calls);
-            }
+            ((TextCheckWithIconCell) view).setChecked(ExteraConfig.calls);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == peopleNearbyRow) {
             ExteraConfig.toggleDrawerElements(6);
-            if (view instanceof TextCheckWithIconCell) {
-                ((TextCheckWithIconCell) view).setChecked(ExteraConfig.peopleNearby);
-            }
+            ((TextCheckWithIconCell) view).setChecked(ExteraConfig.peopleNearby);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == archivedChatsRow) {
             ExteraConfig.toggleDrawerElements(7);
-            if (view instanceof TextCheckWithIconCell) {
-                ((TextCheckWithIconCell) view).setChecked(ExteraConfig.archivedChats);
-            }
+            ((TextCheckWithIconCell) view).setChecked(ExteraConfig.archivedChats);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == savedMessagesRow) {
             ExteraConfig.toggleDrawerElements(8);
-            if (view instanceof TextCheckWithIconCell) {
-                ((TextCheckWithIconCell) view).setChecked(ExteraConfig.savedMessages);
-            }
+            ((TextCheckWithIconCell) view).setChecked(ExteraConfig.savedMessages);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == scanQrRow) {
             ExteraConfig.toggleDrawerElements(9);
-            if (view instanceof TextCheckWithIconCell) {
-                ((TextCheckWithIconCell) view).setChecked(ExteraConfig.scanQr);
-            }
+            ((TextCheckWithIconCell) view).setChecked(ExteraConfig.scanQr);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == inviteFriendsRow) {
             ExteraConfig.toggleDrawerElements(10);
-            if (view instanceof TextCheckWithIconCell) {
-                ((TextCheckWithIconCell) view).setChecked(ExteraConfig.inviteFriends);
-            }
+            ((TextCheckWithIconCell) view).setChecked(ExteraConfig.inviteFriends);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == telegramFeaturesRow) {
             ExteraConfig.toggleDrawerElements(11);
-            if (view instanceof TextCheckWithIconCell) {
-                ((TextCheckWithIconCell) view).setChecked(ExteraConfig.telegramFeatures);
-            }
+            ((TextCheckWithIconCell) view).setChecked(ExteraConfig.telegramFeatures);
             parentLayout.rebuildAllFragmentViews(false, false);
         } else if (position == eventChooserRow) {
             if (getParentActivity() == null) {
@@ -420,16 +391,7 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
                     R.drawable.msg_settings_ny,
                     R.drawable.msg_saved_14,
                     R.drawable.msg_contacts_hw
-            }, (dialog, which) -> {
-                ExteraConfig.setEventType(which);
-                RecyclerView.ViewHolder holder = getListView().findViewHolderForAdapterPosition(eventChooserRow);
-                if (holder != null) {
-                    listAdapter.onBindViewHolder(holder, eventChooserRow);
-                }
-                if (getListView().getLayoutManager() != null) recyclerViewState = getListView().getLayoutManager().onSaveInstanceState();
-                parentLayout.rebuildAllFragmentViews(true, true);
-                getListView().getLayoutManager().onRestoreInstanceState(recyclerViewState);
-            });
+            }, this::onClick);
             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
             showDialog(builder.create());
         }
@@ -462,12 +424,12 @@ public class AppearancePreferencesActivity extends BasePreferencesActivity {
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int type) {
             switch (type) {
                 case 9:
-                    avatarCornersCell = new AvatarCornersCell(mContext);
+                    AvatarCornersCell avatarCornersCell = new AvatarCornersCell(mContext);
                     avatarCornersCell.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     avatarCornersCell.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
                     return new RecyclerListView.Holder(avatarCornersCell);
                 case 12:
-                    fabShapeCell = new FabShapeCell(mContext) {
+                    FabShapeCell fabShapeCell = new FabShapeCell(mContext) {
                         @Override
                         protected void rebuildFragments() {
                             parentLayout.rebuildAllFragmentViews(false, false);

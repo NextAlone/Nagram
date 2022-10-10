@@ -64,7 +64,6 @@
     <string name="StickerTime">隐藏贴纸发送时间</string>
     <string name="UnlimitedRecentStickers">无限的最近贴纸</string>
     <string name="PremiumAutoPlayback">Premium自动播放</string>
-    <string name="SendMessageBeforeSendSticker">发送贴纸前发送消息</string>
     <string name="HideSendAsChannel">隐藏“以频道身份发言”</string>
     <string name="HideKeyboardOnScroll">在浏览对话时隐藏键盘</string>
     <string name="DisableReactions">禁用表情回应</string>

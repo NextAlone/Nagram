@@ -64,7 +64,6 @@
     <string name="StickerTime">Ocultar Horário nas Figurinhas</string>
     <string name="UnlimitedRecentStickers">Figurinhas recentes ilimitadas</string>
     <string name="PremiumAutoPlayback">Reprodução automática premium</string>
-    <string name="SendMessageBeforeSendSticker">Enviar mensagem antes de figurinhas</string>
     <string name="HideSendAsChannel">Ocultar \"Enviar como Canal\"</string>
     <string name="HideKeyboardOnScroll">Ocultar teclado ao rolar no chat</string>
     <string name="DisableReactions">Desativar reações</string>

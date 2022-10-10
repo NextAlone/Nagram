@@ -11908,7 +11908,7 @@ public class MessagesStorage extends BaseController {
                             try {
                                 database.executeFast(String.format(Locale.US, "UPDATE media_holes_v2 SET end = %d WHERE uid = %d AND type = %d AND start = %d AND end = %d", minId, did, hole.type, hole.start, hole.end)).stepThis().dispose();
                             } catch (Exception e) {
-                                FileLog.e(e, false);
+                                FileLog.e(e);
                             }
                         }
                     } else if (minId <= hole.start + 1) {
@@ -11916,7 +11916,7 @@ public class MessagesStorage extends BaseController {
                             try {
                                 database.executeFast(String.format(Locale.US, "UPDATE media_holes_v2 SET start = %d WHERE uid = %d AND type = %d AND start = %d AND end = %d", maxId, did, hole.type, hole.start, hole.end)).stepThis().dispose();
                             } catch (Exception e) {
-                                FileLog.e(e, false);
+                                FileLog.e(e);
                             }
                         }
                     } else {
@@ -11981,7 +11981,7 @@ public class MessagesStorage extends BaseController {
                             try {
                                 database.executeFast(String.format(Locale.US, "UPDATE " + table + " SET end = %d WHERE uid = %d AND start = %d AND end = %d", minId, did, hole.start, hole.end)).stepThis().dispose();
                             } catch (Exception e) {
-                                FileLog.e(e, false);
+                                FileLog.e(e);
                             }
                         }
                     } else if (minId <= hole.start + 1) {
@@ -11989,7 +11989,7 @@ public class MessagesStorage extends BaseController {
                             try {
                                 database.executeFast(String.format(Locale.US, "UPDATE " + table + " SET start = %d WHERE uid = %d AND start = %d AND end = %d", maxId, did, hole.start, hole.end)).stepThis().dispose();
                             } catch (Exception e) {
-                                FileLog.e(e, false);
+                                FileLog.e(e);
                             }
                         }
                     } else {

@@ -11,7 +11,6 @@ package org.telegram.messenger;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -32,10 +31,6 @@ import android.telephony.TelephonyManager;
 import androidx.annotation.NonNull;
 import androidx.multidex.MultiDex;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-
-import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
@@ -132,7 +127,7 @@ public class ApplicationLoader extends Application {
         } catch (Exception e) {
             FileLog.e(e);
         }
-        return new File(BuildVars.isBetaApp() ? "/data/data/com.exteragram.messenger.beta/files" : "/data/data/com.exteragram.messenger/files");
+        return new File(String.format("/data/data/com.exteragram.messenger%s/files", BuildVars.isBetaApp() ? ".beta" : ""));
     }
 
     public static void postInitApplication() {
@@ -312,16 +307,6 @@ public class ApplicationLoader extends Application {
                 PushListenerController.sendRegistrationToServer(getPushProvider().getPushType(), null);
             }
         }, 1000);
-    }
-
-    private boolean checkPlayServices() {
-        try {
-            int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-            return resultCode == ConnectionResult.SUCCESS;
-        } catch (Exception e) {
-            FileLog.e(e);
-        }
-        return true;
     }
 
     private static void ensureCurrentNetworkGet(boolean force) {
@@ -507,29 +492,4 @@ public class ApplicationLoader extends Application {
         }
         return result;
     }
-
-    public static void startAppCenter(Activity context) {
-        applicationLoaderInstance.startAppCenterInternal(context);
-    }
-
-    public static void checkForUpdates() {
-        applicationLoaderInstance.checkForUpdatesInternal();
-    }
-
-    public static void appCenterLog(Throwable e) {
-        applicationLoaderInstance.appCenterLogInternal(e);
-    }
-
-    protected void appCenterLogInternal(Throwable e) {
-
-    }
-
-    protected void checkForUpdatesInternal() {
-
-    }
-
-    protected void startAppCenterInternal(Activity context) {
-
-    }
-
 }

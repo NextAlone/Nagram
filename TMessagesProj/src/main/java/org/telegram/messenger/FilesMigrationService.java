@@ -21,16 +21,12 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.core.graphics.ColorUtils;
-
-import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.StickerImageView;
-import org.telegram.ui.DialogsActivity;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -149,7 +145,7 @@ public class FilesMigrationService extends Service {
                     try {
                         Files.move(path, dest.toPath());
                     } catch (Exception e) {
-                        FileLog.e(e, false);
+                        FileLog.e(e);
                         try {
                             path.toFile().delete();
                         } catch (Exception e1) {

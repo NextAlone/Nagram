@@ -539,6 +539,11 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                     playbackSpeedButton.layout(x, playbackSpeedButton.getTop(), x + playbackSpeedButton.getMeasuredWidth(), playbackSpeedButton.getBottom());
                 }
             }
+
+            @Override
+            protected void onDraw(Canvas canvas) {
+                canvas.drawLine(0, 1, getMeasuredWidth(), 1, Theme.dividerPaint);
+            }
         };
 
         coverContainer = new CoverContainer(context) {

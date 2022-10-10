@@ -12,12 +12,12 @@
 package com.exteragram.messenger.components;
 
 import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.text.TextUtils;
 import android.util.Property;
 import android.util.TypedValue;
@@ -25,46 +25,34 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 import android.widget.ImageView;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
+import android.widget.TextView;
+
+import com.exteragram.messenger.ExteraConfig;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AnimationProperties;
-import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
-import org.telegram.ui.Components.Switch;
 import org.telegram.ui.Components.RLottieImageView;
+import org.telegram.ui.Components.Switch;
 
 import java.util.ArrayList;
-
-import com.exteragram.messenger.ExteraConfig;
 
 public class TextCheckWithIconCell extends FrameLayout {
 
     private boolean isAnimatingToThumbInsteadOfTouch;
-
-    private TextView textView;
-    private Switch checkBox;
+    private final TextView textView;
+    private final Switch checkBox;
     private boolean needDivider;
-    private int height = 50;
-    private int animatedColorBackground;
     private float animationProgress;
-    private Paint animationPaint;
     private float lastTouchX;
-    private ObjectAnimator animator;
-    private boolean drawCheckRipple;
     public final RLottieImageView imageView;
-    private ImageView valueImageView;
-    private int offsetFromImage;
     public int imageLeft;
-    private boolean inDialogs;
 
-    public static final Property<TextCheckWithIconCell, Float> ANIMATION_PROGRESS = new AnimationProperties.FloatProperty<TextCheckWithIconCell>("animationProgress") {
+    public static final Property<TextCheckWithIconCell, Float> ANIMATION_PROGRESS = new AnimationProperties.FloatProperty<>("animationProgress") {
         @Override
         public void setValue(TextCheckWithIconCell object, float value) {
             object.setAnimationProgress(value);
@@ -107,6 +95,7 @@ public class TextCheckWithIconCell extends FrameLayout {
         setClipChildren(false);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         lastTouchX = event.getX();
@@ -115,6 +104,7 @@ public class TextCheckWithIconCell extends FrameLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int height = 50;
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(height) + (needDivider ? 1 : 0), MeasureSpec.EXACTLY));
     }
 
@@ -125,7 +115,6 @@ public class TextCheckWithIconCell extends FrameLayout {
 
     public void setTextAndCheckAndIcon(String text, int resId, boolean checked, boolean divider) {
         imageLeft = 21;
-        offsetFromImage = 71;
         textView.setText(text);
         checkBox.setChecked(checked, false);
         needDivider = divider;
@@ -136,14 +125,6 @@ public class TextCheckWithIconCell extends FrameLayout {
         layoutParams.topMargin = 0;
         textView.setLayoutParams(layoutParams);
         setWillNotDraw(!divider);
-    }
-
-    @Override
-    public void setPressed(boolean pressed) {
-        if (drawCheckRipple) {
-            checkBox.setDrawRipple(pressed);
-        }
-        super.setPressed(pressed);
     }
 
     public void setEnabled(boolean value, ArrayList<Animator> animators) {
@@ -165,21 +146,13 @@ public class TextCheckWithIconCell extends FrameLayout {
         return checkBox.isChecked();
     }
 
-    @Override
-    public void setBackgroundColor(int color) {
-        clearAnimation();
-        animatedColorBackground = 0;
-        super.setBackgroundColor(color);
-    }
-
     private void setAnimationProgress(float value) {
         animationProgress = value;
         float tx = getLastTouchX();
         float rad = Math.max(tx, getMeasuredWidth() - tx) + AndroidUtilities.dp(40);
-        float cx = tx;
         int cy = getMeasuredHeight() / 2;
         float animatedRad = rad * animationProgress;
-        checkBox.setOverrideColorProgress(cx, cy, animatedRad);
+        checkBox.setOverrideColorProgress(tx, cy, animatedRad);
     }
 
     private float getLastTouchX() {
@@ -188,14 +161,6 @@ public class TextCheckWithIconCell extends FrameLayout {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (animatedColorBackground != 0) {
-            float tx = getLastTouchX();
-            float rad = Math.max(tx, getMeasuredWidth() - tx) + AndroidUtilities.dp(40);
-            float cx = tx;
-            int cy = getMeasuredHeight() / 2;
-            float animatedRad = rad * animationProgress;
-            canvas.drawCircle(cx, cy, animatedRad, animationPaint);
-        }
         if (needDivider && !ExteraConfig.disableDividers) {
             canvas.drawLine(LocaleController.isRTL ? 0 : AndroidUtilities.dp(70), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(70) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
         }
@@ -208,5 +173,9 @@ public class TextCheckWithIconCell extends FrameLayout {
         info.setCheckable(true);
         info.setChecked(checkBox.isChecked());
         info.setContentDescription(checkBox.isChecked() ? LocaleController.getString("NotificationsOn", R.string.NotificationsOn) : LocaleController.getString("NotificationsOff", R.string.NotificationsOff));
+    }
+
+    public void setAnimatingToThumbInsteadOfTouch(boolean animatingToThumbInsteadOfTouch) {
+        isAnimatingToThumbInsteadOfTouch = animatingToThumbInsteadOfTouch;
     }
 }

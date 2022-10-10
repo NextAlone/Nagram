@@ -19,8 +19,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -29,13 +28,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.text.SpannableStringBuilder;
-import android.text.TextUtils;
 
-import androidx.core.content.ContextCompat;
+import com.exteragram.messenger.ExteraConfig;
+import com.exteragram.messenger.ExteraUtils;
+import com.exteragram.messenger.components.TextCheckWithIconCell;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
@@ -43,16 +41,10 @@ import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.TextCell;
-import org.telegram.ui.Cells.TextCheckCell;
-import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RLottieImageView;
-
-import com.exteragram.messenger.ExteraConfig;
-import com.exteragram.messenger.ExteraUtils;
-import com.exteragram.messenger.components.TextCheckWithIconCell;
 
 public class UpdaterBottomSheet extends BottomSheet {
 
@@ -129,7 +121,7 @@ public class UpdaterBottomSheet extends BottomSheet {
             changelog.setOnClickListener(v -> copyText(changelog.getTextView().getText() + "\n" + (isTranslated ? translatedC : AndroidUtilities.replaceTags(args[1]))));
             linearLayout.addView(changelog);
 
-            changelogTextView = new TextView(context) {
+            changelogTextView = new androidx.appcompat.widget.AppCompatTextView(context) {
                 @Override
                 protected void onDraw(Canvas canvas) {
                     super.onDraw(canvas);
@@ -143,13 +135,11 @@ public class UpdaterBottomSheet extends BottomSheet {
             changelogTextView.setText(AndroidUtilities.replaceTags(args[1]));
             changelogTextView.setPadding(AndroidUtilities.dp(21), 0, AndroidUtilities.dp(21), AndroidUtilities.dp(10));
             changelogTextView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-            changelogTextView.setOnClickListener(v -> {
-                UpdaterUtils.translate(AndroidUtilities.replaceTags(args[1]), (String translated) -> {
-                    translatedC = translated;
-                    animateChangelog(isTranslated ? AndroidUtilities.replaceTags(args[1]) : translatedC);
-                    isTranslated ^= true;
-                }, () -> {});
-            });
+            changelogTextView.setOnClickListener(v -> UpdaterUtils.translate(AndroidUtilities.replaceTags(args[1]), (String translated) -> {
+                translatedC = translated;
+                animateChangelog(isTranslated ? AndroidUtilities.replaceTags(args[1]) : translatedC);
+                isTranslated ^= true;
+            }, () -> {}));
             linearLayout.addView(changelogTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
     
             TextView doneButton = new TextView(context);
@@ -179,7 +169,7 @@ public class UpdaterBottomSheet extends BottomSheet {
             scheduleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             scheduleButton.setText(LocaleController.getString("AppUpdateRemindMeLater", R.string.AppUpdateRemindMeLater));
             scheduleButton.setOnClickListener(v -> {
-                ExteraConfig.scheduleUpdate();
+                ExteraConfig.editor.putLong("updateScheduleTimestamp", ExteraConfig.updateScheduleTimestamp = System.currentTimeMillis()).apply();
                 dismiss();
             });
             linearLayout.addView(scheduleButton, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, 0, 16, 0, 16, 0));
@@ -196,8 +186,8 @@ public class UpdaterBottomSheet extends BottomSheet {
             checkOnLaunch.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), 100, 0));
             checkOnLaunch.setTextAndCheckAndIcon(LocaleController.getString("CheckOnLaunch", R.string.CheckOnLaunch), R.drawable.msg_timeredit, ExteraConfig.checkUpdatesOnLaunch, true);
             checkOnLaunch.setOnClickListener(v -> {
+                ExteraConfig.editor.putBoolean("checkUpdatesOnLaunch", ExteraConfig.checkUpdatesOnLaunch ^= true).apply();
                 checkOnLaunch.setChecked(!checkOnLaunch.isChecked());
-                ExteraConfig.toggleCheckUpdatesOnLaunch();
             });
             linearLayout.addView(checkOnLaunch);
     
@@ -230,12 +220,10 @@ public class UpdaterBottomSheet extends BottomSheet {
             checkUpdatesButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             checkUpdatesButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             checkUpdatesButton.setText(LocaleController.getString("CheckForUpdates", R.string.CheckForUpdates));
-            checkUpdatesButton.setOnClickListener(v -> {
-                UpdaterUtils.checkUpdates(context, true, () -> {
-                    BulletinFactory.of(getContainer(), null).createErrorBulletin(LocaleController.getString("NoUpdates", R.string.NoUpdates)).show();
-                    timeView.setText(LocaleController.getString("LastCheck", R.string.LastCheck) + ": " + LocaleController.formatDateTime(ExteraConfig.lastUpdateCheckTime / 1000));
-                }, () -> dismiss());
-            });
+            checkUpdatesButton.setOnClickListener(v -> UpdaterUtils.checkUpdates(context, true, () -> {
+                BulletinFactory.of(getContainer(), null).createErrorBulletin(LocaleController.getString("NoUpdates", R.string.NoUpdates)).show();
+                timeView.setText(LocaleController.getString("LastCheck", R.string.LastCheck) + ": " + LocaleController.formatDateTime(ExteraConfig.lastUpdateCheckTime / 1000));
+            }, this::dismiss));
             linearLayout.addView(checkUpdatesButton, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, 0, 16, 15, 16, 16));
         }
 

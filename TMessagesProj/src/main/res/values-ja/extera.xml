@@ -46,7 +46,6 @@
     <string name="StickerSize">ステッカーのサイズ</string>
     <string name="StickerTime">ステッカーの下に時間を隠す</string>
     <string name="UnlimitedRecentStickers">最近のステッカーを無制限に追加する</string>
-    <string name="SendMessageBeforeSendSticker">ステッカーを送信する前にメッセージを送信</string>
     <string name="StickerSizeDialogMessageReplyTo">わぁ~!</string>
     <string name="StickerSizeDialogMessage">うわ~かわいい!</string>
     <string name="HideSendAsChannel">「チャンネルとして送信」を非表示</string>

@@ -13,9 +13,11 @@ package com.exteragram.messenger.preferences;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.exteragram.messenger.updater.UpdaterBottomSheet;
 
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -23,12 +25,7 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
-import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCell;
-
-import com.exteragram.messenger.components.InfoSettingsCell;
-import com.exteragram.messenger.ExteraUtils;
-import com.exteragram.messenger.updater.UpdaterBottomSheet;
 
 public class MainPreferencesActivity extends BasePreferencesActivity {
 
@@ -112,7 +109,7 @@ public class MainPreferencesActivity extends BasePreferencesActivity {
         }
 
         @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             switch (holder.getItemViewType()) {
                 case 1:
                     if (position == infoDividerRow) {
@@ -147,9 +144,6 @@ public class MainPreferencesActivity extends BasePreferencesActivity {
                     } else if (position == infoHeaderRow){
                         headerCell.setText(LocaleController.getString("Links", R.string.Links));
                     }
-                    break;
-                case 4:
-                    InfoSettingsCell textDetailCell = (InfoSettingsCell) holder.itemView;
                     break;
             }
         }

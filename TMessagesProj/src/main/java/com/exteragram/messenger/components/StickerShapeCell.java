@@ -35,13 +35,13 @@ import com.exteragram.messenger.ExteraConfig;
 
 public class StickerShapeCell extends LinearLayout {
 
-    private class StickerShape extends FrameLayout {
+    private static class StickerShape extends FrameLayout {
 
-        private boolean isRounded;
-        private boolean isRoundedAsMsg;
-        private TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        private RectF rect = new RectF();
-        private Paint outlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        private final boolean isRounded;
+        private final boolean isRoundedAsMsg;
+        private final TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        private final RectF rect = new RectF();
+        private final Paint outlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         private float progress;
 
         public StickerShape(Context context, boolean rounded, boolean roundedAsMsg) {
@@ -86,7 +86,7 @@ public class StickerShapeCell extends LinearLayout {
             int width = (int) Math.ceil(textPaint.measureText(text));
 
             textPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-            canvas.drawText(text, (getMeasuredWidth() - width) / 2, AndroidUtilities.dp(102), textPaint);
+            canvas.drawText(text, (getMeasuredWidth() - width) >> 1, AndroidUtilities.dp(102), textPaint);
 
             rect.set(AndroidUtilities.dp(10), AndroidUtilities.dp(10), getMeasuredWidth() - AndroidUtilities.dp(10), AndroidUtilities.dp(70));
             Theme.dialogs_onlineCirclePaint.setColor(Color.argb(90, r, g, b));
@@ -94,7 +94,7 @@ public class StickerShapeCell extends LinearLayout {
                 canvas.drawRoundRect(rect, AndroidUtilities.dp(0), AndroidUtilities.dp(0), Theme.dialogs_onlineCirclePaint);
             } else if (isRounded) {
                 canvas.drawRoundRect(rect, AndroidUtilities.dp(6), AndroidUtilities.dp(6), Theme.dialogs_onlineCirclePaint);
-            } else if (isRoundedAsMsg) {
+            } else {
                 canvas.drawRoundRect(rect, AndroidUtilities.dp(SharedConfig.bubbleRadius), AndroidUtilities.dp(SharedConfig.bubbleRadius), Theme.dialogs_onlineCirclePaint);
             }
         }
@@ -124,7 +124,7 @@ public class StickerShapeCell extends LinearLayout {
         }
     }
 
-    private StickerShape[] stickerShape = new StickerShape[3];
+    private final StickerShape[] stickerShape = new StickerShape[3];
 
     public StickerShapeCell(Context context) {
         super(context);
@@ -140,7 +140,7 @@ public class StickerShapeCell extends LinearLayout {
                 for (int b = 0; b < 3; b++) {
                     stickerShape[b].setSelected(v == stickerShape[b], true);
                 }
-                ExteraConfig.setStickerShape(rounded ? 1 : (roundedAsMsg ? 2 : 0));
+                ExteraConfig.editor.putInt("stickerShape", ExteraConfig.stickerShape = (rounded ? 1 : (roundedAsMsg ? 2 : 0))).apply();
                 updateStickerPreview();
             });
         }
@@ -154,7 +154,7 @@ public class StickerShapeCell extends LinearLayout {
         }
     }
 
-    protected void updateStickerPreview() {};
+    protected void updateStickerPreview() {}
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

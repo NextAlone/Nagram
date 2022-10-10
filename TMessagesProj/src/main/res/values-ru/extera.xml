@@ -38,7 +38,7 @@
     <string name="TransparentStatusBar">Прозрачная строка состояния</string>
     <string name="BlurForAllThemes">Размытие во всех темах</string>
     <string name="CenterTitle">Заголовок по центру</string>
-    <string name="NewSwitchStyle">Альтернативный стиль переключателей</string>
+    <string name="NewSwitchStyle">Переключатели в стиле MD3</string>
     <string name="DisableDividers">Отключить разделители</string>
     <string name="TransparentNavBar">Прозрачная панель навигации</string>
     <string name="TransparentNavBarInfo">Панель навигации не станет полностью прозрачной, она лишь приобретет цвет панели отправки сообщений.</string>
@@ -46,7 +46,7 @@
     <!-- General -->
     <string name="AvatarCorners">Закругление аватарок</string>
     <string name="DownloadSpeedBoost">Увеличение скорости загрузки</string>
-    <string name="UploadSpeedBoost">Увеличение скорости выгрузки</string>
+    <string name="UploadSpeedBoost">Увеличение скорости отправки</string>
     <string name="Ultra">Ультра</string>
     <string name="DisableNumberRounding">Отключить округление чисел</string>
     <string name="FormatTimeWithSeconds">Показывать время с секундами</string>
@@ -75,8 +75,6 @@
     <string name="StickerShapeRoundedMsg">Сообщение</string>
     <string name="StickerTime">Скрыть время под стикером</string>
     <string name="UnlimitedRecentStickers">Бесконечные недавние стикеры</string>
-    <string name="SendMessageBeforeSendSticker">Отправлять сообщение перед стикером</string>
-
     <string name="HideSendAsChannel">Скрыть \"Написать от имени…\"</string>
     <string name="HideKeyboardOnScroll">Скрывать клавиатуру при скролле</string>
     <string name="DisableGreetingSticker">Скрыть приветственный стикер</string>

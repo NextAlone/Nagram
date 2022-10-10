@@ -98,7 +98,7 @@ public class MonetHelper {
         try {
             int c, id, alpha = 100;
             boolean withAlpha = false;
-            if (color.matches(".*[\\(\\)].*")) {
+            if (color.matches(".*[()].*")) {
                 withAlpha = true;
                 alpha = Integer.parseInt(color.substring(color.indexOf("(") + 1, color.indexOf(")")));
                 color = color.substring(0, color.indexOf("("));

@@ -11,15 +11,15 @@
 
 package com.exteragram.messenger.components;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.exteragram.messenger.ExteraUtils;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
@@ -28,14 +28,11 @@ import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
-import com.exteragram.messenger.ExteraUtils;
-
 public class InfoSettingsCell extends FrameLayout {
 
-    private TextView textView;
-    private TextView valueTextView;
-    private ImageView imageView;
+    private final TextView textView;
 
+    @SuppressLint("SetTextI18n")
     public InfoSettingsCell(Context context) {
         super(context);
 
@@ -51,7 +48,7 @@ public class InfoSettingsCell extends FrameLayout {
         textView.setGravity(Gravity.CENTER);
         addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER | Gravity.TOP, 50, 148, 50, 0));
 
-        valueTextView = new TextView(context);
+        TextView valueTextView = new TextView(context);
         valueTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
         valueTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rregular.ttf"));
         valueTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
@@ -63,7 +60,7 @@ public class InfoSettingsCell extends FrameLayout {
         valueTextView.setPadding(0, 0, 0, 0);
         addView(valueTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER | Gravity.TOP, 60, 178, 60, 20));
 
-        imageView = new ImageView(context);
+        ImageView imageView = new ImageView(context);
         imageView.setScaleType(ImageView.ScaleType.CENTER);
         imageView.setImageResource(R.drawable.ic_logo_foreground);
         addView(imageView, LayoutHelper.createFrame(108, 108, Gravity.CENTER | Gravity.TOP, 0, 20, 0, 0));
