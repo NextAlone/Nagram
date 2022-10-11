@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
 
  This is the source code of exteraGram for Android.
@@ -10,7 +9,6 @@
  Copyright @immat0x1, @itsv1eds, 2022.
 
 -->
-
 <resources>
     <!-- exteraGram's Main Strings -->
     <string name="UpdateExteraGram">Esta mensagem não é suportada na sua versão do exteraGram. Atualize o aplicativo para visualizar: https://github.com/exteraSquad/exteraGram/releases/latest</string>
@@ -22,7 +20,6 @@
     <string name="Links">Links</string>
     <string name="AboutExteraDescription">Cliente Experimental do Telegram baseado em fontes oficiais do Telegram!</string>
     <string name="Channel">Canal</string>
-    <string name="Chats">Conversas</string>
     <string name="Crowdin">Traduza</string>
     <string name="SourceCode">Código-fonte</string>
     <string name="Preferences">Preferências exteraGram</string>
@@ -34,18 +31,20 @@
     <string name="TransparentStatusBar">Barra de status transparente</string>
     <string name="BlurForAllThemes">Blur para todos os temas</string>
     <string name="CenterTitle">Centralizar título na barra de ação</string>
-    <string name="NewSwitchStyle">Estilo alternativo do switch</string>
+    <string name="NewSwitchStyle">Estilo do interruptor MD3</string>
     <string name="DisableDividers">Desativar divisores</string>
     <string name="TransparentNavBar">Barra de navegação transparente</string>
     <string name="TransparentNavBarInfo">A barra de navegação não ficará completamente transparente, só terá a cor do Painel de Mensagens.</string>
     <!-- General -->
     <string name="AvatarCorners">Cantos dos avatares</string>
+    <string name="DownloadSpeedBoost">Otimizar velocidade de download</string>
+    <string name="UploadSpeedBoost">Aumentar velocidade de upload</string>
+    <string name="Ultra">Ultra</string>
     <string name="DisableNumberRounding">Desativar arredondamento de números</string>
     <string name="FormatTimeWithSeconds">Formatar a hora com segundos</string>
     <string name="ChatsOnTitle">\"Conversas\" em vez de \"exteraGram\"</string>
     <string name="DisableVibration">Desabilitar vibração</string>
     <string name="ForceTabletMode">Forçar modo tablet</string>
-    <string name="DisableAnimatedAvatars">Desativar avatares animados</string>
     <string name="ArchiveOnPull">Abrir Conversas Arquivadas ao deslizar pra cima</string>
     <string name="DisableUnarchiveSwipe">Desativar \"Desarquivar\" ao deslizar</string>
     <string name="ForcePacmanAnimation">Forçar Animação do Pac-Man</string>
@@ -54,6 +53,10 @@
     <string name="HidePhoneNumber">Ocultar número do telefone</string>
     <string name="ShowID">Mostrar ID no perfil</string>
     <string name="ShowDC">Mostrar DC no Perfil</string>
+    <string name="HidePremiumStickersTab">Ocultar aba de stickers premium</string>
+    <string name="HideFeaturedEmojisTabs">Ocultar emojis premium destacados</string>
+    <string name="PremiumAutoPlayback">Reprodução automática premium</string>
+    <string name="DisableAnimatedAvatars">Desativar avatares animados</string>
     <!-- Chats -->
     <string name="StickerSize">Tamanho das figurinhas</string>
     <string name="StickerSizeDialogMessageReplyTo">uau</string>
@@ -61,9 +64,8 @@
     <string name="StickerShape">Formato das figurinhas</string>
     <string name="StickerShapeRounded">Arredondado</string>
     <string name="StickerShapeRoundedMsg">Mensagem</string>
-    <string name="StickerTime">Ocultar Horário nas Figurinhas</string>
-    <string name="UnlimitedRecentStickers">Figurinhas recentes ilimitadas</string>
-    <string name="PremiumAutoPlayback">Reprodução automática premium</string>
+    <string name="StickerTime">Ocultar Horário nos Stickers</string>
+    <string name="UnlimitedRecentStickers">Stickers recentes ilimitados</string>
     <string name="HideSendAsChannel">Ocultar \"Enviar como Canal\"</string>
     <string name="HideKeyboardOnScroll">Ocultar teclado ao rolar no chat</string>
     <string name="DisableReactions">Desativar reações</string>
@@ -119,9 +121,6 @@
     <string name="AppIconRelease">Release</string>
     <string name="AppIconBeta">Beta</string>
     <string name="AppIconInverted">Invertido</string>
-    <string name="AppIconMonet">Monet</string>
     <string name="AppIconGradient">Gradiente</string>
     <string name="AppIconPixel">Pixel</string>
-    <string name="AppIconGoogle">Google</string>
-    <string name="AppIconRed">RedEbalo</string>
 </resources>

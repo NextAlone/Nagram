@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+
+ This is the source code of exteraGram for Android.
+
+ We do not and cannot prevent the use of our code,
+ but be respectful and credit the original author.
+
+ Copyright @immat0x1, @itsv1eds, 2022.
+
+-->
 <resources>
     <!-- exteraGram's Main Strings -->
+    <string name="UpdateExteraGram">Ce message n\'est pas pris en charge sur votre version d\'exteraGram. Mettez à jour l\'application pour l\'afficher : https://github.com/exteraSquad/exteraGram/releases/latest</string>
     <string name="MutualContact">contact mutuel</string>
     <string name="ToBeginning">Au début</string>
     <string name="SaveMessage">Enregistrer le message</string>
@@ -8,12 +19,11 @@
     <string name="exteraPrivacy">Politique de confidentialité et FAQ de exteraGram</string>
     <string name="Links">Liens</string>
     <string name="AboutExteraDescription">Client Telegram expérimental basé sur les sources officielles de Telegram!</string>
-    <string name="Channel">Chaîne Telegram</string>
-    <string name="Chats">Échanges</string>
+    <string name="Channel">Canal</string>
     <string name="Crowdin">Traduire</string>
     <string name="SourceCode">Code source</string>
-    <string name="Preferences">préférences exteraGram</string>
-    <string name="RestartRequired">Redémarrer AirDroid pour prendre en compte les changements.</string>
+    <string name="Preferences">Préférences exteraGram</string>
+    <string name="RestartRequired">Redémarrez l\'application pour appliquer les changements.</string>
     <string name="Categories">Catégories</string>
     <!-- Appearance -->
     <string name="UseSystemFonts">Utiliser la police du système</string>
@@ -21,60 +31,96 @@
     <string name="TransparentStatusBar">Barre de notifications transparente</string>
     <string name="BlurForAllThemes">Flou pour tous les thèmes</string>
     <string name="CenterTitle">Centrer le titre dans la barre d\'action</string>
-    <string name="NewSwitchStyle">Activer le style de changement alternatif</string>
+    <string name="NewSwitchStyle">Type de commutateur MD3</string>
+    <string name="DisableDividers">Désactiver les séparateurs</string>
     <string name="TransparentNavBar">Barre de navigation transparente</string>
-    <string name="TransparentNavBarValue">La barre de navigation ne deviendra pas complètement transparente, elle ne prendra que la couleur du panneau de messages.</string>
-    <string name="SquareFab">FAB en forme de carré</string>
-    <string name="SquareFabInfo">Un bouton d\'action flottant (FAB) est un bouton circulaire qui déclenche l\'action principale dans l\'interface d\'application. Il se trouve dans le coin inférieur droit de l\'écran.</string>
+    <string name="TransparentNavBarInfo">La barre de navigation ne deviendra pas complètement transparente, elle n\'obtiendra que la couleur du panneau de messages.</string>
     <!-- General -->
+    <string name="AvatarCorners">Coins de l\'avatar</string>
+    <string name="DownloadSpeedBoost">Augmentation de la vitesse de téléchargement</string>
+    <string name="UploadSpeedBoost">Augmentation de la vitesse de chargement</string>
+    <string name="Ultra">Ultra</string>
     <string name="DisableNumberRounding">Désactiver l\'arrondi des nombres</string>
-    <string name="FormatTimeWithSeconds">Afficher l\'heure avec les secondes</string>
-    <string name="HideAllChats">Masquer l\'onglet \"Toutes les discussions\"</string>
-    <string name="HideProxySponsor">Cacher le sponsor du proxy</string>
+    <string name="FormatTimeWithSeconds">Formater l\'heure avec les secondes</string>
     <string name="ChatsOnTitle">\"Chats\" au lieu de \"exteraGram\"</string>
     <string name="DisableVibration">Désactiver les vibrations</string>
-    <string name="ForceTabletMode">Forcer le mode Tablet Ui</string>
-    <string name="ArchiveOnPull">Ouvrir les archives dans le menu déroulant</string>
-    <string name="DisableUnarchiveSwipe">Désactiver le balayage \"Déarchive\"</string>
-    <string name="ForcePacmanAnimation">Forcer l\'animation de Pac-Man</string>
-    <string name="ForcePacmanAnimationInfo">Cela nécessite le geste de balayage sélectionné dans la liste de chat.</string>
+    <string name="ForceTabletMode">Forcer le mode tablette</string>
+    <string name="ArchiveOnPull">Ouvrir l\'archive lors du pulldown</string>
+    <string name="DisableUnarchiveSwipe">Désactiver le balayage \"Désarchiver\"</string>
+    <string name="ForcePacmanAnimation">Forcer l\'animation Pac-Man</string>
+    <string name="ForcePacmanAnimationInfo">Cela nécessite le geste de balayage \"Archive\" sélectionné dans la liste de discussion.</string>
     <string name="Profile">Profil</string>
     <string name="HidePhoneNumber">Cacher le numéro de téléphone</string>
-    <string name="ShowID">Afficher dans le profil</string>
-    <string name="ShowDC">Afficher dans le profil</string>
+    <string name="ShowID">Afficher l\'ID dans le profil</string>
+    <string name="ShowDC">Afficher le DC dans le profil</string>
+    <string name="HidePremiumStickersTab">Masquer l\'onglet des autocollants premium</string>
+    <string name="HideFeaturedEmojisTabs">Masquer les emojis premium en vedette</string>
+    <string name="PremiumAutoPlayback">Lecture automatique premium</string>
+    <string name="DisableAnimatedAvatars">Désactiver les avatars animés</string>
     <!-- Chats -->
-    <string name="StickerSize">Taille de l\'autocollant</string>
-    <string name="StickerTime">Masquer le temps sous les autocollants</string>
-    <string name="UnlimitedRecentStickers">Autocollants récents illimités</string>
+    <string name="StickerSize">Taille des autocollants</string>
     <string name="StickerSizeDialogMessageReplyTo">wow</string>
-    <string name="StickerSizeDialogMessage">woah, il est si mignon!</string>
-    <string name="HideSendAsChannel">Masquer \"Envoyer en tant que Canal\"</string>
+    <string name="StickerSizeDialogMessage">waouh, il est si mignon !</string>
+    <string name="StickerShape">Forme des autocollants</string>
+    <string name="StickerShapeRounded">Arrondi</string>
+    <string name="StickerShapeRoundedMsg">Message</string>
+    <string name="StickerTime">Cacher l\'heure sur les autocollants</string>
+    <string name="UnlimitedRecentStickers">Autocollants récents illimités</string>
+    <string name="HideSendAsChannel">Masquer \"Envoyer en tant que canal\"</string>
     <string name="HideKeyboardOnScroll">Masquer le clavier lors du défilement</string>
     <string name="DisableReactions">Désactiver les réactions</string>
     <string name="DisableGreetingSticker">Désactiver l\'autocollant d\'accueil</string>
     <string name="DisableJumpToNextChannel">Désactiver \"Aller au canal suivant\"</string>
     <string name="DateOfForwardedMsg">Afficher la date de transfert du message</string>
-    <string name="ShowMessageID">Afficher les messages</string>
-    <string name="Media">Lecteur</string>
+    <string name="ShowMessageID">Afficher l\'ID du message</string>
+    <string name="ShowActionTimestamps">Afficher les horodatages des actions</string>
+    <string name="ZalgoFilter">Filtrer les symboles \"Zalgo\"</string>
+    <string name="ZalgoFilterInfo">Tous les symboles \"Z̷͍͌ā̸̜l̸̞̂g̷̝͘o̶̩̓\" dans les surnoms ou les messages seront supprimés. Le cache des messages sera effacé.</string>
+    <string name="Media">Médias</string>
     <string name="RearVideoMessages">Caméra arrière dans les messages vidéo</string>
     <string name="DisableCamera">Désactiver la caméra instantanée</string>
     <string name="DisableProximityEvents">Désactiver les événements de proximité</string>
     <string name="PauseOnMinimize">Pause automatique</string>
-    <string name="POMDescription">Met en pause une lecture vidéo lorsque l\'appareil est verrouillé ou que l\'exteraGram est minimisé</string>
+    <string name="POMDescription">Met en pause une lecture vidéo lorsque l\'appareil est verrouillé ou exteraGram est minimisé.</string>
     <string name="DisablePlayback">Désactiver la lecture</string>
-    <string name="DPDescription">Désactive la lecture lorsque le bouton de volume est enfoncé</string>
+    <string name="DPDescription">Désactive la lecture lorsque le bouton de volume est enfoncé.</string>
     <!-- Drawer -->
-    <string name="Drawer">Liste d\'applications</string>
-    <string name="DrawerElements">Éléments du tiroir</string>
-    <string name="DrawerOptions">Tri tiroir</string>
+    <string name="DrawerElements">Éléments de tiroir</string>
+    <string name="DrawerOptions">Options de tiroir</string>
     <string name="DrawerIconPack">Pack d\'icônes</string>
     <string name="NewYear">Nouvel an</string>
-    <string name="ValentinesDay">Valentine\'s Day</string>
+    <string name="ValentinesDay">La Saint-Valentin</string>
     <string name="Halloween">Halloween</string>
+    <!-- Updates -->
+    <string name="Updates">Mises à jour</string>
+    <string name="UpdateAvailable">Mise à jour disponible !</string>
+    <string name="CheckOnLaunch">Vérifier au lancement</string>
+    <string name="NoUpdates">Mises à jour introuvables.</string>
+    <string name="CheckForUpdates">Vérifier les mises à jour</string>
+    <string name="CurrentVersion">Version actuelle</string>
+    <string name="Version">Version</string>
+    <string name="UpdateSize">Taille de la mise à jour</string>
+    <string name="Changelog">Journal des modifications :</string>
+    <string name="BuildType">Type de compilation</string>
+    <string name="BTRelease">Version</string>
+    <string name="BTBeta">Bêta</string>
+    <string name="ClearUpdatesCache">Effacer le cache des mises à jour</string>
+    <string name="ClearedUpdatesCache">**%1$s** effacé du cache.</string>
+    <string name="NothingToClear">Rien à effacer.</string>
+    <string name="LastCheck">Dernière vérification</string>
     <!-- Other -->
-    <string name="EnterID">Entrer l\'ID De L\'utilisateur</string>
-    <string name="TrackSaved">Piste enregistrée</string>
-    <string name="ChannelToSaveDescription">Entrez l\'ID du canal/chat/utilisateur où les pistes seront sauvegardées</string>
+    <string name="BoldItalic">Italique gras</string>
+    <string name="OpenPremiumBot">Ouvrir le bot officiel</string>
+    <string name="Select">Sélectionner</string>
+    <string name="EnterID">Entrer l\'ID</string>
+    <string name="TrackSaved">Piste enregistrée dans **%1$s**.</string>
+    <string name="ChannelToSaveDescription">Entrez l\'ID du canal/chat/utilisateur où les pistes seront enregistrées</string>
+    <string name="Unknown">Inconnu</string>
     <string name="ConfirmCall">Confirmer l\'appel</string>
-    <string name="CallTo">Appeler à **%1$s**?</string>
+    <string name="CallTo">Appeler **%1$s** ?</string>
+    <string name="AppIconRelease">Version</string>
+    <string name="AppIconBeta">Bêta</string>
+    <string name="AppIconInverted">Inversé</string>
+    <string name="AppIconGradient">Dégradé</string>
+    <string name="AppIconPixel">Pixel</string>
 </resources>

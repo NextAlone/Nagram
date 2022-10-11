@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
 
  This is the source code of exteraGram for Android.
@@ -10,23 +9,21 @@
  Copyright @immat0x1, @itsv1eds, 2022.
 
 -->
-
 <resources>
     <!-- exteraGram's Main Strings -->
     <string name="UpdateExteraGram">您的ExteraGram版本不支持此信息。更新应用程序以查看：https://github.com/exteraSquad/exteraGram/releases/latest</string>
     <string name="MutualContact">双向联系人</string>
-    <string name="ToBeginning">跳转至开头</string>
+    <string name="ToBeginning">首条消息</string>
     <string name="SaveMessage">我的收藏</string>
     <!-- Main Menu (about) -->
     <string name="exteraPrivacy">exteraGram 隐私政策和常见问题</string>
     <string name="Links">链接</string>
     <string name="AboutExteraDescription">基于官方Telegram源码制作的第三方客户端</string>
     <string name="Channel">通知频道</string>
-    <string name="Chats">对话</string>
     <string name="Crowdin">翻译</string>
     <string name="SourceCode">exteraGram 源码</string>
     <string name="Preferences">exteraGram 设置</string>
-    <string name="RestartRequired">重启应用以保证设置生效</string>
+    <string name="RestartRequired">重启应用以保证设置生效.</string>
     <string name="Categories">设置分类</string>
     <!-- Appearance -->
     <string name="UseSystemFonts">使用系统字体</string>
@@ -34,18 +31,20 @@
     <string name="TransparentStatusBar">使用完全透明的状态栏</string>
     <string name="BlurForAllThemes">对所有主题启用模糊</string>
     <string name="CenterTitle">标题居中</string>
-    <string name="NewSwitchStyle">启用MD3开关样式</string>
+    <string name="NewSwitchStyle">Material Design 3 开关样式</string>
     <string name="DisableDividers">禁用分隔线</string>
     <string name="TransparentNavBar">透明的导航栏</string>
     <string name="TransparentNavBarInfo">导航栏不会变得完全透明，它只会根据消息面板的颜色变化.</string>
     <!-- General -->
     <string name="AvatarCorners">头像圆角</string>
+    <string name="DownloadSpeedBoost">下载加速</string>
+    <string name="UploadSpeedBoost">上传加速</string>
+    <string name="Ultra">极大</string>
     <string name="DisableNumberRounding">禁用数字舍入</string>
     <string name="FormatTimeWithSeconds">时间精确到秒</string>
     <string name="ChatsOnTitle">主标题显示为“对话”</string>
     <string name="DisableVibration">关闭振动</string>
     <string name="ForceTabletMode">强制开启平板模式</string>
-    <string name="DisableAnimatedAvatars">禁用动态头像</string>
     <string name="ArchiveOnPull">下拉打开已归档对话</string>
     <string name="DisableUnarchiveSwipe">禁用\"取消存档\"滑动动作</string>
     <string name="ForcePacmanAnimation">强制吃豆人动画</string>
@@ -54,16 +53,19 @@
     <string name="HidePhoneNumber">隐藏手机号码</string>
     <string name="ShowID">在个人资料页显示ID</string>
     <string name="ShowDC">在个人资料页显示所处数据中心</string>
+    <string name="HidePremiumStickersTab">隐藏Premium贴纸选项卡</string>
+    <string name="HideFeaturedEmojisTabs">隐藏Premium专属表情</string>
+    <string name="PremiumAutoPlayback">Premium自动播放</string>
+    <string name="DisableAnimatedAvatars">禁用动态头像</string>
     <!-- Chats -->
     <string name="StickerSize">贴纸大小</string>
     <string name="StickerSizeDialogMessageReplyTo">喵喵喵~</string>
     <string name="StickerSizeDialogMessage">哇，好可爱的猫猫!</string>
     <string name="StickerShape">贴纸形状</string>
-    <string name="StickerShapeRounded">圆形</string>
+    <string name="StickerShapeRounded">圆角</string>
     <string name="StickerShapeRoundedMsg">留言</string>
     <string name="StickerTime">隐藏贴纸发送时间</string>
     <string name="UnlimitedRecentStickers">无限的最近贴纸</string>
-    <string name="PremiumAutoPlayback">Premium自动播放</string>
     <string name="HideSendAsChannel">隐藏“以频道身份发言”</string>
     <string name="HideKeyboardOnScroll">在浏览对话时隐藏键盘</string>
     <string name="DisableReactions">禁用表情回应</string>
@@ -119,9 +121,6 @@
     <string name="AppIconRelease">Release</string>
     <string name="AppIconBeta">Beta</string>
     <string name="AppIconInverted">反色</string>
-    <string name="AppIconMonet">莫奈</string>
     <string name="AppIconGradient">渐变</string>
     <string name="AppIconPixel">Pixel</string>
-    <string name="AppIconGoogle">Google</string>
-    <string name="AppIconRed">红色</string>
 </resources>

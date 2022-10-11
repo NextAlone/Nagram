@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
 
  This is the source code of exteraGram for Android.
@@ -10,7 +9,6 @@
  Copyright @immat0x1, @itsv1eds, 2022.
 
 -->
-
 <resources>
     <!-- exteraGram's Main Strings -->
     <string name="UpdateExteraGram">Це повідомлення не підтримується у вашій версії exteraGram. Оновіть застосунок для перегляду: https://github.com/exteraSquad/exteraGram/releases/latest</string>
@@ -22,7 +20,6 @@
     <string name="Links">Посилання</string>
     <string name="AboutExteraDescription">Експериментальний клієнт Telegram заснований на офіційних джерелах Telegram!</string>
     <string name="Channel">Канал</string>
-    <string name="Chats">Бесіди</string>
     <string name="Crowdin">Перекладати</string>
     <string name="SourceCode">Вихідний код</string>
     <string name="Preferences">параметри exteraGram</string>
@@ -34,18 +31,20 @@
     <string name="TransparentStatusBar">Прозорий рядок стану</string>
     <string name="BlurForAllThemes">Розмиття для всіх тем</string>
     <string name="CenterTitle">Центрувати заголовок в панелі дій</string>
-    <string name="NewSwitchStyle">Увімкнути альтернативний стиль перемикання</string>
+    <string name="NewSwitchStyle">Перемикачі в стилі MD3</string>
     <string name="DisableDividers">Відключити розділювачі</string>
     <string name="TransparentNavBar">Прозора панель навігації</string>
     <string name="TransparentNavBarInfo">Панель навігації не стане повністю прозорою, вона отримає тільки колір панель надсилання повідомлення.</string>
     <!-- General -->
     <string name="AvatarCorners">Закруглення аватарок</string>
+    <string name="DownloadSpeedBoost">Прискорення швидкості завантаження</string>
+    <string name="UploadSpeedBoost">Збільшення швидкості завантаження</string>
+    <string name="Ultra">Ультра</string>
     <string name="DisableNumberRounding">Вимкнути округлення чисел</string>
     <string name="FormatTimeWithSeconds">Форматувати час з секундами</string>
     <string name="ChatsOnTitle">\"Чати\" замість \"exteraGram\"</string>
     <string name="DisableVibration">Вимкнути вібрацію</string>
     <string name="ForceTabletMode">Примусовий режим планшета</string>
-    <string name="DisableAnimatedAvatars">Вимкнути анімовані аватарки</string>
     <string name="ArchiveOnPull">Відкрити архів при витягуванні</string>
     <string name="DisableUnarchiveSwipe">Вимкнути свайп «Розархівувати»</string>
     <string name="ForcePacmanAnimation">Примусова анімація Pac-Man</string>
@@ -54,6 +53,10 @@
     <string name="HidePhoneNumber">Приховати номер телефону</string>
     <string name="ShowID">ID чату в профілі</string>
     <string name="ShowDC">Показати DC в профілі</string>
+    <string name="HidePremiumStickersTab">Приховати вкладку преміум наклейок</string>
+    <string name="HideFeaturedEmojisTabs">Приховати вибрані преміум-емодзі</string>
+    <string name="PremiumAutoPlayback">Авто анімація преміум стікерів</string>
+    <string name="DisableAnimatedAvatars">Вимкнути анімовані аватарки</string>
     <!-- Chats -->
     <string name="StickerSize">Розмір наліпок</string>
     <string name="StickerSizeDialogMessageReplyTo">овва</string>
@@ -63,7 +66,6 @@
     <string name="StickerShapeRoundedMsg">Повідомлення</string>
     <string name="StickerTime">Ховати час наліпок</string>
     <string name="UnlimitedRecentStickers">Необмежені улюблені Наклейки</string>
-    <string name="PremiumAutoPlayback">Авто анімація преміум стікерів</string>
     <string name="HideSendAsChannel">Сховати надсилання як канал</string>
     <string name="HideKeyboardOnScroll">Приховати клавіатуру на прокрутці чату</string>
     <string name="DisableReactions">Вимкнути реакції</string>
@@ -119,9 +121,6 @@
     <string name="AppIconRelease">Реліз</string>
     <string name="AppIconBeta">Бета</string>
     <string name="AppIconInverted">Інвертований</string>
-    <string name="AppIconMonet">Monet</string>
     <string name="AppIconGradient">Градієнт</string>
     <string name="AppIconPixel">Піксель</string>
-    <string name="AppIconGoogle">Google</string>
-    <string name="AppIconRed">Червоне Єбало</string>
 </resources>
