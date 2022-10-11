@@ -2760,7 +2760,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                 if (currentFragment != null && (currentFragment.isRemovingFromStack() || currentFragment.isInPreviewMode())) {
                     currentFragment = mainFragmentsStack.size() > 1 ? mainFragmentsStack.get(mainFragmentsStack.size() - 2) : null;
                 }
-                UpdaterUtils.checkUpdates(currentFragment.getParentActivity(), false, () -> showBulletin(factory -> factory.createErrorBulletin(LocaleController.getString("NoUpdates", R.string.NoUpdates))), null);
+                UpdaterUtils.checkUpdates(currentFragment.getParentActivity(), true, () -> showBulletin(factory -> factory.createErrorBulletin(LocaleController.getString("NoUpdates", R.string.NoUpdates))), null);
             } else if (newContact) {
                 final NewContactActivity fragment = new NewContactActivity();
                 if (newContactName != null) {

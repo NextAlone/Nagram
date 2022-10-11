@@ -22,6 +22,8 @@ import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 
 import androidx.core.content.FileProvider;
 
@@ -33,9 +35,11 @@ import org.json.JSONTokener;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.TypefaceSpan;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -291,11 +295,45 @@ public class UpdaterUtils {
         }
     }
 
-/*
-    // TODO
-    public CharSequence formatChangelog(String text) {
+    public static SpannableStringBuilder replaceTags(String str) {
+        try {
+            int start;
+            int end;
+            StringBuilder stringBuilder = new StringBuilder(str);
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(str);
+            String symbol = "", font = "fonts/rregular.ttf";
+            for (int i = 0; i < 3; i++) {
+                switch (i) {
+                    case 0:
+                        symbol = "**";
+                        font = "fonts/rmedium.ttf";
+                        break;
+                    case 1:
+                        symbol = "_";
+                        font = "fonts/ritalic.ttf";
+                        break;
+                    case 2:
+                        symbol = "`";
+                        font = "fonts/rmono.ttf";
+                        break;
+                }
+                while ((start = stringBuilder.indexOf(symbol)) != -1) {
+                    stringBuilder.replace(start, start + symbol.length(), "");
+                    spannableStringBuilder.replace(start, start + symbol.length(), "");
+                    end = stringBuilder.indexOf(symbol);
+                    if (end >= 0) {
+                        stringBuilder.replace(end, end + symbol.length(), "");
+                        spannableStringBuilder.replace(end, end + symbol.length(), "");
+                        spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface(font)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                }
+            }
+            return spannableStringBuilder;
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        return new SpannableStringBuilder(str);
     }
-*/
 
     public interface OnTranslationSuccess {
         void run(String translated);

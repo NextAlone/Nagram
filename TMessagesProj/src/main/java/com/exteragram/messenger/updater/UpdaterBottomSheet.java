@@ -51,8 +51,6 @@ public class UpdaterBottomSheet extends BottomSheet {
     private RLottieImageView imageView;
     private TextView changelogTextView;
 
-    private boolean animationInProgress;
-
     private boolean isTranslated = false;
     private CharSequence translatedC;
 
@@ -118,10 +116,10 @@ public class UpdaterBottomSheet extends BottomSheet {
             TextCell changelog = new TextCell(context);
             changelog.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), 100, 0));
             changelog.setTextAndIcon(LocaleController.getString("Changelog", R.string.Changelog), R.drawable.msg_log, false);
-            changelog.setOnClickListener(v -> copyText(changelog.getTextView().getText() + "\n" + (isTranslated ? translatedC : AndroidUtilities.replaceTags(args[1]))));
+            changelog.setOnClickListener(v -> copyText(changelog.getTextView().getText() + "\n" + (isTranslated ? translatedC : UpdaterUtils.replaceTags(args[1]))));
             linearLayout.addView(changelog);
 
-            changelogTextView = new androidx.appcompat.widget.AppCompatTextView(context) {
+            changelogTextView = new TextView(context) {
                 @Override
                 protected void onDraw(Canvas canvas) {
                     super.onDraw(canvas);
@@ -132,12 +130,12 @@ public class UpdaterBottomSheet extends BottomSheet {
             changelogTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             changelogTextView.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
             changelogTextView.setLinkTextColor(Theme.getColor(Theme.key_dialogTextLink));
-            changelogTextView.setText(AndroidUtilities.replaceTags(args[1]));
+            changelogTextView.setText(UpdaterUtils.replaceTags(args[1]));
             changelogTextView.setPadding(AndroidUtilities.dp(21), 0, AndroidUtilities.dp(21), AndroidUtilities.dp(10));
             changelogTextView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-            changelogTextView.setOnClickListener(v -> UpdaterUtils.translate(AndroidUtilities.replaceTags(args[1]), (String translated) -> {
+            changelogTextView.setOnClickListener(v -> UpdaterUtils.translate(args[1], (String translated) -> {
                 translatedC = translated;
-                animateChangelog(isTranslated ? AndroidUtilities.replaceTags(args[1]) : translatedC);
+                animateChangelog(UpdaterUtils.replaceTags(isTranslated ? args[1] : (String) translatedC));
                 isTranslated ^= true;
             }, () -> {}));
             linearLayout.addView(changelogTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
@@ -234,20 +232,13 @@ public class UpdaterBottomSheet extends BottomSheet {
 
     private void animateChangelog(CharSequence text) {
         changelogTextView.setText(text);
-        animationInProgress = true;
         AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.setDuration(200);
+        animatorSet.setDuration(250);
         animatorSet.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
         animatorSet.playTogether(
                 ObjectAnimator.ofFloat(changelogTextView, View.ALPHA, 0.0f, 1.0f),
-                ObjectAnimator.ofFloat(changelogTextView, View.TRANSLATION_Y, AndroidUtilities.dp(10), 0)
+                ObjectAnimator.ofFloat(changelogTextView, View.TRANSLATION_Y, AndroidUtilities.dp(12), 0)
         );
-        animatorSet.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                animationInProgress = false;
-            }
-        });
         animatorSet.start();
     }
 
