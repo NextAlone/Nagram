@@ -74,7 +74,9 @@ public class UserConfig extends BaseController {
     public TLRPC.InputStorePaymentPurpose billingPaymentPurpose;
 
     public String premiumGiftsStickerPack;
+    public String genericAnimationsStickerPack;
     public long lastUpdatedPremiumGiftsStickerPack;
+    public long lastUpdatedGenericAnimations;
 
     public volatile byte[] savedPasswordHash;
     public volatile byte[] savedSaltedPassword;
@@ -176,6 +178,9 @@ public class UserConfig extends BaseController {
                     editor.putString("premiumGiftsStickerPack", premiumGiftsStickerPack);
                     editor.putLong("lastUpdatedPremiumGiftsStickerPack", lastUpdatedPremiumGiftsStickerPack);
 
+                    editor.putString("genericAnimationsStickerPack", genericAnimationsStickerPack);
+                    editor.putLong("lastUpdatedGenericAnimations", lastUpdatedGenericAnimations);
+
                     editor.putInt("6migrateOffsetId", migrateOffsetId);
                     if (migrateOffsetId != -1) {
                         editor.putInt("6migrateOffsetDate", migrateOffsetDate);
@@ -263,11 +268,11 @@ public class UserConfig extends BaseController {
             TLRPC.User oldUser = currentUser;
             currentUser = user;
             clientUserId = user.id;
-            checkPremium(oldUser, user);
+            checkPremiumSelf(oldUser, user);
         }
     }
 
-    private void checkPremium(TLRPC.User oldUser, TLRPC.User newUser) {
+    private void checkPremiumSelf(TLRPC.User oldUser, TLRPC.User newUser) {
         if (oldUser == null || (newUser != null && oldUser.premium != newUser.premium)) {
             AndroidUtilities.runOnUIThread(() -> {
                 getMessagesController().updatePremium(newUser.premium || NekoConfig.localPremium.Bool());
@@ -275,6 +280,7 @@ public class UserConfig extends BaseController {
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.premiumStatusChangedGlobal);
 
                 getMediaDataController().loadPremiumPromo(false);
+                getMediaDataController().loadReactions(false, true);
             });
         }
     }
@@ -328,6 +334,10 @@ public class UserConfig extends BaseController {
             premiumGiftsStickerPack = preferences.getString("premiumGiftsStickerPack", null);
             lastUpdatedPremiumGiftsStickerPack = preferences.getLong("lastUpdatedPremiumGiftsStickerPack", 0);
 
+            genericAnimationsStickerPack = preferences.getString("genericAnimationsStickerPack", null);
+            lastUpdatedGenericAnimations = preferences.getLong("lastUpdatedGenericAnimations", 0);
+
+
             try {
                 String terms = preferences.getString("terms", null);
                 if (terms != null) {
@@ -371,7 +381,7 @@ public class UserConfig extends BaseController {
                 }
             }
             if (currentUser != null) {
-                checkPremium(null, currentUser);
+                checkPremiumSelf(null, currentUser);
                 clientUserId = currentUser.id;
             }
             configLoaded = true;
@@ -513,5 +523,18 @@ public class UserConfig extends BaseController {
             return false;
         }
         return currentUser.premium || NekoConfig.localPremium.Bool();
+    }
+
+    public Long getEmojiStatus() {
+        if (currentUser == null) {
+            return null;
+        }
+        if (currentUser.emoji_status instanceof TLRPC.TL_emojiStatusUntil && ((TLRPC.TL_emojiStatusUntil) currentUser.emoji_status).until > (int) (System.currentTimeMillis() / 1000)) {
+            return ((TLRPC.TL_emojiStatusUntil) currentUser.emoji_status).document_id;
+        }
+        if (currentUser.emoji_status instanceof TLRPC.TL_emojiStatus) {
+            return ((TLRPC.TL_emojiStatus) currentUser.emoji_status).document_id;
+        }
+        return null;
     }
 }

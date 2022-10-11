@@ -118,6 +118,7 @@ public class MentionCell extends LinearLayout {
     }
 
     public void setChat(TLRPC.Chat chat) {
+        resetEmojiSuggestion();
         if (chat == null) {
             nameTextView.setText("");
             usernameTextView.setText("");
@@ -155,9 +156,12 @@ public class MentionCell extends LinearLayout {
 
     public void resetEmojiSuggestion() {
         nameTextView.setPadding(0, 0, 0, 0);
-        if (emojiDrawable instanceof AnimatedEmojiDrawable) {
-            ((AnimatedEmojiDrawable) emojiDrawable).removeView(this);
+        if (emojiDrawable != null) {
+            if (emojiDrawable instanceof AnimatedEmojiDrawable) {
+                ((AnimatedEmojiDrawable) emojiDrawable).removeView(this);
+            }
             emojiDrawable = null;
+            invalidate();
         }
     }
 

@@ -3,15 +3,15 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
-def verName = "8.9.3"
-def verCode = 1112
+def verName = "9.0.2"
+def verCode = 1113
 
 if (System.getenv("DEBUG_BUILD") == "true") {
     verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:%h -n 1").trim()
 }
 
-def officialVer = "8.9.3"
-def officialCode = 2757
+def officialVer = "9.0.2"
+def officialCode = 2808
 
 configurations {
     compile.exclude module: "support-v4"

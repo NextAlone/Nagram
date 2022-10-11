@@ -56,6 +56,21 @@ public class FileLog {
         e(e);
     }
 
+    public static void fatal(final Throwable e) {
+        fatal(e, true);
+    }
+
+    public static void fatal(final Throwable e, boolean logToAppCenter) {
+        if (!BuildVars.LOGS_ENABLED) {
+            return;
+        }
+//        if (BuildVars.DEBUG_VERSION && needSent(e) && logToAppCenter) {
+//            AndroidUtilities.appCenterLog(e);
+//        }
+        Log.wtf(mkTag(), mkMessage(e), e);
+
+    }
+
     private static boolean needSent(Throwable e) {
         if (e instanceof InterruptedException || e instanceof MediaCodecVideoConvertor.ConversionCanceledException) {
             return false;
