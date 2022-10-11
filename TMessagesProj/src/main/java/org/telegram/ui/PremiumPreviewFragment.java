@@ -42,6 +42,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BillingController;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
@@ -623,6 +624,10 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         // NekoX: remove Google billing
     }
 
+    public static String getPremiumButtonText(int currentAccount, PremiumPreviewFragment.SubscriptionTier ignore) {
+        return LocaleController.getString(R.string.SubscribeToPremiumNotAvailable);
+    }
+
     private void measureGradient(int w, int h) {
         int yOffset = 0;
         for (int i = 0; i < premiumFeatures.size(); i++) {
@@ -1082,45 +1087,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         @SuppressLint("NotifyDataSetChanged")
         public void updatePremiumTiers() {
             subscriptionTiers.clear();
-            long pricePerYearMax = 0;
-            if (getMediaDataController().getPremiumPromo() != null) {
-                for (TLRPC.TL_premiumSubscriptionOption option : getMediaDataController().getPremiumPromo().period_options) {
-                    SubscriptionTier subscriptionTier = new SubscriptionTier(option);
-                    subscriptionTiers.add(subscriptionTier);
-                    if (BuildVars.useInvoiceBilling()) {
-                        if (subscriptionTier.getPricePerYear() > pricePerYearMax) {
-                            pricePerYearMax = subscriptionTier.getPricePerYear();
-                        }
-                    }
-                }
-            }
-            if (BuildVars.useInvoiceBilling()) {
-                for (SubscriptionTier tier : subscriptionTiers) {
-                    tier.setPricePerYearRegular(pricePerYearMax);
-                }
-            } else if (BillingController.getInstance().isReady() && BillingController.PREMIUM_PRODUCT_DETAILS != null) {
-                long pricePerMonthMaxStore = 0;
-
-                for (SubscriptionTier subscriptionTier : subscriptionTiers) {
-                    subscriptionTier.setGooglePlayProductDetails(BillingController.PREMIUM_PRODUCT_DETAILS);
-
-                    if (subscriptionTier.getPricePerYear() > pricePerMonthMaxStore) {
-                        pricePerMonthMaxStore = subscriptionTier.getPricePerYear();
-                    }
-                }
-
-                for (SubscriptionTier subscriptionTier : subscriptionTiers) {
-                    subscriptionTier.setPricePerYearRegular(pricePerMonthMaxStore);
-                }
-            }
-
-            for (int i = 0; i < subscriptionTiers.size(); i++) {
-                SubscriptionTier tier = subscriptionTiers.get(i);
-                if (tier.getMonths() == 1) {
-                    selectedTierIndex = i;
-                    break;
-                }
-            }
+            // NekoX: remove
             updateButtonText(false);
             tierListView.getAdapter().notifyDataSetChanged();
         }
@@ -1137,15 +1104,9 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
             return;
         }
         if (BuildVars.IS_BILLING_UNAVAILABLE) {
-            premiumButtonView.setButton(getPremiumButtonText(currentAccount, subscriptionTiers.get(selectedTierIndex)), v -> buyPremium(this), animated);
+            premiumButtonView.setButton(getPremiumButtonText(currentAccount), v -> buyPremium(this, subscriptionTiers.get(selectedTierIndex), "settings"), animated);
             return;
         }
-        if (!BuildVars.useInvoiceBilling() && (!BillingController.getInstance().isReady() || subscriptionTiers.isEmpty() || subscriptionTiers.get(selectedTierIndex).googlePlayProductDetails == null)) {
-            premiumButtonView.setButton(LocaleController.getString(R.string.Loading), v -> {}, animated);
-            premiumButtonView.setFlickerDisabled(true);
-            return;
-        }
-        premiumButtonView.setButton(getPremiumButtonText(currentAccount, subscriptionTiers.get(selectedTierIndex)), v -> buyPremium(this, subscriptionTiers.get(selectedTierIndex), "settings"), animated);
         premiumButtonView.setFlickerDisabled(false);
     }
 
@@ -1326,8 +1287,9 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         private long pricePerYear;
 
         private long pricePerYearRegular;
-        private ProductDetails googlePlayProductDetails;
-        private ProductDetails.SubscriptionOfferDetails offerDetails;
+//        private ProductDetails googlePlayProductDetails;
+//        private ProductDetails.SubscriptionOfferDetails offerDetails;
+        private final Object googlePlayProductDetails = null;
 
         public int yOffset;
 
@@ -1335,18 +1297,18 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
             this.subscriptionOption = subscriptionOption;
         }
 
-        public ProductDetails getGooglePlayProductDetails() {
-            return googlePlayProductDetails;
-        }
-
-        public ProductDetails.SubscriptionOfferDetails getOfferDetails() {
-            checkOfferDetails();
-            return offerDetails;
-        }
-
-        public void setGooglePlayProductDetails(ProductDetails googlePlayProductDetails) {
-            this.googlePlayProductDetails = googlePlayProductDetails;
-        }
+//        public ProductDetails getGooglePlayProductDetails() {
+//            return googlePlayProductDetails;
+//        }
+//
+//        public ProductDetails.SubscriptionOfferDetails getOfferDetails() {
+//            checkOfferDetails();
+//            return offerDetails;
+//        }
+//
+//        public void setGooglePlayProductDetails(ProductDetails googlePlayProductDetails) {
+//            this.googlePlayProductDetails = googlePlayProductDetails;
+//        }
 
         public void setPricePerYearRegular(long pricePerYearRegular) {
             this.pricePerYearRegular = pricePerYearRegular;
@@ -1433,7 +1395,8 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 return 0;
             }
             checkOfferDetails();
-            return offerDetails == null ? 0 : offerDetails.getPricingPhases().getPricingPhaseList().get(0).getPriceAmountMicros();
+            return 0;
+//            return offerDetails == null ? 0 : offerDetails.getPricingPhases().getPricingPhaseList().get(0).getPriceAmountMicros();
         }
 
         public String getCurrency() {
@@ -1444,7 +1407,8 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 return "";
             }
             checkOfferDetails();
-            return offerDetails == null ? "" : offerDetails.getPricingPhases().getPricingPhaseList().get(0).getPriceCurrencyCode();
+            return "";
+//            return offerDetails == null ? "" : offerDetails.getPricingPhases().getPricingPhaseList().get(0).getPriceCurrencyCode();
         }
 
         private void checkOfferDetails() {
@@ -1452,15 +1416,15 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 return;
             }
 
-            if (offerDetails == null) {
-                for (ProductDetails.SubscriptionOfferDetails details : googlePlayProductDetails.getSubscriptionOfferDetails()) {
-                    String period = details.getPricingPhases().getPricingPhaseList().get(0).getBillingPeriod();
-                    if (getMonths() == 12 ? period.equals("P1Y") : period.equals(String.format(Locale.ROOT, "P%dM", getMonths()))) {
-                        offerDetails = details;
-                        break;
-                    }
-                }
-            }
+//            if (offerDetails == null) {
+//                for (ProductDetails.SubscriptionOfferDetails details : googlePlayProductDetails.getSubscriptionOfferDetails()) {
+//                    String period = details.getPricingPhases().getPricingPhaseList().get(0).getBillingPeriod();
+//                    if (getMonths() == 12 ? period.equals("P1Y") : period.equals(String.format(Locale.ROOT, "P%dM", getMonths()))) {
+//                        offerDetails = details;
+//                        break;
+//                    }
+//                }
+//            }
         }
     }
 }

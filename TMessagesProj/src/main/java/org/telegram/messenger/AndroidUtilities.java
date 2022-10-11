@@ -2560,9 +2560,9 @@ public class AndroidUtilities {
         }
     }*/
 
-    public static void appCenterLog(Throwable e) {
+//    public static void appCenterLog(Throwable e) {
 //        ApplicationLoader.appCenterLog(e);
-    }
+//    }
 
     public static boolean shouldShowClipboardToast() {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.S || !OneUIUtilities.hasBuiltInClipboardToasts();

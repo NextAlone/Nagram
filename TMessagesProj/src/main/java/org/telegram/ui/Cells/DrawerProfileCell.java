@@ -58,6 +58,7 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
@@ -510,7 +511,7 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
         super.onAttachedToWindow();
         updateColors();
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
-        for (int i = 0; i < UserConfig.MAX_ACCOUNT_COUNT; i++){
+        for (int i : SharedConfig.activeAccounts) {
             NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.currentUserPremiumStatusChanged);
         }
     }
@@ -519,7 +520,7 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
-        for (int i = 0; i < UserConfig.MAX_ACCOUNT_COUNT; i++){
+        for (int i : SharedConfig.activeAccounts) {
             NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.currentUserPremiumStatusChanged);
         }
         if (lastAccount >= 0) {
@@ -779,7 +780,7 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
         }
         if (NekoConfig.largeAvatarInDrawer.Int() == 2) {
             // add shadow
-            nameTextView.setShadowLayer(6.0f, 2.0f, 2.0f, Color.BLACK);
+//            nameTextView.setShadowLayer(6.0f, 2.0f, 2.0f, Color.BLACK);
             phoneTextView.getTextView().setShadowLayer(6.0f, 2.0f, 2.0f, Color.BLACK);
 
             // correct the position of night button

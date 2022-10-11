@@ -64,4 +64,8 @@ public class BillingController {
     public int getCurrencyExp(String currency) {
         return 0;
     }
+
+    public boolean isReady() {
+        return false;
+    }
 }

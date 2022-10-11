@@ -10505,7 +10505,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     String str = StrUtil.utf8Str(os.toByteArray());
                     if (StrUtil.isBlank(str)) return;
                     getSendMessagesHelper().sendMessage(str, dialog_id, null, null, null,
-                            false, null, null, null, true, 0, null);
+                            false, null, null, null, true, 0, null, false);
                     afterMessageSend();
                     hideFieldPanel(false);
                     break;
@@ -24789,7 +24789,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             for (int a = 0; a < dids.size(); a++) {
                 long did = dids.get(a);
                 if (message != null && !NekoConfig.sendCommentAfterForward.Bool()) {
-                    getSendMessagesHelper().sendMessage(message.toString(), did, null, null, null, true, null, null, null, true, 0, null);
+                    getSendMessagesHelper().sendMessage(message.toString(), did, null, null, null, true, null, null, null, true, 0, null, false);
                 }
                 forwardMessages(fmessages, noForwardQuote, true, 0, did);
                 if (message != null && NekoConfig.sendCommentAfterForward.Bool()) {
@@ -30495,11 +30495,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             .sendMessage(caption.toString(), dialog_id, replyTo,
                                     getThreadMessage(), null,
                                     false, selectedObject.messageOwner.entities, null, null,
-                                    true, 0, null);
+                                    true, 0, null, false);
                 }
             } else if ((selectedObject.isSticker() || selectedObject.isAnimatedSticker()) && selectedObject.getDocument() != null) {
                 SendMessagesHelper.getInstance(currentAccount)
-                        .sendSticker(selectedObject.getDocument(), null, dialog_id, replyTo, getThreadMessage(), null, null, true, 0);
+                        .sendSticker(selectedObject.getDocument(), null, dialog_id, replyTo, getThreadMessage(), null, null, true, 0, false);
             }
             return;
         }

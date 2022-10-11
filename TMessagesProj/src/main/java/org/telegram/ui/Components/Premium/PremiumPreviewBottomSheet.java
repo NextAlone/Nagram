@@ -109,7 +109,7 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView i
         this(fragment, currentAccount, user, null, resourcesProvider);
     }
 
-    public PremiumPreviewBottomSheet(BaseFragment fragment, int currentAccount, TLRPC.User user, GiftPremiumBottomSheet.GiftTier gift, Theme.ResourcesProvider resourcesProvider) {
+    public PremiumPreviewBottomSheet(BaseFragment fragment, int currentAccount, TLRPC.User user, Void gift, Theme.ResourcesProvider resourcesProvider) {
         super(fragment, false, false, resourcesProvider);
         fixNavigationBar();
         this.fragment = fragment;
@@ -138,7 +138,7 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView i
         rowCount += premiumFeatures.size();
         featuresEndRow = rowCount;
         sectionRow = rowCount++;
-        if (!UserConfig.getInstance(currentAccount).isPremium() && gift == null) {
+        if (!UserConfig.getInstance(currentAccount).isPremium() && true) {
             buttonRow = rowCount++;
         }
         recyclerListView.setPadding(AndroidUtilities.dp(6), 0, AndroidUtilities.dp(6), 0);
@@ -316,7 +316,7 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView i
         } else if (isEmojiStatus) {
             titleView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.TelegramPremiumUserStatusDefaultDialogTitle, ContactsController.formatName(user.first_name, user.last_name))));
             subtitleView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.TelegramPremiumUserStatusDialogSubtitle, ContactsController.formatName(user.first_name, user.last_name))));
-        } else if (giftTier != null) {
+        } else /*if (giftTier != null) {
             if (isOutboundGift) {
                 titleView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(R.string.TelegramPremiumUserGiftedPremiumOutboundDialogTitleWithPlural, user != null ? user.first_name : "", LocaleController.formatPluralString("GiftMonths", giftTier.getMonths())), Theme.key_windowBackgroundWhiteBlueButton, null));
                 subtitleView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(R.string.TelegramPremiumUserGiftedPremiumOutboundDialogSubtitle, user != null ? user.first_name : ""), Theme.key_windowBackgroundWhiteBlueButton, null));
@@ -324,7 +324,7 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView i
                 titleView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(R.string.TelegramPremiumUserGiftedPremiumDialogTitleWithPlural, user != null ? user.first_name : "", LocaleController.formatPluralString("GiftMonths", giftTier.getMonths())), Theme.key_windowBackgroundWhiteBlueButton, null));
                 subtitleView.setText(AndroidUtilities.replaceTags(LocaleController.getString(R.string.TelegramPremiumUserGiftedPremiumDialogSubtitle)));
             }
-        } else {
+        } else */ {
             titleView.setText(AndroidUtilities.replaceSingleTag(LocaleController.formatString(R.string.TelegramPremiumUserDialogTitle, ContactsController.formatName(user.first_name, user.last_name)), Theme.key_windowBackgroundWhiteBlueButton, null));
             subtitleView.setText(AndroidUtilities.replaceTags(LocaleController.getString(R.string.TelegramPremiumUserDialogSubtitle)));
         }

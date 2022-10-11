@@ -279,6 +279,10 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         }
     }
 
+    public StickersActivity(int type) {
+        this(type, new ArrayList<>());
+    }
+    
     public StickersActivity(int type, ArrayList<TLRPC.TL_messages_stickerSet> frozenEmojiPacks) {
         super();
         currentType = type;
@@ -614,7 +618,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 pro.dismiss();
 
                 MediaDataController.getInstance(currentAccount).checkStickers(currentType);
-                updateRows();
+                updateRows(false);
 
             });
 

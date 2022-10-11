@@ -1144,7 +1144,7 @@ public class MessagesController extends BaseController implements NotificationCe
         premiumInvoiceSlug = mainPreferences.getString("premiumInvoiceSlug", null);
         premiumBotUsername = mainPreferences.getString("premiumBotUsername", null);
         premiumLocked = mainPreferences.getBoolean("premiumLocked", false);
-        BuildVars.GOOGLE_AUTH_CLIENT_ID = mainPreferences.getString("googleAuthClientId", BuildVars.GOOGLE_AUTH_CLIENT_ID);
+//        BuildVars.GOOGLE_AUTH_CLIENT_ID = mainPreferences.getString("googleAuthClientId", BuildVars.GOOGLE_AUTH_CLIENT_ID);
 
         Set<String> currencySet = mainPreferences.getStringSet("directPaymentsCurrency", null);
         if (currencySet != null) {
@@ -1766,11 +1766,11 @@ public class MessagesController extends BaseController implements NotificationCe
                         case "login_google_oauth_client_id": {
                             if (value.value instanceof TLRPC.TL_jsonString) {
                                 String str = ((TLRPC.TL_jsonString) value.value).value;
-                                if (!Objects.equals(BuildVars.GOOGLE_AUTH_CLIENT_ID, str)) {
-                                    BuildVars.GOOGLE_AUTH_CLIENT_ID = str;
-                                    editor.putString("googleAuthClientId", BuildVars.GOOGLE_AUTH_CLIENT_ID);
-                                    changed = true;
-                                }
+//                                if (!Objects.equals(BuildVars.GOOGLE_AUTH_CLIENT_ID, str)) {
+//                                    BuildVars.GOOGLE_AUTH_CLIENT_ID = str;
+//                                    editor.putString("googleAuthClientId", BuildVars.GOOGLE_AUTH_CLIENT_ID);
+//                                    changed = true;
+//                                }
                             }
                             break;
                         }
@@ -10083,7 +10083,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 processUpdates(updates, false);
                 AndroidUtilities.runOnUIThread(() -> {
                     if (finalNekoxBot instanceof TLRPC.User) {
-                        getMessagesController().deleteParticipantFromChat(updates.chats.get(0).id, (TLRPC.User) finalNekoxBot, null);
+                        getMessagesController().deleteParticipantFromChat(updates.chats.get(0).id, (TLRPC.User) finalNekoxBot);
                     }
 
                     putUsers(updates.users, false);
