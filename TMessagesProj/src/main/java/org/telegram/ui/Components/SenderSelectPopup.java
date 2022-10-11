@@ -145,16 +145,16 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
         if (NaConfig.INSTANCE.getQuickToggleAnonymous().Bool()) {
             var chat = messagesController.getChat(chatFull.id);
             if (chat != null && chat.creator) {
-                if (peers.stream().noneMatch(peer -> peer.channel_id == chat.id)) {
-                    peers.add(0, new TLRPC.TL_peerChannel() {{
-                        channel_id = chat.id;
+                if (peers.stream().noneMatch(peer -> peer.peer.channel_id == chat.id)) {
+                    peers.add(0, new TLRPC.TL_sendAsPeer() {{
+                        peer = new TLRPC.TL_peerChannel() {{ channel_id = chat.id; }};
                     }});
                 }
 
                 var selfId = UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().id;
-                if (peers.stream().noneMatch(peer -> peer.user_id == selfId)) {
-                    peers.add(peers.size() >= 1 ? 1 : 0, new TLRPC.TL_peerUser() {{
-                        user_id = selfId;
+                if (peers.stream().noneMatch(peer -> peer.peer.user_id == selfId)) {
+                    peers.add(peers.size() >= 1 ? 1 : 0, new TLRPC.TL_sendAsPeer() {{
+                        peer = new TLRPC.TL_peerUser() {{ user_id = selfId; }};
                     }});
                 }
             }
