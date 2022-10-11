@@ -709,6 +709,22 @@ public class ActionBarPopupWindow extends PopupWindow {
         wm.updateViewLayout(container, p);
     }
 
+    public void setFocusableFlag(boolean enable) {
+        View container = getContentView().getRootView();
+        Context context = getContentView().getContext();
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager.LayoutParams p = (WindowManager.LayoutParams) container.getLayoutParams();
+
+        if (p != null) {
+            if (enable) {
+                p.flags |= WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
+            } else {
+                p.flags &= ~WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
+            }
+            wm.updateViewLayout(container, p);
+        }
+    }
+
     private void dismissDim() {
         View container = getContentView().getRootView();
         Context context = getContentView().getContext();
@@ -737,6 +753,74 @@ public class ActionBarPopupWindow extends PopupWindow {
         } catch (Exception e) {
             FileLog.e(e);
         }
+    }
+
+    public static AnimatorSet startAnimation(ActionBarPopupWindowLayout content) {
+        content.startAnimationPending = true;
+        content.setTranslationY(0);
+        content.setAlpha(1.0f);
+        content.setPivotX(content.getMeasuredWidth());
+        content.setPivotY(0);
+        final int count = content.getItemsCount();
+        content.positions.clear();
+        int visibleCount = 0;
+        for (int a = 0; a < count; a++) {
+            View child = content.getItemAt(a);
+            child.setAlpha(0.0f);
+            if (child.getVisibility() != View.VISIBLE) {
+                continue;
+            }
+            content.positions.put(child, visibleCount);
+            visibleCount++;
+        }
+        if (content.shownFromBottom) {
+            content.lastStartedChild = count - 1;
+        } else {
+            content.lastStartedChild = 0;
+        }
+        float finalScaleY = 1f;
+        if (content.getSwipeBack() != null) {
+            content.getSwipeBack().invalidateTransforms();
+            finalScaleY = content.backScaleY;
+        }
+        AnimatorSet windowAnimatorSet = new AnimatorSet();
+        ValueAnimator childtranslations = ValueAnimator.ofFloat(0, 1);
+        childtranslations.addUpdateListener(anm -> {
+            final int count2 = content.getItemsCount();
+            final float t = (float) anm.getAnimatedValue();
+            for (int a = 0; a < count2; a++) {
+                View child = content.getItemAt(a);
+                if (child instanceof GapView) {
+                    continue;
+                }
+                float at = AndroidUtilities.cascade(t, a, count2, 2);
+                child.setTranslationY((1f - at) * AndroidUtilities.dp(-12));
+                child.setAlpha(at);
+            }
+        });
+        content.updateAnimation = true;
+        windowAnimatorSet.playTogether(
+                ObjectAnimator.ofFloat(content, "backScaleY", 0.0f, finalScaleY),
+                ObjectAnimator.ofInt(content, "backAlpha", 0, 255),
+                childtranslations
+        );
+        windowAnimatorSet.setDuration(150 + 16 * visibleCount + 1000);
+        windowAnimatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                content.startAnimationPending = false;
+                int count = content.getItemsCount();
+                for (int a = 0; a < count; a++) {
+                    View child = content.getItemAt(a);
+                    if (child instanceof GapView) {
+                        continue;
+                    }
+                    child.setAlpha(child.isEnabled() ? 1f : 0.5f);
+                }
+            }
+        });
+        windowAnimatorSet.start();
+        return windowAnimatorSet;
     }
 
     public void startAnimation() {

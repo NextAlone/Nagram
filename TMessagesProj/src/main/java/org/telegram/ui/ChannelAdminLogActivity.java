@@ -2167,7 +2167,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         MessageObject messageObject = cell.getMessageObject();
                         if (url instanceof URLSpanMono) {
                             ((URLSpanMono) url).copyToClipboard();
-                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+                            if (AndroidUtilities.shouldShowClipboardToast()) {
                                 Toast.makeText(getParentActivity(), LocaleController.getString("TextCopied", R.string.TextCopied), Toast.LENGTH_SHORT).show();
                             }
                         } else if (url instanceof URLSpanUserMention) {
@@ -2240,7 +2240,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
 
                     @Override
                     public void needOpenWebView(MessageObject message, String url, String title, String description, String originalUrl, int w, int h) {
-                        EmbedBottomSheet.show(getParentActivity(), message, provider, title, description, originalUrl, url, w, h, false);
+                        EmbedBottomSheet.show(ChannelAdminLogActivity.this, message, provider, title, description, originalUrl, url, w, h, false);
                     }
 
                     @Override
@@ -2259,7 +2259,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         if (message.getInputStickerSet() != null) {
                             showDialog(new StickersAlert(getParentActivity(), ChannelAdminLogActivity.this, message.getInputStickerSet(), null, null));
                         } else if (message.isVideo() || message.type == 1 || message.type == 0 && !message.isWebpageDocument() || message.isGif()) {
-                            PhotoViewer.getInstance().setParentActivity(getParentActivity());
+                            PhotoViewer.getInstance().setParentActivity(ChannelAdminLogActivity.this);
                             PhotoViewer.getInstance().openPhoto(message, null, 0, 0, provider);
                         } else if (message.type == 3) {
                             try {
@@ -2365,7 +2365,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     @Override
                     public void didClickImage(ChatActionCell cell) {
                         MessageObject message = cell.getMessageObject();
-                        PhotoViewer.getInstance().setParentActivity(getParentActivity());
+                        PhotoViewer.getInstance().setParentActivity(ChannelAdminLogActivity.this);
                         TLRPC.PhotoSize photoSize = FileLoader.getClosestPhotoSizeWithSize(message.photoThumbs, 640);
                         if (photoSize != null) {
                             ImageLocation imageLocation = ImageLocation.getForPhoto(photoSize, message.messageOwner.action.photo);

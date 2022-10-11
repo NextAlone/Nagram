@@ -381,6 +381,7 @@ public class ApplicationLoader extends Application {
             LocaleController.getInstance().onDeviceConfigurationChange(newConfig);
             AndroidUtilities.checkDisplaySize(applicationContext, newConfig);
             VideoCapturerDevice.checkScreenCapturerSize();
+            AndroidUtilities.resetTabletFlag();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -569,4 +570,29 @@ public class ApplicationLoader extends Application {
         }
         return result;
     }
+
+    public static void startAppCenter(Activity context) {
+        applicationLoaderInstance.startAppCenterInternal(context);
+    }
+
+    public static void checkForUpdates() {
+        applicationLoaderInstance.checkForUpdatesInternal();
+    }
+
+    public static void appCenterLog(Throwable e) {
+        applicationLoaderInstance.appCenterLogInternal(e);
+    }
+
+    protected void appCenterLogInternal(Throwable e) {
+
+    }
+
+    protected void checkForUpdatesInternal() {
+
+    }
+
+    protected void startAppCenterInternal(Activity context) {
+
+    }
+
 }

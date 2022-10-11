@@ -32,6 +32,10 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
+import androidx.annotation.Keep;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLoader;
@@ -352,7 +356,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                                 String name = FileLoader.getAttachFileName(wallPaper.document);
                                 if (!loadingThemes.containsKey(name)) {
                                     loadingThemes.put(name, themeInfo);
-                                    FileLoader.getInstance(themeInfo.account).loadFile(wallPaper.document, wallPaper, 1, 1);
+                                    FileLoader.getInstance(themeInfo.account).loadFile(wallPaper.document, wallPaper, FileLoader.PRIORITY_NORMAL, 1);
                                 }
                             } else {
                                 themeInfo.badWallpaper = true;
@@ -442,7 +446,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                             String name = FileLoader.getAttachFileName(themeInfo.info.document);
                             if (!loadingThemes.containsKey(name)) {
                                 loadingThemes.put(name, themeInfo);
-                                FileLoader.getInstance(themeInfo.account).loadFile(themeInfo.info.document, themeInfo.info, 1, 1);
+                                FileLoader.getInstance(themeInfo.account).loadFile(themeInfo.info.document, themeInfo.info, FileLoader.PRIORITY_NORMAL, 1);
                             }
                         }
                     } else {

@@ -28,6 +28,7 @@ import androidx.annotation.Nullable;
 import com.fasterxml.jackson.databind.annotation.JsonAppend;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -119,6 +120,15 @@ public class ChatActivityEnterViewAnimatedIconView extends FrameLayout {
             });
             buttonsAnimation.setDuration(200);
             buttonsAnimation.start();
+        }
+
+        switch (state) {
+            case VOICE:
+                setContentDescription(LocaleController.getString("AccDescrVoiceMessage", R.string.AccDescrVoiceMessage));
+                break;
+            case VIDEO:
+                setContentDescription(LocaleController.getString("AccDescrVideoMessage", R.string.AccDescrVideoMessage));
+                break;
         }
     }
 

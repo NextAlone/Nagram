@@ -27,7 +27,6 @@ import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Editable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -1629,7 +1628,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                     result = SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, !showSendersName,false, withSound, 0);
                 }
                 if (frameLayout2.getTag() != null && commentTextView.length() > 0) {
-                    SendMessagesHelper.getInstance(currentAccount).sendMessage(text[0] == null ? null : text[0].toString(), key, null, null, null, true, entities, null, null, withSound, 0, null);
+                    SendMessagesHelper.getInstance(currentAccount).sendMessage(text[0] == null ? null : text[0].toString(), key, null, null, null, true, entities, null, null, withSound, 0, null, false);
                 }
                 if (!NekoConfig.sendCommentAfterForward.Bool()) {
                     result = SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, !showSendersName,false, withSound, 0);
@@ -1665,10 +1664,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                         SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingText[num], key, null, null, null, true, null, null, null, true, 0, null);
                     }
                     if (frameLayout2.getTag() != null && commentTextView.length() > 0) {
-                        SendMessagesHelper.getInstance(currentAccount).sendMessage(text[0] == null ? null : text[0].toString(), key, null, null, null, true, entities, null, null, true, 0, null);
+                        SendMessagesHelper.getInstance(currentAccount).sendMessage(text[0] == null ? null : text[0].toString(), key, null, null, null, true, entities, null, null, true, 0, null, false);
                     }
                     if (!NekoConfig.sendCommentAfterForward.Bool()) {
-                        SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingText[num], key, null, null, null, true, null, null, null, true, 0, null);
+                        SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingText[num], key, null, null, null, true, null, null, null, true, 0, null, false);
                     }
                 }
                 onSend(selectedDialogs, 1);

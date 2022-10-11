@@ -180,6 +180,7 @@ public class BottomSheet extends Dialog {
 
     private float hideSystemVerticalInsetsProgress;
     public boolean useBackgroundTopPadding = true;
+    protected int customViewGravity = Gravity.LEFT | Gravity.TOP;
 
     protected class ContainerView extends LinearLayout implements NestedScrollingParent {
 
@@ -1105,9 +1106,9 @@ public class BottomSheet extends Dialog {
                 containerView.setClipChildren(false);
                 container.setClipToPadding(false);
                 container.setClipChildren(false);
-                containerView.addView(customView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, -backgroundPaddingTop + topOffset, 0, 0));
+                containerView.addView(customView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, customViewGravity, 0, -backgroundPaddingTop + topOffset, 0, 0));
             } else {
-                containerView.addView(customView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, topOffset, 0, 0));
+                containerView.addView(customView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, customViewGravity, 0, topOffset, 0, 0));
             }
         } else {
             if (items != null) {

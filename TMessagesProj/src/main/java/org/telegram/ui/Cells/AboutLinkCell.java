@@ -287,6 +287,7 @@ public class AboutLinkCell extends FrameLayout {
         canvas.translate(0, textY = AndroidUtilities.dp(8));
 
         try {
+            Theme.profile_aboutTextPaint.linkColor = Theme.getColor(Theme.key_chat_messageLinkIn, resourcesProvider);
             if (firstThreeLinesLayout == null || !shouldExpand) {
                 if (textLayout != null) {
                     textLayout.draw(canvas);
@@ -410,7 +411,7 @@ public class AboutLinkCell extends FrameLayout {
                                 onLinkClick(pressedLinkFinal);
                             } else if (which == 1) {
                                 AndroidUtilities.addToClipboard(url);
-                                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+                                if (AndroidUtilities.shouldShowClipboardToast()) {
                                     if (url.startsWith("@")) {
                                         BulletinFactory.of(parentFragment).createSimpleBulletin(R.raw.copy,
                                                 LocaleController.getString("UsernameCopied", R.string.UsernameCopied)).show();

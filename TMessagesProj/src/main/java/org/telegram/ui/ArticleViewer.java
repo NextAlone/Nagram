@@ -530,7 +530,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
             sizeBar = new SeekBarView(context);
             sizeBar.setReportChanges(true);
-//            sizeBar.setSeparatorsCount(endFontSize - startFontSize);
+            sizeBar.setSeparatorsCount(endFontSize - startFontSize + 1);
             sizeBar.setDelegate(new SeekBarView.SeekBarViewDelegate() {
                 @Override
                 public void onSeekBarDrag(boolean stop, float progress) {
@@ -1315,7 +1315,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             deleteView.setOnClickListener(v -> {
                 if (pressedLinkOwnerLayout != null) {
                     AndroidUtilities.addToClipboard(pressedLinkOwnerLayout.getText());
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+                    if (AndroidUtilities.shouldShowClipboardToast()) {
                         Toast.makeText(parentActivity, LocaleController.getString("TextCopied", R.string.TextCopied), Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -3753,7 +3753,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
             @Override
             public void onTextCopied() {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+                if (AndroidUtilities.shouldShowClipboardToast()) {
                     BulletinFactory.of(containerView, null).createCopyBulletin(LocaleController.getString("TextCopied", R.string.TextCopied)).show();
                 }
             }
@@ -6327,7 +6327,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     TLRPC.PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(currentDocument.thumbs, 40);
                     imageView.setImage(ImageLocation.getForDocument(currentDocument), null, ImageLocation.getForDocument(thumb, currentDocument), "80_80_b", currentDocument.size, null, parentAdapter.currentPage, 1);
                 } else {
-                    FileLoader.getInstance(currentAccount).loadFile(currentDocument, parentAdapter.currentPage, 1, 1);
+                    FileLoader.getInstance(currentAccount).loadFile(currentDocument, parentAdapter.currentPage, FileLoader.PRIORITY_NORMAL, 1);
                 }
                 buttonState = 1;
                 radialProgress.setIcon(getIconForCurrentState(), true, animated);
@@ -11289,7 +11289,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             index = 0;
         }
         final PhotoViewer photoViewer = PhotoViewer.getInstance();
-        photoViewer.setParentActivity(parentActivity);
+        photoViewer.setParentActivity(parentFragment);
         return photoViewer.openPhoto(index, new RealPageBlocksAdapter(adapter.currentPage, pageBlocks), new PageBlocksPhotoViewerProvider(pageBlocks));
     }
 
