@@ -2489,9 +2489,11 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             botCommandsMenuButton.setOnClickListener(view -> {
                 boolean open = !botCommandsMenuButton.isOpened();
                 botCommandsMenuButton.setOpened(open);
-                try {
-                    performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                } catch (Exception ignore) {}
+                if (!NekoConfig.disableVibration.Bool()) {
+                    try {
+                        performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                    } catch (Exception ignore) {}
+                }
                 if (hasBotWebView()) {
                     if (open) {
                         if (emojiViewVisible || botKeyboardViewVisible) {
@@ -2700,9 +2702,11 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 }
             }
             if (delegate.getSendAsPeers() != null) {
-                try {
-                    v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                } catch (Exception ignored) {}
+                if (!NekoConfig.disableVibration.Bool()) {
+                    try {
+                        v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                    } catch (Exception ignored) {}
+                }
                 if (senderSelectPopupWindow != null) {
                     senderSelectPopupWindow.setPauseNotifications(false);
                     senderSelectPopupWindow.startDismissAnimation();
@@ -2885,9 +2889,11 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                                             public void onAnimationUpdate(DynamicAnimation animation, float value, float velocity) {
                                                 if (!performedHapticFeedback && value >= endY) {
                                                     performedHapticFeedback = true;
-                                                    try {
-                                                        avatar.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                                                    } catch (Exception ignored) {}
+                                                    if (!NekoConfig.disableVibration.Bool()) {
+                                                        try {
+                                                            avatar.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                                        } catch (Exception ignored) {}
+                                                    }
                                                 }
                                             }
                                         })
@@ -3673,9 +3679,11 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             sendPopupWindow.showAtLocation(view, Gravity.LEFT | Gravity.TOP, location[0] + view.getMeasuredWidth() - sendPopupLayout.getMeasuredWidth() + AndroidUtilities.dp(8), y);
             sendPopupWindow.dimBehind();
             doneButtonContainer.invalidate();
-            try {
-                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-            } catch (Exception ignore) {}
+            if (!NekoConfig.disableVibration.Bool()) {
+                try {
+                    view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                } catch (Exception ignore) {}
+            }
             return false;
         });
 

@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import tw.nekomimi.nekogram.NekoConfig;
 import xyz.nextalone.nagram.NaConfig;
 
 public class SenderSelectPopup extends ActionBarPopupWindow {
@@ -243,9 +244,11 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
                 return;
             }
             if (peerObj.premium_required && !UserConfig.getInstance(UserConfig.selectedAccount).isPremium()) {
-                try {
-                    view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                } catch (Exception ignored) {}
+                if (!NekoConfig.disableVibration.Bool()) {
+                    try {
+                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                    } catch (Exception ignored) {}
+                }
 
                 WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
                 if (bulletinContainer == null) {
@@ -345,7 +348,9 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
             bulletinContainer.animate().alpha(0).setDuration(150).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    windowManager.removeViewImmediate(bulletinContainer);
+                    if (bulletinContainer != null && bulletinContainer.isShown()) {
+                        windowManager.removeViewImmediate(bulletinContainer);
+                    }
 
                     if (bulletinHideCallback != null) {
                         AndroidUtilities.cancelRunOnUIThread(bulletinHideCallback);
