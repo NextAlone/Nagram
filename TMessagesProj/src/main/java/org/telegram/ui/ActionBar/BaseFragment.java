@@ -196,7 +196,7 @@ public abstract class BaseFragment {
     public void setParentFragment(BaseFragment fragment) {
         setParentLayout(fragment.parentLayout);
         fragmentView = createView(parentLayout.getContext());
-        if (NekoConfig.disableVibration.Bool()) {
+        if (NekoConfig.disableVibration.Bool() && fragmentView != null) {
             VibrateUtil.disableHapticFeedback(fragmentView);
         }
     }
