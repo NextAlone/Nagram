@@ -1,5 +1,7 @@
 package tw.nekomimi.nekogram;
 
+import android.os.Build;
+
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
@@ -11,6 +13,7 @@ import org.webrtc.EglBase;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Consumer;
 
 import tw.nekomimi.nekogram.utils.FileUtil;
@@ -137,7 +140,7 @@ public class InternalUpdater {
                 try {
                     TLRPC.messages_Messages res = (TLRPC.messages_Messages) response;
                     FileLog.d("Retrieve update messages, size:" + res.messages.size());
-                    final String target = metadata.versionName + "(" + metadata.versionCode + ")" + "-" + BuildConfig.FLAVOR + "-" + FileUtil.getAbi() + ".apk";
+                    final String target = metadata.versionName + "(" + metadata.versionCode + ")" + "-" + BuildConfig.FLAVOR + "-" + Build.SUPPORTED_ABIS[0].toLowerCase(Locale.ROOT) + ".apk";
                     for (int i = 0; i < res.messages.size(); i++) {
                         if (res.messages.get(i).media == null) continue;
 
