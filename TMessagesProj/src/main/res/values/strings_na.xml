@@ -67,4 +67,5 @@
     <string name="CustomPoor">Custom long click reply word</string>
     <string name="CustomPoorHint">Default pool</string>
     <string name="CustomEditedMessage">Custom Edited Message word</string>
+    <string name="HidePremiumOnlyChannel">Hide Premium Only Channel</string>
 </resources>

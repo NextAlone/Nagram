@@ -322,6 +322,12 @@ object NaConfig {
             ConfigItem.configTypeString,
             ""
         )
+    val hidePremiumOnlyChannel =
+        addConfig(
+            "HidePremiumOnlyChannel",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

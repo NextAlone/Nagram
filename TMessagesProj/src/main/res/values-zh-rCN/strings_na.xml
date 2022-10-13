@@ -66,4 +66,5 @@
     <string name="CustomPoor">自定义长按快捷回复词</string>
     <string name="CustomPoorHint">默认破烂</string>
     <string name="CustomEditedMessage">自定义已编辑消息提示词</string>
+    <string name="HidePremiumOnlyChannel">隐藏大会员皮套</string>
 </resources>
