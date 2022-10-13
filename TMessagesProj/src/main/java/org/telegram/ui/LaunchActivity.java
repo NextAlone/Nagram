@@ -5267,7 +5267,7 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
             editorView.onConfigurationChanged();
         }
         if (Theme.selectedAutoNightType == Theme.AUTO_NIGHT_TYPE_SYSTEM) {
-            Theme.checkAutoNightThemeConditions();
+            Theme.checkAutoNightThemeConditions(true);
         }
     }
 
