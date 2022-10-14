@@ -13,6 +13,10 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.os.Build
 import android.os.Environment
 import android.util.Base64
@@ -43,35 +47,64 @@ import org.json.JSONException
 import org.telegram.messenger.*
 import org.telegram.messenger.browser.Browser
 import org.yaml.snakeyaml.Yaml
-import tw.nekomimi.nekogram.ui.BottomBuilder
 import tw.nekomimi.nekogram.proxy.ShadowsocksLoader
 import tw.nekomimi.nekogram.proxy.ShadowsocksRLoader
+import tw.nekomimi.nekogram.ui.BottomBuilder
 import tw.nekomimi.nekogram.utils.AlertUtil.showToast
 import java.io.File
-import java.net.NetworkInterface
 import java.util.*
-import kotlin.collections.HashMap
 
 
 object ProxyUtil {
 
     @JvmStatic
     fun isVPNEnabled(): Boolean {
-
-        val networkList = mutableListOf<String>()
-
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return false
+        }
         runCatching {
+            val connectivityManager = ApplicationLoader.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val network = connectivityManager.activeNetwork
+            val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
+            return networkCapabilities!!.hasTransport(NetworkCapabilities.TRANSPORT_VPN)
+        }
+        return false
+    }
 
-            Collections.list(NetworkInterface.getNetworkInterfaces()).forEach {
-
-                if (it.isUp) networkList.add(it.name)
-
+    @JvmStatic
+    fun registerNetworkCallback() {
+        val connectivityManager = ApplicationLoader.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkCallback: ConnectivityManager.NetworkCallback =
+            object : ConnectivityManager.NetworkCallback() {
+                override fun onAvailable(network: Network) {
+                    val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
+                    val vpn = networkCapabilities!!.hasTransport(NetworkCapabilities.TRANSPORT_VPN)
+                    if (!vpn) {
+                        if (SharedConfig.currentProxy == null) {
+                            if (!SharedConfig.proxyList.isEmpty()) {
+                                SharedConfig.setCurrentProxy(SharedConfig.proxyList[0])
+                            } else {
+                                return
+                            }
+                        }
+                    }
+                    if ((SharedConfig.proxyEnabled && vpn) || (!SharedConfig.proxyEnabled && !vpn)) {
+                        SharedConfig.setProxyEnable(!vpn)
+                        UIUtil.runOnUIThread(Runnable {
+                            NotificationCenter.getGlobalInstance()
+                                .postNotificationName(NotificationCenter.proxySettingsChanged)
+                        })
+                    }
+                }
             }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            connectivityManager.registerDefaultNetworkCallback(networkCallback)
+        } else {
+            val request: NetworkRequest = NetworkRequest.Builder()
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build()
+            connectivityManager.registerNetworkCallback(request, networkCallback)
         }
-
-        return networkList.contains("tun0")
-
     }
 
     @JvmStatic

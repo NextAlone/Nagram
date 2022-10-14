@@ -35,6 +35,7 @@ import android.location.Location;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.media.AudioManager;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -192,7 +193,9 @@ import tw.nekomimi.nekogram.proxy.SubInfo;
 import tw.nekomimi.nekogram.proxy.SubManager;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.MonetHelper;
+import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
+import xyz.nextalone.nagram.NaConfig;
 
 public class LaunchActivity extends BasePermissionsActivity implements ActionBarLayout.ActionBarLayoutDelegate, NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate {
     public final static Pattern PREFIX_T_ME_PATTERN = Pattern.compile("^(?:http(?:s|)://|)([A-z0-9-]+?)\\.t\\.me");
@@ -5159,6 +5162,16 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                 }
             }
             passcodeView.onResume();
+        }
+
+        if (NaConfig.INSTANCE.getDisableProxyWhenVpnEnabled().Bool()) {
+            if (SharedConfig.proxyEnabled && ProxyUtil.isVPNEnabled()) {
+                SharedConfig.setProxyEnable(false);
+            } else if (!ProxyUtil.isVPNEnabled()) {
+                SharedConfig.setProxyEnable(true);
+            }
+            ProxyUtil.registerNetworkCallback();
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
         }
 
         ConnectionsManager.getInstance(currentAccount).setAppPaused(false, false);

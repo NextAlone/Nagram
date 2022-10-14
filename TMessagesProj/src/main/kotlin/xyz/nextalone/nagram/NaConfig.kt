@@ -328,6 +328,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val disableProxyWhenVpnEnabled =
+        addConfig(
+            "DisableProxyWhenVpnEnabled",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,
