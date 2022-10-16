@@ -6,9 +6,6 @@ apply plugin: "kotlin-android"
 def verName = "9.0.2"
 def verCode = 1113
 
-if (System.getenv("DEBUG_BUILD") == "true") {
-    verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:%h -n 1").trim()
-}
 
 def officialVer = "9.0.2"
 def officialCode = 2808
@@ -301,7 +298,7 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
-            outputFileName = outputFileName.replace("TMessagesProj", "Nagram-v" + versionName + "(" + versionCode + ")").replace("-release", "")
+            outputFileName = outputFileName.replace("TMessagesProj", "Nagram-v" + versionName).replace("-release", "")
         }
     }
 
