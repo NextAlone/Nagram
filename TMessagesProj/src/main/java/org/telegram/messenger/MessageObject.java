@@ -4531,7 +4531,7 @@ public class MessageObject {
     }
 
     public void replaceEmojiToLottieFrame(CharSequence text, int[] emojiOnly) {
-        if (!(text instanceof Spannable)) {
+        if (!(text instanceof Spannable) || NekoConfig.useSystemEmoji.Bool()) {
             return;
         }
         Spannable spannable = (Spannable) text;

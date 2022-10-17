@@ -285,7 +285,7 @@ public class Emoji {
 
         @Override
         public void draw(Canvas canvas) {
-            if (!isLoaded()) {
+            if (!NekoConfig.useSystemEmoji.Bool() && !isLoaded()) {
                 loadEmoji(info.page, info.page2);
                 placeholderPaint.setColor(placeholderColor);
                 Rect bounds = getBounds();
@@ -300,32 +300,17 @@ public class Emoji {
                 b = getBounds();
             }
 
-            if (!NekoConfig.useSystemEmoji.Bool() && EmojiProvider.containsEmoji) {
-                if (!isLoaded()) {
-                    loadEmoji(info.page, info.page2);
-                    canvas.drawRect(getBounds(), placeholderPaint);
-                } else if (!canvas.quickReject(b.left, b.top, b.right, b.bottom, Canvas.EdgeType.AA)) {
-                    canvas.drawBitmap(emojiBmp[info.page][info.page2], null, b, paint);
-                }
+            if (NekoConfig.useSystemEmoji.Bool()) {
+                String emoji = fixEmoji(EmojiData.data[info.page][info.emojiIndex]);
+                textPaint.setTextSize(b.height() * 0.8f);
+                textPaint.setTypeface(NekoXConfig.getSystemEmojiTypeface());
+                canvas.drawText(emoji,  0, emoji.length(), b.left, b.bottom - b.height() * 0.225f, textPaint);
                 return;
             }
 
-            String emoji = fixEmoji(EmojiData.data[info.page][info.emojiIndex]);
-
-            if (!NekoConfig.useSystemEmoji.Bool() && EmojiProvider.isFont) {
-                try {
-                    textPaint.setTypeface(EmojiProvider.getFont());
-                } catch (RuntimeException ignored) {
-                }
-            } else if (NekoConfig.useSystemEmoji.Bool()) {
-                try {
-                    textPaint.setTypeface(NekoXConfig.getSystemEmojiTypeface());
-                } catch (RuntimeException ignored) {
-                }
+            if (!canvas.quickReject(b.left, b.top, b.right, b.bottom, Canvas.EdgeType.AA)) {
+                canvas.drawBitmap(emojiBmp[info.page][info.page2], null, b, paint);
             }
-
-            textPaint.setTextSize(b.height() * 0.8f);
-            canvas.drawText(emoji, 0, emoji.length(), b.left, b.bottom - b.height() * 0.225f, textPaint);
         }
 
         @Override
@@ -344,9 +329,6 @@ public class Emoji {
         }
 
         public boolean isLoaded() {
-            if (!EmojiProvider.containsEmoji || NekoConfig.useSystemEmoji.Bool()) {
-                return true;
-            }
             return emojiBmp[info.page][info.page2] != null;
         }
 
@@ -549,11 +531,8 @@ public class Emoji {
     }
 
     public static CharSequence replaceEmoji(CharSequence cs, Paint.FontMetricsInt fontMetrics, int size, boolean createNew, int[] emojiOnly, boolean limit) {
-        if ((NekoConfig.useSystemEmoji.Bool() || cs.length() == 0) && emojiOnly == null) {
-            if (cs instanceof Spannable) {
-                return cs;
-            }
-            return Spannable.Factory.getInstance().newSpannable(cs.toString());
+        if (cs == null || cs.length() == 0) {
+            return cs;
         }
         Spannable s;
         if (!createNew && cs instanceof Spannable) {
