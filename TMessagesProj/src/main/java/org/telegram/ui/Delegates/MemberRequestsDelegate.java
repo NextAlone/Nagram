@@ -388,6 +388,20 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
         hideChatJoinRequest(importer, false);
     }
 
+    @Override
+    public void onBanClicked(TLRPC.TL_chatInviteImporter importer) {
+        kickUser(importer);
+        hideChatJoinRequest(importer, false);
+    }
+
+    private void kickUser(TLRPC.TL_chatInviteImporter importer) {
+        TLRPC.User user = users.get(importer.user_id);
+        if (user == null) {
+            return;
+        }
+        fragment.getMessagesController().deleteParticipantFromChat(chatId, user);
+    }
+
     public void setAdapterItemsEnabled(boolean adapterItemsEnabled) {
         if (recyclerView != null) {
             int position = adapter.extraFirstHolders();
@@ -735,7 +749,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             });
             popupLayout.addView(sendMsgCell);
 
-            ActionBarMenuSubItem dismissCell = new ActionBarMenuSubItem(context, false, true);
+            ActionBarMenuSubItem dismissCell = new ActionBarMenuSubItem(context, false, false);
             dismissCell.setColors(Theme.getColor(Theme.key_dialogTextRed2, resourcesProvider), Theme.getColor(Theme.key_dialogRedIcon, resourcesProvider));
             dismissCell.setSelectorColor(Theme.getColor(Theme.key_dialogButtonSelector, resourcesProvider));
             dismissCell.setTextAndIcon(LocaleController.getString("DismissRequest", R.string.DismissRequest), R.drawable.msg_remove);
@@ -746,6 +760,18 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
                 hidePreview();
             });
             popupLayout.addView(dismissCell);
+
+            ActionBarMenuSubItem banCell = new ActionBarMenuSubItem(context, false, true);
+            banCell.setColors(Theme.getColor(Theme.key_dialogTextRed2, resourcesProvider), Theme.getColor(Theme.key_dialogRedIcon, resourcesProvider));
+            banCell.setSelectorColor(Theme.getColor(Theme.key_dialogButtonSelector, resourcesProvider));
+            banCell.setTextAndIcon(LocaleController.getString("KickFromGroup", R.string.KickFromGroup), R.drawable.profile_ban);
+            banCell.setOnClickListener((v) -> {
+                if (importer != null) {
+                    onBanClicked(importer);
+                }
+                hidePreview();
+            });
+            popupLayout.addView(banCell);
         }
 
         @Override
