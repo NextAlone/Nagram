@@ -68,4 +68,5 @@
     <string name="CustomEditedMessage">自定义已编辑消息提示词</string>
     <string name="HidePremiumOnlyChannel">切换皮套隐藏大会员专享</string>
     <string name="FakeHighPerformanceDevice">伪装高性能设备</string>
+    <string name="DisableEmojiDrawLimit">解除 emoji 渲染上限</string>
 </resources>

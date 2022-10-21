@@ -69,4 +69,5 @@
     <string name="CustomEditedMessage">Custom Edited Message word</string>
     <string name="HidePremiumOnlyChannel">Hide Premium Only Channel</string>
     <string name="FakeHighPerformanceDevice">Fake High Performance Device</string>
+    <string name="DisableEmojiDrawLimit">Disable Emoji Draw Limit</string>
 </resources>
