@@ -246,6 +246,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
                 bottomPages.setPageOffset(position, positionOffset);
                 selectedPosition = position;
                 toPosition = positionOffsetPixels > 0 ? selectedPosition + 1 : selectedPosition - 1;
+                if (toPosition < 0) toPosition = 0;
                 progress = positionOffset;
                 checkPage();
             }
