@@ -61,6 +61,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAlertLayout {
 
     private final long durationMultiplier = 1;
@@ -1652,9 +1654,12 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
                     draggingCellTop = (draggingCellTouchY - draggingCellRect.top) / (float) draggingCellRect.height();
                     draggingCellFromWidth = draggingCellDrawingRect.width();
                     draggingCellFromHeight = draggingCellDrawingRect.height();
-                    try {
-                        ChatAttachAlertPhotoLayoutPreview.this.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                    } catch (Exception ignore) {}
+                    if (!NekoConfig.disableVibration.Bool()) {
+                        try {
+                            ChatAttachAlertPhotoLayoutPreview.this.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                        } catch (Exception ignore) {
+                        }
+                    }
                 }, ViewConfiguration.getLongPressTimeout());
 
                 invalidate();
@@ -1714,9 +1719,12 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
                         }
                     }
 
-                    try {
-                        ChatAttachAlertPhotoLayoutPreview.this.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_RELEASE, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                    } catch (Exception ignore) {}
+                    if (!NekoConfig.disableVibration.Bool()) {
+                        try {
+                            ChatAttachAlertPhotoLayoutPreview.this.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_RELEASE, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                        } catch (Exception ignore) {
+                        }
+                    }
 
                     updateGroups();
                     toPhotoLayout(photoLayout, false);

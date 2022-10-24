@@ -2051,7 +2051,9 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                                 ignoreTextChange = true;
                                 s.delete(40, s.length());
                                 AndroidUtilities.shakeView(editText, 2, 0);
-                                editText.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                if (!NekoConfig.disableVibration.Bool()) {
+                                    editText.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                }
                                 ignoreTextChange = false;
                             }
                         }
@@ -4240,7 +4242,9 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     if (startingGroupCall) {
                         return;
                     }
-                    v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                    if (!NekoConfig.disableVibration.Bool()) {
+                        v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                    }
                     startingGroupCall = true;
                     TLRPC.TL_phone_startScheduledGroupCall req = new TLRPC.TL_phone_startScheduledGroupCall();
                     req.call = call.getInputGroupCall();
@@ -4275,7 +4279,9 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                         }
                         playingHandAnimation = true;
                         AndroidUtilities.shakeView(muteLabel[0], 2, 0);
-                        v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                        if (!NekoConfig.disableVibration.Bool()) {
+                            v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                        }
                         int num = Utilities.random.nextInt(100);
                         int endFrame;
                         int startFrame;
@@ -5129,10 +5135,10 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 }
             });
             final NumberPicker.OnValueChangeListener onValueChangeListener = (picker, oldVal, newVal) -> {
-                try {
-                    container.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                } catch (Exception ignore) {
-
+                if (!NekoConfig.disableVibration.Bool()) {
+                    try {
+                        container.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                    } catch (Exception ignore) {}
                 }
                 AlertsCreator.checkScheduleDate(scheduleButtonTextView, scheduleInfoTextView, 7 * 24 * 60 * 60, 2, dayPicker, hourPicker, minutePicker);
             };

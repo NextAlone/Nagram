@@ -24,6 +24,8 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.Theme;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class SwipeGestureSettingsView extends FrameLayout {
 
     public static final int SWIPE_GESTURE_PIN = 0;
@@ -106,7 +108,9 @@ public class SwipeGestureSettingsView extends FrameLayout {
 
             SharedConfig.updateChatListSwipeSetting(newVal);
             invalidate();
-            picker.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+            if (!NekoConfig.disableVibration.Bool()) {
+                picker.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+            }
         });
         picker.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
         picker.setValue(SharedConfig.getChatSwipeAction(currentAccount));

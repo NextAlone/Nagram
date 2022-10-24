@@ -6084,9 +6084,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             blurredView.setBackground(null);
         }
         if (isOpen && afterSignup) {
-            try {
-                fragmentView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-            } catch (Exception ignored) {}
+            if (!NekoConfig.disableVibration.Bool()) {
+                try {
+                    fragmentView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                } catch (Exception ignored) {}
+            }
             if (getParentActivity() instanceof LaunchActivity) {
                 ((LaunchActivity) getParentActivity()).getFireworksOverlay().start();
             }
@@ -8385,7 +8387,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         int y = location[1] - layout.getMeasuredHeight() - AndroidUtilities.dp(2);
         sendPopupWindow.showAtLocation(view, Gravity.LEFT | Gravity.TOP, location[0] + view.getMeasuredWidth() - layout.getMeasuredWidth() + AndroidUtilities.dp(8), y);
         sendPopupWindow.dimBehind();
-        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+        if (!NekoConfig.disableVibration.Bool()) {
+            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+        }
 
         return false;
     }

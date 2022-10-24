@@ -67,6 +67,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class ReactionsContainerLayout extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
     public final static Property<ReactionsContainerLayout, Float> TRANSITION_PROGRESS_VALUE = new Property<ReactionsContainerLayout, Float>(Float.class, "transitionProgress") {
@@ -206,7 +208,9 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                     boolean b1 = oldProgress > 1f;
                     boolean b2 = newProgress > 1f;
                     if (b1 != b2) {
-                        recyclerListView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                        if (!NekoConfig.disableVibration.Bool()) {
+                            recyclerListView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                        }
                     }
                     if (pullingLeftOffset < 0) {
                         dx = (int) pullingLeftOffset;
@@ -237,7 +241,9 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                     boolean b1 = oldProgress > 1f;
                     boolean b2 = newProgress > 1f;
                     if (b1 != b2) {
-                        recyclerListView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                        if (!NekoConfig.disableVibration.Bool()) {
+                            recyclerListView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                        }
                     }
                     if (customReactionsContainer != null) {
                         customReactionsContainer.invalidate();
@@ -1367,7 +1373,9 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         Runnable longPressRunnable = new Runnable() {
             @Override
             public void run() {
-                performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                if (!NekoConfig.disableVibration.Bool()) {
+                    performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                }
                 pressedReactionPosition = visibleReactionsList.indexOf(currentReaction);
                 pressedReaction = currentReaction;
                 ReactionsContainerLayout.this.invalidate();

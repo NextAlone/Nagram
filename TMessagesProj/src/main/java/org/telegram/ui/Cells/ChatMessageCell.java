@@ -2142,7 +2142,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
             float p = a / 360f;
             if (Math.abs(currentMessageObject.audioProgress - p) > 0.9f) {
-                if (roundSeekbarOutAlpha == 0) {
+                if (roundSeekbarOutAlpha == 0 && !NekoConfig.disableVibration.Bool()) {
                     performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                 }
                 roundSeekbarOutAlpha = 1f;

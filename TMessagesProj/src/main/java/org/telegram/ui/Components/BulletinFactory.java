@@ -40,6 +40,8 @@ import org.telegram.ui.PremiumPreviewFragment;
 
 import java.io.File;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public final class BulletinFactory {
 
     public static BulletinFactory of(BaseFragment fragment) {
@@ -508,7 +510,9 @@ public final class BulletinFactory {
         layout.textView.setText(text);
         if (hapticDelay > 0) {
             layout.postDelayed(() -> {
-                layout.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                if (!NekoConfig.disableVibration.Bool()) {
+                    layout.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                }
             }, hapticDelay);
         }
         return Bulletin.make(containerLayout, layout, Bulletin.DURATION_SHORT);
@@ -558,7 +562,9 @@ public final class BulletinFactory {
         layout.textView.setText(text);
         if (hapticDelay > 0) {
             layout.postDelayed(() -> {
-                layout.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                if (!NekoConfig.disableVibration.Bool()) {
+                    layout.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                }
             }, hapticDelay);
         }
         return Bulletin.make(containerLayout, layout, Bulletin.DURATION_SHORT);

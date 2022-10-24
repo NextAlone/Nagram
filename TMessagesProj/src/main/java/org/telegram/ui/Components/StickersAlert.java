@@ -108,6 +108,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 
 public class StickersAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate {
@@ -1389,7 +1390,9 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 state[0] = 3;
                 if (!lastNameAvailable) {
                     AndroidUtilities.shakeView(editText, 2, 0);
-                    editText.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                    if (!NekoConfig.disableVibration.Bool()) {
+                        editText.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                    }
                 }
                 AndroidUtilities.hideKeyboard(editText);
                 SendMessagesHelper.getInstance(currentAccount).prepareImportStickers(setTitle, lastCheckName, importingSoftware, importingStickersPaths, (param) -> {

@@ -67,6 +67,8 @@ import org.telegram.ui.Components.URLSpanNoUnderline;
 import org.telegram.ui.Components.spoilers.SpoilerEffect;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PhotoViewer;
+
+import tw.nekomimi.nekogram.NekoConfig;
 import xyz.nextalone.nagram.NaConfig;
 
 import java.util.ArrayList;
@@ -235,9 +237,11 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
                     if (messageObject != null && messageObject.wasUnread || forceWasUnread) {
                         forceWasUnread = messageObject.wasUnread = false;
 
-                        try {
-                            performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                        } catch (Exception ignored) {
+                        if (!NekoConfig.disableVibration.Bool()) {
+                            try {
+                                performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                            } catch (Exception ignored) {
+                            }
                         }
 
                         if (getContext() instanceof LaunchActivity) {

@@ -42,6 +42,8 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.ListView.RecyclerListViewWithOverlayDraw;
 import org.telegram.ui.Components.Premium.PremiumLockIconView;
 
+import tw.nekomimi.nekogram.utils.VibrateUtil;
+
 public class StickerEmojiCell extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, RecyclerListViewWithOverlayDraw.OverlayView {
 
     private ImageReceiver imageView;
@@ -312,10 +314,7 @@ public class StickerEmojiCell extends FrameLayout implements NotificationCenter.
 
     public void showRequirePremiumAnimation() {
         if (premiumIconView != null) {
-            Vibrator v = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
-            if (v != null) {
-                v.vibrate(200);
-            }
+            VibrateUtil.vibrate();
             AndroidUtilities.shakeView(premiumIconView, 2, 0);
         }
     }

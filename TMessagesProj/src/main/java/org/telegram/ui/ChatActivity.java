@@ -316,6 +316,7 @@ import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.PGPUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.TelegramUtil;
+import tw.nekomimi.nekogram.utils.VibrateUtil;
 import xyz.nextalone.nagram.NaConfig;
 import xyz.nextalone.nagram.helper.DoubleTap;
 import xyz.nextalone.nagram.helper.MessageHelper;
@@ -7031,7 +7032,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     chatActivityEnterView.getEditField().setAllowDrawCursor(true);
                 }
             });
-            view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+            if (!NekoConfig.disableVibration.Bool()) {
+                view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+            }
             return true;
         });
 
@@ -7428,7 +7431,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     chatActivityEnterView.getEditField().setAllowDrawCursor(true);
                 }
             });
-            view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+            if (!NekoConfig.disableVibration.Bool()) {
+                view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+            }
             return false;
         });
         reactionsMentiondownButton.setVisibility(View.INVISIBLE);
@@ -10831,10 +10836,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             return;
         }
 
-        try {
-            fragmentView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-        } catch (Exception e) {
-            FileLog.e(e);
+        if (!NekoConfig.disableVibration.Bool()) {
+            try {
+                fragmentView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
         }
 
         if (mediaBanTooltip == null) {
@@ -13873,10 +13880,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else {
                 if (selectedMessagesIds[0].size() + selectedMessagesIds[1].size() >= 1024) {
                     AndroidUtilities.shakeView(selectedMessagesCountTextView, 2, 0);
-                    Vibrator vibrator = (Vibrator) ApplicationLoader.applicationContext.getSystemService(Context.VIBRATOR_SERVICE);
-                    if (vibrator != null) {
-                        vibrator.vibrate(200);
-                    }
+                    VibrateUtil.vibrate();
                     return;
                 }
                 selectedMessagesIds[index].put(messageObject.getId(), messageObject);
@@ -24667,7 +24671,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     bulletin.show();
                     View view = bulletin.getLayout();
                     view.postDelayed(() -> {
-                        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                        if (!NekoConfig.disableVibration.Bool()) {
+                            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                        }
                     }, 550);
                 });
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);

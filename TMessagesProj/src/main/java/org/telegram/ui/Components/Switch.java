@@ -37,6 +37,8 @@ import androidx.annotation.Keep;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
+import tw.nekomimi.nekogram.utils.VibrateUtil;
+
 public class Switch extends View {
 
     private RectF rectF;
@@ -544,10 +546,8 @@ public class Switch extends View {
     private void vibrateChecked(boolean toCheck) {
         try {
             if (isHapticFeedbackEnabled() && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-                Vibrator vibrator = AndroidUtilities.getVibrator();
                 VibrationEffect vibrationEffect = VibrationEffect.createWaveform(new long[]{75,10,5,10}, new int[] {5,20,110,20}, -1);
-                vibrator.cancel();
-                vibrator.vibrate(vibrationEffect);
+                VibrateUtil.vibrate(200L, vibrationEffect);
                 semHaptics = true;
             }
         } catch (Exception ignore) {}

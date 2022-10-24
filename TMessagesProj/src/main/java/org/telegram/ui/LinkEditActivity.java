@@ -44,6 +44,8 @@ import org.telegram.ui.Components.SlideChooseView;
 
 import java.util.ArrayList;
 
+import tw.nekomimi.nekogram.utils.VibrateUtil;
+
 public class LinkEditActivity extends BaseFragment {
 
     public final static int CREATE_TYPE = 0;
@@ -518,10 +520,7 @@ public class LinkEditActivity extends BaseFragment {
         int timeIndex = timeChooseView.getSelectedIndex();
         if (timeIndex < dispalyedDates.size() && dispalyedDates.get(timeIndex) < 0) {
             AndroidUtilities.shakeView(timeEditText, 2, 0);
-            Vibrator vibrator = (Vibrator) timeEditText.getContext().getSystemService(Context.VIBRATOR_SERVICE);
-            if (vibrator != null) {
-                vibrator.vibrate(200);
-            }
+            VibrateUtil.vibrate();
             return;
         }
 

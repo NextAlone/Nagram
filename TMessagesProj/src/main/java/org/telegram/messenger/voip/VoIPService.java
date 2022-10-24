@@ -140,6 +140,7 @@ import java.util.Set;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
+import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 @SuppressLint("NewApi")
 public class VoIPService extends Service implements SensorEventListener, AudioManager.OnAudioFocusChangeListener, VoIPController.ConnectionStateListener, NotificationCenter.NotificationCenterDelegate {
@@ -2952,14 +2953,13 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 				vibrate = prefs.getInt("vibrate_calls", 0);
 			}
 			if ((vibrate != 2 && vibrate != 4 && (am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE || am.getRingerMode() == AudioManager.RINGER_MODE_NORMAL)) || (vibrate == 4 && am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)) {
-				vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 				long duration = 700;
 				if (vibrate == 1) {
 					duration /= 2;
 				} else if (vibrate == 3) {
 					duration *= 2;
 				}
-				vibrator.vibrate(new long[]{0, duration, 500}, 0);
+				VibrateUtil.vibrate(new long[]{0, duration, 500}, 0);
 			}
 		}
 	}
@@ -4125,10 +4125,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 				if (groupCall == null && !wasEstablished) {
 					wasEstablished = true;
 					if (!isProximityNear && !privateCall.video) {
-						Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-						if (vibrator.hasVibrator()) {
-							vibrator.vibrate(100);
-						}
+						VibrateUtil.vibrate(100);
 					}
 					AndroidUtilities.runOnUIThread(new Runnable() {
 						@Override

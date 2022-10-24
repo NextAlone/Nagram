@@ -540,7 +540,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                             muteButton.playAnimation();
                             if (VoIPService.getSharedInstance() != null) {
                                 VoIPService.getSharedInstance().setMicMute(true, true, false);
-                                muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                if (!NekoConfig.disableVibration.Bool()) {
+                                    muteButton.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                }
                             }
                             pressed = false;
                             Theme.getFragmentContextViewWavesDrawable().updateState(true);

@@ -1816,10 +1816,7 @@ public class AlertsCreator {
             public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
                 CharSequence result = super.filter(source, start, end, dest, dstart, dend);
                 if (result != null && source != null && result.length() != source.length()) {
-                    Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-                    if (v != null) {
-                        v.vibrate(200);
-                    }
+                    VibrateUtil.vibrate();
                     AndroidUtilities.shakeView(checkTextView, 2, 0);
                 }
                 return result;
@@ -2944,10 +2941,10 @@ public class AlertsCreator {
             }
         });
         final NumberPicker.OnValueChangeListener onValueChangeListener = (picker, oldVal, newVal) -> {
-            try {
-                container.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-            } catch (Exception ignore) {
-
+            if (!NekoConfig.disableVibration.Bool()) {
+                try {
+                    container.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                } catch (Exception ignore) {}
             }
             checkScheduleDate(null, null, 0, dayPicker, hourPicker, minutePicker);
         };
@@ -3139,10 +3136,10 @@ public class AlertsCreator {
         container.addView(buttonTextView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM, 16, 15, 16, 16));
 
         final NumberPicker.OnValueChangeListener onValueChangeListener = (picker, oldVal, newVal) -> {
-            try {
-                container.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-            } catch (Exception ignore) {
-
+            if (!NekoConfig.disableVibration.Bool()) {
+                try {
+                    container.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                } catch (Exception ignore) {}
             }
         };
         numberPicker.setOnValueChangedListener(onValueChangeListener);
@@ -3278,10 +3275,10 @@ public class AlertsCreator {
         container.addView(buttonTextView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM, 16, 15, 16, 16));
 
         final NumberPicker.OnValueChangeListener onValueChangeListener = (picker, oldVal, newVal) -> {
-            try {
-                container.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-            } catch (Exception ignore) {
-
+            if (!NekoConfig.disableVibration.Bool()) {
+                try {
+                    container.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                } catch (Exception ignore) {}
             }
         };
         times.setOnValueChangedListener(onValueChangeListener);
@@ -3430,10 +3427,10 @@ public class AlertsCreator {
 
         linearLayout.addView(numberPicker, LayoutHelper.createLinear(0, 54 * 5, 1f));
         final NumberPicker.OnValueChangeListener onValueChangeListener = (picker, oldVal, newVal) -> {
-            try {
-                container.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-            } catch (Exception ignore) {
-
+            if (!NekoConfig.disableVibration.Bool()) {
+                try {
+                    container.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                } catch (Exception ignore) {}
             }
         };
         numberPicker.setOnValueChangedListener(onValueChangeListener);

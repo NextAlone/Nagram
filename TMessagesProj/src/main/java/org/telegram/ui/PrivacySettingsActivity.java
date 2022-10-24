@@ -58,6 +58,8 @@ import org.telegram.ui.Components.TextStyleSpan;
 
 import java.util.ArrayList;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class PrivacySettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private ListAdapter listAdapter;
@@ -309,10 +311,12 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                 presentFragment(new PrivacyControlActivity(ContactsController.PRIVACY_RULES_TYPE_FORWARDS));
             } else if (position == voicesRow) {
                 if (!getUserConfig().isPremium()) {
-                    try {
-                        fragmentView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                    } catch (Exception e) {
-                        FileLog.e(e);
+                    if (!NekoConfig.disableVibration.Bool()) {
+                        try {
+                            fragmentView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                        } catch (Exception e) {
+                            FileLog.e(e);
+                        }
                     }
                     BulletinFactory.of(this).createRestrictVoiceMessagesPremiumBulletin().show();
                     return;
@@ -344,11 +348,11 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                             layout.textView.setText(LocaleController.getString(R.string.YourLoginEmailChangedSuccess));
                             int duration = Bulletin.DURATION_SHORT;
                             Bulletin.make(PrivacySettingsActivity.this, layout, duration).show();
-
-                            try {
-                                fragmentView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                            } catch (Exception ignored) {}
-
+                            if (!NekoConfig.disableVibration.Bool()) {
+                                try {
+                                    fragmentView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                } catch (Exception ignored) {}
+                            }
                             loadPasswordSettings();
                         })))
                         .setNegativeButton(LocaleController.getString(R.string.Cancel), null)

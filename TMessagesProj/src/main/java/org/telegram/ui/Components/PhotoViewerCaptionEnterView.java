@@ -63,6 +63,8 @@ import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PhotoViewer;
 import org.telegram.ui.PremiumPreviewFragment;
 
+import tw.nekomimi.nekogram.utils.VibrateUtil;
+
 public class PhotoViewerCaptionEnterView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, SizeNotifierFrameLayoutPhoto.SizeNotifierFrameLayoutPhotoDelegate {
 
     private final ImageView doneButton;
@@ -377,10 +379,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         doneButton.setOnClickListener(view -> {
             if (MessagesController.getInstance(currentAccount).getCaptionMaxLengthLimit() - codePointCount < 0) {
                 AndroidUtilities.shakeView(captionLimitView, 2, 0);
-                Vibrator v = (Vibrator) captionLimitView.getContext().getSystemService(Context.VIBRATOR_SERVICE);
-                if (v != null) {
-                    v.vibrate(200);
-                }
+                VibrateUtil.vibrate();
                 return;
             }
             delegate.onCaptionEnter();

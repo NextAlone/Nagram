@@ -64,6 +64,8 @@ import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class CalendarActivity extends BaseFragment {
 
     public final static int TYPE_CHAT_ACTIVITY = 0;
@@ -691,7 +693,9 @@ public class CalendarActivity extends BaseFragment {
                     PeriodDay periodDay = getDayAtCoord(e.getX(), e.getY());
 
                     if (periodDay != null) {
-                        performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                        if (!NekoConfig.disableVibration.Bool()) {
+                            performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                        }
 
                         Bundle bundle = new Bundle();
                         if (dialogId > 0) {

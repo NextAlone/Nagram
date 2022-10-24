@@ -109,6 +109,7 @@ import androidx.dynamicanimation.animation.SpringForce;
 import androidx.recyclerview.widget.ChatListItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import tw.nekomimi.nekogram.utils.VibrateUtil;
 import xyz.nextalone.nagram.NaConfig;
 import xyz.nextalone.nagram.helper.Dialogs;
 import xyz.nextalone.nagram.ui.syntaxhighlight.SyntaxHighlight;
@@ -5672,10 +5673,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         }
         if (currentLimit - codePointCount < 0) {
             AndroidUtilities.shakeView(captionLimitView, 2, 0);
-            Vibrator v = (Vibrator) captionLimitView.getContext().getSystemService(Context.VIBRATOR_SERVICE);
-            if (v != null) {
-                v.vibrate(200);
-            }
+            VibrateUtil.vibrate();
             return;
         }
         if (searchingType != 0) {

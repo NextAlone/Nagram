@@ -264,6 +264,7 @@ import tw.nekomimi.nekogram.transtale.TranslatorKt;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
+import tw.nekomimi.nekogram.utils.VibrateUtil;
 import xyz.nextalone.nagram.NaConfig;
 import xyz.nextalone.nagram.helper.MessageHelper;
 
@@ -742,9 +743,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         BottomSheet bottomSheet = builder.create();
         bottomSheet.scrollNavBar = true;
         bottomSheet.show();
-        try {
-            containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-        } catch (Exception ignore) {}
+        if (!NekoConfig.disableVibration.Bool()) {
+            try {
+                containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+            } catch (Exception ignore) {}
+        }
         bottomSheet.setItemColor(0,0xffffffff, 0xffffffff);
         bottomSheet.setItemColor(1,0xffffffff, 0xffffffff);
         bottomSheet.setBackgroundColor(0xff1C2229);
@@ -5422,10 +5425,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         pickerViewSendButton.setOnClickListener(v -> {
             if (captionEditText.getCaptionLimitOffset() < 0) {
                 AndroidUtilities.shakeView(captionLimitView, 2, 0);
-                Vibrator vibrator = (Vibrator) captionLimitView.getContext().getSystemService(Context.VIBRATOR_SERVICE);
-                if (vibrator != null) {
-                    vibrator.vibrate(200);
-                }
+                VibrateUtil.vibrate();
                 return;
             }
             if (parentChatActivity != null && parentChatActivity.isInScheduleMode() && !parentChatActivity.isEditingMessageMedia()) {

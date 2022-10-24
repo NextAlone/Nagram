@@ -62,6 +62,7 @@ import org.telegram.ui.Components.URLSpanNoUnderline;
 import java.util.concurrent.atomic.AtomicReference;
 
 import kotlin.Unit;
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 
 public class AboutLinkCell extends FrameLayout {
@@ -397,9 +398,11 @@ public class AboutLinkCell extends FrameLayout {
                     url = pressedLink.getSpan().toString();
                 }
 
-                try {
-                    performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                } catch (Exception ignore) {}
+                if (!NekoConfig.disableVibration.Bool()) {
+                    try {
+                        performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                    } catch (Exception ignore) {}
+                }
 
                 ClickableSpan pressedLinkFinal = (ClickableSpan) pressedLink.getSpan();
                 BottomBuilder builder = new BottomBuilder(parentFragment.getParentActivity());
