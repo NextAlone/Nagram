@@ -61,6 +61,7 @@ import kotlin.text.StringsKt;
 
 import tw.nekomimi.nekogram.DatacenterActivity;
 import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.GsonUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
@@ -194,7 +195,7 @@ public class NekoSettingsActivity extends BaseFragment {
     private void backupSettings() {
 
         try {
-            File cacheFile = new File(ApplicationLoader.applicationContext.getCacheDir(), new Date().toLocaleString() + ".nekox-settings.json");
+            File cacheFile = new File(EnvUtil.getShareCachePath(), new Date().toLocaleString() + ".nekox-settings.json");
             FileUtil.writeUtf8String(backupSettingsJson(), cacheFile);
             ShareUtil.shareFile(getParentActivity(), cacheFile);
         } catch (JSONException e) {

@@ -8106,7 +8106,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     private void sendLogs() {
 
-        File path = new File(EnvUtil.getTelegramPath(), "logs");
+        File path = new File(EnvUtil.getShareCachePath(), "logs");
 
         path.mkdirs();
 

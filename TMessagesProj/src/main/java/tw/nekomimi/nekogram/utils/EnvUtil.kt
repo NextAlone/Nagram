@@ -80,6 +80,15 @@ object EnvUtil {
     }
 
     @JvmStatic
+    fun getShareCachePath(): File {
+        // fix SDK < A11
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            return getTelegramPath()
+        }
+        return File(availableDirectories[3])
+    }
+
+    @JvmStatic
     fun doTest() {
 
         FileLog.d("rootDirectories: ${rootDirectories.size}")

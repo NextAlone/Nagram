@@ -33,6 +33,7 @@ import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.LocaleUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
@@ -165,7 +166,7 @@ public class NekoXSettingActivity extends BaseFragment {
 
             LocaleUtil.fetchAndExportLang();
 
-            File zipFile = new File(ApplicationLoader.applicationContext.getCacheDir(), "languages.zip");
+            File zipFile = new File(EnvUtil.getShareCachePath(), "languages.zip");
 
             FileUtil.delete(zipFile);
 
