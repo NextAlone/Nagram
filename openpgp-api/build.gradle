@@ -4,14 +4,14 @@ android {
     compileSdkVersion 31
 
     defaultConfig {
-        versionCode 9
-        versionName '13.0' // API-Version . minor
+        // API-Version . minor
         minSdkVersion 19
         targetSdkVersion 31
     }
 
-    lintOptions {
+    buildToolsVersion '31.0.0'
+    lint {
         abortOnError false
     }
-    buildToolsVersion '31.0.0'
+    namespace 'org.openintents.openpgp'
 }
