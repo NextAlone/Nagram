@@ -714,7 +714,9 @@ SharedPreferences mainPreferences;
     }
 
     public static void onInternalPushReceived(final int currentAccount) {
-        KeepAliveJob.startJob();
+        if (MessagesController.getInstance(currentAccount).backgroundConnection) {
+            KeepAliveJob.startJob();
+        }
     }
 
     private static Boolean _enabled;
