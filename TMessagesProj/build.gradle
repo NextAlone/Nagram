@@ -335,8 +335,6 @@ dependencies {
     implementation "androidx.dynamicanimation:dynamicanimation:1.0.0"
     implementation "androidx.multidex:multidex:2.0.1"
     implementation "androidx.sharetarget:sharetarget:1.2.0"
-    implementation "androidx.emoji2:emoji2:1.2.0"
-    implementation 'androidx.emoji2:emoji2-bundled:1.2.0'
 
     compileOnly "org.checkerframework:checker-qual:3.16.0"
     compileOnly "org.checkerframework:checker-compat-qual:2.5.5"

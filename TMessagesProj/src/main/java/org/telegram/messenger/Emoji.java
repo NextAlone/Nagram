@@ -46,7 +46,6 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import org.telegram.ui.Components.AnimatedEmojiSpan;
-import tw.nekomimi.nekogram.EmojiProvider;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoConfig;
 
@@ -285,7 +284,7 @@ public class Emoji {
 
         @Override
         public void draw(Canvas canvas) {
-            if (!isLoaded()) {
+            if (!NekoConfig.useSystemEmoji.Bool() && !isLoaded()) {
                 loadEmoji(info.page, info.page2);
                 placeholderPaint.setColor(placeholderColor);
                 Rect bounds = getBounds();
@@ -300,32 +299,27 @@ public class Emoji {
                 b = getBounds();
             }
 
-            if (!NekoConfig.useSystemEmoji.Bool() && EmojiProvider.containsEmoji) {
-                if (!isLoaded()) {
-                    loadEmoji(info.page, info.page2);
-                    canvas.drawRect(getBounds(), placeholderPaint);
-                } else if (!canvas.quickReject(b.left, b.top, b.right, b.bottom, Canvas.EdgeType.AA)) {
-                    canvas.drawBitmap(emojiBmp[info.page][info.page2], null, b, paint);
+            if (NekoConfig.useSystemEmoji.Bool()) {
+                String emoji = fixEmoji(EmojiData.data[info.page][info.emojiIndex]);
+                textPaint.setTextSize(b.height() * 0.8f);
+                textPaint.setTypeface(NekoXConfig.getSystemEmojiTypeface());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (!textPaint.hasGlyph(emoji)) {
+                        if (!isLoaded()) {
+                            loadEmoji(info.page, info.page2);
+                            placeholderPaint.setColor(placeholderColor);
+                            Rect bounds = getBounds();
+                            canvas.drawCircle(bounds.centerX(), bounds.centerY(), bounds.width() * .4f, placeholderPaint);
+                        } else {
+                            canvas.drawBitmap(emojiBmp[info.page][info.page2], null, b, paint);
+                        }
+                        return;
+                    }
                 }
-                return;
+                canvas.drawText(emoji, 0, emoji.length(), b.left, b.bottom - b.height() * 0.225f, textPaint);
+            } else {
+                canvas.drawBitmap(emojiBmp[info.page][info.page2], null, b, paint);
             }
-
-            String emoji = fixEmoji(EmojiData.data[info.page][info.emojiIndex]);
-
-            if (!NekoConfig.useSystemEmoji.Bool() && EmojiProvider.isFont) {
-                try {
-                    textPaint.setTypeface(EmojiProvider.getFont());
-                } catch (RuntimeException ignored) {
-                }
-            } else if (NekoConfig.useSystemEmoji.Bool()) {
-                try {
-                    textPaint.setTypeface(NekoXConfig.getSystemEmojiTypeface());
-                } catch (RuntimeException ignored) {
-                }
-            }
-
-            textPaint.setTextSize(b.height() * 0.8f);
-            canvas.drawText(emoji, 0, emoji.length(), b.left, b.bottom - b.height() * 0.225f, textPaint);
         }
 
         @Override
@@ -344,9 +338,6 @@ public class Emoji {
         }
 
         public boolean isLoaded() {
-            if (!EmojiProvider.containsEmoji || NekoConfig.useSystemEmoji.Bool()) {
-                return true;
-            }
             return emojiBmp[info.page][info.page2] != null;
         }
 
@@ -384,6 +375,7 @@ public class Emoji {
             this.end = end;
             this.code = code;
         }
+
         int start;
         int end;
         CharSequence code;
@@ -549,10 +541,7 @@ public class Emoji {
     }
 
     public static CharSequence replaceEmoji(CharSequence cs, Paint.FontMetricsInt fontMetrics, int size, boolean createNew, int[] emojiOnly, boolean limit) {
-        if ((NekoConfig.useSystemEmoji.Bool() || cs.length() == 0) && emojiOnly == null) {
-            if (cs instanceof Spannable) {
-                return cs;
-            }
+        if (cs == null || cs.length() == 0) {
             return Spannable.Factory.getInstance().newSpannable(cs.toString());
         }
         Spannable s;
@@ -848,6 +837,7 @@ public class Emoji {
     /**
      * NekoX: This function tries to fix incomplete emoji display shown in AvatarDrawable
      * In AvatarDrawable, only the first char is used to draw "avatar".
+     *
      * @return The first char or the first emoji
      */
     public static String getFirstCharSafely(String source) {

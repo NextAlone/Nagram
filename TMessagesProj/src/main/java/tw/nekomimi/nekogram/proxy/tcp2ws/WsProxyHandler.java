@@ -24,6 +24,7 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.DnsFactory;
 
 public class WsProxyHandler extends Thread {
 
@@ -34,6 +35,8 @@ public class WsProxyHandler extends Thread {
     private Socket clientSocket;
     private WebSocket wsSocket = null;
     private final byte[] buffer = new byte[4096];
+
+    private String wsHost = "";
 
     private final AtomicInteger wsStatus = new AtomicInteger(0);
     private final static int STATUS_OPENED = 1;
@@ -63,10 +66,10 @@ public class WsProxyHandler extends Thread {
                     close();
                     return;
                 }
-                if (readLen < 10) {
-                    FileLog.d(Arrays.toString(Arrays.copyOf(buffer, readLen)));
-                }
-                this.wsSocket.send(ByteString.of(Arrays.copyOf(buffer, readLen)));
+//                if (readLen < 10) {
+//                    FileLog.d(Arrays.toString(Arrays.copyOf(buffer, readLen)));
+//                }
+                this.wsSocket.send(ByteString.of(buffer, 0, readLen));
             }
         } catch (SocketException se) {
             if ("Socket closed".equals(se.getMessage())) {
@@ -108,7 +111,7 @@ public class WsProxyHandler extends Thread {
         wsSocket = null;
     }
 
-    private static OkHttpClient okhttpClient = null;
+    private static volatile OkHttpClient okhttpClient = null;
     private static final Object okhttpLock = new Object();
 
     private static OkHttpClient getOkHttpClientInstance() {
@@ -121,9 +124,10 @@ public class WsProxyHandler extends Thread {
                                 FileLog.d("okhttpWS: resolving: " + s);
                                 if (StringUtils.isNotBlank(NekoConfig.customPublicProxyIP.String())) {
                                     ret.add(InetAddress.getByName(NekoConfig.customPublicProxyIP.String()));
-                                } else
-                                    ret.addAll(Arrays.asList(InetAddress.getAllByName(s)));
-                                FileLog.d("okhttpWS: resolved: " + ret.toString());
+                                } else {
+                                    ret.addAll(DnsFactory.lookup(s));
+                                }
+                                FileLog.d("okhttpWS: resolved: " + ret);
                                 return ret;
                             })
                             .build();
@@ -134,6 +138,8 @@ public class WsProxyHandler extends Thread {
     }
 
     private void connectToServer(String wsHost) {
+        this.wsHost = wsHost;
+        FileLog.e(new Exception("WS: Connect To Server"));
         getOkHttpClientInstance()
                 .newWebSocket(new Request.Builder()
                         .url((bean.getTls() ? "wss://" : "ws://") + wsHost + "/api")
@@ -149,7 +155,7 @@ public class WsProxyHandler extends Thread {
 
                     @Override
                     public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
-                        FileLog.e(t);
+                        FileLog.e("["+wsHost+"] Failure:"  + t);
                         wsStatus.set(STATUS_FAILED);
                         synchronized (wsStatus) {
                             wsStatus.notify();
@@ -177,10 +183,6 @@ public class WsProxyHandler extends Thread {
                     @Override
                     public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
                         FileLog.d("[" + wsHost + "] Closed: " + code + " " + reason);
-                        WsProxyHandler.this.close();
-                        synchronized (wsStatus) {
-                            wsStatus.notify();
-                        }
                     }
 
                     @Override
