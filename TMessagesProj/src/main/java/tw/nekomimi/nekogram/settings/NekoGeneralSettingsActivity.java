@@ -169,6 +169,12 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
             LocaleController.getString("Snowflakes", R.string.Snowflakes),
             LocaleController.getString("Fireworks", R.string.Fireworks)
     }, null));
+    private final AbstractConfigCell iconDecorationRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NaConfig.INSTANCE.getIconDecoration(), new String[]{
+            LocaleController.getString("DependsOnDate", R.string.DependsOnDate),
+            LocaleController.getString("Christmas", R.string.Christmas),
+            LocaleController.getString("Valentine", R.string.Valentine),
+            LocaleController.getString("HalloWeen", R.string.HalloWeen)
+    }, null));
     private final AbstractConfigCell tabletModeRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.tabletMode, new String[]{
             LocaleController.getString("TabletModeDefault", R.string.TabletModeDefault),
             LocaleController.getString("Enable", R.string.Enable),

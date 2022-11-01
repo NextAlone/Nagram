@@ -70,4 +70,6 @@
     <string name="HidePremiumOnlyChannel">Hide Premium Only Channel</string>
     <string name="FakeHighPerformanceDevice">Fake High Performance Device</string>
     <string name="DisableEmojiDrawLimit">Disable Emoji Draw Limit</string>
+    <string name="IconDecoration">Icon Decoration</string>
+    <string name="HalloWeen">HalloWeen</string>
 </resources>

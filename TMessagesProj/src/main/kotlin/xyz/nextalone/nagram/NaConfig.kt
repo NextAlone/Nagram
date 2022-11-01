@@ -346,6 +346,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val iconDecoration =
+        addConfig(
+            "IconDecoration",
+            ConfigItem.configTypeInt,
+            0
+        )
 
     private fun addConfig(
         k: String,
