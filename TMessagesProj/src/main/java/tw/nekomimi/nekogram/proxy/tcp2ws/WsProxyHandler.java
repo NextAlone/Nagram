@@ -1,5 +1,7 @@
 package tw.nekomimi.nekogram.proxy.tcp2ws;
 
+import android.annotation.SuppressLint;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,8 +15,10 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import okhttp3.OkHttpClient;
@@ -43,15 +47,18 @@ public class WsProxyHandler extends Thread {
     private final static int STATUS_CLOSED = 2;
     private final static int STATUS_FAILED = 3;
 
+    private final CountDownLatch connecting = new CountDownLatch(1);
+
     public WsProxyHandler(Socket clientSocket, WsLoader.Bean bean) {
         this.bean = bean;
         this.clientSocket = clientSocket;
         FileLog.d("ProxyHandler Created.");
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public void run() {
-        FileLog.d("Proxy Started.");
+        FileLog.d("Proxy to " + wsHost + "Started.");
         try {
             clientInputStream = clientSocket.getInputStream();
             clientOutputStream = clientSocket.getOutputStream();
@@ -59,16 +66,19 @@ public class WsProxyHandler extends Thread {
             socks5Handshake();
             FileLog.d("socks5 handshake and websocket connection done");
             // Start read from client socket and send to websocket
+            this.clientSocket.setSoTimeout(1000);
             while (clientSocket != null && wsSocket != null && wsStatus.get() == STATUS_OPENED && !clientSocket.isClosed() && !clientSocket.isInputShutdown()) {
-                int readLen = this.clientInputStream.read(buffer);
-                FileLog.d(String.format("read %d from client", readLen));
-                if (readLen == -1) {
-                    close();
-                    return;
+                int readLen = 0;
+                try {
+                    readLen = this.clientInputStream.read(buffer);
+                } catch (SocketTimeoutException ex) {
+                    if (wsStatus.get() != STATUS_OPENED)
+                        throw new Exception(String.format("[%s] timeout and ws closed", wsHost));
+                    continue;
                 }
-//                if (readLen < 10) {
-//                    FileLog.d(Arrays.toString(Arrays.copyOf(buffer, readLen)));
-//                }
+                FileLog.d(String.format("[%s] read %d from local", wsHost, readLen));
+                if (readLen == -1) throw new Exception(String.format("[%s] socks closed", wsHost));;
+                if (wsStatus.get() != STATUS_OPENED) throw new Exception(String.format("[%s] ws closed when trying to write", wsHost));;
                 this.wsSocket.send(ByteString.of(buffer, 0, readLen));
             }
         } catch (SocketException se) {
@@ -79,16 +89,14 @@ public class WsProxyHandler extends Thread {
                 FileLog.e(se);
                 close();
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             FileLog.e(e);
             close();
         }
     }
 
     public void close() {
-        int cur = wsStatus.get();
-        if (cur == STATUS_CLOSED)
+        if (wsStatus.get() == STATUS_CLOSED)
             return;
         wsStatus.set(STATUS_CLOSED);
         FileLog.d("ws handler closed");
@@ -99,16 +107,16 @@ public class WsProxyHandler extends Thread {
         } catch (IOException e) {
             // ignore
         }
-        try {
-            if (wsSocket != null) {
-                wsSocket.close(1000, "");
-            }
-        } catch (Exception e) {
-            // ignore
-        }
+//        try {
+//            if (wsSocket != null) {
+//                wsSocket.cancel();
+//            }
+//        } catch (Exception e) {
+//            // ignore
+//        }
 
         clientSocket = null;
-        wsSocket = null;
+//        wsSocket = null;
     }
 
     private static volatile OkHttpClient okhttpClient = null;
@@ -148,30 +156,26 @@ public class WsProxyHandler extends Thread {
                     public void onOpen(@NotNull okhttp3.WebSocket webSocket, @NotNull Response response) {
                         WsProxyHandler.this.wsSocket = webSocket;
                         wsStatus.set(STATUS_OPENED);
-                        synchronized (wsStatus) {
-                            wsStatus.notify();
-                        }
+                        connecting.countDown();
                     }
 
                     @Override
                     public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
-                        FileLog.e("["+wsHost+"] Failure:"  + t);
+                        FileLog.e("[" + wsHost + "] Failure:" + t);
                         wsStatus.set(STATUS_FAILED);
-                        synchronized (wsStatus) {
-                            wsStatus.notify();
-                        }
-                        WsProxyHandler.this.close();
+                        connecting.countDown();
                     }
 
                     @Override
                     public void onMessage(@NotNull okhttp3.WebSocket webSocket, @NotNull ByteString bytes) {
-                        FileLog.d("[" + wsHost + "] Received " + bytes.size() + " bytes");
+                        FileLog.d("[" + wsHost + "] Received " + bytes.size() + " bytes from ws");
                         try {
-                            if (wsStatus.get() == STATUS_OPENED && !WsProxyHandler.this.clientSocket.isOutputShutdown())
+                            if (wsStatus.get() == STATUS_OPENED && !WsProxyHandler.this.clientSocket.isClosed())
                                 WsProxyHandler.this.clientOutputStream.write(bytes.toByteArray());
                         } catch (IOException e) {
                             FileLog.e(e);
-                            WsProxyHandler.this.close();
+                            wsStatus.set(STATUS_FAILED);
+                            webSocket.cancel();
                         }
                     }
 
@@ -183,15 +187,13 @@ public class WsProxyHandler extends Thread {
                     @Override
                     public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
                         FileLog.d("[" + wsHost + "] Closed: " + code + " " + reason);
+                        wsStatus.set(STATUS_CLOSED);
                     }
 
                     @Override
                     public void onClosing(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
                         FileLog.d("[" + wsHost + "] Closing: " + code + " " + reason);
-                        WsProxyHandler.this.close();
-                        synchronized (wsStatus) {
-                            wsStatus.notify();
-                        }
+                        wsStatus.set(STATUS_CLOSED);
                     }
                 });
     }
@@ -241,9 +243,7 @@ public class WsProxyHandler extends Thread {
         String wsHost = getWsHost(address);
         connectToServer(wsHost);
 
-        synchronized (wsStatus) {
-            wsStatus.wait();
-        }
+        connecting.await();
 
         if (wsStatus.get() == STATUS_OPENED) {
             this.clientOutputStream.write(RESP_SUCCESS);

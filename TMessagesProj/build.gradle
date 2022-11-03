@@ -319,7 +319,6 @@ android {
 
 }
 
-def okHttpVersion = "5.0.0-alpha.9"
 def fcmVersion = "23.0.7"
 def crashlyticsVersion = "18.2.12"
 def playCoreVersion = "1.10.3"
@@ -348,7 +347,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.21"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
 
-    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "com.squareup.okhttp3:okhttp:4.10.0"
     implementation 'dnsjava:dnsjava:3.4.1'
     implementation "org.dizitart:nitrite:3.4.3"
 
