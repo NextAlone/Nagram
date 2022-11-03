@@ -347,7 +347,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.21"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
 
-    implementation "com.squareup.okhttp3:okhttp:4.10.0"
+    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.10"
+    implementation 'com.neovisionaries:nv-websocket-client:2.14'
     implementation 'dnsjava:dnsjava:3.4.1'
     implementation "org.dizitart:nitrite:3.4.3"
 
