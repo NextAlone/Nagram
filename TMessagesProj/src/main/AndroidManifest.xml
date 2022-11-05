@@ -100,7 +100,7 @@
     <uses-permission android:name="me.everything.badger.permission.BADGE_COUNT_WRITE"/>
     <uses-permission android:name="com.android.vending.BILLING"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28"
+        android:maxSdkVersion="29"
         tools:node="replace" />
 
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
@@ -121,7 +121,9 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_nagram_round"
         android:supportsRtl="false"
+        android:requestLegacyExternalStorage="true"
         android:hasFragileUserData="true"
+        android:preserveLegacyExternalStorage="true"
         android:allowAudioPlaybackCapture="true"
         tools:replace="android:supportsRtl">
 
