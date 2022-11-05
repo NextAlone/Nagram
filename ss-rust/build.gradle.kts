@@ -27,6 +27,7 @@ android {
         targetSdk = 31
     }
     buildToolsVersion = "31.0.0"
+    namespace = "io.nekohasekai.ss_rust"
 
     if (targetAbi.isNotBlank()) splits.abi {
         reset()

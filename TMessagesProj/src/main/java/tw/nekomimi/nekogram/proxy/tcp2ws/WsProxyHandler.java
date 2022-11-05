@@ -1,11 +1,20 @@
 package tw.nekomimi.nekogram.proxy.tcp2ws;
 
+import android.annotation.SuppressLint;
+
+import com.neovisionaries.ws.client.ThreadType;
+import com.neovisionaries.ws.client.WebSocket;
+import com.neovisionaries.ws.client.WebSocketAdapter;
+import com.neovisionaries.ws.client.WebSocketException;
+import com.neovisionaries.ws.client.WebSocketFactory;
+import com.neovisionaries.ws.client.WebSocketFrame;
+import com.neovisionaries.ws.client.WebSocketListener;
+import com.neovisionaries.ws.client.WebSocketState;
+
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.checkerframework.common.value.qual.IntVal;
 import org.telegram.messenger.FileLog;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -13,17 +22,22 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.WebSocket;
-import okhttp3.WebSocketListener;
-import okio.ByteString;
+import javax.net.SocketFactory;
+import javax.net.ssl.SSLSocket;
+
+import cn.hutool.http.ssl.AndroidSupportSSLFactory;
+import cn.hutool.http.ssl.CustomProtocolsSSLFactory;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.DnsFactory;
 
 public class WsProxyHandler extends Thread {
 
@@ -32,13 +46,17 @@ public class WsProxyHandler extends Thread {
 
     private final WsLoader.Bean bean;
     private Socket clientSocket;
-    private WebSocket wsSocket = null;
+    private WebSocket webSocket = null;
     private final byte[] buffer = new byte[4096];
+
+    private String wsHost = "";
 
     private final AtomicInteger wsStatus = new AtomicInteger(0);
     private final static int STATUS_OPENED = 1;
     private final static int STATUS_CLOSED = 2;
     private final static int STATUS_FAILED = 3;
+
+    private final CountDownLatch connecting = new CountDownLatch(1);
 
     public WsProxyHandler(Socket clientSocket, WsLoader.Bean bean) {
         this.bean = bean;
@@ -46,9 +64,10 @@ public class WsProxyHandler extends Thread {
         FileLog.d("ProxyHandler Created.");
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public void run() {
-        FileLog.d("Proxy Started.");
+        FileLog.d("Proxy to " + wsHost + "Started.");
         try {
             clientInputStream = clientSocket.getInputStream();
             clientOutputStream = clientSocket.getOutputStream();
@@ -56,17 +75,23 @@ public class WsProxyHandler extends Thread {
             socks5Handshake();
             FileLog.d("socks5 handshake and websocket connection done");
             // Start read from client socket and send to websocket
-            while (clientSocket != null && wsSocket != null && wsStatus.get() == STATUS_OPENED && !clientSocket.isClosed() && !clientSocket.isInputShutdown()) {
-                int readLen = this.clientInputStream.read(buffer);
-                FileLog.d(String.format("read %d from client", readLen));
-                if (readLen == -1) {
-                    close();
-                    return;
+            this.clientSocket.setSoTimeout(1000);
+            while (clientSocket != null && webSocket != null && wsStatus.get() == STATUS_OPENED && !clientSocket.isClosed() && !clientSocket.isInputShutdown()) {
+                int readLen = 0;
+                try {
+                    readLen = this.clientInputStream.read(buffer);
+                } catch (SocketTimeoutException ex) {
+                    if (wsStatus.get() != STATUS_OPENED)
+                        throw new Exception(String.format("[%s] timeout and ws closed", wsHost));
+                    continue;
                 }
-                if (readLen < 10) {
-                    FileLog.d(Arrays.toString(Arrays.copyOf(buffer, readLen)));
-                }
-                this.wsSocket.send(ByteString.of(Arrays.copyOf(buffer, readLen)));
+                FileLog.d(String.format("[%s] read %d from local", wsHost, readLen));
+                if (readLen == -1) throw new Exception(String.format("[%s] socks closed", wsHost));
+                ;
+                if (wsStatus.get() != STATUS_OPENED)
+                    throw new Exception(String.format("[%s] ws closed when trying to write", wsHost));
+                ;
+                this.webSocket.sendBinary(Arrays.copyOf(buffer, readLen));
             }
         } catch (SocketException se) {
             if ("Socket closed".equals(se.getMessage())) {
@@ -76,16 +101,14 @@ public class WsProxyHandler extends Thread {
                 FileLog.e(se);
                 close();
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             FileLog.e(e);
             close();
         }
     }
 
     public void close() {
-        int cur = wsStatus.get();
-        if (cur == STATUS_CLOSED)
+        if (wsStatus.get() == STATUS_CLOSED)
             return;
         wsStatus.set(STATUS_CLOSED);
         FileLog.d("ws handler closed");
@@ -97,101 +120,49 @@ public class WsProxyHandler extends Thread {
             // ignore
         }
         try {
-            if (wsSocket != null) {
-                wsSocket.close(1000, "");
+            if (webSocket != null) {
+                webSocket.sendClose();
             }
         } catch (Exception e) {
             // ignore
         }
 
         clientSocket = null;
-        wsSocket = null;
+        webSocket = null;
     }
 
-    private static OkHttpClient okhttpClient = null;
-    private static final Object okhttpLock = new Object();
-
-    private static OkHttpClient getOkHttpClientInstance() {
-        if (okhttpClient == null) {
-            synchronized (okhttpLock) {
-                if (okhttpClient == null) {
-                    okhttpClient = new OkHttpClient.Builder()
-                            .dns(s -> {
-                                ArrayList<InetAddress> ret = new ArrayList<>();
-                                FileLog.d("okhttpWS: resolving: " + s);
-                                if (StringUtils.isNotBlank(NekoConfig.customPublicProxyIP.String())) {
-                                    ret.add(InetAddress.getByName(NekoConfig.customPublicProxyIP.String()));
-                                } else
-                                    ret.addAll(Arrays.asList(InetAddress.getAllByName(s)));
-                                FileLog.d("okhttpWS: resolved: " + ret.toString());
-                                return ret;
-                            })
-                            .build();
-                }
+    private void connectToServer(String wsHost) throws Exception {
+        this.wsHost = wsHost;
+        WebSocketFactory factory = new WebSocketFactory().setConnectionTimeout(5000);
+        webSocket = factory.createSocket((bean.getTls() ? "wss://" : "ws://") + wsHost + "/api");
+        webSocket.addListener(new WebSocketAdapter() {
+            @Override
+            public void onBinaryMessage(WebSocket websocket, byte[] binary) throws Exception {
+                WsProxyHandler.this.clientOutputStream.write(binary);
             }
-        }
-        return okhttpClient;
-    }
 
-    private void connectToServer(String wsHost) {
-        getOkHttpClientInstance()
-                .newWebSocket(new Request.Builder()
-                        .url((bean.getTls() ? "wss://" : "ws://") + wsHost + "/api")
-                        .build(), new WebSocketListener() {
-                    @Override
-                    public void onOpen(@NotNull okhttp3.WebSocket webSocket, @NotNull Response response) {
-                        WsProxyHandler.this.wsSocket = webSocket;
-                        wsStatus.set(STATUS_OPENED);
-                        synchronized (wsStatus) {
-                            wsStatus.notify();
-                        }
-                    }
+            @Override
+            public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
+                FileLog.e(cause);
+                wsStatus.set(STATUS_FAILED);
+            }
 
-                    @Override
-                    public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
-                        FileLog.e(t);
-                        wsStatus.set(STATUS_FAILED);
-                        synchronized (wsStatus) {
-                            wsStatus.notify();
-                        }
-                        WsProxyHandler.this.close();
-                    }
+            @Override
+            public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
+                FileLog.d(String.format("[%s] WS connect failed: %s", wsHost, exception.toString()));
+                wsStatus.set(STATUS_FAILED);
+                connecting.countDown();
+            }
 
-                    @Override
-                    public void onMessage(@NotNull okhttp3.WebSocket webSocket, @NotNull ByteString bytes) {
-                        FileLog.d("[" + wsHost + "] Received " + bytes.size() + " bytes");
-                        try {
-                            if (wsStatus.get() == STATUS_OPENED && !WsProxyHandler.this.clientSocket.isOutputShutdown())
-                                WsProxyHandler.this.clientOutputStream.write(bytes.toByteArray());
-                        } catch (IOException e) {
-                            FileLog.e(e);
-                            WsProxyHandler.this.close();
-                        }
-                    }
-
-                    @Override
-                    public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
-                        FileLog.d("[" + wsHost + "] Received text: " + text);
-                    }
-
-                    @Override
-                    public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
-                        FileLog.d("[" + wsHost + "] Closed: " + code + " " + reason);
-                        WsProxyHandler.this.close();
-                        synchronized (wsStatus) {
-                            wsStatus.notify();
-                        }
-                    }
-
-                    @Override
-                    public void onClosing(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
-                        FileLog.d("[" + wsHost + "] Closing: " + code + " " + reason);
-                        WsProxyHandler.this.close();
-                        synchronized (wsStatus) {
-                            wsStatus.notify();
-                        }
-                    }
-                });
+            @Override
+            public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
+                FileLog.d(String.format("[%s] WS connected", wsHost));
+                wsStatus.set(STATUS_OPENED);
+                connecting.countDown();
+            }
+        });
+        webSocket.addProtocol("binary");
+        webSocket.connect();
     }
 
     private static final byte[] RESP_AUTH = new byte[]{0x05, 0x00};
@@ -239,9 +210,7 @@ public class WsProxyHandler extends Thread {
         String wsHost = getWsHost(address);
         connectToServer(wsHost);
 
-        synchronized (wsStatus) {
-            wsStatus.wait();
-        }
+        connecting.await();
 
         if (wsStatus.get() == STATUS_OPENED) {
             this.clientOutputStream.write(RESP_SUCCESS);

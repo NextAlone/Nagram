@@ -1086,19 +1086,25 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
 
         @SuppressLint("NotifyDataSetChanged")
         public void updatePremiumTiers() {
+            subscriptionTiers.clear();
             long pricePerYearMax = 0;
             if (getMediaDataController().getPremiumPromo() != null) {
                 for (TLRPC.TL_premiumSubscriptionOption option : getMediaDataController().getPremiumPromo().period_options) {
                     SubscriptionTier subscriptionTier = new SubscriptionTier(option);
                     subscriptionTiers.add(subscriptionTier);
-                    if (subscriptionTier.getPricePerYear() > pricePerYearMax) {
-                        pricePerYearMax = subscriptionTier.getPricePerYear();
+                    if (BuildVars.useInvoiceBilling()) {
+                        if (subscriptionTier.getPricePerYear() > pricePerYearMax) {
+                            pricePerYearMax = subscriptionTier.getPricePerYear();
+                        }
                     }
                 }
             }
-            for (SubscriptionTier tier : subscriptionTiers) {
-                tier.setPricePerYearRegular(pricePerYearMax);
+            if (BuildVars.useInvoiceBilling()) {
+                for (SubscriptionTier tier : subscriptionTiers) {
+                    tier.setPricePerYearRegular(pricePerYearMax);
+                }
             }
+            // NekoX: remove Google billing
             for (int i = 0; i < subscriptionTiers.size(); i++) {
                 SubscriptionTier tier = subscriptionTiers.get(i);
                 if (tier.getMonths() == 1) {
@@ -1106,7 +1112,6 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                     break;
                 }
             }
-            // NekoX: remove
             updateButtonText(false);
             tierListView.getAdapter().notifyDataSetChanged();
         }

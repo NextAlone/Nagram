@@ -46,7 +46,6 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import org.telegram.ui.Components.AnimatedEmojiSpan;
-import tw.nekomimi.nekogram.EmojiProvider;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoConfig;
 import xyz.nextalone.nagram.NaConfig;
@@ -305,11 +304,21 @@ public class Emoji {
                 String emoji = fixEmoji(EmojiData.data[info.page][info.emojiIndex]);
                 textPaint.setTextSize(b.height() * 0.8f);
                 textPaint.setTypeface(NekoXConfig.getSystemEmojiTypeface());
-                canvas.drawText(emoji,  0, emoji.length(), b.left, b.bottom - b.height() * 0.225f, textPaint);
-                return;
-            }
-
-            if (!canvas.quickReject(b.left, b.top, b.right, b.bottom, Canvas.EdgeType.AA)) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (!textPaint.hasGlyph(emoji)) {
+                        if (!isLoaded()) {
+                            loadEmoji(info.page, info.page2);
+                            placeholderPaint.setColor(placeholderColor);
+                            Rect bounds = getBounds();
+                            canvas.drawCircle(bounds.centerX(), bounds.centerY(), bounds.width() * .4f, placeholderPaint);
+                        } else {
+                            canvas.drawBitmap(emojiBmp[info.page][info.page2], null, b, paint);
+                        }
+                        return;
+                    }
+                }
+                canvas.drawText(emoji, 0, emoji.length(), b.left, b.bottom - b.height() * 0.225f, textPaint);
+            } else {
                 canvas.drawBitmap(emojiBmp[info.page][info.page2], null, b, paint);
             }
         }
@@ -367,6 +376,7 @@ public class Emoji {
             this.end = end;
             this.code = code;
         }
+
         int start;
         int end;
         CharSequence code;
@@ -830,6 +840,7 @@ public class Emoji {
     /**
      * NekoX: This function tries to fix incomplete emoji display shown in AvatarDrawable
      * In AvatarDrawable, only the first char is used to draw "avatar".
+     *
      * @return The first char or the first emoji
      */
     public static String getFirstCharSafely(String source) {

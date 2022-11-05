@@ -77,7 +77,7 @@ android {
     defaultConfig {
         minSdkVersion 21
         //noinspection ExpiredTargetSdkVersion,OldTargetApi
-        targetSdkVersion 30
+        targetSdkVersion 32
 
         versionName verName
         versionCode verCode
@@ -117,24 +117,6 @@ android {
         }
     }
 
-    lintOptions {
-        disable "MissingTranslation"
-        disable "ExtraTranslation"
-        disable "BlockedPrivateApi"
-    }
-
-    packagingOptions {
-
-        exclude "/fabric/**"
-        exclude "/META-INF/*.version"
-        exclude "/META-INF/*.kotlin_module"
-        exclude "/META-INF/native-image/**"
-        exclude "/builddef.lst"
-        exclude "/*.txt"
-        exclude "/DebugProbesKt.bin"
-        exclude "/okhttp3/internal/publicsuffix/NOTICE"
-
-    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
@@ -304,7 +286,6 @@ android {
 
 }
 
-def okHttpVersion = "5.0.0-alpha.9"
 def fcmVersion = "23.0.7"
 def crashlyticsVersion = "18.2.12"
 def playCoreVersion = "1.10.3"
@@ -319,7 +300,7 @@ dependencies {
     implementation "androidx.interpolator:interpolator:1.0.0"
     implementation "androidx.dynamicanimation:dynamicanimation:1.0.0"
     implementation "androidx.multidex:multidex:2.0.1"
-    implementation "androidx.sharetarget:sharetarget:1.1.0"
+    implementation "androidx.sharetarget:sharetarget:1.2.0"
 
     compileOnly "org.checkerframework:checker-qual:3.16.0"
     compileOnly "org.checkerframework:checker-compat-qual:2.5.5"
@@ -330,10 +311,11 @@ dependencies {
 
     implementation "com.google.code.gson:gson:2.8.8"
     implementation "org.osmdroid:osmdroid-android:6.1.10"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.20"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.21"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
 
-    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.10"
+    implementation 'com.neovisionaries:nv-websocket-client:2.14'
     implementation 'dnsjava:dnsjava:3.4.1'
     implementation "org.dizitart:nitrite:3.4.3"
 
@@ -370,7 +352,7 @@ dependencies {
     testImplementation "androidx.test:core:1.4.0"
     testImplementation "org.robolectric:robolectric:4.5.1"
 
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.0"
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.2.0"
 
 }
 dependencies {
@@ -384,6 +366,20 @@ apply plugin: "com.google.gms.google-services"
 apply plugin: "com.google.firebase.crashlytics"
 
 android {
+
+
+    packagingOptions {
+        jniLibs {
+            excludes += ['/fabric/**', '/META-INF/native-image/**']
+        }
+        resources {
+            excludes += ['/fabric/**', '/META-INF/*.version', '/META-INF/*.kotlin_module', '/META-INF/native-image/**', '/builddef.lst', '/*.txt', '/DebugProbesKt.bin', '/okhttp3/internal/publicsuffix/NOTICE']
+        }
+    }
+    namespace "org.telegram.messenger"
+    lint {
+        disable 'MissingTranslation', 'ExtraTranslation', 'BlockedPrivateApi'
+    }
 
     tasks.all { task ->
         if (task.name.startsWith("uploadCrashlyticsMappingFile")) {

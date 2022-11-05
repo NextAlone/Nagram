@@ -66,7 +66,7 @@ object DnsFactory {
             val dc = DClass.IN
             val name = Name.fromConstantString("$domain.")
             val message = Message.newQuery(Record.newRecord(name, type, dc)).toWire()
-            var sr = cache.lookupRecords(name, type, dc)
+            val sr = cache.lookupRecords(name, type, dc)
 
             fun sr2Ret(sr: SetResponse?): List<InetAddress>? {
                 if (sr == null) return null
@@ -100,8 +100,8 @@ object DnsFactory {
             val cachedSr = sr2Ret(sr)
             if (cachedSr != null) return cachedSr
 
-            var counterAll = AtomicInteger(0)
-            var counterGood = AtomicInteger(0)
+            val counterAll = AtomicInteger(0)
+            val counterGood = AtomicInteger(0)
 
             val ret = runBlocking {
                 val client = OkHttpClient()
