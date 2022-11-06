@@ -363,6 +363,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int nkbtn_invertReply = 2026;
     private final static int nkbtn_greatOrPoor = 2027;
     private final static int nkbtn_repeatascopy = 2028;
+    private final static int nkbtn_setReminder = 2029;
 
 
     protected TLRPC.Chat currentChat;
@@ -22625,6 +22626,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                         }
                         if (chatMode != MODE_SCHEDULED) {
+                            if (NaConfig.INSTANCE.getShowSetReminder().Bool()) {
+                                items.add(LocaleController.getString("SetReminder", R.string.SetReminder));
+                                options.add(nkbtn_setReminder);
+                                icons.add(R.drawable.msg_calendar2);
+                            }
                             if (!UserObject.isUserSelf(currentUser) && NekoConfig.showAddToSavedMessages.Bool()) {
                                 if (!noforwardOverride) {
                                     items.add(LocaleController.getString("AddToSavedMessages", R.string.AddToSavedMessages));
@@ -30747,6 +30753,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
                 break;
 
+            }
+            case nkbtn_setReminder: {
+                ArrayList<MessageObject> messages =  new ArrayList<>();
+                if (selectedObjectGroup != null) {
+                    messages.addAll(selectedObjectGroup.messages);
+                } else {
+                    messages.add(selectedObject);
+                }
+                AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), getUserConfig().getClientUserId(), (notify, scheduleDate) -> {
+                    forwardMessages(messages, false, notify, scheduleDate, getUserConfig().getClientUserId());
+                    undoView.showWithAction(getUserConfig().getClientUserId(), UndoView.ACTION_FWD_MESSAGES, messages.size());
+                }, themeDelegate);
+                break;
             }
         }
     }
