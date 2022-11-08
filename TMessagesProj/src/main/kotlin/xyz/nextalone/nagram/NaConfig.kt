@@ -273,12 +273,6 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
-    val onlyShowBuiltInEmoji =
-        addConfig(
-            "OnlyShowBuiltInEmoji",
-            ConfigItem.configTypeBool,
-            false
-        )
     val realHideTimeForSticker =
         addConfig(
             "RealHideTimeForSticker",
@@ -321,12 +315,6 @@ object NaConfig {
             "CustomEditedMessage",
             ConfigItem.configTypeString,
             ""
-        )
-    val hidePremiumOnlyChannel =
-        addConfig(
-            "HidePremiumOnlyChannel",
-            ConfigItem.configTypeBool,
-            false
         )
     val disableProxyWhenVpnEnabled =
         addConfig(

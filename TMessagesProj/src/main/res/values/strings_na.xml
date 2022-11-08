@@ -54,7 +54,6 @@
     <string name="ShowPhotoOpenInExternalApp">Show Open In External App When Open Photo</string>
     <string name="QuickToggleAnonymous">Quick toggle anonymous</string>
     <string name="QuickToggleAnonymousNotice">If you\'re owner of the group</string>
-    <string name="OnlyShowBuiltInEmoji">Only Show Built-in Emoji</string>
     <string name="RealHideTimeForSticker">Real hide time for stickers</string>
     <string name="HideTitle">Hide Title</string>
     <string name="IgnoreFolderCount">Ignore Folder Count</string>
@@ -67,7 +66,6 @@
     <string name="CustomPoor">Custom long click reply word</string>
     <string name="CustomPoorHint">Default pool</string>
     <string name="CustomEditedMessage">Custom Edited Message word</string>
-    <string name="HidePremiumOnlyChannel">Hide Premium Only Channel</string>
     <string name="FakeHighPerformanceDevice">Fake High Performance Device</string>
     <string name="DisableEmojiDrawLimit">Disable Emoji Draw Limit</string>
     <string name="IconDecoration">Icon Decoration</string>

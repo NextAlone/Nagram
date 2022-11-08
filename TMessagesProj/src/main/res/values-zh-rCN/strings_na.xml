@@ -53,7 +53,6 @@
     <string name="ShowPhotoOpenInExternalApp">查看图片可以使用其他应用打开</string>
     <string name="QuickToggleAnonymous">快速切换匿名发言</string>
     <string name="QuickToggleAnonymousNotice">如果你是群组的所有者的话</string>
-    <string name="OnlyShowBuiltInEmoji">非大会员仅显示内置 Emoji</string>
     <string name="RealHideTimeForSticker">真正的隐藏贴纸发送时间</string>
     <string name="HideTitle">隐藏标题和头像</string>
     <string name="IgnoreFolderCount">忽略文件夹标签上的未读计数</string>
@@ -66,7 +65,6 @@
     <string name="CustomPoor">自定义长按快捷回复词</string>
     <string name="CustomPoorHint">默认破烂</string>
     <string name="CustomEditedMessage">自定义已编辑消息提示词</string>
-    <string name="HidePremiumOnlyChannel">切换皮套隐藏大会员专享</string>
     <string name="FakeHighPerformanceDevice">伪装高性能设备</string>
     <string name="DisableEmojiDrawLimit">解除 emoji 渲染上限</string>
     <string name="IconDecoration">图标装饰</string>
