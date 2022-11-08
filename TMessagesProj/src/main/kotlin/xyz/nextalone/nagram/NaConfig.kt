@@ -346,6 +346,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val showOnlineStatus =
+        addConfig(
+            "ShowOnlineStatus",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,
