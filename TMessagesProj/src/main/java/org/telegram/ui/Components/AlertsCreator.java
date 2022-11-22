@@ -5023,7 +5023,7 @@ public class AlertsCreator {
             }
         }
 
-        final boolean[] checks = new boolean[3];
+        final boolean[] checks = new boolean[4];
         final boolean[] deleteForAll = {true};
         TLRPC.User actionUser = null;
         TLRPC.Chat actionChat = null;
@@ -5142,7 +5142,7 @@ public class AlertsCreator {
                 FrameLayout frameLayout = new FrameLayout(activity);
                 int num = 0;
                 String name = actionUser != null ? ContactsController.formatName(actionUser.first_name, actionUser.last_name) : actionChat.title;
-                for (int a = 0; a < 3; a++) {
+                for (int a = 0; a < 4; a++) {
                     if ((loadParticipant == 2 || !canBan) && a == 0) {
                         continue;
                     }
@@ -5153,8 +5153,11 @@ public class AlertsCreator {
                         cell.setText(LocaleController.getString("DeleteBanUser", R.string.DeleteBanUser), "", false, false);
                     } else if (a == 1) {
                         cell.setText(LocaleController.getString("DeleteReportSpam", R.string.DeleteReportSpam), "", false, false);
-                    } else {
+                    } else if (a == 2) {
                         cell.setText(LocaleController.formatString("DeleteAllFrom", R.string.DeleteAllFrom, name), "", false, false);
+                    } else {
+                        cell.setText(LocaleController.getString("DoActionsInCommonGroups", R.string.DoActionsInCommonGroups), "", true, false);
+                        checks[3] = true;
                     }
                     cell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16) : AndroidUtilities.dp(8), 0, LocaleController.isRTL ? AndroidUtilities.dp(8) : AndroidUtilities.dp(16), 0);
                     frameLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.TOP | Gravity.LEFT, 0, 48 * num, 0, 0));
@@ -5324,6 +5327,9 @@ public class AlertsCreator {
                 }
                 if (checks[2]) {
                     MessagesController.getInstance(currentAccount).deleteUserChannelHistory(chat, userFinal, chatFinal, 0);
+                }
+                if (checks[3] && userFinal != null) {
+                    doActionsInCommonGroups(checks, currentAccount, userFinal);
                 }
             }
             if (onDelete != null) {
@@ -5874,5 +5880,32 @@ public class AlertsCreator {
 
     public interface SoundFrequencyDelegate {
         void didSelectValues(int time, int minute);
+    }
+
+    public static void doActionsInCommonGroups(boolean[] checks, int currentAccount, TLRPC.User userFinal) {
+        TLRPC.TL_messages_getCommonChats req = new TLRPC.TL_messages_getCommonChats();
+        req.user_id = MessagesController.getInstance(currentAccount).getInputUser(userFinal);
+        if (req.user_id instanceof TLRPC.TL_inputUserEmpty) {
+            return;
+        }
+        req.limit = 100;
+        req.max_id = 0;
+        ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
+            if (error != null) {
+                return;
+            }
+            TLRPC.messages_Chats res = (TLRPC.messages_Chats) response;
+            for (int j=0; j < res.chats.size(); j++) {
+                TLRPC.Chat chat_ = res.chats.get(j);
+                boolean canBan = ChatObject.canBlockUsers(chat_);
+                boolean canDelete = ChatObject.canUserDoAdminAction(chat_, ChatObject.ACTION_DELETE_MESSAGES);
+                if (canBan && checks[0]) {
+                    MessagesController.getInstance(currentAccount).deleteParticipantFromChat(chat_.id, userFinal, null, false, false);
+                }
+                if (canDelete && checks[2]) {
+                    MessagesController.getInstance(currentAccount).deleteUserChannelHistory(chat_, userFinal, null, 0);
+                }
+            }
+        });
     }
 }

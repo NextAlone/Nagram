@@ -41,4 +41,5 @@
     <string name="AppIconColorful">繽紛</string>
     <string name="AppIconDarkGreen">深翠</string>
     <string name="AppIconNeon">霓虹</string>
+    <string name="DoActionsInCommonGroups">也在共同群組中操作</string>
 </resources>
