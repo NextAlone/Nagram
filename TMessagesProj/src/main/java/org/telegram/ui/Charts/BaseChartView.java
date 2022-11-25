@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 public abstract class BaseChartView<T extends ChartData, L extends LineViewData> extends View implements ChartPickerDelegate.Listener {
 
@@ -1078,13 +1079,11 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
 
     protected void runSmoothHaptic() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            final Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
             if (vibrationEffect == null) {
                 long[] vibrationWaveFormDurationPattern = {0, 2};
                 vibrationEffect = VibrationEffect.createWaveform(vibrationWaveFormDurationPattern, -1);
             }
-            vibrator.cancel();
-            vibrator.vibrate(vibrationEffect);
+            VibrateUtil.vibrate(200L, vibrationEffect);
         }
     }
 
