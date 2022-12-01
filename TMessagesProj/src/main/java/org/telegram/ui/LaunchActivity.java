@@ -185,6 +185,7 @@ import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import kotlin.text.StringsKt;
 import tw.nekomimi.nekogram.InternalUpdater;
+import tw.nekomimi.nekogram.helpers.SettingsHelper;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
@@ -2051,6 +2052,17 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                                                 sticker = path.replace("addstickers/", "");
                                             } else if (path.startsWith("addemoji/")) {
                                                 emoji = path.replace("addemoji/", "");
+                                            } else if (path.startsWith("nekosettings/")) {
+                                                SettingsHelper.processDeepLink(data, fragment -> {
+                                                    AndroidUtilities.runOnUIThread(() -> presentFragment(fragment, false, false));
+                                                    if (AndroidUtilities.isTablet()) {
+                                                        actionBarLayout.showLastFragment();
+                                                        rightActionBarLayout.showLastFragment();
+                                                        drawerLayoutContainer.setAllowOpenDrawer(false, false);
+                                                    } else {
+                                                        drawerLayoutContainer.setAllowOpenDrawer(true, false);
+                                                    }
+                                                }, () -> showBulletin(factory -> factory.createErrorBulletin(LocaleController.getString("UnknownNekoSettingsOption", R.string.UnknownNekoSettingsOption))));
                                             } else if (path.startsWith("msg/") || path.startsWith("share/")) {
                                                 message = data.getQueryParameter("url");
                                                 if (message == null) {
@@ -2421,6 +2433,19 @@ public class LaunchActivity extends BasePermissionsActivity implements ActionBar
                                         }
                                     } else if (url.startsWith("tg:upgrade") || url.startsWith("tg://upgrade") || url.startsWith("tg:update") || url.startsWith("tg://update")) {
                                         checkAppUpdate(true);
+                                    } else if (url.startsWith("tg:neko") || url.startsWith("tg://neko")) {
+                                        url = url.replace("tg:neko", "tg://t.me/nekosettings").replace("tg://neko", "tg://t.me/nekosettings");
+                                        data = Uri.parse(url);
+                                        SettingsHelper.processDeepLink(data, fragment -> {
+                                            AndroidUtilities.runOnUIThread(() -> presentFragment(fragment, false, false));
+                                            if (AndroidUtilities.isTablet()) {
+                                                actionBarLayout.showLastFragment();
+                                                rightActionBarLayout.showLastFragment();
+                                                drawerLayoutContainer.setAllowOpenDrawer(false, false);
+                                            } else {
+                                                drawerLayoutContainer.setAllowOpenDrawer(true, false);
+                                            }
+                                        }, () -> showBulletin(factory -> factory.createErrorBulletin(LocaleController.getString("UnknownNekoSettingsOption", R.string.UnknownNekoSettingsOption))));
                                     } else if ((url.startsWith("tg:search") || url.startsWith("tg://search"))) {
                                         url = url.replace("tg:search", "tg://telegram.org").replace("tg://search", "tg://telegram.org");
                                         data = Uri.parse(url);

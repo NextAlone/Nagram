@@ -122,6 +122,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import kotlin.Unit;
+import tw.nekomimi.nekogram.helpers.PasscodeHelper;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
@@ -4949,6 +4950,7 @@ public class AlertsCreator {
         final LinearLayout linearLayout = new LinearLayout(parentActivity);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         for (int a : SharedConfig.activeAccounts) {
+            if (PasscodeHelper.isAccountHidden(a)) continue;
             TLRPC.User u = UserConfig.getInstance(a).getCurrentUser();
             if (u != null) {
                 AccountSelectCell cell = new AccountSelectCell(parentActivity, false);

@@ -85,6 +85,7 @@ import java.util.Locale;
 import java.util.concurrent.Executor;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.helpers.PasscodeHelper;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 import xyz.nextalone.nagram.NaConfig;
@@ -954,7 +955,7 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
                 onPasscodeError();
                 return;
             }
-            if (!SharedConfig.checkPasscode(password)) {
+            if (!PasscodeHelper.checkPasscode((Activity) getContext(), password) && !SharedConfig.checkPasscode(password)) {
                 SharedConfig.increaseBadPasscodeTries();
                 if (SharedConfig.passcodeRetryInMs > 0) {
                     checkRetryTextView();

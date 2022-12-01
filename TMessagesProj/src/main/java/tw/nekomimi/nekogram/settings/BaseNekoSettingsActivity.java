@@ -330,6 +330,10 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
                     view = new TextRadioCell(mContext);
                     view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
                     break;
+                case 11:
+                    view = new AccountCell(mContext);
+                    view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
+                    break;
             }
             //noinspection ConstantConditions
             view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));

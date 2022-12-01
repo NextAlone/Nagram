@@ -60,6 +60,7 @@ import java.util.function.Function;
 import kotlin.text.StringsKt;
 
 import tw.nekomimi.nekogram.DatacenterActivity;
+import tw.nekomimi.nekogram.helpers.PasscodeHelper;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
@@ -77,6 +78,7 @@ public class NekoSettingsActivity extends BaseFragment {
     private int generalRow;
     private int accountRow;
     private int chatRow;
+    private int passcodeRow;
     private int experimentRow;
     private int categories2Row;
 
@@ -172,6 +174,8 @@ public class NekoSettingsActivity extends BaseFragment {
                 presentFragment(new NekoGeneralSettingsActivity());
             } else if (position == accountRow) {
                 presentFragment(new NekoAccountSettingsActivity());
+            } else if (position == passcodeRow) {
+                presentFragment(new NekoPasscodeSettingsActivity());
             } else if (position == experimentRow) {
                 presentFragment(new NekoExperimentalSettingsActivity());
             } else if (position == channelRow) {
@@ -380,6 +384,11 @@ public class NekoSettingsActivity extends BaseFragment {
         generalRow = rowCount++;
         accountRow = rowCount++;
         chatRow = rowCount++;
+        if (!PasscodeHelper.isSettingsHidden()) {
+            passcodeRow = rowCount++;
+        } else {
+            passcodeRow = -1;
+        }
         experimentRow = rowCount++;
         categories2Row = rowCount++;
 
@@ -472,6 +481,8 @@ public class NekoSettingsActivity extends BaseFragment {
                         textCell.setTextAndIcon(LocaleController.getString("Chat", R.string.Chat), R.drawable.menu_chats, true);
                     } else if (position == generalRow) {
                         textCell.setTextAndIcon(LocaleController.getString("General", R.string.General), R.drawable.msg_theme, true);
+                    } else if (position == passcodeRow) {
+                        textCell.setTextAndIcon(LocaleController.getString("PasscodeNeko", R.string.PasscodeNeko), R.drawable.msg_permissions, true);
                     } else if (position == experimentRow) {
                         textCell.setTextAndIcon(LocaleController.getString("Experiment", R.string.Experiment), R.drawable.msg_fave, true);
                     } else if (position == accountRow) {
@@ -555,7 +566,7 @@ public class NekoSettingsActivity extends BaseFragment {
         public int getItemViewType(int position) {
             if (position == categories2Row || position == about2Row) {
                 return 1;
-            } else if (position == chatRow || position == accountRow || position == generalRow || position == experimentRow) {
+            } else if (position == chatRow || position == accountRow || position == generalRow || position == passcodeRow || position == experimentRow) {
                 return 2;
             } else if (position == categoriesRow || position == aboutRow) {
                 return 4;
