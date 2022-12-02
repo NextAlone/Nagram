@@ -300,33 +300,6 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
         }
     }
 
-    public static class ThemeAnimationSettings {
-
-        public final Theme.ThemeInfo theme;
-        public final int accentId;
-        public final boolean nightTheme;
-        public final boolean instant;
-        public boolean onlyTopFragment;
-        public boolean applyTheme = true;
-        public Runnable afterStartDescriptionsAddedRunnable;
-        public Runnable beforeAnimationRunnable;
-        public Runnable afterAnimationRunnable;
-        public onAnimationProgress animationProgress;
-        public long duration = 200;
-        public Theme.ResourcesProvider resourcesProvider;
-
-        public ThemeAnimationSettings(Theme.ThemeInfo theme, int accentId, boolean nightTheme, boolean instant) {
-            this.theme = theme;
-            this.accentId = accentId;
-            this.nightTheme = nightTheme;
-            this.instant = instant;
-        }
-
-        public interface onAnimationProgress {
-            void setProgress(float p);
-        }
-    }
-
     public static Drawable headerShadowDrawable;
     private static Drawable layerShadowDrawable;
     private static Paint scrimPaint;
@@ -2222,7 +2195,9 @@ public class ActionBarLayout extends FrameLayout implements INavigationLayout, F
     private void onCloseAnimationEnd() {
         if (transitionAnimationInProgress && onCloseAnimationEndRunnable != null) {
             if (currentAnimation != null) {
-                currentAnimation.cancel();
+                AnimatorSet animatorSet = currentAnimation;
+                currentAnimation = null;
+                animatorSet.cancel();
             }
             transitionAnimationInProgress = false;
             layoutToIgnore = null;

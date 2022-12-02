@@ -94,6 +94,7 @@ public class FileLog {
                 try {
                     String metadata = "requestMsgId=" + requestMsgId + " requestingTime=" + (System.currentTimeMillis() - startRequestTimeInMillis) +  " request_token=" + requestToken;
                     FileLog.getInstance().tlStreamWriter.write(getInstance().dateFormat.format(time) + " " + metadata);
+                    FileLog.getInstance().tlStreamWriter.write("\n");
                     FileLog.getInstance().tlStreamWriter.write(req);
                     FileLog.getInstance().tlStreamWriter.write("\n");
                     FileLog.getInstance().tlStreamWriter.write(finalRes);
@@ -127,6 +128,7 @@ public class FileLog {
                     String metadata = getInstance().dateFormat.format(time);// + " msgId=" + messageId;
 
                     FileLog.getInstance().tlStreamWriter.write(metadata);
+                    FileLog.getInstance().tlStreamWriter.write("\n");
                     FileLog.getInstance().tlStreamWriter.write(messageStr);
                     FileLog.getInstance().tlStreamWriter.write("\n\n");
                     FileLog.getInstance().tlStreamWriter.flush();
@@ -273,7 +275,7 @@ public class FileLog {
     }
 
     private static boolean needSent(Throwable e) {
-        if (e instanceof InterruptedException || e instanceof MediaCodecVideoConvertor.ConversionCanceledException || e instanceof IgnoreSentException) {
+        if (e instanceof InterruptedException || e instanceof MediaCodecVideoConvertor.ConversionCanceledException) {
             return false;
         }
         return true;

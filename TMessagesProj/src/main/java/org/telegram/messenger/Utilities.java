@@ -113,12 +113,13 @@ public class Utilities {
         if (value == null) {
             return 0;
         }
-        if (BuildConfig.BUILD_HOST_IS_WINDOWS) {
-            Matcher matcher = pattern.matcher(value);
-            if (matcher.find()) {
-                return Integer.valueOf(matcher.group());
-            }
-        } else {
+//        if (BuildConfig.BUILD_HOST_IS_WINDOWS) {
+//            Matcher matcher = pattern.matcher(value);
+//            if (matcher.find()) {
+//                return Integer.valueOf(matcher.group());
+//            }
+//        } else {
+        {
             int val = 0;
             try {
                 int start = -1, end;
@@ -140,7 +141,7 @@ public class Utilities {
             } catch (Exception ignore) {}
             return val;
         }
-        return 0;
+//        return 0;
     }
 
     private static int parseInt(final String s) {

@@ -1581,11 +1581,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     @SuppressLint("Range")
     private boolean handleIntent(Intent intent, boolean isNew, boolean restore, boolean fromPassword) {
         if (AndroidUtilities.handleProxyIntent(this, intent)) {
-            actionBarLayout.rebuildFragments(INavigationLayout.REBUILD_FLAG_REBUILD_LAST);
-            if (AndroidUtilities.isTablet()) {
-                layersActionBarLayout.rebuildFragments(INavigationLayout.REBUILD_FLAG_REBUILD_LAST);
-                rightActionBarLayout.rebuildFragments(INavigationLayout.REBUILD_FLAG_REBUILD_LAST);
-            }
             return true;
         }
         if (isNew && PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
@@ -5334,7 +5329,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         }
         PipRoundVideoView pipRoundVideoView = PipRoundVideoView.getInstance();
         MediaController.getInstance().setBaseActivity(this, false);
-        MediaController.getInstance().setFeedbackView(actionBarLayout.getView(), false);
+        MediaController.getInstance().setFeedbackView(feedbackView, false);
         if (pipRoundVideoView != null) {
             pipRoundVideoView.close(false);
         }
@@ -5376,6 +5371,8 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         actionBarLayout.onUserLeaveHint();
     }
 
+    View feedbackView;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -5390,7 +5387,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         checkWasMutedByAdmin(true);
         //FileLog.d("UI resume time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 4096);
-        MediaController.getInstance().setFeedbackView(actionBarLayout.getView(), true);
+        MediaController.getInstance().setFeedbackView(feedbackView = actionBarLayout.getView(), true);
         ApplicationLoader.mainInterfacePaused = false;
         showLanguageAlert(false);
         Utilities.stageQueue.postRunnable(() -> {
@@ -6037,6 +6034,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             if (drawerLayoutAdapter != null) {
                 drawerLayoutAdapter.notifyDataSetChanged();
             }
+            MessagesController.getMainSettings(currentAccount).edit().remove("transcribeButtonPressed").apply();
         } else if (id == NotificationCenter.requestPermissions) {
             int type = (int) args[0];
             String[] permissions = null;
@@ -6834,7 +6832,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 drawerLayoutContainer.setAllowOpenDrawer(false, true);
 
                 int account = -1;
-                for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+                for (int a : SharedConfig.activeAccounts) {
                     if (UserConfig.getInstance(a).isClientActivated()) {
                         account = a;
                         break;

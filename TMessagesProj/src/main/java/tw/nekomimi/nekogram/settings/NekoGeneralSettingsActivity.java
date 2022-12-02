@@ -40,6 +40,7 @@ import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.EmptyCell;
@@ -397,8 +398,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                 getNotificationCenter().postNotificationName(NotificationCenter.mainUserInfoChanged);
                 listAdapter.notifyItemChanged(cellGroup.rows.indexOf(profilePreviewRow));
             } else if (key.equals(NekoConfig.disableAppBarShadow.getKey())) {
-                ActionBarLayout.headerShadowDrawable = (boolean) newValue ? null : parentLayout.getResources().getDrawable(R.drawable.header_shadow).mutate();
-                parentLayout.rebuildAllFragmentViews(true, true);
+                ActionBarLayout.headerShadowDrawable = (boolean) newValue ? null : parentLayout.getParentActivity().getResources().getDrawable(R.drawable.header_shadow).mutate();
+                parentLayout.rebuildFragments(INavigationLayout.REBUILD_FLAG_REBUILD_LAST | INavigationLayout.REBUILD_FLAG_REBUILD_ONLY_LAST);
             } else if (NekoConfig.forceBlurInChat.getKey().equals(key)) {
                 boolean enabled = (Boolean) newValue;
                 if (chatBlurAlphaSeekbar != null)

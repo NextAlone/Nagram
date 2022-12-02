@@ -411,7 +411,7 @@ public class ShadowsocksRSettingsActivity extends BaseFragment {
     }
 
     @Override
-    protected void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
+    public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
         if (isOpen && !backward && currentProxyInfo == null) {
             ipField.requestFocus();
             AndroidUtilities.showKeyboard(ipField);

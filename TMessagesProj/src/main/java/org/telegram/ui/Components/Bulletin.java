@@ -81,7 +81,7 @@ public class Bulletin {
     private View.OnLayoutChangeListener containerLayoutListener;
     private SpringAnimation bottomOffsetSpring;
 
-    public static Bulletin make(@NonNull ViewGroup containerLayout, @NonNull Layout contentLayout, int duration) {
+    public static Bulletin make(@NonNull FrameLayout containerLayout, @NonNull Layout contentLayout, int duration) {
         return new Bulletin(null, containerLayout, contentLayout, duration);
     }
 
@@ -125,7 +125,7 @@ public class Bulletin {
     private final Layout layout;
     private final ParentLayout parentLayout;
     private final BaseFragment containerFragment;
-    private final ViewGroup containerLayout;
+    private final FrameLayout containerLayout;
     private final Runnable hideRunnable = this::hide;
     private int duration;
 
@@ -1290,11 +1290,11 @@ public class Bulletin {
             super(context, resourcesProvider);
 
             avatarsImageView = new AvatarsImageView(context, false);
-            avatarsImageView.setStyle(AvatarsDarawable.STYLE_MESSAGE_SEEN);
+            avatarsImageView.setStyle(AvatarsDrawable.STYLE_MESSAGE_SEEN);
+            avatarsImageView.setAvatarsTextSize(AndroidUtilities.dp(18));
             addView(avatarsImageView, LayoutHelper.createFrameRelatively(24 + 12 + 12 + 8, 48, Gravity.START | Gravity.CENTER_VERTICAL, 12, 0, 0, 0));
 
             textView = new LinkSpanDrawable.LinksTextView(context);
-            textView.setSingleLine();
             textView.setTypeface(Typeface.SANS_SERIF);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             textView.setEllipsize(TextUtils.TruncateAt.END);

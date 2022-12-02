@@ -350,8 +350,8 @@ public class ApplicationLoader extends Application {
         } else AndroidUtilities.runOnUIThread(() -> {
             applicationContext.stopService(new Intent(applicationContext, NotificationsService.class));
 
-            PendingIntent pintent = PendingIntent.getService(applicationContext, 0, new Intent(applicationContext, NotificationsService.class), PendingIntent.FLAG_IMMUTABLE);
-            AlarmManager alarm = (AlarmManager) applicationContext.getSystemService(Context.ALARM_SERVICE);
+            PendingIntent pintent = PendingIntent.getService(applicationContext, 0, new Intent(applicationContext, NotificationsService.class), PendingIntent.FLAG_MUTABLE);
+            AlarmManager alarm = (AlarmManager)applicationContext.getSystemService(Context.ALARM_SERVICE);
             alarm.cancel(pintent);
             if (pendingIntent != null) {
                 alarm.cancel(pendingIntent);

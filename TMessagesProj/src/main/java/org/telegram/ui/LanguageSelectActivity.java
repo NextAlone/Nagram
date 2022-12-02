@@ -17,7 +17,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
