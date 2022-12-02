@@ -2053,15 +2053,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                             if (s.length() > 40) {
                                 ignoreTextChange = true;
                                 s.delete(40, s.length());
-<<<<<<< HEAD
-                                AndroidUtilities.shakeView(editText, 2, 0);
-                                if (!NekoConfig.disableVibration.Bool()) {
-                                    editText.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                                }
-=======
                                 AndroidUtilities.shakeView(editText);
                                 editText.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
->>>>>>> NekoX/dev
                                 ignoreTextChange = false;
                             }
                         }
@@ -4286,15 +4279,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                             return;
                         }
                         playingHandAnimation = true;
-<<<<<<< HEAD
-                        AndroidUtilities.shakeView(muteLabel[0], 2, 0);
-                        if (!NekoConfig.disableVibration.Bool()) {
-                            v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                        }
-=======
                         AndroidUtilities.shakeView(muteLabel[0]);
                         v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
->>>>>>> NekoX/dev
                         int num = Utilities.random.nextInt(100);
                         int endFrame;
                         int startFrame;

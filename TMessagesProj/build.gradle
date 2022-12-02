@@ -204,6 +204,7 @@ android {
         }
 
         debug {
+            java {
                 srcDirs "src/main/java", "src/gservcies/java"
             }
             jni.srcDirs = ["./jni/"]
