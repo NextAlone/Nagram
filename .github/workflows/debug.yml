@@ -409,6 +409,16 @@ jobs:
           path: |
             TMessagesProj/libs/libv2ray.aar
           key: ${{ hashFiles('bin/libs/v2ray/*', 'v2ray_status') }}
+      - name: Build Cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            TMessagesProj/build
+            TMessagesProj/.cxx
+            ss-rust/build
+            ssr-rust/build
+            openpgp-api/build
+          key: build-cache
       - name: Configure Gradle
         run: |
           sed -i -e "s/16384/6144/g" gradle.properties
@@ -439,7 +449,7 @@ jobs:
           curl http://127.0.0.1:8081/ || start
           curl http://127.0.0.1:8081/ || start
           curl http://127.0.0.1:8081/ || start
-          apk=$(find TMessagesProj/build/outputs/apk/mini/release -name '*arm64-v8a*.apk' | head -n 1)
+          apk=$(find TMessagesProj/build/outputs/apk/mini/release -name 'NekoX*.apk' | head -n 1)
           curl http://127.0.0.1:8081/bot${{ secrets.HELPER_BOT_TOKEN }}/sendDocument \
             -X POST \
             -F chat_id="${{ secrets.HELPER_BOT_TARGET }}" \

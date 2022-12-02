@@ -7,7 +7,7 @@ def verName = "9.1.6-preview01"
 def verCode = 670
 
 if (System.getenv("DEBUG_BUILD") == "true") {
-    verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1").trim()
+    verName += "-" + RuntimeUtil.execForStr("git log --pretty=format:'%h' -n 1").trim().replace('\'','')
 }
 
 def officialVer = "9.1.6"
@@ -85,12 +85,13 @@ android {
                 enable false
                 universalApk true
             } else {
-                enable true
                 if (!nativeTarget.isBlank()) {
+                    enable false
+                    universalApk false
                     reset()
                     include nativeTarget
-                    universalApk false
                 } else {
+                    enable false
                     universalApk true
                 }
             }
