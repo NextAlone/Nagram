@@ -5942,7 +5942,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             if (!mainFragmentsStack.isEmpty()) {
                 int type = (int) args[0];
 
-                LinearLayout container = null;
+                FrameLayout container = null;
                 BaseFragment fragment = null;
                 if (GroupCallActivity.groupCallUiVisible && GroupCallActivity.groupCallInstance != null) {
                     container = GroupCallActivity.groupCallInstance.getContainer();
@@ -6915,7 +6915,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 drawerLayoutContainer.setAllowOpenDrawer(false, true);
 
                 int account = -1;
-                for (int a = 0; a < UserConfig.MAX_ACCOUNT_COUNT; a++) {
+                for (int a : SharedConfig.activeAccounts) {
                     if (UserConfig.getInstance(a).isClientActivated()) {
                         account = a;
                         break;

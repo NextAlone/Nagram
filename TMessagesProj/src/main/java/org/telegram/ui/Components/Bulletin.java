@@ -142,7 +142,7 @@ public class Bulletin {
         containerLayout = null;
     }
 
-    private Bulletin(BaseFragment fragment, @NonNull ViewGroup containerLayout, @NonNull Layout layout, int duration) {
+    private Bulletin(BaseFragment fragment, @NonNull FrameLayout containerLayout, @NonNull Layout layout, int duration) {
         this.layout = layout;
         this.parentLayout = new ParentLayout(layout) {
             @Override

@@ -89,7 +89,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
     private final ArrayList<TLRPC.TL_chatInviteImporter> allImporters = new ArrayList<>();
     private final Adapter adapter = new Adapter();
     private final BaseFragment fragment;
-    private final ViewGroup layoutContainer;
+    private final FrameLayout layoutContainer;
     private final MemberRequestsController controller;
     private final long chatId;
     private final int currentAccount;
@@ -114,7 +114,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
     private boolean isFirstLoading = true;
     private boolean isShowLastItemDivider = true;
 
-    public MemberRequestsDelegate(BaseFragment fragment, ViewGroup layoutContainer, long chatId, boolean showSearchMenu) {
+    public MemberRequestsDelegate(BaseFragment fragment, FrameLayout layoutContainer, long chatId, boolean showSearchMenu) {
         this.fragment = fragment;
         this.layoutContainer = layoutContainer;
         this.chatId = chatId;
