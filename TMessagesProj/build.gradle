@@ -86,10 +86,12 @@ android {
                 universalApk true
             } else {
                 enable true
-                universalApk false
                 if (!nativeTarget.isBlank()) {
                     reset()
                     include nativeTarget
+                    universalApk false
+                } else {
+                    universalApk true
                 }
             }
         }

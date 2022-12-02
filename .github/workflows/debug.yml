@@ -379,12 +379,30 @@ jobs:
           git submodule status ss-rust/src/main/rust/shadowsocks-rust > shadowsocks_status
           git submodule status 'ssr-libev/*' > shadowsocksr_status
           git submodule status v2ray > v2ray_status
+      - name: Native Cache (armeabi-v7a)
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/src/main/libs
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-armeabi-v7a
       - name: Native Cache (arm64-v8a)
         uses: actions/cache@v2
         with:
           path: |
             TMessagesProj/src/main/libs
           key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-arm64-v8a
+      - name: Native Cache (x86)
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/src/main/libs
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-x86
+      - name: Native Cache (x86_64)
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/src/main/libs
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-x86_64
       - name: V2ray Cache
         uses: actions/cache@v2
         with:
@@ -410,7 +428,6 @@ jobs:
         run: |
           export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
           export DEBUG_BUILD=true
-          export NATIVE_TARGET=arm64-v8a
           ./gradlew TMessagesProj:assembleMiniRelease
       - name: Send Build
         run: |
