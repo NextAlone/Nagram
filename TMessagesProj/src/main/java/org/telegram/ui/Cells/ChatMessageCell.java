@@ -18039,7 +18039,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             lastForwardedNamesOffset = namesOffset;
             lastForwardNameWidth = forwardedNameWidth;
             lastBackgroundLeft = getCurrentBackgroundLeft();
-            lastBackgroundRight = currentBackgroundDrawable.getBounds().right;
+            lastBackgroundRight = getCurrentBackgroundRight();
 
             reactionsLayoutInBubble.recordDrawingState();
             if (replyNameLayout != null) {
