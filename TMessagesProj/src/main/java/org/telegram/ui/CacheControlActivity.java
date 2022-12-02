@@ -129,6 +129,8 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
 
     long fragmentCreateTime;
 
+    private boolean updateDatabaseSize;
+
     @Override
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
@@ -563,7 +565,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                             CheckBoxCell cell = (CheckBoxCell) v;
                             int num = (Integer) cell.getTag();
                             if (enabledCount == 1 && clearViewData[num].clear) {
-                                AndroidUtilities.shakeView(((CheckBoxCell) v).getCheckBoxView(), 2, 0);
+                                AndroidUtilities.shakeView(((CheckBoxCell) v).getCheckBoxView());
                                 return;
                             }
 
@@ -679,6 +681,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
             progressDialog = null;
             if (listAdapter != null) {
                 databaseSize = MessagesStorage.getInstance(currentAccount).getDatabaseSize();
+                updateDatabaseSize = true;
                 listAdapter.notifyDataSetChanged();
             }
         }
@@ -766,7 +769,8 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                 case 0:
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                     if (position == databaseRow) {
-                        textCell.setTextAndValue(LocaleController.getString("ClearLocalDatabase", R.string.ClearLocalDatabase), AndroidUtilities.formatFileSize(databaseSize), false);
+                        textCell.setTextAndValue(LocaleController.getString("ClearLocalDatabase", R.string.ClearLocalDatabase), AndroidUtilities.formatFileSize(databaseSize), updateDatabaseSize, false);
+                        updateDatabaseSize = false;
                     } else if (position == resetDataRow) {
                         textCell.setText(LocaleController.getString("StorageReset", R.string.StorageReset), false);
                         textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText));

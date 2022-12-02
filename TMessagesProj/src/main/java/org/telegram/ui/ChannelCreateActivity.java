@@ -325,7 +325,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                         }
                         if (nameTextView.length() == 0) {
                             VibrateUtil.vibrate();
-                            AndroidUtilities.shakeView(nameTextView, 2, 0);
+                            AndroidUtilities.shakeView(nameTextView);
                             return;
                         }
                         donePressed = true;
@@ -347,10 +347,10 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                             } else {
                                 if (!lastNameAvailable) {
                                     VibrateUtil.vibrate();
-                                    AndroidUtilities.shakeView(checkTextView, 2, 0);
+                                    AndroidUtilities.shakeView(checkTextView);
                                     return;
                                 } else {
-                                    MessagesController.getInstance(currentAccount).updateChannelUserName(chatId, lastCheckName);
+                                    MessagesController.getInstance(currentAccount).updateChannelUserName(ChannelCreateActivity.this, chatId, lastCheckName, null, null);
                                 }
                             }
                         }
@@ -1105,9 +1105,9 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                         final TLRPC.Chat channel = cell.getCurrentChannel();
                         BottomBuilder builder = new BottomBuilder(getParentActivity());
                         if (channel.megagroup) {
-                            builder.addTitle(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlert", R.string.RevokeLinkAlert, MessagesController.getInstance(currentAccount).linkPrefix + "/" + channel.username, channel.title)));
+                            builder.addTitle(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlert", R.string.RevokeLinkAlert, MessagesController.getInstance(currentAccount).linkPrefix + "/" + ChatObject.getPublicUsername(channel), channel.title)));
                         } else {
-                            builder.addTitle(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlertChannel", R.string.RevokeLinkAlertChannel, MessagesController.getInstance(currentAccount).linkPrefix + "/" + channel.username, channel.title)));
+                            builder.addTitle(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlertChannel", R.string.RevokeLinkAlertChannel, MessagesController.getInstance(currentAccount).linkPrefix + "/" + ChatObject.getPublicUsername(channel), channel.title)));
                         }
                         builder.addItem(LocaleController.getString("RevokeButton", R.string.RevokeButton), R.drawable.baseline_delete_forever_24, (i) -> {
                             TLRPC.TL_channels_updateUsername req1 = new TLRPC.TL_channels_updateUsername();

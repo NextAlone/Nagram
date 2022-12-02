@@ -1561,7 +1561,7 @@ public class PasscodeView extends FrameLayout implements NotificationCenter.Noti
         fingerprintStatusTextView.setText(error);
         fingerprintStatusTextView.setTextColor(0xfff4511e);
         VibrateUtil.vibrate();
-        AndroidUtilities.shakeView(fingerprintStatusTextView, 2, 0);
+        AndroidUtilities.shakeView(fingerprintStatusTextView);
     }
 
     @Override

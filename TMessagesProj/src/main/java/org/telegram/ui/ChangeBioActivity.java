@@ -118,7 +118,7 @@ public class ChangeBioActivity extends BaseFragment {
                 CharSequence result = super.filter(source, start, end, dest, dstart, dend);
                 if (result != null && source != null && result.length() != source.length()) {
                     VibrateUtil.vibrate();
-                    AndroidUtilities.shakeView(checkTextView, 2, 0);
+                    AndroidUtilities.shakeView(checkTextView);
                 }
                 return result;
             }

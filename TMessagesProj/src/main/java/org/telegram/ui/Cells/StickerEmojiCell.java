@@ -316,7 +316,7 @@ public class StickerEmojiCell extends FrameLayout implements NotificationCenter.
             if (v != null) {
                 v.vibrate(200);
             }
-            AndroidUtilities.shakeView(premiumIconView, 2, 0);
+            AndroidUtilities.shakeView(premiumIconView);
         }
     }
 

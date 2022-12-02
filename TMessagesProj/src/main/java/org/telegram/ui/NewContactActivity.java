@@ -115,17 +115,17 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
                     }
                     if (firstNameField.length() == 0) {
                         VibrateUtil.vibrate();
-                        AndroidUtilities.shakeView(firstNameField, 2, 0);
+                        AndroidUtilities.shakeView(firstNameField);
                         return;
                     }
                     if (codeField.length() == 0) {
                         VibrateUtil.vibrate();
-                        AndroidUtilities.shakeView(codeField, 2, 0);
+                        AndroidUtilities.shakeView(codeField);
                         return;
                     }
                     if (phoneField.length() == 0) {
                         VibrateUtil.vibrate();
-                        AndroidUtilities.shakeView(phoneField, 2, 0);
+                        AndroidUtilities.shakeView(phoneField);
                         return;
                     }
                     donePressed = true;
