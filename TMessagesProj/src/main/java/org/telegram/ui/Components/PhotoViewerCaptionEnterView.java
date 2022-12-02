@@ -22,7 +22,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.Vibrator;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -34,6 +33,7 @@ import android.text.style.ImageSpan;
 import android.util.TypedValue;
 import android.view.ActionMode;
 import android.view.Gravity;
+import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -71,6 +71,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
     public int getCaptionLimitOffset() {
         return MessagesController.getInstance(currentAccount).getCaptionMaxLengthLimit() - codePointCount;
+    }
+
+    public int getCodePointCount() {
+        return codePointCount;
     }
 
     public interface PhotoViewerCaptionEnterViewDelegate {
@@ -125,7 +129,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     private final Theme.ResourcesProvider resourcesProvider;
     public int currentAccount = UserConfig.selectedAccount;
 
-    public PhotoViewerCaptionEnterView(Context context, SizeNotifierFrameLayoutPhoto parent, final View window, Theme.ResourcesProvider resourcesProvider) {
+    public PhotoViewerCaptionEnterView(PhotoViewer photoViewer, Context context, SizeNotifierFrameLayoutPhoto parent, final View window, Theme.ResourcesProvider resourcesProvider) {
         super(context);
         this.resourcesProvider = new DarkTheme();
         paint.setColor(0x7f000000);
@@ -273,6 +277,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         });
         messageEditText.addTextChangedListener(new TextWatcher() {
             boolean processChange = false;
+            boolean heightShouldBeChanged;
 
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -281,10 +286,13 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
                 if (lineCount != messageEditText.getLineCount()) {
+                    heightShouldBeChanged = (messageEditText.getLineCount() >= 4) != (lineCount >= 4);
                     if (!isInitLineCount && messageEditText.getMeasuredWidth() > 0) {
                         onLineCountChanged(lineCount, messageEditText.getLineCount());
                     }
                     lineCount = messageEditText.getLineCount();
+                } else {
+                    heightShouldBeChanged = false;
                 }
 
                 if (innerTextChange) {
@@ -364,6 +372,15 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     });
                     sendButtonColorAnimator.setDuration(150).start();
                 }
+
+                if (photoViewer.getParentAlert() != null && !photoViewer.getParentAlert().captionLimitBulletinShown && !MessagesController.getInstance(currentAccount).premiumLocked && !UserConfig.getInstance(currentAccount).isPremium() && codePointCount > MessagesController.getInstance(currentAccount).captionLengthLimitDefault && codePointCount < MessagesController.getInstance(currentAccount).captionLengthLimitPremium) {
+                    photoViewer.getParentAlert().captionLimitBulletinShown = true;
+                    if (heightShouldBeChanged) {
+                        AndroidUtilities.runOnUIThread(()->photoViewer.showCaptionLimitBulletin(parent), 300);
+                    } else {
+                        photoViewer.showCaptionLimitBulletin(parent);
+                    }
+                }
             }
         });
 
@@ -378,8 +395,14 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         textFieldContainer.addView(doneButton, LayoutHelper.createLinear(48, 48, Gravity.BOTTOM));
         doneButton.setOnClickListener(view -> {
             if (MessagesController.getInstance(currentAccount).getCaptionMaxLengthLimit() - codePointCount < 0) {
-                AndroidUtilities.shakeView(captionLimitView, 2, 0);
-                VibrateUtil.vibrate();
+                AndroidUtilities.shakeView(captionLimitView);
+                try {
+                    captionLimitView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                } catch (Exception ignored) {}
+
+                if (!MessagesController.getInstance(currentAccount).premiumLocked && MessagesController.getInstance(currentAccount).captionLengthLimitPremium > codePointCount) {
+                    photoViewer.showCaptionLimitBulletin(parent);
+                }
                 return;
             }
             delegate.onCaptionEnter();

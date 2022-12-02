@@ -79,7 +79,7 @@ public class ColoredImageSpan extends ReplacementSpan {
 
     public void setColorKey(String colorKey) {
         this.colorKey = colorKey;
-        usePaintColor = false;
+        usePaintColor = colorKey == null;
     }
 
     public void setTopOffset(int topOffset) {

@@ -32,7 +32,6 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.CheckBoxSquare;
@@ -157,7 +156,7 @@ public class TextCheckCell extends FrameLayout {
         textView.setText(text);
         isMultiline = false;
         if (checkBox != null) {
-            checkBox.setChecked(checked, false);
+            checkBox.setChecked(checked, attached);
         } else {
             checkBoxSquare.setChecked(checked,false);
         }
@@ -369,5 +368,19 @@ public class TextCheckCell extends FrameLayout {
             sb.append(valueTextView.getText());
         }
         info.setContentDescription(sb);
+    }
+
+    boolean attached;
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        attached = true;
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        attached = false;
     }
 }

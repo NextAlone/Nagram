@@ -3,12 +3,12 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
-def verName = "9.0.2"
+def verName = "9.1.6"
 def verCode = 1113
 
 
-def officialVer = "9.0.2"
-def officialCode = 2808
+def officialVer = "9.1.6"
+def officialCode = 2929
 
 configurations {
     compile.exclude module: "support-v4"
@@ -64,10 +64,12 @@ android {
                 universalApk true
             } else {
                 enable true
-                universalApk false
                 if (!nativeTarget.isBlank()) {
                     reset()
                     include nativeTarget
+                    universalApk false
+                } else {
+                    universalApk true
                 }
             }
         }
@@ -202,7 +204,6 @@ android {
         }
 
         debug {
-            java {
                 srcDirs "src/main/java", "src/gservcies/java"
             }
             jni.srcDirs = ["./jni/"]

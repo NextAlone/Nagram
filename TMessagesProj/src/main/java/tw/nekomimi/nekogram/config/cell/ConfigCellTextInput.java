@@ -95,7 +95,7 @@ public class ConfigCellTextInput extends AbstractConfigCell {
             //refresh
             cellGroup.listAdapter.notifyItemChanged(cellGroup.rows.indexOf(this));
             builder.getDismissRunnable().run();
-            cellGroup.thisFragment.parentLayout.rebuildAllFragmentViews(false, false);
+            cellGroup.thisFragment.getParentLayout().rebuildAllFragmentViews(false, false);
 
             cellGroup.runCallback(bindConfig.getKey(), newV);
         });

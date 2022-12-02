@@ -50,6 +50,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
+import androidx.core.graphics.ColorUtils;
+import androidx.dynamicanimation.animation.FloatValueHolder;
+import androidx.dynamicanimation.animation.SpringAnimation;
+import androidx.dynamicanimation.animation.SpringForce;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -139,6 +143,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     private ActionBarMenuItem searchItem;
     private boolean blurredAnimationInProgress;
     private View[] buttons = new View[5];
+    private SpringAnimation seekBarBufferSpring;
 
     private boolean draggingSeekBar;
 
@@ -174,6 +179,8 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     int rewindingForwardPressedCount;
     long lastRewindingTime;
     long lastUpdateRewindingPlayerTime;
+
+    private boolean wasLight;
 
     private final static int menu_speed_slow = 1;
     private final static int menu_speed_normal = 2;
@@ -273,18 +280,15 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                     lastMeasturedHeight = totalHeight;
                 }
                 ignoreLayout = true;
-                if (Build.VERSION.SDK_INT >= 21 && !isFullscreen) {
-                    setPadding(backgroundPaddingLeft, AndroidUtilities.statusBarHeight, backgroundPaddingLeft, 0);
-                }
                 playerLayout.setVisibility(searchWas || keyboardVisible ? INVISIBLE : VISIBLE);
                 playerShadow.setVisibility(playerLayout.getVisibility());
                 int availableHeight = totalHeight - getPaddingTop();
 
                 LayoutParams layoutParams = (LayoutParams) listView.getLayoutParams();
-                layoutParams.topMargin = ActionBar.getCurrentActionBarHeight();
+                layoutParams.topMargin = ActionBar.getCurrentActionBarHeight() + AndroidUtilities.statusBarHeight;
 
                 layoutParams = (LayoutParams) actionBarShadow.getLayoutParams();
-                layoutParams.topMargin = ActionBar.getCurrentActionBarHeight();
+                layoutParams.topMargin = ActionBar.getCurrentActionBarHeight() + AndroidUtilities.statusBarHeight;
 
                 LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) blurredView.getLayoutParams();
                 lp.topMargin = -getPaddingTop();
@@ -397,11 +401,6 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                         Theme.dialogs_onlineCirclePaint.setAlpha((int) (alpha * alphaProgress * rad));
                         canvas.drawRoundRect(rect, AndroidUtilities.dp(2), AndroidUtilities.dp(2), Theme.dialogs_onlineCirclePaint);
                     }
-
-                    int color1 = getThemedColor(Theme.key_dialogBackground);
-                    int finalColor = Color.argb((int) (255 * actionBar.getAlpha()), (int) (Color.red(color1) * 0.8f), (int) (Color.green(color1) * 0.8f), (int) (Color.blue(color1) * 0.8f));
-                    Theme.dialogs_onlineCirclePaint.setColor(finalColor);
-                    canvas.drawRect(backgroundPaddingLeft, 0, getMeasuredWidth() - backgroundPaddingLeft, AndroidUtilities.statusBarHeight, Theme.dialogs_onlineCirclePaint);
                 }
             }
 
@@ -439,7 +438,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         actionBar.setTitleColor(getThemedColor(Theme.key_player_actionBarTitle));
         actionBar.setTitle(LocaleController.getString("AttachMusic", R.string.AttachMusic));
         actionBar.setSubtitleColor(getThemedColor(Theme.key_player_actionBarSubtitle));
-        actionBar.setOccupyStatusBar(false);
+        actionBar.setOccupyStatusBar(true);
         actionBar.setAlpha(0.0f);
 
         if (messageObject != null && !MediaController.getInstance().currentPlaylistIsGlobalSearch()) {
@@ -646,6 +645,12 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         });
         seekBarView.setReportChanges(true);
         playerLayout.addView(seekBarView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 38, Gravity.TOP | Gravity.LEFT, 5, 70, 5, 0));
+
+        seekBarBufferSpring = new SpringAnimation(new FloatValueHolder(0))
+                .setSpring(new SpringForce()
+                        .setStiffness(750f)
+                        .setDampingRatio(SpringForce.DAMPING_RATIO_NO_BOUNCY))
+                .addUpdateListener((animation, value, velocity) -> seekBarView.setBufferedProgress(value / 1000f));
 
         progressView = new LineProgressView(context);
         progressView.setVisibility(View.INVISIBLE);
@@ -1395,9 +1400,9 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             final ArrayList<MessageObject> fmessages = new ArrayList<>();
             fmessages.add(messageObject);
             fragment.setDelegate((fragment1, dids, message, param) -> {
-                if (dids.size() > 1 || dids.get(0) == UserConfig.getInstance(currentAccount).getClientUserId() || message != null) {
+                if (dids.size() > 1 || dids.get(0) .dialogId== UserConfig.getInstance(currentAccount).getClientUserId() || message != null) {
                     for (int a = 0; a < dids.size(); a++) {
-                        long did = dids.get(a);
+                        long did = dids.get(a).dialogId;
                         if (message != null) {
                             SendMessagesHelper.getInstance(currentAccount).sendMessage(message.toString(), did, null, null, null, true, null, null, null, true, 0, null, false);
                         }
@@ -1405,7 +1410,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                     }
                     fragment1.finishFragment();
                 } else {
-                    long did = dids.get(0);
+                    long did = dids.get(0).dialogId;
                     Bundle args1 = new Bundle();
                     args1.putBoolean("scrollToTopOnResume", true);
                     if (DialogObject.isEncryptedDialog(did)) {
@@ -1520,7 +1525,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             blurredView.setTag(1);
             bigAlbumConver.setImageBitmap(coverContainer.getImageReceiver().getBitmap());
             blurredAnimationInProgress = true;
-            BaseFragment fragment = parentActivity.getActionBarLayout().fragmentsStack.get(parentActivity.getActionBarLayout().fragmentsStack.size() - 1);
+            BaseFragment fragment = parentActivity.getActionBarLayout().getFragmentStack().get(parentActivity.getActionBarLayout().getFragmentStack().size() - 1);
             View fragmentView = fragment.getFragmentView();
             int w = (int) (fragmentView.getMeasuredWidth() / 6.0f);
             int h = (int) (fragmentView.getMeasuredHeight() / 6.0f);
@@ -1661,7 +1666,8 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                     }
                 }
                 if (bufferedProgress != -1) {
-                    seekBarView.setBufferedProgress(bufferedProgress);
+                    seekBarBufferSpring.getSpring().setFinalPosition(bufferedProgress * 1000);
+                    seekBarBufferSpring.start();
                 }
             }
         }
@@ -1711,10 +1717,29 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             actionBarAnimation.start();
         }
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) listView.getLayoutParams();
-        newOffset += layoutParams.topMargin - AndroidUtilities.dp(11);
+        newOffset += layoutParams.topMargin - AndroidUtilities.statusBarHeight - AndroidUtilities.dp(11);
         if (scrollOffsetY != newOffset) {
-            listView.setTopGlowOffset((scrollOffsetY = newOffset) - layoutParams.topMargin);
+            listView.setTopGlowOffset((scrollOffsetY = newOffset) - layoutParams.topMargin - AndroidUtilities.statusBarHeight);
             containerView.invalidate();
+        }
+
+        int offset = AndroidUtilities.dp(13);
+        top = scrollOffsetY - backgroundPaddingTop - offset;
+        if (currentSheetAnimationType == 1) {
+            top += listView.getTranslationY();
+        }
+        float rad = 1.0f;
+
+        if (top + backgroundPaddingTop < ActionBar.getCurrentActionBarHeight()) {
+            float toMove = offset + AndroidUtilities.dp(11 - 7);
+            float moveProgress = Math.min(1.0f, (ActionBar.getCurrentActionBarHeight() - top - backgroundPaddingTop) / toMove);
+
+            rad = 1.0f - moveProgress;
+        }
+
+        boolean light = rad <= 0.5f && ColorUtils.calculateLuminance(getThemedColor(Theme.key_dialogBackground)) > 0.7f;
+        if (light != wasLight) {
+            AndroidUtilities.setLightStatusBar(getWindow(), wasLight = light);
         }
     }
 
@@ -1846,7 +1871,8 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                     }
                 }
                 if (bufferedProgress != -1) {
-                    seekBarView.setBufferedProgress(bufferedProgress);
+                    seekBarBufferSpring.getSpring().setFinalPosition(bufferedProgress * 1000);
+                    seekBarBufferSpring.start();
                 }
                 if (updateRewinding) {
                     newTime = (int) (messageObject.getDuration() * seekBarView.getProgress());
@@ -2147,7 +2173,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                                 break;
                             }
                             TLRPC.Document document;
-                            if (messageObject.type == 0) {
+                            if (messageObject.type == MessageObject.TYPE_TEXT) {
                                 document = messageObject.messageOwner.media.webpage.document;
                             } else {
                                 document = messageObject.messageOwner.media.document;

@@ -182,7 +182,7 @@ public class BottomSheet extends Dialog {
     public boolean useBackgroundTopPadding = true;
     protected int customViewGravity = Gravity.LEFT | Gravity.TOP;
 
-    protected class ContainerView extends LinearLayout implements NestedScrollingParent {
+    protected class ContainerView extends FrameLayout implements NestedScrollingParent {
 
         private VelocityTracker velocityTracker = null;
         private int startedTrackingX;
@@ -1401,7 +1401,7 @@ public class BottomSheet extends Dialog {
         delegate = bottomSheetDelegate;
     }
 
-    public LinearLayout getContainer() {
+    public FrameLayout getContainer() {
         return container;
     }
 
@@ -1614,7 +1614,8 @@ public class BottomSheet extends Dialog {
         try {
             super.dismiss();
         } catch (Exception e) {
-            FileLog.e(e);
+            //ignore: not attached to window manager
+            FileLog.e(e, false);
         }
     }
 

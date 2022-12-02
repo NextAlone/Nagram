@@ -31,7 +31,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextPaint;
 import android.text.TextUtils;
@@ -104,6 +103,7 @@ import org.telegram.ui.ChatActivity;
 import org.telegram.ui.PassportActivity;
 import org.telegram.ui.PhotoPickerActivity;
 import org.telegram.ui.PhotoPickerSearchActivity;
+import org.telegram.ui.PremiumPreviewFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -675,6 +675,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     private final boolean forceDarkTheme;
     private final boolean showingFromDialog;
 
+    protected boolean captionLimitBulletinShown = false;
 
     private class AttachButton extends FrameLayout {
 
@@ -1061,7 +1062,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             private Bulletin.Delegate bulletinDelegate = new Bulletin.Delegate() {
                 @Override
                 public int getBottomOffset(int tag) {
-                    return AndroidUtilities.dp(52);
+                    return getHeight() - frameLayout2.getTop();
                 }
             };
             private int lastNotifyWidth;
@@ -2234,6 +2235,11 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     });
                     sendButtonColorAnimator.setDuration(150).start();
                 }
+
+//                if (!captionLimitBulletinShown && !MessagesController.getInstance(currentAccount).premiumLocked && !UserConfig.getInstance(currentAccount).isPremium() && codepointCount > MessagesController.getInstance(currentAccount).captionLengthLimitDefault && codepointCount < MessagesController.getInstance(currentAccount).captionLengthLimitPremium) {
+//                    captionLimitBulletinShown = true;
+//                    showCaptionLimitBulletin(parentFragment);
+//                }
             }
         });
         frameLayout2.addView(commentTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 0, 0, 84, 0));
@@ -2290,8 +2296,14 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         writeButtonContainer.addView(writeButton, LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 56 : 60, Build.VERSION.SDK_INT >= 21 ? 56 : 60, Gravity.LEFT | Gravity.TOP, Build.VERSION.SDK_INT >= 21 ? 2 : 0, 0, 0, 0));
         writeButton.setOnClickListener(v -> {
             if (currentLimit - codepointCount < 0) {
-                AndroidUtilities.shakeView(captionLimitView, 2, 0);
-                VibrateUtil.vibrate();
+                AndroidUtilities.shakeView(captionLimitView);
+                try {
+                    captionLimitView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                } catch (Exception ignored) {}
+
+                if (!MessagesController.getInstance(currentAccount).premiumLocked && MessagesController.getInstance(currentAccount).captionLengthLimitPremium > codepointCount) {
+                    showCaptionLimitBulletin(parentFragment);
+                }
                 return;
             }
             if (editingMessageObject == null && baseFragment instanceof ChatActivity && ((ChatActivity) baseFragment).isInScheduleMode()) {
@@ -2477,6 +2489,19 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             checkColors();
             navBarColorKey = null;
         }
+    }
+
+    private void showCaptionLimitBulletin(BaseFragment parentFragment) {
+        if (!(parentFragment instanceof ChatActivity) || !ChatObject.isChannelAndNotMegaGroup(((ChatActivity) parentFragment).getCurrentChat())) {
+            return;
+        }
+
+        BulletinFactory.of(sizeNotifierFrameLayout, resourcesProvider).createCaptionLimitBulletin(MessagesController.getInstance(currentAccount).captionLengthLimitPremium, ()->{
+            dismiss(true);
+            if (parentFragment != null) {
+                parentFragment.presentFragment(new PremiumPreviewFragment("caption_limit"));
+            }
+        }).show();
     }
 
     @Override
@@ -4182,6 +4207,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         if (baseFragment != null) {
             AndroidUtilities.setLightStatusBar(getWindow(), baseFragment.isLightStatusBar());
         }
+        captionLimitBulletinShown = false;
         super.dismiss();
         allowPassConfirmationAlert = false;
     }

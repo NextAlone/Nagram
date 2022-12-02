@@ -13,7 +13,6 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
 import android.text.Editable;
@@ -47,7 +46,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
@@ -74,7 +72,6 @@ import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PremiumPreviewFragment;
 import org.telegram.ui.ProfileActivity;
-import org.telegram.ui.SelectAnimatedEmojiDialog;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -317,11 +314,11 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                         }
 
                         drawable.update(time);
-                        imageView.backgroundThreadDrawHolder = drawable.getImageReceiver().setDrawInBackgroundThread(imageView.backgroundThreadDrawHolder);
-                        imageView.backgroundThreadDrawHolder.time = time;
+                        imageView.backgroundThreadDrawHolder[threadIndex] = drawable.getImageReceiver().setDrawInBackgroundThread(imageView.backgroundThreadDrawHolder[threadIndex], threadIndex);
+                        imageView.backgroundThreadDrawHolder[threadIndex].time = time;
                         drawable.setAlpha(255);
                         AndroidUtilities.rectTmp2.set(imageView.getLeft() + imageView.getPaddingLeft(),  imageView.getPaddingTop(), imageView.getRight() - imageView.getPaddingRight(), imageView.getMeasuredHeight() - imageView.getPaddingBottom());
-                        imageView.backgroundThreadDrawHolder.setBounds(AndroidUtilities.rectTmp2);
+                        imageView.backgroundThreadDrawHolder[threadIndex].setBounds(AndroidUtilities.rectTmp2);
                         imageView.imageReceiver = drawable.getImageReceiver();
                         drawInBackgroundViews.add(imageView);
                     }
@@ -355,7 +352,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 public void drawInBackground(Canvas canvas) {
                     for (int i = 0; i < drawInBackgroundViews.size(); i++) {
                         EmojiImageView imageView = drawInBackgroundViews.get(i);
-                        imageView.imageReceiver.draw(canvas, imageView.backgroundThreadDrawHolder);
+                        imageView.imageReceiver.draw(canvas, imageView.backgroundThreadDrawHolder[threadIndex]);
                     }
                 }
 
@@ -399,7 +396,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                     super.onFrameReady();
                     for (int i = 0; i < drawInBackgroundViews.size(); i++) {
                         EmojiImageView imageView = drawInBackgroundViews.get(i);
-                        imageView.backgroundThreadDrawHolder.release();
+                        imageView.backgroundThreadDrawHolder[threadIndex].release();
                     }
                     containerView.invalidate();
                 }
@@ -941,7 +938,9 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
     @Override
     public void dismiss() {
         super.dismiss();
-        customEmojiPacks.recycle();
+        if (customEmojiPacks != null) {
+            customEmojiPacks.recycle();
+        }
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 4);
     }
 
@@ -1115,7 +1114,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
             }
             ShareAlert alert = new ShareAlert(context, null, stickersUrl, false, stickersUrl, false, resourcesProvider) {
                 @Override
-                protected void onSend(androidx.collection.LongSparseArray<TLRPC.Dialog> dids, int count) {
+                protected void onSend(androidx.collection.LongSparseArray<TLRPC.Dialog> dids, int count, TLRPC.TL_forumTopic topic) {
                     AndroidUtilities.runOnUIThread(() -> {
                         UndoView undoView;
                         if (fragment instanceof ChatActivity) {
@@ -1150,7 +1149,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
         }
     }
     private class EmojiImageView extends View {
-        public ImageReceiver.BackgroundThreadDrawHolder backgroundThreadDrawHolder;
+        public ImageReceiver.BackgroundThreadDrawHolder[] backgroundThreadDrawHolder = new ImageReceiver.BackgroundThreadDrawHolder[DrawingInBackgroundThreadDrawable.THREAD_COUNT];
         public ImageReceiver imageReceiver;
 
         public EmojiImageView(Context context) {

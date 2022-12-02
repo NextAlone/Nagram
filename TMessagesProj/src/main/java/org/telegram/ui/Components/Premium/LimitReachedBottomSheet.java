@@ -120,6 +120,7 @@ public class LimitReachedBottomSheet extends BottomSheetWithRecyclerListView {
         } else if (type == TYPE_TO_MANY_COMMUNITIES) {
             loadInactiveChannels();
         }
+        updatePremiumButtonText();
     }
 
     @Override
@@ -128,7 +129,6 @@ public class LimitReachedBottomSheet extends BottomSheetWithRecyclerListView {
         Context context = containerView.getContext();
 
         premiumButtonView = new PremiumButtonView(context, true);
-        updatePremiumButtonText();
 
         if (!hasFixedSize) {
             divider = new View(context) {
@@ -604,9 +604,9 @@ public class LimitReachedBottomSheet extends BottomSheetWithRecyclerListView {
         if (channels.size() == 1) {
             TLRPC.Chat channel = channels.get(0);
             if (parentIsChannel) {
-                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlertChannel", R.string.RevokeLinkAlertChannel, MessagesController.getInstance(currentAccount).linkPrefix + "/" + channel.username, channel.title)));
+                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlertChannel", R.string.RevokeLinkAlertChannel, MessagesController.getInstance(currentAccount).linkPrefix + "/" + ChatObject.getPublicUsername(channel), channel.title)));
             } else {
-                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlert", R.string.RevokeLinkAlert, MessagesController.getInstance(currentAccount).linkPrefix + "/" + channel.username, channel.title)));
+                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlert", R.string.RevokeLinkAlert, MessagesController.getInstance(currentAccount).linkPrefix + "/" + ChatObject.getPublicUsername(channel), channel.title)));
             }
         } else {
             if (parentIsChannel) {
@@ -689,6 +689,9 @@ public class LimitReachedBottomSheet extends BottomSheetWithRecyclerListView {
                         ((LinearLayoutManager) recyclerListView.getLayoutManager()).scrollToPositionWithOffset(headerRow + 1, savedTop);
                     }
 
+                    if (limitParams == null) {
+                        limitParams = getLimitParams(type, currentAccount);
+                    }
                     int currentValue = Math.max(inactiveChats.size(), limitParams.defaultLimit);
                     limitPreviewView.setIconValue(currentValue);
                     limitPreviewView.setBagePosition(currentValue / (float) limitParams.premiumLimit);

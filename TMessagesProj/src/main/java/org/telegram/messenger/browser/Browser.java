@@ -180,14 +180,38 @@ public class Browser {
         if (equals) {
             return url.equals("telegra.ph") || url.equals("te.legra.ph") || url.equals("graph.org");
         }
-        return url.matches("^(https" + (forceHttps ? "" : "?") + "://)?(te\\.?legra\\.ph|graph\\.org).*"); // telegra.ph, te.legra.ph, graph.org
+        return url.matches("^(https" + (forceHttps ? "" : "?") + "://)?(te\\.?legra\\.ph|graph\\.org)(/.*|$)"); // telegra.ph, te.legra.ph, graph.org
+    }
+
+    public static String extractUsername(String link) {
+        if (link == null || TextUtils.isEmpty(link)) {
+            return null;
+        }
+        if (link.startsWith("@")) {
+            return link.substring(1);
+        }
+        if (link.startsWith("t.me/")) {
+            return link.substring(5);
+        }
+        if (link.startsWith("http://t.me/")) {
+            return link.substring(12);
+        }
+        if (link.startsWith("https://t.me/")) {
+            return link.substring(13);
+        }
+        Matcher prefixMatcher = LaunchActivity.PREFIX_T_ME_PATTERN.matcher(link);
+        if (prefixMatcher.find()) {
+            return prefixMatcher.group(1);
+        }
+        return null;
     }
 
     public static boolean urlMustNotHaveConfirmation(String url) {
         return (
             isTelegraphUrl(url, false, true) ||
-            url.matches("^(https://)?t\\.me/iv\\??.*") || // t.me/iv?
-            url.matches("^(https://)?telegram\\.org/(blog|tour)/?.*") // telegram.org/blog, telegram.org/tour
+            url.matches("^(https://)?t\\.me/iv\\??(/.*|$)") || // t.me/iv?
+            url.matches("^(https://)?telegram\\.org/(blog|tour)(/.*|$)") || // telegram.org/blog, telegram.org/tour
+            url.matches("^(https://)?fragment\\.com(/.*|$)") // fragment.com
         );
     }
 
@@ -324,7 +348,7 @@ public class Browser {
                     Intent share = new Intent(ApplicationLoader.applicationContext, ShareBroadcastReceiver.class);
                     share.setAction(Intent.ACTION_SEND);
 
-                    PendingIntent copy = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, CustomTabsCopyReceiver.class), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+                    PendingIntent copy = PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, new Intent(ApplicationLoader.applicationContext, CustomTabsCopyReceiver.class), PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
                     CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder(getSession());
                     builder.addMenuItem(LocaleController.getString("CopyLink", R.string.CopyLink), copy);
@@ -341,7 +365,7 @@ public class Browser {
                             .build();
                     builder.setDefaultColorSchemeParams(params);
                     builder.setShowTitle(true);
-                    builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), R.drawable.msg_filled_shareout), LocaleController.getString("ShareFile", R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, share, PendingIntent.FLAG_IMMUTABLE), true);
+                    builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), R.drawable.msg_filled_shareout), LocaleController.getString("ShareFile", R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, share, PendingIntent.FLAG_MUTABLE ), true);
                     CustomTabsIntent intent = builder.build();
                     intent.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.launchUrl(context, uri);
@@ -360,7 +384,11 @@ public class Browser {
             intent.putExtra(android.provider.Browser.EXTRA_CREATE_NEW_TAB, true);
             intent.putExtra(android.provider.Browser.EXTRA_APPLICATION_ID, context.getPackageName());
             intent.putExtra("internal", true);
-            context.startActivity(intent);
+            if (internalUri && context instanceof LaunchActivity) {
+                ((LaunchActivity) context).onNewIntent(intent);
+            } else {
+                context.startActivity(intent);
+            }
         } catch (Exception e) {
             FileLog.e(e);
         }

@@ -92,7 +92,7 @@ public class ConfigCellSelectBox extends AbstractConfigCell {
                     cellGroup.listAdapter.notifyItemChanged(cellGroup.rows.indexOf(this));
                 builder.getDismissRunnable().run();
                 if (cellGroup.thisFragment != null)
-                    cellGroup.thisFragment.parentLayout.rebuildAllFragmentViews(false, false);
+                    cellGroup.thisFragment.getParentLayout().rebuildAllFragmentViews(false, false);
 
                 cellGroup.runCallback(bindConfig.getKey(), which);
             });
@@ -127,7 +127,7 @@ public class ConfigCellSelectBox extends AbstractConfigCell {
             if (cellGroup.listAdapter != null)
                 cellGroup.listAdapter.notifyItemChanged(cellGroup.rows.indexOf(this));
             if (cellGroup.thisFragment != null)
-                cellGroup.thisFragment.parentLayout.rebuildAllFragmentViews(false, false);
+                cellGroup.thisFragment.getParentLayout().rebuildAllFragmentViews(false, false);
 
             cellGroup.runCallback(bindConfig.getKey(), i);
 

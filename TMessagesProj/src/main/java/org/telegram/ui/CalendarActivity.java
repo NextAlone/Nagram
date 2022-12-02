@@ -89,6 +89,7 @@ public class CalendarActivity extends BaseFragment {
     Paint blackoutPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     private long dialogId;
+    private int topicId;
     private boolean loading;
     private boolean checkEnterItems;
     private boolean inSelectionMode;
@@ -142,6 +143,7 @@ public class CalendarActivity extends BaseFragment {
     @Override
     public boolean onFragmentCreate() {
         dialogId = getArguments().getLong("dialog_id");
+        topicId = getArguments().getInt("topic_id");
         calendarType = getArguments().getInt("type");
 
         if (dialogId >= 0) {
@@ -315,8 +317,8 @@ public class CalendarActivity extends BaseFragment {
                     public void run(boolean forAll) {
                         finishFragment();
 
-                        if (parentLayout.fragmentsStack.size() >= 2) {
-                            BaseFragment fragment = parentLayout.fragmentsStack.get(parentLayout.fragmentsStack.size() - 2);
+                        if (parentLayout.getFragmentStack().size() >= 2) {
+                            BaseFragment fragment = parentLayout.getFragmentStack().get(parentLayout.getFragmentStack().size() - 2);
                             if (fragment instanceof ChatActivity) {
                                 ((ChatActivity) fragment).deleteHistory(dateSelectedStart, dateSelectedEnd + 86400, forAll);
                             }
@@ -602,6 +604,9 @@ public class CalendarActivity extends BaseFragment {
                 @SuppressLint("NotifyDataSetChanged")
                 @Override
                 public boolean onSingleTapUp(MotionEvent e) {
+                    if (parentLayout == null) {
+                        return false;
+                    }
                     if (calendarType == TYPE_MEDIA_CALENDAR && messagesByDays != null) {
                         PeriodDay day = getDayAtCoord(e.getX(), e.getY());
                         if (day != null && day.messageObject != null && callback != null) {
@@ -642,8 +647,8 @@ public class CalendarActivity extends BaseFragment {
                             }
                         } else {
                             PeriodDay day = getDayAtCoord(e.getX(), e.getY());
-                            if (day != null && parentLayout.fragmentsStack.size() >= 2) {
-                                BaseFragment fragment = parentLayout.fragmentsStack.get(parentLayout.fragmentsStack.size() - 2);
+                            if (day != null && parentLayout != null && parentLayout.getFragmentStack().size() >= 2) {
+                                BaseFragment fragment = parentLayout.getFragmentStack().get(parentLayout.getFragmentStack().size() - 2);
                                 if (fragment instanceof ChatActivity) {
                                     finishFragment();
                                     ((ChatActivity) fragment).jumpToDate(day.date);
@@ -714,8 +719,8 @@ public class CalendarActivity extends BaseFragment {
                         cellJump.setTextAndIcon(LocaleController.getString("JumpToDate", R.string.JumpToDate), R.drawable.msg_message);
                         cellJump.setMinimumWidth(160);
                         cellJump.setOnClickListener(view -> {
-                            if (parentLayout.fragmentsStack.size() >= 3) {
-                                BaseFragment fragment = parentLayout.fragmentsStack.get(parentLayout.fragmentsStack.size() - 3);
+                            if (parentLayout.getFragmentStack().size() >= 3) {
+                                BaseFragment fragment = parentLayout.getFragmentStack().get(parentLayout.getFragmentStack().size() - 3);
                                 if (fragment instanceof ChatActivity) {
                                     AndroidUtilities.runOnUIThread(() -> {
                                         finishFragment();
@@ -744,8 +749,8 @@ public class CalendarActivity extends BaseFragment {
                             cellDelete.setTextAndIcon(LocaleController.getString("ClearHistory", R.string.ClearHistory), R.drawable.msg_delete);
                             cellDelete.setMinimumWidth(160);
                             cellDelete.setOnClickListener(view -> {
-                                if (parentLayout.fragmentsStack.size() >= 3) {
-                                    BaseFragment fragment = parentLayout.fragmentsStack.get(parentLayout.fragmentsStack.size() - 3);
+                                if (parentLayout.getFragmentStack().size() >= 3) {
+                                    BaseFragment fragment = parentLayout.getFragmentStack().get(parentLayout.getFragmentStack().size() - 3);
                                     if (fragment instanceof ChatActivity) {
                                         AlertsCreator.createClearDaysDialogAlert(CalendarActivity.this, 1, getMessagesController().getUser(dialogId), null, false, new MessagesStorage.BooleanCallback() {
                                             @Override
@@ -777,7 +782,7 @@ public class CalendarActivity extends BaseFragment {
                         });
                         blurredView.setVisibility(View.GONE);
                         blurredView.setFitsSystemWindows(true);
-                        parentLayout.containerView.addView(blurredView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+                        parentLayout.getOverlayContainerView().addView(blurredView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
                         prepareBlurBitmap();
 
                         presentFragmentAsPreviewWithMenu(chatActivity, previewMenu);
@@ -1265,13 +1270,13 @@ public class CalendarActivity extends BaseFragment {
     }
 
     @Override
-    protected void onTransitionAnimationStart(boolean isOpen, boolean backward) {
+    public void onTransitionAnimationStart(boolean isOpen, boolean backward) {
         super.onTransitionAnimationStart(isOpen, backward);
         isOpened = true;
     }
 
     @Override
-    protected void onTransitionAnimationProgress(boolean isOpen, float progress) {
+    public void onTransitionAnimationProgress(boolean isOpen, float progress) {
         super.onTransitionAnimationProgress(isOpen, progress);
         if (blurredView != null && blurredView.getVisibility() == View.VISIBLE) {
             if (isOpen) {
@@ -1283,7 +1288,7 @@ public class CalendarActivity extends BaseFragment {
     }
 
     @Override
-    protected void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
+    public void onTransitionAnimationEnd(boolean isOpen, boolean backward) {
         if (isOpen && blurredView != null && blurredView.getVisibility() == View.VISIBLE) {
             blurredView.setVisibility(View.GONE);
             blurredView.setBackground(null);
@@ -1397,12 +1402,12 @@ public class CalendarActivity extends BaseFragment {
         if (blurredView == null) {
             return;
         }
-        int w = (int) (parentLayout.getMeasuredWidth() / 6.0f);
-        int h = (int) (parentLayout.getMeasuredHeight() / 6.0f);
+        int w = (int) (parentLayout.getView().getMeasuredWidth() / 6.0f);
+        int h = (int) (parentLayout.getView().getMeasuredHeight() / 6.0f);
         Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.scale(1.0f / 6.0f, 1.0f / 6.0f);
-        parentLayout.draw(canvas);
+        parentLayout.getView().draw(canvas);
         Utilities.stackBlurBitmap(bitmap, Math.max(7, Math.max(w, h) / 180));
         blurredView.setBackground(new BitmapDrawable(bitmap));
         blurredView.setAlpha(0.0f);

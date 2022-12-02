@@ -348,8 +348,9 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
             bulletinContainer.animate().alpha(0).setDuration(150).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    if (bulletinContainer != null && bulletinContainer.isShown()) {
+                    try {
                         windowManager.removeViewImmediate(bulletinContainer);
+                    } catch (Exception e) {
                     }
 
                     if (bulletinHideCallback != null) {

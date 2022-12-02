@@ -56,6 +56,7 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.ListView.AdapterWithDiffUtils;
 import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
 import org.telegram.ui.Components.Premium.PremiumLockIconView;
 import org.telegram.ui.Components.Reactions.CustomEmojiReactionsWindow;
@@ -161,7 +162,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         this.currentAccount = currentAccount;
         this.fragment = fragment;
 
-        nextRecentReaction = new ReactionHolderView(context);
+        nextRecentReaction = new ReactionHolderView(context, false);
         nextRecentReaction.setVisibility(View.GONE);
         nextRecentReaction.touchable = false;
         nextRecentReaction.pressedBackupImageView.setVisibility(View.GONE);
@@ -278,13 +279,12 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         });
         recyclerListView.setLayoutManager(linearLayoutManager);
         recyclerListView.setOverScrollMode(View.OVER_SCROLL_NEVER);
-        recyclerListView.setAdapter(listAdapter = new RecyclerView.Adapter() {
+        recyclerListView.setAdapter(listAdapter = new AdapterWithDiffUtils() {
 
-            int rowCount;
-            int reactionsStartRow;
-            int reactionsEndRow;
-            int premiumUnlockButtonRow;
-            int customReactionsEmojiRow;
+            @Override
+            public boolean isEnabled(RecyclerView.ViewHolder holder) {
+                return false;
+            }
 
             @NonNull
             @Override
@@ -292,10 +292,10 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                 View view;
                 switch (viewType) {
                     default:
-                    case 0:
-                        view = new ReactionHolderView(context);
+                    case VIEW_TYPE_REACTION:
+                        view = new ReactionHolderView(context, true);
                         break;
-                    case 1:
+                    case VIEW_TYPE_PREMIUM_BUTTON:
                         premiumLockContainer = new FrameLayout(context);
                         premiumLockIconView = new PremiumLockIconView(context, PremiumLockIconView.TYPE_REACTIONS);
                         premiumLockIconView.setColor(ColorUtils.blendARGB(Theme.getColor(Theme.key_actionBarDefaultSubmenuItemIcon), Theme.getColor(Theme.key_dialogBackground), 0.7f));
@@ -311,7 +311,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                         });
                         view = premiumLockContainer;
                         break;
-                    case 2:
+                    case VIEW_TYPE_CUSTOM_EMOJI_BUTTON:
                         customReactionsContainer = new CustomReactionsContainer(context);
                         customEmojiReactionsIconView = new InternalImageView(context);
                         customEmojiReactionsIconView.setImageResource(R.drawable.msg_reactions_expand);
@@ -334,45 +334,67 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
 
             @Override
             public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-                if (holder.getItemViewType() == 0) {
+                if (holder.getItemViewType() == VIEW_TYPE_REACTION) {
                     ReactionHolderView h = (ReactionHolderView) holder.itemView;
                     h.setScaleX(1);
                     h.setScaleY(1);
-                    h.setReaction(visibleReactionsList.get(position), position);
+                    h.setReaction(items.get(position).reaction, position);
                 }
             }
 
             @Override
             public int getItemCount() {
-                return rowCount;
+                return items.size();
             }
 
             @Override
             public int getItemViewType(int position) {
-                if (position >= 0 && position < visibleReactionsList.size()) {
-                    return 0;
-                }
-                if (position == premiumUnlockButtonRow) {
-                    return 1;
-                }
-                return 2;
+                return items.get(position).viewType;
             }
 
+            ArrayList<InnerItem> items = new ArrayList<>();
+            ArrayList<InnerItem> oldItems = new ArrayList<>();
+
+            private static final int VIEW_TYPE_REACTION = 0;
+            private static final int VIEW_TYPE_PREMIUM_BUTTON = 1;
+            private static final int VIEW_TYPE_CUSTOM_EMOJI_BUTTON = 2;
             @Override
             public void notifyDataSetChanged() {
-                rowCount = 0;
-                premiumUnlockButtonRow = -1;
-                customReactionsEmojiRow = -1;
-                reactionsStartRow = rowCount;
-                rowCount += visibleReactionsList.size();
-                reactionsEndRow = rowCount;
+                oldItems.clear();
+                oldItems.addAll(items);
+                items.clear();
+                for (int i = 0; i < visibleReactionsList.size(); i++) {
+                    items.add(new InnerItem(VIEW_TYPE_REACTION, visibleReactionsList.get(i)));
+                }
                 if (showUnlockPremiumButton()) {
-                    premiumUnlockButtonRow = rowCount++;
+                    items.add(new InnerItem(VIEW_TYPE_PREMIUM_BUTTON, null));
                 }
                 if (showCustomEmojiReaction()) {
-                    customReactionsEmojiRow = rowCount++;
+                    items.add(new InnerItem(VIEW_TYPE_CUSTOM_EMOJI_BUTTON, null));
                 }
-                super.notifyDataSetChanged();
+                setItems(oldItems, items);
+            }
+
+            class InnerItem extends AdapterWithDiffUtils.Item {
+
+                ReactionsLayoutInBubble.VisibleReaction reaction;
+
+                public InnerItem(int viewType, ReactionsLayoutInBubble.VisibleReaction reaction) {
+                    super(viewType, false);
+                    this.reaction = reaction;
+                }
+
+                @Override
+                public boolean equals(Object o) {
+                    if (this == o) return true;
+                    if (o == null || getClass() != o.getClass()) return false;
+                    InnerItem innerItem = (InnerItem) o;
+                    if (viewType == innerItem.viewType && viewType == VIEW_TYPE_REACTION) {
+                        return reaction != null && reaction.equals(innerItem.reaction);
+                    }
+                    return viewType == innerItem.viewType;
+                }
+
             }
         });
         recyclerListView.addOnScrollListener(new LeftRightShadowsListener());
@@ -445,7 +467,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         nextRecentReaction.getLayoutParams().height = size;
 
         bgPaint.setColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground, resourcesProvider));
-        MediaDataController.getInstance(currentAccount).preloadReactions();
+        MediaDataController.getInstance(currentAccount).preloadDefaultReactions();
     }
 
     private void animatePullingBack() {
@@ -468,21 +490,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
             return;
         }
         reactionsWindow = new CustomEmojiReactionsWindow(fragment, allReactionsList, selectedReactions, this, resourcesProvider);
-        for (int i = 0; i < recyclerListView.getChildCount(); i++) {
-            View child = recyclerListView.getChildAt(i);
-            if (child instanceof ReactionHolderView) {
-                ReactionHolderView holderView = (ReactionHolderView) child;
-                if (holderView.loopImageView.getImageReceiver().getLottieAnimation() != null) {
-                    holderView.loopImageView.getImageReceiver().moveLottieToFront();
-                }
-                if (holderView.loopImageView.animatedEmojiDrawable != null) {
-                    reactionsWindow.getSelectAnimatedEmojiDialog().putAnimatedEmojiToCache(holderView.loopImageView.animatedEmojiDrawable);
-                }
-            }
-        }
-        if (nextRecentReaction != null && nextRecentReaction.getVisibility() == View.VISIBLE) {
-            nextRecentReaction.loopImageView.getImageReceiver().moveLottieToFront();
-        }
+
         reactionsWindow.onDismissListener(() -> {
             reactionsWindow = null;
         });
@@ -701,33 +709,6 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                     nextRecentReaction.setTag(null);
                 }
             }
-//            if (pullingLeftOffsetProgress > 0.8f) {
-//                if (nextRecentReaction.getTag() == null) {
-//                    nextRecentReaction.setTag(1f);
-//                    if (nextRecentReaction.getVisibility() == View.GONE) {
-//                        nextRecentReaction.resetAnimation();
-//                        nextRecentReaction.setVisibility(View.VISIBLE);
-//                        nextRecentReaction.play(0);
-//                        nextRecentReaction.setScaleX(1f);
-//                        nextRecentReaction.setScaleY(1f);
-//                    } else {
-//                        nextRecentReaction.animate().setListener(null).cancel();
-//                        nextRecentReaction.animate().scaleX(1f).scaleY(1f).setDuration(100).start();
-//                    }
-//
-//                }
-//
-//            } else {
-//                if (nextRecentReaction.getTag() != null) {
-//                    nextRecentReaction.setTag(null);
-//                    nextRecentReaction.animate().scaleX(0f).scaleY(0f).setDuration(100).setListener(new AnimatorListenerAdapter() {
-//                        @Override
-//                        public void onAnimationEnd(Animator animation) {
-//                            nextRecentReaction.setVisibility(View.GONE);
-//                        }
-//                    }).start();
-//                }
-//            }
         }
 
         if (skipDraw && reactionsWindow != null) {
@@ -817,7 +798,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
             pullingOffsetX = leftProgress * progress * AndroidUtilities.dp(46);
         }
         if (view.currentReaction.equals(pressedReaction)) {
-            View imageView = showCustomEmojiReaction() ? view.loopImageView : view.enterImageView;
+            View imageView = view.loopImageView.getVisibility() == View.VISIBLE ? view.loopImageView : view.enterImageView;
             view.setPivotX(view.getMeasuredWidth() >> 1);
             view.setPivotY(imageView.getY() + imageView.getMeasuredHeight());
             view.setScaleX(pressedViewScale);
@@ -1173,6 +1154,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
     }
 
     public final class ReactionHolderView extends FrameLayout {
+        private final boolean recyclerReaction;
         public BackupImageView enterImageView;
         public BackupImageView loopImageView;
         public BackupImageView pressedBackupImageView;
@@ -1183,6 +1165,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         public boolean shouldSwitchToLoopView;
         public boolean switchedToLoopView;
         public boolean selected;
+        public boolean drawSelected = true;
         public int position;
 
         Runnable playRunnable = new Runnable() {
@@ -1208,13 +1191,17 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
             }
         }
 
-        ReactionHolderView(Context context) {
+        ReactionHolderView(Context context, boolean recyclerReaction) {
             super(context);
+            this.recyclerReaction = recyclerReaction;
             enterImageView = new BackupImageView(context) {
 
                 @Override
                 protected void dispatchDraw(Canvas canvas) {
                     super.dispatchDraw(canvas);
+                    if (imageReceiver.getLottieAnimation() != null) {
+                        imageReceiver.getLottieAnimation().start();
+                    }
                     if (shouldSwitchToLoopView && !switchedToLoopView && imageReceiver.getLottieAnimation() != null && imageReceiver.getLottieAnimation().isLastFrame() && loopImageView.imageReceiver.getLottieAnimation() != null && loopImageView.imageReceiver.getLottieAnimation().hasBitmap()) {
                         switchedToLoopView = true;
                         loopImageView.imageReceiver.getLottieAnimation().setCurrentFrame(0, false, true);
@@ -1223,6 +1210,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                             enterImageView.setVisibility(View.INVISIBLE);
                         });
                     }
+                    invalidate();
                 }
 
                 @Override
@@ -1251,39 +1239,40 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
             addView(enterImageView, LayoutHelper.createFrame(34, 34, Gravity.CENTER));
             addView(pressedBackupImageView, LayoutHelper.createFrame(34, 34, Gravity.CENTER));
             addView(loopImageView, LayoutHelper.createFrame(34, 34, Gravity.CENTER));
+            enterImageView.setLayerNum(Integer.MAX_VALUE);
+            loopImageView.setLayerNum(Integer.MAX_VALUE);
+            pressedBackupImageView.setLayerNum(Integer.MAX_VALUE);
         }
 
         private void setReaction(ReactionsLayoutInBubble.VisibleReaction react, int position) {
             if (currentReaction != null && currentReaction.equals(react)) {
+                updateImage(react);
                 return;
             }
             this.position = position;
             resetAnimation();
             currentReaction = react;
             selected = selectedReactions.contains(react);
+            hasEnterAnimation = currentReaction.emojicon != null && (!showCustomEmojiReaction() || allReactionsIsDefault);
             if (currentReaction.emojicon != null) {
-                TLRPC.TL_availableReaction defaultReaction = MediaDataController.getInstance(currentAccount).getReactionsMap().get(currentReaction.emojicon);
-                if (defaultReaction != null) {
-                    SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(defaultReaction.activate_animation, Theme.key_windowBackgroundGray, 1.0f);
-                    enterImageView.getImageReceiver().setImage(ImageLocation.getForDocument(defaultReaction.appear_animation), ReactionsUtils.APPEAR_ANIMATION_FILTER, null, null, svgThumb, 0, "tgs", react, 0);
-                    pressedBackupImageView.getImageReceiver().setImage(ImageLocation.getForDocument(defaultReaction.select_animation), ReactionsUtils.SELECT_ANIMATION_FILTER, null, null, svgThumb, 0, "tgs", react, 0);
-                    loopImageView.getImageReceiver().setImage(ImageLocation.getForDocument(defaultReaction.select_animation), ReactionsUtils.SELECT_ANIMATION_FILTER, null, null, null, 0, "tgs", currentReaction, 0);
-                    loopImageView.setAnimatedEmojiDrawable(null);
-                    pressedBackupImageView.setAnimatedEmojiDrawable(null);
+                updateImage(react);
+
+                pressedBackupImageView.setAnimatedEmojiDrawable(null);
+                if (enterImageView.getImageReceiver().getLottieAnimation() != null) {
+                    enterImageView.getImageReceiver().getLottieAnimation().setCurrentFrame(0, false);
                 }
             } else {
                 pressedBackupImageView.getImageReceiver().clearImage();
                 loopImageView.getImageReceiver().clearImage();
                 pressedBackupImageView.setAnimatedEmojiDrawable(new AnimatedEmojiDrawable(AnimatedEmojiDrawable.CACHE_TYPE_ALERT_PREVIEW_LARGE, currentAccount, currentReaction.documentId));
                 loopImageView.setAnimatedEmojiDrawable(new AnimatedEmojiDrawable(AnimatedEmojiDrawable.CACHE_TYPE_ALERT_PREVIEW, currentAccount, currentReaction.documentId));
-
             }
             setFocusable(true);
-            hasEnterAnimation = currentReaction.emojicon != null && (!showCustomEmojiReaction() || allReactionsIsDefault);
             shouldSwitchToLoopView = hasEnterAnimation && showCustomEmojiReaction();
             if (!hasEnterAnimation) {
                 enterImageView.setVisibility(View.GONE);
                 loopImageView.setVisibility(View.VISIBLE);
+                switchedToLoopView = true;
             } else {
                 switchedToLoopView = false;
                 enterImageView.setVisibility(View.VISIBLE);
@@ -1295,6 +1284,18 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
             } else {
                 loopImageView.getLayoutParams().width = loopImageView.getLayoutParams().height = AndroidUtilities.dp(34);
                 enterImageView.getLayoutParams().width = enterImageView.getLayoutParams().height = AndroidUtilities.dp(34);
+            }
+        }
+
+        private void updateImage(ReactionsLayoutInBubble.VisibleReaction react) {
+            if (currentReaction.emojicon != null) {
+                TLRPC.TL_availableReaction defaultReaction = MediaDataController.getInstance(currentAccount).getReactionsMap().get(currentReaction.emojicon);
+                if (defaultReaction != null) {
+                    SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(defaultReaction.activate_animation, Theme.key_windowBackgroundGray, 1.0f);
+                    enterImageView.getImageReceiver().setImage(ImageLocation.getForDocument(defaultReaction.appear_animation), ReactionsUtils.APPEAR_ANIMATION_FILTER, null, null, svgThumb, 0, "tgs", react, 0);
+                    pressedBackupImageView.getImageReceiver().setImage(ImageLocation.getForDocument(defaultReaction.select_animation), ReactionsUtils.SELECT_ANIMATION_FILTER, null, null, svgThumb, 0, "tgs", react, 0);
+                    loopImageView.getImageReceiver().setImage(ImageLocation.getForDocument(defaultReaction.select_animation), ReactionsUtils.SELECT_ANIMATION_FILTER, null, null, hasEnterAnimation ? null : svgThumb, 0, "tgs", currentReaction, 0);
+                }
             }
         }
 
@@ -1425,7 +1426,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
 
         @Override
         protected void dispatchDraw(Canvas canvas) {
-            if (selected) {
+            if (selected && drawSelected) {
                 canvas.drawCircle(getMeasuredWidth() >> 1, getMeasuredHeight() >> 1, (getMeasuredWidth() >> 1) - AndroidUtilities.dp(1), selectedPaint);
             }
             if (loopImageView.animatedEmojiDrawable != null && loopImageView.animatedEmojiDrawable.getImageReceiver() != null) {
@@ -1530,8 +1531,6 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
 
         public void play(int delay) {
             isEnter = true;
-//            cellFlickerDrawable.progress = 0;
-//            cellFlickerDrawable.repeatEnabled = false;
             invalidate();
             if (valueAnimator != null) {
                 valueAnimator.removeAllListeners();
@@ -1578,12 +1577,11 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
             int color = ColorUtils.blendARGB(Theme.getColor(Theme.key_actionBarDefaultSubmenuItemIcon, resourcesProvider), Theme.getColor(Theme.key_dialogBackground, resourcesProvider), 0.7f);
             backgroundPaint.setColor(color);
 
-            int cy = getMeasuredHeight() >> 1;
-            int cx = getMeasuredWidth() >> 1;
+            float cy = getMeasuredHeight() / 2f;
+            float cx = getMeasuredWidth() / 2f;
             View child = getChildAt(0);
 
-            int sizeHalf = (getMeasuredWidth() - AndroidUtilities.dp(6)) >> 1;
-            float pullingLeftOffsetProgress = getPullingLeftProgress();
+            float sizeHalf = (getMeasuredWidth() - AndroidUtilities.dpf2(6)) / 2f;
 
             float expandSize = expandSize();
             AndroidUtilities.rectTmp.set(cx - sizeHalf, cy - sizeHalf - expandSize, cx + sizeHalf, cy + sizeHalf + expandSize);

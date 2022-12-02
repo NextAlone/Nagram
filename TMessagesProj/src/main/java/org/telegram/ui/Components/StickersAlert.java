@@ -490,7 +490,9 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                         adapter.notifyDataSetChanged();
                     } else {
                         dismiss();
-                        BulletinFactory.of(parentFragment).createErrorBulletin(LocaleController.getString("AddStickersNotFound", R.string.AddStickersNotFound)).show();
+                        if (parentFragment != null) {
+                            BulletinFactory.of(parentFragment).createErrorBulletin(LocaleController.getString("AddStickersNotFound", R.string.AddStickersNotFound)).show();
+                        }
                     }
                 }));
             } else {
@@ -632,7 +634,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 }
                 boolean openBgLight = AndroidUtilities.computePerceivedBrightness(getThemedColor(Theme.key_dialogBackground)) > .721f;
                 boolean closedBgLight = AndroidUtilities.computePerceivedBrightness(Theme.blendOver(getThemedColor(Theme.key_actionBarDefault), 0x33000000)) > .721f;
-                boolean isLight = open ? openBgLight : closedBgLight;
+                boolean isLight = (statusBarOpen = open) ? openBgLight : closedBgLight;
                 AndroidUtilities.setLightStatusBar(getWindow(), isLight);
             }
 
@@ -1029,7 +1031,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 }
 
                 @Override
-                protected void onSend(LongSparseArray<TLRPC.Dialog> dids, int count) {
+                protected void onSend(LongSparseArray<TLRPC.Dialog> dids, int count, TLRPC.TL_forumTopic topic) {
                     AndroidUtilities.runOnUIThread(() -> {
                         UndoView undoView;
                         if (parentFragment instanceof ChatActivity) {
@@ -1389,10 +1391,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             } else if (state[0] == 2) {
                 state[0] = 3;
                 if (!lastNameAvailable) {
-                    AndroidUtilities.shakeView(editText, 2, 0);
-                    if (!NekoConfig.disableVibration.Bool()) {
-                        editText.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                    }
+                    AndroidUtilities.shakeView(editText);
+                    editText.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 }
                 AndroidUtilities.hideKeyboard(editText);
                 SendMessagesHelper.getInstance(currentAccount).prepareImportStickers(setTitle, lastCheckName, importingSoftware, importingStickersPaths, (param) -> {

@@ -514,7 +514,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         this.forceDarkTheme = forceDarkTheme;
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.albumsDidLoad);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.cameraInitied);
-        LinearLayout container = alert.getContainer();
+        FrameLayout container = alert.getContainer();
 
         cameraDrawable = context.getResources().getDrawable(R.drawable.instant_camera).mutate();
 

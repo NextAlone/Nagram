@@ -2232,14 +2232,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 TLRPC.TL_secureValue value = getValueByType(requiredType, true);
                 if (value == null) {
                     VibrateUtil.vibrate();
-                    AndroidUtilities.shakeView(getViewByType(requiredType), 2, 0);
+                    AndroidUtilities.shakeView(getViewByType(requiredType));
                     return;
                 }
                 String key = getNameForType(requiredType.type);
                 HashMap<String, String> errors = errorsMap.get(key);
                 if (errors != null && !errors.isEmpty()) {
                     VibrateUtil.vibrate();
-                    AndroidUtilities.shakeView(getViewByType(requiredType), 2, 0);
+                    AndroidUtilities.shakeView(getViewByType(requiredType));
                     return;
                 }
                 valuesToSend.add(new ValueToSend(value, requiredType.selfie_required, requiredType.translation_required));
@@ -3572,7 +3572,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             return;
         }
         VibrateUtil.vibrate();
-        AndroidUtilities.shakeView(field, 2, 0);
+        AndroidUtilities.shakeView(field);
         scrollToField(field);
     }
 
@@ -6252,7 +6252,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         if (clear) {
             inputFields[FIELD_PASSWORD].setText("");
         }
-        AndroidUtilities.shakeView(inputFields[FIELD_PASSWORD], 2, 0);
+        AndroidUtilities.shakeView(inputFields[FIELD_PASSWORD]);
     }
 
     private void startPhoneVerification(boolean checkPermissions, final String phone, Runnable finishRunnable, ErrorRunnable errorRunnable, final PassportActivityDelegate delegate) {
@@ -7757,7 +7757,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 code = getCode();
             }
             if (TextUtils.isEmpty(code)) {
-                AndroidUtilities.shakeView(codeFieldContainer, 2, 0);
+                AndroidUtilities.shakeView(codeFieldContainer);
                 return;
             }
             nextPressed = true;

@@ -43,9 +43,7 @@ public class FilePathDatabase {
         cacheFile = new File(filesDir, DATABASE_NAME + ".db");
         shmCacheFile = new File(filesDir, DATABASE_NAME + ".db-shm");
 
-
         boolean createTable = false;
-
 
         if (!cacheFile.exists()) {
             createTable = true;
@@ -142,23 +140,24 @@ public class FilePathDatabase {
 
             CountDownLatch syncLatch = new CountDownLatch(1);
             String[] res = new String[1];
-            long time = System.currentTimeMillis();
 
             dispatchQueue.postRunnable(() -> {
-                SQLiteCursor cursor = null;
-                try {
-                    cursor = database.queryFinalized("SELECT path FROM paths WHERE document_id = " + documentId + " AND dc_id = " + dc + " AND type = " + type);
-                    if (cursor.next()) {
-                        res[0] = cursor.stringValue(0);
-                        if (BuildVars.DEBUG_VERSION) {
-                            FileLog.d("get file path id=" + documentId + " dc=" + dc + " type=" + type + " path=" + res[0]);
+                if (database != null) {
+                    SQLiteCursor cursor = null;
+                    try {
+                        cursor = database.queryFinalized("SELECT path FROM paths WHERE document_id = " + documentId + " AND dc_id = " + dc + " AND type = " + type);
+                        if (cursor.next()) {
+                            res[0] = cursor.stringValue(0);
+                            if (BuildVars.DEBUG_VERSION) {
+                                FileLog.d("get file path id=" + documentId + " dc=" + dc + " type=" + type + " path=" + res[0]);
+                            }
                         }
-                    }
-                } catch (SQLiteException e) {
-                    FileLog.e(e);
-                } finally {
-                    if (cursor != null) {
-                        cursor.dispose();
+                    } catch (SQLiteException e) {
+                        FileLog.e(e);
+                    } finally {
+                        if (cursor != null) {
+                            cursor.dispose();
+                        }
                     }
                 }
                 syncLatch.countDown();
@@ -169,6 +168,9 @@ public class FilePathDatabase {
             }
             return res[0];
         } else {
+            if (database == null) {
+                return null;
+            }
             SQLiteCursor cursor = null;
             String res = null;
             try {
@@ -194,6 +196,9 @@ public class FilePathDatabase {
         dispatchQueue.postRunnable(() -> {
             if (BuildVars.DEBUG_VERSION) {
                 FileLog.d("put file path id=" + id + " dc=" + dc + " type=" + type + " path=" + path);
+            }
+            if (database == null) {
+                return;
             }
             SQLitePreparedStatement state = null;
             SQLitePreparedStatement deleteState = null;
@@ -266,7 +271,7 @@ public class FilePathDatabase {
         dispatchQueue.postRunnable(() -> {
             try {
                 database.executeFast("DELETE FROM paths WHERE 1").stepThis().dispose();
-            } catch (SQLiteException e) {
+            } catch (Exception e) {
                 FileLog.e(e);
             }
         });
