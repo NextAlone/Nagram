@@ -60,6 +60,8 @@ object ZipUtil {
 
             }
 
+            zip.close()
+
         }
 
     }
