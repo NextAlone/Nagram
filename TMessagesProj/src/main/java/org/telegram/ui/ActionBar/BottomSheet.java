@@ -522,7 +522,7 @@ public class BottomSheet extends Dialog {
                     continue;
                 }
                 if (!onCustomLayout(child, left, top, right, bottom - (drawNavigationBar ? getBottomInset() : 0))) {
-                    final LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) child.getLayoutParams();
+                    final FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) child.getLayoutParams();
 
                     final int width = child.getMeasuredWidth();
                     final int height = child.getMeasuredHeight();
