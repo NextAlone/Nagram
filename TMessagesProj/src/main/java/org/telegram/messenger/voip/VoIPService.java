@@ -37,6 +37,7 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Icon;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -4350,6 +4351,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 		PhoneAccountHandle handle = new PhoneAccountHandle(new ComponentName(this, TelegramConnectionService.class), "" + self.id);
 		PhoneAccount account = new PhoneAccount.Builder(handle, ContactsController.formatName(self.first_name, self.last_name))
 				.setCapabilities(PhoneAccount.CAPABILITY_SELF_MANAGED)
+				.setIcon(Icon.createWithResource(this, R.drawable.ic_launcher_dr))
 				.setHighlightColor(0xff2ca5e0)
 				.addSupportedUriScheme("sip")
 				.build();

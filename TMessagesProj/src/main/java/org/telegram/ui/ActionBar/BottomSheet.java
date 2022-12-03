@@ -522,7 +522,7 @@ public class BottomSheet extends Dialog {
                     continue;
                 }
                 if (!onCustomLayout(child, left, top, right, bottom - (drawNavigationBar ? getBottomInset() : 0))) {
-                    final LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) child.getLayoutParams();
+                    final FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) child.getLayoutParams();
 
                     final int width = child.getMeasuredWidth();
                     final int height = child.getMeasuredHeight();
@@ -776,7 +776,7 @@ public class BottomSheet extends Dialog {
         }
     }
 
-    public static class BottomSheetCell extends LinearLayout {
+    public static class BottomSheetCell extends FrameLayout {
 
         private final Theme.ResourcesProvider resourcesProvider;
         private TextView textView;
@@ -792,41 +792,36 @@ public class BottomSheet extends Dialog {
             this.resourcesProvider = resourcesProvider;
 
             currentType = type;
-
-            setOrientation(LinearLayout.HORIZONTAL);
-
-            setBackground(Theme.getSelectorDrawable(false));
-
-            super.setGravity(Gravity.CENTER_VERTICAL | (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT));
+            setBackgroundDrawable(Theme.getSelectorDrawable(false));
+            //setPadding(AndroidUtilities.dp(16), 0, AndroidUtilities.dp(16), 0);
 
             imageView = new ImageView(context);
             imageView.setScaleType(ImageView.ScaleType.CENTER);
-            imageView.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_dialogIcon), PorterDuff.Mode.SRC_IN));
-            addView(imageView, LayoutHelper.createLinear(56, 48));
+            imageView.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_dialogIcon), PorterDuff.Mode.MULTIPLY));
+            addView(imageView, LayoutHelper.createFrame(56, 48, Gravity.CENTER_VERTICAL | (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT)));
 
             textView = new TextView(context);
             textView.setLines(1);
             textView.setSingleLine(true);
+            textView.setGravity(Gravity.CENTER_HORIZONTAL);
             textView.setEllipsize(TextUtils.TruncateAt.END);
             if (type == 0) {
                 textView.setTextColor(getThemedColor(Theme.key_dialogTextBlack));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-                textView.setGravity(Gravity.CENTER_VERTICAL);
-                textView.setPadding(AndroidUtilities.dp(16), 0, 0, 0);
-                addView(textView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL));
+                addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL));
             } else if (type == 1) {
+                textView.setGravity(Gravity.CENTER);
                 textView.setTextColor(getThemedColor(Theme.key_dialogTextBlack));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                textView.setGravity(Gravity.CENTER);
-                addView(textView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+                addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
             } else if (type == 2) {
                 textView.setGravity(Gravity.CENTER);
                 textView.setTextColor(getThemedColor(Theme.key_featuredStickers_buttonText));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 textView.setBackground(Theme.AdaptiveRipple.filledRect(getThemedColor(Theme.key_featuredStickers_addButton), 4));
-                addView(textView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 0, 16, 16, 16, 16));
+                addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 0, 16, 16, 16, 16));
             }
         }
 
@@ -868,10 +863,16 @@ public class BottomSheet extends Dialog {
                     imageView.setImageResource(icon);
                 }
                 imageView.setVisibility(VISIBLE);
-                textView.setPadding(0, 0, 0, 0);
+                if (bigTitle) {
+                    textView.setPadding(AndroidUtilities.dp(LocaleController.isRTL ? 21 : 72), 0, AndroidUtilities.dp(LocaleController.isRTL ? 72 : 21), 0);
+                    imageView.setPadding(LocaleController.isRTL ? 0 : AndroidUtilities.dp(5), 0, LocaleController.isRTL ? AndroidUtilities.dp(5) : 5, 0);
+                } else {
+                    textView.setPadding(AndroidUtilities.dp(LocaleController.isRTL ? 16 : 72), 0, AndroidUtilities.dp(LocaleController.isRTL ? 72 : 16), 0);
+                    imageView.setPadding(0, 0, 0, 0);
+                }
             } else {
-                imageView.setVisibility(GONE);
-                textView.setPadding(AndroidUtilities.dp(bigTitle ? 21 : 16), 0, 0, 0);
+                imageView.setVisibility(INVISIBLE);
+                textView.setPadding(AndroidUtilities.dp(bigTitle ? 21 : 16), 0, AndroidUtilities.dp(bigTitle ? 21 : 16), 0);
             }
         }
 
@@ -919,9 +920,6 @@ public class BottomSheet extends Dialog {
         } else if (Build.VERSION.SDK_INT >= 21) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         }
-
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-
         ViewConfiguration vc = ViewConfiguration.get(context);
         touchSlop = vc.getScaledTouchSlop();
 
@@ -1021,7 +1019,7 @@ public class BottomSheet extends Dialog {
         }
 
         if (containerView == null) {
-            containerView = new LinearLayout(getContext()) {
+            containerView = new FrameLayout(getContext()) {
                 @Override
                 public boolean hasOverlappingRendering() {
                     return false;
@@ -1031,10 +1029,6 @@ public class BottomSheet extends Dialog {
                 public void setTranslationY(float translationY) {
                     super.setTranslationY(translationY);
                     onContainerTranslationYChanged(translationY);
-                }
-
-                {
-                    setOrientation(VERTICAL);
                 }
             };
             containerView.setBackgroundDrawable(shadowDrawable);

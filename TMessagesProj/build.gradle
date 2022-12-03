@@ -4,11 +4,11 @@ apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
 def verName = "9.1.6"
-def verCode = 1113
+def verCode = 1120
 
 
 def officialVer = "9.1.6"
-def officialCode = 2929
+def officialCode = 2927
 
 configurations {
     compile.exclude module: "support-v4"
