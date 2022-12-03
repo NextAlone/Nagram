@@ -3223,7 +3223,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                 }
                 if (ChatObject.isMegagroup(currentChat) || currentChat != null && !ChatObject.isChannel(currentChat)) {
-                    headerItem.addSubItem(nkheaderbtn_zibi, R.drawable.baseline_delete_24, LocaleController.getString("DeleteAllFromSelf", R.string.DeleteAllFromSelf));
+                    headerItem.addSubItem(nkheaderbtn_zibi, R.drawable.msg_delete, LocaleController.getString("DeleteAllFromSelf", R.string.DeleteAllFromSelf));
                 }
 
                 if (currentChat != null && !ChatObject.isChannel(currentChat) && currentChat.creator) {
