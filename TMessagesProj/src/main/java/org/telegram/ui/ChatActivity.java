@@ -24287,11 +24287,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             int availableHeight = totalHeight - scrimPopupY - AndroidUtilities.dp(46 + 16) - (isReactionsAvailable ? AndroidUtilities.dp(52) : 0);
 
 //                            if (SharedConfig.messageSeenHintCount > 0 && contentView.getKeyboardHeight() < AndroidUtilities.dp(20)) {
+                            if (!NaConfig.INSTANCE.getHideMessageSeenTooltip().Bool()) {
                                 availableHeight -= AndroidUtilities.dp(52);
                                 Bulletin bulletin = BulletinFactory.of(Bulletin.BulletinWindow.make(getContext()), themeDelegate).createErrorBulletin(AndroidUtilities.replaceTags(LocaleController.getString("MessageSeenTooltipMessage", R.string.MessageSeenTooltipMessage)));
                                 bulletin.setDuration(4000);
                                 bulletin.show();
                                 SharedConfig.updateMessageSeenHintCount(SharedConfig.messageSeenHintCount - 1);
+                            }
 //                            } else if (contentView.getKeyboardHeight() > AndroidUtilities.dp(20)) {
 //                                availableHeight -= contentView.getKeyboardHeight() / 3f;
 //                            }
