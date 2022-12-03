@@ -352,6 +352,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val showFullAbout =
+        addConfig(
+            "ShowFullAbout",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

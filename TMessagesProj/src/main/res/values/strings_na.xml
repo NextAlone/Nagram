@@ -73,4 +73,5 @@
     <string name="ShowOnlineStatus">Show Online Status</string>
     <string name="ShowOnlineStatusNotice">Show the online status of other people next to their profile photo in groups</string>
     <string name="DoActionsInCommonGroups">Applied in common groups</string>
+    <string name="ShowFullAbout">Show full about info</string>
 </resources>

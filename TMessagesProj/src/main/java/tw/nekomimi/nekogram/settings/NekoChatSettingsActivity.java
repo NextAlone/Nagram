@@ -134,6 +134,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
 //                    LocaleController.getString("doubleTapShowReactions", R.string.doubleTapShowReactions),
 //                    LocaleController.getString("ReactionsDisabled", R.string.ReactionsDisabled),
 //            }, null));
+    private final AbstractConfigCell showFullAboutRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowFullAbout()));
     private final AbstractConfigCell dividerInteractions = cellGroup.appendCell(new ConfigCellDivider());
 
     // Sticker
