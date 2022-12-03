@@ -2938,7 +2938,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                 @Override
                 public void onSearchExpand() {
-                    if (threadMessageId != 0 || UserObject.isReplyUser(currentUser)) {
+                    if (threadMessageId != 0 && !isTopic || UserObject.isReplyUser(currentUser)) {
                         openSearchWithText(null);
                     }
                     if (!openSearchKeyboard) {
@@ -23633,8 +23633,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                         }
                         if (chatMode != MODE_SCHEDULED) {
-                            boolean allowViewHistory = currentUser == null
-                                    && (currentChat != null && !currentChat.broadcast && !isThreadChat());
+                            boolean allowViewHistory = currentChat != null && chatMode == 0 && !currentChat.broadcast && !(threadMessageObjects != null && threadMessageObjects.contains(message));
 
                             if (NekoConfig.showDeleteDownloadedFile.Bool() && TelegramUtil.messageObjectIsFile(type, selectedObject)) {
                                 items.add(LocaleController.getString("DeleteDownloadedFile", R.string.DeleteDownloadedFile));
@@ -31832,7 +31831,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             case nkbtn_view_history: {
                 // same as "search_from_user_id"
                 TLRPC.Peer peer = selectedObject.messageOwner.from_id;
-                openSearchWithText("");
+                if ((threadMessageId == 0 || isTopic) && !UserObject.isReplyUser(currentUser)) {
+                    openSearchWithText("");
+                } else {
+                    searchItem.openSearch(false);
+                }
                 if (peer.user_id!=0) {
                     TLRPC.User user = getMessagesController().getUser(peer.user_id);
                     searchUserMessages(user,null);
