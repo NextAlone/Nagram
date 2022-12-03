@@ -1549,7 +1549,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                             count = forum ? 12 : 11;
                         }
 //                        blockCell.setTextAndValue(LocaleController.getString("ChannelPermissions", R.string.ChannelPermissions), count + " / 11", true);
-                        blockCell.setTextAndValue(LocaleController.getString("ChannelPermissions", R.string.ChannelPermissions), String.format("%d/%d", count, forum ? 12 : 11), true);
+                        blockCell.setTextAndValueAndIcon(LocaleController.getString("ChannelPermissions", R.string.ChannelPermissions), String.format("%d/%d", count, forum ? 12 : 11), R.drawable.msg_permissions, true);
                     }
                     if (memberRequestsCell != null) {
                         memberRequestsCell.setTextAndValueAndIcon(LocaleController.getString("MemberRequests", R.string.MemberRequests), String.format("%d", info.requests_pending), R.drawable.msg_requests, logCell != null && logCell.getVisibility() == View.VISIBLE);
