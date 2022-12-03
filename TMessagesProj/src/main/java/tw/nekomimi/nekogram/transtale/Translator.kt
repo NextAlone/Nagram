@@ -81,6 +81,7 @@ interface Translator {
         const val providerMicrosoft = 5
         const val providerYouDao = 6
         const val providerDeepL = 7
+        const val providerTelegram = 8
 
         @Throws(Exception::class)
         suspend fun translate(to: Locale, query: String): String {
@@ -107,6 +108,7 @@ interface Translator {
                         language = if (provider == providerMicrosoft) "zh-HanT" else "zh-TW"
                     }
                 }
+                providerTelegram -> language = TelegramTranslator.convertLanguageCode(language, country)
 
             }
             val translator = when (provider) {
@@ -116,6 +118,7 @@ interface Translator {
                 providerMicrosoft -> MicrosoftTranslator
                 providerYouDao -> YouDaoTranslator
                 providerDeepL -> DeepLTranslator
+                providerTelegram -> TelegramTranslator
                 else -> throw IllegalArgumentException()
             }
 
