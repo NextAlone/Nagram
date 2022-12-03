@@ -1276,8 +1276,8 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         for (int a = 0, N = places.size(); a < N; a++) {
             TLRPC.TL_messageMediaVenue venue = places.get(a);
             try {
-                IMapsProvider.IMarkerOptions options = ApplicationLoader.getMapsProvider().onCreateMarkerOptions().position(new IMapsProvider.LatLng(venue.geo.lat, venue.geo._long));
-                options.icon(createPlaceBitmap(a));
+                IMapsProvider.IMarkerOptions options = ApplicationLoader.getMapsProvider().onCreateMarkerOptions(mapView).position(new IMapsProvider.LatLng(venue.geo.lat, venue.geo._long));
+                options.icon(getParentActivity().getResources(), createPlaceBitmap(a));
                 options.anchor(0.5f, 0.5f);
                 options.title(venue.title);
                 options.snippet(venue.address);

@@ -48,6 +48,7 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.LinkedList;
 
+import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.parts.SignturesKt;
 import tw.nekomimi.nekogram.utils.FileUtil;
@@ -106,7 +107,10 @@ public class ApplicationLoader extends Application {
 
     public static IMapsProvider getMapsProvider() {
         if (mapsProvider == null) {
-            mapsProvider = new GoogleMapsProvider();
+            if (NekoConfig.useOSMDroidMap.Bool())
+                mapsProvider = new OSMDroidMapsProvider();
+            else
+                mapsProvider = new GoogleMapsProvider();
         }
         return mapsProvider;
     }
