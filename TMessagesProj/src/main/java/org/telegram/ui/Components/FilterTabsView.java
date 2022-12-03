@@ -1127,7 +1127,7 @@ public class FilterTabsView extends FrameLayout {
             }
             TabView tabView = (TabView) view;
             if (isEditing) {
-                if (position != 0) {
+                if (position != 0 || NekoConfig.hideAllTab.Bool()) {
                     int side = AndroidUtilities.dp(6);
                     if (tabView.rect.left - side < x && tabView.rect.right + side > x) {
                         delegate.onDeletePressed(tabView.currentTab.id);
@@ -1442,9 +1442,10 @@ public class FilterTabsView extends FrameLayout {
             int tabWith = 0;
             int trueTabsWidth = allTabsWidth ;
             if (showAllChatsTab && firstTab != null) {
+                firstTab.setTitle(LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
                 tabWith = firstTab.getWidth(false);
-                trueTabsWidth = allTabsWidth - tabWith;
                 firstTab.setTitle(allTabsWidth > width ? LocaleController.getString("FilterAllChatsShort", R.string.FilterAllChatsShort) : LocaleController.getString("FilterAllChats", R.string.FilterAllChats));
+                trueTabsWidth = allTabsWidth - tabWith;
                 trueTabsWidth += firstTab.getWidth(false);
             }
             int prevWidth = additionalTabWidth;
@@ -1706,6 +1707,21 @@ public class FilterTabsView extends FrameLayout {
                 return;
             }
             ArrayList<MessagesController.DialogFilter> filters = MessagesController.getInstance(UserConfig.selectedAccount).dialogFilters;
+            if (NekoConfig.hideAllTab.Bool()) {
+                int defaultPosition = 0;
+                for (int i = 0; i < filters.size(); i++) {
+                    if (filters.get(i).isDefault()) {
+                        defaultPosition = i;
+                        break;
+                    }
+                }
+                if (idx1 >= defaultPosition) {
+                    idx1++;
+                }
+                if (idx2 >= defaultPosition) {
+                    idx2++;
+                }
+            }
             MessagesController.DialogFilter filter1 = filters.get(idx1);
             MessagesController.DialogFilter filter2 = filters.get(idx2);
             int temp = filter1.order;
@@ -1804,7 +1820,7 @@ public class FilterTabsView extends FrameLayout {
 
         @Override
         public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-            if (MessagesController.getInstance(UserConfig.selectedAccount).premiumLocked && (!isEditing || (viewHolder.getAdapterPosition() == 0 && tabs.get(0).isDefault && !UserConfig.getInstance(UserConfig.selectedAccount).isPremium()))) {
+            if (showAllChatsTab && MessagesController.getInstance(UserConfig.selectedAccount).premiumLocked && (!isEditing || (viewHolder.getAdapterPosition() == 0 && tabs.get(0).isDefault && !UserConfig.getInstance(UserConfig.selectedAccount).isPremium()))) {
                 return makeMovementFlags(0, 0);
             }
             return makeMovementFlags(ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, 0);
@@ -1812,7 +1828,7 @@ public class FilterTabsView extends FrameLayout {
 
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {
-            if (MessagesController.getInstance(UserConfig.selectedAccount).premiumLocked && ((source.getAdapterPosition() == 0 || target.getAdapterPosition() == 0) && !UserConfig.getInstance(UserConfig.selectedAccount).isPremium())) {
+            if (showAllChatsTab && MessagesController.getInstance(UserConfig.selectedAccount).premiumLocked && ((source.getAdapterPosition() == 0 || target.getAdapterPosition() == 0) && !UserConfig.getInstance(UserConfig.selectedAccount).isPremium())) {
                 return false;
             }
             adapter.swapElements(source.getAdapterPosition(), target.getAdapterPosition());
