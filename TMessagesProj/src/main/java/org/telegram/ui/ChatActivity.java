@@ -23657,7 +23657,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     }
                                 }
                             }
-                            if (NekoConfig.showTranslate.Bool() && !messageObject.translating) {
+                            if (NekoConfig.showTranslate.Bool()) {
                                 if (messageObject != null || docsWithMessages) {
                                     boolean td;
                                     if (messageObject != null) {
@@ -23870,7 +23870,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 }
                             }
                         }
-                        if (NekoConfig.showTranslate.Bool() && !messageObject.translating) {
+                        if (NekoConfig.showTranslate.Bool()) {
                             if (messageObject != null || docsWithMessages) {
                                 boolean td;
                                 if (messageObject != null) {
@@ -29250,7 +29250,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 (String lang) -> {
                                     if (!isLanguageRestricted(lang)) {
                                         ArrayList<MessageObject> fmessages = new ArrayList<>(Arrays.asList(messageObject));
-                                        MessageTransKt.translateMessages(ChatActivity.this, fmessages);
+                                        MessageTransKt.translateMessages(ChatActivity.this, fmessages, true);
                                     }
                                 },
                                 (Exception e) -> {
