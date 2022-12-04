@@ -376,6 +376,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val hideBotButtonInInputField =
+        addConfig(
+            "HideBotButtonInInputField",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

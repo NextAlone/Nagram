@@ -44,4 +44,5 @@
     <string name="DoActionsInCommonGroups">也在共同群組中操作</string>
     <string name="HideMessageSeenTooltip">隱藏訊息已讀提示</string>
     <string name="TypeMessageHintUseGroupName">使用群組名稱作為輸入提示</string>
+    <string name="HideBotButtonInInputField">隱藏輸入框中的機器人按鈕</string>
 </resources>
