@@ -5,6 +5,8 @@ import android.os.VibrationEffect;
 
 import androidx.annotation.RequiresApi;
 
+import tw.nekomimi.nekogram.utils.VibrateUtil;
+
 public enum BotWebViewVibrationEffect {
     IMPACT_LIGHT(new long[] {7}, new int[] {65}, new long[] {60}),
     IMPACT_MEDIUM(new long[] {7}, new int[] {145}, new long[] {70}),
@@ -43,9 +45,9 @@ public enum BotWebViewVibrationEffect {
 
     public void vibrate() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            AndroidUtilities.getVibrator().vibrate(getVibrationEffectForOreo());
+            VibrateUtil.vibrate(200L, getVibrationEffectForOreo());
         } else {
-            AndroidUtilities.getVibrator().vibrate(fallbackTimings, -1);
+            VibrateUtil.vibrate(fallbackTimings, -1);
         }
     }
 }
