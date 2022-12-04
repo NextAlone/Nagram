@@ -77,4 +77,5 @@
     <string name="HideMessageSeenTooltip">Hide message seen tooltip</string>
     <string name="TypeMessageHintUseGroupName">Use group name as type message hint</string>
     <string name="HideBotButtonInInputField">Hide bot button in input field</string>
+    <string name="ShowSendAsUnderMessageHint">Show send as under message hint</string>
 </resources>

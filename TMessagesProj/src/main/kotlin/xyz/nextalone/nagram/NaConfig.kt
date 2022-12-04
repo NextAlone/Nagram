@@ -376,6 +376,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val showSendAsUnderMessageHint =
+        addConfig(
+            "ShowSendAsUnderMessageHint",
+            ConfigItem.configTypeBool,
+            false
+        )
     val hideBotButtonInInputField =
         addConfig(
             "HideBotButtonInInputField",
