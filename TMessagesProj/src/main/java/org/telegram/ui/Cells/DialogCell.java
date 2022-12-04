@@ -1224,7 +1224,7 @@ public class DialogCell extends BaseCell {
                         } else {
                             needEmoji = true;
                             updateMessageThumbs();
-                            if (chat != null && chat.id > 0 && fromChat == null && (!ChatObject.isChannel(chat) || ChatObject.isMegagroup(chat)) && !ForumUtilities.isTopicCreateMessage(message)) {
+                            if (chat != null && chat.id > 0 && (!ChatObject.isChannel(chat) || ChatObject.isMegagroup(chat)) && !ForumUtilities.isTopicCreateMessage(message)) {
                                 messageNameString = getMessageNameString();
                                 if (chat.forum && !isTopic) {
                                     CharSequence topicName = MessagesController.getInstance(currentAccount).getTopicsController().getTopicIconName(chat, message, currentMessagePaint);
@@ -4145,8 +4145,8 @@ public class DialogCell extends BaseCell {
             }
         } else if (fromChat != null && fromChat.title != null) {
             return fromChat.title.replace("\n", "");
-        }else {
-            return "DELETED";
+        } else {
+            return LocaleController.getString("HiddenName", R.string.HiddenName);
         }
     }
 
