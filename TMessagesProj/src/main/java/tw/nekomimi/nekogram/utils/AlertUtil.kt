@@ -244,8 +244,8 @@ object AlertUtil {
                     LocaleController.getString("ProviderYandexTranslate", R.string.ProviderYandexTranslate),
                     LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud),
                     LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderMicrosoftTranslator),
-                    LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderYouDao),
-                    LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderDeepLTranslate)
+                    LocaleController.getString("ProviderYouDao", R.string.ProviderYouDao),
+                    LocaleController.getString("ProviderDeepLTranslate", R.string.ProviderDeepLTranslate)
             ))
 
             popup.setItems(items.toTypedArray()) { item, _ ->
