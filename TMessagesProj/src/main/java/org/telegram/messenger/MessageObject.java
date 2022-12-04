@@ -204,6 +204,9 @@ public class MessageObject {
     public boolean scheduled;
     public boolean preview;
 
+    // nekogram
+    public boolean translating;
+
     public ArrayList<TLRPC.TL_pollAnswer> checkedVotes;
 
     public CharSequence editingMessage;

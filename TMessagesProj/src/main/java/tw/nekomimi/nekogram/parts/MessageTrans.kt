@@ -48,6 +48,8 @@ fun MessageObject.translateFinished(locale: Locale): Int {
 
     val db = TranslateDb.forLocale(locale)
 
+    translating = false
+
     if (isPoll) {
 
         val pool = (messageOwner.media as TLRPC.TL_messageMediaPoll).poll
@@ -93,6 +95,10 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
         ?: selectedObjectGroup?.messages
         ?: emptyList()) {
 
+    if (messages.any { it.translating }) {
+        return
+    }
+
     // TODO: Fix file group
 
     if (messages.all { it.messageOwner.translated }) {
@@ -100,13 +106,17 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
         messages.forEach { messageObject ->
 
             messageObject.messageOwner.translated = false
-
             messageHelper.resetMessageContent(dialogId, messageObject)
+            messageObject.translating = false
 
         }
 
         return
 
+    } else {
+        messages.forEach { messageObject ->
+            messageObject.translating = true
+        }
     }
 
     val status = AlertUtil.showProgress(parentActivity)
@@ -302,6 +312,9 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
 
         }
 
+    }
+    messages.forEach { messageObject ->
+        messageObject.translating = false
     }
 
 }

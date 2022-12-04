@@ -6,7 +6,7 @@ import android.content.Context
 import android.text.TextUtils
 import androidx.core.content.FileProvider
 import org.telegram.messenger.*
-import org.telegram.tgnet.TLRPC.Chat
+import org.telegram.tgnet.TLRPC.*
 import org.telegram.ui.ChatActivity
 import xyz.nextalone.nagram.NaConfig
 import java.io.File
@@ -88,7 +88,7 @@ object MessageHelper {
 
     fun zalgoFilter(
         text: CharSequence?
-    ): String? {
+    ): String {
         return if (text == null) {
             ""
         } else {
@@ -154,14 +154,67 @@ object MessageHelper {
     fun canSendAsDice(text: String, parentFragment: ChatActivity, dialog_id: Long): Boolean {
         var canSendGames = true
         if (DialogObject.isChatDialog(dialog_id)) {
-            val chat: Chat = parentFragment.getMessagesController().getChat(-dialog_id)
+            val chat: Chat = parentFragment.messagesController.getChat(-dialog_id)
             canSendGames = ChatObject.canSendStickers(chat)
         }
-        return canSendGames && parentFragment.getMessagesController().diceEmojies.contains(
+        return canSendGames && parentFragment.messagesController.diceEmojies.contains(
             text.replace(
                 "\ufe0f",
                 ""
             )
         )
+    }
+
+    @JvmStatic
+    fun isLinkOrEmojiOnlyMessage(messageObject: MessageObject): Boolean {
+        val entities = messageObject.messageOwner.entities
+        if (entities != null) {
+            for (entity in entities) {
+                if (entity is TL_messageEntityBotCommand ||
+                    entity is TL_messageEntityEmail ||
+                    entity is TL_messageEntityUrl ||
+                    entity is TL_messageEntityMention ||
+                    entity is TL_messageEntityCashtag ||
+                    entity is TL_messageEntityHashtag ||
+                    entity is TL_messageEntityBankCard ||
+                    entity is TL_messageEntityPhone
+                ) {
+                    if (entity.offset == 0 && entity.length == messageObject.messageOwner.message.length) {
+                        return true
+                    }
+                }
+            }
+        }
+        return Emoji.fullyConsistsOfEmojis(messageObject.messageOwner.message)
+    }
+
+    @JvmStatic
+    fun isMessageObjectAutoTranslatable(messageObject: MessageObject): Boolean {
+        if (messageObject.messageOwner.translated || messageObject.translating || messageObject.isOutOwner) {
+            return false
+        }
+        return if (messageObject.isPoll) {
+            true
+        } else !TextUtils.isEmpty(messageObject.messageOwner.message) && !isLinkOrEmojiOnlyMessage(
+            messageObject
+        )
+    }
+
+    @JvmStatic
+    fun getMessagePlainText(messageObject: MessageObject): String {
+        val message: String = if (messageObject.isPoll) {
+            val poll = (messageObject.messageOwner.media as TL_messageMediaPoll).poll
+            val pollText = StringBuilder(poll.question).append("\n")
+            for (answer in poll.answers) {
+                pollText.append("\n\uD83D\uDD18 ")
+                pollText.append(answer.text)
+            }
+            pollText.toString()
+        } else if (messageObject.isVoiceTranscriptionOpen) {
+            messageObject.messageOwner.voiceTranscription
+        } else {
+            messageObject.messageOwner.message
+        }
+        return message
     }
 }

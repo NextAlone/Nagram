@@ -364,6 +364,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val autoTranslate =
+        addConfig(
+            "AutoTranslate",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,
