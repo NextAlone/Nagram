@@ -5231,7 +5231,12 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         messageEditText.setHintText(LocaleController.getString("ChannelBroadcast", R.string.ChannelBroadcast), animated);
                     }
                 } else {
-                    messageEditText.setHintText(LocaleController.getString("TypeMessage", R.string.TypeMessage));
+                    TLRPC.Chat chat = accountInstance.getMessagesController().getChat(-dialog_id);
+                    if (NaConfig.INSTANCE.getTypeMessageHintUseGroupName().Bool() && chat != null) {
+                        messageEditText.setHintText(chat.title, animated);
+                    } else {
+                        messageEditText.setHintText(LocaleController.getString("TypeMessage", R.string.TypeMessage), animated);
+                    }
                 }
             }
         }
