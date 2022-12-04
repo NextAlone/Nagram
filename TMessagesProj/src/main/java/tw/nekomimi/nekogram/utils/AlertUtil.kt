@@ -238,15 +238,18 @@ object AlertUtil {
 
             val items = LinkedList<String>()
 
-            items.addAll(arrayOf(
+            items.addAll(
+                arrayOf(
                     LocaleController.getString("ProviderGoogleTranslate", R.string.ProviderGoogleTranslate),
                     LocaleController.getString("ProviderGoogleTranslateCN", R.string.ProviderGoogleTranslateCN),
                     LocaleController.getString("ProviderYandexTranslate", R.string.ProviderYandexTranslate),
                     LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud),
                     LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderMicrosoftTranslator),
                     LocaleController.getString("ProviderYouDao", R.string.ProviderYouDao),
-                    LocaleController.getString("ProviderDeepLTranslate", R.string.ProviderDeepLTranslate)
-            ))
+                    LocaleController.getString("ProviderDeepLTranslate", R.string.ProviderDeepLTranslate),
+                    LocaleController.getString("ProviderTelegram", R.string.ProviderTelegram)
+                ).toList()
+            )
 
             popup.setItems(items.toTypedArray()) { item, _ ->
 
