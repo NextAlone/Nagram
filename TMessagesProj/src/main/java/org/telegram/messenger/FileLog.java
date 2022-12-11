@@ -38,6 +38,7 @@ public class FileLog {
     private File networkFile = null;
     private File tonlibFile = null;
     private boolean initied;
+    public static boolean databaseIsMalformed = false;
 
     private OutputStreamWriter tlStreamWriter = null;
     private File tlRequestsFile = null;
@@ -77,7 +78,7 @@ public class FileLog {
         String requestSimpleName = request.getClass().getSimpleName();
         checkGson();
 
-        if (excludeRequests.contains(requestSimpleName)) {
+        if (excludeRequests.contains(requestSimpleName) && error == null) {
             return;
         }
         try {

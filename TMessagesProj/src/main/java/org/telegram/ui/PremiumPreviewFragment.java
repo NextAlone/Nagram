@@ -555,6 +555,11 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         return fragmentView;
     }
 
+    @Override
+    public boolean isActionBarCrossfadeEnabled() {
+        return false;
+    }
+
     public static void buyPremium(BaseFragment fragment) {
         buyPremium(fragment, "settings");
     }
@@ -1138,7 +1143,8 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
             premiumButtonView.setButton(getPremiumButtonText(currentAccount), v -> buyPremium(this, subscriptionTiers.get(selectedTierIndex), "settings"), animated);
             return;
         }
-        premiumButtonView.setFlickerDisabled(false);
+            premiumButtonView.setFlickerDisabled(false);
+        }
     }
 
     @Override

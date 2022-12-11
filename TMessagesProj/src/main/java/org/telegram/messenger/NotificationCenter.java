@@ -10,6 +10,7 @@ package org.telegram.messenger;
 
 import android.os.SystemClock;
 import android.util.SparseArray;
+import android.view.View;
 
 import androidx.annotation.UiThread;
 
@@ -266,6 +267,7 @@ public class NotificationCenter {
     public static final int permissionsGranted = totalEvents++;
     public static int topicsDidLoaded = totalEvents++;
     public static int chatSwithcedToForum = totalEvents++;
+    public static int didUpdateGlobalAutoDeleteTimer = totalEvents++;
 
     // custom
 
@@ -662,5 +664,30 @@ public class NotificationCenter {
         private AllowedNotifications() {
             time = SystemClock.elapsedRealtime();
         }
+    }
+
+    public static void listenEmojiLoading(View view) {
+        if (view == null) {
+            return;
+        }
+
+        final NotificationCenterDelegate delegate = (id, account, args) -> {
+            if (id == NotificationCenter.emojiLoaded) {
+                if (view != null && view.isAttachedToWindow()) {
+                    view.invalidate();
+                }
+            }
+        };
+        view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View view) {
+                NotificationCenter.getGlobalInstance().addObserver(delegate, NotificationCenter.emojiLoaded);
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View view) {
+                NotificationCenter.getGlobalInstance().removeObserver(delegate, NotificationCenter.emojiLoaded);
+            }
+        });
     }
 }

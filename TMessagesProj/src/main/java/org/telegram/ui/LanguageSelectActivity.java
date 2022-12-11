@@ -15,11 +15,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Canvas;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -69,6 +72,9 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     private ArrayList<LocaleController.LocaleInfo> sortedLanguages;
     private ArrayList<LocaleController.LocaleInfo> unofficialLanguages;
 
+    private ActionBarMenuItem searchItem;
+    private int translateSettingsBackgroundHeight;
+
     @Override
     public boolean onFragmentCreate() {
         fillLanguages();
@@ -102,7 +108,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         });
 
         ActionBarMenu menu = actionBar.createMenu();
-        ActionBarMenuItem item = menu.addItem(0, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        searchItem = menu.addItem(0, R.drawable.ic_ab_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             @Override
             public void onSearchExpand() {
                 searching = true;
@@ -138,7 +144,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 }
             }
         });
-        item.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
+        searchItem.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
 
         listAdapter = new ListAdapter(context, false);
         searchListViewAdapter = new ListAdapter(context, true);
@@ -153,11 +159,32 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         emptyView.setShowAtCenter(true);
         frameLayout.addView(emptyView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-        listView = new RecyclerListView(context);
+        listView = new RecyclerListView(context) {
+            @Override
+            protected void dispatchDraw(Canvas canvas) {
+                if (getAdapter() == listAdapter && getItemAnimator() != null && getItemAnimator().isRunning()) {
+                    int backgroundColor = Theme.getColor(Theme.key_windowBackgroundWhite, resourcesProvider);
+                    drawItemBackground(canvas, 0, translateSettingsBackgroundHeight, backgroundColor);
+//                    drawItemBackground(canvas, 1, Theme.getColor(Theme.key_windowBackgroundWhite, resourcesProvider));
+                    drawSectionBackground(canvas, 1, 2, backgroundColor);
+                }
+                super.dispatchDraw(canvas);
+            }
+        };
         listView.setEmptyView(emptyView);
         listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         listView.setVerticalScrollBarEnabled(false);
         listView.setAdapter(listAdapter);
+        DefaultItemAnimator itemAnimator = new DefaultItemAnimator() {
+            @Override
+            protected void onMoveAnimationUpdate(RecyclerView.ViewHolder holder) {
+                listView.invalidate();
+                listView.updateSelector();
+            }
+        };
+        itemAnimator.setDurations(400);
+        itemAnimator.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
+        listView.setItemAnimator(itemAnimator);
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
         listView.setOnItemClickListener((view, position) -> {
@@ -332,6 +359,22 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         }
     }
 
+    private void updateLanguage() {
+        if (actionBar != null) {
+            actionBar.setTitleAnimated(LocaleController.getString("Language", R.string.Language), true, 350, CubicBezierInterpolator.EASE_OUT_QUINT);
+        }
+        if (listView != null) {
+            for (int i = 0; i < listView.getChildCount(); ++i) {
+                View child = listView.getChildAt(i);
+                if (child instanceof TranslateSettings || child instanceof HeaderCell) {
+                    listAdapter.notifyItemChanged(listView.getChildAdapterPosition(child));
+                } else {
+                    listAdapter.onBindViewHolder(listView.getChildViewHolder(child), listView.getChildAdapterPosition(child));
+                }
+            }
+        }
+    }
+
     private void processSearch(final String query) {
         Utilities.searchQueue.postRunnable(() -> {
 
@@ -464,7 +507,6 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
 //                case 3:
 //                    HeaderCell header = new HeaderCell(mContext);
 //                    header.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-//                    header.setText(LocaleController.getString("Language", R.string.Language));
 //                    view = header;
 //                    break;
                 case 1:
@@ -480,7 +522,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             switch (holder.getItemViewType()) {
                 case 0: {
-                    LanguageCell textSettingsCell = (LanguageCell) holder.itemView;
+                    if (!search)
+                        position -= 2;
 //                    TextRadioCell textSettingsCell = (TextRadioCell) holder.itemView;
                     LocaleController.LocaleInfo localeInfo;
                     boolean last;

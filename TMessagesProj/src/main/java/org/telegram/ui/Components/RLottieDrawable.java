@@ -1096,7 +1096,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
 
     @Override
     public void draw(Canvas canvas) {
-        drawInternal(canvas, false, 0, 0);
+        drawInternal(canvas, null, false, 0, 0);
     }
 
     public void drawInBackground(Canvas canvas, float x, float y, float w, float h, int alpha, ColorFilter colorFilter, int threadIndex) {
@@ -1108,10 +1108,14 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
         backgroundPaint[threadIndex].setAlpha(alpha);
         backgroundPaint[threadIndex].setColorFilter(colorFilter);
         dstRectBackground[threadIndex].set(x, y, x + w, y + h);
-        drawInternal(canvas, true, 0, threadIndex);
+        drawInternal(canvas, null,true, 0, threadIndex);
     }
 
-    public void drawInternal(Canvas canvas, boolean drawInBackground, long time, int threadIndex) {
+    public void draw(Canvas canvas, Paint paint) {
+        drawInternal(canvas, paint, false, 0, 0);
+    }
+
+    public void drawInternal(Canvas canvas, Paint overridePaint, boolean drawInBackground, long time, int threadIndex) {
         if (!canLoadFrames() || destroyWhenDone) {
             return;
         }
@@ -1120,7 +1124,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
         }
 
         RectF rect = drawInBackground ? dstRectBackground[threadIndex] : dstRect;
-        Paint paint = drawInBackground ? backgroundPaint[threadIndex] : getPaint();
+        Paint paint = overridePaint != null ? overridePaint : (drawInBackground ? backgroundPaint[threadIndex] : getPaint());
 
         if (paint.getAlpha() == 0) {
             return;
@@ -1300,7 +1304,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
         return bitmap;
     }
 
-    void setMasterParent(View parent) {
+    public void setMasterParent(View parent) {
         masterParent = parent;
     }
 

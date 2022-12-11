@@ -697,6 +697,10 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         blurIsRunning = false;
     }
 
+    public boolean blurWasDrawn() {
+        return SharedConfig.chatBlurEnabled() && currentBitmap != null;
+    }
+
     public void drawBlurRect(Canvas canvas, float y, Rect rectTmp, Paint blurScrimPaint, boolean top) {
         int blurAlpha = Color.alpha(Theme.getColor(Theme.key_chat_BlurAlpha));
         if (NekoConfig.forceBlurInChat.Bool()) blurAlpha = NekoConfig.chatBlueAlphaValue.Int();
