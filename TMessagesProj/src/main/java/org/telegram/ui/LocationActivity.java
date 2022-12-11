@@ -1387,11 +1387,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             daddrLong = chatLocation.geo_point._long;
         }
         String domain;
-        if (BuildVars.isHuaweiStoreApp()) {
-            domain = "mapapp://navigation";
-        } else {
-            domain = "http://maps.google.com/maps";
-        }
+        domain = "http://maps.google.com/maps";
         if (myLocation != null) {
             try {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(Locale.US, domain + "?saddr=%f,%f&daddr=%f,%f", myLocation.getLatitude(), myLocation.getLongitude(), daddrLat, daddrLong)));

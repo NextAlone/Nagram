@@ -18674,6 +18674,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else if (id == NotificationCenter.dialogsUnreadCounterChanged) {
                 if (actionBar != null) { // NekoX
                     actionBar.unreadBadgeSetCount(getMessagesStorage().getMainUnreadCount());
+                }
             }
         }
     }

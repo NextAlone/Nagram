@@ -28,20 +28,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.Utilities;
-import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.ActionBar.ThemeDescription;
-import org.telegram.ui.Cells.LanguageCell;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Cells.HeaderCell;
+import org.telegram.ui.Cells.LanguageCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
+import org.telegram.ui.Cells.TextCheckCell;
+import org.telegram.ui.Cells.TextInfoPrivacyCell;
+import org.telegram.ui.Cells.TextRadioCell;
+import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
@@ -73,7 +81,6 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     private ArrayList<LocaleController.LocaleInfo> unofficialLanguages;
 
     private ActionBarMenuItem searchItem;
-    private int translateSettingsBackgroundHeight;
 
     @Override
     public boolean onFragmentCreate() {
@@ -159,32 +166,11 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         emptyView.setShowAtCenter(true);
         frameLayout.addView(emptyView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-        listView = new RecyclerListView(context) {
-            @Override
-            protected void dispatchDraw(Canvas canvas) {
-                if (getAdapter() == listAdapter && getItemAnimator() != null && getItemAnimator().isRunning()) {
-                    int backgroundColor = Theme.getColor(Theme.key_windowBackgroundWhite, resourcesProvider);
-                    drawItemBackground(canvas, 0, translateSettingsBackgroundHeight, backgroundColor);
-//                    drawItemBackground(canvas, 1, Theme.getColor(Theme.key_windowBackgroundWhite, resourcesProvider));
-                    drawSectionBackground(canvas, 1, 2, backgroundColor);
-                }
-                super.dispatchDraw(canvas);
-            }
-        };
+        listView = new RecyclerListView(context);
         listView.setEmptyView(emptyView);
         listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         listView.setVerticalScrollBarEnabled(false);
         listView.setAdapter(listAdapter);
-        DefaultItemAnimator itemAnimator = new DefaultItemAnimator() {
-            @Override
-            protected void onMoveAnimationUpdate(RecyclerView.ViewHolder holder) {
-                listView.invalidate();
-                listView.updateSelector();
-            }
-        };
-        itemAnimator.setDurations(400);
-        itemAnimator.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
-        listView.setItemAnimator(itemAnimator);
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
         listView.setOnItemClickListener((view, position) -> {
@@ -200,7 +186,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                     }).show();
                     return;
                 }
-                LocaleController.getInstance().applyLanguage(localeInfo, true, false, false, true, currentAccount);
+                LocaleController.getInstance().applyLanguage(localeInfo, true, false, false, true, currentAccount, () -> {});
                 parentLayout.rebuildAllFragmentViews(false, false);
             }
             finishFragment();
@@ -359,22 +345,6 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         }
     }
 
-    private void updateLanguage() {
-        if (actionBar != null) {
-            actionBar.setTitleAnimated(LocaleController.getString("Language", R.string.Language), true, 350, CubicBezierInterpolator.EASE_OUT_QUINT);
-        }
-        if (listView != null) {
-            for (int i = 0; i < listView.getChildCount(); ++i) {
-                View child = listView.getChildAt(i);
-                if (child instanceof TranslateSettings || child instanceof HeaderCell) {
-                    listAdapter.notifyItemChanged(listView.getChildAdapterPosition(child));
-                } else {
-                    listAdapter.onBindViewHolder(listView.getChildViewHolder(child), listView.getChildAdapterPosition(child));
-                }
-            }
-        }
-    }
-
     private void processSearch(final String query) {
         Utilities.searchQueue.postRunnable(() -> {
 
@@ -522,8 +492,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             switch (holder.getItemViewType()) {
                 case 0: {
-                    if (!search)
-                        position -= 2;
+                    LanguageCell textSettingsCell = (LanguageCell) holder.itemView;
 //                    TextRadioCell textSettingsCell = (TextRadioCell) holder.itemView;
                     LocaleController.LocaleInfo localeInfo;
                     boolean last;

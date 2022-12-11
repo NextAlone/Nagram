@@ -3062,11 +3062,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 				}
 				am.abandonAudioFocus(this);
 			}
-			try {
-				am.unregisterMediaButtonEventReceiver(new ComponentName(this, VoIPMediaButtonReceiver.class));
-			} catch (Exception e) {
-				FileLog.e(e);
-			}
+			am.unregisterMediaButtonEventReceiver(new ComponentName(this, VoIPMediaButtonReceiver.class));
 			if (hasAudioFocus) {
 				am.abandonAudioFocus(this);
 			}

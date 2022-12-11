@@ -10495,7 +10495,7 @@ public class MessagesController extends BaseController implements NotificationCe
                             putUsers(res.users, false);
                             putChats(res.chats, false);
                             getMessagesStorage().putUsersAndChats(res.users, res.chats, false, true);
-                            createChat(title, selectedContacts, about, type, forImport, location, locationAddress, fragment);
+                            createChat(title, selectedContacts, about, type, forImport, location, locationAddress, ttlPeriod, fragment);
                         } else {
                             AndroidUtilities.runOnUIThread(() -> {
                                 AlertsCreator.processError(currentAccount, error, fragment, req);

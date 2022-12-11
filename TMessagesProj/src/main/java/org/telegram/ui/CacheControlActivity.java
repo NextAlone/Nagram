@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.transition.ChangeBounds;
 import android.transition.Fade;
 import android.transition.TransitionManager;
@@ -36,6 +37,7 @@ import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -425,7 +427,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
         itemInners.add(new ItemInner(VIEW_TYPE_INFO, "database", null));
 //        resetDateRow = itemInners.size();
 //        itemInners.add(new ItemInner());
-        // fixme merge 9.2.2
+//         fixme merge 9.2.2
         if (loadingDialogs) {
             itemInners.add(new ItemInner(VIEW_TYPE_HEADER, LocaleController.getString("DataUsageByChats", R.string.DataUsageByChats), 15, 4, null));
             itemInners.add(new ItemInner(VIEW_FLICKER_LOADING_DIALOG, null, null));
@@ -1164,9 +1166,10 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                     }
                     slideChooseView.setOptions(index, LocaleController.formatPluralString("Days", 1), LocaleController.formatPluralString("Days", 3), LocaleController.formatPluralString("Weeks", 1), LocaleController.formatPluralString("Months", 1), LocaleController.getString("KeepMediaForever", R.string.KeepMediaForever));
                     break;
-                case 5:
-                    view = new ShadowSectionCell(mContext);
-                    break;
+//                     fixme merge 9.2.2
+//                case 5:
+//                    view = new ShadowSectionCell(mContext);
+//                    break;
                 case VIEW_TYPE_CHAT:
                     UserCell userCell = new UserCell(getContext(), getResourceProvider());
                     userCell.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));

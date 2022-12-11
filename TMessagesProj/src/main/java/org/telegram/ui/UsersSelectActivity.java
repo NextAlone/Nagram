@@ -1093,7 +1093,7 @@ public class UsersSelectActivity extends BaseFragment implements NotificationCen
                             continue;
                         }
                         spansContainer.addSpan(span, true);
-                        span.setOnClickListener(FilterUsersActivity.this);
+                        span.setOnClickListener(UsersSelectActivity.this);
                     }
                 }
             }
