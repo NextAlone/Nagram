@@ -175,4 +175,5 @@
     <string name="AutoTranslateAbout">Automatically translate messages that are in another language.</string>
     <string name="BrokenMLKit">Option unavailable</string>
     <string name="BrokenMLKitDetail">Google MLKit language identifier is somehow broken on this device.</string>
+    <string name="RestrictionReason">Restriction reason</string>
 </resources>

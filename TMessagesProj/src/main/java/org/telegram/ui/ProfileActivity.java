@@ -158,6 +158,7 @@ import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailCell;
+import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.UserCell;
 import org.telegram.ui.Components.AlertsCreator;
@@ -501,6 +502,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private int userInfoRow;
     private int channelInfoRow;
     private int usernameRow;
+    private int restrictionReasonRow;
     private int notificationsDividerRow;
     private int notificationsRow;
     private int notificationsSimpleRow;
@@ -5031,7 +5033,41 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
             builder.show();
             return true;
-        } else if (position == phoneRow || position == numberRow) {
+        } else if (position == restrictionReasonRow) {
+            ArrayList<TLRPC.TL_restrictionReason> reasons = new ArrayList<>();
+            if (userId != 0) {
+                final TLRPC.User user = getMessagesController().getUser(userId);
+                if (user != null) {
+                    reasons = user.restriction_reason;
+                }
+            } else if (currentChat != null) {
+                TLRPC.Chat chat = getMessagesController().getChat(chatId);
+                reasons = chat.restriction_reason;
+            }
+            Context context = getParentActivity();
+            LinearLayout ll = new LinearLayout(context);
+            ll.setOrientation(LinearLayout.VERTICAL);
+
+            AlertDialog dialog = new AlertDialog.Builder(context, resourcesProvider)
+                    .setView(ll)
+                    .create();
+
+            for (TLRPC.TL_restrictionReason reason : reasons) {
+                TextDetailSettingsCell cell = new TextDetailSettingsCell(context);
+                cell.setBackground(Theme.getSelectorDrawable(false));
+                cell.setMultilineDetail(true);
+                cell.setOnClickListener(v1 -> {
+                    dialog.dismiss();
+                    AndroidUtilities.addToClipboard(cell.getValueTextView().getText());
+                    BulletinFactory.of(this).createCopyBulletin(LocaleController.formatString("TextCopied", R.string.TextCopied)).show();
+                });
+                cell.setTextAndValue(reason.reason + "-" + reason.platform, reason.text, false);
+
+                ll.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+            }
+
+            showDialog(dialog);
+    } else if (position == phoneRow || position == numberRow) {
             final TLRPC.User user = getMessagesController().getUser(userId);
             if (user == null || user.phone == null || user.phone.length() == 0 || getParentActivity() == null) {
                 return false;
@@ -7037,6 +7073,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         locationRow = -1;
         channelInfoRow = -1;
         usernameRow = -1;
+        restrictionReasonRow = -1;
         settingsTimerRow = -1;
         settingsKeyRow = -1;
         notificationsDividerRow = -1;
@@ -7144,13 +7181,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (user != null && !TextUtils.isEmpty(user.username)) {
                     usernameRow = rowCount++;
                 }
+                if (user != null && !user.restriction_reason.isEmpty()) {
+                    restrictionReasonRow = rowCount++;
+                }
                 if (!isBot && (hasPhone || !hasInfo) && !hideNumber) {
                     phoneRow = rowCount++;
                 }
                 if (userInfo != null && !TextUtils.isEmpty(userInfo.about)) {
                     userInfoRow = rowCount++;
                 }
-                if (phoneRow != -1 || userInfoRow != -1 || usernameRow != -1) {
+                if (phoneRow != -1 || userInfoRow != -1 || usernameRow != -1 || restrictionReasonRow != -1) {
                     notificationsDividerRow = rowCount++;
                 }
                 if (userId != getUserConfig().getClientUserId()) {
@@ -7199,6 +7239,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (ChatObject.isPublic(currentChat)) {
                 usernameRow = rowCount++;
             }
+            if (!currentChat.restriction_reason.isEmpty()) {
+                restrictionReasonRow = rowCount++;
+            }
             notificationsSimpleRow = rowCount++;
             infoSectionRow = rowCount++;
             if (hasMedia) {
@@ -7220,6 +7263,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
                 if (ChatObject.isPublic(currentChat)) {
                     usernameRow = rowCount++;
+                }
+                if (!currentChat.restriction_reason.isEmpty()) {
+                    restrictionReasonRow = rowCount++;
                 }
             }
             if (infoHeaderRow != -1) {
@@ -8961,6 +9007,27 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             text = getLink(username, topicId);
                         }
                         detailCell.setTextAndValue(text, alsoUsernamesString(username, usernames, value), false);
+                    } else if (position == restrictionReasonRow) {
+                        ArrayList<TLRPC.TL_restrictionReason> reasons = new ArrayList<>();
+                        if (userId != 0) {
+                            final TLRPC.User user = getMessagesController().getUser(userId);
+                            if (user != null) {
+                                reasons = user.restriction_reason;
+                            }
+                        } else if (currentChat != null) {
+                            TLRPC.Chat chat = getMessagesController().getChat(chatId);
+                            reasons = chat.restriction_reason;
+                        }
+                        StringBuilder value = new StringBuilder();
+                        for (TLRPC.TL_restrictionReason reason : reasons) {
+                            value.append(reason.reason);
+                            value.append("-");
+                            value.append(reason.platform);
+                            if (reasons.indexOf(reason) != reasons.size() - 1) {
+                                value.append(", ");
+                            }
+                        }
+                        detailCell.setTextAndValue(value.toString(), LocaleController.getString("RestrictionReason", R.string.RestrictionReason), false);
                     } else if (position == locationRow) {
                         if (chatInfo != null && chatInfo.location instanceof TLRPC.TL_channelLocation) {
                             TLRPC.TL_channelLocation location = (TLRPC.TL_channelLocation) chatInfo.location;
@@ -9412,7 +9479,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (position == infoHeaderRow || position == membersHeaderRow || position == settingsSectionRow2 ||
                     position == numberSectionRow || position == helpHeaderRow || position == debugHeaderRow) {
                 return VIEW_TYPE_HEADER;
-            } else if (position == phoneRow || position == locationRow || position == numberRow) {
+            } else if (position == phoneRow || position == locationRow || position == numberRow || position == restrictionReasonRow) {
                 return VIEW_TYPE_TEXT_DETAIL;
             } else if (position == usernameRow || position == setUsernameRow) {
                 return VIEW_TYPE_TEXT_DETAIL_MULTILINE;
@@ -10526,6 +10593,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             put(++pointer, userInfoRow, sparseIntArray);
             put(++pointer, channelInfoRow, sparseIntArray);
             put(++pointer, usernameRow, sparseIntArray);
+            put(++pointer, restrictionReasonRow, sparseIntArray);
             put(++pointer, notificationsDividerRow, sparseIntArray);
             put(++pointer, reportDividerRow, sparseIntArray);
             put(++pointer, notificationsRow, sparseIntArray);

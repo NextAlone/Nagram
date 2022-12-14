@@ -171,4 +171,5 @@
     <string name="AutoTranslateAbout">自动翻译其他语言的消息。</string>
     <string name="BrokenMLKit">选项不可用</string>
     <string name="BrokenMLKitDetail">Google MLKit 语言识别器在这个设备上不知何故坏了。</string>
+    <string name="RestrictionReason">限制原因</string>
 </resources>
