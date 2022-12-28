@@ -182,12 +182,12 @@ public class AboutLinkCell extends FrameLayout {
         );
         showMoreTextBackgroundView.addView(showMoreTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
         addView(showMoreTextBackgroundView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.RIGHT | Gravity.BOTTOM, 22 - showMoreTextBackgroundView.getPaddingLeft() / AndroidUtilities.density, 0, 22 - showMoreTextBackgroundView.getPaddingRight() / AndroidUtilities.density, 6));
-        if (NaConfig.INSTANCE.getShowFullAbout().Bool()) {
-            updateCollapse(true, true);
-        }
         backgroundPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhite, resourcesProvider));
 
         setWillNotDraw(false);
+        if (NaConfig.INSTANCE.getShowFullAbout().Bool()) {
+            onClick();
+        }
     }
 
     @Override

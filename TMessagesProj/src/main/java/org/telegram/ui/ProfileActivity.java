@@ -3341,49 +3341,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (userInfo != null) {
                     presentFragment(new ChangeBioActivity());
                 }
-            } else if (position == channelInfoRow || position == userInfoRow || position == locationRow) {
-                if (aboutLinkCell != null && !aboutLinkCell.isExpanded()) {
-                    aboutLinkCell.updateCollapse(true, true);
-                } else {
-                    BottomBuilder builder = new BottomBuilder(getParentActivity());
-                    builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.msg_copy, __ -> {
-                        try {
-                            String about;
-                            if (position == locationRow) {
-                                about = chatInfo != null && chatInfo.location instanceof TLRPC.TL_channelLocation ? ((TLRPC.TL_channelLocation) chatInfo.location).address : null;
-                            } else if (position == channelInfoRow) {
-                                about = chatInfo != null ? chatInfo.about : null;
-                            } else {
-                                about = userInfo != null ? userInfo.about : null;
-                            }
-                            if (!TextUtils.isEmpty(about)) {
-                                AlertUtil.copyAndAlert(about);
-                            }
-                        } catch (Exception e) {
-                            FileLog.e(e);
-                        }
-                        return Unit.INSTANCE;
-                    });
-                    builder.addItem(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate, __ -> {
-                        try {
-                            String about;
-                            if (position == locationRow) {
-                                about = chatInfo != null && chatInfo.location instanceof TLRPC.TL_channelLocation ? ((TLRPC.TL_channelLocation) chatInfo.location).address : null;
-                            } else if (position == channelInfoRow) {
-                                about = chatInfo != null ? chatInfo.about : null;
-                            } else {
-                                about = userInfo != null ? userInfo.about : null;
-                            }
-                            if (!TextUtils.isEmpty(about)) {
-                                DialogTransKt.startTrans(getParentActivity(), about);
-                            }
-                        } catch (Exception e) {
-                            FileLog.e(e);
-                        }
-                        return Unit.INSTANCE;
-                    });
-                    builder.show();
-                }
             } else if (position == numberRow) {
                 TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
                 String number;
@@ -5067,7 +5024,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
 
             showDialog(dialog);
-    } else if (position == phoneRow || position == numberRow) {
+        } else if (position == phoneRow || position == numberRow) {
             final TLRPC.User user = getMessagesController().getUser(userId);
             if (user == null || user.phone == null || user.phone.length() == 0 || getParentActivity() == null) {
                 return false;
@@ -9099,7 +9056,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             aboutLinkCell.setTextAndValue(LocaleController.getString("UserBioDetail", R.string.UserBioDetail), LocaleController.getString("UserBio", R.string.UserBio), false);
                             currentBio = null;
                         }
-//                      aboutLinkCell.setMoreButtonDisabled(true);
+                        aboutLinkCell.setMoreButtonDisabled(true);
                     }
                     break;
                 case VIEW_TYPE_PREMIUM_TEXT_CELL:
