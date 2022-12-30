@@ -20913,6 +20913,20 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 topViewWasVisible = 0;
             }
         }
+        if (ChatObject.isForum(currentChat) && !isTopic && (replyingMessageObject == null || haveBeenWaiting) && bottomOverlayChatWaitsReply) {
+            TLRPC.TL_forumTopic topic = getMessagesController().getTopicsController().findTopic(currentChat.id, 1);
+            if (topic != null) {
+                if (topic.closed && !ChatObject.canManageTopic(currentAccount, currentChat, forumTopic)) {
+                    Drawable lock = getContext().getResources().getDrawable(R.drawable.msg_mini_lock2).mutate();
+                    lock.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_windowBackgroundWhiteGrayText), PorterDuff.Mode.MULTIPLY));
+                    bottomOverlayChatText.setTextInfo(lock, LocaleController.getString("TopicClosedByAdmin", R.string.TopicClosedByAdmin));
+                    bottomOverlayChatText.setEnabled(false);
+                } else {
+                    bottomOverlayChat.setVisibility(View.INVISIBLE);
+                    chatActivityEnterView.setVisibility(View.VISIBLE);
+                }
+            }
+        }
         checkRaiseSensors();
     }
 

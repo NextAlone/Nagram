@@ -6386,7 +6386,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 slowedReloadAfterDialogClick = true;
                 if (getMessagesController().checkCanOpenChat(args, DialogsActivity.this)) {
                     TLRPC.Chat chat = getMessagesController().getChat(-dialogId);
-                    if (chat != null && chat.forum && topicId == 0) {
+                    if (chat != null && chat.forum && topicId == 0 && !NaConfig.INSTANCE.getShowForumAsNormalChat().Bool()) {
                         if (SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_LOW) {
                             presentFragment(new TopicsFragment(args));
                         } else {

@@ -388,6 +388,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val showForumAsNormalChat =
+        addConfig(
+            "ShowForumAsNormalChat",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

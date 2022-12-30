@@ -78,4 +78,5 @@
     <string name="HideBotButtonInInputField">隐藏输入框中的机器人按钮</string>
     <string name="ShowSendAsUnderMessageHint">在消息提示下显示发送者</string>
     <string name="CheckAllForum">添加所有话题模式的群组</string>
+    <string name="ShowForumAsNormalChat">以普通对话模式打开话题模式群组</string>
 </resources>
