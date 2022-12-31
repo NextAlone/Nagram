@@ -4974,7 +4974,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                 return;
                             }
                         }
-                    CameraScanActivity.showAsSheet(DialogsActivity.this, new CameraScanActivity.CameraScanActivityDelegate() {
+                    CameraScanActivity.showAsSheet(DialogsActivity.this, false, CameraScanActivity.TYPE_QR, new CameraScanActivity.CameraScanActivityDelegate() {
 
                         @Override
                         public void didFindQr(String text) {
