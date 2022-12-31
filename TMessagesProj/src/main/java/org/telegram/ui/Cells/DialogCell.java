@@ -110,6 +110,7 @@ import java.util.Stack;
 
 import tw.nekomimi.nekogram.ui.MessageHelper;
 import tw.nekomimi.nekogram.NekoConfig;
+import xyz.nextalone.nagram.NaConfig;
 
 public class DialogCell extends BaseCell {
 
@@ -1652,8 +1653,10 @@ public class DialogCell extends BaseCell {
                 }
             }
         }
-    
-        nameString = xyz.nextalone.nagram.helper.MessageHelper.INSTANCE.zalgoFilter(nameString);
+
+        if (NaConfig.INSTANCE.getZalgoFilter().Bool() && topicIconInName == null) {
+            nameString = xyz.nextalone.nagram.helper.MessageHelper.INSTANCE.zalgoFilter(nameString);
+        }
         int timeWidth;
         if (drawTime) {
             timeWidth = (int) Math.ceil(Theme.dialogs_timePaint.measureText(timeString));
