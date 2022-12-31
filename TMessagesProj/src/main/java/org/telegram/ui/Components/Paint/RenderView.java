@@ -1,21 +1,17 @@
 package org.telegram.ui.Components.Paint;
 
 import android.content.Context;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.RectF;
+import android.graphics.SurfaceTexture;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.os.Looper;
 import android.view.MotionEvent;
 import android.view.TextureView;
 import android.view.View;
-
-import com.google.android.exoplayer2.util.Log;
-
-import javax.microedition.khronos.egl.EGL10;
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.egl.EGLContext;
-import javax.microedition.khronos.egl.EGLDisplay;
-import javax.microedition.khronos.egl.EGLSurface;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
@@ -25,6 +21,12 @@ import org.telegram.ui.Components.Size;
 
 import java.util.concurrent.CountDownLatch;
 
+import javax.microedition.khronos.egl.EGL10;
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.egl.EGLContext;
+import javax.microedition.khronos.egl.EGLDisplay;
+import javax.microedition.khronos.egl.EGLSurface;
+
 public class RenderView extends TextureView {
 
     public interface RenderViewDelegate {
@@ -32,7 +34,8 @@ public class RenderView extends TextureView {
         void onFinishedDrawing(boolean moved);
         void onFirstDraw();
         boolean shouldDraw();
-        void onTouch(int x, int y);
+        default void invalidateInputView() {}
+        void resetBrush();
     }
 
     private RenderViewDelegate delegate;
@@ -42,6 +45,7 @@ public class RenderView extends TextureView {
     private Painting painting;
     private CanvasInternal internal;
     private Input input;
+    private ShapeInput shapeInput;
     private Bitmap bitmap;
     private boolean transformedBitmap;
 
@@ -73,7 +77,11 @@ public class RenderView extends TextureView {
                 internal.setBufferSize(width, height);
                 updateTransform();
 
-                internal.requestRender();
+                post(() -> {
+                    if (internal != null) {
+                        internal.requestRender();
+                    }
+                });
 
                 if (painting.isPaused()) {
                     painting.onResume();
@@ -118,6 +126,11 @@ public class RenderView extends TextureView {
         });
 
         input = new Input(this);
+        shapeInput = new ShapeInput(this, () -> {
+            if (delegate != null) {
+                delegate.invalidateInputView();
+            }
+        });
         painting.setDelegate(new Painting.PaintingDelegate() {
             @Override
             public void contentChanged() {
@@ -157,22 +170,22 @@ public class RenderView extends TextureView {
         if (internal == null || !internal.initialized || !internal.ready) {
             return true;
         }
-
-        if (isColorPicker) {
-            int x = (int)event.getX();
-            int y = (int)event.getY();
-
-            if (x >= getWidth()) return false;
-            if (y >= getHeight()) return false;
-            if (x <= 0) return false;
-            if (y <= 0) return false;
-
-            delegate.onTouch(x, y);
-            return true;
+        if (brush instanceof Brush.Shape) {
+            shapeInput.process(event, getScaleX());
+        } else {
+            input.process(event, getScaleX());
         }
-
-        input.process(event, getScaleX());
         return true;
+    }
+
+    public void onDrawForInput(Canvas canvas) {
+        if (brush instanceof Brush.Shape) {
+            shapeInput.dispatchDraw(canvas);
+        }
+    }
+
+    public void onFillShapesToggle(Canvas canvas) {
+
     }
 
     public void setUndoStore(UndoStore store) {
@@ -191,7 +204,7 @@ public class RenderView extends TextureView {
         return painting;
     }
 
-    private float brushWeightForSize(float size) {
+    public float brushWeightForSize(float size) {
         float paintingWidth = painting.getSize().width;
         return 8.0f / 2048.0f * paintingWidth + (90.0f / 2048.0f * paintingWidth) * size;
     }
@@ -202,6 +215,9 @@ public class RenderView extends TextureView {
 
     public void setColor(int value) {
         color = value;
+        if (brush instanceof Brush.Shape) {
+            shapeInput.onColorChange();
+        }
     }
 
     public float getCurrentWeight() {
@@ -210,17 +226,48 @@ public class RenderView extends TextureView {
 
     public void setBrushSize(float size) {
         weight = brushWeightForSize(size);
+        if (brush instanceof Brush.Shape) {
+            shapeInput.onWeightChange();
+        }
     }
 
     public Brush getCurrentBrush() {
         return brush;
     }
 
+    public UndoStore getUndoStore() {
+        return undoStore;
+    }
+
     public void setBrush(Brush value) {
-        painting.setBrush(brush = value);
+        if (brush instanceof Brush.Shape) {
+            shapeInput.stop();
+        }
+        brush = value;
+        updateTransform();
+        painting.setBrush(brush);
+        if (brush instanceof Brush.Shape) {
+            shapeInput.start(((Brush.Shape) brush).getShapeShaderType());
+        }
+    }
+
+    public void resetBrush() {
+        if (delegate != null) {
+            delegate.resetBrush();
+        }
+        input.ignoreOnce();
+    }
+
+    public void clearShape() {
+        if (shapeInput != null) {
+            shapeInput.clear();
+        }
     }
 
     private void updateTransform() {
+        if (internal == null) {
+            return;
+        }
         Matrix matrix = new Matrix();
 
         float scale = painting != null ? getWidth() / painting.getSize().width : 1.0f;
@@ -234,7 +281,11 @@ public class RenderView extends TextureView {
         matrix.preScale(scale, -scale);
         matrix.preTranslate(-paintingSize.width / 2.0f, -paintingSize.height / 2.0f);
 
-        input.setMatrix(matrix);
+        if (brush instanceof Brush.Shape) {
+            shapeInput.setMatrix(matrix);
+        } else {
+            input.setMatrix(matrix);
+        }
 
         float[] proj = GLMatrix.LoadOrtho(0.0f, internal.bufferWidth, 0.0f, internal.bufferHeight, -1.0f, 1.0f);
         float[] effectiveProjection = GLMatrix.LoadGraphicsMatrix(matrix);
@@ -270,6 +321,10 @@ public class RenderView extends TextureView {
         }
 
         setVisibility(View.GONE);
+    }
+
+    public void clearAll() {
+        input.clear(() -> painting.setBrush(brush));
     }
 
     private class CanvasInternal extends DispatchQueue {
@@ -533,6 +588,9 @@ public class RenderView extends TextureView {
     }
 
     public Bitmap getResultBitmap() {
+        if (brush instanceof Brush.Shape) {
+            shapeInput.stop();
+        }
         return internal != null ? internal.getTexture() : null;
     }
 
@@ -550,4 +608,6 @@ public class RenderView extends TextureView {
             action.run();
         });
     }
+
+    protected void selectBrush(Brush brush) {}
 }

@@ -355,6 +355,10 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         public boolean isVideo;
         public boolean isMuted;
         public boolean canDeleteAfter;
+        public boolean hasSpoiler;
+
+        public boolean isChatPreviewSpoilerRevealed;
+        public boolean isAttachSpoilerRevealed;
 
         public PhotoEntry(int bucketId, int imageId, long dateTaken, String path, int orientation, boolean isVideo, int width, int height, long size) {
             this.bucketId = bucketId;
@@ -373,6 +377,12 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
 
         @Override
+        public void copyFrom(MediaEditState state) {
+            super.copyFrom(state);
+            this.hasSpoiler = state instanceof PhotoEntry && ((PhotoEntry) state).hasSpoiler;
+        }
+
+        @Override
         public String getPath() {
             return path;
         }
@@ -385,6 +395,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     filterPath = null;
                 }
             }
+            hasSpoiler = false;
             super.reset();
         }
     }
@@ -3797,6 +3808,11 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             currentAccount.getNotificationCenter().addObserver(this, NotificationCenter.fileLoadProgressChanged);
             currentAccount.getNotificationCenter().addObserver(this, NotificationCenter.fileLoadFailed);
             notificationId = SaveToDownloadReceiver.createNotificationId();
+            progressDialog = new AlertDialog(context, AlertDialog.ALERT_TYPE_LOADING);
+            progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setCancelable(true);
+            progressDialog.setOnCancelListener(d -> cancelled = true);
         }
 
         public void start(Context context) {
@@ -4046,6 +4062,11 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             final boolean[] finished = new boolean[1];
             if (context != null && type != 0) {
                 try {
+                    final AlertDialog dialog = new AlertDialog(context, AlertDialog.ALERT_TYPE_LOADING);
+                    dialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.setCancelable(true);
+                    dialog.setOnCancelListener(d -> cancelled[0] = true);
                     AndroidUtilities.runOnUIThread(() -> {
                         if (!finished[0]) {
                             SaveToDownloadReceiver.showNotification(context, notificationId, 1, () -> cancelled[0] = true);

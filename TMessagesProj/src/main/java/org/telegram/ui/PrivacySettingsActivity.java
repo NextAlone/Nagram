@@ -120,6 +120,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
     private boolean archiveChats;
 
     private boolean[] clear = new boolean[2];
+    SessionsActivity sessionsActivityPreload;
 
     @Override
     public boolean onFragmentCreate() {
@@ -143,6 +144,15 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         getNotificationCenter().addObserver(this, NotificationCenter.didUpdateGlobalAutoDeleteTimer);
 
         getUserConfig().loadGlobalTTl();
+
+        sessionsActivityPreload = new SessionsActivity(0);
+        sessionsActivityPreload.setDelegate(() -> {
+            if (listAdapter != null && sessionsRow >= 0) {
+                listAdapter.notifyItemChanged(sessionsRow);
+            }
+        });
+        sessionsActivityPreload.loadSessions(false);
+
         return true;
     }
 
@@ -236,7 +246,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
             } if (position == blockedRow) {
                 presentFragment(new PrivacyUsersActivity());
             } else if (position == sessionsRow) {
-                presentFragment(new SessionsActivity(0));
+                sessionsActivityPreload.resetFragment();
+                presentFragment(sessionsActivityPreload);
             } else if (position == webSessionsRow) {
                 presentFragment(new SessionsActivity(1));
             } else if (position == deleteAccountRow) {
@@ -287,7 +298,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         } else if (which == 3) {
                             value = 365;
                         }
-                        final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
+                        final AlertDialog progressDialog = new AlertDialog(getParentActivity(), AlertDialog.ALERT_TYPE_SPINNER);
                         progressDialog.setCanCancel(false);
                         progressDialog.show();
 
@@ -593,22 +604,9 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
 
     private void updateRows(boolean notify) {
         rowCount = 0;
-        privacySectionRow = rowCount++;
-        blockedRow = rowCount++;
-        phoneNumberRow = rowCount++;
-        lastSeenRow = rowCount++;
-        profilePhotoRow = rowCount++;
-        forwardsRow = rowCount++;
-        callsRow = rowCount++;
-        groupsRow = rowCount++;
-        groupsDetailRow = -1;
-        if (!getMessagesController().premiumLocked || getUserConfig().isPremium()) {
-            voicesRow = rowCount++;
-        } else {
-            voicesRow = -1;
-        }
-        privacyShadowRow = rowCount++;
+
         securitySectionRow = rowCount++;
+        blockedRow = rowCount++;
         sessionsRow = rowCount++;
         passcodeRow = rowCount++;
         passwordRow = rowCount++;
@@ -627,6 +625,22 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         }
         autoDeleteMesages = rowCount++;
         autoDeleteDetailRow = rowCount++;
+
+        privacySectionRow = rowCount++;
+        phoneNumberRow = rowCount++;
+        lastSeenRow = rowCount++;
+        profilePhotoRow = rowCount++;
+        forwardsRow = rowCount++;
+        callsRow = rowCount++;
+        groupsRow = rowCount++;
+        groupsDetailRow = -1;
+        if (!getMessagesController().premiumLocked || getUserConfig().isPremium()) {
+            voicesRow = rowCount++;
+        } else {
+            voicesRow = -1;
+        }
+        privacyShadowRow = rowCount++;
+
         if (getMessagesController().autoarchiveAvailable || getUserConfig().isPremium()) {
             newChatsHeaderRow = rowCount++;
             newChatsRow = rowCount++;
@@ -899,17 +913,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                     boolean animated = holder.itemView.getTag() != null && ((Integer) holder.itemView.getTag()) == position;
                     holder.itemView.setTag(position);
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
-                    if (position == blockedRow) {
-                        int totalCount = getMessagesController().totalBlockedCount;
-                        if (totalCount == 0) {
-                            textCell.setTextAndValue(LocaleController.getString("BlockedUsers", R.string.BlockedUsers), LocaleController.getString("BlockedEmpty", R.string.BlockedEmpty), true);
-                        } else if (totalCount > 0) {
-                            textCell.setTextAndValue(LocaleController.getString("BlockedUsers", R.string.BlockedUsers), String.format("%d", totalCount), true);
-                        } else {
-                            showLoading = true;
-                            textCell.setText(LocaleController.getString("BlockedUsers", R.string.BlockedUsers), true);
-                        }
-                    } else if (position == webSessionsRow) {
+                    if (position == webSessionsRow) {
                         textCell.setText(LocaleController.getString("WebSessionsTitle", R.string.WebSessionsTitle), false);
                     } else if (position == phoneNumberRow) {
                         if (getContactsController().getLoadingPrivacyInfo(ContactsController.PRIVACY_RULES_TYPE_PHONE)) {
@@ -1098,7 +1102,19 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         }
                         textCell2.setTextAndValueAndIcon(LocaleController.getString("AutoDeleteMessages", R.string.AutoDeleteMessages), value, R.drawable.msg_autodelete, false);
                     } else if (position == sessionsRow) {
-                        textCell2.setTextAndValueAndIcon(LocaleController.getString("SessionsTitle", R.string.SessionsTitle), "", R.drawable.msg_devices, true);
+                        String count = "";
+
+                        if (sessionsActivityPreload.getSessionsCount() == 0) {
+                            if (getMessagesController().lastKnownSessionsCount == 0) {
+                                showLoading = true;
+                            } else {
+                                count = Integer.toString(getMessagesController().lastKnownSessionsCount);
+                            }
+                        } else {
+                            count = Integer.toString(sessionsActivityPreload.getSessionsCount());
+                        }
+                        getMessagesController().lastKnownSessionsCount = sessionsActivityPreload.getSessionsCount();
+                        textCell2.setTextAndValueAndIcon(LocaleController.getString("SessionsTitle", R.string.SessionsTitle), count, R.drawable.msg_devices, true);
                     } else if (position == emailLoginRow) {
                         textCell2.setTextAndValueAndIcon(LocaleController.getString(R.string.EmailLogin), "", R.drawable.msg_email, true);
                     } else if (position == passwordRow) {
@@ -1118,6 +1134,16 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                             value = LocaleController.getString("PasswordOff", R.string.PasswordOff);
                         }
                         textCell2.setTextAndValueAndIcon(LocaleController.getString("Passcode", R.string.Passcode), value, R.drawable.msg_permissions, true);
+                    } else if (position == blockedRow) {
+                        int totalCount = getMessagesController().totalBlockedCount;
+                        if (totalCount == 0) {
+                            textCell2.setTextAndValueAndIcon(LocaleController.getString("BlockedUsers", R.string.BlockedUsers), LocaleController.getString("BlockedEmpty", R.string.BlockedEmpty), R.drawable.msg_block2, true);
+                        } else if (totalCount > 0) {
+                            textCell2.setTextAndValueAndIcon(LocaleController.getString("BlockedUsers", R.string.BlockedUsers), String.format("%d", totalCount), R.drawable.msg_block2, true);
+                        } else {
+                            showLoading = true;
+                            textCell2.setTextAndValueAndIcon(LocaleController.getString("BlockedUsers", R.string.BlockedUsers), "", R.drawable.msg_block2, true);
+                        }
                     }
                     textCell2.setDrawLoading(showLoading, loadingLen, animated);
                     break;
@@ -1126,7 +1152,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
 
         @Override
         public int getItemViewType(int position) {
-            if (position == passportRow || position == lastSeenRow || position == phoneNumberRow || position == blockedRow ||
+            if (position == passportRow || position == lastSeenRow || position == phoneNumberRow ||
                     position == deleteAccountRow || position == webSessionsRow || position == groupsRow || position == paymentsClearRow ||
                     position == secretMapRow || position == contactsDeleteRow) {
                 return 0;
@@ -1138,7 +1164,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                 return 3;
             } else if (position == privacyShadowRow) {
                 return 4;
-            } else if (position == autoDeleteMesages || position == sessionsRow || position == emailLoginRow || position == passwordRow || position == passcodeRow ) {
+            } else if (position == autoDeleteMesages || position == sessionsRow || position == emailLoginRow || position == passwordRow || position == passcodeRow || position == blockedRow) {
                 return 5;
             }
             return 0;

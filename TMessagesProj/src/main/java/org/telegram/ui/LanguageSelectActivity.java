@@ -177,8 +177,22 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             if (getParentActivity() == null || parentLayout == null || !(view instanceof LanguageCell)) {
                 return;
             }
+            boolean search = listView.getAdapter() == searchListViewAdapter;
+            if (!search) {
+                position -= 2;
+            }
             LanguageCell cell = (LanguageCell) view;
-            LocaleController.LocaleInfo localeInfo = cell.getCurrentLocale();
+            LocaleController.LocaleInfo localeInfo;
+            if (search) {
+                localeInfo = searchResult.get(position);
+            } else if (!unofficialLanguages.isEmpty() && position >= 0 && position < unofficialLanguages.size()) {
+                localeInfo = unofficialLanguages.get(position);
+            } else {
+                if (!unofficialLanguages.isEmpty()) {
+                    position -= unofficialLanguages.size() + 1;
+                }
+                localeInfo = sortedLanguages.get(position);
+            }
             if (localeInfo != null) {
                 if (localeInfo.toInstall) {
                     AlertsCreator.createLanguageAlert((LaunchActivity) getParentActivity(),localeInfo.pack,() -> {
@@ -492,12 +506,17 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             switch (holder.getItemViewType()) {
                 case 0: {
+                    if (!search) {
+                        position -= 2;
+                    }
                     LanguageCell textSettingsCell = (LanguageCell) holder.itemView;
 //                    TextRadioCell textSettingsCell = (TextRadioCell) holder.itemView;
-                    LocaleController.LocaleInfo localeInfo;
+                    LocaleController.LocaleInfo localeInfo = null;
                     boolean last;
                     if (search) {
-                        localeInfo = searchResult.get(position);
+                        if (position >= 0 && position < searchResult.size()) {
+                            localeInfo = searchResult.get(position);
+                        }
                         last = position == searchResult.size() - 1;
                     } else if (!unofficialLanguages.isEmpty() && position >= 0 && position < unofficialLanguages.size()) {
                         localeInfo = unofficialLanguages.get(position);
@@ -506,13 +525,17 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                         if (!unofficialLanguages.isEmpty()) {
                             position -= unofficialLanguages.size() + 1;
                         }
-                        localeInfo = sortedLanguages.get(position);
+                        if (position >= 0 && position < sortedLanguages.size()) {
+                            localeInfo = sortedLanguages.get(position);
+                        }
                         last = position == sortedLanguages.size() - 1;
                     }
-                    if (localeInfo.isLocal()) {
-                        textSettingsCell.setLanguage(LanguageSelectActivity.this, localeInfo, String.format("%1$s (%2$s)", localeInfo.name, LocaleController.getString("LanguageCustom", R.string.LanguageCustom)), !last);
-                    } else {
-                        textSettingsCell.setLanguage(LanguageSelectActivity.this, localeInfo, null, !last);
+                    if (localeInfo != null) {
+                        if (localeInfo.isLocal()) {
+                            textSettingsCell.setLanguage(LanguageSelectActivity.this, localeInfo, String.format("%1$s (%2$s)", localeInfo.name, LocaleController.getString("LanguageCustom", R.string.LanguageCustom)), !last);
+                        } else {
+                            textSettingsCell.setLanguage(LanguageSelectActivity.this, localeInfo, null, !last);
+                        }
                     }
                     textSettingsCell.setLanguageSelected(localeInfo == LocaleController.getInstance().getCurrentLocaleInfo(), true);
                     break;

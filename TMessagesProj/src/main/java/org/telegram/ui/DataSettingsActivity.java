@@ -514,6 +514,7 @@ public class DataSettingsActivity extends BaseFragment {
                         textCell.setIcon(R.drawable.msg_data_usage);
                         textCell.setText(LocaleController.getString("NetworkUsage", R.string.NetworkUsage), storageNumRow != -1);
                     } else if (position == storageNumRow) {
+                        textCell.setIcon(R.drawable.msg_storage_path);
                         textCell.setTextAndValue(LocaleController.getString("StoragePath", R.string.StoragePath), NekoConfig.cachePath.String(), false);
                     } else if (position == proxyRow) {
                         textCell.setIcon(0);

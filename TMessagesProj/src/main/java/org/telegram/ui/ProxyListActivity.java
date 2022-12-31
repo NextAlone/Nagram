@@ -12,6 +12,10 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -44,6 +48,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -65,6 +70,7 @@ import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -73,13 +79,17 @@ import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.Components.CheckBox2;
+import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.NumberTextView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -114,6 +124,8 @@ import tw.nekomimi.nekogram.utils.UIUtil;
 import tw.nekomimi.nekogram.NekoConfig;
 
 public class ProxyListActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
+    private static final int MENU_DELETE = 0;
+    private static final int MENU_SHARE = 1;
 
     private ListAdapter listAdapter;
     private RecyclerListView listView;
@@ -476,7 +488,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
     @Override
     public View createView(Context context) {
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setBackButtonDrawable(new BackDrawable(false));
+        actionBar.setAllowOverlayTitle(true);
         actionBar.setTitle(LocaleController.getString("ProxySettings", R.string.ProxySettings));
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
@@ -609,7 +622,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 }
             }
 
-            CameraScanActivity.showAsSheet(this, new CameraScanActivity.CameraScanActivityDelegate() {
+            CameraScanActivity.showAsSheet(this, false, CameraScanActivity.TYPE_QR, new CameraScanActivity.CameraScanActivityDelegate() {
 
                 @Override
                 public void didFindQr(String text) {
@@ -663,8 +676,15 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = (FrameLayout) fragmentView;
 
-        listView = new RecyclerListView(context);
+        listView = new RecyclerListView(context) {
+            @Override
+            protected void dispatchDraw(Canvas canvas) {
+                drawSectionBackground(canvas, proxyStartRow, proxyEndRow, Theme.getColor(Theme.key_windowBackgroundWhite));
+                super.dispatchDraw(canvas);
+            }
+        };
         ((DefaultItemAnimator) listView.getItemAnimator()).setDelayAnimations(false);
+        ((DefaultItemAnimator) listView.getItemAnimator()).setTranslationInterpolator(CubicBezierInterpolator.DEFAULT);
         listView.setVerticalScrollBarEnabled(false);
         listView.setLayoutManager(layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
@@ -858,7 +878,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     }
                 }
 
-                CameraScanActivity.showAsSheet(this, new CameraScanActivity.CameraScanActivityDelegate() {
+                CameraScanActivity.showAsSheet(this, false, CameraScanActivity.TYPE_QR, new CameraScanActivity.CameraScanActivityDelegate() {
 
                     @Override
                     public void didFindQr(String text) {
@@ -1123,6 +1143,10 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                             cell.updateStatus();
                         }
                     }
+
+                    if (currentConnectionState == ConnectionsManager.ConnectionStateConnected) {
+                        updateRows(true);
+                    }
                 }
             }
         } else if (id == NotificationCenter.proxyCheckDone) {
@@ -1147,6 +1171,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     private class ListAdapter extends RecyclerListView.SelectionAdapter {
 
         public static final int PAYLOAD_CHECKED_CHANGED = 0;
+        public static final int PAYLOAD_SELECTION_CHANGED = 1;
+        public static final int PAYLOAD_SELECTION_MODE_CHANGED = 2;
 
         private Context mContext;
 

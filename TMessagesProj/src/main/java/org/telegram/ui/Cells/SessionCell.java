@@ -95,7 +95,7 @@ public class SessionCell extends FrameLayout {
             imageView.setRoundRadius(AndroidUtilities.dp(10));
             addView(imageView, LayoutHelper.createFrame(42, 42, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 0 : 16), 9, (LocaleController.isRTL ? 16 : 0), 0));
 
-            addView(linearLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 30, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 15 : 72), 7.333f, (LocaleController.isRTL ? 72 : 15), 0));
+            addView(linearLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 30, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 15 : 72), 6.333f, (LocaleController.isRTL ? 72 : 15), 0));
         }
 
 
@@ -443,7 +443,8 @@ public class SessionCell extends FrameLayout {
             }
         }
         if (needDivider) {
-            canvas.drawLine(0, getMeasuredHeight() - 1, getMeasuredWidth(), getMeasuredHeight() - 1, Theme.dividerPaint);
+            int margin = currentType == 1 ? 49 : 72;
+            canvas.drawLine(LocaleController.isRTL ? 0 : AndroidUtilities.dp(margin), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(margin) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
         }
     }
 
