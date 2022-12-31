@@ -133,7 +133,11 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         avatarImageView.setRoundRadius(AndroidUtilities.dp(21));
         addView(avatarImageView);
         if (avatarClickable) {
-            avatarImageView.setOnClickListener(v -> openProfile(true));
+            avatarImageView.setOnClickListener(v -> {
+                if (!onAvatarClick()) {
+                    openProfile(true);
+                }
+            });
         }
 
         titleTextView = new SimpleTextView(context) {
@@ -235,6 +239,10 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         emojiStatusDrawable = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable(titleTextView, AndroidUtilities.dp(24));
     }
 
+    protected boolean onAvatarClick() {
+        return false;
+    }
+
     public void setTitleExpand(boolean titleExpand) {
         int newRightPadding = titleExpand ? AndroidUtilities.dp(10) : 0;
         if (titleTextView.getPaddingRight() != newRightPadding) {
@@ -317,6 +325,10 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     }
 
     public void openProfile(boolean byAvatar) {
+        openProfile(byAvatar, true);
+    }
+
+    public void openProfile(boolean byAvatar, boolean fromChatAnimation) {
         if (byAvatar && (AndroidUtilities.isTablet() || AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y || !avatarImageView.getImageReceiver().hasNotThumb())) {
             byAvatar = false;
         }
@@ -350,7 +362,9 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 args.putInt("actionBarColor", getThemedColor(Theme.key_actionBarDefault));
                 ProfileActivity fragment = new ProfileActivity(args, sharedMediaPreloader);
                 fragment.setUserInfo(parentFragment.getCurrentUserInfo());
-                fragment.setPlayProfileAnimation(byAvatar ? 2 : 1);
+                if (fromChatAnimation) {
+                    fragment.setPlayProfileAnimation(byAvatar ? 2 : 1);
+                }
                 parentFragment.presentFragment(fragment);
             }
         } else if (chat != null) {
@@ -361,7 +375,9 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             }
             ProfileActivity fragment = new ProfileActivity(args, sharedMediaPreloader);
             fragment.setChatInfo(parentFragment.getCurrentChatInfo());
-            fragment.setPlayProfileAnimation(byAvatar ? 2 : 1);
+            if (fromChatAnimation) {
+                fragment.setPlayProfileAnimation(byAvatar ? 2 : 1);
+            }
             parentFragment.presentFragment(fragment);
         }
     }

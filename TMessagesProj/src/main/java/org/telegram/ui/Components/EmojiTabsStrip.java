@@ -337,6 +337,10 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
 
     }
 
+    protected boolean allowEmojisForNonPremium() {
+        return false;
+    }
+
     boolean first = true;
     private ValueAnimator appearAnimation;
     private int appearCount;
@@ -351,7 +355,7 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
         if (emojiPacks == null) {
             return;
         }
-        final boolean isPremium = UserConfig.getInstance(UserConfig.selectedAccount).isPremium();
+        final boolean isPremium = UserConfig.getInstance(UserConfig.selectedAccount).isPremium() || allowEmojisForNonPremium();
         if (NekoConfig.disableTrending.Bool() && !isPremium) {
             return;
         }

@@ -517,7 +517,7 @@ public class AndroidUtilities {
                         }
                     }
                 }
-            }), 36);
+            }), Build.VERSION.SDK_INT <= 23 ? 100 : 36);
         }
     }
 
@@ -5192,13 +5192,7 @@ public class AndroidUtilities {
     }
 
     public static boolean isAccessibilityScreenReaderEnabled() {
-        return false;
-//        try {
-//            AccessibilityManager am = (AccessibilityManager) ApplicationLoader.applicationContext.getSystemService(Context.ACCESSIBILITY_SERVICE);
-//            return (am != null && am.isEnabled() && !am.isTouchExplorationEnabled());
-//        } catch (Exception ignroe) {
-//            return false;
-//        }
+        return isAccessibilityTouchExplorationEnabled();
     }
 
     public static CharSequence trim(CharSequence text, int[] newStart) {
