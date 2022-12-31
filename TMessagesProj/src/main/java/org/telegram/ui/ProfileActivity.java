@@ -7135,7 +7135,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 boolean hasPhone = user != null && (!TextUtils.isEmpty(user.phone) || !TextUtils.isEmpty(vcardPhone));
 
                 infoHeaderRow = rowCount++;
-                if (user != null && !TextUtils.isEmpty(user.username)) {
+                if (username != null) {
                     usernameRow = rowCount++;
                 }
                 if (user != null && !user.restriction_reason.isEmpty()) {
