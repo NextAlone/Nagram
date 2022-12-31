@@ -4,7 +4,7 @@ apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
 def verName = "9.2.2"
-def verCode = 1121
+def verCode = 1122
 
 
 def officialVer = "9.2.2"
