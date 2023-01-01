@@ -872,7 +872,9 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     return;
                 } else if (position == antiSpamRow) {
                     final TextCell textCell = (TextCell) view;
-                    if (info != null && !info.antispam && info.participants_count < getMessagesController().telegramAntispamGroupSizeMin) {
+                    // nagram: no this limit
+//                    if (info != null && !info.antispam && info.participants_count < getMessagesController().telegramAntispamGroupSizeMin) {
+                    if (false) {
                         BulletinFactory.of(this).createSimpleBulletin(R.raw.msg_antispam, AndroidUtilities.replaceTags(LocaleController.formatPluralString("ChannelAntiSpamForbidden", getMessagesController().telegramAntispamGroupSizeMin))).show();
                     } else if (info != null && ChatObject.canUserDoAdminAction(currentChat, ChatObject.ACTION_DELETE_MESSAGES) && !antiSpamToggleLoading) {
                         antiSpamToggleLoading = true;
