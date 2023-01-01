@@ -263,6 +263,88 @@ jobs:
         flavor:
           - FullRelease
           - MiniRelease
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Android SDK Tools
+        uses: android-actions/setup-android@v2
+      - name: Install NDK
+        run: |
+          echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
+          echo "sdk.dir=${ANDROID_HOME}" > local.properties
+          echo "ndk.dir=${ANDROID_HOME}/ndk/21.4.7075529" >> local.properties
+      - name: Fetch Status
+        run: |
+          sed -i 's/\/\///g' settings.gradle
+          git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
+          git submodule status TMessagesProj/jni/boringssl > boringssl_status
+          git submodule status ss-rust/src/main/rust/shadowsocks-rust > shadowsocks_status
+          git submodule status 'ssr-libev/*' > shadowsocksr_status
+          git submodule status v2ray > v2ray_status
+      - name: Native Cache (armeabi-v7a)
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/src/main/libs
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-armeabi-v7a
+      - name: Native Cache (arm64-v8a)
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/src/main/libs
+          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-arm64-v8a
+      - name: V2ray Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/libs/libv2ray.aar
+          key: ${{ hashFiles('bin/libs/v2ray/*', 'v2ray_status') }}
+      - name: Shadowsocks Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/libs/ss-rust-release.aar
+          key: ${{ hashFiles('shadowsocks_status') }}
+      - name: ShadowsocksR Cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            TMessagesProj/libs/ssr-libev-release.aar
+          key: ${{ hashFiles('shadowsocksr_status') }}
+      - name: Configure Gradle
+        run: |
+          sed -i -e "s/16384/6144/g" gradle.properties
+          echo "sdk.dir=${ANDROID_HOME}" >> local.properties
+      - name: Gradle cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle
+          key: gradle-${{ hashFiles('**/*.gradle') }}
+      - name: Debug Build
+        run: |
+          export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
+          export DEBUG_BUILD=true
+          ./gradlew TMessagesProj:assemble${{ matrix.flavor }}
+
+          APK=$(find TMessagesProj/build/outputs/apk -name '*arm64-v8a*.apk')
+          APK=$(dirname $APK)
+          echo "APK=$APK" >> $GITHUB_ENV
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.flavor }}
+          path: ${{ env.APK }}
+  build-nogcm:
+    name: Gradle Build (nogcm)
+    runs-on: ubuntu-latest
+    needs:
+      - native
+      - v2ray
+      - shadowsocks
+      - shadowsocksr
+      - build
+    strategy:
+      matrix:
+        flavor:
           - FullReleaseNoGcm
           - MiniReleaseNoGcm
     steps:
@@ -341,6 +423,7 @@ jobs:
     if: ${{ !contains(github.event.head_commit.message, 'bump version') }}
     needs:
       - build
+      - build-nogcm
       - telegram-bot-api
     steps:
       - name: Donwload Artifacts
