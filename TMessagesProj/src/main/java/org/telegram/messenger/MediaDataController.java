@@ -2068,7 +2068,7 @@ public class MediaDataController extends BaseController {
                 archivedStickersCount[type] = count;
                 getNotificationCenter().postNotificationName(NotificationCenter.archivedStickersCountDidLoad, type);
             }
-        } else if(!getUserConfig().getCurrentUser().bot)  {
+        } else if (getUserConfig().getCurrentUser() != null && !getUserConfig().getCurrentUser().bot) {
             TLRPC.TL_messages_getArchivedStickers req = new TLRPC.TL_messages_getArchivedStickers();
             req.limit = 0;
             req.masks = type == TYPE_MASK;
