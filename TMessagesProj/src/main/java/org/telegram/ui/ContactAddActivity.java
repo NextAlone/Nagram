@@ -371,7 +371,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
                 photoSelectedType = TYPE_SUGGEST;
                 imageUpdater.setUser(user);
                 TLRPC.FileLocation avatar = (user == null || user.photo == null) ? null : user.photo.photo_small;
-                imageUpdater.openMenu(avatar != null, () -> {
+                imageUpdater.openMenu(false, () -> {
 
                 }, dialogInterface -> {
                     if (!imageUpdater.isUploadingImage()) {
@@ -400,7 +400,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
                 photoSelectedType = TYPE_SET;
                 imageUpdater.setUser(user);
                 TLRPC.FileLocation avatar = (user == null || user.photo == null) ? null : user.photo.photo_small;
-                imageUpdater.openMenu(avatar != null, () -> {
+                imageUpdater.openMenu(false, () -> {
 
                 }, dialogInterface -> {
                     if (!imageUpdater.isUploadingImage()) {
