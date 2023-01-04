@@ -327,7 +327,7 @@ public class ActionBar extends FrameLayout {
                     }
                 }
             }
-            if (NekoConfig.actionBarDecoration.Int() == 3 || !manualStart) {
+            if (NekoConfig.actionBarDecoration.Int() == 3) {
                 if (snowflakesEffect != null) {
                     snowflakesEffect = null;
                 }
@@ -341,6 +341,13 @@ public class ActionBar extends FrameLayout {
             } else if (NekoConfig.actionBarDecoration.Int() == 1 || Theme.canStartHolidayAnimation()) {
                 if (snowflakesEffect == null) {
                     snowflakesEffect = new SnowflakesEffect(0);
+                }
+            } else if (!manualStart) {
+                if (snowflakesEffect != null) {
+                    snowflakesEffect = null;
+                }
+                if (fireworksEffect != null) {
+                    fireworksEffect = null;
                 }
             }
             if (snowflakesEffect != null) {

@@ -415,8 +415,8 @@ public class FilterTabsView extends FrameLayout {
                     android.graphics.Rect bounds = new android.graphics.Rect(0, 0, emoticonSize, emoticonSize);
                     icon = getResources().getDrawable(FolderIconHelper.getTabIcon(currentTab.emoticon)).mutate();
                     icon.setBounds(bounds);
+                    icon.setTint(textPaint.getColor());
                 }
-                icon.setTint(textPaint.getColor());
                 iconX = (int) ((getMeasuredWidth() - tabWidth) / 2f);
                 if (animateIconX) {
                     iconX = (int) (iconX * changeProgress + animateFromIconX * (1f - changeProgress));
@@ -441,7 +441,7 @@ public class FilterTabsView extends FrameLayout {
                         canvas.restore();
                         iconAnimateInDrawable.setAlpha(alpha);
                     }
-                } else {
+                } else if (icon != null) {
                     canvas.save();
                     canvas.translate(iconX, iconY);
                     icon.draw(canvas);
