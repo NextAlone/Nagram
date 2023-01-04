@@ -2141,6 +2141,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 PhotoViewer.getInstance().setParentActivity(parentFragment, resourcesProvider);
                 PhotoViewer.getInstance().openPhotoForSelect(entries, 0, 2, false, new PhotoViewer.EmptyPhotoViewerProvider() {
                     boolean sending;
+                    boolean spoiler;
 
                     @Override
                     public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo, boolean notify, int scheduleDate, boolean forceDocument) {
@@ -2159,11 +2160,12 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         info.ttl = photoEntry.ttl;
                         info.videoEditedInfo = videoEditedInfo;
                         info.canDeleteAfter = true;
+                        info.hasMediaSpoilers = spoiler;
                         photos.add(info);
                         photoEntry.reset();
                         sending = true;
                         boolean updateStickersOrder = SendMessagesHelper.checkUpdateStickersOrder(info.caption);
-                        SendMessagesHelper.prepareSendingMedia(accountInstance, photos, dialog_id, replyingMessageObject, getThreadMessage(), null, false, false, editingMessageObject, notify, scheduleDate, updateStickersOrder);
+                        SendMessagesHelper.prepareSendingMedia(accountInstance, photos, dialog_id, replyingMessageObject, getThreadMessage(), null, forceDocument, false, editingMessageObject, notify, scheduleDate, updateStickersOrder);
                         if (delegate != null) {
                             delegate.onMessageSend(null, true, scheduleDate);
                         }
@@ -2183,6 +2185,11 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     @Override
                     public boolean canCaptureMorePhotos() {
                         return false;
+                    }
+
+                    @Override
+                    public void setMediaSpoiler(boolean mediaSpoiler) {
+                        spoiler = mediaSpoiler;
                     }
                 }, parentFragment);
             }

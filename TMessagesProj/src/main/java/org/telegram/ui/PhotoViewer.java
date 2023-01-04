@@ -2071,6 +2071,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         public void onClose() {
 
         }
+
+        @Override
+        public void setMediaSpoiler(boolean mediaSpoiler) {
+
+        }
     }
 
     public interface PhotoViewerProvider {
@@ -2144,6 +2149,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
         default void onPreOpen() {}
         default void onPreClose() {}
+
+        default void setMediaSpoiler(boolean mediaSpoiler) {}
     }
 
     private class FrameLayoutDrawer extends SizeNotifierFrameLayoutPhoto {
@@ -5731,10 +5738,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             sendPopupLayout.setBackgroundColor(0xf9222222);
 
             final boolean canReplace = placeProvider != null && placeProvider.canReplace(currentIndex);
-            final int[] order = {4, 3, 2, 0, 1, 4};
-            for (int i = 0; i < 5; i++) {
+            final int[] order = {5, 4, 3, 2, 0, 1, 6};
+            for (int i = 0; i < 7; i++) {
                 final int a = order[i];
-                if (a != 2 && a != 3 && a != 4 && canReplace) {
+                if (a != 2 && a != 3 && a != 5 && a != 6 && canReplace) {
                     continue;
                 }
                 if (a == 0 && !parentChatActivity.canScheduleMessage()) {
@@ -5783,9 +5790,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 } else if (a == 3) {
                     cell.setTextAndIcon(LocaleController.getString("SendAsNewPhoto", R.string.SendAsNewPhoto), R.drawable.msg_send);
                 } else if (a == 4) {
-                    cell.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
-                } else if (a == 5) {
                     cell.setTextAndIcon(LocaleController.getString("SendWithoutCompression", R.string.SendWithoutCompression), R.drawable.msg_sendfile);
+                } else if (a == 5) {
+                    cell.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
+                } else if (a == 6) {
+                    cell.setTextAndIcon(LocaleController.getString("EnablePhotoSpoiler", R.string.EnablePhotoSpoiler), R.drawable.msg_spoiler);
                 }
                 cell.setMinimumWidth(AndroidUtilities.dp(196));
                 cell.setColors(0xffffffff, 0xffffffff);
@@ -5811,13 +5820,15 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     } else if (a == 3) {
                         sendPressed(true, 0);
                     } else if (a == 4) {
-                        translateComment(TranslateDb.getChatLanguage(chatId, TranslatorKt.getCode2Locale(NekoConfig.translateInputLang.String())));
-                    } else if (a == 5) {
                         sendPressed(true, 0, false, true, false);
+                    } else if (a == 5) {
+                        translateComment(TranslateDb.getChatLanguage(chatId, TranslatorKt.getCode2Locale(NekoConfig.translateInputLang.String())));
+                    } else if (a == 6) {
+                        sendPressed(true, 0, false, false, false, true);
                     }
                 });
                 cell.setOnLongClickListener(v -> {
-                    if (a == 4) {
+                    if (a == 5) {
                         Translator.showTargetLangSelect(cell, true, (locale) -> {
                             if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                                 sendPopupWindow.dismiss();
@@ -6887,6 +6898,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     }
 
     private void sendPressed(boolean notify, int scheduleDate, boolean replace, boolean forceDocument, boolean confirmed) {
+        sendPressed(notify, scheduleDate, replace, forceDocument, confirmed, false);
+    }
+
+    private void sendPressed(boolean notify, int scheduleDate, boolean replace, boolean forceDocument, boolean confirmed, boolean hasMediaSpoilers) {
         if (captionEditText.getTag() != null) {
             return;
         }
@@ -7004,6 +7019,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     return;
                 }
             }
+            placeProvider.setMediaSpoiler(hasMediaSpoilers);
             if (!replace) {
                 placeProvider.sendButtonPressed(currentIndex, videoEditedInfo, notify, scheduleDate, forceDocument);
             } else {

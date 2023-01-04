@@ -1281,7 +1281,9 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
 
     @Override
     public void dismiss() {
-        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
+        try {
+            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
+        } catch (Throwable ignore) {}
         if (onDismissListener != null) {
             onDismissListener.onDismiss(this);
         }
