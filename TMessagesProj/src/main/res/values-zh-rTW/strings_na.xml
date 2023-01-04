@@ -51,7 +51,6 @@
     <string name="ZalgoFilterNotice">所有暱稱或資訊中的「Z̷͍͌ā̸̜l̸̞̂g̷̝͘o̩̓」符號將被刪除以避免影響閱讀。</string>
     <string name="CustomChannelLabel">自定頻道預設標籤</string>
     <string name="AlwaysShowDownloadIcon">總是顯示下載圖示</string>
-    <string name="ShowPhotoOpenInExternalApp">使用外部應用程式開啟相片</string>
     <string name="QuickToggleAnonymous">快速切換匿名發言</string>
     <string name="QuickToggleAnonymousNotice">如果你是頻道的持有者則可以使用頻道匿名發言</string>
     <string name="RealHideTimeForSticker">真正的隱藏貼圖傳送時間</string>

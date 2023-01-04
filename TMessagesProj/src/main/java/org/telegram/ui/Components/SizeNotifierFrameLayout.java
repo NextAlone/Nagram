@@ -42,6 +42,7 @@ import org.telegram.ui.BlurSettingsBottomSheet;
 import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import xyz.nextalone.nagram.NaConfig;
 
 public class SizeNotifierFrameLayout extends FrameLayout {
 
@@ -415,7 +416,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     }
 
     private void checkSnowflake(Canvas canvas) {
-        if (Theme.canStartHolidayAnimation() && !SharedConfig.getLiteMode().enabled()) {
+        if (((Theme.canStartHolidayAnimation() && !SharedConfig.getLiteMode().enabled()) || NaConfig.INSTANCE.getChatDecoration().Int() == 1) && NaConfig.INSTANCE.getChatDecoration().Int() != 2) {
             if (snowflakesEffect == null) {
                 snowflakesEffect = new SnowflakesEffect(1);
             }

@@ -106,6 +106,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
 
+import tw.nekomimi.nekogram.NekoConfig;
+import xyz.nextalone.nagram.helper.Dialogs;
+
 public class ThemeActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     public final static int THEME_TYPE_BASIC = 0;
@@ -1154,9 +1157,13 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 showDialog(builder.create());
             } else if (position == chatBlurRow) {
-                SharedConfig.toggleChatBlur();
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(SharedConfig.chatBlurEnabled());
+                if (NekoConfig.forceBlurInChat.Bool()) {
+                    Dialogs.createNeedChangeNekoSettingsAlert(getContext());
+                } else {
+                    SharedConfig.toggleChatBlur();
+                    if (view instanceof TextCheckCell) {
+                        ((TextCheckCell) view).setChecked(SharedConfig.chatBlurEnabled());
+                    }
                 }
             } else if (position == lightModeRow) {
                 SharedConfig.getLiteMode().toggleMode();

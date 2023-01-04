@@ -169,13 +169,20 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell actionBarDecorationRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.actionBarDecoration, new String[]{
             LocaleController.getString("DependsOnDate", R.string.DependsOnDate),
             LocaleController.getString("Snowflakes", R.string.Snowflakes),
-            LocaleController.getString("Fireworks", R.string.Fireworks)
+            LocaleController.getString("Fireworks", R.string.Fireworks),
+            LocaleController.getString("DecorationNone", R.string.DecorationNone),
     }, null));
     private final AbstractConfigCell iconDecorationRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NaConfig.INSTANCE.getIconDecoration(), new String[]{
             LocaleController.getString("DependsOnDate", R.string.DependsOnDate),
             LocaleController.getString("Christmas", R.string.Christmas),
             LocaleController.getString("Valentine", R.string.Valentine),
-            LocaleController.getString("HalloWeen", R.string.HalloWeen)
+            LocaleController.getString("HalloWeen", R.string.HalloWeen),
+            LocaleController.getString("DecorationNone", R.string.DecorationNone),
+    }, null));
+    private final AbstractConfigCell chatDecorationRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NaConfig.INSTANCE.getChatDecoration(), new String[]{
+            LocaleController.getString("DependsOnDate", R.string.DependsOnDate),
+            LocaleController.getString("Snowflakes", R.string.Snowflakes),
+            LocaleController.getString("DecorationNone", R.string.DecorationNone),
     }, null));
     private final AbstractConfigCell tabletModeRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.tabletMode, new String[]{
             LocaleController.getString("TabletModeDefault", R.string.TabletModeDefault),
@@ -206,7 +213,6 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
     private final AbstractConfigCell inappCameraRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.inappCamera));
     private final AbstractConfigCell hideProxySponsorChannelRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideProxySponsorChannel));
     private final AbstractConfigCell hideSponsoredMessageRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideSponsoredMessage));
-    private final AbstractConfigCell showPhotoOpenInExternalAppRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowPhotoOpenInExternalApp()));
     private final AbstractConfigCell autoPauseVideoRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.autoPauseVideo, LocaleController.getString("AutoPauseVideoAbout")));
     private final AbstractConfigCell disableNumberRoundingRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableNumberRounding, "4.8K -> 4777"));
     private final AbstractConfigCell nameOrderRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.nameOrder, new String[]{

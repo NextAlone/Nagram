@@ -299,6 +299,9 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         int inviteIcon;
         int helpIcon;
         int peopleNearbyIcon;
+        if (NaConfig.INSTANCE.getIconDecoration().Int() == 4) {
+            eventType = -1;
+        }
         if (eventType == 0 || NaConfig.INSTANCE.getIconDecoration().Int() == 1) {
             newGroupIcon = R.drawable.msg_groups_ny;
             //newSecretIcon = R.drawable.msg_secret_ny;

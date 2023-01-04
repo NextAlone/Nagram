@@ -73,4 +73,18 @@ object Dialogs {
         layoutParams.height = AndroidUtilities.dp(36f * 3);
         editText.layoutParams = layoutParams;
     }
+
+    @JvmStatic
+    fun createNeedChangeNekoSettingsAlert(context: Context) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(LocaleController.getString("AppName", R.string.AppName))
+        builder.setMessage(
+            LocaleController.getString(
+                "NeedChangeNekoSettings",
+                R.string.NeedChangeNekoSettings
+            )
+        )
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null)
+        builder.show()
+    }
 }

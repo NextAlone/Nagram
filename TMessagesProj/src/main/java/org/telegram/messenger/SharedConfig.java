@@ -1296,7 +1296,7 @@ public class SharedConfig {
             saveStreamMedia = preferences.getBoolean("saveStreamMedia", true);
             smoothKeyboard = preferences.getBoolean("smoothKeyboard2", true);
             pauseMusicOnRecord = preferences.getBoolean("pauseMusicOnRecord", false);
-            chatBlur = chatBlur || NekoConfig.forceBlurInChat.Bool();
+            chatBlur = preferences.getBoolean("chatBlur", true) || NekoConfig.forceBlurInChat.Bool();
             forceDisableTabletMode = preferences.getBoolean("forceDisableTabletMode", false);
             streamAllVideo = preferences.getBoolean("streamAllVideo", BuildVars.DEBUG_VERSION);
             streamMkv = preferences.getBoolean("streamMkv", false);
@@ -2086,7 +2086,6 @@ public class SharedConfig {
 
     public static void toggleChatBlur() {
         chatBlur = !chatBlur;
-        if (NekoConfig.forceBlurInChat.Bool()) chatBlur = true;
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("chatBlur", chatBlur);

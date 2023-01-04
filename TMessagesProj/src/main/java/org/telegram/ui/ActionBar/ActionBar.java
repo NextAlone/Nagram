@@ -327,20 +327,20 @@ public class ActionBar extends FrameLayout {
                     }
                 }
             }
-            if (NekoConfig.actionBarDecoration.Int() == 2) {
+            if (NekoConfig.actionBarDecoration.Int() == 3 || !manualStart) {
+                if (snowflakesEffect != null) {
+                    snowflakesEffect = null;
+                }
+                if (fireworksEffect != null) {
+                    fireworksEffect = null;
+                }
+            } else if (NekoConfig.actionBarDecoration.Int() == 2) {
                 if (fireworksEffect == null) {
                     fireworksEffect = new FireworksEffect();
                 }
             } else if (NekoConfig.actionBarDecoration.Int() == 1 || Theme.canStartHolidayAnimation()) {
                 if (snowflakesEffect == null) {
                     snowflakesEffect = new SnowflakesEffect(0);
-                }
-            } else if (!manualStart) {
-                if (snowflakesEffect != null) {
-                    snowflakesEffect = null;
-                }
-                if (fireworksEffect != null) {
-                    fireworksEffect = null;
                 }
             }
             if (snowflakesEffect != null) {

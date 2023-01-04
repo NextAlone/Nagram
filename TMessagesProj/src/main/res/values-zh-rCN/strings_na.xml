@@ -50,7 +50,6 @@
     <string name="ZalgoFilterNotice">昵称和消息中的 \"Z̷͍͌ā̸̜l̸̞̂g̷̝͘o̶̩̓\" 符号将被过滤</string>
     <string name="CustomChannelLabel">自定义频道默认别名</string>
     <string name="AlwaysShowDownloadIcon">一直显示下载管理器</string>
-    <string name="ShowPhotoOpenInExternalApp">查看图片可以使用其他应用打开</string>
     <string name="QuickToggleAnonymous">快速切换匿名发言</string>
     <string name="QuickToggleAnonymousNotice">如果你是群组的所有者的话</string>
     <string name="RealHideTimeForSticker">真正的隐藏贴纸发送时间</string>
@@ -79,4 +78,7 @@
     <string name="ShowSendAsUnderMessageHint">在消息提示下显示发送者</string>
     <string name="CheckAllForum">添加所有话题模式的群组</string>
     <string name="ShowForumAsNormalChat">以普通对话模式打开话题模式群组</string>
+    <string name="DecorationNone">无</string>
+    <string name="ChatDecoration">聊天框装饰</string>
+    <string name="NeedChangeNekoSettings">此设置已被 N-设置 覆盖，无法修改</string>
 </resources>
