@@ -6008,7 +6008,7 @@ public class Theme {
             if (monthOfYear == 0 && dayOfMonth == 1 && hour <= 23) {
                 canStartHolidayAnimation = true;
             } else {
-                canStartHolidayAnimation = BuildVars.DEBUG_VERSION;//false;
+                canStartHolidayAnimation = false;
             }
             if (dialogs_holidayDrawable == null) {
                 if (getEventType() == 0 || NekoConfig.newYear.Bool()) {

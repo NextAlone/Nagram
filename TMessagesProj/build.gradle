@@ -3,12 +3,12 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
-def verName = "9.3.2"
-def verCode = 1124
+def verName = "9.3.3"
+def verCode = 1125
 
 
-def officialVer = "9.3.2"
-def officialCode = 3023
+def officialVer = "9.3.3"
+def officialCode = 3026
 
 configurations {
     compile.exclude module: "support-v4"
