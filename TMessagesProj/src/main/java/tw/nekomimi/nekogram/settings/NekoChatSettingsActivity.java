@@ -140,6 +140,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private final AbstractConfigCell showSendAsUnderMessageHintRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowSendAsUnderMessageHint()));
     private final AbstractConfigCell hideBotButtonInInputFieldRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getHideBotButtonInInputField()));
     private final AbstractConfigCell showForumAsNormalChatRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowForumAsNormalChat()));
+    private final AbstractConfigCell doNotUnarchiveBySwipeRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDoNotUnarchiveBySwipe()));
     private final AbstractConfigCell dividerInteractions = cellGroup.appendCell(new ConfigCellDivider());
 
     // Sticker

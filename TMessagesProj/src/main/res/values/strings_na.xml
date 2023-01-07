@@ -82,4 +82,5 @@
     <string name="DecorationNone">None</string>
     <string name="ChatDecoration">Chat Decoration</string>
     <string name="NeedChangeNekoSettings">You need to change N-Settings</string>
+    <string name="DoNotUnarchiveBySwipe">Do not unarchive by swipe</string>
 </resources>
