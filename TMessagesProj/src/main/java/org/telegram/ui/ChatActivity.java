@@ -3358,6 +3358,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             actionModeOtherItem.addSubItem(nkbtn_hide, R.drawable.msg_disable, LocaleController.getString("Hide",
              R.string.Hide));
         }
+        if (NekoConfig.showMessageDetails.Bool()) {
+            actionModeOtherItem.addSubItem(nkbtn_detail,R.drawable.msg_info,LocaleController.getString("MessageDetails", R.string.MessageDetails));
+        }
 
         actionMode.getItem(nkactionbarbtn_reply).setVisibility(ChatObject.canSendMessages(currentChat) && selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1 ? View.VISIBLE : View.GONE);
         actionMode.getItem(edit).setVisibility(canEditMessagesCount == 1 && selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1 ? View.VISIBLE : View.GONE);
@@ -32267,6 +32270,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
             }
             hideTitleItem.setVisibility(android.view.View.GONE);
+        } else if (id == nkbtn_detail) {
+            presentFragment(new MessageDetailsActivity(getSelectedMessages().get(0)));
         }
     }
 
