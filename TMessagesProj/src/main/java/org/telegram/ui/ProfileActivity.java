@@ -8320,17 +8320,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (chat.megagroup) {
                     if (chatInfo == null || !chatInfo.participants_hidden || ChatObject.hasAdminRights(chat)) {
                         canSearchMembers = true;
-                        otherItem.addSubItem(search_members, R.drawable.baseline_search_24, LocaleController.getString("SearchMembers", R.string.SearchMembers));
+                        otherItem.addSubItem(search_members, R.drawable.msg_search, LocaleController.getString("SearchMembers", R.string.SearchMembers));
                     }
                     if (!chat.creator && !chat.left && !chat.kicked && !isTopic) {
-                        otherItem.addSubItem(leave_group, R.drawable.baseline_exit_to_app_24, LocaleController.getString("LeaveMegaMenu", R.string.LeaveMegaMenu));
+                        otherItem.addSubItem(leave_group, R.drawable.msg_leave, LocaleController.getString("LeaveMegaMenu", R.string.LeaveMegaMenu));
                     }
                     if (isTopic && ChatObject.canDeleteTopic(currentAccount, chat, topicId)) {
                         otherItem.addSubItem(delete_topic, R.drawable.msg_delete, LocaleController.getPluralString("DeleteTopics", 1));
                     }
                 } else {
                     if (ChatObject.isPublic(chat)) {
-                        otherItem.addSubItem(share, R.drawable.baseline_forward_24, LocaleController.getString("BotShare", R.string.BotShare));
+                        otherItem.addSubItem(share, R.drawable.msg_shareout, LocaleController.getString("BotShare", R.string.BotShare));
                     }
                     if (NekoConfig.channelAlias.Bool()){
                         otherItem.addSubItem(aliasChannelName, R.drawable.profile_admin, LocaleController.getString("setChannelAliasName", R.string.setChannelAliasName));
