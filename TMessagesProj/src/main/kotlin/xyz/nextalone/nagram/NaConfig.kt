@@ -400,6 +400,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val doNotShareMyPhoneNumber =
+        addConfig(
+            "DoNotShareMyPhoneNumber",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

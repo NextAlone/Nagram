@@ -82,4 +82,5 @@
     <string name="ChatDecoration">聊天框装饰</string>
     <string name="NeedChangeNekoSettings">此设置已被 N-设置 覆盖，无法修改</string>
     <string name="DoNotUnarchiveBySwipe">禁用滑动取消归档</string>
+    <string name="DoNotShareMyPhoneNumber">禁用分享我的手机号码</string>
 </resources>
