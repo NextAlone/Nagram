@@ -415,6 +415,8 @@ public class FilterTabsView extends FrameLayout {
                     android.graphics.Rect bounds = new android.graphics.Rect(0, 0, emoticonSize, emoticonSize);
                     icon = getResources().getDrawable(FolderIconHelper.getTabIcon(currentTab.emoticon)).mutate();
                     icon.setBounds(bounds);
+                }
+                if (icon != null) {
                     icon.setTint(textPaint.getColor());
                 }
                 iconX = (int) ((getMeasuredWidth() - tabWidth) / 2f);
