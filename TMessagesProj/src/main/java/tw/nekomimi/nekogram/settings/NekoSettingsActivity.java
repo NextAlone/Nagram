@@ -283,6 +283,7 @@ public class NekoSettingsActivity extends BaseFragment {
         spToJSON("themeconfig", configJson, null);
 
         spToJSON("nkmrcfg", configJson, null);
+        spToJSON("nekodialogconfig", configJson, null);
 
         return configJson.toString(4);
     }
