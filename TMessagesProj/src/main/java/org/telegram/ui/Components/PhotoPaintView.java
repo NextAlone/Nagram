@@ -37,6 +37,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
@@ -426,10 +427,23 @@ public class PhotoPaintView extends FrameLayout implements IPhotoPaintView, Enti
         float height = bitmapToEdit.getHeight();
 
         Size size = new Size(width, height);
-        size.width = 1280;
+        int maxSide;
+        switch (SharedConfig.getDevicePerformanceClass()) {
+            case SharedConfig.PERFORMANCE_CLASS_LOW:
+                maxSide = 1280;
+                break;
+            default:
+            case SharedConfig.PERFORMANCE_CLASS_AVERAGE:
+                maxSide = 2560;
+                break;
+            case SharedConfig.PERFORMANCE_CLASS_HIGH:
+                maxSide = 3840;
+                break;
+        }
+        size.width = maxSide;
         size.height = (float) Math.floor(size.width * height / width);
-        if (size.height > 1280) {
-            size.height = 1280;
+        if (size.height > maxSide) {
+            size.height = maxSide;
             size.width = (float) Math.floor(size.height * width / height);
         }
         paintingSize = size;
