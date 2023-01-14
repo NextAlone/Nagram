@@ -3364,11 +3364,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
             } else if (position == numberRow) {
                 TLRPC.User user = UserConfig.getInstance(currentAccount).getCurrentUser();
-                String number;
                 if (user == null || StrUtil.isBlank(user.phone)) {
                     return;
                 }
-                number = PhoneFormat.getInstance().format("+" + user.phone);
+                String number = PhoneFormat.getInstance().format("+" + user.phone);
                 BottomBuilder builder = new BottomBuilder(getParentActivity());
                 builder.addTitle(number);
                 builder.addItem(LocaleController.getString("Edit", R.string.Edit), R.drawable.msg_edit, __ -> {
@@ -3402,6 +3401,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 showDialog(builder.create());
             } else if (position == phoneRow) {
                 final TLRPC.User user = getMessagesController().getUser(userId);
+                if (user == null || StrUtil.isBlank(user.phone)) {
+                    return;
+                }
                 String number = PhoneFormat.getInstance().format("+" + user.phone);
                 BottomBuilder builder = new BottomBuilder(getParentActivity());
                 builder.addTitle(number);
