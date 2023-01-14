@@ -130,6 +130,7 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
         imageReceiver = new ImageReceiver(this);
         imageReceiver.setCrossfadeWithOldImage(true);
         imageReceiver.setForceCrossfade(true);
+        imageReceiver.setCrossfadeByScale(0f);
         imageReceiver.setDelegate((imageReceiver, set, thumb, memCache) -> {
             if (NekoConfig.avatarBackgroundDarken.Bool() || NekoConfig.avatarBackgroundBlur.Bool()) {
                 if (thumb || allowInvalidate) {
