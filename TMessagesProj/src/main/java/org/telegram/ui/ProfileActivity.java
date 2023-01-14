@@ -8285,7 +8285,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (topicId == 0 && ChatObject.canUserDoAdminAction(chat, ChatObject.ACTION_DELETE_MESSAGES)) {
                 createAutoDeleteItem(context);
             }
-            createAutoTranslateItem(-chatId, topicId);
+            createAutoTranslateItem(-chatId, topicId, !isTopic || chatInfo == null || !chatInfo.participants_hidden || ChatObject.hasAdminRights(chat));
             if (chat != null && (chat.has_link || (chatInfo != null && chatInfo.linked_chat_id != 0))) {
                 String text;
                 if (!chat.megagroup) {
@@ -8505,13 +8505,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     private void createAutoTranslateItem(long dialogId) {
-        createAutoTranslateItem(dialogId, 0);
+        createAutoTranslateItem(dialogId, 0, true);
     }
 
-    private void createAutoTranslateItem(long dialogId, int topicId) {
+    private void createAutoTranslateItem(long dialogId, int topicId, boolean gap) {
         var autoTranslatePopupWrapper = new AutoTranslatePopupWrapper(ProfileActivity.this, otherItem.getPopupLayout().getSwipeBack(), dialogId, topicId, getResourceProvider());
         otherItem.addSwipeBackItem(R.drawable.msg_translate, null, LocaleController.getString("AutoTranslate", R.string.AutoTranslate), autoTranslatePopupWrapper.windowLayout);
-        otherItem.addColoredGap();
+        if (gap) otherItem.addColoredGap();
     }
 
     private void setAutoDeleteHistory(int time, int action) {
