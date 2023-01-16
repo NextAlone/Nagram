@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import androidx.core.util.Consumer;
 
+import org.osmdroid.api.IMapController;
 import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
@@ -151,6 +152,13 @@ public class OSMDroidMapsProvider implements IMapsProvider {
                 }
             };
             mapView.setTileSource(TileSourceFactory.MAPNIK);
+            GeoPoint initLocation = new GeoPoint(48.85825, 2.29448);
+            final IMapController controller = mapView.getController();
+            mapView.setMaxZoomLevel(20.0);
+            mapView.setMultiTouchControls(true);
+            mapView.setBuiltInZoomControls(false);
+            controller.setCenter(initLocation);
+            controller.setZoom(7.);
         }
 
         @Override
