@@ -129,6 +129,7 @@ import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
+import xyz.nextalone.nagram.NaConfig;
 
 public class AlertsCreator {
     public final static int PERMISSIONS_REQUEST_TOP_ICON_SIZE = 72;
@@ -5232,9 +5233,9 @@ public class AlertsCreator {
                         cell.setText(LocaleController.getString("DeleteReportSpam", R.string.DeleteReportSpam), "", false, false);
                     } else if (a == 2) {
                         cell.setText(LocaleController.formatString("DeleteAllFrom", R.string.DeleteAllFrom, name), "", false, false);
-                    } else {
-                        cell.setText(LocaleController.getString("DoActionsInCommonGroups", R.string.DoActionsInCommonGroups), "", true, false);
-                        checks[3] = true;
+                    } else if (a == 3) {
+                        cell.setText(LocaleController.getString("DoActionsInCommonGroups", R.string.DoActionsInCommonGroups), "", NaConfig.INSTANCE.getDoActionsInCommonGroups().Bool(), false);
+                        checks[3] = NaConfig.INSTANCE.getDoActionsInCommonGroups().Bool();
                     }
                     cell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16) : AndroidUtilities.dp(8), 0, LocaleController.isRTL ? AndroidUtilities.dp(8) : AndroidUtilities.dp(16), 0);
                     frameLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.TOP | Gravity.LEFT, 0, 48 * num, 0, 0));
@@ -5245,6 +5246,9 @@ public class AlertsCreator {
                         CheckBoxCell cell13 = (CheckBoxCell) v;
                         Integer num1 = (Integer) cell13.getTag();
                         checks[num1] = !checks[num1];
+                        if (num1 == 3) {
+                            NaConfig.INSTANCE.getDoActionsInCommonGroups().setConfigBool(checks[num1]);
+                        }
                         cell13.setChecked(checks[num1], true);
                     });
                     num++;

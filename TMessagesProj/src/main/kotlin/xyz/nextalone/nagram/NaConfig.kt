@@ -406,6 +406,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val doActionsInCommonGroups =
+        addConfig(
+            "DoActionsInCommonGroups",
+            ConfigItem.configTypeBool,
+            true
+        )
 
     private fun addConfig(
         k: String,
