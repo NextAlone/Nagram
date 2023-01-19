@@ -334,6 +334,12 @@ object NaConfig {
             ConfigItem.configTypeInt,
             0
         )
+    val notificationIcon =
+        addConfig(
+            "NotificationIcon",
+            ConfigItem.configTypeInt,
+            1
+        )
     val showSetReminder =
         addConfig(
             "SetReminder",

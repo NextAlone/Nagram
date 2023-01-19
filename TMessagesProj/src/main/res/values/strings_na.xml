@@ -68,6 +68,9 @@
     <string name="FakeHighPerformanceDevice">Fake High Performance Device</string>
     <string name="DisableEmojiDrawLimit">Disable Emoji Draw Limit</string>
     <string name="IconDecoration">Icon Decoration</string>
+    <string name="NotificationIcon">Notification Icon</string>
+    <string name="Official">Official</string>
+    <string name="Nekogram">Nekogram</string>
     <string name="HalloWeen">HalloWeen</string>
     <string name="ShowOnlineStatus">Show Online Status</string>
     <string name="ShowOnlineStatusNotice">Show the online status of other people next to their profile photo in groups</string>
