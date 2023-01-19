@@ -83,6 +83,7 @@ import java.util.function.Consumer;
 
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoConfig;
+import xyz.nextalone.nagram.NaConfig;
 
 public class NotificationsController extends BaseController {
 
@@ -3847,7 +3848,7 @@ public class NotificationsController extends BaseController {
             PendingIntent contentIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_MUTABLE);
 
             mBuilder.setContentTitle(name)
-                    .setSmallIcon(R.drawable.nagram_notification)
+                    .setSmallIcon(getNotificationIconResId())
                     .setAutoCancel(true)
                     .setNumber(total_unread_count)
                     .setContentIntent(contentIntent)
@@ -4635,7 +4636,7 @@ public class NotificationsController extends BaseController {
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(ApplicationLoader.applicationContext)
                     .setContentTitle(name)
-                    .setSmallIcon(R.drawable.nagram_notification)
+                    .setSmallIcon(getNotificationIconResId())
                     .setContentText(text.toString())
                     .setAutoCancel(true)
                     .setNumber(messageObjects.size())
@@ -5092,6 +5093,20 @@ public class NotificationsController extends BaseController {
 
     public NotificationsSettingsFacade getNotificationsSettingsFacade() {
         return dialogsNotificationsFacade;
+    }
+
+    private int getNotificationIconResId() {
+        int notificationIconConfigValue = NaConfig.INSTANCE.getNotificationIcon().Int();
+        switch (notificationIconConfigValue) {
+            case 0:
+                return R.drawable.offical_notification;
+            case 1:
+                return R.drawable.nagram_notification;
+            case 2:
+                return R.drawable.notification;
+        }
+
+        return R.drawable.offical_notification;
     }
 
     public void loadTopicsNotificationsExceptions(long dialogId, Consumer<HashSet<Integer>> consumer) {

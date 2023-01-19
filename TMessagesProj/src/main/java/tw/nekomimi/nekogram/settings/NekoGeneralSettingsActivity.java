@@ -184,6 +184,11 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
             LocaleController.getString("Snowflakes", R.string.Snowflakes),
             LocaleController.getString("DecorationNone", R.string.DecorationNone),
     }, null));
+    private final AbstractConfigCell notificationIconRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NaConfig.INSTANCE.getNotificationIcon(), new String[]{
+            LocaleController.getString("Official", R.string.Official),
+            LocaleController.getString("Nagram", R.string.NekoX),
+            LocaleController.getString("Nekogram", R.string.Nekogram)
+    }, null));
     private final AbstractConfigCell tabletModeRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.tabletMode, new String[]{
             LocaleController.getString("TabletModeDefault", R.string.TabletModeDefault),
             LocaleController.getString("Enable", R.string.Enable),
@@ -394,6 +399,8 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     }
                 }
             } else if (key.equals(NekoConfig.actionBarDecoration.getKey())) {
+                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+            } else if (key.equals(NaConfig.INSTANCE.getNotificationIcon().getKey())) {
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (key.equals(NekoConfig.tabletMode.getKey())) {
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
