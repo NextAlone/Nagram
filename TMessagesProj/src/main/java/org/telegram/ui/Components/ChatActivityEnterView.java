@@ -3927,6 +3927,35 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
     private boolean isInInput;
     private ActionBarPopupWindow menuPopupWindow;
 
+    private boolean checkMenuPermissions() {
+        if (Build.VERSION.SDK_INT < 23) {
+            return true;
+        }
+        if (isInVideoMode()) {
+            boolean hasAudio = parentActivity.checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED;
+            boolean hasVideo = parentActivity.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+            if (!hasAudio || !hasVideo) {
+                String[] permissions = new String[!hasAudio && !hasVideo ? 2 : 1];
+                if (!hasAudio && !hasVideo) {
+                    permissions[0] = Manifest.permission.RECORD_AUDIO;
+                    permissions[1] = Manifest.permission.CAMERA;
+                } else if (!hasAudio) {
+                    permissions[0] = Manifest.permission.RECORD_AUDIO;
+                } else {
+                    permissions[0] = Manifest.permission.CAMERA;
+                }
+                parentActivity.requestPermissions(permissions, BasePermissionsActivity.REQUEST_CODE_VIDEO_MESSAGE);
+                return false;
+            }
+        } else {
+            if (parentActivity.checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                parentActivity.requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, 3);
+                return false;
+            }
+        }
+        return true;
+    }
+
     private void onMenuClick(View view) {
         if (parentFragment == null) {
             return;
@@ -3975,14 +4004,16 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 }
 
                 isInVideoMode = false;
-                recordAudioVideoRunnable.run();
-                delegate.onSwitchRecordMode(isInVideoMode);
-                setRecordVideoButtonVisible(isInVideoMode, true);
-                if (!NekoConfig.disableVibration.Bool()) {
-                    performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                if (checkMenuPermissions()) {
+                    recordAudioVideoRunnable.run();
+                    delegate.onSwitchRecordMode(isInVideoMode);
+                    setRecordVideoButtonVisible(isInVideoMode, true);
+                    if (!NekoConfig.disableVibration.Bool()) {
+                        performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                    }
+                    recordCircle.sendButtonVisible = true;
+                    startLockTransition(false);
                 }
-                recordCircle.sendButtonVisible = true;
-                startLockTransition(false);
             });
 
             cell.setMinimumWidth(AndroidUtilities.dp(196));
@@ -4007,15 +4038,16 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     }
 
                     isInVideoMode = true;
-                    recordAudioVideoRunnable.run();
-                    delegate.onSwitchRecordMode(isInVideoMode);
-                    setRecordVideoButtonVisible(isInVideoMode, true);
-                    if (!NekoConfig.disableVibration.Bool()) {
-                        performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                    if (checkMenuPermissions()) {
+                        recordAudioVideoRunnable.run();
+                        delegate.onSwitchRecordMode(isInVideoMode);
+                        setRecordVideoButtonVisible(isInVideoMode, true);
+                        if (!NekoConfig.disableVibration.Bool()) {
+                            performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                        }
+                        recordCircle.sendButtonVisible = true;
+                        startLockTransition(false);
                     }
-                    recordCircle.sendButtonVisible = true;
-                    startLockTransition(false);
-
                 });
 
                 cell.setMinimumWidth(AndroidUtilities.dp(196));
