@@ -33,8 +33,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -54,8 +52,6 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBarMenu;
-import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -83,8 +79,6 @@ import org.telegram.ui.Components.voip.CellFlickerDrawable;
 
 import java.util.ArrayList;
 import java.util.Objects;
-
-import tw.nekomimi.nekogram.utils.ProxyUtil;
 
 public class SessionsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -187,35 +181,6 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 if (id == -1) {
                     finishFragment();
                 }
-            }
-        });
-        ActionBarMenu menu = actionBar.createMenu();
-        ActionBarMenuItem item = menu.addItem(0, R.drawable.msg_qrcode);
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
-            @Override
-            public void onItemClick(int id) {
-            if (id == -1) {
-                finishFragment();
-            } else if (id == 0) {
-                if (Build.VERSION.SDK_INT >= 23) {
-                    if (getParentActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        getParentActivity().requestPermissions(new String[]{Manifest.permission.CAMERA}, 22);
-                        return;
-                    }
-                }
-                CameraScanActivity.showAsSheet(SessionsActivity.this, false, CameraScanActivity.TYPE_QR_LOGIN, new CameraScanActivity.CameraScanActivityDelegate() {
-                    @Override
-                    public void didFindQr(String text) {
-                        ProxyUtil.showLinkAlert(getParentActivity(), text);
-                    }
-    
-                    @Override
-                    public boolean processQr(String text, Runnable onLoadEnd) {
-                        onLoadEnd.run();
-                        return false;
-                    }
-                });
-            }
             }
         });
         listAdapter = new ListAdapter(context);
@@ -744,7 +709,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         ttlRow = -1;
         ttlDivideRow = -1;
 
-        if (currentType == 0 && getMessagesController().qrLoginCamera) {
+        if (currentType == 0) {
             qrCodeRow = rowCount++;
             qrCodeDividerRow = rowCount++;
         }
