@@ -22,7 +22,6 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.EmptyCell;
@@ -33,19 +32,21 @@ import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.Components.BlurredRecyclerView;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UndoView;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import tw.nekomimi.nekogram.ui.MessageHelper;
 
 @SuppressLint("RtlHardcoded")
-public class NekoAccountSettingsActivity extends BaseFragment {
+public class NekoAccountSettingsActivity extends BaseNekoXSettingsActivity {
 
-    private RecyclerListView listView;
     private ListAdapter listAdapter;
 
     private int rowCount;
@@ -90,9 +91,9 @@ public class NekoAccountSettingsActivity extends BaseFragment {
         fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = (FrameLayout) fragmentView;
 
-        listView = new RecyclerListView(context);
+        listView = new BlurredRecyclerView(context);
         listView.setVerticalScrollBarEnabled(false);
-        listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        listView.setLayoutManager(layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener((view, position, x, y) -> {
@@ -193,6 +194,22 @@ public class NekoAccountSettingsActivity extends BaseFragment {
                     button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
                 }
             }
+        });
+        listView.setOnItemLongClickListener((view, position, x, y) -> {
+            var holder = listView.findViewHolderForAdapterPosition(position);
+            var key = getRowKey(position);
+            if (holder != null && listAdapter.isEnabled(holder)) {
+                showDialog(new AlertDialog.Builder(context)
+                        .setItems(
+                                new CharSequence[]{LocaleController.getString("CopyLink", R.string.CopyLink)},
+                                (dialogInterface, i) -> {
+                                    AndroidUtilities.addToClipboard(String.format(Locale.getDefault(), "https://%s/nasettings/%s?r=%s", getMessagesController().linkPrefix, "account", key));
+                                    BulletinFactory.of(NekoAccountSettingsActivity.this).createCopyLinkBulletin().show();
+                                })
+                        .create());
+                return true;
+            }
+            return false;
         });
 
         tooltip = new UndoView(context);

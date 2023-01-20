@@ -51,6 +51,8 @@ import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.Components.BlurredRecyclerView;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
@@ -59,6 +61,7 @@ import org.telegram.ui.Components.UndoView;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
@@ -78,9 +81,8 @@ import tw.nekomimi.nekogram.config.cell.*;
 import xyz.nextalone.nagram.NaConfig;
 
 @SuppressLint("RtlHardcoded")
-public class NekoGeneralSettingsActivity extends BaseFragment {
+public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
 
-    private RecyclerListView listView;
     private ListAdapter listAdapter;
     private ValueAnimator statusBarColorAnimator;
     private DrawerProfilePreviewCell profilePreviewCell;
@@ -273,9 +275,9 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
         // Before listAdapter
         setCanNotChange();
 
-        listView = new RecyclerListView(context);
+        listView = new BlurredRecyclerView(context);
         listView.setVerticalScrollBarEnabled(false);
-        listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        listView.setLayoutManager(layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         if (listView.getItemAnimator() != null) {
             ((DefaultItemAnimator) listView.getItemAnimator()).setSupportsChangeAnimations(false);
         }
@@ -373,6 +375,23 @@ public class NekoGeneralSettingsActivity extends BaseFragment {
                     LocaleController.getInstance().recreateFormatters();
                 }
             }
+        });
+        addRowsToMap(cellGroup);
+        listView.setOnItemLongClickListener((view, position, x, y) -> {
+            var holder = listView.findViewHolderForAdapterPosition(position);
+            var key = getRowKey(position);
+            if (holder != null && listAdapter.isEnabled(holder)) {
+                showDialog(new AlertDialog.Builder(context)
+                        .setItems(
+                                new CharSequence[]{LocaleController.getString("CopyLink", R.string.CopyLink)},
+                                (dialogInterface, i) -> {
+                                    AndroidUtilities.addToClipboard(String.format(Locale.getDefault(), "https://%s/nasettings/%s?r=%s", getMessagesController().linkPrefix, "general", key));
+                                    BulletinFactory.of(NekoGeneralSettingsActivity.this).createCopyLinkBulletin().show();
+                                })
+                        .create());
+                return true;
+            }
+            return false;
         });
 
         // Cells: Set OnSettingChanged Callbacks

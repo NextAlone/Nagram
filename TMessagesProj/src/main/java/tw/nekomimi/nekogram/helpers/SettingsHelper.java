@@ -1,9 +1,13 @@
 package tw.nekomimi.nekogram.helpers;
 
 import android.net.Uri;
+import android.text.TextUtils;
 
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.BaseFragment;
 
+import tw.nekomimi.nekogram.settings.BaseNekoSettingsActivity;
+import tw.nekomimi.nekogram.settings.BaseNekoXSettingsActivity;
 import tw.nekomimi.nekogram.settings.NekoChatSettingsActivity;
 import tw.nekomimi.nekogram.settings.NekoAccountSettingsActivity;
 import tw.nekomimi.nekogram.settings.NekoEmojiSettingsActivity;
@@ -20,36 +24,38 @@ public class SettingsHelper {
             return;
         }
         var segments = uri.getPathSegments();
-        if (segments.isEmpty() || segments.size() > 2 || !"nekosettings".equals(segments.get(0))) {
+        if (segments.isEmpty() || segments.size() > 2 || !"nasettings".equals(segments.get(0))) {
             unknown.run();
             return;
         }
         BaseFragment fragment;
+        BaseNekoSettingsActivity neko_fragment = null;
+        BaseNekoXSettingsActivity nekox_fragment = null;
         if (segments.size() == 1) {
             fragment = new NekoSettingsActivity();
         } else if (PasscodeHelper.getSettingsKey().equals(segments.get(1))) {
-            fragment = new NekoPasscodeSettingsActivity();
+            fragment = neko_fragment = new NekoPasscodeSettingsActivity();
         } else {
             switch (segments.get(1)) {
                 case "a":
                 case "account":
-                    fragment = new NekoAccountSettingsActivity();
+                    fragment = nekox_fragment = new NekoAccountSettingsActivity();
                     break;
                 case "chat":
                 case "chats":
                 case "c":
-                    fragment = new NekoChatSettingsActivity();
+                    fragment = nekox_fragment = new NekoChatSettingsActivity();
                     break;
                 case "experimental":
                 case "e":
-                    fragment = new NekoExperimentalSettingsActivity();
+                    fragment = nekox_fragment = new NekoExperimentalSettingsActivity();
                     break;
                 case "emoji":
-                    fragment = new NekoEmojiSettingsActivity();
+                    fragment = neko_fragment = new NekoEmojiSettingsActivity();
                     break;
                 case "general":
                 case "g":
-                    fragment = new NekoGeneralSettingsActivity();
+                    fragment = nekox_fragment = new NekoGeneralSettingsActivity();
                     break;
                 default:
                     unknown.run();
@@ -57,6 +63,20 @@ public class SettingsHelper {
             }
         }
         callback.presentFragment(fragment);
+        var row = uri.getQueryParameter("r");
+        if (TextUtils.isEmpty(row)) {
+            row = uri.getQueryParameter("row");
+        }
+        if (!TextUtils.isEmpty(row)) {
+            var rowFinal = row;
+            if (neko_fragment != null) {
+                BaseNekoSettingsActivity finalNeko_fragment = neko_fragment;
+                AndroidUtilities.runOnUIThread(() -> finalNeko_fragment.scrollToRow(rowFinal, unknown));
+            } else if (nekox_fragment != null) {
+                BaseNekoXSettingsActivity finalNekoX_fragment = nekox_fragment;
+                AndroidUtilities.runOnUIThread(() -> finalNekoX_fragment.scrollToRow(rowFinal, unknown));
+            }
+        }
     }
 
     public interface Callback {

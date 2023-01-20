@@ -25,7 +25,6 @@ import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.EmptyCell;
@@ -36,6 +35,8 @@ import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.Components.BlurredRecyclerView;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
@@ -44,6 +45,7 @@ import org.telegram.ui.Components.UndoView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import kotlin.Unit;
@@ -64,7 +66,7 @@ import xyz.nextalone.nagram.NaConfig;
 import xyz.nextalone.nagram.helper.DoubleTap;
 
 @SuppressLint("RtlHardcoded")
-public class NekoChatSettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, EmojiHelper.EmojiPacksLoadedListener {
+public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implements NotificationCenter.NotificationCenterDelegate, EmojiHelper.EmojiPacksLoadedListener {
 
     private final CellGroup cellGroup = new CellGroup(this);
 
@@ -172,7 +174,6 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
 
 
 
-    private RecyclerListView listView;
     private ListAdapter listAdapter;
     private ActionBarMenuItem menuItem;
     private StickerSizeCell stickerSizeCell;
@@ -242,9 +243,9 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
         fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = (FrameLayout) fragmentView;
 
-        listView = new RecyclerListView(context);
+        listView = new BlurredRecyclerView(context);
         listView.setVerticalScrollBarEnabled(false);
-        listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        listView.setLayoutManager(layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
         listView.setAdapter(listAdapter);
 
@@ -312,6 +313,23 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                     presentFragment(new NekoEmojiSettingsActivity());
                 }
             }
+        });
+        addRowsToMap(cellGroup);
+        listView.setOnItemLongClickListener((view, position, x, y) -> {
+            var holder = listView.findViewHolderForAdapterPosition(position);
+            var key = getRowKey(position);
+            if (holder != null && listAdapter.isEnabled(holder)) {
+                showDialog(new AlertDialog.Builder(context)
+                        .setItems(
+                                new CharSequence[]{LocaleController.getString("CopyLink", R.string.CopyLink)},
+                                (dialogInterface, i) -> {
+                                    AndroidUtilities.addToClipboard(String.format(Locale.getDefault(), "https://%s/nasettings/%s?r=%s", getMessagesController().linkPrefix, "chat", key));
+                                    BulletinFactory.of(NekoChatSettingsActivity.this).createCopyLinkBulletin().show();
+                                })
+                        .create());
+                return true;
+            }
+            return false;
         });
 
         // Cells: Set OnSettingChanged Callbacks

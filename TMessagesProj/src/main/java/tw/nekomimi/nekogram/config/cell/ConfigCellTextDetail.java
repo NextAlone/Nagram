@@ -27,6 +27,10 @@ public class ConfigCellTextDetail extends AbstractConfigCell {
         return CellGroup.ITEM_TYPE_TEXT_DETAIL;
     }
 
+    public String getKey() {
+        return bindConfig == null ? null : bindConfig.getKey();
+    }
+
     public boolean isEnabled() {
         return false;
     }
