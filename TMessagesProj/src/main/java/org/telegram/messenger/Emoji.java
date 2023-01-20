@@ -47,6 +47,7 @@ import java.util.Locale;
 import org.telegram.ui.Components.AnimatedEmojiSpan;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.helpers.remote.EmojiHelper;
 import xyz.nextalone.nagram.NaConfig;
 
 public class Emoji {
@@ -79,6 +80,34 @@ public class Emoji {
 
     private final static int MAX_RECENT_EMOJI_COUNT = 48;
 
+    private static boolean isSelectedCustomEmojiPack;
+    private static File emojiFile;
+    private static boolean isSelectedEmojiPack;
+
+    private static void reloadCache() {
+        isSelectedCustomEmojiPack = EmojiHelper.getInstance().isSelectedCustomEmojiPack();
+        emojiFile = EmojiHelper.getInstance().getCurrentEmojiPackOffline();
+        isSelectedEmojiPack = !EmojiHelper.getInstance().getEmojiPack().equals("default") && emojiFile != null && emojiFile.exists();
+    }
+
+    public static boolean isSelectedCustomPack() {
+        return isSelectedCustomEmojiPack || isSelectedEmojiPack || NekoConfig.useSystemEmoji.Bool();
+    }
+
+    public static void reloadEmoji() {
+        reloadCache();
+        for (int a = 0; a < emojiBmp.length; a++) {
+            emojiBmp[a] = new Bitmap[emojiCounts[a]];
+            loadingEmoji[a] = new boolean[emojiCounts[a]];
+        }
+        for (int j = 0; j < EmojiData.data.length; j++) {
+            for (int i = 0; i < EmojiData.data[j].length; i++) {
+                rects.put(EmojiData.data[j][i], new DrawableInfo((byte) j, (short) i, i));
+            }
+        }
+    }
+
+
     static {
         drawImgSize = AndroidUtilities.dp(20);
         bigImgSize = AndroidUtilities.dp(AndroidUtilities.isTablet() ? 40 : 34);
@@ -95,6 +124,7 @@ public class Emoji {
         }
         placeholderPaint = new Paint();
         placeholderPaint.setColor(0x00000000);
+        reloadCache();
     }
 
     public static void preloadEmoji(CharSequence code) {
@@ -119,34 +149,40 @@ public class Emoji {
 
     private static void loadEmojiInternal(final byte page, final short page2) {
         try {
-            float scale;
-            int imageResize = 1;
+            int imageResize;
             if (AndroidUtilities.density <= 1.0f) {
-                scale = 2.0f;
                 imageResize = 2;
-            } else if (AndroidUtilities.density <= 1.5f) {
-                scale = 2.0f;
-            } else if (AndroidUtilities.density <= 2.0f) {
-                scale = 2.0f;
             } else {
-                scale = 2.0f;
+                imageResize = 1;
             }
 
             Bitmap bitmap = null;
             try {
-                InputStream is;
-                String entry = "emoji/" + String.format(Locale.US, "%d_%d.png", page, page2);
-                if (NekoConfig.useCustomEmoji.Bool()) {
-                    entry = "custom_emoji/" + entry;
-                    is = new FileInputStream(new File(ApplicationLoader.applicationContext.getFilesDir(), entry));
+                if (NekoConfig.useSystemEmoji.Bool() || isSelectedCustomEmojiPack) {
+                    int emojiSize = 66;
+                    bitmap = Bitmap.createBitmap(emojiSize, emojiSize, Bitmap.Config.ARGB_8888);
+                    Canvas canvas = new Canvas(bitmap);
+                    EmojiHelper.drawEmojiFont(
+                            canvas,
+                            0,
+                            0,
+                            EmojiHelper.getInstance().getCurrentTypeface(),
+                            fixEmoji(EmojiData.data[page][page2]),
+                            emojiSize
+                    );
                 } else {
-                    is = ApplicationLoader.applicationContext.getAssets().open(entry);
+                    InputStream is;
+                    if (isSelectedEmojiPack) {
+                        is = new FileInputStream(new File(emojiFile, String.format(Locale.US, "%d_%d.png", page, page2)));
+                    } else {
+                        is = ApplicationLoader.applicationContext.getAssets().open("emoji/" + String.format(Locale.US, "%d_%d.png", page, page2));
+                    }
+                    BitmapFactory.Options opts = new BitmapFactory.Options();
+                    opts.inJustDecodeBounds = false;
+                    opts.inSampleSize = imageResize;
+                    bitmap = BitmapFactory.decodeStream(is, null, opts);
+                    is.close();
                 }
-                BitmapFactory.Options opts = new BitmapFactory.Options();
-                opts.inJustDecodeBounds = false;
-                opts.inSampleSize = imageResize;
-                bitmap = BitmapFactory.decodeStream(is, null, opts);
-                is.close();
             } catch (Throwable e) {
                 FileLog.e(e);
             }
@@ -284,7 +320,7 @@ public class Emoji {
 
         @Override
         public void draw(Canvas canvas) {
-            if (!NekoConfig.useSystemEmoji.Bool() && !isLoaded()) {
+            if (!isLoaded()) {
                 loadEmoji(info.page, info.page2);
                 placeholderPaint.setColor(placeholderColor);
                 Rect bounds = getBounds();
@@ -299,25 +335,7 @@ public class Emoji {
                 b = getBounds();
             }
 
-            if (NekoConfig.useSystemEmoji.Bool()) {
-                String emoji = fixEmoji(EmojiData.data[info.page][info.emojiIndex]);
-                textPaint.setTextSize(b.height() * 0.8f);
-                textPaint.setTypeface(NekoXConfig.getSystemEmojiTypeface());
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (!textPaint.hasGlyph(emoji)) {
-                        if (!isLoaded()) {
-                            loadEmoji(info.page, info.page2);
-                            placeholderPaint.setColor(placeholderColor);
-                            Rect bounds = getBounds();
-                            canvas.drawCircle(bounds.centerX(), bounds.centerY(), bounds.width() * .4f, placeholderPaint);
-                        } else {
-                            canvas.drawBitmap(emojiBmp[info.page][info.page2], null, b, paint);
-                        }
-                        return;
-                    }
-                }
-                canvas.drawText(emoji, 0, emoji.length(), b.left, b.bottom - b.height() * 0.225f, textPaint);
-            } else {
+            if (!canvas.quickReject(b.left, b.top, b.right, b.bottom, Canvas.EdgeType.AA)) {
                 canvas.drawBitmap(emojiBmp[info.page][info.page2], null, b, paint);
             }
         }

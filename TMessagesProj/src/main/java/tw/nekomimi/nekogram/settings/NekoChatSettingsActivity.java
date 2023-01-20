@@ -1,5 +1,7 @@
 package tw.nekomimi.nekogram.settings;
 
+import static tw.nekomimi.nekogram.settings.BaseNekoSettingsActivity.PARTIAL;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -56,12 +58,13 @@ import tw.nekomimi.nekogram.config.cell.ConfigCellSelectBox;
 import tw.nekomimi.nekogram.config.cell.ConfigCellTextCheck;
 import tw.nekomimi.nekogram.config.cell.ConfigCellTextDetail;
 import tw.nekomimi.nekogram.config.cell.ConfigCellTextInput;
+import tw.nekomimi.nekogram.helpers.remote.EmojiHelper;
 import tw.nekomimi.nekogram.ui.PopupBuilder;
 import xyz.nextalone.nagram.NaConfig;
 import xyz.nextalone.nagram.helper.DoubleTap;
 
 @SuppressLint("RtlHardcoded")
-public class NekoChatSettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
+public class NekoChatSettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, EmojiHelper.EmojiPacksLoadedListener {
 
     private final CellGroup cellGroup = new CellGroup(this);
 
@@ -72,6 +75,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
 
     // Chats
     private final AbstractConfigCell header1 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Chat")));
+    private final AbstractConfigCell emojiSetsRow = cellGroup.appendCell(new ConfigCellCustom(ConfigCellCustom.CUSTOM_ITEM_EmojiSet, true));
     private final AbstractConfigCell unreadBadgeOnBackButton = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.unreadBadgeOnBackButton));
     private final AbstractConfigCell sendCommentAfterForwardRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.sendCommentAfterForward));
     private final AbstractConfigCell useChatAttachMediaMenuRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useChatAttachMediaMenu, LocaleController.getString("UseChatAttachEnterMenuNotice")));
@@ -172,10 +176,14 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     private ListAdapter listAdapter;
     private ActionBarMenuItem menuItem;
     private StickerSizeCell stickerSizeCell;
+    private EmojiSetCell emojiSetCell;
     private UndoView tooltip;
 
     @Override
     public boolean onFragmentCreate() {
+        EmojiHelper.getInstance().loadEmojisInfo(this);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
+
         super.onFragmentCreate();
 
 //        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
@@ -300,6 +308,8 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                         return Unit.INSTANCE;
                     });
                     builder.show();
+                } else if (position == cellGroup.rows.indexOf(emojiSetsRow)) {
+                    presentFragment(new NekoEmojiSettingsActivity());
                 }
             }
         });
@@ -674,7 +684,17 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
     }
 
     @Override
+    public void emojiPacksLoaded(String error) {
+        if (listAdapter != null) {
+            listAdapter.notifyItemChanged(cellGroup.rows.indexOf(emojiSetsRow), PARTIAL);
+        }
+    }
+
+    @Override
     public void didReceivedNotification(int id, int account, Object... args) {
+        if (id == NotificationCenter.emojiLoaded && listAdapter != null) {
+            listAdapter.notifyItemChanged(cellGroup.rows.indexOf(emojiSetsRow), PARTIAL);
+        }
        /* if (id == NotificationCenter.emojiDidLoad) {
             if (listView != null) {
                 listView.invalidateViews();
@@ -684,6 +704,7 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
 
     @Override
     public void onFragmentDestroy() {
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
         super.onFragmentDestroy();
 //        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
     }
@@ -829,6 +850,11 @@ public class NekoChatSettingsActivity extends BaseFragment implements Notificati
                     break;
                 case ConfigCellCustom.CUSTOM_ITEM_StickerSize:
                     view = stickerSizeCell = new StickerSizeCell(mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
+                case ConfigCellCustom.CUSTOM_ITEM_EmojiSet:
+                    view = emojiSetCell = new EmojiSetCell(mContext, false);
+                    emojiSetCell.setData(EmojiHelper.getInstance().getCurrentEmojiPackInfo(), false, true);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
             }

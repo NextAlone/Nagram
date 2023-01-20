@@ -24,6 +24,7 @@ import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Cells.CreationTextCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.NotificationsCheckCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
@@ -36,6 +37,7 @@ import org.telegram.ui.Cells.TextRadioCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.BlurredRecyclerView;
 import org.telegram.ui.Components.BulletinFactory;
+import org.telegram.ui.Components.FlickerLoadingView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
@@ -45,6 +47,24 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public abstract class BaseNekoSettingsActivity extends BaseFragment {
+
+    public static final Object PARTIAL = new Object();
+
+    public static final int TYPE_SHADOW = 1;
+    public static final int TYPE_SETTINGS = 2;
+    public static final int TYPE_CHECK = 3;
+    public static final int TYPE_HEADER = 4;
+    public static final int TYPE_NOTIFICATION_CHECK = 5;
+    public static final int TYPE_DETAIL_SETTINGS = 6;
+    public static final int TYPE_INFO_PRIVACY = 7;
+    public static final int TYPE_TEXT = 8;
+    public static final int TYPE_CHECKBOX = 9;
+    public static final int TYPE_RADIO = 10;
+    public static final int TYPE_ACCOUNT = 11;
+    public static final int TYPE_EMOJI = 12;
+    public static final int TYPE_EMOJI_SELECTION = 13;
+    public static final int TYPE_CREATION = 14;
+    public static final int TYPE_FLICKER = 15;
 
     protected BlurredRecyclerView listView;
     protected BaseListAdapter listAdapter;
@@ -129,7 +149,9 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
             actionBar = new ActionBar(context);
             actionBar.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
             actionBar.setItemsColor(getThemedColor(Theme.key_windowBackgroundWhiteBlackText), false);
+            actionBar.setItemsBackgroundColor(getThemedColor(Theme.key_actionBarActionModeDefaultSelector), true);
             actionBar.setItemsBackgroundColor(getThemedColor(Theme.key_actionBarWhiteSelector), false);
+            actionBar.setItemsColor(getThemedColor(Theme.key_actionBarActionModeDefaultIcon), true);
             actionBar.setTitleColor(getThemedColor(Theme.key_windowBackgroundWhiteBlackText));
             actionBar.setCastShadows(false);
         }
@@ -283,7 +305,17 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int type = holder.getItemViewType();
-            return type == 2 || type == 3 || type == 5 || type == 6 || type == 8 | type == 9 || type == 10 || type == 11 || type == 12;
+            return type == TYPE_SETTINGS || type == TYPE_CHECK || type == TYPE_NOTIFICATION_CHECK || type == TYPE_DETAIL_SETTINGS || type == TYPE_TEXT | type == TYPE_CHECKBOX || type == TYPE_RADIO || type == TYPE_ACCOUNT || type == TYPE_EMOJI || type == TYPE_EMOJI_SELECTION || type == TYPE_CREATION;
+        }
+
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, boolean partial) {
+
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            var payload = holder.getPayload();
+            onBindViewHolder(holder, position, PARTIAL.equals(payload));
         }
 
         @NonNull
@@ -291,47 +323,62 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = null;
             switch (viewType) {
-                case 1:
+                case TYPE_SHADOW:
                     view = new ShadowSectionCell(mContext, resourcesProvider);
                     break;
-                case 2:
+                case TYPE_SETTINGS:
                     view = new TextSettingsCell(mContext, resourcesProvider);
                     view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
                     break;
-                case 3:
+                case TYPE_CHECK:
                     view = new TextCheckCell(mContext, resourcesProvider);
                     view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
                     break;
-                case 4:
+                case TYPE_HEADER:
                     view = new HeaderCell(mContext, resourcesProvider);
                     view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
                     break;
-                case 5:
+                case TYPE_NOTIFICATION_CHECK:
                     view = new NotificationsCheckCell(mContext, resourcesProvider);
                     view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
                     break;
-                case 6:
+                case TYPE_DETAIL_SETTINGS:
                     view = new TextDetailSettingsCell(mContext);
                     view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
                     break;
-                case 7:
+                case TYPE_INFO_PRIVACY:
                     view = new TextInfoPrivacyCell(mContext, resourcesProvider);
                     view.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, getThemedColor(Theme.key_windowBackgroundGrayShadow)));
                     break;
-                case 8:
+                case TYPE_TEXT:
                     view = new TextCell(mContext, resourcesProvider);
                     view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
                     break;
-                case 9:
+                case TYPE_CHECKBOX:
                     view = new TextCheckbox2Cell(mContext);
                     view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
                     break;
-                case 10:
+                case TYPE_RADIO:
                     view = new TextRadioCell(mContext);
                     view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
                     break;
-                case 11:
+                case TYPE_ACCOUNT:
                     view = new AccountCell(mContext);
+                    view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
+                    break;
+                case TYPE_EMOJI:
+                case TYPE_EMOJI_SELECTION:
+                    view = new EmojiSetCell(mContext, viewType == TYPE_EMOJI_SELECTION);
+                    view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
+                    break;
+                case TYPE_CREATION:
+                    CreationTextCell creationTextCell = new CreationTextCell(mContext, resourcesProvider);
+                    creationTextCell.startPadding = 61;
+                    view = creationTextCell;
+                    view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
+                    break;
+                case TYPE_FLICKER:
+                    view = new FlickerLoadingView(mContext, resourcesProvider);
                     view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
                     break;
             }

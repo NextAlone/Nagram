@@ -325,7 +325,6 @@ dependencies {
     implementation "cn.hutool:hutool-crypto:5.7.13"
     implementation 'cn.hutool:hutool-http:5.7.5'
     implementation "com.jakewharton:process-phoenix:2.1.2"
-    implementation 'org:jaudiotagger:2.0.3'
 
     compileOnly 'org.yaml:snakeyaml:1.29'
     fullImplementation 'org.yaml:snakeyaml:1.29'
@@ -356,14 +355,18 @@ dependencies {
 
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.2.0"
 
-    implementation 'com.google.mlkit:language-id:17.0.4'
-
 }
 dependencies {
     // add for undo and redo
     implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:4.3'
     // add splash screen
     implementation("androidx.core:core-splashscreen:1.0.0-beta02")
+    // add for music tag flac...
+    implementation 'org:jaudiotagger:2.0.3'
+    // add for auto translate
+    implementation 'com.google.mlkit:language-id:17.0.4'
+    // add for emoji
+    implementation 'com.jaredrummler:truetypeparser-light:1.0.0'
 }
 
 apply plugin: "com.google.gms.google-services"

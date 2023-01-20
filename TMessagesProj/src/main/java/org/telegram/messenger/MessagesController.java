@@ -7579,7 +7579,7 @@ public class MessagesController extends BaseController implements NotificationCe
         return true;
     }
 
-    protected void removeDeletedMessagesFromArray(final long dialogId, ArrayList<TLRPC.Message> messages) {
+    public void removeDeletedMessagesFromArray(final long dialogId, ArrayList<TLRPC.Message> messages) {
         int maxDeletedId = deletedHistory.get(dialogId, 0);
         if (maxDeletedId == 0) {
             return;

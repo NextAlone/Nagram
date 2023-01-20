@@ -197,6 +197,7 @@ import kotlin.Unit;
 import kotlin.text.StringsKt;
 import tw.nekomimi.nekogram.InternalUpdater;
 import tw.nekomimi.nekogram.helpers.SettingsHelper;
+import tw.nekomimi.nekogram.helpers.remote.EmojiHelper;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
@@ -930,6 +931,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                         }
                     });
         }
+        EmojiHelper.getInstance().checkEmojiPacks();
     }
 
     @Override

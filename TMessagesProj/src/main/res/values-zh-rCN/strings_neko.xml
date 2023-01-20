@@ -172,4 +172,22 @@
     <string name="BrokenMLKit">选项不可用</string>
     <string name="BrokenMLKitDetail">Google MLKit 语言识别器在这个设备上不知何故坏了。</string>
     <string name="RestrictionReason">限制原因</string>
+    <string name="InvalidCustomEmojiTypeface">无效的字体文件。</string>
+    <string name="DownloadEmojiSet">下载 %s</string>
+    <string name="EmojiSets">Emoji 包</string>
+    <string name="MyEmojiSets">我的 Emoji 包</string>
+    <string name="InstalledEmojiSet">已安装</string>
+    <string name="InstallingEmojiSet">正在安装…</string>
+    <string name="UpdateEmojiSet">更新 %s</string>
+    <string name="EmojiSetHint">这只对您影响 Emoji 的外观。其他人会根据自己的设置看到它们。</string>
+    <string name="CustomEmojiSetHint">从您的内部存储中导入和选择 Emoji 包。</string>
+    <string name="AddEmojiSet">添加 Emoji 包</string>
+    <string name="EmojiSetRemoved">Emoji 包已移除。</string>
+    <string name="EmojiSetRemovedInfo">%1$s 已经不在您的 Emoji 包中。</string>
+    <string name="DeleteEmojiSets">%1$s 个 Emoji 包</string>
+    <string name="DeleteEmojiSetsMessage">你确定要删除所选的 Emoji 包吗？</string>
+    <string name="ApplyEmojiSet">应用 Emoji 包</string>
+    <string name="EmojiSetApplied">Emoji 包已应用。</string>
+    <string name="EmojiSetAppliedInfo">%1$s 现在是您的 Emoji 包。</string>
+    <string name="EmojiSetAlreadyApplied">Emoji 包已经被应用。</string>
 </resources>

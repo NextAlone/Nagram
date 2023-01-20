@@ -6,6 +6,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 
 import tw.nekomimi.nekogram.settings.NekoChatSettingsActivity;
 import tw.nekomimi.nekogram.settings.NekoAccountSettingsActivity;
+import tw.nekomimi.nekogram.settings.NekoEmojiSettingsActivity;
 import tw.nekomimi.nekogram.settings.NekoExperimentalSettingsActivity;
 import tw.nekomimi.nekogram.settings.NekoGeneralSettingsActivity;
 import tw.nekomimi.nekogram.settings.NekoPasscodeSettingsActivity;
@@ -42,6 +43,9 @@ public class SettingsHelper {
                 case "experimental":
                 case "e":
                     fragment = new NekoExperimentalSettingsActivity();
+                    break;
+                case "emoji":
+                    fragment = new NekoEmojiSettingsActivity();
                     break;
                 case "general":
                 case "g":
