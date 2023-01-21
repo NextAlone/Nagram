@@ -227,7 +227,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             openAttachMenu(onDismiss);
             return;
         }
-        BottomBuilder builder = new BottomBuilder(parentFragment.getParentActivity());
+        BottomSheet.Builder builder = new BottomSheet.Builder(parentFragment.getParentActivity());
 
         if (type == TYPE_SET_PHOTO_FOR_USER) {
             builder.setTitle(LocaleController.formatString("SetPhotoFor", R.string.SetPhotoFor, user.first_name), true);
@@ -236,6 +236,80 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         } else {
             builder.setTitle(LocaleController.getString("ChoosePhoto", R.string.ChoosePhoto), true);
         }
+
+        ArrayList<CharSequence> items = new ArrayList<>();
+        ArrayList<Integer> icons = new ArrayList<>();
+        ArrayList<Integer> ids = new ArrayList<>();
+
+        items.add(LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto));
+        icons.add(R.drawable.msg_camera);
+        ids.add(ID_TAKE_PHOTO);
+
+        if (canSelectVideo) {
+            items.add(LocaleController.getString("ChooseRecordVideo", R.string.ChooseRecordVideo));
+            icons.add(R.drawable.msg_video);
+            ids.add(ID_RECORD_VIDEO);
+        }
+
+        items.add(LocaleController.getString("ChooseFromGallery", R.string.ChooseFromGallery));
+        icons.add(R.drawable.msg_photos);
+        ids.add(ID_UPLOAD_FROM_GALLERY);
+
+        if (searchAvailable) {
+            items.add(LocaleController.getString("ChooseFromSearch", R.string.ChooseFromSearch));
+            icons.add(R.drawable.msg_search);
+            ids.add(ID_SEARCH_WEB);
+        }
+        if (hasAvatar) {
+            items.add(LocaleController.getString("DeletePhoto", R.string.DeletePhoto));
+            icons.add(R.drawable.msg_delete);
+            ids.add(ID_REMOVE_PHOTO);
+        }
+
+        int[] iconsRes = new int[icons.size()];
+        for (int i = 0, N = icons.size(); i < N; i++) {
+            iconsRes[i] = icons.get(i);
+        }
+
+        builder.setItems(items.toArray(new CharSequence[0]), iconsRes, (dialogInterface, i) -> {
+            int id = ids.get(i);
+            switch (id) {
+                case ID_TAKE_PHOTO:
+                    openCamera();
+                    break;
+                case ID_UPLOAD_FROM_GALLERY:
+                    openGallery();
+                    break;
+                case ID_SEARCH_WEB:
+                    openSearch();
+                    break;
+                case ID_REMOVE_PHOTO:
+                    onDeleteAvatar.run();
+                    break;
+                case ID_RECORD_VIDEO:
+                    openVideoCamera();
+                    break;
+            }
+        });
+        BottomSheet sheet = builder.create();
+        sheet.setOnHideListener(onDismiss);
+        parentFragment.showDialog(sheet);
+        if (hasAvatar) {
+            sheet.setItemColor(items.size() - 1, Theme.getColor(Theme.key_dialogTextRed2), Theme.getColor(Theme.key_dialogRedIcon));
+        }
+    }
+
+    public void openMenu(boolean hasAvatar, Runnable onDeleteAvatar, DialogInterface.OnDismissListener onDismiss) {
+        if (parentFragment == null || parentFragment.getParentActivity() == null) {
+            return;
+        }
+
+        if (useAttachMenu) {
+            openAttachMenu(onDismiss);
+            return;
+        }
+
+        BottomBuilder builder = new BottomBuilder(parentFragment.getParentActivity());
 
         if (hasAvatar && parentFragment instanceof ProfileActivity) {
 

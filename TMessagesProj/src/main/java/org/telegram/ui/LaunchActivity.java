@@ -126,8 +126,8 @@ import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.DrawerLayoutAdapter;
-import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Cells.DrawerActionCheckCell;
+import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Cells.DrawerActionCell;
 import org.telegram.ui.Cells.DrawerAddCell;
 import org.telegram.ui.Cells.DrawerProfileCell;
@@ -2166,8 +2166,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                                                         messageId = Utilities.parseInt(segments.get(3));
                                                     }
                                                 }
-                                            } else if (path.startsWith("contact/")) {
-                                                contactToken = path.substring(8);
                                             } else if (path.startsWith("@id")) {
                                                 try {
                                                     long userId = Utilities.parseLong(StringsKt.substringAfter(path, "@id", "0"));
@@ -2177,6 +2175,8 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                                                 } catch (Exception e) {
                                                     FileLog.e(e);
                                                 }
+                                            } else if (path.startsWith("contact/")) {
+                                                contactToken = path.substring(8);
                                             } else if (path.length() >= 1) {
                                                 ArrayList<String> segments = new ArrayList<>(data.getPathSegments());
                                                 if (segments.size() > 0 && segments.get(0).equals("s")) {
@@ -2628,7 +2628,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                                 if (message != null && message.startsWith("@")) {
                                     message = " " + message;
                                 }
-                                runLinkRequest(intentAccount[0], username, group, sticker, emoji, botUser, botChat, botChannel, botChatAdminParams, message, contactToken, hasUrl, messageId, channelId, threadId, commentId, game, auth, lang, unsupportedUrl, code, login, wallPaper, inputInvoiceSlug, theme, voicechat, livestream, internal ? 3 : 0, videoTimestamp, setAsAttachBot, attachMenuBotToOpen, attachMenuBotChoose, progress);
+                                runLinkRequest(intentAccount[0], username, group, sticker, emoji, botUser, botChat, botChannel, botChatAdminParams, message, contactToken, hasUrl, messageId, channelId, threadId, commentId, game, auth, lang, unsupportedUrl, code, login, wallPaper, inputInvoiceSlug, theme, voicechat, livestream, 0, videoTimestamp, setAsAttachBot, attachMenuBotToOpen, attachMenuBotChoose, progress);
                             } else {
                                 try (Cursor cursor = getContentResolver().query(intent.getData(), null, null, null, null)) {
                                     if (cursor != null) {
@@ -3412,12 +3412,12 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             progress.onCancel(() -> AndroidUtilities.cancelRunOnUIThread(runnable));
             AndroidUtilities.runOnUIThread(runnable, 7500);
             return;
-        } else if (state == 0 && UserConfig.getActivatedAccountsCount() >= 2) {
+        } else if (state == 0 && UserConfig.getActivatedAccountsCount() >= 2 && auth != null) {
             AlertsCreator.createAccountSelectDialog(this, account -> {
                 if (account != intentAccount) {
                     switchToAccount(account, true);
                 }
-                runLinkRequest(account, username, group, sticker, emoji, botUser, botChat, botChannel, botChatAdminParams, message, contactToken, hasUrl, messageId, channelId, threadId, commentId, game, auth, lang, unsupportedUrl, code, loginToken, wallPaper, inputInvoiceSlug, theme, voicechat, livestream, 3, videoTimestamp, setAsAttachBot, attachMenuBotToOpen, attachMenuBotChoose, progress);
+                runLinkRequest(account, username, group, sticker, emoji, botUser, botChat, botChannel, botChatAdminParams, message, contactToken, hasUrl, messageId, channelId, threadId, commentId, game, auth, lang, unsupportedUrl, code, loginToken, wallPaper, inputInvoiceSlug, theme, voicechat, livestream, 1, videoTimestamp, setAsAttachBot, attachMenuBotToOpen, attachMenuBotChoose, progress);
             }).show();
             return;
         } else if (code != null) {

@@ -2439,7 +2439,7 @@ public class LocaleController {
                     req.lang_pack = "";
                     return ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
                         if (response != null) {
-                            saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount, onDone);
+                            AndroidUtilities.runOnUIThread(() -> saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount, onDone));
                         }
                     }, ConnectionsManager.RequestFlagWithoutLogin);
                 }
@@ -2448,7 +2448,7 @@ public class LocaleController {
                 req.lang_code = localeInfo.getBaseLangCode();
                 return ConnectionsManager.getInstance(currentAccount).sendRequest(req, (TLObject response, TLRPC.TL_error error) -> {
                     if (response != null) {
-                        saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount, onDone);
+                        AndroidUtilities.runOnUIThread(() -> saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount, onDone));
                     }
                 }, ConnectionsManager.RequestFlagWithoutLogin);
             }
@@ -2461,7 +2461,7 @@ public class LocaleController {
                 req.lang_pack = "";
                 return ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
                     if (response != null) {
-                        saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount, onDone);
+                        AndroidUtilities.runOnUIThread(() -> saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount, onDone));
                     }
                 }, ConnectionsManager.RequestFlagWithoutLogin);
             } else {
@@ -2470,7 +2470,7 @@ public class LocaleController {
                 req.lang_code = localeInfo.getLangCode();
                 return ConnectionsManager.getInstance(currentAccount).sendRequest(req, (TLObject response, TLRPC.TL_error error) -> {
                     if (response != null) {
-                        saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount, onDone);
+                        AndroidUtilities.runOnUIThread(() -> saveRemoteLocaleStrings(localeInfo, (TLRPC.TL_langPackDifference) response, currentAccount, onDone));
                     }
                 }, ConnectionsManager.RequestFlagWithoutLogin);
             }

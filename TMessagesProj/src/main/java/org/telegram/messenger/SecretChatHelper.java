@@ -68,7 +68,7 @@ public class SecretChatHelper extends BaseController {
         }
     }
 
-    public static final int CURRENT_SECRET_CHAT_LAYER = 151;
+    public static int CURRENT_SECRET_CHAT_LAYER = 151;
 
     private ArrayList<Integer> sendingNotifyLayer = new ArrayList<>();
     private SparseArray<ArrayList<TL_decryptedMessageHolder>> secretHolesQueue = new SparseArray<>();

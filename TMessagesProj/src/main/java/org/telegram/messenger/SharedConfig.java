@@ -47,6 +47,8 @@ import java.io.RandomAccessFile;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.Arrays;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.io.UnsupportedEncodingException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -290,60 +292,72 @@ public class SharedConfig {
             }
         }
 
-        public String getLink() {
-            StringBuilder url = new StringBuilder(!TextUtils.isEmpty(secret) ? "https://t.me/proxy?" : "https://t.me/socks?");
-            try {
-                url.append("server=").append(URLEncoder.encode(address, "UTF-8")).append("&").append("port=").append(port);
-                if (!TextUtils.isEmpty(username)) {
-                    url.append("&user=").append(URLEncoder.encode(username, "UTF-8"));
-                }
-                if (!TextUtils.isEmpty(password)) {
-                    url.append("&pass=").append(URLEncoder.encode(password, "UTF-8"));
-                }
-                if (!TextUtils.isEmpty(secret)) {
-                    url.append("&secret=").append(URLEncoder.encode(secret, "UTF-8"));
-                }
-            } catch (UnsupportedEncodingException ignored) {}
-            return url.toString();
-        }
-
         public String getAddress() {
+
             return address + ":" + port;
+
         }
 
         public String getType() {
+
             if (!StrUtil.isBlank(secret)) {
+
                 return "MTProto";
+
             } else {
+
                 return "Socks5";
+
             }
+
         }
 
         public String getTitle() {
+
             StringBuilder builder = new StringBuilder();
+
             builder.append("[ ");
+
             if (subId != 0L) {
+
                 try {
+
                     builder.append(SubManager.getSubList().find(ObjectFilters.eq("id", subId)).firstOrDefault().displayName());
+
                 } catch (Exception e) {
+
                     builder.append("Unknown");
+
                 }
+
             } else {
+
                 builder.append(getType());
+
             }
+
             builder.append(" ] ");
+
             if (StrUtil.isBlank(getRemarks())) {
+
                 builder.append(getAddress());
+
             } else {
+
                 builder.append(getRemarks());
+
             }
+
             return builder.toString();
+
         }
 
         private String remarks;
 
         public String getRemarks() {
+
             return remarks;
+
         }
 
         public void setRemarks(String remarks) {
@@ -354,38 +368,59 @@ public class SharedConfig {
         }
 
         public String toUrl() {
+
             HttpUrl.Builder builder = HttpUrl.parse(StrUtil.isBlank(secret) ?
                     "https://t.me/socks" : "https://t.me/proxy").newBuilder()
                     .addQueryParameter("server", address)
                     .addQueryParameter("port", port + "");
+
             if (!StrUtil.isBlank(secret)) {
+
                 builder.addQueryParameter("secret", secret);
+
             } else {
+
                 builder.addQueryParameter("user", username)
                         .addQueryParameter("pass", password);
+
             }
+
             if (!StrUtil.isBlank(remarks)) {
+
                 builder.fragment(Utils.INSTANCE.urlEncode(remarks));
+
             }
+
             return builder.toString();
+
         }
 
         public static ProxyInfo fromUrl(String url) {
+
             Uri lnk = Uri.parse(url);
+
             if (lnk == null) throw new IllegalArgumentException(url);
+
             ProxyInfo info = new ProxyInfo(lnk.getQueryParameter("server"),
                     Utilities.parseInt(lnk.getQueryParameter("port")),
                     lnk.getQueryParameter("user"),
                     lnk.getQueryParameter("pass"),
                     lnk.getQueryParameter("secret"));
+
             if (StrUtil.isNotBlank(lnk.getFragment())) {
+
                 info.setRemarks(lnk.getFragment());
+
             }
+
             return info;
+
         }
 
         public JSONObject toJsonInternal() throws JSONException {
+
             JSONObject obj = new JSONObject();
+
             if (!StrUtil.isBlank(remarks)) {
                 obj.put("remarks", remarks);
             }
@@ -410,12 +445,17 @@ public class SharedConfig {
             }
 
             return obj;
+
         }
 
         public static ProxyInfo fromJson(JSONObject obj) {
+
             ProxyInfo info;
+
             switch (obj.optString("type", "null")) {
+
                 case "socks5": {
+
                     info = new ProxyInfo();
 
                     info.group = obj.optInt("group", 0);
@@ -423,55 +463,84 @@ public class SharedConfig {
                     info.port = obj.optInt("port", 443);
                     info.username = obj.optString("username", "");
                     info.password = obj.optString("password", "");
+
                     info.remarks = obj.optString("remarks");
+
                     if (StrUtil.isBlank(info.remarks)) info.remarks = null;
+
                     info.group = obj.optInt("group", 0);
+
                     break;
+
                 }
 
                 case "mtproto": {
+
                     info = new ProxyInfo();
+
                     info.address = obj.optString("address", "");
                     info.port = obj.optInt("port", 443);
                     info.secret = obj.optString("secret", "");
+
                     info.remarks = obj.optString("remarks");
+
                     if (StrUtil.isBlank(info.remarks)) info.remarks = null;
+
                     info.group = obj.optInt("group", 0);
+
                     break;
+
                 }
 
                 case "vmess": {
+
                     info = new VmessProxy(obj.optString("link"));
+
                     break;
+
                 }
 
                 case "shadowsocks": {
+
                     info = new ShadowsocksProxy(obj.optString("link"));
+
                     break;
+
                 }
 
                 case "shadowsocksr": {
+
                     info = new ShadowsocksRProxy(obj.optString("link"));
+
                     break;
+
                 }
 
                 case "ws": {
+
                     info = new WsProxy(obj.optString("link"));
+
                     break;
+
                 }
 
                 default: {
+
                     throw new IllegalStateException("invalid proxy type " + obj.optString("type", "null"));
+
                 }
 
             }
 
             return info;
+
         }
 
         @Override
         public int hashCode() {
+
             return (address + port + username + password + secret).hashCode();
+
         }
 
         @Override
@@ -480,7 +549,7 @@ public class SharedConfig {
         }
     }
 
-    public abstract static class ExternalSocks5Proxy extends SharedConfig.ProxyInfo {
+    public abstract static class ExternalSocks5Proxy extends ProxyInfo {
 
         public ExternalSocks5Proxy() {
 

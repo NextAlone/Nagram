@@ -1242,7 +1242,7 @@ public class MessagesController extends BaseController implements NotificationCe
         telegramAntispamUserId = mainPreferences.getLong("telegramAntispamUserId", -1);
         telegramAntispamGroupSizeMin = mainPreferences.getInt("telegramAntispamGroupSizeMin", 100);
         hiddenMembersGroupSizeMin = mainPreferences.getInt("hiddenMembersGroupSizeMin", 100);
-//        BuildVars.GOOGLE_AUTH_CLIENT_ID = mainPreferences.getString("googleAuthClientId", BuildVars.GOOGLE_AUTH_CLIENT_ID);
+        // BuildVars.GOOGLE_AUTH_CLIENT_ID = mainPreferences.getString("googleAuthClientId", BuildVars.GOOGLE_AUTH_CLIENT_ID);
 
         Set<String> currencySet = mainPreferences.getStringSet("directPaymentsCurrency", null);
         if (currencySet != null) {
@@ -10465,10 +10465,6 @@ public class MessagesController extends BaseController implements NotificationCe
         if (type == ChatObject.CHAT_TYPE_CHAT && !forImport) {
             TLRPC.TL_messages_createChat req = new TLRPC.TL_messages_createChat();
             req.title = title;
-            if (ttlPeriod > 0) {
-                req.ttl_period = ttlPeriod;
-                req.flags |= 1;
-            }
             TLObject nekoxBot = null;
             if (selectedContacts.isEmpty()) {
                 String username = "NekoXBot";
@@ -10484,7 +10480,7 @@ public class MessagesController extends BaseController implements NotificationCe
                             putUsers(res.users, false);
                             putChats(res.chats, false);
                             getMessagesStorage().putUsersAndChats(res.users, res.chats, false, true);
-                            createChat(title, selectedContacts, about, type, forImport, location, locationAddress, fragment);
+                            createChat(title, selectedContacts, about, type, forImport, location, locationAddress, 0, fragment);
                         } else {
                             AndroidUtilities.runOnUIThread(() -> {
                                 AlertsCreator.processError(currentAccount, error, fragment, req);

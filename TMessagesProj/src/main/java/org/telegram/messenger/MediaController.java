@@ -3796,6 +3796,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         private final int notificationId;
 
         public MediaLoader(Context context, AccountInstance accountInstance, ArrayList<MessageObject> messages, MessagesStorage.IntCallback onFinish) {
+            notificationId = SaveToDownloadReceiver.createNotificationId();
             currentAccount = accountInstance;
             messageObjects = messages;
             onFinishRunnable = onFinish;
@@ -3808,7 +3809,6 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setCancelable(true);
             progressDialog.setOnCancelListener(d -> cancelled = true);
-            notificationId = SaveToDownloadReceiver.createNotificationId();
         }
 
         public void start(Context context) {

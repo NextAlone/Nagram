@@ -195,14 +195,12 @@ import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.Crop.CropTransform;
 import org.telegram.ui.Components.Crop.CropView;
 import org.telegram.ui.Components.CubicBezierInterpolator;
-import org.telegram.ui.Components.EmojiPacksAlert;
 import org.telegram.ui.Components.FadingTextViewLayout;
 import org.telegram.ui.Components.FilterShaders;
 import org.telegram.ui.Components.FloatSeekBarAccessibilityDelegate;
 import org.telegram.ui.Components.GestureDetector2;
 import org.telegram.ui.Components.GroupedPhotosListView;
 import org.telegram.ui.Components.HideViewAfterAnimation;
-import org.telegram.ui.Components.IPhotoPaintView;
 import org.telegram.ui.Components.ImageUpdater;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkPath;
@@ -210,10 +208,10 @@ import org.telegram.ui.Components.LinkSpanDrawable;
 import org.telegram.ui.Components.MediaActivity;
 import org.telegram.ui.Components.NumberPicker;
 import org.telegram.ui.Components.OtherDocumentPlaceholderDrawable;
-import org.telegram.ui.Components.Paint.Views.LPhotoPaintView;
 import org.telegram.ui.Components.PaintingOverlay;
 import org.telegram.ui.Components.PhotoCropView;
 import org.telegram.ui.Components.PhotoFilterView;
+import org.telegram.ui.Components.PhotoPaintView;
 import org.telegram.ui.Components.PhotoViewerCaptionEnterView;
 import org.telegram.ui.Components.PhotoViewerWebView;
 import org.telegram.ui.Components.PickerBottomLayoutViewer;
@@ -254,15 +252,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import kotlin.Unit;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
-import tw.nekomimi.nekogram.transtale.TranslatorKt;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
@@ -394,7 +391,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private MediaController.CropState leftCropState;
     private MediaController.CropState rightCropState;
     private PhotoFilterView photoFilterView;
-    private IPhotoPaintView photoPaintView;
+    private PhotoPaintView photoPaintView;
     private AlertDialog visibleDialog;
     private CaptionTextViewSwitcher captionTextViewSwitcher;
     private CaptionScrollView captionScrollView;
@@ -5741,8 +5738,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     } else if (a == 3) {
                         sendPressed(true, 0);
                     } else if (a == 4) {
-                        translateComment(TranslateDb.getChatLanguage(chatId, TranslatorKt.getCode2Locale(NekoConfig.translateInputLang.String())));
-                    } else if (a == 5) {
                         sendPressed(true, 0, false, true, false);
                     }
                 });
@@ -10370,7 +10365,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             } else {
                 state = editState.cropState;
             }
-            photoPaintView = new LPhotoPaintView(parentActivity, currentAccount, bitmap, isCurrentVideo ? null : centerImage.getBitmap(), centerImage.getOrientation(), editState.mediaEntities, state, () -> paintingOverlay.hideBitmap(), resourcesProvider) {
+            photoPaintView = new PhotoPaintView(parentActivity, bitmap, isCurrentVideo ? null : centerImage.getBitmap(), centerImage.getOrientation(), editState.mediaEntities, state, () -> paintingOverlay.hideBitmap(), resourcesProvider) {
                 @Override
                 protected void onOpenCloseStickersAlert(boolean open) {
                     if (videoPlayer == null) {
@@ -10396,7 +10391,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 @Override
                 protected void onTextAdd() {
                     if (!windowView.isFocusable()) {
-//                        makeFocusable();
+                        makeFocusable();
                     }
                 }
             };
@@ -11570,7 +11565,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 MessagesController.getInstance(currentAccount).loadDialogPhotos(avatarsDialogId, 80, 0, true, classGuid);
             }
         }
-        if (currentMessageObject != null && currentMessageObject.isVideo() || (NekoConfig.takeGIFasVideo.Bool() && currentMessageObject != null && currentMessageObject.isGif()) || currentBotInlineResult != null && (currentBotInlineResult.type.equals("video") || MessageObject.isVideoDocument(currentBotInlineResult.document)) || (pageBlocksAdapter != null && pageBlocksAdapter.isVideo(index)) || (sendPhotoType == SELECT_TYPE_NO_SELECT && ((MediaController.PhotoEntry)imagesArrLocals.get(index)).isVideo)) {
+        if (currentMessageObject != null && currentMessageObject.isVideo() || currentBotInlineResult != null && (currentBotInlineResult.type.equals("video") || MessageObject.isVideoDocument(currentBotInlineResult.document)) || (pageBlocksAdapter != null && pageBlocksAdapter.isVideo(index)) || (sendPhotoType == SELECT_TYPE_NO_SELECT && ((MediaController.PhotoEntry)imagesArrLocals.get(index)).isVideo)) {
             playerAutoStarted = true;
             onActionClick(false);
         } else if (!imagesArrLocals.isEmpty()) {
@@ -13518,9 +13513,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         return openPhoto(null, null, null, null, null, null, null, index, provider, null, 0, 0, 0, true, pageBlocksAdapter, null);
     }
 
-    public boolean openPhotoForSelect(final ArrayList<Object> photos, final int index,
-                                      int type, boolean documentsPicker, final PhotoViewerProvider provider, ChatActivity
-                                              chatActivity) {
+    public boolean openPhotoForSelect(final ArrayList<Object> photos, final int index, int type, boolean documentsPicker, final PhotoViewerProvider provider, ChatActivity chatActivity) {
         return openPhotoForSelect(null, null, photos, index, type, documentsPicker, provider, chatActivity);
     }
 
@@ -15480,7 +15473,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         zoomAnimation = false;
         containerView.invalidate();
     }
-
+    
     public void zoomOut() {
         animateTo(1f, 0, 0, false);
     }
@@ -17356,8 +17349,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         return new ByteArrayInputStream(output, 0, outPos);
     }
 
-    private void processOpenVideo(final String videoPath, boolean muted, float start,
-                                  float end, int compressQality) {
+    private void processOpenVideo(final String videoPath, boolean muted, float start, float end, int compressQality) {
         if (currentLoadingVideoRunnable != null) {
             Utilities.globalQueue.cancelRunnable(currentLoadingVideoRunnable);
             currentLoadingVideoRunnable = null;

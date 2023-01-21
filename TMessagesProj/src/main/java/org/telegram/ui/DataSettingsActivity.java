@@ -12,7 +12,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -513,9 +512,10 @@ public class DataSettingsActivity extends BaseFragment {
                         updateVoipUseLessData = false;
                     } else if (position == dataUsageRow) {
                         textCell.setIcon(R.drawable.msg_data_usage);
-                        textCell.setText(LocaleController.getString("NetworkUsage", R.string.NetworkUsage), true);
+                        textCell.setText(LocaleController.getString("NetworkUsage", R.string.NetworkUsage), storageNumRow != -1);
                     } else if (position == storageNumRow) {
-                        textCell.setTextAndValue(LocaleController.getString("StoragePath", R.string.StoragePath), NekoConfig.cachePath.String(), false);
+                        textCell.setIcon(R.drawable.msg_storage_path);
+                        textCell.setText(LocaleController.getString("StoragePath", R.string.StoragePath), false);
                     } else if (position == proxyRow) {
                         textCell.setIcon(0);
                         textCell.setText(LocaleController.getString("ProxySettings", R.string.ProxySettings), false);
@@ -524,7 +524,7 @@ public class DataSettingsActivity extends BaseFragment {
                         textCell.setCanDisable(true);
                         textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText));
                         textCell.setText(LocaleController.getString("ResetAutomaticMediaDownload", R.string.ResetAutomaticMediaDownload), false);
-                    } else if (position == quickRepliesRow) {
+                    } else if (position == quickRepliesRow){
                         textCell.setIcon(0);
                         textCell.setText(LocaleController.getString("VoipQuickReplies", R.string.VoipQuickReplies), false);
                     } else if (position == clearDraftsRow) {

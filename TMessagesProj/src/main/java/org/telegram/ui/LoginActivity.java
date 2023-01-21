@@ -42,7 +42,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
 //import android.telephony.TelephonyManager;
-import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.Spannable;
@@ -2309,90 +2308,90 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             req.lang_code = "";
             getConnectionsManager().sendRequest(req, (response, error) -> {
                 AndroidUtilities.runOnUIThread(() -> {
-                    if (error == null) {
-                        countriesArray.clear();
-                        codesMap.clear();
-                        phoneFormatMap.clear();
+                    AndroidUtilities.runOnUIThread(() -> {
+                        if (error == null) {
+                            countriesArray.clear();
+                            codesMap.clear();
+                            phoneFormatMap.clear();
 
-                        TLRPC.TL_help_countriesList help_countriesList = (TLRPC.TL_help_countriesList) response;
-                        for (int i = 0; i < help_countriesList.countries.size(); i++) {
-                            TLRPC.TL_help_country c = help_countriesList.countries.get(i);
-                            for (int k = 0; k < c.country_codes.size(); k++) {
-                                TLRPC.TL_help_countryCode countryCode = c.country_codes.get(k);
-                                if (countryCode != null) {
-                                    CountrySelectActivity.Country countryWithCode = new CountrySelectActivity.Country();
-                                    countryWithCode.name = c.default_name;
-                                    countryWithCode.code = countryCode.country_code;
-                                    countryWithCode.shortname = c.iso2;
+                            TLRPC.TL_help_countriesList help_countriesList = (TLRPC.TL_help_countriesList) response;
+                            for (int i = 0; i < help_countriesList.countries.size(); i++) {
+                                TLRPC.TL_help_country c = help_countriesList.countries.get(i);
+                                for (int k = 0; k < c.country_codes.size(); k++) {
+                                    TLRPC.TL_help_countryCode countryCode = c.country_codes.get(k);
+                                    if (countryCode != null) {
+                                        CountrySelectActivity.Country countryWithCode = new CountrySelectActivity.Country();
+                                        countryWithCode.name = c.default_name;
+                                        countryWithCode.code = countryCode.country_code;
+                                        countryWithCode.shortname = c.iso2;
 
-                                    countriesArray.add(countryWithCode);
-                                    List<CountrySelectActivity.Country> countryList = codesMap.get(countryCode.country_code);
-                                    if (countryList == null) {
-                                        codesMap.put(countryCode.country_code, countryList = new ArrayList<>());
-                                    }
-                                    countryList.add(countryWithCode);
-                                    if (countryCode.patterns.size() > 0) {
-                                        phoneFormatMap.put(countryCode.country_code, countryCode.patterns);
+                                        countriesArray.add(countryWithCode);
+                                        List<CountrySelectActivity.Country> countryList = codesMap.get(countryCode.country_code);
+                                        if (countryList == null) {
+                                            codesMap.put(countryCode.country_code, countryList = new ArrayList<>());
+                                        }
+                                        countryList.add(countryWithCode);
+                                        if (countryCode.patterns.size() > 0) {
+                                            phoneFormatMap.put(countryCode.country_code, countryCode.patterns);
+                                        }
                                     }
                                 }
                             }
-                        }
-                        CountrySelectActivity.Country countryWithCode = new CountrySelectActivity.Country();
-                        String test_code = "999";
-                        countryWithCode.name = "Test Number";
-                        countryWithCode.code = test_code;
-                        countryWithCode.shortname = "YL";
 
-                        countriesArray.add(countryWithCode);
-                        codesMap.put(test_code, countryWithCode);
-                        List<String> testCodeStr = new ArrayList<>();
-                        testCodeStr.add("XX X XXXX");
-                        phoneFormatMap.put(test_code, testCodeStr);
+                            if (activityMode == MODE_CHANGE_PHONE_NUMBER) {
+                                String number = PhoneFormat.stripExceptNumbers(UserConfig.getInstance(currentAccount).getClientPhone());
+                                boolean ok = false;
+                                if (!TextUtils.isEmpty(number)) {
+                                    if (number.length() > 4) {
+                                        for (int a = 4; a >= 1; a--) {
+                                            String sub = number.substring(0, a);
 
-                        if (activityMode == MODE_CHANGE_PHONE_NUMBER) {
-                            String number = PhoneFormat.stripExceptNumbers(UserConfig.getInstance(currentAccount).getClientPhone());
-                            boolean ok = false;
-                            if (!TextUtils.isEmpty(number)) {
-                                if (number.length() > 4) {
-                                    for (int a = 4; a >= 1; a--) {
-                                        String sub = number.substring(0, a);
+                                            CountrySelectActivity.Country country2;
+                                            List<CountrySelectActivity.Country> list = codesMap.get(sub);
+                                            if (list == null) {
+                                                country2 = null;
+                                            } else if (list.size() > 1) {
+                                                SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+                                                String lastMatched = preferences.getString("phone_code_last_matched_" + sub, null);
 
-                                        CountrySelectActivity.Country country2;
-                                        List<CountrySelectActivity.Country> list = codesMap.get(sub);
-                                        if (list == null) {
-                                            country2 = null;
-                                        } else if (list.size() > 1) {
-                                            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-                                            String lastMatched = preferences.getString("phone_code_last_matched_" + sub, null);
-
-                                            if (lastMatched != null) {
-                                                country2 = list.get(list.size() - 1);
-                                                for (CountrySelectActivity.Country c : countriesArray) {
-                                                    if (Objects.equals(c.shortname, lastMatched)) {
-                                                        country2 = c;
-                                                        break;
+                                                if (lastMatched != null) {
+                                                    country2 = list.get(list.size() - 1);
+                                                    for (CountrySelectActivity.Country c : countriesArray) {
+                                                        if (Objects.equals(c.shortname, lastMatched)) {
+                                                            country2 = c;
+                                                            break;
+                                                        }
                                                     }
+                                                } else {
+                                                    country2 = list.get(list.size() - 1);
                                                 }
                                             } else {
-                                                country2 = list.get(list.size() - 1);
+                                                country2 = list.get(0);
                                             }
-                                        } else {
-                                            country2 = list.get(0);
-                                        }
 
-                                        if (country2 != null) {
-                                            ok = true;
-                                            codeField.setText(sub);
-                                            break;
+                                            if (country2 != null) {
+                                                ok = true;
+                                                codeField.setText(sub);
+                                                break;
+                                            }
                                         }
-                                    }
-                                    if (!ok) {
-                                        codeField.setText(number.substring(0, 1));
+                                        if (!ok) {
+                                            codeField.setText(number.substring(0, 1));
+                                        }
                                     }
                                 }
                             }
+                            CountrySelectActivity.Country countryWithCode = new CountrySelectActivity.Country();
+                            String test_code = "999";
+                            countryWithCode.name = "Test Number";
+                            countryWithCode.code = test_code;
+                            countryWithCode.shortname = "YL";
+
+                            countriesArray.add(countryWithCode);
+                            codesMap.put(test_code, new ArrayList<>(Collections.singletonList(countryWithCode)));
+                            phoneFormatMap.put(test_code, Collections.singletonList("XX X XXXX"));
                         }
-                    }
+                    });
                 });
             }, ConnectionsManager.RequestFlagWithoutLogin | ConnectionsManager.RequestFlagFailOnServerErrors);
         }
@@ -2808,68 +2807,61 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 }
             }
 
-            TLRPC.TL_codeSettings settings = new TLRPC.TL_codeSettings();
-            settings.allow_flashcall = simcardAvailable && allowCall && allowCancelCall && allowReadCallLog;
-            settings.allow_missed_call = simcardAvailable && allowCall;
-            settings.allow_app_hash = PushListenerController.getProvider().hasServices();
-
-
+            ConnectionsManager.getInstance(currentAccount).cleanup(false);
+            final TLRPC.TL_auth_sendCode req = new TLRPC.TL_auth_sendCode();
+            req.api_hash = NekoXConfig.currentAppHash();
+            req.api_id = NekoXConfig.currentAppId();
+            req.phone_number = phone;
+            req.settings = new TLRPC.TL_codeSettings();
+            req.settings.allow_flashcall = simcardAvailable && allowCall && allowCancelCall && allowReadCallLog;
+            req.settings.allow_missed_call = simcardAvailable && allowCall;
+            req.settings.allow_app_hash = PushListenerController.getProvider().hasServices();
             ArrayList<TLRPC.TL_auth_loggedOut> tokens = MessagesController.getSavedLogOutTokens();
             if (tokens != null) {
                 for (int i = 0; i < tokens.size(); i++) {
-                    if (settings.logout_tokens == null) {
-                        settings.logout_tokens = new ArrayList<>();
+                    if (req.settings.logout_tokens == null) {
+                        req.settings.logout_tokens = new ArrayList<>();
                     }
-                    settings.logout_tokens.add(tokens.get(i).future_auth_token);
+                    req.settings.logout_tokens.add(tokens.get(i).future_auth_token);
                 }
                 MessagesController.saveLogOutTokens(tokens);
             }
-            if (settings.logout_tokens != null) {
-                settings.flags |= 64;
+            if (req.settings.logout_tokens != null) {
+                req.settings.flags |= 64;
             }
             SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
             preferences.edit().remove("sms_hash_code").apply();
-            if (settings.allow_app_hash) {
-                preferences.edit().putString("sms_hash", BuildVars.SMS_HASH).apply();
-            } else {
-                preferences.edit().remove("sms_hash").apply();
-            }
-            if (settings.allow_flashcall) {
+            req.settings.allow_app_hash = PushListenerController.getProvider().hasServices();
+            if (req.settings.allow_flashcall) {
                 try {
-                    String number = tm.getLine1Number();
+                    String number = "";
                     if (!TextUtils.isEmpty(number)) {
-                        settings.current_number = PhoneNumberUtils.compare(phone, number);
-                        if (!settings.current_number) {
-                            settings.allow_flashcall = false;
+                        req.settings.current_number = PhoneNumberUtils.compare(phone, number);
+                        if (!req.settings.current_number) {
+                            req.settings.allow_flashcall = false;
                         }
                     } else {
                         if (UserConfig.getActivatedAccountsCount() > 0) {
-                            settings.allow_flashcall = false;
+                            req.settings.allow_flashcall = false;
                         } else {
-                            settings.current_number = false;
+                            req.settings.current_number = false;
                         }
                     }
                 } catch (Exception e) {
-                    settings.allow_flashcall = false;
+                    req.settings.allow_flashcall = false;
                     FileLog.e(e);
                 }
             }
 
-            TLObject req;
+            TLObject reqFinal;
             if (activityMode == MODE_CHANGE_PHONE_NUMBER) {
                 TLRPC.TL_account_sendChangePhoneCode changePhoneCode = new TLRPC.TL_account_sendChangePhoneCode();
                 changePhoneCode.phone_number = phone;
-                changePhoneCode.settings = settings;
-                req = changePhoneCode;
+                changePhoneCode.settings = req.settings;
+                reqFinal = changePhoneCode;
             } else {
                 ConnectionsManager.getInstance(currentAccount).cleanup(false);
-
-                TLRPC.TL_auth_sendCode sendCode = new TLRPC.TL_auth_sendCode();
-                sendCode.api_hash = NekoXConfig.currentAppHash();
-                sendCode.api_id = NekoXConfig.currentAppId();
-                sendCode.phone_number = phone;
-                sendCode.settings = settings;
-                req = sendCode;
+                reqFinal = req;
             }
 
             Bundle params = new Bundle();
@@ -2937,7 +2929,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                             bundle.putString("phoneFormated", phone);
                                             bundle.putString("phoneHash", phoneHash);
                                             bundle.putString("code", reqI.phone_code);
-                                            setPage(6, true, bundle, false);
+                                            setPage(LoginActivity.VIEW_PASSWORD, true, bundle, false);
                                         } else {
                                             needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), error1.text);
                                         }
@@ -3019,7 +3011,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 return;
             }
             try {
-                TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService(Context.TELEPHONY_SERVICE);
+//                TelephonyManager tm = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService(Context.TELEPHONY_SERVICE);
                 if (AndroidUtilities.isSimAvailable()) {
                     boolean allowCall = true;
                     boolean allowReadPhoneNumbers = true;
@@ -3568,7 +3560,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                                         mailer.putExtra(Intent.EXTRA_TEXT, "Phone: " + requestPhone + "\nApp version: " + version + "\nOS version: SDK " + Build.VERSION.SDK_INT + "\nDevice Name: " + Build.MANUFACTURER + Build.MODEL + "\nLocale: " + Locale.getDefault() + "\nError: " + lastError);
                                         getContext().startActivity(Intent.createChooser(mailer, "Send email..."));
                                     } catch (Exception e) {
-                                        needShowAlert(LocaleController.getString(R.string.NekoX), LocaleController.getString("NoMailInstalled", R.string.NoMailInstalled));
+                                        needShowAlert(LocaleController.getString(R.string.AppName), LocaleController.getString("NoMailInstalled", R.string.NoMailInstalled));
                                     }
                                 })
                                 .setPositiveButton(LocaleController.getString(R.string.Close), null)

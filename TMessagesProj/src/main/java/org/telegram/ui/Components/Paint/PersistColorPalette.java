@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Components.Paint.Views.PaintTextOptionsView;
 
@@ -32,7 +33,7 @@ public class PersistColorPalette {
     );
     private final static Integer DEFAULT_MARKER_COLOR = 0xff0a84ff;
 
-    private static PersistColorPalette[] instances = new PersistColorPalette[UserConfig.MAX_ACCOUNT_COUNT];
+    private static PersistColorPalette[] instances = new PersistColorPalette[32];
 
     private SharedPreferences mConfig;
     private List<Integer> colors = new ArrayList<>(COLORS_COUNT);

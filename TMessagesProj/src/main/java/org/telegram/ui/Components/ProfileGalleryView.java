@@ -998,11 +998,6 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
 
             item.imageView.setRoundRadius(roundTopRadius, roundTopRadius, roundBottomRadius, roundBottomRadius);
             item.imageView.setTag(realPosition);
-
-            item.imageView.setOnClickListener(__ -> {
-                callback.onClick();;
-            });
-
             return item;
         }
 

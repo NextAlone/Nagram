@@ -278,7 +278,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
             shadowDrawable = context.getResources().getDrawable(R.drawable.popup_fixed_alert3).mutate();
             backgroundColor = getThemedColor(Theme.key_dialogBackground);
             blurOpacity = progressStyle == ALERT_TYPE_SPINNER ? 0.55f : (AndroidUtilities.computePerceivedBrightness(backgroundColor) < 0.721f ? 0.80f : 0.92f);
-            shadowDrawable.setColorFilter(new PorterDuffColorFilter(backgroundColor, PorterDuff.Mode.SRC_IN));
+            shadowDrawable.setColorFilter(new PorterDuffColorFilter(backgroundColor, PorterDuff.Mode.MULTIPLY));
             shadowDrawable.getPadding(backgroundPaddings);
         }
 

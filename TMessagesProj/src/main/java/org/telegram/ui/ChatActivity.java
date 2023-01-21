@@ -1603,8 +1603,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         int migrated_to = arguments.getInt("migrated_to", 0);
         scrollToTopOnResume = arguments.getBoolean("scrollToTopOnResume", false);
         needRemovePreviousSameChatActivity = arguments.getBoolean("need_remove_previous_same_chat_activity", true);
-        justCreatedChat = arguments.getBoolean("just_created_chat", false);
         noForwardQuote = arguments.getBoolean("forward_noquote", false);
+        justCreatedChat = arguments.getBoolean("just_created_chat", false);
 
         if (chatId != 0) {
             currentChat = getMessagesController().getChat(chatId);
@@ -9467,11 +9467,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (createUnreadMessageAfterId != 0) {
             scrollToMessageId(createUnreadMessageAfterId, 0, false, returnToLoadIndex, true, 0, inCaseLoading);
         } else if (returnToMessageId > 0) {
-            if (NekoConfig.rememberAllBackMessages.Bool() && !returnToMessageIdsStack.empty())
-                returnToMessageId = returnToMessageIdsStack.pop();
             scrollToMessageId(returnToMessageId, 0, true, returnToLoadIndex, true, 0, inCaseLoading);
         } else {
-            scrollToLastMessage(true, true, inCaseLoading);
+            scrollToLastMessage(false, true, inCaseLoading);
             if (!pinnedMessageIds.isEmpty()) {
                 forceScrollToFirst = true;
                 forceNextPinnedMessageId = pinnedMessageIds.get(0);
@@ -11275,7 +11273,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     private void showVoiceHint(boolean hide, boolean video) {
-        if (getParentActivity() == null || fragmentView == null || hide && voiceHintTextView == null || chatMode != 0 || chatActivityEnterView == null || chatActivityEnterView.getAudioVideoButtonContainer() == null || chatActivityEnterView.getAudioVideoButtonContainer().getVisibility() != View.VISIBLE || isInPreviewMode()) {
+        if (getParentActivity() == null || fragmentView == null || hide && voiceHintTextView == null || chatMode != 0 || chatActivityEnterView == null  || chatActivityEnterView.getAudioVideoButtonContainer() == null || chatActivityEnterView.getAudioVideoButtonContainer().getVisibility() != View.VISIBLE || isInPreviewMode()) {
             return;
         }
         if (NekoConfig.useChatAttachMediaMenu.Bool()) return;
@@ -12157,7 +12155,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 SendMessagesHelper.getInstance(currentAccount).sendMessage(caption, dialog_id, null, null, null, true, null, null, null, true, 0, null, false);
                 caption = null;
             }
-            getSendMessagesHelper().sendMessage(fmessages, dialog_id, noForwardQuote, false, true, 0);
+            getSendMessagesHelper().sendMessage(fmessages, dialog_id, false, false, true, 0);
             SendMessagesHelper.prepareSendingDocuments(getAccountInstance(), files, files, null, caption, null, dialog_id, replyingMessageObject, getThreadMessage(), null, editingMessageObject, notify, scheduleDate);
             afterMessageSend();
         }
@@ -18723,10 +18721,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (avatarContainer != null) {
                     avatarContainer.updateSubtitle();
                 }
-            }
-        } else if (id == NotificationCenter.dialogsUnreadCounterChanged) {
-            if (actionBar != null) { // NekoX
-                actionBar.unreadBadgeSetCount(getMessagesStorage().getMainUnreadCount());
             }
         }
     }
@@ -27121,7 +27115,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (username != null) {
                 username = username.toLowerCase();
                 if (ChatObject.hasPublicLink(currentChat, username) || UserObject.hasPublicUsername(currentUser, username)) {
-                        if (avatarContainer != null) {
+                    if (avatarContainer != null) {
                         avatarContainer.openProfile(false);
                     } else {
                         shakeContent();
@@ -27145,10 +27139,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     presentFragment(fragment);
                 }
             } else {
-//                if (qr) {
-//                    ProxyUtil.showQrDialog(getParentActivity(), str);
-//                    return;
-//                }
                 processExternalUrl(0, str, url, cell, false);
             }
         }
@@ -27248,11 +27238,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else if (type == 1) {
                 Browser.openUrl(getParentActivity(), Uri.parse(url), inlineReturn == 0, false, makeProgressForLink(cell, span));
             } else if (type == 2) {
-                // NekoX: Fix skipOpenLinkConfirm broken in 7.6.0, since processExternalUrl is imported in 7.6.0
-                if (NekoConfig.skipOpenLinkConfirm.Bool())
-                    Browser.openUrl(getParentActivity(), Uri.parse(url), inlineReturn == 0, true, makeProgressForLink(cell, span));
-                else
-                    AlertsCreator.showOpenUrlAlert(ChatActivity.this, url, true, true, true);
+                Browser.openUrl(getParentActivity(), Uri.parse(url), inlineReturn == 0, true, makeProgressForLink(cell, span));
             }
         }
     }
@@ -27397,63 +27383,54 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         } else {
             final String urlFinal = ((URLSpan) url).getURL();
             if (longPress) {
-                BottomBuilder builder = new BottomBuilder(getParentActivity());
+                final ChatMessageCell finalCell = cell;
+                BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity(), false, themeDelegate);
                 String formattedUrl = urlFinal;
                 try {
                     formattedUrl = URLDecoder.decode(urlFinal.replaceAll("\\+", "%2b"), "UTF-8");
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
-                builder.addTitle(formattedUrl);
-                builder.addItems(
-                        new String[]{
-                                LocaleController.getString("Open", R.string.Open),
-                                LocaleController.getString("Copy", R.string.Copy),
-                                LocaleController.getString("ShareQRCode", R.string.ShareQRCode),
-                                LocaleController.getString("ShareMessages", R.string.ShareMessages)
-                        },
-                        new int[]{
-                                R.drawable.baseline_open_in_browser_24,
-                                R.drawable.baseline_content_copy_24,
-                                R.drawable.wallet_qr,
-                                R.drawable.baseline_share_24
-                        },
-                        (which, text, __) -> {
-                            if (which == 0) {
-                                processExternalUrl(1, urlFinal, url, finalCell, false);
-                            } else if (which == 1) {
-                                String url1 = urlFinal;
-                                boolean tel = false;
-                                boolean mail = false;
-                                if (url1.startsWith("mailto:")) {
-                                    url1 = url1.substring(7);
-                                    mail = true;
-                                } else if (url1.startsWith("tel:")) {
-                                    url1 = url1.substring(4);
-                                    tel = true;
-                                }
-                                AndroidUtilities.addToClipboard(url1);
-                                if (mail) {
-                                    undoView.showWithAction(0, UndoView.ACTION_EMAIL_COPIED, null);
-                                } else if (tel) {
-                                    undoView.showWithAction(0, UndoView.ACTION_PHONE_COPIED, null);
-                                } else {
-                                    undoView.showWithAction(0, UndoView.ACTION_LINK_COPIED, null);
-                                }
-                            } else if (which == 2) {
-                                ProxyUtil.showQrDialog(getParentActivity(), urlFinal);
-                            } else if (which == 3) {
-                                Intent intent = new Intent(Intent.ACTION_SEND);
-                                intent.setType("text/plain");
-                                intent.putExtra(Intent.EXTRA_TEXT, urlFinal);
-                                try {
-                                    getParentActivity().startActivity(intent);
-                                } catch (Exception e) {
-                                    AlertUtil.showToast(e);
-                                }
+                builder.setTitle(formattedUrl);
+                builder.setTitleMultipleLines(true);
+                builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("ShareFile", R.string.ShareFile), LocaleController.getString("Copy", R.string.Copy)}, (dialog, which) -> {
+                    if (which == 0) {
+                        processExternalUrl(1, urlFinal, url, finalCell, false);
+                    } else if (which == 1 || which == 2) {
+                        String url1 = urlFinal;
+                        boolean tel = false;
+                        boolean mail = false;
+                        if (url1.startsWith("mailto:")) {
+                            url1 = url1.substring(7);
+                            mail = true;
+                        } else if (url1.startsWith("tel:")) {
+                            url1 = url1.substring(4);
+                            tel = true;
+                        }
+                        if (which == 2) {
+                            AndroidUtilities.addToClipboard(url1);
+                            if (mail) {
+                                undoView.showWithAction(0, UndoView.ACTION_EMAIL_COPIED, null);
+                            } else if (tel) {
+                                undoView.showWithAction(0, UndoView.ACTION_PHONE_COPIED, null);
+                            } else {
+                                undoView.showWithAction(0, UndoView.ACTION_LINK_COPIED, null);
                             }
-                            return Unit.INSTANCE;
-                        });
+                        } else {
+                            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                            shareIntent.setType("text/plain");
+                            shareIntent.putExtra(Intent.EXTRA_TEXT, url1);
+                            Intent chooserIntent = Intent.createChooser(shareIntent, LocaleController.getString("ShareFile", R.string.ShareFile));
+                            chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            ApplicationLoader.applicationContext.startActivity(chooserIntent);
+                        }
+                    }
+                });
+                builder.setOnPreDismissListener(di -> {
+                    if (finalCell != null) {
+                        finalCell.resetPressedLink(-1);
+                    }
+                });
                 showDialog(builder.create());
             } else {
                 boolean forceAlert = url instanceof URLSpanReplacement;

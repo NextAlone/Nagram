@@ -374,8 +374,7 @@ public class Emoji {
             this.end = end;
             this.code = code;
         }
-
-       public int start;
+        public int start;
         public int end;
         public CharSequence code;
     }
@@ -544,8 +543,8 @@ public class Emoji {
     }
 
     public static CharSequence replaceEmoji(CharSequence cs, Paint.FontMetricsInt fontMetrics, boolean createNew, int[] emojiOnly, int alignment) {
-        if (cs == null || cs.length() == 0) {
-            return Spannable.Factory.getInstance().newSpannable(cs.toString());
+        if (NekoConfig.useSystemEmoji.Bool() || cs == null || cs.length() == 0) {
+            return cs;
         }
         Spannable s;
         if (!createNew && cs instanceof Spannable) {

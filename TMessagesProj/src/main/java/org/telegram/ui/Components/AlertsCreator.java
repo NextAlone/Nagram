@@ -607,9 +607,6 @@ public class AlertsCreator {
                             localeInfo.pathToFile = "unofficial";
                         }
                     }
-                    if (callback != null) {
-                        callback.run();
-                    }
                     LocaleController.getInstance().applyLanguage(localeInfo, true, false, false, true, UserConfig.selectedAccount, null);
                     activity.rebuildAllFragments(true);
                     return Unit.INSTANCE;
@@ -1115,7 +1112,7 @@ public class AlertsCreator {
             return;
         }
         long inlineReturn = (fragment instanceof ChatActivity) ? ((ChatActivity) fragment).getInlineReturn() : 0;
-        if (Browser.isInternalUrl(url, null) || !ask || NekoConfig.skipOpenLinkConfirm.Bool()) {
+        if (Browser.isInternalUrl(url, null) || !ask) {
             Browser.openUrl(fragment.getParentActivity(), Uri.parse(url), inlineReturn == 0, tryTelegraph, progress);
         } else {
             String urlFinal = url;
@@ -3848,6 +3845,44 @@ public class AlertsCreator {
             }
             return Unit.INSTANCE;
         });
+        return builder.create();
+    }
+
+    public static BottomSheet createMuteAlert(BaseFragment fragment, ArrayList<Long> dialog_ids, int topicId, Theme.ResourcesProvider resourcesProvider) {
+        if (fragment == null || fragment.getParentActivity() == null) {
+            return null;
+        }
+
+        BottomSheet.Builder builder = new BottomSheet.Builder(fragment.getParentActivity(), false, resourcesProvider);
+        builder.setTitle(LocaleController.getString("Notifications", R.string.Notifications), true);
+        CharSequence[] items = new CharSequence[]{
+                LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Hours", 1)),
+                LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Hours", 8)),
+                LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Days", 2)),
+                LocaleController.getString("MuteDisable", R.string.MuteDisable)
+        };
+        builder.setItems(items, (dialogInterface, i) -> {
+                    int setting;
+                    if (i == 0) {
+                        setting = NotificationsController.SETTING_MUTE_HOUR;
+                    } else if (i == 1) {
+                        setting = NotificationsController.SETTING_MUTE_8_HOURS;
+                    } else if (i == 2) {
+                        setting = NotificationsController.SETTING_MUTE_2_DAYS;
+                    } else {
+                        setting = NotificationsController.SETTING_MUTE_FOREVER;
+                    }
+                    if (dialog_ids != null) {
+                        for (int j = 0; j < dialog_ids.size(); ++j) {
+                            long dialog_id = dialog_ids.get(j);
+                            NotificationsController.getInstance(UserConfig.selectedAccount).setDialogNotificationsSettings(dialog_id, topicId, setting);
+                        }
+                    }
+                    if (BulletinFactory.canShowBulletin(fragment)) {
+                        BulletinFactory.createMuteBulletin(fragment, setting, 0, resourcesProvider).show();
+                    }
+                }
+        );
         return builder.create();
     }
 

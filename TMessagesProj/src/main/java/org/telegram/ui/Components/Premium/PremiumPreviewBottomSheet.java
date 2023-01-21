@@ -106,10 +106,6 @@ public class PremiumPreviewBottomSheet extends BottomSheetWithRecyclerListView i
     FrameLayout bulletinContainer;
 
     public PremiumPreviewBottomSheet(BaseFragment fragment, int currentAccount, TLRPC.User user, Theme.ResourcesProvider resourcesProvider) {
-        this(fragment, currentAccount, user, null, resourcesProvider);
-    }
-
-    public PremiumPreviewBottomSheet(BaseFragment fragment, int currentAccount, TLRPC.User user, Void gift, Theme.ResourcesProvider resourcesProvider) {
         super(fragment, false, false, false, resourcesProvider);
         fixNavigationBar();
         this.fragment = fragment;

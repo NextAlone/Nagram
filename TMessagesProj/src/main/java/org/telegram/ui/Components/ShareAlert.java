@@ -1971,6 +1971,9 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                     // send fwd message first.
                     result = SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, !showSendersName,false, withSound, 0);
                 }
+                if (replyTopMsg != null) {
+                    replyTopMsg.isTopicMainMessage = true;
+                }
                 if (frameLayout2.getTag() != null && commentTextView.length() > 0) {
                     SendMessagesHelper.getInstance(currentAccount).sendMessage(text[0] == null ? null : text[0].toString(), key, replyTopMsg, replyTopMsg, null, true, entities, null, null, withSound, 0, null, false);
                 }

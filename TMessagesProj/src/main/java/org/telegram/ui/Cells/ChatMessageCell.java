@@ -12607,8 +12607,6 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     } else if (messageObject.customReplyName != null) {
                         name = messageObject.customReplyName;
                     } else {
-                        // NekoX: never draw forwardede name
-                        drawForwardedName = false;
                         if (drawForwardedName) {
                             name = messageObject.replyMessageObject.getForwardedName();
                         }

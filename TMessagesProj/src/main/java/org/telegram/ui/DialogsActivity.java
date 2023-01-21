@@ -1692,7 +1692,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 firstLayout = false;
             }
             super.onMeasure(widthSpec, heightSpec);
-            if ((initialDialogsType == 3 && NekoConfig.showTabsOnForward.Bool()) || !onlySelect) {
+            if (!onlySelect) {
                 if (appliedPaddingTop != t && viewPages != null && viewPages.length > 1 && !startedTracking && (tabsAnimation == null || !tabsAnimation.isRunning()) && !tabsAnimationInProgress && (filterTabsView == null || !filterTabsView.isAnimatingIndicator())) {
                     viewPages[1].setTranslationX(viewPages[0].getMeasuredWidth());
                 }
@@ -2538,11 +2538,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             updatePasscodeButton();
             updateProxyButton(false, false);
         }
-
-        scanItem = menu.addItem(nekox_scanqr, R.drawable.wallet_qr);
-        scanItem.setContentDescription(LocaleController.getString("ScanQRCode", R.string.ScanQRCode));
-        scanItem.setVisibility(View.GONE);
-
         searchItem = menu.addItem(0, R.drawable.ic_ab_search).setIsSearchField(true, false).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             boolean isSpeedItemCreated = false;
 
@@ -4582,15 +4577,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         };
         rightSlidingDialogContainer.setOpenProgress(0f);
         contentView.addView(rightSlidingDialogContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
-
-        if (new Random().nextInt(100) < 50)
-            PrivacyUtil.postCheckAll(getParentActivity(), currentAccount);
-        else if (new Random().nextInt(100) < 20)
-            UpdateUtil.postCheckFollowChannel(getParentActivity(), currentAccount);
-
-        if (NekoXConfig.developerMode && !NekoXConfig.isDeveloper())
-            NekoXConfig.toggleDeveloperMode();
-
         return fragmentView;
     }
 

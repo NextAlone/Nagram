@@ -400,14 +400,41 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                     });
                     builder.setCustomViewOffset(16);
                     builder.setView(frameLayout1);
+                }
+                builder.setPositiveButton(buttonText, (dialogInterface, option) -> {
+                    if (getParentActivity() == null) {
+                        return;
+                    }
+                    final AlertDialog progressDialog = new AlertDialog(getParentActivity(), AlertDialog.ALERT_TYPE_SPINNER);
+                    progressDialog.setCanCancel(false);
+                    progressDialog.show();
 
-                    builder.setPositiveButton(buttonText, (dialogInterface, option) -> {
-                        if (getParentActivity() == null) {
-                            return;
+                    if (currentType == 0) {
+                        final TLRPC.TL_authorization authorization;
+                        if (position >= otherSessionsStartRow && position < otherSessionsEndRow) {
+                            authorization = (TLRPC.TL_authorization) sessions.get(position - otherSessionsStartRow);
+                        } else {
+                            authorization = (TLRPC.TL_authorization) passwordSessions.get(position - passwordSessionsStartRow);
                         }
-                        final AlertDialog progressDialog = new AlertDialog(getParentActivity(), AlertDialog.ALERT_TYPE_SPINNER);
-                        progressDialog.setCanCancel(false);
-                        progressDialog.show();
+                        TLRPC.TL_account_resetAuthorization req = new TLRPC.TL_account_resetAuthorization();
+                        req.hash = authorization.hash;
+                        ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+                            try {
+                                progressDialog.dismiss();
+                            } catch (Exception e) {
+                                FileLog.e(e);
+                            }
+                            if (error == null) {
+                                sessions.remove(authorization);
+                                passwordSessions.remove(authorization);
+                                updateRows();
+                                if (listAdapter != null) {
+                                    listAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        }));
+                    } else {
+                        final TLRPC.TL_webAuthorization authorization = (TLRPC.TL_webAuthorization) sessions.get(position - otherSessionsStartRow);
                         TLRPC.TL_account_resetWebAuthorization req = new TLRPC.TL_account_resetWebAuthorization();
                         req.hash = authorization.hash;
                         ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
@@ -427,15 +454,14 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                         if (param[0]) {
                             MessagesController.getInstance(currentAccount).blockPeer(authorization.bot_id);
                         }
-                    });
-                    builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-                    AlertDialog alertDialog = builder.create();
-                    showDialog(alertDialog);
-                    TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                    if (button != null) {
-                        button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
                     }
-
+                });
+                builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                AlertDialog alertDialog = builder.create();
+                showDialog(alertDialog);
+                TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                if (button != null) {
+                    button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
                 }
             }
         });
