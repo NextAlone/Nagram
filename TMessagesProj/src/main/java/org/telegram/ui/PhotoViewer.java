@@ -208,6 +208,7 @@ import org.telegram.ui.Components.LinkSpanDrawable;
 import org.telegram.ui.Components.MediaActivity;
 import org.telegram.ui.Components.NumberPicker;
 import org.telegram.ui.Components.OtherDocumentPlaceholderDrawable;
+import org.telegram.ui.Components.Paint.Views.LPhotoPaintView;
 import org.telegram.ui.Components.PaintingOverlay;
 import org.telegram.ui.Components.PhotoCropView;
 import org.telegram.ui.Components.PhotoFilterView;
@@ -391,7 +392,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private MediaController.CropState leftCropState;
     private MediaController.CropState rightCropState;
     private PhotoFilterView photoFilterView;
-    private PhotoPaintView photoPaintView;
+    private LPhotoPaintView photoPaintView;
     private AlertDialog visibleDialog;
     private CaptionTextViewSwitcher captionTextViewSwitcher;
     private CaptionScrollView captionScrollView;
@@ -10365,7 +10366,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             } else {
                 state = editState.cropState;
             }
-            photoPaintView = new PhotoPaintView(parentActivity, bitmap, isCurrentVideo ? null : centerImage.getBitmap(), centerImage.getOrientation(), editState.mediaEntities, state, () -> paintingOverlay.hideBitmap(), resourcesProvider) {
+            photoPaintView = new LPhotoPaintView(parentActivity, currentAccount, bitmap, isCurrentVideo ? null : centerImage.getBitmap(), centerImage.getOrientation(), editState.mediaEntities, state, () -> paintingOverlay.hideBitmap(), resourcesProvider) {
                 @Override
                 protected void onOpenCloseStickersAlert(boolean open) {
                     if (videoPlayer == null) {
@@ -10391,7 +10392,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 @Override
                 protected void onTextAdd() {
                     if (!windowView.isFocusable()) {
-                        makeFocusable();
+//                        makeFocusable();
                     }
                 }
             };
