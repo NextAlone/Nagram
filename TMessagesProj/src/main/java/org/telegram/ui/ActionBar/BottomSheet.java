@@ -182,7 +182,7 @@ public class BottomSheet extends Dialog {
     public boolean useBackgroundTopPadding = true;
     protected int customViewGravity = Gravity.LEFT | Gravity.TOP;
 
-    protected class ContainerView extends FrameLayout implements NestedScrollingParent {
+    public class ContainerView extends FrameLayout implements NestedScrollingParent {
 
         private VelocityTracker velocityTracker = null;
         private int startedTrackingX;
@@ -820,7 +820,7 @@ public class BottomSheet extends Dialog {
                 textView.setTextColor(getThemedColor(Theme.key_featuredStickers_buttonText));
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                textView.setBackground(Theme.AdaptiveRipple.filledRect(getThemedColor(Theme.key_featuredStickers_addButton), 4));
+                textView.setBackground(Theme.AdaptiveRipple.filledRect(getThemedColor(Theme.key_featuredStickers_addButton), 6));
                 addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 0, 16, 16, 16, 16));
             }
         }
@@ -1395,7 +1395,7 @@ public class BottomSheet extends Dialog {
         delegate = bottomSheetDelegate;
     }
 
-    public FrameLayout getContainer() {
+    public ContainerView getContainer() {
         return container;
     }
 

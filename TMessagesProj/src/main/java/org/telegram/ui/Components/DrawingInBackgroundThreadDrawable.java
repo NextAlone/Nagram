@@ -80,10 +80,7 @@ public class DrawingInBackgroundThreadDrawable implements NotificationCenter.Not
             bitmapUpdating = false;
             onFrameReady();
             if (!attachedToWindow) {
-                if (backgroundBitmap != null) {
-                    backgroundBitmap.recycle();
-                    backgroundBitmap = null;
-                }
+                recycleBitmaps();
                 return;
             }
             if (frameGuid != lastFrameId) {
@@ -186,7 +183,11 @@ public class DrawingInBackgroundThreadDrawable implements NotificationCenter.Not
     }
 
     public void onAttachToWindow() {
+        if (attachedToWindow) {
+            return;
+        }
         attachedToWindow = true;
+        error = false;
         currentOpenedLayerFlags = NotificationCenter.getGlobalInstance().getCurrentHeavyOperationFlags();
         currentOpenedLayerFlags &= ~currentLayerNum;
         if (currentOpenedLayerFlags == 0) {
@@ -195,20 +196,36 @@ public class DrawingInBackgroundThreadDrawable implements NotificationCenter.Not
                 onResume();
             }
         }
+
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.stopAllHeavyOperations);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.startAllHeavyOperations);
     }
 
     public void onDetachFromWindow() {
+        if (!attachedToWindow) {
+            return;
+        }
+        if (!bitmapUpdating) {
+            recycleBitmaps();
+        }
+        attachedToWindow = false;
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.stopAllHeavyOperations);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.startAllHeavyOperations);
+    }
+
+    private void recycleBitmaps() {
         ArrayList<Bitmap> bitmaps = new ArrayList<>();
         if (bitmap != null) {
             bitmaps.add(bitmap);
         }
+        if (backgroundBitmap != null) {
+            bitmaps.add(backgroundBitmap);
+        }
         bitmap = null;
+        backgroundBitmap = null;
+        backgroundCanvas = null;
+        bitmapCanvas = null;
         AndroidUtilities.recycleBitmaps(bitmaps);
-        attachedToWindow = false;
-        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.stopAllHeavyOperations);
-        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.startAllHeavyOperations);
     }
 
     @Override

@@ -1,9 +1,12 @@
 package org.telegram.ui.Components;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.util.TypedValue;
@@ -16,23 +19,28 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.CheckResult;
 import androidx.annotation.NonNull;
+import androidx.core.graphics.ColorUtils;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
+import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.PremiumPreviewFragment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public final class BulletinFactory {
 
@@ -153,7 +161,7 @@ public final class BulletinFactory {
         layout.setAnimation(iconRawId, 36, 36);
         layout.titleTextView.setText(text);
         layout.subtitleTextView.setText(subtext);
-        return create(layout, text.length() < 20 ? Bulletin.DURATION_SHORT : Bulletin.DURATION_LONG);
+        return create(layout, (text.length() + subtext.length()) < 20 ? Bulletin.DURATION_SHORT : Bulletin.DURATION_LONG);
     }
 
     public Bulletin createSimpleBulletin(int iconRawId, CharSequence text, CharSequence button, Runnable onButtonClick) {
@@ -191,8 +199,12 @@ public final class BulletinFactory {
         return create(layout, Bulletin.DURATION_PROLONG);
     }
 
-    public Bulletin createUsersBulletin(ArrayList<TLRPC.User> users, CharSequence text) {
-        final Bulletin.UsersLayout layout = new Bulletin.UsersLayout(getContext(), resourcesProvider);
+    public Bulletin createUsersBulletin(List<TLRPC.User> users, CharSequence text) {
+       return createUsersBulletin(users, text, null);
+    }
+
+    public Bulletin createUsersBulletin(List<TLRPC.User> users, CharSequence text, CharSequence subtitle) {
+        final Bulletin.UsersLayout layout = new Bulletin.UsersLayout(getContext(), subtitle != null, resourcesProvider);
         int count = 0;
         if (users != null) {
             for (int i = 0; i < users.size(); ++i) {
@@ -204,20 +216,48 @@ public final class BulletinFactory {
                     layout.avatarsImageView.setObject(count - 1, UserConfig.selectedAccount, user);
                 }
             }
-        }
-        layout.avatarsImageView.commitTransition(false);
-        layout.textView.setSingleLine(false);
-        layout.textView.setMaxLines(2);
-        layout.textView.setText(text);
-        if (layout.textView.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-            int margin = AndroidUtilities.dp(12 + 56 + 2 - (3 - count) * 12);
-            if (LocaleController.isRTL) {
-                ((ViewGroup.MarginLayoutParams) layout.textView.getLayoutParams()).rightMargin = margin;
+            if (users.size() == 1) {
+                layout.avatarsImageView.setTranslationX(AndroidUtilities.dp(4));
+                layout.avatarsImageView.setScaleX(1.2f);
+                layout.avatarsImageView.setScaleY(1.2f);
             } else {
-                ((ViewGroup.MarginLayoutParams) layout.textView.getLayoutParams()).leftMargin = margin;
+                layout.avatarsImageView.setScaleX(1f);
+                layout.avatarsImageView.setScaleY(1f);
             }
         }
-        return create(layout, Bulletin.DURATION_LONG);
+        layout.avatarsImageView.commitTransition(false);
+
+
+        if (subtitle != null) {
+            layout.textView.setSingleLine(true);
+            layout.textView.setMaxLines(1);
+            layout.textView.setText(text);
+            layout.subtitleView.setText(subtitle);
+            layout.subtitleView.setSingleLine(true);
+            layout.subtitleView.setMaxLines(1);
+            if (layout.linearLayout.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+                int margin = AndroidUtilities.dp(12 + 56 + 2 - (3 - count) * 12);
+                if (LocaleController.isRTL) {
+                    ((ViewGroup.MarginLayoutParams) layout.linearLayout.getLayoutParams()).rightMargin = margin;
+                } else {
+                    ((ViewGroup.MarginLayoutParams) layout.linearLayout.getLayoutParams()).leftMargin = margin;
+                }
+            }
+        } else {
+            layout.textView.setSingleLine(false);
+            layout.textView.setMaxLines(2);
+            layout.textView.setText(text);
+            if (layout.textView.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+                int margin = AndroidUtilities.dp(12 + 56 + 2 - (3 - count) * 12);
+                if (LocaleController.isRTL) {
+                    ((ViewGroup.MarginLayoutParams) layout.textView.getLayoutParams()).rightMargin = margin;
+                } else {
+                    ((ViewGroup.MarginLayoutParams) layout.textView.getLayoutParams()).leftMargin = margin;
+                }
+            }
+        }
+
+        return create(layout, Bulletin.DURATION_PROLONG);
     }
 
     public Bulletin createUsersAddedBulletin(ArrayList<TLRPC.User> users, TLRPC.Chat chat) {
@@ -255,6 +295,9 @@ public final class BulletinFactory {
 
     public Bulletin createEmojiBulletin(TLRPC.Document document, CharSequence text, CharSequence button, Runnable onButtonClick) {
         final Bulletin.LottieLayout layout = new Bulletin.LottieLayout(getContext(), resourcesProvider);
+        if (MessageObject.isTextColorEmoji(document)) {
+            layout.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_undo_infoColor), PorterDuff.Mode.SRC_IN));
+        }
         layout.setAnimation(document, 36, 36);
         layout.textView.setText(text);
         layout.textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
@@ -262,6 +305,79 @@ public final class BulletinFactory {
         layout.textView.setMaxLines(3);
         layout.setButton(new Bulletin.UndoButton(getContext(), true, resourcesProvider).setText(button).setUndoAction(onButtonClick));
         return create(layout, Bulletin.DURATION_LONG);
+    }
+
+    public Bulletin createEmojiLoadingBulletin(TLRPC.Document document, CharSequence text, CharSequence button, Runnable onButtonClick) {
+        final Bulletin.LoadingLottieLayout layout = new Bulletin.LoadingLottieLayout(getContext(), resourcesProvider);
+        if (MessageObject.isTextColorEmoji(document)) {
+            layout.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_undo_infoColor), PorterDuff.Mode.SRC_IN));
+        }
+        layout.setAnimation(document, 36, 36);
+        layout.textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        layout.textView.setSingleLine(false);
+        layout.textView.setMaxLines(3);
+        layout.textLoadingView.setText(text);
+        layout.textLoadingView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        layout.textLoadingView.setSingleLine(false);
+        layout.textLoadingView.setMaxLines(3);
+        layout.setButton(new Bulletin.UndoButton(getContext(), true, resourcesProvider).setText(button).setUndoAction(onButtonClick));
+        return create(layout, Bulletin.DURATION_LONG);
+    }
+
+    public Bulletin createContainsEmojiBulletin(TLRPC.Document document, boolean inTopic, Utilities.Callback<TLRPC.InputStickerSet> openSet) {
+        TLRPC.InputStickerSet inputStickerSet = MessageObject.getInputStickerSet(document);
+        if (inputStickerSet == null) {
+            return null;
+        }
+        TLRPC.TL_messages_stickerSet cachedSet = MediaDataController.getInstance(UserConfig.selectedAccount).getStickerSet(inputStickerSet, true);
+        if (cachedSet == null || cachedSet.set == null) {
+            final String loadingPlaceholder = "<{LOADING}>";
+            SpannableStringBuilder stringBuilder;
+            if (inTopic) {
+                stringBuilder = new SpannableStringBuilder(AndroidUtilities.replaceTags(LocaleController.formatString("TopicContainsEmojiPackSingle", R.string.TopicContainsEmojiPackSingle, loadingPlaceholder)));
+            } else {
+                stringBuilder = new SpannableStringBuilder(AndroidUtilities.replaceTags(LocaleController.formatString("MessageContainsEmojiPackSingle", R.string.MessageContainsEmojiPackSingle, loadingPlaceholder)));
+            }
+            LoadingSpan loadingSpan = null;
+            int index;
+            if ((index = stringBuilder.toString().indexOf(loadingPlaceholder)) >= 0) {
+                stringBuilder.setSpan(loadingSpan = new LoadingSpan(null, AndroidUtilities.dp(100)), index, index + loadingPlaceholder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                loadingSpan.setColors(
+                    ColorUtils.setAlphaComponent(Theme.getColor(Theme.key_undo_infoColor, resourcesProvider), 0x20),
+                    ColorUtils.setAlphaComponent(Theme.getColor(Theme.key_undo_infoColor, resourcesProvider), 0x48)
+                );
+            }
+            final long startTime = System.currentTimeMillis();
+            final long minDuration = 750;
+            Bulletin bulletin = createEmojiLoadingBulletin(document, stringBuilder, LocaleController.getString("ViewAction", R.string.ViewAction), () -> openSet.run(inputStickerSet)).show();
+            if (loadingSpan != null && bulletin.getLayout() instanceof Bulletin.LoadingLottieLayout) {
+                loadingSpan.setView(((Bulletin.LoadingLottieLayout) bulletin.getLayout()).textLoadingView);
+            }
+            MediaDataController.getInstance(UserConfig.selectedAccount).getStickerSet(inputStickerSet, null, false, set -> {
+                CharSequence message;
+                if (set != null && set.set != null) {
+                    if (inTopic) {
+                        message = AndroidUtilities.replaceTags(LocaleController.formatString("TopicContainsEmojiPackSingle", R.string.TopicContainsEmojiPackSingle, set.set.title));
+                    } else {
+                        message = AndroidUtilities.replaceTags(LocaleController.formatString("MessageContainsEmojiPackSingle", R.string.MessageContainsEmojiPackSingle, set.set.title));
+                    }
+                } else {
+                    message = LocaleController.getString("AddEmojiNotFound", R.string.AddEmojiNotFound);
+                }
+                AndroidUtilities.runOnUIThread(() -> {
+                    bulletin.onLoaded(message);
+                }, Math.max(1, minDuration - (System.currentTimeMillis() - startTime)));
+            });
+            return bulletin;
+        } else {
+            CharSequence message;
+            if (inTopic) {
+                message = AndroidUtilities.replaceTags(LocaleController.formatString("TopicContainsEmojiPackSingle", R.string.TopicContainsEmojiPackSingle, cachedSet.set.title));
+            } else {
+                message = AndroidUtilities.replaceTags(LocaleController.formatString("MessageContainsEmojiPackSingle", R.string.MessageContainsEmojiPackSingle, cachedSet.set.title));
+            }
+            return createEmojiBulletin(document, message, LocaleController.getString("ViewAction", R.string.ViewAction), () -> openSet.run(inputStickerSet));
+        }
     }
 
     @CheckResult
@@ -315,6 +431,19 @@ public final class BulletinFactory {
         Bulletin.LottieLayout layout = new Bulletin.LottieLayout(getContext(), resourcesProvider);
         layout.setAnimation(R.raw.chats_infotip);
         layout.textView.setText(errorMessage);
+        layout.textView.setSingleLine(false);
+        layout.textView.setMaxLines(2);
+        return create(layout, Bulletin.DURATION_SHORT);
+    }
+
+    public Bulletin createSuccessBulletin(CharSequence successMessage) {
+        return createSuccessBulletin(successMessage, null);
+    }
+
+    public Bulletin createSuccessBulletin(CharSequence successMessage, Theme.ResourcesProvider resourcesProvider) {
+        Bulletin.LottieLayout layout = new Bulletin.LottieLayout(getContext(), resourcesProvider);
+        layout.setAnimation(R.raw.contact_check);
+        layout.textView.setText(successMessage);
         layout.textView.setSingleLine(false);
         layout.textView.setMaxLines(2);
         return create(layout, Bulletin.DURATION_SHORT);
@@ -438,7 +567,19 @@ public final class BulletinFactory {
     }
 
     private Context getContext() {
-        return fragment != null ? fragment.getParentActivity() : containerLayout.getContext();
+        Context context = null;
+        if (fragment != null) {
+            context = fragment.getParentActivity();
+            if (context == null && fragment.getLayoutContainer() != null) {
+                context = fragment.getLayoutContainer().getContext();
+            }
+        } else if (containerLayout != null) {
+            context = containerLayout.getContext();
+        }
+        if (context == null) {
+            context = ApplicationLoader.applicationContext;
+        }
+        return context;
     }
 
     //region Static Factory
@@ -635,9 +776,9 @@ public final class BulletinFactory {
             }
         } else {
             if (messagesCount <= 1) {
-                text = AndroidUtilities.replaceTags(LocaleController.formatString("FwdMessageToChats", R.string.FwdMessageToChats, LocaleController.formatPluralString("Chats", dialogsCount)));
+                text = AndroidUtilities.replaceTags(LocaleController.formatPluralString("FwdMessageToManyChats", dialogsCount));
             } else {
-                text = AndroidUtilities.replaceTags(LocaleController.formatString("FwdMessagesToChats", R.string.FwdMessagesToChats, LocaleController.formatPluralString("Chats", dialogsCount)));
+                text = AndroidUtilities.replaceTags(LocaleController.formatPluralString("FwdMessagesToManyChats", dialogsCount));
             }
             layout.setAnimation(R.raw.forward, 30, 30);
             hapticDelay = 300;

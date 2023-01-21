@@ -24,7 +24,6 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.DynamicDrawableSpan;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -376,9 +375,9 @@ public class Emoji {
             this.code = code;
         }
 
-        int start;
-        int end;
-        CharSequence code;
+       public int start;
+        public int end;
+        public CharSequence code;
     }
 
     public static boolean fullyConsistsOfEmojis(CharSequence cs) {
@@ -532,15 +531,19 @@ public class Emoji {
         return emojis;
     }
 
+    public static CharSequence replaceEmoji(CharSequence cs, Paint.FontMetricsInt fontMetrics, boolean createNew) {
+        return replaceEmoji(cs, fontMetrics, AndroidUtilities.dp(16), createNew, null);
+    }
+
     public static CharSequence replaceEmoji(CharSequence cs, Paint.FontMetricsInt fontMetrics, int size, boolean createNew) {
         return replaceEmoji(cs, fontMetrics, size, createNew, null);
     }
 
     public static CharSequence replaceEmoji(CharSequence cs, Paint.FontMetricsInt fontMetrics, int size, boolean createNew, int[] emojiOnly) {
-        return replaceEmoji(cs, fontMetrics, size, createNew, emojiOnly, false);
+        return replaceEmoji(cs, fontMetrics, createNew, emojiOnly, DynamicDrawableSpan.ALIGN_BOTTOM);
     }
 
-    public static CharSequence replaceEmoji(CharSequence cs, Paint.FontMetricsInt fontMetrics, int size, boolean createNew, int[] emojiOnly, boolean limit) {
+    public static CharSequence replaceEmoji(CharSequence cs, Paint.FontMetricsInt fontMetrics, boolean createNew, int[] emojiOnly, int alignment) {
         if (cs == null || cs.length() == 0) {
             return Spannable.Factory.getInstance().newSpannable(cs.toString());
         }
@@ -551,10 +554,14 @@ public class Emoji {
             s = Spannable.Factory.getInstance().newSpannable(cs.toString());
         }
         ArrayList<EmojiSpanRange> emojis = parseEmojis(s, emojiOnly);
+        if (emojis.isEmpty()) {
+            return cs;
+        }
 
         AnimatedEmojiSpan[] animatedEmojiSpans = s.getSpans(0, s.length(), AnimatedEmojiSpan.class);
         EmojiSpan span;
         Drawable drawable;
+        int limitCount = SharedConfig.getDevicePerformanceClass() >= SharedConfig.PERFORMANCE_CLASS_HIGH ? 100 : 50;
         for (int i = 0; i < emojis.size(); ++i) {
             try {
                 EmojiSpanRange emojiRange = emojis.get(i);
@@ -573,14 +580,13 @@ public class Emoji {
                 }
                 drawable = Emoji.getEmojiDrawable(emojiRange.code);
                 if (drawable != null) {
-                    span = new EmojiSpan(drawable, DynamicDrawableSpan.ALIGN_BOTTOM, size, fontMetrics);
+                    span = new EmojiSpan(drawable, alignment, fontMetrics);
                     span.emoji = emojiRange.code == null ? null : emojiRange.code.toString();
                     s.setSpan(span, emojiRange.start, emojiRange.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             } catch (Exception e) {
                 FileLog.e(e);
             }
-            int limitCount = SharedConfig.getDevicePerformanceClass() >= SharedConfig.PERFORMANCE_CLASS_HIGH ? 100 : 50;
             if ((Build.VERSION.SDK_INT < 23 || Build.VERSION.SDK_INT >= 29)/* && !BuildVars.DEBUG_PRIVATE_VERSION*/ && (i + 1) >= limitCount) {
                 break;
             }
@@ -593,7 +599,7 @@ public class Emoji {
         public int size = AndroidUtilities.dp(20);
         public String emoji;
 
-        public EmojiSpan(Drawable d, int verticalAlignment, int s, Paint.FontMetricsInt original) {
+        public EmojiSpan(Drawable d, int verticalAlignment, Paint.FontMetricsInt original) {
             super(d, verticalAlignment);
             fontMetrics = original;
             if (original != null) {
@@ -607,6 +613,16 @@ public class Emoji {
         public void replaceFontMetrics(Paint.FontMetricsInt newMetrics, int newSize) {
             fontMetrics = newMetrics;
             size = newSize;
+        }
+
+        public void replaceFontMetrics(Paint.FontMetricsInt newMetrics) {
+            fontMetrics = newMetrics;
+            if (fontMetrics != null) {
+                size = Math.abs(fontMetrics.descent) + Math.abs(fontMetrics.ascent);
+                if (size == 0) {
+                    size = AndroidUtilities.dp(20);
+                }
+            }
         }
 
         @Override

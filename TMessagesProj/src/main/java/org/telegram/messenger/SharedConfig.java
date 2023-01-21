@@ -37,6 +37,8 @@ import androidx.annotation.IntDef;
 import org.json.JSONObject;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.SerializedData;
+import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.SwipeGestureSettingsView;
 import org.telegram.tgnet.TLRPC;
 
@@ -45,8 +47,12 @@ import java.io.RandomAccessFile;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.Arrays;
+import java.io.UnsupportedEncodingException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -77,6 +83,17 @@ import java.util.Locale;
 public class SharedConfig {
     public final static int PASSCODE_TYPE_PIN = 0,
             PASSCODE_TYPE_PASSWORD = 1;
+
+    public static LiteMode getLiteMode() {
+        if (liteMode == null) {
+            liteMode = new LiteMode();
+        }
+        return liteMode;
+    }
+
+    public static boolean loopStickers() {
+        return loopStickers && !getLiteMode().enabled;
+    }
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({
@@ -120,7 +137,7 @@ public class SharedConfig {
     public static int suggestStickers;
     public static boolean suggestAnimatedEmoji;
     public static boolean loopStickers;
-    public static int keepMedia = 2;
+    public static int keepMedia = CacheByChatsController.KEEP_MEDIA_ONE_MONTH; //deprecated
     public static int lastKeepMediaCheckTime;
     public static int lastLogsCheckTime;
     public static int searchMessagesAsListHintShows;
@@ -207,6 +224,7 @@ public class SharedConfig {
     public static int loginingAccount = -1;
 
     public static boolean isFloatingDebugActive;
+    public static LiteMode liteMode;
 
     static {
         loadConfig();
@@ -272,72 +290,60 @@ public class SharedConfig {
             }
         }
 
+        public String getLink() {
+            StringBuilder url = new StringBuilder(!TextUtils.isEmpty(secret) ? "https://t.me/proxy?" : "https://t.me/socks?");
+            try {
+                url.append("server=").append(URLEncoder.encode(address, "UTF-8")).append("&").append("port=").append(port);
+                if (!TextUtils.isEmpty(username)) {
+                    url.append("&user=").append(URLEncoder.encode(username, "UTF-8"));
+                }
+                if (!TextUtils.isEmpty(password)) {
+                    url.append("&pass=").append(URLEncoder.encode(password, "UTF-8"));
+                }
+                if (!TextUtils.isEmpty(secret)) {
+                    url.append("&secret=").append(URLEncoder.encode(secret, "UTF-8"));
+                }
+            } catch (UnsupportedEncodingException ignored) {}
+            return url.toString();
+        }
+
         public String getAddress() {
-
             return address + ":" + port;
-
         }
 
         public String getType() {
-
             if (!StrUtil.isBlank(secret)) {
-
                 return "MTProto";
-
             } else {
-
                 return "Socks5";
-
             }
-
         }
 
         public String getTitle() {
-
             StringBuilder builder = new StringBuilder();
-
             builder.append("[ ");
-
             if (subId != 0L) {
-
                 try {
-
                     builder.append(SubManager.getSubList().find(ObjectFilters.eq("id", subId)).firstOrDefault().displayName());
-
                 } catch (Exception e) {
-
                     builder.append("Unknown");
-
                 }
-
             } else {
-
                 builder.append(getType());
-
             }
-
             builder.append(" ] ");
-
             if (StrUtil.isBlank(getRemarks())) {
-
                 builder.append(getAddress());
-
             } else {
-
                 builder.append(getRemarks());
-
             }
-
             return builder.toString();
-
         }
 
         private String remarks;
 
         public String getRemarks() {
-
             return remarks;
-
         }
 
         public void setRemarks(String remarks) {
@@ -348,59 +354,38 @@ public class SharedConfig {
         }
 
         public String toUrl() {
-
             HttpUrl.Builder builder = HttpUrl.parse(StrUtil.isBlank(secret) ?
                     "https://t.me/socks" : "https://t.me/proxy").newBuilder()
                     .addQueryParameter("server", address)
                     .addQueryParameter("port", port + "");
-
             if (!StrUtil.isBlank(secret)) {
-
                 builder.addQueryParameter("secret", secret);
-
             } else {
-
                 builder.addQueryParameter("user", username)
                         .addQueryParameter("pass", password);
-
             }
-
             if (!StrUtil.isBlank(remarks)) {
-
                 builder.fragment(Utils.INSTANCE.urlEncode(remarks));
-
             }
-
             return builder.toString();
-
         }
 
         public static ProxyInfo fromUrl(String url) {
-
             Uri lnk = Uri.parse(url);
-
             if (lnk == null) throw new IllegalArgumentException(url);
-
             ProxyInfo info = new ProxyInfo(lnk.getQueryParameter("server"),
                     Utilities.parseInt(lnk.getQueryParameter("port")),
                     lnk.getQueryParameter("user"),
                     lnk.getQueryParameter("pass"),
                     lnk.getQueryParameter("secret"));
-
             if (StrUtil.isNotBlank(lnk.getFragment())) {
-
                 info.setRemarks(lnk.getFragment());
-
             }
-
             return info;
-
         }
 
         public JSONObject toJsonInternal() throws JSONException {
-
             JSONObject obj = new JSONObject();
-
             if (!StrUtil.isBlank(remarks)) {
                 obj.put("remarks", remarks);
             }
@@ -425,17 +410,12 @@ public class SharedConfig {
             }
 
             return obj;
-
         }
 
         public static ProxyInfo fromJson(JSONObject obj) {
-
             ProxyInfo info;
-
             switch (obj.optString("type", "null")) {
-
                 case "socks5": {
-
                     info = new ProxyInfo();
 
                     info.group = obj.optInt("group", 0);
@@ -443,84 +423,55 @@ public class SharedConfig {
                     info.port = obj.optInt("port", 443);
                     info.username = obj.optString("username", "");
                     info.password = obj.optString("password", "");
-
                     info.remarks = obj.optString("remarks");
-
                     if (StrUtil.isBlank(info.remarks)) info.remarks = null;
-
                     info.group = obj.optInt("group", 0);
-
                     break;
-
                 }
 
                 case "mtproto": {
-
                     info = new ProxyInfo();
-
                     info.address = obj.optString("address", "");
                     info.port = obj.optInt("port", 443);
                     info.secret = obj.optString("secret", "");
-
                     info.remarks = obj.optString("remarks");
-
                     if (StrUtil.isBlank(info.remarks)) info.remarks = null;
-
                     info.group = obj.optInt("group", 0);
-
                     break;
-
                 }
 
                 case "vmess": {
-
                     info = new VmessProxy(obj.optString("link"));
-
                     break;
-
                 }
 
                 case "shadowsocks": {
-
                     info = new ShadowsocksProxy(obj.optString("link"));
-
                     break;
-
                 }
 
                 case "shadowsocksr": {
-
                     info = new ShadowsocksRProxy(obj.optString("link"));
-
                     break;
-
                 }
 
                 case "ws": {
-
                     info = new WsProxy(obj.optString("link"));
-
                     break;
-
                 }
 
                 default: {
-
                     throw new IllegalStateException("invalid proxy type " + obj.optString("type", "null"));
-
                 }
 
             }
 
             return info;
-
         }
 
         @Override
         public int hashCode() {
-
             return (address + port + username + password + secret).hashCode();
-
         }
 
         @Override
@@ -529,7 +480,7 @@ public class SharedConfig {
         }
     }
 
-    public abstract static class ExternalSocks5Proxy extends ProxyInfo {
+    public abstract static class ExternalSocks5Proxy extends SharedConfig.ProxyInfo {
 
         public ExternalSocks5Proxy() {
 
@@ -1276,7 +1227,7 @@ public class SharedConfig {
             distanceSystemType = preferences.getInt("distanceSystemType", 0);
             devicePerformanceClass = preferences.getInt("devicePerformanceClass", -1);
             loopStickers = preferences.getBoolean("loopStickers", true);
-            keepMedia = preferences.getInt("keep_media", 2);
+            keepMedia = preferences.getInt("keep_media", CacheByChatsController.KEEP_MEDIA_ONE_MONTH);
             noStatusBar = NekoConfig.transparentStatusBar.Bool();
             forceRtmpStream = preferences.getBoolean("forceRtmpStream", false);
             debugWebView = preferences.getBoolean("debugWebView", false);
@@ -1331,7 +1282,7 @@ public class SharedConfig {
             fastScrollHintCount = preferences.getInt("fastScrollHintCount", 3);
             dontAskManageStorage = preferences.getBoolean("dontAskManageStorage", false);
             hasEmailLogin = preferences.getBoolean("hasEmailLogin", false);
-            useLNavigation = preferences.getBoolean("useLNavigation", BuildVars.DEBUG_VERSION);
+            useLNavigation = preferences.getBoolean("useLNavigation", false);
             isFloatingDebugActive = preferences.getBoolean("floatingDebugActive", false);
 
             preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
@@ -1611,36 +1562,143 @@ public class SharedConfig {
 
     public static void checkKeepMedia() {
         int time = (int) (System.currentTimeMillis() / 1000);
-        if (Math.abs(time - lastKeepMediaCheckTime) < 60 * 60) {
+        if (!BuildVars.DEBUG_PRIVATE_VERSION && Math.abs(time - lastKeepMediaCheckTime) < 60 * 60) {
             return;
         }
         lastKeepMediaCheckTime = time;
         File cacheDir = FileLoader.checkDirectory(FileLoader.MEDIA_DIR_CACHE);
+
         Utilities.cacheClearQueue.postRunnable(() -> {
-            if (keepMedia != 2) {
-                int days;
-                if (keepMedia == 0) {
-                    days = 7;
-                } else if (keepMedia == 1) {
-                    days = 30;
-                } else if (keepMedia == 4) {
-                    days = 1;
-                } else {
-                    days = 3;
+            boolean hasExceptions = false;
+            ArrayList<CacheByChatsController> cacheByChatsControllers = new ArrayList<>();
+            for (int account : SharedConfig.activeAccounts) {
+                if (UserConfig.getInstance(account).isClientActivated()) {
+                    CacheByChatsController cacheByChatsController = UserConfig.getInstance(account).getMessagesController().getCacheByChatsController();
+                    cacheByChatsControllers.add(cacheByChatsController);
+                    if (cacheByChatsController.getKeepMediaExceptionsByDialogs().size() > 0) {
+                        hasExceptions = true;
+                    }
                 }
-                long currentTime = time - 60 * 60 * 24 * days;
+            }
+
+            int[] keepMediaByTypes = new int[3];
+            boolean allKeepMediaTypesForever = true;
+            long keepMediaMinSeconds = Long.MAX_VALUE;
+            for (int i = 0; i < 3; i++) {
+                keepMediaByTypes[i] = SharedConfig.getPreferences().getInt("keep_media_type_" + i, CacheByChatsController.getDefault(i));
+                if (keepMediaByTypes[i] != CacheByChatsController.KEEP_MEDIA_FOREVER) {
+                    allKeepMediaTypesForever = false;
+                }
+                long days = CacheByChatsController.getDaysInSeconds(keepMediaByTypes[i]);
+                if (days < keepMediaMinSeconds) {
+                    keepMediaMinSeconds = days;
+                }
+            }
+            if (hasExceptions) {
+                allKeepMediaTypesForever = false;
+            }
+            if (!allKeepMediaTypesForever) {
+                //long currentTime = time - 60 * 60 * 24 * days;
                 final SparseArray<File> paths = ImageLoader.getInstance().createMediaPaths();
                 for (int a = 0; a < paths.size(); a++) {
+                    boolean isCacheDir = false;
                     if (paths.keyAt(a) == FileLoader.MEDIA_DIR_CACHE) {
-                        continue;
+                        isCacheDir = true;
                     }
+                    File dir = paths.valueAt(a);
                     try {
-                        Utilities.clearDir(paths.valueAt(a).getAbsolutePath(), 0, currentTime, false);
+                        File[] files = dir.listFiles();
+                        ArrayList<CacheByChatsController.KeepMediaFile> keepMediaFiles = new ArrayList<>();
+                        for (int i = 0; i < files.length; i++) {
+                            keepMediaFiles.add(new CacheByChatsController.KeepMediaFile(files[i]));
+                        }
+                        for (int i = 0; i < cacheByChatsControllers.size(); i++) {
+                            cacheByChatsControllers.get(i).lookupFiles(keepMediaFiles);
+                        }
+                        for (int i = 0; i < keepMediaFiles.size(); i++) {
+                            CacheByChatsController.KeepMediaFile file = keepMediaFiles.get(i);
+                            if (file.keepMedia == CacheByChatsController.KEEP_MEDIA_FOREVER) {
+                                continue;
+                            }
+                            long seconds;
+                            boolean isException = false;
+                            if (file.keepMedia >= 0) {
+                                isException = true;
+                                seconds = CacheByChatsController.getDaysInSeconds(file.keepMedia);
+                            } else if (file.dialogType >= 0) {
+                                seconds = CacheByChatsController.getDaysInSeconds(keepMediaByTypes[file.dialogType]);
+                            } else if (isCacheDir) {
+                                continue;
+                            } else {
+                                seconds = keepMediaMinSeconds;
+                            }
+                            if (seconds == Long.MAX_VALUE) {
+                                continue;
+                            }
+                            long lastUsageTime = Utilities.getLastUsageFileTime(file.file.getAbsolutePath());
+                            long timeLocal = time - seconds;
+                            boolean needDelete = lastUsageTime < timeLocal;
+                            if (needDelete) {
+                                try {
+                                    file.file.delete();
+                                } catch (Exception exception) {
+                                    FileLog.e(exception);
+                                }
+                            }
+                        }
                     } catch (Throwable e) {
                         FileLog.e(e);
                     }
                 }
             }
+
+            int maxCacheGb = SharedConfig.getPreferences().getInt("cache_limit", Integer.MAX_VALUE);
+            if (maxCacheGb != Integer.MAX_VALUE) {
+                long maxCacheSize;
+                if (maxCacheGb == 1) {
+                    maxCacheSize = 1024L * 1024L * 300L;
+                } else {
+                    maxCacheSize = maxCacheGb * 1024L * 1024L * 1000L;
+                }
+                final SparseArray<File> paths = ImageLoader.getInstance().createMediaPaths();
+                long totalSize = 0;
+                for (int a = 0; a < paths.size(); a++) {
+                    totalSize += Utilities.getDirSize(paths.valueAt(a).getAbsolutePath(), 0, true);
+                }
+                if (totalSize > maxCacheSize) {
+                    ArrayList<FileInfoInternal> allFiles = new ArrayList<>();
+                    for (int a = 0; a < paths.size(); a++) {
+                        File dir = paths.valueAt(a);
+                        fillFilesRecursive(dir, allFiles);
+                    }
+                    Collections.sort(allFiles, (o1, o2) -> {
+                        if (o2.lastUsageDate > o1.lastUsageDate) {
+                            return -1;
+                        } else if (o2.lastUsageDate < o1.lastUsageDate) {
+                            return 1;
+                        }
+                        return 0;
+                    });
+                    for (int i = 0; i < allFiles.size(); i++) {
+                        long size = allFiles.get(i).file.length();
+                        totalSize -= size;
+                        try {
+                            allFiles.get(i).file.delete();
+                        } catch (Exception e) {
+
+                        }
+
+                        if (totalSize < maxCacheSize) {
+                            break;
+                        }
+                    }
+                }
+
+            }
+
+
+            //TODO now every day generating cache for reactions and cleared it after one day -\_(-_-)_/-
+            //need fix
             File stickersPath = new File(cacheDir, "acache");
             if (stickersPath.exists()) {
                 long currentTime = time - 60 * 60 * 24;
@@ -1650,11 +1708,30 @@ public class SharedConfig {
                     FileLog.e(e);
                 }
             }
-            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putInt("lastKeepMediaCheckTime", lastKeepMediaCheckTime);
-            editor.commit();
+            MessagesController.getGlobalMainSettings().edit()
+                    .putInt("lastKeepMediaCheckTime", lastKeepMediaCheckTime)
+                    .apply();
         });
+    }
+
+    private static void fillFilesRecursive(final File fromFolder, ArrayList<FileInfoInternal> fileInfoList) {
+        if (fromFolder == null) {
+            return;
+        }
+        File[] files = fromFolder.listFiles();
+        if (files == null) {
+            return;
+        }
+        for (final File fileEntry : files) {
+            if (fileEntry.isDirectory()) {
+                fillFilesRecursive(fileEntry, fileInfoList);
+            } else {
+                if (fileEntry.getName().equals(".nomedia")) {
+                    continue;
+                }
+                fileInfoList.add(new FileInfoInternal(fileEntry));
+            }
+        }
     }
 
     public static void toggleDisableVoiceAudioEffects() {
@@ -2449,5 +2526,56 @@ public class SharedConfig {
             animationsEnabled = MessagesController.getGlobalMainSettings().getBoolean("view_animations", true);
         }
         return animationsEnabled;
+    }
+
+    public static SharedPreferences getPreferences() {
+        return ApplicationLoader.applicationContext.getSharedPreferences("userconfing", Context.MODE_PRIVATE);
+    }
+
+    private static class FileInfoInternal {
+        final File file;
+        final long lastUsageDate;
+
+        private FileInfoInternal(File file) {
+            this.file = file;
+            this.lastUsageDate = Utilities.getLastUsageFileTime(file.getAbsolutePath());
+        }
+    }
+
+
+    public static class LiteMode {
+
+        private boolean enabled;
+
+        LiteMode() {
+            loadPreference();
+        }
+
+        public boolean enabled() {
+            return enabled;
+        }
+
+        public void toggleMode() {
+            enabled = !enabled;
+            savePreference();
+            AnimatedEmojiDrawable.lightModeChanged();
+        }
+
+        private void loadPreference() {
+            int flags = MessagesController.getGlobalMainSettings().getInt("light_mode", getDevicePerformanceClass() == PERFORMANCE_CLASS_LOW ? 1 : 0) ;
+            enabled = (flags & 1) != 0;
+        }
+
+        public void savePreference() {
+            int flags = 0;
+            if (enabled) {
+                flags |= 1;
+            }
+            MessagesController.getGlobalMainSettings().edit().putInt("light_mode", flags).apply();
+        }
+
+        public boolean animatedEmojiEnabled() {
+            return !enabled;
+        }
     }
 }

@@ -38,6 +38,7 @@ public class FileLog {
     private File networkFile = null;
     private File tonlibFile = null;
     private boolean initied;
+    public static boolean databaseIsMalformed = false;
 
     private OutputStreamWriter tlStreamWriter = null;
     private File tlRequestsFile = null;
@@ -71,13 +72,13 @@ public class FileLog {
     private static HashSet<String> excludeRequests;
 
     public static void dumpResponseAndRequest(TLObject request, TLObject response, TLRPC.TL_error error, long requestMsgId, long startRequestTimeInMillis, int requestToken) {
-        if (!BuildVars.DEBUG_PRIVATE_VERSION || !BuildVars.LOGS_ENABLED || request == null) {
+        if (!BuildVars.DEBUG_PRIVATE_VERSION || !BuildVars.LOGS_ENABLED || request == null || SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_LOW) {
             return;
         }
         String requestSimpleName = request.getClass().getSimpleName();
         checkGson();
 
-        if (excludeRequests.contains(requestSimpleName)) {
+        if (excludeRequests.contains(requestSimpleName) && error == null) {
             return;
         }
         try {
@@ -119,6 +120,7 @@ public class FileLog {
             return;
         }
         try {
+            checkGson();
             getInstance().dateFormat.format(System.currentTimeMillis());
             String messageStr = "receive message -> " + message.getClass().getSimpleName() + " : " + gson.toJson(message);
             String res = "null";

@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +13,16 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
@@ -516,13 +521,15 @@ public class ReactionsEffectOverlay {
         if (availableReaction != null || visibleReaction.documentId != 0) {
             if (availableReaction != null) {
                 if (animationType != ONLY_MOVE_ANIMATION) {
-                    TLRPC.Document document = animationType == SHORT_ANIMATION ? availableReaction.around_animation : availableReaction.effect_animation;
-                    String filer = animationType == SHORT_ANIMATION ? getFilterForAroundAnimation() : sizeForFilter + "_" + sizeForFilter;
-                    effectImageView.getImageReceiver().setUniqKeyPrefix((uniqPrefix++) + "_" + cell.getMessageObject().getId() + "_");
-                    effectImageView.setImage(ImageLocation.getForDocument(document), filer, null, null, 0, null);
+                    if ((animationType == SHORT_ANIMATION && !SharedConfig.getLiteMode().enabled()) || animationType == LONG_ANIMATION)  {
+                        TLRPC.Document document = animationType == SHORT_ANIMATION ? availableReaction.around_animation : availableReaction.effect_animation;
+                        String filer = animationType == SHORT_ANIMATION ? getFilterForAroundAnimation() : sizeForFilter + "_" + sizeForFilter;
+                        effectImageView.getImageReceiver().setUniqKeyPrefix((uniqPrefix++) + "_" + cell.getMessageObject().getId() + "_");
+                        effectImageView.setImage(ImageLocation.getForDocument(document), filer, null, null, 0, null);
 
-                    effectImageView.getImageReceiver().setAutoRepeat(0);
-                    effectImageView.getImageReceiver().setAllowStartAnimation(false);
+                        effectImageView.getImageReceiver().setAutoRepeat(0);
+                        effectImageView.getImageReceiver().setAllowStartAnimation(false);
+                    }
 
                     if (effectImageView.getImageReceiver().getLottieAnimation() != null) {
                         effectImageView.getImageReceiver().getLottieAnimation().setCurrentFrame(0, false);
@@ -546,8 +553,16 @@ public class ReactionsEffectOverlay {
                     emojiImageView.setAnimatedReactionDrawable(new AnimatedEmojiDrawable(AnimatedEmojiDrawable.CACHE_TYPE_KEYBOARD, currentAccount, visibleReaction.documentId));
                 }
                 if (animationType == LONG_ANIMATION || animationType == SHORT_ANIMATION) {
-                   effectImageView.setAnimatedEmojiEffect(AnimatedEmojiEffect.createFrom(new AnimatedEmojiDrawable(AnimatedEmojiDrawable.CACHE_TYPE_KEYBOARD, currentAccount, visibleReaction.documentId), animationType == LONG_ANIMATION, true));
-                   windowView.setClipChildren(false);
+                    AnimatedEmojiDrawable animatedEmojiDrawable = new AnimatedEmojiDrawable(AnimatedEmojiDrawable.CACHE_TYPE_KEYBOARD, currentAccount, visibleReaction.documentId);
+                    int color = Theme.getColor(
+                        cell.getMessageObject().shouldDrawWithoutBackground() ?
+                            cell.getMessageObject().isOutOwner() ? Theme.key_chat_outReactionButtonBackground : Theme.key_chat_inReactionButtonBackground :
+                            cell.getMessageObject().isOutOwner() ? Theme.key_chat_outReactionButtonTextSelected : Theme.key_chat_inReactionButtonTextSelected,
+                        fragment.getResourceProvider()
+                    );
+                    animatedEmojiDrawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
+                    effectImageView.setAnimatedEmojiEffect(AnimatedEmojiEffect.createFrom(animatedEmojiDrawable, animationType == LONG_ANIMATION, true));
+                    windowView.setClipChildren(false);
                 }
             }
 
@@ -729,6 +744,7 @@ public class ReactionsEffectOverlay {
 
         public AnimationView(Context context) {
             super(context);
+            getImageReceiver().setFileLoadingPriority(FileLoader.PRIORITY_HIGH);
         }
 
         boolean wasPlaying;

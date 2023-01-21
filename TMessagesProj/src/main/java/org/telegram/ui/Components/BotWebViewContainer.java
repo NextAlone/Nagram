@@ -9,6 +9,7 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -66,7 +67,9 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.CameraScanActivity;
 import org.telegram.ui.Components.voip.CellFlickerDrawable;
 
 import java.io.File;
@@ -80,7 +83,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BotWebViewContainer extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
     private final static String DURGER_KING_USERNAME = "DurgerKingBot";
-    private final static int REQUEST_CODE_WEB_VIEW_FILE = 3000, REQUEST_CODE_WEB_PERMISSION = 4000;
+    private final static int REQUEST_CODE_WEB_VIEW_FILE = 3000, REQUEST_CODE_WEB_PERMISSION = 4000, REQUEST_CODE_QR_CAMERA_PERMISSION = 5000;
     private final static int DIALOG_SEQUENTIAL_COOLDOWN_TIME = 3000;
     private final static boolean ENABLE_REQUEST_PHONE = false;
 
@@ -130,6 +133,10 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
     private int dialogSequentialOpenTimes;
     private long lastDialogClosed;
     private long lastDialogCooldownTime;
+
+    private BottomSheet cameraBottomSheet;
+    private boolean hasQRPending;
+    private String lastQrText;
 
     public BotWebViewContainer(@NonNull Context context, Theme.ResourcesProvider resourcesProvider, int backgroundColor) {
         super(context);
@@ -456,10 +463,10 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
     }
 
     private void onOpenUri(Uri uri) {
-        onOpenUri(uri, false);
+        onOpenUri(uri, false, false);
     }
 
-    private void onOpenUri(Uri uri, boolean suppressPopup) {
+    private void onOpenUri(Uri uri, boolean tryInstantView, boolean suppressPopup) {
         if (isRequestingPageOpen || System.currentTimeMillis() - lastClickMs > 10000 && suppressPopup) {
             return;
         }
@@ -478,18 +485,18 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
                 InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
-                delegate.onCloseRequested(() -> Browser.openUrl(getContext(), uri, true, false));
+                delegate.onCloseRequested(() -> Browser.openUrl(getContext(), uri, true, tryInstantView));
             } else {
-                Browser.openUrl(getContext(), uri, true, false);
+                Browser.openUrl(getContext(), uri, true, tryInstantView);
             }
         } else if (suppressPopup) {
-            Browser.openUrl(getContext(), uri, true, false);
+            Browser.openUrl(getContext(), uri, true, tryInstantView);
         } else {
             isRequestingPageOpen = true;
             new AlertDialog.Builder(getContext(), resourcesProvider)
                     .setTitle(LocaleController.getString(R.string.OpenUrlTitle))
                     .setMessage(LocaleController.formatString(R.string.OpenUrlAlert2, uri.toString()))
-                    .setPositiveButton(LocaleController.getString(R.string.Open), (dialog, which) -> Browser.openUrl(getContext(), uri, true, false))
+                    .setPositiveButton(LocaleController.getString(R.string.Open), (dialog, which) -> Browser.openUrl(getContext(), uri, true, tryInstantView))
                     .setNegativeButton(LocaleController.getString(R.string.Cancel), null)
                     .setOnDismissListener(dialog -> isRequestingPageOpen = false)
                     .show();
@@ -526,6 +533,7 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
         if (isPageLoaded) {
             return;
         }
+
         AnimatorSet set = new AnimatorSet();
         set.playTogether(
                 ObjectAnimator.ofFloat(webView, View.ALPHA, 1f),
@@ -931,6 +939,71 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
                 delegate.onCloseRequested(null);
                 break;
             }
+            case "web_app_read_text_from_clipboard": {
+                try {
+                    JSONObject jsonObject = new JSONObject(eventData);
+                    String reqId = jsonObject.getString("req_id");
+                    if (!delegate.isClipboardAvailable() || System.currentTimeMillis() - lastClickMs > 10000) {
+                        notifyEvent("clipboard_text_received", new JSONObject().put("req_id", reqId));
+                        break;
+                    }
+
+                    ClipboardManager clipboardManager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                    CharSequence text = clipboardManager.getText();
+                    String data = text != null ? text.toString() : "";
+                    notifyEvent("clipboard_text_received", new JSONObject().put("req_id", reqId).put("data", data));
+                } catch (JSONException e) {
+                    FileLog.e(e);
+                }
+                break;
+            }
+            case "web_app_close_scan_qr_popup": {
+                if (hasQRPending) {
+                    cameraBottomSheet.dismiss();
+                }
+                break;
+            }
+            case "web_app_open_scan_qr_popup": {
+                try {
+                    if (hasQRPending || parentActivity == null) {
+                        break;
+                    }
+
+                    JSONObject jsonObject = new JSONObject(eventData);
+                    lastQrText = jsonObject.optString("text");
+                    hasQRPending = true;
+
+                    if (Build.VERSION.SDK_INT >= 23 && parentActivity.checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        NotificationCenter.getGlobalInstance().addObserver(new NotificationCenter.NotificationCenterDelegate() {
+                            @Override
+                            public void didReceivedNotification(int id, int account, Object... args) {
+                                if (id == NotificationCenter.onRequestPermissionResultReceived) {
+                                    int requestCode = (int) args[0];
+                                    // String[] permissions = (String[]) args[1];
+                                    int[] grantResults = (int[]) args[2];
+
+                                    if (requestCode == REQUEST_CODE_QR_CAMERA_PERMISSION) {
+                                        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.onRequestPermissionResultReceived);
+
+                                        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                                            openQrScanActivity();
+                                        } else {
+                                            notifyEvent("scan_qr_popup_closed", new JSONObject());
+                                        }
+                                    }
+                                }
+                            }
+                        }, NotificationCenter.onRequestPermissionResultReceived);
+                        parentActivity.requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_QR_CAMERA_PERMISSION);
+                        return;
+                    }
+
+                    openQrScanActivity();
+                } catch (JSONException e) {
+                    FileLog.e(e);
+                }
+                break;
+            }
             case "web_app_request_phone": {
                 if (currentDialog != null || !ENABLE_REQUEST_PHONE) {
                     break;
@@ -1189,7 +1262,7 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
                     JSONObject jsonData = new JSONObject(eventData);
                     Uri uri = Uri.parse(jsonData.optString("url"));
                     if (WHITELISTED_SCHEMES.contains(uri.getScheme())) {
-                        onOpenUri(uri, true);
+                        onOpenUri(uri, jsonData.optBoolean("try_instant_view"), true);
                     }
                 } catch (Exception e) {
                     FileLog.e(e);
@@ -1291,6 +1364,34 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
                 break;
             }
         }
+    }
+
+    private void openQrScanActivity() {
+        if (parentActivity == null) {
+            return;
+        }
+
+        cameraBottomSheet = CameraScanActivity.showAsSheet(parentActivity, false, CameraScanActivity.TYPE_QR_WEB_BOT, new CameraScanActivity.CameraScanActivityDelegate() {
+            @Override
+            public void didFindQr(String text) {
+                try {
+                    notifyEvent("qr_text_received", new JSONObject().put("data", text));
+                } catch (JSONException e) {
+                    FileLog.e(e);
+                }
+            }
+
+            @Override
+            public String getSubtitleText() {
+                return lastQrText;
+            }
+
+            @Override
+            public void onDismiss() {
+                notifyEvent("scan_qr_popup_closed", null);
+                hasQRPending = false;
+            }
+        });
     }
 
     private JSONObject buildThemeParams() {
@@ -1410,6 +1511,13 @@ public class BotWebViewContainer extends FrameLayout implements NotificationCent
          * Called when WebView is ready (Called web_app_ready or page load finished)
          */
         default void onWebAppReady() {}
+
+        /**
+         * @return If clipboard access is available to webapp
+         */
+        default boolean isClipboardAvailable() {
+            return false;
+        }
     }
 
     public final static class PopupButton {

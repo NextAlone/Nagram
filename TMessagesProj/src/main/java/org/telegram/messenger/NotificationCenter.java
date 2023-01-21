@@ -10,10 +10,14 @@ package org.telegram.messenger;
 
 import android.os.SystemClock;
 import android.util.SparseArray;
+import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -266,6 +270,7 @@ public class NotificationCenter {
     public static final int permissionsGranted = totalEvents++;
     public static int topicsDidLoaded = totalEvents++;
     public static int chatSwithcedToForum = totalEvents++;
+    public static int didUpdateGlobalAutoDeleteTimer = totalEvents++;
 
     // custom
 
@@ -520,9 +525,6 @@ public class NotificationCenter {
         if (!allowDuringAnimation && isAnimationInProgress()) {
             DelayedPost delayedPost = new DelayedPost(id, args);
             delayedPosts.add(delayedPost);
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("delay post notification " + id + " with args count = " + args.length);
-            }
             return;
         }
         if (!postponeCallbackList.isEmpty()) {
@@ -583,12 +585,21 @@ public class NotificationCenter {
         }
         ArrayList<NotificationCenterDelegate> objects = observers.get(id);
         if (objects == null) {
-            observers.put(id, (objects = new ArrayList<>()));
+            observers.put(id, (objects = createArrayForId(id)));
         }
         if (objects.contains(observer)) {
             return;
         }
         objects.add(observer);
+    }
+
+    private ArrayList<NotificationCenterDelegate> createArrayForId(int id) {
+        // this notifications often add/remove
+        // UniqArrayList for fast contains method check
+        if (id == didReplacedPhotoInMemCache || id == stopAllHeavyOperations || id == startAllHeavyOperations) {
+            return new UniqArrayList<>();
+        }
+        return new ArrayList<>();
     }
 
     public void removeObserver(NotificationCenterDelegate observer, int id) {
@@ -661,6 +672,99 @@ public class NotificationCenter {
 
         private AllowedNotifications() {
             time = SystemClock.elapsedRealtime();
+        }
+    }
+
+    public static void listenEmojiLoading(View view) {
+        if (view == null) {
+            return;
+        }
+
+        final NotificationCenterDelegate delegate = (id, account, args) -> {
+            if (id == NotificationCenter.emojiLoaded) {
+                if (view != null && view.isAttachedToWindow()) {
+                    view.invalidate();
+                }
+            }
+        };
+        view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View view) {
+                NotificationCenter.getGlobalInstance().addObserver(delegate, NotificationCenter.emojiLoaded);
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View view) {
+                NotificationCenter.getGlobalInstance().removeObserver(delegate, NotificationCenter.emojiLoaded);
+            }
+        });
+    }
+
+    private class UniqArrayList<T> extends ArrayList<T> {
+        HashSet<T> set = new HashSet<>();
+
+        @Override
+        public boolean add(T t) {
+            if (set.add(t)) {
+                return super.add(t);
+            }
+            return false;
+        }
+
+        @Override
+        public void add(int index, T element) {
+            if (set.add(element)) {
+                super.add(index, element);
+            }
+        }
+
+        @Override
+        public boolean addAll(@NonNull Collection<? extends T> c) {
+            boolean modified = false;
+            for (T t : c) {
+                if (add(t)) {
+                    modified = true;
+                }
+            }
+            return modified;
+        }
+
+        @Override
+        public boolean addAll(int index, @NonNull Collection<? extends T> c) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public T remove(int index) {
+            T t = super.remove(index);
+            if (t != null) {
+                set.remove(t);
+            }
+            return t;
+        }
+
+        @Override
+        public boolean remove(@Nullable Object o) {
+            if (set.remove(0)) {
+                return super.remove(o);
+            }
+            return false;
+        }
+
+        @Override
+        public boolean removeAll(@NonNull Collection<?> c) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean contains(@Nullable Object o) {
+            return set.contains(o);
+        }
+
+        @Override
+        public void clear() {
+            set.clear();
+            super.clear();
         }
     }
 }

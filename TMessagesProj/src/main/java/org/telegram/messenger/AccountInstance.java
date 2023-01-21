@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.util.SparseArray;
 
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.ui.Components.Paint.PersistColorPalette;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -38,6 +39,10 @@ public class AccountInstance {
 
     public ContactsController getContactsController() {
         return ContactsController.getInstance(currentAccount);
+    }
+
+    public PersistColorPalette getColorPalette() {
+        return PersistColorPalette.getInstance(currentAccount);
     }
 
     public MediaDataController getMediaDataController() {

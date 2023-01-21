@@ -67,7 +67,6 @@ import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
-import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.CubicBezierInterpolator;
@@ -622,7 +621,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                         cameraDrawable.setCurrentFrame(0, false);
                     }
 
-                });
+                }, 0);
                 cameraDrawable.setCurrentFrame(0);
                 cameraDrawable.setCustomEndFrame(43);
                 setAvatarCell.imageView.playAnimation();
@@ -833,7 +832,9 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             settingsSectionCell.setBackground(combinedDrawable);
             linearLayout1.addView(settingsSectionCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             if (forumsCell != null) {
-                settingsSectionCell.setText(LocaleController.getString(R.string.ForumToggleDescription));
+                settingsSectionCell.setText(LocaleController.getString("ForumToggleDescription", R.string.ForumToggleDescription));
+            } else {
+                settingsSectionCell.setText(LocaleController.getString("ChannelSignMessagesInfo", R.string.ChannelSignMessagesInfo));
             }
         }
 
@@ -1114,7 +1115,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     }
 
     @Override
-    public void didUploadPhoto(final TLRPC.InputFile photo, final TLRPC.InputFile video, double videoStartTimestamp, String videoPath, final TLRPC.PhotoSize bigSize, final TLRPC.PhotoSize smallSize) {
+    public void didUploadPhoto(final TLRPC.InputFile photo, final TLRPC.InputFile video, double videoStartTimestamp, String videoPath, final TLRPC.PhotoSize bigSize, final TLRPC.PhotoSize smallSize, boolean isVideo) {
         AndroidUtilities.runOnUIThread(() -> {
             avatar = smallSize.location;
             if (photo != null || video != null) {
@@ -1259,7 +1260,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
 
         if (imageUpdater.isUploadingImage()) {
             createAfterUpload = true;
-            progressDialog = new AlertDialog(getParentActivity(), 3);
+            progressDialog = new AlertDialog(getParentActivity(), AlertDialog.ALERT_TYPE_SPINNER);
             progressDialog.setOnCancelListener(dialog -> {
                 createAfterUpload = false;
                 progressDialog = null;

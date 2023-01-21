@@ -506,6 +506,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
         FrameLayout frameLayout = (FrameLayout) fragmentView;
         frameLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
 
+        LinearLayoutManager layoutManager;
         listView = new RecyclerListView(context) {
             @Override
             public boolean onTouchEvent(MotionEvent e) {
@@ -516,9 +517,15 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 }
                 return super.onTouchEvent(e);
             }
+
+            @Override
+            protected void dispatchDraw(Canvas canvas) {
+                drawSectionBackground(canvas, filtersStartRow, filtersEndRow, getThemedColor(Theme.key_windowBackgroundWhite));
+                super.dispatchDraw(canvas);
+            }
         };
         ((DefaultItemAnimator) listView.getItemAnimator()).setDelayAnimations(false);
-        listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        listView.setLayoutManager(layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         listView.setVerticalScrollBarEnabled(false);
         itemTouchHelper = new ItemTouchHelper(new TouchHelperCallback());
         itemTouchHelper.attachToRecyclerView(listView);
@@ -651,7 +658,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                                 builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), (dialog2, which2) -> {
                                     AlertDialog progressDialog = null;
                                     if (getParentActivity() != null) {
-                                        progressDialog = new AlertDialog(getParentActivity(), 3);
+                                        progressDialog = new AlertDialog(getParentActivity(), AlertDialog.ALERT_TYPE_SPINNER);
                                         progressDialog.setCanCancel(false);
                                         progressDialog.show();
                                     }

@@ -128,6 +128,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
     private boolean highlightLinkDesktopDevice;
     private boolean fragmentOpened;
+    private Delegate delegate;
 
     public SessionsActivity(int type) {
         currentType = type;
@@ -251,6 +252,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                     cell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
                     cell.setTextAndValue(items[a], selected == a);
                     linearLayout.addView(cell);
+                    cell.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), Theme.RIPPLE_MASK_ALL));
                     cell.setOnClickListener(v -> {
                         builder.getDismissRunnable().run();
                         Integer which = (Integer) v.getTag();
@@ -403,7 +405,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                         if (getParentActivity() == null) {
                             return;
                         }
-                        final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
+                        final AlertDialog progressDialog = new AlertDialog(getParentActivity(), AlertDialog.ALERT_TYPE_SPINNER);
                         progressDialog.setCanCancel(false);
                         progressDialog.show();
                         TLRPC.TL_account_resetWebAuthorization req = new TLRPC.TL_account_resetWebAuthorization();
@@ -595,7 +597,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    private void loadSessions(boolean silent) {
+    public void loadSessions(boolean silent) {
         if (loading) {
             return;
         }
@@ -606,7 +608,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             TLRPC.TL_account_getAuthorizations req = new TLRPC.TL_account_getAuthorizations();
             int reqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
                 loading = false;
-                int oldItemsCount = listAdapter.getItemCount();
+                int oldItemsCount = listAdapter != null ? listAdapter.getItemCount() : 0;
                 if (error == null) {
                     sessions.clear();
                     passwordSessions.clear();
@@ -623,6 +625,9 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                     }
                     ttlDays = res.authorization_ttl_days;
                     updateRows();
+                    if (delegate != null) {
+                        delegate.sessionsLoaded();
+                    }
                 }
 //                itemsEnterAnimator.showItemsAnimated(oldItemsCount + 1);
                 if (listAdapter != null) {
@@ -1266,5 +1271,20 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                         .show();
             }
         }
+    }
+
+    int getSessionsCount() {
+        if (sessions.size() == 0 && loading) {
+            return 0;
+        }
+        return sessions.size() + 1;
+    }
+
+    public void setDelegate(Delegate delegate) {
+        this.delegate = delegate;
+    }
+
+    public interface Delegate {
+        void sessionsLoaded();
     }
 }

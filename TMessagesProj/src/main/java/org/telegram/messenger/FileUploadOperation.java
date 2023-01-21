@@ -256,6 +256,10 @@ public class FileUploadOperation {
             started = true;
             if (stream == null) {
                 File cacheFile = new File(uploadingFilePath);
+                // NekoX: keep this checking?
+                if (AndroidUtilities.isInternalUri(Uri.fromFile(cacheFile))) {
+                    throw new Exception("trying to upload internal file");
+                }
                 stream = new RandomAccessFile(cacheFile, "r");
                 boolean isInternalFile = false;
                 try {

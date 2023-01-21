@@ -80,10 +80,10 @@ public class ActionBarMenuItem extends FrameLayout {
     public void setSearchPaddingStart(int padding) {
         searchItemPaddingStart = padding;
         if (searchContainer != null) {
-            ((MarginLayoutParams)searchContainer.getLayoutParams()).leftMargin = AndroidUtilities.dp(padding);
+            ((MarginLayoutParams) searchContainer.getLayoutParams()).leftMargin = AndroidUtilities.dp(padding);
             searchContainer.setClipChildren(searchItemPaddingStart != 0);
+            searchContainer.setLayoutParams(searchContainer.getLayoutParams());
         }
-
     }
 
     public static class ActionBarMenuItemSearchListener {
@@ -414,6 +414,10 @@ public class ActionBarMenuItem extends FrameLayout {
             return;
         }
         popupLayout.setShownFromBottom(value);
+    }
+
+    public void setFitSubItems(boolean fit) {
+        popupLayout.setFitItems(fit);
     }
 
     public void addSubItem(View view, int width, int height) {
@@ -1861,6 +1865,17 @@ public class ActionBarMenuItem extends FrameLayout {
             view.setVisibility(VISIBLE);
             measurePopup = true;
         }
+    }
+
+    public int getVisibleSubItemsCount() {
+        int count = 0;
+        for (int i = 0; i < popupLayout.getItemsCount(); ++i) {
+            View item = popupLayout.getItemAt(i);
+            if (item != null && item.getVisibility() == View.VISIBLE) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public void requestFocusOnSearchView() {

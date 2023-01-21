@@ -30,6 +30,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -49,8 +50,10 @@ import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.dynamicanimation.animation.SpringForce;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -75,6 +78,7 @@ public class Bulletin {
     public static final int TYPE_NAME_CHANGED = 3;
     public static final int TYPE_ERROR_SUBTITLE = 4;
     public static final int TYPE_APP_ICON = 5;
+    public static final int TYPE_SUCCESS = 6;
 
     public int tag;
     public int hash;
@@ -131,7 +135,9 @@ public class Bulletin {
 
     private boolean showing;
     private boolean canHide;
+    private boolean loaded = true;
     public int currentBottomOffset;
+    public int lastBottomOffset;
     private Delegate currentDelegate;
     private Layout.Transition layoutTransition;
 
@@ -144,6 +150,7 @@ public class Bulletin {
 
     private Bulletin(BaseFragment fragment, @NonNull FrameLayout containerLayout, @NonNull Layout layout, int duration) {
         this.layout = layout;
+        this.loaded = !(this.layout instanceof LoadingLayout);
         this.parentLayout = new ParentLayout(layout) {
             @Override
             protected void onPressedStateChanged(boolean pressed) {
@@ -204,15 +211,15 @@ public class Bulletin {
             containerLayout.addOnLayoutChangeListener(containerLayoutListener = (v, left, top1, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
                 if (!top) {
                     int newOffset = currentDelegate != null ? currentDelegate.getBottomOffset(tag) : 0;
-                    if (currentBottomOffset != newOffset) {
+                    if (lastBottomOffset != newOffset) {
                         if (bottomOffsetSpring == null || !bottomOffsetSpring.isRunning()) {
-                            bottomOffsetSpring = new SpringAnimation(new FloatValueHolder(currentBottomOffset))
+                            bottomOffsetSpring = new SpringAnimation(new FloatValueHolder(lastBottomOffset))
                                     .setSpring(new SpringForce()
                                             .setFinalPosition(newOffset)
                                             .setStiffness(900f)
                                             .setDampingRatio(SpringForce.DAMPING_RATIO_NO_BOUNCY));
                             bottomOffsetSpring.addUpdateListener((animation, value, velocity) -> {
-                                currentBottomOffset = (int) value;
+                                lastBottomOffset = (int) value;
                                 updatePosition();
                             });
                             bottomOffsetSpring.addEndListener((animation, canceled, value, velocity) -> {
@@ -236,7 +243,7 @@ public class Bulletin {
                         layout.onShow();
                         currentDelegate = findDelegate(containerFragment, containerLayout);
                         if (bottomOffsetSpring == null || !bottomOffsetSpring.isRunning()) {
-                            currentBottomOffset = currentDelegate != null ? currentDelegate.getBottomOffset(tag) : 0;
+                            lastBottomOffset = currentDelegate != null ? currentDelegate.getBottomOffset(tag) : 0;
                         }
                         if (currentDelegate != null) {
                             currentDelegate.onShow(Bulletin.this);
@@ -285,7 +292,8 @@ public class Bulletin {
         return this;
     }
 
-    private void setCanHide(boolean canHide) {
+    public void setCanHide(boolean canHide) {
+        canHide = canHide && loaded;
         if (this.canHide != canHide && layout != null) {
             this.canHide = canHide;
             if (canHide) {
@@ -783,7 +791,7 @@ public class Bulletin {
 
         public float getBottomOffset() {
             if (bulletin != null && bulletin.bottomOffsetSpring != null && bulletin.bottomOffsetSpring.isRunning()) {
-                return bulletin.currentBottomOffset;
+                return bulletin.lastBottomOffset;
             }
             return delegate.getBottomOffset(bulletin != null ? bulletin.tag : 0);
         }
@@ -1149,8 +1157,8 @@ public class Bulletin {
     public static class TwoLineLottieLayout extends ButtonLayout {
 
         public final RLottieImageView imageView;
-        public final TextView titleTextView;
-        public final TextView subtitleTextView;
+        public final LinkSpanDrawable.LinksTextView titleTextView;
+        public final LinkSpanDrawable.LinksTextView subtitleTextView;
 
         private final int textColor;
 
@@ -1164,20 +1172,22 @@ public class Bulletin {
             addView(imageView, LayoutHelper.createFrameRelatively(56, 48, Gravity.START | Gravity.CENTER_VERTICAL));
 
             final int undoInfoColor = getThemedColor(Theme.key_undo_infoColor);
-            final int undoLinkColor = getThemedColor(Theme.key_voipgroup_overlayBlue1);
+            final int undoLinkColor = getThemedColor(Theme.key_undo_cancelColor);
 
             final LinearLayout linearLayout = new LinearLayout(context);
             linearLayout.setOrientation(LinearLayout.VERTICAL);
-            addView(linearLayout, LayoutHelper.createFrameRelatively(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.START | Gravity.CENTER_VERTICAL, 56, 8, 12, 8));
+            addView(linearLayout, LayoutHelper.createFrameRelatively(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.START | Gravity.CENTER_VERTICAL, 52, 8, 8, 8));
 
-            titleTextView = new TextView(context);
+            titleTextView = new LinkSpanDrawable.LinksTextView(context);
+            titleTextView.setPadding(AndroidUtilities.dp(4), 0, AndroidUtilities.dp(4), 0);
             titleTextView.setSingleLine();
             titleTextView.setTextColor(undoInfoColor);
             titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             linearLayout.addView(titleTextView);
 
-            subtitleTextView = new TextView(context);
+            subtitleTextView = new LinkSpanDrawable.LinksTextView(context);
+            subtitleTextView.setPadding(AndroidUtilities.dp(4), 0, AndroidUtilities.dp(4), 0);
             subtitleTextView.setTextColor(undoInfoColor);
             subtitleTextView.setLinkTextColor(undoLinkColor);
             subtitleTextView.setTypeface(Typeface.SANS_SERIF);
@@ -1222,7 +1232,14 @@ public class Bulletin {
             imageView.setScaleType(ImageView.ScaleType.CENTER);
             addView(imageView, LayoutHelper.createFrameRelatively(56, 48, Gravity.START | Gravity.CENTER_VERTICAL));
 
-            textView = new LinkSpanDrawable.LinksTextView(context);
+            textView = new LinkSpanDrawable.LinksTextView(context) {
+                @Override
+                public void setText(CharSequence text, BufferType type) {
+                    text = Emoji.replaceEmoji(text, getPaint().getFontMetricsInt(), AndroidUtilities.dp(13), false);
+                    super.setText(text, type);
+                }
+            };
+            NotificationCenter.listenEmojiLoading(textView);
             textView.setDisablePaddingsOffset(true);
             textView.setSingleLine();
             textView.setTypeface(Typeface.SANS_SERIF);
@@ -1281,12 +1298,59 @@ public class Bulletin {
         }
     }
 
+    public static interface LoadingLayout {
+        void onTextLoaded(CharSequence text);
+    }
+
+    public static class LoadingLottieLayout extends LottieLayout implements LoadingLayout {
+
+        public LinkSpanDrawable.LinksTextView textLoadingView;
+
+        public LoadingLottieLayout(@NonNull Context context, Theme.ResourcesProvider resourcesProvider) {
+            super(context, resourcesProvider);
+
+            textLoadingView = new LinkSpanDrawable.LinksTextView(context);
+            textLoadingView.setDisablePaddingsOffset(true);
+            textLoadingView.setSingleLine();
+            textLoadingView.setTypeface(Typeface.SANS_SERIF);
+            textLoadingView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+            textLoadingView.setEllipsize(TextUtils.TruncateAt.END);
+            textLoadingView.setPadding(0, AndroidUtilities.dp(8), 0, AndroidUtilities.dp(8));
+            textView.setVisibility(View.GONE);
+            addView(textLoadingView, LayoutHelper.createFrameRelatively(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.START | Gravity.CENTER_VERTICAL, 56, 0, 8, 0));
+
+            setTextColor(getThemedColor(Theme.key_undo_infoColor));
+        }
+
+        public LoadingLottieLayout(@NonNull Context context, Theme.ResourcesProvider resourcesProvider, int backgroundColor, int textColor) {
+            this(context, resourcesProvider);
+            setBackground(backgroundColor);
+            setTextColor(textColor);
+        }
+
+        @Override
+        public void setTextColor(int textColor) {
+            super.setTextColor(textColor);
+            if (textLoadingView != null) {
+                textLoadingView.setTextColor(textColor);
+            }
+        }
+
+        public void onTextLoaded(CharSequence text) {
+            textView.setText(text);
+            AndroidUtilities.updateViewShow(textLoadingView, false, false, true);
+            AndroidUtilities.updateViewShow(textView, true, false, true);
+        }
+    }
+
     public static class UsersLayout extends ButtonLayout {
 
         public AvatarsImageView avatarsImageView;
         public TextView textView;
+        public TextView subtitleView;
+        LinearLayout linearLayout;
 
-        public UsersLayout(@NonNull Context context, Theme.ResourcesProvider resourcesProvider) {
+        public UsersLayout(@NonNull Context context, boolean subtitle, Theme.ResourcesProvider resourcesProvider) {
             super(context, resourcesProvider);
 
             avatarsImageView = new AvatarsImageView(context, false);
@@ -1294,26 +1358,64 @@ public class Bulletin {
             avatarsImageView.setAvatarsTextSize(AndroidUtilities.dp(18));
             addView(avatarsImageView, LayoutHelper.createFrameRelatively(24 + 12 + 12 + 8, 48, Gravity.START | Gravity.CENTER_VERTICAL, 12, 0, 0, 0));
 
-            textView = new LinkSpanDrawable.LinksTextView(context);
-            textView.setTypeface(Typeface.SANS_SERIF);
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-            textView.setEllipsize(TextUtils.TruncateAt.END);
-            textView.setPadding(0, AndroidUtilities.dp(8), 0, AndroidUtilities.dp(8));
-            addView(textView, LayoutHelper.createFrameRelatively(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.START | Gravity.CENTER_VERTICAL, 12 + 56 + 2, 0, 8, 0));
+            if (!subtitle) {
+                textView = new LinkSpanDrawable.LinksTextView(context) {
+                    @Override
+                    public void setText(CharSequence text, BufferType type) {
+                        text = Emoji.replaceEmoji(text, getPaint().getFontMetricsInt(), AndroidUtilities.dp(13), false);
+                        super.setText(text, type);
+                    }
+                };
+                NotificationCenter.listenEmojiLoading(textView);
+                textView.setTypeface(Typeface.SANS_SERIF);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+                textView.setEllipsize(TextUtils.TruncateAt.END);
+                textView.setPadding(0, AndroidUtilities.dp(8), 0, AndroidUtilities.dp(8));
+                addView(textView, LayoutHelper.createFrameRelatively(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.START | Gravity.CENTER_VERTICAL, 12 + 56 + 2, 0, 8, 0));
+            } else {
+                linearLayout = new LinearLayout(getContext());
+                linearLayout.setOrientation(LinearLayout.VERTICAL);
+                addView(linearLayout, LayoutHelper.createFrameRelatively(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.START | Gravity.CENTER_VERTICAL, 18 + 56 + 2, 0, 8, 0));
 
+                textView = new LinkSpanDrawable.LinksTextView(context) {
+                    @Override
+                    public void setText(CharSequence text, BufferType type) {
+                        text = Emoji.replaceEmoji(text, getPaint().getFontMetricsInt(), AndroidUtilities.dp(13), false);
+                        super.setText(text, type);
+                    }
+                };
+                NotificationCenter.listenEmojiLoading(textView);
+                textView.setTypeface(Typeface.SANS_SERIF);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+                textView.setEllipsize(TextUtils.TruncateAt.END);
+                textView.setMaxLines(1);
+                linearLayout.addView(textView);
+
+                subtitleView = new LinkSpanDrawable.LinksTextView(context);
+                subtitleView.setTypeface(Typeface.SANS_SERIF);
+                subtitleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+                subtitleView.setEllipsize(TextUtils.TruncateAt.END);
+                subtitleView.setMaxLines(1);
+                subtitleView.setLinkTextColor(getThemedColor(Theme.key_undo_cancelColor));
+                linearLayout.addView(subtitleView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 0, 0, 0, 0));
+            }
             textView.setLinkTextColor(getThemedColor(Theme.key_undo_cancelColor));
+
             setTextColor(getThemedColor(Theme.key_undo_infoColor));
             setBackground(getThemedColor(Theme.key_undo_background));
         }
 
         public UsersLayout(@NonNull Context context, Theme.ResourcesProvider resourcesProvider, int backgroundColor, int textColor) {
-            this(context, resourcesProvider);
+            this(context, false, resourcesProvider);
             setBackground(backgroundColor);
             setTextColor(textColor);
         }
 
         public void setTextColor(int textColor) {
             textView.setTextColor(textColor);
+            if (subtitleView != null) {
+                subtitleView.setTextColor(textColor);
+            }
         }
 
         @Override
@@ -1392,16 +1494,14 @@ public class Bulletin {
             if (text) {
                 undoTextView = new TextView(context);
                 undoTextView.setOnClickListener(v -> undo());
-                final int leftInset = LocaleController.isRTL ? AndroidUtilities.dp(16) : 0;
-                final int rightInset = LocaleController.isRTL ? 0 : AndroidUtilities.dp(16);
-                undoTextView.setBackground(Theme.createCircleSelectorDrawable((undoCancelColor & 0x00ffffff) | 0x19000000, leftInset, rightInset));
+                undoTextView.setBackground(Theme.createSelectorDrawable((undoCancelColor & 0x00ffffff) | 0x19000000, Theme.RIPPLE_MASK_ROUNDRECT_6DP));
                 undoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 undoTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 undoTextView.setTextColor(undoCancelColor);
                 undoTextView.setText(LocaleController.getString("Undo", R.string.Undo));
                 undoTextView.setGravity(Gravity.CENTER_VERTICAL);
-                ViewHelper.setPaddingRelative(undoTextView, 16, 0, 16, 0);
-                addView(undoTextView, LayoutHelper.createFrameRelatively(LayoutHelper.WRAP_CONTENT, 48, Gravity.CENTER_VERTICAL, 8, 0, 0, 0));
+                ViewHelper.setPaddingRelative(undoTextView, 12, 8, 12, 8);
+                addView(undoTextView, LayoutHelper.createFrameRelatively(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL, 8, 0, 8, 0));
             } else {
                 final ImageView undoImageView = new ImageView(getContext());
                 undoImageView.setOnClickListener(v -> undo());
@@ -1458,6 +1558,16 @@ public class Bulletin {
             return color != null ? color : Theme.getColor(key);
         }
     }
+
+    // TODO: possibility of loading icon as well
+    public void onLoaded(CharSequence text) {
+        loaded = true;
+        if (layout instanceof LoadingLayout) {
+            ((LoadingLayout) layout).onTextLoaded(text);
+        }
+        setCanHide(true);
+    }
+
     //endregion
 
     public static class EmptyBulletin extends Bulletin {
@@ -1596,6 +1706,23 @@ public class Bulletin {
                 },
                 new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
             );
+            if (Build.VERSION.SDK_INT >= 21) {
+                container.setFitsSystemWindows(true);
+                container.setOnApplyWindowInsetsListener((v, insets) -> {
+                    applyInsets(insets);
+                    v.requestLayout();
+                    if (Build.VERSION.SDK_INT >= 30) {
+                        return WindowInsets.CONSUMED;
+                    } else {
+                        return insets.consumeSystemWindowInsets();
+                    }
+                });
+                if (Build.VERSION.SDK_INT >= 30) {
+                    container.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |  View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+                } else {
+                    container.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                }
+            }
 
             addDelegate(container, new Delegate() {
                 @Override
@@ -1620,7 +1747,7 @@ public class Bulletin {
                 params.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
                 params.flags |= WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    params.flags |= WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+                    params.flags |= WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
                 }
                 params.flags |= WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
                 if (Build.VERSION.SDK_INT >= 21) {
@@ -1634,7 +1761,19 @@ public class Bulletin {
                     params.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
                 }
                 window.setAttributes(params);
+                AndroidUtilities.setLightNavigationBar(window, AndroidUtilities.computePerceivedBrightness(Theme.getColor(Theme.key_windowBackgroundGray)) > 0.721f);
             } catch (Exception ignore) {}
+        }
+
+        private void applyInsets(WindowInsets insets) {
+            if (container != null) {
+                container.setPadding(
+                        insets.getSystemWindowInsetLeft(),
+                        insets.getSystemWindowInsetTop(),
+                        insets.getSystemWindowInsetRight(),
+                        insets.getSystemWindowInsetBottom()
+                );
+            }
         }
     }
 }

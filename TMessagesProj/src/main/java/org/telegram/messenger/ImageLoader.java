@@ -27,7 +27,6 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.SparseArray;
 
 import androidx.exifinterface.media.ExifInterface;
@@ -89,7 +88,7 @@ import tw.nekomimi.nekogram.utils.FileUtil;
  * isc - ignore cache for small images
  * b - need blur image
  * g - autoplay
- * lastframe - return firstframe for Lottie animation
+ * lastframe - return lastframe for Lottie animation
  * firstframe - return firstframe for Lottie animation
  */
 public class ImageLoader {
@@ -1024,7 +1023,8 @@ public class ImageLoader {
                             cacheOptions.compressQuality = BitmapsCache.COMPRESS_QUALITY_DEFAULT;
                         }
                     }
-                    fileDrawable = new AnimatedFileDrawable(cacheImage.finalFilePath, false, size, document, document == null ? cacheImage.imageLocation : null, cacheImage.parentObject, seekTo, cacheImage.currentAccount, false, cacheOptions);
+                    boolean notCreateStream = cacheImage.filter != null && cacheImage.filter.contains("nostream");
+                    fileDrawable = new AnimatedFileDrawable(cacheImage.finalFilePath, false, notCreateStream ? 0 : size, notCreateStream ? null : document, document == null && !notCreateStream ? cacheImage.imageLocation : null, cacheImage.parentObject, seekTo, cacheImage.currentAccount, false, cacheOptions);
                     fileDrawable.setIsWebmSticker(MessageObject.isWebM(document) || MessageObject.isVideoSticker(document) || isAnimatedAvatar(cacheImage.filter));
                 } else {
 
@@ -1046,7 +1046,9 @@ public class ImageLoader {
                             cacheOptions.compressQuality = BitmapsCache.COMPRESS_QUALITY_DEFAULT;
                         }
                     }
-                    fileDrawable = new AnimatedFileDrawable(cacheImage.finalFilePath, "d".equals(cacheImage.filter), 0, cacheImage.imageLocation.document, null, null, seekTo, cacheImage.currentAccount, false, w, h, cacheOptions);
+                    boolean createDecoder = cacheImage.filter != null && ("d".equals(cacheImage.filter) || cacheImage.filter.contains("_d"));
+                    boolean notCreateStream = cacheImage.filter != null && cacheImage.filter.contains("nostream");
+                    fileDrawable = new AnimatedFileDrawable(cacheImage.finalFilePath, createDecoder, 0, notCreateStream ? null : cacheImage.imageLocation.document, null, null, seekTo, cacheImage.currentAccount, false, w, h, cacheOptions);
                     fileDrawable.setIsWebmSticker(MessageObject.isWebM(cacheImage.imageLocation.document) || MessageObject.isVideoSticker(cacheImage.imageLocation.document) || isAnimatedAvatar(cacheImage.filter));
                 }
                 fileDrawable.setLimitFps(limitFps);
@@ -1357,7 +1359,7 @@ public class ImageLoader {
                             }
                         }
                     } catch (Throwable e) {
-                        FileLog.e(e);
+                        FileLog.e(e, !(e instanceof FileNotFoundException));
                     }
                 } else {
                     try {
@@ -1384,7 +1386,13 @@ public class ImageLoader {
                         opts.inDither = false;
                         if (mediaId != null && mediaThumbPath == null) {
                             if (mediaIsVideo) {
-                                image = MediaStore.Video.Thumbnails.getThumbnail(ApplicationLoader.applicationContext.getContentResolver(), mediaId, MediaStore.Video.Thumbnails.MINI_KIND, opts);
+                                if (mediaId == 0) {
+                                    AnimatedFileDrawable fileDrawable = new AnimatedFileDrawable(cacheFileFinal, true, 0, null, null, null, 0, 0, true, null);
+                                    image = fileDrawable.getFrameAtTime(0, true);
+                                    fileDrawable.recycle();
+                                } else {
+                                    image = MediaStore.Video.Thumbnails.getThumbnail(ApplicationLoader.applicationContext.getContentResolver(), mediaId, MediaStore.Video.Thumbnails.MINI_KIND, opts);
+                                }
                             } else {
                                 image = MediaStore.Images.Thumbnails.getThumbnail(ApplicationLoader.applicationContext.getContentResolver(), mediaId, MediaStore.Images.Thumbnails.MINI_KIND, opts);
                             }
@@ -1402,7 +1410,8 @@ public class ImageLoader {
                                 Utilities.loadWebpImage(image, buffer, buffer.limit(), null, !opts.inPurgeable);
                                 file.close();
                             } else {
-                                if (opts.inPurgeable || secureDocumentKey != null || Build.VERSION.SDK_INT <= 29) {
+                                try {
+
                                     RandomAccessFile f = new RandomAccessFile(cacheFileFinal, "r");
                                     int len = (int) f.length();
                                     int offset = 0;
@@ -1429,7 +1438,11 @@ public class ImageLoader {
                                     if (!error) {
                                         image = BitmapFactory.decodeByteArray(data, offset, len, opts);
                                     }
-                                } else {
+                                } catch (Throwable e) {
+
+                                }
+
+                                if (image == null) {
                                     FileInputStream is;
                                     if (inEncryptedFile) {
                                         is = new EncryptedFileInputStream(cacheFileFinal, cacheImage.encryptionKeyPath);
@@ -1626,7 +1639,7 @@ public class ImageLoader {
                         toSet = bitmapDrawable;
                     } else {
                         Bitmap image = bitmapDrawable.getBitmap();
-                        image.recycle();
+                        AndroidUtilities.recycleBitmap(image);
                     }
                     if (toSet != null && incrementUseCount) {
                         incrementUseCount(cacheImage.key);

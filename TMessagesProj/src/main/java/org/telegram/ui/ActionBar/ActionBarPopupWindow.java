@@ -16,8 +16,6 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
@@ -48,12 +46,14 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.Paint.Views.LPhotoPaintView;
 import org.telegram.ui.Components.PopupSwipeBackLayout;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class ActionBarPopupWindow extends PopupWindow {
 
@@ -128,6 +128,7 @@ public class ActionBarPopupWindow extends PopupWindow {
         private boolean fitItems;
         private final Theme.ResourcesProvider resourcesProvider;
         private View topView;
+        protected ActionBarPopupWindow window;
 
         public int subtractBackgroundHeight;
 
@@ -314,7 +315,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                     if (shownFromBottom) {
                         for (int a = lastStartedChild; a >= 0; a--) {
                             View child = getItemAt(a);
-                            if (child.getVisibility() != VISIBLE || child instanceof GapView) {
+                            if (child == null || child.getVisibility() != VISIBLE || child instanceof GapView) {
                                 continue;
                             }
                             Integer position = positions.get(child);
@@ -371,6 +372,10 @@ public class ActionBarPopupWindow extends PopupWindow {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         itemAnimators.remove(animatorSet);
+
+                        if (child instanceof ActionBarMenuSubItem) {
+                            ((ActionBarMenuSubItem) child).onItemShown();
+                        }
                     }
                 });
                 animatorSet.setInterpolator(decelerateInterpolator);
@@ -612,6 +617,10 @@ public class ActionBarPopupWindow extends PopupWindow {
                 swipeBackLayout.invalidateTransforms(!startAnimationPending);
             }
         }
+
+        public void setParentWindow(ActionBarPopupWindow popupWindow) {
+            window = popupWindow;
+        }
     }
 
     public ActionBarPopupWindow() {
@@ -766,6 +775,9 @@ public class ActionBarPopupWindow extends PopupWindow {
         int visibleCount = 0;
         for (int a = 0; a < count; a++) {
             View child = content.getItemAt(a);
+            if (child instanceof GapView) {
+                continue;
+            }
             child.setAlpha(0.0f);
             if (child.getVisibility() != View.VISIBLE) {
                 continue;
@@ -793,9 +805,9 @@ public class ActionBarPopupWindow extends PopupWindow {
                 if (child instanceof GapView) {
                     continue;
                 }
-                float at = AndroidUtilities.cascade(t, a, count2, 2);
-                child.setTranslationY((1f - at) * AndroidUtilities.dp(-12));
-                child.setAlpha(at);
+                float at = AndroidUtilities.cascade(t, content.shownFromBottom ? count2 - 1 - a : a, count2, 4);
+                child.setTranslationY((1f - at) * AndroidUtilities.dp(-6));
+//                child.setAlpha(at * (child.isEnabled() ? 1f : 0.5f));
             }
         });
         content.updateAnimation = true;
@@ -804,7 +816,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                 ObjectAnimator.ofInt(content, "backAlpha", 0, 255),
                 childtranslations
         );
-        windowAnimatorSet.setDuration(150 + 16 * visibleCount + 1000);
+        windowAnimatorSet.setDuration(150 + 16 * visibleCount);
         windowAnimatorSet.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -1029,21 +1041,31 @@ public class ActionBarPopupWindow extends PopupWindow {
         Theme.ResourcesProvider resourcesProvider;
         String colorKey;
 
+        Drawable shadowDrawable;
+
+        public GapView(Context context, Theme.ResourcesProvider resourcesProvider) {
+            this(context, resourcesProvider, Theme.key_actionBarDefaultSubmenuSeparator);
+        }
+
         public GapView(Context context, Theme.ResourcesProvider resourcesProvider, String colorKey) {
             super(context);
             this.resourcesProvider = resourcesProvider;
             this.colorKey = colorKey;
-
-            setBackgroundColor(getThemedColor(colorKey));
-        }
-
-        private int getThemedColor(String key) {
-            Integer color = resourcesProvider != null ? resourcesProvider.getColor(key) : null;
-            return color != null ? color : Theme.getColor(key);
+            this.shadowDrawable = Theme.getThemedDrawable(getContext(), R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow, resourcesProvider);
+            setBackgroundColor(Theme.getColor(colorKey, resourcesProvider));
         }
 
         public void setColor(int color) {
             setBackgroundColor(color);
+        }
+
+        @Override
+        protected void onDraw(Canvas canvas) {
+            super.onDraw(canvas);
+            if (shadowDrawable != null) {
+                shadowDrawable.setBounds(0, 0, getWidth(), getHeight());
+                shadowDrawable.draw(canvas);
+            }
         }
     }
 }

@@ -49,7 +49,6 @@ import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -70,6 +69,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
+import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
@@ -610,7 +610,7 @@ public class AlertsCreator {
                     if (callback != null) {
                         callback.run();
                     }
-                    LocaleController.getInstance().applyLanguage(localeInfo, true, false, false, true, UserConfig.selectedAccount);
+                    LocaleController.getInstance().applyLanguage(localeInfo, true, false, false, true, UserConfig.selectedAccount, null);
                     activity.rebuildAllFragments(true);
                     return Unit.INSTANCE;
                 });
@@ -665,13 +665,27 @@ public class AlertsCreator {
     }
 
     public static AlertDialog.Builder createSimpleAlert(Context context, final String title, final String text, Theme.ResourcesProvider resourcesProvider) {
+        return createSimpleAlert(context, title, text, null, null, resourcesProvider);
+    }
+
+    public static AlertDialog.Builder createSimpleAlert(Context context, final String title, final String text, String positiveButton, Runnable positive, Theme.ResourcesProvider resourcesProvider) {
         if (context == null || text == null) {
             return null;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(title == null ? LocaleController.getString("AppName", R.string.AppName) : title);
         builder.setMessage(text);
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+        if (positiveButton == null) {
+            builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+        } else {
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            builder.setPositiveButton(positiveButton, (dialog, which) -> {
+                dialog.dismiss();
+                if (positive != null) {
+                    positive.run();
+                }
+            });
+        }
         return builder;
     }
 
@@ -1036,6 +1050,7 @@ public class AlertsCreator {
             cell.setTag(a);
             cell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
             cell.setTextAndValue(arrayList.get(a), SharedConfig.mapPreviewType == types.get(a));
+            cell.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), Theme.RIPPLE_MASK_ALL));
             linearLayout.addView(cell);
             cell.setOnClickListener(v -> {
                 Integer which = (Integer) v.getTag();
@@ -1068,30 +1083,23 @@ public class AlertsCreator {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
 
+        int year, month;
+
         int currentYear = calendar.get(Calendar.YEAR);
         int currentMonth = calendar.get(Calendar.MONTH);
         int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
 
-        if (currentYear > yearPicker.getValue()) {
-            yearPicker.setValue(currentYear);
-            //yearPicker.finishScroll();
-        }
-        if (yearPicker.getValue() == currentYear) {
-            if (currentMonth > monthPicker.getValue()) {
-                monthPicker.setValue(currentMonth);
-                //monthPicker.finishScroll();
-            }
-            if (currentMonth == monthPicker.getValue()) {
-                if (currentDay > dayPicker.getValue()) {
-                    dayPicker.setValue(currentDay);
-                    //dayPicker.finishScroll();
-                }
-            }
-        }
+        yearPicker.setMinValue(currentYear);
+        year = yearPicker.getValue();
+
+        monthPicker.setMinValue(year == currentYear ? currentMonth : 0);
+        month = monthPicker.getValue();
+
+        dayPicker.setMinValue(year == currentYear && month == currentMonth ? currentDay : 1);
     }
 
     public static void showOpenUrlAlert(BaseFragment fragment, String url, boolean punycode, boolean ask) {
-        showOpenUrlAlert(fragment, url, punycode, true, ask, null);
+        showOpenUrlAlert(fragment, url, punycode, true, ask, null, null);
     }
 
     public static void showOpenUrlAlert(BaseFragment fragment, String url, boolean punycode, boolean tryTelegraph, boolean ask) {
@@ -1099,16 +1107,16 @@ public class AlertsCreator {
     }
 
     public static void showOpenUrlAlert(BaseFragment fragment, String url, boolean punycode, boolean ask, Theme.ResourcesProvider resourcesProvider) {
-        showOpenUrlAlert(fragment, url, punycode, true, ask, resourcesProvider);
+        showOpenUrlAlert(fragment, url, punycode, true, ask, null, resourcesProvider);
     }
 
-    public static void showOpenUrlAlert(BaseFragment fragment, String url, boolean punycode, boolean tryTelegraph, boolean ask, Theme.ResourcesProvider resourcesProvider) {
+    public static void showOpenUrlAlert(BaseFragment fragment, String url, boolean punycode, boolean tryTelegraph, boolean ask, Browser.Progress progress, Theme.ResourcesProvider resourcesProvider) {
         if (fragment == null || fragment.getParentActivity() == null) {
             return;
         }
         long inlineReturn = (fragment instanceof ChatActivity) ? ((ChatActivity) fragment).getInlineReturn() : 0;
         if (Browser.isInternalUrl(url, null) || !ask || NekoConfig.skipOpenLinkConfirm.Bool()) {
-            Browser.openUrl(fragment.getParentActivity(), url, inlineReturn == 0, tryTelegraph);
+            Browser.openUrl(fragment.getParentActivity(), Uri.parse(url), inlineReturn == 0, tryTelegraph, progress);
         } else {
             String urlFinal = url;
 //            if (punycode) {
@@ -1133,7 +1141,7 @@ public class AlertsCreator {
             }
             builder.setMessage(stringBuilder);
             builder.setMessageTextViewClickable(false);
-            builder.setPositiveButton(LocaleController.getString("Open", R.string.Open), (dialogInterface, i) -> Browser.openUrl(fragment.getParentActivity(), url, inlineReturn == 0, tryTelegraph));
+            builder.setPositiveButton(LocaleController.getString("Open", R.string.Open), (dialogInterface, i) -> Browser.openUrl(fragment.getParentActivity(), Uri.parse(url), inlineReturn == 0, tryTelegraph, progress));
             builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
             builder.setNeutralButton(LocaleController.getString("Copy", R.string.Copy), (dialogInterface, i) -> {
                 try {
@@ -1151,7 +1159,7 @@ public class AlertsCreator {
         if (fragment == null || fragment.getParentActivity() == null) {
             return null;
         }
-        final TextView message = new TextView(fragment.getParentActivity());
+        final LinkSpanDrawable.LinksTextView message = new LinkSpanDrawable.LinksTextView(fragment.getParentActivity(), fragment.getResourceProvider());
         Spannable spanned = new SpannableString(Html.fromHtml(LocaleController.getString("AskAQuestionInfo", R.string.AskAQuestionInfo).replace("\n", "<br>")));
         URLSpan[] spans = spanned.getSpans(0, spanned.length(), URLSpan.class);
         for (int i = 0; i < spans.length; i++) {
@@ -1212,7 +1220,7 @@ public class AlertsCreator {
             }
         }
         if (supportUser == null) {
-            final AlertDialog progressDialog = new AlertDialog(fragment.getParentActivity(), 3);
+            final AlertDialog progressDialog = new AlertDialog(fragment.getParentActivity(), AlertDialog.ALERT_TYPE_SPINNER);
             progressDialog.setCanCancel(false);
             progressDialog.show();
             TLRPC.TL_help_getSupport req = new TLRPC.TL_help_getSupport();
@@ -1299,15 +1307,15 @@ public class AlertsCreator {
 
         if (user != null) {
             if (UserObject.isReplyUser(user)) {
-                avatarDrawable.setSmallSize(true);
+                avatarDrawable.setScaleSize(.8f);
                 avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_REPLIES);
                 imageView.setImage(null, null, avatarDrawable, user);
             } else if (user.id == selfUserId) {
-                avatarDrawable.setSmallSize(true);
+                avatarDrawable.setScaleSize(.8f);
                 avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_SAVED);
                 imageView.setImage(null, null, avatarDrawable, user);
             } else {
-                avatarDrawable.setSmallSize(false);
+                avatarDrawable.setScaleSize(1f);
                 avatarDrawable.setInfo(user);
                 imageView.setForUserOrChat(user, avatarDrawable);
             }
@@ -1365,7 +1373,14 @@ public class AlertsCreator {
 
         CheckBoxCell[] cell = new CheckBoxCell[1];
 
-        TextView messageTextView = new TextView(context);
+        TextView messageTextView = new TextView(context) {
+            @Override
+            public void setText(CharSequence text, BufferType type) {
+                text = Emoji.replaceEmoji(text, getPaint().getFontMetricsInt(), false);
+                super.setText(text, type);
+            }
+        };
+        NotificationCenter.listenEmojiLoading(messageTextView);
         messageTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         messageTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
@@ -1384,7 +1399,7 @@ public class AlertsCreator {
         builder.setView(frameLayout);
 
         AvatarDrawable avatarDrawable = new AvatarDrawable();
-        avatarDrawable.setTextSize(AndroidUtilities.dp(12));
+        avatarDrawable.setTextSize(AndroidUtilities.dp(18));
 
         BackupImageView imageView = new BackupImageView(context);
         imageView.setRoundRadius(AndroidUtilities.dp(20));
@@ -1479,15 +1494,15 @@ public class AlertsCreator {
 
         if (user != null) {
             if (UserObject.isReplyUser(user)) {
-                avatarDrawable.setSmallSize(true);
+                avatarDrawable.setScaleSize(.8f);
                 avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_REPLIES);
                 imageView.setImage(null, null, avatarDrawable, user);
             } else if (user.id == selfUserId) {
-                avatarDrawable.setSmallSize(true);
+                avatarDrawable.setScaleSize(.8f);
                 avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_SAVED);
                 imageView.setImage(null, null, avatarDrawable, user);
             } else {
-                avatarDrawable.setSmallSize(false);
+                avatarDrawable.setScaleSize(1f);
                 avatarDrawable.setInfo(user);
                 imageView.setForUserOrChat(user, avatarDrawable);
             }
@@ -1643,7 +1658,14 @@ public class AlertsCreator {
 
         CheckBoxCell[] cell = new CheckBoxCell[1];
 
-        TextView messageTextView = new TextView(context);
+        TextView messageTextView = new TextView(context) {
+            @Override
+            public void setText(CharSequence text, BufferType type) {
+                text = Emoji.replaceEmoji(text, getPaint().getFontMetricsInt(), false);
+                super.setText(text, type);
+            }
+        };
+        NotificationCenter.listenEmojiLoading(messageTextView);
         messageTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         messageTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
@@ -1754,7 +1776,14 @@ public class AlertsCreator {
             message = LocaleController.formatString("CallAlert", R.string.CallAlert, UserObject.getUserName(user));
         }
 
-        TextView messageTextView = new TextView(context);
+        TextView messageTextView = new TextView(context) {
+            @Override
+            public void setText(CharSequence text, BufferType type) {
+                text = Emoji.replaceEmoji(text, getPaint().getFontMetricsInt(), false);
+                super.setText(text, type);
+            }
+        };
+        NotificationCenter.listenEmojiLoading(messageTextView);
         messageTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
         messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         messageTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
@@ -1762,7 +1791,7 @@ public class AlertsCreator {
 
         AvatarDrawable avatarDrawable = new AvatarDrawable();
         avatarDrawable.setTextSize(AndroidUtilities.dp(12));
-        avatarDrawable.setSmallSize(false);
+        avatarDrawable.setScaleSize(1f);
         avatarDrawable.setInfo(user);
 
         BackupImageView imageView = new BackupImageView(context);
@@ -2139,6 +2168,52 @@ public class AlertsCreator {
         baseFragment.showDialog(builder.create());
     }
 
+    public static void createContactInviteDialog(BaseFragment parentFragment, String fisrtName, String lastName, String phone) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(parentFragment.getParentActivity());
+        builder.setTitle(LocaleController.getString("ContactNotRegisteredTitle", R.string.ContactNotRegisteredTitle));
+        builder.setMessage(LocaleController.formatString("ContactNotRegistered", R.string.ContactNotRegistered, ContactsController.formatName(fisrtName, lastName)));
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setPositiveButton(LocaleController.getString("Invite", R.string.Invite), (dialog, which) -> {
+            try {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", phone, null));
+                intent.putExtra("sms_body", ContactsController.getInstance(parentFragment.getCurrentAccount()).getInviteText(1));
+                parentFragment.getParentActivity().startActivityForResult(intent, 500);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+        });
+        parentFragment.showDialog(builder.create());
+    }
+
+    public static ActionBarPopupWindow createSimplePopup(BaseFragment fragment, View popupView, View anhcorView, float x, float y) {
+        if (fragment == null || anhcorView == null || popupView == null) {
+            return null;
+        }
+        ActionBarPopupWindow popupWindow = new ActionBarPopupWindow(popupView, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT);
+        popupWindow.setPauseNotifications(true);
+        popupWindow.setDismissAnimationDuration(220);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setClippingEnabled(true);
+        popupWindow.setAnimationStyle(R.style.PopupContextAnimation);
+        popupWindow.setFocusable(true);
+        popupView.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), View.MeasureSpec.AT_MOST));
+        popupWindow.setInputMethodMode(ActionBarPopupWindow.INPUT_METHOD_NOT_NEEDED);
+        popupWindow.getContentView().setFocusableInTouchMode(true);
+        float viewX = 0, viewY = 0;
+        View child = anhcorView;
+        while (child != anhcorView.getRootView()) {
+            viewX += child.getX();
+            viewY += child.getY();
+            child = (View) child.getParent();
+            if (child == null) {
+                break;
+            }
+        }
+        popupWindow.showAtLocation(anhcorView.getRootView(), 0, (int) (viewX + x - popupView.getMeasuredWidth() / 2f), (int) (viewY + y - popupView.getMeasuredHeight() / 2f));
+        popupWindow.dimBehind();
+        return popupWindow;
+    }
+
     public interface BlockDialogCallback {
         void run(boolean report, boolean delete);
     }
@@ -2293,34 +2368,50 @@ public class AlertsCreator {
         calendar.setTimeInMillis(systemTime);
         int currentYear = calendar.get(Calendar.YEAR);
         int currentDay = calendar.get(Calendar.DAY_OF_YEAR);
+
+        int maxDay = 0, maxHour = 0, maxMinute = 0;
         if (maxDate > 0) {
             maxDate *= 1000;
             calendar.setTimeInMillis(systemTime + maxDate);
-            calendar.set(Calendar.HOUR_OF_DAY, 23);
-            calendar.set(Calendar.MINUTE, 59);
+            calendar.set(Calendar.HOUR_OF_DAY, maxHour = 23);
+            calendar.set(Calendar.MINUTE, maxMinute = 59);
             calendar.set(Calendar.SECOND, 59);
+            maxDay = 7; // ???
             maxDate = calendar.getTimeInMillis();
         }
+
+        calendar.setTimeInMillis(systemTime + 60000L);
+        int minDay = 1;
+        int minHour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minMinute = calendar.get(Calendar.MINUTE);
 
         calendar.setTimeInMillis(System.currentTimeMillis() + (long) day * 24 * 3600 * 1000);
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
         long currentTime = calendar.getTimeInMillis();
+        calendar.setTimeInMillis(currentTime);
 
+        dayPicker.setMinValue(0);
+        if (maxDate > 0) {
+            dayPicker.setMaxValue(maxDay);
+        }
+        day = dayPicker.getValue();
+
+        hourPicker.setMinValue(day == 0 ? minHour : 0);
+        if (maxDate > 0) {
+            hourPicker.setMaxValue(day == maxDay ? maxHour : 23);
+        }
+        hour = hourPicker.getValue();
+
+        minutePicker.setMinValue(day == 0 && hour == minHour ? minMinute : 0);
+        if (maxDate > 0) {
+            minutePicker.setMaxValue(day == maxDay && hour == maxHour ? maxMinute : 59);
+        }
+        minute = minutePicker.getValue();
         if (currentTime <= systemTime + 60000L) {
             calendar.setTimeInMillis(systemTime + 60000L);
-
-            if (currentDay != calendar.get(Calendar.DAY_OF_YEAR)) {
-                dayPicker.setValue(day = 1);
-            }
-            hourPicker.setValue(hour = calendar.get(Calendar.HOUR_OF_DAY));
-            minutePicker.setValue(minute = calendar.get(Calendar.MINUTE));
         } else if (maxDate > 0 && currentTime > maxDate) {
             calendar.setTimeInMillis(maxDate);
-
-            dayPicker.setValue(day = 7);
-            hourPicker.setValue(hour = calendar.get(Calendar.HOUR_OF_DAY));
-            minutePicker.setValue(minute = calendar.get(Calendar.MINUTE));
         }
         int selectedYear = calendar.get(Calendar.YEAR);
 
@@ -2467,6 +2558,8 @@ public class AlertsCreator {
                 return LocaleController.formatPluralString("Hours", value);
             }
         };
+        hourPicker.setWrapSelectorWheel(true);
+        hourPicker.setAllItemsCount(24);
         hourPicker.setItemCount(5);
         hourPicker.setTextColor(datePickerColors.textColor);
         hourPicker.setTextOffset(-AndroidUtilities.dp(10));
@@ -2476,6 +2569,8 @@ public class AlertsCreator {
                 return LocaleController.formatPluralString("Minutes", value);
             }
         };
+        minutePicker.setWrapSelectorWheel(true);
+        minutePicker.setAllItemsCount(60);
         minutePicker.setItemCount(5);
         minutePicker.setTextColor(datePickerColors.textColor);
         minutePicker.setTextOffset(-AndroidUtilities.dp(34));
@@ -3040,7 +3135,7 @@ public class AlertsCreator {
         return builder;
     }
 
-    public static BottomSheet.Builder createAutoDeleteDatePickerDialog(Context context, Theme.ResourcesProvider resourcesProvider, final ScheduleDatePickerDelegate datePickerDelegate) {
+    public static BottomSheet.Builder createAutoDeleteDatePickerDialog(Context context, int type, Theme.ResourcesProvider resourcesProvider, final ScheduleDatePickerDelegate datePickerDelegate) {
         if (context == null) {
             return null;
         }
@@ -3149,7 +3244,7 @@ public class AlertsCreator {
         linearLayout.setWeightSum(1.0f);
         container.addView(linearLayout, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 1f, 0, 0, 12, 0, 12));
 
-        TextView buttonTextView = new TextView(context) {
+        AnimatedTextView buttonTextView = new AnimatedTextView(context, true, true, false) {
             @Override
             public CharSequence getAccessibilityClassName() {
                 return Button.class.getName();
@@ -3158,17 +3253,22 @@ public class AlertsCreator {
 
         linearLayout.addView(numberPicker, LayoutHelper.createLinear(0, 54 * 5, 1f));
 
-        buttonTextView.setPadding(AndroidUtilities.dp(34), 0, AndroidUtilities.dp(34), 0);
+        buttonTextView.setPadding(0, 0, 0, 0);
         buttonTextView.setGravity(Gravity.CENTER);
         buttonTextView.setTextColor(datePickerColors.buttonTextColor);
-        buttonTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        buttonTextView.setTextSize(AndroidUtilities.dp(14));
         buttonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         buttonTextView.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4), datePickerColors.buttonBackgroundColor, datePickerColors.buttonBackgroundPressedColor));
-        buttonTextView.setText(LocaleController.getString("AutoDeleteConfirm", R.string.AutoDeleteConfirm));
         container.addView(buttonTextView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM, 16, 15, 16, 16));
+        buttonTextView.setText(LocaleController.getString("DisableAutoDeleteTimer", R.string.DisableAutoDeleteTimer));
 
         final NumberPicker.OnValueChangeListener onValueChangeListener = (picker, oldVal, newVal) -> {
             try {
+                if (newVal == 0) {
+                    buttonTextView.setText(LocaleController.getString("DisableAutoDeleteTimer", R.string.DisableAutoDeleteTimer));
+                } else {
+                    buttonTextView.setText(LocaleController.getString("SetAutoDeleteTimer", R.string.SetAutoDeleteTimer));
+                }
                 container.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignore) {
 
@@ -3524,9 +3624,7 @@ public class AlertsCreator {
     }
 
     private static void checkCalendarDate(long minDate, NumberPicker dayPicker, NumberPicker monthPicker, NumberPicker yearPicker) {
-        int day = dayPicker.getValue();
-        int month = monthPicker.getValue();
-        int year = yearPicker.getValue();
+        int month, year;
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(minDate);
@@ -3538,43 +3636,20 @@ public class AlertsCreator {
         int maxMonth = calendar.get(Calendar.MONTH);
         int maxDay = calendar.get(Calendar.DAY_OF_MONTH);
 
-        if (year > maxYear) {
-            yearPicker.setValue(year = maxYear);
-        }
-        if (year == maxYear) {
-            if (month > maxMonth) {
-                monthPicker.setValue(month = maxMonth);
-            }
-            if (month == maxMonth) {
-                if (day > maxDay) {
-                    dayPicker.setValue(day = maxDay);
-                }
-            }
-        }
+        yearPicker.setMaxValue(maxYear);
+        yearPicker.setMinValue(minYear);
+        year = yearPicker.getValue();
 
-        if (year < minYear) {
-            yearPicker.setValue(year = minYear);
-        }
-        if (year == minYear) {
-            if (month < minMonth) {
-                monthPicker.setValue(month = minMonth);
-            }
-            if (month == minMonth) {
-                if (day < minDay) {
-                    dayPicker.setValue(day = minDay);
-                }
-            }
-        }
+        monthPicker.setMaxValue(year == maxYear ? maxMonth : 11);
+        monthPicker.setMinValue(year == minYear ? minMonth : 0);
+        month = monthPicker.getValue();
 
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month);
 
         int daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-        dayPicker.setMaxValue(daysInMonth);
-        if (day > daysInMonth) {
-            day = daysInMonth;
-            dayPicker.setValue(day);
-        }
+        dayPicker.setMaxValue(year == maxYear && month == maxMonth ? Math.min(maxDay, daysInMonth) : daysInMonth);
+        dayPicker.setMinValue(year == minYear && month == minMonth ? minDay : 1);
     }
 
     public static BottomSheet.Builder createCalendarPickerDialog(Context context, long minDate, final MessagesStorage.IntCallback callback, Theme.ResourcesProvider resourcesProvider) {
@@ -3676,39 +3751,17 @@ public class AlertsCreator {
         linearLayout.addView(monthPicker, LayoutHelper.createLinear(0, 54 * 5, 0.5f));
         monthPicker.setFormatter(value -> {
             switch (value) {
-                case 0: {
-                    return LocaleController.getString("January", R.string.January);
-                }
-                case 1: {
-                    return LocaleController.getString("February", R.string.February);
-                }
-                case 2: {
-                    return LocaleController.getString("March", R.string.March);
-                }
-                case 3: {
-                    return LocaleController.getString("April", R.string.April);
-                }
-                case 4: {
-                    return LocaleController.getString("May", R.string.May);
-                }
-                case 5: {
-                    return LocaleController.getString("June", R.string.June);
-                }
-                case 6: {
-                    return LocaleController.getString("July", R.string.July);
-                }
-                case 7: {
-                    return LocaleController.getString("August", R.string.August);
-                }
-                case 8: {
-                    return LocaleController.getString("September", R.string.September);
-                }
-                case 9: {
-                    return LocaleController.getString("October", R.string.October);
-                }
-                case 10: {
-                    return LocaleController.getString("November", R.string.November);
-                }
+                case 0: return LocaleController.getString("January", R.string.January);
+                case 1: return LocaleController.getString("February", R.string.February);
+                case 2: return LocaleController.getString("March", R.string.March);
+                case 3: return LocaleController.getString("April", R.string.April);
+                case 4: return LocaleController.getString("May", R.string.May);
+                case 5: return LocaleController.getString("June", R.string.June);
+                case 6: return LocaleController.getString("July", R.string.July);
+                case 7: return LocaleController.getString("August", R.string.August);
+                case 8: return LocaleController.getString("September", R.string.September);
+                case 9: return LocaleController.getString("October", R.string.October);
+                case 10: return LocaleController.getString("November", R.string.November);
                 case 11:
                 default: {
                     return LocaleController.getString("December", R.string.December);
@@ -3795,6 +3848,44 @@ public class AlertsCreator {
             }
             return Unit.INSTANCE;
         });
+        return builder.create();
+    }
+
+    public static BottomSheet createMuteAlert(BaseFragment fragment, ArrayList<Long> dialog_ids, int topicId, Theme.ResourcesProvider resourcesProvider) {
+        if (fragment == null || fragment.getParentActivity() == null) {
+            return null;
+        }
+
+        BottomSheet.Builder builder = new BottomSheet.Builder(fragment.getParentActivity(), false, resourcesProvider);
+        builder.setTitle(LocaleController.getString("Notifications", R.string.Notifications), true);
+        CharSequence[] items = new CharSequence[]{
+                LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Hours", 1)),
+                LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Hours", 8)),
+                LocaleController.formatString("MuteFor", R.string.MuteFor, LocaleController.formatPluralString("Days", 2)),
+                LocaleController.getString("MuteDisable", R.string.MuteDisable)
+        };
+        builder.setItems(items, (dialogInterface, i) -> {
+                    int setting;
+                    if (i == 0) {
+                        setting = NotificationsController.SETTING_MUTE_HOUR;
+                    } else if (i == 1) {
+                        setting = NotificationsController.SETTING_MUTE_8_HOURS;
+                    } else if (i == 2) {
+                        setting = NotificationsController.SETTING_MUTE_2_DAYS;
+                    } else {
+                        setting = NotificationsController.SETTING_MUTE_FOREVER;
+                    }
+                    if (dialog_ids != null) {
+                        for (int j = 0; j < dialog_ids.size(); ++j) {
+                            long dialog_id = dialog_ids.get(j);
+                            NotificationsController.getInstance(UserConfig.selectedAccount).setDialogNotificationsSettings(dialog_id, topicId, setting);
+                        }
+                    }
+                    if (BulletinFactory.canShowBulletin(fragment)) {
+                        BulletinFactory.createMuteBulletin(fragment, setting, 0, resourcesProvider).show();
+                    }
+                }
+        );
         return builder.create();
     }
 
@@ -4639,69 +4730,11 @@ public class AlertsCreator {
     }
 
     public static Dialog createFreeSpaceDialog(final LaunchActivity parentActivity) {
-        final int[] selected = new int[1];
-
-        if (SharedConfig.keepMedia == 2) {
-            selected[0] = 3;
-        } else if (SharedConfig.keepMedia == 0) {
-            selected[0] = 1;
-        } else if (SharedConfig.keepMedia == 1) {
-            selected[0] = 2;
-        } else if (SharedConfig.keepMedia == 3) {
-            selected[0] = 0;
-        }
-
-        String[] descriptions = new String[]{
-                LocaleController.formatPluralString("Days", 3),
-                LocaleController.formatPluralString("Weeks", 1),
-                LocaleController.formatPluralString("Months", 1),
-                LocaleController.getString("LowDiskSpaceNeverRemove", R.string.LowDiskSpaceNeverRemove)
-        };
-
-        final LinearLayout linearLayout = new LinearLayout(parentActivity);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-
-        TextView titleTextView = new TextView(parentActivity);
-        titleTextView.setText(LocaleController.getString("LowDiskSpaceTitle2", R.string.LowDiskSpaceTitle2));
-        titleTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        titleTextView.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
-        linearLayout.addView(titleTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 24, 0, 24, 8));
-
-        for (int a = 0; a < descriptions.length; a++) {
-            RadioColorCell cell = new RadioColorCell(parentActivity);
-            cell.setPadding(AndroidUtilities.dp(4), 0, AndroidUtilities.dp(4), 0);
-            cell.setTag(a);
-            cell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
-            cell.setTextAndValue(descriptions[a], selected[0] == a);
-            linearLayout.addView(cell);
-            cell.setOnClickListener(v -> {
-                int num = (Integer) v.getTag();
-                if (num == 0) {
-                    selected[0] = 3;
-                } else if (num == 1) {
-                    selected[0] = 0;
-                } else if (num == 2) {
-                    selected[0] = 1;
-                } else if (num == 3) {
-                    selected[0] = 2;
-                }
-                int count = linearLayout.getChildCount();
-                for (int a1 = 0; a1 < count; a1++) {
-                    View child = linearLayout.getChildAt(a1);
-                    if (child instanceof RadioColorCell) {
-                        ((RadioColorCell) child).setChecked(child == v, true);
-                    }
-                }
-            });
-        }
         AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
         builder.setTitle(LocaleController.getString("LowDiskSpaceTitle", R.string.LowDiskSpaceTitle));
-        builder.setMessage(LocaleController.getString("LowDiskSpaceMessage", R.string.LowDiskSpaceMessage));
-        builder.setView(linearLayout);
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialog, which) -> SharedConfig.setKeepMedia(selected[0]));
-        builder.setNeutralButton(LocaleController.getString("ClearMediaCache", R.string.ClearMediaCache), (dialog, which) -> parentActivity.presentFragment(new CacheControlActivity()));
+        builder.setMessage(LocaleController.getString("LowDiskSpaceMessage2", R.string.LowDiskSpaceMessage2));
+        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setPositiveButton(LocaleController.getString("LowDiskSpaceButton", R.string.LowDiskSpaceButton), (dialog, which) -> parentActivity.presentFragment(new CacheControlActivity()));
         return builder.create();
     }
 
@@ -5140,7 +5173,7 @@ public class AlertsCreator {
             }
             if ((actionUser != null && actionUser.id != UserConfig.getInstance(currentAccount).getClientUserId()) || (actionChat != null && !ChatObject.hasAdminRights(actionChat))) {
                 if (loadParticipant == 1 && !chat.creator && actionUser != null) {
-                    final AlertDialog[] progressDialog = new AlertDialog[]{new AlertDialog(activity, 3)};
+                    final AlertDialog[] progressDialog = new AlertDialog[]{new AlertDialog(activity, AlertDialog.ALERT_TYPE_SPINNER)};
 
                     TLRPC.TL_channels_getParticipant req = new TLRPC.TL_channels_getParticipant();
                     req.channel = MessagesController.getInputChannel(chat);

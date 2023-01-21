@@ -1291,7 +1291,7 @@ public class ChangeUsernameActivity extends BaseFragment {
             return;
         }
 
-        final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
+        final AlertDialog progressDialog = new AlertDialog(getParentActivity(), AlertDialog.ALERT_TYPE_SPINNER);
 
         final TLRPC.TL_account_updateUsername req = new TLRPC.TL_account_updateUsername();
         req.username = username;

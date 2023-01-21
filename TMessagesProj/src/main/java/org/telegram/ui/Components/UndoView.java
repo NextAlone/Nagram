@@ -187,6 +187,8 @@ public class UndoView extends FrameLayout {
     public final static int ACTION_HINT_SWIPE_TO_REPLY = 85;
     public final static int ACTION_PREMIUM_ALL_FOLDER = 86;
 
+    public final static int ACTION_PROXY_ADDED = 87;
+
     private CharSequence infoText;
     private int hideAnimationType = 1;
     Drawable backgroundDrawable;
@@ -329,7 +331,7 @@ public class UndoView extends FrameLayout {
 
     private boolean isTooltipAction() {
         return currentAction == ACTION_NEED_RESATRT || currentAction == ACTION_ARCHIVE_HIDDEN || currentAction == ACTION_ARCHIVE_HINT || currentAction == ACTION_ARCHIVE_FEW_HINT ||
-                currentAction == ACTION_ARCHIVE_PINNED || currentAction == ACTION_CONTACT_ADDED || currentAction == ACTION_OWNER_TRANSFERED_CHANNEL ||
+                currentAction == ACTION_ARCHIVE_PINNED || currentAction == ACTION_CONTACT_ADDED || currentAction == ACTION_PROXY_ADDED || currentAction == ACTION_OWNER_TRANSFERED_CHANNEL ||
                 currentAction == ACTION_OWNER_TRANSFERED_GROUP || currentAction == ACTION_QUIZ_CORRECT || currentAction == ACTION_QUIZ_INCORRECT || currentAction == ACTION_CACHE_WAS_CLEARED ||
                 currentAction == ACTION_ADDED_TO_FOLDER || currentAction == ACTION_REMOVED_FROM_FOLDER || currentAction == ACTION_PROFILE_PHOTO_CHANGED ||
                 currentAction == ACTION_CHAT_UNARCHIVED || currentAction == ACTION_VOIP_MUTED || currentAction == ACTION_VOIP_UNMUTED || currentAction == ACTION_VOIP_REMOVED ||
@@ -774,6 +776,10 @@ public class UndoView extends FrameLayout {
                 infoText = LocaleController.formatString("NowInContacts", R.string.NowInContacts, UserObject.getFirstName(user));
                 subInfoText = null;
                 icon = R.raw.contact_check;
+            } else if (action == ACTION_PROXY_ADDED) {
+                infoText = LocaleController.formatString(R.string.ProxyAddedSuccess);
+                subInfoText = null;
+                icon = R.raw.contact_check;
             } else if (action == ACTION_PROFILE_PHOTO_CHANGED) {
                 if (DialogObject.isUserDialog(did)) {
                     if (infoObject == null) {
@@ -861,7 +867,7 @@ public class UndoView extends FrameLayout {
             } else if (action == ACTION_CACHE_WAS_CLEARED) {
                 infoText = this.infoText;
                 subInfoText = null;
-                icon = R.raw.chats_infotip;
+                icon = R.raw.ic_delete;
             } else if (action == ACTION_PREVIEW_MEDIA_DESELECTED) {
                 MediaController.PhotoEntry photo = (MediaController.PhotoEntry) infoObject;
                 infoText = photo.isVideo ? LocaleController.getString("AttachMediaVideoDeselected", R.string.AttachMediaVideoDeselected) : LocaleController.getString("AttachMediaPhotoDeselected", R.string.AttachMediaPhotoDeselected);
@@ -1087,9 +1093,9 @@ public class UndoView extends FrameLayout {
                 } else {
                     int amount = (Integer) infoObject2;
                     if (count == 1) {
-                        infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("FwdMessageToChats", R.string.FwdMessageToChats, LocaleController.formatPluralString("Chats", amount))));
+                        infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatPluralString("FwdMessageToManyChats", amount)));
                     } else {
-                        infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("FwdMessagesToChats", R.string.FwdMessagesToChats, LocaleController.formatPluralString("Chats", amount))));
+                        infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatPluralString("FwdMessagesToManyChats", amount)));
                     }
                     leftImageView.setAnimation(R.raw.forward, 30, 30);
                     hapticDelay = 300;
