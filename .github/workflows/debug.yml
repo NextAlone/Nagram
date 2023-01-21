@@ -434,28 +434,68 @@ jobs:
         with:
           name: telegram-bot-api-binary
           path: .
-      - name: Debug Build
+      - name: CI Build
         run: |
           export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
           export DEBUG_BUILD=true
+          export NATIVE_TARGET=universal
           ./gradlew TMessagesProj:assembleMiniRelease
-      - name: Send Build
+
+          APK=$(find TMessagesProj/build/outputs/apk/mini/release -name 'NekoX*.apk')
+          echo "APK=$APK" >> $GITHUB_ENV
+          VERSION_CODE=$(grep -E "def verCode = ([0-9]+)" TMessagesProj/build.gradle | sed "s/def verCode = //")
+          VERSION_NAME=$(grep -E "def verName = " TMessagesProj/build.gradle | sed "s/def verName = //" | sed "s/\"//g")
+          echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_ENV
+          echo "VERSION_NAME=VERSION_NAME" >> $GITHUB_ENV
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ci-apk
+          path: ${{ env.APK }}
+  upload:
+    name: Upload Apks to Telegram
+    runs-on: ubuntu-latest
+    needs:
+      - build-dev
+      - telegram-bot-api
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: ci-apk
+          path: apks
+      - name: Download Telegram Bot API Binary
+        uses: actions/download-artifact@master
+        with:
+          name: telegram-bot-api-binary
+          path: .
+      - name: Install Python Environment
+        run: |
+          sudo apt install python3 python3-pip -y
+          pip3 install requests
+      - name: Upload
         run: |
           chmod +x telegram-bot-api-binary
           function start() {
             ./telegram-bot-api-binary --api-id=21724 --api-hash=3e0cb5efcd52300aec5994fdfc5bdc16 --local 2>&1 > /dev/null &
+            sleep 5
           }
           start
           curl http://127.0.0.1:8081/ || start
           curl http://127.0.0.1:8081/ || start
           curl http://127.0.0.1:8081/ || start
-          apk=$(find TMessagesProj/build/outputs/apk/mini/release -name 'NekoX*.apk' | head -n 1)
-          curl http://127.0.0.1:8081/bot${{ secrets.HELPER_BOT_TOKEN }}/sendDocument \
-            -X POST \
-            -F chat_id="${{ secrets.HELPER_BOT_TARGET }}" \
-            -F document="@$apk" \
-            -F caption="${{ github.event.head_commit.message }}\n$GITHUB_SHA" \
-            --silent --show-error --fail >/dev/null
+          curl http://127.0.0.1:8081/ || start
+          
+          curl https://raw.githubusercontent.com/NekoX-Dev/NekoX/dev/.github/scripts/upload.py -o upload.py
+          
+          export BOT_TOKEN=${{ secrets.HELPER_BOT_TOKEN }}
+          export BOT_TARGET=${{ secrets.HELPER_BOT_TARGET }}
+          export COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
+          export VERSION_NAME="${{ env.VERSION_NAME }}"
+          export VERSION_CODE="${{ env.VERSION_CODE }}"
+          echo ${{ env.VERSION_NAME }}
+          
+          python3 upload.py ci
+
           pkill telegram-bot
 
   telegram-bot-api:

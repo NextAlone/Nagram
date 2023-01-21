@@ -370,7 +370,9 @@ jobs:
       - build
       - telegram-bot-api
     steps:
-      - name: Donwload Artifacts
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Download Artifacts
         uses: actions/download-artifact@v2
         with:
           path: artifacts
@@ -384,116 +386,21 @@ jobs:
           chmod +x telegram-bot-api-binary
           function start() {
             ./telegram-bot-api-binary --api-id=21724 --api-hash=3e0cb5efcd52300aec5994fdfc5bdc16 --local 2>&1 > /dev/null &
+            sleep 5
           }
           start
           curl http://127.0.0.1:8081/ || start
           curl http://127.0.0.1:8081/ || start
           curl http://127.0.0.1:8081/ || start
-          curl http://127.0.0.1:8081/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
-           -X POST \
-           -F chat_id="${{ secrets.TELEGRAM_CHANNEL }}" \
-           -F text="==== ${{ github.event.inputs.tag }} ====" \
-           --silent --show-error --fail >/dev/null
           mkdir apks
           find artifacts -name "*.apk" -exec cp {} apks \;
-          function upload() {
-            for apk in $@; do
-              echo ">> Uploading $apk"
-              curl http://127.0.0.1:8081/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument \
-                -X POST \
-                -F chat_id="${{ secrets.TELEGRAM_CHANNEL }}" \
-                -F document="@$apk" \
-                --retry 5 \
-                --retry-delay 5 \
-                --silent --show-error --fail >/dev/null
-              sleep 1
-            done
-          }
-          upload apks/NekoX-*-mini-*-release.apk
-          upload apks/NekoX-*-mini-*-releaseNoGcm.apk
-          upload apks/NekoX-*-full-*-release.apk
-          upload apks/NekoX-*-full-*-releaseNoGcm.apk
+          curl https://raw.githubusercontent.com/NekoX-Dev/NekoX/dev/.github/scripts/upload.py -o upload.py
+          export BOT_TOKEN="${{ secrets.HELPER_BOT_TOKEN }}"
+          export BOT_TARGET="${{ secrets.HELPER_BOT_TARGET }}"
+          export VERSION_CODE="$(grep -E "def verCode = ([0-9]+)" TMessagesProj/build.gradle | sed "s/def verCode = //")"
+          export VERSION_NAME="$(grep -E "def verName = " TMessagesProj/build.gradle | sed "s/def verName = //" | sed "s/\"//g")"
+          python3 upload.py release
           pkill telegram-bot
-  play:
-    name: Publish to Play Store
-    if: github.event.inputs.play != 'y'
-    runs-on: ubuntu-latest
-    needs:
-      - native
-      - v2ray
-      - shadowsocks
-      - shadowsocksr
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup Android SDK Tools
-        uses: android-actions/setup-android@v2
-      - name: Fetch Status
-        run: |
-          git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
-          git submodule status TMessagesProj/jni/boringssl > boringssl_status
-          git submodule status ss-rust/src/main/rust/shadowsocks-rust > shadowsocks_status
-          git submodule status 'ssr-libev/*' > shadowsocksr_status
-          git submodule status v2ray > v2ray_status
-      - name: Native Cache (armeabi-v7a)
-        uses: actions/cache@v2
-        with:
-          path: |
-            TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-armeabi-v7a
-      - name: Native Cache (arm64-v8a)
-        uses: actions/cache@v2
-        with:
-          path: |
-            TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-arm64-v8a
-      - name: Native Cache (x86)
-        uses: actions/cache@v2
-        with:
-          path: |
-            TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-x86
-      - name: Native Cache (x86_64)
-        uses: actions/cache@v2
-        with:
-          path: |
-            TMessagesProj/src/main/libs
-          key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-x86_64
-      - name: V2ray Cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            TMessagesProj/libs/libv2ray.aar
-          key: ${{ hashFiles('bin/libs/v2ray/*', 'v2ray_status') }}
-      - name: Shadowsocks Cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            TMessagesProj/libs/ss-rust-release.aar
-          key: ${{ hashFiles('shadowsocks_status') }}
-      - name: ShadowsocksR Cache
-        uses: actions/cache@v2
-        with:
-          path: |
-            TMessagesProj/libs/ssr-libev-release.aar
-          key: ${{ hashFiles('shadowsocksr_status') }}
-      - name: Fix Gradle Memoery
-        run: |
-          sed -i -e "s/16384/6144/g" gradle.properties
-#          echo "ndk.dir=${ANDROID_HOME}/ndk-bundle" > local.properties
-      - name: Gradle cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle
-          key: gradle-${{ hashFiles('**/*.gradle') }}
-      - name: Publish to Play Store
-        run: |
-          export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
-          cat > service_account_credentials.json << EOF
-          ${{ secrets.ANDROID_PUBLISHER_CREDENTIALS }}"
-          EOF
-          sed -i -e 's@<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />@@g' TMessagesProj/src/main/AndroidManifest.xml
-          ./gradlew TMessagesProj:publishMiniPlayReleaseApk
 
   telegram-bot-api:
     name: Telegram Bot API

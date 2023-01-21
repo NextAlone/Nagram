@@ -85,14 +85,17 @@ android {
                 enable false
                 universalApk true
             } else {
-                if (!nativeTarget.isBlank()) {
+                if (nativeTarget.toLowerCase().equals("universal")) {
                     enable false
+                    universalApk true
+                } else if (!nativeTarget.isBlank()) {
+                    enable true
                     universalApk false
                     reset()
                     include nativeTarget
                 } else {
-                    enable false
-                    universalApk true
+                    enable true
+                    universalApk false
                 }
             }
         }
