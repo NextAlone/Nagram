@@ -671,6 +671,9 @@ public class EmojiHelper extends BaseRemoteHelper implements NotificationCenter.
     }
 
     private void checkAccount() {
+        if (Thread.currentThread() != ApplicationLoader.applicationHandler.getLooper().getThread()) {
+            return;
+        }
         if (currentAccount != UserConfig.selectedAccount) {
             NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.fileLoaded);
             NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.fileLoadProgressChanged);
