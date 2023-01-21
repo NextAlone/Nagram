@@ -19,7 +19,7 @@
     <string name="IgnoreBlocked">Ignorer blokkerte brukere i gruppe</string>
     <string name="NameOrder">Navnerekkefølge</string>
     <string name="Christmas">Jul</string>
-    <string name="TestBackendOff">Denne kontoen vil koble til produksjonsbakenden.</string>
+    <string name="TestBackendOff">Denne kontoen vil kobles til produksjonsbakenden.</string>
     <string name="SaveCacheToExternalFilesDir">Lagringsisolering</string>
     <string name="StickerSize">Klistremerkestørrelse</string>
     <string name="UnlimitedFavoredStickersAbout">Legg til så mange klistremerker du vil for favoritter. Det kan hende klistremekrer ikke synkroniseres til alle enheter.</string>
@@ -95,7 +95,7 @@
     <string name="EnableResidentNotification">Vis vedvarende merknad</string>
     <string name="DisableResidentNotification">Skru av vedvarende merknad</string>
     <string name="DependsOnDate">Avhenger av dato</string>
-    <string name="TestBackendOn">Denne kontoen vil koble til test-bakenden.</string>
+    <string name="TestBackendOn">Denne kontoen vil kobles til test-bakenden.</string>
     <string name="ActionBarDecoration">Tittellinje-dekorasjon</string>
     <string name="TestBackend">Test-bakende</string>
     <string name="HideProxySponsorChannel">Skjul mellomtjnenersponsor-kanal</string>
@@ -144,4 +144,8 @@
     <string name="ChatBlurAlphaValue">Alfa-kanal for sludretilsløring</string>
     <string name="disableChoosingSticker">Send skriveaktivitet istedenfor å sende klistremerke</string>
     <string name="disableRemoteEmojiInteractions">Skru av emoji-interaksjoner som kommer annensteds fra</string>
+    <string name="disablePremiumStickerAnimation">Deaktiver premium sticker animasjon</string>
+    <string name="mapDriftingFixForGoogleMaps">Fiks Google Maps drifting i Kina</string>
+    <string name="enhancedFileLoader">Forbedre nedlastingshastighet</string>
+    <string name="useOSMDroidMap">Bruk OSMDroid Map</string>
 </resources>

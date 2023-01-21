@@ -210,7 +210,7 @@
     <string name="AcceptSecretChat">Accetta nuova chat segreta</string>
     <string name="TabletMode">Modalità Tablet</string>
     <string name="TabletModeDefault">Dipende dal dispositivo</string>
-    <string name="DisableTrending">Disabilita Tendenze</string>
+    <string name="DisableTrending">Disabilita tendenze</string>
     <string name="ReplaceRegex">Usa espressione regolare</string>
     <string name="TextReplace">Sostituisci</string>
     <string name="TextOrigin">Origine</string>
@@ -233,7 +233,7 @@
     <string name="EnableStickerPinTip">Questa funzione è ancora in fase di sviluppo, la sincronizzazione con il cloud potrebbe non funzionare come previsto.</string>
     <string name="EnableStickerPinAbout">Fissa Stickers e sincronizzali con il cloud anche quando si aggiungono nuovi stickers.
 \nAccoppiato con Disabilita Preferito e Recente.</string>
-    <string name="EnableStickerPin">Abilita Fissaggio Sticker</string>
+    <string name="EnableStickerPin">Abilita fissaggio sticker</string>
     <string name="ArchiveFiles">File Archivio</string>
     <string name="Win32ExecutableFiles">File eseguibili Win32</string>
     <string name="AutoDownload">Download Automatico</string>
@@ -258,7 +258,7 @@
 \nAvatar grande come sfondo</string>
     <string name="repeatConfirm">Chiedi prima di ripetere</string>
     <string name="hideSponsoredMessage">Nascondi messaggi sponsorizzati</string>
-    <string name="useCustomEmoji">Usa Emoji Personalizzata</string>
+    <string name="useCustomEmoji">Usa emoji personalizzata</string>
     <string name="customPublicProxyIP">Imposta IP del proxy pubblico</string>
     <string name="update_download_soucre">Seleziona la fonte del download</string>
     <string name="DeleteDownloadedFileConfirm">Eliminare questo file dalla cache locale\?</string>
@@ -270,10 +270,14 @@
     <string name="AutoCheckUpdatePreview">Anteprima (Instabile)</string>
     <string name="AppUpdateNekoX">Aggiorna Nekogram X</string>
     <string name="NekoXUpdateTranslationHint">Premi per tradurre il registro dei cambiamenti</string>
-    <string name="channelAlias">Alias del Canale</string>
+    <string name="channelAlias">Alias del canale</string>
     <string name="setChannelAliasName">Imposta Alias</string>
     <string name="Name">Nome</string>
-    <string name="labelChannelUser">Etichetta Canale Utente</string>
+    <string name="labelChannelUser">Etichetta utente canale</string>
     <string name="channelAliasDetails">Richiedi che l\'etichetta del canale utente sia abilitato.</string>
     <string name="labelChannelUserDetails">Se il mittente del messaggio è \"Canale\", sarà etichettato come \"Canale\".</string>
+    <string name="StickerSettings">Sticker</string>
+    <string name="ConfirmSettings">Conferma</string>
+    <string name="InteractionSettings">Interazione</string>
+    <string name="nekoxPremiumGiftRemoved">Il regalo premium è rimosso in NekoX.</string>
 </resources>

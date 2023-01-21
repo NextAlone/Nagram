@@ -46,21 +46,21 @@
     <string name="SensitiveDisableFiltering">تعطيل تصفية المحتوى الحساسة</string>
     <string name="SensitiveAbout">عرض الوسائط الحساسة في القنوات العامة على جميع أجهزتك.</string>
     <string name="StickerSize">حجم الملصق</string>
-    <string name="StickerSizeDialogMessageBigOne">واحد كبير</string>
-    <string name="StickerSizeDialogMessageSmallOne">واحد صغير</string>
+    <string name="StickerSizeDialogMessageBigOne">واحدة كبيرة</string>
+    <string name="StickerSizeDialogMessageSmallOne">واحدة صغيرة</string>
     <string name="StickerSizeDialogMessageReplyTo">ميااو</string>
     <string name="StickerSizeDialogName">دوانج</string>
     <string name="Experiment">تجريبية</string>
     <string name="UnlimitedFavoredStickers">ملصقات مفضلة غير محدودة</string>
     <string name="UnlimitedFavoredStickersAbout">إضافة ملصقات غير محدودة إلى المفضلة. الملصقات قد لا تكون متزامنة مع الأجهزة الأخرى.</string>
     <string name="MessageDetails">التفاصيل</string>
-    <string name="ExportAsJson">تصدير ك JSON</string>
+    <string name="ExportAsJson">تصدير كـ JSON</string>
     <string name="Translate">ترجم</string>
     <string name="DeleteAccount">حذف حساب تيليجرام</string>
     <string name="TranslateFailed">خطأ في خادم الترجمة</string>
     <string name="TranslationProvider">مزود الترجمة</string>
-    <string name="ProviderGoogleTranslate">ترجمة Google</string>
-    <string name="ProviderGoogleTranslateCN">ترجمة جوجل CN</string>
+    <string name="ProviderGoogleTranslate">ترجمة جوجل</string>
+    <string name="ProviderGoogleTranslateCN">ترجمة جوجل الصينية</string>
     <string name="TranslateApiUnsupported">موفر الترجمة الذي اخترته لا يدعم لغتك.</string>
     <string name="ProviderLingocloud">لينغوكلاود</string>
     <string name="UndoTranslate">التراجع عن الترجمة</string>
@@ -145,4 +145,5 @@
     <string name="channelLabel">قناة</string>
     <string name="forceBlurInChat">فرض تمكين شفافية المحادثة</string>
     <string name="ChatBlurAlphaValue">نسبة شفافية المحادثة</string>
+    <string name="disablePremiumStickerAnimation">تعطيل الرسوم المتحركة لملصقات البريميوم</string>
 </resources>

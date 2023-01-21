@@ -12,4 +12,6 @@
     <string name="Chat">Bual</string>
     <string name="InvalidAccessToken">Token akses tak sah</string>
     <string name="BotLogin">Log masuk Bot</string>
+    <string name="TypefaceUseDefault">Guna sistem tulisan lalai</string>
+    <string name="Repeat">Ulang semula</string>
 </resources>

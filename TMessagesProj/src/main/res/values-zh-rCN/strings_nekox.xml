@@ -173,7 +173,7 @@
     <string name="NekoXFaq">NekoX 常见问题</string>
     <string name="TransSite">翻译平台</string>
     <string name="OpenKayChain">OpenPGP 客户端</string>
-    <string name="OpenPGPApp">OpenPGP 提供应用</string>
+    <string name="OpenPGPApp">OpenPGP 客户端</string>
     <string name="OpenPGPKey">OpenPGP 密钥</string>
     <string name="None">无</string>
     <string name="Sign">签名</string>
@@ -268,7 +268,7 @@
     <string name="hideSponsoredMessage">隐藏赞助消息</string>
     <string name="DisableInstantCamera">禁用相机即时预览</string>
     <string name="showSeconds">以秒为单位显示时间戳</string>
-    <string name="rememberAllBackMessages">记住所有点击的回复</string>
+    <string name="rememberAllBackMessages">记住已点击的回复</string>
     <string name="ShareMessages">分享</string>
     <string name="AutoCheckUpdatePreview">预览版(不稳定)</string>
     <string name="AppUpdateNekoX">更新 Nekogram X</string>
@@ -282,4 +282,5 @@
     <string name="StickerSettings">贴纸</string>
     <string name="ConfirmSettings">操作确认</string>
     <string name="InteractionSettings">交互</string>
+    <string name="nekoxPremiumGiftRemoved">高级礼品在 NekoX 中被移除。</string>
 </resources>

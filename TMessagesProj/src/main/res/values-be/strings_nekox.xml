@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ChatAttachEnterMenuRecordAudio">Запіс аўдыё</string>
+    <string name="AccDescrChatAttachEnterMenu">Меню ўводу ў чаце</string>
+    <string name="ChatAttachEnterMenuRecordVideo">Запіс відэа</string>
+    <string name="Locked">Зачынены</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">Адключыць папярэдні прагляд спасылак</string>
+</resources>

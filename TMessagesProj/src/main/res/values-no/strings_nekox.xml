@@ -70,7 +70,7 @@
     <string name="FilterNameChannels">Kanaler</string>
     <string name="FilterNameGroups">Grupper</string>
     <string name="FilterNameContacts">Kontakter</string>
-    <string name="FilterNameUsersDescription">Kun meldinger fra private sludringer</string>
+    <string name="FilterNameUsersDescription">Kun meldinger fra private chater</string>
     <string name="FilterNameUsers">Brukere</string>
     <string name="ImportPxy">Importer</string>
     <string name="DisableChatAction">Ikke send min skrivestatus</string>
@@ -98,7 +98,7 @@
     <string name="UseChatAttachEnterMenu">Bruk inndatameny</string>
     <string name="ChatAttachEnterMenuEnableLinkPreview">Lenkeforhåndsvisning</string>
     <string name="ChatAttachEnterMenuDisableLinkPreview">Ingen lenkeforhåndsvisning</string>
-    <string name="AccDescrChatAttachEnterMenu">Sludreinndatameny</string>
+    <string name="AccDescrChatAttachEnterMenu">Chat input meny</string>
     <string name="ProxyTypeVmess">VMess-mellomtjener</string>
     <string name="BlockedListEmpty">Du har ikke blokkert noen :)</string>
     <string name="FilterNameUnmutedDescription">Kun meldinger fra uforstummede sludringer</string>
@@ -147,7 +147,7 @@
     <string name="SSRObfs">Obfs</string>
     <string name="ProxyInfoTrojan">Trojan-mellomtjenerinnstillinger</string>
     <string name="DisableProxyWhenVpnEnabled">Skru av mellomtjener når VPN er påslått</string>
-    <string name="FilterNameGroupsDescription">Kun meldinger fra gruppesludringer</string>
+    <string name="FilterNameGroupsDescription">Kun meldinger fra gruppechater</string>
     <string name="FilterNameBots">Botter</string>
     <string name="ProxySubDetails">Abonnementsdetaljer</string>
     <string name="IgnoreMutedCount">Ignorer telling av forstummede i mappefane</string>
@@ -275,4 +275,9 @@
     <string name="PrivacyNotice2fa">Du har ikke satt et passord, noe som lar myndighetskontrollerte hackere ta rede på din sanne identitet. Sett et nå!</string>
     <string name="channelAliasDetails">Krev av etikett-kanalbruker er påslått.</string>
     <string name="labelChannelUser">Etikett-kanalbruker</string>
+    <string name="StickerSettings">Klistremerke</string>
+    <string name="ConfirmSettings">Bekreftelse</string>
+    <string name="InteractionSettings">Interaksjon</string>
+    <string name="nekoxPremiumGiftRemoved">Premium gave er fjernet i NekoX.</string>
+    <string name="PrivacyNoticeAddByPhone">Du har ikke skrudd av \"Tillat å finne meg med mitt telefonnummer\", som lar statskontrollerte hackere finne din sanne identitet. Vennligst skru det av!!</string>
 </resources>

@@ -69,17 +69,17 @@
     <string name="FilterNameContacts">جهات الاتصال</string>
     <string name="FilterNameContactsDescription">فقط الرسائل من المستخدمين المحفوظين</string>
     <string name="FilterNameGroups">المجموعات</string>
-    <string name="FilterNameGroupsDescription">فقط الرسائل من مجموعة المحادثات</string>
+    <string name="FilterNameGroupsDescription">فقط الرسائل من المجموعات</string>
     <string name="FilterNameChannels">القنوات</string>
     <string name="FilterNameChannelsDescription">الرسائل من القنوات فقط</string>
     <string name="FilterNameBots">البوتات</string>
     <string name="FilterNameBotsDescription">فقط الرسائل من البوتات</string>
     <string name="FilterNameUnmuted">غير مكتومة</string>
-    <string name="FilterNameUnmutedDescription">فقط الرسائل من المحادثة الغير مكتومه</string>
+    <string name="FilterNameUnmutedDescription">فقط الرسائل من المحادثة الغير مكتومة</string>
     <string name="FilterNameUnread2">غير مقروءة</string>
     <string name="FilterNameUnreadDescription">فقط الرسائل غير المقروءة</string>
     <string name="FilterNameUnmutedAndUnread">غير مكتوم وغير مقروء</string>
-    <string name="FilterNameUnmutedAndUnreadDescription">فقط الرسائل غير المقروءة من المحادثة الغير مكتومه</string>
+    <string name="FilterNameUnmutedAndUnreadDescription">فقط الرسائل غير المقروءة من المحادثة الغير مكتومة</string>
     <string name="IgnoreMutedCount">تجاهل كتم العد غير المقروء في علامة تبويب المجلد</string>
     <string name="DialogsSettings">إعدادات الحوار</string>
     <string name="SortMenu">إعدادات فرز الحوار</string>
@@ -279,4 +279,7 @@
     <string name="setChannelAliasName">تعيين الاسم المستعار</string>
     <string name="labelChannelUser">تسمية مستخدم القناة</string>
     <string name="labelChannelUserDetails">إذا كان مرسل الرسالة هو قناة، تصنيفه على أنه قناة.</string>
+    <string name="StickerSettings">ملصق</string>
+    <string name="ConfirmSettings">تأكيد</string>
+    <string name="InteractionSettings">التفاعل</string>
 </resources>

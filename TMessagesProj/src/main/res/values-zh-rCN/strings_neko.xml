@@ -147,4 +147,6 @@
     <string name="ChatBlurAlphaValue">对话顶栏不透明度</string>
     <string name="disablePremiumStickerAnimation">禁用会员贴纸动画</string>
     <string name="enhancedFileLoader">加速下载</string>
+    <string name="useOSMDroidMap">使用 OSMDroid 地图</string>
+    <string name="mapDriftingFixForGoogleMaps">修复 Google 地图在中国的漂移问题</string>
 </resources>

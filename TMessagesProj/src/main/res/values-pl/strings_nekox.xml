@@ -213,7 +213,7 @@
     <string name="AutoCheckUpdateRc">Kandydat do wydania</string>
     <string name="AutoCheckUpdateStable">Stabilna</string>
     <string name="AutoCheckUpdateSwitch">Automatyczna aktualizacja</string>
-    <string name="AutoCheckUpdateOFF">WYŁĄCZONE</string>
+    <string name="AutoCheckUpdateOFF">Wyłączona</string>
     <string name="VersionUpdateNoUpdate">Brak aktualizacji.</string>
     <string name="VersionUpdateNotNow">Nie teraz</string>
     <string name="VersionUpdateIgnore">Ignoruj</string>
@@ -279,4 +279,5 @@
     <string name="ConfirmSettings">Potwierdzenia</string>
     <string name="InteractionSettings">Interakcje</string>
     <string name="StickerSettings">Naklejki</string>
+    <string name="nekoxPremiumGiftRemoved">Prezent premium został usunięty w NekoX.</string>
 </resources>

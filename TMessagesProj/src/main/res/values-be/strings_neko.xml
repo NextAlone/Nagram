@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="NekoSettings">Налады Neko</string>
+    <string name="MessageMenu">Меню паведамленняў</string>
+    <string name="IPv6">Падключэнне праз IPv6</string>
+    <string name="HidePhone">Схаваць мой нумар тэлефона</string>
+    <string name="Hide">Схаваць</string>
+    <string name="DeleteAllFromSelf">Выдаліць усё з сябе</string>
+    <string name="IgnoreBlocked">Схаваць паведамленні ад заблакіраванага карыстальніка</string>
+    <string name="Connection">Злучэнне</string>
+    <string name="Chat">Чат</string>
+    <string name="ForceTabletMode">Прымусовы рэжым планшэта</string>
+    <string name="EventType">Набор значкоў бакавой панэлі</string>
+    <string name="Snowflakes">Сняжынкі</string>
+    <string name="TestBackend">Тэставы сервер</string>
+    <string name="HideProxySponsorChannel">Схаваць канал проксі-спонсара</string>
+    <string name="ViewHistory">Прагляд гісторыі</string>
+    <string name="TypefaceUseDefault">Выкарыстоўваць сістэмны шрыфт па змаўчанні</string>
+    <string name="AddToSavedMessages">Захаваць паведамленне</string>
+    <string name="DependsOnDate">Залежыць ад даты</string>
+    <string name="DeleteAllFromSelfAlert">Папярэджанне! Гэта прывядзе да **выдалення ўсіх вашых паведамленняў** у гэтым чаце для **ўсіх** удзельнікаў.</string>
+    <string name="DeleteDownloadedFile">Выдаліць спампаваны файл</string>
+    <string name="TestBackendOn">Гэты ўліковы запіс падключыцца да тэставага серверу.</string>
+</resources>

@@ -1,3 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="CustomApiInput">Ručni unos</string>
+    <string name="UpdateLater">Kasnije</string>
+    <string name="SwitchVersion">Zameni verziju</string>
+    <string name="Ignore">Ignoriši</string>
+    <string name="Install">Instaliraj</string>
+    <string name="ChatAttachEnterMenuRecordAudio">Snjimi zvuk</string>
+    <string name="AccDescrChatAttachEnterMenu">Meni za unos u ćaskanje</string>
+    <string name="ChatAttachEnterMenuDisableLinkPreview">Onemogući pregled linkova</string>
+    <string name="DisableLinkPreviewByDefaultNotice">Podrazumevano onemogući zahtev za pregled linkova tokom unosa da bi sprečio server da sazna da je link deljen kroz Telegram.</string>
+    <string name="UseChatAttachEnterMenuNotice">Zameni dugme za snjimanje sa menijem za unos i dodaj dugme za pregled linkova.</string>
+    <string name="DownloadFailed">Preuzimanje neuspešno</string>
+    <string name="Locked">Zaključano</string>
+    <string name="CustomApiOfficial">Telegram Android</string>
+    <string name="CustomApiNo">Ne koristi prilagođeni API</string>
+    <string name="UseChatAttachEnterMenu">Koristi meni za unos</string>
+    <string name="ChatAttachEnterMenuEnableLinkPreview">Omogući pregled linkova</string>
+    <string name="CustomApi">Prilagođen API</string>
+    <string name="ChatAttachEnterMenuRecordVideo">Snjimi video</string>
+    <string name="CustomApiTGX">Telegram Android X</string>
 </resources>

@@ -249,7 +249,7 @@
 \nEmparelhado com Desativar Favoritos e Recentes.</string>
     <string name="EnableStickerPin">Ativar fixação de sticker</string>
     <string name="ArchiveFiles">Arquivos mortos</string>
-    <string name="Win32ExecutableFiles">Arquivos executáveis Win32</string>
+    <string name="Win32ExecutableFiles">Arquivos executáveis do Windows</string>
     <string name="AutoDownload">Download Automático</string>
     <string name="DeleteDownloadedFileSucceed">Excluído</string>
     <string name="DeleteDownloadedFileConfirm">Excluir este arquivo do cache local\?</string>
@@ -282,4 +282,5 @@
     <string name="StickerSettings">Sticker</string>
     <string name="InteractionSettings">Interação</string>
     <string name="ConfirmSettings">Confirmação</string>
+    <string name="nekoxPremiumGiftRemoved">Presentear assinatura premium não está disponível no NekoX.</string>
 </resources>

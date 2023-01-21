@@ -1,2 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="HidePhone">Sakrij moj broj telefona</string>
+    <string name="Chat">Ćaskanje</string>
+    <string name="ForceTabletMode">Forsiraj mod za tablete</string>
+    <string name="IPv6">Povezivanje kroz IPv6</string>
+    <string name="MessageMenu">Meni za poruke</string>
+    <string name="Hide">Sakrij</string>
+    <string name="AddToSavedMessages">Sačuvaj poruku</string>
+    <string name="Repeat">Ponovi</string>
+    <string name="CreateMention">Napravi pominjanje</string>
+    <string name="NekogramRunning">Nekogram radi</string>
+    <string name="NameOrder">Red imena</string>
+    <string name="FirstLast">Prvo poslednji</string>
+    <string name="IgnoreBlocked">Sakrij poruke od blokiranog korisnika</string>
+    <string name="TransparentStatusBar">Providna statusna traka</string>
+    <string name="ChristmasHat">Prikaži Deda Mrazovu kapicu svaki dan</string>
+    <string name="DeleteAllFromSelfAlert">Upozorenje! Ova radnja će **izbrisati sve poruke od tebe** u ovom ćaskanju za **sve** učesnike.</string>
+    <string name="TypefaceUseDefault">Koristi podrazumevani sistemski font</string>
+    <string name="NekoSettings">Neko podešavanja</string>
+    <string name="DeleteAllFromSelf">Obriši sve od mene</string>
+    <string name="BotLogin">Prijava bota</string>
+    <string name="Connection">Veza</string>
+    <string name="InvalidAccessToken">Nevažeći token za pristup</string>
+    <string name="LastFirst">Poslednje prvi</string>
+</resources>

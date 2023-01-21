@@ -145,4 +145,8 @@
     <string name="customSavePath">Percorso di salvataggio personalizzato</string>
     <string name="ChatBlurAlphaValue">Alpha della sfocatura in chat</string>
     <string name="forceBlurInChat">Forza l\'attivazione della sfocatura in chat</string>
+    <string name="disablePremiumStickerAnimation">Disabilita animazioni sticker premium</string>
+    <string name="mapDriftingFixForGoogleMaps">Risolvi Google Maps alla deriva in Cina</string>
+    <string name="enhancedFileLoader">Migliora la velocità di download</string>
+    <string name="useOSMDroidMap">Usa la mappa OSMDroid</string>
 </resources>

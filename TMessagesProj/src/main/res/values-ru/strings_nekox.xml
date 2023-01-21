@@ -274,7 +274,7 @@
     <string name="AutoCheckUpdatePreview">Preview (предварительные сборки)</string>
     <string name="NekoXUpdateTranslationHint">Нажмите, чтобы перевести журнал изменений</string>
     <string name="Name">Имя</string>
-    <string name="channelAlias">Свои лычки для сообщений от каналов</string>
+    <string name="channelAlias">Свои личные сообщения для сообщений от каналов</string>
     <string name="channelAliasDetails">Сначала включите «Помечать сообщения от каналов».</string>
     <string name="setChannelAliasName">Добавить лычку</string>
     <string name="labelChannelUser">Помечать сообщения от каналов</string>
@@ -282,4 +282,5 @@
     <string name="StickerSettings">Стикеры</string>
     <string name="ConfirmSettings">Подтверждение</string>
     <string name="InteractionSettings">Взаимодействие</string>
+    <string name="nekoxPremiumGiftRemoved">Вы не можете подарить Premium в NekoX.</string>
 </resources>
