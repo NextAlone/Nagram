@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Locale;
 
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.location.NekoLocationSource;
+import tw.nekomimi.nekogram.location.NekoLocation;
 
 @SuppressLint("MissingPermission")
 public class LocationController extends BaseController implements NotificationCenter.NotificationCenterDelegate, ILocationServiceProvider.IAPIConnectionCallbacks, ILocationServiceProvider.IAPIOnConnectionFailedListener {
@@ -553,7 +553,7 @@ public class LocationController extends BaseController implements NotificationCe
             return;
         }
         if (NekoConfig.fixDriftingForGoogleMaps() && location != null) {
-            NekoLocationSource.transform(location);
+            NekoLocation.transform(location);
         }
         lastKnownLocation = location;
         if (lastKnownLocation != null) {

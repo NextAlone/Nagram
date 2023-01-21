@@ -44,7 +44,6 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.text.TextUtils;
-import android.util.SparseArray;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
@@ -119,7 +118,7 @@ import java.util.List;
 import java.util.Locale;
 
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.location.NekoLocationSource;
+import tw.nekomimi.nekogram.location.NekoLocation;
 
 public class LocationActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -737,9 +736,9 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         mapTypeButton.setAdditionalXOffset(AndroidUtilities.dp(10));
         mapTypeButton.setAdditionalYOffset(-AndroidUtilities.dp(10));
         if (ApplicationLoader.getMapsProvider() instanceof OSMDroidMapsProvider) {
-            mapTypeButton.addSubItem(map_list_menu_osm, R.drawable.msg_map, "Standard OSM");
-            mapTypeButton.addSubItem(map_list_menu_wiki, R.drawable.msg_map, "Wikimedia");
-            mapTypeButton.addSubItem(map_list_menu_cartodark, R.drawable.msg_map, "Carto Dark");
+            mapTypeButton.addSubItem(map_list_menu_map, R.drawable.msg_map, "Standard OSM");
+            mapTypeButton.addSubItem(map_list_menu_satellite, R.drawable.msg_map, "Wikimedia");
+            mapTypeButton.addSubItem(map_list_menu_hybrid, R.drawable.msg_map, "Carto Dark");
         } else {
             mapTypeButton.addSubItem(map_list_menu_map, R.drawable.msg_map, LocaleController.getString("Map", R.string.Map));
             mapTypeButton.addSubItem(map_list_menu_satellite, R.drawable.msg_satellite, LocaleController.getString("Satellite", R.string.Satellite));
@@ -782,6 +781,9 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 map.setMapType(IMapsProvider.MAP_TYPE_HYBRID);
             }
         });
+        if (ApplicationLoader.getMapsProvider() instanceof OSMDroidMapsProvider) {
+            mapViewClip.addView(getAttributionOverlay(context), LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.BOTTOM, LocaleController.isRTL ? 0 : 4, 0, LocaleController.isRTL ? 4 : 0, 20));
+        }
 
         locationButton = new ImageView(context);
         drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(40), Theme.getColor(Theme.key_location_actionBackground), Theme.getColor(Theme.key_location_actionPressedBackground));
@@ -2109,7 +2111,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 l = lm.getLastKnownLocation(providers.get(i));
                 if (l != null) {
                     if (NekoConfig.fixDriftingForGoogleMaps()) {
-                        NekoLocationSource.transform(l);
+                        NekoLocation.transform(l);
                     }
                     break;
                 }

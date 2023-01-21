@@ -1,4 +1,4 @@
-package tw.nekomimi.nekogram.location;
+package nekox.messenger;
 
 import android.Manifest;
 import android.app.Activity;
@@ -24,6 +24,8 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Set;
+
+import tw.nekomimi.nekogram.location.GeodeticTransform;
 
 public class NekoLocationSource implements LocationSource {
     public final static Set<Integer> recent = Collections.synchronizedSet(Collections.newSetFromMap(new Cache<>()));

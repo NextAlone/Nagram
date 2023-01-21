@@ -48,4 +48,71 @@ public interface ILocationServiceProvider {
     interface ILocationListener {
         void onLocationChanged(Location location);
     }
+
+    class DummyLocationServiceProvider implements ILocationServiceProvider {
+        @Override
+        public void init(Context context) {
+
+        }
+
+        @Override
+        public ILocationRequest onCreateLocationRequest() {
+            return new ILocationRequest() {
+                @Override
+                public void setPriority(int priority) {
+
+                }
+
+                @Override
+                public void setInterval(long interval) {
+
+                }
+
+                @Override
+                public void setFastestInterval(long interval) {
+
+                }
+            };
+        }
+
+        @Override
+        public IMapApiClient onCreateLocationServicesAPI(Context context, IAPIConnectionCallbacks connectionCallbacks, IAPIOnConnectionFailedListener failedListener) {
+            return new IMapApiClient() {
+                @Override
+                public void connect() {
+
+                }
+
+                @Override
+                public void disconnect() {
+
+                }
+            };
+        }
+
+        @Override
+        public boolean checkServices() {
+            return false;
+        }
+
+        @Override
+        public void getLastLocation(Consumer<Location> callback) {
+
+        }
+
+        @Override
+        public void requestLocationUpdates(ILocationRequest request, ILocationListener locationListener) {
+
+        }
+
+        @Override
+        public void removeLocationUpdates(ILocationListener locationListener) {
+
+        }
+
+        @Override
+        public void checkLocationSettings(ILocationRequest request, Consumer<Integer> callback) {
+
+        }
+    }
 }

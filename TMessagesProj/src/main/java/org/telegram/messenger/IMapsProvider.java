@@ -14,6 +14,8 @@ import androidx.core.util.Consumer;
 
 import java.util.List;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public interface IMapsProvider {
     int MAP_TYPE_NORMAL = 0,
         MAP_TYPE_SATELLITE = 1,

@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.location.NekoLocationSource;
+import nekox.messenger.NekoLocationSource;
 
 public class GoogleMapsProvider implements IMapsProvider {
 
