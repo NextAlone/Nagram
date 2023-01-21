@@ -2538,6 +2538,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             updatePasscodeButton();
             updateProxyButton(false, false);
         }
+
+        scanItem = menu.addItem(nekox_scanqr, R.drawable.wallet_qr);
+        scanItem.setContentDescription(LocaleController.getString("ScanQRCode", R.string.ScanQRCode));
+        scanItem.setVisibility(View.GONE);
+
         searchItem = menu.addItem(0, R.drawable.ic_ab_search).setIsSearchField(true, false).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             boolean isSpeedItemCreated = false;
 
