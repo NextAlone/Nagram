@@ -1899,11 +1899,4 @@ public class ActionBar extends FrameLayout {
             backButtonImageView.setUnread(count);
         }
     }
-    public void setDrawBackButton(boolean b) {
-        this.drawBackButton = b;
-        if (backButtonImageView != null) {
-            backButtonImageView.invalidate();
-        }
-    }
-
 }

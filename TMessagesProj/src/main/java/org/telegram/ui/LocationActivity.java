@@ -1390,9 +1390,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             daddrLong = chatLocation.geo_point._long;
         }
         String domain;
-        if (BuildVars.isHuaweiStoreApp()) {
-            domain = "mapapp://navigation";
-        } else {
+        {
             domain = "http://maps.google.com/maps";
         }
         if (myLocation != null) {
