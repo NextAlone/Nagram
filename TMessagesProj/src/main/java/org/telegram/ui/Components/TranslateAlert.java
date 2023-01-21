@@ -70,7 +70,7 @@ import java.util.ArrayList;
 
 public class TranslateAlert extends Dialog {
 
-    public static volatile DispatchQueue translateQueue = new DispatchQueue("translateQueue", false);
+//    public static volatile DispatchQueue translateQueue = new DispatchQueue("translateQueue", false);
 
     private FrameLayout bulletinContainer;
     private FrameLayout contentView;

@@ -149,4 +149,5 @@
     <string name="enhancedFileLoader">加速下载</string>
     <string name="useOSMDroidMap">使用 OSMDroid 地图</string>
     <string name="mapDriftingFixForGoogleMaps">修复 Google 地图在中国的漂移问题</string>
+    <string name="useTelegramTranslateInChat">在聊天中使用 Telegram 官方翻译</string>
 </resources>

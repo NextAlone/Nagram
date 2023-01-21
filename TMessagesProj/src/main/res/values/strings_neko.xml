@@ -147,4 +147,5 @@
     <string name="enhancedFileLoader">Enhance Download speed</string>
     <string name="mapDriftingFixForGoogleMaps">Fix Google Maps drifting in China</string>
     <string name="useOSMDroidMap">Use OSMDroid Map</string>
+    <string name="useTelegramTranslateInChat">Use Telegram Translate in Chat</string>
 </resources>

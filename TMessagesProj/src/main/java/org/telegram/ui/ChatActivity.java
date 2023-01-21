@@ -282,6 +282,7 @@ import org.telegram.ui.Components.TextSelectionHint;
 import org.telegram.ui.Components.TextStyleSpan;
 import org.telegram.ui.Components.ThemeEditorView;
 import org.telegram.ui.Components.TranscribeButton;
+import org.telegram.ui.Components.TranslateAlert;
 import org.telegram.ui.Components.TrendingStickersAlert;
 import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.Components.URLSpanBotCommand;
@@ -24562,7 +24563,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         processSelectedOption(options.get(i));
                     });
                     if (option == OPTION_TRANSLATE) {
-                        // NekoX: Official Translation Removed
+                        // NekoX: Official Translation Move to neko_btn_translate
                     }
                     cell.setOnLongClickListener(v1 -> {
                         if (selectedObject == null || i < 0 || i >= options.size()) {
@@ -26009,7 +26010,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private int processSelectedOptionLongClick(ActionBarMenuSubItem cell, int option) {
         switch (option) {
             case nkbtn_translate: {
-
                 ChatMessageCell messageCell = null;
                 int count = chatListView.getChildCount();
                 for (int a = 0; a < count; a++) {
@@ -26024,27 +26024,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 if (selectedObject.messageOwner.translated) {
-
                     return 0;
-
                 }
 
                 Translator.showTargetLangSelect(cell, (locale) -> {
-
                     if (scrimPopupWindow != null) {
                         scrimPopupWindow.dismiss();
                         scrimPopupWindow = null;
                         scrimPopupWindowItems = null;
                     }
-
                     MessageTransKt.translateMessages(this, locale);
-
                     return Unit.INSTANCE;
-
                 });
-
                 return 1;
-
             }
             case nkbtn_repeat: {
                 repeatMessage(true);
@@ -32070,7 +32062,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 break;
             }
             case nkbtn_translate: {
-                MessageTransKt.translateMessages(this);
+                if (NekoConfig.useTelegramTranslateInChat.Bool()) {
+                    String toLang = LocaleController.getInstance().getCurrentLocale().getLanguage();
+                    int[] messageIdToTranslate = new int[] { selectedObject.getId() };
+                    final CharSequence finalMessageText = getMessageCaption(selectedObject, selectedObjectGroup, messageIdToTranslate);
+                    TranslateAlert.OnLinkPress onLinkPress = (link) -> {
+                        didPressMessageUrl(link, false, selectedObject, null);
+                        return true;
+                    };
+                    TLRPC.InputPeer inputPeer = selectedObject != null && (selectedObject.isPoll() || selectedObject.isVoiceTranscriptionOpen() || selectedObject.isSponsored()) ? null : getMessagesController().getInputPeer(dialog_id);
+                    TranslateAlert alert = TranslateAlert.showAlert(getParentActivity(), this, currentAccount, inputPeer, messageIdToTranslate[0], "und", toLang, finalMessageText, false, onLinkPress, () -> dimBehindView(false));
+                    alert.showDim(false);
+                    closeMenu(false);
+                } else {
+                    MessageTransKt.translateMessages(this);
+                }
                 break;
             }
             case nkbtn_detail: {
