@@ -14,6 +14,8 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -29,6 +31,15 @@ import android.os.StatFs;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.os.SystemClock;
+import android.text.TextUtils;
+import android.text.style.RelativeSizeSpan;
+import android.util.LongSparseArray;
+import android.util.SparseArray;
+import android.util.TypedValue;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.RelativeSizeSpan;
 import android.util.LongSparseArray;
@@ -40,9 +51,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.widget.NestedScrollView;
+
 import androidx.annotation.NonNull;
+import androidx.core.graphics.ColorUtils;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -52,12 +70,19 @@ import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BotWebViewVibrationEffect;
+import org.telegram.messenger.CacheByChatsController;
+import org.telegram.messenger.Emoji;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.DialogObject;
+import org.telegram.messenger.FileLoader;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.BotWebViewVibrationEffect;
 import org.telegram.messenger.CacheByChatsController;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.FilePathDatabase;
 import org.telegram.messenger.FilePathDatabase;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
@@ -69,6 +94,8 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.NativeByteBuffer;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
@@ -83,10 +110,16 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Cells.HeaderCell;
+import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextCheckBoxCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.AnimatedFloat;
+import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.CacheChart;
+import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AnimatedFloat;
 import org.telegram.ui.Components.AnimatedTextView;
@@ -166,8 +199,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
     private long totalSize = -1;
     private long totalDeviceSize = -1;
     private long totalDeviceFreeSize = -1;
-//    private long migrateOldFolderRow = -1;
-    private StorageDiagramView.ClearViewData[] clearViewData = new StorageDiagramView.ClearViewData[7];
+
     private long migrateOldFolderRow = -1;
     private boolean calculating = true;
     private boolean collapsed = true;
@@ -1312,39 +1344,6 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
         });
     }
 
-    private void resetData() {
-        BottomBuilder builder = new BottomBuilder(getParentActivity());
-        builder.addTitle(LocaleController.getString("StorageResetInfo", R.string.StorageResetInfo));
-        builder.addItem(LocaleController.getString("CacheClear", R.string.CacheClear), R.drawable.msg_clear, true, (i) -> {
-            if (getParentActivity() == null) {
-                return Unit.INSTANCE;
-            }
-            final AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
-            progressDialog.setCanCancel(false);
-            progressDialog.show();
-            ConnectionsManager.reseting = true;
-            UIUtil.runOnIoDispatcher(() -> {
-                FileUtil.delete(EnvUtil.getTelegramPath());
-                for (int a : SharedConfig.activeAccounts) {
-                    AccountInstance instance = AccountInstance.getInstance(a);
-                    if (instance.getUserConfig().isClientActivated()) {
-                        TLRPC.TL_auth_logOut req = new TLRPC.TL_auth_logOut();
-                        instance.getConnectionsManager().sendRequest(req, (response, error) -> {
-                        });
-                    }
-                }
-                FileUtil.delete(getParentActivity().getFilesDir().getParentFile());
-                AndroidUtilities.runOnUIThread(() -> {
-                    progressDialog.dismiss();
-                    ProcessPhoenix.triggerRebirth(getParentActivity(), new Intent(getParentActivity(), LaunchActivity.class));
-                }, 2000L);
-            });
-            return Unit.INSTANCE;
-        });
-        builder.addCancelItem();
-        builder.show();
-    }
-
     private void clearDatabase() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
         builder.setTitle(LocaleController.getString("LocalDatabaseClearTextTitle", R.string.LocalDatabaseClearTextTitle));
@@ -1371,6 +1370,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
             button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
         }
     }
+
 
     @Override
     public void onResume() {
@@ -1895,8 +1895,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int position = holder.getAdapterPosition();
-            // NekoX: Remove migrateOldFolderRow
-            return (holder.getItemViewType() == VIEW_TYPE_STORAGE && (totalSize > 0) && !calculating) || holder.getItemViewType() == VIEW_TYPE_CHAT || holder.getItemViewType() == VIEW_TYPE_KEEP_MEDIA_CELL || holder.getItemViewType() == VIEW_TYPE_SECTION;
+            return position == migrateOldFolderRow || (holder.getItemViewType() == VIEW_TYPE_STORAGE && (totalSize > 0) && !calculating) || holder.getItemViewType() == VIEW_TYPE_CHAT || holder.getItemViewType() == VIEW_TYPE_KEEP_MEDIA_CELL || holder.getItemViewType() == VIEW_TYPE_SECTION;
         }
 
         @Override
@@ -1926,32 +1925,24 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     slideChooseView.setCallback(index -> {
                         if (index == 0) {
-                            SharedConfig.setKeepMedia(4);
-                        } else if (index == 1) {
                             SharedConfig.setKeepMedia(3);
-                        } else if (index == 2) {
+                        } else if (index == 1) {
                             SharedConfig.setKeepMedia(0);
-                        } else if (index == 3) {
+                        } else if (index == 2) {
                             SharedConfig.setKeepMedia(1);
-                        } else if (index == 4) {
+                        } else if (index == 3) {
                             SharedConfig.setKeepMedia(2);
                         }
                     });
                     int keepMedia = SharedConfig.keepMedia;
                     int index;
                     if (keepMedia == 3) {
-                        index = 1;
-                    } else if (keepMedia == 4) {
                         index = 0;
                     } else {
-                        index = keepMedia + 2;
+                        index = keepMedia + 1;
                     }
-                    slideChooseView.setOptions(index, LocaleController.formatPluralString("Days", 1), LocaleController.formatPluralString("Days", 3), LocaleController.formatPluralString("Weeks", 1), LocaleController.formatPluralString("Months", 1), LocaleController.getString("KeepMediaForever", R.string.KeepMediaForever));
+                    slideChooseView.setOptions(index, LocaleController.formatPluralString("Days", 3), LocaleController.formatPluralString("Weeks", 1), LocaleController.formatPluralString("Months", 1), LocaleController.getString("KeepMediaForever", R.string.KeepMediaForever));
                     break;
-//                     fixme merge 9.2.2
-//                case 5:
-//                    view = new ShadowSectionCell(mContext);
-//                    break;
                 case VIEW_TYPE_CHAT:
                     UserCell userCell = new UserCell(getContext(), getResourceProvider());
                     userCell.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
@@ -1974,16 +1965,16 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                     view = cacheChart = new CacheChart(mContext) {
                         @Override
                         protected void onSectionClick(int index) {
-//                            if (index == 8) {
-//                                index = -1;
-//                            }
-//                            for (int i = 0; i < itemInners.size(); ++i) {
-//                                ItemInner item = itemInners.get(i);
-//                                if (item != null && item.index == index) {
-//                                    toggleSection(item, null);
-//                                    return;
-//                                }
-//                            }
+                            //                            if (index == 8) {
+                            //                                index = -1;
+                            //                            }
+                            //                            for (int i = 0; i < itemInners.size(); ++i) {
+                            //                                ItemInner item = itemInners.get(i);
+                            //                                if (item != null && item.index == index) {
+                            //                                    toggleSection(item, null);
+                            //                                    return;
+                            //                                }
+                            //                            }
                         }
 
                         @Override
@@ -2107,9 +2098,9 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
 
                     float totalSizeInGb = (int) (totalDeviceSize / 1024L / 1024L) / 1000.0f;
                     ArrayList<Integer> options = new ArrayList<>();
-//                    if (BuildVars.DEBUG_PRIVATE_VERSION) {
-//                        options.add(1);
-//                    }
+                    //                    if (BuildVars.DEBUG_PRIVATE_VERSION) {
+                    //                        options.add(1);
+                    //                    }
                     if (totalSizeInGb <= 17) {
                         options.add(2);
                     }
@@ -2213,9 +2204,9 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
 //                        textCell.setTextAndValue(LocaleController.getString("ClearLocalDatabase", R.string.ClearLocalDatabase), AndroidUtilities.formatFileSize(databaseSize), updateDatabaseSize, false);
 //                        updateDatabaseSize = false;
 //                    } else
-//                    if (position == migrateOldFolderRow) {
-//                        textCell.setTextAndValue(LocaleController.getString("MigrateOldFolder", R.string.MigrateOldFolder), null, false);
-//                    }
+                    if (position == migrateOldFolderRow) {
+                        textCell.setTextAndValue(LocaleController.getString("MigrateOldFolder", R.string.MigrateOldFolder), null, false);
+                    }
                     break;
                 case VIEW_TYPE_INFO:
                     TextInfoPrivacyCell privacyCell = (TextInfoPrivacyCell) holder.itemView;

@@ -10,6 +10,25 @@ def verCode = 1125
 def officialVer = "9.3.3"
 def officialCode = 3026
 
+def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
+
+def beta = verName.contains("preview")
+
+if (serviceAccountCredentialsFile.isFile()) {
+    setupPlay(beta)
+    play.serviceAccountCredentials = serviceAccountCredentialsFile
+} else if (System.getenv().containsKey("ANDROID_PUBLISHER_CREDENTIALS")) {
+    setupPlay(beta)
+}
+
+void setupPlay(boolean beta) {
+    apply plugin: "com.github.triplet.play"
+    play {
+        track = beta ? "beta" : "production"
+        defaultToAppBundles = true
+    }
+}
+
 configurations {
     compile.exclude module: "support-v4"
 }
@@ -337,10 +356,10 @@ dependencies {
     compileOnly "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
     compileOnly "com.google.android.play:core:$playCoreVersion"
 
-    // TODO: Remove in nogcm vesion
-    implementation 'com.google.android.gms:play-services-maps:18.1.0'
-    implementation 'com.google.android.gms:play-services-location:20.0.0'
-
+    debugImplementation 'com.google.android.gms:play-services-maps:18.1.0'
+    debugImplementation 'com.google.android.gms:play-services-location:20.0.0'
+    releaseImplementation 'com.google.android.gms:play-services-maps:18.1.0'
+    releaseImplementation 'com.google.android.gms:play-services-location:20.0.0'
 
     debugImplementation "com.google.firebase:firebase-messaging:$fcmVersion"
     debugImplementation "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"

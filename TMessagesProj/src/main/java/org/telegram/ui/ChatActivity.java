@@ -282,6 +282,7 @@ import org.telegram.ui.Components.TextSelectionHint;
 import org.telegram.ui.Components.TextStyleSpan;
 import org.telegram.ui.Components.ThemeEditorView;
 import org.telegram.ui.Components.TranscribeButton;
+import org.telegram.ui.Components.TranslateAlert;
 import org.telegram.ui.Components.TrendingStickersAlert;
 import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.Components.URLSpanBotCommand;
@@ -1702,8 +1703,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         int migrated_to = arguments.getInt("migrated_to", 0);
         scrollToTopOnResume = arguments.getBoolean("scrollToTopOnResume", false);
         needRemovePreviousSameChatActivity = arguments.getBoolean("need_remove_previous_same_chat_activity", true);
-        justCreatedChat = arguments.getBoolean("just_created_chat", false);
         noForwardQuote = arguments.getBoolean("forward_noquote", false);
+        justCreatedChat = arguments.getBoolean("just_created_chat", false);
 
         if (chatId != 0) {
             currentChat = getMessagesController().getChat(chatId);
@@ -24838,7 +24839,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         processSelectedOption(options.get(i));
                     });
                     if (option == OPTION_TRANSLATE) {
-                        // NekoX: Official Translation Removed
+                        // NekoX: Official Translation Move to neko_btn_translate
                     }
                     cell.setOnLongClickListener(v1 -> {
                         if (selectedObject == null || i < 0 || i >= options.size()) {
@@ -26317,6 +26318,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             case OPTION_OPEN_PROFILE: {
                 TLRPC.Peer from = selectedObject.messageOwner.from_id;
                 openUserProfile(from.user_id != 0 ? from.user_id : from.channel_id != 0 ? from.channel_id : from.chat_id);
+                break;
             }
             default: {
                 nkbtn_onclick(option);
@@ -26332,7 +26334,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private int processSelectedOptionLongClick(ActionBarMenuSubItem cell, int option) {
         switch (option) {
             case nkbtn_translate: {
-
                 ChatMessageCell messageCell = null;
                 int count = chatListView.getChildCount();
                 for (int a = 0; a < count; a++) {
@@ -26347,27 +26348,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 if (selectedObject.messageOwner.translated) {
-
                     return 0;
-
                 }
 
                 Translator.showTargetLangSelect(cell, (locale) -> {
-
                     if (scrimPopupWindow != null) {
                         scrimPopupWindow.dismiss();
                         scrimPopupWindow = null;
                         scrimPopupWindowItems = null;
                     }
-
                     MessageTransKt.translateMessages(this, locale);
-
                     return Unit.INSTANCE;
-
                 });
-
                 return 1;
-
             }
             case nkbtn_repeat: {
                 repeatMessage(true, false);
@@ -27474,10 +27467,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     presentFragment(fragment);
                 }
             } else {
-//                if (qr) {
-//                    ProxyUtil.showQrDialog(getParentActivity(), str);
-//                    return;
-//                }
                 processExternalUrl(0, str, url, cell, false);
             }
         }
@@ -27577,11 +27566,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else if (type == 1) {
                 Browser.openUrl(getParentActivity(), Uri.parse(url), inlineReturn == 0, false, makeProgressForLink(cell, span));
             } else if (type == 2) {
-                // NekoX: Fix skipOpenLinkConfirm broken in 7.6.0, since processExternalUrl is imported in 7.6.0
-                if (NekoConfig.skipOpenLinkConfirm.Bool())
-                    Browser.openUrl(getParentActivity(), Uri.parse(url), inlineReturn == 0, true, makeProgressForLink(cell, span));
-                else
-                    AlertsCreator.showOpenUrlAlert(ChatActivity.this, url, true, true, true);
+                Browser.openUrl(getParentActivity(), Uri.parse(url), inlineReturn == 0, true, makeProgressForLink(cell, span));
             }
         }
     }
@@ -27726,63 +27711,54 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         } else {
             final String urlFinal = ((URLSpan) url).getURL();
             if (longPress) {
-                BottomBuilder builder = new BottomBuilder(getParentActivity());
+                final ChatMessageCell finalCell = cell;
+                BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity(), false, themeDelegate);
                 String formattedUrl = urlFinal;
                 try {
                     formattedUrl = URLDecoder.decode(urlFinal.replaceAll("\\+", "%2b"), "UTF-8");
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
-                builder.addTitle(formattedUrl);
-                builder.addItems(
-                        new String[]{
-                                LocaleController.getString("Open", R.string.Open),
-                                LocaleController.getString("Copy", R.string.Copy),
-                                LocaleController.getString("ShareQRCode", R.string.ShareQRCode),
-                                LocaleController.getString("ShareMessages", R.string.ShareMessages)
-                        },
-                        new int[]{
-                                R.drawable.msg_openin,
-                                R.drawable.msg_copy,
-                                R.drawable.msg_qrcode,
-                                R.drawable.msg_shareout
-                        },
-                        (which, text, __) -> {
-                            if (which == 0) {
-                                processExternalUrl(1, urlFinal, url, null, false);
-                            } else if (which == 1) {
-                                String url1 = urlFinal;
-                                boolean tel = false;
-                                boolean mail = false;
-                                if (url1.startsWith("mailto:")) {
-                                    url1 = url1.substring(7);
-                                    mail = true;
-                                } else if (url1.startsWith("tel:")) {
-                                    url1 = url1.substring(4);
-                                    tel = true;
-                                }
-                                AndroidUtilities.addToClipboard(url1);
-                                if (mail) {
-                                    undoView.showWithAction(0, UndoView.ACTION_EMAIL_COPIED, null);
-                                } else if (tel) {
-                                    undoView.showWithAction(0, UndoView.ACTION_PHONE_COPIED, null);
-                                } else {
-                                    undoView.showWithAction(0, UndoView.ACTION_LINK_COPIED, null);
-                                }
-                            } else if (which == 2) {
-                                ProxyUtil.showQrDialog(getParentActivity(), urlFinal);
-                            } else if (which == 3) {
-                                Intent intent = new Intent(Intent.ACTION_SEND);
-                                intent.setType("text/plain");
-                                intent.putExtra(Intent.EXTRA_TEXT, urlFinal);
-                                try {
-                                    getParentActivity().startActivity(intent);
-                                } catch (Exception e) {
-                                    AlertUtil.showToast(e);
-                                }
+                builder.setTitle(formattedUrl);
+                builder.setTitleMultipleLines(true);
+                builder.setItems(new CharSequence[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("ShareFile", R.string.ShareFile), LocaleController.getString("Copy", R.string.Copy)}, (dialog, which) -> {
+                    if (which == 0) {
+                        processExternalUrl(1, urlFinal, url, finalCell, false);
+                    } else if (which == 1 || which == 2) {
+                        String url1 = urlFinal;
+                        boolean tel = false;
+                        boolean mail = false;
+                        if (url1.startsWith("mailto:")) {
+                            url1 = url1.substring(7);
+                            mail = true;
+                        } else if (url1.startsWith("tel:")) {
+                            url1 = url1.substring(4);
+                            tel = true;
+                        }
+                        if (which == 2) {
+                            AndroidUtilities.addToClipboard(url1);
+                            if (mail) {
+                                undoView.showWithAction(0, UndoView.ACTION_EMAIL_COPIED, null);
+                            } else if (tel) {
+                                undoView.showWithAction(0, UndoView.ACTION_PHONE_COPIED, null);
+                            } else {
+                                undoView.showWithAction(0, UndoView.ACTION_LINK_COPIED, null);
                             }
-                            return Unit.INSTANCE;
-                        });
+                        } else {
+                            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                            shareIntent.setType("text/plain");
+                            shareIntent.putExtra(Intent.EXTRA_TEXT, url1);
+                            Intent chooserIntent = Intent.createChooser(shareIntent, LocaleController.getString("ShareFile", R.string.ShareFile));
+                            chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            ApplicationLoader.applicationContext.startActivity(chooserIntent);
+                        }
+                    }
+                });
+                builder.setOnPreDismissListener(di -> {
+                    if (finalCell != null) {
+                        finalCell.resetPressedLink(-1);
+                    }
+                });
                 showDialog(builder.create());
             } else {
                 boolean forceAlert = url instanceof URLSpanReplacement;
@@ -32476,7 +32452,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 break;
             }
             case nkbtn_translate: {
-                MessageTransKt.translateMessages(this);
+                if (NekoConfig.useTelegramTranslateInChat.Bool()) {
+                    String toLang = LocaleController.getInstance().getCurrentLocale().getLanguage();
+                    int[] messageIdToTranslate = new int[] { selectedObject.getId() };
+                    final CharSequence finalMessageText = getMessageCaption(selectedObject, selectedObjectGroup, messageIdToTranslate);
+                    TranslateAlert.OnLinkPress onLinkPress = (link) -> {
+                        didPressMessageUrl(link, false, selectedObject, null);
+                        return true;
+                    };
+                    TLRPC.InputPeer inputPeer = selectedObject != null && (selectedObject.isPoll() || selectedObject.isVoiceTranscriptionOpen() || selectedObject.isSponsored()) ? null : getMessagesController().getInputPeer(dialog_id);
+                    TranslateAlert alert = TranslateAlert.showAlert(getParentActivity(), this, currentAccount, inputPeer, messageIdToTranslate[0], "und", toLang, finalMessageText, false, onLinkPress, () -> dimBehindView(false));
+                    alert.showDim(false);
+                    closeMenu(false);
+                } else {
+                    MessageTransKt.translateMessages(this);
+                }
                 break;
             }
             case nkbtn_detail: {

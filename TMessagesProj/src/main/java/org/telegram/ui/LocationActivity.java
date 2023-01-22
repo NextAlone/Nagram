@@ -44,7 +44,6 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.os.Build;
 import android.text.TextUtils;
-import android.util.SparseArray;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
@@ -78,6 +77,7 @@ import org.telegram.messenger.LocationController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.OSMDroidMapsProvider;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
@@ -122,7 +122,7 @@ import java.util.List;
 import java.util.Locale;
 
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.location.NekoLocationSource;
+import tw.nekomimi.nekogram.location.NekoLocation;
 
 public class LocationActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -746,14 +746,14 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         mapTypeButton.setSubMenuOpenSide(2);
         mapTypeButton.setAdditionalXOffset(AndroidUtilities.dp(10));
         mapTypeButton.setAdditionalYOffset(-AndroidUtilities.dp(10));
-        if (false) {
+        if (ApplicationLoader.getMapsProvider() instanceof OSMDroidMapsProvider) {
+            mapTypeButton.addSubItem(map_list_menu_map, R.drawable.msg_map, "Standard OSM");
+            mapTypeButton.addSubItem(map_list_menu_satellite, R.drawable.msg_map, "Wikimedia");
+            mapTypeButton.addSubItem(map_list_menu_hybrid, R.drawable.msg_map, "Carto Dark");
+        } else {
             mapTypeButton.addSubItem(map_list_menu_map, R.drawable.msg_map, LocaleController.getString("Map", R.string.Map));
             mapTypeButton.addSubItem(map_list_menu_satellite, R.drawable.msg_satellite, LocaleController.getString("Satellite", R.string.Satellite));
             mapTypeButton.addSubItem(map_list_menu_hybrid, R.drawable.msg_hybrid, LocaleController.getString("Hybrid", R.string.Hybrid));
-        } else {
-            mapTypeButton.addSubItem(map_list_menu_osm, R.drawable.msg_map, "Standard OSM");
-            mapTypeButton.addSubItem(map_list_menu_wiki, R.drawable.msg_map, "Wikimedia");
-            mapTypeButton.addSubItem(map_list_menu_cartodark, R.drawable.msg_map, "Carto Dark");
         }
         mapTypeButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
         Drawable drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(40), Theme.getColor(Theme.key_location_actionBackground), Theme.getColor(Theme.key_location_actionPressedBackground));
@@ -792,6 +792,9 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 map.setMapType(IMapsProvider.MAP_TYPE_HYBRID);
             }
         });
+        if (ApplicationLoader.getMapsProvider() instanceof OSMDroidMapsProvider) {
+            mapViewClip.addView(getAttributionOverlay(context), LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.BOTTOM, LocaleController.isRTL ? 0 : 4, 0, LocaleController.isRTL ? 4 : 0, 20));
+        }
 
         locationButton = new ImageView(context);
         drawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(40), Theme.getColor(Theme.key_location_actionBackground), Theme.getColor(Theme.key_location_actionPressedBackground));
@@ -1211,13 +1214,13 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
         }));
         IMapsProvider.IMapView map = mapView;
-        new Thread(() -> {
-            try {
-                map.onCreate(null);
-            } catch (Exception e) {
-                //this will cause exception, but will preload google maps?
-            }
-            AndroidUtilities.runOnUIThread(() -> {
+//        new Thread(() -> {
+//            try {
+//                map.onCreate(null);
+//            } catch (Exception e) {
+//                //this will cause exception, but will preload google maps?
+//            }
+//            AndroidUtilities.runOnUIThread(() -> {
                 if (mapView != null && getParentActivity() != null) {
                     try {
                         map.onCreate(null);
@@ -1240,8 +1243,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         FileLog.e(e);
                     }
                 }
-            });
-        }).start();
+//            });
+//        }).start();
 
         if (messageObject == null && chatLocation == null) {
             if (chat != null && locationType == LOCATION_TYPE_GROUP && dialogId != 0) {
@@ -1663,8 +1666,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         for (int a = 0, N = places.size(); a < N; a++) {
             TLRPC.TL_messageMediaVenue venue = places.get(a);
             try {
-                IMapsProvider.IMarkerOptions options = ApplicationLoader.getMapsProvider().onCreateMarkerOptions().position(new IMapsProvider.LatLng(venue.geo.lat, venue.geo._long));
-                options.icon(createPlaceBitmap(a));
+                IMapsProvider.IMarkerOptions options = ApplicationLoader.getMapsProvider().onCreateMarkerOptions(mapView).position(new IMapsProvider.LatLng(venue.geo.lat, venue.geo._long));
+                options.icon(getParentActivity().getResources(), createPlaceBitmap(a));
                 options.anchor(0.5f, 0.5f);
                 options.title(venue.title);
                 options.snippet(venue.address);
@@ -1700,25 +1703,25 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
 
             try {
-                IMapsProvider.IMarkerOptions options = ApplicationLoader.getMapsProvider().onCreateMarkerOptions().position(latLng);
+                IMapsProvider.IMarkerOptions options = ApplicationLoader.getMapsProvider().onCreateMarkerOptions(mapView).position(latLng);
                 Bitmap bitmap = createUserBitmap(liveLocation);
                 if (bitmap != null) {
-                    options.icon(bitmap);
+                    options.icon(getParentActivity().getResources(), bitmap);
                     options.anchor(0.5f, 0.907f);
                     liveLocation.marker = map.addMarker(options);
 
                     if (!UserObject.isUserSelf(liveLocation.user)) {
-                        IMapsProvider.IMarkerOptions dirOptions = ApplicationLoader.getMapsProvider().onCreateMarkerOptions().position(latLng).flat(true);
+                        IMapsProvider.IMarkerOptions dirOptions = ApplicationLoader.getMapsProvider().onCreateMarkerOptions(mapView).position(latLng).flat(true);
                         dirOptions.anchor(0.5f, 0.5f);
                         liveLocation.directionMarker = map.addMarker(dirOptions);
 
                         if (message.media.heading != 0) {
                             liveLocation.directionMarker.setRotation(message.media.heading);
-                            liveLocation.directionMarker.setIcon(R.drawable.map_pin_cone2);
+                            liveLocation.directionMarker.setIcon(getParentActivity().getResources(), R.drawable.map_pin_cone2);
                             liveLocation.hasRotation = true;
                         } else {
                             liveLocation.directionMarker.setRotation(0);
-                            liveLocation.directionMarker.setIcon(R.drawable.map_pin_circle);
+                            liveLocation.directionMarker.setIcon(getParentActivity().getResources(), R.drawable.map_pin_circle);
                             liveLocation.hasRotation = false;
                         }
                     }
@@ -1755,16 +1758,16 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         liveLocation.id = dialogId;
 
         try {
-            IMapsProvider.IMarkerOptions options = ApplicationLoader.getMapsProvider().onCreateMarkerOptions().position(latLng);
+            IMapsProvider.IMarkerOptions options = ApplicationLoader.getMapsProvider().onCreateMarkerOptions(mapView).position(latLng);
             Bitmap bitmap = createUserBitmap(liveLocation);
             if (bitmap != null) {
-                options.icon(bitmap);
+                options.icon(getParentActivity().getResources(), bitmap);
                 options.anchor(0.5f, 0.907f);
                 liveLocation.marker = map.addMarker(options);
 
                 if (!UserObject.isUserSelf(liveLocation.user)) {
-                    IMapsProvider.IMarkerOptions dirOptions = ApplicationLoader.getMapsProvider().onCreateMarkerOptions().position(latLng).flat(true);
-                    dirOptions.icon(R.drawable.map_pin_circle);
+                    IMapsProvider.IMarkerOptions dirOptions = ApplicationLoader.getMapsProvider().onCreateMarkerOptions(mapView).position(latLng).flat(true);
+                    dirOptions.icon(getParentActivity().getResources(), R.drawable.map_pin_circle);
                     dirOptions.anchor(0.5f, 0.5f);
                     liveLocation.directionMarker = map.addMarker(dirOptions);
                 }
@@ -1796,7 +1799,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             } else {
                 IMapsProvider.LatLng latLng = new IMapsProvider.LatLng(userLocation.getLatitude(), userLocation.getLongitude());
                 try {
-                    map.addMarker(ApplicationLoader.getMapsProvider().onCreateMarkerOptions().position(latLng).icon(R.drawable.map_pin2));
+                    map.addMarker(ApplicationLoader.getMapsProvider().onCreateMarkerOptions(mapView).position(latLng).icon(getParentActivity().getResources(), R.drawable.map_pin2));
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
@@ -2187,7 +2190,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 l = lm.getLastKnownLocation(providers.get(i));
                 if (l != null) {
                     if (NekoConfig.fixDriftingForGoogleMaps()) {
-                        NekoLocationSource.transform(l);
+                        NekoLocation.transform(l);
                     }
                     break;
                 }
@@ -2545,13 +2548,13 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                             if (messageObject.messageOwner.media.heading != 0) {
                                 liveLocation.directionMarker.setRotation(messageObject.messageOwner.media.heading);
                                 if (!liveLocation.hasRotation) {
-                                    liveLocation.directionMarker.setIcon(R.drawable.map_pin_cone2);
+                                    liveLocation.directionMarker.setIcon(getParentActivity().getResources(), R.drawable.map_pin_cone2);
                                     liveLocation.hasRotation = true;
                                 }
                             } else {
                                 if (liveLocation.hasRotation) {
                                     liveLocation.directionMarker.setRotation(0);
-                                    liveLocation.directionMarker.setIcon(R.drawable.map_pin_circle);
+                                    liveLocation.directionMarker.setIcon(getParentActivity().getResources(), R.drawable.map_pin_circle);
                                     liveLocation.hasRotation = false;
                                 }
                             }

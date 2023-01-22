@@ -11,4 +11,7 @@
     <string name="DisableLinkPreviewByDefault">Lumpuhkan Pratonton Pautan sebagai lalai</string>
     <string name="DisableLinkPreviewByDefaultNotice">Lumpuhkan permintaan pratonton pautan semasa input secara lalai untuk menghalang pelayan daripada mengetahui bahawa pautan itu dikongsi melalui Telegram.</string>
     <string name="UseChatAttachEnterMenu">Guna menu input</string>
+    <string name="CustomApiInput">Input manual</string>
+    <string name="CustomApiOfficial">Telegram Android</string>
+    <string name="CheckUpdate">Periksa kemaskini</string>
 </resources>

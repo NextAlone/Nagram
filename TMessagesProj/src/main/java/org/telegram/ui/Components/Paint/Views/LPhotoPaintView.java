@@ -151,6 +151,7 @@ public class LPhotoPaintView extends SizeNotifierFrameLayoutPhoto implements IPh
         }
     };
 
+//    private ArrayList<PhotoFace> faces;
     private int originalBitmapRotation;
     private BigInteger lcm;
 
@@ -246,7 +247,8 @@ public class LPhotoPaintView extends SizeNotifierFrameLayoutPhoto implements IPh
         queue = new DispatchQueue("Paint");
 
         bitmapToEdit = bitmap;
-        facesBitmap = originalBitmap;
+        // NekoX: Ignore face detection related
+//        facesBitmap = originalBitmap;
         originalBitmapRotation = originalRotation;
         undoStore = new UndoStore();
         undoStore.setDelegate(() -> {
@@ -1289,11 +1291,11 @@ public class LPhotoPaintView extends SizeNotifierFrameLayoutPhoto implements IPh
     private void openStickersView() {
         final int wasSelectedIndex = tabsSelectedIndex;
         switchTab(1);
-        postDelayed(() -> {
-            if (facesBitmap != null) {
-                detectFaces();
-            }
-        }, 350);
+//        postDelayed(() -> {
+//            if (facesBitmap != null) {
+//                detectFaces();
+//            }
+//        }, 350);
         StickerMasksAlert stickerMasksAlert = new StickerMasksAlert(getContext(), facesBitmap == null, resourcesProvider) {
             @Override
             public void onDismissAnimationStart() {
@@ -2575,36 +2577,8 @@ public class LPhotoPaintView extends SizeNotifierFrameLayoutPhoto implements IPh
             baseScale = 0.75f;
         }
         StickerPosition defaultPosition = new StickerPosition(centerPositionForEntity(), baseScale, rotation);
+        // NekoX: Remove face detection parts
         return defaultPosition;
-//        if (maskCoords == null || faces == null || faces.size() == 0) {
-//            return defaultPosition;
-//        } else {
-//            int anchor = maskCoords.n;
-//
-//            PhotoFace face = getRandomFaceWithVacantAnchor(anchor, document.id, maskCoords);
-//            if (face == null) {
-//                return defaultPosition;
-//            }
-//
-//            Point referencePoint = face.getPointForAnchor(anchor);
-//            float referenceWidth = face.getWidthForAnchor(anchor);
-//            float angle = face.getAngle();
-//            Size baseSize = baseStickerSize();
-//
-//            float scale = (float) (referenceWidth / baseSize.width * maskCoords.zoom);
-//
-//            float radAngle = (float) Math.toRadians(angle);
-//            float xCompX = (float) (Math.sin(Math.PI / 2.0f - radAngle) * referenceWidth * maskCoords.x);
-//            float xCompY = (float) (Math.cos(Math.PI / 2.0f - radAngle) * referenceWidth * maskCoords.x);
-//
-//            float yCompX = (float) (Math.cos(Math.PI / 2.0f + radAngle) * referenceWidth * maskCoords.y);
-//            float yCompY = (float) (Math.sin(Math.PI / 2.0f + radAngle) * referenceWidth * maskCoords.y);
-//
-//            float x = referencePoint.x + xCompX + yCompX;
-//            float y = referencePoint.y + xCompY + yCompY;
-//
-//            return new StickerPosition(new Point(x, y), scale, angle);
-//        }
     }
 
 //    private PhotoFace getRandomFaceWithVacantAnchor(int anchor, long documentId, TLRPC.TL_maskCoords maskCoords) {
@@ -2626,7 +2600,7 @@ public class LPhotoPaintView extends SizeNotifierFrameLayoutPhoto implements IPh
 //
 //        return selectedFace;
 //    }
-//
+
 //    private boolean isFaceAnchorOccupied(PhotoFace face, int anchor, long documentId, TLRPC.TL_maskCoords maskCoords) {
 //        Point anchorPoint = face.getPointForAnchor(anchor);
 //        if (anchorPoint == null) {

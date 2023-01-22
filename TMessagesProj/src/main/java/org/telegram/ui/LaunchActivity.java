@@ -2183,6 +2183,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                                                         threadId = messageId;
                                                         messageId = Utilities.parseInt(segments.get(3));
                                                     }
+                                                }
                                             } else if (path.startsWith("@id")) {
                                                 try {
                                                     long userId = Utilities.parseLong(StringsKt.substringAfter(path, "@id", "0"));
@@ -2191,7 +2192,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                                                     }
                                                 } catch (Exception e) {
                                                     FileLog.e(e);
-                                                }
                                                 }
                                             } else if (path.startsWith("contact/")) {
                                                 contactToken = path.substring(8);

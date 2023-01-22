@@ -1,6 +1,7 @@
 package org.telegram.messenger;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.location.Location;
@@ -13,6 +14,8 @@ import androidx.core.util.Consumer;
 
 import java.util.List;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public interface IMapsProvider {
     int MAP_TYPE_NORMAL = 0,
         MAP_TYPE_SATELLITE = 1,
@@ -20,7 +23,7 @@ public interface IMapsProvider {
 
     void initializeMaps(Context context);
     IMapView onCreateMapView(Context context);
-    IMarkerOptions onCreateMarkerOptions();
+    IMarkerOptions onCreateMarkerOptions(IMapView imapView);
     ICircleOptions onCreateCircleOptions();
     ILatLngBoundsBuilder onCreateLatLngBoundsBuilder();
     ICameraUpdate newCameraUpdateLatLng(LatLng latLng);
@@ -80,15 +83,15 @@ public interface IMapsProvider {
         LatLng getPosition();
         void setPosition(LatLng latLng);
         void setRotation(int rotation);
-        void setIcon(Bitmap bitmap);
-        void setIcon(int resId);
+        void setIcon(Resources resources, Bitmap bitmap);
+        void setIcon(Resources resources, int resId);
         void remove();
     }
 
     interface IMarkerOptions {
         IMarkerOptions position(LatLng latLng);
-        IMarkerOptions icon(Bitmap bitmap);
-        IMarkerOptions icon(int resId);
+        IMarkerOptions icon(Resources resources, Bitmap bitmap);
+        IMarkerOptions icon(Resources resources, int resId);
         IMarkerOptions anchor(float lat, float lng);
         IMarkerOptions title(String title);
         IMarkerOptions snippet(String snippet);

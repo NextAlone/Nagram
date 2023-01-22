@@ -615,9 +615,6 @@ public class AlertsCreator {
                             localeInfo.pathToFile = "unofficial";
                         }
                     }
-                    if (callback != null) {
-                        callback.run();
-                    }
                     LocaleController.getInstance().applyLanguage(localeInfo, true, false, false, true, UserConfig.selectedAccount, null);
                     activity.rebuildAllFragments(true);
                     return Unit.INSTANCE;
@@ -1114,7 +1111,7 @@ public class AlertsCreator {
         showOpenUrlAlert(fragment, url, punycode, tryTelegraph, ask, null, null);
     }
 
-    public static void showOpenUrlAlert(BaseFragment fragment, String url, boolean punycode, boolean ask, Theme.ResourcesProvider resourcesProvider) {
+    public static void showOpenUrlAlert(BaseFragment fragment, String url, boolean punycode,  boolean ask,  Theme.ResourcesProvider resourcesProvider) {
         showOpenUrlAlert(fragment, url, punycode, true, ask, null, resourcesProvider);
     }
 
@@ -1123,7 +1120,7 @@ public class AlertsCreator {
             return;
         }
         long inlineReturn = (fragment instanceof ChatActivity) ? ((ChatActivity) fragment).getInlineReturn() : 0;
-        if (Browser.isInternalUrl(url, null) || !ask || NekoConfig.skipOpenLinkConfirm.Bool()) {
+        if (Browser.isInternalUrl(url, null) || !ask) {
             Browser.openUrl(fragment.getParentActivity(), Uri.parse(url), inlineReturn == 0, tryTelegraph, progress);
         } else {
             String urlFinal = url;

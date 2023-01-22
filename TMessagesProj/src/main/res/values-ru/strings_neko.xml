@@ -21,7 +21,7 @@
     <string name="AddToSavedMessages">Сохранить в облако</string>
     <string name="CreateMention">Упомянуть</string>
     <string name="ForceTabletMode">Режим планшета</string>
-    <string name="Prpr">Peropero</string>
+    <string name="Prpr">Пероперо</string>
     <string name="TransparentStatusBar">Прозрачная полоска статуса</string>
     <string name="EnableResidentNotification">Отображать постоянное уведомление</string>
     <string name="DisableResidentNotification">Скрыть постоянное уведомление</string>
@@ -121,7 +121,7 @@
     <string name="DontSendGreetingSticker">Не отправлять приветственный стикер</string>
     <string name="disableChoosingSticker">Отправлять «печатает» вместо «выбирает стикер»</string>
     <string name="hideGroupSticker">Скрыть стикер группы</string>
-    <string name="disableRemoteEmojiInteractions">Отключить эффекты при нажатии на эмодзи</string>
+    <string name="disableRemoteEmojiInteractions">Отключить удаленное взаимодействие с эмодзи</string>
     <string name="enablePublicProxy">Публичный прокси NekoX</string>
     <string name="autoUpdateSubInfo">Автоматическое обновление прокси-серверов</string>
     <string name="hideSendAsChannel">Скрыть «Отправить как канал»</string>
@@ -146,4 +146,7 @@
     <string name="forceBlurInChat">Принудительно включить размытие чатов</string>
     <string name="ChatBlurAlphaValue">Размытие чатов (Альфа)</string>
     <string name="disablePremiumStickerAnimation">Отключить анимацию премиум стикеров</string>
+    <string name="useOSMDroidMap">Используйте карту OSMDroid</string>
+    <string name="mapDriftingFixForGoogleMaps">Исправить дрейф Карт Google в Китае</string>
+    <string name="enhancedFileLoader">Увеличить скорость загрузки</string>
 </resources>

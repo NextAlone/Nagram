@@ -525,9 +525,6 @@ public class NotificationCenter {
         if (!allowDuringAnimation && isAnimationInProgress()) {
             DelayedPost delayedPost = new DelayedPost(id, args);
             delayedPosts.add(delayedPost);
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("delay post notification " + id + " with args count = " + args.length);
-            }
             return;
         }
         if (!postponeCallbackList.isEmpty()) {

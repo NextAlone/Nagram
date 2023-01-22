@@ -274,12 +274,13 @@
 \nProfil resmini arkaplanda kullan
 \nBüyük profil resmini arkaplanda kullan</string>
     <string name="hideSponsoredMessage">Reklam içeren mesajları gizle</string>
-    <string name="rememberAllBackMessages">Tıklanmış bütün yanıtları hatırla</string>
+    <string name="rememberAllBackMessages">Bütün dokunulmuş yanıtları hatırla</string>
     <string name="NekoXUpdateTranslationHint">Değişim günlüğünü çevirmek için dokunun</string>
-    <string name="Name">Ad</string>
+    <string name="Name">İsim</string>
     <string name="labelChannelUser">Kanal kullanıcısı etiketi</string>
     <string name="channelAliasDetails">Kanal kullanıcısı etiketi özelliğinin etkinleştirilmesine ihtiyaç duyar.</string>
     <string name="InteractionSettings">Etkileşim</string>
     <string name="StickerSettings">Çıkartma</string>
     <string name="ConfirmSettings">Doğrulama</string>
+    <string name="nekoxPremiumGiftRemoved">Premium hediyeleri NekoX\'ten kaldırıldı.</string>
 </resources>

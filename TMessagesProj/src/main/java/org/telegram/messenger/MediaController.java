@@ -3800,6 +3800,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         private final int notificationId;
 
         public MediaLoader(Context context, AccountInstance accountInstance, ArrayList<MessageObject> messages, MessagesStorage.IntCallback onFinish) {
+            notificationId = SaveToDownloadReceiver.createNotificationId();
             currentAccount = accountInstance;
             messageObjects = messages;
             onFinishRunnable = onFinish;
@@ -3807,7 +3808,6 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             currentAccount.getNotificationCenter().addObserver(this, NotificationCenter.fileLoaded);
             currentAccount.getNotificationCenter().addObserver(this, NotificationCenter.fileLoadProgressChanged);
             currentAccount.getNotificationCenter().addObserver(this, NotificationCenter.fileLoadFailed);
-            notificationId = SaveToDownloadReceiver.createNotificationId();
             progressDialog = new AlertDialog(context, AlertDialog.ALERT_TYPE_LOADING);
             progressDialog.setMessage(LocaleController.getString("Loading", R.string.Loading));
             progressDialog.setCanceledOnTouchOutside(false);

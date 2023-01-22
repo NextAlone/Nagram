@@ -18,7 +18,6 @@ import org.telegram.ui.ActionBar.Theme;
 public class ColoredImageSpan extends ReplacementSpan {
 
     int drawableColor;
-//    boolean override;
     Drawable drawable;
 
     boolean usePaintColor = true;
@@ -68,7 +67,6 @@ public class ColoredImageSpan extends ReplacementSpan {
     public void draw(@NonNull Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, @NonNull Paint paint) {
         int color;
         if (usePaintColor) {
-            // override
             color = paint.getColor();
         } else {
             color = Theme.getColor(colorKey);

@@ -160,7 +160,7 @@
     <string name="DeleteUnavailableServerConfirm">آیا اطمینان دارید که **سرورهای غیرقابل‌دسترس حذف شوند**؟</string>
     <string name="MinApi21Required">متأسفیم، حداقل Android 5 لازم است.</string>
     <string name="MinApi23Required">متأسفیم، حداقل Android 6 لازم است.</string>
-    <string name="MiniVersionAlert">نسخه مینی (mini) از این نوع پروکسی پشتیبانی نمی‌کند. لطفا نسخه را در تنظیمات تغییر دهید.</string>
+    <string name="MiniVersionAlert">متأسفیم، نسخه مینی از این نوع پروکسی پشتیبانی نمی‌کند. لطفا نسخه را در تنظیمات تغییر دهید.</string>
     <string name="ImportProxyFromClipboard">وارد کردن از کلیپ‌بورد</string>
     <string name="BrokenLink">لینک خراب / ناشناخته</string>
     <string name="ShareQRCode">کد QR</string>
@@ -225,7 +225,7 @@
     <string name="EnableStickerPinTip">این عملکرد هنوز درحال توسعه است، همگام‌سازی ابری ممکن است آن‌طور که مورد انتظار است کار نکند.</string>
     <string name="EnableStickerPinAbout">استیکرها پین و همگام‌سازی ابری شوند، حتی حین افزودن استیکر‌های جدید.
 \nبه غیرفعال بودن استیکر‌های اخیر و مورد علاقه بستگی دارد.</string>
-    <string name="EnableStickerPin">فعالسازی پین‌کردن استیکر</string>
+    <string name="EnableStickerPin">فعالسازی پین استیکر</string>
     <string name="ArchiveFiles">فایل‌های آرشیو</string>
     <string name="Win32ExecutableFiles">فایل‌های قابل اجرای ویندوزی</string>
     <string name="AppLinkFDroid">F-Droid</string>
@@ -253,30 +253,34 @@
     <string name="VersionUpdateTitle">نسخه جدید موجود است</string>
     <string name="customPublicProxyIP">تنظیم IP پروکسی عمومی</string>
     <string name="ShareMessages">اشتراک‌گذاری</string>
-    <string name="unreadBadgeOnBackButton">نمایش علامت پیام‌های خوانده نشده روی دکمه بازگشت</string>
+    <string name="unreadBadgeOnBackButton">علامت خوانده نشده درصورت زدن دکمه بازگشت</string>
     <string name="customPublicProxyIPNotice">در برخی مناطق، تنظیم IP پروکسی عمومی CDN (مانند Cloudflare) می‌تواند سرعت دسترسی را بهبود بخشد.</string>
     <string name="DeleteDownloadedFileSucceed">حذف شده</string>
     <string name="DeleteDownloadedFileConfirm">این فایل از حافظه‌نهان حذف شود؟</string>
     <string name="useCustomEmojiInvalid">فایل ایموجی معتبر نیست.</string>
-    <string name="DeleteDownloadedFileExternal">فایل بیرونی رد شده است.</string>
+    <string name="DeleteDownloadedFileExternal">فایل بیرونی رد شد.</string>
     <string name="update_download_soucre">انتخاب منبع دانلود</string>
-    <string name="hideSponsoredMessage">مخفی کردن پیامهای تبلیغاتی</string>
+    <string name="hideSponsoredMessage">عدم نمایش پیامهای تبلیغاتی (کانالها)</string>
     <string name="rememberAllBackMessages">بخاطر داشتن همه ریپلای‌های کلیک شده</string>
     <string name="useCustomEmoji">استفاده از ایموجی سفارشی</string>
     <string name="valuesLargeAvatarInDrawer">پیشفرض تلگرام
-\nتصویر پروفایل به عنوان پس‌زمینه
-\nتصویر بزرگ پروفایل به عنوان پس‌زمینه</string>
+\nتصویر پروفایل بعنوان پس‌زمینه
+\nتصویر بزرگ پروفایل بعنوان پس‌زمینه</string>
     <string name="DisableInstantCamera">غیرفعال کردن دوربین فوری</string>
-    <string name="repeatConfirmText">آیا از تکرار پیام اطمینان دارید؟</string>
+    <string name="repeatConfirmText">برای تکرار مطمئن هستید؟</string>
     <string name="repeatConfirm">پرسیدن قبل از تکرار پیام</string>
     <string name="showSeconds">نمایش ثانیه حین نمایش زمان</string>
     <string name="AutoCheckUpdatePreview">پیش‌نمایش (ناپایدار)</string>
     <string name="AppUpdateNekoX">به‌روزرسانی نکوگرام ایکس</string>
     <string name="NekoXUpdateTranslationHint">برای ترجمه تغییرات انگشتتان را روی آن نگهدارید</string>
     <string name="Name">نام</string>
-    <string name="channelAlias">نام مستعار کانال</string>
+    <string name="channelAlias">برچسب کانال</string>
     <string name="channelAliasDetails">لازم است علامت‌گذاری کاربر کانال فعال شود.</string>
     <string name="setChannelAliasName">تنظیم نام مستعار</string>
-    <string name="labelChannelUser">علامت‌گذاری کاربر کانال</string>
+    <string name="labelChannelUser">علامت‌گذاری کاربران کانالی</string>
     <string name="labelChannelUserDetails">اگر فرستنده پیام یک \"کانال\" باشد، به‌عنوان یک \"کانال\" علامت‌گذاری خواهد شد.</string>
+    <string name="StickerSettings">استیکر</string>
+    <string name="ConfirmSettings">تاییدیه</string>
+    <string name="InteractionSettings">فعالیت</string>
+    <string name="nekoxPremiumGiftRemoved">هدیه دادن پرمیوم در نکوایکس حذف شده.</string>
 </resources>

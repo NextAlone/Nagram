@@ -2317,90 +2317,90 @@ R.string.CustomBackend))
             req.lang_code = "";
             getConnectionsManager().sendRequest(req, (response, error) -> {
                 AndroidUtilities.runOnUIThread(() -> {
-                    if (error == null) {
-                        countriesArray.clear();
-                        codesMap.clear();
-                        phoneFormatMap.clear();
+                    AndroidUtilities.runOnUIThread(() -> {
+                        if (error == null) {
+                            countriesArray.clear();
+                            codesMap.clear();
+                            phoneFormatMap.clear();
 
-                        TLRPC.TL_help_countriesList help_countriesList = (TLRPC.TL_help_countriesList) response;
-                        for (int i = 0; i < help_countriesList.countries.size(); i++) {
-                            TLRPC.TL_help_country c = help_countriesList.countries.get(i);
-                            for (int k = 0; k < c.country_codes.size(); k++) {
-                                TLRPC.TL_help_countryCode countryCode = c.country_codes.get(k);
-                                if (countryCode != null) {
-                                    CountrySelectActivity.Country countryWithCode = new CountrySelectActivity.Country();
-                                    countryWithCode.name = c.default_name;
-                                    countryWithCode.code = countryCode.country_code;
-                                    countryWithCode.shortname = c.iso2;
+                            TLRPC.TL_help_countriesList help_countriesList = (TLRPC.TL_help_countriesList) response;
+                            for (int i = 0; i < help_countriesList.countries.size(); i++) {
+                                TLRPC.TL_help_country c = help_countriesList.countries.get(i);
+                                for (int k = 0; k < c.country_codes.size(); k++) {
+                                    TLRPC.TL_help_countryCode countryCode = c.country_codes.get(k);
+                                    if (countryCode != null) {
+                                        CountrySelectActivity.Country countryWithCode = new CountrySelectActivity.Country();
+                                        countryWithCode.name = c.default_name;
+                                        countryWithCode.code = countryCode.country_code;
+                                        countryWithCode.shortname = c.iso2;
 
-                                    countriesArray.add(countryWithCode);
-                                    List<CountrySelectActivity.Country> countryList = codesMap.get(countryCode.country_code);
-                                    if (countryList == null) {
-                                        codesMap.put(countryCode.country_code, countryList = new ArrayList<>());
-                                    }
-                                    countryList.add(countryWithCode);
-                                    if (countryCode.patterns.size() > 0) {
-                                        phoneFormatMap.put(countryCode.country_code, countryCode.patterns);
+                                        countriesArray.add(countryWithCode);
+                                        List<CountrySelectActivity.Country> countryList = codesMap.get(countryCode.country_code);
+                                        if (countryList == null) {
+                                            codesMap.put(countryCode.country_code, countryList = new ArrayList<>());
+                                        }
+                                        countryList.add(countryWithCode);
+                                        if (countryCode.patterns.size() > 0) {
+                                            phoneFormatMap.put(countryCode.country_code, countryCode.patterns);
+                                        }
                                     }
                                 }
                             }
-                        }
-                        CountrySelectActivity.Country countryWithCode = new CountrySelectActivity.Country();
-                        String test_code = "999";
-                        countryWithCode.name = "Test Number";
-                        countryWithCode.code = test_code;
-                        countryWithCode.shortname = "YL";
 
-                        countriesArray.add(countryWithCode);
-                        codesMap.put(test_code, Collections.singletonList(countryWithCode));
-                        List<String> testCodeStr = new ArrayList<>();
-                        testCodeStr.add("XX X XXXX");
-                        phoneFormatMap.put(test_code, testCodeStr);
+                            if (activityMode == MODE_CHANGE_PHONE_NUMBER) {
+                                String number = PhoneFormat.stripExceptNumbers(UserConfig.getInstance(currentAccount).getClientPhone());
+                                boolean ok = false;
+                                if (!TextUtils.isEmpty(number)) {
+                                    if (number.length() > 4) {
+                                        for (int a = 4; a >= 1; a--) {
+                                            String sub = number.substring(0, a);
 
-                        if (activityMode == MODE_CHANGE_PHONE_NUMBER) {
-                            String number = PhoneFormat.stripExceptNumbers(UserConfig.getInstance(currentAccount).getClientPhone());
-                            boolean ok = false;
-                            if (!TextUtils.isEmpty(number)) {
-                                if (number.length() > 4) {
-                                    for (int a = 4; a >= 1; a--) {
-                                        String sub = number.substring(0, a);
+                                            CountrySelectActivity.Country country2;
+                                            List<CountrySelectActivity.Country> list = codesMap.get(sub);
+                                            if (list == null) {
+                                                country2 = null;
+                                            } else if (list.size() > 1) {
+                                                SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+                                                String lastMatched = preferences.getString("phone_code_last_matched_" + sub, null);
 
-                                        CountrySelectActivity.Country country2;
-                                        List<CountrySelectActivity.Country> list = codesMap.get(sub);
-                                        if (list == null) {
-                                            country2 = null;
-                                        } else if (list.size() > 1) {
-                                            SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-                                            String lastMatched = preferences.getString("phone_code_last_matched_" + sub, null);
-
-                                            if (lastMatched != null) {
-                                                country2 = list.get(list.size() - 1);
-                                                for (CountrySelectActivity.Country c : countriesArray) {
-                                                    if (Objects.equals(c.shortname, lastMatched)) {
-                                                        country2 = c;
-                                                        break;
+                                                if (lastMatched != null) {
+                                                    country2 = list.get(list.size() - 1);
+                                                    for (CountrySelectActivity.Country c : countriesArray) {
+                                                        if (Objects.equals(c.shortname, lastMatched)) {
+                                                            country2 = c;
+                                                            break;
+                                                        }
                                                     }
+                                                } else {
+                                                    country2 = list.get(list.size() - 1);
                                                 }
                                             } else {
-                                                country2 = list.get(list.size() - 1);
+                                                country2 = list.get(0);
                                             }
-                                        } else {
-                                            country2 = list.get(0);
-                                        }
 
-                                        if (country2 != null) {
-                                            ok = true;
-                                            codeField.setText(sub);
-                                            break;
+                                            if (country2 != null) {
+                                                ok = true;
+                                                codeField.setText(sub);
+                                                break;
+                                            }
                                         }
-                                    }
-                                    if (!ok) {
-                                        codeField.setText(number.substring(0, 1));
+                                        if (!ok) {
+                                            codeField.setText(number.substring(0, 1));
+                                        }
                                     }
                                 }
                             }
+                            CountrySelectActivity.Country countryWithCode = new CountrySelectActivity.Country();
+                            String test_code = "999";
+                            countryWithCode.name = "Test Number";
+                            countryWithCode.code = test_code;
+                            countryWithCode.shortname = "YL";
+
+                            countriesArray.add(countryWithCode);
+                            codesMap.put(test_code, new ArrayList<>(Collections.singletonList(countryWithCode)));
+                            phoneFormatMap.put(test_code, Collections.singletonList("XX X XXXX"));
                         }
-                    }
+                    });
                 });
             }, ConnectionsManager.RequestFlagWithoutLogin | ConnectionsManager.RequestFlagFailOnServerErrors);
         }
@@ -2839,12 +2839,8 @@ R.string.CustomBackend))
                 req.settings.flags |= 64;
             }
             SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
-//            preferences.edit().remove("sms_hash_code").apply();
-//            if (settings.allow_app_hash) {
-//                preferences.edit().putString("sms_hash", BuildVars.SMS_HASH).apply();
-//            } else {
-//                preferences.edit().remove("sms_hash").apply();
-//            }
+            preferences.edit().remove("sms_hash_code").apply();
+            req.settings.allow_app_hash = PushListenerController.getProvider().hasServices();
             if (req.settings.allow_flashcall) {
                 try {
                     String number = "";

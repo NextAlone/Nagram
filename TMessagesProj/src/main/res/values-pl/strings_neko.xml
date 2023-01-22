@@ -145,4 +145,7 @@
     <string name="ChatBlurAlphaValue">Poziom rozmycia</string>
     <string name="forceBlurInChat">Wymuś rozmycia interfejsu</string>
     <string name="disablePremiumStickerAnimation">Wyłącz animację naklejek premium</string>
+    <string name="enhancedFileLoader">Zwiększ prędkość pobierania</string>
+    <string name="mapDriftingFixForGoogleMaps">Napraw działanie Map Google w Chinach</string>
+    <string name="useOSMDroidMap">Użyj mapy OSMDroid</string>
 </resources>

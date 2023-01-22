@@ -4282,7 +4282,17 @@ public class AndroidUtilities {
             SharedConfig.addProxy(info);
 
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
-
+            if (activity instanceof LaunchActivity) {
+                INavigationLayout layout = ((LaunchActivity) activity).getActionBarLayout();
+                BaseFragment fragment = layout.getLastFragment();
+                if (fragment instanceof ChatActivity) {
+                    ((ChatActivity) fragment).getUndoView().showWithAction(0, UndoView.ACTION_PROXY_ADDED, null);
+                } else {
+                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_SUCCESS, LocaleController.getString(R.string.ProxyAddedSuccess));
+                }
+            } else {
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_SUCCESS, LocaleController.getString(R.string.ProxyAddedSuccess));
+            }
             dismissRunnable.run();
 
         });
@@ -4919,6 +4929,9 @@ public class AndroidUtilities {
     }
 
     public static boolean shouldShowUrlInAlert(String url) {
+        if (NekoConfig.skipOpenLinkConfirm.Bool()) {
+            return false;
+        }
         try {
             Uri uri = Uri.parse(url);
             url = uri.getHost();

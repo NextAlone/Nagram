@@ -44,6 +44,7 @@ public class AvatarDrawable extends Drawable {
     private float textHeight;
     private float textLeft;
     private boolean isProfile;
+    private boolean smallSize;
     private boolean drawDeleted;
     private int avatarType;
     private float archivedAvatarProgress;
@@ -260,6 +261,10 @@ public class AvatarDrawable extends Drawable {
         needApplyColorAccent = false;
     }
 
+    public void setSmallSize(boolean value) {
+        smallSize = value;
+    }
+
     public void setTextSize(int size) {
         namePaint.setTextSize(size);
     }
@@ -436,6 +441,10 @@ public class AvatarDrawable extends Drawable {
             if (drawable != null) {
                 int w = (int) (drawable.getIntrinsicWidth() * scaleSize);
                 int h = (int) (drawable.getIntrinsicHeight() * scaleSize);
+                if (smallSize) {
+                    w *= 0.8f;
+                    h *= 0.8f;
+                }
                 int x = (size - w) / 2;
                 int y = (size - h) / 2;
                 drawable.setBounds(x, y, x + w, y + h);

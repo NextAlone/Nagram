@@ -279,4 +279,5 @@
     <string name="ConfirmSettings">Confirmación</string>
     <string name="InteractionSettings">Interacción</string>
     <string name="StickerSettings">Sticker</string>
+    <string name="nekoxPremiumGiftRemoved">Regalar Premium está deshabilitado en NekoX.</string>
 </resources>

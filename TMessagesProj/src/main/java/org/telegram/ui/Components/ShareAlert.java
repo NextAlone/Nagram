@@ -1965,17 +1965,19 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 long key = selectedDialogs.keyAt(a);
                 TLRPC.TL_forumTopic topic = selectedDialogTopics.get(selectedDialogs.get(key));
                 MessageObject replyTopMsg = topic != null ? new MessageObject(currentAccount, topic.topicStartMessage, false, false) : null;
-                int result = 0;
-                if (NekoConfig.sendCommentAfterForward.Bool()) {
-                    result = SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, !showSendersName, false, withSound, 0);
-                }
                 if (replyTopMsg != null) {
                     replyTopMsg.isTopicMainMessage = true;
+                }
+                int result = 0;
+                if (NekoConfig.sendCommentAfterForward.Bool()) {
+                    // send fwd message first.
+                    result = SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, !showSendersName, false, withSound, 0);
                 }
                 if (frameLayout2.getTag() != null && commentTextView.length() > 0) {
                     SendMessagesHelper.getInstance(currentAccount).sendMessage(text[0] == null ? null : text[0].toString(), key, replyTopMsg, replyTopMsg, null, true, entities, null, null, withSound, 0, null, false);
                 }
                 if (!NekoConfig.sendCommentAfterForward.Bool()) {
+                    // send fwd message second.
                     result = SendMessagesHelper.getInstance(currentAccount).sendMessage(sendingMessageObjects, key, !showSendersName,false, withSound, 0, replyTopMsg);
                 }
                 if (result != 0) {

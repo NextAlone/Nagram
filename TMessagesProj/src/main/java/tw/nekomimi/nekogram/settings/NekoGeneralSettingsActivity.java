@@ -98,6 +98,7 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
 
     private final AbstractConfigCell headerTranslation = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Translate")));
     private final AbstractConfigCell translationProviderRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final AbstractConfigCell useTelegramTranslateInChatRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useTelegramTranslateInChat));
     private final AbstractConfigCell translateToLangRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final AbstractConfigCell translateInputToLangRow = cellGroup.appendCell(new ConfigCellCustom(CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final AbstractConfigCell googleCloudTranslateKeyRow = cellGroup.appendCell(new ConfigCellTextDetail(NekoConfig.googleCloudTranslateKey, (view, position) -> {
@@ -829,6 +830,9 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
             NekoConfig.useOSMDroidMap.setConfigBool(true);
             ((ConfigCellTextCheck) useOSMDroidMapRow).setEnabled(false);
             cellGroup.rows.remove(mapDriftingFixForGoogleMapsRow);
+        } else {
+            if (NekoConfig.useOSMDroidMap.Bool())
+                ((ConfigCellTextCheck) mapDriftingFixForGoogleMapsRow).setEnabled(false);
         }
 
         boolean enabled;

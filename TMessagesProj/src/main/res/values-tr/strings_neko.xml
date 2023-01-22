@@ -145,4 +145,7 @@
     <string name="forceBlurInChat">Sohbet bulanıklaştırmayı zorla etkinleştir</string>
     <string name="ChatBlurAlphaValue">Sohbet bulanıklaştırması opaklığı</string>
     <string name="disablePremiumStickerAnimation">Premium çıkartma animasyonunu devre dışı bırak</string>
+    <string name="enhancedFileLoader">İndirme hızını arttır</string>
+    <string name="mapDriftingFixForGoogleMaps">Google Haritalar kaydırmasını Çin için düzelt</string>
+    <string name="useOSMDroidMap">OSMDroid harita kullan</string>
 </resources>

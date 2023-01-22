@@ -481,13 +481,13 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 });
                 sendPopupLayout.setShownFromBottom(false);
 
-                itemCells = new ActionBarMenuSubItem[2];
+                itemCells = new ActionBarMenuSubItem[3];
                 for (int a = 0; a < 3; a++) {
                     if (a == 0 && !chatActivity.canScheduleMessage() || a == 1 && UserObject.isUserSelf(user)) {
                         continue;
                     }
                     int num = a;
-                    itemCells[a] = new ActionBarMenuSubItem(getParentActivity(), a == 0, a ==  1);
+                    itemCells[a] = new ActionBarMenuSubItem(getParentActivity(), a == 0, a == 2);
                     if (num == 0) {
                         itemCells[a].setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
                     } else if (num == 1) {

@@ -265,9 +265,9 @@ public class AdminLogFilterAlert extends BottomSheet {
                     if (currentFilter == null) {
                         currentFilter = new TLRPC.TL_channelAdminLogEventsFilter();
                         currentFilter.join = currentFilter.leave = currentFilter.invite = currentFilter.ban =
-                                currentFilter.unban = currentFilter.kick = currentFilter.unkick = currentFilter.promote =
-                                        currentFilter.demote = currentFilter.info = currentFilter.settings = currentFilter.pinned =
-                                                currentFilter.edit = currentFilter.delete = currentFilter.group_call = currentFilter.invites = true;
+                        currentFilter.unban = currentFilter.kick = currentFilter.unkick = currentFilter.promote =
+                        currentFilter.demote = currentFilter.info = currentFilter.settings = currentFilter.pinned =
+                        currentFilter.edit = currentFilter.delete = currentFilter.group_call = currentFilter.invites = true;
                     }
                     if (position == restrictionsRow) {
                         currentFilter.kick = currentFilter.ban = currentFilter.unkick = currentFilter.unban = !currentFilter.kick;

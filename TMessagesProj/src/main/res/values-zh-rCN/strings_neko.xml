@@ -190,4 +190,7 @@
     <string name="EmojiSetApplied">Emoji 包已应用。</string>
     <string name="EmojiSetAppliedInfo">%1$s 现在是您的 Emoji 包。</string>
     <string name="EmojiSetAlreadyApplied">Emoji 包已经被应用。</string>
+    <string name="useOSMDroidMap">使用 OSMDroid 地图</string>
+    <string name="mapDriftingFixForGoogleMaps">修复 Google 地图在中国的漂移问题</string>
+    <string name="useTelegramTranslateInChat">在聊天中使用 Telegram 官方翻译</string>
 </resources>
