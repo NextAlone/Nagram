@@ -27,10 +27,16 @@ public class ConfigCellSelectBox extends AbstractConfigCell {
     private final String title;
     private final Runnable onClickCustom;
     private Context ctxCustom;
+    private final String key;
 
     // default: customTitle=null customOnClick=null
-    public ConfigCellSelectBox(String customTitle, ConfigItem bind, Object selectList_s, Runnable customOnClick) {
+    public ConfigCellSelectBox(String key, ConfigItem bind, Object selectList_s, Runnable customOnClick) {
         this.bindConfig = bind;
+        String key1 = key;
+        if (key == null) {
+            key1 = bindConfig.getKey();
+        }
+        this.key = key1;
         if (selectList_s == null) {
             this.selectList = null;
         } else if (selectList_s instanceof String) {
@@ -40,11 +46,7 @@ public class ConfigCellSelectBox extends AbstractConfigCell {
         } else {
             this.selectList = null;
         }
-        if (customTitle == null) {
-            title = LocaleController.getString(bindConfig.getKey());
-        } else {
-            title = customTitle;
-        }
+        title = LocaleController.getString(this.key);
         this.onClickCustom = customOnClick;
     }
 
@@ -53,7 +55,7 @@ public class ConfigCellSelectBox extends AbstractConfigCell {
     }
 
     public String getKey() {
-        return bindConfig == null ? null : bindConfig.getKey();
+        return this.key;
     }
 
     public boolean isEnabled() {
