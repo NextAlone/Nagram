@@ -10,12 +10,11 @@ package org.telegram.ui;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.Context;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,7 +40,6 @@ import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.v2ray.ang.V2RayConfig;
@@ -149,16 +147,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     private int proxyDetailRow;
     private int callsRow;
     private int callsDetailRow;
-    private int deleteAllRow;
-
-    private ItemTouchHelper itemTouchHelper;
-    private NumberTextView selectedCountTextView;
-    private ActionBarMenuItem shareMenuItem;
-    private ActionBarMenuItem deleteMenuItem;
-
-    private List<SharedConfig.ProxyInfo> selectedItems = new ArrayList<>();
-    private List<SharedConfig.ProxyInfo> proxyList = new ArrayList<>();
-    private boolean wasCheckedAllList;
 
     private ActionBarMenuItem otherItem;
 
@@ -166,13 +154,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
         private TextView textView;
         private TextView valueTextView;
-        private ImageView checkImageView;
         private SharedConfig.ProxyInfo currentInfo;
         private Drawable checkDrawable;
-
-        private CheckBox2 checkBox;
-        private boolean isSelected;
-        private boolean isSelectionEnabled;
 
         private int color;
         private Pattern urlPattern;
@@ -200,41 +183,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             valueTextView.setEllipsize(TextUtils.TruncateAt.END);
             valueTextView.setPadding(0, 0, 0, 0);
             addView(valueTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, (LocaleController.isRTL ? 56 : 21), 35, (LocaleController.isRTL ? 21 : 56), 0));
-
-            checkImageView = new ImageView(context);
-            checkImageView.setImageResource(R.drawable.msg_info);
-            checkImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3), PorterDuff.Mode.MULTIPLY));
-            checkImageView.setScaleType(ImageView.ScaleType.CENTER);
-            checkImageView.setContentDescription(LocaleController.getString("Edit", R.string.Edit));
-            addView(checkImageView, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.TOP, 8, 8, 8, 0));
-            checkImageView.setOnClickListener(v -> {
-                SharedConfig.ProxyInfo info = currentInfo;
-                if (info instanceof SharedConfig.VmessProxy) {
-                    if (((SharedConfig.VmessProxy) info).bean.getConfigType() == V2RayConfig.EConfigType.Trojan) {
-                        presentFragment(new TrojanSettingsActivity((SharedConfig.VmessProxy) info));
-                    } else {
-                        presentFragment(new VmessSettingsActivity((SharedConfig.VmessProxy) info));
-                    }
-                } else if (info instanceof SharedConfig.ShadowsocksProxy) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        presentFragment(new ShadowsocksSettingsActivity((SharedConfig.ShadowsocksProxy) info));
-                    }
-                } else if (info instanceof SharedConfig.ShadowsocksRProxy) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        presentFragment(new ShadowsocksRSettingsActivity((SharedConfig.ShadowsocksRProxy) info));
-                    }
-                } else if (info instanceof SharedConfig.WsProxy) {
-                    presentFragment(new WsSettingsActivity((SharedConfig.WsProxy) info));
-                } else {
-                    presentFragment(new ProxySettingsActivity(info));
-                }
-            });
-
-            checkBox = new CheckBox2(context, 21);
-            checkBox.setColor(Theme.key_radioBackground, Theme.key_radioBackground, Theme.key_checkboxCheck);
-            checkBox.setDrawBackgroundAsArc(14);
-            checkBox.setVisibility(GONE);
-            addView(checkBox, LayoutHelper.createFrame(24, 24, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, 16, 0, 8, 0));
 
             setWillNotDraw(false);
         }
@@ -365,6 +313,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     public ProxyListActivity(String alert) {
         this.alert = alert;
     }
+
+    private LinkedList<SharedConfig.ProxyInfo> proxyList = SharedConfig.getProxyList();
 
     @Override
     public boolean onFragmentCreate() {
@@ -797,10 +747,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 editor.putBoolean("proxy_enabled_calls", useProxyForCalls);
                 editor.apply();
             } else if (position >= proxyStartRow && position < proxyEndRow) {
-                if (!selectedItems.isEmpty()) {
-                    listAdapter.toggleSelected(position);
-                    return;
-                }
                 SharedConfig.ProxyInfo info = proxyList.get(position - proxyStartRow);
                 useProxySettings = true;
                 SharedConfig.setCurrentProxy(info);
@@ -890,15 +836,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         return fragmentView;
     }
 
-    @Override
-    public boolean onBackPressed() {
-        if (!selectedItems.isEmpty()) {
-            listAdapter.clearSelected();
-            return false;
-        }
-        return true;
-    }
-
     @SuppressLint("NewApi")
     private void addProxy() {
         BottomBuilder builder = new BottomBuilder(getParentActivity());
@@ -968,39 +905,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         proxyList = SharedConfig.getProxyList();
         rowCount = 0;
         useProxyRow = rowCount++;
-
-        if (notify) {
-            proxyList.clear();
-            proxyList.addAll(SharedConfig.proxyList);
-
-            boolean checking = false;
-            if (!wasCheckedAllList) {
-                for (SharedConfig.ProxyInfo info : proxyList) {
-                    if (info.checking || info.availableCheckTime == 0) {
-                        checking = true;
-                        break;
-                    }
-                }
-                if (!checking) {
-                    wasCheckedAllList = true;
-                }
-            }
-
-            boolean isChecking = checking;
-            Collections.sort(proxyList, (o1, o2) -> {
-                long bias1 = SharedConfig.currentProxy == o1 ? -200000 : 0;
-                if (!o1.available) {
-                    bias1 += 100000;
-                }
-                long bias2 = SharedConfig.currentProxy == o2 ? -200000 : 0;
-                if (!o2.available) {
-                    bias2 += 100000;
-                }
-                return Long.compare(isChecking && o1 != SharedConfig.currentProxy ? SharedConfig.proxyList.indexOf(o1) * 10000L : o1.ping + bias1,
-                        isChecking && o2 != SharedConfig.currentProxy ? SharedConfig.proxyList.indexOf(o2) * 10000L : o2.ping + bias2);
-            });
-        }
-
         enablePublicProxyRow = rowCount++;
         if (!proxyList.isEmpty()) {
             useProxyDetailRow = rowCount++;
@@ -1035,11 +939,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     listAdapter.notifyItemRangeRemoved(proxyDetailRow + 1, 2);
                 });
             }
-        }
-        if (proxyList.size() >= 10) {
-            deleteAllRow = rowCount++;
-        } else {
-            deleteAllRow = -1;
         }
         checkProxyList(false);
         if (notify && listAdapter != null) {
@@ -1281,41 +1180,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             mContext = context;
         }
 
-        public void toggleSelected(int position) {
-            if (position < proxyStartRow || position >= proxyEndRow) {
-                return;
-            }
-            SharedConfig.ProxyInfo info = proxyList.get(position - proxyStartRow);
-            if (selectedItems.contains(info)) {
-                selectedItems.remove(info);
-            } else {
-                selectedItems.add(info);
-            }
-            notifyItemChanged(position, PAYLOAD_SELECTION_CHANGED);
-            checkActionMode();
-        }
-
-        public void clearSelected() {
-            selectedItems.clear();
-            notifyItemRangeChanged(proxyStartRow, proxyEndRow - proxyStartRow, PAYLOAD_SELECTION_CHANGED);
-            checkActionMode();
-        }
-
-        private void checkActionMode() {
-            int selectedCount = selectedItems.size();
-            boolean actionModeShowed = actionBar.isActionModeShowed();
-            if (selectedCount > 0) {
-                selectedCountTextView.setNumber(selectedCount, actionModeShowed);
-                if (!actionModeShowed) {
-                    actionBar.showActionMode();
-                    notifyItemRangeChanged(proxyStartRow, proxyEndRow - proxyStartRow, PAYLOAD_SELECTION_MODE_CHANGED);
-                }
-            } else if (actionModeShowed) {
-                actionBar.hideActionMode();
-                notifyItemRangeChanged(proxyStartRow, proxyEndRow - proxyStartRow, PAYLOAD_SELECTION_MODE_CHANGED);
-            }
-        }
-
         @Override
         public int getItemCount() {
             return rowCount;
@@ -1407,7 +1271,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int position = holder.getAdapterPosition();
-            return position == useProxyRow || position == callsRow || position == enablePublicProxyRow || position == deleteAllRow || position >= proxyStartRow && position < proxyEndRow;
+            return position == useProxyRow || position == callsRow || position == enablePublicProxyRow || position >= proxyStartRow && position < proxyEndRow;
         }
 
         @Override
@@ -1441,30 +1305,6 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             }
             view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
             return new RecyclerListView.Holder(view);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            // Random stable ids, could be anything non-repeating
-            if (position == useProxyDetailRow) {
-                return -1;
-            } else if (position == proxyDetailRow) {
-                return -2;
-//            } else if (position == proxyAddRow) {
-//                return -3;
-            } else if (position == useProxyRow) {
-                return -4;
-            } else if (position == callsRow) {
-                return -5;
-            } else if (position == connectionsHeaderRow) {
-                return -6;
-            } else if (position == deleteAllRow) {
-                return -8;
-            } else if (position >= proxyStartRow && position < proxyEndRow) {
-                return proxyList.get(position - proxyStartRow).hashCode();
-            } else {
-                return -7;
-            }
         }
 
         @Override
