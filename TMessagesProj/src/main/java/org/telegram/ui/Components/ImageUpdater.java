@@ -72,7 +72,8 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             ID_UPLOAD_FROM_GALLERY = 1,
             ID_SEARCH_WEB = 2,
             ID_REMOVE_PHOTO = 3,
-            ID_RECORD_VIDEO = 4;
+            ID_RECORD_VIDEO = 4,
+            ID_OPEN_PHOTO = 50;
 
     public BaseFragment parentFragment;
     private ImageUpdaterDelegate delegate;
@@ -242,6 +243,12 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         ArrayList<Integer> icons = new ArrayList<>();
         ArrayList<Integer> ids = new ArrayList<>();
 
+        if (hasAvatar && parentFragment instanceof ProfileActivity) {
+            items.add(LocaleController.getString("Open", R.string.Open));
+            icons.add(R.drawable.msg_view_file);
+            ids.add(ID_OPEN_PHOTO);
+        }
+
         items.add(LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto));
         icons.add(R.drawable.msg_camera);
         ids.add(ID_TAKE_PHOTO);
@@ -290,6 +297,16 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 case ID_RECORD_VIDEO:
                     openVideoCamera();
                     break;
+                case ID_OPEN_PHOTO:
+                    TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(UserConfig.getInstance(currentAccount).getClientUserId());
+                    if (user != null && user.photo != null && user.photo.photo_big != null) {
+                        PhotoViewer.getInstance().setParentActivity(parentFragment.getParentActivity());
+                        if (user.photo.dc_id != 0) {
+                            user.photo.photo_big.dc_id = user.photo.dc_id;
+                        }
+                        PhotoViewer.getInstance().openPhoto(user.photo.photo_big, ((ProfileActivity) parentFragment).provider);
+                    }
+                    break;
             }
         });
         BottomSheet sheet = builder.create();
@@ -298,64 +315,6 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         if (hasAvatar) {
             sheet.setItemColor(items.size() - 1, Theme.getColor(Theme.key_dialogTextRed2), Theme.getColor(Theme.key_dialogRedIcon));
         }
-    }
-
-    public void openMenu(boolean hasAvatar, Runnable onDeleteAvatar, DialogInterface.OnDismissListener onDismiss) {
-        if (parentFragment == null || parentFragment.getParentActivity() == null) {
-            return;
-        }
-
-        if (useAttachMenu) {
-            openAttachMenu(onDismiss);
-            return;
-        }
-
-        BottomBuilder builder = new BottomBuilder(parentFragment.getParentActivity());
-
-        if (hasAvatar && parentFragment instanceof ProfileActivity) {
-
-            builder.addItem(LocaleController.getString("Open", R.string.Open), R.drawable.baseline_visibility_24, __ -> {
-
-                TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(UserConfig.getInstance(currentAccount).getClientUserId());
-                if (user != null && user.photo != null && user.photo.photo_big != null) {
-                    PhotoViewer.getInstance().setParentActivity(parentFragment.getParentActivity());
-                    if (user.photo.dc_id != 0) {
-                        user.photo.photo_big.dc_id = user.photo.dc_id;
-                    }
-                    PhotoViewer.getInstance().openPhoto(user.photo.photo_big, ((ProfileActivity) parentFragment).provider);
-                }
-
-                return Unit.INSTANCE;
-            });
-
-        }
-
-        builder.addItem(LocaleController.getString("UploadImage", R.string.UploadImage), R.drawable.profile_photos, __ -> {
-            openAttachMenu(onDismiss);
-            return Unit.INSTANCE;
-        });
-
-        if (searchAvailable) {
-
-            builder.addItem(LocaleController.getString("ChooseFromSearch", R.string.ChooseFromSearch), R.drawable.menu_search, __ -> {
-                openSearch();
-                return Unit.INSTANCE;
-            });
-
-        }
-
-        if (hasAvatar) {
-
-            builder.addItem(LocaleController.getString("DeletePhoto", R.string.DeletePhoto), R.drawable.chats_delete, true, __ -> {
-                onDeleteAvatar.run();
-                return Unit.INSTANCE;
-            });
-
-        }
-
-        BottomSheet sheet = builder.create();
-        sheet.setOnHideListener(onDismiss);
-        parentFragment.showDialog(sheet);
     }
 
     public void setSearchAvailable(boolean value) {
