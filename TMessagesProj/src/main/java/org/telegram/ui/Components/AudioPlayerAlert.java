@@ -736,7 +736,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         if (Build.VERSION.SDK_INT >= 21) {
             repeatButton.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector), 1, AndroidUtilities.dp(18)));
         }
-        if (!messageObject.isVoice()) {
+        if (messageObject != null && !messageObject.isVoice()) {
         bottomView.addView(repeatButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP));
         }
         repeatButton.setOnClickListener(v -> {
@@ -924,7 +924,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         if (Build.VERSION.SDK_INT >= 21) {
             prevButton.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector), 1, AndroidUtilities.dp(22)));
         }
-        if (!messageObject.isVoice()) {
+        if (messageObject != null && !messageObject.isVoice()) {
         bottomView.addView(prevButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP));
         }
         prevButton.setContentDescription(LocaleController.getString("AccDescrPrevious", R.string.AccDescrPrevious));
@@ -1050,7 +1050,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         if (Build.VERSION.SDK_INT >= 21) {
             nextButton.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector), 1, AndroidUtilities.dp(22)));
         }
-        if (!messageObject.isVoice()) {
+        if (messageObject != null && !messageObject.isVoice()) {
         bottomView.addView(nextButton, LayoutHelper.createFrame(48, 48, Gravity.LEFT | Gravity.TOP));
         }
         nextButton.setContentDescription(LocaleController.getString("Next", R.string.Next));
