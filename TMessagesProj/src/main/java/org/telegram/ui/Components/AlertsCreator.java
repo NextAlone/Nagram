@@ -129,6 +129,7 @@ import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
+import static tw.nekomimi.nekogram.settings.NekoChatSettingsActivity.getDeleteMenuChecks;
 import xyz.nextalone.nagram.NaConfig;
 
 public class AlertsCreator {
@@ -5098,7 +5099,7 @@ public class AlertsCreator {
             }
         }
 
-        final boolean[] checks = new boolean[4];
+        final boolean[] checks = getDeleteMenuChecks();
         final boolean[] deleteForAll = {true};
         TLRPC.User actionUser = null;
         TLRPC.Chat actionChat = null;
@@ -5225,14 +5226,13 @@ public class AlertsCreator {
                     cell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
                     cell.setTag(a);
                     if (a == 0) {
-                        cell.setText(LocaleController.getString("DeleteBanUser", R.string.DeleteBanUser), "", false, false);
+                        cell.setText(LocaleController.getString("DeleteBanUser", R.string.DeleteBanUser), "", checks[a], false);
                     } else if (a == 1) {
-                        cell.setText(LocaleController.getString("DeleteReportSpam", R.string.DeleteReportSpam), "", false, false);
+                        cell.setText(LocaleController.getString("DeleteReportSpam", R.string.DeleteReportSpam), "", checks[a], false);
                     } else if (a == 2) {
-                        cell.setText(LocaleController.formatString("DeleteAllFrom", R.string.DeleteAllFrom, name), "", false, false);
+                        cell.setText(LocaleController.formatString("DeleteAllFrom", R.string.DeleteAllFrom, name), "", checks[a], false);
                     } else if (a == 3) {
-                        cell.setText(LocaleController.getString("DoActionsInCommonGroups", R.string.DoActionsInCommonGroups), "", NaConfig.INSTANCE.getDoActionsInCommonGroups().Bool(), false);
-                        checks[3] = NaConfig.INSTANCE.getDoActionsInCommonGroups().Bool();
+                        cell.setText(LocaleController.getString("DoActionsInCommonGroups", R.string.DoActionsInCommonGroups), "", checks[a], false);
                     }
                     cell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16) : AndroidUtilities.dp(8), 0, LocaleController.isRTL ? AndroidUtilities.dp(8) : AndroidUtilities.dp(16), 0);
                     frameLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.TOP | Gravity.LEFT, 0, 48 * num, 0, 0));
@@ -5243,9 +5243,6 @@ public class AlertsCreator {
                         CheckBoxCell cell13 = (CheckBoxCell) v;
                         Integer num1 = (Integer) cell13.getTag();
                         checks[num1] = !checks[num1];
-                        if (num1 == 3) {
-                            NaConfig.INSTANCE.getDoActionsInCommonGroups().setConfigBool(checks[num1]);
-                        }
                         cell13.setChecked(checks[num1], true);
                     });
                     num++;

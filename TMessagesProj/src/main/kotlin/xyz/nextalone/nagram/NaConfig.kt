@@ -412,11 +412,11 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
-    val doActionsInCommonGroups =
+    val defaultDeleteMenu =
         addConfig(
-            "DoActionsInCommonGroups",
-            ConfigItem.configTypeBool,
-            true
+            "DefaultDeleteMenu",
+            ConfigItem.configTypeInt,
+            0
         )
 
     private fun addConfig(

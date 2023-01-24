@@ -89,6 +89,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     private final AbstractConfigCell hideSendAsChannelRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideSendAsChannel));
     private final AbstractConfigCell showSpoilersDirectlyRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showSpoilersDirectly));
     private final AbstractConfigCell messageMenuRow = cellGroup.appendCell(new ConfigCellSelectBox("MessageMenu", null, null, this::showMessageMenuAlert));
+    private final AbstractConfigCell defaultDeleteMenuRow = cellGroup.appendCell(new ConfigCellSelectBox("DefaultDeleteMenu", null, null, this::showDeleteMenuAlert));
     private final AbstractConfigCell customGreatRow = cellGroup.appendCell(new ConfigCellTextInput(null, NaConfig.INSTANCE.getCustomGreat(), LocaleController.getString(R.string.CustomGreatHint), null,(input) -> input.isEmpty() ? (String) NaConfig.INSTANCE.getCustomGreat().defaultValue : input));
     private final AbstractConfigCell customPoorRow = cellGroup.appendCell(new ConfigCellTextInput(null, NaConfig.INSTANCE.getCustomPoor(), LocaleController.getString(R.string.CustomPoorHint), null,(input) -> input.isEmpty() ? (String) NaConfig.INSTANCE.getCustomPoor().defaultValue : input));
     private final AbstractConfigCell customEditedMessageRow = cellGroup.appendCell(new ConfigCellTextInput(null, NaConfig.INSTANCE.getCustomEditedMessage(), "", null));
@@ -697,6 +698,83 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
 
         }
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+        builder.setView(linearLayout);
+        showDialog(builder.create());
+    }
+
+    public static boolean[] getDeleteMenuChecks() {
+        final boolean[] checks = new boolean[4];
+        final Integer[] values = {8, 4, 2, 1};
+        int data = NaConfig.INSTANCE.getDefaultDeleteMenu().Int();
+        for (int i = 0; i < values.length; i++) {
+            if (data >= values[i]) {
+                checks[i] = true;
+                data -= values[i];
+            } else {
+                checks[i] = false;
+            }
+        }
+        return checks;
+    }
+
+    private void saveDeleteMenuChecks(boolean[] checks) {
+        final Integer[] values = {8, 4, 2, 1};
+        int data = 0;
+        for (int i = 0; i < values.length; i++) {
+            if (checks[i]) {
+                data += values[i];
+            }
+        }
+        NaConfig.INSTANCE.getDefaultDeleteMenu().setConfigInt(data);
+    }
+
+    private void showDeleteMenuAlert() {
+        if (getParentActivity() == null) {
+            return;
+        }
+        Context context = getParentActivity();
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(LocaleController.getString("DefaultDeleteMenu", R.string.DefaultDeleteMenu));
+
+        LinearLayout linearLayout = new LinearLayout(context);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+        LinearLayout linearLayoutInviteContainer = new LinearLayout(context);
+        linearLayoutInviteContainer.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.addView(linearLayoutInviteContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+
+        final boolean[] checks = getDeleteMenuChecks();
+
+        for (int a = 0; a < 4; a++) {
+            TextCheckCell textCell = new TextCheckCell(context);
+            switch (a) {
+                case 0: {
+                    textCell.setTextAndCheck(LocaleController.getString("DeleteBanUser", R.string.DeleteBanUser), checks[a], false);
+                    break;
+                }
+                case 1: {
+                    textCell.setTextAndCheck(LocaleController.getString("DeleteReportSpam", R.string.DeleteReportSpam), checks[a], false);
+                    break;
+                }
+                case 2 : {
+                    textCell.setTextAndCheck(LocaleController.getString("DeleteAll", R.string.DeleteAll), checks[a], false);
+                    break;
+                }
+                case 3: {
+                    textCell.setTextAndCheck(LocaleController.getString("DoActionsInCommonGroups", R.string.DoActionsInCommonGroups), checks[a], false);
+                    break;
+                }
+            }
+            textCell.setTag(a);
+            textCell.setBackground(Theme.getSelectorDrawable(false));
+            linearLayoutInviteContainer.addView(textCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+            textCell.setOnClickListener(v2 -> {
+                Integer tag = (Integer) v2.getTag();
+                checks[tag] = !checks[tag];
+                textCell.setChecked(checks[tag]);
+            });
+        }
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> saveDeleteMenuChecks(checks));
         builder.setView(linearLayout);
         showDialog(builder.create());
     }
