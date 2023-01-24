@@ -747,6 +747,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
             messageTextView.setLines(1);
             messageTextView.setEllipsize(TextUtils.TruncateAt.END);
             progressViewContainer.addView(messageTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, (LocaleController.isRTL ? 0 : 62), 0, (LocaleController.isRTL ? 62 : 0), 0));
+            backgroundColor = getThemedColor(Theme.key_dialog_inlineProgressBackground);
+            containerView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(18), backgroundColor));
         } else if (progressViewStyle == ALERT_TYPE_LOADING) {
             setCanceledOnTouchOutside(false);
             setCancelable(false);
