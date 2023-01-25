@@ -3327,9 +3327,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     presentFragment(new ChangeUsernameActivity());
                     return;
                 }
-
+                String username = UserObject.getPublicUsername(user);
                 BottomBuilder builder = new BottomBuilder(getParentActivity());
-                builder.addTitle("@" + user.username);
+                builder.addTitle("@" + username);
 
                 if (userId == getUserConfig().clientUserId && isQrNeedVisible()) {
                     builder.addItem(LocaleController.getString("QrCode", R.string.QrCode), R.drawable.msg_qrcode, __ -> {
@@ -3347,12 +3347,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 });
 
                 builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.msg_copy, __ -> {
-                    AlertUtil.copyAndAlert("@" + user.username);
+                    AlertUtil.copyAndAlert("@" + username);
                     return Unit.INSTANCE;
                 });
 
                 builder.addItem(LocaleController.getString("CopyLink", R.string.CopyLink), R.drawable.msg_link, __ -> {
-                    AlertUtil.copyAndAlert("https://t.me/" + user.username);
+                    AlertUtil.copyAndAlert("https://t.me/" + username);
                     return Unit.INSTANCE;
                 });
 
@@ -5170,7 +5170,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (chat == null || !ChatObject.isPublic(chat)) {
                     return false;
                 }
-                username = chat.username;
+                username = ChatObject.getPublicUsername(chat);
             } else {
                 return false;
             }
