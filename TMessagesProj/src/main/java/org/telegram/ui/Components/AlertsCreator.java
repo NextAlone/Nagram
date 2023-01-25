@@ -5404,7 +5404,17 @@ public class AlertsCreator {
                     MessagesController.getInstance(currentAccount).deleteUserChannelHistory(chat, userFinal, chatFinal, 0);
                 }
                 if (checks[3] && userFinal != null) {
-                    doActionsInCommonGroups(checks, currentAccount, userFinal);
+                    if (userFinal.contact || userFinal.bot) {
+                        AlertDialog confirm = new AlertDialog.Builder(activity, resourcesProvider)
+                                .setTitle(LocaleController.getString("DoActionsInCommonGroups", R.string.DoActionsInCommonGroups))
+                                .setMessage(LocaleController.getString("UserRestrictionsApplyChanges", R.string.UserRestrictionsApplyChanges))
+                                .setPositiveButton(LocaleController.getString("ApplyTheme", R.string.ApplyTheme), (dialogInterface_, i_) -> doActionsInCommonGroups(checks, currentAccount, userFinal))
+                                .setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null)
+                                .create();
+                        fragment.showDialog(confirm);
+                    } else {
+                        doActionsInCommonGroups(checks, currentAccount, userFinal);
+                    }
                 }
             }
             if (onDelete != null) {
