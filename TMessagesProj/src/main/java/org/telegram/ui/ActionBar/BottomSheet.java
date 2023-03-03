@@ -60,12 +60,16 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.camera.CameraView;
+import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
 
 import java.util.ArrayList;
+
+import kotlin.Unit;
+import tw.nekomimi.nekogram.ui.BottomBuilder;
 
 public class BottomSheet extends Dialog {
     private final static boolean AVOID_SYSTEM_CUTOUT_FULLSCREEN = false;
@@ -1746,6 +1750,131 @@ public class BottomSheet extends Dialog {
             bottomSheet.setOnHideListener(onDismissListener);
             return this;
         }
+    }
+
+    public static class NekoXBuilder {
+        // do the same thing as BottomBuilder
+        private final BottomBuilder nekoxBuilder;
+
+        private HeaderCell title;
+
+        private final BottomSheet bottomSheet;
+        // in Telegram interface, BottomSheet only have one title
+
+        public NekoXBuilder(Context context) {
+            this(context, false);
+        }
+
+        public NekoXBuilder(Context context, int bgColor) {
+            this(context, false, bgColor);
+        }
+
+        public NekoXBuilder(Context context, boolean needFocus) {
+            this(context, needFocus, Theme.getColor(Theme.key_dialogBackground));
+        }
+        public NekoXBuilder(Context context, boolean needFocus, int bgColor) {
+            this.nekoxBuilder = new BottomBuilder(context, needFocus, bgColor);
+            this.bottomSheet = nekoxBuilder.getBuilder().bottomSheet;
+        }
+        public NekoXBuilder setItems(CharSequence[] items, final OnClickListener onClickListener) {
+            nekoxBuilder.addItems(items, null, (index, text, cell) -> {
+                onClickListener.onClick(null, index);
+                return Unit.INSTANCE;
+            });
+            return this;
+        }
+
+        public NekoXBuilder setItems(CharSequence[] items, int[] icons, final OnClickListener onClickListener) {
+            nekoxBuilder.addItems(items, icons, (index, text, cell) -> {
+                onClickListener.onClick(null, index);
+                return Unit.INSTANCE;
+            });
+            return this;
+        }
+
+        public NekoXBuilder setTitle(CharSequence title) {
+            return setTitle(title, false);
+        }
+
+        public NekoXBuilder setTitle(CharSequence title, boolean big) {
+            this.title = nekoxBuilder.addTitle(title, big);
+            return this;
+        }
+
+        public NekoXBuilder setTitleMultipleLines(boolean allowMultipleLines) {
+            if (this.title != null) {
+                var textView = this.title.getTextView();
+                if (allowMultipleLines) {
+                    textView.setSingleLine(false);
+                    textView.setMaxLines(5);
+                    textView.setEllipsize(TextUtils.TruncateAt.END);
+                } else {
+                    textView.setLines(1);
+                    textView.setSingleLine(true);
+                    textView.setEllipsize(TextUtils.TruncateAt.MIDDLE);
+                }
+            }
+            return this;
+        }
+
+        public BottomSheet create() {
+            return nekoxBuilder.create();
+        }
+
+        public BottomSheet setDimBehind(boolean value) {
+            bottomSheet.dimBehind = value;
+            return bottomSheet;
+        }
+
+        public BottomSheet show() {
+            bottomSheet.show();
+            return bottomSheet;
+        }
+
+        public NekoXBuilder setTag(int tag) {
+            bottomSheet.tag = tag;
+            return this;
+        }
+
+        public NekoXBuilder setUseHardwareLayer(boolean value) {
+            bottomSheet.useHardwareLayer = value;
+            return this;
+        }
+
+        public NekoXBuilder setDelegate(BottomSheetDelegate delegate) {
+            bottomSheet.setDelegate(delegate);
+            return this;
+        }
+
+        public NekoXBuilder setApplyTopPadding(boolean value) {
+            bottomSheet.applyTopPadding = value;
+            return this;
+        }
+
+        public NekoXBuilder setApplyBottomPadding(boolean value) {
+            bottomSheet.applyBottomPadding = value;
+            return this;
+        }
+
+        public Runnable getDismissRunnable() {
+            return bottomSheet.dismissRunnable;
+        }
+
+        public BottomSheet setUseFullWidth(boolean value) {
+            bottomSheet.fullWidth = value;
+            return bottomSheet;
+        }
+
+        public BottomSheet setUseFullscreen(boolean value) {
+            bottomSheet.isFullscreen = value;
+            return bottomSheet;
+        }
+
+        public NekoXBuilder setOnPreDismissListener(OnDismissListener onDismissListener) {
+            nekoxBuilder.getBuilder().bottomSheet.setOnHideListener(onDismissListener);
+            return this;
+        }
+
     }
 
     public int getLeftInset() {

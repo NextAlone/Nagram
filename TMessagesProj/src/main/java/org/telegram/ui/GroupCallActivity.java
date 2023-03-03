@@ -2167,7 +2167,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                         iconsArray[i] = icons.get(i);
                     }
 
-                    BottomSheet.Builder builder = new BottomSheet.Builder(context)
+                    BottomSheet.NekoXBuilder builder = new BottomSheet.NekoXBuilder(context)
                             .setTitle(LocaleController.getString("VoipSelectAudioOutput", R.string.VoipSelectAudioOutput), true)
                             .setItems(itemsArray, iconsArray, (dialog, which) -> {
                                         if (VoIPService.getSharedInstance() == null) {

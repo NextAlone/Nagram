@@ -6549,7 +6549,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private void onArchiveLongPress(View view) {
         if (!NekoConfig.disableVibration.Bool()) {
             view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-        }        BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity());
+        }
+        BottomSheet.NekoXBuilder builder = new BottomSheet.NekoXBuilder(getParentActivity());
         final boolean hasUnread = getMessagesStorage().getArchiveUnreadCount() != 0;
 
         int[] icons = new int[]{
