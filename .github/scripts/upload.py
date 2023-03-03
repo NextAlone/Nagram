@@ -20,20 +20,24 @@ VERSION_CODE = read_env("VERSION_CODE")
 COMMIT_HASH = read_env("GITHUB_SHA")
 COMMIT_MESSAGE = read_env("COMMIT_MESSAGE")
 
-APK_CHANNEL_ID = "@miaomiao_apks"
-UPDATE_CHANNEL_ID = "@miaomiao_apks"
-UPDATE_METADATA_CHANNEL_ID = "@miaomiao_metadata"
+APK_CHANNEL_ID = "@NekoXApks"
+UPDATE_CHANNEL_ID = "@NekogramX"
+UPDATE_METADATA_CHANNEL_ID = "@nekox_update_metadata"
 CI_CHANNEL_ID = "@NekoX_CI"
 
-def generateReleaseMessage(first_apk_message_id, release_text) -> str:
-    rel_type = 'PRE_RELEASE' if 'preview' in VERSION_NAME else 'RELEASE'
-    return f"""
-#{rel_type} [ ](https://t.me/{APK_CHANNEL_ID.replace("@","")}/{first_apk_message_id + 1}) *{VERSION_NAME}*
 
-{release_text}
+def addEntity(entities, origin_str, en_type, content, url = None) -> str:
+    origin_len = len(origin_str)
+    entity = {
+        "type": en_type,
+        "offset": origin_len,
+        "length": len(content)
+    }
+    if url:
+        entity["url"] = url
+    entities.append(entity)
+    return content
 
-[GitHub Release](https://github.com/NekoX-Dev/NekoX/releases/{VERSION_NAME}) | [Apks](https://t.me/{APK_CHANNEL_ID.replace("@","")}/{first_apk_message_id}) | [Check Update](tg://update/)
-"""
 
 def waitReply(mid):
     last_update = 0
@@ -54,11 +58,11 @@ def waitReply(mid):
             last_update = max(last_update, update["update_id"])
 
 
-def sendMessage(message, user_id = BOT_TARGET) -> int:
+def sendMessage(message, user_id = BOT_TARGET, entities = None) -> int:
     data = {
         "chat_id" : user_id,
         "text": message,
-        "parse_mode": "Markdown"
+        "entities": entities
     }
     resp = requests.post(API_PREFIX + "sendMessage", json=data).json()
     print(resp)
@@ -80,8 +84,6 @@ def sendRelease():
     # read message from admin
     mid = sendMessage(f"Please reply the release message for the version {VERSION_NAME},{VERSION_CODE}:", user_id=BOT_TARGET)
     admin_resp = waitReply(mid)
-    print(admin_resp)
-    release_text = admin_resp["text"]
 
     # send message and apks to APK channel
     message = f"=== {VERSION_NAME} ==="
@@ -92,11 +94,31 @@ def sendRelease():
         sendDocument(user_id=APK_CHANNEL_ID, path=path)
     
     # generate release message and send to update channel
-    release_msg = generateReleaseMessage(apk_channel_first_id, release_text)
-    sendMessage(release_msg, user_id=UPDATE_CHANNEL_ID)
+    entities = []
+    text = ""
+    text += addEntity(entities, text, "hashtag", f"#{'PRE_RELEASE' if 'preview' in VERSION_NAME else 'RELEASE'}")
+    text += " "
+    text += addEntity(entities, text, "text_link", " ", f'https://t.me/{APK_CHANNEL_ID.replace("@","")}/{apk_channel_first_id + 1}')
+    text += " "
+    text += addEntity(entities, text, "bold", VERSION_NAME)
+    text += "\n\n"
+    resp_entities = admin_resp["entities"]
+    for en in resp_entities:
+        copy = en.copy()
+        copy["offset"] += len(text)
+        entities.append(copy)
+    text += admin_resp["text"]
+    text += "\n\n"
+    text += addEntity(entities, text, "text_link", "GitHub Release", f"https://github.com/NekoX-Dev/NekoX/releases/{VERSION_NAME}")
+    text += " | "
+    text += addEntity(entities, text, "text_link", "Apks", f'https://t.me/{APK_CHANNEL_ID.replace("@","")}/{apk_channel_first_id}')
+    text += " | "
+    text += addEntity(entities, text, "text_link", "Check Update", "tg://update/")
+
+    sendMessage(text, user_id=UPDATE_CHANNEL_ID, entities=entities)
 
     # send release message to metadata channel
-    mid = sendMessage(release_text, user_id=UPDATE_METADATA_CHANNEL_ID)
+    mid = sendMessage(admin_resp["text"], user_id=UPDATE_METADATA_CHANNEL_ID, entities=admin_resp["entities"])
     meta_msg = f"{VERSION_NAME},{VERSION_CODE},{apk_channel_first_id},{mid}"
     sendMessage(meta_msg, user_id=UPDATE_METADATA_CHANNEL_ID)
 
