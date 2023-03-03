@@ -472,28 +472,26 @@ jobs:
         run: |
           sudo apt install python3 python3-pip -y
           pip3 install requests
-      - name: Upload
+      - name: Prepare Upload
         run: |
           chmod +x telegram-bot-api-binary
           function start() {
-            ./telegram-bot-api-binary --api-id=21724 --api-hash=3e0cb5efcd52300aec5994fdfc5bdc16 --local 2>&1 > /dev/null &
+            ./telegram-bot-api-binary --api-id=21724 --api-hash=3e0cb5efcd52300aec5994fdfc5bdc16 -p 38118 --local 2>&1 > /dev/null &
             sleep 5
           }
           start
-          curl http://127.0.0.1:8081/ || start
-          curl http://127.0.0.1:8081/ || start
-          curl http://127.0.0.1:8081/ || start
-          curl http://127.0.0.1:8081/ || start
-          
+          curl http://127.0.0.1:38118/ || start
+          curl http://127.0.0.1:38118/ || start
+          curl http://127.0.0.1:38118/ || start
+          curl http://127.0.0.1:38118/ || start
+      - name: Upload
+        run: |
           curl https://raw.githubusercontent.com/NekoX-Dev/NekoX/dev/.github/scripts/upload.py -o upload.py
           
-          export BOT_TOKEN=${{ secrets.HELPER_BOT_TOKEN }}
-          export BOT_TARGET=${{ secrets.HELPER_BOT_TARGET }}
+          export BOT_TOKEN="${{ secrets.HELPER_BOT_TOKEN }}"
+          export BOT_TARGET="${{ secrets.HELPER_BOT_TARGET }}"
           export COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
-          export VERSION_NAME="${{ env.VERSION_NAME }}"
-          export VERSION_CODE="${{ env.VERSION_CODE }}"
-          echo ${{ env.VERSION_NAME }}
-          
+
           python3 upload.py ci
 
           pkill telegram-bot

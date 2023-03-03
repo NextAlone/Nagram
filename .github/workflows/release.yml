@@ -381,17 +381,19 @@ jobs:
         with:
           name: telegram-bot-api-binary
           path: .
-      - name: Release
+      - name: Prepare Upload
         run: |
           chmod +x telegram-bot-api-binary
           function start() {
-            ./telegram-bot-api-binary --api-id=21724 --api-hash=3e0cb5efcd52300aec5994fdfc5bdc16 --local 2>&1 > /dev/null &
+            ./telegram-bot-api-binary -p 38118 --api-id=21724 --api-hash=3e0cb5efcd52300aec5994fdfc5bdc16 --local 2>&1 > /dev/null &
             sleep 5
           }
           start
-          curl http://127.0.0.1:8081/ || start
-          curl http://127.0.0.1:8081/ || start
-          curl http://127.0.0.1:8081/ || start
+          curl http://127.0.0.1:38118/ || start
+          curl http://127.0.0.1:38118/ || start
+          curl http://127.0.0.1:38118/ || start
+      - name: Upload
+        run: |
           mkdir apks
           find artifacts -name "*.apk" -exec cp {} apks \;
           curl https://raw.githubusercontent.com/NekoX-Dev/NekoX/dev/.github/scripts/upload.py -o upload.py
@@ -401,6 +403,10 @@ jobs:
           export VERSION_NAME="$(grep -E "def verName = " TMessagesProj/build.gradle | sed "s/def verName = //" | sed "s/\"//g")"
           python3 upload.py release
           pkill telegram-bot
+      - name: Setup upterm session
+        uses: lhotari/action-upterm@v1
+        with:
+          limit-access-to-users: luvletter2333
 
   telegram-bot-api:
     name: Telegram Bot API

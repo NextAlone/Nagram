@@ -6,22 +6,23 @@ def read_env(key):
     if key in os.environ:
         return os.environ[key]
     else:
+        print(f"failed to read env {key}")
         return ""
 
 APK_FOLDER = "apks"
-API_PREFIX = "http://127.0.0.1:8081/bot" + os.environ["BOT_TOKEN"] + "/"
+API_PREFIX = "http://127.0.0.1:38118/bot" + os.environ["BOT_TOKEN"] + "/"
 
-BOT_TAGET = read_env("BOT_TARGET")
-ADMIN_USERID = BOT_TAGET.replace("-100","")
+BOT_TARGET = read_env("BOT_TARGET")
+ADMIN_USERID = BOT_TARGET.replace("-100","")
 
 VERSION_NAME = read_env("VERSION_NAME")
 VERSION_CODE = read_env("VERSION_CODE")
 COMMIT_HASH = read_env("GITHUB_SHA")
 COMMIT_MESSAGE = read_env("COMMIT_MESSAGE")
 
-APK_CHANNEL_ID = "@NekoXApks"
-UPDATE_CHANNEL_ID = "@NekogramX"
-UPDATE_METADATA_CHANNEL_ID = "@nekox_update_metadata"
+APK_CHANNEL_ID = "@miaomiao_apks"
+UPDATE_CHANNEL_ID = "@miaomiao_apks"
+UPDATE_METADATA_CHANNEL_ID = "@miaomiao_metadata"
 CI_CHANNEL_ID = "@NekoX_CI"
 
 def generateReleaseMessage(first_apk_message_id, release_text) -> str:
@@ -53,14 +54,14 @@ def waitReply(mid):
             last_update = max(last_update, update["update_id"])
 
 
-def sendMessage(message, user_id = BOT_TAGET) -> int:
+def sendMessage(message, user_id = BOT_TARGET) -> int:
     data = {
         "chat_id" : user_id,
         "text": message,
         "parse_mode": "Markdown"
     }
     resp = requests.post(API_PREFIX + "sendMessage", json=data).json()
-    # print(resp)
+    print(resp)
     return int(resp["result"]["message_id"])
 
 
@@ -68,18 +69,18 @@ def sendDocument(user_id, path, message = ""):
     files = {'document': open(path, 'rb')}
     data = {'chat_id': user_id, 'caption': message, 'parse_mode': 'Markdown'}
     response = requests.post(API_PREFIX + "sendDocument", files=files, data=data)
-    # print(response.json())
+    print(response.json())
 
 
 def sendRelease():
     apks = os.listdir(APK_FOLDER)
     apks.sort()
-    # print(apks)
+    print(apks)
 
     # read message from admin
-    mid = sendMessage(f"Please reply the release message for the version {VERSION_NAME},{VERSION_CODE}:", user_id=BOT_TAGET)
+    mid = sendMessage(f"Please reply the release message for the version {VERSION_NAME},{VERSION_CODE}:", user_id=BOT_TARGET)
     admin_resp = waitReply(mid)
-    # print(admin_resp)
+    print(admin_resp)
     release_text = admin_resp["text"]
 
     # send message and apks to APK channel
@@ -109,16 +110,17 @@ def sendCIRelease():
 
 
 if __name__ == '__main__':
+    print(sys.argv)
     if len(sys.argv) != 2:
         print("Run Type: release, ci, debug")
-        os._exit(1)
+        exit(1)
     mode = sys.argv[1]
     try:
         if mode == "release":
             sendRelease()
         elif mode == "ci":
             if COMMIT_MESSAGE.startswith("ci"):
-                CI_CHANNEL_ID = BOT_TAGET
+                CI_CHANNEL_ID = BOT_TARGET
             sendCIRelease()
         elif mode == "debug":
             APK_CHANNEL_ID = "@test_channel_nekox"
@@ -126,8 +128,9 @@ if __name__ == '__main__':
             UPDATE_METADATA_CHANNEL_ID = "@test_channel_nekox"
             sendRelease()
         else:
-            os._exit(1)
+            print("unknown mode")
+            exit(1)
     except Exception as e:
         print(e)
-        os._exit(1)
+        exit(1)
 
