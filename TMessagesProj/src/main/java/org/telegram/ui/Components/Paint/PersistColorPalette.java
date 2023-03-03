@@ -2,6 +2,7 @@ package org.telegram.ui.Components.Paint;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.SparseArray;
 
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.SharedConfig;
@@ -33,7 +34,7 @@ public class PersistColorPalette {
     );
     private final static Integer DEFAULT_MARKER_COLOR = 0xff0a84ff;
 
-    private static PersistColorPalette[] instances = new PersistColorPalette[32];
+    private static SparseArray<PersistColorPalette> instances = new SparseArray<>();
 
     private SharedPreferences mConfig;
     private List<Integer> colors = new ArrayList<>(COLORS_COUNT);
@@ -60,10 +61,10 @@ public class PersistColorPalette {
     }
 
     public static PersistColorPalette getInstance(int currentAccount) {
-        if (instances[currentAccount] == null) {
-            instances[currentAccount] = new PersistColorPalette(currentAccount);
+        if (instances.get(currentAccount) == null) {
+            instances.set(currentAccount, new PersistColorPalette(currentAccount));
         }
-        return instances[currentAccount];
+        return instances.get(currentAccount);
     }
 
     public int getCurrentTextType() {
