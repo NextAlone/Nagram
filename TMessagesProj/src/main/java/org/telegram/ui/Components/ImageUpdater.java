@@ -269,7 +269,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         }
         if (hasAvatar) {
             items.add(LocaleController.getString("DeletePhoto", R.string.DeletePhoto));
-            icons.add(R.drawable.msg_delete);
+            icons.add(R.drawable.baseline_delete_24);
             ids.add(ID_REMOVE_PHOTO);
         }
 
