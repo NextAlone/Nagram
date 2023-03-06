@@ -69,9 +69,12 @@ def sendMessage(message, user_id = BOT_TARGET, entities = None) -> int:
     return int(resp["result"]["message_id"])
 
 
-def sendDocument(user_id, path, message = ""):
+def sendDocument(user_id, path, message = "", entities = None):
     files = {'document': open(path, 'rb')}
-    data = {'chat_id': user_id, 'caption': message, 'parse_mode': 'Markdown'}
+    data = {'chat_id': user_id,
+            'caption': message,
+            'parse_mode': 'Markdown',
+            'caption_entities': entities}
     response = requests.post(API_PREFIX + "sendDocument", files=files, data=data)
     print(response.json())
 
@@ -127,8 +130,10 @@ def sendCIRelease():
     apks = os.listdir(APK_FOLDER)
     apks.sort()
     apk = os.path.join(APK_FOLDER, apks[0])
-    message = f"CI Build\n\n{COMMIT_MESSAGE}\n\n{COMMIT_HASH[0:8]}"
-    sendDocument(user_id=CI_CHANNEL_ID, path = apk, message=message)
+    entities = []
+    message = f"CI Build\n\n{COMMIT_MESSAGE}\n\n"
+    message += addEntity(entities, message, "text_link", COMMIT_HASH[0:8], f"https://github.com/NekoX-Dev/NekoX/commit/{COMMIT_HASH}")
+    sendDocument(user_id=CI_CHANNEL_ID, path = apk, message=message, )
 
 
 if __name__ == '__main__':
