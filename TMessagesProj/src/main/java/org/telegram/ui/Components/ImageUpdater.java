@@ -250,7 +250,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         }
 
         items.add(LocaleController.getString("UploadImage", R.string.UploadImage));
-        icons.add(R.drawable.baseline_image_24);
+        icons.add(R.drawable.msg_photos);
         ids.add(ID_UPLOAD_FROM_GALLERY);
 
         items.add(LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto));
@@ -259,18 +259,18 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
 
         if (canSelectVideo) {
             items.add(LocaleController.getString("ChooseRecordVideo", R.string.ChooseRecordVideo));
-            icons.add(R.drawable.baseline_videocam_24);
+            icons.add(R.drawable.msg_videocall);
             ids.add(ID_RECORD_VIDEO);
         }
 
         if (searchAvailable) {
             items.add(LocaleController.getString("ChooseFromSearch", R.string.ChooseFromSearch));
-            icons.add(R.drawable.baseline_search_24);
+            icons.add(R.drawable.msg_search);
             ids.add(ID_SEARCH_WEB);
         }
         if (hasAvatar) {
             items.add(LocaleController.getString("DeletePhoto", R.string.DeletePhoto));
-            icons.add(R.drawable.baseline_delete_24);
+            icons.add(R.drawable.msg_delete);
             ids.add(ID_REMOVE_PHOTO);
         }
 

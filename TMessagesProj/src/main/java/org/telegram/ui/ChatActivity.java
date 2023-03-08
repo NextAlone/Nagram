@@ -27708,10 +27708,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 LocaleController.getString("ShareMessages", R.string.ShareMessages)
                         },
                         new int[]{
-                                R.drawable.baseline_open_in_browser_24,
-                                R.drawable.baseline_content_copy_24,
+                                R.drawable.msg_openin,
+                                R.drawable.msg_copy,
                                 R.drawable.wallet_qr,
-                                R.drawable.baseline_share_24
+                                R.drawable.msg_shareout
                         },
                         (which, text, __) -> {
                             if (which == 0) {

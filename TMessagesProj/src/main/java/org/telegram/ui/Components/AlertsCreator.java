@@ -3836,10 +3836,10 @@ public class AlertsCreator {
                 LocaleController.getString("MuteDisable", R.string.MuteDisable)
         };
         builder.addItems(items, new int[]{
-                R.drawable.baseline_notifications_paused_24,
-                R.drawable.baseline_notifications_paused_24,
-                R.drawable.baseline_notifications_paused_24,
-                R.drawable.baseline_notifications_paused_24
+                R.drawable.msg_mute_period,
+                R.drawable.msg_mute_period,
+                R.drawable.msg_mute_period,
+                R.drawable.msg_mute_period
         }, (i, text, cell) -> {
             int setting;
             if (i == 0) {
