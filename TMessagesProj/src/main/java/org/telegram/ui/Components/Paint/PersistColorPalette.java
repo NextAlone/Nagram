@@ -34,7 +34,7 @@ public class PersistColorPalette {
     );
     private final static Integer DEFAULT_MARKER_COLOR = 0xff0a84ff;
 
-    private static SparseArray<PersistColorPalette> instances = new SparseArray();
+    private static SparseArray<PersistColorPalette> instances = new SparseArray<>();
 
     private SharedPreferences mConfig;
     private List<Integer> colors = new ArrayList<>(COLORS_COUNT);
@@ -62,7 +62,7 @@ public class PersistColorPalette {
 
     public static PersistColorPalette getInstance(int currentAccount) {
         if (instances.get(currentAccount) == null) {
-            instances.put(currentAccount, new PersistColorPalette(currentAccount));
+            instances.set(currentAccount, new PersistColorPalette(currentAccount));
         }
         return instances.get(currentAccount);
     }

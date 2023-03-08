@@ -239,7 +239,7 @@ public class TextCell extends FrameLayout {
         }
     }
 
-    public void setText(String text, boolean divider) {
+    public void setText(CharSequence text, boolean divider) {
         imageLeft = 21;
         textView.setText(text);
         valueTextView.setText(null, false);
@@ -250,7 +250,7 @@ public class TextCell extends FrameLayout {
         setWillNotDraw(!needDivider);
     }
 
-    public void setTextAndIcon(String text, int resId, boolean divider) {
+    public void setTextAndIcon(CharSequence text, int resId, boolean divider) {
         imageLeft = 21;
         offsetFromImage = 71;
         textView.setText(text);
@@ -268,7 +268,7 @@ public class TextCell extends FrameLayout {
         setWillNotDraw(!needDivider);
     }
 
-    public void setTextAndIcon(String text, Drawable drawable, boolean divider) {
+    public void setTextAndIcon(CharSequence text, Drawable drawable, boolean divider) {
         offsetFromImage = 68;
         imageLeft = 18;
         textView.setText(text);
@@ -295,11 +295,11 @@ public class TextCell extends FrameLayout {
         this.imageLeft = imageLeft;
     }
 
-    public void setTextAndValue(String text, String value, boolean divider) {
+    public void setTextAndValue(CharSequence text, String value, boolean divider) {
         setTextAndValue(text, value, false, divider);
     }
 
-    public void setTextAndValue(String text, String value, boolean animated, boolean divider) {
+    public void setTextAndValue(CharSequence text, String value, boolean animated, boolean divider) {
         imageLeft = 21;
         offsetFromImage = 71;
         textView.setText(text);
@@ -314,11 +314,11 @@ public class TextCell extends FrameLayout {
         }
     }
 
-    public void setTextAndValueAndIcon(String text, String value, int resId, boolean divider) {
+    public void setTextAndValueAndIcon(CharSequence text, String value, int resId, boolean divider) {
         setTextAndValueAndIcon(text, value, false, resId, divider);
     }
 
-    public void setTextAndValueAndIcon(String text, String value, boolean animated, int resId, boolean divider) {
+    public void setTextAndValueAndIcon(CharSequence text, String value, boolean animated, int resId, boolean divider) {
         imageLeft = 21;
         offsetFromImage = 71;
         textView.setText(text);
@@ -348,7 +348,7 @@ public class TextCell extends FrameLayout {
         imageView.setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(8), color));
     }
 
-    public void setTextAndCheck(String text, boolean checked, boolean divider) {
+    public void setTextAndCheck(CharSequence text, boolean checked, boolean divider) {
         imageLeft = 21;
         offsetFromImage = 71;
         textView.setText(text);
@@ -363,7 +363,7 @@ public class TextCell extends FrameLayout {
         setWillNotDraw(!needDivider);
     }
 
-    public void setTextAndCheckAndIcon(String text, boolean checked, int resId, boolean divider) {
+    public void setTextAndCheckAndIcon(CharSequence text, boolean checked, int resId, boolean divider) {
         imageLeft = 21;
         offsetFromImage = 71;
         textView.setText(text);
@@ -380,7 +380,7 @@ public class TextCell extends FrameLayout {
         setWillNotDraw(!needDivider);
     }
 
-    public void setTextAndCheckAndIcon(String text, boolean checked, Drawable resDrawable, boolean divider) {
+    public void setTextAndCheckAndIcon(CharSequence text, boolean checked, Drawable resDrawable, boolean divider) {
         imageLeft = 21;
         offsetFromImage = 71;
         textView.setText(text);
@@ -397,7 +397,7 @@ public class TextCell extends FrameLayout {
         setWillNotDraw(!needDivider);
     }
 
-    public void setTextAndValueDrawable(String text, Drawable drawable, boolean divider) {
+    public void setTextAndValueDrawable(CharSequence text, Drawable drawable, boolean divider) {
         imageLeft = 21;
         offsetFromImage = 71;
         textView.setText(text);

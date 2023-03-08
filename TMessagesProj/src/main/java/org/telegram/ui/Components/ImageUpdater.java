@@ -73,7 +73,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             ID_SEARCH_WEB = 2,
             ID_REMOVE_PHOTO = 3,
             ID_RECORD_VIDEO = 4,
-            ID_OPEN_PHOTO = 50;
+            ID_OPEN_AVATAR = 5;
 
     public BaseFragment parentFragment;
     private ImageUpdaterDelegate delegate;
@@ -229,7 +229,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             openAttachMenu(onDismiss);
             return;
         }
-        BottomSheet.Builder builder = new BottomSheet.Builder(parentFragment.getParentActivity());
+        BottomSheet.NekoXBuilder builder = new BottomSheet.NekoXBuilder(parentFragment.getParentActivity());
 
         if (type == TYPE_SET_PHOTO_FOR_USER) {
             builder.setTitle(LocaleController.formatString("SetPhotoFor", R.string.SetPhotoFor, user.first_name), true);
@@ -246,8 +246,12 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         if (hasAvatar && parentFragment instanceof ProfileActivity) {
             items.add(LocaleController.getString("Open", R.string.Open));
             icons.add(R.drawable.msg_view_file);
-            ids.add(ID_OPEN_PHOTO);
+            ids.add(ID_OPEN_AVATAR);
         }
+
+        items.add(LocaleController.getString("UploadImage", R.string.UploadImage));
+        icons.add(R.drawable.baseline_image_24);
+        ids.add(ID_UPLOAD_FROM_GALLERY);
 
         items.add(LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto));
         icons.add(R.drawable.msg_camera);
@@ -255,22 +259,18 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
 
         if (canSelectVideo) {
             items.add(LocaleController.getString("ChooseRecordVideo", R.string.ChooseRecordVideo));
-            icons.add(R.drawable.msg_video);
+            icons.add(R.drawable.baseline_videocam_24);
             ids.add(ID_RECORD_VIDEO);
         }
 
-        items.add(LocaleController.getString("ChooseFromGallery", R.string.ChooseFromGallery));
-        icons.add(R.drawable.msg_photos);
-        ids.add(ID_UPLOAD_FROM_GALLERY);
-
         if (searchAvailable) {
             items.add(LocaleController.getString("ChooseFromSearch", R.string.ChooseFromSearch));
-            icons.add(R.drawable.msg_search);
+            icons.add(R.drawable.baseline_search_24);
             ids.add(ID_SEARCH_WEB);
         }
         if (hasAvatar) {
             items.add(LocaleController.getString("DeletePhoto", R.string.DeletePhoto));
-            icons.add(R.drawable.msg_delete);
+            icons.add(R.drawable.baseline_delete_24);
             ids.add(ID_REMOVE_PHOTO);
         }
 
@@ -282,6 +282,16 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         builder.setItems(items.toArray(new CharSequence[0]), iconsRes, (dialogInterface, i) -> {
             int id = ids.get(i);
             switch (id) {
+                case ID_OPEN_AVATAR:
+                    TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(UserConfig.getInstance(currentAccount).getClientUserId());
+                    if (user != null && user.photo != null && user.photo.photo_big != null) {
+                        PhotoViewer.getInstance().setParentActivity(parentFragment.getParentActivity());
+                        if (user.photo.dc_id != 0) {
+                            user.photo.photo_big.dc_id = user.photo.dc_id;
+                        }
+                        PhotoViewer.getInstance().openPhoto(user.photo.photo_big, ((ProfileActivity) parentFragment).provider);
+                    }
+                    break;
                 case ID_TAKE_PHOTO:
                     openCamera();
                     break;
@@ -1040,4 +1050,4 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             self = object instanceof TLRPC.User && ((TLRPC.User) object).self;
         }
     }
-}
+

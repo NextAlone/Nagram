@@ -82,8 +82,12 @@ android {
                 enable false
                 universalApk true
             } else {
-                enable true
-                if (!nativeTarget.isBlank()) {
+                if (nativeTarget.toLowerCase().equals("universal")) {
+                    enable false
+                    universalApk true
+                } else if (!nativeTarget.isBlank()) {
+                    enable true
+                    universalApk false
                     reset()
                     include nativeTarget
                     universalApk false

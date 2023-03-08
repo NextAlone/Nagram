@@ -1130,8 +1130,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (user == null) {
                     return;
                 }
-                imageUpdater.openMenu(user.photo != null && user.photo.photo_big != null && !(user.photo instanceof TLRPC.TL_userProfilePhotoEmpty), () -> MessagesController.getInstance(currentAccount).deleteUserPhoto(null), dialog -> {
-                }, 0);
+                imageUpdater.openMenu(
+                        user.photo != null && user.photo.photo_big != null && !(user.photo instanceof TLRPC.TL_userProfilePhotoEmpty),
+                        () -> MessagesController.getInstance(currentAccount).deleteUserPhoto(null), dialog -> {},
+                        ImageUpdater.TYPE_DEFAULT);
             } else {
                 openAvatar();
             }
@@ -4842,7 +4844,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 // avatarImage's onClick event should call this openAvatar method.
                 if (userId == UserConfig.getInstance(currentAccount).getClientUserId() && imageUpdater != null) {
                     imageUpdater.openMenu(false, () -> MessagesController.getInstance(currentAccount).deleteUserPhoto(null), dialog -> {
-                    }, 0);
+                    }, ImageUpdater.TYPE_DEFAULT);
                 }
             }
         } else if (chatId != 0) {
@@ -4866,38 +4868,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private void onWriteButtonClick() {
         if (userId != 0) {
             if (imageUpdater != null) {
-                TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(UserConfig.getInstance(currentAccount).getClientUserId());
-                if (user == null) {
-                    user = UserConfig.getInstance(currentAccount).getCurrentUser();
-                }
-                if (user == null) {
-                    return;
-                }
-                imageUpdater.openMenu(user.photo != null && user.photo.photo_big != null && !(user.photo instanceof TLRPC.TL_userProfilePhotoEmpty), () -> {
-                    MessagesController.getInstance(currentAccount).deleteUserPhoto(null);
-                    cameraDrawable.setCurrentFrame(0);
-                    cellCameraDrawable.setCurrentFrame(0);
-                }, dialog -> {
-                    if (!imageUpdater.isUploadingImage()) {
-                        cameraDrawable.setCustomEndFrame(86);
-                        cellCameraDrawable.setCustomEndFrame(86);
-                        writeButton.playAnimation();
-                        if (setAvatarCell != null) {
-                            setAvatarCell.getImageView().playAnimation();
-                        }
-                    } else {
-                        cameraDrawable.setCurrentFrame(0, false);
-                        cellCameraDrawable.setCurrentFrame(0, false);
-                    }
-                }, 0);
-                cameraDrawable.setCurrentFrame(0);
-                cameraDrawable.setCustomEndFrame(43);
-                cellCameraDrawable.setCurrentFrame(0);
-                cellCameraDrawable.setCustomEndFrame(43);
-                writeButton.playAnimation();
-                if (setAvatarCell != null) {
-                    setAvatarCell.getImageView().playAnimation();
-                }
+                presentFragment(new ChangeNameActivity(resourcesProvider));
             } else {
                 if (playProfileAnimation != 0 && parentLayout.getFragmentStack().get(parentLayout.getFragmentStack().size() - 2) instanceof ChatActivity) {
                     finishFragment();

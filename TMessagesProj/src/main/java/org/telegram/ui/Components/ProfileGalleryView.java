@@ -997,9 +997,11 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             item.imageView.getImageReceiver().setCrossfadeAlpha((byte) 2);
 
             item.imageView.setRoundRadius(roundTopRadius, roundTopRadius, roundBottomRadius, roundBottomRadius);
-            item.imageView.setTag(realPosition);
 
-            item.imageView.setOnClickListener(__ -> callback.onClick());
+            item.imageView.setOnClickListener(__ -> {
+                callback.onClick();
+            });
+
             return item;
         }
 
