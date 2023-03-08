@@ -307,16 +307,6 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 case ID_RECORD_VIDEO:
                     openVideoCamera();
                     break;
-                case ID_OPEN_PHOTO:
-                    TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(UserConfig.getInstance(currentAccount).getClientUserId());
-                    if (user != null && user.photo != null && user.photo.photo_big != null) {
-                        PhotoViewer.getInstance().setParentActivity(parentFragment.getParentActivity());
-                        if (user.photo.dc_id != 0) {
-                            user.photo.photo_big.dc_id = user.photo.dc_id;
-                        }
-                        PhotoViewer.getInstance().openPhoto(user.photo.photo_big, ((ProfileActivity) parentFragment).provider);
-                    }
-                    break;
             }
         });
         BottomSheet sheet = builder.create();
@@ -1050,4 +1040,4 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             self = object instanceof TLRPC.User && ((TLRPC.User) object).self;
         }
     }
-
+}
