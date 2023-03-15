@@ -7303,7 +7303,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             pagedownButton.setOnLongClickListener(view -> {
                 returnToMessageId = 0;
                 returnToMessageIdsStack.clear();
-                scrollToLastMessage(true, true);
+                onPageDownClicked();
                 return true;
             });
         }
@@ -9467,7 +9467,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         };
         if (createUnreadMessageAfterId != 0) {
             scrollToMessageId(createUnreadMessageAfterId, 0, false, returnToLoadIndex, true, 0, inCaseLoading);
-        } else if (returnToMessageId > 0) {
+        } else if (returnToMessageId > 0 || (NekoConfig.rememberAllBackMessages.Bool() && !returnToMessageIdsStack.empty())) {
+            if (NekoConfig.rememberAllBackMessages.Bool() && !returnToMessageIdsStack.empty())
+                returnToMessageId = returnToMessageIdsStack.pop();
             scrollToMessageId(returnToMessageId, 0, true, returnToLoadIndex, true, 0, inCaseLoading);
         } else {
             scrollToLastMessage(false, true, inCaseLoading);
