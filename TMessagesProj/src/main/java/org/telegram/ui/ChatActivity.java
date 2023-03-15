@@ -2715,7 +2715,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         ActionBarMenu menu = actionBar.createMenu();
 
-        if (isThreadChat() && threadMessageId != 0) {
+        if (isThreadChat() && threadMessageId != 0 && !isTopic) {
             viewInChatItem = menu.addItem(nkbtn_view_in_chat, R.drawable.baseline_forum_24, themeDelegate);
         }
 
@@ -23857,7 +23857,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                             options.add(OPTION_VIEW_REPLIES_OR_THREAD);
                             icons.add(R.drawable.baseline_forum_24);
-                        } else if (isThreadChat() && chatMode != MODE_SCHEDULED && currentChat != null) {
+                        } else if (isThreadChat() && !isTopic && chatMode != MODE_SCHEDULED && currentChat != null) {
                             options.add(nkbtn_view_in_chat);
                             icons.add(R.drawable.baseline_forum_24);
                             items.add(LocaleController.getString("ViewInChat", R.string.ViewInChat));
@@ -32255,11 +32255,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     private void doRepeatMessage(boolean isLongClick, ArrayList<MessageObject> messages) {
-        if (selectedObject != null && selectedObject.messageOwner != null && (isLongClick || isThreadChat())) {
+        if (selectedObject != null && selectedObject.messageOwner != null && (isLongClick || (isThreadChat() && !isTopic))) {
             // If selected message contains `replyTo`:
             // When longClick it will reply to the `replyMessage` of selectedMessage
             // When not LongClick but in a threadchat: reply to the Thread
-            MessageObject replyTo = isLongClick ? selectedObject.replyMessageObject : getThreadMessage();
+            MessageObject replyTo = isLongClick ? selectedObject.replyMessageObject : getReplyMessage();
             if (selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject, selectedObjectGroup) != null) {
                 CharSequence caption = getMessageCaption(selectedObject, selectedObjectGroup);
                 if (caption == null) {
