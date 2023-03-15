@@ -24,6 +24,10 @@ public class ConfigCellCustom extends AbstractConfigCell {
         return enabled;
     }
 
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     public void onBindViewHolder(RecyclerView.ViewHolder holder) {
         // Not Used
     }
