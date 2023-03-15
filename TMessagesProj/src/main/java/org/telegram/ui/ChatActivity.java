@@ -32078,7 +32078,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 break;
             }
             case nkbtn_translate: {
-                if (NekoConfig.useTelegramTranslateInChat.Bool()) {
+                if (NekoConfig.useTelegramTranslateInChat.Bool() && !selectedObject.isPoll()) {
                     String toLang = LocaleController.getInstance().getCurrentLocale().getLanguage();
                     int[] messageIdToTranslate = new int[] { selectedObject.getId() };
                     final CharSequence finalMessageText = getMessageCaption(selectedObject, selectedObjectGroup, messageIdToTranslate);
