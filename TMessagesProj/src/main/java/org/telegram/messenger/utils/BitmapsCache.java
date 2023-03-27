@@ -16,11 +16,9 @@ import org.telegram.ui.Components.RLottieDrawable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,12 +34,12 @@ public class BitmapsCache {
     public final static int FRAME_RESULT_NO_FRAME = -1;
     public static final int COMPRESS_QUALITY_DEFAULT = 60;
     private final Cacheable source;
+    private static boolean mkdir;
     String fileName;
     int w;
     int h;
 
     ArrayList<FrameOffset> frameOffsets = new ArrayList<>();
-
 
     final boolean useSharedBuffers;
     static ConcurrentHashMap<Thread, byte[]> sharedBuffers = new ConcurrentHashMap();
@@ -88,6 +86,10 @@ public class BitmapsCache {
         }
 
         File fileTmo = new File(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_CACHE), "acache");
+        if (!mkdir) {
+            fileTmo.mkdir();
+            mkdir = true;
+        }
         file = new File(fileTmo, fileName + "_" + w + "_" + h + (noLimit ? "_nolimit" : " ") + ".pcache2");
         useSharedBuffers = w < AndroidUtilities.dp(60) && h < AndroidUtilities.dp(60);
 
@@ -111,6 +113,9 @@ public class BitmapsCache {
                             fileExist = false;
                             file.delete();
                         } else {
+                            if (cachedFile != randomAccessFile) {
+                                closeCachedFile();
+                            }
                             cachedFile = randomAccessFile;
                         }
                     }
@@ -179,6 +184,9 @@ public class BitmapsCache {
                         if (count > 0) {
                             fillFrames(randomAccessFile, count);
                             randomAccessFile.seek(0);
+                            if (cachedFile != randomAccessFile) {
+                                closeCachedFile();
+                            }
                             cachedFile = randomAccessFile;
                             fileExist = true;
                             return;
@@ -214,7 +222,7 @@ public class BitmapsCache {
             }
             sharedTools.allocate(h, w);
             Bitmap[] bitmap = sharedTools.bitmap;
-            ByteArrayOutputStream[] byteArrayOutputStream = sharedTools.byteArrayOutputStream;
+            ImmutableByteArrayOutputStream[] byteArrayOutputStream = sharedTools.byteArrayOutputStream;
             CountDownLatch[] countDownLatch = new CountDownLatch[N];
 
             ArrayList<FrameOffset> frameOffsets = new ArrayList<>();
@@ -279,7 +287,7 @@ public class BitmapsCache {
                     }
 
                     Bitmap.CompressFormat format = Bitmap.CompressFormat.WEBP;
-                    if (Build.VERSION.SDK_INT <= 26) {
+                    if (Build.VERSION.SDK_INT <= 28) {
                         format = Bitmap.CompressFormat.PNG;
                     }
                     bitmap[finalIndex].compress(format, compressQuality, byteArrayOutputStream[finalIndex]);
@@ -345,6 +353,7 @@ public class BitmapsCache {
 
             this.frameOffsets.clear();
             this.frameOffsets.addAll(frameOffsets);
+            closeCachedFile();
             cachedFile = new RandomAccessFile(file, "r");
             cacheCreated = true;
             fileExist = true;
@@ -460,6 +469,9 @@ public class BitmapsCache {
             bufferTmp = getBuffer(selectedFrame);
             randomAccessFile.readFully(bufferTmp, 0, selectedFrame.frameSize);
             if (!recycled) {
+                if (cachedFile != randomAccessFile) {
+                    closeCachedFile();
+                }
                 cachedFile = randomAccessFile;
             } else {
                 cachedFile = null;
@@ -493,6 +505,16 @@ public class BitmapsCache {
 
         // source.getFirstFrame(bitmap);
         return FRAME_RESULT_NO_FRAME;
+    }
+
+    private void closeCachedFile() {
+        if (cachedFile != null) {
+            try {
+                cachedFile.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private byte[] getBuffer(FrameOffset selectedFrame) {
@@ -539,6 +561,10 @@ public class BitmapsCache {
         return frameOffsets.size();
     }
 
+    public boolean isCreated() {
+        return cacheCreated && fileExist;
+    }
+
     private class FrameOffset {
         final int index;
         int frameSize;
@@ -559,82 +585,6 @@ public class BitmapsCache {
         Bitmap getFirstFrame(Bitmap bitmap);
     }
 
-    public static class ByteArrayOutputStream extends OutputStream {
-
-        protected byte buf[];
-
-        protected int count;
-
-        public ByteArrayOutputStream() {
-            this(32);
-        }
-
-        public ByteArrayOutputStream(int size) {
-            buf = new byte[size];
-        }
-
-        private void ensureCapacity(int minCapacity) {
-            if (minCapacity - buf.length > 0) {
-                grow(minCapacity);
-            }
-        }
-
-        private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
-
-        private void grow(int minCapacity) {
-            int oldCapacity = buf.length;
-            int newCapacity = oldCapacity << 1;
-            if (newCapacity - minCapacity < 0)
-                newCapacity = minCapacity;
-            if (newCapacity - MAX_ARRAY_SIZE > 0)
-                newCapacity = hugeCapacity(minCapacity);
-            buf = Arrays.copyOf(buf, newCapacity);
-        }
-
-        private static int hugeCapacity(int minCapacity) {
-            if (minCapacity < 0) // overflow
-                throw new OutOfMemoryError();
-            return (minCapacity > MAX_ARRAY_SIZE) ?
-                    Integer.MAX_VALUE :
-                    MAX_ARRAY_SIZE;
-        }
-
-        public synchronized void write(int b) {
-            ensureCapacity(count + 1);
-            buf[count] = (byte) b;
-            count += 1;
-        }
-
-        public void writeInt(int value) {
-            ensureCapacity(count + 4);
-            buf[count] = (byte) (value >>> 24);
-            buf[count + 1] = (byte) (value >>> 16);
-            buf[count + 2] = (byte) (value >>> 8);
-            buf[count + 3] = (byte) (value);
-            count += 4;
-        }
-
-        public synchronized void write(byte b[], int off, int len) {
-            if ((off < 0) || (off > b.length) || (len < 0) ||
-                    ((off + len) - b.length > 0)) {
-                throw new IndexOutOfBoundsException();
-            }
-            ensureCapacity(count + len);
-            System.arraycopy(b, off, buf, count, len);
-            count += len;
-        }
-
-        public synchronized void writeTo(OutputStream out) throws IOException {
-            out.write(buf, 0, count);
-        }
-
-        public synchronized void reset() {
-            count = 0;
-        }
-
-
-    }
-
     public static class Metadata {
         public int frame;
     }
@@ -642,10 +592,11 @@ public class BitmapsCache {
     public static class CacheOptions {
         public int compressQuality = 100;
         public boolean fallback = false;
+        public boolean firstFrame;
     }
 
     private static class CacheGeneratorSharedTools {
-        ByteArrayOutputStream[] byteArrayOutputStream = new ByteArrayOutputStream[N];
+        ImmutableByteArrayOutputStream[] byteArrayOutputStream = new ImmutableByteArrayOutputStream[N];
         private Bitmap[] bitmap = new Bitmap[N];
 
         private int lastSize;
@@ -672,7 +623,7 @@ public class BitmapsCache {
                     bitmap[i] = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
                 }
                 if (byteArrayOutputStream[i] == null) {
-                    byteArrayOutputStream[i] = new ByteArrayOutputStream(w * h * 2);
+                    byteArrayOutputStream[i] = new ImmutableByteArrayOutputStream(w * h * 2);
                 }
             }
         }

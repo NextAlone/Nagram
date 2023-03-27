@@ -2474,7 +2474,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.closeChats) {
-            removeSelfFromStack();
+            removeSelfFromStack(true);
         } else if (id == NotificationCenter.locationPermissionGranted) {
             locationDenied = false;
             if (adapter != null) {
@@ -2604,12 +2604,11 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     @Override
-    public void finishFragment(boolean animated) {
+    public boolean finishFragment(boolean animated) {
         if (onCheckGlScreenshot()) {
-            return;
+            return false;
         }
-
-        super.finishFragment(animated);
+        return super.finishFragment(animated);
     }
 
     private boolean onCheckGlScreenshot() {

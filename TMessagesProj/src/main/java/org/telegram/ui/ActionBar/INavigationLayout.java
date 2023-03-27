@@ -8,10 +8,9 @@ import android.graphics.drawable.Drawable;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
-import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.Components.BackButtonMenu;
-import org.telegram.ui.LNavigation.LNavigation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,10 +19,12 @@ import java.util.List;
 public interface INavigationLayout {
     int REBUILD_FLAG_REBUILD_LAST = 1, REBUILD_FLAG_REBUILD_ONLY_LAST = 2;
 
+    int FORCE_NOT_ATTACH_VIEW = -2;
+
     boolean presentFragment(NavigationParams params);
     boolean checkTransitionAnimation();
     boolean addFragmentToStack(BaseFragment fragment, int position);
-    void removeFragmentFromStack(BaseFragment fragment);
+    void removeFragmentFromStack(BaseFragment fragment, boolean immediate);
     List<BaseFragment> getFragmentStack();
     void setDelegate(INavigationLayoutDelegate INavigationLayoutDelegate);
     void closeLastFragment(boolean animated, boolean forceNoAnimation);
@@ -47,7 +48,7 @@ public interface INavigationLayout {
     void expandPreviewFragment();
     void finishPreviewFragment();
     void setFragmentPanTranslationOffset(int offset);
-    ViewGroup getOverlayContainerView();
+    FrameLayout getOverlayContainerView();
     void setHighlightActionButtons(boolean highlight);
     float getCurrentPreviewFragmentAlpha();
     void drawCurrentPreviewFragment(Canvas canvas, Drawable foregroundDrawable);
@@ -75,9 +76,12 @@ public interface INavigationLayout {
     void setPulledDialogs(List<BackButtonMenu.PulledDialog> pulledDialogs);
 
     static INavigationLayout newLayout(Context context) {
-        return SharedConfig.useLNavigation ? new LNavigation(context) : new ActionBarLayout(context);
+        return new ActionBarLayout(context);
     }
 
+    default void removeFragmentFromStack(BaseFragment fragment) {
+        removeFragmentFromStack(fragment, false);
+    }
     default boolean isActionBarInCrossfade() {
         return false;
     }

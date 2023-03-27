@@ -9,8 +9,9 @@ import org.telegram.messenger.SharedConfig
 import org.telegram.messenger.UserConfig
 import org.telegram.tgnet.ConnectionsManager
 import org.telegram.tgnet.TLObject
+import org.telegram.tgnet.TLRPC
 import org.telegram.tgnet.TLRPC.TL_error
-import org.telegram.tgnet.TLRPC.TL_messages_translateResultText
+import org.telegram.tgnet.TLRPC.TL_messages_translateResult
 import org.telegram.tgnet.TLRPC.TL_messages_translateText
 import tw.nekomimi.nekogram.transtale.Translator
 import kotlin.coroutines.resume
@@ -27,16 +28,16 @@ object TelegramAPITranslator : Translator {
         return suspendCoroutine {
             val req = TL_messages_translateText()
             req.peer = null
-            req.msg_id = 0
             req.flags = req.flags or 2
-            req.text = query
-            req.from_lang = null
+            req.text.add(TLRPC.TL_textWithEntities().apply {
+                text = query
+            })
             req.to_lang = to
 
             try {
                 ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req) { res: TLObject?, err: TL_error? ->
-                    if (res is TL_messages_translateResultText) {
-                        it.resume(res.text)
+                    if (res is TL_messages_translateResult && res.result.isNotEmpty()) {
+                        it.resume(res.result[0].text)
                     } else {
                         FileLog.e(err?.text)
                         it.resumeWithException(RuntimeException("Failed to translate by Telegram API"))

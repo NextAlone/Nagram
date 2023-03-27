@@ -136,9 +136,10 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
 
         PremiumPreviewFragment.PremiumFeatureData featureData = premiumFeatures.get(selectedPosition);
 
+        setApplyTopPadding(false);
         setApplyBottomPadding(false);
         useBackgroundTopPadding = false;
-        PremiumGradient.GradientTools gradientTools = new PremiumGradient.GradientTools(Theme.key_premiumGradientBottomSheet1, Theme.key_premiumGradientBottomSheet2, Theme.key_premiumGradientBottomSheet3, null);
+        PremiumGradient.PremiumGradientTools gradientTools = new PremiumGradient.PremiumGradientTools(Theme.key_premiumGradientBottomSheet1, Theme.key_premiumGradientBottomSheet2, Theme.key_premiumGradientBottomSheet3, null);
         gradientTools.x1 = 0;
         gradientTools.y1 = 1.1f;
         gradientTools.x2 = 1.5f;
@@ -234,7 +235,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
         viewPager.setCurrentItem(selectedPosition);
         frameLayout.addView(viewPager, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 100, 0, 0, 18, 0, 0));
 
-        frameLayout.addView(closeLayout, LayoutHelper.createFrame(52, 52, Gravity.RIGHT | Gravity.TOP, 0, 16, 0, 0));
+        frameLayout.addView(closeLayout, LayoutHelper.createFrame(52, 52, Gravity.RIGHT | Gravity.TOP, 0, 24, 0, 0));
         BottomPagesView bottomPages = new BottomPagesView(getContext(), viewPager, premiumFeatures.size());
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -289,7 +290,9 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
                 if (localGradientAlpha != gradientAlpha) {
                     gradientAlpha = localGradientAlpha;
                     content.invalidate();
-                    checkTopOffset();
+                    AndroidUtilities.runOnUIThread(() -> {
+                        checkTopOffset();
+                    });
                 }
             }
 
@@ -380,7 +383,7 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
 
             @Override
             protected void dispatchDraw(Canvas canvas) {
-                shadowDrawable.setBounds(0, topCurrentOffset - backgroundPaddingTop + AndroidUtilities.dp(2), getMeasuredWidth(), getMeasuredHeight());
+                shadowDrawable.setBounds(0, topCurrentOffset + backgroundPaddingTop - AndroidUtilities.dp(2) + 1, getMeasuredWidth(), getMeasuredHeight());
                 shadowDrawable.draw(canvas);
                 super.dispatchDraw(canvas);
                 if (actionBar != null && actionBar.getVisibility() == View.VISIBLE && actionBar.getAlpha() != 0) {
@@ -621,6 +624,9 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
                 } else if (startType == PremiumPreviewFragment.PREMIUM_FEATURE_VOICE_TO_TEXT) {
                     title.setText(LocaleController.getString(R.string.PremiumPreviewVoiceToText));
                     description.setText(LocaleController.getString(R.string.PremiumPreviewVoiceToTextDescription2));
+                } else if (startType == PremiumPreviewFragment.PREMIUM_FEATURE_TRANSLATIONS) {
+                    title.setText(LocaleController.getString(R.string.PremiumPreviewTranslations));
+                    description.setText(LocaleController.getString(R.string.PremiumPreviewTranslationsDescription));
                 }
                 topViewOnFullHeight = false;
             } else {

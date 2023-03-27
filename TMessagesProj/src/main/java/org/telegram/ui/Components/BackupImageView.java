@@ -176,8 +176,12 @@ public class BackupImageView extends View {
         onNewImageSet();
     }
 
-    public void setImageMedia(ImageLocation mediaLocation, String mediaFilter, ImageLocation imageLocation, String imageFilter, ImageLocation thumbLocation, String thumbFilter, String ext, int size, int cacheType, Object parentObject) {
-        imageReceiver.setImage(mediaLocation, mediaFilter, imageLocation, imageFilter, thumbLocation, thumbFilter, null, size, ext, parentObject, cacheType);
+    public void setImageMedia(VectorAvatarThumbDrawable vectorAvatar, ImageLocation mediaLocation, String mediaFilter, ImageLocation imageLocation, String imageFilter, ImageLocation thumbLocation, String thumbFilter, String ext, int size, int cacheType, Object parentObject) {
+        if (vectorAvatar != null) {
+            imageReceiver.setImageBitmap(vectorAvatar);
+        } else {
+            imageReceiver.setImage(mediaLocation, mediaFilter, imageLocation, imageFilter, thumbLocation, thumbFilter, null, size, ext, parentObject, cacheType);
+        }
         onNewImageSet();
     }
 
@@ -321,6 +325,7 @@ public class BackupImageView extends View {
         if (attached && animatedEmojiDrawable != null) {
             animatedEmojiDrawable.addView(this);
         }
+        invalidate();
     }
 
     ValueAnimator roundRadiusAnimator;

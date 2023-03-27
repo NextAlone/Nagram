@@ -26,13 +26,13 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
+import org.telegram.messenger.LiteMode;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
-import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
@@ -226,6 +226,7 @@ public class StickerEmojiCell extends FrameLayout implements NotificationCenter.
         updatePremiumStatus(false);
         imageView.setAlpha(alpha * premiumAlpha);
         if (drawInParentView) {
+            imageView.setInvalidateAll(true);
             imageView.setParentView((View) getParent());
         } else {
             imageView.setParentView(this);
@@ -329,6 +330,7 @@ public class StickerEmojiCell extends FrameLayout implements NotificationCenter.
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (drawInParentView) {
+            imageView.setInvalidateAll(true);
             imageView.setParentView((View) getParent());
         } else {
             imageView.setParentView(this);

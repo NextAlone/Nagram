@@ -34,7 +34,6 @@ import org.telegram.ui.ActionBar.Theme;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class ChatActivityEnterViewAnimatedIconView extends FrameLayout {
     private State currentState;

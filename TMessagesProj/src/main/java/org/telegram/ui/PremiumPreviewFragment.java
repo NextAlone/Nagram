@@ -2,6 +2,7 @@ package org.telegram.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
@@ -90,14 +91,17 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class PremiumPreviewFragment extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
-    private final static boolean IS_PREMIUM_TIERS_UNAVAILABLE = true;
+    public final static String TRANSACTION_PATTERN = "^(.*?)(?:\\.\\.\\d*|)$";
+    private final static boolean IS_PREMIUM_TIERS_UNAVAILABLE = false;
 
     RecyclerListView listView;
     ArrayList<PremiumFeatureData> premiumFeatures = new ArrayList<>();
     ArrayList<SubscriptionTier> subscriptionTiers = new ArrayList<>();
     int selectedTierIndex = 0;
+    SubscriptionTier currentSubscriptionTier;
 
     int rowCount;
     int paddingRow;
@@ -139,6 +143,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
     public final static int PREMIUM_FEATURE_APPLICATION_ICONS = 10;
     public final static int PREMIUM_FEATURE_ANIMATED_EMOJI = 11;
     public final static int PREMIUM_FEATURE_EMOJI_STATUS = 12;
+    public final static int PREMIUM_FEATURE_TRANSLATIONS = 13;
     private int statusBarHeight;
     private int firstViewHeight;
     private boolean isDialogVisible;
@@ -151,10 +156,12 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
     float totalProgress;
     private String source;
 
+    private boolean selectAnnualByDefault;
+
     final Bitmap gradientTextureBitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
     final Canvas gradientCanvas = new Canvas(gradientTextureBitmap);
-    PremiumGradient.GradientTools gradientTools = new PremiumGradient.GradientTools(Theme.key_premiumGradientBackground1, Theme.key_premiumGradientBackground2, Theme.key_premiumGradientBackground3, Theme.key_premiumGradientBackground4);
-    PremiumGradient.GradientTools tiersGradientTools;
+    PremiumGradient.PremiumGradientTools gradientTools = new PremiumGradient.PremiumGradientTools(Theme.key_premiumGradientBackground1, Theme.key_premiumGradientBackground2, Theme.key_premiumGradientBackground3, Theme.key_premiumGradientBackground4);
+    PremiumGradient.PremiumGradientTools tiersGradientTools;
 
     private boolean forcePremium;
     float progressToFull;
@@ -187,6 +194,8 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 return PREMIUM_FEATURE_ANIMATED_EMOJI;
             case "emoji_status":
                 return PREMIUM_FEATURE_EMOJI_STATUS;
+            case "translations":
+                return PREMIUM_FEATURE_TRANSLATIONS;
         }
         return -1;
     }
@@ -219,6 +228,8 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 return "app_icons";
             case PREMIUM_FEATURE_EMOJI_STATUS:
                 return "emoji_status";
+            case PREMIUM_FEATURE_TRANSLATIONS:
+                return "translations";
         }
         return null;
     }
@@ -234,7 +245,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
     }
 
     {
-        tiersGradientTools = new PremiumGradient.GradientTools(Theme.key_premiumGradient1, Theme.key_premiumGradient2, null, null);
+        tiersGradientTools = new PremiumGradient.PremiumGradientTools(Theme.key_premiumGradient1, Theme.key_premiumGradient2, null, null);
         tiersGradientTools.exactly = true;
         tiersGradientTools.x1 = 0;
         tiersGradientTools.y1 = 0f;
@@ -242,6 +253,11 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         tiersGradientTools.y2 = 1f;
         tiersGradientTools.cx = 0;
         tiersGradientTools.cy = 0;
+    }
+
+    public PremiumPreviewFragment setSelectAnnualByDefault() {
+        this.selectAnnualByDefault = true;
+        return this;
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -286,8 +302,8 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
 
             @Override
             public boolean dispatchTouchEvent(MotionEvent ev) {
-                float iconX = backgroundView.getX() + backgroundView.imageView.getX();
-                float iconY = backgroundView.getY() + backgroundView.imageView.getY();
+                float iconX = backgroundView.getX() + backgroundView.imageFrameLayout.getX();
+                float iconY = backgroundView.getY() + backgroundView.imageFrameLayout.getY();
                 AndroidUtilities.rectTmp.set(iconX, iconY, iconX + backgroundView.imageView.getMeasuredWidth(), iconY + backgroundView.imageView.getMeasuredHeight());
                 if ((AndroidUtilities.rectTmp.contains(ev.getX(), ev.getY()) || iconInterceptedTouch) && !listView.scrollingByUser) {
                     ev.offsetLocation(-iconX, -iconY);
@@ -330,7 +346,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 }
                 backgroundView.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
                 particlesView.getLayoutParams().height = backgroundView.getMeasuredHeight();
-                int buttonHeight = (getUserConfig().isPremium() || forcePremium ? 0 : AndroidUtilities.dp(68));
+                int buttonHeight = (buttonContainer == null || buttonContainer.getVisibility() == View.GONE ? 0 : AndroidUtilities.dp(68));
                 layoutManager.setAdditionalHeight(buttonHeight + statusBarHeight - AndroidUtilities.dp(16));
                 layoutManager.setMinimumLastViewHeight(buttonHeight);
                 super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -415,13 +431,13 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 backgroundView.tierListView.setAlpha(alpha);
                 particlesView.setAlpha(1f - totalProgress);
 
-                particlesView.setTranslationY(-(particlesView.getMeasuredHeight() - backgroundView.imageView.getMeasuredWidth()) / 2f + backgroundView.getY() + backgroundView.imageView.getY());
+                particlesView.setTranslationY(-(particlesView.getMeasuredHeight() - backgroundView.imageView.getMeasuredWidth()) / 2f + backgroundView.getY() + backgroundView.imageFrameLayout.getY());
                 float toX = AndroidUtilities.dp(72) - backgroundView.titleView.getLeft();
                 float f = totalProgress > 0.3f ? (totalProgress - 0.3f) / 0.7f : 0f;
                 backgroundView.titleView.setTranslationX(toX * (1f - CubicBezierInterpolator.EASE_OUT_QUINT.getInterpolation(1 - f)));
 
-                backgroundView.imageView.mRenderer.gradientStartX = (backgroundView.getX() + backgroundView.imageView.getX() + getMeasuredWidth() * 0.1f * progress) / getMeasuredWidth();
-                backgroundView.imageView.mRenderer.gradientStartY = (backgroundView.getY() + backgroundView.imageView.getY()) / getMeasuredHeight();
+                backgroundView.imageView.mRenderer.gradientStartX = (backgroundView.getX() + backgroundView.imageFrameLayout.getX() + getMeasuredWidth() * 0.1f * progress) / getMeasuredWidth();
+                backgroundView.imageView.mRenderer.gradientStartY = (backgroundView.getY() + backgroundView.imageFrameLayout.getY()) / getMeasuredHeight();
 
                 if (!isDialogVisible) {
                     invalidate();
@@ -508,11 +524,13 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
 //                    bottomSheet.setParentFragment(PremiumPreviewFragment.this);
 //                    showDialog(bottomSheet);
 //                } else {
-                if (subscriptionTiers.isEmpty()) {
-                    return;
-                }
-                    showDialog(new PremiumFeatureBottomSheet(PremiumPreviewFragment.this, cell.data.type, false, subscriptionTiers.get(selectedTierIndex)));
+//                if (subscriptionTiers.isEmpty()) {
+//                    return;
+//                }
                // }
+
+                SubscriptionTier tier = selectedTierIndex < 0 || selectedTierIndex >= subscriptionTiers.size() ? null : subscriptionTiers.get(selectedTierIndex);
+                showDialog(new PremiumFeatureBottomSheet(PremiumPreviewFragment.this, cell.data.type, false, tier));
             }
         });
         contentView.addView(listView);
@@ -583,6 +601,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_ANIMATED_AVATARS, R.drawable.msg_premium_avatar, LocaleController.getString("PremiumPreviewAnimatedProfiles", R.string.PremiumPreviewAnimatedProfiles), LocaleController.getString("PremiumPreviewAnimatedProfilesDescription", R.string.PremiumPreviewAnimatedProfilesDescription)));
         premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_APPLICATION_ICONS, R.drawable.msg_premium_icons, LocaleController.getString("PremiumPreviewAppIcon", R.string.PremiumPreviewAppIcon), LocaleController.getString("PremiumPreviewAppIconDescription", R.string.PremiumPreviewAppIconDescription)));
         premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_EMOJI_STATUS, R.drawable.msg_premium_status, LocaleController.getString("PremiumPreviewEmojiStatus", R.string.PremiumPreviewEmojiStatus), LocaleController.getString("PremiumPreviewEmojiStatusDescription", R.string.PremiumPreviewEmojiStatusDescription)));
+        premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_TRANSLATIONS, R.drawable.msg_premium_translate, LocaleController.getString("PremiumPreviewTranslations", R.string.PremiumPreviewTranslations), LocaleController.getString("PremiumPreviewTranslationsDescription", R.string.PremiumPreviewTranslationsDescription)));
 
         if (messagesController.premiumFeaturesTypesToPosition.size() > 0) {
             for (int i = 0; i < premiumFeatures.size(); i++) {
@@ -617,10 +636,23 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
     }
 
     public static void buyPremium(BaseFragment fragment, String source) {
-        buyPremium(fragment, null, source);
+        buyPremium(fragment, null, source, true);
+    }
+
+    public static void buyPremium(BaseFragment fragment, String source, boolean forcePremium) {
+        buyPremium(fragment, null, source, forcePremium);
     }
 
     public static void buyPremium(BaseFragment fragment, SubscriptionTier tier, String source) {
+        buyPremium(fragment, tier, source, true);
+    }
+
+    public static void buyPremium(BaseFragment fragment, SubscriptionTier tier, String source, boolean forcePremium) {
+        buyPremium(fragment, tier, source, forcePremium, null);
+    }
+
+//  public static void buyPremium(BaseFragment fragment, SubscriptionTier tier, String source, boolean forcePremium, BillingFlowParams.SubscriptionUpdateParams updateParams) {
+    public static void buyPremium(BaseFragment fragment, SubscriptionTier tier, String source, boolean forcePremium, Object updateParams) {
         if (BuildVars.IS_BILLING_UNAVAILABLE) {
             fragment.showDialog(new PremiumNotAvailableBottomSheet(fragment));
             return;
@@ -660,11 +692,8 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         featuresEndRow = rowCount;
         statusRow = rowCount++;
         lastPaddingRow = rowCount++;
-        if (getUserConfig().isPremium() || forcePremium) {
-            buttonContainer.setVisibility(View.GONE);
-        } else {
-            buttonContainer.setVisibility(View.VISIBLE);
-        }
+
+        AndroidUtilities.updateViewVisibilityAnimated(buttonContainer, !getUserConfig().isPremium() || currentSubscriptionTier != null && currentSubscriptionTier.getMonths() < subscriptionTiers.get(selectedTierIndex).getMonths() && !forcePremium, 1f, false);
 
         int buttonHeight = buttonContainer.getVisibility() == View.VISIBLE ? AndroidUtilities.dp(64) : 0;
         layoutManager.setAdditionalHeight(buttonHeight + statusBarHeight - AndroidUtilities.dp(16));
@@ -708,6 +737,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.billingProductDetailsUpdated || id == NotificationCenter.premiumPromoUpdated) {
             updateButtonText(false);
+            backgroundView.updatePremiumTiers();
         }
         if (id == NotificationCenter.currentUserPremiumStatusChanged || id == NotificationCenter.premiumPromoUpdated) {
             backgroundView.updateText();
@@ -908,6 +938,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
 
         TextView titleView;
         private final TextView subtitleView;
+        private final FrameLayout imageFrameLayout;
         private final GLIconTextureView imageView;
 
         private RecyclerListView tierListView;
@@ -915,6 +946,8 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         public BackgroundView(Context context) {
             super(context);
             setOrientation(VERTICAL);
+            imageFrameLayout = new FrameLayout(context);
+            addView(imageFrameLayout, LayoutHelper.createLinear(190, 190, Gravity.CENTER_HORIZONTAL));
             imageView = new GLIconTextureView(context, GLIconRenderer.FRAGMENT_STYLE) {
                 @Override
                 public void onLongPress() {
@@ -937,7 +970,9 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                     settingsView.animate().translationY(1).setDuration(300);
                 }
             };
-            addView(imageView, LayoutHelper.createLinear(190, 190, Gravity.CENTER_HORIZONTAL));
+            imageFrameLayout.addView(imageView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+            imageFrameLayout.setClipChildren(false);
+            setClipChildren(false);
 
             titleView = new TextView(context);
             titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
@@ -1006,7 +1041,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
 
                 @Override
                 public boolean isEnabled(RecyclerView.ViewHolder holder) {
-                    return true;
+                    return !subscriptionTiers.get(holder.getAdapterPosition()).subscriptionOption.current;
                 }
 
                 @Override
@@ -1015,6 +1050,9 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 }
             });
             tierListView.setOnItemClickListener((view, position) -> {
+                if (!view.isEnabled()) {
+                    return;
+                }
                 if (view instanceof PremiumTierCell) {
                     PremiumTierCell tierCell = (PremiumTierCell) view;
                     selectedTierIndex = subscriptionTiers.indexOf(tierCell.getTier());
@@ -1060,6 +1098,8 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                             }
                         }
                     }
+
+                    AndroidUtilities.updateViewVisibilityAnimated(buttonContainer, !getUserConfig().isPremium() || currentSubscriptionTier != null && currentSubscriptionTier.getMonths() < subscriptionTiers.get(selectedTierIndex).getMonths() && !forcePremium);
                 }
             });
             Path path = new Path();
@@ -1083,8 +1123,8 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
             });
             addView(tierListView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 12, 16, 12, 0));
 
-            updateText();
             updatePremiumTiers();
+            updateText();
         }
 
         private void measureGradient(int w, int h) {
@@ -1102,11 +1142,25 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         @SuppressLint("NotifyDataSetChanged")
         public void updatePremiumTiers() {
             subscriptionTiers.clear();
+            selectedTierIndex = -1;
+            currentSubscriptionTier = null;
             long pricePerYearMax = 0;
             if (getMediaDataController().getPremiumPromo() != null) {
                 for (TLRPC.TL_premiumSubscriptionOption option : getMediaDataController().getPremiumPromo().period_options) {
+                    if (getUserConfig().isPremium() && !option.can_purchase_upgrade && !option.current) {
+                        continue;
+                    }
+
                     SubscriptionTier subscriptionTier = new SubscriptionTier(option);
                     subscriptionTiers.add(subscriptionTier);
+                    if (selectAnnualByDefault) {
+                        if (option.months == 12) {
+                            selectedTierIndex = subscriptionTiers.size() - 1;
+                        }
+                    }
+                    if (option.current) {
+                        currentSubscriptionTier = subscriptionTier;
+                    }
                     if (BuildVars.useInvoiceBilling()) {
                         if (subscriptionTier.getPricePerYear() > pricePerYearMax) {
                             pricePerYearMax = subscriptionTier.getPricePerYear();
@@ -1114,42 +1168,121 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                     }
                 }
             }
+            if (BuildVars.useInvoiceBilling() && getUserConfig().isPremium()) {
+                subscriptionTiers.clear();
+                currentSubscriptionTier = null;
+            } else if (!BuildVars.useInvoiceBilling() && currentSubscriptionTier != null && !Objects.equals(BillingController.getInstance().getLastPremiumTransaction(),
+                    currentSubscriptionTier.subscriptionOption != null ? currentSubscriptionTier.subscriptionOption.transaction != null ?
+                            currentSubscriptionTier.subscriptionOption.transaction.replaceAll(TRANSACTION_PATTERN, "$1") : null : null) ||
+                                currentSubscriptionTier != null && currentSubscriptionTier.getMonths() == 12) {
+                subscriptionTiers.clear();
+                currentSubscriptionTier = null;
+            }
+
             if (BuildVars.useInvoiceBilling()) {
                 for (SubscriptionTier tier : subscriptionTiers) {
                     tier.setPricePerYearRegular(pricePerYearMax);
                 }
             }
             // NekoX: remove Google billing
-            for (int i = 0; i < subscriptionTiers.size(); i++) {
-                SubscriptionTier tier = subscriptionTiers.get(i);
-                if (tier.getMonths() == 1) {
-                    selectedTierIndex = i;
-                    break;
+            if (selectedTierIndex == -1) {
+                for (int i = 0; i < subscriptionTiers.size(); i++) {
+                    SubscriptionTier tier = subscriptionTiers.get(i);
+                    if (tier.getMonths() == 12) {
+                        selectedTierIndex = i;
+                        break;
+                    }
+                }
+                if (selectedTierIndex == -1) {
+                    selectedTierIndex = 0;
                 }
             }
             updateButtonText(false);
             tierListView.getAdapter().notifyDataSetChanged();
         }
 
+        private boolean setTierListViewVisibility;
+        private boolean tierListViewVisible;
         public void updateText() {
             titleView.setText(LocaleController.getString(forcePremium ? R.string.TelegramPremiumSubscribedTitle : R.string.TelegramPremium));
             subtitleView.setText(AndroidUtilities.replaceTags(LocaleController.getString(getUserConfig().isPremium() || forcePremium ? R.string.TelegramPremiumSubscribedSubtitle : R.string.TelegramPremiumSubtitle)));
-            tierListView.setVisibility(getUserConfig().isPremium() || forcePremium || BuildVars.IS_BILLING_UNAVAILABLE || IS_PREMIUM_TIERS_UNAVAILABLE ? GONE : VISIBLE);
+            boolean tierNotVisible = forcePremium || BuildVars.IS_BILLING_UNAVAILABLE || IS_PREMIUM_TIERS_UNAVAILABLE || subscriptionTiers.size() <= 1;
+            if (!setTierListViewVisibility || !tierNotVisible) {
+                tierListView.setVisibility(tierNotVisible ? GONE : VISIBLE);
+                setTierListViewVisibility = true;
+            } else if (tierListView.getVisibility() == VISIBLE && tierNotVisible && tierListViewVisible == tierNotVisible) {
+                View v = tierListView;
+                ValueAnimator animator = ValueAnimator.ofFloat(1, 0).setDuration(250);
+                animator.addUpdateListener(animation -> {
+                    float val = (float) animation.getAnimatedValue();
+                    v.setAlpha(val);
+                    v.setScaleX(val);
+                    v.setScaleY(val);
+
+                    float f = animator.getAnimatedFraction();
+                    for (int i = 0; i < backgroundView.getChildCount(); i++) {
+                        View ch = backgroundView.getChildAt(i);
+                        if (ch != tierListView) {
+                            float offset = 0;
+                            if (ch == imageFrameLayout) {
+                                offset -= AndroidUtilities.dp(15) * f;
+                            } else {
+                                offset += AndroidUtilities.dp(8) * f;
+                            }
+                            ch.setTranslationY(f * v.getMeasuredHeight() + offset);
+                        }
+                    }
+                });
+                animator.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        v.setVisibility(GONE);
+
+                        for (int i = 0; i < backgroundView.getChildCount(); i++) {
+                            View ch = backgroundView.getChildAt(i);
+                            if (ch != tierListView) {
+                                ch.setTranslationY(0);
+                            }
+                        }
+                    }
+                });
+                animator.setInterpolator(CubicBezierInterpolator.DEFAULT);
+                animator.start();
+            }
+            tierListViewVisible = !tierNotVisible;
         }
     }
 
     private void updateButtonText(boolean animated) {
-        if (premiumButtonView == null) {
+        if (premiumButtonView == null || getUserConfig().isPremium() && currentSubscriptionTier != null && subscriptionTiers.get(selectedTierIndex).getMonths() < currentSubscriptionTier.getMonths()) {
             return;
+        }
+        if (LocaleController.isRTL) {
+            animated = false;
         }
         if (BuildVars.IS_BILLING_UNAVAILABLE) {
-            premiumButtonView.setButton(getPremiumButtonText(currentAccount), v -> buyPremium(this, subscriptionTiers.get(selectedTierIndex), "settings"), animated);
+            premiumButtonView.setButton(getPremiumButtonText(currentAccount, subscriptionTiers.get(selectedTierIndex)), v -> buyPremium(this), animated);
             return;
         }
-        if (!subscriptionTiers.isEmpty()) {
-            premiumButtonView.setButton(getPremiumButtonText(currentAccount, subscriptionTiers.get(selectedTierIndex)), v -> buyPremium(this, subscriptionTiers.get(selectedTierIndex), "settings"), animated);
-            premiumButtonView.setFlickerDisabled(false);
+        if (!BuildVars.useInvoiceBilling() && (!BillingController.getInstance().isReady() || subscriptionTiers.isEmpty() || selectedTierIndex >= subscriptionTiers.size() || subscriptionTiers.get(selectedTierIndex).googlePlayProductDetails == null)) {
+            premiumButtonView.setButton(LocaleController.getString(R.string.Loading), v -> {}, animated);
+            premiumButtonView.setFlickerDisabled(true);
+            return;
         }
+//        if (!subscriptionTiers.isEmpty()) {
+//            premiumButtonView.setButton(getPremiumButtonText(currentAccount, subscriptionTiers.get(selectedTierIndex)), v -> {
+//                SubscriptionTier tier = subscriptionTiers.get(selectedTierIndex);
+//                BillingFlowParams.SubscriptionUpdateParams updateParams = null;
+//                if (currentSubscriptionTier != null && currentSubscriptionTier.subscriptionOption != null && currentSubscriptionTier.subscriptionOption.transaction != null) {
+//                    updateParams = BillingFlowParams.SubscriptionUpdateParams.newBuilder()
+//                            .setOldPurchaseToken(BillingController.getInstance().getLastPremiumToken())
+//                            .setReplaceProrationMode(BillingFlowParams.ProrationMode.IMMEDIATE_AND_CHARGE_FULL_PRICE)
+//                            .build();
+//                }
+//                buyPremium(this, tier, "settings", true, updateParams);
+//            }, animated);
+//            premiumButtonView.setFlickerDisabled(false);
+//        }
     }
 
     @Override
@@ -1261,11 +1394,17 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         event.data = data;
 
         TLRPC.TL_jsonObjectValue sourceObj = new TLRPC.TL_jsonObjectValue();
-        TLRPC.TL_jsonString jsonString = new TLRPC.TL_jsonString();
-        jsonString.value = source;
+        TLRPC.JSONValue sourceVal;
+        if (source != null) {
+            TLRPC.TL_jsonString jsonString = new TLRPC.TL_jsonString();
+            jsonString.value = source;
+            sourceVal = jsonString;
+        } else {
+            sourceVal = new TLRPC.TL_jsonNull();
+        }
 
         sourceObj.key = "source";
-        sourceObj.value = jsonString;
+        sourceObj.value = sourceVal;
 
         data.value.add(sourceObj);
         req.events.add(event);
@@ -1309,13 +1448,17 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         TLRPC.TL_jsonObject data = new TLRPC.TL_jsonObject();
         event.data = data;
         TLRPC.TL_jsonObjectValue item = new TLRPC.TL_jsonObjectValue();
-        TLRPC.TL_jsonString jsonString = new TLRPC.TL_jsonString();
-        jsonString.value = PremiumPreviewFragment.featureTypeToServerString(type);
+        String value = PremiumPreviewFragment.featureTypeToServerString(type);
+        if (value != null) {
+            TLRPC.TL_jsonString jsonString = new TLRPC.TL_jsonString();
+            jsonString.value = value;
+            item.value = jsonString;
+        } else {
+            item.value = new TLRPC.TL_jsonNull();
+        }
         item.key = "item";
-        item.value = jsonString;
         data.value.add(item);
         req.events.add(event);
-        event.data = data;
 
         ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
 

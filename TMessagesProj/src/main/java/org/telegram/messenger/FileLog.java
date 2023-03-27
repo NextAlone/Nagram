@@ -25,7 +25,9 @@ import org.telegram.ui.LaunchActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Locale;
 
@@ -111,7 +113,7 @@ public class FileLog {
                 }
             });
         } catch (Throwable e) {
-            FileLog.e(e);
+            FileLog.e(e, BuildVars.DEBUG_PRIVATE_VERSION);
         }
     }
 
@@ -143,7 +145,6 @@ public class FileLog {
                 }
             });
         } catch (Throwable e) {
-            FileLog.e(e);
         }
     }
 
@@ -157,6 +158,7 @@ public class FileLog {
             privateFields.add("bytes");
             privateFields.add("secret");
             privateFields.add("stripped_thumb");
+            privateFields.add("strippedBitmap");
 
             privateFields.add("networkType");
             privateFields.add("disableFree");
@@ -193,13 +195,10 @@ public class FileLog {
         dateFormat = FastDateFormat.getInstance("dd_MM_yyyy_HH_mm_ss", Locale.US);
         String date = dateFormat.format(System.currentTimeMillis());
         try {
-            File sdCard = ApplicationLoader.applicationContext.getExternalFilesDir(null);
-            if (sdCard == null) {
+            File dir = AndroidUtilities.getLogsDir();
+            if (dir == null) {
                 return;
             }
-            File dir = new File(sdCard.getAbsolutePath() + "/logs");
-            dir.mkdirs();
-
             currentFile = new File(dir, date + ".txt");
             tlRequestsFile = new File(dir, date + "_mtproto.txt");
         } catch (Exception e) {

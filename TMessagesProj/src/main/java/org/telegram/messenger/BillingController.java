@@ -32,6 +32,9 @@ public class BillingController {
 
     private static BillingController instance;
 
+    private String lastPremiumTransaction = "";
+    private String lastPremiumToken = "";
+
     public static BillingController getInstance() {
         if (instance == null) {
             instance = new BillingController(ApplicationLoader.applicationContext);
@@ -41,6 +44,14 @@ public class BillingController {
 
     private BillingController(Context ctx) {
 
+    }
+
+    public String getLastPremiumTransaction() {
+        return lastPremiumTransaction;
+    }
+
+    public String getLastPremiumToken() {
+        return lastPremiumToken;
     }
 
     public String formatCurrency(long amount, String currency) {

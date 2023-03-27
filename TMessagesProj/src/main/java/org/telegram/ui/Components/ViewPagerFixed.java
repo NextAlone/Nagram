@@ -150,11 +150,11 @@ public class ViewPagerFixed extends FrameLayout {
                 updateViewForIndex(1);
 
                 onTabPageSelected(page);
-
+                int trasnlationX = viewPages[0] != null ? viewPages[0].getMeasuredWidth() : 0;
                 if (forward) {
-                    viewPages[1].setTranslationX(viewPages[0].getMeasuredWidth());
+                    viewPages[1].setTranslationX(trasnlationX);
                 } else {
-                    viewPages[1].setTranslationX(-viewPages[0].getMeasuredWidth());
+                    viewPages[1].setTranslationX(-trasnlationX);
                 }
             }
 
@@ -812,6 +812,7 @@ public class ViewPagerFixed extends FrameLayout {
             public String title;
             public int titleWidth;
             public int counter;
+            public float alpha = 1f;
 
             public Tab(int i, String t) {
                 id = i;
@@ -851,6 +852,7 @@ public class ViewPagerFixed extends FrameLayout {
                 currentTab = tab;
                 currentPosition = position;
                 setContentDescription(tab.title);
+                setAlpha(tab.alpha);
                 requestLayout();
             }
 

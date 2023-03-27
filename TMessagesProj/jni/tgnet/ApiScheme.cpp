@@ -196,19 +196,19 @@ void TL_config::readParams(NativeByteBuffer *stream, int32_t instanceNum, bool &
     notify_default_delay_ms = stream->readInt32(&error);
     push_chat_period_ms = stream->readInt32(&error);
     push_chat_limit = stream->readInt32(&error);
-    saved_gifs_limit = stream->readInt32(&error);
+    // saved_gifs_limit = stream->readInt32(&error);
     edit_time_limit = stream->readInt32(&error);
     revoke_time_limit = stream->readInt32(&error);
     revoke_pm_time_limit = stream->readInt32(&error);
     rating_e_decay = stream->readInt32(&error);
     stickers_recent_limit = stream->readInt32(&error);
-    stickers_faved_limit = stream->readInt32(&error);
+    // stickers_faved_limit = stream->readInt32(&error);
     channels_read_media_period = stream->readInt32(&error);
     if ((flags & 1) != 0) {
         tmp_sessions = stream->readInt32(&error);
     }
-    pinned_dialogs_count_max = stream->readInt32(&error);
-    pinned_infolder_count_max = stream->readInt32(&error);
+    // pinned_dialogs_count_max = stream->readInt32(&error);
+    // pinned_infolder_count_max = stream->readInt32(&error);
     call_receive_timeout_ms = stream->readInt32(&error);
     call_ring_timeout_ms = stream->readInt32(&error);
     call_connect_timeout_ms = stream->readInt32(&error);
@@ -244,6 +244,9 @@ void TL_config::readParams(NativeByteBuffer *stream, int32_t instanceNum, bool &
     if ((flags & 32768) != 0) {
         reactions_default = std::unique_ptr<Reaction>(Reaction::TLdeserialize(stream, stream->readUint32(&error), instanceNum, error));
     }
+    if ((flags & 65536) != 0) {
+        autologin_token = stream->readString(&error);
+    }
 }
 
 void TL_config::serializeToStream(NativeByteBuffer *stream) {
@@ -271,19 +274,19 @@ void TL_config::serializeToStream(NativeByteBuffer *stream) {
     stream->writeInt32(notify_default_delay_ms);
     stream->writeInt32(push_chat_period_ms);
     stream->writeInt32(push_chat_limit);
-    stream->writeInt32(saved_gifs_limit);
+    // stream->writeInt32(saved_gifs_limit);
     stream->writeInt32(edit_time_limit);
     stream->writeInt32(revoke_time_limit);
     stream->writeInt32(revoke_pm_time_limit);
     stream->writeInt32(rating_e_decay);
     stream->writeInt32(stickers_recent_limit);
-    stream->writeInt32(stickers_faved_limit);
+    // stream->writeInt32(stickers_faved_limit);
     stream->writeInt32(channels_read_media_period);
     if ((flags & 1) != 0) {
         stream->writeInt32(tmp_sessions);
     }
-    stream->writeInt32(pinned_dialogs_count_max);
-    stream->writeInt32(pinned_infolder_count_max);
+    // stream->writeInt32(pinned_dialogs_count_max);
+    // stream->writeInt32(pinned_infolder_count_max);
     stream->writeInt32(call_receive_timeout_ms);
     stream->writeInt32(call_ring_timeout_ms);
     stream->writeInt32(call_connect_timeout_ms);
@@ -318,6 +321,9 @@ void TL_config::serializeToStream(NativeByteBuffer *stream) {
     }
     if ((flags & 32768) != 0 && reactions_default != nullptr) {
         reactions_default->serializeToStream(stream);
+    }
+    if ((flags & 65536) != 0) {
+        stream->writeString(autologin_token);
     }
 }
 
@@ -1057,7 +1063,7 @@ auth_Authorization *auth_Authorization::TLdeserialize(NativeByteBuffer *stream, 
         case 0x44747e9a:
             result = new TL_auth_authorizationSignUpRequired();
             break;
-        case 0x33fb7bb8:
+        case 0x2ea2c0d4:
             result = new TL_auth_authorization();
             break;
         default:
@@ -1086,8 +1092,14 @@ void TL_auth_authorizationSignUpRequired::serializeToStream(NativeByteBuffer *st
 
 void TL_auth_authorization::readParams(NativeByteBuffer *stream, int32_t instanceNum, bool &error) {
     flags = stream->readInt32(&error);
+    if ((flags & 2) != 0) {
+        otherwise_relogin_days = stream->readInt32(&error);
+    }
     if ((flags & 1) != 0) {
         tmp_sessions = stream->readInt32(&error);
+    }
+    if ((flags & 4) != 0) {
+        future_auth_token = std::unique_ptr<ByteArray>(stream->readByteArray(&error));
     }
     user = std::unique_ptr<User>(User::TLdeserialize(stream, stream->readUint32(&error), instanceNum, error));
 }

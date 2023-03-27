@@ -75,7 +75,6 @@ import java.util.Map;
 public class AlertDialog extends Dialog implements Drawable.Callback, NotificationCenter.NotificationCenterDelegate {
 
     public static final int ALERT_TYPE_MESSAGE = 0;
-    public static final int ALERT_TYPE_SPINNER_DETAIL = 1; // not used?
     public static final int ALERT_TYPE_LOADING = 2;
     public static final int ALERT_TYPE_SPINNER = 3;
 
@@ -94,7 +93,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
     private BitmapDrawable[] shadow = new BitmapDrawable[2];
     private boolean[] shadowVisibility = new boolean[2];
     private AnimatorSet[] shadowAnimation = new AnimatorSet[2];
-    private int customViewOffset = 20;
+    private int customViewOffset = 12;
 
     private String dialogButtonColorKey = Theme.key_dialogButton;
 
@@ -200,7 +199,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
     public void redPositive() {
         TextView button = (TextView) getButton(DialogInterface.BUTTON_POSITIVE);
         if (button != null) {
-            button.setTextColor(getThemedColor(Theme.key_dialogTextRed2));
+            button.setTextColor(getThemedColor(Theme.key_dialogTextRed));
         }
     }
 
@@ -269,15 +268,17 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
 
     public AlertDialog(Context context, int progressStyle, Theme.ResourcesProvider resourcesProvider) {
         super(context, R.style.TransparentDialog);
-        blurredNativeBackground = supportsNativeBlur() && progressViewStyle == ALERT_TYPE_MESSAGE;
-        blurredBackground = blurredNativeBackground || !supportsNativeBlur() && SharedConfig.getDevicePerformanceClass() >= SharedConfig.PERFORMANCE_CLASS_HIGH;
         this.resourcesProvider = resourcesProvider;
+
+        blurredNativeBackground = supportsNativeBlur() && progressViewStyle == ALERT_TYPE_MESSAGE;
+        backgroundColor = getThemedColor(Theme.key_dialogBackground);
+        final boolean isDark = AndroidUtilities.computePerceivedBrightness(backgroundColor) < 0.721f;
+        blurredBackground = blurredNativeBackground || !supportsNativeBlur() && SharedConfig.getDevicePerformanceClass() >= SharedConfig.PERFORMANCE_CLASS_HIGH && isDark;
 
         backgroundPaddings = new Rect();
         if (progressStyle != ALERT_TYPE_SPINNER || blurredBackground) {
             shadowDrawable = context.getResources().getDrawable(R.drawable.popup_fixed_alert3).mutate();
-            backgroundColor = getThemedColor(Theme.key_dialogBackground);
-            blurOpacity = progressStyle == ALERT_TYPE_SPINNER ? 0.55f : (AndroidUtilities.computePerceivedBrightness(backgroundColor) < 0.721f ? 0.80f : 0.92f);
+            blurOpacity = progressStyle == ALERT_TYPE_SPINNER ? 0.55f : (isDark ? 0.80f : 0.985f);
             shadowDrawable.setColorFilter(new PorterDuffColorFilter(backgroundColor, PorterDuff.Mode.MULTIPLY));
             shadowDrawable.getPadding(backgroundPaddings);
         }
@@ -380,7 +381,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
                         availableHeight -= topImageView.getMeasuredHeight();
                     }
                     if (topView != null) {
-                        int w = width - AndroidUtilities.dp(16);
+                        int w = width;
                         int h;
                         if (aspectRatio == 0) {
                             float scale = w / 936.0f;
@@ -734,20 +735,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
             messageTextView.setEnabled(false);
         }
         messageTextView.setGravity((topAnimationIsNew ? Gravity.CENTER_HORIZONTAL : LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP);
-        if (progressViewStyle == ALERT_TYPE_SPINNER_DETAIL) {
-            setCanceledOnTouchOutside(false);
-            setCancelable(false);
-            progressViewContainer = new FrameLayout(getContext());
-            containerView.addView(progressViewContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 44, Gravity.LEFT | Gravity.TOP, 23, title == null ? 24 : 0, 23, 24));
-
-            RadialProgressView progressView = new RadialProgressView(getContext(), resourcesProvider);
-            progressView.setProgressColor(getThemedColor(Theme.key_dialogProgressCircle));
-            progressViewContainer.addView(progressView, LayoutHelper.createFrame(44, 44, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP));
-
-            messageTextView.setLines(1);
-            messageTextView.setEllipsize(TextUtils.TruncateAt.END);
-            progressViewContainer.addView(messageTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, (LocaleController.isRTL ? 0 : 62), 0, (LocaleController.isRTL ? 62 : 0), 0));
-        } else if (progressViewStyle == ALERT_TYPE_LOADING) {
+        if (progressViewStyle == ALERT_TYPE_LOADING) {
             setCanceledOnTouchOutside(false);
             setCancelable(false);
             containerView.addView(messageTextView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 24, title == null ? 19 : 0, 24, 20));
@@ -785,10 +773,6 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
         }
         if (!TextUtils.isEmpty(message)) {
             messageTextView.setText(message);
-            if (customView != null) {
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) messageTextView.getLayoutParams();
-                params.topMargin = AndroidUtilities.dp(16);
-            }
             messageTextView.setVisibility(View.VISIBLE);
         } else {
             messageTextView.setVisibility(View.GONE);
@@ -1229,10 +1213,6 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
             }
 
         }
-    }
-
-    public void setProgressStyle(int style) {
-        progressViewStyle = style;
     }
 
     public void setDismissDialogByButtons(boolean value) {

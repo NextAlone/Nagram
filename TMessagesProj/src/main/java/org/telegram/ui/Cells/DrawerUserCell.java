@@ -10,7 +10,6 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
@@ -144,13 +143,10 @@ public class DrawerUserCell extends FrameLayout implements NotificationCenter.No
             text = Emoji.replaceEmoji(text, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20), false);
         } catch (Exception ignore) {}
         textView.setText(text);
-        if (user.emoji_status instanceof TLRPC.TL_emojiStatusUntil && ((TLRPC.TL_emojiStatusUntil) user.emoji_status).until > (int) (System.currentTimeMillis() / 1000)) {
+        Long emojiStatusId = UserObject.getEmojiStatusDocumentId(user);
+        if (emojiStatusId != null) {
             textView.setDrawablePadding(AndroidUtilities.dp(4));
-            status.set(((TLRPC.TL_emojiStatusUntil) user.emoji_status).document_id, true);
-            textView.setRightDrawableOutside(true);
-        } else if (user.emoji_status instanceof TLRPC.TL_emojiStatus) {
-            textView.setDrawablePadding(AndroidUtilities.dp(4));
-            status.set(((TLRPC.TL_emojiStatus) user.emoji_status).document_id, true);
+            status.set(emojiStatusId, true);
             textView.setRightDrawableOutside(true);
         } else if (MessagesController.getInstance(account).isPremiumUser(user)) {
             textView.setDrawablePadding(AndroidUtilities.dp(6));
