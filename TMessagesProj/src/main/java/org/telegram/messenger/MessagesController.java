@@ -10780,33 +10780,6 @@ public class MessagesController extends BaseController implements NotificationCe
                 }
                 req.users.add(getInputUser(user));
             }
-            // NekoX: invite NekoXBot and kick it
-            TLObject nekoxBot = null;
-            if (selectedContacts.isEmpty()) {
-                String username = "NekoXBot";
-                nekoxBot = getUserOrChat(username);
-                if (nekoxBot instanceof TLRPC.User) {
-                    req.users.add(getInputUser((TLRPC.User) nekoxBot));
-                } else {
-                    TLRPC.TL_contacts_resolveUsername req1 = new TLRPC.TL_contacts_resolveUsername();
-                    req1.username = username;
-                    return getConnectionsManager().sendRequest(req1, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
-                        if (error == null) {
-                            TLRPC.TL_contacts_resolvedPeer res = (TLRPC.TL_contacts_resolvedPeer) response;
-                            putUsers(res.users, false);
-                            putChats(res.chats, false);
-                            getMessagesStorage().putUsersAndChats(res.users, res.chats, false, true);
-                            createChat(title, selectedContacts, about, type, forImport, location, locationAddress, 0, fragment);
-                        } else {
-                            AndroidUtilities.runOnUIThread(() -> {
-                                AlertsCreator.processError(currentAccount, error, fragment, req);
-                                getNotificationCenter().postNotificationName(NotificationCenter.chatDidFailCreate);
-                            });
-                        }
-                    }));
-                }
-            }
-            TLObject finalNekoxBot = nekoxBot;
             return getConnectionsManager().sendRequest(req, (response, error) -> {
                 if (error != null) {
                     AndroidUtilities.runOnUIThread(() -> {
@@ -10818,10 +10791,6 @@ public class MessagesController extends BaseController implements NotificationCe
                 TLRPC.Updates updates = (TLRPC.Updates) response;
                 processUpdates(updates, false);
                 AndroidUtilities.runOnUIThread(() -> {
-                    if (finalNekoxBot instanceof TLRPC.User) {
-                        getMessagesController().deleteParticipantFromChat(updates.chats.get(0).id, (TLRPC.User) finalNekoxBot);
-                    }
-
                     putUsers(updates.users, false);
                     putChats(updates.chats, false);
                     if (updates.chats != null && !updates.chats.isEmpty()) {
