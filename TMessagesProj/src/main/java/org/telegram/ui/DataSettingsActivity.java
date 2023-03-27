@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,6 +51,7 @@ import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.voip.VoIPHelper;
@@ -77,7 +79,7 @@ public class DataSettingsActivity extends BaseFragment {
     private int roamingRow;
     private int wifiRow;
     private int storageNumRow;
-    private int resetDownloadRow;
+    private int resetDownloadRow = -1;
     private int mediaDownloadSection2Row;
     private int usageSectionRow;
     private int storageUsageRow;
@@ -121,6 +123,12 @@ public class DataSettingsActivity extends BaseFragment {
         super.onFragmentCreate();
 
         DownloadController.getInstance(currentAccount).loadAutoDownloadConfig(true);
+        updateRows(true);
+
+        return true;
+    }
+
+    private void updateRows(boolean fullNotify) {
 
         rowCount = 0;
         usageSectionRow = rowCount++;
@@ -132,7 +140,25 @@ public class DataSettingsActivity extends BaseFragment {
         mobileRow = rowCount++;
         wifiRow = rowCount++;
         roamingRow = rowCount++;
-        resetDownloadRow = rowCount++;
+        DownloadController dc = getDownloadController();
+        boolean isDefault = !(
+            !dc.lowPreset.equals(dc.getCurrentRoamingPreset()) || dc.lowPreset.isEnabled() != dc.roamingPreset.enabled ||
+            !dc.mediumPreset.equals(dc.getCurrentMobilePreset()) || dc.mediumPreset.isEnabled() != dc.mobilePreset.enabled ||
+            !dc.highPreset.equals(dc.getCurrentWiFiPreset()) || dc.highPreset.isEnabled() != dc.wifiPreset.enabled
+        );
+        int wasResetDownloadRow = resetDownloadRow;
+        resetDownloadRow = isDefault ? -1 : rowCount++;
+        if (listAdapter != null && !fullNotify) {
+            if (wasResetDownloadRow < 0 && resetDownloadRow >= 0) {
+                listAdapter.notifyItemChanged(roamingRow);
+                listAdapter.notifyItemInserted(resetDownloadRow);
+            } else if (wasResetDownloadRow >= 0 && resetDownloadRow < 0) {
+                listAdapter.notifyItemChanged(roamingRow);
+                listAdapter.notifyItemRemoved(wasResetDownloadRow);
+            } else {
+                fullNotify = true;
+            }
+        }
         mediaDownloadSection2Row = rowCount++;
 
         saveToGallerySectionRow = rowCount++;
@@ -167,7 +193,9 @@ public class DataSettingsActivity extends BaseFragment {
         clearDraftsRow = rowCount++;
         clearDraftsSectionRow = rowCount++;
 
-        return true;
+        if (listAdapter != null && fullNotify) {
+            listAdapter.notifyDataSetChanged();
+        }
     }
 
     private void loadCacheSize() {
@@ -248,7 +276,15 @@ public class DataSettingsActivity extends BaseFragment {
         fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = (FrameLayout) fragmentView;
 
-        listView = new RecyclerListView(context);
+        listView = new RecyclerListView(context) {
+            @Override
+            public Integer getSelectorColor(int position) {
+                if (position == resetDownloadRow) {
+                    return Theme.multAlpha(getThemedColor(Theme.key_windowBackgroundWhiteRedText2), .1f);
+                }
+                return getThemedColor(Theme.key_listSelector);
+            }
+        };
         listView.setVerticalScrollBarEnabled(false);
         listView.setLayoutManager(layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
@@ -320,9 +356,7 @@ public class DataSettingsActivity extends BaseFragment {
                     }
                     DownloadController.getInstance(currentAccount).checkAutodownloadSettings();
                     DownloadController.getInstance(currentAccount).savePresetToServer(num);
-                    if (wasEnabled != listAdapter.isRowEnabled(resetDownloadRow)) {
-                        listAdapter.notifyItemChanged(resetDownloadRow);
-                    }
+                    updateRows(false);
                 } else {
                     int type;
                     if (position == mobileRow) {
@@ -374,6 +408,7 @@ public class DataSettingsActivity extends BaseFragment {
                         DownloadController.getInstance(currentAccount).savePresetToServer(a);
                     }
                     listAdapter.notifyItemRangeChanged(mobileRow, 4);
+                    updateRows(false);
                 });
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                 AlertDialog dialog = builder.create();
@@ -514,8 +549,27 @@ public class DataSettingsActivity extends BaseFragment {
                 }
             }
         });
+        DefaultItemAnimator itemAnimator = new DefaultItemAnimator();
+        itemAnimator.setDurations(350);
+        itemAnimator.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
+        itemAnimator.setDelayAnimations(false);
+        itemAnimator.setSupportsChangeAnimations(false);
+        listView.setItemAnimator(itemAnimator);
 
         return fragmentView;
+    }
+
+    private void setStorageDirectory(String storageDir) {
+        SharedConfig.storageCacheDir = storageDir;
+        SharedConfig.saveConfig();
+        if (storageDir != null) {
+            SharedConfig.readOnlyStorageDirAlertShowed = false;
+        }
+        rebind(storageNumRow);
+        ImageLoader.getInstance().checkMediaPaths(() -> {
+            CacheControlActivity.resetCalculatedTotalSIze();
+            loadCacheSize();
+        });
     }
 
     @Override
@@ -528,6 +582,7 @@ public class DataSettingsActivity extends BaseFragment {
         super.onResume();
         loadCacheSize();
         rebindAll();
+        updateRows(false);
     }
 
     private class ListAdapter extends RecyclerListView.SelectionAdapter {
@@ -672,7 +727,7 @@ public class DataSettingsActivity extends BaseFragment {
                     String text;
                     CharSequence description = null;
                     DownloadController.Preset preset = null;
-                    boolean enabled;
+                    boolean enabled, divider = true;
                     if (position == saveToGalleryPeerRow) {
                         text = LocaleController.getString("SaveToGalleryPrivate", R.string.SaveToGalleryPrivate);
                         description = SaveToGallerySettingsHelper.user.createDescription(currentAccount);
@@ -685,6 +740,7 @@ public class DataSettingsActivity extends BaseFragment {
                         text = LocaleController.getString("SaveToGalleryChannels", R.string.SaveToGalleryChannels);
                         description = SaveToGallerySettingsHelper.channels.createDescription(currentAccount);
                         enabled = SaveToGallerySettingsHelper.channels.enabled();
+                        divider = false;
                     } else if (position == mobileRow) {
                         text = LocaleController.getString("WhenUsingMobileData", R.string.WhenUsingMobileData);
                         enabled = DownloadController.getInstance(currentAccount).mobilePreset.enabled;
@@ -697,6 +753,7 @@ public class DataSettingsActivity extends BaseFragment {
                         text = LocaleController.getString("WhenRoaming", R.string.WhenRoaming);
                         enabled = DownloadController.getInstance(currentAccount).roamingPreset.enabled;
                         preset = DownloadController.getInstance(currentAccount).getCurrentRoamingPreset();
+                        divider = resetDownloadRow >= 0;
                     }
                     boolean checked;
                     if (preset != null) {
@@ -746,7 +803,7 @@ public class DataSettingsActivity extends BaseFragment {
                         checked = enabled;
                     }
                     checkCell.setAnimationsEnabled(true);
-                    checkCell.setTextAndValueAndCheck(text, description, checked, 0, true, true);
+                    checkCell.setTextAndValueAndCheck(text, description, checked, 0, true, divider);
                     break;
                 }
             }
@@ -775,15 +832,9 @@ public class DataSettingsActivity extends BaseFragment {
         }
 
         public boolean isRowEnabled(int position) {
-            if (position == resetDownloadRow) {
-                DownloadController controller = DownloadController.getInstance(currentAccount);
-                return !controller.lowPreset.equals(controller.getCurrentRoamingPreset()) || controller.lowPreset.isEnabled() != controller.roamingPreset.enabled ||
-                        !controller.mediumPreset.equals(controller.getCurrentMobilePreset()) || controller.mediumPreset.isEnabled() != controller.mobilePreset.enabled ||
-                        !controller.highPreset.equals(controller.getCurrentWiFiPreset()) || controller.highPreset.isEnabled() != controller.wifiPreset.enabled;
-            }
             return position == mobileRow || position == roamingRow || position == wifiRow || position == storageUsageRow || position == useLessDataForCallsRow || position == dataUsageRow || position == proxyRow || position == clearDraftsRow ||
                     position == enableCacheStreamRow || position == enableStreamRow || position == enableAllStreamRow || position == enableMkvRow || position == quickRepliesRow || position == autoplayVideoRow || position == autoplayGifsRow ||
-                    position == storageNumRow || position == saveToGalleryGroupsRow || position == saveToGalleryPeerRow || position == saveToGalleryChannelsRow;
+                    position == storageNumRow || position == saveToGalleryGroupsRow || position == saveToGalleryPeerRow || position == saveToGalleryChannelsRow || position == resetDownloadRow;
         }
 
         @Override

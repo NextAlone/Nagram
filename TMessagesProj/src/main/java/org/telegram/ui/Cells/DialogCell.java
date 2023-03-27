@@ -515,13 +515,14 @@ public class DialogCell extends BaseCell {
         for (int i = 0; i < thumbImage.length; ++i) {
             thumbImage[i] = new ImageReceiver(this);
             thumbImage[i].setRoundRadius(AndroidUtilities.dp(2));
+            thumbImage[i].setAllowLoadingOnAttachedOnly(true);
         }
         useForceThreeLines = forceThreeLines;
         currentAccount = account;
 
-
         emojiStatus = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable(this, AndroidUtilities.dp(22));
         emojiStatus.center = false;
+        avatarImage.setAllowLoadingOnAttachedOnly(true);
     }
 
     public void setDialog(TLRPC.Dialog dialog, int type, int folder) {
@@ -2129,7 +2130,7 @@ public class DialogCell extends BaseCell {
                 } else if (drawScam != 0) {
                     nameMuteLeft = (int) (nameLeft + (nameWidth - widthpx) - AndroidUtilities.dp(6) - (drawScam == 1 ? Theme.dialogs_scamDrawable : Theme.dialogs_fakeDrawable).getIntrinsicWidth());
                 } else {
-                    nameMuteLeft = 0;
+                    nameMuteLeft = (int) (nameLeft + (nameWidth - widthpx) - AndroidUtilities.dp(6) - Theme.dialogs_muteDrawable.getIntrinsicWidth());
                 }
                 if (left == 0) {
                     if (widthpx < nameWidth) {
@@ -2201,7 +2202,7 @@ public class DialogCell extends BaseCell {
                         nameLeft -= (nameWidth - widthpx);
                     }
                 }
-                if (dialogMuted || drawUnmute || drawVerified || drawPremium || drawScam != 0) {
+                if ((dialogMuted || true) || drawUnmute || drawVerified || drawPremium || drawScam != 0) {
                     nameMuteLeft = (int) (nameLeft + left + AndroidUtilities.dp(6));
                 }
             }
@@ -3850,7 +3851,7 @@ public class DialogCell extends BaseCell {
 
                     float size1;
                     float size2;
-                    if (!LiteMode.isEnabled(LiteMode.FLAG_CHAT_BACKGROUND)) {
+                    if (!LiteMode.isEnabled(LiteMode.FLAGS_CHAT)) {
                         innerProgress = 0.65f;
                     }
                     if (progressStage == 0) {
@@ -3895,7 +3896,7 @@ public class DialogCell extends BaseCell {
                         canvas.restore();
                     }
 
-                    if (!LiteMode.isEnabled(LiteMode.FLAG_CHAT_BACKGROUND)) {
+                    if (LiteMode.isEnabled(LiteMode.FLAGS_CHAT)) {
                         innerProgress += 16f / 400.0f;
                         if (innerProgress >= 1.0f) {
                             innerProgress = 0.0f;

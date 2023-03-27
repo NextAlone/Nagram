@@ -1578,17 +1578,25 @@ public boolean retriedToSend;
             if (newDocument.mime_type == null) {
                 newDocument.mime_type = "";
             }
-            TLRPC.PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90);
-            if (thumb instanceof TLRPC.TL_photoSize || thumb instanceof TLRPC.TL_photoSizeProgressive) {
-                File file = FileLoader.getInstance(currentAccount).getPathToAttach(thumb, true);
-                if (file.exists()) {
-                    try {
-                        int len = (int) file.length();
-                        byte[] arr = new byte[(int) file.length()];
-                        RandomAccessFile reader = new RandomAccessFile(file, "r");
-                        reader.readFully(arr);
 
-                        TLRPC.PhotoSize newThumb = new TLRPC.TL_photoCachedSize();
+            TLRPC.PhotoSize thumb = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 10);
+            if (thumb instanceof TLRPC.TL_photoSize || thumb instanceof TLRPC.TL_photoSizeProgressive || thumb instanceof TLRPC.TL_photoStrippedSize) {
+                File file = FileLoader.getInstance(currentAccount).getPathToAttach(thumb, true);
+                if (thumb instanceof TLRPC.TL_photoStrippedSize || file.exists()) {
+                    try {
+                        byte[] arr;
+                        TLRPC.PhotoSize newThumb;
+                        if (thumb instanceof TLRPC.TL_photoStrippedSize) {
+                            newThumb = new TLRPC.TL_photoStrippedSize();
+                            arr = thumb.bytes;
+                        } else {
+                            newThumb = new TLRPC.TL_photoCachedSize();
+                            int len = (int) file.length();
+                            arr = new byte[(int) file.length()];
+                            RandomAccessFile reader = new RandomAccessFile(file, "r");
+                            reader.readFully(arr);
+                        }
+
                         TLRPC.TL_fileLocation_layer82 fileLocation = new TLRPC.TL_fileLocation_layer82();
                         fileLocation.dc_id = thumb.location.dc_id;
                         fileLocation.volume_id = thumb.location.volume_id;
@@ -4531,10 +4539,16 @@ public boolean retriedToSend;
                             reqSend.media.caption = caption;
                             TLRPC.PhotoSize thumb = getThumbForSecretChat(document.thumbs);
                             if (thumb != null) {
-                                ImageLoader.fillPhotoSizeWithBytes(thumb);
-                                ((TLRPC.TL_decryptedMessageMediaDocument) reqSend.media).thumb = thumb.bytes;
-                                reqSend.media.thumb_h = thumb.h;
-                                reqSend.media.thumb_w = thumb.w;
+                                if (thumb instanceof TLRPC.TL_photoStrippedSize) {
+                                    ((TLRPC.TL_decryptedMessageMediaDocument) reqSend.media).thumb = thumb.bytes;
+                                    reqSend.media.thumb_h = thumb.h;
+                                    reqSend.media.thumb_w = thumb.w;
+                                } else {
+                                    ImageLoader.fillPhotoSizeWithBytes(thumb);
+                                    ((TLRPC.TL_decryptedMessageMediaDocument) reqSend.media).thumb = thumb.bytes;
+                                    reqSend.media.thumb_h = thumb.h;
+                                    reqSend.media.thumb_w = thumb.w;
+                                }
                             } else {
                                 ((TLRPC.TL_decryptedMessageMediaDocument) reqSend.media).thumb = new byte[0];
                                 reqSend.media.thumb_h = 0;
@@ -4719,8 +4733,11 @@ public boolean retriedToSend;
         }
         for (int a = 0, N = arrayList.size(); a < N; a++) {
             TLRPC.PhotoSize size = arrayList.get(a);
-            if (size == null || size instanceof TLRPC.TL_photoStrippedSize || size instanceof TLRPC.TL_photoPathSize || size instanceof TLRPC.TL_photoSizeEmpty || size.location == null) {
+            if (size == null || size instanceof TLRPC.TL_photoPathSize || size instanceof TLRPC.TL_photoSizeEmpty || size.location == null) {
                 continue;
+            }
+            if (size instanceof TLRPC.TL_photoStrippedSize) {
+                return size;
             }
             TLRPC.TL_photoSize photoSize = new TLRPC.TL_photoSize_layer127();
             photoSize.type = size.type;

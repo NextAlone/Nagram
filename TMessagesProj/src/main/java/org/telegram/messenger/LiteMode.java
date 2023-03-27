@@ -53,8 +53,10 @@ public class LiteMode {
 
     public static int PRESET_LOW = (
         FLAG_ANIMATED_EMOJI_CHAT_PREMIUM |
+        FLAG_ANIMATED_EMOJI_KEYBOARD_PREMIUM |
+        FLAG_ANIMATED_EMOJI_REACTIONS_PREMIUM |
         FLAG_AUTOPLAY_GIFS
-    ); // 2064
+    ); // 2076
     public static int PRESET_MEDIUM = (
         FLAGS_ANIMATED_STICKERS |
         FLAG_ANIMATED_EMOJI_KEYBOARD_PREMIUM |
@@ -123,12 +125,14 @@ public class LiteMode {
     }
 
     private static int preprocessFlag(int flag) {
-        if (flag == FLAG_ANIMATED_EMOJI_KEYBOARD) {
-            return UserConfig.hasPremiumOnAccounts() ? FLAG_ANIMATED_EMOJI_KEYBOARD_PREMIUM : FLAG_ANIMATED_EMOJI_KEYBOARD_NOT_PREMIUM;
-        } else if (flag == FLAG_ANIMATED_EMOJI_REACTIONS) {
-            return UserConfig.hasPremiumOnAccounts() ? FLAG_ANIMATED_EMOJI_REACTIONS_PREMIUM : FLAG_ANIMATED_EMOJI_REACTIONS_NOT_PREMIUM;
-        } else if (flag == FLAG_ANIMATED_EMOJI_CHAT) {
-            return UserConfig.hasPremiumOnAccounts() ? FLAG_ANIMATED_EMOJI_CHAT_PREMIUM : FLAG_ANIMATED_EMOJI_CHAT_NOT_PREMIUM;
+        if ((flag & FLAG_ANIMATED_EMOJI_KEYBOARD) > 0) {
+            flag = flag & ~FLAG_ANIMATED_EMOJI_KEYBOARD | (UserConfig.hasPremiumOnAccounts() ? FLAG_ANIMATED_EMOJI_KEYBOARD_PREMIUM : FLAG_ANIMATED_EMOJI_KEYBOARD_NOT_PREMIUM);
+        }
+        if ((flag & FLAG_ANIMATED_EMOJI_REACTIONS) > 0) {
+            flag = flag & ~FLAG_ANIMATED_EMOJI_REACTIONS | (UserConfig.hasPremiumOnAccounts() ? FLAG_ANIMATED_EMOJI_REACTIONS_PREMIUM : FLAG_ANIMATED_EMOJI_REACTIONS_NOT_PREMIUM);
+        }
+        if ((flag & FLAG_ANIMATED_EMOJI_CHAT) > 0) {
+            flag = flag & ~FLAG_ANIMATED_EMOJI_CHAT | (UserConfig.hasPremiumOnAccounts() ? FLAG_ANIMATED_EMOJI_CHAT_PREMIUM : FLAG_ANIMATED_EMOJI_CHAT_NOT_PREMIUM);
         }
         return flag;
     }

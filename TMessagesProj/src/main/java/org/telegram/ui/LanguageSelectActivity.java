@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -409,6 +410,16 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     }
 
     @Override
+    public void onBecomeFullyVisible() {
+        super.onBecomeFullyVisible();
+        LocaleController.getInstance().checkForcePatchLangpack(currentAccount, () -> {
+            if (!isPaused) {
+                updateLanguage();
+            }
+        });
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (listAdapter != null) {
@@ -431,7 +442,10 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
 
     private void updateLanguage() {
         if (actionBar != null) {
-            actionBar.setTitleAnimated(LocaleController.getString("Language", R.string.Language), true, 350, CubicBezierInterpolator.EASE_OUT_QUINT);
+            String newTitle = LocaleController.getString("Language", R.string.Language);
+            if (!TextUtils.equals(actionBar.getTitle(), newTitle)) {
+                actionBar.setTitleAnimated(newTitle, true, 350, CubicBezierInterpolator.EASE_OUT_QUINT);
+            }
         }
         if (listAdapter != null) {
             listAdapter.notifyItemRangeChanged(0, listAdapter.getItemCount());

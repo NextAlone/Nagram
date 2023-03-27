@@ -414,7 +414,7 @@ public class ContentPreviewViewer {
                 ActionBarPopupWindow.ActionBarPopupWindowLayout previewMenu = new ActionBarPopupWindow.ActionBarPopupWindowLayout(containerView.getContext(), R.drawable.popup_fixed_alert2, resourcesProvider);
 
                 View.OnClickListener onItemClickListener = v -> {
-                    if (parentActivity == null) {
+                    if (parentActivity == null || delegate == null) {
                         return;
                     }
                     int which = (int) v.getTag();
@@ -513,7 +513,7 @@ public class ContentPreviewViewer {
                 if (delegate.needSend(currentContentType) && !delegate.isInScheduleMode()) {
                     items.add(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound));
                     icons.add(R.drawable.baseline_notifications_off_24);
-                    actions.add(nkbtn_send_without_sound);
+                    actions.add(4);
                 }
                 if (delegate.canSchedule()) {
                     items.add(LocaleController.getString("Schedule", R.string.Schedule));
@@ -553,6 +553,8 @@ public class ContentPreviewViewer {
                     int which = (int) v.getTag();
                     if (actions.get(which) == 0 || actions.get(which) == nkbtn_send_without_sound) {
                         delegate.sendGif(currentDocument != null ? currentDocument : inlineResult, parentObject, actions.get(which) == 0, 0);
+                    } else if (actions.get(which) == 4) {
+                        delegate.sendGif(currentDocument != null ? currentDocument : inlineResult, parentObject, false, 0);
                     } else if (actions.get(which) == 1) {
                         MediaDataController.getInstance(currentAccount).removeRecentGif(currentDocument);
                         delegate.gifAddedOrDeleted();

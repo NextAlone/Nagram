@@ -4820,7 +4820,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 containerView.invalidate();
             }
         };
-        avatarsViewPager.setImagesLayerNum(8192);
+        avatarsViewPager.setImagesLayerNum(Integer.MAX_VALUE);
         avatarsViewPager.setInvalidateWithParent(true);
         avatarPagerIndicator.setProfileGalleryView(avatarsViewPager);
         avatarPreviewContainer = new FrameLayout(context) {

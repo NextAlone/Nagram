@@ -213,7 +213,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
             super(context);
             this.resourcesProvider = resourcesProvider;
 
-            setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(Theme.key_dialogButtonSelector), 2));
+            setBackground(Theme.createSelectorDrawable(getThemedColor(Theme.key_dialogButtonSelector), 2));
             setPadding(AndroidUtilities.dp(23), 0, AndroidUtilities.dp(23), 0);
 
             imageView = new ImageView(context);
@@ -568,7 +568,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
             }
         };
         containerView.setOrientation(LinearLayout.VERTICAL);
-        if (blurredBackground || progressViewStyle == ALERT_TYPE_SPINNER) {
+        if ((blurredBackground || progressViewStyle == ALERT_TYPE_SPINNER) && progressViewStyle != ALERT_TYPE_LOADING) {
             containerView.setBackgroundDrawable(null);
             containerView.setPadding(0, 0, 0, 0);
             if (blurredBackground && !blurredNativeBackground) {

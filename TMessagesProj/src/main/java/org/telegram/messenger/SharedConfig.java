@@ -10,7 +10,9 @@ package org.telegram.messenger;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.content.pm.PackageInfo;
@@ -37,8 +39,12 @@ import org.json.JSONObject;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.CacheControlActivity;
 import org.telegram.ui.Components.SwipeGestureSettingsView;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.LaunchActivity;
 
 import java.io.File;
 import java.io.RandomAccessFile;
@@ -96,6 +102,40 @@ public class SharedConfig {
         return LiteMode.isEnabled(LiteMode.FLAG_ANIMATED_STICKERS_CHAT);
     }
 
+    public static boolean readOnlyStorageDirAlertShowed;
+
+    public static void checkSdCard(File file) {
+        if (file == null || SharedConfig.storageCacheDir == null || readOnlyStorageDirAlertShowed) {
+            return;
+        }
+        if (file.getPath().startsWith(SharedConfig.storageCacheDir)) {
+            AndroidUtilities.runOnUIThread(() -> {
+                if (readOnlyStorageDirAlertShowed) {
+                    return;
+                }
+                BaseFragment fragment = LaunchActivity.getLastFragment();
+                if (fragment != null && fragment.getParentActivity() != null) {
+                    SharedConfig.storageCacheDir = null;
+                    SharedConfig.saveConfig();
+                    ImageLoader.getInstance().checkMediaPaths(() -> {
+
+                    });
+
+                    readOnlyStorageDirAlertShowed = true;
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(fragment.getParentActivity());
+                    dialog.setTitle(LocaleController.getString("SdCardError", R.string.SdCardError));
+                    dialog.setSubtitle(LocaleController.getString("SdCardErrorDescription", R.string.SdCardErrorDescription));
+                    dialog.setPositiveButton(LocaleController.getString("DoNotUseSDCard", R.string.DoNotUseSDCard), (dialog1, which) -> {
+
+                    });
+                    Dialog dialogFinal = dialog.create();
+                    dialogFinal.setCanceledOnTouchOutside(false);
+                    dialogFinal.show();
+                }
+            });
+        }
+    }
+
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({
             PASSCODE_TYPE_PIN,
@@ -150,6 +190,7 @@ public class SharedConfig {
     public static boolean disableVoiceAudioEffects;
     public static boolean forceDisableTabletMode;
     public static boolean updateStickersOrderOnSend = true;
+    public static boolean bigCameraForRound;
     private static int lastLocalId = -210000;
 
     public static String storageCacheDir;
@@ -166,6 +207,7 @@ public class SharedConfig {
     public static int mapPreviewType = 2;
     public static boolean chatBubbles = Build.VERSION.SDK_INT >= 30;
     public static boolean raiseToSpeak = false;
+    public static boolean raiseToListen = true;
     public static boolean recordViaSco = false;
     public static boolean customTabs = true;
     public static boolean directShare = true;
@@ -177,6 +219,7 @@ public class SharedConfig {
     public static boolean streamMkv = false;
     public static boolean saveStreamMedia = true;
     public static boolean pauseMusicOnRecord = false;
+    public static boolean pauseMusicOnMedia = true;
     public static boolean noiseSupression;
     public static final boolean noStatusBar = true;
     public static boolean debugWebView;
@@ -1301,6 +1344,7 @@ public class SharedConfig {
             preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
             SaveToGallerySettingsHelper.load(preferences);
             mapPreviewType = preferences.getInt("mapPreviewType", 2);
+            raiseToListen = preferences.getBoolean("raise_to_listen", true);
             raiseToSpeak = preferences.getBoolean("raise_to_speak", false);
             recordViaSco = preferences.getBoolean("record_via_sco", false);
             customTabs = preferences.getBoolean("custom_tabs", true);
@@ -1309,7 +1353,7 @@ public class SharedConfig {
             playOrderReversed = !shuffleMusic && preferences.getBoolean("playOrderReversed", false);
             inappCamera = preferences.getBoolean("inappCamera", true);
             hasCameraCache = preferences.contains("cameraCache");
-            roundCamera16to9 = true;//preferences.getBoolean("roundCamera16to9", false);
+            roundCamera16to9 = true;
             repeatMode = preferences.getInt("repeatMode", 0);
             fontSize = preferences.getInt("fons_size", AndroidUtilities.isTablet() ? 14 : 12);
             fontSizeIsDefault = !preferences.contains("fons_size");
@@ -1319,6 +1363,7 @@ public class SharedConfig {
             streamMedia = preferences.getBoolean("streamMedia", true);
             saveStreamMedia = preferences.getBoolean("saveStreamMedia", true);
             pauseMusicOnRecord = preferences.getBoolean("pauseMusicOnRecord", false);
+            pauseMusicOnMedia = preferences.getBoolean("pauseMusicOnMedia", true);
             forceDisableTabletMode = preferences.getBoolean("forceDisableTabletMode", false);
             streamAllVideo = preferences.getBoolean("streamAllVideo", BuildVars.DEBUG_VERSION);
             streamMkv = preferences.getBoolean("streamMkv", false);
@@ -1388,6 +1433,7 @@ public class SharedConfig {
             hasEmailLogin = preferences.getBoolean("hasEmailLogin", false);
             isFloatingDebugActive = preferences.getBoolean("floatingDebugActive", false);
             updateStickersOrderOnSend = preferences.getBoolean("updateStickersOrderOnSend", true);
+            bigCameraForRound = preferences.getBoolean("bigCameraForRound", false);
 
             preferences = ApplicationLoader.applicationContext.getSharedPreferences("Notifications", Activity.MODE_PRIVATE);
             showNotificationsForAllAccounts = preferences.getBoolean("AllAccounts", true);
@@ -1814,12 +1860,24 @@ public class SharedConfig {
         editor.commit();
     }
 
-    public static void toogleRaiseToSpeak() {
+    public static void toggleRaiseToSpeak() {
         raiseToSpeak = !raiseToSpeak;
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("raise_to_speak", raiseToSpeak);
         editor.commit();
+    }
+
+    public static void toggleRaiseToListen() {
+        raiseToListen = !raiseToListen;
+        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("raise_to_listen", raiseToListen);
+        editor.commit();
+    }
+
+    public static boolean enabledRaiseTo(boolean speak) {
+        return raiseToListen && (!speak || raiseToSpeak);
     }
 
     public static void toggleCustomTabs() {
@@ -1900,6 +1958,14 @@ public class SharedConfig {
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("pauseMusicOnRecord", pauseMusicOnRecord);
+        editor.commit();
+    }
+
+    public static void togglePauseMusicOnMedia() {
+        pauseMusicOnMedia = !pauseMusicOnMedia;
+        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("pauseMusicOnMedia", pauseMusicOnMedia);
         editor.commit();
     }
 
@@ -2524,6 +2590,15 @@ public class SharedConfig {
     public static boolean deviceIsAverage() {
         return getDevicePerformanceClass() <= PERFORMANCE_CLASS_AVERAGE;
     }
+
+    public static void toggleRoundCamera() {
+        bigCameraForRound = !bigCameraForRound;
+        ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE)
+                .edit()
+                .putBoolean("bigCameraForRound", bigCameraForRound)
+                .apply();
+    }
+
 
     @Deprecated
     public static int getLegacyDevicePerformanceClass() {
