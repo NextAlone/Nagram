@@ -70,7 +70,7 @@ public class DataSettingsActivity extends BaseFragment {
     @SuppressWarnings("FieldCanBeLocal")
     private LinearLayoutManager layoutManager;
 
-    private ArrayList<File> storageDirs;
+//    private ArrayList<File> storageDirs;
 
     private int mediaDownloadSectionRow;
     private int mobileRow;
@@ -577,17 +577,7 @@ public class DataSettingsActivity extends BaseFragment {
                         );
                         textCell.setTextAndValueAndColorfulIcon(LocaleController.getString("NetworkUsage", R.string.NetworkUsage), AndroidUtilities.formatFileSize(size), true, R.drawable.msg_filled_datausage, getThemedColor(Theme.key_color_green), storageNumRow != -1);
                     } else if (position == storageNumRow) {
-                        String dir = storageDirs.get(0).getAbsolutePath();
-                        if (!TextUtils.isEmpty(SharedConfig.storageCacheDir)) {
-                            for (int a = 0, N = storageDirs.size(); a < N; a++) {
-                                String path = storageDirs.get(a).getAbsolutePath();
-                                if (path.startsWith(SharedConfig.storageCacheDir)) {
-                                    dir = path;
-                                    break;
-                                }
-                            }
-                        }
-                        final String value = dir == null || dir.contains("/storage/emulated/") ? LocaleController.getString("InternalStorage", R.string.InternalStorage) : LocaleController.getString("SdCard", R.string.SdCard);
+                        String value = NekoConfig.cachePath.String();
                         textCell.setTextAndValueAndColorfulIcon(LocaleController.getString("StoragePath", R.string.StoragePath), value, true, R.drawable.msg_filled_sdcard, getThemedColor(Theme.key_color_yellow), false);
                     }
                     break;

@@ -2063,6 +2063,8 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         sendButtonContainer.addView(audioVideoButtonContainer, LayoutHelper.createFrame(48, 48));
         if (NekoConfig.useChatAttachMediaMenu.Bool()) {
             audioVideoButtonContainer.setOnClickListener(v -> {
+                createRecordAudioPanel();
+                createRecordCircle();
                 if (recordCircle.isSendButtonVisible()) {
                     if (!hasRecordVideo || calledRecordRunnable) {
                         startedDraggingX = -1;
@@ -2270,9 +2272,6 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         }
 
         audioVideoButtonContainer.addView(audioVideoSendButton, LayoutHelper.createFrame(48, 48));
-
-        // NekoX: fix this for chatInputMenu
-        createRecordCircle();
 
         cancelBotButton = new ImageView(context);
         cancelBotButton.setVisibility(INVISIBLE);

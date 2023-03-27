@@ -144,7 +144,7 @@ object AlertUtil {
     @JvmStatic
     fun showProgress(ctx: Context, text: String = LocaleController.getString("Loading", R.string.Loading)): AlertDialog {
 
-        return AlertDialog.Builder(ctx, 1).apply {
+        return AlertDialog.Builder(ctx, AlertDialog.ALERT_TYPE_MESSAGE).apply {
 
             setMessage(text)
 
