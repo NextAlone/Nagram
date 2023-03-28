@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Locale;
 
+import cn.hutool.core.util.StrUtil;
+
 public class FileLog {
     private OutputStreamWriter streamWriter = null;
     private FastDateFormat dateFormat = null;
@@ -47,6 +49,7 @@ public class FileLog {
     private final static String mtproto_tag = "MTProto";
 
     private static volatile FileLog Instance = null;
+
     public static FileLog getInstance() {
         FileLog localInstance = Instance;
         if (localInstance == null) {
@@ -93,7 +96,7 @@ public class FileLog {
             long time = System.currentTimeMillis();
             FileLog.getInstance().logQueue.postRunnable(() -> {
                 try {
-                    String metadata = "requestMsgId=" + requestMsgId + " requestingTime=" + (System.currentTimeMillis() - startRequestTimeInMillis) +  " request_token=" + requestToken;
+                    String metadata = "requestMsgId=" + requestMsgId + " requestingTime=" + (System.currentTimeMillis() - startRequestTimeInMillis) + " request_token=" + requestToken;
                     FileLog.getInstance().tlStreamWriter.write(getInstance().dateFormat.format(time) + " " + metadata);
                     FileLog.getInstance().tlStreamWriter.write("\n");
                     FileLog.getInstance().tlStreamWriter.write(req);
@@ -185,12 +188,11 @@ public class FileLog {
     }
 
 
-
     public void init() {
         if (initied) {
             return;
         }
-        dateFormat = FastDateFormat.getInstance("dd_MM_yyyy_HH_mm_ss", Locale.US);
+        dateFormat = FastDateFormat.getInstance("yyyy_MM_dd-HH_mm_ss", Locale.US);
         String date = dateFormat.format(System.currentTimeMillis());
         try {
             File dir = AndroidUtilities.getLogsDir();
@@ -263,11 +265,12 @@ public class FileLog {
             return;
         }
         ensureInitied();
+        String tag = mkTag();
         Log.e(tag, message, exception);
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
                 try {
-                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + message + "\n");
+                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/" + tag + ": " + message + "\n");
                     getInstance().streamWriter.write(exception.toString());
                     getInstance().streamWriter.flush();
                 } catch (Exception e) {
@@ -282,11 +285,12 @@ public class FileLog {
             return;
         }
         ensureInitied();
+        String tag = mkTag();
         Log.e(tag, message);
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
                 try {
-                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + message + "\n");
+                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/" + tag + ": " + message + "\n");
                     getInstance().streamWriter.flush();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -321,16 +325,18 @@ public class FileLog {
                 }
             }
         }
+        final String tag = mkTag();
+        Log.e(tag, mkMessage(e));
         ensureInitied();
         e.printStackTrace();
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
 
                 try {
-                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + e + "\n");
+                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/" + tag + ": " + e + "\n");
                     StackTraceElement[] stack = e.getStackTrace();
                     for (int a = 0; a < stack.length; a++) {
-                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + stack[a] + "\n");
+                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/" + tag + ": " + stack[a] + "\n");
                     }
                     getInstance().streamWriter.flush();
                 } catch (Exception e1) {
@@ -355,13 +361,15 @@ public class FileLog {
 //        }
         ensureInitied();
         e.printStackTrace();
+        String tag = mkTag();
+        Log.e(tag, mkMessage(e));
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
                 try {
-                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + e + "\n");
+                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " Fatal/" + tag + ": " + e + "\n");
                     StackTraceElement[] stack = e.getStackTrace();
                     for (int a = 0; a < stack.length; a++) {
-                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + stack[a] + "\n");
+                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " Fatal/" + tag + ": " + stack[a] + "\n");
                     }
                     getInstance().streamWriter.flush();
                 } catch (Exception e1) {
@@ -380,6 +388,17 @@ public class FileLog {
         }
     }
 
+    private static String mkTag() {
+        final StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        return StrUtil.subAfter(stackTrace[4].getClassName(), ".", true);
+    }
+
+    private static String mkMessage(Throwable e) {
+        String message = e.getMessage();
+        if (message != null) return e.getClass().getSimpleName() + ": " + message;
+        return e.getClass().getSimpleName();
+    }
+
     private static boolean needSent(Throwable e) {
         if (e instanceof InterruptedException || e instanceof MediaCodecVideoConvertor.ConversionCanceledException || e instanceof IgnoreSentException) {
             return false;
@@ -392,11 +411,12 @@ public class FileLog {
             return;
         }
         ensureInitied();
+        String tag = mkTag();
         Log.d(tag, message);
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
                 try {
-                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " D/tmessages: " + message + "\n");
+                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " D/" + tag + ": " + message + "\n");
                     getInstance().streamWriter.flush();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -413,11 +433,12 @@ public class FileLog {
             return;
         }
         ensureInitied();
+        String tag = mkTag();
         Log.w(tag, message);
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
                 try {
-                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " W/tmessages: " + message + "\n");
+                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " W/" + tag + ": " + message + "\n");
                     getInstance().streamWriter.flush();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -450,7 +471,7 @@ public class FileLog {
         }
     }
 
-    public static class IgnoreSentException extends Exception{
+    public static class IgnoreSentException extends Exception {
 
         public IgnoreSentException(String e) {
             super(e);
