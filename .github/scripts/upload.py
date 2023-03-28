@@ -79,6 +79,22 @@ def sendDocument(user_id, path, message = "", entities = None):
             'caption_entities': entities}
     response = requests.post(API_PREFIX + "sendDocument", files=files, data=data)
     print(response.json())
+    return response.json()
+
+
+def sendMediaGroup(user_id, file_ids, message, entities = None):
+    data = {
+        "chat_id": user_id,
+        "media": [],
+        "type": "media"
+    }
+    for fileid in file_ids:
+        data["media"].append({"type" : "document", "media" : fileid})
+    data["media"][0]["caption"] = message
+    data["media"][0]["caption_entities"] = entities
+    result = requests.post(API_PREFIX + "sendMediaGroup", json=data).json()
+    print(result)
+    return result
 
 
 def sendRelease():
@@ -133,11 +149,15 @@ def sendRelease():
 def sendCIRelease():
     apks = os.listdir(APK_FOLDER)
     apks.sort()
-    apk = os.path.join(APK_FOLDER, apks[0])
+    file_ids = list()
+    for apk in apks:
+        apk_path = os.path.join(APK_FOLDER, apk)
+        result = sendDocument("@test_channel_nekox", path=apk_path)
+        file_ids.append(result["result"]["document"]["file_id"])
     entities = []
     message = f"CI Build\n\n{COMMIT_MESSAGE}\n\n"
     message += addEntity(entities, message, "text_link", COMMIT_HASH[0:8], f"https://github.com/NekoX-Dev/NekoX/commit/{COMMIT_HASH}")
-    sendDocument(user_id=CI_CHANNEL_ID, path = apk, message=message, )
+    sendMediaGroup(CI_CHANNEL_ID, file_ids, message=message, entities=entities)
 
 
 if __name__ == '__main__':
@@ -155,10 +175,12 @@ if __name__ == '__main__':
             CI_CHANNEL_ID = BOT_TARGET
         sendCIRelease()
     elif mode == "debug":
+        CI_CHANNEL_ID = "@test_channel_nekox"
         APK_CHANNEL_ID = "@test_channel_nekox"
         UPDATE_CHANNEL_ID = "@test_channel_nekox"
         UPDATE_METADATA_CHANNEL_ID = "@test_channel_nekox"
-        sendRelease()
+        sendCIRelease()
+        # sendRelease()
     else:
         print("unknown mode")
 

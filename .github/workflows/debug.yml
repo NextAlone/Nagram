@@ -440,8 +440,9 @@ jobs:
           export DEBUG_BUILD=true
           export NATIVE_TARGET=universal
           ./gradlew TMessagesProj:assembleMiniRelease
+          ./gradlew TMessagesProj:assembleMiniDebug
 
-          APK=$(find TMessagesProj/build/outputs/apk/mini/release -name 'NekoX*.apk')
+          APK=$(find TMessagesProj/build/outputs/apk/mini/ -name 'NekoX*.apk')
           echo "APK=$APK" >> $GITHUB_ENV
           VERSION_CODE=$(grep -E "def verCode = ([0-9]+)" TMessagesProj/build.gradle | sed "s/def verCode = //")
           VERSION_NAME=$(grep -E "def verName = " TMessagesProj/build.gradle | sed "s/def verName = //" | sed "s/\"//g")
