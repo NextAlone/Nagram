@@ -9109,28 +9109,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
                     }
                     if (finished[0]) {
-                        Uri uri;
-                        if (Build.VERSION.SDK_INT >= 24) {
-                            uri = FileProvider.getUriForFile(activity, ApplicationLoader.getApplicationId() + ".provider", zipFile);
-                        } else {
-                            uri = Uri.fromFile(zipFile);
-                        }
-
-                        Intent i = new Intent(Intent.ACTION_SEND);
-                        if (Build.VERSION.SDK_INT >= 24) {
-                            i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        }
-                        i.setType("message/rfc822");
-                        i.putExtra(Intent.EXTRA_EMAIL, "");
-                        i.putExtra(Intent.EXTRA_SUBJECT, "Logs from " + LocaleController.getInstance().formatterStats.format(System.currentTimeMillis()));
-                        i.putExtra(Intent.EXTRA_STREAM, uri);
-                        if (activity != null) {
-                            try {
-                                activity.startActivityForResult(Intent.createChooser(i, "Select email application."), 500);
-                            } catch (Exception e) {
-                                FileLog.e(e);
-                            }
-                        }
+                        ShareUtil.shareFile(activity, zipFile);
                     } else {
                         if (activity != null) {
                             Toast.makeText(activity, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred), Toast.LENGTH_SHORT).show();
@@ -9624,7 +9603,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     } else if (position == sendLogsRow) {
                         textCell.setTextAndIcon(LocaleController.getString("DebugSendLogs", R.string.DebugSendLogs), R.drawable.baseline_bug_report_24, true);
                     } else if (position == sendLastLogsRow) {
-                        textCell.setText(LocaleController.getString("DebugSendLastLogs", R.string.DebugSendLastLogs), true);
+                        textCell.setTextAndIcon(LocaleController.getString("DebugSendLastLogs", R.string.DebugSendLastLogs), R.drawable.baseline_bug_report_24 ,true);
                     } else if (position == clearLogsRow) {
                         textCell.setTextAndIcon(LocaleController.getString("DebugClearLogs", R.string.DebugClearLogs), R.drawable.baseline_delete_sweep_24, switchBackendRow != -1);
                     } else if (position == switchBackendRow) {
