@@ -3467,7 +3467,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 allowShowPinned = false;
             }
             if (allowShowPinned) {
-                headerItem.addSubItem(nkheaderbtn_show_pinned, R.drawable.deproko_baseline_pin_24, LocaleController.getString("PinnedMessage", R.string.PinnedMessage));
+                headerItem.lazilyAddSubItem(nkheaderbtn_show_pinned, R.drawable.deproko_baseline_pin_24, LocaleController.getString("PinnedMessage", R.string.PinnedMessage));
             }
             translateItem = headerItem.lazilyAddSubItem(translate, R.drawable.msg_translate, LocaleController.getString("TranslateMessage", R.string.TranslateMessage));
             updateTranslateItemVisibility();
@@ -3482,7 +3482,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 } else {
                     text = LocaleController.getString("LinkedChannelChat", R.string.LinkedChannelChat);
                 }
-                headerItem.addSubItem(nkheaderbtn_linked_chat, R.drawable.baseline_layers_24, text);
+                headerItem.lazilyAddSubItem(nkheaderbtn_linked_chat, R.drawable.baseline_layers_24, text);
             }
 
             if (currentUser != null) {
@@ -3522,11 +3522,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                 }
                 if (ChatObject.isMegagroup(currentChat) || currentChat != null && !ChatObject.isChannel(currentChat)) {
-                    headerItem.addSubItem(nkheaderbtn_zibi, R.drawable.baseline_delete_24, LocaleController.getString("DeleteAllFromSelf", R.string.DeleteAllFromSelf));
+                    headerItem.lazilyAddSubItem(nkheaderbtn_zibi, R.drawable.baseline_delete_24, LocaleController.getString("DeleteAllFromSelf", R.string.DeleteAllFromSelf));
                 }
 
                 if (currentChat != null && !ChatObject.isChannel(currentChat) && currentChat.creator) {
-                    headerItem.addSubItem(nkheaderbtn_upgrade, R.drawable.baseline_arrow_upward_24, LocaleController.getString("UpgradeGroup", R.string.UpgradeGroup));
+                    headerItem.lazilyAddSubItem(nkheaderbtn_upgrade, R.drawable.baseline_arrow_upward_24, LocaleController.getString("UpgradeGroup", R.string.UpgradeGroup));
                 }
             }
             if (currentUser != null && currentUser.self) {
