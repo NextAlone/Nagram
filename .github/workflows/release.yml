@@ -403,10 +403,6 @@ jobs:
           export VERSION_NAME="$(grep -E "def verName = " TMessagesProj/build.gradle | sed "s/def verName = //" | sed "s/\"//g")"
           python3 upload.py release
           pkill telegram-bot
-      - name: Setup upterm session
-        uses: lhotari/action-upterm@v1
-        with:
-          limit-access-to-users: luvletter2333
 
   telegram-bot-api:
     name: Telegram Bot API
