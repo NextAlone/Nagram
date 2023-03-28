@@ -1844,7 +1844,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                                 showDialog(alertDialog);
                                 TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
                                 if (button != null) {
-                                    button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
+                                    button.setTextColor(Theme.getColor(Theme.key_dialogTextRed));
                                 }
                             }
 
@@ -1875,11 +1875,13 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                                 colorPicker.setMinBrightness(0.05f);
                                 colorPicker.setMaxBrightness(0.8f);
                             }
-                            int colorsCount = accent.accentColor2 != 0 ? 2 : 1;
-                            colorPicker.setType(1, hasChanges(1), 2, colorsCount, false, 0, false);
-                            colorPicker.setColor(accent.accentColor, 0);
-                            if (accent.accentColor2 != 0) {
-                                colorPicker.setColor(accent.accentColor2, 1);
+                            if (accent != null) {
+                                int colorsCount = accent.accentColor2 != 0 ? 2 : 1;
+                                colorPicker.setType(1, hasChanges(1), 2, colorsCount, false, 0, false);
+                                colorPicker.setColor(accent.accentColor, 0);
+                                if (accent.accentColor2 != 0) {
+                                    colorPicker.setColor(accent.accentColor2, 1);
+                                }
                             }
                         } else {
                             patternLayout[a].addView(colorPicker, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.CENTER_HORIZONTAL, 0, 0, 0, 48));

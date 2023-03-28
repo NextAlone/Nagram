@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.os.SystemClock;
 import android.util.Base64;
 import android.util.SparseArray;
+import android.util.LongSparseArray;
 
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC;
@@ -32,7 +33,7 @@ public class UserConfig extends BaseController {
     //public final static int MAX_ACCOUNT_COUNT = 4;
 
     private final Object sync = new Object();
-    private boolean configLoaded;
+    private volatile boolean configLoaded;
     private TLRPC.User currentUser;
     public boolean registeredForPush;
     public int lastSendMessageId = -210000;
@@ -83,6 +84,10 @@ public class UserConfig extends BaseController {
     public volatile byte[] savedPasswordHash;
     public volatile byte[] savedSaltedPassword;
     public volatile long savedPasswordTime;
+    LongSparseArray<SaveToGallerySettingsHelper.DialogException> userSaveGalleryExceptions;
+    LongSparseArray<SaveToGallerySettingsHelper.DialogException> chanelSaveGalleryExceptions;
+    LongSparseArray<SaveToGallerySettingsHelper.DialogException> groupsSaveGalleryExceptions;
+
 
     private static SparseArray<UserConfig> Instance = new SparseArray<>();
 
@@ -137,6 +142,9 @@ public class UserConfig extends BaseController {
 
     public void saveConfig(boolean withFile) {
         NotificationCenter.getInstance(currentAccount).doOnIdle(() -> {
+            if (!configLoaded) {
+                return;
+            }
             synchronized (sync) {
                 try {
                     SharedPreferences.Editor editor = getPreferences().edit();
@@ -287,7 +295,8 @@ public class UserConfig extends BaseController {
         }
     }
 
-    public void loadConfig() {
+    public void
+    loadConfig() {
         synchronized (sync) {
             if (configLoaded) {
                 return;
@@ -427,6 +436,48 @@ public class UserConfig extends BaseController {
         }
     }
 
+    public LongSparseArray<SaveToGallerySettingsHelper.DialogException> getSaveGalleryExceptions(int type) {
+        if (type == SharedConfig.SAVE_TO_GALLERY_FLAG_PEER) {
+            if (userSaveGalleryExceptions == null) {
+                userSaveGalleryExceptions = SaveToGallerySettingsHelper.loadExceptions(ApplicationLoader.applicationContext.getSharedPreferences(SaveToGallerySettingsHelper.USERS_PREF_NAME + "_" + currentAccount, Context.MODE_PRIVATE));
+            }
+            return userSaveGalleryExceptions;
+        } else if (type == SharedConfig.SAVE_TO_GALLERY_FLAG_GROUP) {
+            if (groupsSaveGalleryExceptions == null) {
+                groupsSaveGalleryExceptions = SaveToGallerySettingsHelper.loadExceptions(ApplicationLoader.applicationContext.getSharedPreferences(SaveToGallerySettingsHelper.GROUPS_PREF_NAME + "_" + currentAccount, Context.MODE_PRIVATE));
+            }
+            return groupsSaveGalleryExceptions;
+        } else  if (type == SharedConfig.SAVE_TO_GALLERY_FLAG_CHANNELS) {
+            if (chanelSaveGalleryExceptions == null) {
+                chanelSaveGalleryExceptions = SaveToGallerySettingsHelper.loadExceptions(ApplicationLoader.applicationContext.getSharedPreferences(SaveToGallerySettingsHelper.CHANNELS_PREF_NAME + "_" + currentAccount, Context.MODE_PRIVATE));
+            }
+            return chanelSaveGalleryExceptions;
+        }
+        return null;
+    }
+
+    public void updateSaveGalleryExceptions(int type, LongSparseArray<SaveToGallerySettingsHelper.DialogException> exceptions) {
+        if (type == SharedConfig.SAVE_TO_GALLERY_FLAG_PEER) {
+            userSaveGalleryExceptions = exceptions;
+            SaveToGallerySettingsHelper.saveExceptions(
+                    ApplicationLoader.applicationContext.getSharedPreferences(SaveToGallerySettingsHelper.USERS_PREF_NAME + "_" + currentAccount, Context.MODE_PRIVATE),
+                    userSaveGalleryExceptions
+            );
+        } else if (type == SharedConfig.SAVE_TO_GALLERY_FLAG_GROUP) {
+            groupsSaveGalleryExceptions = exceptions;
+            SaveToGallerySettingsHelper.saveExceptions(
+                    ApplicationLoader.applicationContext.getSharedPreferences(SaveToGallerySettingsHelper.GROUPS_PREF_NAME + "_" + currentAccount, Context.MODE_PRIVATE),
+                    groupsSaveGalleryExceptions
+            );
+        } else  if (type == SharedConfig.SAVE_TO_GALLERY_FLAG_CHANNELS) {
+            chanelSaveGalleryExceptions = exceptions;
+            SaveToGallerySettingsHelper.saveExceptions(
+                    ApplicationLoader.applicationContext.getSharedPreferences(SaveToGallerySettingsHelper.CHANNELS_PREF_NAME + "_" + currentAccount, Context.MODE_PRIVATE),
+                    chanelSaveGalleryExceptions
+            );
+        }
+    }
+
     public void clearConfig() {
         getPreferences().edit().clear().apply();
 
@@ -482,6 +533,16 @@ public class UserConfig extends BaseController {
         getPreferences().edit().putBoolean("2pinnedDialogsLoaded" + folderId, loaded).commit();
     }
 
+    public void clearPinnedDialogsLoaded() {
+        SharedPreferences.Editor editor = getPreferences().edit();
+        for (String key : getPreferences().getAll().keySet()) {
+            if (key.startsWith("2pinnedDialogsLoaded")) {
+                editor.remove(key);
+            }
+        }
+        editor.apply();
+    }
+
     public static final int i_dialogsLoadOffsetId = 0;
     public static final int i_dialogsLoadOffsetDate = 1;
     public static final int i_dialogsLoadOffsetUserId = 2;
@@ -528,16 +589,7 @@ public class UserConfig extends BaseController {
     }
 
     public Long getEmojiStatus() {
-        if (currentUser == null) {
-            return null;
-        }
-        if (currentUser.emoji_status instanceof TLRPC.TL_emojiStatusUntil && ((TLRPC.TL_emojiStatusUntil) currentUser.emoji_status).until > (int) (System.currentTimeMillis() / 1000)) {
-            return ((TLRPC.TL_emojiStatusUntil) currentUser.emoji_status).document_id;
-        }
-        if (currentUser.emoji_status instanceof TLRPC.TL_emojiStatus) {
-            return ((TLRPC.TL_emojiStatus) currentUser.emoji_status).document_id;
-        }
-        return null;
+        return UserObject.getEmojiStatusDocumentId(currentUser);
     }
 
 
@@ -568,5 +620,10 @@ public class UserConfig extends BaseController {
 
     public void setGlobalTtl(int ttl) {
         globalTtl = ttl;
+    }
+
+    public void clearFilters() {
+        getPreferences().edit().remove("filtersLoaded").apply();
+        filtersLoaded = false;
     }
 }

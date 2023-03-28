@@ -72,6 +72,7 @@ public class NotificationCenter {
     public static final int updateMessageMedia = totalEvents++;
     public static final int replaceMessagesObjects = totalEvents++;
     public static final int didSetPasscode = totalEvents++;
+    public static final int passcodeDismissed = totalEvents++;
     public static final int twoStepPasswordChanged = totalEvents++;
     public static final int didSetOrRemoveTwoStepPassword = totalEvents++;
     public static final int didRemoveTwoStepPassword = totalEvents++;
@@ -135,6 +136,11 @@ public class NotificationCenter {
     public static final int animatedEmojiDocumentLoaded = totalEvents++;
     public static final int recentEmojiStatusesUpdate = totalEvents++;
     public static final int updateSearchSettings = totalEvents++;
+
+    public static final int messageTranslated = totalEvents++;
+    public static final int messageTranslating = totalEvents++;
+    public static final int dialogIsTranslatable = totalEvents++;
+    public static final int dialogTranslate = totalEvents++;
 
     public static final int didGenerateFingerprintKeyPair = totalEvents++;
 
@@ -205,6 +211,7 @@ public class NotificationCenter {
     public static final int updateBotMenuButton = totalEvents++;
 
     public static final int didUpdatePremiumGiftStickers = totalEvents++;
+    public static final int didUpdatePremiumGiftFieldIcon = totalEvents++;
 
     //global
     public static final int pushMessagesUpdated = totalEvents++;
@@ -233,6 +240,7 @@ public class NotificationCenter {
     public static final int didSetNewWallpapper = totalEvents++;
     public static final int proxySettingsChanged = totalEvents++;
     public static final int proxyCheckDone = totalEvents++;
+    public static final int proxyChangedByRotation = totalEvents++;
     public static final int liveLocationsChanged = totalEvents++;
     public static final int newLocationAvailable = totalEvents++;
     public static final int liveLocationsCacheChanged = totalEvents++;
@@ -271,6 +279,9 @@ public class NotificationCenter {
     public static int topicsDidLoaded = totalEvents++;
     public static int chatSwithcedToForum = totalEvents++;
     public static int didUpdateGlobalAutoDeleteTimer = totalEvents++;
+    public static int onDatabaseReset = totalEvents++;
+
+    public static boolean alreadyLogged;
 
     // custom
 
@@ -591,6 +602,12 @@ public class NotificationCenter {
             return;
         }
         objects.add(observer);
+        if (BuildVars.DEBUG_VERSION && !alreadyLogged) {
+            if (objects.size() > 1000) {
+                alreadyLogged = true;
+                FileLog.e(new RuntimeException("Total observers more than 1000, need check for memory leak. " + id), true);
+            }
+        }
     }
 
     private ArrayList<NotificationCenterDelegate> createArrayForId(int id) {

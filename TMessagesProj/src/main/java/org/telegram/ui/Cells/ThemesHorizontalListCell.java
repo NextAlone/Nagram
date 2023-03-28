@@ -83,6 +83,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
     private ArrayList<Theme.ThemeInfo> defaultThemes;
     private int currentType;
     private int prevCount;
+    private BaseFragment fragment;
 
     private class ThemesListAdapter extends RecyclerListView.SelectionAdapter {
 
@@ -691,12 +692,13 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
         }
     }
 
-    public ThemesHorizontalListCell(Context context, int type, ArrayList<Theme.ThemeInfo> def, ArrayList<Theme.ThemeInfo> custom) {
+    public ThemesHorizontalListCell(Context context, BaseFragment fragment, int type, ArrayList<Theme.ThemeInfo> def, ArrayList<Theme.ThemeInfo> custom) {
         super(context);
 
         customThemes = custom;
         defaultThemes = def;
         currentType = type;
+        this.fragment = fragment;
 
         if (type == ThemeActivity.THEME_TYPE_OTHER) {
             setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
@@ -739,7 +741,9 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 return;
             }
             if (themeInfo.info.document == null) {
-                presentFragment(new ThemeSetUrlActivity(themeInfo, null, true));
+                if (fragment != null) {
+                    fragment.presentFragment(new ThemeSetUrlActivity(themeInfo, null, true));
+                }
                 return;
             }
         }
@@ -772,6 +776,10 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
             }
         }
         EmojiThemes.saveCustomTheme(themeInfo, themeInfo.currentAccentId);
+
+        if (currentType != ThemeActivity.THEME_TYPE_NIGHT) {
+            Theme.turnOffAutoNight(fragment);
+        }
     }
 
     public void setDrawDivider(boolean draw) {
@@ -894,10 +902,6 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
     }
 
     protected void showOptionsForTheme(Theme.ThemeInfo themeInfo) {
-
-    }
-
-    protected void presentFragment(BaseFragment fragment) {
 
     }
 

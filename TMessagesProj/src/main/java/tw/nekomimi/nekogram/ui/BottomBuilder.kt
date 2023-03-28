@@ -255,6 +255,10 @@ class BottomBuilder(val ctx: Context, val needFocus: Boolean = true, val bgColor
         }
     }
 
+    fun setTitleMultipleLines(multilines: Boolean) {
+        builder.setTitleMultipleLines(multilines)
+    }
+
     fun create() = builder.create()
     fun show() = builder.show()
     fun dismiss() {

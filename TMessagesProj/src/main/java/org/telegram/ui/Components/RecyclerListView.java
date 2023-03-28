@@ -1621,12 +1621,12 @@ public class RecyclerListView extends RecyclerView {
             selectorDrawable = Theme.createRadSelectorDrawable(color, selectorRadius, 0);
         } else if (topBottomSelectorRadius > 0) {
             selectorDrawable = Theme.createRadSelectorDrawable(color, topBottomSelectorRadius, topBottomSelectorRadius);
-        } else if (selectorRadius > 0) {
+        } else if (selectorRadius > 0 && selectorType != Theme.RIPPLE_MASK_CIRCLE_20DP) {
             selectorDrawable = Theme.createSimpleSelectorRoundRectDrawable(selectorRadius, 0, color, 0xff000000);
         } else if (selectorType == 2) {
             selectorDrawable = Theme.getSelectorDrawable(color, false);
         } else {
-            selectorDrawable = Theme.createSelectorDrawable(color, selectorType);
+            selectorDrawable = Theme.createSelectorDrawable(color, selectorType, selectorRadius);
         }
         selectorDrawable.setCallback(this);
     }
@@ -1851,6 +1851,10 @@ public class RecyclerListView extends RecyclerView {
 
     public void setListSelectorColor(int color) {
         Theme.setSelectorDrawableColor(selectorDrawable, color, true);
+    }
+
+    public Integer getSelectorColor(int position) {
+        return null;
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -2270,6 +2274,10 @@ public class RecyclerListView extends RecyclerView {
         if (positionChanged) {
             selectorDrawable.setVisible(false, false);
             selectorDrawable.setState(StateSet.NOTHING);
+        }
+        Integer color = getSelectorColor(position);
+        if (color != null) {
+            setListSelectorColor(color);
         }
         selectorDrawable.setBounds(selectorRect);
         if (positionChanged) {

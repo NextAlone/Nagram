@@ -10,8 +10,6 @@ package org.telegram.messenger;
 
 import android.util.Log;
 
-import cn.hutool.core.util.StrUtil;
-
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
@@ -25,7 +23,9 @@ import org.telegram.ui.LaunchActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Locale;
 
@@ -111,7 +111,7 @@ public class FileLog {
                 }
             });
         } catch (Throwable e) {
-            FileLog.e(e);
+            FileLog.e(e, BuildVars.DEBUG_PRIVATE_VERSION);
         }
     }
 
@@ -143,7 +143,6 @@ public class FileLog {
                 }
             });
         } catch (Throwable e) {
-            FileLog.e(e);
         }
     }
 
@@ -157,6 +156,7 @@ public class FileLog {
             privateFields.add("bytes");
             privateFields.add("secret");
             privateFields.add("stripped_thumb");
+            privateFields.add("strippedBitmap");
 
             privateFields.add("networkType");
             privateFields.add("disableFree");
@@ -193,13 +193,10 @@ public class FileLog {
         dateFormat = FastDateFormat.getInstance("dd_MM_yyyy_HH_mm_ss", Locale.US);
         String date = dateFormat.format(System.currentTimeMillis());
         try {
-            File sdCard = ApplicationLoader.applicationContext.getExternalFilesDir(null);
-            if (sdCard == null) {
+            File dir = AndroidUtilities.getLogsDir();
+            if (dir == null) {
                 return;
             }
-            File dir = new File(sdCard.getAbsolutePath() + "/logs");
-            dir.mkdirs();
-
             currentFile = new File(dir, date + ".txt");
             tlRequestsFile = new File(dir, date + "_mtproto.txt");
         } catch (Exception e) {
@@ -228,37 +225,121 @@ public class FileLog {
     }
 
     public static String getNetworkLogPath() {
-        if (BuildVars.DEBUG_PRIVATE_VERSION) return "/dev/null";
+        if (!BuildVars.LOGS_ENABLED) {
+            return "";
+        }
+        try {
+            File dir = AndroidUtilities.getLogsDir();
+            if (dir == null) {
+                return "";
+            }
+            getInstance().networkFile = new File(dir, getInstance().dateFormat.format(System.currentTimeMillis()) + "_net.txt");
+            return getInstance().networkFile.getAbsolutePath();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
         return "";
     }
 
-    private static String mkTag() {
-
-        final StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        return StrUtil.subAfter(stackTrace[4].getClassName(), ".", true);
-
-    }
-
-    private static String mkMessage(Throwable e) {
-        String message = e.getMessage();
-        if (message != null) return e.getClass().getSimpleName() + ": " + message;
-        return e.getClass().getSimpleName();
+    public static String getTonlibLogPath() {
+        if (!BuildVars.LOGS_ENABLED) {
+            return "";
+        }
+        try {
+            File dir = AndroidUtilities.getLogsDir();
+            if (dir == null) {
+                return "";
+            }
+            getInstance().tonlibFile = new File(dir, getInstance().dateFormat.format(System.currentTimeMillis()) + "_tonlib.txt");
+            return getInstance().tonlibFile.getAbsolutePath();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public static void e(final String message, final Throwable exception) {
-        Log.e(mkTag(), message, exception);
+        if (!BuildVars.LOGS_ENABLED) {
+            return;
+        }
+        ensureInitied();
+        Log.e(tag, message, exception);
+        if (getInstance().streamWriter != null) {
+            getInstance().logQueue.postRunnable(() -> {
+                try {
+                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + message + "\n");
+                    getInstance().streamWriter.write(exception.toString());
+                    getInstance().streamWriter.flush();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     }
 
     public static void e(final String message) {
-        Log.e(mkTag(), message);
+        if (!BuildVars.LOGS_ENABLED) {
+            return;
+        }
+        ensureInitied();
+        Log.e(tag, message);
+        if (getInstance().streamWriter != null) {
+            getInstance().logQueue.postRunnable(() -> {
+                try {
+                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + message + "\n");
+                    getInstance().streamWriter.flush();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     }
 
     public static void e(final Throwable e) {
-        Log.e(mkTag(), mkMessage(e), e);
+        e(e, true);
     }
 
-    public static void e(final Throwable e, boolean dummyException) {
-        e(e);
+    public static void e(final Throwable e, boolean logToAppCenter) {
+        if (!BuildVars.LOGS_ENABLED) {
+            return;
+        }
+//        if (BuildVars.DEBUG_VERSION && needSent(e) && logToAppCenter) {
+//            AndroidUtilities.appCenterLog(e);
+//        }
+        if (BuildVars.DEBUG_VERSION && e.getMessage() != null && e.getMessage().contains("disk image is malformed") && !databaseIsMalformed) {
+            FileLog.d("copy malformed files");
+            databaseIsMalformed = true;
+            File filesDir = ApplicationLoader.getFilesDirFixed();
+            filesDir = new File(filesDir, "malformed_database/");
+            filesDir.mkdirs();
+            ArrayList<File> malformedFiles = MessagesStorage.getInstance(UserConfig.selectedAccount).getDatabaseFiles();
+            for (int i = 0; i < malformedFiles.size(); i++) {
+                try {
+                    AndroidUtilities.copyFile(malformedFiles.get(i), new File(filesDir, malformedFiles.get(i).getName()));
+                } catch (IOException ex) {
+                    FileLog.e(ex);
+                }
+            }
+        }
+        ensureInitied();
+        e.printStackTrace();
+        if (getInstance().streamWriter != null) {
+            getInstance().logQueue.postRunnable(() -> {
+
+                try {
+                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + e + "\n");
+                    StackTraceElement[] stack = e.getStackTrace();
+                    for (int a = 0; a < stack.length; a++) {
+                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + stack[a] + "\n");
+                    }
+                    getInstance().streamWriter.flush();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            });
+        } else {
+            e.printStackTrace();
+        }
     }
 
     public static void fatal(final Throwable e) {
@@ -272,25 +353,108 @@ public class FileLog {
 //        if (BuildVars.DEBUG_VERSION && needSent(e) && logToAppCenter) {
 //            AndroidUtilities.appCenterLog(e);
 //        }
-        Log.wtf(mkTag(), mkMessage(e), e);
+        ensureInitied();
+        e.printStackTrace();
+        if (getInstance().streamWriter != null) {
+            getInstance().logQueue.postRunnable(() -> {
+                try {
+                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + e + "\n");
+                    StackTraceElement[] stack = e.getStackTrace();
+                    for (int a = 0; a < stack.length; a++) {
+                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: " + stack[a] + "\n");
+                    }
+                    getInstance().streamWriter.flush();
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
 
+                if (BuildVars.DEBUG_PRIVATE_VERSION) {
+                    System.exit(2);
+                }
+            });
+        } else {
+            e.printStackTrace();
+            if (BuildVars.DEBUG_PRIVATE_VERSION) {
+                System.exit(2);
+            }
+        }
     }
 
     private static boolean needSent(Throwable e) {
-        if (e instanceof InterruptedException || e instanceof MediaCodecVideoConvertor.ConversionCanceledException) {
+        if (e instanceof InterruptedException || e instanceof MediaCodecVideoConvertor.ConversionCanceledException || e instanceof IgnoreSentException) {
             return false;
         }
         return true;
     }
 
     public static void d(final String message) {
-        if (!BuildVars.LOGS_ENABLED) return;
-        Log.d(mkTag(), message);
+        if (!BuildVars.LOGS_ENABLED) {
+            return;
+        }
+        ensureInitied();
+        Log.d(tag, message);
+        if (getInstance().streamWriter != null) {
+            getInstance().logQueue.postRunnable(() -> {
+                try {
+                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " D/tmessages: " + message + "\n");
+                    getInstance().streamWriter.flush();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    if (AndroidUtilities.isENOSPC(e)) {
+                        LaunchActivity.checkFreeDiscSpaceStatic(1);
+                    }
+                }
+            });
+        }
     }
 
     public static void w(final String message) {
-        if (!BuildVars.LOGS_ENABLED) return;
-        Log.w(mkTag(), message);
+        if (!BuildVars.LOGS_ENABLED) {
+            return;
+        }
+        ensureInitied();
+        Log.w(tag, message);
+        if (getInstance().streamWriter != null) {
+            getInstance().logQueue.postRunnable(() -> {
+                try {
+                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " W/tmessages: " + message + "\n");
+                    getInstance().streamWriter.flush();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     }
 
+    public static void cleanupLogs() {
+        ensureInitied();
+        File dir = AndroidUtilities.getLogsDir();
+        if (dir == null) {
+            return;
+        }
+        File[] files = dir.listFiles();
+        if (files != null) {
+            for (int a = 0; a < files.length; a++) {
+                File file = files[a];
+                if (getInstance().currentFile != null && file.getAbsolutePath().equals(getInstance().currentFile.getAbsolutePath())) {
+                    continue;
+                }
+                if (getInstance().networkFile != null && file.getAbsolutePath().equals(getInstance().networkFile.getAbsolutePath())) {
+                    continue;
+                }
+                if (getInstance().tonlibFile != null && file.getAbsolutePath().equals(getInstance().tonlibFile.getAbsolutePath())) {
+                    continue;
+                }
+                file.delete();
+            }
+        }
+    }
+
+    public static class IgnoreSentException extends Exception{
+
+        public IgnoreSentException(String e) {
+            super(e);
+        }
+
+    }
 }

@@ -14,6 +14,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MediaController;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
 
@@ -354,7 +355,9 @@ public class MediaCodecVideoConvertor {
                                 }
                                 avatarStartTime = 0;
                                 //this encoder work with bitrate better, prevent case when result video max 2MB
-                                encoderName = "OMX.google.h264.encoder";
+                                if (originalBitrate >= 15_000_000) {
+                                    encoderName = "OMX.google.h264.encoder";
+                                }
                             } else if (bitrate <= 0) {
                                 bitrate = 921600;
                             }
@@ -822,7 +825,7 @@ public class MediaCodecVideoConvertor {
 
         long timeLeft = System.currentTimeMillis() - time;
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.d("compression completed time=" + timeLeft + " needCompress=" + needCompress + " w=" + resultWidth + " h=" + resultHeight + " bitrate=" + bitrate);
+            FileLog.d("compression completed time=" + timeLeft + " needCompress=" + needCompress + " w=" + resultWidth + " h=" + resultHeight + " bitrate=" + bitrate + " file size=" + cacheFile.length());
         }
 
         return error;
@@ -992,8 +995,12 @@ public class MediaCodecVideoConvertor {
             final int dstHeight, boolean external) {
 
         final float kernelSize = Utilities.clamp((float) (Math.max(srcWidth, srcHeight) / (float) Math.max(dstHeight, dstWidth)) * 0.8f, 2f, 1f);
-        final int kernelRadius = (int) kernelSize;
+        int kernelRadius = (int) kernelSize;
+        if (kernelRadius > 1 && SharedConfig.deviceIsAverage()) {
+            kernelRadius = 1;
+        }
         FileLog.d("source size " + srcWidth + "x" + srcHeight + "    dest size " + dstWidth + dstHeight + "   kernelRadius " + kernelRadius);
+
         if (external) {
             return "#extension GL_OES_EGL_image_external : require\n" +
                     "precision mediump float;\n" +
