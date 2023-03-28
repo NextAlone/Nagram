@@ -125,6 +125,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class SelectAnimatedEmojiDialog extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
     public final static int TYPE_EMOJI_STATUS = 0;
@@ -561,6 +563,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
             emojiTabs.recentTab.setOnLongClickListener(e -> {
                 onRecentLongClick();
                 try {
+                    if (!NekoConfig.disableVibration.Bool())
                     performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                 } catch (Exception ignore) {
                 }
@@ -757,6 +760,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
             public boolean onItemClick(View view, int position, float x, float y) {
                 if (view instanceof ImageViewEmoji && type == TYPE_REACTIONS) {
                     incrementHintUse();
+                    if (!NekoConfig.disableVibration.Bool())
                     performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                     ImageViewEmoji imageViewEmoji = (ImageViewEmoji) view;
                     if (!imageViewEmoji.isDefaultReaction && !UserConfig.getInstance(currentAccount).isPremium()) {
@@ -821,6 +825,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
                     dialog.show();
 
                     try {
+                        if (!NekoConfig.disableVibration.Bool())
                         view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                     } catch (Exception ignore) {}
                     return true;
@@ -863,6 +868,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
                 }
                 if (type != TYPE_REACTIONS) {
                     try {
+                        if (!NekoConfig.disableVibration.Bool())
                         performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                     } catch (Exception ignore) {}
                 }
@@ -870,6 +876,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
                 onEmojiClick(view, null);
                 if (type != TYPE_REACTIONS) {
                     try {
+                        if (!NekoConfig.disableVibration.Bool())
                         performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                     } catch (Exception ignore) {}
                 }
@@ -878,6 +885,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
                 expand(position, button);
                 if (type != TYPE_REACTIONS) {
                     try {
+                        if (!NekoConfig.disableVibration.Bool())
                         performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                     } catch (Exception ignore) {}
                 }
@@ -4794,6 +4802,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
             }, () -> {
                 if (date != null) {
                     try {
+                        if (!NekoConfig.disableVibration.Bool())
                         performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                     } catch (Exception ignore) {}
                     onEndPartly(date);

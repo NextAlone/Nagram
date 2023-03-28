@@ -59,6 +59,8 @@ import org.telegram.ui.Components.TextStyleSpan;
 
 import java.util.ArrayList;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class PrivacySettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private ListAdapter listAdapter;
@@ -334,6 +336,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
             } else if (position == voicesRow) {
                 if (!getUserConfig().isPremium()) {
                     try {
+                        if (!NekoConfig.disableVibration.Bool())
                         fragmentView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                     } catch (Exception e) {
                         FileLog.e(e);
@@ -370,6 +373,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                             Bulletin.make(PrivacySettingsActivity.this, layout, duration).show();
 
                             try {
+                                if (!NekoConfig.disableVibration.Bool())
                                 fragmentView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                             } catch (Exception ignored) {}
 

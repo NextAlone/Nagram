@@ -102,6 +102,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class QrActivity extends BaseFragment {
 
     private static final ArrayMap<String, int[]> qrColorsMap = new ArrayMap<>();
@@ -1055,6 +1057,7 @@ public class QrActivity extends BaseFragment {
                                 }
                             } catch (Exception ignore) {
                                 try {
+                                    if (!NekoConfig.disableVibration.Bool())
                                     performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                                 } catch (Exception ignore2) {}
                             }

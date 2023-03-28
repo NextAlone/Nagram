@@ -223,7 +223,8 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
         if (bestView != null) {
             chatActivity.restartSticker(bestView);
             if (!EmojiData.hasEmojiSupportVibration(bestView.getMessageObject().getStickerEmoji()) && !bestView.getMessageObject().isPremiumSticker() && !bestView.getMessageObject().isAnimatedAnimatedEmoji()) {
-                bestView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                if (!NekoConfig.disableVibration.Bool())
+                    bestView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
             }
             showAnimationForCell(bestView, animation, false, true);
         }
@@ -347,7 +348,8 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
         boolean show = showAnimationForCell(view, -1, userTapped, false);
 
         if (userTapped && show && !EmojiData.hasEmojiSupportVibration(view.getMessageObject().getStickerEmoji()) && !view.getMessageObject().isPremiumSticker() && !view.getMessageObject().isAnimatedAnimatedEmoji()) {
-            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+            if (!NekoConfig.disableVibration.Bool())
+                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
         }
         if (view.getMessageObject().isPremiumSticker() || (!userTapped && view.getMessageObject().isAnimatedEmojiStickerSingle())) {
             view.getMessageObject().forcePlayEffect = false;
@@ -621,7 +623,8 @@ public class EmojiAnimationsOverlay implements NotificationCenter.NotificationCe
                         @Override
                         public void onAnimationReady(ImageReceiver imageReceiver) {
                             if (sendTap && messageObject.isAnimatedAnimatedEmoji() && imageReceiver.getLottieAnimation() != null && !imageReceiver.getLottieAnimation().hasVibrationPattern()) {
-                                view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+                                if (!NekoConfig.disableVibration.Bool())
+                                    view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                             }
                         }
                     });

@@ -368,7 +368,7 @@ public class ContentPreviewViewer {
 
                 if (!NekoConfig.disableVibration.Bool())
                     containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-} else if (currentContentType == CONTENT_TYPE_EMOJI && delegate != null) {
+            } else if (currentContentType == CONTENT_TYPE_EMOJI && delegate != null) {
                 menuVisible = true;
                 containerView.invalidate();
                 ArrayList<CharSequence> items = new ArrayList<>();
@@ -481,7 +481,8 @@ public class ContentPreviewViewer {
                 popupWindow.showAtLocation(containerView, 0, (int) ((containerView.getMeasuredWidth() - previewMenu.getMeasuredWidth()) / 2f), y);
                 ActionBarPopupWindow.startAnimation(previewMenu);
 
-                containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                if (!NekoConfig.disableVibration.Bool())
+                    containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
 
                 if (moveY != 0) {
                     if (finalMoveY == 0) {

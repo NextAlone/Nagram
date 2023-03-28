@@ -10106,6 +10106,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 new SearchResult(123, LocaleController.getString("PrivacyVoiceMessages", R.string.PrivacyVoiceMessages), LocaleController.getString("PrivacySettings", R.string.PrivacySettings), R.drawable.msg_secret, () -> {
                     if (!getUserConfig().isPremium()) {
                         try {
+                            if (!NekoConfig.disableVibration.Bool())
                             fragmentView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                         } catch (Exception e) {
                             FileLog.e(e);
