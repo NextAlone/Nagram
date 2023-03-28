@@ -3394,7 +3394,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 AlertDialog pro = AlertUtil.showProgress(getParentActivity());
                 pro.show();
                 UIUtil.runOnIoDispatcher(() -> {
-                    FileUtil.delete(new File(EnvUtil.getTelegramPath(), "logs"));
+                    FileUtil.delete(AndroidUtilities.getLogsDir());
                     ThreadUtil.sleep(100L);
                     LangsKt.uDismiss(pro);
                 });
@@ -9039,6 +9039,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     return;
                 }
 
+                File logcatFile = new File(dir, "NekoX-" + System.currentTimeMillis() + ".log");
+                try {
+                    RuntimeUtil.exec("logcat", "-df", logcatFile.getPath()).waitFor();
+                    RuntimeUtil.exec("logcat", "-c").waitFor();
+                } catch (Exception e) {
+                    AlertUtil.showToast(e);
+                }
+
                 File zipFile = new File(dir, "logs.zip");
                 if (zipFile.exists()) {
                     zipFile.delete();
@@ -9046,18 +9054,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
                 ArrayList<File> files = new ArrayList<>();
 
-                File[] logFiles = dir.listFiles();
-                for (File f : logFiles) {
-                    files.add(f);
-                }
+                files.addAll(Arrays.asList(dir.listFiles()));
 
                 File filesDir = ApplicationLoader.getFilesDirFixed();
                 filesDir = new File(filesDir, "malformed_database/");
                 if (filesDir.exists() && filesDir.isDirectory()) {
                     File[] malformedDatabaseFiles = filesDir.listFiles();
-                    for (File file : malformedDatabaseFiles) {
-                        files.add(file);
-                    }
+                    files.addAll(Arrays.asList(malformedDatabaseFiles));
                 }
 
                 boolean[] finished = new boolean[1];
