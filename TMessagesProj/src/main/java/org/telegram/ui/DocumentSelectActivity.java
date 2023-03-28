@@ -653,7 +653,7 @@ public class DocumentSelectActivity extends BaseFragment {
 
         } else {
 
-            writeButton.setImageResource(R.drawable.msg_check);
+            writeButton.setImageResource(R.drawable.baseline_check_circle_24);
 
         }
 

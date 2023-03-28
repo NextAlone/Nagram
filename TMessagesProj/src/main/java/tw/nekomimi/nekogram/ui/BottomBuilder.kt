@@ -224,7 +224,7 @@ class BottomBuilder(val ctx: Context, val needFocus: Boolean = true, val bgColor
                 listener?.invoke(this)
             }
             if (red) {
-                setColors("key_dialogTextRed2", "key_dialogTextRed2")
+                setColors("key_dialogTextRed", "key_dialogTextRed")
             }
             this@BottomBuilder.rootView.addView(this, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, rtl))
         }
