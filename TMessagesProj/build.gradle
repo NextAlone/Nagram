@@ -3,7 +3,7 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
-def verName = "9.5.5-preview01"
+def verName = "9.5.6-preview01"
 def verCode = 725
 
 if (System.getenv("DEBUG_BUILD") == "true") {
