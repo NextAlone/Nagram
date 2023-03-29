@@ -238,7 +238,7 @@ public class ContentPreviewViewer {
                     }
                     if (delegate.canSchedule()) {
                         items.add(LocaleController.getString("Schedule", R.string.Schedule));
-                        icons.add(R.drawable.baseline_timer_24);
+                        icons.add(R.drawable.msg_timer);
                         actions.add(3);
                     }
                     if (currentStickerSet != null && delegate.needOpen()) {
@@ -519,7 +519,7 @@ public class ContentPreviewViewer {
                 }
                 if (delegate.canSchedule()) {
                     items.add(LocaleController.getString("Schedule", R.string.Schedule));
-                    icons.add(R.drawable.baseline_timer_24);
+                    icons.add(R.drawable.msg_timer);
                     actions.add(3);
                 }
 

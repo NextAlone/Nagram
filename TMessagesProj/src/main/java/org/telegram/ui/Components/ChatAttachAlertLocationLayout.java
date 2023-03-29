@@ -1685,7 +1685,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                     if (activity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     BottomBuilder builder = new BottomBuilder(activity);
                     builder.addTitle(LocaleController.getString("PermissionNoLocation", R.string.PermissionNoLocation), true);
-                    builder.addItem(LocaleController.getString("Ok", R.string.OK),R.drawable.baseline_check_circle_24, __ -> {
+                    builder.addItem(LocaleController.getString("Ok", R.string.OK),R.drawable.msg_check, __ -> {
                         activity.requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 2);
                         return Unit.INSTANCE;
                     });

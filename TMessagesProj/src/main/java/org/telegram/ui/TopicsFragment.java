@@ -688,9 +688,9 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
         }
         other = menu.addItem(0, R.drawable.ic_ab_other, themeDelegate);
         other.addSubItem(toggle_id, R.drawable.baseline_forum_24, LocaleController.getString("TopicViewAsMessages", R.string.TopicViewAsMessages));
-        addMemberSubMenu = other.addSubItem(add_member_id, R.drawable.baseline_person_add_24, LocaleController.getString("AddMember", R.string.AddMember));
-        createTopicSubmenu = other.addSubItem(create_topic_id, R.drawable.baseline_group_add_24, LocaleController.getString("CreateTopic", R.string.CreateTopic));
-        deleteChatSubmenu = other.addSubItem(delete_chat_id, R.drawable.baseline_exit_to_app_24, LocaleController.getString("LeaveMegaMenu", R.string.LeaveMegaMenu), themeDelegate);
+        addMemberSubMenu = other.addSubItem(add_member_id, R.drawable.menu_invite, LocaleController.getString("AddMember", R.string.AddMember));
+        createTopicSubmenu = other.addSubItem(create_topic_id, R.drawable.groups_create, LocaleController.getString("CreateTopic", R.string.CreateTopic));
+        deleteChatSubmenu = other.addSubItem(delete_chat_id, R.drawable.menu_newphone, LocaleController.getString("LeaveMegaMenu", R.string.LeaveMegaMenu), themeDelegate);
 
         avatarContainer = new ChatAvatarContainer(context, this, false);
         avatarContainer.getAvatarImageView().setRoundRadius(AndroidUtilities.dp(16));
@@ -1897,7 +1897,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
 
         if (ChatObject.canDeleteTopic(currentAccount, getCurrentChat(), topic)) {
             ActionBarMenuSubItem deleteItem = new ActionBarMenuSubItem(getParentActivity(), false, true);
-            deleteItem.setTextAndIcon(LocaleController.getPluralString("DeleteTopics", 1), R.drawable.baseline_delete_24);
+            deleteItem.setTextAndIcon(LocaleController.getPluralString("DeleteTopics", 1), R.drawable.msg_delete);
             deleteItem.setIconColor(getThemedColor(Theme.key_dialogRedIcon));
             deleteItem.setTextColor(getThemedColor(Theme.key_dialogTextRed));
             deleteItem.setMinimumWidth(160);

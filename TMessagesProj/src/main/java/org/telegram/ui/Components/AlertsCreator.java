@@ -227,7 +227,7 @@ public class AlertsCreator {
     public static BottomBuilder createApkRestrictedDialog(Context ctx, Theme.ResourcesProvider resourcesProvider) {
         BottomBuilder builder = new BottomBuilder(ctx);
         builder.addTitle(LocaleController.getString("ApkRestricted", R.string.ApkRestricted));
-        builder.addItem(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), R.drawable.baseline_settings_24, (i) -> {
+        builder.addItem(LocaleController.getString("PermissionOpenSettings", R.string.PermissionOpenSettings), R.drawable.menu_settings, (i) -> {
             try {
                 ctx.startActivity(new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:" + ctx.getPackageName())));
             } catch (Exception e) {

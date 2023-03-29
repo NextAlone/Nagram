@@ -2045,7 +2045,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             attachButton = new ImageView(context);
             attachButton.setScaleType(ImageView.ScaleType.CENTER);
             attachButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_chat_messagePanelIcons), PorterDuff.Mode.SRC_IN));
-            attachButton.setImageResource(R.drawable.deproko_baseline_attach_26);
+            attachButton.setImageResource(R.drawable.input_attach);
             if (Build.VERSION.SDK_INT >= 21) {
                 attachButton.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector)));
             }
@@ -3699,9 +3699,9 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             if (scheduleButtonValue) {
                 ActionBarMenuSubItem scheduleButton = new ActionBarMenuSubItem(getContext(), true, !sendWithoutSoundButtonValue, resourcesProvider);
                 if (self) {
-                    scheduleButton.setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.baseline_date_range_24);
+                    scheduleButton.setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.msg_calendar);
                 } else {
-                    scheduleButton.setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.baseline_date_range_24);
+                    scheduleButton.setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.msg_calendar);
                 }
                 scheduleButton.setMinimumWidth(AndroidUtilities.dp(196));
                 scheduleButton.setOnClickListener(v -> {
@@ -8583,7 +8583,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             } else {
                 if (!canShowBotsMenu && !NaConfig.INSTANCE.getHideBotButtonInInputField().Bool()) {
                     createBotButton();
-                    botButtonDrawable.setIcon(R.drawable.deproko_baseline_bots_command_26, true);
+                    botButtonDrawable.setIcon(R.drawable.input_bot1, true);
                     botButton.setContentDescription(LocaleController.getString("AccDescrBotCommands", R.string.AccDescrBotCommands));
                     botButton.setVisibility(VISIBLE);
                 } else if (botButton != null) {
