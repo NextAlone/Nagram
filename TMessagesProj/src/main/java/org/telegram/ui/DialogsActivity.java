@@ -3091,7 +3091,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             hasUnread = true;
                         }
                     }
-                    for (int a = 0, N = 2 + (!defaultTab ? 1 : 0) + (hasUnread ? 1 : 0); a < N; a++) {
+                    for (int a = 0, N = 4; a < N; a++) {
                         ActionBarMenuSubItem cell = new ActionBarMenuSubItem(getParentActivity(), a == 0, a == N - 1);
                         if (a == 0) {
                             if (getMessagesController().dialogFilters.size() <= 1) continue;
@@ -3102,10 +3102,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             } else {
                                 cell.setTextAndIcon(LocaleController.getString("FilterEdit", R.string.FilterEdit), R.drawable.msg_edit);
                             }
-                        } else if (a == 2 && hasUnread) {
-                            if (N == 3) continue;
+                        } else if (a == 2) {
+                            if (!hasUnread) continue;
                             cell.setTextAndIcon(LocaleController.getString("MarkAllAsRead", R.string.MarkAllAsRead), R.drawable.msg_markread);
                         } else {
+                            if (defaultTab) continue;
                             cell.setTextAndIcon(LocaleController.getString("FilterDeleteItem", R.string.FilterDeleteItem), R.drawable.msg_delete);
                         }
                         scrimPopupWindowItems[a] = cell;
@@ -3123,28 +3124,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                 } else {
                                     presentFragment(new FilterCreateActivity(dialogFilter));
                                 }
-                            } else if (i == 2 && finalHasUnread) {
-                                markDialogsAsRead(dialogs);
                             } else if (i == 2) {
-                                showDeleteAlert(dialogFilter);
+                                if (finalHasUnread)
+                                    markDialogsAsRead(dialogs);
                             } else {
-                                if (dialogFilter == null) {
-                                    int folderId = tabView.getId() == Integer.MAX_VALUE ? 0 : -1;
-                                    getMessagesStorage().readAllDialogs(folderId);
-                                } else {
-                                    if (dialogFilter.dialogs.isEmpty()) {
-                                        getMessagesController().loadTabDialogs(dialogFilter);
-                                    }
-                                    for (TLRPC.Dialog dialog : dialogFilter.dialogs) {
-                                        if (dialog.unread_count == 0 && dialog.unread_mentions_count == 0)
-                                            continue;
-                                        if (getMessagesController().isForum(dialog.id)) {
-                                            getMessagesController().markAllTopicsAsRead(dialog.id);
-                                        }
-                                        getMessagesController().markDialogAsRead(dialog.id, dialog.top_message, dialog.top_message, dialog.last_message_date, false, 0, dialog.unread_count, true, 0);
-                                    }
-                                }
-
+                                showDeleteAlert(dialogFilter);
                             }
                             if (scrimPopupWindow != null) {
                                 scrimPopupWindow.dismiss();
