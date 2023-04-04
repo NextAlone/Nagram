@@ -303,7 +303,11 @@ public class ApplicationLoader extends Application {
         Utilities.stageQueue.postRunnable(() -> SignturesKt.checkMT(this));
 
         NativeLoader.initNativeLibs(ApplicationLoader.applicationContext);
-        ConnectionsManager.native_setJava(false);
+        try {
+            ConnectionsManager.native_setJava(false);
+        } catch (UnsatisfiedLinkError error) {
+            throw new RuntimeException("can't load native libraries " +  Build.CPU_ABI + " lookup folder " + NativeLoader.getAbiFolder());
+        }
         new ForegroundDetector(this) {
             @Override
             public void onActivityStarted(Activity activity) {
