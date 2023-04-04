@@ -2067,6 +2067,8 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
 
             @Override
             public boolean onTouchEvent(MotionEvent motionEvent) {
+                if (NekoConfig.useChatAttachMediaMenu.Bool())
+                    return super.onTouchEvent(motionEvent);
                 createRecordCircle();
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     if (recordCircle.isSendButtonVisible()) {
@@ -2238,6 +2240,30 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 return true;
             }
         };
+        if (NekoConfig.useChatAttachMediaMenu.Bool()) {
+            audioVideoButtonContainer.setOnClickListener(v -> {
+                createRecordAudioPanel();
+                createRecordCircle();
+                if (recordCircle.isSendButtonVisible()) {
+                    if (!hasRecordVideo || calledRecordRunnable) {
+                        startedDraggingX = -1;
+                        if (hasRecordVideo && isInVideoMode) {
+                            delegate.needStartRecordVideo(1, true, 0);
+                        } else {
+                            if (recordingAudioVideo && isInScheduleMode()) {
+                                AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), (notify, scheduleDate) -> MediaController.getInstance().stopRecording(1, notify, scheduleDate), () -> MediaController.getInstance().stopRecording(0, false, 0), null);
+                            }
+                            MediaController.getInstance().stopRecording(isInScheduleMode() ? 3 : 1, true, 0);
+                            delegate.needStartRecordAudio(0);
+                        }
+                        recordingAudioVideo = false;
+                        updateRecordInterface(RECORD_STATE_SENDING);
+                    }
+                    return;
+                }
+                onMenuClick(v);
+            });
+        }
         audioVideoButtonContainer.setSoundEffectsEnabled(false);
         sendButtonContainer.addView(audioVideoButtonContainer, LayoutHelper.createFrame(48, 48));
         audioVideoButtonContainer.setFocusable(true);
@@ -2408,7 +2434,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
     //            view.onTouchEvent(motionEvent);
     //            return true;
     //        });
-        }
+//        }
 
         audioVideoSendButton = new ChatActivityEnterViewAnimatedIconView(context, this);
         audioVideoSendButton.setFocusable(true);

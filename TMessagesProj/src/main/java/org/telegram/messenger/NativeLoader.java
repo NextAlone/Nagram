@@ -11,6 +11,7 @@ package org.telegram.messenger;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.os.Build;
 
 import java.io.File;
 
