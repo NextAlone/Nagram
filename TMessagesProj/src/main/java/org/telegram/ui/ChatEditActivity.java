@@ -1537,7 +1537,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                         } else {
                             count = forum ? 14 : 13;
                         }
-                        blockCell.setTextAndValueAndIcon(LocaleController.getString("ChannelPermissions", R.string.ChannelPermissions), String.format("%d/%d", count, forum ? 14 : 13), animated, R.drawable.msg_permissions, true);
+                        blockCell.setTextAndValue(LocaleController.getString("ChannelPermissions", R.string.ChannelPermissions), String.format("%d/%d", count, forum ? 14 : 13), animated, true);
                     }
                     if (memberRequestsCell != null) {
                         memberRequestsCell.setTextAndValue(LocaleController.getString("MemberRequests", R.string.MemberRequests), String.format("%d", info.requests_pending), logCell != null && logCell.getVisibility() == View.VISIBLE);
