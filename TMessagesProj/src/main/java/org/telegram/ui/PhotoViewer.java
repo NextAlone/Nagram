@@ -4420,7 +4420,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     }
 
                     if (isChannel && msgs.size() <= 1) {
-                        showShareAlert(msgs);
+                        showForward(msgs, id == gallery_menu_send_noquote);
                     } else if (msgs.size() > 1) {
                         boolean photos = true;
                         for (int i = 0; i < msgs.size(); ++i) {
@@ -4437,10 +4437,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                                 .setNegativeButton((photos ? LocaleController.getString("ThisPhoto", R.string.ThisPhoto) : LocaleController.getString("ThisMedia", R.string.ThisMedia)), (di, a) -> {
                                     ArrayList<MessageObject> singleMessage = new ArrayList<>(1);
                                     singleMessage.add(currentMessageObject);
-                                    showShareAlert(singleMessage);
+                                    showForward(singleMessage, id == gallery_menu_send_noquote);
                                 })
                                 .setPositiveButton(photos ? LocaleController.formatPluralString("AllNPhotos", msgs.size()) : LocaleController.formatPluralString("AllNMedia", msgs.size()), (di, a) -> {
-                                    showShareAlert(msgs);
+                                    showForward(msgs, id == gallery_menu_send_noquote);
                                 })
                                 .setNeutralButton(LocaleController.getString("Cancel", R.string.Cancel), (di, a) -> {
                                     di.dismiss();
@@ -6980,6 +6980,65 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             }
             closePhoto(false, false);
         }
+    }
+
+    private void showForward(ArrayList<MessageObject> fmessages, boolean noQuote) {
+        Bundle args = new Bundle();
+        args.putBoolean("onlySelect", true);
+        args.putInt("dialogsType", 3);
+        DialogsActivity fragment = new DialogsActivity(args);
+        final ChatActivity parentChatActivityFinal = parentChatActivity;
+        fragment.setDelegate((fragment1, dids, message, param, topicsFragment) -> {
+            if (dids.size() > 1 || dids.get(0).dialogId == UserConfig.getInstance(currentAccount).getClientUserId() || message != null) {
+                for (int a = 0; a < dids.size(); a++) {
+                    long did = dids.get(a).dialogId;
+                    if (message != null) {
+                        SendMessagesHelper.getInstance(currentAccount).sendMessage(message.toString(), did, null, null, null, true, null, null, null, true, 0, null, false);
+                    }
+                    if (noQuote) {
+                        //MessageHelper.getInstance(currentAccount).processForwardFromMyName(fmessages, did, true, 0);
+                        SendMessagesHelper.getInstance(currentAccount).sendMessage(fmessages, did, true, false, true, 0);
+                    } else {
+                        SendMessagesHelper.getInstance(currentAccount).sendMessage(fmessages, did, false, false, true, 0);
+                    }
+                }
+                fragment1.finishFragment();
+                if (parentChatActivityFinal != null) {
+                    UndoView undoView = parentChatActivityFinal.getUndoView();
+                    if (undoView != null) {if (dids.size() == 1) {
+                        undoView.showWithAction(dids.get(0).dialogId, UndoView.ACTION_FWD_MESSAGES, fmessages.size());
+                    } else {
+                        undoView.showWithAction(0, UndoView.ACTION_FWD_MESSAGES, fmessages.size(), dids.size(), null, null);
+                    }
+                    }
+                }
+            } else {
+                MessagesStorage.TopicKey topicKey = dids.get(0);
+                long did = topicKey.dialogId;
+                Bundle args1 = new Bundle();
+                args1.putBoolean("forward_noquote", noQuote);
+                args1.putBoolean("scrollToTopOnResume", true);
+                if (DialogObject.isEncryptedDialog(did)) {
+                    args1.putInt("enc_id", DialogObject.getEncryptedChatId(did));
+                } else if (DialogObject.isUserDialog(did)) {
+                    args1.putLong("user_id", did);
+                } else {
+                    args1.putLong("chat_id", -did);
+                }
+                ChatActivity chatActivity = new ChatActivity(args1);
+                if (topicKey.topicId != 0) {
+                    ForumUtilities.applyTopic(chatActivity, topicKey);
+                }
+                if (((LaunchActivity) parentActivity).presentFragment(chatActivity, true, false)) {
+                    chatActivity.showFieldPanelForForward(true, fmessages);
+                } else {
+                    fragment1.finishFragment();
+                }
+            }
+            return true;
+        });
+        closePhoto(false, false);
+        ((LaunchActivity) parentActivity).presentFragment(fragment, false, true);
     }
 
     private void showShareAlert(ArrayList<MessageObject> messages) {
