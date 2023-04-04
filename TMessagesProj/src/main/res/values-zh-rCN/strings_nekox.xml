@@ -283,4 +283,10 @@
     <string name="ConfirmSettings">操作确认</string>
     <string name="InteractionSettings">交互</string>
     <string name="nekoxPremiumGiftRemoved">高级礼品在 NekoX 中被移除。</string>
+    <string name="ReactionSettings">回应</string>
+    <string name="doubleTapAndReactions">双击与回应</string>
+    <string name="doubleTapShowReactionsMenu">显示回应菜单</string>
+    <string name="doubleTapSendReaction">发送默认回应</string>
+    <string name="doubleTapDisable">禁用</string>
+    <string name="disableReactionsWhenSelecting">选择消息时隐藏回应菜单</string>
 </resources>

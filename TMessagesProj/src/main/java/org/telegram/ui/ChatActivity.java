@@ -5692,8 +5692,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         contentView.addView(chatListView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
-        selectionReactionsOverlay = new ChatSelectionReactionMenuOverlay(this, context);
-        contentView.addView(selectionReactionsOverlay, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+        if (!NekoConfig.disableReactionsWhenSelecting.Bool()) {
+            selectionReactionsOverlay = new ChatSelectionReactionMenuOverlay(this, context);
+            contentView.addView(selectionReactionsOverlay, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+        }
 
         animatingImageView = new ClippingImageView(context);
         animatingImageView.setVisibility(View.GONE);
@@ -7735,7 +7737,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (doShrinkActionBarItems) {
             actionMode.getItem(nkactionbarbtn_reply).setVisibility(View.GONE);
         }
-}
+    }
 
     private void createSearchContainer() {
         if (searchContainer != null || getContext() == null) {
@@ -14943,7 +14945,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         for (int i = 0; i < objs.size(); i++) {
             selected.add(objs.valueAt(i));
         }
-        selectionReactionsOverlay.setSelectedMessages(selected);
+        if (selectionReactionsOverlay != null)
+            selectionReactionsOverlay.setSelectedMessages(selected);
     }
 
     private void processRowSelect(View view, boolean outside, float touchX, float touchY) {
