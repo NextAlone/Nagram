@@ -28849,9 +28849,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             } else if (currentChat != null) {
                                 long fromId = nextMessage.getFromChatId();
                                 pinnedBottom = fromId == message.getFromChatId();
-                                if (!pinnedBottomByGroup && pinnedBottom && fromId < 0 && currentChat.megagroup) {
-                                    pinnedBottom = false;
-                                }
+//                                if (!pinnedBottomByGroup && pinnedBottom && fromId < 0 && currentChat.megagroup) {
+//                                    pinnedBottom = false;
+//                                }
                             } else if (UserObject.isUserSelf(currentUser) || UserObject.isReplyUser(currentUser)) {
                                 if (message.isPrivateForward() || nextMessage.isPrivateForward()) {
                                     pinnedBottom = false;
@@ -28884,9 +28884,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             } else if (currentChat != null) {
                                 long fromId = prevMessage.getFromChatId();
                                 pinnedTop = fromId == message.getFromChatId() && !message.isImportedForward() && !prevMessage.isImportedForward();
-                                if (!pinnedTopByGroup && pinnedTop && fromId < 0 && currentChat.megagroup) {
-                                    pinnedTop = false;
-                                }
+//                                if (!pinnedTopByGroup && pinnedTop && fromId < 0 && currentChat.megagroup) {
+//                                    pinnedTop = false;
+//                                }
                             } else if (UserObject.isUserSelf(currentUser) || UserObject.isReplyUser(currentUser)) {
                                 if (message.isPrivateForward() || prevMessage.isPrivateForward()) {
                                     pinnedTop = false;
@@ -28896,14 +28896,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                         }
                     }
-                    if (ChatObject.isChannel(currentChat) && currentChat.megagroup && message.getFromChatId() <= 0 && message.messageOwner.fwd_from != null && message.messageOwner.fwd_from.saved_from_peer instanceof TLRPC.TL_peerChannel) {
-                        if (!pinnedTopByGroup) {
-                            pinnedTop = false;
-                        }
-                        if (!pinnedBottomByGroup) {
-                            pinnedBottom = false;
-                        }
-                    }
+//                    if (ChatObject.isChannel(currentChat) && currentChat.megagroup && message.getFromChatId() <= 0 && message.messageOwner.fwd_from != null && message.messageOwner.fwd_from.saved_from_peer instanceof TLRPC.TL_peerChannel) {
+//                        if (!pinnedTopByGroup) {
+//                            pinnedTop = false;
+//                        }
+//                        if (!pinnedBottomByGroup) {
+//                            pinnedBottom = false;
+//                        }
+//                    }
 
                     message.updateTranslation(false);
                     if (groupedMessages != null) {
