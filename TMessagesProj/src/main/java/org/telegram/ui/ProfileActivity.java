@@ -7466,7 +7466,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
                 if (BuildVars.LOGS_ENABLED) {
                     sendLogsRow = rowCount++;
-                    sendLastLogsRow = rowCount++;
+                    sendLastLogsRow = -1;
+                    // disable send last logs
                     clearLogsRow = rowCount++;
                 }
                 versionRow = rowCount++;
@@ -9029,6 +9030,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         if (activity == null) {
             return;
         }
+        // always send last logs
         AlertDialog progressDialog = new AlertDialog(activity, AlertDialog.ALERT_TYPE_SPINNER);
         progressDialog.setCanCancel(false);
         progressDialog.show();
@@ -9075,7 +9077,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
                     for (int i = 0; i < files.size(); i++) {
                         File file = files.get(i);
-                        if (!file.getName().contains("cache4") && (last || file.getName().contains("_mtproto")) && (currentDate - file.lastModified()) > 24 * 60 * 60 * 1000) {
+                        if (!file.getName().contains("cache4") && (file.getName().contains("_mtproto")) && (currentDate - file.lastModified()) > 24 * 60 * 60 * 1000) {
                             continue;
                         }
                         if (!file.exists()) {
