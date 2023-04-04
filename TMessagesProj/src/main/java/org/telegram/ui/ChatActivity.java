@@ -157,7 +157,6 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
-import org.telegram.messenger.TranslateController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
@@ -237,7 +236,6 @@ import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.EditTextCaption;
 import org.telegram.ui.Components.EmbedBottomSheet;
-import org.telegram.ui.Components.EmojiTextView;
 import org.telegram.ui.Components.EmojiPacksAlert;
 import org.telegram.ui.Components.EmojiView;
 import org.telegram.ui.Components.ExtendedGridLayoutManager;
@@ -315,7 +313,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.InputStream;
-import java.io.RandomAccessFile;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -337,7 +334,6 @@ import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.ui.MessageDetailsActivity;
-import tw.nekomimi.nekogram.ui.MessageHelper;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
@@ -421,7 +417,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private FrameLayout bottomOverlay;
     protected ChatActivityEnterView chatActivityEnterView;
     private ChatActivityEnterTopView chatActivityEnterTopView;
-    private boolean shrinkActionBarItems;
+    private boolean isActionBarTooNarrow;
     private int chatActivityEnterViewAnimateFromTop;
     private boolean chatActivityEnterViewAnimateBeforeSending;
     private ActionBarMenuItem.Item timeItem2;
@@ -7694,7 +7690,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         getParentActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
         int maxActionBarItems = (int) (Math.ceil(displayMetrics.widthPixels  / (double) AndroidUtilities.dp(54))) - 2;
-        shrinkActionBarItems = maxActionBarItems < 6;
+        isActionBarTooNarrow = maxActionBarItems < 6;
 
         actionModeViews.add(actionMode.addItemWithWidth(nkactionbarbtn_reply, R.drawable.baseline_reply_24, AndroidUtilities.dp(54), LocaleController.getString("Reply", R.string.Reply)));
         actionModeViews.add(actionMode.addItemWithWidth(edit, R.drawable.baseline_edit_24, AndroidUtilities.dp(54), LocaleController.getString("Edit", R.string.Edit)));
@@ -7708,15 +7704,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         actionModeViews.add(actionMode.addItemWithWidth(delete, R.drawable.baseline_delete_24, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete)));
         actionModeViews.add(actionModeOtherItem = actionMode.addItemWithWidth(nkactionbarbtn_action_mode_other, R.drawable.ic_ab_other, AndroidUtilities.dp(54), LocaleController.getString("MessageMenu", R.string.MessageMenu)));
 
-        if (currentEncryptedChat == null) {
-            actionModeOtherItem.addSubItem(forward, R.drawable.baseline_forward_24, LocaleController.getString("Forward", R.string.Forward));
-        }
-
         boolean noforward = getMessagesController().isChatNoForwards(currentChat);
 
         if (currentEncryptedChat == null || !noforward) {
             actionModeOtherItem.addSubItem(nkbtn_forward_noquote, R.drawable.baseline_fast_forward_24, LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward));
-            actionModeOtherItem.addSubItem(star, R.drawable.baseline_favorite_20, LocaleController.getString("AddToFavorites", R.string.AddToFavorites));
+            actionModeOtherItem.addSubItem(star, R.drawable.baseline_star_24, LocaleController.getString("AddToFavorites", R.string.AddToFavorites));
             actionModeOtherItem.addSubItem(save_to, R.drawable.msg_download, LocaleController.getString("SaveToMusic", R.string.SaveToMusic));
         }
 
@@ -7739,8 +7731,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         actionMode.getItem(delete).setVisibility(cantDeleteMessagesCount == 0 ? View.VISIBLE : View.GONE);
 
         actionModeOtherItem.setSubItemVisibility(star, selectedMessagesCanStarIds[0].size() + selectedMessagesCanStarIds[1].size() != 0);
-
-        if (shrinkActionBarItems) {
+        boolean doShrinkActionBarItems = isActionBarTooNarrow && actionMode.getItem(edit).getVisibility() == View.VISIBLE && actionMode.getItem(copy).getVisibility() == View.VISIBLE && actionMode.getItem(delete).getVisibility() == View.VISIBLE;
+        if (doShrinkActionBarItems) {
             actionMode.getItem(nkactionbarbtn_reply).setVisibility(View.GONE);
         }
 }
@@ -14631,34 +14623,25 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else {
                 createActionMode();
                 ActionBarMenuItem replyItem = actionBar.createActionMode().getItem(nkactionbarbtn_reply);
-                if (replyItem != null) {
-                    replyItem.setVisibility(!shrinkActionBarItems &&chatMode != MODE_PINNED &&
-                            ChatObject.canSendMessages(currentChat) && selectedCount == 1 ? View.VISIBLE : View.GONE);
-                }
-                ActionBarMenuSubItem saveItem = actionModeOtherItem.getSubItem(save_to);
-                ActionBarMenuItem copyItem = actionBar.createActionMode().getItem(copy);
-                ActionBarMenuItem starItem = actionBar.createActionMode().getItem(star);
                 ActionBarMenuItem editItem = actionBar.createActionMode().getItem(edit);
+                ActionBarMenuItem copyItem = actionBar.createActionMode().getItem(copy);
                 ActionBarMenuItem forwardItem = actionBar.createActionMode().getItem(forward);
                 ActionBarMenuItem deleteItem = actionBar.createActionMode().getItem(delete);
                 ActionBarMenuItem selectItem = actionBar.createActionMode().getItem(nkactionbarbtn_selectBetween);
 
-                ActionBarMenuSubItem nkbtnSaveMessage = actionModeOtherItem.getSubItem(nkbtn_savemessage);
+                ActionBarMenuSubItem saveToDownloadsItem = actionModeOtherItem.getSubItem(save_to);
+                ActionBarMenuSubItem saveMessageItem = actionModeOtherItem.getSubItem(nkbtn_savemessage);
+                ActionBarMenuSubItem forwardNoQuoteItem = actionModeOtherItem.getSubItem(nkbtn_forward_noquote);
+                ActionBarMenuSubItem starItem = actionModeOtherItem.getSubItem(star);
 
-                if (chatMode == MODE_SCHEDULED) {
-                    actionModeOtherItem.setSubItemVisibility(nkbtn_forward_noquote, false);
-                    actionModeOtherItem.setSubItemVisibility(forward, false);
-                    actionModeOtherItem.setSubItemVisibility(nkbtn_savemessage, false);
-                }
+                boolean noforwards = getMessagesController().isChatNoForwards(currentChat) || hasSelectedNoforwardsMessage();
+                boolean canForward = chatMode != MODE_SCHEDULED && cantForwardMessagesCount == 0 && !noforwards;
+
+                forwardNoQuoteItem.setVisibility(canForward);
+                saveMessageItem.setVisibility(canForward);
 
                 if (NekoConfig.showBottomActionsWhenSelecting.Bool())
                     createBottomMessagesActionButtons();
-                boolean noforwards = getMessagesController().isChatNoForwards(currentChat) || hasSelectedNoforwardsMessage();
-
-                boolean canForward = cantForwardMessagesCount != 0 && !noforwards;
-                actionModeOtherItem.setSubItemVisibility(nkbtn_savemessage, canForward);
-                actionModeOtherItem.setSubItemVisibility(forward, canForward);
-                actionModeOtherItem.setSubItemVisibility(nkbtn_forward_noquote, canForward);
 
                 if (prevCantForwardCount == 0 && cantForwardMessagesCount != 0 || prevCantForwardCount != 0 && cantForwardMessagesCount == 0) {
                     forwardButtonAnimation = new AnimatorSet();
@@ -14713,9 +14696,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         forwardButton.setAlpha(cantForwardMessagesCount == 0 ? 1.0f : 0.5f);
                     }
                 }
-                if (saveItem != null) {
-                    saveItem.setVisibility(((canSaveMusicCount > 0 && canSaveDocumentsCount == 0) || (canSaveMusicCount == 0 && canSaveDocumentsCount > 0)) && cantSaveMessagesCount == 0 ? View.VISIBLE : View.GONE);
-                    saveItem.setText(canSaveMusicCount > 0 ? LocaleController.getString("SaveToMusic", R.string.SaveToMusic) : LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
+                if (saveToDownloadsItem != null) {
+                    saveToDownloadsItem.setVisibility(((canSaveMusicCount > 0 && canSaveDocumentsCount == 0) || (canSaveMusicCount == 0 && canSaveDocumentsCount > 0)) && cantSaveMessagesCount == 0 ? View.VISIBLE : View.GONE);
+                    saveToDownloadsItem.setText(canSaveMusicCount > 0 ? LocaleController.getString("SaveToMusic", R.string.SaveToMusic) : LocaleController.getString("SaveToDownloads", R.string.SaveToDownloads));
                 }
 
                 int copyVisible = View.GONE, starVisible = View.GONE, newCopyVisible = View.GONE, newStarVisible = View.GONE;
@@ -14730,6 +14713,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     starVisible = starItem.getVisibility();
                     starItem.setVisibility(getMediaDataController().canAddStickerToFavorites() && (selectedMessagesCanStarIds[0].size() + selectedMessagesCanStarIds[1].size()) == selectedCount ? View.VISIBLE : View.GONE);
                     newStarVisible = starItem.getVisibility();
+                }
+
+                if (replyItem != null) {
+                    boolean showReplyItem = chatMode != MODE_SCHEDULED && ChatObject.canSendMessages(currentChat) && selectedCount == 1;
+                    boolean doShrinkActionBarItems = isActionBarTooNarrow && newCopyVisible == View.VISIBLE && canForward && canEditMessagesCount == 1 && selectedCount == 1;
+                    replyItem.setVisibility(!doShrinkActionBarItems && showReplyItem);
                 }
 
                 if (selectItem != null) {
@@ -14782,7 +14771,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                 }
                 if (starItem != null) {
-                    starItem.setIcon(hasUnfavedSelected ? R.drawable.msg_fave : R.drawable.msg_unfave);
+//                    starItem.setIcon(hasUnfavedSelected ? R.drawable.msg_fave : R.drawable.msg_unfave);
+                    starItem.setText(hasUnfavedSelected ? LocaleController.getString("AddToFavorites", R.string.AddToFavorites) : LocaleController.getString("DeleteFromFavorites", R.string.DeleteFromFavorites));
                 }
                 final int newEditVisibility = canEditMessagesCount == 1 && selectedCount == 1 ? View.VISIBLE : View.GONE;
                 createBottomMessagesActionButtons();
@@ -14880,44 +14870,40 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         if (editButtonAnimation != null) {
                             editButtonAnimation.cancel();
                         }
-                        if (shrinkActionBarItems) {
+                        editButtonAnimation = new AnimatorSet();
+                        editItem.setPivotX(AndroidUtilities.dp(54));
+                        editItem.setPivotX(AndroidUtilities.dp(54));
+                        if (newEditVisibility == View.VISIBLE) {
                             editItem.setVisibility(newEditVisibility);
+                            editButtonAnimation.playTogether(
+                                    ObjectAnimator.ofFloat(editItem, View.ALPHA, 1.0f),
+                                    ObjectAnimator.ofFloat(editItem, View.SCALE_X, 1.0f)
+                            );
                         } else {
-                            editButtonAnimation = new AnimatorSet();
-                            editItem.setPivotX(AndroidUtilities.dp(54));
-                            editItem.setPivotX(AndroidUtilities.dp(54));
-                            if (newEditVisibility == View.VISIBLE) {
-                                editItem.setVisibility(newEditVisibility);
-                                editButtonAnimation.playTogether(
-                                        ObjectAnimator.ofFloat(editItem, View.ALPHA, 1.0f),
-                                        ObjectAnimator.ofFloat(editItem, View.SCALE_X, 1.0f)
-                                );
-                            } else {
-                                editButtonAnimation.playTogether(
-                                        ObjectAnimator.ofFloat(editItem, View.ALPHA, 0.0f),
-                                        ObjectAnimator.ofFloat(editItem, View.SCALE_X, 0.0f)
-                                );
-                            }
-                            editButtonAnimation.setDuration(100);
-                            editButtonAnimation.addListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    if (editButtonAnimation != null && editButtonAnimation.equals(animation)) {
-                                        if (newEditVisibility == View.GONE) {
-                                            editItem.setVisibility(View.GONE);
-                                        }
-                                    }
-                                }
-
-                                @Override
-                                public void onAnimationCancel(Animator animation) {
-                                    if (editButtonAnimation != null && editButtonAnimation.equals(animation)) {
-                                        editButtonAnimation = null;
-                                    }
-                                }
-                            });
-                            editButtonAnimation.start();
+                            editButtonAnimation.playTogether(
+                                    ObjectAnimator.ofFloat(editItem, View.ALPHA, 0.0f),
+                                    ObjectAnimator.ofFloat(editItem, View.SCALE_X, 0.0f)
+                            );
                         }
+                        editButtonAnimation.setDuration(100);
+                        editButtonAnimation.addListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                if (editButtonAnimation != null && editButtonAnimation.equals(animation)) {
+                                    if (newEditVisibility == View.GONE) {
+                                        editItem.setVisibility(View.GONE);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+                                if (editButtonAnimation != null && editButtonAnimation.equals(animation)) {
+                                    editButtonAnimation = null;
+                                }
+                            }
+                        });
+                        editButtonAnimation.start();
                     }
                 }
 
@@ -32964,6 +32950,23 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         } else if (id == nkbtn_repeat) {
             repeatMessage(false);
             clearSelectionMode();
+        } else if (id == nkbtn_sharemessage) {
+            var selected = getSelectedMessages();
+            if (selected.isEmpty()) return;
+            var builder = new StringBuilder();
+            for (int i = 0; i < selected.size(); i++) {
+                builder.append(selected.get(i).messageOwner.message);
+                if (i != selected.size() - 1)
+                    builder.append("\n\n");
+            }
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT,builder.toString());
+            try {
+                getParentActivity().startActivity(intent);
+            } catch (Exception e) {
+                AlertUtil.showToast(e);
+            }
         }
     }
 
