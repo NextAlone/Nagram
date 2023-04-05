@@ -254,6 +254,10 @@ public class ActionBarMenuItem extends FrameLayout {
         invalidate();
     }
 
+    public void setVisibility(boolean visibility) {
+        this.setVisibility(visibility ? VISIBLE : GONE);
+    }
+
     @Override
     public void draw(Canvas canvas) {
         if (fixBackground) {

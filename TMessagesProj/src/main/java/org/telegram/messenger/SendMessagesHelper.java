@@ -6654,7 +6654,7 @@ public boolean retriedToSend;
                 int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
                 cursor.moveToFirst();
                 len = cursor.getLong(sizeIndex);
-
+                cursor.close();
             } catch (Exception e) {
                 FileLog.e(e);
             }

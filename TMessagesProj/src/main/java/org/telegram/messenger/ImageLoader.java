@@ -584,7 +584,7 @@ public class ImageLoader {
                         }
                     }
                 } catch (Exception e) {
-                    FileLog.e(e);
+                    FileLog.e(e, false);
                 }
                 if (imageSize == 0 && httpConnection != null) {
                     try {
@@ -2208,6 +2208,8 @@ public class ImageLoader {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("cache path = " + cachePath);
         }
+
+        FileLog.d("selected SD card = " + SharedConfig.storageCacheDir);
 
         try {
             telegramPath = EnvUtil.getTelegramPath();
