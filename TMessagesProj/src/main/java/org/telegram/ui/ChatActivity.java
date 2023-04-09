@@ -14808,10 +14808,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 boolean noforwards = getMessagesController().isChatNoForwards(currentChat) || hasSelectedNoforwardsMessage();
                 boolean canForward = chatMode != MODE_SCHEDULED && cantForwardMessagesCount == 0 && !noforwards;
 
-                if (NaConfig.INSTANCE.getShowNoQuoteForward().Bool()) {
-                    forwardNoQuoteItem.setVisibility(canForward);
+                if (forwardNoQuoteItem != null) {
+                    forwardNoQuoteItem.setVisibility(canForward && NaConfig.INSTANCE.getShowNoQuoteForward().Bool());
                 }
-                saveMessageItem.setVisibility(canForward);
+                if (saveMessageItem != null) {
+                    saveMessageItem.setVisibility(canForward);
+                }
 
                 if (NekoConfig.showBottomActionsWhenSelecting.Bool())
                     createBottomMessagesActionButtons();
