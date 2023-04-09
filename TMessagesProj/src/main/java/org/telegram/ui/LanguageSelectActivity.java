@@ -11,9 +11,7 @@ package org.telegram.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Canvas;
-import android.view.Gravity;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -718,12 +716,6 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
 
         @Override
         public int getItemViewType(int i) {
-            if (!search)
-                i -= 2;
-            if (i == -2)
-                return 2;
-            if (i == -1)
-                return 3;
             if (search) {
                 return VIEW_TYPE_LANGUAGE;
             } else {
