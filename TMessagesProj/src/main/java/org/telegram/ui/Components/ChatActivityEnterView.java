@@ -4323,6 +4323,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     info.ttl = photoEntry.ttl;
                     info.videoEditedInfo = videoEditedInfo;
                     info.canDeleteAfter = true;
+                    info.hasMediaSpoilers = photoEntry.hasSpoiler;
                     photos.add(info);
                     photoEntry.reset();
                     sending = true;
