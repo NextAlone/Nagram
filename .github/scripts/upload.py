@@ -64,6 +64,8 @@ def sendMessage(message, user_id = BOT_TARGET, entities = None) -> int:
         "text": message,
         "entities": entities
     }
+    print(message)
+    print(entities)
     resp = requests.post(API_PREFIX + "sendMessage", json=data).json()
     print(resp)
     return int(resp["result"]["message_id"])
@@ -105,6 +107,8 @@ def sendRelease():
     text += " "
     text += addEntity(entities, text, "bold", VERSION_NAME)
     text += "\n\n"
+    if "entities" not in admin_resp:
+        admin_resp["entities"] = list()
     resp_entities = admin_resp["entities"]
     for en in resp_entities:
         copy = en.copy()
@@ -140,24 +144,21 @@ if __name__ == '__main__':
     print(sys.argv)
     if len(sys.argv) != 2:
         print("Run Type: release, ci, debug")
+        sys.stdout.flush()
+        sys.stderr.flush()
         exit(1)
     mode = sys.argv[1]
-    try:
-        if mode == "release":
-            sendRelease()
-        elif mode == "ci":
-            if COMMIT_MESSAGE.startswith("ci"):
-                CI_CHANNEL_ID = BOT_TARGET
-            sendCIRelease()
-        elif mode == "debug":
-            APK_CHANNEL_ID = "@test_channel_nekox"
-            UPDATE_CHANNEL_ID = "@test_channel_nekox"
-            UPDATE_METADATA_CHANNEL_ID = "@test_channel_nekox"
-            sendRelease()
-        else:
-            print("unknown mode")
-            exit(1)
-    except Exception as e:
-        print(e)
-        exit(1)
+    if mode == "release":
+        sendRelease()
+    elif mode == "ci":
+        if COMMIT_MESSAGE.startswith("ci"):
+            CI_CHANNEL_ID = BOT_TARGET
+        sendCIRelease()
+    elif mode == "debug":
+        APK_CHANNEL_ID = "@test_channel_nekox"
+        UPDATE_CHANNEL_ID = "@test_channel_nekox"
+        UPDATE_METADATA_CHANNEL_ID = "@test_channel_nekox"
+        sendRelease()
+    else:
+        print("unknown mode")
 

@@ -25,11 +25,11 @@ import java.util.ArrayList;
 
 public class CanvasButton {
 
-    Path drawingPath = new Path();
+    Path drawingPath;
     ArrayList<RectF> drawingRects = new ArrayList<>();
     int usingRectCount;
     boolean buttonPressed;
-    RippleDrawable selectorDrawable;
+    Drawable selectorDrawable;
     private final static int[] pressedState = new int[]{android.R.attr.state_enabled, android.R.attr.state_pressed};
 
     private final View parent;
@@ -110,7 +110,11 @@ public class CanvasButton {
     private void drawInternal(Canvas canvas, Paint paint) {
         if (usingRectCount > 1) {
             if (!pathCreated) {
-                drawingPath.rewind();
+                if (drawingPath == null) {
+                    drawingPath = new Path();
+                } else {
+                    drawingPath.rewind();
+                }
                 int left = 0, top = 0, right = 0, bottom = 0;
                 for (int i = 0; i < usingRectCount; i++) {
                     if (i + 1 < usingRectCount) {
@@ -140,7 +144,9 @@ public class CanvasButton {
                 pathCreated = true;
             }
             paint.setPathEffect(pathEffect);
-            canvas.drawPath(drawingPath, paint);
+            if (drawingPath != null) {
+                canvas.drawPath(drawingPath, paint);
+            }
         } else if (usingRectCount == 1) {
             if (selectorDrawable != null) {
                 selectorDrawable.setBounds((int) drawingRects.get(0).left, (int) drawingRects.get(0).top, (int) drawingRects.get(0).right, (int) drawingRects.get(0).bottom);
@@ -250,7 +256,9 @@ public class CanvasButton {
     public void setRoundRadius(int radius) {
         roundRadius = radius;
         pathEffect = new CornerPathEffect(radius);
-        maskPaint.setPathEffect(new CornerPathEffect(radius));
+        if (maskPaint != null) {
+            maskPaint.setPathEffect(new CornerPathEffect(radius));
+        }
     }
 
     public void cancelRipple() {
@@ -259,5 +267,10 @@ public class CanvasButton {
             selectorDrawable.jumpToCurrentState();
         }
 
+    }
+
+    public void setRect(int x, int y, int x1, int y1) {
+        AndroidUtilities.rectTmp.set(x, y, x1, y1);
+        setRect(AndroidUtilities.rectTmp);
     }
 }

@@ -23,6 +23,7 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -62,6 +63,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.graphics.ColorUtils;
+import androidx.core.math.MathUtils;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -133,6 +135,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.ListView.AdapterWithDiffUtils;
 import org.telegram.ui.Components.LoadingDrawable;
 import org.telegram.ui.Components.NestedSizeNotifierLayout;
+import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SlideChooseView;
 import org.telegram.ui.Components.StorageDiagramView;
@@ -142,6 +145,9 @@ import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.Storage.CacheModel;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -215,7 +221,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
     private CacheChartHeader cacheChartHeader;
     private ClearCacheButtonInternal clearCacheButton;
 
-    private volatile boolean canceled = false;
+    public static volatile boolean canceled = false;
 
     private View bottomSheetView;
     private BottomSheet bottomSheet;
@@ -253,9 +259,109 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
         }
     }
 
+    private static long lastTotalSizeCalculatedTime;
+    private static Long lastTotalSizeCalculated;
+    private static Long lastDeviceTotalSize, lastDeviceTotalFreeSize;
+
+    public static void calculateTotalSize(Utilities.Callback<Long> onDone) {
+        if (onDone == null) {
+            return;
+        }
+        if (lastTotalSizeCalculated != null) {
+            onDone.run(lastTotalSizeCalculated);
+            if (System.currentTimeMillis() - lastTotalSizeCalculatedTime < 5000) {
+                return;
+            }
+        }
+        Utilities.globalQueue.postRunnable(() -> {
+            canceled = false;
+            long cacheSize = getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_CACHE), 5);
+            long cacheTempSize = getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_CACHE), 4);
+            long photoSize = getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_IMAGE), 0);
+            photoSize += getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_IMAGE_PUBLIC), 0);
+            long videoSize = getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_VIDEO), 0);
+            videoSize += getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_VIDEO_PUBLIC), 0);
+            long documentsSize = getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_DOCUMENT), 1);
+            documentsSize += getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_FILES), 1);
+            long musicSize = getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_DOCUMENT), 2);
+            musicSize += getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_FILES), 2);
+            long stickersCacheSize = getDirectorySize(new File(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_CACHE), "acache"), 0);
+            stickersCacheSize += getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_CACHE), 3);
+            long audioSize = getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_AUDIO), 0);
+            final long totalSize = lastTotalSizeCalculated = cacheSize + cacheTempSize + videoSize + audioSize + photoSize + documentsSize + musicSize + stickersCacheSize;
+            lastTotalSizeCalculatedTime = System.currentTimeMillis();
+            if (!canceled) {
+                AndroidUtilities.runOnUIThread(() -> {
+                    onDone.run(totalSize);
+                });
+            }
+        });
+    }
+
+    public static void resetCalculatedTotalSIze() {
+        lastTotalSizeCalculated = null;
+    }
+
+    public static void getDeviceTotalSize(Utilities.Callback2<Long, Long> onDone) {
+        if (lastDeviceTotalSize != null && lastDeviceTotalFreeSize != null) {
+            if (onDone != null) {
+                onDone.run(lastDeviceTotalSize, lastDeviceTotalFreeSize);
+            }
+            return;
+        }
+        File path;
+        if (Build.VERSION.SDK_INT >= 19) {
+            ArrayList<File> storageDirs = AndroidUtilities.getRootDirs();
+            String dir = (path = storageDirs.get(0)).getAbsolutePath();
+            if (!TextUtils.isEmpty(SharedConfig.storageCacheDir)) {
+                for (int a = 0, N = storageDirs.size(); a < N; a++) {
+                    File file = storageDirs.get(a);
+                    if (file.getAbsolutePath().startsWith(SharedConfig.storageCacheDir) && file.canWrite()) {
+                        path = file;
+                        break;
+                    }
+                }
+            }
+        } else {
+            path = new File(SharedConfig.storageCacheDir);
+        }
+        try {
+            StatFs stat = new StatFs(path.getPath());
+            long blockSize;
+            long blockSizeExternal;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                blockSize = stat.getBlockSizeLong();
+            } else {
+                blockSize = stat.getBlockSize();
+            }
+            long availableBlocks;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                availableBlocks = stat.getAvailableBlocksLong();
+            } else {
+                availableBlocks = stat.getAvailableBlocks();
+            }
+            long blocksTotal;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                blocksTotal = stat.getBlockCountLong();
+            } else {
+                blocksTotal = stat.getBlockCount();
+            }
+
+            lastDeviceTotalSize = blocksTotal * blockSize;
+            lastDeviceTotalFreeSize = availableBlocks * blockSize;
+            if (onDone != null) {
+                onDone.run(lastDeviceTotalSize, lastDeviceTotalFreeSize);
+            }
+            return;
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+    }
+
     @Override
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
+        canceled = false;
         getNotificationCenter().addObserver(this, NotificationCenter.didClearDatabase);
         databaseSize = MessagesStorage.getInstance(currentAccount).getDatabaseSize();
         loadingDialogs = true;
@@ -309,7 +415,11 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
             }
             stickersCacheSize += cacheCustomEmojiSize;
             audioSize = getDirectorySize(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_AUDIO), 0);
-            totalSize = cacheSize + cacheTempSize + videoSize + audioSize + photoSize + documentsSize + musicSize + stickersCacheSize;
+            if (canceled) {
+                return;
+            }
+            totalSize = lastTotalSizeCalculated = cacheSize + cacheTempSize + videoSize + audioSize + photoSize + documentsSize + musicSize + stickersCacheSize;
+            lastTotalSizeCalculatedTime = System.currentTimeMillis();
 
             File path = EnvUtil.getTelegramPath();
             try {
@@ -340,14 +450,13 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                 FileLog.e(e);
             }
 
-            long minDuration = System.currentTimeMillis() - fragmentCreateTime > 45 ? 600 : 0;
             AndroidUtilities.runOnUIThread(() -> {
                 resumeDelayedFragmentAnimation();
                 calculating = false;
 
                 updateRows(true);
                 updateChart();
-            }, Math.max(1, minDuration - (System.currentTimeMillis() - fragmentCreateTime)));
+            });
 
             loadDialogEntities();
         });
@@ -377,11 +486,11 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                 if (System.currentTimeMillis() - fragmentCreateTime < 80) {
                     cacheChart.loadingFloat.set(0, true);
                 }
-                cacheChart.setSegments(totalSize, segments);
+                cacheChart.setSegments(totalSize, true, segments);
             } else if (calculating) {
-                cacheChart.setSegments(-1);
+                cacheChart.setSegments(-1, true);
             } else {
-                cacheChart.setSegments(0);
+                cacheChart.setSegments(0, true);
             }
         }
         if (clearCacheButton != null && !calculating) {
@@ -391,6 +500,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
 
     private void loadDialogEntities() {
         getFileLoader().getFileDatabase().getQueue().postRunnable(() -> {
+            getFileLoader().getFileDatabase().ensureDatabaseCreated();
             CacheModel cacheModel = new CacheModel(false);
             LongSparseArray<DialogFileEntities> dilogsFilesEntities = new LongSparseArray<>();
 
@@ -568,14 +678,14 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
     }
 
     private String formatPercent(float k, boolean minimize) {
-        float p = Math.round(k * 100f);
-        if (minimize && p < 0.1f) {
+        if (minimize && k < 0.001f) {
             return String.format("<%.1f%%", 0.1f);
         }
-        if (p % 1 == 0) {
-            return ((int) p) + "%";
+        final float p = Math.round(k * 100f);
+        if (minimize && p <= 0) {
+            return String.format("<%d%%", 1);
         }
-        return String.format("%.1f%%", p);
+        return String.format("%d%%", (int) p);
     }
 
     private CharSequence getCheckBoxTitle(CharSequence header, int percent) {
@@ -583,7 +693,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
     }
 
     private CharSequence getCheckBoxTitle(CharSequence header, int percent, boolean addArrow) {
-        String percentString = percent <= 0 ? String.format("<%.1f%%", 0.1f) : String.format("%d%%", percent);
+        String percentString = percent <= 0 ? String.format("<%.1f%%", 1f) : String.format("%d%%", percent);
         SpannableString percentStr = new SpannableString(percentString);
         percentStr.setSpan(new RelativeSizeSpan(.834f), 0, percentStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         percentStr.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf")), 0, percentStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -738,7 +848,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
         canceled = true;
     }
 
-    private long getDirectorySize(File dir, int documentsMusicType) {
+    private static long getDirectorySize(File dir, int documentsMusicType) {
         if (dir == null || canceled) {
             return 0;
         }
@@ -751,7 +861,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
         return size;
     }
 
-    private void cleanupFolders() {
+    private void cleanupFolders(Utilities.Callback2<Float, Boolean> onProgress, Runnable onDone) {
         if (cacheModel != null) {
             cacheModel.clearSelection();
         }
@@ -760,22 +870,125 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
             cachedMediaLayout.showActionMode(false);
         }
 
-        progressDialog = new AlertDialog(getParentActivity(), AlertDialog.ALERT_TYPE_SPINNER);
-        progressDialog.setCanCancel(false);
-        progressDialog.showDelayed(500);
+//        progressDialog = new AlertDialog(getParentActivity(), AlertDialog.ALERT_TYPE_SPINNER);
+//        progressDialog.setCanCancel(false);
+//        progressDialog.showDelayed(500);
         getFileLoader().cancelLoadAllFiles();
         getFileLoader().getFileLoaderQueue().postRunnable(() -> Utilities.globalQueue.postRunnable(() -> {
-            cleanupFoldersInternal();
+            cleanupFoldersInternal(onProgress, onDone);
         }));
         setCacheModel(null);
         loadingDialogs = true;
 //        updateRows();
     }
 
-    private void cleanupFoldersInternal() {
+    private static int LISTDIR_DOCTYPE_ALL = 0;
+    private static int LISTDIR_DOCTYPE_OTHER_THAN_MUSIC = 1;
+    private static int LISTDIR_DOCTYPE_MUSIC = 2;
+
+    private static int LISTDIR_DOCTYPE2_EMOJI = 3;
+    private static int LISTDIR_DOCTYPE2_TEMP = 4;
+    private static int LISTDIR_DOCTYPE2_OTHER = 5;
+
+    public static int countDirJava(String fileName, int docType) {
+        int count = 0;
+        File dir = new File(fileName);
+        if (dir.exists()) {
+            File[] entries = dir.listFiles();
+            for (int i = 0; i < entries.length; ++i) {
+                File entry = entries[i];
+                String name = entry.getName();
+                if (".".equals(name)) {
+                    continue;
+                }
+
+                if (docType > 0 && name.length() >= 4) {
+                    String namelc = name.toLowerCase();
+                    boolean isMusic = namelc.endsWith(".mp3") || namelc.endsWith(".m4a");
+                    boolean isEmoji = namelc.endsWith(".tgs") || namelc.endsWith(".webm");
+                    boolean isTemp = namelc.endsWith(".tmp") || namelc.endsWith(".temp") || namelc.endsWith(".preload");
+
+                    if (
+                        isMusic && docType == LISTDIR_DOCTYPE_OTHER_THAN_MUSIC ||
+                        !isMusic && docType == LISTDIR_DOCTYPE_MUSIC ||
+                        isEmoji && docType == LISTDIR_DOCTYPE2_OTHER ||
+                        !isEmoji && docType == LISTDIR_DOCTYPE2_EMOJI ||
+                        isTemp && docType == LISTDIR_DOCTYPE2_OTHER ||
+                        !isTemp && docType == LISTDIR_DOCTYPE2_TEMP
+                    ) {
+                        continue;
+                    }
+                }
+
+                if (entry.isDirectory()) {
+                    count += countDirJava(fileName + "/" + name, docType);
+                } else {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    public static void cleanDirJava(String fileName, int docType, int[] p, Utilities.Callback<Float> onProgress) {
+        int count = countDirJava(fileName, docType);
+        if (p == null) {
+            p = new int[] { 0 };
+        }
+        File dir = new File(fileName);
+        if (dir.exists()) {
+            File[] entries = dir.listFiles();
+            for (int i = 0; i < entries.length; ++i) {
+                File entry = entries[i];
+                String name = entry.getName();
+                if (".".equals(name)) {
+                    continue;
+                }
+
+                if (docType > 0 && name.length() >= 4) {
+                    String namelc = name.toLowerCase();
+                    boolean isMusic = namelc.endsWith(".mp3") || namelc.endsWith(".m4a");
+                    boolean isEmoji = namelc.endsWith(".tgs") || namelc.endsWith(".webm");
+                    boolean isTemp = namelc.endsWith(".tmp") || namelc.endsWith(".temp") || namelc.endsWith(".preload");
+
+                    if (
+                        isMusic && docType == LISTDIR_DOCTYPE_OTHER_THAN_MUSIC ||
+                        !isMusic && docType == LISTDIR_DOCTYPE_MUSIC ||
+                        isEmoji && docType == LISTDIR_DOCTYPE2_OTHER ||
+                        !isEmoji && docType == LISTDIR_DOCTYPE2_EMOJI ||
+                        isTemp && docType == LISTDIR_DOCTYPE2_OTHER ||
+                        !isTemp && docType == LISTDIR_DOCTYPE2_TEMP
+                    ) {
+                        continue;
+                    }
+                }
+
+                if (entry.isDirectory()) {
+                    cleanDirJava(fileName + "/" + name, docType, p, onProgress);
+                } else {
+                    entry.delete();
+
+                    p[0]++;
+                    onProgress.run(p[0] / (float) count);
+                }
+            }
+        }
+    }
+
+    private void cleanupFoldersInternal(Utilities.Callback2<Float, Boolean> onProgress, Runnable onDone) {
         boolean imagesCleared = false;
         long clearedSize = 0;
         boolean allItemsClear = true;
+        final int[] clearDirI = new int[] { 0 };
+        int clearDirCount = (selected[0] ? 2 : 0) + (selected[1] ? 2 : 0) + (selected[2] ? 2 : 0) + (selected[3] ? 2 : 0) + (selected[4] ? 1 : 0) + (selected[5] ? 2 : 0) + (selected[6] ? 1 : 0) + (selected[7] ? 1 : 0);
+        long time = System.currentTimeMillis();
+        Utilities.Callback<Float> updateProgress = t -> {
+            onProgress.run(clearDirI[0] / (float) clearDirCount + (1f / clearDirCount) * MathUtils.clamp(t, 0, 1), false);
+        };
+        Runnable next = () -> {
+            final long now = System.currentTimeMillis();
+            onProgress.run(clearDirI[0] / (float) clearDirCount, now - time > 250);
+        };
         for (int a = 0; a < 8; a++) {
             if (!selected[a]) {
                 allItemsClear = false;
@@ -822,14 +1035,18 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                 file = FileLoader.checkDirectory(type);
             }
             if (file != null) {
-                    Utilities.clearDir(file.getAbsolutePath(), documentsMusicType, Long.MAX_VALUE, true);
+                cleanDirJava(file.getAbsolutePath(), documentsMusicType, null, updateProgress);
             }
+            clearDirI[0]++;
+            next.run();
             if (type == 100) {
                 file = FileLoader.checkDirectory(FileLoader.MEDIA_DIR_CACHE);
                 if (file != null) {
-                    Utilities.clearDir(file.getAbsolutePath(), 3, Long.MAX_VALUE, false);
+                    cleanDirJava(file.getAbsolutePath(), 3, null, updateProgress);
                 }
                 EmojiHelper.getInstance().deleteAll();
+                clearDirI[0]++;
+                next.run();
             }
             if (type == FileLoader.MEDIA_DIR_IMAGE || type == FileLoader.MEDIA_DIR_VIDEO) {
                 int publicDirectoryType;
@@ -841,14 +1058,18 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                 file = FileLoader.checkDirectory(publicDirectoryType);
 
                 if (file != null) {
-                    Utilities.clearDir(file.getAbsolutePath(), documentsMusicType, Long.MAX_VALUE, false);
+                    cleanDirJava(file.getAbsolutePath(), documentsMusicType, null, updateProgress);
                 }
+                clearDirI[0]++;
+                next.run();
             }
             if (type == FileLoader.MEDIA_DIR_DOCUMENT) {
                 file = FileLoader.checkDirectory(FileLoader.MEDIA_DIR_FILES);
                 if (file != null) {
-                    Utilities.clearDir(file.getAbsolutePath(), documentsMusicType, Long.MAX_VALUE, false);
+                    cleanDirJava(file.getAbsolutePath(), documentsMusicType, null, updateProgress);
                 }
+                clearDirI[0]++;
+                next.run();
             }
 
             if (type == FileLoader.MEDIA_DIR_CACHE) {
@@ -892,7 +1113,8 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
             }
         }
         final boolean imagesClearedFinal = imagesCleared;
-        totalSize = cacheSize + cacheTempSize + videoSize + audioSize + photoSize + documentsSize + musicSize + stickersCacheSize;
+        totalSize = lastTotalSizeCalculated = cacheSize + cacheTempSize + videoSize + audioSize + photoSize + documentsSize + musicSize + stickersCacheSize;
+        lastTotalSizeCalculatedTime = System.currentTimeMillis();
         Arrays.fill(selected, true);
 
         File path = Environment.getDataDirectory();
@@ -939,11 +1161,17 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
             }
 
             getMediaDataController().ringtoneDataStore.checkRingtoneSoundsLoaded();
-            cacheRemovedTooltip.setInfoText(LocaleController.formatString("CacheWasCleared", R.string.CacheWasCleared, AndroidUtilities.formatFileSize(finalClearedSize)));
-            cacheRemovedTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
+            AndroidUtilities.runOnUIThread(() -> {
+                cacheRemovedTooltip.setInfoText(LocaleController.formatString("CacheWasCleared", R.string.CacheWasCleared, AndroidUtilities.formatFileSize(finalClearedSize)));
+                cacheRemovedTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
+            }, 150);
             MediaDataController.getInstance(currentAccount).chekAllMedia(true);
 
             loadDialogEntities();
+
+            if (onDone != null) {
+                onDone.run();
+            }
         });
     }
 
@@ -1061,7 +1289,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
         ActionBarMenuItem otherItem = actionBar.createMenu().addItem(other_id, R.drawable.ic_ab_other);
         clearDatabaseItem = otherItem.addSubItem(clear_database_id, R.drawable.msg_delete, LocaleController.getString("ClearLocalDatabase", R.string.ClearLocalDatabase));
         clearDatabaseItem.setIconColor(Theme.getColor(Theme.key_dialogRedIcon));
-        clearDatabaseItem.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
+        clearDatabaseItem.setTextColor(Theme.getColor(Theme.key_dialogTextRed));
         updateDatabaseItemSize();
 
         listAdapter = new ListAdapter(context);
@@ -1202,7 +1430,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
         showDialog(dialog);
         TextView button = (TextView) dialog.getButton(DialogInterface.BUTTON_POSITIVE);
         if (button != null) {
-            button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
+            button.setTextColor(Theme.getColor(Theme.key_dialogTextRed));
         }
     }
 
@@ -1367,7 +1595,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
         showDialog(alertDialog);
         TextView button = (TextView) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         if (button != null) {
-            button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
+            button.setTextColor(Theme.getColor(Theme.key_dialogTextRed));
         }
     }
 
@@ -1483,7 +1711,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                     LocaleController.getString("StorageCleared", R.string.StorageCleared)
             );
             if (hasCache) {
-                if (percent < 0.1f) {
+                if (percent < 0.01f) {
                     subtitle[1].setText(LocaleController.formatString("StorageUsageTelegramLess", R.string.StorageUsageTelegramLess, formatPercent(percent)));
                 } else {
                     subtitle[1].setText(LocaleController.formatString("StorageUsageTelegram", R.string.StorageUsageTelegram, formatPercent(percent)));
@@ -1628,13 +1856,144 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
         }
     }
 
+    private class ClearingCacheView extends FrameLayout {
+
+        RLottieImageView imageView;
+        AnimatedTextView percentsTextView;
+        ProgressView progressView;
+        TextView title, subtitle;
+
+        public ClearingCacheView(Context context) {
+            super(context);
+
+            imageView = new RLottieImageView(context);
+            imageView.setAutoRepeat(true);
+            imageView.setAnimation(R.raw.utyan_cache, 150, 150);
+            addView(imageView, LayoutHelper.createFrame(150, 150, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 16, 0, 0));
+            imageView.playAnimation();
+
+            percentsTextView = new AnimatedTextView(context, false, true, true);
+            percentsTextView.setAnimationProperties(.35f, 0, 120, CubicBezierInterpolator.EASE_OUT);
+            percentsTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+            percentsTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+            percentsTextView.setTextSize(AndroidUtilities.dp(24));
+            percentsTextView.setTypeface(AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_MEDIUM));
+            addView(percentsTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 32, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 16 + 150 + 16 - 6, 0, 0));
+
+            progressView = new ProgressView(context);
+            addView(progressView, LayoutHelper.createFrame(240, 5, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 16 + 150 + 16 + 28 + 16, 0, 0));
+
+            title = new TextView(context);
+            title.setGravity(Gravity.CENTER_HORIZONTAL);
+            title.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+            title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+            title.setTypeface(AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_MEDIUM));
+            title.setText(LocaleController.getString("ClearingCache", R.string.ClearingCache));
+            addView(title, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 16 + 150 + 16 + 28 + 16 + 5 + 30, 0, 0));
+
+            subtitle = new TextView(context);
+            subtitle.setGravity(Gravity.CENTER_HORIZONTAL);
+            subtitle.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+            subtitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+            subtitle.setText(LocaleController.getString("ClearingCacheDescription", R.string.ClearingCacheDescription));
+            addView(subtitle, LayoutHelper.createFrame(240, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 16 + 150 + 16 + 28 + 16 + 5 + 30 + 18 + 10, 0, 0));
+
+            setProgress(0);
+        }
+
+        public void setProgress(float t) {
+            percentsTextView.cancelAnimation();
+            percentsTextView.setText(String.format("%d%%", (int) Math.ceil(MathUtils.clamp(t, 0, 1) * 100)), !LocaleController.isRTL);
+            progressView.setProgress(t);
+        }
+
+        @Override
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(
+                MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(350), MeasureSpec.EXACTLY)
+            );
+        }
+
+        class ProgressView extends View {
+
+            Paint in = new Paint(Paint.ANTI_ALIAS_FLAG), out = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+            public ProgressView(Context context) {
+                super(context);
+
+                in.setColor(Theme.getColor(Theme.key_switchTrackChecked));
+                out.setColor(Theme.multAlpha(Theme.getColor(Theme.key_switchTrackChecked), .2f));
+            }
+
+            float progress;
+            AnimatedFloat progressT = new AnimatedFloat(this, 350, CubicBezierInterpolator.EASE_OUT);
+
+            public void setProgress(float t) {
+                this.progress = t;
+                invalidate();
+            }
+
+            @Override
+            protected void onDraw(Canvas canvas) {
+                super.onDraw(canvas);
+
+                AndroidUtilities.rectTmp.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                canvas.drawRoundRect(AndroidUtilities.rectTmp, AndroidUtilities.dp(3), AndroidUtilities.dp(3), out);
+
+                AndroidUtilities.rectTmp.set(0, 0, getMeasuredWidth() * progressT.set(this.progress), getMeasuredHeight());
+                canvas.drawRoundRect(AndroidUtilities.rectTmp, AndroidUtilities.dp(3), AndroidUtilities.dp(3), in);
+            }
+        }
+    }
+
     private class ClearCacheButtonInternal extends ClearCacheButton {
 
         public ClearCacheButtonInternal(Context context) {
             super(context);
             ((MarginLayoutParams) button.getLayoutParams()).topMargin = AndroidUtilities.dp(5);
             button.setOnClickListener(e -> {
-                cleanupFolders();
+                BottomSheet bottomSheet = new BottomSheet(getContext(), false) {
+                    @Override
+                    protected boolean canDismissWithTouchOutside() {
+                        return false;
+                    }
+                };
+                bottomSheet.fixNavigationBar();
+                bottomSheet.setCanDismissWithSwipe(false);
+                bottomSheet.setCancelable(false);
+                ClearingCacheView cacheView = new ClearingCacheView(getContext());
+                bottomSheet.setCustomView(cacheView);
+
+                final boolean[] done = new boolean[] { false };
+                final float[] progress = new float[] { 0 };
+                final boolean[] nextSection = new boolean[] { false };
+                Runnable updateProgress = () -> {
+                    cacheView.setProgress(progress[0]);
+                    if (nextSection[0]) {
+                        updateRows();
+                    }
+                };
+
+                AndroidUtilities.runOnUIThread(() -> {
+                    if (!done[0]) {
+                        showDialog(bottomSheet);
+                    }
+                }, 150);
+
+                cleanupFolders(
+                    (progressValue, next) -> {
+                        progress[0] = progressValue;
+                        nextSection[0] = next;
+                        AndroidUtilities.cancelRunOnUIThread(updateProgress);
+                        AndroidUtilities.runOnUIThread(updateProgress);
+                    },
+                    () -> AndroidUtilities.runOnUIThread(() -> {
+                        done[0] = true;
+                        cacheView.setProgress(1F);
+                        bottomSheet.dismiss();
+                    })
+                );
             });
         }
 
@@ -1687,7 +2046,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                 @Override
                 protected void dispatchDraw(Canvas canvas) {
                     final int margin = AndroidUtilities.dp(8);
-                    int x = (getMeasuredWidth() - margin - valueTextView.getCurrentWidth() + textView.getCurrentWidth()) / 2;
+                    int x = (getMeasuredWidth() - margin - (int) valueTextView.getCurrentWidth() + (int) textView.getCurrentWidth()) / 2;
 
                     if (LocaleController.isRTL) {
                         super.dispatchDraw(canvas);
@@ -1704,8 +2063,15 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                 protected boolean verifyDrawable(@NonNull Drawable who) {
                     return who == valueTextView || who == textView || super.verifyDrawable(who);
                 }
+
+                @Override
+                public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+                    super.onInitializeAccessibilityNodeInfo(info);
+                    info.setClassName("android.widget.Button");
+                }
             };
             button.setBackground(Theme.AdaptiveRipple.filledRect(Theme.key_featuredStickers_addButton, 8));
+            button.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);
 
             if (LocaleController.isRTL) {
                 rtlTextView = new TextView(context);
@@ -1734,6 +2100,8 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
             valueTextView.setTextColor(Theme.adaptHSV(Theme.getColor(Theme.key_featuredStickers_addButton), -.46f, +.08f));
             valueTextView.setText("");
 
+            button.setContentDescription(TextUtils.concat(textView.getText(), "\t", valueTextView.getText()));
+
             setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
             addView(button, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.FILL, 16, 16, 16, 16));
         }
@@ -1755,6 +2123,8 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
             valueTextView.setText(size <= 0 ? "" : AndroidUtilities.formatFileSize(size));
             setDisabled(size <= 0);
             button.invalidate();
+
+            button.setContentDescription(TextUtils.concat(textView.getText(), "\t", valueTextView.getText()));
         }
 
         public void setDisabled(boolean disabled) {
@@ -2187,14 +2557,11 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                     }
                     String value = CacheByChatsController.getKeepMediaString(cacheByChatsController.getKeepMedia(keepMediaType));
                     if (itemInners.get(position).keepMediaType == KEEP_MEDIA_TYPE_USER) {
-                        textCell2.setTextAndValue(LocaleController.getString("PrivateChats", R.string.PrivateChats), value, true, true);
-                        textCell2.setColorfulIcon(getThemedColor(Theme.key_statisticChartLine_lightblue), R.drawable.msg_filled_menu_users);
+                        textCell2.setTextAndValueAndColorfulIcon(LocaleController.getString("PrivateChats", R.string.PrivateChats), value, true, R.drawable.msg_filled_menu_users, getThemedColor(Theme.key_statisticChartLine_lightblue), true);
                     } else if (itemInners.get(position).keepMediaType == KEEP_MEDIA_TYPE_GROUP) {
-                        textCell2.setTextAndValue(LocaleController.getString("GroupChats", R.string.GroupChats), value, true, true);
-                        textCell2.setColorfulIcon(getThemedColor(Theme.key_statisticChartLine_green), R.drawable.msg_filled_menu_groups);
+                        textCell2.setTextAndValueAndColorfulIcon(LocaleController.getString("GroupChats", R.string.GroupChats), value, true, R.drawable.msg_filled_menu_groups, getThemedColor(Theme.key_statisticChartLine_green), true);
                     } else if (itemInners.get(position).keepMediaType == KEEP_MEDIA_TYPE_CHANNEL) {
-                        textCell2.setTextAndValue(LocaleController.getString("CacheChannels", R.string.CacheChannels), value, true, false);
-                        textCell2.setColorfulIcon(getThemedColor(Theme.key_statisticChartLine_golden), R.drawable.msg_filled_menu_channels);
+                        textCell2.setTextAndValueAndColorfulIcon(LocaleController.getString("CacheChannels", R.string.CacheChannels), value, true, R.drawable.msg_filled_menu_channels, getThemedColor(Theme.key_statisticChartLine_golden), true);
                     }
                     textCell2.setSubtitle(subtitle);
                     break;
@@ -2310,7 +2677,6 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
         arrayList.add(new ThemeDescription(listView, 0, new Class[]{StorageUsageView.class}, new String[]{"telegramCacheTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText));
         arrayList.add(new ThemeDescription(listView, 0, new Class[]{StorageUsageView.class}, new String[]{"freeSizeTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText));
         arrayList.add(new ThemeDescription(listView, 0, new Class[]{StorageUsageView.class}, new String[]{"calculationgTextView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayText));
-        arrayList.add(new ThemeDescription(listView, 0, new Class[]{StorageUsageView.class}, new String[]{"paintProgress2"}, null, null, null, Theme.key_player_progressBackground2));
 
         arrayList.add(new ThemeDescription(listView, 0, new Class[]{SlideChooseView.class}, null, null, null, Theme.key_switchTrack));
         arrayList.add(new ThemeDescription(listView, 0, new Class[]{SlideChooseView.class}, null, null, null, Theme.key_switchTrackChecked));

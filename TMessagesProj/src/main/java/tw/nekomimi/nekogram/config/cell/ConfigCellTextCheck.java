@@ -13,7 +13,7 @@ public class ConfigCellTextCheck extends AbstractConfigCell {
     private final String title;
     private final String subtitle;
     private boolean enabled = true;
-    public TextCheckCell cell; //TODO getCell() in NekomuraTGCell
+    public TextCheckCell cell;
 
     public ConfigCellTextCheck(ConfigItem bind) {
         this.bindConfig = bind;

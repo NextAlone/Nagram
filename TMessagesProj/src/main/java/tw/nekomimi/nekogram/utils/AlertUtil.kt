@@ -144,7 +144,7 @@ object AlertUtil {
     @JvmStatic
     fun showProgress(ctx: Context, text: String = LocaleController.getString("Loading", R.string.Loading)): AlertDialog {
 
-        return AlertDialog.Builder(ctx, 1).apply {
+        return AlertDialog.Builder(ctx, AlertDialog.ALERT_TYPE_MESSAGE).apply {
 
             setMessage(text)
 
@@ -247,7 +247,7 @@ object AlertUtil {
                     LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderMicrosoftTranslator),
                     LocaleController.getString("ProviderYouDao", R.string.ProviderYouDao),
                     LocaleController.getString("ProviderDeepLTranslate", R.string.ProviderDeepLTranslate),
-                    LocaleController.getString("ProviderTelegram", R.string.ProviderTelegram)
+                    LocaleController.getString("ProviderTelegramAPI", R.string.ProviderTelegramAPI)
                 ).toList()
             )
 

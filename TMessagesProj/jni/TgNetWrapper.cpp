@@ -5,6 +5,7 @@
 #include "tgnet/ConnectionsManager.h"
 #include "tgnet/MTProtoScheme.h"
 #include "tgnet/ConnectionSocket.h"
+#include "tgnet/FileLog.h"
 
 JavaVM *java;
 jclass jclass_RequestDelegateInternal;
@@ -65,10 +66,10 @@ jobject getJavaByteBuffer(JNIEnv *env, jclass c, jlong address) {
 
 static const char *NativeByteBufferClassPathName = "org/telegram/tgnet/NativeByteBuffer";
 static JNINativeMethod NativeByteBufferMethods[] = {
-        {"native_getFreeBuffer",     "(I)J",                     (void *) getFreeBuffer},
-        {"native_limit",             "(J)I",                     (void *) limit},
-        {"native_position",          "(J)I",                     (void *) position},
-        {"native_reuse",             "(J)V",                     (void *) reuse},
+        {"native_getFreeBuffer", "(I)J", (void *) getFreeBuffer},
+        {"native_limit", "(J)I", (void *) limit},
+        {"native_position", "(J)I", (void *) position},
+        {"native_reuse", "(J)V", (void *) reuse},
         {"native_getJavaByteBuffer", "(J)Ljava/nio/ByteBuffer;", (void *) getJavaByteBuffer}
 };
 
@@ -99,12 +100,15 @@ void sendRequest(JNIEnv *env, jclass c, jint instanceNum, jlong object, jobject 
     TL_api_request *request = new TL_api_request();
     request->request = (NativeByteBuffer *) (intptr_t) object;
     if (onComplete != nullptr) {
+        DEBUG_REF("sendRequest onComplete");
         onComplete = env->NewGlobalRef(onComplete);
     }
     if (onQuickAck != nullptr) {
+        DEBUG_REF("sendRequest onQuickAck");
         onQuickAck = env->NewGlobalRef(onQuickAck);
     }
     if (onWriteToSocket != nullptr) {
+        DEBUG_REF("sendRequest onWriteToSocket");
         onWriteToSocket = env->NewGlobalRef(onWriteToSocket);
     }
     ConnectionsManager::getInstance(instanceNum).sendRequest(request, ([onComplete, instanceNum](
@@ -262,6 +266,7 @@ checkProxy(JNIEnv *env, jclass c, jint instanceNum, jstring address, jint port, 
     const char *secretStr = env->GetStringUTFChars(secret, 0);
 
     if (requestTimeFunc != nullptr) {
+        DEBUG_REF("sendRequest requestTimeFunc");
         requestTimeFunc = env->NewGlobalRef(requestTimeFunc);
     }
 
@@ -434,7 +439,7 @@ void init(JNIEnv *env, jclass c, jint instanceNum, jint version, jint layer, jin
           jstring deviceModel, jstring systemVersion, jstring appVersion, jstring langCode,
           jstring systemLangCode, jstring configPath, jstring logPath, jstring regId,
           jstring cFingerprint, jstring installerId, jstring packageId, jint timezoneOffset, jlong userId,
-          jboolean enablePushConnection, jboolean hasNetwork, jint networkType) {
+          jboolean enablePushConnection, jboolean hasNetwork, jint networkType, jint performanceClass) {
     const char *deviceModelStr = env->GetStringUTFChars(deviceModel, 0);
     const char *systemVersionStr = env->GetStringUTFChars(systemVersion, 0);
     const char *appVersionStr = env->GetStringUTFChars(appVersion, 0);
@@ -459,7 +464,7 @@ void init(JNIEnv *env, jclass c, jint instanceNum, jint version, jint layer, jin
                                                       std::string(cFingerprintStr),
                                                       std::string(installerIdStr), std::string(packageIdStr), timezoneOffset,
                                                       userId, true, enablePushConnection,
-                                                      hasNetwork, networkType);
+                                                      hasNetwork, networkType, performanceClass);
 
     if (deviceModelStr != 0) {
         env->ReleaseStringUTFChars(deviceModel, deviceModelStr);
@@ -524,7 +529,7 @@ static JNINativeMethod ConnectionsManagerMethods[] = {
         {"native_setProxySettings",         "(ILjava/lang/String;ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",                                                                                                                    (void *) setProxySettings},
         {"native_getConnectionState",       "(I)I",                                                                                                                                                                                             (void *) getConnectionState},
         {"native_setUserId",                "(IJ)V",                                                                                                                                                                                            (void *) setUserId},
-        {"native_init", "(IIIILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IJZZI)V", (void *) init},
+        {"native_init", "(IIIILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IJZZII)V", (void *) init},
         {"native_setLangCode",              "(ILjava/lang/String;)V",                                                                                                                                                                           (void *) setLangCode},
         {"native_setRegId",                 "(ILjava/lang/String;)V",                                                                                                                                                                           (void *) setRegId},
         {"native_setSystemLangCode",        "(ILjava/lang/String;)V",                                                                                                                                                                           (void *) setSystemLangCode},
@@ -569,7 +574,7 @@ extern "C" int registerNativeTgNetFunctions(JavaVM *vm, JNIEnv *env) {
                                sizeof(ConnectionsManagerMethods[0]))) {
         return JNI_FALSE;
     }
-
+DEBUG_REF("RequestDelegateInternal class");
     jclass_RequestDelegateInternal = (jclass) env->NewGlobalRef(
             env->FindClass("org/telegram/tgnet/RequestDelegateInternal"));
     if (jclass_RequestDelegateInternal == 0) {
@@ -581,6 +586,7 @@ extern "C" int registerNativeTgNetFunctions(JavaVM *vm, JNIEnv *env) {
         return JNI_FALSE;
     }
 
+    DEBUG_REF("RequestTimeDelegate class");
     jclass_RequestTimeDelegate = (jclass) env->NewGlobalRef(
             env->FindClass("org/telegram/tgnet/RequestTimeDelegate"));
     if (jclass_RequestTimeDelegate == 0) {
@@ -591,6 +597,7 @@ extern "C" int registerNativeTgNetFunctions(JavaVM *vm, JNIEnv *env) {
         return JNI_FALSE;
     }
 
+    DEBUG_REF("QuickAckDelegate class");
     jclass_QuickAckDelegate = (jclass) env->NewGlobalRef(
             env->FindClass("org/telegram/tgnet/QuickAckDelegate"));
     if (jclass_RequestDelegateInternal == 0) {
@@ -601,6 +608,7 @@ extern "C" int registerNativeTgNetFunctions(JavaVM *vm, JNIEnv *env) {
         return JNI_FALSE;
     }
 
+    DEBUG_REF("WriteToSocketDelegate class");
     jclass_WriteToSocketDelegate = (jclass) env->NewGlobalRef(
             env->FindClass("org/telegram/tgnet/WriteToSocketDelegate"));
     if (jclass_WriteToSocketDelegate == 0) {
@@ -610,6 +618,7 @@ extern "C" int registerNativeTgNetFunctions(JavaVM *vm, JNIEnv *env) {
     if (jclass_WriteToSocketDelegate_run == 0) {
         return JNI_FALSE;
     }
+    DEBUG_REF("ConnectionsManager class");
     jclass_ConnectionsManager = (jclass) env->NewGlobalRef(
             env->FindClass("org/telegram/tgnet/ConnectionsManager"));
     if (jclass_ConnectionsManager == 0) {

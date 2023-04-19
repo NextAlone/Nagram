@@ -57,6 +57,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
 import org.telegram.ui.LaunchActivity;
+import org.telegram.ui.ProfileActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -489,13 +490,6 @@ public class FloatingDebugView extends FrameLayout implements NotificationCenter
                 Toast.makeText(getContext(), LocaleController.getString(SharedConfig.debugWebView ? R.string.DebugMenuWebViewDebugEnabled : R.string.DebugMenuWebViewDebugDisabled), Toast.LENGTH_SHORT).show();
             }));
         }
-        items.add(new FloatingDebugController.DebugItem(LocaleController.getString(SharedConfig.useLNavigation ? R.string.AltNavigationDisable : R.string.AltNavigationEnable), () -> {
-            SharedConfig.useLNavigation = !SharedConfig.useLNavigation;
-            SharedConfig.saveConfig();
-            if (getContext() instanceof Activity) {
-                ((Activity) getContext()).recreate();
-            }
-        }));
         items.add(new FloatingDebugController.DebugItem(Theme.isCurrentThemeDark() ? "Switch to day theme" : "Switch to dark theme", () -> {
             boolean toDark;
 
@@ -527,6 +521,7 @@ public class FloatingDebugView extends FrameLayout implements NotificationCenter
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, finalThemeInfo, true, null, -1);
             }, 200);
         }));
+        items.add(new FloatingDebugController.DebugItem(LocaleController.getString(R.string.DebugSendLogs), () -> ProfileActivity.sendLogs((Activity) getContext(), false)));
         return items;
     }
 

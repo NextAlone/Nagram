@@ -10,6 +10,9 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
+import android.util.LongSparseArray;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 
@@ -28,6 +31,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
+import org.telegram.messenger.LiteMode;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.SharedConfig;
@@ -38,6 +42,7 @@ import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.Premium.PremiumLockIconView;
+import org.telegram.ui.SelectAnimatedEmojiDialog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -61,10 +66,14 @@ public class AnimatedEmojiDrawable extends Drawable {
     public static final int CACHE_TYPE_FORUM_TOPIC = 10;
     public static final int CACHE_TYPE_FORUM_TOPIC_LARGE = 11;
     public static final int CACHE_TYPE_RENDERING_VIDEO = 12;
+    public static final int CACHE_TYPE_ALERT_PREVIEW_STATIC = 13;
+    public static final int CACHE_TYPE_AVATAR_CONSTRUCTOR_PREVIEW = 14;
+    public static final int CACHE_TYPE_AVATAR_CONSTRUCTOR_PREVIEW2 = 15;
 
     public int rawDrawIndex;
 
-    private static HashMap<Integer, HashMap<Long, AnimatedEmojiDrawable>> globalEmojiCache;
+    private static SparseArray<LongSparseArray<AnimatedEmojiDrawable>> globalEmojiCache;
+    private static boolean LOG_MEMORY_LEAK = false;
 
     @NonNull
     public static AnimatedEmojiDrawable make(int account, int cacheType, long documentId) {
@@ -74,12 +83,12 @@ public class AnimatedEmojiDrawable extends Drawable {
     @NonNull
     public static AnimatedEmojiDrawable make(int account, int cacheType, long documentId, String absolutePath) {
         if (globalEmojiCache == null) {
-            globalEmojiCache = new HashMap<>();
+            globalEmojiCache = new SparseArray<>();
         }
         final int key = Objects.hash(account, cacheType);
-        HashMap<Long, AnimatedEmojiDrawable> cache = globalEmojiCache.get(key);
+        LongSparseArray<AnimatedEmojiDrawable> cache = globalEmojiCache.get(key);
         if (cache == null) {
-            globalEmojiCache.put(key, cache = new HashMap<>());
+            globalEmojiCache.put(key, cache = new LongSparseArray<>());
         }
         AnimatedEmojiDrawable drawable = cache.get(documentId);
         if (drawable == null) {
@@ -91,12 +100,12 @@ public class AnimatedEmojiDrawable extends Drawable {
     @NonNull
     public static AnimatedEmojiDrawable make(int account, int cacheType, @NonNull TLRPC.Document document) {
         if (globalEmojiCache == null) {
-            globalEmojiCache = new HashMap<>();
+            globalEmojiCache = new SparseArray<>();
         }
         final int key = Objects.hash(account, cacheType);
-        HashMap<Long, AnimatedEmojiDrawable> cache = globalEmojiCache.get(key);
+        LongSparseArray<AnimatedEmojiDrawable> cache = globalEmojiCache.get(key);
         if (cache == null) {
-            globalEmojiCache.put(key, cache = new HashMap<>());
+            globalEmojiCache.put(key, cache = new LongSparseArray<>());
         }
         AnimatedEmojiDrawable drawable = cache.get(document.id);
         if (drawable == null) {
@@ -163,7 +172,9 @@ public class AnimatedEmojiDrawable extends Drawable {
                 if (emojiDocumentsCache != null) {
                     TLRPC.Document cacheDocument = emojiDocumentsCache.get(id);
                     if (cacheDocument != null) {
-                        onDone.run(cacheDocument);
+                        if (onDone != null) {
+                            onDone.run(cacheDocument);
+                        }
                         return;
                     }
                 }
@@ -171,19 +182,18 @@ public class AnimatedEmojiDrawable extends Drawable {
             if (!checkThread()) {
                 return;
             }
-            if (onDone != null) {
-                if (loadingDocuments == null) {
-                    loadingDocuments = new HashMap<>();
-                }
-                ArrayList<ReceivedDocument> callbacks = loadingDocuments.get(id);
-                if (callbacks != null) {
-                    callbacks.add(onDone);
-                    return;
-                }
-                callbacks = new ArrayList<>(1);
-                callbacks.add(onDone);
-                loadingDocuments.put(id, callbacks);
+            if (loadingDocuments == null) {
+                loadingDocuments = new HashMap<>();
             }
+            ArrayList<ReceivedDocument> callbacks = loadingDocuments.get(id);
+            if (callbacks != null) {
+                callbacks.add(onDone);
+                return;
+            }
+            callbacks = new ArrayList<>(1);
+            callbacks.add(onDone);
+            loadingDocuments.put(id, callbacks);
+
             if (toFetchDocuments == null) {
                 toFetchDocuments = new HashSet<>();
             }
@@ -210,8 +220,12 @@ public class AnimatedEmojiDrawable extends Drawable {
         }
 
         private void loadFromDatabase(ArrayList<Long> emojiToLoad) {
-            MessagesStorage.getInstance(currentAccount).getStorageQueue().postRunnable(() -> {
-                SQLiteDatabase database = MessagesStorage.getInstance(currentAccount).getDatabase();
+            MessagesStorage messagesStorage = MessagesStorage.getInstance(currentAccount);
+            messagesStorage.getStorageQueue().postRunnable(() -> {
+                SQLiteDatabase database = messagesStorage.getDatabase();
+                if (database == null) {
+                    return;
+                }
                 try {
                     String idsStr = TextUtils.join(",", emojiToLoad);
                     SQLiteCursor cursor = database.queryFinalized(String.format(Locale.US, "SELECT data FROM animated_emoji WHERE document_id IN (%s)", idsStr));
@@ -241,7 +255,7 @@ public class AnimatedEmojiDrawable extends Drawable {
                     });
                     cursor.dispose();
                 } catch (SQLiteException e) {
-                    FileLog.e(e);
+                    messagesStorage.checkSQLException(e);
                 }
             });
         }
@@ -312,7 +326,10 @@ public class AnimatedEmojiDrawable extends Drawable {
                         ArrayList<ReceivedDocument> loadingCallbacks = loadingDocuments.remove(document.id);
                         if (loadingCallbacks != null) {
                             for (int j = 0; j < loadingCallbacks.size(); ++j) {
-                                loadingCallbacks.get(j).run(document);
+                                ReceivedDocument callback = loadingCallbacks.get(j);
+                                if (callback != null) {
+                                    callback.run(document);
+                                }
                             }
                             loadingCallbacks.clear();
                         }
@@ -413,6 +430,8 @@ public class AnimatedEmojiDrawable extends Drawable {
             sizedp = (int) ((Math.abs(Theme.chat_msgTextPaintEmoji[2].ascent()) + Math.abs(Theme.chat_msgTextPaintEmoji[2].descent())) * 1.15f / AndroidUtilities.density);
         } else if (this.cacheType == STANDARD_LOTTIE_FRAME) {
             sizedp = (int) ((Math.abs(Theme.chat_msgTextPaintEmoji[0].ascent()) + Math.abs(Theme.chat_msgTextPaintEmoji[0].descent())) * 1.15f / AndroidUtilities.density);
+        } else if (cacheType == CACHE_TYPE_AVATAR_CONSTRUCTOR_PREVIEW || cacheType == CACHE_TYPE_AVATAR_CONSTRUCTOR_PREVIEW2) {
+            sizedp = 100;
         } else {
             sizedp = 34;
         }
@@ -443,6 +462,7 @@ public class AnimatedEmojiDrawable extends Drawable {
                     return super.setImageBitmapByKey(drawable, key, type, memCache, guid);
                 }
             };
+            imageReceiver.setAllowLoadingOnAttachedOnly(true);
         };
         if (cacheType == CACHE_TYPE_RENDERING_VIDEO) {
             imageReceiver.ignoreNotifications = true;
@@ -458,16 +478,18 @@ public class AnimatedEmojiDrawable extends Drawable {
             imageReceiver.setUniqKeyPrefix(cacheType + "_");
         }
         imageReceiver.setVideoThumbIsSame(true);
-        boolean onlyStaticPreview = SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_LOW && (cacheType == CACHE_TYPE_KEYBOARD || cacheType == CACHE_TYPE_ALERT_PREVIEW || cacheType == CACHE_TYPE_ALERT_PREVIEW_TAB_STRIP);
-
+        boolean onlyStaticPreview = SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_LOW && cacheType == CACHE_TYPE_ALERT_PREVIEW_TAB_STRIP || cacheType == CACHE_TYPE_KEYBOARD && !LiteMode.isEnabled(LiteMode.FLAG_ANIMATED_EMOJI_KEYBOARD) || cacheType == CACHE_TYPE_ALERT_PREVIEW && !LiteMode.isEnabled(LiteMode.FLAG_ANIMATED_EMOJI_REACTIONS);
+        if (cacheType == CACHE_TYPE_ALERT_PREVIEW_STATIC) {
+            onlyStaticPreview = true;
+        }
         String filter = sizedp + "_" + sizedp;
         if (cacheType == CACHE_TYPE_RENDERING_VIDEO) {
             filter += "_d_nostream";
         }
-        if (cacheType != STANDARD_LOTTIE_FRAME && (cacheType != CACHE_TYPE_MESSAGES_LARGE || SharedConfig.getDevicePerformanceClass() < SharedConfig.PERFORMANCE_CLASS_HIGH) && cacheType != CACHE_TYPE_RENDERING_VIDEO) {
+        if (cacheType != CACHE_TYPE_AVATAR_CONSTRUCTOR_PREVIEW2 && cacheType != CACHE_TYPE_AVATAR_CONSTRUCTOR_PREVIEW && cacheType != STANDARD_LOTTIE_FRAME && (cacheType != CACHE_TYPE_MESSAGES_LARGE || SharedConfig.getDevicePerformanceClass() < SharedConfig.PERFORMANCE_CLASS_HIGH) && cacheType != CACHE_TYPE_RENDERING_VIDEO) {
             filter += "_pcache";
         }
-        if (cacheType != CACHE_TYPE_MESSAGES && cacheType != CACHE_TYPE_MESSAGES_LARGE) {
+        if (cacheType != CACHE_TYPE_MESSAGES && cacheType != CACHE_TYPE_MESSAGES_LARGE && cacheType != CACHE_TYPE_AVATAR_CONSTRUCTOR_PREVIEW && cacheType != CACHE_TYPE_AVATAR_CONSTRUCTOR_PREVIEW2) {
             filter += "_compress";
         }
         if (cacheType == STANDARD_LOTTIE_FRAME) {
@@ -481,8 +503,7 @@ public class AnimatedEmojiDrawable extends Drawable {
         if ("video/webm".equals(document.mime_type)) {
             mediaLocation = ImageLocation.getForDocument(document);
             mediaFilter = filter + "_" + ImageLoader.AUTOPLAY_FILTER;
-            SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(document.thumbs, Theme.key_windowBackgroundWhiteGrayIcon, 0.2f);
-            thumbDrawable = svgThumb;
+            thumbDrawable = DocumentObject.getSvgThumb(document.thumbs, Theme.key_windowBackgroundWhiteGrayIcon, 0.2f);
         } else if ("application/x-tgsticker".equals(document.mime_type)) {
             String probableCacheKey = (cacheType != 0 ? cacheType + "_" : "") + documentId + "@" + filter;
             if (SharedConfig.getDevicePerformanceClass() != SharedConfig.PERFORMANCE_CLASS_LOW || (cacheType == CACHE_TYPE_KEYBOARD || !ImageLoader.getInstance().hasLottieMemCache(probableCacheKey))) {
@@ -503,41 +524,35 @@ public class AnimatedEmojiDrawable extends Drawable {
             mediaLocation = null;
             mediaFilter = filter;
         }
-        if (onlyStaticPreview) {
-            mediaLocation = null;
-        }
 
         if (absolutePath != null) {
-            imageReceiver.setImageBitmap(new AnimatedFileDrawable(new File(absolutePath), true, 0, null, null, null, 0, currentAccount, true, 512, 512, null));
+            imageReceiver.setImageBitmap(new AnimatedFileDrawable(new File(absolutePath), true, 0, 0, null, null, null, 0, currentAccount, true, 512, 512, null));
         } else if (cacheType == STANDARD_LOTTIE_FRAME) {
             imageReceiver.setImage(null, null, mediaLocation, mediaFilter, null, null, thumbDrawable, document.size, null, document, 1);
         } else {
-            if (SharedConfig.getLiteMode().enabled()) {
+            if (onlyStaticPreview || (!LiteMode.isEnabled(LiteMode.FLAG_ANIMATED_EMOJI_KEYBOARD) && cacheType != CACHE_TYPE_AVATAR_CONSTRUCTOR_PREVIEW)) {
                 if ("video/webm".equals(document.mime_type)) {
                     imageReceiver.setImage(null, null, ImageLocation.getForDocument(thumb, document), sizedp + "_" + sizedp, null, null, thumbDrawable, document.size, null, document, 1);
+                } else if (MessageObject.isAnimatedStickerDocument(document, true)){
+                    imageReceiver.setImage(mediaLocation, mediaFilter + "_firstframe", null, null, thumbDrawable, document.size, null, document, 1);
                 } else {
-                    imageReceiver.setImage(mediaLocation, mediaFilter + "_firstframe", ImageLocation.getForDocument(thumb, document), sizedp + "_" + sizedp, null, null, thumbDrawable, document.size, null, document, 1);
+                    imageReceiver.setImage(ImageLocation.getForDocument(thumb, document), sizedp + "_" + sizedp, null, null, thumbDrawable, document.size, null, document, 1);
                 }
             } else {
                 imageReceiver.setImage(mediaLocation, mediaFilter, ImageLocation.getForDocument(thumb, document), sizedp + "_" + sizedp, null, null, thumbDrawable, document.size, null, document, 1);
             }
         }
 
+        updateAutoRepeat(imageReceiver);
 
-        if (cacheType == CACHE_TYPE_EMOJI_STATUS || cacheType == CACHE_TYPE_ALERT_EMOJI_STATUS || cacheType == CACHE_TYPE_FORUM_TOPIC) {
-            imageReceiver.setAutoRepeatCount(2);
-        } else if (cacheType == CACHE_TYPE_FORUM_TOPIC_LARGE) {
-            imageReceiver.setAutoRepeatCount(1);
-        }
-
-        if (cacheType == CACHE_TYPE_ALERT_PREVIEW || cacheType == CACHE_TYPE_ALERT_PREVIEW_TAB_STRIP || cacheType == CACHE_TYPE_ALERT_PREVIEW_LARGE) {
+        if (cacheType == CACHE_TYPE_ALERT_PREVIEW_STATIC || cacheType == CACHE_TYPE_ALERT_PREVIEW || cacheType == CACHE_TYPE_ALERT_PREVIEW_TAB_STRIP || cacheType == CACHE_TYPE_ALERT_PREVIEW_LARGE) {
             imageReceiver.setLayerNum(7);
         }
         if (cacheType == CACHE_TYPE_ALERT_EMOJI_STATUS) {
             imageReceiver.setLayerNum(6656);
         }
         imageReceiver.setAspectFit(true);
-        if (cacheType == CACHE_TYPE_RENDERING_VIDEO || cacheType == STANDARD_LOTTIE_FRAME) {
+        if (cacheType == CACHE_TYPE_RENDERING_VIDEO || cacheType == STANDARD_LOTTIE_FRAME || cacheType == CACHE_TYPE_TAB_STRIP || cacheType == CACHE_TYPE_ALERT_PREVIEW_TAB_STRIP) {
             imageReceiver.setAllowStartAnimation(false);
             imageReceiver.setAllowStartLottieAnimation(false);
             imageReceiver.setAutoRepeat(0);
@@ -554,6 +569,14 @@ public class AnimatedEmojiDrawable extends Drawable {
         imageReceiver.setRoundRadius(roundRadius);
         updateAttachState();
         invalidate();
+    }
+
+    private void updateAutoRepeat(ImageReceiver imageReceiver) {
+        if (cacheType == CACHE_TYPE_EMOJI_STATUS || cacheType == CACHE_TYPE_ALERT_EMOJI_STATUS || cacheType == CACHE_TYPE_FORUM_TOPIC) {
+            imageReceiver.setAutoRepeatCount(2);
+        } else if (cacheType == CACHE_TYPE_FORUM_TOPIC_LARGE || cacheType == CACHE_TYPE_AVATAR_CONSTRUCTOR_PREVIEW || cacheType == CACHE_TYPE_TAB_STRIP || cacheType == CACHE_TYPE_ALERT_PREVIEW_TAB_STRIP) {
+            imageReceiver.setAutoRepeatCount(1);
+        }
     }
 
     void invalidate() {
@@ -637,6 +660,9 @@ public class AnimatedEmojiDrawable extends Drawable {
     }
 
     public void addView(View callback) {
+        if (callback instanceof SelectAnimatedEmojiDialog.EmojiListView) {
+            throw new RuntimeException();
+        }
         if (views == null) {
             views = new ArrayList<>(10);
         }
@@ -670,6 +696,8 @@ public class AnimatedEmojiDrawable extends Drawable {
         updateAttachState();
     }
 
+    public static int attachedCount = 0;
+    public static ArrayList<AnimatedEmojiDrawable> attachedDrawable;
     private void updateAttachState() {
         if (imageReceiver == null) {
             return;
@@ -681,6 +709,19 @@ public class AnimatedEmojiDrawable extends Drawable {
                 imageReceiver.onAttachedToWindow();
             } else {
                 imageReceiver.onDetachedFromWindow();
+            }
+            if (LOG_MEMORY_LEAK) {
+                if (attachedDrawable == null) {
+                    attachedDrawable = new ArrayList<>();
+                }
+                if (attached) {
+                    attachedCount++;
+                    attachedDrawable.add(this);
+                } else {
+                    attachedCount--;
+                    attachedDrawable.remove(this);
+                }
+                Log.d("animatedDrawable", "attached count " + attachedCount);
             }
         }
 
@@ -852,9 +893,11 @@ public class AnimatedEmojiDrawable extends Drawable {
         private AnimatedFloat changeProgress = new AnimatedFloat((View) null, 300, CubicBezierInterpolator.EASE_OUT);
         private Drawable[] drawables = new Drawable[2];
         private View parentView;
+        private View secondParent;
         private boolean invalidateParent;
         private int size;
         private int alpha = 255;
+        boolean attached;
 
         public SwapAnimatedEmojiDrawable(View parentView, int size) {
             this(parentView, false, size, CACHE_TYPE_EMOJI_STATUS);
@@ -876,28 +919,8 @@ public class AnimatedEmojiDrawable extends Drawable {
         }
 
         public void setParentView(View parentView) {
-            removeParentView(this.parentView);
-            addParentView(this.parentView = parentView);
             changeProgress.setParent(parentView);
             this.parentView = parentView;
-        }
-
-        public void addParentView(View parentView) {
-            if (drawables[0] instanceof AnimatedEmojiDrawable) {
-                ((AnimatedEmojiDrawable) drawables[0]).addView(parentView);
-            }
-            if (drawables[1] instanceof AnimatedEmojiDrawable) {
-                ((AnimatedEmojiDrawable) drawables[1]).addView(parentView);
-            }
-        }
-
-        public void removeParentView(View parentView) {
-            if (drawables[0] instanceof AnimatedEmojiDrawable) {
-                ((AnimatedEmojiDrawable) drawables[0]).removeView(parentView);
-            }
-            if (drawables[1] instanceof AnimatedEmojiDrawable) {
-                ((AnimatedEmojiDrawable) drawables[1]).removeView(parentView);
-            }
         }
 
         public void play() {
@@ -905,11 +928,7 @@ public class AnimatedEmojiDrawable extends Drawable {
                 AnimatedEmojiDrawable drawable = (AnimatedEmojiDrawable) getDrawable();
                 ImageReceiver imageReceiver = drawable.getImageReceiver();
                 if (imageReceiver != null) {
-                    if (drawable.cacheType == CACHE_TYPE_EMOJI_STATUS || drawable.cacheType == CACHE_TYPE_ALERT_EMOJI_STATUS || drawable.cacheType == CACHE_TYPE_FORUM_TOPIC) {
-                        imageReceiver.setAutoRepeatCount(2);
-                    } else if (cacheType == CACHE_TYPE_FORUM_TOPIC_LARGE) {
-                        imageReceiver.setAutoRepeatCount(1);
-                    }
+                    drawable.updateAutoRepeat(imageReceiver);
                     imageReceiver.startAnimation();
                 }
             }
@@ -1013,19 +1032,26 @@ public class AnimatedEmojiDrawable extends Drawable {
             if (animated) {
                 changeProgress.set(0, true);
                 if (drawables[1] != null) {
-                    if (drawables[1] instanceof AnimatedEmojiDrawable) {
+                    if (attached && drawables[1] instanceof AnimatedEmojiDrawable) {
                         ((AnimatedEmojiDrawable) drawables[1]).removeView(this);
                     }
                     drawables[1] = null;
                 }
                 drawables[1] = drawables[0];
                 drawables[0] = AnimatedEmojiDrawable.make(UserConfig.selectedAccount, cacheType, documentId);
-                ((AnimatedEmojiDrawable) drawables[0]).addView(this);
+                if (attached) {
+                    ((AnimatedEmojiDrawable) drawables[0]).addView(this);
+                }
             } else {
                 changeProgress.set(1, true);
-                detach();
+                boolean attachedLocal = attached;
+                if (attachedLocal) {
+                    detach();
+                }
                 drawables[0] = AnimatedEmojiDrawable.make(UserConfig.selectedAccount, cacheType, documentId);
-                ((AnimatedEmojiDrawable) drawables[0]).addView(this);
+                if (attachedLocal) {
+                    attach();
+                }
             }
             lastColor = 0xffffffff;
             colorFilter = null;
@@ -1052,18 +1078,25 @@ public class AnimatedEmojiDrawable extends Drawable {
                 drawables[1] = drawables[0];
                 if (document != null) {
                     drawables[0] = AnimatedEmojiDrawable.make(UserConfig.selectedAccount, cacheType, document);
-                    ((AnimatedEmojiDrawable) drawables[0]).addView(this);
+                    if (attached) {
+                        ((AnimatedEmojiDrawable) drawables[0]).addView(this);
+                    }
                 } else {
                     drawables[0] = null;
                 }
             } else {
                 changeProgress.set(1, true);
-                detach();
+                boolean attachedLocal = attached;
+                if (attachedLocal) {
+                    detach();
+                }
                 if (document != null) {
                     drawables[0] = AnimatedEmojiDrawable.make(UserConfig.selectedAccount, cacheType, document);
-                    ((AnimatedEmojiDrawable) drawables[0]).addView(this);
                 } else {
                     drawables[0] = null;
+                }
+                if (attachedLocal) {
+                    attach();
                 }
             }
             lastColor = 0xffffffff;
@@ -1079,7 +1112,7 @@ public class AnimatedEmojiDrawable extends Drawable {
             if (animated) {
                 changeProgress.set(0, true);
                 if (drawables[1] != null) {
-                    if (drawables[1] instanceof AnimatedEmojiDrawable) {
+                    if (attached && drawables[1] instanceof AnimatedEmojiDrawable) {
                         ((AnimatedEmojiDrawable) drawables[1]).removeView(this);
                     }
                     drawables[1] = null;
@@ -1088,8 +1121,14 @@ public class AnimatedEmojiDrawable extends Drawable {
                 drawables[0] = drawable;
             } else {
                 changeProgress.set(1, true);
-                detach();
+                boolean attachedLocal = attached;
+                if (attachedLocal) {
+                    detach();
+                }
                 drawables[0] = drawable;
+                if (attachedLocal) {
+                    attach();
+                }
             }
             lastColor = 0xffffffff;
             colorFilter = null;
@@ -1098,6 +1137,10 @@ public class AnimatedEmojiDrawable extends Drawable {
         }
 
         public void detach() {
+            if (!attached) {
+                return;
+            }
+            attached = false;
             if (drawables[0] instanceof AnimatedEmojiDrawable) {
                 ((AnimatedEmojiDrawable) drawables[0]).removeView(this);
             }
@@ -1107,6 +1150,10 @@ public class AnimatedEmojiDrawable extends Drawable {
         }
 
         public void attach() {
+            if (attached) {
+                return;
+            }
+            attached = true;
             if (drawables[0] instanceof AnimatedEmojiDrawable) {
                 ((AnimatedEmojiDrawable) drawables[0]).addView(this);
             }
@@ -1145,15 +1192,27 @@ public class AnimatedEmojiDrawable extends Drawable {
                     parentView.invalidate();
                 }
             }
+            if (secondParent != null) {
+                secondParent.invalidate();
+            }
+            invalidateSelf();
+        }
+
+        public void setSecondParent(View secondParent) {
+            this.secondParent = secondParent;
         }
     }
 
-    public static void lightModeChanged() {
-        for (HashMap<Long, AnimatedEmojiDrawable> map :globalEmojiCache.values()) {
-            ArrayList<Long> set = new ArrayList(map.keySet());
-            for (Long documentId : set) {
+    public static void updateAll() {
+        if (globalEmojiCache == null) {
+            return;
+        }
+        for (int i = 0; i < globalEmojiCache.size(); i++) {
+            LongSparseArray<AnimatedEmojiDrawable> map = globalEmojiCache.valueAt(i);
+            for (int j = 0; j < map.size(); j++) {
+                long documentId = map.keyAt(j);
                 AnimatedEmojiDrawable animatedEmojiDrawable = map.get(documentId);
-                if (animatedEmojiDrawable.attached) {
+                if (animatedEmojiDrawable != null && animatedEmojiDrawable.attached) {
                     animatedEmojiDrawable.initDocument(true);
                 } else {
                     map.remove(documentId);

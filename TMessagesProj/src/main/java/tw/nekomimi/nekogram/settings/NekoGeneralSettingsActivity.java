@@ -350,7 +350,7 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
                             LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderMicrosoftTranslator),
                             LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderYouDao),
                             LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderDeepLTranslate),
-                            LocaleController.getString("ProviderTelegram", R.string.ProviderTelegram)
+                            LocaleController.getString("ProviderTelegramAPI", R.string.ProviderTelegramAPI)
                     }, (i, __) -> {
                         boolean needReset = NekoConfig.translationProvider.Int() - 1 != i && (NekoConfig.translationProvider.Int() == 1 || i == 0);
                         NekoConfig.translationProvider.setConfigInt(i + 1);
@@ -461,6 +461,17 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
                 boolean enabled = (Boolean) newValue;
                 ((ConfigCellTextCheck) mapDriftingFixForGoogleMapsRow).setEnabled(!enabled);
                 listAdapter.notifyItemChanged(cellGroup.rows.indexOf(mapDriftingFixForGoogleMapsRow));
+            } else if (key.equals(NekoConfig.useTelegramTranslateInChat.getKey())) {
+                var cell = (TextSettingsCell) (listView.findViewHolderForAdapterPosition(cellGroup.rows.indexOf(translationProviderRow)).itemView);
+                if (NekoConfig.useTelegramTranslateInChat.Bool()) {
+                    NekoConfig.translationProvider.setConfigInt(Translator.providerTelegram);
+                    ((ConfigCellCustom) translationProviderRow).setEnabled(false);
+                    cell.setEnabled(false);
+                } else {
+                    ((ConfigCellCustom) translationProviderRow).setEnabled(true);
+                    cell.setEnabled(true);
+                }
+                listAdapter.notifyItemChanged(cellGroup.rows.indexOf(translationProviderRow));
             }
         };
 
@@ -735,34 +746,35 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
                         if (position == cellGroup.rows.indexOf(translationProviderRow)) {
                             String value;
                             switch (NekoConfig.translationProvider.Int()) {
-                                case 1:
+                                case Translator.providerGoogle:
                                     value = LocaleController.getString("ProviderGoogleTranslate", R.string.ProviderGoogleTranslate);
                                     break;
-                                case 2:
+                                case Translator.providerGoogleCN:
                                     value = LocaleController.getString("ProviderGoogleTranslateCN", R.string.ProviderGoogleTranslateCN);
                                     break;
-                                case 3:
+                                case Translator.providerYandex:
                                     value = LocaleController.getString("ProviderYandexTranslate", R.string.ProviderYandexTranslate);
                                     break;
-                                case 4:
+                                case Translator.providerLingo:
                                     value = LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud);
                                     break;
-                                case 5:
+                                case Translator.providerMicrosoft:
                                     value = LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderMicrosoftTranslator);
                                     break;
-                                case 6:
+                                case Translator.providerYouDao:
                                     value = LocaleController.getString("ProviderYouDao", R.string.ProviderYouDao);
                                     break;
-                                case 7:
+                                case Translator.providerDeepL:
                                     value = LocaleController.getString("ProviderDeepLTranslate", R.string.ProviderDeepLTranslate);
                                     break;
-                                case 8:
-                                    value = LocaleController.getString("ProviderTelegram", R.string.ProviderTelegram);
+                                case Translator.providerTelegram:
+                                    value = LocaleController.getString("ProviderTelegramAPI", R.string.ProviderTelegramAPI);
                                     break;
                                 default:
                                     value = "Unknown";
                             }
                             textCell.setTextAndValue(LocaleController.getString("TranslationProvider", R.string.TranslationProvider), value, true);
+                            if (NekoConfig.useTelegramTranslateInChat.Bool()) textCell.setEnabled(false);
                         } else if (position == cellGroup.rows.indexOf(pgpAppRow)) {
                             textCell.setTextAndValue(LocaleController.getString("OpenPGPApp", R.string.OpenPGPApp), NekoXConfig.getOpenPGPAppName(), true);
                         } else if (position == cellGroup.rows.indexOf(translateToLangRow)) {
@@ -834,6 +846,9 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
             if (NekoConfig.useOSMDroidMap.Bool())
                 ((ConfigCellTextCheck) mapDriftingFixForGoogleMapsRow).setEnabled(false);
         }
+
+        if (NekoConfig.useTelegramTranslateInChat.Bool())
+            ((ConfigCellCustom) translationProviderRow).setEnabled(false);
 
         boolean enabled;
 

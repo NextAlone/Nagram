@@ -101,7 +101,7 @@ public class TextDetailSettingsCell extends FrameLayout {
         }
     }
 
-    public void setTextAndValue(String text, CharSequence value, boolean divider) {
+    public void setTextAndValue(CharSequence text, CharSequence value, boolean divider) {
         textView.setText(text);
         if (StrUtil.isBlank(value)) {
             valueTextView.setVisibility(GONE);

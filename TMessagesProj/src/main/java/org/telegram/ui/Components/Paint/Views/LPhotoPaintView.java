@@ -785,12 +785,12 @@ public class LPhotoPaintView extends SizeNotifierFrameLayoutPhoto implements IPh
 
         cancelButton = new PaintCancelView(context);
         cancelButton.setPadding(AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8));
-        cancelButton.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector, resourcesProvider)));
+        cancelButton.setBackground(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         bottomLayout.addView(cancelButton, LayoutHelper.createFrame(32, 32, Gravity.BOTTOM | Gravity.LEFT, 12, 0, 0, 4));
 
         doneButton = new PaintDoneView(context);
         doneButton.setPadding(AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8));
-        doneButton.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector, resourcesProvider)));
+        doneButton.setBackground(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR));
         doneButton.setOnClickListener(v -> {
             if (isColorListShown) {
                 new ColorPickerBottomSheet(context, this.resourcesProvider).setColor(colorSwatch.color).setPipetteDelegate(new ColorPickerBottomSheet.PipetteDelegate() {
@@ -1166,6 +1166,7 @@ public class LPhotoPaintView extends SizeNotifierFrameLayoutPhoto implements IPh
         drawTab.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         drawTab.setGravity(Gravity.CENTER_HORIZONTAL);
         drawTab.setTypeface(AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_MEDIUM));
+        drawTab.setSingleLine();
         drawTab.setOnClickListener(v -> {
             if (editingText) {
                 selectEntity(null);
@@ -1185,6 +1186,7 @@ public class LPhotoPaintView extends SizeNotifierFrameLayoutPhoto implements IPh
         stickerTab.setGravity(Gravity.CENTER_HORIZONTAL);
         stickerTab.setTypeface(AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_MEDIUM));
         stickerTab.setAlpha(0.6f);
+        stickerTab.setSingleLine();
         tabsLayout.addView(stickerTab, LayoutHelper.createLinear(0, LayoutHelper.WRAP_CONTENT, 1f));
 
         textTab = new TextView(context);
@@ -1196,6 +1198,7 @@ public class LPhotoPaintView extends SizeNotifierFrameLayoutPhoto implements IPh
         textTab.setGravity(Gravity.CENTER_HORIZONTAL);
         textTab.setTypeface(AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_MEDIUM));
         textTab.setAlpha(0.6f);
+        textTab.setSingleLine();
         textTab.setOnClickListener(v -> {
             switchTab(2);
             if (!(currentEntityView instanceof TextPaintView)) {
@@ -1371,7 +1374,7 @@ public class LPhotoPaintView extends SizeNotifierFrameLayoutPhoto implements IPh
         measureChild(topLayout, widthMeasureSpec, heightMeasureSpec);
         ignoreLayout = false;
 
-        int keyboardSize = SharedConfig.smoothKeyboard ? 0 : measureKeyboardHeight();
+        int keyboardSize = 0;
         if (!waitingForKeyboardOpen && keyboardSize <= AndroidUtilities.dp(20) && !emojiViewVisible && !isAnimatePopupClosing) {
             ignoreLayout = true;
             hideEmojiView();
@@ -2832,37 +2835,36 @@ public class LPhotoPaintView extends SizeNotifierFrameLayoutPhoto implements IPh
             onWindowSizeChanged();
 
             if (!emojiWasVisible) {
-                if (SharedConfig.smoothKeyboard) {
-                    if (keyboardVisible) {
-                        translateBottomPanelAfterResize = true;
-                        weightChooserView.startPanTransition(AndroidUtilities.displaySize.y, AndroidUtilities.displaySize.y - emojiPadding);
+                if (keyboardVisible) {
+                    translateBottomPanelAfterResize = true;
+                    weightChooserView.startPanTransition(AndroidUtilities.displaySize.y, AndroidUtilities.displaySize.y - emojiPadding);
 //                        weightChooserView.updatePanTransition(0, 1);
 //                        weightChooserView.stopPanTransition();
-                    } else {
-                        ValueAnimator animator = ValueAnimator.ofFloat(emojiPadding, 0);
-                        weightChooserView.startPanTransition(AndroidUtilities.displaySize.y, AndroidUtilities.displaySize.y - emojiPadding);
-                        animator.addUpdateListener(animation -> {
-                            float v = (float) animation.getAnimatedValue();
-                            emojiView.setTranslationY(v);
+                } else {
+                    ValueAnimator animator = ValueAnimator.ofFloat(emojiPadding, 0);
+                    weightChooserView.startPanTransition(AndroidUtilities.displaySize.y, AndroidUtilities.displaySize.y - emojiPadding);
+                    animator.addUpdateListener(animation -> {
+                        float v = (float) animation.getAnimatedValue();
+                        emojiView.setTranslationY(v);
+                        if (!ignore) {
+                            bottomPanelTranslationY(v, 1f - v / emojiPadding);
+                        }
+                    });
+                    animator.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            emojiView.setTranslationY(0);
                             if (!ignore) {
-                                bottomPanelTranslationY(v, 1f - v / emojiPadding);
+                                bottomPanelTranslationY(0, 1);
                             }
-                        });
-                        animator.addListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                emojiView.setTranslationY(0);
-                                if (!ignore) {
-                                    bottomPanelTranslationY(0, 1);
-                                }
-                                weightChooserView.stopPanTransition();
-                            }
-                        });
-                        animator.setDuration(AdjustPanLayoutHelper.keyboardDuration);
-                        animator.setInterpolator(AdjustPanLayoutHelper.keyboardInterpolator);
-                        animator.start();
-                    }
+                            weightChooserView.stopPanTransition();
+                        }
+                    });
+                    animator.setDuration(AdjustPanLayoutHelper.keyboardDuration);
+                    animator.setInterpolator(AdjustPanLayoutHelper.keyboardInterpolator);
+                    animator.start();
                 }
+
             }
         } else {
             ChatActivityEnterViewAnimatedIconView emojiButton = textOptionsView.getEmojiButton();
@@ -2895,7 +2897,7 @@ public class LPhotoPaintView extends SizeNotifierFrameLayoutPhoto implements IPh
             showEmojiPopup(0);
         }
         if (byBackButton) {
-            if (SharedConfig.smoothKeyboard && emojiView != null && emojiView.getVisibility() == View.VISIBLE && !waitingForKeyboardOpen) {
+            if (emojiView != null && emojiView.getVisibility() == View.VISIBLE && !waitingForKeyboardOpen) {
                 int height = emojiView.getMeasuredHeight();
                 ValueAnimator animator = ValueAnimator.ofFloat(0, height);
                 final boolean ignore = bottomPanelIgnoreOnce;

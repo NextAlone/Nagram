@@ -14,6 +14,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MediaController;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
 
@@ -82,7 +83,9 @@ public class MediaCodecVideoConvertor {
         long time = System.currentTimeMillis();
         boolean error = false;
         boolean repeatWithIncreasedTimeout = false;
+        boolean isAvatar = avatarStartTime >= 0;
         int videoTrackIndex = -5;
+        String selectedEncoderName = null;
 
         try {
             MediaCodec.BufferInfo info = new MediaCodec.BufferInfo();
@@ -107,7 +110,7 @@ public class MediaCodecVideoConvertor {
                     boolean decoderDone = false;
                     int framesCount = 0;
 
-                    if (avatarStartTime >= 0) {
+                    if (isAvatar) {
                         if (durationS <= 2000) {
                             bitrate = 2600000;
                         } else if (durationS <= 5000) {
@@ -143,6 +146,10 @@ public class MediaCodecVideoConvertor {
                     outputFormat.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 1);
 
                     encoder = MediaCodec.createEncoderByType(MediaController.VIDEO_MIME_TYPE);
+
+                    selectedEncoderName = encoder.getName();
+                    FileLog.d("selected encoder " + selectedEncoderName);
+
                     encoder.configure(outputFormat, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
                     inputSurface = new InputSurface(encoder.createInputSurface());
                     inputSurface.makeCurrent();
@@ -344,7 +351,7 @@ public class MediaCodecVideoConvertor {
                             extractor.selectTrack(videoIndex);
                             MediaFormat videoFormat = extractor.getTrackFormat(videoIndex);
                             String encoderName = null;
-                            if (avatarStartTime >= 0) {
+                            if (isAvatar) {
                                 if (durationS <= 2000) {
                                     bitrate = 2600000;
                                 } else if (durationS <= 5000) {
@@ -354,7 +361,9 @@ public class MediaCodecVideoConvertor {
                                 }
                                 avatarStartTime = 0;
                                 //this encoder work with bitrate better, prevent case when result video max 2MB
-                                encoderName = "OMX.google.h264.encoder";
+                                if (originalBitrate >= 15_000_000) {
+                                    encoderName = "OMX.google.h264.encoder";
+                                }
                             } else if (bitrate <= 0) {
                                 bitrate = 921600;
                             }
@@ -389,21 +398,6 @@ public class MediaCodecVideoConvertor {
                                 w = resultWidth;
                                 h = resultHeight;
                             }
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("create encoder with w = " + w + " h = " + h + " bitrate = " + bitrate);
-                            }
-                            MediaFormat outputFormat = MediaFormat.createVideoFormat(MediaController.VIDEO_MIME_TYPE, w, h);
-                            outputFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface);
-                            outputFormat.setInteger(MediaFormat.KEY_BIT_RATE, bitrate);
-                            outputFormat.setInteger(MediaFormat.KEY_FRAME_RATE, framerate);
-                            outputFormat.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 2);
-
-                            if (Build.VERSION.SDK_INT < 23 && Math.min(h, w) <= 480) {
-                                if (bitrate > 921600) {
-                                    bitrate = 921600;
-                                }
-                                outputFormat.setInteger(MediaFormat.KEY_BIT_RATE, bitrate);
-                            }
 
                             if (encoderName != null) {
                                 try {
@@ -415,6 +409,30 @@ public class MediaCodecVideoConvertor {
                             if (encoder == null) {
                                 encoder = MediaCodec.createEncoderByType(MediaController.VIDEO_MIME_TYPE);
                             }
+
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.d("create encoder with w = " + w + " h = " + h + " bitrate = " + bitrate);
+                            }
+                            MediaFormat outputFormat = MediaFormat.createVideoFormat(MediaController.VIDEO_MIME_TYPE, w, h);
+                            outputFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface);
+                            outputFormat.setInteger(MediaFormat.KEY_BIT_RATE, bitrate);
+                            if (isAvatar && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                // prevent case when result video max 2MB
+                                outputFormat.setInteger(MediaFormat.KEY_BITRATE_MODE, MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CBR);
+                            }
+                            outputFormat.setInteger( "max-bitrate", bitrate);
+                            outputFormat.setInteger(MediaFormat.KEY_FRAME_RATE, framerate);
+                            outputFormat.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 1);
+
+                            if (Build.VERSION.SDK_INT < 23 && Math.min(h, w) <= 480 && !isAvatar) {
+                                if (bitrate > 921600) {
+                                    bitrate = 921600;
+                                }
+                                outputFormat.setInteger(MediaFormat.KEY_BIT_RATE, bitrate);
+                            }
+
+                            selectedEncoderName = encoder.getName();
+                            FileLog.d("selected encoder " + selectedEncoderName);
                             encoder.configure(outputFormat, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
                             inputSurface = new InputSurface(encoder.createInputSurface());
                             inputSurface.makeCurrent();
@@ -822,10 +840,14 @@ public class MediaCodecVideoConvertor {
 
         long timeLeft = System.currentTimeMillis() - time;
         if (BuildVars.LOGS_ENABLED) {
-            FileLog.d("compression completed time=" + timeLeft + " needCompress=" + needCompress + " w=" + resultWidth + " h=" + resultHeight + " bitrate=" + bitrate);
+            FileLog.d("compression completed time=" + timeLeft + " needCompress=" + needCompress + " w=" + resultWidth + " h=" + resultHeight + " bitrate=" + bitrate + " file size=" + AndroidUtilities.formatFileSize(cacheFile.length()) + " encoder_name=" + selectedEncoderName);
         }
 
         return error;
+    }
+
+    private boolean isMediatekAvcEncoder(MediaCodec encoder) {
+        return encoder.getName().equals("c2.mtk.avc.encoder");
     }
 
     private long readAndWriteTracks(MediaExtractor extractor, MP4Builder mediaMuxer,
@@ -992,8 +1014,12 @@ public class MediaCodecVideoConvertor {
             final int dstHeight, boolean external) {
 
         final float kernelSize = Utilities.clamp((float) (Math.max(srcWidth, srcHeight) / (float) Math.max(dstHeight, dstWidth)) * 0.8f, 2f, 1f);
-        final int kernelRadius = (int) kernelSize;
+        int kernelRadius = (int) kernelSize;
+        if (kernelRadius > 1 && SharedConfig.deviceIsAverage()) {
+            kernelRadius = 1;
+        }
         FileLog.d("source size " + srcWidth + "x" + srcHeight + "    dest size " + dstWidth + dstHeight + "   kernelRadius " + kernelRadius);
+
         if (external) {
             return "#extension GL_OES_EGL_image_external : require\n" +
                     "precision mediump float;\n" +

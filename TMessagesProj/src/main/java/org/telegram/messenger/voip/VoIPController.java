@@ -193,11 +193,11 @@ public class VoIPController {
 	}
 
 	private String getLogFilePath(String name) {
-		return new File(EnvUtil.getTelegramPath(),"logs/" + name + ".log").getPath();
+		return new File(ApplicationLoader.applicationContext.getCacheDir(),"logs/" + name + ".log").getPath();
 	}
 
 	private String getLogFilePath(long callID){
-		return new File(EnvUtil.getTelegramPath(),"logs/" + callID + ".log").getPath();
+		return new File(ApplicationLoader.applicationContext.getCacheDir(),"logs/" + callID + ".log").getPath();
 	}
 
 	public String getDebugLog() {

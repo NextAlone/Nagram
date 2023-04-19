@@ -381,7 +381,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                 showDialog(dialog);
                 TextView button = (TextView) dialog.getButton(DialogInterface.BUTTON_POSITIVE);
                 if (button != null) {
-                    button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
+                    button.setTextColor(Theme.getColor(Theme.key_dialogTextRed));
                 }
             } else if (position == soundRow) {
                 Bundle bundle = new Bundle();
@@ -897,6 +897,11 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         String key = NotificationsController.getSharedPrefKey(dialogId, topicId);
                         checkCell.setTextAndCheck(LocaleController.getString("MessagePreview", R.string.MessagePreview), preferences.getBoolean("content_preview_" + key, true), true);
                     }
+                    break;
+                }
+                case VIEW_TYPE_SHADOW: {
+                    ShadowSectionCell shadowCell = (ShadowSectionCell) holder.itemView;
+                    shadowCell.setTopBottom(position > 0, position < getItemCount() - 1);
                     break;
                 }
             }

@@ -24,6 +24,8 @@ public class BuildVars {
     public static boolean USE_CLOUD_STRINGS = true;
     public static boolean NO_SCOPED_STORAGE = Build.VERSION.SDK_INT <= 29;
 
+    // SafetyNet key for Google Identity SDK, set it to empty to disable
+    public static String SAFETYNET_KEY = "AIzaSyDqt8P-7F7CPCseMkOiVRgb1LY8RN1bvH8";
     public static int BUILD_VERSION; // generated
     public static String BUILD_VERSION_STRING;
 

@@ -118,7 +118,7 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
     private float stateX, stateY;
 
     StarParticlesView.Drawable starParticlesDrawable;
-    PremiumGradient.GradientTools gradientTools;
+    PremiumGradient.PremiumGradientTools gradientTools;
 
     private Bitmap lastBitmap;
     private TLRPC.User user;
@@ -301,13 +301,15 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
                 sunDrawable.setCustomEndFrame(0);
             }
             darkThemeView.playAnimation();
-            if (Theme.selectedAutoNightType != Theme.AUTO_NIGHT_TYPE_NONE) {
-                Toast.makeText(getContext(), LocaleController.getString("AutoNightModeOff", R.string.AutoNightModeOff), Toast.LENGTH_SHORT).show();
-                Theme.selectedAutoNightType = Theme.AUTO_NIGHT_TYPE_NONE;
-                Theme.saveAutoNightThemeConfig();
-                Theme.cancelAutoNightThemeCallbacks();
-            }
             switchTheme(themeInfo, toDark);
+
+            if (drawerLayoutContainer != null ) {
+                FrameLayout layout = drawerLayoutContainer.getParent() instanceof FrameLayout ? (FrameLayout) drawerLayoutContainer.getParent() : null;
+                Theme.turnOffAutoNight(layout, () -> {
+                    drawerLayoutContainer.closeDrawer(false);
+                    drawerLayoutContainer.presentFragment(new ThemeActivity(ThemeActivity.THEME_TYPE_NIGHT));
+                });
+            }
         });
         darkThemeView.setOnLongClickListener(e -> {
             if (drawerLayoutContainer != null) {
@@ -672,7 +674,7 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
             drawPremiumProgress = Utilities.clamp(drawPremiumProgress, 1f, 0);
             if (drawPremiumProgress != 0) {
                 if (gradientTools == null) {
-                    gradientTools = new PremiumGradient.GradientTools(Theme.key_premiumGradientBottomSheet1, Theme.key_premiumGradientBottomSheet2, Theme.key_premiumGradientBottomSheet3, null);
+                    gradientTools = new PremiumGradient.PremiumGradientTools(Theme.key_premiumGradientBottomSheet1, Theme.key_premiumGradientBottomSheet2, Theme.key_premiumGradientBottomSheet3, null);
                     gradientTools.x1 = 0;
                     gradientTools.y1 = 1.1f;
                     gradientTools.x2 = 1.5f;
@@ -734,7 +736,6 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
             NotificationCenter.getInstance(lastAccount = account).addObserver(this, NotificationCenter.userEmojiStatusUpdated);
             NotificationCenter.getInstance(lastAccount = account).addObserver(this, NotificationCenter.updateInterfaces);
         }
-
         lastUser = user;
         if (user == null) {
             return;
@@ -749,14 +750,11 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
 
         drawPremium = false;//user.premium;
         nameTextView.setText(text);
-        if (user.emoji_status instanceof TLRPC.TL_emojiStatusUntil && ((TLRPC.TL_emojiStatusUntil) user.emoji_status).until > (int) (System.currentTimeMillis() / 1000)) {
+        Long emojiStatusId = UserObject.getEmojiStatusDocumentId(user);
+        if (emojiStatusId != null) {
             animatedStatus.animate().alpha(1).setDuration(200).start();
             nameTextView.setDrawablePadding(AndroidUtilities.dp(4));
-            status.set(((TLRPC.TL_emojiStatusUntil) user.emoji_status).document_id, true);
-        } else if (user.emoji_status instanceof TLRPC.TL_emojiStatus) {
-            animatedStatus.animate().alpha(1).setDuration(200).start();
-            nameTextView.setDrawablePadding(AndroidUtilities.dp(4));
-            status.set(((TLRPC.TL_emojiStatus) user.emoji_status).document_id, true);
+            status.set(emojiStatusId, true);
         } else if (user.premium) {
             animatedStatus.animate().alpha(1).setDuration(200).start();
             nameTextView.setDrawablePadding(AndroidUtilities.dp(4));
