@@ -9173,7 +9173,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         String text;
                         TLRPC.User user = getMessagesController().getUser(userId);
                         String phoneNumber;
-                        if (user != null && !TextUtils.isEmpty(vcardPhone)) {
+                        if (NekoConfig.hidePhone.Bool()) {
+                            text = LocaleController.getString("PhoneHidden", R.string.PhoneHidden);
+                            phoneNumber = null;
+                        } else if (user != null && !TextUtils.isEmpty(vcardPhone)) {
                             text = PhoneFormat.getInstance().format("+" + vcardPhone);
                             phoneNumber = vcardPhone;
                         } else if (user != null && !TextUtils.isEmpty(user.phone)) {
