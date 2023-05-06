@@ -7571,10 +7571,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             TLRPC.User user = getMessagesController().getUser(userId);
 
             if (UserObject.isUserSelf(user)) {
-                if (avatarBig == null && (user.photo == null || !(user.photo.photo_big instanceof TLRPC.TL_fileLocation_layer97) && !(user.photo.photo_big instanceof TLRPC.TL_fileLocationToBeDeprecated)) && (avatarsViewPager == null || avatarsViewPager.getRealCount() == 0)) {
-                    setAvatarRow = rowCount++;
-                    setAvatarSectionRow = rowCount++;
-                }
                 numberSectionRow = rowCount++;
                 setUsernameRow = rowCount++;
                 if (!hideNumber) {
