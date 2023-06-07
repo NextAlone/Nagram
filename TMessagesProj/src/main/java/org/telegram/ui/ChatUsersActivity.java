@@ -719,6 +719,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             if (listAdapter) {
                 if (isExpandableSendMediaRow(position)) {
                     CheckBoxCell checkBoxCell = (CheckBoxCell) view;
+                    if (!checkBoxCell.isEnabled()) return;
                     if (position == sendMediaPhotosRow) {
                         defaultBannedRights.send_photos = !defaultBannedRights.send_photos;
                     } else if (position == sendMediaVideosRow) {
@@ -1008,6 +1009,14 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     return;
                 } else if (position > permissionsSectionRow && position <= Math.max(manageTopicsRow, changeInfoRow)) {
                     TextCheckCell2 checkCell = (TextCheckCell2) view;
+                    if (position == sendMediaRow) {
+                        //defaultBannedRights.send_media = !defaultBannedRights.send_media;
+                        DiffCallback diffCallback = saveState();
+                        sendMediaExpanded = !sendMediaExpanded;
+                        AndroidUtilities.updateVisibleRows(listView);
+                        updateListAnimated(diffCallback);
+                        return;
+                    }
                     if (!checkCell.isEnabled()) {
                         return;
                     }
@@ -1019,14 +1028,14 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                         }
                         return;
                     }
-                    if (position == sendMediaRow) {
-                        //defaultBannedRights.send_media = !defaultBannedRights.send_media;
-                        DiffCallback diffCallback = saveState();
-                        sendMediaExpanded = !sendMediaExpanded;
-                        AndroidUtilities.updateVisibleRows(listView);
-                        updateListAnimated(diffCallback);
-                        return;
-                    }
+//                    if (position == sendMediaRow) {
+//                        //defaultBannedRights.send_media = !defaultBannedRights.send_media;
+//                        DiffCallback diffCallback = saveState();
+//                        sendMediaExpanded = !sendMediaExpanded;
+//                        AndroidUtilities.updateVisibleRows(listView);
+//                        updateListAnimated(diffCallback);
+//                        return;
+//                    }
                     checkCell.setChecked(!checkCell.isChecked());
                     if (position == changeInfoRow) {
                         defaultBannedRights.change_info = !defaultBannedRights.change_info;
@@ -3025,7 +3034,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 }
             }
             if (viewType == VIEW_TYPE_INNER_CHECK) {
-                return true;
+                return ChatObject.canBlockUsers(currentChat);
             }
             return false;
         }
@@ -3370,6 +3379,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                         checkCell.setCollapseArrow(String.format(Locale.US, "%d/9", sentMediaCount), !sendMediaExpanded, new Runnable() {
                             @Override
                             public void run() {
+                                if (!checkCell.isEnabled()) return;
                                 boolean checked = !checkCell.isChecked();
                                 checkCell.setChecked(checked);
                                 setSendMediaEnabled(checked);
