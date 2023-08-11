@@ -30,6 +30,7 @@ public class PremiumLockIconView extends ImageView {
     StarParticlesView.Drawable starParticles;
     private boolean locked;
     private Theme.ResourcesProvider resourcesProvider;
+    boolean attachedToWindow;
 
     public PremiumLockIconView(Context context, int type) {
         this(context, type, null);
@@ -104,7 +105,7 @@ public class PremiumLockIconView extends ImageView {
         if (waitingImage) {
             if (imageReceiver != null && imageReceiver.getBitmap() != null) {
                 waitingImage = false;
-                setColor(getDominantColor(imageReceiver.getBitmap()));
+                setColor(AndroidUtilities.getDominantColor(imageReceiver.getBitmap()));
             } else {
                 invalidate();
             }
@@ -164,34 +165,10 @@ public class PremiumLockIconView extends ImageView {
         return imageReceiver;
     }
 
-    public static int getDominantColor(Bitmap bitmap) {
-        if (bitmap == null) {
-            return Color.WHITE;
-        }
-        float stepH = (bitmap.getHeight() - 1) / 10f;
-        float stepW = (bitmap.getWidth() - 1) / 10f;
-        int r = 0, g = 0, b = 0;
-        int amount = 0;
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
-                int x = (int) (stepW * i);
-                int y = (int) (stepH * j);
-                int pixel = bitmap.getPixel(x, y);
-                if (Color.alpha(pixel) > 200) {
-                    r += Color.red(pixel);
-                    g += Color.green(pixel);
-                    b += Color.blue(pixel);
-                    amount++;
-                }
-            }
-        }
-        if (amount == 0) {
-            return 0;
-        }
-        return Color.argb(255, r / amount, g / amount, b / amount);
-    }
-
     private void updateGradient() {
+        if (!attachedToWindow) {
+            return;
+        }
         if (getMeasuredHeight() != 0 && getMeasuredWidth() != 0) {
             int c1 = currentColor;
             int c2;
@@ -217,6 +194,27 @@ public class PremiumLockIconView extends ImageView {
                 invalidate();
             }
         }
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        attachedToWindow = true;
+        if (type != TYPE_REACTIONS) {
+            updateGradient();
+        }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        attachedToWindow = false;
+        if (paint != null) {
+            paint.setShader(null);
+            paint = null;
+        }
+        shader = null;
+        wasDrawn = false;
     }
 
     public void setWaitingImage() {

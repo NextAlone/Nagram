@@ -151,6 +151,9 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
             } else if (currentType == NotificationsController.TYPE_CHANNEL) {
                 prefPath = "ChannelSoundPath";
                 prefDocId = "ChannelSoundDocId";
+            } else if (currentType == NotificationsController.TYPE_STORIES) {
+                prefPath = "StoriesSoundPath";
+                prefDocId = "StoriesSoundDocId";
             } else {
                 throw new RuntimeException("Unsupported type");
             }
@@ -204,7 +207,7 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
                     AlertDialog dialog = builder.show();
                     TextView button = (TextView) dialog.getButton(DialogInterface.BUTTON_POSITIVE);
                     if (button != null) {
-                        button.setTextColor(Theme.getColor(Theme.key_dialogTextRed, resourcesProvider));
+                        button.setTextColor(Theme.getColor(Theme.key_text_RedBold, resourcesProvider));
                     }
                 } else if (id == shareId) {
                     if (selectedTones.size() == 1) {
@@ -292,6 +295,8 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
                 actionBar.setTitle(LocaleController.getString("NotificationsSoundGroup", R.string.NotificationsSoundGroup));
             } else if (currentType == NotificationsController.TYPE_CHANNEL) {
                 actionBar.setTitle(LocaleController.getString("NotificationsSoundChannels", R.string.NotificationsSoundChannels));
+            } else if (currentType == NotificationsController.TYPE_STORIES) {
+                actionBar.setTitle(LocaleController.getString("NotificationsSoundStories", R.string.NotificationsSoundStories));
             }
         } else {
             avatarContainer = new ChatAvatarContainer(context, null, false, resourcesProvider);
@@ -343,7 +348,7 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
         listView.setLayoutManager(new LinearLayoutManager(context));
         listView.setOnItemClickListener((view, position) -> {
             if (position == uploadRow) {
-                chatAttachAlert = new ChatAttachAlert(context, NotificationsSoundActivity.this, false, false, resourcesProvider);
+                chatAttachAlert = new ChatAttachAlert(context, NotificationsSoundActivity.this, false, false, true, resourcesProvider);
                 chatAttachAlert.setSoundPicker();
                 chatAttachAlert.init();
                 chatAttachAlert.show();
@@ -445,7 +450,7 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
     }
 
     private void loadTones() {
-        getMediaDataController().ringtoneDataStore.loadUserRingtones();
+        getMediaDataController().ringtoneDataStore.loadUserRingtones(false);
         serverTones.clear();
         systemTones.clear();
         
@@ -472,9 +477,6 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
         RingtoneManager manager = new RingtoneManager(ApplicationLoader.applicationContext);
         manager.setType(RingtoneManager.TYPE_NOTIFICATION);
         Cursor cursor = manager.getCursor();
-
-
-
 
         Tone noSoundTone = new Tone();
         noSoundTone.stableId = stableIds++;
@@ -520,6 +522,32 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
             selectedToneChanged = true;
         }
         updateRows();
+    }
+
+    public static String findRingtonePathByName(String title) {
+        if (title == null) {
+            return null;
+        }
+
+        try {
+            RingtoneManager manager = new RingtoneManager(ApplicationLoader.applicationContext);
+            manager.setType(RingtoneManager.TYPE_NOTIFICATION);
+            Cursor cursor = manager.getCursor();
+
+            while (cursor.moveToNext()) {
+                String notificationTitle = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX);
+                String notificationUri = cursor.getString(RingtoneManager.URI_COLUMN_INDEX) + "/" + cursor.getString(RingtoneManager.ID_COLUMN_INDEX);
+
+                if (title.equalsIgnoreCase(notificationTitle)) {
+                    return notificationUri;
+                }
+            }
+        } catch (Throwable e) {
+            // Exception java.lang.NullPointerException: Attempt to invoke interface method 'void android.database.Cursor.registerDataSetObserver(android.database.DataSetObserver)' on a null object reference
+            // ignore
+            FileLog.e(e);
+        }
+        return null;
     }
 
     private void updateRows() {
@@ -711,7 +739,7 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
 
 
             checkBox = new CheckBox2(context, 24, resourcesProvider);
-            checkBox.setColor(null, Theme.key_windowBackgroundWhite, Theme.key_checkboxCheck);
+            checkBox.setColor(-1, Theme.key_windowBackgroundWhite, Theme.key_checkboxCheck);
             checkBox.setDrawUnchecked(false);
             checkBox.setDrawBackgroundAsArc(3);
             addView(checkBox, LayoutHelper.createFrame(26, 26, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, (LocaleController.isRTL ? 0 : 18), 0, (LocaleController.isRTL ? 18 : 0), 0));
@@ -760,11 +788,6 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
     public void onPause() {
         super.onPause();
         getNotificationCenter().removeObserver(this, NotificationCenter.onUserRingtonesUpdated);
-    }
-
-    @Override
-    public int getNavigationBarColor() {
-        return getThemedColor(Theme.key_windowBackgroundGray);
     }
 
     @Override
@@ -861,6 +884,10 @@ public class NotificationsSoundActivity extends BaseFragment implements ChatAtta
                     prefName = "ChannelSound";
                     prefPath = "ChannelSoundPath";
                     prefDocId = "ChannelSoundDocId";
+                } else if (currentType == NotificationsController.TYPE_STORIES) {
+                    prefName = "StoriesSound";
+                    prefPath = "StoriesSoundPath";
+                    prefDocId = "StoriesSoundDocId";
                 } else {
                     throw new RuntimeException("Unsupported type");
                 }

@@ -1206,7 +1206,7 @@ public final class FloatingToolbar {
         textView.setFocusable(false);
         textView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
         textView.setFocusableInTouchMode(false);
-        int selectorColor = Theme.getColor(Theme.key_listSelector);
+        int selectorColor = getThemedColor(Theme.key_listSelector);
         if (currentStyle == STYLE_DIALOG) {
             textView.setTextColor(getThemedColor(Theme.key_dialogTextBlack));
         } else if (currentStyle == STYLE_BLACK) {
@@ -1273,9 +1273,8 @@ public final class FloatingToolbar {
         return contentContainer;
     }
 
-    private int getThemedColor(String key) {
-        Integer color = resourcesProvider != null ? resourcesProvider.getColor(key) : null;
-        return color != null ? color : Theme.getColor(key);
+    private int getThemedColor(int key) {
+        return Theme.getColor(key, resourcesProvider);
     }
 
     private static PopupWindow createPopupWindow(ViewGroup content) {

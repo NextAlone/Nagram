@@ -178,7 +178,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         pickerBottomLayout.setBackgroundColor(getThemedColor(Theme.key_dialogBackground));
         containerView.addView(pickerBottomLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM));
         pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
-        pickerBottomLayout.cancelButton.setTextColor(getThemedColor(Theme.key_dialogTextRed));
+        pickerBottomLayout.cancelButton.setTextColor(getThemedColor(Theme.key_text_RedBold));
         pickerBottomLayout.cancelButton.setText(LocaleController.getString("StopAllLocationSharings", R.string.StopAllLocationSharings));
         pickerBottomLayout.cancelButton.setOnClickListener(view -> {
             for (int a : SharedConfig.activeAccounts) {

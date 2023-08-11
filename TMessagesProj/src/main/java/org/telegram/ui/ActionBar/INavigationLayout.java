@@ -5,15 +5,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.util.SparseIntArray;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.FrameLayout;
+
+import androidx.core.util.Supplier;
 
 import org.telegram.ui.Components.BackButtonMenu;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public interface INavigationLayout {
@@ -77,6 +80,15 @@ public interface INavigationLayout {
 
     static INavigationLayout newLayout(Context context) {
         return new ActionBarLayout(context);
+    }
+
+    static INavigationLayout newLayout(Context context, Supplier<BottomSheet> supplier) {
+        return new ActionBarLayout(context) {
+            @Override
+            public BottomSheet getBottomSheet() {
+                return supplier.get();
+            }
+        };
     }
 
     default void removeFragmentFromStack(BaseFragment fragment) {
@@ -254,6 +266,17 @@ public interface INavigationLayout {
         }
     }
 
+    default Window getWindow() {
+        if (getParentActivity() != null) {
+            return getParentActivity().getWindow();
+        }
+        return null;
+    }
+
+    default BottomSheet getBottomSheet() {
+        return null;
+    }
+
     interface INavigationLayoutDelegate {
         default boolean needPresentFragment(INavigationLayout layout, NavigationParams params) {
             return needPresentFragment(params.fragment, params.removeLast, params.noAnimation, layout);
@@ -358,8 +381,8 @@ public interface INavigationLayout {
     }
 
     class StartColorsProvider implements Theme.ResourcesProvider {
-        HashMap<String, Integer> colors = new HashMap<>();
-        String[] keysToSave = new String[] {
+        SparseIntArray colors = new SparseIntArray();
+        int[] keysToSave = new int[] {
                 Theme.key_chat_outBubble,
                 Theme.key_chat_outBubbleGradient1,
                 Theme.key_chat_outBubbleGradient2,
@@ -369,18 +392,22 @@ public interface INavigationLayout {
         };
 
         @Override
-        public Integer getColor(String key) {
-            return colors.get(key);
+        public int getColor(int key) {
+            int index = colors.indexOfKey(key);
+            if (index >= 0) {
+                return colors.valueAt(index);
+            }
+            return Theme.getColor(key);
         }
 
         @Override
-        public Integer getCurrentColor(String key) {
+        public int getCurrentColor(int key) {
             return colors.get(key);
         }
 
         public void saveColors(Theme.ResourcesProvider fragmentResourceProvider) {
             colors.clear();
-            for (String key : keysToSave) {
+            for (int key : keysToSave) {
                 colors.put(key, fragmentResourceProvider.getCurrentColor(key));
             }
         }

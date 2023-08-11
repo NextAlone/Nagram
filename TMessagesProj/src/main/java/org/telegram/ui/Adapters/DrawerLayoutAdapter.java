@@ -350,10 +350,15 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         UserConfig me = UserConfig.getInstance(UserConfig.selectedAccount);
         if (me != null && me.isPremium()) {
             if (me.getEmojiStatus() != null) {
-                items.add(new Item(15, LocaleController.getString("ChangeEmojiStatus", R.string.ChangeEmojiStatus), 0, R.raw.emoji_status_change_to_set));
+                items.add(new Item(15, LocaleController.getString("ChangeEmojiStatus", R.string.ChangeEmojiStatus), R.drawable.msg_status_edit));
             } else {
-                items.add(new Item(15, LocaleController.getString("SetEmojiStatus", R.string.SetEmojiStatus), 0, R.raw.emoji_status_set_to_change));
+                items.add(new Item(15, LocaleController.getString("SetEmojiStatus", R.string.SetEmojiStatus), R.drawable.msg_status_set));
             }
+        }
+        if (MessagesController.getInstance(UserConfig.selectedAccount).storiesEnabled()) {
+            items.add(new Item(16, LocaleController.getString("ProfileMyStories", R.string.ProfileMyStories), R.drawable.msg_menu_stories));
+            items.add(null); // divider
+        } else if (me != null && me.isPremium()) {
             items.add(null); // divider
         }
 
@@ -433,7 +438,6 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
 
     private static class Item {
         public int icon;
-        public int lottieIcon;
         public String text;
         public int id;
 
@@ -443,15 +447,8 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
             this.text = text;
         }
 
-        public Item(int id, String text, int icon, int lottieIcon) {
-            this.icon = icon;
-            this.lottieIcon = lottieIcon;
-            this.id = id;
-            this.text = text;
-        }
-
         public void bind(DrawerActionCell actionCell) {
-            actionCell.setTextAndIcon(id, text, icon, lottieIcon);
+            actionCell.setTextAndIcon(id, text, icon);
         }
     }
 

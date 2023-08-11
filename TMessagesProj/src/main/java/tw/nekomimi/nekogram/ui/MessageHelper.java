@@ -20,6 +20,7 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
@@ -135,18 +136,18 @@ public class MessageHelper extends BaseController {
                     }
                 }
                 if (messageObject.messageOwner.media.photo instanceof TLRPC.TL_photo) {
-                    getSendMessagesHelper().sendMessage((TLRPC.TL_photo) messageObject.messageOwner.media.photo, null, did, null, null, messageObject.messageOwner.message, entities, null, params, notify, scheduleDate, 0, messageObject, false);
+                    getSendMessagesHelper().sendMessage(SendMessagesHelper.SendMessageParams.of((TLRPC.TL_photo) messageObject.messageOwner.media.photo, null, did, null, null, messageObject.messageOwner.message, entities, null, params, notify, scheduleDate, 0, messageObject, false));
                 } else if (messageObject.messageOwner.media.document instanceof TLRPC.TL_document) {
-                    getSendMessagesHelper().sendMessage((TLRPC.TL_document) messageObject.messageOwner.media.document, null, messageObject.messageOwner.attachPath, did, null, null, messageObject.messageOwner.message, entities, null, params, notify, scheduleDate, 0, messageObject, null, false);
+                    getSendMessagesHelper().sendMessage(SendMessagesHelper.SendMessageParams.of((TLRPC.TL_document) messageObject.messageOwner.media.document, null, messageObject.messageOwner.attachPath, did, null, null, messageObject.messageOwner.message, entities, null, params, notify, scheduleDate, 0, messageObject, null, false));
                 } else if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaVenue || messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaGeo) {
-                    getSendMessagesHelper().sendMessage(messageObject.messageOwner.media, did, null, null, null, null, notify, scheduleDate);
+                    getSendMessagesHelper().sendMessage(SendMessagesHelper.SendMessageParams.of(messageObject.messageOwner.media, did, null, null, null, null, notify, scheduleDate));
                 } else if (messageObject.messageOwner.media.phone_number != null) {
                     TLRPC.User user = new TLRPC.TL_userContact_old2();
                     user.phone = messageObject.messageOwner.media.phone_number;
                     user.first_name = messageObject.messageOwner.media.first_name;
                     user.last_name = messageObject.messageOwner.media.last_name;
                     user.id = messageObject.messageOwner.media.user_id;
-                    getSendMessagesHelper().sendMessage(user, did, null, null, null, null, notify, scheduleDate);
+                    getSendMessagesHelper().sendMessage(SendMessagesHelper.SendMessageParams.of(user, did, null, null, null, null, notify, scheduleDate));
                 } else if ((int) did != 0) {
                     ArrayList<MessageObject> arrayList = new ArrayList<>();
                     arrayList.add(messageObject);
@@ -157,7 +158,7 @@ public class MessageHelper extends BaseController {
                 if (messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaWebPage) {
                     webPage = messageObject.messageOwner.media.webpage;
                 }
-                getSendMessagesHelper().sendMessage(messageObject.messageOwner.message, did, null, null, webPage, webPage != null, entities, null, null, notify, scheduleDate, null, false);
+                getSendMessagesHelper().sendMessage(SendMessagesHelper.SendMessageParams.of(messageObject.messageOwner.message, did, null, null, webPage, webPage != null, entities, null, null, notify, scheduleDate, null, false));
             } else if ((int) did != 0) {
                 ArrayList<MessageObject> arrayList = new ArrayList<>();
                 arrayList.add(messageObject);

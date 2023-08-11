@@ -159,7 +159,7 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
             }
 
             @Override
-            public void onWebAppSetActionBarColor(String colorKey) {
+            public void onWebAppSetActionBarColor(int colorKey) {
                 int from = overrideActionBarBackground;
                 int to = getColor(colorKey);
 
@@ -376,7 +376,7 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
         }
 
         ChatAvatarContainer avatarContainer = chatActivity.getAvatarContainer();
-        String subtitleDefaultColorKey = avatarContainer.getLastSubtitleColorKey() == null ? Theme.key_actionBarDefaultSubtitle : avatarContainer.getLastSubtitleColorKey();
+        int subtitleDefaultColorKey = avatarContainer.getLastSubtitleColorKey() < 0 ? Theme.key_actionBarDefaultSubtitle : avatarContainer.getLastSubtitleColorKey();
         int subtitleColor = ColorUtils.blendARGB(getColor(subtitleDefaultColorKey), getColor(Theme.key_windowBackgroundWhiteGrayText), actionBarTransitionProgress);
         ActionBar actionBar = chatActivity.getActionBar();
         int backgroundColor = ColorUtils.blendARGB(getColor(Theme.key_actionBarDefault), getColor(Theme.key_windowBackgroundWhite), actionBarTransitionProgress);
@@ -421,7 +421,7 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
                     .create();
             dialog.show();
             TextView textView = (TextView) dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-            textView.setTextColor(getColor(Theme.key_dialogTextRed));
+            textView.setTextColor(getColor(Theme.key_text_RedBold));
             return false;
         } else {
             dismiss();
@@ -762,15 +762,9 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
         }));
     }
 
-    private int getColor(String key) {
-        Integer color;
+    private int getColor(int key) {
         Theme.ResourcesProvider resourcesProvider = parentEnterView.getParentFragment().getResourceProvider();
-        if (resourcesProvider != null) {
-            color = resourcesProvider.getColor(key);
-        } else {
-            color = Theme.getColor(key);
-        }
-        return color != null ? color : Theme.getColor(key);
+        return Theme.getColor(key, resourcesProvider);
     }
 
     /**

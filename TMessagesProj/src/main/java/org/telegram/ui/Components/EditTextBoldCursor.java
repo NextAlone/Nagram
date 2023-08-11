@@ -113,6 +113,7 @@ public class EditTextBoldCursor extends EditTextEffects {
     private float cursorWidth = 2.0f;
     private boolean supportRtlHint;
 
+    public boolean ignoreClipTop;
     private boolean cursorDrawn;
 
     private boolean lineVisible = false;
@@ -672,6 +673,9 @@ public class EditTextBoldCursor extends EditTextEffects {
 
     @Override
     public int getExtendedPaddingTop() {
+        if (ignoreClipTop) {
+            return 0;
+        }
         if (ignoreTopCount != 0) {
             ignoreTopCount--;
             return 0;

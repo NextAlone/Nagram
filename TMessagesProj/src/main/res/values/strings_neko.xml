@@ -195,4 +195,7 @@
     <string name="EmojiSetAlreadyApplied">Emoji set already applied.</string>
     <string name="useTelegramTranslateInChat">Use Telegram Translate UI in Chat</string>
     <string name="ProviderTelegramAPI">Telegram API</string>
+    <string name="RecentChats">Recent chats</string>
+    <string name="ClearRecentChats">Clear recent chats</string>
+    <string name="ClearRecentChatAlert">Do you want to clear your recent chats?</string>
 </resources>

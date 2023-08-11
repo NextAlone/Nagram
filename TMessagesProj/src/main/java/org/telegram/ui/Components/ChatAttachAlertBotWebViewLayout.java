@@ -37,6 +37,7 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
@@ -92,7 +93,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
             prolongWebView.query_id = queryId;
             prolongWebView.silent = silent;
             if (replyToMsgId != 0) {
-                prolongWebView.reply_to_msg_id = replyToMsgId;
+                prolongWebView.reply_to = SendMessagesHelper.creteReplyInput(replyToMsgId);
                 prolongWebView.flags |= 1;
             }
 
@@ -248,7 +249,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
                     .create();
             dialog.show();
             TextView textView = (TextView) dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-            textView.setTextColor(getThemedColor(Theme.key_dialogTextRed));
+            textView.setTextColor(getThemedColor(Theme.key_text_RedBold));
             return false;
         } else {
             parentAlert.dismiss();
@@ -454,7 +455,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
         }
 
         if (replyToMsgId != 0) {
-            req.reply_to_msg_id = replyToMsgId;
+            req.reply_to = SendMessagesHelper.creteReplyInput(replyToMsgId);
             req.flags |= 1;
         }
 
@@ -986,9 +987,8 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
             bluePaint.setStrokeCap(Paint.Cap.ROUND);
         }
 
-        protected int getThemedColor(String key) {
-            Integer color = resourcesProvider != null ? resourcesProvider.getColor(key) : null;
-            return color != null ? color : Theme.getColor(key);
+        protected int getThemedColor(int key) {
+            return Theme.getColor(key, resourcesProvider);
         }
 
         @Override

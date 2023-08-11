@@ -69,7 +69,7 @@ public:
     void setLangCode(std::string langCode);
     void setRegId(std::string regId);
     void setSystemLangCode(std::string langCode);
-    void updateDcSettings(uint32_t datacenterId, bool workaround);
+    void updateDcSettings(uint32_t datacenterId, bool workaround, bool ifLoadingTryAgain);
     void setPushConnectionEnabled(bool value);
     void applyDnsConfig(NativeByteBuffer *buffer, std::string phone, int32_t date);
     void moveToDatacenter(uint32_t datacenterId);
@@ -80,6 +80,9 @@ public:
     void sendRequest(TLObject *object, onCompleteFunc onComplete, onQuickAckFunc onQuickAck, onWriteToSocketFunc onWriteToSocket, uint32_t flags, uint32_t datacenterId, ConnectionType connetionType, bool immediate, int32_t requestToken, jobject ptr1, jobject ptr2, jobject ptr3);
     static void useJavaVM(JavaVM *vm, bool useJavaByteBuffers);
 #endif
+
+    void reconnect(int32_t datacentrId, int32_t connectionType);
+    void failNotRunningRequest(int32_t token);
 
 private:
     static void *ThreadProc(void *data);
@@ -153,6 +156,8 @@ private:
     bool sendingPushPing = false;
     bool sendingPing = false;
     bool updatingDcSettings = false;
+    bool updatingDcSettingsAgain = false;
+    uint32_t updatingDcSettingsAgainDcNum = 0;
     bool updatingDcSettingsWorkaround = false;
     int32_t disconnectTimeoutAmount = 0;
     bool requestingSecondAddressByTlsHashMismatch = false;
@@ -203,6 +208,7 @@ private:
     int *pipeFd = nullptr;
     NativeByteBuffer *networkBuffer;
 
+    requestsList waitingLoginRequests;
     requestsList requestsQueue;
     requestsList runningRequests;
     std::vector<uint32_t> requestingSaltsForDc;
@@ -252,6 +258,7 @@ private:
     friend class Config;
     friend class FileLog;
     friend class Handshake;
+
 };
 
 #ifdef ANDROID

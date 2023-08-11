@@ -501,17 +501,17 @@ public class VoIPHelper {
         alertView.addView(problemsWrap, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, -8, 0, -8, 0));
         problemsWrap.setVisibility(View.GONE);
 
-        final EditTextBoldCursor commentBox = new EditTextBoldCursor(context);
-        commentBox.setHint(LocaleController.getString("VoipFeedbackCommentHint", R.string.VoipFeedbackCommentHint));
-        commentBox.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-        commentBox.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        commentBox.setHintTextColor(Theme.getColor(Theme.key_dialogTextHint));
-        commentBox.setBackground(null);
-		commentBox.setLineColors(Theme.getColor(Theme.key_dialogInputField), Theme.getColor(Theme.key_dialogInputFieldActivated), Theme.getColor(Theme.key_dialogTextRed));
-        commentBox.setPadding(0, AndroidUtilities.dp(4), 0, AndroidUtilities.dp(4));
-        commentBox.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-        commentBox.setVisibility(View.GONE);
-        alertView.addView(commentBox, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 8, 8, 8, 0));
+		final EditTextBoldCursor commentBox = new EditTextBoldCursor(context);
+		commentBox.setHint(LocaleController.getString("VoipFeedbackCommentHint", R.string.VoipFeedbackCommentHint));
+		commentBox.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+		commentBox.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
+		commentBox.setHintTextColor(Theme.getColor(Theme.key_dialogTextHint));
+		commentBox.setBackground(null);
+		commentBox.setLineColors(Theme.getColor(Theme.key_dialogInputField), Theme.getColor(Theme.key_dialogInputFieldActivated), Theme.getColor(Theme.key_text_RedBold));
+		commentBox.setPadding(0, AndroidUtilities.dp(4), 0, AndroidUtilities.dp(4));
+		commentBox.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+		commentBox.setVisibility(View.GONE);
+		alertView.addView(commentBox, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 8, 8, 8, 0));
 
         final boolean[] includeLogs = {true};
         final CheckBoxCell checkbox = new CheckBoxCell(context, 1);
@@ -586,46 +586,46 @@ public class VoIPHelper {
                         problemTags.add("#" + check.getTag());
                 }
 
-                if (req.rating < 5) {
-                    req.comment = commentBox.getText().toString();
-                } else {
-                    req.comment = "";
-                }
-                if (!problemTags.isEmpty() && !includeLogs[0]) {
-                    req.comment += " " + TextUtils.join(" ", problemTags);
-                }
-                req.peer = new TLRPC.TL_inputPhoneCall();
-                req.peer.access_hash = accessHash;
-                req.peer.id = callID;
-                req.user_initiative = userInitiative;
-                ConnectionsManager.getInstance(account).sendRequest(req, (response, error) -> {
-                    if (response instanceof TLRPC.TL_updates) {
-                        TLRPC.TL_updates updates = (TLRPC.TL_updates) response;
-                        MessagesController.getInstance(currentAccount).processUpdates(updates, false);
-                    }
-                    if (includeLogs[0] && log.exists() && req.rating < 4) {
-                        AccountInstance accountInstance = AccountInstance.getInstance(UserConfig.selectedAccount);
-                        SendMessagesHelper.prepareSendingDocument(accountInstance, log.getAbsolutePath(), log.getAbsolutePath(), null, TextUtils.join(" ", problemTags), "text/plain", VOIP_SUPPORT_ID, null, null, null, null, true, 0);
-                        Toast.makeText(context, LocaleController.getString("CallReportSent", R.string.CallReportSent), Toast.LENGTH_LONG).show();
-                    }
-                });
-                alert.dismiss();
-            } else {
-                page[0] = 1;
-                bar.setVisibility(View.GONE);
-                //text.setText(LocaleController.getString("CallReportHint", R.string.CallReportHint));
-                text.setVisibility(View.GONE);
-                alert.setTitle(LocaleController.getString("CallReportHint", R.string.CallReportHint));
-                commentBox.setVisibility(View.VISIBLE);
-                if (log.exists()) {
-                    checkbox.setVisibility(View.VISIBLE);
-                    logsText.setVisibility(View.VISIBLE);
-                }
-                problemsWrap.setVisibility(View.VISIBLE);
-                ((TextView) btn).setText(LocaleController.getString("Send", R.string.Send).toUpperCase());
-            }
-        });
-    }
+				if (req.rating < 5) {
+					req.comment = commentBox.getText().toString();
+				} else {
+					req.comment = "";
+				}
+				if (!problemTags.isEmpty() && !includeLogs[0]) {
+					req.comment += " " + TextUtils.join(" ", problemTags);
+				}
+				req.peer = new TLRPC.TL_inputPhoneCall();
+				req.peer.access_hash = accessHash;
+				req.peer.id = callID;
+				req.user_initiative = userInitiative;
+				ConnectionsManager.getInstance(account).sendRequest(req, (response, error) -> {
+					if (response instanceof TLRPC.TL_updates) {
+						TLRPC.TL_updates updates = (TLRPC.TL_updates) response;
+						MessagesController.getInstance(currentAccount).processUpdates(updates, false);
+					}
+					if (includeLogs[0] && log.exists() && req.rating < 4) {
+						AccountInstance accountInstance = AccountInstance.getInstance(UserConfig.selectedAccount);
+						SendMessagesHelper.prepareSendingDocument(accountInstance, log.getAbsolutePath(), log.getAbsolutePath(), null, TextUtils.join(" ", problemTags), "text/plain", VOIP_SUPPORT_ID, null, null, null, null, true, 0, null);
+						Toast.makeText(context, LocaleController.getString("CallReportSent", R.string.CallReportSent), Toast.LENGTH_LONG).show();
+					}
+				});
+				alert.dismiss();
+			} else {
+				page[0] = 1;
+				bar.setVisibility(View.GONE);
+				//text.setText(LocaleController.getString("CallReportHint", R.string.CallReportHint));
+				text.setVisibility(View.GONE);
+				alert.setTitle(LocaleController.getString("CallReportHint", R.string.CallReportHint));
+				commentBox.setVisibility(View.VISIBLE);
+				if (log.exists()) {
+					checkbox.setVisibility(View.VISIBLE);
+					logsText.setVisibility(View.VISIBLE);
+				}
+				problemsWrap.setVisibility(View.VISIBLE);
+				((TextView) btn).setText(LocaleController.getString("Send", R.string.Send).toUpperCase());
+			}
+		});
+	}
 
     private static File getLogFile(long callID) {
         if (BuildVars.DEBUG_VERSION) {

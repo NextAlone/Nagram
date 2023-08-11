@@ -11,6 +11,8 @@ package org.telegram.messenger;
 import android.text.TextUtils;
 import android.util.SparseArray;
 
+import com.google.android.exoplayer2.util.Log;
+
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.LaunchActivity;
@@ -70,6 +72,12 @@ public class FileLoader extends BaseController {
             fileMeta.messageType = messageObject.type;
             fileMeta.messageSize = messageObject.getSize();
             return fileMeta;
+        } else if (parentObject instanceof TLRPC.StoryItem) {
+            TLRPC.StoryItem storyItem = (TLRPC.StoryItem) parentObject;
+            FilePathDatabase.FileMeta fileMeta = new FilePathDatabase.FileMeta();
+            fileMeta.dialogId = storyItem.dialogId;
+            fileMeta.messageType = MessageObject.TYPE_STORY;
+            return fileMeta;
         }
         return null;
     }
@@ -101,12 +109,12 @@ public class FileLoader extends BaseController {
             return Integer.MAX_VALUE;
         } else if (priorityType == PRIORITY_HIGH) {
             priorityIncreasePointer++;
-            return (1 << 20) + priorityIncreasePointer;
+            return FileLoaderPriorityQueue.PRIORITY_VALUE_MAX + priorityIncreasePointer;
         } else if (priorityType == PRIORITY_NORMAL_UP) {
             priorityIncreasePointer++;
-            return (1 << 16) + priorityIncreasePointer;
+            return FileLoaderPriorityQueue.PRIORITY_VALUE_NORMAL + priorityIncreasePointer;
         } else if (priorityType == PRIORITY_NORMAL) {
-            return 1 << 16;
+            return FileLoaderPriorityQueue.PRIORITY_VALUE_NORMAL;
         } else {
             return 0;
         }
@@ -137,6 +145,7 @@ public class FileLoader extends BaseController {
     public static final int MEDIA_DIR_DOCUMENT = 3;
     public static final int MEDIA_DIR_CACHE = 4;
     public static final int MEDIA_DIR_FILES = 5;
+    public static final int MEDIA_DIR_STORIES = 6;
 
     public static final int MEDIA_DIR_IMAGE_PUBLIC = 100;
     public static final int MEDIA_DIR_VIDEO_PUBLIC = 101;
@@ -214,8 +223,8 @@ public class FileLoader extends BaseController {
         super(instance);
         filePathDatabase = new FilePathDatabase(instance);
         for (int i = 0; i < smallFilesQueue.length; i++)  {
-            smallFilesQueue[i] = new FileLoaderPriorityQueue("smallFilesQueue dc" + (i + 1), 5);
-            largeFilesQueue[i] = new FileLoaderPriorityQueue("largeFilesQueue dc" + (i + 1), 1);
+            smallFilesQueue[i] = new FileLoaderPriorityQueue(instance, "smallFilesQueue dc" + (i + 1), FileLoaderPriorityQueue.TYPE_SMALL, fileLoaderQueue);
+            largeFilesQueue[i] = new FileLoaderPriorityQueue(instance, "largeFilesQueue dc" + (i + 1), FileLoaderPriorityQueue.TYPE_LARGE, fileLoaderQueue);
         }
         dumpFilesQueue();
     }
@@ -239,7 +248,7 @@ public class FileLoader extends BaseController {
                     dir.mkdirs();
                 }
             } catch (Exception e) {
-                //don't promt
+                //don't prompt
             }
         }
         return dir;
@@ -329,6 +338,10 @@ public class FileLoader extends BaseController {
     }
 
     public void checkUploadNewDataAvailable(final String location, final boolean encrypted, final long newAvailableSize, final long finalSize) {
+        checkUploadNewDataAvailable(location, encrypted, newAvailableSize, finalSize, null);
+    }
+
+    public void checkUploadNewDataAvailable(final String location, final boolean encrypted, final long newAvailableSize, final long finalSize, final Float progress) {
         fileLoaderQueue.postRunnable(() -> {
             FileUploadOperation operation;
             if (encrypted) {
@@ -337,7 +350,7 @@ public class FileLoader extends BaseController {
                 operation = uploadOperationPaths.get(location);
             }
             if (operation != null) {
-                operation.checkNewDataAvailable(newAvailableSize, finalSize);
+                operation.checkNewDataAvailable(newAvailableSize, finalSize, progress);
             } else if (finalSize != 0) {
                 uploadSizes.put(location, finalSize);
             }
@@ -498,6 +511,7 @@ public class FileLoader extends BaseController {
                 }
                 operation.setForceRequest(true);
                 operation.setPriority(getPriorityValue(PRIORITY_STREAM));
+                operation.getQueue().remove(operation);
                 operation.getQueue().add(operation);
                 operation.getQueue().checkLoadingOperations();
             }
@@ -580,6 +594,39 @@ public class FileLoader extends BaseController {
                 getNotificationCenter().postNotificationName(NotificationCenter.onDownloadingFilesChanged);
             });
         }
+    }
+
+    public void changePriority(int priority, final TLRPC.Document document, final SecureDocument secureDocument, final WebFile webDocument, final TLRPC.FileLocation location, final String locationExt, String name) {
+        if (location == null && document == null && webDocument == null && secureDocument == null && TextUtils.isEmpty(name)) {
+            return;
+        }
+        final String fileName;
+        if (location != null) {
+            fileName = getAttachFileName(location, locationExt);
+        } else if (document != null) {
+            fileName = getAttachFileName(document);
+        } else if (secureDocument != null) {
+            fileName = getAttachFileName(secureDocument);
+        } else if (webDocument != null) {
+            fileName = getAttachFileName(webDocument);
+        } else {
+            fileName = name;
+        }
+        fileLoaderQueue.postRunnable(() -> {
+            FileLoadOperation operation = loadOperationPaths.get(fileName);
+            if (operation != null) {
+                int newPriority = getPriorityValue(priority);
+                if (operation.getPriority() == newPriority) {
+                    return;
+                }
+                operation.setPriority(newPriority);
+                FileLoaderPriorityQueue queue = operation.getQueue();
+                queue.remove(operation);
+                queue.add(operation);
+                queue.checkLoadingOperations();
+                FileLog.d("update priority " + fileName + " position in queue " + operation.getPositionInQueue() + " account=" + currentAccount);
+            }
+        });
     }
 
 
@@ -670,6 +717,10 @@ public class FileLoader extends BaseController {
         if (fileName == null || fileName.contains("" + Integer.MIN_VALUE)) {
             return null;
         }
+        if (fileName.startsWith("0_0")) {
+            FileLog.e(new RuntimeException("cant get hash from " + document));
+            return null;
+        }
         if (cacheType != 10 && !TextUtils.isEmpty(fileName) && !fileName.contains("" + Integer.MIN_VALUE)) {
             loadOperationPathsUI.put(fileName, new LoadOperationUIObject());
         }
@@ -688,12 +739,18 @@ public class FileLoader extends BaseController {
                 operation.setIsPreloadVideoOperation(false);
             }
             operation.setForceRequest(priority > 0);
-            operation.setPriority(priority);
             operation.setStream(stream, streamPriority, streamOffset);
+            boolean priorityChanged = false;
+            if (operation.getPriority() != priority) {
+                priorityChanged = true;
+                operation.setPriority(priority);
+            }
             operation.getQueue().add(operation);
             operation.updateProgress();
-            operation.getQueue().checkLoadingOperations();
-            FileLog.d("load operation update position fileName=" + finalFileName + " position in queue " + operation.getPositionInQueue() + " account=" + currentAccount);
+            if (priorityChanged) {
+                operation.getQueue().checkLoadingOperations();
+            }
+            FileLog.d("load operation update position fileName=" + finalFileName + " position in queue " + operation.getPositionInQueue() + " preloadFinish " + operation.isPreloadFinished());
             return operation;
         }
 
@@ -708,7 +765,7 @@ public class FileLoader extends BaseController {
             type = MEDIA_DIR_DOCUMENT;
         } else if (location != null) {
             documentId = location.volume_id;
-            dcId = location.dc_id;
+            dcId = location.dc_id + (location.local_id << 16);
             operation = new FileLoadOperation(imageLocation, parentObject, locationExt, locationSize);
             type = MEDIA_DIR_IMAGE;
         } else if (document != null) {
@@ -748,7 +805,8 @@ public class FileLoader extends BaseController {
         }
         FileLoaderPriorityQueue loaderQueue;
         int index = Utilities.clamp(operation.getDatacenterId() - 1, 4, 0);
-        if (operation.totalBytesCount >  20 * 1024 * 1024) {//20mb
+        boolean isStory = parentObject instanceof TLRPC.StoryItem;
+        if (operation.totalBytesCount > 20 * 1024 * 1024 || isStory) {
             loaderQueue = largeFilesQueue[index];
         } else {
             loaderQueue = smallFilesQueue[index];
@@ -756,7 +814,7 @@ public class FileLoader extends BaseController {
 
         String storeFileName = fileName;
 
-        if (cacheType == 0 || cacheType == 10) {
+        if (cacheType == 0 || cacheType == 10 || isStory) {
             if (documentId != 0) {
                 String path = getFileDatabase().getPath(documentId, dcId, type, true);
                 boolean customPath = false;
@@ -773,7 +831,13 @@ public class FileLoader extends BaseController {
                     storeDir = getDirectory(type);
                     boolean saveCustomPath = false;
 
-                    if ((type == MEDIA_DIR_IMAGE || type == MEDIA_DIR_VIDEO) && canSaveToPublicStorage(parentObject)) {
+                    if (isStory) {
+                        File newDir = getDirectory(MEDIA_DIR_STORIES);
+                        if (newDir != null) {
+                            storeDir = newDir;
+                            saveCustomPath = true;
+                        }
+                    } else if ((type == MEDIA_DIR_IMAGE || type == MEDIA_DIR_VIDEO) && canSaveToPublicStorage(parentObject)) {
                         File newDir;
                         if (type == MEDIA_DIR_IMAGE) {
                             newDir = getDirectory(MEDIA_DIR_IMAGE_PUBLIC);
@@ -816,18 +880,15 @@ public class FileLoader extends BaseController {
             public void didPreFinishLoading(FileLoadOperation operation, File finalFile) {
                 FileLoaderPriorityQueue queue = operation.getQueue();
                 fileLoaderQueue.postRunnable(() -> {
-                    FileLoadOperation currentOperation = loadOperationPaths.get(fileName);
-                    if (currentOperation != null) {
-                        currentOperation.preFinished = true;
-                        queue.checkLoadingOperations();
-                    }
+                    operation.preFinished = true;
+                    queue.checkLoadingOperations();
                 });
-                checkDownloadQueue(operation.getQueue(), fileName);
             }
 
             @Override
             public void didFinishLoadingFile(FileLoadOperation operation, File finalFile) {
                 if (!operation.isPreloadVideoOperation() && operation.isPreloadFinished()) {
+                    checkDownloadQueue(operation, operation.getQueue(), 0);
                     return;
                 }
                 FilePathDatabase.FileMeta fileMeta = getFileMetadataFromParent(currentAccount, parentObject);
@@ -848,13 +909,13 @@ public class FileLoader extends BaseController {
                     }
                 }
 
-                checkDownloadQueue(operation.getQueue(), fileName);
+                checkDownloadQueue(operation, operation.getQueue(), 0);
             }
 
             @Override
             public void didFailedLoadingFile(FileLoadOperation operation, int reason) {
                 loadOperationPathsUI.remove(fileName);
-                checkDownloadQueue(operation.getQueue(), fileName);
+                checkDownloadQueue(operation, operation.getQueue());
                 if (getDelegate() != null) {
                     delegate.fileDidFailedLoad(fileName, reason);
                 }
@@ -887,10 +948,12 @@ public class FileLoader extends BaseController {
 
         loadOperationPaths.put(finalFileName, operation);
         operation.setPriority(priority);
-        operation.setStream(stream, streamPriority, streamOffset);
+        if (stream != null) {
+            operation.setStream(stream, streamPriority, streamOffset);
+        }
 
         loaderQueue.add(operation);
-        loaderQueue.checkLoadingOperations();
+        loaderQueue.checkLoadingOperations(operation.isStory && priority >= PRIORITY_HIGH);
 
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("create load operation fileName=" + finalFileName + " documentName=" + getDocumentFileName(document) + "size=" + AndroidUtilities.formatFileSize(operation.totalBytesCount) + " position in queue " + operation.getPositionInQueue() + " account=" + currentAccount);
@@ -992,20 +1055,36 @@ public class FileLoader extends BaseController {
             result[0] = loadFileInternal(document, null, null, document == null && location != null ? location.location : null, location, parentObject, document == null && location != null ? "mp4" : null, document == null && location != null ? location.currentSize : 0, loadingPriority, stream, offset, priority, document == null ? 1 : 0);
             semaphore.countDown();
         });
-        try {
-            semaphore.await();
-        } catch (Exception e) {
-            FileLog.e(e, false);
-        }
+        awaitFileLoadOperation(semaphore, true);
         return result[0];
     }
 
-    private void checkDownloadQueue(FileLoaderPriorityQueue queue, String fileName) {
+    /**
+     * Necessary to wait of the FileLoadOperation object, despite the interruption of the thread.
+     * Thread can be interrupted by {@link ImageLoader.CacheOutTask#cancel}.
+     * For cases when two {@link ImageReceiver} require loading of the same file and the first {@link ImageReceiver} decides to cancel the operation.
+     * For example, to autoplay a video after sending a message.
+     */
+    private void awaitFileLoadOperation(CountDownLatch latch, boolean ignoreInterruption) {
+        try {
+            latch.await();
+        } catch (Exception e) {
+            FileLog.e(e, false);
+            if (ignoreInterruption) awaitFileLoadOperation(latch, false);
+        }
+    }
+
+    private void checkDownloadQueue(FileLoadOperation operation, FileLoaderPriorityQueue queue) {
+        checkDownloadQueue(operation, queue, 0);
+    }
+
+    private void checkDownloadQueue(FileLoadOperation operation, FileLoaderPriorityQueue queue, long delay) {
         fileLoaderQueue.postRunnable(() -> {
-            FileLoadOperation operation = loadOperationPaths.remove(fileName);
-            queue.remove(operation);
-            queue.checkLoadingOperations();
-        });
+            if (queue.remove(operation)) {
+                loadOperationPaths.remove(operation.getFileName());
+                queue.checkLoadingOperations();
+            }
+        }, delay);
     }
 
     public static String getMessageFileName(TLRPC.Message message) {
@@ -1164,8 +1243,7 @@ public class FileLoader extends BaseController {
                     dir = getDirectory(type = MEDIA_DIR_IMAGE);
                 }
                 documentId = photoSize.location.volume_id;
-                dcId = photoSize.location.dc_id;
-
+                dcId = photoSize.location.dc_id + (photoSize.location.local_id << 16);
             } else if (attach instanceof TLRPC.TL_videoSize) {
                 TLRPC.TL_videoSize videoSize = (TLRPC.TL_videoSize) attach;
                 if (videoSize.location == null || videoSize.location.key != null || videoSize.location.volume_id == Integer.MIN_VALUE && videoSize.location.local_id < 0 || videoSize.size < 0) {
@@ -1174,14 +1252,14 @@ public class FileLoader extends BaseController {
                     dir = getDirectory(type = MEDIA_DIR_IMAGE);
                 }
                 documentId = videoSize.location.volume_id;
-                dcId = videoSize.location.dc_id;
+                dcId = videoSize.location.dc_id + (videoSize.location.local_id << 16);
             } else if (attach instanceof TLRPC.FileLocation) {
                 TLRPC.FileLocation fileLocation = (TLRPC.FileLocation) attach;
                 if (fileLocation.key != null || fileLocation.volume_id == Integer.MIN_VALUE && fileLocation.local_id < 0) {
                     dir = getDirectory(MEDIA_DIR_CACHE);
                 } else {
                     documentId = fileLocation.volume_id;
-                    dcId = fileLocation.dc_id;
+                    dcId = fileLocation.dc_id + (fileLocation.local_id << 16);
                     dir = getDirectory(type = MEDIA_DIR_IMAGE);
                 }
             } else if (attach instanceof TLRPC.UserProfilePhoto || attach instanceof TLRPC.ChatPhoto) {
@@ -1709,6 +1787,9 @@ public class FileLoader extends BaseController {
         for (int i = 0; i < smallFilesQueue.length; i++) {
             if (smallFilesQueue[i].getCount() > 0 || largeFilesQueue[i].getCount() > 0) {
                 FileLog.d("download queue: dc" + (i + 1) + " account=" + currentAccount + " small_operations=" + smallFilesQueue[i].getCount() + " large_operations=" + largeFilesQueue[i].getCount());
+//                if (!largeFilesQueue[i].allOperations.isEmpty()) {
+//                    largeFilesQueue[i].allOperations.get(0).dump();
+//                }
             }
         }
         dumpFilesQueue();
@@ -1719,6 +1800,6 @@ public class FileLoader extends BaseController {
             return;
         }
         fileLoaderQueue.cancelRunnable(dumpFilesQueueRunnable);
-        fileLoaderQueue.postRunnable(dumpFilesQueueRunnable, 10_000);
+        fileLoaderQueue.postRunnable(dumpFilesQueueRunnable, 10000);
     }
 }
