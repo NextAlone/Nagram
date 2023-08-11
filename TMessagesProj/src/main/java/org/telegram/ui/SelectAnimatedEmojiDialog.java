@@ -2976,7 +2976,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
         }
     }
 
-    private static boolean[] preloaded = new boolean[UserConfig.MAX_ACCOUNT_COUNT];
+    private static boolean[] preloaded = new boolean[SharedConfig.activeAccounts.size()];
 
     public static void preload(int account) {
         if (preloaded[account] || MediaDataController.getInstance(account) == null) {

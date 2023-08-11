@@ -309,7 +309,7 @@ public class NekoAccountSettingsActivity extends BaseNekoXSettingsActivity {
                     textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                     if (position == deleteAccountRow) {
                         textCell.setText(LocaleController.getString("DeleteAccount", R.string.DeleteAccount), false);
-                        textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText));
+                        textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText3));
                     }
                     break;
                 }

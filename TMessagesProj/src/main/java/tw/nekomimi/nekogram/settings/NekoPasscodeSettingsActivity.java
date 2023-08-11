@@ -239,10 +239,10 @@ public class NekoPasscodeSettingsActivity extends BaseNekoSettingsActivity {
                     if (position == setPanicCodeRow) {
                         textCell.setText(PasscodeHelper.hasPanicCode() ? LocaleController.getString("PasscodePanicCodeEdit", R.string.PasscodePanicCodeEdit) : LocaleController.getString("PasscodePanicCodeSet", R.string.PasscodePanicCodeSet), removePanicCodeRow != -1);
                     } else if (position == clearPasscodesRow) {
-                        textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText));
+                        textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText3));
                         textCell.setText("Clear passcodes", false);
                     } else if (position == removePanicCodeRow) {
-                        textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText));
+                        textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText3));
                         textCell.setText(LocaleController.getString("PasscodePanicCodeRemove", R.string.PasscodePanicCodeRemove), false);
                     }
                     break;

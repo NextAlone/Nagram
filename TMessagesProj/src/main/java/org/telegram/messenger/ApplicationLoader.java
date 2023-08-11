@@ -56,6 +56,9 @@ import tw.nekomimi.nekogram.utils.FileUtil;
 import static android.os.Build.VERSION.SDK_INT;
 
 public class ApplicationLoader extends Application {
+
+    private static ApplicationLoader applicationLoaderInstance;
+
     private static PendingIntent pendingIntent;
 
     @SuppressLint("StaticFieldLeak")
@@ -285,6 +288,7 @@ public class ApplicationLoader extends Application {
 
     @Override
     public void onCreate() {
+        applicationLoaderInstance = this;
         try {
             applicationContext = getApplicationContext();
         } catch (Throwable ignore) {

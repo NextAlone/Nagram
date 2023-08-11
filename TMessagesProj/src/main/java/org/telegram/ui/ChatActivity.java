@@ -4244,7 +4244,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 currentEncryptedChat == null && message.getId() < 0 ||
                                 bottomOverlayChat != null && bottomOverlayChat.getVisibility() == View.VISIBLE && !(bottomOverlayChatWaitsReply && allowReplyOnOpenTopic || message.wasJustSent) ||
                                 currentChat != null && (ChatObject.isNotInChat(currentChat) && !isThreadChat() || ChatObject.isChannel(currentChat) && !ChatObject.canPost(currentChat) && !currentChat.megagroup || !ChatObject.canSendMessages(currentChat)) ||
-                                textSelectionHelper.isSelectionMode()) {
+                                textSelectionHelper.isInSelectionMode()) {
                             if (!canSendInCommentGroup()) {
                                 slidingView.setSlidingOffset(0);
                                 slidingView = null;
@@ -24922,7 +24922,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         } else if (type == 21) {
                             items.add(LocaleController.getString("ImportProxyList", R.string.ImportProxyList));
                             options.add(5);
-                            icons.add(R.drawable.proxy_on);
+                            icons.add(R.drawable.msg2_proxy_on);
                         } else if (type == 7) {
                             items.add(LocaleController.getString("AddToStickers", R.string.AddToStickers));
                             options.add(OPTION_ADD_TO_STICKERS_OR_MASKS);
@@ -28864,7 +28864,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         },
                         (which, text, __) -> {
                             if (which == 0) {
-                                logSponsoredClicked(finalMessageObject);
                                 processExternalUrl(1, urlFinal, url, finalCell, false);
                             } else if (which == 1 || which == 3) {
                                 // Copy / ShareMessage
@@ -34152,7 +34151,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
             } else if ((selectedObject.isSticker() || selectedObject.isAnimatedSticker()) && selectedObject.getDocument() != null) {
                 SendMessagesHelper.getInstance(currentAccount)
-                        .sendSticker(selectedObject.getDocument(), null, dialog_id, replyTo, getThreadMessage(), null, null, true, 0, false);
+                        .sendSticker(selectedObject.getDocument(), null, dialog_id, replyTo, getThreadMessage(), null, null, true, 0, false, null);
             }
             return;
         }
@@ -34202,7 +34201,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else if ((selectedObject.isSticker() || selectedObject.isAnimatedSticker()) && selectedObject.getDocument() != null) {
                 SendMessagesHelper.getInstance(currentAccount)
                         .sendSticker(selectedObject.getDocument(), null, dialog_id, replyTo, getThreadMessage(), null
-                        , null, true, 0, false);
+                        , null, true, 0, false, null);
             }
         }
     }

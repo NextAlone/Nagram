@@ -9,6 +9,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.support.LongSparseLongArray;
 import org.telegram.tgnet.ConnectionsManager;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 
 public class UserListPoller {
 
-    private static UserListPoller[] istances = new UserListPoller[UserConfig.MAX_ACCOUNT_COUNT];
+    private static UserListPoller[] istances = new UserListPoller[SharedConfig.activeAccounts.size()];
 
     final int currentAccount;
 

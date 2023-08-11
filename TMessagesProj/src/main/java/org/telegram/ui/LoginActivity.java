@@ -532,9 +532,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 marginLayoutParams = (MarginLayoutParams) backButtonView.getLayoutParams();
                 marginLayoutParams.topMargin = AndroidUtilities.dp(16) + statusBarHeight;
 
-                marginLayoutParams = (MarginLayoutParams) proxyButtonView.getLayoutParams();
-                marginLayoutParams.topMargin = AndroidUtilities.dp(16) + statusBarHeight;
-
                 marginLayoutParams = (MarginLayoutParams) radialProgressView.getLayoutParams();
                 marginLayoutParams.topMargin = AndroidUtilities.dp(16) + statusBarHeight;
 
@@ -7948,10 +7945,6 @@ R.string.CustomBackend))
 
         backButtonView.setColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         backButtonView.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)));
-
-        proxyDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.SRC_IN));
-        proxyDrawable.setColorKey(Theme.key_windowBackgroundWhiteBlackText);
-        proxyButtonView.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)));
 
         radialProgressView.setProgressColor(Theme.getColor(Theme.key_chats_actionBackground));
 

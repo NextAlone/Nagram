@@ -11,6 +11,7 @@ import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import org.telegram.ui.ActionBar.BottomSheet
 import org.telegram.ui.ActionBar.Theme
+import org.telegram.ui.ActionBar.Theme.key_dialogTextRed
 import org.telegram.ui.Cells.HeaderCell
 import org.telegram.ui.Cells.RadioButtonCell
 import org.telegram.ui.Cells.TextCell
@@ -224,7 +225,7 @@ class BottomBuilder(val ctx: Context, val needFocus: Boolean = true, val bgColor
                 listener?.invoke(this)
             }
             if (red) {
-                setColors("key_dialogTextRed", "key_dialogTextRed")
+                setColors(key_dialogTextRed, key_dialogTextRed)
             }
             this@BottomBuilder.rootView.addView(this, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, rtl))
         }

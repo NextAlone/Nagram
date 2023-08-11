@@ -13,7 +13,7 @@ import androidx.core.util.Pair;
 
 import com.google.android.exoplayer2.util.Util;
 
-import org.telegram.messenger.utils.BillingUtilities;
+//import org.telegram.messenger.utils.BillingUtilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.PremiumPreviewFragment;
