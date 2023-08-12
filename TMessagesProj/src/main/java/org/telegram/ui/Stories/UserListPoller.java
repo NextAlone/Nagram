@@ -1,5 +1,6 @@
 package org.telegram.ui.Stories;
 
+import android.util.SparseArray;
 import android.view.View;
 
 import com.google.android.exoplayer2.util.Log;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 
 public class UserListPoller {
 
-    private static UserListPoller[] istances = new UserListPoller[SharedConfig.activeAccounts.size()];
+    private static SparseArray<UserListPoller> istances = new SparseArray();
 
     final int currentAccount;
 
@@ -31,10 +32,10 @@ public class UserListPoller {
     }
 
     public static UserListPoller getInstance(int account) {
-        if (istances[account] == null) {
-            istances[account] = new UserListPoller(account);
+        if (istances.get(account) == null) {
+            istances.put(account, new UserListPoller(account));
         }
-        return istances[account];
+        return istances.get(account);
     }
 
     LongSparseLongArray userPollLastTime = new LongSparseLongArray();

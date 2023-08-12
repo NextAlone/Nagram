@@ -1617,15 +1617,15 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         actionModeLayout.addView(selectedMessagesCountTextView, LayoutHelper.createLinear(0, LayoutHelper.MATCH_PARENT, 1.0f, 18, 0, 0, 0));
         actionModeViews.add(selectedMessagesCountTextView);
 
-        if (!DialogObject.isEncryptedDialog(dialog_id)) {
-            gotoItem = new ActionBarMenuItem(context, null, getThemedColor(Theme.key_actionBarActionModeDefaultSelector), getThemedColor(Theme.key_actionBarActionModeDefaultIcon), false);
-            gotoItem.setIcon(R.drawable.msg_message);
-            gotoItem.setContentDescription(LocaleController.getString("AccDescrGoToMessage", R.string.AccDescrGoToMessage));
-            gotoItem.setDuplicateParentStateEnabled(false);
-            actionModeLayout.addView(gotoItem, new LinearLayout.LayoutParams(AndroidUtilities.dp(54), ViewGroup.LayoutParams.MATCH_PARENT));
-            actionModeViews.add(gotoItem);
-            gotoItem.setOnClickListener(v -> onActionBarItemClick(v, gotochat));
+        gotoItem = new ActionBarMenuItem(context, null, getThemedColor(Theme.key_actionBarActionModeDefaultSelector), getThemedColor(Theme.key_actionBarActionModeDefaultIcon), false);
+        gotoItem.setIcon(R.drawable.msg_message);
+        gotoItem.setContentDescription(LocaleController.getString("AccDescrGoToMessage", R.string.AccDescrGoToMessage));
+        gotoItem.setDuplicateParentStateEnabled(false);
+        actionModeLayout.addView(gotoItem, new LinearLayout.LayoutParams(AndroidUtilities.dp(54), ViewGroup.LayoutParams.MATCH_PARENT));
+        actionModeViews.add(gotoItem);
+        gotoItem.setOnClickListener(v -> onActionBarItemClick(v, gotochat));
 
+        if (!DialogObject.isEncryptedDialog(dialog_id)) {
             forwardNoQuoteItem = new ActionBarMenuItem(context, null, Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
             forwardNoQuoteItem.setIcon(R.drawable.msg_forward_noquote);
             forwardNoQuoteItem.setContentDescription(LocaleController.getString("NoQuoteForward", R.string.NoQuoteForward));
@@ -4951,52 +4951,43 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                             scrollSlidingTextTabStrip.addTextTab(0, LocaleController.getString("SharedMediaTab2", R.string.SharedMediaTab2), idToView, longClickListener);
                         }
                     }
-                    if (hasMedia[0] > 0) {
-                        if (!scrollSlidingTextTabStrip.hasTab(0)) {
-                            if (hasMedia[1] == 0 && hasMedia[2] == 0 && hasMedia[3] == 0 && hasMedia[4] == 0 && hasMedia[5] == 0 && hasMedia[6] == 0 && chatUsersAdapter.chatInfo == null) {
-                                scrollSlidingTextTabStrip.addTextTab(0, LocaleController.getString("SharedMediaTabFull2", R.string.SharedMediaTabFull2), idToView);
-                            } else {
-                                scrollSlidingTextTabStrip.addTextTab(0, LocaleController.getString("SharedMediaTab2", R.string.SharedMediaTab2), idToView);
-                            }
+                }
+                if (hasMedia[1] > 0) {
+                    if (!scrollSlidingTextTabStrip.hasTab(1)) {
+                        scrollSlidingTextTabStrip.addTextTab(1, LocaleController.getString("SharedFilesTab2", R.string.SharedFilesTab2), idToView);
+                    }
+                }
+                if (!DialogObject.isEncryptedDialog(dialog_id)) {
+                    if (hasMedia[3] > 0) {
+                        if (!scrollSlidingTextTabStrip.hasTab(3)) {
+                            scrollSlidingTextTabStrip.addTextTab(3, LocaleController.getString("SharedLinksTab2", R.string.SharedLinksTab2), idToView);
                         }
                     }
-                    if (hasMedia[1] > 0) {
-                        if (!scrollSlidingTextTabStrip.hasTab(1)) {
-                            scrollSlidingTextTabStrip.addTextTab(1, LocaleController.getString("SharedFilesTab2", R.string.SharedFilesTab2), idToView);
+                    if (hasMedia[4] > 0) {
+                        if (!scrollSlidingTextTabStrip.hasTab(4)) {
+                            scrollSlidingTextTabStrip.addTextTab(4, LocaleController.getString("SharedMusicTab2", R.string.SharedMusicTab2), idToView);
                         }
                     }
-                    if (!DialogObject.isEncryptedDialog(dialog_id)) {
-                        if (hasMedia[3] > 0) {
-                            if (!scrollSlidingTextTabStrip.hasTab(3)) {
-                                scrollSlidingTextTabStrip.addTextTab(3, LocaleController.getString("SharedLinksTab2", R.string.SharedLinksTab2), idToView);
-                            }
-                        }
-                        if (hasMedia[4] > 0) {
-                            if (!scrollSlidingTextTabStrip.hasTab(4)) {
-                                scrollSlidingTextTabStrip.addTextTab(4, LocaleController.getString("SharedMusicTab2", R.string.SharedMusicTab2), idToView);
-                            }
-                        }
-                    } else {
-                        if (hasMedia[4] > 0) {
-                            if (!scrollSlidingTextTabStrip.hasTab(4)) {
-                                scrollSlidingTextTabStrip.addTextTab(4, LocaleController.getString("SharedMusicTab2", R.string.SharedMusicTab2), idToView);
-                            }
+                } else {
+                    if (hasMedia[4] > 0) {
+                        if (!scrollSlidingTextTabStrip.hasTab(4)) {
+                            scrollSlidingTextTabStrip.addTextTab(4, LocaleController.getString("SharedMusicTab2", R.string.SharedMusicTab2), idToView);
                         }
                     }
-                    if (hasMedia[2] > 0) {
-                        if (!scrollSlidingTextTabStrip.hasTab(2)) {
-                            scrollSlidingTextTabStrip.addTextTab(2, LocaleController.getString("SharedVoiceTab2", R.string.SharedVoiceTab2), idToView);
-                        }
+                }
+                if (hasMedia[2] > 0) {
+                    if (!scrollSlidingTextTabStrip.hasTab(2)) {
+                        scrollSlidingTextTabStrip.addTextTab(2, LocaleController.getString("SharedVoiceTab2", R.string.SharedVoiceTab2), idToView);
                     }
-                    if (hasMedia[5] > 0) {
-                        if (!scrollSlidingTextTabStrip.hasTab(5)) {
-                            scrollSlidingTextTabStrip.addTextTab(5, LocaleController.getString("SharedGIFsTab2", R.string.SharedGIFsTab2), idToView);
-                        }
+                }
+                if (hasMedia[5] > 0) {
+                    if (!scrollSlidingTextTabStrip.hasTab(5)) {
+                        scrollSlidingTextTabStrip.addTextTab(5, LocaleController.getString("SharedGIFsTab2", R.string.SharedGIFsTab2), idToView);
                     }
-                    if (hasMedia[6] > 0) {
-                        if (!scrollSlidingTextTabStrip.hasTab(6)) {
-                            scrollSlidingTextTabStrip.addTextTab(6, LocaleController.getString("SharedGroupsTab2", R.string.SharedGroupsTab2), idToView);
-                        }
+                }
+                if (hasMedia[6] > 0) {
+                    if (!scrollSlidingTextTabStrip.hasTab(6)) {
+                        scrollSlidingTextTabStrip.addTextTab(6, LocaleController.getString("SharedGroupsTab2", R.string.SharedGroupsTab2), idToView);
                     }
                 }
             }

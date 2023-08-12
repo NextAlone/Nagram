@@ -2976,13 +2976,13 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
         }
     }
 
-    private static boolean[] preloaded = new boolean[SharedConfig.activeAccounts.size()];
+    private static SparseArray<Boolean> preloaded = new SparseArray();
 
     public static void preload(int account) {
-        if (preloaded[account] || MediaDataController.getInstance(account) == null) {
+        if (preloaded.get(account, false) || MediaDataController.getInstance(account) == null) {
             return;
         }
-        preloaded[account] = true;
+        preloaded.put(account, true);
         MediaDataController.getInstance(account).checkStickers(MediaDataController.TYPE_EMOJIPACKS);
         MediaDataController.getInstance(account).fetchEmojiStatuses(0, true);
         MediaDataController.getInstance(account).checkReactions();

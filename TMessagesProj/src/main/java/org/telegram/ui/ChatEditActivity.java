@@ -994,7 +994,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         if (currentChat != null) {
             blockCell = new TextCell(context);
             blockCell.setBackground(Theme.getSelectorDrawable(false));
-            blockCell.setVisibility(ChatObject.isChannel(currentChat) || currentChat.creator || ChatObject.hasAdminRights(currentChat) && ChatObject.canChangeChatInfo(currentChat) ? View.VISIBLE : View.GONE);
+//            blockCell.setVisibility(ChatObject.isChannel(currentChat) || currentChat.creator || ChatObject.hasAdminRights(currentChat) && ChatObject.canChangeChatInfo(currentChat) ? View.VISIBLE : View.GONE);
             blockCell.setOnClickListener(v -> {
                 Bundle args = new Bundle();
                 args.putLong("chat_id", chatId);
@@ -1132,10 +1132,10 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         }
 
         if (currentChat != null) {
-            if (!ChatObject.hasAdminRights(currentChat)) {
-                infoContainer.setVisibility(View.GONE);
-                settingsTopSectionCell.setVisibility(View.GONE);
-            }
+//            if (!ChatObject.hasAdminRights(currentChat)) {
+//                infoContainer.setVisibility(View.GONE);
+//                settingsTopSectionCell.setVisibility(View.GONE);
+//            }
 
             if (stickersCell == null) {
                 infoSectionCell = new ShadowSectionCell(context);
