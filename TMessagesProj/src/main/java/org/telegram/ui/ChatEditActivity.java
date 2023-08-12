@@ -1135,7 +1135,6 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             if (!ChatObject.hasAdminRights(currentChat)) {
 //                infoContainer.setVisibility(View.GONE);
 //                settingsTopSectionCell.setVisibility(View.GONE);
-                if (logCell != null) logCell.setVisibility(View.GONE);
             }
 
             if (stickersCell == null) {
@@ -1929,6 +1928,8 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         if (stickersCell != null && info != null) {
             stickersCell.setTextAndValue(LocaleController.getString(R.string.GroupStickers), info.stickerset != null ? info.stickerset.title : LocaleController.getString(R.string.Add), false);
         }
+
+        if (logCell != null && !ChatObject.hasAdminRights(currentChat)) logCell.setVisibility(View.GONE);
     }
 
     private ValueAnimator updateHistoryShowAnimator;

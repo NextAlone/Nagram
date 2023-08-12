@@ -2772,6 +2772,10 @@ public class MessagesController extends BaseController implements NotificationCe
                     break;
                 }
                 case "pending_suggestions": {
+                    if (NaConfig.INSTANCE.getDisableSuggestionView().Bool()) {
+                        pendingSuggestions = new HashSet<>();
+                        break;
+                    }
                     HashSet<String> newSuggestions = new HashSet<>();
                     if (value.value instanceof TLRPC.TL_jsonArray) {
                         TLRPC.TL_jsonArray array = (TLRPC.TL_jsonArray) value.value;

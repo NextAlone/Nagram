@@ -418,6 +418,12 @@ object NaConfig {
             ConfigItem.configTypeInt,
             0
         )
+    val disableSuggestionView =
+        addConfig(
+            "DisableSuggestionView",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,
