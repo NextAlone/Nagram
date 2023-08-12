@@ -31,6 +31,7 @@ import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.LiteMode;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -38,6 +39,7 @@ import org.telegram.ui.ActionBar.AdjustPanLayoutHelper;
 import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.BlurSettingsBottomSheet;
+import org.telegram.ui.ChatBackgroundDrawable;
 
 import java.util.ArrayList;
 
@@ -48,6 +50,10 @@ public class SizeNotifierFrameLayout extends FrameLayout {
 
     private Rect rect = new Rect();
     private Drawable backgroundDrawable;
+    private boolean backgroundMotion;
+    private Drawable oldBackgroundDrawable;
+    private boolean oldBackgroundMotion;
+
     protected int keyboardHeight;
     private int bottomClip;
     private SizeNotifierFrameLayoutDelegate delegate;
@@ -59,7 +65,6 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     private float parallaxScale = 1.0f;
     private int backgroundTranslationY;
     private boolean paused = true;
-    private Drawable oldBackgroundDrawable;
     private INavigationLayout parentLayout;
     public AdjustPanLayoutHelper adjustPanLayoutHelper;
     private int emojiHeight;
@@ -68,6 +73,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     private boolean skipBackgroundDrawing;
     SnowflakesEffect snowflakesEffect;
     protected View backgroundView;
+    boolean attached;
 
 
     //blur variables
@@ -100,11 +106,22 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     int times;
     int count2;
     int times2;
+    private float themeAnimationValue = 1f;
     //
 
     public void invalidateBlur() {
         invalidateBlur = true;
         invalidate();
+    }
+
+    public void invalidateBackground() {
+        if (backgroundView != null) {
+            backgroundView.invalidate();
+        }
+    }
+
+    public int getBottomPadding() {
+        return 0;
     }
 
 
@@ -121,140 +138,211 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         setWillNotDraw(false);
         parentLayout = layout;
         adjustPanLayoutHelper = createAdjustPanLayoutHelper();
-        backgroundView = new View(context) {
-            @Override
-            protected void onDraw(Canvas canvas) {
-                if (backgroundDrawable == null || skipBackgroundDrawing) {
-                    return;
+    }
+
+    private class BackgroundView extends View {
+        public BackgroundView(Context context) {
+            super(context);
+        }
+
+        @Override
+        protected void onDraw(Canvas canvas) {
+            if (backgroundDrawable == null || skipBackgroundDrawing) {
+                return;
+            }
+            Drawable newDrawable = getNewDrawable();
+            boolean newMotion = getNewDrawableMotion();
+            if (newDrawable != backgroundDrawable && newDrawable != null) {
+                if (Theme.isAnimatingColor()) {
+                    oldBackgroundDrawable = backgroundDrawable;
+                    oldBackgroundMotion = backgroundMotion;
                 }
-                Drawable newDrawable = getNewDrawable();
-                if (newDrawable != backgroundDrawable && newDrawable != null) {
-                    if (Theme.isAnimatingColor()) {
-                        oldBackgroundDrawable = backgroundDrawable;
-                    }
-                    if (newDrawable instanceof MotionBackgroundDrawable) {
-                        MotionBackgroundDrawable motionBackgroundDrawable = (MotionBackgroundDrawable) newDrawable;
-                        motionBackgroundDrawable.setParentView(backgroundView);
-                    }
-                    backgroundDrawable = newDrawable;
+                if (newDrawable instanceof MotionBackgroundDrawable) {
+                    MotionBackgroundDrawable motionBackgroundDrawable = (MotionBackgroundDrawable) newDrawable;
+                    motionBackgroundDrawable.setParentView(backgroundView);
                 }
-                float themeAnimationValue = parentLayout != null ? parentLayout.getThemeAnimationValue() : 1.0f;
-                for (int a = 0; a < 2; a++) {
-                    Drawable drawable = a == 0 ? oldBackgroundDrawable : backgroundDrawable;
-                    if (drawable == null) {
-                        continue;
-                    }
-                    if (a == 1 && oldBackgroundDrawable != null && parentLayout != null) {
-                        drawable.setAlpha((int) (255 * themeAnimationValue));
-                    } else {
-                        drawable.setAlpha(255);
-                    }
-                    if (drawable instanceof MotionBackgroundDrawable) {
-                        MotionBackgroundDrawable motionBackgroundDrawable = (MotionBackgroundDrawable) drawable;
-                        if (motionBackgroundDrawable.hasPattern()) {
-                            int actionBarHeight = (isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0) + (Build.VERSION.SDK_INT >= 21 && occupyStatusBar ? AndroidUtilities.statusBarHeight : 0);
-                            int viewHeight = getRootView().getMeasuredHeight() - actionBarHeight;
-                            float scaleX = (float) getMeasuredWidth() / (float) drawable.getIntrinsicWidth();
-                            float scaleY = (float) (viewHeight) / (float) drawable.getIntrinsicHeight();
-                            float scale = Math.max(scaleX, scaleY);
-                            int width = (int) Math.ceil(drawable.getIntrinsicWidth() * scale * parallaxScale);
-                            int height = (int) Math.ceil(drawable.getIntrinsicHeight() * scale * parallaxScale);
-                            int x = (getMeasuredWidth() - width) / 2 + (int) translationX;
-                            int y = backgroundTranslationY + (viewHeight - height) / 2 + actionBarHeight + (int) translationY;
-                            canvas.save();
-                            canvas.clipRect(0, actionBarHeight, width, getMeasuredHeight() - bottomClip);
-                            drawable.setBounds(x, y, x + width, y + height);
-                            drawable.draw(canvas);
-                            checkSnowflake(canvas);
-                            canvas.restore();
-                        } else {
-                            if (bottomClip != 0) {
-                                canvas.save();
-                                canvas.clipRect(0, 0, getMeasuredWidth(), getRootView().getMeasuredHeight() - bottomClip);
-                            }
-                            motionBackgroundDrawable.setTranslationY(backgroundTranslationY);
-                            int bottom = (int) (getRootView().getMeasuredHeight() - backgroundTranslationY + translationY);
-                            if (animationInProgress) {
-                                bottom -= emojiOffset;
-                            } else if (emojiHeight != 0) {
-                                bottom -= emojiHeight;
-                            }
-                            drawable.setBounds(0, 0, getMeasuredWidth(), bottom);
-                            drawable.draw(canvas);
-                            if (bottomClip != 0) {
-                                canvas.restore();
-                            }
-                        }
-                    } else if (drawable instanceof ColorDrawable) {
-                        if (bottomClip != 0) {
-                            canvas.save();
-                            canvas.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight() - bottomClip);
-                        }
-                        drawable.setBounds(0, 0, getMeasuredWidth(), getRootView().getMeasuredHeight());
+                backgroundDrawable = newDrawable;
+                if (attached && backgroundDrawable instanceof ChatBackgroundDrawable) {
+                    ((ChatBackgroundDrawable) backgroundDrawable).onAttachedToWindow();
+                }
+                backgroundMotion = newMotion;
+                themeAnimationValue = 0f;
+                checkMotion();
+            }
+            themeAnimationValue = Utilities.clamp(themeAnimationValue + AndroidUtilities.screenRefreshTime / 200, 1f, 0);
+            for (int a = 0; a < 2; a++) {
+                Drawable drawable = a == 0 ? oldBackgroundDrawable : backgroundDrawable;
+                if (drawable == null) {
+                    continue;
+                }
+                if (a == 1 && oldBackgroundDrawable != null && parentLayout != null) {
+                    drawable.setAlpha((int) (255 * themeAnimationValue));
+                } else {
+                    drawable.setAlpha(255);
+                }
+                float parallaxScale;
+                float translationX;
+                float translationY;
+                boolean drawMotion = a == 0 ? oldBackgroundMotion : backgroundMotion;
+                if (drawMotion) {
+                    parallaxScale = SizeNotifierFrameLayout.this.parallaxScale;
+                    translationX = SizeNotifierFrameLayout.this.translationX;
+                    translationY = SizeNotifierFrameLayout.this.translationY;
+                } else {
+                    parallaxScale = 1.0f;
+                    translationX = 0;
+                    translationY = 0;
+
+                }
+                if (drawable instanceof MotionBackgroundDrawable) {
+                    MotionBackgroundDrawable motionBackgroundDrawable = (MotionBackgroundDrawable) drawable;
+                    if (motionBackgroundDrawable.hasPattern()) {
+                        int actionBarHeight = (isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0) + (Build.VERSION.SDK_INT >= 21 && occupyStatusBar ? AndroidUtilities.statusBarHeight : 0);
+                        int viewHeight = getRootView().getMeasuredHeight() - actionBarHeight;
+                        float scaleX = (float) getMeasuredWidth() / (float) drawable.getIntrinsicWidth();
+                        float scaleY = (float) (viewHeight) / (float) drawable.getIntrinsicHeight();
+                        float scale = Math.max(scaleX, scaleY);
+                        int width = (int) Math.ceil(drawable.getIntrinsicWidth() * scale * parallaxScale);
+                        int height = (int) Math.ceil(drawable.getIntrinsicHeight() * scale * parallaxScale);
+                        int x = (getMeasuredWidth() - width) / 2 + (int) translationX;
+                        int y = backgroundTranslationY + (viewHeight - height) / 2 + actionBarHeight + (int) translationY;
+                        canvas.save();
+                        canvas.clipRect(0, actionBarHeight, width, getMeasuredHeight() - bottomClip);
+                        drawable.setBounds(x, y, x + width, y + height);
                         drawable.draw(canvas);
                         checkSnowflake(canvas);
-                        if (bottomClip != 0) {
-                            canvas.restore();
-                        }
-                    } else if (drawable instanceof GradientDrawable) {
+                        canvas.restore();
+                    } else {
                         if (bottomClip != 0) {
                             canvas.save();
                             canvas.clipRect(0, 0, getMeasuredWidth(), getRootView().getMeasuredHeight() - bottomClip);
                         }
-                        drawable.setBounds(0, backgroundTranslationY, getMeasuredWidth(), backgroundTranslationY + getRootView().getMeasuredHeight());
+                        motionBackgroundDrawable.setTranslationY(backgroundTranslationY);
+                        int bottom = (int) (getRootView().getMeasuredHeight() - backgroundTranslationY + translationY);
+                        if (animationInProgress) {
+                            bottom -= emojiOffset;
+                        } else if (emojiHeight != 0) {
+                            bottom -= emojiHeight;
+                        }
+                        drawable.setBounds(0, 0, getMeasuredWidth(), bottom);
                         drawable.draw(canvas);
-                        checkSnowflake(canvas);
                         if (bottomClip != 0) {
                             canvas.restore();
                         }
-                    } else if (drawable instanceof BitmapDrawable) {
-                        BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-                        if (bitmapDrawable.getTileModeX() == Shader.TileMode.REPEAT) {
-                            canvas.save();
-                            float scale = 2.0f / AndroidUtilities.density;
-                            canvas.scale(scale, scale);
-                            drawable.setBounds(0, 0, (int) Math.ceil(getMeasuredWidth() / scale), (int) Math.ceil(getRootView().getMeasuredHeight() / scale));
-                            drawable.draw(canvas);
-                            checkSnowflake(canvas);
-                            canvas.restore();
-                        } else {
-                            int actionBarHeight = (isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0) + (Build.VERSION.SDK_INT >= 21 && occupyStatusBar ? AndroidUtilities.statusBarHeight : 0);
-                            int viewHeight = getRootView().getMeasuredHeight() - actionBarHeight;
-                            float scaleX = (float) getMeasuredWidth() / (float) drawable.getIntrinsicWidth();
-                            float scaleY = (float) (viewHeight) / (float) drawable.getIntrinsicHeight();
-                            float scale = Math.max(scaleX, scaleY);
-                            int width = (int) Math.ceil(drawable.getIntrinsicWidth() * scale * parallaxScale);
-                            int height = (int) Math.ceil(drawable.getIntrinsicHeight() * scale * parallaxScale);
-                            int x = (getMeasuredWidth() - width) / 2 + (int) translationX;
-                            int y = backgroundTranslationY + (viewHeight - height) / 2 + actionBarHeight + (int) translationY;
-                            canvas.save();
-                            canvas.clipRect(0, actionBarHeight, width, getMeasuredHeight() - bottomClip);
-                            drawable.setBounds(x, y, x + width, y + height);
-                            drawable.draw(canvas);
-                            checkSnowflake(canvas);
-                            canvas.restore();
-                        }
                     }
-                    if (a == 0 && oldBackgroundDrawable != null && themeAnimationValue >= 1.0f) {
-                        oldBackgroundDrawable = null;
-                        backgroundView.invalidate();
+                } else if (drawable instanceof ColorDrawable) {
+                    if (bottomClip != 0) {
+                        canvas.save();
+                        canvas.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight() - bottomClip);
+                    }
+                    drawable.setBounds(0, 0, getMeasuredWidth(), getRootView().getMeasuredHeight());
+                    drawable.draw(canvas);
+                    checkSnowflake(canvas);
+                    if (bottomClip != 0) {
+                        canvas.restore();
+                    }
+                } else if (drawable instanceof GradientDrawable) {
+                    if (bottomClip != 0) {
+                        canvas.save();
+                        canvas.clipRect(0, 0, getMeasuredWidth(), getRootView().getMeasuredHeight() - bottomClip);
+                    }
+                    drawable.setBounds(0, backgroundTranslationY, getMeasuredWidth(), backgroundTranslationY + getRootView().getMeasuredHeight());
+                    drawable.draw(canvas);
+                    checkSnowflake(canvas);
+                    if (bottomClip != 0) {
+                        canvas.restore();
+                    }
+                } else if (drawable instanceof BitmapDrawable) {
+                    BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+                    if (bitmapDrawable.getTileModeX() == Shader.TileMode.REPEAT) {
+                        canvas.save();
+                        float scale = 2.0f / AndroidUtilities.density;
+                        canvas.scale(scale, scale);
+                        drawable.setBounds(0, 0, (int) Math.ceil(getMeasuredWidth() / scale), (int) Math.ceil(getRootView().getMeasuredHeight() / scale));
+                        drawable.draw(canvas);
+                        checkSnowflake(canvas);
+                        canvas.restore();
+                    } else {
+                        int actionBarHeight = (isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0) + (Build.VERSION.SDK_INT >= 21 && occupyStatusBar ? AndroidUtilities.statusBarHeight : 0);
+                        int viewHeight = getRootView().getMeasuredHeight() - actionBarHeight;
+                        float scaleX = (float) getMeasuredWidth() / (float) drawable.getIntrinsicWidth();
+                        float scaleY = (float) (viewHeight) / (float) drawable.getIntrinsicHeight();
+                        float scale = Math.max(scaleX, scaleY);
+                        int width = (int) Math.ceil(drawable.getIntrinsicWidth() * scale * parallaxScale);
+                        int height = (int) Math.ceil(drawable.getIntrinsicHeight() * scale * parallaxScale);
+                        int x = (getMeasuredWidth() - width) / 2 + (int) translationX;
+                        int y = backgroundTranslationY + (viewHeight - height) / 2 + actionBarHeight + (int) translationY;
+                        canvas.save();
+                        canvas.clipRect(0, actionBarHeight, width, getMeasuredHeight() - bottomClip);
+                        drawable.setBounds(x, y, x + width, y + height);
+                        drawable.draw(canvas);
+                        checkSnowflake(canvas);
+                        canvas.restore();
+                    }
+                } else {
+                    if (bottomClip != 0) {
+                        canvas.save();
+                        canvas.clipRect(0, 0, getMeasuredWidth(), getRootView().getMeasuredHeight() - bottomClip);
+                    }
+                    if (drawable instanceof ChatBackgroundDrawable) {
+                        ((ChatBackgroundDrawable) drawable).setParent(this);
+                    }
+                    float x = -getMeasuredWidth() * (parallaxScale - 1f) / 2f + translationX;
+                    float y = -getRootView().getMeasuredHeight() * (parallaxScale - 1f) / 2f + translationY;
+                    drawable.setBounds(
+                            (int) x,
+                            (int) (backgroundTranslationY + y),
+                            (int) (getMeasuredWidth() * parallaxScale + x),
+                            (int) (backgroundTranslationY + getRootView().getMeasuredHeight() * parallaxScale + y)
+                    );
+                    drawable.draw(canvas);
+                    checkSnowflake(canvas);
+                    if (bottomClip != 0) {
+                        canvas.restore();
                     }
                 }
+                if (a == 0 && oldBackgroundDrawable != null && themeAnimationValue >= 1.0f) {
+                    if (attached && oldBackgroundDrawable instanceof ChatBackgroundDrawable) {
+                        ((ChatBackgroundDrawable) oldBackgroundDrawable).onDetachedFromWindow();
+                    }
+                    oldBackgroundDrawable = null;
+                    oldBackgroundMotion = false;
+                    checkMotion();
+                    backgroundView.invalidate();
+                }
             }
-        };
-        addView(backgroundView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
-        checkLayerType();
+            if (themeAnimationValue != 1f) {
+                backgroundView.invalidate();
+            }
+        }
     }
 
     public void setBackgroundImage(Drawable bitmap, boolean motion) {
         if (backgroundDrawable == bitmap) {
             return;
         }
+        if (backgroundView == null) {
+            addView(backgroundView = new BackgroundView(getContext()), 0, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+            checkLayerType();
+        }
         if (bitmap instanceof MotionBackgroundDrawable) {
             MotionBackgroundDrawable motionBackgroundDrawable = (MotionBackgroundDrawable) bitmap;
             motionBackgroundDrawable.setParentView(backgroundView);
         }
+        if (attached && backgroundDrawable instanceof ChatBackgroundDrawable) {
+            ((ChatBackgroundDrawable) backgroundDrawable).onDetachedFromWindow();
+        }
         backgroundDrawable = bitmap;
+        if (attached && backgroundDrawable instanceof ChatBackgroundDrawable) {
+            ((ChatBackgroundDrawable) backgroundDrawable).onAttachedToWindow();
+        }
+        checkMotion();
+        backgroundView.invalidate();
+        checkLayerType();
+    }
+
+    private void checkMotion() {
+        boolean motion = oldBackgroundMotion || backgroundMotion;
         if (motion) {
             if (parallaxEffect == null) {
                 parallaxEffect = new WallpaperParallaxEffect(getContext());
@@ -262,7 +350,9 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                     translationX = offsetX;
                     translationY = offsetY;
                     bgAngle = angle;
-                    backgroundView.invalidate();
+                    if (backgroundView != null) {
+                        backgroundView.invalidate();
+                    }
                 });
                 if (getMeasuredWidth() != 0 && getMeasuredHeight() != 0) {
                     parallaxScale = parallaxEffect.getScale(getMeasuredWidth(), getMeasuredHeight());
@@ -278,8 +368,6 @@ public class SizeNotifierFrameLayout extends FrameLayout {
             translationX = 0;
             translationY = 0;
         }
-        backgroundView.invalidate();
-        checkLayerType();
     }
 
     private void checkLayerType() {
@@ -354,14 +442,18 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     public void setBottomClip(int value) {
         if (value != bottomClip) {
             bottomClip = value;
-            backgroundView.invalidate();
+            if (backgroundView != null) {
+                backgroundView.invalidate();
+            }
         }
     }
 
     public void setBackgroundTranslation(int translation) {
         if (translation != backgroundTranslationY) {
             backgroundTranslationY = translation;
-            backgroundView.invalidate();
+            if (backgroundView != null) {
+                backgroundView.invalidate();
+            }
         }
     }
 
@@ -403,7 +495,9 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     public void setEmojiKeyboardHeight(int height) {
         if (emojiHeight != height) {
             emojiHeight = height;
-            backgroundView.invalidate();
+            if (backgroundView != null) {
+                backgroundView.invalidate();
+            }
         }
     }
 
@@ -411,12 +505,14 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         if (emojiOffset != offset || animationInProgress != animInProgress) {
             emojiOffset = offset;
             animationInProgress = animInProgress;
-            backgroundView.invalidate();
+            if (backgroundView != null) {
+                backgroundView.invalidate();
+            }
         }
     }
 
     private void checkSnowflake(Canvas canvas) {
-        if (((Theme.canStartHolidayAnimation() && !SharedConfig.getLiteMode().enabled()) || NaConfig.INSTANCE.getChatDecoration().Int() == 1) && NaConfig.INSTANCE.getChatDecoration().Int() != 2) {
+        if (((backgroundView != null && Theme.canStartHolidayAnimation() && LiteMode.isEnabled(LiteMode.FLAG_CHAT_BACKGROUND)) || NaConfig.INSTANCE.getChatDecoration().Int() == 1) && NaConfig.INSTANCE.getChatDecoration().Int() != 2) {
             if (snowflakesEffect == null) {
                 snowflakesEffect = new SnowflakesEffect(1);
             }
@@ -435,12 +531,18 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     public void setSkipBackgroundDrawing(boolean skipBackgroundDrawing) {
         if (this.skipBackgroundDrawing != skipBackgroundDrawing) {
             this.skipBackgroundDrawing = skipBackgroundDrawing;
-            backgroundView.invalidate();
+            if (backgroundView != null) {
+                backgroundView.invalidate();
+            }
         }
     }
 
     protected Drawable getNewDrawable() {
         return Theme.getCachedWallpaperNonBlocking();
+    }
+
+    protected boolean getNewDrawableMotion() {
+        return Theme.isWallpaperMotion();
     }
 
     @Override
@@ -669,15 +771,23 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        attached = true;
         if (needBlur && !blurIsRunning) {
             blurIsRunning = true;
             invalidateBlur = true;
+        }
+        if (backgroundDrawable instanceof ChatBackgroundDrawable) {
+            ((ChatBackgroundDrawable) backgroundDrawable).onAttachedToWindow();
+        }
+        if (oldBackgroundDrawable instanceof ChatBackgroundDrawable) {
+            ((ChatBackgroundDrawable) oldBackgroundDrawable).onAttachedToWindow();
         }
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        attached = false;
         blurPaintTop.setShader(null);
         blurPaintTop2.setShader(null);
         blurPaintBottom.setShader(null);
@@ -696,6 +806,13 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         }
         unusedBitmaps.clear();
         blurIsRunning = false;
+
+        if (backgroundDrawable instanceof ChatBackgroundDrawable) {
+            ((ChatBackgroundDrawable) backgroundDrawable).onDetachedFromWindow();
+        }
+        if (oldBackgroundDrawable instanceof ChatBackgroundDrawable) {
+            ((ChatBackgroundDrawable) oldBackgroundDrawable).onDetachedFromWindow();
+        }
     }
 
     public boolean blurWasDrawn() {

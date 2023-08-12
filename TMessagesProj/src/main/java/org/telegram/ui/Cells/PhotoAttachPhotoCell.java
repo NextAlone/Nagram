@@ -338,7 +338,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
             if (photoEntry.isVideo) {
                 imageView.setImage("vthumb://" + photoEntry.imageId + ":" + photoEntry.path, null, Theme.chat_attachEmptyDrawable);
             } else {
-                imageView.setOrientation(photoEntry.orientation, true);
+                imageView.setOrientation(photoEntry.orientation, photoEntry.invert, true);
                 imageView.setImage("thumb://" + photoEntry.imageId + ":" + photoEntry.path, null, Theme.chat_attachEmptyDrawable);
             }
         } else {
@@ -539,11 +539,17 @@ public class PhotoAttachPhotoCell extends FrameLayout {
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
         super.onInitializeAccessibilityNodeInfo(info);
         info.setEnabled(true);
+        StringBuilder sb = new StringBuilder();
         if (photoEntry != null && photoEntry.isVideo) {
-            info.setText(LocaleController.getString("AttachVideo", R.string.AttachVideo) + ", " + LocaleController.formatDuration(photoEntry.duration));
+            sb.append(LocaleController.getString("AttachVideo", R.string.AttachVideo) + ", " + LocaleController.formatDuration(photoEntry.duration));
         } else {
-            info.setText(LocaleController.getString("AttachPhoto", R.string.AttachPhoto));
+            sb.append(LocaleController.getString("AttachPhoto", R.string.AttachPhoto));
         }
+        if (photoEntry != null) {
+            sb.append(". ");
+            sb.append(LocaleController.getInstance().formatterStats.format(photoEntry.dateTaken * 1000L));
+        }
+        info.setText(sb);
         if (checkBox.isChecked()) {
             info.setSelected(true);
         }
@@ -562,8 +568,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         return super.performAccessibilityAction(action, arguments);
     }
 
-    protected int getThemedColor(String key) {
-        Integer color = resourcesProvider != null ? resourcesProvider.getColor(key) : null;
-        return color != null ? color : Theme.getColor(key);
+    protected int getThemedColor(int key) {
+        return Theme.getColor(key, resourcesProvider);
     }
 }

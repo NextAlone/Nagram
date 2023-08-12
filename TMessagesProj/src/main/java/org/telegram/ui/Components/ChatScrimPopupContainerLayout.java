@@ -18,6 +18,7 @@ public class ChatScrimPopupContainerLayout extends LinearLayout {
     private float progressToSwipeBack;
     private float bottomViewYOffset;
     private float expandSize;
+    private float bottomViewReactionsOffset;
 
     public ChatScrimPopupContainerLayout(Context context) {
         super(context);
@@ -106,6 +107,7 @@ public class ChatScrimPopupContainerLayout extends LinearLayout {
         } else {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
+        maxHeight = getMeasuredHeight();
     }
 
     private void updatePopupTranslation() {
@@ -148,7 +150,7 @@ public class ChatScrimPopupContainerLayout extends LinearLayout {
 
     private void updateBottomViewPosition() {
         if (bottomView != null) {
-            bottomView.setTranslationY(bottomViewYOffset + expandSize);
+            bottomView.setTranslationY(bottomViewYOffset + expandSize + bottomViewReactionsOffset);
         }
     }
 
@@ -162,10 +164,24 @@ public class ChatScrimPopupContainerLayout extends LinearLayout {
         updateBottomViewPosition();
     }
 
-    public void setPopupAlpha(float aplha) {
-        popupWindowLayout.setAlpha(aplha);
+    public void setPopupAlpha(float alpha) {
+        popupWindowLayout.setAlpha(alpha);
         if (bottomView != null) {
-            bottomView.setAlpha(aplha);
+            bottomView.setAlpha(alpha);
+        }
+    }
+
+    public void setReactionsTransitionProgress(float v) {
+        popupWindowLayout.setReactionsTransitionProgress(v);
+        if (bottomView != null) {
+            bottomView.setAlpha(v);
+            float scale = 0.5f + v * 0.5f;
+            bottomView.setPivotX(bottomView.getMeasuredWidth());
+            bottomView.setPivotY(0);
+            bottomViewReactionsOffset = -popupWindowLayout.getMeasuredHeight() * (1f - v);
+            updateBottomViewPosition();
+            bottomView.setScaleX(scale);
+            bottomView.setScaleY(scale);
         }
     }
 }

@@ -43,6 +43,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MemberRequestsController;
 import org.telegram.messenger.MessagesController;
@@ -165,7 +166,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             if (isShowLastItemDivider) {
                 loadingView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite, fragment.getResourceProvider()));
             }
-            loadingView.setColors(Theme.key_windowBackgroundWhite, Theme.key_windowBackgroundGray, null);
+            loadingView.setColors(Theme.key_windowBackgroundWhite, Theme.key_windowBackgroundGray, -1);
             loadingView.setViewType(FlickerLoadingView.MEMBER_REQUESTS_TYPE);
         }
         return loadingView;
@@ -464,6 +465,9 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
                 MessagesController.getInstance(currentAccount).processUpdates(updates, false);
             }
             AndroidUtilities.runOnUIThread(() -> {
+                if (fragment == null || fragment.getParentActivity() == null) {
+                    return;
+                }
                 if (error == null) {
                     TLRPC.TL_updates updates = (TLRPC.TL_updates) response;
                     if (!updates.chats.isEmpty()) {
@@ -564,7 +568,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
                     break;
                 case 1:
                     view = new View(parent.getContext());
-                    view.setBackground(Theme.getThemedDrawable(parent.getContext(), R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                    view.setBackground(Theme.getThemedDrawableByKey(parent.getContext(), R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     break;
                 case 2:
                     view = new View(parent.getContext()) {
@@ -620,12 +624,34 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
 
         @SuppressLint("NotifyDataSetChanged")
         public void setItems(List<TLRPC.TL_chatInviteImporter> newItems) {
+            for (int i = 0; i < newItems.size(); ++i) {
+                long id = newItems.get(i).user_id;
+                for (int j = i + 1; j < newItems.size(); ++j) {
+                    long iid = newItems.get(j).user_id;
+                    if (iid == id) {
+                        newItems.remove(i);
+                        i--;
+                        break;
+                    }
+                }
+            }
             currentImporters.clear();
             currentImporters.addAll(newItems);
             notifyDataSetChanged();
         }
 
         public void appendItems(List<TLRPC.TL_chatInviteImporter> newItems) {
+            for (int i = 0; i < newItems.size(); ++i) {
+                long id = newItems.get(i).user_id;
+                for (int j = 0; j < currentImporters.size(); ++j) {
+                    long iid = currentImporters.get(j).user_id;
+                    if (iid == id) {
+                        newItems.remove(i);
+                        i--;
+                        break;
+                    }
+                }
+            }
             currentImporters.addAll(newItems);
             if (currentImporters.size() > newItems.size()) {
                 notifyItemChanged(currentImporters.size() - newItems.size() - 1);
@@ -749,8 +775,8 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             });
             popupLayout.addView(sendMsgCell);
 
-            ActionBarMenuSubItem dismissCell = new ActionBarMenuSubItem(context, false, false);
-            dismissCell.setColors(Theme.getColor(Theme.key_dialogTextRed2, resourcesProvider), Theme.getColor(Theme.key_dialogRedIcon, resourcesProvider));
+            ActionBarMenuSubItem dismissCell = new ActionBarMenuSubItem(context, false, true);
+            dismissCell.setColors(Theme.getColor(Theme.key_text_RedBold, resourcesProvider), Theme.getColor(Theme.key_text_RedRegular, resourcesProvider));
             dismissCell.setSelectorColor(Theme.getColor(Theme.key_dialogButtonSelector, resourcesProvider));
             dismissCell.setTextAndIcon(LocaleController.getString("DismissRequest", R.string.DismissRequest), R.drawable.msg_remove);
             dismissCell.setOnClickListener((v) -> {
@@ -762,7 +788,7 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
             popupLayout.addView(dismissCell);
 
             ActionBarMenuSubItem banCell = new ActionBarMenuSubItem(context, false, true);
-            banCell.setColors(Theme.getColor(Theme.key_dialogTextRed2, resourcesProvider), Theme.getColor(Theme.key_dialogRedIcon, resourcesProvider));
+            banCell.setColors(Theme.getColor(Theme.key_dialogTextRed, resourcesProvider), Theme.getColor(Theme.key_dialogRedIcon, resourcesProvider));
             banCell.setSelectorColor(Theme.getColor(Theme.key_dialogButtonSelector, resourcesProvider));
             banCell.setTextAndIcon(LocaleController.getString("KickFromGroup", R.string.KickFromGroup), R.drawable.profile_ban);
             banCell.setOnClickListener((v) -> {
@@ -800,8 +826,19 @@ public class MemberRequestsDelegate implements MemberRequestCell.OnClickListener
         public void setImporter(TLRPC.TL_chatInviteImporter importer, BackupImageView imageView) {
             this.importer = importer;
             this.imageView = imageView;
+
+            final ImageLocation imageLocation;
+            final ImageLocation thumbLocation;
+            TLRPC.User currentUser = MessagesController.getInstance(currentAccount).getUser(importer.user_id);
+            imageLocation = ImageLocation.getForUserOrChat(currentUser, ImageLocation.TYPE_BIG);
+            thumbLocation = ImageLocation.getForUserOrChat(currentUser, ImageLocation.TYPE_SMALL);
+            final TLRPC.UserFull userFull = MessagesController.getInstance(currentAccount).getUserFull(importer.user_id);
+            if (userFull == null) {
+                MessagesController.getInstance(currentAccount).loadUserInfo(currentUser, false, 0);
+            }
             viewPager.setParentAvatarImage(imageView);
             viewPager.setData(importer.user_id, true);
+            viewPager.initIfEmpty(null, imageLocation, thumbLocation, true);
             TLRPC.User user = users.get(importer.user_id);
             nameText.setText(UserObject.getUserName(user));
             bioText.setText(importer.about);

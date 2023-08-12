@@ -845,7 +845,7 @@ public class PhotoPaintView extends FrameLayout implements IPhotoPaintView, Enti
     }
 
     @Override
-    public float[] getTransformedTouch(float x, float y) {
+    public float[] getTransformedTouch(MotionEvent e, float x, float y) {
         float x2 = (x - AndroidUtilities.displaySize.x / 2);
         float y2 = (y - AndroidUtilities.displaySize.y / 2);
         float rotation = (float) Math.toRadians(-entitiesView.getRotation());
@@ -1750,9 +1750,8 @@ public class PhotoPaintView extends FrameLayout implements IPhotoPaintView, Enti
     }
 	*/
 
-    private int getThemedColor(String key) {
-        Integer color = resourcesProvider != null ? resourcesProvider.getColor(key) : null;
-        return color != null ? color : Theme.getColor(key);
+    private int getThemedColor(int key) {
+        return Theme.getColor(key, resourcesProvider);
     }
 
     private static class StickerPosition {
@@ -1768,7 +1767,9 @@ public class PhotoPaintView extends FrameLayout implements IPhotoPaintView, Enti
     }
 
     @Override
-    public void onBackPressed() {}
+    public boolean onBackPressed() {
+        return false;
+    }
 
     @Override
     public void updateZoom(boolean zoomedOut) {}

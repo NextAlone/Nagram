@@ -1,22 +1,38 @@
 package org.telegram.messenger;
 
+import com.google.android.exoplayer2.util.Log;
+
 import java.util.ArrayList;
 
 public class FileLoaderPriorityQueue {
 
-    private final int maxActiveOperationsCount;
+    public static final int TYPE_SMALL = 0;
+    public static final int TYPE_LARGE = 1;
     String name;
+    int type;
+    int currentAccount;
 
-    ArrayList<FileLoadOperation> allOperations = new ArrayList<>();
-    ArrayList<FileLoadOperation> activeOperations = new ArrayList<>();
+    public ArrayList<FileLoadOperation> allOperations = new ArrayList<>();
+    public ArrayList<FileLoadOperation> tmpListOperations = new ArrayList<>();
 
-    private int PRIORITY_VALUE_MAX = (1 << 20);
-    private int PRIORITY_VALUE_NORMAL = (1 << 16);
-    private int PRIORITY_VALUE_LOW = 0;
+    public final static int PRIORITY_VALUE_MAX = (1 << 20);
+    public final static int PRIORITY_VALUE_NORMAL = (1 << 16);
+    public final static int PRIORITY_VALUE_LOW = 0;
 
-    FileLoaderPriorityQueue(String name, int maxActiveOperationsCount) {
+    final DispatchQueue workerQueue;
+
+    boolean checkOperationsScheduled = false;
+
+    Runnable checkOperationsRunnable = () -> {
+        checkLoadingOperationInternal();
+        checkOperationsScheduled = false;
+    };
+
+    FileLoaderPriorityQueue(int currentAccount, String name, int type, DispatchQueue workerQueue) {
+        this.currentAccount = currentAccount;
         this.name = name;
-        this.maxActiveOperationsCount = maxActiveOperationsCount;
+        this.type = type;
+        this.workerQueue = workerQueue;
     }
 
     public void add(FileLoadOperation operation) {
@@ -24,7 +40,12 @@ public class FileLoaderPriorityQueue {
             return;
         }
         int index = -1;
-        allOperations.remove(operation);
+        for (int i = 0; i < allOperations.size(); i++) {
+            if (allOperations.get(i) == operation) {
+                allOperations.remove(i);
+                i--;
+            }
+        }
         for (int i = 0; i < allOperations.size(); i++) {
             if (operation.getPriority() > allOperations.get(i).getPriority()) {
                 index = i;
@@ -42,23 +63,55 @@ public class FileLoaderPriorityQueue {
         if (operation == null) {
             return;
         }
-        allOperations.remove(operation);
-        operation.cancel();
+        if (allOperations.remove(operation)) {
+            operation.cancel();
+        }
     }
 
     public void checkLoadingOperations() {
+        checkLoadingOperations(false);
+    }
+
+    public void checkLoadingOperations(boolean immediate) {
+        if (immediate) {
+            workerQueue.cancelRunnable(checkOperationsRunnable);
+            checkOperationsRunnable.run();
+            return;
+        }
+        if (checkOperationsScheduled) {
+            return;
+        }
+        checkOperationsScheduled = true;
+        workerQueue.cancelRunnable(checkOperationsRunnable);
+        workerQueue.postRunnable(checkOperationsRunnable, 20);
+    }
+
+    private void checkLoadingOperationInternal() {
         int activeCount = 0;
         int lastPriority = 0;
         boolean pauseAllNextOperations = false;
+        int max = type == TYPE_LARGE ? MessagesController.getInstance(currentAccount).largeQueueMaxActiveOperations : MessagesController.getInstance(currentAccount).smallQueueMaxActiveOperations;
+        tmpListOperations.clear();
         for (int i = 0; i < allOperations.size(); i++) {
+            FileLoadOperation prevOperation = i > 0 ? allOperations.get(i - 1) : null;
             FileLoadOperation operation = allOperations.get(i);
             if (i > 0 && !pauseAllNextOperations) {
+                if (type == TYPE_LARGE) {
+                    if (prevOperation != null && prevOperation.isStory && prevOperation.getPriority() >= PRIORITY_VALUE_MAX) {
+                        pauseAllNextOperations = true;
+                    }
+                }
                 if (lastPriority > PRIORITY_VALUE_LOW && operation.getPriority() == PRIORITY_VALUE_LOW) {
                     pauseAllNextOperations = true;
                 }
             }
-            if (!pauseAllNextOperations && i < maxActiveOperationsCount) {
-                operation.start();
+            if (operation.preFinished) {
+                //operation will not use connections
+                //just skip
+                max++;
+                continue;
+            } else if (!pauseAllNextOperations && i < max) {
+                tmpListOperations.add(operation);
                 activeCount++;
             } else {
                 if (operation.wasStarted()) {
@@ -67,20 +120,23 @@ public class FileLoaderPriorityQueue {
             }
             lastPriority = operation.getPriority();
         }
+        for (int i = 0; i < tmpListOperations.size(); i++) {
+            tmpListOperations.get(i).start();
+        }
     }
 
-    public void remove(FileLoadOperation operation) {
+    public boolean remove(FileLoadOperation operation) {
         if (operation == null) {
-            return;
+            return false;
         }
-        allOperations.remove(operation);
+        return allOperations.remove(operation);
     }
 
-    private FileLoadOperation remove() {
-        if (allOperations.isEmpty()) {
-            return null;
-        }
-        return allOperations.remove(0);
+    public int getCount() {
+        return allOperations.size();
     }
 
+    public int getPosition(FileLoadOperation fileLoadOperation) {
+        return allOperations.indexOf(fileLoadOperation);
+    }
 }

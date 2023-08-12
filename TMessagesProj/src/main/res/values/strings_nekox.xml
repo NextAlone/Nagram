@@ -278,4 +278,10 @@
     <string name="InteractionSettings">Interaction</string>
     <string name="localPremium">Local Premium</string>
     <string name="nekoxPremiumGiftRemoved">Premium Gift is removed in NekoX.</string>
+    <string name="ReactionSettings">Reaction</string>
+    <string name="doubleTapAndReactions">Double tap</string>
+    <string name="doubleTapShowReactionsMenu">Show reactions menu</string>
+    <string name="doubleTapSendReaction">Send reaction</string>
+    <string name="doubleTapDisable">Disable</string>
+    <string name="disableReactionsWhenSelecting">Hide reactions while selecting</string>
 </resources>

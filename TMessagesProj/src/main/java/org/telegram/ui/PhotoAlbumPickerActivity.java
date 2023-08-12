@@ -217,7 +217,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
 
                 setMeasuredDimension(widthSize, heightSize);
 
-                int keyboardSize = SharedConfig.smoothKeyboard ? 0 : measureKeyboardHeight();
+                int keyboardSize = 0;
                 if (keyboardSize <= AndroidUtilities.dp(20)) {
                     if (!AndroidUtilities.isInMultiwindow) {
                         heightSize -= commentTextView.getEmojiPadding();
@@ -261,7 +261,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 }
                 final int count = getChildCount();
 
-                int keyboardSize = SharedConfig.smoothKeyboard ? 0 : measureKeyboardHeight();
+                int keyboardSize = 0;
                 int paddingBottom = keyboardSize <= AndroidUtilities.dp(20) && !AndroidUtilities.isInMultiwindow && !AndroidUtilities.isTablet() ? commentTextView.getEmojiPadding() : 0;
                 setBottomClip(paddingBottom);
 
@@ -492,9 +492,9 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                         itemCells[a].setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
                     } else if (num == 1) {
                         if (UserObject.isUserSelf(user)) {
-                            itemCells[a].setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.msg_schedule);
+                            itemCells[a].setTextAndIcon(LocaleController.getString("SetReminder", R.string.SetReminder), R.drawable.msg_calendar);
                         } else {
-                            itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.msg_schedule);
+                            itemCells[a].setTextAndIcon(LocaleController.getString("ScheduleMessage", R.string.ScheduleMessage), R.drawable.msg_calendar);
                         }
                     } else if (num == 2) {
                         itemCells[a].setTextAndIcon(LocaleController.getString("SendWithoutSound", R.string.SendWithoutSound), R.drawable.input_notify_off);
@@ -705,7 +705,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 loading = false;
             }
         } else if (id == NotificationCenter.closeChats) {
-            removeSelfFromStack();
+            removeSelfFromStack(true);
         }
     }
 

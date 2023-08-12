@@ -22,6 +22,7 @@ dependencies {
 
     implementation "com.microsoft.appcenter:appcenter-distribute:3.3.1"
     implementation "com.microsoft.appcenter:appcenter-crashes:3.3.1"
+    implementation "com.microsoft.appcenter:appcenter-analytics:3.3.1"
 }
 
 android {
@@ -67,8 +68,8 @@ android {
 
     buildTypes {
         HA_private {
-            debuggable false
-            jniDebuggable false
+            debuggable true
+            jniDebuggable true
             signingConfig signingConfigs.debug
             applicationIdSuffix ".beta"
             minifyEnabled true

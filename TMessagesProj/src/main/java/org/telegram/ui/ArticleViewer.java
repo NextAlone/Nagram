@@ -92,6 +92,7 @@ import android.widget.Toast;
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.collection.LongSparseArray;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.GridLayoutManagerFixed;
@@ -104,6 +105,7 @@ import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.AnimationNotificationsLocker;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DownloadController;
@@ -168,6 +170,7 @@ import org.telegram.ui.Components.TextPaintMarkSpan;
 import org.telegram.ui.Components.TextPaintSpan;
 import org.telegram.ui.Components.TextPaintUrlSpan;
 import org.telegram.ui.Components.TextPaintWebpageUrlSpan;
+import org.telegram.ui.Components.TranslateAlert2;
 import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.Components.WebPlayerView;
 
@@ -311,12 +314,16 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
     PinchToZoomHelper pinchToZoomHelper;
 
-    private int allowAnimationIndex = -1;
+    private final AnimationNotificationsLocker notificationsLocker = new AnimationNotificationsLocker(new int[]{
+            NotificationCenter.dialogsNeedReload,
+            NotificationCenter.closeChats
+    });
 
     private final String BOTTOM_SHEET_VIEW_TAG = "bottomSheet";
 
     @SuppressLint("StaticFieldLeak")
     private static volatile ArticleViewer Instance = null;
+    private Drawable chat_redLocationIcon;
 
     public static ArticleViewer getInstance() {
         ArticleViewer localInstance = Instance;
@@ -397,8 +404,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     public class DrawingText implements TextSelectionHelper.TextLayoutBlock {
-        public View latestParentView;
+        private View latestParentView;
 
+        private boolean isDrawing;
         public StaticLayout textLayout;
         public LinkPath textPath;
         public LinkPath markPath;
@@ -412,6 +420,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         public CharSequence prefix;
 
         public void draw(Canvas canvas, View view) {
+            isDrawing = true;
             latestParentView = view;
 
             if (!searchResults.isEmpty()) {
@@ -458,6 +467,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 canvas.drawRect(-AndroidUtilities.dp(2) + x, 0, x + width + AndroidUtilities.dp(2), getHeight(), urlPaint);
             }
             textLayout.draw(canvas);
+            isDrawing = false;
+        }
+
+        public void invalidateParent() {
+            if (!isDrawing && latestParentView != null) {
+                latestParentView.invalidate();
+            }
         }
 
         public CharSequence getText() {
@@ -756,7 +772,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             MotionEvent textSelectionEv = MotionEvent.obtain(ev);
             textSelectionEv.offsetLocation(-containerView.getX(), -containerView.getY());
 
-            if (textSelectionHelper.isSelectionMode() && textSelectionHelper.getOverlayView(getContext()).onTouchEvent(textSelectionEv)) {
+            if (textSelectionHelper.isInSelectionMode() && textSelectionHelper.getOverlayView(getContext()).onTouchEvent(textSelectionEv)) {
                 return true;
             }
 
@@ -764,7 +780,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 ev.setAction(MotionEvent.ACTION_CANCEL);
             }
 
-            if (ev.getAction() == MotionEvent.ACTION_DOWN && textSelectionHelper.isSelectionMode() && (ev.getY() < containerView.getTop() || ev.getY() > containerView.getBottom())) {
+            if (ev.getAction() == MotionEvent.ACTION_DOWN && textSelectionHelper.isInSelectionMode() && (ev.getY() < containerView.getTop() || ev.getY() > containerView.getBottom())) {
                 if (textSelectionHelper.getOverlayView(getContext()).onTouchEvent(textSelectionEv)) {
                     return super.dispatchTouchEvent(ev);
                 } else {
@@ -905,7 +921,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
 
         public boolean handleTouchEvent(MotionEvent event) {
-            if (pageSwitchAnimation == null && !closeAnimationInProgress && fullscreenVideoContainer.getVisibility() != VISIBLE && !textSelectionHelper.isSelectionMode()) {
+            if (pageSwitchAnimation == null && !closeAnimationInProgress && fullscreenVideoContainer.getVisibility() != VISIBLE && !textSelectionHelper.isInSelectionMode()) {
                 if (event != null && event.getAction() == MotionEvent.ACTION_DOWN && !startedTracking && !maybeStartTracking) {
                     startedTrackingPointerId = event.getPointerId(0);
                     maybeStartTracking = true;
@@ -1034,7 +1050,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         tracker.recycle();
                         tracker = null;
                     }
-                    if (textSelectionHelper != null && !textSelectionHelper.isSelectionMode()) {
+                    if (textSelectionHelper != null && !textSelectionHelper.isInSelectionMode()) {
                         textSelectionHelper.clear();
                     }
                 }
@@ -1135,7 +1151,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     } else {
                         textSelectionHelper.trySelect(pressedLinkOwnerView);
                     }
-                    if (textSelectionHelper.isSelectionMode() && !NekoConfig.disableVibration.Bool()) {
+                    if (textSelectionHelper.isInSelectionMode() && !NekoConfig.disableVibration.Bool()) {
                         windowView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                     }
                 } else if (pressedLinkOwnerLayout != null && pressedLinkOwnerView != null) {
@@ -1226,7 +1242,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
 
         BottomBuilder builder = new BottomBuilder(parentActivity);
-        builder.addTitle(urlFinal);
+        String formattedUrl = urlFinal;
+        try {
+            formattedUrl = URLDecoder.decode(urlFinal.replaceAll("\\+", "%2b"), "UTF-8");
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        builder.addTitle(formattedUrl);
+        builder.setTitleMultipleLines(true);
         builder.addItems(
                 new String[]{LocaleController.getString("Open", R.string.Open), LocaleController.getString("Copy", R.string.Copy), LocaleController.getString("ShareQRCode", R.string.ShareQRCode)},
                 new int[]{R.drawable.msg_openin, R.drawable.msg_copy, R.drawable.msg_qrcode}, (which, text, cell) -> {
@@ -1734,7 +1757,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         TextSelectionHelper.TextSelectionOverlay selectionOverlay = textSelectionHelperBottomSheet.getOverlayView(getContext());
                         MotionEvent textSelectionEv = MotionEvent.obtain(ev);
                         textSelectionEv.offsetLocation(-linearLayout.getX(), -linearLayout.getY());
-                        if (textSelectionHelperBottomSheet.isSelectionMode() && textSelectionHelperBottomSheet.getOverlayView(getContext()).onTouchEvent(textSelectionEv)) {
+                        if (textSelectionHelperBottomSheet.isInSelectionMode() && textSelectionHelperBottomSheet.getOverlayView(getContext()).onTouchEvent(textSelectionEv)) {
                             return true;
                         }
 
@@ -1742,7 +1765,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                             ev.setAction(MotionEvent.ACTION_CANCEL);
                         }
 
-                        if (ev.getAction() == MotionEvent.ACTION_DOWN && textSelectionHelperBottomSheet.isSelectionMode() && (ev.getY() < linearLayout.getTop() || ev.getY() > linearLayout.getBottom())) {
+                        if (ev.getAction() == MotionEvent.ACTION_DOWN && textSelectionHelperBottomSheet.isInSelectionMode() && (ev.getY() < linearLayout.getTop() || ev.getY() > linearLayout.getBottom())) {
                             if (textSelectionHelperBottomSheet.getOverlayView(getContext()).onTouchEvent(textSelectionEv)) {
                                 return super.dispatchTouchEvent(ev);
                             } else {
@@ -1763,7 +1786,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 builder.setDelegate(new BottomSheet.BottomSheetDelegate() {
                     @Override
                     public boolean canDismiss() {
-                        if (textSelectionHelperBottomSheet != null && textSelectionHelperBottomSheet.isSelectionMode()) {
+                        if (textSelectionHelperBottomSheet != null && textSelectionHelperBottomSheet.isInSelectionMode()){
                             textSelectionHelperBottomSheet.clear();
                             return false;
                         }
@@ -1774,7 +1797,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 frameLayout.addView(linearLayout, LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT);
                 frameLayout.addView(overlayView, LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT);
                 builder.setCustomView(frameLayout);
-                if (textSelectionHelper.isSelectionMode()) {
+                if (textSelectionHelper.isInSelectionMode()) {
                     textSelectionHelper.clear();
                 }
                 showDialog(linkSheet = builder.create());
@@ -2688,22 +2711,24 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                                             pressedEnd = end;
                                         }
                                     }
-                                    if (pressedLink != null) {
-                                        links.removeLink(pressedLink);
-                                    }
-                                    pressedLink = new LinkSpanDrawable<TextPaintUrlSpan>(selectedLink, null, x, y);
-                                    pressedLink.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkSelection) & 0x33ffffff);
-                                    links.addLink(pressedLink, pressedLinkOwnerLayout);
-                                    try {
-                                        LinkPath path = pressedLink.obtainNewPath();
-                                        path.setCurrentLayout(layout, pressedStart, 0);
-                                        TextPaint textPaint = selectedLink.getTextPaint();
-                                        int shift = textPaint != null ? textPaint.baselineShift : 0;
-                                        path.setBaselineShift(shift != 0 ? shift + AndroidUtilities.dp(shift > 0 ? 5 : -2) : 0);
-                                        layout.getSelectionPath(pressedStart, pressedEnd, path);
-                                        parentView.invalidate();
-                                    } catch (Exception e) {
-                                        FileLog.e(e);
+                                    if (pressedLink == null || pressedLink.getSpan() != selectedLink) {
+                                        if (pressedLink != null) {
+                                            links.removeLink(pressedLink);
+                                        }
+                                        pressedLink = new LinkSpanDrawable(selectedLink, null, x, y);
+                                        pressedLink.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkSelection) & 0x33ffffff);
+                                        links.addLink(pressedLink, pressedLinkOwnerLayout);
+                                        try {
+                                            LinkPath path = pressedLink.obtainNewPath();
+                                            path.setCurrentLayout(layout, pressedStart, 0);
+                                            TextPaint textPaint = selectedLink.getTextPaint();
+                                            int shift = textPaint != null ? textPaint.baselineShift : 0;
+                                            path.setBaselineShift(shift != 0 ? shift + AndroidUtilities.dp(shift > 0 ? 5 : -2) : 0);
+                                            layout.getSelectionPath(pressedStart, pressedEnd, path);
+                                            parentView.invalidate();
+                                        } catch (Exception e) {
+                                            FileLog.e(e);
+                                        }
                                     }
                                 }
                             }
@@ -3098,6 +3123,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     return super.drawChild(canvas, child, drawingTime);
                 }
             }
+
+            @Override
+            public void invalidate() {
+                super.invalidate();
+            }
         };
         windowView.addView(containerView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
         //containerView.setFitsSystemWindows(true);
@@ -3199,7 +3229,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             });
             listView[i].setOnItemClickListener((view, position, x, y) -> {
                 if (textSelectionHelper != null) {
-                    if (textSelectionHelper.isSelectionMode()) {
+                    if (textSelectionHelper.isInSelectionMode()) {
                         textSelectionHelper.clear();
                         return;
                     }
@@ -3724,10 +3754,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         boolean isLightNavigation = navigationBrightness >= 0.721f;
         if (isLightNavigation && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             uiFlags |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
-            navigationBarPaint.setColor(navigationColor);
-        } else if (!isLightNavigation) {
-            navigationBarPaint.setColor(navigationColor);
         }
+        navigationBarPaint.setColor(navigationColor);
         windowLayoutParams.systemUiVisibility = uiFlags;
 
         if (Build.VERSION.SDK_INT >= 21) {
@@ -3741,9 +3769,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         textSelectionHelper = new TextSelectionHelper.ArticleTextSelectionHelper();
         textSelectionHelper.setParentView(listView[0]);
-        if (MessagesController.getGlobalMainSettings().getBoolean("translate_button", false)) {
+        if (MessagesController.getInstance(currentAccount).getTranslateController().isContextTranslateEnabled()) {
             textSelectionHelper.setOnTranslate((text, fromLang, toLang, onAlertDismiss) -> {
-//                TranslateAlert.showAlert(parentActivity, parentFragment, currentAccount, fromLang, toLang, text, false, null, onAlertDismiss);
+                TranslateAlert2.showAlert(parentActivity, parentFragment, currentAccount, fromLang, toLang, text, null, false, null, onAlertDismiss);
             });
         }
         textSelectionHelper.layoutManager = layoutManager[0];
@@ -4317,7 +4345,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             @Override
             public void onAnimationEnd(Animator animation) {
                 AndroidUtilities.runOnUIThread(() -> {
-                    NotificationCenter.getInstance(currentAccount).onAnimationFinish(allowAnimationIndex);
+                    notificationsLocker.unlock();
                     if (animationEndRunnable != null) {
                         animationEndRunnable.run();
                         animationEndRunnable = null;
@@ -4327,7 +4355,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         });
         transitionAnimationStartTime = System.currentTimeMillis();
         AndroidUtilities.runOnUIThread(() -> {
-            allowAnimationIndex = NotificationCenter.getInstance(currentAccount).setAnimationInProgress(allowAnimationIndex, new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats});
+            notificationsLocker.lock();
             animatorSet.start();
         });
         if (Build.VERSION.SDK_INT >= 18) {
@@ -4605,7 +4633,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 return;
             }
         }
-        if (textSelectionHelper.isSelectionMode()) {
+        if (textSelectionHelper.isInSelectionMode()) {
             textSelectionHelper.clear();
             return;
         }
@@ -6602,7 +6630,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             if (currentBlock == null) {
                 return;
             }
-            radialProgress.setColors(Theme.key_chat_inLoader, Theme.key_chat_inLoaderSelected, Theme.key_chat_inMediaIcon, Theme.key_chat_inMediaIconSelected);
+            radialProgress.setColorKeys(Theme.key_chat_inLoader, Theme.key_chat_inLoaderSelected, Theme.key_chat_inMediaIcon, Theme.key_chat_inMediaIconSelected);
             radialProgress.setProgressColor(Theme.getColor(Theme.key_chat_inFileProgress));
             radialProgress.draw(canvas);
             canvas.save();
@@ -6676,7 +6704,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 for (int a = 0; a < currentDocument.attributes.size(); a++) {
                     TLRPC.DocumentAttribute attribute = currentDocument.attributes.get(a);
                     if (attribute instanceof TLRPC.TL_documentAttributeAudio) {
-                        duration = attribute.duration;
+                        duration = (int) attribute.duration;
                         break;
                     }
                 }
@@ -7570,7 +7598,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         pressedLinkOwnerView = null;
                     }
                     updateChildTextPositions();
-                    if (textSelectionHelper != null && textSelectionHelper.isSelectionMode()) {
+                    if (textSelectionHelper != null && textSelectionHelper.isInSelectionMode()) {
                         textSelectionHelper.invalidate();
                     }
                 }
@@ -10429,13 +10457,16 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
             imageView.draw(canvas);
             if (currentMapProvider == 2 && imageView.hasNotThumb()) {
-                int w = (int) (Theme.chat_redLocationIcon.getIntrinsicWidth() * 0.8f);
-                int h = (int) (Theme.chat_redLocationIcon.getIntrinsicHeight() * 0.8f);
+                if (chat_redLocationIcon == null) {
+                    chat_redLocationIcon = ContextCompat.getDrawable(getContext(), R.drawable.map_pin).mutate();
+                }
+                int w = (int) (chat_redLocationIcon.getIntrinsicWidth() * 0.8f);
+                int h = (int) (chat_redLocationIcon.getIntrinsicHeight() * 0.8f);
                 int x = (int) (imageView.getImageX() + (imageView.getImageWidth() - w) / 2);
                 int y = (int) (imageView.getImageY() + (imageView.getImageHeight() / 2 - h));
-                Theme.chat_redLocationIcon.setAlpha((int) (255 * imageView.getCurrentAlpha()));
-                Theme.chat_redLocationIcon.setBounds(x, y, x + w, y + h);
-                Theme.chat_redLocationIcon.draw(canvas);
+                chat_redLocationIcon.setAlpha((int) (255 * imageView.getCurrentAlpha()));
+                chat_redLocationIcon.setBounds(x, y, x + w, y + h);
+                chat_redLocationIcon.draw(canvas);
             }
             int count = 0;
             if (captionLayout != null) {
@@ -10738,7 +10769,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 if (textLayout != null) {
                     height += AndroidUtilities.dp(8 + 8) + textLayout.getHeight();
                     if (parentAdapter.isRtl) {
-                        textX = (int) Math.floor(width - textLayout.getLineWidth(0) - AndroidUtilities.dp(16));
+                        textX = (int) Math.floor(width - textLayout.getLineLeft(0) - textLayout.getLineWidth(0) - AndroidUtilities.dp(16));
                     } else {
                         textX = AndroidUtilities.dp(18);
                     }
@@ -11099,7 +11130,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
             if (Build.VERSION.SDK_INT >= 23) {
                 scrollView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-                    if (textSelectionHelper != null && textSelectionHelper.isSelectionMode()) {
+                    if (textSelectionHelper != null && textSelectionHelper.isInSelectionMode()) {
                         textSelectionHelper.invalidate();
                     }
                 });

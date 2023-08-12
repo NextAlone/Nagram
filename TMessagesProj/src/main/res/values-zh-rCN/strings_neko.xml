@@ -192,5 +192,8 @@
     <string name="EmojiSetAlreadyApplied">Emoji 包已经被应用。</string>
     <string name="useOSMDroidMap">使用 OSMDroid 地图</string>
     <string name="mapDriftingFixForGoogleMaps">修复 Google 地图在中国的漂移问题</string>
-    <string name="useTelegramTranslateInChat">在聊天中使用 Telegram 官方翻译</string>
+    <string name="useTelegramTranslateInChat">在聊天中使用 Telegram 翻译界面</string>
+    <string name="RecentChats">最近对话</string>
+    <string name="ClearRecentChats">清除最近对话</string>
+    <string name="ClearRecentChatAlert">您确定要清除您的最近对话吗？</string>
 </resources>

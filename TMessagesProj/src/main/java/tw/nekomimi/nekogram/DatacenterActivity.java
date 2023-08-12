@@ -360,7 +360,7 @@ public class DatacenterActivity extends BaseNekoSettingsActivity implements Noti
         }
 
         public void updateStatus() {
-            String colorKey;
+            int colorKey;
             if (currentInfo.checking) {
                 valueTextView.setText(LocaleController.getString("Checking", R.string.Checking));
                 colorKey = Theme.key_windowBackgroundWhiteGrayText2;

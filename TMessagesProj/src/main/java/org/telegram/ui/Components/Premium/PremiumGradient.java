@@ -23,7 +23,7 @@ import org.telegram.ui.ActionBar.Theme;
 
 public class PremiumGradient {
 
-    private final GradientTools mainGradient = new GradientTools(Theme.key_premiumGradient1, Theme.key_premiumGradient2, Theme.key_premiumGradient3, Theme.key_premiumGradient4);
+    private final PremiumGradientTools mainGradient = new PremiumGradientTools(Theme.key_premiumGradient1, Theme.key_premiumGradient2, Theme.key_premiumGradient3, Theme.key_premiumGradient4);
 //    private final GradientTools grayGradient = new GradientTools(Theme.key_windowBackgroundWhiteGrayText7, Theme.key_windowBackgroundWhiteGrayText7, Theme.key_windowBackgroundWhiteGrayText7);
     private final Paint mainGradientPaint = mainGradient.paint;
     Paint lockedPremiumPaint;
@@ -62,7 +62,7 @@ public class PremiumGradient {
         return createGradientDrawable(drawable, mainGradient);
     }
 
-    public InternalDrawable createGradientDrawable(Drawable drawable, PremiumGradient.GradientTools gradient) {
+    public InternalDrawable createGradientDrawable(Drawable drawable, PremiumGradientTools gradient) {
         if (drawable == null) {
             return null;
         }
@@ -101,6 +101,14 @@ public class PremiumGradient {
         mainGradient.gradientMatrix(x, y, width, height, xOffset, yOffset);
     }
 
+    public Paint getPremiumLocakedPaint() {
+        if (lockedPremiumPaint == null) {
+            lockedPremiumPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        }
+        lockedPremiumPaint.setColor(Theme.getColor(Theme.key_featuredStickers_addButton));
+        return lockedPremiumPaint;
+    }
+
     public static class InternalDrawable extends BitmapDrawable {
 
         public int[] colors;
@@ -135,7 +143,9 @@ public class PremiumGradient {
             return mainGradientPaint;
         }
     }
-    public static class GradientTools {
+
+    //help with update colors and position
+    public static class PremiumGradientTools {
 
         public float cx = 0.5f;
         public float cy = 0.5f;
@@ -143,28 +153,27 @@ public class PremiumGradient {
         Matrix matrix = new Matrix();
         public final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-        final String colorKey1, colorKey2, colorKey3, colorKey4, colorKey5;
+        final int colorKey1, colorKey2, colorKey3, colorKey4, colorKey5;
         final int colors[] = new int[5];
         public boolean exactly;
 
         public float x1 = 0f, y1 = 1f, x2 = 1.5f, y2 = 0f;
 
-        public GradientTools(String colorKey1, String colorKey2, String colorKey3) {
-            this(colorKey1, colorKey2, colorKey3, null, null);
+        public PremiumGradientTools(int colorKey1, int colorKey2, int colorKey3) {
+            this(colorKey1, colorKey2, colorKey3, -1, -1);
         }
 
-        public GradientTools(String colorKey1, String colorKey2, String colorKey3, String colorKey4) {
-            this(colorKey1, colorKey2, colorKey3, colorKey4, null);
+        public PremiumGradientTools(int colorKey1, int colorKey2, int colorKey3, int colorKey4) {
+            this(colorKey1, colorKey2, colorKey3, colorKey4, -1);
         }
 
-        public GradientTools(String colorKey1, String colorKey2, String colorKey3, String colorKey4, String colorKey5) {
+        public PremiumGradientTools(int colorKey1, int colorKey2, int colorKey3, int colorKey4, int colorKey5) {
             this.colorKey1 = colorKey1;
             this.colorKey2 = colorKey2;
             this.colorKey3 = colorKey3;
             this.colorKey4 = colorKey4;
             this.colorKey5 = colorKey5;
         }
-
 
         public void gradientMatrix(int x, int y, int x1, int y1, float xOffset, float yOffset) {
             chekColors();
@@ -194,9 +203,9 @@ public class PremiumGradient {
         private void chekColors() {
             int c1 = Theme.getColor(colorKey1);
             int c2 = Theme.getColor(colorKey2);
-            int c3 = colorKey3 == null ? 0 : Theme.getColor(colorKey3);
-            int c4 = colorKey4 == null ? 0 : Theme.getColor(colorKey4);
-            int c5 = colorKey5 == null ? 0 : Theme.getColor(colorKey5);
+            int c3 = colorKey3 < 0 ? 0 : Theme.getColor(colorKey3);
+            int c4 = colorKey4 < 0 ? 0 : Theme.getColor(colorKey4);
+            int c5 = colorKey5 < 0 ? 0 : Theme.getColor(colorKey5);
             if (colors[0] != c1 || colors[1] != c2 || colors[2] != c3 || colors[3] != c4 || colors[4] != c5) {
                 colors[0] = c1;
                 colors[1] = c2;

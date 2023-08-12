@@ -282,7 +282,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
                     TextInfoPrivacyCell privacyCell = (TextInfoPrivacyCell) holder.itemView;
                     if (position == shadowRow) {
                         privacyCell.setText("");
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawableByKey(mContext, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
                     } else if (position == linkInfoRow) {
                         TLRPC.Chat chat = getMessagesController().getChat(chatId);
                         if (ChatObject.isChannel(chat) && !chat.megagroup) {
@@ -290,7 +290,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
                         } else {
                             privacyCell.setText(LocaleController.getString("LinkInfo", R.string.LinkInfo));
                         }
-                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                        privacyCell.setBackgroundDrawable(Theme.getThemedDrawableByKey(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     }
                     break;
                 case 2:

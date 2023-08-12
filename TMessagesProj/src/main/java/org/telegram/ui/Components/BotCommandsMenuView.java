@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -24,7 +26,9 @@ import androidx.collection.LongSparseArray;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.MenuDrawable;
@@ -109,9 +113,12 @@ public class BotCommandsMenuView extends View {
 
     private void updateColors() {
         paint.setColor(Theme.getColor(Theme.key_chat_messagePanelVoiceBackground));
-        int textColor = Theme.getColor(Theme.key_chat_messagePanelVoicePressed);
+        int textColor = Theme.getColor(Theme.key_chat_messagePanelVoiceDuration);
         backDrawable.setBackColor(textColor);
         backDrawable.setIconColor(textColor);
+        if (webViewAnimation != null) {
+            webViewAnimation.setColorFilter(new PorterDuffColorFilter(textColor, PorterDuff.Mode.SRC_IN));
+        }
         textPaint.setColor(textColor);
     }
 
@@ -329,7 +336,14 @@ public class BotCommandsMenuView extends View {
             setOrientation(HORIZONTAL);
             setPadding(AndroidUtilities.dp(16), 0, AndroidUtilities.dp(16), 0);
 
-            description = new TextView(context);
+            description = new TextView(context) {
+                @Override
+                public void setText(CharSequence text, BufferType type) {
+                    text = Emoji.replaceEmoji(text, getPaint().getFontMetricsInt(), AndroidUtilities.dp(14), false);
+                    super.setText(text, type);
+                }
+            };
+            NotificationCenter.listenEmojiLoading(description);
             description.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
             description.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
             description.setTag(Theme.key_windowBackgroundWhiteBlackText);

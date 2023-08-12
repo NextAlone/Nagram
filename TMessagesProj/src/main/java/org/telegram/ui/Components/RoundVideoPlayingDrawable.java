@@ -36,12 +36,16 @@ public class RoundVideoPlayingDrawable extends Drawable {
     public int timeColor;
     int alpha = 255;
 
-    private final Theme.ResourcesProvider resourcesProvider;
+    private Theme.ResourcesProvider resourcesProvider;
 
     public RoundVideoPlayingDrawable(View view, Theme.ResourcesProvider resourcesProvider) {
         super();
         this.resourcesProvider = resourcesProvider;
         parentView = view;
+    }
+
+    public void setResourcesProvider(Theme.ResourcesProvider resourcesProvider) {
+        this.resourcesProvider = resourcesProvider;
     }
 
     private void update() {
@@ -140,8 +144,7 @@ public class RoundVideoPlayingDrawable extends Drawable {
         return AndroidUtilities.dp(12);
     }
 
-    private int getThemedColor(String key) {
-        Integer color = resourcesProvider != null ? resourcesProvider.getColor(key) : null;
-        return color != null ? color : Theme.getColor(key);
+    private int getThemedColor(int key) {
+        return Theme.getColor(key, resourcesProvider);
     }
 }

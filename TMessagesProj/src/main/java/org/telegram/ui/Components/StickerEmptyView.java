@@ -3,6 +3,7 @@ package org.telegram.ui.Components;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -15,21 +16,23 @@ import androidx.annotation.NonNull;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.ImageLocation;
+import org.telegram.messenger.LiteMode;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
-import org.telegram.ui.ActionBar.AdjustPanLayoutHelper;
 import org.telegram.ui.ActionBar.Theme;
 
 public class StickerEmptyView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
     public final static int STICKER_TYPE_NO_CONTACTS = 0;
     public final static int STICKER_TYPE_SEARCH = 1;
-    public final static int STICKER_TYPE_DONE = 2;
+    public final static int STICKER_TYPE_ALBUM = 11;
+    public final static int STICKER_TYPE_PRIVACY = 12;
+    public final static int STICKER_TYPE_DONE = 16;
 
-    private LinearLayout linearLayout;
+    public LinearLayout linearLayout;
     public BackupImageView stickerView;
     private RadialProgressView progressBar;
     public final TextView title;
@@ -79,7 +82,9 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
             public void setVisibility(int visibility) {
                 if (getVisibility() == View.GONE && visibility == View.VISIBLE) {
                     setSticker();
-                    stickerView.getImageReceiver().startAnimation();
+                    if (LiteMode.isEnabled(LiteMode.FLAGS_ANIMATED_STICKERS)) {
+                        stickerView.getImageReceiver().startAnimation();
+                    }
                 } else if (visibility == View.GONE) {
                     stickerView.getImageReceiver().clearImage();
                 }
@@ -139,9 +144,9 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
         lastH = getMeasuredHeight();
     }
 
-    String colorKey1 = Theme.key_emptyListPlaceholder;
+    int colorKey1 = Theme.key_emptyListPlaceholder;
 
-    public void setColors(String titleKey, String subtitleKey, String key1, String key2) {
+    public void setColors(int titleKey, int subtitleKey, int key1, int key2) {
         title.setTag(titleKey);
         title.setTextColor(getThemedColor(titleKey));
 
@@ -156,6 +161,7 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
             if (visibility == VISIBLE) {
                 if (progressShowing) {
                     linearLayout.animate().alpha(0f).scaleY(0.8f).scaleX(0.8f).setDuration(150).start();
+                    progressView.animate().setListener(null).cancel();
                     progressView.setVisibility(VISIBLE);
                     progressView.setAlpha(1f);
                     //showProgressRunnable.run();
@@ -229,10 +235,14 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
             if (set == null) {
                 set = MediaDataController.getInstance(currentAccount).getStickerSetByEmojiOrName(AndroidUtilities.STICKERS_PLACEHOLDER_PACK_NAME);
             }
-            if (set != null && stickerType >= 0 && stickerType < set.documents.size() ) {
+            if (set != null && stickerType >= 0 && stickerType < set.documents.size()) {
                 document = set.documents.get(stickerType);
             }
             imageFilter = "130_130";
+        }
+
+        if (!LiteMode.isEnabled(LiteMode.FLAGS_ANIMATED_STICKERS)) {
+            imageFilter += "_firstframe";
         }
 
         if (document != null) {
@@ -362,9 +372,8 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
         }
     }
 
-    private int getThemedColor(String key) {
-        Integer color = resourcesProvider != null ? resourcesProvider.getColor(key) : null;
-        return color != null ? color : Theme.getColor(key);
+    private int getThemedColor(int key) {
+        return Theme.getColor(key, resourcesProvider);
     }
 
     public void setStickerType(int stickerType) {

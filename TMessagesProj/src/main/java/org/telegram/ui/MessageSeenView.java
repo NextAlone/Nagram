@@ -1,11 +1,20 @@
 package org.telegram.ui;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.DynamicDrawableSpan;
+import android.text.style.ImageSpan;
+import android.util.Log;
+import android.util.Pair;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -16,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,11 +37,16 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
+import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.AvatarsDrawable;
 import org.telegram.ui.Components.AvatarsImageView;
@@ -39,6 +54,7 @@ import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.FlickerLoadingView;
 import org.telegram.ui.Components.HideViewAfterAnimation;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.MessageSeenCheckDrawable;
 import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
@@ -47,7 +63,8 @@ import java.util.HashMap;
 public class MessageSeenView extends FrameLayout {
 
     ArrayList<Long> peerIds = new ArrayList<>();
-    public ArrayList<TLRPC.User> users = new ArrayList<>();
+    ArrayList<Integer> dates = new ArrayList<>();
+    public ArrayList<TLObject> users = new ArrayList<>();
     AvatarsImageView avatarsImageView;
     SimpleTextView titleView;
     ImageView iconView;
@@ -61,7 +78,7 @@ public class MessageSeenView extends FrameLayout {
         this.currentAccount = currentAccount;
         isVoice = (messageObject.isRoundVideo() || messageObject.isVoice());
         flickerLoadingView = new FlickerLoadingView(context);
-        flickerLoadingView.setColors(Theme.key_actionBarDefaultSubmenuBackground, Theme.key_listSelector, null);
+        flickerLoadingView.setColors(Theme.key_actionBarDefaultSubmenuBackground, Theme.key_listSelector, -1);
         flickerLoadingView.setViewType(FlickerLoadingView.MESSAGE_SEEN_TYPE);
         flickerLoadingView.setIsSingleCell(false);
         addView(flickerLoadingView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT));
@@ -101,29 +118,55 @@ public class MessageSeenView extends FrameLayout {
             if (error == null) {
                 TLRPC.Vector vector = (TLRPC.Vector) response;
                 ArrayList<Long> unknownUsers = new ArrayList<>();
-                HashMap<Long, TLRPC.User> usersLocal = new HashMap<>();
-                ArrayList<Long> allPeers = new ArrayList<>();
+                ArrayList<Long> unknownChats = new ArrayList<>();
+                HashMap<Long, TLObject> usersLocal = new HashMap<>();
+                ArrayList<Pair<Long, Integer>> allPeers = new ArrayList<>();
                 for (int i = 0, n = vector.objects.size(); i < n; i++) {
                     Object object = vector.objects.get(i);
-                    if (object instanceof Long) {
-                        Long peerId = (Long) object;
+                    if (object instanceof TLRPC.TL_readParticipantDate) {
+                        int date = ((TLRPC.TL_readParticipantDate) object).date;
+                        Long peerId = ((TLRPC.TL_readParticipantDate) object).user_id;
                         if (finalFromId == peerId) {
                             continue;
                         }
                         TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(peerId);
-                        allPeers.add(peerId);
+                        allPeers.add(new Pair<>(peerId, date));
                         if (true || user == null) {
                             unknownUsers.add(peerId);
                         } else {
                             usersLocal.put(peerId, user);
+                        }
+                    } else if (object instanceof Long) {
+                        Long peerId = (Long) object;
+                        if (finalFromId == peerId) {
+                            continue;
+                        }
+                        if (peerId > 0) {
+                            TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(peerId);
+                            allPeers.add(new Pair<>(peerId, 0));
+                            if (true || user == null) {
+                                unknownUsers.add(peerId);
+                            } else {
+                                usersLocal.put(peerId, user);
+                            }
+                        } else {
+                            TLRPC.Chat chat1 = MessagesController.getInstance(currentAccount).getChat(-peerId);
+                            allPeers.add(new Pair<>(peerId, 0));
+                            if (true || chat1 == null) {
+                                unknownChats.add(peerId);
+                            } else {
+                                usersLocal.put(peerId, chat1);
+                            }
                         }
                     }
                 }
 
                 if (unknownUsers.isEmpty()) {
                     for (int i = 0; i < allPeers.size(); i++) {
-                        peerIds.add(allPeers.get(i));
-                        users.add(usersLocal.get(allPeers.get(i)));
+                        Pair<Long, Integer> pair = allPeers.get(i);
+                        peerIds.add(pair.first);
+                        dates.add(pair.second);
+                        users.add(usersLocal.get(pair.first));
                     }
                     updateView();
                 } else {
@@ -142,8 +185,10 @@ public class MessageSeenView extends FrameLayout {
                                     usersLocal.put(user.id, user);
                                 }
                                 for (int i = 0; i < allPeers.size(); i++) {
-                                    peerIds.add(allPeers.get(i));
-                                    this.users.add(usersLocal.get(allPeers.get(i)));
+                                    Pair<Long, Integer> pair = allPeers.get(i);
+                                    peerIds.add(pair.first);
+                                    dates.add(pair.second);
+                                    this.users.add(usersLocal.get(pair.first));
                                 }
                             }
                             updateView();
@@ -160,8 +205,10 @@ public class MessageSeenView extends FrameLayout {
                                     usersLocal.put(user.id, user);
                                 }
                                 for (int i = 0; i < allPeers.size(); i++) {
-                                    peerIds.add(allPeers.get(i));
-                                    this.users.add(usersLocal.get(allPeers.get(i)));
+                                    Pair<Long, Integer> pair = allPeers.get(i);
+                                    peerIds.add(pair.first);
+                                    dates.add(pair.second);
+                                    this.users.add(usersLocal.get(pair.first));
                                 }
                             }
                             updateView();
@@ -231,7 +278,7 @@ public class MessageSeenView extends FrameLayout {
 
         avatarsImageView.commitTransition(false);
         if (peerIds.size() == 1 && users.get(0) != null) {
-            titleView.setText(ContactsController.formatName(users.get(0).first_name, users.get(0).last_name));
+            titleView.setText(ContactsController.formatName(users.get(0)));
         } else {
             if (peerIds.size() == 0) {
                 titleView.setText(LocaleController.getString("NobodyViewed", R.string.NobodyViewed));
@@ -242,14 +289,23 @@ public class MessageSeenView extends FrameLayout {
         titleView.animate().alpha(1f).setDuration(220).start();
         avatarsImageView.animate().alpha(1f).setDuration(220).start();
         flickerLoadingView.animate().alpha(0f).setDuration(220).setListener(new HideViewAfterAnimation(flickerLoadingView)).start();
+
+        if (listView != null && listView.getAdapter() != null) {
+//            listView.getAdapter().notifyDataSetChanged();
+        }
     }
 
+    private RecyclerListView listView;
+
     public RecyclerListView createListView() {
-        RecyclerListView recyclerListView = new RecyclerListView(getContext()) {
+        if (listView != null) {
+            return listView;
+        }
+        listView = new RecyclerListView(getContext()) {
             @Override
             protected void onMeasure(int widthSpec, int heightSpec) {
                 int height = MeasureSpec.getSize(heightSpec);
-                int listViewTotalHeight = AndroidUtilities.dp(8) + AndroidUtilities.dp(44) * getAdapter().getItemCount();
+                int listViewTotalHeight = AndroidUtilities.dp(4) + AndroidUtilities.dp(50) * getAdapter().getItemCount();
 
                 if (listViewTotalHeight > height) {
                     listViewTotalHeight = height;
@@ -258,20 +314,17 @@ public class MessageSeenView extends FrameLayout {
                 super.onMeasure(widthSpec, MeasureSpec.makeMeasureSpec(listViewTotalHeight, MeasureSpec.EXACTLY));
             }
         };
-        recyclerListView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerListView.addItemDecoration(new RecyclerView.ItemDecoration() {
+        listView.setLayoutManager(new LinearLayoutManager(getContext()));
+        listView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 int p = parent.getChildAdapterPosition(view);
-                if (p == 0) {
-                    outRect.top = AndroidUtilities.dp(4);
-                }
                 if (p == users.size() - 1) {
                     outRect.bottom = AndroidUtilities.dp(4);
                 }
             }
         });
-        recyclerListView.setAdapter(new RecyclerListView.SelectionAdapter() {
+        listView.setAdapter(new RecyclerListView.SelectionAdapter() {
 
             @Override
             public boolean isEnabled(RecyclerView.ViewHolder holder) {
@@ -281,14 +334,14 @@ public class MessageSeenView extends FrameLayout {
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 UserCell userCell = new UserCell(parent.getContext());
-                userCell.setLayoutParams(new RecyclerView.LayoutParams(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+                userCell.setLayoutParams(new RecyclerView.LayoutParams(LayoutHelper.MATCH_PARENT, AndroidUtilities.dp(50)));
                 return new RecyclerListView.Holder(userCell);
             }
 
             @Override
             public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
                 UserCell cell = (UserCell) holder.itemView;
-                cell.setUser(users.get(position));
+                cell.setUser(users.get(position), dates.get(position));
             }
 
             @Override
@@ -297,48 +350,136 @@ public class MessageSeenView extends FrameLayout {
             }
 
         });
-        return recyclerListView;
+        return listView;
     }
 
-    private static class UserCell extends FrameLayout {
+    private static class UserCell extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
+
+        private int currentAccount = UserConfig.selectedAccount;
 
         BackupImageView avatarImageView;
-        TextView nameView;
+        SimpleTextView nameView;
+        TextView readView;
         AvatarDrawable avatarDrawable = new AvatarDrawable();
+        AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable rightDrawable;
+
+        TLObject object;
+
+        private static MessageSeenCheckDrawable seenDrawable = new MessageSeenCheckDrawable(R.drawable.msg_mini_checks, Theme.key_windowBackgroundWhiteGrayText);
 
         public UserCell(Context context) {
             super(context);
             avatarImageView = new BackupImageView(context);
-            addView(avatarImageView, LayoutHelper.createFrame(32, 32, Gravity.CENTER_VERTICAL, 13, 0, 0, 0));
-            avatarImageView.setRoundRadius(AndroidUtilities.dp(16));
-            nameView = new TextView(context);
-            nameView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-            nameView.setLines(1);
-            nameView.setEllipsize(TextUtils.TruncateAt.END);
-            nameView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
-            addView(nameView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.CENTER_VERTICAL, 59, 0, 13, 0));
+            avatarImageView.setRoundRadius(AndroidUtilities.dp(18));
 
+            nameView = new SimpleTextView(context);
+            nameView.setTextSize(16);
+            nameView.setEllipsizeByGradient(!LocaleController.isRTL);
+            nameView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
             nameView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
+            nameView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
+
+            rightDrawable = new AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable(this, AndroidUtilities.dp(18));
+            nameView.setDrawablePadding(AndroidUtilities.dp(3));
+
+            readView = new TextView(context);
+            readView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
+            readView.setLines(1);
+            readView.setEllipsize(TextUtils.TruncateAt.END);
+            readView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+            readView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText));
+            readView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
+
+            if (LocaleController.isRTL) {
+                addView(avatarImageView, LayoutHelper.createFrame(34, 34, Gravity.RIGHT | Gravity.CENTER_VERTICAL, 0, 0, 10, 0));
+                addView(nameView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.RIGHT | Gravity.TOP, 8, 6.33f, 55, 0));
+                addView(readView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.RIGHT | Gravity.TOP, 13, 20, 55, 0));
+            } else {
+                addView(avatarImageView, LayoutHelper.createFrame(34, 34, Gravity.LEFT | Gravity.CENTER_VERTICAL, 10f, 0, 0, 0));
+                addView(nameView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 55, 6.33f, 8, 0));
+                addView(readView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 55, 20, 13, 0));
+            }
         }
 
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(44), View.MeasureSpec.EXACTLY));
+            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(50), View.MeasureSpec.EXACTLY));
         }
 
-        public void setUser(TLRPC.User user) {
-            if (user != null) {
-                avatarDrawable.setInfo(user);
-                ImageLocation imageLocation = ImageLocation.getForUser(user, ImageLocation.TYPE_SMALL);
-                avatarImageView.setImage(imageLocation, "50_50", avatarDrawable, user);
-                nameView.setText(ContactsController.formatName(user.first_name, user.last_name));
+        public void setUser(TLObject object, int date) {
+            this.object = object;
+            updateStatus(false);
+
+            if (object != null) {
+                avatarDrawable.setInfo(object);
+                ImageLocation imageLocation = ImageLocation.getForUserOrChat(object, ImageLocation.TYPE_SMALL);
+                avatarImageView.setImage(imageLocation, "50_50", avatarDrawable, object);
+                nameView.setText(ContactsController.formatName(object));
+            }
+
+            if (date <= 0) {
+                readView.setVisibility(GONE);
+                nameView.setTranslationY(AndroidUtilities.dp(9));
+            } else {
+                readView.setText(TextUtils.concat(seenDrawable.getSpanned(getContext(), null), LocaleController.formatSeenDate(date)));
+                readView.setVisibility(VISIBLE);
+                nameView.setTranslationY(0);
             }
         }
 
         @Override
         public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
             super.onInitializeAccessibilityNodeInfo(info);
-            info.setText(LocaleController.formatString("AccDescrPersonHasSeen", R.string.AccDescrPersonHasSeen, nameView.getText()));
+            String text = LocaleController.formatString("AccDescrPersonHasSeen", R.string.AccDescrPersonHasSeen, nameView.getText());
+            if (readView.getVisibility() == VISIBLE) {
+                text += " " + readView.getText();
+            }
+            info.setText(text);
+        }
+
+        @Override
+        public void didReceivedNotification(int id, int account, Object... args) {
+            if (id == NotificationCenter.userEmojiStatusUpdated) {
+                TLRPC.User user = (TLRPC.User) args[0];
+                TLRPC.User currentUser = object instanceof TLRPC.User ? (TLRPC.User) object : null;
+                if (currentUser != null && user != null && currentUser.id == user.id) {
+                    this.object = user;
+                    updateStatus(true);
+                }
+            }
+        }
+
+        private void updateStatus(boolean animated) {
+            TLRPC.User currentUser = object instanceof TLRPC.User ? (TLRPC.User) object : null;
+            if (currentUser == null) {
+                return;
+            }
+            Long documentId = UserObject.getEmojiStatusDocumentId(currentUser);
+            if (documentId == null) {
+                nameView.setRightDrawable(null);
+                rightDrawable.set((Drawable) null, animated);
+            } else {
+                nameView.setRightDrawable(rightDrawable);
+                rightDrawable.set(documentId, animated);
+            }
+        }
+
+        @Override
+        protected void onAttachedToWindow() {
+            super.onAttachedToWindow();
+            if (rightDrawable != null) {
+                rightDrawable.attach();
+            }
+            NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.userEmojiStatusUpdated);
+        }
+
+        @Override
+        protected void onDetachedFromWindow() {
+            super.onDetachedFromWindow();
+            if (rightDrawable != null) {
+                rightDrawable.detach();
+            }
+            NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.userEmojiStatusUpdated);
         }
     }
 }

@@ -56,6 +56,9 @@ import tw.nekomimi.nekogram.utils.FileUtil;
 import static android.os.Build.VERSION.SDK_INT;
 
 public class ApplicationLoader extends Application {
+
+    private static ApplicationLoader applicationLoaderInstance;
+
     private static PendingIntent pendingIntent;
 
     @SuppressLint("StaticFieldLeak")
@@ -285,6 +288,7 @@ public class ApplicationLoader extends Application {
 
     @Override
     public void onCreate() {
+        applicationLoaderInstance = this;
         try {
             applicationContext = getApplicationContext();
         } catch (Throwable ignore) {
@@ -303,7 +307,11 @@ public class ApplicationLoader extends Application {
         Utilities.stageQueue.postRunnable(() -> SignturesKt.checkMT(this));
 
         NativeLoader.initNativeLibs(ApplicationLoader.applicationContext);
-        ConnectionsManager.native_setJava(false);
+        try {
+            ConnectionsManager.native_setJava(false);
+        } catch (UnsatisfiedLinkError error) {
+            throw new RuntimeException("can't load native libraries " +  Build.CPU_ABI + " lookup folder " + NativeLoader.getAbiFolder());
+        }
         new ForegroundDetector(this) {
             @Override
             public void onActivityStarted(Activity activity) {
@@ -324,6 +332,7 @@ public class ApplicationLoader extends Application {
         org.osmdroid.config.Configuration.getInstance().setOsmdroidBasePath(new File(ApplicationLoader.applicationContext.getCacheDir(), "osmdroid"));
 
         LauncherIconController.tryFixLauncherIconIfNeeded();
+        ProxyRotationController.init();
     }
 
     // Local Push Service, TFoss implementation
@@ -615,6 +624,14 @@ public class ApplicationLoader extends Application {
     }
 
     protected void startAppCenterInternal(Activity context) {
+
+    }
+
+    public static void logDualCamera(boolean success, boolean vendor) {
+        applicationLoaderInstance.logDualCameraInternal(success, vendor);
+    }
+
+    protected void logDualCameraInternal(boolean success, boolean vendor) {
 
     }
 

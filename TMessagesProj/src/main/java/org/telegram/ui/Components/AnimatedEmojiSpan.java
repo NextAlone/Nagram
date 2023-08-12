@@ -20,8 +20,8 @@ import androidx.annotation.NonNull;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.ImageReceiver;
+import org.telegram.messenger.LiteMode;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
@@ -44,7 +44,7 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
     private float size = AndroidUtilities.dp(20);
     public int cacheType = -1;
     public String documentAbsolutePath;
-    int measuredSize;
+    protected int measuredSize;
 
     boolean spanDrawn;
     boolean positionChanged;
@@ -55,6 +55,11 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
 
     public AnimatedEmojiSpan(@NonNull TLRPC.Document document, Paint.FontMetricsInt fontMetrics) {
         this(document.id, 1.2f, fontMetrics);
+        this.document = document;
+    }
+
+    public AnimatedEmojiSpan(@NonNull TLRPC.Document document, float scale, Paint.FontMetricsInt fontMetrics) {
+        this(document.id, scale, fontMetrics);
         this.document = document;
     }
 
@@ -318,7 +323,7 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
             }
         }
 
-        public void draw(Canvas canvas, long time, float boundTop, float boundBottom, float alpha) {
+        public void draw(Canvas canvas, long time, float boundTop, float boundBottom, float alpha, ColorFilter colorFilter) {
             if ((boundTop != 0 || boundBottom != 0) && outOfBounds(boundTop, boundBottom)) {
                 skipDraw = true;
                 return;
@@ -327,10 +332,9 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
             }
 
             if (drawable.getImageReceiver() != null) {
-                drawable.setColorFilter(Theme.chat_animatedEmojiTextColorFilter);
+                drawable.setColorFilter(colorFilter == null ? Theme.chat_animatedEmojiTextColorFilter : colorFilter);
                 drawable.setTime(time);
                 drawable.draw(canvas, drawableBounds, alpha * this.alpha);
-//                drawable.setTime(0);
             }
         }
 
@@ -730,7 +734,7 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
         }
 
         private void checkBackgroundRendering() {
-            if (allowBackgroundRendering && holders.size() >= 10 && backgroundThreadDrawable == null && !SharedConfig.getLiteMode().enabled()) {
+            if (allowBackgroundRendering && holders.size() >= 10 && backgroundThreadDrawable == null && LiteMode.isEnabled(LiteMode.FLAG_ANIMATED_EMOJI_KEYBOARD)) {
                 backgroundThreadDrawable = new DrawingInBackgroundThreadDrawable() {
 
                     private final ArrayList<AnimatedEmojiHolder> backgroundHolders = new ArrayList<>();
@@ -753,7 +757,7 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
                             if (!holder.span.spanDrawn) {
                                 continue;
                             }
-                            holder.draw(canvas, time, 0, 0, alpha);
+                            holder.draw(canvas, time, 0, 0, alpha, null);
                         }
                     }
 
@@ -798,8 +802,7 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
                 };
                 backgroundThreadDrawable.padding = AndroidUtilities.dp(3);
                 backgroundThreadDrawable.onAttachToWindow();
-            }
-            else if (holders.size() < 10 && backgroundThreadDrawable != null) {
+            } else if (holders.size() < 10 && backgroundThreadDrawable != null) {
                 backgroundThreadDrawable.onDetachFromWindow();
                 backgroundThreadDrawable = null;
             }
@@ -840,7 +843,7 @@ public class AnimatedEmojiSpan extends ReplacementSpan {
                 holder.drawingYOffset = drawingYOffset;
                 holder.alpha = spoilerAlpha;
                 if (backgroundThreadDrawable == null) {
-                    holder.draw(canvas, time, boundTop, boundBottom, alpha);
+                    holder.draw(canvas, time, boundTop, boundBottom, alpha, colorFilter);
                 }
             }
             if (backgroundThreadDrawable != null) {

@@ -223,8 +223,8 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
         public void setData(Limit limit) {
             title.setText(limit.title);
             subtitle.setText(limit.subtitle);
-            previewView.premiumCount.setText(Integer.toString(limit.premiumLimit));
-            previewView.defaultCount.setText(Integer.toString(limit.defaultLimit));
+            previewView.premiumCount.setText(String.format("%d", limit.premiumLimit));
+            previewView.defaultCount.setText(String.format("%d", limit.defaultLimit));
         }
     }
 
@@ -255,7 +255,7 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
 
         final ArrayList<Limit> limits = new ArrayList<>();
 
-        PremiumGradient.GradientTools gradientTools;
+        PremiumGradient.PremiumGradientTools gradientTools;
         private int totalGradientHeight;
 
         ViewGroup containerView;
@@ -263,7 +263,7 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
 
         public Adapter(int currentAccount, boolean drawHeader) {
             this.drawHeader = drawHeader;
-            gradientTools = new PremiumGradient.GradientTools(Theme.key_premiumGradient1, Theme.key_premiumGradient2, Theme.key_premiumGradient3, Theme.key_premiumGradient4);
+            gradientTools = new PremiumGradient.PremiumGradientTools(Theme.key_premiumGradient1, Theme.key_premiumGradient2, Theme.key_premiumGradient3, Theme.key_premiumGradient4);
             gradientTools.x1 = 0;
             gradientTools.y1 = 0;
             gradientTools.x2 = 0;

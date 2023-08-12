@@ -182,7 +182,7 @@ public class NekoAccountSettingsActivity extends BaseNekoXSettingsActivity {
                     showDialog(dialog12);
                     TextView button = (TextView) dialog12.getButton(DialogInterface.BUTTON_POSITIVE);
                     if (button != null) {
-                        button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
+                        button.setTextColor(Theme.getColor(Theme.key_dialogTextRed));
                     }
                 });
                 builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
@@ -191,7 +191,7 @@ public class NekoAccountSettingsActivity extends BaseNekoXSettingsActivity {
                 showDialog(dialog);
                 TextView button = (TextView) dialog.getButton(DialogInterface.BUTTON_POSITIVE);
                 if (button != null) {
-                    button.setTextColor(Theme.getColor(Theme.key_dialogTextRed2));
+                    button.setTextColor(Theme.getColor(Theme.key_dialogTextRed));
                 }
             }
         });
@@ -309,7 +309,7 @@ public class NekoAccountSettingsActivity extends BaseNekoXSettingsActivity {
                     textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
                     if (position == deleteAccountRow) {
                         textCell.setText(LocaleController.getString("DeleteAccount", R.string.DeleteAccount), false);
-                        textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText));
+                        textCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteRedText3));
                     }
                     break;
                 }

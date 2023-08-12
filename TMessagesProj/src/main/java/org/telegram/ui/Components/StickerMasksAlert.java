@@ -45,6 +45,7 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
+import org.telegram.messenger.LiteMode;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
@@ -142,7 +143,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
         }
 
         @Override
-        public boolean needSend() {
+        public boolean needSend(int contentType) {
             return false;
         }
 
@@ -312,7 +313,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
 
     public StickerMasksAlert(Context context, boolean isVideo, Theme.ResourcesProvider resourcesProvider) {
         super(context, true, resourcesProvider);
-        behindKeyboardColorKey = null;
+        behindKeyboardColorKey = -1;
         behindKeyboardColor = 0xff252525;
         useLightStatusBar = false;
         fixNavigationBar(0xff252525);
@@ -988,7 +989,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             if (imageViewEmojis == null) {
                 return;
             }
-            boolean drawInUi = imageViewEmojis.size() <= 4 || SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_LOW || SharedConfig.getLiteMode().enabled();
+            boolean drawInUi = imageViewEmojis.size() <= 4 || SharedConfig.getDevicePerformanceClass() == SharedConfig.PERFORMANCE_CLASS_LOW || !LiteMode.isEnabled(LiteMode.FLAG_ANIMATED_EMOJI_KEYBOARD);
             if (!drawInUi) {
 //                boolean animatedExpandIn = animateExpandStartTime > 0 && (SystemClock.elapsedRealtime() - animateExpandStartTime) < animateExpandDuration();
                 for (int i = 0; i < imageViewEmojis.size(); i++) {
@@ -1380,10 +1381,12 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             View view = null;
             switch (viewType) {
                 case -1:
-                    view = new ImageViewEmoji(context);
+                    ImageViewEmoji imageViewEmoji = new ImageViewEmoji(context);
+                    imageViewEmoji.getImageReceiver().setLayerNum(playingImagesLayerNum);
+                    view = imageViewEmoji;
                     break;
                 case 0:
-                    view = new StickerEmojiCell(context, false) {
+                    StickerEmojiCell stickerEmojiCell = new StickerEmojiCell(context, false, resourcesProvider) {
                         public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                             if (currentType == MediaDataController.TYPE_EMOJIPACKS) {
                                 super.onMeasure(widthMeasureSpec, widthMeasureSpec);
@@ -1392,6 +1395,8 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                             }
                         }
                     };
+                    stickerEmojiCell.getImageView().setLayerNum(playingImagesLayerNum);
+                    view = stickerEmojiCell;
                     break;
                 case 1:
                     view = new EmptyCell(context);
@@ -1906,10 +1911,12 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             View view = null;
             switch (viewType) {
                 case -1:
-                    view = new ImageViewEmoji(context);
+                    ImageViewEmoji imageViewEmoji = new ImageViewEmoji(context);
+                    imageViewEmoji.getImageReceiver().setLayerNum(playingImagesLayerNum);
+                    view = imageViewEmoji;
                     break;
                 case 0:
-                    view = new StickerEmojiCell(context, false) {
+                    StickerEmojiCell cell = new StickerEmojiCell(context, false, resourcesProvider) {
                         public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                             if (currentType == MediaDataController.TYPE_EMOJIPACKS) {
                                 super.onMeasure(widthMeasureSpec, widthMeasureSpec);
@@ -1918,6 +1925,8 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                             }
                         }
                     };
+                    cell.getImageView().setLayerNum(playingImagesLayerNum);
+                    view = cell;
                     break;
                 case 1:
                     view = new EmptyCell(context);
@@ -2109,5 +2118,11 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             }
             super.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void setImageReceiverNumLevel(int playingImages, int onShowing) {
+        super.setImageReceiverNumLevel(playingImages, onShowing);
+        stickersTab.setImageReceiversLayerNum(playingImages);
     }
 }

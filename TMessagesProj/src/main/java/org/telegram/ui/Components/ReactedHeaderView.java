@@ -25,6 +25,7 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -40,15 +41,15 @@ public class ReactedHeaderView extends FrameLayout {
 
     private int currentAccount;
     private boolean ignoreLayout;
-    private List<TLRPC.User> seenUsers = new ArrayList<>();
-    private List<TLRPC.User> users = new ArrayList<>();
+    private List<UserSeen> seenUsers = new ArrayList<>();
+    private List<UserSeen> users = new ArrayList<>();
     private long dialogId;
     private MessageObject message;
     private int fixedWidth;
 
     private boolean isLoaded;
 
-    private Consumer<List<TLRPC.User>> seenCallback;
+    private Consumer<List<UserSeen>> seenCallback;
 
     public ReactedHeaderView(@NonNull Context context, int currentAccount, MessageObject message, long dialogId) {
         super(context);
@@ -57,7 +58,7 @@ public class ReactedHeaderView extends FrameLayout {
         this.dialogId = dialogId;
 
         flickerLoadingView = new FlickerLoadingView(context);
-        flickerLoadingView.setColors(Theme.key_actionBarDefaultSubmenuBackground, Theme.key_listSelector, null);
+        flickerLoadingView.setColors(Theme.key_actionBarDefaultSubmenuBackground, Theme.key_listSelector, -1);
         flickerLoadingView.setViewType(FlickerLoadingView.MESSAGE_SEEN_TYPE);
         flickerLoadingView.setIsSingleCell(false);
         addView(flickerLoadingView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT));
@@ -71,6 +72,7 @@ public class ReactedHeaderView extends FrameLayout {
 
         avatarsImageView = new AvatarsImageView(context, false);
         avatarsImageView.setStyle(AvatarsDrawable.STYLE_MESSAGE_SEEN);
+        avatarsImageView.setAvatarsTextSize(AndroidUtilities.dp(22));
         addView(avatarsImageView, LayoutHelper.createFrameRelatively(24 + 12 + 12 + 8, LayoutHelper.MATCH_PARENT, Gravity.END | Gravity.CENTER_VERTICAL, 0, 0, 0, 0));
 
         iconView = new ImageView(context);
@@ -89,8 +91,28 @@ public class ReactedHeaderView extends FrameLayout {
         setBackground(Theme.getSelectorDrawable(false));
     }
 
-    public void setSeenCallback(Consumer<List<TLRPC.User>> seenCallback) {
+    public void setSeenCallback(Consumer<List<UserSeen>> seenCallback) {
         this.seenCallback = seenCallback;
+    }
+
+    public static class UserSeen {
+        public TLObject user;
+        long dialogId;
+        public int date = 0;
+
+        public UserSeen(TLRPC.User user) {
+            this.user = user;
+            dialogId = user.id;
+        }
+        public UserSeen(TLObject user, int date) {
+            this.user = user;
+            this.date = date;
+            if (user instanceof TLRPC.User) {
+                dialogId = ((TLRPC.User) user).id;
+            } else if (user instanceof TLRPC.Chat) {
+                dialogId = -((TLRPC.Chat) user).id;
+            }
+        }
     }
 
     @Override
@@ -111,29 +133,43 @@ public class ReactedHeaderView extends FrameLayout {
                 ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
                     if (response instanceof TLRPC.Vector) {
                         List<Long> usersToRequest = new ArrayList<>();
+                        List<Integer> dates = new ArrayList<>();
                         TLRPC.Vector v = (TLRPC.Vector) response;
                         for (Object obj : v.objects) {
                             if (obj instanceof Long) {
                                 long l = (long) obj;
-                                if (fromId != l)
+                                if (fromId != l) {
                                     usersToRequest.add(l);
+                                    dates.add(0);
+                                }
+                            } else if (obj instanceof TLRPC.TL_readParticipantDate) {
+                                long userId = ((TLRPC.TL_readParticipantDate) obj).user_id;
+                                int date = ((TLRPC.TL_readParticipantDate) obj).date;
+                                if (fromId != userId) {
+                                    usersToRequest.add(userId);
+                                    dates.add(date);
+                                }
                             }
                         }
                         usersToRequest.add(fromId);
+                        dates.add(0);
 
-                        List<TLRPC.User> usersRes = new ArrayList<>();
+                        List<UserSeen> usersRes = new ArrayList<>();
                         Runnable callback = () -> {
                             seenUsers.addAll(usersRes);
-                            for (TLRPC.User u : usersRes) {
+                            for (UserSeen p : usersRes) {
                                 boolean hasSame = false;
                                 for (int i = 0; i < users.size(); i++) {
-                                    if (users.get(i).id == u.id) {
+                                    if (MessageObject.getObjectPeerId(users.get(i).user) == MessageObject.getObjectPeerId(p.user)) {
                                         hasSame = true;
+                                        if (p.date > 0) {
+                                            users.get(i).date = p.date;
+                                        }
                                         break;
                                     }
                                 }
                                 if (!hasSame) {
-                                    users.add(u);
+                                    users.add(p);
                                 }
                             }
                             if (seenCallback != null)
@@ -152,8 +188,10 @@ public class ReactedHeaderView extends FrameLayout {
                                     for (int i = 0; i < users.users.size(); i++) {
                                         TLRPC.User user = users.users.get(i);
                                         MessagesController.getInstance(currentAccount).putUser(user, false);
-                                        if (!user.self && usersToRequest.contains(user.id))
-                                            usersRes.add(user);
+                                        int index = usersToRequest.indexOf(user.id);
+                                        if (!user.self && index >= 0) {
+                                            usersRes.add(new UserSeen(user, dates.get(index)));
+                                        }
                                     }
                                 }
                                 callback.run();
@@ -167,8 +205,10 @@ public class ReactedHeaderView extends FrameLayout {
                                     for (int i = 0; i < chatFull.users.size(); i++) {
                                         TLRPC.User user = chatFull.users.get(i);
                                         MessagesController.getInstance(currentAccount).putUser(user, false);
-                                        if (!user.self && usersToRequest.contains(user.id))
-                                            usersRes.add(user);
+                                        int index = usersToRequest.indexOf(user.id);
+                                        if (!user.self && index >= 0) {
+                                            usersRes.add(new UserSeen(user, dates.get(index)));
+                                        }
                                     }
                                 }
                                 callback.run();
@@ -192,18 +232,20 @@ public class ReactedHeaderView extends FrameLayout {
             if (response instanceof TLRPC.TL_messages_messageReactionsList) {
                 TLRPC.TL_messages_messageReactionsList list = (TLRPC.TL_messages_messageReactionsList) response;
                 int c = list.count;
+                int ic = list.users.size();
                 post(() -> {
                     String str;
                     if (seenUsers.isEmpty() || seenUsers.size() < c) {
                         str = LocaleController.formatPluralString("ReactionsCount", c);
                     } else {
                         String countStr;
+                        int n;
                         if (c == seenUsers.size()) {
-                            countStr = String.valueOf(c);
+                            countStr = String.valueOf(n = c);
                         } else {
-                            countStr = c + "/" + seenUsers.size();
+                            countStr = (n = c) + "/" + seenUsers.size();
                         }
-                        str = String.format(LocaleController.getPluralString("Reacted", c), countStr);
+                        str = String.format(LocaleController.getPluralString("Reacted", n), countStr);
                     }
 
                     if (getMeasuredWidth() > 0) {
@@ -214,7 +256,7 @@ public class ReactedHeaderView extends FrameLayout {
                     if (message.messageOwner.reactions != null && message.messageOwner.reactions.results.size() == 1 && !list.reactions.isEmpty()) {
                         for (TLRPC.TL_availableReaction r : MediaDataController.getInstance(currentAccount).getReactionsList()) {
                             if (r.reaction.equals(list.reactions.get(0).reaction)) {
-                                reactView.setImage(ImageLocation.getForDocument(r.center_icon), "40_40_lastframe", "webp", null, r);
+                                reactView.setImage(ImageLocation.getForDocument(r.center_icon), "40_40_lastreactframe", "webp", null, r);
                                 reactView.setVisibility(VISIBLE);
                                 reactView.setAlpha(0);
                                 reactView.animate().alpha(1f).start();
@@ -233,13 +275,27 @@ public class ReactedHeaderView extends FrameLayout {
                         if (message.messageOwner.from_id != null && u.id != message.messageOwner.from_id.user_id) {
                             boolean hasSame = false;
                             for (int i = 0; i < users.size(); i++) {
-                                if (users.get(i).id == u.id) {
+                                if (users.get(i).dialogId == u.id) {
                                     hasSame = true;
                                     break;
                                 }
                             }
                             if (!hasSame) {
-                                users.add(u);
+                                users.add(new UserSeen(u, 0));
+                            }
+                        }
+                    }
+                    for (TLRPC.Chat u : list.chats) {
+                        if (message.messageOwner.from_id != null && u.id != message.messageOwner.from_id.user_id) {
+                            boolean hasSame = false;
+                            for (int i = 0; i < users.size(); i++) {
+                                if (users.get(i).dialogId == -u.id) {
+                                    hasSame = true;
+                                    break;
+                                }
+                            }
+                            if (!hasSame) {
+                                users.add(new UserSeen(u, 0));
                             }
                         }
                     }
@@ -250,7 +306,7 @@ public class ReactedHeaderView extends FrameLayout {
         }, ConnectionsManager.RequestFlagInvokeAfter);
     }
 
-    public List<TLRPC.User> getSeenUsers() {
+    public List<UserSeen> getSeenUsers() {
         return seenUsers;
     }
 
@@ -258,7 +314,7 @@ public class ReactedHeaderView extends FrameLayout {
         setEnabled(users.size() > 0);
         for (int i = 0; i < 3; i++) {
             if (i < users.size()) {
-                avatarsImageView.setObject(i, currentAccount, users.get(i));
+                avatarsImageView.setObject(i, currentAccount, users.get(i).user);
             } else {
                 avatarsImageView.setObject(i, currentAccount, null);
             }

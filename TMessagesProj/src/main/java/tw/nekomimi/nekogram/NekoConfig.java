@@ -86,7 +86,6 @@ public class NekoConfig {
     public static ConfigItem avatarBackgroundBlur = addConfig("BlurAvatarBackground", configTypeBool, false);
     public static ConfigItem avatarBackgroundDarken = addConfig("DarkenAvatarBackground", configTypeBool, false);
     public static ConfigItem useSystemEmoji = addConfig("EmojiUseDefault", configTypeBool, false);
-    public static ConfigItem showTabsOnForward = addConfig("ShowTabsOnForward", configTypeBool, false);
     public static ConfigItem rearVideoMessages = addConfig("RearVideoMessages", configTypeBool, false);
     public static ConfigItem hideAllTab = addConfig("HideAllTab", configTypeBool, false);
 //    public static ConfigItem pressTitleToOpenAllChats = addConfig("pressTitleToOpenAllChats", configTypeBool, false);
@@ -176,6 +175,7 @@ public class NekoConfig {
     public static ConfigItem hideSendAsChannel = addConfig("hideSendAsChannel", configTypeBool, false);
     public static ConfigItem showSpoilersDirectly = addConfig("showSpoilersDirectly", configTypeBool, false);
     public static ConfigItem reactions = addConfig("reactions", configTypeInt, 0);
+    public static ConfigItem disableReactionsWhenSelecting = addConfig("disableReactionsWhenSelecting", configTypeBool, true);
     public static ConfigItem showBottomActionsWhenSelecting = addConfig("showBottomActionsWhenSelecting", configTypeBool, false);
 
     public static ConfigItem labelChannelUser = addConfig("labelChannelUser", configTypeBool, false);
@@ -335,8 +335,6 @@ public class NekoConfig {
             avatarBackgroundDarken.setConfigBool(preferences.getBoolean("avatarBackgroundDarken", false));
         if (preferences.contains("useSystemEmoji"))
             useSystemEmoji.setConfigBool(preferences.getBoolean("useSystemEmoji", false));
-        if (preferences.contains("showTabsOnForward"))
-            showTabsOnForward.setConfigBool(preferences.getBoolean("showTabsOnForward", false));
         if (preferences.contains("rearVideoMessages"))
             rearVideoMessages.setConfigBool(preferences.getBoolean("rearVideoMessages", false));
         if (preferences.contains("hideAllTab"))

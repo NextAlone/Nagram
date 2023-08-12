@@ -57,10 +57,10 @@ public class Switch extends View {
 
     private OnCheckedChangeListener onCheckedChangeListener;
 
-    private String trackColorKey = Theme.key_switch2Track;
-    private String trackCheckedColorKey = Theme.key_switch2TrackChecked;
-    private String thumbColorKey = Theme.key_windowBackgroundWhite;
-    private String thumbCheckedColorKey = Theme.key_windowBackgroundWhite;
+    private int trackColorKey = Theme.key_fill_RedNormal;
+    private int trackCheckedColorKey = Theme.key_switch2TrackChecked;
+    private int thumbColorKey = Theme.key_windowBackgroundWhite;
+    private int thumbCheckedColorKey = Theme.key_windowBackgroundWhite;
 
     private Drawable iconDrawable;
     private int lastIconColor;
@@ -224,7 +224,7 @@ public class Switch extends View {
         return super.verifyDrawable(who) || rippleDrawable != null && who == rippleDrawable;
     }
 
-    public void setColors(String track, String trackChecked, String thumb, String thumbChecked) {
+    public void setColors(int track, int trackChecked, int thumb, int thumbChecked) {
         trackColorKey = track;
         trackCheckedColorKey = trackChecked;
         thumbColorKey = thumb;
@@ -233,7 +233,7 @@ public class Switch extends View {
 
     private void animateToCheckedState(boolean newCheckedState) {
         checkAnimator = ObjectAnimator.ofFloat(this, "progress", newCheckedState ? 1 : 0);
-        checkAnimator.setDuration(semHaptics ? 150 : 250);
+        checkAnimator.setDuration(200);
         checkAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -245,7 +245,7 @@ public class Switch extends View {
 
     private void animateIcon(boolean newCheckedState) {
         iconAnimator = ObjectAnimator.ofFloat(this, "iconProgress", newCheckedState ? 1 : 0);
-        iconAnimator.setDuration(semHaptics ? 150 : 250);
+        iconAnimator.setDuration(200);
         iconAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -279,7 +279,6 @@ public class Switch extends View {
         if (checked != isChecked) {
             isChecked = checked;
             if (attachedToWindow && animated) {
-                vibrateChecked(checked);
                 animateToCheckedState(checked);
             } else {
                 cancelCheckAnimator();
@@ -546,15 +545,4 @@ public class Switch extends View {
         //info.setContentDescription(isChecked ? LocaleController.getString("NotificationsOn", R.string.NotificationsOn) : LocaleController.getString("NotificationsOff", R.string.NotificationsOff));
     }
 
-    private boolean semHaptics = false;
-
-    private void vibrateChecked(boolean toCheck) {
-        try {
-            if (isHapticFeedbackEnabled() && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-                VibrationEffect vibrationEffect = VibrationEffect.createWaveform(new long[]{75,10,5,10}, new int[] {5,20,110,20}, -1);
-                VibrateUtil.vibrate(200L, vibrationEffect);
-                semHaptics = true;
-            }
-        } catch (Exception ignore) {}
-    }
 }

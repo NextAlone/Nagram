@@ -113,6 +113,7 @@ public class EditTextBoldCursor extends EditTextEffects {
     private float cursorWidth = 2.0f;
     private boolean supportRtlHint;
 
+    public boolean ignoreClipTop;
     private boolean cursorDrawn;
 
     private boolean lineVisible = false;
@@ -503,12 +504,15 @@ public class EditTextBoldCursor extends EditTextEffects {
         invalidate();
     }
 
-    public void setHintVisible(boolean value) {
+    public void setHintVisible(boolean value, boolean animated) {
         if (hintVisible == value) {
             return;
         }
         hintLastUpdateTime = System.currentTimeMillis();
         hintVisible = value;
+        if (!animated) {
+            hintAlpha = hintVisible ? 1f : 0;
+        }
         invalidate();
     }
 
@@ -669,6 +673,9 @@ public class EditTextBoldCursor extends EditTextEffects {
 
     @Override
     public int getExtendedPaddingTop() {
+        if (ignoreClipTop) {
+            return 0;
+        }
         if (ignoreTopCount != 0) {
             ignoreTopCount--;
             return 0;

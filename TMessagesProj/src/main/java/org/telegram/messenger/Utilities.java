@@ -39,6 +39,7 @@ public class Utilities {
     public static volatile DispatchQueue phoneBookQueue = new DispatchQueue("phoneBookQueue");
     public static volatile DispatchQueue themeQueue = new DispatchQueue("themeQueue");
     public static volatile DispatchQueue externalNetworkQueue = new DispatchQueue("externalNetworkQueue");
+    public static volatile DispatchQueue videoPlayerQueue;
 
     private final static String RANDOM_STRING_CHARS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -80,6 +81,7 @@ public class Utilities {
     public static native void drawDitheredGradient(Bitmap bitmap, int[] colors, int startX, int startY, int endX, int endY);
     public static native int saveProgressiveJpeg(Bitmap bitmap, int width, int height, int stride, int quality, String path);
     public static native void generateGradient(Bitmap bitmap, boolean unpin, int phase, float progress, int width, int height, int stride, int[] colors);
+    public static native void setupNativeCrashesListener(String path);
 
     public static Bitmap stackBlurBitmapMax(Bitmap bitmap) {
         int w = AndroidUtilities.dp(20);
@@ -472,6 +474,10 @@ public class Utilities {
         return Math.max(Math.min(value, maxValue), minValue);
     }
 
+    public static long clamp(long value, long maxValue, long minValue) {
+        return Math.max(Math.min(value, maxValue), minValue);
+    }
+
     public static float clamp(float value, float maxValue, float minValue) {
         if (Float.isNaN(value)) {
             return minValue;
@@ -511,8 +517,20 @@ public class Utilities {
         public void run(T arg);
     }
 
+    public static interface CallbackReturn<Arg, ReturnType> {
+        public ReturnType run(Arg arg);
+    }
+
     public static interface Callback2<T, T2> {
         public void run(T arg, T2 arg2);
+    }
+
+    public static interface Callback3<T, T2, T3> {
+        public void run(T arg, T2 arg2, T3 arg3);
+    }
+
+    public static interface Callback4<T, T2, T3, T4> {
+        public void run(T arg, T2 arg2, T3 arg3, T4 arg4);
     }
 
     public static <Key, Value> Value getOrDefault(HashMap<Key, Value> map, Key key, Value defaultValue) {
@@ -521,5 +539,42 @@ public class Utilities {
             return defaultValue;
         }
         return v;
+    }
+
+    public static void doCallbacks(Utilities.Callback<Runnable> ...actions) {
+        doCallbacks(0, actions);
+    }
+    private static void doCallbacks(int i, Utilities.Callback<Runnable> ...actions) {
+        if (actions != null && actions.length > i) {
+            actions[i].run(() -> doCallbacks(i + 1, actions));
+        }
+    }
+
+    public static void raceCallbacks(Runnable onFinish, Utilities.Callback<Runnable> ...actions) {
+        if (actions == null || actions.length == 0) {
+            if (onFinish != null) {
+                onFinish.run();
+            }
+            return;
+        }
+        final int[] finished = new int[] { 0 };
+        Runnable checkFinish = () -> {
+            finished[0]++;
+            if (finished[0] == actions.length) {
+                if (onFinish != null) {
+                    onFinish.run();
+                }
+            }
+        };
+        for (int i = 0; i < actions.length; ++i) {
+            actions[i].run(checkFinish);
+        }
+    }
+
+    public static DispatchQueue getOrCreatePlayerQueue() {
+        if (videoPlayerQueue == null) {
+            videoPlayerQueue = new DispatchQueue("playerQueue");
+        }
+        return videoPlayerQueue;
     }
 }

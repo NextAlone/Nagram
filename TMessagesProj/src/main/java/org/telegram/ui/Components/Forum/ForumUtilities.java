@@ -61,7 +61,7 @@ public class ForumUtilities {
             backupImageView.setImageDrawable(null);
             if (backupImageView.animatedEmojiDrawable == null || forumTopic.icon_emoji_id != backupImageView.animatedEmojiDrawable.getDocumentId()) {
                 AnimatedEmojiDrawable drawable = new AnimatedEmojiDrawable(largeIcon ? AnimatedEmojiDrawable.CACHE_TYPE_FORUM_TOPIC_LARGE : AnimatedEmojiDrawable.CACHE_TYPE_FORUM_TOPIC, UserConfig.selectedAccount, forumTopic.icon_emoji_id);
-                drawable.setColorFilter(actionBar ? new PorterDuffColorFilter(Theme.getColor(Theme.key_actionBarDefaultTitle), PorterDuff.Mode.SRC_IN) : Theme.chat_animatedEmojiTextColorFilter);
+                drawable.setColorFilter(actionBar ? new PorterDuffColorFilter(Theme.getColor(Theme.key_actionBarDefaultTitle), PorterDuff.Mode.SRC_IN) : Theme.getAnimatedEmojiColorFilter(resourcesProvider));
                 backupImageView.setAnimatedEmojiDrawable(drawable);
             }
         } else {
@@ -228,7 +228,7 @@ public class ForumUtilities {
                 AnimatedEmojiSpan span;
                 sb.setSpan(span = new AnimatedEmojiSpan(forumTopic.icon_emoji_id, .95f, paint == null ? null : paint.getFontMetricsInt()), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 span.top = true;
-                span.cacheType = AnimatedEmojiDrawable.CACHE_TYPE_EMOJI_STATUS;
+                span.cacheType = AnimatedEmojiDrawable.CACHE_TYPE_ALERT_PREVIEW_STATIC;
             } else {
                 sb.append(" ");
                 Drawable drawable = ForumUtilities.createTopicDrawable(forumTopic);

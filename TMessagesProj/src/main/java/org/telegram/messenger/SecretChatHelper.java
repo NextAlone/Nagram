@@ -1006,7 +1006,7 @@ public class SecretChatHelper extends BaseController {
                         for (int a = 0, N = newMessage.media.document.attributes.size(); a < N; a++) {
                             TLRPC.DocumentAttribute attribute = newMessage.media.document.attributes.get(a);
                             if (attribute instanceof TLRPC.TL_documentAttributeAudio || attribute instanceof TLRPC.TL_documentAttributeVideo) {
-                                newMessage.ttl = Math.max(attribute.duration + 1, newMessage.ttl);
+                                newMessage.ttl = (int) Math.max(attribute.duration + 1, newMessage.ttl);
                                 break;
                             }
                         }
@@ -1022,7 +1022,7 @@ public class SecretChatHelper extends BaseController {
                     }
                     byte[] thumb = ((TLRPC.TL_decryptedMessageMediaDocument) decryptedMessage.media).thumb;
                     TLRPC.PhotoSize photoSize;
-                    if (thumb != null && thumb.length != 0 && thumb.length <= 6000 && decryptedMessage.media.thumb_w <= 100 && decryptedMessage.media.thumb_h <= 100) {
+                    if (thumb != null && thumb.length != 0 && thumb.length <= 20000) {
                         photoSize = new TLRPC.TL_photoCachedSize();
                         photoSize.bytes = thumb;
                         photoSize.w = decryptedMessage.media.thumb_w;

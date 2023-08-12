@@ -85,4 +85,5 @@
     <string name="DoNotUnarchiveBySwipe">禁用滑动取消归档</string>
     <string name="DoNotShareMyPhoneNumber">禁用分享我的手机号码</string>
     <string name="DefaultDeleteMenu">默认删除菜单</string>
+    <string name="DisableSuggestionView">禁用修改手机号码的建议</string>
 </resources>

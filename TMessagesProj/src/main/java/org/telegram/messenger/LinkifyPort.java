@@ -165,7 +165,7 @@ public class LinkifyPort {
     private static final String PATH_AND_QUERY = "[/\\?](?:(?:[" + LABEL_CHAR + ";/\\?:@&=#~" + "\\-\\.\\+!\\*'\\(\\),_\\$])|(?:%[a-fA-F0-9]{2}))*";
     private static final String BASE64 = "(?:[A-Za-z0-9+\\/]{4}\\\\n?)*(?:[A-Za-z0-9+\\/]{2}==|[A-Za-z0-9+\\/]{3}=)";
     private static final String PATH_AND_QUERY_BASE64 = "[/\\?]?(?:(?:[" + LABEL_CHAR + ";/\\?:@&=#~" + "\\-\\.\\+!\\*'\\(\\),_\\$])|(?:%[a-fA-F0-9]{2})|" + BASE64 + ")*";
-    private static final String RELAXED_DOMAIN_NAME = "(?:" + "(?:" + IRI_LABEL + "(?:\\.(?=\\S))" + "?)+" + "|" + IP_ADDRESS_STRING + ")";
+    private static final String RELAXED_DOMAIN_NAME = "(?:" + "(?:" + IRI_LABEL + "(?:\\.(?=\\S))" + ")*" + "(?:" + IRI_LABEL + "(?:\\.(?=\\S))" + "?)" + "|" + IP_ADDRESS_STRING + ")";
 
     private static final String WEB_URL_WITHOUT_PROTOCOL = "("
             + WORD_BOUNDARY

@@ -32,6 +32,7 @@ import android.text.Spanned;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
+import android.util.SparseIntArray;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
@@ -101,6 +102,8 @@ import org.telegram.ui.Components.ThemeSmallPreviewView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class QrActivity extends BaseFragment {
 
@@ -374,7 +377,9 @@ public class QrActivity extends BaseFragment {
         fragmentView = rootLayout;
         Utilities.themeQueue.postRunnable(() -> {
             homeTheme.loadPreviewColors(currentAccount);
-
+            if (fragmentView == null) {
+                return;
+            }
             fragmentView.postDelayed(() -> {
                 onItemSelected(currentTheme, 0, true);
             }, 17);
@@ -483,11 +488,6 @@ public class QrActivity extends BaseFragment {
         if (getParentActivity() != null) {
             getParentActivity().getWindow().getDecorView().setSystemUiVisibility(prevSystemUiVisibility);
         }
-    }
-
-    @Override
-    public int getNavigationBarColor() {
-        return getThemedColor(Theme.key_windowBackgroundGray);
     }
 
     @Override
@@ -778,15 +778,15 @@ public class QrActivity extends BaseFragment {
 
     private class ThemeResourcesProvider implements Theme.ResourcesProvider {
 
-        private HashMap<String, Integer> colors;
+        private SparseIntArray colors;
 
         void initColors(EmojiThemes theme, boolean isDark) {
             colors = theme.createColors(currentAccount, isDark ? 1 : 0);
         }
 
         @Override
-        public Integer getColor(String key) {
-            return colors != null ? colors.get(key) : null;
+        public int getColor(int key) {
+            return colors != null ? colors.get(key) : Theme.getColor(key);
         }
     }
 
@@ -1053,6 +1053,7 @@ public class QrActivity extends BaseFragment {
                                 }
                             } catch (Exception ignore) {
                                 try {
+                                    if (!NekoConfig.disableVibration.Bool())
                                     performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                                 } catch (Exception ignore2) {}
                             }
@@ -1263,7 +1264,7 @@ public class QrActivity extends BaseFragment {
             super.onDetachedFromWindow();
             if (loadingMatrix != null) {
                 loadingMatrix.stop();
-                loadingMatrix.recycle();
+                loadingMatrix.recycle(false);
                 loadingMatrix = null;
             }
         }

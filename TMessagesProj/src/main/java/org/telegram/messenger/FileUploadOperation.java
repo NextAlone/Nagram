@@ -11,7 +11,7 @@ package org.telegram.messenger;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.net.Uri;
+import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 
@@ -83,6 +83,7 @@ public class FileUploadOperation {
     private long availableSize;
     private boolean uploadFirstPartLater;
     private SparseArray<UploadCachedResult> cachedResults = new SparseArray<>();
+    private boolean[] recalculatedEstimatedSize = {false, false};
     protected long lastProgressUpdateTime;
 
     public interface FileUploadOperationDelegate {
@@ -113,6 +114,7 @@ public class FileUploadOperation {
             return;
         }
         state = 1;
+        AutoDeleteMediaTask.lockFile(uploadingFilePath);
         Utilities.stageQueue.postRunnable(() -> {
             preferences = ApplicationLoader.applicationContext.getSharedPreferences("uploadinfo", Activity.MODE_PRIVATE);
             slowNetwork = ApplicationLoader.isConnectionSlow();
@@ -173,6 +175,7 @@ public class FileUploadOperation {
                 ConnectionsManager.getInstance(currentAccount).cancelRequest(requestTokens.valueAt(a), true);
             }
         });
+        AutoDeleteMediaTask.unlockFile(uploadingFilePath);
         delegate.didFailedUploadingFile(this);
         cleanup();
     }
@@ -196,10 +199,26 @@ public class FileUploadOperation {
         } catch (Exception e) {
             FileLog.e(e);
         }
+        AutoDeleteMediaTask.unlockFile(uploadingFilePath);
     }
 
-    protected void checkNewDataAvailable(final long newAvailableSize, final long finalSize) {
+    protected void checkNewDataAvailable(final long newAvailableSize, final long finalSize, final Float progress) {
         Utilities.stageQueue.postRunnable(() -> {
+            if (progress != null && estimatedSize != 0 && finalSize == 0) {
+                boolean needRecalculation = false;
+                if (progress > 0.75f && !recalculatedEstimatedSize[0]) {
+                    recalculatedEstimatedSize[0] = true;
+                    needRecalculation = true;
+                }
+                if (progress > 0.95f && !recalculatedEstimatedSize[1]) {
+                    recalculatedEstimatedSize[1] = true;
+                    needRecalculation = true;
+                }
+                if (needRecalculation) {
+                    estimatedSize = (long) (newAvailableSize / progress);
+                }
+            }
+
             if (estimatedSize != 0 && finalSize != 0) {
                 estimatedSize = 0;
                 totalFileSize = finalSize;
@@ -259,10 +278,9 @@ public class FileUploadOperation {
             started = true;
             if (stream == null) {
                 File cacheFile = new File(uploadingFilePath);
-                // NekoX: keep this checking?
-                if (AndroidUtilities.isInternalUri(Uri.fromFile(cacheFile))) {
-                    throw new Exception("trying to upload internal file");
-                }
+//                if (AndroidUtilities.isInternalUri(Uri.fromFile(cacheFile))) {
+//                    throw new FileLog.IgnoreSentException("trying to upload internal file");
+//                }
                 stream = new RandomAccessFile(cacheFile, "r");
                 boolean isInternalFile = false;
                 try {
@@ -526,10 +544,14 @@ public class FileUploadOperation {
         } else {
             connectionType = ConnectionsManager.ConnectionTypeUpload | ((requestNumFinal % 4) << 16);
         }
-
-        int requestToken = ConnectionsManager.getInstance(currentAccount).sendRequest(finalRequest, (response, error) -> {
+        long time = System.currentTimeMillis();
+        int[] requestToken = new int[1];
+        requestToken[0] = ConnectionsManager.getInstance(currentAccount).sendRequest(finalRequest, (response, error) -> {
             if (currentOperationGuid != operationGuid) {
                 return;
+            }
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("debug_uploading: " + " response reqId " + requestToken[0] + " time" + uploadingFilePath);
             }
             int networkType = response != null ? response.networkType : ApplicationLoader.getCurrentNetworkType();
             if (currentType == ConnectionsManager.FileTypeAudio) {
@@ -539,7 +561,11 @@ public class FileUploadOperation {
             } else if (currentType == ConnectionsManager.FileTypePhoto) {
                 StatsController.getInstance(currentAccount).incrementSentBytesCount(networkType, StatsController.TYPE_PHOTOS, requestSize);
             } else if (currentType == ConnectionsManager.FileTypeFile) {
-                StatsController.getInstance(currentAccount).incrementSentBytesCount(networkType, StatsController.TYPE_FILES, requestSize);
+                if (uploadingFilePath != null && (uploadingFilePath.toLowerCase().endsWith("mp3") || uploadingFilePath.toLowerCase().endsWith("m4a"))) {
+                    StatsController.getInstance(currentAccount).incrementSentBytesCount(networkType, StatsController.TYPE_MUSIC, requestSize);
+                } else {
+                    StatsController.getInstance(currentAccount).incrementSentBytesCount(networkType, StatsController.TYPE_FILES, requestSize);
+                }
             }
             if (currentRequestIv != null) {
                 freeRequestIvs.add(currentRequestIv);
@@ -594,7 +620,11 @@ public class FileUploadOperation {
                     } else if (currentType == ConnectionsManager.FileTypePhoto) {
                         StatsController.getInstance(currentAccount).incrementSentItemsCount(ApplicationLoader.getCurrentNetworkType(), StatsController.TYPE_PHOTOS, 1);
                     } else if (currentType == ConnectionsManager.FileTypeFile) {
-                        StatsController.getInstance(currentAccount).incrementSentItemsCount(ApplicationLoader.getCurrentNetworkType(), StatsController.TYPE_FILES, 1);
+                        if (uploadingFilePath != null && (uploadingFilePath.toLowerCase().endsWith("mp3") || uploadingFilePath.toLowerCase().endsWith("m4a"))) {
+                            StatsController.getInstance(currentAccount).incrementSentItemsCount(ApplicationLoader.getCurrentNetworkType(), StatsController.TYPE_MUSIC, 1);
+                        } else {
+                            StatsController.getInstance(currentAccount).incrementSentItemsCount(ApplicationLoader.getCurrentNetworkType(), StatsController.TYPE_FILES, 1);
+                        }
                     }
                 } else if (currentUploadRequetsCount < maxRequestsCount) {
                     if (estimatedSize == 0 && !uploadFirstPartLater && !nextPartFirst) {
@@ -643,6 +673,9 @@ public class FileUploadOperation {
                 startUploadRequest();
             }
         }), forceSmallFile ? ConnectionsManager.RequestFlagCanCompress : 0, ConnectionsManager.DEFAULT_DATACENTER_ID, connectionType, true);
-        requestTokens.put(requestNumFinal, requestToken);
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("debug_uploading: " + " send reqId " + requestToken[0] + " " + uploadingFilePath);
+        }
+        requestTokens.put(requestNumFinal, requestToken[0]);
     }
 }

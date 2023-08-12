@@ -88,4 +88,5 @@
     <string name="DoNotUnarchiveBySwipe">Do not unarchive by swipe</string>
     <string name="DoNotShareMyPhoneNumber">Do not share my phone number</string>
     <string name="DefaultDeleteMenu">Default Delete Menu</string>
+    <string name="DisableSuggestionView">Disable Profile Settings Suggestion</string>
 </resources>

@@ -63,7 +63,7 @@ public class ThemePreviewMessagesCell extends LinearLayout {
         setOrientation(LinearLayout.VERTICAL);
         setPadding(0, AndroidUtilities.dp(11), 0, AndroidUtilities.dp(11));
 
-        shadowDrawable = Theme.getThemedDrawable(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow);
+        shadowDrawable = Theme.getThemedDrawableByKey(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow);
 
         int date = (int) (System.currentTimeMillis() / 1000) - 60 * 60;
 
@@ -191,6 +191,9 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                 private GestureDetector gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
                     @Override
                     public boolean onDoubleTap(MotionEvent e) {
+                        if (MediaDataController.getInstance(currentAccount).getDoubleTapReaction() == null) {
+                            return false;
+                        }
                         boolean added = getMessageObject().selectReaction(ReactionsLayoutInBubble.VisibleReaction.fromEmojicon(MediaDataController.getInstance(currentAccount).getDoubleTapReaction()), false, false);
                         setMessageObject(getMessageObject(), null, false, false);
                         requestLayout();

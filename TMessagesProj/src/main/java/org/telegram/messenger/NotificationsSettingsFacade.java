@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.NotificationsSoundActivity;
 
 public class NotificationsSettingsFacade {
 
@@ -14,6 +15,7 @@ public class NotificationsSettingsFacade {
     public final static String PROPERTY_NOTIFY_UNTIL = "notifyuntil_";
     public final static String PROPERTY_CONTENT_PREVIEW = "content_preview_";
     public final static String PROPERTY_SILENT  = "silent_";
+    public final static String PROPERTY_STORIES_NOTIFY = "stories_";
 
     private final int currentAccount;
 
@@ -35,6 +37,7 @@ public class NotificationsSettingsFacade {
                 .remove(PROPERTY_NOTIFY_UNTIL + key)
                 .remove(PROPERTY_CONTENT_PREVIEW + key)
                 .remove(PROPERTY_SILENT + key)
+                .remove(PROPERTY_STORIES_NOTIFY + key)
                 .apply();
 
     }
@@ -105,6 +108,11 @@ public class NotificationsSettingsFacade {
                 editor.putBoolean(PROPERTY_SILENT + key, notify_settings.silent);
             } else {
                 editor.remove(PROPERTY_SILENT + key);
+            }
+            if ((notify_settings.flags & 64) != 0) {
+                editor.putBoolean(PROPERTY_STORIES_NOTIFY + key, !notify_settings.stories_muted);
+            } else {
+                editor.remove(PROPERTY_STORIES_NOTIFY + key);
             }
 
             TLRPC.Dialog dialog = null;
@@ -192,6 +200,10 @@ public class NotificationsSettingsFacade {
                 soundPref = "GroupSound";
                 soundDocPref = "GroupSoundDocId";
                 soundPathPref = "GroupSoundPath";
+            } else if (globalType == NotificationsController.TYPE_STORIES) {
+                soundPref = "StoriesSound";
+                soundDocPref = "StoriesSoundDocId";
+                soundPathPref = "StoriesSoundPath";
             } else if (globalType == TYPE_PRIVATE) {
                 soundPref = "GlobalSound";
                 soundDocPref = "GlobalSoundDocId";
@@ -200,6 +212,23 @@ public class NotificationsSettingsFacade {
                 soundPref = "ChannelSound";
                 soundDocPref = "ChannelSoundDocId";
                 soundPathPref = "ChannelSoundPath";
+            }
+        }
+
+        if (settings instanceof TLRPC.TL_notificationSoundLocal) {
+            TLRPC.TL_notificationSoundLocal localSound = (TLRPC.TL_notificationSoundLocal) settings;
+            if ("Default".equalsIgnoreCase(localSound.data)) {
+                settings = new TLRPC.TL_notificationSoundDefault();
+            } else if ("NoSound".equalsIgnoreCase(localSound.data)) {
+                settings = new TLRPC.TL_notificationSoundNone();
+            } else {
+                String path = NotificationsSoundActivity.findRingtonePathByName(localSound.title);
+                if (path == null) {
+//                    settings = new TLRPC.TL_notificationSoundDefault();
+                    return;
+                } else {
+                    localSound.data = path;
+                }
             }
         }
 
@@ -219,7 +248,7 @@ public class NotificationsSettingsFacade {
         } else if (settings instanceof TLRPC.TL_notificationSoundRingtone) {
             TLRPC.TL_notificationSoundRingtone soundRingtone = (TLRPC.TL_notificationSoundRingtone) settings;
             editor.putLong(soundDocPref, soundRingtone.id);
-            MediaDataController.getInstance(currentAccount).checkRingtones();
+            MediaDataController.getInstance(currentAccount).checkRingtones(true);
             if (serverUpdate && dialogId != 0) {
                 editor.putBoolean("custom_" + dialogId, true);
             }

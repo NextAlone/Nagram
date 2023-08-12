@@ -33,6 +33,7 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.CustomTabsCopyReceiver;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.ShareBroadcastReceiver;
@@ -238,10 +239,14 @@ public class Browser {
     }
 
     public static void openUrl(final Context context, Uri uri, final boolean allowCustom, boolean tryTelegraph) {
-        openUrl(context, uri, allowCustom, tryTelegraph, null);
+        openUrl(context, uri, allowCustom, tryTelegraph, false, null);
     }
 
     public static void openUrl(final Context context, Uri uri, final boolean allowCustom, boolean tryTelegraph, Progress inCaseLoading) {
+        openUrl(context, uri, allowCustom, tryTelegraph, false, inCaseLoading);
+    }
+
+    public static void openUrl(final Context context, Uri uri, final boolean allowCustom, boolean tryTelegraph, boolean forceNotInternalForApps, Progress inCaseLoading) {
         if (context == null || uri == null) {
             return;
         }
@@ -250,7 +255,7 @@ public class Browser {
         boolean internalUri = isInternalUri(uri, forceBrowser);
         if (tryTelegraph) {
             try {
-                String host = uri.getHost().toLowerCase();
+                String host = AndroidUtilities.getHostAuthority(uri);
                 if (isTelegraphUrl(host, true) || uri.toString().toLowerCase().contains("telegram.org/faq") || uri.toString().toLowerCase().contains("telegram.org/privacy")) {
                     final AlertDialog[] progressDialog = new AlertDialog[] {
                         new AlertDialog(context, AlertDialog.ALERT_TYPE_SPINNER)
@@ -309,7 +314,7 @@ public class Browser {
                     FileLog.e(e);
                 }
             }
-            String host = uri.getHost() != null ? uri.getHost().toLowerCase() : "";
+            String host = AndroidUtilities.getHostAuthority(uri.toString().toLowerCase());
             if (AccountInstance.getInstance(currentAccount).getMessagesController().autologinDomains.contains(host)) {
                 String token = "autologin_token=" + URLEncoder.encode(AccountInstance.getInstance(UserConfig.selectedAccount).getMessagesController().autologinToken, "UTF-8");
                 String url = uri.toString();
@@ -377,6 +382,13 @@ public class Browser {
                 }
 
                 if (forceBrowser[0] || allActivities == null || allActivities.isEmpty()) {
+                    if (MessagesController.getInstance(currentAccount).authDomains.contains(host)) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        ApplicationLoader.applicationContext.startActivity(intent);
+                        return;
+                    }
+
                     Intent share = new Intent(ApplicationLoader.applicationContext, ShareBroadcastReceiver.class);
                     share.setAction(Intent.ACTION_SEND);
 
@@ -417,6 +429,7 @@ public class Browser {
             intent.putExtra(android.provider.Browser.EXTRA_APPLICATION_ID, context.getPackageName());
             intent.putExtra("internal", true);
             if (internalUri && context instanceof LaunchActivity) {
+                intent.putExtra(LaunchActivity.EXTRA_FORCE_NOT_INTERNAL_APPS, forceNotInternalForApps);
                 ((LaunchActivity) context).onNewIntent(intent, inCaseLoading);
             } else {
                 context.startActivity(intent);
@@ -454,8 +467,15 @@ public class Browser {
     }
 
     public static boolean isInternalUri(Uri uri, boolean all, boolean[] forceBrowser) {
-        String host = uri.getHost();
+        String host = AndroidUtilities.getHostAuthority(uri);
         host = host != null ? host.toLowerCase() : "";
+
+        if (MessagesController.getInstance(UserConfig.selectedAccount).authDomains.contains(host)) {
+            if (forceBrowser != null) {
+                forceBrowser[0] = true;
+            }
+            return false;
+        }
 
         Matcher prefixMatcher = LaunchActivity.PREFIX_T_ME_PATTERN.matcher(host);
         if (prefixMatcher.find()) {
@@ -521,5 +541,33 @@ public class Browser {
             }
         }
         return false;
+    }
+
+    // © ChatGPT. All puns reserved. 🤖📜
+    public static String replaceHostname(Uri originalUri, String newHostname) {
+        String scheme = originalUri.getScheme();
+        String userInfo = originalUri.getUserInfo();
+        int port = originalUri.getPort();
+        String path = originalUri.getPath();
+        String query = originalUri.getQuery();
+        String fragment = originalUri.getFragment();
+
+        StringBuilder modifiedUriBuilder = new StringBuilder();
+        modifiedUriBuilder.append(scheme).append("://");
+        if (userInfo != null) {
+            modifiedUriBuilder.append(userInfo).append("@");
+        }
+        modifiedUriBuilder.append(newHostname);
+        if (port != -1) {
+            modifiedUriBuilder.append(":").append(port);
+        }
+        modifiedUriBuilder.append(path);
+        if (query != null) {
+            modifiedUriBuilder.append("?").append(query);
+        }
+        if (fragment != null) {
+            modifiedUriBuilder.append("#").append(fragment);
+        }
+        return modifiedUriBuilder.toString();
     }
 }

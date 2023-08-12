@@ -108,7 +108,7 @@ interface Translator {
                         language = if (provider == providerMicrosoft) "zh-HanT" else "zh-TW"
                     }
                 }
-                providerTelegram -> language = TelegramTranslator.convertLanguageCode(language, country)
+                providerTelegram -> language = TelegramAPITranslator.convertLanguageCode(language, country)
 
             }
             val translator = when (provider) {
@@ -118,7 +118,7 @@ interface Translator {
                 providerMicrosoft -> MicrosoftTranslator
                 providerYouDao -> YouDaoTranslator
                 providerDeepL -> DeepLTranslator
-                providerTelegram -> TelegramTranslator
+                providerTelegram -> TelegramAPITranslator
                 else -> throw IllegalArgumentException()
             }
 

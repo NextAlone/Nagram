@@ -801,7 +801,13 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
         if (document != null) {
             if (MessageObject.isGifDocument(document)) {
                 actionBar.setTitle(LocaleController.getString("DisappearingGif", R.string.DisappearingGif));
-                centerImage.setImage(ImageLocation.getForDocument(document), null, currentThumb != null ? new BitmapDrawable(currentThumb.bitmap) : null, -1, null, messageObject, 1);
+                ImageLocation location;
+                if (messageObject.messageOwner.attachPath != null && messageObject.attachPathExists) {
+                    location = ImageLocation.getForPath(messageObject.messageOwner.attachPath);
+                } else {
+                    location =ImageLocation.getForDocument(document);
+                }
+                centerImage.setImage(location, null, currentThumb != null ? new BitmapDrawable(currentThumb.bitmap) : null, -1, null, messageObject, 1);
                 secretDeleteTimer.setDestroyTime((long) messageObject.messageOwner.destroyTime * 1000, messageObject.messageOwner.ttl, false);
             } else {
                 playerRetryPlayCount = 1;
@@ -822,7 +828,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
                 long destroyTime = (long) messageObject.messageOwner.destroyTime * 1000;
                 long currentTime = System.currentTimeMillis() + ConnectionsManager.getInstance(currentAccount).getTimeDifference() * 1000L;
                 long timeToDestroy = destroyTime - currentTime;
-                long duration = messageObject.getDuration() * 1000L;
+                long duration = (long) (messageObject.getDuration() * 1000L);
                 if (duration > timeToDestroy) {
                     secretDeleteTimer.setDestroyTime(-1, -1, true);
                 } else {

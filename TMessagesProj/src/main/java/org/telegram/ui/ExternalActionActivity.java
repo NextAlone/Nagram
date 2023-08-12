@@ -217,7 +217,7 @@ public class ExternalActionActivity extends Activity implements INavigationLayou
         passcodeView.onShow(true, false);
         SharedConfig.isWaitingForPasscodeEnter = true;
         drawerLayoutContainer.setAllowOpenDrawer(false, false);
-        passcodeView.setDelegate(() -> {
+        passcodeView.setDelegate(view -> {
             SharedConfig.isWaitingForPasscodeEnter = false;
             if (passcodeSaveIntent != null) {
                 handleIntent(passcodeSaveIntent, passcodeSaveIntentIsNew, passcodeSaveIntentIsRestore, true, passcodeSaveIntentAccount, passcodeSaveIntentState);
@@ -228,6 +228,8 @@ public class ExternalActionActivity extends Activity implements INavigationLayou
             if (AndroidUtilities.isTablet()) {
                 layersActionBarLayout.showLastFragment();
             }
+
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.passcodeDismissed, view);
         });
     }
 

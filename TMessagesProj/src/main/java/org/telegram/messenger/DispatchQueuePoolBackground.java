@@ -5,6 +5,8 @@ import android.util.SparseIntArray;
 
 import androidx.annotation.UiThread;
 
+import org.telegram.ui.Components.Reactions.HwEmojis;
+
 import java.util.ArrayList;
 
 public class DispatchQueuePoolBackground {
@@ -77,6 +79,11 @@ public class DispatchQueuePoolBackground {
             busyQueues.add(queue);
             int count = busyQueuesMap.get(queue.index, 0);
             busyQueuesMap.put(queue.index, count + 1);
+            if(HwEmojis.isHwEnabled()) {
+                queue.setPriority(Thread.MIN_PRIORITY);
+            } else if (queue.getPriority() != Thread.MAX_PRIORITY) {
+                queue.setPriority(Thread.MAX_PRIORITY);
+            }
             queue.postRunnable(() -> {
                 runnable.run();
                 Utilities.globalQueue.postRunnable(() -> {
@@ -110,7 +117,7 @@ public class DispatchQueuePoolBackground {
     @UiThread
     public static void execute(Runnable runnable, boolean now) {
         if (Thread.currentThread() != ApplicationLoader.applicationHandler.getLooper().getThread()) {
-            if (BuildVars.DEBUG_PRIVATE_VERSION) {
+            if (BuildVars.DEBUG_VERSION) {
                 FileLog.e(new RuntimeException("wrong thread"));
             }
             return;

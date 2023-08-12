@@ -519,9 +519,11 @@ public class AboutLinkCell extends FrameLayout {
 
             @Override
             public void end(boolean replacing) {
-                if (thisLoading != null) {
-                    links.removeLoading(thisLoading, true);
-                }
+                AndroidUtilities.runOnUIThread(() -> {
+                    if (thisLoading != null) {
+                        links.removeLoading(thisLoading, true);
+                    }
+                }, replacing ? 0 : 350);
             }
         } : null;
         if (pressedLink instanceof URLSpanNoUnderline) {
@@ -688,7 +690,7 @@ public class AboutLinkCell extends FrameLayout {
     private StaticLayout makeTextLayout(CharSequence string, int width) {
         if (Build.VERSION.SDK_INT >= 24) {
             return StaticLayout.Builder.obtain(string, 0, string.length(), Theme.profile_aboutTextPaint, width)
-                    .setBreakStrategy(StaticLayout.BREAK_STRATEGY_HIGH_QUALITY)
+                    .setBreakStrategy(StaticLayout.BREAK_STRATEGY_SIMPLE)
                     .setHyphenationFrequency(StaticLayout.HYPHENATION_FREQUENCY_NONE)
                     .setAlignment(LocaleController.isRTL ? StaticLayoutEx.ALIGN_RIGHT() : StaticLayoutEx.ALIGN_LEFT())
                     .build();

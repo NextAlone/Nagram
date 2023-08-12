@@ -115,13 +115,13 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
 
     public ContactAddActivity(Bundle args) {
         super(args);
-        imageUpdater = new ImageUpdater(true);
+        imageUpdater = new ImageUpdater(true, ImageUpdater.FOR_TYPE_USER, true);
     }
 
     public ContactAddActivity(Bundle args, Theme.ResourcesProvider resourcesProvider) {
         super(args);
         this.resourcesProvider = resourcesProvider;
-        imageUpdater = new ImageUpdater(true);
+        imageUpdater = new ImageUpdater(true, ImageUpdater.FOR_TYPE_USER, true);
     }
 
     @Override
@@ -182,6 +182,8 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
                         TLRPC.User user = getMessagesController().getUser(user_id);
                         user.first_name = firstNameField.getText().toString();
                         user.last_name = lastNameField.getText().toString();
+                        user.contact = true;
+                        getMessagesController().putUser(user, false);
                         getContactsController().addContact(user, checkBoxCell != null && checkBoxCell.isChecked());
                         SharedPreferences preferences = MessagesController.getNotificationsSettings(currentAccount);
                         preferences.edit().putInt("dialog_bar_vis3" + user_id, 3).commit();
@@ -266,7 +268,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         firstNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText, resourcesProvider));
         firstNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider));
         firstNameField.setBackgroundDrawable(null);
-        firstNameField.setLineColors(getThemedColor(Theme.key_windowBackgroundWhiteInputField), getThemedColor(Theme.key_windowBackgroundWhiteInputFieldActivated), getThemedColor(Theme.key_windowBackgroundWhiteRedText3));
+        firstNameField.setLineColors(getThemedColor(Theme.key_windowBackgroundWhiteInputField), getThemedColor(Theme.key_windowBackgroundWhiteInputFieldActivated), getThemedColor(Theme.key_text_RedRegular));
         firstNameField.setMaxLines(1);
         firstNameField.setLines(1);
         firstNameField.setSingleLine(true);
@@ -308,7 +310,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         lastNameField.setHintTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteHintText, resourcesProvider));
         lastNameField.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider));
         lastNameField.setBackgroundDrawable(null);
-        lastNameField.setLineColors(getThemedColor(Theme.key_windowBackgroundWhiteInputField), getThemedColor(Theme.key_windowBackgroundWhiteInputFieldActivated), getThemedColor(Theme.key_windowBackgroundWhiteRedText3));
+        lastNameField.setLineColors(getThemedColor(Theme.key_windowBackgroundWhiteInputField), getThemedColor(Theme.key_windowBackgroundWhiteInputFieldActivated), getThemedColor(Theme.key_text_RedRegular));
         lastNameField.setMaxLines(1);
         lastNameField.setLines(1);
         lastNameField.setSingleLine(true);
@@ -367,7 +369,6 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
             suggestPhoto.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             suggestPhoto.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
             RLottieDrawable suggestDrawable = new RLottieDrawable(R.raw.photo_suggest_icon, "" + R.raw.photo_suggest_icon, AndroidUtilities.dp(50), AndroidUtilities.dp(50), false, null);
-            suggestPhoto.imageView.setTranslationY(-AndroidUtilities.dp(9));
             suggestPhoto.imageView.setTranslationX(-AndroidUtilities.dp(8));
             suggestPhoto.imageView.setAnimation(suggestDrawable);
             suggestPhoto.setOnClickListener(v -> {
@@ -396,7 +397,6 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
             setAvatarCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             setAvatarCell.setColors(Theme.key_windowBackgroundWhiteBlueIcon, Theme.key_windowBackgroundWhiteBlueButton);
             RLottieDrawable cameraDrawable = new RLottieDrawable(R.raw.camera_outline, "" + R.raw.camera_outline, AndroidUtilities.dp(50), AndroidUtilities.dp(50), false, null);
-            setAvatarCell.imageView.setTranslationY(-AndroidUtilities.dp(9));
             setAvatarCell.imageView.setTranslationX(-AndroidUtilities.dp(8));
             setAvatarCell.imageView.setAnimation(cameraDrawable);
             setAvatarCell.setOnClickListener(v -> {
@@ -453,7 +453,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
                         LocaleController.formatString("ResetToOriginalPhotoMessage", R.string.ResetToOriginalPhotoMessage, user.first_name),
                         LocaleController.getString("Reset", R.string.Reset), () -> {
                             avatar = null;
-                            sendPhotoChangedRequest(null, null,null, null, 0, TYPE_SET);
+                            sendPhotoChangedRequest(null, null,null, null, null, 0, TYPE_SET);
 
                             TLRPC.User user1 = getMessagesController().getUser(user_id);
                             user1.photo.personal = false;
@@ -673,7 +673,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
     }
 
     @Override
-    public void didUploadPhoto(TLRPC.InputFile photo, TLRPC.InputFile video, double videoStartTimestamp, String videoPath, TLRPC.PhotoSize bigSize, TLRPC.PhotoSize smallSize, boolean isVideo) {
+    public void didUploadPhoto(TLRPC.InputFile photo, TLRPC.InputFile video, double videoStartTimestamp, String videoPath, TLRPC.PhotoSize bigSize, TLRPC.PhotoSize smallSize, boolean isVideo, TLRPC.VideoSize emojiMarkup) {
         AndroidUtilities.runOnUIThread(() -> {
             if (imageUpdater.isCanceled()) {
                 return;
@@ -704,7 +704,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
                     getNotificationCenter().postNotificationName(NotificationCenter.reloadDialogPhotos);
                     getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, MessagesController.UPDATE_MASK_AVATAR);
                 }
-                sendPhotoChangedRequest(avatar, bigSize.location, photo, video, videoStartTimestamp, photoSelectedTypeFinal);
+                sendPhotoChangedRequest(avatar, bigSize.location, photo, video, emojiMarkup, videoStartTimestamp, photoSelectedTypeFinal);
                 showAvatarProgress(false, true);
             } else {
                 avatarImage.setImage(ImageLocation.getForLocal(avatar), "50_50", avatarDrawable, getMessagesController().getUser(user_id));
@@ -764,7 +764,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         getMessagesController().photoSuggestion.put(message.local_id, imageUpdater);
     }
 
-    private void sendPhotoChangedRequest(TLRPC.FileLocation avatar, TLRPC.FileLocation bigAvatar, TLRPC.InputFile photo, TLRPC.InputFile video, double videoStartTimestamp, int photoSelectedTypeFinal) {
+    private void sendPhotoChangedRequest(TLRPC.FileLocation avatar, TLRPC.FileLocation bigAvatar, TLRPC.InputFile photo, TLRPC.InputFile video, TLRPC.VideoSize emojiMarkup, double videoStartTimestamp, int photoSelectedTypeFinal) {
         TLRPC.TL_photos_uploadContactProfilePhoto req = new TLRPC.TL_photos_uploadContactProfilePhoto();
         req.user_id = getMessagesController().getInputUser(user_id);
 
@@ -777,6 +777,10 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
             req.flags |= 2;
             req.video_start_ts = videoStartTimestamp;
             req.flags |= 4;
+        }
+        if (emojiMarkup != null) {
+            req.flags |= 32;
+            req.video_emoji_markup = emojiMarkup;
         }
         if (photoSelectedTypeFinal == TYPE_SUGGEST) {
             req.suggest = true;
