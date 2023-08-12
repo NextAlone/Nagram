@@ -12442,6 +12442,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             CharSequence subtitle = null;
             if (newMessageObject.messageOwner != null) {
                 subtitle = LocaleController.formatDateAudio(newMessageObject.messageOwner.date, false);
+                if (newMessageObject.messageOwner.media != null) {
+                    if (newMessageObject.messageOwner.media.document != null) {
+                        subtitle = String.format(Locale.US, "%s, DC%d", subtitle, newMessageObject.messageOwner.media.document.dc_id);
+                    } else if (newMessageObject.messageOwner.media.photo != null) {
+                        subtitle = String.format(Locale.US, "%s, DC%d", subtitle, newMessageObject.messageOwner.media.photo.dc_id);
+                    }
+                }
             }
             actionBarContainer.setSubtitle(subtitle, animated);
 
