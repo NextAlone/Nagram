@@ -962,7 +962,7 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
                             }
                         });
 
-                        if (!unsupported) {
+                        if (!unsupported || true) {
                             ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_gallery, str, false, resourcesProvider).setOnClickListener(v -> {
                                 saveToGallery();
                                 if (popupMenu != null) {
@@ -1053,8 +1053,8 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
                             }
                         }
 
-                        if (!unsupported) {
-                            if (UserObject.isService(dialogId) || allowShare) {
+                        if (!unsupported || true) {
+                            if (UserObject.isService(dialogId) || allowShare || true) {
                                 ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_gallery, LocaleController.getString("SaveToGallery", R.string.SaveToGallery), false, resourcesProvider).setOnClickListener(v -> {
                                     saveToGallery();
                                     if (popupMenu != null) {
