@@ -1132,10 +1132,11 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         }
 
         if (currentChat != null) {
-//            if (!ChatObject.hasAdminRights(currentChat)) {
+            if (!ChatObject.hasAdminRights(currentChat)) {
 //                infoContainer.setVisibility(View.GONE);
 //                settingsTopSectionCell.setVisibility(View.GONE);
-//            }
+                if (logCell != null) logCell.setVisibility(View.GONE);
+            }
 
             if (stickersCell == null) {
                 infoSectionCell = new ShadowSectionCell(context);
