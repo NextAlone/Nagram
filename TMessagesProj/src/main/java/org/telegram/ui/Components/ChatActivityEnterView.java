@@ -5916,17 +5916,17 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         }
                     }
                     if (NaConfig.INSTANCE.getShowSendAsUnderMessageHint().Bool() && delegate != null) {
-                        TLRPC.ChatFull full = parentFragment.getMessagesController().getChatFull(-dialog_id);
+                        TLRPC.ChatFull full = accountInstance.getMessagesController().getChatFull(-dialog_id);
                         TLRPC.Peer defPeer = full != null ? full.default_send_as : null;
                         if (defPeer == null && delegate.getSendAsPeers() != null && !delegate.getSendAsPeers().peers.isEmpty()) {
                             defPeer = delegate.getSendAsPeers().peers.get(0).peer;
                         }
                         if (defPeer != null) {
                             if (defPeer.channel_id != 0) {
-                                TLRPC.Chat ch = MessagesController.getInstance(currentAccount).getChat(defPeer.channel_id);
+                                TLRPC.Chat ch = accountInstance.getMessagesController().getChat(defPeer.channel_id);
                                 sendAsText = new SpannableString(ch != null ? "\nas " + ch.title : "");
                             } else {
-                                TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(defPeer.user_id);
+                                TLRPC.User user = accountInstance.getMessagesController().getUser(defPeer.user_id);
                                 sendAsText = new SpannableString(user != null ? "\nas " + UserObject.getUserName(user) : "");
                             }
                         }
