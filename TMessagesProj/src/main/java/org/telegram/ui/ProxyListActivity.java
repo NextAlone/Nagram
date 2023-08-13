@@ -907,7 +907,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         });
         listView.setOnItemLongClickListener((view, position) -> {
             if (position >= proxyStartRow && position < proxyEndRow) {
-                final SharedConfig.ProxyInfo info = SharedConfig.proxyList.get(position - proxyStartRow);
+                final SharedConfig.ProxyInfo info = proxyList.get(position - proxyStartRow);
                 BottomBuilder builder = new BottomBuilder(context);
                 builder.addItems(new String[]{
 

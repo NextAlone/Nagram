@@ -676,7 +676,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
     }
 
     public int getRealCount() {
-        int size = photos.size() > 0 ? 1 : 0;
+        int size = photos.size();
         if (hasActiveVideo) {
             size++;
         }
@@ -1179,6 +1179,8 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             item.imageView.setOnClickListener(__ -> {
                 callback.onClick();
             });
+
+            item.imageView.setTag(realPosition);
 
             return item;
         }
