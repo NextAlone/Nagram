@@ -1684,23 +1684,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (isSecretChat() || isInScheduleMode()) {
                     return;
                 }
-                ChatMessageCell cell = (ChatMessageCell) view;
-                MessageObject primaryMessage = cell.getPrimaryMessageObject();
-                if (primaryMessage.isSecretMedia() || primaryMessage.isExpiredStory()) {
-                    return;
-                }
-                ReactionsEffectOverlay.removeCurrent(false);
-                String reactionString = getMediaDataController().getDoubleTapReaction();
-                if (reactionString.startsWith("animated_")) {
-                    boolean available = dialog_id >= 0;
-                    if (!available && chatInfo != null) {
-                        available = ChatObject.reactionIsAvailable(chatInfo, reactionString);
-                    }
-                    if (!available) {
-                        return;
-                    }
-                    selectReaction(primaryMessage, null, null, x, y, ReactionsLayoutInBubble.VisibleReaction.fromEmojicon(reactionString), true, false, false);
-                }
+                createMenu(view, true, false, x, y, true, true);
             } else if (NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTap.DOUBLE_TAP_ACTION_SEND_REACTIONS) {
                 if (isSecretChat() || isInScheduleMode()) {
                     return;
