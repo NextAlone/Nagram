@@ -86,4 +86,6 @@
     <string name="DoNotShareMyPhoneNumber">禁用分享我的手机号码</string>
     <string name="DefaultDeleteMenu">默认删除菜单</string>
     <string name="DisableSuggestionView">禁用修改手机号码的建议</string>
+    <string name="DisableStories">禁用动态功能</string>
+    <string name="DisableSendReadStories">偷偷看动态</string>
 </resources>

@@ -424,6 +424,18 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val disableStories =
+        addConfig(
+            "DisableStories",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val disableSendReadStories =
+        addConfig(
+            "DisableSendReadStories",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

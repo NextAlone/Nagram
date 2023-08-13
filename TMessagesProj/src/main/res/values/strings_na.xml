@@ -89,4 +89,6 @@
     <string name="DoNotShareMyPhoneNumber">Do not share my phone number</string>
     <string name="DefaultDeleteMenu">Default Delete Menu</string>
     <string name="DisableSuggestionView">Disable Profile Settings Suggestion</string>
+    <string name="DisableStories">Disable Stories</string>
+    <string name="DisableSendReadStories">Disable Send Read Stories</string>
 </resources>

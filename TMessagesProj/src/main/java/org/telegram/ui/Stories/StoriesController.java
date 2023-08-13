@@ -64,6 +64,8 @@ import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import xyz.nextalone.nagram.NaConfig;
+
 public class StoriesController {
 
     public final static int STATE_READ = 0;
@@ -187,11 +189,13 @@ public class StoriesController {
     }
 
     public boolean hasStories(long dialogId) {
+        if (NaConfig.INSTANCE.getDisableStories().Bool()) return false;
         TLRPC.TL_userStories stories = allStoriesMap.get(dialogId);
         return stories != null && !stories.stories.isEmpty();
     }
 
     public boolean hasStories() {
+        if (NaConfig.INSTANCE.getDisableStories().Bool()) return false;
         return (dialogListStories != null && dialogListStories.size() > 0) || hasSelfStories();
     }
 
@@ -892,6 +896,7 @@ public class StoriesController {
             TLRPC.TL_stories_readStories req = new TLRPC.TL_stories_readStories();
             req.user_id = MessagesController.getInstance(currentAccount).getInputUser(dialogId);
             req.max_id = storyItem.id;
+            if (NaConfig.INSTANCE.getDisableSendReadStories().Bool()) return true;
             ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {});
             return true;
         }

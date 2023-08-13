@@ -18535,6 +18535,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public boolean storiesEnabled() {
+        if (NaConfig.INSTANCE.getDisableStories().Bool()) return false;
         switch (storiesPosting) {
             case "premium":
                 return getUserConfig().isPremium();

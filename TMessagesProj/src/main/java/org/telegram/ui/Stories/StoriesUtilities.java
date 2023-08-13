@@ -46,6 +46,8 @@ import org.telegram.ui.LaunchActivity;
 
 import java.util.Collections;
 
+import xyz.nextalone.nagram.NaConfig;
+
 public class StoriesUtilities {
 
     private final static int ANIMATION_SEGMENT_COUNT = 16;
