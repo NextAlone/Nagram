@@ -312,6 +312,11 @@ public class OSMDroidMapsProvider implements IMapsProvider {
         }
 
         @Override
+        public float getMinZoomLevel() {
+            return (float) this.mapView.getMinZoomLevel();
+        }
+
+        @Override
         public void setMyLocationEnabled(boolean enabled) {
             if (myLocationOverlay != null) {
                 if (enabled) this.myLocationOverlay.enableMyLocation();
@@ -341,6 +346,11 @@ public class OSMDroidMapsProvider implements IMapsProvider {
             if (this.uiSettings == null)
                 this.uiSettings = new OSMDroidUISettings();
             return this.uiSettings;
+        }
+
+        @Override
+        public void setOnCameraIdleListener(Runnable callback) {
+
         }
 
         @Override
