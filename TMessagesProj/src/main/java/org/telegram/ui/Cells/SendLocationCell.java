@@ -71,8 +71,8 @@ public class SendLocationCell extends FrameLayout {
             AndroidUtilities.runOnUIThread(invalidateRunnable, 1000);
             setWillNotDraw(false);
         } else {
-            Drawable drawable = getResources().getDrawable(R.drawable.pin);
-            drawable.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_location_sendLocationIcon), PorterDuff.Mode.SRC_IN));
+            Drawable drawable = getResources().getDrawable(R.drawable.pin).mutate();
+            drawable.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_location_sendLocationIcon), PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable = new CombinedDrawable(circle, drawable);
             combinedDrawable.setCustomSize(AndroidUtilities.dp(42), AndroidUtilities.dp(42));
             combinedDrawable.setIconSize(AndroidUtilities.dp(24), AndroidUtilities.dp(24));

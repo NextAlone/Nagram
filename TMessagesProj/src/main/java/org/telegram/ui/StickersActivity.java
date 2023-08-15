@@ -439,7 +439,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             @Override
             protected void dispatchDraw(Canvas canvas) {
                 if (actionBar.isActionModeShowed()) {
-                    drawSectionBackground(canvas, stickersHeaderRow, stickersEndRow, getThemedColor(Theme.key_windowBackgroundWhite));
+                    drawSectionBackground(canvas, stickersHeaderRow, stickersEndRow - 1, getThemedColor(Theme.key_windowBackgroundWhite));
                 }
                 super.dispatchDraw(canvas);
             }
@@ -454,6 +454,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             }
         };
         itemAnimator.setMoveDuration(350);
+        itemAnimator.setSupportsChangeAnimations(false);
         itemAnimator.setMoveInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
         listView.setItemAnimator(itemAnimator);
         layoutManager = new LinearLayoutManager(context) {
@@ -471,8 +472,6 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         listView.setLayoutManager(layoutManager);
         itemTouchHelper = new ItemTouchHelper(new TouchHelperCallback());
         itemTouchHelper.attachToRecyclerView(listView);
-        itemAnimator = (DefaultItemAnimator) listView.getItemAnimator();
-        itemAnimator.setSupportsChangeAnimations(false);
 
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         listView.setAdapter(listAdapter);
@@ -915,7 +914,6 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
         loopRow = -1;
         loopInfoRow = -1;
-        archivedRow = -1;
 
         if (currentType == MediaDataController.TYPE_IMAGE) {
             featuredRow = rowCount++;

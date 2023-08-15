@@ -23,6 +23,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -76,6 +77,7 @@ import org.telegram.ui.Components.Premium.PremiumGradient;
 import org.telegram.ui.Components.Premium.PremiumNotAvailableBottomSheet;
 import org.telegram.ui.Components.Premium.PremiumTierCell;
 import org.telegram.ui.Components.Premium.StarParticlesView;
+import org.telegram.ui.Components.Premium.StoriesPageView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SimpleThemeDescription;
 import org.telegram.ui.Components.TextStyleSpan;
@@ -144,6 +146,15 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
     public final static int PREMIUM_FEATURE_ANIMATED_EMOJI = 11;
     public final static int PREMIUM_FEATURE_EMOJI_STATUS = 12;
     public final static int PREMIUM_FEATURE_TRANSLATIONS = 13;
+    public final static int PREMIUM_FEATURE_STORIES = 14;
+    public final static int PREMIUM_FEATURE_STORIES_STEALTH_MODE = 15;
+    public final static int PREMIUM_FEATURE_STORIES_VIEWS_HISTORY = 16;
+    public final static int PREMIUM_FEATURE_STORIES_EXPIRATION_DURATION = 17;
+    public final static int PREMIUM_FEATURE_STORIES_SAVE_TO_GALLERY = 18;
+    public final static int PREMIUM_FEATURE_STORIES_LINKS_AND_FORMATTING = 19;
+    public static final int PREMIUM_FEATURE_STORIES_PRIORITY_ORDER = 20;
+    public static final int PREMIUM_FEATURE_STORIES_CAPTION = 21;
+
     private int statusBarHeight;
     private int firstViewHeight;
     private boolean isDialogVisible;
@@ -196,6 +207,22 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 return PREMIUM_FEATURE_EMOJI_STATUS;
             case "translations":
                 return PREMIUM_FEATURE_TRANSLATIONS;
+            case "stories":
+                return PREMIUM_FEATURE_STORIES;
+            case "stories__stealth_mode":
+                return PREMIUM_FEATURE_STORIES_STEALTH_MODE;
+            case "stories__permanent_views_history":
+                return PREMIUM_FEATURE_STORIES_VIEWS_HISTORY;
+            case "stories__expiration_durations":
+                return PREMIUM_FEATURE_STORIES_EXPIRATION_DURATION;
+            case "stories__save_stories_to_gallery":
+                return PREMIUM_FEATURE_STORIES_SAVE_TO_GALLERY;
+            case "stories__links_and_formatting":
+                return PREMIUM_FEATURE_STORIES_LINKS_AND_FORMATTING;
+            case "stories__priority_order":
+                return PREMIUM_FEATURE_STORIES_PRIORITY_ORDER;
+            case "stories__caption":
+                return PREMIUM_FEATURE_STORIES_CAPTION;
         }
         return -1;
     }
@@ -230,6 +257,22 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 return "emoji_status";
             case PREMIUM_FEATURE_TRANSLATIONS:
                 return "translations";
+            case PREMIUM_FEATURE_STORIES:
+                return "stories";
+            case PREMIUM_FEATURE_STORIES_STEALTH_MODE:
+                return "stories__stealth_mode";
+            case PREMIUM_FEATURE_STORIES_VIEWS_HISTORY:
+                return "stories__permanent_views_history";
+            case PREMIUM_FEATURE_STORIES_EXPIRATION_DURATION:
+                return "stories__expiration_durations";
+            case PREMIUM_FEATURE_STORIES_SAVE_TO_GALLERY:
+                return "stories__save_stories_to_gallery";
+            case PREMIUM_FEATURE_STORIES_LINKS_AND_FORMATTING:
+                return "stories__links_and_formatting";
+            case PREMIUM_FEATURE_STORIES_PRIORITY_ORDER:
+                return "stories__priority_order";
+            case PREMIUM_FEATURE_STORIES_CAPTION:
+                return "stories__caption";
         }
         return null;
     }
@@ -589,6 +632,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         MessagesController messagesController = MessagesController.getInstance(currentAccount);
         premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_LIMITS, R.drawable.msg_premium_limits, LocaleController.getString("PremiumPreviewLimits", R.string.PremiumPreviewLimits), LocaleController.formatString("PremiumPreviewLimitsDescription", R.string.PremiumPreviewLimitsDescription,
                 messagesController.channelsLimitPremium, messagesController.dialogFiltersLimitPremium, messagesController.dialogFiltersPinnedLimitPremium, messagesController.publicLinksLimitPremium, 4)));
+        premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_STORIES, R.drawable.msg_filled_stories, applyNewSpan(LocaleController.getString("PremiumPreviewStories", R.string.PremiumPreviewStories)), LocaleController.formatString("PremiumPreviewStoriesDescription", R.string.PremiumPreviewStoriesDescription)));
         premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_UPLOAD_LIMIT, R.drawable.msg_premium_uploads, LocaleController.getString("PremiumPreviewUploads", R.string.PremiumPreviewUploads), LocaleController.getString("PremiumPreviewUploadsDescription", R.string.PremiumPreviewUploadsDescription)));
         premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_DOWNLOAD_SPEED, R.drawable.msg_premium_speed, LocaleController.getString("PremiumPreviewDownloadSpeed", R.string.PremiumPreviewDownloadSpeed), LocaleController.getString("PremiumPreviewDownloadSpeedDescription", R.string.PremiumPreviewDownloadSpeedDescription)));
         premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_VOICE_TO_TEXT, R.drawable.msg_premium_voice, LocaleController.getString("PremiumPreviewVoiceToText", R.string.PremiumPreviewVoiceToText), LocaleController.getString("PremiumPreviewVoiceToTextDescription", R.string.PremiumPreviewVoiceToTextDescription)));
@@ -617,6 +661,15 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
             int type2 = messagesController.premiumFeaturesTypesToPosition.get(o2.type, Integer.MAX_VALUE);
             return type1 - type2;
         });
+    }
+
+    private static CharSequence applyNewSpan(String str) {
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(str);
+        spannableStringBuilder.append("  d");
+        FilterCreateActivity.NewSpan span = new FilterCreateActivity.NewSpan(false);
+        span.setColor(Theme.getColor(Theme.key_premiumGradient1));
+        spannableStringBuilder.setSpan(span, spannableStringBuilder.length() - 1, spannableStringBuilder.length(), 0);
+        return spannableStringBuilder;
     }
 
     private void updateBackgroundImage() {
@@ -920,11 +973,11 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
     public static class PremiumFeatureData {
         public final int type;
         public final int icon;
-        public final String title;
+        public final CharSequence title;
         public final String description;
         public int yOffset;
 
-        public PremiumFeatureData(int type, int icon, String title, String description) {
+        public PremiumFeatureData(int type, int icon, CharSequence title, String description) {
             this.type = type;
             this.icon = icon;
             this.title = title;

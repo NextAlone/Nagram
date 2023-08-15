@@ -3,12 +3,12 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
-def verName = "9.7.6"
-def verCode = 1131
+def verName = "10.0.1"
+def verCode = 1133
 
 
-def officialVer = "9.7.6"
-def officialCode = 3721
+def officialVer = "10.0.1"
+def officialCode = 3793
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
@@ -98,7 +98,7 @@ android {
     defaultConfig {
         minSdkVersion 21
         //noinspection ExpiredTargetSdkVersion,OldTargetApi
-        targetSdkVersion 32
+        targetSdkVersion 33
 
         versionName verName
         versionCode verCode

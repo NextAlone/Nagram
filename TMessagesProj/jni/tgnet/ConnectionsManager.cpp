@@ -3055,7 +3055,7 @@ void ConnectionsManager::updateDcSettings(uint32_t dcNum, bool workaround, bool 
         if ((!workaround && !updatingDcSettings) || (workaround && !updatingDcSettingsWorkaround)) {
             return;
         }
-        if (!workaround && updatingDcSettingsAgain) {
+        if (!workaround && updatingDcSettingsAgain && updatingDcSettingsAgainDcNum == dcNum) {
             updatingDcSettingsAgain = false;
             for (auto & datacenter : datacenters) {
                 datacenter.second->resetInitVersion();

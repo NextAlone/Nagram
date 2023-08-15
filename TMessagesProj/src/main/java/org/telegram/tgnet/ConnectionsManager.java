@@ -11,6 +11,11 @@ import android.util.Base64;
 import android.util.SparseArray;
 
 import com.v2ray.ang.util.Utils;
+//import com.google.android.exoplayer2.util.Log;
+//import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -428,6 +433,9 @@ SharedPreferences mainPreferences;
     }
 
     public void bindRequestToGuid(int requestToken, int guid) {
+        if (guid == 0) {
+            return;
+        }
         native_bindRequestToGuid(currentAccount, requestToken, guid);
     }
 

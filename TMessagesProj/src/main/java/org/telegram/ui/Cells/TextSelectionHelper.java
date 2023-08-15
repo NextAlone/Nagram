@@ -20,6 +20,7 @@ import android.text.Layout;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.StaticLayout;
+import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.util.TypedValue;
@@ -82,6 +83,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
     protected int textY;
     protected int maybeTextX;
     protected int maybeTextY;
+    boolean allowDiscard;
 
     float movingOffsetX;
     float movingOffsetY;
@@ -120,6 +122,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
     private Callback callback;
 
     protected RecyclerListView parentRecyclerView;
+    protected NestedScrollView parentNestedScrollView;
     protected ViewGroup parentView;
     private Magnifier magnifier;
     private float magnifierYanimated;
@@ -158,7 +161,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
     private Runnable scrollRunnable = new Runnable() {
         @Override
         public void run() {
-            if (scrolling && parentRecyclerView != null) {
+            if (scrolling && (parentRecyclerView != null || parentNestedScrollView != null)) {
                 int dy;
                 if (multiselect && selectedView == null) {
                     dy = AndroidUtilities.dp(8);
@@ -168,7 +171,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                     return;
                 }
 
-                if (!multiselect) {
+                if (!multiselect && !allowScrollPrentRelative) {
                     if (scrollDown) {
                         if (selectedView.getBottom() - dy < parentView.getMeasuredHeight() - getParentBottomPadding()) {
                             dy = selectedView.getBottom() - parentView.getMeasuredHeight() + getParentBottomPadding();
@@ -179,7 +182,12 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                         }
                     }
                 }
-                parentRecyclerView.scrollBy(0, scrollDown ? dy : -dy);
+                if (parentRecyclerView != null) {
+                    parentRecyclerView.scrollBy(0, scrollDown ? dy : -dy);
+                }
+                if (parentNestedScrollView != null) {
+                    parentNestedScrollView.setScrollY(parentNestedScrollView.getScrollY() + (scrollDown ? dy : -dy));
+                }
                 AndroidUtilities.runOnUIThread(this);
             }
         }
@@ -294,12 +302,14 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                 onOffsetChanged();
             }
             tryCapture = false;
+            allowDiscard = false;
 
         }
     };
     protected Theme.ResourcesProvider resourcesProvider;
     public boolean useMovingOffset = true;
     private boolean invalidateParent;
+    public boolean allowScrollPrentRelative;
 
     public TextSelectionHelper() {
         longpressDelay = ViewConfiguration.getLongPressTimeout();
@@ -327,6 +337,12 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
         parentView = view;
     }
 
+    public void setScrollingParent(View scrollingParent) {
+        if (scrollingParent instanceof NestedScrollView) {
+            parentNestedScrollView = (NestedScrollView) scrollingParent;
+        }
+    }
+
     public void setMaybeTextCord(int x, int y) {
         maybeTextX = x;
         maybeTextY = y;
@@ -339,7 +355,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                 capturedY = (int) event.getY();
                 tryCapture = false;
                 textArea.inset(-AndroidUtilities.dp(8), -AndroidUtilities.dp(8));
-                if (textArea.contains(capturedX, capturedY)) {
+                if (textArea.contains(capturedX, capturedY) && maybeSelectedView != null) {
                     textArea.inset(AndroidUtilities.dp(8), AndroidUtilities.dp(8));
                     int x = capturedX;
                     int y = capturedY;
@@ -373,7 +389,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                 int y = (int) event.getY();
                 int x = (int) event.getX();
                 int r = (capturedY - y) * (capturedY - y) + (capturedX - x) * (capturedX - x);
-                if (r > touchSlop) {
+                if (r > touchSlop * touchSlop) {
                     AndroidUtilities.cancelRunOnUIThread(startSelectionRunnable);
                     tryCapture = false;
                 }
@@ -803,6 +819,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                     }
 
                     movingHandle = false;
+                    allowDiscard = true;
                     break;
                 case MotionEvent.ACTION_MOVE:
                     if (movingHandle) {
@@ -842,7 +859,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                         y -= coordsInParent[1];
                         x -= coordsInParent[0];
 
-                        boolean canScrollDown = event.getY() - touchSlop > parentView.getMeasuredHeight() - getParentBottomPadding() && (multiselect || selectedView.getBottom() > parentView.getMeasuredHeight() - getParentBottomPadding());
+                        boolean canScrollDown = event.getY() - touchSlop > parentView.getMeasuredHeight() - getParentBottomPadding() && (allowScrollPrentRelative || multiselect || selectedView.getBottom() > parentView.getMeasuredHeight() - getParentBottomPadding());
                         boolean canScrollUp = event.getY() < ((View) parentView.getParent()).getTop() + getParentTopPadding() && (multiselect || selectedView.getTop() < getParentTopPadding());
                         if (canScrollDown || canScrollUp) {
                             if (!scrolling) {
@@ -1268,17 +1285,19 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                 int[] coordsInParent = getCoordsInParent();
                 lastMotionY += coordsInParent[1] + textY;
             }
-            if (!movingHandle && (lastMotionY < startArea.top - AndroidUtilities.dp(8) || lastMotionY > endArea.bottom + AndroidUtilities.dp(8))) {
+            if (!movingHandle && allowDiscard) {
                 clear();
             }
         }
 
         float cancelPressedX, cancelPressedY;
+
         public void checkCancelAction(MotionEvent ev) {
             if (ev.getAction() == MotionEvent.ACTION_DOWN) {
                 cancelPressedX = ev.getX();
                 cancelPressedY = ev.getY();
-            } else if (Math.abs(ev.getX() - cancelPressedX) < AndroidUtilities.touchSlop && Math.abs(ev.getY() - cancelPressedY) < AndroidUtilities.touchSlop && (ev.getAction() == MotionEvent.ACTION_CANCEL || ev.getAction() == MotionEvent.ACTION_UP)) {
+                allowDiscard = isInSelectionMode();
+            } else if (allowDiscard && Math.abs(ev.getX() - cancelPressedX) < AndroidUtilities.touchSlop && Math.abs(ev.getY() - cancelPressedY) < AndroidUtilities.touchSlop && (ev.getAction() == MotionEvent.ACTION_CANCEL || ev.getAction() == MotionEvent.ACTION_UP)) {
                 checkCancel(ev.getX(), ev.getY(), true);
             }
         }
@@ -1791,14 +1810,19 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
 
             int line = -1;
             for (int i = 0; i < layout.getLineCount(); i++) {
-                if (y > layoutBlock.yOffset + layout.getLineTop(i) && y < layoutBlock.yOffset + layout.getLineBottom(i)) {
+                if (y > offsetY + layout.getLineTop(i) && y < offsetY + layout.getLineBottom(i)) {
                     line = i;
                     break;
                 }
             }
             if (line >= 0) {
-                int k = layoutBlock.charOffset + layout.getOffsetForHorizontal(line, x);;
-                return k;
+                try {
+                    int k = layoutBlock.charOffset + layout.getOffsetForHorizontal(line, x);
+                    return k;
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
+
             }
 
             return -1;
