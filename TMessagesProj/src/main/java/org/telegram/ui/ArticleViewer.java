@@ -2173,7 +2173,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             return getPlainText(((TLRPC.TL_textUrl) richText).text);
         } else if (richText instanceof TLRPC.TL_textPlain) {
             String plainText = ((TLRPC.TL_textPlain) richText).text;
-            if (plainText != null && Instance != null && Instance.adapter[0].trans && TranslateDb.currentTarget().contains(plainText)) {
+            if (plainText != null && Instance != null && Instance.adapter != null && Instance.adapter.length > 0 && Instance.adapter[0].trans && TranslateDb.currentTarget().contains(plainText)) {
                 plainText = TranslateDb.currentTarget().query(plainText);
             }
             return plainText;
