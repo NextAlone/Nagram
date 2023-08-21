@@ -12701,7 +12701,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     menuItem.hideSubItem(gallery_menu_delete);
                 }
                 allowShare = !noforwardsOverride;
-                actionBar.setTitle(LocaleController.getString("AttachGif", R.string.AttachGif));
             }
             if (totalImagesCount + totalImagesCountMerge != 0 && !needSearchImageInArr) {
                 if (opennedFromMedia) {
