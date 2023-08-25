@@ -327,6 +327,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
             drawPremium = !savedMessages && MessagesController.getInstance(currentAccount).isPremiumUser(user);
             updateStatus(drawCheck, user, false);
         } else if (contact != null) {
+            dialog_id = 0;
             if (!LocaleController.isRTL) {
                 nameLeft = AndroidUtilities.dp(AndroidUtilities.leftBaseline);
             } else {
@@ -753,7 +754,12 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
             actionLayout.draw(canvas);
             canvas.restore();
         }
-        StoriesUtilities.drawAvatarWithStory(dialog_id, canvas, avatarImage, avatarStoryParams);
+        if (user != null) {
+            StoriesUtilities.drawAvatarWithStory(user.id, canvas, avatarImage, avatarStoryParams);
+        } else {
+            avatarImage.setImageCoords(avatarStoryParams.originalAvatarRect);
+            avatarImage.draw(canvas);
+        }
     }
 
     @Override
@@ -799,7 +805,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (avatarStoryParams.checkOnTouchEvent(event, this)) {
+        if (user != null && avatarStoryParams.checkOnTouchEvent(event, this)) {
             return true;
         }
         if (actionButton != null && actionButton.checkTouchEvent(event)) {

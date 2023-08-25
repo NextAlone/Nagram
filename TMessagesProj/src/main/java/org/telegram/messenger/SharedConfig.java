@@ -1614,7 +1614,22 @@ public class SharedConfig {
     }
 
     public static boolean setNewAppVersionAvailable(TLRPC.TL_help_appUpdate update) {
-        if (update == null) {
+        String updateVersionString = null;
+        int versionCode = 0;
+        try {
+            PackageInfo packageInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
+            versionCode = packageInfo.versionCode;
+            updateVersionString = packageInfo.versionName;
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        if (versionCode == 0) {
+            versionCode = BuildVars.BUILD_VERSION;
+        }
+        if (updateVersionString == null) {
+            updateVersionString = BuildVars.BUILD_VERSION_STRING;
+        }
+        if (update == null || update.version == null || versionBiggerOrEqual(updateVersionString, update.version)) {
             pendingAppUpdate = null;
             pendingAppUpdateBuildVersion = 0;
             saveConfig();
@@ -1623,6 +1638,22 @@ public class SharedConfig {
         pendingAppUpdate = update;
         pendingAppUpdateBuildVersion = BuildConfig.VERSION_CODE;
         saveConfig();
+        return true;
+    }
+
+    // returns a >= b
+    private static boolean versionBiggerOrEqual(String a, String b) {
+        String[] partsA = a.split("\\.");
+        String[] partsB = b.split("\\.");
+        for (int i = 0; i < Math.min(partsA.length, partsB.length); ++i) {
+            int numA = Integer.parseInt(partsA[i]);
+            int numB = Integer.parseInt(partsB[i]);
+            if (numA < numB) {
+                return false;
+            } else if (numA > numB) {
+                return true;
+            }
+        }
         return true;
     }
 

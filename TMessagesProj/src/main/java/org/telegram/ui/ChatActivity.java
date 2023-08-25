@@ -9195,7 +9195,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             blurredView.animate().setListener(new HideViewAfterAnimation(blurredView)).alpha(0).start();
             blurredView.setTag(null);
             chatListView.invalidate();
-            fragmentView.invalidate();
+            if (fragmentView != null) {
+                fragmentView.invalidate();
+            }
         }
     }
 
