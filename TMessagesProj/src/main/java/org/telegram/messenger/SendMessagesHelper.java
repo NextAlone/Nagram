@@ -8617,7 +8617,7 @@ public boolean retriedToSend;
         public boolean hasMediaSpoilers;
         public TLRPC.StoryItem replyToStoryItem;
         public TLRPC.StoryItem sendingStory;
-        public boolean canSendGames;
+        public boolean canSendGames = true;
 
         public static SendMessageParams of(String string, long dialogId) {
             return of(string, null, null, null, null, null, null, null, null, null, dialogId, null, null, null, null, true, null, null, null, null, false, 0, 0, null, null, false);
