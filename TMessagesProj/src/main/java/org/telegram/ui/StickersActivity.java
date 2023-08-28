@@ -630,7 +630,10 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
         }
 
-        AlertDialog pro = new AlertDialog(getParentActivity(), 1);
+        AlertDialog pro = new AlertDialog(getParentActivity(), AlertDialog.ALERT_TYPE_MESSAGE);
+        pro.setMessage(LocaleController.getString("Loading", R.string.Loading));
+        pro.setCanceledOnTouchOutside(true);
+        pro.setCancelable(true);
         pro.show();
 
         UIUtil.runOnIoDispatcher(() -> {

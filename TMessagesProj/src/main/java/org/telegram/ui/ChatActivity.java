@@ -26053,7 +26053,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (item != null) {
             item.setVisibility(View.VISIBLE);
         }
-        if (chatMode != MODE_SCHEDULED && NaConfig.INSTANCE.getShowNoQuoteForward().Bool())
+        if (chatMode != MODE_SCHEDULED && actionModeOtherItem != null && NaConfig.INSTANCE.getShowNoQuoteForward().Bool())
             actionModeOtherItem.showSubItem(nkbtn_forward_noquote);
         item = actionMode.getItem(delete);
         if (item != null) {
