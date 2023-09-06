@@ -73,7 +73,27 @@ public class BillingController {
     @SuppressWarnings("ConstantConditions")
     public int getCurrencyExp(String currency) {
         return 0;
+//        BillingUtilities.extractCurrencyExp(currencyExpMap);
+//        return currencyExpMap.getOrDefault(currency, 0);
     }
+
+//    public void startConnection() {
+//        if (isReady()) {
+//            return;
+//        }
+//        BillingUtilities.extractCurrencyExp(currencyExpMap);
+//        if (!BuildVars.useInvoiceBilling()) {
+//            billingClient.startConnection(this);
+//        }
+//    }
+//
+//    private void switchToInvoice() {
+//        if (billingClientEmpty) {
+//            return;
+//        }
+//        billingClientEmpty = true;
+//        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.billingProductDetailsUpdated);
+//    }
 
     public boolean isReady() {
         return false;
