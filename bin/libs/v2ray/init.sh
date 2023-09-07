@@ -8,4 +8,4 @@ cd $PROJECT
 [ -f v2ray/go.mod ] || git submodule update --init v2ray
 cd v2ray
 git reset --hard && git clean -fdx
-go mod download -x && go get -v golang.org/x/mobile/cmd/... || exit 1
+go mod download -x && go get -v golang.org/x/mobile/cmd/...@v0.0.0-20230531173138-3c911d8e3eda || exit 1

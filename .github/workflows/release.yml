@@ -183,7 +183,7 @@ jobs:
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
           echo "ndk.dir=${ANDROID_HOME}/ndk/21.4.7075529" >> local.properties
       - name: Install Golang
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v4
         if: steps.cache.outputs.cache-hit != 'true'
         with:
           go-version: 1.16
