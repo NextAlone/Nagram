@@ -7,6 +7,10 @@
     <string name="Hide">隐藏</string>
     <string name="DeleteAllFromSelf">删除自己所有消息</string>
     <string name="DeleteAllFromSelfAlert">警告！这将为此会话中的 **所有人** 删除 **全部你发出的消息**。</string>
+    <string name="DeleteAllFromSelfAlertBefore">警告！这将为此会话中的 **所有人** 删除 **全部您在%s前发出的消息**。</string>
+    <string name="DeleteAllFromSelfBefore">早于...</string>
+    <string name="DeleteAllFromSelfAdmin">使用管理员权限</string>
+    <string name="DeleteAllFromSelfDone">您的所有消息都已删除</string>
     <string name="BotLogin">机器人登录</string>
     <string name="InvalidAccessToken">无效的访问令牌</string>
     <string name="IgnoreBlocked">忽略被屏蔽用户在群组内的消息</string>
