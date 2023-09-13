@@ -244,7 +244,7 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
 
-        updateRows(true);
+        updateRows();
 
         return true;
     }
@@ -355,7 +355,7 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
                         boolean needReset = NekoConfig.translationProvider.Int() - 1 != i && (NekoConfig.translationProvider.Int() == 1 || i == 0);
                         NekoConfig.translationProvider.setConfigInt(i + 1);
                         if (needReset) {
-                            updateRows(true);
+                            updateRows();
                         } else {
                             listAdapter.notifyItemChanged(position);
                         }
@@ -380,16 +380,8 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
         addRowsToMap(cellGroup);
         listView.setOnItemLongClickListener((view, position, x, y) -> {
             var holder = listView.findViewHolderForAdapterPosition(position);
-            var key = getRowKey(position);
             if (holder != null && listAdapter.isEnabled(holder)) {
-                showDialog(new AlertDialog.Builder(context)
-                        .setItems(
-                                new CharSequence[]{LocaleController.getString("CopyLink", R.string.CopyLink)},
-                                (dialogInterface, i) -> {
-                                    AndroidUtilities.addToClipboard(String.format(Locale.getDefault(), "https://%s/nasettings/%s?r=%s", getMessagesController().linkPrefix, "general", key));
-                                    BulletinFactory.of(NekoGeneralSettingsActivity.this).createCopyLinkBulletin().show();
-                                })
-                        .create());
+                createLongClickDialog(context, NekoGeneralSettingsActivity.this, "general", position);
                 return true;
             }
             return false;
@@ -655,8 +647,9 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
         }
     }
 
-    private void updateRows(boolean notify) {
-        if (notify && listAdapter != null) {
+    @Override
+    protected void updateRows() {
+        if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }
     }

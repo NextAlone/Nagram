@@ -37,6 +37,10 @@ public class ConfigCellTextCheck extends AbstractConfigCell {
         return CellGroup.ITEM_TYPE_TEXT_CHECK;
     }
 
+    public ConfigItem getBindConfig() {
+        return bindConfig;
+    }
+
     public String getKey() {
         return bindConfig == null ? null : bindConfig.getKey();
     }

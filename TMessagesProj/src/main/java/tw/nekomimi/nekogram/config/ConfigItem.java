@@ -167,4 +167,24 @@ public class ConfigItem {
             }
         }
     }
+
+    public Object checkConfigFromString(String value) {
+        try {
+            switch (type) {
+                case configTypeBool:
+                    return Boolean.parseBoolean(value);
+                case configTypeInt:
+                    return Integer.parseInt(value);
+                case configTypeString:
+                    return value;
+                case configTypeLong:
+                    return Long.parseLong(value);
+                case configTypeFloat:
+                    return Float.parseFloat(value);
+                default:
+                    return null;
+            }
+        } catch (Exception ignored) {}
+        return null;
+    }
 }

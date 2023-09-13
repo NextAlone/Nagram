@@ -67,6 +67,10 @@ public class SettingsHelper {
         if (TextUtils.isEmpty(row)) {
             row = uri.getQueryParameter("row");
         }
+        var value = uri.getQueryParameter("v");
+        if (TextUtils.isEmpty(value)) {
+            value = uri.getQueryParameter("value");
+        }
         if (!TextUtils.isEmpty(row)) {
             var rowFinal = row;
             if (neko_fragment != null) {
@@ -74,7 +78,12 @@ public class SettingsHelper {
                 AndroidUtilities.runOnUIThread(() -> finalNeko_fragment.scrollToRow(rowFinal, unknown));
             } else if (nekox_fragment != null) {
                 BaseNekoXSettingsActivity finalNekoX_fragment = nekox_fragment;
-                AndroidUtilities.runOnUIThread(() -> finalNekoX_fragment.scrollToRow(rowFinal, unknown));
+                if (!TextUtils.isEmpty(value)) {
+                    String finalValue = value;
+                    AndroidUtilities.runOnUIThread(() -> finalNekoX_fragment.importToRow(rowFinal, finalValue, unknown));
+                } else {
+                    AndroidUtilities.runOnUIThread(() -> finalNekoX_fragment.scrollToRow(rowFinal, unknown));
+                }
             }
         }
     }

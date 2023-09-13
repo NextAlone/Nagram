@@ -197,16 +197,8 @@ public class NekoAccountSettingsActivity extends BaseNekoXSettingsActivity {
         });
         listView.setOnItemLongClickListener((view, position, x, y) -> {
             var holder = listView.findViewHolderForAdapterPosition(position);
-            var key = getRowKey(position);
             if (holder != null && listAdapter.isEnabled(holder)) {
-                showDialog(new AlertDialog.Builder(context)
-                        .setItems(
-                                new CharSequence[]{LocaleController.getString("CopyLink", R.string.CopyLink)},
-                                (dialogInterface, i) -> {
-                                    AndroidUtilities.addToClipboard(String.format(Locale.getDefault(), "https://%s/nasettings/%s?r=%s", getMessagesController().linkPrefix, "account", key));
-                                    BulletinFactory.of(NekoAccountSettingsActivity.this).createCopyLinkBulletin().show();
-                                })
-                        .create());
+                createLongClickDialog(context, NekoAccountSettingsActivity.this, "account", position);
                 return true;
             }
             return false;
@@ -226,7 +218,8 @@ public class NekoAccountSettingsActivity extends BaseNekoXSettingsActivity {
         }
     }
 
-    private void updateRows() {
+    @Override
+    protected void updateRows() {
         rowCount = 0;
 
         accountRow = rowCount++;

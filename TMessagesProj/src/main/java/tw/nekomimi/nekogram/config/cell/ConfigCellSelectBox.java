@@ -54,6 +54,10 @@ public class ConfigCellSelectBox extends AbstractConfigCell {
         return CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL;
     }
 
+    public ConfigItem getBindConfig() {
+        return this.bindConfig;
+    }
+
     public String getKey() {
         return this.key;
     }

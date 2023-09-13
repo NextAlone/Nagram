@@ -336,16 +336,8 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
         addRowsToMap(cellGroup);
         listView.setOnItemLongClickListener((view, position, x, y) -> {
             var holder = listView.findViewHolderForAdapterPosition(position);
-            var key = getRowKey(position);
             if (holder != null && listAdapter.isEnabled(holder)) {
-                showDialog(new AlertDialog.Builder(context)
-                        .setItems(
-                                new CharSequence[]{LocaleController.getString("CopyLink", R.string.CopyLink)},
-                                (dialogInterface, i) -> {
-                                    AndroidUtilities.addToClipboard(String.format(Locale.getDefault(), "https://%s/nasettings/%s?r=%s", getMessagesController().linkPrefix, "chat", key));
-                                    BulletinFactory.of(NekoChatSettingsActivity.this).createCopyLinkBulletin().show();
-                                })
-                        .create());
+                createLongClickDialog(context, NekoChatSettingsActivity.this, "chat", position);
                 return true;
             }
             return false;
@@ -381,7 +373,8 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
         }
     }
 
-    private void updateRows() {
+    @Override
+    protected void updateRows() {
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }
