@@ -129,6 +129,10 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             recycleOnRelease = true;
         }
 
+        public String getKey() {
+            return key;
+        }
+
         public int getWidth() {
             return bitmap != null ? bitmap.getWidth() : 0;
         }
@@ -3096,7 +3100,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     public void setFileLoadingPriority(int fileLoadingPriority) {
         if (this.fileLoadingPriority != fileLoadingPriority) {
             this.fileLoadingPriority = fileLoadingPriority;
-            if (attachedToWindow) {
+            if (attachedToWindow && hasImageSet()) {
                 ImageLoader.getInstance().changeFileLoadingPriorityForImageReceiver(this);
             }
         }

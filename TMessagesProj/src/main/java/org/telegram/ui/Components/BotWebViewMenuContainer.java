@@ -145,7 +145,12 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
         ActionBar actionBar = chatActivity.getActionBar();
         actionBarOnItemClick = actionBar.getActionBarMenuOnItemClick();
 
-        webViewContainer = new BotWebViewContainer(context, parentEnterView.getParentFragment().getResourceProvider(), getColor(Theme.key_windowBackgroundWhite));
+        webViewContainer = new BotWebViewContainer(context, parentEnterView.getParentFragment().getResourceProvider(), getColor(Theme.key_windowBackgroundWhite)) {
+            @Override
+            public void onWebViewCreated() {
+                swipeContainer.setWebView(webViewContainer.getWebView());
+            }
+        };
         webViewContainer.setDelegate(webViewDelegate = new BotWebViewContainer.Delegate() {
 
             @Override
@@ -813,7 +818,12 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
         webViewContainer.destroyWebView();
         swipeContainer.removeView(webViewContainer);
 
-        webViewContainer = new BotWebViewContainer(getContext(), parentEnterView.getParentFragment().getResourceProvider(), getColor(Theme.key_windowBackgroundWhite));
+        webViewContainer = new BotWebViewContainer(getContext(), parentEnterView.getParentFragment().getResourceProvider(), getColor(Theme.key_windowBackgroundWhite)) {
+            @Override
+            public void onWebViewCreated() {
+                swipeContainer.setWebView(webViewContainer.getWebView());
+            }
+        };
         webViewContainer.setDelegate(webViewDelegate);
         webViewContainer.setWebViewProgressListener(progress -> {
             progressView.setLoadProgressAnimated(progress);

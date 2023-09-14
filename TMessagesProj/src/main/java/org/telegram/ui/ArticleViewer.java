@@ -65,8 +65,10 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.PixelCopy;
 import android.view.SoundEffectConstants;
 import android.view.Surface;
+import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -148,6 +150,7 @@ import org.telegram.ui.Cells.TextSelectionHelper;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AnchorSpan;
 import org.telegram.ui.Components.AnimatedArrowDrawable;
+import org.telegram.ui.Components.AnimatedFileDrawable;
 import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BulletinFactory;
@@ -11716,6 +11719,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         public void onReleasePlayerBeforeClose(int photoIndex) {
             VideoPlayer player = PhotoViewer.getInstance().getVideoPlayer();
             TextureView textureView = PhotoViewer.getInstance().getVideoTextureView();
+            SurfaceView surfaceView = PhotoViewer.getInstance().getVideoSurfaceView();
             BlockVideoCell videoCell = getViewFromListView(listView[0], pageBlocks.get(photoIndex));
             if (videoCell != null && player != null && textureView != null) {
                 videoCell.playFrom = player.getCurrentPosition();
@@ -11732,6 +11736,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         videoCell.imageView.setImageBitmap(textureView.getBitmap());
                     }
                 }
+            }
+            if (videoCell != null && player != null && surfaceView != null) {
+                videoCell.playFrom = player.getCurrentPosition();
+                videoCell.firstFrameRendered = false;
+                videoCell.textureView.setAlpha(0);
+                Bitmap bitmap = Bitmap.createBitmap(surfaceView.getMeasuredWidth(), surfaceView.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+                AndroidUtilities.getBitmapFromSurface(surfaceView, bitmap);
+                videoCell.imageView.setImageBitmap(bitmap);
             }
             checkVideoPlayer();
         }

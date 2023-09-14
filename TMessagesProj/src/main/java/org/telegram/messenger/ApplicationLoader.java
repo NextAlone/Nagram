@@ -182,6 +182,7 @@ public class ApplicationLoader extends Application {
             return;
         }
         applicationInited = true;
+        NativeLoader.initNativeLibs(ApplicationLoader.applicationContext);
 
         SharedConfig.loadConfig();
         LocaleController.getInstance();
@@ -242,7 +243,7 @@ public class ApplicationLoader extends Application {
             Runnable initRunnable = () -> loadAccount(finalA);
             if (finalA == UserConfig.selectedAccount) {
                 initRunnable.run();
-                ChatThemeController.init();
+                ChatThemeController.getInstance(finalA);
             }
             else postRun.add(initRunnable);
         }
@@ -280,6 +281,7 @@ public class ApplicationLoader extends Application {
             ContactsController.getInstance(account).checkAppAccount();
             DownloadController.getInstance(account);
         });
+//        BillingController.getInstance().startConnection();
     }
 
     public ApplicationLoader() {

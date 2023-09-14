@@ -65,7 +65,7 @@ import org.telegram.ui.Stories.DarkThemeResourceProvider;
 
 import tw.nekomimi.nekogram.utils.VibrateUtil;
 
-public class PhotoViewerCaptionEnterView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, SizeNotifierFrameLayoutPhoto.SizeNotifierFrameLayoutPhotoDelegate {
+public class PhotoViewerCaptionEnterView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate {
 
     private final ImageView doneButton;
 

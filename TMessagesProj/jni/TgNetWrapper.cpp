@@ -111,42 +111,38 @@ void sendRequest(JNIEnv *env, jclass c, jint instanceNum, jlong object, jobject 
         DEBUG_REF("sendRequest onWriteToSocket");
         onWriteToSocket = env->NewGlobalRef(onWriteToSocket);
     }
-    ConnectionsManager::getInstance(instanceNum).sendRequest(request, ([onComplete, instanceNum](
-                                                                     TLObject *response, TL_error *error, int32_t networkType, int64_t responseTime, int64_t msgId) {
-                                                                 TL_api_response *resp = (TL_api_response *) response;
-                                                                 jlong ptr = 0;
-                                                                 jint errorCode = 0;
-                                                                 jstring errorText = nullptr;
-                                                                 if (resp != nullptr) {
-                                                                     ptr = (jlong) resp->response.get();
-                                                                 } else if (error != nullptr) {
-                                                                     errorCode = error->code;
-                                                                     const char *text = error->text.c_str();
-                                                                     size_t size = error->text.size();
-                                                                     if (check_utf8(text, size)) {
-                                                                         errorText = jniEnv[instanceNum]->NewStringUTF(text);
-                                                                     } else {
-                                                                         errorText = jniEnv[instanceNum]->NewStringUTF("UTF-8 ERROR");
-                                                                     }
-                                                                 }
-                                                                 if (onComplete != nullptr) {
-                                                                     jniEnv[instanceNum]->CallVoidMethod(onComplete, jclass_RequestDelegateInternal_run, ptr,
-                                                                                                         errorCode, errorText, networkType, responseTime);
-                                                                 }
-                                                                 if (errorText != nullptr) {
-                                                                     jniEnv[instanceNum]->DeleteLocalRef(errorText);
-                                                                 }
-                                                             }), ([onQuickAck, instanceNum] {
-                                                                 if (onQuickAck != nullptr) {
-                                                                     jniEnv[instanceNum]->CallVoidMethod(onQuickAck, jclass_QuickAckDelegate_run);
-                                                                 }
-                                                             }), ([onWriteToSocket, instanceNum] {
-                                                                 if (onWriteToSocket != nullptr) {
-                                                                     jniEnv[instanceNum]->CallVoidMethod(onWriteToSocket, jclass_WriteToSocketDelegate_run);
-                                                                 }
-                                                             }), (uint32_t) flags, (uint32_t) datacenterId, (ConnectionType) connetionType, immediate, token,
-                                                             onComplete, onQuickAck,
-                                                             onWriteToSocket);
+    ConnectionsManager::getInstance(instanceNum).sendRequest(request, ([onComplete, instanceNum](TLObject *response, TL_error *error, int32_t networkType, int64_t responseTime, int64_t msgId) {
+        TL_api_response *resp = (TL_api_response *) response;
+        jlong ptr = 0;
+        jint errorCode = 0;
+        jstring errorText = nullptr;
+        if (resp != nullptr) {
+            ptr = (jlong) resp->response.get();
+        } else if (error != nullptr) {
+            errorCode = error->code;
+            const char *text = error->text.c_str();
+            size_t size = error->text.size();
+            if (check_utf8(text, size)) {
+                errorText = jniEnv[instanceNum]->NewStringUTF(text);
+            } else {
+                errorText = jniEnv[instanceNum]->NewStringUTF("UTF-8 ERROR");
+            }
+        }
+        if (onComplete != nullptr) {
+            jniEnv[instanceNum]->CallVoidMethod(onComplete, jclass_RequestDelegateInternal_run, ptr, errorCode, errorText, networkType, responseTime, msgId);
+        }
+        if (errorText != nullptr) {
+            jniEnv[instanceNum]->DeleteLocalRef(errorText);
+        }
+    }), ([onQuickAck, instanceNum] {
+        if (onQuickAck != nullptr) {
+            jniEnv[instanceNum]->CallVoidMethod(onQuickAck, jclass_QuickAckDelegate_run);
+        }
+    }), ([onWriteToSocket, instanceNum] {
+        if (onWriteToSocket != nullptr) {
+            jniEnv[instanceNum]->CallVoidMethod(onWriteToSocket, jclass_WriteToSocketDelegate_run);
+        }
+    }), (uint32_t) flags, (uint32_t) datacenterId, (ConnectionType) connetionType, immediate, token, onComplete, onQuickAck, onWriteToSocket);
 }
 
 void cancelRequest(JNIEnv *env, jclass c, jint instanceNum, jint token, jboolean notifyServer) {

@@ -311,6 +311,8 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
     }
 
     private boolean genCacheSend;
+    private boolean allowDrawFramesWhileCacheGenerating;
+
     protected Runnable loadFrameRunnable = new Runnable() {
         private long lastUpdate = 0;
 
@@ -365,6 +367,10 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
                     if (precache && bitmapsCache != null) {
                         try {
                             result = bitmapsCache.getFrame(currentFrame / framesPerUpdates, backgroundBitmap);
+                            if (!bitmapsCache.needGenCache() && allowDrawFramesWhileCacheGenerating && nativePtr != 0) {
+                                destroy(nativePtr);
+                                nativePtr = 0;
+                            }
                         } catch (Exception e) {
                             FileLog.e(e);
                         }
@@ -376,7 +382,14 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
                             genCacheSend = true;
                             uiHandler.post(uiRunnableGenerateCache);
                         }
-                        result = -1;
+                        if (allowDrawFramesWhileCacheGenerating) {
+                            if (nativePtr == 0) {
+                                nativePtr = create(args.file.toString(), args.json, width, height, new int[3], false, args.colorReplacement, false, args.fitzModifier);
+                            }
+                            result = getFrame(nativePtr, currentFrame, backgroundBitmap, width, height, backgroundBitmap.getRowBytes(), true);
+                        } else {
+                            result = -1;
+                        }
                     }
                     if (result == -1) {
                         uiHandler.post(uiRunnableNoFrame);
@@ -502,7 +515,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
             if (shouldLimitFps && metaData[1] < 60) {
                 shouldLimitFps = false;
             }
-            bitmapsCache = new BitmapsCache(file, this, cacheOptions, w, h, !limitFps);
+           bitmapsCache = new BitmapsCache(file, this, cacheOptions, w, h, !limitFps);
         } else {
             nativePtr = create(file.getAbsolutePath(), null, w, h, metaData, precache, colorReplacement, shouldLimitFps, fitzModifier);
             if (nativePtr == 0) {
@@ -988,7 +1001,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
         if (loadFrameTask != null || nextRenderingBitmap != null || !canLoadFrames() || loadingInBackground || destroyWhenDone || !isRunning && (!decodeSingleFrame || decodeSingleFrame && singleFrameDecoded)) {
             return false;
         }
-        if (generatingCache) {
+        if (generatingCache && !allowDrawFramesWhileCacheGenerating) {
             return false;
         }
         if (!newColorUpdates.isEmpty()) {
@@ -1337,7 +1350,6 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
             return -1;
         }
         int framesPerUpdates = shouldLimitFps ? 2 : 1;
-
         int result = getFrame(generateCacheNativePtr, generateCacheFramePointer, bitmap, width, height, bitmap.getRowBytes(), true);
         if (result == -5) {
             try {
@@ -1397,10 +1409,6 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
         }
     }
 
-    public void setAllowDrawFramesWhileCacheGenerating(boolean allowDrawWhileCacheGenerating) {
-        //TODO
-    }
-
     private class NativePtrArgs {
         public int[] colorReplacement;
         public int fitzModifier;
@@ -1438,6 +1446,10 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
                 });
             });
         }
+    }
+
+    public void setAllowDrawFramesWhileCacheGenerating(boolean allow) {
+        allowDrawFramesWhileCacheGenerating = allow;
     }
 
     private class LottieMetadata {

@@ -1186,7 +1186,7 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
                 cacheRemovedTooltip.setInfoText(LocaleController.formatString("CacheWasCleared", R.string.CacheWasCleared, AndroidUtilities.formatFileSize(finalClearedSize)));
                 cacheRemovedTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
             }, 150);
-            MediaDataController.getInstance(currentAccount).chekAllMedia(true);
+            MediaDataController.getInstance(currentAccount).checkAllMedia(true);
 
             loadDialogEntities();
 
