@@ -185,6 +185,17 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
                 }
             }
         };
+        editText.setDelegate(new EditTextCaption.EditTextCaptionDelegate() {
+            @Override
+            public void onSpansChanged() {
+                editText.invalidateEffects();
+            }
+
+            @Override
+            public long getCurrentChat() {
+                return 0;
+            }
+        });
         editText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         editText.setInputType(editText.getInputType() | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         editText.setFocusable(editText.isEnabled());

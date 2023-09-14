@@ -55,6 +55,7 @@ import org.telegram.ui.ActionBar.AlertDialogDecor;
 import org.telegram.ui.ActionBar.Theme;
 
 import java.util.List;
+import java.util.Locale;
 
 import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
@@ -295,8 +296,15 @@ public class EditTextCaption extends EditTextBoldCursor {
             setText(replaceAt(origin, start, end, TranslateDb.currentInputTarget().query(text)));
 
         } else {
+            Locale to;
+            Locale toDefault = TranslatorKt.getCode2Locale(NekoConfig.translateInputLang.String());
+            if (delegate != null) {
+                to = TranslateDb.getChatLanguage(delegate.getCurrentChat(), toDefault);
+            } else {
+                to = toDefault;
+            }
 
-            Translator.translate(TranslateDb.getChatLanguage(delegate.getCurrentChat(), TranslatorKt.getCode2Locale(NekoConfig.translateInputLang.String())), text, new Translator.Companion.TranslateCallBack() {
+            Translator.translate(to, text, new Translator.Companion.TranslateCallBack() {
 
                 AlertDialog status = AlertUtil.showProgress(getContext());
 
