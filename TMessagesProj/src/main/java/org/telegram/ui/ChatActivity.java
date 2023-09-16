@@ -508,6 +508,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private SimpleTextView mentiondownButtonCounter;
     private ImageView mentiondownButtonImage;
     private Bulletin messageSeenPrivacyBulletin;
+    TextView webBotTitle;
 
     private int reactionsMentionCount;
     private FrameLayout reactionsMentiondownButton;
@@ -1288,6 +1289,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         for (int i = 0; i < messageObjects.size(); i++) {
             chatAdapter.updateRowWithMessageObject(messageObjects.get(i), false, replace);
         }
+    }
+
+    public TextView getOrCreateWebBotTitleView() {
+        if (webBotTitle == null) {
+            webBotTitle = new TextView(getContext());
+            webBotTitle.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+            webBotTitle.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            webBotTitle.setGravity(Gravity.CENTER_VERTICAL);
+            actionBar.addView(webBotTitle, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, 0,  72, 0, 72, 0));
+        }
+        return webBotTitle;
     }
 
     private interface ChatActivityDelegate {
@@ -14093,6 +14105,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             setMeasuredDimension(widthSize, heightSize);
             heightSize -= getPaddingTop();
 
+            if (webBotTitle != null) {
+                ((LayoutParams) webBotTitle.getLayoutParams()).topMargin = AndroidUtilities.statusBarHeight;
+                webBotTitle.setTextSize(!AndroidUtilities.isTablet() && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 18 : 20);
+            }
             measureChildWithMargins(actionBar, widthMeasureSpec, 0, heightMeasureSpec, 0);
             int actionBarHeight = actionBar.getMeasuredHeight();
             if (actionBar.getVisibility() == VISIBLE) {
@@ -15487,6 +15503,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                 @Override
                 public boolean canScrollAway() {
+                    return false;
+                }
+
+                @Override
+                public boolean canCaptureMorePhotos() {
                     return false;
                 }
             }, this);
