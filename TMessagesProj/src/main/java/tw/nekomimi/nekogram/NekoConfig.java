@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import tw.nekomimi.nekogram.config.ConfigItem;
+import tw.nekomimi.nekogram.helpers.CloudSettingsHelper;
 
 import static tw.nekomimi.nekogram.config.ConfigItem.*;
 
@@ -258,6 +259,8 @@ public class NekoConfig {
                     }
                 }
             }
+            if (!configLoaded)
+                preferences.registerOnSharedPreferenceChangeListener(CloudSettingsHelper.listener);
             for (int a = 1; a <= 5; a++) {
                 datacenterInfos.add(new DatacenterInfo(a));
             }

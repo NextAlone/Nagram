@@ -60,6 +60,7 @@ import java.util.function.Function;
 import kotlin.text.StringsKt;
 
 import tw.nekomimi.nekogram.DatacenterActivity;
+import tw.nekomimi.nekogram.helpers.CloudSettingsHelper;
 import tw.nekomimi.nekogram.helpers.PasscodeHelper;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.EnvUtil;
@@ -103,6 +104,7 @@ public class NekoSettingsActivity extends BaseFragment {
 
     private static final int backup_settings = 1;
     private static final int import_settings = 2;
+    private static final int sync_settings = 3;
 
     @SuppressLint("NewApi")
     @Override
@@ -114,6 +116,7 @@ public class NekoSettingsActivity extends BaseFragment {
         ActionBarMenuItem otherMenu = menu.addItem(0, R.drawable.ic_ab_other);
         otherMenu.addSubItem(backup_settings, LocaleController.getString("BackupSettings", R.string.BackupSettings));
         otherMenu.addSubItem(import_settings, LocaleController.getString("ImportSettings", R.string.ImportSettings));
+        menu.addItem(sync_settings, R.drawable.cloud_sync);
 
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
@@ -152,6 +155,8 @@ public class NekoSettingsActivity extends BaseFragment {
                         }
                     });
                     presentFragment(fragment);
+                } else if (id == sync_settings) {
+                    CloudSettingsHelper.getInstance().showDialog(NekoSettingsActivity.this);
                 }
             }
         });
@@ -208,7 +213,7 @@ public class NekoSettingsActivity extends BaseFragment {
 
     }
 
-    private String backupSettingsJson() throws JSONException {
+    public static String backupSettingsJson() throws JSONException {
 
         JSONObject configJson = new JSONObject();
 

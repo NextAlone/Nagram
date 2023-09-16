@@ -59,6 +59,8 @@ import org.telegram.ui.Stories.StoryViewer;
 import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.helpers.CloudStorageHelper;
+import tw.nekomimi.nekogram.helpers.UserHelper;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
 import tw.nekomimi.nekogram.ui.MessageHelper;
 
@@ -792,7 +794,15 @@ public abstract class BaseFragment {
     }
 
     public MessageHelper getMessageHelper() {
-        return MessageHelper.getInstance(currentAccount);
+        return getAccountInstance().getMessageHelper();
+    }
+
+    public UserHelper getUserHelper() {
+        return getAccountInstance().getUserHelper();
+    }
+
+    public CloudStorageHelper getCloudStorageHelper() {
+        return getAccountInstance().getCloudStorageHelper();
     }
 
     public void saveKeyboardPositionBeforeTransition() {
