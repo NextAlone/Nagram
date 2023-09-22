@@ -76,7 +76,8 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             ID_SEARCH_WEB = 2,
             ID_REMOVE_PHOTO = 3,
             ID_RECORD_VIDEO = 4,
-            ID_OPEN_AVATAR = 5;
+            ID_OPEN_AVATAR = 5,
+            ID_OPEN_ATTACH = 6;
 
     public final static int FOR_TYPE_USER = 0;
     public final static int FOR_TYPE_CHANNEL = 1;
@@ -273,6 +274,10 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         icons.add(R.drawable.msg_photos);
         ids.add(ID_UPLOAD_FROM_GALLERY);
 
+        items.add(LocaleController.getString("UploadImage", R.string.UploadImage));
+        icons.add(R.drawable.msg_photos);
+        ids.add(ID_OPEN_ATTACH);
+
         items.add(LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto));
         icons.add(R.drawable.msg_camera);
         ids.add(ID_TAKE_PHOTO);
@@ -302,6 +307,9 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         builder.setItems(items.toArray(new CharSequence[0]), iconsRes, (dialogInterface, i) -> {
             int id = ids.get(i);
             switch (id) {
+                case ID_OPEN_ATTACH:
+                    openAttachMenu(onDismiss);
+                    break;
                 case ID_OPEN_AVATAR:
                     TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(UserConfig.getInstance(currentAccount).getClientUserId());
                     if (user != null && user.photo != null && user.photo.photo_big != null) {
