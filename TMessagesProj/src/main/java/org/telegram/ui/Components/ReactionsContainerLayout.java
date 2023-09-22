@@ -722,8 +722,8 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                 float sc = transitionProgress;
                 canvas.scale(sc, sc, pivotX, getHeight() / 2f);
             }
-            if (type == TYPE_STORY) {
-                delegate.drawRoundRect(canvas, rect, radius, getX(), getY());
+            if (type == TYPE_STORY || delegate.drawBackground()) {
+                delegate.drawRoundRect(canvas, rect, radius, getX(), getY(), 255, false);
             } else {
                 canvas.drawRoundRect(rect, radius, radius, bgPaint);
             }
@@ -893,7 +893,12 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         bgPaint.setAlpha(alpha);
         shadow.setBounds((int) (cx - br - sPad * cPr), (int) (cy - br - sPad * cPr), (int) (cx + br + sPad * cPr), (int) (cy + br + sPad * cPr));
         shadow.draw(canvas);
-        canvas.drawCircle(cx, cy, br, bgPaint);
+        if (delegate.drawBackground()) {
+            rectF.set(cx - br, cy - br, cx + br, cy + br);
+            delegate.drawRoundRect(canvas, rectF, br, getX(), getY(), alpha, false);
+        } else {
+            canvas.drawCircle(cx, cy, br, bgPaint);
+        }
 
         cx = LocaleController.isRTL || mirrorX ? bigCircleOffset - bigCircleRadius : getWidth() - bigCircleOffset + bigCircleRadius;
         cx += bubblesOffset;
@@ -902,7 +907,12 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         sPad = -AndroidUtilities.dp(1);
         shadow.setBounds((int) (cx - br - sPad * cPr), (int) (cy - br - sPad * cPr), (int) (cx + br + sPad * cPr), (int) (cy + br + sPad * cPr));
         shadow.draw(canvas);
-        canvas.drawCircle(cx, cy, sr, bgPaint);
+        if (delegate.drawBackground()) {
+            rectF.set(cx - sr, cy - sr, cx + sr, cy + sr);
+            delegate.drawRoundRect(canvas, rectF, sr, getX(), getY(), alpha, false);
+        } else {
+            canvas.drawCircle(cx, cy, sr, bgPaint);
+        }
         canvas.restore();
 
         shadow.setAlpha(255);
@@ -1876,7 +1886,7 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
 
         }
 
-        default void drawRoundRect(Canvas canvas, RectF rect, float radius, float offsetX, float offsetY) {
+        default void drawRoundRect(Canvas canvas, RectF rect, float radius, float offsetX, float offsetY, int alpha, boolean isWindow) {
 
         }
 
@@ -1886,6 +1896,10 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
 
         default void onEmojiWindowDismissed() {
 
+        }
+
+        default boolean drawBackground() {
+            return false;
         }
     }
 

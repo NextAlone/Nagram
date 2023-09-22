@@ -3,12 +3,12 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
-def verName = "10.0.9"
-def verCode = 1140
+def verName = "10.1.0"
+def verCode = 1141
 
 
-def officialVer = "10.0.9"
-def officialCode = 3872
+def officialVer = "10.1.0"
+def officialCode = 3919
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
@@ -314,6 +314,7 @@ def playCoreVersion = "1.10.3"
 dependencies {
 
     implementation "androidx.browser:browser:1.5.0"
+    implementation 'androidx.fragment:fragment:1.2.0'
     implementation "androidx.core:core-ktx:1.9.0"
     implementation "androidx.palette:palette-ktx:1.0.0"
     implementation "androidx.viewpager:viewpager:1.0.0"
