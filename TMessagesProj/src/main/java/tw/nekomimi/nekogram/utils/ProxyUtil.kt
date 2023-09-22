@@ -77,8 +77,9 @@ object ProxyUtil {
         val networkCallback: ConnectivityManager.NetworkCallback =
             object : ConnectivityManager.NetworkCallback() {
                 override fun onAvailable(network: Network) {
-                    val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
-                    val vpn = networkCapabilities!!.hasTransport(NetworkCapabilities.TRANSPORT_VPN)
+                    val networkCapabilities =
+                        connectivityManager.getNetworkCapabilities(network) ?: return
+                    val vpn = networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN)
                     if (!vpn) {
                         if (SharedConfig.currentProxy == null) {
                             if (!SharedConfig.proxyList.isEmpty()) {
