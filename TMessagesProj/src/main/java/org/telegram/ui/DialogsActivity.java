@@ -5084,12 +5084,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         } else {
             showSearch(false, false, false);
         }
-        View backButton = actionBar.getBackButton();
-        backButton.setOnLongClickListener(e -> {
-            if (searching || filterTabsView != null && filterTabsView.isEditing() || actionBar.isActionModeShowed()) return false;
-            BackButtonMenuRecent.show(currentAccount, this, backButton);
-            return true;
-        });
+        if (!onlySelect && folderId == 0) {
+            View backButton = actionBar.getBackButton();
+            backButton.setOnLongClickListener(e -> {
+                if (searching || filterTabsView != null && filterTabsView.isEditing() || actionBar.isActionModeShowed()) return false;
+                BackButtonMenuRecent.show(currentAccount, this, backButton);
+                return true;
+            });
+        }
 
         updateMenuButton(false);
         actionBar.setDrawBlurBackground(contentView);
