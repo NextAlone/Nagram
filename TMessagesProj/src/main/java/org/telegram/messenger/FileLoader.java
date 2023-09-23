@@ -1270,13 +1270,14 @@ public class FileLoader extends BaseController {
                     } else if (MessageObject.isStickerDocument(document)) {
                         dir = getDirectory(MEDIA_DIR_CACHE);
                     } else {
-                        String documentFileName = getDocumentFileName(document);
-                        if (saveAsFile && !TextUtils.isEmpty(documentFileName)) {
-                            fileName = documentFileName;
-                            type = MEDIA_DIR_FILES;
-                        } else {
-                            type = MEDIA_DIR_DOCUMENT;
-                        }
+//                        String documentFileName = getDocumentFileName(document);
+//                        if (saveAsFile && !TextUtils.isEmpty(documentFileName)) {
+//                            fileName = documentFileName;
+//                            type = MEDIA_DIR_FILES;
+//                        } else {
+//                            type = MEDIA_DIR_DOCUMENT;
+//                        }
+                        type = MEDIA_DIR_DOCUMENT;
                     }
                 }
                 documentId = document.id;
