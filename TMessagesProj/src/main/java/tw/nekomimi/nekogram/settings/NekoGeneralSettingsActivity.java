@@ -143,6 +143,7 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
                     LocaleController.getString("TabTitleTypeIcon", R.string.TabTitleTypeIcon),
                     LocaleController.getString("TabTitleTypeMix", R.string.TabTitleTypeMix)
             }, null));
+    private final AbstractConfigCell hideFilterMuteAllRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getHideFilterMuteAll()));
     private final AbstractConfigCell dividerFolder = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell header_notification = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("NekoGeneralNotification")));

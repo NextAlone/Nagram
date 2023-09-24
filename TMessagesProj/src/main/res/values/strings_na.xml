@@ -91,4 +91,5 @@
     <string name="DisableSuggestionView">Disable Profile Settings Suggestion</string>
     <string name="DisableStories">Disable Stories</string>
     <string name="DisableSendReadStories">Disable Send Read Stories</string>
+    <string name="HideFilterMuteAll">Hide filter mute all</string>
 </resources>

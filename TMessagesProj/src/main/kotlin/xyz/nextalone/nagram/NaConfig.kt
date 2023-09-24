@@ -436,6 +436,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val hideFilterMuteAll =
+        addConfig(
+            "HideFilterMuteAll",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

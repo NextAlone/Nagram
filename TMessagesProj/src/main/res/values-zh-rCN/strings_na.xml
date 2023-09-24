@@ -88,4 +88,5 @@
     <string name="DisableSuggestionView">禁用修改手机号码的建议</string>
     <string name="DisableStories">禁用动态功能</string>
     <string name="DisableSendReadStories">偷偷看动态</string>
+    <string name="HideFilterMuteAll">隐藏文件夹中的\"全部取消静音\"</string>
 </resources>
