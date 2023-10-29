@@ -205,6 +205,12 @@ public class MessagePreviewParams {
         this.noforwards = secret || noforwards;
     }
 
+    public MessagePreviewParams(boolean secret, boolean noforwards, boolean hideForwardSendersName) {
+        this.secret = secret;
+        this.noforwards = secret || noforwards;
+        this.hideForwardSendersName = hideForwardSendersName;
+    }
+
     public void updateReply(MessageObject replyMessageObject, MessageObject.GroupedMessages group, long dialogId, ChatActivity.ReplyQuote replyQuote) {
         if (replyMessageObject == null || replyMessageObject.type == MessageObject.TYPE_DATE || replyMessageObject.type == MessageObject.TYPE_ACTION_PHOTO || replyMessageObject.type == MessageObject.TYPE_ACTION_WALLPAPER || replyMessageObject.type == MessageObject.TYPE_SUGGEST_PHOTO) {
             replyMessageObject = null;
