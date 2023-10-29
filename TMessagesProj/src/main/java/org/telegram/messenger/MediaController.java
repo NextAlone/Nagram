@@ -4150,7 +4150,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                                 TLRPC.Document document = message.getDocument();
                                 if (!TextUtils.isEmpty(FileLoader.getDocumentFileName(document)) && FileLoader.canSaveAsFile(message)) {
                                     String filename = FileLoader.getDocumentFileName(document);
-                                    File newDir = FileLoader.getDirectory(FileLoader.MEDIA_DIR_FILES);
+                                    File newDir = FileLoader.getDirectory(FileLoader.MEDIA_DIR_DOCUMENT);
                                     if (newDir != null) {
                                         path = new File(newDir, filename).getAbsolutePath();
                                     }

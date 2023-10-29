@@ -27963,7 +27963,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         messageObjects.add(selectedObject);
                     }
                     MediaController.saveFilesFromMessages(getParentActivity(), getAccountInstance(), messageObjects, (count) -> {
-                        if (getParentActivity() == null || fragmentView == null) {
+                        if (getParentActivity() == null) {
                             return;
                         }
                         if (count > 0) {
@@ -27989,7 +27989,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         path = getFileLoader().getPathToMessage(selectedObject.messageOwner).toString();
                     }
                     MediaController.saveFile(path, getParentActivity(), 2, fileName, selectedObject.getDocument() != null ? selectedObject.getDocument().mime_type : "", uri -> {
-                        if (getParentActivity() == null || fragmentView == null) {
+                        if (getParentActivity() == null) {
                             return;
                         }
                         final BulletinFactory.FileType fileType;
