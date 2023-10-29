@@ -32,6 +32,7 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.tl.TL_stories;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -70,7 +71,7 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
     private boolean hasGps;
     private boolean isEmpty;
     public boolean hasStories;
-    public ArrayList<TLRPC.PeerStories> userStories = new ArrayList<>();
+    public ArrayList<TL_stories.PeerStories> userStories = new ArrayList<>();
 
     DialogStoriesCell dialogStoriesCell;
     BaseFragment fragment;
@@ -86,7 +87,7 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
         this.fragment = fragment;
     }
 
-    public void setStories(ArrayList<TLRPC.PeerStories> stories, boolean animated) {
+    public void setStories(ArrayList<TL_stories.PeerStories> stories, boolean animated) {
 //        boolean hasStories = !stories.isEmpty();
 //        userStories.clear();
 //        userStories.addAll(stories);

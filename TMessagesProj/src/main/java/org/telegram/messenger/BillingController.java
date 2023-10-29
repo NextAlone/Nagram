@@ -45,6 +45,10 @@ public class BillingController {
 
     }
 
+    public void setOnCanceled(Runnable onCanceled) {
+//        this.onCanceled = onCanceled;
+    }
+
     public String getLastPremiumTransaction() {
         return lastPremiumTransaction;
     }

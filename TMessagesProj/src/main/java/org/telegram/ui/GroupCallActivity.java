@@ -8470,7 +8470,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                                     src.renameTo(destFile);
                                 }
 
-                                accountInstance.getMessagesStorage().clearUserPhotos(user.id);
+                                accountInstance.getMessagesController().getDialogPhotos(user.id).reset();
                                 ArrayList<TLRPC.User> users = new ArrayList<>();
                                 users.add(user);
                                 accountInstance.getMessagesStorage().putUsersAndChats(users, null, false, true);

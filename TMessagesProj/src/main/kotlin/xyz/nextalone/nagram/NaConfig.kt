@@ -75,6 +75,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             true
         )
+    val showTextQuote =
+        addConfig(
+            "TextQuote",
+            ConfigItem.configTypeBool,
+            true
+        )
     val showTextSpoiler =
         addConfig(
             "TextSpoiler",

@@ -2308,7 +2308,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         }
     }
 
-    public void setImageX(int x) {
+    public void setImageX(float x) {
         imageX = x;
     }
 

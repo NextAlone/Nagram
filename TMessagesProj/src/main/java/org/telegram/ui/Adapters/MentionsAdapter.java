@@ -149,6 +149,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
     private String lastSticker;
     private int lastReqId;
     private boolean delayLocalResults;
+    private Runnable checkAgainRunnable;
 
     private ChatActivity parentFragment;
     private final Theme.ResourcesProvider resourcesProvider;
@@ -209,6 +210,8 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.fileLoaded);
             NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.fileLoadFailed);
         }
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.recentDocumentsDidLoad);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.stickersDidLoad);
     }
 
     public TLRPC.User getFoundContextBot() {
@@ -223,6 +226,18 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
                 stickersToLoad.remove(fileName);
                 if (stickersToLoad.isEmpty()) {
                     delegate.needChangePanelVisibility(getItemCountInternal() > 0);
+                }
+            }
+        } else if (id == NotificationCenter.recentDocumentsDidLoad) {
+            if (checkAgainRunnable != null) {
+                AndroidUtilities.runOnUIThread(checkAgainRunnable);
+                checkAgainRunnable = null;
+            }
+        } else if (id == NotificationCenter.stickersDidLoad) {
+            if ((int) args[0] == MediaDataController.TYPE_IMAGE) {
+                if (checkAgainRunnable != null) {
+                    AndroidUtilities.runOnUIThread(checkAgainRunnable);
+                    checkAgainRunnable = null;
                 }
             }
         }
@@ -440,6 +455,8 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.fileLoaded);
             NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.fileLoadFailed);
         }
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.recentDocumentsDidLoad);
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.stickersDidLoad);
     }
 
     public void setParentFragment(ChatActivity fragment) {
@@ -838,6 +855,10 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
             AndroidUtilities.cancelRunOnUIThread(searchGlobalRunnable);
             searchGlobalRunnable = null;
         }
+        if (checkAgainRunnable != null) {
+            AndroidUtilities.cancelRunOnUIThread(checkAgainRunnable);
+            checkAgainRunnable = null;
+        }
         if (TextUtils.isEmpty(text) || text.length() > MessagesController.getInstance(currentAccount).maxMessageLength) {
             searchForContextBot(null, null);
             delegate.needChangePanelVisibility(false);
@@ -902,6 +923,9 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
 
             delayLocalResults = false;
             if (!serverStickersOnly) {
+                checkAgainRunnable = () -> searchUsernameOrHashtag(charSequence, position, messageObjects, usernameOnly, forSearch);
+                MediaDataController.getInstance(currentAccount).loadRecents(MediaDataController.TYPE_IMAGE, false, true, false);
+                MediaDataController.getInstance(currentAccount).loadRecents(MediaDataController.TYPE_FAVE, false, true, false);
                 final ArrayList<TLRPC.Document> recentStickers = MediaDataController.getInstance(currentAccount).getRecentStickersNoCopy(MediaDataController.TYPE_IMAGE);
                 final ArrayList<TLRPC.Document> favsStickers = MediaDataController.getInstance(currentAccount).getRecentStickersNoCopy(MediaDataController.TYPE_FAVE);
                 int recentsAdded = 0;
@@ -922,6 +946,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
                     }
                 }
 
+                MediaDataController.getInstance(currentAccount).checkStickers(MediaDataController.TYPE_IMAGE);
                 HashMap<String, ArrayList<TLRPC.Document>> allStickers = MediaDataController.getInstance(currentAccount).getAllStickers();
                 ArrayList<TLRPC.Document> newStickers = allStickers != null ? allStickers.get(lastSticker) : null;
                 if (newStickers != null && !newStickers.isEmpty()) {
@@ -1425,7 +1450,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
                 searchResultCommandsUsers = null;
                 notifyDataSetChanged();
                 delegate.needChangePanelVisibility(searchResultSuggestions != null && !searchResultSuggestions.isEmpty());
-            }, true);
+            }, SharedConfig.suggestAnimatedEmoji && UserConfig.getInstance(currentAccount).isPremium());
         } else if (foundType == 4) {
             searchResultHashtags = null;
             searchResultUsernames = null;

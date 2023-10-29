@@ -963,6 +963,11 @@ public class LPhotoPaintView extends SizeNotifierFrameLayoutPhoto implements IPh
         Size paintingSize = getPaintingSize();
         Point position = startPositionRelativeToEntity(null);
         TextPaintView view = new TextPaintView(getContext(), position, (int) (paintingSize.width / 9), "", colorSwatch, selectedTextType);
+        view.setMinMaxFontSize((int) (0.5f * (paintingSize.width / 9f)), (int) (2f * (paintingSize.width / 9f)), () -> {
+            if (weightChooserView != null) {
+                weightChooserView.invalidate();
+            }
+        });
         if (position.x == entitiesView.getMeasuredWidth() / 2f) {
             view.setStickyX(EntityView.STICKY_CENTER);
         }
@@ -1100,6 +1105,7 @@ public class LPhotoPaintView extends SizeNotifierFrameLayoutPhoto implements IPh
 
             if (currentEntityView instanceof TextPaintView) {
                 TextPaintView textPaintView = (TextPaintView) currentEntityView;
+                textPaintView.disableAutoresize(false);
                 textPaintView.getSwatch().brushWeight = colorSwatch.brushWeight;
                 setCurrentSwatch(textPaintView.getSwatch(), true);
 
@@ -1112,6 +1118,7 @@ public class LPhotoPaintView extends SizeNotifierFrameLayoutPhoto implements IPh
 
                     @Override
                     public void set(float val) {
+                        textPaintView.disableAutoresize(true);
                         textPaintView.setBaseFontSize((int) (base * val));
                     }
                 });
@@ -3190,7 +3197,7 @@ public class LPhotoPaintView extends SizeNotifierFrameLayoutPhoto implements IPh
         if (emojiView != null) {
             return;
         }
-        emojiView = new EmojiView(null, true, false, false, getContext(), false, null, null, true, resourcesProvider);
+        emojiView = new EmojiView(null, true, false, false, getContext(), false, null, null, true, resourcesProvider, false);
         emojiView.allowEmojisForNonPremium(true);
         emojiView.setVisibility(GONE);
         if (AndroidUtilities.isTablet()) {

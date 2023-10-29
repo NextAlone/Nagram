@@ -6294,6 +6294,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         req.settings.allow_flashcall = simcardAvailable && allowCall;
         req.settings.allow_app_hash = PushListenerController.getProvider().hasServices();
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
+        if (req.settings.allow_app_hash) {
+            preferences.edit().putString("sms_hash", BuildVars.getSmsHash()).commit();
+        } else {
+            preferences.edit().remove("sms_hash").commit();
+        }
         if (req.settings.allow_flashcall) {
             try {
                 @SuppressLint("HardwareIds")

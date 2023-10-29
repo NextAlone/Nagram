@@ -1,6 +1,7 @@
 package org.telegram.messenger;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
 
@@ -58,7 +59,8 @@ public class MemberRequestsController extends BaseController {
             AndroidUtilities.runOnUIThread(() -> {
                 if (error == null) {
                     TLRPC.TL_messages_chatInviteImporters importers = (TLRPC.TL_messages_chatInviteImporters) response;
-                    firstImportersCache.put(chatId, importers);
+                    if (lastImporter == null && isEmptyQuery)
+                        firstImportersCache.put(chatId, importers);
                 }
                 onComplete.run(response, error);
             });

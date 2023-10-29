@@ -614,7 +614,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
         LinearLayout linearLayoutInviteContainer = new LinearLayout(context);
         linearLayoutInviteContainer.setOrientation(LinearLayout.VERTICAL);
         linearLayout.addView(linearLayoutInviteContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-        for (int a = 0; a < 10; a++) {
+        for (int a = 0; a < 11; a++) {
             TextCheckCell textCell = new TextCheckCell(getParentActivity());
             textCell.setTag(a);
             switch (a) {
@@ -656,6 +656,10 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                 }
                 case 9: {
                     textCell.setTextAndCheck(LocaleController.getString("TextUndoRedo", R.string.TextUndoRedo), NaConfig.INSTANCE.getShowTextUndoRedo().Bool(), false);
+                }
+                case 10: {
+                    textCell.setTextAndCheck(LocaleController.getString("Quote", R.string.Quote), NaConfig.INSTANCE.getShowTextQuote().Bool(), false);
+                    break;
                 }
             }
             textCell.setTag(a);
@@ -702,6 +706,10 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                     }
                     case 9: {
                         textCell.setChecked(NaConfig.INSTANCE.getShowTextUndoRedo().toggleConfigBool());
+                        break;
+                    }
+                    case 10: {
+                        textCell.setChecked(NaConfig.INSTANCE.getShowTextQuote().toggleConfigBool());
                         break;
                     }
                 }

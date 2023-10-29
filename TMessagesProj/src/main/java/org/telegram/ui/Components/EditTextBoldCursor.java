@@ -31,11 +31,15 @@ import androidx.annotation.Nullable;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 
+import android.text.Editable;
 import android.text.Layout;
+import android.text.Selection;
+import android.text.Spanned;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.Menu;
@@ -47,6 +51,8 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.TextView;
 
 import org.lsposed.hiddenapibypass.HiddenApiBypass;
+import com.google.common.primitives.Chars;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
@@ -118,6 +124,7 @@ public class EditTextBoldCursor extends EditTextEffects {
     private float hintAlpha = 1.0f;
     private long hintLastUpdateTime;
     private boolean allowDrawCursor = true;
+    private boolean forceCursorEnd = false;
     private float cursorWidth = 2.0f;
     private boolean supportRtlHint;
 
@@ -511,6 +518,11 @@ public class EditTextBoldCursor extends EditTextEffects {
         invalidate();
     }
 
+    public void setForceCursorEnd(boolean cursorEnd) {
+        this.forceCursorEnd = cursorEnd;
+        invalidate();
+    }
+
     public void setCursorWidth(float width) {
         cursorWidth = width;
     }
@@ -752,9 +764,6 @@ public class EditTextBoldCursor extends EditTextEffects {
 
     @Override
     public int getExtendedPaddingTop() {
-//        if (ignoreClipTop) {
-//            return 0;
-//        }
         if (ignoreTopCount != 0) {
             ignoreTopCount--;
             return 0;
@@ -910,10 +919,10 @@ public class EditTextBoldCursor extends EditTextEffects {
                 throw new RuntimeException(e);
             }
         }
-        ignoreTopCount = 1;
-        ignoreBottomCount = 1;
+//        ignoreTopCount = 1;
+//        ignoreBottomCount = 1;
         canvas.save();
-        canvas.translate(0, topPadding);
+//        canvas.translate(0, topPadding);
         try {
             drawInMaim = true;
             super.onDraw(canvas);
@@ -1080,7 +1089,7 @@ public class EditTextBoldCursor extends EditTextEffects {
 
     private boolean updateCursorPosition() {
         final Layout layout = getLayout();
-        final int offset = getSelectionStart();
+        final int offset = forceCursorEnd ? layout.getText().length() : getSelectionStart();
         final int line = layout.getLineForOffset(offset);
         final int top = layout.getLineTop(line);
         final int bottom = layout.getLineTop(line + 1);
@@ -1168,6 +1177,7 @@ public class EditTextBoldCursor extends EditTextEffects {
             cleanupFloatingActionModeViews();
             floatingToolbar = new FloatingToolbar(getContext(), windowView != null ? windowView : attachedToWindow, getActionModeStyle(), getResourcesProvider());
             floatingToolbar.setOnPremiumLockClick(onPremiumMenuLockClickListener);
+            floatingToolbar.setQuoteShowVisible(this::shouldShowQuoteButton);
             floatingActionMode = new FloatingActionMode(getContext(), new ActionModeCallback2Wrapper(callback), this, floatingToolbar);
             floatingToolbarPreDrawListener = () -> {
                 if (floatingActionMode != null) {
@@ -1187,6 +1197,18 @@ public class EditTextBoldCursor extends EditTextEffects {
         } else {
             return super.startActionMode(callback);
         }
+    }
+
+    private boolean shouldShowQuoteButton() {
+        if (!hasSelection() || getSelectionStart() < 0 || getSelectionEnd() < 0 || getSelectionStart() == getSelectionEnd()) {
+            return false;
+        }
+        Editable text = getText();
+        if (text == null) {
+            return false;
+        }
+        QuoteSpan.QuoteStyleSpan[] spans = ((Spanned) text).getSpans(getSelectionStart(), getSelectionEnd(), QuoteSpan.QuoteStyleSpan.class);
+        return spans == null || spans.length == 0;
     }
 
     @Override
@@ -1267,5 +1289,9 @@ public class EditTextBoldCursor extends EditTextEffects {
     private Runnable onPremiumMenuLockClickListener;
     public void setOnPremiumMenuLockClickListener(Runnable listener) {
         onPremiumMenuLockClickListener = listener;
+    }
+
+    public Runnable getOnPremiumMenuLockClickListener() {
+        return onPremiumMenuLockClickListener;
     }
 }

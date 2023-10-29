@@ -65,7 +65,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.PixelCopy;
 import android.view.SoundEffectConstants;
 import android.view.Surface;
 import android.view.SurfaceView;
@@ -150,7 +149,6 @@ import org.telegram.ui.Cells.TextSelectionHelper;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AnchorSpan;
 import org.telegram.ui.Components.AnimatedArrowDrawable;
-import org.telegram.ui.Components.AnimatedFileDrawable;
 import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BulletinFactory;
@@ -1169,7 +1167,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     }
                 } else if (pressedLinkOwnerLayout != null && pressedLinkOwnerView != null) {
                     if (!NekoConfig.disableVibration.Bool()) {
-                        windowView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);;
+                    windowView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                     }
                     int[] location = new int[2];
                     pressedLinkOwnerView.getLocationInWindow(location);
@@ -1799,7 +1797,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 builder.setDelegate(new BottomSheet.BottomSheetDelegate() {
                     @Override
                     public boolean canDismiss() {
-                        if (textSelectionHelperBottomSheet != null && textSelectionHelperBottomSheet.isInSelectionMode()){
+                        if (textSelectionHelperBottomSheet != null && textSelectionHelperBottomSheet.isInSelectionMode()) {
                             textSelectionHelperBottomSheet.clear();
                             return false;
                         }
@@ -2842,7 +2840,16 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             openUrlReqId = 0;
             showProgressView(true, false);
             if (isVisible) {
-                if (response instanceof TLRPC.TL_webPage && ((TLRPC.TL_webPage) response).cached_page instanceof TLRPC.TL_page) {
+                if (response instanceof TLRPC.TL_messages_webPage) {
+                    TLRPC.TL_messages_webPage res = (TLRPC.TL_messages_webPage) response;
+                    MessagesController.getInstance(currentAccount).putUsers(res.users, false);
+                    MessagesController.getInstance(currentAccount).putChats(res.chats, false);
+                    if (res.webpage != null && res.webpage.cached_page instanceof TLRPC.TL_page) {
+                        addPageToStack(res.webpage, anchor, 1);
+                    } else {
+                        Browser.openUrl(parentActivity, req.url);
+                    }
+                } else if (response instanceof TLRPC.TL_webPage && ((TLRPC.TL_webPage) response).cached_page instanceof TLRPC.TL_page) {
                     addPageToStack((TLRPC.TL_webPage) response, anchor, 1);
                 } else {
                     Browser.openUrl(parentActivity, req.url);
@@ -4287,7 +4294,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
             final TLRPC.WebPage webPageFinal = webpage;
             final int currentAccount = UserConfig.selectedAccount;
-            ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+            ConnectionsManager.getInstance(currentAccount).sendRequest(req, (_response, error) -> AndroidUtilities.runOnUIThread(() -> {
+                Object response = _response;
+                if (response instanceof TLRPC.TL_messages_webPage) {
+                    TLRPC.TL_messages_webPage res = (TLRPC.TL_messages_webPage) response;
+                    MessagesController.getInstance(currentAccount).putUsers(res.users, false);
+                    MessagesController.getInstance(currentAccount).putChats(res.chats, false);
+                    response = res.webpage;
+                }
                 if (response instanceof TLRPC.TL_webPage) {
                     final TLRPC.TL_webPage webPage = (TLRPC.TL_webPage) response;
                     if (webPage.cached_page == null) {
@@ -6091,6 +6105,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         private DrawingText captionLayout;
         private DrawingText creditLayout;
         private ImageReceiver imageView;
+        FrameLayout aspectRationContainer;
         private AspectRatioFrameLayout aspectRatioFrameLayout;
         private TextureView textureView;
         private RadialProgress2 radialProgress;
@@ -6142,15 +6157,17 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             aspectRatioFrameLayout.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
             textureView = new TextureView(context);
             textureView.setOpaque(false);
-            aspectRatioFrameLayout.addView(textureView);
+            aspectRationContainer = new FrameLayout(getContext());
+            aspectRatioFrameLayout.addView(textureView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL));
 
-            addView(aspectRatioFrameLayout);
+            aspectRationContainer.addView(aspectRatioFrameLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.CENTER));
+            addView(aspectRationContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
             addView(channelCell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
         }
 
         @Override
         protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
-            if (child == aspectRatioFrameLayout && pinchToZoomHelper.isInOverlayModeFor(this)) {
+            if (child == aspectRationContainer && pinchToZoomHelper.isInOverlayModeFor(this)) {
                 return true;
             }
             return super.drawChild(canvas, child, drawingTime);
@@ -6164,6 +6181,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             isFirst = first;
             channelCell.setVisibility(INVISIBLE);
             updateButtonState(false);
+
             requestLayout();
         }
 
@@ -6181,7 +6199,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         @Override
         public boolean onTouchEvent(MotionEvent event) {
-            if (pinchToZoomHelper.checkPinchToZoom(event, this, imageView, textureView, null)) {
+            if (pinchToZoomHelper.checkPinchToZoom(event, this, imageView, aspectRationContainer, textureView, null)) {
                 return true;
             }
             float x = event.getX();
@@ -6293,25 +6311,20 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     imageView.setImageCoords(photoX, photoY, photoWidth, photoHeight);
                     if (isGif) {
                         autoDownload = DownloadController.getInstance(currentAccount).canDownloadMedia(DownloadController.AUTODOWNLOAD_TYPE_VIDEO, currentDocument.size);
-                        File path = FileLoader.getInstance(currentAccount).getPathToAttach(currentDocument, true);
-                        if (autoDownload || path.exists()) {
+                        File path = FileLoader.getInstance(currentAccount).getPathToAttach(currentDocument);
+                        File path2 = FileLoader.getInstance(currentAccount).getPathToAttach(currentDocument, true);
+                        if (autoDownload || path.exists() || path2.exists()) {
                             imageView.setStrippedLocation(null);
-                            TLRPC.PhotoSize photoSize = FileLoader.getClosestPhotoSizeWithSize(currentDocument.thumbs, 1000);
-                            imageView.setImage(null, null, ImageLocation.getForObject(photoSize, currentDocument), "200_200", ImageLocation.getForDocument(thumb, currentDocument), "80_80_b", null, currentDocument.size, null, parentAdapter.currentPage, 1);
+                            imageView.setImage(null, null, ImageLocation.getForDocument(currentDocument), "200_200_pframe", ImageLocation.getForDocument(thumb, currentDocument), "80_80_b", null, currentDocument.size, null, parentAdapter.currentPage, 1);
                         } else {
                             imageView.setStrippedLocation(ImageLocation.getForDocument(currentDocument));
                             imageView.setImage(null, null, null, null, ImageLocation.getForDocument(thumb, currentDocument), "80_80_b", null, currentDocument.size, null, parentAdapter.currentPage, 1);
                         }
-                        FrameLayout.LayoutParams params = (LayoutParams) aspectRatioFrameLayout.getLayoutParams();
-                        params.leftMargin = photoX;
-                        params.topMargin = photoY;
-                        params.width = photoWidth;
-                        params.height = photoHeight;
                     } else {
                         imageView.setStrippedLocation(null);
                         imageView.setImage(null, null, ImageLocation.getForDocument(thumb, currentDocument), "80_80_b", 0, null, parentAdapter.currentPage, 1);
                     }
-                   // imageView.setAspectFit(true);
+                    imageView.setAspectFit(true);
                     buttonX = (int) (imageView.getImageX() + (imageView.getImageWidth() - size) / 2.0f);
                     buttonY = (int) (imageView.getImageY() + (imageView.getImageHeight() - size) / 2.0f);
                     radialProgress.setProgressRect(buttonX, buttonY, buttonX + size, buttonY + size);
@@ -6344,7 +6357,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
             channelCell.measure(widthMeasureSpec, heightMeasureSpec);
             channelCell.setTranslationY(imageView.getImageHeight() - AndroidUtilities.dp(39));
-
+            FrameLayout.LayoutParams params = (LayoutParams) aspectRationContainer.getLayoutParams();
+            params.leftMargin = (int) imageView.getImageX();
+            params.topMargin = (int) imageView.getImageY();
+            params.width = (int) imageView.getImageWidth();
+            params.height = (int) imageView.getImageHeight();
             super.onMeasure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
         }
 
@@ -6401,8 +6418,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         public void updateButtonState(boolean animated) {
             String fileName = FileLoader.getAttachFileName(currentDocument);
-            File path = FileLoader.getInstance(currentAccount).getPathToAttach(currentDocument, true);
-            boolean fileExists = path.exists();
+            File path = FileLoader.getInstance(currentAccount).getPathToAttach(currentDocument);
+            File path2 = FileLoader.getInstance(currentAccount).getPathToAttach(currentDocument, true);
+            boolean fileExists = path.exists() || path2.exists();
             if (TextUtils.isEmpty(fileName)) {
                 radialProgress.setIcon(MediaActionDrawable.ICON_NONE, false, false);
                 return;
@@ -6512,6 +6530,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }.with(textureView);
 
             TLRPC.Document document = currentDocument;
+            for (int i = 0; i < document.attributes.size(); i++) {
+                if (document.attributes.get(i) instanceof TLRPC.TL_documentAttributeVideo) {
+                    TLRPC.TL_documentAttributeVideo videoAttr = (TLRPC.TL_documentAttributeVideo) document.attributes.get(i);
+                    aspectRatioFrameLayout.setAspectRatio(videoAttr.w / (float) videoAttr.h, 0);
+                }
+            }
             Uri uri = FileStreamLoadOperation.prepareUri(currentAccount, document, parentAdapter.currentPage);
             if (uri == null) {
                 return;
@@ -10113,7 +10137,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         @Override
         public boolean onTouchEvent(MotionEvent event) {
-            if (pinchToZoomHelper.checkPinchToZoom(event, this, imageView, null, null)) {
+            if (pinchToZoomHelper.checkPinchToZoom(event, this, imageView, null, null, null)) {
                 return true;
             }
             float x = event.getX();
