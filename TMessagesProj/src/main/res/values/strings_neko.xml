@@ -215,4 +215,7 @@
     <string name="CloudConfigAutoSyncDesc">Sync to cloud automatically after making changes to Neko Settings.</string>
     <string name="CloudConfigSyncFailed">Failed to sync settings to cloud.</string>
     <string name="CloudConfigRestoreFailed">Failed to restore settings from cloud.</string>
+    <string name="CopyCallback">Copy Callback Data</string>
+    <string name="CopyInlineQuery">Copy Inline Query</string>
+    <string name="CopyID">Copy ID</string>
 </resources>

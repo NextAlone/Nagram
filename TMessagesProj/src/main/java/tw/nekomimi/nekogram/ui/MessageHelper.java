@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -52,6 +53,10 @@ import org.telegram.ui.Components.LayoutHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.ByteBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -62,6 +67,8 @@ import java.util.concurrent.CountDownLatch;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 
 public class MessageHelper extends BaseController {
+
+    private static final CharsetDecoder utf8Decoder = StandardCharsets.UTF_8.newDecoder();
 
     private static SparseArray<MessageHelper> Instance = new SparseArray<>();
     private int lastReqId;
@@ -727,5 +734,13 @@ public class MessageHelper extends BaseController {
             acc = MediaDataController.calcHash(acc, message.id);
         }
         return acc;
+    }
+
+    public static String getTextOrBase64(byte[] data) {
+        try {
+            return utf8Decoder.decode(ByteBuffer.wrap(data)).toString();
+        } catch (CharacterCodingException e) {
+            return Base64.encodeToString(data, Base64.NO_PADDING | Base64.NO_WRAP);
+        }
     }
 }

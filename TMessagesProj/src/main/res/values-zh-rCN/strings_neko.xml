@@ -213,4 +213,7 @@
     <string name="CloudConfigAutoSyncDesc">修改喵设置后自动同步到云端。</string>
     <string name="CloudConfigSyncFailed">无法将设置同步到云端。</string>
     <string name="CloudConfigRestoreFailed">无法从云端恢复设置。</string>
+    <string name="CopyCallback">复制回调数据</string>
+    <string name="CopyInlineQuery">复制 Inline 请求</string>
+    <string name="CopyID">复制 ID</string>
 </resources>

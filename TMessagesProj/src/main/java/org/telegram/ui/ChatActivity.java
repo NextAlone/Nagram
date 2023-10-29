@@ -24718,7 +24718,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         } else if (entity instanceof TLRPC.TL_messageEntityCode || entity instanceof TLRPC.TL_messageEntityPre) {
                             TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
                             run.flags |= TextStyleSpan.FLAG_STYLE_MONO;
-                            run.urlEntity = entity;
                             MediaDataController.addStyleToText(new TextStyleSpan(run), entity.offset, entity.offset + entity.length, stringBuilder, true);
                         } else if (entity instanceof TLRPC.TL_messageEntityBold) {
                             TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
@@ -31909,21 +31908,46 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
 
         @Override
-        public void didLongPressBotButton(ChatMessageCell cell, TLRPC.KeyboardButton button) {
+        public boolean didLongPressBotButton(ChatMessageCell cell, TLRPC.KeyboardButton button) {
             if (getParentActivity() == null || bottomOverlayChat.getVisibility() == View.VISIBLE &&
                     !(button instanceof TLRPC.TL_keyboardButtonSwitchInline) && !(button instanceof TLRPC.TL_keyboardButtonCallback) &&
                     !(button instanceof TLRPC.TL_keyboardButtonGame) && !(button instanceof TLRPC.TL_keyboardButtonUrl) &&
                     !(button instanceof TLRPC.TL_keyboardButtonBuy) && !(button instanceof TLRPC.TL_keyboardButtonUrlAuth) &&
                     !(button instanceof TLRPC.TL_keyboardButtonUserProfile)) {
-                return;
+                return false;
             }
-            if (button instanceof TLRPC.TL_keyboardButtonUrl) {
+            if (!TextUtils.isEmpty(button.url)) {
                 openClickableLink(null, button.url, true, cell, cell.getMessageObject());
-                try {
-                    if (!NekoConfig.disableVibration.Bool())
-                        cell.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
-                } catch (Exception ignore) {}
+            } else {
+                BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity(), false, themeDelegate);
+                builder.setTitle(button.text);
+                builder.setItems(new CharSequence[]{
+                        LocaleController.getString("Copy", R.string.Copy),
+                        button.data != null ? LocaleController.getString("CopyCallback", R.string.CopyCallback) : null,
+                        button.query != null ? LocaleController.getString("CopyInlineQuery", R.string.CopyInlineQuery) : null,
+                        button.user_id != 0 ? LocaleController.getString("CopyID", R.string.CopyID) : null}, (dialog, which) -> {
+                    if (which == 0) {
+                        AndroidUtilities.addToClipboard(button.text);
+                    } else if (which == 1) {
+                        AndroidUtilities.addToClipboard(getMessageHelper().getTextOrBase64(button.data));
+                    } else if (which == 2) {
+                        AndroidUtilities.addToClipboard(button.query);
+                    } else if (which == 3) {
+                        AndroidUtilities.addToClipboard(String.valueOf(button.user_id));
+                    }
+                    createUndoView();
+                    if (undoView == null) {
+                        return;
+                    }
+                    undoView.showWithAction(0, UndoView.ACTION_TEXT_COPIED, null);
+                });
+                showDialog(builder.create());
             }
+            try {
+                if (!NekoConfig.disableVibration.Bool())
+                    cell.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
+            } catch (Exception ignore) {}
+            return true;
         }
 
         @Override
@@ -32159,16 +32183,37 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
 
         @Override
-        public void didPressCode(ChatMessageCell cell, CharacterStyle _span, boolean longPress) {
-            if (!(_span instanceof CodeHighlighting.Span)) {
+        public void didPressCode(ChatMessageCell cell, CharSequence code, String language, boolean longPress) {
+            if (code == null) {
                 return;
             }
-            final CodeHighlighting.Span span = (CodeHighlighting.Span) _span;
-            SpannableStringBuilder text = new SpannableStringBuilder(span.code);
-            text.setSpan(new CodeHighlighting.Span(false, 0, null, span.lng, span.code), 0, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            AndroidUtilities.addToClipboard(text);
-            createUndoView();
-            undoView.showWithAction(0, UndoView.ACTION_TEXT_COPIED, null);
+            SpannableStringBuilder text = new SpannableStringBuilder(code);
+            text.setSpan(new CodeHighlighting.Span(false, 0, null, language, code.toString()), 0, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            if (!longPress) {
+                AndroidUtilities.addToClipboard(text);
+                createUndoView();
+                undoView.showWithAction(0, UndoView.ACTION_TEXT_COPIED, null);
+            } else {
+                BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity(), false, themeDelegate);
+                if (language != null) builder.setTitle(language);
+                builder.setItems(new CharSequence[]{LocaleController.getString("ShareFile", R.string.ShareFile), LocaleController.getString("Copy", R.string.Copy)}, (dialog, which) -> {
+                    if (which == 1) {
+                        AndroidUtilities.addToClipboard(text);
+                        UndoView undoView = getUndoView();
+                        if (undoView != null) {
+                            undoView.showWithAction(0, UndoView.ACTION_TEXT_COPIED, null);
+                        }
+                    } else {
+                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                        shareIntent.setType("text/plain");
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, text);
+                        Intent chooserIntent = Intent.createChooser(shareIntent, LocaleController.getString("ShareFile", R.string.ShareFile));
+                        chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        ApplicationLoader.applicationContext.startActivity(chooserIntent);
+                    }
+                });
+                showDialog(builder.create());
+            }
         }
 
         @Override
