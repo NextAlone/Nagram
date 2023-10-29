@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="N_Config">N-Config</string>
+    <string name="ForceCopy">Kopyalamaya Zorla</string>
+    <string name="InvertReply">Ters çevir</string>
+    <string name="Great">Harika</string>
+    <string name="Poor">Zayıf</string>
+    <string name="CombineMessage">Mesajı Birleştir</string>
+    <string name="TextStyle">Metin Stili</string>
+    <string name="CombineMessageEnabledWithReply">Etkinleştirilmiş İletiyi Yanıtla Birleştir</string>
+    <string name="CombineMessageEnabled">Mesajı Birleştir Etkin</string>
+    <string name="CombineMessageDisabled">Mesajı Birleştir Devre Dışı</string>
+    <string name="TextUndoRedo">Undo/Redo</string>
+    <string name="TextUndo">Geri Al</string>
+    <string name="TextRedo">Redo</string>
+    <string name="NoiseSuppressAndVoiceEnhance">Gürültü Bastırma ve Ses İyileştirici</string>
+    <string name="RepeatAsCopy">Kopya Olarak Tekrarlay</string>
+    <string name="DoubleTapAction">Çift Dokunma Eylemi</string>
+    <string name="SendReactions">Tepki Gönder</string>
+    <string name="ShowReactions">Tepkileri Göster</string>
+    <string name="ScrollableChatPreview">Kaydırılabilir Sohbet Önizlemesi</string>
+    <string name="CustomTitle">Özel Başlık</string>
+    <string name="CustomTitleHint">Nagram\'ı kullanmak için boş bırakın</string>
+    <string name="CodeSyntaxHighlight">Kod sözdizimi vurgulaması</string>
+    <string name="CreateMono">Create Monospace</string>
+    <string name="CreateMonoLanguage">Kod dili</string>
+    <string name="CodeSyntaxHighlightDetails">Prismjs ve Nekogram sayesinde</string>
+    <string name="UseSystemUnlock">Şifreyi Açmak için  kullanıcı arayüzünü kullanın</string>
+    <string name="CopyPhoto">Fotoğrafı Kopyala</string>
+    <string name="PhotoCopied">Fotoğraf Panoya kopyalandı</string>
+    <string name="ToTheBeginning">Başlangıca</string>
+    <string name="DateOfForwardedMsg">İletilecek mesajın tarihini göster</string>
+    <string name="ShowMessageID">Mesaj kimliğini göster</string>
+    <string name="ShowRPCError">Toast all RPC errors</string>
+    <string name="ShowServicesTime">Servis mesajlarında zaman damgasını göster</string>
+    <string name="ShowPremiumStickersAnimation">Premium çıkartmaları göster</string>
+    <string name="ShowPremiumStarInChat">Sohbette Premium Yıldız Simgesini Göster</string>
+</resources>
