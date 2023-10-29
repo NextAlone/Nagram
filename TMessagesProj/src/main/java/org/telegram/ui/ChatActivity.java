@@ -9475,7 +9475,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     @Override
                     public void setVisibility(int visibility) {
                         super.setVisibility(visibility);
-                        fragmentView.invalidate();
+                        if (fragmentView != null) {
+                            fragmentView.invalidate();
+                        }
                     }
                 };
                 contentView.addView(blurredView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
