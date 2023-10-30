@@ -656,6 +656,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                 }
                 case 9: {
                     textCell.setTextAndCheck(LocaleController.getString("TextUndoRedo", R.string.TextUndoRedo), NaConfig.INSTANCE.getShowTextUndoRedo().Bool(), false);
+                    break;
                 }
                 case 10: {
                     textCell.setTextAndCheck(LocaleController.getString("Quote", R.string.Quote), NaConfig.INSTANCE.getShowTextQuote().Bool(), false);
