@@ -74,6 +74,8 @@ import org.telegram.ui.Stories.recorder.ButtonWithCounterView;
 import java.util.ArrayList;
 import java.util.List;
 
+import xyz.nextalone.nagram.NaConfig;
+
 public class PeerColorActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private final boolean isChannel;
@@ -178,6 +180,10 @@ public class PeerColorActivity extends BaseFragment implements NotificationCente
                 selectedColor = user.color;
             } else {
                 selectedColor = (int) (user.id % 7);
+            }
+            if (NaConfig.INSTANCE.getUseLocalQuoteColor().Bool()) {
+                selectedColor = NaConfig.INSTANCE.getUseLocalQuoteColorColor().Int();
+                selectedEmoji = NaConfig.INSTANCE.getUseLocalQuoteColorEmoji().Long();
             }
         }
 
@@ -481,6 +487,10 @@ public class PeerColorActivity extends BaseFragment implements NotificationCente
                 }
             }));
         } else {
+            if (NaConfig.INSTANCE.getUseLocalQuoteColor().Bool()) {
+                NaConfig.INSTANCE.getUseLocalQuoteColorColor().setConfigInt(selectedColor);
+                NaConfig.INSTANCE.getUseLocalQuoteColorEmoji().setConfigLong(selectedEmoji);
+            }
             final TLRPC.User me = getUserConfig().getCurrentUser();
             if (selectedColor == me.color && selectedEmoji == ((me.flags2 & 64) == 0 ? 0 : me.background_emoji_id)) {
                 return;

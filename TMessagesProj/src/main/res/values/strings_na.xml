@@ -92,4 +92,5 @@
     <string name="DisableStories">Disable Stories</string>
     <string name="DisableSendReadStories">Disable Send Read Stories</string>
     <string name="HideFilterMuteAll">Hide filter mute all</string>
+    <string name="UseLocalQuoteColor">Use local quote color</string>
 </resources>

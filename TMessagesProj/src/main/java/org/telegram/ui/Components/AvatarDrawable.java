@@ -40,6 +40,8 @@ import org.telegram.ui.ActionBar.Theme;
 
 import java.util.ArrayList;
 
+import xyz.nextalone.nagram.helper.PeerColorHelper;
+
 public class AvatarDrawable extends Drawable {
 
     private TextPaint namePaint;
@@ -198,6 +200,10 @@ public class AvatarDrawable extends Drawable {
         if (user == null) {
             return Theme.keys_avatar_nameInMessage[0];
         }
+        if (user.self) {
+            Integer colorId = PeerColorHelper.replaceColor((user.flags2 & 128) != 0 ? user.color : null);
+            if (colorId != null) return getNameColorKey1For(colorId);
+        }
         if ((user.flags2 & 128) != 0) {
             return getNameColorKey1For(user.color);
         }
@@ -207,6 +213,10 @@ public class AvatarDrawable extends Drawable {
     public static int getNameColorKey2For(TLRPC.User user) {
         if (user == null) {
             return Theme.keys_avatar_nameInMessage[0];
+        }
+        if (user.self) {
+            Integer colorId = PeerColorHelper.replaceColor((user.flags2 & 128) != 0 ? user.color : null);
+            if (colorId != null) return getNameColorKey2For(colorId);
         }
         if ((user.flags2 & 128) != 0) {
             return getNameColorKey2For(user.color);
@@ -260,7 +270,11 @@ public class AvatarDrawable extends Drawable {
 
     public void setInfo(TLRPC.User user) {
         if (user != null) {
-            setInfo(user.id, user.first_name, user.last_name, null, (user.flags2 & 128) != 0 ? user.color : null);
+            Integer colorId = (user.flags2 & 128) != 0 ? user.color : null;
+            if (user.self) {
+                colorId = PeerColorHelper.replaceColor(colorId);
+            }
+            setInfo(user.id, user.first_name, user.last_name, null, colorId);
             drawDeleted = UserObject.isDeleted(user);
         }
     }

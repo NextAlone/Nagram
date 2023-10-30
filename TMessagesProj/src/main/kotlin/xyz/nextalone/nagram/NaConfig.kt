@@ -448,6 +448,24 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val useLocalQuoteColor =
+        addConfig(
+            "UseLocalQuoteColor",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val useLocalQuoteColorColor =
+        addConfig(
+            "UseLocalQuoteColorColor",
+            ConfigItem.configTypeInt,
+            0
+        )
+    val useLocalQuoteColorEmoji =
+        addConfig(
+            "useLocalQuoteColorEmoji",
+            ConfigItem.configTypeLong,
+            0L
+        )
 
     private fun addConfig(
         k: String,

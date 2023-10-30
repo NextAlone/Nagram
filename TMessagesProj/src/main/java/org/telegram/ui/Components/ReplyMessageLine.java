@@ -25,6 +25,9 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.ChatMessageCell;
 
+import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.helper.PeerColorHelper;
+
 public class ReplyMessageLine {
 
     private final RectF rectF = new RectF();
@@ -154,6 +157,9 @@ public class ReplyMessageLine {
                 } else {
                     colorId = (int) (currentUser.id % 7);
                 }
+                if (currentUser.self) {
+                    colorId = PeerColorHelper.replaceColor(colorId);
+                }
             } else if (messageObject.isFromChannel() && currentChat != null) {
                 if ((currentChat.flags2 & 64) != 0) {
                     colorId = currentChat.color;
@@ -185,6 +191,10 @@ public class ReplyMessageLine {
                     colorId = (user.flags2 & 128) != 0 ? user.color : (int) (user.id % 7);
                     if ((user.flags2 & 64) != 0) {
                         emojiDocumentId = user.background_emoji_id;
+                    }
+                    if (NaConfig.INSTANCE.getUseLocalQuoteColor().Bool() && user.self) {
+                        colorId = NaConfig.INSTANCE.getUseLocalQuoteColorColor().Int();
+                        emojiDocumentId = NaConfig.INSTANCE.getUseLocalQuoteColorEmoji().Long();
                     }
                 } else {
                     colorId = 0;

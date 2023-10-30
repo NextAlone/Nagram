@@ -201,6 +201,7 @@ import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 
 import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.helper.PeerColorHelper;
 
 import static xyz.nextalone.nagram.helper.MessageHelper.showForwardDate;
 
@@ -15286,6 +15287,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         colorId = (currentMessageObject.sponsoredChatInvite.chat.flags2 & 64) != 0 ? currentMessageObject.sponsoredChatInvite.chat.color : (int) (currentMessageObject.sponsoredChatInvite.chat.id % 7);
                     } else if (currentMessageObject.isFromUser() && currentUser != null) {
                         colorId = (currentUser.flags2 & 128) != 0 ? currentUser.color : (int) (currentUser.id % 7);
+                        if (currentUser.self) colorId = PeerColorHelper.replaceColor(colorId);
                     } else {
                         colorId = (currentChat.flags2 & 64) != 0 ? currentChat.color : (int) (currentChat.id % 7);
                     }
@@ -15816,6 +15818,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         colorId = (currentMessageObject.sponsoredChatInvite.chat.flags2 & 64) != 0 ? currentMessageObject.sponsoredChatInvite.chat.color : (int) (currentMessageObject.sponsoredChatInvite.chat.id % 7);
                     } else if (currentMessageObject.isFromUser() && currentUser != null) {
                         colorId = (currentUser.flags2 & 128) != 0 ? currentUser.color : (int) (currentUser.id % 7);
+                        if (currentUser.self) colorId = PeerColorHelper.replaceColor(colorId);
                     } else {
                         colorId = (currentChat.flags2 & 64) != 0 ? currentChat.color : (int) (currentChat.id % 7);
                     }
