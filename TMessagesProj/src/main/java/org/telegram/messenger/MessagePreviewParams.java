@@ -206,7 +206,7 @@ public class MessagePreviewParams {
     }
 
     public MessagePreviewParams(boolean secret, boolean noforwards, boolean hideForwardSendersName) {
-        this.secret = secret;
+        this.isSecret = secret;
         this.noforwards = secret || noforwards;
         this.hideForwardSendersName = hideForwardSendersName;
     }
