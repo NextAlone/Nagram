@@ -5,7 +5,7 @@ set(CMAKE_C_FLAGS "-w -std=c11 -DANDROID -D_LARGEFILE_SOURCE=1")
 set(CMAKE_ASM_FLAGS "${CFLAGS} -x assembler-with-cpp")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ffunction-sections -fdata-sections")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffunction-sections -fdata-sections")
-set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--exclude-libs,libtgvoip.a,libtgcalls.a,libtgcalls_tp.a,libtgnet.a,liblz4.a,libwebp.a,libflac.a,librlottie.a,libsqlite.a,
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--exclude-libs,libtgvoip.a,libtgcalls.a,libtgcalls_tp.a,libtgnet.a,libwebp.a,libflac.a,librlottie.a,libsqlite.a,
 ${CMAKE_HOME_DIRECTORY}/ffmpeg/build/${ANDROID_ABI}/lib/libswscale.a,
 ${CMAKE_HOME_DIRECTORY}/ffmpeg/build/${ANDROID_ABI}/lib/libavformat.a,
 ${CMAKE_HOME_DIRECTORY}/ffmpeg/build/${ANDROID_ABI}/lib/libavcodec.a,
@@ -440,16 +440,6 @@ target_compile_definitions(webp PUBLIC
 target_include_directories(webp PUBLIC
         libwebp libwebp/src)
 
-#lz4
-add_library(lz4 STATIC
-        lz4/lz4.c
-        lz4/lz4frame.c
-        lz4/xxhash.c)
-target_compile_options(lz4 PUBLIC
-        -w -O3)
-set_target_properties(lz4 PROPERTIES
-        ANDROID_ARM_MODE arm)
-
 #sqlite
 add_library(sqlite STATIC
         sqlite/sqlite3.c)
@@ -766,8 +756,7 @@ target_include_directories(${NATIVE_LIB} PUBLIC
         intro
         rlottie/inc
         tgcalls/
-        webrtc/
-        lz4)
+        webrtc/)
 
 target_link_libraries(${NATIVE_LIB}
         -Wl,--whole-archive rnnoise openh264 voipandroid -Wl,--no-whole-archive
@@ -776,7 +765,6 @@ target_link_libraries(${NATIVE_LIB}
         tgcalls_tp
         mozjpeg
         tgnet
-        lz4
         webp
         flac
         rlottie
