@@ -1610,6 +1610,14 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
             return googlePlayProductDetails == null ? "" : BillingController.getInstance().formatCurrency(getPricePerYear(), getCurrency(), 6);
         }
 
+        public String getFormattedPricePerMonthRounded() {
+            if (BuildVars.useInvoiceBilling() || subscriptionOption.store_product == null) {
+                return BillingController.getInstance().formatCurrency(getPricePerMonth(), getCurrency(), BillingController.getInstance().getCurrencyExp(getCurrency()), true);
+            }
+
+            return googlePlayProductDetails == null ? "" : BillingController.getInstance().formatCurrency(getPricePerMonth(), getCurrency(), 6, true);
+        }
+
         public String getFormattedPricePerMonth() {
             if (BuildVars.useInvoiceBilling() || subscriptionOption.store_product == null) {
                 return BillingController.getInstance().formatCurrency(getPricePerMonth(), getCurrency());

@@ -62,6 +62,10 @@ public class BillingController {
     }
 
     public String formatCurrency(long amount, String currency, int exp) {
+        return formatCurrency(amount, currency, exp, false);
+    }
+
+    public String formatCurrency(long amount, String currency, int exp, boolean rounded) {
         if (currency.isEmpty()) {
             return String.valueOf(amount);
         }
@@ -69,6 +73,9 @@ public class BillingController {
         if (cur != null) {
             NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
             numberFormat.setCurrency(cur);
+            if (rounded) {
+                return numberFormat.format(Math.round(amount / Math.pow(10, exp)));
+            }
             return numberFormat.format(amount / Math.pow(10, exp));
         }
         return amount + " " + currency;

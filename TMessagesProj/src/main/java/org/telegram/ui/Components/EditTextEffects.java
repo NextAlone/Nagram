@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.widget.EditText;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.spoilers.SpoilerEffect;
@@ -274,7 +275,7 @@ public class EditTextEffects extends EditText {
         return offsetY;
     }
 
-    public boolean wrapCanvasToFixClipping;
+    public boolean wrapCanvasToFixClipping = Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH && !BuildVars.isHonorDevice();;
     private NoClipCanvas wrappedCanvas;
 
     @Override

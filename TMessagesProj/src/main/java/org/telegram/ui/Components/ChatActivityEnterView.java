@@ -4723,7 +4723,6 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             messageEditText.setFallbackLineSpacing(false);
         }
-        messageEditText.wrapCanvasToFixClipping = Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH && !BuildVars.isHonorDevice();
         messageEditText.setDelegate(new EditTextCaption.EditTextCaptionDelegate() {
 
             @Override
@@ -8613,14 +8612,13 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                                     span = new AnimatedEmojiSpan(emojiEntity.document_id, fontMetricsInt);
                                 }
                                 stringBuilder.setSpan(span, entity.offset, entity.offset + entity.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                            } else if (entity instanceof TLRPC.TL_messageEntityBlockquote) {
-                                QuoteSpan.putQuoteToEditable(stringBuilder, entity.offset, entity.offset + entity.length);
                             }
                         }
                     } catch (Exception e) {
                         FileLog.e(e);
                     }
                 }
+                QuoteSpan.mergeQuotes(stringBuilder, entities);
                 textToSetWithKeyboard = Emoji.replaceEmoji(new SpannableStringBuilder(stringBuilder), fontMetricsInt, false, null);
                 if (entities != null) {
                     try {
@@ -8630,13 +8628,6 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                                 if (!(textToSetWithKeyboard instanceof Spannable)) {
                                     textToSetWithKeyboard = new SpannableStringBuilder(textToSetWithKeyboard);
                                 }
-//                                CodeHighlighting.highlight((Spannable) textToSetWithKeyboard, entity.offset, entity.offset + entity.length, entity.language, 0, null, false);
-//                                ((Spannable) textToSetWithKeyboard).setSpan(
-//                                    new CodeHighlighting.Span(false, 0, null, entity.language, textToSetWithKeyboard.subSequence(entity.offset, entity.offset + entity.length).toString(), false, false, entity.offset, entity.offset + entity.length),
-//                                    entity.offset,
-//                                    entity.offset + entity.length,
-//                                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-//                                );
                                 ((SpannableStringBuilder) textToSetWithKeyboard).insert(entity.offset + entity.length, "```\n");
                                 ((SpannableStringBuilder) textToSetWithKeyboard).insert(entity.offset, "```"+(entity.language == null ? "" : entity.language)+"\n");
                             }

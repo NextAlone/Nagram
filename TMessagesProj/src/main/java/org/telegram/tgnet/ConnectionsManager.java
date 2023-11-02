@@ -397,7 +397,7 @@ SharedPreferences mainPreferences;
                         resp.networkType = networkType;
                     }
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.d("java received " + resp + " error = " + error);
+                        FileLog.d("java received " + resp + " error = " + error + " messageId = " + requestMsgId);
                     }
                     FileLog.dumpResponseAndRequest(object, resp, error, requestMsgId, finalStartRequestTime, requestToken);
                     final TLObject finalResponse = resp;
