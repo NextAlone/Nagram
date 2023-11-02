@@ -215,7 +215,7 @@ public class CaptionContainerView extends FrameLayout {
                 return true;
             }
         };
-        editText.getEditText().wrapCanvasToFixClipping = Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH && !XiaomiUtilities.isMIUI();
+        editText.getEditText().wrapCanvasToFixClipping = Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH && !BuildVars.isHonorDevice();
         editText.setFocusable(true);
         editText.setFocusableInTouchMode(true);
         editText.getEditText().hintLayoutYFix = true;

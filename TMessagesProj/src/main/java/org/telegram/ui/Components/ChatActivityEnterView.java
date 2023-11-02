@@ -4723,7 +4723,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             messageEditText.setFallbackLineSpacing(false);
         }
-        messageEditText.wrapCanvasToFixClipping = Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH && !XiaomiUtilities.isMIUI();
+        messageEditText.wrapCanvasToFixClipping = Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH && !BuildVars.isHonorDevice();
         messageEditText.setDelegate(new EditTextCaption.EditTextCaptionDelegate() {
 
             @Override
