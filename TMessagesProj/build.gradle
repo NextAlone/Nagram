@@ -3,12 +3,12 @@ import cn.hutool.core.util.RuntimeUtil
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
-def verName = "10.2.3"
-def verCode = 1146
+def verName = "10.2.6"
+def verCode = 1147
 
 
-def officialVer = "10.2.3"
-def officialCode = 4075
+def officialVer = "10.2.6"
+def officialCode = 4082
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 

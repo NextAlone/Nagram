@@ -10,9 +10,10 @@ package org.telegram.messenger;
 
 import static org.telegram.messenger.AndroidUtilities.dp;
 
+import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Rect;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
@@ -32,10 +33,10 @@ import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.util.Base64;
-import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.collection.LongSparseArray;
+import androidx.core.graphics.ColorUtils;
 
 import xyz.nextalone.nagram.NaConfig;
 import xyz.nextalone.nagram.helper.MessageHelper;
@@ -60,6 +61,7 @@ import org.telegram.ui.Components.Forum.ForumUtilities;
 import org.telegram.ui.Components.QuoteSpan;
 import org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble;
 import org.telegram.ui.Components.Reactions.ReactionsUtils;
+import org.telegram.ui.Components.Text;
 import org.telegram.ui.Components.TextStyleSpan;
 import org.telegram.ui.Components.TranscribeButton;
 import org.telegram.ui.Components.TypefaceSpan;
@@ -694,6 +696,152 @@ public class MessageObject {
         public String language;
         public Drawable selectorDrawable;
 
+        public String language;
+        public Text languageLayout;
+        public int languageHeight; // included in padTop
+
+        public boolean hasCodeCopyButton;
+        public int copyIconColor;
+        public Drawable copyIcon;
+        public Text copyText;
+        public int copySelectorColor;
+        public Drawable copySelector;
+        public Paint copySeparator;
+
+        public void layoutCode(String lng, int codeLength) {
+            hasCodeCopyButton = codeLength >= 75;
+            if (hasCodeCopyButton) {
+                copyText = new Text(LocaleController.getString(R.string.CopyCode).toUpperCase(), SharedConfig.fontSize - 3, AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_MEDIUM));
+                copyIcon = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.msg_copy).mutate();
+                copyIcon.setColorFilter(new PorterDuffColorFilter(copyIconColor, PorterDuff.Mode.SRC_IN));
+                copySelector = Theme.createRadSelectorDrawable(copySelectorColor, 0, 0, Math.min(5, SharedConfig.bubbleRadius), 0);
+                copySeparator = new Paint(Paint.ANTI_ALIAS_FLAG);
+            }
+            if (TextUtils.isEmpty(lng)) {
+                language = null;
+                languageLayout = null;
+                return;
+            }
+            language = lng;
+            languageLayout = new Text(
+                capitalizeLanguage(lng),
+                SharedConfig.fontSize - 1 - CodeHighlighting.getTextSizeDecrement(codeLength) / 2,
+                AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_MEDIUM)
+            );
+            languageHeight = (int) (languageLayout.getTextSize() * 1.714f) + dp(4);
+        }
+
+        public void drawCopyCodeButton(Canvas canvas, RectF bounds, int textColor, int backgroundColor, float alpha) {
+            if (!hasCodeCopyButton) {
+                return;
+            }
+
+            final int selectorColor = Theme.multAlpha(textColor, .10f);
+            if (copySelectorColor != selectorColor) {
+                Theme.setSelectorDrawableColor(copySelector, copySelectorColor = selectorColor, true);
+            }
+            copySelector.setBounds((int) bounds.left + dp(3), (int) (bounds.bottom - dp(38)), (int) bounds.right, (int) bounds.bottom);
+            copySelector.setAlpha((int) (0xFF * alpha));
+            copySelector.draw(canvas);
+
+            copySeparator.setColor(ColorUtils.setAlphaComponent(backgroundColor, 0x26));
+            canvas.drawRect(bounds.left + dp(10), bounds.bottom - dp(38) - AndroidUtilities.getShadowHeight(), bounds.right - dp(6.66f), bounds.bottom - dp(38), copySeparator);
+
+            final float iconScale = .8f;
+            final float contentWidth = Math.min(bounds.width() - dp(12), copyIcon.getIntrinsicWidth() * iconScale + dp(5) + copyText.getCurrentWidth());
+            float x = bounds.centerX() - contentWidth / 2f;
+            final float cy = bounds.bottom - dp(38) / 2f;
+
+            if (copyIconColor != textColor) {
+                copyIcon.setColorFilter(new PorterDuffColorFilter(copyIconColor = textColor, PorterDuff.Mode.SRC_IN));
+            }
+            copyIcon.setAlpha((int) (0xFF * alpha));
+            copyIcon.setBounds(
+                (int) x,
+                (int) (cy - copyIcon.getIntrinsicHeight() * iconScale / 2f),
+                (int) (x + copyIcon.getIntrinsicWidth() * iconScale),
+                (int) (cy + copyIcon.getIntrinsicHeight() * iconScale / 2f)
+            );
+            copyIcon.draw(canvas);
+
+            x += copyIcon.getIntrinsicWidth() * iconScale + dp(5);
+            copyText
+                .ellipsize((int) (contentWidth - (copyIcon.getIntrinsicWidth() * iconScale + dp(5))) + dp(12))
+                .draw(canvas, x, cy, textColor, alpha);
+        }
+
+        private static String capitalizeLanguage(String lng) {
+            if (lng == null) return null;
+            String llng = lng.toLowerCase().replaceAll("\\W", "");
+            switch (llng) {
+                case "js":
+                case "javascript":
+                    return "JavaScript";
+                case "ts":
+                case "typescript":
+                    return "TypeScript";
+                case "objc":
+                case "objectivec":
+                    return "Objective-C";
+                case "md":
+                case "markdown":
+                    return "Markdown";
+                case "rb":
+                case "ruby":
+                    return "Ruby";
+                case "py":
+                case "python":
+                    return "Python";
+                case "actionscript": return "ActionScript";
+                case "autohotkey": return "AutoHotKey";
+                case "cpp": return "C++";
+                case "csharp":
+                case "cs":
+                    return "C#";
+                case "aspnet": return "ASP.NET";
+                case "c":
+                case "arduino":
+                case "swift":
+                case "rust":
+                case "pascal":
+                case "kotlin":
+                case "lua":
+                case "docker":
+                case "dockerfile":
+                case "dart":
+                case "java":
+                    return capitalizeFirst(lng);
+                case "http":
+                case "html":
+                case "css":
+                case "scss":
+                case "less":
+                case "asm":
+                case "nasm":
+                case "wasm":
+                case "xml":
+                case "yaml":
+                case "yml":
+                case "php":
+                case "json":
+                case "json5":
+                case "r":
+                case "ini":
+                case "glsl":
+                case "hlsl":
+                case "csv":
+                case "cobol":
+                case "jsx":
+                case "tsx":
+                    return lng.toUpperCase();
+            }
+            return lng;
+        }
+
+        private static String capitalizeFirst(String str) {
+            return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
+        }
+
         public boolean isRtl() {
             return (directionFlags & FLAG_RTL) != 0 && (directionFlags & FLAG_NOT_RTL) == 0;
         }
@@ -1268,6 +1416,7 @@ public class MessageObject {
     public boolean hasCodeAtTop, hasCodeAtBottom;
     public boolean hasQuote;
     public boolean hasSingleQuote;
+    public boolean hasSingleCode;
     public boolean hasQuoteAtBottom;
 
     public MessageObject(int accountNum, TL_stories.StoryItem storyItem) {
@@ -5823,7 +5972,7 @@ public class MessageObject {
         }
         generatedWithDensity = AndroidUtilities.density;
         if (hasCode) {
-            maxWidth = generatedWithMinSize - dp(45);
+            maxWidth = generatedWithMinSize - dp(45 + 15);
             if (needDrawAvatarInternal() && !isOutOwner() && !messageOwner.isThreadMessage) {
                 maxWidth -= dp(52);
             }
@@ -5848,7 +5997,7 @@ public class MessageObject {
                 maxWidth -= dp(52);
             }
             if (needDrawShareButton() && !isOutOwner()) {
-                maxWidth -= dp(20);
+                maxWidth -= dp(10);
             }
             if (getMedia(messageOwner) instanceof TLRPC.TL_messageMediaGame) {
                 maxWidth -= dp(10);
@@ -5945,6 +6094,7 @@ public class MessageObject {
         hasCode = messageText instanceof Spanned && ((Spanned) messageText).getSpans(0, messageText.length(), CodeHighlighting.Span.class).length > 0;
         hasQuote = messageText instanceof Spanned && ((Spanned) messageText).getSpans(0, messageText.length(), QuoteSpan.QuoteStyleSpan.class).length > 0;
         hasSingleQuote = false;
+        hasSingleCode = false;
 
         if (messageText instanceof Spanned) {
             Spanned spanned = (Spanned) messageText;
@@ -5953,6 +6103,9 @@ public class MessageObject {
                 quoteSpans[i].adaptLineHeight = false;
             }
             hasSingleQuote = quoteSpans.length == 1 && spanned.getSpanStart(quoteSpans[0]) == 0 && spanned.getSpanEnd(quoteSpans[0]) == spanned.length();
+
+            CodeHighlighting.Span[] codeSpans = spanned.getSpans(0, spanned.length(), CodeHighlighting.Span.class);
+            hasSingleCode = codeSpans.length == 1 && spanned.getSpanStart(codeSpans[0]) == 0 && spanned.getSpanEnd(codeSpans[0]) == spanned.length();
         }
 
 
@@ -5960,6 +6113,8 @@ public class MessageObject {
 
         if (hasSingleQuote) {
             maxWidth -= AndroidUtilities.dp(32);
+        } else if (hasSingleCode) {
+            maxWidth -= AndroidUtilities.dp(15);
         }
 
         StaticLayout textLayout;
@@ -5999,6 +6154,8 @@ public class MessageObject {
 
         if (hasSingleQuote) {
             maxWidth += AndroidUtilities.dp(32);
+        } else if (hasSingleCode) {
+            maxWidth += AndroidUtilities.dp(15);
         }
 
         textHeight = 0;
@@ -6047,6 +6204,7 @@ public class MessageObject {
         hasCodeAtBottom = false;
         hasQuoteAtBottom = false;
         hasSingleQuote = false;
+        hasSingleCode = false;
         float offset = 0;
         for (int a = 0; a < textRanges.size(); a++) {
             TextLayoutBlock block = new TextLayoutBlock();
@@ -6068,17 +6226,19 @@ public class MessageObject {
                 hasCodeAtBottom = block.code;
             }
             hasSingleQuote = block.first && block.last && block.quote;
+            hasSingleCode = block.first && block.last && !block.quote && block.code;
 
             if (block.quote) {
                 if (block.first && block.last) {
-                    block.padTop = block.padBottom = AndroidUtilities.dp(6);
+                    block.padTop = block.padBottom = dp(6);
                 } else {
-                    block.padTop = AndroidUtilities.dp(block.first ? 8 : 6);
-                    block.padBottom = AndroidUtilities.dp(7);
+                    block.padTop = dp(block.first ? 8 : 6);
+                    block.padBottom = dp(7);
                 }
             } else if (block.code) {
-                block.padTop = block.first ? 0 : AndroidUtilities.dp(5);
-                block.padBottom = block.last ? 0 : AndroidUtilities.dp(5);
+                block.layoutCode(range.language, range.end - range.start);
+                block.padTop = dp(4) + block.languageHeight + (block.first ? 0 : dp(5));
+                block.padBottom = dp(4) + (block.last ? 0 : dp(7)) + (block.hasCodeCopyButton ? dp(38) : 0);
             }
 
             TextPaint layoutPaint = paint;
@@ -6094,12 +6254,23 @@ public class MessageObject {
             }
 
             CharSequence blockText = messageText.subSequence(range.start, range.end);
+            int blockMaxWidth = maxWidth;
+            if (block.quote) {
+                blockMaxWidth -= dp(24);
+            } else if (block.code) {
+                blockMaxWidth -= dp(15);
+            }
             if (blocksCount == 1) {
-                if (block.code && !block.quote && textLayout.getText() instanceof Spannable && !TextUtils.isEmpty(range.language)) {
-                    SpannableString sb = CodeHighlighting.getHighlighted(blockText.toString(), range.language);
-                    if (hasUrls && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                if (block.code && !block.quote && textLayout.getText() instanceof Spannable) {
+                    SpannableString sb;
+                    if (!TextUtils.isEmpty(range.language)) {
+                        sb = CodeHighlighting.getHighlighted(blockText.toString(), range.language);
+                    } else {
+                        sb = new SpannableString(blockText.toString());
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         StaticLayout.Builder builder =
-                            StaticLayout.Builder.obtain(sb, 0, sb.length(), layoutPaint, maxWidth - (block.quote ? dp(24) : 0) + dp(2))
+                            StaticLayout.Builder.obtain(sb, 0, sb.length(), layoutPaint, blockMaxWidth)
                                 .setLineSpacing(lineAdd, lineSpacing)
                                 .setBreakStrategy(StaticLayout.BREAK_STRATEGY_HIGH_QUALITY)
                                 .setHyphenationFrequency(StaticLayout.HYPHENATION_FREQUENCY_NONE)
@@ -6112,7 +6283,7 @@ public class MessageObject {
                         }
                         textLayout = builder.build();
                     } else {
-                        textLayout = new StaticLayout(sb, 0, sb.length(), layoutPaint, maxWidth - (block.quote ? dp(24) : 0), align, lineSpacing, lineAdd, false);
+                        textLayout = new StaticLayout(sb, 0, sb.length(), layoutPaint, blockMaxWidth, align, lineSpacing, lineAdd, false);
                     }
                 }
 
@@ -6154,22 +6325,16 @@ public class MessageObject {
                     } else {
                         sb = SpannableString.valueOf(blockText);
                     }
-                    if (hasUrls && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         StaticLayout.Builder builder =
-                                StaticLayout.Builder.obtain(sb, 0, sb.length(), layoutPaint, maxWidth - (block.quote ? dp(24) : 0) + dp(2))
-                                        .setLineSpacing(lineAdd, lineSpacing)
-                                        .setBreakStrategy(StaticLayout.BREAK_STRATEGY_HIGH_QUALITY)
-                                        .setHyphenationFrequency(StaticLayout.HYPHENATION_FREQUENCY_NONE)
-                                        .setAlignment(align);
-                        if (emojiOnlyCount > 0) {
-                            builder.setIncludePad(false);
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                                builder.setUseLineSpacingFromFallbacks(false);
-                            }
-                        }
+                            StaticLayout.Builder.obtain(sb, 0, sb.length(), layoutPaint, blockMaxWidth)
+                                .setLineSpacing(lineAdd, lineSpacing)
+                                .setBreakStrategy(StaticLayout.BREAK_STRATEGY_HIGH_QUALITY)
+                                .setHyphenationFrequency(StaticLayout.HYPHENATION_FREQUENCY_NONE)
+                                .setAlignment(align);
                         block.textLayout = builder.build();
                     } else {
-                        block.textLayout = new StaticLayout(sb, 0, sb.length(), layoutPaint, maxWidth - (block.quote ? dp(24) : 0), align, lineSpacing, lineAdd, false);
+                        block.textLayout = new StaticLayout(sb, 0, sb.length(), layoutPaint, blockMaxWidth, align, lineSpacing, lineAdd, false);
                     }
 
                     block.textYOffset = offset;
@@ -6214,6 +6379,8 @@ public class MessageObject {
             }
             if (block.quote) {
                 lastLine += AndroidUtilities.dp(32);
+            } else if (block.code) {
+                lastLine += AndroidUtilities.dp(15);
             }
 
             int linesMaxWidth = (int) Math.ceil(lastLine);
@@ -6252,6 +6419,8 @@ public class MessageObject {
 
                     if (block.quote) {
                         lineWidth += AndroidUtilities.dp(32);
+                    } else if (block.code) {
+                        lineWidth += AndroidUtilities.dp(15);
                     }
 
                     try {
@@ -6314,7 +6483,13 @@ public class MessageObject {
 
             block.spoilers.clear();
             if (!isSpoilersRevealed && !spoiledLoginCode) {
-                SpoilerEffect.addSpoilers(null, block.textLayout, -1, linesMaxWidthWithLeft, null, block.spoilers);
+                int right = linesMaxWidthWithLeft;
+                if (block.quote) {
+                    right -= AndroidUtilities.dp(32);
+                } else if (block.code) {
+                    right -= AndroidUtilities.dp(15);
+                }
+                SpoilerEffect.addSpoilers(null, block.textLayout, -1, right, null, block.spoilers);
             }
         }
 
@@ -6330,11 +6505,8 @@ public class MessageObject {
         public boolean hasRtl;
         public float textXOffset;
         public final ArrayList<TextLayoutBlock> textLayoutBlocks = new ArrayList<>();
-        public boolean hasCode;
-        public boolean hasCodeAtTop, hasCodeAtBottom;
-        public boolean hasQuote;
-        public boolean hasSingleQuote;
-        public boolean hasQuoteAtBottom;
+        public boolean hasCode, hasCodeAtTop, hasCodeAtBottom, hasSingleCode;
+        public boolean hasQuote, hasQuoteAtBottom, hasSingleQuote;
 
         public TextLayoutBlocks(MessageObject messageObject, @NonNull CharSequence text, TextPaint textPaint, int width) {
             this.text = text;
@@ -6343,6 +6515,7 @@ public class MessageObject {
             hasCode = text instanceof Spanned && ((Spanned) text).getSpans(0, text.length(), CodeHighlighting.Span.class).length > 0;
             hasQuote = text instanceof Spanned && ((Spanned) text).getSpans(0, text.length(), QuoteSpan.QuoteStyleSpan.class).length > 0;
             hasSingleQuote = false;
+            hasSingleCode = false;
 
             if (text instanceof Spanned) {
                 Spanned spanned = (Spanned) text;
@@ -6351,12 +6524,17 @@ public class MessageObject {
                     quoteSpans[i].adaptLineHeight = false;
                 }
                 hasSingleQuote = quoteSpans.length == 1 && spanned.getSpanStart(quoteSpans[0]) == 0 && spanned.getSpanEnd(quoteSpans[0]) == spanned.length();
+
+                CodeHighlighting.Span[] codeSpans = spanned.getSpans(0, spanned.length(), CodeHighlighting.Span.class);
+                hasSingleCode = codeSpans.length == 1 && spanned.getSpanStart(codeSpans[0]) == 0 && spanned.getSpanEnd(codeSpans[0]) == spanned.length();
             }
 
             StaticLayout textLayout;
 
             if (hasSingleQuote) {
                 width -= AndroidUtilities.dp(32);
+            } else if (hasSingleCode) {
+                width -= AndroidUtilities.dp(15);
             }
 
             final float lineSpacing = 1f;
@@ -6381,6 +6559,8 @@ public class MessageObject {
 
             if (hasSingleQuote) {
                 width += AndroidUtilities.dp(32);
+            } else if (hasSingleCode) {
+                width += AndroidUtilities.dp(15);
             }
 
             textHeight = 0;
@@ -6448,14 +6628,15 @@ public class MessageObject {
 
                 if (block.quote) {
                     if (block.first && block.last) {
-                        block.padTop = block.padBottom = AndroidUtilities.dp(6);
+                        block.padTop = block.padBottom = dp(6);
                     } else {
-                        block.padTop = AndroidUtilities.dp(block.first ? 8 : 6);
-                        block.padBottom = AndroidUtilities.dp(7);
+                        block.padTop = dp(block.first ? 8 : 6);
+                        block.padBottom = dp(7);
                     }
                 } else if (block.code) {
-                    block.padTop = block.first ? 0 : AndroidUtilities.dp(5);
-                    block.padBottom = block.last ? 0 : AndroidUtilities.dp(5);
+                    block.layoutCode(range.language, range.end - range.start);
+                    block.padTop = dp(4) + block.languageHeight + (block.first ? 0 : dp(5));
+                    block.padBottom = dp(4) + (block.last ? 0 : dp(7)) + (block.hasCodeCopyButton ? dp(38) : 0);
                 }
 
                 TextPaint layoutPaint = textPaint;
@@ -6470,19 +6651,30 @@ public class MessageObject {
                     }
                 }
 
+                int blockMaxWidth = width;
+                if (block.quote) {
+                    blockMaxWidth -= dp(32);
+                } else if (block.code) {
+                    blockMaxWidth -= dp(15);
+                }
                 if (blocksCount == 1) {
-                    if (block.code && !block.quote && textLayout.getText() instanceof Spannable && !TextUtils.isEmpty(range.language)) {
-                        SpannableString sb = CodeHighlighting.getHighlighted(text.subSequence(range.start, range.end).toString(), range.language);
+                    if (block.code && !block.quote && textLayout.getText() instanceof Spannable) {
+                        SpannableString sb;
+                        if (!TextUtils.isEmpty(range.language)) {
+                            sb = CodeHighlighting.getHighlighted(text.subSequence(range.start, range.end).toString(), range.language);
+                        } else {
+                            sb = new SpannableString(text.subSequence(range.start, range.end));
+                        }
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                             StaticLayout.Builder builder =
-                                    StaticLayout.Builder.obtain(sb, 0, text.length(), layoutPaint, width)
+                                    StaticLayout.Builder.obtain(sb, 0, text.length(), layoutPaint, blockMaxWidth)
                                             .setLineSpacing(lineAdd, lineSpacing)
                                             .setBreakStrategy(StaticLayout.BREAK_STRATEGY_HIGH_QUALITY)
                                             .setHyphenationFrequency(StaticLayout.HYPHENATION_FREQUENCY_NONE)
                                             .setAlignment(align);
                             textLayout = builder.build();
                         } else {
-                            textLayout = new StaticLayout(sb, layoutPaint, width, align, lineSpacing, lineAdd, false);
+                            textLayout = new StaticLayout(sb, layoutPaint, blockMaxWidth, align, lineSpacing, lineAdd, false);
                         }
                     }
 
@@ -6508,7 +6700,7 @@ public class MessageObject {
                         } else {
                             sb = SpannableString.valueOf(text.subSequence(startCharacter, endCharacter));
                         }
-                        block.textLayout = new StaticLayout(sb, 0, sb.length(), layoutPaint, width - (block.quote ? dp(24) : 0), align, lineSpacing, lineAdd, false);
+                        block.textLayout = new StaticLayout(sb, 0, sb.length(), layoutPaint, blockMaxWidth, align, lineSpacing, lineAdd, false);
 
                         block.textYOffset = offset;
                         if (a != 0) {
@@ -6591,6 +6783,8 @@ public class MessageObject {
 
                         if (block.quote) {
                             lineWidth += AndroidUtilities.dp(32);
+                        } else if (block.code) {
+                            lineWidth += AndroidUtilities.dp(15);
                         }
 
                         try {
@@ -6647,14 +6841,17 @@ public class MessageObject {
                     }
 
                     textWidth = Math.max(textWidth, Math.min(width, linesMaxWidth));
-//                    if (block.quote && hasSingleQuote) {
-//                        textWidth += AndroidUtilities.dp(32);
-//                    }
                 }
 
                 linesOffset += currentBlockLinesCount;
                 if (messageObject != null && !messageObject.isSpoilersRevealed && !messageObject.spoiledLoginCode) {
-                    SpoilerEffect.addSpoilers(null, block.textLayout, -1, linesMaxWidthWithLeft, null, block.spoilers);
+                    int right = linesMaxWidthWithLeft;
+                    if (block.quote) {
+                        right -= AndroidUtilities.dp(32);
+                    } else if (block.code) {
+                        right -= AndroidUtilities.dp(15);
+                    }
+                    SpoilerEffect.addSpoilers(null, block.textLayout, -1, right, null, block.spoilers);
                 }
             }
         }
@@ -6769,6 +6966,25 @@ public class MessageObject {
         }
         if (a instanceof TLRPC.TL_inputPeerSelf && b instanceof TLRPC.TL_inputPeerSelf) {
             return true;
+        }
+        return false;
+    }
+
+    public static boolean peersEqual(TLRPC.InputPeer a, TLRPC.Peer b) {
+        if (a == null && b == null) {
+            return true;
+        }
+        if (a == null || b == null) {
+            return false;
+        }
+        if (a instanceof TLRPC.TL_inputPeerChat && b instanceof TLRPC.TL_peerChat) {
+            return a.chat_id == b.chat_id;
+        }
+        if (a instanceof TLRPC.TL_inputPeerChannel && b instanceof TLRPC.TL_peerChannel) {
+            return a.channel_id == b.channel_id;
+        }
+        if (a instanceof TLRPC.TL_inputPeerUser && b instanceof TLRPC.TL_peerUser) {
+            return a.user_id == b.user_id;
         }
         return false;
     }

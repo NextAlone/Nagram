@@ -8017,7 +8017,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
 
         if (usedSurfaceView) {
-            videoPlayer.player.setVideoTextureView(null);
+            if (videoPlayer.player != null) {
+                videoPlayer.player.setVideoTextureView(null);
+            }
             videoPlayer.setSurfaceView(videoSurfaceView);
             videoSurfaceView.setVisibility(View.INVISIBLE);
             waitingForFirstTextureUpload = 2;
