@@ -693,8 +693,6 @@ public class MessageObject {
 
         public boolean code;
         public boolean quote;
-        public String language;
-        public Drawable selectorDrawable;
 
         public String language;
         public Text languageLayout;
@@ -6213,7 +6211,6 @@ public class MessageObject {
 
             block.code = range.code;
             block.quote = range.quote;
-            block.language = range.language;
 
             block.first = a == 0;
             block.last = a == textRanges.size() - 1;
@@ -6612,7 +6609,6 @@ public class MessageObject {
 
                 block.code = range.code;
                 block.quote = range.quote;
-                block.language = range.language;
 
                 block.first = a == 0;
                 block.last = a == textRanges.size() - 1;
