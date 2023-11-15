@@ -706,8 +706,8 @@ public class MessageObject {
         public Drawable copySelector;
         public Paint copySeparator;
 
-        public void layoutCode(String lng, int codeLength) {
-            hasCodeCopyButton = codeLength >= 75;
+        public void layoutCode(String lng, int codeLength, boolean noforwards) {
+            hasCodeCopyButton = codeLength >= 75 && !noforwards;
             if (hasCodeCopyButton) {
                 copyText = new Text(LocaleController.getString(R.string.CopyCode).toUpperCase(), SharedConfig.fontSize - 3, AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_MEDIUM));
                 copyIcon = ApplicationLoader.applicationContext.getResources().getDrawable(R.drawable.msg_copy).mutate();
@@ -4229,7 +4229,7 @@ public class MessageObject {
             } else if (!isMediaEmpty()) {
 //                messageText = getMediaTitle(getMedia(messageOwner)); // I'm afraid doing this
                 if (getMedia(messageOwner) instanceof TLRPC.TL_messageMediaGiveaway) {
-                    messageText = LocaleController.getString("BoostingGiveaway", R.string.BoostingGiveaway);
+                    messageText = LocaleController.getString("BoostingGiveawayChannelStarted", R.string.BoostingGiveawayChannelStarted);
                 } else if (getMedia(messageOwner) instanceof TLRPC.TL_messageMediaStory) {
                     if (getMedia(messageOwner).via_mention) {
                         TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(getMedia(messageOwner).user_id);
@@ -6085,6 +6085,11 @@ public class MessageObject {
             return;
         }
         boolean hasUrls = applyEntities();
+        boolean noforwards = messageOwner != null && messageOwner.noforwards;
+        if (!noforwards) {
+            TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-getDialogId());
+            noforwards = chat != null && chat.noforwards;
+        }
 
         textLayoutBlocks = new ArrayList<>();
         textWidth = 0;
@@ -6233,7 +6238,7 @@ public class MessageObject {
                     block.padBottom = dp(7);
                 }
             } else if (block.code) {
-                block.layoutCode(range.language, range.end - range.start);
+                block.layoutCode(range.language, range.end - range.start, noforwards);
                 block.padTop = dp(4) + block.languageHeight + (block.first ? 0 : dp(5));
                 block.padBottom = dp(4) + (block.last ? 0 : dp(7)) + (block.hasCodeCopyButton ? dp(38) : 0);
             }
@@ -6508,6 +6513,11 @@ public class MessageObject {
         public TextLayoutBlocks(MessageObject messageObject, @NonNull CharSequence text, TextPaint textPaint, int width) {
             this.text = text;
             textWidth = 0;
+            boolean noforwards = messageObject != null && messageObject.messageOwner != null && messageObject.messageOwner.noforwards;
+            if (messageObject != null && !noforwards) {
+                TLRPC.Chat chat = MessagesController.getInstance(messageObject.currentAccount).getChat(-messageObject.getDialogId());
+                noforwards = chat != null && chat.noforwards;
+            }
 
             hasCode = text instanceof Spanned && ((Spanned) text).getSpans(0, text.length(), CodeHighlighting.Span.class).length > 0;
             hasQuote = text instanceof Spanned && ((Spanned) text).getSpans(0, text.length(), QuoteSpan.QuoteStyleSpan.class).length > 0;
@@ -6630,7 +6640,7 @@ public class MessageObject {
                         block.padBottom = dp(7);
                     }
                 } else if (block.code) {
-                    block.layoutCode(range.language, range.end - range.start);
+                    block.layoutCode(range.language, range.end - range.start, noforwards);
                     block.padTop = dp(4) + block.languageHeight + (block.first ? 0 : dp(5));
                     block.padBottom = dp(4) + (block.last ? 0 : dp(7)) + (block.hasCodeCopyButton ? dp(38) : 0);
                 }

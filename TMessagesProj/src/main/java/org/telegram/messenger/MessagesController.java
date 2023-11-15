@@ -5357,6 +5357,9 @@ public class MessagesController extends BaseController implements NotificationCe
         loadedFullChats.clear();
     }
 
+    private final LongSparseArray<Long> peerDialogsRequested = new LongSparseArray<Long>();
+    private final long peerDialogRequestTimeout = 1000 * 60 * 4;
+
     private void reloadDialogsReadValue(ArrayList<TLRPC.Dialog> dialogs, long did) {
         if (did == 0 && (dialogs == null || dialogs.isEmpty())) {
             return;
@@ -5370,7 +5373,12 @@ public class MessagesController extends BaseController implements NotificationCe
                 }
                 TLRPC.TL_inputDialogPeer inputDialogPeer = new TLRPC.TL_inputDialogPeer();
                 inputDialogPeer.peer = inputPeer;
-                req.peers.add(inputDialogPeer);
+                final long _did = DialogObject.getPeerDialogId(inputPeer);
+                Long lastRequest = peerDialogsRequested.get(_did);
+                if (lastRequest == null || System.currentTimeMillis() - lastRequest > peerDialogRequestTimeout) {
+                    req.peers.add(inputDialogPeer);
+                    peerDialogsRequested.put(_did, System.currentTimeMillis());
+                }
             }
         } else {
             TLRPC.InputPeer inputPeer = getInputPeer(did);
@@ -5379,7 +5387,12 @@ public class MessagesController extends BaseController implements NotificationCe
             }
             TLRPC.TL_inputDialogPeer inputDialogPeer = new TLRPC.TL_inputDialogPeer();
             inputDialogPeer.peer = inputPeer;
-            req.peers.add(inputDialogPeer);
+            final long _did = DialogObject.getPeerDialogId(inputPeer);
+            Long lastRequest = peerDialogsRequested.get(_did);
+            if (lastRequest == null || System.currentTimeMillis() - lastRequest > peerDialogRequestTimeout) {
+                req.peers.add(inputDialogPeer);
+                peerDialogsRequested.put(_did, System.currentTimeMillis());
+            }
         }
         if (req.peers.isEmpty()) {
             return;
