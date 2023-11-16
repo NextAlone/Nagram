@@ -264,9 +264,9 @@ jobs:
     strategy:
       matrix:
         flavor:
-          - FullRelease
+#          - FullRelease
           - MiniRelease
-          - FullReleaseNoGcm
+#          - FullReleaseNoGcm
           - MiniReleaseNoGcm
     steps:
       - name: Checkout
@@ -367,23 +367,23 @@ jobs:
           # send release via telegram bot api
           export mini64=$(find artifacts -name "*mini-arm64-v8a.apk")
           export mini32=$(find artifacts -name "*mini-armeabi-v7a.apk")
-          export full64=$(find artifacts -name "*full-arm64-v8a.apk")
-          export full32=$(find artifacts -name "*full-armeabi-v7a.apk")
+          #          export full64=$(find artifacts -name "*full-arm64-v8a.apk")
+          #          export full32=$(find artifacts -name "*full-armeabi-v7a.apk")
           export mini64nogcm=$(find artifacts -name "*mini-arm64-v8aNoGcm.apk")
           export mini32nogcm=$(find artifacts -name "*mini-armeabi-v7aNoGcm.apk")
-          export full64nogcm=$(find artifacts -name "*full-arm64-v8aNoGcm.apk")
-          export full32nogcm=$(find artifacts -name "*full-armeabi-v7aNoGcm.apk")
+          #          export full64nogcm=$(find artifacts -name "*full-arm64-v8aNoGcm.apk")
+          #          export full32nogcm=$(find artifacts -name "*full-armeabi-v7aNoGcm.apk")
 
           echo $mini64
           echo $mini32
-          echo $full64
-          echo $full32
+          #          echo $full64
+          #          echo $full32
           echo $mini64nogcm
           echo $mini32nogcm
-          echo $full64nogcm
-          echo $full32nogcm
+          #          echo $full64nogcm
+          #          echo $full32nogcm
 
-          curl --http0.9 http://127.0.0.1:8081/bot${{ secrets.HELPER_BOT_TOKEN }}/sendMediaGroup --form-string chat_id=${{ secrets.HELPER_BOT_TARGET }} --form apk1=@"${mini64}" --form apk2=@"${mini32}" --form apk3=@"${full64}" --form apk4=@"${full32}" --form apk5=@"${mini64nogcm}" --form apk6=@"${mini32nogcm}" --form apk7=@"${full64nogcm}" --form apk8=@"${full32nogcm}" --form-string media="[{\"type\": \"document\",\"media\": \"attach://apk1\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://apk2\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://apk3\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://apk4\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://apk5\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://apk6\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://apk7\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://apk8\",\"caption\": \"${{ github.event.head_commit.message }}\",\"parse_mode\": \"Markdown\"}]" --verbose >/dev/null
+          curl --http0.9 http://127.0.0.1:8081/bot${{ secrets.HELPER_BOT_TOKEN }}/sendMediaGroup --form-string chat_id=${{ secrets.HELPER_BOT_TARGET }} --form apk1=@"${mini64}" --form apk2=@"${mini32}" --form apk3=@"${mini64nogcm}" --form apk4=@"${mini32nogcm}" --form-string media="[{\"type\": \"document\",\"media\": \"attach://apk1\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://apk2\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://apk3\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://apk4\",\"caption\": \"${{ github.event.head_commit.message }}\",\"parse_mode\": \"Markdown\"}]" --verbose >/dev/null
 
           pkill telegram-bot
   telegram-bot-api:
