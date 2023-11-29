@@ -3035,7 +3035,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 					} else if (vibrate == 3) {
 						duration *= 2;
 					}
-					VibrateUtil.vibrate(new long[]{0, duration, 500}, 0);
+					vibrator.vibrate(new long[]{0, duration, 500}, 0);
 				}
 			}
 		}
