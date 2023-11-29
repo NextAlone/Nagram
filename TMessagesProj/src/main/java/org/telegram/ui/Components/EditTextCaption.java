@@ -208,6 +208,7 @@ public class EditTextCaption extends EditTextBoldCursor {
             }
 
             builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
+                String language = editText.getText().toString();
                 Editable editable = getText();
                 CharacterStyle[] spans = editable.getSpans(start, end, CharacterStyle.class);
                 if (spans != null && spans.length > 0) {
@@ -228,10 +229,14 @@ public class EditTextCaption extends EditTextBoldCursor {
                     run.flags |= TextStyleSpan.FLAG_STYLE_MONO;
                     run.start = start;
                     run.end = end;
-                    run.urlEntity = new TLRPC.TL_messageEntityPre();
-                    run.urlEntity.language = editText.getText().toString();
+                    if (!language.isBlank()) {
+                        run.urlEntity = new TLRPC.TL_messageEntityPre();
+                        run.urlEntity.language = language;
+                    }
                     MediaDataController.addStyleToText(new TextStyleSpan(run), start, end, getText(), allowTextEntitiesIntersection);
-                    SyntaxHighlight.highlight(run, editable);
+                    if (!language.isBlank()) {
+                        SyntaxHighlight.highlight(run, editable);
+                    }
                 } catch (Exception ignore) {
 
                 }
