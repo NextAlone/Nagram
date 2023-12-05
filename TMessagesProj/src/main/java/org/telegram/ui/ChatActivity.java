@@ -1742,31 +1742,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTap.DOUBLE_TAP_ACTION_NONE || !(view instanceof ChatMessageCell) || getParentActivity() == null || isSecretChat() || isInScheduleMode() || isInPreviewMode()) {
                 return;
             }
-            if (NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTap.DOUBLE_TAP_ACTION_SHOW_REACTIONS) {
-                ChatMessageCell cell = (ChatMessageCell) view;
-                MessageObject primaryMessage = cell.getPrimaryMessageObject();
-                if (primaryMessage.isSecretMedia() || primaryMessage.isExpiredStory() || primaryMessage.type == MessageObject.TYPE_JOINED_CHANNEL) {
-                    return;
-                }
-                ReactionsEffectOverlay.removeCurrent(false);
-                String reactionString = getMediaDataController().getDoubleTapReaction();
-                if (reactionString.startsWith("animated_")) {
-                    boolean available = dialog_id >= 0;
-                    if (!available && chatInfo != null) {
-                        available = ChatObject.reactionIsAvailable(chatInfo, reactionString);
-                    }
-                    if (!available) {
-                        return;
-                    }
-                    createMenu(view, true, false, x, y, true, true);
-                }
-            } else if (NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTap.DOUBLE_TAP_ACTION_SEND_REACTIONS) {
+            if (NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTap.DOUBLE_TAP_ACTION_SEND_REACTIONS) {
                 if (isSecretChat() || isInScheduleMode()) {
                     return;
                 }
                 ChatMessageCell cell = (ChatMessageCell) view;
                 MessageObject primaryMessage = cell.getPrimaryMessageObject();
-                if (primaryMessage.isSecretMedia()) {
+                if (primaryMessage.isSecretMedia() || primaryMessage.isExpiredStory() || primaryMessage.type == MessageObject.TYPE_JOINED_CHANNEL) {
                     return;
                 }
                 ReactionsEffectOverlay.removeCurrent(false);
@@ -1794,6 +1776,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                     selectReaction(primaryMessage, null, null, x, y, ReactionsLayoutInBubble.VisibleReaction.fromEmojicon(reaction), true, false, false);
                 }
+            } else if (NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTap.DOUBLE_TAP_ACTION_SHOW_REACTIONS) {
+                createMenu(view, true, false, x, y, true, true);
             } else {
                 var cell = (ChatMessageCell) view;
                 var message = cell.getMessageObject();
