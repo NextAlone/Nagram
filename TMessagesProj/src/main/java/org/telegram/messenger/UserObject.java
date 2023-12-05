@@ -16,6 +16,7 @@ import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.tgnet.TLRPC;
 
 import xyz.nextalone.nagram.helper.MessageHelper;
+import xyz.nextalone.nagram.helper.PeerColorHelper;
 
 public class UserObject {
 
@@ -154,22 +155,30 @@ public class UserObject {
 
     public static int getColorId(TLRPC.User user) {
         if (user == null) return 0;
+        Integer replace = PeerColorHelper.getColorId(user);
+        if (replace != null) return replace;
         if (user.color != null && (user.color.flags & 1) != 0) return user.color.color;
         return (int) (user.id % 7);
     }
 
     public static long getEmojiId(TLRPC.User user) {
+        Long replace = PeerColorHelper.getEmojiId(user);
+        if (replace != null) return replace;
         if (user != null && user.color != null && (user.color.flags & 2) != 0) return user.color.background_emoji_id;
         return 0;
     }
 
     public static int getProfileColorId(TLRPC.User user) {
         if (user == null) return 0;
+        Integer replace = PeerColorHelper.getProfileColorId(user);
+        if (replace != null) return replace;
         if (user.profile_color != null && (user.profile_color.flags & 1) != 0) return user.profile_color.color;
         return -1;
     }
 
     public static long getProfileEmojiId(TLRPC.User user) {
+        Long replace = PeerColorHelper.getProfileEmojiId(user);
+        if (replace != null) return replace;
         if (user != null && user.profile_color != null && (user.profile_color.flags & 2) != 0) return user.profile_color.background_emoji_id;
         return 0;
     }

@@ -101,6 +101,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.helper.PeerColorHelper;
 
 public class PeerColorActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
@@ -1178,6 +1179,7 @@ public class PeerColorActivity extends BaseFragment implements NotificationCente
                 }
             }));
         } else {
+            PeerColorHelper.apply(namePage.selectedColor, namePage.selectedEmoji, profilePage.selectedColor, profilePage.selectedEmoji);
             final TLRPC.User me = getUserConfig().getCurrentUser();
             if (me.color == null) {
                 me.color = new TLRPC.TL_peerColor();
