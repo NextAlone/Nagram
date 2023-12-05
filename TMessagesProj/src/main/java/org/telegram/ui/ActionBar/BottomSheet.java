@@ -29,6 +29,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -348,6 +349,7 @@ public class BottomSheet extends Dialog {
 
         private float y = 0f;
         private float swipeBackX = 0f;
+        private boolean allowedSwipeToBack;
         public boolean processTouchEvent(MotionEvent ev, boolean intercept) {
             if (dismissed) {
                 return false;
@@ -355,8 +357,9 @@ public class BottomSheet extends Dialog {
             if (onContainerTouchEvent(ev)) {
                 return true;
             }
-            if (canSwipeToBack()) {
+            if (canSwipeToBack(ev) || allowedSwipeToBack) {
                 if (ev != null && (ev.getAction() == MotionEvent.ACTION_DOWN || ev.getAction() == MotionEvent.ACTION_MOVE) && (!startedTracking && !maybeStartTracking && ev.getPointerCount() == 1)) {
+                    allowedSwipeToBack = true;
                     startedTrackingX = (int) ev.getX();
                     startedTrackingY = (int) ev.getY();
                     startedTrackingPointerId = ev.getPointerId(0);
@@ -424,6 +427,7 @@ public class BottomSheet extends Dialog {
                     maybeStartTracking = false;
                     startedTracking = false;
                     startedTrackingPointerId = -1;
+                    allowedSwipeToBack = false;
                 }
             } else {
                 if (canDismissWithTouchOutside() && ev != null && (ev.getAction() == MotionEvent.ACTION_DOWN || ev.getAction() == MotionEvent.ACTION_MOVE) && (!startedTracking && !maybeStartTracking && ev.getPointerCount() == 1)) {
@@ -440,7 +444,7 @@ public class BottomSheet extends Dialog {
                     if (velocityTracker != null) {
                         velocityTracker.clear();
                     }
-                } else if (ev != null && ev.getAction() == MotionEvent.ACTION_MOVE && ev.getPointerId(0) == startedTrackingPointerId) {
+                } else if (canDismissWithSwipe() && ev != null && ev.getAction() == MotionEvent.ACTION_MOVE && ev.getPointerId(0) == startedTrackingPointerId) {
                     if (velocityTracker == null) {
                         velocityTracker = VelocityTracker.obtain();
                     }
@@ -480,7 +484,7 @@ public class BottomSheet extends Dialog {
                     startedTrackingPointerId = -1;
                 }
             }
-            return (!intercept && maybeStartTracking) || startedTracking || !(canDismissWithSwipe() || canSwipeToBack());
+            return (!intercept && maybeStartTracking) || startedTracking || !(canDismissWithSwipe() || canSwipeToBack(ev));
         }
 
         @Override
@@ -572,7 +576,7 @@ public class BottomSheet extends Dialog {
                     right -= getRightInset();
                     if (useSmoothKeyboard) {
                         t = 0;
-                    } else {
+                    } else if (!occupyNavigationBar) {
                         t -= lastInsets.getSystemWindowInsetBottom() * (1f - hideSystemVerticalInsetsProgress) - (drawNavigationBar ? 0 : getBottomInset());
                         if (Build.VERSION.SDK_INT >= 29) {
                             t -= getAdditionalMandatoryOffsets();
@@ -674,7 +678,7 @@ public class BottomSheet extends Dialog {
 
         @Override
         public boolean onInterceptTouchEvent(MotionEvent event) {
-            if (canDismissWithSwipe() || canSwipeToBack()) {
+            if (canDismissWithSwipe() || canSwipeToBack(event)) {
                 return processTouchEvent(event, true);
             }
             return super.onInterceptTouchEvent(event);
@@ -764,7 +768,7 @@ public class BottomSheet extends Dialog {
                 restore = true;
             }
             super.onDraw(canvas);
-            if (lastInsets != null && keyboardHeight != 0) {
+            if (drawNavigationBar && lastInsets != null && keyboardHeight != 0) {
                 backgroundPaint.setColor(behindKeyboardColorKey >= 0 ? getThemedColor(behindKeyboardColorKey) : behindKeyboardColor);
                 canvas.drawRect(containerView.getLeft() + backgroundPaddingLeft, getMeasuredHeight() - keyboardHeight - (drawNavigationBar ? getBottomInset() : 0), containerView.getRight() - backgroundPaddingLeft, getMeasuredHeight() - (drawNavigationBar ? getBottomInset() : 0), backgroundPaint);
             }
@@ -1121,7 +1125,7 @@ public class BottomSheet extends Dialog {
     }
 
     public void fixNavigationBar(int bgColor) {
-        drawNavigationBar = true;
+        drawNavigationBar = !occupyNavigationBar;
         drawDoubleNavigationBar = true;
         scrollNavBar = true;
         navBarColorKey = -1;
@@ -1337,7 +1341,10 @@ public class BottomSheet extends Dialog {
         }
         dismissed = false;
         cancelSheetAnimation();
-        containerView.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.x + backgroundPaddingLeft * 2, View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.y, View.MeasureSpec.AT_MOST));
+        containerView.measure(
+            View.MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.x + backgroundPaddingLeft * 2, View.MeasureSpec.AT_MOST),
+            View.MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.y, View.MeasureSpec.AT_MOST)
+        );
         if (showWithoutAnimation) {
             backDrawable.setAlpha(dimBehind ? dimBehindAlpha : 0);
             containerView.setTranslationY(0);
@@ -1678,7 +1685,7 @@ public class BottomSheet extends Dialog {
         return containerView.getMeasuredHeight();
     }
 
-    protected boolean canSwipeToBack() {
+    protected boolean canSwipeToBack(MotionEvent event) {
         return false;
     }
 

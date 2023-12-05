@@ -113,8 +113,6 @@ import org.telegram.ui.PassportActivity;
 import org.telegram.ui.PhotoPickerActivity;
 import org.telegram.ui.PhotoPickerSearchActivity;
 import org.telegram.ui.PremiumPreviewFragment;
-import org.telegram.ui.Stories.DarkThemeResourceProvider;
-import org.telegram.ui.Stories.recorder.CaptionContainerView;
 import org.telegram.ui.WebAppDisclaimerAlert;
 
 import java.io.File;
@@ -465,6 +463,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     }
 
     public interface ChatAttachViewDelegate {
+        default boolean selectItemOnClicking() {
+            return false;
+        }
+
         void didPressedButton(int button, boolean arg, boolean notify, int scheduleDate, boolean forceDocument);
 
         default void onCameraOpened() {
@@ -1141,7 +1143,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             nameTextView.setTextColor(getThemedColor(Theme.key_dialogTextGray2));
             currentUser = user;
             nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
-            avatarDrawable.setInfo(user);
+            avatarDrawable.setInfo(currentAccount, user);
             imageView.setForUserOrChat(user, avatarDrawable);
             imageView.setSize(-1, -1);
             imageView.setColorFilter(null);
@@ -1159,7 +1161,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             nameTextView.setTextColor(getThemedColor(Theme.key_dialogTextGray2));
             currentUser = user;
             nameTextView.setText(bot.short_name);
-            avatarDrawable.setInfo(user);
+            avatarDrawable.setInfo(currentAccount, user);
 
             boolean animated = true;
             TLRPC.TL_attachMenuBotIcon icon = MediaDataController.getAnimatedAttachMenuBotIcon(bot);

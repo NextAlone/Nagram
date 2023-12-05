@@ -74,6 +74,7 @@ import org.telegram.ui.Cells.TextDetailCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.BulletinFactory;
@@ -85,6 +86,8 @@ import org.telegram.ui.Components.ImageUpdater;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RadialProgressView;
+import org.telegram.ui.Components.Reactions.ChatCustomReactionsEditActivity;
+import org.telegram.ui.Components.Reactions.ReactionsUtils;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.UndoView;
 
@@ -181,6 +184,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     private int realAdminCount = 0;
 
     private boolean hasUploadedPhoto;
+    private final List<AnimatedEmojiDrawable> preloadedReactions = new ArrayList<>();
 
     private PhotoViewer.PhotoViewerProvider provider = new PhotoViewer.EmptyPhotoViewerProvider() {
 
@@ -401,6 +405,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     @Override
     public void onPause() {
         super.onPause();
+        ReactionsUtils.stopPreloadReactions(preloadedReactions);
         if (nameTextView != null) {
             nameTextView.onPause();
         }
@@ -887,7 +892,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             }
 
             if (ChatObject.isChannelAndNotMegaGroup(currentChat) && ChatObject.canChangeChatInfo(currentChat)) {
-                colorCell = new PeerColorActivity.ChangeNameColorCell(true, context, getResourceProvider());
+                colorCell = new PeerColorActivity.ChangeNameColorCell(currentAccount, true, context, getResourceProvider());
                 colorCell.setBackgroundDrawable(Theme.getSelectorDrawable(true));
                 typeEditContainer.addView(colorCell, LayoutHelper.createLinear(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 colorCell.setOnClickListener(v -> {
@@ -1033,11 +1038,15 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             reactionsCell = new TextCell(context);
             reactionsCell.setBackground(Theme.getSelectorDrawable(false));
             reactionsCell.setOnClickListener(v -> {
-                Bundle args = new Bundle();
-                args.putLong(ChatReactionsEditActivity.KEY_CHAT_ID, chatId);
-                ChatReactionsEditActivity reactionsEditActivity = new ChatReactionsEditActivity(args);
-                reactionsEditActivity.setInfo(info);
-                presentFragment(reactionsEditActivity);
+                if (ChatObject.isChannelAndNotMegaGroup(currentChat)) {
+                    presentFragment(new ChatCustomReactionsEditActivity(chatId, info));
+                } else {
+                    Bundle args = new Bundle();
+                    args.putLong(ChatReactionsEditActivity.KEY_CHAT_ID, chatId);
+                    ChatReactionsEditActivity reactionsEditActivity = new ChatReactionsEditActivity(args);
+                    reactionsEditActivity.setInfo(info);
+                    presentFragment(reactionsEditActivity);
+                }
             });
 
             adminCell = new TextCell(context);
@@ -1668,8 +1677,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                         getParentLayout().removeFragmentFromStack(i);
                         Bundle bundle = new Bundle();
                         bundle.putLong("chat_id",chatId);
-                        TopicsFragment topicsFragment = new TopicsFragment(bundle);
-                        getParentLayout().addFragmentToStack(topicsFragment, i);
+                        getParentLayout().addFragmentToStack(TopicsFragment.getTopicsOrChat(this, bundle), i);
                     }
                 }
             }
@@ -1773,6 +1781,8 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             }
             historyHidden = !ChatObject.isChannel(currentChat) || info.hidden_prehistory;
             availableReactions = info.available_reactions;
+            preloadedReactions.clear();
+            preloadedReactions.addAll(ReactionsUtils.startPreloadReactions(currentChat, info));
         }
     }
 
@@ -2051,6 +2061,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     }
 
     private void updateReactionsCell(boolean animated) {
+        boolean isChannelAndNotMegaGroup = ChatObject.isChannelAndNotMegaGroup(currentChat);
         String finalString;
         if (availableReactions == null || availableReactions instanceof TLRPC.TL_chatReactionsNone) {
             finalString = LocaleController.getString("ReactionsOff", R.string.ReactionsOff);
@@ -2065,15 +2076,25 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                     if (reaction != null && !reaction.inactive) {
                         count++;
                     }
+                } else if (someReaction instanceof TLRPC.TL_reactionCustomEmoji) {
+                    count++;
                 }
             }
-            int reacts = Math.min(getMediaDataController().getEnabledReactionsList().size(), count);
-            finalString = reacts == 0 ? LocaleController.getString("ReactionsOff", R.string.ReactionsOff) :
-                    LocaleController.formatString("ReactionsCount", R.string.ReactionsCount, reacts, getMediaDataController().getEnabledReactionsList().size());
+            if (isChannelAndNotMegaGroup) {
+                finalString = count == 0 ? LocaleController.getString("ReactionsOff", R.string.ReactionsOff) : String.valueOf(count);
+            } else {
+                int reacts = Math.min(getMediaDataController().getEnabledReactionsList().size(), count);
+                finalString = reacts == 0 ? LocaleController.getString("ReactionsOff", R.string.ReactionsOff) :
+                        LocaleController.formatString("ReactionsCount", R.string.ReactionsCount, reacts, getMediaDataController().getEnabledReactionsList().size());
+            }
         } else {
             finalString = LocaleController.getString("ReactionsAll", R.string.ReactionsAll);
         }
-        reactionsCell.setTextAndValueAndIcon(LocaleController.getString("Reactions", R.string.Reactions), finalString, R.drawable.msg_reactions2, true);
+        if (isChannelAndNotMegaGroup) {
+            reactionsCell.setTextAndValueAndIcon(TextCell.applyNewSpan(LocaleController.getString("Reactions", R.string.Reactions)), finalString, animated, R.drawable.msg_reactions2, true);
+        } else {
+            reactionsCell.setTextAndValueAndIcon(LocaleController.getString("Reactions", R.string.Reactions), finalString, animated, R.drawable.msg_reactions2, true);
+        }
     }
 
     @Override
@@ -2179,6 +2200,12 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         themeDescriptions.add(new ThemeDescription(reactionsCell, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector));
         themeDescriptions.add(new ThemeDescription(reactionsCell, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{TextCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
         themeDescriptions.add(new ThemeDescription(reactionsCell, 0, new Class[]{TextCell.class}, new String[]{"imageView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayIcon));
+
+        if (statsAndBoosts != null) {
+            themeDescriptions.add(new ThemeDescription(statsAndBoosts, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector));
+            themeDescriptions.add(new ThemeDescription(statsAndBoosts, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{TextCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+            themeDescriptions.add(new ThemeDescription(statsAndBoosts, 0, new Class[]{TextCell.class}, new String[]{"imageView"}, null, null, null, Theme.key_windowBackgroundWhiteGrayIcon));
+        }
 
         return themeDescriptions;
     }

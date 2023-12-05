@@ -324,6 +324,11 @@ public class DoubledLimitsBottomSheet extends BottomSheetWithRecyclerListView im
                     LocaleController.formatString("ConnectedAccountsLimitSubtitle", R.string.ConnectedAccountsLimitSubtitle, 4),
                     16, 4
             ));
+            limits.add(new Limit(
+                    LocaleController.getString(R.string.SimilarChannelsLimitTitle),
+                    LocaleController.formatString(R.string.SimilarChannelsLimitSubtitle, messagesController.recommendedChannelsLimitPremium),
+                    messagesController.recommendedChannelsLimitDefault, messagesController.recommendedChannelsLimitPremium
+            ));
 
             rowCount = 0;
             headerRow = rowCount++;

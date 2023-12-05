@@ -36,7 +36,7 @@ import tw.nekomimi.nekogram.NekoConfig;
 public class TextDetailCell extends FrameLayout {
 
     private final TextView textView;
-    private final LinkSpanDrawable.LinksTextView valueTextView;
+    public final LinkSpanDrawable.LinksTextView valueTextView;
     private final TextView showMoreTextView = null;
     private final ImageView imageView;
     private boolean needDivider;

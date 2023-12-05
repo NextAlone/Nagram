@@ -394,12 +394,6 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
-    val showForumAsNormalChat =
-        addConfig(
-            "ShowForumAsNormalChat",
-            ConfigItem.configTypeBool,
-            false
-        )
     val chatDecoration =
         addConfig(
             "ChatDecoration",
