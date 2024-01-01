@@ -5781,7 +5781,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 }
             }
             recentStickers = new ArrayList<>(recentStickers.subList(0, Math.min(recentStickers.size(), NekoConfig.maxRecentStickerCount.Int())));
-            if (MessagesController.getInstance(currentAccount).premiumLocked) {
+            if (MessagesController.getInstance(currentAccount).premiumFeaturesBlocked()) {
                 for (int a = 0; a < favouriteStickers.size(); a++) {
                     if (MessageObject.isPremiumSticker(favouriteStickers.get(a))) {
                         favouriteStickers.remove(a);
