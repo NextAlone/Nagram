@@ -13,7 +13,7 @@
     </queries>
 
 
-    <uses-sdk tools:overrideLibrary="io.nekohasekai.ss_rust,io.nekohasekai.ssr_libev" />
+    <uses-sdk tools:overrideLibrary="io.nekohasekai.ss_rust,io.nekohasekai.ssr_libev,com.google.mlkit.vision.segmentation.subject" />
 
     <supports-screens android:anyDensity="true"
                       android:largeScreens="true"
@@ -111,8 +111,6 @@
         tools:node="replace" />
 
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-
-    <uses-sdk tools:overrideLibrary="com.google.mlkit.vision.segmentation.subject"/>
 
     <queries>
         <package android:name="com.google.android.apps.maps"/>

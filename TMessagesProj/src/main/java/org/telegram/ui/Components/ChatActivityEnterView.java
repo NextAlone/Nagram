@@ -2632,12 +2632,12 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     if (!hasRecordVideo || calledRecordRunnable) {
                         startedDraggingX = -1;
                         if (hasRecordVideo && isInVideoMode) {
-                            delegate.needStartRecordVideo(1, true, 0);
+                            delegate.needStartRecordVideo(1, true, 0, voiceOnce ? 0x7FFFFFFF : 0);
                         } else {
                             if (recordingAudioVideo && isInScheduleMode()) {
-                                AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), (notify, scheduleDate) -> MediaController.getInstance().stopRecording(1, notify, scheduleDate), () -> MediaController.getInstance().stopRecording(0, false, 0), null);
+                                AlertsCreator.createScheduleDatePickerDialog(parentActivity, parentFragment.getDialogId(), (notify, scheduleDate) -> MediaController.getInstance().stopRecording(1, notify, scheduleDate, voiceOnce), () -> MediaController.getInstance().stopRecording(0, false, 0, voiceOnce), null);
                             }
-                            MediaController.getInstance().stopRecording(isInScheduleMode() ? 3 : 1, true, 0);
+                            MediaController.getInstance().stopRecording(isInScheduleMode() ? 3 : 1, true, 0, voiceOnce);
                             delegate.needStartRecordAudio(0);
                         }
                         recordingAudioVideo = false;
