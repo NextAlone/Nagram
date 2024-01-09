@@ -74,6 +74,7 @@
     <string name="HalloWeen">HalloWeen</string>
     <string name="ShowOnlineStatus">Show Online Status</string>
     <string name="ShowOnlineStatusNotice">Show the online status of other people next to their profile photo in groups</string>
+    <string name="ShowRecentOnlineStatus">Show Recent Online Status</string>
     <string name="DoActionsInCommonGroups">Applied in common groups</string>
     <string name="ShowFullAbout">Show full about info</string>
     <string name="HideMessageSeenTooltip">Hide message seen tooltip</string>

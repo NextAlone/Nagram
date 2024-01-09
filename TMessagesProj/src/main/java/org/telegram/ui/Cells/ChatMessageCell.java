@@ -1546,7 +1546,20 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
     public void drawStatusWithImage(Canvas canvas, ImageReceiver imageReceiver, int radius) {
         String formatUserStatus = currentUser != null ? LocaleController.formatUserStatus(this.currentAccount, currentUser) : "";
-        if (!NaConfig.INSTANCE.getShowOnlineStatus().Bool() || currentUser == null || currentUser.bot || !formatUserStatus.equals(LocaleController.getString("Online", R.string.Online))) {
+        if (!NaConfig.INSTANCE.getShowOnlineStatus().Bool() || currentUser == null || currentUser.bot) {
+            imageReceiver.draw(canvas);
+            return;
+        }
+        int diff = -60 * 60 - 1;
+        if (NaConfig.INSTANCE.getShowRecentOnlineStatus().Bool()) {
+            if (currentUser != null && currentUser.status != null) {
+                diff = currentUser.status.expires - ConnectionsManager.getInstance(currentAccount).getCurrentTime();
+            }
+            if (diff < -60 * 60) {
+                imageReceiver.draw(canvas);
+                return;
+            }
+        } else if (!formatUserStatus.equals(LocaleController.getString("Online", R.string.Online))) {
             imageReceiver.draw(canvas);
             return;
         }
@@ -1556,8 +1569,17 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         int spaceLeft = radius - circleRadius;
         int xCenterRegion = x - spaceLeft;
         int yCenterRegion = y - spaceLeft;
+        int colorOnline = diff > 0
+                ? Theme.getColor(Theme.key_chats_onlineCircle)
+                : diff > -15 * 60
+                ? android.graphics.Color.argb(255, 234, 234, 30)
+                : diff > -30 * 60
+                ? android.graphics.Color.argb(255, 234, 132, 30)
+                : diff > -60 * 60
+                ? android.graphics.Color.argb(255, 234, 30, 30)
+                : 0;
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(Theme.getColor(Theme.key_chats_onlineCircle));
+        paint.setColor(colorOnline);
         canvas.save();
         Path p = new Path();
         p.addCircle(x - radius, y - radius, radius, Path.Direction.CW);

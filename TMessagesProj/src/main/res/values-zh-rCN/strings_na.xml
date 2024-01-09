@@ -71,6 +71,7 @@
     <string name="HalloWeen">万圣节</string>
     <string name="ShowOnlineStatus">显示用户在线状态</string>
     <string name="ShowOnlineStatusNotice">在群组聊天时用户头像的右下角显示在线状态</string>
+    <string name="ShowRecentOnlineStatus">显示用户最近在线状态</string>
     <string name="DoActionsInCommonGroups">也在共同群操作</string>
     <string name="ShowFullAbout">直接显示完整的群组简介</string>
     <string name="HideMessageSeenTooltip">隐藏消息已读提示</string>
