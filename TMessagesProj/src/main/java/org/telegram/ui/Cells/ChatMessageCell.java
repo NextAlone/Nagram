@@ -1570,14 +1570,14 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         int xCenterRegion = x - spaceLeft;
         int yCenterRegion = y - spaceLeft;
         int colorOnline = diff > 0
-                ? Theme.getColor(Theme.key_chats_onlineCircle)
+                ? Theme.getColor(Theme.key_chats_onlineCircle, resourcesProvider)
                 : diff > -15 * 60
                 ? android.graphics.Color.argb(255, 234, 234, 30)
                 : diff > -30 * 60
                 ? android.graphics.Color.argb(255, 234, 132, 30)
                 : diff > -60 * 60
                 ? android.graphics.Color.argb(255, 234, 30, 30)
-                : 0;
+                : Theme.getColor(Theme.key_chats_onlineCircle, resourcesProvider);
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(colorOnline);
         canvas.save();
