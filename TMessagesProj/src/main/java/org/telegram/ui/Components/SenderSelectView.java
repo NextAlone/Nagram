@@ -24,6 +24,8 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 
+import xyz.nextalone.nagram.NaConfig;
+
 public class SenderSelectView extends View {
     private final static float SPRING_MULTIPLIER = 100f;
     private final static FloatPropertyCompat<SenderSelectView> MENU_PROGRESS = new SimpleFloatPropertyCompat<SenderSelectView>("menuProgress", obj -> obj.menuProgress, (obj, value) -> {
@@ -56,7 +58,8 @@ public class SenderSelectView extends View {
     private void updateColors() {
         backgroundPaint.setColor(Theme.getColor(Theme.key_chat_messagePanelVoiceBackground));
         menuPaint.setColor(Theme.getColor(Theme.key_chat_messagePanelVoicePressed));
-        selectorDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(16), Color.TRANSPARENT, Theme.getColor(Theme.key_windowBackgroundWhite));
+        int value = NaConfig.INSTANCE.getShowSquareAvatar().Bool() ? 0 : 16;
+        selectorDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(value), Color.TRANSPARENT, Theme.getColor(Theme.key_windowBackgroundWhite));
         selectorDrawable.setCallback(this);
     }
 
@@ -99,7 +102,12 @@ public class SenderSelectView extends View {
 
         int alpha = (int) (menuProgress * 0xFF);
         backgroundPaint.setAlpha(alpha);
-        canvas.drawCircle(getWidth() / 2f, getHeight() / 2f, Math.min(getWidth(), getHeight()) / 2f, backgroundPaint);
+        if (NaConfig.INSTANCE.getShowSquareAvatar().Bool()) {
+            AndroidUtilities.rectTmp.set(0, 0, getWidth(), getHeight());
+            canvas.drawRoundRect(AndroidUtilities.rectTmp, 0, 0, backgroundPaint);
+        } else {
+            canvas.drawCircle(getWidth() / 2f, getHeight() / 2f, Math.min(getWidth(), getHeight()) / 2f, backgroundPaint);
+        }
 
         canvas.save();
         menuPaint.setAlpha(alpha);

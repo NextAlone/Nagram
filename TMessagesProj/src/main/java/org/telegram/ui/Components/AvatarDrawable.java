@@ -42,6 +42,8 @@ import org.telegram.ui.ActionBar.Theme;
 
 import java.util.ArrayList;
 
+import xyz.nextalone.nagram.NaConfig;
+
 public class AvatarDrawable extends Drawable {
 
     private TextPaint namePaint;
@@ -465,6 +467,8 @@ public class AvatarDrawable extends Drawable {
             if (roundRadius > 0) {
                 AndroidUtilities.rectTmp.set(0, 0, size, size);
                 canvas.drawRoundRect(AndroidUtilities.rectTmp, roundRadius, roundRadius, Theme.avatar_backgroundPaint);
+            } else if (NaConfig.INSTANCE.getShowSquareAvatar().Bool()) {
+                canvas.drawRect(0f, 0f, size, size, Theme.avatar_backgroundPaint);
             } else {
                 canvas.drawCircle(size / 2.0f, size / 2.0f, size / 2.0f, Theme.avatar_backgroundPaint);
             }

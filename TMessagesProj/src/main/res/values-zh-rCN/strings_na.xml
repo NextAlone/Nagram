@@ -91,4 +91,5 @@
     <string name="DisableSendReadStories">偷偷看动态</string>
     <string name="HideFilterMuteAll">隐藏文件夹中的\"全部取消静音\"</string>
     <string name="UseLocalQuoteColor">本地名称颜色</string>
+    <string name="ShowSquareAvatar">显示方形头像</string>
 </resources>

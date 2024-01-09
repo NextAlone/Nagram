@@ -58,6 +58,8 @@ import org.telegram.ui.Components.Forum.ForumUtilities;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RLottieDrawable;
 
+import xyz.nextalone.nagram.NaConfig;
+
 public class ShareDialogCell extends FrameLayout {
 
     private final BackupImageView imageView;
@@ -316,7 +318,11 @@ public class ShareDialogCell extends FrameLayout {
         Theme.checkboxSquare_checkPaint.setAlpha((int) (checkBox.getProgress() * 255));
         int radius = dp(currentType == TYPE_CREATE ? 24 : 28);
         AndroidUtilities.rectTmp.set(cx - radius, cy - radius, cx + radius, cy + radius);
-        canvas.drawRoundRect(AndroidUtilities.rectTmp, imageView.getRoundRadius()[0], imageView.getRoundRadius()[0], Theme.checkboxSquare_checkPaint);
+        if (NaConfig.INSTANCE.getShowSquareAvatar().Bool()) {
+            canvas.drawRoundRect(AndroidUtilities.rectTmp, 0, 0, Theme.checkboxSquare_checkPaint);
+        } else {
+            canvas.drawRoundRect(AndroidUtilities.rectTmp, imageView.getRoundRadius()[0], imageView.getRoundRadius()[0], Theme.checkboxSquare_checkPaint);
+        }
         super.onDraw(canvas);
     }
 

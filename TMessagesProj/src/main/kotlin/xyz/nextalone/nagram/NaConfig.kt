@@ -460,6 +460,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val showSquareAvatar =
+        addConfig(
+            "ShowSquareAvatar",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,
