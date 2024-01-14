@@ -49,7 +49,7 @@ jobs:
       - name: Install NDK
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
+          echo "y" | sdkmanager --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
           echo "ndk.dir=${ANDROID_HOME}/ndk/21.4.7075529" >> local.properties
       - name: Native Build
@@ -82,7 +82,7 @@ jobs:
       - name: Install NDK
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
+          echo "y" | sdkmanager --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
           echo "ndk.dir=${ANDROID_HOME}/ndk/21.4.7075529" >> local.properties
       - name: Native Build
@@ -142,7 +142,7 @@ jobs:
       - name: Install NDK
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
+          echo "y" | sdkmanager --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
           echo "ndk.dir=${ANDROID_HOME}/ndk/21.4.7075529" >> local.properties
       - name: Fix BoringSSL
@@ -179,7 +179,7 @@ jobs:
       - name: Install NDK
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
+          echo "y" | sdkmanager --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
           echo "ndk.dir=${ANDROID_HOME}/ndk/21.4.7075529" >> local.properties
       - name: Install Golang
@@ -214,7 +214,7 @@ jobs:
       - name: Install NDK
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
+          echo "y" | sdkmanager --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
           echo "ndk.dir=${ANDROID_HOME}/ndk/21.4.7075529" >> local.properties
       - name: Install Rust
@@ -247,7 +247,7 @@ jobs:
       - name: Install NDK
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
+          echo "y" | sdkmanager --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
           echo "ndk.dir=${ANDROID_HOME}/ndk/21.4.7075529" >> local.properties
       - name: Native Build
@@ -275,7 +275,7 @@ jobs:
         uses: android-actions/setup-android@v2
       - name: Install NDK
         run: |
-          echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
+          echo "y" | sdkmanager --install "ndk;21.4.7075529" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
           echo "ndk.dir=${ANDROID_HOME}/ndk/21.4.7075529" >> local.properties
       - name: Fetch Status
