@@ -1911,9 +1911,6 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                             if (!currentChat.default_banned_rights.send_plain) {
                                 count++;
                             }
-                            if (!currentChat.default_banned_rights.send_gifs) {
-                                count++;
-                            }
                             count += ChatUsersActivity.getSendMediaSelectedCount(currentChat.default_banned_rights);
                             if (!currentChat.default_banned_rights.pin_messages) {
                                 count++;
@@ -1927,16 +1924,10 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                             if (!currentChat.default_banned_rights.change_info) {
                                 count++;
                             }
-                            if (!currentChat.default_banned_rights.send_games) {
-                                count++;
-                            }
-                            if (!currentChat.default_banned_rights.send_inline) {
-                                count++;
-                            }
                         } else {
-                            count = forum ? 14 : 13;
+                            count = forum ? 17 : 16;
                         }
-                        blockCell.setTextAndValueAndIcon(LocaleController.getString("ChannelPermissions", R.string.ChannelPermissions), String.format("%d/%d", count, forum ? 14 : 13), R.drawable.msg_permissions, true);
+                        blockCell.setTextAndValueAndIcon(LocaleController.getString("ChannelPermissions", R.string.ChannelPermissions), String.format("%d/%d", count, forum ? 17 : 16), R.drawable.msg_permissions, true);
                     }
                     if (memberRequestsCell != null) {
                         memberRequestsCell.setTextAndValueAndIcon(LocaleController.getString("MemberRequests", R.string.MemberRequests), String.format("%d", info.requests_pending), R.drawable.msg_requests, logCell != null && logCell.getVisibility() == View.VISIBLE);
