@@ -7591,9 +7591,9 @@ public class MessageObject {
 
     public static boolean shouldEncryptPhotoOrVideo(int currentAccount, TLRPC.Message message) {
         if (NekoXConfig.disableFlagSecure) {
-            return true;
+            return false;
         }
-        if (MessagesController.getInstance(currentAccount).isChatNoForwards(getChatId(message)) || message != null && message.noforwards) {
+        if (MessagesController.getInstance(currentAccount).isChatNoForwardsWithOverride(getChatId(message)) || message != null && message.noforwards) {
             return true;
         }
         if (message instanceof TLRPC.TL_message_secret) {
