@@ -6658,7 +6658,7 @@ public boolean retriedToSend;
                     title = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
                     permormer = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
                 }
-                if (editingMessageObject == null && extL.equals("ogg") && MediaController.isOpusFile(f.getAbsolutePath()) == 1) {
+                if (editingMessageObject == null && extL.equals("opus") && MediaController.isOpusFile(f.getAbsolutePath()) == 1) {
                     isVoice = true;
                 }
             } catch (Exception e) {
