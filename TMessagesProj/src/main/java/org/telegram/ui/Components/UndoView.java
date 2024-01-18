@@ -52,23 +52,26 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SavedMessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.LaunchActivity;
-import tw.nekomimi.nekogram.NekoConfig;
+import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.Premium.boosts.BoostRepository;
+import org.telegram.ui.LaunchActivity;
 
 import java.util.ArrayList;
+
+import tw.nekomimi.nekogram.NekoConfig;
 
 @SuppressWarnings("FieldCanBeLocal")
 @Deprecated // use Bulletin instead
 public class UndoView extends FrameLayout {
 
-    private TextView infoTextView;
+    private LinkSpanDrawable.LinksTextView infoTextView;
     private TextView subinfoTextView;
     private TextView undoTextView;
     private ImageView undoImageView;
@@ -245,7 +248,7 @@ public class UndoView extends FrameLayout {
         parentFragment = parent;
         fromTop = top;
 
-        infoTextView = new EmojiTextView(context);
+        infoTextView = new LinkSpanDrawable.LinksTextView(context, resourcesProvider);
         infoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
         infoTextView.setTextColor(getThemedColor(Theme.key_undo_infoColor));
         infoTextView.setLinkTextColor(getThemedColor(Theme.key_undo_cancelColor));
@@ -1071,9 +1074,9 @@ public class UndoView extends FrameLayout {
                 if (infoObject2 == null || infoObject2 instanceof TLRPC.TL_forumTopic) {
                     if (did == UserConfig.getInstance(currentAccount).clientUserId) {
                         if (count == 1) {
-                            infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("FwdMessageToSavedMessages", R.string.FwdMessageToSavedMessages)));
+                            infoTextView.setText(AndroidUtilities.replaceSingleTag(LocaleController.getString("FwdMessageToSavedMessages", R.string.FwdMessageToSavedMessages), SavedMessagesController::openSavedMessages));
                         } else {
-                            infoTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("FwdMessagesToSavedMessages", R.string.FwdMessagesToSavedMessages)));
+                            infoTextView.setText(AndroidUtilities.replaceSingleTag(LocaleController.getString("FwdMessagesToSavedMessages", R.string.FwdMessagesToSavedMessages), SavedMessagesController::openSavedMessages));
                         }
                         leftImageView.setAnimation(R.raw.saved_messages, 30, 30);
                     } else {

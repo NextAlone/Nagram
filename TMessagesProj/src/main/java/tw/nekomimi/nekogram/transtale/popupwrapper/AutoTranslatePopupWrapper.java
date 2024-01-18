@@ -24,13 +24,13 @@ public class AutoTranslatePopupWrapper {
 
     public ActionBarPopupWindow.ActionBarPopupWindowLayout windowLayout;
     private final long dialogId;
-    private final int topicId;
+    private final long topicId;
     private final ActionBarMenuSubItem defaultItem;
     private final ActionBarMenuSubItem enableItem;
     private final ActionBarMenuSubItem disableItem;
     private final boolean supportLanguageDetector = LanguageDetector.hasSupport();
 
-    public AutoTranslatePopupWrapper(BaseFragment fragment, PopupSwipeBackLayout swipeBackLayout, long dialogId, int topicId, Theme.ResourcesProvider resourcesProvider) {
+    public AutoTranslatePopupWrapper(BaseFragment fragment, PopupSwipeBackLayout swipeBackLayout, long dialogId, long topicId, Theme.ResourcesProvider resourcesProvider) {
         Context context = fragment.getParentActivity();
         windowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(context, 0, resourcesProvider);
         windowLayout.setFitItems(true);

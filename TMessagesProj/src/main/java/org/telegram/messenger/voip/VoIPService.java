@@ -3032,7 +3032,8 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 				} else {
 					ringtonePlayer.setAudioStreamType(AudioManager.STREAM_RING);
 					if (!USE_CONNECTION_SERVICE) {
-						am.requestAudioFocus(this, AudioManager.STREAM_RING, AudioManager.AUDIOFOCUS_GAIN);
+						int focusResult = am.requestAudioFocus(this, AudioManager.STREAM_RING, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+						hasAudioFocus = focusResult == AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
 					}
 				}
 				try {
@@ -3159,8 +3160,8 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 			}
 		}
 		cpuWakelock.release();
+		AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
 		if (!playingSound) {
-			AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
 			VoipAudioManager vam = VoipAudioManager.get();
 			if (!USE_CONNECTION_SERVICE) {
 				if (isBtHeadsetConnected || bluetoothScoActive || bluetoothScoConnecting) {
@@ -3197,14 +3198,15 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 			if (audioDeviceCallback != null) {
 				am.unregisterAudioDeviceCallback(audioDeviceCallback);
 			}
-			if (hasAudioFocus) {
-				am.abandonAudioFocus(this);
-			}
+
 			Utilities.globalQueue.postRunnable(() -> {
 				if (soundPool != null) {
 					soundPool.release();
 				}
 			});
+		}
+		if (hasAudioFocus) {
+			am.abandonAudioFocus(this);
 		}
 
 		if (USE_CONNECTION_SERVICE) {
@@ -3577,7 +3579,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 		}
 		try {
 			AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && am.getProperty(AudioManager.PROPERTY_OUTPUT_FRAMES_PER_BUFFER) != null) {
+			if (am.getProperty(AudioManager.PROPERTY_OUTPUT_FRAMES_PER_BUFFER) != null) {
 				int outFramesPerBuffer = Integer.parseInt(am.getProperty(AudioManager.PROPERTY_OUTPUT_FRAMES_PER_BUFFER));
 				Instance.setBufferSize(outFramesPerBuffer);
 			} else {
@@ -3773,7 +3775,8 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 					}
 				}
 				AndroidUtilities.runOnUIThread(() -> {
-					am.requestAudioFocus(VoIPService.this, currentStreamType, AudioManager.AUDIOFOCUS_GAIN);
+					int focusResult = am.requestAudioFocus(VoIPService.this, AudioManager.STREAM_VOICE_CALL, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+					hasAudioFocus = focusResult == AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
 					final VoipAudioManager vam = VoipAudioManager.get();
 					if (isBluetoothHeadsetConnected() && hasEarpiece()) {
 						switch (audioRouteToSet) {
