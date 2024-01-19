@@ -36325,7 +36325,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 return;
             Bundle args = new Bundle();
             args.putLong("chat_id", chatInfo.id);
-            args.putInt("message_id", threadMessageId);
+            args.putLong("message_id", threadMessageId);
             if (!getMessagesController().checkCanOpenChat(args, ChatActivity.this))
                 return;
             presentFragment(new ChatActivity(args), true);
