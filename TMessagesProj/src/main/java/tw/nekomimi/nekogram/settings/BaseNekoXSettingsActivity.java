@@ -138,11 +138,12 @@ public class BaseNekoXSettingsActivity extends BaseFragment {
             var builder = new AlertDialog.Builder(context);
             builder.setTitle(LocaleController.getString("ImportSettings", R.string.ImportSettings));
             builder.setMessage(LocaleController.getString("ImportSettingsAlert", R.string.ImportSettingsAlert));
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (dialogInter, i) -> scrollToRow(key, unknown));
             builder.setPositiveButton(LocaleController.getString("Import", R.string.Import), (dialogInter, i) -> {
                 config.changed(new_value);
                 config.saveConfig();
                 updateRows();
+                scrollToRow(key, unknown);
             });
             builder.show();
         } else {
