@@ -1464,17 +1464,18 @@ public class PreviewView extends FrameLayout {
             return null;
         }
         TLRPC.WallPaper wallpaper = null;
-        if (dialogId >= 0) {
-            TLRPC.UserFull userFull = MessagesController.getInstance(currentAccount).getUserFull(dialogId);
-            if (userFull != null) {
-                wallpaper = userFull.wallpaper;
-            }
-        } else {
-            TLRPC.ChatFull chatFull = MessagesController.getInstance(currentAccount).getChatFull(-dialogId);
-            if (chatFull != null) {
-                wallpaper = chatFull.wallpaper;
-            }
-        }
+//        if (dialogId >= 0) {
+//            TLRPC.UserFull userFull = MessagesController.getInstance(currentAccount).getUserFull(dialogId);
+//            if (userFull != null) {
+//                wallpaper = userFull.wallpaper;
+//            }
+//        } else {
+//            TLRPC.ChatFull chatFull = MessagesController.getInstance(currentAccount).getChatFull(-dialogId);
+//            if (chatFull != null) {
+//                wallpaper = chatFull.wallpaper;
+//            }
+//        }
+        wallpaper = ChatThemeController.getInstance(currentAccount).getDialogWallpaper(dialogId);
         return getBackgroundDrawable(prevDrawable, currentAccount, wallpaper, isDark);
     }
 

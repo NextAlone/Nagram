@@ -92,4 +92,6 @@
     <string name="HideFilterMuteAll">隐藏文件夹中的\"全部取消静音\"</string>
     <string name="UseLocalQuoteColor">本地名称颜色</string>
     <string name="ShowSquareAvatar">显示方形头像</string>
+    <string name="DisableCustomWallpaperUser">禁用私聊的自定义背景</string>
+    <string name="DisableCustomWallpaperChannel">禁用频道的自定义背景</string>
 </resources>

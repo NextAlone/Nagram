@@ -95,4 +95,6 @@
     <string name="HideFilterMuteAll">Hide filter mute all</string>
     <string name="UseLocalQuoteColor">Use local quote color</string>
     <string name="ShowSquareAvatar">Show square avatar</string>
+    <string name="DisableCustomWallpaperUser">Disable user custom wallpaper</string>
+    <string name="DisableCustomWallpaperChannel">Disable channel custom wallpaper</string>
 </resources>
