@@ -99,6 +99,7 @@ import java.util.regex.Pattern;
 
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.ui.PinnedStickerHelper;
+import xyz.nextalone.nagram.helper.ExternalStickerCacheHelper;
 
 @SuppressWarnings("unchecked")
 public class MediaDataController extends BaseController {
@@ -2940,6 +2941,8 @@ public class MediaDataController extends BaseController {
                         onFinish.run();
                     }
                 }
+                // Na: [ExternalStickerCache] cache sticker sets
+                ExternalStickerCacheHelper.onCacheStickers(type, res, ApplicationLoader.applicationContext);
             } else if (!cache) {
                 AndroidUtilities.runOnUIThread(() -> loadDate[type] = date);
                 putStickersToCache(type, null, date, 0);
