@@ -104,6 +104,11 @@ public class WallpaperHelper extends BaseRemoteHelper {
             int count = data.readInt32(false);
             for (int a = 0; a < count; a++) {
                 WallPaperInfo info = WallPaperInfo.deserialize(data);
+                if (info.wallPaper == null) {
+                    continue;
+                }
+                info.wallPaper.flags |= 4;
+                info.wallPaper.settings = info.parseSettings();
                 wallPaperInfo.add(info);
                 wallpaperInfoMap.put(info.chatId, info);
             }
@@ -135,6 +140,7 @@ public class WallpaperHelper extends BaseRemoteHelper {
                 wallpaper.id = 0;
                 wallpaper.isDefault = false;
                 wallpaper.dark = false;
+                wallpaper.flags |= 4;
                 wallpaper.settings = info.parseSettings();
                 info.flags |= 1;
                 info.wallPaper = wallpaper;
@@ -154,6 +160,7 @@ public class WallpaperHelper extends BaseRemoteHelper {
                         if (response instanceof TLRPC.TL_wallPaper) {
                             info.flags |= 1;
                             info.wallPaper = (TLRPC.WallPaper) response;
+                            info.wallPaper.flags |= 4;
                             info.wallPaper.settings = info.parseSettings();
                             saveWallPaperInfo();
                         }
