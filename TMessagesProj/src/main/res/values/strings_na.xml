@@ -97,4 +97,5 @@
     <string name="ShowSquareAvatar">Show square avatar</string>
     <string name="DisableCustomWallpaperUser">Disable user custom wallpaper</string>
     <string name="DisableCustomWallpaperChannel">Disable channel custom wallpaper</string>
+    <string name="CopyPhotoAsSticker">Copy Photo As Sticker</string>
 </resources>
