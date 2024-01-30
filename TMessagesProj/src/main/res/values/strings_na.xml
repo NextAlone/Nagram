@@ -102,4 +102,5 @@
     <string name="ExternalStickerCacheHint">For sharing sticker packs with other apps. Click to pick storage location.</string>
     <string name="ExternalStickerCacheRefresh">Refresh External Cache</string>
     <string name="ExternalStickerCacheDelete">Delete External Cache</string>
+    <string name="ProviderTranSmartTranslate">TranSmart Translator</string>
 </resources>

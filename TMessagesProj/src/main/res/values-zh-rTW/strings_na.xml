@@ -78,4 +78,5 @@
     <string name="TypeMessageHintUseGroupName">使用群組名稱作為輸入框提示</string>
     <string name="HideBotButtonInInputField">隱藏輸入框中的機器人按鈕</string>
     <string name="ShowSendAsUnderMessageHint">在訊息提示下顯示傳送者</string>
+    <string name="ProviderTranSmartTranslate">騰訊交互翻譯</string>
 </resources>

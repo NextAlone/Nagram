@@ -99,4 +99,5 @@
     <string name="ExternalStickerCacheHint">用于与其他应用共享贴纸包 (点击选择存储位置)</string>
     <string name="ExternalStickerCacheRefresh">刷新外部缓存</string>
     <string name="ExternalStickerCacheDelete">删除外部缓存</string>
+    <string name="ProviderTranSmartTranslate">腾讯交互翻译</string>
 </resources>
