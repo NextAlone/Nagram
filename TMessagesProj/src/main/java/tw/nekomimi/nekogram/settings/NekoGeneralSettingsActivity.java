@@ -352,7 +352,8 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
                             LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderMicrosoftTranslator),
                             LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderYouDao),
                             LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderDeepLTranslate),
-                            LocaleController.getString("ProviderTelegramAPI", R.string.ProviderTelegramAPI)
+                            LocaleController.getString("ProviderTelegramAPI", R.string.ProviderTelegramAPI),
+                            LocaleController.getString("ProviderTranSmartTranslate", R.string.ProviderTranSmartTranslate),
                     }, (i, __) -> {
                         boolean needReset = NekoConfig.translationProvider.Int() - 1 != i && (NekoConfig.translationProvider.Int() == 1 || i == 0);
                         NekoConfig.translationProvider.setConfigInt(i + 1);
@@ -764,6 +765,9 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
                                     break;
                                 case Translator.providerTelegram:
                                     value = LocaleController.getString("ProviderTelegramAPI", R.string.ProviderTelegramAPI);
+                                    break;
+                                case Translator.providerTranSmart:
+                                    value = LocaleController.getString("ProviderTranSmartTranslate", R.string.ProviderTranSmartTranslate);
                                     break;
                                 default:
                                     value = "Unknown";

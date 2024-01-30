@@ -105,4 +105,5 @@
     <string name="ExternalStickerCacheAutoRefreshHint">在有贴纸事件时自动同步所有缓存</string>
     <string name="ExternalStickerCacheRefreshAll">同步所有缓存</string>
     <string name="ExternalStickerCacheDeleteAll">删除所有缓存</string>
+    <string name="ProviderTranSmartTranslate">腾讯交互翻译</string>
 </resources>

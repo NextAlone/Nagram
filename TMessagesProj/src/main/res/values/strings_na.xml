@@ -108,4 +108,5 @@
     <string name="ExternalStickerCacheAutoRefreshHint">Automatically sync all caches after receiving sticker events</string>
     <string name="ExternalStickerCacheRefreshAll">Sync all caches</string>
     <string name="ExternalStickerCacheDeleteAll">Delete all caches</string>
+    <string name="ProviderTranSmartTranslate">TranSmart Translator</string>
 </resources>

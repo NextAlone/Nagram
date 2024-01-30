@@ -1718,7 +1718,6 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                                         LocaleController.getString("UnpinSticker", R.string.UnpinSticker) :
                                         LocaleController.getString("PinSticker", R.string.PinSticker), () -> processSelectionOption(MENU_TOGGLE_PIN, stickerSet));
                             }
-                            options.add(R.drawable.msg_archive, LocaleController.getString("StickersHide", R.string.StickersHide), () -> processSelectionOption(MENU_ARCHIVE, stickerSet));
                             options.add(R.drawable.msg_link, LocaleController.getString("StickersCopy", R.string.StickersCopy), () -> processSelectionOption(3, stickerSet));
                             options.add(R.drawable.msg_reorder, LocaleController.getString("StickersReorder", R.string.StickersReorder), () -> processSelectionOption(4, stickerSet));
                             options.add(R.drawable.msg_share, LocaleController.getString("StickersShare", R.string.StickersShare), () -> processSelectionOption(2, stickerSet));
