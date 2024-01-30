@@ -2950,8 +2950,6 @@ public class MediaDataController extends BaseController {
                         onFinish.run();
                     }
                 }
-                // Na: [ExternalStickerCache] cache sticker sets
-                ExternalStickerCacheHelper.onCacheStickers(type, res, ApplicationLoader.applicationContext);
             } else if (!cache) {
                 AndroidUtilities.runOnUIThread(() -> loadDate[type] = date);
                 putStickersToCache(type, null, date, 0);
