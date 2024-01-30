@@ -9,6 +9,8 @@ public class ConfigCellText extends AbstractConfigCell implements WithKey, WithO
     private final String key;
     private final String value;
     private final Runnable onClick;
+    private boolean enabled = true;
+    private TextSettingsCell cell;
 
     public ConfigCellText(String key, String customValue, Runnable onClick) {
         this.key = key;
@@ -29,16 +31,24 @@ public class ConfigCellText extends AbstractConfigCell implements WithKey, WithO
     }
 
     public boolean isEnabled() {
-        return true;
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        if (this.cell != null) this.cell.setEnabled(this.enabled);
     }
 
     public void onBindViewHolder(RecyclerView.ViewHolder holder) {
         TextSettingsCell cell = (TextSettingsCell) holder.itemView;
+        this.cell = cell;
         String title = LocaleController.getString(key);
         cell.setTextAndValue(title, value, cellGroup.needSetDivider(this));
+        cell.setEnabled(enabled);
     }
 
     public void onClick() {
+        if (!enabled) return;
         if (onClick != null) {
             try {
                 onClick.run();

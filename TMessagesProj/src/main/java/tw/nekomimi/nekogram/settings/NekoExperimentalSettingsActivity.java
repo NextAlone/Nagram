@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -24,11 +23,9 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.R;
-import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.EmptyCell;
@@ -41,7 +38,6 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.BlurredRecyclerView;
-import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UndoView;
@@ -49,7 +45,6 @@ import org.telegram.ui.Components.UndoView;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import kotlin.Unit;
 
@@ -104,17 +99,30 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
     private final AbstractConfigCell customArtworkApiRow = cellGroup.appendCell(new ConfigCellTextInput(null, NaConfig.INSTANCE.getCustomArtworkApi(), "", null));
     private final AbstractConfigCell fakeHighPerformanceDeviceRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getFakeHighPerformanceDevice()));
     private final AbstractConfigCell disableEmojiDrawLimitRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableEmojiDrawLimit()));
+    private final AbstractConfigCell divider1 = cellGroup.appendCell(new ConfigCellDivider());
+
+    private final AbstractConfigCell header3 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.ExternalStickerCache)));
     private final AbstractConfigCell externalStickerCacheRow = cellGroup.appendCell(new ConfigCellAutoTextCheck(
             NaConfig.INSTANCE.getExternalStickerCache(), LocaleController.getString(R.string.ExternalStickerCacheHint), this::onExternalStickerCacheButtonClick));
-    private final AbstractConfigCell divider1 = cellGroup.appendCell(new ConfigCellDivider());
+    private final AbstractConfigCell externalStickerCacheAutoSyncRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getExternalStickerCacheAutoRefresh(), LocaleController.getString(R.string.ExternalStickerCacheAutoRefreshHint)));
+    private final AbstractConfigCell externalStickerCacheSyncAllRow = cellGroup.appendCell(new ConfigCellText("ExternalStickerCacheRefreshAll", ExternalStickerCacheHelper::syncAllCaches));
+    private final AbstractConfigCell externalStickerCacheDeleteAllRow = cellGroup.appendCell(new ConfigCellText("ExternalStickerCacheDeleteAll", ExternalStickerCacheHelper::deleteAllCaches));
+    private final AbstractConfigCell divider2 = cellGroup.appendCell(new ConfigCellDivider());
 
     private UndoView tooltip;
 
     private static final int INTENT_PICK_CUSTOM_EMOJI_PACK = 114;
     private static final int INTENT_PICK_EXTERNAL_STICKER_DIRECTORY = 514;
 
+    private void setExternalStickerCacheCellsEnabled(boolean enabled) {
+        ((ConfigCellTextCheck) externalStickerCacheAutoSyncRow).setEnabled(enabled);
+        ((ConfigCellText) externalStickerCacheSyncAllRow).setEnabled(enabled);
+        ((ConfigCellText) externalStickerCacheDeleteAllRow).setEnabled(enabled);
+    }
+
     private void refreshExternalStickerStorageState() {
         ConfigCellAutoTextCheck cell = (ConfigCellAutoTextCheck) externalStickerCacheRow;
+        setExternalStickerCacheCellsEnabled(!cell.getBindConfig().String().isEmpty());
         Context context = ApplicationLoader.applicationContext;
         ExternalStickerCacheHelper.checkUri(cell, context);
     }
@@ -122,6 +130,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
     private void onExternalStickerCacheButtonClick(boolean isChecked) {
         if (isChecked) {
             // clear config
+            setExternalStickerCacheCellsEnabled(false);
             ConfigCellAutoTextCheck cell = (ConfigCellAutoTextCheck) externalStickerCacheRow;
             cell.setSubtitle(null);
             NaConfig.INSTANCE.getExternalStickerCache().setConfigString("");
@@ -159,15 +168,6 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
         });
 
         refreshExternalStickerStorageState(); // Cell (externalStickerCacheRow): Refresh state
-
-        // ExternalStickerCache: Additional options
-        if (!NaConfig.INSTANCE.getExternalStickerCache().String().isEmpty()) {
-            cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.ExternalStickerCache)));
-            cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getExternalStickerCacheAutoRefresh(), LocaleController.getString(R.string.ExternalStickerCacheAutoRefreshHint)));
-            cellGroup.appendCell(new ConfigCellText("ExternalStickerCacheRefreshAll", ExternalStickerCacheHelper::syncAllCaches));
-            cellGroup.appendCell(new ConfigCellText("ExternalStickerCacheDeleteAll", ExternalStickerCacheHelper::deleteAllCaches));
-            cellGroup.appendCell(new ConfigCellDivider());
-        }
 
         listAdapter = new ListAdapter(context);
 
