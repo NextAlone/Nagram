@@ -1953,9 +1953,6 @@ public class MediaDataController extends BaseController {
         loadHash[type] = calcStickersHash(stickerSets[type]);
         getNotificationCenter().postNotificationName(NotificationCenter.stickersDidLoad, type, true);
         loadStickers(type, false, true);
-
-        // Na: [ExternalStickerCache] cache sticker sets
-        ExternalStickerCacheHelper.cacheStickers();
     }
 
     public void loadFeaturedStickers(boolean emoji, boolean cache, boolean force) {
@@ -2726,9 +2723,6 @@ public class MediaDataController extends BaseController {
                 }));
             }
         }
-
-        // Na: [ExternalStickerCache] cache sticker sets
-        ExternalStickerCacheHelper.cacheStickers();
     }
 
     private void putStickersToCache(int type, ArrayList<TLRPC.TL_messages_stickerSet> stickers, int date, long hash) {
@@ -2764,9 +2758,6 @@ public class MediaDataController extends BaseController {
             } catch (Exception e) {
                 FileLog.e(e);
             }
-
-            // Na: [ExternalStickerCache] cache sticker sets
-            ExternalStickerCacheHelper.cacheStickers();
         });
     }
 
@@ -3125,9 +3116,6 @@ public class MediaDataController extends BaseController {
         }
 
         getNotificationCenter().postNotificationName(NotificationCenter.stickersDidLoad, type, true);
-
-        // Na: [ExternalStickerCache] cache sticker sets
-        ExternalStickerCacheHelper.cacheStickers();
     }
 
     public void removeMultipleStickerSets(Context context, BaseFragment fragment, ArrayList<TLRPC.TL_messages_stickerSet> sets) {

@@ -1166,9 +1166,6 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             stickersTab.onPageScrolled(lastPosition, lastPosition);
         }
         checkPanels();
-
-        // Na: [ExternalStickerCache] cache sticker sets
-        ExternalStickerCacheHelper.cacheStickers();
     }
 
     private void checkPanels() {

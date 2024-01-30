@@ -11,6 +11,8 @@ import org.telegram.messenger.AndroidUtilities
 import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.MediaDataController
+import org.telegram.messenger.NotificationCenter
+import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate
 import org.telegram.messenger.R
 import org.telegram.messenger.UserConfig
 import org.telegram.tgnet.TLRPC.TL_messages_stickerSet
@@ -242,6 +244,28 @@ object ExternalStickerCacheHelper {
             } catch (e: Exception) {
                 logException(e, "deleting all caches")
             }
+        }
+    }
+
+    private val observer = NotificationCenterDelegate { _, _, _ -> cacheStickers(true) }
+    private val notificationIdList = listOf(
+        NotificationCenter.stickersDidLoad,
+        NotificationCenter.diceStickersDidLoad,
+        NotificationCenter.featuredStickersDidLoad,
+        NotificationCenter.stickersImportComplete,
+    )
+
+    @JvmStatic
+    fun addNotificationObservers(currentAccount: Int) {
+        NotificationCenter.getInstance(currentAccount).apply {
+            notificationIdList.forEach { addObserver(observer, it) }
+        }
+    }
+
+    @JvmStatic
+    fun removeNotificationObservers(currentAccount: Int) {
+        NotificationCenter.getInstance(currentAccount).apply {
+            notificationIdList.forEach { removeObserver(observer, it) }
         }
     }
 
