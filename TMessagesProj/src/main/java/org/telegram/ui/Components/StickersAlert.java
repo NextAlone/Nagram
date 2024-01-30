@@ -162,8 +162,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     public boolean probablyEmojis;
 
     private int menu_archive = 4;
-    private int menu_refreshExternalCache = 5;
-    private int menu_deleteExternalCache = 6;
+    private final int menuRefreshExternalCache = 100;
+    private final int menuDeleteExternalCache = 101;
 
     private TLRPC.TL_messages_stickerSet stickerSet;
     private TLRPC.Document selectedSticker;
@@ -870,8 +870,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         optionsButton.addSubItem(3, R.drawable.msg_qrcode, LocaleController.getString("ShareQRCode", R.string.ShareQRCode));
         optionsButton.addSubItem(menu_archive, R.drawable.msg_archive, LocaleController.getString("Archive", R.string.Archive));
         if (!NaConfig.INSTANCE.getExternalStickerCache().String().isBlank()) {
-            optionsButton.addSubItem(menu_refreshExternalCache, R.drawable.menu_views_reposts, LocaleController.getString(R.string.ExternalStickerCacheRefresh));
-            optionsButton.addSubItem(menu_deleteExternalCache, R.drawable.msg_delete, LocaleController.getString(R.string.ExternalStickerCacheDelete));
+            optionsButton.addSubItem(menuRefreshExternalCache, R.drawable.menu_views_reposts, LocaleController.getString(R.string.ExternalStickerCacheRefresh));
+            optionsButton.addSubItem(menuDeleteExternalCache, R.drawable.msg_delete, LocaleController.getString(R.string.ExternalStickerCacheDelete));
         }
 
         optionsButton.setOnClickListener(v -> optionsButton.toggleSubMenu());
@@ -1100,10 +1100,10 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         } else if (id == menu_archive) {
             dismiss();
             MediaDataController.getInstance(currentAccount).toggleStickerSet(parentActivity, stickerSet, 1, parentFragment, false, true);
-        } else if (id == menu_refreshExternalCache) {
+        } else if (id == menuRefreshExternalCache) {
             // Na: [ExternalStickerCache] force refresh cache files
             ExternalStickerCacheHelper.refreshCacheFiles(stickerSet);
-        } else if (id == menu_deleteExternalCache) {
+        } else if (id == menuDeleteExternalCache) {
             // Na: [ExternalStickerCache] delete cache files
             ExternalStickerCacheHelper.deleteCacheFiles(stickerSet);
         }

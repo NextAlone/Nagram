@@ -1,12 +1,16 @@
 package tw.nekomimi.nekogram.config.cell;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.telegram.messenger.LocaleController;
 import org.telegram.ui.Cells.TextCheckCell;
 import tw.nekomimi.nekogram.config.CellGroup;
+import tw.nekomimi.nekogram.config.ConfigItem;
 
 import java.util.function.Consumer;
 
 public class ConfigCellAutoTextCheck extends AbstractConfigCell {
+    private final ConfigItem bindConfig;
     private final Consumer<Boolean> onClick;
     private final String title;
     private String subtitle = null;
@@ -14,18 +18,23 @@ public class ConfigCellAutoTextCheck extends AbstractConfigCell {
     private boolean enabled = true;
     public TextCheckCell cell;
 
-    public ConfigCellAutoTextCheck(String title, String subtitleFallback, Consumer<Boolean> onClick) {
-        this.title = title;
+    public ConfigCellAutoTextCheck(ConfigItem bindConfig, String subtitleFallback, Consumer<Boolean> onClick) {
+        this.bindConfig = bindConfig;
+        this.title = LocaleController.getString(bindConfig.getKey());
         this.subtitleFallback = subtitleFallback;
         this.onClick = onClick;
     }
 
-    public ConfigCellAutoTextCheck(String title, Consumer<Boolean> onClick) {
-        this(title, null, onClick);
-    }
-
     public int getType() {
         return CellGroup.ITEM_TYPE_TEXT_CHECK;
+    }
+
+    public String getKey() {
+        return bindConfig == null ? null : bindConfig.getKey();
+    }
+
+    public ConfigItem getBindConfig() {
+        return bindConfig;
     }
 
     public boolean isEnabled() {

@@ -105,7 +105,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
     private final AbstractConfigCell fakeHighPerformanceDeviceRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getFakeHighPerformanceDevice()));
     private final AbstractConfigCell disableEmojiDrawLimitRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableEmojiDrawLimit()));
     private final AbstractConfigCell externalStickerCacheRow = cellGroup.appendCell(new ConfigCellAutoTextCheck(
-            LocaleController.getString(R.string.ExternalStickerCache), LocaleController.getString(R.string.ExternalStickerCacheHint), this::onExternalStickerCacheButtonClick));
+            NaConfig.INSTANCE.getExternalStickerCache(), LocaleController.getString(R.string.ExternalStickerCacheHint), this::onExternalStickerCacheButtonClick));
     private final AbstractConfigCell divider1 = cellGroup.appendCell(new ConfigCellDivider());
 
     private UndoView tooltip;

@@ -9,10 +9,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.telegram.messenger.AndroidUtilities
 import org.telegram.messenger.ApplicationLoader
+import org.telegram.messenger.LocaleController
 import org.telegram.messenger.MediaDataController
+import org.telegram.messenger.R
 import org.telegram.messenger.UserConfig
 import org.telegram.tgnet.TLRPC.TL_messages_stickerSet
 import tw.nekomimi.nekogram.config.cell.ConfigCellAutoTextCheck
+import tw.nekomimi.nekogram.utils.AlertUtil
 import xyz.nextalone.nagram.NaConfig
 import java.io.File
 
@@ -184,6 +187,7 @@ object ExternalStickerCacheHelper {
                         }
                     }
                 }
+                showToast(null)
             } catch (e: Exception) {
                 logException(e, "refreshing specific cache")
             }
@@ -201,8 +205,22 @@ object ExternalStickerCacheHelper {
                     val idString = stickerSet.id.toString()
                     dir.findFile(idString)?.delete()
                 }
+                showToast(null)
             } catch (e: Exception) {
                 logException(e, "deleting specific cache")
+            }
+        }
+    }
+
+    @JvmStatic
+    private fun showToast(msg: String?) {
+        var realMessage = msg
+        if (realMessage == null) {
+            realMessage = LocaleController.getString("Done", R.string.Done)
+        }
+        AndroidUtilities.runOnUIThread {
+            if (realMessage != null) {
+                AlertUtil.showToast(realMessage)
             }
         }
     }
@@ -210,7 +228,9 @@ object ExternalStickerCacheHelper {
     private fun logException(e: Exception, s: String) {
         val exception = e.javaClass.canonicalName
         val message = e.message
-        Log.e(TAG, "Exception while $s: $exception: $message")
+        val realMessage = "Exception while $s: $exception: $message"
+        Log.e(TAG, realMessage)
+        showToast(realMessage)
     }
     private fun logV(message: String) = Log.v(TAG, message)
     private fun logD(message: String) = Log.d(TAG, message)
