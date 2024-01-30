@@ -61,7 +61,6 @@ object ExternalStickerCacheHelper {
     private var cacheAgain = false
 
     @JvmStatic
-    @JvmOverloads
     fun cacheStickers(isAutoSync: Boolean = true) {
         if (isAutoSync && !NaConfig.externalStickerCacheAutoRefresh.Bool()) return
         if (caching) {
@@ -69,6 +68,10 @@ object ExternalStickerCacheHelper {
             return
         }
         if (NaConfig.externalStickerCache.String().isEmpty()) return
+        cacheStickers0(isAutoSync)
+    }
+
+    private fun cacheStickers0(isAutoSync: Boolean) {
         async {
             caching = true
             val stickerSets = MediaDataController.getInstance(UserConfig.selectedAccount).getStickerSets(MediaDataController.TYPE_IMAGE)
@@ -140,7 +143,7 @@ object ExternalStickerCacheHelper {
             if (cacheAgain) {
                 delay(30000)
                 cacheAgain = false
-                cacheStickers()
+                cacheStickers0(true)
             } else {
                 caching = false
             }
