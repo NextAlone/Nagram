@@ -485,8 +485,8 @@ object NaConfig {
             ConfigItem.configTypeString,
             ""
         )
-    var externalStickerCacheUri
-        get() = Uri.parse(externalStickerCache.String())
+    var externalStickerCacheUri: Uri?
+        get() = externalStickerCache.String().let { if (it.isBlank()) return null else return Uri.parse(it) }
         set(value) = externalStickerCache.setConfigString(value.toString())
 
     private fun addConfig(

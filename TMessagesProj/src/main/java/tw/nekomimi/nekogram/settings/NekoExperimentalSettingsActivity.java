@@ -104,8 +104,8 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
     private final AbstractConfigCell customArtworkApiRow = cellGroup.appendCell(new ConfigCellTextInput(null, NaConfig.INSTANCE.getCustomArtworkApi(), "", null));
     private final AbstractConfigCell fakeHighPerformanceDeviceRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getFakeHighPerformanceDevice()));
     private final AbstractConfigCell disableEmojiDrawLimitRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableEmojiDrawLimit()));
-    private final AbstractConfigCell externalStickerCacheRow = cellGroup.appendCell(new ConfigCellButton(
-            LocaleController.getString(R.string.ExternalStickerCache), LocaleController.getString(R.string.ExternalStickerCacheHint), NekoExperimentalSettingsActivity::onExternalStickerCacheButtonClick));
+    private final AbstractConfigCell externalStickerCacheRow = cellGroup.appendCell(new ConfigCellAutoTextCheck(
+            LocaleController.getString(R.string.ExternalStickerCache), LocaleController.getString(R.string.ExternalStickerCacheHint), this::onExternalStickerCacheButtonClick));
     private final AbstractConfigCell divider1 = cellGroup.appendCell(new ConfigCellDivider());
 
     private UndoView tooltip;
@@ -114,15 +114,21 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
     private static final int INTENT_PICK_EXTERNAL_STICKER_DIRECTORY = 514;
 
     private void refreshExternalStickerStorageState() {
-        ConfigCellButton cell = (ConfigCellButton) externalStickerCacheRow;
-        cell.setSubtitle("Loading...");
+        ConfigCellAutoTextCheck cell = (ConfigCellAutoTextCheck) externalStickerCacheRow;
         Context context = ApplicationLoader.applicationContext;
         ExternalStickerCacheHelper.checkUri(cell, context);
     }
 
-    private static void onExternalStickerCacheButtonClick(BaseFragment fragment) {
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-        fragment.startActivityForResult(intent, 514);
+    private void onExternalStickerCacheButtonClick(boolean isChecked) {
+        if (isChecked) {
+            // clear config
+            ConfigCellAutoTextCheck cell = (ConfigCellAutoTextCheck) externalStickerCacheRow;
+            cell.setSubtitle(null);
+            NaConfig.INSTANCE.getExternalStickerCache().setConfigString("");
+        } else {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            startActivityForResult(intent, INTENT_PICK_EXTERNAL_STICKER_DIRECTORY);
+        }
     }
 
     @Override
@@ -175,8 +181,8 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
                 ((ConfigCellSelectBox) a).onClick(view);
             } else if (a instanceof ConfigCellTextInput) {
                 ((ConfigCellTextInput) a).onClick();
-            } else if (a instanceof ConfigCellButton) {
-                ((ConfigCellButton) a).onClick(this);
+            } else if (a instanceof ConfigCellAutoTextCheck) {
+                ((ConfigCellAutoTextCheck) a).onClick();
             } else if (a instanceof ConfigCellTextDetail) {
                 RecyclerListView.OnItemClickListener o = ((ConfigCellTextDetail) a).onItemClickListener;
                 if (o != null) {
