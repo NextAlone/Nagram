@@ -2,6 +2,7 @@ package xyz.nextalone.nagram
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.Uri
 import android.util.Base64
 import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.LocaleController
@@ -478,6 +479,15 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val externalStickerCache =
+        addConfig(
+            "ExternalStickerCache",
+            ConfigItem.configTypeString,
+            ""
+        )
+    var externalStickerCacheUri: Uri?
+        get() = externalStickerCache.String().let { if (it.isBlank()) return null else return Uri.parse(it) }
+        set(value) = externalStickerCache.setConfigString(value.toString())
 
     private fun addConfig(
         k: String,

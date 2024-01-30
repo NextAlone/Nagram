@@ -28,6 +28,7 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.EmptyCell;
@@ -60,6 +61,7 @@ import tw.nekomimi.nekogram.config.CellGroup;
 import tw.nekomimi.nekogram.config.cell.AbstractConfigCell;
 import tw.nekomimi.nekogram.config.cell.*;
 import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.helper.ExternalStickerCacheHelper;
 
 @SuppressLint("RtlHardcoded")
 public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity {
@@ -102,9 +104,32 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
     private final AbstractConfigCell customArtworkApiRow = cellGroup.appendCell(new ConfigCellTextInput(null, NaConfig.INSTANCE.getCustomArtworkApi(), "", null));
     private final AbstractConfigCell fakeHighPerformanceDeviceRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getFakeHighPerformanceDevice()));
     private final AbstractConfigCell disableEmojiDrawLimitRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableEmojiDrawLimit()));
+    private final AbstractConfigCell externalStickerCacheRow = cellGroup.appendCell(new ConfigCellAutoTextCheck(
+            NaConfig.INSTANCE.getExternalStickerCache(), LocaleController.getString(R.string.ExternalStickerCacheHint), this::onExternalStickerCacheButtonClick));
     private final AbstractConfigCell divider1 = cellGroup.appendCell(new ConfigCellDivider());
 
     private UndoView tooltip;
+
+    private static final int INTENT_PICK_CUSTOM_EMOJI_PACK = 114;
+    private static final int INTENT_PICK_EXTERNAL_STICKER_DIRECTORY = 514;
+
+    private void refreshExternalStickerStorageState() {
+        ConfigCellAutoTextCheck cell = (ConfigCellAutoTextCheck) externalStickerCacheRow;
+        Context context = ApplicationLoader.applicationContext;
+        ExternalStickerCacheHelper.checkUri(cell, context);
+    }
+
+    private void onExternalStickerCacheButtonClick(boolean isChecked) {
+        if (isChecked) {
+            // clear config
+            ConfigCellAutoTextCheck cell = (ConfigCellAutoTextCheck) externalStickerCacheRow;
+            cell.setSubtitle(null);
+            NaConfig.INSTANCE.getExternalStickerCache().setConfigString("");
+        } else {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            startActivityForResult(intent, INTENT_PICK_EXTERNAL_STICKER_DIRECTORY);
+        }
+    }
 
     @Override
     public boolean onFragmentCreate() {
@@ -133,6 +158,8 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
             }
         });
 
+        refreshExternalStickerStorageState(); // Cell (externalStickerCacheRow): Refresh state
+
         listAdapter = new ListAdapter(context);
 
         fragmentView = new FrameLayout(context);
@@ -154,6 +181,8 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
                 ((ConfigCellSelectBox) a).onClick(view);
             } else if (a instanceof ConfigCellTextInput) {
                 ((ConfigCellTextInput) a).onClick();
+            } else if (a instanceof ConfigCellAutoTextCheck) {
+                ((ConfigCellAutoTextCheck) a).onClick();
             } else if (a instanceof ConfigCellTextDetail) {
                 RecyclerListView.OnItemClickListener o = ((ConfigCellTextDetail) a).onItemClickListener;
                 if (o != null) {
@@ -251,7 +280,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("application/zip");
                 Activity act = getParentActivity();
-                act.startActivityFromChild(act, intent, 114);
+                act.startActivityFromChild(act, intent, INTENT_PICK_CUSTOM_EMOJI_PACK);
             }
         };
 
@@ -266,7 +295,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
 
     @Override
     public void onActivityResultFragment(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 114 && resultCode == Activity.RESULT_OK) {
+        if (requestCode == INTENT_PICK_CUSTOM_EMOJI_PACK && resultCode == Activity.RESULT_OK) {
             try {
                 // copy emoji zip
                 Uri uri = data.getData();
@@ -299,6 +328,15 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
             }
             tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
 //            listAdapter.notifyItemChanged(cellGroup.rows.indexOf(useCustomEmojiRow));
+        } else if (requestCode == INTENT_PICK_EXTERNAL_STICKER_DIRECTORY && resultCode == Activity.RESULT_OK) {
+            Uri uri = data.getData();
+            // reserve permissions
+            int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+            ApplicationLoader.applicationContext.getContentResolver().takePersistableUriPermission(uri, takeFlags);
+            // save config
+            NaConfig.INSTANCE.setExternalStickerCacheUri(uri);
+            refreshExternalStickerStorageState();
+            tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
         }
     }
 

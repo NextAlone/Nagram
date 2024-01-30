@@ -19,6 +19,7 @@ import java.util.Locale;
 import tw.nekomimi.nekogram.config.CellGroup;
 import tw.nekomimi.nekogram.config.ConfigItem;
 import tw.nekomimi.nekogram.config.cell.AbstractConfigCell;
+import tw.nekomimi.nekogram.config.cell.ConfigCellAutoTextCheck;
 import tw.nekomimi.nekogram.config.cell.ConfigCellCustom;
 import tw.nekomimi.nekogram.config.cell.ConfigCellSelectBox;
 import tw.nekomimi.nekogram.config.cell.ConfigCellTextCheck;
@@ -88,6 +89,8 @@ public class BaseNekoXSettingsActivity extends BaseFragment {
             return ((ConfigCellTextInput) row).getKey();
         } else if (row instanceof ConfigCellCustom) {
             return ((ConfigCellCustom) row).getKey();
+        } else if (row instanceof ConfigCellAutoTextCheck) {
+            return ((ConfigCellAutoTextCheck) row).getKey();
         }
         return null;
     }

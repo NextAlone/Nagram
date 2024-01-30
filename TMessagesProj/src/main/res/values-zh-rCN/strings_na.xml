@@ -95,4 +95,8 @@
     <string name="DisableCustomWallpaperUser">禁用私聊的自定义背景</string>
     <string name="DisableCustomWallpaperChannel">禁用频道的自定义背景</string>
     <string name="CopyPhotoAsSticker">复制图片但是贴纸</string>
+    <string name="ExternalStickerCache">在外部存储缓存贴纸文件</string>
+    <string name="ExternalStickerCacheHint">用于与其他应用共享贴纸包 (点击选择存储位置)</string>
+    <string name="ExternalStickerCacheRefresh">刷新外部缓存</string>
+    <string name="ExternalStickerCacheDelete">删除外部缓存</string>
 </resources>
