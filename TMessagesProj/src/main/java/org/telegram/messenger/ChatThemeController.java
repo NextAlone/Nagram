@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import tw.nekomimi.nekogram.helpers.remote.WallpaperHelper;
 import xyz.nextalone.nagram.NaConfig;
 
 public class ChatThemeController extends BaseController {
@@ -301,9 +302,13 @@ public class ChatThemeController extends BaseController {
     }
 
     public TLRPC.WallPaper getDialogWallpaper(long dialogId) {
+        TLRPC.WallPaper info = WallpaperHelper.getInstance().getDialogWallpaper(dialogId);
         if (dialogId >= 0) {
             if (NaConfig.INSTANCE.getDisableCustomWallpaperUser().Bool()) {
                 return null;
+            }
+            if (info != null) {
+                return info;
             }
             TLRPC.UserFull userFull = getMessagesController().getUserFull(dialogId);
             if (userFull != null) {
@@ -312,6 +317,9 @@ public class ChatThemeController extends BaseController {
         } else {
             if (NaConfig.INSTANCE.getDisableCustomWallpaperChannel().Bool()) {
                 return null;
+            }
+            if (info != null) {
+                return info;
             }
             TLRPC.ChatFull chatFull = getMessagesController().getChatFull(-dialogId);
             if (chatFull != null) {

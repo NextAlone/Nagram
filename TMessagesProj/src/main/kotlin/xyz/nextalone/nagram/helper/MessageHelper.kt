@@ -3,13 +3,37 @@ package xyz.nextalone.nagram.helper
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Build
 import android.text.TextUtils
 import androidx.core.content.FileProvider
-import org.telegram.messenger.*
-import org.telegram.tgnet.TLRPC.*
+import org.telegram.messenger.AndroidUtilities
+import org.telegram.messenger.ApplicationLoader
+import org.telegram.messenger.BuildConfig
+import org.telegram.messenger.ChatObject
+import org.telegram.messenger.DialogObject
+import org.telegram.messenger.Emoji
+import org.telegram.messenger.FileLoader
+import org.telegram.messenger.FileLog
+import org.telegram.messenger.LocaleController
+import org.telegram.messenger.MediaDataController
+import org.telegram.messenger.MessageObject
+import org.telegram.messenger.UserConfig
+import org.telegram.tgnet.TLRPC.Chat
+import org.telegram.tgnet.TLRPC.TL_messageEntityBankCard
+import org.telegram.tgnet.TLRPC.TL_messageEntityBotCommand
+import org.telegram.tgnet.TLRPC.TL_messageEntityCashtag
+import org.telegram.tgnet.TLRPC.TL_messageEntityEmail
+import org.telegram.tgnet.TLRPC.TL_messageEntityHashtag
+import org.telegram.tgnet.TLRPC.TL_messageEntityMention
+import org.telegram.tgnet.TLRPC.TL_messageEntityPhone
+import org.telegram.tgnet.TLRPC.TL_messageEntityUrl
+import org.telegram.tgnet.TLRPC.TL_messageMediaPoll
 import org.telegram.ui.ChatActivity
 import xyz.nextalone.nagram.NaConfig
 import java.io.File
+import java.io.FileOutputStream
 
 
 object MessageHelper {
@@ -54,6 +78,32 @@ object MessageHelper {
         }
     }
 
+    fun addMessageToClipboardAsSticker(selectedObject: MessageObject, callback: Runnable) {
+        val file = getPathToMessage(selectedObject)
+        try {
+            if (file != null) {
+                val path = file.path
+                val image = BitmapFactory.decodeFile(path)
+                if (image != null && !TextUtils.isEmpty(path)) {
+                    val file2 = File(
+                        if (path.endsWith(".jpg")) path.replace(
+                            ".jpg",
+                            ".webp"
+                        ) else "$path.webp"
+                    )
+                    val stream = FileOutputStream(file2)
+                    if (Build.VERSION.SDK_INT >= 30) {
+                        image.compress(Bitmap.CompressFormat.WEBP_LOSSLESS, 100, stream)
+                    } else {
+                        image.compress(Bitmap.CompressFormat.WEBP, 100, stream)
+                    }
+                    stream.close()
+                    addFileToClipboard(file2, callback)
+                }
+            }
+        } catch (ignored: java.lang.Exception) {
+        }
+    }
 
     fun addFileToClipboard(file: File?, callback: Runnable) {
         try {
