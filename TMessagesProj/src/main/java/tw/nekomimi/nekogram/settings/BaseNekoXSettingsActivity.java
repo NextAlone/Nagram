@@ -18,13 +18,7 @@ import java.util.Locale;
 
 import tw.nekomimi.nekogram.config.CellGroup;
 import tw.nekomimi.nekogram.config.ConfigItem;
-import tw.nekomimi.nekogram.config.cell.AbstractConfigCell;
-import tw.nekomimi.nekogram.config.cell.ConfigCellAutoTextCheck;
-import tw.nekomimi.nekogram.config.cell.ConfigCellCustom;
-import tw.nekomimi.nekogram.config.cell.ConfigCellSelectBox;
-import tw.nekomimi.nekogram.config.cell.ConfigCellTextCheck;
-import tw.nekomimi.nekogram.config.cell.ConfigCellTextDetail;
-import tw.nekomimi.nekogram.config.cell.ConfigCellTextInput;
+import tw.nekomimi.nekogram.config.cell.*;
 
 public class BaseNekoXSettingsActivity extends BaseFragment {
     protected BlurredRecyclerView listView;
@@ -79,7 +73,9 @@ public class BaseNekoXSettingsActivity extends BaseFragment {
     }
 
     protected String getRowKey(AbstractConfigCell row) {
-        if (row instanceof ConfigCellTextCheck) {
+        if (row instanceof WithKey) {
+            return ((WithKey) row).getKey();
+        } else if (row instanceof ConfigCellTextCheck) {
             return ((ConfigCellTextCheck) row).getKey();
         } else if (row instanceof ConfigCellSelectBox) {
             return ((ConfigCellSelectBox) row).getKey();

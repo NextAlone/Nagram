@@ -26,7 +26,7 @@ object ExternalStickerCacheHelper {
 
     @JvmStatic
     fun checkUri(configCell: ConfigCellAutoTextCheck, context: Context) {
-        CoroutineScope(Dispatchers.IO).launch {
+        async {
             NaConfig.externalStickerCacheUri?.let { uri ->
                 AndroidUtilities.runOnUIThread { configCell.setSubtitle("Loading...") }
                 val dir = DocumentFile.fromTreeUri(context, uri)
@@ -59,18 +59,20 @@ object ExternalStickerCacheHelper {
     private var cacheAgain = false
 
     @JvmStatic
-    fun cacheStickers() {
+    @JvmOverloads
+    fun cacheStickers(isAutoSync: Boolean = true) {
+        if (isAutoSync && !NaConfig.externalStickerCacheAutoRefresh.Bool()) return
         if (caching) {
             cacheAgain = true
             return
         }
         if (NaConfig.externalStickerCache.String().isEmpty()) return
-        CoroutineScope(Dispatchers.IO).launch {
+        async {
             caching = true
             val stickerSets = MediaDataController.getInstance(UserConfig.selectedAccount).getStickerSets(MediaDataController.TYPE_IMAGE)
             val context = ApplicationLoader.applicationContext
             try {
-                val uri = NaConfig.externalStickerCacheUri ?: return@launch
+                val uri = NaConfig.externalStickerCacheUri ?: return@async
                 val resolver = context.contentResolver
                 DocumentFile.fromTreeUri(context, uri)?.let { dir ->
                     logD("Caching ${stickerSets.size} sticker set(s)...")
@@ -127,6 +129,7 @@ object ExternalStickerCacheHelper {
                                 }
                             }
                         }
+                        if (!isAutoSync) showToast(null)
                     }
                 }
             } catch (e: Exception) {
@@ -144,8 +147,9 @@ object ExternalStickerCacheHelper {
 
     @JvmStatic
     fun refreshCacheFiles(set: TL_messages_stickerSet) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val uri = NaConfig.externalStickerCacheUri ?: return@launch
+        async {
+            waitForSync()
+            val uri = NaConfig.externalStickerCacheUri ?: return@async
             val context = ApplicationLoader.applicationContext
             try {
                 DocumentFile.fromTreeUri(context, uri)?.let { dir ->
@@ -196,8 +200,9 @@ object ExternalStickerCacheHelper {
 
     @JvmStatic
     fun deleteCacheFiles(set: TL_messages_stickerSet) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val uri = NaConfig.externalStickerCacheUri ?: return@launch
+        async {
+            waitForSync()
+            val uri = NaConfig.externalStickerCacheUri ?: return@async
             val context = ApplicationLoader.applicationContext
             try {
                 DocumentFile.fromTreeUri(context, uri)?.let { dir ->
@@ -213,6 +218,34 @@ object ExternalStickerCacheHelper {
     }
 
     @JvmStatic
+    fun syncAllCaches() {
+        async {
+            if (caching) {
+                showToast(LocaleController.getString(R.string.ExternalStickerCacheSyncNotFinished))
+            } else {
+                cacheStickers(false)
+            }
+        }
+    }
+
+    @JvmStatic
+    fun deleteAllCaches() {
+        async {
+            waitForSync()
+            val uri = NaConfig.externalStickerCacheUri ?: return@async
+            val context = ApplicationLoader.applicationContext
+            try {
+                DocumentFile.fromTreeUri(context, uri)?.let { dir ->
+                    dir.listFiles().forEach { if (it.isDirectory) it.delete() }
+                }
+                showToast(null)
+            } catch (e: Exception) {
+                logException(e, "deleting all caches")
+            }
+        }
+    }
+
+    @JvmStatic
     private fun showToast(msg: String?) {
         var realMessage = msg
         if (realMessage == null) {
@@ -223,6 +256,17 @@ object ExternalStickerCacheHelper {
                 AlertUtil.showToast(realMessage)
             }
         }
+    }
+
+    private suspend fun waitForSync() {
+        if (caching) {
+            showToast(LocaleController.getString(R.string.ExternalStickerCacheWaitSync))
+            do delay(3000) while (caching)
+        }
+    }
+
+    private fun async(scope: suspend CoroutineScope.() -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch(block = scope)
     }
 
     private fun logException(e: Exception, s: String) {

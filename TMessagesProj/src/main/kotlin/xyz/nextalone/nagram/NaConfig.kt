@@ -488,6 +488,12 @@ object NaConfig {
     var externalStickerCacheUri: Uri?
         get() = externalStickerCache.String().let { if (it.isBlank()) return null else return Uri.parse(it) }
         set(value) = externalStickerCache.setConfigString(value.toString())
+    val externalStickerCacheAutoRefresh =
+        addConfig(
+            "ExternalStickerCacheAutoRefresh",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

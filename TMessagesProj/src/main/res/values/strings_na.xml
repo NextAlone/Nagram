@@ -102,4 +102,10 @@
     <string name="ExternalStickerCacheHint">For sharing sticker packs with other apps. Click to pick storage location.</string>
     <string name="ExternalStickerCacheRefresh">Refresh External Cache</string>
     <string name="ExternalStickerCacheDelete">Delete External Cache</string>
+    <string name="ExternalStickerCacheWaitSync">Waiting for cache sync to finish</string>
+    <string name="ExternalStickerCacheSyncNotFinished">Cache sync is already running</string>
+    <string name="ExternalStickerCacheAutoRefresh">Automatic sync</string>
+    <string name="ExternalStickerCacheAutoRefreshHint">Automatically sync all caches after receiving sticker events</string>
+    <string name="ExternalStickerCacheRefreshAll">Sync all caches</string>
+    <string name="ExternalStickerCacheDeleteAll">Delete all caches</string>
 </resources>

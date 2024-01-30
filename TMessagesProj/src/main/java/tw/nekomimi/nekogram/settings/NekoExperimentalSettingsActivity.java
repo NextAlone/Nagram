@@ -160,6 +160,15 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
 
         refreshExternalStickerStorageState(); // Cell (externalStickerCacheRow): Refresh state
 
+        // ExternalStickerCache: Additional options
+        if (!NaConfig.INSTANCE.getExternalStickerCache().String().isEmpty()) {
+            cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.ExternalStickerCache)));
+            cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getExternalStickerCacheAutoRefresh(), LocaleController.getString(R.string.ExternalStickerCacheAutoRefreshHint)));
+            cellGroup.appendCell(new ConfigCellText("ExternalStickerCacheRefreshAll", ExternalStickerCacheHelper::syncAllCaches));
+            cellGroup.appendCell(new ConfigCellText("ExternalStickerCacheDeleteAll", ExternalStickerCacheHelper::deleteAllCaches));
+            cellGroup.appendCell(new ConfigCellDivider());
+        }
+
         listAdapter = new ListAdapter(context);
 
         fragmentView = new FrameLayout(context);
@@ -179,6 +188,8 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
                 ((ConfigCellTextCheck) a).onClick((TextCheckCell) view);
             } else if (a instanceof ConfigCellSelectBox) {
                 ((ConfigCellSelectBox) a).onClick(view);
+            } else if (a instanceof WithOnClick) {
+                ((WithOnClick) a).onClick();
             } else if (a instanceof ConfigCellTextInput) {
                 ((ConfigCellTextInput) a).onClick();
             } else if (a instanceof ConfigCellAutoTextCheck) {

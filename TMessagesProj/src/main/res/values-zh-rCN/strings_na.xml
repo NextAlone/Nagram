@@ -99,4 +99,10 @@
     <string name="ExternalStickerCacheHint">用于与其他应用共享贴纸包 (点击选择存储位置)</string>
     <string name="ExternalStickerCacheRefresh">刷新外部缓存</string>
     <string name="ExternalStickerCacheDelete">删除外部缓存</string>
+    <string name="ExternalStickerCacheWaitSync">正在等待缓存同步完成</string>
+    <string name="ExternalStickerCacheSyncNotFinished">缓存同步已经在运行了</string>
+    <string name="ExternalStickerCacheAutoRefresh">自动同步</string>
+    <string name="ExternalStickerCacheAutoRefreshHint">在有贴纸事件时自动同步所有缓存</string>
+    <string name="ExternalStickerCacheRefreshAll">同步所有缓存</string>
+    <string name="ExternalStickerCacheDeleteAll">删除所有缓存</string>
 </resources>
