@@ -31,28 +31,32 @@ object ExternalStickerCacheHelper {
         async {
             NaConfig.externalStickerCacheUri?.let { uri ->
                 AndroidUtilities.runOnUIThread { configCell.setSubtitle("Loading...") }
-                val dir = DocumentFile.fromTreeUri(context, uri)
-                var subtitle: String
-                if (dir == null) {
-                    subtitle = "Error: failed to access document"
-                } else {
-                    if (dir.isDirectory) {
-                        val testFile = dir.findFile("test") ?: dir.createFile("text/plain", "test")
-                        if (testFile == null) {
-                            subtitle = "Error: cannot create file"
-                        } else {
-                            if (testFile.canRead() && testFile.canWrite()) {
-                                subtitle = "Currently using: ${dir.name}"
-                            } else {
-                                subtitle = "Error: read/write is not supported"
-                            }
-                            if (!testFile.delete()) subtitle = "Error: cannot delete file"
-                        }
+                try {
+                    val dir = DocumentFile.fromTreeUri(context, uri)
+                    val subtitle: String
+                    if (dir == null) {
+                        subtitle = "Error: failed to access document"
                     } else {
-                        subtitle = "Error: not a directory"
+                        if (dir.isDirectory) {
+                            val nomedia = ".nomedia"
+                            val testFile = dir.findFile(nomedia) ?: dir.createFile("", nomedia)
+                            if (testFile == null) {
+                                subtitle = "Error: cannot create $nomedia"
+                            } else {
+                                if (testFile.canRead() && testFile.canWrite()) {
+                                    subtitle = "Currently using: ${dir.name}"
+                                } else {
+                                    subtitle = "Error: read/write is not supported"
+                                }
+                            }
+                        } else {
+                            subtitle = "Error: not a directory"
+                        }
                     }
+                    AndroidUtilities.runOnUIThread { configCell.setSubtitle(subtitle) }
+                } catch (e: Exception) {
+                    logException(e, "checking Uri")
                 }
-                AndroidUtilities.runOnUIThread { configCell.setSubtitle(subtitle) }
             }
         }
     }
