@@ -63,11 +63,11 @@ object ExternalStickerCacheHelper {
     @JvmStatic
     fun cacheStickers(isAutoSync: Boolean = true) {
         if (isAutoSync && !NaConfig.externalStickerCacheAutoRefresh.Bool()) return
+        if (NaConfig.externalStickerCache.String().isEmpty()) return
         if (caching) {
             cacheAgain = true
             return
         }
-        if (NaConfig.externalStickerCache.String().isEmpty()) return
         cacheStickers0(isAutoSync)
     }
 
@@ -87,11 +87,10 @@ object ExternalStickerCacheHelper {
                             forEach { it.name?.let { name -> map[name] = it } }
                             map
                         }
-                        stickerSets.forEach { stickerSetObject ->
-                            val stickerSet = stickerSetObject.set
-                            val stickers = stickerSetObject.documents
-                            val idString = stickerSet.id.toString()
-                            (stickerSetDirMap[idString] ?: dir.createDirectory(idString))?.let { stickerSetDir ->
+                        stickerSets.forEach { set ->
+                            val stickers = set.documents
+                            val setDirName = getStickerDirName(set)
+                            (stickerSetDirMap[setDirName] ?: dir.createDirectory(setDirName))?.let { stickerSetDir ->
                                 if (stickerSetDir.isDirectory) {
                                     val stickerFileMap = stickerSetDir.listFiles().run {
                                         val map = mutableMapOf<String, DocumentFile>()
@@ -158,18 +157,17 @@ object ExternalStickerCacheHelper {
             val context = ApplicationLoader.applicationContext
             try {
                 DocumentFile.fromTreeUri(context, uri)?.let { dir ->
-                    val stickerSet = set.set
-                    val idString = stickerSet.id.toString()
-                    logD("Refreshing cache $idString...")
-                    dir.findFile(idString)?.let {
+                    val setDirName = getStickerDirName(set)
+                    logD("Refreshing cache $setDirName...")
+                    dir.findFile(setDirName)?.let {
                         it.delete()
                         logD("Deleting exist files...")
                         while (true) {
+                            if (dir.findFile(setDirName) == null) break
                             delay(500)
-                            if (dir.findFile(idString) == null) break
                         }
                     }
-                    dir.createDirectory(idString)?.let { stickerSetDir ->
+                    dir.createDirectory(setDirName)?.let { stickerSetDir ->
                         val stickers = set.documents
                         val resolver = context.contentResolver
                         for (sticker in stickers) {
@@ -211,9 +209,8 @@ object ExternalStickerCacheHelper {
             val context = ApplicationLoader.applicationContext
             try {
                 DocumentFile.fromTreeUri(context, uri)?.let { dir ->
-                    val stickerSet = set.set
-                    val idString = stickerSet.id.toString()
-                    dir.findFile(idString)?.delete()
+                    val setDirName = getStickerDirName(set)
+                    dir.findFile(setDirName)?.delete()
                 }
                 showToast(null)
             } catch (e: Exception) {
@@ -283,6 +280,15 @@ object ExternalStickerCacheHelper {
                 AlertUtil.showToast(realMessage)
             }
         }
+    }
+
+    private const val TYPE_USERNAME = 0
+    private const val TYPE_ID = 1
+
+    private fun getStickerDirName(set: TL_messages_stickerSet): String = when (NaConfig.externalStickerCacheDirNameType.Int()) {
+        TYPE_USERNAME -> set.set.short_name
+        TYPE_ID -> set.set.id.toString()
+        else -> throw RuntimeException("Invalid dir name type")
     }
 
     private suspend fun waitForSync() {

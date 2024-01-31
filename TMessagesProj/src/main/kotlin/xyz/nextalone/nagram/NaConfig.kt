@@ -494,6 +494,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val externalStickerCacheDirNameType =
+        addConfig(
+            "ExternalStickerCacheDirNameType",
+            ConfigItem.configTypeInt,
+            0
+        )
 
     private fun addConfig(
         k: String,
