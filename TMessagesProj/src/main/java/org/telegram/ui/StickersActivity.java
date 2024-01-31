@@ -1710,6 +1710,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                         StickerSetCell cell = (StickerSetCell) v.getParent();
                         TLRPC.TL_messages_stickerSet stickerSet = cell.getStickersSet();
                         ItemOptions options = ItemOptions.makeOptions(StickersActivity.this, cell);
+                        options.add(R.drawable.msg_archive, LocaleController.getString("StickersHide", R.string.StickersHide), () -> processSelectionOption(MENU_ARCHIVE, stickerSet));
                         if (stickerSet.set.official) {
                             options.add(R.drawable.msg_reorder, LocaleController.getString("StickersReorder", R.string.StickersReorder), () -> processSelectionOption(4, stickerSet));
                         } else {
