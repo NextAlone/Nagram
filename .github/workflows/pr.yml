@@ -257,8 +257,7 @@ jobs:
       matrix:
         flavor:
 #          - FullRelease
-          - MiniRelease
-          - MiniReleaseNoGcm
+          - MiniDebug
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -320,6 +319,8 @@ jobs:
         run: |
           export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
           export DEBUG_BUILD=true
+          sed '/signingConfig signingConfigs.release/d' TMessagesProj/build.gradle > TMessagesProj/build.gradle.tmp
+          mv TMessagesProj/build.gradle.tmp TMessagesProj/build.gradle
           ./gradlew TMessagesProj:assemble${{ matrix.flavor }}
 
           APK=$(find TMessagesProj/build/outputs/apk -name '*arm64-v8a*.apk')
