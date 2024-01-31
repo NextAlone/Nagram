@@ -11,6 +11,8 @@ import org.telegram.messenger.AndroidUtilities
 import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.MediaDataController
+import org.telegram.messenger.NotificationCenter
+import org.telegram.messenger.NotificationCenter.NotificationCenterDelegate
 import org.telegram.messenger.R
 import org.telegram.messenger.UserConfig
 import org.telegram.tgnet.TLRPC.TL_messages_stickerSet
@@ -26,31 +28,35 @@ object ExternalStickerCacheHelper {
 
     @JvmStatic
     fun checkUri(configCell: ConfigCellAutoTextCheck, context: Context) {
-        CoroutineScope(Dispatchers.IO).launch {
+        async {
             NaConfig.externalStickerCacheUri?.let { uri ->
                 AndroidUtilities.runOnUIThread { configCell.setSubtitle("Loading...") }
-                val dir = DocumentFile.fromTreeUri(context, uri)
-                var subtitle: String
-                if (dir == null) {
-                    subtitle = "Error: failed to access document"
-                } else {
-                    if (dir.isDirectory) {
-                        val testFile = dir.findFile("test") ?: dir.createFile("text/plain", "test")
-                        if (testFile == null) {
-                            subtitle = "Error: cannot create file"
-                        } else {
-                            if (testFile.canRead() && testFile.canWrite()) {
-                                subtitle = "Currently using: ${dir.name}"
-                            } else {
-                                subtitle = "Error: read/write is not supported"
-                            }
-                            if (!testFile.delete()) subtitle = "Error: cannot delete file"
-                        }
+                try {
+                    val dir = DocumentFile.fromTreeUri(context, uri)
+                    val subtitle: String
+                    if (dir == null) {
+                        subtitle = "Error: failed to access document"
                     } else {
-                        subtitle = "Error: not a directory"
+                        if (dir.isDirectory) {
+                            val nomedia = ".nomedia"
+                            val testFile = dir.findFile(nomedia) ?: dir.createFile("", nomedia)
+                            if (testFile == null) {
+                                subtitle = "Error: cannot create $nomedia"
+                            } else {
+                                if (testFile.canRead() && testFile.canWrite()) {
+                                    subtitle = "Currently using: ${dir.name}"
+                                } else {
+                                    subtitle = "Error: read/write is not supported"
+                                }
+                            }
+                        } else {
+                            subtitle = "Error: not a directory"
+                        }
                     }
+                    AndroidUtilities.runOnUIThread { configCell.setSubtitle(subtitle) }
+                } catch (e: Exception) {
+                    logException(e, "checking Uri")
                 }
-                AndroidUtilities.runOnUIThread { configCell.setSubtitle(subtitle) }
             }
         }
     }
@@ -59,18 +65,23 @@ object ExternalStickerCacheHelper {
     private var cacheAgain = false
 
     @JvmStatic
-    fun cacheStickers() {
+    fun cacheStickers(isAutoSync: Boolean = true) {
+        if (isAutoSync && !NaConfig.externalStickerCacheAutoRefresh.Bool()) return
+        if (NaConfig.externalStickerCache.String().isEmpty()) return
         if (caching) {
             cacheAgain = true
             return
         }
-        if (NaConfig.externalStickerCache.String().isEmpty()) return
-        CoroutineScope(Dispatchers.IO).launch {
+        cacheStickers0(isAutoSync)
+    }
+
+    private fun cacheStickers0(isAutoSync: Boolean) {
+        async {
             caching = true
             val stickerSets = MediaDataController.getInstance(UserConfig.selectedAccount).getStickerSets(MediaDataController.TYPE_IMAGE)
             val context = ApplicationLoader.applicationContext
             try {
-                val uri = NaConfig.externalStickerCacheUri ?: return@launch
+                val uri = NaConfig.externalStickerCacheUri ?: return@async
                 val resolver = context.contentResolver
                 DocumentFile.fromTreeUri(context, uri)?.let { dir ->
                     logD("Caching ${stickerSets.size} sticker set(s)...")
@@ -80,11 +91,10 @@ object ExternalStickerCacheHelper {
                             forEach { it.name?.let { name -> map[name] = it } }
                             map
                         }
-                        stickerSets.forEach { stickerSetObject ->
-                            val stickerSet = stickerSetObject.set
-                            val stickers = stickerSetObject.documents
-                            val idString = stickerSet.id.toString()
-                            (stickerSetDirMap[idString] ?: dir.createDirectory(idString))?.let { stickerSetDir ->
+                        stickerSets.forEach { set ->
+                            val stickers = set.documents
+                            val setDirName = getStickerDirName(set)
+                            (stickerSetDirMap[setDirName] ?: dir.createDirectory(setDirName))?.let { stickerSetDir ->
                                 if (stickerSetDir.isDirectory) {
                                     val stickerFileMap = stickerSetDir.listFiles().run {
                                         val map = mutableMapOf<String, DocumentFile>()
@@ -127,6 +137,7 @@ object ExternalStickerCacheHelper {
                                 }
                             }
                         }
+                        if (!isAutoSync) showToast(null)
                     }
                 }
             } catch (e: Exception) {
@@ -135,7 +146,7 @@ object ExternalStickerCacheHelper {
             if (cacheAgain) {
                 delay(30000)
                 cacheAgain = false
-                cacheStickers()
+                cacheStickers0(true)
             } else {
                 caching = false
             }
@@ -144,23 +155,23 @@ object ExternalStickerCacheHelper {
 
     @JvmStatic
     fun refreshCacheFiles(set: TL_messages_stickerSet) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val uri = NaConfig.externalStickerCacheUri ?: return@launch
+        async {
+            waitForSync()
+            val uri = NaConfig.externalStickerCacheUri ?: return@async
             val context = ApplicationLoader.applicationContext
             try {
                 DocumentFile.fromTreeUri(context, uri)?.let { dir ->
-                    val stickerSet = set.set
-                    val idString = stickerSet.id.toString()
-                    logD("Refreshing cache $idString...")
-                    dir.findFile(idString)?.let {
+                    val setDirName = getStickerDirName(set)
+                    logD("Refreshing cache $setDirName...")
+                    dir.findFile(setDirName)?.let {
                         it.delete()
                         logD("Deleting exist files...")
                         while (true) {
+                            if (dir.findFile(setDirName) == null) break
                             delay(500)
-                            if (dir.findFile(idString) == null) break
                         }
                     }
-                    dir.createDirectory(idString)?.let { stickerSetDir ->
+                    dir.createDirectory(setDirName)?.let { stickerSetDir ->
                         val stickers = set.documents
                         val resolver = context.contentResolver
                         for (sticker in stickers) {
@@ -196,19 +207,69 @@ object ExternalStickerCacheHelper {
 
     @JvmStatic
     fun deleteCacheFiles(set: TL_messages_stickerSet) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val uri = NaConfig.externalStickerCacheUri ?: return@launch
+        async {
+            waitForSync()
+            val uri = NaConfig.externalStickerCacheUri ?: return@async
             val context = ApplicationLoader.applicationContext
             try {
                 DocumentFile.fromTreeUri(context, uri)?.let { dir ->
-                    val stickerSet = set.set
-                    val idString = stickerSet.id.toString()
-                    dir.findFile(idString)?.delete()
+                    val setDirName = getStickerDirName(set)
+                    dir.findFile(setDirName)?.delete()
                 }
                 showToast(null)
             } catch (e: Exception) {
                 logException(e, "deleting specific cache")
             }
+        }
+    }
+
+    @JvmStatic
+    fun syncAllCaches() {
+        async {
+            if (caching) {
+                showToast(LocaleController.getString(R.string.ExternalStickerCacheSyncNotFinished))
+            } else {
+                cacheStickers(false)
+            }
+        }
+    }
+
+    @JvmStatic
+    fun deleteAllCaches() {
+        async {
+            waitForSync()
+            val uri = NaConfig.externalStickerCacheUri ?: return@async
+            val context = ApplicationLoader.applicationContext
+            try {
+                DocumentFile.fromTreeUri(context, uri)?.let { dir ->
+                    dir.listFiles().forEach { if (it.isDirectory) it.delete() }
+                }
+                showToast(null)
+            } catch (e: Exception) {
+                logException(e, "deleting all caches")
+            }
+        }
+    }
+
+    private val observer = NotificationCenterDelegate { _, _, _ -> cacheStickers(true) }
+    private val notificationIdList = listOf(
+        NotificationCenter.stickersDidLoad,
+        NotificationCenter.diceStickersDidLoad,
+        NotificationCenter.featuredStickersDidLoad,
+        NotificationCenter.stickersImportComplete,
+    )
+
+    @JvmStatic
+    fun addNotificationObservers(currentAccount: Int) {
+        NotificationCenter.getInstance(currentAccount).apply {
+            notificationIdList.forEach { addObserver(observer, it) }
+        }
+    }
+
+    @JvmStatic
+    fun removeNotificationObservers(currentAccount: Int) {
+        NotificationCenter.getInstance(currentAccount).apply {
+            notificationIdList.forEach { removeObserver(observer, it) }
         }
     }
 
@@ -223,6 +284,26 @@ object ExternalStickerCacheHelper {
                 AlertUtil.showToast(realMessage)
             }
         }
+    }
+
+    private const val TYPE_USERNAME = 0
+    private const val TYPE_ID = 1
+
+    private fun getStickerDirName(set: TL_messages_stickerSet): String = when (NaConfig.externalStickerCacheDirNameType.Int()) {
+        TYPE_USERNAME -> set.set.short_name
+        TYPE_ID -> set.set.id.toString()
+        else -> throw RuntimeException("Invalid dir name type")
+    }
+
+    private suspend fun waitForSync() {
+        if (caching) {
+            showToast(LocaleController.getString(R.string.ExternalStickerCacheWaitSync))
+            do delay(3000) while (caching)
+        }
+    }
+
+    private fun async(scope: suspend CoroutineScope.() -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch(block = scope)
     }
 
     private fun logException(e: Exception, s: String) {
