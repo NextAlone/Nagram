@@ -365,10 +365,6 @@ public class AvatarPreviewPagerIndicator extends View implements ProfileGalleryV
     }
 
     @Override
-    public void onClick() {
-    }
-
-    @Override
     public void onPhotosLoaded() {
     }
 
