@@ -3035,8 +3035,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 TLRPC.Dialog dialog = new TLRPC.TL_dialog();
                 if (object instanceof TLRPC.User) {
                     dialog.id = ((TLRPC.User) object).id;
-                } else {
+                } else if (object instanceof TLRPC.Chat) {
                     dialog.id = -((TLRPC.Chat) object).id;
+                } else {
+                    return null;
                 }
                 return dialog;
             }
@@ -3055,8 +3057,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 TLRPC.Dialog dialog = new TLRPC.TL_dialog();
                 if (object instanceof TLRPC.User) {
                     dialog.id = ((TLRPC.User) object).id;
-                } else {
+                } else if (object instanceof TLRPC.Chat) {
                     dialog.id = -((TLRPC.Chat) object).id;
+                } else {
+                    return null;
                 }
                 return dialog;
             }
