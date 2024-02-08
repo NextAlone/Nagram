@@ -110,4 +110,6 @@
     <string name="ExternalStickerCacheDeleteAll">Delete all caches</string>
     <string name="ExternalStickerCacheDirNameType">Directory naming</string>
     <string name="ProviderTranSmartTranslate">TranSmart Translator</string>
+    <string name="DisableMarkdown">Disable Markdown</string>
+    <string name="SendWithMarkdown">Send with markdown</string>
 </resources>

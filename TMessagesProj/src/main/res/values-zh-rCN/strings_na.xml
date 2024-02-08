@@ -107,4 +107,6 @@
     <string name="ExternalStickerCacheDeleteAll">删除所有缓存</string>
     <string name="ExternalStickerCacheDirNameType">目录命名方式</string>
     <string name="ProviderTranSmartTranslate">腾讯交互翻译</string>
+    <string name="DisableMarkdown">禁用 Markdown</string>
+    <string name="SendWithMarkdown">启用 Markdown</string>
 </resources>
