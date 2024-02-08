@@ -4919,8 +4919,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 writeButton.setContentDescription(LocaleController.getString("AccDescrOpenChat", R.string.AccDescrOpenChat));
             }
         } else {
-            writeButton.setImageResource(R.drawable.profile_discuss);
-            writeButton.setContentDescription(LocaleController.getString("ViewDiscussion", R.string.ViewDiscussion));
+            if (currentChat.megagroup) {
+                writeButton.setImageResource(R.drawable.msg_channel);
+                writeButton.setContentDescription(LocaleController.getString("OpenChannel2", R.string.OpenChannel2));
+            } else {
+                writeButton.setImageResource(R.drawable.profile_discuss);
+                writeButton.setContentDescription(LocaleController.getString("ViewDiscussion", R.string.ViewDiscussion));
+            }
         }
         writeButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_profile_actionIcon), PorterDuff.Mode.SRC_IN));
         writeButton.setScaleType(ImageView.ScaleType.CENTER);
@@ -6844,7 +6849,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
                 boolean writeButtonVisible = diff > 0.2f && !searchMode && (imageUpdater == null || setAvatarRow == -1);
                 if (writeButtonVisible && chatId != 0) {
-                    writeButtonVisible = ChatObject.isChannel(currentChat) && !currentChat.megagroup && chatInfo != null && chatInfo.linked_chat_id != 0 && infoHeaderRow != -1;
+                    // na: show write Button for currentChat.megagroup
+                    writeButtonVisible = ChatObject.isChannel(currentChat) && chatInfo != null && chatInfo.linked_chat_id != 0 && infoHeaderRow != -1;
                 }
                 if (!openAnimationInProgress) {
                     boolean currentVisible = writeButton.getTag() == null;
