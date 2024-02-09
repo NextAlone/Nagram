@@ -4607,14 +4607,19 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             }
             if (sendWithoutSoundButtonValue) {
                 if (containsMarkdown(messageEditText.getText())) {
+                    boolean withoutMarkdown = NaConfig.INSTANCE.getDisableMarkdown().Bool();
                     ActionBarMenuSubItem sendWithoutMarkdownButton = new ActionBarMenuSubItem(getContext(), false, false, resourcesProvider);
-                    sendWithoutMarkdownButton.setTextAndIcon(LocaleController.getString("SendWithoutMarkdown", R.string.SendWithoutMarkdown), R.drawable.round_code_off_white);
+                    if (withoutMarkdown) {
+                        sendWithoutMarkdownButton.setTextAndIcon(LocaleController.getString("SendWithMarkdown", R.string.SendWithMarkdown), R.drawable.round_code_white);
+                    } else {
+                        sendWithoutMarkdownButton.setTextAndIcon(LocaleController.getString("SendWithoutMarkdown", R.string.SendWithoutMarkdown), R.drawable.round_code_off_white);
+                    }
                     sendWithoutMarkdownButton.setMinimumWidth(AndroidUtilities.dp(196));
                     sendWithoutMarkdownButton.setOnClickListener(v -> {
                         if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                             sendPopupWindow.dismiss();
                         }
-                        sendMessageInternal(true, 0, true, false, true);
+                        sendMessageInternal(true, 0, true, withoutMarkdown, true);
                     });
                     sendPopupLayout.addView(sendWithoutMarkdownButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
                 } else if (canSendAsDice(messageEditText.getText().toString(), parentFragment, dialog_id)) {
@@ -4625,7 +4630,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                             sendPopupWindow.dismiss();
                         }
-                        sendMessageInternal(true, 0, true, true, false);
+                        sendMessageInternal(true, 0, true, null, false);
                     });
                     sendPopupLayout.addView(sendWithoutMarkdownButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
                 }
@@ -7024,10 +7029,14 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
     private boolean premiumEmojiBulletin = true;
 
     private void sendMessageInternal(boolean notify, int scheduleDate, boolean allowConfirm) {
-        sendMessageInternal(notify, scheduleDate, allowConfirm, true, true);
+        sendMessageInternal(notify, scheduleDate, allowConfirm, null, true);
     }
 
-    private void sendMessageInternal(boolean notify, int scheduleDate, boolean allowConfirm, boolean withMarkdown, boolean withGame) {
+    private void sendMessageInternal(boolean notify, int scheduleDate, boolean allowConfirm, Boolean withMarkdown, boolean withGame) {
+        boolean disableMarkdown = NaConfig.INSTANCE.getDisableMarkdown().Bool();
+        if (withMarkdown == null) {
+            withMarkdown = !disableMarkdown;
+        }
         if (slowModeTimer == Integer.MAX_VALUE && !isInScheduleMode()) {
             if (delegate != null) {
                 delegate.scrollToSendingMessage();
