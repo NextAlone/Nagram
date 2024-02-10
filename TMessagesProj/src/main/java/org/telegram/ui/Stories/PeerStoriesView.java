@@ -1527,7 +1527,7 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
                             createQualityItem(popupLayout);
                         }
 
-                        if (!unsupported && allowShare) {
+                        if (!unsupported && (allowShare || true)) {
                             if (UserConfig.getInstance(currentAccount).isPremium() || true) {
                                 ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_gallery, LocaleController.getString("SaveToGallery", R.string.SaveToGallery), false, resourcesProvider).setOnClickListener(v -> {
                                     saveToGallery();
