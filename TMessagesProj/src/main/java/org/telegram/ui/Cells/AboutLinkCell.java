@@ -191,9 +191,6 @@ public class AboutLinkCell extends FrameLayout {
         backgroundPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhite, resourcesProvider));
 
         setWillNotDraw(false);
-        if (NaConfig.INSTANCE.getShowFullAbout().Bool()) {
-            onClick();
-        }
     }
 
     protected int processColor(int color) {
@@ -716,6 +713,10 @@ public class AboutLinkCell extends FrameLayout {
         if (stringBuilder != null && (maxWidth != lastMaxWidth || force)) {
             textLayout = makeTextLayout(stringBuilder, maxWidth);
             shouldExpand = textLayout.getLineCount() >= 4; // && valueTextView.getVisibility() != View.VISIBLE;
+
+            if (NaConfig.INSTANCE.getShowFullAbout().Bool() && shouldExpand) {
+                shouldExpand = false;
+            }
 
             if (textLayout.getLineCount() >= 3 && shouldExpand) {
                 int end = Math.max(textLayout.getLineStart(2), textLayout.getLineEnd(2));
