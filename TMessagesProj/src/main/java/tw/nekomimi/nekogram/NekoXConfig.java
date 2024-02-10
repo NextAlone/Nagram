@@ -39,6 +39,7 @@ public class NekoXConfig {
 //            1137038259, // NekoX APKs
             1500637449, // Nagram
             1645699549, // Nagram Updates
+            2001739482, // Nagram Tips
     };
 
     public static long[] developers = {
@@ -47,7 +48,8 @@ public class NekoXConfig {
             784901712, // NextAlone
             457896977, // Queally
             782954985, // MaiTungTM
-            5412523572L //blxueya
+            5412523572L, //blxueya
+            676660002, // mrwangzhe
     };
 
     public static final int TITLE_TYPE_TEXT = 0;
