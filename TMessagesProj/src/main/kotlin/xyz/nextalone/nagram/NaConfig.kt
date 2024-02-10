@@ -506,6 +506,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val disableClickProfileGalleryView =
+        addConfig(
+            "DisableClickProfileGalleryView",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

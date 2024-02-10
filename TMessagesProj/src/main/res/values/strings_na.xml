@@ -112,4 +112,5 @@
     <string name="ProviderTranSmartTranslate">TranSmart Translator</string>
     <string name="DisableMarkdown">Disable Markdown</string>
     <string name="SendWithMarkdown">Send with markdown</string>
+    <string name="DisableClickProfileGalleryView">Disable flip avatars by tapping</string>
 </resources>

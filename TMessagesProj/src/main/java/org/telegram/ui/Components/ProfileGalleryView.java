@@ -42,6 +42,7 @@ import org.telegram.ui.ProfileActivity;
 import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import xyz.nextalone.nagram.NaConfig;
 
 public class ProfileGalleryView extends CircularViewPager implements NotificationCenter.NotificationCenterDelegate {
 
@@ -1229,7 +1230,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
 
             item.imageView.setRoundRadius(roundTopRadius, roundTopRadius, roundBottomRadius, roundBottomRadius);
 
-            if (NekoConfig.disablePhotoSideAction.Bool()) {
+            if (NaConfig.INSTANCE.getDisableClickProfileGalleryView().Bool()) {
                 item.imageView.setOnClickListener(__ -> callback.onClick());
             }
 
