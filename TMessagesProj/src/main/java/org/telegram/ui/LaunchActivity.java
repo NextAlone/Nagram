@@ -180,6 +180,7 @@ import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SearchTagsList;
+import org.telegram.ui.Components.SharedMediaLayout;
 import org.telegram.ui.Components.SharingLocationsAlert;
 import org.telegram.ui.Components.SideMenultItemAnimator;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
@@ -642,9 +643,18 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     presentFragment(new CallLogActivity());
                     drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 11) {
-                    Bundle args = new Bundle();
-                    args.putLong("user_id", UserConfig.getInstance(currentAccount).getClientUserId());
-                    presentFragment(new ChatActivity(args));
+                    if (MessagesController.getInstance(UserConfig.selectedAccount).savedViewAsChats) {
+                        Bundle args = new Bundle();
+                        args.putLong("dialog_id", UserConfig.getInstance(currentAccount).getClientUserId());
+                        args.putInt("type", MediaActivity.TYPE_MEDIA);
+                        args.putInt("start_from", SharedMediaLayout.TAB_SAVED_DIALOGS);
+                        MediaActivity mediaActivity = new MediaActivity(args, null);
+                        presentFragment(mediaActivity);
+                    } else {
+                        Bundle args = new Bundle();
+                        args.putLong("user_id", UserConfig.getInstance(currentAccount).getClientUserId());
+                        presentFragment(new ChatActivity(args));
+                    }
                     drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 12) {
                     if (Build.VERSION.SDK_INT >= 23) {
