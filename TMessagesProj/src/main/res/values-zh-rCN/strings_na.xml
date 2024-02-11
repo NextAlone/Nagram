@@ -110,4 +110,5 @@
     <string name="DisableMarkdown">禁用 Markdown</string>
     <string name="SendWithMarkdown">启用 Markdown</string>
     <string name="DisableClickProfileGalleryView">禁用点按切换头像</string>
+    <string name="ShowSmallGIF">GIF 显示得更小</string>
 </resources>

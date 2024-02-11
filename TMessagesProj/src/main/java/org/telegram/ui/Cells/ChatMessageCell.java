@@ -7920,6 +7920,11 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     if (w == 0 || h == 0) {
                         w = h = AndroidUtilities.dp(150);
                     }
+
+                    if (NaConfig.INSTANCE.getShowSmallGIF().Bool() && messageObject.type == MessageObject.TYPE_GIF) {
+                        w = h = AndroidUtilities.dp(120);
+                    }
+
                     if (messageObject.type == MessageObject.TYPE_VIDEO) {
                         if (w < infoWidth + AndroidUtilities.dp(16 + 24)) {
                             w = infoWidth + AndroidUtilities.dp(16 + 24);

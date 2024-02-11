@@ -512,6 +512,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val showSmallGIF =
+        addConfig(
+            "ShowSmallGIF",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,
