@@ -13,7 +13,7 @@ data class LocalQuoteColorData (
 )
 
 
-object PeerColorHelper {
+object LocalPeerColorHelper {
     var loaded: Boolean = false
     var data: LocalQuoteColorData? = null
 
