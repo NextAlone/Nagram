@@ -118,6 +118,7 @@ android {
         buildConfigField "int", "OFFICIAL_VERSION_CODE", officialCode + ""
         buildConfigField "int", "APP_ID", appId
         buildConfigField "String", "APP_HASH", "\"" + appHash + "\""
+        buildConfigField "int", "IS_NO_GCM", "0"
 
         externalNativeBuild {
             cmake {
@@ -184,6 +185,8 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             matchingFallbacks = ["release", "debug"]
             signingConfig signingConfigs.release
+
+            buildConfigField "int", "IS_NO_GCM", "1"
         }
 
         release {

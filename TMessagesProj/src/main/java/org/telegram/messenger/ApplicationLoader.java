@@ -26,6 +26,7 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -35,6 +36,7 @@ import android.util.Log;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 import androidx.multidex.MultiDex;
 
 import androidx.multidex.MultiDex;
@@ -43,8 +45,11 @@ import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.ForegroundDetector;
 import org.telegram.ui.Components.Premium.boosts.BoostRepository;
+import org.telegram.ui.Components.UpdateAppAlertDialog;
+import org.telegram.ui.Components.UpdateLayout;
 import org.telegram.ui.IUpdateLayout;
 import org.telegram.ui.LauncherIconController;
 
@@ -658,19 +663,50 @@ public class ApplicationLoader extends Application {
     }
 
     public boolean checkApkInstallPermissions(final Context context) {
-        return false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !ApplicationLoader.applicationContext.getPackageManager().canRequestPackageInstalls()) {
+            AlertsCreator.createApkRestrictedDialog(context, null).show();
+            return false;
+        }
+        return true;
     }
 
     public boolean openApkInstall(Activity activity, TLRPC.Document document) {
-        return false;
+        boolean exists = false;
+        try {
+            String fileName = FileLoader.getAttachFileName(document);
+            File f = FileLoader.getInstance(UserConfig.selectedAccount).getPathToAttach(document, true);
+            if (exists = f.exists()) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                if (Build.VERSION.SDK_INT >= 24) {
+                    intent.setDataAndType(FileProvider.getUriForFile(activity, ApplicationLoader.getApplicationId() + ".provider", f), "application/vnd.android.package-archive");
+                } else {
+                    intent.setDataAndType(Uri.fromFile(f), "application/vnd.android.package-archive");
+                }
+                try {
+                    activity.startActivityForResult(intent, 500);
+                } catch (Exception e) {
+                    FileLog.e(e);
+                }
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        return exists;
     }
 
     public boolean showUpdateAppPopup(Context context, TLRPC.TL_help_appUpdate update, int account) {
-        return false;
+        try {
+            (new UpdateAppAlertDialog(context, update, account)).show();
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        return true;
     }
 
     public IUpdateLayout takeUpdateLayout(Activity activity, ViewGroup sideMenu, ViewGroup sideMenuContainer) {
-        return null;
+        return new UpdateLayout(activity, sideMenu, sideMenuContainer);
     }
 
 }

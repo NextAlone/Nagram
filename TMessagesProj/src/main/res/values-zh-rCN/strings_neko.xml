@@ -216,4 +216,9 @@
     <string name="CopyCallback">复制回调数据</string>
     <string name="CopyInlineQuery">复制 Inline 请求</string>
     <string name="CopyID">复制 ID</string>
+    <string name="UpdateInstalling">正在安装更新...</string>
+    <string name="UpdateInstallingNotification">更新完成后，将显示一个通知。</string>
+    <string name="UpdateInstallingRelaunch">更新完成后，应用将重新启动。</string>
+    <string name="UpdateInstalledNotification">更新安装完成，点击启动应用。</string>
+    <string name="UpdateFailedToInstall">无法安装更新：%d</string>
 </resources>

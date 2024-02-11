@@ -41,6 +41,7 @@ public class BuildVars {
     public static boolean isFdroid = BuildConfig.BUILD_TYPE.toLowerCase().contains("fdroid");
     public static boolean isMini = !BuildConfig.FLAVOR.startsWith("full");
     public static boolean isGServicesCompiled = BuildConfig.BUILD_TYPE.equals("debug") || BuildConfig.BUILD_TYPE.equals("release");
+    public static boolean isNoGCM = BuildConfig.IS_NO_GCM == 1;
 
     static {
 

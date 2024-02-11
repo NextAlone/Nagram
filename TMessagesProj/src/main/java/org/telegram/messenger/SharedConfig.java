@@ -1667,29 +1667,26 @@ public class SharedConfig {
     }
 
     public static boolean setNewAppVersionAvailable(TLRPC.TL_help_appUpdate update) {
-        String updateVersionString = null;
+        //String updateVersionString = null;
         int versionCode = 0;
         try {
             PackageInfo packageInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
             versionCode = packageInfo.versionCode;
-            updateVersionString = packageInfo.versionName;
+            //updateVersionString = packageInfo.versionName;
         } catch (Exception e) {
             FileLog.e(e);
         }
         if (versionCode == 0) {
             versionCode = buildVersion();
         }
-        if (updateVersionString == null) {
-            updateVersionString = BuildVars.BUILD_VERSION_STRING;
-        }
-        if (update == null || update.version == null || versionBiggerOrEqual(updateVersionString, update.version)) {
-            pendingAppUpdate = null;
-            pendingAppUpdateBuildVersion = 0;
-            saveConfig();
-            return false;
-        }
+        //if (updateVersionString == null) {
+        //    updateVersionString = BuildVars.BUILD_VERSION_STRING;
+        //}
+        //if (update.version == null || versionBiggerOrEqual(updateVersionString, update.version)) {
+        //    return false;
+        //}
         pendingAppUpdate = update;
-        pendingAppUpdateBuildVersion = BuildConfig.VERSION_CODE;
+        pendingAppUpdateBuildVersion = versionCode;
         saveConfig();
         return true;
     }

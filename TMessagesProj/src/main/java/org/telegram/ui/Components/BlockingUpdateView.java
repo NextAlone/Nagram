@@ -38,6 +38,8 @@ import org.telegram.ui.Components.voip.CellFlickerDrawable;
 
 import java.util.Locale;
 
+import tw.nekomimi.nekogram.helpers.remote.UpdateHelper;
+
 public class BlockingUpdateView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
     private TextView textView;
@@ -63,10 +65,8 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         FrameLayout view = new FrameLayout(context);
         addView(view, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, AndroidUtilities.dp(176) + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)));
 
-        RLottieImageView imageView = new RLottieImageView(context);
-        imageView.setAnimation(R.raw.qr_code_logo, 108, 108);
-        imageView.playAnimation();
-        imageView.getAnimatedDrawable().setAutoRepeat(1);
+        ImageView imageView = new ImageView(context);
+        imageView.setImageResource(R.mipmap.ic_launcher);
         imageView.setScaleType(ImageView.ScaleType.CENTER);
         imageView.setPadding(0, 0, 0, AndroidUtilities.dp(14));
         view.addView(imageView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 0, top, 0, 0));
@@ -94,15 +94,14 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         titleTextView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
         titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        titleTextView.setText(LocaleController.getString("UpdateTelegram", R.string.UpdateTelegram));
+        titleTextView.setText(LocaleController.getString("UpdateTelegram", R.string.UpdateTelegram).replace("Telegram", LocaleController.getString("NekoX", R.string.NekoX)));
         container.addView(titleTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP));
 
         textView = new TextView(context);
         textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         textView.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-        textView.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
-        textView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
+        textView.setGravity(Gravity.LEFT | Gravity.TOP);
         textView.setLineSpacing(AndroidUtilities.dp(2), 1.0f);
         container.addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 0, 44, 0, 0));
 
@@ -139,24 +138,14 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         acceptButton.setPadding(AndroidUtilities.dp(34), 0, AndroidUtilities.dp(34), 0);
         addView(acceptButton, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 46, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 0, 0, 45));
         acceptButton.setOnClickListener(view1 -> {
-//            if (ApplicationLoader.isStandaloneBuild() || BuildVars.DEBUG_VERSION) {
-//                if (!ApplicationLoader.applicationLoaderInstance.checkApkInstallPermissions(getContext())) {
-//                    return;
-//                }
-//                if (appUpdate.document instanceof TLRPC.TL_document) {
-//                    if (!ApplicationLoader.applicationLoaderInstance.openApkInstall((Activity) getContext(), appUpdate.document)) {
-//                        FileLoader.getInstance(accountNum).loadFile(appUpdate.document, "update", FileLoader.PRIORITY_HIGH, 1);
-//                        showProgress(true);
-//                    }
-//                } else if (appUpdate.url != null) {
-//                    Browser.openUrl(getContext(), appUpdate.url);
-//                }
-//            } else if (BuildVars.isHuaweiStoreApp()){
-//                Browser.openUrl(context, BuildVars.HUAWEI_STORE_URL);
-//            } else {
-//                Browser.openUrl(context, BuildVars.PLAYSTORE_APP_URL);
-//            }
-            Browser.openUrl(context, BuildVars.GITHUB_RELEASE_URL);
+            if (appUpdate.document instanceof TLRPC.TL_document) {
+                if (!ApplicationLoader.applicationLoaderInstance.openApkInstall((Activity) getContext(), appUpdate.document)) {
+                    FileLoader.getInstance(accountNum).loadFile(appUpdate.document, "update", FileLoader.PRIORITY_HIGH, 1);
+                    showProgress(true);
+                }
+            } else if (appUpdate.url != null) {
+                Browser.openUrl(getContext(), appUpdate.url);
+            }
         });
 
         acceptTextView = new TextView(context);
@@ -292,6 +281,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         }
         SpannableStringBuilder builder = new SpannableStringBuilder(update.text);
         MessageObject.addEntitiesToText(builder, update.entities, false, false, false, false);
+        MessageObject.replaceAnimatedEmoji(builder, update.entities, textView.getPaint().getFontMetricsInt());
         textView.setText(builder);
         if (update.document instanceof TLRPC.TL_document) {
             acceptTextView.setText(LocaleController.getString("Update", R.string.Update) + String.format(Locale.US, " (%1$s)", AndroidUtilities.formatFileSize(update.document.size)));
@@ -301,20 +291,10 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.fileLoaded);
         NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.fileLoadFailed);
         NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.fileLoadProgressChanged);
-        if (check && ApplicationLoader.isStandaloneBuild()) {
-            TLRPC.TL_help_getAppUpdate req = new TLRPC.TL_help_getAppUpdate();
-            try {
-                req.source = ApplicationLoader.applicationContext.getPackageManager().getInstallerPackageName(ApplicationLoader.applicationContext.getPackageName());
-            } catch (Exception ignore) {
-
-            }
-            if (req.source == null) {
-                req.source = "";
-            }
-            ConnectionsManager.getInstance(accountNum).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
-                if (response instanceof TLRPC.TL_help_appUpdate) {
-                    final TLRPC.TL_help_appUpdate res = (TLRPC.TL_help_appUpdate) response;
-                    if (!res.can_not_skip) {
+        if (check) {
+            UpdateHelper.getInstance().checkNewVersionAvailable((response, error) -> AndroidUtilities.runOnUIThread(() -> {
+                if (response != null) {
+                    if (!response.can_not_skip) {
                         setVisibility(GONE);
                         SharedConfig.pendingAppUpdate = null;
                         SharedConfig.saveConfig();

@@ -223,6 +223,7 @@ import tw.nekomimi.nekogram.InternalUpdater;
 import tw.nekomimi.nekogram.helpers.SettingsHelper;
 import tw.nekomimi.nekogram.helpers.remote.EmojiHelper;
 import tw.nekomimi.nekogram.helpers.remote.PeerColorHelper;
+import tw.nekomimi.nekogram.helpers.remote.UpdateHelper;
 import tw.nekomimi.nekogram.helpers.remote.WallpaperHelper;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
@@ -5390,103 +5391,79 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     }
 
     public void checkAppUpdate(boolean force, Browser.Progress progress) {
-        if (BuildVars.isFdroid || BuildVars.isPlay) return;
-        if (NekoXConfig.autoUpdateReleaseChannel == 0) return;
-        if (!force && System.currentTimeMillis() < NekoConfig.lastUpdateCheckTime.Long() + 48 * 60 * 60 * 1000L) return;
-        NekoConfig.lastUpdateCheckTime.setConfigLong(System.currentTimeMillis());
-        FileLog.d("checking update");
-        final int accountNum = currentAccount;
-        InternalUpdater.checkUpdate((res, error) -> AndroidUtilities.runOnUIThread(() -> {
-            if (res != null) {
-                if (SharedConfig.setNewAppVersionAvailable(res)) {
-                    if (res.can_not_skip) {
-                        showUpdateActivity(accountNum, res, false);
-                    } else if (ApplicationLoader.isStandaloneBuild() || BuildVars.DEBUG_VERSION) {
-                        drawerLayoutAdapter.notifyDataSetChanged();
-                        ApplicationLoader.applicationLoaderInstance.showUpdateAppPopup(LaunchActivity.this, res, accountNum);
-                    }
-                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.appUpdateAvailable);
-                }
-            } else {
-                if (force) {
-                    if (error)
-                        Toast.makeText(LaunchActivity.this, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred), Toast.LENGTH_SHORT).show();
-                    else
-                        Toast.makeText(LaunchActivity.this, LocaleController.getString("VersionUpdateNoUpdate", R.string.VersionUpdateNoUpdate), Toast.LENGTH_SHORT).show();
-                }
-                SharedConfig.setNewAppVersionAvailable(null);
-                drawerLayoutAdapter.notifyDataSetChanged();
-            }
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.appUpdateAvailable);
-        }));
+//        if (BuildVars.isFdroid || BuildVars.isPlay) return;
+//        if (NekoXConfig.autoUpdateReleaseChannel == 0) return;
+//        if (!force && System.currentTimeMillis() < NekoConfig.lastUpdateCheckTime.Long() + 48 * 60 * 60 * 1000L) return;
+//        NekoConfig.lastUpdateCheckTime.setConfigLong(System.currentTimeMillis());
+//        FileLog.d("checking update");
+//        final int accountNum = currentAccount;
+//        InternalUpdater.checkUpdate((res, error) -> AndroidUtilities.runOnUIThread(() -> {
+//            if (res != null) {
+//                if (SharedConfig.setNewAppVersionAvailable(res)) {
+//                    if (res.can_not_skip) {
+//                        showUpdateActivity(accountNum, res, false);
+//                    } else if (ApplicationLoader.isStandaloneBuild() || BuildVars.DEBUG_VERSION) {
+//                        drawerLayoutAdapter.notifyDataSetChanged();
+//                        ApplicationLoader.applicationLoaderInstance.showUpdateAppPopup(LaunchActivity.this, res, accountNum);
+//                    }
+//                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.appUpdateAvailable);
+//                }
+//            } else {
+//                if (force) {
+//                    if (error)
+//                        Toast.makeText(LaunchActivity.this, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred), Toast.LENGTH_SHORT).show();
+//                    else
+//                        Toast.makeText(LaunchActivity.this, LocaleController.getString("VersionUpdateNoUpdate", R.string.VersionUpdateNoUpdate), Toast.LENGTH_SHORT).show();
+//                }
+//                SharedConfig.setNewAppVersionAvailable(null);
+//                drawerLayoutAdapter.notifyDataSetChanged();
+//            }
+//            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.appUpdateAvailable);
+//        }));
 
 //        if (!force && BuildVars.DEBUG_VERSION || !force && !BuildVars.CHECK_UPDATES) {
 //            return;
 //        }
-//        if (!force && Math.abs(System.currentTimeMillis() - SharedConfig.lastUpdateCheckTime) < MessagesController.getInstance(0).updateCheckDelay * 1000) {
-//            return;
-//        }
-//        TLRPC.TL_help_getAppUpdate req = new TLRPC.TL_help_getAppUpdate();
-//        try {
-//            req.source = ApplicationLoader.applicationContext.getPackageManager().getInstallerPackageName(ApplicationLoader.applicationContext.getPackageName());
-//        } catch (Exception ignore) {}
-//
-//        final int accountNum = currentAccount;
-//        int reqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
-//            SharedConfig.lastUpdateCheckTime = System.currentTimeMillis();
-//            SharedConfig.saveConfig();
-//            if (response instanceof TLRPC.TL_help_appUpdate) {
-//                final TLRPC.TL_help_appUpdate res = (TLRPC.TL_help_appUpdate) response;
-//                AndroidUtilities.runOnUIThread(() -> {
-//                    if (SharedConfig.pendingAppUpdate != null && SharedConfig.pendingAppUpdate.version.equals(res.version)) {
-//                        return;
-//                    }
-//                    final boolean newVersionAvailable = SharedConfig.setNewAppVersionAvailable(res);
-//                    if (newVersionAvailable) {
-//                        if (res.can_not_skip) {
-//                            showUpdateActivity(accountNum, res, false);
-//                        } else if (ApplicationLoader.isStandaloneBuild() || BuildVars.DEBUG_VERSION) {
-//                            drawerLayoutAdapter.notifyDataSetChanged();
-//                            ApplicationLoader.applicationLoaderInstance.showUpdateAppPopup(LaunchActivity.this, res, accountNum);
-//                        }
-//                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.appUpdateAvailable);
-//                    }
-//                    if (progress != null) {
-//                        progress.end();
-//                        if (!newVersionAvailable) {
-//                            BaseFragment fragment = getLastFragment();
-//                            if (fragment != null) {
-//                                BulletinFactory.of(fragment).createSimpleBulletin(R.raw.chats_infotip, LocaleController.getString(R.string.YourVersionIsLatest)).show();
-//                            }
-//                        }
-//                    }
-//                });
-//            } else if (response instanceof TLRPC.TL_help_noAppUpdate) {
-//                AndroidUtilities.runOnUIThread(() -> {
-//                    if (progress != null) {
-//                        progress.end();
-//                        BaseFragment fragment = getLastFragment();
-//                        if (fragment != null) {
-//                            BulletinFactory.of(fragment).createSimpleBulletin(R.raw.chats_infotip, LocaleController.getString(R.string.YourVersionIsLatest)).show();
-//                        }
-//                    }
-//                });
-//            } else if (error != null) {
-//                AndroidUtilities.runOnUIThread(() -> {
-//                    if (progress != null) {
-//                        progress.end();
-//                        BaseFragment fragment = getLastFragment();
-//                        if (fragment != null) {
-//                            BulletinFactory.of(fragment).showForError(error);
-//                        }
-//                    }
-//                });
-//            }
-//        });
-//        if (progress != null) {
-//            progress.init();
-//            progress.onCancel(() -> ConnectionsManager.getInstance(currentAccount).cancelRequest(reqId, true));
-//        }
+        if (!force && Math.abs(System.currentTimeMillis() - SharedConfig.lastUpdateCheckTime) < MessagesController.getInstance(0).updateCheckDelay * 1000) {
+            return;
+        }
+        final int accountNum = currentAccount;
+        if (progress != null) progress.init();
+        UpdateHelper.getInstance().checkNewVersionAvailable((res, error) -> {
+            SharedConfig.lastUpdateCheckTime = System.currentTimeMillis();
+            SharedConfig.saveConfig();
+            AndroidUtilities.runOnUIThread(() -> {
+                if (res != null) {
+                    SharedConfig.setNewAppVersionAvailable(res);
+                    if (res.can_not_skip) {
+                        showUpdateActivity(accountNum, res, false);
+                    } else {
+                        drawerLayoutAdapter.notifyDataSetChanged();
+                        ApplicationLoader.applicationLoaderInstance.showUpdateAppPopup(LaunchActivity.this, res, accountNum);
+                    }
+                } else {
+                    if (force) {
+                        BaseFragment fragment = getLastFragment();
+                        if (fragment != null) {
+                            if (error == null) {
+                                BulletinFactory.of(fragment).createSimpleBulletin(R.raw.chats_infotip, LocaleController.getString(R.string.YourVersionIsLatest)).show();
+                            } else {
+                                AlertsCreator.createSimpleAlert(this, LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred) + "\n" + error).show();
+                            }
+                        }
+                    }
+                    SharedConfig.setNewAppVersionAvailable(null);
+                    drawerLayoutAdapter.notifyDataSetChanged();
+                }
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.appUpdateAvailable);
+                if (progress != null) {
+                    progress.end();
+                }
+            });
+        });
+        if (progress != null) {
+            progress.init();
+        }
     }
 
     public Dialog showAlertDialog(AlertDialog.Builder builder) {

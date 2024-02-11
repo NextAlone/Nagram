@@ -218,4 +218,9 @@
     <string name="CopyCallback">Copy Callback Data</string>
     <string name="CopyInlineQuery">Copy Inline Query</string>
     <string name="CopyID">Copy ID</string>
+    <string name="UpdateInstalling">Installing update...</string>
+    <string name="UpdateInstallingNotification">A notification will be shown when the update completes.</string>
+    <string name="UpdateInstallingRelaunch">The app will relaunch when the update completes.</string>
+    <string name="UpdateInstalledNotification">Update installation finished, tap to launch the app.</string>
+    <string name="UpdateFailedToInstall">Failed to install update: %d</string>
 </resources>
