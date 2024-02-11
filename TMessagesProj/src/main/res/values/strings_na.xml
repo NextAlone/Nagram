@@ -113,5 +113,7 @@
     <string name="DisableMarkdown">Disable Markdown</string>
     <string name="SendWithMarkdown">Send with markdown</string>
     <string name="DisableClickProfileGalleryView">Disable flip avatars by tapping</string>
+    <string name="TipsInfo">Want to follow our features tips channel?</string>
+    <string name="TipsChannel">Features Tips Channel</string>
     <string name="ShowSmallGIF">Show Small Gif</string>
 </resources>

@@ -11,6 +11,7 @@ import org.telegram.ui.ActionBar.AlertDialog
 object UpdateUtil {
 
     const val channelUsername = "nagram_channel"
+    const val channelUsernameTips = "NagramTips"
 
     @JvmStatic
     fun postCheckFollowChannel(ctx: Context, currentAccount: Int) = UIUtil.runOnIoDispatcher {
@@ -67,6 +68,66 @@ object UpdateUtil {
 
             builder.setNeutralButton(LocaleController.getString("DoNotRemindAgain", R.string.DoNotRemindAgain)) { _, _ ->
                 MessagesController.getMainSettings(currentAccount).edit().putBoolean("update_channel_skip", true).apply()
+            }
+
+            try {
+                builder.show()
+            } catch (ignored: Exception) {}
+
+        }
+
+    }
+
+    @JvmStatic
+    fun postCheckFollowTipsChannel(ctx: Context, currentAccount: Int) = UIUtil.runOnIoDispatcher {
+
+        if (MessagesController.getMainSettings(currentAccount).getBoolean("update_channel_tip_skip", false)) return@runOnIoDispatcher
+
+        val messagesCollector = MessagesController.getInstance(currentAccount)
+        val connectionsManager = ConnectionsManager.getInstance(currentAccount)
+        val messagesStorage = MessagesStorage.getInstance(currentAccount)
+        val updateChannel = messagesCollector.getUserOrChat(channelUsernameTips)
+
+        if (updateChannel is TLRPC.Chat) checkFollowTipsChannel(ctx, currentAccount, updateChannel) else {
+            connectionsManager.sendRequest(TLRPC.TL_contacts_resolveUsername().apply {
+                username = channelUsernameTips
+            }) { response: TLObject?, error: TLRPC.TL_error? ->
+                if (error == null) {
+                    val res = response as TLRPC.TL_contacts_resolvedPeer
+                    val chat = res.chats.find { it.username == channelUsernameTips } ?: return@sendRequest
+                    messagesCollector.putChats(res.chats, false)
+                    messagesStorage.putUsersAndChats(res.users, res.chats, false, true)
+                    checkFollowTipsChannel(ctx, currentAccount, chat)
+                }
+            }
+        }
+
+    }
+
+    private fun checkFollowTipsChannel(ctx: Context, currentAccount: Int, channel: TLRPC.Chat) {
+        if (!channel.left || channel.kicked) {
+            return
+        }
+
+        UIUtil.runOnUIThread {
+
+            val messagesCollector = MessagesController.getInstance(currentAccount)
+            val userConfig = UserConfig.getInstance(currentAccount)
+
+            val builder = AlertDialog.Builder(ctx)
+
+            builder.setTitle(LocaleController.getString("FCTitle", R.string.FCTitle))
+            builder.setMessage(LocaleController.getString("TipsInfo", R.string.TipsInfo))
+
+            builder.setPositiveButton(LocaleController.getString("ChannelJoin", R.string.ChannelJoin)) { _, _ ->
+                messagesCollector.addUserToChat(channel.id, userConfig.currentUser, 0, null, null, null)
+                Browser.openUrl(ctx, "https://t.me/$channelUsernameTips")
+            }
+
+            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null)
+
+            builder.setNeutralButton(LocaleController.getString("DoNotRemindAgain", R.string.DoNotRemindAgain)) { _, _ ->
+                MessagesController.getMainSettings(currentAccount).edit().putBoolean("update_channel_tip_skip", true).apply()
             }
 
             try {
