@@ -37,6 +37,7 @@
     <string name="ShowPremiumAvatarAnimation">显示 Premium 动态头像</string>
     <string name="AlwaysSaveChatOffset">总是保存聊天记录的偏移量</string>
     <string name="AutoReplaceRepeat">自动替换复读为无引用复读</string>
+    <string name="AppIconGoogle">Google</string>
     <string name="AppIconColorful">缤纷</string>
     <string name="AppIconDarkGreen">深翠</string>
     <string name="AppIconNeon">霓虹</string>
@@ -68,6 +69,8 @@
     <string name="DisableEmojiDrawLimit">解除 emoji 渲染上限</string>
     <string name="IconDecoration">图标装饰</string>
     <string name="NotificationIcon">通知图标样式</string>
+    <string name="Official">官方的</string>
+    <string name="Nekogram">Nekogram</string>
     <string name="HalloWeen">万圣节</string>
     <string name="ShowOnlineStatus">显示用户在线状态</string>
     <string name="ShowOnlineStatusNotice">在群组聊天时用户头像的右下角显示在线状态</string>
