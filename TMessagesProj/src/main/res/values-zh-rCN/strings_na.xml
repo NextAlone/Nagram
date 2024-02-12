@@ -41,6 +41,10 @@
     <string name="AppIconColorful">缤纷</string>
     <string name="AppIconDarkGreen">深翠</string>
     <string name="AppIconNeon">霓虹</string>
+    <string name="AppIconNiello">黑金</string>
+    <string name="AppIconBlue">几何</string>
+    <string name="AppIconDarkBlue">几何蓝</string>
+    <string name="AppIconBlurBlue">轻盈</string>
     <string name="AutoInsertGIFCaption">在 GIF 发送时自动插入草稿</string>
     <string name="DefaultMonoLanguage">自定义默认语法高亮语言</string>
     <string name="DisableGlobalSearch">禁用全局搜索</string>

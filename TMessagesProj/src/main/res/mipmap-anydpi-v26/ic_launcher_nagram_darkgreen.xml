@@ -2,4 +2,5 @@
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
     <background android:drawable="@drawable/ic_launcher_nagram_darkgreen_background"/>
     <foreground android:drawable="@mipmap/ic_launcher_nagram_darkgreen_foreground"/>
+    <monochrome android:drawable="@mipmap/ic_launcher_nagram_darkgreen_foreground"/>
 </adaptive-icon>
