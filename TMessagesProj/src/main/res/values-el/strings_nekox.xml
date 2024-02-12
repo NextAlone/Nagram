@@ -98,7 +98,7 @@
     <string name="LoginSettings">Ρυθμίσεις σύνδεσης</string>
     <string name="SortByUnmuted">Κατά Μη σε Σίγαση</string>
     <string name="InvalidProxyFile">Μη έγκυρο αρχείο λίστας proxy:</string>
-    <string name="NekoXFaq">Συχνές ερωτήσεις NekoX</string>
+    <string name="NekoXFaq">Συχνές ερωτήσεις Nagram</string>
     <string name="BrokenLink">Άγνωστο / Σφάλμα συνδέσμου</string>
     <string name="ProxyInfoSS">Ρυθμίσεις Proxy Shadowsocks</string>
     <string name="ReorderByPing">Αναδιάταξη servers βάσει ping</string>

@@ -191,13 +191,13 @@ public class NekoSettingsActivity extends BaseFragment {
             } else if (position == channelTipsRow) {
                 MessagesController.getInstance(currentAccount).openByUserName(channelUsernameTips, this, 1);
             } else if (position == translationRow) {
-                Browser.openUrl(getParentActivity(), "https://hosted.weblate.org/engage/nekox/");
+                Browser.openUrl(getParentActivity(), "https://xtaolabs.crowdin.com/nagram");
 //            } else if (position == fdroidRow) {
 //                Browser.openUrl(getParentActivity(), "https://f-droid.org/packages/nekox.messenger");
 //            } else if (position == googlePlayRow) {
 //                Browser.openUrl(getParentActivity(), "https://play.google.com/store/apps/details?id=nekox.messenger");
             } else if (position == sourceCodeRow) {
-                Browser.openUrl(getParentActivity(), "https://github.com/NextAlone/NagramX");
+                Browser.openUrl(getParentActivity(), "https://github.com/NextAlone/Nagram");
             } else if (position == datacenterStatusRow) {
                 presentFragment(new DatacenterActivity(0));
             }

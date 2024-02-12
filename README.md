@@ -160,11 +160,33 @@ For mini release:
 
 ----
 
+## FAQ
+
+#### What is the differences between Nagram, NekoX and Nekogram?
+
+Developed by different developers, read the feature list above to understand the differences.
+
+#### What is the noGcm version?
+
+Google Cloud Messaging, also known as gcm / fcm, message push service by google used by original Telegram android app, it requires your device to have Google Service Framework (non-free) installed.
+
+#### I've encountered a bug!
+
+First, make sure you have the latest version installed (check the channel).
+
+Then, if the issue appears in the official Telegram client too, please submit it to the officials, (be careful not to show NekoX in the description and screenshots, the official developers doesn't like us!).
+
+Then, submit it to our [group](https://t.me/nagram_group) with #bug.
+
+If you experience a *crash*, you also need to click on the version number at the bottom of the settings and select "Enable Log" and send it to us.
+
 ## Localization
 
 Nagram is forked from Telegram, thus most locales follows the translations of Telegram for Android, checkout <https://translations.telegram.org/en/android/>.
 
-Is Nagram not in your language, or the translation is incorrect or incomplete? Get involved in the translations on our [Weblate](https://hosted.weblate.org/engage/nekox/).
+Is Nagram not in your language, or the translation is incorrect or incomplete? Get involved in the translations on our [Weblate](https://xtaolabs.crowdin.com/nagram).
+
+[![Crowdin](https://badges.crowdin.net/e/156df3a631d257cc6b57301566d545fb/localized.svg)](https://xtaolabs.crowdin.com/nagram)
 
 ## Thanks
 

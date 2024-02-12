@@ -191,7 +191,7 @@
     <string name="ImportSettings">Nastavení vložení</string>
     <string name="PrivacyNotice2fa">Zjistilo se že jste si nenastavili heslo, což by mohlo způsobit že hacker kontrolovaný vládou najde vaši pravou identitu, prosíme nastavte jej!</string>
     <string name="AddProxySSR">Přidat ShadowsocksR Proxy</string>
-    <string name="NekoXFaq">NekoX FAQ</string>
+    <string name="NekoXFaq">Nagram FAQ</string>
     <string name="DisableVibration">Vypnout Vibraci</string>
     <string name="VersionUpdateIgnore">Ignorovat</string>
     <string name="DisableDeveloperMode">Vypnout Vývojářský Mód</string>
