@@ -518,6 +518,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val disableClickCommandToSend =
+        addConfig(
+            "DisableClickCommandToSend",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

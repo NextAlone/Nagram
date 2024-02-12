@@ -120,4 +120,6 @@
     <string name="TipsInfo">Want to follow our features tips channel?</string>
     <string name="TipsChannel">Features Tips Channel</string>
     <string name="ShowSmallGIF">Show Small Gif</string>
+    <string name="DisableClickCommandToSend">Disable click command text to send</string>
+    <string name="DisableClickCommandToSendHint">To prevent accidental touch</string>
 </resources>

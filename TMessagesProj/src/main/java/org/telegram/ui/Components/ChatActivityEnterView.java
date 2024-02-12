@@ -9178,6 +9178,11 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 openKeyboard();
             }
         } else {
+            // Na: DisableClickCommandToSend
+            if (NaConfig.INSTANCE.getDisableClickCommandToSend().Bool()) {
+                return;
+            }
+
             if (slowModeTimer > 0 && !isInScheduleMode()) {
                 if (delegate != null) {
                     delegate.onUpdateSlowModeButton(slowModeButton, true, slowModeButton.getText());
