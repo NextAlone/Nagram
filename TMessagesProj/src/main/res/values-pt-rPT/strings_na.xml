@@ -41,6 +41,10 @@
     <string name="AppIconColorful">Colorido</string>
     <string name="AppIconDarkGreen">Verde escuro</string>
     <string name="AppIconNeon">Néon</string>
+    <string name="AppIconNiello">Niello</string>
+    <string name="AppIconBlue">azul</string>
+    <string name="AppIconDarkBlue">Azul Escuro</string>
+    <string name="AppIconBlurBlue">Azul desfocado</string>
     <string name="AutoInsertGIFCaption">Inserir legenda automaticamente antes de enviar GIF</string>
     <string name="DefaultMonoLanguage">Idioma de código padrão personalizado</string>
     <string name="DisableGlobalSearch">Desativar Pesquisa Global</string>

@@ -41,6 +41,10 @@
     <string name="AppIconColorful">Кольорова</string>
     <string name="AppIconDarkGreen">Темно-зелений</string>
     <string name="AppIconNeon">Неон</string>
+    <string name="AppIconNiello">Ньєлло</string>
+    <string name="AppIconBlue">Синій</string>
+    <string name="AppIconDarkBlue">Темно-синій</string>
+    <string name="AppIconBlurBlue">Синій колір</string>
     <string name="AutoInsertGIFCaption">Автоматично вставляти підпис до GIF</string>
     <string name="DefaultMonoLanguage">Власна мова коду за замовчуванням</string>
     <string name="DisableGlobalSearch">Вимкнути глобальний пошук</string>

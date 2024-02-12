@@ -41,6 +41,10 @@
     <string name="AppIconColorful">Kleurrijk</string>
     <string name="AppIconDarkGreen">Donker Groen</string>
     <string name="AppIconNeon">Neon</string>
+    <string name="AppIconNiello">Niello</string>
+    <string name="AppIconBlue">Blauw</string>
+    <string name="AppIconDarkBlue">Donker blauw</string>
+    <string name="AppIconBlurBlue">Blauw vervagen</string>
     <string name="AutoInsertGIFCaption">Onderschrift automatisch invoegen voor GIF verzenden</string>
     <string name="DefaultMonoLanguage">Aangepaste standaardtaal code</string>
     <string name="DisableGlobalSearch">Globaal zoeken uitschakelen</string>

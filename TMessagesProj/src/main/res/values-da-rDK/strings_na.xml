@@ -41,6 +41,10 @@
     <string name="AppIconColorful">Farverig</string>
     <string name="AppIconDarkGreen">Mørkegrøn</string>
     <string name="AppIconNeon">Neon</string>
+    <string name="AppIconNiello">Niello</string>
+    <string name="AppIconBlue">Blå</string>
+    <string name="AppIconDarkBlue">Mørk Blå</string>
+    <string name="AppIconBlurBlue">Slør Blå</string>
     <string name="AutoInsertGIFCaption">Indsæt billedtekst automatisk før GIF sender</string>
     <string name="DefaultMonoLanguage">Brugerdefineret standard kodesprog</string>
     <string name="DisableGlobalSearch">Deaktiver Global Søgning</string>

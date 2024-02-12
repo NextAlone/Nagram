@@ -41,6 +41,10 @@
     <string name="AppIconColorful">カラフルな</string>
     <string name="AppIconDarkGreen">濃い緑</string>
     <string name="AppIconNeon">Neon</string>
+    <string name="AppIconNiello">Niello</string>
+    <string name="AppIconBlue">青</string>
+    <string name="AppIconDarkBlue">ダークブルー</string>
+    <string name="AppIconBlurBlue">ぼかし青</string>
     <string name="AutoInsertGIFCaption">GIF 送信前にキャプションを自動的に挿入する</string>
     <string name="DefaultMonoLanguage">カスタムデフォルトのコード言語</string>
     <string name="DisableGlobalSearch">グローバル検索を無効にする</string>

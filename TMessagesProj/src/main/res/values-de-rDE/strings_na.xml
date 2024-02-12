@@ -41,6 +41,10 @@
     <string name="AppIconColorful">Bunt</string>
     <string name="AppIconDarkGreen">Dunkelgrün</string>
     <string name="AppIconNeon">Neon</string>
+    <string name="AppIconNiello">Nilo</string>
+    <string name="AppIconBlue">Blau</string>
+    <string name="AppIconDarkBlue">Dunkelblau</string>
+    <string name="AppIconBlurBlue">Unschärfe Blau</string>
     <string name="AutoInsertGIFCaption">Überschrift automatisch einfügen bevor GIF gesendet wird</string>
     <string name="DefaultMonoLanguage">Eigene Standard-Code-Sprache</string>
     <string name="DisableGlobalSearch">Globale Suche deaktivieren</string>

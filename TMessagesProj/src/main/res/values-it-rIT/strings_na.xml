@@ -41,6 +41,10 @@
     <string name="AppIconColorful">Colorato</string>
     <string name="AppIconDarkGreen">Verde Scuro</string>
     <string name="AppIconNeon">Neon</string>
+    <string name="AppIconNiello">Niello</string>
+    <string name="AppIconBlue">Blu</string>
+    <string name="AppIconDarkBlue">Blu Scuro</string>
+    <string name="AppIconBlurBlue">Blu Sfocatura</string>
     <string name="AutoInsertGIFCaption">Inserisci automaticamente la didascalia prima dell\'invio del GIF</string>
     <string name="DefaultMonoLanguage">Lingua di codice predefinita personalizzata</string>
     <string name="DisableGlobalSearch">Disabilita Ricerca Globale</string>

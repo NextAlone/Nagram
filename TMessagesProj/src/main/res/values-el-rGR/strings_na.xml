@@ -41,6 +41,10 @@
     <string name="AppIconColorful">Πολύχρωμο</string>
     <string name="AppIconDarkGreen">Σκούρο Πράσινο</string>
     <string name="AppIconNeon">Νέον</string>
+    <string name="AppIconNiello">Niello</string>
+    <string name="AppIconBlue">Μπλε</string>
+    <string name="AppIconDarkBlue">Σκούρο Μπλε</string>
+    <string name="AppIconBlurBlue">Θόλωμα Μπλε</string>
     <string name="AutoInsertGIFCaption">Αυτόματη εισαγωγή τίτλου πριν από την αποστολή GIF</string>
     <string name="DefaultMonoLanguage">Προσαρμοσμένη προεπιλεγμένη γλώσσα κώδικα</string>
     <string name="DisableGlobalSearch">Απενεργοποίηση Καθολικής Αναζήτησης</string>

@@ -41,6 +41,10 @@
     <string name="AppIconColorful">ملونة</string>
     <string name="AppIconDarkGreen">أخضر غامق</string>
     <string name="AppIconNeon">نيون</string>
+    <string name="AppIconNiello">نيلو</string>
+    <string name="AppIconBlue">أزرق</string>
+    <string name="AppIconDarkBlue">أزرق داكن</string>
+    <string name="AppIconBlurBlue">طمس الأزرق</string>
     <string name="AutoInsertGIFCaption">إدراج عنوان تلقائي قبل إرسال GIF</string>
     <string name="DefaultMonoLanguage">لغة الكود الافتراضي المخصصة</string>
     <string name="DisableGlobalSearch">تعطيل البحث العالمي</string>

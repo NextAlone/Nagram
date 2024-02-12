@@ -41,6 +41,10 @@
     <string name="AppIconColorful">Цветные</string>
     <string name="AppIconDarkGreen">Тёмно-зеленый</string>
     <string name="AppIconNeon">Неоновый</string>
+    <string name="AppIconNiello">Ниэлло</string>
+    <string name="AppIconBlue">Синий</string>
+    <string name="AppIconDarkBlue">Темно-синий</string>
+    <string name="AppIconBlurBlue">Размытие синего</string>
     <string name="AutoInsertGIFCaption">Автовставка заголовка перед отправкой GIF</string>
     <string name="DefaultMonoLanguage">Пользовательский код языка по умолчанию</string>
     <string name="DisableGlobalSearch">Отключить глобальный поиск</string>

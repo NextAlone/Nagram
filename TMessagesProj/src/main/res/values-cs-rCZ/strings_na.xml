@@ -41,6 +41,10 @@
     <string name="AppIconColorful">Barevné</string>
     <string name="AppIconDarkGreen">Tmavě zelená</string>
     <string name="AppIconNeon">Neún</string>
+    <string name="AppIconNiello">Niello</string>
+    <string name="AppIconBlue">Modrá</string>
+    <string name="AppIconDarkBlue">Tmavě modrá</string>
+    <string name="AppIconBlurBlue">Modré rozostření</string>
     <string name="AutoInsertGIFCaption">Automaticky vkládat titulek před odesláním GIF</string>
     <string name="DefaultMonoLanguage">Vlastní výchozí jazyk kódu</string>
     <string name="DisableGlobalSearch">Zakázat globální vyhledávání</string>
