@@ -120,4 +120,6 @@
     <string name="TipsInfo">要关注我们的功能介绍频道吗 ？</string>
     <string name="TipsChannel">功能介绍频道</string>
     <string name="ShowSmallGIF">GIF 显示得更小</string>
+    <string name="DisableClickCommandToSend">禁用点击指令文本发送</string>
+    <string name="DisableClickCommandToSendHint">妈妈再也不用担心我会误触啦</string>
 </resources>
