@@ -778,7 +778,7 @@ public class CachedMediaLayout extends FrameLayout implements NestedSizeNotifier
             boolean animated = file == holder.itemView.getTag();
             boolean divider = position != itemInners.size() - 1;
             holder.itemView.setTag(file);
-            long date = file.file.lastModified() / 1000;
+            long date = file.file.lastModified();
 
             cell.setTextAndValueAndTypeAndThumb(file.messageType == MessageObject.TYPE_ROUND_VIDEO ? LocaleController.getString("AttachRound", R.string.AttachRound) : file.file.getName(), LocaleController.formatDateAudio(date / 1000, true), Utilities.getExtension(file.file.getName()), null, 0, divider);
             if (!animated) {
