@@ -9159,7 +9159,6 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         if (command == null || getVisibility() != VISIBLE || messageEditText == null) {
             return;
         }
-        ifLongPress:
         if (longPress) {
             String text = messageEditText.getText().toString();
             TLRPC.User user = messageObject != null && DialogObject.isChatDialog(dialog_id) ? accountInstance.getMessagesController().getUser(messageObject.messageOwner.from_id.user_id) : null;
@@ -9180,8 +9179,9 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             }
         } else {
             // Na: DisableClickCommandToSend
-            boolean disableClickCommandToSend = NaConfig.INSTANCE.getDisableClickCommandToSend().Bool();
-            if (disableClickCommandToSend) break ifLongPress;
+            if (NaConfig.INSTANCE.getDisableClickCommandToSend().Bool()) {
+                return;
+            }
 
             if (slowModeTimer > 0 && !isInScheduleMode()) {
                 if (delegate != null) {
