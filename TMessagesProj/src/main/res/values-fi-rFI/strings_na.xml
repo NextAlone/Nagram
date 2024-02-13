@@ -122,4 +122,5 @@
     <string name="ShowSmallGIF">Näytä Pieni Gif</string>
     <string name="DisableClickCommandToSend">Poista komennon teksti käytöstä lähettääksesi</string>
     <string name="DisableClickCommandToSendHint">Estä vahingossa kosketus</string>
+    <string name="DisableDialogsFloatingButton">Poista Dialogien Kelluva Painike Käytöstä</string>
 </resources>

@@ -122,4 +122,5 @@
     <string name="ShowSmallGIF">GIF 显示得更小</string>
     <string name="DisableClickCommandToSend">禁用点击指令文本发送</string>
     <string name="DisableClickCommandToSendHint">妈妈再也不用担心我会误触啦</string>
+    <string name="DisableDialogsFloatingButton">禁用主页浮动按钮</string>
 </resources>

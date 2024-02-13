@@ -64,6 +64,8 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
     private SideMenultItemAnimator itemAnimator;
     private boolean hasGps;
 
+    public static int nkbtnNewStory = 1000;
+
     public DrawerLayoutAdapter(Context context, SideMenultItemAnimator animator, DrawerLayoutContainer drawerLayoutContainer) {
         mContext = context;
         mDrawerLayoutContainer = drawerLayoutContainer;
@@ -361,6 +363,10 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         if (MessagesController.getInstance(UserConfig.selectedAccount).storiesEnabled()) {
             items.add(new Item(16, LocaleController.getString("ProfileMyStories", R.string.ProfileMyStories), R.drawable.msg_menu_stories));
             showDivider = true;
+
+            if (NaConfig.INSTANCE.getDisableDialogsFloatingButton().Bool()) {
+                items.add(new Item(nkbtnNewStory, LocaleController.getString("RecorderNewStory", R.string.RecorderNewStory), R.drawable.msg_menu_stories));
+            }
         }
         TLRPC.TL_attachMenuBots menuBots = MediaDataController.getInstance(UserConfig.selectedAccount).getAttachMenuBots();
         if (menuBots != null && menuBots.bots != null) {

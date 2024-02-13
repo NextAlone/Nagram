@@ -524,6 +524,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val disableDialogsFloatingButton =
+        addConfig(
+            "DisableDialogsFloatingButton",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

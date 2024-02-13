@@ -122,4 +122,5 @@
     <string name="ShowSmallGIF">Mostrar Pequeno Gif</string>
     <string name="DisableClickCommandToSend">Desative clique no texto de comando para enviar</string>
     <string name="DisableClickCommandToSendHint">Para prevenir toques acidentais</string>
+    <string name="DisableDialogsFloatingButton">Desativar Botão de Diálogos Flutuantes</string>
 </resources>

@@ -122,4 +122,5 @@
     <string name="ShowSmallGIF">Zobrazit malý Gif</string>
     <string name="DisableClickCommandToSend">Zakázat kliknutí na text příkazu pro odeslání</string>
     <string name="DisableClickCommandToSendHint">Aby se zabránilo náhodnému dotyku</string>
+    <string name="DisableDialogsFloatingButton">Zakázat plovoucí tlačítko dialogů</string>
 </resources>

@@ -6847,6 +6847,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         updateVisibleRows(0, false);
         updateProxyButton(false, true);
         updateStoriesVisibility(false);
+        if (NaConfig.INSTANCE.getDisableDialogsFloatingButton().Bool()) {
+            hideFloatingButton(true);
+        }
         checkSuggestClearDatabase();
     }
 
@@ -10874,6 +10877,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     private void hideFloatingButton(boolean hide) {
+        if (NaConfig.INSTANCE.getDisableDialogsFloatingButton().Bool()) {
+            hide = true;
+        }
+
         if (rightSlidingDialogContainer.hasFragment()) {
             hide = true;
         }

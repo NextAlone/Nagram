@@ -122,4 +122,5 @@
     <string name="ShowSmallGIF">小さなGifを表示</string>
     <string name="DisableClickCommandToSend">送信するコマンドテキストをクリックしない</string>
     <string name="DisableClickCommandToSendHint">偶発的なタッチを防ぐため</string>
+    <string name="DisableDialogsFloatingButton">ダイアログのフローティングボタンを無効化</string>
 </resources>

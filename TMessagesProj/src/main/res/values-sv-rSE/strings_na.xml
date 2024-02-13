@@ -122,4 +122,5 @@
     <string name="ShowSmallGIF">Visa liten Gif</string>
     <string name="DisableClickCommandToSend">Inaktivera klickkommandotext för att skicka</string>
     <string name="DisableClickCommandToSendHint">För att förhindra oavsiktligt tryck</string>
+    <string name="DisableDialogsFloatingButton">Inaktivera dialoger flytande knapp</string>
 </resources>

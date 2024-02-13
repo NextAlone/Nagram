@@ -122,4 +122,5 @@
     <string name="ShowSmallGIF">Εμφάνιση Μικρού Gif</string>
     <string name="DisableClickCommandToSend">Απενεργοποιήστε το κλικ στην εντολή κειμένου για αποστολή</string>
     <string name="DisableClickCommandToSendHint">Για την πρόληψη ακούσιας αφής</string>
+    <string name="DisableDialogsFloatingButton">Απενεργοποίηση Πλωτού Κουμπιού Dialogs</string>
 </resources>
