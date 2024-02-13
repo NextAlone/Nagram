@@ -124,4 +124,5 @@
     <string name="DisableClickCommandToSendHint">För att förhindra oavsiktligt tryck</string>
     <string name="DisableDialogsFloatingButton">Inaktivera dialoger flytande knapp</string>
     <string name="DisableFlagSecure">Inaktivera flagga säkert</string>
+    <string name="CenterActionBarTitle">Centrera titel i åtgärdsfältet</string>
 </resources>

@@ -536,6 +536,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             true
         )
+    val centerActionBarTitle =
+        addConfig(
+            "CenterActionBarTitle",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

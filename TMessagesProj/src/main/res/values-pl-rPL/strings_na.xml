@@ -124,4 +124,5 @@
     <string name="DisableClickCommandToSendHint">Aby zapobiec przypadkowemu dotknięciu</string>
     <string name="DisableDialogsFloatingButton">Wyłącz pływający przycisk dialogów</string>
     <string name="DisableFlagSecure">Wyłącz bezpieczne flagi</string>
+    <string name="CenterActionBarTitle">Wyśrodkuj tytuł na pasku akcji</string>
 </resources>

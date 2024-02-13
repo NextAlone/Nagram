@@ -124,4 +124,5 @@
     <string name="DisableClickCommandToSendHint">Estä vahingossa kosketus</string>
     <string name="DisableDialogsFloatingButton">Poista Dialogien Kelluva Painike Käytöstä</string>
     <string name="DisableFlagSecure">Poista Lipun Turvallisuus Käytöstä</string>
+    <string name="CenterActionBarTitle">Keskitä otsikko toimintopalkille</string>
 </resources>

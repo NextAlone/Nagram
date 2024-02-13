@@ -124,4 +124,5 @@
     <string name="DisableClickCommandToSendHint">Para prevenir toques acidentais</string>
     <string name="DisableDialogsFloatingButton">Desativar Botão de Diálogos Flutuantes</string>
     <string name="DisableFlagSecure">Desativar Sinalização Segura</string>
+    <string name="CenterActionBarTitle">Centralizar título na barra de ação</string>
 </resources>

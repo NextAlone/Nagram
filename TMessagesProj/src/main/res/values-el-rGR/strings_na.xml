@@ -124,4 +124,5 @@
     <string name="DisableClickCommandToSendHint">Για την πρόληψη ακούσιας αφής</string>
     <string name="DisableDialogsFloatingButton">Απενεργοποίηση Πλωτού Κουμπιού Dialogs</string>
     <string name="DisableFlagSecure">Απενεργοποίηση Flag Secure</string>
+    <string name="CenterActionBarTitle">Κεντράρισμα τίτλου στη γραμμή ενεργειών</string>
 </resources>

@@ -124,4 +124,5 @@
     <string name="DisableClickCommandToSendHint">Ongewenste aanraking voorkomen</string>
     <string name="DisableDialogsFloatingButton">Zwevende knop dialoogknop uitschakelen</string>
     <string name="DisableFlagSecure">Vlaggenbeveiliging uitschakelen</string>
+    <string name="CenterActionBarTitle">Centreer titel in actiebalk</string>
 </resources>

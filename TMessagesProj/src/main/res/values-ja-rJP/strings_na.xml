@@ -124,4 +124,5 @@
     <string name="DisableClickCommandToSendHint">偶発的なタッチを防ぐため</string>
     <string name="DisableDialogsFloatingButton">ダイアログのフローティングボタンを無効化</string>
     <string name="DisableFlagSecure">安全フラグを無効にする</string>
+    <string name="CenterActionBarTitle">アクションバーのタイトルを中心にする</string>
 </resources>

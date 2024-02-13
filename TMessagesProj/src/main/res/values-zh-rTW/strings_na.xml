@@ -124,4 +124,5 @@
     <string name="DisableClickCommandToSendHint">To prevent accidental touch</string>
     <string name="DisableDialogsFloatingButton">Disable Dialogs Floating Button</string>
     <string name="DisableFlagSecure">Disable Flag Secure</string>
+    <string name="CenterActionBarTitle">Center title in action bar</string>
 </resources>
