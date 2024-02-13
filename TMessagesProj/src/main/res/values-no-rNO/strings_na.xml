@@ -123,4 +123,5 @@
     <string name="DisableClickCommandToSend">Deaktiver komprimeringstekst for å sende</string>
     <string name="DisableClickCommandToSendHint">Å forhindre utilsiktet berøring</string>
     <string name="DisableDialogsFloatingButton">Deaktiver dialoger med flytende knapp</string>
+    <string name="DisableFlagSecure">Deaktiver Flag sikker</string>
 </resources>

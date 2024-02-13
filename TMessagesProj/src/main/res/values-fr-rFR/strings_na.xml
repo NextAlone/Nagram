@@ -123,4 +123,5 @@
     <string name="DisableClickCommandToSend">Désactiver le texte de la commande pour envoyer</string>
     <string name="DisableClickCommandToSendHint">Pour éviter un toucher accidentel</string>
     <string name="DisableDialogsFloatingButton">Désactiver le bouton flottant des boîtes de dialogue</string>
+    <string name="DisableFlagSecure">Désactiver Flag Secure</string>
 </resources>

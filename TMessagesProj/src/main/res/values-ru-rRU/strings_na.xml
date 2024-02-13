@@ -123,4 +123,5 @@
     <string name="DisableClickCommandToSend">Отключите команду клика для отправки</string>
     <string name="DisableClickCommandToSendHint">Во избежание случайного касания</string>
     <string name="DisableDialogsFloatingButton">Отключить плавающую кнопку диалогов</string>
+    <string name="DisableFlagSecure">Отключить защиту флага</string>
 </resources>

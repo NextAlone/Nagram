@@ -123,4 +123,5 @@
     <string name="DisableClickCommandToSend">Disabilita il clic sul testo del comando da inviare</string>
     <string name="DisableClickCommandToSendHint">Per evitare tocchi accidentali</string>
     <string name="DisableDialogsFloatingButton">Disabilita Le Finestre Pulsante Fluttuante</string>
+    <string name="DisableFlagSecure">Disabilita Flag Secure</string>
 </resources>

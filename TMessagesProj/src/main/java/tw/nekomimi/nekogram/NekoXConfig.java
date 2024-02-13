@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.database.NitritesKt;
+import xyz.nextalone.nagram.NaConfig;
 
 public class NekoXConfig {
 
@@ -66,7 +67,7 @@ public class NekoXConfig {
 
     public static boolean developerMode = preferences.getBoolean("developer_mode", true);
 
-    public static boolean disableFlagSecure = preferences.getBoolean("disable_flag_secure", true);
+    public static boolean disableFlagSecure = NaConfig.INSTANCE.getDisableFlagSecure().Bool();
     public static boolean disableScreenshotDetection = preferences.getBoolean("disable_screenshot_detection", false);
 
     public static boolean disableStatusUpdate = preferences.getBoolean("disable_status_update", false);
@@ -92,7 +93,10 @@ public class NekoXConfig {
     }
 
     public static void toggleDisableFlagSecure() {
-        preferences.edit().putBoolean("disable_flag_secure", disableFlagSecure = !disableFlagSecure).apply();
+//        preferences.edit().putBoolean("disable_flag_secure", disableFlagSecure = !disableFlagSecure).apply();
+
+        disableFlagSecure = !disableFlagSecure;
+        NaConfig.INSTANCE.getDisableFlagSecure().toggleConfigBool();
     }
 
     public static void toggleDisableScreenshotDetection() {

@@ -123,4 +123,5 @@
     <string name="DisableClickCommandToSend">Schakel klik op opdracht tekst uit om te verzenden</string>
     <string name="DisableClickCommandToSendHint">Ongewenste aanraking voorkomen</string>
     <string name="DisableDialogsFloatingButton">Zwevende knop dialoogknop uitschakelen</string>
+    <string name="DisableFlagSecure">Vlaggenbeveiliging uitschakelen</string>
 </resources>

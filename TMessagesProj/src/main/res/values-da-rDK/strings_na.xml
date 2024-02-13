@@ -123,4 +123,5 @@
     <string name="DisableClickCommandToSend">Deaktivér klikkommandotekst for at sende</string>
     <string name="DisableClickCommandToSendHint">For at forhindre utilsigtet berøring</string>
     <string name="DisableDialogsFloatingButton">Deaktivér Dialoger Flydende Knap</string>
+    <string name="DisableFlagSecure">Deaktivér Flag Sikker</string>
 </resources>

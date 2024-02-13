@@ -123,4 +123,5 @@
     <string name="DisableClickCommandToSend">Zakázat kliknutí na text příkazu pro odeslání</string>
     <string name="DisableClickCommandToSendHint">Aby se zabránilo náhodnému dotyku</string>
     <string name="DisableDialogsFloatingButton">Zakázat plovoucí tlačítko dialogů</string>
+    <string name="DisableFlagSecure">Zakázat zabezpečení vlajky</string>
 </resources>

@@ -123,4 +123,5 @@
     <string name="DisableClickCommandToSend">禁用点击指令文本发送</string>
     <string name="DisableClickCommandToSendHint">妈妈再也不用担心我会误触啦</string>
     <string name="DisableDialogsFloatingButton">禁用主页浮动按钮</string>
+    <string name="DisableFlagSecure">Disable Flag Secure</string>
 </resources>
