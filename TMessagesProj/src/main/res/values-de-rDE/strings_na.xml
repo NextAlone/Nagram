@@ -120,4 +120,6 @@
     <string name="TipsInfo">Willst du unseren Funktionen Tipps Kanal folgen?</string>
     <string name="TipsChannel">Features-Tipps Kanal</string>
     <string name="ShowSmallGIF">Kleine Gif anzeigen</string>
+    <string name="DisableClickCommandToSend">Deaktiviere Befehlstext zum Senden</string>
+    <string name="DisableClickCommandToSendHint">Um zufällige Berührung zu verhindern</string>
 </resources>

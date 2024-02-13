@@ -120,4 +120,6 @@
     <string name="TipsInfo">هل ترغب في متابعة قناة نصائح الميزات؟</string>
     <string name="TipsChannel">قناة نصائح الميزات</string>
     <string name="ShowSmallGIF">إظهار الغاز الصغير</string>
+    <string name="DisableClickCommandToSend">تعطيل نص أمر النقر لإرساله</string>
+    <string name="DisableClickCommandToSendHint">لمنع اللمس العرضي</string>
 </resources>

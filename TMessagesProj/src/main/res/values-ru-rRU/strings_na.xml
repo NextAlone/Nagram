@@ -120,4 +120,6 @@
     <string name="TipsInfo">Хотите следить за нашими советами по функциям?</string>
     <string name="TipsChannel">Подсказки о функциях канала</string>
     <string name="ShowSmallGIF">Показать маленький Gif</string>
+    <string name="DisableClickCommandToSend">Отключите команду клика для отправки</string>
+    <string name="DisableClickCommandToSendHint">Во избежание случайного касания</string>
 </resources>

@@ -120,4 +120,6 @@
     <string name="TipsInfo">私たちの機能のヒントチャンネルをフォローしたいですか?</string>
     <string name="TipsChannel">機能ヒントチャンネル</string>
     <string name="ShowSmallGIF">小さなGifを表示</string>
+    <string name="DisableClickCommandToSend">送信するコマンドテキストをクリックしない</string>
+    <string name="DisableClickCommandToSendHint">偶発的なタッチを防ぐため</string>
 </resources>

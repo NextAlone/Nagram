@@ -120,4 +120,6 @@
     <string name="TipsInfo">Vill du följa våra tips kanal?</string>
     <string name="TipsChannel">Egenskaper Tips Kanal</string>
     <string name="ShowSmallGIF">Visa liten Gif</string>
+    <string name="DisableClickCommandToSend">Inaktivera klickkommandotext för att skicka</string>
+    <string name="DisableClickCommandToSendHint">För att förhindra oavsiktligt tryck</string>
 </resources>

@@ -120,4 +120,6 @@
     <string name="TipsInfo">Vil du følge våre funksjoner tips kanal?</string>
     <string name="TipsChannel">Funksjoner Tips Kanal</string>
     <string name="ShowSmallGIF">Vis liten Gif</string>
+    <string name="DisableClickCommandToSend">Deaktiver komprimeringstekst for å sende</string>
+    <string name="DisableClickCommandToSendHint">Å forhindre utilsiktet berøring</string>
 </resources>

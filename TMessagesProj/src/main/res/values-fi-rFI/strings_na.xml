@@ -120,4 +120,6 @@
     <string name="TipsInfo">Haluatko seurata meidän ominaisuuksia vinkkejä kanava?</string>
     <string name="TipsChannel">Ominaisuudet Vinkit Kanava</string>
     <string name="ShowSmallGIF">Näytä Pieni Gif</string>
+    <string name="DisableClickCommandToSend">Poista komennon teksti käytöstä lähettääksesi</string>
+    <string name="DisableClickCommandToSendHint">Estä vahingossa kosketus</string>
 </resources>

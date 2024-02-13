@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="N_Config">N-Config</string>
+    <string name="N_Config">N-Configuration</string>
     <string name="ForceCopy">Forcer la copie</string>
-    <string name="InvertReply">Invert</string>
+    <string name="InvertReply">Inverser</string>
     <string name="Great">Superbe</string>
-    <string name="Poor">Mauvais</string>
+    <string name="Poor">Faible</string>
     <string name="CombineMessage">Combiner le message</string>
     <string name="TextStyle">Style du texte</string>
     <string name="CombineMessageEnabledWithReply">Message de combinaison activé avec réponse</string>
@@ -48,7 +48,7 @@
     <string name="AutoInsertGIFCaption">Insérer automatiquement la légende avant l\'envoi du GIF</string>
     <string name="DefaultMonoLanguage">Langue du code par défaut personnalisée</string>
     <string name="DisableGlobalSearch">Désactiver la recherche globale</string>
-    <string name="InputMessageId">Input Message Id</string>
+    <string name="InputMessageId">Id du message d\'entrée</string>
     <string name="ToTheMessage">Vers le message</string>
     <string name="HideOriginAfterTranslation">Cacher l\'origine après la traduction</string>
     <string name="ZalgoFilter">Filtrer les symboles \"Zalgo\"</string>
@@ -69,8 +69,8 @@
     <string name="CustomPoor">Mot de réponse personnalisé par clic long</string>
     <string name="CustomPoorHint">Groupement par défaut</string>
     <string name="CustomEditedMessage">Mot de message modifié personnalisé</string>
-    <string name="FakeHighPerformanceDevice">Fausse Appareil Haute Performance</string>
-    <string name="DisableEmojiDrawLimit">Désactiver la limite de tirage des emojis</string>
+    <string name="FakeHighPerformanceDevice">Faux appareil à haute performance</string>
+    <string name="DisableEmojiDrawLimit">Désactiver la limite de dessins d\'Émojis</string>
     <string name="IconDecoration">Décoration de l\'icône</string>
     <string name="NotificationIcon">Icône de notification</string>
     <string name="Official">Officiel</string>
@@ -109,9 +109,9 @@
     <string name="ExternalStickerCacheWaitSync">En attente de la fin de la synchronisation du cache</string>
     <string name="ExternalStickerCacheSyncNotFinished">La synchronisation du cache est déjà en cours d\'exécution</string>
     <string name="ExternalStickerCacheAutoRefresh">Synchronisation automatique</string>
-    <string name="ExternalStickerCacheAutoRefreshHint">Synchroniser automatiquement toutes les caches après avoir reçu des événements autocollants</string>
-    <string name="ExternalStickerCacheRefreshAll">Synchroniser toutes les caches</string>
-    <string name="ExternalStickerCacheDeleteAll">Supprimer toutes les caches</string>
+    <string name="ExternalStickerCacheAutoRefreshHint">Synchronisation automatique de tous les caches après réception d\'événements liés aux autocollants</string>
+    <string name="ExternalStickerCacheRefreshAll">Synchroniser les caches</string>
+    <string name="ExternalStickerCacheDeleteAll">Supprimer tous les caches</string>
     <string name="ExternalStickerCacheDirNameType">Nommage du répertoire</string>
     <string name="ProviderTranSmartTranslate">Traducteur TranSmart</string>
     <string name="DisableMarkdown">Désactiver Markdown</string>
@@ -120,4 +120,6 @@
     <string name="TipsInfo">Vous voulez suivre notre canal de conseils de fonctionnalités?</string>
     <string name="TipsChannel">Caractéristiques Canal de Conseils</string>
     <string name="ShowSmallGIF">Afficher le petit Gif</string>
+    <string name="DisableClickCommandToSend">Désactiver le texte de la commande pour envoyer</string>
+    <string name="DisableClickCommandToSendHint">Pour éviter un toucher accidentel</string>
 </resources>

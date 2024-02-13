@@ -120,4 +120,6 @@
     <string name="TipsInfo">Wil je ons tips kanaal voor nieuwe functies volgen?</string>
     <string name="TipsChannel">Functies Tips Kanaal</string>
     <string name="ShowSmallGIF">Kleine Gif weergeven</string>
+    <string name="DisableClickCommandToSend">Schakel klik op opdracht tekst uit om te verzenden</string>
+    <string name="DisableClickCommandToSendHint">Ongewenste aanraking voorkomen</string>
 </resources>

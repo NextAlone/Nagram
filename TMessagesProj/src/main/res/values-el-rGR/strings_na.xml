@@ -120,4 +120,6 @@
     <string name="TipsInfo">Θέλετε να ακολουθήσετε το κανάλι μας χαρακτηριστικά?</string>
     <string name="TipsChannel">Συμβουλές Κανάλι</string>
     <string name="ShowSmallGIF">Εμφάνιση Μικρού Gif</string>
+    <string name="DisableClickCommandToSend">Απενεργοποιήστε το κλικ στην εντολή κειμένου για αποστολή</string>
+    <string name="DisableClickCommandToSendHint">Για την πρόληψη ακούσιας αφής</string>
 </resources>

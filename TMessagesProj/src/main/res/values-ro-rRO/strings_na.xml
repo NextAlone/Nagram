@@ -120,4 +120,6 @@
     <string name="TipsInfo">Doriți să urmăriți canalul nostru de sfaturi?</string>
     <string name="TipsChannel">Caracteristici Sfaturi Canal</string>
     <string name="ShowSmallGIF">Arată Gif Mic</string>
+    <string name="DisableClickCommandToSend">Dezactivează clic pe textul de comandă pentru a trimite</string>
+    <string name="DisableClickCommandToSendHint">Pentru a preveni atingerea accidentală</string>
 </resources>

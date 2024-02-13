@@ -120,4 +120,6 @@
     <string name="TipsInfo">Chcesz śledzić nasz kanał wskazówek dotyczących funkcji?</string>
     <string name="TipsChannel">Kanał wskazówek dotyczących funkcji</string>
     <string name="ShowSmallGIF">Pokaż mały Gif</string>
+    <string name="DisableClickCommandToSend">Wyłącz tekst polecenia, aby wysłać</string>
+    <string name="DisableClickCommandToSendHint">Aby zapobiec przypadkowemu dotknięciu</string>
 </resources>

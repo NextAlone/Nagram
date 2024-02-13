@@ -120,4 +120,6 @@
     <string name="TipsInfo">Chcete sledovat náš kanál tipů na funkce?</string>
     <string name="TipsChannel">Tipy funkcí</string>
     <string name="ShowSmallGIF">Zobrazit malý Gif</string>
+    <string name="DisableClickCommandToSend">Zakázat kliknutí na text příkazu pro odeslání</string>
+    <string name="DisableClickCommandToSendHint">Aby se zabránilo náhodnému dotyku</string>
 </resources>

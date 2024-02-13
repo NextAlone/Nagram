@@ -120,4 +120,6 @@
     <string name="TipsInfo">Хочете перейти до нашого каналу з підказками?</string>
     <string name="TipsChannel">Підказки до каналу функцій</string>
     <string name="ShowSmallGIF">Показати маленький Gif</string>
+    <string name="DisableClickCommandToSend">Вимкнути командний текст, щоб відправити</string>
+    <string name="DisableClickCommandToSendHint">Щоб запобігти випадковому дотику</string>
 </resources>
