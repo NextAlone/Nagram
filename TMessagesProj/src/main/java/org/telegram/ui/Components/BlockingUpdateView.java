@@ -38,6 +38,7 @@ import org.telegram.ui.Components.voip.CellFlickerDrawable;
 
 import java.util.Locale;
 
+import tw.nekomimi.nekogram.TextViewEffects;
 import tw.nekomimi.nekogram.helpers.remote.UpdateHelper;
 
 public class BlockingUpdateView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
@@ -97,7 +98,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         titleTextView.setText(LocaleController.getString("UpdateTelegram", R.string.UpdateTelegram).replace("Telegram", LocaleController.getString("NekoX", R.string.NekoX)));
         container.addView(titleTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP));
 
-        textView = new TextView(context);
+        textView = new TextViewEffects(context);
         textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         textView.setLinkTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteLinkText));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
