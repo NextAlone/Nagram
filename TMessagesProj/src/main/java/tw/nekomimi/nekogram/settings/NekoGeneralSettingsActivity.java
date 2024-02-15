@@ -244,6 +244,10 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
     private ChatBlurAlphaSeekBar chatBlurAlphaSeekbar;
     private UndoView restartTooltip;
 
+    public NekoGeneralSettingsActivity() {
+        addRowsToMap(cellGroup);
+    }
+
     @Override
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
@@ -257,7 +261,7 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setTitle(LocaleController.getString("General", R.string.General));
+        actionBar.setTitle(getTitle());
 
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
@@ -382,7 +386,6 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
                 }
             }
         });
-        addRowsToMap(cellGroup);
         listView.setOnItemLongClickListener((view, position, x, y) -> {
             var holder = listView.findViewHolderForAdapterPosition(position);
             if (holder != null && listAdapter.isEnabled(holder)) {
@@ -657,6 +660,21 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public int getBaseGuid() {
+        return 12000;
+    }
+
+    @Override
+    public int getDrawable() {
+        return R.drawable.msg_theme;
+    }
+
+    @Override
+    public String getTitle() {
+        return LocaleController.getString("General", R.string.General);
     }
 
     @Override

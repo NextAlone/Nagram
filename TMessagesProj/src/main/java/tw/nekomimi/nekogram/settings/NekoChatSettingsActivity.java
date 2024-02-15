@@ -205,6 +205,10 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     private EmojiSetCell emojiSetCell;
     private UndoView tooltip;
 
+    public NekoChatSettingsActivity() {
+        addRowsToMap(cellGroup);
+    }
+
     @Override
     public boolean onFragmentCreate() {
         EmojiHelper.getInstance().loadEmojisInfo(this);
@@ -222,7 +226,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setTitle(LocaleController.getString("Chat", R.string.Chat));
+        actionBar.setTitle(getTitle());
 
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
@@ -339,7 +343,6 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                 }
             }
         });
-        addRowsToMap(cellGroup);
         listView.setOnItemLongClickListener((view, position, x, y) -> {
             var holder = listView.findViewHolderForAdapterPosition(position);
             if (holder != null && listAdapter.isEnabled(holder)) {
@@ -384,6 +387,16 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public int getDrawable() {
+        return R.drawable.menu_chats;
+    }
+
+    @Override
+    public String getTitle() {
+        return LocaleController.getString("Chat", R.string.Chat);
     }
 
     @Override

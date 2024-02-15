@@ -116,6 +116,10 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
     private static final int INTENT_PICK_CUSTOM_EMOJI_PACK = 114;
     private static final int INTENT_PICK_EXTERNAL_STICKER_DIRECTORY = 514;
 
+    public NekoExperimentalSettingsActivity() {
+        addRowsToMap(cellGroup);
+    }
+
     private void setExternalStickerCacheCellsEnabled(boolean enabled) {
         ((ConfigCellText) externalStickerCacheSyncAllRow).setEnabled(enabled);
         ((ConfigCellText) externalStickerCacheDeleteAllRow).setEnabled(enabled);
@@ -154,7 +158,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setTitle(LocaleController.getString("Experiment", R.string.Experiment));
+        actionBar.setTitle(getTitle());
 
         if (AndroidUtilities.isTablet()) {
             actionBar.setOccupyStatusBar(false);
@@ -257,7 +261,6 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
                 }
             }
         });
-        addRowsToMap(cellGroup);
         listView.setOnItemLongClickListener((view, position, x, y) -> {
             var holder = listView.findViewHolderForAdapterPosition(position);
             if (holder != null && listAdapter.isEnabled(holder)) {
@@ -366,6 +369,21 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public int getBaseGuid() {
+        return 11000;
+    }
+
+    @Override
+    public int getDrawable() {
+        return R.drawable.msg_fave;
+    }
+
+    @Override
+    public String getTitle() {
+        return LocaleController.getString("Experiment", R.string.Experiment);
     }
 
     @Override

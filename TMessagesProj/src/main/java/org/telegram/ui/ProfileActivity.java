@@ -285,6 +285,8 @@ import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import libv2ray.Libv2ray;
 import tw.nekomimi.nekogram.BackButtonMenuRecent;
+import tw.nekomimi.nekogram.helpers.SettingsHelper;
+import tw.nekomimi.nekogram.helpers.SettingsSearchResult;
 import tw.nekomimi.nekogram.transtale.popupwrapper.AutoTranslatePopupWrapper;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.InternalUpdater;
@@ -11401,7 +11403,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
 
         private SearchResult[] onCreateSearchArray() {
-            return new SearchResult[]{
+            SearchResult[] arr = new SearchResult[]{
                     new SearchResult(500, LocaleController.getString("EditName", R.string.EditName), 0, () -> presentFragment(new ChangeNameActivity(resourcesProvider))),
                     new SearchResult(501, LocaleController.getString("ChangePhoneNumber", R.string.ChangePhoneNumber), 0, () -> presentFragment(new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_CHANGE_PHONE_NUMBER))),
                     new SearchResult(502, LocaleController.getString("AddAnotherAccount", R.string.AddAnotherAccount), 0, () -> {
@@ -11664,6 +11666,22 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 new SearchResult(403, LocaleController.getString("TelegramFAQ", R.string.TelegramFAQ), LocaleController.getString("SettingsHelp", R.string.SettingsHelp), R.drawable.msg2_help, () -> Browser.openUrl(getParentActivity(), LocaleController.getString("TelegramFaqUrl", R.string.TelegramFaqUrl))),
                 new SearchResult(404, LocaleController.getString("PrivacyPolicy", R.string.PrivacyPolicy), LocaleController.getString("SettingsHelp", R.string.SettingsHelp), R.drawable.msg2_help, () -> Browser.openUrl(getParentActivity(), LocaleController.getString("PrivacyPolicyUrl", R.string.PrivacyPolicyUrl))),
             };
+            ArrayList<SettingsSearchResult> nagramSettings = SettingsHelper.onCreateSearchArray(
+                    fragment -> AndroidUtilities.runOnUIThread(() -> presentFragment(fragment, false, false))
+            );
+            ArrayList<SearchResult> list = new ArrayList<>();
+            for (SettingsSearchResult oldResult: nagramSettings) {
+                SearchResult result = new SearchResult(
+                    oldResult.guid, oldResult.searchTitle, null, oldResult.path1, oldResult.path2, oldResult.iconResId, oldResult.openRunnable
+                );
+                list.add(result);
+            }
+            // combine
+            SearchResult[] result = Arrays.copyOf(arr, arr.length + list.size());
+            for (int i = 0; i < list.size(); i++) {
+                result[arr.length + i] = list.get(i);
+            }
+            return result;
         }
 
         private boolean isPremiumFeatureAvailable(int feature) {
@@ -11937,12 +11955,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     for (int i = 0; i < searchArgs.length; i++) {
                         if (searchArgs[i].length() != 0) {
                             String searchString = searchArgs[i];
-                            int index = title.indexOf(" " + searchString);
+                            int index = title.indexOf(searchString);
                             if (index < 0 && translitArgs[i] != null) {
                                 searchString = translitArgs[i];
-                                index = title.indexOf(" " + searchString);
+                                index = title.indexOf(searchString);
                             }
                             if (index >= 0) {
+                                index -= 1;
                                 if (stringBuilder == null) {
                                     stringBuilder = new SpannableStringBuilder(result.searchTitle);
                                 }

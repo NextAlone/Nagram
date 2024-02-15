@@ -30,6 +30,18 @@ public class BaseNekoXSettingsActivity extends BaseFragment {
     protected void updateRows() {
     }
 
+    public int getBaseGuid() {
+        return 10000;
+    }
+
+    public int getDrawable() {
+        return 0;
+    }
+
+    public String getTitle() {
+        return "";
+    }
+
     protected void addRowsToMap(CellGroup cellGroup) {
         rowMap.clear();
         rowMapReverse.clear();
@@ -68,6 +80,8 @@ public class BaseNekoXSettingsActivity extends BaseFragment {
             return ((ConfigCellTextDetail) row).getBindConfig();
         } else if (row instanceof ConfigCellTextInput) {
             return ((ConfigCellTextInput) row).getBindConfig();
+        } else if (row instanceof ConfigCellAutoTextCheck) {
+            return ((ConfigCellAutoTextCheck) row).getBindConfig();
         }
         return null;
     }
@@ -164,8 +178,12 @@ public class BaseNekoXSettingsActivity extends BaseFragment {
                 layoutManager.scrollToPositionWithOffset(finalPosition, AndroidUtilities.dp(60));
                 return finalPosition;
             });
-        } else {
+        } else if (unknown != null) {
             unknown.run();
         }
+    }
+
+    public HashMap<Integer, String> getRowMapReverse() {
+        return rowMapReverse;
     }
 }
