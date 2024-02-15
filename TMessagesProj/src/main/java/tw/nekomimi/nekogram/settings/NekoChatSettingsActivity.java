@@ -206,6 +206,20 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     private UndoView tooltip;
 
     public NekoChatSettingsActivity() {
+        if (!NekoXConfig.isDeveloper()) {
+            cellGroup.rows.remove(disableChatActionRow);
+            cellGroup.rows.remove(disableChoosingStickerRow);
+            cellGroup.rows.remove(ignoreBlockedRow);
+            cellGroup.rows.remove(dividerEnd);
+            NekoConfig.disableChatAction.setConfigBool(false);
+            NekoConfig.disableChoosingSticker.setConfigBool(false);
+            NekoConfig.ignoreBlocked.setConfigBool(false);
+        }
+        if (!NekoConfig.showRepeat.Bool() || NaConfig.INSTANCE.getShowRepeatAsCopy().Bool()){
+            cellGroup.rows.remove(autoReplaceRepeatRow);
+            NaConfig.INSTANCE.getAutoReplaceRepeat().setConfigBool(false);
+        }
+
         addRowsToMap(cellGroup);
     }
 
@@ -250,21 +264,6 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                 }
             }
         });
-
-        // Before listAdapter
-        if (!NekoXConfig.isDeveloper()) {
-            cellGroup.rows.remove(disableChatActionRow);
-            cellGroup.rows.remove(disableChoosingStickerRow);
-            cellGroup.rows.remove(ignoreBlockedRow);
-            cellGroup.rows.remove(dividerEnd);
-            NekoConfig.disableChatAction.setConfigBool(false);
-            NekoConfig.disableChoosingSticker.setConfigBool(false);
-            NekoConfig.ignoreBlocked.setConfigBool(false);
-        }
-        if (!NekoConfig.showRepeat.Bool() || NaConfig.INSTANCE.getShowRepeatAsCopy().Bool()){
-            cellGroup.rows.remove(autoReplaceRepeatRow);
-            NaConfig.INSTANCE.getAutoReplaceRepeat().setConfigBool(false);
-        }
 
         listAdapter = new ListAdapter(context);
 

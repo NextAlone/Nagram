@@ -245,6 +245,13 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
     private UndoView restartTooltip;
 
     public NekoGeneralSettingsActivity() {
+        if (!NekoXConfig.isDeveloper()) {
+            cellGroup.rows.remove(hideSponsoredMessageRow);
+        }
+        if (!BuildVars.isGServicesCompiled) {
+            cellGroup.rows.remove(mapDriftingFixForGoogleMapsRow);
+        }
+
         addRowsToMap(cellGroup);
     }
 
@@ -854,13 +861,13 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
     }
 
     private void setCanNotChange() {
-        if (!NekoXConfig.isDeveloper())
-            cellGroup.rows.remove(hideSponsoredMessageRow);
+//        if (!NekoXConfig.isDeveloper())
+//            cellGroup.rows.remove(hideSponsoredMessageRow);
 
         if (!BuildVars.isGServicesCompiled) {
             NekoConfig.useOSMDroidMap.setConfigBool(true);
             ((ConfigCellTextCheck) useOSMDroidMapRow).setEnabled(false);
-            cellGroup.rows.remove(mapDriftingFixForGoogleMapsRow);
+//            cellGroup.rows.remove(mapDriftingFixForGoogleMapsRow);
         } else {
             if (NekoConfig.useOSMDroidMap.Bool())
                 ((ConfigCellTextCheck) mapDriftingFixForGoogleMapsRow).setEnabled(false);
