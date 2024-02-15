@@ -9269,8 +9269,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fullscreenButton[b].getLayoutParams();
                 layoutParams.topMargin = (containerView.getMeasuredHeight() + height) / 2 - dp(48);
             } else {
-                if (fullscreenButton[b].getVisibility() != View.INVISIBLE) {
-                    fullscreenButton[b].setVisibility(View.INVISIBLE);
+                if (fullscreenButton[b].getVisibility() != View.GONE) {
+                    fullscreenButton[b].setVisibility(View.GONE);
                 }
             }
 
