@@ -16958,10 +16958,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 ActionBarMenuItem selectItem = actionBar.createActionMode().getItem(nkactionbarbtn_selectBetween);
                 ActionBarMenuItem combineMessageItem = actionBar.createActionMode().getItem(combine_message);
 
-                ActionBarMenuSubItem saveToDownloadsItem = actionModeOtherItem.getSubItem(save_to);
-                ActionBarMenuSubItem saveMessageItem = actionModeOtherItem.getSubItem(nkbtn_savemessage);
-                ActionBarMenuSubItem forwardNoQuoteItem = actionModeOtherItem.getSubItem(nkbtn_forward_noquote);
-                ActionBarMenuSubItem starItem = actionModeOtherItem.getSubItem(star);
+                ActionBarMenuSubItem saveToDownloadsItem = null;
+                ActionBarMenuSubItem saveMessageItem = null;
+                ActionBarMenuSubItem forwardNoQuoteItem = null;
+                ActionBarMenuSubItem starItem = null;
+                if (actionModeOtherItem != null) {
+                    saveToDownloadsItem = actionModeOtherItem.getSubItem(save_to);
+                    saveMessageItem = actionModeOtherItem.getSubItem(nkbtn_savemessage);
+                    forwardNoQuoteItem = actionModeOtherItem.getSubItem(nkbtn_forward_noquote);
+                    starItem = actionModeOtherItem.getSubItem(star);
+                }
 
                 boolean noforwards = getMessagesController().isChatNoForwards(currentChat) || hasSelectedNoforwardsMessage();
                 boolean canForward = chatMode != MODE_SCHEDULED && cantForwardMessagesCount == 0 && !noforwards;
@@ -17249,7 +17255,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                 if (translateItem != null)
                     translateItem.setVisibility(selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() > 0);
-                actionModeOtherItem.setSubItemVisibility(nkbtn_sharemessage, selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() > 0);
+                if (actionModeOtherItem != null) {
+                    actionModeOtherItem.setSubItemVisibility(nkbtn_sharemessage, selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() > 0);
+                }
 
                 boolean allowPin = false;
                 if (currentChat != null) {
@@ -17267,7 +17275,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         }
                     }
                 }
-                actionModeOtherItem.setSubItemVisibility(nkbtn_unpin, allowPin);
+                if (actionModeOtherItem != null) {
+                    actionModeOtherItem.setSubItemVisibility(nkbtn_unpin, allowPin);
+                }
             }
         }
         updateSelectedMessageReactions();
