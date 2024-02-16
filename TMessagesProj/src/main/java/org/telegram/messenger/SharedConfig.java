@@ -1429,19 +1429,25 @@ public class SharedConfig {
     public static boolean proxyEnabled;
 
     public static void setProxyEnable(boolean enable) {
+        if (enable && currentProxy == null) {
+            enable = false;
+        }
 
         proxyEnabled = enable;
 
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
 
-        preferences.edit().putBoolean("proxy_enabled", enable).commit();
+        preferences.edit().putBoolean("proxy_enabled", enable).apply();
 
         ProxyInfo finalInfo = currentProxy;
 
         UIUtil.runOnIoDispatcher(() -> {
 
-            ConnectionsManager.setProxySettings(enable, finalInfo.address, finalInfo.port, finalInfo.username, finalInfo.password, finalInfo.secret);
-
+            if (proxyEnabled) {
+                ConnectionsManager.setProxySettings(true, finalInfo.address, finalInfo.port, finalInfo.username, finalInfo.password, finalInfo.secret);
+            } else {
+                ConnectionsManager.setProxySettings(false, "", 0, "", "", "");
+            }
             UIUtil.runOnUIThread(() -> NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged));
 
         });
