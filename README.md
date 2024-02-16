@@ -160,6 +160,36 @@ For mini release:
 
 ----
 
+## Compilation with Github Action
+
+1. Create your own `release.keystore` to replace `TMessagesProj/release.keystore`.
+
+2. Prepare LOCAL_PROPERTIES
+
+- KEYSTORE_PASS: from your keystore
+- ALIAS_NAME: from your keystore
+- ALIAS_PASS: from your keystore
+- TELEGRAM_APP_ID: from [Telegram Developer](https://my.telegram.org/auth)
+- TELEGRAM_APP_HASH: from [Telegram Developer](https://my.telegram.org/auth)
+
+```env
+KEYSTORE_PASS=123456
+ALIAS_NAME=key0
+ALIAS_PASS=123456
+TELEGRAM_APP_ID=123456
+TELEGRAM_APP_HASH=abcdefg
+```
+
+Then, use base64 to encode the above.
+
+3. Add Repo Action Secrets
+
+- LOCAL_PROPERTIES: from step 2
+- HELPER_BOT_TOKEN: from telegram [@Botfather](https://t.me/Botfather), such as `1111:abcd`
+- HELPER_BOT_TARGET: from telegram chat id, such as `777000`
+
+4. Run Release Build
+
 ## FAQ
 
 #### What is the differences between Nagram, NekoX and Nekogram?
