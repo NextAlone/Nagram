@@ -336,7 +336,7 @@ dependencies {
     implementation "com.googlecode.mp4parser:isoparser:1.0.6"
 
     implementation "com.google.code.gson:gson:2.8.9"
-    implementation "org.osmdroid:osmdroid-android:6.1.10"
+    implementation "org.osmdroid:osmdroid-android:6.1.18"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
 
