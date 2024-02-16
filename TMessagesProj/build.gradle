@@ -343,7 +343,7 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.10"
     implementation 'com.neovisionaries:nv-websocket-client:2.14'
     implementation 'dnsjava:dnsjava:3.4.1'
-    implementation "org.dizitart:nitrite:3.4.3"
+    implementation "org.dizitart:nitrite:3.4.4"
 
     implementation "cn.hutool:hutool-core:5.7.13"
     implementation "cn.hutool:hutool-crypto:5.7.13"
