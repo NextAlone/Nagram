@@ -283,7 +283,6 @@ import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
-import libv2ray.Libv2ray;
 import tw.nekomimi.nekogram.BackButtonMenuRecent;
 import tw.nekomimi.nekogram.helpers.SettingsHelper;
 import tw.nekomimi.nekogram.helpers.SettingsSearchResult;
@@ -3881,14 +3880,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
                 BottomBuilder builder = new BottomBuilder(getParentActivity());
                 String message = cell.getTextView().getText().toString();
-                try {
-                    if (!BuildVars.isMini) {
-                        message += "\n" + Libv2ray.checkVersionX()
-                                .replace("Lib", "AndroidLibV2rayLite")
-                                .replace("Core", "v2ray-core");
-                    }
-                } catch (Exception ignored) {
-                }
                 builder.addTitle(message);
                 String finalMessage = message;
                 builder.addItem(LocaleController.getString("Copy", R.string.Copy), R.drawable.msg_copy, (it) -> {

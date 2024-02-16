@@ -5675,12 +5675,6 @@ public class MessageObject {
                 addUrlsByPattern(isOutOwner(), caption, true, 0, 0, true);
             }
 
-            try {
-                AndroidUtilities.addProxyLinks((Spannable) caption);
-            } catch (Exception e) {
-                FileLog.e(e);
-            }
-
             addEntitiesToText(caption, useManualParse);
             if (isVideo()) {
                 addUrlsByPattern(isOutOwner(), caption, true, 3, (int) getDuration(), false);
@@ -6449,11 +6443,6 @@ public class MessageObject {
 //                    FileLog.e(e);
 //                }
 //            }
-        }
-        try {
-            AndroidUtilities.addProxyLinks((Spannable) messageText);
-        } catch (Throwable e) {
-            FileLog.e(e);
         }
         if (isYouTubeVideo()) {
             addUrlsByPattern(isOutOwner(), messageText, false, 3, Integer.MAX_VALUE, false);

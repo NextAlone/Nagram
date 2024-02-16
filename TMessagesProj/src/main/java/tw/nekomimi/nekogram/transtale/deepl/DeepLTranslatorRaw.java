@@ -181,11 +181,11 @@ public class DeepLTranslatorRaw {
         InputStream httpConnectionStream = null;
         URL downloadUrl = new URL(url);
         HttpURLConnection httpConnection;
-        final Proxy proxy = SharedConfig.getActiveSocks5Proxy();
-        if (proxy != null)
-            httpConnection = (HttpURLConnection) downloadUrl.openConnection(proxy);
-        else
-            httpConnection = (HttpURLConnection) downloadUrl.openConnection();
+//        final Proxy proxy = SharedConfig.getActiveSocks5Proxy();
+//        if (proxy != null)
+//            httpConnection = (HttpURLConnection) downloadUrl.openConnection(proxy);
+//        else
+        httpConnection = (HttpURLConnection) downloadUrl.openConnection();
         httpConnection.addRequestProperty("Connection", "keep-alive");
         httpConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4147.105 Safari/537.36");
         httpConnection.addRequestProperty("Content-Type", "application/json");

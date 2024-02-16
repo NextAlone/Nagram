@@ -12,7 +12,6 @@ import android.animation.ValueAnimator;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -42,6 +41,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.core.graphics.ColorUtils;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -56,6 +57,8 @@ import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Cells.HeaderCell;
+import org.telegram.ui.Cells.RadioCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
@@ -80,17 +83,18 @@ public class ProxySettingsActivity extends BaseFragment {
     private final static int FIELD_USER = 2;
     private final static int FIELD_PASSWORD = 3;
     private final static int FIELD_SECRET = 4;
-    private final static int FIELD_REMARKS = 5;
 
     private EditTextBoldCursor[] inputFields;
     private ScrollView scrollView;
     private LinearLayout linearLayout2;
     private LinearLayout inputFieldsContainer;
+    private HeaderCell headerCell;
     private ShadowSectionCell[] sectionCell = new ShadowSectionCell[3];
     private TextInfoPrivacyCell[] bottomCells = new TextInfoPrivacyCell[2];
+    private TextSettingsCell shareCell;
     private TextSettingsCell pasteCell;
     private ActionBarMenuItem doneItem;
-    // private RadioCell[] typeCell = new RadioCell[2];
+    private RadioCell[] typeCell = new RadioCell[2];
     private int currentType = -1;
 
     private int pasteType = -1;
@@ -134,7 +138,7 @@ public class ProxySettingsActivity extends BaseFragment {
             addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, LocaleController.isRTL ? 23 + 48 : 21, 0, LocaleController.isRTL ? 21 : 23, 0));
 
             checkImage = new ImageView(context);
-            checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), PorterDuff.Mode.SRC_IN));
+            checkImage.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_featuredStickers_addedIcon), PorterDuff.Mode.MULTIPLY));
             checkImage.setImageResource(R.drawable.sticker_added);
             addView(checkImage, LayoutHelper.createFrame(19, 14, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, 21, 0, 21, 0));
         }
@@ -157,16 +161,15 @@ public class ProxySettingsActivity extends BaseFragment {
         @Override
         protected void onDraw(Canvas canvas) {
             if (needDivider) {
-                canvas.drawLine(0, getMeasuredHeight() - 1, getMeasuredWidth(), getMeasuredHeight() - 1, Theme.dividerPaint);
+                canvas.drawLine(LocaleController.isRTL ? 0 : AndroidUtilities.dp(20), getMeasuredHeight() - 1, getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20) : 0), getMeasuredHeight() - 1, Theme.dividerPaint);
             }
         }
     }
 
-    public ProxySettingsActivity(int type) {
+    public ProxySettingsActivity() {
         super();
         currentProxyInfo = new SharedConfig.ProxyInfo("", 1080, "", "", "");
         addingNewProxy = true;
-        currentType = type;
     }
 
     public ProxySettingsActivity(SharedConfig.ProxyInfo proxyInfo) {
@@ -210,7 +213,6 @@ public class ProxySettingsActivity extends BaseFragment {
                     }
                     currentProxyInfo.address = inputFields[FIELD_IP].getText().toString();
                     currentProxyInfo.port = Utilities.parseInt(inputFields[FIELD_PORT].getText().toString());
-                    currentProxyInfo.setRemarks(inputFields[FIELD_REMARKS].getText().toString());
                     if (currentType == 0) {
                         currentProxyInfo.secret = "";
                         currentProxyInfo.username = inputFields[FIELD_USER].getText().toString();
@@ -223,11 +225,14 @@ public class ProxySettingsActivity extends BaseFragment {
 
                     SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                     SharedPreferences.Editor editor = preferences.edit();
+                    boolean enabled;
                     if (addingNewProxy) {
                         SharedConfig.addProxy(currentProxyInfo);
-                        SharedConfig.setCurrentProxy(currentProxyInfo);
+                        SharedConfig.currentProxy = currentProxyInfo;
+                        editor.putBoolean("proxy_enabled", true);
+                        enabled = true;
                     } else {
-                        SharedConfig.setProxyEnable(false);
+                        enabled = preferences.getBoolean("proxy_enabled", false);
                         SharedConfig.saveProxyList();
                     }
                     if (addingNewProxy || SharedConfig.currentProxy == currentProxyInfo) {
@@ -236,21 +241,13 @@ public class ProxySettingsActivity extends BaseFragment {
                         editor.putString("proxy_user", currentProxyInfo.username);
                         editor.putInt("proxy_port", currentProxyInfo.port);
                         editor.putString("proxy_secret", currentProxyInfo.secret);
-                        if (currentProxyInfo instanceof SharedConfig.VmessProxy) {
-                            editor.putString("vmess_link", ((SharedConfig.VmessProxy) currentProxyInfo).bean.toString());
-                        } else  if (currentProxyInfo instanceof SharedConfig.ShadowsocksProxy) {
-                            editor.putString("vmess_link", ((SharedConfig.ShadowsocksProxy) currentProxyInfo).bean.toString());
-                        } else  if (currentProxyInfo instanceof SharedConfig.ShadowsocksRProxy) {
-                            editor.putString("vmess_link", ((SharedConfig.ShadowsocksRProxy) currentProxyInfo).bean.toString());
-                        }
-                        ConnectionsManager.setProxySettings(SharedConfig.proxyEnabled, currentProxyInfo.address, currentProxyInfo.port, currentProxyInfo.username, currentProxyInfo.password, currentProxyInfo.secret);
+                        ConnectionsManager.setProxySettings(enabled, currentProxyInfo.address, currentProxyInfo.port, currentProxyInfo.username, currentProxyInfo.password, currentProxyInfo.secret);
                     }
-                    editor.apply();
+                    editor.commit();
 
                     NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
 
                     finishFragment();
-
                 }
             }
         });
@@ -271,7 +268,23 @@ public class ProxySettingsActivity extends BaseFragment {
         linearLayout2.setOrientation(LinearLayout.VERTICAL);
         scrollView.addView(linearLayout2, new ScrollView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
+        final View.OnClickListener typeCellClickListener = view -> setProxyType((Integer) view.getTag(), true);
+
+        for (int a = 0; a < 2; a++) {
+            typeCell[a] = new RadioCell(context);
+            typeCell[a].setBackground(Theme.getSelectorDrawable(true));
+            typeCell[a].setTag(a);
+            if (a == 0) {
+                typeCell[a].setText(LocaleController.getString("UseProxySocks5", R.string.UseProxySocks5), a == currentType, true);
+            } else {
+                typeCell[a].setText(LocaleController.getString("UseProxyTelegram", R.string.UseProxyTelegram), a == currentType, false);
+            }
+            linearLayout2.addView(typeCell[a], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 50));
+            typeCell[a].setOnClickListener(typeCellClickListener);
+        }
+
         sectionCell[0] = new ShadowSectionCell(context);
+        linearLayout2.addView(sectionCell[0], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
         inputFieldsContainer = new LinearLayout(context);
         inputFieldsContainer.setOrientation(LinearLayout.VERTICAL);
@@ -283,8 +296,8 @@ public class ProxySettingsActivity extends BaseFragment {
         }
         linearLayout2.addView(inputFieldsContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
 
-        inputFields = new EditTextBoldCursor[6];
-        for (int a = 0; a < 6; a++) {
+        inputFields = new EditTextBoldCursor[5];
+        for (int a = 0; a < 5; a++) {
             FrameLayout container = new FrameLayout(context);
             inputFieldsContainer.addView(container, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 64));
 
@@ -399,10 +412,6 @@ public class ProxySettingsActivity extends BaseFragment {
                     inputFields[a].setHintText(LocaleController.getString("UseProxySecret", R.string.UseProxySecret));
                     inputFields[a].setText(currentProxyInfo.secret);
                     break;
-                case FIELD_REMARKS:
-                    inputFields[a].setHintText(LocaleController.getString("ProxyRemarks", R.string.ProxyRemarks));
-                    inputFields[a].setText(currentProxyInfo.getRemarks());
-                    break;
             }
             inputFields[a].setSelection(inputFields[a].length());
 
@@ -482,6 +491,63 @@ public class ProxySettingsActivity extends BaseFragment {
         linearLayout2.addView(sectionCell[2], 1, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
         sectionCell[2].setVisibility(View.GONE);
 
+        shareCell = new TextSettingsCell(context);
+        shareCell.setBackgroundDrawable(Theme.getSelectorDrawable(true));
+        shareCell.setText(LocaleController.getString("ShareFile", R.string.ShareFile), false);
+        shareCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4));
+        linearLayout2.addView(shareCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        shareCell.setOnClickListener(v -> {
+            StringBuilder params = new StringBuilder();
+            String address = inputFields[FIELD_IP].getText().toString();
+            String password = inputFields[FIELD_PASSWORD].getText().toString();
+            String user = inputFields[FIELD_USER].getText().toString();
+            String port = inputFields[FIELD_PORT].getText().toString();
+            String secret = inputFields[FIELD_SECRET].getText().toString();
+            String url;
+            try {
+                if (!TextUtils.isEmpty(address)) {
+                    params.append("server=").append(URLEncoder.encode(address, "UTF-8"));
+                }
+                if (!TextUtils.isEmpty(port)) {
+                    if (params.length() != 0) {
+                        params.append("&");
+                    }
+                    params.append("port=").append(URLEncoder.encode(port, "UTF-8"));
+                }
+                if (currentType == 1) {
+                    url = "https://t.me/proxy?";
+                    if (params.length() != 0) {
+                        params.append("&");
+                    }
+                    params.append("secret=").append(URLEncoder.encode(secret, "UTF-8"));
+                } else {
+                    url = "https://t.me/socks?";
+                    if (!TextUtils.isEmpty(user)) {
+                        if (params.length() != 0) {
+                            params.append("&");
+                        }
+                        params.append("user=").append(URLEncoder.encode(user, "UTF-8"));
+                    }
+                    if (!TextUtils.isEmpty(password)) {
+                        if (params.length() != 0) {
+                            params.append("&");
+                        }
+                        params.append("pass=").append(URLEncoder.encode(password, "UTF-8"));
+                    }
+                }
+            } catch (Exception ignore) {
+                return;
+            }
+            if (params.length() == 0) {
+                return;
+            }
+            String link = url + params.toString();
+            QRCodeBottomSheet alert = new QRCodeBottomSheet(context, LocaleController.getString("ShareQrCode", R.string.ShareQrCode), link, LocaleController.getString("QRCodeLinkHelpProxy", R.string.QRCodeLinkHelpProxy), true);
+            Bitmap icon = SvgHelper.getBitmap(RLottieDrawable.readRes(null, R.raw.qr_dog), AndroidUtilities.dp(60), AndroidUtilities.dp(60), false);
+            alert.setCenterImage(icon);
+            showDialog(alert);
+        });
+
         sectionCell[1] = new ShadowSectionCell(context);
         sectionCell[1].setBackgroundDrawable(Theme.getThemedDrawableByKey(context, R.drawable.greydivider_bottom, Theme.key_windowBackgroundGrayShadow));
         linearLayout2.addView(sectionCell[1], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
@@ -492,19 +558,8 @@ public class ProxySettingsActivity extends BaseFragment {
         shareDoneProgress = 1f;
         checkShareDone(false);
 
-        if (currentType == -1) {
-
-            setProxyType(TextUtils.isEmpty(currentProxyInfo.secret) ? 0 : 1, false);
-
-        } else {
-
-            int t = currentType;
-
-            currentType = -1;
-
-            setProxyType(t, false);
-
-        }
+        currentType = -1;
+        setProxyType(TextUtils.isEmpty(currentProxyInfo.secret) ? 0 : 1, false);
 
         pasteType = -1;
         pasteString = null;
@@ -612,6 +667,7 @@ public class ProxySettingsActivity extends BaseFragment {
                 shareDoneAnimator.setDuration(200);
                 shareDoneAnimator.addUpdateListener(a -> {
                     shareDoneProgress = AndroidUtilities.lerp(shareDoneProgressAnimValues, a.getAnimatedFraction());
+                    shareCell.setTextColor(ColorUtils.blendARGB(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4), shareDoneProgress));
                     doneItem.setAlpha(shareDoneProgress / 2f + 0.5f);
                 });
             }
@@ -621,15 +677,17 @@ public class ProxySettingsActivity extends BaseFragment {
                 shareDoneAnimator.start();
             } else {
                 shareDoneProgress = enabled ? 1f : 0f;
+                shareCell.setTextColor(enabled ? Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4) : Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
                 doneItem.setAlpha(enabled ? 1f : .5f);
             }
+            shareCell.setEnabled(enabled);
             doneItem.setEnabled(enabled);
             shareDoneEnabled = enabled;
         }
     }
 
     private void checkShareDone(boolean animated) {
-        if (doneItem == null || inputFields[FIELD_IP] == null || inputFields[FIELD_PORT] == null) {
+        if (shareCell == null || doneItem == null || inputFields[FIELD_IP] == null || inputFields[FIELD_PORT] == null) {
             return;
         }
         setShareDoneEnabled(inputFields[FIELD_IP].length() != 0 && Utilities.parseInt(inputFields[FIELD_PORT].getText().toString()) != 0, animated);
@@ -693,6 +751,8 @@ public class ProxySettingsActivity extends BaseFragment {
                 ((View) inputFields[FIELD_PASSWORD].getParent()).setVisibility(View.GONE);
                 ((View) inputFields[FIELD_USER].getParent()).setVisibility(View.GONE);
             }
+            typeCell[0].setChecked(currentType == 0, animated);
+            typeCell[1].setChecked(currentType == 1, animated);
         }
     }
 
@@ -707,6 +767,9 @@ public class ProxySettingsActivity extends BaseFragment {
     @Override
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         final ThemeDescription.ThemeDescriptionDelegate delegate = () -> {
+            if (shareCell != null && (shareDoneAnimator == null || !shareDoneAnimator.isRunning())) {
+                shareCell.setTextColor(shareDoneEnabled ? Theme.getColor(Theme.key_windowBackgroundWhiteBlueText4) : Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
+            }
             if (inputFields != null) {
                 for (int i = 0; i < inputFields.length; i++) {
                     inputFields[i].setLineColors(Theme.getColor(Theme.key_windowBackgroundWhiteInputField),
@@ -727,9 +790,22 @@ public class ProxySettingsActivity extends BaseFragment {
         arrayList.add(new ThemeDescription(inputFieldsContainer, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite));
         arrayList.add(new ThemeDescription(linearLayout2, 0, new Class[]{View.class}, Theme.dividerPaint, null, null, Theme.key_divider));
 
+        arrayList.add(new ThemeDescription(shareCell, ThemeDescription.FLAG_SELECTORWHITE, null, null, null, null, Theme.key_windowBackgroundWhite));
+        arrayList.add(new ThemeDescription(shareCell, ThemeDescription.FLAG_SELECTORWHITE, null, null, null, null, Theme.key_listSelector));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, null, delegate, Theme.key_windowBackgroundWhiteBlueText4));
+        arrayList.add(new ThemeDescription(null, 0, null, null, null, null, delegate, Theme.key_windowBackgroundWhiteGrayText2));
+
         arrayList.add(new ThemeDescription(pasteCell, ThemeDescription.FLAG_SELECTORWHITE, null, null, null, null, Theme.key_windowBackgroundWhite));
         arrayList.add(new ThemeDescription(pasteCell, ThemeDescription.FLAG_SELECTORWHITE, null, null, null, null, Theme.key_listSelector));
         arrayList.add(new ThemeDescription(pasteCell, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueText4));
+
+        for (int a = 0; a < typeCell.length; a++) {
+            arrayList.add(new ThemeDescription(typeCell[a], ThemeDescription.FLAG_SELECTORWHITE, null, null, null, null, Theme.key_windowBackgroundWhite));
+            arrayList.add(new ThemeDescription(typeCell[a], ThemeDescription.FLAG_SELECTORWHITE, null, null, null, null, Theme.key_listSelector));
+            arrayList.add(new ThemeDescription(typeCell[a], 0, new Class[]{RadioCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
+            arrayList.add(new ThemeDescription(typeCell[a], ThemeDescription.FLAG_CHECKBOX, new Class[]{RadioCell.class}, new String[]{"radioButton"}, null, null, null, Theme.key_radioBackground));
+            arrayList.add(new ThemeDescription(typeCell[a], ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{RadioCell.class}, new String[]{"radioButton"}, null, null, null, Theme.key_radioBackgroundChecked));
+        }
 
         if (inputFields != null) {
             for (int a = 0; a < inputFields.length; a++) {
@@ -745,6 +821,8 @@ public class ProxySettingsActivity extends BaseFragment {
             arrayList.add(new ThemeDescription(null, ThemeDescription.FLAG_TEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
             arrayList.add(new ThemeDescription(null, ThemeDescription.FLAG_HINTTEXTCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteHintText));
         }
+        arrayList.add(new ThemeDescription(headerCell, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite));
+        arrayList.add(new ThemeDescription(headerCell, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, null, null, null, Theme.key_windowBackgroundWhiteBlueHeader));
         for (int a = 0; a < sectionCell.length; a++) {
             if (sectionCell[a] != null) {
                 arrayList.add(new ThemeDescription(sectionCell[a], ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, null, null, null, Theme.key_windowBackgroundGrayShadow));

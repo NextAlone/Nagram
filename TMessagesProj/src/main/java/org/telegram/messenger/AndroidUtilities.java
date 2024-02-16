@@ -208,24 +208,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import cn.hutool.core.util.StrUtil;
-import kotlin.Unit;
-import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
-import tw.nekomimi.nekogram.utils.ProxyUtil;
-import tw.nekomimi.nekogram.utils.UIUtil;
-
-import static com.v2ray.ang.V2RayConfig.SSR_PROTOCOL;
-import static com.v2ray.ang.V2RayConfig.SS_PROTOCOL;
-import static com.v2ray.ang.V2RayConfig.TROJAN_PROTOCOL;
-import static com.v2ray.ang.V2RayConfig.VMESS1_PROTOCOL;
-import static com.v2ray.ang.V2RayConfig.VMESS_PROTOCOL;
-import static com.v2ray.ang.V2RayConfig.WSS_PROTOCOL;
-import static com.v2ray.ang.V2RayConfig.WS_PROTOCOL;
 
 public class AndroidUtilities {
     public final static int LIGHT_STATUS_BAR_OVERLAY = 0x0f000000, DARK_STATUS_BAR_OVERLAY = 0x33000000;
@@ -947,34 +932,6 @@ public class AndroidUtilities {
         }
         return true;
     };
-
-    public static boolean addProxyLinks(Spannable text) {
-        if (text == null) return false;
-        final URLSpan[] old = text.getSpans(0, text.length(), URLSpan.class);
-        for (int i = old.length - 1; i >= 0; i--) {
-            String url = old[i].getURL();
-            if (url.startsWith("vmess") || url.startsWith("ss")) {
-                text.removeSpan(old[i]);
-            }
-        }
-        final ArrayList<LinkSpec> links = new ArrayList<>();
-        gatherLinks(links, text, LinkifyPort.PROXY_PATTERN, new String[]{VMESS_PROTOCOL, VMESS1_PROTOCOL, SS_PROTOCOL, SSR_PROTOCOL, TROJAN_PROTOCOL, WS_PROTOCOL, WSS_PROTOCOL,/*, RB_PROTOCOL*/}, sUrlMatchFilter, false);
-        pruneOverlaps(links);
-        if (links.size() == 0) {
-            return false;
-        }
-        for (int a = 0, N = links.size(); a < N; a++) {
-            LinkSpec link = links.get(a);
-            URLSpan[] oldSpans = text.getSpans(link.start, link.end, URLSpan.class);
-            if (oldSpans != null && oldSpans.length > 0) {
-                for (int b = 0; b < oldSpans.length; b++) {
-                    text.removeSpan(oldSpans[b]);
-                }
-            }
-            text.setSpan(new URLSpan(link.url), link.start, link.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-        return true;
-    }
 
     public static boolean addLinks(Spannable text, int mask) {
         return addLinks(text, mask, false);
@@ -3990,27 +3947,68 @@ public class AndroidUtilities {
         if (intent == null) {
             return false;
         }
-        if ((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0) {
-            return false;
-        }
-        Uri data = intent.getData();
-        if (data == null) return false;
-        String link = data.toString();
-        if (link.startsWith("tg://proxy") ||
-                link.startsWith("tg://socks") ||
-                link.startsWith("http://t.me/proxy?") ||
-                link.startsWith("http://t.me/socks?") ||
-                link.startsWith("https://t.me/proxy?") ||
-                link.startsWith("https://t.me/socks?") ||
-                link.startsWith(VMESS_PROTOCOL) ||
-                link.startsWith(VMESS1_PROTOCOL) ||
-                link.startsWith(SS_PROTOCOL) ||
-                link.startsWith(SSR_PROTOCOL) ||
-                link.startsWith(WS_PROTOCOL) ||
-                link.startsWith(WSS_PROTOCOL) ||
-                link.startsWith(TROJAN_PROTOCOL)/*||
-                data.startsWith(RB_PROTOCOL)*/) {
-            return ProxyUtil.importProxy(activity, link);
+        try {
+            if ((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0) {
+                return false;
+            }
+            Uri data = intent.getData();
+            if (data != null) {
+                String user = null;
+                String password = null;
+                String port = null;
+                String address = null;
+                String secret = null;
+                String scheme = data.getScheme();
+                if (scheme != null) {
+                    if ((scheme.equals("http") || scheme.equals("https"))) {
+                        String host = data.getHost().toLowerCase();
+                        if (host.equals("telegram.me") || host.equals("t.me") || host.equals("telegram.dog")) {
+                            String path = data.getPath();
+                            if (path != null) {
+                                if (path.startsWith("/socks") || path.startsWith("/proxy")) {
+                                    address = data.getQueryParameter("server");
+                                    if (AndroidUtilities.checkHostForPunycode(address)) {
+                                        address = IDN.toASCII(address, IDN.ALLOW_UNASSIGNED);
+                                    }
+                                    port = data.getQueryParameter("port");
+                                    user = data.getQueryParameter("user");
+                                    password = data.getQueryParameter("pass");
+                                    secret = data.getQueryParameter("secret");
+                                }
+                            }
+                        }
+                    } else if (scheme.equals("tg")) {
+                        String url = data.toString();
+                        if (url.startsWith("tg:proxy") || url.startsWith("tg://proxy") || url.startsWith("tg:socks") || url.startsWith("tg://socks")) {
+                            url = url.replace("tg:proxy", "tg://telegram.org").replace("tg://proxy", "tg://telegram.org").replace("tg://socks", "tg://telegram.org").replace("tg:socks", "tg://telegram.org");
+                            data = Uri.parse(url);
+                            address = data.getQueryParameter("server");
+                            if (AndroidUtilities.checkHostForPunycode(address)) {
+                                address = IDN.toASCII(address, IDN.ALLOW_UNASSIGNED);
+                            }
+                            port = data.getQueryParameter("port");
+                            user = data.getQueryParameter("user");
+                            password = data.getQueryParameter("pass");
+                            secret = data.getQueryParameter("secret");
+                        }
+                    }
+                }
+                if (!TextUtils.isEmpty(address) && !TextUtils.isEmpty(port)) {
+                    if (user == null) {
+                        user = "";
+                    }
+                    if (password == null) {
+                        password = "";
+                    }
+                    if (secret == null) {
+                        secret = "";
+                    }
+                    showProxyAlert(activity, address, port, user, password, secret);
+                    return true;
+                }
+            }
+        } catch (Exception ignore) {
+
         }
         return false;
     }
@@ -4030,7 +4028,7 @@ public class AndroidUtilities {
         return true;
     }
 
-    public static void showProxyAlert(Context activity, final String address, final String port, final String user, final String password, final String secret, final String remarks) {
+    public static void showProxyAlert(Activity activity, final String address, final String port, final String user, final String password, final String secret) {
         BottomSheet.Builder builder = new BottomSheet.Builder(activity);
         final Runnable dismissRunnable = builder.getDismissRunnable();
 
@@ -4136,640 +4134,42 @@ public class AndroidUtilities {
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
         pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
         pickerBottomLayout.cancelButton.setOnClickListener(view -> dismissRunnable.run());
-
         pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
         pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
-
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(View.GONE);
-        pickerBottomLayout.middleButtonTextView.setText(LocaleController.getString("Save", R.string.Save).toUpperCase());
-        pickerBottomLayout.middleButton.setVisibility(View.VISIBLE);
-        pickerBottomLayout.middleButton.setOnClickListener((it) -> {
-
+        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", R.string.ConnectingConnectProxy).toUpperCase());
+        pickerBottomLayout.doneButton.setOnClickListener(v -> {
+            SharedPreferences.Editor editor = MessagesController.getGlobalMainSettings().edit();
+            editor.putBoolean("proxy_enabled", true);
+            editor.putString("proxy_ip", address);
             int p = Utilities.parseInt(port);
+            editor.putInt("proxy_port", p);
 
             SharedConfig.ProxyInfo info;
-
             if (TextUtils.isEmpty(secret)) {
-
-                info = new SharedConfig.ProxyInfo(address, p, user, password, "");
-
-            } else {
-
-                info = new SharedConfig.ProxyInfo(address, p, "", "", secret);
-
-            }
-
-            info.setRemarks(remarks);
-
-            SharedConfig.addProxy(info);
-
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
-
-            dismissRunnable.run();
-
-        });
-
-        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", R.string.ConnectingConnectProxy).toUpperCase());
-        pickerBottomLayout.doneButton.setOnClickListener(v -> {
-            int p = Utilities.parseInt(port);
-
-            SharedConfig.ProxyInfo info;
-
-            if (TextUtils.isEmpty(secret)) {
-
-                info = new SharedConfig.ProxyInfo(address, p, user, password, "");
-
-            } else {
-
-                info = new SharedConfig.ProxyInfo(address, p, "", "", secret);
-
-            }
-
-            info.setRemarks(remarks);
-
-            SharedConfig.setCurrentProxy(SharedConfig.addProxy(info));
-
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
-
-            dismissRunnable.run();
-        });
-        builder.show();
-    }
-
-    public static void showVmessAlert(Context activity, final SharedConfig.VmessProxy info) {
-        BottomSheet.Builder builder = new BottomSheet.Builder(activity);
-        final Runnable dismissRunnable = builder.getDismissRunnable();
-
-        builder.setApplyTopPadding(false);
-        builder.setApplyBottomPadding(false);
-        LinearLayout linearLayout = new LinearLayout(activity);
-        builder.setCustomView(linearLayout);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        for (int a = 0; a < 8; a++) {
-            String text = null;
-            String detail = null;
-            if (a == 0) {
-                text = info.bean.getAddress();
-                detail = LocaleController.getString("UseProxyAddress", R.string.UseProxyAddress);
-            } else if (a == 1) {
-                text = "" + info.bean.getPort();
-                detail = LocaleController.getString("UseProxyPort", R.string.UseProxyPort);
-            } else if (a == 2) {
-                text = info.bean.getId();
-                detail = LocaleController.getString("VmessUserId", R.string.VmessUserId);
-            } else if (a == 3) {
-                text = info.bean.getSecurity();
-                if ("none".equals(text)) continue;
-                detail = LocaleController.getString("VmessSecurity", R.string.VmessSecurity);
-            } else if (a == 4) {
-                text = info.bean.getNetwork() + (StrUtil.isBlank(info.bean.getStreamSecurity()) ? "" : ", tls");
-                detail = LocaleController.getString("VmessNetwork", R.string.VmessNetwork);
-            } else if (a == 5) {
-                text = info.bean.getHeaderType();
-                if ("none".equals(text)) continue;
-                detail = LocaleController.getString("VmessHeadType", R.string.VmessHeadType);
-            } else if (a == 6) {
-                text = info.bean.getRequestHost();
-                detail = LocaleController.getString("VmessRequestHost", R.string.VmessRequestHost);
-            } else {
-                text = LocaleController.getString("Checking", R.string.Checking);
-                detail = LocaleController.getString("Checking", R.string.Checking);
-            }
-            if (TextUtils.isEmpty(text)) {
-                continue;
-            }
-            TextDetailSettingsCell cell = new TextDetailSettingsCell(activity);
-            cell.setTextAndValue(text, detail, true);
-            cell.getTextView().setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-            cell.getValueTextView().setTextColor(Theme.getColor(Theme.key_dialogTextGray3));
-            linearLayout.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-            AtomicInteger count = new AtomicInteger();
-            if (a == 7) {
-
-                RequestTimeDelegate callback = new RequestTimeDelegate() {
-                    @Override
-                    public void run(long time) {
-                        int c = count.getAndIncrement();
-                        int colorKey;
-                        if (time != -1) {
-                            info.stop();
-                            cell.setTextAndValue(LocaleController.getString("Available", R.string.Available), LocaleController.formatString("Ping", R.string.Ping, time), true);
-                            colorKey = Theme.key_windowBackgroundWhiteGreenText;
-                        } else if (c < 2) {
-                            ConnectionsManager.getInstance(UserConfig.selectedAccount).checkProxy(info.address, info.port, "", "", "", t -> AndroidUtilities.runOnUIThread(() -> run(t), 500));
-                            colorKey = Theme.key_windowBackgroundWhiteGreenText;
-                        } else {
-                            info.stop();
-                            cell.setTextAndValue(LocaleController.getString("Unavailable", R.string.Unavailable), LocaleController.getString("Unavailable", R.string.Unavailable), true);
-                            colorKey = Theme.key_windowBackgroundWhiteRedText4;
-                        }
-                        cell.getValueTextView().setTextColor(Theme.getColor(colorKey));
-                    }
-
-                };
-
-
-                UIUtil.runOnIoDispatcher(() -> {
-
-                    try {
-                        info.start();
-                        ConnectionsManager.getInstance(UserConfig.selectedAccount).checkProxy(info.address, info.port, "", "", "", time -> AndroidUtilities.runOnUIThread(() -> callback.run(time)));
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                        AlertUtil.showToast(e);
-                    }
-
-                });
-
-            }
-        }
-
-        PickerBottomLayout pickerBottomLayout = new PickerBottomLayout(activity, false);
-        pickerBottomLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
-        linearLayout.addView(pickerBottomLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM));
-        pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
-        pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-        pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
-        pickerBottomLayout.cancelButton.setOnClickListener(view -> {
-            info.stop();
-            dismissRunnable.run();
-        });
-        pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-        pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
-        pickerBottomLayout.doneButtonBadgeTextView.setVisibility(View.GONE);
-        pickerBottomLayout.middleButtonTextView.setText(LocaleController.getString("Save", R.string.Save).toUpperCase());
-        pickerBottomLayout.middleButton.setVisibility(View.VISIBLE);
-        pickerBottomLayout.middleButton.setOnClickListener((it) -> {
-            SharedConfig.addProxy(info);
-
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
-
-            dismissRunnable.run();
-
-        });
-        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", R.string.ConnectingConnectProxy).toUpperCase());
-        pickerBottomLayout.doneButton.setOnClickListener(v -> {
-
-            SharedConfig.setCurrentProxy(SharedConfig.addProxy(info));
-
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
-            if (activity instanceof LaunchActivity) {
-                INavigationLayout layout = ((LaunchActivity) activity).getActionBarLayout();
-                BaseFragment fragment = layout.getLastFragment();
-                if (fragment instanceof ChatActivity) {
-                    ((ChatActivity) fragment).getUndoView().showWithAction(0, UndoView.ACTION_PROXY_ADDED, null);
+                editor.remove("proxy_secret");
+                if (TextUtils.isEmpty(password)) {
+                    editor.remove("proxy_pass");
                 } else {
-                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_SUCCESS, LocaleController.getString(R.string.ProxyAddedSuccess));
+                    editor.putString("proxy_pass", password);
                 }
-            } else {
-                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_SUCCESS, LocaleController.getString(R.string.ProxyAddedSuccess));
-            }
-            dismissRunnable.run();
-
-        });
-        builder.show();
-    }
-
-    public static void showTrojanAlert(Context activity, final SharedConfig.VmessProxy info) {
-        BottomSheet.Builder builder = new BottomSheet.Builder(activity);
-        final Runnable dismissRunnable = builder.getDismissRunnable();
-
-        builder.setApplyTopPadding(false);
-        builder.setApplyBottomPadding(false);
-        LinearLayout linearLayout = new LinearLayout(activity);
-        builder.setCustomView(linearLayout);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        for (int a = 0; a < 4; a++) {
-            String text = null;
-            String detail = null;
-            if (a == 0) {
-                text = info.bean.getAddress();
-                detail = LocaleController.getString("UseProxyAddress", R.string.UseProxyAddress);
-            } else if (a == 1) {
-                text = "" + info.bean.getPort();
-                detail = LocaleController.getString("UseProxyPort", R.string.UseProxyPort);
-            } else if (a == 2) {
-                text = info.bean.getId();
-                detail = LocaleController.getString("SSPassword", R.string.SSPassword);
-            } else {
-                text = LocaleController.getString("Checking", R.string.Checking);
-                detail = LocaleController.getString("Checking", R.string.Checking);
-            }
-            if (TextUtils.isEmpty(text)) {
-                continue;
-            }
-            TextDetailSettingsCell cell = new TextDetailSettingsCell(activity);
-            cell.setTextAndValue(text, detail, true);
-            cell.getTextView().setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-            cell.getValueTextView().setTextColor(Theme.getColor(Theme.key_dialogTextGray3));
-            linearLayout.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-            AtomicInteger count = new AtomicInteger();
-            if (a == 3) {
-
-                RequestTimeDelegate callback = new RequestTimeDelegate() {
-                    @Override
-                    public void run(long time) {
-                        int c = count.getAndIncrement();
-                        int colorKey;
-                        if (time != -1) {
-                            info.stop();
-                            cell.setTextAndValue(LocaleController.getString("Available", R.string.Available), LocaleController.formatString("Ping", R.string.Ping, time), true);
-                            colorKey = Theme.key_windowBackgroundWhiteGreenText;
-                        } else if (c < 2) {
-                            ConnectionsManager.getInstance(UserConfig.selectedAccount).checkProxy(info.address, info.port, "", "", "", t -> AndroidUtilities.runOnUIThread(() -> run(t), 500));
-                            colorKey = Theme.key_windowBackgroundWhiteGreenText;
-                        } else {
-                            info.stop();
-                            cell.setTextAndValue(LocaleController.getString("Unavailable", R.string.Unavailable), LocaleController.getString("Unavailable", R.string.Unavailable), true);
-                            colorKey = Theme.key_windowBackgroundWhiteRedText4;
-                        }
-                        cell.getValueTextView().setTextColor(Theme.getColor(colorKey));
-                    }
-
-                };
-
-
-                UIUtil.runOnIoDispatcher(() -> {
-
-                    try {
-                        info.start();
-                        ConnectionsManager.getInstance(UserConfig.selectedAccount).checkProxy(info.address, info.port, "", "", "", time -> AndroidUtilities.runOnUIThread(() -> callback.run(time)));
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                        AlertUtil.showToast(e);
-                    }
-
-                });
-
-            }
-        }
-
-        PickerBottomLayout pickerBottomLayout = new PickerBottomLayout(activity, false);
-        pickerBottomLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
-        linearLayout.addView(pickerBottomLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM));
-        pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
-        pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-        pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
-        pickerBottomLayout.cancelButton.setOnClickListener(view -> {
-            info.stop();
-            dismissRunnable.run();
-        });
-        pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-        pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
-        pickerBottomLayout.doneButtonBadgeTextView.setVisibility(View.GONE);
-        pickerBottomLayout.middleButtonTextView.setText(LocaleController.getString("Save", R.string.Save).toUpperCase());
-        pickerBottomLayout.middleButton.setVisibility(View.VISIBLE);
-        pickerBottomLayout.middleButton.setOnClickListener((it) -> {
-            SharedConfig.addProxy(info);
-
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
-
-            dismissRunnable.run();
-
-        });
-        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", R.string.ConnectingConnectProxy).toUpperCase());
-        pickerBottomLayout.doneButton.setOnClickListener(v -> {
-
-            SharedConfig.setCurrentProxy(SharedConfig.addProxy(info));
-
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
-
-            dismissRunnable.run();
-
-        });
-        builder.show();
-    }
-
-
-    public static void showShadowsocksAlert(Context activity, final SharedConfig.ShadowsocksProxy info) {
-        try {
-            BottomSheet.Builder builder = new BottomSheet.Builder(activity);
-            final Runnable dismissRunnable = builder.getDismissRunnable();
-
-            builder.setApplyTopPadding(false);
-            builder.setApplyBottomPadding(false);
-            LinearLayout linearLayout = new LinearLayout(activity);
-            builder.setCustomView(linearLayout);
-            linearLayout.setOrientation(LinearLayout.VERTICAL);
-            for (int a = 0; a < 5; a++) {
-                String text = null;
-                String detail = null;
-                if (a == 0) {
-                    text = info.bean.getHost();
-                    detail = LocaleController.getString("UseProxyAddress", R.string.UseProxyAddress);
-                } else if (a == 1) {
-                    text = "" + info.bean.getRemotePort();
-                    detail = LocaleController.getString("UseProxyPort", R.string.UseProxyPort);
-                } else if (a == 2) {
-                    text = info.bean.getPassword();
-                    detail = LocaleController.getString("UseProxyPassword", R.string.UseProxyPassword);
-                } else if (a == 3) {
-                    text = info.bean.getMethod();
-                    detail = LocaleController.getString("SSMethod", R.string.SSMethod);
+                if (TextUtils.isEmpty(user)) {
+                    editor.remove("proxy_user");
                 } else {
-                    text = LocaleController.getString("Checking", R.string.Checking);
-                    detail = LocaleController.getString("Checking", R.string.Checking);
+                    editor.putString("proxy_user", user);
                 }
-                if (TextUtils.isEmpty(text)) {
-                    continue;
-                }
-                TextDetailSettingsCell cell = new TextDetailSettingsCell(activity);
-                cell.setTextAndValue(text, detail, true);
-                cell.getTextView().setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-                cell.getValueTextView().setTextColor(Theme.getColor(Theme.key_dialogTextGray3));
-                linearLayout.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-                AtomicInteger count = new AtomicInteger();
-                if (a == 4) {
-
-                    RequestTimeDelegate callback = new RequestTimeDelegate() {
-                        @Override
-                        public void run(long time) {
-                            int c = count.getAndIncrement();
-                            int colorKey;
-                            if (time != -1) {
-                                info.stop();
-                                cell.setTextAndValue(LocaleController.getString("Available", R.string.Available), LocaleController.formatString("Ping", R.string.Ping, time), true);
-                                colorKey = Theme.key_windowBackgroundWhiteGreenText;
-                            } else if (c < 2) {
-                                ConnectionsManager.getInstance(UserConfig.selectedAccount).checkProxy(info.address, info.port, "", "", "", t -> AndroidUtilities.runOnUIThread(() -> run(t), 500));
-                                colorKey = Theme.key_windowBackgroundWhiteGreenText;
-                            } else {
-                                info.stop();
-                                cell.setTextAndValue(LocaleController.getString("Unavailable", R.string.Unavailable), LocaleController.getString("Unavailable", R.string.Unavailable), true);
-                                colorKey = Theme.key_windowBackgroundWhiteRedText4;
-                            }
-                            cell.getValueTextView().setTextColor(Theme.getColor(colorKey));
-                        }
-
-                    };
-
-                    UIUtil.runOnIoDispatcher(() -> {
-
-                        try {
-                            info.start();
-                            ConnectionsManager.getInstance(UserConfig.selectedAccount).checkProxy(info.address, info.port, "", "", "", time -> AndroidUtilities.runOnUIThread(() -> callback.run(time)));
-                        } catch (Exception e) {
-                            FileLog.e(e);
-                            AlertUtil.showToast(e);
-                        }
-
-                    });
-
-                }
-            }
-
-            PickerBottomLayout pickerBottomLayout = new PickerBottomLayout(activity, false);
-            pickerBottomLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
-            linearLayout.addView(pickerBottomLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM));
-            pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
-            pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-            pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
-            pickerBottomLayout.cancelButton.setOnClickListener(view -> {
-                info.stop();
-                dismissRunnable.run();
-            });
-            pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-            pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
-            pickerBottomLayout.doneButtonBadgeTextView.setVisibility(View.GONE);
-            pickerBottomLayout.middleButtonTextView.setText(LocaleController.getString("Save", R.string.Save).toUpperCase());
-            pickerBottomLayout.middleButton.setVisibility(View.VISIBLE);
-            pickerBottomLayout.middleButton.setOnClickListener((it) -> {
-                SharedConfig.addProxy(info);
-
-                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
-
-                dismissRunnable.run();
-
-            });
-            pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", R.string.ConnectingConnectProxy).toUpperCase());
-            pickerBottomLayout.doneButton.setOnClickListener(v -> {
-
-                SharedConfig.setCurrentProxy(SharedConfig.addProxy(info));
-
-                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
-
-                dismissRunnable.run();
-
-            });
-            builder.show();
-        } catch (Exception e) {
-            FileLog.e(e);
-            AlertUtil.showToast(e);
-        }
-    }
-
-    public static void showShadowsocksRAlert(Context activity, final SharedConfig.ShadowsocksRProxy info) {
-        BottomSheet.Builder builder = new BottomSheet.Builder(activity);
-        final Runnable dismissRunnable = builder.getDismissRunnable();
-
-        builder.setApplyTopPadding(false);
-        builder.setApplyBottomPadding(false);
-        LinearLayout linearLayout = new LinearLayout(activity);
-        builder.setCustomView(linearLayout);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        for (int a = 0; a < 7; a++) {
-            String text = null;
-            String detail = null;
-            if (a == 0) {
-                text = info.bean.getHost();
-                detail = LocaleController.getString("UseProxyAddress", R.string.UseProxyAddress);
-            } else if (a == 1) {
-                text = "" + info.bean.getRemotePort();
-                detail = LocaleController.getString("UseProxyPort", R.string.UseProxyPort);
-            } else if (a == 2) {
-                text = info.bean.getPassword();
-                detail = LocaleController.getString("SSPassword", R.string.SSPassword);
-            } else if (a == 3) {
-                text = info.bean.getMethod();
-                detail = LocaleController.getString("SSMethod", R.string.SSMethod);
-            } else if (a == 4) {
-                text = info.bean.getProtocol();
-                if (!StrUtil.isBlank(info.bean.getProtocol_param())) {
-                    text += ", " + info.bean.getProtocol_param();
-                }
-                detail = LocaleController.getString("SSRProtocol", R.string.SSRProtocol);
-            } else if (a == 5) {
-                text = info.bean.getObfs();
-                if (!StrUtil.isBlank(info.bean.getObfs_param())) {
-                    text += ", " + info.bean.getObfs_param();
-                }
-                detail = LocaleController.getString("SSRObfs", R.string.SSRObfs);
+                info = new SharedConfig.ProxyInfo(address, p, user, password, "");
             } else {
-                text = LocaleController.getString("Checking", R.string.Checking);
-                detail = LocaleController.getString("Checking", R.string.Checking);
+                editor.remove("proxy_pass");
+                editor.remove("proxy_user");
+                editor.putString("proxy_secret", secret);
+                info = new SharedConfig.ProxyInfo(address, p, "", "", secret);
             }
-            if (TextUtils.isEmpty(text)) {
-                continue;
-            }
-            TextDetailSettingsCell cell = new TextDetailSettingsCell(activity);
-            cell.setTextAndValue(text, detail, true);
-            cell.getTextView().setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-            cell.getValueTextView().setTextColor(Theme.getColor(Theme.key_dialogTextGray3));
-            linearLayout.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-            AtomicInteger count = new AtomicInteger();
-            if (a == 6) {
+            editor.commit();
 
-                RequestTimeDelegate callback = new RequestTimeDelegate() {
-                    @Override
-                    public void run(long time) {
-                        int c = count.getAndIncrement();
-                        int colorKey;
-                        if (time != -1) {
-                            info.stop();
-                            cell.setTextAndValue(LocaleController.getString("Available", R.string.Available), LocaleController.formatString("Ping", R.string.Ping, time), true);
-                            colorKey = Theme.key_windowBackgroundWhiteGreenText;
-                        } else if (c < 2) {
-                            ConnectionsManager.getInstance(UserConfig.selectedAccount).checkProxy(info.address, info.port, "", "", "", t -> AndroidUtilities.runOnUIThread(() -> run(t), 500));
-                            colorKey = Theme.key_windowBackgroundWhiteGreenText;
-                        } else {
-                            info.stop();
-                            cell.setTextAndValue(LocaleController.getString("Unavailable", R.string.Unavailable), LocaleController.getString("Unavailable", R.string.Unavailable), true);
-                            colorKey = Theme.key_windowBackgroundWhiteRedText4;
-                        }
-                        cell.getValueTextView().setTextColor(Theme.getColor(colorKey));
-                    }
+            SharedConfig.currentProxy = SharedConfig.addProxy(info);
 
-                };
-
-                UIUtil.runOnIoDispatcher(() -> {
-
-                    try {
-                        info.start();
-                        ConnectionsManager.getInstance(UserConfig.selectedAccount).checkProxy(info.address, info.port, "", "", "", time -> AndroidUtilities.runOnUIThread(() -> callback.run(time)));
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                        AlertUtil.showToast(e);
-                    }
-
-                });
-
-            }
-        }
-
-        PickerBottomLayout pickerBottomLayout = new PickerBottomLayout(activity, false);
-        pickerBottomLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
-        linearLayout.addView(pickerBottomLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM));
-        pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
-        pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-        pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
-        pickerBottomLayout.cancelButton.setOnClickListener(view -> {
-            info.stop();
-            dismissRunnable.run();
-        });
-        pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-        pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
-        pickerBottomLayout.doneButtonBadgeTextView.setVisibility(View.GONE);
-        pickerBottomLayout.middleButtonTextView.setText(LocaleController.getString("Save", R.string.Save).toUpperCase());
-        pickerBottomLayout.middleButton.setVisibility(View.VISIBLE);
-        pickerBottomLayout.middleButton.setOnClickListener((it) -> {
-            SharedConfig.addProxy(info);
-
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
-
-            dismissRunnable.run();
-
-        });
-        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", R.string.ConnectingConnectProxy).toUpperCase());
-        pickerBottomLayout.doneButton.setOnClickListener(v -> {
-
-            SharedConfig.setCurrentProxy(SharedConfig.addProxy(info));
-
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
-
-            dismissRunnable.run();
-
-        });
-        builder.show();
-    }
-
-    public static void showWsAlert(Context activity, final SharedConfig.WsProxy info) {
-        BottomSheet.Builder builder = new BottomSheet.Builder(activity);
-        final Runnable dismissRunnable = builder.getDismissRunnable();
-
-        builder.setApplyTopPadding(false);
-        builder.setApplyBottomPadding(false);
-        LinearLayout linearLayout = new LinearLayout(activity);
-        builder.setCustomView(linearLayout);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        for (int a = 0; a < 4; a++) {
-            String text = null;
-            String detail = null;
-            if (a == 0) {
-                text = info.bean.getServer();
-                detail = LocaleController.getString("UseProxyAddress", R.string.UseProxyAddress);
-            } else if (a == 1) {
-                text = info.bean.getTls() ? "Y" : "N";
-                detail = LocaleController.getString("VmessTls", R.string.VmessTls);
-            } else {
-                text = LocaleController.getString("Checking", R.string.Checking);
-                detail = LocaleController.getString("Checking", R.string.Checking);
-            }
-            if (TextUtils.isEmpty(text)) {
-                continue;
-            }
-            TextDetailSettingsCell cell = new TextDetailSettingsCell(activity);
-            cell.setTextAndValue(text, detail, true);
-            cell.getTextView().setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-            cell.getValueTextView().setTextColor(Theme.getColor(Theme.key_dialogTextGray3));
-            linearLayout.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-            AtomicInteger count = new AtomicInteger();
-            if (a == 3) {
-
-                RequestTimeDelegate callback = new RequestTimeDelegate() {
-                    @Override
-                    public void run(long time) {
-                        int c = count.getAndIncrement();
-                        int colorKey;
-                        if (time != -1) {
-                            info.stop();
-                            cell.setTextAndValue(LocaleController.getString("Available", R.string.Available), LocaleController.formatString("Ping", R.string.Ping, time), true);
-                            colorKey = Theme.key_windowBackgroundWhiteGreenText;
-                        } else if (c < 2) {
-                            ConnectionsManager.getInstance(UserConfig.selectedAccount).checkProxy(info.address, info.port, "", "", "", t -> AndroidUtilities.runOnUIThread(() -> run(t), 500));
-                            colorKey = Theme.key_windowBackgroundWhiteGreenText;
-                        } else {
-                            info.stop();
-                            cell.setTextAndValue(LocaleController.getString("Unavailable", R.string.Unavailable), LocaleController.getString("Unavailable", R.string.Unavailable), true);
-                            colorKey = Theme.key_windowBackgroundWhiteRedText4;
-                        }
-                        cell.getValueTextView().setTextColor(Theme.getColor(colorKey));
-                    }
-
-                };
-
-                UIUtil.runOnIoDispatcher(() -> {
-
-                    try {
-                        info.start();
-                        ConnectionsManager.getInstance(UserConfig.selectedAccount).checkProxy(info.address, info.port, "", "", "", time -> AndroidUtilities.runOnUIThread(() -> callback.run(time)));
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                        AlertUtil.showToast(e);
-                    }
-
-                });
-
-            }
-        }
-
-        PickerBottomLayout pickerBottomLayout = new PickerBottomLayout(activity, false);
-        pickerBottomLayout.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));
-        linearLayout.addView(pickerBottomLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.LEFT | Gravity.BOTTOM));
-        pickerBottomLayout.cancelButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
-        pickerBottomLayout.cancelButton.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-        pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", R.string.Cancel).toUpperCase());
-        pickerBottomLayout.cancelButton.setOnClickListener(view -> {
-            info.stop();
-            dismissRunnable.run();
-        });
-        pickerBottomLayout.doneButtonTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue2));
-        pickerBottomLayout.doneButton.setPadding(AndroidUtilities.dp(18), 0, AndroidUtilities.dp(18), 0);
-        pickerBottomLayout.doneButtonBadgeTextView.setVisibility(View.GONE);
-        pickerBottomLayout.middleButtonTextView.setText(LocaleController.getString("Save", R.string.Save).toUpperCase());
-        pickerBottomLayout.middleButton.setVisibility(View.VISIBLE);
-        pickerBottomLayout.middleButton.setOnClickListener((it) -> {
-            SharedConfig.addProxy(info);
-
+            ConnectionsManager.setProxySettings(true, address, p, user, password, secret);
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
             if (activity instanceof LaunchActivity) {
                 INavigationLayout layout = ((LaunchActivity) activity).getActionBarLayout();
@@ -4789,17 +4189,6 @@ public class AndroidUtilities {
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_SUCCESS, LocaleController.getString(R.string.ProxyAddedSuccess));
             }
             dismissRunnable.run();
-
-        });
-        pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", R.string.ConnectingConnectProxy).toUpperCase());
-        pickerBottomLayout.doneButton.setOnClickListener(v -> {
-
-            SharedConfig.setCurrentProxy(SharedConfig.addProxy(info));
-
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
-
-            dismissRunnable.run();
-
         });
         builder.show();
     }

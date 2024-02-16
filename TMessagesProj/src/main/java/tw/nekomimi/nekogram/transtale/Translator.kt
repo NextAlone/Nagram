@@ -19,7 +19,7 @@ import tw.nekomimi.nekogram.utils.receiveLazy
 import java.util.*
 
 fun <T : HttpRequest> T.applyProxy(): T {
-    SharedConfig.getActiveSocks5Proxy()?.let { setProxy(it) }
+//    SharedConfig.getActiveSocks5Proxy()?.let { setProxy(it) }
     return this
 }
 
