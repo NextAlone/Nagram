@@ -349,7 +349,7 @@ dependencies {
     implementation "cn.hutool:hutool-crypto:5.7.13"
     implementation 'cn.hutool:hutool-http:5.7.5'
     implementation "com.jakewharton:process-phoenix:2.1.2"
-    implementation 'com.google.guava:guava:31.1-android'
+    implementation 'com.google.guava:guava:31.1-jre'
 
     implementation 'com.google.android.gms:play-services-mlkit-subject-segmentation:16.0.0-beta1'
 
