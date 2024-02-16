@@ -53,7 +53,7 @@
     <string name="HideOriginAfterTranslation">Ocultar el origen tras la traducción</string>
     <string name="ZalgoFilter">Filtrar los símbolos \"Zalgo\"</string>
     <string name="ZalgoFilterNotice">Se eliminarán todos los símbolos \"Z̷͍͌ā̸̜l̸̞̂g̷̝͘o̶̩̓\" en los apodos o mensajes.</string>
-    <string name="CustomChannelLabel">Etiqueta personalizada de canal por defecto</string>
+    <string name="CustomChannelLabel">Personalizar etiqueta predeterminada del canal</string>
     <string name="AlwaysShowDownloadIcon">Siempre mostrar el icono de descarga</string>
     <string name="QuickToggleAnonymous">Cambio rápido a anónimo</string>
     <string name="QuickToggleAnonymousNotice">Si eres el dueño del grupo</string>
@@ -110,10 +110,10 @@
     <string name="ExternalStickerCacheSyncNotFinished">La sincronización del cache ya se está ejecutando</string>
     <string name="ExternalStickerCacheAutoRefresh">Sincronización automática</string>
     <string name="ExternalStickerCacheAutoRefreshHint">Sincronizar automáticamente todos los cachés después de recibir eventos del sticker</string>
-    <string name="ExternalStickerCacheRefreshAll">Sincronizar todos los cachés</string>
-    <string name="ExternalStickerCacheDeleteAll">Borrar todos los cachés</string>
+    <string name="ExternalStickerCacheRefreshAll">Sincronizar todos los caches</string>
+    <string name="ExternalStickerCacheDeleteAll">Borrar todos los caches</string>
     <string name="ExternalStickerCacheDirNameType">Nombre del directorio</string>
-    <string name="ProviderTranSmartTranslate">Traductor Inteligente</string>
+    <string name="ProviderTranSmartTranslate">Traductor TranSmart</string>
     <string name="DisableMarkdown">Desactivar Markdown</string>
     <string name="SendWithMarkdown">Enviar con markdown</string>
     <string name="DisableClickProfileGalleryView">Desactivar los avatares de flip tocando</string>
@@ -122,7 +122,7 @@
     <string name="ShowSmallGIF">Mostrar Gif pequeño</string>
     <string name="DisableClickCommandToSend">Deshabilitar clic para enviar comando</string>
     <string name="DisableClickCommandToSendHint">Para prevenir toques accidentales</string>
-    <string name="DisableDialogsFloatingButton">Desactivar el botón flotante de diálogos</string>
-    <string name="DisableFlagSecure">Desactivar Bandera Segura</string>
+    <string name="DisableDialogsFloatingButton">Deshabilitar botón flotante de diálogos</string>
+    <string name="DisableFlagSecure">Deshabilitar Flag Secure</string>
     <string name="CenterActionBarTitle">Centrar el título en la barra de acción</string>
 </resources>
