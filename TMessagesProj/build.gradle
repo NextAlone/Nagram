@@ -364,9 +364,9 @@ dependencies {
     compileOnly "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
     compileOnly "com.google.android.play:core:$playCoreVersion"
 
-    debugImplementation 'com.google.android.gms:play-services-maps:18.1.0'
+    debugImplementation 'com.google.android.gms:play-services-maps:18.2.0'
     debugImplementation 'com.google.android.gms:play-services-location:20.0.0'
-    releaseImplementation 'com.google.android.gms:play-services-maps:18.1.0'
+    releaseImplementation 'com.google.android.gms:play-services-maps:18.2.0'
     releaseImplementation 'com.google.android.gms:play-services-location:20.0.0'
 
     debugImplementation "com.google.firebase:firebase-messaging:$fcmVersion"
