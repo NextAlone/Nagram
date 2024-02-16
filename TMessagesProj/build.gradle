@@ -329,7 +329,7 @@ dependencies {
 
     // just follow official
     compileOnly 'org.checkerframework:checker-qual:2.5.2'
-    compileOnly 'org.checkerframework:checker-compat-qual:2.5.0'
+    compileOnly 'org.checkerframework:checker-compat-qual:2.5.6'
 
     // don"t change this :)
     //noinspection GradleDependency
