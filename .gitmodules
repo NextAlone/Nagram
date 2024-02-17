@@ -13,30 +13,3 @@
 	path = TMessagesProj/jni/libvpx
 	url = https://github.com/webmproject/libvpx
 	ignore = dirty
-
-[submodule "ss-rust/src/main/rust/shadowsocks-rust"]
-	path = ss-rust/src/main/rust/shadowsocks-rust
-	url = https://github.com/shadowsocks/shadowsocks-rust.git
-
-[submodule "shadowsocksr-libev"]
-	path = ssr-libev/src/main/jni/shadowsocks-libev
-	url = https://github.com/shadowsocksRb/shadowsocksr-libev.git
-[submodule "ssr-libev/src/main/jni/libancillary"]
-	path = ssr-libev/src/main/jni/libancillary
-	url = https://github.com/shadowsocks/libancillary.git
-[submodule "ssr-libev/src/main/jni/mbedtls"]
-	path = ssr-libev/src/main/jni/mbedtls
-	url = https://github.com/ARMmbed/mbedtls
-[submodule "ssr-libev/src/main/jni/pcre"]
-	path = ssr-libev/src/main/jni/pcre
-	url = https://android.googlesource.com/platform/external/pcre
-[submodule "ssr-libev/src/main/jni/libsodium"]
-	path = ssr-libev/src/main/jni/libsodium
-	url = https://github.com/jedisct1/libsodium.git
-	branch = stable
-[submodule "ssr-libev/src/main/jni/re2"]
-	path = ssr-libev/src/main/jni/re2
-	url = https://github.com/google/re2.git
-[submodule "v2ray"]
-	path = v2ray
-	url = https://github.com/nekohasekai/AndroidLibV2rayLite
