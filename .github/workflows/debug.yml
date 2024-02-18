@@ -348,12 +348,12 @@ jobs:
           curl http://127.0.0.1:8081/ || start
           curl http://127.0.0.1:8081/ || start
           # send release via telegram bot api
-          export mini64=$(find artifacts -name "*mini-arm64-v8a.apk")
-          export mini32=$(find artifacts -name "*mini-armeabi-v7a.apk")
+          export mini64=$(find artifacts -name "*arm64-v8a.apk")
+          export mini32=$(find artifacts -name "*armeabi-v7a.apk")
           #          export full64=$(find artifacts -name "*full-arm64-v8a.apk")
           #          export full32=$(find artifacts -name "*full-armeabi-v7a.apk")
-          export mini64nogcm=$(find artifacts -name "*mini-arm64-v8aNoGcm.apk")
-          export mini32nogcm=$(find artifacts -name "*mini-armeabi-v7aNoGcm.apk")
+          export mini64nogcm=$(find artifacts -name "*arm64-v8aNoGcm.apk")
+          export mini32nogcm=$(find artifacts -name "*armeabi-v7aNoGcm.apk")
           #          export full64nogcm=$(find artifacts -name "*full-arm64-v8aNoGcm.apk")
           #          export full32nogcm=$(find artifacts -name "*full-armeabi-v7aNoGcm.apk")
 

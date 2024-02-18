@@ -307,7 +307,12 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
-            outputFileName = outputFileName.replace("TMessagesProj", "Nagram-v" + versionName).replace("-release", "")
+            String gramName = "Nagram"
+            String first = String.format("%s-v%s(%s)", gramName, versionName, versionCode)
+            String name = outputFileName.replace("TMessagesProj", first)
+            name = name.replace("-release", "")
+            name = name.replace("-mini", "")
+            outputFileName = name
         }
     }
 
