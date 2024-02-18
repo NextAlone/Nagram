@@ -387,7 +387,7 @@ dependencies {
     // add for undo and redo
     implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:4.3'
     // add splash screen
-    implementation("androidx.core:core-splashscreen:1.0.0-beta02")
+    implementation("androidx.core:core-splashscreen:1.0.1")
     // add for music tag flac...
     implementation 'org:jaudiotagger:2.0.3'
     // add for auto translate
