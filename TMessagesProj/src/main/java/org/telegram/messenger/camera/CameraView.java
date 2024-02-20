@@ -101,7 +101,7 @@ import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
 
 @SuppressLint("NewApi")
-public class CameraView extends FrameLayout implements TextureView.SurfaceTextureListener, CameraController.ICameraView {
+public class CameraView extends FrameLayout implements TextureView.SurfaceTextureListener, CameraController.ICameraView, CameraController.ErrorCallback  {
 
     public boolean WRITE_TO_FILE_IN_BACKGROUND = false;
 
@@ -113,7 +113,6 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     private boolean lazy;
     private TextureView textureView;
     private ImageView blurredStubView;
-    private CameraSession[] cameraSession = new CameraSession[2];
     private boolean inited;
     private CameraViewDelegate delegate;
     private int clipTop;
@@ -123,6 +122,10 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     private Matrix matrix = new Matrix();
     private int focusAreaSize;
     private Drawable thumbDrawable;
+
+    private final boolean useCamera2 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && SharedConfig.useCamera2;
+    private final CameraSessionWrapper[] cameraSession = new CameraSessionWrapper[2];
+    private CameraSessionWrapper cameraSessionRecording;
 
     private boolean useMaxPreview;
 
@@ -164,8 +167,6 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     }
 
     Runnable onRecordingFinishRunnable;
-
-    private CameraSession cameraSessionRecording;
 
     public boolean startRecording(File path, Runnable onFinished) {
         cameraSessionRecording = cameraSession[0];
@@ -270,7 +271,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 return;
             }
             closingDualCamera = true;
-            CameraController.getInstance().close(cameraSession[1], null, null, () -> {
+            cameraSession[1].destroy(false, null, () -> {
                 closingDualCamera = false;
                 enableDualInternal();
             });
@@ -286,11 +287,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
             if (handler != null) {
                 cameraThread.sendMessage(handler.obtainMessage(cameraThread.BLUR_CAMERA1), 0);
             }
-            CameraController.getInstance().close(cameraSession[0], null, null, () -> {
-//                inited = false;
-//                synchronized (layoutLock) {
-//                    firstFrameRendered = false;
-//                }
+            cameraSession[0].destroy(false, null, () -> {
                 initFirstCameraAfterSecond = true;
                 updateCameraInfoSize(1);
                 if (handler != null) {
@@ -325,7 +322,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
             }
             enableDualInternal();
         } else {
-            if (cameraSession[1] == null || !cameraSession[1].isInitied()) {
+            if (cameraSession[1] == null || !cameraSession[1].isInitiated()) {
                 dual = !dual;
                 return;
             }
@@ -334,7 +331,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 if (cameraSessionRecording == cameraSession[1]) {
                     cameraSessionRecording = null;
                 }
-                CameraController.getInstance().close(cameraSession[1], null, null, () -> {
+                cameraSession[1].destroy(false, null, () -> {
                     closingDualCamera = false;
                     dualCameraAppeared = false;
                     addToDualWait(400L);
@@ -393,6 +390,9 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
 
     public CameraView(Context context, boolean frontface, boolean lazy) {
         super(context, null);
+
+        CameraController.getInstance().addOnErrorListener(this);
+
         initialFrontface = isFrontface = frontface;
         textureView = new TextureView(context);
         if (!(this.lazy = lazy)) {
@@ -606,7 +606,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
             pictureSize[0] = pictureSize[1];
             pictureSize[1] = pictureSize0;
 
-            CameraSession cameraSession0 = cameraSession[0];
+            CameraSessionWrapper cameraSession0 = cameraSession[0];
             cameraSession[0] = cameraSession[1];
             cameraSession[1] = cameraSession0;
 
@@ -623,7 +623,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
             if (cameraSessionRecording == cameraSession[0]) {
                 cameraSessionRecording = null;
             }
-            CameraController.getInstance().close(cameraSession[0], null, null, () -> {
+            cameraSession[0].destroy(false, null, () -> {
                 inited = false;
                 synchronized (layoutLock) {
                     firstFrameRendered = false;
@@ -645,7 +645,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
             if (handler != null) {
                 cameraThread.sendMessage(handler.obtainMessage(cameraThread.BLUR_CAMERA1), 0);
             }
-            CameraController.getInstance().close(cameraSession[0], null, null, () -> {
+            cameraSession[0].destroy(false, null, () -> {
                 inited = false;
                 synchronized (layoutLock) {
                     firstFrameRendered = false;
@@ -773,17 +773,17 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
             cameraThread.postRunnable(() -> this.cameraThread = null);
         }
         if (cameraSession[0] != null) {
-            CameraController.getInstance().close(cameraSession[0], null, null);
+            cameraSession[0].destroy(false, null, null);
         }
         if (cameraSession[1] != null) {
-            CameraController.getInstance().close(cameraSession[1], null, null);
+            cameraSession[1].destroy(false, null, null);
         }
         return false;
     }
 
     @Override
     public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-        if (!inited && cameraSession[0] != null && cameraSession[0].isInitied()) {
+        if (!inited && cameraSession[0] != null && cameraSession[0].isInitiated()) {
             if (delegate != null) {
                 delegate.onCameraInit();
             }
@@ -934,25 +934,30 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         return inited;
     }
 
-    public CameraSession getCameraSession() {
+    public CameraSessionWrapper getCameraSession() {
         return getCameraSession(0);
     }
 
-    public CameraSession getCameraSession(int i) {
+    public Object getCameraSessionObject() {
+        if (cameraSession[0] == null) return null;
+        return cameraSession[0].getObject();
+    }
+
+    public CameraSessionWrapper getCameraSession(int i) {
         return cameraSession[i];
     }
 
-    public CameraSession getCameraSessionRecording() {
+    public CameraSessionWrapper getCameraSessionRecording() {
         return cameraSessionRecording;
     }
 
     public void destroy(boolean async, final Runnable beforeDestroyRunnable) {
         for (int i = 0; i < 2; ++i) {
             if (cameraSession[i] != null) {
-                cameraSession[i].destroy();
-                CameraController.getInstance().close(cameraSession[i], !async ? new CountDownLatch(1) : null, beforeDestroyRunnable);
+                cameraSession[i].destroy(async, beforeDestroyRunnable, null);
             }
         }
+        CameraController.getInstance().removeOnErrorListener(this);
     }
 
     public Matrix getMatrix() {
@@ -1071,7 +1076,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         private EGLConfig eglConfig;
         private boolean initied;
 
-        private CameraSession currentSession[] = new CameraSession[2];
+        private final CameraSessionWrapper currentSession[] = new CameraSessionWrapper[2];
 
         private final SurfaceTexture[] cameraSurface = new SurfaceTexture[2];
 
@@ -1384,7 +1389,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
             }
         }
 
-        public void setCurrentSession(CameraSession session, int i) {
+        public void setCurrentSession(CameraSessionWrapper session, int i) {
             Handler handler = getHandler();
             if (handler != null) {
                 sendMessage(handler.obtainMessage(DO_SETSESSION_MESSAGE, i, 0, session), 0);
@@ -1463,7 +1468,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 }
             }
 
-            if (currentSession[0] == null || currentSession[0].cameraInfo.cameraId != cameraId1) {
+            if (currentSession[0] == null || currentSession[0].getCameraId() != cameraId1) {
                 return;
             }
 
@@ -1500,7 +1505,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 if (cameraSurface[i] == null) {
                     continue;
                 }
-                if (i != 0 && (currentSession[i] == null || !currentSession[i].isInitied()) || i == 0 && cameraId1 < 0 && !dual || i == 1 && cameraId2 < 0) {
+                if (i != 0 && (currentSession[i] == null || !currentSession[i].isInitiated()) || i == 0 && cameraId1 < 0 && !dual || i == 1 && cameraId2 < 0) {
                     continue;
                 }
 
@@ -1680,13 +1685,13 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 }
                 case DO_SETSESSION_MESSAGE: {
                     final int i = inputMessage.arg1;
-                    CameraSession newSession = (CameraSession) inputMessage.obj;
+                    CameraSessionWrapper newSession = (CameraSessionWrapper) inputMessage.obj;
                     if (newSession == null) {
                         return;
                     }
                     if (currentSession[i] != newSession) {
                         currentSession[i] = newSession;
-                        cameraId[i] = newSession.cameraInfo.cameraId;
+                        cameraId[i] = newSession.getCameraId();
                     }
 //                    currentSession[i].updateRotation();
                     int rotationAngle = currentSession[i].getWorldAngle();
@@ -1755,7 +1760,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                     cameraId[0] = cameraId[1];
                     cameraId[1] = cameraId0;
 
-                    CameraSession cameraSession0 = currentSession[0];
+                    CameraSessionWrapper cameraSession0 = currentSession[0];
                     currentSession[0] = currentSession[1];
                     currentSession[1] = cameraSession0;
 
@@ -1938,39 +1943,58 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 return;
             }
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("CameraView " + "create camera session " + i);
+                FileLog.d("CameraView " + "create camera"+(useCamera2 ? "2" : "")+" session " + i);
             }
-            if (previewSize[i] == null) {
-                updateCameraInfoSize(i);
-            }
-            if (previewSize[i] == null) {
-                return;
-            }
-            surfaceTexture.setDefaultBufferSize(previewSize[i].getWidth(), previewSize[i].getHeight());
 
-            cameraSession[i] = new CameraSession(info[i], previewSize[i], pictureSize[i], ImageFormat.JPEG, false);
-            cameraSession[i].setCurrentFlashMode(Camera.Parameters.FLASH_MODE_OFF);
-            cameraThread.setCurrentSession(cameraSession[i], i);
-            requestLayout();
-
-            CameraController.getInstance().open(cameraSession[i], surfaceTexture, () -> {
-                if (cameraSession[i] != null) {
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.d("CameraView " + "camera initied " + i);
-                    }
-                    cameraSession[i].setInitied();
+            if (useCamera2) {
+                Camera2Session session = Camera2Session.create(false, i == 0 ? isFrontface : !isFrontface, surfaceWidth, surfaceHeight);
+                if (session == null) return;
+                cameraSession[i] = CameraSessionWrapper.of(session);
+                cameraThread.setCurrentSession(cameraSession[i], i);
+                session.whenDone(() -> {
                     requestLayout();
+                    if (dual && i == 1 && initFirstCameraAfterSecond) {
+                        initFirstCameraAfterSecond = false;
+                        AndroidUtilities.runOnUIThread(() -> {
+                            updateCameraInfoSize(0);
+                            cameraThread.reinitForNewCamera();
+                            addToDualWait(350L);
+                        });
+                    }
+                });
+                session.open(surfaceTexture);
+            } else {
+                if (previewSize[i] == null) {
+                    updateCameraInfoSize(i);
                 }
+                if (previewSize[i] == null) {
+                    return;
+                }
+                surfaceTexture.setDefaultBufferSize(previewSize[i].getWidth(), previewSize[i].getHeight());
+                CameraSession session = new CameraSession(info[i], previewSize[i], pictureSize[i], ImageFormat.JPEG, false);
+                session.setCurrentFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                cameraSession[i] = CameraSessionWrapper.of(session);
+                cameraThread.setCurrentSession(cameraSession[i], i);
+                requestLayout();
+                CameraController.getInstance().open(session, surfaceTexture, () -> {
+                    if (cameraSession[i] != null) {
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.d("CameraView " + "camera initied " + i);
+                        }
+                        session.setInitied();
+                        requestLayout();
+                    }
 
-                if (dual && i == 1 && initFirstCameraAfterSecond) {
-                    initFirstCameraAfterSecond = false;
-                    AndroidUtilities.runOnUIThread(() -> {
-                        updateCameraInfoSize(0);
-                        cameraThread.reinitForNewCamera();
-                        addToDualWait(350L);
-                    });
-                }
-            }, () -> cameraThread.setCurrentSession(cameraSession[i], i));
+                    if (dual && i == 1 && initFirstCameraAfterSecond) {
+                        initFirstCameraAfterSecond = false;
+                        AndroidUtilities.runOnUIThread(() -> {
+                            updateCameraInfoSize(0);
+                            cameraThread.reinitForNewCamera();
+                            addToDualWait(350L);
+                        });
+                    }
+                }, () -> cameraThread.setCurrentSession(cameraSession[i], i));
+            }
         });
     }
 
@@ -3041,5 +3065,10 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         if (cameraThread != null) {
             cameraThread.pause(600);
         }
+    }
+
+    @Override
+    public void onError(int errorId, Camera camera, CameraSessionWrapper cameraSession) {
+
     }
 }

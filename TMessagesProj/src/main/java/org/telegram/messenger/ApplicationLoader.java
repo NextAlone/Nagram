@@ -41,10 +41,12 @@ import androidx.multidex.MultiDex;
 
 import androidx.multidex.MultiDex;
 
+import org.json.JSONObject;
 import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Adapters.DrawerLayoutAdapter;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.ForegroundDetector;
 import org.telegram.ui.Components.Premium.boosts.BoostRepository;
@@ -55,6 +57,7 @@ import org.telegram.ui.LauncherIconController;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -707,6 +710,34 @@ public class ApplicationLoader extends Application {
 
     public IUpdateLayout takeUpdateLayout(Activity activity, ViewGroup sideMenu, ViewGroup sideMenuContainer) {
         return new UpdateLayout(activity, sideMenu, sideMenuContainer);
+    }
+
+    public TLRPC.Update parseTLUpdate(int constructor) {
+        return null;
+    }
+
+    public void processUpdate(int currentAccount, TLRPC.Update update) {
+
+    }
+
+    public boolean onSuggestionFill(String suggestion, String[] output, boolean[] closeable) {
+        return false;
+    }
+
+    public boolean onSuggestionClick(String suggestion) {
+        return false;
+    }
+
+    public boolean extendDrawer(ArrayList<DrawerLayoutAdapter.Item> items) {
+        return false;
+    }
+
+    public boolean checkRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) {
+        return false;
+    }
+
+    public boolean consumePush(int account, JSONObject json) {
+        return false;
     }
 
 }

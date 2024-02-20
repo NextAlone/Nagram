@@ -1439,6 +1439,10 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
                 menu.getItem(1).setVisible(canShowQuote());
+                MenuItem copyItem = menu.findItem(android.R.id.copy);
+                if (copyItem != null) {
+                    copyItem.setVisible(canCopy());
+                }
                 if (selectedView != null) {
                     CharSequence charSequence = getText(selectedView, false);
                     if (multiselect || selectionStart <= 0 && selectionEnd >= charSequence.length() - 1) {
@@ -3337,5 +3341,9 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
 
     protected Theme.ResourcesProvider getResourcesProvider() {
         return resourcesProvider;
+    }
+
+    protected boolean canCopy() {
+        return true;
     }
 }

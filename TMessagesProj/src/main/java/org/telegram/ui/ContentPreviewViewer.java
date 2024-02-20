@@ -56,6 +56,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.WebFile;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
@@ -215,6 +216,7 @@ public class ContentPreviewViewer {
                 return;
             }
             closeOnDismiss = true;
+            ActionBarPopupWindow.ActionBarPopupWindowLayout previewMenu = new ActionBarPopupWindow.ActionBarPopupWindowLayout(containerView.getContext(), R.drawable.popup_fixed_alert3, resourcesProvider);
             if (currentContentType == CONTENT_TYPE_STICKER) {
                 if (MessageObject.isPremiumSticker(currentDocument) && !AccountInstance.getInstance(currentAccount).getUserConfig().isPremium()) {
                     showUnlockPremiumView();
@@ -317,7 +319,6 @@ public class ContentPreviewViewer {
                         }
                     }
                 };
-                ActionBarPopupWindow.ActionBarPopupWindowLayout previewMenu = new ActionBarPopupWindow.ActionBarPopupWindowLayout(containerView.getContext(), R.drawable.popup_fixed_alert3, resourcesProvider);
 
                 for (int i = 0; i < items.size(); i++) {
                     View item = ActionBarMenuItem.addItem(previewMenu, icons.get(i), items.get(i), false, resourcesProvider);
@@ -422,8 +423,6 @@ public class ContentPreviewViewer {
                 for (int a = 0; a < icons.size(); a++) {
                     ic[a] = icons.get(a);
                 }
-
-                ActionBarPopupWindow.ActionBarPopupWindowLayout previewMenu = new ActionBarPopupWindow.ActionBarPopupWindowLayout(containerView.getContext(), R.drawable.popup_fixed_alert2, resourcesProvider);
 
                 View.OnClickListener onItemClickListener = v -> {
                     if (parentActivity == null || delegate == null) {
@@ -559,8 +558,6 @@ public class ContentPreviewViewer {
                     ic[a] = icons.get(a);
                 }
 
-                ActionBarPopupWindow.ActionBarPopupWindowLayout previewMenu = new ActionBarPopupWindow.ActionBarPopupWindowLayout(containerView.getContext(), R.drawable.popup_fixed_alert2, resourcesProvider);
-
                 View.OnClickListener onItemClickListener = v -> {
                     if (parentActivity == null) {
                         return;
@@ -652,6 +649,12 @@ public class ContentPreviewViewer {
                     valueAnimator.setDuration(350);
                     valueAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
                     valueAnimator.start();
+                }
+            }
+            for (int i = 0; i < previewMenu.getItemsCount(); ++i) {
+                View child = previewMenu.getItemAt(i);
+                if (child instanceof ActionBarMenuSubItem) {
+                    ((ActionBarMenuSubItem) child).updateSelectorBackground(i == 0, i == previewMenu.getItemsCount() - 1, 8);
                 }
             }
         }

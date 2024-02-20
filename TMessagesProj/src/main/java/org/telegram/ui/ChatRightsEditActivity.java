@@ -1211,6 +1211,12 @@ public class ChatRightsEditActivity extends BaseFragment {
                 banUsersRow = rowCount++;
                 addUsersRow = rowCount++;
                 pinMessagesRow = rowCount++;
+                channelStoriesRow = rowCount++;
+                if (channelStoriesExpanded) {
+                    channelPostStoriesRow = rowCount++;
+                    channelEditStoriesRow = rowCount++;
+                    channelDeleteStoriesRow = rowCount++;
+                }
                 startVoiceChatRow = rowCount++;
                 addAdminsRow = rowCount++;
                 anonymousRow = rowCount++;
