@@ -175,7 +175,6 @@
     <string name="OpenKayChain">OpenPGP Client</string>
     <string name="OpenPGPApp">OpenPGP Provider</string>
     <string name="OpenPGPKey">کلید OpenPGP</string>
-    <string name="None">هیچ کدام</string>
     <string name="Sign">امضا</string>
     <string name="PGPDecrypt">رمزگشایی پیام</string>
     <string name="PGPVerify">تصدیق پیام</string>

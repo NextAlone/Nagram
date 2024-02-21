@@ -5031,7 +5031,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
     private LongSparseArray<BlockVideoCellState> videoStates = new LongSparseArray<>();
 
-    private class WebpageAdapter extends RecyclerListView.SelectionAdapter {
+    public class WebpageAdapter extends RecyclerListView.SelectionAdapter {
 
         private Context context;
         private ArrayList<TLRPC.PageBlock> localBlocks = new ArrayList<>();

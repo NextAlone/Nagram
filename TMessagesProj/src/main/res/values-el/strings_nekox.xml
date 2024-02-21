@@ -164,7 +164,6 @@
     <string name="ProxyTypeVmess">VMess Proxy</string>
     <string name="DialogsSettings">Ρυθμίσεις διαλόγων</string>
     <string name="AddProxyVmess">Προσθήκη VMess Proxy</string>
-    <string name="None">Χωρίς</string>
     <string name="SSMethod">Μέθοδος κρυπτογράφησης</string>
     <string name="SSRProtocolParams">Παράμετροι πρωτοκόλλου</string>
     <string name="IgnoreContentRestrictionsNotice">Παραβλέπει τους περιορισμούς αναπαραγωγής στα μηνύματα.</string>

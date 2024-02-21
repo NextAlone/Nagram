@@ -175,7 +175,6 @@
     <string name="OpenKayChain">OpenPGP</string>
     <string name="OpenPGPApp">Провайдер OpenPGP</string>
     <string name="OpenPGPKey">Ключ OpenPGP</string>
-    <string name="None">Не выбран</string>
     <string name="Sign">Подписать</string>
     <string name="PGPDecrypt">Расшифровать</string>
     <string name="PGPVerify">Проверить</string>

@@ -175,7 +175,6 @@
     <string name="OpenKayChain">OpenPGP 클라이언트</string>
     <string name="OpenPGPApp">OpenPGP 제공자</string>
     <string name="OpenPGPKey">OpenPGP 키</string>
-    <string name="None">없음</string>
     <string name="Sign">기호</string>
     <string name="PGPDecrypt">메시지 해독</string>
     <string name="PGPVerify">메시지 확인</string>

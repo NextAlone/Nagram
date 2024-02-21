@@ -175,7 +175,6 @@
     <string name="OpenKayChain">عميل OpenPGP</string>
     <string name="OpenPGPApp">موفر OpenPGP</string>
     <string name="OpenPGPKey">مفتاح OpenPGP</string>
-    <string name="None">لا شيء</string>
     <string name="Sign">التوقيع</string>
     <string name="PGPDecrypt">فك تشفير الرسالة</string>
     <string name="PGPVerify">تحقق من الرسالة</string>

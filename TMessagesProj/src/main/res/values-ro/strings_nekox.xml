@@ -125,7 +125,6 @@
     <string name="OpenKayChain">Client OpenPGP</string>
     <string name="OpenPGPApp">Furnizor OpenPGP</string>
     <string name="OpenPGPKey">Cheia OpenPGP</string>
-    <string name="None">Niciunul</string>
     <string name="Sign">Semn</string>
     <string name="PGPDecrypt">Decriptare mesaj</string>
     <string name="PGPVerify">Verificare mesaj</string>

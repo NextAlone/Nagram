@@ -169,7 +169,6 @@
     <string name="OpenKayChain">OpenPGP-Client</string>
     <string name="OpenPGPApp">OpenPGP-Anbieter</string>
     <string name="OpenPGPKey">OpenPGP-Schlüssel</string>
-    <string name="None">Keiner</string>
     <string name="Sign">Signieren</string>
     <string name="PGPDecrypt">Nachricht entschlüsseln</string>
     <string name="PGPVerify">Nachricht überprüfen</string>

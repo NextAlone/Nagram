@@ -164,7 +164,6 @@
     <string name="SubscriptionUpdating">Aktualizuji Předplatné</string>
     <string name="AddProxyVmess">Přidat VMess Proxy</string>
     <string name="ProxyInfoTrojan">Nastavení Trojan Proxy</string>
-    <string name="None">Žádný</string>
     <string name="PrivacyNoticeP2p">Zjistili jsme, že jste nevypnuli \"Povolit P2P volání\" nastavení, které by mohlo způsobit že hacker kontrolovaný vládou najde vaší pravou identitu, prosíme vypněte jej!</string>
     <string name="PublicPrefix">Veřejné</string>
     <string name="DisableProxyWhenVpnEnabled">Vypnout proxy když je VPN zapnutá</string>

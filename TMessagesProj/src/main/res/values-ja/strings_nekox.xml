@@ -175,7 +175,6 @@
     <string name="OpenKayChain">OpenPGP クライアント</string>
     <string name="OpenPGPApp">OpenPGPプロバイダー</string>
     <string name="OpenPGPKey">OpenPGP キー</string>
-    <string name="None">なし</string>
     <string name="Sign">符号</string>
     <string name="PGPDecrypt">メッセージの復号化</string>
     <string name="PGPVerify">メッセージを確認</string>

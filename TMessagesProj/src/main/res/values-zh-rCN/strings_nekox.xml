@@ -175,7 +175,6 @@
     <string name="OpenKayChain">OpenPGP 客户端</string>
     <string name="OpenPGPApp">OpenPGP 客户端</string>
     <string name="OpenPGPKey">OpenPGP 密钥</string>
-    <string name="None">无</string>
     <string name="Sign">签名</string>
     <string name="PGPDecrypt">解密消息</string>
     <string name="PGPVerify">验证消息</string>

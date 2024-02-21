@@ -175,7 +175,6 @@
     <string name="OpenKayChain">Klien OpenPGP</string>
     <string name="OpenPGPApp">Penyedia OpenPGP</string>
     <string name="OpenPGPKey">Kunci OpenPGP</string>
-    <string name="None">Kosong</string>
     <string name="Sign">Tanda</string>
     <string name="PGPDecrypt">Dekripsi Pesan</string>
     <string name="PGPVerify">Verifikasi Pesan</string>

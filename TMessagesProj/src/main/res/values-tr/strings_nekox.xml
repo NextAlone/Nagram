@@ -175,7 +175,6 @@
     <string name="OpenKayChain">OpenPGP İstemcisi</string>
     <string name="OpenPGPApp">OpenPGP Sağlayıcısı</string>
     <string name="OpenPGPKey">OpenPGP Anahtarı</string>
-    <string name="None">Yok</string>
     <string name="Sign">İmza</string>
     <string name="PGPDecrypt">Mesajın Şifresini Çöz</string>
     <string name="PGPVerify">Mesajı Doğrula</string>

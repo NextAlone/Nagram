@@ -175,7 +175,6 @@
     <string name="OpenKayChain">OpenPGP Müştəri</string>
     <string name="OpenPGPApp">OpenPGP Təminatçısı</string>
     <string name="OpenPGPKey">OpenPGP açarı</string>
-    <string name="None">Yoxdur</string>
     <string name="Sign">İşarəsi</string>
     <string name="PGPDecrypt">Mesajın şifrəsini açın</string>
     <string name="PGPVerify">Mesajı yoxlayın</string>

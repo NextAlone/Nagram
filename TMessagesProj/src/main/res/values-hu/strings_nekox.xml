@@ -174,7 +174,6 @@
     <string name="OpenKayChain">OpenPGP kliens</string>
     <string name="OpenPGPApp">OpenPGP Szolgáltató</string>
     <string name="OpenPGPKey">OpenPGP kulcs</string>
-    <string name="None">Egyik sem</string>
     <string name="Sign">Jel</string>
     <string name="PGPDecrypt">Az üzenet visszafejtése</string>
     <string name="PGPVerify">Üzenet ellenőrzése</string>

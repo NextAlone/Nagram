@@ -175,7 +175,6 @@
     <string name="OpenKayChain">OpenPGP հաճախորդ</string>
     <string name="OpenPGPApp">OpenPGP մատակարար</string>
     <string name="OpenPGPKey">OpenPGP բանալին</string>
-    <string name="None">Ոչ ոք</string>
     <string name="Sign">Նշան</string>
     <string name="PGPDecrypt">Վերծանել հաղորդագրությունը</string>
     <string name="PGPVerify">Հաստատեք հաղորդագրությունը</string>

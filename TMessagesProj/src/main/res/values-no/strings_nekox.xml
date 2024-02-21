@@ -27,7 +27,6 @@
     <string name="PGPVerify">Bekreft melding</string>
     <string name="PGPDecrypt">Dekrypter melding</string>
     <string name="Sign">Signer</string>
-    <string name="None">Ingen</string>
     <string name="OpenPGPKey">OpenPGP-nøkkel</string>
     <string name="OpenPGPApp">OpenPGP-tilbyder</string>
     <string name="OpenKayChain">OpenPGP-klient</string>
