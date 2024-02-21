@@ -46,7 +46,7 @@
     <string name="AppIconDarkBlue">Azul Oscuro</string>
     <string name="AppIconBlurBlue">Azul desenfocado</string>
     <string name="AutoInsertGIFCaption">Insertar captura automáticamente antes de enviar GIF</string>
-    <string name="DefaultMonoLanguage">Lenguaje de código personalizado por defecto</string>
+    <string name="DefaultMonoLanguage">Personalizar lenguaje de código predeterminado</string>
     <string name="DisableGlobalSearch">Desactivar la búsqueda global</string>
     <string name="InputMessageId">Id del mensaje entrante</string>
     <string name="ToTheMessage">Al mensaje</string>
@@ -70,7 +70,7 @@
     <string name="CustomPoorHint">Piscina por defecto</string>
     <string name="CustomEditedMessage">Palabra personalizada del mensaje editado</string>
     <string name="FakeHighPerformanceDevice">Falsear como dispositivo de alto rendimiento</string>
-    <string name="DisableEmojiDrawLimit">Desactivar el ímite de dibujo de los emojis</string>
+    <string name="DisableEmojiDrawLimit">Deshabilitar límite de dibujado de emojis</string>
     <string name="IconDecoration">Decoración de los iconos</string>
     <string name="NotificationIcon">Icono de la notificación</string>
     <string name="Official">Oficial</string>
@@ -116,7 +116,7 @@
     <string name="ProviderTranSmartTranslate">Traductor TranSmart</string>
     <string name="DisableMarkdown">Desactivar Markdown</string>
     <string name="SendWithMarkdown">Enviar con markdown</string>
-    <string name="DisableClickProfileGalleryView">Desactivar los avatares de flip tocando</string>
+    <string name="DisableClickProfileGalleryView">Deshabilitar cambio de avatares al tocar</string>
     <string name="TipsInfo">¿Quieres seguir nuestro canal de consejos y características?</string>
     <string name="TipsChannel">Canal de Consejos y Características</string>
     <string name="ShowSmallGIF">Mostrar Gif pequeño</string>
