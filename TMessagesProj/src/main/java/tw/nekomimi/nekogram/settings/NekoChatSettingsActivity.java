@@ -95,11 +95,11 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     private final AbstractConfigCell customPoorRow = cellGroup.appendCell(new ConfigCellTextInput(null, NaConfig.INSTANCE.getCustomPoor(), LocaleController.getString(R.string.CustomPoorHint), null,(input) -> input.isEmpty() ? (String) NaConfig.INSTANCE.getCustomPoor().defaultValue : input));
     private final AbstractConfigCell customEditedMessageRow = cellGroup.appendCell(new ConfigCellTextInput(null, NaConfig.INSTANCE.getCustomEditedMessage(), "", null));
     private final AbstractConfigCell showServicesTime = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowServicesTime()));
-    private final AbstractConfigCell combineMessageRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NaConfig.INSTANCE.getCombineMessage(), new String[]{
-            LocaleController.getString("combineMessageEnabledWithReply", R.string.CombineMessageEnabledWithReply),
-            LocaleController.getString("combineMessageEnabled", R.string.CombineMessageEnabled),
-            LocaleController.getString("combineMessageDisabled", R.string.CombineMessageDisabled)
-    }, null));
+//    private final AbstractConfigCell combineMessageRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NaConfig.INSTANCE.getCombineMessage(), new String[]{
+//            LocaleController.getString("combineMessageEnabledWithReply", R.string.CombineMessageEnabledWithReply),
+//            LocaleController.getString("combineMessageEnabled", R.string.CombineMessageEnabled),
+//            LocaleController.getString("combineMessageDisabled", R.string.CombineMessageDisabled)
+//    }, null));
     private final AbstractConfigCell dateOfForwardMsgRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDateOfForwardedMsg()));
     private final AbstractConfigCell showMessageIDRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowMessageID()));
     private final AbstractConfigCell showPremiumStarInChatRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowPremiumStarInChat()));
@@ -110,12 +110,12 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
             null, null,
             (input) -> input.isEmpty() ? (String) NaConfig.INSTANCE.getDefaultMonoLanguage().defaultValue : input));
     private final AbstractConfigCell disableGlobalSearchRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableGlobalSearch()));
-    private final AbstractConfigCell mapPreviewRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.mapPreviewProvider,
-            new String[]{
-                    LocaleController.getString("MapPreviewProviderTelegram", R.string.MapPreviewProviderTelegram),
-                    LocaleController.getString("MapPreviewProviderYandex", R.string.MapPreviewProviderYandex),
-                    LocaleController.getString("MapPreviewProviderNobody", R.string.MapPreviewProviderNobody)
-            }, null));
+//    private final AbstractConfigCell mapPreviewRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.mapPreviewProvider,
+//            new String[]{
+//                    LocaleController.getString("MapPreviewProviderTelegram", R.string.MapPreviewProviderTelegram),
+//                    LocaleController.getString("MapPreviewProviderYandex", R.string.MapPreviewProviderYandex),
+//                    LocaleController.getString("MapPreviewProviderNobody", R.string.MapPreviewProviderNobody)
+//            }, null));
     private final AbstractConfigCell doubleTapActionRow = cellGroup.appendCell(new ConfigCellCustom("DoubleTapAction", CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final AbstractConfigCell autoReplaceRepeatRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getAutoReplaceRepeat()));
     private final AbstractConfigCell textStyleRow = cellGroup.appendCell(new ConfigCellSelectBox("TextStyle", null, null, this::showTextStyleAlert));
@@ -168,13 +168,13 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
 
     // Reaction
     private final AbstractConfigCell headerReaction = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("ReactionSettings", R.string.ReactionSettings)));
-    private final AbstractConfigCell reactionsRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString("DoubleTapAndReactions", R.string.doubleTapAndReactions),
-            NekoConfig.reactions,
-            new String[]{
-                    LocaleController.getString("doubleTapSendReaction", R.string.doubleTapSendReaction),
-                    LocaleController.getString("doubleTapShowReactionsMenu", R.string.doubleTapShowReactionsMenu),
-                    LocaleController.getString("doubleTapDisable", R.string.doubleTapDisable),
-            }, null));
+//    private final AbstractConfigCell reactionsRow = cellGroup.appendCell(new ConfigCellSelectBox(LocaleController.getString("DoubleTapAndReactions", R.string.doubleTapAndReactions),
+//            NekoConfig.reactions,
+//            new String[]{
+//                    LocaleController.getString("doubleTapSendReaction", R.string.doubleTapSendReaction),
+//                    LocaleController.getString("doubleTapShowReactionsMenu", R.string.doubleTapShowReactionsMenu),
+//                    LocaleController.getString("doubleTapDisable", R.string.doubleTapDisable),
+//            }, null));
     private final AbstractConfigCell disableReactionsWhenSelectingRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableReactionsWhenSelecting));
     private final AbstractConfigCell dividerReaction = cellGroup.appendCell(new ConfigCellDivider());
 
