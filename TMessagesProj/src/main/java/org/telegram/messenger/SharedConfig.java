@@ -1428,24 +1428,18 @@ public class SharedConfig {
         LocaleController.resetImperialSystemType();
     }
 
-    public static boolean proxyEnabled;
-
     public static void setProxyEnable(boolean enable) {
         if (enable && currentProxy == null) {
             enable = false;
         }
 
-        proxyEnabled = enable;
-
         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-
         preferences.edit().putBoolean("proxy_enabled", enable).apply();
 
         ProxyInfo finalInfo = currentProxy;
-
+        boolean finalEnable = enable;
         UIUtil.runOnIoDispatcher(() -> {
-
-            if (proxyEnabled) {
+            if (finalEnable) {
                 ConnectionsManager.setProxySettings(true, finalInfo.address, finalInfo.port, finalInfo.username, finalInfo.password, finalInfo.secret);
             } else {
                 ConnectionsManager.setProxySettings(false, "", 0, "", "", "");
@@ -1602,6 +1596,7 @@ public class SharedConfig {
     }
 
     public static boolean isProxyEnabled() {
+        loadProxyList();
         return MessagesController.getGlobalMainSettings().getBoolean("proxy_enabled", false) && currentProxy != null;
     }
 

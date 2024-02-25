@@ -403,9 +403,9 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         items.add(new Item(11, LocaleController.getString("SavedMessages", R.string.SavedMessages), savedIcon));
         items.add(new Item(8, LocaleController.getString("Settings", R.string.Settings), settingsIcon));
         items.add(new Item(10, LocaleController.getString("Calls", R.string.Calls), callsIcon));
-        if (NekoConfig.useProxyItem.Bool() && (!NekoConfig.hideProxyByDefault.Bool() || SharedConfig.proxyEnabled)) {
-            items.add(new CheckItem(13, LocaleController.getString("Proxy", R.string.Proxy), R.drawable.menu_policy, () -> SharedConfig.proxyEnabled, () -> {
-                SharedConfig.setProxyEnable(!SharedConfig.proxyEnabled);
+        if (NekoConfig.useProxyItem.Bool() && (!NekoConfig.hideProxyByDefault.Bool() || SharedConfig.isProxyEnabled())) {
+            items.add(new CheckItem(13, LocaleController.getString("Proxy", R.string.Proxy), R.drawable.menu_policy, SharedConfig::isProxyEnabled, () -> {
+                SharedConfig.setProxyEnable(!SharedConfig.isProxyEnabled());
                 return true;
             }));
         }

@@ -495,10 +495,7 @@ SharedPreferences mainPreferences;
         native_init(currentAccount, version, layer, apiId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, logPath, regId, cFingerprint, installer, packageId, timezoneOffset, userId, userPremium, enablePushConnection, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType(), SharedConfig.measureDevicePerformanceClass());
 
         Utilities.stageQueue.postRunnable(() -> {
-
-            SharedConfig.loadProxyList();
-
-            if (SharedConfig.proxyEnabled && SharedConfig.currentProxy != null) {
+            if (SharedConfig.isProxyEnabled()) {
                 native_setProxySettings(currentAccount, SharedConfig.currentProxy.address, SharedConfig.currentProxy.port, SharedConfig.currentProxy.username, SharedConfig.currentProxy.password, SharedConfig.currentProxy.secret);
             }
             checkConnection();
