@@ -436,6 +436,18 @@ public class SharedConfig {
             } catch (UnsupportedEncodingException ignored) {}
             return url.toString();
         }
+
+        public static ProxyInfo fromUrl(String url) {
+            Uri lnk = Uri.parse(url);
+            if (lnk == null) throw new IllegalArgumentException(url);
+            return new ProxyInfo(
+                    lnk.getQueryParameter("server"),
+                    Utilities.parseInt(lnk.getQueryParameter("port")),
+                    lnk.getQueryParameter("user"),
+                    lnk.getQueryParameter("pass"),
+                    lnk.getQueryParameter("secret")
+            );
+        }
     }
 
     public static LinkedList<ProxyInfo> proxyList = new LinkedList<>();

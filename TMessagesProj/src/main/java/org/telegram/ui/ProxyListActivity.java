@@ -67,7 +67,12 @@ import org.telegram.ui.Components.SlideChooseView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeSet;
+
+import tw.nekomimi.nekogram.utils.AlertUtil;
+import tw.nekomimi.nekogram.utils.ProxyUtil;
 
 public class ProxyListActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     private final static boolean IS_PROXY_ROTATION_AVAILABLE = true;
@@ -107,6 +112,9 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     private List<SharedConfig.ProxyInfo> selectedItems = new ArrayList<>();
     private List<SharedConfig.ProxyInfo> proxyList = new ArrayList<>();
     private boolean wasCheckedAllList;
+
+    // na: action bar menu
+    private ActionBarMenuItem otherItem;
 
     public class TextDetailProxyCell extends FrameLayout {
 
@@ -353,6 +361,12 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.didUpdateConnectionState);
     }
 
+    private final static int na_menu_other = 1001;
+    private final static int na_menu_add_input_telegram = 1002;
+    private final static int na_menu_add_import_from_clipboard = 1003;
+    private final static int na_menu_retest_ping = 1004;
+    private final static int na_menu_delete_all = 1005;
+
     @Override
     public View createView(Context context) {
         actionBar.setBackButtonDrawable(new BackDrawable(false));
@@ -369,6 +383,32 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                     finishFragment();
                 }
             }
+        });
+
+        // na: action bar menu
+        ActionBarMenu menu = actionBar.createMenu();
+        otherItem = menu.addItem(na_menu_other, R.drawable.ic_ab_other);
+        otherItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));
+        otherItem.addSubItem(na_menu_add_input_telegram, LocaleController.getString("AddProxyTelegram", R.string.AddProxyTelegram)).setOnClickListener((v) -> presentFragment(new ProxySettingsActivity()));
+        otherItem.addSubItem(na_menu_add_import_from_clipboard, LocaleController.getString("ImportProxyFromClipboard", R.string.ImportProxyFromClipboard)).setOnClickListener((v) -> ProxyUtil.importFromClipboard(getParentActivity()));
+        otherItem.addSubItem(na_menu_retest_ping, LocaleController.getString("RetestPing", R.string.RetestPing)).setOnClickListener((v) -> {
+            checkProxyList(true);
+            for (int a = proxyStartRow; a < proxyEndRow; a++) {
+                RecyclerListView.Holder holder = (RecyclerListView.Holder) listView.findViewHolderForAdapterPosition(a);
+                if (holder != null) {
+                    TextDetailProxyCell cell = (TextDetailProxyCell) holder.itemView;
+                    cell.updateStatus();
+                }
+            }
+        });
+        otherItem.addSubItem(na_menu_delete_all, LocaleController.getString("DeleteAllServer", R.string.DeleteAllServer)).setOnClickListener((v) -> {
+            AlertUtil.showConfirm(getParentActivity(),
+                    LocaleController.getString("DeleteAllServer", R.string.DeleteAllServer),
+                    R.drawable.baseline_delete_24, LocaleController.getString("Delete", R.string.Delete),
+                    true, () -> {
+                        SharedConfig.deleteAllProxy();
+                        updateRows(true);
+                    });
         });
 
         listAdapter = new ListAdapter(context);
@@ -716,10 +756,16 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     }
 
     private void checkProxyList() {
+        checkProxyList(false);
+    }
+
+    private void checkProxyList(boolean force) {
         for (int a = 0, count = proxyList.size(); a < count; a++) {
             final SharedConfig.ProxyInfo proxyInfo = proxyList.get(a);
             if (proxyInfo.checking || SystemClock.elapsedRealtime() - proxyInfo.availableCheckTime < 2 * 60 * 1000) {
-                continue;
+                if (!force) {
+                    continue;
+                }
             }
             proxyInfo.checking = true;
             proxyInfo.proxyCheckPingId = ConnectionsManager.getInstance(currentAccount).checkProxy(proxyInfo.address, proxyInfo.port, proxyInfo.username, proxyInfo.password, proxyInfo.secret, time -> AndroidUtilities.runOnUIThread(() -> {

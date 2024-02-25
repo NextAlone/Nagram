@@ -5,6 +5,7 @@ package tw.nekomimi.nekogram.utils
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.pm.PackageManager
@@ -17,6 +18,7 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.os.Build
 import android.os.Environment
+import android.util.Base64
 import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
@@ -304,4 +306,92 @@ object ProxyUtil {
 
     }
 
+    @JvmStatic
+    fun importFromClipboard(ctx: Activity) {
+
+        val text = (ApplicationLoader.applicationContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip?.getItemAt(0)?.text?.toString()
+
+        val proxies = mutableListOf<SharedConfig.ProxyInfo>()
+
+        var error = false
+
+        text?.trim()?.split('\n')?.map { it.split(" ") }?.forEach {
+
+            it.forEach { line ->
+
+                if (line.startsWith("tg://proxy") ||
+                    line.startsWith("tg://socks") ||
+                    line.startsWith("https://t.me/proxy") ||
+                    line.startsWith("https://t.me/socks")) {
+
+                    runCatching { proxies.add(SharedConfig.ProxyInfo.fromUrl(line)) }.onFailure {
+
+                        error = true
+
+                        showToast(LocaleController.getString("BrokenLink", R.string.BrokenLink) + ": ${it.message ?: it.javaClass.simpleName}")
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        runCatching {
+
+            if (proxies.isNullOrEmpty() && !error) {
+
+                String(Base64.decode(text, Base64.NO_PADDING)).trim().split('\n').map { it.split(" ") }.forEach { str ->
+
+                    str.forEach { line ->
+
+                        if (line.startsWith("tg://proxy") ||
+                            line.startsWith("tg://socks") ||
+                            line.startsWith("https://t.me/proxy") ||
+                            line.startsWith("https://t.me/socks")) {
+
+                            runCatching { proxies.add(SharedConfig.ProxyInfo.fromUrl(line)) }.onFailure {
+
+                                error = true
+
+                                showToast(LocaleController.getString("BrokenLink", R.string.BrokenLink) + ": ${it.message ?: it.javaClass.simpleName}")
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        if (proxies.isNullOrEmpty()) {
+
+            if (!error) showToast(LocaleController.getString("BrokenLink", R.string.BrokenLink))
+
+            return
+
+        } else if (!error) {
+
+            AlertUtil.showSimpleAlert(ctx, LocaleController.getString("ImportedProxies", R.string.ImportedProxies) + "\n\n" + proxies.joinToString("\n") { it.address })
+
+        }
+
+        proxies.forEach {
+
+            SharedConfig.addProxy(it)
+
+        }
+
+        UIUtil.runOnUIThread {
+
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged)
+
+        }
+
+    }
 }
