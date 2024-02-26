@@ -96,71 +96,63 @@ Nagram is a third-party Telegram client based on [NekoX](https://github.com/Neko
 
 Telegram API manuals: <https://core.telegram.org/api>
 
-MTproto protocol manuals: <https://core.telegram.org/mtproto>
+MTProto protocol manuals: <https://core.telegram.org/mtproto>
 
-## Compilation Guide(By NekoX-dev)
+## Compilation Guide
 
-**NOTE: Building on Windows is, unfortunately, not supported.
-Consider using a Linux VM or dual booting.**
+**NOTE: For Windows users, please consider using a Linux VM (such as WSL2) or dual booting.**
 
-**Important:**
+Environment:
 
-1. Checkout all submodules
+- A Linux distribution based on Debian (e.g. Ubuntu)
 
-```
-git submodule update --init --recursive
-```
+- Native tools: `gcc` `go` `make` `cmake` `ninja` `yasm`
+  
+  ```shell
+  sudo apt install gcc golang make cmake ninja-build yasm
+  ```
+- Android SDK: `build-tools;33.0.0` `platforms;android-33` `ndk;21.4.7075529` `cmake;3.18.1` (the default location is **$HOME/Android/SDK**, otherwise you need to specify **$ANDROID_HOME** for it)
 
-2. Install Android SDK and NDK (default location is $HOME/Android/SDK, otherwise you need to specify $ANDROID_HOME for it)
+  It is recommended to use [Android Studio](https://developer.android.com/studio) to install, but you can also use `sdkmanager`:
 
-It is recommended to use [AndroidStudio](https://developer.android.com/studio) to install.
+  ```shell
+  sudo apt install sdkmanager
+  sdkmanager --sdk_root $HOME/Android/SDK --install "build-tools;33.0.0" "platforms;android-33" "ndk;21.4.7075529" "cmake;3.18.1"
+  ```
 
-3. Install golang and yasm
+Build: 
 
-```shell
-apt install -y golang-1.16 yasm
-```
+1. Checkout submodules
 
-4. Install Rust and its stdlib for Android ABIs, and add environment variables for it.
+   ```shell
+   git submodule update --init --recursive
+   ```
 
-It is recommended to use the official script, otherwise you may not find rustup.
+2. Build native dependencies:
+   ```shell
+   ./run init libs
+   ```
 
-```shell
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain none -y
-echo "source \$HOME/.cargo/env" >> $HOME/.bashrc && source $HOME/.cargo/env
+3. Build external libraries and native code: 
+   ```shell
+   ./run libs native
+   ```
 
-rustup install $(cat ss-rust/src/main/rust/shadowsocks-rust/rust-toolchain)
-rustup default $(cat ss-rust/src/main/rust/shadowsocks-rust/rust-toolchain)
-rustup target install armv7-linux-androideabi aarch64-linux-android i686-linux-android x86_64-linux-android
-```
+4. Fill out `TELEGRAM_APP_ID` and `TELEGRAM_APP_HASH` in **local.properties** (from [Telegram Developer](https://my.telegram.org/auth))
 
-This step can be skipped if you want to build a `mini` release.
+5. Replace **TMessagesProj/google-services.json** if you want FCM to work.
 
-5. Build native dependencies: `./run init libs`
-6. Build external libraries and native code:
+6. Replace **release.keystore** with yours and fill out `ALIAS_NAME`, `KEYSTORE_PASS` and `ALIAS_PASS` in **local.properties**.
 
-For full release:
+7. Build with Gradle:
 
-uncomment lines in settings.gradle  
-
-`./run libs update`
-
-For mini release:
-
-```
-./run libs v2ray
-./run libs native # libtmessages.so
-```
-
-1. Fill out `TELEGRAM_APP_ID` and `TELEGRAM_APP_HASH` in `local.properties`
-2. Replace TMessagesProj/google-services.json if you want fcm to work.
-3. Replace release.keystore with yours and fill out `ALIAS_NAME`, `KEYSTORE_PASS` and `ALIAS_PASS` in `local.properties` if you want a custom sign key.
-
-`./gradlew assemble<Full/Mini><Debug/Release/ReleaseNoGcm>`
+   ```shell
+   ./gradlew assembleMini<Debug/Release/ReleaseNoGcm>
+   ```
 
 ----
 
-## Compilation with Github Action
+## Compilation with GitHub Action
 
 1. Create your own `release.keystore` to replace `TMessagesProj/release.keystore`.
 
