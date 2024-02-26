@@ -147,7 +147,7 @@ Build:
 7. Build with Gradle:
 
    ```shell
-   ./gradlew assembleMini<Release/ReleaseNoGcm>
+   ./gradlew assembleMini<Debug/Release/ReleaseNoGcm>
    ```
 
 ----

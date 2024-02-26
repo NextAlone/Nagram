@@ -417,6 +417,12 @@ android {
         resources {
             excludes += ['/fabric/**', '/META-INF/*.version', '/META-INF/*.kotlin_module', '/META-INF/native-image/**', '/builddef.lst', '/*.txt', '/DebugProbesKt.bin', '/okhttp3/internal/publicsuffix/NOTICE']
         }
+
+        def lib = "libtmessages.47.so"
+        pickFirst "lib/x86/$lib"
+        pickFirst "lib/x86_64/$lib"
+        pickFirst "lib/armeabi-v7a/$lib"
+        pickFirst "lib/arm64-v8a/$lib"
     }
     namespace "org.telegram.messenger"
     lint {
