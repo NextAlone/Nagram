@@ -2461,7 +2461,8 @@ public class AndroidUtilities {
 
     public static boolean isSmallTablet() {
         float minSide = Math.min(displaySize.x, displaySize.y) / density;
-        return minSide <= 690;
+//        return minSide <= 690;
+        return minSide <= 840;
     }
 
     public static int getMinTabletSide() {
