@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.Gravity;
@@ -17,6 +19,8 @@ import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
@@ -31,6 +35,7 @@ import com.google.gson.JsonSerializer;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildConfig;
+import org.telegram.messenger.CodeHighlighting;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
@@ -50,12 +55,14 @@ import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.ProfileActivity;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
@@ -90,6 +97,7 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
     private int dcRow;
     private int buttonsRow;
     private int emptyRow;
+    private int jsonTextRow;
     private int exportRow;
     private int endRow;
 
@@ -207,7 +215,7 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
             if (position == exportRow) {
                 try {
                     AndroidUtilities.addToClipboard(gson.toJson(messageObject.messageOwner));
-                    copyTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
+                    BulletinFactory.of(this).createCopyBulletin(LocaleController.formatString("TextCopied", R.string.TextCopied)).show();
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
@@ -215,7 +223,7 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                 TextDetailSettingsCell textCell = (TextDetailSettingsCell) view;
                 try {
                     AndroidUtilities.addToClipboard(textCell.getValueTextView().getText());
-                    copyTooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
+                    BulletinFactory.of(this).createCopyBulletin(LocaleController.formatString("TextCopied", R.string.TextCopied)).show();
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
@@ -300,6 +308,7 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
         }
         buttonsRow = messageObject.messageOwner.reply_markup instanceof TLRPC.TL_replyInlineMarkup ? rowCount++ : -1;
         emptyRow = rowCount++;
+        jsonTextRow = rowCount++;
         exportRow = rowCount++;
         endRow = rowCount++;
         if (listAdapter != null) {
@@ -479,6 +488,27 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                         textCell.setTextAndValue("Scheduled", "Yes", divider);
                     } else if (position == buttonsRow) {
                         textCell.setTextAndValue("Buttons", gson.toJson(messageObject.messageOwner.reply_markup), divider);
+                    } else if (position == jsonTextRow) {
+                        try {
+                            ObjectMapper mapper = new ObjectMapper();
+                            mapper.enable(SerializationFeature.INDENT_OUTPUT);
+                            String jsonString = mapper.writeValueAsString(messageObject.messageOwner);
+
+                            final SpannableString[] sb = new SpannableString[1];
+                            new CountDownTimer(300, 100) {
+                                @Override
+                                public void onTick(long millisUntilFinished) {
+                                    sb[0] = CodeHighlighting.getHighlighted(jsonString, "json");
+                                }
+
+                                @Override
+                                public void onFinish() {
+                                    textCell.setTextAndValue("JSON", sb[0], divider);
+                                }
+                            }.start();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 }
