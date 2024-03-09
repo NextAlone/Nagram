@@ -125,4 +125,5 @@
     <string name="DisableDialogsFloatingButton">禁用主页浮动按钮</string>
     <string name="DisableFlagSecure">Disable Flag Secure</string>
     <string name="CenterActionBarTitle">标题居中</string>
+    <string name="ShowQuickReplyInBotCommands">在输入框中显示快速回复按钮</string>
 </resources>

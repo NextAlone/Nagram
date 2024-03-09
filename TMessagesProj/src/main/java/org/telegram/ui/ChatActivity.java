@@ -2527,7 +2527,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             hasQuickReplies = false;
             if (currentUser != null && chatMode == 0 && !currentUser.bot) {
                 QuickRepliesController.getInstance(currentAccount).load();
-//                hasQuickReplies = QuickRepliesController.getInstance(currentAccount).hasReplies();
+                if (NaConfig.INSTANCE.getShowQuickReplyInBotCommands().Bool()) {
+                    hasQuickReplies = QuickRepliesController.getInstance(currentAccount).hasReplies();
+                }
             }
         } else if (encId != 0) {
             currentEncryptedChat = getMessagesController().getEncryptedChat(encId);

@@ -125,4 +125,5 @@
     <string name="DisableDialogsFloatingButton">Disable Dialogs Floating Button</string>
     <string name="DisableFlagSecure">Disable Flag Secure</string>
     <string name="CenterActionBarTitle">Center title in action bar</string>
+    <string name="ShowQuickReplyInBotCommands">Show Quick Reply In Bot Commands</string>
 </resources>

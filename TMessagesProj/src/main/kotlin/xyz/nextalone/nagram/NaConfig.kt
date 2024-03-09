@@ -542,6 +542,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val showQuickReplyInBotCommands =
+        addConfig(
+            "ShowQuickReplyInBotCommands",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,
