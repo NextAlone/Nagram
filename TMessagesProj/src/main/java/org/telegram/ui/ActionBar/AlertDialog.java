@@ -65,6 +65,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.Utilities;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.AnimatedFloat;
 import org.telegram.ui.Components.EffectsTextView;
@@ -116,6 +117,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
 
     private OnClickListener onClickListener;
     private OnDismissListener onDismissListener;
+    private Utilities.Callback<Runnable> overridenDissmissListener;
 
     private CharSequence[] items;
     private int[] itemIcons;
@@ -1326,6 +1328,12 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
 
     @Override
     public void dismiss() {
+        if (overridenDissmissListener != null) {
+            Utilities.Callback<Runnable> listener = overridenDissmissListener;
+            overridenDissmissListener = null;
+            listener.run(this::dismiss);
+            return;
+        }
         try {
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
         } catch (Throwable ignore) {}
@@ -1725,6 +1733,11 @@ public class AlertDialog extends Dialog implements Drawable.Callback, Notificati
 
         public Builder setOnPreDismissListener(OnDismissListener onDismissListener) {
             alertDialog.onDismissListener = onDismissListener;
+            return this;
+        }
+
+        public Builder overrideDismissListener(Utilities.Callback<Runnable> overridenDissmissListener) {
+            alertDialog.overridenDissmissListener = overridenDissmissListener;
             return this;
         }
 

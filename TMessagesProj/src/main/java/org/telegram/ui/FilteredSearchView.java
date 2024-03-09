@@ -52,6 +52,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Adapters.FiltersView;
+import org.telegram.ui.Business.QuickRepliesController;
 import org.telegram.ui.Cells.ChatActionCell;
 import org.telegram.ui.Cells.ContextLinkCell;
 import org.telegram.ui.Cells.DialogCell;
@@ -437,6 +438,10 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
     public static CharSequence createFromInfoString(MessageObject messageObject, boolean includeChat, int arrowType, TextPaint textPaint) {
         if (messageObject == null || messageObject.messageOwner == null) {
             return "";
+        }
+        if (messageObject.isQuickReply()) {
+            QuickRepliesController.QuickReply reply = QuickRepliesController.getInstance(messageObject.currentAccount).findReply(messageObject.getQuickReplyId());
+            return reply == null ? "" : reply.name;
         }
         if (arrowSpan[arrowType] == null) {
             arrowSpan[arrowType] = new SpannableStringBuilder(">");

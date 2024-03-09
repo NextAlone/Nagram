@@ -755,6 +755,8 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
         avatarContainer = new ChatAvatarContainer(context, this, false);
         avatarContainer.getAvatarImageView().setRoundRadius(AndroidUtilities.dp(16));
         avatarContainer.setOccupyStatusBar(!AndroidUtilities.isTablet() && !inPreviewMode);
+        avatarContainer.allowDrawStories = getDialogId() < 0;
+        avatarContainer.setClipChildren(false);
         actionBar.addView(avatarContainer, 0, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT, 56, 0, 86, 0));
 
         avatarContainer.getAvatarImageView().setOnClickListener(new View.OnClickListener() {
@@ -2552,6 +2554,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
     @Override
     public boolean onFragmentCreate() {
         getMessagesController().loadFullChat(chatId, 0, true);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.storiesUpdated);
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.chatWasBoostedByUser);
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.chatInfoDidLoad);
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.topicsDidLoaded);
@@ -2590,6 +2593,7 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
     @Override
     public void onFragmentDestroy() {
         notificationsLocker.unlock();
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.storiesUpdated);
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.chatWasBoostedByUser);
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.chatInfoDidLoad);
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.topicsDidLoaded);
@@ -2680,6 +2684,8 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
                     pendingRequestsDelegate.setChatInfo(chatFull, true);
                 }
             }
+        } else if (id == NotificationCenter.storiesUpdated) {
+            updateChatInfo();
         } else if (id == NotificationCenter.chatWasBoostedByUser) {
             if (chatId == -(long) args[2]) {
                 boostsStatus = (TL_stories.TL_premium_boostsStatus) args[0];

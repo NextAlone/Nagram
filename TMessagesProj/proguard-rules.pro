@@ -18,12 +18,10 @@
 -keep class org.telegram.ui.** { *; }
 -keep class org.telegram.tgnet.ConnectionsManager { *; }
 -keep class org.telegram.tgnet.NativeByteBuffer { *; }
--keep class org.telegram.tgnet.RequestDelegateInternal { *; }
 -keep class org.telegram.tgnet.RequestTimeDelegate { *; }
 -keep class org.telegram.tgnet.RequestDelegate { *; }
 -keep class org.telegram.tgnet.QuickAckDelegate { *; }
 -keep class org.telegram.tgnet.WriteToSocketDelegate { *; }
--keep class com.v2ray.ang.dto.** { *; }
 -keep class org.openintents.openpgp.** { *; }
 
 # -keep class io.github.trojan_gfw.** { *; }

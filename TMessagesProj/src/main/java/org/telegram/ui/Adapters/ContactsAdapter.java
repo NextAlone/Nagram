@@ -61,7 +61,7 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
     private int onlyUsers;
     private boolean needPhonebook;
     private LongSparseArray<TLRPC.User> ignoreUsers;
-    private LongSparseArray<?> checkedMap;
+    private LongSparseArray<TLRPC.User> selectedContacts;
     private ArrayList<TLRPC.TL_contact> onlineContacts;
     private boolean scrolling;
     private boolean isAdmin;
@@ -76,11 +76,12 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
     DialogStoriesCell dialogStoriesCell;
     BaseFragment fragment;
 
-    public ContactsAdapter(Context context, BaseFragment fragment, int onlyUsersType, boolean showPhoneBook, LongSparseArray<TLRPC.User> usersToIgnore, int flags, boolean gps) {
+    public ContactsAdapter(Context context, BaseFragment fragment, int onlyUsersType, boolean showPhoneBook, LongSparseArray<TLRPC.User> usersToIgnore, LongSparseArray<TLRPC.User> selectedContacts, int flags, boolean gps) {
         mContext = context;
         onlyUsers = onlyUsersType;
         needPhonebook = showPhoneBook;
         ignoreUsers = usersToIgnore;
+        this.selectedContacts = selectedContacts;
         isAdmin = flags != 0;
         isChannel = flags == 2;
         hasGps = gps;
@@ -176,10 +177,6 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
                 Exception e) {
             FileLog.e(e);
         }
-    }
-
-    public void setCheckedMap(LongSparseArray<?> map) {
-        checkedMap = map;
     }
 
     public void setIsScrolling(boolean value) {
@@ -561,9 +558,7 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
                 }
                 TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(arr.get(position).user_id);
                 userCell.setData(user, null, null, 0);
-                if (checkedMap != null) {
-                    userCell.setChecked(checkedMap.indexOfKey(user.id) >= 0, !scrolling);
-                }
+                userCell.setChecked(selectedContacts.indexOfKey(user.id) >= 0, false);
                 if (ignoreUsers != null) {
                     if (ignoreUsers.indexOfKey(user.id) >= 0) {
                         userCell.setAlpha(0.5f);

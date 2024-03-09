@@ -6,9 +6,11 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.location.Location;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.core.util.Consumer;
 
@@ -537,6 +539,8 @@ public class GoogleMapsProvider implements IMapsProvider {
         private ITouchInterceptor interceptInterceptor;
         private Runnable onLayoutListener;
 
+        private GLSurfaceView glSurfaceView;
+
         private GoogleMapView(Context context) {
             mapView = new MapView(context) {
                 @Override
@@ -591,7 +595,26 @@ public class GoogleMapsProvider implements IMapsProvider {
                 if (NekoConfig.fixDriftingForGoogleMaps())
                     googleMap.setLocationSource(new NekoLocationSource(mapView.getContext()));
                 callback.accept(new GoogleMapImpl(googleMap));
+                findGlSurfaceView(mapView);
             });
+        }
+
+        @Override
+        public GLSurfaceView getGlSurfaceView() {
+            return glSurfaceView;
+        }
+
+        private void findGlSurfaceView(View v) {
+            if (v instanceof GLSurfaceView) {
+                glSurfaceView = (GLSurfaceView) v;
+            }
+
+            if (v instanceof ViewGroup) {
+                ViewGroup vg = (ViewGroup) v;
+                for (int i = 0; i < vg.getChildCount(); i++) {
+                    findGlSurfaceView(vg.getChildAt(i));
+                }
+            }
         }
 
         @Override
