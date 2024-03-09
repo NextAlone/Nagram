@@ -2765,7 +2765,15 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                                             FileLog.e(e);
                                         }
                                     } else if (url.startsWith("tg:upgrade") || url.startsWith("tg://upgrade") || url.startsWith("tg:update") || url.startsWith("tg://update")) {
-                                        checkAppUpdate(true, null);
+                                        boolean updateAlways = false;
+                                        try {
+                                            url = url.replace("tg:upgrade", "tg://telegram.org").replace("tg://upgrade", "tg://telegram.org").replace("tg:update", "tg://telegram.org").replace("tg://update", "tg://telegram.org");
+                                            data = Uri.parse(url);
+                                            updateAlways = data.getQueryParameter("always") != null && "true".equals(data.getQueryParameter("always"));
+                                        } catch (Exception e) {
+                                            FileLog.e(e);
+                                        }
+                                        checkAppUpdate(true, null, updateAlways);
                                     } else if (url.startsWith("tg:neko") || url.startsWith("tg://neko")) {
                                         url = url.replace("tg:neko", "tg://t.me/nasettings").replace("tg://neko", "tg://t.me/nasettings");
                                         data = Uri.parse(url);
@@ -5473,6 +5481,10 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     }
 
     public void checkAppUpdate(boolean force, Browser.Progress progress) {
+        checkAppUpdate(force, progress, false);
+    }
+
+    public void checkAppUpdate(boolean force, Browser.Progress progress, boolean updateAlways) {
 //        if (BuildVars.isFdroid || BuildVars.isPlay) return;
 //        if (NekoXConfig.autoUpdateReleaseChannel == 0) return;
 //        if (!force && System.currentTimeMillis() < NekoConfig.lastUpdateCheckTime.Long() + 48 * 60 * 60 * 1000L) return;
@@ -5542,7 +5554,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     progress.end();
                 }
             });
-        });
+        }, updateAlways);
         if (progress != null) {
             progress.init();
         }
