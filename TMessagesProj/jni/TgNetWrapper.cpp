@@ -554,9 +554,11 @@ inline int registerNativeMethods(JNIEnv *env, const char *className, JNINativeMe
 extern "C" int registerNativeTgNetFunctions(JavaVM *vm, JNIEnv *env) {
     java = vm;
 
-    if (!registerNativeMethods(env, NativeByteBufferClassPathName, NativeByteBufferMethods,
-                               sizeof(NativeByteBufferMethods) /
-                               sizeof(NativeByteBufferMethods[0]))) {
+    if (!registerNativeMethods(env, NativeByteBufferClassPathName, NativeByteBufferMethods, sizeof(NativeByteBufferMethods) / sizeof(NativeByteBufferMethods[0]))) {
+        return JNI_FALSE;
+    }
+
+    if (!registerNativeMethods(env, ConnectionsManagerClassPathName, ConnectionsManagerMethods, sizeof(ConnectionsManagerMethods) / sizeof(ConnectionsManagerMethods[0]))) {
         return JNI_FALSE;
     }
 

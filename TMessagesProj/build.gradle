@@ -359,6 +359,7 @@ dependencies {
     compileOnly "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
     compileOnly "com.google.android.play:core:$playCoreVersion"
 
+    implementation 'com.google.android.gms:play-services-vision:20.1.3'
     debugImplementation 'com.google.android.gms:play-services-maps:18.1.0'
     debugImplementation 'com.google.android.gms:play-services-location:20.0.0'
     releaseImplementation 'com.google.android.gms:play-services-maps:18.1.0'
@@ -405,7 +406,7 @@ android {
             excludes += ['/fabric/**', '/META-INF/*.version', '/META-INF/*.kotlin_module', '/META-INF/native-image/**', '/builddef.lst', '/*.txt', '/DebugProbesKt.bin', '/okhttp3/internal/publicsuffix/NOTICE']
         }
 
-        def lib = "libtmessages.47.so"
+        def lib = "libtmessages.*.so"
         pickFirst "lib/x86/$lib"
         pickFirst "lib/x86_64/$lib"
         pickFirst "lib/armeabi-v7a/$lib"

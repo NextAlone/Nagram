@@ -8725,9 +8725,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
                 infoStartRow = rowCount;
                 infoHeaderRow = rowCount++;
-                if (username != null) {
-                    usernameRow = rowCount++;
-                }
                 if (user != null && !user.restriction_reason.isEmpty()) {
                     restrictionReasonRow = rowCount++;
                 }

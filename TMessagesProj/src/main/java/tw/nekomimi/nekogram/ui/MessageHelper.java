@@ -252,7 +252,7 @@ public class MessageHelper extends BaseController {
                     if (progress != null) uDismiss(progress);
                     return;
                 }
-                AndroidUtilities.runOnUIThread(() -> getMessagesController().deleteMessages(ids, random_ids, null, dialog_id, true, false));
+                AndroidUtilities.runOnUIThread(() -> getMessagesController().deleteMessages(ids, random_ids, null, dialog_id, 0, true, 0));
                 if (progress != null) uUpdate(progress, ">> " + indey);
                 deleteUserChannelHistoryWithSearch(progress, dialog_id, user, lastMessageId, indey);
             } else {
@@ -324,7 +324,7 @@ public class MessageHelper extends BaseController {
                             deleteUserChannelHistory(chat, userId, 0);
                         }
                         if (!msgIds.isEmpty()) {
-                            getMessagesController().deleteMessages(msgIds, random_ids, null, dialog_id, true, false);
+                            getMessagesController().deleteMessages(msgIds, random_ids, null, dialog_id, 0, true, 0);
                         }
                         deleteChannelHistory(dialog_id, chat, lastMessageId);
 
@@ -671,7 +671,7 @@ public class MessageHelper extends BaseController {
                 }
                 Runnable deleteAction = () -> {
                     for (ArrayList<Integer> list : lists) {
-                        getMessagesController().deleteMessages(list, null, null, dialogId, true, false);
+                        getMessagesController().deleteMessages(list, null, null, dialogId, 0, true, 0);
                     }
                 };
                 AndroidUtilities.runOnUIThread(callback != null ? () -> callback.run(messageIds.size(), deleteAction) : deleteAction);

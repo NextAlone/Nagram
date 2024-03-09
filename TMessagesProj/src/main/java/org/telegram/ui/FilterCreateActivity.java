@@ -1501,6 +1501,7 @@ public class FilterCreateActivity extends BaseFragment {
                 case VIEW_TYPE_EDIT: {
                     PollEditTextCell cell = (PollEditTextCell) holder.itemView;
                     cell.setIcon(FolderIconHelper.getTabIcon(newFilterEmoticon), newFilterEmoticon);
+                    break;
                 }
                 case VIEW_TYPE_HEADER_COLOR_PREVIEW: {
                     folderTagsHeader = (HeaderCellColorPreview) holder.itemView;
