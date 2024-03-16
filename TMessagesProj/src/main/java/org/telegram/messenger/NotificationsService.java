@@ -20,13 +20,15 @@ import android.os.IBinder;
 
 import androidx.core.app.NotificationCompat;
 
+import xyz.nextalone.nagram.NaConfig;
+
 public class NotificationsService extends Service {
 
     @Override
     public void onCreate() {
         super.onCreate();
         ApplicationLoader.postInitApplication();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && NaConfig.INSTANCE.getPushServiceTypeInAppDialog().Bool()) {
             String CHANNEL_ID = "push_service_channel";
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, LocaleController.getString("NekoXPushService", R.string.NekoXPushService), NotificationManager.IMPORTANCE_DEFAULT);
