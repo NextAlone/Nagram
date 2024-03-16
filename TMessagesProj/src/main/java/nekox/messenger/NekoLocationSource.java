@@ -96,7 +96,7 @@ public class NekoLocationSource implements LocationSource {
         private static final long serialVersionUID = 1L;
 
         @Override
-        protected boolean removeEldestEntry(final java.util.Map.Entry<K, V> eldest) {
+        protected boolean removeEldestEntry(final Entry<K, V> eldest) {
             return (size() > KMaxEntries);
         }
     }

@@ -1,0 +1,2 @@
+git+https://github.com/KurimuzonAkuma/pyrogram
+PyroTgCrypto==1.2.6a0

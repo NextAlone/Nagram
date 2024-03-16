@@ -7,6 +7,13 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.FileLog;
+import org.telegram.messenger.PushListenerController;
+import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.Utilities;
+
 public class GooglePushListenerServiceProvider implements PushListenerController.IPushListenerServiceProvider {
 
     private Boolean hasServices;

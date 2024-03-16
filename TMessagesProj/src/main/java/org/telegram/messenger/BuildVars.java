@@ -36,13 +36,6 @@ public class BuildVars {
     public static int TGX_APP_ID = 21724;
     public static String TGX_APP_HASH = "3e0cb5efcd52300aec5994fdfc5bdc16";
 
-    public static boolean isUnknown = !BuildConfig.BUILD_TYPE.startsWith("release");
-    public static boolean isPlay = BuildConfig.FLAVOR.endsWith("Play");
-    public static boolean isFdroid = BuildConfig.BUILD_TYPE.toLowerCase().contains("fdroid");
-    public static boolean isMini = !BuildConfig.FLAVOR.startsWith("full");
-    public static boolean isGServicesCompiled = BuildConfig.BUILD_TYPE.equals("debug") || BuildConfig.BUILD_TYPE.equals("release");
-    public static boolean isNoGCM = BuildConfig.IS_NO_GCM == 1;
-
     static {
 
         try {

@@ -6,10 +6,10 @@ buildscript {
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.1'
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21'
-        classpath 'com.google.gms:google-services:4.3.14'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.2'
+        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0'
+        classpath 'com.google.gms:google-services:4.4.1'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.9'
         classpath 'gradle.plugin.org.mozilla.rust-android-gradle:plugin:0.9.0'
         //noinspection GradleDependency
         classpath "com.github.triplet.gradle:play-publisher:3.6.0"

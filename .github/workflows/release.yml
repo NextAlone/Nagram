@@ -178,13 +178,6 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - native
-    strategy:
-      matrix:
-        flavor:
-#          - FullRelease
-          - MiniRelease
-#          - FullReleaseNoGcm
-          - MiniReleaseNoGcm
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -229,14 +222,14 @@ jobs:
       - name: Release Build
         run: |
           export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
-          ./gradlew TMessagesProj:assemble${{ matrix.flavor }}
+          ./gradlew TMessagesProj:assembleRelease
 
           APK=$(find TMessagesProj/build/outputs/apk -name '*arm64-v8a*.apk')
           APK=$(dirname $APK)
           echo "APK=$APK" >> $GITHUB_ENV
       - uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.flavor }}
+          name: Release
           path: ${{ env.APK }}
   upload:
     name: Upload release
@@ -244,81 +237,26 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - build
-      - telegram-bot-api
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Donwload Artifacts
         uses: actions/download-artifact@v2
         with:
           path: artifacts
-      - name: Download Telegram Bot API Binary
-        uses: actions/download-artifact@master
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          name: telegram-bot-api-binary
-          path: .
+          python-version: 3.12
       - name: Send to Telegram
         run: |
-          chmod +x telegram-bot-api-binary
-          function start() {
-            ./telegram-bot-api-binary --api-id=11535358 --api-hash=33d372962fadb01df47e6ceed4e33cd6 --local 2>&1 > /dev/null &
-          }
-          start
-          curl http://127.0.0.1:8081/ || start
-          curl http://127.0.0.1:8081/ || start
-          curl http://127.0.0.1:8081/ || start
           # send release via telegram bot api
           export mini64=$(find artifacts -name "*arm64-v8a.apk")
           export mini32=$(find artifacts -name "*armeabi-v7a.apk")
-          #          export full64=$(find artifacts -name "*full-arm64-v8a.apk")
-          #          export full32=$(find artifacts -name "*full-armeabi-v7a.apk")
-          export mini64nogcm=$(find artifacts -name "*arm64-v8aNoGcm.apk")
-          export mini32nogcm=$(find artifacts -name "*armeabi-v7aNoGcm.apk")
-          #          export full64nogcm=$(find artifacts -name "*full-arm64-v8aNoGcm.apk")
-          #          export full32nogcm=$(find artifacts -name "*full-armeabi-v7aNoGcm.apk")
 
           echo $mini64
           echo $mini32
-          #          echo $full64
-          #          echo $full32
-          echo $mini64nogcm
-          echo $mini32nogcm
-          #          echo $full64nogcm
-          #          echo $full32nogcm
 
-          curl --http0.9 http://127.0.0.1:8081/bot${{ secrets.HELPER_BOT_TOKEN }}/sendMediaGroup --form-string chat_id=${{ secrets.HELPER_BOT_TARGET }} --form apk1=@"${mini64}" --form apk2=@"${mini32}" --form apk3=@"${mini64nogcm}" --form apk4=@"${mini32nogcm}" --form-string media="[{\"type\": \"document\",\"media\": \"attach://apk1\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://apk2\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://apk3\",\"caption\": \"\",\"parse_mode\": \"Markdown\"},{\"type\": \"document\",\"media\": \"attach://apk4\",\"caption\": \"${{ github.event.head_commit.message }}\",\"parse_mode\": \"Markdown\"}]" --verbose >/dev/null
-
-          pkill telegram-bot
-  telegram-bot-api:
-    name: Telegram Bot API
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Clone Telegram Bot API
-        run: |
-          git clone --recursive https://github.com/tdlib/telegram-bot-api.git
-          git status telegram-bot-api >> telegram-bot-api-status
-      - name: Cache Bot API Binary
-        id: cache-bot-api
-        uses: actions/cache@v2
-        with:
-          path: telegram-bot-api-binary
-          key: CI-telegram-bot-api-${{ hashFiles('telegram-bot-api-status') }}
-      - name: Compile Telegram Bot API
-        if: steps.cache-bot-api.outputs.cache-hit != 'true'
-        run: |
-          sudo apt-get update
-          sudo apt-get install make git zlib1g-dev libssl-dev gperf cmake g++
-          cd telegram-bot-api
-          rm -rf build
-          mkdir build
-          cd build
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=.. ..
-          cmake --build . --target install -j$(nproc)
-          cd ../..
-          ls -l telegram-bot-api/bin/telegram-bot-api*
-          cp telegram-bot-api/bin/telegram-bot-api telegram-bot-api-binary
-      - name: Upload Binary
-        uses: actions/upload-artifact@master
-        with:
-          name: telegram-bot-api-binary
-          path: telegram-bot-api-binary
+          python -m pip install -r bin/scripts/requirements.txt
+          git log -1 --pretty=format:"%s" > artifacts/caption.txt
+          python bin/scripts/upload.py ${{ secrets.HELPER_BOT_TOKEN }} ${{ secrets.HELPER_BOT_TARGET }} release

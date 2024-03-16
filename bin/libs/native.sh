@@ -2,11 +2,11 @@
 
 source "bin/init/env.sh"
 
-OUT=TMessagesProj/build/intermediates/stripped_native_libs/miniFoss/out/lib
+OUT=TMessagesProj/build/intermediates/stripped_native_libs/release/out/lib
 DIR=TMessagesProj/src/main/libs
 
 export COMPILE_NATIVE=1
-./gradlew TMessagesProj:stripMiniFossDebugSymbols || exit 1
+./gradlew TMessagesProj:stripReleaseDebugSymbols || exit 1
 
 function install() {
   local ABI="$1"
@@ -22,5 +22,3 @@ function install() {
 
 install armeabi-v7a
 install arm64-v8a
-install x86
-install x86_64

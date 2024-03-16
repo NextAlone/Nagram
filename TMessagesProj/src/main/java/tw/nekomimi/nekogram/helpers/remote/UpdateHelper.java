@@ -148,9 +148,7 @@ public class UpdateHelper extends BaseRemoteHelper {
         if (update.sticker != null) {
             ids.put("sticker", update.sticker);
         }
-        if (update.nogcm != null && BuildVars.isNoGCM) {
-            ids.put("file", getPreferredAbiFile(update.nogcm));
-        } else if (update.gcm != null) {
+        if (update.gcm != null) {
             ids.put("file", getPreferredAbiFile(update.gcm));
         }
 

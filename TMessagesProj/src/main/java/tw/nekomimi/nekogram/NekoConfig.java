@@ -156,7 +156,7 @@ public class NekoConfig {
     public static ConfigItem autoPauseVideo = addConfig("AutoPauseVideo", configTypeBool, false);
     public static ConfigItem disableProximityEvents = addConfig("DisableProximityEvents", configTypeBool, false);
 
-    public static ConfigItem ignoreContentRestrictions = addConfig("ignoreContentRestrictions", configTypeBool, !BuildVars.isPlay);
+    public static ConfigItem ignoreContentRestrictions = addConfig("ignoreContentRestrictions", configTypeBool, true);
     public static ConfigItem useChatAttachMediaMenu = addConfig("UseChatAttachEnterMenu", configTypeBool, true);
     public static ConfigItem disableLinkPreviewByDefault = addConfig("DisableLinkPreviewByDefault", configTypeBool, false);
     public static ConfigItem sendCommentAfterForward = addConfig("SendCommentAfterForward", configTypeBool, true);
@@ -190,7 +190,7 @@ public class NekoConfig {
     public static ConfigItem customAudioBitrate = addConfig("customAudioBitrate", configTypeInt, 32);
     public static ConfigItem disableGroupVoipAudioProcessing = addConfig("disableGroupVoipAudioProcessing", configTypeBool, false);
     public static ConfigItem enhancedFileLoader = addConfig("enhancedFileLoader", configTypeBool, false);
-    public static ConfigItem useOSMDroidMap = addConfig("useOSMDroidMap", configTypeBool, !BuildVars.isGServicesCompiled);
+    public static ConfigItem useOSMDroidMap = addConfig("useOSMDroidMap", configTypeBool, false);
     public static ConfigItem mapDriftingFixForGoogleMaps = addConfig("mapDriftingFixForGoogleMaps", configTypeBool, true);
 
     // priv branch changes
@@ -441,7 +441,7 @@ public class NekoConfig {
             disableProximityEvents.setConfigBool(preferences.getBoolean("disableProximityEvents", false));
 
         if (preferences.contains("ignoreContentRestrictions"))
-            ignoreContentRestrictions.setConfigBool(preferences.getBoolean("ignoreContentRestrictions", !BuildVars.isPlay));
+            ignoreContentRestrictions.setConfigBool(preferences.getBoolean("ignoreContentRestrictions", true));
         if (preferences.contains("useChatAttachMediaMenu"))
             useChatAttachMediaMenu.setConfigBool(preferences.getBoolean("useChatAttachMediaMenu", true));
         if (preferences.contains("disableLinkPreviewByDefault"))
@@ -498,6 +498,6 @@ public class NekoConfig {
     }
 
     public static boolean fixDriftingForGoogleMaps() {
-        return BuildVars.isGServicesCompiled && !useOSMDroidMap.Bool() && mapDriftingFixForGoogleMaps.Bool();
+        return !useOSMDroidMap.Bool() && mapDriftingFixForGoogleMaps.Bool();
     }
 }

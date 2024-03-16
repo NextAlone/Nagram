@@ -10,3 +10,4 @@ build/
 local.properties
 obj/
 service_account_credentials.json
+__pycache__/

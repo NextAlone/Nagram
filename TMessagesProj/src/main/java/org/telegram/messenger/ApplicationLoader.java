@@ -115,17 +115,7 @@ public class ApplicationLoader extends Application {
 
     public static ILocationServiceProvider getLocationServiceProvider() {
         if (locationServiceProvider == null) {
-            if (BuildVars.isGServicesCompiled) {
-                try {
-                    locationServiceProvider = (ILocationServiceProvider) Class.forName("org.telegram.messenger.GoogleLocationProvider").newInstance();
-                    locationServiceProvider.init(applicationContext);
-                } catch (Exception e) {
-                    FileLog.e("Failed to load GoogleLocationService Provider from gservices", e);
-                    locationServiceProvider = new ILocationServiceProvider.DummyLocationServiceProvider();
-                }
-            } else {
-                locationServiceProvider = new ILocationServiceProvider.DummyLocationServiceProvider();
-            }
+            locationServiceProvider = new GoogleLocationProvider();
         }
         return locationServiceProvider;
     }
@@ -135,16 +125,7 @@ public class ApplicationLoader extends Application {
             if (NekoConfig.useOSMDroidMap.Bool())
                 mapsProvider = new OSMDroidMapsProvider();
             else {
-                if (BuildVars.isGServicesCompiled) {
-                    try {
-                        mapsProvider = (IMapsProvider) Class.forName("org.telegram.messenger.GoogleMapsProvider").newInstance();
-                    } catch (Exception e) {
-                        FileLog.e("Failed to load Google Maps Provider from gservices", e);
-                        mapsProvider = new OSMDroidMapsProvider();
-                    }
-                } else {
-                    mapsProvider = new OSMDroidMapsProvider();
-                }
+                mapsProvider = new GoogleMapsProvider();
             }
         }
         return mapsProvider;

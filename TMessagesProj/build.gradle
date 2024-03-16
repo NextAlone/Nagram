@@ -1,5 +1,3 @@
-import cn.hutool.core.util.RuntimeUtil
-
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 
@@ -83,12 +81,12 @@ android {
                 universalApk true
             } else {
                 enable true
+                reset()
+                universalApk false
                 if (!nativeTarget.isBlank()) {
-                    reset()
                     include nativeTarget
-                    universalApk false
                 } else {
-                    universalApk true
+                    include 'armeabi-v7a', 'arm64-v8a'
                 }
             }
         }
@@ -118,7 +116,6 @@ android {
         buildConfigField "int", "OFFICIAL_VERSION_CODE", officialCode + ""
         buildConfigField "int", "APP_ID", appId
         buildConfigField "String", "APP_HASH", "\"" + appHash + "\""
-        buildConfigField "int", "IS_NO_GCM", "0"
 
         externalNativeBuild {
             cmake {
@@ -174,20 +171,6 @@ android {
             signingConfig signingConfigs.release
         }
 
-        releaseNoGcm {
-            debuggable false
-            jniDebuggable false
-            minifyEnabled true
-            shrinkResources true
-            multiDexEnabled true
-            zipAlignEnabled true
-            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
-            matchingFallbacks = ["release", "debug"]
-            signingConfig signingConfigs.release
-
-            buildConfigField "int", "IS_NO_GCM", "1"
-        }
-
         release {
             debuggable false
             jniDebuggable false
@@ -198,47 +181,19 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             matchingFallbacks = ["release", "debug"]
             signingConfig signingConfigs.release
-        }
-
-        foss {
-            debuggable false
-            jniDebuggable false
-            minifyEnabled true
-            shrinkResources true
-            multiDexEnabled true
-            zipAlignEnabled true
-            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
-            matchingFallbacks = ["release", "debug"]
-        }
-
-        fdroidRelease {
-            initWith foss
-            matchingFallbacks = ["release", "debug"]
         }
     }
 
     sourceSets {
 
         main {
-            jni.srcDirs = []
             assets.srcDirs = ["src/main/assets", "src/emojis/twitter"]
         }
 
         debug {
             java {
-                srcDirs "src/main/java", "src/gservcies/java"
+                srcDirs "src/main/java"
             }
-            jni.srcDirs = []
-            jniLibs {
-                srcDir "src/main/libs"
-            }
-            manifest {
-                srcFile "src/gservcies/AndroidManifest.xml"
-            }
-        }
-
-        releaseNoGcm {
-            jni.srcDirs = []
             jniLibs {
                 srcDir "src/main/libs"
             }
@@ -246,67 +201,42 @@ android {
 
         release {
             java {
-                srcDirs "src/main/java", "src/gservcies/java"
+                srcDirs "src/main/java"
             }
-            jni.srcDirs = []
             jniLibs {
                 srcDir "src/main/libs"
             }
-            manifest {
-                srcFile "src/gservcies/AndroidManifest.xml"
-            }
         }
-
-        foss {
-            jni {
-                srcDirs = ["./jni/"]
-            }
-        }
-
-        fdroidRelease {
-            jni {
-                srcDirs = ["./jni/"]
-            }
-            jniLibs.srcDirs = []
-        }
-
     }
 
     flavorDimensions "version"
 
-    productFlavors {
-        mini {
-            isDefault true
-        }
-    }
-
-    tasks.all { task ->
-        if (((task.name.endsWith("Ndk") || task.name.startsWith("generateJsonModel") || task.name.startsWith("externalNativeBuild"))) && !(task.name.contains("Debug") || task.name.contains("Foss") || task.name.contains("Fdroid"))) {
+    tasks.configureEach { task ->
+        if (((task.name.endsWith("Ndk") || task.name.startsWith("generateJsonModel") || task.name.startsWith("externalNativeBuild"))) && !task.name.contains("Debug")) {
             task.enabled = false
         }
         if (task.name.contains("uploadCrashlyticsMappingFile")) {
             enabled = false
         }
-        if (disableCMakeRelWithDebInfo && task.name.contains("CMakeRelWithDebInfo") && !targetTask.contains("fdroid")) {
+        if (disableCMakeRelWithDebInfo && task.name.contains("CMakeRelWithDebInfo")) {
             enabled = false
         }
     }
 
-    applicationVariants.all { variant ->
-        variant.outputs.all { output ->
+    applicationVariants.configureEach { variant ->
+        variant.outputs.configureEach { output ->
             String gramName = "Nagram"
             String first = String.format("%s-v%s(%s)", gramName, versionName, versionCode)
             String name = outputFileName.replace("TMessagesProj", first)
             name = name.replace("-release", "")
-            name = name.replace("-mini", "")
             outputFileName = name
         }
     }
 
 }
 
-def fcmVersion = "23.0.7"
-def crashlyticsVersion = "18.2.12"
+def fcmVersion = "23.4.1"
+def crashlyticsVersion = "18.6.2"
 def playCoreVersion = "1.10.3"
 
 dependencies {
@@ -316,7 +246,7 @@ dependencies {
     implementation "androidx.core:core-ktx:1.9.0"
     implementation "androidx.palette:palette-ktx:1.0.0"
     implementation "androidx.viewpager:viewpager:1.0.0"
-    implementation "androidx.exifinterface:exifinterface:1.3.6"
+    implementation "androidx.exifinterface:exifinterface:1.3.7"
     implementation "androidx.interpolator:interpolator:1.0.0"
     implementation "androidx.dynamicanimation:dynamicanimation:1.0.0"
     implementation "androidx.multidex:multidex:2.0.1"
@@ -330,10 +260,10 @@ dependencies {
     //noinspection GradleDependency
     implementation "com.googlecode.mp4parser:isoparser:1.0.6"
 
-    implementation "com.google.code.gson:gson:2.8.9"
+    implementation "com.google.code.gson:gson:2.10"
     implementation "org.osmdroid:osmdroid-android:6.1.10"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.23"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0"
 
     implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.10"
     implementation 'com.neovisionaries:nv-websocket-client:2.14'
@@ -348,9 +278,6 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-mlkit-subject-segmentation:16.0.0-beta1'
 
-    compileOnly 'org.yaml:snakeyaml:1.29'
-    implementation 'org.yaml:snakeyaml:1.29'
-
     implementation project(":openpgp-api")
 
     compileOnly fileTree("libs")
@@ -360,17 +287,12 @@ dependencies {
     compileOnly "com.google.android.play:core:$playCoreVersion"
 
     implementation 'com.google.android.gms:play-services-vision:20.1.3'
-    debugImplementation 'com.google.android.gms:play-services-maps:18.1.0'
-    debugImplementation 'com.google.android.gms:play-services-location:20.0.0'
-    releaseImplementation 'com.google.android.gms:play-services-maps:18.1.0'
-    releaseImplementation 'com.google.android.gms:play-services-location:20.0.0'
+    implementation 'com.google.android.gms:play-services-maps:18.2.0'
+    implementation 'com.google.android.gms:play-services-location:21.2.0'
 
-    debugImplementation "com.google.firebase:firebase-messaging:$fcmVersion"
-    debugImplementation "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
-    debugImplementation "com.google.android.play:core:$playCoreVersion"
-    releaseImplementation "com.google.firebase:firebase-messaging:$fcmVersion"
-    releaseImplementation "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
-    releaseImplementation "com.google.android.play:core:$playCoreVersion"
+    implementation "com.google.firebase:firebase-messaging:$fcmVersion"
+    implementation "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
+    implementation "com.google.android.play:core:$playCoreVersion"
 
     testImplementation "junit:junit:4.13.2"
     testImplementation "androidx.test:core:1.5.0"
@@ -383,11 +305,11 @@ dependencies {
     // add for undo and redo
     implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:4.3'
     // add splash screen
-    implementation("androidx.core:core-splashscreen:1.0.0-beta02")
+    implementation("androidx.core:core-splashscreen:1.0.1")
     // add for music tag flac...
     implementation 'org:jaudiotagger:2.0.3'
     // add for auto translate
-    implementation 'com.google.mlkit:language-id:17.0.4'
+    implementation 'com.google.mlkit:language-id:17.0.5'
     // add for emoji
     implementation 'com.jaredrummler:truetypeparser-light:1.0.0'
 }
@@ -407,17 +329,13 @@ android {
         }
 
         def lib = "libtmessages.*.so"
-        pickFirst "lib/x86/$lib"
-        pickFirst "lib/x86_64/$lib"
-        pickFirst "lib/armeabi-v7a/$lib"
-        pickFirst "lib/arm64-v8a/$lib"
     }
     namespace "org.telegram.messenger"
     lint {
         disable 'MissingTranslation', 'ExtraTranslation', 'BlockedPrivateApi'
     }
 
-    tasks.all { task ->
+    tasks.configureEach { task ->
         if (task.name.startsWith("uploadCrashlyticsMappingFile")) {
             task.enabled = false
         } else if (task.name.contains("Crashlytics") && task.name.contains("NoGcm")) {

@@ -248,9 +248,6 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
         if (!NekoXConfig.isDeveloper()) {
             cellGroup.rows.remove(hideSponsoredMessageRow);
         }
-        if (!BuildVars.isGServicesCompiled) {
-            cellGroup.rows.remove(mapDriftingFixForGoogleMapsRow);
-        }
 
         addRowsToMap(cellGroup);
     }
@@ -864,14 +861,8 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
 //        if (!NekoXConfig.isDeveloper())
 //            cellGroup.rows.remove(hideSponsoredMessageRow);
 
-        if (!BuildVars.isGServicesCompiled) {
-            NekoConfig.useOSMDroidMap.setConfigBool(true);
-            ((ConfigCellTextCheck) useOSMDroidMapRow).setEnabled(false);
-//            cellGroup.rows.remove(mapDriftingFixForGoogleMapsRow);
-        } else {
-            if (NekoConfig.useOSMDroidMap.Bool())
-                ((ConfigCellTextCheck) mapDriftingFixForGoogleMapsRow).setEnabled(false);
-        }
+        if (NekoConfig.useOSMDroidMap.Bool())
+            ((ConfigCellTextCheck) mapDriftingFixForGoogleMapsRow).setEnabled(false);
 
         if (NekoConfig.useTelegramTranslateInChat.Bool())
             ((ConfigCellCustom) translationProviderRow).setEnabled(false);
