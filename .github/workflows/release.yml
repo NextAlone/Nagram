@@ -258,5 +258,5 @@ jobs:
           echo $mini32
 
           python -m pip install -r bin/scripts/requirements.txt
-          git log -1 --pretty=format:"%s" > artifacts/caption.txt
+          git log -1 --pretty=format:"%s%n%n%b" > artifacts/caption.txt
           python bin/scripts/upload.py ${{ secrets.HELPER_BOT_TOKEN }} ${{ secrets.HELPER_BOT_TARGET }} release
