@@ -125,4 +125,11 @@
     <string name="DisableDialogsFloatingButton">Deaktiver dialoger med flytende knapp</string>
     <string name="DisableFlagSecure">Deaktiver Flag sikker</string>
     <string name="CenterActionBarTitle">Sentertittel i handlingslinjen</string>
+    <string name="ShowQuickReplyInBotCommands">Vis hurtigsvar i bot-kommandoer</string>
+    <string name="PushServiceType">Push tjenestetype</string>
+    <string name="PushServiceTypeInApp">I App</string>
+    <string name="PushServiceTypeFCM">Google FCM</string>
+    <string name="PushServiceTypeUnified">Felles Push</string>
+    <string name="PushServiceTypeInAppDialog">Vis varsling fra kunder</string>
+    <string name="PushServiceTypeUnifiedGateway">Enhetlig Push Gateway</string>
 </resources>

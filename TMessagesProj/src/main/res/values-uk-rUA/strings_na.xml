@@ -125,4 +125,11 @@
     <string name="DisableDialogsFloatingButton">Вимкнути плаваючу кнопку діалогу</string>
     <string name="DisableFlagSecure">Вимкнути захист прапора</string>
     <string name="CenterActionBarTitle">Центрувати заголовок в панелі дій</string>
+    <string name="ShowQuickReplyInBotCommands">Показати швидку відповідь у командах Bot</string>
+    <string name="PushServiceType">Тип Служба push</string>
+    <string name="PushServiceTypeInApp">В додатку</string>
+    <string name="PushServiceTypeFCM">Google FCM</string>
+    <string name="PushServiceTypeUnified">Одноразове штовхання</string>
+    <string name="PushServiceTypeInAppDialog">Показувати сповіщення резидента</string>
+    <string name="PushServiceTypeUnifiedGateway">Уніфікований Push-шлюз</string>
 </resources>

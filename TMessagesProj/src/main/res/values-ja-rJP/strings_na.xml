@@ -125,4 +125,11 @@
     <string name="DisableDialogsFloatingButton">ダイアログのフローティングボタンを無効化</string>
     <string name="DisableFlagSecure">安全フラグを無効にする</string>
     <string name="CenterActionBarTitle">アクションバーのタイトルを中心にする</string>
+    <string name="ShowQuickReplyInBotCommands">Botコマンドでクイック返信を表示する</string>
+    <string name="PushServiceType">プッシュ・サービス・タイプ</string>
+    <string name="PushServiceTypeInApp">アプリ内</string>
+    <string name="PushServiceTypeFCM">Google FCM</string>
+    <string name="PushServiceTypeUnified">統一されたプッシュ</string>
+    <string name="PushServiceTypeInAppDialog">常駐通知を表示</string>
+    <string name="PushServiceTypeUnifiedGateway">Unified Push Gateway</string>
 </resources>

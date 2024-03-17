@@ -125,4 +125,11 @@
     <string name="DisableDialogsFloatingButton">Dezactivează dialogul cu butonul plutitor</string>
     <string name="DisableFlagSecure">Dezactivează Steagul Securizat</string>
     <string name="CenterActionBarTitle">Titlul centrului în bara de acțiune</string>
+    <string name="ShowQuickReplyInBotCommands">Arată Rapid În Bot Comenzi</string>
+    <string name="PushServiceType">Tip serviciu Push</string>
+    <string name="PushServiceTypeInApp">În aplicație</string>
+    <string name="PushServiceTypeFCM">Google FCM</string>
+    <string name="PushServiceTypeUnified">Push unificat</string>
+    <string name="PushServiceTypeInAppDialog">Arată notificările rezidenților</string>
+    <string name="PushServiceTypeUnifiedGateway">Gateway Push Unificat</string>
 </resources>

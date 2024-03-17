@@ -125,4 +125,11 @@
     <string name="DisableDialogsFloatingButton">Deaktivér Dialoger Flydende Knap</string>
     <string name="DisableFlagSecure">Deaktivér Flag Sikker</string>
     <string name="CenterActionBarTitle">Centrér titel i handlingsbjælken</string>
+    <string name="ShowQuickReplyInBotCommands">Vis Hurtigt Svar I Bot Kommandoer</string>
+    <string name="PushServiceType">Push Service Type</string>
+    <string name="PushServiceTypeInApp">I App</string>
+    <string name="PushServiceTypeFCM">Google FCM</string>
+    <string name="PushServiceTypeUnified">Unified Push</string>
+    <string name="PushServiceTypeInAppDialog">Vis residente notifikationer</string>
+    <string name="PushServiceTypeUnifiedGateway">Unified Push Gateway</string>
 </resources>

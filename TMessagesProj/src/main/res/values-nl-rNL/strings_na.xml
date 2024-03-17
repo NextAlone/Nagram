@@ -125,4 +125,11 @@
     <string name="DisableDialogsFloatingButton">Zwevende knop dialoogknop uitschakelen</string>
     <string name="DisableFlagSecure">Vlaggenbeveiliging uitschakelen</string>
     <string name="CenterActionBarTitle">Centreer titel in actiebalk</string>
+    <string name="ShowQuickReplyInBotCommands">Toon Snel Antwoord In Bot Commando\'s</string>
+    <string name="PushServiceType">Push Service Type</string>
+    <string name="PushServiceTypeInApp">In de App</string>
+    <string name="PushServiceTypeFCM">Google FCM</string>
+    <string name="PushServiceTypeUnified">Gecombineerde Push</string>
+    <string name="PushServiceTypeInAppDialog">Toon inactieve meldingen</string>
+    <string name="PushServiceTypeUnifiedGateway">Gecombineerde Push Gateway</string>
 </resources>

@@ -125,4 +125,11 @@
     <string name="DisableDialogsFloatingButton">Schwebende Dialoge deaktivieren</string>
     <string name="DisableFlagSecure">Sichere Flagge deaktivieren</string>
     <string name="CenterActionBarTitle">Titel in Aktionsleiste zentrieren</string>
+    <string name="ShowQuickReplyInBotCommands">Schnellantwort in Bot-Befehlen anzeigen</string>
+    <string name="PushServiceType">Push-Service-Typ</string>
+    <string name="PushServiceTypeInApp">In App</string>
+    <string name="PushServiceTypeFCM">Google FCM</string>
+    <string name="PushServiceTypeUnified">Einheitlicher Push</string>
+    <string name="PushServiceTypeInAppDialog">Resident-Benachrichtigungen anzeigen</string>
+    <string name="PushServiceTypeUnifiedGateway">Einheitliches Push-Gateway</string>
 </resources>

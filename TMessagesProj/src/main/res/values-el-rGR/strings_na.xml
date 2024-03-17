@@ -125,4 +125,11 @@
     <string name="DisableDialogsFloatingButton">Απενεργοποίηση Πλωτού Κουμπιού Dialogs</string>
     <string name="DisableFlagSecure">Απενεργοποίηση Flag Secure</string>
     <string name="CenterActionBarTitle">Κεντράρισμα τίτλου στη γραμμή ενεργειών</string>
+    <string name="ShowQuickReplyInBotCommands">Εμφάνιση Γρήγορης Απάντησης Στις Εντολές Bot</string>
+    <string name="PushServiceType">Τύπος Υπηρεσίας Push</string>
+    <string name="PushServiceTypeInApp">Στην Εφαρμογή</string>
+    <string name="PushServiceTypeFCM">Google FCM</string>
+    <string name="PushServiceTypeUnified">Ενοποιημένη Προώθηση</string>
+    <string name="PushServiceTypeInAppDialog">Εμφάνιση ειδοποιήσεων κατοίκων</string>
+    <string name="PushServiceTypeUnifiedGateway">Ενοποιημένη Πύλη Ώθησης</string>
 </resources>

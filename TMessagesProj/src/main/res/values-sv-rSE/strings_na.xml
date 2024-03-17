@@ -125,4 +125,11 @@
     <string name="DisableDialogsFloatingButton">Inaktivera dialoger flytande knapp</string>
     <string name="DisableFlagSecure">Inaktivera flagga säkert</string>
     <string name="CenterActionBarTitle">Centrera titel i åtgärdsfältet</string>
+    <string name="ShowQuickReplyInBotCommands">Visa snabbsvar i botkommandon</string>
+    <string name="PushServiceType">Typ av push-tjänst</string>
+    <string name="PushServiceTypeInApp">I appen</string>
+    <string name="PushServiceTypeFCM">Google FCM</string>
+    <string name="PushServiceTypeUnified">Enhetlig Push</string>
+    <string name="PushServiceTypeInAppDialog">Visa inhemska aviseringar</string>
+    <string name="PushServiceTypeUnifiedGateway">Enhetlig Push Gateway</string>
 </resources>
