@@ -14,4 +14,7 @@ android {
         abortOnError false
     }
     namespace 'org.openintents.openpgp'
+    buildFeatures {
+        aidl true
+    }
 }

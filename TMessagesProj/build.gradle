@@ -334,6 +334,7 @@ android {
     packagingOptions {
         jniLibs {
             excludes += ['/fabric/**', '/META-INF/native-image/**']
+            useLegacyPackaging true
         }
         resources {
             excludes += ['/fabric/**', '/META-INF/*.version', '/META-INF/*.kotlin_module', '/META-INF/native-image/**', '/builddef.lst', '/*.txt', '/DebugProbesKt.bin', '/okhttp3/internal/publicsuffix/NOTICE']

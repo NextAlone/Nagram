@@ -152,3 +152,11 @@
 -dontwarn org.osmdroid.**
 
 -keepattributes SourceFile,LineNumberTable
+
+-dontwarn java.beans.**
+-dontwarn java.lang.management.**
+-dontwarn javax.swing.**
+-dontwarn lombok.**
+-dontwarn org.slf4j.**
+-dontwarn org.w3c.dom.bootstrap.**
+-dontwarn sun.net.spi.nameservice.**

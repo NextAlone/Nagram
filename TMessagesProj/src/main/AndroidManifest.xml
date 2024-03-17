@@ -128,7 +128,6 @@
         android:allowBackup="true"
         android:restoreAnyVersion="true"
         android:backupAgent=".BackupAgent"
-        android:extractNativeLibs="true"
         android:hardwareAccelerated="@bool/useHardwareAcceleration"
         android:icon="@mipmap/ic_launcher_nagram"
         android:label="@string/NekoX"
