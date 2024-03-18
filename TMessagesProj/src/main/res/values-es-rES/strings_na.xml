@@ -125,11 +125,11 @@
     <string name="DisableDialogsFloatingButton">Deshabilitar botón flotante de diálogos</string>
     <string name="DisableFlagSecure">Deshabilitar Flag Secure</string>
     <string name="CenterActionBarTitle">Centrar el título en la barra de acción</string>
-    <string name="ShowQuickReplyInBotCommands">Mostrar respuestas rápidas en comandos de bot</string>
+    <string name="ShowQuickReplyInBotCommands">Mostrar respuestas rápidas en comandos del bot</string>
     <string name="PushServiceType">Tipo de servicio Push</string>
-    <string name="PushServiceTypeInApp">En App</string>
-    <string name="PushServiceTypeFCM">Google FCM</string>
-    <string name="PushServiceTypeUnified">Empuje unificado</string>
-    <string name="PushServiceTypeInAppDialog">Mostrar notificaciones residentes</string>
-    <string name="PushServiceTypeUnifiedGateway">Unificado Push Gateway</string>
+    <string name="PushServiceTypeInApp">En la App</string>
+    <string name="PushServiceTypeFCM">FCM de Google</string>
+    <string name="PushServiceTypeUnified">Unified Push</string>
+    <string name="PushServiceTypeInAppDialog">Mostrar notificación permanente</string>
+    <string name="PushServiceTypeUnifiedGateway">Gateway de Unified Push</string>
 </resources>

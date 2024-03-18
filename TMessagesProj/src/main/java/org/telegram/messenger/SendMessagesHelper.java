@@ -94,6 +94,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import xyz.nextalone.nagram.NaConfig;
+
 public class SendMessagesHelper extends BaseController implements NotificationCenter.NotificationCenterDelegate {
 
     public static final int MEDIA_TYPE_DICE = 11;
@@ -8137,7 +8139,7 @@ public boolean retriedToSend;
                             videoEditedInfo = info.videoEditedInfo != null ? info.videoEditedInfo : createCompressionSettings(info.path);
                         }
 
-                        if (!forceDocument && (videoEditedInfo != null || info.path.endsWith("mp4"))) {
+                        if (NaConfig.INSTANCE.getSendMp4DocumentAsVideo().Bool() || (!forceDocument && (videoEditedInfo != null || info.path.endsWith("mp4")))) {
                             if (info.path == null && info.searchImage != null) {
                                 if (info.searchImage.photo instanceof TLRPC.TL_photo) {
                                     info.path = FileLoader.getInstance(accountInstance.getCurrentAccount()).getPathToAttach(info.searchImage.photo, true).getAbsolutePath();
@@ -8206,6 +8208,12 @@ public boolean retriedToSend;
                                     attributeVideo.supports_streaming = true;
                                 }
                                 document.attributes.add(attributeVideo);
+
+                                // na: Fix filename
+                                TLRPC.TL_documentAttributeFilename fileName = new TLRPC.TL_documentAttributeFilename();
+                                fileName.file_name = new File(path).getName();
+                                document.attributes.add(fileName);
+
                                 if (videoEditedInfo != null && (videoEditedInfo.needConvert() || !info.isVideo)) {
                                     if (info.isVideo && videoEditedInfo.muted) {
                                         fillVideoAttribute(info.path, attributeVideo, videoEditedInfo);
@@ -8891,6 +8899,12 @@ public boolean retriedToSend;
                     }
                     attributeVideo.round_message = isRound;
                     document.attributes.add(attributeVideo);
+
+                    // na: Fix filename
+                    TLRPC.TL_documentAttributeFilename fileName = new TLRPC.TL_documentAttributeFilename();
+                    fileName.file_name = new File(path).getName();
+                    document.attributes.add(fileName);
+
                     if (videoEditedInfo != null && videoEditedInfo.notReadyYet) {
                         attributeVideo.w = videoEditedInfo.resultWidth;
                         attributeVideo.h = videoEditedInfo.resultHeight;

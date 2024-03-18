@@ -566,6 +566,12 @@ object NaConfig {
             ConfigItem.configTypeString,
             "https://p2p.belloworld.it/"
         )
+    val sendMp4DocumentAsVideo =
+        addConfig(
+            "SendMp4DocumentAsVideo",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,
