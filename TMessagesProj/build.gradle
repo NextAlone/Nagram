@@ -77,7 +77,6 @@ if (nativeTarget == null) nativeTarget = ""
 
 android {
     compileSdkVersion 33
-    buildToolsVersion "33.0.0"
     ndkVersion rootProject.ext.ndkVersion
 
     defaultConfig.applicationId = "xyz.nextalone.nagram"
@@ -345,6 +344,9 @@ android {
     namespace "org.telegram.messenger"
     lint {
         disable 'MissingTranslation', 'ExtraTranslation', 'BlockedPrivateApi'
+    }
+    buildFeatures {
+        buildConfig true
     }
 
     tasks.configureEach { task ->

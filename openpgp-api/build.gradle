@@ -9,7 +9,6 @@ android {
         targetSdkVersion 33
     }
 
-    buildToolsVersion '33.0.0'
     lint {
         abortOnError false
     }
