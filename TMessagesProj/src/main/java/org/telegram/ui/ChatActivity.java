@@ -2586,6 +2586,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
         getNotificationCenter().addPostponeNotificationsCallback(postponeNotificationsWhileLoadingCallback);
 
+        // na: unread count
+        getNotificationCenter().addObserver(this, NotificationCenter.dialogsUnreadCounterChanged);
+
         if (chatMode != MODE_SCHEDULED) {
             if (threadMessageId == 0) {
                 getNotificationCenter().addObserver(this, NotificationCenter.screenshotTook);
@@ -2983,6 +2986,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             AndroidUtilities.cancelRunOnUIThread(chatInviteRunnable);
             chatInviteRunnable = null;
         }
+
+        // na: unread count
+        getNotificationCenter().removeObserver(this, NotificationCenter.dialogsUnreadCounterChanged);
+
         getNotificationCenter().removePostponeNotificationsCallback(postponeNotificationsWhileLoadingCallback);
         getMessagesController().setLastCreatedDialogId(dialog_id, chatMode == MODE_SCHEDULED, false);
         getNotificationCenter().removeObserver(this, NotificationCenter.messagesDidLoad);
@@ -33385,6 +33392,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     messageObject.translating = false;
                                 });
                     }
+                }
+                // na: unread count
+                if (actionBar != null) {
+                    actionBar.unreadBadgeSetCount(getMessagesStorage().getMainUnreadCount());
                 }
             }
 
