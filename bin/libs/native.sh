@@ -2,7 +2,7 @@
 
 source "bin/init/env.sh"
 
-OUT=TMessagesProj/build/intermediates/stripped_native_libs/release/out/lib
+OUT=TMessagesProj/build/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib
 DIR=TMessagesProj/src/main/libs
 
 export COMPILE_NATIVE=1

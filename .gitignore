@@ -11,3 +11,5 @@ local.properties
 obj/
 service_account_credentials.json
 __pycache__/
+release/
+

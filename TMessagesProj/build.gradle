@@ -340,6 +340,8 @@ android {
         }
 
         def lib = "libtmessages.*.so"
+        pickFirst "lib/armeabi-v7a/$lib"
+        pickFirst "lib/arm64-v8a/$lib"
     }
     namespace "org.telegram.messenger"
     lint {
