@@ -132,4 +132,5 @@
     <string name="PushServiceTypeUnified">Enhetlig Push</string>
     <string name="PushServiceTypeInAppDialog">Visa inhemska aviseringar</string>
     <string name="PushServiceTypeUnifiedGateway">Enhetlig Push Gateway</string>
+    <string name="SendMp4DocumentAsVideo">Skicka mp4-dokument som video</string>
 </resources>

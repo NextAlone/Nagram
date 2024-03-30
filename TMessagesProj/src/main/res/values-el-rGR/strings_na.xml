@@ -132,4 +132,5 @@
     <string name="PushServiceTypeUnified">Ενοποιημένη Προώθηση</string>
     <string name="PushServiceTypeInAppDialog">Εμφάνιση ειδοποιήσεων κατοίκων</string>
     <string name="PushServiceTypeUnifiedGateway">Ενοποιημένη Πύλη Ώθησης</string>
+    <string name="SendMp4DocumentAsVideo">Αποστολή εγγράφου mp4 ως βίντεο</string>
 </resources>

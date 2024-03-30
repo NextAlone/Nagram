@@ -132,4 +132,5 @@
     <string name="PushServiceTypeUnified">دفع موحد</string>
     <string name="PushServiceTypeInAppDialog">إظهار الإشعارات المقيمة</string>
     <string name="PushServiceTypeUnifiedGateway">بوابة دفع موحدة</string>
+    <string name="SendMp4DocumentAsVideo">إرسال مستند mp4 كفيديو</string>
 </resources>

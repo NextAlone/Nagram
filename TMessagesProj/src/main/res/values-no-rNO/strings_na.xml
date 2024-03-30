@@ -132,4 +132,5 @@
     <string name="PushServiceTypeUnified">Felles Push</string>
     <string name="PushServiceTypeInAppDialog">Vis varsling fra kunder</string>
     <string name="PushServiceTypeUnifiedGateway">Enhetlig Push Gateway</string>
+    <string name="SendMp4DocumentAsVideo">Send mp4-dokument som video</string>
 </resources>

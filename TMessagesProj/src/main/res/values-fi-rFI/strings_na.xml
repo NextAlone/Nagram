@@ -132,4 +132,5 @@
     <string name="PushServiceTypeUnified">Yhdistetty Työntö</string>
     <string name="PushServiceTypeInAppDialog">Näytä kotimaiset ilmoitukset</string>
     <string name="PushServiceTypeUnifiedGateway">Yhdistetty Push-Yhdyskäytävä</string>
+    <string name="SendMp4DocumentAsVideo">Lähetä mp4-asiakirja videona</string>
 </resources>

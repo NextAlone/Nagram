@@ -132,4 +132,5 @@
     <string name="PushServiceTypeUnified">Einheitlicher Push</string>
     <string name="PushServiceTypeInAppDialog">Resident-Benachrichtigungen anzeigen</string>
     <string name="PushServiceTypeUnifiedGateway">Einheitliches Push-Gateway</string>
+    <string name="SendMp4DocumentAsVideo">mp4 Dokument als Video senden</string>
 </resources>

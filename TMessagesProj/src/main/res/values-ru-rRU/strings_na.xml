@@ -132,4 +132,5 @@
     <string name="PushServiceTypeUnified">Единый толчок</string>
     <string name="PushServiceTypeInAppDialog">Показывать уведомления жителя</string>
     <string name="PushServiceTypeUnifiedGateway">Единый Push шлюз</string>
+    <string name="SendMp4DocumentAsVideo">Отправить mp4 документ как видео</string>
 </resources>

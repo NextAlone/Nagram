@@ -132,4 +132,5 @@
     <string name="PushServiceTypeUnified">Push unificat</string>
     <string name="PushServiceTypeInAppDialog">Arată notificările rezidenților</string>
     <string name="PushServiceTypeUnifiedGateway">Gateway Push Unificat</string>
+    <string name="SendMp4DocumentAsVideo">Trimite documentul mp4 ca video</string>
 </resources>

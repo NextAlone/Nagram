@@ -132,4 +132,5 @@
     <string name="PushServiceTypeUnified">Unified Push</string>
     <string name="PushServiceTypeInAppDialog">Vis residente notifikationer</string>
     <string name="PushServiceTypeUnifiedGateway">Unified Push Gateway</string>
+    <string name="SendMp4DocumentAsVideo">Send mp4-dokument som video</string>
 </resources>

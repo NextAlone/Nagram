@@ -132,4 +132,5 @@
     <string name="PushServiceTypeUnified">Jednolite Push</string>
     <string name="PushServiceTypeInAppDialog">Pokaż powiadomienia mieszkańców</string>
     <string name="PushServiceTypeUnifiedGateway">Zunifikowana brama popychająca</string>
+    <string name="SendMp4DocumentAsVideo">Wyślij dokument mp4 jako film</string>
 </resources>

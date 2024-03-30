@@ -132,4 +132,5 @@
     <string name="PushServiceTypeUnified">統一されたプッシュ</string>
     <string name="PushServiceTypeInAppDialog">常駐通知を表示</string>
     <string name="PushServiceTypeUnifiedGateway">Unified Push Gateway</string>
+    <string name="SendMp4DocumentAsVideo">mp4ドキュメントを動画として送信</string>
 </resources>
