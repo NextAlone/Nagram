@@ -80,7 +80,7 @@ function build {
 }
 
 if (( $# == 0 )); then
-	build x86_64 arm64 arm x86
+	build arm64 arm
 else
 	build $@
 fi

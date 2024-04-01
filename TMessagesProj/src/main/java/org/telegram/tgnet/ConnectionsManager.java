@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.SystemClock;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.SparseArray;
@@ -24,17 +26,28 @@ import org.telegram.messenger.BaseController;
 import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.EmuDetector;
+import org.telegram.messenger.FileLoadOperation;
+import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.FileUploadOperation;
 import org.telegram.messenger.KeepAliveJob;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.PushListenerController;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.StatsController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
+import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ChatActivity;
+import org.telegram.ui.Components.BulletinFactory;
+import org.telegram.ui.Components.TypefaceSpan;
+import org.telegram.ui.DialogsActivity;
+import org.telegram.ui.LaunchActivity;
+import org.telegram.ui.PremiumPreviewFragment;
 
 import java.io.File;
 import java.net.Inet4Address;
@@ -725,7 +738,7 @@ SharedPreferences mainPreferences;
             buff.reused = true;
             int constructor = buff.readInt32(true);
             final TLObject message = TLClassStore.Instance().TLdeserialize(buff, constructor, true);
-            FileLog.dumpUnparsedMessage(message, messageId);
+            FileLog.dumpUnparsedMessage(message, messageId, currentAccount);
             if (message instanceof TLRPC.Updates) {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("java received " + message);
@@ -1202,4 +1215,31 @@ SharedPreferences mainPreferences;
         }
     }
 
+    public static long lastPremiumFloodWaitShown = 0;
+    public static void onPremiumFloodWait(final int currentAccount, final int requestToken, boolean isUpload) {
+        AndroidUtilities.runOnUIThread(() -> {
+            if (UserConfig.selectedAccount != currentAccount) {
+                return;
+            }
+
+            boolean updated = false;
+            if (isUpload) {
+                FileUploadOperation operation = FileLoader.getInstance(currentAccount).findUploadOperationByRequestToken(requestToken);
+                if (operation != null) {
+                    updated = !operation.caughtPremiumFloodWait;
+                    operation.caughtPremiumFloodWait = true;
+                }
+            } else {
+                FileLoadOperation operation = FileLoader.getInstance(currentAccount).findLoadOperationByRequestToken(requestToken);
+                if (operation != null) {
+                    updated = !operation.caughtPremiumFloodWait;
+                    operation.caughtPremiumFloodWait = true;
+                }
+            }
+
+            if (updated) {
+                NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.premiumFloodWaitReceived);
+            }
+        });
+    }
 }

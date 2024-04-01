@@ -88,6 +88,7 @@ public class BottomSheet extends Dialog {
     public boolean scrollNavBar;
     public boolean occupyNavigationBar;
     protected boolean waitingKeyboard;
+    public FrameLayout topBulletinContainer;
 
     protected boolean useSmoothKeyboard;
 

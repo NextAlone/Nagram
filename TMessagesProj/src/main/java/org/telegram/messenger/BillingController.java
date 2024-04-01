@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -68,6 +69,9 @@ public class BillingController {
     public String formatCurrency(long amount, String currency, int exp, boolean rounded) {
         if (currency == null || currency.isEmpty()) {
             return String.valueOf(amount);
+        }
+        if ("TON".equalsIgnoreCase(currency)) {
+            return "TON " + (amount / 1_000_000_000.0);
         }
         Currency cur = Currency.getInstance(currency);
         if (cur != null) {

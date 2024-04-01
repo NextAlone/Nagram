@@ -55,6 +55,7 @@ function build_one {
 	--disable-examples \
 	--disable-tools \
 	--disable-debug \
+	--disable-neon-asm \
 	--disable-unit-tests \
 	--disable-install-docs \
 	--enable-realtime-only \
@@ -184,7 +185,7 @@ function build {
 }
 
 if (( $# == 0 )); then
-	build  x86 x86_64 arm arm64
+	build arm arm64
 else
 	build $@
 fi

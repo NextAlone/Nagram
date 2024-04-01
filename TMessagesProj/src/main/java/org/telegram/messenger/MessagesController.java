@@ -255,7 +255,7 @@ public class MessagesController extends BaseController implements NotificationCe
     public boolean dialogFiltersLoaded;
     public ArrayList<TLRPC.TL_dialogFilterSuggested> suggestedFilters = new ArrayList<>();
 
-    private LongSparseArray<ArrayList<TLRPC.Updates>> updatesQueueChannels = new LongSparseArray<>();
+    private final LongSparseArray<ArrayList<TLRPC.Updates>> updatesQueueChannels = new LongSparseArray<>();
     private LongSparseLongArray updatesStartWaitTimeChannels = new LongSparseLongArray();
     private LongSparseIntArray channelsPts = new LongSparseIntArray();
     private LongSparseArray<Boolean> gettingDifferenceChannels = new LongSparseArray<>();
@@ -557,6 +557,7 @@ public class MessagesController extends BaseController implements NotificationCe
     public int recommendedChannelsLimitDefault;
     public int recommendedChannelsLimitPremium;
     public int boostsChannelLevelMax;
+    public int channelRestrictSponsoredLevelMin;
 
     public int channelsLimitDefault;
     public int channelsLimitPremium;
@@ -610,6 +611,14 @@ public class MessagesController extends BaseController implements NotificationCe
     public int groupTranscribeLevelMin;
     public int quickRepliesLimit;
     public int quickReplyMessagesLimit;
+    public float uploadPremiumSpeedupUpload;
+    public float uploadPremiumSpeedupDownload;
+    public int uploadPremiumSpeedupNotifyPeriod;
+    public int introTitleLengthLimit;
+    public int introDescriptionLengthLimit;
+    public int businessChatLinksLimit;
+    public boolean channelRevenueWithdrawalEnabled;
+    public boolean newNoncontactPeersRequirePremiumWithoutOwnpremium;
 
     public int savedDialogsPinnedLimitDefault;
     public int savedDialogsPinnedLimitPremium;
@@ -1595,11 +1604,20 @@ public class MessagesController extends BaseController implements NotificationCe
         recommendedChannelsLimitDefault = mainPreferences.getInt("recommendedChannelsLimitDefault", 10);
         recommendedChannelsLimitPremium = mainPreferences.getInt("recommendedChannelsLimitPremium", 100);
         boostsChannelLevelMax = mainPreferences.getInt("boostsChannelLevelMax", 100);
+        channelRestrictSponsoredLevelMin = mainPreferences.getInt("channelRestrictSponsoredLevelMin", 30);
         savedDialogsPinnedLimitDefault = mainPreferences.getInt("savedDialogsPinnedLimitDefault", 4);
         savedDialogsPinnedLimitPremium = mainPreferences.getInt("savedDialogsPinnedLimitPremium", 6);
         storyQualityFull = mainPreferences.getBoolean("storyQualityFull", true);
         savedViewAsChats = mainPreferences.getBoolean("savedViewAsChats", false);
         folderTags = mainPreferences.getBoolean("folderTags", false);
+        uploadPremiumSpeedupUpload = mainPreferences.getFloat("uploadPremiumSpeedupUpload", 10.0f);
+        uploadPremiumSpeedupDownload = mainPreferences.getFloat("uploadPremiumSpeedupDownload", 10.0f);
+        uploadPremiumSpeedupNotifyPeriod = mainPreferences.getInt("uploadPremiumSpeedupNotifyPeriod2", 3600);
+        introTitleLengthLimit = mainPreferences.getInt("introTitleLengthLimit", 32);
+        introDescriptionLengthLimit = mainPreferences.getInt("introDescriptionLengthLimit", 72);
+        businessChatLinksLimit = mainPreferences.getInt("businessChatLinksLimit", 100);
+        channelRevenueWithdrawalEnabled = mainPreferences.getBoolean("channelRevenueWithdrawalEnabled", false);
+        newNoncontactPeersRequirePremiumWithoutOwnpremium = mainPreferences.getBoolean("newNoncontactPeersRequirePremiumWithoutOwnpremium", false);
         scheduleTranscriptionUpdate();
 //        BuildVars.GOOGLE_AUTH_CLIENT_ID = mainPreferences.getString("googleAuthClientId", BuildVars.GOOGLE_AUTH_CLIENT_ID);
         if (mainPreferences.contains("dcDomainName2")) {
@@ -3801,6 +3819,17 @@ public class MessagesController extends BaseController implements NotificationCe
                     }
                     break;
                 }
+                case "channel_restrict_sponsored_level_min": {
+                    if (value.value instanceof TLRPC.TL_jsonNumber) {
+                        TLRPC.TL_jsonNumber num = (TLRPC.TL_jsonNumber) value.value;
+                        if (channelRestrictSponsoredLevelMin != num.value) {
+                            channelRestrictSponsoredLevelMin = (int) num.value;
+                            editor.putInt("channelRestrictSponsoredLevelMin", channelRestrictSponsoredLevelMin);
+                            changed = true;
+                        }
+                    }
+                    break;
+                }
                 case "channel_bg_icon_level_min": {
                     if (value.value instanceof TLRPC.TL_jsonNumber) {
                         TLRPC.TL_jsonNumber num = (TLRPC.TL_jsonNumber) value.value;
@@ -3961,6 +3990,94 @@ public class MessagesController extends BaseController implements NotificationCe
                         if (num.value != savedDialogsPinnedLimitPremium) {
                             savedDialogsPinnedLimitPremium = (int) num.value;
                             editor.putInt("savedDialogsPinnedLimitPremium", savedDialogsPinnedLimitPremium);
+                            changed = true;
+                        }
+                    }
+                    break;
+                }
+                case "upload_premium_speedup_upload": {
+                    if (value.value instanceof TLRPC.TL_jsonNumber) {
+                        TLRPC.TL_jsonNumber num = (TLRPC.TL_jsonNumber) value.value;
+                        if (Math.abs(num.value - uploadPremiumSpeedupUpload) >= 0.01f) {
+                            uploadPremiumSpeedupUpload = (float) num.value;
+                            editor.putFloat("uploadPremiumSpeedupUpload", uploadPremiumSpeedupUpload);
+                            changed = true;
+                        }
+                    }
+                    break;
+                }
+                case "upload_premium_speedup_download": {
+                    if (value.value instanceof TLRPC.TL_jsonNumber) {
+                        TLRPC.TL_jsonNumber num = (TLRPC.TL_jsonNumber) value.value;
+                        if (Math.abs(num.value - uploadPremiumSpeedupDownload) >= 0.01f) {
+                            uploadPremiumSpeedupDownload = (float) num.value;
+                            editor.putFloat("uploadPremiumSpeedupDownload", uploadPremiumSpeedupDownload);
+                            changed = true;
+                        }
+                    }
+                    break;
+                }
+                case "upload_premium_speedup_notify_period": {
+                    if (value.value instanceof TLRPC.TL_jsonNumber) {
+                        TLRPC.TL_jsonNumber num = (TLRPC.TL_jsonNumber) value.value;
+                        if (num.value != uploadPremiumSpeedupNotifyPeriod) {
+                            uploadPremiumSpeedupNotifyPeriod = (int) num.value;
+                            editor.putInt("uploadPremiumSpeedupNotifyPeriod2", uploadPremiumSpeedupNotifyPeriod);
+                            changed = true;
+                        }
+                    }
+                    break;
+                }
+                case "intro_title_length_limit": {
+                    if (value.value instanceof TLRPC.TL_jsonNumber) {
+                        TLRPC.TL_jsonNumber num = (TLRPC.TL_jsonNumber) value.value;
+                        if (num.value != introTitleLengthLimit) {
+                            introTitleLengthLimit = (int) num.value;
+                            editor.putInt("introTitleLengthLimit", introTitleLengthLimit);
+                            changed = true;
+                        }
+                    }
+                    break;
+                }
+                case "intro_description_length_limit": {
+                    if (value.value instanceof TLRPC.TL_jsonNumber) {
+                        TLRPC.TL_jsonNumber num = (TLRPC.TL_jsonNumber) value.value;
+                        if (num.value != introDescriptionLengthLimit) {
+                            introDescriptionLengthLimit = (int) num.value;
+                            editor.putInt("introDescriptionLengthLimit", introDescriptionLengthLimit);
+                            changed = true;
+                        }
+                    }
+                    break;
+                }
+                case "business_chat_links_limit": {
+                    if (value.value instanceof TLRPC.TL_jsonNumber) {
+                        TLRPC.TL_jsonNumber num = (TLRPC.TL_jsonNumber) value.value;
+                        if (num.value != businessChatLinksLimit) {
+                            businessChatLinksLimit = (int) num.value;
+                            editor.putInt("businessChatLinksLimit", businessChatLinksLimit);
+                            changed = true;
+                        }
+                    }
+                    break;
+                }
+                case "channel_revenue_withdrawal_enabled": {
+                    if (value.value instanceof TLRPC.TL_jsonBool) {
+                        TLRPC.TL_jsonBool num = (TLRPC.TL_jsonBool) value.value;
+                        if (num.value != channelRevenueWithdrawalEnabled) {
+                            channelRevenueWithdrawalEnabled = num.value;
+                            editor.putBoolean("channelRevenueWithdrawalEnabled", channelRevenueWithdrawalEnabled);
+                            changed = true;
+                        }
+                    }
+                    break;
+                }
+                case "new_noncontact_peers_require_premium_without_ownpremium": {
+                    if (value.value instanceof TLRPC.TL_jsonBool) {
+                        TLRPC.TL_jsonBool num = (TLRPC.TL_jsonBool) value.value;
+                        if (num.value != newNoncontactPeersRequirePremiumWithoutOwnpremium) {
+                            newNoncontactPeersRequirePremiumWithoutOwnpremium = num.value;
+                            editor.putBoolean("newNoncontactPeersRequirePremiumWithoutOwnpremium", newNoncontactPeersRequirePremiumWithoutOwnpremium);
                             changed = true;
                         }
                     }
@@ -4494,9 +4611,10 @@ public class MessagesController extends BaseController implements NotificationCe
 
     private void resetAppConfig() {
         getfileExperimentalParams = false;
+        channelRevenueWithdrawalEnabled = false;
         collectDeviceStats = false;
         smsjobsStickyNotificationEnabled = false;
-        mainPreferences.edit().remove("getfileExperimentalParams").remove("smsjobsStickyNotificationEnabled").apply();
+        mainPreferences.edit().remove("getfileExperimentalParams").remove("smsjobsStickyNotificationEnabled").remove("channelRevenueWithdrawalEnabled").apply();
     }
 
     private boolean savePremiumFeaturesPreviewOrder(String key, SparseIntArray array, SharedPreferences.Editor editor, ArrayList<TLRPC.JSONValue> value) {
@@ -4872,6 +4990,18 @@ public class MessagesController extends BaseController implements NotificationCe
             inputPeer.user_id = id;
         }
         return inputPeer;
+    }
+
+    public TLRPC.InputDocument getInputDocument(TLRPC.Document document) {
+        if (document == null) return null;
+        TLRPC.TL_inputDocument id = new TLRPC.TL_inputDocument();
+        id.id = document.id;
+        id.access_hash = document.access_hash;
+        id.file_reference = document.file_reference;
+        if (id.file_reference == null) {
+            id.file_reference = new byte[0];
+        }
+        return id;
     }
 
 
@@ -6054,7 +6184,7 @@ public class MessagesController extends BaseController implements NotificationCe
         loadingFullChats.remove(chatId);
     }
 
-    protected void clearFullUsers() {
+    public void clearFullUsers() {
         loadedFullUsers.clear();
         loadedFullChats.clear();
     }
@@ -6182,7 +6312,7 @@ public class MessagesController extends BaseController implements NotificationCe
 
     public void loadChannelAdmins(long chatId, boolean cache) {
         int loadTime = loadingChannelAdmins.get(chatId);
-        if (SystemClock.elapsedRealtime() - loadTime < 60) {
+        if ((SystemClock.elapsedRealtime() / 1000) - loadTime < 60) {
             return;
         }
         loadingChannelAdmins.put(chatId, (int) (SystemClock.elapsedRealtime() / 1000));
@@ -6620,11 +6750,23 @@ public class MessagesController extends BaseController implements NotificationCe
         }
     }
 
-    private void savePeerSettings(long dialogId, TLRPC.TL_peerSettings settings, boolean update) {
-        if (settings == null || notificationsPreferences.getInt("dialog_bar_vis3" + dialogId, 0) == 3) {
+    private void savePeerSettings(long dialogId, TLRPC.PeerSettings settings, boolean update) {
+        if (settings == null) {
             return;
         }
         SharedPreferences.Editor editor = notificationsPreferences.edit();
+        if (settings.business_bot_id != 0) {
+            editor.putLong("dialog_botid" + dialogId, settings.business_bot_id);
+            editor.putString("dialog_boturl" + dialogId, settings.business_bot_manage_url);
+            editor.putInt("dialog_botflags" + dialogId, (settings.business_bot_paused ? 1 : 0) + (settings.business_bot_can_reply ? 2 : 0));
+        } else {
+            editor.remove("dialog_botid" + dialogId).remove("dialog_boturl" + dialogId).remove("dialog_botflags" + dialogId);
+        }
+        if (notificationsPreferences.getInt("dialog_bar_vis3" + dialogId, 0) == 3) {
+            editor.apply();
+            getNotificationCenter().postNotificationName(NotificationCenter.peerSettingsDidLoad, dialogId);
+            return;
+        }
         boolean bar_hidden = settings.flags == 0;
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("peer settings loaded for " + dialogId + " add = " + settings.add_contact + " block = " + settings.block_contact + " spam = " + settings.report_spam + " share = " + settings.share_contact + " geo = " + settings.report_geo + " hide = " + bar_hidden + " distance = " + settings.geo_distance + " invite = " + settings.invite_members);
@@ -6647,6 +6789,10 @@ public class MessagesController extends BaseController implements NotificationCe
             } else {
                 editor.remove("dialog_bar_distance" + dialogId);
             }
+        }
+        if (dialogId == getUserConfig().getClientUserId()) {
+            settings.business_bot_id = UserObject.REPLY_BOT;
+            settings.business_bot_manage_url = "https://telegram.org/";
         }
         editor.apply();
         getNotificationCenter().postNotificationName(NotificationCenter.peerSettingsDidLoad, dialogId);
@@ -6686,7 +6832,7 @@ public class MessagesController extends BaseController implements NotificationCe
             loadingPeerSettings.remove(dialogId);
             if (response != null) {
                 TLRPC.TL_messages_peerSettings res = (TLRPC.TL_messages_peerSettings) response;
-                TLRPC.TL_peerSettings settings = res.settings;
+                TLRPC.PeerSettings settings = res.settings;
                 putUsers(res.users, false);
                 putChats(res.chats, false);
 
@@ -7360,7 +7506,7 @@ public class MessagesController extends BaseController implements NotificationCe
                                 LimitReachedBottomSheet restricterdUsersBottomSheet = new LimitReachedBottomSheet(lastFragment, lastFragment.getParentActivity(), LimitReachedBottomSheet.TYPE_ADD_MEMBERS_RESTRICTED, currentAccount, null);
                                 ArrayList<TLRPC.User> users = new ArrayList<TLRPC.User>();
                                 users.add(user);
-                                restricterdUsersBottomSheet.setRestrictedUsers(chat, users);
+                                restricterdUsersBottomSheet.setRestrictedUsers(chat, users, null, null);
                                 restricterdUsersBottomSheet.show();
                             }
                             onError.run(error);
@@ -11973,13 +12119,14 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     private void applyDialogsNotificationsSettings(ArrayList<TLRPC.Dialog> dialogs) {
-        SharedPreferences.Editor editor = null;
+        SharedPreferences.Editor editor = getNotificationsSettings(currentAccount).edit();
         for (int a = 0; a < dialogs.size(); a++) {
             TLRPC.Dialog dialog = dialogs.get(a);
             if (dialog.peer != null && dialog.notify_settings instanceof TLRPC.TL_peerNotifySettings) {
-                getNotificationsController().getNotificationsSettingsFacade().setSettingsForDialog(dialog, dialog.notify_settings);
+                getNotificationsController().getNotificationsSettingsFacade().setSettingsForDialog(editor, dialog, dialog.notify_settings);
             }
         }
+        editor.apply();
     }
 
     public void reloadMentionsCountForChannel(TLRPC.InputPeer peer, long taskId) {
@@ -13010,18 +13157,20 @@ public class MessagesController extends BaseController implements NotificationCe
                     });
                     return;
                 }
-                TLRPC.Updates updates = (TLRPC.Updates) response;
-                processUpdates(updates, false);
-                AndroidUtilities.runOnUIThread(() -> {
-                    putUsers(updates.users, false);
-                    putChats(updates.chats, false);
-                    if (updates.chats != null && !updates.chats.isEmpty()) {
-                        getNotificationCenter().postNotificationName(NotificationCenter.chatDidCreated, updates.chats.get(0).id);
-                        AlertsCreator.checkRestrictedInviteUsers(currentAccount, updates.chats.get(0), updates);
-                    } else {
-                        getNotificationCenter().postNotificationName(NotificationCenter.chatDidFailCreate);
-                    }
-                });
+                if (response instanceof TLRPC.TL_messages_invitedUsers) {
+                    TLRPC.TL_messages_invitedUsers res = (TLRPC.TL_messages_invitedUsers) response;
+                    processUpdates(res.updates, false);
+                    AndroidUtilities.runOnUIThread(() -> {
+                        putUsers(res.updates.users, false);
+                        putChats(res.updates.chats, false);
+                        if (res.updates.chats != null && !res.updates.chats.isEmpty()) {
+                            getNotificationCenter().postNotificationName(NotificationCenter.chatDidCreated, res.updates.chats.get(0).id);
+                            AlertsCreator.checkRestrictedInviteUsers(currentAccount, res.updates.chats.get(0), res);
+                        } else {
+                            getNotificationCenter().postNotificationName(NotificationCenter.chatDidFailCreate);
+                        }
+                    });
+                }
             }, ConnectionsManager.RequestFlagFailOnServerErrors);
         } else if (forImport || type == ChatObject.CHAT_TYPE_CHANNEL || type == ChatObject.CHAT_TYPE_MEGAGROUP || type == ChatObject.CHAT_TYPE_FORUM) {
             TLRPC.TL_channels_createChannel req = new TLRPC.TL_channels_createChannel();
@@ -13209,11 +13358,15 @@ public class MessagesController extends BaseController implements NotificationCe
                 AndroidUtilities.runOnUIThread(() -> AlertsCreator.processError(currentAccount, error, fragment, req, true));
                 return;
             }
-            processUpdates((TLRPC.Updates) response, false);
-            AndroidUtilities.runOnUIThread(() -> {
-                AlertsCreator.checkRestrictedInviteUsers(currentAccount, getChat(chatId), (TLRPC.Updates) response);
-            });
-
+            if (response instanceof TLRPC.TL_messages_invitedUsers) {
+                TLRPC.TL_messages_invitedUsers res = (TLRPC.TL_messages_invitedUsers) response;
+                processUpdates(res.updates, false);
+                AndroidUtilities.runOnUIThread(() -> {
+                    putUsers(res.updates.users, false);
+                    putChats(res.updates.chats, false);
+                    AlertsCreator.checkRestrictedInviteUsers(currentAccount, getChat(chatId), res);
+                });
+            }
         });
     }
 
@@ -13427,47 +13580,40 @@ public class MessagesController extends BaseController implements NotificationCe
         public boolean run(TLRPC.TL_error error);
     }
 
+    public void loadUsersPremiumLocked(
+        final ArrayList<TLRPC.User> users,
+        Utilities.Callback<ArrayList<Long>> whenDone
+    ) {
+        if (whenDone == null) return;
+        if (getUserConfig().isPremium()) {
+            whenDone.run(null);
+            return;
+        }
+        TLRPC.TL_users_getIsPremiumRequiredToContact req = new TLRPC.TL_users_getIsPremiumRequiredToContact();
+        MessagesController mc = MessagesController.getInstance(currentAccount);
+        for (TLRPC.User user : users) {
+            req.id.add(mc.getInputUser(user));
+        }
+        ConnectionsManager.getInstance(currentAccount).sendRequest(req, (res, err) -> AndroidUtilities.runOnUIThread(() -> {
+            ArrayList<Long> lockedUserIds = new ArrayList<>();
+            if (res instanceof TLRPC.Vector) {
+                TLRPC.Vector vector = (TLRPC.Vector) res;
+                for (int i = 0; i < vector.objects.size(); ++i) {
+                    if (i < users.size() && vector.objects.get(i) instanceof TLRPC.TL_boolTrue) {
+                        lockedUserIds.add(users.get(i).id);
+                    }
+                }
+            }
+            whenDone.run(lockedUserIds);
+        }));
+    }
+
     public void addUsersToChat(TLRPC.Chat currentChat, BaseFragment baseFragment, ArrayList<TLRPC.User> users, int fwdCount, Consumer<TLRPC.User> onAddUser, Consumer<TLRPC.User> onRestricted, Runnable onComplete) {
         final int count = users.size();
         final int[] processed = new int[1];
-        final ArrayList<TLRPC.User> userRestrictedPrivacy = new ArrayList<>();
         processed[0] = 0;
-        final Runnable showUserRestrictedPrivacyAlert = () -> {
-            AndroidUtilities.runOnUIThread(() -> {
-                BaseFragment lastFragment = LaunchActivity.getLastFragment();
-                if (lastFragment != null && lastFragment.getParentActivity() != null && !lastFragment.getParentActivity().isFinishing()) {
-//                    if (ChatObject.canUserDoAdminAction(currentChat, ChatObject.ACTION_INVITE)) {
-                        LimitReachedBottomSheet restricterdUsersBottomSheet = new LimitReachedBottomSheet(lastFragment, lastFragment.getParentActivity(), LimitReachedBottomSheet.TYPE_ADD_MEMBERS_RESTRICTED, currentAccount, null);
-                        restricterdUsersBottomSheet.setRestrictedUsers(currentChat, userRestrictedPrivacy);
-                        restricterdUsersBottomSheet.show();
-//                    } else {
-//                        CharSequence title, description;
-//                        if (userRestrictedPrivacy.size() == 1) {
-//                            if (count > 1) {
-//                                title = LocaleController.getString("InviteToGroupErrorTitleAUser", R.string.InviteToGroupErrorTitleAUser);
-//                            } else {
-//                                title = LocaleController.getString("InviteToGroupErrorTitleThisUser", R.string.InviteToGroupErrorTitleThisUser);
-//                            }
-//                            description = AndroidUtilities.replaceTags(LocaleController.formatString("InviteToGroupErrorMessageSingle", R.string.InviteToGroupErrorMessageSingle, UserObject.getFirstName(userRestrictedPrivacy.get(0))));
-//                        } else if (userRestrictedPrivacy.size() == 2) {
-//                            title = LocaleController.getString("InviteToGroupErrorTitleSomeUsers", R.string.InviteToGroupErrorTitleSomeUsers);
-//                            description = AndroidUtilities.replaceTags(LocaleController.formatString("InviteToGroupErrorMessageDouble", R.string.InviteToGroupErrorMessageDouble, UserObject.getFirstName(userRestrictedPrivacy.get(0)), UserObject.getFirstName(userRestrictedPrivacy.get(1))));
-//                        } else if (userRestrictedPrivacy.size() == count) {
-//                            title = LocaleController.getString("InviteToGroupErrorTitleTheseUsers", R.string.InviteToGroupErrorTitleTheseUsers);
-//                            description = LocaleController.getString("InviteToGroupErrorMessageMultipleAll", R.string.InviteToGroupErrorMessageMultipleAll);
-//                        } else {
-//                            title = LocaleController.getString("InviteToGroupErrorTitleSomeUsers", R.string.InviteToGroupErrorTitleSomeUsers);
-//                            description = LocaleController.getString("InviteToGroupErrorMessageMultipleSome", R.string.InviteToGroupErrorMessageMultipleSome);
-//                        }
-//                        new AlertDialog.Builder(lastFragment.getParentActivity())
-//                                .setTitle(title)
-//                                .setMessage(description)
-//                                .setPositiveButton(LocaleController.getString("OK", R.string.OK), null)
-//                                .show();
-//                    }
-                }
-            }, 200);
-        };
+        TLRPC.TL_messages_invitedUsers totalInvitedUsers = new TLRPC.TL_messages_invitedUsers();
+        totalInvitedUsers.updates = new TLRPC.TL_updates();
         long chatId = currentChat.id;
         for (int a = 0; a < count; a++) {
             final TLRPC.User user = users.get(a);
@@ -13475,37 +13621,62 @@ public class MessagesController extends BaseController implements NotificationCe
                 if (onAddUser != null) {
                     onAddUser.accept(user);
                 }
+            }, err -> {
+                if (onRestricted != null) {
+                    onRestricted.accept(user);
+                }
+                return !(err != null && "USER_PRIVACY_RESTRICTED".equals(err.text));
+            }, invitedUsers -> {
+                if (invitedUsers != null) {
+                    totalInvitedUsers.missing_invitees.addAll(invitedUsers.missing_invitees);
+                }
                 processed[0]++;
                 if (processed[0] >= count) {
-                    if (userRestrictedPrivacy.size() > 0) {
-                        showUserRestrictedPrivacyAlert.run();
+                    if (!totalInvitedUsers.missing_invitees.isEmpty()) {
+                        AndroidUtilities.runOnUIThread(() -> {
+                            AlertsCreator.checkRestrictedInviteUsers(currentAccount, currentChat, totalInvitedUsers);
+                        });
                     }
                     if (onComplete != null) {
                         onComplete.run();
                     }
                 }
-            }, err -> {
-                processed[0]++;
-                boolean privacyRestricted;
-                if (privacyRestricted = err != null && "USER_PRIVACY_RESTRICTED".equals(err.text)) {
-                    userRestrictedPrivacy.add(user);
-                }
-                if (processed[0] >= count && userRestrictedPrivacy.size() > 0) {
-                    showUserRestrictedPrivacyAlert.run();
-                }
-                if (onRestricted != null) {
-                    onRestricted.accept(user);
-                }
-                return !privacyRestricted;
             });
             putUser(user, false);
         }
     }
 
-    public void addUserToChat(long chatId, TLRPC.User user, int forwardCount, String botHash, BaseFragment fragment, boolean ignoreIfAlreadyExists, Runnable onFinishRunnable, ErrorDelegate onError) {
+
+    public void addUserToChat(
+        long chatId,
+        TLRPC.User user,
+        int forwardCount,
+        String botHash,
+        BaseFragment fragment,
+        boolean ignoreIfAlreadyExists,
+        Runnable onFinishRunnable,
+        ErrorDelegate onError
+    ) {
+        addUserToChat(chatId, user, forwardCount, botHash, fragment, ignoreIfAlreadyExists, onFinishRunnable, onError, null);
+    }
+
+    public void addUserToChat(
+        long chatId,
+        TLRPC.User user,
+        int forwardCount,
+        String botHash,
+        BaseFragment fragment,
+        boolean ignoreIfAlreadyExists,
+        Runnable onFinishRunnable,
+        ErrorDelegate onError,
+        Utilities.Callback<TLRPC.TL_messages_invitedUsers> processInvitedUsers
+    ) {
         if (user == null) {
             if (onError != null) {
                 onError.run(null);
+            }
+            if (processInvitedUsers != null) {
+                processInvitedUsers.run(null);
             }
             return;
         }
@@ -13560,6 +13731,28 @@ public class MessagesController extends BaseController implements NotificationCe
                 AndroidUtilities.runOnUIThread(() -> joiningToChannels.remove(chatId));
             }
             if (error != null) {
+                if ("PRIVACY_PREMIUM_REQUIRED".equals(error.text)) {
+                    TLRPC.TL_messages_invitedUsers invitedUsers = new TLRPC.TL_messages_invitedUsers();
+                    invitedUsers.updates = new TLRPC.TL_updates();
+                    TLRPC.TL_missingInvitee missingInvitee = new TLRPC.TL_missingInvitee();
+                    missingInvitee.user_id = user.id;
+                    missingInvitee.premium_would_allow_invite = true;
+                    missingInvitee.premium_required_for_pm = true;
+                    invitedUsers.missing_invitees.add(missingInvitee);
+                    AndroidUtilities.runOnUIThread(() -> {
+                        if (processInvitedUsers != null) {
+                            processInvitedUsers.run(invitedUsers);
+                        } else {
+                            AlertsCreator.checkRestrictedInviteUsers(currentAccount, getChat(chatId), invitedUsers);
+                        }
+                    });
+                    return;
+                }
+                AndroidUtilities.runOnUIThread(() -> {
+                    if (processInvitedUsers != null) {
+                        processInvitedUsers.run(null);
+                    }
+                });
                 if ("USER_ALREADY_PARTICIPANT".equals(error.text) && ignoreIfAlreadyExists) {
                     if (onFinishRunnable != null) {
                         AndroidUtilities.runOnUIThread(onFinishRunnable);
@@ -13585,7 +13778,23 @@ public class MessagesController extends BaseController implements NotificationCe
                 return;
             }
             boolean hasJoinMessage = false;
-            TLRPC.Updates updates = (TLRPC.Updates) response;
+            TLRPC.Updates updates;
+            TLRPC.TL_messages_invitedUsers invitedUsers;
+            if (response instanceof TLRPC.TL_messages_invitedUsers) {
+                invitedUsers = (TLRPC.TL_messages_invitedUsers) response;
+                updates = invitedUsers.updates;
+            } else if (response instanceof TLRPC.Updates) {
+                invitedUsers = null;
+                updates = (TLRPC.Updates) response;
+            } else {
+                FileLog.e("unexpected " + response + " in addUserToChat");
+                AndroidUtilities.runOnUIThread(() -> {
+                    if (processInvitedUsers != null) {
+                        processInvitedUsers.run(null);
+                    }
+                });
+                return;
+            }
             for (int a = 0; a < updates.updates.size(); a++) {
                 TLRPC.Update update = updates.updates.get(a);
                 if (update instanceof TLRPC.TL_updateNewChannelMessage) {
@@ -13596,13 +13805,22 @@ public class MessagesController extends BaseController implements NotificationCe
                 }
             }
             processUpdates(updates, false);
+            if (invitedUsers != null && !invitedUsers.missing_invitees.isEmpty()) {
+                AndroidUtilities.runOnUIThread(() -> {
+                    putUsers(updates.users, false);
+                    putChats(updates.chats, false);
+                    if (processInvitedUsers != null) {
+                        processInvitedUsers.run(invitedUsers);
+                    } else {
+                        AlertsCreator.checkRestrictedInviteUsers(currentAccount, getChat(chatId), invitedUsers);
+                    }
+                });
+                return;
+            }
             if (isChannel) {
                 if (!hasJoinMessage && inputUser instanceof TLRPC.TL_inputUserSelf) {
                     generateJoinMessage(chatId, true);
                 }
-                AndroidUtilities.runOnUIThread(() -> {
-                    AlertsCreator.checkRestrictedInviteUsers(currentAccount, getChat(chatId), (TLRPC.Updates) response);
-                });
                 AndroidUtilities.runOnUIThread(() -> loadFullChat(chatId, 0, true), 1000);
             }
             if (isChannel && inputUser instanceof TLRPC.TL_inputUserSelf) {
@@ -13610,6 +13828,9 @@ public class MessagesController extends BaseController implements NotificationCe
             }
             if (onFinishRunnable != null) {
                 AndroidUtilities.runOnUIThread(onFinishRunnable);
+            }
+            if (processInvitedUsers != null) {
+                AndroidUtilities.runOnUIThread(() -> processInvitedUsers.run(null));
             }
         });
     }
@@ -18257,7 +18478,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 for (int a = 0, size = scheduledMessagesFinal.size(); a < size; a++) {
                     long key = scheduledMessagesFinal.keyAt(a);
                     ArrayList<MessageObject> value = scheduledMessagesFinal.valueAt(a);
-                    updateInterfaceWithMessages(key, value, 0);
+                    updateInterfaceWithMessages(key, value, ChatActivity.MODE_SCHEDULED);
                 }
             }
             if (editingMessagesFinal != null) {
@@ -18847,6 +19068,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         messageObject.sponsoredWebPage = sponsoredMessage.webpage;
                         messageObject.sponsoredBotApp = sponsoredMessage.app;
                         messageObject.sponsoredButtonText = sponsoredMessage.button_text;
+                        messageObject.sponsoredCanReport = sponsoredMessage.can_report;
                         result.add(messageObject);
                     }
                 }
@@ -19051,7 +19273,7 @@ public class MessagesController extends BaseController implements NotificationCe
                             save = true;
                         }
                         if (save) {
-                            getMediaDataController().addRecentGif(message.messageOwner.media.document, message.messageOwner.date, true);
+                            getMediaDataController().addRecentGif(message.messageOwner.media.document, message.messageOwner.date, message.wasJustSent);
                         }
                     } else if (!message.isAnimatedEmoji() && (message.isSticker() || message.isAnimatedSticker())) {
                         getMediaDataController().addRecentSticker(MediaDataController.TYPE_IMAGE, message, message.messageOwner.media.document, message.messageOwner.date, false);
@@ -19680,7 +19902,7 @@ public class MessagesController extends BaseController implements NotificationCe
             if (type != 3 && user.bot) {
                 type = 1;
                 BaseFragment lastFragment = LaunchActivity.getLastFragment();
-                if (!(lastFragment.storyViewer != null && lastFragment.storyViewer.isShown())) {
+                if (lastFragment.getLastStoryViewer() == null) {
                     closeLast = true;
                 }
             }

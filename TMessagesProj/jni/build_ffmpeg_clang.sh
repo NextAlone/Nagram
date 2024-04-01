@@ -75,6 +75,10 @@ function build_one {
 	\
 	--enable-libvpx \
 	--enable-decoder=libvpx_vp9 \
+	--enable-encoder=libvpx_vp9 \
+  --enable-muxer=matroska \
+  --enable-bsf=vp9_superframe \
+  --enable-bsf=vp9_raw_reorder \
 	--enable-runtime-cpudetect \
 	--enable-pthreads \
 	--enable-avresample \
@@ -223,7 +227,7 @@ function build {
 }
 
 if (( $# == 0 )); then
-	build x86_64 arm64 arm x86
+	build arm64 arm
 else
 	build $@
 fi

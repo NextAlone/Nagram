@@ -215,8 +215,14 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
             }
             generatingCache = false;
             decodeFrameFinishedInternal();
+            if (whenCacheDone != null) {
+                whenCacheDone.run();
+                whenCacheDone = null;
+            }
         }
     };
+
+    public Runnable whenCacheDone;
 
     BitmapsCache bitmapsCache;
     int generateCacheFramePointer;
@@ -1019,6 +1025,14 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
             loadFrameRunnableQueue.execute(loadFrameTask);
         }
         return true;
+    }
+
+    public void post(Runnable runnable) {
+        if (shouldLimitFps && Thread.currentThread() == ApplicationLoader.applicationHandler.getLooper().getThread()) {
+            DispatchQueuePoolBackground.execute(() -> AndroidUtilities.runOnUIThread(runnable), frameWaitSync != null);
+        } else {
+            loadFrameRunnableQueue.execute(() -> AndroidUtilities.runOnUIThread(runnable));
+        }
     }
 
     public boolean isHeavyDrawable() {

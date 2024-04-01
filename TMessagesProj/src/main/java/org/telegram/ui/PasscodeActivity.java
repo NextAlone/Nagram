@@ -22,7 +22,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.hardware.biometrics.BiometricManager;
 import android.os.Build;
 import android.text.Editable;
 import android.text.InputType;
@@ -51,6 +50,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
+import androidx.biometric.BiometricManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -63,7 +63,6 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.support.fingerprint.FingerprintManagerCompat;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
@@ -897,22 +896,15 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         changePasscodeRow = rowCount++;
         try {
             if (Build.VERSION.SDK_INT >= 23) {
-                boolean useBiometric;
-                if (Build.VERSION.SDK_INT >= 29) {
-                    BiometricManager biometricManager = (BiometricManager) ApplicationLoader.applicationContext.getSystemService(Context.BIOMETRIC_SERVICE);
-                    if (Build.VERSION.SDK_INT >= 30) {
-                        useBiometric = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK) == BiometricManager.BIOMETRIC_SUCCESS;
-                    } else {
-                        useBiometric = biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS;
-                    }
-                } else {
-                    FingerprintManagerCompat fingerprintManager = FingerprintManagerCompat.from(ApplicationLoader.applicationContext);
-                    useBiometric = fingerprintManager.isHardwareDetected();
-                }
-                if (useBiometric) {
+                if (
+                        BiometricManager.from(getContext()).canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG) == BiometricManager.BIOMETRIC_SUCCESS &&
+                                AndroidUtilities.isKeyguardSecure()
+                ) {
                     fingerprintRow = rowCount++;
-                } else fingerprintRow = -1;
-            }
+                } else {
+                    fingerprintRow = -1;
+                }
+            } else fingerprintRow = -1;
         } catch (Throwable e) {
             FileLog.e(e);
         }
