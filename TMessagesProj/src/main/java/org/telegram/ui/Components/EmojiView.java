@@ -6641,9 +6641,9 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     packStartPosition.put(key = "fav", totalItems);
                 } else if (a == -2) {
                     documents = recentStickers;
-                    if (!documents.isEmpty() && !StickersAlert.DISABLE_STICKER_EDITOR) {
-                        isAddedStickerBtnSet = true;
-                    }
+//                    if (!documents.isEmpty() && !StickersAlert.DISABLE_STICKER_EDITOR) {
+//                        isAddedStickerBtnSet = true;
+//                    }
                     packStartPosition.put(key = "recent", totalItems);
                 } else if (a == -1) {
                     continue;
