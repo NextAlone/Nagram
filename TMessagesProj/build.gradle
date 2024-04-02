@@ -303,6 +303,8 @@ dependencies {
     implementation "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
     implementation "com.google.android.play:core:$playCoreVersion"
 
+    implementation 'com.android.billingclient:billing:5.1.0'
+
     testImplementation "junit:junit:4.13.2"
     testImplementation "androidx.test:core:1.5.0"
     testImplementation "org.robolectric:robolectric:4.5.1"
