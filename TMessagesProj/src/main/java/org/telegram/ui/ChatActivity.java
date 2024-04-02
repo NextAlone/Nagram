@@ -8311,7 +8311,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
 
 //        BackButtonMenu.addToAccessedDialogs(currentAccount, currentChat, currentUser, dialog_id, dialogFolderId, dialogFilterId);
-        BackButtonMenuRecent.addToRecentDialogs(currentAccount, currentUser != null ? currentUser.id : -currentChat.id);
+        if (currentUser != null || currentChat != null) {
+            BackButtonMenuRecent.addToRecentDialogs(currentAccount, currentUser != null ? currentUser.id : -currentChat.id);
+        }
 
         if (getDialogId() == getUserConfig().getClientUserId() && chatMode != MODE_SAVED) {
             savedMessagesHint = new HintView2(context, HintView2.DIRECTION_TOP);
