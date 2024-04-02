@@ -59,7 +59,7 @@ import tw.nekomimi.nekogram.helpers.UnzipHelper;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class EmojiHelper extends BaseRemoteHelper implements NotificationCenter.NotificationCenterDelegate {
-    private static final String EMOJI_TAG = "emoji";
+    private static final String EMOJI_TAG = "emojiv1";
     private static final String EMOJI_FONT_AOSP = "NotoColorEmoji.ttf";
     private static final int EMOJI_COUNT = 3538;
     private static final String EMOJI_PACKS_FILE_DIR;
