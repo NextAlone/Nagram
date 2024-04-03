@@ -2209,6 +2209,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                     if (stickerSet == null) return;
                     cell.setSticker(stickerSet.documents.get(position), null, stickerSet, null, showEmoji, isEditModeEnabled);
                     cell.editModeIcon.setOnClickListener(v -> {
+                        ContentPreviewViewer.getInstance().setDelegate(previewDelegate);
                         ContentPreviewViewer.getInstance().showMenuFor(cell);
                     });
                 }

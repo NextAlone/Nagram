@@ -508,9 +508,11 @@ public class ContentPreviewViewer {
                             icons.add(R.drawable.msg_edit);
                             actions.add(7);
                         }
-                        items.add(LocaleController.getString(R.string.DeleteSticker));
-                        icons.add(R.drawable.msg_delete);
-                        actions.add(8);
+                        if (delegate != null) {
+                            items.add(LocaleController.getString(R.string.DeleteSticker));
+                            icons.add(R.drawable.msg_delete);
+                            actions.add(8);
+                        }
                     }
                 }
 
