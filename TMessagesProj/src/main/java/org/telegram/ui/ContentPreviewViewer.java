@@ -143,7 +143,7 @@ public class ContentPreviewViewer {
 
         }
 
-        default void newStickerPackSelected(CharSequence name, String emoji) {
+        default void newStickerPackSelected(CharSequence short_name, CharSequence name, String emoji) {
 
         }
 
@@ -356,11 +356,13 @@ public class ContentPreviewViewer {
                         reactionsWindow.dismiss();
                     }
                     if (stickerSetCovered instanceof TLRPC.TL_stickerSetNoCovered) {
-                        StickersDialogs.showNameEditorDialog(null, resourcesProvider, containerView.getContext(), arg -> {
-                            delegate.newStickerPackSelected(arg, reactionsLayout.getSelectedEmoji());
-                            if (popupWindow != null) {
-                                popupWindow.dismiss();
-                            }
+                        StickersDialogs.showShortNameEditorDialog(resourcesProvider, containerView.getContext(), short_name -> {
+                            StickersDialogs.showNameEditorDialog(null, resourcesProvider, containerView.getContext(), arg -> {
+                                delegate.newStickerPackSelected(short_name, arg, reactionsLayout.getSelectedEmoji());
+                                if (popupWindow != null) {
+                                    popupWindow.dismiss();
+                                }
+                            });
                         });
                         return;
                     }

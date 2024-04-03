@@ -917,10 +917,15 @@ public class StickerMakerView extends FrameLayout implements NotificationCenter.
     }
 
     public void uploadStickerFile(String path, VideoEditedInfo videoEditedInfo, String emoji, CharSequence stickerPackName, boolean addToFavorite, TLRPC.StickerSet stickerSet, TLRPC.Document replacedSticker) {
+        uploadStickerFile(path, videoEditedInfo, emoji, stickerPackName, addToFavorite, stickerSet, replacedSticker, "");
+    }
+
+    public void uploadStickerFile(String path, VideoEditedInfo videoEditedInfo, String emoji, CharSequence stickerPackName, boolean addToFavorite, TLRPC.StickerSet stickerSet, TLRPC.Document replacedSticker, CharSequence stickerShortPackName) {
         AndroidUtilities.runOnUIThread(() -> {
             stickerUploader = new StickerUploader();
             stickerUploader.emoji = emoji;
             stickerUploader.path = stickerUploader.finalPath = path;
+            stickerUploader.stickerShortPackName = stickerShortPackName;
             stickerUploader.stickerPackName = stickerPackName;
             stickerUploader.addToFavorite = addToFavorite;
             stickerUploader.stickerSet = stickerSet;
@@ -1003,7 +1008,7 @@ public class StickerMakerView extends FrameLayout implements NotificationCenter.
             TLRPC.TL_stickers_createStickerSet req = new TLRPC.TL_stickers_createStickerSet();
             req.user_id = new TLRPC.TL_inputUserSelf();
             req.title = stickerUploader.stickerPackName.toString();
-            req.short_name = "";
+            req.short_name = stickerUploader.stickerShortPackName != null ? stickerUploader.stickerShortPackName.toString() : "";
             req.stickers.add(stickerUploader.tlInputStickerSetItem);
             ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
                 if (response instanceof TLRPC.TL_messages_stickerSet) {
@@ -1036,6 +1041,7 @@ public class StickerMakerView extends FrameLayout implements NotificationCenter.
         public String path;
         public String finalPath;
         public String emoji;
+        public CharSequence stickerShortPackName;
         public CharSequence stickerPackName;
         public TLRPC.TL_inputStickerSetItem tlInputStickerSetItem;
         public TLRPC.TL_messageMediaDocument mediaDocument;

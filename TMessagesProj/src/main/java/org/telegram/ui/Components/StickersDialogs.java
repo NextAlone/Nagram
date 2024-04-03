@@ -142,6 +142,91 @@ public class StickersDialogs {
         });
     }
 
+    public static void showShortNameEditorDialog(Theme.ResourcesProvider resourcesProvider, Context context, Utilities.Callback<CharSequence> callback) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, resourcesProvider);
+        builder.setTitle(LocaleController.getString(R.string.NewStickerPack));
+        builder.setMessage(LocaleController.getString(R.string.StickersChooseShortNameForStickerPack));
+        FrameLayout frameLayout = new FrameLayout(context);
+        frameLayout.setPadding(dp(24), 0, dp(20), 0);
+        final EditTextBoldCursor editText = new EditTextBoldCursor(context) {
+            @Override
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(dp(50), MeasureSpec.EXACTLY));
+            }
+        };
+        editText.setTextColor(getThemedColor(Theme.key_dialogTextBlack, resourcesProvider));
+        editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        editText.setTextColor(getThemedColor(Theme.key_dialogTextBlack, resourcesProvider));
+        editText.setHandlesColor(getThemedColor(Theme.key_chat_TextSelectionCursor, resourcesProvider));
+        editText.setHeaderHintColor(getThemedColor(Theme.key_windowBackgroundWhiteBlueHeader, resourcesProvider));
+        editText.setSingleLine(true);
+        editText.setFocusable(true);
+        InputFilter[] inputFilters = new InputFilter[2];
+        final int maxLength = 50;
+        inputFilters[0] = new InputFilter.LengthFilter(maxLength);
+        inputFilters[1] = (source, start, end, dest, dstart, dend) -> {
+            for (int i = start; i < end; i++) {
+                if (Character.isWhitespace(source.charAt(i))) {
+                    return "";
+                }
+            }
+            return source;
+        };
+        editText.setFilters(inputFilters);
+        editText.setLineColors(getThemedColor(Theme.key_windowBackgroundWhiteInputField, resourcesProvider), getThemedColor(Theme.key_windowBackgroundWhiteInputFieldActivated, resourcesProvider), getThemedColor(Theme.key_text_RedRegular, resourcesProvider));
+        editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        editText.setBackground(null);
+        editText.requestFocus();
+        editText.setPadding(dp(LocaleController.isRTL ? 28 : 0), 0, dp(LocaleController.isRTL ? 0 : 28), 0);
+        frameLayout.addView(editText);
+
+        NumberTextView checkTextView = new NumberTextView(context);
+        checkTextView.setCenterAlign(true);
+        checkTextView.setTextSize(15);
+        checkTextView.setNumber(maxLength, false);
+        checkTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText4));
+        checkTextView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+        frameLayout.addView(checkTextView, LayoutHelper.createFrame(26, 20, (LocaleController.isRTL ? Gravity.LEFT : Gravity.RIGHT) | Gravity.CENTER_VERTICAL, 0, 2, 4, 0));
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                checkTextView.setNumber(maxLength - Character.codePointCount(s, 0, s.length()), true);
+            }
+        });
+        builder.setView(frameLayout);
+        builder.setCustomViewOffset(4);
+        builder.setPositiveButton(LocaleController.getString(R.string.Done), (dialog, i) -> {
+            CharSequence text = editText.getText().toString().trim();
+            AndroidUtilities.hideKeyboard(editText);
+            dialog.dismiss();
+            callback.run(text);
+        });
+        builder.setNegativeButton(LocaleController.getString(R.string.Cancel), (dialog, which) -> {
+            AndroidUtilities.hideKeyboard(editText);
+            dialog.dismiss();
+        });
+        AlertDialog alertDialog = builder.show();
+        alertDialog.setDismissDialogByButtons(false);
+        editText.setOnEditorActionListener((view1, i, keyEvent) -> {
+            if (i == EditorInfo.IME_ACTION_DONE) {
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).callOnClick();
+                return true;
+            }
+            return false;
+        });
+    }
+
     public static void showDeleteForEveryOneDialog(TLRPC.StickerSet set, Theme.ResourcesProvider resourcesProvider, Context context, Runnable callback) {
         if (set == null) return;
         AlertDialog alertDialog = new AlertDialog.Builder(context, resourcesProvider)

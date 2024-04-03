@@ -7420,8 +7420,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                             }
 
                             @Override
-                            public void newStickerPackSelected(CharSequence name, String emoji) {
-                                stickerMakerView.uploadStickerFile(fullStickerPath, finalVideoEditedInfo, emoji, name, false, null, null);
+                            public void newStickerPackSelected(CharSequence short_name, CharSequence name, String emoji) {
+                                stickerMakerView.uploadStickerFile(fullStickerPath, finalVideoEditedInfo, emoji, name, false, null, null, short_name);
                             }
 
                             @Override
