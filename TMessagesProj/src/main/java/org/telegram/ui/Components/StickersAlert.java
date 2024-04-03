@@ -120,6 +120,7 @@ import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import xyz.nextalone.nagram.NaConfig;
 import xyz.nextalone.nagram.helper.ExternalStickerCacheHelper;
+import xyz.nextalone.nagram.helper.StickerSetHelper;
 
 public class StickersAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate {
 
@@ -179,6 +180,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     private int menu_archive = 102;
     private final int menuRefreshExternalCache = 100;
     private final int menuDeleteExternalCache = 101;
+    private final int menu_copy_sticker_set = 103;
 
     private TLRPC.TL_messages_stickerSet stickerSet;
     private TLRPC.Document selectedSticker;
@@ -1021,6 +1023,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             optionsButton.addSubItem(menuRefreshExternalCache, R.drawable.menu_views_reposts, LocaleController.getString(R.string.ExternalStickerCacheRefresh));
             optionsButton.addSubItem(menuDeleteExternalCache, R.drawable.msg_delete, LocaleController.getString(R.string.ExternalStickerCacheDelete));
         }
+        optionsButton.addSubItem(menu_copy_sticker_set, R.drawable.msg_copy, LocaleController.getString(R.string.StickersCopyStickerSet));
 
         optionsButton.setOnClickListener(v -> {
             checkOptions();
@@ -1309,6 +1312,14 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             // Na: [ExternalStickerCache] delete cache files
             ExternalStickerCacheHelper.deleteCacheFiles(stickerSet);
             enableEditMode();
+        } else if (id == menu_copy_sticker_set) {
+            // Na: copy sticker set
+            dismiss();
+            StickersDialogs.showShortNameEditorDialog(resourcesProvider, containerView.getContext(), short_name -> {
+                StickersDialogs.showNameEditorDialog(null, resourcesProvider, containerView.getContext(), pack_name -> {
+                    StickerSetHelper.INSTANCE.copyStickerSet(short_name, pack_name, stickerSet, UserConfig.selectedAccount);
+                });
+            });
         } else if (id == 4) {
             StickersDialogs.showNameEditorDialog(stickerSet.set, resourcesProvider, getContext(), arg -> {
                 titleTextView.setText(arg);

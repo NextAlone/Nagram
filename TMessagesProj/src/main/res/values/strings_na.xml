@@ -134,4 +134,5 @@
     <string name="PushServiceTypeUnifiedGateway">Unified Push Gateway</string>
     <string name="SendMp4DocumentAsVideo">Send mp4 document as video</string>
     <string name="StickersChooseShortNameForStickerPack">Choose a short name for your pack.</string>
+    <string name="StickersCopyStickerSet">Copy Sticker Set</string>
 </resources>
