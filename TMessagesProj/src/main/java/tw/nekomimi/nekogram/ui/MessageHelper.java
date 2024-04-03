@@ -447,6 +447,42 @@ public class MessageHelper extends BaseController {
         }
     }
 
+    public void addStickerToClipboard(TLRPC.Document document, Runnable callback) {
+        String path = FileLoader.getInstance(currentAccount).getPathToAttach(document, true).toString();
+
+        if (TextUtils.isEmpty(path)) {
+            return;
+        }
+        if (MessageObject.isVideoSticker(document)) {
+            return;
+        }
+        File file = new File(path);
+        if (file.exists()) {
+            xyz.nextalone.nagram.helper.MessageHelper.INSTANCE.addFileToClipboard(file, callback);
+        }
+    }
+
+    public void addStickerToClipboardAsPNG(TLRPC.Document document, Runnable callback) {
+        String path = FileLoader.getInstance(currentAccount).getPathToAttach(document, true).toString();
+
+        if (TextUtils.isEmpty(path)) {
+            return;
+        }
+        if (MessageObject.isVideoSticker(document)) {
+            return;
+        }
+        try {
+            Bitmap image = BitmapFactory.decodeFile(path);
+            File png = new File(path + ".png");
+            FileOutputStream stream = new FileOutputStream(png);
+            image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            stream.close();
+            xyz.nextalone.nagram.helper.MessageHelper.INSTANCE.addFileToClipboard(png, callback);
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+    }
+
     public MessageObject getMessageForRepeat(MessageObject selectedObject, MessageObject.GroupedMessages selectedObjectGroup) {
         MessageObject messageObject = null;
         if (selectedObjectGroup != null && !selectedObjectGroup.isDocuments) {

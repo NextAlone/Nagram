@@ -358,6 +358,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private final static int nkbtn_greatOrPoor = 2027;
     private final static int nkbtn_repeatascopy = 2028;
     private final static int nkbtn_setReminder = 2029;
+    private final static int nkbtn_sticker_copy = 2031;
+    private final static int nkbtn_sticker_copy_png = 2032;
 
 
     public int shareAlertDebugMode = DEBUG_SHARE_ALERT_MODE_NORMAL;
@@ -28251,6 +28253,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     items.add(LocaleController.getString("SaveToGallery", R.string.SaveToGallery));
                                     options.add(nkbtn_stickerdl);
                                     icons.add(R.drawable.msg_gallery);
+                                    if (NaConfig.INSTANCE.getShowCopyPhoto().Bool()) {
+                                        items.add(LocaleController.getString("CopyPhotoAsSticker", R.string.CopyPhotoAsSticker));
+                                        icons.add(R.drawable.msg_copy);
+                                        options.add(nkbtn_sticker_copy);
+                                        items.add(LocaleController.getString("CopyPhoto", R.string.CopyPhoto));
+                                        icons.add(R.drawable.msg_copy);
+                                        options.add(nkbtn_sticker_copy_png);
+                                    }
                                 }
                                 items.add(LocaleController.getString("AddToStickers", R.string.AddToStickers));
                                 options.add(OPTION_ADD_TO_STICKERS_OR_MASKS);
@@ -39209,6 +39219,22 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     return;
                 }
                 getMessageHelper().saveStickerToGallery(getParentActivity(), selectedObject);
+                break;
+            }
+            case nkbtn_sticker_copy: {
+                getMessageHelper().addStickerToClipboard(selectedObject.getDocument(), () -> {
+                    if (BulletinFactory.canShowBulletin(ChatActivity.this)) {
+                        BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("PhotoCopied", R.string.PhotoCopied)).show();
+                    }
+                });
+                break;
+            }
+            case nkbtn_sticker_copy_png: {
+                getMessageHelper().addStickerToClipboardAsPNG(selectedObject.getDocument(), () -> {
+                    if (BulletinFactory.canShowBulletin(ChatActivity.this)) {
+                        BulletinFactory.of(this).createCopyBulletin(LocaleController.getString("PhotoCopied", R.string.PhotoCopied)).show();
+                    }
+                });
                 break;
             }
             case nkbtn_translate: {
