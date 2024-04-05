@@ -3343,6 +3343,11 @@ public class Theme {
     public static Drawable[] chat_pollHintDrawable = new Drawable[2];
     public static Drawable[] chat_psaHelpDrawable = new Drawable[2];
 
+    public static Drawable chat_editDrawable;
+
+    public static Drawable chat_timeHintSentDrawable;
+    public static Drawable chat_timeHintForwardDrawable;
+
     public static Drawable chat_msgCallUpGreenDrawable;
     public static Drawable chat_msgCallDownRedDrawable;
     public static Drawable chat_msgCallDownGreenDrawable;
@@ -8833,6 +8838,11 @@ public class Theme {
                 chat_pollHintDrawable[a] = resources.getDrawable(R.drawable.msg_emoji_objects).mutate();
                 chat_psaHelpDrawable[a] = resources.getDrawable(R.drawable.msg_psa).mutate();
             }
+
+            chat_editDrawable = resources.getDrawable(R.drawable.msg_edit).mutate();
+
+            chat_timeHintSentDrawable = resources.getDrawable(R.drawable.msg_check_s).mutate();
+            chat_timeHintForwardDrawable = resources.getDrawable(R.drawable.mini_forwarded).mutate();
 
             calllog_msgCallUpRedDrawable = resources.getDrawable(R.drawable.ic_call_made_green_18dp).mutate();
             calllog_msgCallUpGreenDrawable = resources.getDrawable(R.drawable.ic_call_made_green_18dp).mutate();

@@ -1319,7 +1319,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private float drawTimeY;
     public StaticLayout timeLayout;
     public int timeWidth;
-    private int timeTextWidth;
+    public int timeTextWidth;
     public int timeX;
     public int signWidth;
     private CharSequence currentTimeString;
@@ -3005,9 +3005,6 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     private boolean checkDateMotionEvent(MotionEvent event) {
-        if (!currentMessageObject.isImportedForward()) {
-            return false;
-        }
         int x = (int) event.getX();
         int y = (int) event.getY();
 

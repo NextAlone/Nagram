@@ -6,6 +6,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
+import android.text.SpannableStringBuilder
+import android.text.Spanned
 import android.text.TextUtils
 import androidx.core.content.FileProvider
 import org.telegram.messenger.AndroidUtilities
@@ -19,6 +21,7 @@ import org.telegram.messenger.FileLog
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.MediaDataController
 import org.telegram.messenger.MessageObject
+import org.telegram.messenger.R
 import org.telegram.messenger.UserConfig
 import org.telegram.tgnet.TLRPC.Chat
 import org.telegram.tgnet.TLRPC.TL_messageEntityBankCard
@@ -30,13 +33,19 @@ import org.telegram.tgnet.TLRPC.TL_messageEntityMention
 import org.telegram.tgnet.TLRPC.TL_messageEntityPhone
 import org.telegram.tgnet.TLRPC.TL_messageEntityUrl
 import org.telegram.tgnet.TLRPC.TL_messageMediaPoll
+import org.telegram.ui.ActionBar.Theme
 import org.telegram.ui.ChatActivity
+import org.telegram.ui.Components.ColoredImageSpan
 import xyz.nextalone.nagram.NaConfig
 import java.io.File
 import java.io.FileOutputStream
+import java.util.Date
 
 
 object MessageHelper {
+
+    private val spannedStrings = arrayOfNulls<SpannableStringBuilder>(5)
+
     fun getPathToMessage(messageObject: MessageObject): File? {
         var path = messageObject.messageOwner.attachPath
         if (!TextUtils.isEmpty(path)) {
@@ -260,5 +269,43 @@ object MessageHelper {
             messageObject.messageOwner.message
         }
         return message
+    }
+
+    private fun formatTime(timestamp: Int): String {
+        return LocaleController.formatString(R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(Date(timestamp * 1000L)), LocaleController.getInstance().formatterDay.format(Date(timestamp * 1000L)))
+    }
+
+    fun getTimeHintText(messageObject: MessageObject): CharSequence {
+        val text = SpannableStringBuilder()
+        if (spannedStrings[3] == null) {
+            spannedStrings[3] = SpannableStringBuilder("\u200B")
+            spannedStrings[3]?.setSpan(ColoredImageSpan(Theme.chat_timeHintSentDrawable), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        text.append(spannedStrings[3])
+        text.append(' ')
+        text.append(formatTime(messageObject.messageOwner.date))
+        if (messageObject.messageOwner.edit_date != 0) {
+            text.append("\n")
+            if (spannedStrings[1] == null) {
+                spannedStrings[1] = SpannableStringBuilder("\u200B")
+                spannedStrings[1]?.setSpan(ColoredImageSpan(Theme.chat_editDrawable), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            text.append(spannedStrings[1])
+            text.append(' ')
+            text.append(formatTime(messageObject.messageOwner.edit_date))
+        }
+        if (messageObject.messageOwner.fwd_from != null && messageObject.messageOwner.fwd_from.date != 0) {
+            text.append("\n")
+            if (spannedStrings[4] == null) {
+                spannedStrings[4] = SpannableStringBuilder("\u200B")
+                val span = ColoredImageSpan(Theme.chat_timeHintForwardDrawable)
+                span.setSize(AndroidUtilities.dp(12f))
+                spannedStrings[4]?.setSpan(span, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            text.append(spannedStrings[4])
+            text.append(' ')
+            text.append(formatTime(messageObject.messageOwner.fwd_from.date))
+        }
+        return text
     }
 }
