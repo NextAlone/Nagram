@@ -241,6 +241,7 @@ import org.telegram.ui.Components.Premium.GiftPremiumBottomSheet;
 import org.telegram.ui.Components.Premium.LimitReachedBottomSheet;
 import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
 import org.telegram.ui.Components.Premium.PremiumGradient;
+import org.telegram.ui.Components.Premium.PremiumNotAvailableBottomSheet;
 import org.telegram.ui.Components.Premium.PremiumPreviewBottomSheet;
 import org.telegram.ui.Components.Premium.ProfilePremiumCell;
 import org.telegram.ui.Components.Premium.boosts.BoostRepository;
@@ -4037,7 +4038,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             } else if (position == businessRow) {
                 presentFragment(new PremiumPreviewFragment(PremiumPreviewFragment.FEATURES_BUSINESS, "settings"));
             } else if (position == premiumGiftingRow) {
-                UserSelectorBottomSheet.open(0, BirthdayController.getInstance(currentAccount).getState());
+//                UserSelectorBottomSheet.open(0, BirthdayController.getInstance(currentAccount).getState());
+                showDialog(new PremiumNotAvailableBottomSheet(this));
+                // NekoX: remove Google billing
             } else if (position == bizHoursRow) {
                 hoursExpanded = !hoursExpanded;
                 saveScrollPosition();
