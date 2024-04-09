@@ -45,6 +45,8 @@ import org.telegram.ui.Components.Premium.PremiumButtonView;
 import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Stories.recorder.ButtonWithCounterView;
 
+import tw.nekomimi.nekogram.utils.AlertUtil;
+
 public class FragmentUsernameBottomSheet {
 
     public static final int TYPE_USERNAME = 0;
@@ -168,6 +170,17 @@ public class FragmentUsernameBottomSheet {
                 sheet.dismiss();
             });
             layout.addView(button2, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, 6, 6, 6, 0));
+
+            // na: copy fragment username
+            if (type == TYPE_USERNAME) {
+                ButtonWithCounterView button3 = new ButtonWithCounterView(context, false, resourcesProvider);
+                button3.setText(getString(R.string.Copy), false);
+                button3.setOnClickListener(v -> {
+                    AlertUtil.copyAndAlert("@" + name);
+                    sheet.dismiss();
+                });
+                layout.addView(button3, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, 6, 6, 6, 0));
+            }
         }
 
         sheet.setCustomView(layout);
