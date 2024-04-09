@@ -8845,7 +8845,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     // disable send last logs
                     clearLogsRow = rowCount++;
                 }
-                if (BuildVars.DEBUG_VERSION) {
+                // na: disable switch backend button
+                if (BuildVars.DEBUG_VERSION && false) {
                     switchBackendRow = rowCount++;
                 }
                 versionRow = rowCount++;
