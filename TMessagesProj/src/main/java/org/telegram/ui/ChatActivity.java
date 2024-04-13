@@ -22675,7 +22675,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (inlineReturn == 0 || button.same_peer || parentLayout == null) {
             return false;
         }
-        String query = "@" + currentUser.username + " " + button.query;
+        String query = "@" + UserObject.getPublicUsername(currentUser) + " " + button.query;
         if (inlineReturn == dialog_id) {
             inlineReturn = 0;
             chatActivityEnterView.setFieldText(query);
