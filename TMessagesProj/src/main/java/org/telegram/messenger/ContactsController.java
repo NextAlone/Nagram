@@ -3039,7 +3039,7 @@ public class ContactsController extends BaseController {
                 result.append(firstName);
             }
         }
-        return MessageHelper.INSTANCE.zalgoFilter(result);
+        return MessageHelper.INSTANCE.zalgoFilter(result.toString());
     }
 
     private class PhoneBookContact {

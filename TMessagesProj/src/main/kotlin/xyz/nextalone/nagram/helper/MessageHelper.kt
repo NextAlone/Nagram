@@ -137,20 +137,14 @@ object MessageHelper {
     }
 
     fun zalgoFilter(
-        text: CharSequence?
+        text: String
     ): String {
-        return if (text == null) {
-            ""
-        } else {
-            zalgoFilter(
-                text.toString()
-            )
-        }
+        return zalgoFilter(text as CharSequence).toString()
     }
 
     fun zalgoFilter(
-        text: String?
-    ): String {
+        text: CharSequence?
+    ): CharSequence {
         return if (text == null) {
             ""
         } else if (NaConfig.zalgoFilter.Bool() && text.matches(
