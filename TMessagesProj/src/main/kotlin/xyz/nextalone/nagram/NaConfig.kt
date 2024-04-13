@@ -572,6 +572,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val disableChannelMuteButton =
+        addConfig(
+            "DisableChannelMuteButton",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

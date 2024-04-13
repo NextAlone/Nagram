@@ -24904,6 +24904,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         bottomOverlayChatText.setText(LocaleController.getString("ChannelUnmute", R.string.ChannelUnmute), true);
                         bottomOverlayChatText.setEnabled(true);
                     }
+                    // na: DisableChannelMuteButton
+                    if (NaConfig.INSTANCE.getDisableChannelMuteButton().Bool()) {
+                        bottomOverlayChatText.setText("", false);
+                        bottomOverlayChatText.setEnabled(false);
+                    }
                     showBottomOverlayProgress(false, bottomOverlayProgress.getTag() != null);
                 } else if (forumTopic != null && forumTopic.closed) {
                     if (!ChatObject.canManageTopic(currentAccount, currentChat, forumTopic)) {
