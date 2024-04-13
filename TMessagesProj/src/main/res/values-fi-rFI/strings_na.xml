@@ -133,4 +133,6 @@
     <string name="PushServiceTypeInAppDialog">Näytä kotimaiset ilmoitukset</string>
     <string name="PushServiceTypeUnifiedGateway">Yhdistetty Push-Yhdyskäytävä</string>
     <string name="SendMp4DocumentAsVideo">Lähetä mp4-asiakirja videona</string>
+    <string name="StickersChooseShortNameForStickerPack">Choose a short name for your pack.</string>
+    <string name="StickersCopyStickerSet">Copy Sticker Set</string>
 </resources>

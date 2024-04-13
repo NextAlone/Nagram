@@ -133,4 +133,6 @@
     <string name="PushServiceTypeInAppDialog">Εμφάνιση ειδοποιήσεων κατοίκων</string>
     <string name="PushServiceTypeUnifiedGateway">Ενοποιημένη Πύλη Ώθησης</string>
     <string name="SendMp4DocumentAsVideo">Αποστολή εγγράφου mp4 ως βίντεο</string>
+    <string name="StickersChooseShortNameForStickerPack">Επιλέξτε ένα σύντομο όνομα για το πακέτο σας.</string>
+    <string name="StickersCopyStickerSet">Αντιγραφή Σετ Αυτοκόλλητων</string>
 </resources>

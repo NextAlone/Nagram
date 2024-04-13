@@ -133,4 +133,6 @@
     <string name="PushServiceTypeInAppDialog">常駐通知を表示</string>
     <string name="PushServiceTypeUnifiedGateway">Unified Push Gateway</string>
     <string name="SendMp4DocumentAsVideo">mp4ドキュメントを動画として送信</string>
+    <string name="StickersChooseShortNameForStickerPack">あなたのパックの短い名前を選択してください。</string>
+    <string name="StickersCopyStickerSet">ステッカーセットをコピー</string>
 </resources>

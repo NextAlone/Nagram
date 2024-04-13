@@ -133,4 +133,6 @@
     <string name="PushServiceTypeInAppDialog">Vis residente notifikationer</string>
     <string name="PushServiceTypeUnifiedGateway">Unified Push Gateway</string>
     <string name="SendMp4DocumentAsVideo">Send mp4-dokument som video</string>
+    <string name="StickersChooseShortNameForStickerPack">Vælg et kort navn til din pakke.</string>
+    <string name="StickersCopyStickerSet">Kopiér Klistermærke Set</string>
 </resources>

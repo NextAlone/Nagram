@@ -133,4 +133,6 @@
     <string name="PushServiceTypeInAppDialog">Vis varsling fra kunder</string>
     <string name="PushServiceTypeUnifiedGateway">Enhetlig Push Gateway</string>
     <string name="SendMp4DocumentAsVideo">Send mp4-dokument som video</string>
+    <string name="StickersChooseShortNameForStickerPack">Choose a short name for your pack.</string>
+    <string name="StickersCopyStickerSet">Copy Sticker Set</string>
 </resources>

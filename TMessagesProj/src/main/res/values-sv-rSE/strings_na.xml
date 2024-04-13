@@ -133,4 +133,6 @@
     <string name="PushServiceTypeInAppDialog">Visa inhemska aviseringar</string>
     <string name="PushServiceTypeUnifiedGateway">Enhetlig Push Gateway</string>
     <string name="SendMp4DocumentAsVideo">Skicka mp4-dokument som video</string>
+    <string name="StickersChooseShortNameForStickerPack">Välj ett kort namn för ditt paket.</string>
+    <string name="StickersCopyStickerSet">Kopiera klistermärke set</string>
 </resources>

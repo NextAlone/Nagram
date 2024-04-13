@@ -133,5 +133,6 @@
     <string name="PushServiceTypeInAppDialog">显示常驻通知</string>
     <string name="PushServiceTypeUnifiedGateway">Unified Push Gateway</string>
     <string name="SendMp4DocumentAsVideo">MP4 视频作为文件发送时可预览</string>
+    <string name="StickersChooseShortNameForStickerPack">为您的包选择一个简短的名称。</string>
     <string name="StickersCopyStickerSet">复制整个贴纸包</string>
 </resources>

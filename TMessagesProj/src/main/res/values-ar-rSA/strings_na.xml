@@ -133,4 +133,6 @@
     <string name="PushServiceTypeInAppDialog">إظهار الإشعارات المقيمة</string>
     <string name="PushServiceTypeUnifiedGateway">بوابة دفع موحدة</string>
     <string name="SendMp4DocumentAsVideo">إرسال مستند mp4 كفيديو</string>
+    <string name="StickersChooseShortNameForStickerPack">اختر اسما قصيرا لحزمتك.</string>
+    <string name="StickersCopyStickerSet">نسخ مجموعة الملصقات</string>
 </resources>

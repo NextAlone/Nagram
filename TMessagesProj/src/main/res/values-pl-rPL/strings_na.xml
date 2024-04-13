@@ -133,4 +133,6 @@
     <string name="PushServiceTypeInAppDialog">Pokaż powiadomienia mieszkańców</string>
     <string name="PushServiceTypeUnifiedGateway">Zunifikowana brama popychająca</string>
     <string name="SendMp4DocumentAsVideo">Wyślij dokument mp4 jako film</string>
+    <string name="StickersChooseShortNameForStickerPack">Wybierz krótką nazwę dla paczki.</string>
+    <string name="StickersCopyStickerSet">Kopiuj zestaw naklejek</string>
 </resources>

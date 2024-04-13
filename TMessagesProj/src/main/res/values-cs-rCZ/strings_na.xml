@@ -133,4 +133,6 @@
     <string name="PushServiceTypeInAppDialog">Zobrazit rezidentní oznámení</string>
     <string name="PushServiceTypeUnifiedGateway">Sjednocená posuvná brána</string>
     <string name="SendMp4DocumentAsVideo">Poslat dokument mp4 jako video</string>
+    <string name="StickersChooseShortNameForStickerPack">Choose a short name for your pack.</string>
+    <string name="StickersCopyStickerSet">Copy Sticker Set</string>
 </resources>

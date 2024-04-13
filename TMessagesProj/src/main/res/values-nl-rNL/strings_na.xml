@@ -133,4 +133,6 @@
     <string name="PushServiceTypeInAppDialog">Toon inactieve meldingen</string>
     <string name="PushServiceTypeUnifiedGateway">Gecombineerde Push Gateway</string>
     <string name="SendMp4DocumentAsVideo">Stuur mp4-document als video</string>
+    <string name="StickersChooseShortNameForStickerPack">Kies een korte naam voor je pakket.</string>
+    <string name="StickersCopyStickerSet">Kopieer Sticker Set</string>
 </resources>
