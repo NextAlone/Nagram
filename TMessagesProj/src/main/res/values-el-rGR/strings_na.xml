@@ -135,4 +135,5 @@
     <string name="SendMp4DocumentAsVideo">Αποστολή εγγράφου mp4 ως βίντεο</string>
     <string name="StickersChooseShortNameForStickerPack">Επιλέξτε ένα σύντομο όνομα για το πακέτο σας.</string>
     <string name="StickersCopyStickerSet">Αντιγραφή Σετ Αυτοκόλλητων</string>
+    <string name="DisableChannelMuteButton">Απενεργοποίηση κουμπιού σίγασης καναλιού</string>
 </resources>

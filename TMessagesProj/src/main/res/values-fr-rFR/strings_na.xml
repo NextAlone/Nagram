@@ -135,4 +135,5 @@
     <string name="SendMp4DocumentAsVideo">Envoyer le document mp4 en tant que vidéo</string>
     <string name="StickersChooseShortNameForStickerPack">Choisissez un nom court pour votre pack.</string>
     <string name="StickersCopyStickerSet">Copier le jeu d\'autocollants</string>
+    <string name="DisableChannelMuteButton">Désactiver le bouton de mise en sourdine</string>
 </resources>

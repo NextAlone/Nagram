@@ -135,4 +135,5 @@
     <string name="SendMp4DocumentAsVideo">Відправити mp4 документ як відео</string>
     <string name="StickersChooseShortNameForStickerPack">Виберіть коротке ім\'я для свого набору.</string>
     <string name="StickersCopyStickerSet">Копіювати набір наклейок</string>
+    <string name="DisableChannelMuteButton">Вимкнути кнопку вимкнення звуку каналу</string>
 </resources>

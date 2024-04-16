@@ -135,4 +135,5 @@
     <string name="SendMp4DocumentAsVideo">mp4ドキュメントを動画として送信</string>
     <string name="StickersChooseShortNameForStickerPack">あなたのパックの短い名前を選択してください。</string>
     <string name="StickersCopyStickerSet">ステッカーセットをコピー</string>
+    <string name="DisableChannelMuteButton">チャンネルミュートボタンを無効にする</string>
 </resources>

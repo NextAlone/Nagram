@@ -135,4 +135,5 @@
     <string name="SendMp4DocumentAsVideo">Stuur mp4-document als video</string>
     <string name="StickersChooseShortNameForStickerPack">Kies een korte naam voor je pakket.</string>
     <string name="StickersCopyStickerSet">Kopieer Sticker Set</string>
+    <string name="DisableChannelMuteButton">Kanaaldemping knop uitschakelen</string>
 </resources>
