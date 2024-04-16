@@ -4093,6 +4093,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 //                    }
                 }
             } else if (position == channelRow) {
+                // na: Group Profile Show Linked Channel Info
+                if (chatInfo != null) {
+                    openDiscussion();
+                    return;
+                }
                 if (userInfo == null) return;
                 Bundle args = new Bundle();
                 args.putLong("chat_id", userInfo.personal_channel_id);
@@ -7771,6 +7776,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (sharedMediaLayout != null) {
                     sharedMediaLayout.setChatInfo(chatInfo);
                 }
+                // na: Group Profile Show Linked Channel Info
+                if (profileChannelMessageFetcher == null && !isSettings()) {
+                    profileChannelMessageFetcher = new ProfileChannelCell.ChannelMessageFetcher(currentAccount);
+                    profileChannelMessageFetcher.subscribe(() -> updateListAnimated(false));
+                    profileChannelMessageFetcher.fetchChannelMsg(chatInfo);
+                }
             }
         } else if (id == NotificationCenter.closeChats) {
             removeSelfFromStack(true);
@@ -8558,6 +8569,18 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
     }
 
+    public void setChatInfoChannelMsg(ProfileChannelCell.ChannelMessageFetcher channelMessageFetcher) {
+        // na: Group Profile Show Linked Channel Info
+        if (profileChannelMessageFetcher == null) {
+            profileChannelMessageFetcher = channelMessageFetcher;
+        }
+        if (profileChannelMessageFetcher == null) {
+            profileChannelMessageFetcher = new ProfileChannelCell.ChannelMessageFetcher(currentAccount);
+        }
+        profileChannelMessageFetcher.subscribe(() -> updateListAnimated(false));
+        profileChannelMessageFetcher.fetchChannelMsg(chatInfo);
+    }
+
     public void setChatInfo(TLRPC.ChatFull value) {
         chatInfo = value;
         if (chatInfo != null && chatInfo.migrated_from_chat_id != 0 && mergeDialogId == 0) {
@@ -8952,6 +8975,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 sharedMediaRow = rowCount++;
             }
         } else if (chatId != 0) {
+
+            // na: Group Profile Show Linked Channel Info
+            if (chatInfo != null && chatInfo.linked_chat_id != 0 && (profileChannelMessageFetcher == null || !profileChannelMessageFetcher.loaded || profileChannelMessageFetcher.messageObject != null)) {
+                TLRPC.Chat channel = getMessagesController().getChat(chatInfo.linked_chat_id);
+                if (channel != null && (ChatObject.isPublic(channel) || !ChatObject.isNotInChat(channel)) && ChatObject.isChannelAndNotMegaGroup(channel)) {
+                    channelRow = rowCount++;
+                    channelDividerRow = rowCount++;
+                }
+            }
+
             if (chatInfo != null && (!TextUtils.isEmpty(chatInfo.about) || chatInfo.location instanceof TLRPC.TL_channelLocation) || ChatObject.isPublic(currentChat)) {
                 if (LocaleController.isRTL && ChatObject.isChannel(currentChat) && chatInfo != null && !currentChat.megagroup && chatInfo.linked_chat_id != 0) {
                     emptyRow = rowCount++;
@@ -11607,10 +11640,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     hoursCell.set(userInfo != null ? userInfo.business_work_hours : null, hoursExpanded, hoursShownMine, notificationsDividerRow < 0 || bizLocationRow >= 0);
                     break;
                 case VIEW_TYPE_CHANNEL:
-                    ((ProfileChannelCell) holder.itemView).set(
-                        getMessagesController().getChat(userInfo.personal_channel_id),
-                        profileChannelMessageFetcher != null ? profileChannelMessageFetcher.messageObject : null
-                    );
+                    if (userInfo != null) {
+                        ((ProfileChannelCell) holder.itemView).set(
+                                getMessagesController().getChat(userInfo.personal_channel_id),
+                                profileChannelMessageFetcher != null ? profileChannelMessageFetcher.messageObject : null
+                        );
+                    } else if (chatInfo != null) {
+                        ((ProfileChannelCell) holder.itemView).set(
+                                getMessagesController().getChat(chatInfo.linked_chat_id),
+                                profileChannelMessageFetcher != null ? profileChannelMessageFetcher.messageObject : null
+                        );
+                    }
                     break;
             }
         }

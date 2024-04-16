@@ -19,6 +19,7 @@ import androidx.collection.LongSparseArray;
 
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -359,6 +360,127 @@ public class ProfileChannelCell extends FrameLayout {
                                 } else {
                                     this.messageObject = new MessageObject(currentAccount, message1, true, true);
                                 }
+                                done(false);
+                            }
+                        } else {
+                            if (thisSearchId != searchId) return;
+                            done(true);
+                        }
+                    }));
+                });
+            });
+        }
+
+        public void fetchChannelMsg(TLRPC.ChatFull chatFull) {
+            if (chatFull == null || chatFull.linked_chat_id == 0) {
+                searchId++;
+                loaded = true;
+                messageObject = null;
+                done(false);
+                return;
+            }
+            fetchChannelMsg(chatFull.linked_chat_id);
+        }
+
+        public void fetchChannelMsg(long channel_id) {
+            if (loaded || loading) {
+                if (this.channel_id != channel_id) {
+                    loaded = false;
+                    messageObject = null;
+                } else {
+                    return;
+                }
+            }
+            final int thisSearchId = ++this.searchId;
+            loading = true;
+
+            this.channel_id = channel_id;
+            this.message_id = 0;
+
+            final long selfId = UserConfig.getInstance(currentAccount).getClientUserId();
+            MessagesStorage storage = MessagesStorage.getInstance(currentAccount);
+            storage.getStorageQueue().postRunnable(() -> {
+                TLRPC.Message message = null;
+                ArrayList<TLRPC.User> users = new ArrayList<>();
+                ArrayList<TLRPC.Chat> chats = new ArrayList<>();
+                SQLiteCursor cursor = null;
+                try {
+                    if (message_id <= 0) {
+                        cursor = storage.getDatabase().queryFinalized("SELECT data, mid FROM messages_v2 WHERE uid = ? ORDER BY mid DESC LIMTI 1", -channel_id);
+                    } else {
+                        cursor = storage.getDatabase().queryFinalized("SELECT data, mid FROM messages_v2 WHERE uid = ? AND mid = ? LIMIT 1", -channel_id, message_id);
+                    }
+                    ArrayList<Long> usersToLoad = new ArrayList<>();
+                    ArrayList<Long> chatsToLoad = new ArrayList<>();
+                    if (cursor.next()) {
+                        NativeByteBuffer data = cursor.byteBufferValue(0);
+                        if (data != null) {
+                            message = TLRPC.Message.TLdeserialize(data, data.readInt32(false), false);
+                            message.readAttachPath(data, selfId);
+                            data.reuse();
+                            message.id = cursor.intValue(1);
+                            message.dialog_id = -channel_id;
+                            MessagesStorage.addUsersAndChatsFromMessage(message, usersToLoad, chatsToLoad, null);
+                        }
+                    }
+                    cursor.dispose();
+
+                    if (message != null) {
+
+                        if (!usersToLoad.isEmpty()) {
+                            storage.getUsersInternal(TextUtils.join(",", usersToLoad), users);
+                        }
+                        if (!chatsToLoad.isEmpty()) {
+                            storage.getChatsInternal(TextUtils.join(",", chatsToLoad), chats);
+                        }
+                    }
+                } catch (Exception e) {
+                    FileLog.e(e);
+                } finally {
+                    if (cursor != null) {
+                        cursor.dispose();
+                    }
+                }
+                final TLRPC.Message finalMessage = message;
+                AndroidUtilities.runOnUIThread(() -> {
+                    if (thisSearchId != searchId) return;
+                    MessageObject messageObject1 = null;
+                    if (finalMessage != null) {
+                        messageObject1 = new MessageObject(currentAccount, finalMessage, true, true);
+                    }
+
+                    if (messageObject1 != null) {
+                        this.messageObject = messageObject1;
+                        done(false);
+                        return;
+                    }
+
+                    TLRPC.TL_messages_search req = new TLRPC.TL_messages_search();
+                    req.limit = 3;
+                    req.offset_id = 0;
+                    req.filter = new TLRPC.TL_inputMessagesFilterEmpty();
+                    req.q = "";
+                    req.peer = MessagesController.getInstance(currentAccount).getInputPeer(-channel_id);
+                    ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, err) -> AndroidUtilities.runOnUIThread(() -> {
+                        if (response instanceof TLRPC.messages_Messages) {
+                            TLRPC.messages_Messages res = (TLRPC.messages_Messages) response;
+                            MessagesController.getInstance(currentAccount).putUsers(res.users, false);
+                            MessagesController.getInstance(currentAccount).putChats(res.chats, false);
+                            storage.putUsersAndChats(res.users, res.chats, true, true);
+                            storage.putMessages(res, -channel_id, -1, 0, false, 0, 0);
+
+                            if (thisSearchId != searchId) return;
+
+                            TLRPC.Message message1 = null;
+                            for (TLRPC.Message m : res.messages) {
+                                if (!(m instanceof TLRPC.TL_messageEmpty)) {
+                                    message1 = m;
+                                    break;
+                                }
+                            }
+                            if (message1 != null) {
+                                message_id = message1.id;
+                                this.messageObject = new MessageObject(currentAccount, message1, true, true);
                                 done(false);
                             }
                         } else {

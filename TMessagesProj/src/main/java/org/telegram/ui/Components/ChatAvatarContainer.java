@@ -533,6 +533,8 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             }
             ProfileActivity fragment = new ProfileActivity(args, sharedMediaPreloader);
             fragment.setChatInfo(parentFragment.getCurrentChatInfo());
+            // na: Group Profile Show Linked Channel Info
+            fragment.setChatInfoChannelMsg(parentFragment.profileChannelMessageFetcher);
             if (fromChatAnimation) {
                 fragment.setPlayProfileAnimation(byAvatar ? 2 : 1);
             }

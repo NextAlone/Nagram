@@ -1446,6 +1446,8 @@ public class TopicsFragment extends BaseFragment implements NotificationCenter.N
         args.putLong("chat_id", chatId);
         ProfileActivity fragment = new ProfileActivity(args, avatarContainer.getSharedMediaPreloader());
         fragment.setChatInfo(chatFull);
+        // na: Group Profile Show Linked Channel Info
+        fragment.setChatInfoChannelMsg(fragment.profileChannelMessageFetcher);
         fragment.setPlayProfileAnimation(fragmentView.getMeasuredHeight() > fragmentView.getMeasuredWidth() && avatarContainer.getAvatarImageView().getImageReceiver().hasImageLoaded() && byAvatar ? 2 : 1);
         presentFragment(fragment);
     }
