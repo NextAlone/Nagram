@@ -9,7 +9,6 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.util.Property;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -24,6 +23,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AnimationProperties;
+import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Switch;
@@ -32,6 +32,7 @@ import java.util.ArrayList;
 
 public class DrawerActionCheckCell extends FrameLayout {
 
+    private BackupImageView imageView;
     private TextView textView;
     public Switch checkBox;
     private int height = 48;
@@ -56,26 +57,24 @@ public class DrawerActionCheckCell extends FrameLayout {
     };
 
     public DrawerActionCheckCell(Context context) {
-        this(context, 21);
-    }
-
-    public DrawerActionCheckCell(Context context, int padding) {
         super(context);
+
+        imageView = new BackupImageView(context);
+        imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuItemIcon), PorterDuff.Mode.SRC_IN));
 
         textView = new TextView(context);
         textView.setTextColor(Theme.getColor(Theme.key_chats_menuItemText));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-        textView.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        textView.setLines(1);
-        textView.setMaxLines(1);
-        textView.setSingleLine(true);
-
-        addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, padding, 0, 70, 0));
+        textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
 
         checkBox = new Switch(context);
         checkBox.setColors(Theme.key_switchTrack, Theme.key_switchTrackChecked, Theme.key_windowBackgroundWhite, Theme.key_windowBackgroundWhite);
-        addView(checkBox, LayoutHelper.createFrame(37, 20, Gravity.RIGHT | Gravity.CENTER_VERTICAL, 22, 0, 22, 0));
+
+        addView(imageView, LayoutHelper.createFrame(24, 24, Gravity.LEFT | Gravity.TOP, 19, 12, 0, 0));
+        addView(checkBox, LayoutHelper.createFrame(37, 20, Gravity.RIGHT | Gravity.TOP, 0, 14, 16, 0));
+        int textViewRightMargin = 16 + 37 + 16;
+        addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.TOP, 72, 0, textViewRightMargin, 0));
 
         setClipChildren(false);
     }
@@ -131,15 +130,8 @@ public class DrawerActionCheckCell extends FrameLayout {
 
     public void setTextAndValueAndCheck(String text, int resId, String value, boolean checked, boolean multiline, boolean divider) {
         textView.setText(text);
-        Drawable drawable = getResources().getDrawable(resId).mutate();
-        drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_menuItemIcon), PorterDuff.Mode.SRC_IN));
-        textView.setCompoundDrawablePadding(AndroidUtilities.dp(29));
-        textView.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+        imageView.setImageResource(resId);
         checkBox.setChecked(checked, false);
-        LayoutParams layoutParams = (LayoutParams) textView.getLayoutParams();
-        layoutParams.height = LayoutParams.WRAP_CONTENT;
-        layoutParams.topMargin = AndroidUtilities.dp(10);
-        textView.setLayoutParams(layoutParams);
         setWillNotDraw(!divider);
     }
 

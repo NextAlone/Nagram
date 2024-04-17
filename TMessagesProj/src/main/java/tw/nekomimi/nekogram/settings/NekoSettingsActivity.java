@@ -490,7 +490,7 @@ public class NekoSettingsActivity extends BaseFragment {
                 case 2: {
                     TextCell textCell = (TextCell) holder.itemView;
                     if (position == chatRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Chat", R.string.Chat), R.drawable.menu_chats, true);
+                        textCell.setTextAndIcon(LocaleController.getString("Chat", R.string.Chat), R.drawable.msg_discussion, true);
                     } else if (position == generalRow) {
                         textCell.setTextAndIcon(LocaleController.getString("General", R.string.General), R.drawable.msg_theme, true);
                     } else if (position == passcodeRow) {
@@ -498,7 +498,7 @@ public class NekoSettingsActivity extends BaseFragment {
                     } else if (position == experimentRow) {
                         textCell.setTextAndIcon(LocaleController.getString("Experiment", R.string.Experiment), R.drawable.msg_fave, true);
                     } else if (position == accountRow) {
-                        textCell.setTextAndIcon(LocaleController.getString("Account", R.string.Account), R.drawable.menu_contacts, true);
+                        textCell.setTextAndIcon(LocaleController.getString("Account", R.string.Account), R.drawable.msg_contacts, true);
                     }
                     break;
                 }
