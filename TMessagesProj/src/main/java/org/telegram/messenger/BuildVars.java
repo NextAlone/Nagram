@@ -18,7 +18,7 @@ import android.os.Build;
 public class BuildVars {
 
     public static final boolean IS_BILLING_UNAVAILABLE = true;
-    public static boolean DEBUG_VERSION = BuildConfig.BUILD_TYPE.equals("debug");
+    public static boolean DEBUG_VERSION = true;
     public static boolean DEBUG_PRIVATE_VERSION = DEBUG_VERSION;
     public static boolean LOGS_ENABLED = DEBUG_PRIVATE_VERSION;
     public static boolean USE_CLOUD_STRINGS = true;
