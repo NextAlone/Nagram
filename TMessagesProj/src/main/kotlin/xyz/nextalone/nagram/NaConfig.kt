@@ -578,6 +578,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val disablePreviewVideoSoundShortcut =
+        addConfig(
+            "DisablePreviewVideoSoundShortcut",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

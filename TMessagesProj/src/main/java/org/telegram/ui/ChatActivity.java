@@ -27464,6 +27464,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     public boolean maybePlayVisibleVideo() {
+        if (NaConfig.INSTANCE.getDisablePreviewVideoSoundShortcut().Bool()) {
+            return false;
+        }
+
         if (chatListView == null) {
             return false;
         }

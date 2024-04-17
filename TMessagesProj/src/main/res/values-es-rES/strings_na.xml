@@ -136,4 +136,6 @@
     <string name="StickersChooseShortNameForStickerPack">Elige un nombre corto para tu paquete.</string>
     <string name="StickersCopyStickerSet">Copiar Set de Sticker</string>
     <string name="DisableChannelMuteButton">Deshabilitar botón de silenciar canal</string>
+    <string name="DisablePreviewVideoSoundShortcut">Desactivar acceso directo al sonido de un video</string>
+    <string name="DisablePreviewVideoSoundShortcutNotice">Desactivar las teclas de volumen para reproducir el sonido de la vista previa del video</string>
 </resources>
