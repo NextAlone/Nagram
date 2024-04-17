@@ -56,6 +56,7 @@ function build_one {
 	--disable-tools \
 	--disable-debug \
 	--disable-neon-asm \
+	--disable-neon-dotprod \
 	--disable-unit-tests \
 	--disable-install-docs \
 	--enable-realtime-only \
