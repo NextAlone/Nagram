@@ -3836,7 +3836,7 @@ public class NotificationsController extends BaseController {
             }
             SharedPreferences preferences = getAccountInstance().getNotificationsSettings();
             int dismissDate = preferences.getInt("dismissDate", 0);
-            if (!lastMessageObject.isStoryPush && lastMessageObject.messageOwner.date <= dismissDate) {
+            if (!lastMessageObject.isStoryPush && (lastMessageObject.messageOwner.date <= dismissDate && NaConfig.INSTANCE.getPushServiceType().Int() != 3)) {
                 dismissNotification();
                 return;
             }
@@ -3962,7 +3962,7 @@ public class NotificationsController extends BaseController {
                 for (int i = 0; i < count; i++) {
                     MessageObject messageObject = pushMessages.get(i);
                     String message = getStringForMessage(messageObject, false, text, null);
-                    if (message == null || !messageObject.isStoryPush && messageObject.messageOwner.date <= dismissDate) {
+                    if (message == null || !messageObject.isStoryPush && (messageObject.messageOwner.date <= dismissDate && NaConfig.INSTANCE.getPushServiceType().Int() != 3)) {
                         continue;
                     }
                     if (silent == 2) {
@@ -4454,7 +4454,7 @@ public class NotificationsController extends BaseController {
             long dialog_id = messageObject.getDialogId();
             long topicId = MessageObject.getTopicId(currentAccount, messageObject.messageOwner, getMessagesController().isForum(messageObject));
             int dismissDate = preferences.getInt("dismissDate" + dialog_id, 0);
-            if (!messageObject.isStoryPush && messageObject.messageOwner.date <= dismissDate) {
+            if (!messageObject.isStoryPush && (messageObject.messageOwner.date <= dismissDate && NaConfig.INSTANCE.getPushServiceType().Int() != 3)) {
                 continue;
             }
 

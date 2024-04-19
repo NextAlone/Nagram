@@ -243,6 +243,7 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
             LocaleController.getString(R.string.PushServiceTypeInApp),
             LocaleController.getString(R.string.PushServiceTypeFCM),
             LocaleController.getString(R.string.PushServiceTypeUnified),
+            LocaleController.getString(R.string.PushServiceTypeMicroG),
     }, null));
     private final AbstractConfigCell pushServiceTypeInAppDialogRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getPushServiceTypeInAppDialog()));
     private final AbstractConfigCell pushServiceTypeUnifiedGatewayRow = cellGroup.appendCell(new ConfigCellTextInput(null, NaConfig.INSTANCE.getPushServiceTypeUnifiedGateway(), null, null, (input) -> input.isEmpty() ? (String) NaConfig.INSTANCE.getPushServiceTypeUnifiedGateway().defaultValue : input));

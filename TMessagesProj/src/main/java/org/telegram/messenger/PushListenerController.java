@@ -1440,7 +1440,8 @@ public class PushListenerController {
         if (instance != null)
             return instance;
         switch (NaConfig.INSTANCE.getPushServiceType().Int()) {
-            case 1: {
+            case 1:
+            case 3: {
                 instance = new GooglePushListenerServiceProvider();
                 break;
             }
