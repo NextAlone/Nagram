@@ -136,4 +136,6 @@
     <string name="StickersChooseShortNameForStickerPack">Alege un nume scurt pentru pachet.</string>
     <string name="StickersCopyStickerSet">Copiază Setul de Sticker</string>
     <string name="DisableChannelMuteButton">Dezactivare buton mut canal</string>
+    <string name="DisablePreviewVideoSoundShortcut">Dezactivează scurtătură sunet previzualizare</string>
+    <string name="DisablePreviewVideoSoundShortcutNotice">Dezactivează tastele de volum pentru a activa previzualizarea sunetului video</string>
 </resources>

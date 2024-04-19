@@ -136,4 +136,6 @@
     <string name="StickersChooseShortNameForStickerPack">Επιλέξτε ένα σύντομο όνομα για το πακέτο σας.</string>
     <string name="StickersCopyStickerSet">Αντιγραφή Σετ Αυτοκόλλητων</string>
     <string name="DisableChannelMuteButton">Απενεργοποίηση κουμπιού σίγασης καναλιού</string>
+    <string name="DisablePreviewVideoSoundShortcut">Απενεργοποίηση συντόμευσης ήχου βίντεο προεπισκόπησης</string>
+    <string name="DisablePreviewVideoSoundShortcutNotice">Απενεργοποίηση πλήκτρων έντασης για ενεργοποίηση προεπισκόπησης ήχου βίντεο</string>
 </resources>

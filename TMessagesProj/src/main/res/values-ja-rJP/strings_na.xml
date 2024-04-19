@@ -136,4 +136,6 @@
     <string name="StickersChooseShortNameForStickerPack">あなたのパックの短い名前を選択してください。</string>
     <string name="StickersCopyStickerSet">ステッカーセットをコピー</string>
     <string name="DisableChannelMuteButton">チャンネルミュートボタンを無効にする</string>
+    <string name="DisablePreviewVideoSoundShortcut">プレビュービデオサウンドのショートカットを無効にする</string>
+    <string name="DisablePreviewVideoSoundShortcutNotice">ビデオのプレビューを有効にするには音量キーを無効にしてください</string>
 </resources>

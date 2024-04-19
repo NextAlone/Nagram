@@ -136,4 +136,6 @@
     <string name="StickersChooseShortNameForStickerPack">Kies een korte naam voor je pakket.</string>
     <string name="StickersCopyStickerSet">Kopieer Sticker Set</string>
     <string name="DisableChannelMuteButton">Kanaaldemping knop uitschakelen</string>
+    <string name="DisablePreviewVideoSoundShortcut">Snelkoppeling voor preview video uitschakelen</string>
+    <string name="DisablePreviewVideoSoundShortcutNotice">Volumeknoppen uitschakelen om preview videogeluid in te schakelen</string>
 </resources>

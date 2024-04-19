@@ -136,4 +136,6 @@
     <string name="StickersChooseShortNameForStickerPack">Выберите короткое имя для вашего набора.</string>
     <string name="StickersCopyStickerSet">Копировать набор стикеров</string>
     <string name="DisableChannelMuteButton">Отключить кнопку отключения канала</string>
+    <string name="DisablePreviewVideoSoundShortcut">Отключить ярлык предварительного просмотра звука видео</string>
+    <string name="DisablePreviewVideoSoundShortcutNotice">Отключить кнопки громкости для предварительного просмотра звука видео</string>
 </resources>

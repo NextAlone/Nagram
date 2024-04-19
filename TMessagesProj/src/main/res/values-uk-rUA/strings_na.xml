@@ -136,4 +136,6 @@
     <string name="StickersChooseShortNameForStickerPack">Виберіть коротке ім\'я для свого набору.</string>
     <string name="StickersCopyStickerSet">Копіювати набір наклейок</string>
     <string name="DisableChannelMuteButton">Вимкнути кнопку вимкнення звуку каналу</string>
+    <string name="DisablePreviewVideoSoundShortcut">Вимкнути ярлик під час перегляду відео звукового звуку</string>
+    <string name="DisablePreviewVideoSoundShortcutNotice">Вимкніть клавіші гучності, щоб увімкнути попередній перегляд відео звуку</string>
 </resources>

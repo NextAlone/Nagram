@@ -136,4 +136,6 @@
     <string name="StickersChooseShortNameForStickerPack">Choose a short name for your pack.</string>
     <string name="StickersCopyStickerSet">Copy Sticker Set</string>
     <string name="DisableChannelMuteButton">Zakázat tlačítko ztlumit kanál</string>
+    <string name="DisablePreviewVideoSoundShortcut">Zakázat zástupce zvuku videa</string>
+    <string name="DisablePreviewVideoSoundShortcutNotice">Zakázat tlačítka hlasitosti pro zapnutí náhledu zvuku videa</string>
 </resources>

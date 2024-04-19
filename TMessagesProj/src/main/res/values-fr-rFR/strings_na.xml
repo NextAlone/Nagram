@@ -136,4 +136,6 @@
     <string name="StickersChooseShortNameForStickerPack">Choisissez un nom court pour votre pack.</string>
     <string name="StickersCopyStickerSet">Copier le jeu d\'autocollants</string>
     <string name="DisableChannelMuteButton">Désactiver le bouton de mise en sourdine</string>
+    <string name="DisablePreviewVideoSoundShortcut">Désactiver le raccourci de l\'aperçu du son vidéo</string>
+    <string name="DisablePreviewVideoSoundShortcutNotice">Désactiver les boutons de volume pour activer la prévisualisation du son vidéo</string>
 </resources>

@@ -136,4 +136,6 @@
     <string name="StickersChooseShortNameForStickerPack">Choose a short name for your pack.</string>
     <string name="StickersCopyStickerSet">Copy Sticker Set</string>
     <string name="DisableChannelMuteButton">Deaktiver knappen for å slå av kanal</string>
+    <string name="DisablePreviewVideoSoundShortcut">Deaktivere forhåndsvise video lyd snarvei</string>
+    <string name="DisablePreviewVideoSoundShortcutNotice">Deaktiver volumtastene for å aktivere forhåndsvisningsvideo lyd</string>
 </resources>

@@ -136,4 +136,6 @@
     <string name="StickersChooseShortNameForStickerPack">Choose a short name for your pack.</string>
     <string name="StickersCopyStickerSet">Copy Sticker Set</string>
     <string name="DisableChannelMuteButton">Disable channel mute button</string>
+    <string name="DisablePreviewVideoSoundShortcut">Disable preview video sound shortcut</string>
+    <string name="DisablePreviewVideoSoundShortcutNotice">Disable volume keys to enable preview video sound</string>
 </resources>
