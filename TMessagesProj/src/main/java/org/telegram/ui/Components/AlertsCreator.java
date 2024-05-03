@@ -6226,6 +6226,7 @@ public class AlertsCreator {
                     });
                 }
                 deleteMessagesBottomSheet.show();
+                return;
             } else if (!hasNotOut && myMessagesCount > 0 && hasNonDiceMessages) {
                 hasDeleteForAllCheck = true;
                 FrameLayout frameLayout = new FrameLayout(activity);
