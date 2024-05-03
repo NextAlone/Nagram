@@ -10,12 +10,12 @@ repositories {
     }
 }
 
-def verName = "10.10.1"
-def verCode = 1170
+def verName = "10.12.0"
+def verCode = 1171
 
 
-def officialVer = "10.10.1"
-def officialCode = 4583
+def officialVer = "10.12.0"
+def officialCode = 4710
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
@@ -286,6 +286,7 @@ dependencies {
     implementation 'com.google.guava:guava:31.1-android'
 
     implementation 'com.google.android.gms:play-services-mlkit-subject-segmentation:16.0.0-beta1'
+    implementation 'com.google.android.gms:play-services-mlkit-image-labeling:16.0.8'
 
     implementation project(":openpgp-api")
 

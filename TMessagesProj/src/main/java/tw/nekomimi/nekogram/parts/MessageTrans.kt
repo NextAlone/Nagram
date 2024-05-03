@@ -25,7 +25,7 @@ fun MessageObject.toRawString(): String {
     if (messageOwner.media is TLRPC.TL_messageMediaPoll) {
 
         val poll = (messageOwner.media as TLRPC.TL_messageMediaPoll).poll
-        content = poll.question
+        content = poll.question.text
         content += "\n"
 
         for (answer in poll.answers) {
@@ -55,16 +55,16 @@ fun MessageObject.translateFinished(locale: Locale): Int {
 
         val pool = (messageOwner.media as TLRPC.TL_messageMediaPoll).poll
 
-        val question = db.query(pool.question) ?: return 0
+        val question = db.query(pool.question.text) ?: return 0
 
         pool.translatedQuestion =
-            "${if (!NaConfig.hideOriginAfterTranslation.Bool()) pool.question + "\n\n--------\n\n" else ""}$question"
+            "${if (!NaConfig.hideOriginAfterTranslation.Bool()) pool.question.text + "\n\n--------\n\n" else ""}$question"
 
         pool.answers.forEach {
 
-            val answer = db.query(it.text) ?: return 0
+            val answer = db.query(it.text.text) ?: return 0
 
-            it.translatedText = it.text + " | " + answer
+            it.translatedText = it.text.text + " | " + answer
 
         }
 
@@ -175,7 +175,7 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
 
                     val pool = (selectedObject.messageOwner.media as TLRPC.TL_messageMediaPoll).poll
 
-                    var question = db.query(pool.question)
+                    var question = db.query(pool.question.text)
 
                     if (question == null) {
 
@@ -183,7 +183,7 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
 
                         runCatching {
 
-                            question = Translator.translate(target, pool.question)
+                            question = Translator.translate(target, pool.question.text)
 
                         }.onFailure {
 
@@ -209,11 +209,11 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
                     }
 
                     pool.translatedQuestion =
-                        "${if (!NaConfig.hideOriginAfterTranslation.Bool()) pool.question + "\n\n--------\n\n" else ""}$question"
+                        "${if (!NaConfig.hideOriginAfterTranslation.Bool()) pool.question.text + "\n\n--------\n\n" else ""}$question"
 
                     pool.answers.forEach {
 
-                        var answer = db.query(it.text)
+                        var answer = db.query(it.text.text)
 
                         if (answer == null) {
 
@@ -221,7 +221,7 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
 
                             runCatching {
 
-                                answer = Translator.translate(target, it.text)
+                                answer = Translator.translate(target, it.text.text)
 
                             }.onFailure { e ->
 
@@ -246,7 +246,7 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
 
                         }
 
-                        it.translatedText = answer + " | " + it.text
+                        it.translatedText = answer + " | " + it.text.text
 
                     }
 

@@ -790,7 +790,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
             TextCheckCell textCell = new TextCheckCell(context);
             switch (a) {
                 case 0: {
-                    textCell.setTextAndCheck(LocaleController.getString("DeleteBanUser", R.string.DeleteBanUser), checks[a], false);
+                    textCell.setTextAndCheck(LocaleController.getString("DeleteBanUsers", R.string.DeleteBanUsers), checks[a], false);
                     break;
                 }
                 case 1: {

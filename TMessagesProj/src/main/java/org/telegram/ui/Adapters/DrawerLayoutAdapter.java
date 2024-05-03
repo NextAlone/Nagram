@@ -352,6 +352,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         }
         UserConfig me = UserConfig.getInstance(UserConfig.selectedAccount);
         boolean showDivider = false;
+        items.add(new Item(16, LocaleController.getString(R.string.MyProfile), R.drawable.left_status_profile));
         if (me != null && me.isPremium()) {
             if (me.getEmojiStatus() != null) {
                 items.add(new Item(15, LocaleController.getString("ChangeEmojiStatus", R.string.ChangeEmojiStatus), R.drawable.msg_status_edit));
@@ -360,14 +361,11 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
             }
             showDivider = true;
         }
-        if (MessagesController.getInstance(UserConfig.selectedAccount).storiesEnabled()) {
-            items.add(new Item(16, LocaleController.getString("ProfileMyStories", R.string.ProfileMyStories), R.drawable.msg_menu_stories));
-            showDivider = true;
-
-            if (NaConfig.INSTANCE.getDisableDialogsFloatingButton().Bool()) {
-                items.add(new Item(nkbtnNewStory, LocaleController.getString("RecorderNewStory", R.string.RecorderNewStory), R.drawable.msg_menu_stories));
-            }
-        }
+//        if (MessagesController.getInstance(UserConfig.selectedAccount).storiesEnabled()) {
+//            items.add(new Item(17, LocaleController.getString(R.string.ProfileStories), R.drawable.msg_menu_stories));
+//            showDivider = true;
+//        }
+        showDivider = true;
         if (ApplicationLoader.applicationLoaderInstance != null) {
             if (ApplicationLoader.applicationLoaderInstance.extendDrawer(items)) {
                 showDivider = true;
