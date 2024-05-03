@@ -140,4 +140,7 @@
     <string name="DisablePreviewVideoSoundShortcut">禁用预览视频音量快捷键</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">禁用音量键快捷开启预览视频的声音</string>
     <string name="DisableAutoWebLogin">禁用官方网页自动登录</string>
+    <string name="PreviewSendPhoto">发送图片</string>
+    <string name="PreviewSendVideo">发送视频</string>
+    <string name="PreviewSendFile">发送文件</string>
 </resources>
