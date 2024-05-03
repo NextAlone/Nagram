@@ -130,6 +130,7 @@
     <string name="PushServiceTypeInApp">En la App</string>
     <string name="PushServiceTypeFCM">FCM de Google</string>
     <string name="PushServiceTypeUnified">Unified Push</string>
+    <string name="PushServiceTypeMicroG">MicroG</string>
     <string name="PushServiceTypeInAppDialog">Mostrar notificación permanente</string>
     <string name="PushServiceTypeUnifiedGateway">Gateway de Unified Push</string>
     <string name="SendMp4DocumentAsVideo">Enviar documento mp4 como vídeo</string>

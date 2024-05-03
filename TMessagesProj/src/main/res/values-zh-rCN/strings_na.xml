@@ -130,6 +130,7 @@
     <string name="PushServiceTypeInApp">内置</string>
     <string name="PushServiceTypeFCM">Google FCM</string>
     <string name="PushServiceTypeUnified">Unified Push</string>
+    <string name="PushServiceTypeMicroG">MicroG</string>
     <string name="PushServiceTypeInAppDialog">显示常驻通知</string>
     <string name="PushServiceTypeUnifiedGateway">Unified Push Gateway</string>
     <string name="SendMp4DocumentAsVideo">MP4 视频作为文件发送时可预览</string>

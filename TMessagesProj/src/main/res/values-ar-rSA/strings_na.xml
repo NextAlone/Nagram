@@ -130,6 +130,7 @@
     <string name="PushServiceTypeInApp">في التطبيق</string>
     <string name="PushServiceTypeFCM">جوجل FCM</string>
     <string name="PushServiceTypeUnified">دفع موحد</string>
+    <string name="PushServiceTypeMicroG">مايكروجي</string>
     <string name="PushServiceTypeInAppDialog">إظهار الإشعارات المقيمة</string>
     <string name="PushServiceTypeUnifiedGateway">بوابة دفع موحدة</string>
     <string name="SendMp4DocumentAsVideo">إرسال مستند mp4 كفيديو</string>

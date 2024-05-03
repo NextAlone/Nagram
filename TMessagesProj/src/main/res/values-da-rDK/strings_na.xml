@@ -130,6 +130,7 @@
     <string name="PushServiceTypeInApp">I App</string>
     <string name="PushServiceTypeFCM">Google FCM</string>
     <string name="PushServiceTypeUnified">Unified Push</string>
+    <string name="PushServiceTypeMicroG">Mikrog</string>
     <string name="PushServiceTypeInAppDialog">Vis residente notifikationer</string>
     <string name="PushServiceTypeUnifiedGateway">Unified Push Gateway</string>
     <string name="SendMp4DocumentAsVideo">Send mp4-dokument som video</string>

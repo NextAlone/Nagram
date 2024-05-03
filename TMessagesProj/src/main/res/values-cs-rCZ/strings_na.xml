@@ -130,6 +130,7 @@
     <string name="PushServiceTypeInApp">V aplikaci</string>
     <string name="PushServiceTypeFCM">Google FCM</string>
     <string name="PushServiceTypeUnified">Sjednocený posun</string>
+    <string name="PushServiceTypeMicroG">MikroG</string>
     <string name="PushServiceTypeInAppDialog">Zobrazit rezidentní oznámení</string>
     <string name="PushServiceTypeUnifiedGateway">Sjednocená posuvná brána</string>
     <string name="SendMp4DocumentAsVideo">Poslat dokument mp4 jako video</string>

@@ -130,6 +130,7 @@
     <string name="PushServiceTypeInApp">Sovelluksessa</string>
     <string name="PushServiceTypeFCM">Google FCM</string>
     <string name="PushServiceTypeUnified">Yhdistetty Työntö</string>
+    <string name="PushServiceTypeMicroG">MikroG</string>
     <string name="PushServiceTypeInAppDialog">Näytä kotimaiset ilmoitukset</string>
     <string name="PushServiceTypeUnifiedGateway">Yhdistetty Push-Yhdyskäytävä</string>
     <string name="SendMp4DocumentAsVideo">Lähetä mp4-asiakirja videona</string>

@@ -130,6 +130,7 @@
     <string name="PushServiceTypeInApp">Dans l\'application</string>
     <string name="PushServiceTypeFCM">Google FCM</string>
     <string name="PushServiceTypeUnified">Push unifié</string>
+    <string name="PushServiceTypeMicroG">MicroG</string>
     <string name="PushServiceTypeInAppDialog">Afficher les notifications des résidents</string>
     <string name="PushServiceTypeUnifiedGateway">Passerelle Push unifiée</string>
     <string name="SendMp4DocumentAsVideo">Envoyer le document mp4 en tant que vidéo</string>

@@ -130,6 +130,7 @@
     <string name="PushServiceTypeInApp">В додатку</string>
     <string name="PushServiceTypeFCM">Google FCM</string>
     <string name="PushServiceTypeUnified">Одноразове штовхання</string>
+    <string name="PushServiceTypeMicroG">МікроГ</string>
     <string name="PushServiceTypeInAppDialog">Показувати сповіщення резидента</string>
     <string name="PushServiceTypeUnifiedGateway">Уніфікований Push-шлюз</string>
     <string name="SendMp4DocumentAsVideo">Відправити mp4 документ як відео</string>

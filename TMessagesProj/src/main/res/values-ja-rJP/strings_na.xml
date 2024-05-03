@@ -130,6 +130,7 @@
     <string name="PushServiceTypeInApp">アプリ内</string>
     <string name="PushServiceTypeFCM">Google FCM</string>
     <string name="PushServiceTypeUnified">統一されたプッシュ</string>
+    <string name="PushServiceTypeMicroG">MicroG</string>
     <string name="PushServiceTypeInAppDialog">常駐通知を表示</string>
     <string name="PushServiceTypeUnifiedGateway">Unified Push Gateway</string>
     <string name="SendMp4DocumentAsVideo">mp4ドキュメントを動画として送信</string>

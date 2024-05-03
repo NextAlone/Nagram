@@ -130,6 +130,7 @@
     <string name="PushServiceTypeInApp">I appen</string>
     <string name="PushServiceTypeFCM">Google FCM</string>
     <string name="PushServiceTypeUnified">Enhetlig Push</string>
+    <string name="PushServiceTypeMicroG">MikroG</string>
     <string name="PushServiceTypeInAppDialog">Visa inhemska aviseringar</string>
     <string name="PushServiceTypeUnifiedGateway">Enhetlig Push Gateway</string>
     <string name="SendMp4DocumentAsVideo">Skicka mp4-dokument som video</string>
