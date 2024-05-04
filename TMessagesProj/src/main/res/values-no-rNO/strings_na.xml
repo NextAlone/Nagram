@@ -139,4 +139,5 @@
     <string name="DisableChannelMuteButton">Deaktiver knappen for å slå av kanal</string>
     <string name="DisablePreviewVideoSoundShortcut">Deaktivere forhåndsvise video lyd snarvei</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Deaktiver volumtastene for å aktivere forhåndsvisningsvideo lyd</string>
+    <string name="DisableAutoWebLogin">Deaktiver innlogging med automatisk</string>
 </resources>

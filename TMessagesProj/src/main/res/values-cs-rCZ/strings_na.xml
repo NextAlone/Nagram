@@ -139,4 +139,5 @@
     <string name="DisableChannelMuteButton">Zakázat tlačítko ztlumit kanál</string>
     <string name="DisablePreviewVideoSoundShortcut">Zakázat zástupce zvuku videa</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Zakázat tlačítka hlasitosti pro zapnutí náhledu zvuku videa</string>
+    <string name="DisableAutoWebLogin">Zakázat automatické přihlášení k webu</string>
 </resources>

@@ -3,8 +3,8 @@
     <string name="N_Config">N-Config</string>
     <string name="ForceCopy">Kopyalamaya Zorla</string>
     <string name="InvertReply">Tersine Çevir</string>
-    <string name="Great">Great</string>
-    <string name="Poor">Poor</string>
+    <string name="Great">Harika</string>
+    <string name="Poor">Fakir</string>
     <string name="CombineMessage">Mesajı Birleştir</string>
     <string name="TextStyle">Metin Stili</string>
     <string name="CombineMessageEnabledWithReply">Etkinleştirilmiş İletiyi Yanıtla Birleştir</string>
@@ -75,7 +75,7 @@
     <string name="NotificationIcon">Bildirim Simgesi</string>
     <string name="Official">Resmi</string>
     <string name="Nekogram">Nekogram</string>
-    <string name="HalloWeen">HalloWeen</string>
+    <string name="HalloWeen">Cadılar bayramı</string>
     <string name="ShowOnlineStatus">Çevrimiçi Durumu Göster</string>
     <string name="ShowOnlineStatusNotice">Gruplardaki diğer kişilerin çevrimiçi durumunu profil fotoğraflarının yanında gösterin</string>
     <string name="ShowRecentOnlineStatus">Son Çevrimiçi Durumu Göster</string>
@@ -139,4 +139,5 @@
     <string name="DisableChannelMuteButton">Kanal sesini kapatma düğmesini devre dışı bırak</string>
     <string name="DisablePreviewVideoSoundShortcut">Önizleme videosu ses kısayolunu devre dışı bırak</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Önizleme video sesini etkinleştirmek için ses seviyesi tuşlarını devre dışı bırakın</string>
+    <string name="DisableAutoWebLogin">Disable auto web login</string>
 </resources>

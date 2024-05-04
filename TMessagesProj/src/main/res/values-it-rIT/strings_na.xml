@@ -139,4 +139,5 @@
     <string name="DisableChannelMuteButton">Disabilita il pulsante Silenzia canale</string>
     <string name="DisablePreviewVideoSoundShortcut">Disabilita la scorciatoia audio anteprima video</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Disabilita i tasti volume per abilitare l\'anteprima del suono video</string>
+    <string name="DisableAutoWebLogin">Disabilita il login automatico</string>
 </resources>

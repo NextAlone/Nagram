@@ -139,4 +139,5 @@
     <string name="DisableChannelMuteButton">Dezactivare buton mut canal</string>
     <string name="DisablePreviewVideoSoundShortcut">Dezactivează scurtătură sunet previzualizare</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Dezactivează tastele de volum pentru a activa previzualizarea sunetului video</string>
+    <string name="DisableAutoWebLogin">Dezactivează autentificarea automată pe web</string>
 </resources>

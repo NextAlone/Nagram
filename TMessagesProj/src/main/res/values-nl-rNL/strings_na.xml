@@ -139,4 +139,5 @@
     <string name="DisableChannelMuteButton">Kanaaldemping knop uitschakelen</string>
     <string name="DisablePreviewVideoSoundShortcut">Snelkoppeling voor preview video uitschakelen</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Volumeknoppen uitschakelen om preview videogeluid in te schakelen</string>
+    <string name="DisableAutoWebLogin">Automatisch web inloggen uitschakelen</string>
 </resources>

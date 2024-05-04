@@ -139,4 +139,5 @@
     <string name="DisableChannelMuteButton">チャンネルミュートボタンを無効にする</string>
     <string name="DisablePreviewVideoSoundShortcut">プレビュービデオサウンドのショートカットを無効にする</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">ビデオのプレビューを有効にするには音量キーを無効にしてください</string>
+    <string name="DisableAutoWebLogin">自動ウェブログインを無効にする</string>
 </resources>

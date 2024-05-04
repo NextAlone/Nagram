@@ -139,4 +139,5 @@
     <string name="DisableChannelMuteButton">Deaktivér kanal mute knap</string>
     <string name="DisablePreviewVideoSoundShortcut">Deaktivér forhåndsvisning af videolyd genvej</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Deaktivér lydstyrkeknapper for at aktivere forhåndsvisning af videolyd</string>
+    <string name="DisableAutoWebLogin">Deaktivér auto weblogin</string>
 </resources>

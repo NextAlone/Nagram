@@ -139,4 +139,5 @@
     <string name="DisableChannelMuteButton">Sendermute-Schaltfläche deaktivieren</string>
     <string name="DisablePreviewVideoSoundShortcut">Vorschau Video Ton Verknüpfung deaktivieren</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Lautstärketasten deaktivieren, um Videovorschau zu aktivieren</string>
+    <string name="DisableAutoWebLogin">Auto-Web-Login deaktivieren</string>
 </resources>

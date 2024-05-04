@@ -139,4 +139,5 @@
     <string name="DisableChannelMuteButton">Вимкнути кнопку вимкнення звуку каналу</string>
     <string name="DisablePreviewVideoSoundShortcut">Вимкнути ярлик під час перегляду відео звукового звуку</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Вимкніть клавіші гучності, щоб увімкнути попередній перегляд відео звуку</string>
+    <string name="DisableAutoWebLogin">Вимкнути автоматичний веб-логін</string>
 </resources>

@@ -139,4 +139,5 @@
     <string name="DisableChannelMuteButton">Desativar botão de silenciar canal</string>
     <string name="DisablePreviewVideoSoundShortcut">Desativar pré-visualização de atalho sonoro de vídeo</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Desativar as teclas de volume para habilitar a visualização do som de vídeo</string>
+    <string name="DisableAutoWebLogin">Desativar o login via web automático</string>
 </resources>

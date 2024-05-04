@@ -139,4 +139,5 @@
     <string name="DisableChannelMuteButton">Απενεργοποίηση κουμπιού σίγασης καναλιού</string>
     <string name="DisablePreviewVideoSoundShortcut">Απενεργοποίηση συντόμευσης ήχου βίντεο προεπισκόπησης</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Απενεργοποίηση πλήκτρων έντασης για ενεργοποίηση προεπισκόπησης ήχου βίντεο</string>
+    <string name="DisableAutoWebLogin">Απενεργοποίηση αυτόματης σύνδεσης στον ιστό</string>
 </resources>

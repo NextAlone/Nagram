@@ -139,4 +139,5 @@
     <string name="DisableChannelMuteButton">Inaktivera kanalavstängningsknapp</string>
     <string name="DisablePreviewVideoSoundShortcut">Inaktivera förhandsgranskning av videoljudgenväg</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Inaktivera volymknappar för att förhandsgranska videoljud</string>
+    <string name="DisableAutoWebLogin">Inaktivera automatisk webbinloggning</string>
 </resources>

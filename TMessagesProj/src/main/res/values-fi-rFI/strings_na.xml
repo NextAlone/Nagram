@@ -139,4 +139,5 @@
     <string name="DisableChannelMuteButton">Poista kanavan mykistyspainike käytöstä</string>
     <string name="DisablePreviewVideoSoundShortcut">Poista esikatseluvideon pikakuvake käytöstä</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Poista äänenvoimakkuusnäppäimet käytöstä, jos haluat ottaa esikatsella videon ääntä</string>
+    <string name="DisableAutoWebLogin">Poista automaattinen web kirjautuminen käytöstä</string>
 </resources>
