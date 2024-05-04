@@ -584,6 +584,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val disableAutoWebLogin =
+        addConfig(
+            "DisableAutoWebLogin",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,
