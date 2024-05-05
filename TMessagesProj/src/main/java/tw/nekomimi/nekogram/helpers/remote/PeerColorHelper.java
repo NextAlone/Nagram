@@ -88,7 +88,6 @@ public class PeerColorHelper extends BaseRemoteHelper {
             savePeerColorInfo();
         } catch (JSONException e) {
             FileLog.e(e);
-            delegate.onTLResponse(null, e.getLocalizedMessage());
         }
     }
 
