@@ -8839,7 +8839,7 @@ public class Theme {
                 chat_psaHelpDrawable[a] = resources.getDrawable(R.drawable.msg_psa).mutate();
             }
 
-            chat_editDrawable = resources.getDrawable(R.drawable.msg_edit).mutate();
+            chat_editDrawable = resources.getDrawable(R.drawable.edit_pencil).mutate();
 
             chat_timeHintSentDrawable = resources.getDrawable(R.drawable.msg_check_s).mutate();
             chat_timeHintForwardDrawable = resources.getDrawable(R.drawable.mini_forwarded).mutate();
