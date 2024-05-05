@@ -140,4 +140,7 @@
     <string name="DisablePreviewVideoSoundShortcut">Вимкнути ярлик під час перегляду відео звукового звуку</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Вимкніть клавіші гучності, щоб увімкнути попередній перегляд відео звуку</string>
     <string name="DisableAutoWebLogin">Вимкнути автоматичний веб-логін</string>
+    <string name="PreviewSendPhoto">Надіслати фото</string>
+    <string name="PreviewSendVideo">Надіслати відео</string>
+    <string name="PreviewSendFile">Надіслати файл</string>
 </resources>

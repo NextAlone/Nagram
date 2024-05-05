@@ -140,4 +140,7 @@
     <string name="DisablePreviewVideoSoundShortcut">Απενεργοποίηση συντόμευσης ήχου βίντεο προεπισκόπησης</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Απενεργοποίηση πλήκτρων έντασης για ενεργοποίηση προεπισκόπησης ήχου βίντεο</string>
     <string name="DisableAutoWebLogin">Απενεργοποίηση αυτόματης σύνδεσης στον ιστό</string>
+    <string name="PreviewSendPhoto">Αποστολή Φωτογραφίας</string>
+    <string name="PreviewSendVideo">Αποστολή Βίντεο</string>
+    <string name="PreviewSendFile">Αποστολή Αρχείου</string>
 </resources>

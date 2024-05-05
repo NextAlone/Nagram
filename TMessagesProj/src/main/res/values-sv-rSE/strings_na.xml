@@ -140,4 +140,7 @@
     <string name="DisablePreviewVideoSoundShortcut">Inaktivera förhandsgranskning av videoljudgenväg</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Inaktivera volymknappar för att förhandsgranska videoljud</string>
     <string name="DisableAutoWebLogin">Inaktivera automatisk webbinloggning</string>
+    <string name="PreviewSendPhoto">Skicka foto</string>
+    <string name="PreviewSendVideo">Skicka video</string>
+    <string name="PreviewSendFile">Skicka fil</string>
 </resources>

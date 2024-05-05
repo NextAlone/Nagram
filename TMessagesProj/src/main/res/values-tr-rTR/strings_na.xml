@@ -140,4 +140,7 @@
     <string name="DisablePreviewVideoSoundShortcut">Önizleme videosu ses kısayolunu devre dışı bırak</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Önizleme video sesini etkinleştirmek için ses seviyesi tuşlarını devre dışı bırakın</string>
     <string name="DisableAutoWebLogin">Disable auto web login</string>
+    <string name="PreviewSendPhoto">Send Photo</string>
+    <string name="PreviewSendVideo">Send Video</string>
+    <string name="PreviewSendFile">Send File</string>
 </resources>

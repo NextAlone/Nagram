@@ -140,4 +140,7 @@
     <string name="DisablePreviewVideoSoundShortcut">Désactiver le raccourci de l\'aperçu du son vidéo</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Désactiver les boutons de volume pour activer la prévisualisation du son vidéo</string>
     <string name="DisableAutoWebLogin">Désactiver la connexion web automatique</string>
+    <string name="PreviewSendPhoto">Envoyer une photo</string>
+    <string name="PreviewSendVideo">Envoyer la vidéo</string>
+    <string name="PreviewSendFile">Envoyer un fichier</string>
 </resources>

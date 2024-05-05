@@ -140,4 +140,7 @@
     <string name="DisablePreviewVideoSoundShortcut">Snelkoppeling voor preview video uitschakelen</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Volumeknoppen uitschakelen om preview videogeluid in te schakelen</string>
     <string name="DisableAutoWebLogin">Automatisch web inloggen uitschakelen</string>
+    <string name="PreviewSendPhoto">Foto verzenden</string>
+    <string name="PreviewSendVideo">Video verzenden</string>
+    <string name="PreviewSendFile">Bestand verzenden</string>
 </resources>

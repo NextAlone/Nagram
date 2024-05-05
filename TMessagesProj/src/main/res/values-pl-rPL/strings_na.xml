@@ -140,4 +140,7 @@
     <string name="DisablePreviewVideoSoundShortcut">Wyłącz podgląd skrótu dźwięku wideo</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Wyłącz przyciski głośności, aby włączyć podgląd dźwięku wideo</string>
     <string name="DisableAutoWebLogin">Wyłącz automatyczne logowanie</string>
+    <string name="PreviewSendPhoto">Wyślij zdjęcie</string>
+    <string name="PreviewSendVideo">Wyślij wideo</string>
+    <string name="PreviewSendFile">Wyślij plik</string>
 </resources>

@@ -140,4 +140,7 @@
     <string name="DisablePreviewVideoSoundShortcut">Отключить ярлык предварительного просмотра звука видео</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Отключить кнопки громкости для предварительного просмотра звука видео</string>
     <string name="DisableAutoWebLogin">Отключить автоматический веб-логин</string>
+    <string name="PreviewSendPhoto">Отправить фото</string>
+    <string name="PreviewSendVideo">Отправить видео</string>
+    <string name="PreviewSendFile">Отправить файл</string>
 </resources>

@@ -140,4 +140,7 @@
     <string name="DisablePreviewVideoSoundShortcut">Zakázat zástupce zvuku videa</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Zakázat tlačítka hlasitosti pro zapnutí náhledu zvuku videa</string>
     <string name="DisableAutoWebLogin">Zakázat automatické přihlášení k webu</string>
+    <string name="PreviewSendPhoto">Odeslat fotku</string>
+    <string name="PreviewSendVideo">Poslat video</string>
+    <string name="PreviewSendFile">Odeslat soubor</string>
 </resources>

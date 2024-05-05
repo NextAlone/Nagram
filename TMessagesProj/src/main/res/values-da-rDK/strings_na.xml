@@ -140,4 +140,7 @@
     <string name="DisablePreviewVideoSoundShortcut">Deaktivér forhåndsvisning af videolyd genvej</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Deaktivér lydstyrkeknapper for at aktivere forhåndsvisning af videolyd</string>
     <string name="DisableAutoWebLogin">Deaktivér auto weblogin</string>
+    <string name="PreviewSendPhoto">Send Foto</string>
+    <string name="PreviewSendVideo">Send Video</string>
+    <string name="PreviewSendFile">Send Fil</string>
 </resources>

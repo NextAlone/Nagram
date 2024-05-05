@@ -140,4 +140,7 @@
     <string name="DisablePreviewVideoSoundShortcut">تعطيل إختصار صوت معاينة الفيديو</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">تعطيل مفاتيح الصوت لتمكين معاينة صوت الفيديو</string>
     <string name="DisableAutoWebLogin">تعطيل تسجيل الدخول التلقائي</string>
+    <string name="PreviewSendPhoto">إرسال صورة</string>
+    <string name="PreviewSendVideo">إرسال فيديو</string>
+    <string name="PreviewSendFile">إرسال ملف</string>
 </resources>
