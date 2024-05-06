@@ -41,7 +41,9 @@ object TelegramAPITranslator : Translator {
                     if (res is TL_messages_translateResult && res.result.isNotEmpty()) {
                         it.resume(res.result[0].text)
                     } else {
-                        FileLog.e(err?.text)
+                        if (err?.text != null && err.text!!.isNotEmpty()) {
+                            FileLog.e(err.text)
+                        }
                         it.resumeWithException(RuntimeException("Failed to translate by Telegram API"))
                     }
                 }
