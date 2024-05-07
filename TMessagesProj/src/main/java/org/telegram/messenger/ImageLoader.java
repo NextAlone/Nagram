@@ -2730,11 +2730,13 @@ public class ImageLoader {
             return;
         }
         ArrayList<Runnable> runnables = imageReceiver.getLoadingOperations();
-        if (!runnables.isEmpty()) {
-            for (int i = 0; i < runnables.size(); i++) {
-                imageLoadQueue.cancelRunnable(runnables.get(i));
+        synchronized (runnables) {
+            if (!runnables.isEmpty()) {
+                for (int i = 0; i < runnables.size(); i++) {
+                    imageLoadQueue.cancelRunnable(runnables.get(i));
+                }
+                runnables.clear();
             }
-            runnables.clear();
         }
         imageReceiver.addLoadingImageRunnable(null);
         imageLoadQueue.postRunnable(() -> {
