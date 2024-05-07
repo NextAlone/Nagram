@@ -143,4 +143,5 @@
     <string name="PreviewSendPhoto">Αποστολή Φωτογραφίας</string>
     <string name="PreviewSendVideo">Αποστολή Βίντεο</string>
     <string name="PreviewSendFile">Αποστολή Αρχείου</string>
+    <string name="SentryAnalytics">Αναφορά κατάρρευσης Sentry</string>
 </resources>

@@ -143,4 +143,5 @@
     <string name="PreviewSendPhoto">Foto senden</string>
     <string name="PreviewSendVideo">Video senden</string>
     <string name="PreviewSendFile">Datei senden</string>
+    <string name="SentryAnalytics">Sentry Absturzbericht</string>
 </resources>

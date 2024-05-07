@@ -143,4 +143,5 @@
     <string name="PreviewSendPhoto">Odeslat fotku</string>
     <string name="PreviewSendVideo">Poslat video</string>
     <string name="PreviewSendFile">Odeslat soubor</string>
+    <string name="SentryAnalytics">Zpráva o pádu aplikace</string>
 </resources>

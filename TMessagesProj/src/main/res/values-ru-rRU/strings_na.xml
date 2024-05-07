@@ -113,7 +113,7 @@
     <string name="ExternalStickerCacheRefreshAll">Синхронизировать все тайники</string>
     <string name="ExternalStickerCacheDeleteAll">Удалить все тайники</string>
     <string name="ExternalStickerCacheDirNameType">Имя каталога</string>
-    <string name="ProviderTranSmartTranslate">TranSmart Translator</string>
+    <string name="ProviderTranSmartTranslate">TranSmart переводчик</string>
     <string name="DisableMarkdown">Отключить Markdown</string>
     <string name="SendWithMarkdown">Отправить с markdown</string>
     <string name="DisableClickProfileGalleryView">Отключить перевёрнутые аватары нажатием</string>
@@ -143,4 +143,5 @@
     <string name="PreviewSendPhoto">Отправить фото</string>
     <string name="PreviewSendVideo">Отправить видео</string>
     <string name="PreviewSendFile">Отправить файл</string>
+    <string name="SentryAnalytics">Отчеты об ошибках Sentry</string>
 </resources>

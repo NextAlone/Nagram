@@ -143,4 +143,5 @@
     <string name="PreviewSendPhoto">Lähetä Kuva</string>
     <string name="PreviewSendVideo">Lähetä Video</string>
     <string name="PreviewSendFile">Lähetä Tiedosto</string>
+    <string name="SentryAnalytics">Piirustuksen Kaatumisraportti</string>
 </resources>

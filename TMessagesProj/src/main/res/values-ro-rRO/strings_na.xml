@@ -143,4 +143,5 @@
     <string name="PreviewSendPhoto">Trimite fotografie</string>
     <string name="PreviewSendVideo">Trimite videoclip</string>
     <string name="PreviewSendFile">Trimite fișier</string>
+    <string name="SentryAnalytics">Raport de defecțiuni la intrare</string>
 </resources>

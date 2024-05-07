@@ -143,4 +143,5 @@
     <string name="PreviewSendPhoto">Envoyer une photo</string>
     <string name="PreviewSendVideo">Envoyer la vidéo</string>
     <string name="PreviewSendFile">Envoyer un fichier</string>
+    <string name="SentryAnalytics">Rapport de Crash du Guetteur</string>
 </resources>

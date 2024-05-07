@@ -143,4 +143,5 @@
     <string name="PreviewSendPhoto">Надіслати фото</string>
     <string name="PreviewSendVideo">Надіслати відео</string>
     <string name="PreviewSendFile">Надіслати файл</string>
+    <string name="SentryAnalytics">Звіт про збій Sentry</string>
 </resources>

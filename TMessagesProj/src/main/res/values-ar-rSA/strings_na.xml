@@ -143,4 +143,5 @@
     <string name="PreviewSendPhoto">إرسال صورة</string>
     <string name="PreviewSendVideo">إرسال فيديو</string>
     <string name="PreviewSendFile">إرسال ملف</string>
+    <string name="SentryAnalytics">تقرير تحطم الحراسة</string>
 </resources>

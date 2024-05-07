@@ -143,4 +143,5 @@
     <string name="PreviewSendPhoto">Send Photo</string>
     <string name="PreviewSendVideo">Send Video</string>
     <string name="PreviewSendFile">Send File</string>
+    <string name="SentryAnalytics">Sentry Crash Report</string>
 </resources>

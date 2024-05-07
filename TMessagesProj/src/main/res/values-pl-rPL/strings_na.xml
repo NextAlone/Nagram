@@ -143,4 +143,5 @@
     <string name="PreviewSendPhoto">Wyślij zdjęcie</string>
     <string name="PreviewSendVideo">Wyślij wideo</string>
     <string name="PreviewSendFile">Wyślij plik</string>
+    <string name="SentryAnalytics">Raport awarii wpisu</string>
 </resources>
