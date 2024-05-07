@@ -143,4 +143,5 @@
     <string name="PreviewSendPhoto">发送图片</string>
     <string name="PreviewSendVideo">发送视频</string>
     <string name="PreviewSendFile">发送文件</string>
+    <string name="SentryAnalytics">Sentry 崩溃自动上报</string>
 </resources>
