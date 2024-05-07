@@ -391,6 +391,7 @@ public class EmojiHelper extends BaseRemoteHelper implements NotificationCenter.
 
     public ArrayList<EmojiPackInfo> getEmojiPacksInfo() {
         return emojiPacksInfo.parallelStream()
+                .filter(Objects::nonNull)
                 .filter(e -> e instanceof EmojiPackInfo)
                 .map(e -> (EmojiPackInfo) e)
                 .filter(e -> e.getFileDocument() != null && e.getPreviewDocument() != null)
@@ -399,6 +400,7 @@ public class EmojiHelper extends BaseRemoteHelper implements NotificationCenter.
 
     public ArrayList<EmojiPackBase> getEmojiCustomPacksInfo() {
         return emojiPacksInfo.parallelStream()
+                .filter(Objects::nonNull)
                 .filter(e -> !(e instanceof EmojiPackInfo))
                 .filter(e -> !e.getPackId().equals(pendingDeleteEmojiPackId))
                 .collect(Collectors.toCollection(ArrayList::new));
