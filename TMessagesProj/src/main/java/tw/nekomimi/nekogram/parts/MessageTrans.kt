@@ -31,7 +31,7 @@ fun MessageObject.toRawString(): String {
         for (answer in poll.answers) {
 
             content += "\n- "
-            content += answer.text
+            content += answer.text.text
 
         }
 
