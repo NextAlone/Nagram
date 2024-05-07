@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
@@ -43,7 +44,11 @@ public class NotificationsService extends Service {
                     .setSmallIcon(R.drawable.notification)
                     .setContentText(LocaleController.getString("NekoXPushService", R.string.NekoXPushService))
                     .build();
-            startForeground(9999, notification);
+            try {
+                startForeground(9999, notification);
+            } catch (Throwable e) {
+                Log.d("TFOSS", "Failed to start push service");
+            }
         }
     }
 
