@@ -2449,7 +2449,7 @@ public class MediaDataController extends BaseController {
                 archivedStickersCount[type] = count;
                 getNotificationCenter().postNotificationName(NotificationCenter.archivedStickersCountDidLoad, type);
             }
-        } else if (getUserConfig().getCurrentUser() != null && !getUserConfig().getCurrentUser().bot) {
+        } else if (getUserConfig().isClientActivated() && !getUserConfig().getCurrentUser().bot) {
             TLRPC.TL_messages_getArchivedStickers req = new TLRPC.TL_messages_getArchivedStickers();
             req.limit = 0;
             req.masks = type == TYPE_MASK;
@@ -2830,7 +2830,7 @@ public class MediaDataController extends BaseController {
                     }
                 });
             });
-        } else if(!getUserConfig().getCurrentUser().bot)  {
+        } else if (getUserConfig().isClientActivated() && !getUserConfig().getCurrentUser().bot)  {
             if (type == TYPE_FEATURED || type == TYPE_FEATURED_EMOJIPACKS) {
                 final boolean emoji = type == TYPE_FEATURED_EMOJIPACKS;
                 TLRPC.TL_messages_allStickers response = new TLRPC.TL_messages_allStickers();

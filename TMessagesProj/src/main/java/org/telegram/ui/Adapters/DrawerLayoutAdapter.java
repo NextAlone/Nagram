@@ -407,7 +407,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
                 return true;
             }));
         }
-        if (NekoXConfig.disableStatusUpdate && !UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().bot) {
+        if (NekoXConfig.disableStatusUpdate && UserConfig.getInstance(UserConfig.selectedAccount).isClientActivated() && !UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().bot) {
             boolean online = MessagesController.getInstance(UserConfig.selectedAccount).isOnline();
             String message = online ? StrUtil.upperFirst(LocaleController.getString("Online", R.string.Online)) : LocaleController.getString("VoipOfflineTitle", R.string.VoipOfflineTitle);
             if (NekoXConfig.keepOnlineStatus) {
