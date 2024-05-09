@@ -144,4 +144,6 @@
     <string name="PreviewSendVideo">发送视频</string>
     <string name="PreviewSendFile">发送文件</string>
     <string name="SentryAnalytics">Sentry 崩溃自动上报</string>
+    <string name="UnblockDeleted">解禁已删除账号</string>
+    <string name="UnblockDeletedWarn">您确定要解除屏蔽**所有已删除账号**吗？</string>
 </resources>
