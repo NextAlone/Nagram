@@ -413,7 +413,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
             if (NekoXConfig.keepOnlineStatus) {
                 message += " (" + LocaleController.getString("Locked", R.string.Locked) + ")";
             }
-            items.add(new CheckItem(14, message, R.drawable.msg_views, () -> online, () -> {
+            items.add(new CheckItem(14, message, R.drawable.msg_view_file, () -> online, () -> {
                 MessagesController controller = MessagesController.getInstance(UserConfig.selectedAccount);
                 controller.updateStatus(!online);
                 return true;

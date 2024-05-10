@@ -46,6 +46,9 @@ public class SettingsHelper {
                 case "account":
                     fragment = nekox_fragment = new NekoAccountSettingsActivity();
                     break;
+                case "about":
+                    fragment = new NekoSettingsActivity().startOnAbout();
+                    break;
                 case "chat":
                 case "chats":
                 case "c":
