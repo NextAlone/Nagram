@@ -144,4 +144,6 @@
     <string name="PreviewSendVideo">Enviar vídeo</string>
     <string name="PreviewSendFile">Enviar Arquivo</string>
     <string name="SentryAnalytics">Relatório de erro sentinela</string>
+    <string name="UnblockDeleted">Desbloquear usuários excluídos</string>
+    <string name="UnblockDeletedWarn">Você tem certeza que deseja desbloquear **todos os usuários deletados**?</string>
 </resources>

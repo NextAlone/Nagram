@@ -144,4 +144,6 @@
     <string name="PreviewSendVideo">Trimite videoclip</string>
     <string name="PreviewSendFile">Trimite fișier</string>
     <string name="SentryAnalytics">Raport de defecțiuni la intrare</string>
+    <string name="UnblockDeleted">Deblochează Utilizatorii șterși</string>
+    <string name="UnblockDeletedWarn">Ești sigur că vrei să deblochezi **toți utilizatorii șterși**?</string>
 </resources>

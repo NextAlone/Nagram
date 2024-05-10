@@ -144,4 +144,6 @@
     <string name="PreviewSendVideo">動画を送信</string>
     <string name="PreviewSendFile">ファイルを送信</string>
     <string name="SentryAnalytics">送信者のクラッシュレポート</string>
+    <string name="UnblockDeleted">削除されたユーザーのブロックを解除</string>
+    <string name="UnblockDeletedWarn">**すべて削除されたユーザー**のブロックを解除してもよろしいですか？</string>
 </resources>

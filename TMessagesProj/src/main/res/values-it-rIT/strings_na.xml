@@ -144,4 +144,6 @@
     <string name="PreviewSendVideo">Invia Video</string>
     <string name="PreviewSendFile">Invia File</string>
     <string name="SentryAnalytics">Rapporto Crash Sentry</string>
+    <string name="UnblockDeleted">Sblocca Utenti Eliminati</string>
+    <string name="UnblockDeletedWarn">Sei sicuro di voler sbloccare **tutti gli utenti eliminati**?</string>
 </resources>

@@ -144,4 +144,6 @@
     <string name="PreviewSendVideo">Video senden</string>
     <string name="PreviewSendFile">Datei senden</string>
     <string name="SentryAnalytics">Sentry Absturzbericht</string>
+    <string name="UnblockDeleted">Gelöschte Benutzer entsperren</string>
+    <string name="UnblockDeletedWarn">Bist du sicher, dass du **alle gelöschten Benutzer** entsperren möchtest?</string>
 </resources>

@@ -144,4 +144,6 @@
     <string name="PreviewSendVideo">Αποστολή Βίντεο</string>
     <string name="PreviewSendFile">Αποστολή Αρχείου</string>
     <string name="SentryAnalytics">Αναφορά κατάρρευσης Sentry</string>
+    <string name="UnblockDeleted">Κατάργηση Μπλοκάρισμα Διαγραμμένων Χρηστών</string>
+    <string name="UnblockDeletedWarn">Είστε βέβαιοι ότι θέλετε να ξεμπλοκάρετε **όλους τους διαγραμμένους χρήστες**?</string>
 </resources>

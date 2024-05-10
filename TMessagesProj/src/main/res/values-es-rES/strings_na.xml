@@ -144,4 +144,6 @@
     <string name="PreviewSendVideo">Enviar vídeo</string>
     <string name="PreviewSendFile">Enviar archivo</string>
     <string name="SentryAnalytics">Informe de error centinela</string>
+    <string name="UnblockDeleted">Desbloquear usuarios eliminados</string>
+    <string name="UnblockDeletedWarn">¿Estás seguro de que quieres desbloquear **todos los usuarios eliminados**?</string>
 </resources>

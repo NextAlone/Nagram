@@ -144,4 +144,6 @@
     <string name="PreviewSendVideo">Skicka video</string>
     <string name="PreviewSendFile">Skicka fil</string>
     <string name="SentryAnalytics">Sentry kraschrapport</string>
+    <string name="UnblockDeleted">Avblockera borttagna användare</string>
+    <string name="UnblockDeletedWarn">Är du säker på att du vill avblockera **alla raderade användare**?</string>
 </resources>

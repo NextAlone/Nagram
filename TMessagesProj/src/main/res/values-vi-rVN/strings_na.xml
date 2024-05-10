@@ -143,5 +143,7 @@
     <string name="PreviewSendPhoto">Gửi hình</string>
     <string name="PreviewSendVideo">Gửi video</string>
     <string name="PreviewSendFile">Gửi tệp</string>
-    <string name="SentryAnalytics">Sentry Crash Report</string>
+    <string name="SentryAnalytics">Sentry báo cáo sự cố</string>
+    <string name="UnblockDeleted">Bỏ chặn người dùng đã xóa</string>
+    <string name="UnblockDeletedWarn">Bạn có chắc chắn muốn bỏ chặn **tất cả người dùng đã xóa** không?</string>
 </resources>

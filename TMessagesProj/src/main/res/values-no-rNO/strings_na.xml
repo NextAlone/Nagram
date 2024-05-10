@@ -144,4 +144,6 @@
     <string name="PreviewSendVideo">Send video</string>
     <string name="PreviewSendFile">Send fil</string>
     <string name="SentryAnalytics">Sentry kræsj rapport</string>
+    <string name="UnblockDeleted">Avblokker slettede brukere</string>
+    <string name="UnblockDeletedWarn">Er du sikker på at du vil oppheve blokkeringen av **alle slettede brukere**?</string>
 </resources>
