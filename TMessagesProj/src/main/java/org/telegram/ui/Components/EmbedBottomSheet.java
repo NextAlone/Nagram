@@ -64,6 +64,8 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PhotoViewer;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -83,6 +85,7 @@ public class EmbedBottomSheet extends BottomSheet {
     private FrameLayout containerLayout;
     private ImageView pipButton;
     private boolean isYouTube;
+    private boolean isSpotify;
 
     private int[] position = new int[2];
 
@@ -259,6 +262,10 @@ public class EmbedBottomSheet extends BottomSheet {
         if (width == 0 || height == 0) {
             width = AndroidUtilities.displaySize.x;
             height = AndroidUtilities.displaySize.y / 2;
+        }
+        isSpotify = WebPlayerView.isSpotify(embedUrl);
+        if (isSpotify) {
+            height -= 200;
         }
 
         fullscreenVideoContainer = new FrameLayout(context);
@@ -764,7 +771,13 @@ public class EmbedBottomSheet extends BottomSheet {
                 return;
             }
             boolean animated = false;
-            if (PipVideoOverlay.show(inAppOnly, parentActivity, webView, width, height)) {
+            int newWidth = width;
+            int newHeight = height;
+            if (isSpotify) {
+                newWidth = 600;
+                newHeight = 200;
+            }
+            if (PipVideoOverlay.show(inAppOnly, parentActivity, webView, newWidth, newHeight)) {
                 PipVideoOverlay.setParentSheet(EmbedBottomSheet.this);
             }
 
@@ -892,6 +905,7 @@ public class EmbedBottomSheet extends BottomSheet {
                     args.put("Referer", "messenger.telegram.org");
                     try {
                         String currentYoutubeId = videoView.getYoutubeId();
+                        boolean isSpotify = WebPlayerView.isSpotify(embedUrl);
                         if (currentYoutubeId != null) {
                             progressBarBlackBackground.setVisibility(View.VISIBLE);
                             isYouTube = true;
@@ -922,6 +936,17 @@ public class EmbedBottomSheet extends BottomSheet {
                                 }
                             }
                             webView.loadDataWithBaseURL("https://messenger.telegram.org/", String.format(Locale.US, youtubeFrame, currentYoutubeId, seekToTime), "text/html", "UTF-8", "https://youtube.com");
+                        } else if (isSpotify) {
+                            InputStream in = getContext().getAssets().open("spotify_embed.html");
+                            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                            byte[] buffer = new byte[10240];
+                            int c;
+                            while ((c = in.read(buffer)) != -1) {
+                                bos.write(buffer, 0, c);
+                            }
+                            bos.close();
+                            in.close();
+                            webView.loadDataWithBaseURL("https://messenger.telegram.org/", String.format(Locale.US, bos.toString("UTF-8"), embedUrl), "text/html", "UTF-8", "https://open.spotify.com");
                         } else {
                             webView.loadUrl(embedUrl, args);
                         }
