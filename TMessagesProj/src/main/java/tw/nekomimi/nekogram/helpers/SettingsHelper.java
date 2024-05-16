@@ -1,5 +1,8 @@
 package tw.nekomimi.nekogram.helpers;
 
+import static org.telegram.ui.ProfileActivity.sendLogs;
+
+import android.app.Activity;
 import android.net.Uri;
 import android.text.TextUtils;
 
@@ -23,7 +26,7 @@ import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
 
 public class SettingsHelper {
 
-    public static void processDeepLink(Uri uri, Callback callback, Runnable unknown) {
+    public static void processDeepLink(Activity activity, Uri uri, Callback callback, Runnable unknown) {
         if (uri == null) {
             unknown.run();
             return;
@@ -65,6 +68,9 @@ public class SettingsHelper {
                 case "g":
                     fragment = nekox_fragment = new NekoGeneralSettingsActivity();
                     break;
+                case "send_logs":
+                    sendLogs(activity, false);
+                    return;
                 default:
                     unknown.run();
                     return;
