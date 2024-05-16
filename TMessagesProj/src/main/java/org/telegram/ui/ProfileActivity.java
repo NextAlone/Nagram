@@ -13209,32 +13209,33 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             args.putLong("user_id", userId);
             presentFragment(new QrActivity(args));
         } else if (parent.getTag() != null && ((int) parent.getTag()) == birthdayRow) {
-            if (userId == getUserConfig().getClientUserId()) {
-                presentFragment(new PremiumPreviewFragment("my_profile_gift"));
-                return;
-            }
-            TLRPC.User user = getMessagesController().getUser(userId);
-            if (user == null || userInfo == null) return;
-            ArrayList<TLRPC.TL_premiumGiftOption> options = new ArrayList<>(userInfo.premium_gifts);
-            if (options.isEmpty()) {
-                if (getVisibleDialog() != null) return;
-                final AlertDialog progressDialog = new AlertDialog(getContext(), AlertDialog.ALERT_TYPE_SPINNER);
-                final int reqId = BoostRepository.loadGiftOptions(null, loadedOptions -> {
-                    progressDialog.dismiss();
-                    if (getVisibleDialog() != null) return;
-                    loadedOptions = BoostRepository.filterGiftOptions(loadedOptions, 1);
-                    loadedOptions = BoostRepository.filterGiftOptionsByBilling(loadedOptions);
-                    ArrayList<TLRPC.User> users = new ArrayList<>();
-                    users.add(user);
-                    PremiumPreviewGiftToUsersBottomSheet.show(users, loadedOptions);
-                });
-                progressDialog.setOnCancelListener(di -> {
-                    getConnectionsManager().cancelRequest(reqId, true);
-                });
-                progressDialog.showDelayed(500);
-            } else {
-                showDialog(new GiftPremiumBottomSheet(this, user));
-            }
+//            if (userId == getUserConfig().getClientUserId()) {
+//                presentFragment(new PremiumPreviewFragment("my_profile_gift"));
+//                return;
+//            }
+//            TLRPC.User user = getMessagesController().getUser(userId);
+//            if (user == null || userInfo == null) return;
+//            ArrayList<TLRPC.TL_premiumGiftOption> options = new ArrayList<>(userInfo.premium_gifts);
+//            if (options.isEmpty()) {
+//                if (getVisibleDialog() != null) return;
+//                final AlertDialog progressDialog = new AlertDialog(getContext(), AlertDialog.ALERT_TYPE_SPINNER);
+//                final int reqId = BoostRepository.loadGiftOptions(null, loadedOptions -> {
+//                    progressDialog.dismiss();
+//                    if (getVisibleDialog() != null) return;
+//                    loadedOptions = BoostRepository.filterGiftOptions(loadedOptions, 1);
+//                    loadedOptions = BoostRepository.filterGiftOptionsByBilling(loadedOptions);
+//                    ArrayList<TLRPC.User> users = new ArrayList<>();
+//                    users.add(user);
+//                    PremiumPreviewGiftToUsersBottomSheet.show(users, loadedOptions);
+//                });
+//                progressDialog.setOnCancelListener(di -> {
+//                    getConnectionsManager().cancelRequest(reqId, true);
+//                });
+//                progressDialog.showDelayed(500);
+//            } else {
+//                showDialog(new GiftPremiumBottomSheet(this, user));
+//            }
+            showDialog(new PremiumNotAvailableBottomSheet(this));
         }
     }
 
