@@ -547,6 +547,10 @@ public class MessagePreviewParams {
         this.previewView = previewView;
     }
 
+    public void setHideForwardSendersName(boolean hideForwardSendersName) {
+        this.hideForwardSendersName = hideForwardSendersName;
+    }
+
     public void checkEdits(ArrayList<MessageObject> replaceMessageObjects) {
         boolean replaced = false;
         if (forwardMessages != null) {
