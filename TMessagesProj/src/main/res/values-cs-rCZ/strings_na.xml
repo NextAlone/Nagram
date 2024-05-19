@@ -146,4 +146,13 @@
     <string name="SentryAnalytics">Zpráva o pádu aplikace</string>
     <string name="UnblockDeleted">Odblokovat smazané uživatele</string>
     <string name="UnblockDeletedWarn">Opravdu chcete odblokovat **všechny odstraněné uživatele**?</string>
+    <string name="RegexFilters">Filtry zpráv</string>
+    <string name="RegexFiltersHeader">Filtry</string>
+    <string name="RegexFiltersEnableInChats">Povolit v soukromých chatech</string>
+    <string name="RegexFiltersCaseInsensitive">Necitlivé výrazy na velikost písmen</string>
+    <string name="RegexFiltersAdd">Přidat filtr</string>
+    <string name="RegexFiltersEdit">Upravit filtr</string>
+    <string name="RegexFiltersAddDescription">Můžete použít web <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> a vyzkoušet váš regulární výraz.
+    Můžete také použít prostý text, ale nezapomeňte uniknout závorky.</string>
+    <string name="RegexFiltersAddError">Syntaktická chyba Regex</string>
 </resources>

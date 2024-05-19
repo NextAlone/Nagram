@@ -146,4 +146,13 @@
     <string name="SentryAnalytics">Rapporto Crash Sentry</string>
     <string name="UnblockDeleted">Sblocca Utenti Eliminati</string>
     <string name="UnblockDeletedWarn">Sei sicuro di voler sbloccare **tutti gli utenti eliminati**?</string>
+    <string name="RegexFilters">Filtri Dei Messaggi</string>
+    <string name="RegexFiltersHeader">Filtri</string>
+    <string name="RegexFiltersEnableInChats">Abilita nelle chat private</string>
+    <string name="RegexFiltersCaseInsensitive">Espressioni insensibili al caso</string>
+    <string name="RegexFiltersAdd">Aggiungi filtro</string>
+    <string name="RegexFiltersEdit">Modifica filtro</string>
+    <string name="RegexFiltersAddDescription">Puoi usare il sito <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> per testare completamente la tua espressione regolare.
+    È anche possibile utilizzare il testo semplice, ma non dimenticare di sfuggire alle parentesi.</string>
+    <string name="RegexFiltersAddError">Errore di sintassi Regex</string>
 </resources>

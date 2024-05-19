@@ -146,4 +146,13 @@
     <string name="SentryAnalytics">تقرير تحطم الحراسة</string>
     <string name="UnblockDeleted">إلغاء حظر المستخدمين المحذوفين</string>
     <string name="UnblockDeletedWarn">هل أنت متأكد من أنك تريد إلغاء حظر **جميع المستخدمين المحذوفين**؟</string>
+    <string name="RegexFilters">مرشحات الرسائل</string>
+    <string name="RegexFiltersHeader">فلاتر</string>
+    <string name="RegexFiltersEnableInChats">تمكين في المحادثة الخاصة</string>
+    <string name="RegexFiltersCaseInsensitive">تعبيرات غير حساسة للحالة</string>
+    <string name="RegexFiltersAdd">إضافة فلتر</string>
+    <string name="RegexFiltersEdit">تعديل عامل التصفية</string>
+    <string name="RegexFiltersAddDescription">يمكنك استخدام الموقع <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> لاختبار التعبير العادي الخاص بك بشكل كامل.
+    يمكنك أيضًا استخدام نص عادي، ولكن لا تنسى أن تخرج من الأقواس المعقوفة.</string>
+    <string name="RegexFiltersAddError">خطأ في صيغة Regex</string>
 </resources>

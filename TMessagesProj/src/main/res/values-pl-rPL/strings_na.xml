@@ -146,4 +146,13 @@
     <string name="SentryAnalytics">Raport awarii wpisu</string>
     <string name="UnblockDeleted">Odblokuj usuniętych użytkowników</string>
     <string name="UnblockDeletedWarn">Czy na pewno chcesz odblokować **wszystkich usuniętych użytkowników**?</string>
+    <string name="RegexFilters">Filtry wiadomości</string>
+    <string name="RegexFiltersHeader">Filtry</string>
+    <string name="RegexFiltersEnableInChats">Włącz na czatach prywatnych</string>
+    <string name="RegexFiltersCaseInsensitive">Wyrażenia niewrażliwe na wielkość liter</string>
+    <string name="RegexFiltersAdd">Dodaj filtr</string>
+    <string name="RegexFiltersEdit">Edytuj filtr</string>
+    <string name="RegexFiltersAddDescription">Możesz użyć witryny <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> do pełnego przetestowania wyrażenia regularnego.
+    Możesz również użyć zwykłego tekstu, ale nie zapomnij o nawiasach ucieczki.</string>
+    <string name="RegexFiltersAddError">Błąd składni Regex</string>
 </resources>

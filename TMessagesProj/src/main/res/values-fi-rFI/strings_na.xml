@@ -146,4 +146,13 @@
     <string name="SentryAnalytics">Piirustuksen Kaatumisraportti</string>
     <string name="UnblockDeleted">Poista Poistetut Käyttäjät</string>
     <string name="UnblockDeletedWarn">Oletko varma, että haluat poistaa estämisen **kaikki poistetut käyttäjät**?</string>
+    <string name="RegexFilters">Viestin Suodattimet</string>
+    <string name="RegexFiltersHeader">Suodattimet</string>
+    <string name="RegexFiltersEnableInChats">Ota käyttöön yksityisissä keskusteluissa</string>
+    <string name="RegexFiltersCaseInsensitive">Huomioi kirjainkoko lausekkeet</string>
+    <string name="RegexFiltersAdd">Lisää suodatin</string>
+    <string name="RegexFiltersEdit">Muokkaa suodatinta</string>
+    <string name="RegexFiltersAddDescription">Voit käyttää sivustoa <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> testataksesi täysin säännöllisen lausekkeen.
+    Voit myös käyttää pelkkää tekstiä, mutta älä unohda paeta suluita.</string>
+    <string name="RegexFiltersAddError">Regex syntaksivirhe</string>
 </resources>

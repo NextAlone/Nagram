@@ -146,4 +146,13 @@
     <string name="SentryAnalytics">Sentry Crash Rapport</string>
     <string name="UnblockDeleted">Deblokkeer verwijderde gebruikers</string>
     <string name="UnblockDeletedWarn">Weet u zeker dat u **verwijderde gebruikers** wilt deblokkeren?</string>
+    <string name="RegexFilters">Bericht Filters</string>
+    <string name="RegexFiltersHeader">Filters</string>
+    <string name="RegexFiltersEnableInChats">Inschakelen in privéchats</string>
+    <string name="RegexFiltersCaseInsensitive">Zaak ongevoelige uitdrukkingen</string>
+    <string name="RegexFiltersAdd">Filter toevoegen</string>
+    <string name="RegexFiltersEdit">Filter bewerken</string>
+    <string name="RegexFiltersAddDescription">Je kunt de website <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> gebruiken om je reguliere expressie volledig te testen.
+    Je kunt ook platte tekst gebruiken, maar vergeet niet om uit haakjes te ontsnappen.</string>
+    <string name="RegexFiltersAddError">Regex syntaxisfout</string>
 </resources>

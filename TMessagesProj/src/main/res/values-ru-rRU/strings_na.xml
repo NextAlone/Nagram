@@ -146,4 +146,13 @@
     <string name="SentryAnalytics">Отчет об ошибке Sentry</string>
     <string name="UnblockDeleted">Разблокировать удаленных пользователей</string>
     <string name="UnblockDeletedWarn">Вы уверены, что хотите разблокировать **все удаленные пользователи**?</string>
+    <string name="RegexFilters">Фильтры сообщений</string>
+    <string name="RegexFiltersHeader">Фильтры</string>
+    <string name="RegexFiltersEnableInChats">Включить в приватных чатах</string>
+    <string name="RegexFiltersCaseInsensitive">Нечувствительные выражения регистра</string>
+    <string name="RegexFiltersAdd">Добавить фильтр</string>
+    <string name="RegexFiltersEdit">Изменить фильтр</string>
+    <string name="RegexFiltersAddDescription">Вы можете использовать сайт <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> для полного тестирования вашего регулярного выражения.
+    Вы также можете использовать простой текст, но не забудьте убрать скобки.</string>
+    <string name="RegexFiltersAddError">Синтаксическая ошибка Regex</string>
 </resources>

@@ -146,4 +146,13 @@
     <string name="SentryAnalytics">Αναφορά κατάρρευσης Sentry</string>
     <string name="UnblockDeleted">Κατάργηση Μπλοκάρισμα Διαγραμμένων Χρηστών</string>
     <string name="UnblockDeletedWarn">Είστε βέβαιοι ότι θέλετε να ξεμπλοκάρετε **όλους τους διαγραμμένους χρήστες**?</string>
+    <string name="RegexFilters">Φίλτρα Μηνυμάτων</string>
+    <string name="RegexFiltersHeader">Φίλτρα</string>
+    <string name="RegexFiltersEnableInChats">Ενεργοποίηση σε ιδιωτικές συνομιλίες</string>
+    <string name="RegexFiltersCaseInsensitive">Μη ευαίσθητες εκφράσεις πεζών</string>
+    <string name="RegexFiltersAdd">Προσθήκη φίλτρου</string>
+    <string name="RegexFiltersEdit">Επεξεργασία φίλτρου</string>
+    <string name="RegexFiltersAddDescription">You can use site <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> to fully test your regular expression.
+    You can also use plain text, but don\'t forget to escape brackets.</string>
+    <string name="RegexFiltersAddError">Κανονικό συντακτικό σφάλμα</string>
 </resources>

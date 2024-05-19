@@ -146,4 +146,13 @@
     <string name="SentryAnalytics">送信者のクラッシュレポート</string>
     <string name="UnblockDeleted">削除されたユーザーのブロックを解除</string>
     <string name="UnblockDeletedWarn">**すべて削除されたユーザー**のブロックを解除してもよろしいですか？</string>
+    <string name="RegexFilters">メッセージフィルタ</string>
+    <string name="RegexFiltersHeader">フィルタ</string>
+    <string name="RegexFiltersEnableInChats">プライベートチャットで有効にする</string>
+    <string name="RegexFiltersCaseInsensitive">大文字小文字を区別しない表現</string>
+    <string name="RegexFiltersAdd">フィルターを追加</string>
+    <string name="RegexFiltersEdit">フィルターを編集</string>
+    <string name="RegexFiltersAddDescription">You can use site <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> to fully test your regular expression.
+    You can also use plain text, but don\'t forget to escape brackets.</string>
+    <string name="RegexFiltersAddError">正規表現の構文エラー</string>
 </resources>

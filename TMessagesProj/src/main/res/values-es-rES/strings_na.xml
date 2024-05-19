@@ -146,4 +146,13 @@
     <string name="SentryAnalytics">Informe de error centinela</string>
     <string name="UnblockDeleted">Desbloquear usuarios eliminados</string>
     <string name="UnblockDeletedWarn">¿Estás seguro de que quieres desbloquear **todos los usuarios eliminados**?</string>
+    <string name="RegexFilters">Filtros de mensajes</string>
+    <string name="RegexFiltersHeader">Filtros</string>
+    <string name="RegexFiltersEnableInChats">Activar en chats privados</string>
+    <string name="RegexFiltersCaseInsensitive">Expresiones insensivas en mayúsculas</string>
+    <string name="RegexFiltersAdd">Añadir filtro</string>
+    <string name="RegexFiltersEdit">Editar filtro</string>
+    <string name="RegexFiltersAddDescription">You can use site <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> to fully test your regular expression.
+    You can also use plain text, but don\'t forget to escape brackets.</string>
+    <string name="RegexFiltersAddError">Error de sintaxis Regex</string>
 </resources>
