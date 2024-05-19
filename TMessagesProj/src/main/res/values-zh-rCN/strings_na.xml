@@ -146,4 +146,13 @@
     <string name="SentryAnalytics">Sentry 崩溃自动上报</string>
     <string name="UnblockDeleted">解禁已删除账号</string>
     <string name="UnblockDeletedWarn">您确定要解除屏蔽**所有已删除账号**吗？</string>
+    <string name="RegexFilters">消息过滤</string>
+    <string name="RegexFiltersHeader">消息过滤</string>
+    <string name="RegexFiltersEnableInChats">在私聊中启用消息过滤</string>
+    <string name="RegexFiltersCaseInsensitive">不区分大小写</string>
+    <string name="RegexFiltersAdd">添加正则表达式</string>
+    <string name="RegexFiltersEdit">修改正则表达式</string>
+    <string name="RegexFiltersAddDescription">您可以使用网站 <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> 来测试您的正则表达式。
+    您也可以使用纯文本，但请不要忘记使用转义符号。</string>
+    <string name="RegexFiltersAddError">正则表达式语法错误</string>
 </resources>

@@ -596,6 +596,24 @@ object NaConfig {
             ConfigItem.configTypeBool,
             true
         )
+    val regexFiltersEnabled =
+        addConfig(
+            "RegexFilters",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val regexFiltersData =
+        addConfig(
+            "RegexFiltersData",
+            ConfigItem.configTypeString,
+            "[]"
+        )
+    val regexFiltersEnableInChats =
+        addConfig(
+            "RegexFiltersEnableInChats",
+            ConfigItem.configTypeBool,
+            true
+        )
 
     private fun addConfig(
         k: String,
