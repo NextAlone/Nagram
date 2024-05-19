@@ -31,6 +31,7 @@ import org.telegram.tgnet.TLRPC.TL_messageEntityEmail
 import org.telegram.tgnet.TLRPC.TL_messageEntityHashtag
 import org.telegram.tgnet.TLRPC.TL_messageEntityMention
 import org.telegram.tgnet.TLRPC.TL_messageEntityPhone
+import org.telegram.tgnet.TLRPC.TL_messageEntitySpoiler
 import org.telegram.tgnet.TLRPC.TL_messageEntityUrl
 import org.telegram.tgnet.TLRPC.TL_messageMediaPoll
 import org.telegram.ui.ActionBar.Theme
@@ -307,5 +308,22 @@ object MessageHelper {
             text.append(formatTime(messageObject.messageOwner.fwd_from.date))
         }
         return text
+    }
+
+    fun blurify(messageObject: MessageObject?) {
+        if (messageObject?.messageOwner == null) {
+            return
+        }
+
+        if (!TextUtils.isEmpty(messageObject.messageOwner.message)) {
+            val entity = TL_messageEntitySpoiler()
+            entity.offset = 0
+            entity.length = messageObject.messageOwner.message.length
+            messageObject.messageOwner.entities.add(entity)
+        }
+
+        if (messageObject.messageOwner.media != null) {
+            messageObject.messageOwner.media.spoiler = true
+        }
     }
 }

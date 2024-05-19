@@ -34344,6 +34344,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                 }
                 // --- AyuGram hook
+                // --- NaGram hook
+                if (msg != null && msg.messageOwner != null && msg.messageOwner.hide) {
+                    return -1000;
+                }
+                if (NekoConfig.ignoreBlocked.Bool() && msg != null && MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(msg.getFromChatId()) >= 0) {
+                    return -1000;
+                }
+                // --- NaGram hook
 
                 return msg.contentType;
             } else if (position == botInfoRow) {
@@ -39111,6 +39119,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 int msgId = messages.get(i).getId();
                 if (NekoConfig.ignoreBlocked.Bool() && getMessagesController().blockePeers.indexOfKey(messages.get(i).getSenderId()) >= 0)
                     continue;
+                if (NaConfig.INSTANCE.getRegexFiltersEnabled().Bool() && AyuFilter.isFiltered(messages.get(i), null)) {
+                    continue;
+                }
                 if (msgId > begin && msgId < end && selectedMessagesIds[0].indexOfKey(msgId) < 0) {
                     MessageObject message = messages.get(i);
                     int type = getMessageType(message);

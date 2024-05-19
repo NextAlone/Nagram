@@ -125,6 +125,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
 
+import tw.nekomimi.nekogram.helpers.AyuFilter;
 import tw.nekomimi.nekogram.ui.MessageHelper;
 import tw.nekomimi.nekogram.NekoConfig;
 import xyz.nextalone.nagram.NaConfig;
@@ -3177,6 +3178,20 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 invalidate = true;
             }
         }
+
+        // --- AyuGram hook
+        if (AyuFilter.isFiltered(message, null)) {
+            xyz.nextalone.nagram.helper.MessageHelper.INSTANCE.blurify(message);
+        }
+        // --- AyuGram hook
+        // --- NaGram hook
+        if (message != null && message.messageOwner != null && message.messageOwner.hide) {
+            xyz.nextalone.nagram.helper.MessageHelper.INSTANCE.blurify(message);
+        }
+        if (NekoConfig.ignoreBlocked.Bool() && message != null && MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(message.getFromChatId()) >= 0) {
+            xyz.nextalone.nagram.helper.MessageHelper.INSTANCE.blurify(message);
+        }
+        // --- NaGram hook
 
         if (!animated) {
             dialogMutedProgress = (dialogMuted || drawUnmute) ? 1f : 0f;
