@@ -4052,6 +4052,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     if (object instanceof TLRPC.RichText) {
                         TLRPC.RichText richText = (TLRPC.RichText) object;
                         CharSequence innerText = getText(adapter[0], null, richText, richText, block, 1000);
+                        if (!TextUtils.isEmpty(innerText)) {
+                            textToSearchIn = innerText.toString().toLowerCase();
+                        }
                     } else if (object instanceof String) {
                         textToSearchIn = ((String) object).toLowerCase();
                     }
