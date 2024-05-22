@@ -49,8 +49,6 @@ import java.io.File
 
 
 object ProxyUtil {
-    private var networkCallback: ConnectivityManager.NetworkCallback? = null
-    private var networkCallbackStatus = false
 
     @JvmStatic
     fun isVPNEnabled(): Boolean {
@@ -68,11 +66,8 @@ object ProxyUtil {
 
     @JvmStatic
     fun registerNetworkCallback() {
-        if (networkCallbackStatus) {
-            return
-        }
         val connectivityManager = ApplicationLoader.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        networkCallback =
+        val networkCallback: ConnectivityManager.NetworkCallback =
             object : ConnectivityManager.NetworkCallback() {
                 override fun onAvailable(network: Network) {
                     val networkCapabilities =
@@ -99,24 +94,13 @@ object ProxyUtil {
 
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                connectivityManager.registerDefaultNetworkCallback(networkCallback!!)
+                connectivityManager.registerDefaultNetworkCallback(networkCallback)
             } else {
                 val request: NetworkRequest = NetworkRequest.Builder()
                     .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build()
-                connectivityManager.registerNetworkCallback(request, networkCallback!!)
+                connectivityManager.registerNetworkCallback(request, networkCallback)
             }
-            networkCallbackStatus = true
-        } catch (_: Exception) {}
-    }
-
-    @JvmStatic
-    fun unregisterNetworkCallback() {
-        if (networkCallbackStatus && networkCallback != null) {
-            val connectivityManager = ApplicationLoader.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            try {
-                connectivityManager.unregisterNetworkCallback(networkCallback!!)
-            } catch (_: Exception) {}
-        }
+        } catch (ignored: Exception) {}
     }
 
     @JvmStatic
