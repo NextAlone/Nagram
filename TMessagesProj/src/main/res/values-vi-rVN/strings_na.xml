@@ -146,13 +146,13 @@
     <string name="SentryAnalytics">Sentry báo cáo sự cố</string>
     <string name="UnblockDeleted">Bỏ chặn người dùng đã xóa</string>
     <string name="UnblockDeletedWarn">Bạn có chắc chắn muốn bỏ chặn **tất cả người dùng đã xóa** không?</string>
-    <string name="RegexFilters">Message Filters</string>
-    <string name="RegexFiltersHeader">Filters</string>
-    <string name="RegexFiltersEnableInChats">Enable in private chats</string>
-    <string name="RegexFiltersCaseInsensitive">Case insensitive expressions</string>
-    <string name="RegexFiltersAdd">Add filter</string>
-    <string name="RegexFiltersEdit">Edit filter</string>
-    <string name="RegexFiltersAddDescription">You can use site <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> to fully test your regular expression.
-    You can also use plain text, but don\'t forget to escape brackets.</string>
-    <string name="RegexFiltersAddError">Regex syntax error</string>
+    <string name="RegexFilters">Lọc tin nhắn</string>
+    <string name="RegexFiltersHeader">Bộ lọc</string>
+    <string name="RegexFiltersEnableInChats">Bật trong cuộc trò chuyện riêng tư</string>
+    <string name="RegexFiltersCaseInsensitive">Biểu thức chính quy không phân biệt chữ hoa chữ thường</string>
+    <string name="RegexFiltersAdd">Thêm bộ lọc</string>
+    <string name="RegexFiltersEdit">Sửa bộ lọc</string>
+    <string name="RegexFiltersAddDescription">Bạn có thể sử dụng trang web <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> để kiểm tra đầy đủ biểu thức chính quy của mình.
+     Bạn cũng có thể sử dụng văn bản thuần túy nhưng đừng quên thoát khỏi dấu ngoặc.</string>
+    <string name="RegexFiltersAddError">Lỗi cú pháp biểu thức chính quy</string>
 </resources>
