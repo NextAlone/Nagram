@@ -36,6 +36,7 @@ import androidx.annotation.Keep;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Cells.BaseCell;
 
 import tw.nekomimi.nekogram.utils.VibrateUtil;
 
@@ -194,7 +195,7 @@ public class Switch extends View {
                 new int[][]{StateSet.WILD_CARD},
                 new int[]{0}
             );
-            rippleDrawable = new RippleDrawable(colorStateList, null, maskDrawable);
+            rippleDrawable = new BaseCell.RippleDrawableSafe(colorStateList, null, maskDrawable);
             if (Build.VERSION.SDK_INT >= 23) {
                 rippleDrawable.setRadius(AndroidUtilities.dp(18));
             }

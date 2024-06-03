@@ -14,7 +14,12 @@ import android.util.SparseArray;
 import android.util.LongSparseArray;
 import android.util.SparseIntArray;
 
-//import com.google.android.exoplayer2.util.Log;
+import com.google.android.exoplayer2.util.Log;
+import com.google.android.gms.tasks.Task;
+import com.google.android.play.core.integrity.IntegrityManager;
+import com.google.android.play.core.integrity.IntegrityManagerFactory;
+import com.google.android.play.core.integrity.IntegrityTokenRequest;
+import com.google.android.play.core.integrity.IntegrityTokenResponse;
 //import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 import org.json.JSONArray;
@@ -47,6 +52,7 @@ import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.LaunchActivity;
+import org.telegram.ui.LoginActivity;
 import org.telegram.ui.PremiumPreviewFragment;
 
 import java.io.File;
@@ -107,6 +113,7 @@ public class ConnectionsManager extends BaseController {
     public final static int RequestFlagNeedQuickAck = 128;
     public final static int RequestFlagDoNotWaitFloodWait = 1024;
     public final static int RequestFlagListenAfterCancel = 2048;
+    public final static int RequestFlagFailOnServerErrorsExceptFloodWait = 65536;
 
     public final static int ConnectionStateConnecting = 1;
     public final static int ConnectionStateWaitingForNetwork = 2;
@@ -1004,6 +1011,9 @@ SharedPreferences mainPreferences;
 
     public static native void native_discardConnection(int currentAccount, int datacenterId, int connectionType);
     public static native void native_failNotRunningRequest(int currentAccount, int token);
+    public static native void native_receivedIntegrityCheckClassic(int currentAccount, int requestToken, String nonce, String token);
+
+    public static native boolean native_isGoodPrime(byte[] prime, int g);
 
     public static int generateClassGuid() {
         return lastClassGuid++;
@@ -1240,6 +1250,36 @@ SharedPreferences mainPreferences;
             if (updated) {
                 NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.premiumFloodWaitReceived);
             }
+        });
+    }
+
+    public static void onIntegrityCheckClassic(final int currentAccount, final int requestToken, final String nonce) {
+        AndroidUtilities.runOnUIThread(() -> {
+            long start = System.currentTimeMillis();
+            FileLog.d("account"+currentAccount+": server requests integrity classic check with nonce = " + nonce);
+            IntegrityManager integrityManager = IntegrityManagerFactory.create(ApplicationLoader.applicationContext);
+            Task<IntegrityTokenResponse> integrityTokenResponse = integrityManager.requestIntegrityToken(IntegrityTokenRequest.builder().setNonce(nonce).setCloudProjectNumber(760348033671L).build());
+            integrityTokenResponse
+                .addOnSuccessListener(r -> {
+                    final String token = r.token();
+
+                    if (token == null) {
+                        FileLog.e("account"+currentAccount+": integrity check gave null token in " + (System.currentTimeMillis() - start) + "ms");
+                        native_receivedIntegrityCheckClassic(currentAccount, requestToken, nonce, "PLAYINTEGRITY_FAILED_EXCEPTION_NULL");
+                        return;
+                    }
+
+                    FileLog.d("account"+currentAccount+": integrity check successfully gave token: " + token + " in " + (System.currentTimeMillis() - start) + "ms");
+                    try {
+                        native_receivedIntegrityCheckClassic(currentAccount, requestToken, nonce, token);
+                    } catch (Exception e) {
+                        FileLog.e("receivedIntegrityCheckClassic failed", e);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    FileLog.e("account"+currentAccount+": integrity check failed to give a token in " + (System.currentTimeMillis() - start) + "ms", e);
+                    native_receivedIntegrityCheckClassic(currentAccount, requestToken, nonce, "PLAYINTEGRITY_FAILED_EXCEPTION_" + LoginActivity.errorString(e));
+                });
         });
     }
 }

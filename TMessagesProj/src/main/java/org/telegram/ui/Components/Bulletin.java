@@ -1256,7 +1256,7 @@ public class Bulletin {
             titleTextView.setSingleLine();
             titleTextView.setTextColor(undoInfoColor);
             titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-            titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            titleTextView.setTypeface(AndroidUtilities.bold());
             linearLayout.addView(titleTextView);
 
             subtitleTextView = new LinkSpanDrawable.LinksTextView(context);
@@ -1313,7 +1313,7 @@ public class Bulletin {
             titleTextView.setSingleLine();
             titleTextView.setTextColor(undoInfoColor);
             titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-            titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            titleTextView.setTypeface(AndroidUtilities.bold());
             linearLayout.addView(titleTextView);
 
             subtitleTextView = new LinkSpanDrawable.LinksTextView(context);
@@ -1785,7 +1785,7 @@ public class Bulletin {
                 undoTextView = new TextView(context);
                 undoTextView.setBackground(Theme.createSelectorDrawable((undoCancelColor & 0x00ffffff) | 0x19000000, Theme.RIPPLE_MASK_ROUNDRECT_6DP));
                 undoTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-                undoTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                undoTextView.setTypeface(AndroidUtilities.bold());
                 undoTextView.setTextColor(undoCancelColor);
                 undoTextView.setText(LocaleController.getString("Undo", R.string.Undo));
                 undoTextView.setGravity(Gravity.CENTER_VERTICAL);
@@ -1903,7 +1903,7 @@ public class Bulletin {
 
             textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
             textPaint.setTextSize(AndroidUtilities.dp(12));
-            textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            textPaint.setTypeface(AndroidUtilities.bold());
             textPaint.setColor(Theme.getColor(Theme.key_undo_infoColor, resourcesProvider));
 
             progressPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -2059,6 +2059,12 @@ public class Bulletin {
                 window.setAttributes(params);
                 AndroidUtilities.setLightNavigationBar(window, AndroidUtilities.computePerceivedBrightness(Theme.getColor(Theme.key_windowBackgroundGray)) > 0.721f);
             } catch (Exception ignore) {}
+        }
+
+        @Override
+        public void show() {
+            if (!AndroidUtilities.isSafeToShow(getContext())) return;
+            super.show();
         }
 
         @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)

@@ -125,7 +125,7 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
         counterDrawable.textPaint = textPaint;
 
         textPaint.setTextSize(AndroidUtilities.dp(13));
-        textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        textPaint.setTypeface(AndroidUtilities.bold());
         textPaint2.setTextSize(AndroidUtilities.dp(14));
 
         xRefPaint.setColor(0xff000000);
@@ -203,14 +203,14 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
                     animatedEmojiDrawable.removeView(parentView);
                 }
                 animatedEmojiDrawable = null;
-                forumIcon = ForumUtilities.createGeneralTopicDrawable(fragmentView.getContext(), 1f, getThemedColor(Theme.key_chat_inMenu), false);
+                forumIcon = ForumUtilities.createGeneralTopicDrawable(fragmentView.getContext(), 1f, getThemedColor(Theme.key_chat_inMenu), false, true);
                 imageReceiver.setImageBitmap(forumIcon);
             } else if (topic.icon_emoji_id != 0) {
                 if (animatedEmojiDrawable == null || animatedEmojiDrawable.getDocumentId() != topic.icon_emoji_id) {
                     if (animatedEmojiDrawable != null && parentView != null) {
                         animatedEmojiDrawable.removeView(parentView);
                     }
-                    animatedEmojiDrawable = new AnimatedEmojiDrawable(AnimatedEmojiDrawable.CACHE_TYPE_FORUM_TOPIC_LARGE, currentAccount, topic.icon_emoji_id);
+                    animatedEmojiDrawable = new AnimatedEmojiDrawable(AnimatedEmojiDrawable.CACHE_TYPE_FORUM_TOPIC_PULL_DOWN, currentAccount, topic.icon_emoji_id);
                     animatedEmojiDrawable.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_chat_serviceText), PorterDuff.Mode.SRC_IN));
                 }
                 if (animatedEmojiDrawable != null && parentView != null) {
@@ -326,7 +326,6 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
         Theme.chat_actionBackgroundGradientDarkenPaint.setAlpha((int) (oldAlpha1 * alpha));
         getThemedPaint(Theme.key_paint_chatActionBackground).setAlpha((int) (oldAlpha * alpha));
         textPaint.setAlpha((int) (oldAlpha2 * alpha));
-        imageReceiver.setAlpha(alpha);
 
         if ((progress >= 1f && lastProgress < 1f) || (progress < 1f && lastProgress == 1f)) {
             long time = System.currentTimeMillis();
@@ -364,11 +363,13 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
         if (swipeToReleaseProgress < 1f || emptyStub) {
             float bottom = -AndroidUtilities.dp(8) * (1f - swipeToReleaseProgress) + (-offset + AndroidUtilities.dp(56)) * swipeToReleaseProgress;
             AndroidUtilities.rectTmp.set(cx - widthRadius, -offset, cx + widthRadius, bottom);
+            float bgAlpha = 1f;
             if (swipeToReleaseProgress > 0 && !emptyStub) {
                 float inset = AndroidUtilities.dp(16) * swipeToReleaseProgress;
                 AndroidUtilities.rectTmp.inset(inset, inset);
+                bgAlpha = 1 - swipeToReleaseProgress;
             }
-            drawBackground(canvas, AndroidUtilities.rectTmp);
+            drawBackground(canvas, AndroidUtilities.rectTmp, bgAlpha);
 
             float arrowCy = -offset + AndroidUtilities.dp(24) + AndroidUtilities.dp(8) * (1f - progress) - AndroidUtilities.dp(36) * swipeToReleaseProgress;
             canvas.save();
@@ -416,6 +417,7 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
             } else {
                 finalImageReceiver = imageReceiver;
             }
+            finalImageReceiver.setAlpha(alpha);
             finalImageReceiver.setRoundRadius((int) (size / 2f));
             finalImageReceiver.setImageCoords(cx - size / 2f, top, size, size);
             if (isTopic && finalImageReceiver.getDrawable() != null && finalImageReceiver.getDrawable() instanceof CombinedDrawable && ((CombinedDrawable) finalImageReceiver.getDrawable()).getIcon() instanceof LetterDrawable) {
@@ -440,14 +442,13 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
             } else {
                 finalImageReceiver.draw(canvas);
             }
+            finalImageReceiver.setAlpha(1f);
         }
 
         getThemedPaint(Theme.key_paint_chatActionBackground).setAlpha(oldAlpha);
         Theme.chat_actionBackgroundGradientDarkenPaint.setAlpha(oldAlpha1);
         textPaint.setAlpha(oldAlpha2);
         arrowPaint.setAlpha(oldAlpha3);
-        imageReceiver.setAlpha(1f);
-
     }
 
     private void drawCheck(Canvas canvas, float cx, float cy) {
@@ -478,7 +479,7 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
         canvas.restore();
     }
 
-    private void drawBackground(Canvas canvas, RectF rectTmp) {
+    private void drawBackground(Canvas canvas, RectF rectTmp, float alpha) {
         if (drawFolderBackground) {
             path.reset();
             float roundRadius = rectTmp.width() * 0.2f;
@@ -506,9 +507,15 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
                 canvas.drawPath(path, Theme.chat_actionBackgroundGradientDarkenPaint);
             }
         } else {
+            int oldAlpha1 = getThemedPaint(Theme.key_paint_chatActionBackground).getAlpha();
+            getThemedPaint(Theme.key_paint_chatActionBackground).setAlpha((int) (oldAlpha1 * alpha));
             canvas.drawRoundRect(AndroidUtilities.rectTmp, circleRadius, circleRadius, getThemedPaint(Theme.key_paint_chatActionBackground));
+            getThemedPaint(Theme.key_paint_chatActionBackground).setAlpha(oldAlpha1);
             if (hasGradientService()) {
+                int oldAlpha2 = Theme.chat_actionBackgroundGradientDarkenPaint.getAlpha();
+                Theme.chat_actionBackgroundGradientDarkenPaint.setAlpha((int) (oldAlpha2 * alpha));
                 canvas.drawRoundRect(AndroidUtilities.rectTmp, circleRadius, circleRadius, Theme.chat_actionBackgroundGradientDarkenPaint);
+                Theme.chat_actionBackgroundGradientDarkenPaint.setAlpha(oldAlpha2);
             }
         }
     }
@@ -713,7 +720,7 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
         if (topics != null && topics.size() > 1) {
             for (int i = 0; i < topics.size(); i++) {
                 TLRPC.TL_forumTopic topic = topics.get(i);
-                if (topic.id != topicId && !topic.hidden && topic.unread_count > 0 && (nextUnreadTopic == null || topic.topMessage.date > nextUnreadTopic.topMessage.date)) {
+                if (topic.id != topicId && !topic.hidden && topic.unread_count > 0 && (nextUnreadTopic == null || topic.topMessage != null && nextUnreadTopic.topMessage != null && topic.topMessage.date > nextUnreadTopic.topMessage.date)) {
                     nextUnreadTopic = topic;
                 }
             }

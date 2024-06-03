@@ -125,7 +125,7 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
         header.setEllipsize(TextUtils.TruncateAt.END);
         header.setTextColor(getThemedColor(Theme.key_dialogTextBlack));
         header.setText(LocaleController.getString("AttachMediaPreview", R.string.AttachMediaPreview));
-        header.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        header.setTypeface(AndroidUtilities.bold());
         header.setCompoundDrawablePadding(AndroidUtilities.dp(4));
         header.setPadding(0, 0, AndroidUtilities.dp(10), 0);
         header.setAlpha(0);
@@ -235,6 +235,7 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
                     if (parentAlert.getPhotoLayout() != null) {
                         parentAlert.getPhotoLayout().previewItem.setIcon(R.drawable.ic_ab_back);
                         parentAlert.getPhotoLayout().previewItem.setText(LocaleController.getString(R.string.Back));
+                        parentAlert.getPhotoLayout().previewItem.setRightIcon(0);
                     }
                 }
             }, 250);
@@ -265,6 +266,7 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
             if (parentAlert.getPhotoLayout() != null) {
                 parentAlert.getPhotoLayout().previewItem.setIcon(R.drawable.msg_view_file);
                 parentAlert.getPhotoLayout().previewItem.setText(LocaleController.getString(R.string.AttachMediaPreviewButton));
+                parentAlert.getPhotoLayout().previewItem.setRightIcon(R.drawable.msg_arrowright);
             }
         }
 
@@ -2194,7 +2196,7 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
 
                         if (textPaint == null) {
                             textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-                            textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                            textPaint.setTypeface(AndroidUtilities.bold());
                         }
                         textPaint.setColor(getThemedColor(Theme.key_chat_attachCheckBoxCheck));
                         final float textSize;
@@ -2237,7 +2239,7 @@ public class ChatAttachAlertPhotoLayoutPreview extends ChatAttachAlert.AttachAle
                         if (videoDurationBitmap == null || videoDurationBitmapText == null || !videoDurationBitmapText.equals(durationText)) {
                             if (videoDurationTextPaint == null) {
                                 videoDurationTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-                                videoDurationTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                                videoDurationTextPaint.setTypeface(AndroidUtilities.bold());
                                 videoDurationTextPaint.setColor(0xffffffff);
                             }
                             final float textSize = AndroidUtilities.dp(12);

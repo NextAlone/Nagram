@@ -170,7 +170,7 @@ public class QuickRepliesController {
                         storage.getChatsInternal(TextUtils.join(",", chatsToLoad), chats);
                     }
                     if (!usersToLoad.isEmpty()) {
-                        storage.getUsersInternal(TextUtils.join(",", usersToLoad), users);
+                        storage.getUsersInternal(usersToLoad, users);
                     }
 
                 } catch (Exception e) {
@@ -528,7 +528,7 @@ public class QuickRepliesController {
                     storage.getChatsInternal(TextUtils.join(",", chatsToLoad), chats);
                 }
                 if (!usersToLoad.isEmpty()) {
-                    storage.getUsersInternal(TextUtils.join(",", usersToLoad), users);
+                    storage.getUsersInternal(usersToLoad, users);
                 }
                 final MessageObject finalMessageObject = messageObject;
                 AndroidUtilities.runOnUIThread(() -> {

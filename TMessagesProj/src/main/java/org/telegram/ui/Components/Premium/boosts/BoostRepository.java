@@ -14,6 +14,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BillingController;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
@@ -116,7 +117,7 @@ public class BoostRepository {
         }
         return BillingController.getInstance().isReady();
     }
-//
+
 //    public static void payGiftCodeByInvoice(List<TLObject> users, TLRPC.TL_premiumGiftCodeOption option, TLRPC.Chat chat, BaseFragment baseFragment, Utilities.Callback<Void> onSuccess, Utilities.Callback<TLRPC.TL_error> onError) {
 //        MessagesController controller = MessagesController.getInstance(UserConfig.selectedAccount);
 //        ConnectionsManager connection = ConnectionsManager.getInstance(UserConfig.selectedAccount);
@@ -157,13 +158,13 @@ public class BoostRepository {
 //                return;
 //            }
 //            PaymentFormActivity paymentFormActivity = null;
-//            if (response instanceof TLRPC.TL_payments_paymentForm) {
-//                TLRPC.TL_payments_paymentForm form = (TLRPC.TL_payments_paymentForm) response;
+//            if (response instanceof TLRPC.PaymentForm) {
+//                TLRPC.PaymentForm form = (TLRPC.PaymentForm) response;
 //                form.invoice.recurring = true;
 //                controller.putUsers(form.users, false);
 //                paymentFormActivity = new PaymentFormActivity(form, invoice, baseFragment);
-//            } else if (response instanceof TLRPC.TL_payments_paymentReceipt) {
-//                paymentFormActivity = new PaymentFormActivity((TLRPC.TL_payments_paymentReceipt) response);
+//            } else if (response instanceof TLRPC.PaymentReceipt) {
+//                paymentFormActivity = new PaymentFormActivity((TLRPC.PaymentReceipt) response);
 //            }
 //            if (paymentFormActivity != null) {
 //                paymentFormActivity.setPaymentFormCallback(status -> {
@@ -344,13 +345,13 @@ public class BoostRepository {
 //                return;
 //            }
 //            PaymentFormActivity paymentFormActivity = null;
-//            if (response instanceof TLRPC.TL_payments_paymentForm) {
-//                TLRPC.TL_payments_paymentForm form = (TLRPC.TL_payments_paymentForm) response;
+//            if (response instanceof TLRPC.PaymentForm) {
+//                TLRPC.PaymentForm form = (TLRPC.PaymentForm) response;
 //                form.invoice.recurring = true;
 //                controller.putUsers(form.users, false);
 //                paymentFormActivity = new PaymentFormActivity(form, invoice, baseFragment);
-//            } else if (response instanceof TLRPC.TL_payments_paymentReceipt) {
-//                paymentFormActivity = new PaymentFormActivity((TLRPC.TL_payments_paymentReceipt) response);
+//            } else if (response instanceof TLRPC.PaymentReceipt) {
+//                paymentFormActivity = new PaymentFormActivity((TLRPC.PaymentReceipt) response);
 //            }
 //            if (paymentFormActivity != null) {
 //                paymentFormActivity.setPaymentFormCallback(status -> {
@@ -384,133 +385,6 @@ public class BoostRepository {
 //        if (withAdditionPrize) {
 //            payload.flags |= 16;
 //        }
-//        payload.random_id = System.currentTimeMillis();
-//        payload.additional_peers = new ArrayList<>();
-//        for (TLObject o : chats) {
-//            if (o instanceof TLRPC.Chat) {
-//                payload.additional_peers.add(controller.getInputPeer(-((TLRPC.Chat) o).id));
-//            }
-//        }
-//        payload.boost_peer = controller.getInputPeer(-chat.id);
-//        for (TLObject object : selectedCountries) {
-//            TLRPC.TL_help_country country = (TLRPC.TL_help_country) object;
-//            payload.countries_iso2.add(country.iso2);
-//        }
-//
-//        QueryProductDetailsParams.Product product = QueryProductDetailsParams.Product.newBuilder()
-//                .setProductType(BillingClient.ProductType.INAPP)
-//                .setProductId(option.store_product)
-//                .build();
-//        BillingController.getInstance().queryProductDetails(Arrays.asList(product), (billingResult, list) -> {
-//            ProductDetails.OneTimePurchaseOfferDetails offerDetails = list.get(0).getOneTimePurchaseOfferDetails();
-//            payload.currency = offerDetails.getPriceCurrencyCode();
-//            payload.amount = (long) ((offerDetails.getPriceAmountMicros() / Math.pow(10, 6)) * Math.pow(10, BillingController.getInstance().getCurrencyExp(option.currency)));
-//
-//            TLRPC.TL_payments_canPurchasePremium req = new TLRPC.TL_payments_canPurchasePremium();
-//            req.purpose = payload;
-//            connection.sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
-//                if (error != null) {
-//                    onError.run(error);
-//                    return;
-//                }
-//                if (response != null) {
-//                    BillingController.getInstance().addResultListener(list.get(0).getProductId(), billingResult1 -> {
-//                        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-//                            AndroidUtilities.runOnUIThread(() -> onSuccess.run(null));
-//                        }
-//                    });
-//                    BillingController.getInstance().setOnCanceled(() -> {
-//                        AndroidUtilities.runOnUIThread(() -> onError.run(null));
-//                    });
-//                    BillingController.getInstance().launchBillingFlow(
-//                            baseFragment.getParentActivity(), AccountInstance.getInstance(UserConfig.selectedAccount), payload,
-//                            Collections.singletonList(BillingFlowParams.ProductDetailsParams.newBuilder()
-//                                    .setProductDetails(list.get(0))
-//                                    .build())
-//                    );
-//                }
-//            }));
-//        });
-//    }
-//
-//    public static void payGiveAwayByInvoice(List<TLObject> chats, List<TLObject> selectedCountries, TLRPC.TL_premiumGiftCodeOption option, TLRPC.Chat chat, int date, boolean onlyNewSubscribers, BaseFragment baseFragment, Utilities.Callback<Void> onSuccess, Utilities.Callback<TLRPC.TL_error> onError) {
-//        MessagesController controller = MessagesController.getInstance(UserConfig.selectedAccount);
-//        ConnectionsManager connection = ConnectionsManager.getInstance(UserConfig.selectedAccount);
-//
-//        TLRPC.TL_payments_getPaymentForm req = new TLRPC.TL_payments_getPaymentForm();
-//        TLRPC.TL_inputInvoicePremiumGiftCode invoice = new TLRPC.TL_inputInvoicePremiumGiftCode();
-//        TLRPC.TL_inputStorePaymentPremiumGiveaway payload = new TLRPC.TL_inputStorePaymentPremiumGiveaway();
-//
-//        payload.only_new_subscribers = onlyNewSubscribers;
-//        payload.until_date = date;
-//        payload.flags |= 2;
-//        payload.flags |= 4;
-//        payload.random_id = System.currentTimeMillis();
-//        payload.additional_peers = new ArrayList<>();
-//        for (TLObject o : chats) {
-//            if (o instanceof TLRPC.Chat) {
-//                payload.additional_peers.add(controller.getInputPeer(-((TLRPC.Chat) o).id));
-//            }
-//        }
-//        payload.boost_peer = controller.getInputPeer(-chat.id);
-//        payload.boost_peer = controller.getInputPeer(-chat.id);
-//        payload.currency = option.currency;
-//        payload.amount = option.amount;
-//
-//        for (TLObject object : selectedCountries) {
-//            TLRPC.TL_help_country country = (TLRPC.TL_help_country) object;
-//            payload.countries_iso2.add(country.iso2);
-//        }
-//
-//        invoice.purpose = payload;
-//        invoice.option = option;
-//
-//        final JSONObject themeParams = BotWebViewSheet.makeThemeParams(baseFragment.getResourceProvider());
-//        if (themeParams != null) {
-//            req.theme_params = new TLRPC.TL_dataJSON();
-//            req.theme_params.data = themeParams.toString();
-//            req.flags |= 1;
-//        }
-//        req.invoice = invoice;
-//
-//        int requestId = connection.sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
-//            if (error != null) {
-//                onError.run(error);
-//                return;
-//            }
-//            PaymentFormActivity paymentFormActivity = null;
-//            if (response instanceof TLRPC.TL_payments_paymentForm) {
-//                TLRPC.TL_payments_paymentForm form = (TLRPC.TL_payments_paymentForm) response;
-//                form.invoice.recurring = true;
-//                controller.putUsers(form.users, false);
-//                paymentFormActivity = new PaymentFormActivity(form, invoice, baseFragment);
-//            } else if (response instanceof TLRPC.TL_payments_paymentReceipt) {
-//                paymentFormActivity = new PaymentFormActivity((TLRPC.TL_payments_paymentReceipt) response);
-//            }
-//            if (paymentFormActivity != null) {
-//                paymentFormActivity.setPaymentFormCallback(status -> {
-//                    if (status == PaymentFormActivity.InvoiceStatus.PAID) {
-//                        onSuccess.run(null);
-//                    } else if (status != PaymentFormActivity.InvoiceStatus.PENDING) {
-//                        onError.run(null);
-//                    }
-//                });
-//                LaunchActivity.getLastFragment().showAsSheet(paymentFormActivity, new BaseFragment.BottomSheetParams());
-//            } else {
-//                onError.run(null);
-//            }
-//        }));
-//    }
-//
-//    public static void payGiveAwayByGoogle(List<TLObject> chats, List<TLObject> selectedCountries, TLRPC.TL_premiumGiftCodeOption option, TLRPC.Chat chat, int date, boolean onlyNewSubscribers, BaseFragment baseFragment, Utilities.Callback<Void> onSuccess, Utilities.Callback<TLRPC.TL_error> onError) {
-//        MessagesController controller = MessagesController.getInstance(UserConfig.selectedAccount);
-//        ConnectionsManager connection = ConnectionsManager.getInstance(UserConfig.selectedAccount);
-//        TLRPC.TL_inputStorePaymentPremiumGiveaway payload = new TLRPC.TL_inputStorePaymentPremiumGiveaway();
-//
-//        payload.only_new_subscribers = onlyNewSubscribers;
-//        payload.until_date = date;
-//        payload.flags |= 2;
-//        payload.flags |= 4;
 //        payload.random_id = System.currentTimeMillis();
 //        payload.additional_peers = new ArrayList<>();
 //        for (TLObject o : chats) {
@@ -685,32 +559,72 @@ public class BoostRepository {
     }
 
     public static int searchContacts(int reqId, String query, Utilities.Callback<List<TLRPC.User>> onDone) {
-        MessagesController controller = MessagesController.getInstance(UserConfig.selectedAccount);
-        ConnectionsManager connection = ConnectionsManager.getInstance(UserConfig.selectedAccount);
-        if (reqId != 0) {
-            connection.cancelRequest(reqId, false);
+        final int currentAccount = UserConfig.selectedAccount;
+        final ArrayList<TLRPC.User> users = new ArrayList<>();
+        final ArrayList<TLRPC.TL_contact> contacts = ContactsController.getInstance(currentAccount).contacts;
+        if (contacts == null || contacts.isEmpty()) {
+            ContactsController.getInstance(currentAccount).loadContacts(false, 0);
         }
-        if (query == null || query.isEmpty()) {
-            AndroidUtilities.runOnUIThread(() -> onDone.run(Collections.emptyList()));
-            return 0;
-        }
-        TLRPC.TL_contacts_search req = new TLRPC.TL_contacts_search();
-        req.q = query;
-        req.limit = 50;
-        return connection.sendRequest(req, (response, error) -> {
-            if (response instanceof TLRPC.TL_contacts_found) {
-                TLRPC.TL_contacts_found res = (TLRPC.TL_contacts_found) response;
-                controller.putUsers(res.users, false);
-                List<TLRPC.User> result = new ArrayList<>();
-                for (int a = 0; a < res.users.size(); a++) {
-                    TLRPC.User user = res.users.get(a);
-                    if (!user.self && !UserObject.isDeleted(user) && !user.bot && !UserObject.isService(user.id)) {
-                        result.add(user);
+        final MessagesController messagesController = MessagesController.getInstance(currentAccount);
+        final String q = query.toLowerCase();
+        final String qt = AndroidUtilities.translitSafe(q);
+        if (contacts != null) {
+            for (int i = 0; i < contacts.size(); ++i) {
+                final TLRPC.TL_contact contact = contacts.get(i);
+                if (contact != null) {
+                    final TLRPC.User user = messagesController.getUser(contact.user_id);
+                    if (user == null || user.bot || UserObject.isService(user.id) || UserObject.isUserSelf(user)) continue;
+                    final String u = UserObject.getUserName(user).toLowerCase();
+                    final String ut = AndroidUtilities.translitSafe(u);
+                    if (u.startsWith(q) || u.contains(" " + q) || ut.startsWith(qt) || ut.contains(" " + qt)) {
+                        users.add(user);
+                    } else if (user.usernames != null) {
+                        for (int j = 0; j < user.usernames.size(); ++j) {
+                            TLRPC.TL_username username = user.usernames.get(j);
+                            if (username == null || !username.active) continue;
+                            final String us = username.username.toLowerCase();
+                            if (us.startsWith(q) || us.contains("_" + q) || us.startsWith(qt) || us.contains(" " + qt)) {
+                                users.add(user);
+                                break;
+                            }
+                        }
+                    } else if (user.username != null) {
+                        final String us = user.username.toLowerCase();
+                        if (us.startsWith(q) || us.contains("_" + q) || us.startsWith(qt) || us.contains(" " + qt)) {
+                            users.add(user);
+                        }
                     }
                 }
-                AndroidUtilities.runOnUIThread(() -> onDone.run(result));
             }
-        });
+        }
+        onDone.run(users);
+        return -1;
+//        MessagesController controller = MessagesController.getInstance(UserConfig.selectedAccount);
+//        ConnectionsManager connection = ConnectionsManager.getInstance(UserConfig.selectedAccount);
+//        if (reqId != 0) {
+//            connection.cancelRequest(reqId, false);
+//        }
+//        if (query == null || query.isEmpty()) {
+//            AndroidUtilities.runOnUIThread(() -> onDone.run(Collections.emptyList()));
+//            return 0;
+//        }
+//        TLRPC.TL_contacts_search req = new TLRPC.TL_contacts_search();
+//        req.q = query;
+//        req.limit = 50;
+//        return connection.sendRequest(req, (response, error) -> {
+//            if (response instanceof TLRPC.TL_contacts_found) {
+//                TLRPC.TL_contacts_found res = (TLRPC.TL_contacts_found) response;
+//                controller.putUsers(res.users, false);
+//                List<TLRPC.User> result = new ArrayList<>();
+//                for (int a = 0; a < res.users.size(); a++) {
+//                    TLRPC.User user = res.users.get(a);
+//                    if (!user.self && !UserObject.isDeleted(user) && !user.bot && !UserObject.isService(user.id)) {
+//                        result.add(user);
+//                    }
+//                }
+//                AndroidUtilities.runOnUIThread(() -> onDone.run(result));
+//            }
+//        });
     }
 
     public static void searchChats(long currentChatId, int guid, String query, int count, Utilities.Callback<List<TLRPC.InputPeer>> onDone) {
