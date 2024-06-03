@@ -43,6 +43,7 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -198,7 +199,7 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
         }
 
         @Override
-        protected void drawList(Canvas blurCanvas, boolean top) {
+        protected void drawList(Canvas blurCanvas, boolean top, ArrayList<IViewWithInvalidateCallback> views) {
             for (int j = 0; j < listView.getChildCount(); j++) {
                 View child = listView.getChildAt(j);
                 if (child.getY() < listView.blurTopPadding + AndroidUtilities.dp(100)) {

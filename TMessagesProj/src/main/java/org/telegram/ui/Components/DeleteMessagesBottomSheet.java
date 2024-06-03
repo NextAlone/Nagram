@@ -998,7 +998,7 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
             }
         });
 
-        applyInCommonGroup.performAction((participant, i) -> {
+        applyInCommonGroup.forEachSelected((participant, i) -> {
             if (participant instanceof TLRPC.User) {
                 boolean needBan = banOrRestrict.checkOption(participant);
                 boolean needDelete = banOrRestrict.checkOption(participant);

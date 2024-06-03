@@ -9711,7 +9711,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         int maxActionBarItems = (int) (Math.ceil(displayMetrics.widthPixels  / (double) AndroidUtilities.dp(54))) - 2;
         isActionBarTooNarrow = maxActionBarItems < 6;
 
-        actionModeViews.add(actionMode.addItemWithWidth(nkactionbarbtn_reply, R.drawable.msg_reply, AndroidUtilities.dp(54), LocaleController.getString("Reply", R.string.Reply)));
+        actionModeViews.add(actionMode.addItemWithWidth(nkactionbarbtn_reply, R.drawable.menu_reply, AndroidUtilities.dp(54), LocaleController.getString("Reply", R.string.Reply)));
         actionModeViews.add(actionMode.addItemWithWidth(edit, R.drawable.msg_edit, AndroidUtilities.dp(54), LocaleController.getString("Edit", R.string.Edit)));
         actionModeViews.add(actionMode.addItemWithWidth(nkactionbarbtn_selectBetween, R.drawable.ic_select_between, AndroidUtilities.dp(54), LocaleController.getString("SelectBetween", R.string.SelectBetween)));
         actionModeViews.add(actionMode.addItemWithWidth(copy, R.drawable.msg_copy, AndroidUtilities.dp(54), LocaleController.getString("Copy", R.string.Copy)));
@@ -18581,7 +18581,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     tagItem.setVisibility(getUserConfig().isPremium() && (
                         (editItem != null && editItem.getVisibility() == View.VISIBLE ? 1 : 0) +
                         (forwardItem != null && forwardItem.getVisibility() == View.VISIBLE ? 1 : 0) +
-                        (saveItem != null && saveItem.getVisibility() == View.VISIBLE ? 1 : 0) +
+//                        (saveItem != null && saveItem.getVisibility() == View.VISIBLE ? 1 : 0) +
                         (copyItem != null && copyItem.getVisibility() == View.VISIBLE ? 1 : 0) +
                         (deleteItem != null && deleteItem.getVisibility() == View.VISIBLE ? 1 : 0) +
                         (starItem != null && starItem.getVisibility() == View.VISIBLE ? 1 : 0) +
@@ -32976,7 +32976,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             searchItem.setSearchFieldText(hashtag.substring(1), false);
             searchItem.setSearchFieldHint(LocaleController.getString(R.string.SearchHashtagsHint));
         }
-        getMediaDataController().searchMessagesInChat(searchingQuery, dialog_id, mergeDialogId, classGuid, 0, threadMessageId, false, searchingUserMessages, searchingChatMessages, false, searchingReaction);
+        getMediaDataController().searchMessagesInChat(searchingQuery, dialog_id, mergeDialogId, classGuid, 0, threadMessageId, false, searchingUserMessages, searchingChatMessages, false, searchingReaction, searchingType);
         updatePinnedMessageView(true);
         hashtagSearchEmptyView.showProgress(true);
         showMessagesSearchListView(true);
