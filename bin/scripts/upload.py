@@ -32,17 +32,18 @@ def get_caption() -> str:
 
 
 def get_document() -> list["InputMediaDocument"]:
-    return [
-        InputMediaDocument(
-            media=str(find_apk("arm64-v8a")),
-            thumb=get_thumb(),
-        ),
-        InputMediaDocument(
-            media=str(find_apk("armeabi-v7a")),
-            thumb=get_thumb(),
-            caption=get_caption(),
-        ),
-    ]
+    documents = []
+    abis = ["arm64-v8a", "armeabi-v7a"]
+    for abi in abis:
+        if apk := find_apk(abi):
+            documents.append(
+                InputMediaDocument(
+                    media=str(apk),
+                    thumb=get_thumb(),
+                )
+            )
+    documents[-1].caption = get_caption()
+    return documents
 
 
 def retry(func):
