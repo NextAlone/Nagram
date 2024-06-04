@@ -36406,7 +36406,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         @Override
         public void didPressTime(ChatMessageCell cell) {
             if (!cell.getMessageObject().isImportedForward()) {
-                showTimeHint(cell);
+                if (NaConfig.INSTANCE.getShowTimeHint().Bool()) {
+                    showTimeHint(cell);
+                }
                 return;
             }
             createUndoView();

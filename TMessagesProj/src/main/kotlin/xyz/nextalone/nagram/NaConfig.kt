@@ -614,6 +614,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             true
         )
+    val showTimeHint =
+        addConfig(
+            "ShowTimeHint",
+            ConfigItem.configTypeBool,
+            true
+        )
 
     private fun addConfig(
         k: String,
