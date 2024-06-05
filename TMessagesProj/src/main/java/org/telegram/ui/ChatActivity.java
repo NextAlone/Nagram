@@ -1842,7 +1842,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     selectReaction(primaryMessage, null, null, x, y, ReactionsLayoutInBubble.VisibleReaction.fromEmojicon(reaction), true, false, false, false);
                 }
             } else if (NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTap.DOUBLE_TAP_ACTION_SHOW_REACTIONS) {
-                createMenu(view, true, false, x, y, true, true);
+                createMenu(view, true, false, x, y, true, false, true);
             } else {
                 var cell = (ChatMessageCell) view;
                 var message = cell.getMessageObject();
