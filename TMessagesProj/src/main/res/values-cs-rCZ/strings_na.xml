@@ -155,4 +155,5 @@
     <string name="RegexFiltersAddDescription">Můžete použít web <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> a vyzkoušet váš regulární výraz.
     Můžete také použít prostý text, ale nezapomeňte uniknout závorky.</string>
     <string name="RegexFiltersAddError">Syntaktická chyba Regex</string>
+    <string name="ShowTimeHint">Pro zobrazení podrobností klikněte na čas zprávy</string>
 </resources>

@@ -155,4 +155,5 @@
     <string name="RegexFiltersAddDescription">You can use site <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> to fully test your regular expression.
     You can also use plain text, but don\'t forget to escape brackets.</string>
     <string name="RegexFiltersAddError">正規表現の構文エラー</string>
+    <string name="ShowTimeHint">詳細を表示するメッセージ時間をクリックしてください</string>
 </resources>

@@ -155,4 +155,5 @@
     <string name="RegexFiltersAddDescription">Du kan bruge <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> til at teste dit regulære udtryk fuldt ud.
     Du kan også bruge almindelig tekst, men glem ikke at undslippe parenteser.</string>
     <string name="RegexFiltersAddError">Regex syntaksfejl</string>
+    <string name="ShowTimeHint">Klik på beskedtid for at vise detaljer</string>
 </resources>

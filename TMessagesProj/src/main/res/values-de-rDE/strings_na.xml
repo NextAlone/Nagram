@@ -155,4 +155,5 @@
     <string name="RegexFiltersAddDescription">Sie können die Seite <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> verwenden, um Ihren regulären Ausdruck vollständig zu testen.
     Sie können auch reinen Text verwenden, aber vergessen Sie nicht, Klammern zu maskieren.</string>
     <string name="RegexFiltersAddError">Regex-Syntaxfehler</string>
+    <string name="ShowTimeHint">Nachrichtenzeit anklicken, um Details anzuzeigen</string>
 </resources>

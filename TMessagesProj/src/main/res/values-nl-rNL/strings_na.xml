@@ -155,4 +155,5 @@
     <string name="RegexFiltersAddDescription">Je kunt de website <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> gebruiken om je reguliere expressie volledig te testen.
     Je kunt ook platte tekst gebruiken, maar vergeet niet om uit haakjes te ontsnappen.</string>
     <string name="RegexFiltersAddError">Regex syntaxisfout</string>
+    <string name="ShowTimeHint">Klik op berichttijd om details weer te geven</string>
 </resources>

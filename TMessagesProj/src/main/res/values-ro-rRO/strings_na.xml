@@ -155,4 +155,5 @@
     <string name="RegexFiltersAddDescription">Poți folosi site-ul <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> pentru a testa complet expresia ta obișnuită.
     Puteți, de asemenea, să folosiți text simplu, dar să nu uitați să scăpați de paranteze.</string>
     <string name="RegexFiltersAddError">Eroare de sintaxă Regex</string>
+    <string name="ShowTimeHint">Apasă pe timpul mesajului pentru a afișa detaliile</string>
 </resources>

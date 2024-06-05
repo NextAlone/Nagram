@@ -155,4 +155,5 @@
     <string name="RegexFiltersAddDescription">Możesz użyć witryny <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> do pełnego przetestowania wyrażenia regularnego.
     Możesz również użyć zwykłego tekstu, ale nie zapomnij o nawiasach ucieczki.</string>
     <string name="RegexFiltersAddError">Błąd składni Regex</string>
+    <string name="ShowTimeHint">Kliknij czas wiadomości aby wyświetlić szczegóły</string>
 </resources>

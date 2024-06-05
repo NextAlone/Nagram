@@ -155,4 +155,5 @@
     <string name="RegexFiltersAddDescription">Ви можете використовувати сайт <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> щоб повністю перевірити свій регулярний вираз.
     Ви також можете використовувати звичайний текст, але не забудьте уникнути дужок.</string>
     <string name="RegexFiltersAddError">Помилка синтаксису регулярного виразу</string>
+    <string name="ShowTimeHint">Натисніть час повідомлення для відображення подробиць</string>
 </resources>

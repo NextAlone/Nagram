@@ -155,4 +155,5 @@
     <string name="RegexFiltersAddDescription">Voit käyttää sivustoa <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> testataksesi täysin säännöllisen lausekkeen.
     Voit myös käyttää pelkkää tekstiä, mutta älä unohda paeta suluita.</string>
     <string name="RegexFiltersAddError">Regex syntaksivirhe</string>
+    <string name="ShowTimeHint">Valitse viestin aika näyttääksesi tiedot</string>
 </resources>

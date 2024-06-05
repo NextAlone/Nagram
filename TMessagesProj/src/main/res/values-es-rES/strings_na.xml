@@ -135,15 +135,15 @@
     <string name="PushServiceTypeUnifiedGateway">Gateway de Unified Push</string>
     <string name="SendMp4DocumentAsVideo">Enviar documento mp4 como vídeo</string>
     <string name="StickersChooseShortNameForStickerPack">Elige un nombre corto para tu paquete.</string>
-    <string name="StickersCopyStickerSet">Copiar Set de Sticker</string>
+    <string name="StickersCopyStickerSet">Copiar pack de Sticker</string>
     <string name="DisableChannelMuteButton">Deshabilitar botón de silenciar canal</string>
     <string name="DisablePreviewVideoSoundShortcut">Desactivar acceso directo al sonido de un video</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Desactivar las teclas de volumen para reproducir el sonido de la vista previa del video</string>
-    <string name="DisableAutoWebLogin">Desactivar inicio de sesión web automático</string>
+    <string name="DisableAutoWebLogin">Deshabilitar inicio de sesión web automático</string>
     <string name="PreviewSendPhoto">Enviar foto</string>
     <string name="PreviewSendVideo">Enviar vídeo</string>
     <string name="PreviewSendFile">Enviar archivo</string>
-    <string name="SentryAnalytics">Informe de error centinela</string>
+    <string name="SentryAnalytics">Monitoreo de errores</string>
     <string name="UnblockDeleted">Desbloquear usuarios eliminados</string>
     <string name="UnblockDeletedWarn">¿Estás seguro de que quieres desbloquear **todos los usuarios eliminados**?</string>
     <string name="RegexFilters">Filtros de mensajes</string>
@@ -155,4 +155,5 @@
     <string name="RegexFiltersAddDescription">You can use site <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> to fully test your regular expression.
     You can also use plain text, but don\'t forget to escape brackets.</string>
     <string name="RegexFiltersAddError">Error de sintaxis Regex</string>
+    <string name="ShowTimeHint">Haga clic en la hora del mensaje para mostrar los detalles</string>
 </resources>

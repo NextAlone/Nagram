@@ -155,4 +155,5 @@
     <string name="RegexFiltersAddDescription">Puoi usare il sito <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> per testare completamente la tua espressione regolare.
     È anche possibile utilizzare il testo semplice, ma non dimenticare di sfuggire alle parentesi.</string>
     <string name="RegexFiltersAddError">Errore di sintassi Regex</string>
+    <string name="ShowTimeHint">Fare clic sull\'ora del messaggio per visualizzare i dettagli</string>
 </resources>

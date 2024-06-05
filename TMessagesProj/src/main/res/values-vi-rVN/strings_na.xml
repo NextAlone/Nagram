@@ -155,4 +155,5 @@
     <string name="RegexFiltersAddDescription">Bạn có thể sử dụng trang web <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> để kiểm tra đầy đủ biểu thức chính quy của mình.
      Bạn cũng có thể sử dụng văn bản thuần túy nhưng đừng quên thoát khỏi dấu ngoặc.</string>
     <string name="RegexFiltersAddError">Lỗi cú pháp biểu thức chính quy</string>
+    <string name="ShowTimeHint">Bấm vào thời gian tin nhắn để hiển thị thông tin chi tiết</string>
 </resources>
