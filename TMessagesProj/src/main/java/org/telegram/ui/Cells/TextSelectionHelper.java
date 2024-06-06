@@ -73,6 +73,7 @@ import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
+import xyz.nextalone.nagram.NaConfig;
 
 import static com.google.zxing.common.detector.MathUtils.distance;
 import static org.telegram.ui.ActionBar.FloatingToolbar.STYLE_THEME;
@@ -1429,11 +1430,11 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                 menu.getItem(1).setVisible(canShowQuote());
                 MenuItem copyItem = menu.findItem(android.R.id.copy);
                 if (copyItem != null) {
-                    copyItem.setVisible(canCopy());
+                    copyItem.setVisible(canCopyOverride());
                 }
                 if (selectedView != null) {
                     CharSequence charSequence = getText(selectedView, false);
-                    if (!canCopy()) {
+                    if (!canCopyOverride()) {
                         menu.getItem(2).setVisible(false);
                     } else if (multiselect || selectionStart <= 0 && selectionEnd >= charSequence.length() - 1) {
                         menu.getItem(2).setVisible(false);
@@ -3386,6 +3387,10 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
 
     protected Theme.ResourcesProvider getResourcesProvider() {
         return resourcesProvider;
+    }
+
+    protected boolean canCopyOverride() {
+        return NaConfig.INSTANCE.getForceCopy().Bool() || canCopy();
     }
 
     protected boolean canCopy() {
