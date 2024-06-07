@@ -9130,7 +9130,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (!getMessagesController().premiumFeaturesBlocked()) {
                     premiumRow = rowCount++;
                 }
-                if (getMessagesController().starsPurchaseAvailable() && (StarsController.getInstance(currentAccount).getBalance() > 0 || StarsController.getInstance(currentAccount).hasTransactions())) {
+                if (getMessagesController().starsPurchaseAvailable() && (StarsController.getInstance(currentAccount).getBalance() > 0 || StarsController.getInstance(currentAccount).hasTransactions() || true)) {
                     starsRow = rowCount++;
                 }
                 if (!getMessagesController().premiumFeaturesBlocked()) {
