@@ -14238,8 +14238,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
             forwardMessages(messagesToForward, messagePreviewParams.hideForwardSendersName, messagePreviewParams.hideCaption, notify, scheduleDate != 0 && scheduleDate != 0x7ffffffe ? scheduleDate + 1 : scheduleDate);
 //                }
-        }
-        if (forwardingPreviewView == null) {
             messagePreviewParams = null;
         }
     }
