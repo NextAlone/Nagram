@@ -13622,7 +13622,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             }
             CharSequence subtitle = null;
             TLRPC.Photo avatar = avatarsArr.get(switchingToIndex);
-            if (avatar.date != 0) {
+            if (avatar != null && avatar.date != 0) {
                 subtitle = LocaleController.formatDateAudio(avatar.date, false);
                 subtitle = String.format(Locale.US, "%s, DC%d", subtitle, avatar.dc_id);
             }
