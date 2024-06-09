@@ -4659,36 +4659,6 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     });
                     sendPopupLayout.addView(sendWithoutSoundButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
                 }
-                if (sendWithoutSoundButtonValue) {
-                    if (containsMarkdown(messageEditText.getText())) {
-                        boolean withoutMarkdown = NaConfig.INSTANCE.getDisableMarkdown().Bool();
-                        ActionBarMenuSubItem sendWithoutMarkdownButton = new ActionBarMenuSubItem(getContext(), false, false, resourcesProvider);
-                        if (withoutMarkdown) {
-                            sendWithoutMarkdownButton.setTextAndIcon(LocaleController.getString("SendWithMarkdown", R.string.SendWithMarkdown), R.drawable.round_code_white);
-                        } else {
-                            sendWithoutMarkdownButton.setTextAndIcon(LocaleController.getString("SendWithoutMarkdown", R.string.SendWithoutMarkdown), R.drawable.round_code_off_white);
-                        }
-                        sendWithoutMarkdownButton.setMinimumWidth(AndroidUtilities.dp(196));
-                        sendWithoutMarkdownButton.setOnClickListener(v -> {
-                            if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
-                                sendPopupWindow.dismiss();
-                            }
-                            sendMessageInternal(true, 0, true, withoutMarkdown, true);
-                        });
-                        sendPopupLayout.addView(sendWithoutMarkdownButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
-                    } else if (canSendAsDice(messageEditText.getText().toString(), parentFragment, dialog_id)) {
-                        ActionBarMenuSubItem sendWithoutMarkdownButton = new ActionBarMenuSubItem(getContext(), false, false, resourcesProvider);
-                        sendWithoutMarkdownButton.setTextAndIcon(LocaleController.getString("SendAsEmoji", R.string.SendAsEmoji), R.drawable.casino_icon);
-                        sendWithoutMarkdownButton.setMinimumWidth(AndroidUtilities.dp(196));
-                        sendWithoutMarkdownButton.setOnClickListener(v -> {
-                            if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
-                                sendPopupWindow.dismiss();
-                            }
-                            sendMessageInternal(true, 0, true, null, false);
-                        });
-                        sendPopupLayout.addView(sendWithoutMarkdownButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
-                    }
-                }
                 sendPopupLayout.setupRadialSelectors(getThemedColor(Theme.key_dialogButtonSelector));
 
                 sendPopupWindow = new ActionBarPopupWindow(sendPopupLayout, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT) {
@@ -4909,6 +4879,36 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     AndroidUtilities.runOnUIThread(dismissSendPreview, 500);
                 }
             });
+        }
+        if (sendWithoutSoundButtonValue) {
+            if (containsMarkdown(messageEditText.getText())) {
+                boolean withoutMarkdown = NaConfig.INSTANCE.getDisableMarkdown().Bool();
+                int markdownButtonDrawable = withoutMarkdown ? R.drawable.round_code_white : R.drawable.round_code_off_white;
+                String markdownButtonStr = withoutMarkdown ? getString("SendWithMarkdown", R.string.SendWithMarkdown) : getString("SendWithoutMarkdown", R.string.SendWithoutMarkdown);
+                options.add(markdownButtonDrawable, markdownButtonStr, () -> {
+                    sentFromPreview = System.currentTimeMillis();
+                    sendMessageInternal(true, 0, true, withoutMarkdown, true);
+                    if (!containsSendMessage && messageSendPreview != null) {
+                        messageSendPreview.dismiss(true);
+                        messageSendPreview = null;
+                    } else {
+                        AndroidUtilities.cancelRunOnUIThread(dismissSendPreview);
+                        AndroidUtilities.runOnUIThread(dismissSendPreview, 500);
+                    }
+                });
+            } else if (canSendAsDice(messageEditText.getText().toString(), parentFragment, dialog_id)) {
+                options.add(R.drawable.casino_icon, getString("SendAsEmoji", R.string.SendAsEmoji), () -> {
+                    sentFromPreview = System.currentTimeMillis();
+                    sendMessageInternal(true, 0, true, null, false);
+                    if (!containsSendMessage && messageSendPreview != null) {
+                        messageSendPreview.dismiss(true);
+                        messageSendPreview = null;
+                    } else {
+                        AndroidUtilities.cancelRunOnUIThread(dismissSendPreview);
+                        AndroidUtilities.runOnUIThread(dismissSendPreview, 500);
+                    }
+                });
+            }
         }
         options.setupSelectors();
         if (sendWhenOnlineButton != null) {

@@ -3124,14 +3124,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             final long finalDialogId = dialogId;
             if (chatActivity != null) {
                 options.add(R.drawable.ic_translate, getString(R.string.Translate), () -> {
-                    AlertsCreator.createScheduleDatePickerDialog(getContext(), finalDialogId, (notify, scheduleDate) -> {
-                        final long effectId = messageSendPreview != null ? messageSendPreview.getSelectedEffect() : 0;
-                        if (messageSendPreview != null) {
-                            messageSendPreview.dismiss(true);
-                            messageSendPreview = null;
-                        }
-                        translateComment(parentFragment.getParentActivity(), TranslateDb.getChatLanguage(finalDialogId, TranslatorKt.getCode2Locale(NekoConfig.translateInputLang.String())));
-                    }, resourcesProvider);
+                    if (messageSendPreview != null) {
+                        messageSendPreview.dismiss(false);
+                    }
+                    translateComment(parentFragment.getParentActivity(), TranslateDb.getChatLanguage(finalDialogId, TranslatorKt.getCode2Locale(NekoConfig.translateInputLang.String())));
                 });
                 // TODO: nekox
 //                itemCells[a].setOnLongClickListener(v -> {
