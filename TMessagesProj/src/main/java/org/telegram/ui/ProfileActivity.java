@@ -4191,7 +4191,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     return Unit.INSTANCE;
                 });
 
-                if (NekoXConfig.isDeveloper()) {
+                if (NaConfig.INSTANCE.getShowHiddenFeature().Bool()) {
                     builder.addItem(LocaleController.getString("DeveloperSettings", R.string.DeveloperSettings), R.drawable.baseline_developer_mode_24, (it) -> {
                         BottomBuilder devBuilder = new BottomBuilder(ProfileActivity.this.getParentActivity());
                         devBuilder.addTitle(LocaleController.getString("DevModeTitle", R.string.DevModeTitle), LocaleController.getString("DevModeNotice", R.string.DevModeNotice));
@@ -4259,6 +4259,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             public boolean onItemClick(View view, int position) {
                 if (position == versionRow) {
                     pressCount++;
+                    if (pressCount >= 5) {
+                        NaConfig.INSTANCE.getShowHiddenFeature().toggleConfigBool();
+                        Toast.makeText(getParentActivity(), LocaleController.getString("ErrorOccurred", R.string.ErrorOccurred), Toast.LENGTH_SHORT).show();
+                    }
                     if (pressCount >= 2 || BuildVars.DEBUG_PRIVATE_VERSION) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity(), resourcesProvider);
                         builder.setTitle(LocaleController.getString("DebugMenu", R.string.DebugMenu));
@@ -10603,6 +10607,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     private void createMessageFilterItem() {
+        if (!NaConfig.INSTANCE.getRegexFiltersEnabled().Bool()) {
+            return;
+        }
         otherItem.addSubItem(message_filter, R.drawable.hide_title, LocaleController.getString("RegexFilters", R.string.RegexFilters));
     }
 

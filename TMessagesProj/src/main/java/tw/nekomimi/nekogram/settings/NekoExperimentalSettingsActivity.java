@@ -101,7 +101,20 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
     private final AbstractConfigCell fakeHighPerformanceDeviceRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getFakeHighPerformanceDevice()));
     private final AbstractConfigCell disableEmojiDrawLimitRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableEmojiDrawLimit()));
     private final AbstractConfigCell sendMp4DocumentAsVideoRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getSendMp4DocumentAsVideo()));
+    private final AbstractConfigCell hideProxySponsorChannelRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideProxySponsorChannel));
+    private final AbstractConfigCell hideSponsoredMessageRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideSponsoredMessage));
+    private final AbstractConfigCell ignoreBlockedRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.ignoreBlocked, LocaleController.getString("IgnoreBlockedAbout")));
+    private final AbstractConfigCell regexFiltersEnabledRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getRegexFiltersEnabled()));
+    private final AbstractConfigCell regexFiltersEnableInChatsRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getRegexFiltersEnableInChats()));
+    private final AbstractConfigCell disableChatActionRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableChatAction));
+    private final AbstractConfigCell disableChoosingStickerRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableChoosingSticker));
     private final AbstractConfigCell divider1 = cellGroup.appendCell(new ConfigCellDivider());
+
+    // Story
+    private final AbstractConfigCell headerStory = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Story")));
+    private final AbstractConfigCell disableStoriesRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableStories()));
+    private final AbstractConfigCell disableSendReadStoriesRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableSendReadStories()));
+    private final AbstractConfigCell dividerStory = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell header3 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.ExternalStickerCache)));
     private final AbstractConfigCell externalStickerCacheRow = cellGroup.appendCell(new ConfigCellAutoTextCheck(
@@ -118,6 +131,40 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
     private static final int INTENT_PICK_EXTERNAL_STICKER_DIRECTORY = 514;
 
     public NekoExperimentalSettingsActivity() {
+        if (!NaConfig.INSTANCE.getShowHiddenFeature().Bool()) {
+            cellGroup.rows.remove(localPremiumRow);
+            cellGroup.rows.remove(localQuoteColorRow);
+            cellGroup.rows.remove(enhancedFileLoaderRow);
+            cellGroup.rows.remove(disableFilteringRow);
+            cellGroup.rows.remove(unlimitedFavedStickersRow);
+            cellGroup.rows.remove(unlimitedPinnedDialogsRow);
+            cellGroup.rows.remove(enableStickerPinRow);
+
+            cellGroup.rows.remove(forceCopyRow);
+            cellGroup.rows.remove(disableFlagSecureRow);
+            cellGroup.rows.remove(hideSponsoredMessageRow);
+            cellGroup.rows.remove(ignoreBlockedRow);
+            cellGroup.rows.remove(regexFiltersEnabledRow);
+            cellGroup.rows.remove(regexFiltersEnableInChatsRow);
+            cellGroup.rows.remove(disableChatActionRow);
+            cellGroup.rows.remove(disableChoosingStickerRow);
+
+            cellGroup.rows.remove(headerStory);
+            cellGroup.rows.remove(disableStoriesRow);
+            cellGroup.rows.remove(disableSendReadStoriesRow);
+            cellGroup.rows.remove(dividerStory);
+
+            NekoConfig.localPremium.setConfigBool(false);
+            NaConfig.INSTANCE.getForceCopy().setConfigBool(false);
+            NaConfig.INSTANCE.getDisableFlagSecure().setConfigBool(false);
+            NekoConfig.hideSponsoredMessage.setConfigBool(false);
+            NekoConfig.ignoreBlocked.setConfigBool(false);
+            NaConfig.INSTANCE.getRegexFiltersEnabled().setConfigBool(false);
+            NekoConfig.disableChatAction.setConfigBool(false);
+            NekoConfig.disableChoosingSticker.setConfigBool(false);
+            NaConfig.INSTANCE.getDisableSendReadStories().setConfigBool(false);
+        }
+
         addRowsToMap(cellGroup);
     }
 
@@ -191,6 +238,10 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
         listView.setOnItemClickListener((view, position, x, y) -> {
             AbstractConfigCell a = cellGroup.rows.get(position);
             if (a instanceof ConfigCellTextCheck) {
+                if (position == cellGroup.rows.indexOf(regexFiltersEnabledRow) && (LocaleController.isRTL && x > AndroidUtilities.dp(76) || !LocaleController.isRTL && x < (view.getMeasuredWidth() - AndroidUtilities.dp(76)))) {
+                    presentFragment(new RegexFiltersSettingActivity());
+                    return;
+                }
                 ((ConfigCellTextCheck) a).onClick((TextCheckCell) view);
             } else if (a instanceof ConfigCellSelectBox) {
                 ((ConfigCellSelectBox) a).onClick(view);
