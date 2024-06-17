@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="N_Config">N-Config</string>
+    <string name="N_Config">N-構成</string>
     <string name="ForceCopy">強制コピー</string>
     <string name="InvertReply">Invert</string>
     <string name="Great">素晴らしい</string>
@@ -132,7 +132,7 @@
     <string name="PushServiceTypeUnified">統一されたプッシュ</string>
     <string name="PushServiceTypeMicroG">MicroG</string>
     <string name="PushServiceTypeInAppDialog">常駐通知を表示</string>
-    <string name="PushServiceTypeUnifiedGateway">Unified Push Gateway</string>
+    <string name="PushServiceTypeUnifiedGateway">統合プッシュゲートウェイ</string>
     <string name="SendMp4DocumentAsVideo">mp4ドキュメントを動画として送信</string>
     <string name="StickersChooseShortNameForStickerPack">あなたのパックの短い名前を選択してください。</string>
     <string name="StickersCopyStickerSet">ステッカーセットをコピー</string>

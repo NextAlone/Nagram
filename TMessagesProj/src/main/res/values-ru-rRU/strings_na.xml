@@ -24,7 +24,7 @@
     <string name="CreateMono">Создать моноширинный</string>
     <string name="CreateMonoLanguage">Язык кода</string>
     <string name="CodeSyntaxHighlightDetails">Спасибо prismjs и Nekogram</string>
-    <string name="UseSystemUnlock">Разблокировка паролем с использованием системного интерфейса</string>
+    <string name="UseSystemUnlock">Разблокировка паролем с помощью системного интерфейса</string>
     <string name="CopyPhoto">Копировать фото</string>
     <string name="PhotoCopied">Фото скопировано в буфер обмена</string>
     <string name="ToTheBeginning">К началу</string>
@@ -41,10 +41,10 @@
     <string name="AppIconColorful">Цветная</string>
     <string name="AppIconDarkGreen">Тёмно-зелёная</string>
     <string name="AppIconNeon">Неон</string>
-    <string name="AppIconNiello">Черный</string>
+    <string name="AppIconNiello">Ниелло</string>
     <string name="AppIconBlue">Синяя</string>
     <string name="AppIconDarkBlue">Тёмно-синяя</string>
-    <string name="AppIconBlurBlue">Размытый синий</string>
+    <string name="AppIconBlurBlue">Размытая синяя</string>
     <string name="AutoInsertGIFCaption">Автоматическая вставка подписи перед отправкой GIF</string>
     <string name="DefaultMonoLanguage">Пользовательский язык кода по умолчанию</string>
     <string name="DisableGlobalSearch">Отключить глобальный поиск</string>
@@ -71,7 +71,7 @@
     <string name="CustomEditedMessage">Подпись для изменённых сообщений</string>
     <string name="FakeHighPerformanceDevice">Поддельное высокопроизводительное устройство</string>
     <string name="DisableEmojiDrawLimit">Отключить ограничение на отрисовку эмодзи</string>
-    <string name="IconDecoration">Оформление иконки</string>
+    <string name="IconDecoration">Оформление значков</string>
     <string name="NotificationIcon">Иконка уведомления</string>
     <string name="Official">Официальная</string>
     <string name="Nekogram">Nekogram</string>
@@ -96,8 +96,8 @@
     <string name="DisableSuggestionView">Отключить предложение настройки профиля</string>
     <string name="DisableStories">Отключить истории</string>
     <string name="DisableSendReadStories">Отключить отправку прочтения историй</string>
-    <string name="HideFilterMuteAll">Скрыть фильтр \"заглушить всех\"</string>
-    <string name="UseLocalQuoteColor">Использовать локальный цвет цитаты</string>
+    <string name="HideFilterMuteAll">Скрыть фильтр «Отключить все»</string>
+    <string name="UseLocalQuoteColor">Локальный цвет цитаты</string>
     <string name="ShowSquareAvatar">Квадратные аватары</string>
     <string name="DisableCustomWallpaperUser">Отключить пользовательские обои</string>
     <string name="DisableCustomWallpaperChannel">Отключить пользовательские обои каналов</string>
@@ -109,8 +109,8 @@
     <string name="ExternalStickerCacheWaitSync">Ожидание завершения синхронизации кэша</string>
     <string name="ExternalStickerCacheSyncNotFinished">Синхронизация кэша уже запущена</string>
     <string name="ExternalStickerCacheAutoRefresh">Автоматическая синхронизация</string>
-    <string name="ExternalStickerCacheAutoRefreshHint">Автосинхронизировать все кеши после получения событий стикера</string>
-    <string name="ExternalStickerCacheRefreshAll">Синхронизировать все кеши</string>
+    <string name="ExternalStickerCacheAutoRefreshHint">Автоматически синхронизируйте весь кэш после получения событий, связанных со стикерами.</string>
+    <string name="ExternalStickerCacheRefreshAll">Синхронизировать весь кэш</string>
     <string name="ExternalStickerCacheDeleteAll">Удалить весь кэш</string>
     <string name="ExternalStickerCacheDirNameType">Присвоение имен каталогам</string>
     <string name="ProviderTranSmartTranslate">TranSmart</string>
@@ -132,11 +132,11 @@
     <string name="PushServiceTypeUnified">Unified Push</string>
     <string name="PushServiceTypeMicroG">microG</string>
     <string name="PushServiceTypeInAppDialog">Показывать постоянное уведомление</string>
-    <string name="PushServiceTypeUnifiedGateway">Unified Push Gateway</string>
+    <string name="PushServiceTypeUnifiedGateway">Шлюз Unified Push</string>
     <string name="SendMp4DocumentAsVideo">Отправлять MP4 без сжатия как видео</string>
     <string name="StickersChooseShortNameForStickerPack">Выберите короткое имя для своего набора.</string>
     <string name="StickersCopyStickerSet">Копировать набор стикеров</string>
-    <string name="DisableChannelMuteButton">Отключить кнопку заглушения канала</string>
+    <string name="DisableChannelMuteButton">Отключить кнопку выключения звука каналов</string>
     <string name="DisablePreviewVideoSoundShortcut">Отключить звук видео превью</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Не включать звук кнопками громкости при предпросмотре видео.</string>
     <string name="DisableAutoWebLogin">Отключить автоматический вход при переходе в веб версию</string>
