@@ -9160,7 +9160,7 @@ R.string.CustomBackend))
 
             final int a = currentType == AUTH_TYPE_WORD ? 0 : 1;
             final String formattedPhone = "+" + PhoneFormat.getInstance().format(PhoneFormat.stripExceptNumbers(phone));
-            if (beginning == null) {
+            if (beginning == null || getConnectionsManager().isTestBackend()) {
                 confirmTextView.setText(AndroidUtilities.replaceTags(formatString(a == 0 ? R.string.SMSWordText : R.string.SMSPhraseText, formattedPhone)));
             } else {
                 confirmTextView.setText(AndroidUtilities.replaceTags(formatString(a == 0 ? R.string.SMSWordBeginningText : R.string.SMSPhraseBeginningText, formattedPhone, beginning)));
@@ -9581,7 +9581,7 @@ R.string.CustomBackend))
         }
 
         private boolean beginsOk(String text) {
-            if (beginning == null) {
+            if (beginning == null || getConnectionsManager().isTestBackend()) {
                 return true;
             }
             String lt = trimLeft(text).toLowerCase();
