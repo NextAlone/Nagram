@@ -100,6 +100,10 @@ public class UpdateHelper extends BaseRemoteHelper {
             update.url = json.url;
             update.flags |= 4;
         }
+        if (NekoXConfig.autoUpdateReleaseChannel == 0 && !update.can_not_skip) {
+            delegate.onTLResponse(null, null);
+            return;
+        }
         if (response != null) {
             var res = (TLRPC.messages_Messages) response;
             getMessagesController().removeDeletedMessagesFromArray(CHANNEL_METADATA_ID, res.messages);
@@ -173,10 +177,6 @@ public class UpdateHelper extends BaseRemoteHelper {
     }
 
     public void checkNewVersionAvailable(Delegate delegate, boolean updateAlways_) {
-        if (NekoXConfig.autoUpdateReleaseChannel == 0) {
-            delegate.onTLResponse(null, null);
-            return;
-        }
         updateAlways = updateAlways_;
         load(delegate);
     }

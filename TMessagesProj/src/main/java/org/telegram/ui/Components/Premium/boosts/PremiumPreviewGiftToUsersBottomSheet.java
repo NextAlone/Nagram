@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BillingController;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
@@ -40,6 +41,7 @@ import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.ColoredImageSpan;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.Premium.PremiumGradient;
+import org.telegram.ui.Components.Premium.PremiumNotAvailableBottomSheet;
 import org.telegram.ui.Components.Premium.PremiumPreviewBottomSheet;
 import org.telegram.ui.Components.Premium.boosts.cells.DurationWithDiscountCell;
 import org.telegram.ui.Components.Premium.boosts.cells.selector.SelectorBtnCell;
@@ -248,6 +250,14 @@ public class PremiumPreviewGiftToUsersBottomSheet extends PremiumPreviewBottomSh
         buttonContainer.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground, resourcesProvider));
         actionBtn = new GradientButtonWithCounterView(getContext(), true, resourcesProvider);
         actionBtn.setOnClickListener(v -> {
+
+            // ---- nagram start ----
+            if (BuildVars.IS_BILLING_UNAVAILABLE && getBaseFragment() != null) {
+                getBaseFragment().showDialog(new PremiumNotAvailableBottomSheet(getBaseFragment()));
+                return;
+            }
+            // ---- nagram end ----
+
             if (actionBtn.isLoading()) {
                 return;
             }

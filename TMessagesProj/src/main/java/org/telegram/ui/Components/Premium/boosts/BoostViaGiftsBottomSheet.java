@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -27,6 +28,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BottomSheetWithRecyclerListView;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.Premium.PremiumNotAvailableBottomSheet;
 import org.telegram.ui.Components.Premium.PremiumPreviewBottomSheet;
 import org.telegram.ui.Components.Premium.boosts.adapters.BoostAdapter;
 import org.telegram.ui.Components.Premium.boosts.cells.ActionBtnCell;
@@ -187,6 +189,14 @@ public class BoostViaGiftsBottomSheet extends BottomSheetWithRecyclerListView im
         updateRows(false, false);
         actionBtn = new ActionBtnCell(getContext(), resourcesProvider);
         actionBtn.setOnClickListener(v -> {
+
+            // ---- nagram start ----
+            if (BuildVars.IS_BILLING_UNAVAILABLE) {
+                fragment.showDialog(new PremiumNotAvailableBottomSheet(fragment));
+                return;
+            }
+            // ---- nagram end ----
+
             if (actionBtn.isLoading()) {
                 return;
             }
