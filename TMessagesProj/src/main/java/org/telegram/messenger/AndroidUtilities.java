@@ -2628,6 +2628,10 @@ public class AndroidUtilities {
         return photoSize;
     }
 
+    public static int getPhotoSizeOld() {
+        return 1280;
+    }
+
     /*public static void clearCursorDrawable(EditText editText) {
         if (editText == null) {
             return;

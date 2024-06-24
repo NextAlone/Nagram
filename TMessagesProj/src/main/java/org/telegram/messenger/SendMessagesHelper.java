@@ -6747,6 +6747,19 @@ public boolean retriedToSend;
         }).start();
     }
 
+    public void removeBigPhotoSizes(TLRPC.TL_photo photo, Boolean isEncrypted) {
+        if (!isEncrypted || photo == null) {
+            return;
+        }
+        ArrayList<TLRPC.PhotoSize> sizes = new ArrayList<>();
+        for (TLRPC.PhotoSize size: photo.sizes) {
+            if (size != null && size.w <= AndroidUtilities.getPhotoSizeOld() && size.h <= AndroidUtilities.getPhotoSizeOld()) {
+                sizes.add(size);
+            }
+        }
+        photo.sizes = sizes;
+    }
+
     public TLRPC.TL_photo generatePhotoSizes(String path, Uri imageUri) {
         return generatePhotoSizes(null, path, imageUri);
     }
@@ -6761,6 +6774,14 @@ public boolean retriedToSend;
         if (size != null) {
             sizes.add(size);
         }
+
+        //        ===== Nagram Hook start =====
+        size = ImageLoader.scaleAndSaveImage(bitmap, AndroidUtilities.getPhotoSizeOld(), AndroidUtilities.getPhotoSizeOld(), true, 80, false, 101, 101);
+        if (size != null) {
+            sizes.add(size);
+        }
+        //        ===== Nagram Hook end =====
+
         size = ImageLoader.scaleAndSaveImage(bitmap, AndroidUtilities.getPhotoSize(), AndroidUtilities.getPhotoSize(), true, 80, false, 101, 101);
         if (size != null) {
             sizes.add(size);
@@ -8002,6 +8023,11 @@ public boolean retriedToSend;
                             worker.sync = new CountDownLatch(1);
                             mediaSendThreadPool.execute(() -> {
                                 worker.photo = accountInstance.getSendMessagesHelper().generatePhotoSizes(info.path, info.uri);
+
+                                //        ===== Nagram Hook start =====
+                                accountInstance.getSendMessagesHelper().removeBigPhotoSizes(worker.photo, isEncrypted);
+                                //        ===== Nagram Hook end =====
+
                                 if (isEncrypted && info.canDeleteAfter) {
                                     new File(info.path).delete();
                                 }
@@ -8561,6 +8587,11 @@ public boolean retriedToSend;
                                 }
                                 if (photo == null) {
                                     photo = accountInstance.getSendMessagesHelper().generatePhotoSizes(info.path, info.uri);
+
+                                    //        ===== Nagram Hook start =====
+                                    accountInstance.getSendMessagesHelper().removeBigPhotoSizes(photo, isEncrypted);
+                                    //        ===== Nagram Hook end =====
+
                                     if (isEncrypted && info.canDeleteAfter) {
                                         new File(info.path).delete();
                                     }
