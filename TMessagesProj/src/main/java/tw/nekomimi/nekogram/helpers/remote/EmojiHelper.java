@@ -55,13 +55,13 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import tw.nekomimi.nekogram.NekoConfig;
-import tw.nekomimi.nekogram.helpers.UnzipHelper;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class EmojiHelper extends BaseRemoteHelper implements NotificationCenter.NotificationCenterDelegate {
-    private static final String EMOJI_TAG = "emojiv1";
+    private static final String EMOJI_TAG = "emojiv2";
     private static final String EMOJI_FONT_AOSP = "NotoColorEmoji.ttf";
-    private static final int EMOJI_COUNT = 3538;
+    private static final String EMOJI_FONT_NAME = "font.ttf";
+    private static final int EMOJI_COUNT = 1;
     private static final String EMOJI_PACKS_FILE_DIR;
     private static final Runnable invalidateUiRunnable = () -> NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.emojiLoaded);
     private static final String[] previewEmojis = {
@@ -313,7 +313,7 @@ public class EmojiHelper extends BaseRemoteHelper implements NotificationCenter.
     }
 
     private Typeface getSelectedTypeface() {
-        EmojiPackBase pack = getEmojiCustomPacksInfo()
+        EmojiPackBase pack = getEmojiPacksInfoAll()
                 .parallelStream()
                 .filter(emojiPackInfo -> emojiPackInfo.packId.equals(emojiPack))
                 .findFirst()
@@ -406,12 +406,21 @@ public class EmojiHelper extends BaseRemoteHelper implements NotificationCenter.
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
+    public ArrayList<EmojiPackBase> getEmojiPacksInfoAll() {
+        ArrayList<EmojiPackInfo> emojiPacksInfo = getEmojiPacksInfo();
+        ArrayList<EmojiPackBase> emojiCustomPacksInfo = getEmojiCustomPacksInfo();
+        ArrayList<EmojiPackBase> newList = new ArrayList<>();
+        newList.addAll(emojiPacksInfo);
+        newList.addAll(emojiCustomPacksInfo);
+        return newList;
+    }
+
     public boolean isInstalledOldVersion(String emojiID, int version) {
-        return getAllVersions(emojiID, version).size() > 0;
+        return !getAllVersions(emojiID, version).isEmpty();
     }
 
     public boolean isInstalledOffline(String emojiID) {
-        return getAllVersions(emojiID, -1).size() > 0;
+        return !getAllVersions(emojiID, -1).isEmpty();
     }
 
     public ArrayList<File> getAllVersions(String emojiID) {
@@ -475,7 +484,18 @@ public class EmojiHelper extends BaseRemoteHelper implements NotificationCenter.
     public void installDownloadedEmoji(EmojiPackInfo pack, boolean update) {
         var emojiDir = EmojiHelper.getEmojiDir(pack.packId, pack.packVersion);
         emojiDir.mkdir();
-        UnzipHelper.unzip(pack.fileLocation, emojiDir, () -> {
+        File old = new File(pack.fileLocation);
+        File newFile = new File(emojiDir, EMOJI_FONT_NAME);
+        if (old.isFile() && old.exists() && old.canRead()) {
+            try (FileInputStream inputStream = new FileInputStream(old)) {
+                AndroidUtilities.copyFile(inputStream, newFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (newFile.isFile() && newFile.exists() && newFile.canRead()) {
+                loadingEmojiPacks.remove(pack.fileLocation);
+                pack.fileLocation = newFile.toString();
+            }
             if (isPackInstalled(pack)) {
                 if (update) {
                     EmojiHelper.getInstance().deleteOldVersions(pack);
@@ -484,10 +504,8 @@ public class EmojiHelper extends BaseRemoteHelper implements NotificationCenter.
                 }
                 reloadEmoji();
             }
-            callProgressChanged(pack, true, 100, pack.fileSize);
-            loadingEmojiPacks.remove(pack.fileLocation);
-        });
-        callProgressChanged(pack, false, 100, pack.fileSize);
+        }
+        callProgressChanged(pack, true, 100, pack.fileSize);
     }
 
     public EmojiPackBase installEmoji(File emojiFile) throws Exception {

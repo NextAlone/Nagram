@@ -918,6 +918,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            View view = holder.itemView;
             AbstractConfigCell a = cellGroup.rows.get(position);
             if (a != null) {
                 if (a instanceof ConfigCellCustom) {
@@ -929,6 +930,9 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                         } else if (position == cellGroup.rows.indexOf(doubleTapActionRow)) {
                             textCell.setTextAndValue(LocaleController.getString("DoubleTapAction", R.string.DoubleTapAction), DoubleTap.doubleTapActionMap.get(NaConfig.INSTANCE.getDoubleTapAction().Int()), true);
                         }
+                    } else if (view instanceof EmojiSetCell) {
+                        EmojiSetCell v1 =  (EmojiSetCell) view;
+                        v1.setData(EmojiHelper.getInstance().getCurrentEmojiPackInfo(), false, true);
                     }
                 } else {
                     // Default binds
@@ -970,7 +974,6 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                     break;
                 case ConfigCellCustom.CUSTOM_ITEM_EmojiSet:
                     view = emojiSetCell = new EmojiSetCell(mContext, false);
-                    emojiSetCell.setData(EmojiHelper.getInstance().getCurrentEmojiPackInfo(), false, true);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
             }
