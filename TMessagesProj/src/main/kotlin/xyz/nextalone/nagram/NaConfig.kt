@@ -626,6 +626,18 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val searchHashtagDefaultPageChannel =
+        addConfig(
+            "SearchHashtagDefaultPageChannel",
+            ConfigItem.configTypeInt,
+            0
+        )
+    val searchHashtagDefaultPageChat =
+        addConfig(
+            "SearchHashtagDefaultPageChat",
+            ConfigItem.configTypeInt,
+            0
+        )
 
     private fun addConfig(
         k: String,

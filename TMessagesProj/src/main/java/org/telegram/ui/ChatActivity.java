@@ -32953,8 +32953,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         if (ChatObject.isChannelAndNotMegaGroup(currentChat) && ChatObject.isPublic(currentChat) && searchingHashtag != null) {
             defaultSearchPage = 2;
+
+//            ----- Nagram Hook Start -----
+            defaultSearchPage = NaConfig.INSTANCE.getSearchHashtagDefaultPageChannel().Int();
+//            ----- Nagram Hook End -----
+
         } else {
             defaultSearchPage = 0;
+
+//            ----- Nagram Hook Start -----
+            defaultSearchPage = NaConfig.INSTANCE.getSearchHashtagDefaultPageChat().Int();
+//            ----- Nagram Hook End -----
+
         }
         openSearchKeyboard = false;
         if (searchItem != null) {

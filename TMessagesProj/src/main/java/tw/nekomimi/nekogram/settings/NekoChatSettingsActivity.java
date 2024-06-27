@@ -190,6 +190,17 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     private final AbstractConfigCell repeatConfirmRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.repeatConfirm));
     private final AbstractConfigCell dividerConfirms = cellGroup.appendCell(new ConfigCellDivider());
 
+    // search tag
+    private final AbstractConfigCell headerSearchTag = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("SavedTagSearchHint")));
+    private final String[] searchPagesString = new String[]{
+            LocaleController.getString(R.string.SearchThisChat),
+            LocaleController.getString(R.string.SearchMyMessages),
+            LocaleController.getString(R.string.SearchPublicPosts),
+    };
+    private final AbstractConfigCell searchHashtagDefaultPageChannelRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NaConfig.INSTANCE.getSearchHashtagDefaultPageChannel(), searchPagesString, null));
+    private final AbstractConfigCell searchHashtagDefaultPageChatRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NaConfig.INSTANCE.getSearchHashtagDefaultPageChat(), searchPagesString, null));
+    private final AbstractConfigCell dividerSearchTag  = cellGroup.appendCell(new ConfigCellDivider());
+
     private ListAdapter listAdapter;
     private ActionBarMenuItem menuItem;
     private StickerSizeCell stickerSizeCell;
