@@ -156,4 +156,6 @@
     You can also use plain text, but don\'t forget to escape brackets.</string>
     <string name="RegexFiltersAddError">Κανονικό συντακτικό σφάλμα</string>
     <string name="ShowTimeHint">Κάντε κλικ στο μήνυμα για να εμφανίσετε λεπτομέρειες</string>
+    <string name="SearchHashtagDefaultPageChannel">Κανάλι Κάντε Κλικ Hashtag Προεπιλεγμένη Σελίδα Αναζήτησης</string>
+    <string name="SearchHashtagDefaultPageChat">Chat Click Hashtag Προεπιλεγμένη Σελίδα Αναζήτησης</string>
 </resources>

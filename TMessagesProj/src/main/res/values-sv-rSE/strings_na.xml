@@ -156,4 +156,6 @@
     Du kan också använda ren text, men glöm inte att fly parenteser.</string>
     <string name="RegexFiltersAddError">Regex syntaxfel</string>
     <string name="ShowTimeHint">Klicka på meddelandetid för att visa detaljer</string>
+    <string name="SearchHashtagDefaultPageChannel">Kanal Klicka på Hashtag standard söksida</string>
+    <string name="SearchHashtagDefaultPageChat">Chatt Klicka Hashtag standard söksida</string>
 </resources>

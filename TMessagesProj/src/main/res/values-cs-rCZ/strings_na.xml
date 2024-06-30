@@ -156,4 +156,6 @@
     Můžete také použít prostý text, ale nezapomeňte uniknout závorky.</string>
     <string name="RegexFiltersAddError">Syntaktická chyba Regex</string>
     <string name="ShowTimeHint">Pro zobrazení podrobností klikněte na čas zprávy</string>
+    <string name="SearchHashtagDefaultPageChannel">Výchozí vyhledávací stránka Hashtag kliknutím na kanál</string>
+    <string name="SearchHashtagDefaultPageChat">Výchozí stránka hledání kliknutím na hashtag</string>
 </resources>

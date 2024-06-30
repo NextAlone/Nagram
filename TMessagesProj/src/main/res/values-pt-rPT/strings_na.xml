@@ -156,4 +156,6 @@
     You can also use plain text, but don\'t forget to escape brackets.</string>
     <string name="RegexFiltersAddError">Erro de sintaxe Regex</string>
     <string name="ShowTimeHint">Clique no horário da mensagem para exibir detalhes</string>
+    <string name="SearchHashtagDefaultPageChannel">Página Padrão de Pesquisa no Hashtag do Canal</string>
+    <string name="SearchHashtagDefaultPageChat">Página de pesquisa padrão do Click Chat Hashtag</string>
 </resources>

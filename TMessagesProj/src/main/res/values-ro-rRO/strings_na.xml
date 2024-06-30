@@ -156,4 +156,6 @@
     Puteți, de asemenea, să folosiți text simplu, dar să nu uitați să scăpați de paranteze.</string>
     <string name="RegexFiltersAddError">Eroare de sintaxă Regex</string>
     <string name="ShowTimeHint">Apasă pe timpul mesajului pentru a afișa detaliile</string>
+    <string name="SearchHashtagDefaultPageChannel">Pagina de căutare implicită a Hashtag-ului pentru Canal</string>
+    <string name="SearchHashtagDefaultPageChat">Pagina Implicită Căutare Hashtag Conversație</string>
 </resources>

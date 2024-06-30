@@ -156,4 +156,6 @@
     Вы также можете использовать простой текст, но не забудьте убрать скобки.</string>
     <string name="RegexFiltersAddError">Синтаксическая ошибка регулярного выражения</string>
     <string name="ShowTimeHint">Показывать подробную информацию при нажатии на время сообщения</string>
+    <string name="SearchHashtagDefaultPageChannel">Страница поиска по умолчанию при нажатии на хештеги каналов</string>
+    <string name="SearchHashtagDefaultPageChat">Страница поиска по умолчанию при нажатии на хештеги чатов</string>
 </resources>

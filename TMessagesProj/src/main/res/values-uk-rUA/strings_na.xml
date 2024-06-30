@@ -156,4 +156,6 @@
     Ви також можете використовувати звичайний текст, але не забудьте уникнути дужок.</string>
     <string name="RegexFiltersAddError">Помилка синтаксису регулярного виразу</string>
     <string name="ShowTimeHint">Натисніть час повідомлення для відображення подробиць</string>
+    <string name="SearchHashtagDefaultPageChannel">Знайти сторінку пошуку по каналу натисніть хештеґ за замовчуванням</string>
+    <string name="SearchHashtagDefaultPageChat">Знайти сторінку пошуку при чаті натисніть хештеґ за замовчуванням</string>
 </resources>

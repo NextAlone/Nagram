@@ -156,4 +156,6 @@
     يمكنك أيضًا استخدام نص عادي، ولكن لا تنسى أن تخرج من الأقواس المعقوفة.</string>
     <string name="RegexFiltersAddError">خطأ في صيغة Regex</string>
     <string name="ShowTimeHint">انقر فوق وقت الرسالة لعرض التفاصيل</string>
+    <string name="SearchHashtagDefaultPageChannel">قناة النقر فوق هاشتاج صفحة البحث الافتراضية</string>
+    <string name="SearchHashtagDefaultPageChat">صفحة البحث الافتراضية للدردشة بنقرة هاشتاج</string>
 </resources>

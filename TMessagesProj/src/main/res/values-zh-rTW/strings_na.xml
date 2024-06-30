@@ -156,4 +156,6 @@
     您也可以使用純文本，但請不要忘記使用轉義符號。</string>
     <string name="RegexFiltersAddError">正則表達式語法錯誤</string>
     <string name="ShowTimeHint">點擊消息時間顯示詳細信息</string>
+    <string name="SearchHashtagDefaultPageChannel">Channel Click Hashtag Default Search Page</string>
+    <string name="SearchHashtagDefaultPageChat">Chat Click Hashtag Default Search Page</string>
 </resources>

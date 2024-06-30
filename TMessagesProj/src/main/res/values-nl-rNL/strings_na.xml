@@ -156,4 +156,6 @@
     Je kunt ook platte tekst gebruiken, maar vergeet niet om uit haakjes te ontsnappen.</string>
     <string name="RegexFiltersAddError">Regex syntaxisfout</string>
     <string name="ShowTimeHint">Klik op berichttijd om details weer te geven</string>
+    <string name="SearchHashtagDefaultPageChannel">Kanaal klik op Hashtag standaard zoekpagina</string>
+    <string name="SearchHashtagDefaultPageChat">Chat klik op Hashtag standaard zoekpagina</string>
 </resources>

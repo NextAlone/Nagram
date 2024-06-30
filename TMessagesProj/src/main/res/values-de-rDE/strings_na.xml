@@ -156,4 +156,6 @@
     Sie können auch reinen Text verwenden, aber vergessen Sie nicht, Klammern zu maskieren.</string>
     <string name="RegexFiltersAddError">Regex-Syntaxfehler</string>
     <string name="ShowTimeHint">Nachrichtenzeit anklicken, um Details anzuzeigen</string>
+    <string name="SearchHashtagDefaultPageChannel">Kanal Klick auf Hashtag Standard-Suchseite</string>
+    <string name="SearchHashtagDefaultPageChat">Chat Klick auf Hashtag Standard-Suchseite</string>
 </resources>
