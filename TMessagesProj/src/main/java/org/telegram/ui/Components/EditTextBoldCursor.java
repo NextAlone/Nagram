@@ -1340,6 +1340,11 @@ public class EditTextBoldCursor extends EditTextEffects {
     }
 
     @Override
+    public void invalidate() {
+        super.invalidate();
+    }
+
+    @Override
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
     }
