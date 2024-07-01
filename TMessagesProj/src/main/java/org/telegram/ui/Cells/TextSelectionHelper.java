@@ -2239,7 +2239,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                 MessageObject.TextLayoutBlocks captionLayout = cell.getCaptionLayout();
                 for (int i = 0; i < captionLayout.textLayoutBlocks.size(); i++) {
                     MessageObject.TextLayoutBlock block = captionLayout.textLayoutBlocks.get(i);
-                    if (y >= block.textYOffset(captionLayout.textLayoutBlocks) && y <= block.textYOffset(captionLayout.textLayoutBlocks) + block.padTop + block.height) {
+                    if (y >= block.textYOffset(captionLayout.textLayoutBlocks) && y <= block.textYOffset(captionLayout.textLayoutBlocks) + block.padTop + block.height(cell.transitionParams)) {
                         layoutBlock.layout = block.textLayout;
                         layoutBlock.yOffset = block.textYOffset(captionLayout.textLayoutBlocks) + block.padTop;
                         int offsetX = 0;
@@ -2259,7 +2259,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
 
             for (int i = 0; i < messageObject.textLayoutBlocks.size(); i++) {
                 MessageObject.TextLayoutBlock block = messageObject.textLayoutBlocks.get(i);
-                if (y >= block.textYOffset(messageObject.textLayoutBlocks) && y <= block.textYOffset(messageObject.textLayoutBlocks) + block.padTop + block.height) {
+                if (y >= block.textYOffset(messageObject.textLayoutBlocks) && y <= block.textYOffset(messageObject.textLayoutBlocks) + block.padTop + block.height(cell.transitionParams)) {
                     layoutBlock.layout = block.textLayout;
                     layoutBlock.yOffset = block.textYOffset(messageObject.textLayoutBlocks) + block.padTop;
                     int offsetX = 0;
@@ -2532,6 +2532,10 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
             if (selectedCellId == messageObject.getId()) {
                 clear(true);
             }
+        }
+
+        public boolean isMenuEmpty() {
+            return !canCopy() && !canShowQuote();
         }
     }
 

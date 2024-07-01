@@ -1440,6 +1440,7 @@ public class LPhotoPaintView extends SizeNotifierFrameLayoutPhoto implements IPh
             if (widget == EmojiBottomSheet.WIDGET_PHOTO) {
                 showPhotoAlert();
             }
+            return true;
         });
         emojiBottomSheet.setOnDismissListener(di -> {
             onOpenCloseStickersAlert(false);

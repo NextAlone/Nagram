@@ -1670,6 +1670,10 @@ public class ActionBar extends FrameLayout {
     }
 
     public void setCastShadows(boolean value) {
+        if (castShadows != value && getParent() instanceof View) {
+            ((View) getParent()).invalidate();
+            invalidate();
+        }
         castShadows = value;
     }
 

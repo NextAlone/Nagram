@@ -63,7 +63,6 @@ public class BillingUtilities {
         serializedData.cleanup();
         if (
             paymentPurpose instanceof TLRPC.TL_inputStorePaymentPremiumGiftCode ||
-            paymentPurpose instanceof TLRPC.TL_inputStorePaymentStars ||
             paymentPurpose instanceof TLRPC.TL_inputStorePaymentPremiumGiveaway
         ) {
             remPaymentPurpose = paymentPurpose;
@@ -108,7 +107,7 @@ public class BillingUtilities {
                     purpose = TLRPC.InputStorePaymentPurpose.TLdeserialize(data, data.readInt32(true), true);
                     data.cleanup();
                 } catch (Exception e) {
-                    FileLog.e(e);
+                    FileLog.e("Billing: Extract payload, no remPaymentPurpose; failed to get purpose", e);
                     purpose = null;
                 }
             } else {
