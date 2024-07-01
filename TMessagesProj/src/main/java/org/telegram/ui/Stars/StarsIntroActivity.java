@@ -1891,7 +1891,7 @@ public class StarsIntroActivity extends GradientHeaderActivity implements Notifi
         }
         SpannableString spacedStar = new SpannableString("⭐ ");
         ColoredImageSpan span = new ColoredImageSpan(R.drawable.star_small_inner);
-        span.recolorDrawable = false;
+//        span.recolorDrawable = false;
         span.setScale(scale, scale);
         spacedStar.setSpan(span, 0, spacedStar.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         AndroidUtilities.replaceMultipleCharSequence("⭐️", ssb, "⭐");
