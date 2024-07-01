@@ -40,11 +40,13 @@ import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.Cells.DialogCell;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import xyz.nextalone.nagram.NaConfig;
 
 /**
  * This is a utility class to add swipe to dismiss and drag & drop support to RecyclerView.
@@ -1257,6 +1259,11 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
     }
 
     public int checkHorizontalSwipe(ViewHolder viewHolder, int flags) {
+        if (viewHolder != null && viewHolder.itemView instanceof DialogCell) {
+            if (((DialogCell) viewHolder.itemView).getCurrentDialogFolderId() == 0 && NaConfig.INSTANCE.getDoNotUnarchiveBySwipe().Bool()) {
+                return 0;
+            }
+        }
         if ((flags & (LEFT | RIGHT)) != 0) {
             final int dirFlag = mDx > 0 ? RIGHT : LEFT;
             if (mVelocityTracker != null && mActivePointerId > -1) {
