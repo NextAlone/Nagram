@@ -98,6 +98,7 @@ public abstract class BaseFragment {
         public View getWindowView();
         public boolean isShown();
         public void dismiss();
+        default void dismiss(boolean tabs) { dismiss(); }
         public void release();
 
         public boolean isFullyVisible();
@@ -113,6 +114,8 @@ public abstract class BaseFragment {
 
         public void setOnDismissListener(Runnable onDismiss);
     }
+
+    public static interface AttachedSheetWindow {}
 
     @Nullable
     public StoryViewer getLastStoryViewer() {
@@ -149,7 +152,7 @@ public abstract class BaseFragment {
         if (sheetsStack == null || sheetsStack.isEmpty())
             return;
         for (int i = sheetsStack.size() - 1; i >= 0; --i) {
-            sheetsStack.get(i).release();
+            sheetsStack.get(i).dismiss(true);
         }
         sheetsStack.clear();
     }
@@ -289,7 +292,7 @@ public abstract class BaseFragment {
     }
 
     public void onRemoveFromParent() {
-
+        clearSheets();
     }
 
     public void setParentFragment(BaseFragment fragment) {
@@ -672,6 +675,16 @@ public abstract class BaseFragment {
                 }
             }
         }
+        if (fullyVisibleListener != null) {
+            Runnable c = fullyVisibleListener;
+            fullyVisibleListener = null;
+            c.run();
+        }
+    }
+
+    private Runnable fullyVisibleListener;
+    public void whenFullyVisible(Runnable callback) {
+        fullyVisibleListener = callback;
     }
 
     public int getPreviewHeight() {

@@ -41,7 +41,7 @@ public class ProfileDateHelper {
     }
 
     public static String getUserTime(String prefix, long date) {
-        String st = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().formatterYear.format(new Date(date)), LocaleController.getInstance().formatterDay.format(new Date(date)));
+        String st = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().getFormatterYear().format(new Date(date)), LocaleController.getInstance().getFormatterDay().format(new Date(date)));
         return prefix + " " + st;
     }
 
