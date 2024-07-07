@@ -29332,7 +29332,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         }
                         if (canViewStats) {
                             items.add(LocaleController.getString("ViewStats", R.string.ViewStats));
-                            options.add(28);
+                            options.add(OPTION_STATISTICS);
                             icons.add(R.drawable.msg_stats);
                         }
                         if (allowUnpin) {

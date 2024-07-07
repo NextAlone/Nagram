@@ -1004,11 +1004,11 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == overviewHeaderRow) {
                         headerCell.setTopMargin(9);
-                        headerCell.setPadding(0, 0, 0, AndroidUtilities.dp(8));
+                        headerCell.setPadding(AndroidUtilities.dp(16), 0, AndroidUtilities.dp(16), AndroidUtilities.dp(8));
                         headerCell.setText(LocaleController.formatString("StatisticOverview", R.string.StatisticOverview));
                     } else {
                         headerCell.setTopMargin(11);
-                        headerCell.setPadding(0, 0, 0, 0);
+                        headerCell.setPadding(AndroidUtilities.dp(16), 0, AndroidUtilities.dp(16), 0);
                         headerCell.setText(LocaleController.formatString("PublicShares", R.string.PublicShares));
                     }
                     break;
