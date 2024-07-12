@@ -1175,8 +1175,10 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
         return minValue;
     }
 
-    public void setData(T chartData) {
+    public boolean setData(T chartData) {
+        boolean updated = false;
         if (this.chartData != chartData) {
+            updated = true;
             invalidate();
             lines.clear();
             if (chartData != null && chartData.lines != null) {
@@ -1236,6 +1238,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
                 alphaAnimator.cancel();
             }
         }
+        return updated;
     }
 
     protected float getMinDistance() {

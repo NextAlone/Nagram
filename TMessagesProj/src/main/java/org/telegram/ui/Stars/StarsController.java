@@ -677,7 +677,7 @@ public class StarsController {
                     b.createSimpleBulletin(starDrawable, getString(R.string.StarsPurchaseCompleted), AndroidUtilities.replaceTags(formatPluralString("StarsPurchaseCompletedInfo", (int) stars, product, bot))).show();
                 }
                 if (LaunchActivity.instance != null && LaunchActivity.instance.getFireworksOverlay() != null) {
-                    LaunchActivity.instance.getFireworksOverlay().start();
+                    LaunchActivity.instance.getFireworksOverlay().start(true);
                 }
 
                 invalidateTransactions(true);
