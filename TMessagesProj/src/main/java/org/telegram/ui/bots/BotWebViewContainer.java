@@ -100,6 +100,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Pattern;
+
+import xyz.nextalone.nagram.NaConfig;
 
 public abstract class BotWebViewContainer extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
     private final static String DURGER_KING_USERNAME = "DurgerKingBot";
@@ -1983,6 +1986,19 @@ public abstract class BotWebViewContainer extends FrameLayout implements Notific
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
                     Uri uriNew = Uri.parse(url);
+
+                    // ----- Nagram Hook start -----
+                    String urlPatternStr = NaConfig.INSTANCE.getOpenUrlOutBotWebViewRegex().String();
+                    if (botWebViewContainer != null && !urlPatternStr.isEmpty()) {
+                        Pattern urlPattern = Pattern.compile(urlPatternStr, Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
+                        if (urlPattern.matcher(url).find()) {
+                            botWebViewContainer.onOpenUri(uriNew);
+                            d("shouldOverrideUrlLoading("+url+") = true");
+                            return true;
+                        }
+                    }
+                    // ----- Nagram Hook end -----
+
                     if (botWebViewContainer != null && Browser.isInternalUri(uriNew, null)) {
                         if (MessagesController.getInstance(botWebViewContainer.currentAccount).webAppAllowedProtocols != null &&
                             MessagesController.getInstance(botWebViewContainer.currentAccount).webAppAllowedProtocols.contains(uriNew.getScheme())) {

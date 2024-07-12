@@ -45,6 +45,7 @@ import org.telegram.ui.Components.UndoView;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import kotlin.Unit;
 
@@ -108,6 +109,16 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
     private final AbstractConfigCell regexFiltersEnableInChatsRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getRegexFiltersEnableInChats()));
     private final AbstractConfigCell disableChatActionRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableChatAction));
     private final AbstractConfigCell disableChoosingStickerRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableChoosingSticker));
+    private final AbstractConfigCell openUrlOutBotWebViewRegexRow = cellGroup.appendCell(new ConfigCellTextInput(null, NaConfig.INSTANCE.getOpenUrlOutBotWebViewRegex(),
+            null, null,
+            (input) -> {
+                try {
+                    Pattern.compile(input, Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
+                    return input;
+                } catch (Exception ignored) {
+                    return "";
+                }
+            }));
     private final AbstractConfigCell divider1 = cellGroup.appendCell(new ConfigCellDivider());
 
     // Story

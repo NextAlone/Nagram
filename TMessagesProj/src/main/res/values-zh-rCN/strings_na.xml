@@ -158,4 +158,5 @@
     <string name="ShowTimeHint">点击消息时间显示详细信息</string>
     <string name="SearchHashtagDefaultPageChannel">在频道点击标签默认搜索页面</string>
     <string name="SearchHashtagDefaultPageChat">在其他对话点击标签默认搜索页面</string>
+    <string name="OpenUrlOutBotWebViewRegex">指定 URL Regex 跳出 bot webview</string>
 </resources>
