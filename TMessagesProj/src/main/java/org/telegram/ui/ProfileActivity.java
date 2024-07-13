@@ -10076,8 +10076,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 getFileLoader().loadFile(imageLocation, chat, null, FileLoader.PRIORITY_LOW, 1);
             }
             avatarImage.getImageReceiver().setVisible(!PhotoViewer.isShowingImage(photoBig) && (getLastStoryViewer() == null || getLastStoryViewer().transitionViewHolder.view != avatarImage), storyView != null);
-            if (chat.photo != null && chat.photo.dc_id != 0) {
+            dc = chatInfo != null ? chatInfo.stats_dc != 0 ? chatInfo.stats_dc : 0 : 0;
+            if (dc == 0 && chat.photo != null && chat.photo.dc_id != 0) {
                 dc = chat.photo.dc_id;
+            }
+            if (dc != 0) {
                 idTextView.setText("ID: " + chatId + ", DC: " + dc);
             } else {
                 idTextView.setText("ID: " + chatId);
