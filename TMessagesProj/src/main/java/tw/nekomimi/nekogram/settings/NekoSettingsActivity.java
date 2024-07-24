@@ -453,6 +453,10 @@ public class NekoSettingsActivity extends BaseFragment {
     }
 
     public static String backupSettingsJson() throws JSONException {
+        return backupSettingsJson(4);
+    }
+
+    public static String backupSettingsJson(int indentSpaces) throws JSONException {
 
         JSONObject configJson = new JSONObject();
 
@@ -529,7 +533,7 @@ public class NekoSettingsActivity extends BaseFragment {
         spToJSON("nkmrcfg", configJson, null);
         spToJSON("nekodialogconfig", configJson, null);
 
-        return configJson.toString(4);
+        return configJson.toString(indentSpaces);
     }
 
     private static void spToJSON(String sp, JSONObject object, Function<String, Boolean> filter) throws JSONException {

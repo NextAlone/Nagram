@@ -217,6 +217,7 @@ import kotlin.text.StringsKt;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.cc.CCConverter;
 import tw.nekomimi.nekogram.cc.CCTarget;
+import tw.nekomimi.nekogram.helpers.remote.ChatExtraButtonsHelper;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
 import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
@@ -4358,6 +4359,20 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         ActionBarMenuSubItem cell = new ActionBarMenuSubItem(getContext(), true, false);
         int dlps = delegate.getDisableLinkPreviewStatus();
 
+        long _chatId = -1;
+        if (parentFragment != null) {
+            TLRPC.Chat chat = parentFragment.getCurrentChat();
+            TLRPC.User user = parentFragment.getCurrentUser();
+            if (chat != null) {
+                _chatId = chat.id;
+            } else if (user != null) {
+                _chatId = user.id;
+            } else {
+                _chatId = -1;
+            }
+        }
+        final long chatId = _chatId;
+
         if (!isInInput) {
 
             cell.setTextAndIcon(LocaleController.getString("ChatAttachEnterMenuRecordAudio", R.string.ChatAttachEnterMenuRecordAudio), R.drawable.input_mic);
@@ -4449,18 +4464,6 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
 
                 cell = new ActionBarMenuSubItem(getContext(), false, false);
 
-            }
-
-            TLRPC.Chat chat = parentFragment.getCurrentChat();
-            TLRPC.User user = parentFragment.getCurrentUser();
-
-            long chatId;
-            if (chat != null) {
-                chatId = chat.id;
-            } else if (user != null) {
-                chatId = user.id;
-            } else {
-                chatId = -1;
             }
 
             cell.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
@@ -4560,6 +4563,8 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
         }
 
+        addChatExtraButtons(chatId, a, menuPopupLayout);
+
         menuPopupLayout.setupRadialSelectors(Theme.getColor(Theme.key_dialogButtonSelector));
 
         menuPopupWindow = new ActionBarPopupWindow(menuPopupLayout, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT);
@@ -4594,6 +4599,44 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         menuPopupWindow.showAtLocation(view, Gravity.LEFT | Gravity.TOP, x, y);
         menuPopupWindow.dimBehind();
 
+    }
+
+    private int addChatExtraButtons(long chatId, int a, ActionBarPopupWindow.ActionBarPopupWindowLayout menuPopupLayout) {
+        ArrayList<ChatExtraButtonsHelper.ChatExtraButtonInfo> buttonInfos = ChatExtraButtonsHelper.getInstance().getChatExtraButtons(chatId);
+        if (buttonInfos == null) {
+            return a;
+        }
+        for (ChatExtraButtonsHelper.ChatExtraButtonInfo info : buttonInfos) {
+            ActionBarMenuSubItem cell = new ActionBarMenuSubItem(getContext(), false, true);
+
+            switch (info.type) {
+                case ChatExtraButtonsHelper.CHAT_BUTTON_TYPE_LINK:
+                    cell.setTextAndIcon(
+                            info.name.isEmpty() ? LocaleController.getString("OpenUrlTitle", R.string.OpenUrlTitle) : info.name,
+                            R.drawable.msg_openin
+                    );
+                    break;
+                case ChatExtraButtonsHelper.CHAT_BUTTON_TYPE_SEARCH:
+                    cell.setTextAndIcon(
+                            info.name.isEmpty() ? LocaleController.getString("Search", R.string.Search) : info.name,
+                            R.drawable.msg_search
+                    );
+                    break;
+            }
+
+            cell.setOnClickListener(v -> {
+                if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
+                    menuPopupWindow.dismiss();
+                }
+                if (parentActivity != null) {
+                    Browser.openUrl(parentActivity, Uri.parse(info.url), true, true);
+                }
+            });
+
+            cell.setMinimumWidth(AndroidUtilities.dp(196));
+            menuPopupLayout.addView(cell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT, 0, 48 * a++, 0, 0));
+        }
+        return a;
     }
 
     private ActionBarMenuSubItem actionScheduleButton;

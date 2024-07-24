@@ -185,7 +185,7 @@ public class CloudSettingsHelper {
 
     private void syncToCloud(Utilities.Callback2<Boolean, String> callback) {
         try {
-            String setting = NekoSettingsActivity.backupSettingsJson();
+            String setting = NekoSettingsActivity.backupSettingsJson(0);
             // 分块存储
             int chunkSize = 4000;  // 每个分块的最大长度
             int numChunks = (int) Math.ceil((double) setting.length() / chunkSize);  // 计算总分块数

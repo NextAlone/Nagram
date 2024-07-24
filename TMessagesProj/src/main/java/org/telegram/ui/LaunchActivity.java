@@ -230,6 +230,7 @@ import kotlin.Unit;
 import kotlin.text.StringsKt;
 import tw.nekomimi.nekogram.InternalUpdater;
 import tw.nekomimi.nekogram.helpers.SettingsHelper;
+import tw.nekomimi.nekogram.helpers.remote.ChatExtraButtonsHelper;
 import tw.nekomimi.nekogram.helpers.remote.EmojiHelper;
 import tw.nekomimi.nekogram.helpers.remote.PagePreviewRulesHelper;
 import tw.nekomimi.nekogram.helpers.remote.PeerColorHelper;
@@ -1077,6 +1078,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         WallpaperHelper.getInstance().checkWallPaper();
         PeerColorHelper.getInstance().checkPeerColor();
         PagePreviewRulesHelper.getInstance().checkPagePreviewRules();
+        ChatExtraButtonsHelper.getInstance().checkChatExtraButtons();
         BackupAgent.requestBackup(this);
 
         RestrictedLanguagesSelectActivity.checkRestrictedLanguages(false);
