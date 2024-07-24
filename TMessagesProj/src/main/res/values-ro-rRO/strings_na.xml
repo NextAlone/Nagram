@@ -158,4 +158,5 @@
     <string name="ShowTimeHint">Apasă pe timpul mesajului pentru a afișa detaliile</string>
     <string name="SearchHashtagDefaultPageChannel">Pagina de căutare implicită a Hashtag-ului pentru Canal</string>
     <string name="SearchHashtagDefaultPageChat">Pagina Implicită Căutare Hashtag Conversație</string>
+    <string name="OpenUrlOutBotWebViewRegex">Url regex pentru a sări din webview bot</string>
 </resources>

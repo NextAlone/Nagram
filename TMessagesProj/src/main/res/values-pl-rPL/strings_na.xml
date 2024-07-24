@@ -158,4 +158,5 @@
     <string name="ShowTimeHint">Kliknij czas wiadomości aby wyświetlić szczegóły</string>
     <string name="SearchHashtagDefaultPageChannel">Kliknięcie kanału Hashtag domyślna strona wyszukiwania</string>
     <string name="SearchHashtagDefaultPageChat">Domyślna strona wyszukiwania Hashtag</string>
+    <string name="OpenUrlOutBotWebViewRegex">Adres URL regex do wyskakania z widoku bota</string>
 </resources>

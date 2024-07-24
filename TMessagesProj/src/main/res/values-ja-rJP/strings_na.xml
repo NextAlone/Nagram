@@ -158,4 +158,5 @@
     <string name="ShowTimeHint">詳細を表示するメッセージ時間をクリックしてください</string>
     <string name="SearchHashtagDefaultPageChannel">Channel Click Hashtag Default Search Page</string>
     <string name="SearchHashtagDefaultPageChat">チャットクリック ハッシュタグ デフォルト検索ページ</string>
+    <string name="OpenUrlOutBotWebViewRegex">ボットのWebビューから飛び出すURL正規表現</string>
 </resources>

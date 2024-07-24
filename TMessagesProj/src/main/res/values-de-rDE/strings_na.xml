@@ -158,4 +158,5 @@
     <string name="ShowTimeHint">Nachrichtenzeit anklicken, um Details anzuzeigen</string>
     <string name="SearchHashtagDefaultPageChannel">Kanal Klick auf Hashtag Standard-Suchseite</string>
     <string name="SearchHashtagDefaultPageChat">Chat Klick auf Hashtag Standard-Suchseite</string>
+    <string name="OpenUrlOutBotWebViewRegex">Url regex um aus dem Bot Webview zu springen</string>
 </resources>

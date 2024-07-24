@@ -158,4 +158,5 @@
     <string name="ShowTimeHint">Натисніть час повідомлення для відображення подробиць</string>
     <string name="SearchHashtagDefaultPageChannel">Знайти сторінку пошуку по каналу натисніть хештеґ за замовчуванням</string>
     <string name="SearchHashtagDefaultPageChat">Знайти сторінку пошуку при чаті натисніть хештеґ за замовчуванням</string>
+    <string name="OpenUrlOutBotWebViewRegex">Перестрибнути з веб-перегляду ботів</string>
 </resources>

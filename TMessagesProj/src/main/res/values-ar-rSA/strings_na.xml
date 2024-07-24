@@ -158,4 +158,5 @@
     <string name="ShowTimeHint">انقر فوق وقت الرسالة لعرض التفاصيل</string>
     <string name="SearchHashtagDefaultPageChannel">قناة النقر فوق هاشتاج صفحة البحث الافتراضية</string>
     <string name="SearchHashtagDefaultPageChat">صفحة البحث الافتراضية للدردشة بنقرة هاشتاج</string>
+    <string name="OpenUrlOutBotWebViewRegex">url regex للقفز من مشاهدة الويب البوت</string>
 </resources>

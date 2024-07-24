@@ -158,4 +158,5 @@
     <string name="ShowTimeHint">Cliquez sur l\'heure du message pour afficher les détails</string>
     <string name="SearchHashtagDefaultPageChannel">Page de recherche par défaut du canal cliqué sur Hashtag</string>
     <string name="SearchHashtagDefaultPageChat">Page de recherche par défaut pour les clics de chat</string>
+    <string name="OpenUrlOutBotWebViewRegex">Url regex pour sortir du site web du bot</string>
 </resources>

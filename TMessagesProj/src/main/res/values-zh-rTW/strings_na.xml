@@ -158,4 +158,5 @@
     <string name="ShowTimeHint">點擊消息時間顯示詳細信息</string>
     <string name="SearchHashtagDefaultPageChannel">Channel Click Hashtag Default Search Page</string>
     <string name="SearchHashtagDefaultPageChat">Chat Click Hashtag Default Search Page</string>
+    <string name="OpenUrlOutBotWebViewRegex">Url regex to jump out of bot webview</string>
 </resources>

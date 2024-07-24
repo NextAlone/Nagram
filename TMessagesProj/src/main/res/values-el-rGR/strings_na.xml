@@ -158,4 +158,5 @@
     <string name="ShowTimeHint">Κάντε κλικ στο μήνυμα για να εμφανίσετε λεπτομέρειες</string>
     <string name="SearchHashtagDefaultPageChannel">Κανάλι Κάντε Κλικ Hashtag Προεπιλεγμένη Σελίδα Αναζήτησης</string>
     <string name="SearchHashtagDefaultPageChat">Chat Click Hashtag Προεπιλεγμένη Σελίδα Αναζήτησης</string>
+    <string name="OpenUrlOutBotWebViewRegex">Url regex για να πηδήξει έξω από bot προβολή webview</string>
 </resources>

@@ -158,4 +158,5 @@
     <string name="ShowTimeHint">Klikk meldings-tid for å vise detaljer</string>
     <string name="SearchHashtagDefaultPageChannel">Kanal klikk Hashtag standard søkeside</string>
     <string name="SearchHashtagDefaultPageChat">Chat Klikk Hashtag som standard søkeside</string>
+    <string name="OpenUrlOutBotWebViewRegex">Url regex til å hoppe ut av bot webview</string>
 </resources>

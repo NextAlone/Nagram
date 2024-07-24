@@ -158,4 +158,5 @@
     <string name="ShowTimeHint">Valitse viestin aika näyttääksesi tiedot</string>
     <string name="SearchHashtagDefaultPageChannel">Kanavan Napsauta Hashtag Oletus Hakusivu</string>
     <string name="SearchHashtagDefaultPageChat">Chatti Klikkaa Hashtag Oletus Hakusivu</string>
+    <string name="OpenUrlOutBotWebViewRegex">Url regex hypätä ulos bottinäytöstä</string>
 </resources>

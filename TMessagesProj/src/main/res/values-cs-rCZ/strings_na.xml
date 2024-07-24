@@ -158,4 +158,5 @@
     <string name="ShowTimeHint">Pro zobrazení podrobností klikněte na čas zprávy</string>
     <string name="SearchHashtagDefaultPageChannel">Výchozí vyhledávací stránka Hashtag kliknutím na kanál</string>
     <string name="SearchHashtagDefaultPageChat">Výchozí stránka hledání kliknutím na hashtag</string>
+    <string name="OpenUrlOutBotWebViewRegex">Url regex pro skok z webového zobrazení bota</string>
 </resources>
