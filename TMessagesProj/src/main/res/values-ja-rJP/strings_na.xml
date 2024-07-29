@@ -2,7 +2,7 @@
 <resources>
     <string name="N_Config">N-構成</string>
     <string name="ForceCopy">強制コピー</string>
-    <string name="InvertReply">Invert</string>
+    <string name="InvertReply">反転</string>
     <string name="Great">素晴らしい</string>
     <string name="Poor">悪い</string>
     <string name="CombineMessage">メッセージを結合</string>
@@ -12,7 +12,7 @@
     <string name="CombineMessageDisabled">メッセージの結合は無効です</string>
     <string name="TextUndoRedo">元に戻す/やり直す</string>
     <string name="TextUndo">元に戻す</string>
-    <string name="TextRedo">Redo</string>
+    <string name="TextRedo">やり直す</string>
     <string name="NoiseSuppressAndVoiceEnhance">ノイズ抑制と音声強化</string>
     <string name="RepeatAsCopy">コピーとして繰り返す</string>
     <string name="DoubleTapAction">ダブルタップアクション</string>
@@ -35,7 +35,7 @@
     <string name="ShowPremiumStickersAnimation">プレミアムステッカーアニメーションを表示</string>
     <string name="ShowPremiumStarInChat">プレミアムスターをチャットで表示</string>
     <string name="ShowPremiumAvatarAnimation">プレミアムアバターのアニメーションを表示</string>
-    <string name="AlwaysSaveChatOffset">AlwaysSaveChatOffset</string>
+    <string name="AlwaysSaveChatOffset">常に保存のチャットオフセット</string>
     <string name="AutoReplaceRepeat">コピーとして繰り返しを自動置換する</string>
     <string name="AppIconGoogle">Google</string>
     <string name="AppIconColorful">カラフルな</string>
@@ -48,7 +48,7 @@
     <string name="AutoInsertGIFCaption">GIF 送信前にキャプションを自動的に挿入する</string>
     <string name="DefaultMonoLanguage">カスタムデフォルトのコード言語</string>
     <string name="DisableGlobalSearch">グローバル検索を無効にする</string>
-    <string name="InputMessageId">Input Message Id</string>
+    <string name="InputMessageId">メッセージIDを入力</string>
     <string name="ToTheMessage">メッセージへ</string>
     <string name="HideOriginAfterTranslation">翻訳後に原点を隠す</string>
     <string name="ZalgoFilter">\"Zalgo\" シンボルをフィルター</string>
@@ -156,7 +156,7 @@
     You can also use plain text, but don\'t forget to escape brackets.</string>
     <string name="RegexFiltersAddError">正規表現の構文エラー</string>
     <string name="ShowTimeHint">詳細を表示するメッセージ時間をクリックしてください</string>
-    <string name="SearchHashtagDefaultPageChannel">Channel Click Hashtag Default Search Page</string>
+    <string name="SearchHashtagDefaultPageChannel">チャンネルをタップでハッシュタグのデフォルト検索ページ</string>
     <string name="SearchHashtagDefaultPageChat">チャットクリック ハッシュタグ デフォルト検索ページ</string>
     <string name="OpenUrlOutBotWebViewRegex">ボットのWebビューから飛び出すURL正規表現</string>
 </resources>
