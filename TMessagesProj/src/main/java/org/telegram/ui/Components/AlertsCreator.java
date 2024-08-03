@@ -4837,20 +4837,20 @@ public class AlertsCreator {
             return;
         }
 
-        BottomBuilder builder = new BottomBuilder(context);
-        builder.getBuilder().setDimBehind(hideDim == null);
-        builder.getBuilder().setOnPreDismissListener(di -> {
+        BottomSheet.Builder builder = new BottomSheet.Builder(context, true, resourcesProvider);
+        builder.setDimBehind(hideDim == null);
+        builder.setOnPreDismissListener(di -> {
             if (hideDim != null) {
                 hideDim.run();
             }
         });
-        builder.addTitle(LocaleController.getString("ReportChat", R.string.ReportChat), true);
-        String[] items;
+        builder.setTitle(LocaleController.getString("ReportChat", R.string.ReportChat), true);
+        CharSequence[] items;
         int[] icons;
         int[] types;
         if (messageId != 0) {
 
-            items = new String[]{
+            items = new CharSequence[]{
                     LocaleController.getString("ReportChatSpam", R.string.ReportChatSpam),
                     LocaleController.getString("ReportChatViolence", R.string.ReportChatViolence),
                     LocaleController.getString("ReportChatChild", R.string.ReportChatChild),
@@ -4878,7 +4878,7 @@ public class AlertsCreator {
                     REPORT_TYPE_OTHER
             };
         } else {
-            items = new String[]{
+            items = new CharSequence[]{
                     LocaleController.getString("ReportChatSpam", R.string.ReportChatSpam),
                     LocaleController.getString("ReportChatFakeAccount", R.string.ReportChatFakeAccount),
                     LocaleController.getString("ReportChatViolence", R.string.ReportChatViolence),
@@ -4909,11 +4909,11 @@ public class AlertsCreator {
                     REPORT_TYPE_OTHER
             };
         }
-        builder.addItems(items, null, (i, text, cell) -> {
+        builder.setItems(items, icons, (dialogInterface, i) -> {
             int type = types[i];
             if (messageId == 0 && (type == REPORT_TYPE_SPAM || type == REPORT_TYPE_VIOLENCE || type == REPORT_TYPE_CHILD_ABUSE || type == REPORT_TYPE_PORNOGRAPHY || type == REPORT_TYPE_ILLEGAL_DRUGS || type == REPORT_TYPE_PERSONAL_DETAILS) && parentFragment instanceof ChatActivity) {
                 ((ChatActivity) parentFragment).openReportChat(type);
-                return Unit.INSTANCE;
+                return;
             } else if (messageId == 0 && (type == REPORT_TYPE_OTHER || type == REPORT_TYPE_FAKE_ACCOUNT) || messageId != 0 && type == REPORT_TYPE_OTHER) {
                 if (parentFragment instanceof ChatActivity) {
                     AndroidUtilities.requestAdjustNothing(parentFragment.getParentActivity(), parentFragment.getClassGuid());
@@ -4951,7 +4951,7 @@ public class AlertsCreator {
                         }
                     }
                 });
-                return Unit.INSTANCE;
+                return;
             }
             TLObject req;
             TLRPC.InputPeer peer = MessagesController.getInstance(UserConfig.selectedAccount).getInputPeer(dialog_id);
@@ -5016,7 +5016,9 @@ public class AlertsCreator {
                 }
                 req = request;
             }
-            ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, (response, error) -> AlertUtil.showToast(error));
+            ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(req, (response, error) -> {
+
+            });
             if (parentFragment instanceof ChatActivity) {
                 UndoView undoView = ((ChatActivity) parentFragment).getUndoView();
                 if (undoView != null) {
@@ -5024,11 +5026,7 @@ public class AlertsCreator {
                 }
             } else {
                 BulletinFactory.of(parentFragment).createReportSent(resourcesProvider).show();
-
-                return Unit.INSTANCE;
             }
-
-            return Unit.INSTANCE;
         });
         BottomSheet sheet = builder.create();
         parentFragment.showDialog(sheet);
