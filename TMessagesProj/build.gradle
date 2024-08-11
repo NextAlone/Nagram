@@ -15,7 +15,7 @@ repositories {
 }
 
 def verName = "10.14.5"
-def verCode = 1187
+def verCode = 1188
 
 
 def officialVer = "10.14.5"
