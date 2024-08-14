@@ -19,6 +19,7 @@ import com.google.gson.annotations.Expose;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.TranscribeButton;
 
@@ -112,7 +113,7 @@ public class AyuFilter {
     }
 
     private static CharSequence getMessageCaption(MessageObject messageObject, MessageObject.GroupedMessages group) {
-        String restrictionReason = MessagesController.getRestrictionReason(messageObject.messageOwner.restriction_reason);
+        String restrictionReason = MessagesController.getInstance(UserConfig.selectedAccount).getRestrictionReason(messageObject.messageOwner.restriction_reason);
         if (!TextUtils.isEmpty(restrictionReason)) {
             return restrictionReason;
         }
@@ -140,7 +141,7 @@ public class AyuFilter {
 
     private static CharSequence getMessageContent(MessageObject messageObject) {
         SpannableStringBuilder str = new SpannableStringBuilder();
-        String restrictionReason = MessagesController.getRestrictionReason(messageObject.messageOwner.restriction_reason);
+        String restrictionReason = MessagesController.getInstance(UserConfig.selectedAccount).getRestrictionReason(messageObject.messageOwner.restriction_reason);
         if (!TextUtils.isEmpty(restrictionReason)) {
             str.append(restrictionReason);
         } else if (messageObject.caption != null) {

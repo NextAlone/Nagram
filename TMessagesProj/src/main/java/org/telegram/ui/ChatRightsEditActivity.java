@@ -575,6 +575,9 @@ public class ChatRightsEditActivity extends BaseFragment {
                 return;
             }
             if (position == sendMediaRow) {
+                if (view instanceof TextCheckCell2 && !((TextCheckCell2) view).isEnabled()) {
+                    return;
+                }
                 sendMediaExpanded = !sendMediaExpanded;
                 updateRows(false);
                 if (sendMediaExpanded) {
@@ -584,6 +587,9 @@ public class ChatRightsEditActivity extends BaseFragment {
                 }
                 return;
             } else if (position == channelMessagesRow) {
+                if (view instanceof TextCheckCell2 && !((TextCheckCell2) view).isEnabled()) {
+                    return;
+                }
                 channelMessagesExpanded = !channelMessagesExpanded;
                 updateRows(false);
                 listViewAdapter.notifyItemChanged(channelMessagesRow);
@@ -594,6 +600,9 @@ public class ChatRightsEditActivity extends BaseFragment {
                 }
                 return;
             } else if (position == channelStoriesRow) {
+                if (view instanceof TextCheckCell2 && !((TextCheckCell2) view).isEnabled()) {
+                    return;
+                }
                 channelStoriesExpanded = !channelStoriesExpanded;
                 updateRows(false);
                 listViewAdapter.notifyItemChanged(channelStoriesRow);

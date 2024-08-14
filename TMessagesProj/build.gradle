@@ -14,12 +14,12 @@ repositories {
     }
 }
 
-def verName = "10.14.5"
-def verCode = 1188
+def verName = "11.0.0"
+def verCode = 1190
 
 
-def officialVer = "10.14.5"
-def officialCode = 4945
+def officialVer = "11.0.0"
+def officialCode = 5143
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
@@ -292,7 +292,6 @@ dependencies {
     implementation "com.jakewharton:process-phoenix:2.1.2"
     implementation 'com.google.guava:guava:31.1-android'
 
-    implementation 'com.airbnb.android:lottie:6.4.0'
     implementation 'com.google.android.play:integrity:1.3.0'
 
     implementation 'com.google.android.gms:play-services-mlkit-subject-segmentation:16.0.0-beta1'
@@ -314,7 +313,7 @@ dependencies {
     implementation "com.google.firebase:firebase-crashlytics:$crashlyticsVersion"
 //    implementation "com.google.android.play:core:$playCoreVersion"
 
-    implementation 'com.android.billingclient:billing:5.1.0'
+    implementation 'com.android.billingclient:billing:6.0.1'
 
     testImplementation "junit:junit:4.13.2"
     testImplementation "androidx.test:core:1.5.0"

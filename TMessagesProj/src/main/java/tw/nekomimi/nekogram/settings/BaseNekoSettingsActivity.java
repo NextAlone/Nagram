@@ -373,7 +373,7 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
                     view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
                     break;
                 case TYPE_CREATION:
-                    CreationTextCell creationTextCell = new CreationTextCell(mContext, resourcesProvider);
+                    CreationTextCell creationTextCell = new CreationTextCell(mContext, 70, resourcesProvider);
                     creationTextCell.startPadding = 61;
                     view = creationTextCell;
                     view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));

@@ -287,7 +287,7 @@ public class SimpleTextView extends View implements Drawable.Callback {
         return size;
     }
 
-    public Paint getPaint() {
+    public TextPaint getPaint() {
         return textPaint;
     }
 

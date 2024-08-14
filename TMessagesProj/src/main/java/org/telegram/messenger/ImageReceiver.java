@@ -2669,8 +2669,8 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     public void setEmojiPaused(boolean paused) {
         if (emojiPaused == paused) return;
         emojiPaused = paused;
-        RLottieDrawable rLottieDrawable = getLottieAnimation();
         allowStartLottieAnimation = !paused;
+        RLottieDrawable rLottieDrawable = getLottieAnimation();
         if (rLottieDrawable != null) {
             if (paused) {
                 rLottieDrawable.stop();
