@@ -98,6 +98,8 @@ public class ItemOptions {
     private int foregroundIndex;
     private ActionBarPopupWindow.ActionBarPopupWindowLayout lastLayout;
 
+    public ActionBarMenuSubItem subItem;
+
     public boolean swipeback;
 
     private ItemOptions(BaseFragment fragment, View scrimView, boolean swipeback) {
@@ -229,7 +231,7 @@ public class ItemOptions {
             return this;
         }
 
-        ActionBarMenuSubItem subItem = new ActionBarMenuSubItem(context, false, false, resourcesProvider);
+        subItem = new ActionBarMenuSubItem(context, false, false, resourcesProvider);
         subItem.setPadding(dp(18), 0, dp(18), 0);
         if (iconResId != 0 || iconDrawable != null) {
             subItem.setTextAndIcon(text, iconResId, iconDrawable);

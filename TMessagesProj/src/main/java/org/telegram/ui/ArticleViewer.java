@@ -373,14 +373,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     private boolean drawBlockSelection;
     private LinkPath urlPath = new LinkPath();
 
-    private static final int search_item = 1;
-    private static final int trans_item = 2;
-    private static final int share_item = 3;
-    private static final int open_item = 4;
-    private static final int settings_item = 5;
-
-    public ActionBarMenuSubItem transMenu;
-
     private int anchorsOffsetMeasuredWidth;
 
     TextSelectionHelper.ArticleTextSelectionHelper textSelectionHelper;
@@ -4490,6 +4482,16 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     pages[0].getWebView().reload();
                 }
             }
+
+            if (id == WebActionBar.trans_item) {
+                if (!pages[0].adapter.trans) {
+                    updateTranslateButton(true);
+                    ArticleTransKt.doTransLATE(this);
+                } else {
+                    updateTranslateButton(false);
+                    updatePaintSize();
+                }
+            }
         });
 
         actionBar.forwardButton.setOnClickListener(v -> {
@@ -4749,6 +4751,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         } catch (Exception e) {
             FileLog.e(e);
         }*/
+    }
+
+    public void updateTranslateButton(Boolean trans) {
+        if (actionBar == null || pages.length < 1) {
+            return;
+        }
+        actionBar.trans = trans;
+        pages[0].adapter.trans = trans;
     }
 
     private void updateSearchButtons() {
@@ -6882,7 +6892,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         private void cleanup() {
             trans = false;
-            transMenu.setTextAndIcon(LocaleController.getString("Translate", R.string.Translate), R.drawable.ic_translate);
+            if (actionBar != null) {
+                actionBar.trans = false;
+            }
             currentPage = null;
             blocks.clear();
             photoBlocks.clear();
