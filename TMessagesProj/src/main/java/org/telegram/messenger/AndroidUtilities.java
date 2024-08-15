@@ -4385,6 +4385,22 @@ public class AndroidUtilities {
             }
             dismissRunnable.run();
         });
+
+        pickerBottomLayout.middleButtonTextView.setText(LocaleController.getString("Save", R.string.Save).toUpperCase());
+        pickerBottomLayout.middleButton.setVisibility(View.VISIBLE);
+        pickerBottomLayout.middleButton.setOnClickListener((it) -> {
+            int p = Utilities.parseInt(port);
+            SharedConfig.ProxyInfo info;
+            if (TextUtils.isEmpty(secret)) {
+                info = new SharedConfig.ProxyInfo(address, p, user, password, "");
+            } else {
+                info = new SharedConfig.ProxyInfo(address, p, "", "", secret);
+            }
+            SharedConfig.addProxy(info);
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
+            dismissRunnable.run();
+        });
+
         builder.show();
     }
 

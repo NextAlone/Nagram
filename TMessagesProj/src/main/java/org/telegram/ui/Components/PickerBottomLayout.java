@@ -63,14 +63,14 @@ public class PickerBottomLayout extends FrameLayout {
 
         middleButton = new LinearLayout(context);
         middleButton.setOrientation(LinearLayout.HORIZONTAL);
-        middleButton.setBackgroundDrawable(Theme.createSelectorDrawable(0x0f000000, 0));
+        middleButton.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_picker_enabledButton, resourcesProvider) & 0x0fffffff, 0));
         middleButton.setPadding(AndroidUtilities.dp(33), 0, AndroidUtilities.dp(33), 0);
         middleButton.setVisibility(GONE);
         rightLayout.addView(middleButton);
 
         middleButtonTextView = new TextView(context);
         middleButtonTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        middleButtonTextView.setTextColor(Theme.getColor(Theme.key_picker_enabledButton));
+        middleButtonTextView.setTextColor(Theme.getColor(Theme.key_picker_enabledButton, resourcesProvider));
         middleButtonTextView.setGravity(Gravity.CENTER);
         middleButtonTextView.setCompoundDrawablePadding(AndroidUtilities.dp(8));
         middleButtonTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
