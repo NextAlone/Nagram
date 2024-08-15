@@ -4243,9 +4243,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             } else if (position == businessRow) {
                 presentFragment(new PremiumPreviewFragment(PremiumPreviewFragment.FEATURES_BUSINESS, "settings"));
             } else if (position == premiumGiftingRow) {
-//                UserSelectorBottomSheet.open(0, BirthdayController.getInstance(currentAccount).getState());
-                showDialog(new PremiumNotAvailableBottomSheet(this));
-                // NekoX: remove Google billing
+                UserSelectorBottomSheet.open(0, BirthdayController.getInstance(currentAccount).getState());
             } else if (position == bizHoursRow) {
                 hoursExpanded = !hoursExpanded;
                 saveScrollPosition();

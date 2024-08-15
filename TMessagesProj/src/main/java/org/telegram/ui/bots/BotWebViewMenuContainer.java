@@ -66,6 +66,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SimpleFloatPropertyCompat;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.LaunchActivity;
+import org.telegram.ui.PaymentFormActivity;
 import org.telegram.ui.Stars.StarsController;
 import org.telegram.ui.web.BotWebViewContainer;
 
@@ -393,8 +394,29 @@ public class BotWebViewMenuContainer extends FrameLayout implements Notification
 
             @Override
             public void onWebAppOpenInvoice(TLRPC.InputInvoice inputInvoice, String slug, TLObject response) {
-                Toast.makeText(getContext(), LocaleController.getString("nekoXPaymentRemovedToast", R.string.nekoXPaymentRemovedToast), Toast.LENGTH_LONG).show();
-                // NekoX: The payment function has been removed.
+                ChatActivity parentFragment = parentEnterView.getParentFragment();
+                PaymentFormActivity paymentFormActivity = null;
+                if (response instanceof TLRPC.TL_payments_paymentFormStars) {
+                    final AlertDialog progressDialog = new AlertDialog(getContext(), AlertDialog.ALERT_TYPE_SPINNER);
+                    progressDialog.showDelayed(150);
+                    StarsController.getInstance(currentAccount).openPaymentForm(null, inputInvoice, (TLRPC.TL_payments_paymentFormStars) response, () -> {
+                        progressDialog.dismiss();
+                    }, status -> {
+                        webViewContainer.onInvoiceStatusUpdate(slug, status);
+                    });
+                    return;
+                } else if (response instanceof TLRPC.PaymentForm) {
+                    TLRPC.PaymentForm form = (TLRPC.PaymentForm) response;
+                    MessagesController.getInstance(currentAccount).putUsers(form.users, false);
+                    paymentFormActivity = new PaymentFormActivity(form, slug, parentFragment);
+                } else if (response instanceof TLRPC.PaymentReceipt) {
+                    paymentFormActivity = new PaymentFormActivity((TLRPC.PaymentReceipt) response);
+                }
+
+                if (paymentFormActivity != null) {
+                    paymentFormActivity.setPaymentFormCallback(status -> webViewContainer.onInvoiceStatusUpdate(slug, status.name().toLowerCase(Locale.ROOT)));
+                    parentFragment.presentFragment(paymentFormActivity);
+                }
             }
 
             @Override

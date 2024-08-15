@@ -4170,8 +4170,42 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 if (error != null) {
                     BulletinFactory.of(mainFragmentsStack.get(mainFragmentsStack.size() - 1)).createErrorBulletin(LocaleController.getString(R.string.PaymentInvoiceLinkInvalid)).show();
                 } else if (!LaunchActivity.this.isFinishing()) {
-                    Toast.makeText(LaunchActivity.this, LocaleController.getString("nekoXPaymentRemovedToast", R.string.nekoXPaymentRemovedToast), Toast.LENGTH_LONG).show();
-                    // NekoX: The payment function has been removed.
+                    PaymentFormActivity paymentFormActivity = null;
+                    if (response instanceof TLRPC.TL_payments_paymentFormStars) {
+                        Runnable callback = navigateToPremiumGiftCallback;
+                        navigateToPremiumGiftCallback = null;
+                        StarsController.getInstance(currentAccount).openPaymentForm(null, invoiceSlug, (TLRPC.TL_payments_paymentFormStars) response, () -> {
+                            try {
+                                dismissLoading.run();
+                            } catch (Exception e) {
+                                FileLog.e(e);
+                            }
+                        }, status -> {
+                            if (callback != null && "paid".equals(status)) {
+                                callback.run();
+                            }
+                        });
+                        return;
+                    } else if (response instanceof TLRPC.PaymentForm) {
+                        TLRPC.PaymentForm form = (TLRPC.PaymentForm) response;
+                        MessagesController.getInstance(intentAccount).putUsers(form.users, false);
+                        paymentFormActivity = new PaymentFormActivity(form, inputInvoiceSlug, getActionBarLayout().getLastFragment());
+                    } else if (response instanceof TLRPC.PaymentReceipt) {
+                        paymentFormActivity = new PaymentFormActivity((TLRPC.PaymentReceipt) response);
+                    }
+
+                    if (paymentFormActivity != null) {
+                        if (navigateToPremiumGiftCallback != null) {
+                            Runnable callback = navigateToPremiumGiftCallback;
+                            navigateToPremiumGiftCallback = null;
+                            paymentFormActivity.setPaymentFormCallback(status -> {
+                                if (status == PaymentFormActivity.InvoiceStatus.PAID) {
+                                    callback.run();
+                                }
+                            });
+                        }
+                        presentFragment(paymentFormActivity);
+                    }
                 }
 
                 try {

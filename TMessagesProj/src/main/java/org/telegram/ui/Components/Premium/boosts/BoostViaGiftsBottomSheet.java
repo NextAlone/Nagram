@@ -250,15 +250,13 @@ public class BoostViaGiftsBottomSheet extends BottomSheetWithRecyclerListView im
                             boolean onlyNewSubscribers = selectedParticipantsType == ParticipantsTypeCell.TYPE_NEW;
                             int dateInt = BoostRepository.prepareServerDate(selectedEndDate);
                             actionBtn.updateLoading(true);
-//                            BoostRepository.payGiveAway(selectedChats, selectedCountries, option, currentChat, dateInt, onlyNewSubscribers, fragment, isShowWinnersSelected, isAdditionalPrizeSelected, additionalPrize, result -> {
-//                                dismiss();
-//                                AndroidUtilities.runOnUIThread(() -> NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.boostByChannelCreated, currentChat, true), 220);
-//                            }, error -> {
-//                                actionBtn.updateLoading(false);
-//                                BoostDialogs.showToastError(getContext(), error);
-//                            });
-                            Toast.makeText(ApplicationLoader.applicationContext, R.string.nekoXPaymentRemovedToast, Toast.LENGTH_SHORT).show();
-                            // NekoX: The payment function has been removed.
+                            BoostRepository.payGiveAway(selectedChats, selectedCountries, option, currentChat, dateInt, onlyNewSubscribers, fragment, isShowWinnersSelected, isAdditionalPrizeSelected, additionalPrize, result -> {
+                                dismiss();
+                                AndroidUtilities.runOnUIThread(() -> NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.boostByChannelCreated, currentChat, true), 220);
+                            }, error -> {
+                                actionBtn.updateLoading(false);
+                                BoostDialogs.showToastError(getContext(), error);
+                            });
                             break;
                         }
                     }

@@ -45,7 +45,7 @@ import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.LaunchActivity;
-//import org.telegram.ui.PaymentFormActivity;
+import org.telegram.ui.PaymentFormActivity;
 import org.telegram.ui.bots.BotWebViewSheet;
 
 import java.util.ArrayList;
@@ -595,47 +595,42 @@ public class StarsController {
                     }
                     return;
                 }
-                // nekox: remove payment form
-                if (whenDone != null) {
-                    whenDone.run(false, "The payment function has been removed.");
+                PaymentFormActivity paymentFormActivity = null;
+                if (response instanceof TLRPC.PaymentForm) {
+                    TLRPC.PaymentForm form = (TLRPC.PaymentForm) response;
+                    form.invoice.recurring = true;
+                    MessagesController.getInstance(currentAccount).putUsers(form.users, false);
+                    paymentFormActivity = new PaymentFormActivity(form, invoice, null);
+                } else if (response instanceof TLRPC.PaymentReceipt) {
+                    paymentFormActivity = new PaymentFormActivity((TLRPC.PaymentReceipt) response);
                 }
-                return;
-//                PaymentFormActivity paymentFormActivity = null;
-//                if (response instanceof TLRPC.PaymentForm) {
-//                    TLRPC.PaymentForm form = (TLRPC.PaymentForm) response;
-//                    form.invoice.recurring = true;
-//                    MessagesController.getInstance(currentAccount).putUsers(form.users, false);
-//                    paymentFormActivity = new PaymentFormActivity(form, invoice, null);
-//                } else if (response instanceof TLRPC.PaymentReceipt) {
-//                    paymentFormActivity = new PaymentFormActivity((TLRPC.PaymentReceipt) response);
-//                }
-//                if (paymentFormActivity != null) {
-//                    paymentFormActivity.setPaymentFormCallback(status -> {
-//                        if (status == PaymentFormActivity.InvoiceStatus.PAID) {
-//                            if (whenDone != null) {
-//                                whenDone.run(true, null);
-//                            }
-//                        } else if (status != PaymentFormActivity.InvoiceStatus.PENDING) {
-//                            if (whenDone != null) {
-//                                whenDone.run(false, null);
-//                            }
-//                        }
-//                    });
-//                    BaseFragment lastFragment = LaunchActivity.getLastFragment();
-//                    if (lastFragment == null) return;
-//                    if (AndroidUtilities.hasDialogOnTop(lastFragment)) {
-//                        BaseFragment.BottomSheetParams bottomSheetParams = new BaseFragment.BottomSheetParams();
-//                        bottomSheetParams.transitionFromLeft = true;
-//                        bottomSheetParams.allowNestedScroll = false;
-//                        lastFragment.showAsSheet(paymentFormActivity, bottomSheetParams);
-//                    } else {
-//                        lastFragment.presentFragment(paymentFormActivity);
-//                    }
-//                } else {
-//                    if (whenDone != null) {
-//                        whenDone.run(false, "UNKNOWN_RESPONSE");
-//                    }
-//                }
+                if (paymentFormActivity != null) {
+                    paymentFormActivity.setPaymentFormCallback(status -> {
+                        if (status == PaymentFormActivity.InvoiceStatus.PAID) {
+                            if (whenDone != null) {
+                                whenDone.run(true, null);
+                            }
+                        } else if (status != PaymentFormActivity.InvoiceStatus.PENDING) {
+                            if (whenDone != null) {
+                                whenDone.run(false, null);
+                            }
+                        }
+                    });
+                    BaseFragment lastFragment = LaunchActivity.getLastFragment();
+                    if (lastFragment == null) return;
+                    if (AndroidUtilities.hasDialogOnTop(lastFragment)) {
+                        BaseFragment.BottomSheetParams bottomSheetParams = new BaseFragment.BottomSheetParams();
+                        bottomSheetParams.transitionFromLeft = true;
+                        bottomSheetParams.allowNestedScroll = false;
+                        lastFragment.showAsSheet(paymentFormActivity, bottomSheetParams);
+                    } else {
+                        lastFragment.presentFragment(paymentFormActivity);
+                    }
+                } else {
+                    if (whenDone != null) {
+                        whenDone.run(false, "UNKNOWN_RESPONSE");
+                    }
+                }
             }));
 
             return;
@@ -723,42 +718,42 @@ public class StarsController {
                     }
                     return;
                 }
-//                PaymentFormActivity paymentFormActivity = null;
-//                if (response instanceof TLRPC.PaymentForm) {
-//                    TLRPC.PaymentForm form = (TLRPC.PaymentForm) response;
-//                    form.invoice.recurring = true;
-//                    MessagesController.getInstance(currentAccount).putUsers(form.users, false);
-//                    paymentFormActivity = new PaymentFormActivity(form, invoice, null);
-//                } else if (response instanceof TLRPC.PaymentReceipt) {
-//                    paymentFormActivity = new PaymentFormActivity((TLRPC.PaymentReceipt) response);
-//                }
-//                if (paymentFormActivity != null) {
-//                    paymentFormActivity.setPaymentFormCallback(status -> {
-//                        if (status == PaymentFormActivity.InvoiceStatus.PAID) {
-//                            if (whenDone != null) {
-//                                whenDone.run(true, null);
-//                            }
-//                        } else if (status != PaymentFormActivity.InvoiceStatus.PENDING) {
-//                            if (whenDone != null) {
-//                                whenDone.run(false, null);
-//                            }
-//                        }
-//                    });
-//                    BaseFragment lastFragment = LaunchActivity.getLastFragment();
-//                    if (lastFragment == null) return;
-//                    if (AndroidUtilities.hasDialogOnTop(lastFragment)) {
-//                        BaseFragment.BottomSheetParams bottomSheetParams = new BaseFragment.BottomSheetParams();
-//                        bottomSheetParams.transitionFromLeft = true;
-//                        bottomSheetParams.allowNestedScroll = false;
-//                        lastFragment.showAsSheet(paymentFormActivity, bottomSheetParams);
-//                    } else {
-//                        lastFragment.presentFragment(paymentFormActivity);
-//                    }
-//                } else {
+                PaymentFormActivity paymentFormActivity = null;
+                if (response instanceof TLRPC.PaymentForm) {
+                    TLRPC.PaymentForm form = (TLRPC.PaymentForm) response;
+                    form.invoice.recurring = true;
+                    MessagesController.getInstance(currentAccount).putUsers(form.users, false);
+                    paymentFormActivity = new PaymentFormActivity(form, invoice, null);
+                } else if (response instanceof TLRPC.PaymentReceipt) {
+                    paymentFormActivity = new PaymentFormActivity((TLRPC.PaymentReceipt) response);
+                }
+                if (paymentFormActivity != null) {
+                    paymentFormActivity.setPaymentFormCallback(status -> {
+                        if (status == PaymentFormActivity.InvoiceStatus.PAID) {
+                            if (whenDone != null) {
+                                whenDone.run(true, null);
+                            }
+                        } else if (status != PaymentFormActivity.InvoiceStatus.PENDING) {
+                            if (whenDone != null) {
+                                whenDone.run(false, null);
+                            }
+                        }
+                    });
+                    BaseFragment lastFragment = LaunchActivity.getLastFragment();
+                    if (lastFragment == null) return;
+                    if (AndroidUtilities.hasDialogOnTop(lastFragment)) {
+                        BaseFragment.BottomSheetParams bottomSheetParams = new BaseFragment.BottomSheetParams();
+                        bottomSheetParams.transitionFromLeft = true;
+                        bottomSheetParams.allowNestedScroll = false;
+                        lastFragment.showAsSheet(paymentFormActivity, bottomSheetParams);
+                    } else {
+                        lastFragment.presentFragment(paymentFormActivity);
+                    }
+                } else {
                     if (whenDone != null) {
                         whenDone.run(false, "UNKNOWN_RESPONSE");
                     }
-//                }
+                }
             }));
 
             return;

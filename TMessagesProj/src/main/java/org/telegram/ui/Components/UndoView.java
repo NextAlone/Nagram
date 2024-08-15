@@ -55,12 +55,14 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.SavedMessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
+import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.Premium.boosts.BoostRepository;
 import org.telegram.ui.LaunchActivity;
+import org.telegram.ui.PaymentFormActivity;
 
 import java.util.ArrayList;
 
@@ -638,8 +640,7 @@ public class UndoView extends FrameLayout {
                 icon = R.raw.voip_invite;
                 timeLeft = 3000;
             } else if (action == ACTION_PAYMENT_SUCCESS) {
-                Toast.makeText(getContext(), LocaleController.getString("nekoXPaymentRemovedToast", R.string.nekoXPaymentRemovedToast), Toast.LENGTH_LONG).show();
-               /* infoText = (CharSequence) infoObject;
+                infoText = (CharSequence) infoObject;
                 subInfoText = null;
                 icon = R.raw.payment_success;
                 timeLeft = 5000;
@@ -658,7 +659,7 @@ public class UndoView extends FrameLayout {
                             }
                         }), ConnectionsManager.RequestFlagFailOnServerErrors);
                     });
-                }*/
+                }
             } else if (action == ACTION_VOIP_MUTED) {
                 String name;
                 if (infoObject instanceof TLRPC.User) {
