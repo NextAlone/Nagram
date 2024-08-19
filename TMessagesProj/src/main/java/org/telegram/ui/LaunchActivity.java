@@ -592,19 +592,27 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 drawerLayoutContainer.closeDrawer(false);
             } else if (view instanceof DrawerAddCell) {
                 int freeAccount;
+                int freeAccounts = UserConfig.MAX_ACCOUNT_COUNT - SharedConfig.activeAccounts.size();
                 for (int account = 0; ; account++) {
                     if (!SharedConfig.activeAccounts.contains(account)) {
                         freeAccount = account;
                         break;
                     }
                 }
-//                if (!UserConfig.hasPremiumOnAccounts()) {
-//                    freeAccounts -= (UserConfig.MAX_ACCOUNT_COUNT - UserConfig.MAX_ACCOUNT_DEFAULT_COUNT);
-//                }
-                if (freeAccount >= 0) {
-                    presentFragment(new LoginActivity(freeAccount));
+                if (!UserConfig.hasPremiumOnAccounts()) {
+                    freeAccounts -= (UserConfig.MAX_ACCOUNT_COUNT - UserConfig.MAX_ACCOUNT_DEFAULT_COUNT);
                 }
-                drawerLayoutContainer.closeDrawer(false);
+                if (freeAccounts > 0 && freeAccount >= 0) {
+                    presentFragment(new LoginActivity(freeAccount));
+                    drawerLayoutContainer.closeDrawer(false);
+                } else if (!UserConfig.hasPremiumOnAccounts()) {
+                    if (actionBarLayout.getFragmentStack().size() > 0) {
+                        BaseFragment fragment = actionBarLayout.getFragmentStack().get(0);
+                        LimitReachedBottomSheet limitReachedBottomSheet = new LimitReachedBottomSheet(fragment, this, TYPE_ACCOUNTS, currentAccount, null);
+                        fragment.showDialog(limitReachedBottomSheet);
+                        limitReachedBottomSheet.onShowPremiumScreenRunnable = () -> drawerLayoutContainer.closeDrawer(false);
+                    }
+                }
             } else if (view instanceof DrawerActionCheckCell) {
                 int id = drawerLayoutAdapter.getId(position);
                 //  DrawerLayoutAdapter.CheckItem item = drawerLayoutAdapter.getItem(position);
