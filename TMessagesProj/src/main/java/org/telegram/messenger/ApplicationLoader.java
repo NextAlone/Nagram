@@ -299,8 +299,6 @@ public class ApplicationLoader extends Application {
 
         super.onCreate();
 
-        AnalyticsHelper.start(this);
-
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("app start time = " + (startTime = SystemClock.elapsedRealtime()));
             try {
@@ -321,6 +319,9 @@ public class ApplicationLoader extends Application {
         } catch (UnsatisfiedLinkError error) {
             throw new RuntimeException("can't load native libraries " +  Build.CPU_ABI + " lookup folder " + NativeLoader.getAbiFolder());
         }
+
+        AnalyticsHelper.start(this);
+
         new ForegroundDetector(this) {
             @Override
             public void onActivityStarted(Activity activity) {
