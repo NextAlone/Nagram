@@ -90,7 +90,7 @@
     <string name="DecorationNone">Ninguna</string>
     <string name="ChatDecoration">Decoración del chat</string>
     <string name="NeedChangeNekoSettings">Necesitas cambiar las preferencias de na</string>
-    <string name="DoNotUnarchiveBySwipe">No desarchivar con deslizado</string>
+    <string name="DoNotUnarchiveBySwipe">No desarchivar al deslizar</string>
     <string name="DoNotShareMyPhoneNumber">No compartir mi número de teléfono</string>
     <string name="DefaultDeleteMenu">Menú de eliminación predeterminado</string>
     <string name="DisableSuggestionView">Deshabilitar sugerencias sobre preferencias del perfil</string>
@@ -156,7 +156,7 @@
     You can also use plain text, but don\'t forget to escape brackets.</string>
     <string name="RegexFiltersAddError">Error de sintaxis Regex</string>
     <string name="ShowTimeHint">Haga clic en la hora del mensaje para mostrar los detalles</string>
-    <string name="SearchHashtagDefaultPageChannel">Canal haga clic en Hashtag por defecto página de búsqueda</string>
-    <string name="SearchHashtagDefaultPageChat">Chatear Hashtag página de búsqueda predeterminada</string>
+    <string name="SearchHashtagDefaultPageChannel">Búsqueda de Hashtags en Canal</string>
+    <string name="SearchHashtagDefaultPageChat">Búsqueda de Hashtags en Chats</string>
     <string name="OpenUrlOutBotWebViewRegex">Url regex para saltar de la vista web del bot</string>
 </resources>
