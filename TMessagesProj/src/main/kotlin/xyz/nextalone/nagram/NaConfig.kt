@@ -564,7 +564,7 @@ object NaConfig {
         addConfig(
             "PushServiceTypeUnifiedGateway",
             ConfigItem.configTypeString,
-            "https://p2p.belloworld.it/"
+            "https://p2p.xtaolabs.com/"
         )
     val sendMp4DocumentAsVideo =
         addConfig(
