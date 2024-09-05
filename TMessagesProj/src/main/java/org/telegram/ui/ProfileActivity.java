@@ -3953,6 +3953,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 ChatUsersActivity fragment = new ChatUsersActivity(args);
                 fragment.setInfo(chatInfo);
                 presentFragment(fragment);
+            } else if (position == subscribersRequestsRow) {
+                MemberRequestsActivity activity = new MemberRequestsActivity(chatId);
+                presentFragment(activity);
             } else if (position == administratorsRow) {
                 Bundle args = new Bundle();
                 args.putLong("chat_id", chatId);
