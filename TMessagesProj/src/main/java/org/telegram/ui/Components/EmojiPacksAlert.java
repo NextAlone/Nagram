@@ -6,6 +6,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
@@ -67,6 +68,7 @@ import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Cells.StickerEmojiCell;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.Premium.PremiumButtonView;
 import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
@@ -80,6 +82,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.ProxyUtil;
 
 public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate {
 
@@ -1451,6 +1454,38 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
             } catch (Exception e) {
                 FileLog.e(e);
             }
+        } else if (id == menu_qrcode) {
+            for (int i = 0, size = listView.getChildCount(); i < size; i++) {
+                final View child = listView.getChildAt(i);
+                if (child instanceof EmojiImageView) {
+                    if (((EmojiImageView) child).imageReceiver != null) {
+                        Bitmap bitmap = ((EmojiImageView) child).imageReceiver.getBitmap();
+                        if (bitmap == null) continue;
+                        ProxyUtil.showQrDialog(getContext(), stickersUrl, imageSize -> Bitmap.createScaledBitmap(bitmap, imageSize, imageSize, true));
+                        return;
+                    }
+                }
+            }
+            ProxyUtil.showQrDialog(getContext(), stickersUrl);
+        } else if (id == menu_user_profile) {
+            // Na: open sticker's admin user profile or copy admin userId
+            long userId = stickerSet.set.id >> 32;
+            if ((stickerSet.set.id >> 24 & 0xff) != 0) {
+                userId += 0x100000000L;
+            }
+            if (fragment != null) {
+                TLRPC.User user = fragment.getMessagesController().getUser(userId);
+                if (user != null) {
+                    MessagesController.getInstance(currentAccount).openChatOrProfileWith(user, null, fragment, 0, false);
+                    return;
+                }
+            }
+            try {
+                AndroidUtilities.addToClipboard("" + userId);
+                BulletinFactory.of((FrameLayout) containerView, resourcesProvider).createCopyLinkBulletin().show();
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
         }
     }
 
@@ -1526,6 +1561,9 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
             }
         }
     }
+
+    private final int menu_qrcode = 104;
+    private final int menu_user_profile = 105;
 
     private class EmojiPackHeader extends FrameLayout {
 
@@ -1666,6 +1704,8 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
                 addView(optionsButton, LayoutHelper.createFrame(40, 40, Gravity.TOP | Gravity.RIGHT, 0, 5, 5 - backgroundPaddingLeft / AndroidUtilities.density, 0));
                 optionsButton.addSubItem(1, R.drawable.msg_share, LocaleController.getString("StickersShare", R.string.StickersShare));
                 optionsButton.addSubItem(2, R.drawable.msg_link, LocaleController.getString("CopyLink", R.string.CopyLink));
+                optionsButton.addSubItem(menu_qrcode, R.drawable.msg_qrcode, LocaleController.getString("ShareQRCode", R.string.ShareQRCode));
+                optionsButton.addSubItem(menu_user_profile, R.drawable.msg_openprofile, LocaleController.getString("ChannelAdmin", R.string.ChannelAdmin));
                 optionsButton.setOnClickListener(v -> optionsButton.toggleSubMenu());
                 optionsButton.setDelegate(EmojiPacksAlert.this::onSubItemClick);
                 optionsButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));

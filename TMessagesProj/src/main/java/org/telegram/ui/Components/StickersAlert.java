@@ -187,6 +187,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     private final int menuDeleteExternalCache = 101;
     private final int menu_copy_sticker_set = 103;
     private final int menu_qrcode = 104;
+    private final int menu_user_profile = 105;
 
     public TLRPC.TL_messages_stickerSet stickerSet;
     private TLRPC.Document selectedSticker;
@@ -1147,6 +1148,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             optionsButton.addSubItem(menuDeleteExternalCache, R.drawable.msg_delete, LocaleController.getString(R.string.ExternalStickerCacheDelete));
         }
         optionsButton.addSubItem(menu_copy_sticker_set, R.drawable.msg_copy, LocaleController.getString(R.string.StickersCopyStickerSet));
+        optionsButton.addSubItem(menu_user_profile, R.drawable.msg_openprofile, LocaleController.getString("ChannelAdmin", R.string.ChannelAdmin));
 
         optionsButton.setOnClickListener(v -> {
             checkOptions();
@@ -1479,6 +1481,25 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                     }
                 });
             });
+        } else if (id == menu_user_profile) {
+            // Na: open sticker's admin user profile or copy admin userId
+            long userId = stickerSet.set.id >> 32;
+            if ((stickerSet.set.id >> 24 & 0xff) != 0) {
+                userId += 0x100000000L;
+            }
+            if (parentFragment != null) {
+                TLRPC.User user = parentFragment.getMessagesController().getUser(userId);
+                if (user != null) {
+                    MessagesController.getInstance(currentAccount).openChatOrProfileWith(user, null, parentFragment, 0, false);
+                    return;
+                }
+            }
+            try {
+                AndroidUtilities.addToClipboard("" + userId);
+                BulletinFactory.of((FrameLayout) containerView, resourcesProvider).createCopyLinkBulletin().show();
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
         }
     }
 
