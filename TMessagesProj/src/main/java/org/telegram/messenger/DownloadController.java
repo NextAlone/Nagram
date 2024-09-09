@@ -32,6 +32,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.concurrent.ConcurrentHashMap;
 
 import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
@@ -72,7 +73,7 @@ public class DownloadController extends BaseController implements NotificationCe
 
     private HashMap<String, ArrayList<WeakReference<FileDownloadProgressListener>>> loadingFileObservers = new HashMap<>();
     private HashMap<String, ArrayList<MessageObject>> loadingFileMessagesObservers = new HashMap<>();
-    private SparseArray<String> observersByTag = new SparseArray<>();
+    private ConcurrentHashMap<Integer, String> observersByTag = new ConcurrentHashMap<>();
     private boolean listenerInProgress = false;
     private HashMap<String, FileDownloadProgressListener> addLaterArray = new HashMap<>();
     private ArrayList<FileDownloadProgressListener> deleteLaterArray = new ArrayList<>();
@@ -80,11 +81,11 @@ public class DownloadController extends BaseController implements NotificationCe
 
     private boolean loadingAutoDownloadConfig;
 
-    private LongSparseArray<Long> typingTimes = new LongSparseArray<>();
+    private ConcurrentHashMap<Long, Long> typingTimes = new ConcurrentHashMap<>();
 
     public final ArrayList<MessageObject> downloadingFiles = new ArrayList<>();
     public final ArrayList<MessageObject> recentDownloadingFiles = new ArrayList<>();
-    public final SparseArray<MessageObject> unviewedDownloads = new SparseArray<>();
+    public final ConcurrentHashMap<Integer, MessageObject> unviewedDownloads = new ConcurrentHashMap<>();
 
     public static class Preset {
         public int[] mask = new int[4];
