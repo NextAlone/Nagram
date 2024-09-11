@@ -245,6 +245,14 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
     private boolean loadingDialogs;
     private NestedSizeNotifierLayout nestedSizeNotifierLayout;
 
+    private long targetDialogId = -1L;
+
+    public CacheControlActivity() {}
+
+    public CacheControlActivity(Bundle args) {
+        targetDialogId = args.getLong("dialog_id", -1L);
+    }
+
     private ActionBarMenuSubItem clearDatabaseItem;
     private ActionBarMenuSubItem resetDatabaseItem;
     private void updateDatabaseItemSize() {
@@ -532,6 +540,14 @@ public class CacheControlActivity extends BaseFragment implements NotificationCe
             fillDialogsEntitiesRecursive(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_STORIES), TYPE_OTHER, dilogsFilesEntities, cacheModel);
             fillDialogsEntitiesRecursive(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_DOCUMENT), TYPE_DOCUMENTS, dilogsFilesEntities, cacheModel);
             fillDialogsEntitiesRecursive(FileLoader.checkDirectory(FileLoader.MEDIA_DIR_FILES), TYPE_DOCUMENTS, dilogsFilesEntities, cacheModel);
+
+            // ----- Nagram Hook start -----
+            if (targetDialogId != -1) {
+                DialogFileEntities entities = dilogsFilesEntities.get(targetDialogId, null);
+                if (entities != null) AndroidUtilities.runOnUIThread(() -> showClearCacheDialog(entities), 100);
+                targetDialogId = -1;
+            }
+            // ----- Nagram Hook end -----
 
             ArrayList<DialogFileEntities> entities = new ArrayList<>();
             ArrayList<Long> unknownUsers = new ArrayList<>();

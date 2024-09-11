@@ -555,13 +555,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private final static int statistics = 19;
     private final static int start_secret_chat = 20;
     private final static int gallery_menu_save = 21;
-    private final static int event_log = 102;
-    private final static int message_filter = 103;
     private final static int view_discussion = 22;
     private final static int delete_topic = 23;
     private final static int report = 24;
 
-    private final static int aliasChannelName = 100;
     private final static int edit_name = 101;
     private final static int edit_info = 30;
     private final static int logout = 31;
@@ -578,6 +575,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private final static int copy_link_profile = 42;
     private final static int set_username = 43;
     private final static int bot_privacy = 44;
+
+    private final static int aliasChannelName = 100;
+    private final static int event_log = 102;
+    private final static int message_filter = 103;
+    private final static int clear_cache = 104;
 
     private Rect rect = new Rect();
 
@@ -2791,6 +2793,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 //                        args.putLong("user_id", userId);
 //                        presentFragment(new QrActivity(args));
 //                    }
+                } else if (id == clear_cache) {
+                    Bundle args = new Bundle();
+                    args.putLong("dialog_id", userId != 0 ? dialogId : -chatId);
+                    CacheControlActivity fragment = new CacheControlActivity(args);
+                    presentFragment(fragment);
                 }
             }
         });
@@ -10618,6 +10625,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         if (selfUser && !myProfile) {
             otherItem.addSubItem(logout, R.drawable.msg_leave, LocaleController.getString(R.string.LogOut));
+        } else {
+            otherItem.addSubItem(clear_cache, R.drawable.msg_delete, LocaleController.getString(R.string.ClearCache));
         }
         if (!isPulledDown) {
             otherItem.hideSubItem(gallery_menu_save);
