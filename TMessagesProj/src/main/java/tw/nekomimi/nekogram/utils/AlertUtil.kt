@@ -26,7 +26,7 @@ object AlertUtil {
 
         AndroidUtilities.addToClipboard(text)
 
-        AlertUtil.showToast(LocaleController.getString("TextCopied", R.string.TextCopied))
+        AlertUtil.showToast(LocaleController.getString(R.string.TextCopied))
 
     }
 
@@ -35,7 +35,7 @@ object AlertUtil {
 
         AndroidUtilities.addToClipboard(text)
 
-        AlertUtil.showToast(LocaleController.getString("LinkCopied", R.string.LinkCopied))
+        AlertUtil.showToast(LocaleController.getString(R.string.LinkCopied))
 
     }
 
@@ -98,10 +98,10 @@ object AlertUtil {
 
         val builder = AlertDialog.Builder(ctx)
 
-        builder.setTitle(title ?: LocaleController.getString("NekoX", R.string.NekoX))
+        builder.setTitle(title ?: LocaleController.getString(R.string.NekoX))
         builder.setMessage(text)
 
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK)) { _, _ ->
+        builder.setPositiveButton(LocaleController.getString(R.string.OK)) { _, _ ->
 
             builder.dismissRunnable?.run()
             listener?.invoke(builder)
@@ -117,20 +117,20 @@ object AlertUtil {
 
         val builder = AlertDialog.Builder(ctx)
 
-        builder.setTitle(LocaleController.getString("Translate", R.string.Translate))
+        builder.setTitle(LocaleController.getString(R.string.Translate))
         builder.setMessage(text)
 
-        builder.setNegativeButton(LocaleController.getString("Copy", R.string.Copy)) { _, _ ->
+        builder.setNegativeButton(LocaleController.getString(R.string.Copy)) { _, _ ->
 
             AndroidUtilities.addToClipboard(text)
 
-            AlertUtil.showToast(LocaleController.getString("TextCopied", R.string.TextCopied))
+            AlertUtil.showToast(LocaleController.getString(R.string.TextCopied))
 
             builder.dismissRunnable.run()
 
         }
 
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK)) { _, _ ->
+        builder.setPositiveButton(LocaleController.getString(R.string.OK)) { _, _ ->
 
             builder.dismissRunnable.run()
 
@@ -142,7 +142,7 @@ object AlertUtil {
 
     @JvmOverloads
     @JvmStatic
-    fun showProgress(ctx: Context, text: String = LocaleController.getString("Loading", R.string.Loading)): AlertDialog {
+    fun showProgress(ctx: Context, text: String = LocaleController.getString(R.string.Loading)): AlertDialog {
 
         return AlertDialog.Builder(ctx, AlertDialog.ALERT_TYPE_MESSAGE).apply {
 
@@ -222,13 +222,13 @@ object AlertUtil {
 
         val builder = AlertDialog.Builder(ctx)
 
-        builder.setTitle(LocaleController.getString("TranslateFailed", R.string.TranslateFailed))
+        builder.setTitle(LocaleController.getString(R.string.TranslateFailed))
 
         builder.setMessage(message)
 
         val reference = AtomicReference<AlertDialog>()
 
-        builder.setNeutralButton(LocaleController.getString("ChangeTranslateProvider", R.string.ChangeTranslateProvider)) {
+        builder.setNeutralButton(LocaleController.getString(R.string.ChangeTranslateProvider)) {
 
             _, _ ->
 
@@ -240,14 +240,14 @@ object AlertUtil {
 
             items.addAll(
                 arrayOf(
-                    LocaleController.getString("ProviderGoogleTranslate", R.string.ProviderGoogleTranslate),
-                    LocaleController.getString("ProviderGoogleTranslateCN", R.string.ProviderGoogleTranslateCN),
-                    LocaleController.getString("ProviderYandexTranslate", R.string.ProviderYandexTranslate),
-                    LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud),
-                    LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderMicrosoftTranslator),
-                    LocaleController.getString("ProviderYouDao", R.string.ProviderYouDao),
-                    LocaleController.getString("ProviderDeepLTranslate", R.string.ProviderDeepLTranslate),
-                    LocaleController.getString("ProviderTelegramAPI", R.string.ProviderTelegramAPI)
+                    LocaleController.getString(R.string.ProviderGoogleTranslate),
+                    LocaleController.getString(R.string.ProviderGoogleTranslateCN),
+                    LocaleController.getString(R.string.ProviderYandexTranslate),
+                    LocaleController.getString(R.string.ProviderLingocloud),
+                    LocaleController.getString(R.string.ProviderMicrosoftTranslator),
+                    LocaleController.getString(R.string.ProviderYouDao),
+                    LocaleController.getString(R.string.ProviderDeepLTranslate),
+                    LocaleController.getString(R.string.ProviderTelegramAPI)
                 ).toList()
             )
 
@@ -267,7 +267,7 @@ object AlertUtil {
 
         if (noRetry) {
 
-            builder.setPositiveButton(LocaleController.getString("Cancel", R.string.Cancel)) { _, _ ->
+            builder.setPositiveButton(LocaleController.getString(R.string.Cancel)) { _, _ ->
 
                 reference.get().dismiss()
 
@@ -275,7 +275,7 @@ object AlertUtil {
 
         } else {
 
-            builder.setPositiveButton(LocaleController.getString("Retry", R.string.Retry)) { _, _ ->
+            builder.setPositiveButton(LocaleController.getString(R.string.Retry)) { _, _ ->
 
                 reference.get().dismiss()
 
@@ -283,7 +283,7 @@ object AlertUtil {
 
             }
 
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel)) { _, _ ->
+            builder.setNegativeButton(LocaleController.getString(R.string.Cancel)) { _, _ ->
 
                 reference.get().dismiss()
 

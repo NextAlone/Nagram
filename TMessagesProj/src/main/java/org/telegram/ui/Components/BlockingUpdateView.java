@@ -95,7 +95,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
         titleTextView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
         titleTextView.setTypeface(AndroidUtilities.bold());
-        titleTextView.setText(LocaleController.getString("UpdateTelegram", R.string.UpdateTelegram).replace("Telegram", LocaleController.getString("NekoX", R.string.NekoX)));
+        titleTextView.setText(LocaleController.getString(R.string.UpdateTelegram).replace("Telegram", LocaleController.getString(R.string.NekoX)));
         container.addView(titleTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL | Gravity.TOP));
 
         textView = new TextViewEffects(context);
@@ -285,9 +285,9 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         MessageObject.replaceAnimatedEmoji(builder, update.entities, textView.getPaint().getFontMetricsInt());
         textView.setText(builder);
         if (update.document instanceof TLRPC.TL_document) {
-            acceptTextView.setText(LocaleController.getString("Update", R.string.Update) + String.format(Locale.US, " (%1$s)", AndroidUtilities.formatFileSize(update.document.size)));
+            acceptTextView.setText(LocaleController.getString(R.string.Update) + String.format(Locale.US, " (%1$s)", AndroidUtilities.formatFileSize(update.document.size)));
         } else {
-            acceptTextView.setText(LocaleController.getString("Update", R.string.Update));
+            acceptTextView.setText(LocaleController.getString(R.string.Update));
         }
         NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.fileLoaded);
         NotificationCenter.getInstance(accountNum).addObserver(this, NotificationCenter.fileLoadFailed);

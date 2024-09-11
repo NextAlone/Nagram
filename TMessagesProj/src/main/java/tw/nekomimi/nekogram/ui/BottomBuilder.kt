@@ -180,18 +180,18 @@ class BottomBuilder(val ctx: Context, val needFocus: Boolean = true, val bgColor
     }
 
     fun addCancelItem() {
-        addItem(LocaleController.getString("Cancel", R.string.Cancel), R.drawable.baseline_cancel_24) {}
+        addItem(LocaleController.getString(R.string.Cancel), R.drawable.baseline_cancel_24) {}
     }
 
     @JvmOverloads
     fun addCancelButton(left: Boolean = true) {
-        addButton(LocaleController.getString("Cancel", R.string.Cancel), left = left) {}
+        addButton(LocaleController.getString(R.string.Cancel), left = left) {}
     }
 
 
     @JvmOverloads
     fun addOkButton(listener: ((TextView) -> Unit), noAutoDismiss: Boolean = false) {
-        addButton(LocaleController.getString("OK", R.string.OK), noAutoDismiss) { listener(it); }
+        addButton(LocaleController.getString(R.string.OK), noAutoDismiss) { listener(it); }
     }
 
     @JvmOverloads

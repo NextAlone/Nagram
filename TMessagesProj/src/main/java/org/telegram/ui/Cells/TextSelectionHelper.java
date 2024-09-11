@@ -1421,7 +1421,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                 menu.add(Menu.NONE, android.R.id.copy, 0, android.R.string.copy);
                 menu.add(Menu.NONE, R.id.menu_quote, 1, LocaleController.getString(R.string.Quote));
                 menu.add(Menu.NONE, android.R.id.selectAll, 2, android.R.string.selectAll);
-                menu.add(Menu.NONE, TRANSLATE, 3, LocaleController.getString("TranslateMessage", R.string.TranslateMessage));
+                menu.add(Menu.NONE, TRANSLATE, 3, LocaleController.getString(R.string.TranslateMessage));
                 return true;
             }
 
@@ -1454,7 +1454,6 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
 //                    onTranslateListener != null && (
 //                        (
 //                            translateFromLanguage != null &&
-//                            (!translateFromLanguage.equals(translateToLanguage) || translateFromLanguage.equals("und")) &&
 //                            !RestrictedLanguagesSelectActivity.getRestrictedLanguages().contains(translateFromLanguage)
 //                        ) || !LanguageDetector.hasSupport()
 //                    )

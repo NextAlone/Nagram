@@ -2005,6 +2005,21 @@ public class SecretChatHelper extends BaseController {
                     } else {
                         delayedEncryptedChatUpdates.clear();
                         AlertUtil.showToast(error1);
+                        AndroidUtilities.runOnUIThread(() -> {
+                            if (!((Activity) context).isFinishing()) {
+                                startingSecretChat = false;
+                                try {
+                                    progressDialog.dismiss();
+                                } catch (Exception e) {
+                                    FileLog.e(e);
+                                }
+                                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                builder.setTitle(LocaleController.getString(R.string.AppName));
+                                builder.setMessage(LocaleController.getString(R.string.CreateEncryptedChatError));
+                                builder.setPositiveButton(LocaleController.getString(R.string.OK), null);
+                                builder.show().setCanceledOnTouchOutside(true);
+                            }
+                        });
                     }
                 }, ConnectionsManager.RequestFlagFailOnServerErrors);
             } else {

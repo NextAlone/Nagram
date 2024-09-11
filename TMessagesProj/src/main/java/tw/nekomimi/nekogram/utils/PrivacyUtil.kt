@@ -174,15 +174,15 @@ object PrivacyUtil {
 
         val builder = AlertDialog.Builder(ctx)
 
-        builder.setTitle(LocaleController.getString("PrivacyNotice", R.string.PrivacyNotice))
+        builder.setTitle(LocaleController.getString(R.string.PrivacyNotice))
 
         builder.setMessage(AndroidUtilities.replaceTags(when (type) {
-            0 -> LocaleController.getString("PrivacyNoticePhoneVisible", R.string.PrivacyNoticePhoneVisible)
-            1 -> LocaleController.getString("PrivacyNoticeAddByPhone", R.string.PrivacyNoticeAddByPhone)
-            else -> LocaleController.getString("PrivacyNoticeP2p", R.string.PrivacyNoticeP2p)
+            0 -> LocaleController.getString(R.string.PrivacyNoticePhoneVisible)
+            1 -> LocaleController.getString(R.string.PrivacyNoticeAddByPhone)
+            else -> LocaleController.getString(R.string.PrivacyNoticeP2p)
         }))
 
-        builder.setPositiveButton(LocaleController.getString("ApplySuggestion", R.string.ApplySuggestion)) { _, _ ->
+        builder.setPositiveButton(LocaleController.getString(R.string.ApplySuggestion)) { _, _ ->
 
             ConnectionsManager.getInstance(account).sendRequest(TLRPC.TL_account_setPrivacy().apply {
 
@@ -207,9 +207,9 @@ object PrivacyUtil {
 
         }
 
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null)
+        builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null)
 
-        builder.setNeutralButton(LocaleController.getString("DoNotRemindAgain", R.string.DoNotRemindAgain)) { _, _ ->
+        builder.setNeutralButton(LocaleController.getString(R.string.DoNotRemindAgain)) { _, _ ->
 
             MessagesController.getMainSettings(account).edit().putBoolean("privacy_warning_skip_${when (type) {
                 0 -> "phone_number"
@@ -233,11 +233,11 @@ object PrivacyUtil {
 
         val builder = AlertDialog.Builder(ctx)
 
-        builder.setTitle(LocaleController.getString("PrivacyNotice", R.string.PrivacyNotice))
+        builder.setTitle(LocaleController.getString(R.string.PrivacyNotice))
 
-        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("PrivacyNotice2fa", R.string.PrivacyNotice2fa)))
+        builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString(R.string.PrivacyNotice2fa)))
 
-        builder.setPositiveButton(LocaleController.getString("Set", R.string.Set)) { _, _ ->
+        builder.setPositiveButton(LocaleController.getString(R.string.Set)) { _, _ ->
 
             if (ctx is LaunchActivity) {
 
@@ -251,9 +251,9 @@ object PrivacyUtil {
 
         }
 
-        builder.setNeutralButton(LocaleController.getString("Cancel", R.string.Cancel), null)
+        builder.setNeutralButton(LocaleController.getString(R.string.Cancel), null)
 
-        builder.setNeutralButton(LocaleController.getString("DoNotRemindAgain", R.string.DoNotRemindAgain)) { _, _ ->
+        builder.setNeutralButton(LocaleController.getString(R.string.DoNotRemindAgain)) { _, _ ->
 
             MessagesController.getMainSettings(account).edit().putBoolean("privacy_warning_skip_2fa", true).apply()
 

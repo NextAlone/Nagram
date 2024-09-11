@@ -208,7 +208,7 @@ public class SessionCell extends FrameLayout {
             String timeText;
             if ((session.flags & 1) != 0) {
                 setTag(Theme.key_windowBackgroundWhiteValueText);
-                timeText = LocaleController.getString("Online", R.string.Online);
+                timeText = LocaleController.getString(R.string.Online);
             } else {
                 setTag(Theme.key_windowBackgroundWhiteGrayText3);
                 timeText = LocaleController.stringForMessageListDate(session.date_active);
@@ -218,7 +218,7 @@ public class SessionCell extends FrameLayout {
                 if (stringBuilder.length() != 0) {
                     stringBuilder.append(", ");
                 }
-                stringBuilder.append(LocaleController.getString("UnofficialApp", R.string.UnofficialApp));
+                stringBuilder.append(LocaleController.getString(R.string.UnofficialApp));
                 stringBuilder.append(" (ID: ");
                 stringBuilder.append(session.api_id);
                 stringBuilder.append(")");

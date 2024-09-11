@@ -2752,8 +2752,6 @@ void ConnectionsManager::processRequestQueue(uint32_t connectionTypes, uint32_t 
 
         if (request->connectionType & ConnectionTypeGeneric && connection->getConnectionToken() == 0) {
             iter++;
-            if (LOGS_ENABLED)
-                DEBUG_D("skip queue, token = %d: generic && connectionToken == 0", request->requestToken);
             continue;
         }
 
@@ -2762,8 +2760,8 @@ void ConnectionsManager::processRequestQueue(uint32_t connectionTypes, uint32_t 
             case ConnectionTypeGenericMedia:
                 if (!canUseUnboundKey && genericRunningRequestCount >= MAX_GENERAL_REQUESTS) {
                     iter++;
-                    if (LOGS_ENABLED)
-                        DEBUG_D("skip queue, token = %d: generic type: running generic requests >= 60", request->requestToken);
+//                    if (LOGS_ENABLED)
+//                        DEBUG_D("skip queue, token = %d: generic type: running generic requests >= %d", request->requestToken, MAX_GENERAL_REQUESTS);
                     continue;
                 }
                 genericRunningRequestCount++;

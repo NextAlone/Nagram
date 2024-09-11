@@ -29,47 +29,38 @@ object DoubleTap {
     init {
         doubleTapActionMap[DOUBLE_TAP_ACTION_NONE] =
             LocaleController.getString(
-                "Disable",
                 R.string.Disable
             )
         doubleTapActionMap[DOUBLE_TAP_ACTION_SEND_REACTIONS] =
             LocaleController.getString(
-                "SendReactions",
                 R.string.SendReactions
             )
         doubleTapActionMap[DOUBLE_TAP_ACTION_SHOW_REACTIONS] =
             LocaleController.getString(
-                "ShowReactions",
                 R.string.ShowReactions
             )
         doubleTapActionMap[DOUBLE_TAP_ACTION_TRANSLATE] =
             LocaleController.getString(
-                "TranslateMessage",
                 R.string.TranslateMessage
             )
         doubleTapActionMap[DOUBLE_TAP_ACTION_REPLY] =
             LocaleController.getString(
-                "Reply",
                 R.string.Reply
             )
         doubleTapActionMap[DOUBLE_TAP_ACTION_SAVE] =
             LocaleController.getString(
-                "AddToSavedMessages",
                 R.string.AddToSavedMessages
             )
         doubleTapActionMap[DOUBLE_TAP_ACTION_REPEAT] =
             LocaleController.getString(
-                "Repeat",
                 R.string.Repeat
             )
         doubleTapActionMap[DOUBLE_TAP_ACTION_REPEAT_AS_COPY] =
             LocaleController.getString(
-                "RepeatAsCopy",
                 R.string.RepeatAsCopy
             )
         doubleTapActionMap[DOUBLE_TAP_ACTION_EDIT] =
             LocaleController.getString(
-                "Edit",
                 R.string.Edit
             )
     }

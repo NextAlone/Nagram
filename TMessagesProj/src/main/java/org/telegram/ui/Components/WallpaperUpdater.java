@@ -63,15 +63,15 @@ public class WallpaperUpdater {
 
     public void showAlert(final boolean fromTheme) {
         BottomBuilder builder = new BottomBuilder(parentActivity);
-        builder.addTitle(LocaleController.getString("ChoosePhoto", R.string.ChoosePhoto), true);
+        builder.addTitle(LocaleController.getString(R.string.ChoosePhoto), true);
 
-        String[] items;
+        CharSequence[] items;
         int[] icons;
         if (fromTheme) {
-            items = new String[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("SelectFromGallery", R.string.SelectFromGallery), LocaleController.getString("SelectColor", R.string.SelectColor), LocaleController.getString("Default", R.string.Default)};
+            items = new CharSequence[]{LocaleController.getString(R.string.ChooseTakePhoto), LocaleController.getString(R.string.SelectFromGallery), LocaleController.getString(R.string.SelectColor), LocaleController.getString(R.string.Default)};
             icons = null;
         } else {
-            items = new String[]{LocaleController.getString("ChooseTakePhoto", R.string.ChooseTakePhoto), LocaleController.getString("SelectFromGallery", R.string.SelectFromGallery)};
+            items = new CharSequence[]{LocaleController.getString(R.string.ChooseTakePhoto), LocaleController.getString(R.string.SelectFromGallery)};
             icons = new int[]{R.drawable.menu_camera, R.drawable.profile_photos};
         }
 

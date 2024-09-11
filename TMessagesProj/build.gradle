@@ -14,12 +14,12 @@ repositories {
     }
 }
 
-def verName = "11.0.0"
-def verCode = 1193
+def verName = APP_VERSION_NAME
+def verCode = 1194
 
 
-def officialVer = "11.0.0"
-def officialCode = 5143
+def officialVer = APP_VERSION_NAME
+def officialCode = APP_VERSION_CODE
 
 def serviceAccountCredentialsFile = rootProject.file("service_account_credentials.json")
 
@@ -83,7 +83,7 @@ def nativeTarget = System.getenv("NATIVE_TARGET")
 if (nativeTarget == null) nativeTarget = ""
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
     ndkVersion rootProject.ext.ndkVersion
 
     defaultConfig.applicationId = "xyz.nextalone.nagram"
@@ -111,7 +111,7 @@ android {
     defaultConfig {
         minSdkVersion 21
         //noinspection ExpiredTargetSdkVersion,OldTargetApi
-        targetSdkVersion 33
+        targetSdkVersion 34
 
         versionName verName
         versionCode verCode
@@ -276,7 +276,7 @@ dependencies {
     //noinspection GradleDependency
     implementation "com.googlecode.mp4parser:isoparser:1.0.6"
 
-    implementation "com.google.code.gson:gson:2.10"
+    implementation "com.google.code.gson:gson:2.11.0"
     implementation "org.osmdroid:osmdroid-android:6.1.10"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.23"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0"
@@ -329,8 +329,6 @@ dependencies {
     implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:4.3'
     // add splash screen
     implementation("androidx.core:core-splashscreen:1.0.1")
-    // add for music tag flac...
-    implementation 'org:jaudiotagger:2.0.3'
     // add for auto translate
     implementation 'com.google.mlkit:language-id:17.0.5'
     // add for emoji

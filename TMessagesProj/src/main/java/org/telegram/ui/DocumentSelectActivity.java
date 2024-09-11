@@ -1167,13 +1167,13 @@ public class DocumentSelectActivity extends BaseFragment {
 
     private void updateEmptyView() {
         if (searching) {
-            emptyTitleTextView.setText(LocaleController.getString("NoFilesFound", R.string.NoFilesFound));
+            emptyTitleTextView.setText(LocaleController.getString(R.string.NoResult));
             emptyView.setGravity(Gravity.CENTER_HORIZONTAL);
             emptyView.setPadding(0, AndroidUtilities.dp(60), 0, 0);
             emptySubtitleTextView.setPadding(AndroidUtilities.dp(40), 0, AndroidUtilities.dp(40), 0);
         } else {
-            emptyTitleTextView.setText(LocaleController.getString("NoFilesFound", R.string.NoFilesFound));
-            emptySubtitleTextView.setText(LocaleController.getString("NoFilesInfo", R.string.NoFilesInfo));
+            emptyTitleTextView.setText(LocaleController.getString(R.string.NoResult));
+            emptySubtitleTextView.setText(LocaleController.getString(R.string.NoFilesInfo));
             emptyView.setGravity(Gravity.CENTER);
             emptyView.setPadding(0, 0, 0, 0);
             emptySubtitleTextView.setPadding(AndroidUtilities.dp(40), 0, AndroidUtilities.dp(40), AndroidUtilities.dp(128));
@@ -1187,9 +1187,9 @@ public class DocumentSelectActivity extends BaseFragment {
         }
         searchItem.setVisibility(hasFiles ? View.VISIBLE : View.GONE);
         if (history.isEmpty()) {
-            searchItem.setSearchFieldHint(LocaleController.getString("SearchRecentFiles", R.string.SearchRecentFiles));
+            searchItem.setSearchFieldHint(LocaleController.getString(R.string.SearchRecentFiles));
         } else {
-            searchItem.setSearchFieldHint(LocaleController.getString("Search", R.string.Search));
+            searchItem.setSearchFieldHint(LocaleController.getString(R.string.Search));
         }
     }
 
@@ -1635,7 +1635,7 @@ public class DocumentSelectActivity extends BaseFragment {
                         listView.setAdapter(searchAdapter);
                         updateEmptyView();
                     }
-                    emptySubtitleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("NoFilesFoundInfo", R.string.NoFilesFoundInfo, query)));
+                    emptySubtitleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.NoFilesFoundInfo, query)));
                 }
                 searchWas = true;
                 searchResult = result;

@@ -324,6 +324,7 @@ public class BubbleActivity extends BasePermissionsActivity implements INavigati
     @Override
     public void onConfigurationChanged(android.content.res.Configuration newConfig) {
         AndroidUtilities.checkDisplaySize(this, newConfig);
+        AndroidUtilities.setPreferredMaxRefreshRate(getWindow());
         super.onConfigurationChanged(newConfig);
     }
 

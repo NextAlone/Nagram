@@ -32,7 +32,7 @@ object TranSmartTranslator : Translator {
     override suspend fun doTranslate(from: String, to: String, query: String): String {
 
         if (to !in targetLanguages) {
-            error(LocaleController.getString("TranslateApiUnsupported", R.string.TranslateApiUnsupported))
+            error(LocaleController.getString(R.string.TranslateApiUnsupported))
         }
 
         val source = JSONArray()

@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.telegram.messenger.ApplicationLoader;
@@ -45,6 +46,7 @@ public class GooglePushListenerServiceProvider implements PushListenerController
         Utilities.globalQueue.postRunnable(() -> {
             try {
                 SharedConfig.pushStringGetTimeStart = SystemClock.elapsedRealtime();
+                FirebaseApp.initializeApp(ApplicationLoader.applicationContext);
                 FirebaseMessaging.getInstance().getToken()
                         .addOnCompleteListener(task -> {
                             SharedConfig.pushStringGetTimeEnd = SystemClock.elapsedRealtime();

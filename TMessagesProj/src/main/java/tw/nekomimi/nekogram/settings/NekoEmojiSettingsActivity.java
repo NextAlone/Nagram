@@ -422,7 +422,7 @@ public class NekoEmojiSettingsActivity extends BaseNekoSettingsActivity implemen
                         if (partial) {
                             textCheckCell.setChecked(NekoConfig.useSystemEmoji.Bool());
                         } else {
-                            textCheckCell.setTextAndCheck(LocaleController.getString("EmojiUseDefault", R.string.EmojiUseDefault), NekoConfig.useSystemEmoji.Bool(), false);
+                            textCheckCell.setTextAndCheck(LocaleController.getString(R.string.EmojiUseDefault), NekoConfig.useSystemEmoji.Bool(), false);
                         }
                     }
                     break;

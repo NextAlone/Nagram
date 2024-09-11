@@ -283,4 +283,17 @@
     <string name="doubleTapSendReaction">Send reaction</string>
     <string name="doubleTapDisable">Disable</string>
     <string name="disableReactionsWhenSelecting">Hide reactions while selecting</string>
+
+    <string name="UpgradeGroup">Upgrade Group</string>
+    <string name="AccDescrShowKeyboard">Show keyboard</string>
+    <string name="ConvertGroupAlertWarning">Warning</string>
+    <string name="ConvertGroupAlert">This action is irreversible. It is not possible to downgrade a supergroup to a regular group.</string>
+    <string name="SharedPhotosAndVideos">Photos and videos</string>
+    <string name="StickersAndMasks">Stickers and Masks</string>
+    <string name="UnofficialApp">unofficial app</string>
+    <string name="FileUploadLimit">File size shouldn\'t be greater than %1$s</string>
+    <string name="NoFilesInfo">This folder is empty.</string>
+    <string name="SearchRecentFiles">Search Recent Files</string>
+    <string name="NoFilesFoundInfo">There are no matches with **%1$s** in current directory.</string>
+    <string name="EmojiUseDefault">Use system default emoji</string>
 </resources>

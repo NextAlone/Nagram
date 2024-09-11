@@ -56,17 +56,17 @@ object UpdateUtil {
 
             val builder = AlertDialog.Builder(ctx)
 
-            builder.setTitle(LocaleController.getString("FCTitle", R.string.FCTitle))
-            builder.setMessage(LocaleController.getString("FCInfo", R.string.FCInfo))
+            builder.setTitle(LocaleController.getString(R.string.FCTitle))
+            builder.setMessage(LocaleController.getString(R.string.FCInfo))
 
-            builder.setPositiveButton(LocaleController.getString("ChannelJoin", R.string.ChannelJoin)) { _, _ ->
+            builder.setPositiveButton(LocaleController.getString(R.string.ChannelJoin)) { _, _ ->
                 messagesCollector.addUserToChat(channel.id, userConfig.currentUser, 0, null, null, null)
                 Browser.openUrl(ctx, "https://t.me/$channelUsername")
             }
 
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null)
+            builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null)
 
-            builder.setNeutralButton(LocaleController.getString("DoNotRemindAgain", R.string.DoNotRemindAgain)) { _, _ ->
+            builder.setNeutralButton(LocaleController.getString(R.string.DoNotRemindAgain)) { _, _ ->
                 MessagesController.getMainSettings(currentAccount).edit().putBoolean("update_channel_skip", true).apply()
             }
 
@@ -116,17 +116,17 @@ object UpdateUtil {
 
             val builder = AlertDialog.Builder(ctx)
 
-            builder.setTitle(LocaleController.getString("FCTitle", R.string.FCTitle))
-            builder.setMessage(LocaleController.getString("TipsInfo", R.string.TipsInfo))
+            builder.setTitle(LocaleController.getString(R.string.FCTitle))
+            builder.setMessage(LocaleController.getString(R.string.TipsInfo))
 
-            builder.setPositiveButton(LocaleController.getString("ChannelJoin", R.string.ChannelJoin)) { _, _ ->
+            builder.setPositiveButton(LocaleController.getString(R.string.ChannelJoin)) { _, _ ->
                 messagesCollector.addUserToChat(channel.id, userConfig.currentUser, 0, null, null, null)
                 Browser.openUrl(ctx, "https://t.me/$channelUsernameTips")
             }
 
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null)
+            builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null)
 
-            builder.setNeutralButton(LocaleController.getString("DoNotRemindAgain", R.string.DoNotRemindAgain)) { _, _ ->
+            builder.setNeutralButton(LocaleController.getString(R.string.DoNotRemindAgain)) { _, _ ->
                 MessagesController.getMainSettings(currentAccount).edit().putBoolean("update_channel_tip_skip", true).apply()
             }
 

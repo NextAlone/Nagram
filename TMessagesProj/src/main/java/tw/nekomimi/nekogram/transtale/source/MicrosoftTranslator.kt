@@ -32,7 +32,7 @@ object MicrosoftTranslator : Translator {
 
     override suspend fun doTranslate(from: String, to: String, query: String): String {
         if (to !in targetLanguages) {
-            throw UnsupportedOperationException(LocaleController.getString("TranslateApiUnsupported", R.string.TranslateApiUnsupported))
+            throw UnsupportedOperationException(LocaleController.getString(R.string.TranslateApiUnsupported))
         }
 
         return withContext(Dispatchers.IO) {

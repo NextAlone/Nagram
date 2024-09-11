@@ -5,7 +5,7 @@ set(CMAKE_C_FLAGS "-w -std=c11 -DANDROID -D_LARGEFILE_SOURCE=1")
 set(CMAKE_ASM_FLAGS "${CFLAGS} -x assembler-with-cpp")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ffunction-sections -fdata-sections")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffunction-sections -fdata-sections")
-set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--exclude-libs,libtgvoip.a,libtgcalls.a,libtgcalls_tp.a,libtgnet.a,libwebp.a,libflac.a,librlottie.a,libsqlite.a,
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--exclude-libs,libtgvoip.a,libtgcalls.a,libtgcalls_tp.a,libtgnet.a,libflac.a,librlottie.a,libsqlite.a,
 ${CMAKE_HOME_DIRECTORY}/ffmpeg/build/${ANDROID_ABI}/lib/libswscale.a,
 ${CMAKE_HOME_DIRECTORY}/ffmpeg/build/${ANDROID_ABI}/lib/libavformat.a,
 ${CMAKE_HOME_DIRECTORY}/ffmpeg/build/${ANDROID_ABI}/lib/libavcodec.a,
@@ -60,127 +60,127 @@ set_target_properties(libvpx PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY
 
 
 #tgnet
-add_library(mozjpeg STATIC
-        mozjpeg/cjpeg.c mozjpeg/cdjpeg.c mozjpeg/rdgif.c mozjpeg/rdppm.c mozjpeg/rdjpeg.c mozjpeg/rdswitch.c mozjpeg/rdbmp.c
-        mozjpeg/rdtarga.c mozjpeg/wrbmp.c mozjpeg/wrtarga.c mozjpeg/djpeg.c mozjpeg/cdjpeg.c mozjpeg/rdcolmap.c mozjpeg/rdswitch.c
-        mozjpeg/wrgif.c mozjpeg/wrppm.c mozjpeg/jpegtran.c mozjpeg/cdjpeg.c mozjpeg/rdswitch.c mozjpeg/transupp.c mozjpeg/turbojpeg.c
-        mozjpeg/jdatadst-tj.c mozjpeg/jdatasrc-tj.c mozjpeg/jcapimin.c mozjpeg/jcapistd.c mozjpeg/jccoefct.c mozjpeg/jccolor.c
-        mozjpeg/jcdctmgr.c mozjpeg/jchuff.c mozjpeg/jcext.c mozjpeg/jcicc.c mozjpeg/jcinit.c mozjpeg/jcmainct.c mozjpeg/jcmarker.c
-        mozjpeg/jcmaster.c mozjpeg/jcomapi.c mozjpeg/jcparam.c mozjpeg/jcphuff.c mozjpeg/jcprepct.c mozjpeg/jcsample.c
-        mozjpeg/jctrans.c mozjpeg/jdapimin.c mozjpeg/jdapistd.c mozjpeg/jdatadst.c mozjpeg/jdatasrc.c
-        mozjpeg/jdcoefct.c mozjpeg/jdcolor.c mozjpeg/jddctmgr.c mozjpeg/jdhuff.c mozjpeg/jdicc.c mozjpeg/jdinput.c
-        mozjpeg/jdmainct.c mozjpeg/jdmarker.c mozjpeg/jdmaster.c mozjpeg/jdmerge.c mozjpeg/jdphuff.c mozjpeg/jdpostct.c mozjpeg/jdsample.c
-        mozjpeg/jdtrans.c mozjpeg/jerror.c mozjpeg/jfdctflt.c mozjpeg/jfdctfst.c mozjpeg/jfdctint.c mozjpeg/jidctflt.c mozjpeg/jidctfst.c
-        mozjpeg/jidctint.c mozjpeg/jidctred.c mozjpeg/jquant1.c mozjpeg/jquant2.c mozjpeg/jutils.c mozjpeg/jmemmgr.c mozjpeg/jmemnobs.c)
-target_compile_options(mozjpeg PUBLIC
-        -Os)
-set_target_properties(mozjpeg PROPERTIES
-        ANDROID_ARM_MODE arm)
-target_compile_definitions(mozjpeg PUBLIC
-        BMP_SUPPORTED GIF_SUPPORTED PPM_SUPPORTED TARGA_SUPPORTED)
-target_include_directories(mozjpeg PUBLIC
-        mozjpeg
-        mozjpeg/simd/nasm)
-
-if (${ANDROID_ABI} STREQUAL "armeabi-v7a")
-    target_sources(mozjpeg PRIVATE
-            mozjpeg/simd/arm/jsimd_neon.S
-            mozjpeg/simd/arm/jsimd.c)
-    target_compile_definitions(mozjpeg PUBLIC
-            SIZEOF_SIZE_T=4)
-elseif (${ANDROID_ABI} STREQUAL "arm64-v8a")
-    target_sources(mozjpeg PRIVATE
-            mozjpeg/simd/arm64/jsimd_neon.S
-            mozjpeg/simd/arm64/jsimd.c)
-    target_compile_definitions(mozjpeg PUBLIC
-            SIZEOF_SIZE_T=8)
-elseif (${ANDROID_ABI} STREQUAL "x86")
-    set(CMAKE_ASM_NASM_COMPILER_ARG1 "${CMAKE_ASM_NASM_COMPILER_ARG1} -DPIC")
-    target_sources(mozjpeg PRIVATE
-            mozjpeg/simd/i386/jsimd.c
-            mozjpeg/simd/i386/jsimdcpu.asm
-            mozjpeg/simd/i386/jfdctflt-3dn.asm
-            mozjpeg/simd/i386/jidctflt-3dn.asm
-            mozjpeg/simd/i386/jquant-3dn.asm
-            mozjpeg/simd/i386/jccolor-mmx.asm
-            mozjpeg/simd/i386/jcgray-mmx.asm
-            mozjpeg/simd/i386/jcsample-mmx.asm
-            mozjpeg/simd/i386/jdcolor-mmx.asm
-            mozjpeg/simd/i386/jdmerge-mmx.asm
-            mozjpeg/simd/i386/jdsample-mmx.asm
-            mozjpeg/simd/i386/jfdctfst-mmx.asm
-            mozjpeg/simd/i386/jfdctint-mmx.asm
-            mozjpeg/simd/i386/jidctfst-mmx.asm
-            mozjpeg/simd/i386/jidctint-mmx.asm
-            mozjpeg/simd/i386/jidctred-mmx.asm
-            mozjpeg/simd/i386/jquant-mmx.asm
-            mozjpeg/simd/i386/jfdctflt-sse.asm
-            mozjpeg/simd/i386/jidctflt-sse.asm
-            mozjpeg/simd/i386/jquant-sse.asm
-            mozjpeg/simd/i386/jccolor-sse2.asm
-            mozjpeg/simd/i386/jcgray-sse2.asm
-            mozjpeg/simd/i386/jchuff-sse2.asm
-            mozjpeg/simd/i386/jcphuff-sse2.asm
-            mozjpeg/simd/i386/jcsample-sse2.asm
-            mozjpeg/simd/i386/jdcolor-sse2.asm
-            mozjpeg/simd/i386/jdmerge-sse2.asm
-            mozjpeg/simd/i386/jdsample-sse2.asm
-            mozjpeg/simd/i386/jfdctfst-sse2.asm
-            mozjpeg/simd/i386/jfdctint-sse2.asm
-            mozjpeg/simd/i386/jidctflt-sse2.asm
-            mozjpeg/simd/i386/jidctfst-sse2.asm
-            mozjpeg/simd/i386/jidctint-sse2.asm
-            mozjpeg/simd/i386/jidctred-sse2.asm
-            mozjpeg/simd/i386/jquantf-sse2.asm
-            mozjpeg/simd/i386/jquanti-sse2.asm
-            mozjpeg/simd/i386/jccolor-avx2.asm
-            mozjpeg/simd/i386/jcgray-avx2.asm
-            mozjpeg/simd/i386/jcsample-avx2.asm
-            mozjpeg/simd/i386/jdcolor-avx2.asm
-            mozjpeg/simd/i386/jdmerge-avx2.asm
-            mozjpeg/simd/i386/jdsample-avx2.asm
-            mozjpeg/simd/i386/jfdctint-avx2.asm
-            mozjpeg/simd/i386/jidctint-avx2.asm
-            mozjpeg/simd/i386/jquanti-avx2.asm)
-    target_compile_definitions(mozjpeg PUBLIC
-            SIZEOF_SIZE_T=4)
-elseif (${ANDROID_ABI} STREQUAL "x86_64")
-    set(CMAKE_ASM_NASM_COMPILER_ARG1 "${CMAKE_ASM_NASM_COMPILER_ARG1} -DPIC")
-    set(CMAKE_ASM_NASM_FLAGS "${CMAKE_ASM_NASM_FLAGS} -DELF")
-    set(CMAKE_ASM_NASM_DEBUG_FORMAT "dwarf2")
-    set(CMAKE_ASM_NASM_FLAGS "${CMAKE_ASM_NASM_FLAGS} -D__x86_64__")
-    target_sources(mozjpeg PRIVATE
-            mozjpeg/simd/x86_64/jsimd.c
-            mozjpeg/simd/x86_64/jsimdcpu.asm
-            mozjpeg/simd/x86_64/jfdctflt-sse.asm
-            mozjpeg/simd/x86_64/jccolor-sse2.asm
-            mozjpeg/simd/x86_64/jcgray-sse2.asm
-            mozjpeg/simd/x86_64/jchuff-sse2.asm
-            mozjpeg/simd/x86_64/jcphuff-sse2.asm
-            mozjpeg/simd/x86_64/jcsample-sse2.asm
-            mozjpeg/simd/x86_64/jdcolor-sse2.asm
-            mozjpeg/simd/x86_64/jdmerge-sse2.asm
-            mozjpeg/simd/x86_64/jdsample-sse2.asm
-            mozjpeg/simd/x86_64/jfdctfst-sse2.asm
-            mozjpeg/simd/x86_64/jfdctint-sse2.asm
-            mozjpeg/simd/x86_64/jidctflt-sse2.asm
-            mozjpeg/simd/x86_64/jidctfst-sse2.asm
-            mozjpeg/simd/x86_64/jidctint-sse2.asm
-            mozjpeg/simd/x86_64/jidctred-sse2.asm
-            mozjpeg/simd/x86_64/jquantf-sse2.asm
-            mozjpeg/simd/x86_64/jquanti-sse2.asm
-            mozjpeg/simd/x86_64/jccolor-avx2.asm
-            mozjpeg/simd/x86_64/jcgray-avx2.asm
-            mozjpeg/simd/x86_64/jcsample-avx2.asm
-            mozjpeg/simd/x86_64/jdcolor-avx2.asm
-            mozjpeg/simd/x86_64/jdmerge-avx2.asm
-            mozjpeg/simd/x86_64/jdsample-avx2.asm
-            mozjpeg/simd/x86_64/jfdctint-avx2.asm
-            mozjpeg/simd/x86_64/jidctint-avx2.asm
-            mozjpeg/simd/x86_64/jquanti-avx2.asm)
-    target_compile_definitions(mozjpeg PUBLIC
-            SIZEOF_SIZE_T=8)
-endif ()
+#add_library(mozjpeg STATIC
+#        mozjpeg/cjpeg.c mozjpeg/cdjpeg.c mozjpeg/rdgif.c mozjpeg/rdppm.c mozjpeg/rdjpeg.c mozjpeg/rdswitch.c mozjpeg/rdbmp.c
+#        mozjpeg/rdtarga.c mozjpeg/wrbmp.c mozjpeg/wrtarga.c mozjpeg/djpeg.c mozjpeg/cdjpeg.c mozjpeg/rdcolmap.c mozjpeg/rdswitch.c
+#        mozjpeg/wrgif.c mozjpeg/wrppm.c mozjpeg/jpegtran.c mozjpeg/cdjpeg.c mozjpeg/rdswitch.c mozjpeg/transupp.c mozjpeg/turbojpeg.c
+#        mozjpeg/jdatadst-tj.c mozjpeg/jdatasrc-tj.c mozjpeg/jcapimin.c mozjpeg/jcapistd.c mozjpeg/jccoefct.c mozjpeg/jccolor.c
+#        mozjpeg/jcdctmgr.c mozjpeg/jchuff.c mozjpeg/jcext.c mozjpeg/jcicc.c mozjpeg/jcinit.c mozjpeg/jcmainct.c mozjpeg/jcmarker.c
+#        mozjpeg/jcmaster.c mozjpeg/jcomapi.c mozjpeg/jcparam.c mozjpeg/jcphuff.c mozjpeg/jcprepct.c mozjpeg/jcsample.c
+#        mozjpeg/jctrans.c mozjpeg/jdapimin.c mozjpeg/jdapistd.c mozjpeg/jdatadst.c mozjpeg/jdatasrc.c
+#        mozjpeg/jdcoefct.c mozjpeg/jdcolor.c mozjpeg/jddctmgr.c mozjpeg/jdhuff.c mozjpeg/jdicc.c mozjpeg/jdinput.c
+#        mozjpeg/jdmainct.c mozjpeg/jdmarker.c mozjpeg/jdmaster.c mozjpeg/jdmerge.c mozjpeg/jdphuff.c mozjpeg/jdpostct.c mozjpeg/jdsample.c
+#        mozjpeg/jdtrans.c mozjpeg/jerror.c mozjpeg/jfdctflt.c mozjpeg/jfdctfst.c mozjpeg/jfdctint.c mozjpeg/jidctflt.c mozjpeg/jidctfst.c
+#        mozjpeg/jidctint.c mozjpeg/jidctred.c mozjpeg/jquant1.c mozjpeg/jquant2.c mozjpeg/jutils.c mozjpeg/jmemmgr.c mozjpeg/jmemnobs.c)
+#target_compile_options(mozjpeg PUBLIC
+#        -Os)
+#set_target_properties(mozjpeg PROPERTIES
+#        ANDROID_ARM_MODE arm)
+#target_compile_definitions(mozjpeg PUBLIC
+#        BMP_SUPPORTED GIF_SUPPORTED PPM_SUPPORTED TARGA_SUPPORTED)
+#target_include_directories(mozjpeg PUBLIC
+#        mozjpeg
+#        mozjpeg/simd/nasm)
+#
+#if (${ANDROID_ABI} STREQUAL "armeabi-v7a")
+#    target_sources(mozjpeg PRIVATE
+#            mozjpeg/simd/arm/jsimd_neon.S
+#            mozjpeg/simd/arm/jsimd.c)
+#    target_compile_definitions(mozjpeg PUBLIC
+#            SIZEOF_SIZE_T=4)
+#elseif (${ANDROID_ABI} STREQUAL "arm64-v8a")
+#    target_sources(mozjpeg PRIVATE
+#            mozjpeg/simd/arm64/jsimd_neon.S
+#            mozjpeg/simd/arm64/jsimd.c)
+#    target_compile_definitions(mozjpeg PUBLIC
+#            SIZEOF_SIZE_T=8)
+#elseif (${ANDROID_ABI} STREQUAL "x86")
+#    set(CMAKE_ASM_NASM_COMPILER_ARG1 "${CMAKE_ASM_NASM_COMPILER_ARG1} -DPIC")
+#    target_sources(mozjpeg PRIVATE
+#            mozjpeg/simd/i386/jsimd.c
+#            mozjpeg/simd/i386/jsimdcpu.asm
+#            mozjpeg/simd/i386/jfdctflt-3dn.asm
+#            mozjpeg/simd/i386/jidctflt-3dn.asm
+#            mozjpeg/simd/i386/jquant-3dn.asm
+#            mozjpeg/simd/i386/jccolor-mmx.asm
+#            mozjpeg/simd/i386/jcgray-mmx.asm
+#            mozjpeg/simd/i386/jcsample-mmx.asm
+#            mozjpeg/simd/i386/jdcolor-mmx.asm
+#            mozjpeg/simd/i386/jdmerge-mmx.asm
+#            mozjpeg/simd/i386/jdsample-mmx.asm
+#            mozjpeg/simd/i386/jfdctfst-mmx.asm
+#            mozjpeg/simd/i386/jfdctint-mmx.asm
+#            mozjpeg/simd/i386/jidctfst-mmx.asm
+#            mozjpeg/simd/i386/jidctint-mmx.asm
+#            mozjpeg/simd/i386/jidctred-mmx.asm
+#            mozjpeg/simd/i386/jquant-mmx.asm
+#            mozjpeg/simd/i386/jfdctflt-sse.asm
+#            mozjpeg/simd/i386/jidctflt-sse.asm
+#            mozjpeg/simd/i386/jquant-sse.asm
+#            mozjpeg/simd/i386/jccolor-sse2.asm
+#            mozjpeg/simd/i386/jcgray-sse2.asm
+#            mozjpeg/simd/i386/jchuff-sse2.asm
+#            mozjpeg/simd/i386/jcphuff-sse2.asm
+#            mozjpeg/simd/i386/jcsample-sse2.asm
+#            mozjpeg/simd/i386/jdcolor-sse2.asm
+#            mozjpeg/simd/i386/jdmerge-sse2.asm
+#            mozjpeg/simd/i386/jdsample-sse2.asm
+#            mozjpeg/simd/i386/jfdctfst-sse2.asm
+#            mozjpeg/simd/i386/jfdctint-sse2.asm
+#            mozjpeg/simd/i386/jidctflt-sse2.asm
+#            mozjpeg/simd/i386/jidctfst-sse2.asm
+#            mozjpeg/simd/i386/jidctint-sse2.asm
+#            mozjpeg/simd/i386/jidctred-sse2.asm
+#            mozjpeg/simd/i386/jquantf-sse2.asm
+#            mozjpeg/simd/i386/jquanti-sse2.asm
+#            mozjpeg/simd/i386/jccolor-avx2.asm
+#            mozjpeg/simd/i386/jcgray-avx2.asm
+#            mozjpeg/simd/i386/jcsample-avx2.asm
+#            mozjpeg/simd/i386/jdcolor-avx2.asm
+#            mozjpeg/simd/i386/jdmerge-avx2.asm
+#            mozjpeg/simd/i386/jdsample-avx2.asm
+#            mozjpeg/simd/i386/jfdctint-avx2.asm
+#            mozjpeg/simd/i386/jidctint-avx2.asm
+#            mozjpeg/simd/i386/jquanti-avx2.asm)
+#    target_compile_definitions(mozjpeg PUBLIC
+#            SIZEOF_SIZE_T=4)
+#elseif (${ANDROID_ABI} STREQUAL "x86_64")
+#    set(CMAKE_ASM_NASM_COMPILER_ARG1 "${CMAKE_ASM_NASM_COMPILER_ARG1} -DPIC")
+#    set(CMAKE_ASM_NASM_FLAGS "${CMAKE_ASM_NASM_FLAGS} -DELF")
+#    set(CMAKE_ASM_NASM_DEBUG_FORMAT "dwarf2")
+#    set(CMAKE_ASM_NASM_FLAGS "${CMAKE_ASM_NASM_FLAGS} -D__x86_64__")
+#    target_sources(mozjpeg PRIVATE
+#            mozjpeg/simd/x86_64/jsimd.c
+#            mozjpeg/simd/x86_64/jsimdcpu.asm
+#            mozjpeg/simd/x86_64/jfdctflt-sse.asm
+#            mozjpeg/simd/x86_64/jccolor-sse2.asm
+#            mozjpeg/simd/x86_64/jcgray-sse2.asm
+#            mozjpeg/simd/x86_64/jchuff-sse2.asm
+#            mozjpeg/simd/x86_64/jcphuff-sse2.asm
+#            mozjpeg/simd/x86_64/jcsample-sse2.asm
+#            mozjpeg/simd/x86_64/jdcolor-sse2.asm
+#            mozjpeg/simd/x86_64/jdmerge-sse2.asm
+#            mozjpeg/simd/x86_64/jdsample-sse2.asm
+#            mozjpeg/simd/x86_64/jfdctfst-sse2.asm
+#            mozjpeg/simd/x86_64/jfdctint-sse2.asm
+#            mozjpeg/simd/x86_64/jidctflt-sse2.asm
+#            mozjpeg/simd/x86_64/jidctfst-sse2.asm
+#            mozjpeg/simd/x86_64/jidctint-sse2.asm
+#            mozjpeg/simd/x86_64/jidctred-sse2.asm
+#            mozjpeg/simd/x86_64/jquantf-sse2.asm
+#            mozjpeg/simd/x86_64/jquanti-sse2.asm
+#            mozjpeg/simd/x86_64/jccolor-avx2.asm
+#            mozjpeg/simd/x86_64/jcgray-avx2.asm
+#            mozjpeg/simd/x86_64/jcsample-avx2.asm
+#            mozjpeg/simd/x86_64/jdcolor-avx2.asm
+#            mozjpeg/simd/x86_64/jdmerge-avx2.asm
+#            mozjpeg/simd/x86_64/jdsample-avx2.asm
+#            mozjpeg/simd/x86_64/jfdctint-avx2.asm
+#            mozjpeg/simd/x86_64/jidctint-avx2.asm
+#            mozjpeg/simd/x86_64/jquanti-avx2.asm)
+#    target_compile_definitions(mozjpeg PUBLIC
+#            SIZEOF_SIZE_T=8)
+#endif ()
 
 #tgnet
 add_library(tgnet STATIC
@@ -314,132 +314,6 @@ target_compile_definitions(flac PUBLIC
         _REENTRANT PIC U_COMMON_IMPLEMENTATION HAVE_SYS_PARAM_H VERSION="1.3.1" FLAC__NO_MD5 FLAC__INTEGER_ONLY_LIBRARY FLAC__NO_ASM)
 target_include_directories(flac PUBLIC
         exoplayer/libFLAC/include)
-
-#webp
-add_library(webp STATIC
-        libwebp/src/dec/alpha_dec.c
-        libwebp/src/dec/buffer_dec.c
-        libwebp/src/dec/frame_dec.c
-        libwebp/src/dec/idec_dec.c
-        libwebp/src/dec/io_dec.c
-        libwebp/src/dec/quant_dec.c
-        libwebp/src/dec/tree_dec.c
-        libwebp/src/dec/vp8_dec.c
-        libwebp/src/dec/vp8l_dec.c
-        libwebp/src/dec/webp_dec.c
-        libwebp/src/demux/anim_decode.c
-        libwebp/src/demux/demux.c
-        libwebp/src/dsp/alpha_processing.c
-        libwebp/src/dsp/alpha_processing_mips_dsp_r2.c
-        libwebp/src/dsp/alpha_processing_neon.c
-        libwebp/src/dsp/alpha_processing_sse2.c
-        libwebp/src/dsp/alpha_processing_sse41.c
-        libwebp/src/dsp/cpu.c
-        libwebp/src/dsp/dec.c
-        libwebp/src/dsp/dec_clip_tables.c
-        libwebp/src/dsp/dec_mips32.c
-        libwebp/src/dsp/dec_mips_dsp_r2.c
-        libwebp/src/dsp/dec_msa.c
-        libwebp/src/dsp/dec_neon.c
-        libwebp/src/dsp/dec_sse2.c
-        libwebp/src/dsp/dec_sse41.c
-        libwebp/src/dsp/filters.c
-        libwebp/src/dsp/filters_mips_dsp_r2.c
-        libwebp/src/dsp/filters_msa.c
-        libwebp/src/dsp/filters_neon.c
-        libwebp/src/dsp/filters_sse2.c
-        libwebp/src/dsp/lossless.c
-        libwebp/src/dsp/lossless_mips_dsp_r2.c
-        libwebp/src/dsp/lossless_msa.c
-        libwebp/src/dsp/lossless_neon.c
-        libwebp/src/dsp/lossless_sse2.c
-        libwebp/src/dsp/lossless_sse41.c
-        libwebp/src/dsp/rescaler.c
-        libwebp/src/dsp/rescaler_mips32.c
-        libwebp/src/dsp/rescaler_mips_dsp_r2.c
-        libwebp/src/dsp/rescaler_msa.c
-        libwebp/src/dsp/rescaler_neon.c
-        libwebp/src/dsp/rescaler_sse2.c
-        libwebp/src/dsp/upsampling.c
-        libwebp/src/dsp/upsampling_mips_dsp_r2.c
-        libwebp/src/dsp/upsampling_msa.c
-        libwebp/src/dsp/upsampling_neon.c
-        libwebp/src/dsp/upsampling_sse2.c
-        libwebp/src/dsp/upsampling_sse41.c
-        libwebp/src/dsp/yuv.c
-        libwebp/src/dsp/yuv_mips32.c
-        libwebp/src/dsp/yuv_mips_dsp_r2.c
-        libwebp/src/dsp/yuv_neon.c
-        libwebp/src/dsp/yuv_sse2.c
-        libwebp/src/dsp/yuv_sse41.c
-        libwebp/src/dsp/cost.c
-        libwebp/src/dsp/cost_mips32.c
-        libwebp/src/dsp/cost_mips_dsp_r2.c
-        libwebp/src/dsp/cost_neon.c
-        libwebp/src/dsp/cost_sse2.c
-        libwebp/src/dsp/enc.c
-        libwebp/src/dsp/enc_mips32.c
-        libwebp/src/dsp/enc_mips_dsp_r2.c
-        libwebp/src/dsp/enc_msa.c
-        libwebp/src/dsp/enc_neon.c
-        libwebp/src/dsp/enc_sse2.c
-        libwebp/src/dsp/enc_sse41.c
-        libwebp/src/dsp/lossless_enc.c
-        libwebp/src/dsp/lossless_enc_mips32.c
-        libwebp/src/dsp/lossless_enc_mips_dsp_r2.c
-        libwebp/src/dsp/lossless_enc_msa.c
-        libwebp/src/dsp/lossless_enc_neon.c
-        libwebp/src/dsp/lossless_enc_sse2.c
-        libwebp/src/dsp/lossless_enc_sse41.c
-        libwebp/src/dsp/ssim.c
-        libwebp/src/dsp/ssim_sse2.c
-        libwebp/src/enc/alpha_enc.c
-        libwebp/src/enc/analysis_enc.c
-        libwebp/src/enc/backward_references_cost_enc.c
-        libwebp/src/enc/backward_references_enc.c
-        libwebp/src/enc/config_enc.c
-        libwebp/src/enc/cost_enc.c
-        libwebp/src/enc/filter_enc.c
-        libwebp/src/enc/frame_enc.c
-        libwebp/src/enc/histogram_enc.c
-        libwebp/src/enc/iterator_enc.c
-        libwebp/src/enc/near_lossless_enc.c
-        libwebp/src/enc/picture_enc.c
-        libwebp/src/enc/picture_csp_enc.c
-        libwebp/src/enc/picture_psnr_enc.c
-        libwebp/src/enc/picture_rescale_enc.c
-        libwebp/src/enc/picture_tools_enc.c
-        libwebp/src/enc/predictor_enc.c
-        libwebp/src/enc/quant_enc.c
-        libwebp/src/enc/syntax_enc.c
-        libwebp/src/enc/token_enc.c
-        libwebp/src/enc/tree_enc.c
-        libwebp/src/enc/vp8l_enc.c
-        libwebp/src/enc/webp_enc.c
-        libwebp/src/mux/anim_encode.c
-        libwebp/src/mux/muxedit.c
-        libwebp/src/mux/muxinternal.c
-        libwebp/src/mux/muxread.c
-        libwebp/src/utils/bit_reader_utils.c
-        libwebp/src/utils/color_cache_utils.c
-        libwebp/src/utils/filters_utils.c
-        libwebp/src/utils/huffman_utils.c
-        libwebp/src/utils/quant_levels_dec_utils.c
-        libwebp/src/utils/random_utils.c
-        libwebp/src/utils/rescaler_utils.c
-        libwebp/src/utils/thread_utils.c
-        libwebp/src/utils/utils.c
-        libwebp/src/utils/bit_writer_utils.c
-        libwebp/src/utils/huffman_encode_utils.c
-        libwebp/src/utils/quant_levels_utils.c)
-target_compile_options(webp PUBLIC
-        -Wall -finline-functions -ffast-math -Os)
-set_target_properties(webp PROPERTIES
-        ANDROID_ARM_MODE arm)
-target_compile_definitions(webp PUBLIC
-        HAVE_MALLOC_H HAVE_PTHREAD WEBP_USE_THREAD)
-target_include_directories(webp PUBLIC
-        libwebp libwebp/src)
 
 #sqlite
 add_library(sqlite STATIC
@@ -769,9 +643,8 @@ target_link_libraries(${NATIVE_LIB}
         tgvoip
         tgcalls
         tgcalls_tp
-        mozjpeg
+#        mozjpeg
         tgnet
-        webp
         flac
         rlottie
         sqlite

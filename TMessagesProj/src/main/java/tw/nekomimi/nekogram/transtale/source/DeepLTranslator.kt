@@ -17,7 +17,7 @@ object DeepLTranslator : Translator {
 
         if (to !in targetLanguages) {
 
-            throw UnsupportedOperationException(LocaleController.getString("TranslateApiUnsupported", R.string.TranslateApiUnsupported))
+            throw UnsupportedOperationException(LocaleController.getString(R.string.TranslateApiUnsupported))
 
         }
 

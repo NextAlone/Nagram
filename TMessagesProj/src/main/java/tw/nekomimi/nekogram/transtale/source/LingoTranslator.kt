@@ -15,7 +15,7 @@ object LingoTranslator : Translator {
 
         if (to !in listOf("zh", "en", "es", "fr", "ja", "ru")) {
 
-            error(LocaleController.getString("TranslateApiUnsupported", R.string.TranslateApiUnsupported))
+            error(LocaleController.getString(R.string.TranslateApiUnsupported))
 
         }
 

@@ -24,7 +24,7 @@ object Dialogs {
         timestamps: ArrayList<String>,
         finish: (String) -> Unit
     ) {
-        val captionString = LocaleController.getString("Caption", R.string.Caption);
+        val captionString = LocaleController.getString(R.string.Caption);
 
         val builder = AlertDialog.Builder(context);
         builder.setTitle(captionString);
@@ -52,13 +52,12 @@ object Dialogs {
         builder.setView(textLayout);
         builder.setPositiveButton(
             LocaleController.getString(
-                "Send",
                 R.string.Send
             )
         ) { _: DialogInterface?, _: Int ->
             finish(editText.text.toString());
         }
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+        builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
         builder.show().setOnShowListener { dialog: DialogInterface? ->
             editText.requestFocus();
             AndroidUtilities.showKeyboard(editText);
@@ -77,14 +76,9 @@ object Dialogs {
     @JvmStatic
     fun createNeedChangeNekoSettingsAlert(context: Context) {
         val builder = AlertDialog.Builder(context)
-        builder.setTitle(LocaleController.getString("AppName", R.string.AppName))
-        builder.setMessage(
-            LocaleController.getString(
-                "NeedChangeNekoSettings",
-                R.string.NeedChangeNekoSettings
-            )
-        )
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null)
+        builder.setTitle(LocaleController.getString(R.string.AppName))
+        builder.setMessage(LocaleController.getString(R.string.NeedChangeNekoSettings))
+        builder.setPositiveButton(LocaleController.getString(R.string.OK), null)
         builder.show()
     }
 }

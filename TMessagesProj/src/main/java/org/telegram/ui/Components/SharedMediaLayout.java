@@ -35,7 +35,6 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.transition.ChangeBounds;
 import android.transition.TransitionManager;
 import android.transition.TransitionSet;
 import android.transition.TransitionValues;
@@ -4317,7 +4316,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), resourcesProvider);
                             builder.setTitle(medias.size() > 1 ? LocaleController.getString(R.string.DeleteBotPreviewsTitle) : LocaleController.getString(R.string.DeleteBotPreviewTitle));
                             builder.setMessage(LocaleController.formatPluralString("DeleteBotPreviewsSubtitle", medias.size()));
-                            builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new DialogInterface.OnClickListener() {
+                            builder.setPositiveButton(LocaleController.getString(R.string.Delete), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     list.delete(medias);
@@ -4325,7 +4324,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                                     closeActionMode(false);
                                 }
                             });
-                            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) (dialog, which) -> {
+                            builder.setNegativeButton(LocaleController.getString(R.string.Cancel), (DialogInterface.OnClickListener) (dialog, which) -> {
                                 dialog.dismiss();
                             });
                             AlertDialog dialog = builder.create();
@@ -4344,7 +4343,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), resourcesProvider);
                             builder.setTitle(storyItems.size() > 1 ? LocaleController.getString(R.string.DeleteStoriesTitle) : LocaleController.getString(R.string.DeleteStoryTitle));
                             builder.setMessage(LocaleController.formatPluralString("DeleteStoriesSubtitle", storyItems.size()));
-                            builder.setPositiveButton(LocaleController.getString("Delete", R.string.Delete), new DialogInterface.OnClickListener() {
+                            builder.setPositiveButton(LocaleController.getString(R.string.Delete), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     profileActivity.getMessagesController().getStoriesController().deleteStories(dialog_id, storyItems);
@@ -4352,7 +4351,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                                     closeActionMode(false);
                                 }
                             });
-                            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (DialogInterface.OnClickListener) (dialog, which) -> {
+                            builder.setNegativeButton(LocaleController.getString(R.string.Cancel), (DialogInterface.OnClickListener) (dialog, which) -> {
                                 dialog.dismiss();
                             });
                             AlertDialog dialog = builder.create();
@@ -4451,7 +4450,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             args.putBoolean("canSelectTopics", true);
             args.putInt("dialogsType", DialogsActivity.DIALOGS_TYPE_FORWARD);
             DialogsActivity fragment = new DialogsActivity(args);
-            fragment.setDelegate((fragment1, dids, message, param, topicsFragment) -> {
+            fragment.setDelegate((fragment1, dids, message, param, notify, scheduleDate, topicsFragment) -> {
                 ArrayList<MessageObject> fmessages = new ArrayList<>();
                 for (int a = 1; a >= 0; a--) {
                     ArrayList<Integer> ids = new ArrayList<>();
@@ -5471,7 +5470,9 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     page.fastScrollEnabled = list.getCount() > 0;
                     updateFastScrollVisibility(page, true);
                 }
-                storiesAdapter.notifyDataSetChanged();
+                if (page != null) {
+                    AndroidUtilities.notifyDataSetChanged(page.listView);
+                }
                 if (delegate != null) {
                     delegate.updateSelectedMediaTabText();
                 }
@@ -5482,7 +5483,9 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     page.fastScrollEnabled = list.getCount() > 0;
                     updateFastScrollVisibility(page, true);
                 }
-                archivedStoriesAdapter.notifyDataSetChanged();
+                if (page != null) {
+                    AndroidUtilities.notifyDataSetChanged(page.listView);
+                }
                 if (delegate != null) {
                     delegate.updateSelectedMediaTabText();
                 }
@@ -5491,7 +5494,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             for (int i = 0; i < mediaPages.length; ++i) {
                 if (mediaPages[i] != null && mediaPages[i].listView != null && (mediaPages[i].selectedType == TAB_STORIES || mediaPages[i].selectedType == TAB_ARCHIVED_STORIES)) {
                     if (isBot() && mediaPages[i].listView.getAdapter() != null) {
-                        mediaPages[i].listView.getAdapter().notifyDataSetChanged();
+                        AndroidUtilities.notifyDataSetChanged(mediaPages[i].listView);
                     } else {
                         for (int j = 0; j < mediaPages[i].listView.getChildCount(); ++j) {
                             View child = mediaPages[i].listView.getChildAt(j);
@@ -5758,11 +5761,10 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         updateTabs(true);
         for (int a = 0; a < mediaPages.length; a++) {
             if (mediaPages[a].selectedType == TAB_GROUPUSERS && mediaPages[a].listView.getAdapter() != null) {
-                mediaPages[a].listView.getAdapter().notifyDataSetChanged();
+                AndroidUtilities.notifyDataSetChanged(mediaPages[a].listView);
             }
         }
     }
-
 
     public void updateAdapters() {
         if (photoVideoAdapter != null) {
@@ -5969,7 +5971,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                     if (!scrollSlidingTextTabStrip.hasTab(0)) {
                         OnLongClickListener longClickListener = view -> {
                             ArrayList<String> entries = new ArrayList<>();
-                            entries.add(LocaleController.getString("SharedPhotosAndVideos", R.string.SharedPhotosAndVideos));
+                            entries.add(LocaleController.getString(R.string.SharedPhotosAndVideos));
                             entries.add(LocaleController.getString("AllVideos", R.string.AllVideos));
                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                             builder.setTitle(LocaleController.getString("SharedMediaTabFull2", R.string.SharedMediaTabFull2));
@@ -7095,43 +7097,43 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         EmptyStubView emptyStubView = new EmptyStubView(context, resourcesProvider);
         if (currentType == 0) {
             if (DialogObject.isEncryptedDialog(dialog_id)) {
-                emptyStubView.emptyTextView.setText(getString("NoMediaSecret", R.string.NoMediaSecret));
+                emptyStubView.emptyTextView.setText(getString(R.string.NoMediaSecret));
             } else {
-                emptyStubView.emptyTextView.setText(getString("NoMedia", R.string.NoMedia));
+                emptyStubView.emptyTextView.setText(getString(R.string.NoMedia));
             }
         } else if (currentType == 1) {
             if (DialogObject.isEncryptedDialog(dialog_id)) {
-                emptyStubView.emptyTextView.setText(getString("NoSharedFilesSecret", R.string.NoSharedFilesSecret));
+                emptyStubView.emptyTextView.setText(getString(R.string.NoSharedFilesSecret));
             } else {
-                emptyStubView.emptyTextView.setText(getString("NoSharedFiles", R.string.NoSharedFiles));
+                emptyStubView.emptyTextView.setText(getString(R.string.NoSharedFiles));
             }
         } else if (currentType == 2) {
             if (DialogObject.isEncryptedDialog(dialog_id)) {
-                emptyStubView.emptyTextView.setText(getString("NoSharedVoiceSecret", R.string.NoSharedVoiceSecret));
+                emptyStubView.emptyTextView.setText(getString(R.string.NoSharedVoiceSecret));
             } else {
-                emptyStubView.emptyTextView.setText(getString("NoSharedVoice", R.string.NoSharedVoice));
+                emptyStubView.emptyTextView.setText(getString(R.string.NoSharedVoice));
             }
         } else if (currentType == 3) {
             if (DialogObject.isEncryptedDialog(dialog_id)) {
-                emptyStubView.emptyTextView.setText(getString("NoSharedLinksSecret", R.string.NoSharedLinksSecret));
+                emptyStubView.emptyTextView.setText(getString(R.string.NoSharedLinksSecret));
             } else {
-                emptyStubView.emptyTextView.setText(getString("NoSharedLinks", R.string.NoSharedLinks));
+                emptyStubView.emptyTextView.setText(getString(R.string.NoSharedLinks));
             }
         } else if (currentType == 4) {
             if (DialogObject.isEncryptedDialog(dialog_id)) {
-                emptyStubView.emptyTextView.setText(getString("NoSharedAudioSecret", R.string.NoSharedAudioSecret));
+                emptyStubView.emptyTextView.setText(getString(R.string.NoSharedAudioSecret));
             } else {
-                emptyStubView.emptyTextView.setText(getString("NoSharedAudio", R.string.NoSharedAudio));
+                emptyStubView.emptyTextView.setText(getString(R.string.NoSharedAudio));
             }
         } else if (currentType == 5) {
             if (DialogObject.isEncryptedDialog(dialog_id)) {
-                emptyStubView.emptyTextView.setText(getString("NoSharedGifSecret", R.string.NoSharedGifSecret));
+                emptyStubView.emptyTextView.setText(getString(R.string.NoSharedGifSecret));
             } else {
-                emptyStubView.emptyTextView.setText(getString("NoGIFs", R.string.NoGIFs));
+                emptyStubView.emptyTextView.setText(getString(R.string.NoGIFs));
             }
         } else if (currentType == 6) {
             emptyStubView.emptyImageView.setImageDrawable(null);
-            emptyStubView.emptyTextView.setText(getString("NoGroupsInCommon", R.string.NoGroupsInCommon));
+            emptyStubView.emptyTextView.setText(getString(R.string.NoGroupsInCommon));
         } else if (currentType == 7) {
             emptyStubView.emptyImageView.setImageDrawable(null);
             emptyStubView.emptyTextView.setText("");
