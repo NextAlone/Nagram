@@ -842,6 +842,10 @@
 
         <meta-data android:name="android.max_aspect" android:value="2.5" />
 
+        <property
+            android:name="miui.continuity.policy"
+            android:value="5" />
+
     </application>
 
 </manifest>
