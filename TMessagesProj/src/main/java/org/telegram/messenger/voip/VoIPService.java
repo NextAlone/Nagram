@@ -3148,7 +3148,11 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
 					} else if (vibrate == 3) {
 						duration *= 2;
 					}
-					vibrator.vibrate(new long[]{0, duration, 500}, 0);
+					AudioAttributes audioAttributes = new AudioAttributes.Builder()
+							.setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+							.setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+							.build();
+					vibrator.vibrate(new long[]{0, duration, 500}, 0, audioAttributes);
 				}
 			}
 		}
