@@ -196,6 +196,8 @@ public class NekoConfig {
     // priv branch changes
     public static ConfigItem localPremium = addConfig("localPremium", configTypeBool, false);
 
+    public static ConfigItem localeToDBC = addConfig("LocaleToDBC", configTypeBool, false);
+
     static {
         loadConfig(false);
         checkMigrate(false);

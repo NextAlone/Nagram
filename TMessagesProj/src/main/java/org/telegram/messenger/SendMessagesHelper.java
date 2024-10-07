@@ -102,6 +102,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import kotlin.Pair;
+import top.qwq2333.nullgram.utils.StringUtils;
 import xyz.nextalone.nagram.NaConfig;
 
 public class SendMessagesHelper extends BaseController implements NotificationCenter.NotificationCenterDelegate {
@@ -1945,7 +1947,16 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 if (msgObj.getId() <= 0 || msgObj.needDrawBluredPreview()) {
                     if (msgObj.type == MessageObject.TYPE_TEXT && !TextUtils.isEmpty(msgObj.messageText)) {
                         TLRPC.WebPage webPage = msgObj.messageOwner.media != null ? msgObj.messageOwner.media.webpage : null;
-                        SendMessageParams params = SendMessageParams.of(msgObj.messageText.toString(), peer, null, replyToTopMsg, webPage, webPage != null, msgObj.messageOwner.entities, null, null, notify, scheduleDate, null, false);
+
+                        var messageText = msgObj.messageText.toString();
+                        var entities = msgObj.messageOwner.entities;
+                        if (!msgObj.isForwarded() && NaConfig.INSTANCE.getEnablePanguOnSending().Bool()) {
+                            var pair = StringUtils.spacingText(messageText, msgObj.messageOwner.entities);
+                            messageText = pair.getFirst();
+                            entities = pair.getSecond();
+                        }
+
+                        SendMessageParams params = SendMessageParams.of(messageText, peer, null, replyToTopMsg, webPage, webPage != null, entities, null, null, notify, scheduleDate, null, false);
                         params.quick_reply_shortcut = msgObj.getQuickReplyName();
                         params.quick_reply_shortcut_id = msgObj.getQuickReplyId();
                         sendMessage(params);
@@ -2107,9 +2118,18 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 if (newMsg.message == null) {
                     newMsg.message = "";
                 }
+
+                if (!((newMsg.params.containsKey("fwd_id") || newMsg.params.containsKey("fwd_peer")) || msgObj.isForwarded() || MessageObject.isForwardedMessage(newMsg)) && NaConfig.INSTANCE.getEnablePanguOnSending().Bool()) {
+                    var pair = StringUtils.spacingText(newMsg.message, msgObj.messageOwner.entities);
+                    newMsg.message = pair.getFirst();
+                    newMsg.entities = pair.getSecond();
+                } else {
+                    newMsg.entities = msgObj.messageOwner.entities;
+                }
+
                 newMsg.fwd_msg_id = msgObj.getId();
                 newMsg.attachPath = msgObj.messageOwner.attachPath;
-                newMsg.entities = msgObj.messageOwner.entities;
+//                newMsg.entities = msgObj.messageOwner.entities;
                 if (msgObj.messageOwner.reply_markup instanceof TLRPC.TL_replyInlineMarkup) {
                     newMsg.reply_markup = new TLRPC.TL_replyInlineMarkup();
                     boolean dropMarkup = false;
@@ -3760,6 +3780,14 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     } else {
                         newMsg = new TLRPC.TL_message();
                     }
+
+                    if (poll.poll != null && NaConfig.INSTANCE.getEnablePanguOnSending().Bool()) {
+                        poll.poll.question = StringUtils.spacingText(poll.poll.question);
+                        for (int i = 0; i < poll.poll.answers.size(); i++) {
+                            poll.poll.answers.get(i).text = StringUtils.spacingText(poll.poll.answers.get(i).text);
+                        }
+                    }
+
                     newMsg.media = poll;
                     type = 10;
                 } else if (location != null) {
@@ -4225,6 +4253,21 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     newMsg.flags |= 131072;
                 }
                 isFinalGroupMedia = params.get("final") != null;
+            }
+
+            if (!((params != null && params.containsKey("fwd_id")) || MessageObject.isForwardedMessage(newMsg)) && NaConfig.INSTANCE.getEnablePanguOnSending().Bool()) {
+                Pair<String, ArrayList<TLRPC.MessageEntity>> pair;
+                if (caption != null) {
+                    pair = StringUtils.spacingText(caption, entities);
+                    caption = pair.getFirst();
+                } else {
+                    pair = StringUtils.spacingText(message, entities);
+                    message = pair.getFirst();
+                }
+                entities = pair.getSecond();
+
+                newMsg.message = pair.getFirst();
+                newMsg.entities = pair.getSecond();
             }
 
             if (stars > 0) {

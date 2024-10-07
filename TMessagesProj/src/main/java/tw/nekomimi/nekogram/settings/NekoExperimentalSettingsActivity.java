@@ -127,6 +127,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
     private final AbstractConfigCell disableSendReadStoriesRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableSendReadStories()));
     private final AbstractConfigCell dividerStory = cellGroup.appendCell(new ConfigCellDivider());
 
+    // Sticker Cache
     private final AbstractConfigCell header3 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.ExternalStickerCache)));
     private final AbstractConfigCell externalStickerCacheRow = cellGroup.appendCell(new ConfigCellAutoTextCheck(
             NaConfig.INSTANCE.getExternalStickerCache(), LocaleController.getString(R.string.ExternalStickerCacheHint), this::onExternalStickerCacheButtonClick));
@@ -135,6 +136,13 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
     private final AbstractConfigCell externalStickerCacheSyncAllRow = cellGroup.appendCell(new ConfigCellText("ExternalStickerCacheRefreshAll", ExternalStickerCacheHelper::syncAllCaches));
     private final AbstractConfigCell externalStickerCacheDeleteAllRow = cellGroup.appendCell(new ConfigCellText("ExternalStickerCacheDeleteAll", ExternalStickerCacheHelper::deleteAllCaches));
     private final AbstractConfigCell divider2 = cellGroup.appendCell(new ConfigCellDivider());
+
+    // Pangu
+    private final AbstractConfigCell header4 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.Pangu)));
+    private final AbstractConfigCell enablePanguOnSendingRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getEnablePanguOnSending(), LocaleController.getString(R.string.PanguInfo)));
+    private final AbstractConfigCell enablePanguOnReceivingRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getEnablePanguOnReceiving()));
+    private final AbstractConfigCell localeToDBCRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.localeToDBC));
+    private final AbstractConfigCell divider3 = cellGroup.appendCell(new ConfigCellDivider());
 
     private UndoView tooltip;
 
@@ -359,6 +367,8 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
                 intent.setType("application/zip");
                 Activity act = getParentActivity();
                 act.startActivityFromChild(act, intent, INTENT_PICK_CUSTOM_EMOJI_PACK);
+            } else if (key.equals(NekoConfig.localeToDBC.getKey())) {
+                tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             }
         };
 

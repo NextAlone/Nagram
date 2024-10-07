@@ -42,6 +42,7 @@ import androidx.annotation.NonNull;
 import androidx.collection.LongSparseArray;
 import androidx.core.graphics.ColorUtils;
 
+import top.qwq2333.nullgram.utils.StringUtils;
 import xyz.nextalone.nagram.NaConfig;
 import xyz.nextalone.nagram.helper.MessageHelper;
 import xyz.nextalone.nagram.ui.syntaxhighlight.SyntaxHighlight;
@@ -1752,6 +1753,12 @@ public class MessageObject {
         TLRPC.User fromUser = null;
         if (message.from_id instanceof TLRPC.TL_peerUser) {
             fromUser = getUser(users, sUsers, message.from_id.user_id);
+        }
+
+        if (generateLayout && messageOwner.message != null && NaConfig.INSTANCE.getEnablePanguOnReceiving().Bool()) {
+            var pair = StringUtils.spacingText(messageOwner.message, messageOwner.entities);
+            messageOwner.message = pair.getFirst();
+            messageOwner.entities = pair.getSecond();
         }
 
         updateMessageText(users, chats, sUsers, sChats);

@@ -1460,11 +1460,11 @@ public class LocaleController {
                 }
             }
         }
-        if (value == null || "".equals(value)) {
+        if (value == null || value.isEmpty()) {
             value = "LOC_ERR:" + key;
             if (getFallbackResources() != null)
                 value = getFallbackResources().getString(res);
-        } else {
+        } else if (NekoConfig.localeToDBC.Bool()) {
             value = LocFiltersKt.filter(value);
         }
         return value;

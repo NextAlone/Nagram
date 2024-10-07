@@ -640,6 +640,18 @@ object NaConfig {
             ConfigItem.configTypeString,
             ""
         )
+    val enablePanguOnSending =
+        addConfig(
+            "EnablePanguOnSending",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val enablePanguOnReceiving =
+        addConfig(
+            "EnablePanguOnReceiving",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

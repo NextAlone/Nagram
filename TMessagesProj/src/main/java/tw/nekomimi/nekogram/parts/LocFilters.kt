@@ -1,12 +1,12 @@
 package tw.nekomimi.nekogram.parts
 
 private val mapArr = mapOf(
-        '（' to '(',
-        '）' to ')',
-        '。' to '.',
-        '，' to ',',
-        '？' to '?',
-        '；' to ';'
+    '（' to '(',
+    '）' to ')',
+    '。' to '.',
+    '，' to ',',
+    '？' to '?',
+    '；' to ';'
 )
 
 fun filter(input: String) = input.toCharArray().let { c ->
