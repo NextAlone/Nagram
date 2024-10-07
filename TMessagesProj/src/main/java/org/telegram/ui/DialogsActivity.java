@@ -5412,7 +5412,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 if (!hasStories) {
                     DialogsActivity.this.setScrollY(0);
                 }
-                if (!hasFragment()) {
+                if (!hasFragment() && hasStories) {
                     invalidateScrollY = true;
                     fixScrollYAfterArchiveOpened = true;
                     fragmentView.invalidate();
