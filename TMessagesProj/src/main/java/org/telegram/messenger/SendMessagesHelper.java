@@ -4267,7 +4267,9 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 entities = pair.getSecond();
 
                 newMsg.message = pair.getFirst();
-                newMsg.entities = pair.getSecond();
+                if (entities != null && !entities.isEmpty()) {
+                    newMsg.entities = entities;
+                }
             }
 
             if (stars > 0) {
