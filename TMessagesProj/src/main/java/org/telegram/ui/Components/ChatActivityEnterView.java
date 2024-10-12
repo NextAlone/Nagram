@@ -10922,6 +10922,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             params.quick_reply_shortcut = parentFragment != null ? parentFragment.quickReplyShortcut : null;
             params.quick_reply_shortcut_id = parentFragment != null ? parentFragment.getQuickReplyId() : 0;
             params.effect_id = effectId;
+            params.canUsePangu = false;  // Na: Always Do not use pangu for bot button text
             sendButton.setEffect(effectId = 0);
             SendMessagesHelper.getInstance(currentAccount).sendMessage(params);
         } else if (button instanceof TLRPC.TL_keyboardButtonUrl) {
