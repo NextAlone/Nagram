@@ -3598,7 +3598,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         long stars = sendMessageParams.stars;
 
         boolean canSendGames = sendMessageParams.canSendGames;
-        boolean canUsePangu = sendMessageParams.canUsePangu;
+        boolean canUsePangu = sendMessageParams.canUsePangu == null ? NaConfig.INSTANCE.getEnablePanguOnSending().Bool() : sendMessageParams.canUsePangu;
         if (user != null && user.phone == null) {
             return;
         }
@@ -3782,7 +3782,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                         newMsg = new TLRPC.TL_message();
                     }
 
-                    if (poll.poll != null && canUsePangu && NaConfig.INSTANCE.getEnablePanguOnSending().Bool()) {
+                    if (poll.poll != null && canUsePangu) {
                         poll.poll.question = StringUtils.spacingText(poll.poll.question);
                         for (int i = 0; i < poll.poll.answers.size(); i++) {
                             poll.poll.answers.get(i).text = StringUtils.spacingText(poll.poll.answers.get(i).text);
@@ -4256,7 +4256,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 isFinalGroupMedia = params.get("final") != null;
             }
 
-            if (!((params != null && params.containsKey("fwd_id")) || MessageObject.isForwardedMessage(newMsg)) && canUsePangu && NaConfig.INSTANCE.getEnablePanguOnSending().Bool()) {
+            if (!((params != null && params.containsKey("fwd_id")) || MessageObject.isForwardedMessage(newMsg)) && canUsePangu) {
                 Pair<String, ArrayList<TLRPC.MessageEntity>> pair;
                 if (caption != null) {
                     pair = StringUtils.spacingText(caption, entities);
@@ -9677,7 +9677,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         public long stars;
 
         public boolean canSendGames = true;
-        public boolean canUsePangu = true;
+        public Boolean canUsePangu = null;
 
         public static SendMessageParams of(String string, long dialogId) {
             return of(string, null, null, null, null, null, null, null, null, null, dialogId, null, null, null, null, true, null, null, null, null, false, 0, 0, null, null, false);

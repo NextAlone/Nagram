@@ -217,6 +217,7 @@ import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import kotlin.text.StringsKt;
+import top.qwq2333.nullgram.utils.StringUtils;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.cc.CCConverter;
 import tw.nekomimi.nekogram.cc.CCTarget;
@@ -4985,10 +4986,10 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             if (containsMarkdown(messageEditText.getText())) {
                 boolean withoutMarkdown = NaConfig.INSTANCE.getDisableMarkdown().Bool();
                 int markdownButtonDrawable = withoutMarkdown ? R.drawable.round_code_white : R.drawable.round_code_off_white;
-                String markdownButtonStr = withoutMarkdown ? getString("SendWithMarkdown", R.string.SendWithMarkdown) : getString("SendWithoutMarkdown", R.string.SendWithoutMarkdown);
+                String markdownButtonStr = withoutMarkdown ? getString(R.string.SendWithMarkdown) : getString(R.string.SendWithoutMarkdown);
                 options.add(markdownButtonDrawable, markdownButtonStr, () -> {
                     sentFromPreview = System.currentTimeMillis();
-                    sendMessageInternal(true, 0, true, withoutMarkdown, true);
+                    sendMessageInternal(true, 0, true, SendMessageInternalParams.markdown(withoutMarkdown));
                     if (!containsSendMessage && messageSendPreview != null) {
                         messageSendPreview.dismiss(true);
                         messageSendPreview = null;
@@ -4998,9 +4999,24 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     }
                 });
             } else if (canSendAsDice(messageEditText.getText().toString(), parentFragment, dialog_id)) {
-                options.add(R.drawable.casino_icon, getString("SendAsEmoji", R.string.SendAsEmoji), () -> {
+                options.add(R.drawable.casino_icon, getString(R.string.SendAsEmoji), () -> {
                     sentFromPreview = System.currentTimeMillis();
-                    sendMessageInternal(true, 0, true, null, false);
+                    sendMessageInternal(true, 0, true, SendMessageInternalParams.game(false));
+                    if (!containsSendMessage && messageSendPreview != null) {
+                        messageSendPreview.dismiss(true);
+                        messageSendPreview = null;
+                    } else {
+                        AndroidUtilities.cancelRunOnUIThread(dismissSendPreview);
+                        AndroidUtilities.runOnUIThread(dismissSendPreview, 500);
+                    }
+                });
+            } else if (StringUtils.canUsePangu(messageEditText.getText().toString())) {
+                boolean shouldUsePangu = !NaConfig.INSTANCE.getEnablePanguOnSending().Bool();
+                int markdownButtonDrawable = shouldUsePangu ? R.drawable.round_code_white : R.drawable.round_code_off_white;
+                String markdownButtonStr = shouldUsePangu ? getString(R.string.SendWithPangu) : getString(R.string.SendWithoutPangu);
+                options.add(markdownButtonDrawable, markdownButtonStr, () -> {
+                    sentFromPreview = System.currentTimeMillis();
+                    sendMessageInternal(true, 0, true, SendMessageInternalParams.pangu(shouldUsePangu));
                     if (!containsSendMessage && messageSendPreview != null) {
                         messageSendPreview.dismiss(true);
                         messageSendPreview = null;
@@ -7351,14 +7367,10 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
     private boolean premiumEmojiBulletin = true;
 
     private void sendMessageInternal(boolean notify, int scheduleDate, boolean allowConfirm) {
-        sendMessageInternal(notify, scheduleDate, allowConfirm, null, true);
+        sendMessageInternal(notify, scheduleDate, allowConfirm, new SendMessageInternalParams());
     }
 
-    private void sendMessageInternal(boolean notify, int scheduleDate, boolean allowConfirm, Boolean withMarkdown, boolean withGame) {
-        boolean disableMarkdown = NaConfig.INSTANCE.getDisableMarkdown().Bool();
-        if (withMarkdown == null) {
-            withMarkdown = !disableMarkdown;
-        }
+    private void sendMessageInternal(boolean notify, int scheduleDate, boolean allowConfirm, SendMessageInternalParams internalParams) {
         if (slowModeTimer == Integer.MAX_VALUE && !isInScheduleMode()) {
             if (delegate != null) {
                 delegate.scrollToSendingMessage();
@@ -7453,7 +7465,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             if (delegate != null) {
                 delegate.beforeMessageSend(message, notify, scheduleDate);
             }
-            if (processSendingText(message, notify, scheduleDate, withMarkdown, withGame)) {
+            if (processSendingText(message, notify, scheduleDate, internalParams)) {
                 if (delegate.hasForwardingMessages() || (scheduleDate != 0 && !isInScheduleMode()) || isInScheduleMode()) {
                     if (messageEditText != null) {
                     messageEditText.setText("");
@@ -7481,6 +7493,30 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 delegate.beforeMessageSend(null, notify, scheduleDate);
                 delegate.onMessageSend(null, notify, scheduleDate);
             }
+        }
+    }
+
+    public static class SendMessageInternalParams {
+        public Boolean withMarkdown = null;
+        public boolean withGame = true;
+        public Boolean canUsePangu = null;
+
+        public static SendMessageInternalParams markdown(Boolean withMarkdown) {
+            SendMessageInternalParams params = new SendMessageInternalParams();
+            params.withMarkdown = withMarkdown;
+            return params;
+        }
+
+        public static SendMessageInternalParams game(boolean withGame) {
+            SendMessageInternalParams params = new SendMessageInternalParams();
+            params.withGame = withGame;
+            return params;
+        }
+
+        public static SendMessageInternalParams pangu(Boolean canUsePangu) {
+            SendMessageInternalParams params = new SendMessageInternalParams();
+            params.canUsePangu = canUsePangu;
+            return params;
         }
     }
 
@@ -7756,7 +7792,11 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         setEditingMessageObject(null, null, false);
     }
 
-    public boolean processSendingText(CharSequence text, boolean notify, int scheduleDate, boolean withMarkdown, boolean withGame) {
+    public boolean processSendingText(CharSequence text, boolean notify, int scheduleDate, SendMessageInternalParams internalParams) {
+        boolean withMarkdown = internalParams.withMarkdown == null ? !NaConfig.INSTANCE.getDisableMarkdown().Bool() : internalParams.withMarkdown;
+        boolean withGame = internalParams.withGame;
+        Boolean canUsePangu = internalParams.canUsePangu;
+
         if (replyingQuote != null && parentFragment != null && replyingQuote.outdated) {
             parentFragment.showQuoteMessageUpdate();
             return false;
@@ -7849,6 +7889,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 }
                 SendMessagesHelper.SendMessageParams params = SendMessagesHelper.SendMessageParams.of(message[0].toString(), dialog_id, replyingMessageObject, replyToTopMsg, messageWebPage, messageWebPageSearch, entities, null, null, notify, scheduleDate, sendAnimationData, updateStickersOrder);
                 params.canSendGames = withGame;
+                params.canUsePangu = canUsePangu;
                 params.quick_reply_shortcut = parentFragment != null ? parentFragment.quickReplyShortcut : null;
                 params.quick_reply_shortcut_id = parentFragment != null ? parentFragment.getQuickReplyId() : 0;
                 params.effect_id = effectId;
