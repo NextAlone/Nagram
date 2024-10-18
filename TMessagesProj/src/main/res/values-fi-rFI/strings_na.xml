@@ -159,4 +159,10 @@
     <string name="SearchHashtagDefaultPageChannel">Kanavan Napsauta Hashtag Oletus Hakusivu</string>
     <string name="SearchHashtagDefaultPageChat">Chatti Klikkaa Hashtag Oletus Hakusivu</string>
     <string name="OpenUrlOutBotWebViewRegex">Url regex hypätä ulos bottinäytöstä</string>
+    <string name="LocaleToDBC">Paikallinen teksti käyttäen DBC kirjainta</string>
+    <string name="EnablePanguOnReceiving">Ota Pangu käyttöön vastaanoton yhteydessä</string>
+    <string name="EnablePanguOnSending">Ota Pangu käyttöön lähetettäessä</string>
+    <string name="PanguInfo">Paranoid tekstiväli hyvän luettavuuden, automaattisesti lisätä valkotilaa CJK (Kiina, japani, korea), puolileveys Englanti, numeroinen ja symboli merkkejä.</string>
+    <string name="SendWithPangu">Lähetä Pangun avulla</string>
+    <string name="SendWithoutPangu">Lähetä ilman Pangu</string>
 </resources>

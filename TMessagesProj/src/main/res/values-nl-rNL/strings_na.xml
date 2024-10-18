@@ -159,4 +159,10 @@
     <string name="SearchHashtagDefaultPageChannel">Kanaal klik op Hashtag standaard zoekpagina</string>
     <string name="SearchHashtagDefaultPageChat">Chat klik op Hashtag standaard zoekpagina</string>
     <string name="OpenUrlOutBotWebViewRegex">Url regex om uit bot webview te springen</string>
+    <string name="LocaleToDBC">Taaltekst met behulp van DBC case</string>
+    <string name="EnablePanguOnReceiving">Pangu inschakelen bij ontvangen</string>
+    <string name="EnablePanguOnSending">Pangu inschakelen bij verzenden</string>
+    <string name="PanguInfo">Paranoïde tekstafstand om goede leesbaarheid te verkrijgen, om automatisch spaties toe te voegen tussen CJK (Chinees, Japans en Koreaans), om Engels, cijfers en symbool tekens in te korten.</string>
+    <string name="SendWithPangu">Verzenden met Pangu</string>
+    <string name="SendWithoutPangu">Verzenden zonder Pangu</string>
 </resources>

@@ -159,4 +159,10 @@
     <string name="SearchHashtagDefaultPageChannel">Знайти сторінку пошуку по каналу натисніть хештеґ за замовчуванням</string>
     <string name="SearchHashtagDefaultPageChat">Знайти сторінку пошуку при чаті натисніть хештеґ за замовчуванням</string>
     <string name="OpenUrlOutBotWebViewRegex">Перестрибнути з веб-перегляду ботів</string>
+    <string name="LocaleToDBC">Текст локалі за допомогою DBC</string>
+    <string name="EnablePanguOnReceiving">Ввімкнути Pangu для отримання</string>
+    <string name="EnablePanguOnSending">Увімкнути Pangu при відправці</string>
+    <string name="PanguInfo">Параноїдний відступ для належної читання, щоб автоматично вставити пробіли між CJK (китайською, японською, корейською, напівшириною англійською, цифрами та символами.</string>
+    <string name="SendWithPangu">Надіслати з Пангу</string>
+    <string name="SendWithoutPangu">Надіслати без Пангу</string>
 </resources>

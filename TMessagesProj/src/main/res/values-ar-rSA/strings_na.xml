@@ -159,4 +159,10 @@
     <string name="SearchHashtagDefaultPageChannel">قناة النقر فوق هاشتاج صفحة البحث الافتراضية</string>
     <string name="SearchHashtagDefaultPageChat">صفحة البحث الافتراضية للدردشة بنقرة هاشتاج</string>
     <string name="OpenUrlOutBotWebViewRegex">url regex للقفز من مشاهدة الويب البوت</string>
+    <string name="LocaleToDBC">النص المحلي باستخدام قضية DBC</string>
+    <string name="EnablePanguOnReceiving">تمكين بانغو عند الاستلام</string>
+    <string name="EnablePanguOnSending">تمكين بانغو عند الإرسال</string>
+    <string name="PanguInfo">تباعد نص بارانويد من أجل القراءة الجيدة، من أجل إدراج فضاء بيضاء تلقائياً بين رمز CJK (الصينية، اليابانية، الكورية)، نصف العرض الإنكليزي والرقم والرموز.</string>
+    <string name="SendWithPangu">إرسال مع بانجو</string>
+    <string name="SendWithoutPangu">إرسال بدون بانجو</string>
 </resources>

@@ -159,4 +159,10 @@
     <string name="SearchHashtagDefaultPageChannel">Búsqueda de Hashtags en Canal</string>
     <string name="SearchHashtagDefaultPageChat">Búsqueda de Hashtags en Chats</string>
     <string name="OpenUrlOutBotWebViewRegex">Url regex para saltar de la vista web del bot</string>
+    <string name="LocaleToDBC">Texto local usando mayúsculas DBC</string>
+    <string name="EnablePanguOnReceiving">Activar Pangu al recibir</string>
+    <string name="EnablePanguOnSending">Activar Pangu al enviar</string>
+    <string name="PanguInfo">Espaciado de texto paranoide para una buena legibilidad, para insertar automáticamente espacios en blanco entre CJK (chino, japonés, coreano), Inglés de medio ancho, dígitos y caracteres de símbolos.</string>
+    <string name="SendWithPangu">Enviar con Pangu</string>
+    <string name="SendWithoutPangu">Enviar sin Pangu</string>
 </resources>

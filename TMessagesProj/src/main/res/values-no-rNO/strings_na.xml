@@ -159,4 +159,10 @@
     <string name="SearchHashtagDefaultPageChannel">Kanal klikk Hashtag standard søkeside</string>
     <string name="SearchHashtagDefaultPageChat">Chat Klikk Hashtag som standard søkeside</string>
     <string name="OpenUrlOutBotWebViewRegex">Url regex til å hoppe ut av bot webview</string>
+    <string name="LocaleToDBC">Nasjonal tekst ved bruk av DBC- bokstaver</string>
+    <string name="EnablePanguOnReceiving">Aktiver Pangu ved mottak</string>
+    <string name="EnablePanguOnSending">Aktiver Pangu ved sending</string>
+    <string name="PanguInfo">Paranoid tekstavstand for god lesbarhet, for automatisk å sette inn tomrom mellom CJK (kinesisk, japansk, koreansk), halvbredde Engelsk, siffer og symboltegn.</string>
+    <string name="SendWithPangu">Send med Pangu</string>
+    <string name="SendWithoutPangu">Send uten Pangu</string>
 </resources>

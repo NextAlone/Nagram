@@ -159,4 +159,10 @@
     <string name="SearchHashtagDefaultPageChannel">Página Padrão de Pesquisa no Hashtag do Canal</string>
     <string name="SearchHashtagDefaultPageChat">Página de pesquisa padrão do Click Chat Hashtag</string>
     <string name="OpenUrlOutBotWebViewRegex">Regex Url para saltar do webview do bot</string>
+    <string name="LocaleToDBC">Texto da localidade usando caso DBC</string>
+    <string name="EnablePanguOnReceiving">Habilitar Pangu ao receber</string>
+    <string name="EnablePanguOnSending">Habilitar Pangu ao enviar</string>
+    <string name="PanguInfo">Espaçamento de texto paranóico para boa leitura, para inserir automaticamente espaço em branco entre CJK (chinês, japonês, coreano), inglês de meia largura, algarismo e símbolo de caracteres.</string>
+    <string name="SendWithPangu">Enviar com Pangu</string>
+    <string name="SendWithoutPangu">Enviar sem Pangu</string>
 </resources>

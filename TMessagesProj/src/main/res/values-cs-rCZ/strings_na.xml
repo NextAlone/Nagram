@@ -159,4 +159,10 @@
     <string name="SearchHashtagDefaultPageChannel">Výchozí vyhledávací stránka Hashtag kliknutím na kanál</string>
     <string name="SearchHashtagDefaultPageChat">Výchozí stránka hledání kliknutím na hashtag</string>
     <string name="OpenUrlOutBotWebViewRegex">Url regex pro skok z webového zobrazení bota</string>
+    <string name="LocaleToDBC">Lokální text s použitím případu DBC</string>
+    <string name="EnablePanguOnReceiving">Povolit Pangu při příjmu</string>
+    <string name="EnablePanguOnSending">Povolit Pangu při odesílání</string>
+    <string name="PanguInfo">Paranoidní textová mezera pro dobrou čitelnost, k automatickému vkládání bílých mezer mezi CJK (čínština, japonština, korejština), na polovinu šířky anglické, číslicové a symbolové znaky.</string>
+    <string name="SendWithPangu">Poslat s Pangu</string>
+    <string name="SendWithoutPangu">Odeslat bez Pangu</string>
 </resources>

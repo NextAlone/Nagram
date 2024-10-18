@@ -159,4 +159,10 @@
     <string name="SearchHashtagDefaultPageChannel">Kanal Klick auf Hashtag Standard-Suchseite</string>
     <string name="SearchHashtagDefaultPageChat">Chat Klick auf Hashtag Standard-Suchseite</string>
     <string name="OpenUrlOutBotWebViewRegex">Url regex um aus dem Bot Webview zu springen</string>
+    <string name="LocaleToDBC">Sprachtext in DBC-Fall</string>
+    <string name="EnablePanguOnReceiving">Pangu beim Empfangen aktivieren</string>
+    <string name="EnablePanguOnSending">Pangu beim Senden aktivieren</string>
+    <string name="PanguInfo">Paranoide Textabstände für eine gute Lesbarkeit, um automatisch Leerzeichen zwischen CJK (Chinesisch, Japanisch, Koreanisch), Halbbreite Englisch, Ziffern und Symbolzeichen einzufügen.</string>
+    <string name="SendWithPangu">Mit Pangu senden</string>
+    <string name="SendWithoutPangu">Ohne Pangu senden</string>
 </resources>

@@ -159,4 +159,10 @@
     <string name="SearchHashtagDefaultPageChannel">Channel Click Hashtag Default Search Page</string>
     <string name="SearchHashtagDefaultPageChat">Chat Click Hashtag Default Search Page</string>
     <string name="OpenUrlOutBotWebViewRegex">Url regex to jump out of bot webview</string>
+    <string name="LocaleToDBC">Locale text using DBC case</string>
+    <string name="EnablePanguOnReceiving">Enable Pangu on receiving</string>
+    <string name="EnablePanguOnSending">Enable Pangu on sending</string>
+    <string name="PanguInfo">Paranoid text spacing for good readability, to automatically insert whitespace between CJK (Chinese, Japanese, Korean), half-width English, digit and symbol characters.</string>
+    <string name="SendWithPangu">Send with Pangu</string>
+    <string name="SendWithoutPangu">Send without Pangu</string>
 </resources>

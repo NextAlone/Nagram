@@ -159,4 +159,10 @@
     <string name="SearchHashtagDefaultPageChannel">Κανάλι Κάντε Κλικ Hashtag Προεπιλεγμένη Σελίδα Αναζήτησης</string>
     <string name="SearchHashtagDefaultPageChat">Chat Click Hashtag Προεπιλεγμένη Σελίδα Αναζήτησης</string>
     <string name="OpenUrlOutBotWebViewRegex">Url regex για να πηδήξει έξω από bot προβολή webview</string>
+    <string name="LocaleToDBC">Τοπικό κείμενο με χρήση πεζών-κεφαλαίων DBC</string>
+    <string name="EnablePanguOnReceiving">Ενεργοποίηση Pangu κατά τη λήψη</string>
+    <string name="EnablePanguOnSending">Ενεργοποίηση Pangu κατά την αποστολή</string>
+    <string name="PanguInfo">Paranoid διάστημα κειμένου για καλή αναγνωσιμότητα, να εισάγετε αυτόματα κενά μεταξύ CJK (κινέζικα, ιαπωνικά, κορεατικά), μισού πλάτους αγγλικά, ψηφία και σύμβολα χαρακτήρες.</string>
+    <string name="SendWithPangu">Αποστολή με Pangu</string>
+    <string name="SendWithoutPangu">Αποστολή χωρίς Pangu</string>
 </resources>

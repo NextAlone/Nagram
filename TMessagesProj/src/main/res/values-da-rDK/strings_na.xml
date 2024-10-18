@@ -159,4 +159,10 @@
     <string name="SearchHashtagDefaultPageChannel">Kanal Klik Hashtag Standard Søgeside</string>
     <string name="SearchHashtagDefaultPageChat">Chat Klik Hashtag Standard Søgeside</string>
     <string name="OpenUrlOutBotWebViewRegex">Url regex til at hoppe ud af bot webview</string>
+    <string name="LocaleToDBC">Landestandard tekst ved brug af DBC case</string>
+    <string name="EnablePanguOnReceiving">Aktiver Pangu ved modtagelse</string>
+    <string name="EnablePanguOnSending">Aktiver Pangu ved afsendelse</string>
+    <string name="PanguInfo">Paranoid tekstafstand for god læsbarhed, for automatisk at indsætte blanke tegn mellem CJK (kinesisk, japansk, koreansk), halvbredde engelsk, ciffer og symbol tegn.</string>
+    <string name="SendWithPangu">Send med Pangu</string>
+    <string name="SendWithoutPangu">Send uden Pangu</string>
 </resources>

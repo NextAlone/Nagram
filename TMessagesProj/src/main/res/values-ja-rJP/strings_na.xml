@@ -159,4 +159,10 @@
     <string name="SearchHashtagDefaultPageChannel">チャンネルをタップでハッシュタグのデフォルト検索ページ</string>
     <string name="SearchHashtagDefaultPageChat">チャットクリック ハッシュタグ デフォルト検索ページ</string>
     <string name="OpenUrlOutBotWebViewRegex">ボットのWebビューから飛び出すURL正規表現</string>
+    <string name="LocaleToDBC">DBCケースを使用したロケールテキスト</string>
+    <string name="EnablePanguOnReceiving">受信時にパングを有効にする</string>
+    <string name="EnablePanguOnSending">送信時にパングを有効にする</string>
+    <string name="PanguInfo">CJK(中国語、日本語、韓国語)、半角英語、数字、記号の間に自動的に空白を挿入することができます。</string>
+    <string name="SendWithPangu">Panguで送信</string>
+    <string name="SendWithoutPangu">Panguなしで送信</string>
 </resources>
