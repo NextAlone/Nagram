@@ -275,7 +275,7 @@ public class UserConfig extends BaseController {
     }
 
     private void checkPremiumSelf(TLRPC.User oldUser, TLRPC.User newUser) {
-        if (oldUser == null || (newUser != null && oldUser.premium != newUser.premium)) {
+        if (oldUser != null && newUser != null && oldUser.premium != newUser.premium) {
             AndroidUtilities.runOnUIThread(() -> {
                 getMessagesController().updatePremium(newUser.premium || NekoConfig.localPremium.Bool());
                 NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.currentUserPremiumStatusChanged);
@@ -284,6 +284,12 @@ public class UserConfig extends BaseController {
                 getMediaDataController().loadPremiumPromo(false);
                 getMediaDataController().loadReactions(false, null);
                 getMessagesController().getStoriesController().invalidateStoryLimit();
+            });
+        } else if (oldUser == null) {
+            AndroidUtilities.runOnUIThread(() -> {
+                getMessagesController().updatePremium(newUser.premium);
+                NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.currentUserPremiumStatusChanged);
+                getMediaDataController().loadPremiumPromo(true);
             });
         }
     }
@@ -565,10 +571,11 @@ public class UserConfig extends BaseController {
     }
 
     public boolean isPremium() {
-        if (currentUser == null) {
+        TLRPC.User user = currentUser;
+        if (user == null) {
             return false;
         }
-        return currentUser.premium || NekoConfig.localPremium.Bool();
+        return user.premium || NekoConfig.localPremium.Bool();
     }
 
     public Long getEmojiStatus() {

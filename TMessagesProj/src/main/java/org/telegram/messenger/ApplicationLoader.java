@@ -186,7 +186,11 @@ public class ApplicationLoader extends Application {
         NativeLoader.initNativeLibs(ApplicationLoader.applicationContext);
 
         SharedConfig.loadConfig();
-        LocaleController.getInstance();
+        try {
+            LocaleController.getInstance(); //TODO improve
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         SharedPrefsHelper.init(applicationContext);
         UserConfig.getInstance(0).loadConfig();
 

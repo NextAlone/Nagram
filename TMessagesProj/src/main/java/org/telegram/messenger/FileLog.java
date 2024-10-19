@@ -86,7 +86,7 @@ public class FileLog {
     private static HashSet<String> excludeRequests;
 
     public static void dumpResponseAndRequest(int account, TLObject request, TLObject response, TLRPC.TL_error error, long requestMsgId, long startRequestTimeInMillis, int requestToken) {
-        if (false && (!BuildVars.DEBUG_PRIVATE_VERSION || !BuildVars.LOGS_ENABLED || request == null)) {
+        if (!BuildVars.DEBUG_PRIVATE_VERSION || !BuildVars.LOGS_ENABLED || request == null) {
             return;
         }
         String requestSimpleName = request.getClass().getSimpleName();
@@ -130,7 +130,7 @@ public class FileLog {
     }
 
     public static void dumpUnparsedMessage(TLObject message, long messageId, int account) {
-        if (false && (!BuildVars.DEBUG_PRIVATE_VERSION || !BuildVars.LOGS_ENABLED || message == null)) {
+        if (!BuildVars.DEBUG_PRIVATE_VERSION || !BuildVars.LOGS_ENABLED || message == null) {
             return;
         }
         try {
@@ -333,6 +333,10 @@ public class FileLog {
                 try {
                     getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/" + tag + ": " + message + "\n");
                     getInstance().streamWriter.write(exception.toString());
+                    StackTraceElement[] stack = exception.getStackTrace();
+                    for (int a = 0; a < stack.length; a++) {
+                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: \tat " + stack[a] + "\n");
+                    }
                     getInstance().streamWriter.flush();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -392,12 +396,19 @@ public class FileLog {
         e.printStackTrace();
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
-
                 try {
                     getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/" + tag + ": " + e + "\n");
                     StackTraceElement[] stack = e.getStackTrace();
                     for (int a = 0; a < stack.length; a++) {
-                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/" + tag + ": " + stack[a] + "\n");
+                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: \tat " + stack[a] + "\n");
+                    }
+                    Throwable cause = e.getCause();
+                    if (cause != null) {
+                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: Caused by " + cause + "\n");
+                        stack = cause.getStackTrace();
+                        for (int a = 0; a < stack.length; a++) {
+                            getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: \tat " + stack[a] + "\n");
+                        }
                     }
                     getInstance().streamWriter.flush();
                 } catch (Exception e1) {
@@ -417,7 +428,7 @@ public class FileLog {
         if (!BuildVars.LOGS_ENABLED) {
             return;
         }
-//        if (BuildVars.DEBUG_VERSION && needSent(e) && logToAppCenter) {
+//        if (logToAppCenter && BuildVars.DEBUG_VERSION && needSent(e)) {
 //            AndroidUtilities.appCenterLog(e);
 //        }
         ensureInitied();
@@ -427,10 +438,18 @@ public class FileLog {
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
                 try {
-                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " Fatal/" + tag + ": " + e + "\n");
+                    getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " FATAL/tmessages: " + e + "\n");
                     StackTraceElement[] stack = e.getStackTrace();
                     for (int a = 0; a < stack.length; a++) {
-                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " Fatal/" + tag + ": " + stack[a] + "\n");
+                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " FATAL/tmessages: \tat " + stack[a] + "\n");
+                    }
+                    Throwable cause = e.getCause();
+                    if (cause != null) {
+                        getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: Caused by " + cause + "\n");
+                        stack = cause.getStackTrace();
+                        for (int a = 0; a < stack.length; a++) {
+                            getInstance().streamWriter.write(getInstance().dateFormat.format(System.currentTimeMillis()) + " E/tmessages: \tat " + stack[a] + "\n");
+                        }
                     }
                     getInstance().streamWriter.flush();
                 } catch (Exception e1) {

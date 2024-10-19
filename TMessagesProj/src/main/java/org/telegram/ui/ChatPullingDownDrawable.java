@@ -729,6 +729,7 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
     }
 
     public long getChatId() {
+        if (nextChat == null) return 0;
         return nextChat.id;
     }
 

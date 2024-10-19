@@ -92,6 +92,7 @@ import org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble;
 import org.telegram.ui.Components.VideoPlayer;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PhotoViewer;
+import org.telegram.ui.Stories.DarkThemeResourceProvider;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -735,12 +736,14 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         public VideoEditedInfo videoEditedInfo;
         public int currentAccount;
         public boolean foreground;
+        public boolean foregroundConversion;
 
-        public VideoConvertMessage(MessageObject object, VideoEditedInfo info, boolean foreground) {
+        public VideoConvertMessage(MessageObject object, VideoEditedInfo info, boolean foreground, boolean conversion) {
             messageObject = object;
             currentAccount = messageObject.currentAccount;
             videoEditedInfo = info;
             this.foreground = foreground;
+            this.foregroundConversion = conversion;
         }
     }
 
@@ -4414,11 +4417,14 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             currentAccount.getNotificationCenter().addObserver(this, NotificationCenter.fileLoaded);
             currentAccount.getNotificationCenter().addObserver(this, NotificationCenter.fileLoadProgressChanged);
             currentAccount.getNotificationCenter().addObserver(this, NotificationCenter.fileLoadFailed);
-            progressDialog = new AlertDialog(context, AlertDialog.ALERT_TYPE_LOADING);
+            final Theme.ResourcesProvider resourcesProvider = PhotoViewer.getInstance().isVisible() ? new DarkThemeResourceProvider() : null;
+            progressDialog = new AlertDialog(context, AlertDialog.ALERT_TYPE_LOADING, resourcesProvider);
             progressDialog.setMessage(LocaleController.getString(R.string.Loading));
-            progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setCancelable(true);
-            progressDialog.setOnCancelListener(d -> cancelled = true);
+            progressDialog.setCancelDialog(true);
+            progressDialog.setOnCancelListener(d -> {
+                cancelled = true;
+            });
         }
 
         public void start(Context context) {
@@ -4434,7 +4440,12 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                         for (int b = 0, N = messageObjects.size(); b < N; b++) {
                             MessageObject message = messageObjects.get(b);
                             String path = message.messageOwner.attachPath;
-                            String name = message.getDocumentName();
+                            TLRPC.Document document = message.getDocument();
+                            if (message.qualityToSave != null) {
+                                document = message.qualityToSave;
+                                path = null;
+                            }
+                            String name = FileLoader.getDocumentFileName(document);
                             if (path != null && path.length() > 0) {
                                 File temp = new File(path);
                                 if (!temp.exists()) {
@@ -4442,18 +4453,21 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                                 }
                             }
                             if (TextUtils.isEmpty(path)) {
-//                                path = null;
-//                                TLRPC.Document document = message.getDocument();
-//                                if (!TextUtils.isEmpty(FileLoader.getDocumentFileName(document)) && !(message.messageOwner instanceof TLRPC.TL_message_secret) && FileLoader.canSaveAsFile(message)) {
-//                                    String filename = FileLoader.getDocumentFileName(document);
-//                                    File newDir = FileLoader.getDirectory(FileLoader.MEDIA_DIR_DOCUMENT);
-//                                    if (newDir != null) {
-//                                        path = new File(newDir, filename).getAbsolutePath();
-//                                    }
-//                                }
-//                                if (path == null) {
-                                    path = FileLoader.getInstance(currentAccount.getCurrentAccount()).getPathToMessage(message.messageOwner).toString();
-//                                }
+                                final FileLoader fileLoader = FileLoader.getInstance(currentAccount.getCurrentAccount());
+                                final TLRPC.MessageMedia media = MessageObject.getMedia(message);
+                                File file = null;
+                                if (message.qualityToSave != null) {
+                                    file = fileLoader.getPathToAttach(message.qualityToSave, null, false, true);
+                                } else {
+                                    file = fileLoader.getPathToMessage(message.messageOwner, true);
+                                    if (media instanceof TLRPC.TL_messageMediaDocument) {
+                                        final TLRPC.TL_messageMediaDocument mediaDocument = (TLRPC.TL_messageMediaDocument) media;
+                                        if (!mediaDocument.alt_documents.isEmpty()) {
+                                            file = fileLoader.getPathToAttach(mediaDocument.alt_documents.get(0), null, false, true);
+                                        }
+                                    }
+                                }
+                                path = file.toString();
                             }
                             File sourceFile = new File(path);
                             if (!sourceFile.exists()) {
@@ -4483,7 +4497,11 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                         dir.mkdir();
                         for (int b = 0, N = messageObjects.size(); b < N; b++) {
                             MessageObject message = messageObjects.get(b);
-                            String name = message.getDocumentName();
+                            TLRPC.Document document = message.getDocument();
+                            if (message.qualityToSave != null) {
+                                document = message.qualityToSave;
+                            }
+                            String name = FileLoader.getDocumentFileName(document);
                             File destFile = new File(dir, name);
                             if (destFile.exists()) {
                                 int idx = name.lastIndexOf('.');
@@ -4504,16 +4522,24 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                                 destFile.createNewFile();
                             }
                             String path = message.messageOwner.attachPath;
+                            if (message.qualityToSave != null) {
+                                path = null;
+                            }
                             if (path != null && path.length() > 0) {
                                 File temp = new File(path);
                                 if (!temp.exists()) {
                                     path = null;
                                 }
                             }
-                            if (path == null || path.length() == 0) {
-                                path = FileLoader.getInstance(currentAccount.getCurrentAccount()).getPathToMessage(message.messageOwner).toString();
+                            File sourceFile;
+                            if (message.qualityToSave != null) {
+                                sourceFile = FileLoader.getInstance(currentAccount.getCurrentAccount()).getPathToAttach(message.qualityToSave, null, false, true);
+                            } else {
+                                if (path == null || path.length() == 0) {
+                                    path = FileLoader.getInstance(currentAccount.getCurrentAccount()).getPathToMessage(message.messageOwner).toString();
+                                }
+                                sourceFile = new File(path);
                             }
-                            File sourceFile = new File(path);
                             if (!sourceFile.exists()) {
                                 waitingForFile = new CountDownLatch(1);
                                 addMessageToLoad(message);
@@ -4556,6 +4582,9 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         private void addMessageToLoad(MessageObject messageObject) {
             AndroidUtilities.runOnUIThread(() -> {
                 TLRPC.Document document = messageObject.getDocument();
+                if (messageObject.qualityToSave != null) {
+                    document = messageObject.qualityToSave;
+                }
                 if (document == null) {
                     return;
                 }
@@ -5360,10 +5389,10 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     }
 
     public void scheduleVideoConvert(MessageObject messageObject) {
-        scheduleVideoConvert(messageObject, false, true);
+        scheduleVideoConvert(messageObject, false, true, false);
     }
 
-    public boolean scheduleVideoConvert(MessageObject messageObject, boolean isEmpty, boolean withForeground) {
+    public boolean scheduleVideoConvert(MessageObject messageObject, boolean isEmpty, boolean withForeground, boolean forConversion) {
         if (messageObject == null || messageObject.videoEditedInfo == null) {
             return false;
         }
@@ -5372,7 +5401,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         } else if (isEmpty) {
             new File(messageObject.messageOwner.attachPath).delete();
         }
-        VideoConvertMessage videoConvertMessage = new VideoConvertMessage(messageObject, messageObject.videoEditedInfo, withForeground);
+        VideoConvertMessage videoConvertMessage = new VideoConvertMessage(messageObject, messageObject.videoEditedInfo, withForeground, forConversion);
         videoConvertQueue.add(videoConvertMessage);
         if (videoConvertMessage.foreground) {
             foregroundConvertingMessages.add(videoConvertMessage);

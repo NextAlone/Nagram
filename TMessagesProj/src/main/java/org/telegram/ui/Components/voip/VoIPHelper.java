@@ -140,44 +140,32 @@ public class VoIPHelper {
         startCall(chat, peer, hash, createCall, null, activity, fragment, accountInstance);
 	}
 
-	public static void startCall(TLRPC.Chat chat, TLRPC.InputPeer peer, String hash, boolean createCall, Boolean checkJoiner, Activity activity, BaseFragment fragment, AccountInstance accountInstance) {if (activity == null) {
-            return;
-        }
-        if (ConnectionsManager.getInstance(UserConfig.selectedAccount).getConnectionState() != ConnectionsManager.ConnectionStateConnected) {
-            boolean isAirplaneMode = Settings.System.getInt(activity.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) != 0;
-            AlertDialog.Builder bldr = new AlertDialog.Builder(activity)
-                    .setTitle(isAirplaneMode ? LocaleController.getString(R.string.VoipOfflineAirplaneTitle) : LocaleController.getString(R.string.VoipOfflineTitle))
-                    .setMessage(isAirplaneMode ? LocaleController.getString(R.string.VoipGroupOfflineAirplane) : LocaleController.getString(R.string.VoipGroupOffline))
-                    .setPositiveButton(LocaleController.getString(R.string.OK), null);
-            if (isAirplaneMode) {
-                final Intent settingsIntent = new Intent(Settings.ACTION_AIRPLANE_MODE_SETTINGS);
-                if (settingsIntent.resolveActivity(activity.getPackageManager()) != null) {
-                    bldr.setNeutralButton(LocaleController.getString(R.string.VoipOfflineOpenSettings), (dialog, which) -> activity.startActivity(settingsIntent));
-                }
-            }
-            try {
-                bldr.show();
-            } catch (Exception e) {
-                FileLog.e(e);
-            }
-            return;
-        }
+	public static void startCall(TLRPC.Chat chat, TLRPC.InputPeer peer, String hash, boolean createCall, Boolean checkJoiner, Activity activity, BaseFragment fragment, AccountInstance accountInstance) {
+		if (activity == null) {
+			return;
+		}
+		if (ConnectionsManager.getInstance(UserConfig.selectedAccount).getConnectionState() != ConnectionsManager.ConnectionStateConnected) {
+			boolean isAirplaneMode = Settings.System.getInt(activity.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) != 0;
+			AlertDialog.Builder bldr = new AlertDialog.Builder(activity)
+					.setTitle(isAirplaneMode ? LocaleController.getString(R.string.VoipOfflineAirplaneTitle) : LocaleController.getString(R.string.VoipOfflineTitle))
+					.setMessage(isAirplaneMode ? LocaleController.getString(R.string.VoipGroupOfflineAirplane) : LocaleController.getString(R.string.VoipGroupOffline))
+					.setPositiveButton(LocaleController.getString(R.string.OK), null);
+			if (isAirplaneMode) {
+				final Intent settingsIntent = new Intent(Settings.ACTION_AIRPLANE_MODE_SETTINGS);
+				if (settingsIntent.resolveActivity(activity.getPackageManager()) != null) {
+					bldr.setNeutralButton(LocaleController.getString(R.string.VoipOfflineOpenSettings), (dialog, which) -> activity.startActivity(settingsIntent));
+				}
+			}
+			try {
+				bldr.show();
+			} catch (Exception e) {
+				FileLog.e(e);
+			}
+			return;
+		}
 
-        if (Build.VERSION.SDK_INT >= 23) {
-            ArrayList<String> permissions = new ArrayList<>();
-            ChatObject.Call call = accountInstance.getMessagesController().getGroupCall(chat.id, false);
-			if (activity.checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED && !(call != null && call.call.rtmp_stream)) {
-                permissions.add(Manifest.permission.RECORD_AUDIO);
-            }
-            if (permissions.isEmpty()) {
-                initiateCall(null, chat, hash, false, false, createCall, checkJoiner, activity, fragment, accountInstance);
-            } else {
-                activity.requestPermissions(permissions.toArray(new String[0]), 103);
-            }
-        } else {
-            initiateCall(null, chat, hash, false, false, createCall, checkJoiner, activity, fragment, accountInstance);
-        }
-    }
+		initiateCall(null, chat, hash, false, false, createCall, checkJoiner, activity, fragment, accountInstance);
+	}
 
     private static void initiateCall(TLRPC.User user, TLRPC.Chat chat, String hash, boolean videoCall, boolean canVideoCall, boolean createCall, Boolean checkJoiner, final Activity activity, BaseFragment fragment, AccountInstance accountInstance) {
         if (activity == null || user == null && chat == null) {
@@ -249,85 +237,89 @@ public class VoIPHelper {
         }
     }
 
-    private static void doInitiateCall(TLRPC.User user, TLRPC.Chat chat, String hash, TLRPC.InputPeer peer, boolean hasFewPeers, boolean videoCall, boolean canVideoCall, boolean createCall, Activity activity, BaseFragment fragment, AccountInstance accountInstance, boolean checkJoiner, boolean checkAnonymous) {
-        if (activity == null || user == null && chat == null) {
-            return;
-        }
-        if (SystemClock.elapsedRealtime() - lastCallTime < (chat != null ? 200 : 2000)) {
-            return;
-        }
-        if (checkJoiner && chat != null && !createCall) {
-            TLRPC.ChatFull chatFull = accountInstance.getMessagesController().getChatFull(chat.id);
-            if (chatFull != null && chatFull.groupcall_default_join_as != null) {
-                long did = MessageObject.getPeerId(chatFull.groupcall_default_join_as);
-                TLRPC.InputPeer inputPeer = accountInstance.getMessagesController().getInputPeer(did);
-                JoinCallAlert.checkFewUsers(activity, -chat.id, accountInstance, param -> {
-                    if (!param && hash != null) {
-                        JoinCallByUrlAlert alert = new JoinCallByUrlAlert(activity, chat) {
-                            @Override
-                            protected void onJoin() {
-                                doInitiateCall(user, chat, hash, inputPeer, true, videoCall, canVideoCall, false, activity, fragment, accountInstance, false, false);
-                            }
-                        };
-                        if (fragment != null) {
-                            fragment.showDialog(alert);
-                        }
-                    } else {
-                        doInitiateCall(user, chat, hash, inputPeer, !param, videoCall, canVideoCall, false, activity, fragment, accountInstance, false, false);
-                    }
-                });
-                return;
-            }
-        }
-        if (checkJoiner && chat != null) {
-			JoinCallAlert.open(activity, -chat.id, accountInstance, fragment, createCall ? JoinCallAlert.TYPE_CREATE : JoinCallAlert.TYPE_JOIN, null, (selectedPeer, hasFew, schedule) -> {
+	private static void doInitiateCall(TLRPC.User user, TLRPC.Chat chat, String hash, TLRPC.InputPeer peer, boolean hasFewPeers, boolean videoCall, boolean canVideoCall, boolean createCall, Activity activity, BaseFragment fragment, AccountInstance accountInstance, boolean checkJoiner, boolean checkAnonymous) {
+		doInitiateCall(user, chat, hash, peer, hasFewPeers, videoCall, canVideoCall, createCall, activity, fragment, accountInstance,checkJoiner, checkAnonymous, false);
+	}
+
+	private static void doInitiateCall(TLRPC.User user, TLRPC.Chat chat, String hash, TLRPC.InputPeer peer, boolean hasFewPeers, boolean videoCall, boolean canVideoCall, boolean createCall, Activity activity, BaseFragment fragment, AccountInstance accountInstance, boolean checkJoiner, boolean checkAnonymous, boolean isRtmpStream) {
+		if (activity == null || user == null && chat == null) {
+			return;
+		}
+		if (SystemClock.elapsedRealtime() - lastCallTime < (chat != null ? 200 : 2000)) {
+			return;
+		}
+		if (checkJoiner && chat != null && !createCall) {
+			TLRPC.ChatFull chatFull = accountInstance.getMessagesController().getChatFull(chat.id);
+			if (chatFull != null && chatFull.groupcall_default_join_as != null) {
+				long did = MessageObject.getPeerId(chatFull.groupcall_default_join_as);
+				TLRPC.InputPeer	inputPeer = accountInstance.getMessagesController().getInputPeer(did);
+				JoinCallAlert.checkFewUsers(activity, -chat.id, accountInstance, param -> {
+					if (!param && hash != null) {
+						JoinCallByUrlAlert alert = new JoinCallByUrlAlert(activity, chat) {
+							@Override
+							protected void onJoin() {
+								doInitiateCall(user, chat, hash, inputPeer, true, videoCall, canVideoCall, false, activity, fragment, accountInstance, false, false);
+							}
+						};
+						if (fragment != null) {
+							fragment.showDialog(alert);
+						}
+					} else {
+						doInitiateCall(user, chat, hash, inputPeer, !param, videoCall, canVideoCall, false, activity, fragment, accountInstance, false, false);
+					}
+				});
+				return;
+			}
+		}
+		if (checkJoiner && chat != null) {
+			JoinCallAlert.open(activity, -chat.id, accountInstance, fragment, createCall ? JoinCallAlert.TYPE_CREATE : JoinCallAlert.TYPE_JOIN, null, (selectedPeer, hasFew, schedule, rtmp) -> {
 				if (createCall && schedule) {
 					GroupCallActivity.create((LaunchActivity) activity, accountInstance, chat, selectedPeer, hasFew, hash);
 				} else if (!hasFew && hash != null) {
-                    JoinCallByUrlAlert alert = new JoinCallByUrlAlert(activity, chat) {
-                        @Override
-                        protected void onJoin() {
-                            doInitiateCall(user, chat, hash, selectedPeer, false, videoCall, canVideoCall, createCall, activity, fragment, accountInstance, false, true);
-                        }
-                    };
-                    if (fragment != null) {
-                        fragment.showDialog(alert);
-                    }
-                } else {
-                    doInitiateCall(user, chat, hash, selectedPeer, hasFew, videoCall, canVideoCall, createCall, activity, fragment, accountInstance, false, true);
-                }
-            });
-            return;
-        }
-        if (checkAnonymous && !hasFewPeers && peer instanceof TLRPC.TL_inputPeerUser && ChatObject.shouldSendAnonymously(chat) && (!ChatObject.isChannel(chat) || chat.megagroup)) {
-            new AlertDialog.Builder(activity)
-                    .setTitle(ChatObject.isChannelOrGiga(chat) ? LocaleController.getString(R.string.VoipChannelVoiceChat) : LocaleController.getString(R.string.VoipGroupVoiceChat))
-                    .setMessage(ChatObject.isChannelOrGiga(chat) ? LocaleController.getString(R.string.VoipChannelJoinAnonymouseAlert) : LocaleController.getString(R.string.VoipGroupJoinAnonymouseAlert))
-                    .setPositiveButton(LocaleController.getString(R.string.VoipChatJoin), (dialog, which) -> doInitiateCall(user, chat, hash, peer, false, videoCall, canVideoCall, createCall, activity, fragment, accountInstance, false, false))
-                    .setNegativeButton(LocaleController.getString(R.string.Cancel), null)
-                    .show();
-            return;
-        }
-        if (chat != null && peer != null) {
-            TLRPC.ChatFull chatFull = accountInstance.getMessagesController().getChatFull(chat.id);
-            if (chatFull != null) {
-                if (peer instanceof TLRPC.TL_inputPeerUser) {
-                    chatFull.groupcall_default_join_as = new TLRPC.TL_peerUser();
-                    chatFull.groupcall_default_join_as.user_id = peer.user_id;
-                } else if (peer instanceof TLRPC.TL_inputPeerChat) {
-                    chatFull.groupcall_default_join_as = new TLRPC.TL_peerChat();
-                    chatFull.groupcall_default_join_as.chat_id = peer.chat_id;
-                } else if (peer instanceof TLRPC.TL_inputPeerChannel) {
-                    chatFull.groupcall_default_join_as = new TLRPC.TL_peerChannel();
-                    chatFull.groupcall_default_join_as.channel_id = peer.channel_id;
-                }
-                if (chatFull instanceof TLRPC.TL_chatFull) {
-                    chatFull.flags |= 32768;
-                } else {
-                    chatFull.flags |= 67108864;
-                }
-            }
-        }
+					JoinCallByUrlAlert alert = new JoinCallByUrlAlert(activity, chat) {
+						@Override
+						protected void onJoin() {
+							doInitiateCall(user, chat, hash, selectedPeer, false, videoCall, canVideoCall, createCall, activity, fragment, accountInstance, false, true, rtmp);
+						}
+					};
+					if (fragment != null) {
+						fragment.showDialog(alert);
+					}
+				} else {
+					doInitiateCall(user, chat, hash, selectedPeer, hasFew, videoCall, canVideoCall, createCall, activity, fragment, accountInstance, false, true, rtmp);
+				}
+			});
+			return;
+		}
+		if (checkAnonymous && !hasFewPeers && peer instanceof TLRPC.TL_inputPeerUser && ChatObject.shouldSendAnonymously(chat) && (!ChatObject.isChannel(chat) || chat.megagroup)) {
+			new AlertDialog.Builder(activity)
+					.setTitle(ChatObject.isChannelOrGiga(chat) ? LocaleController.getString(R.string.VoipChannelVoiceChat) : LocaleController.getString(R.string.VoipGroupVoiceChat))
+					.setMessage(ChatObject.isChannelOrGiga(chat) ? LocaleController.getString(R.string.VoipChannelJoinAnonymouseAlert) : LocaleController.getString(R.string.VoipGroupJoinAnonymouseAlert))
+					.setPositiveButton(LocaleController.getString(R.string.VoipChatJoin), (dialog, which) -> doInitiateCall(user, chat, hash, peer, false, videoCall, canVideoCall, createCall, activity, fragment, accountInstance, false, false))
+					.setNegativeButton(LocaleController.getString(R.string.Cancel), null)
+					.show();
+			return;
+		}
+		if (chat != null && peer != null) {
+			TLRPC.ChatFull chatFull = accountInstance.getMessagesController().getChatFull(chat.id);
+			if (chatFull != null) {
+				if (peer instanceof TLRPC.TL_inputPeerUser) {
+					chatFull.groupcall_default_join_as = new TLRPC.TL_peerUser();
+					chatFull.groupcall_default_join_as.user_id = peer.user_id;
+				} else if (peer instanceof TLRPC.TL_inputPeerChat) {
+					chatFull.groupcall_default_join_as = new TLRPC.TL_peerChat();
+					chatFull.groupcall_default_join_as.chat_id = peer.chat_id;
+				} else if (peer instanceof TLRPC.TL_inputPeerChannel) {
+					chatFull.groupcall_default_join_as = new TLRPC.TL_peerChannel();
+					chatFull.groupcall_default_join_as.channel_id = peer.channel_id;
+				}
+				if (chatFull instanceof TLRPC.TL_chatFull) {
+					chatFull.flags |= 32768;
+				} else {
+					chatFull.flags |= 67108864;
+				}
+			}
+		}
 		if (chat != null && !createCall) {
 			ChatObject.Call call = accountInstance.getMessagesController().getGroupCall(chat.id, false);
 			if (call != null && call.isScheduled()) {
@@ -336,33 +328,34 @@ public class VoIPHelper {
 			}
 		}
 
-        lastCallTime = SystemClock.elapsedRealtime();
-        Intent intent = new Intent(activity, VoIPService.class);
-        if (user != null) {
-            intent.putExtra("user_id", user.id);
-        } else {
-            intent.putExtra("chat_id", chat.id);
-            intent.putExtra("createGroupCall", createCall);
-            intent.putExtra("hasFewPeers", hasFewPeers);
-            intent.putExtra("hash", hash);
-            if (peer != null) {
-                intent.putExtra("peerChannelId", peer.channel_id);
-                intent.putExtra("peerChatId", peer.chat_id);
-                intent.putExtra("peerUserId", peer.user_id);
-                intent.putExtra("peerAccessHash", peer.access_hash);
-            }
-        }
-        intent.putExtra("is_outgoing", true);
-        intent.putExtra("start_incall_activity", true);
-        intent.putExtra("video_call", Build.VERSION.SDK_INT >= 18 && videoCall);
-        intent.putExtra("can_video_call", Build.VERSION.SDK_INT >= 18 && canVideoCall);
-        intent.putExtra("account", UserConfig.selectedAccount);
-        try {
-            activity.startService(intent);
-        } catch (Throwable e) {
-            FileLog.e(e);
-        }
-    }
+		lastCallTime = SystemClock.elapsedRealtime();
+		Intent intent = new Intent(activity, VoIPService.class);
+		if (user != null) {
+			intent.putExtra("user_id", user.id);
+		} else {
+			intent.putExtra("chat_id", chat.id);
+			intent.putExtra("createGroupCall", createCall);
+			intent.putExtra("hasFewPeers", hasFewPeers);
+			intent.putExtra("isRtmpStream", isRtmpStream);
+			intent.putExtra("hash", hash);
+			if (peer != null) {
+				intent.putExtra("peerChannelId", peer.channel_id);
+				intent.putExtra("peerChatId", peer.chat_id);
+				intent.putExtra("peerUserId", peer.user_id);
+				intent.putExtra("peerAccessHash", peer.access_hash);
+			}
+		}
+		intent.putExtra("is_outgoing", true);
+		intent.putExtra("start_incall_activity", true);
+		intent.putExtra("video_call", Build.VERSION.SDK_INT >= 18 && videoCall);
+		intent.putExtra("can_video_call", Build.VERSION.SDK_INT >= 18 && canVideoCall);
+		intent.putExtra("account", UserConfig.selectedAccount);
+		try {
+			activity.startService(intent);
+		} catch (Throwable e) {
+			FileLog.e(e);
+		}
+	}
 
     @TargetApi(Build.VERSION_CODES.M)
     public static void permissionDenied(final Activity activity, final Runnable onFinish, int code) {

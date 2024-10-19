@@ -96,7 +96,7 @@ public class EditTextCaption extends EditTextBoldCursor {
     public interface EditTextCaptionDelegate {
         void onSpansChanged();
 
-        long getCurrentChat();
+        default long getCurrentChat() { return 0; };
     }
 
     public EditTextCaption(Context context, Theme.ResourcesProvider resourcesProvider) {
