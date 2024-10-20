@@ -263,7 +263,7 @@ public class DocumentSelectActivity extends BaseFragment {
             filter.addAction(Intent.ACTION_MEDIA_UNMOUNTABLE);
             filter.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
             filter.addDataScheme("file");
-            ApplicationLoader.applicationContext.registerReceiver(receiver, filter);
+            ApplicationLoader.registerReceiverNotExported(receiver, filter);
         }
 
         actionBar.setBackgroundColor(Theme.getColor(Theme.key_dialogBackground));

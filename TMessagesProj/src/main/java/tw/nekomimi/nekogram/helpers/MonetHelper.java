@@ -1,28 +1,19 @@
 package tw.nekomimi.nekogram.helpers;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Build;
-import android.os.PatternMatcher;
 
 import androidx.annotation.RequiresApi;
 
 import com.google.android.exoplayer2.util.Log;
 
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.FileLog;
 import org.telegram.messenger.R;
-import org.telegram.ui.ActionBar.Theme;
 
 import java.util.HashMap;
 
 @RequiresApi(api = Build.VERSION_CODES.S)
 public class MonetHelper {
     private static final HashMap<String, Integer> ids = new HashMap<>();
-    private static final String ACTION_OVERLAY_CHANGED = "android.intent.action.OVERLAY_CHANGED";
-    private static final OverlayChangeReceiver overlayChangeReceiver = new OverlayChangeReceiver();
 
     static {
         ids.put("a1_0", android.R.color.system_accent1_0);
@@ -109,41 +100,6 @@ public class MonetHelper {
             Log.e("Theme", "Error loading color " + color);
             e.printStackTrace();
             return 0;
-        }
-    }
-
-    private static class OverlayChangeReceiver extends BroadcastReceiver {
-
-        public void register(Context context) {
-            IntentFilter packageFilter = new IntentFilter(ACTION_OVERLAY_CHANGED);
-            packageFilter.addDataScheme("package");
-            packageFilter.addDataSchemeSpecificPart("android", PatternMatcher.PATTERN_LITERAL);
-            context.registerReceiver(this, packageFilter);
-        }
-
-        public void unregister(Context context) {
-            context.unregisterReceiver(this);
-        }
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (ACTION_OVERLAY_CHANGED.equals(intent.getAction())) {
-                if (Theme.getActiveTheme().isMonet()) {
-                    Theme.applyTheme(Theme.getActiveTheme());
-                }
-            }
-        }
-    }
-
-    public static void registerReceiver(Context context) {
-        overlayChangeReceiver.register(context);
-    }
-
-    public static void unregisterReceiver(Context context) {
-        try {
-            overlayChangeReceiver.unregister(context);
-        } catch (IllegalArgumentException e) {
-            FileLog.e(e);
         }
     }
 }

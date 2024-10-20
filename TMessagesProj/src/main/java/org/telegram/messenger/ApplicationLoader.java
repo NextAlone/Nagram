@@ -36,6 +36,7 @@ import android.util.Log;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.multidex.MultiDex;
 
@@ -688,6 +689,20 @@ public class ApplicationLoader extends Application {
             FileLog.e(e);
         }
         return exists;
+    }
+
+    @Nullable
+    public static Intent registerReceiverNotExported(@Nullable BroadcastReceiver receiver, IntentFilter filter) {
+        return ApplicationLoader.registerReceiverNotExported(ApplicationLoader.applicationContext, receiver, filter);
+    }
+
+    @Nullable
+    public static Intent registerReceiverNotExported(Context context, @Nullable BroadcastReceiver receiver, IntentFilter filter) {
+        if (SDK_INT < 33) {
+            return context.registerReceiver(receiver, filter);
+        } else {
+            return context.registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED);
+        }
     }
 
     public boolean showUpdateAppPopup(Context context, TLRPC.TL_help_appUpdate update, int account) {

@@ -159,10 +159,7 @@ public final class ApkInstaller {
 
     private static InstallReceiver register(Context context, Runnable onSuccess) {
         var receiver = new InstallReceiver(context, ApplicationLoader.getApplicationId(), onSuccess);
-        var filter = new IntentFilter(Intent.ACTION_PACKAGE_ADDED);
-        filter.addDataScheme("package");
-        context.registerReceiver(receiver, filter);
-        context.registerReceiver(receiver, new IntentFilter(ApkInstaller.class.getName()));
+        ApplicationLoader.registerReceiverNotExported(context, receiver, new IntentFilter(ApkInstaller.class.getName()));
         return receiver;
     }
 
