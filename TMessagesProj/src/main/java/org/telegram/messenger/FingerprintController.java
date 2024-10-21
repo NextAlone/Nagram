@@ -110,7 +110,10 @@ public class FingerprintController {
 
     public static boolean isKeyReady() {
         try {
-            return getKeyStore().containsAlias(KEY_ALIAS);
+            var ks = getKeyStore();
+            if (ks != null) {
+                return ks.containsAlias(KEY_ALIAS);
+            }
         } catch (KeyStoreException e) {
             FileLog.e(e);
         }
