@@ -61,9 +61,9 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
     }
 
     private final ArrayList<Long> selectedDialogs;
-    private final DialogsActivity fragment;
+    private final BaseFragment fragment;
 
-    public FiltersListBottomSheet(DialogsActivity baseFragment, ArrayList<Long> selectedDialogs) {
+    public FiltersListBottomSheet(BaseFragment baseFragment, ArrayList<Long> selectedDialogs) {
         super(baseFragment.getParentActivity(), false);
         this.selectedDialogs = selectedDialogs;
         this.fragment = baseFragment;
@@ -328,6 +328,12 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
 
     public void setDelegate(FiltersListBottomSheetDelegate filtersListBottomSheetDelegate) {
         delegate = filtersListBottomSheetDelegate;
+    }
+
+    public static ArrayList<MessagesController.DialogFilter> getCanAddDialogFilters(BaseFragment fragment, Long dialogId) {
+        var arrays = new ArrayList<Long>(1);
+        arrays.add(dialogId);
+        return getCanAddDialogFilters(fragment, arrays);
     }
 
     public static ArrayList<MessagesController.DialogFilter> getCanAddDialogFilters(BaseFragment fragment, ArrayList<Long> selectedDialogs) {
