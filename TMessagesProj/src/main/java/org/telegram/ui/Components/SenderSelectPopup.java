@@ -148,7 +148,7 @@ public class SenderSelectPopup extends ActionBarPopupWindow {
 
         if (NaConfig.INSTANCE.getQuickToggleAnonymous().Bool()) {
             var chat = messagesController.getChat(chatFull.id);
-            if (chat != null && chat.creator) {
+            if (chat != null && ChatObject.isMegagroup(chat) && chat.creator) {
                 if (peers.stream().noneMatch(peer -> peer.peer.channel_id == chat.id)) {
                     peers.add(peers.size() >= 1 ? 1 : 0, new TLRPC.TL_sendAsPeer() {{
                         peer = new TLRPC.TL_peerChannel() {{ channel_id = chat.id; }};

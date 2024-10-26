@@ -3737,7 +3737,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     if (chatFull != null) {
 
                         var chat = controller.getChat(chatFull.id);
-                        if (chat != null && chat.creator) {
+                        if (chat != null && ChatObject.isMegagroup(chat) && chat.creator) {
                             var self = UserConfig.getInstance(currentAccount).getCurrentUser();
 
                             if (peer.channel_id == chat.id) {
