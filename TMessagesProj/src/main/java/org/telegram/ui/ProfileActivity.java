@@ -9310,10 +9310,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     setAvatarSectionRow = rowCount++;
                 }
                 numberSectionRow = rowCount++;
-                setUsernameRow = rowCount++;
                 if (!hideNumber) {
                     numberRow = rowCount++;
                 }
+                setUsernameRow = rowCount++;
                 bioRow = rowCount++;
 
                 settingsSectionRow = rowCount++;
