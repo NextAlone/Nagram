@@ -4479,7 +4479,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                                 break;
                             }
                             if (!sourceFile.exists()) {
-                                sourceFile = FileLoader.getInstance(currentAccount.getCurrentAccount()).getPathToAttach(message.messageOwner, true);
+                                sourceFile = FileLoader.getInstance(currentAccount.getCurrentAccount()).getPathToMessage(message.messageOwner);
                                 FileLog.d("saving file: correcting path from " + path + " to " + (sourceFile == null ? null : sourceFile.getAbsolutePath()));
                             }
                             if (sourceFile != null && sourceFile.exists()) {
