@@ -2654,7 +2654,7 @@ public class MessageObject {
                 } else {
                     changedCaption = false;
                 }
-                if (getMedia(newMessage).getClass() != oldMessage.media.getClass() ||
+                if (oldMessage.media == null || getMedia(newMessage).getClass() != oldMessage.media.getClass() ||
                         getMedia(newMessage).photo != null && oldMessage.media.photo != null && getMedia(newMessage).photo.id != oldMessage.media.photo.id ||
                         getMedia(newMessage).document != null && oldMessage.media.document != null && getMedia(newMessage).document.id != oldMessage.media.document.id) {
                     changedMedia = true;
