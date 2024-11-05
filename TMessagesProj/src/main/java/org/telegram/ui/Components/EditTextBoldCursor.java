@@ -10,6 +10,7 @@ package org.telegram.ui.Components;
 
 import static org.telegram.messenger.AndroidUtilities.dp;
 import static org.telegram.messenger.AndroidUtilities.getWallpaperRotation;
+import static org.telegram.ui.Cells.TextSelectionHelper.HYPEROS_AI;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -77,6 +78,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.helper.HyperOsHelper;
 
 public class EditTextBoldCursor extends EditTextEffects {
 
@@ -1219,6 +1221,7 @@ public class EditTextBoldCursor extends EditTextEffects {
             if (NaConfig.INSTANCE.getShowTextUndoRedo().Bool()) {
                 addUndoRedo(floatingActionMode.getMenu());
             }
+            addHyperOsAi(floatingActionMode.getMenu());
             floatingActionMode.invalidate();
             getViewTreeObserver().addOnPreDrawListener(floatingToolbarPreDrawListener);
             invalidate();
@@ -1226,6 +1229,27 @@ public class EditTextBoldCursor extends EditTextEffects {
         } else {
             return super.startActionMode(callback);
         }
+    }
+
+    private void addHyperOsAi(Menu menu) {
+        if (!HyperOsHelper.INSTANCE.isHyperAiAvailable(getContext())) {
+            return;
+        }
+        // Add AI menu item if it doesn't already exist
+        if (menu.findItem(HYPEROS_AI) == null) {
+            menu.add(Menu.NONE, HYPEROS_AI, HYPEROS_AI, "AI")
+                    .setAlphabeticShortcut('s')
+                    .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        }
+    }
+
+    @Override
+    public boolean onTextContextMenuItem(int id) {
+        if (id == HYPEROS_AI) {
+            HyperOsHelper.INSTANCE.startHyperOsAiService(this);
+            return true;
+        }
+        return super.onTextContextMenuItem(id);
     }
 
     private boolean shouldShowQuoteButton() {
