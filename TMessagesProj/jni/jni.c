@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <sys/stat.h>
-#include "genuine.h"
+#include "integrity.h"
 
 int registerNativeTgNetFunctions(JavaVM *vm, JNIEnv *env);
 int videoOnJNILoad(JavaVM *vm, JNIEnv *env);
@@ -24,7 +24,7 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
 		return -1;
 	}
 
-    if (!checkGenuine(env)) {
+    if (verifySign(env) != JNI_OK) {
         return JNI_ERR;
     }
 
