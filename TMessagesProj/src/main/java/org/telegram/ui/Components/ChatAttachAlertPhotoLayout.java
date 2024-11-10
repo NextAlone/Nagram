@@ -2013,7 +2013,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
 
             @Override
             public boolean cancelButtonPressed() {
-                if (cameraOpened && cameraView != null) {
+                if (cameraOpened && cameraView != null && !NekoConfig.disableInstantCamera.Bool()) {
                     AndroidUtilities.runOnUIThread(() -> {
                         if (cameraView != null && !parentAlert.isDismissed() && Build.VERSION.SDK_INT >= 21) {
                             cameraView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_FULLSCREEN);
@@ -3827,7 +3827,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     private void resumeCameraPreview() {
         try {
             checkCamera(false);
-            if (cameraView != null) {
+            if (cameraView != null && !NekoConfig.disableInstantCamera.Bool()) {
                 CameraController.getInstance().startPreview(cameraView.getCameraSessionObject());
             }
         } catch (Exception e) {
@@ -3866,7 +3866,9 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
 //                    afterCameraInitRunnable = null;
 //                    isCameraFrontfaceBeforeEnteringEditMode = null;
 //                };
-                showCamera();
+                if (!NekoConfig.disableInstantCamera.Bool()) {
+                    showCamera();
+                }
             }
         }
     }
