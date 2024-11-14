@@ -24,6 +24,12 @@ import java.util.regex.Pattern
  */
 class Pangu {
     companion object {
+
+        /**
+         * The space character.
+         */
+        private const val SPACE = " "
+
         /*
          * Some capturing group patterns for convenience.
          *
@@ -138,37 +144,37 @@ class Pangu {
 
         // CJK and quotes
         val cqMatcher = CJK_QUOTE.matcher(text)
-        text = cqMatcher.replaceAll("$1 $2")
+        text = cqMatcher.replaceAll("$1$SPACE$2")
         val qcMatcher = QUOTE_CJK.matcher(text)
-        text = qcMatcher.replaceAll("$1 $2")
+        text = qcMatcher.replaceAll("$1$SPACE$2")
         val fixQuoteMatcher = FIX_QUOTE.matcher(text)
         text = fixQuoteMatcher.replaceAll("$1$3$5")
 
         // CJK and brackets
         val oldText = text
         val cbcMatcher = CJK_BRACKET_CJK.matcher(text)
-        val newText = cbcMatcher.replaceAll("$1 $2 $4")
+        val newText = cbcMatcher.replaceAll("$1$SPACE$2$SPACE$4")
         text = newText
         if (oldText == newText) {
             val cbMatcher = CJK_BRACKET.matcher(text)
-            text = cbMatcher.replaceAll("$1 $2")
+            text = cbMatcher.replaceAll("$1$SPACE$2")
             val bcMatcher = BRACKET_CJK.matcher(text)
-            text = bcMatcher.replaceAll("$1 $2")
+            text = bcMatcher.replaceAll("$1$SPACE$2")
         }
         val fixBracketMatcher = FIX_BRACKET.matcher(text)
         text = fixBracketMatcher.replaceAll("$1$3$5")
 
         // CJK and hash
         val chMatcher = CJK_HASH.matcher(text)
-        text = chMatcher.replaceAll("$1 $2")
+        text = chMatcher.replaceAll("$1$SPACE$2")
         val hcMatcher = HASH_CJK.matcher(text)
-        text = hcMatcher.replaceAll("$1 $3")
+        text = hcMatcher.replaceAll("$1$SPACE$3")
 
         // CJK and ANS
         val caMatcher = CJK_ANS.matcher(text)
-        text = caMatcher.replaceAll("$1 $2")
+        text = caMatcher.replaceAll("$1$SPACE$2")
         val acMatcher = ANS_CJK.matcher(text)
-        text = acMatcher.replaceAll("$1 $2")
+        text = acMatcher.replaceAll("$1$SPACE$2")
 
         return text
     }
