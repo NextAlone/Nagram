@@ -28,7 +28,7 @@ class Pangu {
         /**
          * The space character.
          */
-        private const val SPACE = " "
+        private const val SPACE = " "
 
         /*
          * Some capturing group patterns for convenience.
