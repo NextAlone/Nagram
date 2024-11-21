@@ -22,6 +22,7 @@ jobs:
 
           git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
           git submodule status TMessagesProj/jni/libvpx > libvpx_status
+          git submodule status TMessagesProj/jni/dav1d > libdav1d_status
       - name: FFmpeg Cache
         id: cache
         uses: actions/cache@v4
@@ -29,7 +30,13 @@ jobs:
           path: |
             TMessagesProj/jni/ffmpeg/build
             TMessagesProj/jni/libvpx/build
-          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh', 'TMessagesProj/jni/patches/ffmpeg/*') }}
+            TMessagesProj/jni/dav1d/build
+          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'libdav1d_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh', 'TMessagesProj/jni/*dav1d*.sh', 'TMessagesProj/jni/patches/ffmpeg/*') }}
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          python-version: '3.12'
       - name: Install NDK
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
@@ -38,8 +45,9 @@ jobs:
       - name: Native Build
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          sudo apt-get install yasm -y
+          ./run init action ffmpeg
           ./run init libs libvpx
+          ./run init libs dav1d
           ./run init libs ffmpeg
   boringssl:
     name: Native Build (BoringSSL)
@@ -88,6 +96,7 @@ jobs:
           sed -i 's/\/\///g' settings.gradle
           git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
           git submodule status TMessagesProj/jni/libvpx > libvpx_status
+          git submodule status TMessagesProj/jni/dav1d > libdav1d_status
           git submodule status TMessagesProj/jni/boringssl > boringssl_status
       - name: Native Cache
         id: cache
@@ -107,7 +116,8 @@ jobs:
           path: |
             TMessagesProj/jni/ffmpeg/build
             TMessagesProj/jni/libvpx/build
-          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh', 'TMessagesProj/jni/patches/ffmpeg/*') }}
+            TMessagesProj/jni/dav1d/build
+          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'libdav1d_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh', 'TMessagesProj/jni/*dav1d*.sh', 'TMessagesProj/jni/patches/ffmpeg/*') }}
       - name: BoringSSL Cache
         uses: actions/cache@v4
         if: steps.cache.outputs.cache-hit != 'true'
