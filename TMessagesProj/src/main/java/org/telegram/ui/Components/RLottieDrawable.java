@@ -86,7 +86,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable, Bitma
     private int finishFrame;
 
     private View currentParentView;
-    private ArrayList<ImageReceiver> parentViews = new ArrayList<>();
+    private final ArrayList<ImageReceiver> parentViews = new ArrayList<>();
 
     protected int isDice;
     protected int diceSwitchFramesCount = -1;

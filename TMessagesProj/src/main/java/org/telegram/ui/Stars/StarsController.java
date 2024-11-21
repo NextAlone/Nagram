@@ -61,6 +61,7 @@ import org.telegram.ui.bots.BotWebViewSheet;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -575,7 +576,7 @@ public class StarsController {
     public void loadSubscriptions() {
         if (subscriptionsLoading || subscriptionsEndReached) return;
         subscriptionsLoading = true;
-        TL_stars.TL_getStarsSubscriptions req = new TL_stars.TL_getStarsSubscriptions();
+        final TL_stars.TL_getStarsSubscriptions req = new TL_stars.TL_getStarsSubscriptions();
         req.peer = new TLRPC.TL_inputPeerSelf();
         req.offset = subscriptionsOffset;
         if (req.offset == null) {
@@ -1148,6 +1149,7 @@ public class StarsController {
 
     public void openPaymentForm(MessageObject messageObject, TLRPC.InputInvoice inputInvoice, TLRPC.TL_payments_paymentFormStars form, Runnable whenShown, Utilities.Callback<String> whenAllDone) {
         if (form == null || form.invoice == null || paymentFormOpened) return;
+        MessagesController.getInstance(currentAccount).putUsers(form.users, false);
 
         final Context context = LaunchActivity.instance != null ? LaunchActivity.instance : ApplicationLoader.applicationContext;
         final Theme.ResourcesProvider resourcesProvider = getResourceProvider();
@@ -1179,11 +1181,17 @@ public class StarsController {
                 messageObject.getDialogId()
         ) : form.bot_id;
         final String bot;
+        final boolean isBot, isBiz;
         if (dialogId >= 0) {
-            bot = UserObject.getUserName(MessagesController.getInstance(currentAccount).getUser(dialogId));
+            TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(dialogId);
+            bot = UserObject.getUserName(user);
+            isBot = UserObject.isBot(user);
+            isBiz = !UserObject.isBot(user);
         } else {
             TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-dialogId);
             bot = chat == null ? "" : chat.title;
+            isBot = false;
+            isBiz = false;
         }
         final String product = form.title;
 
@@ -1191,8 +1199,9 @@ public class StarsController {
             whenShown.run();
         }
 
+        final int subscription_period = form.invoice.subscription_period;
         final boolean[] allDone = new boolean[] { false };
-        StarsIntroActivity.openConfirmPurchaseSheet(context, resourcesProvider, currentAccount, messageObject, dialogId, product, stars, form.photo, whenDone -> {
+        StarsIntroActivity.openConfirmPurchaseSheet(context, resourcesProvider, currentAccount, messageObject, dialogId, product, stars, form.photo, subscription_period, whenDone -> {
             if (balance < stars) {
                 if (!MessagesController.getInstance(currentAccount).starsPurchaseAvailable()) {
                     paymentFormOpened = false;
@@ -1207,10 +1216,13 @@ public class StarsController {
                     return;
                 }
                 final boolean[] purchased = new boolean[] { false };
-                StarsIntroActivity.StarsNeededSheet sheet = new StarsIntroActivity.StarsNeededSheet(context, resourcesProvider, stars, StarsIntroActivity.StarsNeededSheet.TYPE_BOT, bot, () -> {
+                StarsIntroActivity.StarsNeededSheet sheet = new StarsIntroActivity.StarsNeededSheet(context, resourcesProvider, stars, isBiz ? StarsIntroActivity.StarsNeededSheet.TYPE_BIZ : StarsIntroActivity.StarsNeededSheet.TYPE_BOT, bot, () -> {
                     purchased[0] = true;
                     payAfterConfirmed(messageObject, inputInvoice, form, success -> {
                         allDone[0] = true;
+                        if (subscription_period > 0) {
+                            invalidateSubscriptions(true);
+                        }
                         if (whenAllDone != null) {
                             whenAllDone.run(success ? "paid" : "failed");
                         }
@@ -1232,6 +1244,9 @@ public class StarsController {
                 sheet.show();
             } else {
                 payAfterConfirmed(messageObject, inputInvoice, form, success -> {
+                    if (subscription_period > 0) {
+                        invalidateSubscriptions(true);
+                    }
                     if (whenDone != null) {
                         whenDone.run(true);
                     }
@@ -1371,6 +1386,7 @@ public class StarsController {
             bot = chat == null ? "" : chat.title;
         }
         final String product = form.title;
+        final int subscription_period = form.invoice.subscription_period;
 
         TL_stars.TL_payments_sendStarsForm req2 = new TL_stars.TL_payments_sendStarsForm();
         req2.form_id = form.form_id;
@@ -1391,6 +1407,8 @@ public class StarsController {
                 if (media) {
                     Drawable starDrawable = context.getResources().getDrawable(R.drawable.star_small_inner).mutate();
                     b.createSimpleBulletin(starDrawable, getString(R.string.StarsMediaPurchaseCompleted), AndroidUtilities.replaceTags(formatPluralString("StarsMediaPurchaseCompletedInfo", (int) stars, bot))).show();
+                } else if (subscription_period > 0) {
+                    b.createSimpleBulletin(R.raw.stars_send, getString(R.string.StarsBotSubscriptionCompleted), AndroidUtilities.replaceTags(formatPluralString("StarsBotSubscriptionCompletedInfo", (int) stars, product, bot))).show();
                 } else {
                     b.createSimpleBulletin(R.raw.stars_send, getString(R.string.StarsPurchaseCompleted), AndroidUtilities.replaceTags(formatPluralString("StarsPurchaseCompletedInfo", (int) stars, product, bot))).show();
                 }
@@ -1994,7 +2012,8 @@ public class StarsController {
                 TLRPC.Chat chat = chatActivity.getMessagesController().getChat(-dialogId);
                 name = chat == null ? "" : chat.title;
             }
-            new StarsIntroActivity.StarsNeededSheet(chatActivity.getContext(), chatActivity.getResourceProvider(), totalStars, StarsIntroActivity.StarsNeededSheet.TYPE_REACTIONS, name, () -> {
+            if (context == null) return null;
+            new StarsIntroActivity.StarsNeededSheet(context, chatActivity.getResourceProvider(), totalStars, StarsIntroActivity.StarsNeededSheet.TYPE_REACTIONS, name, () -> {
                 sendPaidReaction(messageObject, chatActivity, totalStars, true, true, anonymous);
             }).show();
             return null;
@@ -2077,6 +2096,7 @@ public class StarsController {
     public int giftsHash;
     public long giftsRemoteTime;
     public final ArrayList<TL_stars.StarGift> gifts = new ArrayList<>();
+    public final ArrayList<TL_stars.StarGift> birthdaySortedGifts = new ArrayList<>();
 
     public void invalidateStarGifts() {
         giftsLoaded = false;
@@ -2089,13 +2109,14 @@ public class StarsController {
         if (giftsLoading || giftsLoaded && (System.currentTimeMillis() - giftsRemoteTime) < 1000 * 60 * 5) return;
         giftsLoading = true;
 
-        final SharedPreferences prefs = MessagesController.getInstance(currentAccount).getMainSettings();
-
         if (!giftsCacheLoaded) {
             getStarGiftsCached((giftsCached, hash, time) -> {
                 giftsCacheLoaded = true;
                 gifts.clear();
                 gifts.addAll(giftsCached);
+                birthdaySortedGifts.clear();
+                birthdaySortedGifts.addAll(gifts);
+                Collections.sort(birthdaySortedGifts, (a, b) -> (b.birthday ? 1 : 0) - (a.birthday ? 1 : 0));
                 giftsHash = hash;
                 giftsRemoteTime = time;
                 giftsLoading = false;
@@ -2111,6 +2132,9 @@ public class StarsController {
                     final TL_stars.TL_starGifts res = (TL_stars.TL_starGifts) giftsRemote;
                     gifts.clear();
                     gifts.addAll(res.gifts);
+                    birthdaySortedGifts.clear();
+                    birthdaySortedGifts.addAll(gifts);
+                    Collections.sort(birthdaySortedGifts, (a, b) -> (b.birthday ? 1 : 0) - (a.birthday ? 1 : 0));
                     giftsHash = res.hash;
                     giftsRemoteTime = System.currentTimeMillis();
                     NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.starGiftsLoaded);
@@ -2367,6 +2391,11 @@ public class StarsController {
                     });
                     fragment.presentFragment(chatActivity);
                 }
+
+                MessagesController.getInstance(currentAccount).getMainSettings().edit()
+                        .putBoolean("show_gift_for_" + user_id, true)
+                        .putBoolean(Calendar.getInstance().get(Calendar.YEAR) + "show_gift_for_" + user_id, true)
+                        .apply();
                 if (LaunchActivity.instance != null && LaunchActivity.instance.getFireworksOverlay() != null) {
                     LaunchActivity.instance.getFireworksOverlay().start(true);
                 }

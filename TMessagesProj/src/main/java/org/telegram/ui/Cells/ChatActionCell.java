@@ -828,11 +828,15 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
     }
 
     private float getUploadingInfoProgress(MessageObject messageObject) {
-        if (messageObject != null && messageObject.type == MessageObject.TYPE_ACTION_WALLPAPER) {
-            MessagesController messagesController = MessagesController.getInstance(currentAccount);
-            if (messagesController.uploadingWallpaper != null && TextUtils.equals(messageObject.messageOwner.action.wallpaper.uploadingImage, messagesController.uploadingWallpaper)) {
-                return messagesController.uploadingWallpaperInfo.uploadingProgress;
+        try {
+            if (messageObject != null && messageObject.type == MessageObject.TYPE_ACTION_WALLPAPER) {
+                MessagesController messagesController = MessagesController.getInstance(currentAccount);
+                if (messagesController.uploadingWallpaper != null && TextUtils.equals(messageObject.messageOwner.action.wallpaper.uploadingImage, messagesController.uploadingWallpaper)) {
+                    return messagesController.uploadingWallpaperInfo.uploadingProgress;
+                }
             }
+        } catch (Exception e) {
+            FileLog.e(e);
         }
         return 1;
     }
@@ -1566,7 +1570,13 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
                         if (action.converted) {
                             title = formatPluralStringComma("Gift2ActionConvertedInfo", (int) stars);
                         } else if (action.saved) {
-                            title = getString(R.string.Gift2ActionSavedInfo);
+                            if (action.convert_stars <= 0) {
+                                title = getString(R.string.Gift2ActionBotSavedInfo);
+                            } else {
+                                title = getString(R.string.Gift2ActionSavedInfo);
+                            }
+                        } else if (action.convert_stars <= 0) {
+                            title = getString(R.string.Gift2ActionBotInfo);
                         } else {
                             title = formatPluralStringComma("Gift2ActionInfo", (int) stars);
                         }
@@ -2729,5 +2739,9 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             adaptiveEmojiColorFilter = new PorterDuffColorFilter(adaptiveEmojiColor = color, PorterDuff.Mode.SRC_IN);
         }
         return adaptiveEmojiColorFilter;
+    }
+
+    public int measuredWidth() {
+        return getMeasuredWidth();
     }
 }

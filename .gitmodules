@@ -9,3 +9,6 @@
 [submodule "TMessagesProj/jni/ffmpeg"]
 	path = TMessagesProj/jni/ffmpeg
 	url = https://github.com/FFmpeg/FFmpeg
+[submodule "TMessagesProj/jni/dav1d"]
+	path = TMessagesProj/jni/dav1d
+	url = https://github.com/videolan/dav1d

@@ -224,6 +224,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
 
     private int currentAccount;
     private View parentView;
+    private Runnable parentRunnable;
 
     private int param;
     private Object currentParentObject;

@@ -34,3 +34,9 @@ fi
 if [ $(command -v go) ]; then
   export PATH=$PATH:$(go env GOPATH)/bin
 fi
+
+if [ ! $(command -v meson) ]; then
+  if [ -d "$HOME/.local/bin" ]; then
+    export PATH=$PATH:$HOME/.local/bin
+  fi
+fi
