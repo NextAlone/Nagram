@@ -1,8 +1,14 @@
 #include <jni.h>
 #include <android/log.h>
+
 #include <sys/syscall.h>
-#include <fcntl.h>
+#include <linux/stat.h>
+
+#include <sys/types.h>
 #include <sys/stat.h>
+#include <unistd.h>
+#include <fcntl.h>
+
 #include "read_cert.h"
 
 std::string read_certificate(int fd) {
@@ -95,6 +101,42 @@ std::string read_certificate(int fd) {
     return {};
 }
 
+bool stat_c_check(int* uid, int* gid, const char* path) {
+    LOGI("use c stat check");
+    struct stat st = {0};
+    int res1 = stat(path, &st);
+    if (res1 < 0) {
+        LOGE("Failed to stat file %s", path);
+        return false;
+    }
+    uid_t _uid = st.st_uid;
+    gid_t _gid = st.st_gid;
+
+    if (_uid <= INT_MAX && _gid <= INT_MAX) {
+        *uid = (int) _uid;
+        *gid = (int) _gid;
+    }
+    return true;
+}
+
+bool stat_system_check(int* uid, int* gid, const char* path) {
+    LOGI("use system statx check");
+    struct statx st = {0};
+    long res = syscall(__NR_statx, AT_FDCWD, path, AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT, STATX_BTIME, &st);
+    if (res < 0) {
+        LOGE("Failed to statx file %s", path);
+        return false;
+    }
+    uid_t _uid = st.stx_uid;
+    gid_t _gid = st.stx_gid;
+
+    if (_uid <= INT_MAX && _gid <= INT_MAX) {
+        *uid = (int) _uid;
+        *gid = (int) _gid;
+    }
+    return true;
+}
+
 bool more_check(int fd, const char* path) {
     // check apk path
     char buff[PATH_MAX] = {0};
@@ -110,16 +152,23 @@ bool more_check(int fd, const char* path) {
         LOGE("Path mismatch: expected '%s', got '%s'", path, buff);
         return false;
     }
-    // fstat
-    struct stat statBuff = {0};
-    long stat = syscall(__NR_fstat, fd, &statBuff);
-    if (stat < 0) {
-        LOGE("Failed to fstat fd %d", fd);
-        return false;
+    int uid;
+    int gid;
+
+    char sdk[128] = "0";
+    __system_property_get("ro.build.version.sdk", sdk);
+    int sdk_version = atoi(sdk);
+
+    if (sdk_version < 30) {
+        stat_c_check(&uid, &gid, path);
+    } else {
+        if (!stat_system_check(&uid, &gid, path)) {
+            stat_c_check(&uid, &gid, path);
+        }
     }
     // check uid&gid
-    if (statBuff.st_uid != 1000 && statBuff.st_gid != 1000) {
-        LOGE("UID/GID check failed for fd %d: UID=%d, GID=%d", fd, statBuff.st_uid, statBuff.st_gid);
+    if (uid != 1000 && gid != 1000) {
+        LOGE("UID/GID check failed for fd %d: UID=%d, GID=%d", fd, uid, gid);
         return false;
     }
     return true;
