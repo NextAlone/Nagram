@@ -734,19 +734,18 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         menu.setSubMenuOpenSide(1);
         menu.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)));
 
-        menu.addSubItem(menu_proxy, R.drawable.msg2_proxy_on, LocaleController.getString("Proxy", R.string.Proxy))
-                .setContentDescription(LocaleController.getString("Proxy", R.string.Proxy));
-        menu.addSubItem(menu_language, R.drawable.ic_translate, LocaleController.getString("Language", R.string.Language))
-                .setContentDescription(LocaleController.getString("Language", R.string.Language));
-        menu.addSubItem(menu_bot_login, R.drawable.list_bot, LocaleController.getString("BotLogin", R.string.BotLogin))
-                .setContentDescription(LocaleController.getString("BotLogin", R.string.BotLogin));
-        menu.addSubItem(menu_qr_login, R.drawable.msg_qrcode, LocaleController.getString("ImportLogin", R.string.ImportLogin))
-                .setContentDescription(LocaleController.getString("ImportLogin", R.string.ImportLogin));
-        menu.addSubItem(menu_custom_api, R.drawable.baseline_vpn_key_24, LocaleController.getString("CustomApi", R.string.CustomApi))
-                .setContentDescription(LocaleController.getString("CustomApi", R.string.CustomApi));
-        menu.addSubItem(menu_custom_dc, R.drawable.msg_retry, LocaleController.getString("CustomBackend",
-R.string.CustomBackend))
-                .setContentDescription(LocaleController.getString("CustomBackend", R.string.CustomBackend));
+        menu.addSubItem(menu_proxy, R.drawable.msg2_proxy_on, LocaleController.getString(R.string.Proxy))
+                .setContentDescription(LocaleController.getString(R.string.Proxy));
+        menu.addSubItem(menu_language, R.drawable.ic_translate, LocaleController.getString(R.string.Language))
+                .setContentDescription(LocaleController.getString(R.string.Language));
+        menu.addSubItem(menu_bot_login, R.drawable.list_bot, LocaleController.getString(R.string.BotLogin))
+                .setContentDescription(LocaleController.getString(R.string.BotLogin));
+        menu.addSubItem(menu_qr_login, R.drawable.msg_qrcode, LocaleController.getString(R.string.ImportLogin))
+                .setContentDescription(LocaleController.getString(R.string.ImportLogin));
+        menu.addSubItem(menu_custom_api, R.drawable.baseline_vpn_key_24, LocaleController.getString(R.string.CustomApi))
+                .setContentDescription(LocaleController.getString(R.string.CustomApi));
+        menu.addSubItem(menu_custom_dc, R.drawable.msg_retry, LocaleController.getString(R.string.CustomBackend))
+                .setContentDescription(LocaleController.getString(R.string.CustomBackend));
 
         menu.setOnClickListener(v -> {
             menu.toggleSubMenu();
@@ -2486,7 +2485,7 @@ R.string.CustomBackend))
                 });
             }
 
-            final boolean allowTestBackend = BuildVars.DEBUG_VERSION;
+            final boolean allowTestBackend = true;
             if (allowTestBackend && activityMode == MODE_LOGIN) {
                 testBackendCheckBox = new CheckBoxCell(context, 2);
                 testBackendCheckBox.setText(getString(R.string.DebugTestBackend), "", testBackend = getConnectionsManager().isTestBackend(), false);
