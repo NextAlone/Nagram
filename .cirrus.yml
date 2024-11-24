@@ -1,0 +1,75 @@
+container:
+  image: teampgm/android-ndk:34-jdk17.0.10_7-ndk21.4.7075529-cmake3.18.1-ci
+  cpu: 4
+  memory: 12G
+
+release_build_task:
+  skip: "changesInclude('.gitea/**', '.github/**', '**.md')"
+  checkout_script:
+    - cat /proc/cpuinfo
+    - git submodule init TMessagesProj/jni/dav1d TMessagesProj/jni/libvpx TMessagesProj/jni/ffmpeg TMessagesProj/jni/boringssl
+    - git submodule update TMessagesProj/jni/dav1d TMessagesProj/jni/libvpx TMessagesProj/jni/ffmpeg TMessagesProj/jni/boringssl
+    - echo "sdk.dir=${ANDROID_HOME}" > local.properties
+    - echo "ndk.dir=${ANDROID_HOME}/ndk/21.4.7075529" >> local.properties
+  ffmpeg_cache:
+    folders:
+      - TMessagesProj/jni/ffmpeg/build
+      - TMessagesProj/jni/libvpx/build
+      - TMessagesProj/jni/dav1d/build
+    fingerprint_script:
+      - git submodule status TMessagesProj/jni/ffmpeg
+      - git submodule status TMessagesProj/jni/libvpx
+      - git submodule status TMessagesProj/jni/dav1d
+      - cat TMessagesProj/jni/*ffmpeg*.sh
+      - cat TMessagesProj/jni/*libvpx*.sh
+      - cat TMessagesProj/jni/*dav1d*.sh
+      - cat TMessagesProj/jni/patches/ffmpeg/*
+    populate_script:
+      - cd /tmp/cirrus-ci-build
+      - ./run init libs libvpx
+      - ./run init libs dav1d
+      - ./run init libs ffmpeg
+  boringssl_cache:
+    folder: TMessagesProj/jni/boringssl/build
+    fingerprint_script:
+      - git submodule status TMessagesProj/jni/boringssl
+      - cat TMessagesProj/jni/*boringssl*.sh
+      - cat TMessagesProj/jni/patches/boringssl/*
+    populate_script:
+      - cd /tmp/cirrus-ci-build
+      - ./run init libs boringssl
+  gradle_cache:
+    folder: ~/.gradle/caches
+  native_cache:
+    folder: TMessagesProj/src/main/libs
+    fingerprint_script:
+      - cat TMessagesProj/jni/CMakeLists.txt
+      - git submodule status TMessagesProj/jni/ffmpeg
+      - git submodule status TMessagesProj/jni/boringssl
+    populate_script:
+      - cd /tmp/cirrus-ci-build/TMessagesProj/jni
+      - cd boringssl && git reset --hard && cd ..
+      - ./patch_boringssl.sh || true
+      - cd /tmp/cirrus-ci-build
+      - export NATIVE_TARGET="arm64-v8a"
+      - ./run libs native
+  environment:
+    LOCAL_PROPERTIES: ENCRYPTED[!453b03d8eefd2fe66111ab213ff55391f052d9585e98d071200ddcd4e2c34ca8631e28c2e493c20048ece5d5f2c0d0eb!]
+    HELPER_BOT_TOKEN: ENCRYPTED[!430d29eb9960a4382a29b077abfff1df00a48c7a05d39056d78e22bf77d3dc0ff6e284da9d55be9cfc56677cc99a5b68!]
+    HELPER_BOT_TARGET: ENCRYPTED[!e97d467b7a98fa9f48d571fefceb210fa9d825efc9a5f0318389ce1e71bb78bc1336865f1badc78524a740939e505a57!]
+  build_script:
+    - cd /tmp/cirrus-ci-build
+    - ./gradlew TMessagesProj:assembleRelease
+  binaries_artifacts:
+    path: "TMessagesProj/build/outputs/apk/release/*"
+  upload_script:
+    - python -m pip install -r bin/scripts/requirements.txt
+    - mkdir artifacts && cp -r TMessagesProj/build/outputs/apk/* artifacts/
+    - git log -1 --pretty=format:"%s%n%n%b" > artifacts/caption.txt
+    - python bin/scripts/upload.py $HELPER_BOT_TOKEN $HELPER_BOT_TARGET test
+  cleanup_before_cache_script:
+    - rm -rf ~/.gradle/caches/$GRADLE_VERSION/
+    - rm -rf ~/.gradle/caches/transforms-1
+    - rm -rf ~/.gradle/caches/journal-1
+    - rm -rf ~/.gradle/caches/jars-3/*/buildSrc.jar
+    - find ~/.gradle/caches/ -name "*.lock" -type f -delete || true
