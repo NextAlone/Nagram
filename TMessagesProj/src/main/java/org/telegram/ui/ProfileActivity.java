@@ -6629,6 +6629,39 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             } else {
                 return false;
             }
+            String link;
+            if (userId == 0) {
+                TLRPC.Chat chat = getMessagesController().getChat(chatId);
+                if (ChatObject.isPublic(chat)) {
+                    link = "https://" + getMessagesController().linkPrefix + "/" + ChatObject.getPublicUsername(chat) + (topicId != 0 ? "/" + topicId : "");
+                } else {
+                    link = "https://" + getMessagesController().linkPrefix + "/c/" + chat.id + (topicId != 0 ? "/" + topicId : "");
+                }
+            } else {
+//                if (editRow(view, position)) return true;
+                link = "https://" + getMessagesController().linkPrefix + "/" + username;
+                if (usernameObj != null && !usernameObj.editable) {
+                    TL_fragment.TL_getCollectibleInfo req = new TL_fragment.TL_getCollectibleInfo();
+                    TL_fragment.TL_inputCollectibleUsername input = new TL_fragment.TL_inputCollectibleUsername();
+                    input.username = usernameObj.username;
+                    req.collectible = input;
+                    int reqId = getConnectionsManager().sendRequest(req, (res, err) -> AndroidUtilities.runOnUIThread(() -> {
+                        if (res instanceof TL_fragment.TL_collectibleInfo) {
+                            TLObject obj;
+                            if (userId != 0) {
+                                obj = getMessagesController().getUser(userId);
+                            } else {
+                                obj = getMessagesController().getChat(chatId);
+                            }
+                            FragmentUsernameBottomSheet.open(getContext(), FragmentUsernameBottomSheet.TYPE_USERNAME, usernameObj.username, obj, (TL_fragment.TL_collectibleInfo) res, getResourceProvider());
+                        } else {
+                            BulletinFactory.showError(err);
+                        }
+                    }));
+                    getConnectionsManager().bindRequestToGuid(reqId, getClassGuid());
+                    return true;
+                }
+            }
 
             BottomBuilder builder = new BottomBuilder(getParentActivity());
             builder.addTitle("@" + username);
@@ -6656,7 +6689,20 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             });
 
             builder.addItem(LocaleController.getString(R.string.CopyLink), R.drawable.msg_link, __ -> {
-                AlertUtil.copyAndAlert("https://t.me/" + username);
+                AlertUtil.copyAndAlert(link);
+                return Unit.INSTANCE;
+            });
+
+            builder.addItem(LocaleController.getString(R.string.ShareSendTo), R.drawable.msg_share, __ -> {
+                ShareAlert shareAlert = new ShareAlert(getParentActivity(), null, link, false, link, false) {
+                    @Override
+                    protected void onSend(LongSparseArray<TLRPC.Dialog> dids, int count, TLRPC.TL_forumTopic topic) {
+                        AndroidUtilities.runOnUIThread(() -> {
+                            BulletinFactory.createInviteSentBulletin(getParentActivity(), contentView, dids.size(), dids.size() == 1 ? dids.valueAt(0).id : 0, count, getThemedColor(Theme.key_undo_background), getThemedColor(Theme.key_undo_infoColor)).show();
+                        }, 250);
+                    }
+                };
+                showDialog(shareAlert);
                 return Unit.INSTANCE;
             });
 
