@@ -133,6 +133,15 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
 //    private final AbstractConfigCell customPublicProxyIPRow = cellGroup.appendCell(new ConfigCellTextDetail(NekoConfig.customPublicProxyIP, (view, position) -> {
 //        customDialog_BottomInputString(position, NekoConfig.customPublicProxyIP, LocaleController.getString("customPublicProxyIPNotice"), "IP");
 //    }, LocaleController.getString("UsernameEmpty", R.string.UsernameEmpty)));
+private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NaConfig.INSTANCE.getDefaultHlsVideoQuality(),
+        new String[]{
+                LocaleController.getString(R.string.QualityAuto),
+                LocaleController.getString(R.string.QualityOriginal),
+                LocaleController.getString(R.string.Quality1440),
+                LocaleController.getString(R.string.Quality1080),
+                LocaleController.getString(R.string.Quality720),
+                LocaleController.getString(R.string.Quality144),
+        }, null));
     private final AbstractConfigCell dividerConnection = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell headerFolder = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Folder")));

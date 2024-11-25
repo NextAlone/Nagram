@@ -165,4 +165,5 @@
     <string name="PanguInfo">使文字更具可读性。在 CJK（中文、日文、韩文）、半宽英文、数字和符号字符之间间隔中自动插入空格</string>
     <string name="SendWithPangu">使用 Pangu 发送</string>
     <string name="SendWithoutPangu">不使用 Pangu 发送</string>
+    <string name="DefaultHlsVideoQuality">默认 Hls 视频质量</string>
 </resources>

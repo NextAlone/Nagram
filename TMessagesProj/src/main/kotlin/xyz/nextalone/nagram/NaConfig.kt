@@ -652,6 +652,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val defaultHlsVideoQuality =
+        addConfig(
+            "DefaultHlsVideoQuality",
+            ConfigItem.configTypeInt,
+            0
+        )
 
     private fun addConfig(
         k: String,

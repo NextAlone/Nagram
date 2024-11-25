@@ -166,4 +166,5 @@
     <string name="PanguInfo">Paranoid text spacing for good readability, to automatically insert whitespace between CJK (Chinese, Japanese, Korean), half-width English, digit and symbol characters.</string>
     <string name="SendWithPangu">Send with Pangu</string>
     <string name="SendWithoutPangu">Send without Pangu</string>
+    <string name="DefaultHlsVideoQuality">Default Hls Video Quality</string>
 </resources>

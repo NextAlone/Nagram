@@ -102,6 +102,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import xyz.nextalone.nagram.NaConfig;
+
 @SuppressLint("NewApi")
 public class VideoPlayer implements Player.Listener, VideoListener, AnalyticsListener, NotificationCenter.NotificationCenterDelegate {
 
@@ -401,9 +403,46 @@ public class VideoPlayer implements Player.Listener, VideoListener, AnalyticsLis
         }
     }
 
+    public static Quality getDefaultSavedQualityInt(ArrayList<Quality> qualities, int pL, int p) {
+        for (Quality q : qualities) {
+            if (!q.original && q.p() <= pL && q.p() >= p) return q;
+        }
+        return null;
+    }
+
+    public static Quality getDefaultSavedQuality(ArrayList<Quality> qualities) {
+        int v = NaConfig.INSTANCE.getDefaultHlsVideoQuality().Int();
+        Quality q1;
+        switch (v) {
+            case 0:
+                return null;
+            case 1:
+                for (Quality q : qualities) {
+                    if (q.original) return q;
+                }
+            case 2:
+                q1 = getDefaultSavedQualityInt(qualities, Integer.MAX_VALUE, 1440);
+                if (q1 != null) return q1;
+            case 3:
+                q1 = getDefaultSavedQualityInt(qualities, 1440, 1000);
+                if (q1 != null) return q1;
+            case 4:
+                q1 = getDefaultSavedQualityInt(qualities, 1000, 700);
+                if (q1 != null) return q1;
+            case 5:
+                q1 = getDefaultSavedQualityInt(qualities, 700, 0);
+                if (q1 != null) return q1;
+        }
+        return null;
+    }
+
     public static Quality getSavedQuality(ArrayList<Quality> qualities, MessageObject messageObject) {
-        if (messageObject == null) return null;
-        return getSavedQuality(qualities, messageObject.getDialogId(), messageObject.getId());
+        if (messageObject == null) return getDefaultSavedQuality(qualities);
+        var q = getSavedQuality(qualities, messageObject.getDialogId(), messageObject.getId());
+        if (q == null) {
+            return getDefaultSavedQuality(qualities);
+        }
+        return q;
     }
 
     public static Quality getSavedQuality(ArrayList<Quality> qualities, long did, int mid) {
