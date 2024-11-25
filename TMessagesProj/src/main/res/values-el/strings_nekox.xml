@@ -39,7 +39,7 @@
     <string name="GoogleCloudTransKey">Κλειδί μετάφρασης Google Cloud</string>
     <string name="UpdateUpdate">Ενημέρωση</string>
     <string name="LinkedChannelChat">Συνδεδεμένο κανάλι</string>
-    <string name="PlaceHolder">Κράτηση θέσης - Απεν/ποίηση</string>
+    <string name="PlaceHolder">Κράτηση θέσης - Απενεργ/ση</string>
     <string name="ProviderYandexTranslate">Yandex</string>
     <string name="UpdateLater">Αργότερα</string>
     <string name="DevModeNotice">Δεν είμαστε υπεύθυνοι για οποιαδήποτε ακατάλληλη χρήση των λειτουργιών προγραμματιστή.</string>
@@ -122,11 +122,11 @@
     <string name="SSRProtocol">Πρωτόκολλο</string>
     <string name="SSRObfs">Obfs</string>
     <string name="ShareMyKey">Κοινή χρήση του δημόσιου κλειδιού μου</string>
-    <string name="DisableVibration">Απεν/ποίηση Δόνησης</string>
+    <string name="DisableVibration">Απενεργ/ση Δόνησης</string>
     <string name="IgnoreContentRestrictions">Παράβλεψη περιορισμών περιεχομένου</string>
     <string name="SSRObfsParam">Obfs Παράμετρος</string>
     <string name="VmessSecurity">Ασφάλεια</string>
-    <string name="DisableSystemAccount">Απεν/ποίηση Λογ/σμού Συστήματος</string>
+    <string name="DisableSystemAccount">Απενεργ/ση Λογ/σμού Συστήματος</string>
     <string name="PGPImportPrivate">Εισαγωγή ιδιωτικού κλειδιού</string>
     <string name="SortByContacts">Ταξινόμηση κατά επαφές</string>
     <string name="NekoXPushService">Υπηρεσία NekoX Push</string>
@@ -138,7 +138,7 @@
     <string name="VmessUserId">Αναγνωριστικό χρήστη</string>
     <string name="DeleteAllInChat">Διαγραφή όλων στη συνομιλία</string>
     <string name="SSPlugin">Πρόσθετο</string>
-    <string name="DisableDeveloperMode">Απενεργοποίηση λειτουργίας προγραμματιστή</string>
+    <string name="DisableDeveloperMode">Απενεργ/ση λειτουργίας προγραμματιστή</string>
     <string name="PGPVerify">Επαλήθευση μηνύματος</string>
     <string name="PGPImport">Εισαγωγή δημόσιου κλειδιού</string>
     <string name="AddProxySS">Προσθήκη Shadowsocks Proxy</string>
@@ -205,7 +205,7 @@
     <string name="TabletMode">Λειτουργία tablet</string>
     <string name="PinSticker">Καρφίτσωμα</string>
     <string name="WsPayload">Payload</string>
-    <string name="DisableInstantCamera">Απεν/ποίηση άμεσης κάμερας</string>
+    <string name="DisableInstantCamera">Απενεργ/ση άμεσης κάμερας</string>
     <string name="showSeconds">Εμφάνιση χρονικής σήμανσης σε δευτ.</string>
     <string name="NekoXUpdateTranslationHint">Πατήστε για να μεταφράσετε το changelog</string>
     <string name="AutoCheckUpdatePreview">Προεπισκόπηση (Ασταθής)</string>
@@ -237,6 +237,7 @@
     <string name="channelAlias">Ψευδώνυμο καναλιού</string>
     <string name="StickerSettings">Αυτοκόλλητο</string>
     <string name="ConfirmSettings">Επιβεβαίωση</string>
+    <string name="useTelegramTranslateInChat">Χρήση Telegram Μετάφρ. UI σε συνομιλία</string>
     <string name="valuesLargeAvatarInDrawer">Προεπιλογή Telegram
 \nAvatar ως φόντο
 \nΜεγάλο avatar</string>
@@ -264,7 +265,7 @@
     <string name="CCSP">Απλοποιημένα κινέζικα (Κίνα)</string>
     <string name="SetPinnedSuffix">(Καρφιτσωμένο)</string>
     <string name="ProxyInfoWS">Ρυθμίσεις αναμετάδοσης WebSocket</string>
-    <string name="BackupSettings">Ρυθμίσεις αντιγράφων ασφαλείας</string>
+    <string name="BackupSettings">Εξαγωγή ρυθμίσεων</string>
     <string name="repeatConfirm">Ερώτηση πριν επαναλάβετε</string>
     <string name="ImportLogin">Σύνδεση QR</string>
     <string name="CCTarget">Στόχος</string>
