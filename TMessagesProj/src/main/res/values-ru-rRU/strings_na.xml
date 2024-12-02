@@ -91,7 +91,7 @@
     <string name="ChatDecoration">Оформление чата</string>
     <string name="NeedChangeNekoSettings">Вам нужно изменить настройки N</string>
     <string name="DoNotUnarchiveBySwipe">Не разархивировать смахиванием</string>
-    <string name="DoNotShareMyPhoneNumber">Не сообщать мне мой номер телефона</string>
+    <string name="DoNotShareMyPhoneNumber">Не показывать мой номер телефона </string>
     <string name="DefaultDeleteMenu">Меню удаления по умолчанию</string>
     <string name="DisableSuggestionView">Отключить предложение настройки профиля</string>
     <string name="DisableStories">Отключить истории</string>
@@ -165,4 +165,5 @@
     <string name="PanguInfo">Для удобства чтения текстового интервала, автоматически вставляйте пробелы между CJK (китайский, японский, корейский), английским языком, цифрами и символами.</string>
     <string name="SendWithPangu">Отправить с Pangu</string>
     <string name="SendWithoutPangu">Отправить без Pangu</string>
+    <string name="DefaultHlsVideoQuality">Качество видео Hls по умолчанию</string>
 </resources>

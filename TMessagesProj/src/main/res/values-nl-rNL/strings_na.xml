@@ -165,4 +165,5 @@
     <string name="PanguInfo">Paranoïde tekstafstand om goede leesbaarheid te verkrijgen, om automatisch spaties toe te voegen tussen CJK (Chinees, Japans en Koreaans), om Engels, cijfers en symbool tekens in te korten.</string>
     <string name="SendWithPangu">Verzenden met Pangu</string>
     <string name="SendWithoutPangu">Verzenden zonder Pangu</string>
+    <string name="DefaultHlsVideoQuality">Standaard Hls Videokwaliteit</string>
 </resources>

@@ -165,4 +165,5 @@
     <string name="PanguInfo">Spaziatura del testo paranoico per una buona leggibilità, per inserire automaticamente lo spazio bianco tra i caratteri CJK (Cinese, Giapponese, Coreano), Inglese di mezza larghezza, cifra e simboli.</string>
     <string name="SendWithPangu">Invia con Pangu</string>
     <string name="SendWithoutPangu">Invia senza Pangu</string>
+    <string name="DefaultHlsVideoQuality">Qualità Video Hls Predefinita</string>
 </resources>

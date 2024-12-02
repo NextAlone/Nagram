@@ -165,4 +165,5 @@
     <string name="PanguInfo">Paranoid tekstavstand for god lesbarhet, for automatisk å sette inn tomrom mellom CJK (kinesisk, japansk, koreansk), halvbredde Engelsk, siffer og symboltegn.</string>
     <string name="SendWithPangu">Send med Pangu</string>
     <string name="SendWithoutPangu">Send uten Pangu</string>
+    <string name="DefaultHlsVideoQuality">Standard Hls Videokvalitet</string>
 </resources>

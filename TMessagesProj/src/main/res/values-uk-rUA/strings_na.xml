@@ -165,4 +165,5 @@
     <string name="PanguInfo">Параноїдний відступ для належної читання, щоб автоматично вставити пробіли між CJK (китайською, японською, корейською, напівшириною англійською, цифрами та символами.</string>
     <string name="SendWithPangu">Надіслати з Пангу</string>
     <string name="SendWithoutPangu">Надіслати без Пангу</string>
+    <string name="DefaultHlsVideoQuality">Стандартна якість відео Hls</string>
 </resources>

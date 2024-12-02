@@ -165,4 +165,5 @@
     <string name="PanguInfo">Paranoidní textová mezera pro dobrou čitelnost, k automatickému vkládání bílých mezer mezi CJK (čínština, japonština, korejština), na polovinu šířky anglické, číslicové a symbolové znaky.</string>
     <string name="SendWithPangu">Poslat s Pangu</string>
     <string name="SendWithoutPangu">Odeslat bez Pangu</string>
+    <string name="DefaultHlsVideoQuality">Výchozí kvalita videa Hls</string>
 </resources>

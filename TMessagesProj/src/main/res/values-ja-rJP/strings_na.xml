@@ -165,4 +165,5 @@
     <string name="PanguInfo">CJK(中国語、日本語、韓国語)、半角英語、数字、記号の間に自動的に空白を挿入することができます。</string>
     <string name="SendWithPangu">Panguで送信</string>
     <string name="SendWithoutPangu">Panguなしで送信</string>
+    <string name="DefaultHlsVideoQuality">デフォルトの Hls ビデオ品質</string>
 </resources>

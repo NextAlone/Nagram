@@ -37,8 +37,6 @@
     <string name="ShowPremiumAvatarAnimation">Εμφάνιση Premium Avatar Εφέ</string>
     <string name="AlwaysSaveChatOffset">Πάντα Αποθ. Offset συνομιλίας</string>
     <string name="AutoReplaceRepeat">Αυτόματη αντικατάσταση επανάληψης για επανάληψη ως αντιγραφή</string>
-    <string name="AutoTranslate">Αυτόματη μετάφραση</string>
-    <string name="AutoTranslateAbout">Αυτόματη μετάφραση μηνυμάτων από άλλη γλώσσα.</string>
     <string name="AppIconGoogle">Google</string>
     <string name="AppIconColorful">Πολύχρωμο</string>
     <string name="AppIconDarkGreen">Σκούρο Πράσινο</string>
@@ -167,4 +165,5 @@
     <string name="PanguInfo">Παρανοϊκό διάστημα κειμένου για καλή αναγνωσιμότητα, για αυτόματη εισαγωγή κενών μεταξύ χαρακτήρων CJK (Κινεζικά, Ιαπωνικά, Κορεατικά), μισού πλάτους Αγγλικά, ψηφίων και συμβόλων.</string>
     <string name="SendWithPangu">Αποστολή με Pangu</string>
     <string name="SendWithoutPangu">Αποστολή χωρίς Pangu</string>
+    <string name="DefaultHlsVideoQuality">Προεπιλεγμένη Ποιότητα Βίντεο Hls</string>
 </resources>

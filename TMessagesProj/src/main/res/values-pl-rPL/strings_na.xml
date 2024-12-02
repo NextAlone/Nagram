@@ -165,4 +165,5 @@
     <string name="PanguInfo">Paranoidalny odstęp tekstowy dla dobrej czytelności, aby automatycznie wstawiać białą przestrzeń między CJK (chińskim, japońskim, koreańskim), w połowie szerokości angielskim, cyfrą i symbolem.</string>
     <string name="SendWithPangu">Wyślij z Pangu</string>
     <string name="SendWithoutPangu">Wyślij bez Pangu</string>
+    <string name="DefaultHlsVideoQuality">Domyślna jakość wideo Hls</string>
 </resources>

@@ -165,4 +165,5 @@
     <string name="PanguInfo">Paranoid tekstiväli hyvän luettavuuden, automaattisesti lisätä valkotilaa CJK (Kiina, japani, korea), puolileveys Englanti, numeroinen ja symboli merkkejä.</string>
     <string name="SendWithPangu">Lähetä Pangun avulla</string>
     <string name="SendWithoutPangu">Lähetä ilman Pangu</string>
+    <string name="DefaultHlsVideoQuality">Hls Videon Oletuslaatu</string>
 </resources>

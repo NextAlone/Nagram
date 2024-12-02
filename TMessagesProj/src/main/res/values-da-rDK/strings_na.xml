@@ -165,4 +165,5 @@
     <string name="PanguInfo">Paranoid tekstafstand for god læsbarhed, for automatisk at indsætte blanke tegn mellem CJK (kinesisk, japansk, koreansk), halvbredde engelsk, ciffer og symbol tegn.</string>
     <string name="SendWithPangu">Send med Pangu</string>
     <string name="SendWithoutPangu">Send uden Pangu</string>
+    <string name="DefaultHlsVideoQuality">Standard Hls Video Kvalitet</string>
 </resources>
