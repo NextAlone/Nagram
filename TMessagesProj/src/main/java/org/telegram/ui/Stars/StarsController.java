@@ -7,13 +7,13 @@ import static org.telegram.messenger.LocaleController.getString;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.util.SparseArray;
 import android.text.TextUtils;
 import android.util.LongSparseArray;
 import android.view.Gravity;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.android.billingclient.api.BillingClient;
@@ -101,22 +101,23 @@ public class StarsController {
 
     private long lastBalanceLoaded;
     private boolean balanceLoading, balanceLoaded;
-    public long balance;
+    @NonNull
+    public TL_stars.StarsAmount balance = new TL_stars.StarsAmount(0);
     public long minus;
 
-    public long getBalance() {
+    public TL_stars.StarsAmount getBalance() {
         return getBalance(null);
     }
 
     public long getBalance(boolean withMinus) {
-        return getBalance(withMinus, null);
+        return getBalance(withMinus, null).amount;
     }
 
-    public long getBalance(Runnable loaded) {
+    public TL_stars.StarsAmount getBalance(Runnable loaded) {
         return getBalance(true, loaded);
     }
 
-    public long getBalance(boolean withMinus, Runnable loaded) {
+    public TL_stars.StarsAmount getBalance(boolean withMinus, Runnable loaded) {
         if ((!balanceLoaded || System.currentTimeMillis() - lastBalanceLoaded > 1000 * 60) && !balanceLoading) {
             balanceLoading = true;
             TL_stars.TL_payments_getStarsStatus req = new TL_stars.TL_payments_getStarsStatus();
@@ -126,15 +127,15 @@ public class StarsController {
                 boolean updatedSubscriptions = false;
                 boolean updatedBalance = !balanceLoaded;
                 lastBalanceLoaded = System.currentTimeMillis();
-                if (res instanceof TL_stars.TL_payments_starsStatus) {
-                    TL_stars.TL_payments_starsStatus r = (TL_stars.TL_payments_starsStatus) res;
+                if (res instanceof TL_stars.StarsStatus) {
+                    TL_stars.StarsStatus r = (TL_stars.StarsStatus) res;
                     MessagesController.getInstance(currentAccount).putUsers(r.users, false);
                     MessagesController.getInstance(currentAccount).putChats(r.chats, false);
 
                     if (transactions[ALL_TRANSACTIONS].isEmpty()) {
                         for (TL_stars.StarsTransaction t : r.history) {
                             transactions[ALL_TRANSACTIONS].add(t);
-                            transactions[t.stars > 0 ? INCOMING_TRANSACTIONS : OUTGOING_TRANSACTIONS].add(t);
+                            transactions[t.stars.amount > 0 ? INCOMING_TRANSACTIONS : OUTGOING_TRANSACTIONS].add(t);
                         }
                         for (int i = 0; i < 3; ++i) {
                             transactionsExist[i] = !transactions[i].isEmpty() || transactionsExist[i];
@@ -155,7 +156,7 @@ public class StarsController {
                         updatedSubscriptions = true;
                     }
 
-                    if (this.balance != r.balance) {
+                    if (this.balance.amount != r.balance.amount) {
                         updatedBalance = true;
                     }
                     this.balance = r.balance;
@@ -178,7 +179,13 @@ public class StarsController {
                 }
             }));
         }
-        return Math.max(0, balance - (withMinus ? minus : 0));
+        if (withMinus && minus > 0) {
+            TL_stars.StarsAmount stars = new TL_stars.StarsAmount();
+            stars.amount = Math.max(0, balance.amount - minus);
+            stars.nanos = balance.nanos;
+            return stars;
+        }
+        return balance;
     }
 
     public void invalidateBalance() {
@@ -187,8 +194,8 @@ public class StarsController {
         balanceLoaded = true;
     }
 
-    public void updateBalance(long balance) {
-        if (this.balance != balance) {
+    public void updateBalance(TL_stars.StarsAmount balance) {
+        if (!this.balance.equals(balance)) {
             this.balance = balance;
             this.minus = 0;
             NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.starBalanceUpdated);
@@ -524,8 +531,8 @@ public class StarsController {
         }
         ConnectionsManager.getInstance(currentAccount).sendRequest(req, (res, err) -> AndroidUtilities.runOnUIThread(() -> {
             loading[type] = false;
-            if (res instanceof TL_stars.TL_payments_starsStatus) {
-                TL_stars.TL_payments_starsStatus r = (TL_stars.TL_payments_starsStatus) res;
+            if (res instanceof TL_stars.StarsStatus) {
+                TL_stars.StarsStatus r = (TL_stars.StarsStatus) res;
                 MessagesController.getInstance(currentAccount).putUsers(r.users, false);
                 MessagesController.getInstance(currentAccount).putChats(r.chats, false);
 
@@ -584,8 +591,8 @@ public class StarsController {
         }
         ConnectionsManager.getInstance(currentAccount).sendRequest(req, (res, err) -> AndroidUtilities.runOnUIThread(() -> {
             subscriptionsLoading = false;
-            if (res instanceof TL_stars.TL_payments_starsStatus) {
-                TL_stars.TL_payments_starsStatus r = (TL_stars.TL_payments_starsStatus) res;
+            if (res instanceof TL_stars.StarsStatus) {
+                TL_stars.StarsStatus r = (TL_stars.StarsStatus) res;
                 MessagesController.getInstance(currentAccount).putUsers(r.users, false);
                 MessagesController.getInstance(currentAccount).putChats(r.chats, false);
 
@@ -616,8 +623,8 @@ public class StarsController {
         req.offset = "";
         ConnectionsManager.getInstance(currentAccount).sendRequest(req, (res, err) -> AndroidUtilities.runOnUIThread(() -> {
             insufficientSubscriptionsLoading = false;
-            if (res instanceof TL_stars.TL_payments_starsStatus) {
-                TL_stars.TL_payments_starsStatus r = (TL_stars.TL_payments_starsStatus) res;
+            if (res instanceof TL_stars.StarsStatus) {
+                TL_stars.StarsStatus r = (TL_stars.StarsStatus) res;
                 MessagesController.getInstance(currentAccount).putUsers(r.users, false);
                 MessagesController.getInstance(currentAccount).putChats(r.chats, false);
                 insufficientSubscriptions.addAll(r.subscriptions);
@@ -656,7 +663,7 @@ public class StarsController {
     }
 
     private void showStarsTopupInternal(Activity activity, long amount, String purpose) {
-        if (getBalance() >= amount || amount <= 0) {
+        if (getBalance().amount >= amount || amount <= 0) {
             BaseFragment lastFragment = LaunchActivity.getSafeLastFragment();
             if (lastFragment == null) return;
             BulletinFactory.of(lastFragment).createSimpleBulletin(R.raw.stars_topup, getString(R.string.StarsTopupLinkEnough), getString(R.string.StarsTopupLinkTopupAnyway), () -> {
@@ -1202,7 +1209,7 @@ public class StarsController {
         final int subscription_period = form.invoice.subscription_period;
         final boolean[] allDone = new boolean[] { false };
         StarsIntroActivity.openConfirmPurchaseSheet(context, resourcesProvider, currentAccount, messageObject, dialogId, product, stars, form.photo, subscription_period, whenDone -> {
-            if (balance < stars) {
+            if (balance.amount < stars) {
                 if (!MessagesController.getInstance(currentAccount).starsPurchaseAvailable()) {
                     paymentFormOpened = false;
                     if (whenDone != null) {
@@ -1278,7 +1285,7 @@ public class StarsController {
 
         final boolean[] allDone = new boolean[] { false };
         StarsIntroActivity.openStarsChannelInviteSheet(context, resourcesProvider, currentAccount, chatInvite, whenDone -> {
-            if (balance < stars) {
+            if (balance.amount < stars) {
                 if (!MessagesController.getInstance(currentAccount).starsPurchaseAvailable()) {
                     paymentFormOpened = false;
                     if (whenDone != null) {
