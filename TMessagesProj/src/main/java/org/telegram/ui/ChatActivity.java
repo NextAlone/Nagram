@@ -3723,6 +3723,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                     createDeleteMessagesAlert(null, null);
                 } else if (id == forward) {
+                    noForwardQuote = id == nkbtn_forward_noquote;
+                    if (messagePreviewParams != null) {
+                        messagePreviewParams.setHideForwardSendersName(noForwardQuote);
+                    }
                     openForward(true);
                 } else if (id == share) {
                     share();
