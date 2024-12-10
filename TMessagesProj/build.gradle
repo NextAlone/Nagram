@@ -189,7 +189,7 @@ android {
         release {
             debuggable false
             jniDebuggable false
-            minifyEnabled false
+            minifyEnabled true
             shrinkResources true
             multiDexEnabled true
             zipAlignEnabled true
