@@ -195,7 +195,7 @@ public class NekoConfig {
 
     // priv branch changes
     public static ConfigItem localPremium = addConfig("localPremium", configTypeBool, false);
-
+    public static ConfigItem ghostMode = addConfig("ghostMode", configTypeBool, false);
     public static ConfigItem localeToDBC = addConfig("LocaleToDBC", configTypeBool, false);
 
     static {
@@ -203,7 +203,7 @@ public class NekoConfig {
         checkMigrate(false);
     }
 
-    public static ConfigItem addConfig(String k, int t, Object d) {
+    public static ConfigItem  addConfig(String k, int t, Object d) {
         ConfigItem a = new ConfigItem(k, t, d);
         configs.add(a);
         return a;
