@@ -72,6 +72,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
 
     private final AbstractConfigCell header1 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Experiment")));
     private final AbstractConfigCell localPremiumRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.localPremium));
+    private final  AbstractConfigCell ghostModeRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.ghostMode));
 //    private final AbstractConfigCell useSystemEmojiRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useSystemEmoji));
 //    private final AbstractConfigCell useCustomEmojiRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useCustomEmoji));
     private final AbstractConfigCell localQuoteColorRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getUseLocalQuoteColor()));
@@ -152,6 +153,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
     public NekoExperimentalSettingsActivity() {
         if (!NaConfig.INSTANCE.getShowHiddenFeature().Bool()) {
             cellGroup.rows.remove(localPremiumRow);
+            cellGroup.rows.remove(ghostModeRow);
             cellGroup.rows.remove(localQuoteColorRow);
             cellGroup.rows.remove(enhancedFileLoaderRow);
             cellGroup.rows.remove(disableFilteringRow);
