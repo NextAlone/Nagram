@@ -281,5 +281,6 @@
     <string name="ConfirmSettings">操作確認</string>
     <string name="InteractionSettings">互動</string>
     <string name="localPremium">本地大會員</string>
+    <string name="ghostMode">隱身模式</string>
     <string name="nekoxPremiumGiftRemoved">大會員在 NekoX 中被刪除。</string>
 </resources>

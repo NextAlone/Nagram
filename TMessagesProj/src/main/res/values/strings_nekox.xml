@@ -276,6 +276,7 @@
     <string name="ConfirmSettings">Confirmation</string>
     <string name="InteractionSettings">Interaction</string>
     <string name="localPremium">Local Premium</string>
+    <string name="ghostMode">Ghost Mode</string>
     <string name="nekoxPremiumGiftRemoved">Premium Gift is removed in NekoX.</string>
     <string name="ReactionSettings">Reaction</string>
     <string name="doubleTapAndReactions">Double tap</string>
