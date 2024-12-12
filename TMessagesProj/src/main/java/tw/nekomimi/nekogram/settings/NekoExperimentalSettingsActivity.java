@@ -176,6 +176,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
             cellGroup.rows.remove(dividerStory);
 
             NekoConfig.localPremium.setConfigBool(false);
+            NekoConfig.ghostMode.setConfigBool(false);
             NaConfig.INSTANCE.getForceCopy().setConfigBool(false);
             NaConfig.INSTANCE.getDisableFlagSecure().setConfigBool(false);
             NekoConfig.hideSponsoredMessage.setConfigBool(false);

@@ -15,6 +15,9 @@ import android.util.SparseArray;
 import android.util.LongSparseArray;
 import android.util.SparseIntArray;
 
+import tw.nekomimi.nekogram.NekoConfig;
+import  tw.nekomimi.nekogram.utils.AyuGhostUtils;
+
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.gms.tasks.Task;
 import com.google.android.play.core.integrity.IntegrityManager;
@@ -366,6 +369,41 @@ SharedPreferences mainPreferences;
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("send request " + object + " with token = " + requestToken);
         }
+
+        // --- AyuGram request hook
+        {
+            // don't send upload & typing status
+            if (!(NekoConfig.ghostMode &&
+                    (
+                            object instanceof TLRPC.TL_messages_setTyping ||
+                                    object instanceof TLRPC.TL_messages_setEncryptedTyping
+                    ))
+            ) {
+                // no need to run `onComplete`
+                return;
+            }
+
+            // don't send online status
+            if (!(NekoConfig.ghostMode && object instanceof TLRPC.TL_account_updateStatus)) {
+                var obj = ((TLRPC.TL_account_updateStatus) object);
+                obj.offline = true;
+            }
+
+            // don't send read status
+            if (
+                    !(NekoConfig.ghostMode &&
+                            (
+                                    object instanceof TLRPC.TL_messages_readHistory ||
+                                            object instanceof TLRPC.TL_messages_readEncryptedHistory ||
+                                            object instanceof TLRPC.TL_messages_readDiscussion ||
+                                            object instanceof TLRPC.TL_messages_readMessageContents ||
+                                            object instanceof TLRPC.TL_channels_readHistory ||
+                                            object instanceof TLRPC.TL_channels_readMessageContents
+                            )
+            ));
+        }
+        // --- AyuGram request hook
+
         try {
             NativeByteBuffer buffer = new NativeByteBuffer(object.getObjectSize());
             object.serializeToStream(buffer);

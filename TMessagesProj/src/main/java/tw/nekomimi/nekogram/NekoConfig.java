@@ -482,6 +482,10 @@ public class NekoConfig {
             customAudioBitrate.setConfigInt(preferences.getInt("customAudioBitrate", 32));
         if (preferences.contains("disableGroupVoipAudioProcessing"))
             disableGroupVoipAudioProcessing.setConfigBool(preferences.getBoolean("disableGroupVoipAudioProcessing", false));
+
+        // Ayugram migration function
+        if (preferences.contains("ghostMode"))
+            ghostMode.setConfigBool(preferences.getBoolean("ghostMode", false));
     }
 
     public static class DatacenterInfo {
