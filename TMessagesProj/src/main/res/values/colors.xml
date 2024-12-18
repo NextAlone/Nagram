@@ -18,6 +18,7 @@
 
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="ic_background">#9570FF</color>
 
     <!--static m colors-->
     <color name="mRed200">#EF9A9A</color>
