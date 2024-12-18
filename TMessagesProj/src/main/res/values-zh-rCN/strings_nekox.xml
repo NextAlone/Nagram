@@ -283,6 +283,7 @@
     <string name="InteractionSettings">交互</string>
     <string name="localPremium">本地大会员</string>
     <string name="ghostMode">隐身模式</string>
+    <string name="RestartRequired">重启应用以保证设置生效.</string>
     <string name="nekoxPremiumGiftRemoved">高级礼品在 NekoX 中被移除。</string>
     <string name="ReactionSettings">回应</string>
     <string name="doubleTapAndReactions">双击与回应</string>
