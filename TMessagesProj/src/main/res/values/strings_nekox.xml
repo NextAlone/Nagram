@@ -277,6 +277,15 @@
     <string name="InteractionSettings">Interaction</string>
     <string name="localPremium">Local Premium</string>
 
+    <string name="GhostModeToggle">Ghost Mode</string>
+    <string name="ShowGhostToggleInDrawer">Show ghost mode toggle</string>
+    <string name="AyuPreferences">AyuGram Preferences</string>
+    <string name="GhostEssentialsHeader">Ghost essentials</string>
+    <string name="DontSendReadPackets">Don\'t read messages</string>
+    <string name="DontSendOnlinePackets">Don\'t send online</string>
+    <string name="DontSendUploadProgress">Don\'t send typing</string>
+    <string name="SendOfflinePacketAfterOnline">Immediate offline after online</string>
+    <string name="MarkReadAfterSend">Send read status after reply</string>
     <string name="ghostMode">Ghost Mode</string>
     <string name="RestartRequired">Restart the App to take effect.</string>
     <string name="exteraAppName" translatable="false">AyuGram</string>
