@@ -239,6 +239,7 @@ public class NekoSettingsActivity extends BaseFragment {
         private int chatRow = -1;
         private int passcodeRow = -1;
         private int experimentRow = -1;
+        private int ghostModeRow = -1;
         private int categories2Row = -1;
 
         private int importRow = -1;
@@ -324,6 +325,8 @@ public class NekoSettingsActivity extends BaseFragment {
                                 textCell.setTextAndIcon(LocaleController.getString("PasscodeNeko", R.string.PasscodeNeko), R.drawable.msg_permissions, true);
                             } else if (position == experimentRow) {
                                 textCell.setTextAndIcon(LocaleController.getString("Experiment", R.string.Experiment), R.drawable.msg_fave, true);
+                                } else if (position == ghostModeRow) {
+                                textCell.setTextAndIcon(LocaleController.getString("GhostMode", R.string.GhostMode), R.drawable.msg_pollstop, true);
                             } else if (position == accountRow) {
                                 textCell.setTextAndIcon(LocaleController.getString("Account", R.string.Account), R.drawable.msg_contacts, true);
                             }
@@ -357,7 +360,7 @@ public class NekoSettingsActivity extends BaseFragment {
                         return VIEW_TYPE_BOTTOM;
                     } else if (position == importRow) {
                         return VIEW_TYPE_HEADER;
-                    } else if (position == chatRow || position == accountRow || position == generalRow || position == passcodeRow || position == experimentRow) {
+                    } else if (position == chatRow || position == accountRow || position == generalRow || position == passcodeRow || position == experimentRow || position == ghostModeRow) {
                         return VIEW_TYPE_TEXT;
                     }
                     return VIEW_TYPE_TEXT_LINK;
@@ -374,6 +377,8 @@ public class NekoSettingsActivity extends BaseFragment {
                     presentFragment(new NekoPasscodeSettingsActivity());
                 } else if (position == experimentRow) {
                     presentFragment(new NekoExperimentalSettingsActivity());
+                } else if (position == ghostModeRow) {
+                    presentFragment(new AyuGramPreferencesActivity());
                 } else if (position == channelRow) {
                     MessagesController.getInstance(currentAccount).openByUserName("nagram_channel", NekoSettingsActivity.this, 1);
                 } else if (position == channelTipsRow) {
@@ -411,6 +416,7 @@ public class NekoSettingsActivity extends BaseFragment {
                     passcodeRow = -1;
                 }
                 experimentRow = rowCount++;
+                ghostModeRow = rowCount++;
                 categories2Row = rowCount++;
                 importRow = rowCount++;
                 importSettingsRow = rowCount++;

@@ -286,7 +286,7 @@
     <string name="DontSendUploadProgress">Don\'t send typing</string>
     <string name="SendOfflinePacketAfterOnline">Immediate offline after online</string>
     <string name="MarkReadAfterSend">Send read status after reply</string>
-    <string name="ghostMode">Ghost Mode</string>
+    <string name="GhostMode">Ghost Mode</string>
     <string name="RestartRequired">Restart the App to take effect.</string>
     <string name="exteraAppName" translatable="false">AyuGram</string>
     <string name="SettingsDescription">Just an exteraGram based client with ToS breaking features in mind.</string>
