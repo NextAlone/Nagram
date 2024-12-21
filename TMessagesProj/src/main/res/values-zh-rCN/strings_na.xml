@@ -166,4 +166,5 @@
     <string name="SendWithPangu">使用 Pangu 发送</string>
     <string name="SendWithoutPangu">不使用 Pangu 发送</string>
     <string name="DefaultHlsVideoQuality">默认 Hls 视频质量</string>
+    <string name="DisableBotOpenButton">禁用 Bot 的打开小程序按钮</string>
 </resources>

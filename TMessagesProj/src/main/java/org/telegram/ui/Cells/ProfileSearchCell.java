@@ -61,6 +61,7 @@ import org.telegram.ui.Stories.StoriesUtilities;
 
 import java.util.Locale;
 
+import xyz.nextalone.nagram.NaConfig;
 import xyz.nextalone.nagram.helper.MessageHelper;
 
 public class ProfileSearchCell extends BaseCell implements NotificationCenter.NotificationCenterDelegate, Theme.Colorable {
@@ -152,7 +153,7 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
     private boolean allowBotOpenButton;
     private Utilities.Callback<TLRPC.User> onOpenButtonClick;
     public ProfileSearchCell allowBotOpenButton(boolean allow, Utilities.Callback<TLRPC.User> onOpenClick) {
-        allowBotOpenButton = allow;
+        allowBotOpenButton = allow && !NaConfig.INSTANCE.getDisableBotOpenButton().Bool();
         onOpenButtonClick = onOpenClick;
         return this;
     }

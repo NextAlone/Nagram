@@ -406,7 +406,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
     private boolean allowBotOpenButton;
     private Utilities.Callback<TLRPC.User> onOpenButtonClick;
     public DialogCell allowBotOpenButton(boolean allow, Utilities.Callback<TLRPC.User> onOpenClick) {
-        allowBotOpenButton = allow;
+        allowBotOpenButton = allow && !NaConfig.INSTANCE.getDisableBotOpenButton().Bool();
         onOpenButtonClick = onOpenClick;
         return this;
     }
