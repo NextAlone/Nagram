@@ -23,6 +23,8 @@ public class ConfigCellTextInput extends AbstractConfigCell {
     private final ConfigItem bindConfig;
     private final String hint;
     private final String title;
+    private boolean enabled = true;
+    public TextSettingsCell cell;
     private final Runnable onClickCustom;
     private final Function<String, String> inputChecker;
 
@@ -60,15 +62,25 @@ public class ConfigCellTextInput extends AbstractConfigCell {
     }
 
     public boolean isEnabled() {
-        return true;
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        if (this.cell != null)
+            this.cell.setEnabled(this.enabled, null);
     }
 
     public void onBindViewHolder(RecyclerView.ViewHolder holder) {
         TextSettingsCell cell = (TextSettingsCell) holder.itemView;
+        this.cell = cell;
         cell.setTextAndValue(title, bindConfig.String(), cellGroup.needSetDivider(this));
+        cell.setCanDisable(true);
+        cell.setEnabled(enabled, null);
     }
 
     public void onClick() {
+        if (!enabled) return;
         if (onClickCustom != null) {
             try {
                 onClickCustom.run();

@@ -664,6 +664,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val customTitleUserName =
+        addConfig(
+            "CustomTitleUserName",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,
