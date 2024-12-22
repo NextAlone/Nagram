@@ -19,10 +19,8 @@ import java.util.Set;
 
 import tw.nekomimi.nekogram.config.ConfigItem;
 import tw.nekomimi.nekogram.helpers.CloudSettingsHelper;
-
 import static tw.nekomimi.nekogram.config.ConfigItem.*;
 
-import com.radolyn.ayugram.AyuConfig;
 
 @SuppressLint("ApplySharedPref")
 public class NekoConfig {
@@ -41,7 +39,6 @@ public class NekoConfig {
     public static boolean markReadAfterSend;
     public static boolean showGhostToggleInDrawer;
     public static boolean openStotyWarning;
-
 
     public static final String channelAliasPrefix = "channelAliasPrefix_";
 
@@ -311,11 +308,11 @@ public class NekoConfig {
         sendReadStotyPackets = !enabled;
         sendOfflinePacketAfterOnline = enabled;
 
-        AyuConfig.editor.putBoolean("sendReadMessagePackets", AyuConfig.sendReadMessagePackets).apply();
-        AyuConfig.editor.putBoolean("sendOnlinePackets", AyuConfig.sendOnlinePackets).apply();
-        AyuConfig.editor.putBoolean("sendUploadProgress", AyuConfig.sendUploadProgress).apply();
-        AyuConfig.editor.putBoolean("sendReadStotyPackets", AyuConfig.sendReadStotyPackets).apply();
-        AyuConfig.editor.putBoolean("sendOfflinePacketAfterOnline", AyuConfig.sendOfflinePacketAfterOnline).apply();
+        NekoConfig.editor.putBoolean("sendReadMessagePackets", NekoConfig.sendReadMessagePackets).apply();
+        NekoConfig.editor.putBoolean("sendOnlinePackets", NekoConfig.sendOnlinePackets).apply();
+        NekoConfig.editor.putBoolean("sendUploadProgress", NekoConfig.sendUploadProgress).apply();
+        NekoConfig.editor.putBoolean("sendReadStotyPackets", NekoConfig.sendReadStotyPackets).apply();
+        NekoConfig.editor.putBoolean("sendOfflinePacketAfterOnline", NekoConfig.sendOfflinePacketAfterOnline).apply();
     }
 
     public static void toggleGhostMode() {
