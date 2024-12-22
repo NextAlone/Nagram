@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- General Settings -->
+    <string name="GhostModeToggle">Ghost Mode</string>
+    <string name="ShowGhostToggleInDrawer">Show Ghost Mode Toggle in Sidebar</string>
+    <string name="AyuPreferences">AyuGram Settings</string>
+    <string name="RestartRequired">Restart the app to apply changes.</string>
+
+    <!-- Ghost Mode Features -->
+    <string name="EnableGhostMode">Enable Ghost Mode</string>
+    <string name="GhostEssentialsHeader">Ghost Mode Essentials</string>
+    <string name="DontReadMessages">Do not mark messages as read</string>
+    <string name="DontReadStories">Do not mark stories as viewed</string>
+    <string name="DontSendOnlinePackets">Do not send online status</string>
+    <string name="DontSendUploadProgress">Do not send typing status</string>
+    <string name="SendOfflinePacketAfterOnline">Go offline automatically after being online</string>
+    <string name="MarkReadAfterAction">Mark as read after performing actions</string>
+
+    <!-- App Information -->
+    <string name="exteraAppName">AyuGram</string>
+    <string name="SettingsDescription">A client based on exteraGram with many amazing features.</string>
+</resources>
