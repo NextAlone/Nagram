@@ -167,4 +167,19 @@
     <string name="SendWithPangu">Send with Pangu</string>
     <string name="SendWithoutPangu">Send without Pangu</string>
     <string name="DefaultHlsVideoQuality">Default Hls Video Quality</string>
+
+    <string name="GhostModeToggle">隐身模式</string>
+    <string name="ShowGhostToggleInDrawer">侧栏显示隐身模式切换</string>
+    <string name="AyuPreferences">AyuGram 设置</string>
+    <string name="EnableGhostMode"> 启用幽灵功能 </string>
+    <string name="GhostEssentialsHeader">隐身模式必要值</string>
+    <string name="DontReadMessages"> 不显示消息已读 </string>
+    <string name="DontReadStories"> 不显示动态已读 </string>
+    <string name="DontSendOnlinePackets"> 不发送在线状态 </string>
+    <string name="DontSendUploadProgress"> 不发送输入状态 </string>
+    <string name="SendOfflinePacketAfterOnline"> 在线后自动离线 </string>
+    <string name="MarkReadAfterAction"> 动作之后设置已读 </string>
+    <string name="RestartRequired">重启应用以保证生效.</string>
+    <string name="exteraAppName">AyuGram</string>
+    <string name="SettingsDescription"> 只是一个基于 exteraGram 的客户端，带有大量惊人功能。</string>
 </resources>
