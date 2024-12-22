@@ -15,7 +15,6 @@
     <string name="exteraAppName">AyuGram</string>
     <string name="SettingsDescription"> 只是一个基于 exteraGram 的客户端，带有大量惊人功能。</string>
 
-
     <string name="NekoSettings">N-设置</string>
     <string name="IPv6">通过 IPv6 连接</string>
     <string name="MessageMenu">消息菜单</string>
