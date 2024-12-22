@@ -19,27 +19,14 @@ import java.util.Set;
 
 import tw.nekomimi.nekogram.config.ConfigItem;
 import tw.nekomimi.nekogram.helpers.CloudSettingsHelper;
-import static tw.nekomimi.nekogram.config.ConfigItem.*;
 
+import static tw.nekomimi.nekogram.config.ConfigItem.*;
 
 @SuppressLint("ApplySharedPref")
 public class NekoConfig {
 
     public static final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nkmrcfg", Context.MODE_PRIVATE);
-    public static final SharedPreferences.Editor editor = preferences.edit();
     public static final Object sync = new Object();
-
-    // ghost mode
-    public static boolean sendReadMessagePackets;
-    public static boolean sendOnlinePackets;
-    public static boolean sendOfflinePacketAfterOnline;
-    public static boolean sendUploadProgress;
-    public static boolean sendReadStotyPackets;
-    public static boolean useScheduledMessages;
-    public static boolean markReadAfterSend;
-    public static boolean showGhostToggleInDrawer;
-    public static boolean openStotyWarning;
-
     public static final String channelAliasPrefix = "channelAliasPrefix_";
 
     private static boolean configLoaded = false;
@@ -274,19 +261,6 @@ public class NekoConfig {
                     }
                 }
             }
-
-            // ~ Ghost essentials
-            sendReadMessagePackets = preferences.getBoolean("sendReadMessagePackets", true);
-            sendOnlinePackets = preferences.getBoolean("sendOnlinePackets", true);
-            sendUploadProgress = preferences.getBoolean("sendUploadProgress", true);
-            sendReadStotyPackets = preferences.getBoolean("sendReadStotyPackets", true);
-            sendOfflinePacketAfterOnline = preferences.getBoolean("sendOfflinePacketAfterOnline", false);
-            markReadAfterSend = preferences.getBoolean("markReadAfterSend", true);
-            // ~ Ghost other options
-            openStotyWarning = preferences.getBoolean("openStotyWarning", false);
-            showGhostToggleInDrawer = preferences.getBoolean("showGhostToggleInDrawer", true);
-            useScheduledMessages = preferences.getBoolean("useScheduledMessages", false);
-
             if (!configLoaded)
                 preferences.registerOnSharedPreferenceChangeListener(CloudSettingsHelper.listener);
             for (int a = 1; a <= 5; a++) {
@@ -294,30 +268,6 @@ public class NekoConfig {
             }
             configLoaded = true;
         }
-    }
-
-
-    public static boolean isGhostModeActive() {
-        return !sendReadMessagePackets && !sendOnlinePackets && !sendReadStotyPackets && !sendUploadProgress && sendOfflinePacketAfterOnline;
-    }
-
-    public static void setGhostMode(boolean enabled) {
-        sendReadMessagePackets = !enabled;
-        sendOnlinePackets = !enabled;
-        sendUploadProgress = !enabled;
-        sendReadStotyPackets = !enabled;
-        sendOfflinePacketAfterOnline = enabled;
-
-        NekoConfig.editor.putBoolean("sendReadMessagePackets", NekoConfig.sendReadMessagePackets).apply();
-        NekoConfig.editor.putBoolean("sendOnlinePackets", NekoConfig.sendOnlinePackets).apply();
-        NekoConfig.editor.putBoolean("sendUploadProgress", NekoConfig.sendUploadProgress).apply();
-        NekoConfig.editor.putBoolean("sendReadStotyPackets", NekoConfig.sendReadStotyPackets).apply();
-        NekoConfig.editor.putBoolean("sendOfflinePacketAfterOnline", NekoConfig.sendOfflinePacketAfterOnline).apply();
-    }
-
-    public static void toggleGhostMode() {
-        // giga move
-        setGhostMode(!isGhostModeActive());
     }
 
     public static void checkMigrate(boolean force) {

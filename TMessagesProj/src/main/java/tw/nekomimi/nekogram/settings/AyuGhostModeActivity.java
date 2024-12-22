@@ -15,8 +15,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.exteragram.messenger.preferences.BasePreferencesActivity;
-//import com.radolyn.ayugram.AyuConfig;
-import tw.nekomimi.nekogram.NekoConfig;
+import com.radolyn.ayugram.AyuConfig;
 import com.radolyn.ayugram.AyuConstants;
 import com.radolyn.ayugram.utils.AyuState;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +26,7 @@ import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.Locale;
 
-public class AyuGramPreferencesActivity extends BasePreferencesActivity implements NotificationCenter.NotificationCenterDelegate {
+public class AyuGhostModeActivity extends BasePreferencesActivity implements NotificationCenter.NotificationCenterDelegate {
 
     private static final int TOGGLE_BUTTON_VIEW = 1000;
 
@@ -36,6 +35,7 @@ public class AyuGramPreferencesActivity extends BasePreferencesActivity implemen
     private int sendReadMessagePacketsRow;
     private int sendOnlinePacketsRow;
     private int sendUploadProgressRow;
+    private int sendReadStotyPacketsRow;
     private int sendOfflinePacketAfterOnlineRow;
     private int markReadAfterSendRow;
     private int ghostDividerRow;
@@ -50,23 +50,20 @@ public class AyuGramPreferencesActivity extends BasePreferencesActivity implemen
         ghostModeToggleRow = newRow();
         if (ghostModeMenuExpanded) {
             sendReadMessagePacketsRow = newRow();
-
             sendOnlinePacketsRow = newRow();
             sendUploadProgressRow = newRow();
+            sendReadStotyPacketsRow = newRow();
             sendOfflinePacketAfterOnlineRow = newRow();
         } else {
             sendReadMessagePacketsRow = -1;
             sendOnlinePacketsRow = -1;
             sendUploadProgressRow = -1;
+            sendReadStotyPacketsRow = -1;
             sendOfflinePacketAfterOnlineRow = -1;
         }
         markReadAfterSendRow = newRow();
         ghostDividerRow = newRow();
-
-
         showGhostToggleInDrawerRow = newRow();
-
-
     }
 
     @Override
@@ -94,12 +91,13 @@ public class AyuGramPreferencesActivity extends BasePreferencesActivity implemen
     }
 
     private void updateGhostViews() {
-        var isActive = NekoConfig.isGhostModeActive();
+        var isActive = AyuConfig.isGhostModeActive();
 
         listAdapter.notifyItemChanged(ghostModeToggleRow, payload);
         listAdapter.notifyItemChanged(sendReadMessagePacketsRow, !isActive);
         listAdapter.notifyItemChanged(sendOnlinePacketsRow, !isActive);
         listAdapter.notifyItemChanged(sendUploadProgressRow, !isActive);
+        listAdapter.notifyItemChanged(sendReadStotyPacketsRow,!isActive);
         listAdapter.notifyItemChanged(sendOfflinePacketAfterOnlineRow, isActive);
 
         NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
@@ -118,35 +116,33 @@ public class AyuGramPreferencesActivity extends BasePreferencesActivity implemen
                 listAdapter.notifyItemRangeRemoved(ghostModeToggleRow + 1, 4);
             }
         } else if (position == sendReadMessagePacketsRow) {
-            NekoConfig.editor.putBoolean("sendReadMessagePackets", NekoConfig.sendReadMessagePackets ^= true).apply();
-            ((CheckBoxCell) view).setChecked(NekoConfig.sendReadMessagePackets, true);
-
+            AyuConfig.editor.putBoolean("sendReadMessagePackets", AyuConfig.sendReadMessagePackets ^= true).apply();
+            ((CheckBoxCell) view).setChecked(AyuConfig.sendReadMessagePackets, true);
             AyuState.setAllowReadPacket(false, -1);
             updateGhostViews();
         } else if (position == sendOnlinePacketsRow) {
-            NekoConfig.editor.putBoolean("sendOnlinePackets", NekoConfig.sendOnlinePackets ^= true).apply();
-            ((CheckBoxCell) view).setChecked(NekoConfig.sendOnlinePackets, true);
-
+            AyuConfig.editor.putBoolean("sendOnlinePackets", AyuConfig.sendOnlinePackets ^= true).apply();
+            ((CheckBoxCell) view).setChecked(AyuConfig.sendOnlinePackets, true);
             updateGhostViews();
         } else if (position == sendUploadProgressRow) {
-            NekoConfig.editor.putBoolean("sendUploadProgress", NekoConfig.sendUploadProgress ^= true).apply();
-            ((CheckBoxCell) view).setChecked(NekoConfig.sendUploadProgress, true);
-
+            AyuConfig.editor.putBoolean("sendUploadProgress", AyuConfig.sendUploadProgress ^= true).apply();
+            ((CheckBoxCell) view).setChecked(AyuConfig.sendUploadProgress, true);
+            updateGhostViews();
+        } else if (position == sendReadStotyPacketsRow) {
+            AyuConfig.editor.putBoolean("sendReadStotyPackets", AyuConfig.sendReadStotyPackets ^= true).apply();
+            ((CheckBoxCell) view).setChecked(AyuConfig.sendReadStotyPackets, true);
             updateGhostViews();
         } else if (position == sendOfflinePacketAfterOnlineRow) {
-            NekoConfig.editor.putBoolean("sendOfflinePacketAfterOnline", NekoConfig.sendOfflinePacketAfterOnline ^= true).apply();
-            ((CheckBoxCell) view).setChecked(NekoConfig.sendOfflinePacketAfterOnline, true);
-
+            AyuConfig.editor.putBoolean("sendOfflinePacketAfterOnline", AyuConfig.sendOfflinePacketAfterOnline ^= true).apply();
+            ((CheckBoxCell) view).setChecked(AyuConfig.sendOfflinePacketAfterOnline, true);
             updateGhostViews();
         } else if (position == markReadAfterSendRow) {
-            NekoConfig.editor.putBoolean("markReadAfterSend", NekoConfig.markReadAfterSend ^= true).apply();
-            ((TextCheckCell) view).setChecked(NekoConfig.markReadAfterSend);
-
+            AyuConfig.editor.putBoolean("markReadAfterSend", AyuConfig.markReadAfterSend ^= true).apply();
+            ((TextCheckCell) view).setChecked(AyuConfig.markReadAfterSend);
             AyuState.setAllowReadPacket(false, -1);
-
         } else if (position == showGhostToggleInDrawerRow) {
-            NekoConfig.editor.putBoolean("showGhostToggleInDrawer", NekoConfig.showGhostToggleInDrawer ^= true).apply();
-            ((TextCheckCell) view).setChecked(NekoConfig.showGhostToggleInDrawer);
+            AyuConfig.editor.putBoolean("showGhostToggleInDrawer", AyuConfig.showGhostToggleInDrawer ^= true).apply();
+            ((TextCheckCell) view).setChecked(AyuConfig.showGhostToggleInDrawer);
 
             NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
         }
@@ -164,10 +160,11 @@ public class AyuGramPreferencesActivity extends BasePreferencesActivity implemen
 
     private int getGhostModeSelectedCount() {
         int count = 0;
-        if (!NekoConfig.sendReadMessagePackets) count++;
-        if (!NekoConfig.sendOnlinePackets) count++;
-        if (!NekoConfig.sendUploadProgress) count++;
-        if (NekoConfig.sendOfflinePacketAfterOnline) count++;
+        if (!AyuConfig.sendReadMessagePackets) count++;
+        if (!AyuConfig.sendOnlinePackets) count++;
+        if (!AyuConfig.sendUploadProgress) count++;
+        if (!AyuConfig.sendReadStotyPackets) count++;
+        if (AyuConfig.sendOfflinePacketAfterOnline) count++;
 
         return count;
     }
@@ -194,18 +191,18 @@ public class AyuGramPreferencesActivity extends BasePreferencesActivity implemen
                     TextCheckCell textCheckCell = (TextCheckCell) holder.itemView;
                     textCheckCell.setEnabled(true, null);
                     if (position == markReadAfterSendRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.MarkReadAfterSend), NekoConfig.markReadAfterSend, true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.MarkReadAfterAction), AyuConfig.markReadAfterSend, true);
                     } else if (position == showGhostToggleInDrawerRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.ShowGhostToggleInDrawer), NekoConfig.showGhostToggleInDrawer, true);
+                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.ShowGhostToggleInDrawer), AyuConfig.showGhostToggleInDrawer, true);
                     }
                     break;
                 case 18:
                     TextCheckCell2 checkCell = (TextCheckCell2) holder.itemView;
                     if (position == ghostModeToggleRow) {
                         int selectedCount = getGhostModeSelectedCount();
-                        checkCell.setTextAndCheck(LocaleController.getString(R.string.GhostModeToggle), NekoConfig.isGhostModeActive(), true, true);
+                        checkCell.setTextAndCheck(LocaleController.getString(R.string.GhostModeToggle), AyuConfig.isGhostModeActive(), true, true);
                         checkCell.setCollapseArrow(String.format(Locale.US, "%d/4", selectedCount), !ghostModeMenuExpanded, () -> {
-                            NekoConfig.toggleGhostMode();
+                            AyuConfig.toggleGhostMode();
                             updateGhostViews();
                         });
                     }
@@ -215,13 +212,15 @@ public class AyuGramPreferencesActivity extends BasePreferencesActivity implemen
                 case 19:
                     CheckBoxCell checkBoxCell = (CheckBoxCell) holder.itemView;
                     if (position == sendReadMessagePacketsRow) {
-                        checkBoxCell.setText(LocaleController.getString(R.string.DontSendReadPackets), "", !NekoConfig.sendReadMessagePackets, true, true);
+                        checkBoxCell.setText(LocaleController.getString(R.string.DontReadMessages), "", !AyuConfig.sendReadMessagePackets, true, true);
                     } else if (position == sendOnlinePacketsRow) {
-                        checkBoxCell.setText(LocaleController.getString(R.string.DontSendOnlinePackets), "", !NekoConfig.sendOnlinePackets, true, true);
+                        checkBoxCell.setText(LocaleController.getString(R.string.DontSendOnlinePackets), "", !AyuConfig.sendOnlinePackets, true, true);
                     } else if (position == sendUploadProgressRow) {
-                        checkBoxCell.setText(LocaleController.getString(R.string.DontSendUploadProgress), "", !NekoConfig.sendUploadProgress, true, true);
+                        checkBoxCell.setText(LocaleController.getString(R.string.DontSendUploadProgress), "", !AyuConfig.sendUploadProgress, true, true);
+                    } else if (position == sendReadStotyPacketsRow) {
+                        checkBoxCell.setText(LocaleController.getString(R.string.DontReadStories), "", !AyuConfig.sendReadStotyPackets, true, true);
                     } else if (position == sendOfflinePacketAfterOnlineRow) {
-                        checkBoxCell.setText(LocaleController.getString(R.string.SendOfflinePacketAfterOnline), "", NekoConfig.sendOfflinePacketAfterOnline, true, true);
+                        checkBoxCell.setText(LocaleController.getString(R.string.SendOfflinePacketAfterOnline), "", AyuConfig.sendOfflinePacketAfterOnline, true, true);
                     }
                     checkBoxCell.setPad(1);
                     break;

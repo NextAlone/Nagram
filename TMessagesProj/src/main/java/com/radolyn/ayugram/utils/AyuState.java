@@ -10,8 +10,7 @@
 package com.radolyn.ayugram.utils;
 
 import android.util.LongSparseArray;
-import tw.nekomimi.nekogram.NekoConfig;
-//import com.radolyn.ayugram.AyuConfig;
+import com.radolyn.ayugram.AyuConfig;
 
 import java.util.ArrayList;
 
@@ -27,7 +26,7 @@ public class AyuState {
     }
 
     public static boolean getAllowReadPacket() {
-        return NekoConfig.sendReadMessagePackets || allowReadPacket.process();
+        return AyuConfig.sendReadMessagePackets || allowReadPacket.process();
     }
 
     public static void setAutomaticallyScheduled(boolean val, int resetAfter) {

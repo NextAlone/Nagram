@@ -11,11 +11,8 @@ package com.radolyn.ayugram;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import com.google.gson.Gson;
 import org.telegram.messenger.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class AyuConfig {
     private static final Object sync = new Object();
@@ -23,15 +20,15 @@ public class AyuConfig {
     public static SharedPreferences preferences;
     public static SharedPreferences.Editor editor;
 
-    public static boolean sendReadPackets;
+    public static boolean sendReadMessagePackets;
     public static boolean sendOnlinePackets;
     public static boolean sendOfflinePacketAfterOnline;
     public static boolean sendUploadProgress;
+    public static boolean sendReadStotyPackets;
     public static boolean useScheduledMessages;
     public static boolean markReadAfterSend;
-
     public static boolean showGhostToggleInDrawer;
-    public static boolean WALMode;
+    public static boolean openStotyWarning;
 
     private static boolean configLoaded;
 
@@ -49,32 +46,36 @@ public class AyuConfig {
             editor = preferences.edit();
 
             // ~ Ghost essentials
-            sendReadPackets = preferences.getBoolean("sendReadPackets", true);
+            sendReadMessagePackets = preferences.getBoolean("sendReadMessagePackets", true);
             sendOnlinePackets = preferences.getBoolean("sendOnlinePackets", true);
             sendUploadProgress = preferences.getBoolean("sendUploadProgress", true);
+            sendReadStotyPackets = preferences.getBoolean("sendReadStotyPackets", true);
             sendOfflinePacketAfterOnline = preferences.getBoolean("sendOfflinePacketAfterOnline", false);
             markReadAfterSend = preferences.getBoolean("markReadAfterSend", true);
-
+            // ~ Ghost other options
+            openStotyWarning = preferences.getBoolean("openStotyWarning", false);
+            showGhostToggleInDrawer = preferences.getBoolean("showGhostToggleInDrawer", true);
             useScheduledMessages = preferences.getBoolean("useScheduledMessages", false);
-
 
             configLoaded = true;
         }
     }
 
     public static boolean isGhostModeActive() {
-        return !sendReadPackets && !sendOnlinePackets && !sendUploadProgress && sendOfflinePacketAfterOnline;
+        return !sendReadMessagePackets && !sendOnlinePackets && !sendReadStotyPackets && !sendUploadProgress && sendOfflinePacketAfterOnline;
     }
 
     public static void setGhostMode(boolean enabled) {
-        sendReadPackets = !enabled;
+        sendReadMessagePackets = !enabled;
         sendOnlinePackets = !enabled;
         sendUploadProgress = !enabled;
+        sendReadStotyPackets = !enabled;
         sendOfflinePacketAfterOnline = enabled;
 
-        AyuConfig.editor.putBoolean("sendReadPackets", AyuConfig.sendReadPackets).apply();
+        AyuConfig.editor.putBoolean("sendReadMessagePackets", AyuConfig.sendReadMessagePackets).apply();
         AyuConfig.editor.putBoolean("sendOnlinePackets", AyuConfig.sendOnlinePackets).apply();
         AyuConfig.editor.putBoolean("sendUploadProgress", AyuConfig.sendUploadProgress).apply();
+        AyuConfig.editor.putBoolean("sendReadStotyPackets", AyuConfig.sendReadStotyPackets).apply();
         AyuConfig.editor.putBoolean("sendOfflinePacketAfterOnline", AyuConfig.sendOfflinePacketAfterOnline).apply();
     }
 
