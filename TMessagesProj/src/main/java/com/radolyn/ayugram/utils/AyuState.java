@@ -26,7 +26,7 @@ public class AyuState {
     }
 
     public static boolean getAllowReadPacket() {
-        return AyuConfig.sendReadPackets || allowReadPacket.process();
+        return AyuConfig.sendReadMessagePackets || allowReadPacket.process();
     }
 
     public static void setAutomaticallyScheduled(boolean val, int resetAfter) {
