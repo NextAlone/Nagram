@@ -201,7 +201,7 @@ public class AyuGhostModeActivity extends BasePreferencesActivity implements Not
                     if (position == ghostModeToggleRow) {
                         int selectedCount = getGhostModeSelectedCount();
                         checkCell.setTextAndCheck(LocaleController.getString(R.string.GhostModeToggle), AyuConfig.isGhostModeActive(), true, true);
-                        checkCell.setCollapseArrow(String.format(Locale.US, "%d/4", selectedCount), !ghostModeMenuExpanded, () -> {
+                        checkCell.setCollapseArrow(String.format(Locale.US, "%d/5", selectedCount), !ghostModeMenuExpanded, () -> {
                             AyuConfig.toggleGhostMode();
                             updateGhostViews();
                         });
