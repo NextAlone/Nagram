@@ -111,9 +111,9 @@ public class AyuGhostModeActivity extends BasePreferencesActivity implements Not
             updateRowsId();
             listAdapter.notifyItemChanged(ghostModeToggleRow, payload);
             if (ghostModeMenuExpanded) {
-                listAdapter.notifyItemRangeInserted(ghostModeToggleRow + 1, 4);
+                listAdapter.notifyItemRangeInserted(ghostModeToggleRow + 1, 5);
             } else {
-                listAdapter.notifyItemRangeRemoved(ghostModeToggleRow + 1, 4);
+                listAdapter.notifyItemRangeRemoved(ghostModeToggleRow + 1, 5);
             }
         } else if (position == sendReadMessagePacketsRow) {
             AyuConfig.editor.putBoolean("sendReadMessagePackets", AyuConfig.sendReadMessagePackets ^= true).apply();

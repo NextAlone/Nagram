@@ -62,7 +62,7 @@ public class AyuConfig {
     }
 
     public static boolean isGhostModeActive() {
-        return !sendReadMessagePackets && !sendOnlinePackets && !sendReadStotyPackets && !sendUploadProgress && sendOfflinePacketAfterOnline;
+        return !sendReadMessagePackets && !sendOnlinePackets && !sendUploadProgress && !sendReadStotyPackets && sendOfflinePacketAfterOnline;
     }
 
     public static void setGhostMode(boolean enabled) {
