@@ -1,3 +1,12 @@
+/*
+ * This is the source code of AyuGram for Android.
+ *
+ * We do not and cannot prevent the use of our code,
+ * but be respectful and credit the original author.
+ *
+ * Copyright @Radolyn, 2023
+ */
+
 package tw.nekomimi.nekogram.settings;
 
 import android.content.Context;
@@ -5,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.exteragram.messenger.preferences.BasePreferencesActivity;
 import com.radolyn.ayugram.AyuConfig;
 import com.radolyn.ayugram.AyuConstants;
 import com.radolyn.ayugram.utils.AyuState;
@@ -59,6 +69,8 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity implements No
     @Override
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
+        // todo: register `MESSAGES_DELETED_NOTIFICATION` on all notification centers, not only on the current account
+
         NotificationCenter.getInstance(UserConfig.selectedAccount).addObserver(this, AyuConstants.MESSAGES_DELETED_NOTIFICATION);
         NotificationCenter.getGlobalInstance().addObserver(this, AyuConstants.AYUSYNC_STATE_CHANGED);
 
@@ -67,7 +79,7 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity implements No
 
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
-        // Add your custom logic to handle received notifications
+       return;
     }
 
     @Override
@@ -85,11 +97,12 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity implements No
         listAdapter.notifyItemChanged(sendReadMessagePacketsRow, !isActive);
         listAdapter.notifyItemChanged(sendOnlinePacketsRow, !isActive);
         listAdapter.notifyItemChanged(sendUploadProgressRow, !isActive);
-        listAdapter.notifyItemChanged(sendReadStotyPacketsRow, !isActive);
+        listAdapter.notifyItemChanged(sendReadStotyPacketsRow,!isActive);
         listAdapter.notifyItemChanged(sendOfflinePacketAfterOnlineRow, isActive);
 
         NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
     }
+
 
     @Override
     protected void onItemClick(View view, int position, float x, float y) {
@@ -136,7 +149,7 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity implements No
     }
 
     @Override
-    protected String getActionBarTitle() {
+    protected String getActionBarTitle  () {
         return LocaleController.getString(R.string.AyuPreferences);
     }
 
@@ -228,18 +241,24 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity implements No
 
         @Override
         public int getItemViewType(int position) {
-            if (position == ghostDividerRow) {
+            if (
+                    position == ghostDividerRow
+            ) {
                 return 1;
-            } else if (position == ghostEssentialsHeaderRow) {
+            } else if (
+                    position == ghostEssentialsHeaderRow
+            ) {
                 return 3;
-            } else if (position == ghostModeToggleRow) {
+            } else if (
+                    position == ghostModeToggleRow
+            ) {
                 return 18;
-            } else if (position == sendReadMessagePacketsRow || position == sendOnlinePacketsRow || position == sendUploadProgressRow || position == sendReadStotyPacketsRow || position == sendOfflinePacketAfterOnlineRow) {
+            } else if (
+                    position >= sendReadMessagePacketsRow && position <= sendOfflinePacketAfterOnlineRow
+            ) {
                 return 19;
-            } else if (position == markReadAfterSendRow || position == showGhostToggleInDrawerRow) {
-                return 5;
             }
-            return super.getItemViewType(position);
+            return 5;
         }
     }
 }
