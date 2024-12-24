@@ -26,7 +26,7 @@ import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.Locale;
 
-public class AyuGhostModeActivity extends BasePreferencesActivity implements NotificationCenter.NotificationCenterDelegate {
+public class AyuGhostModeActivity extends BaseNekoSettingsActivity implements NotificationCenter.NotificationCenterDelegate {
 
     private static final int TOGGLE_BUTTON_VIEW = 1000;
 
@@ -43,17 +43,17 @@ public class AyuGhostModeActivity extends BasePreferencesActivity implements Not
     private boolean ghostModeMenuExpanded;
 
     @Override
-    protected void updateRowsId() {
-        super.updateRowsId();
+    protected void updateRows() {
+        super.updateRows();
 
-        ghostEssentialsHeaderRow = newRow();
-        ghostModeToggleRow = newRow();
+        ghostEssentialsHeaderRow = addRow();
+        ghostModeToggleRow = addRow();
         if (ghostModeMenuExpanded) {
-            sendReadMessagePacketsRow = newRow();
-            sendOnlinePacketsRow = newRow();
-            sendUploadProgressRow = newRow();
-            sendReadStotyPacketsRow = newRow();
-            sendOfflinePacketAfterOnlineRow = newRow();
+            sendReadMessagePacketsRow = addRow();
+            sendOnlinePacketsRow = addRow();
+            sendUploadProgressRow = addRow();
+            sendReadStotyPacketsRow = addRow();
+            sendOfflinePacketAfterOnlineRow = addRow();
         } else {
             sendReadMessagePacketsRow = -1;
             sendOnlinePacketsRow = -1;
@@ -61,9 +61,9 @@ public class AyuGhostModeActivity extends BasePreferencesActivity implements Not
             sendReadStotyPacketsRow = -1;
             sendOfflinePacketAfterOnlineRow = -1;
         }
-        markReadAfterSendRow = newRow();
-        ghostDividerRow = newRow();
-        showGhostToggleInDrawerRow = newRow();
+        markReadAfterSendRow = addRow();
+        ghostDividerRow = addRow();
+        showGhostToggleInDrawerRow = addRow();
     }
 
     @Override
@@ -93,7 +93,7 @@ public class AyuGhostModeActivity extends BasePreferencesActivity implements Not
     private void updateGhostViews() {
         var isActive = AyuConfig.isGhostModeActive();
 
-        listAdapter.notifyItemChanged(ghostModeToggleRow, payload);
+        listAdapter.notifyItemChanged(ghostModeToggleRow, PARTIAL);
         listAdapter.notifyItemChanged(sendReadMessagePacketsRow, !isActive);
         listAdapter.notifyItemChanged(sendOnlinePacketsRow, !isActive);
         listAdapter.notifyItemChanged(sendUploadProgressRow, !isActive);
@@ -108,8 +108,8 @@ public class AyuGhostModeActivity extends BasePreferencesActivity implements Not
     protected void onItemClick(View view, int position, float x, float y) {
         if (position == ghostModeToggleRow) {
             ghostModeMenuExpanded ^= true;
-            updateRowsId();
-            listAdapter.notifyItemChanged(ghostModeToggleRow, payload);
+            updateRows();
+            listAdapter.notifyItemChanged(ghostModeToggleRow, PARTIAL);
             if (ghostModeMenuExpanded) {
                 listAdapter.notifyItemRangeInserted(ghostModeToggleRow + 1, 5);
             } else {
@@ -149,7 +149,7 @@ public class AyuGhostModeActivity extends BasePreferencesActivity implements Not
     }
 
     @Override
-    protected String getTitle() {
+    protected String getActionBarTitle  () {
         return LocaleController.getString(R.string.AyuPreferences);
     }
 
