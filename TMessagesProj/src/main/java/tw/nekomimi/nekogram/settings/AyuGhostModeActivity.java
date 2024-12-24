@@ -26,7 +26,7 @@ import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.Locale;
 
-public class AyuGhostModeActivity extends BaseNekoSettingsActivity implements NotificationCenter.NotificationCenterDelegate {
+public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
 
     private static final int TOGGLE_BUTTON_VIEW = 1000;
 
@@ -68,26 +68,14 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity implements No
 
     @Override
     public boolean onFragmentCreate() {
-        super.onFragmentCreate();
         // todo: register `MESSAGES_DELETED_NOTIFICATION` on all notification centers, not only on the current account
-
-        NotificationCenter.getInstance(UserConfig.selectedAccount).addObserver(this, AyuConstants.MESSAGES_DELETED_NOTIFICATION);
-        NotificationCenter.getGlobalInstance().addObserver(this, AyuConstants.AYUSYNC_STATE_CHANGED);
-
-        return true;
+        return super.onFragmentCreate();
     }
 
-    @Override
-    public void didReceivedNotification(int id, int account, Object... args) {
-       return;
-    }
 
     @Override
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-
-        NotificationCenter.getInstance(UserConfig.selectedAccount).removeObserver(this, AyuConstants.MESSAGES_DELETED_NOTIFICATION);
-        NotificationCenter.getGlobalInstance().removeObserver(this, AyuConstants.AYUSYNC_STATE_CHANGED);
     }
 
     private void updateGhostViews() {
@@ -149,6 +137,11 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity implements No
     }
 
     @Override
+    protected String getKey() {
+        return "ghost";
+    }
+
+    @Override
     protected String getActionBarTitle  () {
         return LocaleController.getString(R.string.AyuPreferences);
     }
@@ -178,16 +171,16 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity implements No
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, boolean payload) {
             switch (holder.getItemViewType()) {
-                case 1:
+                case TYPE_SHADOW:
                     holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
                     break;
-                case 3:
+                case TYPE_HEADER:
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == ghostEssentialsHeaderRow) {
                         headerCell.setText(LocaleController.getString(R.string.GhostEssentialsHeader));
                     }
                     break;
-                case 5:
+                case TYPE_CHECK:
                     TextCheckCell textCheckCell = (TextCheckCell) holder.itemView;
                     textCheckCell.setEnabled(true, null);
                     if (position == markReadAfterSendRow) {
@@ -196,7 +189,7 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity implements No
                         textCheckCell.setTextAndCheck(LocaleController.getString(R.string.ShowGhostToggleInDrawer), AyuConfig.showGhostToggleInDrawer, true);
                     }
                     break;
-                case 18:
+                case TYPE_CHECK2:
                     TextCheckCell2 checkCell = (TextCheckCell2) holder.itemView;
                     if (position == ghostModeToggleRow) {
                         int selectedCount = getGhostModeSelectedCount();
@@ -209,7 +202,7 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity implements No
                     checkCell.getCheckBox().setColors(Theme.key_switchTrack, Theme.key_switchTrackChecked, Theme.key_windowBackgroundWhite, Theme.key_windowBackgroundWhite);
                     checkCell.getCheckBox().setDrawIconType(0);
                     break;
-                case 19:
+                case TYPE_CHECKBOX2:
                     CheckBoxCell checkBoxCell = (CheckBoxCell) holder.itemView;
                     if (position == sendReadMessagePacketsRow) {
                         checkBoxCell.setText(LocaleController.getString(R.string.DontReadMessages), "", !AyuConfig.sendReadMessagePackets, true, true);
