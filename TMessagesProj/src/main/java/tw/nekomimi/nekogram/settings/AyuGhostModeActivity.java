@@ -234,24 +234,18 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
 
         @Override
         public int getItemViewType(int position) {
-            if (
-                    position == ghostDividerRow
-            ) {
+            if (position == ghostDividerRow) {
                 return 1;
-            } else if (
-                    position == ghostEssentialsHeaderRow
-            ) {
+            } else if (position == ghostEssentialsHeaderRow) {
                 return 3;
-            } else if (
-                    position == ghostModeToggleRow
-            ) {
+            } else if (position == ghostModeToggleRow) {
                 return 18;
-            } else if (
-                    position >= sendReadMessagePacketsRow && position <= sendOfflinePacketAfterOnlineRow
-            ) {
+            } else if (position == sendReadMessagePacketsRow || position == sendOnlinePacketsRow || position == sendUploadProgressRow || position == sendReadStotyPacketsRow || position == sendOfflinePacketAfterOnlineRow) {
                 return 19;
+            } else if (position == markReadAfterSendRow || position == showGhostToggleInDrawerRow) {
+                return 5;
             }
-            return 5;
+            return super.getItemViewType(position);
         }
     }
 }
