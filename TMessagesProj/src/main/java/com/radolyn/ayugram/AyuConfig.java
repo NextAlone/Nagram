@@ -73,22 +73,4 @@ public class AyuConfig {
         // giga move
         setGhostMode(!isGhostModeActive());
     }
-
-    public static boolean getBoolean(String key) {
-        synchronized (sync) {
-            if (preferences == null) {
-                loadConfig();
-            }
-            return preferences.getBoolean(key, false);
-        }
-    }
-
-    public static void putBoolean(String key, boolean value) {
-        synchronized (sync) {
-            if (preferences == null) {
-                loadConfig();
-            }
-            editor.putBoolean(key, value).apply();
-        }
-    }
 }

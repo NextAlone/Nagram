@@ -49,6 +49,16 @@ public abstract class BasePreferencesActivity extends BaseFragment {
 
     protected static final Object payload = new Object();
 
+    public static final int TYPE_SHADOW = 1;
+    public static final int TYPE_SETTINGS = 2;
+    public static final int TYPE_CHECK = 3;
+    public static final int TYPE_HEADER = 4;
+    public static final int TYPE_INFO_PRIVACY = 5;
+    public static final int TYPE_TEXT = 6;
+    public static final int TYPE_CHECKBOX = 7;
+    public static final int TYPE_SLIDE_CHOOSE = 8;
+    public static final int TYPE_CHECK2 = 9;
+
     protected RecyclerListView listView;
     protected BaseListAdapter listAdapter;
     protected LinearLayoutManager layoutManager;
@@ -178,50 +188,38 @@ public abstract class BasePreferencesActivity extends BaseFragment {
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view;
             switch (viewType) {
-                case 1:
+                case TYPE_SHADOW:
                     view = new ShadowSectionCell(mContext);
                     break;
-                case 2:
+                case TYPE_TEXT:
                     view = new TextCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
-                case 3:
+                case TYPE_HEADER:
                     view = new HeaderCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
-                case 4:
-                    view = new HeaderSettingsCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 5:
+                case TYPE_CHECK:
                     view = new TextCheckCell(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
-                case 7:
-                    view = new TextSettingsCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                case 8:
-                    view = new TextInfoPrivacyCell(mContext);
-                    break;
-                // case 9: Appearance > AvatarCornersPreviewCell
-                // case 10: Chats > StickerShapeCell
-                // case 11: Chats > StickerSizeCell
-                // case 12: Appearance > FabShapeCell
-                case 13:
-                    view = new SlideChooseView(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
-                // case 14: General > ActionBarSetupCell, Appearance > FoldersPreviewCell
-                // case 15: Chats > DoubleTapCell, Appearance > SolarIconsPreviewCell
-                // case 16: Chats > SetReactionCell
-                // case 17: General > CameraTypeSelector, Appearance > ChatListPreviewCell
-                case 18:
+                case TYPE_CHECK2:
                     view = new TextCheckCell2(mContext);
                     view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
                     break;
-                case 19:
-                    CheckBoxCell checkBoxCell = new CheckBoxCell(mContext, 4, 21, getResourceProvider());
+                case TYPE_SETTINGS:
+                    view = new TextSettingsCell(mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
+                case TYPE_INFO_PRIVACY:
+                    view = new TextInfoPrivacyCell(mContext);
+                    break;
+                case TYPE_SLIDE_CHOOSE:
+                    view = new SlideChooseView(mContext);
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
+                case TYPE_CHECKBOX:
+                    CheckBoxCell checkBoxCell = new CheckBoxCell(mContext, CheckBoxCell.TYPE_CHECK_BOX_ROUND, 21, getResourceProvider());
                     checkBoxCell.getCheckBoxRound().setDrawBackgroundAsArc(14);
                     checkBoxCell.getCheckBoxRound().setColor(Theme.key_switch2TrackChecked, Theme.key_radioBackground, Theme.key_checkboxCheck);
                     checkBoxCell.setEnabled(true);

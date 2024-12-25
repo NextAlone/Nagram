@@ -1,3 +1,12 @@
+/*
+ * This is the source code of AyuGram for Android.
+ *
+ * We do not and cannot prevent the use of our code,
+ * but be respectful and credit the original author.
+ *
+ * Copyright @Radolyn, 2023
+ */
+
 package tw.nekomimi.nekogram.settings;
 
 import android.content.Context;
@@ -17,131 +26,118 @@ import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.Locale;
 
-public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
+public class AyuGhostModeActivity extends BasePreferencesActivity {
 
-    // Row constants
-    private static final int ROW_COUNT = 8;
+    private static final int TOGGLE_BUTTON_VIEW = 1000;
 
-    // Row indices
     private int ghostEssentialsHeaderRow;
     private int ghostModeToggleRow;
     private int sendReadMessagePacketsRow;
     private int sendOnlinePacketsRow;
     private int sendUploadProgressRow;
-    private int sendReadStoryPacketsRow;
+    private int sendReadStotyPacketsRow;
     private int sendOfflinePacketAfterOnlineRow;
     private int markReadAfterSendRow;
     private int ghostDividerRow;
     private int showGhostToggleInDrawerRow;
-
     private boolean ghostModeMenuExpanded;
 
     @Override
-    protected void updateRows() {
-        super.updateRows();
-        ghostEssentialsHeaderRow = addRow();
-        ghostModeToggleRow = addRow();
+    protected void updateRowsId() {
+        super.updateRowsId();
 
-        // Handle expanded menu rows
+        ghostEssentialsHeaderRow = newRow();
+        ghostModeToggleRow = newRow();
         if (ghostModeMenuExpanded) {
-            sendReadMessagePacketsRow = addRow();
-            sendOnlinePacketsRow = addRow();
-            sendUploadProgressRow = addRow();
-            sendReadStoryPacketsRow = addRow();
-            sendOfflinePacketAfterOnlineRow = addRow();
+            sendReadMessagePacketsRow = newRow();
+            sendOnlinePacketsRow = newRow();
+            sendUploadProgressRow = newRow();
+            sendReadStotyPacketsRow = newRow();
+            sendOfflinePacketAfterOnlineRow = newRow();
         } else {
-            resetExpandedRows();
+            sendReadMessagePacketsRow = -1;
+            sendOnlinePacketsRow = -1;
+            sendUploadProgressRow = -1;
+            sendReadStotyPacketsRow = -1;
+            sendOfflinePacketAfterOnlineRow = -1;
         }
-
-        markReadAfterSendRow = addRow();
-        ghostDividerRow = addRow();
-        showGhostToggleInDrawerRow = addRow();
-    }
-
-    private void resetExpandedRows() {
-        sendReadMessagePacketsRow = -1;
-        sendOnlinePacketsRow = -1;
-        sendUploadProgressRow = -1;
-        sendReadStoryPacketsRow = -1;
-        sendOfflinePacketAfterOnlineRow = -1;
+        markReadAfterSendRow = newRow();
+        ghostDividerRow = newRow();
+        showGhostToggleInDrawerRow = newRow();
     }
 
     @Override
     public boolean onFragmentCreate() {
-        // TODO: Register `MESSAGES_DELETED_NOTIFICATION` for all notification centers, not just the current account
+        // todo: register `MESSAGES_DELETED_NOTIFICATION` on all notification centers, not only on the current account
         return super.onFragmentCreate();
     }
 
+
+    @Override
+    public void onFragmentDestroy() {
+        super.onFragmentDestroy();
+    }
+
     private void updateGhostViews() {
-        boolean isActive = AyuConfig.isGhostModeActive();
-        listAdapter.notifyItemChanged(ghostModeToggleRow, PARTIAL);
-        toggleRowState(sendReadMessagePacketsRow, !isActive);
-        toggleRowState(sendOnlinePacketsRow, !isActive);
-        toggleRowState(sendUploadProgressRow, !isActive);
-        toggleRowState(sendReadStoryPacketsRow, !isActive);
-        toggleRowState(sendOfflinePacketAfterOnlineRow, isActive);
+        var isActive = AyuConfig.isGhostModeActive();
+
+        listAdapter.notifyItemChanged(ghostModeToggleRow, payload);
+        listAdapter.notifyItemChanged(sendReadMessagePacketsRow, !isActive);
+        listAdapter.notifyItemChanged(sendOnlinePacketsRow, !isActive);
+        listAdapter.notifyItemChanged(sendUploadProgressRow, !isActive);
+        listAdapter.notifyItemChanged(sendReadStotyPacketsRow,!isActive);
+        listAdapter.notifyItemChanged(sendOfflinePacketAfterOnlineRow, isActive);
 
         NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
     }
 
-    private void toggleRowState(int row, boolean enabled) {
-        if (row != -1) {
-            listAdapter.notifyItemChanged(row, enabled);
-        }
-    }
 
     @Override
     protected void onItemClick(View view, int position, float x, float y) {
         if (position == ghostModeToggleRow) {
-            toggleGhostMenu(view);
+            ghostModeMenuExpanded ^= true;
+            updateRowsId();
+            listAdapter.notifyItemChanged(ghostModeToggleRow, payload);
+            if (ghostModeMenuExpanded) {
+                listAdapter.notifyItemRangeInserted(ghostModeToggleRow + 1, 5);
+            } else {
+                listAdapter.notifyItemRangeRemoved(ghostModeToggleRow + 1, 5);
+            }
         } else if (position == sendReadMessagePacketsRow) {
-            toggleConfig("sendReadMessagePackets", view);
+            AyuConfig.editor.putBoolean("sendReadMessagePackets", AyuConfig.sendReadMessagePackets ^= true).apply();
+            ((CheckBoxCell) view).setChecked(AyuConfig.sendReadMessagePackets, true);
+            AyuState.setAllowReadPacket(false, -1);
+            updateGhostViews();
         } else if (position == sendOnlinePacketsRow) {
-            toggleConfig("sendOnlinePackets", view);
+            AyuConfig.editor.putBoolean("sendOnlinePackets", AyuConfig.sendOnlinePackets ^= true).apply();
+            ((CheckBoxCell) view).setChecked(AyuConfig.sendOnlinePackets, true);
+            updateGhostViews();
         } else if (position == sendUploadProgressRow) {
-            toggleConfig("sendUploadProgress", view);
-        } else if (position == sendReadStoryPacketsRow) {
-            toggleConfig("sendReadStoryPackets", view);
+            AyuConfig.editor.putBoolean("sendUploadProgress", AyuConfig.sendUploadProgress ^= true).apply();
+            ((CheckBoxCell) view).setChecked(AyuConfig.sendUploadProgress, true);
+            updateGhostViews();
+        } else if (position == sendReadStotyPacketsRow) {
+            AyuConfig.editor.putBoolean("sendReadStotyPackets", AyuConfig.sendReadStotyPackets ^= true).apply();
+            ((CheckBoxCell) view).setChecked(AyuConfig.sendReadStotyPackets, true);
+            updateGhostViews();
         } else if (position == sendOfflinePacketAfterOnlineRow) {
-            toggleConfig("sendOfflinePacketAfterOnline", view);
+            AyuConfig.editor.putBoolean("sendOfflinePacketAfterOnline", AyuConfig.sendOfflinePacketAfterOnline ^= true).apply();
+            ((CheckBoxCell) view).setChecked(AyuConfig.sendOfflinePacketAfterOnline, true);
+            updateGhostViews();
         } else if (position == markReadAfterSendRow) {
-            toggleTextConfig("markReadAfterSend", view);
+            AyuConfig.editor.putBoolean("markReadAfterSend", AyuConfig.markReadAfterSend ^= true).apply();
+            ((TextCheckCell) view).setChecked(AyuConfig.markReadAfterSend);
+            AyuState.setAllowReadPacket(false, -1);
         } else if (position == showGhostToggleInDrawerRow) {
-            toggleTextConfig("showGhostToggleInDrawer", view);
+            AyuConfig.editor.putBoolean("showGhostToggleInDrawer", AyuConfig.showGhostToggleInDrawer ^= true).apply();
+            ((TextCheckCell) view).setChecked(AyuConfig.showGhostToggleInDrawer);
+
+            NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
         }
     }
 
-    private void toggleGhostMenu(View view) {
-        ghostModeMenuExpanded ^= true;
-        updateRows();
-        listAdapter.notifyItemChanged(ghostModeToggleRow, PARTIAL);
-        if (ghostModeMenuExpanded) {
-            listAdapter.notifyItemRangeInserted(ghostModeToggleRow + 1, ROW_COUNT);
-        } else {
-            listAdapter.notifyItemRangeRemoved(ghostModeToggleRow + 1, ROW_COUNT);
-        }
-    }
-
-    private void toggleConfig(String key, View view) {
-        boolean newValue = !AyuConfig.getBoolean(key);
-        AyuConfig.putBoolean(key, newValue);
-        ((CheckBoxCell) view).setChecked(newValue, true);
-        updateGhostViews();
-    }
-
-    private void toggleTextConfig(String key, View view) {
-        boolean newValue = !AyuConfig.getBoolean(key);
-        AyuConfig.putBoolean(key, newValue);
-        ((TextCheckCell) view).setChecked(newValue);
-    }
-
     @Override
-    protected String getKey() {
-        return "ghost";
-    }
-
-    @Override
-    protected String getActionBarTitle() {
+    protected String getTitle  () {
         return LocaleController.getString(R.string.AyuPreferences);
     }
 
@@ -150,34 +146,101 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
         return new ListAdapter(context);
     }
 
+    private int getGhostModeSelectedCount() {
+        int count = 0;
+        if (!AyuConfig.sendReadMessagePackets) count++;
+        if (!AyuConfig.sendOnlinePackets) count++;
+        if (!AyuConfig.sendUploadProgress) count++;
+        if (!AyuConfig.sendReadStotyPackets) count++;
+        if (AyuConfig.sendOfflinePacketAfterOnline) count++;
+
+        return count;
+    }
+
     private class ListAdapter extends BaseListAdapter {
+
         public ListAdapter(Context context) {
             super(context);
         }
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, boolean payload) {
-            // Handle row binding based on row type
-            if (holder.getItemViewType() == TYPE_CHECKBOX2) {
-                bindCheckBoxCell(holder, position);
+            switch (holder.getItemViewType()) {
+                case TYPE_SHADOW:
+                    holder.itemView.setBackground(Theme.getThemedDrawable(mContext, R.drawable.greydivider, Theme.key_windowBackgroundGrayShadow));
+                    break;
+                case TYPE_HEADER:
+                    HeaderCell headerCell = (HeaderCell) holder.itemView;
+                    if (position == ghostEssentialsHeaderRow) {
+                        headerCell.setText(LocaleController.getString(R.string.GhostEssentialsHeader));
+                    }
+                    break;
+                case TYPE_CHECK:
+                    TextCheckCell textCheckCell = (TextCheckCell) holder.itemView;
+                    textCheckCell.setEnabled(true, null);
+                    if (position == markReadAfterSendRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.MarkReadAfterAction), AyuConfig.markReadAfterSend, true);
+                    } else if (position == showGhostToggleInDrawerRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.ShowGhostToggleInDrawer), AyuConfig.showGhostToggleInDrawer, true);
+                    }
+                    break;
+                case TYPE_CHECK2:
+                    TextCheckCell2 checkCell = (TextCheckCell2) holder.itemView;
+                    if (position == ghostModeToggleRow) {
+                        int selectedCount = getGhostModeSelectedCount();
+                        checkCell.setTextAndCheck(LocaleController.getString(R.string.GhostModeToggle), AyuConfig.isGhostModeActive(), true, true);
+                        checkCell.setCollapseArrow(String.format(Locale.US, "%d/5", selectedCount), !ghostModeMenuExpanded, () -> {
+                            AyuConfig.toggleGhostMode();
+                            updateGhostViews();
+                        });
+                    }
+                    checkCell.getCheckBox().setColors(Theme.key_switchTrack, Theme.key_switchTrackChecked, Theme.key_windowBackgroundWhite, Theme.key_windowBackgroundWhite);
+                    checkCell.getCheckBox().setDrawIconType(0);
+                    break;
+                case TYPE_CHECKBOX:
+                    CheckBoxCell checkBoxCell = (CheckBoxCell) holder.itemView;
+                    if (position == sendReadMessagePacketsRow) {
+                        checkBoxCell.setText(LocaleController.getString(R.string.DontReadMessages), "", !AyuConfig.sendReadMessagePackets, true, true);
+                    } else if (position == sendOnlinePacketsRow) {
+                        checkBoxCell.setText(LocaleController.getString(R.string.DontSendOnlinePackets), "", !AyuConfig.sendOnlinePackets, true, true);
+                    } else if (position == sendUploadProgressRow) {
+                        checkBoxCell.setText(LocaleController.getString(R.string.DontSendUploadProgress), "", !AyuConfig.sendUploadProgress, true, true);
+                    } else if (position == sendReadStotyPacketsRow) {
+                        checkBoxCell.setText(LocaleController.getString(R.string.DontReadStories), "", !AyuConfig.sendReadStotyPackets, true, true);
+                    } else if (position == sendOfflinePacketAfterOnlineRow) {
+                        checkBoxCell.setText(LocaleController.getString(R.string.SendOfflinePacketAfterOnline), "", AyuConfig.sendOfflinePacketAfterOnline, true, true);
+                    }
+                    checkBoxCell.setPad(1);
+                    break;
             }
-            // Handle other cases
         }
 
-        private void bindCheckBoxCell(@NonNull RecyclerView.ViewHolder holder, int position) {
-            CheckBoxCell checkBoxCell = (CheckBoxCell) holder.itemView;
-            if (position == sendReadMessagePacketsRow) {
-                bindCheckBox(checkBoxCell, "sendReadMessagePackets", R.string.DontReadMessages);
-            } else if (position == sendOnlinePacketsRow) {
-                bindCheckBox(checkBoxCell, "sendOnlinePackets", R.string.DontSendOnlinePackets);
-            } else if (position == sendUploadProgressRow) {
-                bindCheckBox(checkBoxCell, "sendUploadProgress", R.string.DontSendUploadProgress);
+        @NonNull
+        @NotNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+            if (viewType == TOGGLE_BUTTON_VIEW) {
+                var view = new NotificationsCheckCell(mContext);
+                view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                return new RecyclerListView.Holder(view);
             }
+            return super.onCreateViewHolder(parent, viewType);
         }
 
-        private void bindCheckBox(CheckBoxCell cell, String key, int textRes) {
-            boolean value = AyuConfig.getBoolean(key);
-            cell.setText(LocaleController.getString(textRes), "", value, true, true);
+        @Override
+        public int getItemViewType(int position) {
+            if (position == ghostDividerRow) {
+                return 1;
+            } else if (position == ghostEssentialsHeaderRow) {
+                return 3;
+            } else if (position == ghostModeToggleRow) {
+                return 18;
+            } else if (position == sendReadMessagePacketsRow || position == sendOnlinePacketsRow || position == sendUploadProgressRow || position == sendReadStotyPacketsRow || position == sendOfflinePacketAfterOnlineRow) {
+                return 19;
+            } else if (position == markReadAfterSendRow || position == showGhostToggleInDrawerRow) {
+                return 5;
+            }
+            return super.getItemViewType(position);
         }
     }
 }
