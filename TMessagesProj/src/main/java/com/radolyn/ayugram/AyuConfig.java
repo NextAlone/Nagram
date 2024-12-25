@@ -1,18 +1,8 @@
-/*
- * This is the source code of AyuGram for Android.
- *
- * We do not and cannot prevent the use of our code,
- * but be respectful and credit the original author.
- *
- * Copyright @Radolyn, 2023
- */
-
 package com.radolyn.ayugram;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
 import org.telegram.messenger.*;
-
 
 public class AyuConfig {
     private static final Object sync = new Object();
@@ -84,4 +74,21 @@ public class AyuConfig {
         setGhostMode(!isGhostModeActive());
     }
 
+    public static boolean getBoolean(String key) {
+        synchronized (sync) {
+            if (preferences == null) {
+                loadConfig();
+            }
+            return preferences.getBoolean(key, false);
+        }
+    }
+
+    public static void putBoolean(String key, boolean value) {
+        synchronized (sync) {
+            if (preferences == null) {
+                loadConfig();
+            }
+            editor.putBoolean(key, value).apply();
+        }
+    }
 }
