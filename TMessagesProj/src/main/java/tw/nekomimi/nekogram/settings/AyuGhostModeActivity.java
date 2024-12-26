@@ -28,8 +28,6 @@ import java.util.Locale;
 
 public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
 
-    private static final int TOGGLE_BUTTON_VIEW = 1000;
-
     private int GhostModeHeaderRow;
     private int ghostModeToggleRow;
     private int sendReadMessagePacketsRow;
@@ -219,11 +217,6 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
         @NotNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-            if (viewType == TOGGLE_BUTTON_VIEW) {
-                var view = new NotificationsCheckCell(mContext);
-                view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                return new RecyclerListView.Holder(view);
-            }
             return super.onCreateViewHolder(parent, viewType);
         }
 
