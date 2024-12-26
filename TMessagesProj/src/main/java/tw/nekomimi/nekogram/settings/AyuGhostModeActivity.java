@@ -198,19 +198,19 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
                     textCheckCell2.getCheckBox().setDrawIconType(0);
                     break;
                 case TYPE_CHECKBOX:
-                    TextCheckbox2Cell TextCheckbox2Cell = (TextCheckbox2Cell) holder.itemView;
+                    CheckBoxCell checkBoxCell = (CheckBoxCell) holder.itemView;
                     if (position == sendReadMessagePacketsRow) {
-                        TextCheckbox2Cell.setTextAndValueAndCheck(LocaleController.getString(R.string.DontReadMessages), "", !AyuConfig.sendReadMessagePackets, true, true);
+                        checkBoxCell.setText(LocaleController.getString(R.string.DontReadMessages), "", !AyuConfig.sendReadMessagePackets, true, true);
                     } else if (position == sendOnlinePacketsRow) {
-                        TextCheckbox2Cell.setTextAndValueAndCheck(LocaleController.getString(R.string.DontSendOnlinePackets), "", !AyuConfig.sendOnlinePackets, true, true);
+                        checkBoxCell.setText(LocaleController.getString(R.string.DontSendOnlinePackets), "", !AyuConfig.sendOnlinePackets, true, true);
                     } else if (position == sendUploadProgressRow) {
-                        TextCheckbox2Cell.setTextAndValueAndCheck(LocaleController.getString(R.string.DontSendUploadProgress), "", !AyuConfig.sendUploadProgress, true, true);
+                        checkBoxCell.setText(LocaleController.getString(R.string.DontSendUploadProgress), "", !AyuConfig.sendUploadProgress, true, true);
                     } else if (position == sendReadStotyPacketsRow) {
-                        TextCheckbox2Cell.setTextAndValueAndCheck(LocaleController.getString(R.string.DontReadStories), "", !AyuConfig.sendReadStotyPackets, true, true);
+                        checkBoxCell.setText(LocaleController.getString(R.string.DontReadStories), "", !AyuConfig.sendReadStotyPackets, true, true);
                     } else if (position == sendOfflinePacketAfterOnlineRow) {
-                        TextCheckbox2Cell.setTextAndValueAndCheck(LocaleController.getString(R.string.SendOfflinePacketAfterOnline), "", AyuConfig.sendOfflinePacketAfterOnline, true, true);
+                        checkBoxCell.setText(LocaleController.getString(R.string.SendOfflinePacketAfterOnline), "", AyuConfig.sendOfflinePacketAfterOnline, true, true);
                     }
-                    //TextCheckbox2Cell.setPad(1);
+                    checkBoxCell.setPad(1);
                     break;
             }
         }

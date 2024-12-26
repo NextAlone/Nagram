@@ -61,7 +61,7 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
     public static final int TYPE_DETAIL_SETTINGS = 6;
     public static final int TYPE_INFO_PRIVACY = 7;
     public static final int TYPE_TEXT = 8;
-    public static final int TYPE_CHECKBOX = 9;
+    public static final int TYPE_TEXT_CHECKBOX = 9;
     public static final int TYPE_RADIO = 10;
     public static final int TYPE_ACCOUNT = 11;
     public static final int TYPE_EMOJI = 12;
@@ -69,7 +69,7 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
     public static final int TYPE_CREATION = 14;
     public static final int TYPE_FLICKER = 15;
     public static final int TYPE_CHECK2 = 16;
-    //public static final int TYPE_CHECKBOX = 17;
+    public static final int TYPE_CHECKBOX = 17;
 
     protected BlurredRecyclerView listView;
     protected BaseListAdapter listAdapter;
@@ -310,7 +310,7 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int type = holder.getItemViewType();
-            return type == TYPE_SETTINGS || type == TYPE_CHECK || type == TYPE_NOTIFICATION_CHECK || type == TYPE_DETAIL_SETTINGS || type == TYPE_TEXT | type == TYPE_CHECKBOX || type == TYPE_RADIO || type == TYPE_ACCOUNT || type == TYPE_EMOJI || type == TYPE_EMOJI_SELECTION || type == TYPE_CREATION;
+            return type == TYPE_SETTINGS || type == TYPE_CHECK || type == TYPE_NOTIFICATION_CHECK || type == TYPE_DETAIL_SETTINGS || type == TYPE_TEXT | type == TYPE_TEXT_CHECKBOX || type == TYPE_RADIO || type == TYPE_ACCOUNT || type == TYPE_EMOJI || type == TYPE_EMOJI_SELECTION || type == TYPE_CREATION;
         }
 
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, boolean partial) {
@@ -359,7 +359,7 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
                     view = new TextCell(mContext, resourcesProvider);
                     view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
                     break;
-                case TYPE_CHECKBOX:
+                case TYPE_TEXT_CHECKBOX:
                     view = new TextCheckbox2Cell(mContext);
                     view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
                     break;
@@ -390,7 +390,14 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
                     view = new TextCheckCell2(mContext, resourcesProvider);
                     view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
                     break;
-
+                case TYPE_CHECKBOX:
+                    CheckBoxCell checkBoxCell = new CheckBoxCell(mContext, CheckBoxCell.TYPE_CHECK_BOX_ROUND, 21, getResourceProvider());
+                    checkBoxCell.getCheckBoxRound().setDrawBackgroundAsArc(14);
+                    checkBoxCell.getCheckBoxRound().setColor(Theme.key_switch2TrackChecked, Theme.key_radioBackground, Theme.key_checkboxCheck);
+                    checkBoxCell.setEnabled(true);
+                    view = checkBoxCell;
+                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    break;
             }
             //noinspection ConstantConditions
             view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
