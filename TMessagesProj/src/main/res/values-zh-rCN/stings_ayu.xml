@@ -8,7 +8,7 @@
 
     <!-- Ghost Mode Features -->
     <string name="EnableGhostMode">启用幽灵功能</string>
-    <string name="GhostEssentialsHeader">隐身模式必要值</string>
+    <string name="GhostModeHeader">隐身模式必要值</string>
     <string name="DontReadMessages">不显示消息已读</string>
     <string name="DontReadStories">不显示动态已读</string>
     <string name="DontSendOnlinePackets">不发送在线状态</string>

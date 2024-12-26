@@ -69,7 +69,7 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
     public static final int TYPE_CREATION = 14;
     public static final int TYPE_FLICKER = 15;
     public static final int TYPE_CHECK2 = 16;
-    public static final int TYPE_CHECKBOX2 = 17;
+    //public static final int TYPE_CHECKBOX = 17;
 
     protected BlurredRecyclerView listView;
     protected BaseListAdapter listAdapter;
@@ -310,7 +310,7 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int type = holder.getItemViewType();
-            return type == TYPE_SETTINGS || type == TYPE_CHECK || type == TYPE_NOTIFICATION_CHECK || type == TYPE_DETAIL_SETTINGS || type == TYPE_TEXT | type == TYPE_CHECKBOX || type == TYPE_RADIO || type == TYPE_ACCOUNT || type == TYPE_EMOJI || type == TYPE_EMOJI_SELECTION || type == TYPE_CREATION || type == TYPE_CHECK2 || type == TYPE_CHECKBOX2;
+            return type == TYPE_SETTINGS || type == TYPE_CHECK || type == TYPE_NOTIFICATION_CHECK || type == TYPE_DETAIL_SETTINGS || type == TYPE_TEXT | type == TYPE_CHECKBOX || type == TYPE_RADIO || type == TYPE_ACCOUNT || type == TYPE_EMOJI || type == TYPE_EMOJI_SELECTION || type == TYPE_CREATION;
         }
 
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, boolean partial) {
@@ -390,14 +390,7 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
                     view = new TextCheckCell2(mContext, resourcesProvider);
                     view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
                     break;
-                case TYPE_CHECKBOX2:
-                    CheckBoxCell checkBoxCell = new CheckBoxCell(mContext, CheckBoxCell.TYPE_CHECK_BOX_ROUND, 21, getResourceProvider());
-                    checkBoxCell.getCheckBoxRound().setDrawBackgroundAsArc(14);
-                    checkBoxCell.getCheckBoxRound().setColor(Theme.key_switch2TrackChecked, Theme.key_radioBackground, Theme.key_checkboxCheck);
-                    checkBoxCell.setEnabled(true);
-                    view = checkBoxCell;
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-                    break;
+
             }
             //noinspection ConstantConditions
             view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));

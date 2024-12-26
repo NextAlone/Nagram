@@ -8,7 +8,7 @@
 
     <!-- Ghost Mode Features -->
     <string name="EnableGhostMode">Enable Ghost Mode</string>
-    <string name="GhostEssentialsHeader">Ghost Mode Essentials</string>
+    <string name="GhostModeHeader">Ghost Mode Essentials</string>
     <string name="DontReadMessages">Do not mark messages as read</string>
     <string name="DontReadStories">Do not mark stories as viewed</string>
     <string name="DontSendOnlinePackets">Do not send online status</string>

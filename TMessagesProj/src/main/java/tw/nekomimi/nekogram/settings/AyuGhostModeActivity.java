@@ -26,11 +26,11 @@ import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.Locale;
 
-public class AyuGhostModeActivity extends BasePreferencesActivity {
+public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
 
     private static final int TOGGLE_BUTTON_VIEW = 1000;
 
-    private int ghostEssentialsHeaderRow;
+    private int GhostModeHeaderRow;
     private int ghostModeToggleRow;
     private int sendReadMessagePacketsRow;
     private int sendOnlinePacketsRow;
@@ -43,17 +43,17 @@ public class AyuGhostModeActivity extends BasePreferencesActivity {
     private boolean ghostModeMenuExpanded;
 
     @Override
-    protected void updateRowsId() {
-        super.updateRowsId();
+    protected void updateRows() {
+        super.updateRows();
 
-        ghostEssentialsHeaderRow = newRow();
-        ghostModeToggleRow = newRow();
+        GhostModeHeaderRow = addRow();
+        ghostModeToggleRow = addRow();
         if (ghostModeMenuExpanded) {
-            sendReadMessagePacketsRow = newRow();
-            sendOnlinePacketsRow = newRow();
-            sendUploadProgressRow = newRow();
-            sendReadStotyPacketsRow = newRow();
-            sendOfflinePacketAfterOnlineRow = newRow();
+            sendReadMessagePacketsRow = addRow();
+            sendOnlinePacketsRow = addRow();
+            sendUploadProgressRow = addRow();
+            sendReadStotyPacketsRow = addRow();
+            sendOfflinePacketAfterOnlineRow = addRow();
         } else {
             sendReadMessagePacketsRow = -1;
             sendOnlinePacketsRow = -1;
@@ -61,9 +61,9 @@ public class AyuGhostModeActivity extends BasePreferencesActivity {
             sendReadStotyPacketsRow = -1;
             sendOfflinePacketAfterOnlineRow = -1;
         }
-        markReadAfterSendRow = newRow();
-        ghostDividerRow = newRow();
-        showGhostToggleInDrawerRow = newRow();
+        markReadAfterSendRow = addRow();
+        ghostDividerRow = addRow();
+        showGhostToggleInDrawerRow = addRow();
     }
 
     @Override
@@ -82,7 +82,7 @@ public class AyuGhostModeActivity extends BasePreferencesActivity {
     private void updateGhostViews() {
         var isActive = AyuConfig.isGhostModeActive();
 
-        listAdapter.notifyItemChanged(ghostModeToggleRow, payload);
+        listAdapter.notifyItemChanged(ghostModeToggleRow, PARTIAL);
         listAdapter.notifyItemChanged(sendReadMessagePacketsRow, !isActive);
         listAdapter.notifyItemChanged(sendOnlinePacketsRow, !isActive);
         listAdapter.notifyItemChanged(sendUploadProgressRow, !isActive);
@@ -97,8 +97,8 @@ public class AyuGhostModeActivity extends BasePreferencesActivity {
     protected void onItemClick(View view, int position, float x, float y) {
         if (position == ghostModeToggleRow) {
             ghostModeMenuExpanded ^= true;
-            updateRowsId();
-            listAdapter.notifyItemChanged(ghostModeToggleRow, payload);
+            updateRows();
+            listAdapter.notifyItemChanged(ghostModeToggleRow, PARTIAL);
             if (ghostModeMenuExpanded) {
                 listAdapter.notifyItemRangeInserted(ghostModeToggleRow + 1, 5);
             } else {
@@ -138,7 +138,7 @@ public class AyuGhostModeActivity extends BasePreferencesActivity {
     }
 
     @Override
-    protected String getTitle  () {
+    protected String getActionBarTitle() {
         return LocaleController.getString(R.string.AyuPreferences);
     }
 
@@ -154,7 +154,6 @@ public class AyuGhostModeActivity extends BasePreferencesActivity {
         if (!AyuConfig.sendUploadProgress) count++;
         if (!AyuConfig.sendReadStotyPackets) count++;
         if (AyuConfig.sendOfflinePacketAfterOnline) count++;
-
         return count;
     }
 
@@ -172,8 +171,8 @@ public class AyuGhostModeActivity extends BasePreferencesActivity {
                     break;
                 case TYPE_HEADER:
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
-                    if (position == ghostEssentialsHeaderRow) {
-                        headerCell.setText(LocaleController.getString(R.string.GhostEssentialsHeader));
+                    if (position == GhostModeHeaderRow) {
+                        headerCell.setText(LocaleController.getString(R.string.GhostModeHeader));
                     }
                     break;
                 case TYPE_CHECK:
@@ -186,32 +185,32 @@ public class AyuGhostModeActivity extends BasePreferencesActivity {
                     }
                     break;
                 case TYPE_CHECK2:
-                    TextCheckCell2 checkCell = (TextCheckCell2) holder.itemView;
+                    TextCheckCell2 textCheckCell2 = (TextCheckCell2) holder.itemView;
                     if (position == ghostModeToggleRow) {
                         int selectedCount = getGhostModeSelectedCount();
-                        checkCell.setTextAndCheck(LocaleController.getString(R.string.GhostModeToggle), AyuConfig.isGhostModeActive(), true, true);
-                        checkCell.setCollapseArrow(String.format(Locale.US, "%d/5", selectedCount), !ghostModeMenuExpanded, () -> {
+                        textCheckCell2.setTextAndCheck(LocaleController.getString(R.string.GhostModeToggle), AyuConfig.isGhostModeActive(), true, true);
+                        textCheckCell2.setCollapseArrow(String.format(Locale.US, "%d/5", selectedCount), !ghostModeMenuExpanded, () -> {
                             AyuConfig.toggleGhostMode();
                             updateGhostViews();
                         });
                     }
-                    checkCell.getCheckBox().setColors(Theme.key_switchTrack, Theme.key_switchTrackChecked, Theme.key_windowBackgroundWhite, Theme.key_windowBackgroundWhite);
-                    checkCell.getCheckBox().setDrawIconType(0);
+                    textCheckCell2.getCheckBox().setColors(Theme.key_switchTrack, Theme.key_switchTrackChecked, Theme.key_windowBackgroundWhite, Theme.key_windowBackgroundWhite);
+                    textCheckCell2.getCheckBox().setDrawIconType(0);
                     break;
                 case TYPE_CHECKBOX:
-                    CheckBoxCell checkBoxCell = (CheckBoxCell) holder.itemView;
+                    TextCheckbox2Cell TextCheckbox2Cell = (TextCheckbox2Cell) holder.itemView;
                     if (position == sendReadMessagePacketsRow) {
-                        checkBoxCell.setText(LocaleController.getString(R.string.DontReadMessages), "", !AyuConfig.sendReadMessagePackets, true, true);
+                        TextCheckbox2Cell.setTextAndValueAndCheck(LocaleController.getString(R.string.DontReadMessages), "", !AyuConfig.sendReadMessagePackets, true, true);
                     } else if (position == sendOnlinePacketsRow) {
-                        checkBoxCell.setText(LocaleController.getString(R.string.DontSendOnlinePackets), "", !AyuConfig.sendOnlinePackets, true, true);
+                        TextCheckbox2Cell.setTextAndValueAndCheck(LocaleController.getString(R.string.DontSendOnlinePackets), "", !AyuConfig.sendOnlinePackets, true, true);
                     } else if (position == sendUploadProgressRow) {
-                        checkBoxCell.setText(LocaleController.getString(R.string.DontSendUploadProgress), "", !AyuConfig.sendUploadProgress, true, true);
+                        TextCheckbox2Cell.setTextAndValueAndCheck(LocaleController.getString(R.string.DontSendUploadProgress), "", !AyuConfig.sendUploadProgress, true, true);
                     } else if (position == sendReadStotyPacketsRow) {
-                        checkBoxCell.setText(LocaleController.getString(R.string.DontReadStories), "", !AyuConfig.sendReadStotyPackets, true, true);
+                        TextCheckbox2Cell.setTextAndValueAndCheck(LocaleController.getString(R.string.DontReadStories), "", !AyuConfig.sendReadStotyPackets, true, true);
                     } else if (position == sendOfflinePacketAfterOnlineRow) {
-                        checkBoxCell.setText(LocaleController.getString(R.string.SendOfflinePacketAfterOnline), "", AyuConfig.sendOfflinePacketAfterOnline, true, true);
+                        TextCheckbox2Cell.setTextAndValueAndCheck(LocaleController.getString(R.string.SendOfflinePacketAfterOnline), "", AyuConfig.sendOfflinePacketAfterOnline, true, true);
                     }
-                    checkBoxCell.setPad(1);
+                    //TextCheckbox2Cell.setPad(1);
                     break;
             }
         }
@@ -231,18 +230,21 @@ public class AyuGhostModeActivity extends BasePreferencesActivity {
         @Override
         public int getItemViewType(int position) {
             if (position == ghostDividerRow) {
-                return 1;
+                return TYPE_SHADOW;
             }
-            if (position == ghostEssentialsHeaderRow) {
-                return 4;
+            if (position == GhostModeHeaderRow) {
+                return TYPE_HEADER;
             }
             if (position == ghostModeToggleRow) {
-                return 9;
+                return TYPE_CHECK2;
             }
             if (position >= sendReadMessagePacketsRow && position <= sendOfflinePacketAfterOnlineRow) {
-                return 7;
+                return TYPE_CHECKBOX;
             }
-            return 3;
+            if (position == markReadAfterSendRow || position == showGhostToggleInDrawerRow) {
+                return TYPE_CHECK;
+            }
+            return super.getItemViewType(position);
         }
     }
 }
