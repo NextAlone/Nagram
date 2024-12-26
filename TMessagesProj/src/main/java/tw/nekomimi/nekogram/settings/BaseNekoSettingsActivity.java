@@ -387,7 +387,7 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
                     view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
                     break;
                 case TYPE_CHECK2:
-                    view = new TextCheckCell2(mContext, resourcesProvider);
+                    view = new TextCheckCell2(mContext);
                     view.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
                     break;
                 case TYPE_CHECKBOX:
