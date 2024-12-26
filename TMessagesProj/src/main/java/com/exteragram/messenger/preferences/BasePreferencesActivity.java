@@ -131,10 +131,6 @@ public abstract class BasePreferencesActivity extends BaseFragment {
         return fragmentView;
     }
 
-    protected void showBulletin() {
-        BulletinFactory.of(this).createErrorBulletin(LocaleController.getString("RestartRequired", R.string.RestartRequired), resourcesProvider).show();
-    }
-
     protected RecyclerListView getListView() {
         return listView;
     }

@@ -69,7 +69,8 @@ public class AyuGhostModeActivity extends BasePreferencesActivity {
     @Override
     public boolean onFragmentCreate() {
         // todo: register `MESSAGES_DELETED_NOTIFICATION` on all notification centers, not only on the current account
-        return super.onFragmentCreate();
+        super.onFragmentCreate();
+        return true;
     }
 
 
@@ -231,16 +232,17 @@ public class AyuGhostModeActivity extends BasePreferencesActivity {
         public int getItemViewType(int position) {
             if (position == ghostDividerRow) {
                 return 1;
-            } else if (position == ghostEssentialsHeaderRow) {
-                return 3;
-            } else if (position == ghostModeToggleRow) {
-                return 18;
-            } else if (position == sendReadMessagePacketsRow || position == sendOnlinePacketsRow || position == sendUploadProgressRow || position == sendReadStotyPacketsRow || position == sendOfflinePacketAfterOnlineRow) {
-                return 19;
-            } else if (position == markReadAfterSendRow || position == showGhostToggleInDrawerRow) {
-                return 5;
             }
-            return super.getItemViewType(position);
+            if (position == ghostEssentialsHeaderRow) {
+                return 4;
+            }
+            if (position == ghostModeToggleRow) {
+                return 9;
+            }
+            if (position >= sendReadMessagePacketsRow && position <= sendOfflinePacketAfterOnlineRow) {
+                return 7;
+            }
+            return 3;
         }
     }
 }
