@@ -2,11 +2,12 @@
 <resources>
     <!-- General Settings -->
     <string name="GhostModeTitle">隐身模式</string>
+    <string name="GhostElements">幽灵选项</string>
+    <string name="DrawerElements">侧栏元素</string>
     <string name="ShowGhostToggleInDrawer">侧栏显示隐身模式切换</string>
 
     <!-- Ghost Mode Features -->
-    <string name="EnableGhostMode">启用幽灵功能</string>
-    <string name="GhostModeHeader">幽灵选项</string>
+    <!--<string name="EnableGhostMode">启用幽灵功能</string>-->
     <string name="DontReadMessages">不显示消息已读</string>
     <string name="DontReadStories">不显示动态已读</string>
     <string name="DontSendOnlinePackets">不发送在线状态</string>

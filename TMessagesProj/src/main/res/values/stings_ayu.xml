@@ -2,16 +2,16 @@
 <resources>
     <!-- General Settings -->
     <string name="GhostModeTitle">Ghost Mode</string>
+    <string name="GhostElements">Ghost Options</string>
+    <string name="DrawerElements">Sidebar Elements</string>
     <string name="ShowGhostToggleInDrawer">Show Ghost Mode Toggle in Sidebar</string>
 
     <!-- Ghost Mode Features -->
-    <string name="EnableGhostMode">Enable Ghost Mode</string>
-    <string name="GhostModeHeader">Ghost Mode Essentials</string>
-    <string name="DontReadMessages">Do not mark messages as read</string>
-    <string name="DontReadStories">Do not mark stories as viewed</string>
-    <string name="DontSendOnlinePackets">Do not send online status</string>
-    <string name="DontSendUploadProgress">Do not send typing status</string>
-    <string name="SendOfflinePacketAfterOnline">Go offline automatically after being online</string>
-    <string name="MarkReadAfterAction">Mark as read after performing actions</string>
-
+    <!--<string name="EnableGhostMode">Enable Ghost Mode Features</string>-->
+    <string name="DontReadMessages">Do Not Mark Messages as Read</string>
+    <string name="DontReadStories">Do Not Mark Stories as Viewed</string>
+    <string name="DontSendOnlinePackets">Do Not Send Online Status</string>
+    <string name="DontSendUploadProgress">Do Not Send Typing Status</string>
+    <string name="SendOfflinePacketAfterOnline">Go Offline Automatically After Online</string>
+    <string name="MarkReadAfterAction">Mark as Read After Performing Actions</string>
 </resources>

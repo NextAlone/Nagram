@@ -25,9 +25,11 @@ import org.telegram.ui.Components.RecyclerListView;
 import java.util.Locale;
 
 public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
-
+    // title
     private int GhostModeHeaderRow;
+    private int DrawerHeaderRow;
     private int GhostModeTitleRow;
+
     private int sendReadMessagePacketsRow;
     private int sendOnlinePacketsRow;
     private int sendUploadProgressRow;
@@ -59,6 +61,7 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
         }
         markReadAfterSendRow = addRow();
         ghostDividerRow = addRow();
+        DrawerHeaderRow = addRow();
         showGhostToggleInDrawerRow = addRow();
     }
 
@@ -168,7 +171,10 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
                 case TYPE_HEADER:
                     HeaderCell headerCell = (HeaderCell) holder.itemView;
                     if (position == GhostModeHeaderRow) {
-                        headerCell.setText(LocaleController.getString(R.string.GhostModeHeader));
+                        headerCell.setText(LocaleController.getString(R.string.GhostElements));
+                    }
+                    if (position == DrawerHeaderRow) {
+                        headerCell.setText(LocaleController.getString(R.string.DrawerElements));
                     }
                     break;
                 case TYPE_CHECK:
@@ -216,7 +222,7 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
             if (position == ghostDividerRow) {
                 return TYPE_SHADOW;
             }
-            if (position == GhostModeHeaderRow) {
+            if (position == GhostModeHeaderRow || position == DrawerHeaderRow) {
                 return TYPE_HEADER;
             }
             if (position == GhostModeTitleRow) {
