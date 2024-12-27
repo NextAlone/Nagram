@@ -14,17 +14,4 @@
     <color name="monetRedDark">#F2B8B5</color>
     <color name="monetRedCall">#4CAF50</color>
     <color name="monetGreenCall">#EF5350</color>
-
-
-    <color name="black">#000000</color>
-    <color name="white">#FFFFFF</color>
-    <color name="ic_background">#9570FF</color>
-
-    <!--static m colors-->
-    <color name="mRed200">#EF9A9A</color>
-    <color name="mRed500">#F44336</color>
-    <color name="mRed800">#C62828</color>
-    <color name="mGreen200">#A5D6A7</color>
-    <color name="mGreen500">#4CAF50</color>
-    <color name="mGreen800">#2E7D32</color>
 </resources>

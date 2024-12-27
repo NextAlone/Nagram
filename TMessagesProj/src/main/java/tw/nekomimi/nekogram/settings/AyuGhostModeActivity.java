@@ -14,9 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.exteragram.messenger.preferences.BasePreferencesActivity;
 import com.radolyn.ayugram.AyuConfig;
-import com.radolyn.ayugram.AyuConstants;
 import com.radolyn.ayugram.utils.AyuState;
 import org.jetbrains.annotations.NotNull;
 import org.telegram.messenger.*;
@@ -29,7 +27,7 @@ import java.util.Locale;
 public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
 
     private int GhostModeHeaderRow;
-    private int ghostModeToggleRow;
+    private int GhostModeTitleRow;
     private int sendReadMessagePacketsRow;
     private int sendOnlinePacketsRow;
     private int sendUploadProgressRow;
@@ -45,7 +43,7 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
         super.updateRows();
 
         GhostModeHeaderRow = addRow();
-        ghostModeToggleRow = addRow();
+        GhostModeTitleRow = addRow();
         if (ghostModeMenuExpanded) {
             sendReadMessagePacketsRow = addRow();
             sendOnlinePacketsRow = addRow();
@@ -80,7 +78,7 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
     private void updateGhostViews() {
         var isActive = AyuConfig.isGhostModeActive();
 
-        listAdapter.notifyItemChanged(ghostModeToggleRow, PARTIAL);
+        listAdapter.notifyItemChanged(GhostModeTitleRow, PARTIAL);
         listAdapter.notifyItemChanged(sendReadMessagePacketsRow, !isActive);
         listAdapter.notifyItemChanged(sendOnlinePacketsRow, !isActive);
         listAdapter.notifyItemChanged(sendUploadProgressRow, !isActive);
@@ -93,14 +91,14 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
 
     @Override
     protected void onItemClick(View view, int position, float x, float y) {
-        if (position == ghostModeToggleRow) {
+        if (position == GhostModeTitleRow) {
             ghostModeMenuExpanded ^= true;
             updateRows();
-            listAdapter.notifyItemChanged(ghostModeToggleRow, PARTIAL);
+            listAdapter.notifyItemChanged(GhostModeTitleRow, PARTIAL);
             if (ghostModeMenuExpanded) {
-                listAdapter.notifyItemRangeInserted(ghostModeToggleRow + 1, 5);
+                listAdapter.notifyItemRangeInserted(GhostModeTitleRow + 1, 5);
             } else {
-                listAdapter.notifyItemRangeRemoved(ghostModeToggleRow + 1, 5);
+                listAdapter.notifyItemRangeRemoved(GhostModeTitleRow + 1, 5);
             }
         } else if (position == sendReadMessagePacketsRow) {
             AyuConfig.editor.putBoolean("sendReadMessagePackets", AyuConfig.sendReadMessagePackets ^= true).apply();
@@ -137,7 +135,7 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
 
     @Override
     protected String getActionBarTitle() {
-        return LocaleController.getString(R.string.AyuPreferences);
+        return LocaleController.getString(R.string.GhostModeTitle);
     }
 
     @Override
@@ -184,9 +182,9 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
                     break;
                 case TYPE_CHECK2:
                     TextCheckCell2 textCheckCell2 = (TextCheckCell2) holder.itemView;
-                    if (position == ghostModeToggleRow) {
+                    if (position == GhostModeTitleRow) {
                         int selectedCount = getGhostModeSelectedCount();
-                        textCheckCell2.setTextAndCheck(LocaleController.getString(R.string.GhostModeToggle), AyuConfig.isGhostModeActive(), true, true);
+                        textCheckCell2.setTextAndCheck(LocaleController.getString(R.string.GhostModeTitle), AyuConfig.isGhostModeActive(), true, true);
                         textCheckCell2.setCollapseArrow(String.format(Locale.US, "%d/5", selectedCount), !ghostModeMenuExpanded, () -> {
                             AyuConfig.toggleGhostMode();
                             updateGhostViews();
@@ -213,13 +211,6 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
             }
         }
 
-        @NonNull
-        @NotNull
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-            return super.onCreateViewHolder(parent, viewType);
-        }
-
         @Override
         public int getItemViewType(int position) {
             if (position == ghostDividerRow) {
@@ -228,7 +219,7 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
             if (position == GhostModeHeaderRow) {
                 return TYPE_HEADER;
             }
-            if (position == ghostModeToggleRow) {
+            if (position == GhostModeTitleRow) {
                 return TYPE_CHECK2;
             }
             if (position >= sendReadMessagePacketsRow && position <= sendOfflinePacketAfterOnlineRow) {
