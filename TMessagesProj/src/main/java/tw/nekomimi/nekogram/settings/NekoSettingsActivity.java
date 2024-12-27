@@ -326,7 +326,7 @@ public class NekoSettingsActivity extends BaseFragment {
                             } else if (position == experimentRow) {
                                 textCell.setTextAndIcon(LocaleController.getString("Experiment", R.string.Experiment), R.drawable.msg_fave, true);
                                 } else if (position == ghostModeRow) {
-                                textCell.setTextAndIcon(LocaleController.getString("GhostMode", R.string.GhostModeToggle), R.drawable.msg_pollstop, true);
+                                textCell.setTextAndIcon(LocaleController.getString("GhostMode", R.string.GhostModeTitle), R.drawable.msg_pollstop, true);
                             } else if (position == accountRow) {
                                 textCell.setTextAndIcon(LocaleController.getString("Account", R.string.Account), R.drawable.msg_contacts, true);
                             }
