@@ -27,7 +27,6 @@ import java.util.Locale;
 public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
     // title
     private int GhostModeHeaderRow;
-    private int DrawerHeaderRow;
     private int GhostModeTitleRow;
 
     private int sendReadMessagePacketsRow;
@@ -36,7 +35,9 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
     private int sendReadStotyPacketsRow;
     private int sendOfflinePacketAfterOnlineRow;
     private int markReadAfterSendRow;
+
     private int ghostDividerRow;
+    private int DrawerHeaderRow;
     private int showGhostToggleInDrawerRow;
     private boolean ghostModeMenuExpanded;
 

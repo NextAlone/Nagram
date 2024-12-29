@@ -23,6 +23,13 @@ import com.google.android.play.core.integrity.IntegrityTokenRequest;
 import com.google.android.play.core.integrity.IntegrityTokenResponse;
 //import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
+
+import com.radolyn.ayugram.AyuConfig;
+import com.radolyn.ayugram.AyuConstants;
+//import com.radolyn.ayugram.sync.AyuSyncController;
+import com.radolyn.ayugram.utils.AyuGhostUtils;
+import com.radolyn.ayugram.utils.AyuState;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.messenger.AccountInstance;
@@ -366,6 +373,93 @@ SharedPreferences mainPreferences;
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("send request " + object + " with token = " + requestToken);
         }
+
+        // --- AyuGram request hook
+        {
+            // don't send upload & typing status
+            if (!AyuConfig.sendUploadProgress && (object instanceof TLRPC.TL_messages_setTyping || object instanceof TLRPC.TL_messages_setEncryptedTyping)) {
+                // no need to run `onComplete`
+                return;
+            }
+
+            // don't send online status
+            if (!AyuConfig.sendOnlinePackets && object instanceof TLRPC.TL_account_updateStatus) {
+                var obj = ((TLRPC.TL_account_updateStatus) object);
+                obj.offline = true;
+            }
+
+            // don't send read status
+            if (
+                    !AyuConfig.sendReadMessagePackets &&
+                            (
+                                    object instanceof TLRPC.TL_messages_readHistory ||
+                                            object instanceof TLRPC.TL_messages_readEncryptedHistory ||
+                                            object instanceof TLRPC.TL_messages_readDiscussion ||
+                                            object instanceof TLRPC.TL_messages_readMessageContents ||
+                                            object instanceof TLRPC.TL_channels_readHistory ||
+                                            object instanceof TLRPC.TL_channels_readMessageContents
+                            )
+            ) {
+                if (!AyuState.getAllowReadPacket()) {
+                    var fakeRes = new TLRPC.TL_messages_affectedMessages();
+                    // IDK if this should be -1 or what, check `TL_messages_readMessageContents` usages
+                    fakeRes.pts = -1;
+                    fakeRes.pts_count = 0;
+
+                    try {
+                        if (onCompleteOrig != null) {
+                            onCompleteOrig.run(fakeRes, null);
+                        }
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                    }
+
+                    var pair = AyuGhostUtils.getDialogIdAndMessageIdFromRequest(object);
+                    if (pair != null) {
+                        //AyuSyncController.getInstance().syncRead(currentAccount, pair.first, pair.second);
+                    }
+
+                    return;
+                }
+            }
+
+            // mark messages as read after sending a message
+            if (AyuConfig.markReadAfterSend && !AyuConfig.sendReadMessagePackets) {
+                TLRPC.InputPeer peer = null;
+                if (object instanceof TLRPC.TL_messages_sendMessage) {
+                    var obj = ((TLRPC.TL_messages_sendMessage) object);
+                    peer = obj.peer;
+                } else if (object instanceof TLRPC.TL_messages_sendMedia) {
+                    var obj = ((TLRPC.TL_messages_sendMedia) object);
+                    peer = obj.peer;
+                } else if (object instanceof TLRPC.TL_messages_sendMultiMedia) {
+                    var obj = ((TLRPC.TL_messages_sendMultiMedia) object);
+                    peer = obj.peer;
+                }
+
+                if (peer != null) {
+                    var dialogId = AyuGhostUtils.getDialogId(peer);
+
+                    var origOnComplete = onCompleteOrig;
+                    TLRPC.InputPeer finalPeer = peer;
+                    onCompleteOrig = (response, error) -> {
+                        origOnComplete.run(response, error);
+
+                        getMessagesStorage().getDialogMaxMessageId(dialogId, maxId -> {
+                            TLRPC.TL_messages_readHistory request = new TLRPC.TL_messages_readHistory();
+                            request.peer = finalPeer;
+                            request.max_id = maxId;
+
+                            AyuState.setAllowReadPacket(true, 1);
+                            sendRequest(request, (a1, a2) -> {});
+                        });
+                    };
+                }
+            }
+        }
+        final var onComplete = onCompleteOrig;
+        // --- AyuGram request hook
+
         try {
             NativeByteBuffer buffer = new NativeByteBuffer(object.getObjectSize());
             object.serializeToStream(buffer);
