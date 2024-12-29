@@ -21,6 +21,7 @@ import com.google.android.play.core.integrity.IntegrityManager;
 import com.google.android.play.core.integrity.IntegrityManagerFactory;
 import com.google.android.play.core.integrity.IntegrityTokenRequest;
 import com.google.android.play.core.integrity.IntegrityTokenResponse;
+import com.radolyn.ayugram.AyuConfig;
 //import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 import org.json.JSONArray;
@@ -366,6 +367,14 @@ SharedPreferences mainPreferences;
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("send request " + object + " with token = " + requestToken);
         }
+
+        if (!AyuConfig.sendReadMessagePackets && object instanceof TLRPC.TL_messages_readMessageContents) {
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("Read receipts skipped due to setting.");
+            }
+            return;
+        }
+
         try {
             NativeByteBuffer buffer = new NativeByteBuffer(object.getObjectSize());
             object.serializeToStream(buffer);
