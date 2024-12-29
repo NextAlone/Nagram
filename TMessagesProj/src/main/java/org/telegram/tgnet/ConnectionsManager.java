@@ -81,7 +81,9 @@ import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.DnsFactory;
 import tw.nekomimi.nekogram.ErrorDatabase;
 
+import tw.nekomimi.nekogram.utils.NaState;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
+import tw.nekomimi.nekogram.utils.Utils;
 import xyz.nextalone.nagram.NaConfig;
 
 public class ConnectionsManager extends BaseController {
@@ -367,12 +369,27 @@ SharedPreferences mainPreferences;
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("send request " + object + " with token = " + requestToken);
         }
+        // 自定义请求处理逻辑
+        if (!AyuConfig.sendReadMessagePackets && (
+                object instanceof TLRPC.TL_messages_readHistory ||
+                        object instanceof TLRPC.TL_messages_readMessageContents
+        )) {
+            if (!NaState.getAllowReadPacket()) {
+                // 构造虚假响应
+                var fakeRes = new TLRPC.TL_messages_affectedMessages();
+                fakeRes.pts = -1;
+                fakeRes.pts_count = 0;
 
-        if (!AyuConfig.sendReadMessagePackets && object instanceof TLRPC.TL_messages_readMessageContents) {
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("Read receipts skipped due to setting.");
+                if (onComplete != null) {
+                    onComplete.run(fakeRes, null);
+                }
+
+                var pair = Utils.getDialogIdAndMessageIdFromRequest(object);
+                if (pair != null) {
+                    //SyncController.getInstance().syncRead(currentAccount, pair.first, pair.second);
+                }
+                return;
             }
-            return;
         }
 
         try {
