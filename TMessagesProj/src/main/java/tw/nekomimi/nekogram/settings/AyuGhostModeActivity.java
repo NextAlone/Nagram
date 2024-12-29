@@ -73,7 +73,6 @@ public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
         return true;
     }
 
-
     @Override
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
