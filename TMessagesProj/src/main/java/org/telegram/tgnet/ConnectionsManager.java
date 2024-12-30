@@ -22,6 +22,7 @@ import com.google.android.play.core.integrity.IntegrityManagerFactory;
 import com.google.android.play.core.integrity.IntegrityTokenRequest;
 import com.google.android.play.core.integrity.IntegrityTokenResponse;
 import com.radolyn.ayugram.AyuConfig;
+import com.radolyn.ayugram.utils.AyuState;
 //import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 import org.json.JSONArray;
@@ -81,9 +82,8 @@ import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.DnsFactory;
 import tw.nekomimi.nekogram.ErrorDatabase;
 
-import tw.nekomimi.nekogram.utils.NaState;
+import tw.nekomimi.nekogram.utils.AyuGhostUtils;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
-import tw.nekomimi.nekogram.utils.Utils;
 import xyz.nextalone.nagram.NaConfig;
 
 public class ConnectionsManager extends BaseController {
@@ -374,7 +374,7 @@ SharedPreferences mainPreferences;
                 object instanceof TLRPC.TL_messages_readHistory ||
                         object instanceof TLRPC.TL_messages_readMessageContents
         )) {
-            if (!NaState.getAllowReadPacket()) {
+            if (!AyuState.getAllowReadPacket()) {
                 // 构造虚假响应
                 var fakeRes = new TLRPC.TL_messages_affectedMessages();
                 fakeRes.pts = -1;
@@ -384,7 +384,7 @@ SharedPreferences mainPreferences;
                     onComplete.run(fakeRes, null);
                 }
 
-                var pair = Utils.getDialogIdAndMessageIdFromRequest(object);
+                var pair = AyuGhostUtils.getDialogIdAndMessageIdFromRequest(object);
                 if (pair != null) {
                     //SyncController.getInstance().syncRead(currentAccount, pair.first, pair.second);
                 }
