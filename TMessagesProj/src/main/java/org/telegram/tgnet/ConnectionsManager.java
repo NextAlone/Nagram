@@ -369,27 +369,30 @@ SharedPreferences mainPreferences;
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("send request " + object + " with token = " + requestToken);
         }
-        // 自定义请求处理逻辑
+
+        // 控制已读消息
         if (!AyuConfig.sendReadMessagePackets && (
                 object instanceof TLRPC.TL_messages_readHistory ||
                         object instanceof TLRPC.TL_messages_readMessageContents
         )) {
-            if (!AyuState.getAllowReadPacket()) {
-                // 构造虚假响应
-                var fakeRes = new TLRPC.TL_messages_affectedMessages();
-                fakeRes.pts = -1;
-                fakeRes.pts_count = 0;
+            // 如果关闭了已读消息功能，直接返回
+            return;
+        }
 
-                if (onComplete != null) {
-                    onComplete.run(fakeRes, null);
-                }
+        // 控制在线状态
+        if (!AyuConfig.sendOnlinePackets && object instanceof TLRPC.TL_account_updateStatus) {
+            // 如果关闭了在线状态功能，设置为离线
+            var obj = (TLRPC.TL_account_updateStatus) object;
+            obj.offline = true;
+        }
 
-                var pair = AyuGhostUtils.getDialogIdAndMessageIdFromRequest(object);
-                if (pair != null) {
-                    //SyncController.getInstance().syncRead(currentAccount, pair.first, pair.second);
-                }
-                return;
-            }
+        // 控制输入状态
+        if (!AyuConfig.sendUploadProgress && (
+                object instanceof TLRPC.TL_messages_setTyping ||
+                        object instanceof TLRPC.TL_messages_setEncryptedTyping
+        )) {
+            // 如果关闭了输入状态功能，直接返回
+            return;
         }
 
         try {
