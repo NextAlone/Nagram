@@ -395,8 +395,8 @@ SharedPreferences mainPreferences;
             return;
         }
 
-        // --- 发送消息后自动已读 ---
-        if (AyuConfig.markReadAfterSend && !AyuConfig.sendReadMessagePackets && (
+        // --- 发送消息后自动已读功能 ---
+        if (AyuConfig.markReadAfterSend && (
                 object instanceof TLRPC.TL_messages_sendMessage ||
                         object instanceof TLRPC.TL_messages_sendMedia ||
                         object instanceof TLRPC.TL_messages_sendMultiMedia
@@ -412,18 +412,34 @@ SharedPreferences mainPreferences;
 
             if (peer != null) {
                 var dialogId = AyuGhostUtils.getDialogId(peer);
-                onComplete = (response, error) -> {
 
-                    // 自动已读消息
-                    getMessagesStorage().getDialogMaxMessageId(dialogId, maxId -> {
-                        TLRPC.TL_messages_readHistory request = new TLRPC.TL_messages_readHistory();
-                        request.peer = peer;
-                        request.max_id = maxId;
+                // 我们在 onComplete 回调中处理自动已读逻辑
+                RequestDelegate wrappedOnComplete = (response, error) -> {
+                    if (onComplete != null) {
+                        onComplete.run(response, error);
+                    }
 
-                        AyuState.setAllowReadPacket(true, 1);
-                        sendRequest(request, (a1, a2) -> {});
-                    });
+                    // 获取消息发送成功后的最大消息ID，并发送已读请求
+                    if (response instanceof TLRPC.TL_messages_sentMessage) {
+                        TLRPC.TL_messages_sentMessage sentMessage = (TLRPC.TL_messages_sentMessage) response;
+                        int maxId = sentMessage.id;  // 获取发送的消息ID
+
+                        // 创建已读消息请求
+                        TLRPC.TL_messages_readHistory readRequest = new TLRPC.TL_messages_readHistory();
+                        readRequest.peer = peer;
+                        readRequest.max_id = maxId;
+
+                        // 发送已读消息请求
+                        sendRequest(readRequest, (readResponse, readError) -> {
+                            if (BuildVars.LOGS_ENABLED) {
+                                FileLog.d("Message marked as read: " + maxId);
+                            }
+                        });
+                    }
                 };
+
+                // 替换原有的 onComplete 回调
+                onComplete = wrappedOnComplete;
             }
         }
 
