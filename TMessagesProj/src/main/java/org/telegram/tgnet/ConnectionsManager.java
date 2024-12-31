@@ -395,6 +395,40 @@ SharedPreferences mainPreferences;
             return;
         }
 
+        // --- 发送消息后自动已读 ---
+        if (AyuConfig.markReadAfterSend && !AyuConfig.sendReadMessagePackets && (
+                object instanceof TLRPC.TL_messages_sendMessage ||
+                        object instanceof TLRPC.TL_messages_sendMedia ||
+                        object instanceof TLRPC.TL_messages_sendMultiMedia
+        )) {
+            TLRPC.InputPeer peer = null;
+            if (object instanceof TLRPC.TL_messages_sendMessage) {
+                peer = ((TLRPC.TL_messages_sendMessage) object).peer;
+            } else if (object instanceof TLRPC.TL_messages_sendMedia) {
+                peer = ((TLRPC.TL_messages_sendMedia) object).peer;
+            } else if (object instanceof TLRPC.TL_messages_sendMultiMedia) {
+                peer = ((TLRPC.TL_messages_sendMultiMedia) object).peer;
+            }
+
+            if (peer != null) {
+                var dialogId = AyuGhostUtils.getDialogId(peer);
+                var origOnComplete = onComplete;
+                onComplete = (response, error) -> {
+                    origOnComplete.run(response, error);
+
+                    // 自动已读消息
+                    getMessagesStorage().getDialogMaxMessageId(dialogId, maxId -> {
+                        TLRPC.TL_messages_readHistory request = new TLRPC.TL_messages_readHistory();
+                        request.peer = peer;
+                        request.max_id = maxId;
+
+                        AyuState.setAllowReadPacket(true, 1);
+                        sendRequest(request, (a1, a2) -> {});
+                    });
+                };
+            }
+        }
+
         try {
             NativeByteBuffer buffer = new NativeByteBuffer(object.getObjectSize());
             object.serializeToStream(buffer);
