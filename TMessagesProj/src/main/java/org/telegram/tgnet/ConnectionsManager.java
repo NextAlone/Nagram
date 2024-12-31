@@ -412,11 +412,9 @@ SharedPreferences mainPreferences;
 
             if (peer != null) {
                 var dialogId = AyuGhostUtils.getDialogId(peer);
-
-                var origOnComplete = onComplete;
                 TLRPC.InputPeer finalPeer = peer;
                 onComplete = (response, error) -> {
-                    origOnComplete.run(response, error);
+                    onComplete.run(response, error);
 
                     getMessagesStorage().getDialogMaxMessageId(dialogId, maxId -> {
                         TLRPC.TL_messages_readHistory request = new TLRPC.TL_messages_readHistory();
@@ -427,7 +425,6 @@ SharedPreferences mainPreferences;
                         sendRequest(request, (a1, a2) -> {});
                     });
                 };
-                var onComplete = origOnComplete;
             }
         }
     // --- AyuGram request hook
