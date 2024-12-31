@@ -365,11 +365,13 @@ SharedPreferences mainPreferences;
         return requestToken;
     }
 
-    private void sendRequestInternal(TLObject object, RequestDelegate onComplete, RequestDelegateTimestamp onCompleteTimestamp, QuickAckDelegate onQuickAck, WriteToSocketDelegate onWriteToSocket, int flags, int datacenterId, int connectionType, boolean immediate, int requestToken) {
+    private void sendRequestInternal(TLObject object, RequestDelegate onCompleteOrig, RequestDelegateTimestamp onCompleteTimestamp, QuickAckDelegate onQuickAck, WriteToSocketDelegate onWriteToSocket, int flags, int datacenterId, int connectionType, boolean immediate, int requestToken) {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("send request " + object + " with token = " + requestToken);
         }
 
+        // request hook
+        {
         // 控制已读消息
         if (!AyuConfig.sendReadMessagePackets && (
                 object instanceof TLRPC.TL_messages_readHistory ||
@@ -396,38 +398,40 @@ SharedPreferences mainPreferences;
         }
 
         // --- 发送消息后自动已读功能 ---
-        // mark messages as read after sending a message
-        if (AyuConfig.markReadAfterSend && !AyuConfig.sendReadMessagePackets) {
-            TLRPC.InputPeer peer = null;
-            if (object instanceof TLRPC.TL_messages_sendMessage) {
-                var obj = ((TLRPC.TL_messages_sendMessage) object);
-                peer = obj.peer;
-            } else if (object instanceof TLRPC.TL_messages_sendMedia) {
-                var obj = ((TLRPC.TL_messages_sendMedia) object);
-                peer = obj.peer;
-            } else if (object instanceof TLRPC.TL_messages_sendMultiMedia) {
-                var obj = ((TLRPC.TL_messages_sendMultiMedia) object);
-                peer = obj.peer;
-            }
+            if (AyuConfig.markReadAfterSend && !AyuConfig.sendReadMessagePackets) {
+                TLRPC.InputPeer peer = null;
+                if (object instanceof TLRPC.TL_messages_sendMessage) {
+                    var obj = ((TLRPC.TL_messages_sendMessage) object);
+                    peer = obj.peer;
+                } else if (object instanceof TLRPC.TL_messages_sendMedia) {
+                    var obj = ((TLRPC.TL_messages_sendMedia) object);
+                    peer = obj.peer;
+                } else if (object instanceof TLRPC.TL_messages_sendMultiMedia) {
+                    var obj = ((TLRPC.TL_messages_sendMultiMedia) object);
+                    peer = obj.peer;
+                }
 
-            if (peer != null) {
-                var dialogId = AyuGhostUtils.getDialogId(peer);
-                TLRPC.InputPeer finalPeer = peer;
-                onComplete = (response, error) -> {
-                    onComplete.run(response, error);
+                if (peer != null) {
+                    var dialogId = AyuGhostUtils.getDialogId(peer);
+                    var origOnComplete = onCompleteOrig;
+                    TLRPC.InputPeer finalPeer = peer;
+                    onCompleteOrig = (response, error) -> {
+                        origOnComplete.run(response, error);
 
-                    getMessagesStorage().getDialogMaxMessageId(dialogId, maxId -> {
-                        TLRPC.TL_messages_readHistory request = new TLRPC.TL_messages_readHistory();
-                        request.peer = finalPeer;
-                        request.max_id = maxId;
+                        getMessagesStorage().getDialogMaxMessageId(dialogId, maxId -> {
+                            TLRPC.TL_messages_readHistory request = new TLRPC.TL_messages_readHistory();
+                            request.peer = finalPeer;
+                            request.max_id = maxId;
 
-                        AyuState.setAllowReadPacket(true, 1);
-                        sendRequest(request, (a1, a2) -> {});
-                    });
-                };
+                            AyuState.setAllowReadPacket(true, 1);
+                            sendRequest(request, (a1, a2) -> {});
+                        });
+                    };
+                }
             }
         }
-    // --- AyuGram request hook
+    final var onComplete = onCompleteOrig;
+    // --- request hook
 
         try {
             NativeByteBuffer buffer = new NativeByteBuffer(object.getObjectSize());
