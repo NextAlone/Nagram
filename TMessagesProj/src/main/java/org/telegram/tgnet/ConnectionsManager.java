@@ -412,9 +412,7 @@ SharedPreferences mainPreferences;
 
             if (peer != null) {
                 var dialogId = AyuGhostUtils.getDialogId(peer);
-                var origOnComplete = onComplete;
                 onComplete = (response, error) -> {
-                    origOnComplete.run(response, error);
 
                     // 自动已读消息
                     getMessagesStorage().getDialogMaxMessageId(dialogId, maxId -> {
