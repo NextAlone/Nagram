@@ -396,52 +396,41 @@ SharedPreferences mainPreferences;
         }
 
         // --- 发送消息后自动已读功能 ---
-        if (AyuConfig.markReadAfterSend && (
-                object instanceof TLRPC.TL_messages_sendMessage ||
-                        object instanceof TLRPC.TL_messages_sendMedia ||
-                        object instanceof TLRPC.TL_messages_sendMultiMedia
-        )) {
+        // mark messages as read after sending a message
+        if (AyuConfig.markReadAfterSend && !AyuConfig.sendReadMessagePackets) {
             TLRPC.InputPeer peer = null;
             if (object instanceof TLRPC.TL_messages_sendMessage) {
-                peer = ((TLRPC.TL_messages_sendMessage) object).peer;
+                var obj = ((TLRPC.TL_messages_sendMessage) object);
+                peer = obj.peer;
             } else if (object instanceof TLRPC.TL_messages_sendMedia) {
-                peer = ((TLRPC.TL_messages_sendMedia) object).peer;
+                var obj = ((TLRPC.TL_messages_sendMedia) object);
+                peer = obj.peer;
             } else if (object instanceof TLRPC.TL_messages_sendMultiMedia) {
-                peer = ((TLRPC.TL_messages_sendMultiMedia) object).peer;
+                var obj = ((TLRPC.TL_messages_sendMultiMedia) object);
+                peer = obj.peer;
             }
 
             if (peer != null) {
                 var dialogId = AyuGhostUtils.getDialogId(peer);
 
-                // 我们在 onComplete 回调中处理自动已读逻辑
-                RequestDelegate wrappedOnComplete = (response, error) -> {
-                    if (onComplete != null) {
-                        onComplete.run(response, error);
-                    }
+                var origOnComplete = onComplete;
+                TLRPC.InputPeer finalPeer = peer;
+                onComplete = (response, error) -> {
+                    origOnComplete.run(response, error);
 
-                    // 获取消息发送成功后的最大消息ID，并发送已读请求
-                    if (response instanceof TLRPC.TL_messages_sentMessage) {
-                        TLRPC.TL_messages_sentMessage sentMessage = (TLRPC.TL_messages_sentMessage) response;
-                        int maxId = sentMessage.id;  // 获取发送的消息ID
+                    getMessagesStorage().getDialogMaxMessageId(dialogId, maxId -> {
+                        TLRPC.TL_messages_readHistory request = new TLRPC.TL_messages_readHistory();
+                        request.peer = finalPeer;
+                        request.max_id = maxId;
 
-                        // 创建已读消息请求
-                        TLRPC.TL_messages_readHistory readRequest = new TLRPC.TL_messages_readHistory();
-                        readRequest.peer = peer;
-                        readRequest.max_id = maxId;
-
-                        // 发送已读消息请求
-                        sendRequest(readRequest, (readResponse, readError) -> {
-                            if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("Message marked as read: " + maxId);
-                            }
-                        });
-                    }
+                        AyuState.setAllowReadPacket(true, 1);
+                        sendRequest(request, (a1, a2) -> {});
+                    });
                 };
-
-                // 替换原有的 onComplete 回调
-                onComplete = wrappedOnComplete;
+                var onComplete = origOnComplete;
             }
         }
+    // --- AyuGram request hook
 
         try {
             NativeByteBuffer buffer = new NativeByteBuffer(object.getObjectSize());
