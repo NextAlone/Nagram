@@ -439,9 +439,9 @@ SharedPreferences mainPreferences;
                             // 设置允许发送已读包
                             AyuState.setAllowReadPacket(true, 1);
                             TLRPC.TL_updates_getState stateRequest = new TLRPC.TL_updates_getState();
-                            sendRequest(stateRequest, (response, error) -> {
-                                if (response instanceof TLRPC.TL_updates_state) {
-                                    TLRPC.TL_updates_state state = (TLRPC.TL_updates_state) response;
+                            sendRequest(stateRequest, (resp, err) -> {
+                                if (resp instanceof TLRPC.TL_updates_state) {
+                                    TLRPC.TL_updates_state state = (TLRPC.TL_updates_state) resp;
                                     int newMaxId = state.pts; // 获取最新的 PTS
                                     // 使用最新的 PTS 来标记已读
                                     TLRPC.TL_messages_readHistory readHistoryRequest = new TLRPC.TL_messages_readHistory();
@@ -452,7 +452,7 @@ SharedPreferences mainPreferences;
                                         Log.d("ghost", "Read history request sent with MaxId: " + newMaxId);
                                     });
                                 } else {
-                                    Log.e("ghost", "Failed to fetch state. Error: " + error);
+                                    Log.e("ghost", "Failed to fetch state. Error: " + err);
                                 }
                             });
 
