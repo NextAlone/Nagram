@@ -414,7 +414,7 @@ SharedPreferences mainPreferences;
                     if (peer != null) {
                         var dialogId = AyuGhostUtils.getDialogId(peer);
 
-                        var origOnComplete = onCompleteOrig;
+                        RequestDelegate origOnComplete = onCompleteOrig;
                         TLRPC.InputPeer finalPeer = peer;
                         onCompleteOrig = (response, error) -> {
                             origOnComplete.run(response, error);
