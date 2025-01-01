@@ -411,25 +411,41 @@ SharedPreferences mainPreferences;
                         peer = obj.peer;
                     }
 
-                    if (peer != null) {
-                        var dialogId = AyuGhostUtils.getDialogId(peer);
+                if (peer != null) {
+                    var dialogId = AyuGhostUtils.getDialogId(peer);
 
-                        RequestDelegate origOnComplete = onCompleteOrig;
-                        TLRPC.InputPeer finalPeer = peer;
-                        onCompleteOrig = (response, error) -> {
-                            origOnComplete.run(response, error);
+                    // 添加调试日志
+                    FileLog.d("Peer: " + peer + ", DialogId: " + dialogId);
 
-                            getMessagesStorage().getDialogMaxMessageId(dialogId, maxId -> {
-                                TLRPC.TL_messages_readHistory request = new TLRPC.TL_messages_readHistory();
-                                request.peer = finalPeer;
-                                request.max_id = maxId;
+                    // 保留原来的回调函数
+                    RequestDelegate origOnComplete = onCompleteOrig;
+                    TLRPC.InputPeer finalPeer = peer;
+                    onCompleteOrig = (response, error) -> {
+                        origOnComplete.run(response, error); // 执行原始回调
 
-                                AyuState.setAllowReadPacket(true, 1);
-                                sendRequest(request, (a1, a2) -> {});
+                        // 调试日志：检查 response 和 error
+                        FileLog.d("Send message complete. Response: " + response + ", Error: " + error);
+
+                        // 获取最大消息 ID 后执行已读操作
+                        getMessagesStorage().getDialogMaxMessageId(dialogId, maxId -> {
+                            FileLog.d("MaxId for dialogId " + dialogId + ": " + maxId);
+
+                            // 构造已读请求
+                            TLRPC.TL_messages_readHistory request = new TLRPC.TL_messages_readHistory();
+                            request.peer = finalPeer;
+                            request.max_id = maxId;
+
+                            // 设置允许发送已读包
+                            AyuState.setAllowReadPacket(true, 1);
+                            sendRequest(request, (a1, a2) -> {
+                                // 调试日志：确认已读请求是否发送
+                                FileLog.d("Read history request sent for peer: " + finalPeer + ", MaxId: " + maxId);
                             });
-                        };
-                    }
+                        });
+                    };
                 }
+
+            }
 
             // --- 在线后立即离线 ---
             if (AyuConfig.sendOfflinePacketAfterOnline && object instanceof TLRPC.TL_messages_sendMessage) {
