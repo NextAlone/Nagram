@@ -46,7 +46,6 @@ import org.telegram.messenger.PushListenerController;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.StatsController;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLRPC;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.tl.TL_stories;
 import org.telegram.ui.Components.VideoPlayer;
@@ -383,8 +382,8 @@ SharedPreferences mainPreferences;
 
             // --- 不发送动态已读 ---
             if (!AyuConfig.sendReadStotyPackets && (
-                    object instanceof TL_stories.TL_stories_readStories ||
-                            object instanceof TL_stories.TL_stories_incrementStoryViews
+                    object instanceof TLRPC.TL_stories.TL_stories_readStories ||
+                            object instanceof TLRPC.TL_stories.TL_stories_incrementStoryViews;
             )) {
                 return;
             }
