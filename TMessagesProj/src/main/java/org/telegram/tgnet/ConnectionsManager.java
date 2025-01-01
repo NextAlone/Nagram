@@ -379,7 +379,7 @@ SharedPreferences mainPreferences;
                 status.offline = true;  // 将在线状态改为离线
             }
 
-            // --- 不发送动态已读 --- //
+            // --- 不发送动态已读 ---
             if (!AyuConfig.sendReadStotyPackets && (
                     object instanceof TLRPC.TL_stories_readStories ||
                             object instanceof TLRPC.TL_stories_incrementStoryViews
