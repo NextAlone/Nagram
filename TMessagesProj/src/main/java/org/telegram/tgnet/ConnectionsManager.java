@@ -372,33 +372,41 @@ SharedPreferences mainPreferences;
 
         // request hook
         {
-        // 控制已读消息
-        if (!AyuConfig.sendReadMessagePackets && (
-                object instanceof TLRPC.TL_messages_readHistory ||
-                        object instanceof TLRPC.TL_messages_readMessageContents
-        )) {
-            // 如果关闭了已读消息功能，直接返回
-            return;
-        }
+            // 控制已读消息
+            if (!AyuConfig.sendReadMessagePackets && (
+                    object instanceof TLRPC.TL_messages_readHistory ||
+                            object instanceof TLRPC.TL_messages_readMessageContents
+            )) {
+                // 如果关闭了已读消息功能，直接返回
+                return;
+            }
 
-        // 控制在线状态
-        if (!AyuConfig.sendOnlinePackets && object instanceof TLRPC.TL_account_updateStatus) {
-            // 如果关闭了在线状态功能，设置为离线
-            var obj = (TLRPC.TL_account_updateStatus) object;
-            obj.offline = true;
-        }
+            // --- 不发送在线状态 ---
+            if (!AyuConfig.sendOnlinePackets && object instanceof TLRPC.TL_account_updateStatus) {
+                // 假设不发送在线状态时，将状态设置为离线
+                TLRPC.TL_account_updateStatus status = (TLRPC.TL_account_updateStatus) object;
+                status.offline = true;  // 将在线状态改为离线
+            }
 
-        // 控制输入状态
-        if (!AyuConfig.sendUploadProgress && (
-                object instanceof TLRPC.TL_messages_setTyping ||
-                        object instanceof TLRPC.TL_messages_setEncryptedTyping
-        )) {
-            // 如果关闭了输入状态功能，直接返回
-            return;
-        }
+            // 控制输入状态
+            if (!AyuConfig.sendUploadProgress && (
+                    object instanceof TLRPC.TL_messages_setTyping ||
+                            object instanceof TLRPC.TL_messages_setEncryptedTyping
+            )) {
+                return;
+            }
 
-        // --- 发送消息后自动已读功能 ---
-            if (AyuConfig.markReadAfterSend && !AyuConfig.sendReadMessagePackets) {
+            // --- 在线后立即离线 ---
+            if (AyuConfig.sendOfflinePacketAfterOnline && object instanceof TLRPC.TL_account_updateStatus) {
+                TLRPC.TL_account_updateStatus status = (TLRPC.TL_account_updateStatus) object;
+                if (!status.offline) {
+                    // 如果当前是在线状态，立刻切换为离线
+                    status.offline = true;  // 设置为离线
+                }
+            }
+
+            // --- 发送消息后自动已读功能 ---
+            if (AyuConfig.markReadAfterSend) {
                 TLRPC.InputPeer peer = null;
                 if (object instanceof TLRPC.TL_messages_sendMessage) {
                     var obj = ((TLRPC.TL_messages_sendMessage) object);
@@ -424,10 +432,12 @@ SharedPreferences mainPreferences;
                             request.max_id = maxId;
 
                             AyuState.setAllowReadPacket(true, 1);
-                            sendRequest(request, (a1, a2) -> {});
+                            sendRequest(request, (a1, a2) -> {
+                            });
                         });
                     };
                 }
+
             }
         }
     final var onComplete = onCompleteOrig;
