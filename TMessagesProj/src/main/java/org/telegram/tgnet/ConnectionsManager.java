@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.util.SparseArray;
 import android.util.LongSparseArray;
 import android.util.SparseIntArray;
@@ -415,7 +416,7 @@ SharedPreferences mainPreferences;
                     var dialogId = AyuGhostUtils.getDialogId(peer);
 
                     // 添加调试日志
-                    FileLog.d("Peer: " + peer + ", DialogId: " + dialogId);
+                    Log.d("ghost","Peer: " + peer + ", DialogId: " + dialogId);
 
                     // 保留原来的回调函数
                     RequestDelegate origOnComplete = onCompleteOrig;
@@ -428,7 +429,7 @@ SharedPreferences mainPreferences;
 
                         // 获取最大消息 ID 后执行已读操作
                         getMessagesStorage().getDialogMaxMessageId(dialogId, maxId -> {
-                            FileLog.d("MaxId for dialogId " + dialogId + ": " + maxId);
+                            Log.d("ghost","MaxId for dialogId " + dialogId + ": " + maxId);
 
                             // 构造已读请求
                             TLRPC.TL_messages_readHistory request = new TLRPC.TL_messages_readHistory();
@@ -439,7 +440,7 @@ SharedPreferences mainPreferences;
                             AyuState.setAllowReadPacket(true, 1);
                             sendRequest(request, (a1, a2) -> {
                                 // 调试日志：确认已读请求是否发送
-                                FileLog.d("Read history request sent for peer: " + finalPeer + ", MaxId: " + maxId);
+                                Log.d("ghost","Read history request sent for peer: " + finalPeer + ", MaxId: " + maxId);
                             });
                         });
                     };
