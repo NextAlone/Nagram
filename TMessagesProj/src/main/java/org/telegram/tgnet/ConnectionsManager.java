@@ -383,7 +383,7 @@ SharedPreferences mainPreferences;
             // --- 不发送动态已读 ---
             if (!AyuConfig.sendReadStotyPackets && (
                     object instanceof TLRPC.TL_stories.TL_stories_readStories ||
-                            object instanceof TLRPC.TL_stories.TL_stories_incrementStoryViews;
+                            object instanceof TLRPC.TL_stories.TL_stories_incrementStoryViews
             )) {
                 return;
             }
