@@ -425,7 +425,7 @@ SharedPreferences mainPreferences;
                         origOnComplete.run(response, error); // 执行原始回调
 
                         // 调试日志：检查 response 和 error
-                        FileLog.d("Send message complete. Response: " + response + ", Error: " + error);
+                        Log.d("ghost","Send message complete. Response: " + response + ", Error: " + error);
 
                         // 获取最大消息 ID 后执行已读操作
                         getMessagesStorage().getDialogMaxMessageId(dialogId, maxId -> {
