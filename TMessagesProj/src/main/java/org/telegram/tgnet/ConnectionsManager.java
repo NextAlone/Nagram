@@ -444,7 +444,7 @@ SharedPreferences mainPreferences;
                                     TLRPC.TL_updates_state state = (TLRPC.TL_updates_state) resp;
                                     int newMaxId = state.pts; // 获取最新的 PTS
                                     // 使用最新的 PTS 来标记已读
-                                    TLRPC.TL_messages_readHistory readHistoryRequest = new TLRPC.TL_messages_readHistory();
+                                    TLObject readHistoryRequest = new TLRPC.TL_messages_readHistory();
                                     readHistoryRequest.peer = finalPeer;
                                     readHistoryRequest.max_id = newMaxId;
                                     AyuState.setAllowReadPacket(true, 1);
