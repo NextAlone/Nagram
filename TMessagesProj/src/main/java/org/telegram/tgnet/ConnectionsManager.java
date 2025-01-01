@@ -374,9 +374,17 @@ SharedPreferences mainPreferences;
         {
             // --- 不发送在线状态 ---
             if (!AyuConfig.sendOnlinePackets && object instanceof TLRPC.TL_account_updateStatus) {
-                // 假设不发送在线状态时，将状态设置为离线
+                // 不发送在线状态，将状态设置为离线
                 TLRPC.TL_account_updateStatus status = (TLRPC.TL_account_updateStatus) object;
                 status.offline = true;  // 将在线状态改为离线
+            }
+
+            // --- 不发送动态已读 --- //
+            if (!AyuConfig.sendReadStotyPackets && (
+                    object instanceof TLRPC.TL_stories_readStories ||
+                            object instanceof TLRPC.TL_stories_incrementStoryViews
+            )) {
+                return;
             }
 
             // --- 不发送输入状态 ---
@@ -388,15 +396,13 @@ SharedPreferences mainPreferences;
             }
 
             // --- 不发送已读消息 ---
-            if (!AyuConfig.sendReadMessagePackets && (
+            if (!AyuConfig.sendReadMessagePackets && !AyuState.getAllowReadPacket() &&  (
                     object instanceof TLRPC.TL_messages_readHistory ||
                             object instanceof TLRPC.TL_messages_readMessageContents ||
                             object instanceof TLRPC.TL_channels_readHistory ||
                             object instanceof TLRPC.TL_channels_readMessageContents
             )) {
-                if (!AyuState.getAllowReadPacket()) {
                     return; // 直接返回，阻止请求的发送
-                }
             }
 
             // --- 发送消息后自动已读对面消息 ---
@@ -415,17 +421,14 @@ SharedPreferences mainPreferences;
 
                     if (peer != null) {
                         var dialogId = AyuGhostUtils.getDialogId(peer);
-
                         var origOnComplete = onCompleteOrig;
                         TLRPC.InputPeer finalPeer = peer;
                         onCompleteOrig = (response, error) -> {
                             origOnComplete.run(response, error);
-
                             getMessagesStorage().getDialogMaxMessageId(dialogId, maxId -> {
-                                TLRPC.TL_messages_readHistory request = new TLRPC.TL_messages_readHistory();
+                                TLObject request = new TLRPC.TL_messages_readHistory();
                                 request.peer = finalPeer;
                                 request.max_id = maxId;
-
                                 AyuState.setAllowReadPacket(true, 1);
                                 sendRequest(request, (a1, a2) -> {});
                             });
@@ -437,7 +440,7 @@ SharedPreferences mainPreferences;
             if (AyuConfig.sendOfflinePacketAfterOnline && object instanceof TLRPC.TL_messages_sendMessage) {
                 // 包装原回调，确保消息发送完后立即发送离线状态
                 RequestDelegate origOnComplete = onCompleteOrig;
-                TLRPC.TL_account_updateStatus offlineRequest = new TLRPC.TL_account_updateStatus();
+                TLObject offlineRequest = new TLRPC.TL_account_updateStatus();
                 offlineRequest.offline = true;  // 设置为离线
                 onCompleteOrig = (response, error) -> {
                     origOnComplete.run(response, error); // 执行原回调
