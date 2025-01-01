@@ -426,24 +426,24 @@ SharedPreferences mainPreferences;
                         peer = obj.peer;
                     }
 
-                    if (peer != null) {
-                        var dialogId = AyuGhostUtils.getDialogId(peer);
+                if (peer != null) {
+                    var dialogId = AyuGhostUtils.getDialogId(peer);
 
-                        RequestDelegate origOnComplete = onCompleteOrig;
-                        TLRPC.InputPeer finalPeer = peer;
-                        onCompleteOrig = (response, error) -> {
-                            origOnComplete.run(response, error);
+                    var origOnComplete = onCompleteOrig;
+                    TLRPC.InputPeer finalPeer = peer;
+                    onCompleteOrig = (response, error) -> {
+                        origOnComplete.run(response, error);
 
-                            getMessagesStorage().getDialogMaxMessageId(dialogId, maxId -> {
-                                TLObject request = new TLRPC.TL_messages_readHistory();
-                                request.peer = finalPeer;
-                                request.max_id = maxId;
+                        getMessagesStorage().getDialogMaxMessageId(dialogId, maxId -> {
+                            TLObject request = new TLRPC.TL_messages_readHistory();
+                            request.peer = finalPeer;
+                            request.max_id = maxId;
 
-                                AyuState.setAllowReadPacket(true, 1);
-                                sendRequest(request, (a1, a2) -> {});
-                            });
-                        };
-                    }
+                            AyuState.setAllowReadPacket(true, 1);
+                            sendRequest(request, (a1, a2) -> {});
+                        });
+                    };
+                }
                 }
 
             // --- 在线后立即离线 ---
