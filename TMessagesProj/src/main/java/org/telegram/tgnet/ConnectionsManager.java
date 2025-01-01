@@ -395,21 +395,8 @@ SharedPreferences mainPreferences;
                             object instanceof TLRPC.TL_channels_readMessageContents
             )) {
                 if (!AyuState.getAllowReadPacket()) {
-                    var fakeRes = new TLRPC.TL_messages_affectedMessages();
-                    // IDK if this should be -1 or what, check `TL_messages_readMessageContents` usages
-                    fakeRes.pts = -1;
-                    fakeRes.pts_count = 0;
-                    try {
-                        if (onCompleteOrig != null) {
-                            onCompleteOrig.run(fakeRes, null);
-                        }
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                    }
-
-                    return;
+                    return; // 直接返回，阻止请求的发送
                 }
-                //return; // 直接返回，阻止请求的发送
             }
 
             // --- 发送消息后自动已读对面消息 ---
@@ -426,24 +413,24 @@ SharedPreferences mainPreferences;
                         peer = obj.peer;
                     }
 
-                if (peer != null) {
-                    var dialogId = AyuGhostUtils.getDialogId(peer);
+                    if (peer != null) {
+                        var dialogId = AyuGhostUtils.getDialogId(peer);
 
-                    var origOnComplete = onCompleteOrig;
-                    TLRPC.InputPeer finalPeer = peer;
-                    onCompleteOrig = (response, error) -> {
-                        origOnComplete.run(response, error);
+                        var origOnComplete = onCompleteOrig;
+                        TLRPC.InputPeer finalPeer = peer;
+                        onCompleteOrig = (response, error) -> {
+                            origOnComplete.run(response, error);
 
-                        getMessagesStorage().getDialogMaxMessageId(dialogId, maxId -> {
-                            TLObject request = new TLRPC.TL_messages_readHistory();
-                            request.peer = finalPeer;
-                            request.max_id = maxId;
+                            getMessagesStorage().getDialogMaxMessageId(dialogId, maxId -> {
+                                TLRPC.TL_messages_readHistory request = new TLRPC.TL_messages_readHistory();
+                                request.peer = finalPeer;
+                                request.max_id = maxId;
 
-                            AyuState.setAllowReadPacket(true, 1);
-                            sendRequest(request, (a1, a2) -> {});
-                        });
-                    };
-                }
+                                AyuState.setAllowReadPacket(true, 1);
+                                sendRequest(request, (a1, a2) -> {});
+                            });
+                        };
+                    }
                 }
 
             // --- 在线后立即离线 ---
