@@ -423,10 +423,9 @@ SharedPreferences mainPreferences;
 
                 if (peer != null) {
                     var dialogId = AyuGhostUtils.getDialogId(peer);
-
                     var origOnComplete = onCompleteOrig;
                     TLRPC.InputPeer finalPeer = peer;
-                    onComplete = (response, error) -> {
+                    onCompleteOrig = (response, error) -> {
                         origOnComplete.run(response, error); // 调用原本的 onComplete 回调
 
                         // 获取对话的最大消息 ID
