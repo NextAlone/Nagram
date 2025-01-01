@@ -372,13 +372,14 @@ SharedPreferences mainPreferences;
 
         // request hook
         {
-            // --- 不发送上传文件进度 ---
+            /** --- 不发送上传文件进度 ---
             if (!AyuConfig.sendUploadProgress && (
                     object instanceof TLRPC.TL_upload_reportAbout ||
                             object instanceof TLRPC.TL_upload_saveFilePart
             )) {
                 return;  // 不发送上传文件进度
             }
+             **/
 
             // --- 不发送在线状态 ---
             if (!AyuConfig.sendOnlinePackets && object instanceof TLRPC.TL_account_updateStatus) {
