@@ -424,7 +424,7 @@ SharedPreferences mainPreferences;
                 if (peer != null) {
                     var dialogId = AyuGhostUtils.getDialogId(peer);
 
-                    var origOnComplete = onComplete;
+                    var origOnComplete = onCompleteOrig;
                     TLRPC.InputPeer finalPeer = peer;
                     onComplete = (response, error) -> {
                         origOnComplete.run(response, error); // 调用原本的 onComplete 回调
