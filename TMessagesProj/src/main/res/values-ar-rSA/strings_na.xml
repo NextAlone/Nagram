@@ -166,4 +166,7 @@
     <string name="SendWithPangu">إرسال مع بانجو</string>
     <string name="SendWithoutPangu">إرسال بدون بانجو</string>
     <string name="DefaultHlsVideoQuality">جودة الفيديو الافتراضية Hls</string>
+    <string name="DisableBotOpenButton">تعطيل زر فتح البوت</string>
+    <string name="CustomTitleUserName">استخدام الاسم المستعار المستخدم كعنوان</string>
+    <string name="EnhancedVideoBitrate">تحسين معدل بتر الفيديو المشترك</string>
 </resources>

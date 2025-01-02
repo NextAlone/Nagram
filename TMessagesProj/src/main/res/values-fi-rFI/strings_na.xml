@@ -166,4 +166,7 @@
     <string name="SendWithPangu">Lähetä Pangun avulla</string>
     <string name="SendWithoutPangu">Lähetä ilman Pangu</string>
     <string name="DefaultHlsVideoQuality">Hls Videon Oletuslaatu</string>
+    <string name="DisableBotOpenButton">Poista Botti Avaa Painike Käytöstä</string>
+    <string name="CustomTitleUserName">Käytä käyttäjän nimimerkkiä otsikkona</string>
+    <string name="EnhancedVideoBitrate">Tehostettu jaettu videobittinopeus</string>
 </resources>

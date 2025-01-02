@@ -166,4 +166,7 @@
     <string name="SendWithPangu">Verzenden met Pangu</string>
     <string name="SendWithoutPangu">Verzenden zonder Pangu</string>
     <string name="DefaultHlsVideoQuality">Standaard Hls Videokwaliteit</string>
+    <string name="DisableBotOpenButton">Bot Open Knop Uitschakelen</string>
+    <string name="CustomTitleUserName">Gebruik gebruikersnaam gebruiker als titel</string>
+    <string name="EnhancedVideoBitrate">Verbeterde gedeelde videobitrate</string>
 </resources>
