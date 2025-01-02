@@ -381,8 +381,8 @@ SharedPreferences mainPreferences;
 
             // --- 不发送动态已读 ---
             if (!AyuConfig.sendReadStotyPackets && (
-                    object instanceof TL_stories.TL_stories_readStories ||
-                            object instanceof TL_stories.TL_stories_incrementStoryViews
+                    object instanceof org.telegram.tgnet.tl.TL_stories.TL_stories_readStories ||
+                            object instanceof org.telegram.tgnet.tl.TL_stories.TL_stories_incrementStoryViews
             )) {
                 return;
             }
