@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.annotation.Keep;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.radolyn.ayugram.AyuConfig;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
@@ -340,6 +342,17 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
             inviteIcon = R.drawable.msg_invite;
             helpIcon = R.drawable.msg_help;
         }
+
+        // --- start Drawer GhostMode hook
+        if (AyuConfig.showGhostToggleInDrawer) {
+            var msg = AyuConfig.isGhostModeActive()
+                    ? LocaleController.getString("DisableGhostMode", R.string.DisableGhostMode)
+                    : LocaleController.getString("EnableGhostMode", R.string.EnableGhostMode);
+            items.add(new Item(44678, msg, R.drawable.icon_ghost));
+            items.add(null);
+        }
+        // --- end Drawer GhostMode hook
+
         UserConfig me = UserConfig.getInstance(UserConfig.selectedAccount);
         boolean showDivider = false;
         items.add(new Item(16, LocaleController.getString(R.string.MyProfile), R.drawable.left_status_profile));

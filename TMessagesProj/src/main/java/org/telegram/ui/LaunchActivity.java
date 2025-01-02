@@ -85,6 +85,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 //import com.google.android.gms.common.api.Status;
 import com.google.common.primitives.Longs;
+import com.radolyn.ayugram.AyuConfig;
 //import com.google.firebase.appindexing.Action;
 //import com.google.firebase.appindexing.FirebaseUserActions;
 //import com.google.firebase.appindexing.builders.AssistActionBuilder;
@@ -736,6 +737,18 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     StoryRecorder.getInstance(LaunchActivity.this, currentAccount).open(null);
                     drawerLayoutContainer.closeDrawer(true);
                 }
+                // --- start Drawer GhostMode hook
+                if (id == 44678 && AyuConfig.showGhostToggleInDrawer) {
+                    var msg = AyuConfig.isGhostModeActive()
+                            ? LocaleController.getString("DisableGhostMode", R.string.DisableGhostMode)
+                            : LocaleController.getString("EnableGhostMode", R.string.EnableGhostMode);
+                    AyuConfig.toggleGhostMode();
+                    BulletinFactory.of(getLastFragment()).createSuccessBulletin(msg).show();
+                    drawerLayoutContainer.closeDrawer(false);
+                    // update button text
+                    NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
+                }
+                // --- end Drawer GhostMode hook
             }
         });
         final ItemTouchHelper sideMenuTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {

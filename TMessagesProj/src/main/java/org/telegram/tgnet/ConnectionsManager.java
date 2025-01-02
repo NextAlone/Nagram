@@ -435,7 +435,7 @@ SharedPreferences mainPreferences;
                     }
                 }
 
-            // --- 在线后立即离线 ---
+            /** --- 在线后立即离线 ---
             if (AyuConfig.sendOfflinePacketAfterOnline && object instanceof TLRPC.TL_messages_sendMessage) {
                 // 包装原回调，确保消息发送完后立即发送离线状态
                 RequestDelegate origOnComplete = onCompleteOrig;
@@ -446,6 +446,21 @@ SharedPreferences mainPreferences;
                     sendRequest(offlineRequest, null);  // 发送离线请求
                 };
             }
+             **/
+            // --- 在线后立即离线 ---
+            if (AyuConfig.sendOfflinePacketAfterOnline && object instanceof TLRPC.TL_messages_sendMessage) {
+                // 包装原回调，确保消息发送完后立即发送离线状态
+                RequestDelegate origOnComplete = onCompleteOrig;
+                TLRPC.TL_account_updateStatus offlineRequest = new TLRPC.TL_account_updateStatus();
+                offlineRequest.offline = true; // 设置为离线
+                onCompleteOrig = (response, error) -> {
+                    origOnComplete.run(response, error); // 执行原回调
+                    // 延迟执行离线请求
+                    android.os.Handler handler = new android.os.Handler();
+                    handler.postDelayed(() -> sendRequest(offlineRequest, null), 500);
+                };
+            }
+
         }
     final var onComplete = onCompleteOrig;
     // --- request hook

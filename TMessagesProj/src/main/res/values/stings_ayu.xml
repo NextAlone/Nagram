@@ -8,6 +8,8 @@
 
     <!-- Ghost Mode Features -->
     <!--<string name="EnableGhostMode">Enable Ghost Mode Features</string>-->
+    <string name="EnableGhostMode">Enable Ghost</string>
+    <string name="DisableGhostMode">Disable Ghost</string>
     <string name="DontReadMessages">Do Not Mark Messages as Read</string>
     <string name="DontReadStories">Do Not Mark Stories as Viewed</string>
     <string name="DontSendOnlinePackets">Do Not Send Online Status</string>
