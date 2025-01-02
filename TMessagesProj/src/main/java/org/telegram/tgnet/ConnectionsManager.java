@@ -396,7 +396,7 @@ SharedPreferences mainPreferences;
             }
 
             // --- 不发送已读消息 ---
-            if (!AyuConfig.sendReadMessagePackets && !AyuState.getAllowReadPacket() &&  (
+            if (!AyuConfig.sendReadMessagePackets &&  (
                     object instanceof TLRPC.TL_messages_readHistory ||
                             object instanceof TLRPC.TL_messages_readMessageContents ||
                             object instanceof TLRPC.TL_channels_readHistory ||
@@ -429,7 +429,7 @@ SharedPreferences mainPreferences;
                                 TLRPC.TL_messages_readHistory request = new TLRPC.TL_messages_readHistory();
                                 request.peer = finalPeer;
                                 request.max_id = maxId;
-                                AyuState.setAllowReadPacket(true, 1);
+                                //AyuState.setAllowReadPacket(true, 1);
                                 sendRequest(request, (a1, a2) -> {});
                             });
                         };
