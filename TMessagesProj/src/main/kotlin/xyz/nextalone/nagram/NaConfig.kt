@@ -670,6 +670,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val enhancedVideoBitrate =
+        addConfig(
+            "EnhancedVideoBitrate",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,
