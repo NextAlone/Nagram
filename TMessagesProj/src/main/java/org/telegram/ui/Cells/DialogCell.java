@@ -3263,17 +3263,21 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             }
         }
 
+        MessageObject captionMessage = getCaptionMessage();
         // --- AyuGram hook
         if (AyuFilter.isFiltered(message, null)) {
             xyz.nextalone.nagram.helper.MessageHelper.INSTANCE.blurify(message);
+            if (captionMessage != null) xyz.nextalone.nagram.helper.MessageHelper.INSTANCE.blurify(captionMessage);
         }
         // --- AyuGram hook
         // --- NaGram hook
         if (message != null && message.messageOwner != null && message.messageOwner.hide) {
             xyz.nextalone.nagram.helper.MessageHelper.INSTANCE.blurify(message);
+            if (captionMessage != null) xyz.nextalone.nagram.helper.MessageHelper.INSTANCE.blurify(captionMessage);
         }
         if (NekoConfig.ignoreBlocked.Bool() && message != null && MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(message.getFromChatId()) >= 0) {
             xyz.nextalone.nagram.helper.MessageHelper.INSTANCE.blurify(message);
+            if (captionMessage != null) xyz.nextalone.nagram.helper.MessageHelper.INSTANCE.blurify(captionMessage);
         }
         // --- NaGram hook
 
