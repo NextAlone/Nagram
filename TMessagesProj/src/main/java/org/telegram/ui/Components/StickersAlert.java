@@ -1486,6 +1486,9 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         } else if (id == menu_user_profile) {
             // Na: open sticker's admin user profile or copy admin userId
             long userId = stickerSet.set.id >> 32;
+            if ((stickerSet.set.id >> 16 & 0xff) == 0x3f) {
+                userId |= 0x80000000L;
+            }
             if ((stickerSet.set.id >> 24 & 0xff) != 0) {
                 userId += 0x100000000L;
             }
