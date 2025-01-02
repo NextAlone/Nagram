@@ -426,7 +426,7 @@ SharedPreferences mainPreferences;
                         onCompleteOrig = (response, error) -> {
                             origOnComplete.run(response, error);
                             getMessagesStorage().getDialogMaxMessageId(dialogId, maxId -> {
-                                TLObject request = new TLRPC.TL_messages_readHistory();
+                                TLRPC.TL_messages_readHistory request = new TLRPC.TL_messages_readHistory();
                                 request.peer = finalPeer;
                                 request.max_id = maxId;
                                 AyuState.setAllowReadPacket(true, 1);
@@ -440,7 +440,7 @@ SharedPreferences mainPreferences;
             if (AyuConfig.sendOfflinePacketAfterOnline && object instanceof TLRPC.TL_messages_sendMessage) {
                 // 包装原回调，确保消息发送完后立即发送离线状态
                 RequestDelegate origOnComplete = onCompleteOrig;
-                TLObject offlineRequest = new TLRPC.TL_account_updateStatus();
+                TLRPC.TL_account_updateStatus offlineRequest = new TLRPC.TL_account_updateStatus();
                 offlineRequest.offline = true;  // 设置为离线
                 onCompleteOrig = (response, error) -> {
                     origOnComplete.run(response, error); // 执行原回调
