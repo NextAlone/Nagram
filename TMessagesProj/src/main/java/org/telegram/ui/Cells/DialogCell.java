@@ -3263,23 +3263,18 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             }
         }
 
-        MessageObject captionMessage = getCaptionMessage();
-        // --- AyuGram hook
-        if (AyuFilter.isFiltered(message, null)) {
-            xyz.nextalone.nagram.helper.MessageHelper.INSTANCE.blurify(message);
-            if (captionMessage != null) xyz.nextalone.nagram.helper.MessageHelper.INSTANCE.blurify(captionMessage);
+        if (message != null) {
+            MessageObject captionMessage = getCaptionMessage();
+            // --- AyuGram hook
+            boolean isFiltered = AyuFilter.isFiltered(message, null) || (captionMessage != null && AyuFilter.isFiltered(captionMessage, null));
+            // --- NaGram hook
+            isFiltered = isFiltered || (message.messageOwner != null && message.messageOwner.hide);
+            isFiltered = isFiltered || (NekoConfig.ignoreBlocked.Bool() && MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(message.getFromChatId()) >= 0);
+            if (isFiltered) {
+                xyz.nextalone.nagram.helper.MessageHelper.INSTANCE.blurify(message);
+                if (captionMessage != null) xyz.nextalone.nagram.helper.MessageHelper.INSTANCE.blurify(captionMessage);
+            }
         }
-        // --- AyuGram hook
-        // --- NaGram hook
-        if (message != null && message.messageOwner != null && message.messageOwner.hide) {
-            xyz.nextalone.nagram.helper.MessageHelper.INSTANCE.blurify(message);
-            if (captionMessage != null) xyz.nextalone.nagram.helper.MessageHelper.INSTANCE.blurify(captionMessage);
-        }
-        if (NekoConfig.ignoreBlocked.Bool() && message != null && MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(message.getFromChatId()) >= 0) {
-            xyz.nextalone.nagram.helper.MessageHelper.INSTANCE.blurify(message);
-            if (captionMessage != null) xyz.nextalone.nagram.helper.MessageHelper.INSTANCE.blurify(captionMessage);
-        }
-        // --- NaGram hook
 
         if (!animated) {
             dialogMutedProgress = (dialogMuted || drawUnmute) ? 1f : 0f;

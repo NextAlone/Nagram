@@ -327,6 +327,10 @@ object MessageHelper {
             return
         }
 
+        if (!TextUtils.isEmpty(messageObject.messageText)) {
+            messageObject.messageText = blurify(messageObject.messageText)
+        }
+
         if (!TextUtils.isEmpty(messageObject.messageOwner.message)) {
             messageObject.messageOwner.message = blurify(messageObject.messageOwner.message).toString()
         }
