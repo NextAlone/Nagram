@@ -166,4 +166,7 @@
     <string name="SendWithPangu">Αποστολή με Pangu</string>
     <string name="SendWithoutPangu">Αποστολή χωρίς Pangu</string>
     <string name="DefaultHlsVideoQuality">Προεπιλεγμένη Ποιότητα Βίντεο Hls</string>
+    <string name="DisableBotOpenButton">Απενεργοποίηση Κουμπιού Ανοίγματος Bot</string>
+    <string name="CustomTitleUserName">Χρήση ψευδωνύμου χρήστη ως τίτλος</string>
+    <string name="EnhancedVideoBitrate">Ενισχυμένος κοινόχρηστος ρυθμός bit βίντεο</string>
 </resources>

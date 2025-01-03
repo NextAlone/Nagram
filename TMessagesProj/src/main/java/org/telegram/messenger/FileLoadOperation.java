@@ -48,6 +48,7 @@ public class FileLoadOperation {
     private boolean forceSmallChunk;
     private Runnable fileWriteRunnable;
     public boolean isStory;
+    public boolean isVideo;
 
     public volatile boolean caughtPremiumFloodWait;
     public void setStream(FileLoadOperationStream stream, boolean streamPriority, long streamOffset) {
@@ -438,6 +439,7 @@ public class FileLoadOperation {
                     }
                 }
             }
+            isVideo = (MessageObject.isVideoDocument(documentLocation));
             ungzip = "application/x-tgsticker".equals(documentLocation.mime_type) || "application/x-tgwallpattern".equals(documentLocation.mime_type);
             totalBytesCount = documentLocation.size;
             if (key != null) {
@@ -780,7 +782,7 @@ public class FileLoadOperation {
             }
             FileLog.e("FileLoadOperation " + getFileName() + " removing stream listener " + operation);
             streamListeners.remove(operation);
-            if (!isStory && streamListeners.isEmpty()) {
+            if (!isStory && !isVideo && streamListeners.isEmpty()) {
                 Utilities.stageQueue.cancelRunnable(cancelAfterNoStreamListeners);
                 Utilities.stageQueue.postRunnable(cancelAfterNoStreamListeners, 1200);
             } else if (!streamListeners.isEmpty()) {

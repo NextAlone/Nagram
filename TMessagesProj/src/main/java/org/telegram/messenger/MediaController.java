@@ -48,6 +48,9 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.provider.MediaStore;
@@ -117,6 +120,7 @@ import java.util.concurrent.CountDownLatch;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.SaveToDownloadReceiver;
+import xyz.nextalone.nagram.NaConfig;
 import xyz.nextalone.nagram.helper.AudioEnhance;
 
 public class MediaController implements AudioManager.OnAudioFocusChangeListener, NotificationCenter.NotificationCenterDelegate, SensorEventListener {
@@ -675,6 +679,8 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
     };
 
+    public final static int VIDEO_BITRATE_2160 = 28400_000;
+    public final static int VIDEO_BITRATE_1440 = 14000_000;
     public final static int VIDEO_BITRATE_1080 = 6800_000;
     public final static int VIDEO_BITRATE_720 = 2621_440;
     public final static int VIDEO_BITRATE_480 = 1000_000;
@@ -5598,24 +5604,30 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
     private static class VideoConvertRunnable implements Runnable {
 
-        private VideoConvertMessage convertMessage;
+        private final VideoConvertMessage convertMessage;
+        private final Handler handler;
 
-        private VideoConvertRunnable(VideoConvertMessage message) {
-            convertMessage = message;
+        private VideoConvertRunnable(VideoConvertMessage message, Handler handler) {
+            this.convertMessage = message;
+            this.handler = handler;
         }
 
         @Override
         public void run() {
-            MediaController.getInstance().convertVideo(convertMessage);
+            MediaController.getInstance().convertVideo(convertMessage, handler);
         }
 
         public static void runConversion(final VideoConvertMessage obj) {
+            HandlerThread handlerThread = new HandlerThread("VideoConvertRunnableThread");
+            handlerThread.start();
+            Handler handler = new Handler(handlerThread.getLooper());
             new Thread(() -> {
                 try {
-                    VideoConvertRunnable wrapper = new VideoConvertRunnable(obj);
+                    VideoConvertRunnable wrapper = new VideoConvertRunnable(obj, handler);
                     Thread th = new Thread(wrapper, "VideoConvertRunnable");
                     th.start();
                     th.join();
+                    handlerThread.join();
                 } catch (Exception e) {
                     FileLog.e(e);
                 }
@@ -5624,7 +5636,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     }
 
 
-    private boolean convertVideo(final VideoConvertMessage convertMessage) {
+    private boolean convertVideo(final VideoConvertMessage convertMessage, final Handler handler) {
         MessageObject messageObject = convertMessage.messageObject;
         VideoEditedInfo info = convertMessage.videoEditedInfo;
         if (messageObject == null || info == null) {
@@ -5731,7 +5743,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 callback,
                 info);
         convertVideoParams.soundInfos.addAll(info.mixedSoundInfos);
-        boolean error = videoConvertor.convertVideo(convertVideoParams);
+        boolean error = videoConvertor.convertVideo(convertVideoParams, handler);
 
 
         boolean canceled = info.canceled;
@@ -5789,6 +5801,18 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             maxBitrate = 750_000;
             compressFactor = 0.6f;
             minCompressFactor = 0.7f;
+        }
+        if (NaConfig.INSTANCE.getEnhancedVideoBitrate().Bool()) {
+            int size = Math.min(height, width);
+            if (size >= 2160) {
+                maxBitrate = VIDEO_BITRATE_2160;
+            } else if (size >= 1440) {
+                maxBitrate = VIDEO_BITRATE_1440;
+            } else if (size >= 1080) {
+                maxBitrate = VIDEO_BITRATE_1440;
+            } else if (size >= 720) {
+                maxBitrate = VIDEO_BITRATE_1080;
+            }
         }
         int remeasuredBitrate = (int) (originalBitrate / (Math.min(originalHeight / (float) (height), originalWidth / (float) (width))));
         remeasuredBitrate *= compressFactor;

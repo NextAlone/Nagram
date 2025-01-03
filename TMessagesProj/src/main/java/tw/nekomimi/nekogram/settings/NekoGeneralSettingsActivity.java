@@ -233,6 +233,7 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
     private final AbstractConfigCell customSavePathRow = cellGroup.appendCell(new ConfigCellTextInput(null, NekoConfig.customSavePath,
             LocaleController.getString("customSavePathHint", R.string.customSavePathHint), null,
             (input) -> input.matches("^[A-za-z0-9.]{1,255}$") || input.isEmpty() ? input : (String) NekoConfig.customSavePath.defaultValue));
+    private final AbstractConfigCell customTitleUserNameRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getCustomTitleUserName()));
     private final AbstractConfigCell useSystemUnlockRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getUseSystemUnlock()));
     private final AbstractConfigCell disableUndoRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableUndo));
     private final AbstractConfigCell showIdAndDcRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showIdAndDc));
@@ -502,6 +503,11 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
             } else if (key.equals(NaConfig.INSTANCE.getPushServiceTypeUnifiedGateway().getKey())) {
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (key.equals(NaConfig.INSTANCE.getSentryAnalytics().getKey())) {
+                restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+            } else if (key.equals(NaConfig.INSTANCE.getCustomTitleUserName().getKey())) {
+                boolean enabled = (Boolean) newValue;
+                ((ConfigCellTextInput) customTitleRow).setEnabled(!enabled);
+                listAdapter.notifyItemChanged(cellGroup.rows.indexOf(customTitleRow));
                 restartTooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             }
         };
@@ -890,6 +896,9 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
 
         if (NekoConfig.useOSMDroidMap.Bool())
             ((ConfigCellTextCheck) mapDriftingFixForGoogleMapsRow).setEnabled(false);
+
+        if (NaConfig.INSTANCE.getCustomTitleUserName().Bool())
+            ((ConfigCellTextInput) customTitleRow).setEnabled(false);
 
         if (NekoConfig.useTelegramTranslateInChat.Bool())
             ((ConfigCellCustom) translationProviderRow).setEnabled(false);

@@ -166,4 +166,7 @@
     <string name="SendWithPangu">Enviar com Pangu</string>
     <string name="SendWithoutPangu">Enviar sem Pangu</string>
     <string name="DefaultHlsVideoQuality">Qualidade padrão do vídeo Hls</string>
+    <string name="DisableBotOpenButton">Desativar Botão Abrir do Bot</string>
+    <string name="CustomTitleUserName">Usar o apelido do usuário como título</string>
+    <string name="EnhancedVideoBitrate">Bitrate de vídeo compartilhado aprimorado</string>
 </resources>

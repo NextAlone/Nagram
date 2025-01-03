@@ -166,4 +166,7 @@
     <string name="SendWithPangu">Poslat s Pangu</string>
     <string name="SendWithoutPangu">Odeslat bez Pangu</string>
     <string name="DefaultHlsVideoQuality">Výchozí kvalita videa Hls</string>
+    <string name="DisableBotOpenButton">Zakázat tlačítko Bot Open</string>
+    <string name="CustomTitleUserName">Použít uživatelské přezdívku jako titulek</string>
+    <string name="EnhancedVideoBitrate">Rozšířená bitrate sdíleného videa</string>
 </resources>

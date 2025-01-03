@@ -310,16 +310,33 @@ object MessageHelper {
         return text
     }
 
-    fun blurify(messageObject: MessageObject?) {
-        if (messageObject?.messageOwner == null) {
+    private var spoilerChars: CharArray = charArrayOf(
+        '⠌', '⡢', '⢑', '⠨', '⠥', '⠮', '⡑'
+    )
+
+    fun blurify(text: CharSequence): CharSequence {
+        val stringBuilder = StringBuilder(text)
+        for (i in text.indices) {
+            stringBuilder.setCharAt(i, spoilerChars[i % spoilerChars.size])
+        }
+        return stringBuilder
+    }
+
+    fun blurify(messageObject: MessageObject) {
+        if (messageObject.messageOwner == null) {
             return
         }
 
+        if (!TextUtils.isEmpty(messageObject.messageText)) {
+            messageObject.messageText = blurify(messageObject.messageText)
+        }
+
         if (!TextUtils.isEmpty(messageObject.messageOwner.message)) {
-            val entity = TL_messageEntitySpoiler()
-            entity.offset = 0
-            entity.length = messageObject.messageOwner.message.length
-            messageObject.messageOwner.entities.add(entity)
+            messageObject.messageOwner.message = blurify(messageObject.messageOwner.message).toString()
+        }
+
+        if (!TextUtils.isEmpty(messageObject.caption)) {
+            messageObject.caption = blurify(messageObject.caption)
         }
 
         if (messageObject.messageOwner.media != null) {

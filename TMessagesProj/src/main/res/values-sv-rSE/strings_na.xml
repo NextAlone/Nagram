@@ -166,4 +166,7 @@
     <string name="SendWithPangu">Skicka med Pangu</string>
     <string name="SendWithoutPangu">Skicka utan Pangu</string>
     <string name="DefaultHlsVideoQuality">Standard Hls videokvalitet</string>
+    <string name="DisableBotOpenButton">Inaktivera Bot Open Button</string>
+    <string name="CustomTitleUserName">Använd användarnamn som titel</string>
+    <string name="EnhancedVideoBitrate">Förbättrad bithastighet för delade videor</string>
 </resources>
