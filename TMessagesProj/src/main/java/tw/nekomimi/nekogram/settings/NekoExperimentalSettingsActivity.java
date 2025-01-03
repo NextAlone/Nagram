@@ -342,12 +342,11 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
         listView.setOnItemLongClickListener((view, position, x, y) -> {
             var holder = listView.findViewHolderForAdapterPosition(position);
             if (holder != null && listAdapter.isEnabled(holder)) {
+                // --- Open NekoGhostModeActivity ---
                 if (Objects.equals(getRowKey(position), "DisableChatAction")) {
-                    presentFragment(new AyuGhostModeActivity());
+                    presentFragment(new NekoGhostModeActivity());
                     return true;
                 }
-
-                Log.d("test123", String.valueOf(holder));
                 createLongClickDialog(context, NekoExperimentalSettingsActivity.this, "experimental", position);
                 return true;
             }

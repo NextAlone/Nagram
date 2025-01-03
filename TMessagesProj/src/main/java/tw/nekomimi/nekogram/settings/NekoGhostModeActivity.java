@@ -11,20 +11,19 @@ package tw.nekomimi.nekogram.settings;
 
 import android.content.Context;
 import android.view.View;
-import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.radolyn.ayugram.AyuConfig;
 import com.radolyn.ayugram.utils.AyuState;
-import org.jetbrains.annotations.NotNull;
+
 import org.telegram.messenger.*;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.*;
-import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.Locale;
 
-public class AyuGhostModeActivity extends BaseNekoSettingsActivity {
+public class NekoGhostModeActivity extends BaseNekoSettingsActivity {
     // title
     private int GhostModeHeaderRow;
     private int GhostModeTitleRow;

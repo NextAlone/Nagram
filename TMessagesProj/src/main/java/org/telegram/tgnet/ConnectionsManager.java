@@ -370,7 +370,7 @@ SharedPreferences mainPreferences;
             FileLog.d("send request " + object + " with token = " + requestToken);
         }
 
-        // request hook
+        // start request hook
         {
             // --- 不发送在线状态 ---
             if (!AyuConfig.sendOnlinePackets && object instanceof TLRPC.TL_account_updateStatus) {
@@ -460,10 +460,9 @@ SharedPreferences mainPreferences;
                     handler.postDelayed(() -> sendRequest(offlineRequest, null), 500);
                 };
             }
-
         }
     final var onComplete = onCompleteOrig;
-    // --- request hook
+    // --- end request hook
 
         try {
             NativeByteBuffer buffer = new NativeByteBuffer(object.getObjectSize());
