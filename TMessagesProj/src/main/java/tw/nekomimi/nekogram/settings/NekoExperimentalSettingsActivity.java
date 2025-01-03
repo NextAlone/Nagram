@@ -17,6 +17,10 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.exoplayer2.util.Log;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
@@ -62,6 +66,7 @@ import xyz.nextalone.nagram.helper.ExternalStickerCacheHelper;
 @SuppressLint("RtlHardcoded")
 public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity {
 
+    private static final Logger log = LoggerFactory.getLogger(NekoExperimentalSettingsActivity.class);
     private ListAdapter listAdapter;
     private AnimatorSet animatorSet;
 
@@ -335,6 +340,10 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
         listView.setOnItemLongClickListener((view, position, x, y) -> {
             var holder = listView.findViewHolderForAdapterPosition(position);
             if (holder != null && listAdapter.isEnabled(holder)) {
+                //if (position == "disableChatAction") {
+                //    presentFragment(new AyuGhostModeActivity());
+//}
+                Log.d("test123", String.valueOf(position));
                 createLongClickDialog(context, NekoExperimentalSettingsActivity.this, "experimental", position);
                 return true;
             }
