@@ -49,6 +49,7 @@ import org.telegram.ui.Components.UndoView;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import kotlin.Unit;
@@ -340,10 +341,11 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
         listView.setOnItemLongClickListener((view, position, x, y) -> {
             var holder = listView.findViewHolderForAdapterPosition(position);
             if (holder != null && listAdapter.isEnabled(holder)) {
-                //if (position == "disableChatAction") {
-                //    presentFragment(new AyuGhostModeActivity());
-//}
-                Log.d("test123", String.valueOf(position));
+                if (Objects.equals(getRowKey(position), "DisableChatAction")) {
+                    presentFragment(new AyuGhostModeActivity());
+                    return true;
+                }
+                Log.d("test123", String.valueOf(holder));
                 createLongClickDialog(context, NekoExperimentalSettingsActivity.this, "experimental", position);
                 return true;
             }
