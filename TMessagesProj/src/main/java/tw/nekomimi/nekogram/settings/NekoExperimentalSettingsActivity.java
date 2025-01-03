@@ -345,6 +345,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
                     presentFragment(new AyuGhostModeActivity());
                     return true;
                 }
+
                 Log.d("test123", String.valueOf(holder));
                 createLongClickDialog(context, NekoExperimentalSettingsActivity.this, "experimental", position);
                 return true;
