@@ -347,6 +347,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
                     presentFragment(new NekoGhostModeActivity());
                     return true;
                 }
+
                 createLongClickDialog(context, NekoExperimentalSettingsActivity.this, "experimental", position);
                 return true;
             }
