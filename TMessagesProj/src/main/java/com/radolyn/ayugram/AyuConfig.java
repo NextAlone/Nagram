@@ -44,7 +44,7 @@ public class AyuConfig {
             markReadAfterSend = preferences.getBoolean("markReadAfterSend", true);
             // ~ Ghost other options
             openStotyWarning = preferences.getBoolean("openStotyWarning", false);
-            showGhostToggleInDrawer = preferences.getBoolean("showGhostToggleInDrawer", true);
+            showGhostToggleInDrawer = preferences.getBoolean("showGhostToggleInDrawer", false);
             useScheduledMessages = preferences.getBoolean("useScheduledMessages", false);
 
             configLoaded = true;
