@@ -343,7 +343,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
             var holder = listView.findViewHolderForAdapterPosition(position);
             if (holder != null && listAdapter.isEnabled(holder)) {
                 // --- Open NekoGhostModeActivity ---
-                if (Objects.equals(getRowKey(position), "DisableChatAction")) {
+                if (NekoConfig.disableChatAction.Bool() && Objects.equals(getRowKey(position), "DisableChatAction")) {
                     presentFragment(new NekoGhostModeActivity());
                     return true;
                 }

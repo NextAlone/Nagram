@@ -6011,7 +6011,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         .setDuration(Bulletin.DURATION_PROLONG)
                         .show();
             });
-            updateAuthHintCellVisibility(false);
+            updateAuthHintCellVisibility(true);
             StarsController.getInstance(currentAccount).loadStarGifts();
         } else if (
             folderId == 0 &&
