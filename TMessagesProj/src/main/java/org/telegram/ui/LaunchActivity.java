@@ -619,6 +619,13 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 } else if (id == 14) {
                     NekoXConfig.toggleKeepOnlineStatus();
                     drawerLayoutAdapter.notifyDataSetChanged();
+                } else if (id == 44678) {
+                        var msg = AyuConfig.isGhostModeActive()
+                                ? LocaleController.getString("DisableGhostMode", R.string.DisableGhostMode)
+                                : LocaleController.getString("EnableGhostMode", R.string.EnableGhostMode);
+                        AyuConfig.toggleGhostMode();
+                        BulletinFactory.of(getLastFragment()).createSuccessBulletin(msg).show();
+                    drawerLayoutAdapter.notifyDataSetChanged();
                 } else if (!UserConfig.hasPremiumOnAccounts()) {
                     if (actionBarLayout.getFragmentStack().size() > 0) {
                         BaseFragment fragment = actionBarLayout.getFragmentStack().get(0);
@@ -737,18 +744,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     StoryRecorder.getInstance(LaunchActivity.this, currentAccount).open(null);
                     drawerLayoutContainer.closeDrawer(true);
                 }
-                // --- start Drawer GhostMode hook
-                if (id == 44678 && AyuConfig.showGhostToggleInDrawer) {
-                    var msg = AyuConfig.isGhostModeActive()
-                            ? LocaleController.getString("DisableGhostMode", R.string.DisableGhostMode)
-                            : LocaleController.getString("EnableGhostMode", R.string.EnableGhostMode);
-                    AyuConfig.toggleGhostMode();
-                    BulletinFactory.of(getLastFragment()).createSuccessBulletin(msg).show();
-                    drawerLayoutContainer.closeDrawer(false);
-                    // update button text
-                    NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
-                }
-                // --- end Drawer GhostMode hook
             }
         });
         final ItemTouchHelper sideMenuTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
