@@ -347,8 +347,11 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         if (AyuConfig.showGhostToggleInDrawer) {
             boolean isGhost = AyuConfig.isGhostModeActive();
             items.add(new CheckItem(44678, LocaleController.getString("GhostModeTitle", R.string.GhostModeTitle), R.drawable.icon_ghost, () -> isGhost, () -> {
-                AyuConfig.setGhostMode(!isGhost);
-                NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
+                // 使用线程处理耗时操作
+                new Thread(() -> {
+                    AyuConfig.setGhostMode(!isGhost);
+                    NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
+                }).start();
                 return true;
             }));
             items.add(null);
