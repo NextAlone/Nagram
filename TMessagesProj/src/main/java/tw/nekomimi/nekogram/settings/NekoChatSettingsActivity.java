@@ -628,7 +628,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
         LinearLayout linearLayoutInviteContainer = new LinearLayout(context);
         linearLayoutInviteContainer.setOrientation(LinearLayout.VERTICAL);
         linearLayout.addView(linearLayoutInviteContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-        for (int a = 0; a < 6; a++) {
+        for (int a = 0; a < 5; a++) {
             TextCheckCell textCell = new TextCheckCell(getParentActivity());
             textCell.setTag(a);
             switch (a) {
@@ -650,10 +650,6 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                 }
                 case 4: {
                     textCell.setTextAndCheck(LocaleController.getString("Underline", R.string.Underline), NaConfig.INSTANCE.getShowTextUnderline().Bool(), false);
-                    break;
-                }
-                case 5: {
-                    textCell.setTextAndCheck(LocaleController.getString("Spoiler", R.string.Spoiler), NaConfig.INSTANCE.getShowTextSpoiler().Bool(), false);
                     break;
                 }
             }
@@ -681,10 +677,6 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                     }
                     case 4: {
                         textCell.setChecked(NaConfig.INSTANCE.getShowTextUnderline().toggleConfigBool());
-                        break;
-                    }
-                    case 5: {
-                        textCell.setChecked(NaConfig.INSTANCE.getShowTextSpoiler().toggleConfigBool());
                         break;
                     }
                 }
