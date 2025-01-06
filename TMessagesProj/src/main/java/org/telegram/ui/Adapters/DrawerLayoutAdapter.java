@@ -348,7 +348,8 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
             boolean isGhost = AyuConfig.isGhostModeActive();
             items.add(new CheckItem(44678, LocaleController.getString("GhostModeTitle", R.string.GhostModeTitle), R.drawable.icon_ghost, () -> isGhost, () -> {
                 AyuConfig.setGhostMode(!isGhost);
-                return false;
+                resetItems();
+                return true;
             }));
             items.add(null);
         }
