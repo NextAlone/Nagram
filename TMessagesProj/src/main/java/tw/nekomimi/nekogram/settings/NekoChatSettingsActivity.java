@@ -620,7 +620,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
 
         Context context = getParentActivity();
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(LocaleController.getString("TextStyle", R.string.TextStyle));
+        builder.setTitle(LocaleController.getString("DisableTrending", R.string.DisableTrending));
 
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -628,7 +628,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
         LinearLayout linearLayoutInviteContainer = new LinearLayout(context);
         linearLayoutInviteContainer.setOrientation(LinearLayout.VERTICAL);
         linearLayout.addView(linearLayoutInviteContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-        for (int a = 0; a < 11; a++) {
+        for (int a = 0; a < 6; a++) {
             TextCheckCell textCell = new TextCheckCell(getParentActivity());
             textCell.setTag(a);
             switch (a) {
@@ -654,26 +654,6 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                 }
                 case 5: {
                     textCell.setTextAndCheck(LocaleController.getString("Spoiler", R.string.Spoiler), NaConfig.INSTANCE.getShowTextSpoiler().Bool(), false);
-                    break;
-                }
-                case 6: {
-                    textCell.setTextAndCheck(LocaleController.getString("CreateLink", R.string.CreateLink), NaConfig.INSTANCE.getShowTextCreateLink().Bool(), false);
-                    break;
-                }
-                case 7: {
-                    textCell.setTextAndCheck(LocaleController.getString("CreateMention", R.string.CreateMention), NaConfig.INSTANCE.getShowTextCreateMention().Bool(), false);
-                    break;
-                }
-                case 8: {
-                    textCell.setTextAndCheck(LocaleController.getString("Regular", R.string.Regular), NaConfig.INSTANCE.getShowTextRegular().Bool(), false);
-                    break;
-                }
-                case 9: {
-                    textCell.setTextAndCheck(LocaleController.getString("TextUndoRedo", R.string.TextUndoRedo), NaConfig.INSTANCE.getShowTextUndoRedo().Bool(), false);
-                    break;
-                }
-                case 10: {
-                    textCell.setTextAndCheck(LocaleController.getString("Quote", R.string.Quote), NaConfig.INSTANCE.getShowTextQuote().Bool(), false);
                     break;
                 }
             }
@@ -705,26 +685,6 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                     }
                     case 5: {
                         textCell.setChecked(NaConfig.INSTANCE.getShowTextSpoiler().toggleConfigBool());
-                        break;
-                    }
-                    case 6: {
-                        textCell.setChecked(NaConfig.INSTANCE.getShowTextCreateLink().toggleConfigBool());
-                        break;
-                    }
-                    case 7: {
-                        textCell.setChecked(NaConfig.INSTANCE.getShowTextCreateMention().toggleConfigBool());
-                        break;
-                    }
-                    case 8: {
-                        textCell.setChecked(NaConfig.INSTANCE.getShowTextRegular().toggleConfigBool());
-                        break;
-                    }
-                    case 9: {
-                        textCell.setChecked(NaConfig.INSTANCE.getShowTextUndoRedo().toggleConfigBool());
-                        break;
-                    }
-                    case 10: {
-                        textCell.setChecked(NaConfig.INSTANCE.getShowTextQuote().toggleConfigBool());
                         break;
                     }
                 }
