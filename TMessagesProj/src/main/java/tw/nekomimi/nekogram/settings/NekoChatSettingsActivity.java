@@ -628,28 +628,32 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
         LinearLayout linearLayoutInviteContainer = new LinearLayout(context);
         linearLayoutInviteContainer.setOrientation(LinearLayout.VERTICAL);
         linearLayout.addView(linearLayoutInviteContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-        for (int a = 0; a < 5; a++) {
+        for (int a = 0; a < 6; a++) {
             TextCheckCell textCell = new TextCheckCell(getParentActivity());
             textCell.setTag(a);
             switch (a) {
                 case 0: {
-                    textCell.setTextAndCheck(LocaleController.getString("Bold", R.string.Bold), NaConfig.INSTANCE.getShowTextBold().Bool(), false);
+                    textCell.setTextAndCheck(LocaleController.getString("PremiumUpgradeHint", R.string.PremiumUpgradeHint), NaConfig.INSTANCE.getDisablePremiumUpgrade().Bool(), false);
                     break;
                 }
                 case 1: {
-                    textCell.setTextAndCheck(LocaleController.getString("Italic", R.string.Italic), NaConfig.INSTANCE.getShowTextItalic().Bool(), false);
+                    textCell.setTextAndCheck(LocaleController.getString("PremiumExpiringHint", R.string.PremiumExpiringHint), NaConfig.INSTANCE.getDisablePremiumExpiring().Bool(), false);
                     break;
                 }
                 case 2: {
-                    textCell.setTextAndCheck(LocaleController.getString("Mono", R.string.Mono), NaConfig.INSTANCE.getShowTextMono().Bool(), false);
+                    textCell.setTextAndCheck(LocaleController.getString("PremiumChristmasHint", R.string.PremiumChristmasHint), NaConfig.INSTANCE.getDisablePremiumChristmas().Bool(), false);
                     break;
                 }
                 case 3: {
-                    textCell.setTextAndCheck(LocaleController.getString("Strike", R.string.Strike), NaConfig.INSTANCE.getShowTextStrikethrough().Bool(), false);
+                    textCell.setTextAndCheck(LocaleController.getString("BirthdayContactHint", R.string.BirthdayContactHint), NaConfig.INSTANCE.getDisableBirthdayContact().Bool(), false);
                     break;
                 }
                 case 4: {
-                    textCell.setTextAndCheck(LocaleController.getString("Underline", R.string.Underline), NaConfig.INSTANCE.getShowTextUnderline().Bool(), false);
+                    textCell.setTextAndCheck(LocaleController.getString("PremiumRestoreHint", R.string.PremiumRestoreHint), NaConfig.INSTANCE.getDisablePremiumRestore().Bool(), false);
+                    break;
+                }
+                case 5: {
+                    textCell.setTextAndCheck(LocaleController.getString("StarsSubscriptionHint", R.string.StarsSubscriptionHint), NaConfig.INSTANCE.getDisableStarsSubscription().Bool(), false);
                     break;
                 }
             }
@@ -660,23 +664,27 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                 Integer tag = (Integer) v2.getTag();
                 switch (tag) {
                     case 0: {
-                        textCell.setChecked(NaConfig.INSTANCE.getShowTextBold().toggleConfigBool());
+                        textCell.setChecked(NaConfig.INSTANCE.getDisablePremiumUpgrade().toggleConfigBool());
                         break;
                     }
                     case 1: {
-                        textCell.setChecked(NaConfig.INSTANCE.getShowTextItalic().toggleConfigBool());
+                        textCell.setChecked(NaConfig.INSTANCE.getDisablePremiumExpiring().toggleConfigBool());
                         break;
                     }
                     case 2: {
-                        textCell.setChecked(NaConfig.INSTANCE.getShowTextMono().toggleConfigBool());
+                        textCell.setChecked(NaConfig.INSTANCE.getDisablePremiumChristmas().toggleConfigBool());
                         break;
                     }
                     case 3: {
-                        textCell.setChecked(NaConfig.INSTANCE.getShowTextStrikethrough().toggleConfigBool());
+                        textCell.setChecked(NaConfig.INSTANCE.getDisableBirthdayContact().toggleConfigBool());
                         break;
                     }
                     case 4: {
-                        textCell.setChecked(NaConfig.INSTANCE.getShowTextUnderline().toggleConfigBool());
+                        textCell.setChecked(NaConfig.INSTANCE.getDisablePremiumRestore().toggleConfigBool());
+                        break;
+                    }
+                    case 5: {
+                        textCell.setChecked(NaConfig.INSTANCE.getDisableStarsSubscription().toggleConfigBool());
                         break;
                     }
                 }

@@ -5918,7 +5918,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
             authHintCell.set(DialogsActivity.this, currentAccount);
             updateAuthHintCellVisibility(true);
-        } else if (folderId == 0 && MessagesController.getInstance(currentAccount).pendingSuggestions.contains("PREMIUM_GRACE") && !NekoConfig.disableTrending.Bool()) {
+        } else if (folderId == 0 && MessagesController.getInstance(currentAccount).pendingSuggestions.contains("PREMIUM_GRACE") && NaConfig.INSTANCE.getDisablePremiumExpiring().Bool()) {
             dialogsHintCellVisible = true;
             dialogsHintCell.setVisibility(View.VISIBLE);
             dialogsHintCell.setCompact(true);
@@ -5934,7 +5934,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 updateDialogsHint();
             });
             updateAuthHintCellVisibility(false);
-        } else if (isStarsSubscriptionHintVisible() && !NekoConfig.disableTrending.Bool()) {
+        } else if (isStarsSubscriptionHintVisible() && NaConfig.INSTANCE.getDisableStarsSubscription().Bool()) {
             StarsController c = StarsController.getInstance(currentAccount);
             dialogsHintCellVisible = true;
             dialogsHintCell.setVisibility(View.VISIBLE);
@@ -5975,7 +5975,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 updateDialogsHint();
             });
             updateAuthHintCellVisibility(false);
-        } else if (folderId == 0 && !getMessagesController().premiumPurchaseBlocked() && BirthdayController.getInstance(currentAccount).contains() && !getMessagesController().dismissedSuggestions.contains("BIRTHDAY_CONTACTS_TODAY") && !NekoConfig.disableTrending.Bool()) {
+        } else if (folderId == 0 && !getMessagesController().premiumPurchaseBlocked() && BirthdayController.getInstance(currentAccount).contains() && !getMessagesController().dismissedSuggestions.contains("BIRTHDAY_CONTACTS_TODAY") && NaConfig.INSTANCE.getDisableBirthdayContact().Bool()) {
             BirthdayController.BirthdayState state = BirthdayController.getInstance(currentAccount).getState();
             ArrayList<TLRPC.User> users = state.today;
             dialogsHintCellVisible = true;
@@ -6094,7 +6094,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     .show();
             });
             updateAuthHintCellVisibility(false);
-        } else if (isPremiumChristmasHintVisible()) {
+        } else if (isPremiumChristmasHintVisible() && NaConfig.INSTANCE.getDisablePremiumChristmas().Bool()) {
             dialogsHintCellVisible = true;
             dialogsHintCell.setVisibility(View.VISIBLE);
             dialogsHintCell.setCompact(false);
@@ -6117,7 +6117,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         .show();
             });
             updateAuthHintCellVisibility(false);
-        } else if (isPremiumRestoreHintVisible()) {
+        } else if (isPremiumRestoreHintVisible() && NaConfig.INSTANCE.getDisablePremiumRestore().Bool()) {
             dialogsHintCellVisible = true;
             dialogsHintCell.setVisibility(View.VISIBLE);
             dialogsHintCell.setCompact(false);
@@ -6138,7 +6138,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     LocaleController.getString(R.string.RestorePremiumHintMessage)
             );
             updateAuthHintCellVisibility(false);
-        } else if (isPremiumHintVisible()) {
+        } else if (isPremiumHintVisible() && NaConfig.INSTANCE.getDisablePremiumUpgrade().Bool()) {
             dialogsHintCellVisible = true;
             dialogsHintCell.setVisibility(View.VISIBLE);
             dialogsHintCell.setCompact(false);

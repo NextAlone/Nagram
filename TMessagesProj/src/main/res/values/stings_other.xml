@@ -4,7 +4,7 @@
     <string name="GhostModeTitle">隐身模式</string>
     <string name="GhostElements">幽灵选项</string>
     <string name="DrawerElements">侧栏元素</string>
-    <string name="ShowGhostToggleInDrawer">侧栏显示隐身模式切换</string>
+    <string name="ShowGhostToggleInDrawer">隐身模式</string>
 
     <!-- Ghost Mode Features -->
     <string name="EnableGhostMode">启用幽灵功能</string>
@@ -15,4 +15,12 @@
     <string name="DontSendUploadProgress">不发送输入状态</string>
     <string name="SendOfflinePacketAfterOnline">在线后自动离线</string>
     <string name="MarkReadAfterAction">动作之后设置已读</string>
+
+    <!-- other -->
+    <string name="StarsSubscriptionHint">星星余额不足提示</string>
+    <string name="PremiumExpiringHint">Premium 到期提示</string>
+    <string name="PremiumUpgradeHint">Premium 升级提示</string>
+    <string name="PremiumChristmasHint">Premium 圣诞提示</string>
+    <string name="PremiumRestoreHint">Premium 过期恢复提示</string>
+    <string name="BirthdayContactHint">联系人生日提示</string>
 </resources>
