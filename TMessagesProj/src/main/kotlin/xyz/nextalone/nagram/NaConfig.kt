@@ -680,37 +680,37 @@ object NaConfig {
         addConfig(
             "DisableStarsSubscription",
             ConfigItem.configTypeBool,
-            false
+            true
         )
     val disablePremiumExpiring =
         addConfig(
             "DisablePremiumExpiring",
             ConfigItem.configTypeBool,
-            false
+            true
         )
     val disablePremiumUpgrade =
         addConfig(
             "DisablePremiumUpgrade",
             ConfigItem.configTypeBool,
-            false
+            true
         )
     val disablePremiumChristmas =
         addConfig(
             "DisablePremiumChristmas",
             ConfigItem.configTypeBool,
-            false
+            true
         )
     val disableBirthdayContact =
         addConfig(
             "DisableBirthdayContact",
             ConfigItem.configTypeBool,
-            true
+            false
         )
     val disablePremiumRestore =
         addConfig(
             "DisablePremiumRestore",
             ConfigItem.configTypeBool,
-            false
+            true
         )
 
     private fun addConfig(

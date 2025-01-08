@@ -17,10 +17,11 @@
     <string name="MarkReadAfterAction">动作之后设置已读</string>
 
     <!-- other -->
-    <string name="StarsSubscriptionHint">星星余额不足提示</string>
-    <string name="PremiumExpiringHint">Premium 到期提示</string>
-    <string name="PremiumUpgradeHint">Premium 升级提示</string>
-    <string name="PremiumChristmasHint">Premium 圣诞提示</string>
-    <string name="PremiumRestoreHint">Premium 过期恢复提示</string>
-    <string name="BirthdayContactHint">联系人生日提示</string>
+    <string name="StarsSubscriptionHint">禁用星星余额不足提示</string>
+    <string name="PremiumExpiringHint">禁用 Premium 到期提示</string>
+    <string name="PremiumUpgradeHint">禁用 Premium 升级提示</string>
+    <string name="PremiumChristmasHint">禁用 Premium 圣诞提示</string>
+    <string name="PremiumRestoreHint">禁用 Premium 过期恢复提示</string>
+    <string name="BirthdayContactHint">禁用联系人生日提示</string>
+    <string name="DisableSearchTags">禁用搜索标签列表</string>
 </resources>

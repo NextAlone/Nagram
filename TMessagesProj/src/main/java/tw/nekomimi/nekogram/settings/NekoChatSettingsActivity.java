@@ -633,15 +633,15 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
             textCell.setTag(a);
             switch (a) {
                 case 0: {
-                    textCell.setTextAndCheck(LocaleController.getString("PremiumUpgradeHint", R.string.PremiumUpgradeHint), NaConfig.INSTANCE.getDisablePremiumUpgrade().Bool(), false);
+                    textCell.setTextAndCheck(LocaleController.getString("PremiumUpgradeHint", R.string.PremiumUpgradeHint), NaConfig.INSTANCE.getDisablePremiumUpgrade().Bool(), true);
                     break;
                 }
                 case 1: {
-                    textCell.setTextAndCheck(LocaleController.getString("PremiumExpiringHint", R.string.PremiumExpiringHint), NaConfig.INSTANCE.getDisablePremiumExpiring().Bool(), false);
+                    textCell.setTextAndCheck(LocaleController.getString("PremiumExpiringHint", R.string.PremiumExpiringHint), NaConfig.INSTANCE.getDisablePremiumExpiring().Bool(), true);
                     break;
                 }
                 case 2: {
-                    textCell.setTextAndCheck(LocaleController.getString("PremiumChristmasHint", R.string.PremiumChristmasHint), NaConfig.INSTANCE.getDisablePremiumChristmas().Bool(), false);
+                    textCell.setTextAndCheck(LocaleController.getString("PremiumChristmasHint", R.string.PremiumChristmasHint), NaConfig.INSTANCE.getDisablePremiumChristmas().Bool(), true);
                     break;
                 }
                 case 3: {
@@ -649,11 +649,11 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                     break;
                 }
                 case 4: {
-                    textCell.setTextAndCheck(LocaleController.getString("PremiumRestoreHint", R.string.PremiumRestoreHint), NaConfig.INSTANCE.getDisablePremiumRestore().Bool(), false);
+                    textCell.setTextAndCheck(LocaleController.getString("PremiumRestoreHint", R.string.PremiumRestoreHint), NaConfig.INSTANCE.getDisablePremiumRestore().Bool(), true);
                     break;
                 }
                 case 5: {
-                    textCell.setTextAndCheck(LocaleController.getString("StarsSubscriptionHint", R.string.StarsSubscriptionHint), NaConfig.INSTANCE.getDisableStarsSubscription().Bool(), false);
+                    textCell.setTextAndCheck(LocaleController.getString("StarsSubscriptionHint", R.string.StarsSubscriptionHint), NaConfig.INSTANCE.getDisableStarsSubscription().Bool(), true);
                     break;
                 }
             }
