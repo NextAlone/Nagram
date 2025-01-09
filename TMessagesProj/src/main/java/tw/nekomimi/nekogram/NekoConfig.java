@@ -452,8 +452,6 @@ public class NekoConfig {
             sendCommentAfterForward.setConfigBool(preferences.getBoolean("sendCommentAfterForward", true));
 //        if (preferences.contains("increaseVoiceMessageQuality"))
 //            increaseVoiceMessageQuality.setConfigBool(preferences.getBoolean("increaseVoiceMessageQuality", true));
-        if (preferences.contains("disableTrending"))
-            disableTrending.setConfigBool(preferences.getBoolean("disableTrending", true));
         if (preferences.contains("dontSendGreetingSticker"))
             dontSendGreetingSticker.setConfigBool(preferences.getBoolean("dontSendGreetingSticker", false));
         if (preferences.contains("hideTimeForSticker"))
