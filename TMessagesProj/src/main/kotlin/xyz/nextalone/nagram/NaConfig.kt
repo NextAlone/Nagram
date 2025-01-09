@@ -712,6 +712,43 @@ object NaConfig {
             ConfigItem.configTypeBool,
             true
         )
+    val disableSearchTags =
+        addConfig(
+            "DisableSearchTags",
+            ConfigItem.configTypeBool,
+            true
+        )
+    val disableFeatuerdEmojis =
+        addConfig(
+            "DisableFeatuerdEmojis",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val disableFeaturedStickers =
+        addConfig(
+            "DisableFeaturedStickers",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val disableFeaturedGifs =
+        addConfig(
+            "DisableFeaturedGifs",
+            ConfigItem.configTypeBool,
+            false
+         )
+    val disablePremiumSavaEmojiTags =
+        addConfig(
+            "DisablePremiumSavaEmojiTags",
+            ConfigItem.configTypeBool,
+            true
+        )
+    val disableNonPremiumChannelChatShow =
+        addConfig(
+            "DisableNonPremiumChannelChatShow",
+            ConfigItem.configTypeBool,
+            false
+        )
+
 
     private fun addConfig(
         k: String,

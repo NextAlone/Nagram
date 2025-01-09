@@ -2,7 +2,7 @@
 <resources>
     <!-- General Settings -->
     <string name="GhostModeTitle">隐身模式</string>
-    <string name="GhostElements">幽灵选项</string>
+    <string name="GhostElements">隐身选项</string>
     <string name="DrawerElements">侧栏元素</string>
     <string name="ShowGhostToggleInDrawer">隐身模式</string>
 
@@ -17,11 +17,16 @@
     <string name="MarkReadAfterAction">动作之后设置已读</string>
 
     <!-- other -->
-    <string name="StarsSubscriptionHint">禁用星星余额不足提示</string>
-    <string name="PremiumExpiringHint">禁用 Premium 到期提示</string>
-    <string name="PremiumUpgradeHint">禁用 Premium 升级提示</string>
-    <string name="PremiumChristmasHint">禁用 Premium 圣诞提示</string>
-    <string name="PremiumRestoreHint">禁用 Premium 过期恢复提示</string>
-    <string name="BirthdayContactHint">禁用联系人生日提示</string>
+    <string name="DisableStarsSubscription">Telegram Stars余额不足通知</string>
+    <string name="DisablePremiumExpiring">Telegram Premium到期通知</string>
+    <string name="DisablePremiumUpgrade">Telegram Premium升级通知</string>
+    <string name="DisablePremiumChristmas">Telegram Premium圣诞通知(不知道是什么东西)</string>
+    <string name="DisablePremiumRestore">Telegram Premium过期恢复通知</string>
+    <string name="DisableBirthdayContact">联系人生日通知</string>
     <string name="DisableSearchTags">禁用搜索标签列表</string>
+    <string name="DisableFeatuerdEmojis">精选Telegram Premium Emojis</string>
+    <string name="DisableFeaturedStickers">精选Telegram Premium Stickers</string>
+    <string name="DisableFeaturedGifs">精选热门GIF图</string>
+    <string name="DisablePremiumSavaEmojiTags">Telegram Premium收藏夹Emojis标签</string>
+    <string name="DisableNonPremiumChannelChatShow">非Telegram Premium频道马甲发言显示</string>
 </resources>
