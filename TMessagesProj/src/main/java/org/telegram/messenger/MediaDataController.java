@@ -1054,7 +1054,7 @@ public class MediaDataController extends BaseController {
         TLRPC.TL_messages_saveGif req = new TLRPC.TL_messages_saveGif();
         req.id = new TLRPC.TL_inputDocument();
         req.id.id = document.id;
-        req.id.access_hash = document.access_hash;z
+        req.id.access_hash = document.access_hash;
         req.id.file_reference = document.file_reference;
         if (req.id.file_reference == null) {
             req.id.file_reference = new byte[0];
