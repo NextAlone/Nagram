@@ -457,7 +457,7 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
             return;
         }
         final boolean isPremium = UserConfig.getInstance(UserConfig.selectedAccount).isPremium() || allowEmojisForNonPremium();
-        if (!NaConfig.INSTANCE.getDisableFeatuerdEmojis().Bool() && !isPremium) {
+        if (NaConfig.INSTANCE.getDisableFeatuerdEmojis().Bool() && !isPremium) {
             return;
         }
         int childCount = contentView.getChildCount() - packsIndexStart - (settingsTab != null ? 1 : 0);

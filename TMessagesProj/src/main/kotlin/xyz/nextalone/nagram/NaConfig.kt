@@ -716,7 +716,7 @@ object NaConfig {
         addConfig(
             "DisableSearchTags",
             ConfigItem.configTypeBool,
-            true
+            false
         )
     val disableFeatuerdEmojis =
         addConfig(
@@ -740,7 +740,7 @@ object NaConfig {
         addConfig(
             "DisablePremiumSavaEmojiTags",
             ConfigItem.configTypeBool,
-            false
+            true
         )
     val disableNonPremiumChannelChatShow =
         addConfig(

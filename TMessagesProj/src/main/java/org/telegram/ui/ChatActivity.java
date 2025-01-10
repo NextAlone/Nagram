@@ -8933,7 +8933,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
         }
 
-        if (getDialogId() == getUserConfig().getClientUserId() && (getUserConfig().isPremium() && !NaConfig.INSTANCE.getDisableSearchTags().Bool())) {
+        if (getDialogId() == getUserConfig().getClientUserId() && (getUserConfig().isPremium() && NaConfig.INSTANCE.getDisableSearchTags().Bool())) {
             actionBarSearchTags = new SearchTagsList(context, ChatActivity.this, contentView, currentAccount, getSavedDialogId(), themeDelegate, true) {
                 @Override
                 protected boolean setFilter(ReactionsLayoutInBubble.VisibleReaction reaction) {
@@ -23888,7 +23888,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         sendAsPeersObj = getMessagesController().getSendAsPeers(dialog_id);
         if (sendAsPeersObj != null) {
-            if (!NaConfig.INSTANCE.getDisableNonPremiumChannelChatShow().Bool()) {
+            if (NaConfig.INSTANCE.getDisableNonPremiumChannelChatShow().Bool()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     sendAsPeersObj.peers.removeIf(peer -> peer.premium_required);
                 }
@@ -31483,7 +31483,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         sheet.show();
                     }));
                 }
-                if (isReactionsAvailable && (!tags || (!getMessagesController().premiumFeaturesBlocked() && (getUserConfig().isPremium() && !NaConfig.INSTANCE.getDisablePremiumSavaEmojiTags().Bool())))) {
+                if (isReactionsAvailable && (!tags || (!getMessagesController().premiumFeaturesBlocked() && (getUserConfig().isPremium() && NaConfig.INSTANCE.getDisablePremiumSavaEmojiTags().Bool())))) {
                     int pad = 22;
                     int sPad = 24;
                     reactionsLayout.setPadding(AndroidUtilities.dp(4) + (LocaleController.isRTL ? 0 : sPad), AndroidUtilities.dp(4), AndroidUtilities.dp(4) + (LocaleController.isRTL ? sPad : 0), AndroidUtilities.dp(pad));
