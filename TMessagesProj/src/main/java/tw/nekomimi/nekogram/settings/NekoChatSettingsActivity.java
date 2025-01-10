@@ -657,7 +657,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                     break;
                 }
                 case 6: {
-                    textCell.setTextAndCheck(LocaleController.getString("DisableSearchTags", R.string.DisableSearchTags), NaConfig.INSTANCE.getDisableSearchTags().Bool(), false);
+                    textCell.setTextAndCheck(LocaleController.getString("DisableSearchTags", R.string.DisableSearchTags), NaConfig.INSTANCE.getDisableSearchTags().Bool(), true);
                     break;
                 }
                 case 7: {
@@ -673,7 +673,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                     break;
                 }
                 case 10: {
-                    textCell.setTextAndCheck(LocaleController.getString("DisablePremiumSavaEmojiTags", R.string.DisablePremiumSavaEmojiTags), NaConfig.INSTANCE.getDisablePremiumSavaEmojiTags().Bool(), true);
+                    textCell.setTextAndCheck(LocaleController.getString("DisablePremiumSavaEmojiTags", R.string.DisablePremiumSavaEmojiTags), NaConfig.INSTANCE.getDisablePremiumSavaEmojiTags().Bool(), false);
                     break;
                 }
                 case 11: {

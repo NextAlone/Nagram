@@ -17,16 +17,16 @@
     <string name="MarkReadAfterAction">动作之后设置已读</string>
 
     <!-- other -->
-    <string name="DisableStarsSubscription">Telegram Stars余额不足通知</string>
-    <string name="DisablePremiumExpiring">Telegram Premium到期通知</string>
-    <string name="DisablePremiumUpgrade">Telegram Premium升级通知</string>
-    <string name="DisablePremiumChristmas">Telegram Premium圣诞通知(不知道是什么东西)</string>
-    <string name="DisablePremiumRestore">Telegram Premium过期恢复通知</string>
-    <string name="DisableBirthdayContact">联系人生日通知</string>
-    <string name="DisableSearchTags">禁用搜索标签列表</string>
-    <string name="DisableFeatuerdEmojis">精选Telegram Premium Emojis</string>
-    <string name="DisableFeaturedStickers">精选Telegram Premium Stickers</string>
-    <string name="DisableFeaturedGifs">精选热门GIF图</string>
-    <string name="DisablePremiumSavaEmojiTags">Telegram Premium收藏夹Emojis标签</string>
-    <string name="DisableNonPremiumChannelChatShow">非Telegram Premium频道马甲发言显示</string>
+    <string name="DisableStarsSubscription">禁用Telegram Stars余额不足通知</string>
+    <string name="DisablePremiumExpiring">禁用Telegram Premium到期通知</string>
+    <string name="DisablePremiumUpgrade">禁用Telegram Premium升级通知</string>
+    <string name="DisablePremiumChristmas">禁用Telegram Premium圣诞通知(不知道是什么东西)</string>
+    <string name="DisablePremiumRestore">禁用Telegram Premium过期恢复通知</string>
+    <string name="DisableBirthdayContact">禁用联系人生日通知</string>
+    <string name="DisableSearchTags">禁用收藏夹搜索Emoji标签列表</string>
+    <string name="DisableFeatuerdEmojis">禁用精选Telegram Premium Emoji</string>
+    <string name="DisableFeaturedStickers">禁用精选Telegram Premium Stickers</string>
+    <string name="DisableFeaturedGifs">禁用精选热门GIF图</string>
+    <string name="DisablePremiumSavaEmojiTags">禁用Telegram Premium收藏夹Emojis标签</string>
+    <string name="DisableNonPremiumChannelChatShow">禁用非Telegram Premium频道马甲发言显示</string>
 </resources>
