@@ -5390,10 +5390,10 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             gifTabs.addIconTab(0, gifIcons[0]).setContentDescription(LocaleController.getString(R.string.RecentStickers));
         }
 
-        //if (!NaConfig.INSTANCE.getDisableFeaturedGifs().Bool()) {
-        //    gifTrendingTabNum = gifTabsCount++;
-        //    gifTabs.addIconTab(1, gifIcons[1]).setContentDescription(LocaleController.getString(R.string.FeaturedGifs));
-        //}
+        if (NaConfig.INSTANCE.getDisableFeaturedGifs().Bool()) {
+            gifTrendingTabNum = gifTabsCount++;
+            gifTabs.addIconTab(1, gifIcons[1]).setContentDescription(LocaleController.getString(R.string.FeaturedGifs));
+        }
 
         gifFirstEmojiTabNum = gifTabsCount;
         final int hPadding = AndroidUtilities.dp(13);
@@ -8116,8 +8116,9 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         }
 
         public void loadTrendingGifs() {
-            if (!NaConfig.INSTANCE.getDisableFeaturedGifs().Bool()) return;
-            search("", "", true, true, true);
+            if (!NaConfig.INSTANCE.getDisableFeaturedGifs().Bool()) {
+                search("", "", true, true, true);
+            }
         }
 
         private void searchBotUser() {
