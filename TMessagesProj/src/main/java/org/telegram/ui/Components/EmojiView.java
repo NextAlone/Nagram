@@ -8116,9 +8116,8 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         }
 
         public void loadTrendingGifs() {
-            if (!NaConfig.INSTANCE.getDisableFeaturedGifs().Bool()) {
-                search("", "", true, true, true);
-            }
+            if (!NaConfig.INSTANCE.getDisableFeaturedGifs().Bool()) return;
+            search("", "", true, true, true);
         }
 
         private void searchBotUser() {
