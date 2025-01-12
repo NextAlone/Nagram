@@ -277,7 +277,7 @@ public class UserConfig extends BaseController {
     private void checkPremiumSelf(TLRPC.User oldUser, TLRPC.User newUser) {
         if (oldUser != null && newUser != null && oldUser.premium != newUser.premium) {
             AndroidUtilities.runOnUIThread(() -> {
-                getMessagesController().updatePremium(newUser.premium || NekoConfig.localPremium.Bool());
+                getMessagesController().updatePremium(newUser.premium);
                 NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.currentUserPremiumStatusChanged);
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.premiumStatusChangedGlobal);
 

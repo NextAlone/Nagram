@@ -847,7 +847,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public boolean isPremiumUser(TLRPC.User currentUser) {
-        if (NekoConfig.localPremium.Bool()) {
+        if (NekoConfig.localPremium.Bool() && currentUser.id == getUserConfig().getClientUserId()) {
             return true;
         }
         return !premiumFeaturesBlocked() && currentUser.premium && !isSupportUser(currentUser);

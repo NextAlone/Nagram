@@ -3472,7 +3472,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 return true;
             }
             return chatActivity == null || !(
-                chatActivity.getDialogId() < 0 && chatActivity.getMessagesController().isChatNoForwards(-chatActivity.getDialogId()) ||
+                chatActivity.getDialogId() < 0 && chatActivity.getMessagesController().isChatNoForwardsWithOverride(-chatActivity.getDialogId()) ||
                 selectedView != null && selectedView.getMessageObject() != null && (selectedView.getMessageObject().messageOwner != null && selectedView.getMessageObject().messageOwner.noforwards)
             );
         }
