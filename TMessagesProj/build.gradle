@@ -48,6 +48,7 @@ def keystorePwd = null
 def alias = null
 def pwd = null
 def sentry_token = System.getenv("SENTRY_AUTH_TOKEN")
+def nagram_build_args = System.getenv("NAGRAM_BUILD_ARGS")
 def sentry_upload =  project.rootProject.file("sentry.properties").exists()
 def disableCMakeRelWithDebInfo = System.getenv("COMPILE_NATIVE") == null
 
@@ -66,6 +67,7 @@ if (properties != null) {
     alias = properties.getProperty("ALIAS_NAME")
     pwd = properties.getProperty("ALIAS_PASS")
     sentry_token = properties.getProperty("SENTRY_AUTH_TOKEN", sentry_token)
+    nagram_build_args = properties.getProperty("NAGRAM_BUILD_ARGS", nagram_build_args)
 }
 
 keystorePwd = keystorePwd ?: System.getenv("KEYSTORE_PASS")
@@ -370,6 +372,8 @@ android {
         } else if (task.name.contains("Crashlytics") && task.name.contains("NoGcm")) {
             task.enabled = false
         } else if (task.name.endsWith("GoogleServices") && task.name.contains("NoGcm")) {
+            task.enabled = false
+        } else if (task.name.contains("buildCMakeDebug") && nagram_build_args.contains("skip_buildCMakeDebug")) {
             task.enabled = false
         }
     }
