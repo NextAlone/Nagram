@@ -104,20 +104,26 @@ MTProto protocol manuals: <https://core.telegram.org/mtproto>
 
 Environment:
 
-- A Linux distribution based on Debian (e.g. Ubuntu)
+- Linux distribution based on Debian or Arch Linux, or macOS
 
-- Native tools: `gcc` `go` `make` `cmake` `ninja` `yasm`
+- Native tools: `gcc` `go` `make` `cmake` `ninja` `yasm` `meson` `pkgconf`
   
   ```shell
+  # for Debian based distribution
   sudo apt install gcc golang make cmake ninja-build yasm
+  # for Arch Linux based distribution
+  sudo pacman -S base-devel go ninja cmake yasm meson
+  # for macOS
+  xcode-select --install # install developer tools (will open confirm dialog)
+  brew install go cmake ninja yasm meson pkgconf # install other tools by homebrew
   ```
-- Android SDK: `build-tools;33.0.0` `platforms;android-33` `ndk;21.4.7075529` `cmake;3.18.1` (the default location is **$HOME/Android/SDK**, otherwise you need to specify **$ANDROID_HOME** for it)
+- Android SDK: `build-tools;33.0.0` `platforms;android-33` `ndk;21.4.7075529` `cmake;3.18.1` `cmake;3.22.1` (the default location is **$HOME/Android/SDK**, otherwise you need to specify **$ANDROID_HOME** for it)
 
-  It is recommended to use [Android Studio](https://developer.android.com/studio) to install, but you can also use `sdkmanager`:
+  It is recommended to use [Android Studio](https://developer.android.com/studio) to install, but you can also use `sdkmanager` command on distributions based on Debian:
 
   ```shell
   sudo apt install sdkmanager
-  sdkmanager --sdk_root $HOME/Android/SDK --install "build-tools;33.0.0" "platforms;android-33" "ndk;21.4.7075529" "cmake;3.18.1"
+  sdkmanager --sdk_root $HOME/Android/SDK --install "build-tools;33.0.0" "platforms;android-33" "ndk;21.4.7075529" "cmake;3.18.1" "cmake;3.22.1"
   ```
 
 Build: 
@@ -147,7 +153,7 @@ Build:
 7. Build with Gradle:
 
    ```shell
-   ./gradlew assembleMini<Debug/Release/ReleaseNoGcm>
+   ./gradlew assemble<Release/Debug>
    ```
 
 8. Generate `TMessagesProj/jni/integrity/genuine.h` - https://github.com/brevent/genuine
