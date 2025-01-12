@@ -26543,8 +26543,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                     // na: DisableChannelMuteButton
                     if (NaConfig.INSTANCE.getDisableChannelMuteButton().Bool()) {
-                        bottomOverlayChatText.setText("", false);
+                        //bottomOverlayChatText.setText("", false);
                         bottomOverlayChatText.setEnabled(false);
+                        bottomOverlayChatText.setVisibility(View.GONE);
                     }
                     showBottomOverlayProgress(false, bottomOverlayProgress.getTag() != null);
                 } else if (forumTopic != null && forumTopic.closed) {
