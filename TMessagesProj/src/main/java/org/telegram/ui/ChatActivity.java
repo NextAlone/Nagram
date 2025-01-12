@@ -23888,7 +23888,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         sendAsPeersObj = getMessagesController().getSendAsPeers(dialog_id);
         if (sendAsPeersObj != null) {
-            if (NaConfig.INSTANCE.getDisableNonPremiumChannelChatShow().Bool()) {
+            if (!NaConfig.INSTANCE.getDisableNonPremiumChannelChatShow().Bool()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     sendAsPeersObj.peers.removeIf(peer -> peer.premium_required);
                 }
@@ -26444,7 +26444,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     private void updateBottomOverlay() {
-        if (bottomOverlayChatText == null || chatMode == MODE_SCHEDULED || getContext() == null) {
+        if (bottomOverlayChatText == null || chatMode == MODE_SCHEDULED || getContext() == null && !NaConfig.INSTANCE.getDisableChannelMuteButton().Bool()) {
             return;
         }
         bottomOverlayChatWaitsReply = false;
@@ -26543,9 +26543,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                     // na: DisableChannelMuteButton
                     if (NaConfig.INSTANCE.getDisableChannelMuteButton().Bool()) {
-                        //bottomOverlayChatText.setText("", false);
+                        bottomOverlayChatText.setText("", false);
                         bottomOverlayChatText.setEnabled(false);
-                        bottomOverlayChatText.setVisibility(View.GONE);
                     }
                     showBottomOverlayProgress(false, bottomOverlayProgress.getTag() != null);
                 } else if (forumTopic != null && forumTopic.closed) {
