@@ -21593,7 +21593,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             final ArrayList<MessageObject> messages = new ArrayList<>();
             MessageObject conversionMessage = null;
             boolean conversion = false;
-            for (int msg_id : markAsDeletedMessages) {
+            for (int a = 0; a < markAsDeletedMessages.size(); a++) {
+                Integer msg_id = markAsDeletedMessages.get(a);
                 MessageObject msg = messagesDict[0].get(msg_id);
                 if (msg != null) {
                     if (msg.messageOwner != null && msg.messageOwner.video_processing_pending) {
