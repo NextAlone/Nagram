@@ -6,6 +6,8 @@ import static org.telegram.ui.Components.EditTextEmoji.STYLE_GIFT;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Editable;
@@ -56,6 +58,8 @@ public class EditEmojiTextCell extends FrameLayout {
     private boolean focused;
 
     private boolean allowEntities = true;
+
+    private ImageView iconImageView;
 
     final AnimatedColor limitColor;
     private int limitCount;
@@ -269,6 +273,22 @@ public class EditEmojiTextCell extends FrameLayout {
         updateLimitText();
     }
 
+    public void setOnChangeIcon(Context context, OnClickListener onChangeIcon) {
+        editTextEmoji.setLayoutParams(LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, LocaleController.isRTL ? 19 : 40, 0, !LocaleController.isRTL ? 19 : 40, 0));
+        iconImageView = new ImageView(context);
+        iconImageView.setFocusable(true);
+        iconImageView.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_stickers_menuSelector)));
+        iconImageView.setScaleType(ImageView.ScaleType.CENTER);
+        iconImageView.setOnClickListener(onChangeIcon);
+        iconImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), PorterDuff.Mode.MULTIPLY));
+        iconImageView.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
+        addView(iconImageView, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 8, 2, 8, 0));
+    }
+
+    public void setIcon(int icon, String name) {
+        iconImageView.setImageResource(icon);
+    }
+
     public void setText(CharSequence text) {
         ignoreEditText = true;
         editTextEmoji.setText(text);
@@ -313,6 +333,9 @@ public class EditEmojiTextCell extends FrameLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        if (iconImageView != null) {
+            iconImageView.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48), MeasureSpec.EXACTLY));
+        }
         super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), heightMeasureSpec);
     }
 }

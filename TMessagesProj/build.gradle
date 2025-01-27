@@ -15,7 +15,7 @@ repositories {
 }
 
 def verName = APP_VERSION_NAME
-def verCode = 1203
+def verCode = 1204
 
 
 def officialVer = APP_VERSION_NAME
@@ -371,7 +371,7 @@ android {
             task.enabled = false
         } else if (task.name.endsWith("GoogleServices") && task.name.contains("NoGcm")) {
             task.enabled = false
-        } else if (task.name.contains("buildCMakeDebug") && nagram_build_args.contains("skip_buildCMakeDebug")) {
+        } else if (task.name.contains("buildCMakeDebug") && nagram_build_args != null && nagram_build_args.contains("skip_buildCMakeDebug")) {
             task.enabled = false
         }
     }

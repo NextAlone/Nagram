@@ -59,7 +59,6 @@ public class PollEditTextCell extends FrameLayout implements SuggestEmojiView.An
     private EditTextBoldCursor textView;
     private ImageView deleteImageView;
     private ImageView moveImageView;
-    private ImageView iconImageView;
     private SimpleTextView textView2;
     private CheckBox2 checkBox;
     private boolean showNextButton;
@@ -74,10 +73,6 @@ public class PollEditTextCell extends FrameLayout implements SuggestEmojiView.An
     }
 
     public PollEditTextCell(Context context, boolean caption, int type, OnClickListener onDelete) {
-        this(context, caption, type, onDelete, null);
-    }
-
-    public PollEditTextCell(Context context, boolean caption, int type, OnClickListener onDelete, OnClickListener onChangeIcon) {
         super(context);
 
         textView = new EditTextCaption(context, null) {
@@ -183,16 +178,6 @@ public class PollEditTextCell extends FrameLayout implements SuggestEmojiView.An
                 }
                 onCheckBoxClick(PollEditTextCell.this, !checkBox.isChecked());
             });
-        } else if (onChangeIcon != null) {
-            addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL, LocaleController.isRTL ? 19 : 66, 0, !LocaleController.isRTL ? 19 : 66, 0));
-            iconImageView = new ImageView(context);
-            iconImageView.setFocusable(true);
-            iconImageView.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_stickers_menuSelector)));
-            iconImageView.setScaleType(ImageView.ScaleType.CENTER);
-            iconImageView.setOnClickListener(onChangeIcon);
-            iconImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteGrayIcon), PorterDuff.Mode.MULTIPLY));
-            iconImageView.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
-            addView(iconImageView, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.TOP, 8, 2, 8, 0));
         } else {
             int endMargin = type == TYPE_EMOJI ? 80: 19;
             addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, (LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL,  LocaleController.isRTL ? endMargin : 19, 0, LocaleController.isRTL ? 19 : endMargin, 0));
@@ -218,10 +203,6 @@ public class PollEditTextCell extends FrameLayout implements SuggestEmojiView.An
         }
     }
 
-    public void setIcon(int icon, String name) {
-        iconImageView.setImageResource(icon);
-    }
-
     protected void onEditTextFocusChanged(boolean focused) {
 
     }
@@ -245,9 +226,6 @@ public class PollEditTextCell extends FrameLayout implements SuggestEmojiView.An
         }
         if (moveImageView != null) {
             moveImageView.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48), MeasureSpec.EXACTLY));
-        }
-        if (iconImageView != null) {
-            iconImageView.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48), MeasureSpec.EXACTLY));
         }
         if (textView2 != null) {
             textView2.measure(MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(24), MeasureSpec.EXACTLY));
