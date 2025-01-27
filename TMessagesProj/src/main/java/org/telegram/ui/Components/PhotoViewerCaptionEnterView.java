@@ -321,7 +321,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                         for (int i = 0; i < spans.length; i++) {
                             editable.removeSpan(spans[i]);
                         }
-                        Emoji.replaceEmoji(editable, messageEditText.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20), false);
+                        Emoji.replaceEmoji(editable, messageEditText.getPaint().getFontMetricsInt(), false);
                         processChange = false;
                     }
                 }
@@ -745,7 +745,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                 }
                 try {
                     innerTextChange = true;
-                    CharSequence localCharSequence = Emoji.replaceEmoji(symbol, messageEditText.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20), false);
+                    CharSequence localCharSequence = Emoji.replaceEmoji(symbol, messageEditText.getPaint().getFontMetricsInt(), false);
                     messageEditText.setText(messageEditText.getText().insert(i, localCharSequence));
                     int j = i + localCharSequence.length();
                     messageEditText.setSelection(j, j);
@@ -769,7 +769,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             SpannableStringBuilder builder = new SpannableStringBuilder(messageEditText.getText());
             builder.replace(start, start + len, text);
             if (parseEmoji) {
-                Emoji.replaceEmoji(builder, messageEditText.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20), false);
+                Emoji.replaceEmoji(builder, messageEditText.getPaint().getFontMetricsInt(), false);
             }
             messageEditText.setText(builder);
             messageEditText.setSelection(Math.min(start + text.length(), messageEditText.length()));

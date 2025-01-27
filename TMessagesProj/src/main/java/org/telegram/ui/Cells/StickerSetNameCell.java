@@ -184,7 +184,7 @@ public class StickerSetNameCell extends FrameLayout {
             if (searchLength != 0) {
                 updateTextSearchSpan();
             } else {
-                textView.setText(Emoji.replaceEmoji(text, textView.getPaint().getFontMetricsInt(), dp(14), false));
+                textView.setText(Emoji.replaceEmoji(text, textView.getPaint().getFontMetricsInt(), false));
             }
             if (resId != 0) {
                 buttonView.setImageResource(resId);
@@ -214,7 +214,7 @@ public class StickerSetNameCell extends FrameLayout {
                 builder.setSpan(new ForegroundColorSpan(getThemedColor(Theme.key_chat_emojiPanelStickerSetNameHighlight)), stickerSetNameSearchIndex, stickerSetNameSearchIndex + stickerSetNameSearchLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             } catch (Exception ignore) {
             }
-            textView.setText(Emoji.replaceEmoji(builder, textView.getPaint().getFontMetricsInt(), dp(14), false));
+            textView.setText(Emoji.replaceEmoji(builder, textView.getPaint().getFontMetricsInt(), false));
         }
     }
 

@@ -28,7 +28,7 @@ public class EmojiTextView extends TextView {
 
     @Override
     public void setText(CharSequence text, BufferType type) {
-        text = Emoji.replaceEmoji(text, getPaint().getFontMetricsInt(), (int) getTextSize(), false);
+        text = Emoji.replaceEmoji(text, getPaint().getFontMetricsInt(), false);
         super.setText(text, type);
     }
 

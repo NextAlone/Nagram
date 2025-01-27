@@ -93,8 +93,11 @@ public class SharedLinkCell extends FrameLayout {
         public void run() {
             if (checkingForLongPress && getParent() != null && currentPressCount == pressCount) {
                 checkingForLongPress = false;
-                if (!NekoConfig.disableVibration.Bool())
-                    performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                if (!NekoConfig.disableVibration.Bool()) {
+                    try {
+                        performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                    } catch (Exception ignored) {}
+                }
                 if (pressedLinkIndex >= 0) {
                     delegate.onLinkPress(links.get(pressedLinkIndex).toString(), true);
                 }
@@ -416,7 +419,7 @@ public class SharedLinkCell extends FrameLayout {
         }
 
         if (message != null && !TextUtils.isEmpty(message.messageOwner.message)) {
-            CharSequence caption = Emoji.replaceEmoji(message.messageOwner.message.replace("\n", " ").replaceAll(" +", " ").trim(), Theme.chat_msgTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20), false);
+            CharSequence caption = Emoji.replaceEmoji(message.messageOwner.message.replace("\n", " ").replaceAll(" +", " ").trim(), Theme.chat_msgTextPaint.getFontMetricsInt(), false);
             CharSequence sequence = AndroidUtilities.highlightText(caption, message.highlightedWords, null);
             if (sequence != null) {
                 sequence = TextUtils.ellipsize(AndroidUtilities.ellipsizeCenterEnd(sequence, message.highlightedWords.get(0), maxWidth, captionTextPaint, 130), captionTextPaint, maxWidth, TextUtils.TruncateAt.END);

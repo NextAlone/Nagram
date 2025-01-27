@@ -9,6 +9,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.tgnet.AbstractSerializedData;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.tl.TL_account;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -151,7 +152,7 @@ public class WallpaperHelper extends BaseRemoteHelper {
                 continue;
             }
             if (info.slug != null && !info.slug.isEmpty()) {
-                TLRPC.TL_account_getWallPaper req = new TLRPC.TL_account_getWallPaper();
+                TL_account.getWallPaper req = new TL_account.getWallPaper();
                 TLRPC.TL_inputWallPaperSlug inputWallPaperSlug = new TLRPC.TL_inputWallPaperSlug();
                 inputWallPaperSlug.slug = info.slug;
                 req.wallpaper = inputWallPaperSlug;

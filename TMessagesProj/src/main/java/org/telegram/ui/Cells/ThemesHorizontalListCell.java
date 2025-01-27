@@ -47,6 +47,7 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.tl.TL_account;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.EmojiThemes;
 import org.telegram.ui.ActionBar.Theme;
@@ -203,7 +204,9 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                         pressed = true;
                     } else {
                         if (!NekoConfig.disableVibration.Bool()) {
-                            performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                            try {
+                                performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                            } catch (Exception ignored) {}
                         }
                         showOptionsForTheme(themeInfo);
                     }
@@ -341,7 +344,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 if (!file.exists()) {
                     if (!loadingWallpapers.containsKey(themeInfo)) {
                         loadingWallpapers.put(themeInfo, themeInfo.slug);
-                        TLRPC.TL_account_getWallPaper req = new TLRPC.TL_account_getWallPaper();
+                        TL_account.getWallPaper req = new TL_account.getWallPaper();
                         TLRPC.TL_inputWallPaperSlug inputWallPaperSlug = new TLRPC.TL_inputWallPaperSlug();
                         inputWallPaperSlug.slug = themeInfo.slug;
                         req.wallpaper = inputWallPaperSlug;

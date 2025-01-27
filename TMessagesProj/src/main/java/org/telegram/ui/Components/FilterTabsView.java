@@ -16,6 +16,7 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -50,6 +51,7 @@ import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.R;
@@ -58,6 +60,7 @@ import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Stories.recorder.HintView2;
 
 import java.util.ArrayList;
 
@@ -108,23 +111,28 @@ public class FilterTabsView extends FrameLayout {
 
     public class Tab {
         public int id;
-        public String title;
+        public CharSequence title;
         public int titleWidth;
         public String emoticon;
         public int iconWidth;
         public int counter;
         public boolean isDefault;
         public boolean isLocked;
+        public boolean noanimate;
 
-        public Tab(int i, String t, String e) {
+        public Tab(int i, String t, String e1, ArrayList<TLRPC.MessageEntity> e, boolean noanimate) {
             id = i;
-            title = NekoConfig.tabsTitleType.Int() != NekoXConfig.TITLE_TYPE_ICON ? t : "";
-            emoticon = i != Integer.MAX_VALUE ? e : "\uD83D\uDCAC";
+            title = new SpannableStringBuilder(NekoConfig.tabsTitleType.Int() != NekoXConfig.TITLE_TYPE_ICON ? t : "");
+            title = Emoji.replaceEmoji(title, textPaint.getFontMetricsInt(), false);
+//            MessageObject.addEntitiesToText(title, e, false, false, false, true);
+            title = MessageObject.replaceAnimatedEmoji(title, e, textPaint.getFontMetricsInt());
+            this.noanimate = noanimate;
+            emoticon = i != Integer.MAX_VALUE ? e1 : "\uD83D\uDCAC";
         }
 
         public int getWidth(boolean store) {
             iconWidth = FolderIconHelper.getTotalIconWidth();
-            int width = titleWidth = (int) Math.ceil(textPaint.measureText(title));
+            int width = titleWidth = (int) Math.ceil(HintView2.measureCorrectly(title, textPaint));
             width += iconWidth;
             int c;
             if (store) {
@@ -147,12 +155,16 @@ public class FilterTabsView extends FrameLayout {
             return Math.max(AndroidUtilities.dp(40), width);
         }
 
-        public boolean setTitle(String newTitle) {
+        public boolean setTitle(String newTitle, ArrayList<TLRPC.MessageEntity> newEntities, boolean noanimate) {
             newTitle = NekoConfig.tabsTitleType.Int() != NekoXConfig.TITLE_TYPE_ICON ? newTitle : "";
             if (TextUtils.equals(title, newTitle)) {
                 return false;
             }
-            title = newTitle;
+            title = new SpannableStringBuilder(newTitle);
+            title = Emoji.replaceEmoji(title, textPaint.getFontMetricsInt(), false);
+//            MessageObject.addEntitiesToText(title, newEntities, false, false, false, true);
+            title = MessageObject.replaceAnimatedEmoji(title, newEntities, textPaint.getFontMetricsInt());
+            this.noanimate = noanimate;
             return true;
         }
     }
@@ -165,7 +177,9 @@ public class FilterTabsView extends FrameLayout {
         private int tabWidth;
         private int currentPosition;
         private RectF rect = new RectF();
-        private String currentText;
+        private CharSequence currentText;
+        private boolean currentNoanimate;
+        private AnimatedEmojiSpan.EmojiGroupedSpans textLayoutEmojis;
         private StaticLayout textLayout;
         private int textOffsetX;
         private String currentEmoticon;
@@ -199,9 +213,12 @@ public class FilterTabsView extends FrameLayout {
         StaticLayout stableCounter;
 
         StaticLayout lastTitleLayout;
-        String lastTitle;
+        CharSequence lastTitle;
+        private AnimatedEmojiSpan.EmojiGroupedSpans titleAnimateInLayoutEmojis;
         private StaticLayout titleAnimateInLayout;
+        private AnimatedEmojiSpan.EmojiGroupedSpans titleAnimateOutLayoutEmojis;
         private StaticLayout titleAnimateOutLayout;
+        private AnimatedEmojiSpan.EmojiGroupedSpans titleAnimateStableLayoutEmojis;
         private StaticLayout titleAnimateStableLayout;
         private boolean animateTextChange;
         private boolean animateTextChangeOut;
@@ -229,6 +246,20 @@ public class FilterTabsView extends FrameLayout {
             currentPosition = position;
             setContentDescription(tab.title);
             requestLayout();
+
+            if (currentNoanimate != (currentTab != null && currentTab.noanimate)) {
+                AnimatedEmojiSpan.release(this, textLayoutEmojis);
+                AnimatedEmojiSpan.release(this, titleAnimateInLayoutEmojis);
+                AnimatedEmojiSpan.release(this, titleAnimateOutLayoutEmojis);
+                AnimatedEmojiSpan.release(this, titleAnimateStableLayoutEmojis);
+                if (attached) {
+                    textLayoutEmojis = AnimatedEmojiSpan.update(currentTab.noanimate ? AnimatedEmojiDrawable.CACHE_TYPE_NOANIMATE_FOLDER : AnimatedEmojiDrawable.CACHE_TYPE_MESSAGES, this, textLayoutEmojis, textLayout);
+                    titleAnimateInLayoutEmojis = AnimatedEmojiSpan.update(currentTab.noanimate ? AnimatedEmojiDrawable.CACHE_TYPE_NOANIMATE_FOLDER : AnimatedEmojiDrawable.CACHE_TYPE_MESSAGES, this, titleAnimateInLayoutEmojis, titleAnimateInLayout);
+                    titleAnimateOutLayoutEmojis = AnimatedEmojiSpan.update(currentTab.noanimate ? AnimatedEmojiDrawable.CACHE_TYPE_NOANIMATE_FOLDER : AnimatedEmojiDrawable.CACHE_TYPE_MESSAGES, this, titleAnimateOutLayoutEmojis, titleAnimateOutLayout);
+                    titleAnimateStableLayoutEmojis = AnimatedEmojiSpan.update(currentTab.noanimate ? AnimatedEmojiDrawable.CACHE_TYPE_NOANIMATE_FOLDER : AnimatedEmojiDrawable.CACHE_TYPE_MESSAGES, this, titleAnimateStableLayoutEmojis, titleAnimateStableLayout);
+                }
+                currentNoanimate = currentTab.noanimate;
+            }
         }
 
         public int getId() {
@@ -237,6 +268,7 @@ public class FilterTabsView extends FrameLayout {
 
         @Override
         protected void onDetachedFromWindow() {
+            attached = false;
             super.onDetachedFromWindow();
             animateChange = false;
             animateTabCounter = false;
@@ -253,6 +285,10 @@ public class FilterTabsView extends FrameLayout {
                 changeAnimator = null;
             }
             invalidate();
+            AnimatedEmojiSpan.release(this, textLayoutEmojis);
+            AnimatedEmojiSpan.release(this, titleAnimateInLayoutEmojis);
+            AnimatedEmojiSpan.release(this, titleAnimateOutLayoutEmojis);
+            AnimatedEmojiSpan.release(this, titleAnimateStableLayoutEmojis);
         }
 
         @Override
@@ -326,6 +362,7 @@ public class FilterTabsView extends FrameLayout {
                     textPaint.setColor(ColorUtils.blendARGB(color1, color2, animationValue));
                 }
             }
+            emojiColorFilter = new PorterDuffColorFilter(textPaint.getColor(), PorterDuff.Mode.SRC_IN);
 
             float counterWidth;
             int countWidth;
@@ -366,8 +403,8 @@ public class FilterTabsView extends FrameLayout {
 
             if (!TextUtils.equals(currentTab.title, currentText)) {
                 currentText = currentTab.title;
-                CharSequence text = Emoji.replaceEmoji(currentText, textPaint.getFontMetricsInt(), AndroidUtilities.dp(15), false);
-                textLayout = new StaticLayout(text, textPaint, AndroidUtilities.dp(400), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+                textLayout = new StaticLayout(currentText, textPaint, AndroidUtilities.dp(400), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+                textLayoutEmojis = AnimatedEmojiSpan.update(currentTab.noanimate ? AnimatedEmojiDrawable.CACHE_TYPE_NOANIMATE_FOLDER : AnimatedEmojiDrawable.CACHE_TYPE_MESSAGES, this, textLayoutEmojis, textLayout);
                 textHeight = textLayout.getHeight();
                 textOffsetX = (int) -textLayout.getLineLeft(0);
             }
@@ -379,6 +416,7 @@ public class FilterTabsView extends FrameLayout {
                     canvas.save();
                     canvas.translate(textX + textOffsetX + titleOffsetX, (getMeasuredHeight() - textHeight) / 2f + 1);
                     titleAnimateStableLayout.draw(canvas);
+                    AnimatedEmojiSpan.drawAnimatedEmojis(canvas, titleAnimateStableLayout, titleAnimateStableLayoutEmojis, 0, null, computeVerticalScrollOffset() - AndroidUtilities.dp(6), computeVerticalScrollOffset() + computeVerticalScrollExtent(), 0, 1.0f, emojiColorFilter);
                     canvas.restore();
                 }
                 if (titleAnimateInLayout != null) {
@@ -387,6 +425,7 @@ public class FilterTabsView extends FrameLayout {
                     textPaint.setAlpha((int) (alpha * (animateTextChangeOut ? 1f - changeProgress : changeProgress)));
                     canvas.translate(textX + textOffsetX + titleOffsetX, (getMeasuredHeight() - textHeight) / 2f + 1);
                     titleAnimateInLayout.draw(canvas);
+                    AnimatedEmojiSpan.drawAnimatedEmojis(canvas, titleAnimateInLayout, titleAnimateInLayoutEmojis, 0, null, computeVerticalScrollOffset() - AndroidUtilities.dp(6), computeVerticalScrollOffset() + computeVerticalScrollExtent(), 0, (animateTextChangeOut ? 1f - changeProgress : changeProgress), emojiColorFilter);
                     canvas.restore();
                     textPaint.setAlpha(alpha);
                 }
@@ -396,6 +435,7 @@ public class FilterTabsView extends FrameLayout {
                     textPaint.setAlpha((int) (alpha * (animateTextChangeOut ? changeProgress : 1f - changeProgress)));
                     canvas.translate(textX + textOffsetX + titleOffsetX, (getMeasuredHeight() - textHeight) / 2f + 1);
                     titleAnimateOutLayout.draw(canvas);
+                    AnimatedEmojiSpan.drawAnimatedEmojis(canvas, titleAnimateOutLayout, titleAnimateOutLayoutEmojis, 0, null, computeVerticalScrollOffset() - AndroidUtilities.dp(6), computeVerticalScrollOffset() + computeVerticalScrollExtent(), 0, (animateTextChangeOut ? changeProgress : 1f - changeProgress), emojiColorFilter);
                     canvas.restore();
                     textPaint.setAlpha(alpha);
                 }
@@ -404,6 +444,7 @@ public class FilterTabsView extends FrameLayout {
                     canvas.save();
                     canvas.translate(textX + textOffsetX, (getMeasuredHeight() - textHeight) / 2f + 1);
                     textLayout.draw(canvas);
+                    AnimatedEmojiSpan.drawAnimatedEmojis(canvas, textLayout, textLayoutEmojis, 0, null, computeVerticalScrollOffset() - AndroidUtilities.dp(6), computeVerticalScrollOffset() + computeVerticalScrollExtent(), 0, 1.0f, emojiColorFilter);
                     canvas.restore();
                 }
             }
@@ -609,6 +650,17 @@ public class FilterTabsView extends FrameLayout {
             }
         }
 
+        private boolean attached;
+        @Override
+        protected void onAttachedToWindow() {
+            attached = true;
+            super.onAttachedToWindow();
+            textLayoutEmojis = AnimatedEmojiSpan.update(currentTab.noanimate ? AnimatedEmojiDrawable.CACHE_TYPE_NOANIMATE_FOLDER : AnimatedEmojiDrawable.CACHE_TYPE_MESSAGES, this, textLayoutEmojis, textLayout);
+            titleAnimateInLayoutEmojis = AnimatedEmojiSpan.update(currentTab.noanimate ? AnimatedEmojiDrawable.CACHE_TYPE_NOANIMATE_FOLDER : AnimatedEmojiDrawable.CACHE_TYPE_MESSAGES, this, titleAnimateInLayoutEmojis, titleAnimateInLayout);
+            titleAnimateOutLayoutEmojis = AnimatedEmojiSpan.update(currentTab.noanimate ? AnimatedEmojiDrawable.CACHE_TYPE_NOANIMATE_FOLDER : AnimatedEmojiDrawable.CACHE_TYPE_MESSAGES, this, titleAnimateOutLayoutEmojis, titleAnimateOutLayout);
+            titleAnimateStableLayoutEmojis = AnimatedEmojiSpan.update(currentTab.noanimate ? AnimatedEmojiDrawable.CACHE_TYPE_NOANIMATE_FOLDER : AnimatedEmojiDrawable.CACHE_TYPE_MESSAGES, this, titleAnimateStableLayoutEmojis, titleAnimateStableLayout);
+        }
+
         public boolean animateChange() {
             boolean changed = false;
             if (currentTab.counter != lastTabCount) {
@@ -672,8 +724,8 @@ public class FilterTabsView extends FrameLayout {
 
             if (lastTitle != null && !currentTab.title.equals(lastTitle)) {
                 boolean animateOut;
-                String maxStr;
-                String substring;
+                CharSequence maxStr;
+                CharSequence substring;
                 if (lastTitle.length() > currentTab.title.length()) {
                     animateOut = true;
                     maxStr = lastTitle;
@@ -683,9 +735,9 @@ public class FilterTabsView extends FrameLayout {
                     maxStr = currentTab.title;
                     substring = lastTitle;
                 }
-                int startFrom = maxStr.indexOf(substring);
+                int startFrom = AndroidUtilities.charSequenceIndexOf(maxStr, substring);
                 if (startFrom >= 0) {
-                    CharSequence text = Emoji.replaceEmoji(maxStr, textPaint.getFontMetricsInt(), AndroidUtilities.dp(15), false);
+                    CharSequence text = Emoji.replaceEmoji(maxStr, textPaint.getFontMetricsInt(), false);
                     SpannableStringBuilder inStr = new SpannableStringBuilder(text);
                     SpannableStringBuilder stabeStr = new SpannableStringBuilder(text);
                     if (startFrom != 0) {
@@ -697,17 +749,23 @@ public class FilterTabsView extends FrameLayout {
                     inStr.setSpan(new EmptyStubSpan(), startFrom, startFrom + substring.length(), 0);
 
                     titleAnimateInLayout = new StaticLayout(inStr, textPaint, AndroidUtilities.dp(400), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+                    if (attached) titleAnimateInLayoutEmojis = AnimatedEmojiSpan.update(currentTab.noanimate ? AnimatedEmojiDrawable.CACHE_TYPE_NOANIMATE_FOLDER : AnimatedEmojiDrawable.CACHE_TYPE_MESSAGES, this, titleAnimateInLayoutEmojis, titleAnimateInLayout);
                     titleAnimateStableLayout = new StaticLayout(stabeStr, textPaint, AndroidUtilities.dp(400), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+                    if (attached) titleAnimateStableLayoutEmojis = AnimatedEmojiSpan.update(currentTab.noanimate ? AnimatedEmojiDrawable.CACHE_TYPE_NOANIMATE_FOLDER : AnimatedEmojiDrawable.CACHE_TYPE_MESSAGES, this, titleAnimateStableLayoutEmojis, titleAnimateStableLayout);
                     animateTextChange = true;
                     animateTextChangeOut = animateOut;
                     titleXOffset = startFrom == 0 ? 0 : -titleAnimateStableLayout.getPrimaryHorizontal(startFrom);
                     animateFromTitleWidth = lastTitleWidth;
                     titleAnimateOutLayout = null;
+                    AnimatedEmojiSpan.release(this, titleAnimateOutLayoutEmojis);
                     changed = true;
                 } else {
                     titleAnimateInLayout = new StaticLayout(currentTab.title, textPaint, AndroidUtilities.dp(400), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+                    if (attached) titleAnimateInLayoutEmojis = AnimatedEmojiSpan.update(currentTab.noanimate ? AnimatedEmojiDrawable.CACHE_TYPE_NOANIMATE_FOLDER : AnimatedEmojiDrawable.CACHE_TYPE_MESSAGES, this, titleAnimateInLayoutEmojis, titleAnimateInLayout);
                     titleAnimateOutLayout = new StaticLayout(lastTitle, textPaint, AndroidUtilities.dp(400), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0, false);
+                    if (attached) titleAnimateOutLayoutEmojis = AnimatedEmojiSpan.update(currentTab.noanimate ? AnimatedEmojiDrawable.CACHE_TYPE_NOANIMATE_FOLDER : AnimatedEmojiDrawable.CACHE_TYPE_MESSAGES, this, titleAnimateOutLayoutEmojis, titleAnimateOutLayout);
                     titleAnimateStableLayout = null;
+                    AnimatedEmojiSpan.release(this, titleAnimateStableLayoutEmojis);
                     animateTextChange = true;
                     titleXOffset = 0;
                     animateFromTitleWidth = lastTitleWidth;
@@ -808,10 +866,11 @@ public class FilterTabsView extends FrameLayout {
         }
     }
 
-    private TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-    private TextPaint textCounterPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-    private Paint deletePaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-    private Paint counterPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+    private final TextPaint textCounterPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint deletePaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint counterPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private ColorFilter emojiColorFilter = new PorterDuffColorFilter(0, PorterDuff.Mode.SRC_IN);
 
     private ArrayList<Tab> tabs = new ArrayList<>();
 
@@ -1268,7 +1327,7 @@ public class FilterTabsView extends FrameLayout {
         selectedTabId = -1;
     }
 
-    public void addTab(int id, int stableId, String text, String emoticon, boolean isDefault, boolean isLocked) {
+    public void addTab(int id, int stableId, String text, String emoticon, ArrayList<TLRPC.MessageEntity> entities, boolean noanimate, boolean isDefault, boolean isLocked) {
         int position = tabs.size();
         if (position == 0 && selectedTabId == -1) {
             selectedTabId = id;
@@ -1280,7 +1339,7 @@ public class FilterTabsView extends FrameLayout {
             currentPosition = position;
         }
 
-        Tab tab = new Tab(id, text, emoticon);
+        Tab tab = new Tab(id, text, emoticon, entities, noanimate);
         tab.isDefault = isDefault;
         tab.isLocked = isLocked;
         allTabsWidth += tab.getWidth(true) + FolderIconHelper.getPaddingTab();
@@ -1469,9 +1528,9 @@ public class FilterTabsView extends FrameLayout {
             int trueTabsWidth;
             Tab firstTab = findDefaultTab();
             if (firstTab != null && !NekoConfig.hideAllTab.Bool())  {
-                firstTab.setTitle(LocaleController.getString(R.string.FilterAllChats));
+                firstTab.setTitle(LocaleController.getString(R.string.FilterAllChats), null, false);
                 int tabWith = firstTab.getWidth(false);
-                firstTab.setTitle(allTabsWidth > width ? LocaleController.getString(R.string.FilterAllChatsShort) : LocaleController.getString(R.string.FilterAllChats));
+                firstTab.setTitle(allTabsWidth > width ? LocaleController.getString(R.string.FilterAllChatsShort) : LocaleController.getString(R.string.FilterAllChats), null, false);
                 trueTabsWidth = allTabsWidth - tabWith;
                 trueTabsWidth += firstTab.getWidth(false);
             } else {
@@ -1641,7 +1700,7 @@ public class FilterTabsView extends FrameLayout {
                 requestLayout();
                 allTabsWidth = 0;
                 if (!NekoConfig.hideAllTab.Bool())
-                    findDefaultTab().setTitle(LocaleController.getString(R.string.FilterAllChats));
+                    findDefaultTab().setTitle(LocaleController.getString(R.string.FilterAllChats), null, false);
                 for (int b = 0; b < N; b++) {
                     allTabsWidth += tabs.get(b).getWidth(true) + FolderIconHelper.getPaddingTab();
                 }
@@ -1673,7 +1732,7 @@ public class FilterTabsView extends FrameLayout {
             adapter.notifyDataSetChanged();
             allTabsWidth = 0;
             if (!NekoConfig.hideAllTab.Bool())
-                findDefaultTab().setTitle(LocaleController.getString(R.string.FilterAllChats));
+                findDefaultTab().setTitle(LocaleController.getString(R.string.FilterAllChats), null, false);
             for (int b = 0, N = tabs.size(); b < N; b++) {
                 allTabsWidth += tabs.get(b).getWidth(true) + FolderIconHelper.getPaddingTab();
             }
@@ -1946,7 +2005,9 @@ public class FilterTabsView extends FrameLayout {
                 if (tabView.currentTab.id == id) {
                     tabView.shakeLockIcon(1, 0);
                     if (!NekoConfig.disableVibration.Bool()) {
-                        tabView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                        try {
+                            tabView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                        } catch (Exception ignore) {}
                     }
                     break;
                 }
@@ -1971,17 +2032,17 @@ public class FilterTabsView extends FrameLayout {
             MessagesController.DialogFilter dialogFilter = filters.get(a);
             if (filters.get(a).isDefault()) {
                 if (showAllChatsTab)
-                    addTab(a, 0, LocaleController.getString("FilterAllChats", R.string.FilterAllChats), null, true, false);
+                    addTab(a, 0, LocaleController.getString("FilterAllChats", R.string.FilterAllChats), null, null, false, true, false);
             } else {
                 switch (NekoConfig.tabsTitleType.Int()) {
                     case NekoXConfig.TITLE_TYPE_TEXT:
-                        addTab(a, filters.get(a).localId, filters.get(a).name, dialogFilter.name, false, false);
+                        addTab(a, filters.get(a).localId, filters.get(a).name, dialogFilter.name, null, false, false, false);
                         break;
                     case NekoXConfig.TITLE_TYPE_ICON:
-                        addTab(a, filters.get(a).localId, filters.get(a).name, dialogFilter.emoticon != null ? dialogFilter.emoticon : "\uD83D\uDCC1", false, false);
+                        addTab(a, filters.get(a).localId, filters.get(a).name, dialogFilter.emoticon != null ? dialogFilter.emoticon : "\uD83D\uDCC1", null, false, false, false);
                         break;
                     case NekoXConfig.TITLE_TYPE_MIX:
-                        addTab(a, filters.get(a).localId, filters.get(a).name, dialogFilter.emoticon != null ? dialogFilter.emoticon : "\uD83D\uDCC1 " + dialogFilter.name, false, false);
+                        addTab(a, filters.get(a).localId, filters.get(a).name, dialogFilter.emoticon != null ? dialogFilter.emoticon : "\uD83D\uDCC1 " + dialogFilter.name, null, false, false, false);
                         break;
                 }
             }

@@ -87,7 +87,7 @@ public class ActionBar extends FrameLayout {
     public UnreadImageView backButtonImageView;
     private BackupImageView avatarSearchImageView;
     private Drawable backButtonDrawable;
-    private SimpleTextView[] titleTextView = new SimpleTextView[2];
+    private final SimpleTextView[] titleTextView = new SimpleTextView[2];
     private SimpleTextView subtitleTextView;
     private SimpleTextView additionalSubtitleTextView;
     private View actionModeTop;
@@ -446,6 +446,7 @@ public class ActionBar extends FrameLayout {
         } else {
             titleTextView[i].setTextColor(getThemedColor(Theme.key_actionBarDefaultTitle));
         }
+        titleTextView[i].setEmojiColor(titleTextView[i].getTextColor());
         titleTextView[i].setTypeface(AndroidUtilities.bold());
         titleTextView[i].setDrawablePadding(dp(4));
         titleTextView[i].setPadding(0, dp(8), 0, dp(8));
@@ -500,8 +501,10 @@ public class ActionBar extends FrameLayout {
         }
         titleColorToSet = color;
         titleTextView[0].setTextColor(color);
+        titleTextView[0].setEmojiColor(color);
         if (titleTextView[1] != null) {
             titleTextView[1].setTextColor(color);
+            titleTextView[1].setEmojiColor(color);
         }
     }
 
@@ -546,6 +549,15 @@ public class ActionBar extends FrameLayout {
 
     public SimpleTextView getTitleTextView() {
         return titleTextView[0];
+    }
+
+    public Paint.FontMetricsInt getTitleFontMetricsInt() {
+        if (titleTextView[0] == null) {
+            TextPaint paint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+            paint.setTextSize(dp(!AndroidUtilities.isTablet() && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 18 : 20));
+            return paint.getFontMetricsInt();
+        }
+        return titleTextView[0].getPaint().getFontMetricsInt();
     }
 
     public SimpleTextView getTitleTextView2() {

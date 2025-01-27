@@ -45,10 +45,12 @@ public class CustomPhoneKeyboardView extends ViewGroup {
         checkFindEditText();
         if (editText == null || editText.length() == 0 && !dispatchBackWhenEmpty) return;
 
-        if (!NekoConfig.disableVibration.Bool()) {
-            performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-        }
-        playSoundEffect(SoundEffectConstants.CLICK);
+        try {
+            if (!NekoConfig.disableVibration.Bool()) {
+                performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+            }
+            playSoundEffect(SoundEffectConstants.CLICK);
+        } catch (Exception ignore) {}
         editText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
         editText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL));
 
@@ -111,7 +113,9 @@ public class CustomPhoneKeyboardView extends ViewGroup {
                 if (editText == null) return;
 
                 if (!NekoConfig.disableVibration.Bool()) {
-                    performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                    try {
+                        performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                    } catch (Exception ignore) {}
                 }
                 if (editText instanceof EditTextBoldCursor) {
                     ((EditTextBoldCursor) editText).setTextWatchersSuppressed(true, false);

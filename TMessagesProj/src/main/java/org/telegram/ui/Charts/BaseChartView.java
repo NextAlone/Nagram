@@ -1515,7 +1515,9 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
         selectionA = 1f;
         moveLegend(chartFullWidth * (pickerDelegate.pickerStart) - HORIZONTAL_PADDING);
         if (!NekoConfig.disableVibration.Bool()) {
-            performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+            try {
+                performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+            } catch (Exception ignored) {}
         }
     }
 

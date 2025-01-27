@@ -27,6 +27,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.tl.TL_payments;
 import org.telegram.tgnet.tl.TL_stars;
 import org.telegram.tgnet.tl.TL_stories;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -433,7 +434,11 @@ public class BoostViaGiftsBottomSheet extends BottomSheetWithRecyclerListView im
 
     private void updateActionButton(boolean animated) {
         if (isPreparedGiveaway()) {
-            actionBtn.setStartGiveAwayStyle(prepaidGiveaway.quantity * BoostRepository.giveawayBoostsPerPremium(), animated);
+            if (prepaidGiveaway instanceof TL_stories.TL_prepaidStarsGiveaway) {
+                actionBtn.setStartGiveAwayStyle(prepaidGiveaway.quantity, animated);
+            } else {
+                actionBtn.setStartGiveAwayStyle(prepaidGiveaway.quantity * BoostRepository.giveawayBoostsPerPremium(), animated);
+            }
         } else {
             if (selectedBoostSubType == BoostTypeCell.TYPE_GIVEAWAY) {
                 actionBtn.setStartGiveAwayStyle(getSelectedSliderValueWithBoosts(), animated);
@@ -623,7 +628,11 @@ public class BoostViaGiftsBottomSheet extends BottomSheetWithRecyclerListView im
 
             items.add(Item.asSubTitle(getString(R.string.BoostingChannelsGroupsIncludedGiveaway)));
             if (isPreparedGiveaway()) {
-                items.add(Item.asChat(currentChat, false, prepaidGiveaway.quantity * BoostRepository.giveawayBoostsPerPremium()));
+                if (prepaidGiveaway instanceof TL_stories.TL_prepaidStarsGiveaway) {
+                    items.add(Item.asChat(currentChat, false, prepaidGiveaway.quantity));
+                } else {
+                    items.add(Item.asChat(currentChat, false, prepaidGiveaway.quantity * BoostRepository.giveawayBoostsPerPremium()));
+                }
             } else {
                 items.add(Item.asChat(currentChat, false, getSelectedSliderValueWithBoosts()));
             }
@@ -652,7 +661,11 @@ public class BoostViaGiftsBottomSheet extends BottomSheetWithRecyclerListView im
                 }
                 items.add(Item.asSubTitle(getString(R.string.BoostingChannelsGroupsIncludedGiveaway)));
                 if (isPreparedGiveaway()) {
-                    items.add(Item.asChat(currentChat, false, prepaidGiveaway.quantity * BoostRepository.giveawayBoostsPerPremium()));
+                    if (prepaidGiveaway instanceof TL_stories.TL_prepaidStarsGiveaway) {
+                        items.add(Item.asChat(currentChat, false, prepaidGiveaway.quantity));
+                    } else {
+                        items.add(Item.asChat(currentChat, false, prepaidGiveaway.quantity * BoostRepository.giveawayBoostsPerPremium()));
+                    }
                 } else {
                     items.add(Item.asChat(currentChat, false, getSelectedSliderValueWithBoosts()));
                 }

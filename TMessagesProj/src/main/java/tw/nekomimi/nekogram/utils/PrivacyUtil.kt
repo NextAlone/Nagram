@@ -9,6 +9,7 @@ import org.telegram.messenger.MessagesController
 import org.telegram.messenger.R
 import org.telegram.tgnet.ConnectionsManager
 import org.telegram.tgnet.TLRPC
+import org.telegram.tgnet.tl.TL_account
 import org.telegram.ui.ActionBar.AlertDialog
 import org.telegram.ui.ActionBar.Theme
 import org.telegram.ui.LaunchActivity
@@ -47,13 +48,13 @@ object PrivacyUtil {
 
     private fun postCheckPhoneNumberVisible(ctx: Context, account: Int) {
 
-        ConnectionsManager.getInstance(account).sendRequest(TLRPC.TL_account_getPrivacy().apply {
+        ConnectionsManager.getInstance(account).sendRequest(TL_account.getPrivacy().apply {
 
             key = TLRPC.TL_inputPrivacyKeyPhoneNumber()
 
         }, { response, _ ->
 
-            if (response is TLRPC.TL_account_privacyRules) {
+            if (response is TL_account.privacyRules) {
 
                 if (response.rules.isEmpty()) {
 
@@ -83,13 +84,13 @@ object PrivacyUtil {
 
     private fun postCheckAddMeByPhone(ctx: Context, account: Int) {
 
-        ConnectionsManager.getInstance(account).sendRequest(TLRPC.TL_account_getPrivacy().apply {
+        ConnectionsManager.getInstance(account).sendRequest(TL_account.getPrivacy().apply {
 
             key = TLRPC.TL_inputPrivacyKeyAddedByPhone()
 
         }, { response, _ ->
 
-            if (response is TLRPC.TL_account_privacyRules) {
+            if (response is TL_account.privacyRules) {
 
                 if (response.rules.isEmpty()) {
 
@@ -119,13 +120,13 @@ object PrivacyUtil {
 
     private fun postCheckAllowP2p(ctx: Context, account: Int) {
 
-        ConnectionsManager.getInstance(account).sendRequest(TLRPC.TL_account_getPrivacy().apply {
+        ConnectionsManager.getInstance(account).sendRequest(TL_account.getPrivacy().apply {
 
             key = TLRPC.TL_inputPrivacyKeyPhoneP2P()
 
         }, { response, _ ->
 
-            if (response is TLRPC.TL_account_privacyRules) {
+            if (response is TL_account.privacyRules) {
 
                 if (response.rules.isEmpty()) {
 
@@ -155,9 +156,9 @@ object PrivacyUtil {
 
     private fun postCheckAllow2fa(ctx: Context, account: Int) {
 
-        ConnectionsManager.getInstance(account).sendRequest(TLRPC.TL_account_getPassword(), { response, _ ->
+        ConnectionsManager.getInstance(account).sendRequest(TL_account.getPassword(), { response, _ ->
 
-            if (response is TLRPC.TL_account_password) {
+            if (response is TL_account.Password) {
 
                 if (!response.has_password) {
 
@@ -184,7 +185,7 @@ object PrivacyUtil {
 
         builder.setPositiveButton(LocaleController.getString(R.string.ApplySuggestion)) { _, _ ->
 
-            ConnectionsManager.getInstance(account).sendRequest(TLRPC.TL_account_setPrivacy().apply {
+            ConnectionsManager.getInstance(account).sendRequest(TL_account.setPrivacy().apply {
 
                 key = when (type) {
 
@@ -229,7 +230,7 @@ object PrivacyUtil {
 
     }
 
-    private fun show2faAlert(ctx: Context, account: Int, password: TLRPC.TL_account_password) {
+    private fun show2faAlert(ctx: Context, account: Int, password: TL_account.Password) {
 
         val builder = AlertDialog.Builder(ctx)
 

@@ -147,8 +147,8 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
         }
     }
 
-    private Paint bgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Paint leftShadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG),
+    private final Paint bgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint leftShadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG),
             rightShadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private float leftAlpha, rightAlpha;
     private float transitionProgress = 1f;
@@ -295,7 +295,9 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                     boolean b2 = newProgress > 1f;
                     if (b1 != b2) {
                         if (!NekoConfig.disableVibration.Bool()) {
-                            recyclerListView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                            try {
+                                recyclerListView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                            } catch (Exception ignore) {}
                         }
                     }
                     if (pullingLeftOffset < 0) {
@@ -328,7 +330,9 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
                     boolean b2 = newProgress > 1f;
                     if (b1 != b2) {
                         if (!NekoConfig.disableVibration.Bool()) {
-                            recyclerListView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                            try {
+                                recyclerListView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+                            } catch (Exception ignore) {}
                         }
                     }
                     if (customReactionsContainer != null) {
@@ -2170,7 +2174,9 @@ public class ReactionsContainerLayout extends FrameLayout implements Notificatio
             @Override
             public void run() {
                 if (!NekoConfig.disableVibration.Bool()) {
-                    performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                    try {
+                        performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                    } catch (Exception ignored) {}
                 }
                 pressedReactionPosition = visibleReactionsList.indexOf(currentReaction);
                 pressedReaction = currentReaction;

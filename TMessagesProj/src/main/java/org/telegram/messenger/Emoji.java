@@ -28,7 +28,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.checkerframework.checker.units.qual.A;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.AnimatedEmojiSpan;
@@ -615,8 +614,8 @@ public class Emoji {
         return replaceEmoji(cs, fontMetrics, createNew, null);
     }
 
-    public static CharSequence replaceEmoji(CharSequence cs, Paint.FontMetricsInt fontMetrics, int size, boolean createNew) {
-        return replaceEmoji(cs, fontMetrics, createNew, null);
+    public static CharSequence replaceEmoji(CharSequence cs, Paint.FontMetricsInt fontMetrics, boolean createNew, float scale) {
+        return replaceEmoji(cs, fontMetrics, createNew, null, DynamicDrawableSpan.ALIGN_BOTTOM, scale);
     }
 
     public static CharSequence replaceEmoji(CharSequence cs, Paint.FontMetricsInt fontMetrics, boolean createNew, int[] emojiOnly) {
@@ -624,6 +623,10 @@ public class Emoji {
     }
 
     public static CharSequence replaceEmoji(CharSequence cs, Paint.FontMetricsInt fontMetrics, boolean createNew, int[] emojiOnly, int alignment) {
+        return replaceEmoji(cs, fontMetrics, createNew, emojiOnly, alignment, 1.0f);
+    }
+
+    public static CharSequence replaceEmoji(CharSequence cs, Paint.FontMetricsInt fontMetrics, boolean createNew, int[] emojiOnly, int alignment, float scale) {
         if (cs == null || cs.length() == 0) {
             return cs;
         }
@@ -676,6 +679,7 @@ public class Emoji {
                 if (drawable != null) {
                     span = new EmojiSpan(drawable, alignment, fontMetrics);
                     span.emoji = emojiRange.code == null ? null : emojiRange.code.toString();
+                    span.scale = scale;
                     s.setSpan(span, emojiRange.start, emojiRange.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             } catch (Exception e) {

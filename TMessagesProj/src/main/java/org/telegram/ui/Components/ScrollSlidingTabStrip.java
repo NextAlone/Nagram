@@ -139,7 +139,9 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             }
             if (p >= 0 && p < tabsContainer.getChildCount()) {
                 if (!NekoConfig.disableVibration.Bool()) {
-                    performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                    try {
+                        performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                    } catch (Exception ignored) {}
                 }
                 draggindViewDxOnScreen = 0f;
                 draggingViewOutProgress = 0f;

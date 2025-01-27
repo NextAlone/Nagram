@@ -172,7 +172,9 @@ public class InternalFilters {
 
         suggestedFilter.filter.id = currId;
 
-        suggestedFilter.filter.title = name;
+        suggestedFilter.filter.title = new TLRPC.TL_textWithEntities();
+        suggestedFilter.filter.title.text = name;
+        suggestedFilter.filter.title.entities = null;
         suggestedFilter.filter.flags = flag;
 
         builder.apply(suggestedFilter.filter);

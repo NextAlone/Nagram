@@ -331,7 +331,9 @@ public class ChatPullingDownDrawable implements NotificationCenter.NotificationC
             long time = System.currentTimeMillis();
             if (time - lastHapticTime > 100) {
                 if (!NekoConfig.disableVibration.Bool()) {
-                    parent.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                    try {
+                        parent.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                    } catch (Exception ignored) {}
                 }
                 lastHapticTime = time;
             }
