@@ -220,6 +220,7 @@ import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.TelegramUtil;
+import xyz.nextalone.nagram.helper.ColorOsHelper;
 
 public class AndroidUtilities {
     public final static int LIGHT_STATUS_BAR_OVERLAY = 0x0f000000, DARK_STATUS_BAR_OVERLAY = 0x33000000;
@@ -3442,7 +3443,11 @@ public class AndroidUtilities {
 //    }
 
     public static boolean shouldShowClipboardToast() {
-        return (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || !OneUIUtilities.hasBuiltInClipboardToasts()) && (Build.VERSION.SDK_INT < 32 || XiaomiUtilities.isMIUI());
+        boolean origin = (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || !OneUIUtilities.hasBuiltInClipboardToasts()) && Build.VERSION.SDK_INT < 32;
+        if (origin) return true;
+        boolean isMIUI = XiaomiUtilities.isMIUI();
+        boolean isColorOS = ColorOsHelper.INSTANCE.isColorOS();
+        return isMIUI || isColorOS;
     }
 
     public static boolean addToClipboard(CharSequence str) {
