@@ -24,6 +24,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.tl.TL_account;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
@@ -282,7 +283,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
             } else if (a instanceof ConfigCellCustom) { // Custom onclick
                 if (position == cellGroup.rows.indexOf(disableFilteringRow)) {
                     sensitiveEnabled = !sensitiveEnabled;
-                    TLRPC.TL_account_setContentSettings req = new TLRPC.TL_account_setContentSettings();
+                    TL_account.setContentSettings req = new TL_account.setContentSettings();
                     req.sensitive_enabled = sensitiveEnabled;
                     AlertDialog progressDialog = new AlertDialog(getParentActivity(), 3);
                     progressDialog.show();
@@ -502,10 +503,10 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
     }
 
     private void checkSensitive() {
-        TLRPC.TL_account_getContentSettings req = new TLRPC.TL_account_getContentSettings();
+        TL_account.getContentSettings req = new TL_account.getContentSettings();
         getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
             if (error == null) {
-                TLRPC.TL_account_contentSettings settings = (TLRPC.TL_account_contentSettings) response;
+                TL_account.contentSettings settings = (TL_account.contentSettings) response;
                 sensitiveEnabled = settings.sensitive_enabled;
                 sensitiveCanChange = settings.sensitive_can_change;
                 int count = listView.getChildCount();
