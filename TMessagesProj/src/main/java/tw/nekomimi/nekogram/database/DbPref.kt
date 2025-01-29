@@ -1,25 +1,31 @@
 package tw.nekomimi.nekogram.database
 
 import android.content.SharedPreferences
-import org.dizitart.no2.*
-import org.dizitart.no2.filters.Filters
+import org.dizitart.no2.collection.Document
+import org.dizitart.no2.collection.FindOptions
+import org.dizitart.no2.collection.NitriteCollection
+import org.dizitart.no2.collection.UpdateOptions
+import org.dizitart.no2.filters.Filter
+import org.dizitart.no2.filters.FluentFilter
+import org.dizitart.no2.index.IndexOptions
+import org.dizitart.no2.index.IndexType
 import org.telegram.messenger.FileLog
 import tw.nekomimi.nekogram.utils.UIUtil
 
-class DbPref(val connection: NitriteCollection) : SharedPreferences {
+class DbPref(val collection: NitriteCollection) : SharedPreferences {
 
     init {
-        if (!connection.hasIndex("key")) {
-            connection.createIndex("key", IndexOptions.indexOptions(IndexType.Unique))
+        if (!collection.hasIndex("key")) {
+            collection.createIndex(IndexOptions.indexOptions(IndexType.UNIQUE), "key")
         }
     }
 
     val listeners = LinkedHashSet<SharedPreferences.OnSharedPreferenceChangeListener>()
 
-    val isEmpty get() = connection.find(FindOptions.limit(0, 1)).count() == 0
+    val isEmpty get() = collection.find(FindOptions.limitBy(1)).count() == 0
 
     private inline fun <reified T> getAs(key: String, defValue: T): T {
-        connection.find(Filters.eq("key", key)).apply {
+        collection.find(FluentFilter.where("key").eq(key)).apply {
             runCatching {
                 return first().get("value", T::class.java)
             }
@@ -28,7 +34,7 @@ class DbPref(val connection: NitriteCollection) : SharedPreferences {
     }
 
     override fun contains(key: String): Boolean {
-        return connection.find(Filters.eq("key", key)).count() > 0
+        return collection.find(FluentFilter.where("key").eq(key)).count() > 0
     }
 
     override fun getBoolean(key: String, defValue: Boolean) = getAs(key, defValue)
@@ -37,7 +43,7 @@ class DbPref(val connection: NitriteCollection) : SharedPreferences {
 
     override fun getAll(): MutableMap<String, *> {
         val allValues = HashMap<String, Any>()
-        connection.find().forEach {
+        collection.find().forEach {
             allValues[it.get("key", String::class.java)] = it["value"]
         }
         return allValues
@@ -113,17 +119,17 @@ class DbPref(val connection: NitriteCollection) : SharedPreferences {
         override fun commit(): Boolean {
             try {
                 if (clear) {
-                    connection.remove(Filters.ALL)
+                    collection.remove(Filter.ALL)
                 } else {
                     toRemove.forEach {
-                        connection.remove(Filters.eq("key", it))
+                        collection.remove(FluentFilter.where("key").eq(it))
                     }
                 }
                 toApply.forEach { (key, value) ->
                     if (value == null) {
-                        connection.remove(Filters.eq("key", key))
+                        collection.remove(FluentFilter.where("key").eq(key))
                     } else {
-                        connection.update(Filters.eq("key", key), Document().apply {
+                        collection.update(FluentFilter.where("key").eq(key), Document.createDocument().apply {
                             put("key", key)
                             put("value", value)
                         }, UpdateOptions.updateOptions(true))

@@ -127,8 +127,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.jakewharton.processphoenix.ProcessPhoenix;
 
-import org.apache.commons.lang3.StringUtils;
-
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;

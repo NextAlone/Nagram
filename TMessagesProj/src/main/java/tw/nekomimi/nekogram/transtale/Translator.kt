@@ -4,10 +4,8 @@ import android.view.View
 import cn.hutool.core.util.ArrayUtil
 import cn.hutool.core.util.StrUtil
 import cn.hutool.http.HttpRequest
-import org.apache.commons.lang3.LocaleUtils
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
-import org.telegram.messenger.SharedConfig
 import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.ui.PopupBuilder
 import tw.nekomimi.nekogram.cc.CCConverter
@@ -145,13 +143,17 @@ interface Translator {
 
         }
 
+        val availableLocaleList: Array<Locale> = Locale.getAvailableLocales().also {
+            Arrays.sort(it, Comparator.comparing(Locale::toString))
+        }
+
         @JvmStatic
         @JvmOverloads
         fun showTargetLangSelect(anchor: View, input: Boolean = false, full: Boolean = false, callback: (Locale) -> Unit) {
 
             val builder = PopupBuilder(anchor)
 
-            var locales = (if (full) LocaleUtils.availableLocaleList()
+            var locales = (if (full) availableLocaleList
                     .filter { it.variant.isBlank() } else LocaleController.getInstance()
                     .languages
                     .map { it.pluralLangCode }

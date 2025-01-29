@@ -28,12 +28,6 @@ import androidx.annotation.IntDef;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.pm.ShortcutManagerCompat;
 
-import org.apache.commons.lang3.StringUtils;
-import org.dizitart.no2.objects.filters.ObjectFilters;
-import org.json.JSONArray;
-import org.json.JSONException;
-import androidx.annotation.IntDef;
-
 import org.json.JSONObject;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.SerializedData;
@@ -556,7 +550,7 @@ public class SharedConfig {
     public static void saveAccounts() {
         FileLog.e("Save accounts: " + activeAccounts, new Exception());
         ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE).edit()
-                .putString("active_accounts", StringUtils.join(activeAccounts, ","))
+                .putString("active_accounts", StrUtil.join(",", activeAccounts))
                 .apply();
     }
 
@@ -734,7 +728,7 @@ public class SharedConfig {
                 }
 
                 if (!SharedConfig.activeAccounts.isEmpty()) {
-                    preferences.edit().putString("active_accounts", StringUtils.join(activeAccounts, ",")).apply();
+                    preferences.edit().putString("active_accounts", StrUtil.join(",", activeAccounts)).apply();
                 }
 
                 preferences.edit().putBoolean("activeAccountsLoaded", true).apply();

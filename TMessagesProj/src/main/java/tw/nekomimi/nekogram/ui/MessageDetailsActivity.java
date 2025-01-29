@@ -19,16 +19,13 @@ import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
@@ -62,7 +59,6 @@ import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.ProfileActivity;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
@@ -104,8 +100,8 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
     private UndoView copyTooltip;
 
     public static final Gson gson = new GsonBuilder()
-            .setExclusionStrategies(new Exclusion())
             .registerTypeHierarchyAdapter(byte[].class, new ByteArrayToBase64TypeAdapter()).create();
+    public static final Gson prettyGson = new GsonBuilder().setPrettyPrinting().create();
 
     private static class ByteArrayToBase64TypeAdapter implements JsonSerializer<byte[]>, JsonDeserializer<byte[]> {
         public byte[] deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -114,16 +110,6 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
 
         public JsonElement serialize(byte[] src, Type typeOfSrc, JsonSerializationContext context) {
             return new JsonPrimitive(Base64.encodeToString(src, Base64.NO_WRAP));
-        }
-    }
-
-    public static class Exclusion implements ExclusionStrategy {
-        public boolean shouldSkipClass(Class<?> arg0) {
-            return false;
-        }
-
-        public boolean shouldSkipField(FieldAttributes f) {
-            return f.getName().equals("disableFree") || f.getName().equals("networkType");
         }
     }
 
@@ -490,10 +476,9 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                         textCell.setTextAndValue("Buttons", gson.toJson(messageObject.messageOwner.reply_markup), divider);
                     } else if (position == jsonTextRow) {
                         try {
-                            ObjectMapper mapper = new ObjectMapper();
-                            mapper.enable(SerializationFeature.INDENT_OUTPUT);
-                            String jsonString = mapper.writeValueAsString(messageObject.messageOwner);
-
+                            String jsonTempString = gson.toJson(messageObject.messageOwner);
+                            JsonElement jsonElement = JsonParser.parseString(jsonTempString);
+                            String jsonString = prettyGson.toJson(jsonElement);
                             final SpannableString[] sb = new SpannableString[1];
                             new CountDownTimer(300, 100) {
                                 @Override
@@ -506,7 +491,7 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                                     textCell.setTextAndValue("JSON", sb[0], divider);
                                 }
                             }.start();
-                        } catch (IOException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }

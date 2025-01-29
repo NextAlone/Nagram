@@ -1,6 +1,5 @@
 package tw.nekomimi.nekogram.ui;
 
-import org.apache.commons.lang3.StringUtils;
 import org.telegram.messenger.MessagesController;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
@@ -10,6 +9,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+
+import cn.hutool.core.util.StrUtil;
 
 /**
  * @author luvletter2333
@@ -54,7 +55,7 @@ public class PinnedStickerHelper {
     private void updateConfig() {
         MessagesController.getMainSettings(accountNum)
                 .edit()
-                .putString("pinnedStickers", StringUtils.join(this.pinnedList, ","))
+                .putString("pinnedStickers", StrUtil.join(",", this.pinnedList))
                 .apply();
     }
 

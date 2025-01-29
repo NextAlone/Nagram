@@ -1,12 +1,14 @@
 package tw.nekomimi.nekogram.database
 
 import org.dizitart.no2.Nitrite
+import org.dizitart.no2.common.module.NitriteModule
+import org.dizitart.no2.mvstore.MVStoreModule
 import org.telegram.messenger.ApplicationLoader
 import tw.nekomimi.nekogram.utils.FileUtil
 import java.io.File
 
 @JvmOverloads
-fun mkDatabase(name: String, delete: Boolean = false): Nitrite {
+fun mkDatabase(name: String, delete: Boolean = false, module: NitriteModule? = null): Nitrite {
 
     val file = File("${ApplicationLoader.getDataDirFixed()}/databases/$name.db")
     FileUtil.initDir(file.parentFile!!)
@@ -15,12 +17,16 @@ fun mkDatabase(name: String, delete: Boolean = false): Nitrite {
     }
 
     fun create(): Nitrite {
-        val nitrite = Nitrite.builder()
-                .filePath(file)
-                .openOrCreate()!!
+        val storeModule = MVStoreModule.withConfig()
+            .filePath(file)
+            .build()
+        var nitriteBuilder = Nitrite.builder()
+            .loadModule(storeModule)
+        if (module != null) nitriteBuilder = nitriteBuilder.loadModule(module)
+        val nitrite = nitriteBuilder.openOrCreate()
 
         val test = nitrite.openSharedPreference("shared_preferences")
-        test.connection.close()
+        test.collection.close()
 
         return nitrite
     }
@@ -52,7 +58,7 @@ fun openMainSharedPreference(name: String, delete: Boolean = false): DbPref {
 
         mainSharedPreferencesDatabase.openSharedPreference(name)
 
-    } catch (e: IllegalStateException) {
+    } catch (_: IllegalStateException) {
 
         openMainSharedPreference(name, true)
 
