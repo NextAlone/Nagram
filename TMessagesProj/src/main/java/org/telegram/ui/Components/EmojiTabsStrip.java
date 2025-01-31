@@ -47,6 +47,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import xyz.nextalone.nagram.NaConfig;
 
 public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
 
@@ -493,7 +494,7 @@ public class EmojiTabsStrip extends ScrollableHorizontalScrollView {
             return;
         }
         final boolean isPremium = UserConfig.getInstance(UserConfig.selectedAccount).isPremium() || allowEmojisForNonPremium();
-        if (NekoConfig.disableTrending.Bool() && !isPremium) {
+        if (NaConfig.INSTANCE.getDisableFeatuerdEmojis().Bool() && !isPremium) {
             return;
         }
         int childCount = contentView.getChildCount() - packsIndexStart - (settingsTab != null ? 1 : 0);

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- other -->
+    <string name="DisableStarsSubscription">Disable Stars low balance notification</string>
+    <string name="DisablePremiumExpiring">Disable Premium expiration notification</string>
+    <string name="DisablePremiumUpgrade">Disable Premium upgrade notification</string>
+    <string name="DisablePremiumChristmas">Disable Premium Christmas notification</string>
+    <string name="DisablePremiumRestore">Disable Premium expiration recovery notification</string>
+    <string name="DisableBirthdayContact">Disable contact birthday notification</string>
+    <string name="DisableFavoriteSearchEmojiTags">Disable emoji list in favorites tag search bar</string>
+    <string name="DisableFeatuerdEmojis">Disable popular Premium Emojis</string>
+    <string name="DisableFeaturedStickers">Disable popular Premium Stickers</string>
+    <string name="DisableFeaturedGifs">Disable popular GIFs</string>
+    <string name="DisablePremiumFavoriteEmojiTags">Disable Premium favorite emoji tags</string>
+    <string name="DisableNonPremiumChannelChatShow">Disable non-Premium channel alias display</string>
+</resources>

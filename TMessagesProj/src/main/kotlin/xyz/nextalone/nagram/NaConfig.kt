@@ -676,6 +676,78 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val disableStarsSubscription =
+        addConfig(
+            "DisableStarsSubscription",
+            ConfigItem.configTypeBool,
+            true
+        )
+    val disablePremiumExpiring =
+        addConfig(
+            "DisablePremiumExpiring",
+            ConfigItem.configTypeBool,
+            true
+        )
+    val disablePremiumUpgrade =
+        addConfig(
+            "DisablePremiumUpgrade",
+            ConfigItem.configTypeBool,
+            true
+        )
+    val disablePremiumChristmas =
+        addConfig(
+            "DisablePremiumChristmas",
+            ConfigItem.configTypeBool,
+            true
+        )
+    val disableBirthdayContact =
+        addConfig(
+            "DisableBirthdayContact",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val disablePremiumRestore =
+        addConfig(
+            "DisablePremiumRestore",
+            ConfigItem.configTypeBool,
+            true
+        )
+    val disableFeatuerdEmojis =
+        addConfig(
+            "DisableFeatuerdEmojis",
+            ConfigItem.configTypeBool,
+            true
+        )
+    val disableFeaturedStickers =
+        addConfig(
+            "DisableFeaturedStickers",
+            ConfigItem.configTypeBool,
+            true
+        )
+    val disableFeaturedGifs =
+        addConfig(
+            "DisableFeaturedGifs",
+            ConfigItem.configTypeBool,
+            true
+        )
+    val disablePremiumFavoriteEmojiTags =
+        addConfig(
+            "DisablePremiumFavoriteEmojiTags",
+            ConfigItem.configTypeBool,
+            true
+        )
+    val disableFavoriteSearchEmojiTags =
+        addConfig(
+            "DisableFavoriteSearchEmojiTags",
+            ConfigItem.configTypeBool,
+            true
+        )
+    val disableNonPremiumChannelChatShow =
+        addConfig(
+            "DisableNonPremiumChannelChatShow",
+            ConfigItem.configTypeBool,
+            true
+        )
 
     private fun addConfig(
         k: String,

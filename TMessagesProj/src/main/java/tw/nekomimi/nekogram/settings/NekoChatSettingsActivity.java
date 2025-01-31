@@ -134,7 +134,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     private final AbstractConfigCell disableInstantCameraRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableInstantCamera));
     private final AbstractConfigCell disableVibrationRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableVibration));
     private final AbstractConfigCell disableProximityEventsRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableProximityEvents));
-    private final AbstractConfigCell disableTrendingRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableTrending));
+    private final AbstractConfigCell disableTrendingRow = cellGroup.appendCell(new ConfigCellSelectBox("DisableTrending", null, null, this::showTrendDingAlert));
     private final AbstractConfigCell disableSwipeToNextRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableSwipeToNext));
     private final AbstractConfigCell disableChannelMuteButtonRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableChannelMuteButton()));
     private final AbstractConfigCell disablePhotoSideActionRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disablePhotoSideAction));
@@ -607,6 +607,137 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                     }
                 }
             });
+        }
+        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
+        builder.setView(linearLayout);
+        showDialog(builder.create());
+    }
+
+    public void showTrendDingAlert(){
+        if (getParentActivity() == null) {
+            return;
+        }
+
+        Context context = getParentActivity();
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(LocaleController.getString("DisableTrending", R.string.DisableTrending));
+
+        LinearLayout linearLayout = new LinearLayout(context);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+        LinearLayout linearLayoutInviteContainer = new LinearLayout(context);
+        linearLayoutInviteContainer.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.addView(linearLayoutInviteContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        for (int a = 0; a < 12; a++) {
+            TextCheckCell textCell = new TextCheckCell(getParentActivity());
+            textCell.setTag(a);
+            switch (a) {
+                case 0: {
+                    textCell.setTextAndCheck(LocaleController.getString("DisablePremiumUpgrade", R.string.DisablePremiumUpgrade), NaConfig.INSTANCE.getDisablePremiumUpgrade().Bool(), false);
+                    break;
+                }
+                case 1: {
+                    textCell.setTextAndCheck(LocaleController.getString("DisablePremiumExpiring", R.string.DisablePremiumExpiring), NaConfig.INSTANCE.getDisablePremiumExpiring().Bool(), false);
+                    break;
+                }
+                case 2: {
+                    textCell.setTextAndCheck(LocaleController.getString("DisablePremiumChristmas", R.string.DisablePremiumChristmas), NaConfig.INSTANCE.getDisablePremiumChristmas().Bool(), false);
+                    break;
+                }
+                case 3: {
+                    textCell.setTextAndCheck(LocaleController.getString("DisableBirthdayContact", R.string.DisableBirthdayContact), NaConfig.INSTANCE.getDisableBirthdayContact().Bool(), false);
+                    break;
+                }
+                case 4: {
+                    textCell.setTextAndCheck(LocaleController.getString("DisablePremiumRestore", R.string.DisablePremiumRestore), NaConfig.INSTANCE.getDisablePremiumRestore().Bool(), false);
+                    break;
+                }
+                case 5: {
+                    textCell.setTextAndCheck(LocaleController.getString("DisableStarsSubscription", R.string.DisableStarsSubscription), NaConfig.INSTANCE.getDisableStarsSubscription().Bool(), false);
+                    break;
+                }
+                case 6: {
+                    textCell.setTextAndCheck(LocaleController.getString("DisableFavoriteSearchEmojiTags", R.string.DisableFavoriteSearchEmojiTags), NaConfig.INSTANCE.getDisableFavoriteSearchEmojiTags().Bool(), false);
+                    break;
+                }
+                case 7: {
+                    textCell.setTextAndCheck(LocaleController.getString("DisableFeatuerdEmojis", R.string.DisableFeatuerdEmojis), NaConfig.INSTANCE.getDisableFeatuerdEmojis().Bool(), false);
+                    break;
+                }
+                case 8: {
+                    textCell.setTextAndCheck(LocaleController.getString("DisableFeaturedStickers", R.string.DisableFeaturedStickers), NaConfig.INSTANCE.getDisableFeaturedStickers().Bool(), false);
+                    break;
+                }
+                case 9: {
+                    textCell.setTextAndCheck(LocaleController.getString("DisableFeaturedGifs", R.string.DisableFeaturedGifs), NaConfig.INSTANCE.getDisableFeaturedGifs().Bool(), false);
+                    break;
+                }
+                case 10: {
+                    textCell.setTextAndCheck(LocaleController.getString("DisablePremiumFavoriteEmojiTags", R.string.DisablePremiumFavoriteEmojiTags), NaConfig.INSTANCE.getDisablePremiumFavoriteEmojiTags().Bool(), false);
+                    break;
+                }
+                case 11: {
+                    textCell.setTextAndCheck(LocaleController.getString("DisableNonPremiumChannelChatShow", R.string.DisableNonPremiumChannelChatShow), NaConfig.INSTANCE.getDisableNonPremiumChannelChatShow().Bool(), false);
+                    break;
+                }
+            }
+            textCell.setTag(a);
+            textCell.setBackground(Theme.getSelectorDrawable(false));
+            linearLayout.addView(textCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+            textCell.setOnClickListener(v2 -> {
+                Integer tag = (Integer) v2.getTag();
+                switch (tag) {
+                    case 0: {
+                        textCell.setChecked(NaConfig.INSTANCE.getDisablePremiumUpgrade().toggleConfigBool());
+                        break;
+                    }
+                    case 1: {
+                        textCell.setChecked(NaConfig.INSTANCE.getDisablePremiumExpiring().toggleConfigBool());
+                        break;
+                    }
+                    case 2: {
+                        textCell.setChecked(NaConfig.INSTANCE.getDisablePremiumChristmas().toggleConfigBool());
+                        break;
+                    }
+                    case 3: {
+                        textCell.setChecked(NaConfig.INSTANCE.getDisableBirthdayContact().toggleConfigBool());
+                        break;
+                    }
+                    case 4: {
+                        textCell.setChecked(NaConfig.INSTANCE.getDisablePremiumRestore().toggleConfigBool());
+                        break;
+                    }
+                    case 5: {
+                        textCell.setChecked(NaConfig.INSTANCE.getDisableStarsSubscription().toggleConfigBool());
+                        break;
+                    }
+                    case 6: {
+                        textCell.setChecked(NaConfig.INSTANCE.getDisableFavoriteSearchEmojiTags().toggleConfigBool());
+                        break;
+                    }
+                    case 7: {
+                        textCell.setChecked(NaConfig.INSTANCE.getDisableFeatuerdEmojis().toggleConfigBool());
+                        break;
+                    }
+                    case 8: {
+                        textCell.setChecked(NaConfig.INSTANCE.getDisableFeaturedStickers().toggleConfigBool());
+                        break;
+                    }
+                    case 9: {
+                        textCell.setChecked(NaConfig.INSTANCE.getDisableFeaturedGifs().toggleConfigBool());
+                        break;
+                    }
+                    case 10: {
+                        textCell.setChecked(NaConfig.INSTANCE.getDisablePremiumFavoriteEmojiTags().toggleConfigBool());
+                        break;
+                    }
+                    case 11: {
+                        textCell.setChecked(NaConfig.INSTANCE.getDisableNonPremiumChannelChatShow().toggleConfigBool());
+                        break;
+                    }
+                }
+            });
+
         }
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
         builder.setView(linearLayout);
