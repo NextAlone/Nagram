@@ -171,7 +171,13 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
 
     private final AbstractConfigCell header4 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("DialogsSettings")));
     private final AbstractConfigCell sortMenuRow = cellGroup.appendCell(new ConfigCellSelectBox("SortMenu", null, null, () -> {
-        showSortMenuAlert();
+        if (getParentActivity() == null) return;
+        showDialog(NekoChatSettingsActivity.showConfigMenuAlert(getParentActivity(), "SortMenu", new ArrayList<>() {{
+            add(new ConfigCellTextCheck(NekoConfig.sortByUnread, null, LocaleController.getString(R.string.SortByUnread)));
+            add(new ConfigCellTextCheck(NekoConfig.sortByUnmuted, null, LocaleController.getString(R.string.SortByUnmuted)));
+            add(new ConfigCellTextCheck(NekoConfig.sortByUser, null, LocaleController.getString(R.string.SortByUser)));
+            add(new ConfigCellTextCheck(NekoConfig.sortByContacts, null, LocaleController.getString(R.string.SortByContacts)));
+        }}));
     }));
     private final AbstractConfigCell divider4 = cellGroup.appendCell(new ConfigCellDivider());
 
@@ -603,85 +609,6 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
         public String toString() {
             return simpleName;
         }
-    }
-
-
-    private void showSortMenuAlert() {
-        if (getParentActivity() == null) {
-            return;
-        }
-        Context context = getParentActivity();
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(LocaleController.getString("SortMenu", R.string.SortMenu));
-
-        LinearLayout linearLayout = new LinearLayout(context);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-
-        LinearLayout linearLayoutInviteContainer = new LinearLayout(context);
-        linearLayoutInviteContainer.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.addView(linearLayoutInviteContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-
-        int count = 4;
-        for (int a = 0; a < count; a++) {
-            TextCheckCell textCell = new TextCheckCell(context);
-            switch (a) {
-                case 0: {
-                    textCell.setTextAndCheck(LocaleController.getString("SortByUnread", R.string.SortByUnread), NekoConfig.sortByUnread.Bool(), false);
-                    break;
-                }
-                case 1: {
-                    textCell.setTextAndCheck(LocaleController.getString("SortByUnmuted", R.string.SortByUnmuted), NekoConfig.sortByUnmuted.Bool(), false);
-                    break;
-                }
-                case 2: {
-                    textCell.setTextAndCheck(LocaleController.getString("SortByUser", R.string.SortByUser), NekoConfig.sortByUser.Bool(), false);
-                    break;
-                }
-                case 3: {
-                    textCell.setTextAndCheck(LocaleController.getString("SortByContacts", R.string.SortByContacts), NekoConfig.sortByContacts.Bool(), false);
-                    break;
-                }
-            }
-            textCell.setTag(a);
-            textCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            linearLayoutInviteContainer.addView(textCell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
-            textCell.setOnClickListener(view -> {
-                Integer tag = (Integer) view.getTag();
-                switch (tag) {
-                    case 0: {
-                        NekoConfig.sortByUnread.toggleConfigBool();
-                        if (view instanceof TextCheckCell) {
-                            ((TextCheckCell) view).setChecked(NekoConfig.sortByUnread.Bool());
-                        }
-                        break;
-                    }
-                    case 1: {
-                        NekoConfig.sortByUnmuted.toggleConfigBool();
-                        if (view instanceof TextCheckCell) {
-                            ((TextCheckCell) view).setChecked(NekoConfig.sortByUnmuted.Bool());
-                        }
-                        break;
-                    }
-                    case 2: {
-                        NekoConfig.sortByUser.toggleConfigBool();
-                        if (view instanceof TextCheckCell) {
-                            ((TextCheckCell) view).setChecked(NekoConfig.sortByUser.Bool());
-                        }
-                        break;
-                    }
-                    case 3: {
-                        NekoConfig.sortByContacts.toggleConfigBool();
-                        if (view instanceof TextCheckCell) {
-                            ((TextCheckCell) view).setChecked(NekoConfig.sortByContacts.Bool());
-                        }
-                        break;
-                    }
-                }
-            });
-        }
-        builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), null);
-        builder.setView(linearLayout);
-        showDialog(builder.create());
     }
 
     @Override

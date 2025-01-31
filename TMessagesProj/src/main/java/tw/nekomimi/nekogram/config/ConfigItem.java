@@ -21,6 +21,7 @@ public class ConfigItem {
     public static final int configTypeMapIntInt = 4;
     public static final int configTypeLong = 5;
     public static final int configTypeFloat = 6;
+    public static final int configTypeBoolLinkInt = 7;
 
     public final String key;
     public final int type;
