@@ -180,7 +180,23 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     private final AbstractConfigCell disableInstantCameraRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableInstantCamera));
     private final AbstractConfigCell disableVibrationRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableVibration));
     private final AbstractConfigCell disableProximityEventsRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableProximityEvents));
-    private final AbstractConfigCell disableTrendingRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableTrending));
+    private final AbstractConfigCell disableTrendingRow = cellGroup.appendCell(new ConfigCellSelectBox("DisableTrending", null, null, () -> {
+        if (getParentActivity() == null) return;
+        showDialog(showConfigMenuAlert(getParentActivity(), "DisableTrending", new ArrayList<>() {{
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisablePremiumUpgrade()));
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisablePremiumExpiring()));
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisablePremiumChristmas()));
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableBirthdayContact()));
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisablePremiumRestore()));
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableStarsSubscription()));
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableFavoriteSearchEmojiTags()));
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableFeatuerdEmojis()));
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableFeaturedStickers()));
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableFeaturedGifs()));
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisablePremiumFavoriteEmojiTags()));
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableNonPremiumChannelChatShow()));
+        }}));
+    }));
     private final AbstractConfigCell disableSwipeToNextRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableSwipeToNext));
     private final AbstractConfigCell disableChannelMuteButtonRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableChannelMuteButton()));
     private final AbstractConfigCell disablePhotoSideActionRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disablePhotoSideAction));
