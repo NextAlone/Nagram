@@ -50,7 +50,7 @@
     <string name="DisableGlobalSearch">禁用全局搜索</string>
     <string name="InputMessageId">输入消息 ID</string>
     <string name="ToTheMessage">回到消息</string>
-    <string name="HideOriginAfterTranslation">翻译隐藏后原文</string>
+    <string name="HideOriginAfterTranslation">翻译后隐藏原文</string>
     <string name="ZalgoFilter">过滤 \"Zalgo\" 符号</string>
     <string name="ZalgoFilterNotice">昵称和消息中的 \"Z̷͍͌ā̸̜l̸̞̂g̷̝͘o̶̩̓\" 符号将被过滤</string>
     <string name="CustomChannelLabel">自定义频道默认别名</string>
