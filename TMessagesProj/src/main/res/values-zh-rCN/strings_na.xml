@@ -181,4 +181,6 @@
     <string name="DisableFeaturedGifs">禁用热门GIF图</string>
     <string name="DisablePremiumFavoriteEmojiTags">禁用Premium收藏夹Emoji标签</string>
     <string name="DisableNonPremiumChannelChatShow">禁用非Premium频道马甲显示</string>
+    <string name="DisableRepeatInChannel">在频道中禁用复读</string>
+    <string name="DisableRepeatInChannelError">已禁止在频道中使用复读</string>
 </resources>

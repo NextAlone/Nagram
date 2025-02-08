@@ -169,4 +169,6 @@
     <string name="DisableBotOpenButton">Disable Bot Open Button</string>
     <string name="CustomTitleUserName">Use user nickname as Title</string>
     <string name="EnhancedVideoBitrate">Enhanced shared video bitrate</string>
+    <string name="DisableRepeatInChannel">在頻道中禁用复读</string>
+    <string name="DisableRepeatInChannelError">已禁止在頻道中使用复读</string>
 </resources>

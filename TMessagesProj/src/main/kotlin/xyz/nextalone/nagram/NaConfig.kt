@@ -795,6 +795,12 @@ object NaConfig {
             11,
             false
         )
+    val disableRepeatInChannel =
+        addConfig(
+            "DisableRepeatInChannel",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

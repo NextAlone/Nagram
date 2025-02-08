@@ -42557,6 +42557,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (checkSlowMode(chatActivityEnterView.getSendButton())) {
             return;
         }
+        if (NaConfig.INSTANCE.getDisableRepeatInChannel().Bool() && isChannel()) {
+            BulletinFactory.of(this).createSimpleBulletin(R.raw.error, getString(R.string.DisableRepeatInChannelError)).show();
+            return;
+        }
         final ArrayList<MessageObject> messages = new ArrayList<>();
         if (selectedObject != null) {
             messages.add(selectedObject);

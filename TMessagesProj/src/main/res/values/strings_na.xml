@@ -182,4 +182,6 @@
     <string name="DisableFeaturedGifs">Disable popular GIFs</string>
     <string name="DisablePremiumFavoriteEmojiTags">Disable Premium favorite emoji tags</string>
     <string name="DisableNonPremiumChannelChatShow">Disable non-Premium channel alias display</string>
+    <string name="DisableRepeatInChannel">Disable repeat in channel</string>
+    <string name="DisableRepeatInChannelError">Repeat is disabled in channel</string>
 </resources>
