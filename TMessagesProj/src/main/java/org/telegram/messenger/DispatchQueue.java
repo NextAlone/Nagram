@@ -34,6 +34,7 @@ public class DispatchQueue extends Thread {
     public DispatchQueue(final String threadName, boolean start) {
         setName(threadName);
         if (start) {
+            setDaemon(true);
             start();
         }
     }
@@ -42,6 +43,7 @@ public class DispatchQueue extends Thread {
         this.threadPriority = priority;
         setName(threadName);
         if (start) {
+            setDaemon(true);
             start();
         }
     }
