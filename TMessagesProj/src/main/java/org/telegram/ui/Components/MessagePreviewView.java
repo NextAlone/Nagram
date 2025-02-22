@@ -1079,7 +1079,9 @@ public class MessagePreviewView extends FrameLayout {
 
                 ActionBarMenuSubItem sendMessagesView = new ActionBarMenuSubItem(context, false, false, resourcesProvider);
                 sendMessagesView.setTextAndIcon(LocaleController.getString(messagePreviewParams.webpage.document != null ? messagePreviewParams.isVideo ? R.string.PreviewSendVideo : R.string.PreviewSendFile : R.string.PreviewSendPhoto), R.drawable.msg_send);
-                menu.addView(sendMessagesView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
+                if (messagePreviewParams.webpage.document != null || messagePreviewParams.webpage.photo != null) {
+                    menu.addView(sendMessagesView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
+                }
                 sendMessagesView.setOnClickListener(v -> {
                     if (chatActivity.isInScheduleMode()) {
                         AlertsCreator.createScheduleDatePickerDialog(
