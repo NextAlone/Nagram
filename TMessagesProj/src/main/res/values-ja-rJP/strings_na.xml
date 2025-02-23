@@ -169,4 +169,18 @@
     <string name="DisableBotOpenButton">Botを開くボタンを無効にする</string>
     <string name="CustomTitleUserName">ユーザー名をタイトルとして使用する</string>
     <string name="EnhancedVideoBitrate">強化された共有ビデオビットレート</string>
+    <string name="DisableStarsSubscription">スター低残高通知を無効にする</string>
+    <string name="DisablePremiumExpiring">プレミアムの有効期限通知を無効にする</string>
+    <string name="DisablePremiumUpgrade">プレミアムアップグレード通知を無効にする</string>
+    <string name="DisablePremiumChristmas">プレミアムクリスマス通知を無効にする</string>
+    <string name="DisablePremiumRestore">プレミアム有効期限の回復通知を無効にする</string>
+    <string name="DisableBirthdayContact">連絡先の誕生日通知を無効にする</string>
+    <string name="DisableFavoriteSearchEmojiTags">お気に入りタグ検索バーで絵文字リストを無効にする</string>
+    <string name="DisableFeatuerdEmojis">人気のプレミアム絵文字を無効にする</string>
+    <string name="DisableFeaturedStickers">人気のプレミアムステッカーを無効にする</string>
+    <string name="DisableFeaturedGifs">一般的なGIFを無効にする</string>
+    <string name="DisablePremiumFavoriteEmojiTags">プレミアムお気に入りの絵文字タグを無効にする</string>
+    <string name="DisableNonPremiumChannelChatShow">プレミアム以外のチャンネルエイリアス表示を無効にする</string>
+    <string name="DisableRepeatInChannel">チャンネル内の繰り返しを無効にする</string>
+    <string name="DisableRepeatInChannelError">チャンネルでのリピートは無効です</string>
 </resources>

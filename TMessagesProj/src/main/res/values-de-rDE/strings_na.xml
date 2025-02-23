@@ -169,4 +169,18 @@
     <string name="DisableBotOpenButton">Bot Open Button deaktivieren</string>
     <string name="CustomTitleUserName">Benutze Benutzername als Titel</string>
     <string name="EnhancedVideoBitrate">Verbesserte gemeinsame Video-Bitrate</string>
+    <string name="DisableStarsSubscription">Deaktiviere Sterne niedriger Saldo Benachrichtigung</string>
+    <string name="DisablePremiumExpiring">Premium-Ablaufbenachrichtigung deaktivieren</string>
+    <string name="DisablePremiumUpgrade">Premium-Upgrade-Benachrichtigung deaktivieren</string>
+    <string name="DisablePremiumChristmas">Premium Weihnachtsbenachrichtigung deaktivieren</string>
+    <string name="DisablePremiumRestore">Premium-Ablauf-Recovery-Benachrichtigung deaktivieren</string>
+    <string name="DisableBirthdayContact">Kontakt-Geburtstags-Benachrichtigung deaktivieren</string>
+    <string name="DisableFavoriteSearchEmojiTags">Emoji-Liste in den Favoriten Tag-Suchleiste deaktivieren</string>
+    <string name="DisableFeatuerdEmojis">Beliebte Premium-Emojis deaktivieren</string>
+    <string name="DisableFeaturedStickers">Beliebte Premium Sticker deaktivieren</string>
+    <string name="DisableFeaturedGifs">Beliebte GIFs deaktivieren</string>
+    <string name="DisablePremiumFavoriteEmojiTags">Premium favorisierte Emoji-Tags deaktivieren</string>
+    <string name="DisableNonPremiumChannelChatShow">Nicht-Premium-Kanal-Alias-Anzeige deaktivieren</string>
+    <string name="DisableRepeatInChannel">Wiederholung im Kanal deaktivieren</string>
+    <string name="DisableRepeatInChannelError">Wiederholung ist im Kanal deaktiviert</string>
 </resources>

@@ -169,4 +169,18 @@
     <string name="DisableBotOpenButton">Wyłącz Otwarty Przycisk Bot</string>
     <string name="CustomTitleUserName">Użyj pseudonimu użytkownika jako tytułu</string>
     <string name="EnhancedVideoBitrate">Ulepszony bitrate współdzielonego filmu</string>
+    <string name="DisableStarsSubscription">Wyłącz powiadomienia o niskim saldzie gwiazd</string>
+    <string name="DisablePremiumExpiring">Wyłącz powiadomienie o wygaśnięciu wersji Premium</string>
+    <string name="DisablePremiumUpgrade">Wyłącz powiadomienie o aktualizacji Premium</string>
+    <string name="DisablePremiumChristmas">Wyłącz powiadomienia świąteczne Premium</string>
+    <string name="DisablePremiumRestore">Wyłącz powiadomienie odzyskiwania wygasania Premium</string>
+    <string name="DisableBirthdayContact">Wyłącz powiadomienie o urodzinach kontaktu</string>
+    <string name="DisableFavoriteSearchEmojiTags">Wyłącz listę emoji na pasku wyszukiwania ulubionych</string>
+    <string name="DisableFeatuerdEmojis">Wyłącz popularne emotikony Premium</string>
+    <string name="DisableFeaturedStickers">Wyłącz popularne naklejki Premium</string>
+    <string name="DisableFeaturedGifs">Wyłącz popularne GIFy</string>
+    <string name="DisablePremiumFavoriteEmojiTags">Wyłącz ulubione emoji premium</string>
+    <string name="DisableNonPremiumChannelChatShow">Wyłącz wyświetlanie aliasu kanałów innych niż Premium</string>
+    <string name="DisableRepeatInChannel">Wyłącz powtarzanie na kanale</string>
+    <string name="DisableRepeatInChannelError">Powtarzanie jest wyłączone na kanale</string>
 </resources>

@@ -169,4 +169,18 @@
     <string name="DisableBotOpenButton">Deaktivér Bot Åbn Knap</string>
     <string name="CustomTitleUserName">Brug brugernavnet som titel</string>
     <string name="EnhancedVideoBitrate">Forbedret delt video bitrate</string>
+    <string name="DisableStarsSubscription">Deaktivér notifikation om lav saldo for stjerner</string>
+    <string name="DisablePremiumExpiring">Deaktivér Premium-notifikation</string>
+    <string name="DisablePremiumUpgrade">Deaktivér Premium-opgraderingsnotifikation</string>
+    <string name="DisablePremiumChristmas">Deaktivér Premium Christmas notifikation</string>
+    <string name="DisablePremiumRestore">Deaktivér notifikation om Premium udløbsdato</string>
+    <string name="DisableBirthdayContact">Deaktivér kontakt fødselsdag notifikation</string>
+    <string name="DisableFavoriteSearchEmojiTags">Deaktivér emoji liste i favoritter tag søgebjælke</string>
+    <string name="DisableFeatuerdEmojis">Deaktivér populære Premium Emojis</string>
+    <string name="DisableFeaturedStickers">Deaktivér populære Premium klistermærker</string>
+    <string name="DisableFeaturedGifs">Deaktivér populære GIF\'er</string>
+    <string name="DisablePremiumFavoriteEmojiTags">Deaktivér Premium favorit emoji tags</string>
+    <string name="DisableNonPremiumChannelChatShow">Deaktivér visning af ikke-Premium kanal alias</string>
+    <string name="DisableRepeatInChannel">Deaktivér gentagelse i kanal</string>
+    <string name="DisableRepeatInChannelError">Gentagelse er deaktiveret i kanal</string>
 </resources>

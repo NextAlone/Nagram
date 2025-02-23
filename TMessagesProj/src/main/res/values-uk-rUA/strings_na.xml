@@ -169,4 +169,18 @@
     <string name="DisableBotOpenButton">Вимкнути відкриту кнопку бота</string>
     <string name="CustomTitleUserName">Використовувати псевдонім користувача</string>
     <string name="EnhancedVideoBitrate">Розширений спільний бітрейт відео</string>
+    <string name="DisableStarsSubscription">Вимкнути сповіщення про низький баланс</string>
+    <string name="DisablePremiumExpiring">Вимкнути повідомлення про закінчення терміну дії Premium-підписки</string>
+    <string name="DisablePremiumUpgrade">Вимкнути сповіщення про оновлення Premium</string>
+    <string name="DisablePremiumChristmas">Вимкнути сповіщення про Різдво Преміуму</string>
+    <string name="DisablePremiumRestore">Вимкнути сповіщення про закінчення терміну дії Premium-підписки</string>
+    <string name="DisableBirthdayContact">Вимкнути сповіщення про день народження контакта</string>
+    <string name="DisableFavoriteSearchEmojiTags">Вимкнути список смайликів в панелі пошуку улюблених тегів</string>
+    <string name="DisableFeatuerdEmojis">Вимкнути популярні емодзі</string>
+    <string name="DisableFeaturedStickers">Вимкнути популярні Преміум наліпки</string>
+    <string name="DisableFeaturedGifs">Вимкнути популярні GIF</string>
+    <string name="DisablePremiumFavoriteEmojiTags">Вимкнути теги із вибраними емодзі Преміум</string>
+    <string name="DisableNonPremiumChannelChatShow">Вимкнути відображення додаткових псевдонімів каналу</string>
+    <string name="DisableRepeatInChannel">Вимкнути повторення в каналі</string>
+    <string name="DisableRepeatInChannelError">Повторення вимкнено в каналі</string>
 </resources>

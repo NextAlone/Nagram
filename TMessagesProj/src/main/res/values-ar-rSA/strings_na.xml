@@ -169,4 +169,18 @@
     <string name="DisableBotOpenButton">تعطيل زر فتح البوت</string>
     <string name="CustomTitleUserName">استخدام الاسم المستعار المستخدم كعنوان</string>
     <string name="EnhancedVideoBitrate">تحسين معدل بتر الفيديو المشترك</string>
+    <string name="DisableStarsSubscription">تعطيل إشعار بداية منخفضة الرصيد</string>
+    <string name="DisablePremiumExpiring">تعطيل إشعار انتهاء الصلاحية المميز</string>
+    <string name="DisablePremiumUpgrade">تعطيل إشعار الترقية المتميزة</string>
+    <string name="DisablePremiumChristmas">تعطيل إشعار عيد الميلاد المميز</string>
+    <string name="DisablePremiumRestore">تعطيل إشعار استرداد انتهاء الصلاحية المميز</string>
+    <string name="DisableBirthdayContact">تعطيل إشعار يوم ميلاد جهة الاتصال</string>
+    <string name="DisableFavoriteSearchEmojiTags">تعطيل قائمة الرموز التعبيرية في شريط البحث المفضل</string>
+    <string name="DisableFeatuerdEmojis">تعطيل Emojis المميز الشهير</string>
+    <string name="DisableFeaturedStickers">تعطيل الملصقات المتميزة</string>
+    <string name="DisableFeaturedGifs">تعطيل GIFs شعبية</string>
+    <string name="DisablePremiumFavoriteEmojiTags">تعطيل علامات الرموز التعبيرية المتميزة</string>
+    <string name="DisableNonPremiumChannelChatShow">تعطيل عرض الاسم المستعار للقناة الغير مميزة</string>
+    <string name="DisableRepeatInChannel">تعطيل التكرار في القناة</string>
+    <string name="DisableRepeatInChannelError">التكرار معطل في القناة</string>
 </resources>

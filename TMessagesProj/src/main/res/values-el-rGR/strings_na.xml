@@ -169,4 +169,18 @@
     <string name="DisableBotOpenButton">Απενεργοποίηση Κουμπιού Ανοίγματος Bot</string>
     <string name="CustomTitleUserName">Χρήση ψευδωνύμου χρήστη ως τίτλος</string>
     <string name="EnhancedVideoBitrate">Ενισχυμένος κοινόχρηστος ρυθμός bit βίντεο</string>
+    <string name="DisableStarsSubscription">Απενεργοποίηση ειδοποίησης χαμηλού υπολοίπου Stars</string>
+    <string name="DisablePremiumExpiring">Απενεργοποίηση ειδοποίησης λήξης Premium</string>
+    <string name="DisablePremiumUpgrade">Απενεργοποίηση ειδοποίησης αναβάθμισης Premium</string>
+    <string name="DisablePremiumChristmas">Απενεργοποίηση Premium χριστουγεννιάτικης ειδοποίησης</string>
+    <string name="DisablePremiumRestore">Απενεργοποίηση ειδοποίησης λήξης Premium</string>
+    <string name="DisableBirthdayContact">Απενεργοποίηση ειδοποίησης γενεθλίων</string>
+    <string name="DisableFavoriteSearchEmojiTags">Απενεργοποίηση λίστας emoji στα αγαπημένα της γραμμής αναζήτησης ετικετών</string>
+    <string name="DisableFeatuerdEmojis">Απενεργοποίηση δημοφιλών Premium Emojis</string>
+    <string name="DisableFeaturedStickers">Απενεργοποίηση δημοφιλών Αυτοκόλλητων Premium</string>
+    <string name="DisableFeaturedGifs">Απενεργοποίηση δημοφιλών GIFs</string>
+    <string name="DisablePremiumFavoriteEmojiTags">Απενεργοποίηση Premium αγαπημένες ετικέτες emoji</string>
+    <string name="DisableNonPremiumChannelChatShow">Απενεργοποίηση ψευδώνυμου καναλιού</string>
+    <string name="DisableRepeatInChannel">Απενεργοποίηση επανάληψης στο κανάλι</string>
+    <string name="DisableRepeatInChannelError">Η επανάληψη είναι απενεργοποιημένη στο κανάλι</string>
 </resources>

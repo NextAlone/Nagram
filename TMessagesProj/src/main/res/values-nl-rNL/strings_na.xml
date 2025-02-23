@@ -169,4 +169,18 @@
     <string name="DisableBotOpenButton">Bot Open Knop Uitschakelen</string>
     <string name="CustomTitleUserName">Gebruik gebruikersnaam gebruiker als titel</string>
     <string name="EnhancedVideoBitrate">Verbeterde gedeelde videobitrate</string>
+    <string name="DisableStarsSubscription">Notificatie met lage balans uitschakelen</string>
+    <string name="DisablePremiumExpiring">Premium vervalmelding uitschakelen</string>
+    <string name="DisablePremiumUpgrade">Schakel melding voor Premium upgrade uit</string>
+    <string name="DisablePremiumChristmas">Premium kerstmelding uitschakelen</string>
+    <string name="DisablePremiumRestore">Premium vervalherstel notificatie uitschakelen</string>
+    <string name="DisableBirthdayContact">Verjaardag contact uitschakelen</string>
+    <string name="DisableFavoriteSearchEmojiTags">Deactiveer emoji-lijst in favorietentag zoekbalk</string>
+    <string name="DisableFeatuerdEmojis">Schakel populaire Premium Emojis uit</string>
+    <string name="DisableFeaturedStickers">Populaire Premium Stickers uitschakelen</string>
+    <string name="DisableFeaturedGifs">Populaire GIF\'s uitschakelen</string>
+    <string name="DisablePremiumFavoriteEmojiTags">Premium favoriete emoji tags uitschakelen</string>
+    <string name="DisableNonPremiumChannelChatShow">Weergave van niet-Premium kanaalaliassen uitschakelen</string>
+    <string name="DisableRepeatInChannel">Zet herhalen in kanaal uit</string>
+    <string name="DisableRepeatInChannelError">Herhalen is uitgeschakeld in kanaal</string>
 </resources>

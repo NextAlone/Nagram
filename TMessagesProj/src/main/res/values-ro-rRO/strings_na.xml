@@ -169,4 +169,18 @@
     <string name="DisableBotOpenButton">Dezactivează butonul de deschidere a bot-ului</string>
     <string name="CustomTitleUserName">Folosește porecla utilizatorului ca titlu</string>
     <string name="EnhancedVideoBitrate">Rată de biți video partajată îmbunătățită</string>
+    <string name="DisableStarsSubscription">Dezactivează notificări Stele cu sold mic</string>
+    <string name="DisablePremiumExpiring">Dezactivează notificarea de expirare Premium</string>
+    <string name="DisablePremiumUpgrade">Dezactivează notificarea pentru upgrade Premium</string>
+    <string name="DisablePremiumChristmas">Dezactivează notificarea de Crăciun Premium</string>
+    <string name="DisablePremiumRestore">Dezactivează notificarea de recuperare a expirării Premium</string>
+    <string name="DisableBirthdayContact">Dezactivează notificarea zilei de naștere a contactului</string>
+    <string name="DisableFavoriteSearchEmojiTags">Dezactivează lista emoji în bara de căutare a tag-urilor favorite</string>
+    <string name="DisableFeatuerdEmojis">Dezactivează popularul emojis Premium</string>
+    <string name="DisableFeaturedStickers">Dezactivează abonamentele Premium populare</string>
+    <string name="DisableFeaturedGifs">Dezactivează GIF-urile populare</string>
+    <string name="DisablePremiumFavoriteEmojiTags">Dezactivează tag-urile emoji favorite</string>
+    <string name="DisableNonPremiumChannelChatShow">Dezactivează afișarea aliasului canalului non-Premium</string>
+    <string name="DisableRepeatInChannel">Dezactivează repetarea în canal</string>
+    <string name="DisableRepeatInChannelError">Repetarea este dezactivată în canal</string>
 </resources>

@@ -169,4 +169,18 @@
     <string name="DisableBotOpenButton">Zakázat tlačítko Bot Open</string>
     <string name="CustomTitleUserName">Použít uživatelské přezdívku jako titulek</string>
     <string name="EnhancedVideoBitrate">Rozšířená bitrate sdíleného videa</string>
+    <string name="DisableStarsSubscription">Zakázat oznámení o nízkém zůstatku</string>
+    <string name="DisablePremiumExpiring">Zakázat oznámení o vypršení platnosti prémiového členství</string>
+    <string name="DisablePremiumUpgrade">Zakázat prémiovou aktualizaci</string>
+    <string name="DisablePremiumChristmas">Zakázat prémiové Vánoční oznámení</string>
+    <string name="DisablePremiumRestore">Zakázat oznámení o obnovení vypršení platnosti prémiového členství</string>
+    <string name="DisableBirthdayContact">Zakázat oznámení o narozeninách kontaktu</string>
+    <string name="DisableFavoriteSearchEmojiTags">Zakázat seznam emoji v panelu oblíbených značek</string>
+    <string name="DisableFeatuerdEmojis">Zakázat populární prémiové emoji</string>
+    <string name="DisableFeaturedStickers">Zakázat populární prémiové nálepky</string>
+    <string name="DisableFeaturedGifs">Zakázat oblíbené GIFy</string>
+    <string name="DisablePremiumFavoriteEmojiTags">Zakázat prémiové oblíbené tagy</string>
+    <string name="DisableNonPremiumChannelChatShow">Zakázat zobrazení aliasu jiného než Premium kanálu</string>
+    <string name="DisableRepeatInChannel">Zakázat opakování v kanálu</string>
+    <string name="DisableRepeatInChannelError">Opakování je v kanálu zakázáno</string>
 </resources>

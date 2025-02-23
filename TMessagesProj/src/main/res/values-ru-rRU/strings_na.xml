@@ -32,9 +32,9 @@
     <string name="ShowMessageID">Показывать ID сообщения</string>
     <string name="ShowRPCError">Показывать все ошибки RPC</string>
     <string name="ShowServicesTime">Показывать временную метку в сервисных сообщениях</string>
-    <string name="ShowPremiumStickersAnimation">Показывать анимацию премиум стикеров</string>
-    <string name="ShowPremiumStarInChat">Показывать премиум звезду в чате</string>
-    <string name="ShowPremiumAvatarAnimation">Показывать анимацию премиум аватаров</string>
+    <string name="ShowPremiumStickersAnimation">Показывать анимацию Premium стикеров</string>
+    <string name="ShowPremiumStarInChat">Показывать Premium звезду в чате</string>
+    <string name="ShowPremiumAvatarAnimation">Показывать анимацию Premium аватаров</string>
     <string name="AlwaysSaveChatOffset">Всегда сохранять смещение чата</string>
     <string name="AutoReplaceRepeat">Автозамена повтора для повтора как копия</string>
     <string name="AppIconGoogle">Google</string>
@@ -169,4 +169,18 @@
     <string name="DisableBotOpenButton">Отключить кнопку открытия бота</string>
     <string name="CustomTitleUserName">Имя пользователя в качестве заголовка</string>
     <string name="EnhancedVideoBitrate">Расширенный битрейт видео</string>
+    <string name="DisableStarsSubscription">Отключить уведомление о низком балансе звёзд</string>
+    <string name="DisablePremiumExpiring">Отключить уведомление о продлении Premium</string>
+    <string name="DisablePremiumUpgrade">Отключить уведомление о Premium обновлении</string>
+    <string name="DisablePremiumChristmas">Отключить рождественское Premium уведомление</string>
+    <string name="DisablePremiumRestore">Отключить уведомление о восстановлении Premium</string>
+    <string name="DisableBirthdayContact">Отключить уведомление о днях рождения контактов</string>
+    <string name="DisableFavoriteSearchEmojiTags">Отключить список эмодзи в строке поиска избранных тегов</string>
+    <string name="DisableFeatuerdEmojis">Отключить популярные Premium эмодзи</string>
+    <string name="DisableFeaturedStickers">Отключить популярные Premium стикеры</string>
+    <string name="DisableFeaturedGifs">Отключить популярные GIF</string>
+    <string name="DisablePremiumFavoriteEmojiTags">Отключить Premium теги избранных эмодзи</string>
+    <string name="DisableNonPremiumChannelChatShow">Отключить отображение псевдонимов не Premium каналов</string>
+    <string name="DisableRepeatInChannel">Отключить повтор в канале</string>
+    <string name="DisableRepeatInChannelError">Повтор отключён в канале</string>
 </resources>

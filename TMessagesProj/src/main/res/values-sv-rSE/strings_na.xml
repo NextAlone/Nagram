@@ -169,4 +169,18 @@
     <string name="DisableBotOpenButton">Inaktivera Bot Open Button</string>
     <string name="CustomTitleUserName">Använd användarnamn som titel</string>
     <string name="EnhancedVideoBitrate">Förbättrad bithastighet för delade videor</string>
+    <string name="DisableStarsSubscription">Inaktivera Stars-notifiering med lågt saldo</string>
+    <string name="DisablePremiumExpiring">Inaktivera Premium-utgångsmeddelande</string>
+    <string name="DisablePremiumUpgrade">Inaktivera Premium-uppgraderingsavisering</string>
+    <string name="DisablePremiumChristmas">Inaktivera Premium Jul-avisering</string>
+    <string name="DisablePremiumRestore">Inaktivera Premium-återställningsavisering</string>
+    <string name="DisableBirthdayContact">Inaktivera kontaktens födelsedagsmeddelande</string>
+    <string name="DisableFavoriteSearchEmojiTags">Inaktivera emoji-listan i favoritens taggsökningsfält</string>
+    <string name="DisableFeatuerdEmojis">Inaktivera populära Premium Emojis</string>
+    <string name="DisableFeaturedStickers">Inaktivera populära Premium-klistermärken</string>
+    <string name="DisableFeaturedGifs">Inaktivera populära GIF-filer</string>
+    <string name="DisablePremiumFavoriteEmojiTags">Inaktivera Premium favorit emoji-taggar</string>
+    <string name="DisableNonPremiumChannelChatShow">Inaktivera icke-Premium-kanalalias visning</string>
+    <string name="DisableRepeatInChannel">Inaktivera upprepning i kanal</string>
+    <string name="DisableRepeatInChannelError">Upprepning är inaktiverad i kanalen</string>
 </resources>

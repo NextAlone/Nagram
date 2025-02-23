@@ -169,4 +169,18 @@
     <string name="DisableBotOpenButton">Poista Botti Avaa Painike Käytöstä</string>
     <string name="CustomTitleUserName">Käytä käyttäjän nimimerkkiä otsikkona</string>
     <string name="EnhancedVideoBitrate">Tehostettu jaettu videobittinopeus</string>
+    <string name="DisableStarsSubscription">Poista käytöstä alhaisen saldon Stars-ilmoitus</string>
+    <string name="DisablePremiumExpiring">Poista Premiumin vanhentumisilmoitus käytöstä</string>
+    <string name="DisablePremiumUpgrade">Poista Premium-päivitysilmoitus käytöstä</string>
+    <string name="DisablePremiumChristmas">Poista Premium Christmas -ilmoitus käytöstä</string>
+    <string name="DisablePremiumRestore">Poista Premiumin vanhentumisen palautusilmoitus käytöstä</string>
+    <string name="DisableBirthdayContact">Poista yhteystietojen syntymäpäiväilmoitus käytöstä</string>
+    <string name="DisableFavoriteSearchEmojiTags">Poista emojilista suosikeista hakupalkki käytöstä</string>
+    <string name="DisableFeatuerdEmojis">Poista suosittu Premium Emojis käytöstä</string>
+    <string name="DisableFeaturedStickers">Poista suositut Premium-tarrat käytöstä</string>
+    <string name="DisableFeaturedGifs">Poista suositut GIF:t käytöstä</string>
+    <string name="DisablePremiumFavoriteEmojiTags">Poista Premium-suosikkiemoji-tagit käytöstä</string>
+    <string name="DisableNonPremiumChannelChatShow">Poista ei-Premium-kanavien alias näyttö käytöstä</string>
+    <string name="DisableRepeatInChannel">Poista toisto käytöstä kanavalta</string>
+    <string name="DisableRepeatInChannelError">Toisto on poistettu käytöstä kanavalta</string>
 </resources>
