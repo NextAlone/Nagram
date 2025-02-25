@@ -404,6 +404,9 @@ SharedPreferences mainPreferences;
                         if (BuildVars.LOGS_ENABLED && error.code != -2000) {
                             FileLog.e(object + " got error " + error.code + " " + error.text);
                         }
+                        if (NaConfig.INSTANCE.getShowRPCError().Bool()) {
+                            ErrorDatabase.showErrorToast(object, errorText);
+                        }
                     }
                     if ((connectionType & ConnectionTypeDownload) != 0 && VideoPlayer.activePlayers.isEmpty()) {
                         long ping_time = native_getCurrentPingTime(currentAccount);
