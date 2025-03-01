@@ -113,17 +113,6 @@ public class DownloadProgressIcon extends View implements NotificationCenter.Not
         if (progress != 1f) {
             showCompletedIcon = false;
         }
-        boolean has_file = false;
-        DownloadController downloadController = DownloadController.getInstance(currentAccount);
-        for (int i = 0; i < downloadController.downloadingFiles.size(); i++){
-            if (FileLoader.getInstance(currentAccount).isLoadingFile(downloadController.downloadingFiles.get(i).getFileName())) {
-                has_file = true;
-                break;
-            }
-        }
-        if (!has_file && NaConfig.INSTANCE.getAlwaysShowDownloadIcon().Bool()) {
-            showCompletedIcon = true;
-        }
         if (showCompletedIcon) {
             downloadCompleteImageReceiver.draw(canvas);
         } else {
@@ -131,7 +120,7 @@ public class DownloadProgressIcon extends View implements NotificationCenter.Not
         }
 
         if (progress == 1f && !showCompletedIcon) {
-            if (downloadDrawable.getCurrentFrame() == 0) {
+            if (downloadDrawable.getCurrentFrame() == 0 || getAlpha() != 0) {
                 downloadCompleteDrawable.setCurrentFrame(0, false);
                 downloadCompleteDrawable.start();
                 showCompletedIcon = true;
@@ -140,6 +129,7 @@ public class DownloadProgressIcon extends View implements NotificationCenter.Not
         canvas.restore();
         if (getAlpha() != 0) {
             wasDrawn = true;
+            updateProgress();
         }
     }
 
