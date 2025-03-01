@@ -183,4 +183,5 @@
     <string name="DisableNonPremiumChannelChatShow">禁用非Premium频道马甲显示</string>
     <string name="DisableRepeatInChannel">在频道中禁用复读</string>
     <string name="DisableRepeatInChannelError">已禁止在频道中使用复读</string>
+    <string name="DisableDoubleTapWhenSelecting">已禁止在选择模式中使用双击</string>
 </resources>

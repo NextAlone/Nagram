@@ -183,4 +183,5 @@
     <string name="DisableNonPremiumChannelChatShow">Disable non-Premium channel alias display</string>
     <string name="DisableRepeatInChannel">在頻道中禁用复读</string>
     <string name="DisableRepeatInChannelError">已禁止在頻道中使用复读</string>
+    <string name="DisableDoubleTapWhenSelecting">已禁用在選擇時使用雙擊</string>
 </resources>
