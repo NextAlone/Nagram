@@ -9965,18 +9965,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         int maxActionBarItems = (int) (Math.ceil(displayMetrics.widthPixels  / (double) AndroidUtilities.dp(54))) - 2;
         isActionBarTooNarrow = maxActionBarItems < 6;
 
-        actionModeViews.add(actionMode.addItemWithWidth(nkactionbarbtn_reply, R.drawable.menu_reply, AndroidUtilities.dp(54), LocaleController.getString("Reply", R.string.Reply)));
-        actionModeViews.add(actionMode.addItemWithWidth(edit, R.drawable.msg_edit, AndroidUtilities.dp(54), LocaleController.getString("Edit", R.string.Edit)));
-        actionModeViews.add(actionMode.addItemWithWidth(nkactionbarbtn_selectBetween, R.drawable.ic_select_between, AndroidUtilities.dp(54), LocaleController.getString("SelectBetween", R.string.SelectBetween)));
-        actionModeViews.add(actionMode.addItemWithWidth(copy, R.drawable.msg_copy, AndroidUtilities.dp(54), LocaleController.getString("Copy", R.string.Copy)));
-        actionModeViews.add(actionMode.addItemWithWidth(combine_message, R.drawable.msg_replace, AndroidUtilities.dp(54), LocaleController.getString("CombineMessage", R.string.CombineMessage)));
+        actionModeViews.add(actionMode.addItemWithWidth(nkactionbarbtn_reply, R.drawable.menu_reply, AndroidUtilities.dp(54), LocaleController.getString(R.string.Reply)));
+        actionModeViews.add(actionMode.addItemWithWidth(edit, R.drawable.msg_edit, AndroidUtilities.dp(54), LocaleController.getString(R.string.Edit)));
+        actionModeViews.add(actionMode.addItemWithWidth(nkactionbarbtn_selectBetween, R.drawable.ic_select_between, AndroidUtilities.dp(54), LocaleController.getString(R.string.SelectBetween)));
+        actionModeViews.add(actionMode.addItemWithWidth(copy, R.drawable.msg_copy, AndroidUtilities.dp(54), LocaleController.getString(R.string.Copy)));
 
-        if (currentEncryptedChat == null && getDialogId() != UserObject.VERIFY) {
-            actionModeViews.add(actionMode.addItemWithWidth(forward, R.drawable.msg_forward, AndroidUtilities.dp(54), LocaleController.getString("Forward", R.string.Forward)));
+        actionModeViews.add(actionMode.addItemWithWidth(combine_message, R.drawable.msg_replace, AndroidUtilities.dp(54), LocaleController.getString(R.string.CombineMessage)));
+
+        if (currentEncryptedChat == null && getDialogId() != UserObject.VERIFY && !NaConfig.INSTANCE.getDisableActionBarButtonForward().Bool()) {
+            actionModeViews.add(actionMode.addItemWithWidth(forward, R.drawable.msg_forward, AndroidUtilities.dp(54), LocaleController.getString(R.string.Forward)));
         }
 
-        actionModeViews.add(actionMode.addItemWithWidth(delete, R.drawable.msg_delete, AndroidUtilities.dp(54), LocaleController.getString("Delete", R.string.Delete)));
-        actionModeViews.add(actionModeOtherItem = actionMode.addItemWithWidth(nkactionbarbtn_action_mode_other, R.drawable.ic_ab_other, AndroidUtilities.dp(54), LocaleController.getString("MessageMenu", R.string.MessageMenu)));
+        actionModeViews.add(actionMode.addItemWithWidth(delete, R.drawable.msg_delete, AndroidUtilities.dp(54), LocaleController.getString(R.string.Delete)));
+        actionModeViews.add(actionModeOtherItem = actionMode.addItemWithWidth(nkactionbarbtn_action_mode_other, R.drawable.ic_ab_other, AndroidUtilities.dp(54), LocaleController.getString(R.string.MessageMenu)));
 
         boolean noforward = getMessagesController().isChatNoForwards(currentChat);
 
@@ -10010,11 +10011,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             actionModeOtherItem.addSubItem(nkbtn_detail,R.drawable.msg_info,LocaleController.getString("MessageDetails", R.string.MessageDetails));
         }
 
-        actionMode.getItem(nkactionbarbtn_reply).setVisibility(ChatObject.canSendMessages(currentChat) && selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1 ? View.VISIBLE : View.GONE);
-        actionMode.getItem(edit).setVisibility(canEditMessagesCount == 1 && selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1 ? View.VISIBLE : View.GONE);
-        actionMode.getItem(copy).setVisibility(!getMessagesController().isChatNoForwardsWithOverride(currentChat) && selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
-        actionMode.getItem(delete).setVisibility(cantDeleteMessagesCount == 0 ? View.VISIBLE : View.GONE);
-        actionMode.getItem(combine_message).setVisibility(selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
+        actionMode.setItemVisibility(nkactionbarbtn_reply, ChatObject.canSendMessages(currentChat) && (selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1) && !NaConfig.INSTANCE.getDisableActionBarButtonReply().Bool() ? View.VISIBLE : View.GONE);
+        actionMode.setItemVisibility(edit, canEditMessagesCount == 1 && (selectedMessagesIds[0].size() + selectedMessagesIds[1].size() == 1) && !NaConfig.INSTANCE.getDisableActionBarButtonEdit().Bool() ? View.VISIBLE : View.GONE);
+        actionMode.setItemVisibility(nkactionbarbtn_selectBetween, !NaConfig.INSTANCE.getDisableActionBarButtonSelectBetween().Bool() ? View.VISIBLE : View.GONE);
+        actionMode.setItemVisibility(copy, !getMessagesController().isChatNoForwardsWithOverride(currentChat) && (selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0) && !NaConfig.INSTANCE.getDisableActionBarButtonCopy().Bool() ? View.VISIBLE : View.GONE);
+        actionMode.setItemVisibility(combine_message, selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
+        actionMode.setItemVisibility(forward, !NaConfig.INSTANCE.getDisableActionBarButtonForward().Bool() ? View.VISIBLE : View.GONE);
+        actionMode.setItemVisibility(delete, cantDeleteMessagesCount == 0 ? View.VISIBLE : View.GONE);
         actionMode.setItemVisibility(tag_message, getUserConfig().isPremium() ? View.VISIBLE : View.GONE);
         actionMode.setItemVisibility(share, View.GONE);
 
@@ -18783,6 +18786,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                 boolean noforwards = getMessagesController().isChatNoForwards(currentChat) || hasSelectedNoforwardsMessage();
                 boolean canForward = chatMode != MODE_SCHEDULED && cantForwardMessagesCount == 0 && !noforwards;
+                boolean showForward = !NaConfig.INSTANCE.getDisableActionBarButtonForward().Bool();
 
                 if (forwardNoQuoteItem != null) {
                     forwardNoQuoteItem.setVisibility(canForward && NaConfig.INSTANCE.getShowNoQuoteForward().Bool());
@@ -18796,7 +18800,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     forwardButtonAnimation = new AnimatorSet();
                     ArrayList<Animator> animators = new ArrayList<>();
                     if (forwardItem != null) {
-                        forwardItem.setEnabled(cantForwardMessagesCount == 0 || noforwards);
+                        forwardItem.setEnabled((cantForwardMessagesCount == 0 || noforwards) && showForward);
                         animators.add(ObjectAnimator.ofFloat(forwardItem, View.ALPHA, cantForwardMessagesCount == 0 ? 1.0f : 0.5f));
 
                         if (noforwards && forwardItem.getBackground() != null) {
@@ -18825,7 +18829,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     forwardButtonAnimation.start();
                 } else {
                     if (forwardItem != null) {
-                        forwardItem.setEnabled(cantForwardMessagesCount == 0 || noforwards);
+                        forwardItem.setEnabled((cantForwardMessagesCount == 0 || noforwards) && showForward);
                         forwardItem.setAlpha(cantForwardMessagesCount == 0 ? 1.0f : 0.5f);
                         if (noforwards) {
                             if (forwardButton != null && forwardItem.getBackground() != null) {
@@ -18854,7 +18858,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 boolean noforwardsOverride = noforwards && !NekoXConfig.disableFlagSecure && !NaConfig.INSTANCE.getForceCopy().Bool();
                 if (copyItem != null) {
                     copyVisible = copyItem.getVisibility();
-                    copyItem.setVisibility(!noforwardsOverride && selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0 ? View.VISIBLE : View.GONE);
+                    copyItem.setVisibility(!noforwardsOverride && (selectedMessagesCanCopyIds[0].size() + selectedMessagesCanCopyIds[1].size() != 0) && !NaConfig.INSTANCE.getDisableActionBarButtonCopy().Bool() ? View.VISIBLE : View.GONE);
                     newCopyVisible = copyItem.getVisibility();
                 }
 
@@ -18865,7 +18869,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 if (replyItem != null) {
-                    boolean showReplyItem = chatMode != MODE_SCHEDULED && ChatObject.canSendMessages(currentChat) && selectedCount == 1;
+                    boolean showReplyItem = chatMode != MODE_SCHEDULED && ChatObject.canSendMessages(currentChat) && selectedCount == 1 && !NaConfig.INSTANCE.getDisableActionBarButtonReply().Bool();
                     boolean doShrinkActionBarItems = isActionBarTooNarrow && newCopyVisible == View.VISIBLE && canForward && canEditMessagesCount == 1 && selectedCount == 1;
                     replyItem.setVisibility(!doShrinkActionBarItems && showReplyItem);
                 }
@@ -18895,7 +18899,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             break;
                         }
                     }
-                    selectItem.setVisibility(selectable ? View.VISIBLE : View.GONE);
+                    selectItem.setVisibility(selectable && !NaConfig.INSTANCE.getDisableActionBarButtonSelectBetween().Bool() ? View.VISIBLE : View.GONE);
                 }
 
                 if (deleteItem != null) {
@@ -18923,7 +18927,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 //                    starItem.setIcon(hasUnfavedSelected ? R.drawable.msg_fave : R.drawable.msg_unfave);
                     starItem.setText(hasUnfavedSelected ? LocaleController.getString("AddToFavorites", R.string.AddToFavorites) : LocaleController.getString("DeleteFromFavorites", R.string.DeleteFromFavorites));
                 }
-                final int newEditVisibility = canEditMessagesCount == 1 && selectedCount == 1 ? View.VISIBLE : View.GONE;
+                final int newEditVisibility = canEditMessagesCount == 1 && selectedCount == 1 && !NaConfig.INSTANCE.getDisableActionBarButtonEdit().Bool() ? View.VISIBLE : View.GONE;
                 createBottomMessagesActionButtons();
                 if (replyButton != null) {
                     boolean allowChatActions = true;

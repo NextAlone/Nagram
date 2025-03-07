@@ -184,4 +184,5 @@
     <string name="DisableRepeatInChannel">在频道中禁用复读</string>
     <string name="DisableRepeatInChannelError">已禁止在频道中使用复读</string>
     <string name="DisableDoubleTapWhenSelecting">已禁止在选择模式中使用双击</string>
+    <string name="DisableActionBarButton">禁用对话导航栏按钮</string>
 </resources>

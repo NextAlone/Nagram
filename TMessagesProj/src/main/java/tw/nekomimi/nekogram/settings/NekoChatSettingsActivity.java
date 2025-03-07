@@ -122,6 +122,16 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
             add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDefaultDeleteMenuDoActionsInCommonGroups()));
         }}));
     }));
+    private final AbstractConfigCell disableActionBarButtonRow = cellGroup.appendCell(new ConfigCellSelectBox(NaConfig.INSTANCE.getDisableActionBarButton().getKey(), null, null, () -> {
+        if (getParentActivity() == null) return;
+        showDialog(showConfigMenuAlert(getParentActivity(), NaConfig.INSTANCE.getDisableActionBarButton().getKey(), new ArrayList<>() {{
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableActionBarButtonReply()));
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableActionBarButtonEdit()));
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableActionBarButtonSelectBetween()));
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableActionBarButtonCopy()));
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableActionBarButtonForward()));
+        }}));
+    }));
     private final AbstractConfigCell customGreatRow = cellGroup.appendCell(new ConfigCellTextInput(null, NaConfig.INSTANCE.getCustomGreat(), LocaleController.getString(R.string.CustomGreatHint), null,(input) -> input.isEmpty() ? (String) NaConfig.INSTANCE.getCustomGreat().defaultValue : input));
     private final AbstractConfigCell customPoorRow = cellGroup.appendCell(new ConfigCellTextInput(null, NaConfig.INSTANCE.getCustomPoor(), LocaleController.getString(R.string.CustomPoorHint), null,(input) -> input.isEmpty() ? (String) NaConfig.INSTANCE.getCustomPoor().defaultValue : input));
     private final AbstractConfigCell customEditedMessageRow = cellGroup.appendCell(new ConfigCellTextInput(null, NaConfig.INSTANCE.getCustomEditedMessage(), "", null));
