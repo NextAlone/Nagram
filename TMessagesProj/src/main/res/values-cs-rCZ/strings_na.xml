@@ -183,4 +183,6 @@
     <string name="DisableNonPremiumChannelChatShow">Zakázat zobrazení aliasu jiného než Premium kanálu</string>
     <string name="DisableRepeatInChannel">Zakázat opakování v kanálu</string>
     <string name="DisableRepeatInChannelError">Opakování je v kanálu zakázáno</string>
+    <string name="DisableDoubleTapWhenSelecting">Dvojité poklepání je při výběru zakázáno</string>
+    <string name="DisableActionBarButton">Zakázat tlačítko akční lišty</string>
 </resources>

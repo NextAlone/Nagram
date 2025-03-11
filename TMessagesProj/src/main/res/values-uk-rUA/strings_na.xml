@@ -183,4 +183,6 @@
     <string name="DisableNonPremiumChannelChatShow">Вимкнути відображення додаткових псевдонімів каналу</string>
     <string name="DisableRepeatInChannel">Вимкнути повторення в каналі</string>
     <string name="DisableRepeatInChannelError">Повторення вимкнено в каналі</string>
+    <string name="DisableDoubleTapWhenSelecting">Подвійне натискання вимкнено під час вибору</string>
+    <string name="DisableActionBarButton">Вимкнути кнопку дії</string>
 </resources>

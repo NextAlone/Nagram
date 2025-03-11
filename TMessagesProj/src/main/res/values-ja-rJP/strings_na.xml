@@ -183,4 +183,6 @@
     <string name="DisableNonPremiumChannelChatShow">プレミアム以外のチャンネルエイリアス表示を無効にする</string>
     <string name="DisableRepeatInChannel">チャンネル内の繰り返しを無効にする</string>
     <string name="DisableRepeatInChannelError">チャンネルでのリピートは無効です</string>
+    <string name="DisableDoubleTapWhenSelecting">選択時にダブルタップは無効です</string>
+    <string name="DisableActionBarButton">アクションバーボタンを無効化</string>
 </resources>

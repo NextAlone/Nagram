@@ -183,4 +183,6 @@
     <string name="DisableNonPremiumChannelChatShow">Weergave van niet-Premium kanaalaliassen uitschakelen</string>
     <string name="DisableRepeatInChannel">Zet herhalen in kanaal uit</string>
     <string name="DisableRepeatInChannelError">Herhalen is uitgeschakeld in kanaal</string>
+    <string name="DisableDoubleTapWhenSelecting">Dubbel tikken is uitgeschakeld bij selecteren</string>
+    <string name="DisableActionBarButton">Actie Balk Knop Uitschakelen</string>
 </resources>

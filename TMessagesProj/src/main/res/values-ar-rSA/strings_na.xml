@@ -2,7 +2,7 @@
 <resources>
     <string name="N_Config">تكوين N-Config</string>
     <string name="ForceCopy">إجبار النسخ</string>
-    <string name="InvertReply">Invert</string>
+    <string name="InvertReply">عكس</string>
     <string name="Great">عظيم</string>
     <string name="Poor">رديء</string>
     <string name="CombineMessage">دمج الرسالة</string>
@@ -35,7 +35,7 @@
     <string name="ShowPremiumStickersAnimation">إظهار الرسوم المتحركة للملصقات المميزة</string>
     <string name="ShowPremiumStarInChat">إظهار النجم المميز في الدردشة</string>
     <string name="ShowPremiumAvatarAnimation">إظهار الصورة الرمزية المميزة</string>
-    <string name="AlwaysSaveChatOffset">AlwaysSaveChatOffset</string>
+    <string name="AlwaysSaveChatOffset">حفظ الدردشة دائمًا</string>
     <string name="AutoReplaceRepeat">استبدال التكرار التلقائي للتكرار كنسخ</string>
     <string name="AppIconGoogle">جوجل</string>
     <string name="AppIconColorful">ملونة</string>
@@ -48,7 +48,7 @@
     <string name="AutoInsertGIFCaption">إدراج عنوان تلقائي قبل إرسال GIF</string>
     <string name="DefaultMonoLanguage">لغة الكود الافتراضي المخصصة</string>
     <string name="DisableGlobalSearch">تعطيل البحث العالمي</string>
-    <string name="InputMessageId">Input Message Id</string>
+    <string name="InputMessageId">معرف رسالة الإدخال</string>
     <string name="ToTheMessage">إلى الرسالة</string>
     <string name="HideOriginAfterTranslation">إخفاء الأصل بعد الترجمة</string>
     <string name="ZalgoFilter">تصفية رموز \"زالغو\"</string>
@@ -183,4 +183,6 @@
     <string name="DisableNonPremiumChannelChatShow">تعطيل عرض الاسم المستعار للقناة الغير مميزة</string>
     <string name="DisableRepeatInChannel">تعطيل التكرار في القناة</string>
     <string name="DisableRepeatInChannelError">التكرار معطل في القناة</string>
+    <string name="DisableDoubleTapWhenSelecting">يتم تعطيل النقر المزدوج عند تحديد</string>
+    <string name="DisableActionBarButton">تعطيل زر شريط الإجراءات</string>
 </resources>

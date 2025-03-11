@@ -183,4 +183,6 @@
     <string name="DisableNonPremiumChannelChatShow">Desactivar la visualización de alias de canal no Premium</string>
     <string name="DisableRepeatInChannel">Desactivar repetición en el canal</string>
     <string name="DisableRepeatInChannelError">Repetir está desactivado en el canal</string>
+    <string name="DisableDoubleTapWhenSelecting">Doble toque desactivado al seleccionar</string>
+    <string name="DisableActionBarButton">Desactivar Botón de Barra de Acción</string>
 </resources>

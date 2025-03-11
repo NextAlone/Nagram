@@ -183,4 +183,6 @@
     <string name="DisableNonPremiumChannelChatShow">Deaktiver ikke-Premium kanal aliasvisning</string>
     <string name="DisableRepeatInChannel">Deaktiver gjentakelse i kanalen</string>
     <string name="DisableRepeatInChannelError">Repeter er deaktivert i kanalen</string>
+    <string name="DisableDoubleTapWhenSelecting">Dobbelttrykk er deaktivert ved valg</string>
+    <string name="DisableActionBarButton">Knapp for deaktivering av handlingslinje</string>
 </resources>

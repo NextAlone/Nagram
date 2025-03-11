@@ -183,4 +183,6 @@
     <string name="DisableNonPremiumChannelChatShow">Poista ei-Premium-kanavien alias näyttö käytöstä</string>
     <string name="DisableRepeatInChannel">Poista toisto käytöstä kanavalta</string>
     <string name="DisableRepeatInChannelError">Toisto on poistettu käytöstä kanavalta</string>
+    <string name="DisableDoubleTapWhenSelecting">Kaksoisnapautus ei ole käytössä valittaessa</string>
+    <string name="DisableActionBarButton">Poista Toimintapalkin Painike Käytöstä</string>
 </resources>
