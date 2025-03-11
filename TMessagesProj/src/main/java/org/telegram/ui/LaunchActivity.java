@@ -30,6 +30,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.Shader;
@@ -189,6 +190,7 @@ import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SearchTagsList;
+import org.telegram.ui.Components.SeekBarView;
 import org.telegram.ui.Components.SharedMediaLayout;
 import org.telegram.ui.Components.SharingLocationsAlert;
 import org.telegram.ui.Components.SideMenultItemAnimator;
@@ -816,6 +818,63 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         });
         sideMenuTouchHelper.attachToRecyclerView(sideMenu);
         sideMenu.setOnItemLongClickListener((view, position) -> {
+            if (view instanceof  DrawerAddCell) {
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+                dialogBuilder.setTitle(LocaleController.getString("MaxLoginAccounts", R.string.MaxLoginAccounts));
+
+                final int minAccountLimit = 1;
+                final int maxAccountLimit = 30;
+
+                class AccountLimitSeekBar extends FrameLayout {
+                    private final TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+                    private int selectedAccountLimit = NaConfig.INSTANCE.getMaxLoginAccounts().Int();
+
+                    public AccountLimitSeekBar(Context context) {
+                        super(context);
+                    }
+
+                    @Override
+                    protected void onDraw(Canvas canvas) {
+                        super.onDraw(canvas);
+                        textPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
+                        textPaint.setTextSize(AndroidUtilities.dp(18));
+                        String accountLimitText = String.valueOf(selectedAccountLimit);
+                        canvas.drawText(accountLimitText, getMeasuredWidth() - AndroidUtilities.dp(50), AndroidUtilities.dp(35), textPaint);
+                    }
+                }
+
+                AccountLimitSeekBar AccountSeekBar = new AccountLimitSeekBar(this);
+                AccountSeekBar.setPadding(AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8), AndroidUtilities.dp(8));
+                AccountSeekBar.setWillNotDraw(false);
+
+                SeekBarView accountLimitSeekBar = new SeekBarView(this);
+                accountLimitSeekBar.setReportChanges(true);
+
+                int currentAccountLimit = NaConfig.INSTANCE.getMaxLoginAccounts().Int();
+                float initialProgress = (currentAccountLimit - minAccountLimit) / (float) (maxAccountLimit - minAccountLimit);
+                accountLimitSeekBar.setProgress(initialProgress);
+
+                accountLimitSeekBar.setDelegate(new SeekBarView.SeekBarViewDelegate() {
+                    @Override
+                    public void onSeekBarDrag(boolean stop, float progress) {
+                        int updatedAccountLimit = minAccountLimit + (int) ((maxAccountLimit - minAccountLimit) * progress);
+                        AccountSeekBar.selectedAccountLimit = updatedAccountLimit;
+                        AccountSeekBar.invalidate();
+                    }
+
+                    @Override
+                    public void onSeekBarPressed(boolean pressed) {}
+                });
+
+                AccountSeekBar.addView(accountLimitSeekBar, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 38, Gravity.LEFT | Gravity.CENTER_VERTICAL, 9, 5, 43, 11));
+
+                dialogBuilder.setView(AccountSeekBar);
+                dialogBuilder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialog, which) -> {
+                    NaConfig.INSTANCE.getMaxLoginAccounts().setConfigInt(AccountSeekBar.selectedAccountLimit);
+                });
+                dialogBuilder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+                dialogBuilder.show();
+            }
             if (view instanceof DrawerUserCell) {
                 final int accountNumber = ((DrawerUserCell) view).getAccountNumber();
                 if (accountNumber == currentAccount || AndroidUtilities.isTablet()) {

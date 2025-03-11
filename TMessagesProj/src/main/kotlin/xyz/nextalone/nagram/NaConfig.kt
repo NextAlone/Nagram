@@ -843,6 +843,12 @@ object NaConfig {
             4,
             false
         )
+    val maxLoginAccounts =
+        addConfig(
+            "MaxLoginAccounts",
+            ConfigItem.configTypeInt,
+            8
+        )
 
     private fun addConfig(
         k: String,

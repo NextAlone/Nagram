@@ -22,12 +22,13 @@ import org.telegram.tgnet.tl.TL_account;
 import java.util.Arrays;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import xyz.nextalone.nagram.NaConfig;
 
 public class UserConfig extends BaseController {
 
     public static int selectedAccount;
-    public final static int MAX_ACCOUNT_DEFAULT_COUNT = 8;
-    public final static int MAX_ACCOUNT_COUNT = 10;
+    public final static int MAX_ACCOUNT_DEFAULT_COUNT = NaConfig.INSTANCE.getMaxLoginAccounts().Int();
+    public final static int MAX_ACCOUNT_COUNT = MAX_ACCOUNT_DEFAULT_COUNT + 2;
 
     private final Object sync = new Object();
     private volatile boolean configLoaded;
