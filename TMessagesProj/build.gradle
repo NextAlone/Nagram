@@ -267,8 +267,12 @@ dependencies {
     implementation "androidx.interpolator:interpolator:1.0.0"
     implementation 'androidx.biometric:biometric:1.1.0'
 
-    implementation 'com.google.android.gms:play-services-cast-framework:21.4.0'
-    implementation "androidx.mediarouter:mediarouter:1.7.0"
+    implementation ('com.google.android.gms:play-services-cast-framework:21.4.0') {
+        exclude group: 'androidx.recyclerview', module: "recyclerview"
+    }
+    implementation ("androidx.mediarouter:mediarouter:1.7.0") {
+        exclude group: 'androidx.recyclerview', module: "recyclerview"
+    }
     implementation 'org.nanohttpd:nanohttpd:2.3.1'
 
     compileOnly 'org.checkerframework:checker-qual:2.5.2'
