@@ -548,8 +548,18 @@ public class AvatarDrawable extends Drawable {
     }
 
     private Drawable customIconDrawable;
+    private int iconTx, iconTy;
     public void setCustomIcon(Drawable drawable) {
         customIconDrawable = drawable;
+    }
+
+    public void setIconTranslation(int tx, int ty) {
+        this.iconTx = tx;
+        this.iconTy = ty;
+    }
+
+    public Drawable getCustomIcon() {
+        return customIconDrawable;
     }
 
     @Override
@@ -684,8 +694,8 @@ public class AvatarDrawable extends Drawable {
                     w *= 0.8f;
                     h *= 0.8f;
                 }
-                int x = (size - w) / 2;
-                int y = (size - h) / 2;
+                final int x = (size - w) / 2 + iconTx;
+                final int y = (size - h) / 2 + iconTy;
                 drawable.setBounds(x, y, x + w, y + h);
                 if (alpha != 255) {
                     drawable.setAlpha(alpha);

@@ -535,6 +535,8 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
     }
 
     public void search(long dialogId, long minDate, long maxDate, FiltersView.MediaFilterData currentSearchFilter, boolean includeFolder, String query, boolean clearOldResults) {
+        if (query == null) query = "";
+        final String finalQuery = query;
         String currentSearchFilterQueryString = String.format(Locale.ENGLISH, "%d%d%d%d%s%s", dialogId, minDate, maxDate, currentSearchFilter == null ? -1 : currentSearchFilter.filterType, query, includeFolder);
         boolean filterAndQueryIsSame = lastSearchFilterQueryString != null && lastSearchFilterQueryString.equals(currentSearchFilterQueryString);
         boolean forceClear = !filterAndQueryIsSame && clearOldResults;
@@ -600,7 +602,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             ArrayList<Object> resultArray = null;
             if (dialogId != 0) {
                 final TLRPC.TL_messages_search req = new TLRPC.TL_messages_search();
-                req.q = query;
+                req.q = finalQuery;
                 req.limit = 20;
                 req.filter = currentSearchFilter == null ? new TLRPC.TL_inputMessagesFilterEmpty() : currentSearchFilter.filter;
                 req.peer = AccountInstance.getInstance(currentAccount).getMessagesController().getInputPeer(dialogId);
@@ -610,7 +612,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 if (maxDate > 0) {
                     req.max_date = (int) (maxDate / 1000);
                 }
-                if (filterAndQueryIsSame && query.equals(lastMessagesSearchString) && !messages.isEmpty()) {
+                if (filterAndQueryIsSame && finalQuery.equals(lastMessagesSearchString) && !messages.isEmpty()) {
                     MessageObject lastMessage = messages.get(messages.size() - 1);
                     req.offset_id = lastMessage.getId();
                 } else {
@@ -618,16 +620,16 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 }
                 request = req;
             } else {
-                if (!TextUtils.isEmpty(query)) {
+                if (!TextUtils.isEmpty(finalQuery)) {
                     resultArray = new ArrayList<>();
                     ArrayList<CharSequence> resultArrayNames = new ArrayList<>();
                     ArrayList<TLRPC.User> encUsers = new ArrayList<>();
-                    MessagesStorage.getInstance(currentAccount).localSearch(0, query, resultArray, resultArrayNames, encUsers, null, includeFolder ? 1 : 0);
+                    MessagesStorage.getInstance(currentAccount).localSearch(0, finalQuery, resultArray, resultArrayNames, encUsers, null, includeFolder ? 1 : 0);
                 }
 
                 final TLRPC.TL_messages_searchGlobal req = new TLRPC.TL_messages_searchGlobal();
                 req.limit = 20;
-                req.q = query;
+                req.q = finalQuery;
                 req.filter = currentSearchFilter == null ? new TLRPC.TL_inputMessagesFilterEmpty() : currentSearchFilter.filter;
                 if (minDate > 0) {
                     req.min_date = (int) (minDate / 1000);
@@ -635,7 +637,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 if (maxDate > 0) {
                     req.max_date = (int) (maxDate / 1000);
                 }
-                if (filterAndQueryIsSame && query.equals(lastMessagesSearchString) && !messages.isEmpty()) {
+                if (filterAndQueryIsSame && finalQuery.equals(lastMessagesSearchString) && !messages.isEmpty()) {
                     MessageObject lastMessage = messages.get(messages.size() - 1);
                     req.offset_id = lastMessage.getId();
                     req.offset_rate = nextSearchRate;
@@ -651,7 +653,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 request = req;
             }
 
-            lastMessagesSearchString = query;
+            lastMessagesSearchString = finalQuery;
             lastSearchFilterQueryString = currentSearchFilterQueryString;
 
             ArrayList<Object> finalResultArray = resultArray;
@@ -664,7 +666,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                     int n = res.messages.size();
                     for (int i = 0; i < n; i++) {
                         MessageObject messageObject = new MessageObject(currentAccount, res.messages.get(i), false, true);
-                        messageObject.setQuery(query);
+                        messageObject.setQuery(finalQuery);
                         messageObjects.add(messageObject);
                     }
                 }
@@ -696,7 +698,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         sectionArrays.clear();
                     }
                     totalCount = res.count;
-                    currentDataQuery = query;
+                    currentDataQuery = finalQuery;
                     int n = messageObjects.size();
                     for (int i = 0; i < n; i++) {
                         MessageObject messageObject = messageObjects.get(i);
@@ -782,8 +784,8 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         if (finalResultArray != null) {
                             localTipChats.addAll(finalResultArray);
                         }
-                        if (query != null && query.length() >= 3 && (LocaleController.getString(R.string.SavedMessages).toLowerCase().startsWith(query) ||
-                                "saved messages".startsWith(query))) {
+                        if (finalQuery != null && finalQuery.length() >= 3 && (LocaleController.getString(R.string.SavedMessages).toLowerCase().startsWith(finalQuery) ||
+                                "saved messages".startsWith(finalQuery))) {
                             boolean found = false;
                             for (int i = 0; i < localTipChats.size(); i++) {
                                 if (localTipChats.get(i) instanceof TLRPC.User)
@@ -799,8 +801,8 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         localTipDates.clear();
                         localTipDates.addAll(dateData);
                         localTipArchive = false;
-                        if (query != null && query.length() >= 3 && (LocaleController.getString(R.string.ArchiveSearchFilter).toLowerCase().startsWith(query) ||
-                                "archive".startsWith(query))) {
+                        if (finalQuery != null && finalQuery.length() >= 3 && (LocaleController.getString(R.string.ArchiveSearchFilter).toLowerCase().startsWith(finalQuery) ||
+                                "archive".startsWith(finalQuery))) {
                             localTipArchive = true;
                         }
                         if (delegate != null) {
