@@ -7630,14 +7630,14 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                         }, 200);
                     }
                     lastTypingTimeSend = 0;
-                } else if (forceShowSendButton) {
-                    if (delegate != null) {
-                        delegate.beforeMessageSend(null, notify, scheduleDate, payStars);
-                        delegate.onMessageSend(null, notify, scheduleDate, payStars);
-                    }
                 }
-                updateSendButtonPaid();
+            } else if (forceShowSendButton) {
+                if (delegate != null) {
+                    delegate.beforeMessageSend(null, notify, scheduleDate, payStars);
+                    delegate.onMessageSend(null, notify, scheduleDate, payStars);
+                }
             }
+            updateSendButtonPaid();
         };
         if (allowConfirm) {
             boolean alertShown = AlertsCreator.ensurePaidMessageConfirmation(currentAccount, dialog_id, getMessagesCount(), starsPrice -> sendMessageInternal(notify, scheduleDate, starsPrice, false), payStars);
