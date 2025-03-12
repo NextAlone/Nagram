@@ -796,6 +796,13 @@ object NaConfig {
             11,
             false
         )
+    val disableShortcutTagActions =
+        addConfig(
+            "DisableShortcutTagActions",
+            disableTrendingFlags,
+            12,
+            false
+        )
     val disableRepeatInChannel =
         addConfig(
             "DisableRepeatInChannel",

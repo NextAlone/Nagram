@@ -206,6 +206,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
             add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableFeaturedGifs()));
             add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisablePremiumFavoriteEmojiTags()));
             add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableNonPremiumChannelChatShow()));
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableShortcutTagActions()));
         }}));
     }));
     private final AbstractConfigCell disableSwipeToNextRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableSwipeToNext));
