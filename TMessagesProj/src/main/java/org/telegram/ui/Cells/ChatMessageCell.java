@@ -3496,9 +3496,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     private boolean checkDateMotionEvent(MotionEvent event) {
-        if (!currentMessageObject.isImportedForward()) {
-            return false;
-        }
+//        if (!currentMessageObject.isImportedForward()) {
+//            return false;
+//        }
         int x = (int) getEventX(event);
         int y = (int) getEventY(event);
 
