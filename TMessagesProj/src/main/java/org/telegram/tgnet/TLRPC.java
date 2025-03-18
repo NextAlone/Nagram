@@ -52004,11 +52004,11 @@ public class TLRPC {
         public String api_hash;
         public String bot_auth_token;
 
-        public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
+        public TLObject deserializeResponse(InputSerializedData stream, int constructor, boolean exception) {
             return TL_auth_authorization.TLdeserialize(stream, constructor, exception);
         }
 
-        public void serializeToStream(AbstractSerializedData stream) {
+        public void serializeToStream(OutputSerializedData stream) {
             stream.writeInt32(constructor);
             stream.writeInt32(flags);
             stream.writeInt32(api_id);
@@ -70192,65 +70192,6 @@ public class TLRPC {
             stream.writeInt64(overall_revenue);
         }
     }
-
-    // NekoX start
-    public static class TL_account_setContentSettings extends TLObject {
-        public static int constructor = 0xb574b16b;
-
-        public int flags;
-        public boolean sensitive_enabled;
-
-        public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
-            return Bool.TLdeserialize(stream, constructor, exception);
-        }
-
-        public void serializeToStream(AbstractSerializedData stream) {
-            stream.writeInt32(constructor);
-            flags = sensitive_enabled ? (flags | 1) : (flags &~ 1);
-            stream.writeInt32(flags);
-        }
-    }
-
-    public static class TL_account_getContentSettings extends TLObject {
-        public static int constructor = 0x8b9b4dae;
-
-        public TLObject deserializeResponse(AbstractSerializedData stream, int constructor, boolean exception) {
-            return TL_account_contentSettings.TLdeserialize(stream, constructor, exception);
-        }
-
-        public void serializeToStream(AbstractSerializedData stream) {
-            stream.writeInt32(constructor);
-        }
-    }
-
-    public static class TL_account_contentSettings extends TLObject {
-        public static int constructor = 0x57e28221;
-
-        public int flags;
-        public boolean sensitive_enabled;
-        public boolean sensitive_can_change;
-
-        public static TL_account_contentSettings TLdeserialize(AbstractSerializedData stream, int constructor, boolean exception) {
-            if (TL_account_contentSettings.constructor != constructor) {
-                if (exception) {
-                    throw new RuntimeException(String.format("can't parse magic %x in TL_account_contentSettings", constructor));
-                } else {
-                    return null;
-                }
-            }
-            TL_account_contentSettings result = new TL_account_contentSettings();
-            result.readParams(stream, exception);
-            return result;
-        }
-
-        public void readParams(AbstractSerializedData stream, boolean exception) {
-            flags = stream.readInt32(exception);
-            sensitive_enabled = (flags & 1) != 0;
-            sensitive_can_change = (flags & 2) != 0;
-
-        }
-    }
-    // NekoX end
 
     public static class TL_availableEffect extends TLObject {
         public static final int constructor = 0x93c3e27e;

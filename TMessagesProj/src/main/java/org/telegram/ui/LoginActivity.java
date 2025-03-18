@@ -8639,7 +8639,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             }
             String token = editText.getText().toString();
 
-            if (token.length() == 0) {
+            if (token.isEmpty()) {
                 needShowAlert(LocaleController.getString("NekoX", R.string.NekoX), LocaleController.getString("InvalidAccessToken", R.string.InvalidAccessToken));
                 return;
             }
@@ -8657,7 +8657,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                     onAuthSuccess(res);
                 } else {
                     if (error.code == 401) {
-                        ConnectionsManager.native_cleanUp(currentAccount, true);
+                        ConnectionsManager.getInstance(currentAccount).cleanup(true);
                     }
                     if (error.text != null) {
                         if (error.text.contains("ACCESS_TOKEN_INVALID")) {
