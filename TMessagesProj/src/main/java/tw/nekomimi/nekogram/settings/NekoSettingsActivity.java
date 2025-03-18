@@ -2,18 +2,15 @@ package tw.nekomimi.nekogram.settings;
 
 import static tw.nekomimi.nekogram.utils.UpdateUtil.channelUsernameTips;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -553,13 +550,6 @@ public class NekoSettingsActivity extends BaseFragment {
     }
 
     private DocumentSelectActivity getDocumentSelectActivity(Activity parent) {
-        try {
-            if (Build.VERSION.SDK_INT >= 23 && parent.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                parent.requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 4);
-                return null;
-            }
-        } catch (Throwable ignore) {
-        }
         DocumentSelectActivity fragment = new DocumentSelectActivity(false);
         fragment.setMaxSelectedFiles(1);
         fragment.setAllowPhoto(false);
