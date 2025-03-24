@@ -23268,8 +23268,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
         } else if (event.getAction() == MotionEvent.ACTION_HOVER_EXIT) {
             currentFocusedVirtualView = -1;
+            return true;
         }
-        return super.dispatchHoverEvent(event);
+        return false;
     }
 
     @Override
