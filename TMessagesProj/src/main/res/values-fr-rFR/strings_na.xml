@@ -185,4 +185,5 @@
     <string name="DisableRepeatInChannelError">Répéter est désactivé dans le canal</string>
     <string name="DisableDoubleTapWhenSelecting">Le double appui est désactivé lors de la sélection</string>
     <string name="DisableActionBarButton">Désactiver le bouton de la barre d\'action</string>
+    <string name="DisableShortcutTagActions">Désactiver les actions de raccourcis favoris</string>
 </resources>

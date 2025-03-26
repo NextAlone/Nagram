@@ -185,4 +185,5 @@
     <string name="DisableRepeatInChannelError">已禁止在頻道中使用复读</string>
     <string name="DisableDoubleTapWhenSelecting">已禁用在選擇時使用雙擊</string>
     <string name="DisableActionBarButton">Disable Action Bar Button</string>
+    <string name="DisableShortcutTagActions">Disable Favorite Shortcut Tag Actions</string>
 </resources>

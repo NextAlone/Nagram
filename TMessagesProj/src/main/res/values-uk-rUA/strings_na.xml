@@ -185,4 +185,5 @@
     <string name="DisableRepeatInChannelError">Повторення вимкнено в каналі</string>
     <string name="DisableDoubleTapWhenSelecting">Подвійне натискання вимкнено під час вибору</string>
     <string name="DisableActionBarButton">Вимкнути кнопку дії</string>
+    <string name="DisableShortcutTagActions">Вимкнути дії улюблених ярликів</string>
 </resources>

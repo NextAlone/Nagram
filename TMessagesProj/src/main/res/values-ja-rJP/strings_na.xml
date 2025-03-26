@@ -185,4 +185,5 @@
     <string name="DisableRepeatInChannelError">チャンネルでのリピートは無効です</string>
     <string name="DisableDoubleTapWhenSelecting">選択時にダブルタップは無効です</string>
     <string name="DisableActionBarButton">アクションバーボタンを無効化</string>
+    <string name="DisableShortcutTagActions">お気に入りのショートカットタグアクションを無効にする</string>
 </resources>

@@ -185,4 +185,5 @@
     <string name="DisableRepeatInChannelError">Η επανάληψη είναι απενεργοποιημένη στο κανάλι</string>
     <string name="DisableDoubleTapWhenSelecting">Το διπλό πάτημα είναι απενεργοποιημένο κατά την επιλογή</string>
     <string name="DisableActionBarButton">Απενεργοποίηση Κουμπιού Ενεργειών Μπάρα</string>
+    <string name="DisableShortcutTagActions">Απενεργοποιήστε Τις Αγαπημένες Ενέργειες Ετικέτας Συντόμευσης</string>
 </resources>

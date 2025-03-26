@@ -185,4 +185,5 @@
     <string name="DisableRepeatInChannelError">Herhalen is uitgeschakeld in kanaal</string>
     <string name="DisableDoubleTapWhenSelecting">Dubbel tikken is uitgeschakeld bij selecteren</string>
     <string name="DisableActionBarButton">Actie Balk Knop Uitschakelen</string>
+    <string name="DisableShortcutTagActions">Favoriete snelkoppeling Tag Acties uitschakelen</string>
 </resources>

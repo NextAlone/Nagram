@@ -185,4 +185,5 @@
     <string name="DisableRepeatInChannelError">Upprepning är inaktiverad i kanalen</string>
     <string name="DisableDoubleTapWhenSelecting">Dubbeltryck är inaktiverat när du väljer</string>
     <string name="DisableActionBarButton">Inaktivera åtgärdsfältsknapp</string>
+    <string name="DisableShortcutTagActions">Inaktivera favoritgenvägs tagg åtgärder</string>
 </resources>

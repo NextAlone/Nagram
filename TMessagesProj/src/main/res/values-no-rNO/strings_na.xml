@@ -185,4 +185,5 @@
     <string name="DisableRepeatInChannelError">Repeter er deaktivert i kanalen</string>
     <string name="DisableDoubleTapWhenSelecting">Dobbelttrykk er deaktivert ved valg</string>
     <string name="DisableActionBarButton">Knapp for deaktivering av handlingslinje</string>
+    <string name="DisableShortcutTagActions">Deaktiver handlinger for favorittsnarveileder</string>
 </resources>

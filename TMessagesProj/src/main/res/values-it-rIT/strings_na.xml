@@ -185,4 +185,5 @@
     <string name="DisableRepeatInChannelError">La ripetizione è disabilitata nel canale</string>
     <string name="DisableDoubleTapWhenSelecting">Doppio tocco è disabilitato quando si seleziona</string>
     <string name="DisableActionBarButton">Disabilita Pulsante Barra Azioni</string>
+    <string name="DisableShortcutTagActions">Disabilita Azioni Etichetta Scorciatoia Preferite</string>
 </resources>

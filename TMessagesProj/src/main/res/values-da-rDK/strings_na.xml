@@ -185,4 +185,5 @@
     <string name="DisableRepeatInChannelError">Gentagelse er deaktiveret i kanal</string>
     <string name="DisableDoubleTapWhenSelecting">Dobbelttryk er deaktiveret ved valg</string>
     <string name="DisableActionBarButton">Deaktivér Handlingsbjælkeknap</string>
+    <string name="DisableShortcutTagActions">Deaktivér Favorit Genvejshandlinger</string>
 </resources>

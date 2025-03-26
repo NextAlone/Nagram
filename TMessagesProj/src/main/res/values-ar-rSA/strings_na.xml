@@ -185,4 +185,5 @@
     <string name="DisableRepeatInChannelError">التكرار معطل في القناة</string>
     <string name="DisableDoubleTapWhenSelecting">يتم تعطيل النقر المزدوج عند تحديد</string>
     <string name="DisableActionBarButton">تعطيل زر شريط الإجراءات</string>
+    <string name="DisableShortcutTagActions">تعطيل إجراءات علامة الاختصار المفضلة</string>
 </resources>

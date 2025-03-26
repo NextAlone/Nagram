@@ -185,4 +185,5 @@
     <string name="DisableRepeatInChannelError">Opakování je v kanálu zakázáno</string>
     <string name="DisableDoubleTapWhenSelecting">Dvojité poklepání je při výběru zakázáno</string>
     <string name="DisableActionBarButton">Zakázat tlačítko akční lišty</string>
+    <string name="DisableShortcutTagActions">Zakázat akce oblíbených zkratek</string>
 </resources>

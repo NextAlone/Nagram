@@ -185,4 +185,5 @@
     <string name="DisableRepeatInChannelError">Wiederholung ist im Kanal deaktiviert</string>
     <string name="DisableDoubleTapWhenSelecting">Doppeltes Tippen ist bei Auswahl deaktiviert</string>
     <string name="DisableActionBarButton">Aktionsleisten-Button deaktivieren</string>
+    <string name="DisableShortcutTagActions">Favoriten Shortcut Tag-Aktionen deaktivieren</string>
 </resources>

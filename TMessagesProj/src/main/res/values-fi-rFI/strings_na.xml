@@ -185,4 +185,5 @@
     <string name="DisableRepeatInChannelError">Toisto on poistettu käytöstä kanavalta</string>
     <string name="DisableDoubleTapWhenSelecting">Kaksoisnapautus ei ole käytössä valittaessa</string>
     <string name="DisableActionBarButton">Poista Toimintapalkin Painike Käytöstä</string>
+    <string name="DisableShortcutTagActions">Poista Suosikki Pikanäppäin Toiminnot Käytöstä</string>
 </resources>
