@@ -57,20 +57,9 @@ public class ColoredImageSpan extends ReplacementSpan {
 
     public ColoredImageSpan(Drawable drawable, int verticalAlignment) {
         this.drawable = drawable;
-        this.usePaintColor = true;
         if (drawable != null) {
             drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-            drawable.setColorFilter(new PorterDuffColorFilter(drawableColor, PorterDuff.Mode.SRC_IN));
         }
-        this.verticalAlignment = verticalAlignment;
-    }
-
-    public ColoredImageSpan(Drawable drawable, int drawableColor, int verticalAlignment) {
-        this.drawable = drawable;
-        this.drawableColor = drawableColor;
-        this.usePaintColor = true;
-        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-        drawable.setColorFilter(new PorterDuffColorFilter(drawableColor, PorterDuff.Mode.SRC_IN));
         this.verticalAlignment = verticalAlignment;
     }
 
