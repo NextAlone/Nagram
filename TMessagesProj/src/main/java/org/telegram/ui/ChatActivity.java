@@ -9997,7 +9997,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     private boolean isBottomOverlayHidden() {
         // na: DisableChannelMuteButton
-        return currentChat != null && NaConfig.INSTANCE.getDisableChannelMuteButton().Bool() && isChannelBottomMuteView && !currentChat.creator && !ChatObject.canWriteToChat(currentChat);
+        return currentChat != null && NaConfig.INSTANCE.getDisableChannelMuteButton().Bool() && isChannelBottomMuteView && !currentChat.creator && !ChatObject.canWriteToChat(currentChat) && !searchItemVisible;
     }
 
     @Override
@@ -16548,7 +16548,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (pagedownButton == null) {
             return;
         }
-        boolean show = canShowPagedownButton && !textSelectionHelper.isInSelectionMode() && !chatActivityEnterView.isRecordingAudioVideo() && !isInsideContainer && (!searching || getMediaDataController().searchResultMessages.isEmpty());
+        boolean show = canShowPagedownButton && !textSelectionHelper.isInSelectionMode() && !chatActivityEnterView.isRecordingAudioVideo() && !isInsideContainer && (!searching && getMediaDataController().searchResultMessages.isEmpty());
         if (show) {
             if (animated && (openAnimationStartTime == 0 || SystemClock.elapsedRealtime() < openAnimationStartTime + 150)) {
                 animated = false;
@@ -16584,9 +16584,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
             }
         } else {
-            returnToMessageId = 0;
-            returnToMessageIdsStack.clear();
-            newUnreadMessageCount = 0;
+            if (!searchItemVisible) {
+                returnToMessageId = 0;
+                returnToMessageIdsStack.clear();
+                newUnreadMessageCount = 0;
+            }
             if (pagedownButton.getTag() != null) {
                 pagedownButton.setTag(null);
                 if (pagedownButtonAnimation != null) {
@@ -26973,6 +26975,22 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             bottomOverlayChat.setVisibility(View.INVISIBLE);
             chatActivityEnterView.setFieldFocused(false);
             chatActivityEnterView.setVisibility(View.INVISIBLE);
+            if (searchContainer != null) {
+                searchContainer.animate().setListener(null).cancel();
+                if (searchContainer.getVisibility() == View.VISIBLE) {
+                    ViewPropertyAnimator anim = searchContainer.animate().alpha(0f).setDuration(220).setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
+                    if (isInsideContainer) {
+                        anim.translationY(dp(searchContainerHeight));
+                    }
+                    anim.setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            searchContainer.setVisibility(View.INVISIBLE);
+                        }
+                    }).start();
+                }
+            }
         } else if (bottomOverlayLinks || forceVisible) {
             bottomOverlayChat.setVisibility(View.VISIBLE);
             chatActivityEnterView.setVisibility(View.INVISIBLE);
