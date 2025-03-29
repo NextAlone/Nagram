@@ -39486,7 +39486,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (did < 0) {
                     chat = getMessagesController().getChat(-did);
                 }
-                if (did == Long.MAX_VALUE || did != dialog_id && chat != null && !ChatObject.isPublic(chat) && (chat.left || chat.kicked)) {
+                if (did == Long.MAX_VALUE) {
                     if (messageObject != null && messageObject.messageOwner != null && messageObject.messageOwner.reply_to != null && !TextUtils.isEmpty(messageObject.messageOwner.reply_to.quote_text) && messageObject.replyTextEllipsized && !messageObject.replyTextRevealed && !messageObject.shouldDrawWithoutBackground()) {
                         messageObject.replyTextRevealed = true;
                         updateMessageAnimated(messageObject, true);
