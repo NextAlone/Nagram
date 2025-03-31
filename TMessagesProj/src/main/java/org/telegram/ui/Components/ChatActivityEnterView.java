@@ -7520,7 +7520,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 }
             }
             if (allowConfirm && showConfirmAlert(() -> {
-                sendMessageInternal(notify, scheduleDate, payStars, false);
+                sendMessageInternal(notify, scheduleDate, payStars, false, internalParams);
             })) {
                 return;
             }
@@ -7627,7 +7627,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             updateSendButtonPaid();
         };
         if (allowConfirm) {
-            boolean alertShown = AlertsCreator.ensurePaidMessageConfirmation(currentAccount, dialog_id, getMessagesCount(), starsPrice -> sendMessageInternal(notify, scheduleDate, starsPrice, false), payStars);
+            boolean alertShown = AlertsCreator.ensurePaidMessageConfirmation(currentAccount, dialog_id, getMessagesCount(), starsPrice -> sendMessageInternal(notify, scheduleDate, starsPrice, false, internalParams), payStars);
             if (alertShown && sendButtonVisible) {
                 if (isInVideoMode()) {
                     if (delegate.isVideoRecordingPaused())
