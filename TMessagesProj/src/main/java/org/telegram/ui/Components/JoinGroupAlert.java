@@ -159,8 +159,8 @@ public class JoinGroupAlert extends BottomSheet {
             textView.setText(getString(R.string.ChannelPublic).toLowerCase());
         } else {
             textView.setText(isChannel
-                    ? getString(R.string.ChannelPrivate).toLowerCase()
-                    : getString(R.string.MegaPrivate).toLowerCase()
+                    ? getString(R.string.ChannelPrivate).toLowerCase()+ " " + LocaleController.formatPluralStringComma("Subscribers", participants_count)
+                    : getString(R.string.MegaPrivate).toLowerCase() + " " + LocaleController.formatPluralStringComma("Members", participants_count)
             );
         }
         linearLayout.addView(textView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.CENTER_HORIZONTAL, 10, 0, 10, hasAbout ? 0 : 20));
