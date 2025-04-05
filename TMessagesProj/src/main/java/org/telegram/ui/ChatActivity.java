@@ -37354,7 +37354,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 // --- AyuGram hook
                 if (NaConfig.INSTANCE.getRegexFiltersEnabled().Bool() && (NaConfig.INSTANCE.getRegexFiltersEnableInChats().Bool() || ChatObject.isChannel(currentChat))) {
                     var group = getGroup(msg.getGroupId());
-                    var msgToCheck = group == null ? msg : group.findPrimaryMessageObject();
+                    var msgToCheck = group == null ? msg : group.findCaptionMessageObject();
 
                     if (AyuFilter.isFiltered(msgToCheck, group)) {
                         return -1000;
