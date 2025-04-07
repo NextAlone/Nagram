@@ -187,4 +187,5 @@
     <string name="DisableDoubleTapWhenSelecting">Double tap is disabled when selecting</string>\
     <string name="DisableActionBarButton">Disable Action Bar Button</string>
     <string name="DisableShortcutTagActions">Disable Favorite Shortcut Tag Actions</string>
+    <string name="DisablePhoneSharePrompt">Disable contact phone number sharing prompt</string>
 </resources>

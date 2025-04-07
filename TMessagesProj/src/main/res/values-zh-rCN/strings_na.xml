@@ -178,7 +178,7 @@
     <string name="DisableFavoriteSearchEmojiTags">禁用收藏夹标签搜索栏Emoji列表</string>
     <string name="DisableFeatuerdEmojis">禁用热门Premium Emoji</string>
     <string name="DisableFeaturedStickers">禁用热门Premium Stickers</string>
-    <string name="DisableFeaturedGifs">禁用热门GIF图</string>
+    <string name="DisableFeaturedGifs">禁用热门GIF</string>
     <string name="DisablePremiumFavoriteEmojiTags">禁用Premium收藏夹Emoji标签</string>
     <string name="DisableNonPremiumChannelChatShow">禁用非Premium频道马甲显示</string>
     <string name="DisableRepeatInChannel">在频道中禁用复读</string>
@@ -186,4 +186,5 @@
     <string name="DisableDoubleTapWhenSelecting">已禁止在选择模式中使用双击</string>
     <string name="DisableActionBarButton">禁用对话导航栏按钮</string>
     <string name="DisableShortcutTagActions">禁用收藏夹快捷标签操作</string>
+    <string name="DisablePhoneSharePrompt">禁用联系人手机号分享提示</string>
 </resources>
