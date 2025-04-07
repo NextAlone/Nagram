@@ -803,6 +803,13 @@ object NaConfig {
             12,
             false
         )
+    val disablePhoneSharePrompt =
+        addConfig(
+            "DisablePhoneSharePrompt",
+            disableTrendingFlags,
+            13,
+            false
+        )
     val disableRepeatInChannel =
         addConfig(
             "DisableRepeatInChannel",
