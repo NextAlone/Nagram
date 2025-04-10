@@ -188,4 +188,5 @@
     <string name="DisableActionBarButton">Disable Action Bar Button</string>
     <string name="DisableShortcutTagActions">Disable Favorite Shortcut Tag Actions</string>
     <string name="DisablePhoneSharePrompt">Disable contact phone number sharing prompt</string>
+    <string name="ColoredAdminTitle">Colored Admin Title</string>
 </resources>

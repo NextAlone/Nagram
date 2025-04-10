@@ -857,6 +857,12 @@ object NaConfig {
             4,
             false
         )
+    val coloredAdminTitle =
+        addConfig(
+            "ColoredAdminTitle",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

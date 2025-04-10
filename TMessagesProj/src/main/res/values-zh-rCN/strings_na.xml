@@ -187,4 +187,5 @@
     <string name="DisableActionBarButton">禁用对话导航栏按钮</string>
     <string name="DisableShortcutTagActions">禁用收藏夹快捷标签操作</string>
     <string name="DisablePhoneSharePrompt">禁用联系人手机号分享提示</string>
+    <string name="ColoredAdminTitle">着色管理员头衔</string>
 </resources>

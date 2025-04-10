@@ -221,6 +221,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 
+import tw.nekomimi.nekogram.helpers.TimeStringHelper;
 import tw.nekomimi.nekogram.utils.NeteaseEmbed;
 import xyz.nextalone.nagram.NaConfig;
 
@@ -16669,6 +16670,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     adminLabel = getString(R.string.ChatAdmin);
                 }
                 adminString = new SpannableStringBuilder(adminLabel);
+                if (NaConfig.INSTANCE.getColoredAdminTitle().Bool()) {
+                    adminString.replace(0, adminString.length(), TimeStringHelper.getColoredAdminString(this, Theme.chat_namePaint, adminString));
+                }
             }
 
             int boosts = currentMessageObject.messageOwner.from_boosts_applied;
