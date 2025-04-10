@@ -15,6 +15,8 @@ buildscript {
         classpath "com.github.triplet.gradle:play-publisher:3.6.0"
         classpath 'cn.hutool:hutool-core:5.7.13'
         classpath "io.sentry:sentry-android-gradle-plugin:4.5.1"
+        // db
+        classpath "io.objectbox:objectbox-gradle-plugin:4.2.0"
     }
 }
 

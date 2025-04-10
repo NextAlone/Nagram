@@ -1,9 +1,9 @@
-package tw.nekomimi.nekogram.transtale.entity;
+package tw.nekomimi.nekogram.database;
 
-import org.dizitart.no2.repository.annotations.Id;
-import org.dizitart.no2.repository.annotations.Index;
+import io.objectbox.annotation.Entity;
+import io.objectbox.annotation.Id;
 
-@Index(fields = "chatId")
+@Entity
 public class ChatLanguage {
     @Id
     public Long chatId;

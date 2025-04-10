@@ -1,44 +1,31 @@
 package tw.nekomimi.nekogram.transtale
 
-import org.dizitart.no2.common.mapper.SimpleNitriteMapper
-import org.dizitart.no2.common.module.NitriteModule
-import org.dizitart.no2.filters.FluentFilter
-import org.dizitart.no2.repository.ObjectRepository
+import io.objectbox.Box
 import org.telegram.messenger.LocaleController
 import tw.nekomimi.nekogram.NekoConfig
+import tw.nekomimi.nekogram.database.ChatCCTarget
+import tw.nekomimi.nekogram.database.ChatLanguage
+import tw.nekomimi.nekogram.database.TransItem
 import tw.nekomimi.nekogram.database.mkDatabase
-import tw.nekomimi.nekogram.transtale.entity.ChatCCTarget
-import tw.nekomimi.nekogram.transtale.entity.ChatLanguage
-import tw.nekomimi.nekogram.transtale.entity.TransItem
-import tw.nekomimi.nekogram.transtale.mapper.ChatCCTargetConverter
-import tw.nekomimi.nekogram.transtale.mapper.ChatLanguageConverter
-import tw.nekomimi.nekogram.transtale.mapper.TransItemConverter
+import tw.nekomimi.nekogram.database.queryTransItemModel
 import tw.nekomimi.nekogram.utils.UIUtil
 import java.util.Locale
 
 class TranslateDb(val code: String) {
 
-    var conn: ObjectRepository<TransItem> = db.getRepository(TransItem::class.java, code)
+    var conn: Box<TransItem> = db.boxFor(TransItem::class.java)
 
     companion object {
 
-        val db = mkDatabase("translate_caches", module = NitriteModule.module(getNitriteMapper()))
+        val db = mkDatabase("translate_caches")
 
         val repo = HashMap<Locale, TranslateDb>()
-        val chat: ObjectRepository<ChatLanguage> = db.getRepository(ChatLanguage::class.java, "chat")
-        val ccTarget: ObjectRepository<ChatCCTarget> = db.getRepository(ChatCCTarget::class.java, "opencc")
-
-        @JvmStatic fun getNitriteMapper(): SimpleNitriteMapper {
-            val nitriteMapper = SimpleNitriteMapper()
-            nitriteMapper.registerEntityConverter(ChatCCTargetConverter())
-            nitriteMapper.registerEntityConverter(ChatLanguageConverter())
-            nitriteMapper.registerEntityConverter(TransItemConverter())
-            return nitriteMapper
-        }
+        val chat: Box<ChatLanguage> = db.boxFor(ChatLanguage::class.java)
+        val ccTarget: Box<ChatCCTarget> = db.boxFor(ChatCCTarget::class.java)
 
         @JvmStatic fun getChatLanguage(chatId: Long, default: Locale): Locale {
 
-            return chat.find(FluentFilter.where("chatId").eq(chatId)).firstOrNull()?.language?.code2Locale
+            return chat.get(chatId)?.language?.code2Locale
                     ?: default
 
         }
@@ -46,14 +33,14 @@ class TranslateDb(val code: String) {
         @JvmStatic
         fun saveChatLanguage(chatId: Long, locale: Locale) = UIUtil.runOnIoDispatcher {
 
-            chat.update(ChatLanguage(chatId, locale.locale2code), true)
+            chat.put(ChatLanguage(chatId, locale.locale2code))
 
         }
 
         @JvmStatic
         fun getChatCCTarget(chatId: Long, default: String?): String? {
 
-            return ccTarget.find(FluentFilter.where("chatId").eq(chatId)).firstOrNull()?.ccTarget
+            return ccTarget.get(chatId)?.ccTarget
                     ?: default
 
         }
@@ -61,7 +48,7 @@ class TranslateDb(val code: String) {
         @JvmStatic
         fun saveChatCCTarget(chatId: Long, target: String) = UIUtil.runOnIoDispatcher {
 
-            ccTarget.update(ChatCCTarget(chatId, target), true)
+            ccTarget.put(ChatCCTarget(chatId, target))
 
         }
 
@@ -78,10 +65,7 @@ class TranslateDb(val code: String) {
         @JvmStatic
         fun clearAll() {
 
-            db.listRepositories()
-                    .filter { it  != "chat" }
-                    .map { db.getCollection(it) }
-                    .forEach { it.drop() }
+            db.removeAllObjects()
 
             repo.clear()
 
@@ -91,21 +75,26 @@ class TranslateDb(val code: String) {
 
     fun clear() = synchronized(this) {
 
-        conn.drop()
+        conn.removeAll()
 
     }
 
-    fun contains(text: String) = synchronized(this) { conn.find(FluentFilter.where("text").eq(text)).count() > 0 }
+    fun contains(text: String) = synchronized(this) { queryTransItemModel(conn, code, text) != null }
 
     fun save(text: String, trans: String) = synchronized<Unit>(this) {
-
-        conn.update(TransItem(text, trans), true)
+        var model = queryTransItemModel(conn, code, text)
+        if (model != null) {
+            model.trans = trans;
+        } else {
+            model = TransItem(code, text, trans)
+        }
+        conn.put(model)
 
     }
 
     fun query(text: String) = synchronized(this) {
 
-        conn.find(FluentFilter.where("text").eq(text)).firstOrNull()?.trans
+        queryTransItemModel(conn, code, text)?.trans
 
     }
 

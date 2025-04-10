@@ -1,5 +1,6 @@
 package tw.nekomimi.nekogram;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -26,7 +27,6 @@ import java.util.regex.Pattern;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
-import tw.nekomimi.nekogram.database.NitritesKt;
 import xyz.nextalone.nagram.NaConfig;
 
 public class NekoXConfig {
@@ -65,7 +65,7 @@ public class NekoXConfig {
     private static Typeface systemEmojiTypeface;
 
 
-    public static SharedPreferences preferences = NitritesKt.openMainSharedPreference("nekox_config");
+    public static SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekox_config", Context.MODE_PRIVATE);
 
     public static boolean developerMode = preferences.getBoolean("developer_mode", true);
 

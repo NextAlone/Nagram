@@ -4,6 +4,7 @@ import io.sentry.android.gradle.instrumentation.logcat.LogcatLevel
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 apply plugin: "io.sentry.android.gradle"
+apply plugin: "io.objectbox"
 
 repositories {
     maven {
@@ -324,9 +325,6 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.10"
     implementation 'com.neovisionaries:nv-websocket-client:2.14'
     implementation 'dnsjava:dnsjava:3.4.1'
-    // db
-    implementation 'org.dizitart:nitrite:4.3.0'
-    implementation 'org.dizitart:nitrite-mvstore-adapter:4.3.0'
 
     implementation "cn.hutool:hutool-core:5.7.13"
     implementation "cn.hutool:hutool-crypto:5.7.13"
