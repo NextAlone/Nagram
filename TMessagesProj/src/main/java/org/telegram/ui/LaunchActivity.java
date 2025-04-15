@@ -243,6 +243,7 @@ import tw.nekomimi.nekogram.helpers.remote.PagePreviewRulesHelper;
 import tw.nekomimi.nekogram.helpers.remote.PeerColorHelper;
 import tw.nekomimi.nekogram.helpers.remote.UpdateHelper;
 import tw.nekomimi.nekogram.helpers.remote.WallpaperHelper;
+import tw.nekomimi.nekogram.settings.NekoGhostModeActivity;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
@@ -617,9 +618,9 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 if (id == 13) {
                     presentFragment(new ProxyListActivity());
                     drawerLayoutContainer.closeDrawer(false);
-                } else if (id == 14) {
-                    NekoXConfig.toggleKeepOnlineStatus();
-                    drawerLayoutAdapter.notifyDataSetChanged();
+                } else if (id == 44678) {
+                    presentFragment(new NekoGhostModeActivity());
+                    drawerLayoutContainer.closeDrawer(false);
                 } else if (!UserConfig.hasPremiumOnAccounts()) {
                     if (actionBarLayout.getFragmentStack().size() > 0) {
                         BaseFragment fragment = actionBarLayout.getFragmentStack().get(0);

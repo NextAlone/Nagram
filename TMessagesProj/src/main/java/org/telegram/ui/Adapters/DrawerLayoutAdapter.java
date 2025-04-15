@@ -30,7 +30,6 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.DrawerLayoutContainer;
-import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.DividerCell;
 import org.telegram.ui.Cells.DrawerActionCell;
@@ -340,6 +339,19 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
             inviteIcon = R.drawable.msg_invite;
             helpIcon = R.drawable.msg_help;
         }
+
+        // --- start Drawer GhostMode hook
+        if (NekoConfig.showGhostToggleInDrawer) {
+            boolean isGhost = NekoConfig.isGhostModeActive();
+            items.add(new CheckItem(44678, LocaleController.getString("GhostMode", R.string.GhostMode), R.drawable.icon_ghost, () -> isGhost, () -> {
+                NekoConfig.setGhostMode(!isGhost);
+                NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
+                return true;
+            }));
+            items.add(null);
+        }
+        // --- end Drawer GhostMode hook
+
         UserConfig me = UserConfig.getInstance(UserConfig.selectedAccount);
         boolean showDivider = false;
         items.add(new Item(16, LocaleController.getString(R.string.MyProfile), R.drawable.left_status_profile));
@@ -397,18 +409,6 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         if (NekoConfig.useProxyItem.Bool() && (!NekoConfig.hideProxyByDefault.Bool() || SharedConfig.isProxyEnabled())) {
             items.add(new CheckItem(13, LocaleController.getString("Proxy", R.string.Proxy), R.drawable.msg_policy, SharedConfig::isProxyEnabled, () -> {
                 SharedConfig.setProxyEnable(!SharedConfig.isProxyEnabled());
-                return true;
-            }));
-        }
-        if (NekoXConfig.disableStatusUpdate && UserConfig.getInstance(UserConfig.selectedAccount).isClientActivated() && !UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().bot) {
-            boolean online = MessagesController.getInstance(UserConfig.selectedAccount).isOnline();
-            String message = online ? StrUtil.upperFirst(LocaleController.getString("Online", R.string.Online)) : LocaleController.getString("VoipOfflineTitle", R.string.VoipOfflineTitle);
-            if (NekoXConfig.keepOnlineStatus) {
-                message += " (" + LocaleController.getString("Locked", R.string.Locked) + ")";
-            }
-            items.add(new CheckItem(14, message, R.drawable.msg_view_file, () -> online, () -> {
-                MessagesController controller = MessagesController.getInstance(UserConfig.selectedAccount);
-                controller.updateStatus(!online);
                 return true;
             }));
         }

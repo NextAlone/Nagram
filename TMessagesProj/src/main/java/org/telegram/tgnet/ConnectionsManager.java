@@ -23,6 +23,7 @@ import com.google.android.play.core.integrity.IntegrityManager;
 import com.google.android.play.core.integrity.IntegrityManagerFactory;
 import com.google.android.play.core.integrity.IntegrityTokenRequest;
 import com.google.android.play.core.integrity.IntegrityTokenResponse;
+//import com.radolyn.ayugram.utils.AyuState;
 //import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 import org.json.JSONArray;
@@ -80,11 +81,14 @@ import javax.net.ssl.SSLException;
 
 import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.utils.AyuGhostUtils;
 import tw.nekomimi.nekogram.utils.DnsFactory;
 import tw.nekomimi.nekogram.ErrorDatabase;
 
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import xyz.nextalone.nagram.NaConfig;
+import org.telegram.tgnet.tl.*;
+import org.telegram.tgnet.TLRPC;
 
 public class ConnectionsManager extends BaseController {
 
@@ -365,10 +369,95 @@ SharedPreferences mainPreferences;
         return requestToken;
     }
 
-    private void sendRequestInternal(TLObject object, RequestDelegate onComplete, RequestDelegateTimestamp onCompleteTimestamp, QuickAckDelegate onQuickAck, WriteToSocketDelegate onWriteToSocket, int flags, int datacenterId, int connectionType, boolean immediate, int requestToken) {
+    private void sendRequestInternal(TLObject object, RequestDelegate onCompleteOrig, RequestDelegateTimestamp onCompleteTimestamp, QuickAckDelegate onQuickAck, WriteToSocketDelegate onWriteToSocket, int flags, int datacenterId, int connectionType, boolean immediate, int requestToken) {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("send request " + object + " with token = " + requestToken);
         }
+        // start request hook
+        {
+            // --- 不发送在线状态 ---
+            if (!NekoConfig.sendOnlinePackets && object instanceof TL_account.updateStatus) {
+                // 不发送在线状态，将状态设置为离线
+                TL_account.updateStatus status = (TL_account.updateStatus) object;
+                status.offline = true;  // 将在线状态改为离线
+            }
+
+            // --- 不发送动态已读 ---
+            if (!NekoConfig.sendReadStoryPackets && (
+                    object instanceof TL_stories.TL_stories_readStories ||
+                            object instanceof TL_stories.TL_stories_incrementStoryViews
+            )) {
+                return;
+            }
+
+            // --- 不发送输入状态 ---
+            if (!NekoConfig.sendUploadProgress && (
+                    object instanceof TLRPC.TL_messages_setTyping ||
+                            object instanceof TLRPC.TL_messages_setEncryptedTyping
+            )) {
+                return;  // 不处理输入状态请求
+            }
+
+            // --- 不发送已读消息 ---
+            if (!NekoConfig.sendReadMessagePackets && !AyuGhostUtils.getAllowReadPacket() &&  (
+                    object instanceof TLRPC.TL_messages_readHistory ||
+                            object instanceof TLRPC.TL_messages_readMessageContents ||
+                            object instanceof TLRPC.TL_channels_readHistory ||
+                            object instanceof TLRPC.TL_channels_readMessageContents
+            )) {
+                return; // 直接返回，阻止请求的发送
+            }
+
+            // --- 发送消息后自动已读对面消息 ---
+            if (NekoConfig.markReadAfterSend && !NekoConfig.sendReadMessagePackets) {
+                TLRPC.InputPeer peer = null;
+                if (object instanceof TLRPC.TL_messages_sendMessage) {
+                    var obj = ((TLRPC.TL_messages_sendMessage) object);
+                    peer = obj.peer;
+                } else if (object instanceof TLRPC.TL_messages_sendMedia) {
+                    var obj = ((TLRPC.TL_messages_sendMedia) object);
+                    peer = obj.peer;
+                } else if (object instanceof TLRPC.TL_messages_sendMultiMedia) {
+                    var obj = ((TLRPC.TL_messages_sendMultiMedia) object);
+                    peer = obj.peer;
+                }
+                if (peer != null) {
+                    var dialogId = AyuGhostUtils.getDialogId(peer);
+                    var origOnComplete = onCompleteOrig;
+                    TLRPC.InputPeer finalPeer = peer;
+                    onCompleteOrig = (response, error) -> {
+                        origOnComplete.run(response, error);
+                        getMessagesStorage().getDialogMaxMessageId(dialogId, maxId -> {
+                            TLRPC.TL_messages_readHistory request = new TLRPC.TL_messages_readHistory();
+                            request.peer = finalPeer;
+                            request.max_id = maxId;
+                            AyuGhostUtils.setAllowReadPacket(true, 1);
+                            sendRequest(request, (a1, a2) -> {});
+                        });
+                    };
+                }
+            }
+
+            // --- 在线后立即离线 ---
+            if (NekoConfig.sendOfflineAfterOnline && (
+                    object instanceof TLRPC.TL_messages_sendMessage ||
+                            object instanceof TLRPC.TL_messages_sendMedia ||
+                            object instanceof TLRPC.TL_messages_sendMultiMedia
+            )) {
+                // 包装原回调，确保消息发送完后立即发送离线状态
+                RequestDelegate origOnComplete = onCompleteOrig;
+                TL_account.updateStatus offlineRequest = new TL_account.updateStatus();
+                offlineRequest.offline = true; // 设置为离线
+                onCompleteOrig = (response, error) -> {
+                    origOnComplete.run(response, error); // 执行原回调
+                    // 延迟执行离线请求
+                    android.os.Handler handler = new android.os.Handler();
+                    handler.postDelayed(() -> sendRequest(offlineRequest, null), 500);
+                };
+            }
+        }
+        final var onComplete = onCompleteOrig;
+        // --- end request hook
         try {
             NativeByteBuffer buffer = new NativeByteBuffer(object.getObjectSize());
             object.serializeToStream(buffer);

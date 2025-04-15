@@ -77,6 +77,9 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
 //    private final AbstractConfigCell useCustomEmojiRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useCustomEmoji));
     private final AbstractConfigCell localQuoteColorRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getUseLocalQuoteColor()));
     private final AbstractConfigCell channelAliasRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.channelAlias));
+    private final AbstractConfigCell externalGhostModeRow = cellGroup.appendCell(new ConfigCellText("GhostMode", () -> {
+        presentFragment(new NekoGhostModeActivity());
+    }));
     private final AbstractConfigCell customCustomChannelLabelRow = cellGroup.appendCell(new ConfigCellTextInput(null, NaConfig.INSTANCE.getCustomChannelLabel(),
             null, null,
             (input) -> input.isEmpty() ? (String) NaConfig.INSTANCE.getCustomChannelLabel().defaultValue : input));
