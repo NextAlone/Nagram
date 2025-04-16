@@ -186,4 +186,15 @@
     <string name="DisableDoubleTapWhenSelecting">يتم تعطيل النقر المزدوج عند تحديد</string>
     <string name="DisableActionBarButton">تعطيل زر شريط الإجراءات</string>
     <string name="DisableShortcutTagActions">تعطيل إجراءات علامة الاختصار المفضلة</string>
+    <string name="DisablePhoneSharePrompt">تعطيل طلب مشاركة رقم هاتف جهة الاتصال</string>
+    <string name="ColoredAdminTitle">عنوان المدير الملون</string>
+    <string name="GhostMode">وضع الشبح</string>
+    <string name="GhostElements">خيارات الشبح</string>
+    <string name="DrawerElements">عناصر القائمة</string>
+    <string name="DontReadMessages">لا تضع علامة على الرسائل كمقروءة</string>
+    <string name="DontReadStories">لا تحدد القصص كمقروءة</string>
+    <string name="DontSendOnlinePackets">تعطيل حالة الإنترنت</string>
+    <string name="DontSendUploadProgress">تعطيل مؤشر الكتابة</string>
+    <string name="SendOfflinePacketAfterOnline">اذهب دون اتصال بعد الذهاب عبر الإنترنت</string>
+    <string name="MarkReadAfterAction">وضع علامة كمقروء بعد إجراء</string>
 </resources>

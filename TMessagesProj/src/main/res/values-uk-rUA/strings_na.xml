@@ -186,4 +186,15 @@
     <string name="DisableDoubleTapWhenSelecting">Подвійне натискання вимкнено під час вибору</string>
     <string name="DisableActionBarButton">Вимкнути кнопку дії</string>
     <string name="DisableShortcutTagActions">Вимкнути дії улюблених ярликів</string>
+    <string name="DisablePhoneSharePrompt">Вимкнути запит на обмін номером телефону</string>
+    <string name="ColoredAdminTitle">Кольоровий заголовок адміністратора</string>
+    <string name="GhostMode">Режим примари</string>
+    <string name="GhostElements">Параметри Ghost</string>
+    <string name="DrawerElements">Елементи меню</string>
+    <string name="DontReadMessages">Не позначати повідомлення як прочитані</string>
+    <string name="DontReadStories">Не позначати історії як прочитані</string>
+    <string name="DontSendOnlinePackets">Вимкнути онлайн-статус</string>
+    <string name="DontSendUploadProgress">Вимкнути індикатор набору</string>
+    <string name="SendOfflinePacketAfterOnline">Автономний режим після перебування онлайн</string>
+    <string name="MarkReadAfterAction">Відмітити як прочитані після дії</string>
 </resources>

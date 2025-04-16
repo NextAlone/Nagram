@@ -186,4 +186,15 @@
     <string name="DisableDoubleTapWhenSelecting">Dubbel tikken is uitgeschakeld bij selecteren</string>
     <string name="DisableActionBarButton">Actie Balk Knop Uitschakelen</string>
     <string name="DisableShortcutTagActions">Favoriete snelkoppeling Tag Acties uitschakelen</string>
+    <string name="DisablePhoneSharePrompt">Telefoonnummer delen uitschakelen prompt contact</string>
+    <string name="ColoredAdminTitle">Gekleurde titel beheerder</string>
+    <string name="GhostMode">Spook modus</string>
+    <string name="GhostElements">Spook opties</string>
+    <string name="DrawerElements">App-overzicht items</string>
+    <string name="DontReadMessages">Berichten niet markeren als gelezen</string>
+    <string name="DontReadStories">Verhalen niet als gelezen markeren</string>
+    <string name="DontSendOnlinePackets">Uitschakelen Online Status</string>
+    <string name="DontSendUploadProgress">Uitschakelen Typing Indicator</string>
+    <string name="SendOfflinePacketAfterOnline">Ga offline na online gaan</string>
+    <string name="MarkReadAfterAction">Markeer als gelezen na actie</string>
 </resources>

@@ -186,4 +186,15 @@
     <string name="DisableDoubleTapWhenSelecting">Το διπλό πάτημα είναι απενεργοποιημένο κατά την επιλογή</string>
     <string name="DisableActionBarButton">Απενεργοποίηση Κουμπιού Ενεργειών Μπάρα</string>
     <string name="DisableShortcutTagActions">Απενεργοποιήστε Τις Αγαπημένες Ενέργειες Ετικέτας Συντόμευσης</string>
+    <string name="DisablePhoneSharePrompt">Απενεργοποίηση ερώτησης κοινής χρήσης αριθμού τηλεφώνου επαφής</string>
+    <string name="ColoredAdminTitle">Χρωματιστός Τίτλος Διαχειριστή</string>
+    <string name="GhostMode">Λειτουργία Φάντασμα</string>
+    <string name="GhostElements">Επιλογές Φάντασμα</string>
+    <string name="DrawerElements">Στοιχεία Συρταριού</string>
+    <string name="DontReadMessages">Να μην επισημανθούν τα μηνύματα ως αναγνωσμένα</string>
+    <string name="DontReadStories">Να μην επισημανθούν οι Ιστορίες ως αναγνωσμένες</string>
+    <string name="DontSendOnlinePackets">Απενεργοποίηση Online Κατάστασης</string>
+    <string name="DontSendUploadProgress">Απενεργοποίηση Ένδειξης Πληκτρολογίας</string>
+    <string name="SendOfflinePacketAfterOnline">Πηγαίνετε Εκτός Σύνδεσης Μετά Από Να Πηγαίνετε Online</string>
+    <string name="MarkReadAfterAction">Σήμανση ως αναγνωσμένου μετά την ενέργεια</string>
 </resources>

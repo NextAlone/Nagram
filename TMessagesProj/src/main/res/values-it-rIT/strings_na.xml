@@ -186,4 +186,15 @@
     <string name="DisableDoubleTapWhenSelecting">Doppio tocco è disabilitato quando si seleziona</string>
     <string name="DisableActionBarButton">Disabilita Pulsante Barra Azioni</string>
     <string name="DisableShortcutTagActions">Disabilita Azioni Etichetta Scorciatoia Preferite</string>
+    <string name="DisablePhoneSharePrompt">Disabilita il prompt di condivisione del numero di contatto</string>
+    <string name="ColoredAdminTitle">Titolo Admin Colorato</string>
+    <string name="GhostMode">Modalità Fantasma</string>
+    <string name="GhostElements">Opzioni Fantasma</string>
+    <string name="DrawerElements">Elementi Del Cassetto</string>
+    <string name="DontReadMessages">Non contrassegnare i messaggi come letti</string>
+    <string name="DontReadStories">Non contrassegnare le storie come letti</string>
+    <string name="DontSendOnlinePackets">Disabilita Stato Online</string>
+    <string name="DontSendUploadProgress">Disabilita Indicatore Di Digitazione</string>
+    <string name="SendOfflinePacketAfterOnline">Vai Offline Dopo Andare Online</string>
+    <string name="MarkReadAfterAction">Segna come letto dopo l\'azione</string>
 </resources>

@@ -186,4 +186,15 @@
     <string name="DisableDoubleTapWhenSelecting">Dwukrotne dotknięcie jest wyłączone podczas wybierania</string>
     <string name="DisableActionBarButton">Wyłącz przycisk paska akcji</string>
     <string name="DisableShortcutTagActions">Wyłącz Ulubione skróty tagów</string>
+    <string name="DisablePhoneSharePrompt">Wyłącz monit udostępniania numeru telefonu kontaktowego</string>
+    <string name="ColoredAdminTitle">Kolorowy Tytuł Administratora</string>
+    <string name="GhostMode">Tryb Ducha</string>
+    <string name="GhostElements">Opcje Ducha</string>
+    <string name="DrawerElements">Elementy szuflady</string>
+    <string name="DontReadMessages">Nie oznaczaj wiadomości jako przeczytane</string>
+    <string name="DontReadStories">Nie oznaczaj Opowieści jako Przeczytane</string>
+    <string name="DontSendOnlinePackets">Wyłącz status online</string>
+    <string name="DontSendUploadProgress">Wyłącz wskaźnik pisania</string>
+    <string name="SendOfflinePacketAfterOnline">Przejdź do trybu offline po zakończeniu trybu online</string>
+    <string name="MarkReadAfterAction">Oznacz jako przeczytane po akcji</string>
 </resources>

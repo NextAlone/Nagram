@@ -186,4 +186,15 @@
     <string name="DisableDoubleTapWhenSelecting">Atingerea dublă este dezactivată la selectare</string>
     <string name="DisableActionBarButton">Dezactivare buton bară de acțiune</string>
     <string name="DisableShortcutTagActions">Dezactivează acțiunile etichetei rapide favorite</string>
+    <string name="DisablePhoneSharePrompt">Dezactivează solicitarea de partajare număr de telefon</string>
+    <string name="ColoredAdminTitle">Titlu Admin colorat</string>
+    <string name="GhostMode">Mod Ghost</string>
+    <string name="GhostElements">Opțiuni Ghost</string>
+    <string name="DrawerElements">Elemente sertar</string>
+    <string name="DontReadMessages">Nu Marca mesajele ca fiind citite</string>
+    <string name="DontReadStories">Nu Marca povestirile ca fiind citite</string>
+    <string name="DontSendOnlinePackets">Dezactivează starea online</string>
+    <string name="DontSendUploadProgress">Dezactivează tastarea indicatorului</string>
+    <string name="SendOfflinePacketAfterOnline">Du-te offline după ce intri online</string>
+    <string name="MarkReadAfterAction">Marchează ca citit după acțiune</string>
 </resources>

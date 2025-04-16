@@ -186,4 +186,15 @@
     <string name="DisableDoubleTapWhenSelecting">Dobbelttryk er deaktiveret ved valg</string>
     <string name="DisableActionBarButton">Deaktivér Handlingsbjælkeknap</string>
     <string name="DisableShortcutTagActions">Deaktivér Favorit Genvejshandlinger</string>
+    <string name="DisablePhoneSharePrompt">Deaktivér prompt til deling af kontakttelefonnummer</string>
+    <string name="ColoredAdminTitle">Farvet Admin Titel</string>
+    <string name="GhostMode">Spøgelsestilstand</string>
+    <string name="GhostElements">Ghost Indstillinger</string>
+    <string name="DrawerElements">Skuffe Elementer</string>
+    <string name="DontReadMessages">Markér ikke beskeder som læst</string>
+    <string name="DontReadStories">Markér ikke historier som læst</string>
+    <string name="DontSendOnlinePackets">Deaktivér Online Status</string>
+    <string name="DontSendUploadProgress">Deaktivér Skriveindikator</string>
+    <string name="SendOfflinePacketAfterOnline">Gå Offline Efter At Gøre Online</string>
+    <string name="MarkReadAfterAction">Markér som læst efter handling</string>
 </resources>

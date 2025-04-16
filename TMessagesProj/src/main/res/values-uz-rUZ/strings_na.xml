@@ -186,4 +186,15 @@
     <string name="DisableDoubleTapWhenSelecting">Double tap is disabled when selecting</string>
     <string name="DisableActionBarButton">Disable Action Bar Button</string>
     <string name="DisableShortcutTagActions">Disable Favorite Shortcut Tag Actions</string>
+    <string name="DisablePhoneSharePrompt">Disable contact phone number sharing prompt</string>
+    <string name="ColoredAdminTitle">Colored Admin Title</string>
+    <string name="GhostMode">Ghost Mode</string>
+    <string name="GhostElements">Ghost Options</string>
+    <string name="DrawerElements">Drawer Items</string>
+    <string name="DontReadMessages">Do Not Mark Messages as Read</string>
+    <string name="DontReadStories">Do Not Mark Stories as Read</string>
+    <string name="DontSendOnlinePackets">Disable Online Status</string>
+    <string name="DontSendUploadProgress">Disable Typing Indicator</string>
+    <string name="SendOfflinePacketAfterOnline">Go Offline After Going Online</string>
+    <string name="MarkReadAfterAction">Mark as Read After Action</string>
 </resources>

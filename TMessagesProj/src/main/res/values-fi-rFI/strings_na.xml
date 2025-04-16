@@ -186,4 +186,15 @@
     <string name="DisableDoubleTapWhenSelecting">Kaksoisnapautus ei ole käytössä valittaessa</string>
     <string name="DisableActionBarButton">Poista Toimintapalkin Painike Käytöstä</string>
     <string name="DisableShortcutTagActions">Poista Suosikki Pikanäppäin Toiminnot Käytöstä</string>
+    <string name="DisablePhoneSharePrompt">Poista yhteyshenkilön puhelinnumeron jakamiskehotus käytöstä</string>
+    <string name="ColoredAdminTitle">Värillinen Admin Otsikko</string>
+    <string name="GhostMode">Ghost Tila</string>
+    <string name="GhostElements">Ghost Asetukset</string>
+    <string name="DrawerElements">Sovellusvalikon Kohteet</string>
+    <string name="DontReadMessages">Älä merkitse viestejä luetuiksi</string>
+    <string name="DontReadStories">Älä merkitse tarinoita luetuiksi</string>
+    <string name="DontSendOnlinePackets">Poista Käytöstä Online Tila</string>
+    <string name="DontSendUploadProgress">Poista Kirjoitusilmaisin Käytöstä</string>
+    <string name="SendOfflinePacketAfterOnline">Siirry Offline-Tilan Jälkeen Menossa Online</string>
+    <string name="MarkReadAfterAction">Merkitse luetuksi toiminnon jälkeen</string>
 </resources>

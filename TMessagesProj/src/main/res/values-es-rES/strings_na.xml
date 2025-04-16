@@ -186,4 +186,15 @@
     <string name="DisableDoubleTapWhenSelecting">Doble toque desactivado al seleccionar</string>
     <string name="DisableActionBarButton">Desactivar Botón de Barra de Acción</string>
     <string name="DisableShortcutTagActions">Desactivar Acciones de Etiqueta Atajo Favorita</string>
+    <string name="DisablePhoneSharePrompt">Desactivar la solicitud de compartir número de teléfono de contacto</string>
+    <string name="ColoredAdminTitle">Título de administrador coloreado</string>
+    <string name="GhostMode">Modo fantasma</string>
+    <string name="GhostElements">Opciones de fantasma</string>
+    <string name="DrawerElements">Objetos de Dibujo</string>
+    <string name="DontReadMessages">No marcar mensajes como leídos</string>
+    <string name="DontReadStories">No marcar historias como leídas</string>
+    <string name="DontSendOnlinePackets">Desactivar estado en línea</string>
+    <string name="DontSendUploadProgress">Desactivar Typing Indicator</string>
+    <string name="SendOfflinePacketAfterOnline">Desconectarse después de conectarse</string>
+    <string name="MarkReadAfterAction">Marcar como leído después de la acción</string>
 </resources>

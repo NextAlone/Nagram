@@ -186,4 +186,15 @@
     <string name="DisableDoubleTapWhenSelecting">O toque duplo está desativado ao selecionar</string>
     <string name="DisableActionBarButton">Desativar botão da barra de ação</string>
     <string name="DisableShortcutTagActions">Desativar ações de tags de atalho favoritas</string>
+    <string name="DisablePhoneSharePrompt">Desativar aviso de compartilhamento de números de telefone</string>
+    <string name="ColoredAdminTitle">Título de Admin Colorido</string>
+    <string name="GhostMode">Modo fantasma</string>
+    <string name="GhostElements">Opções de Fantasma</string>
+    <string name="DrawerElements">Itens da gaveta</string>
+    <string name="DontReadMessages">Não Marcar Mensagens como Lidas</string>
+    <string name="DontReadStories">Não marcar histórias como lidas</string>
+    <string name="DontSendOnlinePackets">Desativar status online</string>
+    <string name="DontSendUploadProgress">Desativar indicador de digitação</string>
+    <string name="SendOfflinePacketAfterOnline">Ficar offline depois de sair online</string>
+    <string name="MarkReadAfterAction">Marcar Ação Como Lida Após</string>
 </resources>

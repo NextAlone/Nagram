@@ -186,4 +186,15 @@
     <string name="DisableDoubleTapWhenSelecting">Dvojité poklepání je při výběru zakázáno</string>
     <string name="DisableActionBarButton">Zakázat tlačítko akční lišty</string>
     <string name="DisableShortcutTagActions">Zakázat akce oblíbených zkratek</string>
+    <string name="DisablePhoneSharePrompt">Zakázat požadavek na sdílení telefonního čísla kontaktu</string>
+    <string name="ColoredAdminTitle">Barevný název administrátora</string>
+    <string name="GhostMode">Režim ducha</string>
+    <string name="GhostElements">Možnosti ducha</string>
+    <string name="DrawerElements">Položky v menu aplikací</string>
+    <string name="DontReadMessages">Neoznačovat zprávy jako přečtené</string>
+    <string name="DontReadStories">Neoznačovat příběhy jako přečtené</string>
+    <string name="DontSendOnlinePackets">Zakázat stav online</string>
+    <string name="DontSendUploadProgress">Zakázat indikátor psaní</string>
+    <string name="SendOfflinePacketAfterOnline">Zapojit se po online</string>
+    <string name="MarkReadAfterAction">Označit jako přečtené po akci</string>
 </resources>

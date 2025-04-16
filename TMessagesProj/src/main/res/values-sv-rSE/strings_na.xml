@@ -186,4 +186,15 @@
     <string name="DisableDoubleTapWhenSelecting">Dubbeltryck är inaktiverat när du väljer</string>
     <string name="DisableActionBarButton">Inaktivera åtgärdsfältsknapp</string>
     <string name="DisableShortcutTagActions">Inaktivera favoritgenvägs tagg åtgärder</string>
+    <string name="DisablePhoneSharePrompt">Inaktivera kontaktnummerdelnings-prompten</string>
+    <string name="ColoredAdminTitle">Färgad administratörens titel</string>
+    <string name="GhostMode">Spökläge</string>
+    <string name="GhostElements">Spökalternativ</string>
+    <string name="DrawerElements">Lådans objekt</string>
+    <string name="DontReadMessages">Markera inte meddelanden som lästa</string>
+    <string name="DontReadStories">Markera inte berättelser som lästa</string>
+    <string name="DontSendOnlinePackets">Inaktivera onlinestatus</string>
+    <string name="DontSendUploadProgress">Inaktivera typindikatorn</string>
+    <string name="SendOfflinePacketAfterOnline">Gå offline efter att ha åkt online</string>
+    <string name="MarkReadAfterAction">Markera som läst efter åtgärd</string>
 </resources>

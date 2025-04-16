@@ -186,4 +186,15 @@
     <string name="DisableDoubleTapWhenSelecting">Le double appui est désactivé lors de la sélection</string>
     <string name="DisableActionBarButton">Désactiver le bouton de la barre d\'action</string>
     <string name="DisableShortcutTagActions">Désactiver les actions de raccourcis favoris</string>
+    <string name="DisablePhoneSharePrompt">Désactiver l\'invite de partage des numéros de téléphone</string>
+    <string name="ColoredAdminTitle">Titre Admin coloré</string>
+    <string name="GhostMode">Mode fantôme</string>
+    <string name="GhostElements">Options fantôme</string>
+    <string name="DrawerElements">Éléments du tiroir</string>
+    <string name="DontReadMessages">Ne pas marquer les messages comme lus</string>
+    <string name="DontReadStories">Ne pas marquer les histoires comme lues</string>
+    <string name="DontSendOnlinePackets">Désactiver le statut en ligne</string>
+    <string name="DontSendUploadProgress">Désactiver l\'indicateur de saisie</string>
+    <string name="SendOfflinePacketAfterOnline">Passer hors ligne après être passé en ligne</string>
+    <string name="MarkReadAfterAction">Marquer comme lu après l\'action</string>
 </resources>

@@ -186,4 +186,15 @@
     <string name="DisableDoubleTapWhenSelecting">選択時にダブルタップは無効です</string>
     <string name="DisableActionBarButton">アクションバーボタンを無効化</string>
     <string name="DisableShortcutTagActions">お気に入りのショートカットタグアクションを無効にする</string>
+    <string name="DisablePhoneSharePrompt">連絡先電話番号の共有プロンプトを無効にする</string>
+    <string name="ColoredAdminTitle">色付き管理者タイトル</string>
+    <string name="GhostMode">ゴーストモード</string>
+    <string name="GhostElements">ゴーストオプション</string>
+    <string name="DrawerElements">ドロワーアイテム</string>
+    <string name="DontReadMessages">メッセージを既読としてマークしない</string>
+    <string name="DontReadStories">ストーリーを既読にしないでください</string>
+    <string name="DontSendOnlinePackets">オンラインステータスを無効にする</string>
+    <string name="DontSendUploadProgress">入力インジケーターを無効にする</string>
+    <string name="SendOfflinePacketAfterOnline">オンラインに入ったらオフラインになります</string>
+    <string name="MarkReadAfterAction">アクション後に既読としてマーク</string>
 </resources>
