@@ -9863,10 +9863,6 @@ public class MessagesController extends BaseController implements NotificationCe
                         if (statusRequest != 0) {
                             getConnectionsManager().cancelRequest(statusRequest, true);
                         }
-                        if (NekoXConfig.disableStatusUpdate) {
-                            lastStatusUpdateTime = System.currentTimeMillis();
-                            statusSettingState = 0;
-                        } else {
                             TL_account.updateStatus req = new TL_account.updateStatus();
                             req.offline = false;
                             statusRequest = getConnectionsManager().sendRequest(req, (response, error) -> {
@@ -9879,9 +9875,8 @@ public class MessagesController extends BaseController implements NotificationCe
                                         lastStatusUpdateTime += 5000;
                                     }
                                 }
-                                statusRequest = 0;
-                            });
-                        }
+                            statusRequest = 0;
+                        });
                     }
                 }
             } else if (statusSettingState != 2 && !offlineSent && Math.abs(System.currentTimeMillis() - getConnectionsManager().getPauseTime()) >= 2000) {
@@ -9889,9 +9884,6 @@ public class MessagesController extends BaseController implements NotificationCe
                 if (statusRequest != 0) {
                     getConnectionsManager().cancelRequest(statusRequest, true);
                 }
-                if (NekoXConfig.disableStatusUpdate) {
-                    statusRequest = 0;
-                } else {
                     TL_account.updateStatus req = new TL_account.updateStatus();
                     req.offline = true;
                     statusRequest = getConnectionsManager().sendRequest(req, (response, error) -> {
@@ -9902,9 +9894,8 @@ public class MessagesController extends BaseController implements NotificationCe
                                 lastStatusUpdateTime += 5000;
                             }
                         }
-                        statusRequest = 0;
-                    });
-                }
+                    statusRequest = 0;
+                });
             }
 
             if (updatesQueueChannels.size() != 0) {
@@ -18568,14 +18559,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         toDbUser.status = update.status;
                         dbUsersStatus.add(toDbUser);
                         if (update.user_id == getUserConfig().getClientUserId()) {
-                            boolean offline = !(update.status instanceof TLRPC.TL_userStatusOnline);
                             getNotificationsController().setLastOnlineFromOtherDevice(update.status.expires);
-                            if (NekoXConfig.keepOnlineStatus && offline != offlineSent) {
-                                getMessagesController().updateStatus(offline);
-                            } else {
-                                offlineSent = offline;
-                            }
-                            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.updateUserStatus, update);
                         }
                     } else if (baseUpdate instanceof TLRPC.TL_updatePeerWallpaper) {
                         TLRPC.TL_updatePeerWallpaper update = (TLRPC.TL_updatePeerWallpaper) baseUpdate;

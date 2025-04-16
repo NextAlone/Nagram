@@ -188,4 +188,13 @@
     <string name="DisableShortcutTagActions">禁用收藏夹快捷标签操作</string>
     <string name="DisablePhoneSharePrompt">禁用联系人手机号分享提示</string>
     <string name="ColoredAdminTitle">着色管理员头衔</string>
+    <string name="GhostMode">幽灵模式</string>
+    <string name="GhostElements">幽灵选项</string>
+    <string name="DrawerElements">侧栏元素</string>
+    <string name="DontReadMessages">不显示消息已读</string>
+    <string name="DontReadStories">不显示动态已读</string>
+    <string name="DontSendOnlinePackets">不发送在线状态</string>
+    <string name="DontSendUploadProgress">不发送输入状态</string>
+    <string name="SendOfflinePacketAfterOnline">在线后自动离线</string>
+    <string name="MarkReadAfterAction">动作之后设置已读</string>
 </resources>
