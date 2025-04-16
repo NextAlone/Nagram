@@ -138,7 +138,7 @@ public class NekoGhostModeActivity extends BaseNekoSettingsActivity {
 
     @Override
     protected String getActionBarTitle() {
-        return LocaleController.getString("GhostMode",R.string.GhostMode);
+        return LocaleController.getString(R.string.GhostMode);
     }
 
     @Override
@@ -190,7 +190,7 @@ public class NekoGhostModeActivity extends BaseNekoSettingsActivity {
                     TextCheckCell2 textCheckCell2 = (TextCheckCell2) holder.itemView;
                     if (position == GhostModeTitleRow) {
                         int selectedCount = getGhostModeSelectedCount();
-                        textCheckCell2.setTextAndCheck(LocaleController.getString("GhostModeTitle", R.string.GhostMode), NekoConfig.isGhostModeActive(), true, true);
+                        textCheckCell2.setTextAndCheck(LocaleController.getString(R.string.GhostMode), NekoConfig.isGhostModeActive(), true, true);
                         textCheckCell2.setCollapseArrow(String.format(Locale.US, "%d/5", selectedCount), !ghostModeMenuExpanded, () -> {
                             NekoConfig.toggleGhostMode();
                             updateGhostViews();

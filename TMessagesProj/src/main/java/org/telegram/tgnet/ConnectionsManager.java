@@ -23,7 +23,6 @@ import com.google.android.play.core.integrity.IntegrityManager;
 import com.google.android.play.core.integrity.IntegrityManagerFactory;
 import com.google.android.play.core.integrity.IntegrityTokenRequest;
 import com.google.android.play.core.integrity.IntegrityTokenResponse;
-//import com.radolyn.ayugram.utils.AyuState;
 //import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 import org.json.JSONArray;
@@ -49,6 +48,8 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.StatsController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
+import org.telegram.tgnet.tl.TL_account;
+import org.telegram.tgnet.tl.TL_stories;
 import org.telegram.ui.Components.VideoPlayer;
 import org.telegram.ui.LoginActivity;
 
@@ -87,8 +88,6 @@ import tw.nekomimi.nekogram.ErrorDatabase;
 
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import xyz.nextalone.nagram.NaConfig;
-import org.telegram.tgnet.tl.*;
-import org.telegram.tgnet.TLRPC;
 
 public class ConnectionsManager extends BaseController {
 
@@ -331,6 +330,79 @@ SharedPreferences mainPreferences;
         return native_getTimeDifference(currentAccount);
     }
 
+    private boolean ayuGhostShouldSend(TLObject object) {
+        // --- 不发送动态已读 ---
+        if (!NekoConfig.sendReadStoryPackets &&
+                (object instanceof TL_stories.TL_stories_readStories ||
+                        object instanceof TL_stories.TL_stories_incrementStoryViews)) {
+            return false;
+        }
+        // --- 不发送输入状态 ---
+        if (!NekoConfig.sendUploadProgress &&
+                (object instanceof TLRPC.TL_messages_setTyping ||
+                        object instanceof TLRPC.TL_messages_setEncryptedTyping)) {
+            return false;
+        }
+        // --- 不发送已读消息 ---
+        if (!NekoConfig.sendReadMessagePackets && !AyuGhostUtils.getAllowReadPacket() &&
+                (object instanceof TLRPC.TL_messages_readHistory ||
+                        object instanceof TLRPC.TL_messages_readMessageContents ||
+                        object instanceof TLRPC.TL_channels_readHistory ||
+                        object instanceof TLRPC.TL_channels_readMessageContents)) {
+            return false;
+        }
+        return true;
+    }
+
+    private RequestDelegate ayuGhostApplyCallbackHooks(TLObject object, RequestDelegate onComplete) {
+        // --- 发送消息后自动已读对面消息 ---
+        if (NekoConfig.markReadAfterSend && !NekoConfig.sendReadMessagePackets) {
+            onComplete = ayuGhostWrapMarkReadHook(object, onComplete);
+        }
+        // --- 在线后立即离线 ---
+        if (NekoConfig.sendOfflineAfterOnline &&
+                (object instanceof TLRPC.TL_messages_sendMessage ||
+                        object instanceof TLRPC.TL_messages_sendMedia ||
+                        object instanceof TLRPC.TL_messages_sendMultiMedia)) {
+            onComplete = ayuGhostWrapOfflineHook(object, onComplete);
+        }
+        return onComplete;
+    }
+
+    private RequestDelegate ayuGhostWrapMarkReadHook(TLObject object, RequestDelegate origCallback) {
+        TLRPC.InputPeer peer;
+        if (object instanceof TLRPC.TL_messages_sendMessage) {
+            peer = ((TLRPC.TL_messages_sendMessage) object).peer;
+        } else if (object instanceof TLRPC.TL_messages_sendMedia) {
+            peer = ((TLRPC.TL_messages_sendMedia) object).peer;
+        } else if (object instanceof TLRPC.TL_messages_sendMultiMedia) {
+            peer = ((TLRPC.TL_messages_sendMultiMedia) object).peer;
+        } else {
+            peer = null;
+        }
+        if (peer == null) return origCallback;
+        var dialogId = AyuGhostUtils.getDialogId(peer);
+        return (response, error) -> {
+            origCallback.run(response, error);
+            getMessagesStorage().getDialogMaxMessageId(dialogId, maxId -> {
+                TLRPC.TL_messages_readHistory request = new TLRPC.TL_messages_readHistory();
+                request.peer = peer;
+                request.max_id = maxId;
+                AyuGhostUtils.setAllowReadPacket(true, 1);
+                sendRequest(request, (a1, a2) -> {});
+            });
+        };
+    }
+
+    private RequestDelegate ayuGhostWrapOfflineHook(TLObject object, RequestDelegate origCallback) {
+        TL_account.updateStatus offlineRequest = new TL_account.updateStatus();
+        offlineRequest.offline = true;
+        return (response, error) -> {
+            origCallback.run(response, error);
+            new android.os.Handler().postDelayed(() -> sendRequest(offlineRequest, null), 500);
+        };
+    }
+
     public int sendRequest(TLObject object, RequestDelegate completionBlock) {
         return sendRequest(object, completionBlock, null, 0);
     }
@@ -381,80 +453,10 @@ SharedPreferences mainPreferences;
                 TL_account.updateStatus status = (TL_account.updateStatus) object;
                 status.offline = true;  // 将在线状态改为离线
             }
-
-            // --- 不发送动态已读 ---
-            if (!NekoConfig.sendReadStoryPackets && (
-                    object instanceof TL_stories.TL_stories_readStories ||
-                            object instanceof TL_stories.TL_stories_incrementStoryViews
-            )) {
+            if (!ayuGhostShouldSend(object)) {
                 return;
             }
-
-            // --- 不发送输入状态 ---
-            if (!NekoConfig.sendUploadProgress && (
-                    object instanceof TLRPC.TL_messages_setTyping ||
-                            object instanceof TLRPC.TL_messages_setEncryptedTyping
-            )) {
-                return;  // 不处理输入状态请求
-            }
-
-            // --- 不发送已读消息 ---
-            if (!NekoConfig.sendReadMessagePackets && !AyuGhostUtils.getAllowReadPacket() &&  (
-                    object instanceof TLRPC.TL_messages_readHistory ||
-                            object instanceof TLRPC.TL_messages_readMessageContents ||
-                            object instanceof TLRPC.TL_channels_readHistory ||
-                            object instanceof TLRPC.TL_channels_readMessageContents
-            )) {
-                return; // 直接返回，阻止请求的发送
-            }
-
-            // --- 发送消息后自动已读对面消息 ---
-            if (NekoConfig.markReadAfterSend && !NekoConfig.sendReadMessagePackets) {
-                TLRPC.InputPeer peer = null;
-                if (object instanceof TLRPC.TL_messages_sendMessage) {
-                    var obj = ((TLRPC.TL_messages_sendMessage) object);
-                    peer = obj.peer;
-                } else if (object instanceof TLRPC.TL_messages_sendMedia) {
-                    var obj = ((TLRPC.TL_messages_sendMedia) object);
-                    peer = obj.peer;
-                } else if (object instanceof TLRPC.TL_messages_sendMultiMedia) {
-                    var obj = ((TLRPC.TL_messages_sendMultiMedia) object);
-                    peer = obj.peer;
-                }
-                if (peer != null) {
-                    var dialogId = AyuGhostUtils.getDialogId(peer);
-                    var origOnComplete = onCompleteOrig;
-                    TLRPC.InputPeer finalPeer = peer;
-                    onCompleteOrig = (response, error) -> {
-                        origOnComplete.run(response, error);
-                        getMessagesStorage().getDialogMaxMessageId(dialogId, maxId -> {
-                            TLRPC.TL_messages_readHistory request = new TLRPC.TL_messages_readHistory();
-                            request.peer = finalPeer;
-                            request.max_id = maxId;
-                            AyuGhostUtils.setAllowReadPacket(true, 1);
-                            sendRequest(request, (a1, a2) -> {});
-                        });
-                    };
-                }
-            }
-
-            // --- 在线后立即离线 ---
-            if (NekoConfig.sendOfflineAfterOnline && (
-                    object instanceof TLRPC.TL_messages_sendMessage ||
-                            object instanceof TLRPC.TL_messages_sendMedia ||
-                            object instanceof TLRPC.TL_messages_sendMultiMedia
-            )) {
-                // 包装原回调，确保消息发送完后立即发送离线状态
-                RequestDelegate origOnComplete = onCompleteOrig;
-                TL_account.updateStatus offlineRequest = new TL_account.updateStatus();
-                offlineRequest.offline = true; // 设置为离线
-                onCompleteOrig = (response, error) -> {
-                    origOnComplete.run(response, error); // 执行原回调
-                    // 延迟执行离线请求
-                    android.os.Handler handler = new android.os.Handler();
-                    handler.postDelayed(() -> sendRequest(offlineRequest, null), 500);
-                };
-            }
+            onCompleteOrig = ayuGhostApplyCallbackHooks(object, onCompleteOrig);
         }
         final var onComplete = onCompleteOrig;
         // --- end request hook

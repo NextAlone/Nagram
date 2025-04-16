@@ -158,6 +158,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
         if (!NaConfig.INSTANCE.getShowHiddenFeature().Bool()) {
             cellGroup.rows.remove(localPremiumRow);
             cellGroup.rows.remove(localQuoteColorRow);
+            cellGroup.rows.remove(externalGhostModeRow);
             cellGroup.rows.remove(enhancedFileLoaderRow);
             cellGroup.rows.remove(disableFilteringRow);
             cellGroup.rows.remove(unlimitedFavedStickersRow);
@@ -179,6 +180,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
             cellGroup.rows.remove(dividerStory);
 
             NekoConfig.localPremium.setConfigBool(false);
+            NekoConfig.setGhostMode(false);
             NaConfig.INSTANCE.getForceCopy().setConfigBool(false);
             NaConfig.INSTANCE.getDisableFlagSecure().setConfigBool(false);
             NekoConfig.hideSponsoredMessage.setConfigBool(false);
