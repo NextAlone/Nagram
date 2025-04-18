@@ -5,7 +5,7 @@ import io.objectbox.annotation.Id;
 
 @Entity
 public class ChatLanguage {
-    @Id
+    @Id(assignable = true)
     public Long chatId;
     public String language;
 

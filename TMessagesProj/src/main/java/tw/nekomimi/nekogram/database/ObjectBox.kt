@@ -27,6 +27,7 @@ fun mkDatabase(name: String, delete: Boolean = false): BoxStore {
         return builder
             .androidContext(ApplicationLoader.applicationContext)
             .directory(dir)
+            .noReaderThreadLocals()
             .build()
     }
 

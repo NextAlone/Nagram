@@ -5,7 +5,7 @@ import io.objectbox.annotation.Id;
 
 @Entity
 public class ChatCCTarget {
-    @Id
+    @Id(assignable = true)
     public long chatId;
     public String ccTarget;
 
