@@ -7,27 +7,23 @@ release_build_task:
   skip: "changesInclude('.gitea/**', '.github/**', '**.md')"
   checkout_script:
     - cat /proc/cpuinfo
-    - git submodule init TMessagesProj/jni/dav1d TMessagesProj/jni/libvpx TMessagesProj/jni/ffmpeg TMessagesProj/jni/boringssl
-    - git submodule update TMessagesProj/jni/dav1d TMessagesProj/jni/libvpx TMessagesProj/jni/ffmpeg TMessagesProj/jni/boringssl
+    - git submodule init TMessagesProj/jni/libvpx TMessagesProj/jni/ffmpeg TMessagesProj/jni/boringssl
+    - git submodule update TMessagesProj/jni/libvpx TMessagesProj/jni/ffmpeg TMessagesProj/jni/boringssl
     - echo "sdk.dir=${ANDROID_HOME}" > local.properties
     - echo "ndk.dir=${ANDROID_HOME}/ndk/21.4.7075529" >> local.properties
   ffmpeg_cache:
     folders:
       - TMessagesProj/jni/ffmpeg/build
       - TMessagesProj/jni/libvpx/build
-      - TMessagesProj/jni/dav1d/build
     fingerprint_script:
       - git submodule status TMessagesProj/jni/ffmpeg
       - git submodule status TMessagesProj/jni/libvpx
-      - git submodule status TMessagesProj/jni/dav1d
       - cat TMessagesProj/jni/*ffmpeg*.sh
       - cat TMessagesProj/jni/*libvpx*.sh
-      - cat TMessagesProj/jni/*dav1d*.sh
       - cat TMessagesProj/jni/patches/ffmpeg/*
     populate_script:
       - cd /tmp/cirrus-ci-build
       - ./run init libs libvpx
-      - ./run init libs dav1d
       - ./run init libs ffmpeg
   boringssl_cache:
     folder: TMessagesProj/jni/boringssl/build

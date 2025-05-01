@@ -64,12 +64,12 @@ function build {
 				build_one
 			;;
 			arm)
-				API=16
+				API=21
 				CPU=armeabi-v7a
 				build_one
 			;;
 			x86)
-				API=16
+				API=21
 				CPU=x86
 				build_one
 			;;

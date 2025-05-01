@@ -72,6 +72,7 @@ import xyz.nextalone.nagram.helper.MessageHelper;
 
 public class ProfileSearchCell extends BaseCell implements NotificationCenter.NotificationCenterDelegate, Theme.Colorable {
 
+    public boolean dontDrawAvatar;
     private CharSequence currentName;
     public ImageReceiver avatarImage;
     private AvatarDrawable avatarDrawable;
@@ -202,6 +203,10 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
         ad = sponsoredPeer;
     }
 
+    private boolean allowEmojiStatus = true;
+    public void setAllowEmojiStatus(boolean allowEmojiStatus) {
+        this.allowEmojiStatus = allowEmojiStatus;
+    }
     public void setData(Object object, TLRPC.EncryptedChat ec, CharSequence n, CharSequence s, boolean needCount, boolean saved) {
         currentName = n;
         if (object instanceof TLRPC.User) {
@@ -739,16 +744,16 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
 
     public void updateStatus(boolean verified, TLRPC.User user, TLRPC.Chat chat, boolean animated) {
         statusDrawable.center = LocaleController.isRTL;
-        if (verified) {
+        if (allowEmojiStatus && verified) {
             statusDrawable.set(new CombinedDrawable(Theme.dialogs_verifiedDrawable, Theme.dialogs_verifiedCheckDrawable, 0, 0), animated);
             statusDrawable.setColor(null);
-        } else if (user != null && !savedMessages && DialogObject.getEmojiStatusDocumentId(user.emoji_status) != 0) {
+        } else if (allowEmojiStatus && user != null && !savedMessages && DialogObject.getEmojiStatusDocumentId(user.emoji_status) != 0) {
             statusDrawable.set(DialogObject.getEmojiStatusDocumentId(user.emoji_status), animated);
             statusDrawable.setColor(Theme.getColor(Theme.key_chats_verifiedBackground, resourcesProvider));
-        } else if (chat != null && !savedMessages && DialogObject.getEmojiStatusDocumentId(chat.emoji_status) != 0) {
+        } else if (allowEmojiStatus && chat != null && !savedMessages && DialogObject.getEmojiStatusDocumentId(chat.emoji_status) != 0) {
             statusDrawable.set(DialogObject.getEmojiStatusDocumentId(chat.emoji_status), animated);
             statusDrawable.setColor(Theme.getColor(Theme.key_chats_verifiedBackground, resourcesProvider));
-        } else if (user != null && !savedMessages && MessagesController.getInstance(currentAccount).isPremiumUser(user)) {
+        } else if (allowEmojiStatus && user != null && !savedMessages && MessagesController.getInstance(currentAccount).isPremiumUser(user)) {
             statusDrawable.set(PremiumGradient.getInstance().premiumStarDrawableMini, animated);
             statusDrawable.setColor(Theme.getColor(Theme.key_chats_verifiedBackground, resourcesProvider));
         } else {
@@ -997,7 +1002,9 @@ public class ProfileSearchCell extends BaseCell implements NotificationCenter.No
             canvas.restore();
         }
 
-        if (user != null) {
+        if (dontDrawAvatar) {
+
+        } else if (user != null) {
             StoriesUtilities.drawAvatarWithStory(user.id, canvas, avatarImage, avatarStoryParams);
         } else if (chat != null) {
             StoriesUtilities.drawAvatarWithStory(-chat.id, canvas, avatarImage, avatarStoryParams);

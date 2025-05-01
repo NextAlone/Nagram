@@ -19,8 +19,8 @@ function build_one {
 	CXX=${CC_PREFIX}clang++
 	CROSS_PREFIX=${PREBUILT}/bin/${ARCH_NAME}-linux-${BIN_MIDDLE}-
 	
-	INCLUDES=" -I./${LIBVPXPREFIX}/include -I${LIBDAV1DPREFIX}/include"
-	LIBS=" -L./${LIBVPXPREFIX}/lib -L${LIBDAV1DPREFIX}/lib"
+	INCLUDES=" -I./${LIBVPXPREFIX}/include"
+	LIBS=" -L./${LIBVPXPREFIX}/lib"
 
 	echo "Cleaning..."
 	rm -f config.h
@@ -28,7 +28,7 @@ function build_one {
 
 	echo "Configuring..."
 
-	PKG_CONFIG_PATH=${PKG_CONFIG_PATH}:${LIBDAV1DPREFIX}/lib/pkgconfig ./configure \
+	./configure \
 	--nm=${NM} \
 	--ar=${AR} \
 	--strip=${STRIP} \
@@ -40,8 +40,6 @@ function build_one {
 	--enable-cross-compile \
 	--x86asmexe=$NDK/prebuilt/${BUILD_PLATFORM}/bin/yasm \
 	--prefix=$PREFIX \
-	--pkg-config="pkg-config" \
-	--pkg-config-flags="--static" \
 	--enable-pic \
 	--disable-shared \
 	--enable-static \
@@ -81,10 +79,6 @@ function build_one {
   --enable-muxer=matroska \
   --enable-bsf=vp9_superframe \
   --enable-bsf=vp9_raw_reorder \
-  \
-  --enable-libdav1d \
-  --enable-decoder=libdav1d \
-  --enable-decoder=av1 \
 	--enable-runtime-cpudetect \
 	--enable-pthreads \
 	--enable-avresample \
@@ -181,7 +175,6 @@ function build {
 				CPU=x86_64
 				PREFIX=./build/$CPU
 				LIBVPXPREFIX=../libvpx/build/x86_64
-				LIBDAV1DPREFIX=$PREFIX_D/dav1d/build/x86_64
 				ADDITIONAL_CONFIGURE_FLAG="--disable-asm"
 				build_one
 			;;
@@ -198,7 +191,6 @@ function build {
 				OPTIMIZE_CFLAGS=
 				PREFIX=./build/$CPU
 				LIBVPXPREFIX=../libvpx/build/arm64-v8a
-				LIBDAV1DPREFIX=$PREFIX_D/dav1d/build/arm64-v8a
 				ADDITIONAL_CONFIGURE_FLAG="--enable-neon --enable-optimizations"
 				build_one
 			;;
@@ -215,7 +207,6 @@ function build {
 				OPTIMIZE_CFLAGS="-marm -march=$CPU"
 				PREFIX=./build/armeabi-v7a
 				LIBVPXPREFIX=../libvpx/build/armeabi-v7a
-				LIBDAV1DPREFIX=$PREFIX_D/dav1d/build/armeabi-v7a
 				ADDITIONAL_CONFIGURE_FLAG="--enable-neon"
 				build_one
 			;;
@@ -232,7 +223,6 @@ function build {
 				OPTIMIZE_CFLAGS="-march=$CPU"
 				PREFIX=./build/x86
 				LIBVPXPREFIX=../libvpx/build/x86
-				LIBDAV1DPREFIX=$PREFIX_D/dav1d/build/x86
 				ADDITIONAL_CONFIGURE_FLAG="--disable-x86asm --disable-inline-asm --disable-asm"
 				build_one
 			;;

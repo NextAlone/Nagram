@@ -106,16 +106,16 @@ Environment:
 
 - Linux distribution based on Debian or Arch Linux, or macOS
 
-- Native tools: `gcc` `go` `make` `cmake` `ninja` `yasm` `meson` `pkgconf`
+- Native tools: `gcc` `go` `make` `cmake` `ninja` `yasm`
   
   ```shell
   # for Debian based distribution
   sudo apt install gcc golang make cmake ninja-build yasm
   # for Arch Linux based distribution
-  sudo pacman -S base-devel go ninja cmake yasm meson
+  sudo pacman -S base-devel go ninja cmake yasm
   # for macOS
   xcode-select --install # install developer tools (will open confirm dialog)
-  brew install go cmake ninja yasm meson pkgconf # install other tools by homebrew
+  brew install go cmake ninja yasm # install other tools by homebrew
   ```
 - Android SDK: `build-tools;33.0.0` `platforms;android-33` `ndk;21.4.7075529` `cmake;3.18.1` `cmake;3.22.1` (the default location is **$HOME/Android/SDK**, otherwise you need to specify **$ANDROID_HOME** for it)
 

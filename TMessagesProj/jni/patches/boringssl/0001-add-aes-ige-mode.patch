@@ -1,34 +1,51 @@
-From b3958bdfcc9c753477fdf6e0da799c1c4e4077f1 Mon Sep 17 00:00:00 2001
-From: Marcus Hoffmann <bubu@bubu1.eu>
-Date: Tue, 31 Jul 2018 17:15:39 +0200
-Subject: [PATCH] add aes ige mode
+From a4a82ab58d106aa28b5eb2d3b39fabb005962660 Mon Sep 17 00:00:00 2001
+From: xtaodada <xtao@xtao.de>
+Date: Thu, 1 May 2025 14:38:59 +0000
+Subject: [PATCH] [PATCH] add aes ige mode
 
 ---
- crypto/fipsmodule/CMakeLists.txt |   2 +
- crypto/fipsmodule/aes/aes_ige.c  | 323 +++++++++++++++++++++++++++++++
- include/openssl/aes.h            |   9 +
- 3 files changed, 334 insertions(+)
- create mode 100644 crypto/fipsmodule/aes/aes_ige.c
+ gen/sources.cmake     |   1 +
+ include/openssl/aes.h |   7 +
+ ssl/aes_ige.c         | 332 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 340 insertions(+)
+ create mode 100644 ssl/aes_ige.c
 
-diff --git a/crypto/fipsmodule/CMakeLists.txt b/crypto/fipsmodule/CMakeLists.txt
-index 30823755..b349572c 100644
---- a/crypto/fipsmodule/CMakeLists.txt
-+++ b/crypto/fipsmodule/CMakeLists.txt
-@@ -198,6 +198,8 @@ else()
-     bcm.c
-     fips_shared_support.c
+diff --git a/gen/sources.cmake b/gen/sources.cmake
+index 6e347f554..f4a6aa48f 100644
+--- a/gen/sources.cmake
++++ b/gen/sources.cmake
+@@ -2835,6 +2835,7 @@ set(
+   ssl/tls13_server.cc
+   ssl/tls_method.cc
+   ssl/tls_record.cc
++  ssl/aes_ige.c
+ )
  
-+    aes/aes_ige.c
-+
-     ${BCM_ASM_SOURCES}
-   )
-
-diff --git a/crypto/fipsmodule/aes/aes_ige.c b/crypto/fipsmodule/aes/aes_ige.c
+ set(
+diff --git a/include/openssl/aes.h b/include/openssl/aes.h
+index eee88a510..0043536cd 100644
+--- a/include/openssl/aes.h
++++ b/include/openssl/aes.h
+@@ -165,6 +165,13 @@ OPENSSL_EXPORT int AES_unwrap_key_padded(const AES_KEY *key, uint8_t *out,
+                                          size_t *out_len, size_t max_out,
+                                          const uint8_t *in, size_t in_len);
+ 
++OPENSSL_EXPORT void AES_ige_encrypt(const unsigned char *in, unsigned char *out,
++                                    size_t length, const AES_KEY *key,
++                                    unsigned char *ivec, const int enc);
++OPENSSL_EXPORT void AES_bi_ige_encrypt(const unsigned char *in, unsigned char *out,
++                                       size_t length, const AES_KEY *key,
++                                       const AES_KEY *key2, const unsigned char *ivec,
++                                       const int enc);
+ 
+ #if defined(__cplusplus)
+ }  // extern C
+diff --git a/ssl/aes_ige.c b/ssl/aes_ige.c
 new file mode 100644
-index 00000000..b425c7d6
+index 000000000..fa57b075a
 --- /dev/null
-+++ b/crypto/fipsmodule/aes/aes_ige.c
-@@ -0,0 +1,323 @@
++++ b/ssl/aes_ige.c
+@@ -0,0 +1,332 @@
 +/* crypto/aes/aes_ige.c -*- mode:C; c-file-style: "eay" -*- */
 +/* ====================================================================
 + * Copyright (c) 2006 The OpenSSL Project.  All rights reserved.
@@ -38,7 +55,7 @@ index 00000000..b425c7d6
 + * are met:
 + *
 + * 1. Redistributions of source code must retain the above copyright
-+ *    notice, this list of conditions and the following disclaimer. 
++ *    notice, this list of conditions and the following disclaimer.
 + *
 + * 2. Redistributions in binary form must reproduce the above copyright
 + *    notice, this list of conditions and the following disclaimer in
@@ -87,7 +104,7 @@ index 00000000..b425c7d6
 +
 +#define N_WORDS (AES_BLOCK_SIZE / sizeof(unsigned long))
 +typedef struct {
-+        unsigned long data[N_WORDS];
++    unsigned long data[N_WORDS];
 +} aes_block_t;
 +
 +/* XXX: probably some better way to do this */
@@ -108,131 +125,135 @@ index 00000000..b425c7d6
 +/* N.B. The IV for this mode is _twice_ the block size */
 +
 +void AES_ige_encrypt(const unsigned char *in, unsigned char *out,
-+					 size_t length, const AES_KEY *key,
-+					 unsigned char *ivec, const int enc)
-+	{
-+	size_t n;
-+	size_t len = length;
++                     size_t length, const AES_KEY *key,
++                     unsigned char *ivec, const int enc);
 +
-+	assert(in && out && key && ivec);
-+	assert((AES_ENCRYPT == enc)||(AES_DECRYPT == enc));
-+	assert((length%AES_BLOCK_SIZE) == 0);
++void AES_ige_encrypt(const unsigned char *in, unsigned char *out,
++                     size_t length, const AES_KEY *key,
++                     unsigned char *ivec, const int enc)
++{
++    size_t n;
++    size_t len = length;
 +
-+	len = length / AES_BLOCK_SIZE;
++    assert(in && out && key && ivec);
++    assert((AES_ENCRYPT == enc)||(AES_DECRYPT == enc));
++    assert((length%AES_BLOCK_SIZE) == 0);
 +
-+	if (AES_ENCRYPT == enc)
-+		{
-+		if (in != out &&
-+		    (UNALIGNED_MEMOPS_ARE_FAST || ((size_t)in|(size_t)out|(size_t)ivec)%sizeof(long)==0))
-+			{
-+			aes_block_t *ivp = (aes_block_t *)ivec;
-+			aes_block_t *iv2p = (aes_block_t *)(ivec + AES_BLOCK_SIZE);
++    len = length / AES_BLOCK_SIZE;
 +
-+			while (len)
-+				{
-+				aes_block_t *inp = (aes_block_t *)in;
-+				aes_block_t *outp = (aes_block_t *)out;
++    if (AES_ENCRYPT == enc)
++    {
++        if (in != out &&
++            (UNALIGNED_MEMOPS_ARE_FAST || ((size_t)in|(size_t)out|(size_t)ivec)%sizeof(long)==0))
++        {
++            aes_block_t *ivp = (aes_block_t *)ivec;
++            aes_block_t *iv2p = (aes_block_t *)(ivec + AES_BLOCK_SIZE);
 +
-+				for(n=0 ; n < N_WORDS; ++n)
-+					outp->data[n] = inp->data[n] ^ ivp->data[n];
-+				AES_encrypt((unsigned char *)outp->data, (unsigned char *)outp->data, key);
-+				for(n=0 ; n < N_WORDS; ++n)
-+					outp->data[n] ^= iv2p->data[n];
-+				ivp = outp;
-+				iv2p = inp;
-+				--len;
-+				in += AES_BLOCK_SIZE;
-+				out += AES_BLOCK_SIZE;
-+				}
-+			memcpy(ivec, ivp->data, AES_BLOCK_SIZE);
-+			memcpy(ivec + AES_BLOCK_SIZE, iv2p->data, AES_BLOCK_SIZE);
-+			}
-+		else
-+			{
-+			aes_block_t tmp, tmp2;
-+			aes_block_t iv;
-+			aes_block_t iv2;
++            while (len)
++            {
++                aes_block_t *inp = (aes_block_t *)in;
++                aes_block_t *outp = (aes_block_t *)out;
 +
-+			load_block(iv, ivec);
-+			load_block(iv2, ivec + AES_BLOCK_SIZE);
++                for(n=0 ; n < N_WORDS; ++n)
++                    outp->data[n] = inp->data[n] ^ ivp->data[n];
++                AES_encrypt((unsigned char *)outp->data, (unsigned char *)outp->data, key);
++                for(n=0 ; n < N_WORDS; ++n)
++                    outp->data[n] ^= iv2p->data[n];
++                ivp = outp;
++                iv2p = inp;
++                --len;
++                in += AES_BLOCK_SIZE;
++                out += AES_BLOCK_SIZE;
++            }
++            memcpy(ivec, ivp->data, AES_BLOCK_SIZE);
++            memcpy(ivec + AES_BLOCK_SIZE, iv2p->data, AES_BLOCK_SIZE);
++        }
++        else
++        {
++            aes_block_t tmp, tmp2;
++            aes_block_t iv;
++            aes_block_t iv2;
 +
-+			while (len)
-+				{
-+				load_block(tmp, in);
-+				for(n=0 ; n < N_WORDS; ++n)
-+					tmp2.data[n] = tmp.data[n] ^ iv.data[n];
-+				AES_encrypt((unsigned char *)tmp2.data, (unsigned char *)tmp2.data, key);
-+				for(n=0 ; n < N_WORDS; ++n)
-+					tmp2.data[n] ^= iv2.data[n];
-+				store_block(out, tmp2);
-+				iv = tmp2;
-+				iv2 = tmp;
-+				--len;
-+				in += AES_BLOCK_SIZE;
-+				out += AES_BLOCK_SIZE;
-+				}
-+			memcpy(ivec, iv.data, AES_BLOCK_SIZE);
-+			memcpy(ivec + AES_BLOCK_SIZE, iv2.data, AES_BLOCK_SIZE);
-+			}
-+		}
-+	else
-+		{
-+		if (in != out &&
-+		    (UNALIGNED_MEMOPS_ARE_FAST || ((size_t)in|(size_t)out|(size_t)ivec)%sizeof(long)==0))
-+			{
-+			aes_block_t *ivp = (aes_block_t *)ivec;
-+			aes_block_t *iv2p = (aes_block_t *)(ivec + AES_BLOCK_SIZE);
++            load_block(iv, ivec);
++            load_block(iv2, ivec + AES_BLOCK_SIZE);
 +
-+			while (len)
-+				{
-+				aes_block_t tmp;
-+				aes_block_t *inp = (aes_block_t *)in;
-+				aes_block_t *outp = (aes_block_t *)out;
++            while (len)
++            {
++                load_block(tmp, in);
++                for(n=0 ; n < N_WORDS; ++n)
++                    tmp2.data[n] = tmp.data[n] ^ iv.data[n];
++                AES_encrypt((unsigned char *)tmp2.data, (unsigned char *)tmp2.data, key);
++                for(n=0 ; n < N_WORDS; ++n)
++                    tmp2.data[n] ^= iv2.data[n];
++                store_block(out, tmp2);
++                iv = tmp2;
++                iv2 = tmp;
++                --len;
++                in += AES_BLOCK_SIZE;
++                out += AES_BLOCK_SIZE;
++            }
++            memcpy(ivec, iv.data, AES_BLOCK_SIZE);
++            memcpy(ivec + AES_BLOCK_SIZE, iv2.data, AES_BLOCK_SIZE);
++        }
++    }
++    else
++    {
++        if (in != out &&
++            (UNALIGNED_MEMOPS_ARE_FAST || ((size_t)in|(size_t)out|(size_t)ivec)%sizeof(long)==0))
++        {
++            aes_block_t *ivp = (aes_block_t *)ivec;
++            aes_block_t *iv2p = (aes_block_t *)(ivec + AES_BLOCK_SIZE);
 +
-+				for(n=0 ; n < N_WORDS; ++n)
-+					tmp.data[n] = inp->data[n] ^ iv2p->data[n];
-+				AES_decrypt((unsigned char *)tmp.data, (unsigned char *)outp->data, key);
-+				for(n=0 ; n < N_WORDS; ++n)
-+					outp->data[n] ^= ivp->data[n];
-+				ivp = inp;
-+				iv2p = outp;
-+				--len;
-+				in += AES_BLOCK_SIZE;
-+				out += AES_BLOCK_SIZE;
-+				}
-+			memcpy(ivec, ivp->data, AES_BLOCK_SIZE);
-+			memcpy(ivec + AES_BLOCK_SIZE, iv2p->data, AES_BLOCK_SIZE);
-+			}
-+		else
-+			{
-+			aes_block_t tmp, tmp2;
-+			aes_block_t iv;
-+			aes_block_t iv2;
++            while (len)
++            {
++                aes_block_t tmp;
++                aes_block_t *inp = (aes_block_t *)in;
++                aes_block_t *outp = (aes_block_t *)out;
 +
-+			load_block(iv, ivec);
-+			load_block(iv2, ivec + AES_BLOCK_SIZE);
++                for(n=0 ; n < N_WORDS; ++n)
++                    tmp.data[n] = inp->data[n] ^ iv2p->data[n];
++                AES_decrypt((unsigned char *)tmp.data, (unsigned char *)outp->data, key);
++                for(n=0 ; n < N_WORDS; ++n)
++                    outp->data[n] ^= ivp->data[n];
++                ivp = inp;
++                iv2p = outp;
++                --len;
++                in += AES_BLOCK_SIZE;
++                out += AES_BLOCK_SIZE;
++            }
++            memcpy(ivec, ivp->data, AES_BLOCK_SIZE);
++            memcpy(ivec + AES_BLOCK_SIZE, iv2p->data, AES_BLOCK_SIZE);
++        }
++        else
++        {
++            aes_block_t tmp, tmp2;
++            aes_block_t iv;
++            aes_block_t iv2;
 +
-+			while (len)
-+				{
-+				load_block(tmp, in);
-+				tmp2 = tmp;
-+				for(n=0 ; n < N_WORDS; ++n)
-+					tmp.data[n] ^= iv2.data[n];
-+				AES_decrypt((unsigned char *)tmp.data, (unsigned char *)tmp.data, key);
-+				for(n=0 ; n < N_WORDS; ++n)
-+					tmp.data[n] ^= iv.data[n];
-+				store_block(out, tmp);
-+				iv = tmp2;
-+				iv2 = tmp;
-+				--len;
-+				in += AES_BLOCK_SIZE;
-+				out += AES_BLOCK_SIZE;
-+				}
-+			memcpy(ivec, iv.data, AES_BLOCK_SIZE);
-+			memcpy(ivec + AES_BLOCK_SIZE, iv2.data, AES_BLOCK_SIZE);
-+			}
-+		}
-+	}
++            load_block(iv, ivec);
++            load_block(iv2, ivec + AES_BLOCK_SIZE);
++
++            while (len)
++            {
++                load_block(tmp, in);
++                tmp2 = tmp;
++                for(n=0 ; n < N_WORDS; ++n)
++                    tmp.data[n] ^= iv2.data[n];
++                AES_decrypt((unsigned char *)tmp.data, (unsigned char *)tmp.data, key);
++                for(n=0 ; n < N_WORDS; ++n)
++                    tmp.data[n] ^= iv.data[n];
++                store_block(out, tmp);
++                iv = tmp2;
++                iv2 = tmp;
++                --len;
++                in += AES_BLOCK_SIZE;
++                out += AES_BLOCK_SIZE;
++            }
++            memcpy(ivec, iv.data, AES_BLOCK_SIZE);
++            memcpy(ivec + AES_BLOCK_SIZE, iv2.data, AES_BLOCK_SIZE);
++        }
++    }
++}
 +
 +/*
 + * Note that its effectively impossible to do biIGE in anything other
@@ -242,136 +263,121 @@ index 00000000..b425c7d6
 +/* N.B. The IV for this mode is _four times_ the block size */
 +
 +void AES_bi_ige_encrypt(const unsigned char *in, unsigned char *out,
-+						size_t length, const AES_KEY *key,
-+						const AES_KEY *key2, const unsigned char *ivec,
-+						const int enc)
-+	{
-+	size_t n;
-+	size_t len = length;
-+	unsigned char tmp[AES_BLOCK_SIZE];
-+	unsigned char tmp2[AES_BLOCK_SIZE];
-+	unsigned char tmp3[AES_BLOCK_SIZE];
-+	unsigned char prev[AES_BLOCK_SIZE];
-+	const unsigned char *iv;
-+	const unsigned char *iv2;
++                        size_t length, const AES_KEY *key,
++                        const AES_KEY *key2, const unsigned char *ivec,
++                        const int enc);
 +
-+	assert(in && out && key && ivec);
-+	assert((AES_ENCRYPT == enc)||(AES_DECRYPT == enc));
-+	assert((length%AES_BLOCK_SIZE) == 0);
++void AES_bi_ige_encrypt(const unsigned char *in, unsigned char *out,
++                        size_t length, const AES_KEY *key,
++                        const AES_KEY *key2, const unsigned char *ivec,
++                        const int enc)
++{
++    size_t n;
++    size_t len = length;
++    unsigned char tmp[AES_BLOCK_SIZE];
++    unsigned char tmp2[AES_BLOCK_SIZE];
++    unsigned char tmp3[AES_BLOCK_SIZE];
++    unsigned char prev[AES_BLOCK_SIZE];
++    const unsigned char *iv;
++    const unsigned char *iv2;
 +
-+	if (AES_ENCRYPT == enc)
-+		{
-+		/* XXX: Do a separate case for when in != out (strictly should
-+		   check for overlap, too) */
++    assert(in && out && key && ivec);
++    assert((AES_ENCRYPT == enc)||(AES_DECRYPT == enc));
++    assert((length%AES_BLOCK_SIZE) == 0);
 +
-+		/* First the forward pass */ 
-+		iv = ivec;
-+		iv2 = ivec + AES_BLOCK_SIZE;
-+		while (len >= AES_BLOCK_SIZE)
-+			{
-+			for(n=0 ; n < AES_BLOCK_SIZE ; ++n)
-+				out[n] = in[n] ^ iv[n];
-+			AES_encrypt(out, out, key);
-+			for(n=0 ; n < AES_BLOCK_SIZE ; ++n)
-+				out[n] ^= iv2[n];
-+			iv = out;
-+			memcpy(prev, in, AES_BLOCK_SIZE);
-+			iv2 = prev;
-+			len -= AES_BLOCK_SIZE;
-+			in += AES_BLOCK_SIZE;
-+			out += AES_BLOCK_SIZE;
-+			}
++    if (AES_ENCRYPT == enc)
++    {
++        /* XXX: Do a separate case for when in != out (strictly should
++           check for overlap, too) */
 +
-+		/* And now backwards */
-+		iv = ivec + AES_BLOCK_SIZE*2;
-+		iv2 = ivec + AES_BLOCK_SIZE*3;
-+		len = length;
-+		while(len >= AES_BLOCK_SIZE)
-+			{
-+			out -= AES_BLOCK_SIZE;
-+			/* XXX: reduce copies by alternating between buffers */
-+			memcpy(tmp, out, AES_BLOCK_SIZE);
-+			for(n=0 ; n < AES_BLOCK_SIZE ; ++n)
-+				out[n] ^= iv[n];
-+			/*			hexdump(stdout, "out ^ iv", out, AES_BLOCK_SIZE); */
-+			AES_encrypt(out, out, key);
-+			/*			hexdump(stdout,"enc", out, AES_BLOCK_SIZE); */
-+			/*			hexdump(stdout,"iv2", iv2, AES_BLOCK_SIZE); */
-+			for(n=0 ; n < AES_BLOCK_SIZE ; ++n)
-+				out[n] ^= iv2[n];
-+			/*			hexdump(stdout,"out", out, AES_BLOCK_SIZE); */
-+			iv = out;
-+			memcpy(prev, tmp, AES_BLOCK_SIZE);
-+			iv2 = prev;
-+			len -= AES_BLOCK_SIZE;
-+			}
-+		}
-+	else
-+		{
-+		/* First backwards */
-+		iv = ivec + AES_BLOCK_SIZE*2;
-+		iv2 = ivec + AES_BLOCK_SIZE*3;
-+		in += length;
-+		out += length;
-+		while (len >= AES_BLOCK_SIZE)
-+			{
-+			in -= AES_BLOCK_SIZE;
-+			out -= AES_BLOCK_SIZE;
-+			memcpy(tmp, in, AES_BLOCK_SIZE);
-+			memcpy(tmp2, in, AES_BLOCK_SIZE);
-+			for(n=0 ; n < AES_BLOCK_SIZE ; ++n)
-+				tmp[n] ^= iv2[n];
-+			AES_decrypt(tmp, out, key);
-+			for(n=0 ; n < AES_BLOCK_SIZE ; ++n)
-+				out[n] ^= iv[n];
-+			memcpy(tmp3, tmp2, AES_BLOCK_SIZE);
-+			iv = tmp3;
-+			iv2 = out;
-+			len -= AES_BLOCK_SIZE;
-+			}
++        /* First the forward pass */
++        iv = ivec;
++        iv2 = ivec + AES_BLOCK_SIZE;
++        while (len >= AES_BLOCK_SIZE)
++        {
++            for(n=0 ; n < AES_BLOCK_SIZE ; ++n)
++                out[n] = in[n] ^ iv[n];
++            AES_encrypt(out, out, key);
++            for(n=0 ; n < AES_BLOCK_SIZE ; ++n)
++                out[n] ^= iv2[n];
++            iv = out;
++            memcpy(prev, in, AES_BLOCK_SIZE);
++            iv2 = prev;
++            len -= AES_BLOCK_SIZE;
++            in += AES_BLOCK_SIZE;
++            out += AES_BLOCK_SIZE;
++        }
 +
-+		/* And now forwards */
-+		iv = ivec;
-+		iv2 = ivec + AES_BLOCK_SIZE;
-+		len = length;
-+		while (len >= AES_BLOCK_SIZE)
-+			{
-+			memcpy(tmp, out, AES_BLOCK_SIZE);
-+			memcpy(tmp2, out, AES_BLOCK_SIZE);
-+			for(n=0 ; n < AES_BLOCK_SIZE ; ++n)
-+				tmp[n] ^= iv2[n];
-+			AES_decrypt(tmp, out, key);
-+			for(n=0 ; n < AES_BLOCK_SIZE ; ++n)
-+				out[n] ^= iv[n];
-+			memcpy(tmp3, tmp2, AES_BLOCK_SIZE);
-+			iv = tmp3;
-+			iv2 = out;
-+			len -= AES_BLOCK_SIZE;
-+			in += AES_BLOCK_SIZE;
-+			out += AES_BLOCK_SIZE;
-+			}
-+		}
-+	}
-diff --git a/include/openssl/aes.h b/include/openssl/aes.h
-index 11565854..0130fec5 100644
---- a/include/openssl/aes.h
-+++ b/include/openssl/aes.h
-@@ -138,6 +138,15 @@ OPENSSL_EXPORT void AES_cfb128_encrypt(const uint8_t *in, uint8_t *out,
-                                        size_t len, const AES_KEY *key,
-                                        uint8_t *ivec, int *num, int enc);
- 
-+/* NB: the IV is _two_ blocks long */
-+OPENSSL_EXPORT void AES_ige_encrypt(const unsigned char *in, unsigned char *out,
-+                                    size_t length, const AES_KEY *key,
-+                                    unsigned char *ivec, const int enc);
-+/* NB: the IV is _four_ blocks long */
-+OPENSSL_EXPORT void AES_bi_ige_encrypt(const unsigned char *in, unsigned char *out,
-+                                       size_t length, const AES_KEY *key,
-+                                       const AES_KEY *key2, const unsigned char *ivec,
-+                                       const int enc);
- 
- // AES key wrap.
- //
++        /* And now backwards */
++        iv = ivec + AES_BLOCK_SIZE*2;
++        iv2 = ivec + AES_BLOCK_SIZE*3;
++        len = length;
++        while(len >= AES_BLOCK_SIZE)
++        {
++            out -= AES_BLOCK_SIZE;
++            /* XXX: reduce copies by alternating between buffers */
++            memcpy(tmp, out, AES_BLOCK_SIZE);
++            for(n=0 ; n < AES_BLOCK_SIZE ; ++n)
++                out[n] ^= iv[n];
++            /*			hexdump(stdout, "out ^ iv", out, AES_BLOCK_SIZE); */
++            AES_encrypt(out, out, key);
++            /*			hexdump(stdout,"enc", out, AES_BLOCK_SIZE); */
++            /*			hexdump(stdout,"iv2", iv2, AES_BLOCK_SIZE); */
++            for(n=0 ; n < AES_BLOCK_SIZE ; ++n)
++                out[n] ^= iv2[n];
++            /*			hexdump(stdout,"out", out, AES_BLOCK_SIZE); */
++            iv = out;
++            memcpy(prev, tmp, AES_BLOCK_SIZE);
++            iv2 = prev;
++            len -= AES_BLOCK_SIZE;
++        }
++    }
++    else
++    {
++        /* First backwards */
++        iv = ivec + AES_BLOCK_SIZE*2;
++        iv2 = ivec + AES_BLOCK_SIZE*3;
++        in += length;
++        out += length;
++        while (len >= AES_BLOCK_SIZE)
++        {
++            in -= AES_BLOCK_SIZE;
++            out -= AES_BLOCK_SIZE;
++            memcpy(tmp, in, AES_BLOCK_SIZE);
++            memcpy(tmp2, in, AES_BLOCK_SIZE);
++            for(n=0 ; n < AES_BLOCK_SIZE ; ++n)
++                tmp[n] ^= iv2[n];
++            AES_decrypt(tmp, out, key);
++            for(n=0 ; n < AES_BLOCK_SIZE ; ++n)
++                out[n] ^= iv[n];
++            memcpy(tmp3, tmp2, AES_BLOCK_SIZE);
++            iv = tmp3;
++            iv2 = out;
++            len -= AES_BLOCK_SIZE;
++        }
++
++        /* And now forwards */
++        iv = ivec;
++        iv2 = ivec + AES_BLOCK_SIZE;
++        len = length;
++        while (len >= AES_BLOCK_SIZE)
++        {
++            memcpy(tmp, out, AES_BLOCK_SIZE);
++            memcpy(tmp2, out, AES_BLOCK_SIZE);
++            for(n=0 ; n < AES_BLOCK_SIZE ; ++n)
++                tmp[n] ^= iv2[n];
++            AES_decrypt(tmp, out, key);
++            for(n=0 ; n < AES_BLOCK_SIZE ; ++n)
++                out[n] ^= iv[n];
++            memcpy(tmp3, tmp2, AES_BLOCK_SIZE);
++            iv = tmp3;
++            iv2 = out;
++            len -= AES_BLOCK_SIZE;
++            in += AES_BLOCK_SIZE;
++            out += AES_BLOCK_SIZE;
++        }
++    }
++}
 -- 
-2.17.1
+2.43.0
 
