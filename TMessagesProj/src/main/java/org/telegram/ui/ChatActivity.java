@@ -43643,7 +43643,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     interface NagramCopyMesage {
-        void run(boolean isCopy);
+        void run(int isCopy);
     }
 
     public void didLongPressLink(ChatMessageCell cell, MessageObject messageObject, CharacterStyle span, String str) {
@@ -43686,7 +43686,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             });
         }
 
-        NagramCopyMesage run1 = (boolean isCopy) -> {
+        NagramCopyMesage run1 = (int isCopy) -> {
             String urlFinal = str;
             if (str.startsWith("video?") && messageObject != null && !messageObject.scheduled) {
                 MessageObject messageObject1 = messageObject;
@@ -43732,7 +43732,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             } else {
 //                AndroidUtilities.addToClipboard(str);
             }
-            if (isCopy) {
+            if (isCopy == 1) {
                 if (isMail) {
                     urlFinal = urlFinal.substring("mailto:".length());
                 }
@@ -43753,13 +43753,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra(Intent.EXTRA_TEXT, urlFinal);
+                if (isCopy == 2) {
+                    shareIntent.setPackage(ApplicationLoader.applicationContext.getPackageName());
+                }
                 Intent chooserIntent = Intent.createChooser(shareIntent, LocaleController.getString(R.string.ShareFile));
                 chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 ApplicationLoader.applicationContext.startActivity(chooserIntent);
             }
         };
         options.add(R.drawable.msg_copy, getString(isHashtag ? R.string.CopyHashtag : isMail ? R.string.CopyMail : R.string.CopyLink), () -> {
-            run1.run(true);
+            run1.run(1);
         });
 //        ----- Nagram Hook start -----
         options.add(R.drawable.wallet_qr, getString(R.string.ShareQRCode), () -> {
@@ -43768,7 +43771,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         });
         options.add(R.drawable.msg_shareout, getString(R.string.ShareMessages), () -> {
             // ShareMessage
-            run1.run(false);
+            run1.run(0);
+        });
+        options.add(R.drawable.msg_forward_noquote, getString(R.string.Forward), () -> {
+            // ShareMessage
+            run1.run(2);
         });
 //        ----- Nagram Hook end -----
 
