@@ -29,8 +29,8 @@ public class InternalFilters {
 
     static {
 
-        usersFilter = mkFilter(LocaleController.getString("NotificationsUsers", R.string.FilterNameUsers),
-                LocaleController.getString("FilterNameUsersDescription", R.string.FilterNameUsersDescription),
+        usersFilter = mkFilter(LocaleController.getString(R.string.FilterNameUsers),
+                LocaleController.getString(R.string.FilterNameUsersDescription),
                 MessagesController.DIALOG_FILTER_FLAG_CONTACTS |
                         MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS |
                         MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED,
@@ -42,8 +42,8 @@ public class InternalFilters {
 
                 });
 
-        contactsFilter = mkFilter(LocaleController.getString("FilterNameContacts", R.string.FilterNameContacts),
-                LocaleController.getString("FilterNameContactsDescription", R.string.FilterNameContactsDescription),
+        contactsFilter = mkFilter(LocaleController.getString(R.string.FilterNameContacts),
+                LocaleController.getString(R.string.FilterNameContactsDescription),
                 MessagesController.DIALOG_FILTER_FLAG_CONTACTS |
                         MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED,
                 (it) -> {
@@ -53,8 +53,8 @@ public class InternalFilters {
 
                 });
 
-        groupsFilter = mkFilter(LocaleController.getString("FilterNameGroups", R.string.FilterNameGroups),
-                LocaleController.getString("FilterNameContactsDescription", R.string.FilterNameGroupsDescription),
+        groupsFilter = mkFilter(LocaleController.getString(R.string.FilterNameGroups),
+                LocaleController.getString(R.string.FilterNameGroupsDescription),
                 MessagesController.DIALOG_FILTER_FLAG_GROUPS |
                         MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED,
                 (it) -> {
@@ -64,8 +64,8 @@ public class InternalFilters {
 
                 });
 
-        channelsFilter = mkFilter(LocaleController.getString("FilterNameChannels", R.string.FilterNameChannels),
-                LocaleController.getString("FilterNameChannelsDescription", R.string.FilterNameChannelsDescription),
+        channelsFilter = mkFilter(LocaleController.getString(R.string.FilterNameChannels),
+                LocaleController.getString(R.string.FilterNameChannelsDescription),
                 MessagesController.DIALOG_FILTER_FLAG_CHANNELS |
                         MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED,
                 (it) -> {
@@ -75,8 +75,8 @@ public class InternalFilters {
 
                 });
 
-        botsFilter = mkFilter(LocaleController.getString("FilterNameBots", R.string.FilterNameBots),
-                LocaleController.getString("FilterNameBotsDescription", R.string.FilterNameBotsDescription),
+        botsFilter = mkFilter(LocaleController.getString(R.string.FilterNameBots),
+                LocaleController.getString(R.string.FilterNameBotsDescription),
                 MessagesController.DIALOG_FILTER_FLAG_BOTS |
                         MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED,
                 (it) -> {
@@ -86,8 +86,8 @@ public class InternalFilters {
 
                 });
 
-        unmutedFilter = mkFilter(LocaleController.getString("FilterNameUnmuted", R.string.FilterNameUnmuted),
-                LocaleController.getString("FilterNameUnmutedDescription", R.string.FilterNameUnmutedDescription),
+        unmutedFilter = mkFilter(LocaleController.getString(R.string.FilterNameUnmuted),
+                LocaleController.getString(R.string.FilterNameUnmutedDescription),
                 MessagesController.DIALOG_FILTER_FLAG_CONTACTS |
                         MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS |
                         MessagesController.DIALOG_FILTER_FLAG_GROUPS |
@@ -107,8 +107,8 @@ public class InternalFilters {
 
                 });
 
-        unreadFilter = mkFilter(LocaleController.getString("FilterNameUnread2", R.string.FilterNameUnread2),
-                LocaleController.getString("FilterNameUnreadDescription", R.string.FilterNameUnreadDescription),
+        unreadFilter = mkFilter(LocaleController.getString(R.string.FilterNameUnread2),
+                LocaleController.getString(R.string.FilterNameUnreadDescription),
                 MessagesController.DIALOG_FILTER_FLAG_CONTACTS |
                         MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS |
                         MessagesController.DIALOG_FILTER_FLAG_GROUPS |
@@ -128,8 +128,8 @@ public class InternalFilters {
 
                 });
 
-        unmutedAndUnreadFilter = mkFilter(LocaleController.getString("FilterNameUnmutedAndUnread", R.string.FilterNameUnmutedAndUnread),
-                LocaleController.getString("FilterNameUnmutedAndUnreadDescription", R.string.FilterNameUnmutedAndUnreadDescription),
+        unmutedAndUnreadFilter = mkFilter(LocaleController.getString(R.string.FilterNameUnmutedAndUnread),
+                LocaleController.getString(R.string.FilterNameUnmutedAndUnreadDescription),
                 MessagesController.DIALOG_FILTER_FLAG_CONTACTS |
                         MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS |
                         MessagesController.DIALOG_FILTER_FLAG_GROUPS |
@@ -174,7 +174,6 @@ public class InternalFilters {
 
         suggestedFilter.filter.title = new TLRPC.TL_textWithEntities();
         suggestedFilter.filter.title.text = name;
-        suggestedFilter.filter.title.entities = null;
         suggestedFilter.filter.flags = flag;
 
         builder.apply(suggestedFilter.filter);
