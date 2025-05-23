@@ -225,6 +225,9 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
         }
 
         void toggleAllChecks() {
+            if (checks == null) {
+                return;
+            }
             boolean value = true;
             for (int i = 0; i < totalCount; i++) {
                 if (checks[i] && (filter == null || filter[i])) {
