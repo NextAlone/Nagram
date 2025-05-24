@@ -198,4 +198,8 @@
     <string name="DontSendUploadProgress">Disable Typing Indicator</string>
     <string name="SendOfflinePacketAfterOnline">Go Offline After Going Online</string>
     <string name="MarkReadAfterAction">Mark as Read After Action</string>
+    <string name="PlayerDecoder">Player Decoder</string>
+    <string name="PlayerDecoderSoftware">Prefer app decoders</string>
+    <string name="PlayerDecoderHardware">Only device decoders</string>
+    <string name="PlayerDecoderPerferHW">Prefer device decoders</string>
 </resources>

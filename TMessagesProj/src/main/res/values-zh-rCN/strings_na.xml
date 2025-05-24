@@ -197,4 +197,8 @@
     <string name="DontSendUploadProgress">不发送输入状态</string>
     <string name="SendOfflinePacketAfterOnline">在线后自动离线</string>
     <string name="MarkReadAfterAction">动作之后设置已读</string>
+    <string name="PlayerDecoder">播放器解码器</string>
+    <string name="PlayerDecoderSoftware">首选应用解码器</string>
+    <string name="PlayerDecoderHardware">仅限设备解码器</string>
+    <string name="PlayerDecoderPerferHW">设备解码器优先</string>
 </resources>

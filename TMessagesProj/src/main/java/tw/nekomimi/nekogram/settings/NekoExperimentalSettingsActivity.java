@@ -106,6 +106,12 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
     private final AbstractConfigCell fakeHighPerformanceDeviceRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getFakeHighPerformanceDevice()));
     private final AbstractConfigCell disableEmojiDrawLimitRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableEmojiDrawLimit()));
     private final AbstractConfigCell sendMp4DocumentAsVideoRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getSendMp4DocumentAsVideo()));
+    private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NaConfig.INSTANCE.getPlayerDecoder(),
+            new String[]{
+                    LocaleController.getString(R.string.PlayerDecoderSoftware),
+                    LocaleController.getString(R.string.PlayerDecoderHardware),
+                    LocaleController.getString(R.string.PlayerDecoderPerferHW),
+            }, null));
     private final AbstractConfigCell enhancedVideoBitrateRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getEnhancedVideoBitrate()));
     private final AbstractConfigCell hideProxySponsorChannelRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideProxySponsorChannel));
     private final AbstractConfigCell hideSponsoredMessageRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideSponsoredMessage));
@@ -375,6 +381,8 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
                 Activity act = getParentActivity();
                 act.startActivityFromChild(act, intent, INTENT_PICK_CUSTOM_EMOJI_PACK);
             } else if (key.equals(NekoConfig.localeToDBC.getKey())) {
+                tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+            } else if (key.equals(NaConfig.INSTANCE.getPlayerDecoder().getKey())) {
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             }
         };
