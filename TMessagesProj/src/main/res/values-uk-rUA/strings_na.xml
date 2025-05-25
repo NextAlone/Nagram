@@ -197,4 +197,8 @@
     <string name="DontSendUploadProgress">Вимкнути індикатор набору</string>
     <string name="SendOfflinePacketAfterOnline">Автономний режим після перебування онлайн</string>
     <string name="MarkReadAfterAction">Відмітити як прочитані після дії</string>
+    <string name="PlayerDecoder">Гравець декодер</string>
+    <string name="PlayerDecoderSoftware">Перевага декодерам програм</string>
+    <string name="PlayerDecoderHardware">Тільки декодувальники пристрою</string>
+    <string name="PlayerDecoderPerferHW">Віддавати перевагу декодерам пристрою</string>
 </resources>

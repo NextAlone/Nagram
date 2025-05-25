@@ -197,4 +197,8 @@
     <string name="DontSendUploadProgress">Deaktiver Typing Indikator</string>
     <string name="SendOfflinePacketAfterOnline">Gå frakoblet etter å ha startet online</string>
     <string name="MarkReadAfterAction">Merk som lest etter handling</string>
+    <string name="PlayerDecoder">Spiller dekoder</string>
+    <string name="PlayerDecoderSoftware">Foretrekk app-dekodere</string>
+    <string name="PlayerDecoderHardware">Bare dekodere for enheter</string>
+    <string name="PlayerDecoderPerferHW">Foretrekk enhetens dekodere</string>
 </resources>

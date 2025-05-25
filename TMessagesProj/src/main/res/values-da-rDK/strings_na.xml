@@ -197,4 +197,8 @@
     <string name="DontSendUploadProgress">Deaktivér Skriveindikator</string>
     <string name="SendOfflinePacketAfterOnline">Gå Offline Efter At Gøre Online</string>
     <string name="MarkReadAfterAction">Markér som læst efter handling</string>
+    <string name="PlayerDecoder">Spiller Dekoder</string>
+    <string name="PlayerDecoderSoftware">Foretrækker app-dekodere</string>
+    <string name="PlayerDecoderHardware">Kun enhedsafkodere</string>
+    <string name="PlayerDecoderPerferHW">Foretræk enhedsafkodere</string>
 </resources>

@@ -197,4 +197,8 @@
     <string name="DontSendUploadProgress">Desactivar Typing Indicator</string>
     <string name="SendOfflinePacketAfterOnline">Desconectarse después de conectarse</string>
     <string name="MarkReadAfterAction">Marcar como leído después de la acción</string>
+    <string name="PlayerDecoder">Decodificador de Jugador</string>
+    <string name="PlayerDecoderSoftware">Preferir decodificadores de aplicaciones</string>
+    <string name="PlayerDecoderHardware">Sólo decodificadores de dispositivo</string>
+    <string name="PlayerDecoderPerferHW">Preferir decodificadores de dispositivo</string>
 </resources>

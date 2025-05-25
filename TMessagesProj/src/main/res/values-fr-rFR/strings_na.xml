@@ -197,4 +197,8 @@
     <string name="DontSendUploadProgress">Désactiver l\'indicateur de saisie</string>
     <string name="SendOfflinePacketAfterOnline">Passer hors ligne après être passé en ligne</string>
     <string name="MarkReadAfterAction">Marquer comme lu après l\'action</string>
+    <string name="PlayerDecoder">Décodeur du joueur</string>
+    <string name="PlayerDecoderSoftware">Préférer les décodeurs d\'applications</string>
+    <string name="PlayerDecoderHardware">Uniquement les décodeurs de l\'appareil</string>
+    <string name="PlayerDecoderPerferHW">Préférer les décodeurs de l\'appareil</string>
 </resources>

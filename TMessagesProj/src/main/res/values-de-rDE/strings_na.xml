@@ -197,4 +197,8 @@
     <string name="DontSendUploadProgress">Eingabeanzeige deaktivieren</string>
     <string name="SendOfflinePacketAfterOnline">Offline gehen nach Online</string>
     <string name="MarkReadAfterAction">Als gelesen nach Aktion markieren</string>
+    <string name="PlayerDecoder">Spieler Decodierer</string>
+    <string name="PlayerDecoderSoftware">App-Decoder bevorzugen</string>
+    <string name="PlayerDecoderHardware">Nur Gerätedecodierer</string>
+    <string name="PlayerDecoderPerferHW">Gerätedecodierer bevorzugen</string>
 </resources>

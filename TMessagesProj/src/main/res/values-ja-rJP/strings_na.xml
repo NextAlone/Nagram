@@ -197,4 +197,8 @@
     <string name="DontSendUploadProgress">入力インジケーターを無効にする</string>
     <string name="SendOfflinePacketAfterOnline">オンラインに入ったらオフラインになります</string>
     <string name="MarkReadAfterAction">アクション後に既読としてマーク</string>
+    <string name="PlayerDecoder">プレイヤーのDecoder</string>
+    <string name="PlayerDecoderSoftware">アプリデコーダーを優先</string>
+    <string name="PlayerDecoderHardware">デバイスデコーダーのみ</string>
+    <string name="PlayerDecoderPerferHW">デバイスデコーダーを優先</string>
 </resources>

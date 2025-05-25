@@ -197,4 +197,8 @@
     <string name="DontSendUploadProgress">Poista Kirjoitusilmaisin Käytöstä</string>
     <string name="SendOfflinePacketAfterOnline">Siirry Offline-Tilan Jälkeen Menossa Online</string>
     <string name="MarkReadAfterAction">Merkitse luetuksi toiminnon jälkeen</string>
+    <string name="PlayerDecoder">Pelaajan Purkaja</string>
+    <string name="PlayerDecoderSoftware">Suosi sovellusdekoodereita</string>
+    <string name="PlayerDecoderHardware">Vain laitteen dekooderit</string>
+    <string name="PlayerDecoderPerferHW">Suosi laitteen dekoodereita</string>
 </resources>

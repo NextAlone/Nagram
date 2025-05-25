@@ -197,4 +197,8 @@
     <string name="DontSendUploadProgress">Απενεργοποίηση Ένδειξης Πληκτρολογίας</string>
     <string name="SendOfflinePacketAfterOnline">Πηγαίνετε Εκτός Σύνδεσης Μετά Από Να Πηγαίνετε Online</string>
     <string name="MarkReadAfterAction">Σήμανση ως αναγνωσμένου μετά την ενέργεια</string>
+    <string name="PlayerDecoder">Αποκωδικοποιητής Παίκτη</string>
+    <string name="PlayerDecoderSoftware">Προτίμηση αποκωδικοποιητών εφαρμογών</string>
+    <string name="PlayerDecoderHardware">Μόνο αποκωδικοποιητές συσκευής</string>
+    <string name="PlayerDecoderPerferHW">Προτίμηση αποκωδικοποιητών συσκευής</string>
 </resources>

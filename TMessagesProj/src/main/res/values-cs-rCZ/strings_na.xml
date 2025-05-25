@@ -197,4 +197,8 @@
     <string name="DontSendUploadProgress">Zakázat indikátor psaní</string>
     <string name="SendOfflinePacketAfterOnline">Zapojit se po online</string>
     <string name="MarkReadAfterAction">Označit jako přečtené po akci</string>
+    <string name="PlayerDecoder">Dekodér hráče</string>
+    <string name="PlayerDecoderSoftware">Preferovat dekodéry aplikací</string>
+    <string name="PlayerDecoderHardware">Pouze dekodéry zařízení</string>
+    <string name="PlayerDecoderPerferHW">Preferovat dekodéry zařízení</string>
 </resources>

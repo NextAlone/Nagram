@@ -197,4 +197,8 @@
     <string name="DontSendUploadProgress">Disabilita Indicatore Di Digitazione</string>
     <string name="SendOfflinePacketAfterOnline">Vai Offline Dopo Andare Online</string>
     <string name="MarkReadAfterAction">Segna come letto dopo l\'azione</string>
+    <string name="PlayerDecoder">Decoder Giocatore</string>
+    <string name="PlayerDecoderSoftware">Preferisci decoder app</string>
+    <string name="PlayerDecoderHardware">Solo i decoder del dispositivo</string>
+    <string name="PlayerDecoderPerferHW">Preferisci i decoder del dispositivo</string>
 </resources>

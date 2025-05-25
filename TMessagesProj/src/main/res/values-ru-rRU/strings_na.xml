@@ -197,4 +197,8 @@
     <string name="DontSendUploadProgress">Отключить индикатор набора текста</string>
     <string name="SendOfflinePacketAfterOnline">Перейти в автономный режим после входа в Интернет</string>
     <string name="MarkReadAfterAction">Отметить как прочитанное после действия</string>
+    <string name="PlayerDecoder">Декодер игрока</string>
+    <string name="PlayerDecoderSoftware">Предпочитать декодеры приложений</string>
+    <string name="PlayerDecoderHardware">Только декодеры устройства</string>
+    <string name="PlayerDecoderPerferHW">Предпочтительные декодеры устройства</string>
 </resources>

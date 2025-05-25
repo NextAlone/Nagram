@@ -197,4 +197,8 @@
     <string name="DontSendUploadProgress">Uitschakelen Typing Indicator</string>
     <string name="SendOfflinePacketAfterOnline">Ga offline na online gaan</string>
     <string name="MarkReadAfterAction">Markeer als gelezen na actie</string>
+    <string name="PlayerDecoder">Speler Decoder</string>
+    <string name="PlayerDecoderSoftware">Voorkeur voor app-decoders</string>
+    <string name="PlayerDecoderHardware">Alleen apparaat decoders</string>
+    <string name="PlayerDecoderPerferHW">Voorkeur voor apparaatdecoders</string>
 </resources>

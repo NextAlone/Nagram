@@ -197,4 +197,8 @@
     <string name="DontSendUploadProgress">Inaktivera typindikatorn</string>
     <string name="SendOfflinePacketAfterOnline">Gå offline efter att ha åkt online</string>
     <string name="MarkReadAfterAction">Markera som läst efter åtgärd</string>
+    <string name="PlayerDecoder">Avkodare för spelare</string>
+    <string name="PlayerDecoderSoftware">Föredrar appavkodare</string>
+    <string name="PlayerDecoderHardware">Endast enhetsavkodare</string>
+    <string name="PlayerDecoderPerferHW">Föredrar enhetsavkodare</string>
 </resources>

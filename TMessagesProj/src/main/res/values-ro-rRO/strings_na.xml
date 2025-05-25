@@ -197,4 +197,8 @@
     <string name="DontSendUploadProgress">Dezactivează tastarea indicatorului</string>
     <string name="SendOfflinePacketAfterOnline">Du-te offline după ce intri online</string>
     <string name="MarkReadAfterAction">Marchează ca citit după acțiune</string>
+    <string name="PlayerDecoder">Decodor jucător</string>
+    <string name="PlayerDecoderSoftware">Preferă decodoarele aplicației</string>
+    <string name="PlayerDecoderHardware">Doar decodoarele dispozitivului</string>
+    <string name="PlayerDecoderPerferHW">Preferă decodoarele dispozitivului</string>
 </resources>

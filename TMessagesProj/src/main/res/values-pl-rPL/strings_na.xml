@@ -197,4 +197,8 @@
     <string name="DontSendUploadProgress">Wyłącz wskaźnik pisania</string>
     <string name="SendOfflinePacketAfterOnline">Przejdź do trybu offline po zakończeniu trybu online</string>
     <string name="MarkReadAfterAction">Oznacz jako przeczytane po akcji</string>
+    <string name="PlayerDecoder">Dekoder gracza</string>
+    <string name="PlayerDecoderSoftware">Preferuj dekodery aplikacji</string>
+    <string name="PlayerDecoderHardware">Tylko dekodery urządzenia</string>
+    <string name="PlayerDecoderPerferHW">Preferuj dekodery urządzenia</string>
 </resources>

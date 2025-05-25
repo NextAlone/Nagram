@@ -197,4 +197,8 @@
     <string name="DontSendUploadProgress">تعطيل مؤشر الكتابة</string>
     <string name="SendOfflinePacketAfterOnline">اذهب دون اتصال بعد الذهاب عبر الإنترنت</string>
     <string name="MarkReadAfterAction">وضع علامة كمقروء بعد إجراء</string>
+    <string name="PlayerDecoder">فك تشفير اللاعب</string>
+    <string name="PlayerDecoderSoftware">تفضيل رموز التطبيقات</string>
+    <string name="PlayerDecoderHardware">فقط فك ترميز الجهاز</string>
+    <string name="PlayerDecoderPerferHW">تفضيل شفرات الجهاز</string>
 </resources>

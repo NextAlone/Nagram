@@ -197,4 +197,8 @@
     <string name="DontSendUploadProgress">Desativar indicador de digitação</string>
     <string name="SendOfflinePacketAfterOnline">Ficar offline depois de sair online</string>
     <string name="MarkReadAfterAction">Marcar Ação Como Lida Após</string>
+    <string name="PlayerDecoder">Decodificador de Jogador</string>
+    <string name="PlayerDecoderSoftware">Preferir decodificadores de aplicativos</string>
+    <string name="PlayerDecoderHardware">Apenas decodificadores do dispositivo</string>
+    <string name="PlayerDecoderPerferHW">Preferir decodificadores do dispositivo</string>
 </resources>
