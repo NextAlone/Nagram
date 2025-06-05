@@ -196,19 +196,16 @@ public class MessagePreviewParams {
     public boolean webpagePhoto;
 
     public boolean noforwards;
+    public boolean monoforum;
     public boolean hasSecretMessages;
 
     public TLRPC.WebPage webpage;
     public CharacterStyle currentLink;
 
-    public MessagePreviewParams(boolean secret, boolean noforwards) {
+    public MessagePreviewParams(boolean secret, boolean noforwards, boolean monoforum, boolean hideForwardSendersName) {
         this.isSecret = secret;
         this.noforwards = secret || noforwards;
-    }
-
-    public MessagePreviewParams(boolean secret, boolean noforwards, boolean hideForwardSendersName) {
-        this.isSecret = secret;
-        this.noforwards = secret || noforwards;
+        this.monoforum = monoforum;
         this.hideForwardSendersName = hideForwardSendersName;
     }
 

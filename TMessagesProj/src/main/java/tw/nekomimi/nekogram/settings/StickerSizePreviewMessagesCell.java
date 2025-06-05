@@ -116,7 +116,7 @@ public class StickerSizePreviewMessagesCell extends LinearLayout {
             });
             cells[a].isChat = false;
             cells[a].setFullyDraw(true);
-            cells[a].setMessageObject(messageObjects[a], null, false, false);
+            cells[a].setMessageObject(messageObjects[a], null, false, false, false);
             addView(cells[a], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
         }
     }
@@ -130,7 +130,7 @@ public class StickerSizePreviewMessagesCell extends LinearLayout {
                 messageObjects[a].applyNewText();
                 messageObjects[a].resetLayout();
             }
-            cells[a].setMessageObject(messageObjects[a], null, false, false);
+            cells[a].setMessageObject(messageObjects[a], null, false, false, false);
             cells[a].invalidate();
         }
     }
