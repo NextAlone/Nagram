@@ -37,6 +37,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import tw.nekomimi.nekogram.DialogConfig;
 import tw.nekomimi.nekogram.helpers.remote.PeerColorHelper;
 
 public class ChatObject {
@@ -2456,6 +2457,9 @@ public class ChatObject {
     }
 
     public static boolean areTabsEnabled(TLRPC.Chat chat) {
+        if (chat != null && DialogConfig.hasCustomForumTabsConfig(-chat.id)) {
+            return DialogConfig.isCustomForumTabsEnable(-chat.id);
+        }
         return SharedConfig.forceForumTabs || chat != null && chat.forum_tabs;
     }
 }

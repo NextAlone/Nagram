@@ -336,6 +336,7 @@ import tw.nekomimi.nekogram.helpers.SettingsHelper;
 import tw.nekomimi.nekogram.helpers.SettingsSearchResult;
 import tw.nekomimi.nekogram.settings.RegexFiltersSettingActivity;
 import tw.nekomimi.nekogram.transtale.popupwrapper.AutoTranslatePopupWrapper;
+import tw.nekomimi.nekogram.transtale.popupwrapper.CustomForumTabsPopupWrapper;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.InternalUpdater;
 import tw.nekomimi.nekogram.DatacenterActivity;
@@ -11206,6 +11207,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 createAutoDeleteItem(context);
             }
             createAutoTranslateItem(-chatId, topicId, !isTopic || chatInfo == null || !chatInfo.participants_hidden || ChatObject.hasAdminRights(chat));
+            if (chat.forum) {
+                createCustomForumTabsItem(-chatId, !isTopic || chatInfo == null || !chatInfo.participants_hidden || ChatObject.hasAdminRights(chat));
+            }
             createMessageFilterItem();
             if (chat != null && (chat.has_link || (chatInfo != null && chatInfo.linked_chat_id != 0))) {
                 String text;
@@ -11466,6 +11470,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private void createAutoTranslateItem(long dialogId, long topicId, boolean gap) {
         var autoTranslatePopupWrapper = new AutoTranslatePopupWrapper(ProfileActivity.this, otherItem.getPopupLayout().getSwipeBack(), dialogId, topicId, getResourceProvider());
         otherItem.addSwipeBackItem(R.drawable.msg_translate, null, LocaleController.getString("AutoTranslate", R.string.AutoTranslate), autoTranslatePopupWrapper.windowLayout);
+        if (gap) otherItem.addColoredGap();
+    }
+
+    private void createCustomForumTabsItem(long dialogId, boolean gap) {
+        var customForumTabsPopupWrapper = new CustomForumTabsPopupWrapper(ProfileActivity.this, otherItem.getPopupLayout().getSwipeBack(), dialogId, getResourceProvider());
+        otherItem.addSwipeBackItem(R.drawable.msg_topics, null, LocaleController.getString(R.string.Topics), customForumTabsPopupWrapper.windowLayout);
         if (gap) otherItem.addColoredGap();
     }
 
