@@ -13612,7 +13612,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     private void openStoriesRecorder() {
-        if (!storiesEnabled) {
+        if (!storiesEnabled && !NaConfig.INSTANCE.getDisableStories().Bool()) {
             if (storyPremiumHint != null) {
                 if (storyPremiumHint.shown()) {
                     return;
