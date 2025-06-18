@@ -67,10 +67,7 @@ public class NekoXConfig {
 
     public static SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekox_config", Context.MODE_PRIVATE);
 
-    public static boolean developerMode = preferences.getBoolean("developer_mode", true);
-
     public static boolean disableFlagSecure = NaConfig.INSTANCE.getDisableFlagSecure().Bool();
-    public static boolean disableScreenshotDetection = preferences.getBoolean("disable_screenshot_detection", false);
 
     public static int autoUpdateReleaseChannel = preferences.getInt("autoUpdateReleaseChannel", 2);
 //    public static String ignoredUpdateTag = preferences.getString("ignoredUpdateTag", "");
@@ -80,29 +77,8 @@ public class NekoXConfig {
     public static int customAppId = preferences.getInt("custom_app_id", 0);
     public static String customAppHash = preferences.getString("custom_app_hash", "");
 
-    public static void toggleDeveloperMode() {
-        preferences.edit().putBoolean("developer_mode", developerMode = !developerMode).apply();
-        if (!developerMode) {
-            preferences.edit()
-                    .putBoolean("disable_flag_secure", disableFlagSecure = false)
-                    .putBoolean("disable_screenshot_detection", disableScreenshotDetection = false)
-                    .apply();
-        }
-    }
-
-    public static void toggleDisableFlagSecure() {
-//        preferences.edit().putBoolean("disable_flag_secure", disableFlagSecure = !disableFlagSecure).apply();
-
-        disableFlagSecure = !disableFlagSecure;
-        NaConfig.INSTANCE.getDisableFlagSecure().toggleConfigBool();
-    }
-
-    public static void toggleDisableScreenshotDetection() {
-        preferences.edit().putBoolean("disable_screenshot_detection", disableScreenshotDetection = !disableScreenshotDetection).apply();
-    }
-
     private static Boolean hasDeveloper = null;
-    
+
     public static int currentAppId() {
         switch (customApi) {
             case 0:

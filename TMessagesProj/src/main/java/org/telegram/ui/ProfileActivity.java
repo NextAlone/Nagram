@@ -342,7 +342,6 @@ import tw.nekomimi.nekogram.InternalUpdater;
 import tw.nekomimi.nekogram.DatacenterActivity;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
-import tw.nekomimi.nekogram.settings.NekoXSettingActivity;
 import tw.nekomimi.nekogram.parts.DialogTransKt;
 import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
 import tw.nekomimi.nekogram.utils.AlertUtil;
@@ -4530,20 +4529,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     showDialog(switchBuilder.create());
                     return Unit.INSTANCE;
                 });
-
-                if (NaConfig.INSTANCE.getShowHiddenFeature().Bool()) {
-                    builder.addItem(LocaleController.getString("DeveloperSettings", R.string.DeveloperSettings), R.drawable.baseline_developer_mode_24, (it) -> {
-                        BottomBuilder devBuilder = new BottomBuilder(ProfileActivity.this.getParentActivity());
-                        devBuilder.addTitle(LocaleController.getString("DevModeTitle", R.string.DevModeTitle), LocaleController.getString("DevModeNotice", R.string.DevModeNotice));
-                        devBuilder.addItem(LocaleController.getString("Continue", R.string.Continue), R.drawable.baseline_warning_24, true, (__) -> {
-                            ProfileActivity.this.presentFragment(new NekoXSettingActivity());
-                            return Unit.INSTANCE;
-                        });
-                        devBuilder.addCancelItem();
-                        devBuilder.show();
-                        return Unit.INSTANCE;
-                    });
-                }
                 builder.show();
             } else if (position == premiumRow) {
                 presentFragment(new PremiumPreviewFragment("settings"));

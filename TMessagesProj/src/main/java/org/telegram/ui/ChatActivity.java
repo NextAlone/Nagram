@@ -31933,14 +31933,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     } else {
                                         td = selectedObjectGroup.messages.get(0).messageOwner.translated;
                                     }
-                                    items.add(td ? LocaleController.getString("UndoTranslate", R.string.UndoTranslate) : LocaleController.getString("Translate", R.string.Translate));
+                                    items.add(td ? LocaleController.getString(R.string.UndoTranslate) : LocaleController.getString(R.string.Translate));
                                     options.add(nkbtn_translate);
                                     icons.add(R.drawable.msg_translate);
                                 }
                             }
                             if (NekoConfig.showShareMessages.Bool()) {
                                 if (messageObject != null || docsWithMessages) {
-                                    items.add(LocaleController.getString("ShareMessages", R.string.ShareMessages));
+                                    items.add(LocaleController.getString(R.string.ShareMessages));
                                     options.add(nkbtn_sharemessage);
                                     icons.add(R.drawable.msg_shareout);
                                 }
@@ -31966,12 +31966,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                         }
                         if (NekoConfig.showMessageDetails.Bool()) {
-                            items.add(LocaleController.getString("MessageDetails", R.string.MessageDetails));
+                            items.add(LocaleController.getString(R.string.MessageDetails));
                             options.add(nkbtn_detail);
                             icons.add(R.drawable.msg_info);
                         }
                         if (NekoConfig.showMessageHide.Bool()) {
-                            items.add(LocaleController.getString("Hide", R.string.Hide));
+                            items.add(LocaleController.getString(R.string.Hide));
                             options.add(nkbtn_hide);
                             icons.add(R.drawable.msg_disable);
                         }
@@ -32164,6 +32164,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 icons.add(R.drawable.msg_translate);
                             }
                         }
+                        if (NekoConfig.showShareMessages.Bool()) {
+                            if (messageObject != null || docsWithMessages) {
+                                items.add(LocaleController.getString(R.string.ShareMessages));
+                                options.add(nkbtn_sharemessage);
+                                icons.add(R.drawable.msg_shareout);
+                            }
+                        }
                         if (messageObject != null && StrUtil.isNotBlank(messageObject.messageOwner.message) && StrUtil.isNotBlank(NekoConfig.openPGPApp.String())) {
                             //TODO wtf
                             if (PgpHelper.PGP_CLEARTEXT_SIGNATURE.matcher(selectedObject.messageOwner.message).matches()) {
@@ -32184,9 +32191,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 icons.add(R.drawable.baseline_vpn_key_24);
                             }
                         }
+                        if (NekoConfig.showMessageDetails.Bool()) {
+                            items.add(LocaleController.getString(R.string.MessageDetails));
+                            options.add(nkbtn_detail);
+                            icons.add(R.drawable.msg_info);
+                        }
                         if (NekoConfig.showMessageHide.Bool()) {
-                            items.add(LocaleController.getString("Hide", R.string.Hide));
-                            options.add(204);
+                            items.add(LocaleController.getString(R.string.Hide));
+                            options.add(nkbtn_hide);
                             icons.add(R.drawable.msg_disable);
                         }
                         items.add(LocaleController.getString(chatMode == MODE_SAVED && threadMessageId != getUserConfig().getClientUserId() ? R.string.Remove : R.string.Delete));

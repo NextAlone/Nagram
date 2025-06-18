@@ -50,6 +50,7 @@ import java.util.regex.Pattern;
 
 import kotlin.Unit;
 
+import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.ui.PopupBuilder;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.ZipUtil;
@@ -189,6 +190,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
             NekoConfig.setGhostMode(false);
             NaConfig.INSTANCE.getForceCopy().setConfigBool(false);
             NaConfig.INSTANCE.getDisableFlagSecure().setConfigBool(false);
+            NekoXConfig.disableFlagSecure = false;
             NekoConfig.hideSponsoredMessage.setConfigBool(false);
             NekoConfig.ignoreBlocked.setConfigBool(false);
             NaConfig.INSTANCE.getRegexFiltersEnabled().setConfigBool(false);
@@ -384,6 +386,8 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (key.equals(NaConfig.INSTANCE.getPlayerDecoder().getKey())) {
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+            } else if (key.equals(NaConfig.INSTANCE.getDisableFlagSecure().getKey())) {
+                NekoXConfig.disableFlagSecure = NaConfig.INSTANCE.getDisableFlagSecure().Bool();
             }
         };
 

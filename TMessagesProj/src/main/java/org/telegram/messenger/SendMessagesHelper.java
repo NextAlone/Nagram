@@ -7855,19 +7855,6 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         }).start();
     }
 
-    public void removeBigPhotoSizes(TLRPC.TL_photo photo, Boolean isEncrypted) {
-        if (!isEncrypted || photo == null) {
-            return;
-        }
-        ArrayList<TLRPC.PhotoSize> sizes = new ArrayList<>();
-        for (TLRPC.PhotoSize size: photo.sizes) {
-            if (size != null && size.w <= AndroidUtilities.getPhotoSizeOld() && size.h <= AndroidUtilities.getPhotoSizeOld()) {
-                sizes.add(size);
-            }
-        }
-        photo.sizes = sizes;
-    }
-
     public TLRPC.TL_photo generatePhotoSizes(String path, Uri imageUri) {
         return generatePhotoSizes(null, path, imageUri, false);
     }
@@ -9781,11 +9768,6 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                                 }
                                 if (photo == null) {
                                     photo = accountInstance.getSendMessagesHelper().generatePhotoSizes(info.path, info.uri);
-
-                                    //        ===== Nagram Hook start =====
-                                    accountInstance.getSendMessagesHelper().removeBigPhotoSizes(photo, isEncrypted);
-                                    //        ===== Nagram Hook end =====
-
                                     if (isEncrypted && info.canDeleteAfter) {
                                         new File(info.path).delete();
                                     }
