@@ -8,6 +8,7 @@ import static org.telegram.ui.Components.UniversalAdapter.VIEW_TYPE_EXPANDABLE_S
 import static org.telegram.ui.Components.UniversalAdapter.VIEW_TYPE_ROUND_CHECKBOX;
 import static org.telegram.ui.Components.UniversalAdapter.VIEW_TYPE_SHADOW_COLLAPSE_BUTTON;
 import static org.telegram.ui.Components.UniversalAdapter.VIEW_TYPE_SWITCH;
+import static org.telegram.ui.Components.UniversalAdapter.VIEW_TYPE_TEXT;
 import static org.telegram.ui.Components.UniversalAdapter.VIEW_TYPE_USER_GROUP_CHECKBOX;
 import static org.telegram.ui.Components.UniversalAdapter.VIEW_TYPE_USER_CHECKBOX;
 
@@ -37,8 +38,10 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.CollapseTextCell;
+import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Components.Premium.boosts.cells.selector.SelectorBtnCell;
 
 import java.util.ArrayList;
@@ -101,6 +104,8 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
     private static final int RIGHT_SEND_STICKERS = 12;
     private static final int RIGHT_SEND_POLLS = 13;
     private static final int RIGHT_SEND_LINKS = 14;
+
+    private static final int RIGHT_DURATION = 100;
 
     private class Action {
         int type;
@@ -802,6 +807,17 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
                 }
             }
 
+            if (banOrRestrict.checks[0] || restrict) {
+                String value;
+                if (bannedRights.until_date == 0 || Math.abs(bannedRights.until_date - System.currentTimeMillis() / 1000) > 10 * 365 * 24 * 60 * 60) {
+                    value = LocaleController.getString(R.string.UserRestrictionsUntilForever);
+                } else {
+                    value = LocaleController.formatDateForBan(bannedRights.until_date);
+                }
+
+                items.add(UItem.asButton(RIGHT_DURATION, LocaleController.getString(R.string.UserRestrictionsDuration), value));
+            }
+
             if (canRestrict) {
                 items.add(UItem.asShadowCollapseButton(1, getString(getRestrictToggleTextKey()))
                         .setCollapsed(!restrict)
@@ -969,7 +985,87 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
             banOrRestrict.setFilter(restrict ? restrictFilter : banFilter);
             adapter.update(true);
             onRestrictionsChanged();
+        }  else if (item.viewType == VIEW_TYPE_TEXT && item.id == RIGHT_DURATION) {
+            selectDate();
         }
+    }
+
+    private void selectDate() {
+        BottomSheet.Builder builder = new BottomSheet.Builder(getContext());
+        builder.setApplyTopPadding(false);
+
+        LinearLayout linearLayout = new LinearLayout(getContext());
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+        HeaderCell headerCell = new HeaderCell(getContext(), Theme.key_dialogTextBlue2, 23, 15, false);
+        headerCell.setHeight(47);
+        headerCell.setText(LocaleController.getString(R.string.UserRestrictionsDuration));
+        linearLayout.addView(headerCell);
+
+        LinearLayout linearLayoutInviteContainer = new LinearLayout(getContext());
+        linearLayoutInviteContainer.setOrientation(LinearLayout.VERTICAL);
+        linearLayout.addView(linearLayoutInviteContainer, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+
+        BottomSheet.BottomSheetCell[] buttons = new BottomSheet.BottomSheetCell[5];
+
+        for (int a = 0; a < buttons.length; a++) {
+            buttons[a] = new BottomSheet.BottomSheetCell(getContext(), 0);
+            buttons[a].setPadding(AndroidUtilities.dp(7), 0, AndroidUtilities.dp(7), 0);
+            buttons[a].setTag(a);
+            buttons[a].setBackgroundDrawable(Theme.getSelectorDrawable(false));
+            String text;
+            switch (a) {
+                case 0:
+                    text = LocaleController.getString(R.string.UserRestrictionsUntilForever);
+                    break;
+                case 1:
+                    text = LocaleController.formatPluralString("Days", 1);
+                    break;
+                case 2:
+                    text = LocaleController.formatPluralString("Weeks", 1);
+                    break;
+                case 3:
+                    text = LocaleController.formatPluralString("Months", 1);
+                    break;
+                case 4:
+                default:
+                    text = LocaleController.getString(R.string.UserRestrictionsCustom);
+                    break;
+            }
+            buttons[a].setTextAndIcon(text, 0);
+            linearLayoutInviteContainer.addView(buttons[a], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+            buttons[a].setOnClickListener(v2 -> {
+                Integer tag = (Integer) v2.getTag();
+                switch (tag) {
+                    case 0:
+                        bannedRights.until_date = 0;
+                        adapter.update(true);
+                        break;
+                    case 1:
+                        bannedRights.until_date = ConnectionsManager.getInstance(currentAccount).getCurrentTime() + 60 * 60 * 24;
+                        adapter.update(true);
+                        break;
+                    case 2:
+                        bannedRights.until_date = ConnectionsManager.getInstance(currentAccount).getCurrentTime() + 60 * 60 * 24 * 7;
+                        adapter.update(true);
+                        break;
+                    case 3:
+                        bannedRights.until_date = ConnectionsManager.getInstance(currentAccount).getCurrentTime() + 60 * 60 * 24 * 30;
+                        adapter.update(true);
+                        break;
+                    case 4: {
+                        AlertsCreator.createDatePickerDialog(getContext(), LocaleController.getString(R.string.UserRestrictionsDuration), LocaleController.getString(R.string.Set), ConnectionsManager.getInstance(currentAccount).getCurrentTime(), (notify, scheduleDate) -> {
+                            bannedRights.until_date = scheduleDate;
+                            adapter.update(true);
+                        });
+                        break;
+                    }
+                }
+                builder.getDismissRunnable().run();
+            });
+        }
+        builder.setCustomView(linearLayout);
+        builder.show();
     }
 
     private void performDelete() {
