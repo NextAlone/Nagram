@@ -869,6 +869,12 @@ object NaConfig {
             ConfigItem.configTypeInt,
             0
         )
+    val showUserIconsInChatsList =
+        addConfig(
+            "ShowUserIconsInChatsList",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

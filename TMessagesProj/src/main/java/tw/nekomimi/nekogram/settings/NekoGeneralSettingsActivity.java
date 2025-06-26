@@ -179,6 +179,8 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
             add(new ConfigCellTextCheck(NekoConfig.sortByContacts, null, LocaleController.getString(R.string.SortByContacts)));
         }}));
     }));
+    private final AbstractConfigCell mediaPreviewRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.mediaPreview));
+    private final AbstractConfigCell showUserIconsInChatsListRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowUserIconsInChatsList()));
     private final AbstractConfigCell divider4 = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell header5 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Appearance")));

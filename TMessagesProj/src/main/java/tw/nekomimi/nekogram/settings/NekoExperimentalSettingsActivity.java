@@ -87,7 +87,6 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
 
 //    private final AbstractConfigCell smoothKeyboardRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.smoothKeyboard));
     private final AbstractConfigCell enhancedFileLoaderRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.enhancedFileLoader));
-    private final AbstractConfigCell mediaPreviewRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.mediaPreview));
 //    private final AbstractConfigCell proxyAutoSwitchRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.proxyAutoSwitch));
     private final AbstractConfigCell disableFilteringRow = cellGroup.appendCell(new ConfigCellCustom("DisableFiltering", CellGroup.ITEM_TYPE_TEXT_CHECK, true));
     //    private final NekomuraTGCell ignoreContentRestrictionsRow = addNekomuraTGCell(nkmrCells.new NekomuraTGTextCheck(NekoConfig.ignoreContentRestrictions, LocaleController.getString("IgnoreContentRestrictionsNotice")));
@@ -358,12 +357,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
 
         // Cells: Set OnSettingChanged Callbacks
         cellGroup.callBackSettingsChanged = (key, newValue) -> {
-            if (key.equals(NekoConfig.mediaPreview.getKey())) {
-                if ((boolean) newValue) {
-                    tooltip.setInfoText(AndroidUtilities.replaceTags(LocaleController.formatString("BetaWarning", R.string.BetaWarning)));
-                    tooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
-                }
-            } else if (key.equals(NekoConfig.enableStickerPin.getKey())) {
+            if (key.equals(NekoConfig.enableStickerPin.getKey())) {
                 if ((boolean) newValue) {
                     tooltip.setInfoText(AndroidUtilities.replaceTags(LocaleController.formatString("EnableStickerPinTip", R.string.EnableStickerPinTip)));
                     tooltip.showWithAction(0, UndoView.ACTION_CACHE_WAS_CLEARED, null, null);
