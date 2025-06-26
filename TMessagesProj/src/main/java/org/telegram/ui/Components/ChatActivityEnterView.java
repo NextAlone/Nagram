@@ -5512,7 +5512,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                     photoEntry.reset();
                     sending = true;
                     boolean updateStickersOrder = SendMessagesHelper.checkUpdateStickersOrder(info.caption);
-                    SendMessagesHelper.prepareSendingMedia(accountInstance, photos, dialog_id, replyingMessageObject, getThreadMessage(), null, replyingQuote, false, false, editingMessageObject, notify, scheduleDate, parentFragment == null ? 0 : parentFragment.getChatMode(), updateStickersOrder, null, parentFragment != null ? parentFragment.quickReplyShortcut : null, parentFragment != null ? parentFragment.getQuickReplyId() : 0, 0, false, 0, getSendMonoForumPeerId());
+                    SendMessagesHelper.prepareSendingMedia(accountInstance, photos, dialog_id, replyingMessageObject, getThreadMessage(), null, replyingQuote, forceDocument, false, editingMessageObject, notify, scheduleDate, parentFragment == null ? 0 : parentFragment.getChatMode(), updateStickersOrder, null, parentFragment != null ? parentFragment.quickReplyShortcut : null, parentFragment != null ? parentFragment.getQuickReplyId() : 0, 0, false, 0, getSendMonoForumPeerId());
                     if (delegate != null) {
                         delegate.onMessageSend(null, true, scheduleDate, 0);
                     }
