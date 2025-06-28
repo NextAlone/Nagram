@@ -64,6 +64,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
     private SideMenultItemAnimator itemAnimator;
 
     public static int nkbtnNewStory = 1000;
+    public static int nkbtnWiki = 1001;
 
     public DrawerLayoutAdapter(Context context, SideMenultItemAnimator animator, DrawerLayoutContainer drawerLayoutContainer) {
         mContext = context;
@@ -363,10 +364,13 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
             }
             showDivider = true;
         }
-//        if (MessagesController.getInstance(UserConfig.selectedAccount).storiesEnabled()) {
+        if (MessagesController.getInstance(UserConfig.selectedAccount).storiesEnabled()) {
 //            items.add(new Item(17, LocaleController.getString(R.string.ProfileStories), R.drawable.msg_menu_stories));
 //            showDivider = true;
-//        }
+            if (NaConfig.INSTANCE.getDisableDialogsFloatingButton().Bool()) {
+                items.add(new Item(nkbtnNewStory, LocaleController.getString(R.string.RecorderNewStory), R.drawable.msg_menu_stories));
+            }
+        }
         showDivider = true;
         if (ApplicationLoader.applicationLoaderInstance != null) {
             if (ApplicationLoader.applicationLoaderInstance.extendDrawer(items)) {
@@ -387,15 +391,6 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
             items.add(null); // divider
         }
 
-        // TODO: NekoX: Fix icon here
-//        int newGroupIcon = R.drawable.baseline_group_24;
-//        int newSecretIcon = R.drawable.baseline_lock_24;
-//        int newChannelIcon = R.drawable.baseline_chat_bubble_24;
-//        int contactsIcon = R.drawable.baseline_perm_contact_calendar_24;
-//        int savedIcon = R.drawable.baseline_bookmark_24;
-//        int settingsIcon = R.drawable.baseline_settings_24;
-//        int callsIcon = R.drawable.baseline_call_24;
-
         items.add(new Item(2, LocaleController.getString(R.string.NewGroup), newGroupIcon));
         //items.add(new Item(3, LocaleController.getString(R.string.NewSecretChat), newSecretIcon));
         //items.add(new Item(4, LocaleController.getString(R.string.NewChannel), newChannelIcon));
@@ -403,7 +398,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         items.add(new Item(10, LocaleController.getString(R.string.Calls), callsIcon));
         items.add(new Item(11, LocaleController.getString(R.string.SavedMessages), savedIcon));
         items.add(new Item(8, LocaleController.getString(R.string.Settings), settingsIcon));
-//        items.add(null); // divider
+        items.add(null); // divider
 //        items.add(new Item(7, LocaleController.getString(R.string.InviteFriends), inviteIcon));
 //        items.add(new Item(13, LocaleController.getString(R.string.TelegramFeatures), helpIcon));
         if (NekoConfig.useProxyItem.Bool() && (!NekoConfig.hideProxyByDefault.Bool() || SharedConfig.isProxyEnabled())) {
@@ -412,6 +407,8 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
                 return true;
             }));
         }
+        items.add(new Item(13, LocaleController.getString(R.string.TipsChannel), helpIcon));
+        items.add(new Item(nkbtnWiki, LocaleController.getString(R.string.TelegramWiki), helpIcon));
     }
 
     public boolean click(View view, int position) {

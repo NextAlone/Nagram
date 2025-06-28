@@ -12,6 +12,17 @@ object UpdateUtil {
 
     const val channelUsername = "nagram_channel"
     const val channelUsernameTips = "NagramTips"
+    const val wikiUrl = "https://na-wiki.xtaolabs.com"
+
+    @JvmStatic
+    fun getChannelUrl(): String {
+        return "https://t.me/$channelUsername"
+    }
+
+    @JvmStatic
+    fun getTipsUrl(): String {
+        return "https://t.me/$channelUsernameTips"
+    }
 
     @JvmStatic
     fun postCheckFollowChannel(ctx: Context, currentAccount: Int) = UIUtil.runOnIoDispatcher {
@@ -61,7 +72,7 @@ object UpdateUtil {
 
             builder.setPositiveButton(LocaleController.getString(R.string.ChannelJoin)) { _, _ ->
                 messagesCollector.addUserToChat(channel.id, userConfig.currentUser, 0, null, null, null)
-                Browser.openUrl(ctx, "https://t.me/$channelUsername")
+                Browser.openUrl(ctx, getChannelUrl())
             }
 
             builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null)
@@ -121,7 +132,7 @@ object UpdateUtil {
 
             builder.setPositiveButton(LocaleController.getString(R.string.ChannelJoin)) { _, _ ->
                 messagesCollector.addUserToChat(channel.id, userConfig.currentUser, 0, null, null, null)
-                Browser.openUrl(ctx, "https://t.me/$channelUsernameTips")
+                Browser.openUrl(ctx, getTipsUrl())
             }
 
             builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null)

@@ -260,6 +260,7 @@ import tw.nekomimi.nekogram.utils.AlertUtil;
 //import tw.nekomimi.nekogram.utils.MonetHelper;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
+import tw.nekomimi.nekogram.utils.UpdateUtil;
 import xyz.nextalone.nagram.NaConfig;
 import xyz.nextalone.nagram.helper.ExternalStickerCacheHelper;
 
@@ -735,7 +736,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                         AccountFrozenAlert.show(currentAccount);
                         return;
                     }
-                    Browser.openUrl(LaunchActivity.this, LocaleController.getString(R.string.TelegramFeaturesUrl));
+                    Browser.openUrl(LaunchActivity.this, UpdateUtil.getTipsUrl());
                     drawerLayoutContainer.closeDrawer(false);
                 } else if (id == 15) {
                     showSelectStatusDialog();
@@ -768,6 +769,13 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
 
                     StoryRecorder.getInstance(LaunchActivity.this, currentAccount).open(null);
                     drawerLayoutContainer.closeDrawer(true);
+                } else if (id == DrawerLayoutAdapter.nkbtnWiki) {
+                    if (MessagesController.getInstance(currentAccount).isFrozen()) {
+                        AccountFrozenAlert.show(currentAccount);
+                        return;
+                    }
+                    Browser.openInTelegramBrowser(LaunchActivity.this, UpdateUtil.wikiUrl, null);
+                    drawerLayoutContainer.closeDrawer(false);
                 }
             }
         });
