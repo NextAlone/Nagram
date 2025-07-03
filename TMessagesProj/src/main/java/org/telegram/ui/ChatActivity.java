@@ -27223,7 +27223,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         String string = results.solution;
         ArrayList<TLRPC.MessageEntity> entities = results.solution_entities;
-        if (messageObject != null && messageObject.translated && messageObject.messageOwner != null && messageObject.messageOwner.translatedPoll != null && messageObject.messageOwner.translatedPoll.solution != null) {
+        if (messageObject != null && messageObject.messageOwner != null && messageObject.messageOwner.translated && messageObject.messageOwner.translatedPoll != null && messageObject.messageOwner.translatedPoll.solution != null) {
             string = messageObject.messageOwner.translatedPoll.solution.text;
             entities = messageObject.messageOwner.translatedPoll.solution.entities;
         }

@@ -1795,11 +1795,15 @@ public class TranslateController extends BaseController {
         public static PollText fromPoll(TLRPC.TL_messageMediaPoll mediaPoll) {
             final TLRPC.Poll poll = mediaPoll.poll;
             final PollText pollText = new PollText();
-            pollText.question = poll.question;
+            pollText.question = new TLRPC.TL_textWithEntities();
+            pollText.question.text = poll.question.text;
+            pollText.question.entities = poll.question.entities;
             for (int i = 0; i < poll.answers.size(); ++i) {
                 TLRPC.PollAnswer answer = poll.answers.get(i);
                 TLRPC.TL_pollAnswer answerText = new TLRPC.TL_pollAnswer();
-                answerText.text = answer.text;
+                answerText.text = new TLRPC.TL_textWithEntities();
+                answerText.text.text = answer.text.text;
+                answerText.text.entities = answer.text.entities;
                 answerText.option = answer.option;
                 pollText.answers.add(answerText);
             }
