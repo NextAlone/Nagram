@@ -149,6 +149,10 @@ public class ApplicationLoader extends Application {
         return BuildConfig.APPLICATION_ID;
     }
 
+    public static boolean isHuaweiStoreBuild() {
+        return applicationLoaderInstance.isHuaweiBuild();
+    }
+
     public static boolean isStandaloneBuild() {
         return true;
     }

@@ -1800,6 +1800,10 @@ public class SharedConfig {
 
     @PerformanceClass
     public static int getDevicePerformanceClass() {
+        if (BuildVars.DEBUG_PRIVATE_VERSION) {
+            // return PERFORMANCE_CLASS_HIGH;
+        }
+
         if (overrideDevicePerformanceClass != -1) {
             return overrideDevicePerformanceClass;
         }

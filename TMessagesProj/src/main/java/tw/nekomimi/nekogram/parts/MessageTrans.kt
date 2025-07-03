@@ -2,6 +2,7 @@ package tw.nekomimi.nekogram.parts
 
 import kotlinx.coroutines.*
 import org.telegram.messenger.MessageObject
+import org.telegram.messenger.TranslateController
 import org.telegram.tgnet.TLRPC
 import org.telegram.ui.ActionBar.AlertDialog
 import org.telegram.ui.ChatActivity
@@ -52,22 +53,17 @@ fun MessageObject.translateFinished(locale: Locale): Int {
     translating = false
 
     if (isPoll) {
-
         val pool = (messageOwner.media as TLRPC.TL_messageMediaPoll).poll
-
         val question = db.query(pool.question.text) ?: return 0
+        val translatedPoll = TranslateController.PollText.fromMessage(this)
 
-        pool.translatedQuestion =
+        translatedPoll.question.text =
             "${if (!NaConfig.hideOriginAfterTranslation.Bool()) pool.question.text + "\n\n--------\n\n" else ""}$question"
-
-        pool.answers.forEach {
-
+        translatedPoll.answers.forEach {
             val answer = db.query(it.text.text) ?: return 0
-
-            it.translatedText = it.text.text + " | " + answer
-
+            it.text.text += " | $answer"
         }
-
+        messageOwner.translatedPoll = translatedPoll
     } else {
 
         val text = db.query(messageOwner.message.takeIf { !it.isNullOrBlank() } ?: return 1)
@@ -172,84 +168,49 @@ fun ChatActivity.translateMessages(target: Locale = NekoConfig.translateToLang.S
                 val db = TranslateDb.forLocale(target)
 
                 if (selectedObject.isPoll) {
-
                     val pool = (selectedObject.messageOwner.media as TLRPC.TL_messageMediaPoll).poll
-
                     var question = db.query(pool.question.text)
-
                     if (question == null) {
-
                         if (cancel.get()) return@trans
-
                         runCatching {
-
                             question = Translator.translate(target, pool.question.text)
-
                         }.onFailure {
-
                             status?.uDismiss()
-
                             val parentActivity = parentActivity
-
                             if (parentActivity != null && !cancel.get()) {
-
                                 AlertUtil.showTransFailedDialog(parentActivity, it is UnsupportedOperationException, it.message
                                         ?: it.javaClass.simpleName) {
-
                                     translateMessages(target, messages)
-
                                 }
-
                             }
-
                             return@trans
-
                         }
-
                     }
 
-                    pool.translatedQuestion =
+                    val translatedPoll = TranslateController.PollText.fromMessage(selectedObject)
+                    translatedPoll.question.text =
                         "${if (!NaConfig.hideOriginAfterTranslation.Bool()) pool.question.text + "\n\n--------\n\n" else ""}$question"
-
-                    pool.answers.forEach {
-
+                    translatedPoll.answers.forEach {
                         var answer = db.query(it.text.text)
-
                         if (answer == null) {
-
                             if (cancel.get()) return@trans
-
                             runCatching {
-
                                 answer = Translator.translate(target, it.text.text)
-
                             }.onFailure { e ->
-
                                 status?.uDismiss()
-
                                 val parentActivity = parentActivity
-
                                 if (parentActivity != null && !cancel.get()) {
-
                                     AlertUtil.showTransFailedDialog(parentActivity, e is UnsupportedOperationException, e.message
                                             ?: e.javaClass.simpleName) {
-
                                         translateMessages(target, messages)
-
                                     }
-
                                 }
-
                                 return@trans
-
                             }
-
                         }
-
-                        it.translatedText = answer + " | " + it.text.text
-
+                        it.text.text += " | $answer"
                     }
-
+                    selectedObject.messageOwner.translatedPoll = translatedPoll
                 } else {
 
                     var text = db.query(selectedObject.messageOwner.message)

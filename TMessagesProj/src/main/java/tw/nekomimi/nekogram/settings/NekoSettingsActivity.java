@@ -131,7 +131,7 @@ public class NekoSettingsActivity extends BaseFragment {
 
         viewPager = new ViewPagerFixed(context) {
             @Override
-            protected void onTabAnimationUpdate(boolean manual) {
+            public void onTabAnimationUpdate(boolean manual) {
                 tabsView.setSelected(viewPager.getPositionAnimated());
             }
         };

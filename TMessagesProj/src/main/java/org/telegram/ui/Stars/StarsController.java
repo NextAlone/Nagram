@@ -44,9 +44,11 @@ import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
+import org.telegram.messenger.TopicsController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.utils.tlutils.AmountUtils;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLObject;
@@ -66,6 +68,7 @@ import org.telegram.ui.Components.SharedMediaLayout;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PaymentFormActivity;
 import org.telegram.ui.ProfileActivity;
+import org.telegram.ui.TON.TONIntroActivity;
 import org.telegram.ui.bots.BotWebViewSheet;
 
 import java.util.ArrayList;
@@ -88,16 +91,33 @@ public class StarsController {
     public static final int PERIOD_MINUTE = 60;
     public static final int PERIOD_5MINUTES = 300;
 
-    private static volatile SparseArray<StarsController> Instance = new SparseArray<>();
+    private static volatile List<SparseArray<StarsController>> Instance = new ArrayList<>(2);
     private static final Object lockObject = new Object();
+    static {
+        for (int a = 0; a < 2; ++a) {
+            Instance.add(new SparseArray<>());
+        }
+    }
+
+    public static StarsController getTonInstance(int num) {
+        return getInstance(num, true);
+    }
 
     public static StarsController getInstance(int num) {
-        StarsController localInstance = Instance.get(num);
+        return getInstance(num, false);
+    }
+
+    public static StarsController getInstance(int num, AmountUtils.Currency currency) {
+        return getInstance(num, currency == AmountUtils.Currency.TON);
+    }
+
+    public static StarsController getInstance(int num, boolean ton) {
+        StarsController localInstance = Instance.get(ton ? 1 : 0).get(num);
         if (localInstance == null) {
             synchronized (lockObject) {
-                localInstance = Instance.get(num);
+                localInstance = Instance.get(ton ? 1 : 0).get(num);
                 if (localInstance == null) {
-                    Instance.set(num, localInstance = new StarsController(num));
+                    Instance.get(ton ? 1 : 0).set(num, localInstance = new StarsController(num, ton));
                 }
             }
         }
@@ -105,9 +125,11 @@ public class StarsController {
     }
 
     public final int currentAccount;
+    public final boolean ton;
 
-    private StarsController(int account) {
-        currentAccount = account;
+    private StarsController(int account, boolean ton) {
+        this.currentAccount = account;
+        this.ton = ton;
     }
 
     // ===== STAR BALANCE =====
@@ -115,11 +137,21 @@ public class StarsController {
     private long lastBalanceLoaded;
     private boolean balanceLoading, balanceLoaded;
     @NonNull
-    public TL_stars.StarsAmount balance = new TL_stars.StarsAmount(0);
+    public TL_stars.StarsAmount balance = TL_stars.StarsAmount.ofStars(0);
     public long minus;
 
     public TL_stars.StarsAmount getBalance() {
         return getBalance(null);
+    }
+
+    @NonNull
+    public AmountUtils.Amount getBalanceAmount() {
+        AmountUtils.Amount amount = AmountUtils.Amount.of(getBalance());
+        if (amount == null) {
+            amount = AmountUtils.Amount.fromNano(0, ton ? AmountUtils.Currency.TON : AmountUtils.Currency.STARS);
+        }
+
+        return amount;
     }
 
     public long getBalance(boolean withMinus) {
@@ -134,6 +166,7 @@ public class StarsController {
         if ((!balanceLoaded || System.currentTimeMillis() - lastBalanceLoaded > 1000 * 60) && !balanceLoading || force) {
             balanceLoading = true;
             TL_stars.TL_payments_getStarsStatus req = new TL_stars.TL_payments_getStarsStatus();
+            req.ton = ton;
             req.peer = new TLRPC.TL_inputPeerSelf();
             ConnectionsManager.getInstance(currentAccount).sendRequest(req, (res, err) -> AndroidUtilities.runOnUIThread(() -> {
                 boolean updatedTransactions = false;
@@ -148,7 +181,7 @@ public class StarsController {
                     if (transactions[ALL_TRANSACTIONS].isEmpty()) {
                         for (TL_stars.StarsTransaction t : r.history) {
                             transactions[ALL_TRANSACTIONS].add(t);
-                            transactions[t.stars.amount > 0 ? INCOMING_TRANSACTIONS : OUTGOING_TRANSACTIONS].add(t);
+                            transactions[t.amount.amount > 0 ? INCOMING_TRANSACTIONS : OUTGOING_TRANSACTIONS].add(t);
                         }
                         for (int i = 0; i < 3; ++i) {
                             transactionsExist[i] = !transactions[i].isEmpty() || transactionsExist[i];
@@ -193,12 +226,21 @@ public class StarsController {
             }));
         }
         if (withMinus && minus > 0) {
-            TL_stars.StarsAmount stars = new TL_stars.StarsAmount();
-            stars.amount = Math.max(0, balance.amount - minus);
-            stars.nanos = balance.nanos;
-            return stars;
+            AmountUtils.Amount b = AmountUtils.Amount.ofSafe(balance);
+            return AmountUtils.Amount.fromDecimal(Math.max(0, b.asDecimal() - minus), b.currency).toTl();
         }
         return balance;
+    }
+
+    public boolean canUseTon() {
+        if (!ton) {
+            return false;
+        }
+        if (TONIntroActivity.allowTopUp()) {
+            return true;
+        }
+        TL_stars.StarsAmount amount = getBalance();
+        return amount.nanos != 0 || amount.amount != 0;
     }
 
     public void invalidateBalance() {
@@ -538,6 +580,7 @@ public class StarsController {
         loading[type] = true;
 
         TL_stars.TL_payments_getStarsTransactions req = new TL_stars.TL_payments_getStarsTransactions();
+        req.ton = ton;
         req.peer = new TLRPC.TL_inputPeerSelf();
         req.inbound = type == INCOMING_TRANSACTIONS;
         req.outbound = type == OUTGOING_TRANSACTIONS;
@@ -597,7 +640,7 @@ public class StarsController {
     }
 
     public void loadSubscriptions() {
-        if (subscriptionsLoading || subscriptionsEndReached) return;
+        if (ton || subscriptionsLoading || subscriptionsEndReached) return;
         subscriptionsLoading = true;
         final TL_stars.TL_getStarsSubscriptions req = new TL_stars.TL_getStarsSubscriptions();
         req.peer = new TLRPC.TL_inputPeerSelf();
@@ -3218,9 +3261,12 @@ public class StarsController {
         }));
     }
 
-    public void getPaidRevenue(long dialogId, Utilities.Callback<Long> got) {
+    public void getPaidRevenue(long user_id, long parent_id, Utilities.Callback<Long> got) {
         final TL_account.getPaidMessagesRevenue req = new TL_account.getPaidMessagesRevenue();
-        req.user_id = MessagesController.getInstance(currentAccount).getInputUser(dialogId);
+        req.user_id = MessagesController.getInstance(currentAccount).getInputUser(user_id);
+        if (parent_id != 0) {
+            req.parent_peer = MessagesController.getInstance(currentAccount).getInputPeer(parent_id);
+        }
         ConnectionsManager.getInstance(currentAccount).sendRequest(req, (res, err) -> AndroidUtilities.runOnUIThread(() -> {
             if (res instanceof TL_account.paidMessagesRevenue) {
                 got.run(((TL_account.paidMessagesRevenue) res).stars_amount);
@@ -3230,28 +3276,49 @@ public class StarsController {
         }));
     }
 
-    public void stopPaidMessages(long dialogId, boolean refund) {
-        TL_account.addNoPaidMessagesException req = new TL_account.addNoPaidMessagesException();
-        req.user_id = MessagesController.getInstance(currentAccount).getInputUser(dialogId);
+    public void stopPaidMessages(long user_id, long parent_id, boolean refund, boolean stop) {
+        TL_account.toggleNoPaidMessagesException req = new TL_account.toggleNoPaidMessagesException();
+        req.user_id = MessagesController.getInstance(currentAccount).getInputUser(user_id);
+        if (parent_id != 0) {
+            req.parent_peer = MessagesController.getInstance(currentAccount).getInputPeer(parent_id);
+        }
         req.refund_charged = refund;
+        req.require_payment = !stop;
         ConnectionsManager.getInstance(currentAccount).sendRequest(req, (res, err) -> AndroidUtilities.runOnUIThread(() -> {
             if (res instanceof TLRPC.TL_boolTrue) {
-                TLRPC.UserFull userFull = MessagesController.getInstance(currentAccount).getUserFull(dialogId);
-                if (userFull != null && userFull.settings != null) {
-                    userFull.settings.flags &=~ 16384;
-                    userFull.settings.charge_paid_message_stars = 0;
+                if (parent_id != 0) {
+                    processUpdateMonoForumNoPaidException(-parent_id, user_id, stop);
+                } else {
+                    TLRPC.UserFull userFull = MessagesController.getInstance(currentAccount).getUserFull(user_id);
+                    if (userFull != null && userFull.settings != null) {
+                        userFull.settings.flags &= ~16384;
+                        userFull.settings.charge_paid_message_stars = 0;
+                    }
+                    MessagesController.getNotificationsSettings(currentAccount).edit().putLong("dialog_bar_paying_" + user_id, 0L).apply();
+                    MessagesController.getInstance(currentAccount).loadPeerSettings(
+                            MessagesController.getInstance(currentAccount).getUser(user_id),
+                            MessagesController.getInstance(currentAccount).getChat(-user_id),
+                            true
+                    );
+                    ContactsController.getInstance(currentAccount).loadPrivacySettings(true);
+                    NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.messagesFeeUpdated, user_id);
                 }
-                MessagesController.getNotificationsSettings(currentAccount).edit().putLong("dialog_bar_paying_" + dialogId, 0L).apply();
-                MessagesController.getInstance(currentAccount).loadPeerSettings(
-                    MessagesController.getInstance(currentAccount).getUser(dialogId),
-                    MessagesController.getInstance(currentAccount).getChat(-dialogId),
-                    true
-                );
-                ContactsController.getInstance(currentAccount).loadPrivacySettings(true);
-                NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.messagesFeeUpdated, dialogId);
             }
         }));
     }
+
+    public void processUpdateMonoForumNoPaidException(long channelId, long userId, boolean nopaidMessagesException) {
+        TopicsController topicsController = MessagesController.getInstance(currentAccount).getTopicsController();
+        TLRPC.TL_forumTopic topic = topicsController.findTopic(channelId, userId);
+        if (topic != null) {
+            topic.nopaid_messages_exception = nopaidMessagesException;
+            topicsController.saveTopics(channelId);
+
+            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.messagesFeeUpdated, userId);
+        }
+    }
+
+
 
     public static final long PAID_MESSAGES_TIMEOUT = 3_000;
     private class PaidMessagesToast {
@@ -3619,22 +3686,24 @@ public class StarsController {
         if (dialogId >= 0) {
             MessagesController.getInstance(currentAccount).loadFullUser(MessagesController.getInstance(currentAccount).getUser(dialogId), 0, true);
         } else {
-            TLRPC.TL_messages_getChats req = new TLRPC.TL_messages_getChats();
-            req.id.add(dialogId);
-            ConnectionsManager.getInstance(currentAccount).sendRequest(req, (res, err) -> {
-                if (res instanceof TLRPC.messages_Chats) {
-                    TLRPC.messages_Chats chats = (TLRPC.messages_Chats) res;
-                    MessagesController.getInstance(currentAccount).putChats(chats.chats, false);
-                }
-            });
+            MessagesController.getInstance(currentAccount).loadFullChat(-dialogId, 0, true);
         }
-        final CharSequence text = TextUtils.concat(
-            StarsIntroActivity.replaceStars(LocaleController.formatPluralString("PaidMessagesSendErrorToast1", (int) msg.messageOwner.errorAllowedPriceStars)),
+        final CharSequence text = StarsIntroActivity.replaceStars(TextUtils.concat(
+            LocaleController.formatPluralString("PaidMessagesSendErrorToast1", (int) msg.messageOwner.errorAllowedPriceStars),
             " ",
-            StarsIntroActivity.replaceStars(LocaleController.formatPluralString("PaidMessagesSendErrorToast2", (int) msg.messageOwner.errorNewPriceStars))
-        );
+            LocaleController.formatPluralString("PaidMessagesSendErrorToast2", (int) msg.messageOwner.errorNewPriceStars)
+        ));
         BulletinFactory.of(LaunchActivity.getSafeLastFragment())
             .createSimpleBulletin(R.raw.error, text)
             .show();
+    }
+
+    public static boolean isEnoughAmount(int currentAccount, AmountUtils.Amount amount) {
+        if (amount == null) {
+            return true;
+        }
+
+        AmountUtils.Amount balance = getInstance(currentAccount, amount.currency).getBalanceAmount();
+        return balance.asNano() >= amount.asNano();
     }
 }
