@@ -201,4 +201,6 @@
     <string name="PlayerDecoderSoftware">アプリデコーダーを優先</string>
     <string name="PlayerDecoderHardware">デバイスデコーダーのみ</string>
     <string name="PlayerDecoderPerferHW">デバイスデコーダーを優先</string>
+    <string name="ShowUserIconsInChatsList">チャットリストにユーザーアイコンを表示する</string>
+    <string name="TelegramWiki">Telegram Wiki</string>
 </resources>

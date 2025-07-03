@@ -201,4 +201,6 @@
     <string name="PlayerDecoderSoftware">Preferir decodificadores de aplicativos</string>
     <string name="PlayerDecoderHardware">Apenas decodificadores do dispositivo</string>
     <string name="PlayerDecoderPerferHW">Preferir decodificadores do dispositivo</string>
+    <string name="ShowUserIconsInChatsList">Mostrar ícones de usuários na lista de conversas</string>
+    <string name="TelegramWiki">Wiki do Telegram</string>
 </resources>

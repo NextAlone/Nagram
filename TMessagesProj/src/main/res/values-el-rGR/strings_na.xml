@@ -201,4 +201,6 @@
     <string name="PlayerDecoderSoftware">Προτίμηση αποκωδικοποιητών εφαρμογών</string>
     <string name="PlayerDecoderHardware">Μόνο αποκωδικοποιητές συσκευής</string>
     <string name="PlayerDecoderPerferHW">Προτίμηση αποκωδικοποιητών συσκευής</string>
+    <string name="ShowUserIconsInChatsList">Εμφάνιση εικονιδίων χρηστών στη λίστα συνομιλιών</string>
+    <string name="TelegramWiki">Wiki Telegram</string>
 </resources>

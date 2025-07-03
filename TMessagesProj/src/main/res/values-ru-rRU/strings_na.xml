@@ -201,4 +201,6 @@
     <string name="PlayerDecoderSoftware">Предпочитать декодеры приложений</string>
     <string name="PlayerDecoderHardware">Только декодеры устройства</string>
     <string name="PlayerDecoderPerferHW">Предпочтительные декодеры устройства</string>
+    <string name="ShowUserIconsInChatsList">Показывать иконки пользователей в списке чатов</string>
+    <string name="TelegramWiki">Telegram Wiki</string>
 </resources>

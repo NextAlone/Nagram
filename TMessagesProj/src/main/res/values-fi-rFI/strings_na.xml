@@ -201,4 +201,6 @@
     <string name="PlayerDecoderSoftware">Suosi sovellusdekoodereita</string>
     <string name="PlayerDecoderHardware">Vain laitteen dekooderit</string>
     <string name="PlayerDecoderPerferHW">Suosi laitteen dekoodereita</string>
+    <string name="ShowUserIconsInChatsList">Näytä käyttäjän kuvakkeet chat-listassa</string>
+    <string name="TelegramWiki">Telegram Wiki</string>
 </resources>

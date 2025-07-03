@@ -201,4 +201,6 @@
     <string name="PlayerDecoderSoftware">Preferovat dekodéry aplikací</string>
     <string name="PlayerDecoderHardware">Pouze dekodéry zařízení</string>
     <string name="PlayerDecoderPerferHW">Preferovat dekodéry zařízení</string>
+    <string name="ShowUserIconsInChatsList">Zobrazit uživatelské ikony v seznamu chatů</string>
+    <string name="TelegramWiki">Wiki Telegram</string>
 </resources>

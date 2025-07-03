@@ -201,4 +201,6 @@
     <string name="PlayerDecoderSoftware">Preferă decodoarele aplicației</string>
     <string name="PlayerDecoderHardware">Doar decodoarele dispozitivului</string>
     <string name="PlayerDecoderPerferHW">Preferă decodoarele dispozitivului</string>
+    <string name="ShowUserIconsInChatsList">Arată iconițele utilizatorilor în lista de conversații</string>
+    <string name="TelegramWiki">Wiki Telegram</string>
 </resources>

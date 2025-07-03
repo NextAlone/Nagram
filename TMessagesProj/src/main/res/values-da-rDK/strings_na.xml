@@ -201,4 +201,6 @@
     <string name="PlayerDecoderSoftware">Foretrækker app-dekodere</string>
     <string name="PlayerDecoderHardware">Kun enhedsafkodere</string>
     <string name="PlayerDecoderPerferHW">Foretræk enhedsafkodere</string>
+    <string name="ShowUserIconsInChatsList">Vis brugerikoner i chatlisten</string>
+    <string name="TelegramWiki">Telegram Wiki</string>
 </resources>

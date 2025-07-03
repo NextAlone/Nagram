@@ -201,4 +201,6 @@
     <string name="PlayerDecoderSoftware">تفضيل رموز التطبيقات</string>
     <string name="PlayerDecoderHardware">فقط فك ترميز الجهاز</string>
     <string name="PlayerDecoderPerferHW">تفضيل شفرات الجهاز</string>
+    <string name="ShowUserIconsInChatsList">إظهار أيقونات المستخدم في قائمة المحادثة</string>
+    <string name="TelegramWiki">تيليجرام ويكي</string>
 </resources>
