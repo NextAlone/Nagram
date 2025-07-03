@@ -4024,6 +4024,9 @@ public class PeerStoriesView extends SizeNotifierFrameLayout implements Notifica
             if (storyLimit == null || delegate == null) {
                 return;
             }
+            if (!storyLimit.active(currentAccount)) {
+                return;
+            }
             final LimitReachedBottomSheet sheet = new LimitReachedBottomSheet(fragmentForLimit(), findActivity(), storyLimit.getLimitReachedType(), currentAccount, null);
             delegate.showDialog(sheet);
         } else if (id == NotificationCenter.userIsPremiumBlockedUpadted) {

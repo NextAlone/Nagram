@@ -754,7 +754,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     presentFragment(new MediaActivity(args, null));
                 } else if (id == DrawerLayoutAdapter.nkbtnNewStory) {
                     final StoriesController.StoryLimit storyLimit = MessagesController.getInstance(currentAccount).getStoriesController().checkStoryLimit();
-                    if (storyLimit != null) {
+                    if (storyLimit != null && storyLimit.active(currentAccount)) {
                         BaseFragment fragment = actionBarLayout.getFragmentStack().get(0);
                         LimitReachedBottomSheet limitReachedBottomSheet = new LimitReachedBottomSheet(
                                 fragment,
