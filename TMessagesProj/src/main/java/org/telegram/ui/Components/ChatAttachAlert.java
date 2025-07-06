@@ -822,6 +822,14 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
         public void onPanTransitionEnd() {
         }
+
+        public boolean hasDoneItem() {
+            return false;
+        }
+
+        public boolean isDoneItemEnabled() {
+            return false;
+        }
     }
 
     @Nullable
@@ -4059,6 +4067,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             scrollOffsetY[0] = scrollOffsetY[1];
 
             setCaptionAbove(captionAbove, false);
+            updateDoneItemEnabled();
         };
 
         if (!(currentAttachLayout instanceof ChatAttachAlertPhotoLayoutPreview || nextAttachLayout instanceof ChatAttachAlertPhotoLayoutPreview)) {
@@ -5064,6 +5073,25 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     }
                 }
             }
+        }
+    }
+    
+    public void updateDoneItemEnabled() {
+        AttachAlertLayout attachAlertLayout;
+        doneItem.setEnabled(currentAttachLayout.isDoneItemEnabled());
+        float f = 0.0f;
+        if (currentAttachLayout != null) {
+            f = 0.0f + ((currentAttachLayout.isDoneItemEnabled() ? 1.0f : 0.5f) * (nextAttachLayout == null ? 1.0f : translationProgress));
+        }
+        if (nextAttachLayout != null) {
+            f += (nextAttachLayout.isDoneItemEnabled() ? 1.0f : 0.5f) * (1.0f - translationProgress);
+        }
+        if (nextAttachLayout != null && !nextAttachLayout.hasDoneItem()) {
+            doneItem.setAlpha(0);
+            doneItem.setVisibility(View.INVISIBLE);
+        } else {
+            doneItem.setAlpha(f);
+            doneItem.setVisibility((currentAttachLayout.hasDoneItem() || ((attachAlertLayout = nextAttachLayout) != null && attachAlertLayout.hasDoneItem())) ? View.VISIBLE : View.INVISIBLE);
         }
     }
 
