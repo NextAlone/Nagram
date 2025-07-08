@@ -3607,7 +3607,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     } else if (position == sendMediaRow) {
                         int sentMediaCount = getSendMediaSelectedCount();
                         checkCell.setTextAndCheck(getString("UserRestrictionsSendMedia", R.string.UserRestrictionsSendMedia), sentMediaCount > 0, true, animated);
-                        checkCell.setCollapseArrow(String.format(Locale.US, "%d/9", sentMediaCount), !sendMediaExpanded, new Runnable() {
+                        checkCell.setCollapseArrow(String.format(Locale.US, "%d/12", sentMediaCount), !sendMediaExpanded, new Runnable() {
                             @Override
                             public void run() {
                                 if (!checkCell.isEnabled()) return;
