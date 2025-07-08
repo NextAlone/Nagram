@@ -428,6 +428,7 @@ public class Browser {
                             .build();
                     builder.setDefaultColorSchemeParams(params);
                     builder.setShowTitle(true);
+                    builder.setShareIdentityEnabled(true);
                     builder.setActionButton(BitmapFactory.decodeResource(context.getResources(), R.drawable.msg_filled_shareout), LocaleController.getString(R.string.ShareFile), PendingIntent.getBroadcast(ApplicationLoader.applicationContext, 0, share, PendingIntent.FLAG_MUTABLE ), true);
 
                     CustomTabsIntent intent = builder.build();

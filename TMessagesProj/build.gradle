@@ -317,7 +317,7 @@ dependencies {
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.2.0"
 }
 dependencies {
-    implementation "androidx.browser:browser:1.5.0"
+    implementation "androidx.browser:browser:1.8.0"
     implementation "androidx.viewpager:viewpager:1.0.0"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0"
     // OSM
