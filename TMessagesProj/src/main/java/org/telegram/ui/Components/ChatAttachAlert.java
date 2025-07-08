@@ -156,6 +156,7 @@ import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.transtale.TranslatorKt;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
+import xyz.nextalone.nagram.NaConfig;
 
 import java.util.Objects;
 
@@ -5285,6 +5286,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 pollsEnabled = UserObject.isBot(user) || UserObject.isUserSelf(user);
                 todoEnabled = true;
             }
+            todoEnabled = todoEnabled && (!NaConfig.INSTANCE.getDisablePremiumSendTodo().Bool() || UserConfig.getInstance(currentAccount).isPremium());
         }
         if (!(baseFragment instanceof ChatActivity && avatarPicker != 2)) {
             commentTextView.setVisibility(allowEnterCaption ? View.VISIBLE : View.INVISIBLE);

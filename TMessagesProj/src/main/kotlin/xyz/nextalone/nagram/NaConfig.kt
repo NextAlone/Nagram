@@ -810,6 +810,13 @@ object NaConfig {
             13,
             false
         )
+    val disablePremiumSendTodo =
+        addConfig(
+            "DisablePremiumSendTodo",
+            disableTrendingFlags,
+            14,
+            false
+        )
     val disableRepeatInChannel =
         addConfig(
             "DisableRepeatInChannel",
