@@ -46323,6 +46323,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 options.add(OPTION_DELETE);
                 icons.add(deleteIconRes);
             }
+            if (!selectedObject.isSponsored() && chatMode != MODE_QUICK_REPLIES && chatMode != MODE_SCHEDULED && NekoConfig.showMessageDetails.Bool()) {
+                items.add(LocaleController.getString(R.string.MessageDetails));
+                options.add(nkbtn_detail);
+                icons.add(R.drawable.msg_info);
+            }
         } else if (type == 20) {
             items.add(LocaleController.getString(R.string.Retry));
             options.add(OPTION_RETRY);
