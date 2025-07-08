@@ -607,6 +607,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private final static int message_filter = 103;
     private final static int clear_cache = 104;
     private final static int add_to_folder = 105;
+    private final static int open_direct = 106;
 
     private Rect rect = new Rect();
 
@@ -2916,6 +2917,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     presentFragment(fragment);
                 } else if (id == add_to_folder) {
                     showAddCurrentChatToFolderSheet();
+                } else if (id == open_direct) {
+                    if (currentChat == null) return;
+                    presentFragment(ChatActivity.of(-currentChat.linked_monoforum_id));
                 }
             }
         });
@@ -11207,9 +11211,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             createMessageFilterItem();
             if (chat != null && (chat.has_link || (chatInfo != null && chatInfo.linked_chat_id != 0))) {
                 String text;
-                if (!chat.megagroup) {
-                    text = LocaleController.getString("LinkedGroupChat", R.string.LinkedGroupChat);
-                    otherItem.addSubItem(view_discussion, R.drawable.msg_discussion, text);
+                if (ChatObject.isChannel(currentChat) && !ChatObject.isMonoForum(currentChat) && currentChat.linked_monoforum_id != 0 && ChatObject.canManageMonoForum(currentAccount, -currentChat.linked_monoforum_id)) {
+                    text = getString(R.string.ChannelOpenDirect);
+                    otherItem.addSubItem(open_direct, R.drawable.msg_markunread, text);
                 } else {
                     text = LocaleController.getString("LinkedChannelChat", R.string.LinkedChannelChat);
                     otherItem.addSubItem(view_discussion, R.drawable.msg_channel, text);
