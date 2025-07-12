@@ -805,7 +805,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             ((MarginLayoutParams) selectedMessagesCountTextView.getLayoutParams()).leftMargin = AndroidUtilities.dp(72 + (isForumSearch ? 56 : 0));
             selectedMessagesCountTextView.setLayoutParams(selectedMessagesCountTextView.getLayoutParams());
         }
-        if (parent.getActionBar().getBackButton().getDrawable() instanceof MenuDrawable) {
+        if (parent.getActionBar().getBackButton() != null && parent.getActionBar().getBackButton().getDrawable() instanceof MenuDrawable) {
             BackDrawable backDrawable = new BackDrawable(false);
             parent.getActionBar().setBackButtonDrawable(backDrawable);
             backDrawable.setColorFilter(null);
