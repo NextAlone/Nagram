@@ -187,6 +187,7 @@
     <string name="DisableActionBarButton">Aktionsleisten-Button deaktivieren</string>
     <string name="DisableShortcutTagActions">Favoriten Shortcut Tag-Aktionen deaktivieren</string>
     <string name="DisablePhoneSharePrompt">Kontakt-Rufnummernfreigabe deaktivieren</string>
+    <string name="DisablePremiumSendTodo">Deaktiviere Premium To-Do Liste</string>
     <string name="ColoredAdminTitle">Farbiger Admin-Titel</string>
     <string name="GhostMode">Geist-Modus</string>
     <string name="GhostElements">Ghost Optionen</string>

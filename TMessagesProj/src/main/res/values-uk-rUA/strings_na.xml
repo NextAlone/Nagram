@@ -187,6 +187,7 @@
     <string name="DisableActionBarButton">Вимкнути кнопку дії</string>
     <string name="DisableShortcutTagActions">Вимкнути дії улюблених ярликів</string>
     <string name="DisablePhoneSharePrompt">Вимкнути запит на обмін номером телефону</string>
+    <string name="DisablePremiumSendTodo">Вимкнути розсилку в списку завдань</string>
     <string name="ColoredAdminTitle">Кольоровий заголовок адміністратора</string>
     <string name="GhostMode">Режим примари</string>
     <string name="GhostElements">Параметри Ghost</string>

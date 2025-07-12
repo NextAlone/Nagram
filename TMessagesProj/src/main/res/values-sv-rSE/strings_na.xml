@@ -187,6 +187,7 @@
     <string name="DisableActionBarButton">Inaktivera åtgärdsfältsknapp</string>
     <string name="DisableShortcutTagActions">Inaktivera favoritgenvägs tagg åtgärder</string>
     <string name="DisablePhoneSharePrompt">Inaktivera kontaktnummerdelnings-prompten</string>
+    <string name="DisablePremiumSendTodo">Inaktivera Premium skicka göra-lista</string>
     <string name="ColoredAdminTitle">Färgad administratörens titel</string>
     <string name="GhostMode">Spökläge</string>
     <string name="GhostElements">Spökalternativ</string>

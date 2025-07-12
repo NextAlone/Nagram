@@ -187,6 +187,7 @@
     <string name="DisableActionBarButton">تعطيل زر شريط الإجراءات</string>
     <string name="DisableShortcutTagActions">تعطيل إجراءات علامة الاختصار المفضلة</string>
     <string name="DisablePhoneSharePrompt">تعطيل طلب مشاركة رقم هاتف جهة الاتصال</string>
+    <string name="DisablePremiumSendTodo">تعطيل قائمة المهام المميزة المرسلة</string>
     <string name="ColoredAdminTitle">عنوان المدير الملون</string>
     <string name="GhostMode">وضع الشبح</string>
     <string name="GhostElements">خيارات الشبح</string>

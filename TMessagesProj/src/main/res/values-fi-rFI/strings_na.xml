@@ -187,6 +187,7 @@
     <string name="DisableActionBarButton">Poista Toimintapalkin Painike Käytöstä</string>
     <string name="DisableShortcutTagActions">Poista Suosikki Pikanäppäin Toiminnot Käytöstä</string>
     <string name="DisablePhoneSharePrompt">Poista yhteyshenkilön puhelinnumeron jakamiskehotus käytöstä</string>
+    <string name="DisablePremiumSendTodo">Poista Premiumin lähetysluettelo käytöstä</string>
     <string name="ColoredAdminTitle">Värillinen Admin Otsikko</string>
     <string name="GhostMode">Ghost Tila</string>
     <string name="GhostElements">Ghost Asetukset</string>

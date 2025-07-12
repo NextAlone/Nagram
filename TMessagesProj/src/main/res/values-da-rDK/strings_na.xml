@@ -187,6 +187,7 @@
     <string name="DisableActionBarButton">Deaktivér Handlingsbjælkeknap</string>
     <string name="DisableShortcutTagActions">Deaktivér Favorit Genvejshandlinger</string>
     <string name="DisablePhoneSharePrompt">Deaktivér prompt til deling af kontakttelefonnummer</string>
+    <string name="DisablePremiumSendTodo">Deaktivér Premium send todo liste</string>
     <string name="ColoredAdminTitle">Farvet Admin Titel</string>
     <string name="GhostMode">Spøgelsestilstand</string>
     <string name="GhostElements">Ghost Indstillinger</string>

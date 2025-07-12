@@ -187,6 +187,7 @@
     <string name="DisableActionBarButton">Dezactivare buton bară de acțiune</string>
     <string name="DisableShortcutTagActions">Dezactivează acțiunile etichetei rapide favorite</string>
     <string name="DisablePhoneSharePrompt">Dezactivează solicitarea de partajare număr de telefon</string>
+    <string name="DisablePremiumSendTodo">Dezactivează lista de transferuri premium</string>
     <string name="ColoredAdminTitle">Titlu Admin colorat</string>
     <string name="GhostMode">Mod Ghost</string>
     <string name="GhostElements">Opțiuni Ghost</string>

@@ -187,6 +187,7 @@
     <string name="DisableActionBarButton">Απενεργοποίηση Κουμπιού Ενεργειών Μπάρα</string>
     <string name="DisableShortcutTagActions">Απενεργοποιήστε Τις Αγαπημένες Ενέργειες Ετικέτας Συντόμευσης</string>
     <string name="DisablePhoneSharePrompt">Απενεργοποίηση ερώτησης κοινής χρήσης αριθμού τηλεφώνου επαφής</string>
+    <string name="DisablePremiumSendTodo">Απενεργοποίηση λίστας todo Premium αποστολής</string>
     <string name="ColoredAdminTitle">Χρωματιστός Τίτλος Διαχειριστή</string>
     <string name="GhostMode">Λειτουργία Φάντασμα</string>
     <string name="GhostElements">Επιλογές Φάντασμα</string>

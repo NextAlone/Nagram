@@ -187,6 +187,7 @@
     <string name="DisableActionBarButton">Desativar botão da barra de ação</string>
     <string name="DisableShortcutTagActions">Desativar ações de tags de atalho favoritas</string>
     <string name="DisablePhoneSharePrompt">Desativar aviso de compartilhamento de números de telefone</string>
+    <string name="DisablePremiumSendTodo">Desativar lista de tarefas enviadas Premium</string>
     <string name="ColoredAdminTitle">Título de Admin Colorido</string>
     <string name="GhostMode">Modo fantasma</string>
     <string name="GhostElements">Opções de Fantasma</string>

@@ -187,6 +187,7 @@
     <string name="DisableActionBarButton">Disabilita Pulsante Barra Azioni</string>
     <string name="DisableShortcutTagActions">Disabilita Azioni Etichetta Scorciatoia Preferite</string>
     <string name="DisablePhoneSharePrompt">Disabilita il prompt di condivisione del numero di contatto</string>
+    <string name="DisablePremiumSendTodo">Disabilita elenco todo invio Premium</string>
     <string name="ColoredAdminTitle">Titolo Admin Colorato</string>
     <string name="GhostMode">Modalità Fantasma</string>
     <string name="GhostElements">Opzioni Fantasma</string>

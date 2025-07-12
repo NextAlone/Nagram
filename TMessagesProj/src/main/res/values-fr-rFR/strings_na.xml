@@ -187,6 +187,7 @@
     <string name="DisableActionBarButton">Désactiver le bouton de la barre d\'action</string>
     <string name="DisableShortcutTagActions">Désactiver les actions de raccourcis favoris</string>
     <string name="DisablePhoneSharePrompt">Désactiver l\'invite de partage des numéros de téléphone</string>
+    <string name="DisablePremiumSendTodo">Désactiver la todo list d\'envoi Premium</string>
     <string name="ColoredAdminTitle">Titre Admin coloré</string>
     <string name="GhostMode">Mode fantôme</string>
     <string name="GhostElements">Options fantôme</string>
