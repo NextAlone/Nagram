@@ -863,7 +863,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private ActionBarPopupWindow.GapView speedGap;
     private ActionBarMenu menu;
     private ActionBarMenuItem sendItem;
-    private ActionBarMenuItem sendNoQuoteItem;
+    private ActionBarMenuSubItem sendNoQuoteItem;
     private ActionBarMenuItem editItem;
     private ActionBarMenuItem masksItem;
     private ActionBarMenuSubItem castItem;
@@ -5908,10 +5908,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         masksItem.setContentDescription(getString(R.string.Masks));
         masksItem.setIconColor(0xfffafafa);
 
-        sendNoQuoteItem = menu.addItem(gallery_menu_send_noquote, R.drawable.mini_forward_story);
-        sendNoQuoteItem.setContentDescription(getString(R.string.Forward));
-        sendNoQuoteItem.setIconColor(0xfffafafa);
-
         sendItem = menu.addItem(gallery_menu_send, R.drawable.msg_header_share);
         sendItem.setContentDescription(getString(R.string.Forward));
         sendItem.setIconColor(0xfffafafa);
@@ -6041,6 +6037,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         menuItem.addSubItem(gallery_menu_showinchat, R.drawable.msg_message, getString(R.string.ShowInChat)).setColors(0xfffafafa, 0xfffafafa);
         menuItem.addSubItem(gallery_menu_reply, R.drawable.menu_reply, getString(R.string.Reply)).setColors(0xfffafafa, 0xfffafafa);
         menuItem.addSubItem(gallery_menu_report, R.drawable.msg_report, getString(R.string.ReportProfilePhoto)).setColors(0xfffafafa, 0xfffafafa);
+        sendNoQuoteItem = menuItem.addSubItem(gallery_menu_send_noquote, R.drawable.msg_forward_noquote, getString(R.string.NoQuoteForward)).setColors(0xfffafafa, 0xfffafafa);
         menuItem.addSubItem(gallery_menu_share, R.drawable.msg_shareout, getString(R.string.ShareFile)).setColors(0xfffafafa, 0xfffafafa);
         menuItem.addSubItem(gallery_menu_masks2, R.drawable.msg_sticker, getString(R.string.ShowStickers)).setColors(0xfffafafa, 0xfffafafa);
         //menuItem.addSubItem(gallery_menu_edit_avatar, R.drawable.photo_paint, LocaleController.getString(R.string.EditPhoto)).setColors(0xfffafafa, 0xfffafafa);
