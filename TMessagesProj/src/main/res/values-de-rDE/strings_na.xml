@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="N_Config">Nagram Einstellungen</string>
+    <string name="N_Config">N-Einstellungen</string>
     <string name="ForceCopy">Kopie erzwingen</string>
     <string name="InvertReply">Invertieren</string>
     <string name="Great">Tolle</string>
     <string name="Poor">Arm</string>
-    <string name="CombineMessage">Nachricht kombinieren</string>
+    <string name="CombineMessage">Nachrichten verbinden</string>
     <string name="TextStyle">Textstil</string>
     <string name="CombineMessageEnabledWithReply">Nachricht mit Antwort kombinieren aktiviert</string>
     <string name="CombineMessageEnabled">Kombiniere Nachricht aktiviert</string>
