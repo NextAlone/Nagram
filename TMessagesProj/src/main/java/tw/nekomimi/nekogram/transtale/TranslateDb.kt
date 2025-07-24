@@ -23,38 +23,31 @@ class TranslateDb(val code: String) {
         val chat: Box<ChatLanguage> = db.boxFor(ChatLanguage::class.java)
         val ccTarget: Box<ChatCCTarget> = db.boxFor(ChatCCTarget::class.java)
 
-        @JvmStatic fun getChatLanguage(chatId: Long, default: Locale): Locale {
-
-            return chat.get(chatId)?.language?.code2Locale
-                    ?: default
-
+        @JvmStatic
+        fun getChatLanguage(chatId: Long, default: Locale): Locale {
+            return if (chatId == 0L) default
+            else chat.get(chatId)?.language?.code2Locale ?: default
         }
 
         @JvmStatic
         fun saveChatLanguage(chatId: Long, locale: Locale) = UIUtil.runOnIoDispatcher {
-
             chat.put(ChatLanguage(chatId, locale.locale2code))
-
         }
 
         @JvmStatic
         fun getChatCCTarget(chatId: Long, default: String?): String? {
-
-            return ccTarget.get(chatId)?.ccTarget
-                    ?: default
-
+            return if (chatId == 0L) default
+            else ccTarget.get(chatId)?.ccTarget ?: default
         }
 
         @JvmStatic
         fun saveChatCCTarget(chatId: Long, target: String) = UIUtil.runOnIoDispatcher {
-
             ccTarget.put(ChatCCTarget(chatId, target))
-
         }
 
         @JvmStatic
         fun currentTarget() = NekoConfig.translateToLang.String()?.transDbByCode
-                ?: LocaleController.getInstance().currentLocale.transDb
+            ?: LocaleController.getInstance().currentLocale.transDb
 
         @JvmStatic
         fun forLocale(locale: Locale) = locale.transDb
@@ -64,22 +57,17 @@ class TranslateDb(val code: String) {
 
         @JvmStatic
         fun clearAll() {
-
             db.removeAllObjects()
-
             repo.clear()
-
         }
-
     }
 
     fun clear() = synchronized(this) {
-
         conn.removeAll()
-
     }
 
-    fun contains(text: String) = synchronized(this) { queryTransItemModel(conn, code, text) != null }
+    fun contains(text: String) =
+        synchronized(this) { queryTransItemModel(conn, code, text) != null }
 
     fun save(text: String, trans: String) = synchronized<Unit>(this) {
         var model = queryTransItemModel(conn, code, text)
@@ -89,13 +77,9 @@ class TranslateDb(val code: String) {
             model = TransItem(code, text, trans)
         }
         conn.put(model)
-
     }
 
     fun query(text: String) = synchronized(this) {
-
         queryTransItemModel(conn, code, text)?.trans
-
     }
-
 }
