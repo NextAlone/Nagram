@@ -82,6 +82,7 @@ import javax.net.ssl.SSLException;
 
 import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.utils.AyuGhostUtils;
 import tw.nekomimi.nekogram.utils.DnsFactory;
 import tw.nekomimi.nekogram.ErrorDatabase;
@@ -241,42 +242,37 @@ public class ConnectionsManager extends BaseController {
             systemLangCode = LocaleController.getSystemLocaleStringIso639().toLowerCase();
             langCode = MessagesController.getGlobalMainSettings().getString("lang_code", systemLangCode);
             deviceModel = Build.MANUFACTURER + Build.MODEL;
-            systemVersion = "SDK " + Build.VERSION.SDK_INT;
-        } catch (Exception ignored) {
-            systemLangCode = "";
-            langCode = "";
-            deviceModel = "";
-            systemVersion = "";
-        }
-
-        int version;
-        int appId;
-        String fingerprint;
-        if (getUserConfig().official || !getUserConfig().isClientActivated()) {
-            fingerprint = "49C1522548EBACD46CE322B6FD47F6092BB745D0F88082145CAF35E14DCC38E1";
-            version = BuildConfig.OFFICIAL_VERSION_CODE * 10 + 9;
-            appId = BuildVars.OFFICAL_APP_ID;
-            appVersion = BuildConfig.OFFICIAL_VERSION + " (" + (BuildConfig.OFFICIAL_VERSION_CODE * 10 + 9) + ")";
-        } else {
-            fingerprint = AndroidUtilities.getCertificateSHA256Fingerprint();
-            version = BuildConfig.VERSION_CODE;
-            appId = BuildConfig.APP_ID;
             String versionName = BuildConfig.VERSION_NAME;
             if (versionName.contains("-")) {
                 versionName = StrUtil.subBefore(versionName, "-", false);
             }
             appVersion = versionName + " (" + BuildConfig.VERSION_CODE + ")";
+            systemVersion = "SDK " + Build.VERSION.SDK_INT;
+        } catch (Exception ignored) {
+            systemLangCode = "en";
+            langCode = "";
+            deviceModel = "Android unknown";
+            appVersion = "App version unknown";
+            systemVersion = "SDK " + Build.VERSION.SDK_INT;
         }
-
         if (systemLangCode.trim().length() == 0) {
             systemLangCode = "en";
         }
-
+        if (deviceModel.trim().length() == 0) {
+            deviceModel = "Android unknown";
+        }
+        if (appVersion.trim().length() == 0) {
+            appVersion = "App version unknown";
+        }
+        if (systemVersion.trim().length() == 0) {
+            systemVersion = "SDK Unknown";
+        }
         getUserConfig().loadConfig();
         String pushString = getRegId();
+        String fingerprint = AndroidUtilities.getCertificateSHA256Fingerprint();
 
         int timezoneOffset = (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000;
-SharedPreferences mainPreferences;
+        SharedPreferences mainPreferences;
         if (currentAccount == 0) {
             mainPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", Activity.MODE_PRIVATE);
         } else {
@@ -287,7 +283,7 @@ SharedPreferences mainPreferences;
         if (getUserConfig().getCurrentUser() != null) {
             userPremium = getUserConfig().getCurrentUser().premium;
         }
-        init(version, TLRPC.LAYER, appId, deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, getUserConfig().getClientUserId(), userPremium, enablePushConnection);
+        init(BuildConfig.VERSION_CODE, TLRPC.LAYER, NekoXConfig.currentAppId(), deviceModel, systemVersion, appVersion, langCode, systemLangCode, configPath, FileLog.getNetworkLogPath(), pushString, fingerprint, timezoneOffset, getUserConfig().getClientUserId(), userPremium, enablePushConnection);
     }
 
     private String getRegId() {

@@ -81,6 +81,7 @@ public class NekoXConfig {
 
     public static int currentAppId() {
         switch (customApi) {
+            case -1:
             case 0:
                 return BuildConfig.APP_ID;
             case 1:
@@ -94,6 +95,7 @@ public class NekoXConfig {
     
     public static String currentAppHash() {
         switch (customApi) {
+            case -1:
             case 0:
                 return BuildConfig.APP_HASH;
             case 1:

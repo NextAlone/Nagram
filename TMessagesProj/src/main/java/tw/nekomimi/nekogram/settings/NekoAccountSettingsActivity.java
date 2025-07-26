@@ -53,7 +53,6 @@ public class NekoAccountSettingsActivity extends BaseNekoXSettingsActivity {
     private int rowCount;
 
     private int accountRow;
-    private int uploadDeviceInfoRow;
     private int deleteAccountRow;
     private int account2Row;
 
@@ -98,14 +97,7 @@ public class NekoAccountSettingsActivity extends BaseNekoXSettingsActivity {
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener((view, position, x, y) -> {
-            if (position == uploadDeviceInfoRow) {
-                getUserConfig().deviceInfo = !getUserConfig().deviceInfo;
-                getUserConfig().saveConfig(true);
-                if (view instanceof TextCheckCell) {
-                    ((TextCheckCell) view).setChecked(!getUserConfig().deviceInfo);
-                }
-                tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
-            } else if (position == deleteAccountRow) {
+            if (position == deleteAccountRow) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                 builder.setMessage(LocaleController.getString("TosDeclineDeleteAccount", R.string.TosDeclineDeleteAccount));
                 builder.setTitle(LocaleController.getString("DeleteAccount", R.string.DeleteAccount));
@@ -224,7 +216,6 @@ public class NekoAccountSettingsActivity extends BaseNekoXSettingsActivity {
         rowCount = 0;
 
         accountRow = rowCount++;
-        uploadDeviceInfoRow = -1;
         deleteAccountRow = rowCount++;
         account2Row = rowCount++;
         if (listAdapter != null) {

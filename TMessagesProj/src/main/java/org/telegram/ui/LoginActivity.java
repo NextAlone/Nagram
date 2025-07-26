@@ -108,6 +108,7 @@ import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.ProductDetails;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.QueryProductDetailsParams;
+import com.jakewharton.processphoenix.ProcessPhoenix;
 //import com.google.android.gms.auth.api.signin.GoogleSignIn;
 //import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 //import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -10063,7 +10064,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             exportLoginTokenRequest = new TLRPC.TL_auth_exportLoginToken();
             exportLoginTokenRequest.api_id = NekoXConfig.currentAppId();
             exportLoginTokenRequest.api_hash = NekoXConfig.currentAppHash();
-            exportLoginTokenRequest.except_ids = new ArrayList<>();
             for (int a : SharedConfig.activeAccounts) {
                 UserConfig userConfig = UserConfig.getInstance(a);
                 if (!userConfig.isClientActivated()) {
@@ -10158,13 +10158,13 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     }
 
     public void doCustomApi() {
-        AtomicInteger targetApi = new AtomicInteger(-1);
+        AtomicInteger targetApi = new AtomicInteger(NekoXConfig.customApi);
         BottomBuilder builder = new BottomBuilder(getParentActivity());
         EditText[] inputs = new EditText[2];
-        builder.addTitle(LocaleController.getString("CustomApi", R.string.CustomApi),
+        builder.addTitle(LocaleController.getString(R.string.CustomApi),
                 true,
-                LocaleController.getString("UseCustomApiNotice", R.string.UseCustomApiNotice));
-        builder.addRadioItem(LocaleController.getString("CustomApiNo", R.string.CustomApiNo), NekoXConfig.customApi == 0, (cell) -> {
+                LocaleController.getString(R.string.UseCustomApiNotice));
+        builder.addRadioItem(LocaleController.getString(R.string.CustomApiNo), NekoXConfig.customApi == -1 || NekoXConfig.customApi == 0, (cell) -> {
             targetApi.set(0);
             builder.doRadioCheck(cell);
             for (EditText input : inputs) {
@@ -10172,7 +10172,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             }
             return Unit.INSTANCE;
         });
-        builder.addRadioItem(LocaleController.getString("CustomApiOfficial", R.string.CustomApiOfficial), NekoXConfig.customApi == 1, (cell) -> {
+        builder.addRadioItem(LocaleController.getString(R.string.CustomApiOfficial), NekoXConfig.customApi == 1, (cell) -> {
             targetApi.set(1);
             builder.doRadioCheck(cell);
             for (EditText input : inputs) {
@@ -10180,7 +10180,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             }
             return Unit.INSTANCE;
         });
-        builder.addRadioItem(LocaleController.getString("CustomApiTGX", R.string.CustomApiTGX), NekoXConfig.customApi == 2, (cell) -> {
+        builder.addRadioItem(LocaleController.getString(R.string.CustomApiTGX), NekoXConfig.customApi == 2, (cell) -> {
             targetApi.set(2);
             builder.doRadioCheck(cell);
             for (EditText input : inputs) {
@@ -10188,7 +10188,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             }
             return Unit.INSTANCE;
         });
-        builder.addRadioItem(LocaleController.getString("CustomApiInput", R.string.CustomApiInput), NekoXConfig.customApi > 2, (cell) -> {
+        builder.addRadioItem(LocaleController.getString(R.string.CustomApiInput), NekoXConfig.customApi > 2, (cell) -> {
             targetApi.set(3);
             builder.doRadioCheck(cell);
             for (EditText input : inputs) {
@@ -10246,7 +10246,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             }
         }
         builder.addCancelButton();
-        builder.addButton(LocaleController.getString("Set", R.string.Set), (it) -> {
+        builder.addButton(LocaleController.getString(R.string.Set), (it) -> {
             int target = targetApi.get();
             if (target > 2) {
                 if (NekoXConfig.customAppId == 0) {
@@ -10261,6 +10261,13 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             }
             NekoXConfig.customApi = target;
             NekoXConfig.saveCustomApi();
+            AlertDialog restart = new AlertDialog(getContext(), 0);
+            restart.setTitle(LocaleController.getString(R.string.NekoX));
+            restart.setMessage(LocaleController.getString(R.string.RestartAppToTakeEffect));
+            restart.setPositiveButton(LocaleController.getString(R.string.OK), (__, ___) -> {
+                ProcessPhoenix.triggerRebirth(getContext(), new Intent(getContext(), LaunchActivity.class));
+            });
+            restart.show();
             return Unit.INSTANCE;
         });
         builder.show();

@@ -67,8 +67,6 @@ public class UserConfig extends BaseController {
     public int loginTime;
     public TLRPC.TL_help_termsOfService unacceptedTermsOfService;
     public long autoDownloadConfigLoadTime;
-    public boolean official;
-    public boolean deviceInfo;
 
     public String premiumGiftsStickerPack;
     public String premiumTonStickerPack;
@@ -171,8 +169,6 @@ public class UserConfig extends BaseController {
                     editor.putBoolean("hasValidDialogLoadIds", hasValidDialogLoadIds);
                     editor.putInt("sharingMyLocationUntil", sharingMyLocationUntil);
                     editor.putInt("lastMyLocationShareTime", lastMyLocationShareTime);
-                    editor.putBoolean("official", official);
-                    editor.putBoolean("deviceInfo", deviceInfo);
 
                     editor.putBoolean("filtersLoaded", filtersLoaded);
                     editor.putString("premiumGiftsStickerPack", premiumGiftsStickerPack);
@@ -322,8 +318,6 @@ public class UserConfig extends BaseController {
             notificationsSignUpSettingsLoaded = preferences.getBoolean("notificationsSignUpSettingsLoaded", false);
             autoDownloadConfigLoadTime = preferences.getLong("autoDownloadConfigLoadTime", 0);
             hasValidDialogLoadIds = preferences.contains("2dialogsLoadOffsetId") || preferences.getBoolean("hasValidDialogLoadIds", false);
-            official = preferences.getBoolean("official", false);
-            deviceInfo = preferences.getBoolean("deviceInfo", true);
 
             sharingMyLocationUntil = preferences.getInt("sharingMyLocationUntil", 0);
             lastMyLocationShareTime = preferences.getInt("lastMyLocationShareTime", 0);
