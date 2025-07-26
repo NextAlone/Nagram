@@ -4722,13 +4722,13 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             switch (info.type) {
                 case ChatExtraButtonsHelper.CHAT_BUTTON_TYPE_LINK:
                     cell.setTextAndIcon(
-                            info.name.isEmpty() ? LocaleController.getString("OpenUrlTitle", R.string.OpenUrlTitle) : info.name,
+                            info.name.isEmpty() ? LocaleController.getString(R.string.OpenUrlTitle) : info.name,
                             R.drawable.msg_openin
                     );
                     break;
                 case ChatExtraButtonsHelper.CHAT_BUTTON_TYPE_SEARCH:
                     cell.setTextAndIcon(
-                            info.name.isEmpty() ? LocaleController.getString("Search", R.string.Search) : info.name,
+                            info.name.isEmpty() ? LocaleController.getString(R.string.Search) : info.name,
                             R.drawable.msg_search
                     );
                     break;
@@ -4738,9 +4738,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
                 if (menuPopupWindow != null && menuPopupWindow.isShowing()) {
                     menuPopupWindow.dismiss();
                 }
-                if (parentActivity != null) {
-                    Browser.openUrl(parentActivity, Uri.parse(info.url), true, true);
-                }
+                Browser.openUrl(getContext(), Uri.parse(info.url), true, true);
             });
 
             cell.setMinimumWidth(AndroidUtilities.dp(196));
