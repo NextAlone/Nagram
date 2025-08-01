@@ -19,6 +19,8 @@ import org.osmdroid.util.TileSystemWebMercator;
 import androidx.annotation.Keep;
 import androidx.annotation.Nullable;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLoader;
@@ -2079,6 +2081,7 @@ public class TLRPC {
     public static class TL_textPlain extends RichText {
         public static final int constructor = 0x744694e0;
 
+        @SerializedName("_text")
         public String text;
 
         public void readParams(InputSerializedData stream, boolean exception) {
