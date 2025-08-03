@@ -187,6 +187,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
 
     // Interactions
     private final AbstractConfigCell headerInteractions = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("InteractionSettings")));
+    private final AbstractConfigCell swipeToReplyRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.swipeToReply));
     private final AbstractConfigCell hideKeyboardOnChatScrollRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideKeyboardOnChatScroll));
     private final AbstractConfigCell rearVideoMessagesRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.rearVideoMessages));
     private final AbstractConfigCell disableInstantCameraRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableInstantCamera));
