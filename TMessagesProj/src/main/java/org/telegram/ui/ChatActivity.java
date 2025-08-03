@@ -418,6 +418,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     private FrameLayout bottomOverlay;
     protected ChatActivityEnterView chatActivityEnterView;
     private ChatActivityEnterTopView chatActivityEnterTopView;
+    private MessageObject replyingMessageObject;
     private boolean isActionBarTooNarrow;
     private int chatActivityEnterViewAnimateFromTop;
     private boolean chatActivityEnterViewAnimateBeforeSending;
@@ -39193,7 +39194,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 showInfoHint(messageObject, stringBuilder, 1);
             }
             cell.showHintButton(false, true, type);
+    }
+    @Override
+    public void didPressReplyMessage(ChatMessageCell cell, int id) {
+        if (NekoConfig.swipeToReply.Bool()) {
+            MessageObject messageToReply = cell.getMessageObject();
+            replyingMessageObject = messageToReply;
+            chatActivityEnterView.setReplyingMessageObject(replyingMessageObject, true);
+            chatActivityEnterView.getEditField().requestFocus();
         }
+    }
+}
 
         @Override
         public boolean shouldDrawThreadProgress(ChatMessageCell cell, boolean delayed) {
