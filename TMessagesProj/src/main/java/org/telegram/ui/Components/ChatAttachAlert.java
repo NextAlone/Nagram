@@ -634,6 +634,21 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         }
     };
 
+    public void updateDoneItemEnabled() {
+        doneItem.setEnabled(currentAttachLayout == null ? false : currentAttachLayout.isDoneItemEnabled());
+        float alpha = 0.0f;
+        if (currentAttachLayout != null) {
+            alpha += (currentAttachLayout.isDoneItemEnabled() ? 1.0f : 0.5f) * (nextAttachLayout == null ? 1.0f : translationProgress);
+        }
+        if (nextAttachLayout != null) {
+            alpha += (nextAttachLayout.isDoneItemEnabled() ? 1.0f : 0.5f) * (1.0f - translationProgress);
+        }
+        doneItem.setAlpha(alpha);
+        doneItem.setVisibility(
+            currentAttachLayout != null && currentAttachLayout.hasDoneItem() || (nextAttachLayout != null && nextAttachLayout.hasDoneItem()) ? View.VISIBLE : View.INVISIBLE
+        );
+    }
+
     public static class AttachAlertLayout extends FrameLayout {
 
         protected final Theme.ResourcesProvider resourcesProvider;
@@ -658,6 +673,14 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         }
 
         public boolean onCustomLayout(View view, int left, int top, int right, int bottom) {
+            return false;
+        }
+
+        public boolean isDoneItemEnabled() {
+            return false;
+        }
+
+        public boolean hasDoneItem() {
             return false;
         }
 
@@ -822,14 +845,6 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         }
 
         public void onPanTransitionEnd() {
-        }
-
-        public boolean hasDoneItem() {
-            return false;
-        }
-
-        public boolean isDoneItemEnabled() {
-            return false;
         }
     }
 
@@ -2140,7 +2155,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         doneItem.setAlpha(0.0f);
         doneItem.setTranslationX(-dp(12));
         doneItem.setBackgroundDrawable(Theme.createSelectorDrawable(getThemedColor(Theme.key_dialogButtonSelector), 3));
-        doneItem.setOnClickListener(v -> currentAttachLayout.onMenuItemClick(40));
+        doneItem.setOnClickListener(v -> {
+            if (currentAttachLayout != null) {
+                currentAttachLayout.onMenuItemClick(40);
+            }
+        });
+        updateDoneItemEnabled();
 
         if (baseFragment != null) {
             searchItem = new ActionBarMenuItem(context, null, 0, getThemedColor(Theme.key_dialogTextBlack), false, resourcesProvider);
@@ -3116,7 +3136,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         writeButton.setCircleSize(dp(64));
         writeButton.setCirclePadding(dp(8), dp(8));
         writeButton.setOnClickListener(v -> {
-            if (editingMessageObject != null && editingMessageObject.needResendWhenEdit()) {
+            if (editingMessageObject != null && editingMessageObject.needResendWhenEdit() && !ChatObject.canManageMonoForum(currentAccount, editingMessageObject.getDialogId())) {
                 if (baseFragment instanceof ChatActivity) {
                     final ChatActivity chatActivity = (ChatActivity) baseFragment;
                     final MessageSuggestionParams params = chatActivity.messageSuggestionParams != null ?
@@ -3877,6 +3897,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             ChatActivity chatActivity = (ChatActivity) baseFragment;
             calcMandatoryInsets = chatActivity.isKeyboardVisible();
         }
+        updateDoneItemEnabled();
         openTransitionFinished = false;
         if (Build.VERSION.SDK_INT >= 30) {
             navBarColorKey = -1;
@@ -4953,7 +4974,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         if (captionAbove) {
             updateCommentTextViewPosition();
         }
-        if (pollLayout != null && layout == pollLayout) {
+        float pollTranslationY = 0.0f, todoTranslationY = 0.0f;
+        if (pollLayout != null) {
             if (AndroidUtilities.isTablet()) {
                 finalMove = 63;
             } else if (AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y) {
@@ -4961,8 +4983,13 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             } else {
                 finalMove = 59;
             }
-            doneItem.setTranslationY(Math.max(0, pollLayout.getTranslationY() + scrollOffset - dp(7 + finalMove * moveProgress)) + currentPanTranslationY);
-        } else if (todoLayout != null && layout == todoLayout) {
+            if (pollLayout == nextAttachLayout) {
+                pollTranslationY = (pollLayout.getTranslationY() + getScrollOffsetY(1) - dp(7 + finalMove * moveProgress)) * translationProgress;
+            } else if (pollLayout == currentAttachLayout) {
+                pollTranslationY = (pollLayout.getTranslationY() + getScrollOffsetY(0) - dp(7 + finalMove * moveProgress)) * (nextAttachLayout == null ? 1.0f : 1.0f - translationProgress);
+            }
+        }
+        if (todoLayout != null) {
             if (AndroidUtilities.isTablet()) {
                 finalMove = 63;
             } else if (AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y) {
@@ -4970,7 +4997,14 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             } else {
                 finalMove = 59;
             }
-            doneItem.setTranslationY(Math.max(0, todoLayout.getTranslationY() + scrollOffset - dp(7 + finalMove * moveProgress)) + currentPanTranslationY);
+            if (todoLayout == nextAttachLayout) {
+                todoTranslationY = (todoLayout.getTranslationY() + getScrollOffsetY(1) - dp(7 + finalMove * moveProgress)) * translationProgress;
+            } else if (todoLayout == currentAttachLayout) {
+                todoTranslationY = (todoLayout.getTranslationY() + getScrollOffsetY(0) - dp(7 + finalMove * moveProgress)) * (nextAttachLayout == null ? 1.0f : 1.0f - translationProgress);
+            }
+        }
+        if (doneItem != null) {
+            doneItem.setTranslationY(Math.max(0, pollTranslationY + todoTranslationY) + currentPanTranslationY);
         }
     }
 
@@ -5074,25 +5108,6 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     }
                 }
             }
-        }
-    }
-    
-    public void updateDoneItemEnabled() {
-        AttachAlertLayout attachAlertLayout;
-        doneItem.setEnabled(currentAttachLayout.isDoneItemEnabled());
-        float f = 0.0f;
-        if (currentAttachLayout != null) {
-            f = 0.0f + ((currentAttachLayout.isDoneItemEnabled() ? 1.0f : 0.5f) * (nextAttachLayout == null ? 1.0f : translationProgress));
-        }
-        if (nextAttachLayout != null) {
-            f += (nextAttachLayout.isDoneItemEnabled() ? 1.0f : 0.5f) * (1.0f - translationProgress);
-        }
-        if (nextAttachLayout != null && !nextAttachLayout.hasDoneItem()) {
-            doneItem.setAlpha(0);
-            doneItem.setVisibility(View.INVISIBLE);
-        } else {
-            doneItem.setAlpha(f);
-            doneItem.setVisibility((currentAttachLayout.hasDoneItem() || ((attachAlertLayout = nextAttachLayout) != null && attachAlertLayout.hasDoneItem())) ? View.VISIBLE : View.INVISIBLE);
         }
     }
 
@@ -5284,7 +5299,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 documentsEnabled = ChatObject.canSendDocument(chat);
             } else {
                 pollsEnabled = UserObject.isBot(user) || UserObject.isUserSelf(user);
-                todoEnabled = true;
+                todoEnabled = !(baseFragment instanceof ChatActivity) || ((ChatActivity) baseFragment).getCurrentEncryptedChat() == null;
             }
             todoEnabled = todoEnabled && (!NaConfig.INSTANCE.getDisablePremiumSendTodo().Bool() || UserConfig.getInstance(currentAccount).isPremium());
         }
@@ -5370,6 +5385,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             actionBarShadow.setVisibility(actionBar.getVisibility());
 
             setCaptionAbove(captionAbove, false);
+            updateDoneItemEnabled();
         }
         if (currentAttachLayout != photoLayout) {
             photoLayout.setCheckCameraWhenShown(true);

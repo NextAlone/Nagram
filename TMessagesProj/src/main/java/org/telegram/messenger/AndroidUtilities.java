@@ -112,6 +112,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -1151,22 +1152,6 @@ public class AndroidUtilities {
         String url;
         int start;
         int end;
-    }
-
-    private static Boolean standaloneApp;
-    public static boolean isStandaloneApp() {
-        if (standaloneApp == null) {
-            standaloneApp = "org.telegram.messenger.web".equals(ApplicationLoader.applicationContext.getPackageName());
-        }
-        return standaloneApp;
-    }
-
-    private static Boolean betaApp;
-    public static boolean isBetaApp() {
-        if (betaApp == null) {
-            betaApp = "org.telegram.messenger.beta".equals(ApplicationLoader.applicationContext.getPackageName());
-        }
-        return betaApp;
     }
 
     private static String makeUrl(String url, String[] prefixes, Matcher matcher) {

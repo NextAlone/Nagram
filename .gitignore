@@ -13,6 +13,8 @@ obj/
 service_account_credentials.json
 __pycache__/
 release/
+venv/
+.venv/
 
 TMessagesProj/.cxx/
 TMessagesProj/jniLibs/

@@ -1,4 +1,2 @@
 include ':TMessagesProj'
 include ':openpgp-api'
-//include ':ss-rust'
-//include ':ssr-libev'

@@ -83,7 +83,6 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
     private KeyboardNotifier keyboardNotifier;
     private boolean waitingForKeyboardOpen;
     private boolean destroyed;
-    public boolean doneItemEnabled;
     private boolean isPremium;
 
     private final int maxAnswersCount;
@@ -509,10 +508,12 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 CharSequence[] questionCharSequence = new CharSequence[]{questionText};
                 ArrayList<TLRPC.MessageEntity> questionEntities = MediaDataController.getInstance(parentAlert.currentAccount).getEntities(questionCharSequence, true);
                 questionText = questionCharSequence[0];
-                for (int a = 0, N = questionEntities.size(); a < N; a++) {
-                    TLRPC.MessageEntity entity = questionEntities.get(a);
-                    if (entity.offset + entity.length > questionText.length()) {
-                        entity.length = questionText.length() - entity.offset;
+                if (questionEntities != null) {
+                    for (int a = 0, N = questionEntities.size(); a < N; a++) {
+                        TLRPC.MessageEntity entity = questionEntities.get(a);
+                        if (entity.offset + entity.length > questionText.length()) {
+                            entity.length = questionText.length() - entity.offset;
+                        }
                     }
                 }
 
@@ -532,10 +533,12 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                     CharSequence[] answerCharSequence = new CharSequence[]{answerText};
                     ArrayList<TLRPC.MessageEntity> answerEntities = MediaDataController.getInstance(parentAlert.currentAccount).getEntities(answerCharSequence, true);
                     answerText = answerCharSequence[0];
-                    for (int b = 0, N = answerEntities.size(); b < N; b++) {
-                        TLRPC.MessageEntity entity = answerEntities.get(b);
-                        if (entity.offset + entity.length > answerText.length()) {
-                            entity.length = answerText.length() - entity.offset;
+                    if (answerEntities != null) {
+                        for (int b = 0, N = answerEntities.size(); b < N; b++) {
+                            TLRPC.MessageEntity entity = answerEntities.get(b);
+                            if (entity.offset + entity.length > answerText.length()) {
+                                entity.length = answerText.length() - entity.offset;
+                            }
                         }
                     }
 
@@ -576,10 +579,12 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 CharSequence[] questionCharSequence = new CharSequence[]{questionText};
                 ArrayList<TLRPC.MessageEntity> questionEntities = MediaDataController.getInstance(parentAlert.currentAccount).getEntities(questionCharSequence, true);
                 questionText = questionCharSequence[0];
-                for (int a = 0, N = questionEntities.size(); a < N; a++) {
-                    TLRPC.MessageEntity entity = questionEntities.get(a);
-                    if (entity.offset + entity.length > questionText.length()) {
-                        entity.length = questionText.length() - entity.offset;
+                if (questionEntities != null) {
+                    for (int a = 0, N = questionEntities.size(); a < N; a++) {
+                        TLRPC.MessageEntity entity = questionEntities.get(a);
+                        if (entity.offset + entity.length > questionText.length()) {
+                            entity.length = questionText.length() - entity.offset;
+                        }
                     }
                 }
 
@@ -601,10 +606,12 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                     CharSequence[] answerCharSequence = new CharSequence[]{answerText};
                     ArrayList<TLRPC.MessageEntity> answerEntities = MediaDataController.getInstance(parentAlert.currentAccount).getEntities(answerCharSequence, true);
                     answerText = answerCharSequence[0];
-                    for (int b = 0, N = answerEntities.size(); b < N; b++) {
-                        TLRPC.MessageEntity entity = answerEntities.get(b);
-                        if (entity.offset + entity.length > answerText.length()) {
-                            entity.length = answerText.length() - entity.offset;
+                    if (answerEntities != null) {
+                        for (int b = 0, N = answerEntities.size(); b < N; b++) {
+                            TLRPC.MessageEntity entity = answerEntities.get(b);
+                            if (entity.offset + entity.length > answerText.length()) {
+                                entity.length = answerText.length() - entity.offset;
+                            }
                         }
                     }
 
@@ -773,6 +780,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
         }
     }
 
+    private boolean doneItemEnabled;
     private void checkDoneButton() {
         boolean enabled = true;
         int checksCount = 0;
@@ -811,6 +819,16 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
         parentAlert.setAllowNestedScroll(allowNesterScroll);
         doneItemEnabled = quizPoll && checksCount == 0 || enabled;
         parentAlert.updateDoneItemEnabled();
+    }
+
+    @Override
+    public boolean isDoneItemEnabled() {
+        return doneItemEnabled;
+    }
+
+    @Override
+    public boolean hasDoneItem() {
+        return true;
     }
 
     private void updateRows() {
@@ -896,7 +914,6 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
 
     @Override
     public void onHidden() {
-
         parentAlert.updateDoneItemEnabled();
     }
 
@@ -1234,10 +1251,6 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
         }
     }
 
-    public boolean hasDoneItem() {
-        return true;
-    }
-
     private void hideEmojiPopup(boolean byBackButton) {
         if (!isPremium) {
             return;
@@ -1296,10 +1309,6 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
 
     public boolean isAnimatePopupClosing() {
         return isAnimatePopupClosing;
-    }
-
-    public boolean isDoneItemEnabled() {
-        return doneItemEnabled;
     }
 
     public boolean isPopupShowing() {

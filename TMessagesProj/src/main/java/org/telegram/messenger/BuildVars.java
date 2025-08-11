@@ -65,6 +65,14 @@ public class BuildVars {
         }
     }
 
+    private static Boolean betaApp;
+    public static boolean isBetaApp() {
+        if (betaApp == null) {
+            betaApp = ApplicationLoader.applicationContext != null && "org.telegram.messenger.beta".equals(ApplicationLoader.applicationContext.getPackageName());
+        }
+        return betaApp;
+    }
+
     public static boolean useInvoiceBilling() {
         return true;
     }
