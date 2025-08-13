@@ -189,6 +189,7 @@
     <string name="DisableShortcutTagActions">Disable Favorite Shortcut Tag Actions</string>
     <string name="DisablePhoneSharePrompt">Disable contact phone number sharing prompt</string>
     <string name="DisablePremiumSendTodo">Disable Premium send todo list</string>
+    <string name="DisableEmptyStarButton">Disable channel fast Stars reaction</string>
     <string name="ColoredAdminTitle">Colored Admin Title</string>
     <string name="GhostMode">Ghost Mode</string>
     <string name="GhostElements">Ghost Options</string>

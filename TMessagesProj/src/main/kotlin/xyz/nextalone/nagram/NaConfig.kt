@@ -817,6 +817,13 @@ object NaConfig {
             14,
             false
         )
+    val disableEmptyStarButton =
+        addConfig(
+            "DisableEmptyStarButton",
+            disableTrendingFlags,
+            15,
+            false
+        )
     val disableRepeatInChannel =
         addConfig(
             "DisableRepeatInChannel",
