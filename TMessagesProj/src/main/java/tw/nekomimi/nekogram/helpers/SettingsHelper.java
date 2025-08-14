@@ -14,6 +14,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import java.util.ArrayList;
 import java.util.Map;
 
+import tw.nekomimi.nekogram.ChatHistoryActivity;
 import tw.nekomimi.nekogram.settings.BaseNekoSettingsActivity;
 import tw.nekomimi.nekogram.settings.BaseNekoXSettingsActivity;
 import tw.nekomimi.nekogram.settings.NekoChatSettingsActivity;
@@ -68,6 +69,10 @@ public class SettingsHelper {
                 case "g":
                     fragment = nekox_fragment = new NekoGeneralSettingsActivity();
                     break;
+                case "recent_dialogs":
+                case "r":
+                    fragment = new ChatHistoryActivity();
+                    break;
                 case "send_logs":
                     sendLogs(activity, false);
                     return;
@@ -112,7 +117,7 @@ public class SettingsHelper {
         fragments.add(new NekoGeneralSettingsActivity());
         fragments.add(new NekoChatSettingsActivity());
         fragments.add(new NekoExperimentalSettingsActivity());
-        String n_title = LocaleController.getString("NekoSettings", R.string.NekoSettings);
+        String n_title = LocaleController.getString(R.string.NekoSettings);
         for (BaseNekoXSettingsActivity fragment: fragments) {
             int uid = fragment.getBaseGuid();
             int drawable = fragment.getDrawable();

@@ -226,7 +226,6 @@ import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BackButtonMenuRecent;
-import tw.nekomimi.nekogram.DataCenter;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.helpers.PasscodeHelper;

@@ -205,4 +205,7 @@
     <string name="PlayerDecoderPerferHW">设备解码器优先</string>
     <string name="ShowUserIconsInChatsList">对话列表中的用户头像预览</string>
     <string name="TelegramWiki">Telegram 知识库</string>
+    <string name="ShowRecentChatsInSidebar">在侧边栏中显示最近对话</string>
+    <string name="DeleteRecentChatMessage">您确定要从最近对话中移除 %1$s 吗？</string>
+    <string name="DeleteRecentChatTooltip">已从最近对话中移除此对话</string>
 </resources>

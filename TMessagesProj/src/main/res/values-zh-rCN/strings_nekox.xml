@@ -68,7 +68,7 @@
     <string name="FilterNameUsersDescription">仅来自私聊的消息</string>
     <string name="FilterNameContacts">联系人</string>
     <string name="FilterNameContactsDescription">仅来自已保存用户的消息</string>
-    <string name="FilterNameGroups">群組</string>
+    <string name="FilterNameGroups">群组</string>
     <string name="FilterNameGroupsDescription">仅来自群聊的消息</string>
     <string name="FilterNameChannels">频道</string>
     <string name="FilterNameChannelsDescription">仅来自频道的消息</string>

@@ -889,6 +889,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val showRecentChatsInSidebar =
+        addConfig(
+            "ShowRecentChatsInSidebar",
+            ConfigItem.configTypeBool,
+            true
+        )
 
     private fun addConfig(
         k: String,

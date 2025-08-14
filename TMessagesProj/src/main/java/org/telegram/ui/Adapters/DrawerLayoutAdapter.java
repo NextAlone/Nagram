@@ -65,6 +65,8 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
 
     public static int nkbtnNewStory = 1000;
     public static int nkbtnWiki = 1001;
+    public static int nkbtnGhostMode = 1006;
+    public static int nkbtnChatHistory = 1007;
 
     public DrawerLayoutAdapter(Context context, SideMenultItemAnimator animator, DrawerLayoutContainer drawerLayoutContainer) {
         mContext = context;
@@ -344,7 +346,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         // --- start Drawer GhostMode hook
         if (NekoConfig.showGhostToggleInDrawer) {
             boolean isGhost = NekoConfig.isGhostModeActive();
-            items.add(new CheckItem(44678, LocaleController.getString("GhostMode", R.string.GhostMode), R.drawable.icon_ghost, () -> isGhost, () -> {
+            items.add(new CheckItem(nkbtnGhostMode, LocaleController.getString("GhostMode", R.string.GhostMode), R.drawable.icon_ghost, () -> isGhost, () -> {
                 NekoConfig.setGhostMode(!isGhost);
                 NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
                 return true;
@@ -356,6 +358,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         UserConfig me = UserConfig.getInstance(UserConfig.selectedAccount);
         boolean showDivider = false;
         items.add(new Item(16, LocaleController.getString(R.string.MyProfile), R.drawable.left_status_profile));
+        if (NaConfig.INSTANCE.getShowRecentChatsInSidebar().Bool()) items.add(new Item(nkbtnChatHistory, LocaleController.getString(R.string.RecentChats), R.drawable.msg2_autodelete));
         if (me != null && me.isPremium()) {
             if (me.getEmojiStatus() != null) {
                 items.add(new Item(15, LocaleController.getString(R.string.ChangeEmojiStatus), R.drawable.msg_status_edit));

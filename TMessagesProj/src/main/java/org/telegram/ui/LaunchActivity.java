@@ -649,7 +649,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 if (id == 13) {
                     presentFragment(new ProxyListActivity());
                     drawerLayoutContainer.closeDrawer(false);
-                } else if (id == 44678) {
+                } else if (id == DrawerLayoutAdapter.nkbtnGhostMode) {
                     presentFragment(new NekoGhostModeActivity());
                     drawerLayoutContainer.closeDrawer(false);
                 } else if (!UserConfig.hasPremiumOnAccounts()) {
@@ -779,6 +779,9 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                         return;
                     }
                     Browser.openInTelegramBrowser(LaunchActivity.this, UpdateUtil.wikiUrl, null);
+                    drawerLayoutContainer.closeDrawer(false);
+                } else if (id == DrawerLayoutAdapter.nkbtnChatHistory) {
+                    presentFragment(new tw.nekomimi.nekogram.ChatHistoryActivity());
                     drawerLayoutContainer.closeDrawer(false);
                 }
             }

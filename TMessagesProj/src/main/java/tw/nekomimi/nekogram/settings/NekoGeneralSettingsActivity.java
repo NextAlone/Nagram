@@ -224,6 +224,7 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
 
     private final AbstractConfigCell disableDialogsFloatingButtonRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableDialogsFloatingButton()));
     private final AbstractConfigCell centerActionBarTitleRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getCenterActionBarTitle()));
+    private final AbstractConfigCell showRecentChatsInSidebarRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowRecentChatsInSidebar()));
     private final AbstractConfigCell divider5 = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell header6 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("PrivacyTitle")));

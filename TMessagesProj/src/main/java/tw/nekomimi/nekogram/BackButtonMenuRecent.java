@@ -40,11 +40,13 @@ import org.telegram.ui.ProfileActivity;
 import org.telegram.ui.TopicsFragment;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class BackButtonMenuRecent {
 
     private static final int MAX_RECENT_DIALOGS = 25;
+    private static final int MAX_DISK_RECENT_DIALOGS = 1000;
 
     private static final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekorecentdialogs", Context.MODE_PRIVATE);
     private static final SparseArray<LinkedList<Long>> recentDialogs = new SparseArray<>();
@@ -58,7 +60,7 @@ public class BackButtonMenuRecent {
         if (context == null || fragmentView == null) {
             return;
         }
-        LinkedList<Long> dialogs = getRecentDialogs(fragment.getCurrentAccount());
+        List<Long> dialogs = getRecentDialogs(fragment.getCurrentAccount()).subList(0, MAX_RECENT_DIALOGS);
         if (dialogs.isEmpty()) {
             return;
         }
@@ -91,7 +93,7 @@ public class BackButtonMenuRecent {
         TextView titleTextView = new TextView(context);
         titleTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue));
         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        titleTextView.setText(LocaleController.getString("RecentChats", R.string.RecentChats));
+        titleTextView.setText(LocaleController.getString(R.string.RecentChats));
         titleTextView.setTypeface(AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_MEDIUM));
         headerView.addView(titleTextView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, 24, Gravity.LEFT));
 
@@ -102,15 +104,15 @@ public class BackButtonMenuRecent {
         clearImageView.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)));
         clearImageView.setOnClickListener(e2 -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle(LocaleController.getString("ClearRecentChats", R.string.ClearRecentChats));
-            builder.setMessage(LocaleController.getString("ClearRecentChatAlert", R.string.ClearRecentChatAlert));
-            builder.setPositiveButton(LocaleController.getString("ClearButton", R.string.ClearButton).toUpperCase(), (dialogInterface, i) -> {
+            builder.setTitle(LocaleController.getString(R.string.ClearRecentChats));
+            builder.setMessage(LocaleController.getString(R.string.ClearRecentChatAlert));
+            builder.setPositiveButton(LocaleController.getString(R.string.ClearButton).toUpperCase(), (dialogInterface, i) -> {
                 if (scrimPopupWindowRef.get() != null) {
                     scrimPopupWindowRef.getAndSet(null).dismiss();
                 }
                 clearRecentDialogs(currentAccount);
             });
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
+            builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
             fragment.showDialog(builder.create());
         });
         headerView.addView(clearImageView, LayoutHelper.createFrame(24, 24, Gravity.RIGHT | Gravity.CENTER_VERTICAL));
@@ -162,11 +164,11 @@ public class BackButtonMenuRecent {
                     thumb = user.photo.strippedBitmap;
                 }
                 if (UserObject.isReplyUser(user)) {
-                    name = LocaleController.getString("RepliesTitle", R.string.RepliesTitle);
+                    name = LocaleController.getString(R.string.RepliesTitle);
                     avatarDrawable.setAvatarType(AvatarDrawable.AVATAR_TYPE_REPLIES);
                     imageView.setImageDrawable(avatarDrawable);
                 } else if (UserObject.isDeleted(user)) {
-                    name = LocaleController.getString("HiddenName", R.string.HiddenName);
+                    name = LocaleController.getString(R.string.HiddenName);
                     avatarDrawable.setInfo(user);
                     imageView.setImage(ImageLocation.getForUser(user, ImageLocation.TYPE_SMALL), "50_50", avatarDrawable, user);
                 } else {
@@ -236,7 +238,7 @@ public class BackButtonMenuRecent {
         scrimPopupWindow.dimBehind();
     }
 
-    private static LinkedList<Long> getRecentDialogs(int currentAccount) {
+    public static LinkedList<Long> getRecentDialogs(int currentAccount) {
         LinkedList<Long> recentDialog = recentDialogs.get(currentAccount);
         if (recentDialog == null) {
             recentDialog = new LinkedList<>();
@@ -264,7 +266,7 @@ public class BackButtonMenuRecent {
             }
         }
 
-        if (recentDialog.size() > MAX_RECENT_DIALOGS) {
+        if (recentDialog.size() > MAX_DISK_RECENT_DIALOGS) {
             recentDialog.removeLast();
         }
         recentDialog.addFirst(dialogId);
@@ -272,7 +274,13 @@ public class BackButtonMenuRecent {
         Utilities.globalQueue.postRunnable(() -> saveRecentDialogs(currentAccount, finalRecentDialog));
     }
 
-    private static void saveRecentDialogs(int currentAccount, LinkedList<Long> recentDialog) {
+    public static void deleteFromRecentDialogs(int currentAccount, long dialogId) {
+        LinkedList<Long> recentDialog = getRecentDialogs(currentAccount);
+        recentDialog.remove(dialogId);
+        Utilities.globalQueue.postRunnable(() -> saveRecentDialogs(currentAccount, recentDialog));
+    }
+
+    public static void saveRecentDialogs(int currentAccount, LinkedList<Long> recentDialog) {
         SerializedData serializedData = new SerializedData();
         int count = recentDialog.size();
         serializedData.writeInt32(count);
