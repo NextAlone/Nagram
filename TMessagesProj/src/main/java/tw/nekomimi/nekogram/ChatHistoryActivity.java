@@ -195,11 +195,11 @@ public class ChatHistoryActivity extends BaseFragment {
         menu.addItem(2, R.drawable.msg_settings);
 
         // Create main layout
-        SizeNotifierFrameLayout fragmentView = new SizeNotifierFrameLayout(context);
+        fragmentView = new SizeNotifierFrameLayout(context);
         fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
 
         // Create ViewPager with tabs
-        createViewPager(context, fragmentView);
+        createViewPager(context, (SizeNotifierFrameLayout) fragmentView);
 
         // Mark as initialized
         hasBeenInitialized = true;
@@ -827,7 +827,7 @@ public class ChatHistoryActivity extends BaseFragment {
 
         // Add Open option
         ActionBarMenuSubItem openItem = ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_openin, getString(R.string.Open), false, getResourceProvider());
-        openItem.setEnabled(finalCanOpen);
+        openItem.setVisibility(finalCanOpen);
         if (!finalCanOpen) {
             openItem.setColors(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
         }
@@ -840,7 +840,7 @@ public class ChatHistoryActivity extends BaseFragment {
 
         // Add Share option
         ActionBarMenuSubItem shareItem = ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_share, getString(R.string.ShareFile), false, getResourceProvider());
-        shareItem.setEnabled(finalHasUsername);
+        shareItem.setVisibility(finalHasUsername);
         if (!finalHasUsername) {
             shareItem.setColors(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
         }
@@ -853,7 +853,7 @@ public class ChatHistoryActivity extends BaseFragment {
 
         // Add Copy option
         ActionBarMenuSubItem copyItem = ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_copy, getString(R.string.Copy), false, getResourceProvider());
-        copyItem.setEnabled(finalHasUsername);
+        copyItem.setVisibility(finalHasUsername);
         if (!finalHasUsername) {
             copyItem.setColors(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
         }

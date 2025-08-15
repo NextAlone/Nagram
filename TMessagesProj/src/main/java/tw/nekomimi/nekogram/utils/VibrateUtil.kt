@@ -15,13 +15,14 @@ object VibrateUtil {
 
     lateinit var vibrator: Vibrator
 
-    fun initVibrator() {
+    private fun initVibrator() {
         if (!::vibrator.isInitialized) {
             vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 val vibratorManager =
                     ApplicationLoader.applicationContext.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
-                vibratorManager.defaultVibrator;
+                vibratorManager.defaultVibrator
             } else {
+                @Suppress("DEPRECATION")
                 ApplicationLoader.applicationContext.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             }
         }

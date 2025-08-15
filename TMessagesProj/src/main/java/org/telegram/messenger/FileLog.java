@@ -576,7 +576,7 @@ public class FileLog {
         }
         ensureInitied();
         String tag = mkTag();
-//        Log.d(tag, message);
+        Log.d(tag, message);
         if (getInstance().streamWriter != null) {
             getInstance().logQueue.postRunnable(() -> {
                 try {
