@@ -880,6 +880,10 @@ public class MessagesController extends BaseController implements NotificationCe
         return getUserConfig().isPremium() ? reactionsInChatMax : 1;
     }
 
+    public int getMaxFaveStickersCount() {
+        return getUserConfig().isPremium() ? stickersFavedLimitPremium : stickersFavedLimitDefault;
+    }
+
     public int getChatMaxUniqReactions(long dialogId) {
         TLRPC.ChatFull chatFull = MessagesController.getInstance(currentAccount).getChatFull(-dialogId);
         if (chatFull != null && (chatFull instanceof TLRPC.TL_chatFull ? (chatFull.flags & 1048576) != 0 : (chatFull.flags2 & 8192) != 0)) {

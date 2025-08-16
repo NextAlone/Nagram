@@ -895,6 +895,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             true
         )
+    val removeFavouriteStickersInRecentStickers =
+        addConfig(
+            "RemoveFavouriteStickersInRecentStickers",
+            ConfigItem.configTypeBool,
+            true
+        )
 
     private fun addConfig(
         k: String,

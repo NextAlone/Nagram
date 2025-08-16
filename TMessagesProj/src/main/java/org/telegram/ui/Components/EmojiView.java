@@ -5835,6 +5835,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             } else {
                 premiumStickers = new ArrayList<>();
             }
+            if (NaConfig.INSTANCE.getRemoveFavouriteStickersInRecentStickers().Bool()) {
             for (int a = 0; a < favouriteStickers.size(); a++) {
                 TLRPC.Document favSticker = favouriteStickers.get(a);
                 for (int b = 0; b < recentStickers.size(); b++) {
@@ -5845,7 +5846,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     }
                 }
             }
-            recentStickers = new ArrayList<>(recentStickers.subList(0, Math.min(recentStickers.size(), NekoConfig.maxRecentStickerCount.Int())));
+            }
             if (MessagesController.getInstance(currentAccount).premiumFeaturesBlocked()) {
                 for (int a = 0; a < favouriteStickers.size(); a++) {
                     if (MessageObject.isPremiumSticker(favouriteStickers.get(a))) {
@@ -6669,9 +6670,9 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     packStartPosition.put(key = "fav", totalItems);
                 } else if (a == -2) {
                     documents = recentStickers;
-//                    if (!documents.isEmpty() && !StickersAlert.DISABLE_STICKER_EDITOR) {
-//                        isAddedStickerBtnSet = true;
-//                    }
+                    if (!documents.isEmpty() && !StickersAlert.DISABLE_STICKER_EDITOR) {
+                        isAddedStickerBtnSet = true;
+                    }
                     packStartPosition.put(key = "recent", totalItems);
                 } else if (a == -1) {
                     continue;
