@@ -100,7 +100,8 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
     private UndoView copyTooltip;
 
     public static final Gson gson = new GsonBuilder()
-            .registerTypeHierarchyAdapter(byte[].class, new ByteArrayToBase64TypeAdapter()).create();
+            .registerTypeHierarchyAdapter(byte[].class, new ByteArrayToBase64TypeAdapter())
+            .setExclusionStrategies(new CustomExclusionStrategy()).create();
     public static final Gson prettyGson = new GsonBuilder().setPrettyPrinting().create();
 
     private static class ByteArrayToBase64TypeAdapter implements JsonSerializer<byte[]>, JsonDeserializer<byte[]> {
@@ -110,6 +111,18 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
 
         public JsonElement serialize(byte[] src, Type typeOfSrc, JsonSerializationContext context) {
             return new JsonPrimitive(Base64.encodeToString(src, Base64.NO_WRAP));
+        }
+    }
+
+    private static class CustomExclusionStrategy implements com.google.gson.ExclusionStrategy {
+        @Override
+        public boolean shouldSkipField(com.google.gson.FieldAttributes f) {
+            return "parentRichText".equals(f.getName());
+        }
+
+        @Override
+        public boolean shouldSkipClass(Class<?> clazz) {
+            return false;
         }
     }
 
