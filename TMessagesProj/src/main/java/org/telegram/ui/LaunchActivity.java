@@ -635,7 +635,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 if (freeAccounts > 0 && freeAccount >= 0) {
                     presentFragment(new LoginActivity(freeAccount));
                     drawerLayoutContainer.closeDrawer(false);
-                } else if (!UserConfig.hasPremiumOnAccounts()) {
+                } else {
                     if (actionBarLayout.getFragmentStack().size() > 0) {
                         BaseFragment fragment = actionBarLayout.getFragmentStack().get(0);
                         LimitReachedBottomSheet limitReachedBottomSheet = new LimitReachedBottomSheet(fragment, this, TYPE_ACCOUNTS, currentAccount, null);

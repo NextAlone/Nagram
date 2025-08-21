@@ -7227,6 +7227,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         updateProxyButton(false, true);
         updateStoriesVisibility(false);
         if (NaConfig.INSTANCE.getDisableDialogsFloatingButton().Bool()) {
+            floatingHidden = false;
             hideFloatingButton(true);
         }
         checkSuggestClearDatabase();
