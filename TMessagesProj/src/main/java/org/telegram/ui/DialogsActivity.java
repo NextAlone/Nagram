@@ -5082,7 +5082,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                     } catch (Exception ignored) {}
                 }
-                    view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 if (dialogId == UserConfig.getInstance(currentAccount).getClientUserId()) {
                     if (!storiesEnabled) {
                         if (dialogStoriesCell != null) {
@@ -5553,6 +5552,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             });
             dialogStoriesCell.openOverscrollSelectedStory();
             try {
+                if (!NekoConfig.disableVibration.Bool())
                 dialogStoriesCell.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
             } catch (Exception ignored) {}
         }

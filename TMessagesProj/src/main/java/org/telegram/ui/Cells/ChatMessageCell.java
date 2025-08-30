@@ -4924,7 +4924,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         final PollButton button = pollButtons.get(index);
         if (delegate.didPressToDoButton(this, button.task, !button.chosen)) {
             try {
-                if (vibrate) performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                if (vibrate && !NekoConfig.disableVibration.Bool()) performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignored) {}
             final TLRPC.TL_messageMediaToDo media = (TLRPC.TL_messageMediaToDo) MessageObject.getMedia(currentMessageObject);
             MessageObject.toggleTodo(media, button.task.id, !button.chosen, UserConfig.getInstance(currentAccount).getClientUserId(), ConnectionsManager.getInstance(currentAccount).getCurrentTime());

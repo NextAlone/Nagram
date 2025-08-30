@@ -125,6 +125,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class PremiumPreviewFragment extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     public final static String TRANSACTION_PATTERN = "^(.*?)(?:\\.\\.\\d*|)$";
     private final static boolean IS_PREMIUM_TIERS_UNAVAILABLE = false;
@@ -1107,6 +1109,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                     }
                     if (fragment.getParentActivity() instanceof LaunchActivity) {
                         try {
+                            if (!NekoConfig.disableVibration.Bool())
                             fragment.getFragmentView().performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                         } catch (Exception ignored) {}
                         ((LaunchActivity) fragment.getParentActivity()).getFireworksOverlay().start();

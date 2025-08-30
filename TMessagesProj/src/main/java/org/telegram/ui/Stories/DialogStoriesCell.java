@@ -76,6 +76,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Objects;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class DialogStoriesCell extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
     public final static int TYPE_DIALOGS = 0;
@@ -1002,6 +1004,7 @@ public class DialogStoriesCell extends FrameLayout implements NotificationCenter
 
     public void openOverscrollSelectedStory() {
         openStoryForCell(overscrollSelectedView, true);
+        if (!NekoConfig.disableVibration.Bool())
         performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
     }
 

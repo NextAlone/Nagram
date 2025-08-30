@@ -9345,6 +9345,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 return;
             }
             try {
+                if (!NekoConfig.disableVibration.Bool())
                 codeField.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
             } catch (Exception ignore) {}
             final int a = currentType == AUTH_TYPE_WORD ? 0 : 1;

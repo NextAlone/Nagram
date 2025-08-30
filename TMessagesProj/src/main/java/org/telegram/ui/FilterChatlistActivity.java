@@ -94,6 +94,8 @@ import org.telegram.ui.Components.spoilers.SpoilersTextView;
 
 import java.util.ArrayList;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class FilterChatlistActivity extends BaseFragment {
 
     private RecyclerListView listView;
@@ -589,6 +591,7 @@ public class FilterChatlistActivity extends BaseFragment {
                                     s.delete(MAX_NAME_LENGTH, s.length());
                                     AndroidUtilities.shakeView(editText);
                                     try {
+                                        if (!NekoConfig.disableVibration.Bool())
                                         editText.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                                     } catch (Exception ignored) {}
                                     ignoreTextChange = false;

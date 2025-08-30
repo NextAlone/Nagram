@@ -504,8 +504,6 @@ public class ContentPreviewViewer {
                     showUnlockPremiumView();
                     menuVisible = true;
                     containerView.invalidate();
-                    containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-                    containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                     if (!NekoConfig.disableVibration.Bool()) {
                         try {
                             containerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);

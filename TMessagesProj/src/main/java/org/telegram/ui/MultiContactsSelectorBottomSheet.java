@@ -54,6 +54,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class MultiContactsSelectorBottomSheet extends BottomSheetWithRecyclerListView {
     private static MultiContactsSelectorBottomSheet instance;
 
@@ -361,6 +363,7 @@ public class MultiContactsSelectorBottomSheet extends BottomSheetWithRecyclerLis
         String text = LocaleController.formatPluralString("BotMultiContactsSelectorLimit", maxCount);
         BulletinFactory.of(container, resourcesProvider).createSimpleBulletin(R.raw.chats_infotip, text).show(true);
         try {
+            if (!NekoConfig.disableVibration.Bool())
             container.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
         } catch (Exception ignore) {
         }

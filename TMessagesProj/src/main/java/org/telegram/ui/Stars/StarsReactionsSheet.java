@@ -95,6 +95,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class StarsReactionsSheet extends BottomSheet implements NotificationCenter.NotificationCenterDelegate {
 
     private final Theme.ResourcesProvider resourcesProvider;
@@ -779,6 +781,7 @@ public class StarsReactionsSheet extends BottomSheet implements NotificationCent
                 doneRipple[0] = true;
                 LaunchActivity.makeRipple(to.centerX(), to.centerY(), 1.5f);
                 try {
+                    if (!NekoConfig.disableVibration.Bool())
                     container.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                 } catch (Exception ignore) {}
                 if (pushed != null) {
@@ -802,6 +805,7 @@ public class StarsReactionsSheet extends BottomSheet implements NotificationCent
                     doneRipple[0] = true;
                     LaunchActivity.makeRipple(to.centerX(), to.centerY(), 1.5f);
                     try {
+                        if (!NekoConfig.disableVibration.Bool())
                         container.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                     } catch (Exception ignore) {}
                     if (pushed != null) {

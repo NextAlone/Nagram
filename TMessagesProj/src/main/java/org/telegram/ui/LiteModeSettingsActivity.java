@@ -70,6 +70,8 @@ import org.telegram.ui.Components.ThanosEffect;
 
 import java.util.ArrayList;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class LiteModeSettingsActivity extends BaseFragment {
 
     FrameLayout contentView;
@@ -743,6 +745,7 @@ public class LiteModeSettingsActivity extends BaseFragment {
 
                         if (newValue <= 0 || newValue >= 100) {
                             try {
+                                if (!NekoConfig.disableVibration.Bool())
                                 performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                             } catch (Exception e) {}
                         }
