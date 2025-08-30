@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="N_Config">Sozlamalar</string>
+    <string name="N_Config">N-Config</string>
     <string name="ForceCopy">Force Copy</string>
     <string name="InvertReply">Invert</string>
-    <string name="Great">Zo\'r</string>
+    <string name="Great">Great</string>
     <string name="Poor">Poor</string>
     <string name="CombineMessage">Combine Message</string>
     <string name="TextStyle">Text Style</string>
@@ -110,7 +110,7 @@
     <string name="ExternalStickerCacheSyncNotFinished">Cache sync is already running</string>
     <string name="ExternalStickerCacheAutoRefresh">Automatic sync</string>
     <string name="ExternalStickerCacheAutoRefreshHint">Automatically sync all caches after receiving sticker events</string>
-    <string name="ExternalStickerCacheRefreshAll">Hamma keshni sinxiroziyatsiya qilish</string>
+    <string name="ExternalStickerCacheRefreshAll">Sync all caches</string>
     <string name="ExternalStickerCacheDeleteAll">Delete all caches</string>
     <string name="ExternalStickerCacheDirNameType">Directory naming</string>
     <string name="ProviderTranSmartTranslate">TranSmart Translator</string>
@@ -208,4 +208,5 @@
     <string name="ShowRecentChatsInSidebar">Show Recent Chats in Sidebar</string>
     <string name="DeleteRecentChatMessage">Are you sure you want to remove %1$s from recent chats?</string>
     <string name="DeleteRecentChatTooltip">Deleted this chat</string>
+    <string name="RemoveFavouriteStickersInRecentStickers">Remove favourite stickers in recent stickers</string>
 </resources>

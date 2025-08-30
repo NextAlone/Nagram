@@ -188,6 +188,7 @@
     <string name="DisableShortcutTagActions">Вимкнути дії улюблених ярликів</string>
     <string name="DisablePhoneSharePrompt">Вимкнути запит на обмін номером телефону</string>
     <string name="DisablePremiumSendTodo">Вимкнути розсилку в списку завдань</string>
+    <string name="DisableEmptyStarButton">Вимкнути швидку реакцію зірок каналу</string>
     <string name="ColoredAdminTitle">Кольоровий заголовок адміністратора</string>
     <string name="GhostMode">Режим примари</string>
     <string name="GhostElements">Параметри Ghost</string>
@@ -204,4 +205,8 @@
     <string name="PlayerDecoderPerferHW">Віддавати перевагу декодерам пристрою</string>
     <string name="ShowUserIconsInChatsList">Показувати значки користувача у списку чатів</string>
     <string name="TelegramWiki">Wiki у Telegram</string>
+    <string name="ShowRecentChatsInSidebar">Показати останні чати на бічній панелі</string>
+    <string name="DeleteRecentChatMessage">Ви дійсно бажаєте видалити %1$s з останніх чатів?</string>
+    <string name="DeleteRecentChatTooltip">Видалено цей чат</string>
+    <string name="RemoveFavouriteStickersInRecentStickers">Видалити улюблені наліпки в останніх наліпках</string>
 </resources>

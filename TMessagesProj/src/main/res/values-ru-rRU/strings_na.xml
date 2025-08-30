@@ -188,6 +188,7 @@
     <string name="DisableShortcutTagActions">Отключить действия с ярлыком избранного</string>
     <string name="DisablePhoneSharePrompt">Отключить запрос на публикацию номера телефона контакта</string>
     <string name="DisablePremiumSendTodo">Отключить список рассылки задач Премиум</string>
+    <string name="DisableEmptyStarButton">Отключить быструю реакцию на звёзды канала</string>
     <string name="ColoredAdminTitle">Цветной заголовок администратора</string>
     <string name="GhostMode">Режим призрака</string>
     <string name="GhostElements">Параметры призрака</string>
@@ -204,4 +205,8 @@
     <string name="PlayerDecoderPerferHW">Предпочтительные декодеры устройства</string>
     <string name="ShowUserIconsInChatsList">Показывать иконки пользователей в списке чатов</string>
     <string name="TelegramWiki">Telegram Wiki</string>
+    <string name="ShowRecentChatsInSidebar">Показать недавние чаты в боковой панели</string>
+    <string name="DeleteRecentChatMessage">Вы уверены, что хотите удалить %1$s из недавних чатов?</string>
+    <string name="DeleteRecentChatTooltip">Удален этот чат</string>
+    <string name="RemoveFavouriteStickersInRecentStickers">Удалить избранные стикеры в недавних стикерах</string>
 </resources>

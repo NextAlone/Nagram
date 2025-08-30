@@ -188,6 +188,7 @@
     <string name="DisableShortcutTagActions">Dezactivează acțiunile etichetei rapide favorite</string>
     <string name="DisablePhoneSharePrompt">Dezactivează solicitarea de partajare număr de telefon</string>
     <string name="DisablePremiumSendTodo">Dezactivează lista de transferuri premium</string>
+    <string name="DisableEmptyStarButton">Dezactivează reacţia rapidă Stele a canalului</string>
     <string name="ColoredAdminTitle">Titlu Admin colorat</string>
     <string name="GhostMode">Mod Ghost</string>
     <string name="GhostElements">Opțiuni Ghost</string>
@@ -204,4 +205,8 @@
     <string name="PlayerDecoderPerferHW">Preferă decodoarele dispozitivului</string>
     <string name="ShowUserIconsInChatsList">Arată iconițele utilizatorilor în lista de conversații</string>
     <string name="TelegramWiki">Wiki Telegram</string>
+    <string name="ShowRecentChatsInSidebar">Arată conversațiile recente în bara laterală</string>
+    <string name="DeleteRecentChatMessage">Ești sigur că vrei să ștergi %1$s din conversațiile recente?</string>
+    <string name="DeleteRecentChatTooltip">S-a șters această conversație</string>
+    <string name="RemoveFavouriteStickersInRecentStickers">Elimină autocolantele preferate în autocolantele recente</string>
 </resources>

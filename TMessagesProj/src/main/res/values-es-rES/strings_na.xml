@@ -188,6 +188,7 @@
     <string name="DisableShortcutTagActions">Desactivar Acciones de Etiqueta Atajo Favorita</string>
     <string name="DisablePhoneSharePrompt">Desactivar la solicitud de compartir número de teléfono de contacto</string>
     <string name="DisablePremiumSendTodo">Desactivar lista de tareas de envío premium</string>
+    <string name="DisableEmptyStarButton">Desactivar reacción rápida de estrellas del canal</string>
     <string name="ColoredAdminTitle">Título de administrador coloreado</string>
     <string name="GhostMode">Modo fantasma</string>
     <string name="GhostElements">Opciones de fantasma</string>
@@ -204,4 +205,8 @@
     <string name="PlayerDecoderPerferHW">Preferir decodificadores de dispositivo</string>
     <string name="ShowUserIconsInChatsList">Mostrar iconos de usuario en la lista de chats</string>
     <string name="TelegramWiki">Wiki de Telegram</string>
+    <string name="ShowRecentChatsInSidebar">Mostrar charlas recientes en la barra lateral</string>
+    <string name="DeleteRecentChatMessage">¿Estás seguro de que quieres eliminar %1$s de los chats recientes?</string>
+    <string name="DeleteRecentChatTooltip">Borrado este chat</string>
+    <string name="RemoveFavouriteStickersInRecentStickers">Eliminar stickers favoritos de los stickers recientes</string>
 </resources>

@@ -188,6 +188,7 @@
     <string name="DisableShortcutTagActions">Zakázat akce oblíbených zkratek</string>
     <string name="DisablePhoneSharePrompt">Zakázat požadavek na sdílení telefonního čísla kontaktu</string>
     <string name="DisablePremiumSendTodo">Zakázat seznam úkolů pro zasílání Premium</string>
+    <string name="DisableEmptyStarButton">Zakázat rychlou reakci kanálu</string>
     <string name="ColoredAdminTitle">Barevný název administrátora</string>
     <string name="GhostMode">Režim ducha</string>
     <string name="GhostElements">Možnosti ducha</string>
@@ -204,4 +205,8 @@
     <string name="PlayerDecoderPerferHW">Preferovat dekodéry zařízení</string>
     <string name="ShowUserIconsInChatsList">Zobrazit uživatelské ikony v seznamu chatů</string>
     <string name="TelegramWiki">Wiki Telegram</string>
+    <string name="ShowRecentChatsInSidebar">Zobrazit nedávné chaty v postranním panelu</string>
+    <string name="DeleteRecentChatMessage">Jste si jisti, že chcete odstranit %1$s z nedávných chatů?</string>
+    <string name="DeleteRecentChatTooltip">Smazán tento chat</string>
+    <string name="RemoveFavouriteStickersInRecentStickers">Odstranit oblíbené samolepky v nedávných nálepkách</string>
 </resources>

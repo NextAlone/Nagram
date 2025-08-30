@@ -188,6 +188,7 @@
     <string name="DisableShortcutTagActions">Inaktivera favoritgenvägs tagg åtgärder</string>
     <string name="DisablePhoneSharePrompt">Inaktivera kontaktnummerdelnings-prompten</string>
     <string name="DisablePremiumSendTodo">Inaktivera Premium skicka göra-lista</string>
+    <string name="DisableEmptyStarButton">Inaktivera kanalens snabba Stars-reaktion</string>
     <string name="ColoredAdminTitle">Färgad administratörens titel</string>
     <string name="GhostMode">Spökläge</string>
     <string name="GhostElements">Spökalternativ</string>
@@ -204,4 +205,8 @@
     <string name="PlayerDecoderPerferHW">Föredrar enhetsavkodare</string>
     <string name="ShowUserIconsInChatsList">Visa användarikoner i chattlistan</string>
     <string name="TelegramWiki">Telegram Wiki</string>
+    <string name="ShowRecentChatsInSidebar">Visa senaste chattar i sidofält</string>
+    <string name="DeleteRecentChatMessage">Är du säker på att du vill ta bort %1$s från senaste chattar?</string>
+    <string name="DeleteRecentChatTooltip">Tog bort denna chatt</string>
+    <string name="RemoveFavouriteStickersInRecentStickers">Ta bort favoritklistermärken i senaste klistermärken</string>
 </resources>

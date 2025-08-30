@@ -188,6 +188,7 @@
     <string name="DisableShortcutTagActions">Wyłącz Ulubione skróty tagów</string>
     <string name="DisablePhoneSharePrompt">Wyłącz monit udostępniania numeru telefonu kontaktowego</string>
     <string name="DisablePremiumSendTodo">Wyłącz listę zadań do wysłania premium</string>
+    <string name="DisableEmptyStarButton">Wyłącz szybką reakcję kanału Gwiazd</string>
     <string name="ColoredAdminTitle">Kolorowy Tytuł Administratora</string>
     <string name="GhostMode">Tryb Ducha</string>
     <string name="GhostElements">Opcje Ducha</string>
@@ -204,4 +205,8 @@
     <string name="PlayerDecoderPerferHW">Preferuj dekodery urządzenia</string>
     <string name="ShowUserIconsInChatsList">Pokaż ikony użytkownika na liście czatów</string>
     <string name="TelegramWiki">Telegram Wiki</string>
+    <string name="ShowRecentChatsInSidebar">Pokaż ostatnie czaty na pasku bocznym</string>
+    <string name="DeleteRecentChatMessage">Czy na pewno chcesz usunąć %1$s z ostatnich czatów?</string>
+    <string name="DeleteRecentChatTooltip">Usunięto ten czat</string>
+    <string name="RemoveFavouriteStickersInRecentStickers">Usuń ulubione naklejki z najnowszymi naklejkami</string>
 </resources>

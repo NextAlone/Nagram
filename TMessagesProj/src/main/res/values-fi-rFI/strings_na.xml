@@ -188,6 +188,7 @@
     <string name="DisableShortcutTagActions">Poista Suosikki Pikanäppäin Toiminnot Käytöstä</string>
     <string name="DisablePhoneSharePrompt">Poista yhteyshenkilön puhelinnumeron jakamiskehotus käytöstä</string>
     <string name="DisablePremiumSendTodo">Poista Premiumin lähetysluettelo käytöstä</string>
+    <string name="DisableEmptyStarButton">Poista kanavan nopea Stars-reaktio käytöstä</string>
     <string name="ColoredAdminTitle">Värillinen Admin Otsikko</string>
     <string name="GhostMode">Ghost Tila</string>
     <string name="GhostElements">Ghost Asetukset</string>
@@ -204,4 +205,8 @@
     <string name="PlayerDecoderPerferHW">Suosi laitteen dekoodereita</string>
     <string name="ShowUserIconsInChatsList">Näytä käyttäjän kuvakkeet chat-listassa</string>
     <string name="TelegramWiki">Telegram Wiki</string>
+    <string name="ShowRecentChatsInSidebar">Näytä viimeaikaiset keskustelut sivupalkissa</string>
+    <string name="DeleteRecentChatMessage">Oletko varma, että haluat poistaa %1$s viimeaikaisista keskusteluista?</string>
+    <string name="DeleteRecentChatTooltip">Poistettu tämä keskustelu</string>
+    <string name="RemoveFavouriteStickersInRecentStickers">Poista suosikkitarrat viimeaikaisista tarroista</string>
 </resources>

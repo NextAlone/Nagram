@@ -188,6 +188,7 @@
     <string name="DisableShortcutTagActions">Favoriten Shortcut Tag-Aktionen deaktivieren</string>
     <string name="DisablePhoneSharePrompt">Kontakt-Rufnummernfreigabe deaktivieren</string>
     <string name="DisablePremiumSendTodo">Deaktiviere Premium To-Do Liste</string>
+    <string name="DisableEmptyStarButton">Reaktion auf schnelle Sterne des Kanals deaktivieren</string>
     <string name="ColoredAdminTitle">Farbiger Admin-Titel</string>
     <string name="GhostMode">Geist-Modus</string>
     <string name="GhostElements">Ghost Optionen</string>
@@ -204,4 +205,8 @@
     <string name="PlayerDecoderPerferHW">Gerätedecodierer bevorzugen</string>
     <string name="ShowUserIconsInChatsList">Benutzersymbole in der Chat-Liste anzeigen</string>
     <string name="TelegramWiki">Telegramm-Wiki</string>
+    <string name="ShowRecentChatsInSidebar">Letzte Chats in der Seitenleiste anzeigen</string>
+    <string name="DeleteRecentChatMessage">Bist du sicher, dass du %1$s aus den letzten Chats entfernen möchtest?</string>
+    <string name="DeleteRecentChatTooltip">Chat gelöscht</string>
+    <string name="RemoveFavouriteStickersInRecentStickers">Favoritenaufkleber in neueren Aufklebern entfernen</string>
 </resources>

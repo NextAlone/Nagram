@@ -188,6 +188,7 @@
     <string name="DisableShortcutTagActions">Favoriete snelkoppeling Tag Acties uitschakelen</string>
     <string name="DisablePhoneSharePrompt">Telefoonnummer delen uitschakelen prompt contact</string>
     <string name="DisablePremiumSendTodo">Schakel Premium verzenden todo lijst uit</string>
+    <string name="DisableEmptyStarButton">Schakel snelle sterren reactie uit</string>
     <string name="ColoredAdminTitle">Gekleurde titel beheerder</string>
     <string name="GhostMode">Spook modus</string>
     <string name="GhostElements">Spook opties</string>
@@ -204,4 +205,8 @@
     <string name="PlayerDecoderPerferHW">Voorkeur voor apparaatdecoders</string>
     <string name="ShowUserIconsInChatsList">Toon gebruikerspictogrammen in chatlijst</string>
     <string name="TelegramWiki">Telegram Wiki</string>
+    <string name="ShowRecentChatsInSidebar">Recente chats in zijbalk weergeven</string>
+    <string name="DeleteRecentChatMessage">Weet je zeker dat je %1$s wilt verwijderen uit recente chats?</string>
+    <string name="DeleteRecentChatTooltip">Verwijderde deze chat</string>
+    <string name="RemoveFavouriteStickersInRecentStickers">Verwijder favoriete stickers in recente stickers</string>
 </resources>

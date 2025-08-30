@@ -188,6 +188,7 @@
     <string name="DisableShortcutTagActions">お気に入りのショートカットタグアクションを無効にする</string>
     <string name="DisablePhoneSharePrompt">連絡先電話番号の共有プロンプトを無効にする</string>
     <string name="DisablePremiumSendTodo">プレミアムタスク送信リストを無効にする</string>
+    <string name="DisableEmptyStarButton">チャンネルの高速スターリアクションを無効にする</string>
     <string name="ColoredAdminTitle">色付き管理者タイトル</string>
     <string name="GhostMode">ゴーストモード</string>
     <string name="GhostElements">ゴーストオプション</string>
@@ -204,4 +205,8 @@
     <string name="PlayerDecoderPerferHW">デバイスデコーダーを優先</string>
     <string name="ShowUserIconsInChatsList">チャットリストにユーザーアイコンを表示する</string>
     <string name="TelegramWiki">Telegram Wiki</string>
+    <string name="ShowRecentChatsInSidebar">サイドバーに最近のチャットを表示</string>
+    <string name="DeleteRecentChatMessage">最近のチャットから %1$s を削除してもよろしいですか？</string>
+    <string name="DeleteRecentChatTooltip">このチャットを削除しました</string>
+    <string name="RemoveFavouriteStickersInRecentStickers">最近使ったステッカーのお気に入りステッカーを削除</string>
 </resources>

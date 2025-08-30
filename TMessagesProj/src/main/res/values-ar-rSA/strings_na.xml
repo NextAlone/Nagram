@@ -188,6 +188,7 @@
     <string name="DisableShortcutTagActions">تعطيل إجراءات علامة الاختصار المفضلة</string>
     <string name="DisablePhoneSharePrompt">تعطيل طلب مشاركة رقم هاتف جهة الاتصال</string>
     <string name="DisablePremiumSendTodo">تعطيل قائمة المهام المميزة المرسلة</string>
+    <string name="DisableEmptyStarButton">تعطيل رد فعل النجوم السريعة للقناة</string>
     <string name="ColoredAdminTitle">عنوان المدير الملون</string>
     <string name="GhostMode">وضع الشبح</string>
     <string name="GhostElements">خيارات الشبح</string>
@@ -204,4 +205,8 @@
     <string name="PlayerDecoderPerferHW">تفضيل شفرات الجهاز</string>
     <string name="ShowUserIconsInChatsList">إظهار أيقونات المستخدم في قائمة المحادثة</string>
     <string name="TelegramWiki">تيليجرام ويكي</string>
+    <string name="ShowRecentChatsInSidebar">إظهار الدردشات الأخيرة في الشريط الجانبي</string>
+    <string name="DeleteRecentChatMessage">هل أنت متأكد من أنك تريد إزالة %1$s من الدردشات الأخيرة؟</string>
+    <string name="DeleteRecentChatTooltip">تم حذف هذه المحادثة</string>
+    <string name="RemoveFavouriteStickersInRecentStickers">إزالة الملصقات المفضلة في الملصقات الأخيرة</string>
 </resources>

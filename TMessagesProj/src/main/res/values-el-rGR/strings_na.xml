@@ -188,6 +188,7 @@
     <string name="DisableShortcutTagActions">Απενεργοποιήστε Τις Αγαπημένες Ενέργειες Ετικέτας Συντόμευσης</string>
     <string name="DisablePhoneSharePrompt">Απενεργοποίηση ερώτησης κοινής χρήσης αριθμού τηλεφώνου επαφής</string>
     <string name="DisablePremiumSendTodo">Απενεργοποίηση λίστας todo Premium αποστολής</string>
+    <string name="DisableEmptyStarButton">Απενεργοποίηση αντίδρασης γρήγορων Αστέρων καναλιών</string>
     <string name="ColoredAdminTitle">Χρωματιστός Τίτλος Διαχειριστή</string>
     <string name="GhostMode">Λειτουργία Φάντασμα</string>
     <string name="GhostElements">Επιλογές Φάντασμα</string>
@@ -204,4 +205,8 @@
     <string name="PlayerDecoderPerferHW">Προτίμηση αποκωδικοποιητών συσκευής</string>
     <string name="ShowUserIconsInChatsList">Εμφάνιση εικονιδίων χρηστών στη λίστα συνομιλιών</string>
     <string name="TelegramWiki">Wiki Telegram</string>
+    <string name="ShowRecentChatsInSidebar">Εμφάνιση πρόσφατων συνομιλιών στην πλευρική μπάρα</string>
+    <string name="DeleteRecentChatMessage">Είστε βέβαιοι ότι θέλετε να αφαιρέσετε το %1$s από τις πρόσφατες συνομιλίες?</string>
+    <string name="DeleteRecentChatTooltip">Διαγραφή αυτής της συνομιλίας</string>
+    <string name="RemoveFavouriteStickersInRecentStickers">Αφαίρεση αγαπημένων αυτοκόλλητων στα πρόσφατα αυτοκόλλητα</string>
 </resources>

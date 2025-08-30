@@ -188,6 +188,7 @@
     <string name="DisableShortcutTagActions">Disable Favorite Shortcut Tag Actions</string>
     <string name="DisablePhoneSharePrompt">Disable contact phone number sharing prompt</string>
     <string name="DisablePremiumSendTodo">Disable Premium send todo list</string>
+    <string name="DisableEmptyStarButton">Disable channel fast Stars reaction</string>
     <string name="ColoredAdminTitle">Colored Admin Title</string>
     <string name="GhostMode">Ghost Mode</string>
     <string name="GhostElements">Ghost Options</string>
@@ -204,4 +205,8 @@
     <string name="PlayerDecoderPerferHW">Prefer device decoders</string>
     <string name="ShowUserIconsInChatsList">Show user icons in chats list</string>
     <string name="TelegramWiki">Telegram Wiki</string>
+    <string name="ShowRecentChatsInSidebar">Show Recent Chats in Sidebar</string>
+    <string name="DeleteRecentChatMessage">Are you sure you want to remove %1$s from recent chats?</string>
+    <string name="DeleteRecentChatTooltip">Deleted this chat</string>
+    <string name="RemoveFavouriteStickersInRecentStickers">Remove favourite stickers in recent stickers</string>
 </resources>

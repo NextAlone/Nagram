@@ -188,6 +188,7 @@
     <string name="DisableShortcutTagActions">Deaktivér Favorit Genvejshandlinger</string>
     <string name="DisablePhoneSharePrompt">Deaktivér prompt til deling af kontakttelefonnummer</string>
     <string name="DisablePremiumSendTodo">Deaktivér Premium send todo liste</string>
+    <string name="DisableEmptyStarButton">Deaktivér hurtig reaktion fra kanalerne</string>
     <string name="ColoredAdminTitle">Farvet Admin Titel</string>
     <string name="GhostMode">Spøgelsestilstand</string>
     <string name="GhostElements">Ghost Indstillinger</string>
@@ -204,4 +205,8 @@
     <string name="PlayerDecoderPerferHW">Foretræk enhedsafkodere</string>
     <string name="ShowUserIconsInChatsList">Vis brugerikoner i chatlisten</string>
     <string name="TelegramWiki">Telegram Wiki</string>
+    <string name="ShowRecentChatsInSidebar">Vis seneste chat i sidebjælke</string>
+    <string name="DeleteRecentChatMessage">Er du sikker på, at du vil fjerne %1$s fra de seneste chater?</string>
+    <string name="DeleteRecentChatTooltip">Slettede denne chat</string>
+    <string name="RemoveFavouriteStickersInRecentStickers">Fjern favoritklistermærker i de seneste klistermærker</string>
 </resources>
