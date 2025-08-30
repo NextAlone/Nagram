@@ -65,7 +65,7 @@ public class SpoilerEffect2 {
             instance = new HashMap<>();
         }
         SpoilerEffect2 e = instance.get(type);
-        if (e == null) {
+        if (e == null || e.destroyed) {
             final int sz = getSize();
             if (rootView == null) {
                 return null;
@@ -92,6 +92,7 @@ public class SpoilerEffect2 {
         if (instance == null) return;
         for (SpoilerEffect2 s : instance.values()) {
             if (s.thread != null) s.thread.pause(pause);
+            if (pause) s.destroyed = true;
         }
     }
 
