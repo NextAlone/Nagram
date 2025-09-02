@@ -6631,10 +6631,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         float nameX = this.nameX;
         float onlineX = this.onlineX;
+        float idX = this.idX;
 
         if (diff < 1f) {
             nameX = AndroidUtilities.lerp(-dpf2(42 + 21), nameX, diff);
             onlineX = AndroidUtilities.lerp(-dpf2(42 + 21), onlineX, diff);
+            idX = AndroidUtilities.lerp(-dpf2(42 + 21), idX, diff);
         }
         final float kx = dpf2(8);
         final float ky = isPulledDown ? dpf2(8) : dpf2(-24);
@@ -6654,9 +6656,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         final float onlineTextViewY = (1 - value) * (1 - value) * onlineY + 2 * (1 - value) * value * onlineTextViewCy + value * value * onlineTextViewYEnd;
 
         final float idTextViewXEnd = AndroidUtilities.dpf2(16f) - idTextView.getLeft();
-        final float idTextViewYEnd = newTop + extraHeight - AndroidUtilities.dpf2(3f) - idTextView.getBottom();
+        final float idTextViewYEnd = newTop + extraHeight - getActionsExtraHeight() - AndroidUtilities.dpf2(3f) - idTextView.getBottom();
         final float idTextViewCx = kx + idX + (idTextViewXEnd - idX) / 2f;
-        final float idTextViewCy = kx + idY + (idTextViewYEnd - idY) / 2f;
+        final float idTextViewCy = ky + idY + (idTextViewYEnd - idY) / 2f;
         final float idTextViewX = (1 - value) * (1 - value) * idX + 2 * (1 - value) * value * idTextViewCx + value * value * idTextViewXEnd;
         final float idTextViewY = (1 - value) * (1 - value) * idY + 2 * (1 - value) * value * idTextViewCy + value * value * idTextViewYEnd;
 
@@ -6667,13 +6669,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         final float minNameY = (float) Math.floor(minEndNameY) + AndroidUtilities.dp(1.3f);
         final float minOnlineY = minNameY + AndroidUtilities.dpf2(22.7f);
+        final float minIdY = minOnlineY + AndroidUtilities.dpf2(10);
 
         nameTextView[1].setTranslationX(nameTextViewX);
         nameTextView[1].setTranslationY(Math.max(minNameY, nameTextViewY));
         onlineTextView[1].setTranslationX(getOnlineTextViewTranslationXWithOffsets(onlineTextViewX));
         onlineTextView[1].setTranslationY(getOnlineTextViewTranslationYWithOffsets(Math.max(minOnlineY, onlineTextViewY)));
         idTextView.setTranslationX(idTextViewX);
-        idTextView.setTranslationY(idTextViewY);
+        idTextView.setTranslationY(Math.max(minIdY, idTextViewY));
         mediaCounterTextView.setTranslationX(onlineTextViewX);
         mediaCounterTextView.setTranslationY(Math.max(minOnlineY, onlineTextViewY));
 
@@ -8912,7 +8915,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         mediaCounterTextView.setTranslationY(onlineTextView[1].getTranslationY());
                         updateCollectibleHint();
                         idTextView.setTranslationX(AndroidUtilities.dpf2(16f) - onlineTextView[1].getLeft());
-                        idTextView.setTranslationY(newTop + h - AndroidUtilities.dpf2(3f) - idTextView.getBottom() + additionalTranslationY);
+                        idTextView.setTranslationY(newTop + h - getActionsExtraHeight() + dpf2(5) - idTextView.getBottom() + additionalTranslationY);
                     }
                 } else {
                     if (isPulledDown) {
