@@ -693,16 +693,16 @@ public class ProfileActionsView extends View {
                     insertIfNotAvailable(out, KEY_STREAM, KEY_VOICE_CHAT);
                 }
                 insertIfAvailable(out, KEY_NOTIFICATION);
-                if (!join) {
-                    insertIfAvailable(out, KEY_DISCUSS);
-                    insertIfNotAvailable2(out, KEY_GIFT, KEY_DISCUSS, KEY_STORY);
-                }
-                insertIfNotAvailable(out, KEY_SHARE, KEY_STORY);
+//                insertIfNotAvailable(out, KEY_SHARE, KEY_STORY);
                 if (join) {
                     out.add(getOrCreate(KEY_REPORT));
                 } else {
                     insertIfAvailable(out, KEY_STORY);
                     insertIfNotAvailable(out, KEY_LEAVE, KEY_STORY);
+                }
+                if (true /* !join */) {
+                    insertIfAvailable(out, KEY_DISCUSS);
+                    insertIfNotAvailable2(out, KEY_GIFT, KEY_DISCUSS, KEY_STORY);
                 }
                 break;
             case MODE_GROUP:
