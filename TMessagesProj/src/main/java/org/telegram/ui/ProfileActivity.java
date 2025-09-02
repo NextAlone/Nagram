@@ -14507,6 +14507,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 case VIEW_TYPE_MUSIC:
                     final ProfileMusicView cell = (ProfileMusicView) holder.itemView;
                     musicView = cell;
+                    if (avatarsBlurView != null) {
+                        avatarsBlurView.setMusicView(musicView);
+                    }
                     if (userInfo != null && userInfo.saved_music != null) {
                         cell.setMusicDocument(userInfo.saved_music);
                     }
