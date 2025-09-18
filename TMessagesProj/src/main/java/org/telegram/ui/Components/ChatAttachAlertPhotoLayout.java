@@ -2348,7 +2348,20 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 if (noCameraPermissions = (fragment.getParentActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
                     if (request) {
                         try {
-                            parentAlert.baseFragment.getParentActivity().requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE}, 17);
+                            ArrayList<String> permissons = new ArrayList<>();
+                            permissons.add(Manifest.permission.CAMERA);
+                            if (Build.VERSION.SDK_INT >= 33) {
+                                if (fragment.getParentActivity().checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+                                    permissons.add(Manifest.permission.READ_MEDIA_IMAGES);
+                                    permissons.add(Manifest.permission.READ_MEDIA_VIDEO);
+                                }
+                            } else if (Build.VERSION.SDK_INT >= 23) {
+                                if (fragment.getParentActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                    permissons.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+                                }
+                            }
+                            String[] items = permissons.toArray(new String[0]);
+                            parentAlert.baseFragment.getParentActivity().requestPermissions(items, 17);
                         } catch (Exception ignore) {
 
                         }
