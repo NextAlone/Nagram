@@ -824,6 +824,13 @@ object NaConfig {
             15,
             false
         )
+    val disableGifts =
+        addConfig(
+            "DisableGifts",
+            disableTrendingFlags,
+            16,
+            false
+    )
     val disableRepeatInChannel =
         addConfig(
             "DisableRepeatInChannel",

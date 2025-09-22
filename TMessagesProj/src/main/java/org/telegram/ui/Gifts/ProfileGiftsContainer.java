@@ -118,6 +118,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Objects;
 
+import xyz.nextalone.nagram.NaConfig;
+
 public class ProfileGiftsContainer extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
 
     private final BaseFragment fragment;
@@ -1513,10 +1515,10 @@ public class ProfileGiftsContainer extends FrameLayout implements NotificationCe
         }
         if (dialogId >= 0) {
             final TLRPC.UserFull userFull = MessagesController.getInstance(currentAccount).getUserFull(dialogId);
-            return userFull != null ? userFull.stargifts_count : 0;
+            return userFull != null && !NaConfig.INSTANCE.getDisableGifts().Bool() ? userFull.stargifts_count : 0;
         } else {
             final TLRPC.ChatFull chatFull = MessagesController.getInstance(currentAccount).getChatFull(-dialogId);
-            return chatFull != null ? chatFull.stargifts_count : 0;
+            return chatFull != null && !NaConfig.INSTANCE.getDisableGifts().Bool() ? chatFull.stargifts_count : 0;
         }
     }
 
