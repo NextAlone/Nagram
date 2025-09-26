@@ -181,13 +181,17 @@ public class DrawerLayoutContainer extends FrameLayout {
         drawerListView.setVisibility(GONE);
         drawerLayout.setFitsSystemWindows(true);
         if (Build.VERSION.SDK_INT >= 35 && drawerListView instanceof RecyclerView) {
-            ((RecyclerView) drawerListView).setClipToPadding(false);
+//            ((RecyclerView) drawerListView).setClipToPadding(false);
+            drawerLayout.setClipToPadding(false);
             drawerLayout.setOnApplyWindowInsetsListener(new OnApplyWindowInsetsListener() {
                 @NonNull
                 @Override
                 public WindowInsets onApplyWindowInsets(@NonNull View v, @NonNull WindowInsets insets) {
                     Insets r = insets.getInsets(WindowInsetsCompat.Type.displayCutout() | WindowInsetsCompat.Type.systemBars());
-                    drawerListView.setPadding(0, 0, 0, r.bottom);
+                    FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) drawerLayout.getLayoutParams();
+                    layoutParams.bottomMargin = r.bottom;
+                    drawerLayout.setLayoutParams(layoutParams);
+//                    drawerListView.setPadding(0, 0, 0, r.bottom);
                     drawerLayout.requestLayout();
                     return WindowInsets.CONSUMED;
                 }
