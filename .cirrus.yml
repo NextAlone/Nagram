@@ -55,6 +55,7 @@ release_build_task:
     HELPER_BOT_TARGET: ENCRYPTED[!e97d467b7a98fa9f48d571fefceb210fa9d825efc9a5f0318389ce1e71bb78bc1336865f1badc78524a740939e505a57!]
   build_script:
     - cd /tmp/cirrus-ci-build
+    - sed -i "s/2000000000000/$(date +%s%3N)/g" gradle.properties
     - ./gradlew TMessagesProj:assembleRelease
   binaries_artifacts:
     path: "TMessagesProj/build/outputs/apk/release/*"

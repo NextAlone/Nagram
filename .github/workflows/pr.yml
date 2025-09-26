@@ -200,7 +200,7 @@ jobs:
           key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-arm64-v8a
       - name: Configure Gradle
         run: |
-          sed -i -e "s/16384/6144/g" gradle.properties
+          sed -i "s/2000000000000/$(date +%s%3N)/g" gradle.properties
           echo "sdk.dir=${ANDROID_HOME}" >> local.properties
       - name: Gradle cache
         uses: actions/cache@v4

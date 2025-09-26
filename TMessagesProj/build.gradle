@@ -166,6 +166,7 @@ android {
         }
 
         buildConfigField "String", "BUILD_VERSION_STRING", "\"" + verName + "\""
+        buildConfigField "long", "BUILD_TIMESTAMP", APP_BUILD_TIMESTAMP + ""
         buildConfigField "String", "OFFICIAL_VERSION", "\"" + officialVer + "\""
         buildConfigField "int", "OFFICIAL_VERSION_CODE", officialCode + ""
         buildConfigField "int", "APP_ID", appId
