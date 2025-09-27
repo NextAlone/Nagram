@@ -211,6 +211,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
             add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisablePhoneSharePrompt()));
             add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisablePremiumSendTodo()));
             add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableEmptyStarButton()));
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableGifts()));
         }}));
     }));
     private final AbstractConfigCell disableSwipeToNextRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableSwipeToNext));
