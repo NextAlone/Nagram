@@ -1508,12 +1508,15 @@ public class ProfileGiftsContainer extends FrameLayout implements NotificationCe
         } else {
             if (page.list != null && page.list.totalCount > 0) return page.list.totalCount;
         }
+        if (NaConfig.INSTANCE.getDisableGifts().Bool()) {
+            return 0;
+        }
         if (dialogId >= 0) {
             final TLRPC.UserFull userFull = MessagesController.getInstance(currentAccount).getUserFull(dialogId);
-            return userFull != null && !NaConfig.INSTANCE.getDisableGifts().Bool() ? userFull.stargifts_count : 0;
+            return userFull != null ? userFull.stargifts_count : 0;
         } else {
             final TLRPC.ChatFull chatFull = MessagesController.getInstance(currentAccount).getChatFull(-dialogId);
-            return chatFull != null && !NaConfig.INSTANCE.getDisableGifts().Bool() ? chatFull.stargifts_count : 0;
+            return chatFull != null ? chatFull.stargifts_count : 0;
         }
     }
 
