@@ -343,6 +343,7 @@ public class SharedConfig {
 
     public static TLRPC.TL_help_appUpdate pendingAppUpdate;
     public static int pendingAppUpdateBuildVersion;
+    public static long pendingAppUpdateBuildTimestamp;
     public static long lastUpdateCheckTime;
 
     public static boolean hasEmailLogin;
@@ -520,6 +521,7 @@ public class SharedConfig {
                         String str = Base64.encodeToString(data.toByteArray(), Base64.DEFAULT);
                         editor.putString("appUpdate", str);
                         editor.putInt("appUpdateBuild", pendingAppUpdateBuildVersion);
+                        editor.putLong("appUpdateBuildTimestamp", pendingAppUpdateBuildTimestamp);
                         data.cleanup();
                     } catch (Exception ignore) {
 
@@ -607,6 +609,7 @@ public class SharedConfig {
                 String update = preferences.getString("appUpdate", null);
                 if (update != null) {
                     pendingAppUpdateBuildVersion = preferences.getInt("appUpdateBuild", buildVersion());
+                    pendingAppUpdateBuildTimestamp = preferences.getLong("appUpdateBuildTimestamp", BuildConfig.BUILD_TIMESTAMP);
                     byte[] arr = Base64.decode(update, Base64.DEFAULT);
                     if (arr != null) {
                         SerializedData data = new SerializedData(arr);
@@ -631,7 +634,7 @@ public class SharedConfig {
                     if (updateVersionString == null) {
                         updateVersionString = BuildVars.BUILD_VERSION_STRING;
                     }
-                    if (pendingAppUpdateBuildVersion != updateVersion || pendingAppUpdate.version == null || updateVersionString.compareTo(pendingAppUpdate.version) >= 0 || BuildVars.DEBUG_PRIVATE_VERSION) {
+                    if (pendingAppUpdateBuildVersion != updateVersion || pendingAppUpdateBuildTimestamp != BuildConfig.BUILD_TIMESTAMP || pendingAppUpdate.version == null || updateVersionString.compareTo(pendingAppUpdate.version) >= 0 || BuildVars.DEBUG_PRIVATE_VERSION) {
                         pendingAppUpdate = null;
                         AndroidUtilities.runOnUIThread(SharedConfig::saveConfig);
                     }
@@ -864,7 +867,7 @@ public class SharedConfig {
             FileLog.e(e);
             currentVersion = buildVersion();
         }
-        return pendingAppUpdateBuildVersion == currentVersion;
+        return pendingAppUpdateBuildVersion == currentVersion || pendingAppUpdateBuildTimestamp == BuildConfig.BUILD_TIMESTAMP;
     }
 
     public static boolean setNewAppVersionAvailable(TLRPC.TL_help_appUpdate update) {
@@ -888,6 +891,7 @@ public class SharedConfig {
         //}
         pendingAppUpdate = update;
         pendingAppUpdateBuildVersion = versionCode;
+        pendingAppUpdateBuildTimestamp = BuildConfig.BUILD_TIMESTAMP;
         saveConfig();
         return true;
     }

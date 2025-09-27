@@ -4141,19 +4141,14 @@ public class MediaDataController extends BaseController {
     public final static int MEDIA_TYPES_COUNT = 8;
     public final static int MEDIA_STORIES = 8;
 
-
     public void loadMedia(long dialogId, int count, int max_id, int min_id, int type, long topicId, int fromCache, int classGuid, int requestIndex, ReactionsLayoutInBubble.VisibleReaction tag, String query) {
-        loadMedia(dialogId, count, max_id, min_id, type, topicId, fromCache, classGuid, requestIndex, tag, query, false);
-    }
-
-    public void loadMedia(long dialogId, int count, int max_id, int min_id, int type, long topicId, int fromCache, int classGuid, int requestIndex, ReactionsLayoutInBubble.VisibleReaction tag, String query, boolean skipPhotos) {
         boolean isChannel = DialogObject.isChatDialog(dialogId) && ChatObject.isChannel(-dialogId, currentAccount);
 
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("load media did " + dialogId + " count = " + count + " max_id " + max_id + " type = " + type + " cache = " + fromCache + " classGuid = " + classGuid);
         }
         if (fromCache != 0 && TextUtils.isEmpty(query) || DialogObject.isEncryptedDialog(dialogId)) {
-            loadMediaDatabase(dialogId, count, max_id, min_id, type, topicId, tag, classGuid, isChannel, fromCache, requestIndex, skipPhotos);
+            loadMediaDatabase(dialogId, count, max_id, min_id, type, topicId, tag, classGuid, isChannel, fromCache, requestIndex);
         } else {
             TLRPC.TL_messages_search req = new TLRPC.TL_messages_search();
             req.limit = count;
@@ -4169,9 +4164,6 @@ public class MediaDataController extends BaseController {
             }
 
             if (type == MEDIA_PHOTOVIDEO) {
-                req.filter = skipPhotos
-                        ? new TLRPC.TL_inputMessagesFilterVideo()
-                        : new TLRPC.TL_inputMessagesFilterPhotoVideo();
                 req.filter = new TLRPC.TL_inputMessagesFilterPhotoVideo();
             } else if (type == MEDIA_PHOTOS_ONLY) {
                 req.filter = new TLRPC.TL_inputMessagesFilterPhotos();
@@ -4217,7 +4209,7 @@ public class MediaDataController extends BaseController {
                         topReached = res.messages.size() == 0;
                     }
 
-                    processLoadedMedia(res, dialogId, count, max_id, min_id, type, topicId, 0, classGuid, isChannel, topReached, requestIndex, skipPhotos);
+                    processLoadedMedia(res, dialogId, count, max_id, min_id, type, topicId, 0, classGuid, isChannel, topReached, requestIndex);
                 }
             });
             getConnectionsManager().bindRequestToGuid(reqId, classGuid);
@@ -4461,7 +4453,7 @@ public class MediaDataController extends BaseController {
         }
     }
 
-    private void processLoadedMedia(TLRPC.messages_Messages res, long dialogId, int count, int max_id, int min_id, int type, long topicId, int fromCache, int classGuid, boolean isChannel, boolean topReached, int requestIndex, boolean skipPhotos) {
+    private void processLoadedMedia(TLRPC.messages_Messages res, long dialogId, int count, int max_id, int min_id, int type, long topicId, int fromCache, int classGuid, boolean isChannel, boolean topReached, int requestIndex) {
         if (BuildVars.LOGS_ENABLED) {
             int messagesCount = 0;
             if (res != null && res.messages != null) {
@@ -4473,7 +4465,7 @@ public class MediaDataController extends BaseController {
             if (fromCache == 2) {
                 return;
             }
-            loadMedia(dialogId, count, max_id, min_id, type, topicId, 0, classGuid, requestIndex, null, null, skipPhotos);
+            loadMedia(dialogId, count, max_id, min_id, type, topicId, 0, classGuid, requestIndex, null, null);
         } else {
             if (fromCache == 0) {
                 ImageLoader.saveMessagesThumbs(res.messages);
@@ -4490,11 +4482,6 @@ public class MediaDataController extends BaseController {
                 ArrayList<MessageObject> objects = new ArrayList<>();
                 for (int a = 0; a < res.messages.size(); a++) {
                     TLRPC.Message message = res.messages.get(a);
-
-                    if (skipPhotos && message.media != null && message.media.photo != null) {
-                        continue;
-                    }
-
                     MessageObject messageObject = new MessageObject(currentAccount, message, usersDict, true, false);
                     messageObject.createStrippedThumb();
                     objects.add(messageObject);
@@ -4604,7 +4591,7 @@ public class MediaDataController extends BaseController {
         });
     }
 
-    private void loadMediaDatabase(long uid, int count, int max_id, int min_id, int type, long topicId, ReactionsLayoutInBubble.VisibleReaction tag, int classGuid, boolean isChannel, int fromCache, int requestIndex, boolean skipPhotos) {
+    private void loadMediaDatabase(long uid, int count, int max_id, int min_id, int type, long topicId, ReactionsLayoutInBubble.VisibleReaction tag, int classGuid, boolean isChannel, int fromCache, int requestIndex) {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -4793,10 +4780,6 @@ public class MediaDataController extends BaseController {
                                 message.random_id = cursor.longValue(2);
                             }
 
-                            if (skipPhotos && message.media != null && message.media.photo != null) {
-                                continue;
-                            }
-
                             if (message.grouped_id != 0 && groupsToLoad != null) {
                                 groupsToLoad.add(message.grouped_id);
                             }
@@ -4866,7 +4849,7 @@ public class MediaDataController extends BaseController {
                 } finally {
                     Runnable task = this;
                     AndroidUtilities.runOnUIThread(() -> getMessagesStorage().completeTaskForGuid(task, classGuid));
-                    processLoadedMedia(res, uid, count, max_id, min_id, type, topicId, fromCache, classGuid, isChannel, topReached, requestIndex, skipPhotos);
+                    processLoadedMedia(res, uid, count, max_id, min_id, type, topicId, fromCache, classGuid, isChannel, topReached, requestIndex);
                 }
             }
         };

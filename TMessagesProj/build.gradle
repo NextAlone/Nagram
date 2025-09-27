@@ -7,7 +7,7 @@ apply plugin: "io.sentry.android.gradle"
 apply plugin: "io.objectbox"
 
 def verName = APP_VERSION_NAME
-def verCode = 1219
+def verCode = 1220
 
 
 def officialVer = APP_VERSION_NAME
@@ -77,10 +77,55 @@ def nativeTarget = System.getenv("NATIVE_TARGET")
 if (nativeTarget == null) nativeTarget = ""
 
 android {
-    compileSdkVersion 34
-    ndkVersion rootProject.ext.ndkVersion
+    compileSdkVersion 35
+    buildToolsVersion '35.0.0'
+    ndkVersion rootProject.ext.ndkVersion // 26.3.11579264
 
     defaultConfig.applicationId = "xyz.nextalone.nagram"
+
+    sourceSets {
+
+        main {
+            assets.srcDirs = ["src/main/assets"]
+        }
+
+        debug {
+            java {
+                srcDirs "src/main/java"
+            }
+            jniLibs {
+                srcDir "src/main/libs"
+            }
+        }
+
+        release {
+            java {
+                srcDirs "src/main/java"
+            }
+            jniLibs {
+                srcDir "src/main/libs"
+            }
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "jni/CMakeLists.txt"
+        }
+    }
+
+    lintOptions {
+        disable 'MissingTranslation'
+        disable 'ExtraTranslation'
+        disable 'BlockedPrivateApi'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+
+        coreLibraryDesugaringEnabled true
+    }
 
     splits {
 
@@ -105,7 +150,7 @@ android {
     defaultConfig {
         minSdkVersion 21
         //noinspection ExpiredTargetSdkVersion,OldTargetApi
-        targetSdkVersion 34
+        targetSdkVersion 35
 
         versionName verName
         versionCode verCode
@@ -121,6 +166,7 @@ android {
         }
 
         buildConfigField "String", "BUILD_VERSION_STRING", "\"" + verName + "\""
+        buildConfigField "long", "BUILD_TIMESTAMP", APP_BUILD_TIMESTAMP + ""
         buildConfigField "String", "OFFICIAL_VERSION", "\"" + officialVer + "\""
         buildConfigField "int", "OFFICIAL_VERSION_CODE", officialCode + ""
         buildConfigField "int", "APP_ID", appId
@@ -128,7 +174,7 @@ android {
 
         externalNativeBuild {
             cmake {
-                arguments "-DANDROID_STL=c++_static", "-DANDROID_PLATFORM=android-21"
+                arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-21' //, '-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON'
             }
         }
     }
@@ -137,20 +183,6 @@ android {
         language {
             enableSplit = false
         }
-    }
-
-    externalNativeBuild {
-        cmake {
-            path "jni/CMakeLists.txt"
-        }
-    }
-
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
-
-        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
@@ -193,32 +225,25 @@ android {
         }
     }
 
-    sourceSets {
+    flavorDimensions "version"
 
-        main {
-            assets.srcDirs = ["src/main/assets"]
+    packagingOptions {
+        jniLibs {
+            excludes += ['/fabric/**', '/META-INF/native-image/**']
+            useLegacyPackaging true
+        }
+        resources {
+            excludes += ['/fabric/**', '/META-INF/*.version', '/META-INF/*.kotlin_module', '/META-INF/native-image/**', '/builddef.lst', '/*.txt', '/DebugProbesKt.bin', '/okhttp3/internal/publicsuffix/NOTICE']
         }
 
-        debug {
-            java {
-                srcDirs "src/main/java"
-            }
-            jniLibs {
-                srcDir "src/main/libs"
-            }
-        }
-
-        release {
-            java {
-                srcDirs "src/main/java"
-            }
-            jniLibs {
-                srcDir "src/main/libs"
-            }
-        }
+        def lib = "libtmessages.*.so"
+        pickFirst "lib/armeabi-v7a/$lib"
+        pickFirst "lib/arm64-v8a/$lib"
     }
 
-    flavorDimensions "version"
+    buildFeatures {
+        buildConfig true
+    }
 
     tasks.configureEach { task ->
         if (((task.name.endsWith("Ndk") || task.name.startsWith("generateJsonModel") || task.name.startsWith("externalNativeBuild"))) && !task.name.contains("Debug")) {
@@ -232,6 +257,18 @@ android {
         }
     }
 
+    tasks.configureEach { task ->
+        if (task.name.startsWith("uploadCrashlyticsMappingFile")) {
+            task.enabled = false
+        } else if (task.name.contains("Crashlytics") && task.name.contains("NoGcm")) {
+            task.enabled = false
+        } else if (task.name.endsWith("GoogleServices") && task.name.contains("NoGcm")) {
+            task.enabled = false
+        } else if (task.name.contains("buildCMakeDebug") && nagram_build_args != null && nagram_build_args.contains("skip_buildCMakeDebug")) {
+            task.enabled = false
+        }
+    }
+
     applicationVariants.configureEach { variant ->
         variant.outputs.configureEach { output ->
             String gramName = "Nagram"
@@ -242,6 +279,7 @@ android {
         }
     }
 
+    namespace "org.telegram.messenger"
 }
 
 def fcmVersion = "23.4.1"
@@ -282,8 +320,8 @@ dependencies {
     implementation 'com.stripe:stripe-android:2.0.2'
     // add for auto translate
     implementation 'com.google.mlkit:language-id:17.0.6'
-    implementation 'com.android.billingclient:billing:6.0.1'
-    implementation "com.google.code.gson:gson:2.11.0"
+    implementation 'com.android.billingclient:billing:7.1.1'
+    implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'com.google.guava:guava:31.1-android'
     implementation 'com.google.android.play:integrity:1.3.0'
     implementation 'com.google.android.gms:play-services-safetynet:18.0.1'
@@ -305,7 +343,7 @@ dependencies {
     testImplementation "androidx.test:core:1.5.0"
     testImplementation "org.robolectric:robolectric:4.5.1"
 
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.2.0"
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
 }
 dependencies {
     implementation "androidx.browser:browser:1.8.0"
@@ -340,44 +378,6 @@ dependencies {
 
 apply plugin: "com.google.gms.google-services"
 apply plugin: "com.google.firebase.crashlytics"
-
-android {
-
-
-    packagingOptions {
-        jniLibs {
-            excludes += ['/fabric/**', '/META-INF/native-image/**']
-            useLegacyPackaging true
-        }
-        resources {
-            excludes += ['/fabric/**', '/META-INF/*.version', '/META-INF/*.kotlin_module', '/META-INF/native-image/**', '/builddef.lst', '/*.txt', '/DebugProbesKt.bin', '/okhttp3/internal/publicsuffix/NOTICE']
-        }
-
-        def lib = "libtmessages.*.so"
-        pickFirst "lib/armeabi-v7a/$lib"
-        pickFirst "lib/arm64-v8a/$lib"
-    }
-    namespace "org.telegram.messenger"
-    lint {
-        disable 'MissingTranslation', 'ExtraTranslation', 'BlockedPrivateApi'
-    }
-    buildFeatures {
-        buildConfig true
-    }
-
-    tasks.configureEach { task ->
-        if (task.name.startsWith("uploadCrashlyticsMappingFile")) {
-            task.enabled = false
-        } else if (task.name.contains("Crashlytics") && task.name.contains("NoGcm")) {
-            task.enabled = false
-        } else if (task.name.endsWith("GoogleServices") && task.name.contains("NoGcm")) {
-            task.enabled = false
-        } else if (task.name.contains("buildCMakeDebug") && nagram_build_args != null && nagram_build_args.contains("skip_buildCMakeDebug")) {
-            task.enabled = false
-        }
-    }
-
-}
 
 sentry {
     // Disables or enables debug log output, e.g. for for sentry-cli.

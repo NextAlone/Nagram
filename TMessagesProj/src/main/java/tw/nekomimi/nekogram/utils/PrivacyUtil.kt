@@ -50,7 +50,7 @@ object PrivacyUtil {
 
         ConnectionsManager.getInstance(account).sendRequest(TL_account.getPrivacy().apply {
 
-            key = TLRPC.TL_inputPrivacyKeyPhoneNumber()
+            key = TLRPC.InputPrivacyKey.inputPrivacyKeyPhoneNumber
 
         }, { response, _ ->
 
@@ -86,7 +86,7 @@ object PrivacyUtil {
 
         ConnectionsManager.getInstance(account).sendRequest(TL_account.getPrivacy().apply {
 
-            key = TLRPC.TL_inputPrivacyKeyAddedByPhone()
+            key = TLRPC.InputPrivacyKey.inputPrivacyKeyAddedByPhone
 
         }, { response, _ ->
 
@@ -122,7 +122,7 @@ object PrivacyUtil {
 
         ConnectionsManager.getInstance(account).sendRequest(TL_account.getPrivacy().apply {
 
-            key = TLRPC.TL_inputPrivacyKeyPhoneP2P()
+            key = TLRPC.InputPrivacyKey.inputPrivacyKeyPhoneP2P
 
         }, { response, _ ->
 
@@ -189,9 +189,9 @@ object PrivacyUtil {
 
                 key = when (type) {
 
-                    0 -> TLRPC.TL_inputPrivacyKeyPhoneNumber()
-                    1 -> TLRPC.TL_inputPrivacyKeyAddedByPhone()
-                    else -> TLRPC.TL_inputPrivacyKeyPhoneP2P()
+                    0 -> TLRPC.InputPrivacyKey.inputPrivacyKeyPhoneNumber
+                    1 -> TLRPC.InputPrivacyKey.inputPrivacyKeyAddedByPhone
+                    else -> TLRPC.InputPrivacyKey.inputPrivacyKeyPhoneP2P
 
                 }
 

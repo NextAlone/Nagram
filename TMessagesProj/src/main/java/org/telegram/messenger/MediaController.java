@@ -973,6 +973,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     private float currentAspectRatioFrameLayoutRatio;
     private boolean currentAspectRatioFrameLayoutReady;
 
+    public MessagesController.SavedMusicList currentSavedMusicList;
     private ArrayList<MessageObject> playlist = new ArrayList<>();
     private HashMap<Integer, MessageObject> playlistMap = new HashMap<>();
     private ArrayList<MessageObject> shuffledPlaylist = new ArrayList<>();
@@ -1434,6 +1435,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 NotificationCenter.getInstance(a).addObserver(MediaController.this, NotificationCenter.removeAllMessagesFromDialog);
                 NotificationCenter.getInstance(a).addObserver(MediaController.this, NotificationCenter.musicDidLoad);
                 NotificationCenter.getInstance(a).addObserver(MediaController.this, NotificationCenter.mediaDidLoad);
+                NotificationCenter.getInstance(a).addObserver(MediaController.this, NotificationCenter.musicListLoaded);
                 NotificationCenter.getGlobalInstance().addObserver(MediaController.this, NotificationCenter.playerDidStartPlaying);
             }
         });
@@ -1623,6 +1625,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     }
 
     private void clearPlaylist() {
+        currentSavedMusicList = null;
         playlist.clear();
         playlistMap.clear();
         shuffledPlaylist.clear();
@@ -1902,6 +1905,33 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     wasPlayingAudioBeforePause = true;
                 }
                 pauseMessage(message);
+            }
+        } else if (id == NotificationCenter.musicListLoaded) {
+            if (currentSavedMusicList != null && args[0] == currentSavedMusicList) {
+                int addedCount = currentSavedMusicList.list.size() - playlist.size();
+                playlist.clear();
+                playlist.addAll(currentSavedMusicList.list);
+                sortPlaylist();
+                if (SharedConfig.shuffleMusic) {
+                    buildShuffledPlayList();
+                } else if (playingMessageObject != null) {
+                    int newIndex = playlist.indexOf(playingMessageObject);
+                    if (newIndex >= 0) {
+                        currentPlaylistNum = newIndex;
+                    } else {
+                        if (currentPlaylistNum < 0 || currentPlaylistNum >= playlist.size()) {
+                            currentPlaylistNum = 0;
+                        }
+                        if (playlist.size() == 0) {
+                            cleanup();
+                        } else {
+                            playMessage(playlist.get(0));
+                        }
+                    }
+                }
+                if (addedCount != 0 && playingMessageObject != null) {
+                    NotificationCenter.getInstance(playingMessageObject.currentAccount).postNotificationName(NotificationCenter.moreMusicDidLoad, addedCount);
+                }
             }
         }
     }
@@ -2628,8 +2658,11 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         ArrayList<MessageObject> all = new ArrayList<>(playlist);
         shuffledPlaylist.clear();
 
-        MessageObject messageObject = playlist.get(currentPlaylistNum);
-        all.remove(currentPlaylistNum);
+        MessageObject messageObject = null;
+        if (currentPlaylistNum >= 0 && currentPlaylistNum < playlist.size()) {
+            messageObject = playlist.get(currentPlaylistNum);
+            all.remove(currentPlaylistNum);
+        }
 
         int count = all.size();
         for (int a = 0; a < count; a++) {
@@ -2637,11 +2670,17 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             shuffledPlaylist.add(all.get(index));
             all.remove(index);
         }
-        shuffledPlaylist.add(messageObject);
-        currentPlaylistNum = shuffledPlaylist.size() - 1;
+        if (messageObject != null) {
+            shuffledPlaylist.add(messageObject);
+            currentPlaylistNum = shuffledPlaylist.size() - 1;
+        }
     }
 
     public void loadMoreMusic() {
+        if (currentSavedMusicList != null) {
+            currentSavedMusicList.load();
+            return;
+        }
         if (loadingPlaylist || playingMessageObject == null || playingMessageObject.scheduled || DialogObject.isEncryptedDialog(playingMessageObject.getDialogId()) || playlistClassGuid == 0) {
             return;
         }
@@ -2857,6 +2896,9 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
         if (byStop && (SharedConfig.repeatMode == 2 || SharedConfig.repeatMode == 1 && currentPlayList.size() == 1) && !forceLoopCurrentPlaylist) {
             cleanupPlayer(false, false);
+            if (currentPlaylistNum < 0 || currentPlaylistNum >= currentPlayList.size()) {
+                return;
+            }
             MessageObject messageObject = currentPlayList.get(currentPlaylistNum);
             messageObject.audioProgress = 0;
             messageObject.audioProgressSec = 0;
@@ -4304,6 +4346,10 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
     public ArrayList<MessageObject> getPlaylist() {
         return playlist;
+    }
+
+    public MessagesController.SavedMusicList getMusicList() {
+        return currentSavedMusicList;
     }
 
     public boolean isPlayingMessage(MessageObject messageObject) {
@@ -6447,6 +6493,9 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
         final ArrayList<MessageObject> currentPlayList = SharedConfig.shuffleMusic ? shuffledPlaylist : playlist;
         if (currentPlayList == null) {
+            return false;
+        }
+        if (currentPlaylistNum < 0 || currentPlaylistNum >= currentPlayList.size()) {
             return false;
         }
 

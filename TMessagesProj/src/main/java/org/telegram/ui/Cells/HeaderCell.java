@@ -16,8 +16,6 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,7 +24,6 @@ import androidx.core.view.ViewCompat;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AnimatedTextView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -82,6 +79,8 @@ public class HeaderCell extends LinearLayout {
         this.bottomMargin = bottomMargin;
         this.animated = animated;
 
+        setOrientation(LinearLayout.VERTICAL);
+
         if (animated) {
             animatedTextView = new AnimatedTextView(getContext());
             animatedTextView.setTextSize(AndroidUtilities.dp(15));
@@ -106,8 +105,9 @@ public class HeaderCell extends LinearLayout {
         textView2 = new TextView(getContext());
         textView2.setTextSize(13);
         textView2.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
+        textView2.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
         textView2.setTextColor(Theme.getColor(Theme.key_dialogTextBlack));
-        addView(textView2, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, 0, 4, 0, bottomMargin));
+        addView(textView2, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, padding, 4, padding, bottomMargin));
 
         if (!text2) textView2.setVisibility(View.GONE);
 
@@ -122,12 +122,6 @@ public class HeaderCell extends LinearLayout {
             textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         }
         return this;
-    }
-
-    @Override
-    public void setLayoutParams(ViewGroup.LayoutParams params) {
-        params.width = -1;
-        super.setLayoutParams(params);
     }
 
     public void setHeight(int value) {
