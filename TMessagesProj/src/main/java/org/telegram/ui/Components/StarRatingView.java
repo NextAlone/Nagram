@@ -155,6 +155,27 @@ public class StarRatingView extends View {
 
             backgroundColor = fillingTextColor = getTabsViewBackgroundColor(null, color2, color1, parentExpanded);
             backgroundTextColor = fillingColor = ColorUtils.blendARGB(textColor, Theme.getColor(Theme.key_actionBarDefaultTitle), parentExpanded);
+
+            int nonTransparentBackgroundColor = backgroundColor | 0xFF000000;
+            int nonTransparentBackgroundTextColor = backgroundTextColor | 0xFF000000;
+
+            double contract = ColorUtils.calculateContrast(nonTransparentBackgroundTextColor, nonTransparentBackgroundColor);
+            if (contract < 3) {
+                int backgroundRed = (backgroundColor >> 16) & 0xFF;
+                int backgroundGreen = (backgroundColor >> 8) & 0xFF;
+                int backgroundBlue = backgroundColor & 0xFF;
+
+                int contrastRed = 255 - backgroundRed;
+                int contrastGreen = 255 - backgroundGreen;
+                int contrastBlue = 255 - backgroundBlue;
+
+                int newFillingColor = Color.rgb(
+                    Math.min(255, backgroundRed + (int)(contrastRed * 0.8)),
+                    Math.min(255, backgroundGreen + (int)(contrastGreen * 0.8)),
+                    Math.min(255, backgroundBlue + (int)(contrastBlue * 0.8))
+                );
+                backgroundTextColor = fillingColor = newFillingColor;
+            }
             fillingTextColor |= 0xFF000000;
         }
 
