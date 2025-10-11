@@ -209,4 +209,5 @@
     <string name="DeleteRecentChatMessage">Jste si jisti, že chcete odstranit %1$s z nedávných chatů?</string>
     <string name="DeleteRecentChatTooltip">Smazán tento chat</string>
     <string name="RemoveFavouriteStickersInRecentStickers">Odstranit oblíbené samolepky v nedávných nálepkách</string>
+    <string name="DisableGifts">Zakázat záložku Gifts v profilu</string>
 </resources>

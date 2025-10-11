@@ -209,4 +209,5 @@
     <string name="DeleteRecentChatMessage">最近のチャットから %1$s を削除してもよろしいですか？</string>
     <string name="DeleteRecentChatTooltip">このチャットを削除しました</string>
     <string name="RemoveFavouriteStickersInRecentStickers">最近使ったステッカーのお気に入りステッカーを削除</string>
+    <string name="DisableGifts">プロフィールのギフトタブを無効にする</string>
 </resources>

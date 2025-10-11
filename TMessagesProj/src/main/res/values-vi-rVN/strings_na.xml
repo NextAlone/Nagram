@@ -209,4 +209,5 @@
     <string name="DeleteRecentChatMessage">Are you sure you want to remove %1$s from recent chats?</string>
     <string name="DeleteRecentChatTooltip">Deleted this chat</string>
     <string name="RemoveFavouriteStickersInRecentStickers">Remove favourite stickers in recent stickers</string>
+    <string name="DisableGifts">Disable Gifts Tab in Profile</string>
 </resources>

@@ -209,4 +209,5 @@
     <string name="DeleteRecentChatMessage">Oletko varma, että haluat poistaa %1$s viimeaikaisista keskusteluista?</string>
     <string name="DeleteRecentChatTooltip">Poistettu tämä keskustelu</string>
     <string name="RemoveFavouriteStickersInRecentStickers">Poista suosikkitarrat viimeaikaisista tarroista</string>
+    <string name="DisableGifts">Poista lahjat välilehti käytöstä profiilissa</string>
 </resources>

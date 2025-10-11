@@ -209,4 +209,5 @@
     <string name="DeleteRecentChatMessage">Weet je zeker dat je %1$s wilt verwijderen uit recente chats?</string>
     <string name="DeleteRecentChatTooltip">Verwijderde deze chat</string>
     <string name="RemoveFavouriteStickersInRecentStickers">Verwijder favoriete stickers in recente stickers</string>
+    <string name="DisableGifts">Schakel Tabblad Geschenken uit in Profiel</string>
 </resources>

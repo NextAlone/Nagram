@@ -209,4 +209,5 @@
     <string name="DeleteRecentChatMessage">Tem certeza que deseja remover %1$s das conversas recentes?</string>
     <string name="DeleteRecentChatTooltip">Excluído este bate-papo</string>
     <string name="RemoveFavouriteStickersInRecentStickers">Remova adesivos favoritos em adesivos recentes</string>
+    <string name="DisableGifts">Desabilitar aba de Presentes no Perfil</string>
 </resources>

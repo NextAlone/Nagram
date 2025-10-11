@@ -209,4 +209,5 @@
     <string name="DeleteRecentChatMessage">Êtes-vous sûr de vouloir supprimer %1$s des discussions récentes ?</string>
     <string name="DeleteRecentChatTooltip">Ce chat a été supprimé</string>
     <string name="RemoveFavouriteStickersInRecentStickers">Supprimer les autocollants favoris dans les autocollants récents</string>
+    <string name="DisableGifts">Désactiver l\'onglet Cadeaux dans le Profil</string>
 </resources>

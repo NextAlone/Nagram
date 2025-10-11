@@ -209,4 +209,5 @@
     <string name="DeleteRecentChatMessage">Вы уверены, что хотите удалить %1$s из недавних чатов?</string>
     <string name="DeleteRecentChatTooltip">Удален этот чат</string>
     <string name="RemoveFavouriteStickersInRecentStickers">Удалить избранные стикеры в недавних стикерах</string>
+    <string name="DisableGifts">Отключить вкладку \"Подарки\" в профиле</string>
 </resources>

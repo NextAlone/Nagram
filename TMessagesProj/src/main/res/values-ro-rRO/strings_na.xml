@@ -209,4 +209,5 @@
     <string name="DeleteRecentChatMessage">Ești sigur că vrei să ștergi %1$s din conversațiile recente?</string>
     <string name="DeleteRecentChatTooltip">S-a șters această conversație</string>
     <string name="RemoveFavouriteStickersInRecentStickers">Elimină autocolantele preferate în autocolantele recente</string>
+    <string name="DisableGifts">Dezactivează fila cadouri în profil</string>
 </resources>

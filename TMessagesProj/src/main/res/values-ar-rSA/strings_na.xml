@@ -209,4 +209,5 @@
     <string name="DeleteRecentChatMessage">هل أنت متأكد من أنك تريد إزالة %1$s من الدردشات الأخيرة؟</string>
     <string name="DeleteRecentChatTooltip">تم حذف هذه المحادثة</string>
     <string name="RemoveFavouriteStickersInRecentStickers">إزالة الملصقات المفضلة في الملصقات الأخيرة</string>
+    <string name="DisableGifts">تعطيل تبويب الهدايا في الملف الشخصي</string>
 </resources>

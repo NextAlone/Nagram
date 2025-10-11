@@ -209,4 +209,5 @@
     <string name="DeleteRecentChatMessage">Är du säker på att du vill ta bort %1$s från senaste chattar?</string>
     <string name="DeleteRecentChatTooltip">Tog bort denna chatt</string>
     <string name="RemoveFavouriteStickersInRecentStickers">Ta bort favoritklistermärken i senaste klistermärken</string>
+    <string name="DisableGifts">Inaktivera fliken gåvor i profilen</string>
 </resources>

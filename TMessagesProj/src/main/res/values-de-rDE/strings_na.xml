@@ -209,4 +209,5 @@
     <string name="DeleteRecentChatMessage">Bist du sicher, dass du %1$s aus den letzten Chats entfernen möchtest?</string>
     <string name="DeleteRecentChatTooltip">Chat gelöscht</string>
     <string name="RemoveFavouriteStickersInRecentStickers">Favoritenaufkleber in neueren Aufklebern entfernen</string>
+    <string name="DisableGifts">Gifts Tab im Profil deaktivieren</string>
 </resources>
