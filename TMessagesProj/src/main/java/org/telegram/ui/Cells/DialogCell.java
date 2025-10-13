@@ -5889,6 +5889,10 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
         return currentDialogFolderId;
     }
 
+    public int getFolderId() {
+        return folderId;
+    }
+
     public boolean isDialogFolder() {
         return currentDialogFolderId > 0;
     }
