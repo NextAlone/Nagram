@@ -497,7 +497,7 @@ sentry {
         // as Gradle will resolve it to the latest version.
         //
         // Defaults to the latest published Sentry version.
-        sentryVersion = '7.8.0'
+        sentryVersion = '8.23.0'
     }
 
     // Disables or enables dependencies metadata reporting for Sentry.
