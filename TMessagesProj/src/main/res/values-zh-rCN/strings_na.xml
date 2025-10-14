@@ -210,4 +210,5 @@
     <string name="DeleteRecentChatTooltip">已从最近对话中移除此对话</string>
     <string name="RemoveFavouriteStickersInRecentStickers">从最近使用中移除已收藏的贴纸</string>
     <string name="DisableGifts">禁用个人页面中的礼物</string>
+    <string name="ShowVoteCountBeforeVote">无需投票显示投票结果</string>
 </resources>

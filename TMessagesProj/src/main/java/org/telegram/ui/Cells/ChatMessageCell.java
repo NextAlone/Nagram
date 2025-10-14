@@ -8532,7 +8532,18 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                                 }
                             }
                         }
-                        CharSequence answerText = new SpannableStringBuilder(pollAnswer.text.text);
+
+                        boolean forceShowVote = NaConfig.INSTANCE.getShowVoteCountBeforeVote().Bool() && !(pollVoted || pollClosed);
+                        String text = pollAnswer.text.text;
+
+                        if (forceShowVote && media.results.total_voters > 0 && a < media.results.results.size()) {
+                            TLRPC.TL_pollAnswerVoters ans = media.results.results.get(a);
+                            int voters = ans.voters;
+                            float percent = voters * 100f / media.results.total_voters;
+                            text = String.format("%s - (%d - %d%%)", pollAnswer.text.text, voters, Math.round(percent));
+                        }
+
+                        CharSequence answerText = new SpannableStringBuilder(text);
                         answerText = Emoji.replaceEmoji(answerText, Theme.chat_audioTitlePaint.getFontMetricsInt(), false);
                         if (pollAnswer.text.entities != null) {
                             answerText = MessageObject.replaceAnimatedEmoji(answerText, pollAnswer.text.entities, Theme.chat_audioPerformerPaint.getFontMetricsInt(), true);

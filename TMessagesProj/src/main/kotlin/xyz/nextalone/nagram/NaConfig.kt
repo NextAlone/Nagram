@@ -908,6 +908,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             true
         )
+    val showVoteCountBeforeVote =
+        addConfig(
+            "ShowVoteCountBeforeVote",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,
