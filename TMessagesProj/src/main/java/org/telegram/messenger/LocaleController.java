@@ -1339,7 +1339,7 @@ public class LocaleController {
                 saveOtherLanguages();
             }
         }
-        loadPrebuiltLocaleFile(localeInfo);
+        new Thread(() -> loadPrebuiltLocaleFile(localeInfo), "LocaleFileLoader").start();
         boolean isLoadingRemote = false;
         if ((localeInfo.isRemote() || localeInfo.isUnofficial()) && (force || !pathToFile.exists() || hasBase && !pathToBaseFile.exists())) {
             if (BuildVars.LOGS_ENABLED) {
