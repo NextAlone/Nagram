@@ -399,6 +399,10 @@ public class ConnectionsManager extends BaseController {
         };
     }
 
+    public <T extends TLObject> int sendRequestTyped(TLMethod<T> method, Utilities.Callback2<T, TLRPC.TL_error> completionBlock) {
+        return sendRequestTyped(method, null, completionBlock);
+    }
+
     public <T extends TLObject> int sendRequestTyped(TLMethod<T> method, Executor executor, Utilities.Callback2<T, TLRPC.TL_error> completionBlock) {
         return sendRequest(method, (res, err) -> {
             //noinspection unchecked

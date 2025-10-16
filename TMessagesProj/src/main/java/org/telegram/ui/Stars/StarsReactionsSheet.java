@@ -51,6 +51,7 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.ImageReceiver;
+import org.telegram.messenger.LiteMode;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
@@ -1313,6 +1314,10 @@ public class StarsReactionsSheet extends BottomSheet implements NotificationCent
 
         private long lastTime;
         public void process() {
+            if (!LiteMode.isEnabled(LiteMode.FLAG_PARTICLES)) {
+                return;
+            }
+
             final long now = System.currentTimeMillis();
             final float deltaTime = Math.min(lastTime - now, 16) / 1000f * speed;
             for (int i = 0; i < Math.min(visibleCount, particles.size()); ++i) {
@@ -1334,6 +1339,10 @@ public class StarsReactionsSheet extends BottomSheet implements NotificationCent
         }
 
         public void draw(Canvas canvas, int color, float alpha) {
+            if (!LiteMode.isEnabled(LiteMode.FLAG_PARTICLES)) {
+                return;
+            }
+
             final int particlesCount = Math.min(visibleCount, particles.size());
             final boolean useBatchRender = batchParticlesBuffer != null;
             if (useBatchRender) {

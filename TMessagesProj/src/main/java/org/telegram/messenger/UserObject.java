@@ -200,7 +200,7 @@ public class UserObject {
         replace = PeerColorHelper.getInstance().getColorId(user);
         if (replace != null) return replace;
 
-        if (user.color != null && (user.color.flags & 1) != 0) return user.color.color;
+        if (user.color instanceof TLRPC.TL_peerColor && (user.color.flags & 1) != 0) return user.color.color;
         return (int) (user.id % 7);
     }
 
@@ -210,7 +210,7 @@ public class UserObject {
         replace = PeerColorHelper.getInstance().getEmojiId(user);
         if (replace != null) return replace;
 
-        if (user != null && user.color != null && (user.color.flags & 2) != 0) return user.color.background_emoji_id;
+        if (user != null && user.color instanceof TLRPC.TL_peerColor && (user.color.flags & 2) != 0) return user.color.background_emoji_id;
         return 0;
     }
 
@@ -222,7 +222,7 @@ public class UserObject {
         replace = PeerColorHelper.getInstance().getProfileColorId(user);
         if (replace != null) return replace;
 
-        if (user.profile_color != null && (user.profile_color.flags & 1) != 0) return user.profile_color.color;
+        if (user.profile_color instanceof TLRPC.TL_peerColor && (user.profile_color.flags & 1) != 0) return user.profile_color.color;
         return -1;
     }
 
@@ -236,6 +236,11 @@ public class UserObject {
             return ((TLRPC.TL_emojiStatusCollectible) user.emoji_status).pattern_document_id;
         }
         if (user != null && user.profile_color != null && (user.profile_color.flags & 2) != 0) return user.profile_color.background_emoji_id;
+        return 0;
+    }
+
+    public static long getOnlyProfileEmojiId(TLRPC.User user) {
+        if (user != null && user.profile_color instanceof TLRPC.TL_peerColor && (user.profile_color.flags & 2) != 0) return user.profile_color.background_emoji_id;
         return 0;
     }
 
@@ -364,4 +369,7 @@ public class UserObject {
         );
     }
 
+    public static boolean isBotForum(TLRPC.User user) {
+        return user != null && user.bot_forum_view;
+    }
 }

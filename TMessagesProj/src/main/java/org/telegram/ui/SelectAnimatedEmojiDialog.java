@@ -678,9 +678,6 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
                     }
                     int position = 0;
                     int f = 1 + (isGiftsVisible() ? 1 : 0);
-                    if (!isGiftsVisible()) {
-                        index--;
-                    }
                     if (isGiftsVisible() && index == 1) {
                         position = giftsSectionRow;
                     } else if (type == TYPE_AVATAR_CONSTRUCTOR && index == 0) {
@@ -968,7 +965,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
         RecyclerListView.OnItemLongClickListenerExtended onItemLongClick = new RecyclerListView.OnItemLongClickListenerExtended() {
             @Override
             public boolean onItemClick(View view, int position, float x, float y) {
-                if (type == TYPE_TAGS || type == TYPE_STICKER_SET_EMOJI) return false;
+                if (type == TYPE_TAGS || type == TYPE_STICKER_SET_EMOJI || !isLongPressEnabled) return false;
                 if (view instanceof ImageViewEmoji && (type == TYPE_REACTIONS || type == TYPE_EXPANDABLE_REACTIONS)) {
                     incrementHintUse();
                     if (!NekoConfig.disableVibration.Bool()) {
@@ -1227,6 +1224,11 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
         });
         builder.show();
         setDim(1f, true);
+    }
+
+    private boolean isLongPressEnabled = true;
+    public void setLongPressEnabled(boolean isEnabled) {
+        this.isLongPressEnabled = isEnabled;
     }
 
     private ValueAnimator dimAnimator;
@@ -5729,7 +5731,7 @@ public class SelectAnimatedEmojiDialog extends FrameLayout implements Notificati
         }
         bigReactionImageReceiver.setParentView(view);
         if (selectedReactionView != null) {
-            if (pressedProgress != 1f && !cancelPressed) {
+            if (pressedProgress != 1f && !cancelPressed && isLongPressEnabled) {
                 pressedProgress += 16f / 1500f;
                 if (pressedProgress >= 1f) {
                     pressedProgress = 1f;
