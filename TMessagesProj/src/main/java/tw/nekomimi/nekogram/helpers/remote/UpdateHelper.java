@@ -16,8 +16,6 @@ import java.util.Map;
 import tw.nekomimi.nekogram.NekoXConfig;
 
 public class UpdateHelper extends BaseRemoteHelper {
-    public static final String UPDATE_TAG = NekoXConfig.autoUpdateReleaseChannel == 2 ? "updatetest" : "updatev2";
-
     private static final class InstanceHolder {
         private static final UpdateHelper instance = new UpdateHelper();
     }
@@ -35,7 +33,7 @@ public class UpdateHelper extends BaseRemoteHelper {
 
     @Override
     protected String getTag() {
-        return UPDATE_TAG;
+        return NekoXConfig.autoUpdateReleaseChannel >= 2 ? "updatetest" : "updatev2";
     }
 
     @SuppressWarnings("ConstantConditions")

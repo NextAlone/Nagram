@@ -255,7 +255,6 @@ import java.util.zip.ZipInputStream;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import kotlin.text.StringsKt;
-import tw.nekomimi.nekogram.InternalUpdater;
 import tw.nekomimi.nekogram.helpers.SettingsHelper;
 import tw.nekomimi.nekogram.helpers.remote.ChatExtraButtonsHelper;
 import tw.nekomimi.nekogram.helpers.remote.EmojiHelper;
@@ -6257,7 +6256,13 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             });
             return;
         }
-        if (!force && Math.abs(System.currentTimeMillis() - SharedConfig.lastUpdateCheckTime) < /* MessagesController.getInstance(0).updateCheckDelay */ 30 * 60 * 1000) {
+        long updateCheckDelay;
+        if (NekoXConfig.autoUpdateReleaseChannel == 3) {
+            updateCheckDelay = 30 * 60 * 1000;
+        } else {
+            updateCheckDelay = 24 * 60 * 60 * 1000;
+        }
+        if (!force && Math.abs(System.currentTimeMillis() - SharedConfig.lastUpdateCheckTime) < /* MessagesController.getInstance(0).updateCheckDelay */ updateCheckDelay) {
             return;
         }
         final TLRPC.TL_help_getAppUpdate req = new TLRPC.TL_help_getAppUpdate();
