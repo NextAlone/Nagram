@@ -676,6 +676,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val enablePanguOnEditing =
+        addConfig(
+            "EnablePanguOnEditing",
+            ConfigItem.configTypeBool,
+            false
+        )
     val enablePanguOnReceiving =
         addConfig(
             "EnablePanguOnReceiving",
