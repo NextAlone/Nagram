@@ -58,6 +58,11 @@ public class VideoEncodingService extends Service implements NotificationCenter.
         return null;
     }
 
+    @Override
+    public void onTimeout(int startId, int fgsType) {
+        super.onTimeout(startId, fgsType);
+        stopSelf();
+    }
 
     public void onDestroy() {
         super.onDestroy();
