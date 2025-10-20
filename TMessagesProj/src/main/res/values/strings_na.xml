@@ -163,6 +163,7 @@
     <string name="Pangu" translatable="false">Pangu</string>
     <string name="EnablePanguOnReceiving">Enable Pangu on receiving</string>
     <string name="EnablePanguOnSending">Enable Pangu on sending</string>
+    <string name="EnablePanguOnEditing">Enable Pangu on editing</string>
     <string name="PanguInfo">Paranoid text spacing for good readability, to automatically insert whitespace between CJK (Chinese, Japanese, Korean), half-width English, digit and symbol characters.</string>
     <string name="SendWithPangu">Send with Pangu</string>
     <string name="SendWithoutPangu">Send without Pangu</string>

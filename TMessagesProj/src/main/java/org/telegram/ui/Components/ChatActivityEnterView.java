@@ -7987,7 +7987,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             editingMessageObject.editingMessageEntities = withMarkdown ? entities : new ArrayList<>();
 
             // Apply Pangu formatting for message editing if enabled
-            if (!editingMessageObject.isForwarded() && NaConfig.INSTANCE.getEnablePanguOnSending().Bool()) {
+            if (!editingMessageObject.isForwarded() && NaConfig.INSTANCE.getEnablePanguOnEditing().Bool()) {
                 var pair = StringUtils.spacingText(editingMessageObject.editingMessage.toString(), editingMessageObject.editingMessageEntities);
                 editingMessageObject.editingMessage = pair.getFirst();
                 editingMessageObject.editingMessageEntities = pair.getSecond();
