@@ -7983,7 +7983,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
         }
         ArrayList<TLRPC.MessageEntity> entities = MediaDataController.getInstance(currentAccount).getEntities(message, supportsSendingNewEntities());
         if (!TextUtils.equals(message[0], editingMessageObject.messageText) || entities != null && !entities.isEmpty() || !editingMessageObject.messageOwner.entities.isEmpty() || editingMessageObject.messageOwner.media instanceof TLRPC.TL_messageMediaWebPage) {
-            editingMessageObject.editingMessage = withMarkdown ? message[0].toString() : messageEditText.getText().toString();
+            editingMessageObject.editingMessage = withMarkdown ? message[0] : messageEditText.getText().toString();
             editingMessageObject.editingMessageEntities = withMarkdown ? entities : new ArrayList<>();
 
             // Apply Pangu formatting for message editing if enabled
