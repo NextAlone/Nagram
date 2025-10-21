@@ -60,9 +60,12 @@ public class BackButtonMenuRecent {
         if (context == null || fragmentView == null) {
             return;
         }
-        List<Long> dialogs = getRecentDialogs(fragment.getCurrentAccount()).subList(0, MAX_RECENT_DIALOGS);
+        List<Long> dialogs = getRecentDialogs(fragment.getCurrentAccount());
         if (dialogs.isEmpty()) {
             return;
+        }
+        if (dialogs.size() > MAX_RECENT_DIALOGS) {
+            dialogs = dialogs.subList(0, MAX_RECENT_DIALOGS);
         }
 
         ActionBarPopupWindow.ActionBarPopupWindowLayout layout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(context) {
