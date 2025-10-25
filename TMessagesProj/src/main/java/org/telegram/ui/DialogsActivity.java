@@ -3797,7 +3797,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             }
                         } else {
                             rightSlidingDialogContainer.finishPreview();
-                            searchViewPager.updateTabs();
+                            if (searchViewPager != null) {
+                                searchViewPager.updateTabs();
+                            }
                             return;
                         }
                     } else if (filterTabsView != null && filterTabsView.isEditing()) {
@@ -6873,6 +6875,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     animatedUpdateItems = false;
                 }
                 canShowFilterTabsView = true;
+                boolean updateCurrentTab = filterTabsView.isEmpty() || NekoConfig.hideAllTab.Bool();
                 updateFilterTabsVisibility(animated);
                 int id = filterTabsView.getCurrentTabId();
                 int stableId = filterTabsView.getCurrentTabStableId();
@@ -6883,7 +6886,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
                 filterTabsView.removeTabs();
                 for (int a = 0, N = filters.size(); a < N; a++) {
-                    MessagesController.DialogFilter dialogFilter = filters.get(a);
                     if (filters.get(a).isDefault()) {
                         if (filterTabsView.showAllChatsTab)
                             filterTabsView.addTab(a, 0, LocaleController.getString(R.string.FilterAllChats), "\uD83D\uDCAC", null, false, true, filters.get(a).locked);
@@ -6892,7 +6894,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         filterTabsView.addTab(a, filter.localId, filter.name, filter.emoticon == null ? "\uD83D\uDCAC" : filter.emoticon, filter.entities, filter.title_noanimate, false, filters.get(a).locked);
                     }
                 }
-                boolean updateCurrentTab = NekoConfig.hideAllTab.Bool();
                 if (NekoConfig.hideAllTab.Bool() && stableId <= 0) {
                     id = filterTabsView.getFirstTabId();
                     updateCurrentTab = true;
