@@ -212,4 +212,5 @@
     <string name="RemoveFavouriteStickersInRecentStickers">从最近使用中移除已收藏的贴纸</string>
     <string name="DisableGifts">禁用个人页面中的礼物</string>
     <string name="ShowVoteCountBeforeVote">无需投票显示投票结果</string>
+    <string name="HideInstantCamera">隐藏相机即时预览</string>
 </resources>
