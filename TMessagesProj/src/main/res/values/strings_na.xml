@@ -213,4 +213,5 @@
     <string name="RemoveFavouriteStickersInRecentStickers">Remove favourite stickers in recent stickers</string>
     <string name="DisableGifts">Disable Gifts Tab in Profile</string>
     <string name="ShowVoteCountBeforeVote">Show vote count before voting</string>
+    <string name="HideInstantCamera">Hide instant camera</string>
 </resources>

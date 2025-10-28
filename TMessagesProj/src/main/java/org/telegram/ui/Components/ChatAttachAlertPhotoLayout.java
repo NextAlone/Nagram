@@ -126,6 +126,7 @@ import androidx.core.graphics.ColorUtils;
 
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoConfig;
+import xyz.nextalone.nagram.NaConfig;
 
 public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayout implements NotificationCenter.NotificationCenterDelegate {
 
@@ -724,9 +725,10 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         return arrayList;
     }
 
-    public ChatAttachAlertPhotoLayout(ChatAttachAlert alert, Context context, boolean forceDarkTheme, boolean needCamera, Theme.ResourcesProvider resourcesProvider) {
+    public ChatAttachAlertPhotoLayout(ChatAttachAlert alert, Context context, boolean forceDarkTheme, boolean needCamera_, Theme.ResourcesProvider resourcesProvider) {
         super(alert, context, resourcesProvider);
         this.forceDarkTheme = forceDarkTheme;
+        boolean needCamera = needCamera_ && !NaConfig.INSTANCE.getHideInstantCamera().Bool();
         this.needCamera = needCamera;
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.albumsDidLoad);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.cameraInitied);

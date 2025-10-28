@@ -920,6 +920,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val hideInstantCamera =
+        addConfig(
+            "HideInstantCamera",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,
