@@ -15101,6 +15101,10 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void deleteParticipantFromChat(long chatId, TLRPC.User user, TLRPC.Chat chat, boolean forceDelete, boolean revoke) {
+        deleteParticipantFromChat(chatId, user, chat, forceDelete, revoke, 0);
+    }
+
+    public void deleteParticipantFromChat(long chatId, TLRPC.User user, TLRPC.Chat chat, boolean forceDelete, boolean revoke, int until_date) {
         if (user == null && chat == null) {
             return;
         }
@@ -15141,6 +15145,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 req.banned_rights.send_polls = true;
                 req.banned_rights.invite_users = true;
                 req.banned_rights.change_info = true;
+                req.banned_rights.until_date = until_date;
                 request = req;
             }
         } else {

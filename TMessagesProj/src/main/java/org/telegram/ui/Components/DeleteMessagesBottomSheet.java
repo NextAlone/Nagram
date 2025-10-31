@@ -366,15 +366,6 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
         if (defaultBannedRights.send_inline) {
             bannedRights.send_inline = true;
         }
-        if (defaultBannedRights.send_gifs) {
-            bannedRights.send_gifs = true;
-        }
-        if (defaultBannedRights.send_games) {
-            bannedRights.send_games = true;
-        }
-        if (defaultBannedRights.send_inline) {
-            bannedRights.send_inline = true;
-        }
         if (defaultBannedRights.embed_links) {
             bannedRights.embed_links = true;
         }
@@ -762,9 +753,6 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
                             bannedRights.send_videos = !enabled;
                             bannedRights.send_stickers = !enabled;
                             bannedRights.send_gifs = !enabled;
-                            bannedRights.send_games = !enabled;
-                            bannedRights.send_inline = !enabled;
-                            bannedRights.send_gifs = !enabled;
                             bannedRights.send_inline = !enabled;
                             bannedRights.send_games = !enabled;
                             bannedRights.send_audios = !enabled;
@@ -1148,9 +1136,9 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
                 }
             } else {
                 if (participant instanceof TLRPC.User) {
-                    MessagesController.getInstance(currentAccount).deleteParticipantFromChat(chatId, (TLRPC.User) participant, null, false, false);
+                    MessagesController.getInstance(currentAccount).deleteParticipantFromChat(chatId, (TLRPC.User) participant, null, false, false, bannedRights.until_date);
                 } else if (participant instanceof TLRPC.Chat) {
-                    MessagesController.getInstance(currentAccount).deleteParticipantFromChat(chatId, null, (TLRPC.Chat) participant, false, false);
+                    MessagesController.getInstance(currentAccount).deleteParticipantFromChat(chatId, null, (TLRPC.Chat) participant, false, false, bannedRights.until_date);
                 }
             }
         });
@@ -1216,7 +1204,7 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
                                 TLRPC.TL_chatBannedRights rights = bannedRightsOr(bannedRights, participantsBannedRights.get(i));
                                 MessagesController.getInstance(currentAccount).setParticipantBannedRole(chat_.id, userFinal, null, rights, false, getBaseFragment());
                             } else {
-                                MessagesController.getInstance(currentAccount).deleteParticipantFromChat(chat_.id, userFinal, null, false, false);
+                                MessagesController.getInstance(currentAccount).deleteParticipantFromChat(chat_.id, userFinal, null, false, false, bannedRights.until_date);
                             }
                         }
                         if (canDelete && needDelete) {
