@@ -106,6 +106,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import tw.nekomimi.nekogram.DialogConfig;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.ui.PinnedStickerHelper;
 import xyz.nextalone.nagram.NaConfig;
@@ -4984,6 +4985,7 @@ public class MediaDataController extends BaseController {
                 }
             }
         }
+        DialogConfig.modifyShareTarget(hintsFinal);
         boolean recreateShortcuts = Build.VERSION.SDK_INT >= 30;
         Utilities.globalQueue.postRunnable(() -> {
             try {

@@ -9,33 +9,30 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PopupSwipeBackLayout;
 
 import tw.nekomimi.nekogram.DialogConfig;
 
-public class AutoTranslatePopupWrapper {
+public class ShareTargetPopupWrapper {
 
     public ActionBarPopupWindow.ActionBarPopupWindowLayout windowLayout;
     private final long dialogId;
-    private final long topicId;
     private final ActionBarMenuSubItem defaultItem;
     private final ActionBarMenuSubItem enableItem;
     private final ActionBarMenuSubItem disableItem;
-    private final boolean supportLanguageDetector = LanguageDetector.hasSupport();
 
-    public AutoTranslatePopupWrapper(BaseFragment fragment, PopupSwipeBackLayout swipeBackLayout, long dialogId, long topicId, Theme.ResourcesProvider resourcesProvider) {
+    public ShareTargetPopupWrapper(BaseFragment fragment, PopupSwipeBackLayout swipeBackLayout, long dialogId, Theme.ResourcesProvider resourcesProvider) {
         Context context = fragment.getParentActivity();
         windowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(context, 0, resourcesProvider);
         windowLayout.setFitItems(true);
         this.dialogId = dialogId;
-        this.topicId = topicId;
 
         if (swipeBackLayout != null) {
             var backItem = ActionBarMenuItem.addItem(windowLayout, R.drawable.msg_arrow_back, LocaleController.getString(R.string.Back), false, resourcesProvider);
@@ -45,38 +42,29 @@ public class AutoTranslatePopupWrapper {
         defaultItem = ActionBarMenuItem.addItem(windowLayout, 0, LocaleController.getString(R.string.Default), true, resourcesProvider);
 
         defaultItem.setOnClickListener(view -> {
-            if (!supportLanguageDetector) {
-                BulletinFactory.of(fragment).createErrorBulletinSubtitle(LocaleController.getString(R.string.BrokenMLKit), LocaleController.getString(R.string.BrokenMLKitDetail), null).show();
-                return;
-            }
-            DialogConfig.removeAutoTranslateConfig(dialogId, topicId);
+            DialogConfig.removeShareTargetConfig(dialogId);
+            SharedConfig.rebuildDirectShare();
             updateItems();
         });
-        defaultItem.setAlpha(supportLanguageDetector ? 1.0f : 0.5f);
+        defaultItem.setAlpha(1.0f);
 
         enableItem = ActionBarMenuItem.addItem(windowLayout, 0, LocaleController.getString(R.string.Enable), true, resourcesProvider);
-        enableItem.setChecked(DialogConfig.hasAutoTranslateConfig(dialogId, topicId) && DialogConfig.isAutoTranslateEnable(dialogId, topicId));
+        enableItem.setChecked(DialogConfig.hasCustomForumTabsConfig(dialogId) && DialogConfig.isCustomForumTabsEnable(dialogId));
         enableItem.setOnClickListener(view -> {
-            if (!supportLanguageDetector) {
-                BulletinFactory.of(fragment).createErrorBulletinSubtitle(LocaleController.getString(R.string.BrokenMLKit), LocaleController.getString(R.string.BrokenMLKitDetail), null).show();
-                return;
-            }
-            DialogConfig.setAutoTranslateEnable(dialogId, topicId, true);
+            DialogConfig.setShareTargetEnable(dialogId, true);
+            SharedConfig.rebuildDirectShare();
             updateItems();
         });
-        enableItem.setAlpha(supportLanguageDetector ? 1.0f : 0.5f);
+        enableItem.setAlpha(1.0f);
 
         disableItem = ActionBarMenuItem.addItem(windowLayout, 0, LocaleController.getString(R.string.Disable), true, resourcesProvider);
-        disableItem.setChecked(DialogConfig.hasAutoTranslateConfig(dialogId, topicId) && !DialogConfig.isAutoTranslateEnable(dialogId, topicId));
+        disableItem.setChecked(DialogConfig.hasCustomForumTabsConfig(dialogId) && !DialogConfig.isCustomForumTabsEnable(dialogId));
         disableItem.setOnClickListener(view -> {
-            if (!supportLanguageDetector) {
-                BulletinFactory.of(fragment).createErrorBulletinSubtitle(LocaleController.getString(R.string.BrokenMLKit), LocaleController.getString(R.string.BrokenMLKitDetail), null).show();
-                return;
-            }
-            DialogConfig.setAutoTranslateEnable(dialogId, topicId, false);
+            DialogConfig.setShareTargetEnable(dialogId, false);
+            SharedConfig.rebuildDirectShare();
             updateItems();
         });
-        disableItem.setAlpha(supportLanguageDetector ? 1.0f : 0.5f);
+        disableItem.setAlpha(1.0f);
         updateItems();
 
         View gap = new FrameLayout(context);
@@ -89,13 +77,13 @@ public class AutoTranslatePopupWrapper {
         textView.setPadding(AndroidUtilities.dp(13), AndroidUtilities.dp(8), AndroidUtilities.dp(13), AndroidUtilities.dp(8));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
         textView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem, resourcesProvider));
-        textView.setText(LocaleController.getString(R.string.AutoTranslateAbout));
+        textView.setText(LocaleController.getString(R.string.DirectShareInfo));
         windowLayout.addView(textView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
     }
 
     public void updateItems() {
-        defaultItem.setChecked(!DialogConfig.hasAutoTranslateConfig(dialogId, topicId));
-        enableItem.setChecked(DialogConfig.hasAutoTranslateConfig(dialogId, topicId) && DialogConfig.isAutoTranslateEnable(dialogId, topicId));
-        disableItem.setChecked(DialogConfig.hasAutoTranslateConfig(dialogId, topicId) && !DialogConfig.isAutoTranslateEnable(dialogId, topicId));
+        defaultItem.setChecked(!DialogConfig.hasShareTargetConfig(dialogId));
+        enableItem.setChecked(DialogConfig.hasShareTargetConfig(dialogId) && DialogConfig.isShareTargetEnable(dialogId));
+        disableItem.setChecked(DialogConfig.hasShareTargetConfig(dialogId) && !DialogConfig.isShareTargetEnable(dialogId));
     }
 }

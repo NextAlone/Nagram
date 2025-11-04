@@ -351,6 +351,7 @@ import tw.nekomimi.nekogram.helpers.SettingsSearchResult;
 import tw.nekomimi.nekogram.settings.RegexFiltersSettingActivity;
 import tw.nekomimi.nekogram.transtale.popupwrapper.AutoTranslatePopupWrapper;
 import tw.nekomimi.nekogram.transtale.popupwrapper.CustomForumTabsPopupWrapper;
+import tw.nekomimi.nekogram.transtale.popupwrapper.ShareTargetPopupWrapper;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.DatacenterActivity;
 import tw.nekomimi.nekogram.NekoConfig;
@@ -12609,6 +12610,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             createAutoDeleteItem(context);
                         }
                         createAutoTranslateItem(userId);
+                        createShareTargetItem(userId);
                         createMessageFilterItem();
                         otherItem.addSubItem(add_shortcut, R.drawable.msg_home, LocaleController.getString(R.string.AddShortcut));
                         if (isBot) {
@@ -12642,6 +12644,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         createAutoDeleteItem(context);
                     }
                     createAutoTranslateItem(userId);
+                    createShareTargetItem(userId);
                     createMessageFilterItem();
                     if (!TextUtils.isEmpty(user.phone)) {
                         otherItem.addSubItem(share_contact, R.drawable.msg_share, LocaleController.getString(R.string.ShareContact));
@@ -12989,6 +12992,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         var customForumTabsPopupWrapper = new CustomForumTabsPopupWrapper(ProfileActivity.this, otherItem.getPopupLayout().getSwipeBack(), dialogId, getResourceProvider());
         otherItem.addSwipeBackItem(R.drawable.msg_topics, null, LocaleController.getString(R.string.Topics), customForumTabsPopupWrapper.windowLayout);
         if (gap) otherItem.addColoredGap();
+    }
+
+    private void createShareTargetItem(long dialogId) {
+        if (!SharedConfig.directShare) return;
+        var shareTargetPopupWrapper = new ShareTargetPopupWrapper(ProfileActivity.this, otherItem.getPopupLayout().getSwipeBack(), dialogId, getResourceProvider());
+        otherItem.addSwipeBackItem(R.drawable.msg_share, null, LocaleController.getString(R.string.DirectShare), shareTargetPopupWrapper.windowLayout);
+        otherItem.addColoredGap();
     }
 
     private void createMessageFilterItem() {

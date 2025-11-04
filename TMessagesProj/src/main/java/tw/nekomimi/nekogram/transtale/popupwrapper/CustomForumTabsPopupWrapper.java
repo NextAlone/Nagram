@@ -27,11 +27,11 @@ public class CustomForumTabsPopupWrapper {
         this.dialogId = dialogId;
 
         if (swipeBackLayout != null) {
-            var backItem = ActionBarMenuItem.addItem(windowLayout, R.drawable.msg_arrow_back, LocaleController.getString("Back", R.string.Back), false, resourcesProvider);
+            var backItem = ActionBarMenuItem.addItem(windowLayout, R.drawable.msg_arrow_back, LocaleController.getString(R.string.Back), false, resourcesProvider);
             backItem.setOnClickListener(view -> swipeBackLayout.closeForeground());
         }
 
-        defaultItem = ActionBarMenuItem.addItem(windowLayout, 0, LocaleController.getString("Default", R.string.Default), true, resourcesProvider);
+        defaultItem = ActionBarMenuItem.addItem(windowLayout, 0, LocaleController.getString(R.string.Default), true, resourcesProvider);
 
         defaultItem.setOnClickListener(view -> {
             DialogConfig.removeCustomForumTabsConfig(dialogId);

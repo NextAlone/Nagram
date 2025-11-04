@@ -1390,6 +1390,10 @@ public class SharedConfig {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("direct_share", directShare);
         editor.apply();
+        rebuildDirectShare();
+    }
+
+    public static void rebuildDirectShare() {
         ShortcutManagerCompat.removeAllDynamicShortcuts(ApplicationLoader.applicationContext);
         MediaDataController.getInstance(UserConfig.selectedAccount).buildShortcuts();
     }
