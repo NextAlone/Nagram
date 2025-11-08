@@ -31952,6 +31952,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                 }
             }
+            if (selectedObject != null) {
+                ArrayList<Integer> needRemoveOptions = new ArrayList<>();
+                if (!NekoConfig.showShareMessages.Bool()) {
+                    needRemoveOptions.add(OPTION_SHARE);
+                }
+                for (int i = options.size() - 1; i >= 0; i--) {
+                    final int option = options.get(i);
+                    if (needRemoveOptions.contains(option)) {
+                        options.remove(i);
+                        items.remove(i);
+                        icons.remove(i);
+                        break;
+                    }
+                }
+            }
 
             if (suggestEdit) {
                 items.clear();
@@ -34239,11 +34254,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     path = getFileLoader().getPathToMessage(selectedObject.messageOwner).toString();
                 }
                 Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType(selectedObject.getDocument().mime_type);
+                intent.setType(selectedObject.getMimeType());
                 File f = new File(path);
                 if (Build.VERSION.SDK_INT >= 24) {
                     try {
-                        intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(getParentActivity(), ApplicationLoader.getApplicationId() + ".provider", f));
+                        Uri uri = FileProvider.getUriForFile(getParentActivity(), ApplicationLoader.getApplicationId() + ".provider", f);
+                        intent.putExtra(Intent.EXTRA_STREAM, uri);
+                        intent.setClipData(ClipData.newRawUri(null, uri));
                         intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     } catch (Exception ignore) {
                         intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(f));
@@ -46809,6 +46826,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     options.add(OPTION_COPY_PHOTO_AS_STICKER);
                                     icons.add(R.drawable.msg_copy);
                                 }
+                                items.add(LocaleController.getString(R.string.ShareFile));
+                                options.add(OPTION_SHARE);
+                                icons.add(R.drawable.msg_shareout);
                             }
                         }
                     }
@@ -47200,6 +47220,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             options.add(OPTION_COPY_PHOTO_AS_STICKER);
                             icons.add(R.drawable.msg_copy);
                         }
+                        items.add(LocaleController.getString(R.string.ShareFile));
+                        options.add(OPTION_SHARE);
+                        icons.add(R.drawable.msg_shareout);
                     }
                 } else if (type == 5) {
                     items.add(LocaleController.getString(R.string.ApplyLocalizationFile));

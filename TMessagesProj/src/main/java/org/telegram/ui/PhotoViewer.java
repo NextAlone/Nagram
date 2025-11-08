@@ -24,6 +24,7 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -4566,7 +4567,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 }
                 if (Build.VERSION.SDK_INT >= 24) {
                     try {
-                        intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(parentActivity, ApplicationLoader.getApplicationId() + ".provider", f));
+                        Uri uri = FileProvider.getUriForFile(parentActivity, ApplicationLoader.getApplicationId() + ".provider", f);
+                        intent.putExtra(Intent.EXTRA_STREAM, uri);
+                        intent.setClipData(ClipData.newRawUri(null, uri));
                         intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     } catch (Exception ignore) {
                         intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(f));

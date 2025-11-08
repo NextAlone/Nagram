@@ -1,6 +1,7 @@
 package tw.nekomimi.nekogram.ui;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -31,6 +32,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.CodeHighlighting;
 import org.telegram.messenger.ContactsController;
@@ -234,17 +236,20 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                 AndroidUtilities.runOnUIThread(() -> {
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setType("application/octet-stream");
+                    File f = new File(filePath);
                     if (Build.VERSION.SDK_INT >= 24) {
                         try {
-                            intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(getParentActivity(), BuildConfig.APPLICATION_ID + ".provider", new File(filePath)));
+                            Uri uri = FileProvider.getUriForFile(getParentActivity(), ApplicationLoader.getApplicationId() + ".provider", f);
+                            intent.putExtra(Intent.EXTRA_STREAM, uri);
+                            intent.setClipData(ClipData.newRawUri(null, uri));
                             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         } catch (Exception ignore) {
-                            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(filePath)));
+                            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(f));
                         }
                     } else {
-                        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(filePath)));
+                        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(f));
                     }
-                    startActivityForResult(Intent.createChooser(intent, LocaleController.getString("ShareFile", R.string.ShareFile)), 500);
+                    startActivityForResult(Intent.createChooser(intent, LocaleController.getString(R.string.ShareFile)), 500);
                 });
             } else if (position == channelRow || position == groupRow) {
                 if (fromChat != null) {

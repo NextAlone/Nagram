@@ -6,6 +6,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -774,6 +775,7 @@ public class QrActivity extends BaseFragment {
                     .setType("image/*")
                     .putExtra(Intent.EXTRA_STREAM, uri);
             try {
+                intent.setClipData(ClipData.newRawUri(null, uri));
                 Intent chooserIntent = Intent.createChooser(intent, LocaleController.getString(R.string.InviteByQRCode));
                 getParentActivity().startActivityForResult(chooserIntent, 500);
             } catch (ActivityNotFoundException ex) {
