@@ -214,4 +214,6 @@
     <string name="DisableGifts">Disable Gifts Tab in Profile</string>
     <string name="ShowVoteCountBeforeVote">Show vote count before voting</string>
     <string name="HideInstantCamera">Hide instant camera</string>
+    <string name="UseSystemAiService">Use System Ai Service</string>
+    <string name="UseSystemAiServiceDesc">Only support HyperOS and ColorOS</string>
 </resources>

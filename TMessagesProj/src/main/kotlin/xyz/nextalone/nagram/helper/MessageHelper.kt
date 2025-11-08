@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Build
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -76,6 +77,12 @@ object MessageHelper {
             }
         }
         return null
+    }
+
+    fun getUriToMessage(messageObject: MessageObject): Uri? {
+        val f = getPathToMessage(messageObject) ?: return null
+        val context = ApplicationLoader.applicationContext
+        return FileProvider.getUriForFile(context, ApplicationLoader.getApplicationId() + ".provider", f)
     }
 
 

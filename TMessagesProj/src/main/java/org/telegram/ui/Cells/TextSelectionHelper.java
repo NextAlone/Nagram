@@ -74,7 +74,7 @@ import tw.nekomimi.nekogram.transtale.Translator;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import xyz.nextalone.nagram.NaConfig;
-import xyz.nextalone.nagram.helper.HyperOsHelper;
+import xyz.nextalone.nagram.helper.SystemAiServiceHelper;
 
 import static com.google.zxing.common.detector.MathUtils.distance;
 import static org.telegram.ui.ActionBar.FloatingToolbar.STYLE_THEME;
@@ -1425,7 +1425,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                 menu.add(Menu.NONE, android.R.id.copy, 0, android.R.string.copy);
                 menu.add(Menu.NONE, R.id.menu_quote, 1, LocaleController.getString(R.string.Quote));
                 menu.add(Menu.NONE, android.R.id.selectAll, 2, android.R.string.selectAll);
-                if (HyperOsHelper.INSTANCE.isHyperAiAvailable(textSelectionOverlay.getContext())) {
+                if (SystemAiServiceHelper.INSTANCE.isSystemAiAvailable(textSelectionOverlay.getContext())) {
                     menu.add(Menu.NONE, HYPEROS_AI, HYPEROS_AI, "AI");
                 }
                 menu.add(Menu.NONE, TRANSLATE, TRANSLATE, LocaleController.getString(R.string.TranslateMessage));
@@ -1524,7 +1524,7 @@ public abstract class TextSelectionHelper<Cell extends TextSelectionHelper.Selec
                     if (str == null) {
                         return true;
                     }
-                    HyperOsHelper.INSTANCE.startHyperOsAiService(textSelectionOverlay, str.toString());
+                    SystemAiServiceHelper.INSTANCE.startSystemAiService(textSelectionOverlay, str.toString());
                     hideActions();
                     clear(true);
                     return true;

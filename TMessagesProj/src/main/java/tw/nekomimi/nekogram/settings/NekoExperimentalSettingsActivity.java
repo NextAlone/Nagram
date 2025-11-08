@@ -130,6 +130,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
                     return "";
                 }
             }));
+    private final AbstractConfigCell useSystemAiServiceRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getUseSystemAiService(), LocaleController.getString(R.string.UseSystemAiServiceDesc)));
     private final AbstractConfigCell divider1 = cellGroup.appendCell(new ConfigCellDivider());
 
     // Story

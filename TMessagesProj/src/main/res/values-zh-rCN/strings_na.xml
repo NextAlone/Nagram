@@ -213,4 +213,6 @@
     <string name="DisableGifts">禁用个人页面中的礼物</string>
     <string name="ShowVoteCountBeforeVote">无需投票显示投票结果</string>
     <string name="HideInstantCamera">隐藏相机即时预览</string>
+    <string name="UseSystemAiService">使用系统 AI 服务</string>
+    <string name="UseSystemAiServiceDesc">当前仅支持 HyperOS 和 ColorOS</string>
 </resources>

@@ -7,15 +7,14 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.os.Build
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
-import android.widget.EditText
 import org.telegram.messenger.AndroidUtilities
 
 
 object HyperOsHelper {
-    private var IS_HYPEROS: Boolean =
-        AndroidUtilities.getSystemProperty("ro.mi.os.version.name") != null
+    val IS_HYPEROS: Boolean = !TextUtils.isEmpty(AndroidUtilities.getSystemProperty("ro.mi.os.version.name"))
     private const val HYPEROS_NOTES_PKG: String = "com.miui.notes"
     private const val HYPEROS_AI_SERVICE: String = "com.miui.notes.ai.AiTextWidgetService"
     fun isHyperAiAvailable(context: Context): Boolean {
@@ -36,8 +35,7 @@ object HyperOsHelper {
         }
         return true
     }
-    @JvmOverloads
-    fun startHyperOsAiService(view: View, text: String = "") {
+    fun startHyperOsAiService(view: View, text: String) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             return
         }
@@ -46,21 +44,7 @@ object HyperOsHelper {
             val serviceIntent = Intent()
             // Pass the package name
             serviceIntent.putExtra("packageName", currentPackage)
-            // Handle selection logic
-            var selectedText = ""
-            if (view is EditText) {
-                if (view.hasSelection()) {
-                    val selectionStart: Int = view.selectionStart
-                    val selectionEnd: Int = view.selectionEnd
-                    if (selectionStart != selectionEnd) {
-                        selectedText =
-                            view.getText().subSequence(selectionStart, selectionEnd).toString()
-                    }
-                }
-            } else {
-                selectedText = text
-            }
-            serviceIntent.putExtra("selectedText", selectedText)
+            serviceIntent.putExtra("selectedText", text)
             // Store original view bounds
             serviceIntent.putExtra("originalViewLeft", view.left)
             serviceIntent.putExtra("originalViewTop", view.top)
@@ -94,7 +78,7 @@ object HyperOsHelper {
             )
             view.context.startForegroundService(serviceIntent)
         } catch (e: Exception) {
-            Log.e("HyperOsHelper", "Failed to start HyperOS AI service")
+            Log.e("HyperOsHelper", "Failed to start HyperOS AI service", e)
         }
     }
 }

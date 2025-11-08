@@ -339,6 +339,7 @@ import tw.nekomimi.nekogram.utils.TelegramUtil;
 import xyz.nextalone.nagram.NaConfig;
 import xyz.nextalone.nagram.helper.DoubleTap;
 import xyz.nextalone.nagram.helper.MessageHelper;
+import xyz.nextalone.nagram.helper.SystemAiServiceHelper;
 
 @SuppressWarnings("unchecked")
 public class ChatActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate, LocationActivity.LocationActivityDelegate, ChatAttachAlertDocumentLayout.DocumentSelectActivityDelegate, ChatActivityInterface, FloatingDebugProvider, InstantCameraView.Delegate {
@@ -35007,6 +35008,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             case nkbtn_greatOrPoor: {
                 sendGreatOrGreat(true);
                 return 2;
+            }
+            case OPTION_SHARE: {
+                if (SystemAiServiceHelper.INSTANCE.isSystemAiAvailable(getContext()) && selectedObject != null && selectedObject.isPhoto()) {
+                    Uri uri = MessageHelper.INSTANCE.getUriToMessage(selectedObject);
+                    if (uri != null) {
+                        if (SystemAiServiceHelper.INSTANCE.startSystemAiService(getContext(), uri)) {
+                            return 2;
+                        }
+                    }
+                }
             }
         }
         return 0;

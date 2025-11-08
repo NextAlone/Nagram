@@ -926,6 +926,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val useSystemAiService =
+        addConfig(
+            "UseSystemAiService",
+            ConfigItem.configTypeBool,
+            true
+        )
 
     private fun addConfig(
         k: String,
