@@ -44629,8 +44629,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_TEXT,builder.toString());
+            Intent chooserIntent = Intent.createChooser(intent, LocaleController.getString(R.string.ShareFile));
+            chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             try {
-                getParentActivity().startActivity(intent);
+                getParentActivity().startActivity(chooserIntent);
             } catch (Exception e) {
                 AlertUtil.showToast(e);
             }
@@ -44778,8 +44780,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 intent.setType("text/plain");
                 String body = messageObject.messageOwner.message;
                 intent.putExtra(Intent.EXTRA_TEXT,body);
+                Intent chooserIntent = Intent.createChooser(intent, LocaleController.getString(R.string.ShareFile));
+                chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 try {
-                    getParentActivity().startActivity(intent);
+                    getParentActivity().startActivity(chooserIntent);
                 } catch (Exception e) {
                     AlertUtil.showToast(e);
                 }
