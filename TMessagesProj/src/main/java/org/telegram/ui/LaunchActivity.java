@@ -1645,6 +1645,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         }
         updateCurrentConnectionState(currentAccount);
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.updateUserStatus, (Object) null);
+        SharedConfig.rebuildDirectShare();
 
         switchingAccount = false;
     }
