@@ -34,11 +34,9 @@ import tw.nekomimi.nekogram.ui.RegexFilterPopup;
 public class RegexFiltersSettingActivity extends BaseNekoSettingsActivity {
 
     private int filtersHeaderRow;
-
-    // .. filters
-
-    private int filtersDividerRow;
+    private int headerDividerRow;
     private int addFilterBtnRow;
+    // .. filters
 
     private long dialogId;
 
@@ -55,12 +53,12 @@ public class RegexFiltersSettingActivity extends BaseNekoSettingsActivity {
         super.updateRows();
 
         filtersHeaderRow = rowCount++;
+        headerDividerRow = rowCount++;
+
+        addFilterBtnRow = rowCount++;
 
         var filters = AyuFilter.getRegexFilters();
         rowCount += filters.size();
-
-        filtersDividerRow = rowCount++;
-        addFilterBtnRow = rowCount++;
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -77,14 +75,14 @@ public class RegexFiltersSettingActivity extends BaseNekoSettingsActivity {
 
     @Override
     protected void onItemClick(View view, int position, float x, float y) {
-        if (position > filtersHeaderRow && position < filtersDividerRow) {
+        if (position > addFilterBtnRow) {
             // clicked on filter
             if (dialogId == 0 && LocaleController.isRTL && x > AndroidUtilities.dp(76) || !LocaleController.isRTL && x < (view.getMeasuredWidth() - AndroidUtilities.dp(76))) {
-                RegexFilterPopup.show(this, view, x, y, position - filtersHeaderRow - 1);
+                RegexFilterPopup.show(this, view, x, y, position - addFilterBtnRow - 1);
             } else {
                 TextCheckCell textCheckCell = (TextCheckCell) view;
                 ArrayList<AyuFilter.FilterModel> filterModels = AyuFilter.getRegexFilters();
-                AyuFilter.FilterModel filterModel = filterModels.get(position - filtersHeaderRow - 1);
+                AyuFilter.FilterModel filterModel = filterModels.get(position - addFilterBtnRow - 1);
 
                 boolean enabled = !textCheckCell.isChecked();
                 textCheckCell.setChecked(enabled);
@@ -98,8 +96,8 @@ public class RegexFiltersSettingActivity extends BaseNekoSettingsActivity {
 
     @Override
     protected boolean onItemLongClick(View view, int position, float x, float y) {
-        if (dialogId == 0 && position > filtersHeaderRow && position < filtersDividerRow) {
-            RegexFilterPopup.show(this, view, x, y, position - filtersHeaderRow - 1);
+        if (dialogId == 0 && position > addFilterBtnRow) {
+            RegexFilterPopup.show(this, view, x, y, position - addFilterBtnRow - 1);
             return true;
         }
         return super.onItemLongClick(view, position, x, y);
@@ -129,8 +127,8 @@ public class RegexFiltersSettingActivity extends BaseNekoSettingsActivity {
                     break;
                 case TYPE_CHECK:
                     TextCheckCell textCheckCell = (TextCheckCell) holder.itemView;
-                    if (position > filtersHeaderRow && position < filtersDividerRow) {
-                        AyuFilter.FilterModel filterModel = AyuFilter.getRegexFilters().get(position - filtersHeaderRow - 1);
+                    if (position > addFilterBtnRow) {
+                        AyuFilter.FilterModel filterModel = AyuFilter.getRegexFilters().get(position - addFilterBtnRow - 1);
                         textCheckCell.setTextAndCheck(filterModel.regex, filterModel.isEnabled(dialogId), true);
                     }
                     break;
@@ -152,7 +150,7 @@ public class RegexFiltersSettingActivity extends BaseNekoSettingsActivity {
         @Override
         public int getItemViewType(int position) {
             if (
-                    position == filtersDividerRow
+                    position == headerDividerRow
             ) {
                 return TYPE_SHADOW;
             } else if (
