@@ -3449,13 +3449,13 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         .setDampingRatio(SpringForce.DAMPING_RATIO_NO_BOUNCY))
                 .addUpdateListener((animation, value, velocity) -> {
                     int extraWidth;
-                    if (parentWidth > parentHeight || videoWidth > videoHeight) {
+                    if (parentWidth > parentHeight || true) {
                         extraWidth = dp(48);
                     } else {
                         extraWidth = 0;
                     }
 
-                    videoPlayerSeekbar.setSize((int) (getMeasuredWidth() - dp(8) - value - extraWidth), getMeasuredHeight()); //Need further adjust
+                    videoPlayerSeekbar.setSize((int) (getMeasuredWidth() - dp(2 + 14) - value - extraWidth), getMeasuredHeight());
                 });
 
         public VideoPlayerControlFrameLayout(@NonNull Context context) {
@@ -3497,16 +3497,17 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             int extraWidth;
             ignoreLayout = true;
             LayoutParams layoutParams = (LayoutParams) videoPlayerTime.getLayoutParams();
-            if (parentWidth > parentHeight || videoWidth > videoHeight) {
+            if (parentWidth > parentHeight || true) {
                 if (exitFullscreenButton.getVisibility() != VISIBLE) {
                     exitFullscreenButton.setVisibility(VISIBLE);
                 }
+                exitFullscreenButton.setTag(parentWidth > parentHeight);
                 exitFullscreenButton.setImageResource(parentWidth > parentHeight ? R.drawable.msg_minvideo : R.drawable.msg_maxvideo);
                 extraWidth = dp(48);
                 layoutParams.rightMargin = dp(47);
             } else {
-                if (exitFullscreenButton.getVisibility() != GONE) { //see the video I sent in the group, I initially suspected the button wasn't fully hidden, so I made this change. Revert if necessary.
-                    exitFullscreenButton.setVisibility(GONE);
+                if (exitFullscreenButton.getVisibility() != INVISIBLE) {
+                    exitFullscreenButton.setVisibility(INVISIBLE);
                 }
                 extraWidth = 0;
                 layoutParams.rightMargin = dp(12);
@@ -3539,7 +3540,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 timeSpring.getSpring().setFinalPosition(size);
                 timeSpring.start();
             } else {
-                videoPlayerSeekbar.setSize(getMeasuredWidth() - dp(8) - size - extraWidth, getMeasuredHeight()); //Need further adjust
+                videoPlayerSeekbar.setSize(getMeasuredWidth() - dp(2 + 14) - size - extraWidth, getMeasuredHeight());
                 timeValue.setValue(size);
             }
             lastTimeWidth = size;
@@ -9898,19 +9899,16 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 return;
             }
             wasRotated = false;
-            fullscreenedByButton = AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y ? 2 : 1;
+            boolean shouldExit = (Boolean) v.getTag();
+            if (!shouldExit) {
+                fullscreenButton[0].performClick();
+                return;
+            }
+            fullscreenedByButton = 2;
             if (prevOrientation == -10) {
                 prevOrientation = parentActivity.getRequestedOrientation();
             }
-            if (AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y) {
-                parentActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            } else {
-                WindowManager manager = (WindowManager) parentActivity.getSystemService(Activity.WINDOW_SERVICE);
-                int displayRotation = manager.getDefaultDisplay().getRotation();
-                parentActivity.setRequestedOrientation(displayRotation == Surface.ROTATION_270 ?
-                    ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                toggleActionBar(false, false);
-            }
+            parentActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         });
     }
 
@@ -11005,12 +11003,22 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     }
                 }
             }
-            if (AndroidUtilities.displaySize.y > AndroidUtilities.displaySize.x && w > h && b == 0) {
-                videoWidth = w;
-                videoHeight = h;
-            }
-            if (fullscreenButton[b].getVisibility() != View.GONE) {
-                fullscreenButton[b].setVisibility(View.GONE);
+            if (false && AndroidUtilities.displaySize.y > AndroidUtilities.displaySize.x && w > h) {
+                if (fullscreenButton[b].getVisibility() != View.VISIBLE) {
+                    fullscreenButton[b].setVisibility(View.VISIBLE);
+                }
+                if (isActionBarVisible) {
+                    fullscreenButton[b].setAlpha(1f);
+                }
+                float scale = w / (float) containerView.getMeasuredWidth();
+                int height = (int) (h / scale);
+                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fullscreenButton[b].getLayoutParams();
+                layoutParams.topMargin = (containerView.getMeasuredHeight() + height) / 2 - dp(48);
+            } else {
+                // na: move fullscreenButton to progress bar
+                if (fullscreenButton[b].getVisibility() != View.GONE) {
+                    fullscreenButton[b].setVisibility(View.GONE);
+                }
             }
 
             float currentTranslationX;
