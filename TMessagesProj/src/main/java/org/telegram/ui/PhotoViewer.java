@@ -3449,7 +3449,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         .setDampingRatio(SpringForce.DAMPING_RATIO_NO_BOUNCY))
                 .addUpdateListener((animation, value, velocity) -> {
                     int extraWidth;
-                    if (parentWidth > parentHeight) {
+                    if (parentWidth > parentHeight || true) {
                         extraWidth = dp(48);
                     } else {
                         extraWidth = 0;
@@ -3497,10 +3497,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             int extraWidth;
             ignoreLayout = true;
             LayoutParams layoutParams = (LayoutParams) videoPlayerTime.getLayoutParams();
-            if (parentWidth > parentHeight) {
+            if (parentWidth > parentHeight || true) {
                 if (exitFullscreenButton.getVisibility() != VISIBLE) {
                     exitFullscreenButton.setVisibility(VISIBLE);
                 }
+                exitFullscreenButton.setTag(parentWidth > parentHeight);
+                exitFullscreenButton.setImageResource(parentWidth > parentHeight ? R.drawable.msg_minvideo : R.drawable.msg_maxvideo);
                 extraWidth = dp(48);
                 layoutParams.rightMargin = dp(47);
             } else {
@@ -9897,6 +9899,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 return;
             }
             wasRotated = false;
+            boolean shouldExit = (Boolean) v.getTag();
+            if (!shouldExit) {
+                fullscreenButton[0].performClick();
+                return;
+            }
             fullscreenedByButton = 2;
             if (prevOrientation == -10) {
                 prevOrientation = parentActivity.getRequestedOrientation();
@@ -10996,7 +11003,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     }
                 }
             }
-            if (AndroidUtilities.displaySize.y > AndroidUtilities.displaySize.x && w > h) {
+            if (false && AndroidUtilities.displaySize.y > AndroidUtilities.displaySize.x && w > h) {
                 if (fullscreenButton[b].getVisibility() != View.VISIBLE) {
                     fullscreenButton[b].setVisibility(View.VISIBLE);
                 }
@@ -11008,6 +11015,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fullscreenButton[b].getLayoutParams();
                 layoutParams.topMargin = (containerView.getMeasuredHeight() + height) / 2 - dp(48);
             } else {
+                // na: move fullscreenButton to progress bar
                 if (fullscreenButton[b].getVisibility() != View.GONE) {
                     fullscreenButton[b].setVisibility(View.GONE);
                 }
