@@ -162,6 +162,7 @@
     <string name="LocaleToDBC">Lokální text s použitím případu DBC</string>
     <string name="EnablePanguOnReceiving">Povolit Pangu při příjmu</string>
     <string name="EnablePanguOnSending">Povolit Pangu při odesílání</string>
+    <string name="EnablePanguOnEditing">Povolit Pangu při úpravách</string>
     <string name="PanguInfo">Paranoidní textová mezera pro dobrou čitelnost, k automatickému vkládání bílých mezer mezi CJK (čínština, japonština, korejština), na polovinu šířky anglické, číslicové a symbolové znaky.</string>
     <string name="SendWithPangu">Poslat s Pangu</string>
     <string name="SendWithoutPangu">Odeslat bez Pangu</string>
@@ -210,4 +211,8 @@
     <string name="DeleteRecentChatTooltip">Smazán tento chat</string>
     <string name="RemoveFavouriteStickersInRecentStickers">Odstranit oblíbené samolepky v nedávných nálepkách</string>
     <string name="DisableGifts">Zakázat záložku Gifts v profilu</string>
+    <string name="ShowVoteCountBeforeVote">Zobrazit počet hlasů před hlasováním</string>
+    <string name="HideInstantCamera">Skrýt okamžitou kameru</string>
+    <string name="UseSystemAiService">Použít System Ai Service</string>
+    <string name="UseSystemAiServiceDesc">Podpora pouze HyperOS a ColorOS</string>
 </resources>

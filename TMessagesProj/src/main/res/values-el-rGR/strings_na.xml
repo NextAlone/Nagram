@@ -162,6 +162,7 @@
     <string name="LocaleToDBC">Τοπικό κείμενο με χρήση πεζών-κεφαλαίων DBC</string>
     <string name="EnablePanguOnReceiving">Ενεργοποίηση Pangu κατά τη λήψη</string>
     <string name="EnablePanguOnSending">Ενεργοποίηση Pangu κατά την αποστολή</string>
+    <string name="EnablePanguOnEditing">Ενεργοποίηση Pangu κατά την επεξεργασία</string>
     <string name="PanguInfo">Παρανοϊκό διάστημα κειμένου για καλή αναγνωσιμότητα, για αυτόματη εισαγωγή κενών μεταξύ χαρακτήρων CJK (Κινεζικά, Ιαπωνικά, Κορεατικά), μισού πλάτους Αγγλικά, ψηφίων και συμβόλων.</string>
     <string name="SendWithPangu">Αποστολή με Pangu</string>
     <string name="SendWithoutPangu">Αποστολή χωρίς Pangu</string>
@@ -210,4 +211,8 @@
     <string name="DeleteRecentChatTooltip">Διαγραφή αυτής της συνομιλίας</string>
     <string name="RemoveFavouriteStickersInRecentStickers">Αφαίρεση αγαπημένων αυτοκόλλητων στα πρόσφατα αυτοκόλλητα</string>
     <string name="DisableGifts">Απενεργοποίηση καρτέλας δώρων στο προφίλ</string>
+    <string name="ShowVoteCountBeforeVote">Εμφάνιση καταμέτρησης ψήφων πριν από την ψηφοφορία</string>
+    <string name="HideInstantCamera">Απόκρυψη στιγμιαίας κάμερας</string>
+    <string name="UseSystemAiService">Χρήση Υπηρεσίας Συστήματος Ai</string>
+    <string name="UseSystemAiServiceDesc">Υποστήριξη μόνο HyperOS και ColorOS</string>
 </resources>

@@ -162,6 +162,7 @@
     <string name="LocaleToDBC">Tekst językowy za pomocą litery DBC</string>
     <string name="EnablePanguOnReceiving">Włącz Pangu po otrzymaniu</string>
     <string name="EnablePanguOnSending">Włącz Pangu przy wysyłaniu</string>
+    <string name="EnablePanguOnEditing">Włącz Pangu podczas edycji</string>
     <string name="PanguInfo">Paranoidalny odstęp tekstowy dla dobrej czytelności, aby automatycznie wstawiać białą przestrzeń między CJK (chińskim, japońskim, koreańskim), w połowie szerokości angielskim, cyfrą i symbolem.</string>
     <string name="SendWithPangu">Wyślij z Pangu</string>
     <string name="SendWithoutPangu">Wyślij bez Pangu</string>
@@ -210,4 +211,8 @@
     <string name="DeleteRecentChatTooltip">Usunięto ten czat</string>
     <string name="RemoveFavouriteStickersInRecentStickers">Usuń ulubione naklejki z najnowszymi naklejkami</string>
     <string name="DisableGifts">Wyłącz zakładkę prezentów w profilu</string>
+    <string name="ShowVoteCountBeforeVote">Pokaż licznik głosów przed głosowaniem</string>
+    <string name="HideInstantCamera">Ukryj natychmiastową kamerę</string>
+    <string name="UseSystemAiService">Użyj usługi systemowej Ai</string>
+    <string name="UseSystemAiServiceDesc">Wspieraj tylko HyperOS i ColorOS</string>
 </resources>

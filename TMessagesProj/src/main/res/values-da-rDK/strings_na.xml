@@ -162,6 +162,7 @@
     <string name="LocaleToDBC">Landestandard tekst ved brug af DBC case</string>
     <string name="EnablePanguOnReceiving">Aktiver Pangu ved modtagelse</string>
     <string name="EnablePanguOnSending">Aktiver Pangu ved afsendelse</string>
+    <string name="EnablePanguOnEditing">Aktiver Pangu ved redigering</string>
     <string name="PanguInfo">Paranoid tekstafstand for god læsbarhed, for automatisk at indsætte blanke tegn mellem CJK (kinesisk, japansk, koreansk), halvbredde engelsk, ciffer og symbol tegn.</string>
     <string name="SendWithPangu">Send med Pangu</string>
     <string name="SendWithoutPangu">Send uden Pangu</string>
@@ -210,4 +211,8 @@
     <string name="DeleteRecentChatTooltip">Slettede denne chat</string>
     <string name="RemoveFavouriteStickersInRecentStickers">Fjern favoritklistermærker i de seneste klistermærker</string>
     <string name="DisableGifts">Deaktivér fanebladet Gaver i profil</string>
+    <string name="ShowVoteCountBeforeVote">Vis antal stemmer før afstemning</string>
+    <string name="HideInstantCamera">Skjul instant kamera</string>
+    <string name="UseSystemAiService">Brug System Ai Service</string>
+    <string name="UseSystemAiServiceDesc">Understøtter kun HyperOS og ColorOS</string>
 </resources>

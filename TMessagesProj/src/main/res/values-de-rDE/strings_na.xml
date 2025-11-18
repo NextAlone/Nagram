@@ -162,6 +162,7 @@
     <string name="LocaleToDBC">Sprachtext in DBC-Fall</string>
     <string name="EnablePanguOnReceiving">Pangu beim Empfangen aktivieren</string>
     <string name="EnablePanguOnSending">Pangu beim Senden aktivieren</string>
+    <string name="EnablePanguOnEditing">Pangu beim Bearbeiten aktivieren</string>
     <string name="PanguInfo">Paranoide Textabstände für eine gute Lesbarkeit, um automatisch Leerzeichen zwischen CJK (Chinesisch, Japanisch, Koreanisch), Halbbreite Englisch, Ziffern und Symbolzeichen einzufügen.</string>
     <string name="SendWithPangu">Mit Pangu senden</string>
     <string name="SendWithoutPangu">Ohne Pangu senden</string>
@@ -210,4 +211,8 @@
     <string name="DeleteRecentChatTooltip">Chat gelöscht</string>
     <string name="RemoveFavouriteStickersInRecentStickers">Favoritenaufkleber in neueren Aufklebern entfernen</string>
     <string name="DisableGifts">Gifts Tab im Profil deaktivieren</string>
+    <string name="ShowVoteCountBeforeVote">Stimmenanzahl vor der Abstimmung anzeigen</string>
+    <string name="HideInstantCamera">Sofortige Kamera ausblenden</string>
+    <string name="UseSystemAiService">System Ai Service verwenden</string>
+    <string name="UseSystemAiServiceDesc">Nur HyperOS und ColorOS unterstützen</string>
 </resources>

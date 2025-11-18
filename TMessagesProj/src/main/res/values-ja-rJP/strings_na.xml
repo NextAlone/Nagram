@@ -162,6 +162,7 @@
     <string name="LocaleToDBC">DBCケースを使用したロケールテキスト</string>
     <string name="EnablePanguOnReceiving">受信時にパングを有効にする</string>
     <string name="EnablePanguOnSending">送信時にパングを有効にする</string>
+    <string name="EnablePanguOnEditing">編集時にパングを有効にする</string>
     <string name="PanguInfo">CJK(中国語、日本語、韓国語)、半角英語、数字、記号の間に自動的に空白を挿入することができます。</string>
     <string name="SendWithPangu">Panguで送信</string>
     <string name="SendWithoutPangu">Panguなしで送信</string>
@@ -210,4 +211,8 @@
     <string name="DeleteRecentChatTooltip">このチャットを削除しました</string>
     <string name="RemoveFavouriteStickersInRecentStickers">最近使ったステッカーのお気に入りステッカーを削除</string>
     <string name="DisableGifts">プロフィールのギフトタブを無効にする</string>
+    <string name="ShowVoteCountBeforeVote">投票前に投票数を表示</string>
+    <string name="HideInstantCamera">インスタントカメラを隠す</string>
+    <string name="UseSystemAiService">システムAIサービスを使用する</string>
+    <string name="UseSystemAiServiceDesc">HyperOSとColorOSのみをサポートします</string>
 </resources>

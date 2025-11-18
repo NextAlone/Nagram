@@ -162,6 +162,7 @@
     <string name="LocaleToDBC">Paikallinen teksti käyttäen DBC kirjainta</string>
     <string name="EnablePanguOnReceiving">Ota Pangu käyttöön vastaanoton yhteydessä</string>
     <string name="EnablePanguOnSending">Ota Pangu käyttöön lähetettäessä</string>
+    <string name="EnablePanguOnEditing">Ota Pangu käyttöön muokattaessa</string>
     <string name="PanguInfo">Paranoid tekstiväli hyvän luettavuuden, automaattisesti lisätä valkotilaa CJK (Kiina, japani, korea), puolileveys Englanti, numeroinen ja symboli merkkejä.</string>
     <string name="SendWithPangu">Lähetä Pangun avulla</string>
     <string name="SendWithoutPangu">Lähetä ilman Pangu</string>
@@ -210,4 +211,8 @@
     <string name="DeleteRecentChatTooltip">Poistettu tämä keskustelu</string>
     <string name="RemoveFavouriteStickersInRecentStickers">Poista suosikkitarrat viimeaikaisista tarroista</string>
     <string name="DisableGifts">Poista lahjat välilehti käytöstä profiilissa</string>
+    <string name="ShowVoteCountBeforeVote">Näytä äänestysten määrä ennen äänestystä</string>
+    <string name="HideInstantCamera">Piilota pikakamera</string>
+    <string name="UseSystemAiService">Käytä System Ai -palvelua</string>
+    <string name="UseSystemAiServiceDesc">Vain tuki HyperOS ja ColorOS</string>
 </resources>

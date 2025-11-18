@@ -162,6 +162,7 @@
     <string name="LocaleToDBC">Taaltekst met behulp van DBC case</string>
     <string name="EnablePanguOnReceiving">Pangu inschakelen bij ontvangen</string>
     <string name="EnablePanguOnSending">Pangu inschakelen bij verzenden</string>
+    <string name="EnablePanguOnEditing">Pangu inschakelen bij bewerken</string>
     <string name="PanguInfo">Paranoïde tekstafstand om goede leesbaarheid te verkrijgen, om automatisch spaties toe te voegen tussen CJK (Chinees, Japans en Koreaans), om Engels, cijfers en symbool tekens in te korten.</string>
     <string name="SendWithPangu">Verzenden met Pangu</string>
     <string name="SendWithoutPangu">Verzenden zonder Pangu</string>
@@ -210,4 +211,8 @@
     <string name="DeleteRecentChatTooltip">Verwijderde deze chat</string>
     <string name="RemoveFavouriteStickersInRecentStickers">Verwijder favoriete stickers in recente stickers</string>
     <string name="DisableGifts">Schakel Tabblad Geschenken uit in Profiel</string>
+    <string name="ShowVoteCountBeforeVote">Toon aantal stemmen voor stemmen</string>
+    <string name="HideInstantCamera">Verberg directe camera</string>
+    <string name="UseSystemAiService">Gebruik systeem Ai Service</string>
+    <string name="UseSystemAiServiceDesc">Alleen HyperOS en ColorOS ondersteunen</string>
 </resources>

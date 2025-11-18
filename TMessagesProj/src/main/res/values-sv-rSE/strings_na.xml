@@ -162,6 +162,7 @@
     <string name="LocaleToDBC">Lokala texter med hjälp av DBC fall</string>
     <string name="EnablePanguOnReceiving">Aktivera Pangu vid mottagning</string>
     <string name="EnablePanguOnSending">Aktivera Pangu vid sändning</string>
+    <string name="EnablePanguOnEditing">Aktivera Pangu vid redigering</string>
     <string name="PanguInfo">Paranoid textavstånd för god läsbarhet, att automatiskt infoga blanktecken mellan CJK (kinesiska, japanska, koreanska), halvbredd engelska, siffra och symboltecken.</string>
     <string name="SendWithPangu">Skicka med Pangu</string>
     <string name="SendWithoutPangu">Skicka utan Pangu</string>
@@ -210,4 +211,8 @@
     <string name="DeleteRecentChatTooltip">Tog bort denna chatt</string>
     <string name="RemoveFavouriteStickersInRecentStickers">Ta bort favoritklistermärken i senaste klistermärken</string>
     <string name="DisableGifts">Inaktivera fliken gåvor i profilen</string>
+    <string name="ShowVoteCountBeforeVote">Visa antal röster före röstning</string>
+    <string name="HideInstantCamera">Dölj omedelbar kamera</string>
+    <string name="UseSystemAiService">Använd tjänsten System Ai</string>
+    <string name="UseSystemAiServiceDesc">Stöder endast HyperOS och ColorOS</string>
 </resources>

@@ -162,6 +162,7 @@
     <string name="LocaleToDBC">النص المحلي باستخدام قضية DBC</string>
     <string name="EnablePanguOnReceiving">تمكين بانغو عند الاستلام</string>
     <string name="EnablePanguOnSending">تمكين بانغو عند الإرسال</string>
+    <string name="EnablePanguOnEditing">تمكين بانغو عند التحرير</string>
     <string name="PanguInfo">تباعد نص بارانويد من أجل القراءة الجيدة، من أجل إدراج فضاء بيضاء تلقائياً بين رمز CJK (الصينية، اليابانية، الكورية)، نصف العرض الإنكليزي والرقم والرموز.</string>
     <string name="SendWithPangu">إرسال مع بانجو</string>
     <string name="SendWithoutPangu">إرسال بدون بانجو</string>
@@ -210,4 +211,8 @@
     <string name="DeleteRecentChatTooltip">تم حذف هذه المحادثة</string>
     <string name="RemoveFavouriteStickersInRecentStickers">إزالة الملصقات المفضلة في الملصقات الأخيرة</string>
     <string name="DisableGifts">تعطيل تبويب الهدايا في الملف الشخصي</string>
+    <string name="ShowVoteCountBeforeVote">إظهار عدد الأصوات قبل التصويت</string>
+    <string name="HideInstantCamera">إخفاء الكاميرا الفورية</string>
+    <string name="UseSystemAiService">استخدام خدمة النظام Ai</string>
+    <string name="UseSystemAiServiceDesc">فقط دعم HyperOS و ColorOS</string>
 </resources>

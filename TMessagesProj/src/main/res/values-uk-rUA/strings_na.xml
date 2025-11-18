@@ -162,6 +162,7 @@
     <string name="LocaleToDBC">Текст локалі за допомогою DBC</string>
     <string name="EnablePanguOnReceiving">Ввімкнути Pangu для отримання</string>
     <string name="EnablePanguOnSending">Увімкнути Pangu при відправці</string>
+    <string name="EnablePanguOnEditing">Ввімкнути Пангу при редагуванні</string>
     <string name="PanguInfo">Параноїдний відступ для належної читання, щоб автоматично вставити пробіли між CJK (китайською, японською, корейською, напівшириною англійською, цифрами та символами.</string>
     <string name="SendWithPangu">Надіслати з Пангу</string>
     <string name="SendWithoutPangu">Надіслати без Пангу</string>
@@ -210,4 +211,8 @@
     <string name="DeleteRecentChatTooltip">Видалено цей чат</string>
     <string name="RemoveFavouriteStickersInRecentStickers">Видалити улюблені наліпки в останніх наліпках</string>
     <string name="DisableGifts">Вимкнути вкладки подарунків в профілі</string>
+    <string name="ShowVoteCountBeforeVote">Показувати кількість голосів перед голосуванням</string>
+    <string name="HideInstantCamera">Приховати миттєву камеру</string>
+    <string name="UseSystemAiService">Використовувати системний Ai Service</string>
+    <string name="UseSystemAiServiceDesc">Підтримка лише HyperOS та ColorOS</string>
 </resources>

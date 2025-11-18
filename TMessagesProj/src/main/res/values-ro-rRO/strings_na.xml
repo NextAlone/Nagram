@@ -162,6 +162,7 @@
     <string name="LocaleToDBC">Text local folosind carcasa DBC</string>
     <string name="EnablePanguOnReceiving">Activează Pangu la primire</string>
     <string name="EnablePanguOnSending">Activează Pangu la trimitere</string>
+    <string name="EnablePanguOnEditing">Activează Pangu în timpul editării</string>
     <string name="PanguInfo">Spațiere de text paranoică pentru o bună lizibilitate, pentru a insera automat spațiul alb între caracterele CJK (chineză, japoneză, coreană), engleză pe jumătate de lățime, cifră și simboluri.</string>
     <string name="SendWithPangu">Trimite cu Pangu</string>
     <string name="SendWithoutPangu">Trimite fără Pangu</string>
@@ -210,4 +211,8 @@
     <string name="DeleteRecentChatTooltip">S-a șters această conversație</string>
     <string name="RemoveFavouriteStickersInRecentStickers">Elimină autocolantele preferate în autocolantele recente</string>
     <string name="DisableGifts">Dezactivează fila cadouri în profil</string>
+    <string name="ShowVoteCountBeforeVote">Arată numărul de voturi înainte de vot</string>
+    <string name="HideInstantCamera">Ascunde camera instantanee</string>
+    <string name="UseSystemAiService">Folosește Serviciul Ai Sistem</string>
+    <string name="UseSystemAiServiceDesc">Acceptă doar HyperOS și ColorOS</string>
 </resources>

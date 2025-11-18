@@ -162,6 +162,7 @@
     <string name="LocaleToDBC">Locale text using DBC case</string>
     <string name="EnablePanguOnReceiving">Enable Pangu on receiving</string>
     <string name="EnablePanguOnSending">Enable Pangu on sending</string>
+    <string name="EnablePanguOnEditing">Enable Pangu on editing</string>
     <string name="PanguInfo">Paranoid text spacing for good readability, to automatically insert whitespace between CJK (Chinese, Japanese, Korean), half-width English, digit and symbol characters.</string>
     <string name="SendWithPangu">Send with Pangu</string>
     <string name="SendWithoutPangu">Send without Pangu</string>
@@ -210,4 +211,8 @@
     <string name="DeleteRecentChatTooltip">Deleted this chat</string>
     <string name="RemoveFavouriteStickersInRecentStickers">Remove favourite stickers in recent stickers</string>
     <string name="DisableGifts">Disable Gifts Tab in Profile</string>
+    <string name="ShowVoteCountBeforeVote">Show vote count before voting</string>
+    <string name="HideInstantCamera">Hide instant camera</string>
+    <string name="UseSystemAiService">Use System Ai Service</string>
+    <string name="UseSystemAiServiceDesc">Only support HyperOS and ColorOS</string>
 </resources>

@@ -162,6 +162,7 @@
     <string name="LocaleToDBC">Nasjonal tekst ved bruk av DBC- bokstaver</string>
     <string name="EnablePanguOnReceiving">Aktiver Pangu ved mottak</string>
     <string name="EnablePanguOnSending">Aktiver Pangu ved sending</string>
+    <string name="EnablePanguOnEditing">Aktiver Pangu ved redigering</string>
     <string name="PanguInfo">Paranoid tekstavstand for god lesbarhet, for automatisk å sette inn tomrom mellom CJK (kinesisk, japansk, koreansk), halvbredde Engelsk, siffer og symboltegn.</string>
     <string name="SendWithPangu">Send med Pangu</string>
     <string name="SendWithoutPangu">Send uten Pangu</string>
@@ -210,4 +211,8 @@
     <string name="DeleteRecentChatTooltip">Slettet denne chatten</string>
     <string name="RemoveFavouriteStickersInRecentStickers">Fjern favorittklistremerker i nylige klistremerker</string>
     <string name="DisableGifts">Deaktiver Gavefanen i Profil</string>
+    <string name="ShowVoteCountBeforeVote">Vis stemme teller før du stemmer</string>
+    <string name="HideInstantCamera">Skjul øyeblikkelig kamera</string>
+    <string name="UseSystemAiService">Bruk system Ai</string>
+    <string name="UseSystemAiServiceDesc">Støtter bare HyperOS og ColorOS</string>
 </resources>
