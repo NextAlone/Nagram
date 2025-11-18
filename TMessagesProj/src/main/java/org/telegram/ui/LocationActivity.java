@@ -342,7 +342,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             lastPressedMarkerView.setAlpha(0.0f);
             lastPressedMarkerView.setOnClickListener(v -> {
                 if (parentFragment != null && parentFragment.isInScheduleMode()) {
-                    AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), parentFragment.getDialogId(), (notify, scheduleDate) -> {
+                    AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), parentFragment.getDialogId(), (notify, scheduleDate, scheduleRepeatPeriod) -> {
                         delegate.didSelectLocation(location.venue, locationType, notify, scheduleDate, 0);
                         finishFragment();
                     });
@@ -1239,7 +1239,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         location.geo.lat = AndroidUtilities.fixLocationCoord(userLocation.getLatitude());
                         location.geo._long = AndroidUtilities.fixLocationCoord(userLocation.getLongitude());
                         if (parentFragment != null && parentFragment.isInScheduleMode()) {
-                            AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), parentFragment.getDialogId(), (notify, scheduleDate) -> {
+                            AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), parentFragment.getDialogId(), (notify, scheduleDate, scheduleRepeatPeriod) -> {
                                 delegate.didSelectLocation(location, locationType, notify, scheduleDate, 0);
                                 finishFragment();
                             });
@@ -1267,7 +1267,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 Object object = adapter.getItem(position);
                 if (object instanceof TLRPC.TL_messageMediaVenue) {
                     if (parentFragment != null && parentFragment.isInScheduleMode()) {
-                        AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), parentFragment.getDialogId(), (notify, scheduleDate) -> {
+                        AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), parentFragment.getDialogId(), (notify, scheduleDate, scheduleRepeatPeriod) -> {
                             delegate.didSelectLocation((TLRPC.TL_messageMediaVenue) object, locationType, notify, scheduleDate, 0);
                             finishFragment();
                         });
@@ -1443,7 +1443,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     adapter.setCustomLocation(userLocation);
                 } else if (object != null && delegate != null) {
                     if (parentFragment != null && parentFragment.isInScheduleMode()) {
-                        AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), parentFragment.getDialogId(), (notify, scheduleDate) -> {
+                        AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), parentFragment.getDialogId(), (notify, scheduleDate, scheduleRepeatPeriod) -> {
                             delegate.didSelectLocation(object, locationType, notify, scheduleDate, 0);
                             finishFragment();
                         });

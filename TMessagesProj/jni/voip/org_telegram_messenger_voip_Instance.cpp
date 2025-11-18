@@ -531,9 +531,10 @@ JNIEXPORT jlong JNICALL Java_org_telegram_messenger_voip_NativeInstance_makeGrou
         };
         descriptor.requestCurrentTime = [platformContext](std::function<void(int64_t)> callback) -> std::shared_ptr<BroadcastPartTask> {
             std::shared_ptr<RequestCurrentTimeTaskJava> task = std::make_shared<RequestCurrentTimeTaskJava>(callback);
-            tgvoip::jni::DoWithJNI([platformContext, task](JNIEnv *env) {
+            auto weakHolder = new std::weak_ptr<RequestCurrentTimeTaskJava>(task);
+            tgvoip::jni::DoWithJNI([platformContext, weakHolder](JNIEnv *env) {
                 jobject globalRef = ((AndroidContext *) platformContext.get())->getJavaGroupInstance();
-                env->CallVoidMethod(globalRef, env->GetMethodID(NativeInstanceClass, "requestCurrentTime", "(J)V"), (jlong) task.get());
+                env->CallVoidMethod(globalRef, env->GetMethodID(NativeInstanceClass, "requestCurrentTime", "(J)V"), (jlong) weakHolder);
             });
             return task;
         };
@@ -1092,7 +1093,6 @@ JNIEXPORT void JNICALL Java_org_telegram_messenger_voip_NativeInstance_onMediaDe
 
 extern "C"
 JNIEXPORT jlong JNICALL Java_org_telegram_messenger_voip_NativeInstance_createVideoCapturer(JNIEnv *env, jclass clazz, jobject localSink, jint type) {
-    DEBUG_D("createVideoCapturer!");
     initWebRTC(env);
     std::unique_ptr<VideoCaptureInterface> capture;
     if (type == 0 || type == 1) {
@@ -1253,7 +1253,10 @@ JNIEXPORT void JNICALL Java_org_telegram_messenger_voip_NativeInstance_onRequest
     if (instance->groupNativeInstance == nullptr) {
         return;
     }
-    auto task = reinterpret_cast<RequestCurrentTimeTaskJava *>(taskPtr);
+    auto weakHolder = reinterpret_cast<std::weak_ptr<RequestCurrentTimeTaskJava> *>(taskPtr);
+    auto task = weakHolder->lock();
+    delete weakHolder;
+    if (!task) return;
     task->_callback(currentTime);
 }
 

@@ -1089,7 +1089,7 @@ public class MessagePreviewView extends FrameLayout {
                                 chatActivity.getDialogId(),
                                 MessagePreviewView.this::sendWebpageMedia);
                     } else {
-                        sendWebpageMedia(true, 0);
+                        sendWebpageMedia(true, 0, 0);
                     }
                 });
 
@@ -1933,7 +1933,7 @@ public class MessagePreviewView extends FrameLayout {
 
     }
 
-    protected void sendWebpageMedia(boolean notify, int scheduleDate) {
+    protected void sendWebpageMedia(boolean notify, int scheduleDate, int scheduleRepeatPeriod) {
 
     }
 

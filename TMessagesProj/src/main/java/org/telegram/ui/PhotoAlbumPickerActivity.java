@@ -437,7 +437,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         writeButtonContainer.addView(writeButton, LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 56 : 60, Build.VERSION.SDK_INT >= 21 ? 56 : 60, Gravity.LEFT | Gravity.TOP, Build.VERSION.SDK_INT >= 21 ? 2 : 0, 0, 0, 0));
         writeButton.setOnClickListener(v -> {
             if (chatActivity != null && chatActivity.isInScheduleMode()) {
-                AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), chatActivity.getDialogId(), (notify, scheduleDate) -> {
+                AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), chatActivity.getDialogId(), (notify, scheduleDate, scheduleRepeatPeriod) -> {
                     sendSelectedPhotos(selectedPhotos, selectedPhotosOrder, notify, scheduleDate);
                     finishFragment();
                 });
@@ -517,7 +517,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                         if (num == 0) {
                             translateComment(TranslateDb.getChatLanguage(chatId, TranslatorKt.getCode2Locale(NekoConfig.translateInputLang.String())));
                         } else if (num == 1) {
-                            AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), chatActivity.getDialogId(), (notify, scheduleDate) -> {
+                            AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), chatActivity.getDialogId(), (notify, scheduleDate, scheduleRepeatPeriod) -> {
                                 sendSelectedPhotos(selectedPhotos, selectedPhotosOrder, notify, scheduleDate);
                                 finishFragment();
                             });
@@ -880,7 +880,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 }
 
                 @Override
-                public void actionButtonPressed(boolean canceled, boolean notify, int scheduleDate) {
+                public void actionButtonPressed(boolean canceled, boolean notify, int scheduleDate, int scheduleRepeatPeriod) {
                     removeSelfFromStack();
                     if (!canceled) {
                         sendSelectedPhotos(selectedPhotos, selectedPhotosOrder, notify, scheduleDate);
@@ -907,7 +907,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                     }
 
                     @Override
-                    public void actionButtonPressed(boolean canceled, boolean notify, int scheduleDate) {
+                    public void actionButtonPressed(boolean canceled, boolean notify, int scheduleDate, int scheduleRepeatPeriod) {
                         removeSelfFromStack();
                         if (!canceled) {
                             sendSelectedPhotos(photos, order, notify, scheduleDate);
@@ -931,7 +931,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                     }
 
                     @Override
-                    public void actionButtonPressed(boolean canceled, boolean notify, int scheduleDate) {
+                    public void actionButtonPressed(boolean canceled, boolean notify, int scheduleDate, int scheduleRepeatPeriod) {
                         removeSelfFromStack();
                         if (!canceled) {
                             sendSelectedPhotos(photos, order, notify, scheduleDate);

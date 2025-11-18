@@ -117,9 +117,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
 
     public interface PhotoPickerActivityDelegate {
         void selectedPhotosChanged();
-
-        void actionButtonPressed(boolean canceled, boolean notify, int scheduleDate);
-
+        void actionButtonPressed(boolean canceled, boolean notify, int scheduleDate, int scheduleRepeatPeriod);
         void onCaptionChanged(CharSequence caption);
 
         default void onOpenInPressed() {
@@ -399,7 +397,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
 
         @Override
         public boolean cancelButtonPressed() {
-            delegate.actionButtonPressed(true, true, 0);
+            delegate.actionButtonPressed(true, true, 0, 0);
             finishFragment();
             return true;
         }
@@ -410,7 +408,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         }
 
         @Override
-        public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo, boolean notify, int scheduleDate, boolean forceDocument) {
+        public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo, boolean notify, int scheduleDate, int scheduleRepeatPeriod, boolean forceDocument) {
             if (selectedPhotos.isEmpty()) {
                 if (selectedAlbum != null) {
                     if (index < 0 || index >= selectedAlbum.photos.size()) {
@@ -428,7 +426,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                     addToSelectedPhotos(searchImage, -1);
                 }
             }
-            sendSelectedPhotos(notify, scheduleDate);
+            sendSelectedPhotos(notify, scheduleDate, 0);
         }
 
         @Override
@@ -1081,9 +1079,9 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             writeButtonContainer.addView(writeButton, LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 56 : 60, Build.VERSION.SDK_INT >= 21 ? 56 : 60, Gravity.LEFT | Gravity.TOP, Build.VERSION.SDK_INT >= 21 ? 2 : 0, 0, 0, 0));
             writeButton.setOnClickListener(v -> {
                 if (chatActivity != null && chatActivity.isInScheduleMode()) {
-                    AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), chatActivity.getDialogId(), this::sendSelectedPhotos);
+                    AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), chatActivity.getDialogId(), (notify, scheduleDate, scheduleRepeatPeriod) -> sendSelectedPhotos(notify, scheduleDate, 0));
                 } else {
-                    sendSelectedPhotos(true, 0);
+                    sendSelectedPhotos(true, 0, 0);
                 }
             });
             writeButton.setOnLongClickListener(view -> {
@@ -1158,7 +1156,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                             } else if (num == 1) {
                                 AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), chatActivity.getDialogId(), this::sendSelectedPhotos);
                             } else if (num == 2) {
-                                sendSelectedPhotos(true, 0);
+                                sendSelectedPhotos(true, 0, 0);
                             }
                         });
                         itemCells[a].setOnLongClickListener(v -> {
@@ -1849,13 +1847,13 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         searchDelegate = photoPickerActivitySearchDelegate;
     }
 
-    private void sendSelectedPhotos(boolean notify, int scheduleDate) {
+    private void sendSelectedPhotos(boolean notify, int scheduleDate, int scheduleRepeatPeriod) {
         if (selectedPhotos.isEmpty() || delegate == null || sendPressed) {
             return;
         }
         applyCaption();
         sendPressed = true;
-        delegate.actionButtonPressed(false, notify, scheduleDate);
+        delegate.actionButtonPressed(false, notify, scheduleDate, scheduleRepeatPeriod);
         if (selectPhotoType != PhotoAlbumPickerActivity.SELECT_TYPE_WALLPAPER && (delegate == null || delegate.canFinishFragment())) {
             finishFragment();
         }

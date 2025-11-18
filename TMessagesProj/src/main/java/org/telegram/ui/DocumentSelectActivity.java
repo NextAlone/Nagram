@@ -534,10 +534,10 @@ public class DocumentSelectActivity extends BaseFragment {
                         }
 
                         @Override
-                        public void actionButtonPressed(boolean canceled, boolean notify, int scheduleDate) {
+                        public void actionButtonPressed(boolean canceled, boolean notify, int scheduleDate, int scheduleRepeatPeriod) {
                             removeSelfFromStack();
                             if (!canceled) {
-                                sendSelectedPhotos(selectedPhotos, selectedPhotosOrder, notify, scheduleDate);
+                                sendSelectedPhotos(selectedPhotos, selectedPhotosOrder, notify, scheduleDate, scheduleRepeatPeriod);
                             }
                         }
 
@@ -673,7 +673,7 @@ public class DocumentSelectActivity extends BaseFragment {
             if (chatActivity != null && chatActivity.isInScheduleMode()) {
                 AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), chatActivity.getDialogId(), this::sendSelectedFiles);
             } else {
-                sendSelectedFiles(true, 0);
+                sendSelectedFiles(true, 0, 0);
             }
         });
         writeButton.setOnLongClickListener(view -> {
@@ -752,7 +752,7 @@ public class DocumentSelectActivity extends BaseFragment {
                         } else if (num == 1) {
                             AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), chatActivity.getDialogId(), this::sendSelectedFiles);
                         } else if (num == 2) {
-                            sendSelectedFiles(true, 0);
+                            sendSelectedFiles(true, 0, 0);
                         }
                     });
                     itemCells[a].setOnLongClickListener(v -> {
@@ -1032,7 +1032,7 @@ public class DocumentSelectActivity extends BaseFragment {
         }
     }
 
-    private void sendSelectedPhotos(HashMap<Object, Object> photos, ArrayList<Object> order, boolean notify, int scheduleDate) {
+    private void sendSelectedPhotos(HashMap<Object, Object> photos, ArrayList<Object> order, boolean notify, int scheduleDate, int scheduleRepeatPeriod) {
         if (photos.isEmpty() || delegate == null || sendPressed) {
             return;
         }
@@ -1062,7 +1062,7 @@ public class DocumentSelectActivity extends BaseFragment {
         delegate.didSelectPhotos(media, notify, scheduleDate);
     }
 
-    private void sendSelectedFiles(boolean notify, int scheduleDate) {
+    private void sendSelectedFiles(boolean notify, int scheduleDate, int scheduleRepeatPeriod) {
         if (selectedFiles.size() == 0 || delegate == null || sendPressed) {
             return;
         }

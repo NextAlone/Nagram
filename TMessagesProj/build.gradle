@@ -7,7 +7,7 @@ apply plugin: "io.sentry.android.gradle"
 apply plugin: "io.objectbox"
 
 def verName = APP_VERSION_NAME
-def verCode = 1223
+def verCode = 1224
 
 
 def officialVer = APP_VERSION_NAME
@@ -287,12 +287,11 @@ def crashlyticsVersion = "18.6.2"
 def playCoreVersion = "1.10.3"
 
 dependencies {
-    implementation 'androidx.fragment:fragment:1.2.0'
-    implementation "androidx.core:core-ktx:1.10.1"
+    implementation 'androidx.fragment:fragment:1.8.9'
+    implementation "androidx.core:core-ktx:1.16.0"
     implementation "androidx.palette:palette-ktx:1.0.0"
     implementation "androidx.exifinterface:exifinterface:1.3.7"
     implementation "androidx.dynamicanimation:dynamicanimation:1.0.0"
-    implementation "androidx.multidex:multidex:2.0.1"
     implementation "androidx.sharetarget:sharetarget:1.2.0"
     implementation "androidx.interpolator:interpolator:1.0.0"
     implementation 'androidx.biometric:biometric:1.1.0'
@@ -497,7 +496,7 @@ sentry {
         // as Gradle will resolve it to the latest version.
         //
         // Defaults to the latest published Sentry version.
-        sentryVersion = '8.23.0'
+        sentryVersion = '8.26.0'
     }
 
     // Disables or enables dependencies metadata reporting for Sentry.

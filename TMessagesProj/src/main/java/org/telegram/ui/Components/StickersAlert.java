@@ -133,7 +133,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     public final static int STICKERS_MAX_COUNT = 120;
 
     public interface StickersAlertDelegate {
-        void onStickerSelected(TLRPC.Document sticker, String query, Object parent, MessageObject.SendAnimationData sendAnimationData, boolean clearsInputField, boolean notify, int scheduleDate);
+        void onStickerSelected(TLRPC.Document sticker, String query, Object parent, MessageObject.SendAnimationData sendAnimationData, boolean clearsInputField, boolean notify, int scheduleDate, int scheduleRepeatPeriod);
         boolean canSchedule();
 
         boolean isInScheduleMode();
@@ -222,11 +222,11 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         }
 
         @Override
-        public void sendSticker(TLRPC.Document sticker, String query, Object parent, boolean notify, int scheduleDate) {
+        public void sendSticker(TLRPC.Document sticker, String query, Object parent, boolean notify, int scheduleDate, int scheduleRepeatPeriod) {
             if (delegate == null) {
                 return;
             }
-            delegate.onStickerSelected(sticker, query, parent, null, clearsInputField, notify, scheduleDate);
+            delegate.onStickerSelected(sticker, query, parent, null, clearsInputField, notify, scheduleDate, 0);
             dismiss();
         }
 
@@ -1213,7 +1213,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 hidePreview();
                 selectedStickerPath = null;
             } else {
-                delegate.onStickerSelected(selectedSticker, null, stickerSet, null, clearsInputField, true, 0);
+                delegate.onStickerSelected(selectedSticker, null, stickerSet, null, clearsInputField, true, 0, 0);
                 dismiss();
             }
         });

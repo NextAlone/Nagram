@@ -21,7 +21,6 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
-import android.util.TypedValue;
 import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -420,7 +419,7 @@ public class PollCreateActivity extends BaseFragment implements NotificationCent
 //                        ChatActivity chatActivity = (ChatActivity) parentAlert.baseFragment;
 //                        AlertsCreator.ensurePaidMessageConfirmation(parentAlert.currentAccount, parentAlert.getDialogId(), 1 + parentAlert.getAdditionalMessagesCount(), payStars -> {
                             if (parentFragment.isInScheduleMode()) {
-                                AlertsCreator.createScheduleDatePickerDialog(parentFragment.getParentActivity(), parentFragment.getDialogId(), (notify, scheduleDate) -> {
+                                AlertsCreator.createScheduleDatePickerDialog(parentFragment.getParentActivity(), parentFragment.getDialogId(), (notify, scheduleDate, scheduleRepeatPeriod) -> {
                                     delegate.sendPoll(todo, null, notify, scheduleDate);
                                     finishFragment();
                                 });
@@ -506,7 +505,7 @@ public class PollCreateActivity extends BaseFragment implements NotificationCent
                             }
                         }
                         if (parentFragment.isInScheduleMode()) {
-                            AlertsCreator.createScheduleDatePickerDialog(parentFragment.getParentActivity(), parentFragment.getDialogId(), (notify, scheduleDate) -> {
+                            AlertsCreator.createScheduleDatePickerDialog(parentFragment.getParentActivity(), parentFragment.getDialogId(), (notify, scheduleDate, scheduleRepeatPeriod) -> {
                                 delegate.sendPoll(poll, params, notify, scheduleDate);
                                 finishFragment();
                             });
@@ -1804,7 +1803,7 @@ public class PollCreateActivity extends BaseFragment implements NotificationCent
                                 if (menu.findItem(android.R.id.copy) == null) {
                                     return;
                                 }
-                                ChatActivity.fillActionModeMenu(menu, parentFragment.getCurrentEncryptedChat(), false);
+                                ChatActivity.fillActionModeMenu(menu, parentFragment.getCurrentEncryptedChat(), false, true);
                             }
                         }
 
@@ -1871,7 +1870,7 @@ public class PollCreateActivity extends BaseFragment implements NotificationCent
                                 if (menu.findItem(android.R.id.copy) == null) {
                                     return;
                                 }
-                                ChatActivity.fillActionModeMenu(menu, parentFragment.getCurrentEncryptedChat(), false);
+                                ChatActivity.fillActionModeMenu(menu, parentFragment.getCurrentEncryptedChat(), false, true);
                             }
                         }
 

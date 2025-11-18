@@ -14,7 +14,7 @@ buildscript {
 
         //noinspection GradleDependency
         classpath 'cn.hutool:hutool-core:5.7.13'
-        classpath "io.sentry:sentry-android-gradle-plugin:5.11.0"
+        classpath "io.sentry:sentry-android-gradle-plugin:5.12.2"
         // db
         classpath "io.objectbox:objectbox-gradle-plugin:4.3.1"
     }

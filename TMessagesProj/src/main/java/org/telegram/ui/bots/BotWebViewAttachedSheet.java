@@ -21,7 +21,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.icu.util.Measure;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextPaint;
@@ -641,7 +640,7 @@ public class BotWebViewAttachedSheet implements NotificationCenter.NotificationC
 
             @Override
             public boolean isClipboardAvailable() {
-                return MediaDataController.getInstance(currentAccount).botInAttachMenu(botId);
+                return MediaDataController.getInstance(currentAccount).botInAttachMenu(botId) || MessagesController.getInstance(currentAccount).whitelistedBots.contains(botId);
             }
         });
 
@@ -1568,7 +1567,7 @@ public class BotWebViewAttachedSheet implements NotificationCenter.NotificationC
         if (dialog != null) {
             dialog.updateNavigationBarColor();
         } else if (attachedToParent() && LaunchActivity.instance != null) {
-            LaunchActivity.instance.checkSystemBarColors(true, true, true, false);
+            LaunchActivity.instance.checkSystemBarColors(true, true, true);
             //LaunchActivity.instance.setNavigationBarColor(fragment.getNavigationBarColor(), false);
         }
     }
@@ -1922,7 +1921,7 @@ public class BotWebViewAttachedSheet implements NotificationCenter.NotificationC
             lastFragment.presentFragment(ChatActivity.of(botId));
         }
         AndroidUtilities.runOnUIThread(() -> {
-            SendMessagesHelper.getInstance(currentAccount).sendMessage(SendMessagesHelper.SendMessageParams.of("/privacy", botId, null, null, null, false, null, null, null, true, 0, null, false));
+            SendMessagesHelper.getInstance(currentAccount).sendMessage(SendMessagesHelper.SendMessageParams.of("/privacy", botId, null, null, null, false, null, null, null, true, 0, 0, null, false));
         }, 150);
         return true;
     }

@@ -772,6 +772,17 @@ public class NotificationsController extends BaseController {
                     getMessagesStorage().putStoryPushMessage(notification);
                 }
             }
+            for (int i = 0; i < pushMessages.size(); ++i) {
+                MessageObject msg = pushMessages.get(i);
+                if (msg != null && msg.isLiveStoryPush && msg.getId() == storyId) {
+                    pushMessages.remove(i);
+                    i--;
+                    SparseArray<MessageObject> arr = pushMessagesDict.get(msg.getDialogId());
+                    if (arr != null) arr.remove(msg.getId());
+                    if (arr != null && arr.size() <= 0) pushMessagesDict.remove(msg.getDialogId());
+                    changed = true;
+                }
+            }
             if (changed) {
                 showOrUpdateNotification(false);
             }
@@ -796,6 +807,17 @@ public class NotificationsController extends BaseController {
 //                    changed = true;
 //                    getMessagesStorage().putStoryPushMessage(newNotification);
 //                }
+            }
+            for (int i = 0; i < pushMessages.size(); ++i) {
+                MessageObject msg = pushMessages.get(i);
+                if (msg != null && msg.isLiveStoryPush && msg.getId() <= maxId) {
+                    pushMessages.remove(i);
+                    i--;
+                    SparseArray<MessageObject> arr = pushMessagesDict.get(msg.getDialogId());
+                    if (arr != null) arr.remove(msg.getId());
+                    if (arr != null && arr.size() <= 0) pushMessagesDict.remove(msg.getDialogId());
+                    changed = true;
+                }
             }
             if (changed) {
                 showOrUpdateNotification(false);
@@ -3726,7 +3748,7 @@ public class NotificationsController extends BaseController {
             }
 
             if (channelsId != null || groupsId != null || reactionsId != null || storiesId != null || privateId != null || otherId != null) {
-                TLRPC.User user = getMessagesController().getUser(getUserConfig().getClientUserId());
+                final TLRPC.User user = getMessagesController().getUser(getUserConfig().getClientUserId());
                 if (user == null) {
                     getUserConfig().getCurrentUser();
                 }
@@ -3737,7 +3759,7 @@ public class NotificationsController extends BaseController {
                     userName = "";
                 }
 
-                ArrayList<NotificationChannelGroup> channelGroups = new ArrayList<>();
+                final ArrayList<NotificationChannelGroup> channelGroups = new ArrayList<>();
                 if (channelsId != null) {
                     channelGroups.add(new NotificationChannelGroup(channelsId, LocaleController.getString(R.string.NotificationsChannels) + userName));
                 }
@@ -4505,6 +4527,13 @@ public class NotificationsController extends BaseController {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             if (lastMessageObject.isStoryReactionPush) {
+                intent.putExtra("storyId", Math.abs(lastMessageObject.getId()));
+            } else if (lastMessageObject.isLiveStoryPush) {
+                if (chatId != 0) {
+                    intent.putExtra("chatId", chatId);
+                } else if (userId != 0) {
+                    intent.putExtra("userId", userId);
+                }
                 intent.putExtra("storyId", Math.abs(lastMessageObject.getId()));
             } else if (lastMessageObject.isStoryPush) {
                 long[] peerIds = new long[storyPushMessages.size()];
@@ -5442,6 +5471,13 @@ public class NotificationsController extends BaseController {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
             if (lastMessageObject != null && lastMessageObject.isStoryReactionPush) {
+                intent.putExtra("storyId", Math.abs(lastMessageObject.getId()));
+            } else if (lastMessageObject != null && lastMessageObject.isLiveStoryPush) {
+                if (dialogId < 0) {
+                    intent.putExtra("chatId", -dialogId);
+                } else if (dialogId > 0) {
+                    intent.putExtra("userId", dialogId);
+                }
                 intent.putExtra("storyId", Math.abs(lastMessageObject.getId()));
             } else if (dialogKey.story) {
                 long[] peerIds = new long[storyPushMessages.size()];
