@@ -932,6 +932,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             true
         )
+    val navigationAnimationSpring =
+        addConfig(
+            "NavigationAnimationSpring",
+            ConfigItem.configTypeBool,
+            true
+        )
 
     private fun addConfig(
         k: String,
