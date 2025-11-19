@@ -142,8 +142,11 @@ public class DrawerProfileCell extends FrameLayout implements NotificationCenter
                 if (bmp != null) {
                     new Thread(() -> {
                         if (lastBitmap != null) {
-                            imageReceiver.setCrossfadeWithOldImage(false);
-                            imageReceiver.setImageBitmap(new BitmapDrawable(null, lastBitmap), false);
+                            final Bitmap placeholder = lastBitmap;
+                            AndroidUtilities.runOnUIThread(() -> {
+                                imageReceiver.setCrossfadeWithOldImage(false);
+                                imageReceiver.setImageBitmap(new BitmapDrawable(null, placeholder), false);
+                            });
                         }
                         int width = NekoConfig.avatarBackgroundBlur.Bool() ? 150 : bmp.bitmap.getWidth();
                         int height = NekoConfig.avatarBackgroundBlur.Bool() ? 150 : bmp.bitmap.getHeight();

@@ -351,14 +351,13 @@ dependencies {
     // OSM
     implementation "org.osmdroid:osmdroid-android:6.1.10"
     // okhttp
-    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.10"
-    implementation 'com.neovisionaries:nv-websocket-client:2.14'
-    implementation 'dnsjava:dnsjava:3.4.1'
+    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.14"
+    implementation 'dnsjava:dnsjava:3.6.3'
 
     implementation "cn.hutool:hutool-core:5.7.13"
     implementation "cn.hutool:hutool-crypto:5.7.13"
     implementation 'cn.hutool:hutool-http:5.7.5'
-    implementation "com.jakewharton:process-phoenix:2.1.2"
+    implementation "com.jakewharton:process-phoenix:3.0.0"
     // openpgp
     implementation project(":openpgp-api")
 
@@ -366,7 +365,7 @@ dependencies {
 
     compileOnly "com.google.android.play:core:$playCoreVersion"
     // add for undo and redo
-    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:5.1'
+    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:6.1'
     // add splash screen
     implementation("androidx.core:core-splashscreen:1.0.1")
     // add for emoji

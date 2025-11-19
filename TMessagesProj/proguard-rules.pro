@@ -66,12 +66,6 @@
     java.lang.Object readResolve();
 }
 
--keep class tw.nekomimi.nekogram.InternalUpdater$ReleaseMetadata { *; }
--keep class tw.nekomimi.nekogram.InternalUpdater$ApkMetadata { *; }
--keep class tw.nekomimi.nekogram.InternalUpdater$GithubApiContents { *; }
--keep class tw.nekomimi.nekogram.InternalUpdater$NekoXReleaseNote { *; }
--keep class tw.nekomimi.nekogram.InternalUpdater$NekoXAPK { *; }
-
 ## https://developers.google.com/ml-kit/known-issues#android_issues
 #-keep class com.google.mlkit.nl.languageid.internal.LanguageIdentificationJni { *; }
 
@@ -163,4 +157,10 @@
 -dontwarn lombok.**
 -dontwarn org.slf4j.**
 -dontwarn org.w3c.dom.bootstrap.**
+
 -dontwarn sun.net.spi.nameservice.**
+-dontwarn com.sun.jna.**
+-dontwarn javax.naming.NamingException
+-dontwarn javax.naming.directory.DirContext
+-dontwarn javax.naming.directory.InitialDirContext
+-dontwarn org.xbill.DNS.spi.DnsjavaInetAddressResolverProvider
