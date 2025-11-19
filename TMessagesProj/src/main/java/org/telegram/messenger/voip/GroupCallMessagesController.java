@@ -1,6 +1,7 @@
 package org.telegram.messenger.voip;
 
 import android.util.LongSparseArray;
+import android.util.SparseArray;
 
 import androidx.annotation.Nullable;
 
@@ -292,15 +293,15 @@ public class GroupCallMessagesController extends BaseController {
 
     /* * */
 
-    private static volatile GroupCallMessagesController[] Instance = new GroupCallMessagesController[UserConfig.MAX_ACCOUNT_COUNT];
+    private static volatile SparseArray<GroupCallMessagesController> Instance = new SparseArray<>();
 
     public static GroupCallMessagesController getInstance(int num) {
-        GroupCallMessagesController localInstance = Instance[num];
+        GroupCallMessagesController localInstance = Instance.get(num);
         if (localInstance == null) {
             synchronized (GroupCallMessagesController.class) {
-                localInstance = Instance[num];
+                localInstance = Instance.get(num);
                 if (localInstance == null) {
-                    Instance[num] = localInstance = new GroupCallMessagesController(num);
+                    Instance.set(num, localInstance = new GroupCallMessagesController(num));
                 }
             }
         }

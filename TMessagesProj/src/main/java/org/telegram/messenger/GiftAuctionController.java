@@ -2,6 +2,7 @@ package org.telegram.messenger;
 
 import android.text.TextUtils;
 import android.util.LongSparseArray;
+import android.util.SparseArray;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -683,15 +684,15 @@ public class GiftAuctionController extends BaseController {
         super(num);
     }
 
-    private static volatile GiftAuctionController[] Instance = new GiftAuctionController[UserConfig.MAX_ACCOUNT_COUNT];
+    private static volatile SparseArray<GiftAuctionController> Instance = new SparseArray<>();
 
     public static GiftAuctionController getInstance(int num) {
-        GiftAuctionController localInstance = Instance[num];
+        GiftAuctionController localInstance = Instance.get(num);
         if (localInstance == null) {
             synchronized (GiftAuctionController.class) {
-                localInstance = Instance[num];
+                localInstance = Instance.get(num);
                 if (localInstance == null) {
-                    Instance[num] = localInstance = new GiftAuctionController(num);
+                    Instance.set(num, localInstance = new GiftAuctionController(num));
                 }
             }
         }

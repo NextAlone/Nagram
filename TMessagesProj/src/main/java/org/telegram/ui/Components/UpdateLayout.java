@@ -61,7 +61,7 @@ public class UpdateLayout extends IUpdateLayout {
                 Long totalSize = (Long) args[2];
                 float loadProgress = loadedSize / (float) totalSize;
                 updateLayoutIcon.setProgress(loadProgress, true);
-                updateTextViews[0].setText(LocaleController.formatString("AppUpdateDownloading", R.string.AppUpdateDownloading, (int) (loadProgress * 100)));
+                updateTextViews[0].setText(LocaleController.formatString(R.string.AppUpdateDownloading, (int) (loadProgress * 100)));
             }
         }
     }
@@ -136,7 +136,7 @@ public class UpdateLayout extends IUpdateLayout {
             updateTextViews[i].setGravity(Gravity.LEFT);
             updateLayout.addView(updateTextViews[i], LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL, 74, 0, 0, 0));
         }
-        updateTextViews[0].setText(LocaleController.getString(R.string.AppUpdate));
+        updateTextViews[0].setText(LocaleController.getString(R.string.AppUpdate).replace("Telegram", LocaleController.getString(R.string.NekoX)));
         updateTextViews[1].setAlpha(0f);
         updateTextViews[1].setVisibility(View.GONE);
 
@@ -167,11 +167,11 @@ public class UpdateLayout extends IUpdateLayout {
                     updateLayoutIcon.setIcon(MediaActionDrawable.ICON_CANCEL, true, animated);
                     updateLayoutIcon.setProgress(0, false);
                     Float p = ImageLoader.getInstance().getFileProgress(fileName);
-                    setUpdateText(LocaleController.formatString("AppUpdateDownloading", R.string.AppUpdateDownloading, (int) ((p != null ? p : 0.0f) * 100)), animated);
+                    setUpdateText(LocaleController.formatString(R.string.AppUpdateDownloading, (int) ((p != null ? p : 0.0f) * 100)), animated);
                     showSize = false;
                 } else {
                     updateLayoutIcon.setIcon(MediaActionDrawable.ICON_DOWNLOAD, true, animated);
-                    setUpdateText(LocaleController.getString(R.string.AppUpdate), animated);
+                    setUpdateText(LocaleController.getString(R.string.AppUpdate).replace("Telegram", LocaleController.getString(R.string.NekoX)), animated);
                     showSize = true;
                 }
             }
