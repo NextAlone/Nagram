@@ -585,6 +585,7 @@ public class SpoilerEffect extends Drawable {
     }
 
     public static void addSpoilers(@Nullable View v, Layout textLayout, int left, int right, @Nullable Stack<SpoilerEffect> spoilersPool, List<SpoilerEffect> spoilers) {
+        if (NekoConfig.showSpoilersDirectly.Bool()) return;
         if (textLayout.getText() instanceof Spanned) {
             addSpoilers(v, textLayout, left, right, (Spanned) textLayout.getText(), spoilersPool, spoilers, null);
         }

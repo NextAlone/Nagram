@@ -35041,16 +35041,15 @@ public class ChatActivity extends BaseFragment implements
             searchItemVisible = true;
             updateSearchButtons(0, 0, -1);
             updateBottomOverlay();
-
-            if (searchCalendarButton != null) {
-                searchCalendarButton.setVisibility(View.GONE);
-            }
-            if (searchUserButton != null) {
-                searchUserButton.setVisibility(View.GONE);
-            }
-            if (searchFilterButton != null) {
-                searchFilterButton.setVisibility(View.GONE);
-            }
+        }
+        if (searchCalendarButton != null) {
+            searchCalendarButton.setVisibility(View.GONE);
+        }
+        if (searchUserButton != null) {
+            searchUserButton.setVisibility(View.GONE);
+        }
+        if (searchFilterButton != null) {
+            searchFilterButton.setVisibility(View.GONE);
         }
         if (searchItem != null) {
             preventReopenSearchWithText = true;
@@ -35097,16 +35096,15 @@ public class ChatActivity extends BaseFragment implements
             searchItemVisible = true;
             updateSearchButtons(0, 0, -1);
             updateBottomOverlay();
-
-            if (searchCalendarButton != null) {
-                searchCalendarButton.setVisibility(View.GONE);
-            }
-            if (searchUserButton != null) {
-                searchUserButton.setVisibility(View.GONE);
-            }
-            if (searchFilterButton != null) {
-                searchFilterButton.setVisibility(View.GONE);
-            }
+        }
+        if (searchCalendarButton != null) {
+            searchCalendarButton.setVisibility(View.GONE);
+        }
+        if (searchUserButton != null) {
+            searchUserButton.setVisibility(View.GONE);
+        }
+        if (searchFilterButton != null) {
+            searchFilterButton.setVisibility(View.GONE);
         }
         if (searchItem != null) {
             preventReopenSearchWithText = true;
@@ -43966,16 +43964,15 @@ public class ChatActivity extends BaseFragment implements
                 } else {
                     searchItem.openSearch(false);
                 }
-                if (peer.user_id!=0) {
+                if (peer.user_id != 0) {
                     TLRPC.User user = getMessagesController().getUser(peer.user_id);
-                    searchUserMessages(user,null);
-                } else if (peer.chat_id!=0) {
+                    openSearchWithUser(user);
+                } else if (peer.chat_id != 0) {
                     TLRPC.Chat chat = getMessagesController().getChat(peer.chat_id);
-                    searchUserMessages(null, chat);
-                } else if (peer.channel_id!=0) {
-                    // thanks to Nekogram
+                    openSearchWithChat(chat);
+                } else if (peer.channel_id != 0) {
                     TLRPC.Chat chat = getMessagesController().getChat(peer.channel_id);
-                    searchUserMessages(null, chat);
+                    openSearchWithChat(chat);
                 }
                 showMessagesSearchListView(true);
                 break;
