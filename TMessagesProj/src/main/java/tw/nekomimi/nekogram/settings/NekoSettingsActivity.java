@@ -636,4 +636,8 @@ public class NekoSettingsActivity extends BaseFragment {
 
     }
 
+    @Override
+    public boolean isSupportEdgeToEdge() {
+        return false;
+    }
 }

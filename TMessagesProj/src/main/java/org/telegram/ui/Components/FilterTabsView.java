@@ -67,6 +67,8 @@ import java.util.ArrayList;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.folder.FolderIconHelper;
+import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.TabStyle;
 
 public class FilterTabsView extends FrameLayout {
 
@@ -1027,6 +1029,7 @@ public class FilterTabsView extends FrameLayout {
             }
         };
         listView.setClipChildren(false);
+        listView.setOverScrollMode(OVER_SCROLL_NEVER);
         itemAnimator = new DefaultItemAnimator() {
 
             @Override
@@ -1131,7 +1134,7 @@ public class FilterTabsView extends FrameLayout {
         };
         itemAnimator.setDelayAnimations(false);
         listView.setItemAnimator(itemAnimator);
-        listView.setSelectorType(8);
+        listView.setSelectorType(NaConfig.INSTANCE.getTabStyle().Int() >= TabStyle.PILLS.getValue() ? 9 : 8);
         listView.setSelectorRadius(6);
         listView.setSelectorDrawableColor(Theme.getColor(selectorColorKey));
         listView.setLayoutManager(layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false) {
@@ -1499,11 +1502,36 @@ public class FilterTabsView extends FrameLayout {
                     indicatorX = (int) (tabView.getX() + (viewWidth - indicatorWidth) / 2);
                 }
             }
-            if (indicatorWidth != 0) {
+            if (indicatorWidth != 0 && NaConfig.INSTANCE.getTabStyle().Int() != TabStyle.PURE.getValue()) {
                 canvas.save();
                 canvas.translate(listView.getTranslationX(), 0);
                 canvas.scale(listView.getScaleX(), 1f, listView.getPivotX() + listView.getX(), listView.getPivotY());
-                selectorDrawable.setBounds((int) indicatorX, height - AndroidUtilities.dpr(4), (int) (indicatorX + indicatorWidth), height);
+//                selectorDrawable.setBounds((int) indicatorX, height - AndroidUtilities.dpr(4), (int) (indicatorX + indicatorWidth), height);
+                // --- Tab Style Start ---
+                int inlinePadding = 0;
+                int topBound = height - AndroidUtilities.dpr(4);
+                int bottomBound = height;
+                float rtpRad = 0;
+                if (NaConfig.INSTANCE.getTabStyle().Int() >= TabStyle.PILLS.getValue()) {
+                    inlinePadding = AndroidUtilities.dp(10);
+                    topBound = height / 2 - AndroidUtilities.dp(15);
+                    bottomBound = height / 2 + AndroidUtilities.dp(15);
+                    selectorDrawable.setColor(ColorUtils.setAlphaComponent(Theme.getColor(Theme.key_actionBarDefaultIcon), 50));
+                } else {
+                    selectorDrawable.setColor(Theme.getColor(tabLineColorKey));
+                }
+                float rad = AndroidUtilities.dpf2(3);
+                if (NaConfig.INSTANCE.getTabStyle().Int() == TabStyle.PILLS.getValue()) {
+                    rad = rtpRad = AndroidUtilities.dpf2(40);
+                }
+                selectorDrawable.setCornerRadii(new float[]{rad, rad, rad, rad, rtpRad, rtpRad, rtpRad, rtpRad});
+                selectorDrawable.setBounds(
+                        (int) indicatorX - inlinePadding,
+                        topBound,
+                        (int) (indicatorX + indicatorWidth) + inlinePadding,
+                        bottomBound
+                );
+                // --- Tab Style End ---
                 selectorDrawable.draw(canvas);
                 canvas.restore();
             }

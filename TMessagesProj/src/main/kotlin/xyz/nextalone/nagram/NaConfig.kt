@@ -944,6 +944,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    var tabStyle =
+        addConfig(
+            "TabStyle",
+            ConfigItem.configTypeInt,
+            0
+        )
 
     private fun addConfig(
         k: String,

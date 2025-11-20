@@ -218,4 +218,7 @@
     <string name="NavigationAnimationSpring">页面切换弹簧动画</string>
     <string name="ForceEdgeToEdge">强制无边框显示</string>
     <string name="ForceEdgeToEdgeDesc">可能导致页面布局异常、内容重叠及点击失效</string>
+    <string name="TabStyle">文件夹标签样式</string>
+    <string name="TabStylePure">纯净</string>
+    <string name="TabStylePills">药丸</string>
 </resources>
