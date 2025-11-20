@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.core.graphics.ColorUtils;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,12 +40,14 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextRadioCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.BlurredRecyclerView;
+import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.FlickerLoadingView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.URLSpanNoUnderline;
+import org.telegram.ui.Components.inset.WindowInsetsStateHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,6 +75,8 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
     public static final int TYPE_CHECK2 = 16;
     public static final int TYPE_CHECKBOX2 = 17;
 
+    private final WindowInsetsStateHolder windowInsetsStateHolder = new WindowInsetsStateHolder(this::checkInsets);
+
     protected BlurredRecyclerView listView;
     protected BaseListAdapter listAdapter;
     protected LinearLayoutManager layoutManager;
@@ -79,6 +85,10 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
     protected int rowCount;
     protected HashMap<String, Integer> rowMap = new HashMap<>(20);
     protected HashMap<Integer, String> rowMapReverse = new HashMap<>(20);
+
+    private void checkInsets() {
+        listView.setPadding(0, 0, 0, windowInsetsStateHolder.getCurrentNavigationBarInset());
+    }
 
     @Override
     public boolean onFragmentCreate() {
@@ -93,6 +103,10 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
     public View createView(Context context) {
         fragmentView = new BlurContentView(context);
         fragmentView.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundGray));
+        ViewCompat.setOnApplyWindowInsetsListener(fragmentView, (v, insets) -> {
+            windowInsetsStateHolder.setInsets(insets);
+            return WindowInsetsCompat.CONSUMED;
+        });
         SizeNotifierFrameLayout frameLayout = (SizeNotifierFrameLayout) fragmentView;
 
         actionBar.setDrawBlurBackground(frameLayout);
@@ -115,6 +129,7 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
 
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this::onItemClick);
+        listView.setClipToPadding(false);
         listView.setOnItemLongClickListener((view, position, x, y) -> {
             if (onItemLongClick(view, position, x, y)) {
                 return true;
@@ -124,7 +139,7 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
             if (key != null && holder != null && listAdapter.isEnabled(holder) && rowMapReverse.containsKey(position)) {
                 showDialog(new AlertDialog.Builder(context)
                         .setItems(
-                                new CharSequence[]{LocaleController.getString("CopyLink", R.string.CopyLink)},
+                                new CharSequence[]{LocaleController.getString(R.string.CopyLink)},
                                 (dialogInterface, i) -> {
                                     AndroidUtilities.addToClipboard(String.format(Locale.getDefault(), "https://%s/nasettings/%s?r=%s", getMessagesController().linkPrefix, getKey(), rowMapReverse.get(position)));
                                     BulletinFactory.of(BaseNekoSettingsActivity.this).createCopyLinkBulletin().show();
@@ -191,7 +206,7 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
     protected abstract String getActionBarTitle();
 
     protected void showRestartBulletin() {
-        BulletinFactory.of(this).createErrorBulletin(LocaleController.formatString("RestartAppToTakeEffect", R.string.RestartAppToTakeEffect)).show();
+        BulletinFactory.of(this).createErrorBulletin(LocaleController.formatString(R.string.RestartAppToTakeEffect)).show();
     }
 
     private class BlurContentView extends SizeNotifierFrameLayout {
@@ -236,14 +251,27 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }
+
+        Bulletin.addDelegate(this, new Bulletin.Delegate() {
+            @Override
+            public int getBottomOffset(int tag) {
+                return windowInsetsStateHolder.getCurrentNavigationBarInset();
+            }
+        });
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Bulletin.removeDelegate(this);
     }
 
     protected boolean hasWhiteActionBar() {
         return true;
     }
 
-    protected CharSequence getSpannedString(String key, int id, String url) {
-        var text = LocaleController.getString(key, id);
+    protected CharSequence getSpannedString(int id, String url) {
+        var text = LocaleController.getString(id);
         var builder = new SpannableStringBuilder(text);
         int index1 = text.indexOf("**");
         int index2 = text.lastIndexOf("**");
@@ -408,5 +436,10 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
     @Override
     public Theme.ResourcesProvider getResourceProvider() {
         return resourcesProvider;
+    }
+
+    @Override
+    public boolean isSupportEdgeToEdge() {
+        return true;
     }
 }

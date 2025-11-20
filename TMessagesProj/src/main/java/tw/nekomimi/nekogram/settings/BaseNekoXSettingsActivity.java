@@ -1,16 +1,27 @@
 package tw.nekomimi.nekogram.settings;
 
 import android.content.Context;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.FrameLayout;
 
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
+import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BlurredRecyclerView;
+import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.BulletinFactory;
+import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.UndoView;
+import org.telegram.ui.Components.inset.WindowInsetsStateHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,11 +32,74 @@ import tw.nekomimi.nekogram.config.ConfigItem;
 import tw.nekomimi.nekogram.config.cell.*;
 
 public class BaseNekoXSettingsActivity extends BaseFragment {
+    private final WindowInsetsStateHolder windowInsetsStateHolder = new WindowInsetsStateHolder(this::checkInsets);
     protected BlurredRecyclerView listView;
     protected LinearLayoutManager layoutManager;
+    protected UndoView tooltip;
     protected HashMap<String, Integer> rowMap = new HashMap<>(20);
     protected HashMap<Integer, String> rowMapReverse = new HashMap<>(20);
     protected HashMap<Integer, ConfigItem> rowConfigMapReverse = new HashMap<>(20);
+
+    private void checkInsets() {
+        listView.setPadding(0, 0, 0, windowInsetsStateHolder.getCurrentNavigationBarInset());
+    }
+
+    @Override
+    public View createView(Context context) {
+        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        actionBar.setTitle(getTitle());
+        if (AndroidUtilities.isTablet()) {
+            actionBar.setOccupyStatusBar(false);
+        }
+        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+            @Override
+            public void onItemClick(int id) {
+                if (id == -1) {
+                    finishFragment();
+                }
+            }
+        });
+
+        fragmentView = new FrameLayout(context);
+        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+        ViewCompat.setOnApplyWindowInsetsListener(fragmentView, (v, insets) -> {
+            windowInsetsStateHolder.setInsets(insets);
+            return WindowInsetsCompat.CONSUMED;
+        });
+        FrameLayout frameLayout = (FrameLayout) fragmentView;
+
+        listView = new BlurredRecyclerView(context);
+        listView.setVerticalScrollBarEnabled(false);
+        listView.setClipToPadding(false);
+        listView.setLayoutManager(layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
+
+        tooltip = new UndoView(context);
+        frameLayout.addView(tooltip, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 8, 0, 8, 8));
+        return fragmentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Bulletin.addDelegate(this, new Bulletin.Delegate() {
+            @Override
+            public int getBottomOffset(int tag) {
+                return windowInsetsStateHolder.getCurrentNavigationBarInset();
+            }
+        });
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Bulletin.removeDelegate(this);
+    }
+
+    @Override
+    public boolean isSupportEdgeToEdge() {
+        return true;
+    }
 
     protected void updateRows() {
     }
@@ -109,9 +183,9 @@ public class BaseNekoXSettingsActivity extends BaseFragment {
         String key = getRowKey(position);
         String value = getRowValue(position);
         ArrayList<CharSequence> itemsArray = new ArrayList<>();
-        itemsArray.add(LocaleController.getString("CopyLink", R.string.CopyLink));
+        itemsArray.add(LocaleController.getString(R.string.CopyLink));
         if (value != null) {
-            itemsArray.add(LocaleController.getString("BackupSettings", R.string.BackupSettings));
+            itemsArray.add(LocaleController.getString(R.string.BackupSettings));
         }
         CharSequence[] items = itemsArray.toArray(new CharSequence[0]);
         showDialog(new AlertDialog.Builder(context)
@@ -149,10 +223,10 @@ public class BaseNekoXSettingsActivity extends BaseFragment {
                 return;
             }
             var builder = new AlertDialog.Builder(context);
-            builder.setTitle(LocaleController.getString("ImportSettings", R.string.ImportSettings));
-            builder.setMessage(LocaleController.getString("ImportSettingsAlert", R.string.ImportSettingsAlert));
-            builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), (dialogInter, i) -> scrollToRow(key, unknown));
-            builder.setPositiveButton(LocaleController.getString("Import", R.string.Import), (dialogInter, i) -> {
+            builder.setTitle(LocaleController.getString(R.string.ImportSettings));
+            builder.setMessage(LocaleController.getString(R.string.ImportSettingsAlert));
+            builder.setNegativeButton(LocaleController.getString(R.string.Cancel), (dialogInter, i) -> scrollToRow(key, unknown));
+            builder.setPositiveButton(LocaleController.getString(R.string.Import), (dialogInter, i) -> {
                 config.changed(new_value);
                 config.saveConfig();
                 updateRows();

@@ -250,7 +250,7 @@ public class DatacenterActivity extends BaseNekoSettingsActivity implements Noti
             textView.setLinkTextColor(getThemedColor(Theme.key_windowBackgroundWhiteLinkText));
             textView.setHighlightColor(getThemedColor(Theme.key_windowBackgroundWhiteLinkSelection));
             textView.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
-            textView.setText(getSpannedString("DatacenterStatusAbout", R.string.DatacenterStatusAbout, "https://core.telegram.org/api/datacenter"));
+            textView.setText(getSpannedString(R.string.DatacenterStatusAbout, "https://core.telegram.org/api/datacenter"));
 
             setSticker();
         }
