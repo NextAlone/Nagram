@@ -657,4 +657,9 @@ public abstract class GradientHeaderActivity extends BaseFragment {
             savedScrollPosition = -1;
         }
     }
+
+    @Override
+    public boolean isSupportEdgeToEdge() {
+        return false;
+    }
 }

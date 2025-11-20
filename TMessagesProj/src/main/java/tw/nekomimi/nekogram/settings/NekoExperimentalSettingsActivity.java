@@ -89,6 +89,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
     private final AbstractConfigCell enableStickerPinRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.enableStickerPin, LocaleController.getString("EnableStickerPinAbout")));
     private final AbstractConfigCell useMediaStreamInVoipRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useMediaStreamInVoip));
     private final AbstractConfigCell navigationAnimationSpringRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getNavigationAnimationSpring()));
+    private final AbstractConfigCell forceEdgeToEdgeRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getForceEdgeToEdge(), LocaleController.getString(R.string.ForceEdgeToEdgeDesc)));
     private final AbstractConfigCell customAudioBitrateRow = cellGroup.appendCell(new ConfigCellCustom("CustomAudioBitrate", CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final AbstractConfigCell divider0 = cellGroup.appendCell(new ConfigCellDivider());
     
@@ -151,8 +152,6 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
     private final AbstractConfigCell enablePanguOnReceivingRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getEnablePanguOnReceiving()));
     private final AbstractConfigCell localeToDBCRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.localeToDBC));
     private final AbstractConfigCell divider3 = cellGroup.appendCell(new ConfigCellDivider());
-
-    private UndoView tooltip;
 
     private static final int INTENT_PICK_CUSTOM_EMOJI_PACK = 114;
     private static final int INTENT_PICK_EXTERNAL_STICKER_DIRECTORY = 514;
@@ -358,6 +357,8 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
             } else if (key.equals(NaConfig.INSTANCE.getDisableFlagSecure().getKey())) {
                 NekoXConfig.disableFlagSecure = NaConfig.INSTANCE.getDisableFlagSecure().Bool();
             } else if (key.equals(NaConfig.INSTANCE.getNavigationAnimationSpring().getKey())) {
+                tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+            } else if (key.equals(NaConfig.INSTANCE.getForceEdgeToEdge().getKey())) {
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             }
         };

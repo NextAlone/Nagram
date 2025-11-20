@@ -282,7 +282,6 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     private ActionBarMenuItem menuItem;
     private StickerSizeCell stickerSizeCell;
     private EmojiSetCell emojiSetCell;
-    private UndoView tooltip;
 
     public NekoChatSettingsActivity() {
         if (!NekoConfig.showRepeat.Bool() || NaConfig.INSTANCE.getShowRepeatAsCopy().Bool()){

@@ -2430,4 +2430,9 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         popup[0].showAsDropDown(cell, 0, yoff, Gravity.TOP | Gravity.RIGHT);
         popup[0].dimBehind();
     }
+
+    @Override
+    public boolean isSupportEdgeToEdge() {
+        return false;
+    }
 }

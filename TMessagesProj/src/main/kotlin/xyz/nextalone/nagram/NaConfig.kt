@@ -938,6 +938,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             true
         )
+    val forceEdgeToEdge =
+        addConfig(
+            "ForceEdgeToEdge",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

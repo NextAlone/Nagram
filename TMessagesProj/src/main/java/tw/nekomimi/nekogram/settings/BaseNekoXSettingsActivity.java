@@ -42,6 +42,9 @@ public class BaseNekoXSettingsActivity extends BaseFragment {
 
     private void checkInsets() {
         listView.setPadding(0, 0, 0, windowInsetsStateHolder.getCurrentNavigationBarInset());
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) tooltip.getLayoutParams();
+        layoutParams.bottomMargin = windowInsetsStateHolder.getCurrentNavigationBarInset();
+        tooltip.setLayoutParams(layoutParams);
     }
 
     @Override
