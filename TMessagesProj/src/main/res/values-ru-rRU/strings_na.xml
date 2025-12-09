@@ -215,4 +215,10 @@
     <string name="HideInstantCamera">Скрыть мгновенную камеру</string>
     <string name="UseSystemAiService">Использовать системный Ai сервис</string>
     <string name="UseSystemAiServiceDesc">Поддерживать только HyperOS и ColorOS</string>
+    <string name="NavigationAnimationSpring">Анимация источника навигации</string>
+    <string name="ForceEdgeToEdge">Принудительно к краю</string>
+    <string name="ForceEdgeToEdgeDesc">Может привести к неправильным разметкам страниц, дублированию контента и сбою действий кликов.</string>
+    <string name="TabStyle">Tab Style</string>
+    <string name="TabStylePure">Чистый</string>
+    <string name="TabStylePills">Таблетки</string>
 </resources>

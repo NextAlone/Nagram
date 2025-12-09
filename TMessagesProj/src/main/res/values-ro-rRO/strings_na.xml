@@ -215,4 +215,10 @@
     <string name="HideInstantCamera">Ascunde camera instantanee</string>
     <string name="UseSystemAiService">Folosește Serviciul Ai Sistem</string>
     <string name="UseSystemAiServiceDesc">Acceptă doar HyperOS și ColorOS</string>
+    <string name="NavigationAnimationSpring">Animație primăvară de navigare</string>
+    <string name="ForceEdgeToEdge">Forțează marginea la margine</string>
+    <string name="ForceEdgeToEdgeDesc">Poate duce la nereguli în aspectul paginii, la suprapunerea conținutului și la acțiuni eșuate pentru click.</string>
+    <string name="TabStyle">Tab Style</string>
+    <string name="TabStylePure">Pur</string>
+    <string name="TabStylePills">Comprimate</string>
 </resources>

@@ -215,4 +215,10 @@
     <string name="HideInstantCamera">インスタントカメラを隠す</string>
     <string name="UseSystemAiService">システムAIサービスを使用する</string>
     <string name="UseSystemAiServiceDesc">HyperOSとColorOSのみをサポートします</string>
+    <string name="NavigationAnimationSpring">ナビゲーションスプリングアニメーション</string>
+    <string name="ForceEdgeToEdge">エッジを強制する</string>
+    <string name="ForceEdgeToEdgeDesc">ページレイアウトの不規則性、コンテンツの重複、クリックアクションの失敗を引き起こす可能性があります。</string>
+    <string name="TabStyle">Tab Style</string>
+    <string name="TabStylePure">純粋な</string>
+    <string name="TabStylePills">ピル数</string>
 </resources>

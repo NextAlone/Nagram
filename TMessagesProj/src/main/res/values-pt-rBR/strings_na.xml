@@ -215,4 +215,10 @@
     <string name="HideInstantCamera">Ocultar câmera instantânea</string>
     <string name="UseSystemAiService">Usar sistema Ai Service</string>
     <string name="UseSystemAiServiceDesc">Apenas apoiem o HyperOS e o ColorOS</string>
+    <string name="NavigationAnimationSpring">Animação de mola de navegação</string>
+    <string name="ForceEdgeToEdge">Força a aresta a aresta</string>
+    <string name="ForceEdgeToEdgeDesc">Pode resultar no layout da página, sobreposição de conteúdo e falha na ação de ações de clique.</string>
+    <string name="TabStyle">Tab Style</string>
+    <string name="TabStylePure">Puro</string>
+    <string name="TabStylePills">Pílulas</string>
 </resources>

@@ -215,4 +215,10 @@
     <string name="HideInstantCamera">Απόκρυψη στιγμιαίας κάμερας</string>
     <string name="UseSystemAiService">Χρήση Υπηρεσίας Συστήματος Ai</string>
     <string name="UseSystemAiServiceDesc">Υποστήριξη μόνο HyperOS και ColorOS</string>
+    <string name="NavigationAnimationSpring">Εφέ ελατηρίου πλοήγησης</string>
+    <string name="ForceEdgeToEdge">Εξαναγκασμός ακμής στην άκρη</string>
+    <string name="ForceEdgeToEdgeDesc">Μπορεί να έχει ως αποτέλεσμα παρατυπίες στη διάταξη της σελίδας, επικάλυψη περιεχομένου, και αποτυχία των ενεργειών κλικ</string>
+    <string name="TabStyle">Tab Style</string>
+    <string name="TabStylePure">Καθαρό</string>
+    <string name="TabStylePills">Χάπια</string>
 </resources>

@@ -215,4 +215,10 @@
     <string name="HideInstantCamera">Skrýt okamžitou kameru</string>
     <string name="UseSystemAiService">Použít System Ai Service</string>
     <string name="UseSystemAiServiceDesc">Podpora pouze HyperOS a ColorOS</string>
+    <string name="NavigationAnimationSpring">Animace pružiny navigace</string>
+    <string name="ForceEdgeToEdge">Vynutit okraj k hraně</string>
+    <string name="ForceEdgeToEdgeDesc">Může mít za následek nesrovnalosti rozložení stránek, překrývání obsahu a selhání akcí kliknutí.</string>
+    <string name="TabStyle">Tab Style</string>
+    <string name="TabStylePure">Čistá</string>
+    <string name="TabStylePills">Zabití</string>
 </resources>

@@ -215,4 +215,10 @@
     <string name="HideInstantCamera">Приховати миттєву камеру</string>
     <string name="UseSystemAiService">Використовувати системний Ai Service</string>
     <string name="UseSystemAiServiceDesc">Підтримка лише HyperOS та ColorOS</string>
+    <string name="NavigationAnimationSpring">Анімація вежі навігації</string>
+    <string name="ForceEdgeToEdge">Примусово до ребра</string>
+    <string name="ForceEdgeToEdgeDesc">Може викликати нерегулярність макету сторінок, перекриття вмісту та відмову при натисканні дій.</string>
+    <string name="TabStyle">Tab Style</string>
+    <string name="TabStylePure">Чистий</string>
+    <string name="TabStylePills">Пігулки</string>
 </resources>

@@ -215,4 +215,10 @@
     <string name="HideInstantCamera">إخفاء الكاميرا الفورية</string>
     <string name="UseSystemAiService">استخدام خدمة النظام Ai</string>
     <string name="UseSystemAiServiceDesc">فقط دعم HyperOS و ColorOS</string>
+    <string name="NavigationAnimationSpring">حركة ربيع التنقل</string>
+    <string name="ForceEdgeToEdge">إجبار الحافة على الحافة</string>
+    <string name="ForceEdgeToEdgeDesc">قد يؤدي إلى حدوث مخالفات في تخطيط الصفحات، وتداخل المحتوى، وفشل إجراءات النقر.</string>
+    <string name="TabStyle">Tab Style</string>
+    <string name="TabStylePure">بحتة</string>
+    <string name="TabStylePills">حبوب</string>
 </resources>

@@ -215,4 +215,10 @@
     <string name="HideInstantCamera">Piilota pikakamera</string>
     <string name="UseSystemAiService">Käytä System Ai -palvelua</string>
     <string name="UseSystemAiServiceDesc">Vain tuki HyperOS ja ColorOS</string>
+    <string name="NavigationAnimationSpring">Navigointijousen animaatio</string>
+    <string name="ForceEdgeToEdge">Pakota reuna reunaan</string>
+    <string name="ForceEdgeToEdgeDesc">Voi johtaa sivujen ulkoasun epäsäännöllisyyksiin, sisällön päällekkäisyyteen ja napsautuksen epäonnistumiseen.</string>
+    <string name="TabStyle">Tab Style</string>
+    <string name="TabStylePure">Puhdas</string>
+    <string name="TabStylePills">Pillereitä</string>
 </resources>

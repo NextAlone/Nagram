@@ -215,4 +215,10 @@
     <string name="HideInstantCamera">Verberg directe camera</string>
     <string name="UseSystemAiService">Gebruik systeem Ai Service</string>
     <string name="UseSystemAiServiceDesc">Alleen HyperOS en ColorOS ondersteunen</string>
+    <string name="NavigationAnimationSpring">Navigatie veeranimatie</string>
+    <string name="ForceEdgeToEdge">Forceer rand tot rand</string>
+    <string name="ForceEdgeToEdgeDesc">Kan resulteren in pagina-lay-out onregelmatigheden, overlapping van inhoud en falen van klik acties.</string>
+    <string name="TabStyle">Tab Style</string>
+    <string name="TabStylePure">Puur</string>
+    <string name="TabStylePills">Pillen</string>
 </resources>

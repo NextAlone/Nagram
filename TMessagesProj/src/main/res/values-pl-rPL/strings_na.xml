@@ -215,4 +215,10 @@
     <string name="HideInstantCamera">Ukryj natychmiastową kamerę</string>
     <string name="UseSystemAiService">Użyj usługi systemowej Ai</string>
     <string name="UseSystemAiServiceDesc">Wspieraj tylko HyperOS i ColorOS</string>
+    <string name="NavigationAnimationSpring">Animacja źródła nawigacji</string>
+    <string name="ForceEdgeToEdge">Wymuś krawędź do krawędzi</string>
+    <string name="ForceEdgeToEdgeDesc">Może skutkować nieprawidłowościami układu strony, nakładaniem się treści i błędem akcji kliknięcia.</string>
+    <string name="TabStyle">Tab Style</string>
+    <string name="TabStylePure">Czysty</string>
+    <string name="TabStylePills">O masie liniowej nitki pojedynczej mniejszej niż 125 decyteksów (o numerze metrycznym przekraczającym 14, ale nieprzekraczającym 43, dla nitki pojedynczej)</string>
 </resources>

@@ -215,4 +215,10 @@
     <string name="HideInstantCamera">Skjul øyeblikkelig kamera</string>
     <string name="UseSystemAiService">Bruk system Ai</string>
     <string name="UseSystemAiServiceDesc">Støtter bare HyperOS og ColorOS</string>
+    <string name="NavigationAnimationSpring">Navigasjon fjæranimasjon</string>
+    <string name="ForceEdgeToEdge">Tving kant til kant</string>
+    <string name="ForceEdgeToEdgeDesc">Kan resultere i uregelmessigheter i sideoppsett, overlapping og svikt på handlinger.</string>
+    <string name="TabStyle">Tab Style</string>
+    <string name="TabStylePure">Botemiddel</string>
+    <string name="TabStylePills">Pølser</string>
 </resources>
