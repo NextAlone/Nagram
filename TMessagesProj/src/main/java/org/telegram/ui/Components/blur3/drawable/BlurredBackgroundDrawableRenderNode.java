@@ -3,22 +3,18 @@ package org.telegram.ui.Components.blur3.drawable;
 import static org.telegram.messenger.AndroidUtilities.dp;
 import static org.telegram.messenger.AndroidUtilities.dpf2;
 
-import android.graphics.BlendMode;
-import android.graphics.BlendModeColorFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.RenderEffect;
+import android.graphics.RectF;
 import android.graphics.RenderNode;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.core.math.MathUtils;
 
-import org.telegram.messenger.LiteMode;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.blur3.LiquidGlassEffect;
 import org.telegram.ui.Components.blur3.source.BlurredBackgroundSource;
@@ -35,7 +31,6 @@ public class BlurredBackgroundDrawableRenderNode extends BlurredBackgroundDrawab
     private final RenderNode renderNodeStroke;
 
     private final Paint paintShadow = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint paintFill = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint paintStrokeTop = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint paintStrokeBottom = new Paint(Paint.ANTI_ALIAS_FLAG);
 
@@ -70,6 +65,8 @@ public class BlurredBackgroundDrawableRenderNode extends BlurredBackgroundDrawab
 
     @Override
     protected void onBoundPropsChanged() {
+        super.onBoundPropsChanged();
+
         paintStrokeTop.setStrokeWidth(boundProps.strokeWidthTop);
         paintStrokeBottom.setStrokeWidth(boundProps.strokeWidthBottom);
 
@@ -92,9 +89,13 @@ public class BlurredBackgroundDrawableRenderNode extends BlurredBackgroundDrawab
 
     @Override
     protected void onSourceOffsetChange(float sourceOffsetX, float sourceOffsetY) {
+        super.onSourceOffsetChange(sourceOffsetX, sourceOffsetY);
         renderNodeInvalidated = true;
     }
 
+    public boolean hasDisplayList() {
+        return renderNode.hasDisplayList();
+    }
 
     private void updateDisplayList() {
         final float offsetX = sourceOffsetX;
@@ -111,7 +112,8 @@ public class BlurredBackgroundDrawableRenderNode extends BlurredBackgroundDrawab
                 boundProps.shaderRadii[0], boundProps.shaderRadii[2], boundProps.shaderRadii[4], boundProps.shaderRadii[6],
                 boundProps.liquidThickness <= 0 ? dp(11) : boundProps.liquidThickness,
                 boundProps.liquidIntensity,
-                boundProps.liquidIndex
+                boundProps.liquidIndex,
+                backgroundColor
             );
         }
         source.draw(c,
@@ -141,8 +143,8 @@ public class BlurredBackgroundDrawableRenderNode extends BlurredBackgroundDrawab
 
         c = renderNode.beginRecording();
         c.drawRenderNode(renderNodeFill);
-        if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.S || liquidGlassEffect != null) && backgroundColor != 0) {
-            c.drawPaint(paintFill);
+        if (liquidGlassEffect == null && Color.alpha(backgroundColor) != 0) {
+            c.drawColor(backgroundColor);
         }
         if (hasStroke) {
             c.drawRenderNode(renderNodeStroke);
@@ -150,27 +152,11 @@ public class BlurredBackgroundDrawableRenderNode extends BlurredBackgroundDrawab
         renderNode.endRecording();
     }
 
-
-    private int lastBackgroundColor;
-
     @Override
     public void updateColors() {
         super.updateColors();
 
-        if (lastBackgroundColor != backgroundColor) {
-            lastBackgroundColor = backgroundColor;
-            if (liquidGlassEffect == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                if (Color.alpha(backgroundColor) != 0) {
-                    renderNodeFill.setRenderEffect(RenderEffect.createColorFilterEffect(
-                            new BlendModeColorFilter(backgroundColor, BlendMode.SRC_OVER)));
-                } else {
-                    renderNodeFill.setRenderEffect(null);
-                }
-            }
-        }
-
         paintShadow.setShadowLayer(dpf2(1), 0f, dpf2(1 / 3f), shadowColor);
-        paintFill.setColor(Theme.multAlpha(backgroundColor, boundProps.fillAlpha));
         paintStrokeTop.setColor(strokeColorTop);
         paintStrokeBottom.setColor(strokeColorBottom);
 
@@ -188,41 +174,18 @@ public class BlurredBackgroundDrawableRenderNode extends BlurredBackgroundDrawab
             return;
         }
 
-        if (renderNodeInvalidated || !renderNode.hasDisplayList()) {
+        if (!renderNode.hasDisplayList()) {
+            source.dispatchOnDrawablesRelativePositionChange();
+            updateDisplayList();
+        } else if (renderNodeInvalidated) {
             updateDisplayList();
         }
+        renderNodeInvalidated = false;
 
         int color = Theme.multAlpha(shadowColor, renderNode.getAlpha());
         if (Color.alpha(color) != 0) {
             paintShadow.setShadowLayer(dpf2(1), 0f, dpf2(1 / 3f), color);
-
-            if (inAppKeyboardOptimization) {
-                canvas.drawRoundRect(
-                    boundProps.boundsWithPadding.left,
-                    boundProps.boundsWithPadding.top,
-                    boundProps.boundsWithPadding.right,
-                    MathUtils.clamp(
-                        boundProps.boundsWithPadding.top + boundProps.radii[0] * 2,
-                        boundProps.boundsWithPadding.top,
-                        boundProps.boundsWithPadding.bottom
-                    ),
-                    boundProps.radii[0],
-                    boundProps.radii[0],
-                    paintShadow
-                );
-            } else if (boundProps.radiiAreSame) {
-                canvas.drawRoundRect(
-                    boundProps.boundsWithPadding.left,
-                    boundProps.boundsWithPadding.top,
-                    boundProps.boundsWithPadding.right,
-                    boundProps.boundsWithPadding.bottom,
-                    boundProps.radii[0],
-                    boundProps.radii[0],
-                    paintShadow
-                );
-            } else {
-                canvas.drawPath(boundProps.path, paintShadow);
-            }
+            boundProps.drawShadows(canvas, paintShadow, inAppKeyboardOptimization);
         }
 
         canvas.save();
@@ -233,8 +196,20 @@ public class BlurredBackgroundDrawableRenderNode extends BlurredBackgroundDrawab
 
     @Override
     public void setAlpha(int alpha) {
+        final int oldAlpha = getAlpha();
+
         super.setAlpha(alpha);
         renderNode.setAlpha(alpha / 255f);
         renderNodeInvalidated = true;
+
+        if (oldAlpha == 0 && alpha > 0) {
+            source.dispatchOnDrawablesRelativePositionChange();
+        }
+    }
+
+    @Override
+    protected void onSourceRelativePositionChanged(RectF position) {
+        super.onSourceRelativePositionChanged(position);
+        source.dispatchOnDrawablesRelativePositionChange();
     }
 }

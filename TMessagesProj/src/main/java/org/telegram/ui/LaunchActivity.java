@@ -56,6 +56,7 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.util.Base64;
+import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.ActionMode;
 import android.view.Gravity;
@@ -75,7 +76,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import android.window.BackEvent;
+import android.window.OnBackAnimationCallback;
+import android.window.OnBackInvokedDispatcher;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.arch.core.util.Function;
@@ -84,6 +89,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.ColorUtils;
+import androidx.core.os.BuildCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -199,6 +205,7 @@ import org.telegram.ui.Components.PhonebookShareAlert;
 import org.telegram.ui.Components.PipRoundVideoView;
 import org.telegram.ui.Components.PipVideoOverlay;
 import org.telegram.ui.Components.Premium.LimitReachedBottomSheet;
+import org.telegram.ui.Components.Premium.PremiumFeatureBottomSheet;
 import org.telegram.ui.Components.Premium.boosts.BoostPagerBottomSheet;
 import org.telegram.ui.Components.Premium.boosts.GiftInfoBottomSheet;
 import org.telegram.ui.Components.Premium.boosts.UserSelectorBottomSheet;
@@ -216,7 +223,7 @@ import org.telegram.ui.Components.TermsOfServiceView;
 import org.telegram.ui.Components.TextStyleSpan;
 import org.telegram.ui.Components.ThemeEditorView;
 import org.telegram.ui.Components.UndoView;
-import org.telegram.ui.Components.inset.WindowRootInsetsListener;
+import org.telegram.ui.Components.inset.WindowAnimatedInsetsProvider;
 import org.telegram.ui.Components.spoilers.SpoilerEffect2;
 import org.telegram.ui.Components.voip.RTMPStreamPipOverlay;
 import org.telegram.ui.Components.voip.VoIPHelper;
@@ -410,9 +417,13 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
 
     private FlagSecureReason flagSecureReason;
     private final LiteMode.BatteryReceiver batteryReceiver = new LiteMode.BatteryReceiver();
-    public final WindowRootInsetsListener windowRootInsetsListener = new WindowRootInsetsListener();
+    private WindowAnimatedInsetsProvider rootAnimatedInsetsListener;
 
     public static LaunchActivity instance;
+
+    public WindowAnimatedInsetsProvider getRootAnimatedInsetsListener() {
+        return rootAnimatedInsetsListener;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -493,6 +504,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         frameLayout.setClipToPadding(false);
         frameLayout.setClipChildren(false);
         setContentView(frameLayout);
+        rootAnimatedInsetsListener = new WindowAnimatedInsetsProvider(frameLayout);
         pipActivityController.addPipListener(new IPipActivityListener() {
             @Override
             public void onCompleteEnterToPip() {
@@ -1147,7 +1159,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 
         AndroidUtilities.enableEdgeToEdge(this);
-        windowRootInsetsListener.attach(getWindow());
 
         EmojiHelper.getInstance().checkEmojiPacks();
         WallpaperHelper.getInstance().checkWallPaper();
@@ -1157,6 +1168,42 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         BackupAgent.requestBackup(this);
 
         RestrictedLanguagesSelectActivity.checkRestrictedLanguages(false);
+//        if (Build.VERSION.SDK_INT >= 34) {
+//            getOnBackInvokedDispatcher().registerOnBackInvokedCallback(
+//                OnBackInvokedDispatcher.PRIORITY_DEFAULT,
+//                new OnBackAnimationCallback() {
+//                    @Override
+//                    public void onBackInvoked() {
+//                        if (actionBarLayout != null) {
+//                            actionBarLayout.onBackInvoked();
+//                        } else {
+//                            onBackPressed();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onBackStarted(@NonNull BackEvent backEvent) {
+//                        if (actionBarLayout != null) {
+//                            actionBarLayout.onBackStarted(backEvent.getTouchY());
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onBackProgressed(@NonNull BackEvent backEvent) {
+//                        if (actionBarLayout != null) {
+//                            actionBarLayout.onBackProgress(backEvent.getProgress());
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onBackCancelled() {
+//                        if (actionBarLayout != null) {
+//                            actionBarLayout.onBackCancelled();
+//                        }
+//                    }
+//                }
+//            );
+//        }
     }
 
     private void showAttachMenuBot(TLRPC.TL_attachMenuBot attachMenuBot, String startApp, boolean sidemenu) {
@@ -3286,6 +3333,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                                                         ((ChatActivity) lastFragment).shakeContent();
                                                     }
                                                 }
+                                                return;
                                             }
 
                                             new GiftSheet(this, intentAccount[0], peerId, null)
@@ -3862,17 +3910,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     }
 
     private void openEmailSettings(TL_account.Password currentPassword) {
-        SpannableStringBuilder spannable = SpannableStringBuilder.valueOf(currentPassword.login_email_pattern);
-        int startIndex = currentPassword.login_email_pattern.indexOf('*');
-        int endIndex = currentPassword.login_email_pattern.lastIndexOf('*');
-        if (startIndex != endIndex && startIndex != -1 && endIndex != -1) {
-            TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
-            run.flags |= TextStyleSpan.FLAG_STYLE_SPOILER;
-            run.start = startIndex;
-            run.end = endIndex + 1;
-            spannable.setSpan(new TextStyleSpan(run), startIndex, endIndex + 1, 0);
-        }
-
         final LoginActivity loginActivity = new LoginActivity().changeEmail(() -> {
             Bulletin.LottieLayout layout = new Bulletin.LottieLayout(this, null);
             layout.setAnimation(R.raw.email_check_inbox);
@@ -3889,6 +3926,17 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         });
 
         if (currentPassword != null && currentPassword.login_email_pattern != null) {
+            SpannableStringBuilder spannable = SpannableStringBuilder.valueOf(currentPassword.login_email_pattern);
+            int startIndex = currentPassword.login_email_pattern.indexOf('*');
+            int endIndex = currentPassword.login_email_pattern.lastIndexOf('*');
+            if (startIndex != endIndex && startIndex != -1 && endIndex != -1) {
+                TextStyleSpan.TextStyleRun run = new TextStyleSpan.TextStyleRun();
+                run.flags |= TextStyleSpan.FLAG_STYLE_SPOILER;
+                run.start = startIndex;
+                run.end = endIndex + 1;
+                spannable.setSpan(new TextStyleSpan(run), startIndex, endIndex + 1, 0);
+            }
+
             new AlertDialog.Builder(this)
                     .setTitle(spannable)
                     .setMessage(getString(R.string.EmailLoginChangeMessage))
@@ -9483,11 +9531,11 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             if (currentRipple == null || currentRipple.view != parent) {
                 currentRipple = new SuperRipple(parent);
             }
-        } else if (Build.VERSION.SDK_INT >= 26) {
+        }/* else if (Build.VERSION.SDK_INT >= 26) {
             if (currentRipple == null || currentRipple.view != parent) {
                 currentRipple = new SuperRippleFallback(parent);
             }
-        }
+        }*/
         if (currentRipple != null) {
             currentRipple.animate(x, y, intensity);
         }

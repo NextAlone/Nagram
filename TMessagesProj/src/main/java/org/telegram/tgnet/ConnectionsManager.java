@@ -322,6 +322,10 @@ public class ConnectionsManager extends BaseController {
         return native_getCurrentDatacenterId(currentAccount);
     }
 
+    public long getCurrentAuthKeyId() {
+        return native_getCurrentAuthKeyId(currentAccount);
+    }
+
     public int getTimeDifference() {
         return native_getTimeDifference(currentAccount);
     }
@@ -402,18 +406,22 @@ public class ConnectionsManager extends BaseController {
     public <T extends TLObject> int sendRequestTyped(TLMethod<T> method, Utilities.Callback2<T, TLRPC.TL_error> completionBlock) {
         return sendRequestTyped(method, null, completionBlock);
     }
-
     public <T extends TLObject> int sendRequestTyped(TLMethod<T> method, Executor executor, Utilities.Callback2<T, TLRPC.TL_error> completionBlock) {
+        return sendRequestTyped(method, executor, completionBlock, DEFAULT_DATACENTER_ID, 0);
+    }
+    public <T extends TLObject> int sendRequestTyped(TLMethod<T> method, Executor executor, Utilities.Callback2<T, TLRPC.TL_error> completionBlock, int requestFlags) {
+        return sendRequestTyped(method, executor, completionBlock, DEFAULT_DATACENTER_ID, requestFlags);
+    }
+    public <T extends TLObject> int sendRequestTyped(TLMethod<T> method, Executor executor, Utilities.Callback2<T, TLRPC.TL_error> completionBlock, int dcId, int requestFlags) {
         return sendRequest(method, (res, err) -> {
             //noinspection unchecked
             T result = (T) res;
-
             if (executor != null) {
                 executor.execute(() -> completionBlock.run(result, err));
             } else {
                 completionBlock.run(result, err);
             }
-        });
+        }, null, null, null, requestFlags, dcId, ConnectionTypeGeneric, true);
     }
 
     public int sendRequest(TLObject object, RequestDelegate completionBlock) {
@@ -804,6 +812,10 @@ public class ConnectionsManager extends BaseController {
         native_updateDcSettings(currentAccount);
     }
 
+    public void setDefaultDatacenterId(int dcId) {
+        native_moveDatacenter(currentAccount, dcId);
+    }
+
     public long getPauseTime() {
         return lastPauseTime;
     }
@@ -1086,7 +1098,7 @@ public class ConnectionsManager extends BaseController {
     public static native void native_setIpStrategy(int currentAccount, byte value);
 
     public static native void native_updateDcSettings(int currentAccount);
-
+    public static native void native_moveDatacenter(int currentAccount, int datacenterId);
     public static native void native_setNetworkAvailable(int currentAccount, boolean value, int networkType, boolean slow);
 
     public static native void native_resumeNetwork(int currentAccount, boolean partial);
@@ -1098,7 +1110,7 @@ public class ConnectionsManager extends BaseController {
     public static native int native_getCurrentPingTime(int currentAccount);
 
     public static native int native_getCurrentDatacenterId(int currentAccount);
-
+    public static native long native_getCurrentAuthKeyId(int currentAccount);
     public static native int native_getTimeDifference(int currentAccount);
 
     public static native void native_sendRequest(int currentAccount, long object, int flags, int datacenterId, int connectionType, boolean immediate, int requestToken);
@@ -1112,8 +1124,6 @@ public class ConnectionsManager extends BaseController {
     public static native void native_bindRequestToGuid(int currentAccount, int requestToken, int guid);
 
     public static native void native_applyDatacenterAddress(int currentAccount, int datacenterId, String ipAddress, int port);
-
-    public static native void native_moveToDatacenter(int currentAccount, int datacenterId);
 
     public static native int native_getConnectionState(int currentAccount);
     public static native void native_setUserId(int currentAccount, long id);

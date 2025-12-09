@@ -344,6 +344,7 @@ public class Bulletin {
                                 }
                             }, currentBottomOffset);
                         } else {
+                            layout.delegate = currentDelegate;
                             if (currentDelegate != null && !top) {
                                 currentDelegate.onBottomOffsetChange(layout.getHeight() - currentBottomOffset);
                             }

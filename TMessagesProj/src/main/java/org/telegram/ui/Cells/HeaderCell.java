@@ -114,6 +114,14 @@ public class HeaderCell extends LinearLayout {
         ViewCompat.setAccessibilityHeading(this, true);
     }
 
+    public void setOnWidthUpdateListener(Runnable listener) {
+        animatedTextView.setOnWidthUpdatedListener(listener);
+    }
+
+    public float getAnimatedWidth() {
+        return animatedTextView.getDrawable().getCurrentWidth();
+    }
+
     // NekoX: BottomSheet BigTitle, move big title from constructor to here
     public HeaderCell setBigTitle(boolean enabled) {
         if (enabled) {
