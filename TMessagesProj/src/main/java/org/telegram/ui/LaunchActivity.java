@@ -457,7 +457,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         flagSecureReason.attach();
 
         super.onCreate(savedInstanceState);
-        
         // Set initial status bar color immediately to prevent flash
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(0xFF426482); // Use theme's colorPrimaryDark
@@ -927,8 +926,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         actionBarLayout.setDrawerLayoutContainer(drawerLayoutContainer);
         actionBarLayout.setFragmentStack(mainFragmentsStack);
         actionBarLayout.setFragmentStackChangedListener(() -> {
-            // Delay system bar color check to ensure theme is fully loaded
-            AndroidUtilities.runOnUIThread(() -> checkSystemBarColors(true, false), 100);
+            checkSystemBarColors(true, false);
             if (getLastFragment() != null && getLastFragment().getLastStoryViewer() != null) {
                 getLastFragment().getLastStoryViewer().updatePlayingMode();
             }
@@ -1053,8 +1051,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             drawerLayoutContainer.setAllowOpenDrawer(allowOpen, false);
         }
         checkLayout();
-        // Delay system bar colors check to ensure theme is fully loaded on first app launch
-        AndroidUtilities.runOnUIThread(this::checkSystemBarColors, 200);
+        checkSystemBarColors();
         handleIntent(getIntent(), false, savedInstanceState != null, false, null, true, true);
         try {
             String os1 = Build.DISPLAY;
@@ -1570,16 +1567,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     }
 
     public void checkSystemBarColors(boolean useCurrentFragment, boolean checkStatusBar, boolean checkNavigationBar) {
-        // Ensure theme colors are available before setting system bar colors
-        try {
-            // Check if default theme colors are loaded by trying to get a common color
-            Theme.getColor(Theme.key_actionBarDefault, null, true);
-        } catch (Exception e) {
-            // Theme not yet fully loaded, delay the call
-            AndroidUtilities.runOnUIThread(() -> checkSystemBarColors(useCurrentFragment, checkStatusBar, checkNavigationBar), 100);
-            return;
-        }
-        
         BaseFragment currentFragment = !mainFragmentsStack.isEmpty() ? mainFragmentsStack.get(mainFragmentsStack.size() - 1) : null;
         if (currentFragment != null && (currentFragment.isRemovingFromStack() || currentFragment.isInPreviewMode())) {
             currentFragment = mainFragmentsStack.size() > 1 ? mainFragmentsStack.get(mainFragmentsStack.size() - 2) : null;
@@ -7731,9 +7718,6 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 checkNavigationBarColor = (boolean) args[1];
             }
             checkSystemBarColors(args.length > 2 && (boolean) args[2], true, checkNavigationBarColor && !isNavigationBarColorFrozen && !actionBarLayout.isTransitionAnimationInProgress());
-            
-            // Force a status bar color update on theme change to fix first launch issue
-            AndroidUtilities.runOnUIThread(() -> checkSystemBarColors(false, true, false), 50);
         } else if (id == NotificationCenter.needSetDayNightTheme) {
             boolean instant = false;
             if (args[2] != null) {
