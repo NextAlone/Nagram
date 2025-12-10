@@ -269,7 +269,7 @@ public class BackButtonMenuRecent {
             }
         }
 
-        if (recentDialog.size() > MAX_DISK_RECENT_DIALOGS) {
+        if (recentDialog.size() >= MAX_DISK_RECENT_DIALOGS) {
             recentDialog.removeLast();
         }
         recentDialog.addFirst(dialogId);
