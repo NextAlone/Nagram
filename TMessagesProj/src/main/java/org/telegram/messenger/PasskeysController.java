@@ -50,6 +50,7 @@ import kotlinx.coroutines.Dispatchers;
 import kotlinx.coroutines.GlobalScope;
 import kotlinx.coroutines.Job;
 import kotlinx.coroutines.JobCancellationException;
+import tw.nekomimi.nekogram.NekoXConfig;
 
 @RequiresApi(api = 28)
 public class PasskeysController {
@@ -164,8 +165,8 @@ public class PasskeysController {
         final Runnable[] cancel = new Runnable[1];
 
         final TL_account.initPasskeyLogin req = new TL_account.initPasskeyLogin();
-        req.api_id = BuildVars.APP_ID;
-        req.api_hash = BuildVars.APP_HASH;
+        req.api_id = NekoXConfig.currentAppId();
+        req.api_hash = NekoXConfig.currentAppHash();
         final int requestId = ConnectionsManager.getInstance(currentAccount).sendRequestTyped(req, AndroidUtilities::runOnUIThread, (res, err) -> {
             if (cancelled[0]) return;
             if (err != null) {
