@@ -121,6 +121,7 @@
 
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.CREDENTIAL_MANAGER_SET_ORIGIN" />
 
     <queries>
         <package android:name="com.google.android.apps.maps"/>
@@ -399,6 +400,9 @@
                 <data android:host="telegram.dog" android:scheme="https" />
                 <data android:host="t.me" android:scheme="http" />
                 <data android:host="t.me" android:scheme="https" />
+
+                <data android:host="www.keepassdx.com" android:scheme="http" />
+                <data android:host="www.keepassdx.com" android:scheme="https" />
             </intent-filter>
             <intent-filter android:icon="@mipmap/ic_launcher_nagram" android:roundIcon="@mipmap/ic_launcher_nagram_round" android:priority="1">
                 <action android:name="android.intent.action.VIEW"/>

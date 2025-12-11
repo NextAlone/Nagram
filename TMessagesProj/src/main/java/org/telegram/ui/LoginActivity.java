@@ -418,9 +418,10 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     private static final int menu_language = 3;
     private static final int menu_bot_login = 4;
     private static final int menu_other = 5;
-    private int menu_custom_api = 6;
-    private int menu_custom_dc = 7;
+    private static final int menu_custom_api = 6;
+    private static final int menu_custom_dc = 7;
     private static final int menu_qr_login = 8;
+    private static final int menu_passkey_login = 9;
 
     TLRPC.TL_auth_exportLoginToken exportLoginTokenRequest = null;
     AlertDialog exportLoginTokenProgress = null;
@@ -817,6 +818,10 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 .setContentDescription(LocaleController.getString(R.string.BotLogin));
         menu.addSubItem(menu_qr_login, R.drawable.msg_qrcode, LocaleController.getString(R.string.ImportLogin))
                 .setContentDescription(LocaleController.getString(R.string.ImportLogin));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            menu.addSubItem(menu_passkey_login, R.drawable.menu_passkey_add, getString(R.string.Passkey))
+                    .setContentDescription(LocaleController.getString(R.string.Passkey));
+        }
         menu.addSubItem(menu_custom_api, R.drawable.baseline_vpn_key_24, LocaleController.getString(R.string.CustomApi))
                 .setContentDescription(LocaleController.getString(R.string.CustomApi));
         menu.addSubItem(menu_custom_dc, R.drawable.msg_retry, LocaleController.getString(R.string.CustomBackend))
@@ -835,6 +840,11 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             } else if (id == menu_qr_login) {
                 getConnectionsManager().cleanup(false);
                 regenerateLoginToken(false);
+            } else if (id == menu_passkey_login) {
+                PhoneView phoneView = (PhoneView)views[VIEW_PHONE_INPUT];
+                if (phoneView != null) {
+                    phoneView.requestPasskey(true, true);
+                }
             } else if (id == menu_custom_dc) {
                 PhoneView phoneView = (PhoneView)views[VIEW_PHONE_INPUT];
                 if (phoneView.testBackendCheckBox != null) {
@@ -3661,7 +3671,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                     }
                 }
                 if (activityMode == MODE_LOGIN) {
-                    requestPasskey(false);
+//                    requestPasskey(false);
                 }
             }, SHOW_DELAY);
         }
@@ -3678,9 +3688,17 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         private boolean requestedPasskey = false;
         private boolean requestingPasskey = false;
         private Runnable cancelRequestingPasskey;
-        private void requestPasskey(boolean clickedButton) {
+        private void requestPasskey(boolean clickedButton, boolean force) {
             if (activityMode != MODE_LOGIN) return;
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P || !BuildVars.SUPPORTS_PASSKEYS) return;
+            if (force) {
+                if (cancelRequestingPasskey != null) {
+                    cancelRequestingPasskey.run();
+                    cancelRequestingPasskey = null;
+                }
+                requestingPasskey = false;
+                requestedPasskey = false;
+            }
             if (requestingPasskey || !clickedButton && requestedPasskey) return;
 
             requestingPasskey = true;
@@ -3691,7 +3709,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 if (err != null && ("EMPTY".equals(err) || "CANCELLED".equals(err))) {
                     if (subtitleView != null && "CANCELLED".equals(err)) {
                         subtitleView.setText(AndroidUtilities.replaceArrows(AndroidUtilities.replaceSingleTag(getString(R.string.StartTextPasskey), () -> {
-                            requestPasskey(true);
+                            requestPasskey(true, false);
                         }), true));
                     }
                     return;
