@@ -129,11 +129,7 @@ public class PasskeysController {
                             final JSONObject response = json.getJSONObject("response");
                             final TL_account.inputPasskeyResponseRegister passkeyResponse = new TL_account.inputPasskeyResponseRegister();
                             passkeyResponse.client_data = new TLRPC.TL_dataJSON();
-                            if ("<placeholder>".equals(response.getString("clientDataJSON"))) {
-                                passkeyResponse.client_data.data = clientDataJSON;
-                            } else {
-                                passkeyResponse.client_data.data = new String(Base64.decode(response.getString("clientDataJSON"), Base64.URL_SAFE));
-                            }
+                            passkeyResponse.client_data.data = clientDataJSON;
                             passkeyResponse.attestation_object = Base64.decode(response.getString("attestationObject"), Base64.URL_SAFE);
 
                             FileLog.d("AAGUID: " + bytesToHex(Arrays.copyOfRange(passkeyResponse.attestation_object, 67, 67 + 16)));
@@ -242,11 +238,7 @@ public class PasskeysController {
                             final JSONObject response = json.getJSONObject("response");
                             final TL_account.inputPasskeyResponseLogin passkeyResponse = new TL_account.inputPasskeyResponseLogin();
                             passkeyResponse.client_data = new TLRPC.TL_dataJSON();
-                            if ("<placeholder>".equals(response.getString("clientDataJSON"))) {
-                                passkeyResponse.client_data.data = clientDataJSON;
-                            } else {
-                                passkeyResponse.client_data.data = new String(Base64.decode(response.getString("clientDataJSON"), Base64.URL_SAFE));
-                            }
+                            passkeyResponse.client_data.data = clientDataJSON;
 
                             passkeyResponse.authenticator_data = Base64.decode(response.getString("authenticatorData"), Base64.URL_SAFE);
                             passkeyResponse.signature = Base64.decode(response.getString("signature"), Base64.URL_SAFE);
@@ -342,7 +334,9 @@ public class PasskeysController {
 
     public static void openSettings(Activity activity) {
         try {
-            CredentialManager.create(activity).createSettingsPendingIntent().send();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                CredentialManager.create(activity).createSettingsPendingIntent().send();
+            }
         } catch (PendingIntent.CanceledException ignored) {}
     }
 
