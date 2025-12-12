@@ -278,6 +278,11 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     private final AbstractConfigCell searchHashtagDefaultPageChatRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NaConfig.INSTANCE.getSearchHashtagDefaultPageChat(), searchPagesString, null));
     private final AbstractConfigCell dividerSearchTag  = cellGroup.appendCell(new ConfigCellDivider());
 
+    // Bottom Style
+    private final AbstractConfigCell headerBottomStyleTag = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.ChatActivityBottomStyle)));
+    private final AbstractConfigCell chatActivityNavbarTransparentRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getChatActivityNavbarTransparent()));
+    private final AbstractConfigCell dividerBottomStyleTag  = cellGroup.appendCell(new ConfigCellDivider());
+
     private ListAdapter listAdapter;
     private ActionBarMenuItem menuItem;
     private StickerSizeCell stickerSizeCell;

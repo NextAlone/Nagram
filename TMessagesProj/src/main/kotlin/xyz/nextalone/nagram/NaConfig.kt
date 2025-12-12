@@ -950,6 +950,12 @@ object NaConfig {
             ConfigItem.configTypeInt,
             0
         )
+    val chatActivityNavbarTransparent =
+        addConfig(
+            "ChatActivityNavbarTransparent",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

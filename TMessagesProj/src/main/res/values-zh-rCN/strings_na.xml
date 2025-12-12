@@ -221,4 +221,6 @@
     <string name="TabStyle">文件夹标签样式</string>
     <string name="TabStylePure">纯净</string>
     <string name="TabStylePills">药丸</string>
+    <string name="ChatActivityBottomStyle">底部样式</string>
+    <string name="ChatActivityNavbarTransparent">聊天页面底部导航栏全透明</string>
 </resources>
