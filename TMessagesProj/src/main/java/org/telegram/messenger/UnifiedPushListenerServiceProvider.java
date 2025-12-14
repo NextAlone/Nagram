@@ -5,15 +5,14 @@ import android.text.TextUtils;
 
 import org.unifiedpush.android.connector.UnifiedPush;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class UnifiedPushListenerServiceProvider implements PushListenerController.IPushListenerServiceProvider {
-    public UnifiedPushListenerServiceProvider(){};
+    public UnifiedPushListenerServiceProvider(){}
 
     @Override
     public boolean hasServices() {
-        return !UnifiedPush.getDistributors(ApplicationLoader.applicationContext, new ArrayList<>()).isEmpty();
+        return !UnifiedPush.getDistributors(ApplicationLoader.applicationContext).isEmpty();
     }
 
     @Override
@@ -38,16 +37,16 @@ public class UnifiedPushListenerServiceProvider implements PushListenerControlle
                 SharedConfig.pushStringGetTimeStart = SystemClock.elapsedRealtime();
                 SharedConfig.saveConfig();
                 if (UnifiedPush.getAckDistributor(ApplicationLoader.applicationContext) == null) {
-                    List<String> distributors = UnifiedPush.getDistributors(ApplicationLoader.applicationContext, new ArrayList<>());
-                    if (distributors.size() > 0) {
+                    List<String> distributors = UnifiedPush.getDistributors(ApplicationLoader.applicationContext);
+                    if (!distributors.isEmpty()) {
                         String distributor =  distributors.get(0);
                         UnifiedPush.saveDistributor(ApplicationLoader.applicationContext, distributor);
                     }
                 }
-                UnifiedPush.registerApp(
+                UnifiedPush.register(
                         ApplicationLoader.applicationContext,
                         "default",
-                        new ArrayList<>(),
+                        null,
                         "Telegram Simple Push"
                 );
             } catch (Throwable e) {

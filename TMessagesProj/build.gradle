@@ -234,6 +234,7 @@ android {
         }
         resources {
             excludes += ['/fabric/**', '/META-INF/*.version', '/META-INF/*.kotlin_module', '/META-INF/native-image/**', '/builddef.lst', '/*.txt', '/DebugProbesKt.bin', '/okhttp3/internal/publicsuffix/NOTICE']
+            excludes += ["META-INF/INDEX.LIST"]  // hutool
         }
 
         def lib = "libtmessages.*.so"
@@ -353,16 +354,16 @@ dependencies {
 dependencies {
     implementation "androidx.browser:browser:1.8.0"
     implementation "androidx.viewpager:viewpager:1.0.0"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0"
     // OSM
-    implementation "org.osmdroid:osmdroid-android:6.1.10"
+    implementation "org.osmdroid:osmdroid-android:6.1.20"
     // okhttp
-    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.14"
+    implementation "com.squareup.okhttp3:okhttp:5.3.2"
     implementation 'dnsjava:dnsjava:3.6.3'
 
-    implementation "cn.hutool:hutool-core:5.7.13"
-    implementation "cn.hutool:hutool-crypto:5.7.13"
-    implementation 'cn.hutool:hutool-http:5.7.5'
+    implementation "cn.hutool:hutool-core:5.8.42"
+    implementation "cn.hutool:hutool-crypto:5.8.42"
+    implementation 'cn.hutool:hutool-http:5.8.42'
     implementation "com.jakewharton:process-phoenix:3.0.0"
     // openpgp
     implementation project(":openpgp-api")
@@ -373,11 +374,11 @@ dependencies {
     // add for undo and redo
     implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:6.1'
     // add splash screen
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation("androidx.core:core-splashscreen:1.2.0")
     // add for emoji
     implementation 'com.jaredrummler:truetypeparser-light:1.0.0'
     // add for up
-    implementation 'org.unifiedpush.android:connector:2.5.0'
+    implementation 'org.unifiedpush.android:connector:3.1.2'
 }
 
 apply plugin: "com.google.gms.google-services"

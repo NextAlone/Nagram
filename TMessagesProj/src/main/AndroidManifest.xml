@@ -810,14 +810,12 @@
 <!--            android:permission="android.permission.BIND_REMOTEVIEWS"-->
 <!--            android:exported="false" />-->
 
-        <receiver android:exported="true" android:enabled="true" android:name=".UnifiedPushReceiver">
+        <service android:name=".UnifiedPushService"
+            android:exported="false">
             <intent-filter>
-                <action android:name="org.unifiedpush.android.connector.MESSAGE"/>
-                <action android:name="org.unifiedpush.android.connector.UNREGISTERED"/>
-                <action android:name="org.unifiedpush.android.connector.NEW_ENDPOINT"/>
-                <action android:name="org.unifiedpush.android.connector.REGISTRATION_FAILED"/>
+                <action android:name="org.unifiedpush.android.connector.PUSH_EVENT"/>
             </intent-filter>
-        </receiver>
+        </service>
         <service android:name=".GcmPushListenerService"
             android:exported="true">
             <intent-filter>
