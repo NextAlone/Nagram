@@ -32249,11 +32249,12 @@ public class ChatActivity extends BaseFragment implements
                 popupX += location[0];
             }
             int totalHeight = contentView.getHeight();
+            totalHeight -= windowInsetsStateHolder.getCurrentNavigationBarInset() > AndroidUtilities.dp(8) ? (windowInsetsStateHolder.getCurrentNavigationBarInset() - AndroidUtilities.dp(8)) : 0;
             int height = scrimPopupContainerLayout.getMeasuredHeight() + AndroidUtilities.dp(48);
-            int keyboardHeight = contentView.measureKeyboardHeight();
-            if (keyboardHeight > AndroidUtilities.dp(20)) {
-                totalHeight += keyboardHeight;
-            }
+//            int keyboardHeight = contentView.measureKeyboardHeight();
+//            if (keyboardHeight > AndroidUtilities.dp(20)) {
+//                totalHeight += keyboardHeight;
+//            }
             int popupY;
             int minY = (int) (chatListView.getY() + dp(24));
             int maxY = totalHeight - height - dp(8);
