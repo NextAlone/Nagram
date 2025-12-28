@@ -24,7 +24,7 @@ import java.io.File
 object ExternalStickerCacheHelper {
     const val TAG = "ExternalStickerCache"
 
-    private val cachePath = ApplicationLoader.applicationContext.getExternalFilesDir(null)!!.resolve("caches")
+    private val cachePath by lazy { AndroidUtilities.getCacheDir() }
 
     @JvmStatic
     fun checkUri(configCell: ConfigCellAutoTextCheck, context: Context) {
@@ -277,7 +277,7 @@ object ExternalStickerCacheHelper {
     private fun showToast(msg: String?) {
         var realMessage = msg
         if (realMessage == null) {
-            realMessage = LocaleController.getString("Done", R.string.Done)
+            realMessage = LocaleController.getString(R.string.Done)
         }
         AndroidUtilities.runOnUIThread {
             if (realMessage != null) {
