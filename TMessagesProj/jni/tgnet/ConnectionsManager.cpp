@@ -694,7 +694,7 @@ void ConnectionsManager::onConnectionClosed(Connection *connection, int reason) 
     if (connection->getConnectionType() == ConnectionTypeGeneric) {
         if (datacenter->getDatacenterId() == currentDatacenterId) {
             sendingPing = false;
-            if (!connection->isSuspended() && (proxyAddress.empty() || connection->hasTlsHashMismatch())) {
+            if (networkAvailable && !networkPaused && !connection->isSuspended() && (proxyAddress.empty() || connection->hasTlsHashMismatch())) {
                 if (reason == 2) {
                     disconnectTimeoutAmount += connection->getTimeout();
                 } else {
@@ -788,6 +788,10 @@ void ConnectionsManager::onConnectionClosed(Connection *connection, int reason) 
 void ConnectionsManager::onConnectionConnected(Connection *connection) {
     Datacenter *datacenter = connection->getDatacenter();
     ConnectionType connectionType = connection->getConnectionType();
+    if (disconnectTimeoutAmount > 0 && connection->getConnectionType() == ConnectionTypeGeneric && datacenter->getDatacenterId() == currentDatacenterId) {
+        if (LOGS_ENABLED) DEBUG_D("reset disconnect timeout");
+        disconnectTimeoutAmount = 0;
+    }
     if ((connectionType == ConnectionTypeGeneric || connectionType == ConnectionTypeGenericMedia) && datacenter->isHandshakingAny()) {
         datacenter->onHandshakeConnectionConnected(connection);
         return;
