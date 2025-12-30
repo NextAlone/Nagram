@@ -2,6 +2,7 @@
 <resources>
     <string name="N_Config">N-设置</string>
     <string name="ForceCopy">强制复制</string>
+    <string name="disableSecondAddress">禁用请求备用服务器地址</string>
     <string name="InvertReply">反转</string>
     <string name="Great">好耶</string>
     <string name="Poor">破烂</string>

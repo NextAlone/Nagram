@@ -36,6 +36,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val disableSecondAddress =
+        addConfig(
+            "disableSecondAddress",
+            ConfigItem.configTypeBool,
+            true
+        )
     val showInvertReply =
         addConfig(
             "InvertReply",
