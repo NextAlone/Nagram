@@ -962,6 +962,18 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val fixUrlPagePreview =
+        addConfig(
+            "FixUrlPagePreview",
+            ConfigItem.configTypeBool,
+            true
+        )
+    val fixUrlAutoInlineBot =
+        addConfig(
+            "FixUrlAutoInlineBot",
+            ConfigItem.configTypeBool,
+            true
+        )
 
     private fun addConfig(
         k: String,

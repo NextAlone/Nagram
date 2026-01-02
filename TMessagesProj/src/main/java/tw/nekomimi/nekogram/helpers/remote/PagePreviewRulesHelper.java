@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import xyz.nextalone.nagram.NaConfig;
+
 public class PagePreviewRulesHelper extends BaseRemoteHelper {
     private static final String PAGE_PREVIEW_TAG = "pagepreview";
     private static volatile PagePreviewRulesHelper Instance;
@@ -50,7 +52,7 @@ public class PagePreviewRulesHelper extends BaseRemoteHelper {
     @Override
     protected void onLoadSuccess(ArrayList<JSONObject> responses, Delegate delegate) {
         var tag = getTag();
-        var json = responses.size() > 0 ? responses.get(0) : null;
+        var json = !responses.isEmpty() ? responses.get(0) : null;
         if (json == null) {
             preferences.edit()
                     .remove(tag + "_update_time")
@@ -173,6 +175,9 @@ public class PagePreviewRulesHelper extends BaseRemoteHelper {
             oldUrl = (String) textToCheck;
         } else {
             oldUrl = textToCheck.toString();
+        }
+        if (!NaConfig.INSTANCE.getFixUrlPagePreview().Bool()) {
+            return oldUrl;
         }
         String host = AndroidUtilities.getHostAuthority(oldUrl.toLowerCase());
         DomainInfo info = domainsMap.get(host);

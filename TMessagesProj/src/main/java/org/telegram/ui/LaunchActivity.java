@@ -272,6 +272,7 @@ import kotlin.text.StringsKt;
 import tw.nekomimi.nekogram.helpers.SettingsHelper;
 import tw.nekomimi.nekogram.helpers.remote.ChatExtraButtonsHelper;
 import tw.nekomimi.nekogram.helpers.remote.EmojiHelper;
+import tw.nekomimi.nekogram.helpers.remote.InlineBotRulesHelper;
 import tw.nekomimi.nekogram.helpers.remote.PagePreviewRulesHelper;
 import tw.nekomimi.nekogram.helpers.remote.PeerColorHelper;
 import tw.nekomimi.nekogram.helpers.remote.UpdateHelper;
@@ -1160,11 +1161,14 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
 
         AndroidUtilities.enableEdgeToEdge(this);
 
-        EmojiHelper.getInstance().checkEmojiPacks();
-        WallpaperHelper.getInstance().checkWallPaper();
-        PeerColorHelper.getInstance().checkPeerColor();
-        PagePreviewRulesHelper.getInstance().checkPagePreviewRules();
-        ChatExtraButtonsHelper.getInstance().checkChatExtraButtons();
+        Utilities.globalQueue.postRunnable(() -> {
+            EmojiHelper.getInstance().checkEmojiPacks();
+            WallpaperHelper.getInstance().checkWallPaper();
+            PeerColorHelper.getInstance().checkPeerColor();
+            PagePreviewRulesHelper.getInstance().checkPagePreviewRules();
+            ChatExtraButtonsHelper.getInstance().checkChatExtraButtons();
+            InlineBotRulesHelper.getInstance().checkInlineBotRules();
+        });
         BackupAgent.requestBackup(this);
 
         RestrictedLanguagesSelectActivity.checkRestrictedLanguages(false);
