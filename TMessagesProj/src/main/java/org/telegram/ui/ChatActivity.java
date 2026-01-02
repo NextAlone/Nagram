@@ -10345,7 +10345,8 @@ public class ChatActivity extends BaseFragment implements
         // na: DisableChannelMuteButton
         return NaConfig.INSTANCE.getDisableChannelMuteButton().Bool() &&
                 chatMode == MODE_DEFAULT && !isReport() && currentChat != null &&
-                ChatObject.isChannel(currentChat) && currentChat.broadcast && !ChatObject.canWriteToChat(currentChat);
+                ChatObject.isChannel(currentChat) && ChatObject.isInChat(currentChat) &&
+                currentChat.broadcast && !ChatObject.canWriteToChat(currentChat);
     }
 
     @Override
