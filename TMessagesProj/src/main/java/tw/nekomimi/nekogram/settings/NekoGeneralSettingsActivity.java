@@ -562,7 +562,7 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                         apiUrl = "https://api.openai.com/v1/chat/completions";
                         break;
                     case 1: // Gemini
-                        apiUrl = "https://generativelanguage.googleapis.com/v1beta/openai/";
+                        apiUrl = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions";
                         break;
                     case 2: // Groq
                         apiUrl = "https://api.groq.com/openai/v1/chat/completions";
