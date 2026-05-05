@@ -28,6 +28,8 @@ object NaConfig {
         false
     private val configs =
         ArrayList<ConfigItem>()
+    private const val DEFAULT_FIX_URL_AUTO_INLINE_BOT_RULES =
+        """[{"host":"x.com","pattern":"(^|[\\s(\\[{<])(?:https?://)?([\\w-]+\\.)*x\\.com(?=[:/?#\\s)\\]}>]|$)","bot":"twpicbot"},{"host":"threads.com","pattern":"(^|[\\s(\\[{<])(?:https?://)?([\\w-]+\\.)*threads\\.com(?=[:/?#\\s)\\]}>]|$)","bot":"lizardman_bot"},{"host":"threads.net","pattern":"(^|[\\s(\\[{<])(?:https?://)?([\\w-]+\\.)*threads\\.net(?=[:/?#\\s)\\]}>]|$)","bot":"lizardman_bot"},{"host":"pixiv.net","pattern":"(^|[\\s(\\[{<])(?:https?://)?([\\w-]+\\.)*pixiv\\.net(?=[:/?#\\s)\\]}>]|$)","bot":"pixiv_bot"},{"host":"twitter.com","pattern":"(^|[\\s(\\[{<])(?:https?://)?([\\w-]+\\.)*twitter\\.com(?=[:/?#\\s)\\]}>]|$)","bot":"twpicbot"}]"""
 
     // Configs
     val forceCopy =
@@ -979,6 +981,24 @@ object NaConfig {
             "FixUrlAutoInlineBot",
             ConfigItem.configTypeBool,
             true
+        )
+    val fixUrlAutoInlineBotSkipMediaPreview =
+        addConfig(
+            "FixUrlAutoInlineBotSkipMediaPreview",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val fixUrlAutoInlineBotRules =
+        addConfig(
+            "FixUrlAutoInlineBotRules",
+            ConfigItem.configTypeString,
+            DEFAULT_FIX_URL_AUTO_INLINE_BOT_RULES
+        )
+    val fixUrlAutoInlineBotRulesAdvancedMode =
+        addConfig(
+            "FixUrlAutoInlineBotRulesAdvancedMode",
+            ConfigItem.configTypeBool,
+            false
         )
     val deepLxCustomApi =
         addConfig(

@@ -7697,9 +7697,11 @@ public class ChatActivity extends BaseFragment implements
                         return;
                     }
                 }
-                if ((result.type.equals("photo") && (result.photo != null || result.content != null) ||
+                boolean isMediaInlineResult = result.type.equals("photo") && (result.photo != null || result.content != null) ||
                         result.type.equals("gif") && (result.document != null || result.content != null) ||
-                        result.type.equals("video") && (result.document != null/* || result.content_url != null*/))) {
+                        result.type.equals("video") && (result.document != null/* || result.content_url != null*/);
+                boolean skipMediaPreview = NaConfig.INSTANCE.getFixUrlAutoInlineBotSkipMediaPreview().Bool() && mentionContainer.getAdapter().isAutoSearchingContextBot();
+                if (isMediaInlineResult && !skipMediaPreview) {
                     ArrayList<Object> arrayList = botContextResults = new ArrayList<>(mentionContainer.getAdapter().getSearchResultBotContext());
                     PhotoViewer.getInstance().setParentActivity(ChatActivity.this, themeDelegate);
                     PhotoViewer.getInstance().openPhotoForSelect(arrayList, mentionContainer.getAdapter().getItemPosition(position), 3, false, botContextProvider, ChatActivity.this);

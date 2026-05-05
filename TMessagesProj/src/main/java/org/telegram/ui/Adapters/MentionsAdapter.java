@@ -826,6 +826,10 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
         return null;
     }
 
+    public boolean isAutoSearchingContextBot() {
+        return autoSearching;
+    }
+
     public void searchForContextBotForNextOffset() {
         if (contextQueryReqid != 0 || nextQueryOffset == null || nextQueryOffset.length() == 0 || foundContextBot == null || searchingContextQuery == null) {
             return;

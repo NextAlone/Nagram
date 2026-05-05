@@ -146,10 +146,26 @@ public class TextCheckCell extends FrameLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int width = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY);
         if (isMultiline) {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+            super.onMeasure(width, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+            if (valueTextView.getVisibility() == VISIBLE) {
+                LayoutParams layoutParams = (LayoutParams) valueTextView.getLayoutParams();
+                int topMargin = AndroidUtilities.dp(14) + textView.getMeasuredHeight();
+                if (layoutParams.topMargin != topMargin) {
+                    layoutParams.topMargin = topMargin;
+                    valueTextView.setLayoutParams(layoutParams);
+                    super.onMeasure(width, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+                }
+            }
         } else {
-            super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(valueTextView.getVisibility() == VISIBLE ? 64 : height) + (needDivider ? 3 : 0), MeasureSpec.EXACTLY));
+            LayoutParams layoutParams = (LayoutParams) valueTextView.getLayoutParams();
+            int topMargin = AndroidUtilities.dp(35);
+            if (layoutParams.topMargin != topMargin) {
+                layoutParams.topMargin = topMargin;
+                valueTextView.setLayoutParams(layoutParams);
+            }
+            super.onMeasure(width, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(valueTextView.getVisibility() == VISIBLE ? 64 : height) + (needDivider ? 3 : 0), MeasureSpec.EXACTLY));
         }
     }
 
@@ -243,8 +259,8 @@ public class TextCheckCell extends FrameLayout {
         valueTextView.setVisibility(VISIBLE);
         isMultiline = multiline;
         if (multiline) {
-            valueTextView.setLines(0);
-            valueTextView.setMaxLines(0);
+            valueTextView.setMinLines(0);
+            valueTextView.setMaxLines(Integer.MAX_VALUE);
             valueTextView.setSingleLine(false);
             valueTextView.setEllipsize(null);
             valueTextView.setPadding(0, 0, 0, AndroidUtilities.dp(11));
@@ -271,8 +287,8 @@ public class TextCheckCell extends FrameLayout {
         valueTextView.setVisibility(VISIBLE);
         isMultiline = multiline;
         if (multiline) {
-            valueTextView.setLines(0);
-            valueTextView.setMaxLines(0);
+            valueTextView.setMinLines(0);
+            valueTextView.setMaxLines(Integer.MAX_VALUE);
             valueTextView.setSingleLine(false);
             valueTextView.setEllipsize(null);
             valueTextView.setPadding(0, 0, 0, AndroidUtilities.dp(11));
