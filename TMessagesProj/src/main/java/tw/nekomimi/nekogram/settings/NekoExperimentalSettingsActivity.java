@@ -284,7 +284,12 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
                             Toast.makeText(context, LocaleController.formatString("FixUrlAutoInlineBotRuleInvalidRegex", R.string.FixUrlAutoInlineBotRuleInvalidRegex, i + 1, e.getDescription()), Toast.LENGTH_LONG).show();
                             return;
                         }
-                        newRules.add(new InlineBotRulesHelper.InlineBotRule(username, ruleInput, "", false));
+                        String host = InlineBotRulesHelper.extractHostFromPattern(ruleInput);
+                        if (host == null && !row.host.isEmpty() && ruleInput.equals(row.host)) {
+                            host = row.host;
+                            ruleInput = InlineBotRulesHelper.buildHostPattern(host);
+                        }
+                        newRules.add(new InlineBotRulesHelper.InlineBotRule(username, ruleInput, host == null ? "" : host, false));
                     } else {
                         try {
                             String host = InlineBotRulesHelper.normalizeSimpleHostInput(ruleInput);
@@ -321,29 +326,46 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
 
     private boolean updateFixUrlAutoInlineBotRulesDialogMode(Context context, TextView hintTextView, ArrayList<FixUrlAutoInlineBotRuleRow> ruleRows, boolean advancedMode, boolean convertValues) {
         ArrayList<String> convertedValues = new ArrayList<>();
+        ArrayList<String> convertedHosts = new ArrayList<>();
         if (convertValues) {
             for (FixUrlAutoInlineBotRuleRow row : ruleRows) {
                 String value = row.ruleEditText.getText().toString().trim();
                 String convertedValue = value;
+                String convertedHost = row.host;
                 if (!value.isEmpty()) {
                     if (advancedMode) {
                         try {
-                            convertedValue = InlineBotRulesHelper.buildHostPattern(value);
+                            convertedHost = InlineBotRulesHelper.normalizeSimpleHostInput(value);
+                            convertedValue = InlineBotRulesHelper.buildHostPattern(convertedHost);
                         } catch (RuntimeException ignored) {
                             convertedValue = value;
+                            convertedHost = "";
                         }
                     } else {
                         String host = InlineBotRulesHelper.extractHostFromPattern(value);
                         if (host == null) {
+                            host = InlineBotRulesHelper.getHostForRule(value, row.host);
+                        }
+                        if (host.isEmpty()) {
+                            try {
+                                host = InlineBotRulesHelper.normalizeSimpleHostInput(value);
+                            } catch (IllegalArgumentException ignored) {
+                            }
+                        }
+                        if (host.isEmpty()) {
                             row.ruleEditText.setError(LocaleController.getString(R.string.FixUrlAutoInlineBotRulesCannotConvertSimple));
                             row.ruleEditText.requestFocus();
                             Toast.makeText(context, LocaleController.getString(R.string.FixUrlAutoInlineBotRulesCannotConvertSimple), Toast.LENGTH_LONG).show();
                             return false;
                         }
                         convertedValue = host;
+                        convertedHost = host;
                     }
+                } else {
+                    convertedHost = "";
                 }
                 convertedValues.add(convertedValue);
+                convertedHosts.add(convertedHost);
             }
         }
         hintTextView.setText(LocaleController.getString(advancedMode ? R.string.FixUrlAutoInlineBotRulesAdvancedHint : R.string.FixUrlAutoInlineBotRulesSimpleHint));
@@ -351,6 +373,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
             FixUrlAutoInlineBotRuleRow row = ruleRows.get(i);
             if (convertValues) {
                 String value = convertedValues.get(i);
+                row.host = convertedHosts.get(i);
                 row.ruleEditText.setText(value);
                 row.ruleEditText.setSelection(row.ruleEditText.length());
             }
@@ -397,7 +420,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
         usernameEditText.setText(username);
         cardLayout.addView(usernameEditText, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, 0, 6, 0, 0));
 
-        FixUrlAutoInlineBotRuleRow row = new FixUrlAutoInlineBotRuleRow(ruleEditText, usernameEditText);
+        FixUrlAutoInlineBotRuleRow row = new FixUrlAutoInlineBotRuleRow(ruleEditText, usernameEditText, InlineBotRulesHelper.getHostForRule(rule, host));
         deleteButton.setOnClickListener(v -> {
             ruleRows.remove(row);
             rowsContainer.removeView(cardLayout);
@@ -423,10 +446,12 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
     private static class FixUrlAutoInlineBotRuleRow {
         final EditTextBoldCursor ruleEditText;
         final EditTextBoldCursor usernameEditText;
+        String host;
 
-        FixUrlAutoInlineBotRuleRow(EditTextBoldCursor ruleEditText, EditTextBoldCursor usernameEditText) {
+        FixUrlAutoInlineBotRuleRow(EditTextBoldCursor ruleEditText, EditTextBoldCursor usernameEditText, String host) {
             this.ruleEditText = ruleEditText;
             this.usernameEditText = usernameEditText;
+            this.host = host == null ? "" : host;
         }
     }
 

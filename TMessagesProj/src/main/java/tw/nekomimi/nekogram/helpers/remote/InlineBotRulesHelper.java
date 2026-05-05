@@ -77,8 +77,12 @@ public class InlineBotRulesHelper {
                 try {
                     String host = object.optString("host", "");
                     String pattern = object.optString("pattern", object.optString("rule", ""));
-                    if (TextUtils.isEmpty(pattern) && !TextUtils.isEmpty(host)) {
-                        pattern = buildHostPattern(host);
+                    if (!TextUtils.isEmpty(host)) {
+                        String normalizedHost = normalizeHostInput(host);
+                        if (TextUtils.isEmpty(pattern) || TextUtils.equals(pattern.trim(), host.trim()) || TextUtils.equals(pattern.trim(), normalizedHost)) {
+                            pattern = buildHostPattern(normalizedHost);
+                        }
+                        host = normalizedHost;
                     }
                     addInlineBotRule(
                             rules,
