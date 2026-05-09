@@ -5355,9 +5355,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     if (id == gallery_menu_reply) {
                         args.putInt("reply_to", currentMessageObject.getId());
                     }
-                    NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.closeChats);
-                    if (parentActivity instanceof LaunchActivity) {
-                        LaunchActivity launchActivity = (LaunchActivity) parentActivity;
+                    LaunchActivity launchActivity = parentActivity instanceof LaunchActivity ? (LaunchActivity) parentActivity : null;
+                    if (launchActivity == null || !launchActivity.isTabletFullSizeLayout()) {
+                        NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.closeChats);
+                    }
+                    if (launchActivity != null) {
                         boolean remove = launchActivity.getMainFragmentsCount() > 1 || AndroidUtilities.isTablet();
                         launchActivity.presentFragment(new ChatActivity(args), remove, true);
                     }

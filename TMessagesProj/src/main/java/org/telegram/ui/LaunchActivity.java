@@ -1308,6 +1308,10 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         return mainFragmentsStack.size();
     }
 
+    public boolean isTabletFullSizeLayout() {
+        return AndroidUtilities.isTablet() && tabletFullSize;
+    }
+
     private void checkCurrentAccount() {
         if (currentAccount != UserConfig.selectedAccount) {
             NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.openBoostForUsersDialog);
