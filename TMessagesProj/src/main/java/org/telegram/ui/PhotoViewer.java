@@ -5359,7 +5359,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.closeChats);
                     }
                     if (parentActivity instanceof LaunchActivity) {
-						LaunchActivity launchActivity = (LaunchActivity) parentActivity;
+                        LaunchActivity launchActivity = (LaunchActivity) parentActivity;
                         boolean remove = launchActivity.getMainFragmentsCount() > 1 || AndroidUtilities.isTablet();
                         launchActivity.presentFragment(new ChatActivity(args), remove, true);
                     }
