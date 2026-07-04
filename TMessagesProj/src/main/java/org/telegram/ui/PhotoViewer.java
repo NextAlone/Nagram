@@ -15450,7 +15450,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 galleryButton.setVisibility(View.VISIBLE);
                 galleryGap.setVisibility(View.VISIBLE);
             }
-            if (!noforwardsOverrided && avatar.video_sizes.isEmpty()) {
+            if (!noforwardsOverrided && avatar != null && avatar.video_sizes.isEmpty()) {
                 menuItem.showSubItem(gallery_menu_copy);
                 menuItem.showSubItem(gallery_menu_set_photo);
             } else {
