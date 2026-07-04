@@ -91,14 +91,14 @@ public class MemberRequestCell extends FrameLayout {
 
         float dismissButtonWidth = dismissButton.getPaint().measureText(dismissButton.getText().toString()) + btnPadding * 2;
         TextView banButton = new TextView(getContext());
-        banButton.setBackground(Theme.AdaptiveRipple.filledRectByKey(Theme.key_featuredStickers_addButton, 4));
+        banButton.setBackground(Theme.AdaptiveRipple.filledRectByKey(Theme.key_featuredStickers_addButton, 16));
         banButton.setGravity((LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT) | Gravity.CENTER_VERTICAL);
         banButton.setMaxLines(1);
         banButton.setPadding(btnPadding, 0, btnPadding, 0);
-        banButton.setText(LocaleController.getString("KickFromGroup", R.string.KickFromGroup));
+        banButton.setText(LocaleController.getString(R.string.KickFromGroup));
         banButton.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText));
         banButton.setTextSize(14);
-        banButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        banButton.setTypeface(AndroidUtilities.bold());
         banButton.setOnClickListener(v -> {
             if (clickListener != null && importer != null) {
                 clickListener.onBanClicked(importer);
