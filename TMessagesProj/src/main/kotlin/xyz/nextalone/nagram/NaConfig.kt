@@ -451,6 +451,13 @@ object NaConfig {
             0,
             false
         )
+    val defaultDeleteMenuDeleteAllReactions =
+        addConfig(
+            "DeleteAllReactionsFromUsers",
+            defaultDeleteMenu,
+            4,
+            false
+        )
     val disableSuggestionView =
         addConfig(
             "DisableSuggestionView",

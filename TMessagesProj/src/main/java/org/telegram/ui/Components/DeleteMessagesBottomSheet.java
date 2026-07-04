@@ -495,7 +495,7 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
     }
 
     public void toggleDefaultChecks(boolean[] checks) {
-        for (int a = 0; a < 4; a++) {
+        for (int a = 0; a < 5; a++) {
             if (a == 0 && checks[a] && banOrRestrict != null) {
                 banOrRestrict.toggleAllChecks();
             }
@@ -504,10 +504,20 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
             }
             if (a == 2 && checks[a] && deleteAll != null) {
                 deleteAll.toggleAllChecks();
+                if (isSingleUsersMode) {
+                    restrictUserDeleteAllMessages = true;
+                }
             }
             if (a == 3 && checks[a] && applyInCommonGroup != null) {
                 applyInCommonGroup.toggleAllChecks();
             }
+            if (a == 4 && checks[a] && deleteAllReactions != null) {
+                deleteAllReactions.toggleAllChecks();
+                if (isSingleUsersMode) {
+                    restrictUserDeleteAllReactions = true;
+                }
+            }
+            adapter.update(true);
         }
     }
 
@@ -1335,8 +1345,9 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
         applyInCommonGroup.forEachSelected((participant, i) -> {
             if (participant instanceof TLRPC.User) {
                 boolean needBan = banOrRestrict.checkOption(i);
-                boolean needDelete = deleteAll.checkOption(i);
-                if (!needBan && !needDelete) {
+                boolean needDelete = isSingleUsersMode ? restrictUserDeleteAllMessages : deleteAll.checkOption(i);
+                boolean needDeleteReaction = isSingleUsersMode ? restrictUserDeleteAllReactions : deleteAllReactions.checkOption(i);
+                if (!needBan && !needDelete && !needDeleteReaction) {
                     return;
                 }
                 TLRPC.User userFinal = (TLRPC.User) participant;
@@ -1366,6 +1377,9 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
                         }
                         if (canDelete && needDelete) {
                             MessagesController.getInstance(currentAccount).deleteUserChannelHistory(chat_, userFinal, null, 0);
+                        }
+                        if (canDelete && needDeleteReaction) {
+                            MessagesController.getInstance(currentAccount).deleteUserChannelAllReactions(chat_, userFinal, null);
                         }
                     }
                 });

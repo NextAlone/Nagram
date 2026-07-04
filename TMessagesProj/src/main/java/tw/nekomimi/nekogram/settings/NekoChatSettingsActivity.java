@@ -96,6 +96,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
             add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDefaultDeleteMenuBanUsers()));
             add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDefaultDeleteMenReportSpam()));
             add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDefaultDeleteMenuDeleteAll()));
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDefaultDeleteMenuDeleteAllReactions()));
             add(new ConfigCellTextCheck(NaConfig.INSTANCE.getDefaultDeleteMenuDoActionsInCommonGroups()));
         }}));
     }));
@@ -508,6 +509,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                 NaConfig.INSTANCE.getDefaultDeleteMenReportSpam().Bool(),
                 NaConfig.INSTANCE.getDefaultDeleteMenuDeleteAll().Bool(),
                 NaConfig.INSTANCE.getDefaultDeleteMenuDoActionsInCommonGroups().Bool(),
+                NaConfig.INSTANCE.getDefaultDeleteMenuDeleteAllReactions().Bool(),
         };
     }
 
