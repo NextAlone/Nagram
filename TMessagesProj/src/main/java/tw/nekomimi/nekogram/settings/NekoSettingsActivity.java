@@ -57,6 +57,7 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
     private int chatRow;
     private int passcodeRow;
     private int experimentRow;
+    private int debugRow;
     private int categories2Row;
 
     private int aboutRow;
@@ -96,6 +97,8 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
             presentFragment(new NekoPasscodeSettingsActivity());
         } else if (position == experimentRow) {
             presentFragment(new NekoExperimentalSettingsActivity());
+        } else if (position == debugRow) {
+            presentFragment(new NekoDebugSettingsActivity());
         } else if (position == channelRow) {
             getMessagesController().openByUserName(channelUsername, this, 1);
         } else if (position == channelTipsRow) {
@@ -145,6 +148,7 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
             passcodeRow = -1;
         }
         experimentRow = addRow("experiment");
+        debugRow = addRow("debug");
         categories2Row = addRow();
 
         aboutRow = addRow("about");
@@ -215,6 +219,8 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
                         textCell.setTextAndIcon(LocaleController.getString(R.string.PasscodeNeko), R.drawable.msg_secret, divider);
                     } else if (position == experimentRow) {
                         textCell.setTextAndIcon(LocaleController.getString(R.string.Experiment), R.drawable.msg_fave, divider);
+                    } else if (position == debugRow) {
+                        textCell.setTextAndIcon(LocaleController.getString(R.string.DebugMenu), R.drawable.msg_info, divider);
                     }
                     break;
                 }

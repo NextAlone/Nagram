@@ -19,6 +19,7 @@ import tw.nekomimi.nekogram.settings.BaseNekoSettingsActivity;
 import tw.nekomimi.nekogram.settings.BaseNekoXSettingsActivity;
 import tw.nekomimi.nekogram.settings.NekoChatSettingsActivity;
 import tw.nekomimi.nekogram.settings.NekoAccountSettingsActivity;
+import tw.nekomimi.nekogram.settings.NekoDebugSettingsActivity;
 import tw.nekomimi.nekogram.settings.NekoEmojiSettingsActivity;
 import tw.nekomimi.nekogram.settings.NekoExperimentalSettingsActivity;
 import tw.nekomimi.nekogram.settings.NekoGeneralSettingsActivity;
@@ -58,6 +59,10 @@ public class SettingsHelper {
                 case "chats":
                 case "c":
                     fragment = nekox_fragment = new NekoChatSettingsActivity();
+                    break;
+                case "debug":
+                case "d":
+                    fragment = nekox_fragment = new NekoDebugSettingsActivity();
                     break;
                 case "experimental":
                 case "e":
@@ -122,6 +127,7 @@ public class SettingsHelper {
         fragments.add(new NekoGeneralSettingsActivity());
         fragments.add(new NekoChatSettingsActivity());
         fragments.add(new NekoExperimentalSettingsActivity());
+        fragments.add(new NekoDebugSettingsActivity());
         String n_title = LocaleController.getString(R.string.NekoSettings);
         for (BaseNekoXSettingsActivity fragment: fragments) {
             int uid = fragment.getBaseGuid();

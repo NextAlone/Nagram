@@ -229,6 +229,7 @@ public class BaseNekoXSettingsActivity extends BaseFragment {
                 config.changed(new_value);
                 config.saveConfig();
                 updateRows();
+                listAdapter.notifyDataSetChanged();
                 scrollToRow(key, unknown);
             });
             builder.show();
