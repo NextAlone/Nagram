@@ -15,6 +15,26 @@ typedef struct {
     struct SwsContext *sws_ctx;
 } EncoderContext;
 
+static void free_encoder(EncoderContext *ctx) {
+    if (!ctx) return;
+    if (ctx->frame) {
+        av_frame_free(&ctx->frame);
+    }
+    if (ctx->codec_ctx) {
+        avcodec_free_context(&ctx->codec_ctx);
+    }
+    if (ctx->sws_ctx) {
+        sws_freeContext(ctx->sws_ctx);
+    }
+    if (ctx->fmt_ctx) {
+        if (!(ctx->fmt_ctx->oformat->flags & AVFMT_NOFILE)) {
+            avio_closep(&ctx->fmt_ctx->pb);
+        }
+        avformat_free_context(ctx->fmt_ctx);
+    }
+    free(ctx);
+}
+
 JNIEXPORT jlong JNICALL Java_org_telegram_messenger_video_WebmEncoder_createEncoder(
     JNIEnv *env, jobject obj,
     jstring outputPath_,
@@ -29,6 +49,7 @@ JNIEXPORT jlong JNICALL Java_org_telegram_messenger_video_WebmEncoder_createEnco
     EncoderContext* ctx = (EncoderContext*) malloc(sizeof(EncoderContext));
     if (!ctx) {
         LOGE("vp9: failed to alloc context");
+        (*env)->ReleaseStringUTFChars(env, outputPath_, outputPath);
         return (jlong)0;
     }
     memset(ctx, 0, sizeof(EncoderContext));
@@ -36,6 +57,8 @@ JNIEXPORT jlong JNICALL Java_org_telegram_messenger_video_WebmEncoder_createEnco
     avformat_alloc_output_context2(&ctx->fmt_ctx, NULL, "matroska", outputPath);
     if (!ctx->fmt_ctx) {
         LOGE("vp9: no context created!");
+        (*env)->ReleaseStringUTFChars(env, outputPath_, outputPath);
+        free_encoder(ctx);
         return (jlong)0;
     }
 
@@ -43,6 +66,8 @@ JNIEXPORT jlong JNICALL Java_org_telegram_messenger_video_WebmEncoder_createEnco
         ret = avio_open(&ctx->fmt_ctx->pb, outputPath, AVIO_FLAG_WRITE);
         if (ret < 0) {
             LOGE("vp9: failed to write open file %d", ret);
+            (*env)->ReleaseStringUTFChars(env, outputPath_, outputPath);
+            free_encoder(ctx);
             return (jlong) 0;
         }
     }
@@ -50,12 +75,16 @@ JNIEXPORT jlong JNICALL Java_org_telegram_messenger_video_WebmEncoder_createEnco
     AVCodec* codec = avcodec_find_encoder(AV_CODEC_ID_VP9);
     if (!codec) {
         LOGE("vp9: no encoder found!");
-        return 0;
+        (*env)->ReleaseStringUTFChars(env, outputPath_, outputPath);
+        free_encoder(ctx);
+        return (jlong) 0;
     }
 
     ctx->codec_ctx = avcodec_alloc_context3(codec);
     if (!ctx->codec_ctx) {
         LOGE("vp9: failed to create codec ctx");
+        (*env)->ReleaseStringUTFChars(env, outputPath_, outputPath);
+        free_encoder(ctx);
         return (jlong) 0;
     }
 
@@ -81,6 +110,8 @@ JNIEXPORT jlong JNICALL Java_org_telegram_messenger_video_WebmEncoder_createEnco
     ctx->video_stream = avformat_new_stream(ctx->fmt_ctx, codec);
     if (!ctx->video_stream) {
         LOGE("vp9: failed to create stream");
+        (*env)->ReleaseStringUTFChars(env, outputPath_, outputPath);
+        free_encoder(ctx);
         return (jlong) 0;
     }
 
@@ -94,18 +125,24 @@ JNIEXPORT jlong JNICALL Java_org_telegram_messenger_video_WebmEncoder_createEnco
     ret = avcodec_open2(ctx->codec_ctx, codec, NULL);
     if (ret < 0) {
         LOGE("vp9: failed to open codec %s", av_err2str(ret));
+        (*env)->ReleaseStringUTFChars(env, outputPath_, outputPath);
+        free_encoder(ctx);
         return (jlong) 0;
     }
 
     ctx->sws_ctx = sws_getContext(width, height, AV_PIX_FMT_RGBA, width, height, AV_PIX_FMT_YUVA420P, 0, 0, 0, 0);
     if (!ctx->sws_ctx) {
         LOGE("vp9: failed to sws_ctx");
+        (*env)->ReleaseStringUTFChars(env, outputPath_, outputPath);
+        free_encoder(ctx);
         return (jlong) 0;
     }
 
     ctx->frame = av_frame_alloc();
     if (!ctx->frame) {
         LOGE("vp9: failed to alloc frame");
+        (*env)->ReleaseStringUTFChars(env, outputPath_, outputPath);
+        free_encoder(ctx);
         return (jlong)0;
     }
 
@@ -115,17 +152,23 @@ JNIEXPORT jlong JNICALL Java_org_telegram_messenger_video_WebmEncoder_createEnco
     ret = av_frame_get_buffer(ctx->frame, 0);
     if (ret < 0) {
         LOGE("vp9: failed to get frame buffer %d", ret);
+        (*env)->ReleaseStringUTFChars(env, outputPath_, outputPath);
+        free_encoder(ctx);
         return (jlong)0;
     }
 
     if (avcodec_parameters_from_context(ctx->video_stream->codecpar, ctx->codec_ctx) < 0) {
         LOGE("vp9: failed to copy codec parameters to stream");
+        (*env)->ReleaseStringUTFChars(env, outputPath_, outputPath);
+        free_encoder(ctx);
         return (jlong) 0;
     }
 
     ret = avformat_write_header(ctx->fmt_ctx, NULL);
     if (ret < 0) {
         LOGE("vp9: failed to write header %d", ret);
+        (*env)->ReleaseStringUTFChars(env, outputPath_, outputPath);
+        free_encoder(ctx);
         return (jlong) 0;
     }
 
@@ -200,59 +243,45 @@ JNIEXPORT void JNICALL Java_org_telegram_messenger_video_WebmEncoder_stop(
     jlong ptr
 ) {
     EncoderContext *ctx = (EncoderContext *) ptr;
-    if (!ctx || !ctx->fmt_ctx) {
+    if (!ctx) {
         return;
     }
 
-    int ret;
-    ret = avcodec_send_frame(ctx->codec_ctx, NULL);
-    if (ret < 0) {
-        LOGE("vp9: failed to avcodec_send_frame %d", ret);
-    }
-    AVPacket pkt;
-    av_init_packet(&pkt);
-    pkt.data = NULL;
-    pkt.size = 0;
-
-    while (1) {
-        ret = avcodec_receive_packet(ctx->codec_ctx, &pkt);
-        if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
-            break;
-        } else if (ret < 0) {
-            LOGE("vp9: failed to receive packet %d", ret);
-            return;
-        }
-
-        av_packet_rescale_ts(&pkt, ctx->codec_ctx->time_base, ctx->video_stream->time_base);
-        pkt.stream_index = ctx->video_stream->index;
-
-        ret = av_interleaved_write_frame(ctx->fmt_ctx, &pkt);
+    if (ctx->fmt_ctx && ctx->codec_ctx) {
+        int ret;
+        ret = avcodec_send_frame(ctx->codec_ctx, NULL);
         if (ret < 0) {
-            LOGE("vp9: failed to av_interleaved_write_frame %d", ret);
+            LOGE("vp9: failed to avcodec_send_frame %d", ret);
         }
-        av_packet_unref(&pkt);
-    }
+        AVPacket pkt;
+        av_init_packet(&pkt);
+        pkt.data = NULL;
+        pkt.size = 0;
 
-    ret = av_write_trailer(ctx->fmt_ctx);
-    if (ret < 0) {
-        LOGE("vp9: failed to av_write_trailer %d", ret);
-    }
+        while (1) {
+            ret = avcodec_receive_packet(ctx->codec_ctx, &pkt);
+            if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF) {
+                break;
+            } else if (ret < 0) {
+                LOGE("vp9: failed to receive packet %d", ret);
+                break;
+            }
 
-    if (ctx->frame) {
-        av_frame_free(&ctx->frame);
-    }
-    if (ctx->codec_ctx) {
-        avcodec_free_context(&ctx->codec_ctx);
-    }
-    if (ctx->sws_ctx) {
-        sws_freeContext(ctx->sws_ctx);
-    }
-    if (ctx->fmt_ctx) {
-        if (!(ctx->fmt_ctx->oformat->flags & AVFMT_NOFILE)) {
-            avio_closep(&ctx->fmt_ctx->pb);
+            av_packet_rescale_ts(&pkt, ctx->codec_ctx->time_base, ctx->video_stream->time_base);
+            pkt.stream_index = ctx->video_stream->index;
+
+            ret = av_interleaved_write_frame(ctx->fmt_ctx, &pkt);
+            if (ret < 0) {
+                LOGE("vp9: failed to av_interleaved_write_frame %d", ret);
+            }
+            av_packet_unref(&pkt);
         }
-        avformat_free_context(ctx->fmt_ctx);
+
+        ret = av_write_trailer(ctx->fmt_ctx);
+        if (ret < 0) {
+            LOGE("vp9: failed to av_write_trailer %d", ret);
+        }
     }
 
-    free(ctx);
+    free_encoder(ctx);
 }
