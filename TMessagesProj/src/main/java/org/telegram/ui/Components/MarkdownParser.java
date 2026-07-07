@@ -81,6 +81,16 @@ public class MarkdownParser {
         return isExtensionMarkdown(msg.getExtension()) || isMimeMarkdown(msg.getMimeType());
     }
 
+    public static boolean isPlainText(MessageObject msg) {
+        if (msg == null) return false;
+        final String mime = msg.getMimeType();
+        final String lmime = mime != null ? mime.toLowerCase() : "";
+        return "txt".equalsIgnoreCase(msg.getExtension()) ||
+                "log".equalsIgnoreCase(msg.getExtension()) ||
+                lmime.startsWith("text/plain") ||
+                lmime.startsWith("text/x-log");
+    }
+
     public static boolean isExtensionMarkdown(String ext) {
         return (
             "md".equalsIgnoreCase(ext) ||

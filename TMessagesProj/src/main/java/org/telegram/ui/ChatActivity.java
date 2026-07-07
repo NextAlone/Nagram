@@ -42449,7 +42449,7 @@ public class ChatActivity extends BaseFragment implements
                     PhotoViewer.getInstance().openPhoto(message, ChatActivity.this, message.type != 0 ? dialog_id : 0, message.type != 0 ? mergeDialogId : 0, message.type != 0 ? getTopicId() : 0, photoViewerProvider);
                     handled = true;
                 }
-                if (MarkdownParser.isMarkdown(message)) {
+                if (MarkdownParser.isMarkdown(message) || MarkdownParser.isPlainText(message)) {
                     parseMarkdownAsync(message);
                     handled = true;
                 }
