@@ -14357,7 +14357,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     } else if (position == stickersRow) {
                         textCell.setTextAndIcon(LocaleController.getString(R.string.StickersAndMasks), R.drawable.msg_sticker, true);
                     } else if (position == nekoRow) {
-                        textCell.setTextAndIcon(LocaleController.getString(R.string.NekoSettings), R.drawable.msg_settings, true);
+                        textCell.setTextAndIcon(LocaleController.getString(R.string.N_Config), R.drawable.msg_settings, true);
                     } else if (position == filtersRow) {
                         textCell.setTextAndIcon(LocaleController.getString(R.string.Filters), R.drawable.msg_folders, true);
                     } else if (position == liteModeRow) {

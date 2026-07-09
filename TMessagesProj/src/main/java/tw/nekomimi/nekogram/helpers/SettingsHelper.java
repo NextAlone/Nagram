@@ -128,7 +128,7 @@ public class SettingsHelper {
         fragments.add(new NekoChatSettingsActivity());
         fragments.add(new NekoExperimentalSettingsActivity());
         fragments.add(new NekoDebugSettingsActivity());
-        String n_title = LocaleController.getString(R.string.NekoSettings);
+        String n_title = LocaleController.getString(R.string.N_Config);
         for (BaseNekoXSettingsActivity fragment: fragments) {
             int uid = fragment.getBaseGuid();
             int drawable = fragment.getDrawable();

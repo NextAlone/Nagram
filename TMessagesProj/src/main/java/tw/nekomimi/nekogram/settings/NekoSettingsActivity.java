@@ -126,7 +126,7 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
 
     @Override
     protected String getActionBarTitle() {
-        return LocaleController.getString(R.string.NekoSettings);
+        return LocaleController.getString(R.string.N_Config);
     }
 
     @Override
@@ -203,7 +203,7 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
                     } else if (position == aboutRow) {
                         headerCell.setText(LocaleController.getString(R.string.About));
                     } else if (position == settingsRow) {
-                        headerCell.setText(LocaleController.getString(R.string.NekoSettings));
+                        headerCell.setText(LocaleController.getString(R.string.N_Config));
                     }
                     break;
                 }
