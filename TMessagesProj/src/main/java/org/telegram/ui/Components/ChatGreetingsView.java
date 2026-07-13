@@ -65,6 +65,7 @@ public class ChatGreetingsView extends LinearLayout {
     public BackupImageView nextStickerToSendView;
     private final Theme.ResourcesProvider resourcesProvider;
     boolean wasDraw;
+    boolean showSticker = !NekoConfig.dontSendGreetingSticker.Bool();
 
     public ChatGreetingsView(Context context, TLRPC.User user, int currentAccount, TLRPC.Document sticker, Theme.ResourcesProvider resourcesProvider) {
         super(context);
@@ -236,7 +237,7 @@ public class ChatGreetingsView extends LinearLayout {
                 }
             }
         } else {
-            addView(titleView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL, 20, 6, 20, 6));
+            addView(titleView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL, 20, showSticker ? 6 : -4, 20, 6));
             addView(descriptionView, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL, 20, 6, 20, 6));
             addView(stickerContainer, LayoutHelper.createLinear(112, 112, Gravity.CENTER_HORIZONTAL, 16, 10, 16, 16));
         }
@@ -256,8 +257,6 @@ public class ChatGreetingsView extends LinearLayout {
             stickerToSendView.setImage(ImageLocation.getForDocument(sticker), createFilter(sticker), ImageLocation.getForDocument(thumb, sticker), null, 0, sticker);
         }
         stickerToSendView.setOnClickListener(v -> {
-            if (NekoConfig.dontSendGreetingSticker.Bool())
-                return;
             if (listener != null) {
                 listener.onGreetings(sticker);
             }
@@ -430,9 +429,10 @@ public class ChatGreetingsView extends LinearLayout {
         }
         stickerToSendView.setVisibility(View.VISIBLE);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        if (getMeasuredHeight() > MeasureSpec.getSize(heightMeasureSpec) && !preview) {
+        if ((!showSticker || getMeasuredHeight() > MeasureSpec.getSize(heightMeasureSpec)) && !preview) {
             descriptionView.setVisibility(View.GONE);
             stickerToSendView.setVisibility(View.GONE);
+            stickerContainer.setVisibility(View.GONE);
         } else {
             if (!preview) {
                 descriptionView.setVisibility(View.VISIBLE);
