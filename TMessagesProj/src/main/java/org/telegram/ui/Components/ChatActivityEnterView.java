@@ -5479,6 +5479,17 @@ public class ChatActivityEnterView extends FrameLayout implements
                         AndroidUtilities.runOnUIThread(dismissSendPreview, 500);
                     }
                 });
+                options.add(R.drawable.round_code_white, "Send As Rich Message", () -> {
+                    sentFromPreview = System.currentTimeMillis();
+                    sendMessageInternal(true, 0, 0, 0, true, SendMessageInternalParams.richMessage());
+                    if (!containsSendMessage && messageSendPreview != null) {
+                        messageSendPreview.dismiss(true);
+                        messageSendPreview = null;
+                    } else {
+                        AndroidUtilities.cancelRunOnUIThread(dismissSendPreview);
+                        AndroidUtilities.runOnUIThread(dismissSendPreview, 500);
+                    }
+                });
             } else if (canSendAsDice(messageEditText.getText().toString(), parentFragment, dialog_id)) {
                 options.add(R.drawable.casino_icon, getString(R.string.SendAsEmoji), () -> {
                     sentFromPreview = System.currentTimeMillis();
@@ -8108,6 +8119,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         public Boolean withMarkdown = null;
         public boolean withGame = true;
         public Boolean canUsePangu = null;
+        public boolean sendAsRichMessage = false;
 
         public static SendMessageInternalParams markdown(Boolean withMarkdown) {
             SendMessageInternalParams params = new SendMessageInternalParams();
@@ -8124,6 +8136,12 @@ public class ChatActivityEnterView extends FrameLayout implements
         public static SendMessageInternalParams pangu(Boolean canUsePangu) {
             SendMessageInternalParams params = new SendMessageInternalParams();
             params.canUsePangu = canUsePangu;
+            return params;
+        }
+
+        public static SendMessageInternalParams richMessage() {
+            SendMessageInternalParams params = new SendMessageInternalParams();
+            params.sendAsRichMessage = true;
             return params;
         }
     }
@@ -8581,6 +8599,18 @@ public class ChatActivityEnterView extends FrameLayout implements
                     }
                     setWebPage(null, true);
                     parentFragment.fallbackFieldPanel();
+                }
+                if (internalParams.sendAsRichMessage) {
+                    ArrayList<TL_iv.PageBlock> richBlocks = new ArrayList<>();
+                    MarkdownParser.parse(text.toString(), richBlocks);
+                    if (MarkdownParser.isMarkdown(richBlocks)) {
+                        SendMessagesHelper.prepareSendingArticle(accountInstance, richBlocks, false, dialog_id, replyingMessageObject, replyToTopMsg, notify, scheduleDate, scheduleRepeatPeriod,
+                                parentFragment != null ? parentFragment.quickReplyShortcut : null,
+                                parentFragment != null ? parentFragment.getQuickReplyId() : 0,
+                                effectId, getSendMonoForumPeerId(), payStars);
+                        start = end + 1;
+                        continue;
+                    }
                 }
                 SendMessagesHelper.getInstance(currentAccount).sendMessage(params);
                 start = end + 1;
