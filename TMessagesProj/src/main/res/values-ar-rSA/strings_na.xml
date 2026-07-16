@@ -335,4 +335,5 @@
     <string name="FixUrlAutoInlineBotSkipMediaPreviewDesc">ينطبق فقط على نتائج الروبوت المضرب للربط التلقائي. لا تزال وسائط الروبوت المضمنة العادية تفتح المعاينة.</string>
     <string name="TabletModeSmall">لوحي صغير</string>
     <string name="TabletModeBig">لوحي كبير</string>
+    <string name="ShowRecentForwardTab">إظهار علامة تبويب المحادثة الأخيرة عند إعادة التوجيه</string>
 </resources>

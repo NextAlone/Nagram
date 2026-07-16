@@ -335,4 +335,5 @@
     <string name="FixUrlAutoInlineBotSkipMediaPreviewDesc">S\'applique uniquement aux résultats automatiques du bot en ligne d\'URL. Les médias de bot en ligne réguliers ouvrent toujours l\'aperçu.</string>
     <string name="TabletModeSmall">Petite tablette</string>
     <string name="TabletModeBig">Grande tablette</string>
+    <string name="ShowRecentForwardTab">Afficher l\'onglet des discussions récentes lors de la redirection</string>
 </resources>

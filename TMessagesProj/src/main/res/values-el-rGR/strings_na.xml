@@ -335,4 +335,5 @@
     <string name="FixUrlAutoInlineBotSkipMediaPreviewDesc">Ισχύει μόνο για τα αυτόματα αποτελέσματα των inline bot URL. Τα κανονικά inline bot μέσα εξακολουθούν να ανοίγουν την προεπισκόπηση.</string>
     <string name="TabletModeSmall">Μικρό Δισκίο</string>
     <string name="TabletModeBig">Μεγάλη Δισκία</string>
+    <string name="ShowRecentForwardTab">Εμφάνιση πρόσφατης καρτέλας συνομιλιών κατά την προώθηση</string>
 </resources>

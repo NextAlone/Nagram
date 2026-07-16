@@ -335,4 +335,5 @@
     <string name="FixUrlAutoInlineBotSkipMediaPreviewDesc">Só se aplica aos resultados do bot inline de URL automático. Um bot embutido regular ainda abre a pré-visualização.</string>
     <string name="TabletModeSmall">Tablet Pequeno</string>
     <string name="TabletModeBig">Tablet Grande</string>
+    <string name="ShowRecentForwardTab">Mostrar aba de bate-papos recentes ao encaminhar</string>
 </resources>

@@ -335,4 +335,5 @@
     <string name="FixUrlAutoInlineBotSkipMediaPreviewDesc">Si applica solo ai risultati automatici del bot in linea dell\'URL. I media regolari del bot in linea aprono ancora l\'anteprima.</string>
     <string name="TabletModeSmall">Tavoletta Piccola</string>
     <string name="TabletModeBig">Tablet Grande</string>
+    <string name="ShowRecentForwardTab">Mostra la scheda delle chat recenti durante l\'inoltro</string>
 </resources>

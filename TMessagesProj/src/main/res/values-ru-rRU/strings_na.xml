@@ -335,4 +335,5 @@
     <string name="FixUrlAutoInlineBotSkipMediaPreviewDesc">Применяется только к автоматическим URL-адресам встроенных ботов. Обычный встроенный бот-носитель по-прежнему открывает предварительный просмотр.</string>
     <string name="TabletModeSmall">Маленький планшет</string>
     <string name="TabletModeBig">Большой планшет</string>
+    <string name="ShowRecentForwardTab">Показывать вкладку чатов при пересылке</string>
 </resources>

@@ -335,4 +335,5 @@
     <string name="FixUrlAutoInlineBotSkipMediaPreviewDesc">Bare gjelder automatisk URL inline bot resultat. Normal inline bot media åpner fortsatt forhåndsvisning.</string>
     <string name="TabletModeSmall">Lite nettbrett</string>
     <string name="TabletModeBig">Stor nettbrett</string>
+    <string name="ShowRecentForwardTab">Vis nylige sludringer fane ved videresending</string>
 </resources>

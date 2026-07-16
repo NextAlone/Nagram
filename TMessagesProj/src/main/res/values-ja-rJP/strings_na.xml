@@ -335,4 +335,5 @@
     <string name="FixUrlAutoInlineBotSkipMediaPreviewDesc">自動URLインラインボットの結果にのみ適用されます。正規インラインボットメディアはプレビューを開きます。</string>
     <string name="TabletModeSmall">小さいタブレット</string>
     <string name="TabletModeBig">大きなタブレット</string>
+    <string name="ShowRecentForwardTab">転送時に最近のチャットタブを表示する</string>
 </resources>

@@ -335,4 +335,5 @@
     <string name="FixUrlAutoInlineBotSkipMediaPreviewDesc">Wird nur für automatische URL-Inline-Bot-Ergebnisse angewendet. Regelmäßige Inline-Bot Medien öffnen die Vorschau noch.</string>
     <string name="TabletModeSmall">Kleines Tablet</string>
     <string name="TabletModeBig">Großes Tablet</string>
+    <string name="ShowRecentForwardTab">Zeige neuere Chats beim Weiterleiten</string>
 </resources>
