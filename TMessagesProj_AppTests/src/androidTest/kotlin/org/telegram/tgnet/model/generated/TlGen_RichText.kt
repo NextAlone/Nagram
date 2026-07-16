@@ -421,4 +421,19 @@ public sealed class TlGen_RichText : TlGen_Object {
       public const val MAGIC: UInt = 0xA5B45E2BU
     }
   }
+
+  public data class TL_textDiff(
+    public val text: TlGen_RichText,
+    public val old_text: TlGen_RichText,
+  ) : TlGen_RichText() {
+    public override fun serializeToStream(stream: OutputSerializedData) {
+      stream.writeInt32(MAGIC.toInt())
+      text.serializeToStream(stream)
+      old_text.serializeToStream(stream)
+    }
+
+    public companion object {
+      public const val MAGIC: UInt = 0x9686CB50U
+    }
+  }
 }

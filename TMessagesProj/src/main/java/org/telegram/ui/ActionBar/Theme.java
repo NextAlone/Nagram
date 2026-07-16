@@ -73,6 +73,8 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
+import androidx.collection.IntSet;
+import androidx.collection.MutableIntSet;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.math.MathUtils;
 
@@ -3134,6 +3136,8 @@ public class Theme {
     public static TextPaint dialogs_onlinePaint;
     public static TextPaint dialogs_offlinePaint;
     public static TextPaint dialogs_tagTextPaint;
+
+    public static Drawable dialogs_communityCardsDrawable;
     public static Drawable dialogs_checkDrawable;
     public static Drawable dialogs_playDrawable;
     public static Drawable dialogs_checkReadDrawable;
@@ -3145,6 +3149,7 @@ public class Theme {
     public static Drawable dialogs_lock2Drawable;
     public static Drawable dialogs_muteDrawable;
     public static Drawable dialogs_unmuteDrawable;
+    public static Drawable dialogs_hiddenDrawable;
     public static Drawable dialogs_verifiedDrawable;
     public static ScamDrawable dialogs_scamDrawable;
     public static ScamDrawable dialogs_fakeDrawable;
@@ -3177,6 +3182,7 @@ public class Theme {
     public static RLottieDrawable dialogs_swipeMuteDrawable;
     public static RLottieDrawable dialogs_swipeUnmuteDrawable;
     public static RLottieDrawable dialogs_swipeDeleteDrawable;
+    public static RLottieDrawable dialogs_swipeCommunityUngroup;
     public static RLottieDrawable dialogs_swipeReadDrawable;
     public static RLottieDrawable dialogs_swipeUnreadDrawable;
     public static RLottieDrawable dialogs_swipePinDrawable;
@@ -3243,6 +3249,7 @@ public class Theme {
     public static TextPaint chat_contactPhonePaint;
     public static TextPaint chat_timePaint;
     public static TextPaint chat_adminPaint;
+    public static TextPaint chat_ephemeralPaint;
     public static TextPaint chat_namePaint;
     public static TextPaint chat_forwardNamePaint;
     public static TextPaint chat_replyNamePaint;
@@ -6217,8 +6224,8 @@ public class Theme {
         maskPaint.setColor(0xffffffff);
         Drawable maskDrawable = new RippleRadMaskDrawable(topRad, bottomRad);
         ColorStateList colorStateList = new ColorStateList(
-                new int[][]{StateSet.WILD_CARD},
-                new int[]{color}
+            new int[][] { StateSet.WILD_CARD },
+            new int[] { color }
         );
         return new BaseCell.RippleDrawableSafe(colorStateList, null, maskDrawable);
     }
@@ -6227,8 +6234,8 @@ public class Theme {
         maskPaint.setColor(0xffffffff);
         Drawable maskDrawable = new RippleRadMaskDrawable(topRad, bottomRad);
         ColorStateList colorStateList = new ColorStateList(
-                new int[][]{StateSet.WILD_CARD},
-                new int[]{rippleColor}
+            new int[][] { StateSet.WILD_CARD },
+            new int[] { rippleColor }
         );
         return new BaseCell.RippleDrawableSafe(colorStateList, createRoundRectDrawable(dp(topRad), dp(bottomRad), color), maskDrawable);
     }
@@ -8421,6 +8428,7 @@ public class Theme {
             dialogs_swipeDeleteDrawable = new RLottieDrawable(R.raw.swipe_delete, "swipe_delete", dp(36), dp(36), false, null);
             dialogs_swipeUnpinDrawable = new RLottieDrawable(R.raw.swipe_unpin, "swipe_unpin", dp(36), dp(36), false, null);
             dialogs_swipePinDrawable = new RLottieDrawable(R.raw.swipe_pin, "swipe_pin", dp(36), dp(36), false, null);
+            dialogs_swipeCommunityUngroup = new RLottieDrawable(R.raw.swipe_community_ungroup, "swipe_community_ungroup", dp(28), dp(28), false, null);
 
             applyCommonTheme();
         }
@@ -8545,6 +8553,7 @@ public class Theme {
             dialogs_lockDrawable = resources.getDrawable(R.drawable.list_secret);
             dialogs_lock2Drawable = resources.getDrawable(R.drawable.msg_mini_lock2);
             dialogs_checkDrawable = resources.getDrawable(R.drawable.list_check).mutate();
+            dialogs_communityCardsDrawable = resources.getDrawable(R.drawable.community_cards).mutate();
             dialogs_playDrawable = resources.getDrawable(R.drawable.minithumb_play).mutate();
             dialogs_checkReadDrawable = resources.getDrawable(R.drawable.list_check).mutate();
             dialogs_halfCheckDrawable = resources.getDrawable(R.drawable.list_halfcheck);
@@ -8553,6 +8562,7 @@ public class Theme {
             dialogs_reorderDrawable = resources.getDrawable(R.drawable.list_reorder).mutate();
             dialogs_muteDrawable = resources.getDrawable(R.drawable.list_mute).mutate();
             dialogs_unmuteDrawable = resources.getDrawable(R.drawable.list_unmute).mutate();
+            dialogs_hiddenDrawable = resources.getDrawable(R.drawable.mini_ephemeral_hidden_16).mutate();
             dialogs_verifiedDrawable = resources.getDrawable(R.drawable.verified_area).mutate();
             dialogs_scamDrawable = new ScamDrawable(11, 0);
             dialogs_fakeDrawable = new ScamDrawable(11, 1);
@@ -8641,6 +8651,7 @@ public class Theme {
         setDrawableColorByKey(dialogs_lockDrawable, key_chats_secretIcon);
         setDrawableColorByKey(dialogs_lock2Drawable, key_chats_pinnedIcon);
         setDrawableColorByKey(dialogs_checkDrawable, key_chats_sentCheck);
+        setDrawableColorByKey(dialogs_communityCardsDrawable, key_windowBackgroundWhiteBlackText);
         setDrawableColorByKey(dialogs_checkReadDrawable, key_chats_sentReadCheck);
         setDrawableColorByKey(dialogs_halfCheckDrawable, key_chats_sentReadCheck);
         setDrawableColorByKey(dialogs_clockDrawable, key_chats_sentClock);
@@ -8651,6 +8662,7 @@ public class Theme {
         setDrawableColorByKey(dialogs_reorderDrawable, key_chats_pinnedIcon);
         setDrawableColorByKey(dialogs_muteDrawable, key_chats_muteIcon);
         setDrawableColorByKey(dialogs_unmuteDrawable, key_chats_muteIcon);
+        setDrawableColorByKey(dialogs_hiddenDrawable, key_chats_muteIcon);
 
         setDrawableColorByKey(dialogs_mentionDrawable, key_chats_unreadCounter);
         setDrawableColorByKey(dialogs_reactionsMentionDrawable, key_dialogReactionMentionBackground);
@@ -8720,6 +8732,7 @@ public class Theme {
                 chat_msgTextCode3Paint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
                 chat_msgTextCode3Paint.setTypeface(Typeface.MONOSPACE);
                 chat_msgCodeBgPaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
+                chat_ephemeralPaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
             }
 
             final float[] emojiSizePercents = new float[] {.68f, .46f, .34f, .28f, .22f, .19f};
@@ -8739,6 +8752,7 @@ public class Theme {
             chat_replyTextPaint.setTextSize(dp(smallerDp));
             chat_quoteTextPaint.setTextSize(dp(smallerDp - 1));
             chat_explanationTextPaint.setTextSize(dp(smallerDp));
+            chat_ephemeralPaint.setTextSize(dp(12));
             chat_topicTextPaint.setTextSize(dp(smallerDp - 1));
             chat_titleLabelTextPaint.setTextSize(dp(smallerDp - 2));
             chat_forwardNamePaint.setTextSize(dp(smallerDp));
@@ -8797,6 +8811,7 @@ public class Theme {
             chat_shipmentPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
             chat_timePaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
             chat_adminPaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
+            chat_ephemeralPaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
             chat_namePaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
             chat_namePaint.setTypeface(AndroidUtilities.bold());
             chat_forwardNamePaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
@@ -9104,6 +9119,7 @@ public class Theme {
             chat_topicTextPaint.setTextSize(dp(smallerDp - 1));
             chat_forwardNamePaint.setTextSize(dp(smallerDp));
             chat_adminPaint.setTextSize(dp(smallerDp - 1));
+            chat_ephemeralPaint.setTextSize(dp(12));
             float timeDp = 2 * (SharedConfig.fontSize - 16) / 3f + 12;
             chat_timePaint.setTextSize(dp(12));
             chat_gamePaint.setTextSize(dp(13));
@@ -10756,11 +10772,21 @@ public class Theme {
 
     public interface Colorable {
         public void updateColors();
+        public default int[] getColorKeys() { return null; }
     }
 
-    public static Paint PAINT_CLEAR = new Paint(Paint.ANTI_ALIAS_FLAG); static {
+    private static final Paint PAINT_FILLING = new Paint(Paint.ANTI_ALIAS_FLAG);
+    public static final Paint PAINT_CLEAR = new Paint(Paint.ANTI_ALIAS_FLAG); static {
         PAINT_CLEAR.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
     }
+
+    public static Paint fillingPaint(int color) {
+        PAINT_FILLING.setColor(color);
+        return PAINT_FILLING;
+    }
+
+
+    /* DEBUG */
 
     public static Paint DEBUG_RED = new Paint(); static { DEBUG_RED.setColor(0xffff0000); }
     public static Paint DEBUG_BLUE = new Paint(); static { DEBUG_BLUE.setColor(0xff0000ff); }

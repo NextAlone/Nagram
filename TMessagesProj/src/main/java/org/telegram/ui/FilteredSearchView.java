@@ -52,6 +52,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLMethod;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -123,6 +124,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
 
     FiltersView.MediaFilterData currentSearchFilter;
     long currentSearchDialogId;
+    long currentSearchCommunityId;
     long currentSearchMaxDate;
     long currentSearchMinDate;
     String currentSearchString;
@@ -179,7 +181,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         @Override
         public boolean loadMore() {
             if (!endReached) {
-                search(currentSearchDialogId, currentSearchMinDate, currentSearchMaxDate, currentSearchFilter, currentIncludeFolder, lastMessagesSearchString, false);
+                search(currentSearchDialogId, currentSearchCommunityId, currentSearchMinDate, currentSearchMaxDate, currentSearchFilter, currentIncludeFolder, lastMessagesSearchString, false);
             }
             return true;
         }
@@ -400,7 +402,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 int totalItemCount = recyclerView.getAdapter().getItemCount();
                 if (!isLoading && visibleItemCount > 0 && lastVisibleItem >= totalItemCount - 10 && !endReached) {
                     AndroidUtilities.runOnUIThread(() -> {
-                        search(currentSearchDialogId, currentSearchMinDate, currentSearchMaxDate, currentSearchFilter, currentIncludeFolder, lastMessagesSearchString, false);
+                        search(currentSearchDialogId, currentSearchCommunityId, currentSearchMinDate, currentSearchMaxDate, currentSearchFilter, currentIncludeFolder, lastMessagesSearchString, false);
                     });
                 }
 
@@ -570,14 +572,15 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         return fromName == null ? "" : fromName;
     }
 
-    public void search(long dialogId, long minDate, long maxDate, FiltersView.MediaFilterData currentSearchFilter, boolean includeFolder, String query, boolean clearOldResults) {
+    public void search(long dialogId, long communityId, long minDate, long maxDate, FiltersView.MediaFilterData currentSearchFilter, boolean includeFolder, String query, boolean clearOldResults) {
         if (query == null) query = "";
         final String finalQuery = query;
-        String currentSearchFilterQueryString = String.format(Locale.ENGLISH, "%d%d%d%d%s%s", dialogId, minDate, maxDate, currentSearchFilter == null ? -1 : currentSearchFilter.filterType, query, includeFolder);
+        String currentSearchFilterQueryString = String.format(Locale.ENGLISH, "%d%d%d%d%d%s%s", dialogId, communityId, minDate, maxDate, currentSearchFilter == null ? -1 : currentSearchFilter.filterType, query, includeFolder);
         boolean filterAndQueryIsSame = lastSearchFilterQueryString != null && lastSearchFilterQueryString.equals(currentSearchFilterQueryString);
         boolean forceClear = !filterAndQueryIsSame && clearOldResults;
         this.currentSearchFilter = currentSearchFilter;
         this.currentSearchDialogId = dialogId;
+        this.currentSearchCommunityId = communityId;
         this.currentSearchMinDate = minDate;
         this.currentSearchMaxDate = maxDate;
         this.currentSearchString = query;
@@ -589,7 +592,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         if (filterAndQueryIsSame && clearOldResults) {
             return;
         }
-        if (forceClear || currentSearchFilter == null && dialogId == 0 && minDate == 0 && maxDate == 0) {
+        if (forceClear || currentSearchFilter == null && communityId == 0 && dialogId == 0 && minDate == 0 && maxDate == 0) {
             messages.clear();
             sections.clear();
             sectionArrays.clear();
@@ -633,10 +636,10 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         int currentAccount = UserConfig.selectedAccount;
 
         AndroidUtilities.runOnUIThread(searchRunnable = () -> {
-            TLObject request;
+            TLMethod<TLRPC.messages_Messages> request;
 
             ArrayList<Object> resultArray = null;
-            if (dialogId != 0) {
+            if (dialogId != 0 && communityId == 0) {
                 final TLRPC.TL_messages_search req = new TLRPC.TL_messages_search();
                 req.q = finalQuery;
                 req.limit = 20;
@@ -667,6 +670,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 req.limit = 20;
                 req.q = finalQuery;
                 req.filter = currentSearchFilter == null ? new TLRPC.TL_inputMessagesFilterEmpty() : currentSearchFilter.filter;
+                req.community = MessagesController.getInstance(currentAccount).getInputChannel(communityId);
                 if (minDate > 0) {
                     req.min_date = (int) (minDate / 1000);
                 }
@@ -695,10 +699,10 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             ArrayList<Object> finalResultArray = resultArray;
             final ArrayList<FiltersView.DateData> dateData = new ArrayList<>();
             FiltersView.fillTipDates(lastMessagesSearchString, dateData);
-            ConnectionsManager.getInstance(currentAccount).sendRequest(request, (response, error) -> {
+            ConnectionsManager.getInstance(currentAccount).sendRequestTyped(request, (response, error) -> {
                 ArrayList<MessageObject> messageObjects = new ArrayList<>();
                 if (error == null) {
-                    TLRPC.messages_Messages res = (TLRPC.messages_Messages) response;
+                    TLRPC.messages_Messages res = response;
                     int n = res.messages.size();
                     for (int i = 0; i < n; i++) {
                         MessageObject messageObject = new MessageObject(currentAccount, res.messages.get(i), false, true);
@@ -722,7 +726,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
 
                     emptyView.showProgress(false);
 
-                    TLRPC.messages_Messages res = (TLRPC.messages_Messages) response;
+                    TLRPC.messages_Messages res = response;
                     nextSearchRate = res.next_rate;
                     MessagesStorage.getInstance(currentAccount).putUsersAndChats(res.users, res.chats, true, true);
                     MessagesController.getInstance(currentAccount).putUsers(res.users, false);

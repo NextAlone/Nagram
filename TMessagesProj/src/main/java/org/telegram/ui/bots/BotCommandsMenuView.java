@@ -12,6 +12,8 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Layout;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
@@ -35,6 +37,7 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.tl.TL_bots;
 import org.telegram.ui.ActionBar.MenuDrawable;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.ColoredImageSpan;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RLottieDrawable;
@@ -264,6 +267,7 @@ public class BotCommandsMenuView extends View {
 
         ArrayList<String> newResult = new ArrayList<>();
         ArrayList<String> newResultHelp = new ArrayList<>();
+        ArrayList<Boolean> newResultEphemeral = new ArrayList<>();
 
         public BotCommandsAdapter() {
 
@@ -288,10 +292,24 @@ public class BotCommandsMenuView extends View {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            BotCommandView view = (BotCommandView) holder.itemView;
-            view.command.setText(newResult.get(position));
+            final BotCommandView view = (BotCommandView) holder.itemView;
+            final String command = newResult.get(position);
+            final boolean ephemeral = newResultEphemeral.get(position);
+
+            if (ephemeral /*&& false*/) {
+                final ColoredImageSpan coloredImageSpan = new ColoredImageSpan(R.drawable.mini_ephemeral_hidden_14);
+                coloredImageSpan.setColorKey(Theme.key_windowBackgroundWhiteGrayText3);
+                coloredImageSpan.setTopOffset(1);
+                final SpannableStringBuilder ssb = new SpannableStringBuilder(command);
+                ssb.append(" *");
+                ssb.setSpan(coloredImageSpan, ssb.length() - 1, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                view.command.setText(ssb);
+            } else {
+                view.command.setText(command);
+            }
+
             view.description.setText(newResultHelp.get(position));
-            view.commandStr = newResult.get(position);
+            view.commandStr = command;
         }
 
         @Override
@@ -302,13 +320,15 @@ public class BotCommandsMenuView extends View {
         public void setBotInfo(LongSparseArray<TL_bots.BotInfo> botInfo) {
             newResult.clear();
             newResultHelp.clear();
+            newResultEphemeral.clear();
             for (int b = 0; b < botInfo.size(); b++) {
                 TL_bots.BotInfo info = botInfo.valueAt(b);
                 for (int a = 0; a < info.commands.size(); a++) {
-                    TLRPC.TL_botCommand botCommand = info.commands.get(a);
+                    TLRPC.BotCommand botCommand = info.commands.get(a);
                     if (botCommand != null && botCommand.command != null) {
                         newResult.add("/" + botCommand.command);
                         newResultHelp.add(botCommand.description);
+                        newResultEphemeral.add(botCommand.ephemeral);
                     }
                 }
             }

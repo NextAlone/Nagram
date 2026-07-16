@@ -744,6 +744,7 @@ public class TranslateAlert3 extends BottomSheetWithRecyclerListView {
             copyButton = new ImageView(context);
             copyButton.setImageResource(R.drawable.msg_copy);
             copyButton.setScaleType(ImageView.ScaleType.CENTER);
+            copyButton.setContentDescription(getString(R.string.Copy));
             ScaleStateListAnimator.apply(copyButton);
             addView(copyButton, LayoutHelper.createFrame(38, 38, Gravity.BOTTOM | Gravity.RIGHT, 0, 0, -20 + 4, -16 + 4));
             copyButton.setVisibility(View.GONE);

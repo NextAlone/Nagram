@@ -105,4 +105,15 @@ public class TLObject {
         object.readParams(stream, exception);
         return object;
     }
+
+    public static <T extends TLObject> T deepCopy(T tlObject, Vector.TLDeserializer<T> deserializer) {
+        if (tlObject == null) {
+            return null;
+        }
+
+        SerializedData data = new SerializedData(tlObject.getObjectSize());
+        tlObject.serializeToStream(data);
+        data = new SerializedData(data.toByteArray());
+        return deserializer.deserialize(data, data.readInt32(false), false);
+    }
 }

@@ -421,7 +421,17 @@ public class ImageLocation {
     }
 
     public static String getStrippedKey(Object parentObject, Object fullObject, Object strippedObject) {
-        if (parentObject instanceof TLRPC.WebPage || parentObject instanceof MessageObject && ((MessageObject) parentObject).type == MessageObject.TYPE_PAID_MEDIA) {
+        String key = getStrippedKeyInternal(parentObject, fullObject, strippedObject);
+        if (BuildVars.LOGS_ENABLED && parentObject instanceof MessageObject && ((MessageObject) parentObject).messageOwner != null && ((MessageObject) parentObject).messageOwner.rich_message != null) {
+            FileLog.d("[richmedia] strippedKey=" + key
+                + " fullObject=" + (fullObject == null ? "null" : fullObject.getClass().getSimpleName())
+                + " stripped=" + (strippedObject == null ? "null" : strippedObject.getClass().getSimpleName()));
+        }
+        return key;
+    }
+
+    private static String getStrippedKeyInternal(Object parentObject, Object fullObject, Object strippedObject) {
+        if (parentObject instanceof TLRPC.WebPage || parentObject instanceof MessageObject && (((MessageObject) parentObject).type == MessageObject.TYPE_PAID_MEDIA || ((MessageObject) parentObject).messageOwner != null && ((MessageObject) parentObject).messageOwner.rich_message != null)) {
             if (fullObject instanceof ImageLocation) {
                 ImageLocation imageLocation = (ImageLocation) fullObject;
                 if (imageLocation.document != null) {

@@ -17,9 +17,12 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.graphics.Xfermode;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
@@ -69,7 +72,8 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
     private long lastFrameTime;
     private int lastTimeStamp;
     private int invalidateAfter = 50;
-    private final int[] metaData = new int[6];
+    private final int[] metaData = new int[7];
+    private boolean isFrameOpaque;
     private Runnable loadFrameTask;
     private Bitmap renderingBitmap;
     private int renderingBitmapTime;
@@ -125,7 +129,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
     private final RectF dstRect = new RectF();
     private volatile boolean isRunning;
     private volatile boolean isRecycled;
-    public volatile long nativePtr;
+    public volatile AnimatedFileNative mDecoder;
     private boolean ptrFail;
     private DispatchQueue decodeQueue;
     private float startTime;
@@ -204,9 +208,9 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
     };
 
     private void chekDestroyDecoder() {
-        if (loadFrameRunnable == null && destroyWhenDone && nativePtr != 0 && !generatingCache) {
-            AnimatedFileNative.destroyDecoder(nativePtr);
-            nativePtr = 0;
+        if (loadFrameRunnable == null && destroyWhenDone && mDecoder != null && !generatingCache) {
+            mDecoder.recycle();
+            mDecoder = null;
         }
         if (!canLoadFrames()) {
             if (renderingBitmap != null) {
@@ -293,6 +297,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
                     }
                 }
             }
+            isFrameOpaque = metaData[6] == 1;
             backgroundBitmap = null;
             for (int i = 0; i < backgroundShader.length; i++) {
                 backgroundShader[i] = null;
@@ -357,16 +362,16 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
         @Override
         public void run() {
             if (!isRecycled) {
-                if (!decoderCreated && nativePtr == 0) {
-                    nativePtr = AnimatedFileNative.createDecoder(path.getAbsolutePath(), metaData, currentAccount, streamFileSize, stream, false);
-                    ptrFail = nativePtr == 0 && (!isWebmSticker || decoderTryCount > MAX_TRIES);
-                    if (nativePtr != 0 && (metaData[0] > 3840 || metaData[1] > 3840)) {
-                        AnimatedFileNative.destroyDecoder(nativePtr);
-                        nativePtr = 0;
+                if (!decoderCreated && mDecoder == null) {
+                    mDecoder = AnimatedFileNative.createDecoderFrom(path.getAbsolutePath(), metaData, currentAccount, streamFileSize, stream, false);
+                    ptrFail = mDecoder == null && (!isWebmSticker || decoderTryCount > MAX_TRIES);
+                    if (mDecoder != null && (metaData[0] > 3840 || metaData[1] > 3840)) {
+                        mDecoder.recycle();
+                        mDecoder = null;
                     }
                     adaptRenderingSize();
                     updateScaleFactor();
-                    decoderCreated = !isWebmSticker || nativePtr != 0 || (decoderTryCount++) > MAX_TRIES;
+                    decoderCreated = !isWebmSticker || mDecoder != null || (decoderTryCount++) > MAX_TRIES;
                 }
                 try {
                     if (bitmapsCache != null) {
@@ -399,7 +404,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
                         return;
                     }
 
-                    if (nativePtr != 0 || metaData[0] == 0 || metaData[1] == 0) {
+                    if (mDecoder != null || metaData[0] == 0 || metaData[1] == 0) {
                         if (backgroundBitmap == null && metaData[0] > 0 && metaData[1] > 0) {
                             try {
                                 if (!unusedBitmaps.isEmpty()) {
@@ -425,12 +430,12 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
                             if (stream != null) {
                                 stream.reset();
                             }
-                            AnimatedFileNative.seekToMs(nativePtr, seekTo, metaData, true);
+                            mDecoder.seekToMs(seekTo, true);
                         }
                         if (backgroundBitmap != null) {
                             lastFrameDecodeTime = System.currentTimeMillis();
 
-                            if (AnimatedFileNative.getVideoFrame(nativePtr, backgroundBitmap, metaData, false, startTime, endTime, loop) == 0) {
+                            if (mDecoder.getVideoFrame(backgroundBitmap, false, startTime, endTime, loop) == 0) {
                                 AndroidUtilities.runOnUIThread(uiRunnableNoFrame);
                                 return;
                             }
@@ -513,22 +518,22 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
             stream = new AnimatedFileDrawableStream(document, location, parentObject, account, preview, streamLoadingPriority, cacheType);
         }
         if (createDecoder && !this.precache) {
-            nativePtr = AnimatedFileNative.createDecoder(file.getAbsolutePath(), metaData, currentAccount, streamFileSize, stream, preview);
-            ptrFail = nativePtr == 0 && (!isWebmSticker || decoderTryCount > MAX_TRIES);
-            if (nativePtr != 0 && (metaData[0] > 3840 || metaData[1] > 3840)) {
-                AnimatedFileNative.destroyDecoder(nativePtr);
-                nativePtr = 0;
+            mDecoder = AnimatedFileNative.createDecoderFrom(file.getAbsolutePath(), metaData, currentAccount, streamFileSize, stream, preview);
+            ptrFail = mDecoder == null && (!isWebmSticker || decoderTryCount > MAX_TRIES);
+            if (mDecoder != null && (metaData[0] > 3840 || metaData[1] > 3840)) {
+                mDecoder.recycle();
+                mDecoder = null;
             }
             adaptRenderingSize();
             updateScaleFactor();
             decoderCreated = true;
         }
         if (this.precache) {
-            nativePtr = AnimatedFileNative.createDecoder(file.getAbsolutePath(), metaData, currentAccount, streamFileSize, stream, preview);
-            ptrFail = nativePtr == 0 && (!isWebmSticker || decoderTryCount > MAX_TRIES);
-            if (nativePtr != 0 && (metaData[0] > 3840 || metaData[1] > 3840)) {
-                AnimatedFileNative.destroyDecoder(nativePtr);
-                nativePtr = 0;
+            mDecoder = AnimatedFileNative.createDecoderFrom(file.getAbsolutePath(), metaData, currentAccount, streamFileSize, stream, preview);
+            ptrFail = mDecoder == null && (!isWebmSticker || decoderTryCount > MAX_TRIES);
+            if (mDecoder != null && (metaData[0] > 3840 || metaData[1] > 3840)) {
+                mDecoder.recycle();
+                mDecoder = null;
             } else {
                 bitmapsCache = new BitmapsCache(file, this, cacheOptions, renderingWidth, renderingHeight, !limitFps);
             }
@@ -551,7 +556,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
     }
 
     public Bitmap getFrameAtTime(long ms, boolean precise) {
-        if (!decoderCreated || nativePtr == 0) {
+        if (!decoderCreated || mDecoder == null) {
             return null;
         }
         if (stream != null) {
@@ -559,14 +564,14 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
             stream.reset();
         }
         if (!precise) {
-            AnimatedFileNative.seekToMs(nativePtr, ms, metaData, precise);
+            mDecoder.seekToMs(ms, precise);
         }
         Bitmap backgroundBitmap = Bitmap.createBitmap(metaData[0], metaData[1], Bitmap.Config.ARGB_8888);
         int result;
         if (precise) {
-            result = AnimatedFileNative.getFrameAtTime(nativePtr, ms, backgroundBitmap, metaData);
+            result = mDecoder.getFrameAtTime(ms, backgroundBitmap);
         } else {
-            result = AnimatedFileNative.getVideoFrame(nativePtr, backgroundBitmap, metaData, true, (float) 0, (float) 0, true);
+            result = mDecoder.getVideoFrame(backgroundBitmap, true, (float) 0, (float) 0, true);
         }
         return result != 0 ? backgroundBitmap : null;
     }
@@ -655,8 +660,8 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
             pendingSeekTo = ms;
             pendingSeekToUI = ms;
             scheduledForSeek = false;
-            if (nativePtr != 0) {
-                AnimatedFileNative.prepareToSeek(nativePtr);
+            if (mDecoder != null) {
+                mDecoder.prepareToSeek();
             }
             if (decoderCreated && stream != null) {
                 stream.cancel(removeLoading);
@@ -675,8 +680,8 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
     }
 
     public void seekToSync(long ms) {
-        if (nativePtr == 0) return;
-        AnimatedFileNative.seekToMs(nativePtr, ms, metaData, true);
+        if (mDecoder == null) return;
+        mDecoder.seekToMs(ms, true);
     }
 
     public void recycle() {
@@ -692,9 +697,9 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
             cacheGenRunnable = null;
         }
         if (loadFrameTask == null) {
-            if (nativePtr != 0) {
-                AnimatedFileNative.destroyDecoder(nativePtr);
-                nativePtr = 0;
+            if (mDecoder != null) {
+                mDecoder.recycle();
+                mDecoder = null;
             }
 
             ArrayList<Bitmap> bitmapToRecycle = new ArrayList<>();
@@ -732,11 +737,11 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
         if (stream != null) {
             stream.cancel(true);
         }
-        if (nativePtr != 0) {
+        if (mDecoder != null) {
             if (stop) {
-                AnimatedFileNative.stopDecoder(nativePtr);
+                mDecoder.stopDecoder();
             } else {
-                AnimatedFileNative.prepareToSeek(nativePtr);
+                mDecoder.prepareToSeek();
             }
         }
     }
@@ -890,6 +895,8 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
         drawInternal(canvas, true, 0, threadIndex);
     }
 
+    private static final Xfermode SRC_XFERMODE = new PorterDuffXfermode(PorterDuff.Mode.SRC);
+
     public void drawInternal(Canvas canvas, boolean drawInBackground, long currentTime, int threadIndex) {
         if (!canLoadFrames() || destroyWhenDone) {
             return;
@@ -904,6 +911,11 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
 
         if (!drawInBackground) {
             updateCurrentFrame(currentTime, false);
+
+            final Xfermode xfermodeToSet = isFrameOpaque && paint.getAlpha() == 255 ? SRC_XFERMODE : null;
+            if (paint.getXfermode() != xfermodeToSet) {
+                paint.setXfermode(xfermodeToSet);
+            }
         }
 
         if (renderingBitmap != null) {
@@ -1143,7 +1155,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
     }
 
     public Bitmap getNextFrame(boolean loop) {
-        if (nativePtr == 0) {
+        if (mDecoder == null) {
             return backgroundBitmap;
         }
         if (backgroundBitmap == null) {
@@ -1153,15 +1165,15 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
                 backgroundBitmap = Bitmap.createBitmap((int) (metaData[0] * scaleFactor), (int) (metaData[1] * scaleFactor), Bitmap.Config.ARGB_8888);
             }
         }
-        AnimatedFileNative.getVideoFrame(nativePtr, backgroundBitmap, metaData, false, startTime, endTime, loop);
+        mDecoder.getVideoFrame(backgroundBitmap, false, startTime, endTime, loop);
         return backgroundBitmap;
     }
 
     public void skipNextFrame(boolean loop) {
-        if (nativePtr == 0) {
+        if (mDecoder == null) {
             return;
         }
-        AnimatedFileNative.getVideoFrame(nativePtr, null, metaData, false, startTime, endTime, loop);
+        mDecoder.getVideoFrame(null, false, startTime, endTime, loop);
     }
 
     public void setLimitFps(boolean limitFps) {
@@ -1181,32 +1193,33 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
 
     long cacheGenerateTimestamp;
     Bitmap generatingCacheBitmap;
-    long cacheGenerateNativePtr;
+    AnimatedFileNative cacheGenerateDecoder;
     int tryCount;
     int lastMetadata;
 
     @Override
     public void prepareForGenerateCache() {
-        cacheGenerateNativePtr = AnimatedFileNative.createDecoder(path.getAbsolutePath(), metaData, currentAccount, streamFileSize, stream, false);
+        cacheGenerateDecoder = AnimatedFileNative.createDecoderFrom(path.getAbsolutePath(), metaData, currentAccount, streamFileSize, stream, false);
     }
 
     @Override
     public void releaseForGenerateCache() {
-        if (cacheGenerateNativePtr != 0) {
-            AnimatedFileNative.destroyDecoder(cacheGenerateNativePtr);
+        if (cacheGenerateDecoder != null) {
+            cacheGenerateDecoder.recycle();
+            cacheGenerateDecoder = null;
         }
     }
 
     @Override
     public int getNextFrame(Bitmap bitmap) {
-        if (cacheGenerateNativePtr == 0) {
+        if (cacheGenerateDecoder == null) {
             return -1;
         }
         Canvas canvas = new Canvas(bitmap);
         if (generatingCacheBitmap == null) {
             generatingCacheBitmap = Bitmap.createBitmap(metaData[0], metaData[1], Bitmap.Config.ARGB_8888);
         }
-        AnimatedFileNative.getVideoFrame(cacheGenerateNativePtr, generatingCacheBitmap, metaData, false, startTime, endTime, this.loop);
+        cacheGenerateDecoder.getVideoFrame(generatingCacheBitmap, false, startTime, endTime, this.loop);
         if (cacheGenerateTimestamp != 0 && (metaData[3] == 0 || cacheGenerateTimestamp > metaData[3])) {
             return 0;
         }
@@ -1234,15 +1247,15 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
         }
         Canvas canvas = new Canvas(bitmap);
 
-        long nativePtr = AnimatedFileNative.createDecoder(path.getAbsolutePath(), metaData, currentAccount, streamFileSize, stream, false);
-        if (nativePtr == 0) {
+        AnimatedFileNative tempDecoder = AnimatedFileNative.createDecoderFrom(path.getAbsolutePath(), metaData, currentAccount, streamFileSize, stream, false);
+        if (tempDecoder == null) {
             return bitmap;
         }
         if (generatingCacheBitmap == null) {
             generatingCacheBitmap = Bitmap.createBitmap(Math.max(1, metaData[0]), Math.max(1, metaData[1]), Bitmap.Config.ARGB_8888);
         }
-        AnimatedFileNative.getVideoFrame(nativePtr, generatingCacheBitmap, metaData, false, startTime, endTime, true);
-        AnimatedFileNative.destroyDecoder(nativePtr);
+        tempDecoder.getVideoFrame(generatingCacheBitmap, false, startTime, endTime, true);
+        tempDecoder.recycle();
         bitmap.eraseColor(Color.TRANSPARENT);
         canvas.save();
         float s = (float) renderingWidth / generatingCacheBitmap.getWidth();
@@ -1254,7 +1267,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
     }
 
     public void drawFrame(Canvas canvas, int incFrame) {
-        if (nativePtr == 0) {
+        if (mDecoder == null) {
             return;
         }
         for (int i = 0; i < incFrame; ++i) {
@@ -1272,7 +1285,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable, 
         if (precache) {
             return bitmapsCache != null;
         } else {
-            return nativePtr != 0 || !decoderCreated;
+            return mDecoder != null || !decoderCreated;
         }
     }
 

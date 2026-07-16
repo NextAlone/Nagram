@@ -4254,7 +4254,7 @@ public class StarsController {
         if (msg == null) return;
         if (msg.messageOwner == null) return;
         final long price = msg.messageOwner.paid_message_stars;
-        if (price <= 0) return;
+        if (price <= 0 || msg.isEphemeral()) return;
 
         final boolean needsUndo = needsUndoButton(msg, price);
 

@@ -237,6 +237,7 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
     public final static int FEATURE_GIFTS = 40;
     public final static int PREMIUM_FEATURE_SHARING_DISABLE = 41;
     public final static int PREMIUM_FEATURE_AI_EDITOR = 42;
+    public final static int PREMIUM_FEATURE_RICH_EDITOR = 43;
 
     private int statusBarHeight;
     private int firstViewHeight;
@@ -334,6 +335,8 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 return PREMIUM_FEATURE_SHARING_DISABLE;
             case "ai_compose":
                 return PREMIUM_FEATURE_AI_EDITOR;
+            case "rich_formatting":
+                return PREMIUM_FEATURE_RICH_EDITOR;
 
             case "business":
                 return PREMIUM_FEATURE_BUSINESS;
@@ -427,6 +430,8 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
                 return "pm_noforwards";
             case PREMIUM_FEATURE_AI_EDITOR:
                 return "ai_compose";
+            case PREMIUM_FEATURE_RICH_EDITOR:
+                return "rich_formatting";
 
             case PREMIUM_FEATURE_BUSINESS:
                 return "business";
@@ -1023,10 +1028,11 @@ public class PremiumPreviewFragment extends BaseFragment implements Notification
         premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_TODO, R.drawable.msg_premium_icons, getString(R.string.PremiumPreviewTodo), getString(R.string.PremiumPreviewTodoDescription)));
         premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_SHARING_DISABLE, R.drawable.filled_sharing_off2_24, getString(R.string.PremiumPreviewSharingDisable), getString(R.string.PremiumPreviewSharingDisableDescription)));
         premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_AI_EDITOR, R.drawable.premium_ai_editor, getString(R.string.PremiumPreviewAIEditor), getString(R.string.PremiumPreviewAIEditorDescription)));
+        premiumFeatures.add(new PremiumFeatureData(PREMIUM_FEATURE_RICH_EDITOR, R.drawable.premium_rich_editor, getString(R.string.PremiumPreviewRichEditor), getString(R.string.PremiumPreviewRichEditorDescription)));
 
         if (messagesController.premiumFeaturesTypesToPosition.size() > 0) {
             for (int i = 0; i < premiumFeatures.size(); i++) {
-                if (messagesController.premiumFeaturesTypesToPosition.get(premiumFeatures.get(i).type, -1) == -1 && !BuildVars.DEBUG_PRIVATE_VERSION) {
+                if (messagesController.premiumFeaturesTypesToPosition.get(premiumFeatures.get(i).type, -1) == -1 && !BuildVars.DEBUG_VERSION) {
                     premiumFeatures.remove(i);
                     i--;
                 }

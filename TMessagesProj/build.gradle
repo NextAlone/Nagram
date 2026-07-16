@@ -8,7 +8,7 @@ apply plugin: "io.sentry.android.gradle"
 apply plugin: "io.objectbox"
 
 def verName = APP_VERSION_NAME
-def verCode = 1240
+def verCode = 1241
 
 
 def officialVer = APP_VERSION_NAME
@@ -517,7 +517,7 @@ sentry {
         // as Gradle will resolve it to the latest version.
         //
         // Defaults to the latest published Sentry version.
-        sentryVersion = '8.37.1'
+        sentryVersion = '8.49.0'
     }
 
     // Disables or enables dependencies metadata reporting for Sentry.

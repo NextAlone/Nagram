@@ -16,6 +16,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.Bundle;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextUtils;
@@ -1096,6 +1097,34 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             info.setCheckable(true);
             info.setChecked(true);
         }
+        if (documentAttachType == DOCUMENT_ATTACH_TYPE_AUDIO || documentAttachType == DOCUMENT_ATTACH_TYPE_MUSIC) {
+            CharSequence actionLabel;
+            switch (getIconForCurrentState()) {
+                case MediaActionDrawable.ICON_PAUSE:
+                    actionLabel = LocaleController.getString("AccActionPause", R.string.AccActionPause);
+                    break;
+                case MediaActionDrawable.ICON_DOWNLOAD:
+                    actionLabel = LocaleController.getString("AccActionDownload", R.string.AccActionDownload);
+                    break;
+                case MediaActionDrawable.ICON_CANCEL:
+                    actionLabel = LocaleController.getString("AccActionCancelDownload", R.string.AccActionCancelDownload);
+                    break;
+                default:
+                    actionLabel = LocaleController.getString("AccActionPlay", R.string.AccActionPlay);
+                    break;
+            }
+            info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_CLICK, actionLabel));
+        }
+    }
+
+    @Override
+    public boolean performAccessibilityAction(int action, Bundle arguments) {
+        if (action == AccessibilityNodeInfo.ACTION_CLICK
+                && (documentAttachType == DOCUMENT_ATTACH_TYPE_AUDIO || documentAttachType == DOCUMENT_ATTACH_TYPE_MUSIC)) {
+            didPressedButton();
+            return true;
+        }
+        return super.performAccessibilityAction(action, arguments);
     }
 
     private float imageScale = 1.0f;

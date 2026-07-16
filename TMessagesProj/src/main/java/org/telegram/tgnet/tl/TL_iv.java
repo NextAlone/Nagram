@@ -330,6 +330,7 @@ public class TL_iv {
                 case textBankCard.constructor: return new textBankCard();
                 case textMentionName.constructor: return new textMentionName();
                 case textDate.constructor: return new textDate();
+                case textDiff.constructor: return new textDiff();
             }
             return null;
         }
@@ -770,6 +771,25 @@ public class TL_iv {
             stream.writeInt32(date);
         }
     }
+    public static class textDiff extends RichText {
+        public static final int constructor = 0x9686cb50;
+
+        public RichText text;
+        public RichText old_text;
+
+        @Override
+        public void readParams(InputSerializedData stream, boolean exception) {
+            text = RichText.TLdeserialize(stream, stream.readInt32(exception), exception);
+            old_text = RichText.TLdeserialize(stream, stream.readInt32(exception), exception);
+        }
+
+        @Override
+        public void serializeToStream(OutputSerializedData stream) {
+            stream.writeInt32(constructor);
+            text.serializeToStream(stream);
+            old_text.serializeToStream(stream);
+        }
+    }
 
     public static abstract class PageBlock extends TLObject {
 
@@ -1016,21 +1036,10 @@ public class TL_iv {
 
         public void readParams(InputSerializedData stream, boolean exception) {
             ordered = stream.readBool(exception);
-            int magic = stream.readInt32(exception);
-            if (magic != 0x1cb5c415) {
-                if (exception) {
-                    throw new RuntimeException(String.format("wrong Vector magic, got %x", magic));
-                }
-                return;
-            }
-            int count = stream.readInt32(exception);
-            for (int a = 0; a < count; a++) {
-                RichText object = RichText.TLdeserialize(stream, stream.readInt32(exception), exception);
-                if (object == null) {
-                    return;
-                }
+            final ArrayList<RichText> richTexts = Vector.deserialize(stream, RichText::TLdeserialize, exception);
+            for (RichText richText : richTexts) {
                 TL_pageListItemText item = new TL_pageListItemText();
-                item.text = object;
+                item.text = richText;
                 items.add(item);
             }
         }
@@ -1038,13 +1047,13 @@ public class TL_iv {
         public void serializeToStream(OutputSerializedData stream) {
             stream.writeInt32(constructor);
             stream.writeBool(ordered);
-            stream.writeInt32(0x1cb5c415);
-            int count = items.size();
-            stream.writeInt32(count);
-            for (int a = 0; a < count; a++) {
-                TL_pageListItemText item = (TL_pageListItemText) items.get(a);
-                item.text.serializeToStream(stream);
+            ArrayList<RichText> richTexts = new ArrayList<>(items.size());
+            for (PageListItem item : items) {
+                if (item instanceof TL_pageListItemText) {
+                    richTexts.add(((TL_pageListItemText) item).text);
+                }
             }
+            Vector.serialize(stream, richTexts);
         }
     }
     public static class pageBlockBlockquote extends PageBlock {

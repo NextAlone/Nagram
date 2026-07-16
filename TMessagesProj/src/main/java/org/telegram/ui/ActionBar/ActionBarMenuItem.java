@@ -59,13 +59,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
+import androidx.core.view.WindowInsetsCompat;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AnimationNotificationsLocker;
+import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.utils.GradientProtectionDrawable;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.Adapters.FiltersView;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
@@ -82,6 +85,9 @@ import org.telegram.ui.Components.Reactions.ReactionsLayoutInBubble;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import me.vkryl.android.animator.BoolAnimator;
+import me.vkryl.android.animator.FactorAnimator;
 
 public class ActionBarMenuItem extends FrameLayout {
 
@@ -1149,7 +1155,7 @@ public class ActionBarMenuItem extends FrameLayout {
                     return;
                 }
                 if (searchFilterView.getFilter().removable) {
-                    if (!searchFilterView.selectedForDelete) {
+                    if (!searchFilterView.isSelectedForDelete()) {
                         searchFilterView.setSelectedForDelete(true);
                     } else {
                         FiltersView.MediaFilterData filterToRemove = searchFilterView.getFilter();
@@ -2237,30 +2243,21 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     @SuppressLint("ViewConstructor")
-    public static class SearchFilterView extends FrameLayout {
+    public static class SearchFilterView extends FrameLayout implements FactorAnimator.Target {
+        private final BoolAnimator animatorIsSelected = new BoolAnimator(0, this, CubicBezierInterpolator.EASE_OUT_QUINT, 380);
 
         Drawable thumbDrawable;
         BackupImageView avatarImageView;
         ImageView closeIconView;
         TextView titleView;
         FiltersView.MediaFilterData data;
-        ShapeDrawable shapeDrawable;
 
-        private boolean selectedForDelete;
-        private float selectedProgress;
-        ValueAnimator selectAnimator;
-
-        Runnable removeSelectionRunnable = new Runnable() {
-            @Override
-            public void run() {
-                if (selectedForDelete) {
-                    setSelectedForDelete(false);
-                }
-            }
-        };
+        Runnable removeSelectionRunnable = () -> setSelectedForDelete(false);
 
         protected final Theme.ResourcesProvider resourcesProvider;
         private final boolean whiteBg;
+        private boolean glass;
+        private boolean isCommunity;
 
         public SearchFilterView(Context context, Theme.ResourcesProvider resourcesProvider, boolean whiteBg) {
             super(context);
@@ -2274,19 +2271,61 @@ public class ActionBarMenuItem extends FrameLayout {
             addView(closeIconView, LayoutHelper.createFrame(24, 24, Gravity.CENTER_VERTICAL, 8, 0, 0, 0));
 
             titleView = new TextView(context);
+            titleView.setSingleLine();
+            titleView.setEllipsize(TextUtils.TruncateAt.END);
             titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-            addView(titleView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL, 38, 0, 16, 0));
-            shapeDrawable = Theme.createRoundRectDrawable(AndroidUtilities.dp(28), 0xFF446F94);
-            setBackground(shapeDrawable);
+            addView(titleView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL, 38, 0, 12, 0));
+            mBackgroundRadius = dp(28);
+
             updateColors();
         }
 
+        public void setGlass() {
+            this.glass = true;
+            updateColors();
+        }
+
+        @Override
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            if (isCommunity) {
+                //titleView.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED), heightMeasureSpec);
+                //final int titleWidth = titleView.getMeasuredWidth();
+                super.onMeasure(MeasureSpec.makeMeasureSpec(dp(135), MeasureSpec.AT_MOST), heightMeasureSpec);
+                //mDrawGradient = titleWidth > titleView.getMeasuredWidth();
+            } else {
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            }
+        }
+
+        private int mBackgroundColor;
+        private int mBackgroundRadius;
+        private boolean mDrawGradient;
+        private GradientProtectionDrawable mGradientProtectionDrawable;
+
+        @Override
+        protected void dispatchDraw(@NonNull Canvas canvas) {
+            canvas.drawRoundRect(0, 0, getWidth(), getHeight(), mBackgroundRadius, mBackgroundRadius, Theme.fillingPaint(mBackgroundColor));
+            super.dispatchDraw(canvas);
+            /*if (isCommunity && mDrawGradient) {
+                if (mGradientProtectionDrawable == null) {
+                    mGradientProtectionDrawable = new GradientProtectionDrawable(WindowInsetsCompat.Side.RIGHT);
+                }
+                mGradientProtectionDrawable.setColor(mBackgroundColor);
+                mGradientProtectionDrawable.setBounds(getWidth() - dp(18), dp(3), getWidth() - dp(8), getHeight() - dp(3));
+                mGradientProtectionDrawable.draw(canvas);
+            }*/
+        }
+
         public void updateColors() {
-            int defaultBackgroundColor = getThemedColor(whiteBg ? Theme.key_windowBackgroundWhite : Theme.key_groupcreate_spanBackground);
+            final float selectedProgress = animatorIsSelected.getFloatValue();
+
+            int defaultBackgroundColor = glass ? Theme.multAlpha(getThemedColor(Theme.key_windowBackgroundWhiteBlackText), 0.075f) :
+                    getThemedColor(whiteBg ? Theme.key_windowBackgroundWhite : Theme.key_groupcreate_spanBackground);
             int selectedBackgroundColor = getThemedColor(Theme.key_featuredStickers_addButton);
             int textDefaultColor = getThemedColor(Theme.key_windowBackgroundWhiteBlackText);
             int textSelectedColor = getThemedColor(Theme.key_featuredStickers_buttonText);
-            shapeDrawable.getPaint().setColor(ColorUtils.blendARGB(defaultBackgroundColor, selectedBackgroundColor, selectedProgress));
+
+            mBackgroundColor = ColorUtils.blendARGB(defaultBackgroundColor, selectedBackgroundColor, selectedProgress);
             titleView.setTextColor(ColorUtils.blendARGB(textDefaultColor, textSelectedColor, selectedProgress));
             closeIconView.setColorFilter(textSelectedColor);
 
@@ -2307,11 +2346,13 @@ public class ActionBarMenuItem extends FrameLayout {
         }
 
         public boolean isSelectedForDelete() {
-            return selectedForDelete;
+            return animatorIsSelected.getValue();
         }
 
         public void setData(FiltersView.MediaFilterData data) {
             this.data = data;
+            this.isCommunity = false;
+
             titleView.setText(data.getTitle());
             thumbDrawable = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32), data.iconResFilled);
             Theme.setCombinedDrawableColor(thumbDrawable, getThemedColor(Theme.key_featuredStickers_addButton), false);
@@ -2331,7 +2372,8 @@ public class ActionBarMenuItem extends FrameLayout {
                     }
                 } else if (data.chat instanceof TLRPC.Chat) {
                     TLRPC.Chat chat = (TLRPC.Chat) data.chat;
-                    avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp(16));
+                    isCommunity = ChatObject.isCommunity(chat);
+                    avatarImageView.getImageReceiver().setRoundRadius(mBackgroundRadius = AndroidUtilities.dp(isCommunity ? 10 : 16));
                     avatarImageView.getImageReceiver().setForUserOrChat(chat, thumbDrawable);
                 }
             } else if (data.filterType == FiltersView.FILTER_TYPE_ARCHIVE) {
@@ -2355,29 +2397,12 @@ public class ActionBarMenuItem extends FrameLayout {
         }
 
         public void setSelectedForDelete(boolean select) {
-            if (selectedForDelete == select) {
+            if (animatorIsSelected.getValue() == select) {
                 return;
             }
             AndroidUtilities.cancelRunOnUIThread(removeSelectionRunnable);
-            selectedForDelete = select;
-            if (selectAnimator != null) {
-                selectAnimator.removeAllListeners();
-                selectAnimator.cancel();
-            }
-            selectAnimator = ValueAnimator.ofFloat(selectedProgress, select ? 1f : 0f);
-            selectAnimator.addUpdateListener(valueAnimator -> {
-                selectedProgress = (float) valueAnimator.getAnimatedValue();
-                updateColors();
-            });
-            selectAnimator.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    selectedProgress = select ? 1f : 0f;
-                    updateColors();
-                }
-            });
-            selectAnimator.setDuration(150).start();
-            if (selectedForDelete) {
+            animatorIsSelected.setValue(select, true);
+            if (select) {
                 AndroidUtilities.runOnUIThread(removeSelectionRunnable, 2000);
             }
         }
@@ -2388,6 +2413,14 @@ public class ActionBarMenuItem extends FrameLayout {
 
         protected int getThemedColor(int key) {
             return Theme.getColor(key, resourcesProvider);
+        }
+
+        @Override
+        public void onFactorChanged(int id, float factor, float fraction, FactorAnimator callee) {
+            if (id == 0) {
+                updateColors();
+                invalidate();
+            }
         }
     }
 

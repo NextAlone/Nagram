@@ -13,6 +13,8 @@ import java.nio.ByteOrder;
 
 import androidx.core.math.MathUtils;
 
+import org.telegram.messenger.ApplicationLoader;
+
 public class NinePatchBuilder {
     public static final int TRANSPARENT_COLOR = 0x00000000;
     public static final int NO_COLOR = 0x00000001;
@@ -156,7 +158,8 @@ public class NinePatchBuilder {
         ).array();
 
         final Rect padding = new Rect(padLeft, padTop, padRight, padBottom);
-        return new NinePatchDrawable(bitmap, chunk, padding, null);
+        return new NinePatchDrawable(ApplicationLoader.applicationContext.getResources(),
+            bitmap, chunk, padding, null);
     }
 
     /**

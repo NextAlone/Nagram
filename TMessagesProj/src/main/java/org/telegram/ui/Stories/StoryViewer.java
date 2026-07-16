@@ -64,6 +64,7 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
@@ -1786,7 +1787,7 @@ public class StoryViewer implements NotificationCenter.NotificationCenterDelegat
 
         if (ATTACH_TO_FRAGMENT) {
             AndroidUtilities.removeFromParent(windowView);
-            windowView.setTag(0xFF112233, new Object());
+            windowView.setTag(R.id.sheet_attached_to_fragment_tag, new Object());
             fragment.getLayoutContainer().addView(windowView);
             if (!ATTACHED_FRAGMENT_IS_EDGE_TO_EDGE) {
                 AndroidUtilities.requestAdjustResize(fragment.getParentActivity(), fragment.getClassGuid());

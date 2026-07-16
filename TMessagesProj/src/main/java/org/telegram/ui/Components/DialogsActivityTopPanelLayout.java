@@ -61,15 +61,21 @@ public class DialogsActivityTopPanelLayout extends AnimatedLinearLayout {
 
         clipRectF.set(getPaddingLeft(), getPaddingTop(), getMeasuredWidth() - getPaddingRight(), getPaddingTop() + bgHeight);
 
-        final float r = Math.min(dp(24), Math.min(clipRectF.width(), clipRectF.height()) / 2f);
+        final float r = Math.min(dp(defaultRadiusDp), Math.min(clipRectF.width(), clipRectF.height()) / 2f);
         clipPath.rewind();
         clipPath.addRoundRect(clipRectF, r, r, Path.Direction.CW);
 
         if (backgroundDrawable != null) {
             backgroundDrawable.setAlpha((int) (bgAlpha * 255));
             backgroundDrawable.setBounds(dp(4), dp(14), getMeasuredWidth() - dp(4), getPaddingTop() + getPaddingBottom() + (int) bgHeight - dp(14));
-            backgroundDrawable.setRadius(Math.min(dp(24), bgHeight / 2));
+            backgroundDrawable.setRadius(Math.min(dp(defaultRadiusDp), bgHeight / 2));
         }
+    }
+
+    private int defaultRadiusDp = 24;
+
+    public void setDefaultRadiusDp(int defaultRadius) {
+        this.defaultRadiusDp = defaultRadius;
     }
 
     public void updateColors() {

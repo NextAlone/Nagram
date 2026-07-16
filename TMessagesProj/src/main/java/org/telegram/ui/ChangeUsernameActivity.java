@@ -1479,20 +1479,4 @@ public class ChangeUsernameActivity extends BaseFragment {
 
         return themeDescriptions;
     }
-
-    @Override
-    public void onBecomeFullyVisible() {
-        super.onBecomeFullyVisible();
-        if (parentLayout != null && parentLayout.getDrawerLayoutContainer() != null) {
-            parentLayout.getDrawerLayoutContainer().setBehindKeyboardColor(getThemedColor(Theme.key_windowBackgroundGray));
-        }
-    }
-
-    @Override
-    public void onBecomeFullyHidden() {
-        super.onBecomeFullyHidden();
-        if (parentLayout != null && parentLayout.getDrawerLayoutContainer() != null) {
-            parentLayout.getDrawerLayoutContainer().setBehindKeyboardColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-        }
-    }
 }

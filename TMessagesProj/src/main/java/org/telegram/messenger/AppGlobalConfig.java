@@ -82,6 +82,20 @@ public class AppGlobalConfig {
     public final ConfigInt aicomposeToneSavedLimitDefault = ofInt("aicompose_tone_saved_limit_default", 5);
     public final ConfigInt aicomposeToneSavedLimitPremium = ofInt("aicompose_tone_saved_limit_premium", 20);
 
+    public final ConfigBoolean messagePrimaryEditedDate = ofBoolean("message_primary_edited_date", false);
+
+    public final ConfigInt richMessageLengthLimit = ofInt("rich_message_length_limit", 32_768);
+    public final ConfigInt richMessageMaxBlocks = ofInt("rich_message_max_blocks", 500);
+    public final ConfigInt richMessageMaxDepth = ofInt("rich_message_max_depth", 16);
+    public final ConfigInt richMessageMaxMedia = ofInt("rich_message_max_media", 50);
+    public final ConfigInt richMessageMaxTableCols = ofInt("rich_message_max_table_cols", 20);
+    public final ConfigString richMessagePosting = ofString("rich_message_posting", "premium");
+
+    public final ConfigInt communityPeersLimit = ofInt("community_peers_limit", 100);
+
+    public final ConfigInt messageLengthLimitDefault = ofInt("message_length_limit_default", 4096);
+    public final ConfigInt messageLengthLimitPremium = ofInt("message_length_limit_premium", 8192);
+
     /* * */
 
     public boolean apply(SharedPreferences.Editor editor, TLRPC.TL_jsonObject object) {
@@ -382,5 +396,9 @@ public class AppGlobalConfig {
         map.put(name, configInt.handler);
 
         return configInt;
+    }
+
+    public static AppGlobalConfig getInstance(int num) {
+        return MessagesController.getInstance(num).config;
     }
 }

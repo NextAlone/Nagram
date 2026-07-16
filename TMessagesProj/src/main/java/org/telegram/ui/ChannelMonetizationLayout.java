@@ -1038,14 +1038,14 @@ public class ChannelMonetizationLayout extends SizeNotifierFrameLayout implement
         if (tonString == null) {
             tonString = new SpannableString("T");
             if (large) {
-                ColoredImageSpan span = new ColoredImageSpan(R.drawable.ton);
+                ColoredImageSpan span = new ColoredImageSpan(R.drawable.mini_gram_72);
                 span.setScale(scale, scale);
                 span.setColorKey(Theme.key_windowBackgroundWhiteBlueText2);
                 span.setRelativeSize(textPaint.getFontMetricsInt());
                 span.spaceScaleX = .9f;
                 tonString.setSpan(span, 0, tonString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             } else {
-                ColoredImageSpan span = new ColoredImageSpan(R.drawable.mini_ton);
+                ColoredImageSpan span = new ColoredImageSpan(R.drawable.mini_gram_16);
                 span.setScale(scale, scale);
                 span.setTranslateY(translateY);
                 span.spaceScaleX = .95f;
@@ -1586,7 +1586,7 @@ public class ChannelMonetizationLayout extends SizeNotifierFrameLayout implement
         textView.setTypeface(AndroidUtilities.bold());
         textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider));
         SpannableString animatedDiamond = new SpannableString("💎");
-        ColoredImageSpan span = new ColoredImageSpan(R.drawable.ton);
+        ColoredImageSpan span = new ColoredImageSpan(R.drawable.mini_gram_72);
         span.setScale(.9f, .9f);
         span.setColorKey(Theme.key_windowBackgroundWhiteBlueText2);
         span.setRelativeSize(textView.getPaint().getFontMetricsInt());

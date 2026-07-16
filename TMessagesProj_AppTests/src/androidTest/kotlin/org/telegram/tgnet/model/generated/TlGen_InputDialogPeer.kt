@@ -32,4 +32,17 @@ public sealed class TlGen_InputDialogPeer : TlGen_Object {
       public const val MAGIC: UInt = 0x64600527U
     }
   }
+
+  public data class TL_inputDialogPeerCommunity(
+    public val community: TlGen_InputChannel,
+  ) : TlGen_InputDialogPeer() {
+    public override fun serializeToStream(stream: OutputSerializedData) {
+      stream.writeInt32(MAGIC.toInt())
+      community.serializeToStream(stream)
+    }
+
+    public companion object {
+      public const val MAGIC: UInt = 0x69EF72C4U
+    }
+  }
 }

@@ -48,4 +48,17 @@ public sealed class TlGen_InputAiComposeTone : TlGen_Object {
       public const val MAGIC: UInt = 0x1FA01357U
     }
   }
+
+  public data class TL_inputAiComposeToneSingleUse(
+    public val custom_prompt: String,
+  ) : TlGen_InputAiComposeTone() {
+    public override fun serializeToStream(stream: OutputSerializedData) {
+      stream.writeInt32(MAGIC.toInt())
+      stream.writeString(custom_prompt)
+    }
+
+    public companion object {
+      public const val MAGIC: UInt = 0x0E0C35AFU
+    }
+  }
 }

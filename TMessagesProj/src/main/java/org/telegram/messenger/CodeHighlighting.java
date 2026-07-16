@@ -38,8 +38,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -240,6 +242,50 @@ public class CodeHighlighting {
             processedHighlighting.put(key, process);
         }
         return process.result;
+    }
+
+    public static void highlightEditable(CharSequence text, String language, Utilities.Callback<SpannableString> whenDone) {
+        if (whenDone == null) {
+            return;
+        }
+        final SpannableString result = new SpannableString(text == null ? "" : text);
+        if (TextUtils.isEmpty(language) || result.length() == 0) {
+            whenDone.run(result);
+            return;
+        }
+        final String source = result.toString();
+        Utilities.searchQueue.postRunnable(() -> {
+            if (compiledPatterns == null) {
+                parse();
+            }
+            final ArrayList<CachedToSpan> spans = new ArrayList<>();
+            try {
+                final StringToken[] tokens = tokenize(source, compiledPatterns == null ? null : compiledPatterns.get(language), 0).toArray();
+                colorize(result, 0, result.length(), tokens, -1, spans);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+            AndroidUtilities.runOnUIThread(() -> {
+                for (int i = 0; i < spans.size(); ++i) {
+                    final CachedToSpan span = spans.get(i);
+                    result.setSpan(new ColorSpan(span.group), span.start, span.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+                whenDone.run(result);
+            });
+        });
+    }
+
+    public static void prepare() {
+        if (compiledPatterns != null) return;
+        Utilities.searchQueue.postRunnable(() -> {
+            if (compiledPatterns == null)
+                parse();
+        });
+    }
+
+    public static Set<String> getLanguages() {
+        if (languages == null) return null;
+        return languages;
     }
 
     public static void highlight(Spannable text, int start, int end, String lng, int type, TextStyleSpan.TextStyleRun style, boolean smallerSize) {
@@ -603,6 +649,7 @@ public class CodeHighlighting {
     }
 
     private static HashMap<String, TokenPattern[]> compiledPatterns;
+    private static HashSet<String> languages;
     private static void parse() {
         GZIPInputStream zipStream = null;
         BufferedInputStream bufStream = null;
@@ -636,9 +683,10 @@ public class CodeHighlighting {
                 patterns[i].pattern = reader.readString();
             }
 
-            if (compiledPatterns == null) {
+            if (compiledPatterns == null)
                 compiledPatterns = new HashMap<>();
-            }
+            if (CodeHighlighting.languages == null)
+                CodeHighlighting.languages = new HashSet<>();
             for (int i = 0; i < languagesCount; ++i) {
                 int lngid = reader.readUint8();
                 TokenPattern[] tokens = readTokens(reader, patterns, languages);
@@ -646,6 +694,8 @@ public class CodeHighlighting {
                 for (String alias : aliases) {
                     compiledPatterns.put(alias, tokens);
                 }
+                if (aliases.length > 0 && !"plain".equals(aliases[0]) && !aliases[0].endsWith("like") && !aliases[0].startsWith("markup"))
+                    CodeHighlighting.languages.add(aliases[0]);
             }
 
             FileLog.d("[CodeHighlighter] Successfully read " + languagesCount + " languages, " + patternsCount + " patterns in " + (System.currentTimeMillis() - start) + "ms from codelng.gzip");

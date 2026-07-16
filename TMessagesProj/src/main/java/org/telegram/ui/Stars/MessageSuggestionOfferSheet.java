@@ -235,7 +235,7 @@ public class MessageSuggestionOfferSheet extends BottomSheet {
             starsCountEditOutline.addView(iconStars, LayoutHelper.createFrame(22, 22, Gravity.LEFT | Gravity.CENTER_VERTICAL, 14, 0, 0, 0));
 
             iconTon = new ImageView(context);
-            iconTon.setImageResource(R.drawable.ton);
+            iconTon.setImageResource(R.drawable.mini_gram_72);
             iconTon.setColorFilter(0xFF3391d4);
             starsCountEditOutline.addView(iconTon, LayoutHelper.createFrame(22, 22, Gravity.LEFT | Gravity.CENTER_VERTICAL, 14, 0, 0, 0));
 

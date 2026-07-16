@@ -53,6 +53,8 @@ public class DialogObject {
         } else if (dialog instanceof TLRPC.TL_dialogFolder) {
             TLRPC.TL_dialogFolder dialogFolder = (TLRPC.TL_dialogFolder) dialog;
             dialog.id = makeFolderDialogId(dialogFolder.folder.id);
+        } else if (dialog instanceof TLRPC.TL_dialogCommunity) {
+            dialog.id = -dialog.community_id;
         }
     }
 

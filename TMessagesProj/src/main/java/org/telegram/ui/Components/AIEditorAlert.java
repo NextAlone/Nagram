@@ -33,6 +33,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -62,6 +63,8 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
+import org.telegram.messenger.RichMessageLayout;
+import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.TranslateController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
@@ -71,7 +74,9 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.tl.TL_aicompose;
+import org.telegram.tgnet.tl.TL_iv;
 import org.telegram.tgnet.tl.TL_stars;
+import org.telegram.ui.iv.RichTextStyle;
 import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -92,23 +97,31 @@ import java.util.ArrayList;
 
 public class AIEditorAlert extends BottomSheetWithRecyclerListView implements NotificationCenter.NotificationCenterDelegate {
 
+    public static class PromptTone extends TL_aicompose.AiComposeTone {}
+
     public static final int TAB_TRANSLATE = 0;
     public static final int TAB_STYLE = 1;
     public static final int TAB_FIX = 2;
 
     private CharSequence text;
+    private TL_iv.RichMessage textRich;
     private boolean translatedTextLoading;
     private CharSequence translatedText;
+    private TL_iv.RichMessage translatedTextRich;
     private boolean styledTextLoading;
     private CharSequence styledText;
+    private TL_iv.RichMessage styledTextRich;
     private boolean fixedTextLoading;
     private CharSequence fixedText;
+    private TL_iv.RichMessage fixedTextRich;
     private CharSequence fixedTextToCopy;
 
     private Utilities.Callback<CharSequence> onUseListener;
+    private Utilities.Callback<TL_iv.RichMessage> onUseRichListener;
     private long dialogId;
     private boolean editing;
     private Utilities.Callback4<CharSequence, Integer, Integer, Boolean> onSendListener;
+    private Utilities.Callback4<TL_iv.RichMessage, Integer, Integer, Boolean> onSendRichListener;
 
     private final boolean[] accusative = new boolean[1];
     private final boolean[] genitive = new boolean[1];
@@ -122,9 +135,11 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
 
     private final FrameLayout tabsContainer;
     private final Tabs tabs;
-    private FrameLayout styleTabsContainer;
     private final Tabs styleTabs;
     private final ImageView closeView;
+
+    private final FrameLayout promptBox;
+    private final EditTextCell promptCell;
 
     private HintView2 styleHint;
 
@@ -136,7 +151,7 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
     private final FrameLayout bulletinContainer;
 
     public AIEditorAlert(Context context, Theme.ResourcesProvider resourcesProvider) {
-        super(context, null, false, false, false, false, ActionBarType.SLIDING, resourcesProvider);
+        super(context, null, true, false, false, false, ActionBarType.SLIDING, resourcesProvider);
 
         tonesController = MessagesController.getInstance(currentAccount).getTonesController();
         tonesController.load();
@@ -161,6 +176,27 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
         tabs.addTab(R.drawable.menu_proofread, getString(R.string.AIEditorTabFix), this::selectTab);
         tabs.selectTab(TAB_STYLE);
         tabsContainer.addView(tabs, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.FILL, 12, 0, 12, 0));
+
+        promptBox = new FrameLayout(context);
+        promptCell = new EditTextCell(context, getString(R.string.ArticleAIPrompt), true, false, MessagesController.getInstance(currentAccount).config.aicomposeTonePromptLengthMax.get(), resourcesProvider);
+        promptCell.editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        promptCell.editText.setMaxLines(5);
+        promptCell.setBackground(Theme.createRoundRectDrawable(dp(20), Theme.getColor(Theme.key_windowBackgroundWhite, resourcesProvider)));
+        promptCell.editText.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void afterTextChanged(Editable s) {
+                int tab = tabs != null ? tabs.getSelectedTab() : TAB_TRANSLATE;
+                if (tab != TAB_STYLE) return;
+                if (!(styleTabs != null && styleTabs.getSelectedTone() instanceof PromptTone)) return;
+                cancelRequest();
+                updatePromptEditText();
+                updateButton();
+            }
+        });
+        promptBox.addView(promptCell, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
+        promptBox.setPadding(dp(6), 0, dp(6), 0);
+        promptCell.editText.setPadding(dp(11), dp(15), dp(42 + 11), dp(15));
 
         styleTabs = new Tabs(context, currentAccount, true, resourcesProvider);
         styleTabs.setDivider(true);
@@ -264,30 +300,27 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
         }));
 
         button = new ButtonWithCounterView(context, resourcesProvider).setRound();
-        button.setText(getString(R.string.OK));
         buttonContainer.addView(button, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, 1, Gravity.FILL));
 
         sendButton = new ButtonWithCounterView(context, resourcesProvider).setRound();
         sendButton.setOnClickListener(v -> {
-            if (onSendListener != null && getResultText() != null) {
-                onSendListener.run(getResultText(), 0, 0, true);
-            }
+            runSend(0, 0, true);
             dismiss();
         });
         sendButton.setOnLongClickListener(v -> {
             if (editing) return false;
-            if (onSendListener == null || getResultText() == null) return false;
+            if (!hasSendResult()) return false;
             final boolean self = dialogId == UserConfig.getInstance(currentAccount).getClientUserId();
             ItemOptions.makeOptions(container, resourcesProvider, sendButton)
                 .addIf(!self, R.drawable.input_notify_off, getString(R.string.SendWithoutSound), () -> {
-                    onSendListener.run(getResultText(), 0, 0, false);
+                    runSend(0, 0, false);
                     dismiss();
                 })
                 .add(R.drawable.msg_calendar2, getString(self ? R.string.SetReminder : R.string.ScheduleMessage), () -> {
                     AlertsCreator.createScheduleDatePickerDialog(context, dialogId, new AlertsCreator.ScheduleDatePickerDelegate() {
                         @Override
                         public void didSelectDate(boolean notify, int scheduleDate, int scheduleRepeatPeriod) {
-                            onSendListener.run(getResultText(), scheduleDate, scheduleRepeatPeriod, notify);
+                            runSend(scheduleDate, scheduleRepeatPeriod, notify);
                             dismiss();
                         }
                     }, resourcesProvider);
@@ -324,7 +357,7 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
         bulletinContainerLayoutParams.rightMargin += backgroundPaddingLeft;
         containerView.addView(bulletinContainer, bulletinContainerLayoutParams);
 
-        updateButton(false, false);
+        updateButton(false);
 
         recyclerListView.setPadding(backgroundPaddingLeft, 0, backgroundPaddingLeft, dp(6 + 48 + 12));
         recyclerListView.setClipToPadding(false);
@@ -360,6 +393,10 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
         NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.loadedAiComposeTones);
     }
 
+    private void updateButton() {
+        updateButton(true);
+    }
+
     @Override
     public void dismiss() {
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.loadedAiComposeTones);
@@ -379,6 +416,9 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
     private void updateStyles() {
         final TL_aicompose.AiComposeTone wasSelectedTone = styleTabs.getSelectedTone();
         styleTabs.clearTabs();
+        if (isRich()) {
+            styleTabs.addTab(new PromptTone(), this::selectStyle);
+        }
         styleTabs.addTab(null, this::selectStyle);
         for (TL_aicompose.AiComposeTone tone : tonesController.tones) {
             styleTabs.addTab(tone, this::selectStyle);
@@ -389,7 +429,7 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
     }
 
     private void updateSendButtonIcon() {
-        sendButton.setVisibility(editing ? View.GONE : View.VISIBLE);
+        sendButton.setVisibility(editing || !hasSend() ? View.GONE : View.VISIBLE);
         final SpannableStringBuilder sendButtonText = new SpannableStringBuilder(getString(R.string.Send));
         final ColoredImageSpan sendIconSpan = new ColoredImageSpan(editing ? R.drawable.filled_profile_edit_24 : R.drawable.send_plane_24);
         sendIconSpan.setTranslateY(dp(1));
@@ -397,11 +437,56 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
         sendButton.setText(sendButtonText);
     }
 
-    private void updateButton(boolean showLimit) {
-        updateButton(showLimit, true);
+    private boolean newPrompt;
+    private void updatePromptEditText() {
+        final boolean isNewPrompt = !TextUtils.equals(promptText, promptCell.editText.getText().toString());
+        if (newPrompt == isNewPrompt) return;
+        promptCell.editText.animate()
+            .alpha((newPrompt = isNewPrompt) ? 1.0f : 0.5f)
+            .setDuration(320)
+            .start();
+        adapter.update(true);
     }
+
+    private String promptText;
+    private boolean errored;
+    private boolean showLimit;
     private boolean buttonShowLimit;
-    private void updateButton(boolean showLimit, boolean animated) {
+    private void updateButton(boolean animated) {
+        if (errored) {
+            button.setText(getString(R.string.OK));
+            button.setOnClickListener(v -> dismiss());
+        } else {
+            int tab = tabs != null ? tabs.getSelectedTab() : TAB_TRANSLATE;
+            if (tab == TAB_STYLE && styleTabs.getSelectedTone() instanceof PromptTone && !TextUtils.equals(promptCell.getText().toString(), promptText)) {
+                button.setText(getString(R.string.ArticleAIGenerate));
+                button.setOnClickListener(v -> {
+                    AndroidUtilities.hideKeyboard(promptCell.editText);
+                    promptText = promptCell.getText().toString();
+                    updatePromptEditText();
+                    updateButton(true);
+                    request();
+                });
+            } else if (onUseRichListener != null || onUseListener != null) {
+                button.setText(getString(R.string.AIEditorApply));
+                button.setOnClickListener(v -> {
+                    if (onUseRichListener != null) {
+                        final TL_iv.RichMessage rich = getResultRich();
+                        if (rich != null) {
+                            onUseRichListener.run(rich);
+                        }
+                    } else if (onUseListener != null && getResultText() != null) {
+                        onUseListener.run(getResultText());
+                    }
+                    dismiss();
+                });
+            } else {
+                button.setText(getString(R.string.OK));
+                button.setOnClickListener(v -> dismiss());
+            }
+        }
+        button.setLoading(loading);
+
         if (animated && buttonShowLimit == showLimit) return;
         buttonShowLimit = showLimit;
         if (animated) {
@@ -502,6 +587,17 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
     }
 
     private void selectStyle(TL_aicompose.AiComposeTone tone) {
+        if (styleHint != null) {
+            styleHint.hide();
+        }
+        if (tone instanceof PromptTone) {
+            styleTabs.selectTone(tone);
+            adapter.update(true);
+            AndroidUtilities.runOnUIThread(() -> {
+                AndroidUtilities.showKeyboard(promptCell.editText);
+            }, 150);
+            return;
+        }
         if (tone == null) {
             if (
                 tonesController.getSavedTonesCount() + 1 >
@@ -530,9 +626,6 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
             return;
         }
         if (styleTabs.getSelectedTone() == tone) return;
-        if (styleHint != null) {
-            styleHint.hide();
-        }
         styleTabs.selectTone(tone);
         request();
         adapter.update(true);
@@ -594,6 +687,208 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
         return s;
     }
 
+    public AIEditorAlert setText(TL_iv.RichMessage richMessage) {
+        this.textRich = richMessage;
+        if (LanguageDetector.hasSupport()) {
+            LanguageDetector.detectLanguage(format(textRich), lng -> {
+                from_lang = lng;
+                adapter.update(true);
+            }, e -> {
+                FileLog.e(e);
+            });
+        }
+        updateStyles();
+        return this;
+    }
+
+    private static String format(TL_iv.RichMessage richMessage) {
+        StringBuilder s = new StringBuilder();
+        for (int i = 0; i < richMessage.blocks.size(); ++i) {
+            if (i > 0) s.append("\n");
+            format(richMessage.blocks.get(i), s);
+        }
+        return s.toString();
+    }
+    private static void format(TL_iv.RichText text, StringBuilder out) {
+        if (text instanceof TL_iv.textPlain) {
+            out.append(((TL_iv.textPlain) text).text);
+        } else if (text instanceof TL_iv.textConcat) {
+            final TL_iv.textConcat concat = (TL_iv.textConcat) text;
+            for (int i = 0; i < concat.texts.size(); ++i)
+                format(concat.texts.get(i), out);
+        } else if (text != null) {
+            format(text.text, out);
+        }
+    }
+    private static void format(TL_iv.PageBlock block, StringBuilder out) {
+        if (
+            block instanceof TL_iv.pageBlockHeading1 ||
+            block instanceof TL_iv.pageBlockHeading2 ||
+            block instanceof TL_iv.pageBlockHeading3 ||
+            block instanceof TL_iv.pageBlockHeading4 ||
+            block instanceof TL_iv.pageBlockHeading5 ||
+            block instanceof TL_iv.pageBlockHeading6 ||
+            block instanceof TL_iv.pageBlockParagraph ||
+            block instanceof TL_iv.pageBlockPreformatted ||
+            block instanceof TL_iv.pageBlockFooter
+        ) {
+            format(block.text, out);
+        } else if (
+            block instanceof TL_iv.pageBlockMap ||
+            block instanceof TL_iv.pageBlockAudio ||
+            block instanceof TL_iv.pageBlockVideo ||
+            block instanceof TL_iv.pageBlockPhoto ||
+            block instanceof TL_iv.pageBlockSlideshow ||
+            block instanceof TL_iv.pageBlockCollage
+        ) {
+            if (block.caption != null)
+                format(block.caption.text, out);
+        } else if (block instanceof TL_iv.pageBlockTable) {
+            final TL_iv.pageBlockTable table = (TL_iv.pageBlockTable) block;
+            if (table.title != null)
+                format(table.title, out);
+        } else if (block instanceof TL_iv.pageBlockList) {
+            final TL_iv.pageBlockList list = (TL_iv.pageBlockList) block;
+            for (int i = 0; i < list.items.size(); ++i) {
+                if (i > 0) out.append("\n");
+                final TL_iv.PageListItem item = list.items.get(i);
+                if (item instanceof TL_iv.TL_pageListItemText) {
+                    format(((TL_iv.TL_pageListItemText) item).text, out);
+                } else if (item instanceof TL_iv.TL_pageListItemBlocks) {
+                    final ArrayList<TL_iv.PageBlock> blocks = ((TL_iv.TL_pageListItemBlocks) item).blocks;
+                    for (int j = 0; j < blocks.size(); ++j) {
+                        if (j > 0) out.append("\n");
+                        format(blocks.get(j), out);
+                    }
+                }
+            }
+        } else if (block instanceof TL_iv.pageBlockOrderedList) {
+            final TL_iv.pageBlockOrderedList list = (TL_iv.pageBlockOrderedList) block;
+            for (int i = 0; i < list.items.size(); ++i) {
+                if (i > 0) out.append("\n");
+                final TL_iv.PageListOrderedItem item = list.items.get(i);
+                if (item instanceof TL_iv.TL_pageListOrderedItemText) {
+                    format(((TL_iv.TL_pageListOrderedItemText) item).text, out);
+                } else if (item instanceof TL_iv.TL_pageListOrderedItemBlocks) {
+                    final ArrayList<TL_iv.PageBlock> blocks = ((TL_iv.TL_pageListOrderedItemBlocks) item).blocks;
+                    for (int j = 0; j < blocks.size(); ++j) {
+                        if (j > 0) out.append("\n");
+                        format(blocks.get(j), out);
+                    }
+                }
+            }
+        }
+    }
+
+    // Flatten a rich message into a single styled CharSequence (blocks joined by newlines), preserving
+    // inline formatting via RichTextStyle. Used to write an AI rich result back into a plain selection.
+    public static CharSequence formatStyled(TL_iv.RichMessage richMessage) {
+        final SpannableStringBuilder s = new SpannableStringBuilder();
+        if (richMessage == null) return s;
+        for (int i = 0; i < richMessage.blocks.size(); ++i) {
+            if (i > 0) s.append("\n");
+            formatStyled(richMessage.blocks.get(i), s);
+        }
+        return s;
+    }
+    private static void formatStyled(TL_iv.PageBlock block, SpannableStringBuilder out) {
+        if (
+            block instanceof TL_iv.pageBlockHeading1 ||
+            block instanceof TL_iv.pageBlockHeading2 ||
+            block instanceof TL_iv.pageBlockHeading3 ||
+            block instanceof TL_iv.pageBlockHeading4 ||
+            block instanceof TL_iv.pageBlockHeading5 ||
+            block instanceof TL_iv.pageBlockHeading6 ||
+            block instanceof TL_iv.pageBlockParagraph ||
+            block instanceof TL_iv.pageBlockPreformatted ||
+            block instanceof TL_iv.pageBlockFooter
+        ) {
+            out.append(RichTextStyle.toSpannable(block.text, block));
+        } else if (
+            block instanceof TL_iv.pageBlockMap ||
+            block instanceof TL_iv.pageBlockAudio ||
+            block instanceof TL_iv.pageBlockVideo ||
+            block instanceof TL_iv.pageBlockPhoto ||
+            block instanceof TL_iv.pageBlockSlideshow ||
+            block instanceof TL_iv.pageBlockCollage
+        ) {
+            if (block.caption != null)
+                out.append(RichTextStyle.toSpannable(block.caption.text, null));
+        } else if (block instanceof TL_iv.pageBlockTable) {
+            final TL_iv.pageBlockTable table = (TL_iv.pageBlockTable) block;
+            if (table.title != null)
+                out.append(RichTextStyle.toSpannable(table.title, null));
+        } else if (block instanceof TL_iv.pageBlockList) {
+            final TL_iv.pageBlockList list = (TL_iv.pageBlockList) block;
+            for (int i = 0; i < list.items.size(); ++i) {
+                if (i > 0) out.append("\n");
+                final TL_iv.PageListItem item = list.items.get(i);
+                if (item instanceof TL_iv.TL_pageListItemText) {
+                    out.append(RichTextStyle.toSpannable(((TL_iv.TL_pageListItemText) item).text, null));
+                } else if (item instanceof TL_iv.TL_pageListItemBlocks) {
+                    final ArrayList<TL_iv.PageBlock> blocks = ((TL_iv.TL_pageListItemBlocks) item).blocks;
+                    for (int j = 0; j < blocks.size(); ++j) {
+                        if (j > 0) out.append("\n");
+                        formatStyled(blocks.get(j), out);
+                    }
+                }
+            }
+        } else if (block instanceof TL_iv.pageBlockOrderedList) {
+            final TL_iv.pageBlockOrderedList list = (TL_iv.pageBlockOrderedList) block;
+            for (int i = 0; i < list.items.size(); ++i) {
+                if (i > 0) out.append("\n");
+                final TL_iv.PageListOrderedItem item = list.items.get(i);
+                if (item instanceof TL_iv.TL_pageListOrderedItemText) {
+                    out.append(RichTextStyle.toSpannable(((TL_iv.TL_pageListOrderedItemText) item).text));
+                } else if (item instanceof TL_iv.TL_pageListOrderedItemBlocks) {
+                    final ArrayList<TL_iv.PageBlock> blocks = ((TL_iv.TL_pageListOrderedItemBlocks) item).blocks;
+                    for (int j = 0; j < blocks.size(); ++j) {
+                        if (j > 0) out.append("\n");
+                        formatStyled(blocks.get(j), out);
+                    }
+                }
+            }
+        }
+    }
+
+    private static TL_iv.TL_inputRichMessage toInput(TL_iv.RichMessage rich) {
+        final TL_iv.TL_inputRichMessage in = new TL_iv.TL_inputRichMessage();
+        if (rich == null) return in;
+        in.rtl = rich.rtl;
+        in.blocks = new ArrayList<>(rich.blocks.size());
+        for (int i = 0; i < rich.blocks.size(); ++i) {
+            in.blocks.add(SendMessagesHelper.toInputPageBlock(rich.blocks.get(i)));
+        }
+        if (rich.photos != null && !rich.photos.isEmpty()) {
+            in.flags |= TLObject.FLAG_2;
+            for (TLRPC.Photo p : rich.photos) {
+                final TLRPC.TL_inputPhoto ip = new TLRPC.TL_inputPhoto();
+                ip.id = p.id;
+                ip.access_hash = p.access_hash;
+                ip.file_reference = p.file_reference != null ? p.file_reference : new byte[0];
+                in.photos.add(ip);
+            }
+        }
+        if (rich.documents != null && !rich.documents.isEmpty()) {
+            in.flags |= TLObject.FLAG_3;
+            for (TLRPC.Document d : rich.documents) {
+                final TLRPC.TL_inputDocument id = new TLRPC.TL_inputDocument();
+                id.id = d.id;
+                id.access_hash = d.access_hash;
+                id.file_reference = d.file_reference != null ? d.file_reference : new byte[0];
+                in.documents.add(id);
+            }
+        }
+        return in;
+    }
+
+    private UItem previewItem(int id, TL_iv.RichMessage rich, boolean loading) {
+        final UItem item = RichMessageLayout.PreviewView.Factory.of(rich != null ? rich : textRich);
+        item.id = id;
+        item.checked = loading;
+        return item;
+    }
+
     public AIEditorAlert setText(String from_lang, CharSequence text) {
         this.text = copy(text);
         this.from_lang = from_lang;
@@ -615,11 +910,41 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
         this.onUseListener = onUse;
         return this;
     }
+    public AIEditorAlert setOnUseRich(Utilities.Callback<TL_iv.RichMessage> onUseRich) {
+        this.onUseRichListener = onUseRich;
+        return this;
+    }
+
+    private boolean isRich() {
+        return textRich != null;
+    }
     public AIEditorAlert setOnSend(long dialogId, boolean editing, Utilities.Callback4<CharSequence, Integer, Integer, Boolean> onSend) {
         this.dialogId = dialogId;
         this.editing = editing;
         this.onSendListener = onSend;
         return this;
+    }
+    public AIEditorAlert setOnSendRich(long dialogId, Utilities.Callback4<TL_iv.RichMessage, Integer, Integer, Boolean> onSend) {
+        this.dialogId = dialogId;
+        this.onSendRichListener = onSend;
+        return this;
+    }
+
+    private boolean hasSend() {
+        return onSendRichListener != null || onSendListener != null;
+    }
+    private boolean hasSendResult() {
+        return onSendRichListener != null ? getResultRich() != null : (onSendListener != null && getResultText() != null);
+    }
+    private void runSend(int scheduleDate, int scheduleRepeatPeriod, boolean notify) {
+        if (onSendRichListener != null) {
+            final TL_iv.RichMessage rich = getResultRich();
+            if (rich != null) {
+                onSendRichListener.run(rich, scheduleDate, scheduleRepeatPeriod, notify);
+            }
+        } else if (onSendListener != null && getResultText() != null) {
+            onSendListener.run(getResultText(), scheduleDate, scheduleRepeatPeriod, notify);
+        }
     }
 
     private CharSequence title;
@@ -658,6 +983,10 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
     }
 
     private CharSequence getResultText() {
+        if (isRich()) {
+            final TL_iv.RichMessage rich = getResultRich();
+            return rich == null ? null : formatStyled(rich);
+        }
         if (loading) return null;
         final int tab = tabs.getSelectedTab();
         if (tab == TAB_TRANSLATE) {
@@ -671,6 +1000,23 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
             if (styledText == null)
                 return text;
             return styledText;
+        }
+    }
+
+    private TL_iv.RichMessage getResultRich() {
+        if (loading) return null;
+        final int tab = tabs.getSelectedTab();
+        if (tab == TAB_TRANSLATE) {
+            if (translatedTextLoading) return null;
+            return translatedTextRich;
+        } else if (tab == TAB_FIX) {
+            if (fixedTextLoading) return null;
+            return fixedTextRich;
+        } else {
+            if (styledTextLoading) return null;
+            if (styledTextRich == null)
+                return textRich;
+            return styledTextRich;
         }
     }
 
@@ -710,7 +1056,7 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
             } else {
                 items.add(TranslateAlert3.Header.Factory.of(3, getString(R.string.AIEditorOriginalText), null, null, null));
             }
-            items.add(TranslateAlert3.Text.Factory.of(4, text, collapsed, false, this::collapse, null, null));
+            items.add(isRich() ? previewItem(4, textRich, false) : TranslateAlert3.Text.Factory.of(4, text, collapsed, false, this::collapse, null, null));
 
             String lng = languageName(to_lang, accusative);
             String to = getString(accusative != null && accusative[0] ? R.string.AIEditorTo : R.string.AIEditorToOther);
@@ -724,22 +1070,28 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
             }
             if (TextUtils.isEmpty(before)) lng = capitalFirst(lng);
             items.add(TranslateAlert3.Header.Factory.of(5, before, lng + (translateToneTitle != null ? " (" + translateToneTitle + ")" : ""), after, this::onToLangMenu, emojify, this::toggleEmojify, null));
-            items.add(TranslateAlert3.Text.Factory.of(translatedTextLoading ? 7 : 6, translatedText, false, false, null, null, !translatedTextLoading ? this::copyResult : null));
+            items.add(isRich() ? previewItem(6, translatedTextLoading || translatedTextRich == null ? textRich : translatedTextRich, translatedTextLoading) : TranslateAlert3.Text.Factory.of(translatedTextLoading ? 7 : 6, translatedText, false, false, null, null, !translatedTextLoading ? this::copyResult : null));
         } else if (tab == TAB_STYLE) {
             items.add(UItem.asCustom(styleTabs));
-            if (styleTabs != null && styleTabs.getSelectedTab() < 0 && !emojify) {
+            if (styleTabs.getSelectedTone() instanceof PromptTone) {
+                items.add(UItem.asCustom(10, promptBox));
+                adapter.whiteSectionEnd();
+                items.add(UItem.asShadow(11, null));
+                adapter.whiteSectionStart();
+            }
+            if (styleTabs != null && styleTabs.getSelectedTab() < 0 && !emojify || styleTabs.getSelectedTone() instanceof PromptTone && !TextUtils.equals(promptCell.getText().toString(), promptText)) {
                 items.add(TranslateAlert3.Header.Factory.of(5, getString(R.string.AIEditorOriginal), null, null, null, emojify, this::toggleEmojify, null));
-                items.add(TranslateAlert3.Text.Factory.of(styledTextLoading ? 7 : 6, text, false, false, null, null, null));
+                items.add(isRich() ? previewItem(6, textRich, false) : TranslateAlert3.Text.Factory.of(styledTextLoading ? 7 : 6, text, false, false, null, null, null));
             } else {
-                items.add(TranslateAlert3.Header.Factory.of(5, getString(R.string.AIEditorResult), null, null, null, emojify, this::toggleEmojify, null));
-                items.add(TranslateAlert3.Text.Factory.of(styledTextLoading ? 7 : 6, styledText, false, false, null, null, !styledTextLoading ? this::copyResult : null));
+                items.add(TranslateAlert3.Header.Factory.of(7, getString(R.string.AIEditorResult), null, null, null, emojify, this::toggleEmojify, null));
+                items.add(isRich() ? previewItem(8, styledTextLoading || styledTextRich == null ? textRich : styledTextRich, styledTextLoading) : TranslateAlert3.Text.Factory.of(styledTextLoading ? 7 : 6, styledText, false, false, null, null, !styledTextLoading ? this::copyResult : null));
             }
         } else if (tab == TAB_FIX) {
             items.add(TranslateAlert3.Header.Factory.of(3, getString(R.string.AIEditorOriginal), null, null, null));
-            items.add(TranslateAlert3.Text.Factory.of(4, text, collapsed, false, this::collapse, null, null));
+            items.add(isRich() ? previewItem(4, textRich, false) : TranslateAlert3.Text.Factory.of(4, text, collapsed, false, this::collapse, null, null));
 
             items.add(TranslateAlert3.Header.Factory.of(5, getString(R.string.AIEditorResult), null, null, null));
-            items.add(TranslateAlert3.Text.Factory.of(fixedTextLoading ? 7 : 6, fixedText, false, false, null, null, !fixedTextLoading ? this::copyResult : null));
+            items.add(isRich() ? previewItem(6, fixedTextLoading || fixedTextRich == null ? textRich : fixedTextRich, fixedTextLoading) : TranslateAlert3.Text.Factory.of(fixedTextLoading ? 7 : 6, fixedText, false, false, null, null, !fixedTextLoading ? this::copyResult : null));
         }
         adapter.whiteSectionEnd();
         items.add(UItem.asShadow(null));
@@ -755,15 +1107,7 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
         adapter.update(false);
         request();
 
-        if (onUseListener != null) {
-            button.setText(getString(R.string.AIEditorApply));
-            button.setOnClickListener(v -> {
-                if (onUseListener != null && getResultText() != null) {
-                    onUseListener.run(getResultText());
-                }
-                dismiss();
-            });
-        }
+        updateButton();
     }
 
     private void onToLangMenu(View btn) {
@@ -885,7 +1229,12 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
 
     private boolean loading;
     private TLRPC.TL_messages_composeMessageWithAI[] lastRequest = new TLRPC.TL_messages_composeMessageWithAI[3];
+    private TLRPC.TL_messages_composeRichMessageWithAI[] lastRequestRich = new TLRPC.TL_messages_composeRichMessageWithAI[3];
     private void request() {
+        if (isRich()) {
+            requestRich();
+            return;
+        }
         final TLRPC.TL_textWithEntities fromText = new TLRPC.TL_textWithEntities();
         final CharSequence[] message = new CharSequence[] { text };
         fromText.entities = MediaDataController.getInstance(currentAccount).getEntities(message, true);
@@ -901,7 +1250,11 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
             req.emojify = emojify;
         } else if (tab == TAB_STYLE) {
             final TL_aicompose.AiComposeTone tone = styleTabs.getSelectedTone();
-            if (tone instanceof TL_aicompose.TL_aiComposeTone) {
+            if (tone instanceof PromptTone) {
+                final TL_aicompose.inputAiComposeToneSingleUse input = new TL_aicompose.inputAiComposeToneSingleUse();
+                input.custom_prompt = TextUtils.isEmpty(promptText) ? "" : promptText;
+                req.tone = input;
+            } else if (tone instanceof TL_aicompose.TL_aiComposeTone) {
                 final TL_aicompose.inputAiComposeToneID input = new TL_aicompose.inputAiComposeToneID();
                 input.id = ((TL_aicompose.TL_aiComposeTone) tone).id;
                 input.access_hash = ((TL_aicompose.TL_aiComposeTone) tone).access_hash;
@@ -928,7 +1281,9 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
             return;
         }
 
-        button.setLoading(loading = true);
+        loading = true;
+        errored = false;
+        updateButton();
 
         final SimpleTextView actionBarTitleTextView = actionBar.getTitleTextView();
         actionBarTitleTextView.setRightDrawable(titleLoadingDrawable);
@@ -957,33 +1312,35 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
         requestId = ConnectionsManager.getInstance(currentAccount).sendRequestTyped(req, AndroidUtilities::runOnUIThread, (res, err) -> {
             requestId = -1;
 
-            button.setLoading(loading = false);
+            loading = false;
             if (err != null && ("SUMMARY_FLOOD_PREMIUM".equalsIgnoreCase(err.text) || "AICOMPOSE_FLOOD_PREMIUM".equalsIgnoreCase(err.text))) {
                 BulletinFactory.of(bulletinContainer, resourcesProvider)
                     .createSimpleBulletin(R.raw.star_premium_2, getString(R.string.AIEditorLimitTitle), AndroidUtilities.replaceTags(getString(R.string.AIEditorLimitText)))
                     .show();
-                updateButton(true);
+                showLimit = true;
+                updateButton();
                 return;
             } else if (err != null) {
                 BulletinFactory.of(bulletinContainer, resourcesProvider).showForError(err);
 
                 actionBarTitleTextView.setRightDrawable(null);
-                button.setText(getString(R.string.OK));
-                button.setOnClickListener(v -> dismiss());
-                updateButton(false);
+                errored = true;
+                showLimit = false;
+                updateButton();
                 return;
             }
             if (res == null) {
                 actionBarTitleTextView.setRightDrawable(null);
 
-                button.setText(getString(R.string.OK));
-                button.setOnClickListener(v -> dismiss());
-                updateButton(false);
+                errored = true;
+                showLimit = false;
+                updateButton();
                 return;
             }
 
             actionBarTitleTextView.setRightDrawable(null);
-            updateButton(false);
+            showLimit = false;
+            updateButton();
             this.lastRequest[tab] = req;
             if (tab == TAB_TRANSLATE) {
                 translatedTextLoading = false;
@@ -1007,6 +1364,115 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
 
         adapter.update(true);
     }
+    private void requestRich() {
+        final int tab = tabs.getSelectedTab();
+
+        final TLRPC.TL_messages_composeRichMessageWithAI req = new TLRPC.TL_messages_composeRichMessageWithAI();
+        req.flags |= TLObject.FLAG_4;
+        req.text = toInput(textRich);
+        if (tab == TAB_TRANSLATE) {
+            req.translate_to_lang = normalizeLanguage(to_lang);
+            req.tone = TL_aicompose.InputAiComposeTone.fromDefault(translateTone);
+            req.emojify = emojify;
+        } else if (tab == TAB_STYLE) {
+            final TL_aicompose.AiComposeTone tone = styleTabs.getSelectedTone();
+            if (tone instanceof PromptTone) {
+                final TL_aicompose.inputAiComposeToneSingleUse input = new TL_aicompose.inputAiComposeToneSingleUse();
+                input.custom_prompt = TextUtils.isEmpty(promptText) ? "" : promptText;
+                req.tone = input;
+            } else if (tone instanceof TL_aicompose.TL_aiComposeTone) {
+                final TL_aicompose.inputAiComposeToneID input = new TL_aicompose.inputAiComposeToneID();
+                input.id = ((TL_aicompose.TL_aiComposeTone) tone).id;
+                input.access_hash = ((TL_aicompose.TL_aiComposeTone) tone).access_hash;
+                req.tone = input;
+            } else if (tone instanceof TL_aicompose.TL_aiComposeToneDefault) {
+                final TL_aicompose.inputAiComposeToneDefault input = new TL_aicompose.inputAiComposeToneDefault();
+                input.tone = ((TL_aicompose.TL_aiComposeToneDefault) tone).tone;
+                req.tone = input;
+            }
+            req.emojify = emojify;
+        } else if (tab == TAB_FIX) {
+            req.proofread = true;
+        }
+
+        final TLRPC.TL_messages_composeRichMessageWithAI lastRequest = this.lastRequestRich[tab];
+        if (lastRequest != null && (
+            lastRequest.proofread == req.proofread &&
+            lastRequest.emojify == req.emojify &&
+            TL_aicompose.InputAiComposeTone.equals(lastRequest.tone, req.tone) &&
+            TextUtils.equals(lastRequest.translate_to_lang, req.translate_to_lang)
+        )) {
+            return;
+        } else if (!req.emojify && !req.proofread && req.tone == null && req.translate_to_lang == null) {
+            return;
+        }
+
+        loading = true;
+        errored = false;
+        updateButton();
+
+        final SimpleTextView actionBarTitleTextView = actionBar.getTitleTextView();
+        actionBarTitleTextView.setRightDrawable(titleLoadingDrawable);
+        titleLoadingDrawable.start();
+
+        if (tab == TAB_TRANSLATE) {
+            translatedTextLoading = true;
+        } else if (tab == TAB_STYLE) {
+            styledTextLoading = true;
+        } else if (tab == TAB_FIX) {
+            fixedTextLoading = true;
+        }
+
+        requestId = ConnectionsManager.getInstance(currentAccount).sendRequestTyped(req, AndroidUtilities::runOnUIThread, (res, err) -> {
+            requestId = -1;
+
+            loading = false;
+            if (err != null && ("SUMMARY_FLOOD_PREMIUM".equalsIgnoreCase(err.text) || "AICOMPOSE_FLOOD_PREMIUM".equalsIgnoreCase(err.text))) {
+                BulletinFactory.of(bulletinContainer, resourcesProvider)
+                    .createSimpleBulletin(R.raw.star_premium_2, getString(R.string.AIEditorLimitTitle), AndroidUtilities.replaceTags(getString(R.string.AIEditorLimitText)))
+                    .show();
+                showLimit = true;
+                updateButton();
+                return;
+            } else if (err != null) {
+                BulletinFactory.of(bulletinContainer, resourcesProvider).showForError(err);
+
+                actionBarTitleTextView.setRightDrawable(null);
+                errored = true;
+                showLimit = false;
+                updateButton();
+                return;
+            }
+            if (res == null) {
+                actionBarTitleTextView.setRightDrawable(null);
+
+                errored = true;
+                showLimit = false;
+                updateButton();
+                return;
+            }
+
+            actionBarTitleTextView.setRightDrawable(null);
+            showLimit = false;
+            updateButton();
+            this.lastRequestRich[tab] = req;
+            if (tab == TAB_TRANSLATE) {
+                translatedTextLoading = false;
+                translatedTextRich = res.result;
+            } else if (tab == TAB_STYLE) {
+                styledTextLoading = false;
+                styledTextRich = res.result;
+            } else if (tab == TAB_FIX) {
+                fixedTextLoading = false;
+                fixedTextRich = res.result;
+            }
+
+            adapter.update(true);
+        });
+
+        adapter.update(true);
+    }
+
     private void cancelRequest() {
         if (requestId >= 0) {
             ConnectionsManager.getInstance(currentAccount).cancelRequest(requestId, true);
@@ -1194,6 +1660,10 @@ public class AIEditorAlert extends BottomSheetWithRecyclerListView implements No
                 tab.accent = false;
                 tab.updateColors();
                 tab.set(R.drawable.tone_create, getString(R.string.AIEditorStyleNewCreate));
+            } else if (tone instanceof PromptTone) {
+                tab.accent = false;
+                tab.updateColors();
+                tab.set(R.drawable.iv_prompt, getString(R.string.AIEditorStylePrompt));
             } else {
                 tab.set(null, tone.title, tone.emoji_id);
             }

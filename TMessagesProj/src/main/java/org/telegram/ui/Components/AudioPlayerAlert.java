@@ -2121,7 +2121,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
 
         boolean light = rad <= 0.5f && ColorUtils.calculateLuminance(getThemedColor(Theme.key_dialogBackground)) > 0.7f;
         if (light != wasLight) {
-            AndroidUtilities.setLightStatusBar(getWindow(), wasLight = light);
+            AndroidUtilities.setLightStatusBar(this, wasLight = light);
         }
     }
 

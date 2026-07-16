@@ -9,7 +9,6 @@
 package org.telegram.messenger;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -19,7 +18,6 @@ import android.net.Uri;
 import com.carrotsearch.randomizedtesting.Xoroshiro128PlusRandom;
 
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLRPC;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -89,6 +87,7 @@ public class Utilities {
     public static native void generateGradient(Bitmap bitmap, boolean unpin, int phase, float progress, int width, int height, int stride, int[] colors);
     public static native boolean applySoftLight(Bitmap inputBitmap, Bitmap outputBitmap, int color);
     public static native boolean copyBitmaps(Bitmap src, Bitmap dst);
+    public static native int averageBitmapColor(Bitmap bitmap, int left, int top, int right, int bottom);
     public static native void setupNativeCrashesListener(String path);
 
     public static Bitmap stackBlurBitmapMax(Bitmap bitmap) {
@@ -646,4 +645,14 @@ public class Utilities {
         return (a + b - 1) / b;
     }
 
+
+
+    public enum libyuv_ScaleFilter {
+        None, Linear, Bilinear, Box
+    }
+
+    private static native boolean nLibyuvARGBSaleBitmap(Bitmap src, Bitmap dst, int filterMode);
+    public static boolean libyuvARGBSaleBitmap(Bitmap src, Bitmap dst, libyuv_ScaleFilter mode) {
+        return nLibyuvARGBSaleBitmap(src, dst, mode.ordinal());
+    }
 }

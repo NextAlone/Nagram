@@ -201,6 +201,10 @@ public class SpoilerEffect2 {
         if (index == null) {
             index = 0;
         }
+        if (w > ow || h > oh) {
+            final float scale = Math.max(w / (float) ow, h / (float) oh);
+            canvas.scale(scale, scale);
+        }
         if ((index % 4) == 1) {
             canvas.rotate(180, ow / 2f, oh / 2f);
         }
@@ -209,10 +213,6 @@ public class SpoilerEffect2 {
         }
         if ((index % 4) == 3) {
             canvas.scale(1, -1, ow / 2f, oh / 2f);
-        }
-        if (w > ow || h > oh) {
-            final float scale = Math.max(w / (float) ow, h / (float) oh);
-            canvas.scale(scale, scale);
         }
         if (toBitmap) {
             Bitmap bitmap = textureView.getBitmap();

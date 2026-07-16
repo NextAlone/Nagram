@@ -763,6 +763,14 @@ static inline void writeFrameToBitmap(JNIEnv *env, VideoInfo *info, jintArray da
         wantedWidth = dataArr[0];
         wantedHeight = dataArr[1];
         dataArr[3] = (jint) (1000 * info->frame->best_effort_timestamp * av_q2d(info->video_stream->time_base));
+        if (env->GetArrayLength(data) > 6) {
+            bool isOpaque = (
+                info->frame->format == AV_PIX_FMT_YUV420P  ||
+                info->frame->format == AV_PIX_FMT_YUVJ420P ||
+                info->frame->format == AV_PIX_FMT_YUV444P
+            );
+            dataArr[6] = isOpaque ? 1 : 0;
+        }
         env->ReleaseIntArrayElements(data, dataArr, 0);
     } else {
         wantedWidth = bitmapWidth;
@@ -865,6 +873,36 @@ static inline void writeFrameToBitmap(JNIEnv *env, VideoInfo *info, jintArray da
                 bitmapWidth,
                 bitmapHeight
             );
+        }
+    } else if (sws_ctx != nullptr && ((intptr_t) pixels) % 16 != 0) {
+        // fallback if pixels not aligned
+        int alignedStride = FFALIGN(bitmapWidth * 4, 16);
+        int bufSize = alignedStride * bitmapHeight;
+        uint8_t *alignedBuf = (uint8_t *) av_malloc(bufSize);
+        if (alignedBuf != nullptr) {
+            uint8_t *dst_data[1] = { alignedBuf };
+            int32_t dst_stride[1] = { alignedStride };
+            sws_scale(sws_ctx,
+                      info->frame->data,
+                      info->frame->linesize,
+                      0,
+                      info->frame->height,
+                      dst_data,
+                      dst_stride
+            );
+            if (alignedStride == bitmapStride) {
+                memcpy(pixels, alignedBuf, bufSize);
+            } else {
+                uint8_t *src = alignedBuf;
+                uint8_t *dst = (uint8_t *) pixels;
+                int copyStride = bitmapWidth * 4;
+                for (int i = 0; i < bitmapHeight; i++) {
+                    memcpy(dst, src, copyStride);
+                    src += alignedStride;
+                    dst += bitmapStride;
+                }
+            }
+            av_free(alignedBuf);
         }
     }
 

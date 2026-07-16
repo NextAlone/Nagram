@@ -1557,7 +1557,7 @@ public class StarsIntroActivity extends GradientHeaderActivity implements Notifi
             star.setSpan(new ImageSpan(drawable), 0, star.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             ton = new SpannableString("TON");
-            drawable = context.getResources().getDrawable(R.drawable.ton).mutate();
+            drawable = context.getResources().getDrawable(R.drawable.mini_gram_72).mutate();
             ColoredImageSpan span = new ColoredImageSpan(drawable);
             span.setSize(dp(18));
             span.setTranslateY(dp(.5f));
@@ -3303,7 +3303,7 @@ public class StarsIntroActivity extends GradientHeaderActivity implements Notifi
         if (cache != null && cache[0] != null) {
             span = cache[0];
         } else {
-            span = new ColoredImageSpan(ton ? R.drawable.ton : R.drawable.msg_premium_liststar);
+            span = new ColoredImageSpan(ton ? R.drawable.mini_gram_72 : R.drawable.msg_premium_liststar);
             if (cache != null) {
                 cache[0] = span;
             }
@@ -3379,7 +3379,7 @@ public class StarsIntroActivity extends GradientHeaderActivity implements Notifi
         if (spanRef != null && spanRef[0] != null) {
             span = spanRef[0];
         } else {
-            span = new ColoredImageSpan(ton ? R.drawable.ton : R.drawable.msg_premium_liststar);
+            span = new ColoredImageSpan(ton ? R.drawable.mini_gram_72 : R.drawable.msg_premium_liststar);
             span.setScale(ton ? 0.222f : 1.13f, ton ? 0.222f : 1.13f);
         }
         if (spanRef != null) {
@@ -3418,7 +3418,7 @@ public class StarsIntroActivity extends GradientHeaderActivity implements Notifi
             ssb = (SpannableStringBuilder) cs;
         }
         final String symbol = ton ? "TON" : "⭐";
-        final int resId = ton ? R.drawable.ton : R.drawable.star_small_inner;
+        final int resId = ton ? R.drawable.mini_gram_72 : R.drawable.star_small_inner;
         SpannableString spacedStar = new SpannableString(symbol + " ");
         ColoredImageSpan span;
         if (spanArr != null && spanArr[0] != null) {

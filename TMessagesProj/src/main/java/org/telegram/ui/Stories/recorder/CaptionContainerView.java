@@ -403,6 +403,7 @@ public class CaptionContainerView extends FrameLayout {
         applyButtonDrawable.setCustomSize(AndroidUtilities.dp(36), AndroidUtilities.dp(36));
         applyButton.setImageDrawable(applyButtonDrawable);
         applyButton.setScaleType(ImageView.ScaleType.CENTER);
+        applyButton.setContentDescription(LocaleController.getString(R.string.Done));
         applyButton.setAlpha(0f);
         applyButton.setVisibility(View.GONE);
         applyButton.setOnClickListener(e -> done());

@@ -290,6 +290,41 @@ public sealed class TlGen_ChatFull : TlGen_Object {
     }
   }
 
+  public data class TL_communityFull(
+    public val id: Long,
+    public val about: String,
+    public val chat_photo: TlGen_Photo,
+    public val linked_peers: List<TlGen_CommunityPeer>,
+    public val admins_count: Int?,
+    public val kicked_count: Int?,
+    public val peer_link_requests_pending: Int?,
+  ) : TlGen_ChatFull() {
+    internal val flags: UInt
+      get() {
+        var result = 0U
+        if (peer_link_requests_pending != null) result = result or 1U
+        if (admins_count != null) result = result or 2U
+        if (kicked_count != null) result = result or 4U
+        return result
+      }
+
+    public override fun serializeToStream(stream: OutputSerializedData) {
+      stream.writeInt32(MAGIC.toInt())
+      stream.writeInt32(flags.toInt())
+      stream.writeInt64(id)
+      stream.writeString(about)
+      chat_photo.serializeToStream(stream)
+      TlGen_Vector.serialize(stream, linked_peers)
+      admins_count?.let { stream.writeInt32(it) }
+      kicked_count?.let { stream.writeInt32(it) }
+      peer_link_requests_pending?.let { stream.writeInt32(it) }
+    }
+
+    public companion object {
+      public const val MAGIC: UInt = 0xCBB7A507U
+    }
+  }
+
   public data class TL_chatFull_layer27(
     public val id: Int,
     public val participants: TlGen_ChatParticipants,

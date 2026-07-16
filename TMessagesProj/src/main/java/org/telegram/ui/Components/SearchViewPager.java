@@ -47,6 +47,7 @@ import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BackDrawable;
+import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.MenuDrawable;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -157,9 +158,12 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
     private final int folderId;
     int animateFromCount = 0;
 
-    public SearchViewPager(Context context, DialogsActivity fragment, int type, int initialDialogsType, int folderId, ChatPreviewDelegate chatPreviewDelegate) {
+    private final long communityId;
+
+    public SearchViewPager(Context context, DialogsActivity fragment, int type, int initialDialogsType, int folderId, long communityId, ChatPreviewDelegate chatPreviewDelegate) {
         super(context);
         this.folderId = folderId;
+        this.communityId = communityId;
         parent = fragment;
         this.chatPreviewDelegate = chatPreviewDelegate;
 
@@ -335,6 +339,15 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         searchListView.addEdgeEffectListener(this::invalidateBlur);
 
         noMediaFiltersSearchView = new FilteredSearchView(parent);
+        noMediaFiltersSearchView.recyclerListView.setClipToPadding(false);
+        noMediaFiltersSearchView.recyclerListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                onPageScrolled(dx, dy);
+            }
+        });
+        noMediaFiltersSearchView.recyclerListView.addEdgeEffectListener(this::invalidateBlur);
         noMediaFiltersSearchView.setUiCallback(SearchViewPager.this);
         noMediaFiltersSearchView.setVisibility(View.GONE);
         noMediaFiltersSearchView.setChatPreviewDelegate(chatPreviewDelegate);
@@ -680,7 +693,11 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                 if (data.chat instanceof TLRPC.User) {
                     dialogId = ((TLRPC.User) data.chat).id;
                 } else if (data.chat instanceof TLRPC.Chat) {
-                    dialogId = -((TLRPC.Chat) data.chat).id;
+                    if (ChatObject.isCommunity((TLRPC.Chat) data.chat)) {
+                        // communityId = ((TLRPC.Chat) data.chat).id;
+                    } else {
+                        dialogId = -((TLRPC.Chat) data.chat).id;
+                    }
                 }
             } else if (data.filterType == FiltersView.FILTER_TYPE_DATE) {
                 minDate = data.dateData.minDate;
@@ -716,7 +733,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             hashtagSearchAdapter.search(query);
             hashtagEmptyView.setKeyboardHeight(keyboardSize, false);
         } else if (view == searchContainer) {
-            if (dialogId == 0 && minDate == 0 && maxDate == 0 || forumDialogId != 0) {
+            if (dialogId == 0 && communityId == 0 && minDate == 0 && maxDate == 0 || forumDialogId != 0) {
                 lastSearchScrolledToTop = false;
                 dialogsSearchAdapter.searchDialogs(query, includeFolder ? 1 : 0, true);
                 dialogsSearchAdapter.setFiltersDelegate(filteredSearchViewDelegate, false);
@@ -758,7 +775,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                     }
                     noMediaFiltersSearchView.animate().alpha(1f).setDuration(150).start();
                 }
-                noMediaFiltersSearchView.search(dialogId, minDate, maxDate, null, includeFolder, query, reset);
+                noMediaFiltersSearchView.search(dialogId, communityId, minDate, maxDate, null, includeFolder, query, reset);
                 emptyView.setVisibility(View.GONE);
             }
             emptyView.setKeyboardHeight(keyboardSize, false);
@@ -767,7 +784,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             ((FilteredSearchView) view).setUseFromUserAsAvatar(forumDialogId != 0);
             ((FilteredSearchView) view).setKeyboardHeight(keyboardSize, false);
             ViewPagerAdapter.Item item = viewPagerAdapter.items.get(position);
-            ((FilteredSearchView) view).search(dialogId, minDate, maxDate, FiltersView.filters[item.filterIndex], includeFolder, query, reset);
+            ((FilteredSearchView) view).search(dialogId, communityId, minDate, maxDate, FiltersView.filters[item.filterIndex], includeFolder, query, reset);
         } else if (view instanceof SearchDownloadsContainer) {
             ((SearchDownloadsContainer) view).setKeyboardHeight(keyboardSize, false);
             ((SearchDownloadsContainer) view).search(query);
@@ -1007,7 +1024,13 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         }
     }
 
+    @Override
     public void goToMessage(MessageObject messageObject) {
+        parent.presentFragment(createFragmentFromMessage(currentAccount, messageObject));
+        showActionMode(false);
+    }
+
+    public static BaseFragment createFragmentFromMessage(final int currentAccount, MessageObject messageObject) {
         Bundle args = new Bundle();
         long dialogId = messageObject.getDialogId();
         if (DialogObject.isEncryptedDialog(dialogId)) {
@@ -1023,8 +1046,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             args.putLong("chat_id", -dialogId);
         }
         args.putInt("message_id", messageObject.getId());
-        parent.presentFragment(new ChatActivity(args));
-        showActionMode(false);
+        return new ChatActivity(args);
     }
 
     @Override
@@ -1252,7 +1274,19 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         this.pagesPaddingTop = top;
         this.pagesPaddingBottom = bottom;
 
-        setPagesPaddings(searchContainer, searchListView, pagesPaddingTop, pagesPaddingBottom, doNotRequestLayout);
+
+        // setPagesPaddings(searchContainer, searchListView, pagesPaddingTop, pagesPaddingBottom, doNotRequestLayout);
+        searchListView.setPadding(0, pagesPaddingTop, 0, pagesPaddingBottom, doNotRequestLayout);
+        noMediaFiltersSearchView.setPagesPaddings(pagesPaddingTop, pagesPaddingBottom, doNotRequestLayout);
+        {
+            MarginLayoutParams mlp = (MarginLayoutParams) emptyView.getLayoutParams();
+            if (mlp.topMargin != pagesPaddingTop || mlp.bottomMargin != pagesPaddingBottom) {
+                mlp.topMargin = pagesPaddingTop;
+                mlp.bottomMargin = pagesPaddingBottom;
+                emptyView.requestLayout();
+            }
+        }
+
         setPagesPaddings(channelsSearchContainer, channelsSearchListView, pagesPaddingTop, pagesPaddingBottom, doNotRequestLayout);
         setPagesPaddings(botsSearchContainer, botsSearchListView, pagesPaddingTop, pagesPaddingBottom, doNotRequestLayout);
         setPagesPaddings(hashtagSearchContainer, hashtagSearchListView, pagesPaddingTop, pagesPaddingBottom, doNotRequestLayout);
@@ -1470,6 +1504,11 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             if (listView != null) {
                 Blur3Utils.captureRelativeParent(listView, canvas, position, listView, this);
             }
+            if (view == searchContainer && noMediaFiltersSearchView.getVisibility() == VISIBLE) {
+                Blur3Utils.captureRelativeParent(
+                    noMediaFiltersSearchView.recyclerListView, canvas, position,
+                    noMediaFiltersSearchView.recyclerListView, this);
+            }
         }
     }
 
@@ -1492,6 +1531,10 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         public void updateItems() {
             items.clear();
             items.add(new Item(DIALOGS_TYPE));
+            if (communityId != 0) {
+                return;
+            }
+
             if (expandedPublicPosts) {
                 items.add(new Item(PUBLIC_POSTS_TYPE));
             }

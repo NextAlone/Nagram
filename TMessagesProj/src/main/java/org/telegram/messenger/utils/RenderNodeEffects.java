@@ -44,4 +44,10 @@ public class RenderNodeEffects {
 
         return saturationUpX4Effect;
     }
+
+    public static RenderEffect createSaturationXRenderEffect(float x) {
+        final ColorMatrix colorMatrix = new ColorMatrix();
+        colorMatrix.setSaturation(x);
+        return RenderEffect.createColorFilterEffect(new ColorMatrixColorFilter(colorMatrix));
+    }
 }

@@ -993,7 +993,7 @@ public class EmojiPacksAlert extends BottomSheet implements NotificationCenter.N
         boolean openBgLight = AndroidUtilities.computePerceivedBrightness(getThemedColor(Theme.key_dialogBackground)) > .721f;
         boolean closedBgLight = AndroidUtilities.computePerceivedBrightness(Theme.blendOver(getThemedColor(Theme.key_actionBarDefault), 0x33000000)) > .721f;
         boolean isLight = open ? openBgLight : closedBgLight;
-        AndroidUtilities.setLightStatusBar(getWindow(), isLight);
+        AndroidUtilities.setLightStatusBar(this, isLight);
     }
 
     public void updateInstallment() {

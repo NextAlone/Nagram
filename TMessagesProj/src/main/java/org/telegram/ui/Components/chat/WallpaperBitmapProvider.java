@@ -84,8 +84,27 @@ public class WallpaperBitmapProvider {
         return 0;
     }
 
+    public int getStatusBarColor(BlurredBackgroundSource source) {
+        if (source instanceof BlurredBackgroundSourceColor) {
+            return ((BlurredBackgroundSourceColor) source).getColor();
+        }
+
+        if (source instanceof BlurredBackgroundSourceBitmap) {
+            final Bitmap bitmap = ((BlurredBackgroundSourceBitmap) source).getBitmap();
+            return statusBarColorFromBitmap.get(bitmap);
+        }
+
+        if (source instanceof BlurredBackgroundSourceWrapped) {
+            return getStatusBarColor(((BlurredBackgroundSourceWrapped) source).getSource());
+        }
+
+        return 0;
+    }
+
     private final BitmapMemoizedMetadata<Bitmap> blurredFromBitmap = new BitmapMemoizedMetadata<>(WallpaperBitmapProvider::blurBitmap);
     private final BitmapMemoizedMetadata<Integer> navbarColorFromBitmap = new BitmapMemoizedMetadata<>(WallpaperBitmapProvider::averageBottomColor);
+    private final BitmapMemoizedMetadata<Integer> statusBarColorFromBitmap = new BitmapMemoizedMetadata<>(WallpaperBitmapProvider::averageTopColor);
+
 
     private static Bitmap blurBitmap(Bitmap bitmap) {
         if (bitmap == null || bitmap.isRecycled()) {
@@ -98,41 +117,28 @@ public class WallpaperBitmapProvider {
         return result;
     }
 
+
+
+    private static int averageTopColor(Bitmap bitmap) {
+        if (bitmap == null || bitmap.isRecycled()) {
+            return 0;
+        }
+
+        final int height = bitmap.getHeight();
+        final int width = bitmap.getWidth();
+        final int bottom = height / 10;
+        return Utilities.averageBitmapColor(bitmap, 0, 0, width, bottom);
+    }
+
     private static int averageBottomColor(Bitmap bitmap) {
         if (bitmap == null || bitmap.isRecycled()) {
             return 0;
         }
 
-        int height = bitmap.getHeight();
-        int width = bitmap.getWidth();
-        int bottomHeight = (int) (height * 0.1f);
-        int startY = height - bottomHeight;
-
-        long sumR = 0;
-        long sumG = 0;
-        long sumB = 0;
-        long sumA = 0;
-        int count = 0;
-
-        int[] pixels = new int[width * bottomHeight];
-        bitmap.getPixels(pixels, 0, width, 0, startY, width, bottomHeight);
-
-        for (int color : pixels) {
-            sumA += (color >>> 24) & 0xFF;
-            sumR += (color >> 16) & 0xFF;
-            sumG += (color >> 8) & 0xFF;
-            sumB += color & 0xFF;
-            count++;
-        }
-
-        if (count == 0) return Color.TRANSPARENT;
-
-        int a = (int) (sumA / count);
-        int r = (int) (sumR / count);
-        int g = (int) (sumG / count);
-        int b = (int) (sumB / count);
-
-        return Color.argb(a, r, g, b);
+        final int height = bitmap.getHeight();
+        final int width = bitmap.getWidth();
+        final int top = height * 9 / 10;
+        return Utilities.averageBitmapColor(bitmap, 0, top, width, height);
     }
 
 }

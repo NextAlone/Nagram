@@ -247,7 +247,7 @@ public class TONIntroActivity extends GradientHeaderActivity implements Notifica
         starBalanceTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourceProvider));
 
         starBalanceIcon = new SpannableStringBuilder("S");
-        final ColoredImageSpan starBalanceIconSpan = new ColoredImageSpan(R.drawable.ton);
+        final ColoredImageSpan starBalanceIconSpan = new ColoredImageSpan(R.drawable.mini_gram_72);
         starBalanceIconSpan.setOverrideColor(0xFF3391D4);
         starBalanceIconSpan.setScale(0.5f, 0.5f);
         starBalanceIconSpan.translate(-dp(3), 0);

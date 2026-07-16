@@ -137,13 +137,14 @@ public class VideoScreenPreview extends FrameLayout implements PagerHeaderView, 
                 type == PremiumPreviewFragment.PREMIUM_FEATURE_ANIMATED_AVATARS ||
                 type == PremiumPreviewFragment.PREMIUM_FEATURE_ANIMATED_EMOJI ||
                 type == PremiumPreviewFragment.PREMIUM_FEATURE_REACTIONS ||
-                type == PremiumPreviewFragment.PREMIUM_FEATURE_SAVED_TAGS
+                type == PremiumPreviewFragment.PREMIUM_FEATURE_SAVED_TAGS ||
+                type == PremiumPreviewFragment.PREMIUM_FEATURE_RICH_EDITOR
         ) {
             starDrawable = new StarParticlesView.Drawable(40);
             starDrawable.speedScale = 3;
             starDrawable.type = type;
 
-            if (type == PremiumPreviewFragment.PREMIUM_FEATURE_ADS || type == PremiumPreviewFragment.PREMIUM_FEATURE_SAVED_TAGS) {
+            if (type == PremiumPreviewFragment.PREMIUM_FEATURE_ADS || type == PremiumPreviewFragment.PREMIUM_FEATURE_SAVED_TAGS || type == PremiumPreviewFragment.PREMIUM_FEATURE_RICH_EDITOR) {
                 starDrawable.size1 = 14;
                 starDrawable.size2 = 18;
                 starDrawable.size3 = 18;
@@ -151,6 +152,9 @@ public class VideoScreenPreview extends FrameLayout implements PagerHeaderView, 
                 starDrawable.size1 = 14;
                 starDrawable.size2 = 16;
                 starDrawable.size3 = 15;
+            }
+            if (type == PremiumPreviewFragment.PREMIUM_FEATURE_RICH_EDITOR) {
+                starDrawable.useRotate = true;
             }
             starDrawable.k1 = starDrawable.k2 = starDrawable.k3 = 0.98f;
             starDrawable.speedScale = 4;
@@ -337,6 +341,7 @@ public class VideoScreenPreview extends FrameLayout implements PagerHeaderView, 
                         type == PremiumPreviewFragment.PREMIUM_FEATURE_ADS ||
                         type == PremiumPreviewFragment.PREMIUM_FEATURE_ANIMATED_AVATARS ||
                         type == PremiumPreviewFragment.PREMIUM_FEATURE_SAVED_TAGS ||
+                        type == PremiumPreviewFragment.PREMIUM_FEATURE_RICH_EDITOR ||
                         type == PremiumPreviewFragment.PREMIUM_FEATURE_ANIMATED_EMOJI ||
                         type == PremiumPreviewFragment.PREMIUM_FEATURE_REACTIONS) {
                     starDrawable.rect.set(0, 0, getMeasuredWidth(), getMeasuredHeight());

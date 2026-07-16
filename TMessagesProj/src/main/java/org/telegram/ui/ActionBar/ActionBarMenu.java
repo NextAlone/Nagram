@@ -24,10 +24,13 @@ import androidx.annotation.Nullable;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.Adapters.FiltersView;
+import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.RLottieDrawable;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import me.vkryl.android.animator.FactorAnimator;
 
 public class ActionBarMenu extends LinearLayout {
 
@@ -651,12 +654,6 @@ public class ActionBarMenu extends LinearLayout {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
-    private View widthAnchorView;
-
-    public void setWidthAnchorView(View widthAnchorView) {
-        this.widthAnchorView = widthAnchorView;
-    }
-
     public int getItemsWidth() {
         float mLeft = Float.POSITIVE_INFINITY;
         float mRight = Float.NEGATIVE_INFINITY;
@@ -674,11 +671,6 @@ public class ActionBarMenu extends LinearLayout {
             }
         }
 
-        if (widthAnchorView != null) {
-            mLeft = widthAnchorView.getX();
-            mRight = getWidth() + dp(5);
-        }
-
         return found ? (int)(mRight - mLeft) : 0;
     }
 
@@ -687,6 +679,9 @@ public class ActionBarMenu extends LinearLayout {
         super.onLayout(changed, l, t, r, b);
         if (onLayoutListener != null) {
             onLayoutListener.run();
+        }
+        if (parentActionBar != null) {
+            parentActionBar.checkMenuItemsWidth();
         }
     }
 

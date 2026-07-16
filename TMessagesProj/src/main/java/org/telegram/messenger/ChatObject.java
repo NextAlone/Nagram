@@ -22,8 +22,10 @@ import com.google.android.exoplayer2.util.Log;
 import org.telegram.messenger.utils.tlutils.TlUtils;
 import org.telegram.messenger.voip.Instance;
 import org.telegram.messenger.voip.VoIPService;
+import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.tl.TL_account;
+import org.telegram.tgnet.tl.TL_communities;
 import org.telegram.tgnet.tl.TL_phone;
 import org.telegram.tgnet.tl.TL_update;
 import org.telegram.ui.GroupCallActivity;
@@ -36,6 +38,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+
+import me.vkryl.core.BitwiseUtils;
 
 import tw.nekomimi.nekogram.DialogConfig;
 import tw.nekomimi.nekogram.helpers.remote.PeerColorHelper;
@@ -79,6 +83,7 @@ public class ChatObject {
     public static final int ACTION_MANAGE_TAGS = 25;
 
     public static final int ACTION_SEND_REACTIONS = 26;
+    public static final int ACTION_MANAGE_LINKED_CHATS = 27;
 
     public final static int VIDEO_FRAME_NO_FRAME = 0;
     public final static int VIDEO_FRAME_REQUESTING = 1;
@@ -1629,6 +1634,7 @@ public class ChatObject {
             case ACTION_SEND_ROUND:
             case ACTION_SEND_REACTIONS:
             case ACTION_SEND_PLAIN:
+            case ACTION_MANAGE_LINKED_CHATS:
                 return true;
         }
         return false;
@@ -1692,6 +1698,8 @@ public class ChatObject {
                 return rights.send_reactions;
             case ACTION_SEND_PLAIN:
                 return rights.send_plain;
+            case ACTION_MANAGE_LINKED_CHATS:
+                return rights.manage_linked_peers;
         }
         return false;
     }
@@ -1744,6 +1752,9 @@ public class ChatObject {
                 case ACTION_MANAGE_CALLS:
                     value = admin_rights.manage_call;
                     break;
+                case ACTION_MANAGE_LINKED_CHATS:
+                    value = admin_rights.manage_linked_peers;
+                    break;
                 default:
                     value = false;
                     break;
@@ -1787,6 +1798,24 @@ public class ChatObject {
 
         return chat;
     }
+
+    public static boolean canRemoveChatFromCommunity(TLRPC.Chat chat, TLRPC.Chat community) {
+        return (chat != null && community != null)
+            && (chat.creator || ChatObject.canUserDoAdminAction(community, ChatObject.ACTION_MANAGE_LINKED_CHATS));
+    }
+
+    public static boolean canRemoveBotFromCommunity(TLRPC.User user, TLRPC.Chat community) {
+        return (user != null && community != null)
+            && (user.bot && user.bot_can_edit || ChatObject.canUserDoAdminAction(community, ChatObject.ACTION_MANAGE_LINKED_CHATS));
+    }
+
+    public static boolean canAddChatToCommunity(TLRPC.Chat community) {
+        return canUserDoAction(community, ChatObject.ACTION_MANAGE_LINKED_CHATS);
+    }
+
+
+
+
 
     public static boolean canUserDoAdminAction(TLRPC.Chat chat, int action) {
         if (chat == null) {
@@ -1833,6 +1862,9 @@ public class ChatObject {
                     break;
                 case ACTION_MANAGE_CALLS:
                     value = chat.admin_rights.manage_call;
+                    break;
+                case ACTION_MANAGE_LINKED_CHATS:
+                    value = chat.admin_rights.manage_linked_peers;
                     break;
                 default:
                     value = false;
@@ -1916,20 +1948,24 @@ public class ChatObject {
         return false;
     }
 
+    private static boolean isForbidden(TLRPC.Chat chat) {
+        return chat instanceof TLRPC.TL_chatForbidden || chat instanceof TLRPC.TL_channelForbidden || chat instanceof TLRPC.TL_communityForbidden;
+    }
+
     public static boolean isLeftFromChat(TLRPC.Chat chat) {
-        return chat == null || chat instanceof TLRPC.TL_chatEmpty || chat instanceof TLRPC.TL_chatForbidden || chat instanceof TLRPC.TL_channelForbidden || chat.left || chat.deactivated;
+        return chat == null || chat instanceof TLRPC.TL_chatEmpty || isForbidden(chat) || chat.left || chat.deactivated;
     }
 
     public static boolean isKickedFromChat(TLRPC.Chat chat) {
-        return chat == null || chat instanceof TLRPC.TL_chatEmpty || chat instanceof TLRPC.TL_chatForbidden || chat instanceof TLRPC.TL_channelForbidden || chat.kicked || chat.deactivated || chat.banned_rights != null && chat.banned_rights.view_messages;
+        return chat == null || chat instanceof TLRPC.TL_chatEmpty || isForbidden(chat) || chat.kicked || chat.deactivated || chat.banned_rights != null && chat.banned_rights.view_messages;
     }
 
     public static boolean isNotInChat(TLRPC.Chat chat) {
-        return chat == null || chat instanceof TLRPC.TL_chatEmpty || chat instanceof TLRPC.TL_chatForbidden || chat instanceof TLRPC.TL_channelForbidden || chat.left || chat.kicked || chat.deactivated;
+        return chat == null || chat instanceof TLRPC.TL_chatEmpty || isForbidden(chat) || chat.left || chat.kicked || chat.deactivated;
     }
 
     public static boolean isInChat(TLRPC.Chat chat) {
-        if (chat == null || chat instanceof TLRPC.TL_chatEmpty || chat instanceof TLRPC.TL_chatForbidden || chat instanceof TLRPC.TL_channelForbidden) {
+        if (chat == null || chat instanceof TLRPC.TL_chatEmpty || isForbidden(chat)) {
             return false;
         }
         if (chat.left || chat.kicked || chat.deactivated) {
@@ -1942,16 +1978,107 @@ public class ChatObject {
         return ChatObject.isChannel(chat) && (!chat.megagroup && chat.signatures && ChatObject.hasAdminRights(chat) && ChatObject.canWriteToChat(chat) || chat.megagroup && (ChatObject.isPublic(chat) || chat.has_geo || chat.has_link));
     }
 
+    public static boolean isHiddenInCommunity(int currentAccount, long dialogId) {
+        if (dialogId > 0) {
+            return isHiddenInCommunity(currentAccount, MessagesController.getInstance(currentAccount).getUser(dialogId));
+        } else {
+            return isHiddenInCommunity(currentAccount, MessagesController.getInstance(currentAccount).getChat(-dialogId));
+        }
+    }
+
+    public static boolean isHiddenInCommunity(int currentAccount, TLRPC.User user) {
+        return user != null && isHiddenInCommunity(currentAccount, user.linked_community_id, user.id);
+    }
+
+    public static boolean isHiddenInCommunity(int currentAccount, TLRPC.Chat chat) {
+        return chat != null && isHiddenInCommunity(currentAccount, chat.linked_community_id, -chat.id);
+    }
+
+    private static boolean isHiddenInCommunity(int currentAccount, long communityId, long dialogId) {
+        if (communityId == 0 || dialogId == 0) {
+            return false;
+        }
+
+        final TLRPC.ChatFull communityFull = MessagesController.getInstance(currentAccount).getChatFull(-dialogId);
+        if (communityFull == null || communityFull.linked_peers == null) {
+            return false;
+        }
+
+        for (TL_communities.CommunityPeer peer : communityFull.linked_peers) {
+            if (DialogObject.getPeerDialogId(peer.peer) == dialogId && isCommunityPeerHidden(peer)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean isCommunityPeerHidden(TL_communities.CommunityPeer communityPeer) {
+        return communityPeer != null && BitwiseUtils.hasFlag(communityPeer.flags, TLObject.FLAG_0) && !communityPeer.visible;
+    }
+
+
+    public static boolean isCollapsedInCommunity(int currentAccount, long dialogId) {
+        if (dialogId > 0) {
+            return isUserCollapsedInCommunity(currentAccount, MessagesController.getInstance(currentAccount).getUser(dialogId));
+        } else {
+            return isChatCollapsedInCommunity(currentAccount, MessagesController.getInstance(currentAccount).getChat(-dialogId));
+        }
+    }
+
+    public static boolean isChatCollapsedInCommunity(LongSparseArray<TLRPC.Chat> chats, TLRPC.Chat chat) {
+        if (chat == null || chat.linked_community_id == 0 || chats == null) {
+            return false;
+        }
+        final TLRPC.Chat community = chats.get(chat.linked_community_id);
+        return community != null && community.collapsed_in_dialogs;
+    }
+
+    public static boolean isChatCollapsedInCommunity(int currentAccount, TLRPC.Chat chat) {
+        if (chat == null || chat.linked_community_id == 0) {
+            return false;
+        }
+
+        final TLRPC.Chat community = MessagesController.getInstance(currentAccount).getChat(chat.linked_community_id);
+        return community != null && community.collapsed_in_dialogs;
+    }
+
+    public static boolean isUserCollapsedInCommunity(LongSparseArray<TLRPC.Chat> chats, TLRPC.User user) {
+        if (user == null || user.linked_community_id == 0 || chats == null) {
+            return false;
+        }
+        final TLRPC.Chat community = chats.get(user.linked_community_id);
+        return community != null && community.collapsed_in_dialogs;
+    }
+
+    public static boolean isUserCollapsedInCommunity(int currentAccount, TLRPC.User user) {
+        if (user == null || user.linked_community_id == 0) {
+            return false;
+        }
+
+        final TLRPC.Chat community = MessagesController.getInstance(currentAccount).getChat(user.linked_community_id);
+        return community != null && community.collapsed_in_dialogs;
+    }
+
+    public static boolean isCommunity(TLRPC.Chat chat) {
+        return chat instanceof TLRPC.TL_community || chat instanceof TLRPC.TL_communityForbidden;
+    }
+
+    public static boolean isCommunity(int currentAccount, long dialogId) {
+        return dialogId < 0 && isCommunity(MessagesController.getInstance(currentAccount).getChat(-dialogId));
+    }
+
     public static boolean isChannel(TLRPC.Chat chat) {
-        return chat instanceof TLRPC.TL_channel || chat instanceof TLRPC.TL_channelForbidden;
+        return chat instanceof TLRPC.TL_channel || chat instanceof TLRPC.TL_channelForbidden
+            || isCommunity(chat);
     }
 
     public static boolean isChannelOrGiga(TLRPC.Chat chat) {
-        return (chat instanceof TLRPC.TL_channel || chat instanceof TLRPC.TL_channelForbidden) && (!chat.megagroup || chat.gigagroup);
+        return isChannel(chat) && (!chat.megagroup || chat.gigagroup);
     }
 
     public static boolean isMegagroup(TLRPC.Chat chat) {
-        return (chat instanceof TLRPC.TL_channel || chat instanceof TLRPC.TL_channelForbidden) && chat.megagroup;
+        return isChannel(chat) && chat.megagroup;
     }
 
     public static boolean isChannelAndNotMegaGroup(TLRPC.Chat chat) {
@@ -2204,7 +2331,12 @@ public class ChatObject {
 
     public static boolean isChannel(long chatId, int currentAccount) {
         TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(chatId);
-        return chat instanceof TLRPC.TL_channel || chat instanceof TLRPC.TL_channelForbidden;
+        return isChannel(chat);
+    }
+
+    public static boolean isCommunity(long chatId, int currentAccount) {
+        TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(chatId);
+        return chat instanceof TLRPC.TL_community || chat instanceof TLRPC.TL_communityForbidden;
     }
 
     public static boolean isChannelAndNotMegaGroup(long chatId, int currentAccount) {
@@ -2245,6 +2377,7 @@ public class ChatObject {
         currentBannedRights += bannedRights.send_plain ? 1 : 0;
         currentBannedRights += bannedRights.edit_rank ? 1 : 0;
         currentBannedRights += bannedRights.send_reactions ? 1 : 0;
+        currentBannedRights += bannedRights.manage_linked_peers ? 1 : 0;
         currentBannedRights += bannedRights.until_date;
         return currentBannedRights;
     }

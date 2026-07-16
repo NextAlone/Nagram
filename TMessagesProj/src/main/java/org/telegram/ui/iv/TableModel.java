@@ -104,24 +104,6 @@ public class TableModel {
         rebuildAnchorList();
     }
 
-    public void writeBackToBlock() {
-        block.rows.clear();
-        for (int r = 0; r < rowCount; r++) {
-            TL_iv.pageTableRow row = new TL_iv.pageTableRow();
-            row.cells = new ArrayList<>();
-            int c = 0;
-            while (c < colCount) {
-                if (anchorR[r][c] == r && anchorC[r][c] == c) {
-                    row.cells.add(grid[r][c]);
-                    c += spanCol(grid[r][c]);
-                } else {
-                    c++;
-                }
-            }
-            block.rows.add(row);
-        }
-    }
-
     public boolean isAnchor(int r, int c) {
         return r >= 0 && c >= 0 && r < rowCount && c < colCount
             && anchorR[r][c] == r && anchorC[r][c] == c;
@@ -178,6 +160,41 @@ public class TableModel {
         if (header) cell.flags |= TLObject.FLAG_0; else cell.flags &= ~TLObject.FLAG_0;
     }
 
+    // Horizontal alignment: 0 = left, 1 = center, 2 = right.
+    public static final int ALIGN_LEFT = 0, ALIGN_CENTER = 1, ALIGN_RIGHT = 2;
+    // Vertical alignment: 0 = top, 1 = middle, 2 = bottom.
+    public static final int VALIGN_TOP = 0, VALIGN_MIDDLE = 1, VALIGN_BOTTOM = 2;
+
+    public static int alignOf(TL_iv.pageTableCell cell) {
+        if (cell == null) return ALIGN_LEFT;
+        if (cell.align_right) return ALIGN_RIGHT;
+        if (cell.align_center) return ALIGN_CENTER;
+        return ALIGN_LEFT;
+    }
+
+    public static int valignOf(TL_iv.pageTableCell cell) {
+        if (cell == null) return VALIGN_TOP;
+        if (cell.valign_bottom) return VALIGN_BOTTOM;
+        if (cell.valign_middle) return VALIGN_MIDDLE;
+        return VALIGN_TOP;
+    }
+
+    public static void setAlign(TL_iv.pageTableCell cell, int align) {
+        if (cell == null) return;
+        cell.align_center = align == ALIGN_CENTER;
+        cell.align_right = align == ALIGN_RIGHT;
+        if (cell.align_center) cell.flags |= TLObject.FLAG_3; else cell.flags &= ~TLObject.FLAG_3;
+        if (cell.align_right) cell.flags |= TLObject.FLAG_4; else cell.flags &= ~TLObject.FLAG_4;
+    }
+
+    public static void setVAlign(TL_iv.pageTableCell cell, int valign) {
+        if (cell == null) return;
+        cell.valign_middle = valign == VALIGN_MIDDLE;
+        cell.valign_bottom = valign == VALIGN_BOTTOM;
+        if (cell.valign_middle) cell.flags |= TLObject.FLAG_5; else cell.flags &= ~TLObject.FLAG_5;
+        if (cell.valign_bottom) cell.flags |= TLObject.FLAG_6; else cell.flags &= ~TLObject.FLAG_6;
+    }
+
     public void addRow() {
         TL_iv.pageTableRow row = new TL_iv.pageTableRow();
         row.cells = new ArrayList<>();
@@ -200,6 +217,60 @@ public class TableModel {
             }
         }
         rebuildFromBlock();
+    }
+
+    public boolean insertRowAt(int idx) {
+        if (rowCount == 0 || colCount == 0) { addRow(); return true; }
+        if (idx < 0) idx = 0;
+        if (idx > rowCount) idx = rowCount;
+        final int insertAt = idx;
+        IdentityHashMap<TL_iv.pageTableCell, int[]> meta = new IdentityHashMap<>();
+        boolean[] coveredCols = new boolean[colCount];
+        for (TL_iv.pageTableCell c : anchorsRowMajor) {
+            int oldR = anchorRowOf(c), oldC = anchorColOf(c);
+            int rs = spanRow(c), cs = spanCol(c);
+            int newR = oldR >= insertAt ? oldR + 1 : oldR;
+            int newRs = rs;
+            if (oldR < insertAt && oldR + rs > insertAt) {
+                newRs = rs + 1;
+                for (int cc = oldC; cc < oldC + cs && cc < colCount; cc++) coveredCols[cc] = true;
+            }
+            meta.put(c, new int[] { newR, oldC, newRs, cs });
+        }
+        for (int c = 0; c < colCount; c++) {
+            if (coveredCols[c]) continue;
+            meta.put(newEmptyCell(), new int[] { insertAt, c, 1, 1 });
+        }
+        rewriteBlockRows(meta, rowCount + 1);
+        rebuildFromBlock();
+        return true;
+    }
+
+    public boolean insertColumnAt(int idx) {
+        if (rowCount == 0 || colCount == 0) { addColumn(); return true; }
+        if (idx < 0) idx = 0;
+        if (idx > colCount) idx = colCount;
+        final int insertAt = idx;
+        IdentityHashMap<TL_iv.pageTableCell, int[]> meta = new IdentityHashMap<>();
+        boolean[] coveredRows = new boolean[rowCount];
+        for (TL_iv.pageTableCell c : anchorsRowMajor) {
+            int oldR = anchorRowOf(c), oldC = anchorColOf(c);
+            int rs = spanRow(c), cs = spanCol(c);
+            int newC = oldC >= insertAt ? oldC + 1 : oldC;
+            int newCs = cs;
+            if (oldC < insertAt && oldC + cs > insertAt) {
+                newCs = cs + 1;
+                for (int rr = oldR; rr < oldR + rs && rr < rowCount; rr++) coveredRows[rr] = true;
+            }
+            meta.put(c, new int[] { oldR, newC, rs, newCs });
+        }
+        for (int r = 0; r < rowCount; r++) {
+            if (coveredRows[r]) continue;
+            meta.put(newEmptyCell(), new int[] { r, insertAt, 1, 1 });
+        }
+        rewriteBlockRows(meta, rowCount);
+        rebuildFromBlock();
+        return true;
     }
 
     public boolean mergeCells(Set<TL_iv.pageTableCell> sel) {
@@ -413,15 +484,25 @@ public class TableModel {
 
     public static String readPlainText(TL_iv.pageTableCell cell) {
         if (cell == null || cell.text == null) return "";
-        if (cell.text instanceof TL_iv.textPlain) return ((TL_iv.textPlain) cell.text).text;
-        if (cell.text instanceof TL_iv.textEmpty) return "";
-        return "";
+        return RichTextStyle.plainOf(cell.text);
+    }
+
+    public static CharSequence readStyledText(TL_iv.pageTableCell cell) {
+        if (cell == null || cell.text == null) return "";
+        return RichTextStyle.toSpannable(cell.text);
     }
 
     public static void applyPlainText(TL_iv.pageTableCell cell, String text) {
         final TL_iv.textPlain plain = new TL_iv.textPlain();
         plain.text = text == null ? "" : text;
         cell.text = plain;
+        cell.flags |= TLObject.FLAG_7;
+        if (cell.colspan > 1) cell.flags |= TLObject.FLAG_1; else cell.flags &= ~TLObject.FLAG_1;
+        if (cell.rowspan > 1) cell.flags |= TLObject.FLAG_2; else cell.flags &= ~TLObject.FLAG_2;
+    }
+
+    public static void applyStyledText(TL_iv.pageTableCell cell, CharSequence styled) {
+        cell.text = RichTextStyle.fromSpannable(styled);
         cell.flags |= TLObject.FLAG_7;
         if (cell.colspan > 1) cell.flags |= TLObject.FLAG_1; else cell.flags &= ~TLObject.FLAG_1;
         if (cell.rowspan > 1) cell.flags |= TLObject.FLAG_2; else cell.flags &= ~TLObject.FLAG_2;

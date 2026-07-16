@@ -659,6 +659,10 @@ public class BotShareSheet extends BottomSheetWithRecyclerListView {
                 }
                 msg.flags |= 512;
                 msg.media = media;
+            } else if (message instanceof TLRPC.TL_botInlineMessageRichMessage) {
+                final TLRPC.TL_botInlineMessageRichMessage m = (TLRPC.TL_botInlineMessageRichMessage) message;
+                msg.flags2 |= TLObject.FLAG_13;
+                msg.rich_message = m.rich_message;
             }
         }
 

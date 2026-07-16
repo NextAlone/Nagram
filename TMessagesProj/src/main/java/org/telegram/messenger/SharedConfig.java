@@ -316,7 +316,6 @@ public class SharedConfig {
     public static boolean pauseMusicOnRecord = false;
     public static boolean pauseMusicOnMedia = false;
     public static boolean noiseSupression;
-    public static final boolean noStatusBar = true;
     public static boolean debugWebView;
     public static boolean sortContactsByName;
     public static boolean sortFilesByName;

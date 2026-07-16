@@ -6193,8 +6193,15 @@ public class NotificationsController extends BaseController implements Notificat
             topicPeer.top_msg_id = (int) topicId;
             req.peer = topicPeer;
         } else {
-            req.peer = new TLRPC.TL_inputNotifyPeer();
-            ((TLRPC.TL_inputNotifyPeer) req.peer).peer = getMessagesController().getInputPeer(dialogId);
+            if (ChatObject.isCommunity(currentAccount, dialogId)) {
+                TLRPC.TL_inputNotifyCommunity inputNotifyCommunity = new TLRPC.TL_inputNotifyCommunity();
+                inputNotifyCommunity.community = getMessagesController().getInputChannel(-dialogId);
+                req.peer = inputNotifyCommunity;
+            } else {
+                TLRPC.TL_inputNotifyPeer inputNotifyPeer = new TLRPC.TL_inputNotifyPeer();
+                inputNotifyPeer.peer = getMessagesController().getInputPeer(dialogId);
+                req.peer = inputNotifyPeer;
+            }
         }
 
         getConnectionsManager().sendRequest(req, (response, error) -> {

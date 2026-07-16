@@ -31,6 +31,7 @@ public sealed class TlGen_ChatBannedRights : TlGen_Object {
     public val send_plain: Boolean,
     public val edit_rank: Boolean,
     public val send_reactions: Boolean,
+    public val manage_linked_peers: Boolean,
     public val until_date: Int,
   ) : TlGen_ChatBannedRights() {
     internal val flags: UInt
@@ -58,6 +59,7 @@ public sealed class TlGen_ChatBannedRights : TlGen_Object {
         if (send_plain) result = result or 33554432U
         if (edit_rank) result = result or 67108864U
         if (send_reactions) result = result or 134217728U
+        if (manage_linked_peers) result = result or 268435456U
         return result
       }
 

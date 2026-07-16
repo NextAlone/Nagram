@@ -124,6 +124,12 @@ public final class FloatingToolbar {
         premiumLockClickListener = listener;
     }
 
+    public interface StyleDelegate {
+        int getCurrentStyle(int start, int end);
+        void addStyle(int flag, int start, int end);
+        void removeStyle(int flag, int start, int end);
+    }
+
     private Utilities.Callback0Return<Boolean> quoteShowCallback;
     public void setQuoteShowVisible(Utilities.Callback0Return<Boolean> callback) {
         quoteShowCallback = callback;

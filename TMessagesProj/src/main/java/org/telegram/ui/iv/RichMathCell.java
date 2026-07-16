@@ -6,17 +6,19 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.text.Layout;
-import android.text.StaticLayout;
-import android.text.TextPaint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.tl.TL_iv;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.TextSelectionHelper;
@@ -30,49 +32,41 @@ import java.util.ArrayList;
 
 import ru.noties.jlatexmath.JLatexMathDrawable;
 
-public class RichMathCell extends FrameLayout
+public class RichMathCell extends RichBlockCell
     implements Theme.Colorable, TextSelectionHelper.ArticleSelectableView {
 
     public interface Delegate {
-        void onEditMath(BlockRow row);
         TextSelectionHelper.ArticleTextSelectionHelper getSelectionHelper();
     }
 
-    private static final int PLACEHOLDER_HEIGHT_DP = 64;
-
     private final Theme.ResourcesProvider resourcesProvider;
-    private final Paint mathPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint backgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint selectionPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final TextPaint stubPaint = new TextPaint();
-    private final TextPaint placeholderPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-    private final View clickView;
+    private final HorizontalScrollView scrollView;
+    private final ImageView image;
 
-    private Layout stubLayout;
     private Bitmap bitmap;
     private int paintColor = 0;
 
-    private BlockRow currentRow;
     private Delegate delegate;
 
     public RichMathCell(Context context, Theme.ResourcesProvider resourcesProvider) {
         super(context);
         this.resourcesProvider = resourcesProvider;
         setWillNotDraw(false);
+        setBlockPadding(0, dp(6), 0, dp(6));
 
-        stubPaint.setTextSize(1);
-        placeholderPaint.setTextSize(dp(15));
-        placeholderPaint.setTextAlign(Paint.Align.CENTER);
+        image = new ImageView(context);
 
-        setPadding(0, dp(6), 0, dp(6));
+        final FrameLayout mathContainer = new FrameLayout(context);
+        mathContainer.addView(image, new FrameLayout.LayoutParams(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER));
 
-        clickView = new View(context);
-        clickView.setOnClickListener(v -> {
-            if (currentRow != null && delegate != null) {
-                delegate.onEditMath(currentRow);
-            }
-        });
-        addView(clickView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.FILL));
+        scrollView = new HorizontalScrollView(context);
+        scrollView.setHorizontalScrollBarEnabled(false);
+        scrollView.setClipToPadding(false);
+        scrollView.setPadding(dp(16), 0, dp(16), 0);
+        scrollView.setFillViewport(true);
+        scrollView.addView(mathContainer, new FrameLayout.LayoutParams(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT));
+        addView(scrollView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL));
 
         updateColors();
     }
@@ -80,6 +74,7 @@ public class RichMathCell extends FrameLayout
     public void bind(BlockRow row, Delegate delegate) {
         this.currentRow = row;
         this.delegate = delegate;
+        bindBlockInset(row);
         rebuild();
     }
 
@@ -96,12 +91,13 @@ public class RichMathCell extends FrameLayout
 
     public void rebuild() {
         bitmap = null;
+        scrollView.scrollTo(0, 0);
         final String source = getSource();
         if (!TextUtils.isEmpty(source)) {
             try {
                 final JLatexMathDrawable drawable =
                     JLatexMathDrawable.builder(source)
-                        .textSize(dp(20))
+                        .textSize(dp(4 + SharedConfig.fontSize))
                         .build();
                 final int w = drawable.getIntrinsicWidth();
                 final int h = drawable.getIntrinsicHeight();
@@ -115,54 +111,58 @@ public class RichMathCell extends FrameLayout
                 FileLog.e(e);
             }
         }
-        requestLayout();
+        image.setImageBitmap(bitmap);
         invalidate();
     }
 
     @Override
     public void updateColors() {
-        backgroundPaint.setColor(Theme.getColor(Theme.key_chat_inFileBackground, resourcesProvider));
         selectionPaint.setColor(Theme.getColor(Theme.key_chat_inTextSelectionHighlight, resourcesProvider));
-        placeholderPaint.setColor(Theme.multAlpha(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider), 0.5f));
-        paintColor = 0;
+        paintColor = Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider);
+        image.setColorFilter(new PorterDuffColorFilter(paintColor, PorterDuff.Mode.SRC_IN));
         invalidate();
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int w = MeasureSpec.getSize(widthMeasureSpec);
-        int h;
-        if (bitmap != null) {
-            h = bitmap.getHeight() + getPaddingTop() + getPaddingBottom();
-        } else {
-            h = dp(PLACEHOLDER_HEIGHT_DP) + getPaddingTop() + getPaddingBottom();
-        }
-        super.onMeasure(
-            MeasureSpec.makeMeasureSpec(w, MeasureSpec.EXACTLY),
-            MeasureSpec.makeMeasureSpec(h, MeasureSpec.EXACTLY)
-        );
+    private boolean isScrollable() {
+        return bitmap != null && image.getWidth() > scrollView.getWidth();
     }
+
+    private void selectionRect(int[] out) {
+        final int top = getPaddingTop();
+        final int bottom = getHeight() - getPaddingBottom();
+        if (isScrollable()) {
+            out[0] = getPaddingLeft();
+            out[1] = top;
+            out[2] = getWidth() - getPaddingRight();
+            out[3] = bottom;
+        } else {
+            final int bw = bitmap != null ? bitmap.getWidth() : Math.max(1, getWidth() / 2);
+            final int left = (getWidth() - bw) / 2;
+            out[0] = left - dp(4);
+            out[1] = top;
+            out[2] = left + bw + dp(4);
+            out[3] = bottom;
+        }
+    }
+
+    private final int[] rect = new int[4];
 
     @Override
     protected void onDraw(Canvas canvas) {
-        final int contentTop = getPaddingTop();
-        final int contentBottom = getMeasuredHeight() - getPaddingBottom();
-
-        if (bitmap != null) {
-            if (paintColor != Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider)) {
-                mathPaint.setColor(paintColor = Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider));
-            }
-            canvas.drawBitmap(bitmap, (getMeasuredWidth() - bitmap.getWidth()) / 2f, contentTop, mathPaint);
-        } else {
-            canvas.drawRect(dp(16), contentTop, getMeasuredWidth() - dp(16), contentBottom, backgroundPaint);
-            final String hint = "Tap to add an equation";
-            final float ty = contentTop + (contentBottom - contentTop) / 2f - (placeholderPaint.descent() + placeholderPaint.ascent()) / 2f;
-            canvas.drawText(hint, getMeasuredWidth() / 2f, ty, placeholderPaint);
+        if (paintColor != Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider)) {
+            updateColors();
         }
-
-        if (isCellSelected()) {
-            canvas.drawRect(dp(16), contentTop, getMeasuredWidth() - dp(16), contentBottom, selectionPaint);
+        if (bitmap != null && isCellSelected()) {
+            selectionRect(rect);
+            canvas.drawRoundRect(rect[0], rect[1], rect[2], rect[3], dp(4), dp(4), selectionPaint);
         }
+    }
+
+    public boolean isPressOnMath(int localX, int localY) {
+        if (bitmap == null) return false;
+        final int[] r = new int[4];
+        selectionRect(r);
+        return localX >= r[0] && localX <= r[2] && localY >= r[1] && localY <= r[3];
     }
 
     private boolean isCellSelected() {
@@ -177,23 +177,13 @@ public class RichMathCell extends FrameLayout
 
     @Override
     public void fillTextLayoutBlocks(ArrayList<TextSelectionHelper.TextLayoutBlock> out) {
-        if (stubLayout == null) {
-            int w = Math.max(1, getMeasuredWidth());
-            stubLayout = new StaticLayout("•", stubPaint, w, Layout.Alignment.ALIGN_NORMAL, 1f, 0f, false);
-        }
-        final Layout layout = stubLayout;
-        out.add(new TextSelectionHelper.TextLayoutBlock() {
-            @Override public Layout getLayout() { return layout; }
-            @Override public int getX() { return 0; }
-            @Override public int getY() { return 0; }
-            @Override public int getRow() { return 0; }
-        });
+        selectionRect(rect);
+        out.add(RichBlockSelection.of(rect[0], rect[1], rect[2], rect[3]));
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        stubLayout = null;
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), heightMeasureSpec);
     }
 
     public static final class Factory extends UItem.UItemFactory<RichMathCell> {

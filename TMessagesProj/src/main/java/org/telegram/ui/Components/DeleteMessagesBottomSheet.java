@@ -35,12 +35,16 @@ import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.tl.TL_communities;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.CollapseTextCell;
 import org.telegram.ui.Cells.HeaderCell;
+import org.telegram.ui.Cells.TextCheckCell2;
+import org.telegram.ui.ChatActivity;
+import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.Stories.recorder.ButtonWithCounterView;
 
 import java.util.ArrayList;
@@ -54,6 +58,7 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
     private ButtonWithCounterView actionButton;
 
     private TLRPC.Chat inChat;
+    private TLRPC.Chat inCommunity;
     private boolean isForum;
     private ArrayList<MessageObject> messages;
     private long mergeDialogId;
@@ -79,6 +84,10 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
     private boolean[] banFilter;
     private boolean[] restrictFilter;
     private boolean canRestrict;
+
+    private boolean banFromCommunity;
+    private long banFromCommunityDialogId;
+    private TL_communities.ParticipantJoinedChats banFromCommunityChats;
 
     private int[] participantMessageCounts;
     private boolean participantMessageCountsLoading = false;
@@ -115,6 +124,8 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
     private static final int OPTION_DELETE = 100;
     private static final int OPTION_DELETE_MESSAGES = 101;
     private static final int OPTION_DELETE_REACTIONS = 102;
+    private static final int OPTION_BAN_FROM_COMMUNITY = 103;
+    private static final int OPTION_BAN_FROM_COMMUNITY_INFO = 104;
 
     private static final int RIGHT_DURATION = 50;
     private static final int RIGHT_SEND_GIFS = 51;
@@ -437,6 +448,20 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
         applyInCommonGroup = new Action(ACTION_APPLY_IN_COMMON_GROUP, actionParticipants);
 
         monoforum = ChatObject.isMonoForum(inChat);
+
+        if (inChat.linked_community_id != 0) {
+            inCommunity = MessagesController.getInstance(currentAccount).getChat(inChat.linked_community_id);
+        }
+        if (ChatObject.canUserDoAdminAction(inCommunity, ChatObject.ACTION_BLOCK_USERS) && ChatObject.canUserDoAdminAction(inCommunity, ChatObject.ACTION_MANAGE_LINKED_CHATS) && isSingleUsersMode) {
+            banFromCommunityDialogId = DialogObject.getDialogId(actionParticipants.get(0));
+            MessagesController.getInstance(currentAccount).fetchCommunityJoinedChats(inCommunity.id, banFromCommunityDialogId, (res, err) -> {
+                if (res != null) {
+                    banFromCommunityChats = res;
+                    adapter.update(true);
+                }
+            });
+        }
+
         if (ChatObject.canBlockUsers(inChat)) {
             banFilter = new boolean[actionParticipants.size()];
             for (int i = 0; i < actionParticipants.size(); i++) {
@@ -799,6 +824,7 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
         fillAction(items, applyInCommonGroup);
         fillAction(items, banOrRestrict);
 
+        boolean needGap = true;
         if (!monoforum && banOrRestrict.isPresent()) {
             if (restrict) {
                 items.add(UItem.asShadow(null));
@@ -933,7 +959,25 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
                 items.add(UItem.asShadowCollapseButton(1, getString(getRestrictToggleTextKey()))
                         .setCollapsed(!restrict)
                         .accent());
+                needGap = false;
             }
+        }
+
+        if (banFromCommunityDialogId != 0) {
+            if (needGap) {
+                items.add(UItem.asSpace(dp(12)));
+            }
+            items.add(UItem.asSwitchNoIcon(OPTION_BAN_FROM_COMMUNITY, getString(R.string.CommunityBanFromCommunity)).setChecked(banFromCommunity));
+            items.add(UItem.asShadow(OPTION_BAN_FROM_COMMUNITY_INFO, AndroidUtilities.replaceArrows(AndroidUtilities.replaceSingleTag(formatPluralString("CommunityBanFromCommunityInfo",
+                    banFromCommunityChats != null ? banFromCommunityChats.joined_chat_ids.size() : 1), () -> {
+                AlertsCreator.showBanGroupCreatorFromCommunityJoinedChatsAlert(getContext(), resourcesProvider, currentAccount, banFromCommunityDialogId, banFromCommunityChats.joined_chat_ids, (dialogId) -> {
+                    final BaseFragment fragment = LaunchActivity.getLastFragment();
+                    if (fragment != null) {
+                        fragment.presentFragment(ChatActivity.of(dialogId));
+                    }
+                    dismiss();
+                });
+            }), true)));
         }
     }
 
@@ -978,7 +1022,10 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
 
     private float shiftDp = 10.0f;
     private void onClick(UItem item, View view, int position, float x, float y) {
-        if (item.viewType == VIEW_TYPE_USER_CHECKBOX) {
+        if (item.id == OPTION_BAN_FROM_COMMUNITY) {
+            banFromCommunity = !banFromCommunity;
+            ((TextCheckCell2) view).setChecked(banFromCommunity);
+        } else if (item.viewType == VIEW_TYPE_USER_CHECKBOX) {
             int action = item.id >>> 24;
             int index = item.id & 0xffffff;
 
@@ -1216,6 +1263,12 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
     }
 
     private void performDelete() {
+        if (banFromCommunityDialogId != 0 && banFromCommunity) {
+            MessagesController.getInstance(currentAccount).toggleCommunityParticipantBanned(inCommunity.id, banFromCommunityDialogId, true, (res, err) -> {
+
+            });
+        }
+
         ArrayList<Integer> supergroupMessageIds = messages.stream()
                 .filter(msg -> msg.messageOwner.peer_id != null && msg.messageOwner.peer_id.chat_id != -mergeDialogId || mergeDialogId == 0)
                 .map(MessageObject::getId)
@@ -1402,6 +1455,23 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
     }
 
     private void proceed() {
+        proceed(true);
+    }
+
+    private void proceed(boolean ask) {
+        if (ask && banFromCommunity && banFromCommunityChats != null && !banFromCommunityChats.creator_chat_ids.isEmpty()) {
+            AlertsCreator.showBanGroupCreatorFromCommunityConfirmAlert(getContext(), resourcesProvider, currentAccount, banFromCommunityDialogId, banFromCommunityChats.creator_chat_ids, (dialogId) -> {
+                final BaseFragment fragment = LaunchActivity.getLastFragment();
+                if (fragment != null) {
+                    fragment.presentFragment(ChatActivity.of(dialogId));
+                }
+                dismiss();
+            }, () -> {
+                proceed(false);
+            });
+            return;
+        }
+
         dismiss();
         if (onDelete != null) {
             onDelete.run();

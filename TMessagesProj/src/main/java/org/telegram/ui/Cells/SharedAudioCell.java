@@ -11,6 +11,7 @@ import android.text.Layout;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -618,6 +619,31 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
             info.setCheckable(true);
             info.setChecked(true);
         }
+        CharSequence actionLabel;
+        switch (getIconForCurrentState()) {
+            case MediaActionDrawable.ICON_PAUSE:
+                actionLabel = LocaleController.getString("AccActionPause", R.string.AccActionPause);
+                break;
+            case MediaActionDrawable.ICON_DOWNLOAD:
+                actionLabel = LocaleController.getString("AccActionDownload", R.string.AccActionDownload);
+                break;
+            case MediaActionDrawable.ICON_CANCEL:
+                actionLabel = LocaleController.getString("AccActionCancelDownload", R.string.AccActionCancelDownload);
+                break;
+            default:
+                actionLabel = LocaleController.getString("AccActionPlay", R.string.AccActionPlay);
+                break;
+        }
+        info.addAction(new AccessibilityNodeInfo.AccessibilityAction(AccessibilityNodeInfo.ACTION_CLICK, actionLabel));
+    }
+
+    @Override
+    public boolean performAccessibilityAction(int action, Bundle arguments) {
+        if (action == AccessibilityNodeInfo.ACTION_CLICK) {
+            didPressedButton();
+            return true;
+        }
+        return super.performAccessibilityAction(action, arguments);
     }
 
     @Override

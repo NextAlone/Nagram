@@ -224,7 +224,7 @@ public class ReplyMessageLine {
 
     public int check(MessageObject messageObject, TLRPC.User currentUser, TLRPC.Chat currentChat, Theme.ResourcesProvider resourcesProvider, final int type) {
         final boolean dark = resourcesProvider != null ? resourcesProvider.isDark() : Theme.isCurrentThemeDark();
-        if (!(messageObject.isOutOwner() || type == TYPE_CODE) && messageObject.overrideLinkPeerColor != null) {
+        if (messageObject != null && !(messageObject.isOutOwner() || type == TYPE_CODE) && messageObject.overrideLinkPeerColor != null) {
             return resolveCollectionColor(messageObject, messageObject.overrideLinkPeerColor, resourcesProvider);
         }
 

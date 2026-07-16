@@ -2,6 +2,7 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
@@ -35,6 +36,7 @@ public class ProxyDrawable extends Drawable {
         emptyDrawable = context.getResources().getDrawable(R.drawable.outline_shield_plain_24).mutate();
         fullDrawable = context.getResources().getDrawable(R.drawable.outline_shield_check).mutate();
 
+        outerPaint.setColor(Color.WHITE);
         outerPaint.setStyle(Paint.Style.STROKE);
         outerPaint.setStrokeWidth(AndroidUtilities.dp(1.66f));
         outerPaint.setStrokeCap(Paint.Cap.ROUND);

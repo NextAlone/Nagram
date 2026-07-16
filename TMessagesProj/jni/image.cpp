@@ -9,6 +9,8 @@
 #include <unistd.h>
 #include <android/bitmap.h>
 #include <string>
+#include <limits.h>
+#include "libyuv/scale_argb.h"
 //#include <mozjpeg/java/org_libjpegturbo_turbojpeg_TJ.h>
 //#include <mozjpeg/jpeglib.h>
 #include <tgnet/FileLog.h>
@@ -1650,6 +1652,207 @@ Java_org_telegram_messenger_Utilities_applySoftLight(
     AndroidBitmap_unlockPixels(env, outputBitmap);
     AndroidBitmap_unlockPixels(env, inputBitmap);
     return JNI_TRUE;
+}
+
+extern "C"
+JNIEXPORT jboolean JNICALL
+Java_org_telegram_messenger_Utilities_nLibyuvARGBSaleBitmap(
+        JNIEnv* env,
+        jclass,
+        jobject inputBitmap,
+        jobject outputBitmap,
+        jint filterMode
+) {
+    if (__builtin_expect(inputBitmap == nullptr || outputBitmap == nullptr, 0)) {
+        return JNI_FALSE;
+    }
+
+    AndroidBitmapInfo inInfo{};
+    AndroidBitmapInfo outInfo{};
+
+    if (__builtin_expect(
+            AndroidBitmap_getInfo(env, inputBitmap, &inInfo) != ANDROID_BITMAP_RESULT_SUCCESS ||
+            AndroidBitmap_getInfo(env, outputBitmap, &outInfo) != ANDROID_BITMAP_RESULT_SUCCESS,
+            0)) {
+        return JNI_FALSE;
+    }
+
+    if (__builtin_expect(
+            inInfo.width == 0 || inInfo.height == 0 ||
+            outInfo.width == 0 || outInfo.height == 0,
+            0)) {
+        return JNI_FALSE;
+    }
+
+    if (__builtin_expect(
+            inInfo.format != ANDROID_BITMAP_FORMAT_RGBA_8888 ||
+            outInfo.format != ANDROID_BITMAP_FORMAT_RGBA_8888,
+            0)) {
+        return JNI_FALSE;
+    }
+
+    if (__builtin_expect(
+            inInfo.width > INT_MAX / 4 ||
+            outInfo.width > INT_MAX / 4 ||
+            inInfo.height > INT_MAX ||
+            outInfo.height > INT_MAX ||
+            inInfo.stride > INT_MAX ||
+            outInfo.stride > INT_MAX,
+            0)) {
+        return JNI_FALSE;
+    }
+
+    if (__builtin_expect(
+            inInfo.stride < inInfo.width * 4 ||
+            outInfo.stride < outInfo.width * 4,
+            0)) {
+        return JNI_FALSE;
+    }
+
+    libyuv::FilterMode mode;
+
+    switch (filterMode) {
+        case 0: mode = libyuv::kFilterNone; break;
+        case 1: mode = libyuv::kFilterLinear; break;
+        case 2: mode = libyuv::kFilterBilinear; break;
+        case 3: mode = libyuv::kFilterBox; break;
+        default: return JNI_FALSE;
+    }
+
+    void* inPixels = nullptr;
+    void* outPixels = nullptr;
+
+    if (__builtin_expect(
+            AndroidBitmap_lockPixels(env, inputBitmap, &inPixels) != ANDROID_BITMAP_RESULT_SUCCESS ||
+            inPixels == nullptr,
+            0)) {
+        return JNI_FALSE;
+    }
+
+    if (__builtin_expect(
+            AndroidBitmap_lockPixels(env, outputBitmap, &outPixels) != ANDROID_BITMAP_RESULT_SUCCESS ||
+            outPixels == nullptr,
+            0)) {
+        AndroidBitmap_unlockPixels(env, inputBitmap);
+        return JNI_FALSE;
+    }
+
+    const int scaleResult = libyuv::ARGBScale(
+        static_cast<const uint8_t*>(inPixels),
+        static_cast<int>(inInfo.stride),
+        static_cast<int>(inInfo.width),
+        static_cast<int>(inInfo.height),
+        static_cast<uint8_t*>(outPixels),
+        static_cast<int>(outInfo.stride),
+        static_cast<int>(outInfo.width),
+        static_cast<int>(outInfo.height),
+        mode
+    );
+
+    AndroidBitmap_unlockPixels(env, outputBitmap);
+    AndroidBitmap_unlockPixels(env, inputBitmap);
+
+    return __builtin_expect(scaleResult == 0, 1) ? JNI_TRUE : JNI_FALSE;
+}
+
+
+extern "C"
+JNIEXPORT jint JNICALL
+Java_org_telegram_messenger_Utilities_averageBitmapColor(
+        JNIEnv* env,
+        jclass,
+        jobject bitmap,
+        jint left,
+        jint top,
+        jint right,
+        jint bottom
+) {
+    if (__builtin_expect(bitmap == nullptr, 0)) {
+        return 0;
+    }
+
+    if (__builtin_expect(left < 0 || top < 0 || right <= left || bottom <= top, 0)) {
+        return 0;
+    }
+
+    AndroidBitmapInfo info{};
+
+    if (__builtin_expect(
+            AndroidBitmap_getInfo(env, bitmap, &info) != ANDROID_BITMAP_RESULT_SUCCESS,
+            0)) {
+        return 0;
+    }
+
+    if (__builtin_expect(
+            info.width == 0 || info.height == 0 ||
+            info.format != ANDROID_BITMAP_FORMAT_RGBA_8888,
+            0)) {
+        return 0;
+    }
+
+    if (__builtin_expect(
+            info.width > INT_MAX / 4 ||
+            info.height > INT_MAX ||
+            info.stride > INT_MAX,
+            0)) {
+        return 0;
+    }
+
+    if (__builtin_expect(info.stride < info.width * 4, 0)) {
+        return 0;
+    }
+
+    if (__builtin_expect(
+            right > static_cast<jint>(info.width) ||
+            bottom > static_cast<jint>(info.height),
+            0)) {
+        return 0;
+    }
+
+    void* pixels = nullptr;
+
+    if (__builtin_expect(
+            AndroidBitmap_lockPixels(env, bitmap, &pixels) != ANDROID_BITMAP_RESULT_SUCCESS ||
+            pixels == nullptr,
+            0)) {
+        return 0;
+    }
+
+    uint64_t sumR = 0;
+    uint64_t sumG = 0;
+    uint64_t sumB = 0;
+    uint64_t sumA = 0;
+
+    const uint8_t* base = static_cast<const uint8_t*>(pixels);
+    const int stride = static_cast<int>(info.stride);
+
+    for (int y = top; y < bottom; y++) {
+        const uint8_t* row = base + static_cast<size_t>(y) * stride + static_cast<size_t>(left) * 4;
+
+        for (int x = left; x < right; x++) {
+            sumR += row[0];
+            sumG += row[1];
+            sumB += row[2];
+            sumA += row[3];
+            row += 4;
+        }
+    }
+
+    AndroidBitmap_unlockPixels(env, bitmap);
+
+    const uint64_t count = static_cast<uint64_t>(right - left) * static_cast<uint64_t>(bottom - top);
+
+    const uint32_t avgR = static_cast<uint32_t>(sumR / count);
+    const uint32_t avgG = static_cast<uint32_t>(sumG / count);
+    const uint32_t avgB = static_cast<uint32_t>(sumB / count);
+    const uint32_t avgA = static_cast<uint32_t>(sumA / count);
+
+    return static_cast<jint>(
+            (avgA << 24) |
+            (avgR << 16) |
+            (avgG << 8) |
+            avgB
+    );
 }
 
 }

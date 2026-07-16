@@ -126,6 +126,7 @@ import org.telegram.messenger.CodeHighlighting;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.FileStreamLoadOperation;
 import org.telegram.messenger.ImageLoader;
@@ -6183,7 +6184,7 @@ public class ArticleViewer extends IArticleViewer implements NotificationCenter.
                 AndroidUtilities.runOnUIThread(() -> {
                     MessagesController.getInstance(currentAccount).putUsers(resultWebView.users, false);
                     BotGuardHelper.getInstance(currentAccount).openGuardBotWebApp(-channel.id,
-                        resultWebView.bot_id, resultWebView.webview);
+                        resultWebView.bot_id, resultWebView.query_id);
                 });
                 hasJoinMessage = true; // do not generate join message
             }
@@ -6353,6 +6354,16 @@ public class ArticleViewer extends IArticleViewer implements NotificationCenter.
         public static boolean isVideo(TL_iv.RichMessage richMessage, TL_iv.PageBlock block) {
             if (block instanceof TL_iv.pageBlockVideo) {
                 TLRPC.Document document = getDocumentWithId(richMessage, ((TL_iv.pageBlockVideo) block).video_id);
+                if (BuildVars.LOGS_ENABLED) {
+                    StringBuilder attrs = new StringBuilder();
+                    if (document != null) {
+                        for (TLRPC.DocumentAttribute a : document.attributes) attrs.append(a.getClass().getSimpleName()).append(",");
+                    }
+                    FileLog.d("[richmedia] WebPageUtils.isVideo video_id=" + ((TL_iv.pageBlockVideo) block).video_id
+                        + (document == null
+                            ? " doc=NOT_FOUND documents.size=" + richMessage.documents.size()
+                            : " doc=" + document.id + " mime=" + document.mime_type + " attrs=[" + attrs + "] isVideoDocument=" + MessageObject.isVideoDocument(document) + " isGifDocument=" + MessageObject.isGifDocument(document)));
+                }
                 if (document != null) {
                     return MessageObject.isVideoDocument(document);
                 }
@@ -6408,16 +6419,29 @@ public class ArticleViewer extends IArticleViewer implements NotificationCenter.
                 if (photo != null) {
                     TLRPC.PhotoSize sizeFull = FileLoader.getClosestPhotoSizeWithSize(photo.sizes, AndroidUtilities.getPhotoSize(photoHighQuality));
                     if (sizeFull != null) {
-                        return FileLoader.getInstance(UserConfig.selectedAccount).getPathToAttach(sizeFull, true);
+                        return getExistingPathToAttach(sizeFull);
                     }
                 }
             } else if (block instanceof TL_iv.pageBlockVideo) {
                 TLRPC.Document document = getDocumentWithId(page, ((TL_iv.pageBlockVideo) block).video_id);
                 if (document != null) {
-                    return FileLoader.getInstance(UserConfig.selectedAccount).getPathToAttach(document, true);
+                    return getExistingPathToAttach(document);
                 }
             }
             return null;
+        }
+
+        private static File getExistingPathToAttach(TLObject attach) {
+            final FileLoader fileLoader = FileLoader.getInstance(UserConfig.selectedAccount);
+            final File nonCache = fileLoader.getPathToAttach(attach, false);
+            if (nonCache != null && nonCache.exists()) {
+                return nonCache;
+            }
+            final File cache = fileLoader.getPathToAttach(attach, true);
+            if (cache != null && cache.exists()) {
+                return cache;
+            }
+            return nonCache != null ? nonCache : cache;
         }
 
         public static File getMediaFile(TL_iv.RichMessage page, TL_iv.PageBlock block) {
@@ -6426,13 +6450,13 @@ public class ArticleViewer extends IArticleViewer implements NotificationCenter.
                 if (photo != null) {
                     TLRPC.PhotoSize sizeFull = FileLoader.getClosestPhotoSizeWithSize(photo.sizes, AndroidUtilities.getPhotoSize());
                     if (sizeFull != null) {
-                        return FileLoader.getInstance(UserConfig.selectedAccount).getPathToAttach(sizeFull, true);
+                        return getExistingPathToAttach(sizeFull);
                     }
                 }
             } else if (block instanceof TL_iv.pageBlockVideo) {
                 TLRPC.Document document = getDocumentWithId(page, ((TL_iv.pageBlockVideo) block).video_id);
                 if (document != null) {
-                    return FileLoader.getInstance(UserConfig.selectedAccount).getPathToAttach(document, true);
+                    return getExistingPathToAttach(document);
                 }
             }
             return null;

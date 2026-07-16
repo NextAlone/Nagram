@@ -76,14 +76,8 @@ public class DialogsHintCell extends FrameLayout {
         messageView.setMaxLines(5);
         contentView.addView(messageView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 0, Gravity.TOP));
 
-        NotificationCenter.getGlobalInstance().listenGlobal(this, NotificationCenter.emojiLoaded, args -> {
-            if (titleView != null) {
-                titleView.invalidate();
-            }
-            if (messageView != null) {
-                messageView.invalidate();
-            }
-        });
+        NotificationCenter.listenEmojiLoading(titleView);
+        NotificationCenter.listenEmojiLoading(messageView);
 
         parentView = new LinearLayout(context);
         parentView.setOrientation(LinearLayout.HORIZONTAL);

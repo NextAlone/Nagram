@@ -975,7 +975,7 @@ public class TL_stories {
         }
     }
 
-    public static class TL_stories_report extends TLObject {
+    public static class TL_stories_report extends TLMethod<TLRPC.ReportResult> {
         public static final int constructor = 0x19d8eb45;
 
         public TLRPC.InputPeer peer;
@@ -983,7 +983,7 @@ public class TL_stories {
         public byte[] option;
         public String message;
 
-        public TLObject deserializeResponse(InputSerializedData stream, int constructor, boolean exception) {
+        public TLRPC.ReportResult deserializeResponseT(InputSerializedData stream, int constructor, boolean exception) {
             return TLRPC.ReportResult.TLdeserialize(stream, constructor, exception);
         }
 

@@ -2919,6 +2919,12 @@ public class EmojiView extends FrameLayout implements
         }
     }
 
+    public void hideBottomTabContainerBackground() {
+        if (bottomTabContainerBackground != null) {
+            bottomTabContainerBackground.setVisibility(View.GONE);
+        }
+    }
+
     public void setBlurredBackgroundDrawableFactory(BlurredBackgroundDrawableViewFactory factory) {
         if (backspaceButton != null) {
             backspaceButton.setBackground(factory.create(backspaceButton)

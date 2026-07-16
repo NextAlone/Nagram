@@ -9,6 +9,10 @@ import org.telegram.tgnet.Vector;
 import java.util.ArrayList;
 
 public class TL_update {
+    private TL_update() {
+
+    }
+
     public static class TL_updateStarsRevenueStatus extends TLRPC.Update {
         public static final int constructor = 0xa584b019;
 
@@ -2648,12 +2652,12 @@ public class TL_update {
 
         public TLRPC.Peer peer;
         public long bot_id;
-        public ArrayList<TLRPC.TL_botCommand> commands = new ArrayList<>();
+        public ArrayList<TLRPC.BotCommand> commands = new ArrayList<>();
 
         public void readParams(InputSerializedData stream, boolean exception) {
             peer = TLRPC.Peer.TLdeserialize(stream, stream.readInt32(exception), exception);
             bot_id = stream.readInt64(exception);
-            commands = Vector.deserialize(stream, TLRPC.TL_botCommand::TLdeserialize, exception);
+            commands = Vector.deserialize(stream, TLRPC.BotCommand::TLdeserialize, exception);
         }
 
         public void serializeToStream(OutputSerializedData stream) {
@@ -2879,6 +2883,54 @@ public class TL_update {
                 stream.writeBool(open_external_browser);
             }
             exception.serializeToStream(stream);
+        }
+    }
+
+    public static class TL_updateNewEphemeralMessage extends TLRPC.Update {
+        public static final int constructor = 0x20BCBBA1;
+
+        public TLRPC.EphemeralMessage message;
+
+        public void readParams(InputSerializedData stream, boolean exception) {
+            message = TLRPC.EphemeralMessage.TLdeserialize(stream, stream.readInt32(exception), exception);
+        }
+
+        public void serializeToStream(OutputSerializedData stream) {
+            stream.writeInt32(constructor);
+            message.serializeToStream(stream);
+        }
+    }
+
+    public static class TL_updateDeleteEphemeralMessages extends TLRPC.Update {
+        public static final int constructor = 0x56DBFCF8;
+
+        public TLRPC.Peer peer;
+        public ArrayList<Integer> ids = new ArrayList<>();
+
+        public void readParams(InputSerializedData stream, boolean exception) {
+            peer = TLRPC.Peer.TLdeserialize(stream, stream.readInt32(exception), exception);
+            ids = Vector.deserializeInt(stream, exception);
+        }
+
+        public void serializeToStream(OutputSerializedData stream) {
+            stream.writeInt32(constructor);
+            peer.serializeToStream(stream);
+            Vector.serializeInt(stream, ids);
+        }
+    }
+
+    public static class TL_updateEditEphemeralMessage extends TLRPC.Update {
+        public static final int constructor = 0x4BBB8F01;
+
+        public TLRPC.EphemeralMessage message;
+
+        public void readParams(InputSerializedData stream, boolean exception) {
+            message = TLRPC.EphemeralMessage.TLdeserialize(stream, stream.readInt32(exception), exception);
+        }
+
+        public void serializeToStream(OutputSerializedData stream) {
+            stream.writeInt32(constructor);
+            message.serializeToStream(stream);
         }
     }
 }

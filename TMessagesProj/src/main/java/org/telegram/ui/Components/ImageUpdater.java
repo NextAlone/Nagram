@@ -81,6 +81,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     public final static int FOR_TYPE_USER = 0;
     public final static int FOR_TYPE_CHANNEL = 1;
     public final static int FOR_TYPE_GROUP = 2;
+    public final static int FOR_TYPE_COMMUNITY = 3;
 
     public BaseFragment parentFragment;
     private ImageUpdaterDelegate delegate;

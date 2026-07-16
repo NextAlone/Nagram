@@ -3675,6 +3675,10 @@ public class RecyclerListView extends RecyclerView implements IBlur3Capture {
     }
 
     public Drawable getClipBackground(View child) {
+        return getClipBackground(child, false);
+    }
+
+    public Drawable getClipBackground(View child, boolean forceRound) {
         if (child.getParent() != this || !hasSections() || !sectionsItemDecoration.isSectionItem.run(child)) return null;
 
         boolean prev, next;
@@ -3695,13 +3699,13 @@ public class RecyclerListView extends RecyclerView implements IBlur3Capture {
             child.getX() + child.getWidth(),
             Math.min(getHeight() - (applyPaddingToSections ? getPaddingBottom() : 0), bottom(child))
         );
-        if (prev && next) {
+        if (prev && next && !forceRound) {
             prev = top(child) >= rect.top;
             next = bottom(child) <= rect.bottom;
             if (prev && next) return Theme.createRoundRectDrawable(0, Theme.getColor(Theme.key_windowBackgroundWhite, resourcesProvider));
         }
         final Path clipPath = new Path();
-        if (!prev && !next) {
+        if (!prev && !next || forceRound) {
             clipPath.rewind();
             clipPath.addRoundRect(rect, sectionRadius, sectionRadius, Path.Direction.CW);
         } else if (!prev) {

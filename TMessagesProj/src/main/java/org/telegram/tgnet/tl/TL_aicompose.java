@@ -44,6 +44,8 @@ public class TL_aicompose {
                 return b instanceof inputAiComposeToneID && ((inputAiComposeToneID) a).id == ((inputAiComposeToneID) b).id && ((inputAiComposeToneID) a).access_hash == ((inputAiComposeToneID) b).access_hash;
             if (a instanceof inputAiComposeToneSlug)
                 return b instanceof inputAiComposeToneSlug && TextUtils.equals(((inputAiComposeToneSlug) a).slug, ((inputAiComposeToneSlug) b).slug);
+            if (a instanceof inputAiComposeToneSingleUse)
+                return b instanceof inputAiComposeToneSingleUse && TextUtils.equals(((inputAiComposeToneSingleUse) a).custom_prompt, ((inputAiComposeToneSingleUse) b).custom_prompt);
             return false;
         }
 
@@ -54,8 +56,9 @@ public class TL_aicompose {
         private static InputAiComposeTone fromConstructor(int constructor) {
             switch (constructor) {
                 case inputAiComposeToneDefault.constructor: return new inputAiComposeToneDefault();
-                case inputAiComposeToneID.constructor: return new inputAiComposeToneID();
-                case inputAiComposeToneSlug.constructor: return new inputAiComposeToneSlug();
+                case inputAiComposeToneID.constructor:      return new inputAiComposeToneID();
+                case inputAiComposeToneSlug.constructor:    return new inputAiComposeToneSlug();
+                case inputAiComposeToneSingleUse.constructor:   return new inputAiComposeToneSingleUse();
                 default: return null;
             }
         }
@@ -109,6 +112,22 @@ public class TL_aicompose {
         @Override
         public void readParams(InputSerializedData stream, boolean exception) {
             slug = stream.readString(exception);
+        }
+    }
+    public static class inputAiComposeToneSingleUse extends InputAiComposeTone {
+        public static final int constructor = 0xe0c35af;
+
+        public String custom_prompt;
+
+        @Override
+        public void serializeToStream(OutputSerializedData stream) {
+            stream.writeInt32(constructor);
+            stream.writeString(custom_prompt);
+        }
+
+        @Override
+        public void readParams(InputSerializedData stream, boolean exception) {
+            custom_prompt = stream.readString(exception);
         }
     }
 
@@ -212,6 +231,7 @@ public class TL_aicompose {
             stream.writeString(title);
         }
     }
+
 
     public static class Tones extends TLObject {
 

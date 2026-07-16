@@ -2443,4 +2443,45 @@ public sealed class TlGen_Update : TlGen_Object {
       public const val MAGIC: UInt = 0x140502D1U
     }
   }
+
+  public data class TL_updateNewEphemeralMessage(
+    public val message: TlGen_EphemeralMessage,
+  ) : TlGen_Update() {
+    public override fun serializeToStream(stream: OutputSerializedData) {
+      stream.writeInt32(MAGIC.toInt())
+      message.serializeToStream(stream)
+    }
+
+    public companion object {
+      public const val MAGIC: UInt = 0x20BCBBA1U
+    }
+  }
+
+  public data class TL_updateDeleteEphemeralMessages(
+    public val peer: TlGen_Peer,
+    public val ids: List<Int>,
+  ) : TlGen_Update() {
+    public override fun serializeToStream(stream: OutputSerializedData) {
+      stream.writeInt32(MAGIC.toInt())
+      peer.serializeToStream(stream)
+      TlGen_Vector.serializeInt(stream, ids)
+    }
+
+    public companion object {
+      public const val MAGIC: UInt = 0x56DBFCF8U
+    }
+  }
+
+  public data class TL_updateEditEphemeralMessage(
+    public val message: TlGen_EphemeralMessage,
+  ) : TlGen_Update() {
+    public override fun serializeToStream(stream: OutputSerializedData) {
+      stream.writeInt32(MAGIC.toInt())
+      message.serializeToStream(stream)
+    }
+
+    public companion object {
+      public const val MAGIC: UInt = 0x4BBB8F01U
+    }
+  }
 }

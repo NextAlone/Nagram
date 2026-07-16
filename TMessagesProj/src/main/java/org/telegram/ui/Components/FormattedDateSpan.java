@@ -96,7 +96,7 @@ public class FormattedDateSpan extends URLSpan {
         if (text instanceof Spanned) {
             spannedText = (Spanned) text;
         } else {
-            return text; // nothing to replace
+            return text;
         }
 
         CharSequence result = text;
@@ -116,12 +116,9 @@ public class FormattedDateSpan extends URLSpan {
             final int end = ssb.getSpanEnd(span);
             final String toReplace = apply ? LocaleController.formatEntityFormattedDate(span.entity) : span.originalText;
 
-            ssb.replace(start, end, toReplace);
-
-            final int startAfterReplace = ssb.getSpanStart(span);
-            final int endAfterReplace = ssb.getSpanEnd(span);
             ssb.removeSpan(span);
-            ssb.setSpan(new FormattedDateSpan(span, apply), startAfterReplace, endAfterReplace, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ssb.replace(start, end, toReplace);
+            ssb.setSpan(new FormattedDateSpan(span, apply), start, start + toReplace.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
         return result;

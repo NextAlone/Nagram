@@ -513,6 +513,7 @@ public:
     int32_t bot_active_users;
     int64_t bot_verification_icon;
     int64_t send_paid_messages_stars;
+    int64_t linked_community_id;
 
     static User *TLdeserialize(NativeByteBuffer *stream, uint32_t constructor, int32_t instanceNum, bool &error);
 };
@@ -527,6 +528,15 @@ public:
 };
 
 class TL_user : public User {
+
+public:
+    static const uint32_t constructor = 0xB1B8CC83;
+
+    void readParams(NativeByteBuffer *stream, int32_t instanceNum, bool &error);
+    void serializeToStream(NativeByteBuffer *stream);
+};
+
+class TL_user_layer227 : public TL_user {
 
 public:
     static const uint32_t constructor = 0x31774388;

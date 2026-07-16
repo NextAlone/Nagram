@@ -23,18 +23,18 @@ public sealed class TlGen_messages_ChatInviteJoinResult : TlGen_Object {
 
   public data class TL_messages_chatInviteJoinResultWebView(
     public val bot_id: Long,
-    public val webview: TlGen_WebViewResult,
+    public val query_id: Long,
     public val users: List<TlGen_User>,
   ) : TlGen_messages_ChatInviteJoinResult() {
     public override fun serializeToStream(stream: OutputSerializedData) {
       stream.writeInt32(MAGIC.toInt())
       stream.writeInt64(bot_id)
-      webview.serializeToStream(stream)
+      stream.writeInt64(query_id)
       TlGen_Vector.serialize(stream, users)
     }
 
     public companion object {
-      public const val MAGIC: UInt = 0x2F51C337U
+      public const val MAGIC: UInt = 0x61CA29D3U
     }
   }
 }

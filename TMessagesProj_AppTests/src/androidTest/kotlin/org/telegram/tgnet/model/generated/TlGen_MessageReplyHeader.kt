@@ -31,6 +31,7 @@ public sealed class TlGen_MessageReplyHeader : TlGen_Object {
     public val reply_to_scheduled: Boolean,
     public val forum_topic: Boolean,
     public val quote: Boolean,
+    public val reply_to_ephemeral: Boolean,
     public val reply_to_msg_id: Int?,
     public val reply_to_peer_id: TlGen_Peer?,
     public val reply_from: TlGen_MessageFwdHeader?,
@@ -58,6 +59,7 @@ public sealed class TlGen_MessageReplyHeader : TlGen_Object {
         if (quote_offset != null) result = result or 1024U
         if (todo_item_id != null) result = result or 2048U
         if (poll_option != null) result = result or 4096U
+        if (reply_to_ephemeral) result = result or 8192U
         return result
       }
 

@@ -82,6 +82,19 @@ public sealed class TlGen_InputReplyTo : TlGen_Object {
     }
   }
 
+  public data class TL_inputReplyToEphemeralMessage(
+    public val id: Int,
+  ) : TlGen_InputReplyTo() {
+    public override fun serializeToStream(stream: OutputSerializedData) {
+      stream.writeInt32(MAGIC.toInt())
+      stream.writeInt32(id)
+    }
+
+    public companion object {
+      public const val MAGIC: UInt = 0x4119B95EU
+    }
+  }
+
   public data class TL_inputReplyToStory_layer173(
     public val user_id: TlGen_InputUser,
     public val story_id: Int,

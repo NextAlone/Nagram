@@ -120,7 +120,7 @@ public class FragmentUsernameBottomSheet {
         CharSequence titleSpanned = AndroidUtilities.replaceSingleTag(title, copy);
 
         final SpannableString tonIcon = new SpannableString("TON");
-        ColoredImageSpan span = new ColoredImageSpan(R.drawable.mini_ton);
+        ColoredImageSpan span = new ColoredImageSpan(R.drawable.mini_gram_16);
         span.setWidth(dp(13));
         tonIcon.setSpan(span, 0, tonIcon.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         CharSequence messageSpanned = AndroidUtilities.replaceCharSequence("TON", AndroidUtilities.replaceTags(message), tonIcon);

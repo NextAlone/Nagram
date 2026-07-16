@@ -18,11 +18,11 @@ public class BotGuardHelper extends BaseController {
 
     private final LongSparseLongArray queryIdToBotId = new LongSparseLongArray();
 
-    public void openGuardBotWebApp(long dialogId, long guardBotId, TLRPC.TL_webViewResultUrl webview) {
-        openGuardBotWebApp(dialogId, guardBotId, webview, false);
+    public void openGuardBotWebApp(long dialogId, long guardBotId, long queryId) {
+        openGuardBotWebApp(dialogId, guardBotId, queryId, false);
     }
 
-    private void openGuardBotWebApp(long dialogId, long guardBotId, TLRPC.TL_webViewResultUrl webview, boolean confirmed) {
+    private void openGuardBotWebApp(long dialogId, long guardBotId, long queryId, boolean confirmed) {
         if (LaunchActivity.instance == null) {
             return;
         }
@@ -35,17 +35,17 @@ public class BotGuardHelper extends BaseController {
 
         if (!confirmed) {
             if (SharedPrefsHelper.isWebViewConfirmShown(currentAccount, guardBotId) || getMessagesController().whitelistedBots.contains(guardBotId)) {
-                openGuardBotWebApp(dialogId, guardBotId, webview, true);
+                openGuardBotWebApp(dialogId, guardBotId, queryId, true);
             } else {
                 AlertsCreator.createBotLaunchAlert(lastFragment, botUser, () -> {
-                    openGuardBotWebApp(dialogId, guardBotId, webview, true);
+                    openGuardBotWebApp(dialogId, guardBotId, queryId, true);
                     SharedPrefsHelper.setWebViewConfirmShown(currentAccount, guardBotId, true);
                 }, () -> {});
             }
             return;
         }
 
-        queryIdToBotId.put(webview.query_id, guardBotId);
+        queryIdToBotId.put(queryId, guardBotId);
 
         final BaseFragment parentFragment = LaunchActivity.getLastFragment();
         final Theme.ResourcesProvider resourcesProvider = null;
@@ -53,8 +53,8 @@ public class BotGuardHelper extends BaseController {
         final WebViewRequestProps props = WebViewRequestProps.of(currentAccount, dialogId, guardBotId,
             null, null, BotWebViewAttachedSheet.TYPE_WEB_VIEW_GUARD, 0, 0,
             false, null, false, null, null, 0, false, false);
+        props.queryId = queryId;
 
-        props.applyResponse(webview);
         BotWebViewSheet webViewSheet = new BotWebViewSheet(LaunchActivity.instance, resourcesProvider);
         webViewSheet.setDefaultFullsize(false);
         webViewSheet.setNeedsContext(true);

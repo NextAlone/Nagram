@@ -8,8 +8,6 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
-import android.text.Layout;
-import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.view.Gravity;
 import android.view.View;
@@ -23,6 +21,7 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.WebFile;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.tl.TL_iv;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.TextSelectionHelper;
@@ -34,12 +33,19 @@ import org.telegram.ui.Components.UniversalRecyclerView;
 
 import java.util.ArrayList;
 
-public class RichMapCell extends FrameLayout
-    implements Theme.Colorable, TextSelectionHelper.ArticleSelectableView {
+public class RichMapCell extends RichBlockCell
+    implements Theme.Colorable, TextSelectionHelper.ArticleSelectableView, RichCaptionHost {
 
     public interface Delegate {
         void onPickLocation(BlockRow row);
         TextSelectionHelper.ArticleTextSelectionHelper getSelectionHelper();
+        default void onCaptionWillChange(BlockRow row, int removed, int added) {}
+        default void onCaptionChanged(BlockRow row) {}
+        default void onCaptionSpansChanged(BlockRow row) {}
+        default void onCaptionEnter(BlockRow row) {}
+        default void onRequestWindowFocusable(RichEditText et, boolean showKeyboard) {}
+        default void onCaptionLockedInsert(CharSequence text) {}
+        default boolean onCaptionSelectAll(BlockRow row) { return false; }
     }
 
     private static final int DEFAULT_HEIGHT_DP = 200;
@@ -50,17 +56,17 @@ public class RichMapCell extends FrameLayout
     private final Paint backgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint placeholderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint selectionPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final TextPaint stubPaint = new TextPaint();
     private final TextPaint hintPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
     private final ImageReceiver imageReceiver;
     private final Drawable placeholderIcon;
     private final View clickView;
 
-    private Layout stubLayout;
-    private BlockRow currentRow;
     private Delegate delegate;
     private int currentMapProvider;
     private String loadedKey;
+    private Drawable redPinIcon;
+    private int mapImageH;
+    private final RichCaptionController caption;
 
     public RichMapCell(Context context, int currentAccount, Theme.ResourcesProvider resourcesProvider) {
         super(context);
@@ -68,7 +74,6 @@ public class RichMapCell extends FrameLayout
         this.resourcesProvider = resourcesProvider;
         setWillNotDraw(false);
 
-        stubPaint.setTextSize(1);
         hintPaint.setTextSize(dp(15));
         hintPaint.setTextAlign(Paint.Align.CENTER);
 
@@ -76,7 +81,7 @@ public class RichMapCell extends FrameLayout
 
         placeholderIcon = getContext().getResources().getDrawable(R.drawable.msg_map).mutate();
 
-        setPadding(0, dp(6), 0, dp(4));
+        setBlockPadding(0, dp(6), 0, dp(4));
 
         clickView = new View(context);
         clickView.setOnClickListener(v -> {
@@ -84,22 +89,59 @@ public class RichMapCell extends FrameLayout
                 delegate.onPickLocation(currentRow);
             }
         });
-        addView(clickView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.FILL));
+        addView(clickView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP));
+
+        caption = new RichCaptionController(context, resourcesProvider, new RichCaptionController.Host() {
+            @Override public BlockRow currentRow() { return currentRow; }
+            @Override public TextSelectionHelper.ArticleTextSelectionHelper selectionHelper() { return delegate != null ? delegate.getSelectionHelper() : null; }
+            @Override public TextSelectionHelper.ArticleSelectableView cell() { return RichMapCell.this; }
+            @Override public void onCaptionWillChange(int removed, int added) { if (delegate != null) delegate.onCaptionWillChange(currentRow, removed, added); }
+            @Override public void onCaptionChanged() { if (delegate != null) delegate.onCaptionChanged(currentRow); }
+            @Override public void onCaptionSpansChanged() { if (delegate != null) delegate.onCaptionSpansChanged(currentRow); }
+            @Override public void onCaptionEnter() { if (delegate != null) delegate.onCaptionEnter(currentRow); }
+            @Override public void onRequestWindowFocusable(RichEditText et, boolean showKeyboard) { if (delegate != null) delegate.onRequestWindowFocusable(et, showKeyboard); }
+            @Override public void onCaptionLockedInsert(CharSequence text) { if (delegate != null) delegate.onCaptionLockedInsert(text); }
+            @Override public boolean onCaptionSelectAll() { return delegate != null && delegate.onCaptionSelectAll(currentRow); }
+        });
+        addView(caption.editText, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP));
 
         updateColors();
+    }
+
+    @Override
+    protected int nestedContentMargin() {
+        return dp(16); // edge-to-edge map at top level; inside a quote/list it needs the page margin
     }
 
     public void bind(BlockRow row, Delegate delegate) {
         this.currentRow = row;
         this.delegate = delegate;
+        bindBlockInset(row);
         loadedKey = null;
+        caption.bind();
         loadMapImage();
         requestLayout();
         invalidate();
     }
 
+    @Override
     public BlockRow getRow() {
         return currentRow;
+    }
+
+    @Override
+    public RichEditText getCaptionEditText() {
+        return caption.editText;
+    }
+
+    @Override
+    public void persistCaption() {
+        caption.persist();
+    }
+
+    @Override
+    public boolean isPressOnCaption(int localX, int localY) {
+        return caption.isPressOnCaption(localX, localY);
     }
 
     private TL_iv.pageBlockMap getMap() {
@@ -110,19 +152,22 @@ public class RichMapCell extends FrameLayout
     }
 
     private boolean hasLocation() {
-        final TL_iv.pageBlockMap map = getMap();
-        return map != null && map.geo != null;
+        return hasGeo(getMap());
+    }
+
+    public static boolean hasGeo(TL_iv.pageBlockMap map) {
+        return map != null && map.geo instanceof TLRPC.TL_geoPoint;
     }
 
     private void loadMapImage() {
         final TL_iv.pageBlockMap map = getMap();
-        if (map == null || map.geo == null) {
+        if (!hasGeo(map)) {
             imageReceiver.setImageBitmap((Drawable) null);
             loadedKey = null;
             return;
         }
         final int contentW = getMeasuredWidth();
-        final int contentH = getMeasuredHeight() - getPaddingTop() - getPaddingBottom();
+        final int contentH = mapImageH;
         if (contentW <= 0 || contentH <= 0) {
             return;
         }
@@ -164,32 +209,39 @@ public class RichMapCell extends FrameLayout
         selectionPaint.setColor(Theme.getColor(Theme.key_chat_inTextSelectionHighlight, resourcesProvider));
         hintPaint.setColor(Theme.multAlpha(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider), 0.5f));
         placeholderIcon.setColorFilter(new PorterDuffColorFilter(Theme.multAlpha(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider), 0.5f), PorterDuff.Mode.SRC_IN));
+        if (caption != null) caption.applyColors();
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int w = MeasureSpec.getSize(widthMeasureSpec);
-        int h = dp(DEFAULT_HEIGHT_DP);
+        final int w = MeasureSpec.getSize(widthMeasureSpec);
+        final int insL = getPaddingLeft(), insR = getPaddingRight();
+        final int contentW = Math.max(0, w - insL - insR);
         final TL_iv.pageBlockMap map = getMap();
         if (map != null && map.w > 0 && map.h > 0) {
-            int avail = w - dp(32);
-            h = (int) ((long) avail * map.h / map.w);
+            int avail = contentW - dp(32);
+            int h = (int) ((long) avail * map.h / map.w);
             h = Math.min(h, dp(420));
             h = Math.max(h, dp(120));
-            h += getPaddingTop() + getPaddingBottom();
+            mapImageH = h;
+        } else {
+            mapImageH = dp(DEFAULT_HEIGHT_DP) - getPaddingTop() - getPaddingBottom();
         }
-        super.onMeasure(
-            MeasureSpec.makeMeasureSpec(w, MeasureSpec.EXACTLY),
-            MeasureSpec.makeMeasureSpec(h, MeasureSpec.EXACTLY)
+        final int capH = caption.measure(insL, insR, w);
+        clickView.measure(
+            MeasureSpec.makeMeasureSpec(contentW, MeasureSpec.EXACTLY),
+            MeasureSpec.makeMeasureSpec(mapImageH, MeasureSpec.EXACTLY)
         );
+        setMeasuredDimension(w, getPaddingTop() + mapImageH + capH + getPaddingBottom());
     }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
-        int contentW = right - left;
-        int contentH = bottom - top - getPaddingTop() - getPaddingBottom();
-        imageReceiver.setImageCoords(0, getPaddingTop(), contentW, contentH);
+        final int insL = getPaddingLeft(), insR = getPaddingRight();
+        final int contentW = Math.max(0, (right - left) - insL - insR);
+        imageReceiver.setImageCoords(insL, getPaddingTop(), contentW, mapImageH);
+        clickView.layout(insL, getPaddingTop(), insL + contentW, getPaddingTop() + mapImageH);
+        caption.layout(insL, insR, right - left, getPaddingTop() + mapImageH);
         loadMapImage();
     }
 
@@ -200,60 +252,59 @@ public class RichMapCell extends FrameLayout
         if (!(getParent() instanceof RecyclerView)) return false;
         int myPos = ((RecyclerView) getParent()).getChildAdapterPosition(this);
         if (myPos < 0) return false;
-        return myPos >= helper.getStartCell() && myPos <= helper.getEndCell();
+        return myPos > helper.getStartCell() && myPos <= helper.getEndCell();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        final int contentH = getMeasuredHeight() - getPaddingTop() - getPaddingBottom();
-
-        if (!hasLocation()) {
-            canvas.drawRect(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(), getHeight() - getPaddingBottom(), placeholderPaint);
-            final int iconSize = dp(40);
-            final int ix = (getMeasuredWidth() - iconSize) / 2;
-            final int iy = getPaddingTop() + (contentH - iconSize) / 2 - dp(12);
-            placeholderIcon.setBounds(ix, iy, ix + iconSize, iy + iconSize);
-            placeholderIcon.draw(canvas);
-            final String hint = "Tap to pick a location";
-            canvas.drawText(hint, getMeasuredWidth() / 2f, iy + iconSize + dp(20), hintPaint);
-        } else {
+        if (getMap() != null) {
             canvas.drawRect(imageReceiver.getImageX(), imageReceiver.getImageY(), imageReceiver.getImageX2(), imageReceiver.getImageY2(), backgroundPaint);
+
             int cx = (int) imageReceiver.getCenterX();
             int cy = (int) imageReceiver.getCenterY();
-            Drawable pin = Theme.chat_locationDrawable[0];
-            if (pin != null) {
-                int l = cx - pin.getIntrinsicWidth() / 2;
-                int t = cy - pin.getIntrinsicHeight() / 2;
-                pin.setBounds(l, t, l + pin.getIntrinsicWidth(), t + pin.getIntrinsicHeight());
-                pin.draw(canvas);
+            if (placeholderIcon != null) {
+                int l = cx - placeholderIcon.getIntrinsicWidth() / 2;
+                int t = cy - placeholderIcon.getIntrinsicHeight() / 2;
+                placeholderIcon.setBounds(l, t, l + placeholderIcon.getIntrinsicWidth(), t + placeholderIcon.getIntrinsicHeight());
+                placeholderIcon.draw(canvas);
             }
-            imageReceiver.draw(canvas);
+
+            if (hasLocation()) {
+                imageReceiver.draw(canvas);
+
+                if (currentMapProvider == 2 && imageReceiver.hasNotThumb()) {
+                    if (redPinIcon == null) {
+                        redPinIcon = getContext().getResources().getDrawable(R.drawable.map_pin).mutate();
+                    }
+                    int w = (int) (redPinIcon.getIntrinsicWidth() * 0.8f);
+                    int h = (int) (redPinIcon.getIntrinsicHeight() * 0.8f);
+                    int x = (int) (imageReceiver.getCenterX() - w / 2f);
+                    int y = (int) (imageReceiver.getCenterY() - h);
+                    redPinIcon.setAlpha((int) (255 * imageReceiver.getCurrentAlpha()));
+                    redPinIcon.setBounds(x, y, x + w, y + h);
+                    redPinIcon.draw(canvas);
+                }
+            }
         }
 
         if (isCellSelected()) {
-            canvas.drawRect(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(), getHeight() - getPaddingBottom(), selectionPaint);
+            canvas.drawRect(
+                getPaddingLeft(), getPaddingTop(),
+                getWidth() - getPaddingRight(), getPaddingTop() + mapImageH,
+                selectionPaint
+            );
         }
     }
 
     @Override
     public void fillTextLayoutBlocks(ArrayList<TextSelectionHelper.TextLayoutBlock> out) {
-        if (stubLayout == null) {
-            int w = Math.max(1, getMeasuredWidth());
-            stubLayout = new StaticLayout("•", stubPaint, w, Layout.Alignment.ALIGN_NORMAL, 1f, 0f, false);
-        }
-        final Layout layout = stubLayout;
-        out.add(new TextSelectionHelper.TextLayoutBlock() {
-            @Override public Layout getLayout() { return layout; }
-            @Override public int getX() { return 0; }
-            @Override public int getY() { return 0; }
-            @Override public int getRow() { return 0; }
-        });
+        caption.fillTextLayoutBlocks(out);
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        stubLayout = null;
+    protected void dispatchDraw(Canvas canvas) {
+        super.dispatchDraw(canvas);
+        caption.drawSelection(canvas);
     }
 
     public static final class Factory extends UItem.UItemFactory<RichMapCell> {

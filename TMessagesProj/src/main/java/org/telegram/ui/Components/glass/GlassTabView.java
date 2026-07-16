@@ -565,6 +565,7 @@ public class GlassTabView extends FrameLayout implements MainTabsLayout.Tab, Fac
         REPLIES(R.raw.tab_reply, R.raw.tab_reply_reverse),
         WALLET(R.raw.tab_wallet, R.raw.tab_wallet_reverse),
         LINK(TabAnimationType.STATIC, R.drawable.tabs_link_24),
+        ARTICLE(R.raw.tab_article, R.raw.tab_article_reverse),
 
         BOOSTS(R.raw.boosts, 25, 49),
         MONETIZATION(R.raw.monetize, 19, 45);

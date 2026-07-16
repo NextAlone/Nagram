@@ -58,4 +58,17 @@ public sealed class TlGen_InputNotifyPeer : TlGen_Object {
       public const val MAGIC: UInt = 0x5C467992U
     }
   }
+
+  public data class TL_inputNotifyCommunity(
+    public val community: TlGen_InputChannel,
+  ) : TlGen_InputNotifyPeer() {
+    public override fun serializeToStream(stream: OutputSerializedData) {
+      stream.writeInt32(MAGIC.toInt())
+      community.serializeToStream(stream)
+    }
+
+    public companion object {
+      public const val MAGIC: UInt = 0x27BB1ADCU
+    }
+  }
 }

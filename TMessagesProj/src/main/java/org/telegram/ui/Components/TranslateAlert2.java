@@ -59,17 +59,20 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
+import org.telegram.messenger.RichMessageLayout;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.TranslateController;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.XiaomiUtilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.tgnet.tl.TL_iv;
 import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Cells.TextSelectionHelper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -90,6 +93,9 @@ public class TranslateAlert2 extends BottomSheet implements NotificationCenter.N
     private TLRPC.InputPeer reqPeer;
     private int reqMessageId;
     private boolean reqSum;
+    private TL_iv.RichMessage reqRichMessage;
+    private RichMessageLayout.PreviewView richLoadingPreviewView;
+    private RichMessageLayout.PreviewView richPreviewView;
 
     private String fromLanguage, toLanguage;
     private String prevToLanguage;
@@ -103,6 +109,9 @@ public class TranslateAlert2 extends BottomSheet implements NotificationCenter.N
     private RecyclerListView listView;
     private LinearLayoutManager layoutManager;
     private PaddedAdapter adapter;
+
+    private TextSelectionHelper.ArticleTextSelectionHelper textSelectionHelper;
+    private TextSelectionHelper.TextSelectionOverlay textSelectionOverlay;
 
     private View buttonShadowView;
     private FrameLayout buttonView;
@@ -118,13 +127,14 @@ public class TranslateAlert2 extends BottomSheet implements NotificationCenter.N
         CharSequence text, ArrayList<TLRPC.MessageEntity> entities,
         Theme.ResourcesProvider resourcesProvider
     ) {
-        this(context, fromLanguage, toLanguage, text, entities, null, 0, false, resourcesProvider);
+        this(context, fromLanguage, toLanguage, text, entities, null, 0, false, null, resourcesProvider);
     }
 
     private TranslateAlert2(
         Context context,
         String fromLanguage, String toLanguage,
         CharSequence text, ArrayList<TLRPC.MessageEntity> entities, TLRPC.InputPeer peer, int messageId, boolean sum,
+        TL_iv.RichMessage richMessage,
         Theme.ResourcesProvider resourcesProvider
     ) {
         super(context, false, resourcesProvider);
@@ -137,6 +147,7 @@ public class TranslateAlert2 extends BottomSheet implements NotificationCenter.N
         this.reqPeer = peer;
         this.reqMessageId = messageId;
         this.reqSum = sum;
+        this.reqRichMessage = richMessage;
 
         this.fromLanguage = fromLanguage;
         this.toLanguage = toLanguage;
@@ -179,6 +190,16 @@ public class TranslateAlert2 extends BottomSheet implements NotificationCenter.N
         } catch (Exception e) {}
         textViewContainer.addView(textView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
 
+        if (reqRichMessage != null) {
+            richLoadingPreviewView = new RichMessageLayout.PreviewView(context, currentAccount, resourcesProvider);
+            richLoadingPreviewView.setPadding(dp(22), dp(12), dp(22), dp(6));
+            richLoadingPreviewView.set(reqRichMessage);
+            richLoadingPreviewView.setTranslationLoading(true);
+
+            richPreviewView = new RichMessageLayout.PreviewView(context, currentAccount, resourcesProvider);
+            richPreviewView.setPadding(dp(22), dp(12), dp(22), dp(6));
+        }
+
         listView = new RecyclerListView(context) {
             @Override
             public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -201,7 +222,7 @@ public class TranslateAlert2 extends BottomSheet implements NotificationCenter.N
         listView.setPadding(0, AndroidUtilities.statusBarHeight + dp(56), 0, dp(80));
         listView.setClipToPadding(true);
         listView.setLayoutManager(layoutManager = new LinearLayoutManager(context));
-        listView.setAdapter(adapter = new PaddedAdapter(context, loadingTextView));
+        listView.setAdapter(adapter = new PaddedAdapter(context, reqRichMessage != null ? richLoadingPreviewView : loadingTextView));
         listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -235,6 +256,16 @@ public class TranslateAlert2 extends BottomSheet implements NotificationCenter.N
         itemAnimator.setInterpolator(new LinearInterpolator());
         listView.setItemAnimator(itemAnimator);
         containerView.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM));
+
+        textSelectionHelper = new TextSelectionHelper.ArticleTextSelectionHelper();
+        textSelectionHelper.setParentView(listView);
+        textSelectionHelper.layoutManager = layoutManager;
+        textSelectionOverlay = textSelectionHelper.getOverlayView(context);
+        AndroidUtilities.removeFromParent(textSelectionOverlay);
+        containerView.addView(textSelectionOverlay, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.FILL));
+        if (richPreviewView != null) {
+            richPreviewView.setTextSelectionHelper(textSelectionHelper);
+        }
 
         headerView = new HeaderView(context);
         containerView.addView(headerView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 78, Gravity.TOP | Gravity.FILL_HORIZONTAL));
@@ -297,6 +328,37 @@ public class TranslateAlert2 extends BottomSheet implements NotificationCenter.N
         }
         if ("nb".equals(lang)) {
             lang = "no";
+        }
+
+        if (reqRichMessage != null && reqPeer != null) {
+            TLRPC.TL_messages_translateRichMessage req = new TLRPC.TL_messages_translateRichMessage();
+            req.flags |= 1;
+            req.peer = reqPeer;
+            req.id.add(reqMessageId);
+            req.to_lang = normalizeLanguage(lang);
+            reqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, (res, err) -> {
+                AndroidUtilities.runOnUIThread(() -> {
+                    reqId = null;
+                    if (res instanceof TLRPC.TL_messages_translatedRichMessage &&
+                        !((TLRPC.TL_messages_translatedRichMessage) res).result.isEmpty() &&
+                        ((TLRPC.TL_messages_translatedRichMessage) res).result.get(0) != null
+                    ) {
+                        firstTranslation = false;
+                        final TL_iv.RichMessage rich = ((TLRPC.TL_messages_translatedRichMessage) res).result.get(0);
+                        if (richPreviewView != null) {
+                            richPreviewView.set(rich);
+                            adapter.updateMainView(richPreviewView);
+                        }
+                    } else if (firstTranslation) {
+                        dismiss();
+                        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, Bulletin.TYPE_ERROR, LocaleController.getString(R.string.TranslationFailedAlert2));
+                    } else {
+                        BulletinFactory.of((FrameLayout) containerView, resourcesProvider).createErrorBulletin(LocaleController.getString(R.string.TranslationFailedAlert2)).show();
+                        headerView.toLanguageTextView.setText(languageName(toLanguage = prevToLanguage));
+                    }
+                });
+            });
+            return;
         }
 
         TLRPC.TL_textWithEntities textWithEntities = new TLRPC.TL_textWithEntities();
@@ -1322,11 +1384,11 @@ public class TranslateAlert2 extends BottomSheet implements NotificationCenter.N
                         return;
                     }
 
-                    if (adapter.mMainView == textViewContainer) {
+                    if (adapter.mMainView == textViewContainer || adapter.mMainView == richPreviewView) {
                         prevToLanguage = toLanguage;
                     }
                     toLanguageTextView.setText(capitalFirst(languageName(toLanguage = localeInfo.pluralLangCode)));
-                    adapter.updateMainView(loadingTextView);
+                    adapter.updateMainView(reqRichMessage != null ? richLoadingPreviewView : loadingTextView);
                     setToLanguage(toLanguage);
                     translate();
                 });
@@ -1397,6 +1459,27 @@ public class TranslateAlert2 extends BottomSheet implements NotificationCenter.N
 
         private Path bgPath = new Path();
         private Paint bgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+        @Override
+        public boolean dispatchTouchEvent(MotionEvent ev) {
+            if (textSelectionHelper != null && textSelectionOverlay != null) {
+                if (ev.getAction() == MotionEvent.ACTION_DOWN || ev.getAction() == MotionEvent.ACTION_UP) {
+                    Log.d("TA2", "container dispatch act=" + ev.getAction() + " inSel=" + textSelectionHelper.isInSelectionMode());
+                }
+                if (textSelectionHelper.isInSelectionMode() && textSelectionOverlay.onTouchEvent(ev)) {
+                    Log.d("TA2", "overlay consumed (handle)");
+                    return true;
+                }
+                boolean tap = textSelectionOverlay.checkOnTap(ev);
+                if (ev.getAction() == MotionEvent.ACTION_UP) {
+                    Log.d("TA2", "checkOnTap=" + tap);
+                }
+                if (tap) {
+                    ev.setAction(MotionEvent.ACTION_CANCEL);
+                }
+            }
+            return super.dispatchTouchEvent(ev);
+        }
 
         @Override
         protected void dispatchDraw(Canvas canvas) {
@@ -1687,7 +1770,33 @@ public class TranslateAlert2 extends BottomSheet implements NotificationCenter.N
     }
 
     public static TranslateAlert2 showAlert(Context context, BaseFragment fragment, int currentAccount, TLRPC.InputPeer peer, int msgId, boolean sum, String fromLanguage, String toLanguage, CharSequence text, ArrayList<TLRPC.MessageEntity> entities, boolean noforwards, Utilities.CallbackReturn<URLSpan, Boolean> onLinkPress, Runnable onDismiss) {
-        TranslateAlert2 alert = new TranslateAlert2(context, fromLanguage, toLanguage, text, entities, peer, msgId, sum, null) {
+        TranslateAlert2 alert = new TranslateAlert2(context, fromLanguage, toLanguage, text, entities, peer, msgId, sum, null, null) {
+            @Override
+            public void dismiss() {
+                super.dismiss();
+                if (onDismiss != null) {
+                    onDismiss.run();
+                }
+            }
+        };
+        alert.setNoforwards(noforwards);
+        alert.setFragment(fragment);
+        alert.setOnLinkPress(onLinkPress);
+        if (fragment != null) {
+            if (fragment.getParentActivity() != null) {
+                fragment.showDialog(alert);
+            }
+        } else {
+            alert.show();
+        }
+        return alert;
+    }
+
+    public static TranslateAlert2 showAlert(Context context, BaseFragment fragment, int currentAccount, TLRPC.InputPeer peer, int msgId, String fromLanguage, String toLanguage, TL_iv.RichMessage richMessage, boolean noforwards, Utilities.CallbackReturn<URLSpan, Boolean> onLinkPress, Runnable onDismiss) {
+        if (context == null) {
+            return null;
+        }
+        TranslateAlert2 alert = new TranslateAlert2(context, fromLanguage, toLanguage, null, null, peer, msgId, false, richMessage, null) {
             @Override
             public void dismiss() {
                 super.dismiss();

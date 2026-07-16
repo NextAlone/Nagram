@@ -977,9 +977,9 @@ public class PremiumFeatureBottomSheet extends BottomSheet implements Notificati
 
     private void updateStatusBar() {
         if (actionBar != null && actionBar.getTag() != null) {
-            AndroidUtilities.setLightStatusBar(getWindow(), isLightStatusBar());
+            AndroidUtilities.setLightStatusBar(this, isLightStatusBar());
         } else if (baseFragment != null) {
-            AndroidUtilities.setLightStatusBar(getWindow(), baseFragment.isLightStatusBar());
+            AndroidUtilities.setLightStatusBar(this, baseFragment.isLightStatusBar());
         }
     }
 

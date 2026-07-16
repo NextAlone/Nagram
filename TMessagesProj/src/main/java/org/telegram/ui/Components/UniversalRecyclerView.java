@@ -28,6 +28,7 @@ import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
+import org.telegram.ui.iv.RichEditor;
 
 import java.util.ArrayList;
 
@@ -40,6 +41,9 @@ public class UniversalRecyclerView extends RecyclerListView {
     private boolean doNotDetachViews;
     public void doNotDetachViews() {
         doNotDetachViews = true;
+    }
+    public void doNotDetachViews(boolean value) {
+        doNotDetachViews = value;
     }
 
     public UniversalRecyclerView(
@@ -245,6 +249,19 @@ public class UniversalRecyclerView extends RecyclerListView {
 
     }
 
+    protected void onReorderStart(ViewHolder viewHolder) {}
+    protected void onReorderMoved(ViewHolder viewHolder) {}
+    protected void onReorderEnd(ViewHolder viewHolder) {}
+    protected boolean isReorderRemoving() { return false; }
+    protected void onReorderRemove(ViewHolder viewHolder) {}
+    private ViewHolder reorderingViewHolder;
+    public boolean isReordering() { return reorderingViewHolder != null; }
+
+    private boolean reorderingLongPressEnabled = true;
+    public void setReorderLongPressEnabled(boolean enabled) {
+        reorderingLongPressEnabled = enabled;
+    }
+
     public boolean isReorderAllowed() {
         return reorderingAllowed;
     }
@@ -311,7 +328,7 @@ public class UniversalRecyclerView extends RecyclerListView {
     private class TouchHelperCallback extends ItemTouchHelper.Callback {
         @Override
         public boolean isLongPressDragEnabled() {
-            return reorderingAllowed;
+            return reorderingAllowed && reorderingLongPressEnabled;
         }
 
         @Override
@@ -346,6 +363,10 @@ public class UniversalRecyclerView extends RecyclerListView {
         }
 
         @Override
+        public void onMoved(@NonNull RecyclerView recyclerView, @NonNull ViewHolder viewHolder, int fromPos,
+                            @NonNull ViewHolder target, int toPos, int x, int y) {}
+
+        @Override
         public void onSwiped(@NonNull ViewHolder viewHolder, int direction) {
 
         }
@@ -357,19 +378,52 @@ public class UniversalRecyclerView extends RecyclerListView {
             }
             if (actionState == ItemTouchHelper.ACTION_STATE_IDLE) {
                 adapter.reorderDone();
+                if (reorderingViewHolder != null) {
+                    onReorderEnd(reorderingViewHolder);
+                    reorderingViewHolder = null;
+                }
             } else {
                 cancelClickRunnables(false);
                 if (viewHolder != null) {
                     viewHolder.itemView.setPressed(true);
+                    if (viewHolder.itemView.getBackground() instanceof RichEditor.DraggingDrawable) {
+                        ((RichEditor.DraggingDrawable) viewHolder.itemView.getBackground()).setDragging(true);
+                    }
+                    if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
+                        reorderingViewHolder = viewHolder;
+                        onReorderStart(viewHolder);
+                    }
                 }
             }
             super.onSelectedChanged(viewHolder, actionState);
         }
 
         @Override
+        public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+            if (actionState == ItemTouchHelper.ACTION_STATE_DRAG && !isCurrentlyActive && isReorderRemoving()) {
+                return;
+            }
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            if (actionState == ItemTouchHelper.ACTION_STATE_DRAG && isCurrentlyActive) {
+                onReorderMoved(viewHolder);
+            }
+        }
+
+        @Override
         public void clearView(@NonNull RecyclerView recyclerView, @NonNull ViewHolder viewHolder) {
             super.clearView(recyclerView, viewHolder);
             viewHolder.itemView.setPressed(false);
+            if (viewHolder.itemView.getBackground() instanceof RichEditor.DraggingDrawable) {
+                ((RichEditor.DraggingDrawable) viewHolder.itemView.getBackground()).setDragging(false);
+            }
+            if (isReorderRemoving()) {
+                onReorderRemove(viewHolder);
+                viewHolder.itemView.animate()
+                    .scaleX(0.5f).scaleY(0.5f)
+                    .setDuration(200)
+                    .setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT)
+                    .start();
+            }
         }
     }
 

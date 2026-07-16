@@ -39,6 +39,7 @@ import org.telegram.ui.Cells.GraySectionCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.NotificationsCheckCell;
 import org.telegram.ui.Cells.ProfileSearchCell;
+import org.telegram.ui.Cells.RadioButtonCell;
 import org.telegram.ui.Cells.SlideIntChooseView;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextCheckCell;
@@ -116,6 +117,7 @@ public class UniversalAdapter extends AdapterWithDiffUtils {
     public static final int VIEW_TYPE_ROUND_GROUP_CHECKBOX = 41;
     public static final int VIEW_TYPE_ANIMATED_HEADER = 42;
     public static final int VIEW_TYPE_TEXT_SETTINGS = 43;
+    public static final int VIEW_TYPE_RADIO_2 = 44;
 
     protected final RecyclerListView listView;
     private final Context context;
@@ -235,12 +237,15 @@ public class UniversalAdapter extends AdapterWithDiffUtils {
         if (fromPositionReorderId < 0 || fromPositionReorderId != toPositionReorderId) {
             return;
         }
-        UItem fromItem = items.get(fromPosition);
-        UItem toItem = items.get(toPosition);
         boolean fromItemHadDivider = hasDivider(fromPosition);
         boolean toItemHadDivider = hasDivider(toPosition);
-        items.set(fromPosition, toItem);
-        items.set(toPosition, fromItem);
+        // notifyItemMoved has MOVE semantics (remove at from, insert at to), not swap semantics.
+        // ItemTouchHelper.chooseDropTarget can return a non-adjacent target (especially while
+        // auto-scrolling at an edge, when several items pass under the finger per frame), so a
+        // plain items.set()/set() swap desyncs the adapter data from RecyclerView's bookkeeping
+        // -> duplicated/garbled rows. Move the element to match the notification for any distance.
+        UItem fromItem = items.remove(fromPosition);
+        items.add(toPosition, fromItem);
         notifyItemMoved(fromPosition, toPosition);
         if (hasDivider(toPosition) != fromItemHadDivider) {
             notifyItemChanged(toPosition, 3);
@@ -339,6 +344,7 @@ public class UniversalAdapter extends AdapterWithDiffUtils {
             case VIEW_TYPE_CHECK:
             case VIEW_TYPE_CHECKRIPPLE:
             case VIEW_TYPE_RADIO:
+            case VIEW_TYPE_RADIO_2:
             case VIEW_TYPE_TEXT_CHECK:
             case VIEW_TYPE_ICON_TEXT_CHECK:
             case VIEW_TYPE_FULLSCREEN_CUSTOM:
@@ -429,6 +435,9 @@ public class UniversalAdapter extends AdapterWithDiffUtils {
                 break;
             case VIEW_TYPE_RADIO:
                 view = new DialogRadioCell(context);
+                break;
+            case VIEW_TYPE_RADIO_2:
+                view = new RadioButtonCell(context);
                 break;
             case VIEW_TYPE_TEXT_CHECK:
             case VIEW_TYPE_ICON_TEXT_CHECK:
@@ -706,7 +715,7 @@ public class UniversalAdapter extends AdapterWithDiffUtils {
                     holder.itemView.setBackgroundColor(Theme.getColor(item.checked ? Theme.key_windowBackgroundChecked : Theme.key_windowBackgroundUnchecked));
                 }
                 break;
-            case VIEW_TYPE_RADIO:
+            case VIEW_TYPE_RADIO: {
                 DialogRadioCell radioCell = (DialogRadioCell) holder.itemView;
                 if (radioCell.itemId == item.id) {
                     radioCell.setChecked(item.checked, true);
@@ -721,6 +730,13 @@ public class UniversalAdapter extends AdapterWithDiffUtils {
                 }
                 radioCell.itemId = item.id;
                 break;
+            }
+            case VIEW_TYPE_RADIO_2: {
+                RadioButtonCell radioCell = (RadioButtonCell) holder.itemView;
+                radioCell.setTextAndValueAndCheck(item.text.toString(), item.textValue.toString(), divider, item.checked);
+                radioCell.itemId = item.id;
+                break;
+            }
             case VIEW_TYPE_TEXT_CHECK:
                 NotificationsCheckCell checkCell1 = (NotificationsCheckCell) holder.itemView;
                 final boolean multiline = item.subtext != null && item.subtext.toString().contains("\n");
@@ -978,7 +994,7 @@ public class UniversalAdapter extends AdapterWithDiffUtils {
                 }
                 profileCell.allowBotOpenButton(item.locked, item.object2 instanceof Utilities.Callback ? (Utilities.Callback) item.object2 : null);
                 profileCell.setRectangularAvatar(item.red);
-                profileCell.setData(object, null, title, s, false, false);
+                profileCell.setData(object, null, title, item.subtext != null ? item.subtext : s, false, false);
                 profileCell.setChecked(item.checked, false);
                 profileCell.useSeparator = divider;
                 break;
@@ -1023,6 +1039,9 @@ public class UniversalAdapter extends AdapterWithDiffUtils {
             case VIEW_TYPE_EXPANDABLE_SWITCH:
                 TextCheckCell2 switchCell = (TextCheckCell2) holder.itemView;
                 switchCell.setTextAndCheck(item.text.toString(), item.checked, divider, switchCell.id == item.id);
+                switchCell.getCheckBox().setDrawIconType(item.intValue);
+                switchCell.getCheckBox().setColors(item.intValue == 0 ? Theme.key_switchTrack : Theme.key_fill_RedNormal,
+                    Theme.key_switchTrackChecked, Theme.key_windowBackgroundWhite, Theme.key_windowBackgroundWhite);
                 switchCell.id = item.id;
                 switchCell.setIcon(item.locked ? R.drawable.permission_locked : 0);
                 if (viewType == VIEW_TYPE_EXPANDABLE_SWITCH) {
@@ -1117,6 +1136,7 @@ public class UniversalAdapter extends AdapterWithDiffUtils {
                 viewType == VIEW_TYPE_RIGHT_ICON_TEXT ||
                 viewType == VIEW_TYPE_CHECK ||
                 viewType == VIEW_TYPE_RADIO ||
+                viewType == VIEW_TYPE_RADIO_2 ||
                 viewType == VIEW_TYPE_FILTER_CHAT ||
                 viewType == VIEW_TYPE_FILTER_CHAT_CHECK ||
                 viewType == VIEW_TYPE_LARGE_QUICK_REPLY ||

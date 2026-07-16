@@ -1,6 +1,5 @@
 package org.telegram.ui.Components;
 
-import static org.telegram.messenger.AndroidUtilities.concat;
 import static org.telegram.messenger.AndroidUtilities.dp;
 import static org.telegram.messenger.AndroidUtilities.hideKeyboard;
 import static org.telegram.messenger.LocaleController.formatPluralString;
@@ -2974,7 +2973,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
         }
 
         chatAttachAlert.setMaxSelectedPhotos(1, true);
-        chatAttachAlert.enablePollAttachMode(layoutToShow, allowedLayouts);
+        chatAttachAlert.enablePollAttachMode(allowedLayouts);
         chatAttachAlert.setLocationActivityDelegate((location, live, notify, scheduleDate, payStars) -> {
             callback.run(new PollAttachedMediaLocation(location));
         });

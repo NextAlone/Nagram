@@ -72,6 +72,7 @@ public class CaptionStory extends CaptionContainerView {
         roundButton.setImageResource(R.drawable.input_video_story);
         roundButton.setBackground(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, RIPPLE_MASK_CIRCLE_20DP, dp(18)));
         roundButton.setScaleType(ImageView.ScaleType.CENTER);
+        roundButton.setContentDescription(LocaleController.getString(R.string.AccDescrVideoMessage));
         addView(roundButton, LayoutHelper.createFrame(44, 44, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, 11, 6));
         roundButton.setOnClickListener(e -> {
             showRemoveRoundAlert();
@@ -81,6 +82,7 @@ public class CaptionStory extends CaptionContainerView {
         periodButton.setImageDrawable(periodDrawable = new PeriodDrawable());
         periodButton.setBackground(Theme.createSelectorDrawable(Theme.ACTION_BAR_WHITE_SELECTOR_COLOR, RIPPLE_MASK_CIRCLE_20DP, dp(18)));
         periodButton.setScaleType(ImageView.ScaleType.CENTER);
+        periodButton.setContentDescription(LocaleController.getString(R.string.StoryPeriodHint));
         setPeriod(86400, false);
         addView(periodButton, LayoutHelper.createFrame(44, 44, Gravity.RIGHT | Gravity.BOTTOM, 0, 0, 11 + 44 - 4, 6));
         periodButton.setOnClickListener(e -> {
@@ -134,6 +136,7 @@ public class CaptionStory extends CaptionContainerView {
     private boolean hasRoundVideo;
     public void setHasRoundVideo(boolean hasRoundVideo) {
         roundButton.setImageResource(hasRoundVideo ? R.drawable.input_video_story_remove : R.drawable.input_video_story);
+        roundButton.setContentDescription(LocaleController.getString(hasRoundVideo ? R.string.AccDescrRemoveRoundVideo : R.string.AccDescrVideoMessage));
         this.hasRoundVideo = hasRoundVideo;
     }
 

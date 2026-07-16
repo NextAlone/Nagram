@@ -1,10 +1,16 @@
 package org.telegram.messenger.utils;
 
+import static org.telegram.messenger.AndroidUtilities.cascade;
+import static org.telegram.messenger.AndroidUtilities.dp;
+import static org.telegram.messenger.AndroidUtilities.dpf2;
+
 import android.graphics.Canvas;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.graphics.Rect;
+
+import org.telegram.messenger.ImageReceiver;
 
 public class DrawableUtils {
     private static final Rect tmpRect = new Rect();
@@ -40,6 +46,21 @@ public class DrawableUtils {
         }
     }
 
+    public static int getCommunityCardDrawableRadius(int size) {
+        return size * 20 / 72;
+    }
+
+    public static void drawCommunityCardDrawable(Canvas canvas, Drawable drawable, float cx, float cy, float size) {
+        final float left = cx - dpf2(36);
+        final float top = cy - dpf2(36);
+        final float scale = size / dpf2(72);
+        DrawableUtils.setBounds(drawable, left + dpf2(9.66f), top + dpf2(4.66f), Gravity.RIGHT | Gravity.TOP);
+        canvas.save();
+        canvas.scale(scale, scale, cx, cy);
+        drawable.draw(canvas);
+        canvas.restore();
+    }
+
     public static void setBounds(Drawable drawable, float x, float y, int gravity) {
         if (drawable == null) {
             return;
@@ -47,12 +68,24 @@ public class DrawableUtils {
         setBounds(drawable, x, y, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), gravity);
     }
 
+    public static void setBounds(ImageReceiver drawable, float x, float y,
+                                 int width, int height, int gravity) {
+        if (drawable != null) {
+            setBounds(tmpRect, x, y, width, height, gravity);
+            drawable.setImageCoords(tmpRect);
+        }
+    }
+
     public static void setBounds(Drawable drawable, float x, float y,
                                  int width, int height, int gravity) {
-        if (drawable == null) {
-            return;
+        if (drawable != null) {
+            setBounds(tmpRect, x, y, width, height, gravity);
+            drawable.setBounds(tmpRect);
         }
+    }
 
+    public static void setBounds(Rect rect, float x, float y,
+        int width, int height, int gravity) {
         int left;
         int top;
 
@@ -86,6 +119,6 @@ public class DrawableUtils {
                 break;
         }
 
-        drawable.setBounds(left, top, left + width, top + height);
+        rect.set(left, top, left + width, top + height);
     }
 }

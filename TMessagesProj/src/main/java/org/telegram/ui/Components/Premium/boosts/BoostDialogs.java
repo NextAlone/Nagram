@@ -409,7 +409,7 @@ public class BoostDialogs {
         BottomSheet bottomSheet = builder.show();
         bottomSheet.setBackgroundColor(datePickerColors.backgroundColor);
         bottomSheet.fixNavigationBar(datePickerColors.backgroundColor);
-        AndroidUtilities.setLightStatusBar(bottomSheet.getWindow(), ColorUtils.calculateLuminance(datePickerColors.backgroundColor) > 0.7f);
+        AndroidUtilities.setLightStatusBar(bottomSheet, ColorUtils.calculateLuminance(datePickerColors.backgroundColor) > 0.7f);
     }
 
     public static void showUnsavedChanges(int type, Context context, Theme.ResourcesProvider resourcesProvider, Runnable onApply, Runnable onDiscard) {

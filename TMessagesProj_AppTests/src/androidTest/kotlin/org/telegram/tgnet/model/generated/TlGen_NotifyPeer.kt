@@ -1,6 +1,7 @@
 package org.telegram.tgnet.model.generated
 
 import kotlin.Int
+import kotlin.Long
 import kotlin.UInt
 import org.telegram.tgnet.OutputSerializedData
 import org.telegram.tgnet.model.TlGen_Object
@@ -56,6 +57,19 @@ public sealed class TlGen_NotifyPeer : TlGen_Object {
 
     public companion object {
       public const val MAGIC: UInt = 0x226E6308U
+    }
+  }
+
+  public data class TL_notifyCommunity(
+    public val community_id: Long,
+  ) : TlGen_NotifyPeer() {
+    public override fun serializeToStream(stream: OutputSerializedData) {
+      stream.writeInt32(MAGIC.toInt())
+      stream.writeInt64(community_id)
+    }
+
+    public companion object {
+      public const val MAGIC: UInt = 0xBE376999U
     }
   }
 }
