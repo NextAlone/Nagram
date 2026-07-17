@@ -285,6 +285,7 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
         TLRPC.TL_messages_stickerSet set = null;
         if (stickerType == STICKER_TYPE_DONE) {
             document = MediaDataController.getInstance(currentAccount).getEmojiAnimatedSticker("\uD83D\uDC4D");
+            imageFilter = "130_130";
         } else {
             set = MediaDataController.getInstance(currentAccount).getStickerSetByName(AndroidUtilities.STICKERS_PLACEHOLDER_PACK_NAME);
             if (set == null) {
