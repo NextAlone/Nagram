@@ -4700,6 +4700,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 } else {
                     intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(f));
                 }
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 parentActivity.startActivityForResult(Intent.createChooser(intent, getString("ShareFile", R.string.ShareFile)), 500);
             } else {

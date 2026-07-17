@@ -286,6 +286,7 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                             } else {
                                 intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(f));
                             }
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivityForResult(Intent.createChooser(intent, LocaleController.getString(R.string.ShareFile)), 500);
                         });
                         return true;
