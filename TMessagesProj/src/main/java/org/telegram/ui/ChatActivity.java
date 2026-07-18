@@ -2129,7 +2129,7 @@ public class ChatActivity extends BaseFragment implements
                 selectedObjectGroup = getValidGroupedMessage(message);
                 switch (NaConfig.INSTANCE.getDoubleTapAction().Int()) {
                     case DoubleTap.DOUBLE_TAP_ACTION_TRANSLATE:
-                        MessageTransKt.translateMessages(ChatActivity.this);
+                        nkbtn_translate(selectedObject, selectedObjectGroup);
                         break;
                     case DoubleTap.DOUBLE_TAP_ACTION_REPLY:
                         processSelectedOption(OPTION_REPLY);
@@ -33995,16 +33995,12 @@ public class ChatActivity extends BaseFragment implements
         MessageObject messageObject = null;
         if (selectedObjectGroup != null && !selectedObjectGroup.isDocuments) {
             for (MessageObject object : selectedObjectGroup.messages) {
-                if (!TextUtils.isEmpty(object.messageOwner.message)) {
-                    if (messageObject != null) {
-                        messageObject = null;
-                        break;
-                    } else {
-                        messageObject = object;
-                    }
+                if (TranslateController.isTranslatable(object)) {
+                    messageObject = object;
+                    break;
                 }
             }
-        } else if (!TextUtils.isEmpty(selectedObject.messageOwner.message) || selectedObject.type == MessageObject.TYPE_POLL) {
+        } else if (TranslateController.isTranslatable(selectedObject)) {
             messageObject = selectedObject;
         }
         return messageObject;
@@ -35118,19 +35114,6 @@ public class ChatActivity extends BaseFragment implements
     private int processSelectedOptionLongClick(View view, int option) {
         switch (option) {
             case nkbtn_translate: {
-                ChatMessageCell messageCell = null;
-                int count = chatListView.getChildCount();
-                for (int a = 0; a < count; a++) {
-                    View child = chatListView.getChildAt(a);
-                    if (child instanceof ChatMessageCell) {
-                        ChatMessageCell c = (ChatMessageCell) child;
-                        if (c.getMessageObject() == selectedObject) {
-                            messageCell = c;
-                            break;
-                        }
-                    }
-                }
-
                 if (selectedObject.messageOwner.translated) {
                     return 0;
                 }
@@ -45339,7 +45322,7 @@ public class ChatActivity extends BaseFragment implements
                 showFieldPanelForReply(messageObject);
             }
         } else if (id == nkbtn_translate) {
-            MessageTransKt.translateMessages(ChatActivity.this, getSelectedMessages());
+            nkbtn_translate(null, selectedObjectGroup);
         } else if (id == nkbtn_unpin) {
             for (MessageObject selectedMessage : getSelectedMessages()) {
                 if (selectedMessage.messageOwner.pinned) {
@@ -45718,21 +45701,7 @@ public class ChatActivity extends BaseFragment implements
                 break;
             }
             case nkbtn_translate: {
-                if (NekoConfig.useTelegramTranslateInChat.Bool() && !selectedObject.isPoll()) {
-                    String toLang = LocaleController.getInstance().getCurrentLocale().getLanguage();
-                    int[] messageIdToTranslate = new int[] { selectedObject.getId() };
-                    final CharSequence finalMessageText = getMessageCaption(selectedObject, selectedObjectGroup, messageIdToTranslate);
-                    Utilities.CallbackReturn<URLSpan, Boolean> onLinkPress = (link) -> {
-                        didPressMessageUrl(link, false, selectedObject, null);
-                        return true;
-                    };
-                    TLRPC.InputPeer inputPeer = selectedObject != null && (selectedObject.isPoll() || selectedObject.isVoiceTranscriptionOpen() || selectedObject.isSponsored()) ? null : getMessagesController().getInputPeer(dialog_id);
-                    TranslateAlert2 alert = TranslateAlert2.showAlert(getParentActivity(), this, currentAccount, inputPeer, messageIdToTranslate[0], false, "und", toLang, finalMessageText, selectedObject.messageOwner.entities, false, onLinkPress, () -> dimBehindView(false));
-                    alert.setDimBehind(true);
-                    closeMenu(false);
-                } else {
-                    MessageTransKt.translateMessages(this);
-                }
+                nkbtn_translate(selectedObject, selectedObjectGroup);
                 break;
             }
             case nkbtn_detail: {
@@ -45889,6 +45858,37 @@ public class ChatActivity extends BaseFragment implements
                 break;
             }
         }
+    }
+
+    private TL_iv.RichMessage nkbtn_get_translate_rich_message(MessageObject messageObject) {
+        return messageObject != null && messageObject.type == MessageObject.TYPE_ARTICLE && messageObject.messageOwner != null ? messageObject.messageOwner.rich_message : null;
+    }
+
+    private void nkbtn_translate(MessageObject messageObject, MessageObject.GroupedMessages group) {
+        final TL_iv.RichMessage richMessageToTranslate = nkbtn_get_translate_rich_message(messageObject);
+        if ((messageObject != null && NekoConfig.useTelegramTranslateInChat.Bool() && !messageObject.isPoll()) || richMessageToTranslate != null) {
+            final String toLang = LocaleController.getInstance().getCurrentLocale().getLanguage();
+            final String fromLang = selectedObject.messageOwner.originalLanguage;
+            int[] messageIdToTranslate = new int[] { messageObject.getId() };
+            final CharSequence finalMessageText = getMessageCaption(messageObject, group, messageIdToTranslate);
+            Utilities.CallbackReturn<URLSpan, Boolean> onLinkPress = (link) -> {
+                didPressMessageUrl(link, false, messageObject, null);
+                return true;
+            };
+            TLRPC.InputPeer inputPeer = messageObject != null && (messageObject.isPoll() || messageObject.isVoiceTranscriptionOpen() || messageObject.isSponsored()) ? null : getMessagesController().getInputPeer(dialog_id);
+
+            TranslateAlert2 alert;
+            if (NekoConfig.useTelegramTranslateInChat.Bool() && !messageObject.isPoll()) {
+                alert = TranslateAlert2.showAlert(getParentActivity(), this, currentAccount, inputPeer, messageIdToTranslate[0], false, fromLang, toLang, finalMessageText, messageObject.messageOwner.entities, false, onLinkPress, () -> dimBehindView(false));
+                alert.setDimBehind(true);
+            } else {
+                alert = TranslateAlert2.showAlert(getParentActivity(), this, currentAccount, inputPeer, messageIdToTranslate[0], fromLang, toLang, richMessageToTranslate, false, onLinkPress, () -> dimBehindView(false));
+                alert.setDimBehind(false);
+            }
+            closeMenu(false);
+            return;
+        }
+        MessageTransKt.translateMessages(this);
     }
 
     private void repeatMessage(boolean isLongClick, boolean isRepeatasCopy) {
