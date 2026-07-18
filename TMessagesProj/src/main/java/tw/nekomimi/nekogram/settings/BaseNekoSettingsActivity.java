@@ -81,6 +81,8 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
     protected HashMap<String, Integer> rowMap = new HashMap<>(20);
     protected HashMap<Integer, String> rowMapReverse = new HashMap<>(20);
 
+    public static final String settingsPrefix = "https://%s/nasettings/%s?p=and&r=%s";
+
     @Override
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
@@ -128,7 +130,7 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
                         .setItems(
                                 new CharSequence[]{LocaleController.getString(R.string.CopyLink)},
                                 (dialogInterface, i) -> {
-                                    AndroidUtilities.addToClipboard(String.format(Locale.getDefault(), "https://%s/nasettings/%s?r=%s", getMessagesController().linkPrefix, getKey(), rowMapReverse.get(position)));
+                                    AndroidUtilities.addToClipboard(String.format(Locale.getDefault(), settingsPrefix, getMessagesController().linkPrefix, getKey(), rowMapReverse.get(position)));
                                     BulletinFactory.of(BaseNekoSettingsActivity.this).createCopyLinkBulletin().show();
                                 })
                         .create());
