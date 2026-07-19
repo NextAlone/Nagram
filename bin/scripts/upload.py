@@ -1,18 +1,21 @@
 import contextlib
 import json
+import os
 from pathlib import Path
 from sys import argv
 from typing import Union, Iterable
 
-from pyrogram import Client
+from pyrogram import Client, enums
 from pyrogram.types import InputMediaDocument, Message
+
+from release_caption import read_gradle_property, render_test_caption
 
 api_id = 11535358
 api_hash = "33d372962fadb01df47e6ceed4e33cd6"
 metadata_channel = -1001471208507
 metadata_channel_msg_id = 46
 artifacts_path = Path("artifacts")
-test_version = argv[3] == "test" if len(argv) > 2 else None
+test_version = len(argv) > 3 and argv[3] == "test"
 
 
 def find_apk(abi: str) -> Path:
@@ -30,9 +33,22 @@ def get_thumb() -> str:
 
 
 def get_caption() -> str:
-    pre = "Test version, " if test_version else ""
     with open(artifacts_path / "caption.txt", "r", encoding="utf-8") as f:
-        return pre + f.read()
+        commit_message = f.read()
+    if not test_version:
+        return commit_message
+    repository_url = "/".join(
+        part.strip("/")
+        for part in (os.environ.get("GITHUB_SERVER_URL", ""), os.environ.get("GITHUB_REPOSITORY", ""))
+        if part
+    )
+    return render_test_caption(
+        commit_message,
+        read_gradle_property("APP_VERSION_NAME"),
+        read_gradle_property("APP_VERSION_CODE"),
+        os.environ.get("GITHUB_SHA", ""),
+        repository_url,
+    )
 
 
 def get_document() -> list["InputMediaDocument"]:
@@ -47,6 +63,8 @@ def get_document() -> list["InputMediaDocument"]:
                 )
             )
     documents[-1].caption = get_caption()
+    if test_version:
+        documents[-1].parse_mode = enums.ParseMode.HTML
     return documents
 
 
