@@ -289,6 +289,7 @@
     <string name="LLMTesting">测试中…</string>
     <string name="MainTabsStyle">主页底栏样式</string>
     <string name="MainTabsStyleTextFree">无字模式</string>
+    <string name="HideTabBarPermissionWarnings">隐藏标签栏权限警告</string>
     <string name="ShowRecentChatsOnTabLongPress">长按聊天标签显示最近会话</string>
     <string name="CustomIpStrategy">自定义 IP 策略</string>
     <string name="CustomIpStrategyIPV4">仅 IPV4</string>

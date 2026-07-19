@@ -290,6 +290,7 @@
     <string name="LLMTesting">Testing…</string>
     <string name="MainTabsStyle">Main tabs style</string>
     <string name="MainTabsStyleTextFree">No text</string>
+    <string name="HideTabBarPermissionWarnings">Hide tab bar permission warnings</string>
     <string name="ShowRecentChatsOnTabLongPress">Show recent chats on chat tab long-press</string>
     <string name="CustomIpStrategy">Custom Ip Strategy</string>
     <string name="CustomIpStrategyIPV4">IPV4 Only</string>

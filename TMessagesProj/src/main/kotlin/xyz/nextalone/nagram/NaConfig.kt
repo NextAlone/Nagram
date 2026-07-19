@@ -1185,6 +1185,12 @@ object NaConfig {
             ConfigItem.configTypeInt,
             0
         )
+    val hideTabBarPermissionWarnings =
+        addConfig(
+            "HideTabBarPermissionWarnings",
+            ConfigItem.configTypeBool,
+            false
+        )
     val showRecentChatsOnTabLongPress =
         addConfig(
             "ShowRecentChatsOnTabLongPress",
