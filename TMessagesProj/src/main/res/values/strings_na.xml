@@ -265,11 +265,15 @@
     <string name="LLMApiKeys">LLM API Keys</string>
     <string name="LLMModelName">Model Name</string>
     <string name="LLMSystemPrompt">System Prompt</string>
+    <string name="LLMTranslationPrompt">Translation Prompt</string>
+    <string name="LLMUseContext">Use Recent Messages as Context</string>
+    <string name="LLMUseContextNotice">Use up to five earlier messages to resolve ambiguity.</string>
     <string name="LLMTemperature">Temperature</string>
     <string name="LLMApiKeyNotice">Enter your API key. You can separate multiple keys with commas for rotation.</string>
     <string name="LLMApiUrlNotice">Enter the API base URL (e.g., https://api.openai.com/v1)</string>
     <string name="LLMModelNameNotice">Enter the model name (e.g., gpt-4o-mini)</string>
-    <string name="LLMSystemPromptNotice">Custom system prompt for translation. Leave empty to use default.</string>
+    <string name="LLMSystemPromptNotice">Custom system instructions. Leave empty to use the safe default.</string>
+    <string name="LLMTranslationPromptNotice">Use @toLang and @text placeholders; leave empty to use the default.</string>
     <string name="LLMApiFormat">API Format</string>
     <string name="LLMApiFormatOpenAIChat">OpenAI (Chat)</string>
     <string name="LLMApiFormatOpenAIResponse">OpenAI (Response)</string>

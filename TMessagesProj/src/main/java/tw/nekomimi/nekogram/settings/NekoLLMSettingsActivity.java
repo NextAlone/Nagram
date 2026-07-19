@@ -23,6 +23,7 @@ import tw.nekomimi.nekogram.config.cell.ConfigCellCustom;
 import tw.nekomimi.nekogram.config.cell.ConfigCellDivider;
 import tw.nekomimi.nekogram.config.cell.ConfigCellHeader;
 import tw.nekomimi.nekogram.config.cell.ConfigCellSelectBox;
+import tw.nekomimi.nekogram.config.cell.ConfigCellTextCheck;
 import tw.nekomimi.nekogram.config.cell.ConfigCellTextInput;
 import tw.nekomimi.nekogram.transtale.source.LLMTranslator;
 import xyz.nextalone.nagram.NaConfig;
@@ -69,7 +70,8 @@ public class NekoLLMSettingsActivity extends BaseNekoXSettingsActivity {
 
     // --- Advanced section ---
     private final AbstractConfigCell headerAdvanced = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("General", R.string.General)));
-    private final AbstractConfigCell llmSystemPromptRow = cellGroup.appendCell(new ConfigCellTextInput(null, NaConfig.INSTANCE.getLlmSystemPrompt(), "", null));
+    private final AbstractConfigCell llmTranslationPromptRow = cellGroup.appendCell(new ConfigCellTextInput(null, NaConfig.INSTANCE.getLlmTranslationPrompt(), LocaleController.getString("LLMTranslationPromptNotice", R.string.LLMTranslationPromptNotice) + "\n\n" + LLMTranslator.DEFAULT_USER_PROMPT, null));
+    private final AbstractConfigCell llmUseContextRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getLlmUseContext(), LocaleController.getString("LLMUseContextNotice", R.string.LLMUseContextNotice)));
     private final AbstractConfigCell llmTemperatureRow = cellGroup.appendCell(new ConfigCellCustom("LLMTemperature", CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final AbstractConfigCell dividerAdvanced = cellGroup.appendCell(new ConfigCellDivider());
 
@@ -95,6 +97,8 @@ public class NekoLLMSettingsActivity extends BaseNekoXSettingsActivity {
             AbstractConfigCell row = cellGroup.rows.get(position);
             if (row instanceof ConfigCellSelectBox) {
                 ((ConfigCellSelectBox) row).onClick(view1);
+            } else if (row instanceof ConfigCellTextCheck) {
+                ((ConfigCellTextCheck) row).onClick((org.telegram.ui.Cells.TextCheckCell) view1);
             } else if (row instanceof ConfigCellTextInput) {
                 ((ConfigCellTextInput) row).onClick();
             } else if (row == llmModelRow) {
@@ -109,10 +113,8 @@ public class NekoLLMSettingsActivity extends BaseNekoXSettingsActivity {
         });
 
         cellGroup.callBackSettingsChanged = (key, newValue) -> {
-            if (key.equals(NaConfig.INSTANCE.getLlmProvider().getKey())) {
+            if (key.equals(NaConfig.INSTANCE.getLlmProvider().getKey()) || key.equals(NaConfig.INSTANCE.getLlmApiFormat().getKey())) {
                 updateRows();
-            } else if (key.equals(NaConfig.INSTANCE.getLlmApiFormat().getKey())) {
-                listAdapter.notifyItemChanged(cellGroup.rows.indexOf(llmApiFormatDescRow));
             }
         };
 
@@ -127,12 +129,17 @@ public class NekoLLMSettingsActivity extends BaseNekoXSettingsActivity {
         cellGroup.rows.remove(llmApiFormatRow);
         cellGroup.rows.remove(llmApiFormatDescRow);
         cellGroup.rows.remove(llmApiUrlRow);
+        cellGroup.rows.remove(llmTemperatureRow);
 
         if (isCustom) {
             int idx = cellGroup.rows.indexOf(llmProviderRow) + 1;
             cellGroup.rows.add(idx++, llmApiFormatRow);
             cellGroup.rows.add(idx++, llmApiFormatDescRow);
             cellGroup.rows.add(idx, llmApiUrlRow);
+        }
+        if (getEffectiveApiFormat() != LLMTranslator.API_FORMAT_ANTHROPIC) {
+            cellGroup.rows.add(cellGroup.rows.indexOf(dividerAdvanced), llmTemperatureRow);
+            normalizeTemperatureConfig();
         }
     }
 
@@ -172,6 +179,27 @@ public class NekoLLMSettingsActivity extends BaseNekoXSettingsActivity {
         showDialog(builder.create());
     }
 
+    private int getEffectiveApiFormat() {
+        return NaConfig.INSTANCE.getLlmProvider().Int() == LLMTranslator.PROVIDER_CUSTOM
+                ? NaConfig.INSTANCE.getLlmApiFormat().Int()
+                : LLMTranslator.API_FORMAT_OPENAI_CHAT;
+    }
+
+    private double getNormalizedTemperature() {
+        return LLMTranslator.parseTemperature(NaConfig.INSTANCE.getLlmTemperature().String());
+    }
+
+    private String formatTemperature(double value) {
+        return String.format(java.util.Locale.US, "%.1f", value);
+    }
+
+    private void normalizeTemperatureConfig() {
+        String normalized = Double.toString(getNormalizedTemperature());
+        if (!normalized.equals(NaConfig.INSTANCE.getLlmTemperature().String())) {
+            NaConfig.INSTANCE.getLlmTemperature().setConfigString(normalized);
+        }
+    }
+
     // --- Temperature dialog ---
     private void showTemperatureDialog(Context context, int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -181,17 +209,13 @@ public class NekoLLMSettingsActivity extends BaseNekoXSettingsActivity {
         layout.setOrientation(android.widget.LinearLayout.VERTICAL);
         layout.setPadding(AndroidUtilities.dp(24), AndroidUtilities.dp(8), AndroidUtilities.dp(24), AndroidUtilities.dp(8));
 
-        double currentTemp = 0.7;
-        try {
-            String s = NaConfig.INSTANCE.getLlmTemperature().String();
-            if (s != null && !s.isEmpty()) currentTemp = Double.parseDouble(s); else currentTemp = 0.7;
-        } catch (NumberFormatException ignored) {}
+        double currentTemp = getNormalizedTemperature();
 
         android.widget.TextView label = new android.widget.TextView(context);
         label.setTextSize(android.util.TypedValue.COMPLEX_UNIT_DIP, 16);
         label.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
         label.setGravity(android.view.Gravity.CENTER_HORIZONTAL);
-        label.setText(String.format(java.util.Locale.US, "%.1f", currentTemp));
+        label.setText(formatTemperature(currentTemp));
         layout.addView(label, org.telegram.ui.Components.LayoutHelper.createLinear(
             org.telegram.ui.Components.LayoutHelper.WRAP_CONTENT,
             org.telegram.ui.Components.LayoutHelper.WRAP_CONTENT,
@@ -204,7 +228,7 @@ public class NekoLLMSettingsActivity extends BaseNekoXSettingsActivity {
             @Override
             public void onSeekBarDrag(boolean stop, float progress) {
                 tempValue[0] = progress * 2.0f;
-                label.setText(String.format(java.util.Locale.US, "%.1f", tempValue[0]));
+                label.setText(formatTemperature(tempValue[0]));
             }
 
             @Override
@@ -217,7 +241,7 @@ public class NekoLLMSettingsActivity extends BaseNekoXSettingsActivity {
 
         builder.setView(layout);
         builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (d, v) -> {
-            NaConfig.INSTANCE.getLlmTemperature().setConfigString(String.format(java.util.Locale.US, "%.1f", tempValue[0]));
+            NaConfig.INSTANCE.getLlmTemperature().setConfigString(formatTemperature(tempValue[0]));
             listAdapter.notifyItemChanged(position);
         });
         showDialog(builder.create());
@@ -351,9 +375,8 @@ public class NekoLLMSettingsActivity extends BaseNekoXSettingsActivity {
             } else if (row == llmTemperatureRow) {
                 TextSettingsCell cell = (TextSettingsCell) holder.itemView;
                 cell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-                String temp = NaConfig.INSTANCE.getLlmTemperature().String();
                 cell.setTextAndValue(LocaleController.getString("LLMTemperature", R.string.LLMTemperature),
-                    temp != null && !temp.isEmpty() ? temp : "0.7", divider);
+                    formatTemperature(getNormalizedTemperature()), divider);
             } else if (row == llmTestConnectionRow) {
                 TextSettingsCell cell = (TextSettingsCell) holder.itemView;
                 cell.setText(LocaleController.getString("LLMTestConnection", R.string.LLMTestConnection), divider);

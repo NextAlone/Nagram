@@ -65,6 +65,10 @@ interface Translator {
 
     suspend fun doTranslate(from: String, to: String, query: String): String
 
+    suspend fun doTranslate(from: String, to: String, query: String, context: List<String>): String {
+        return doTranslate(from, to, query)
+    }
+
     companion object {
 
         @Throws(Exception::class)
@@ -86,7 +90,10 @@ interface Translator {
         const val providerDeepLFree = 12
 
         @Throws(Exception::class)
-        suspend fun translate(to: Locale, query: String): String {
+        suspend fun translate(to: Locale, query: String): String = translate(to, query, emptyList())
+
+        @Throws(Exception::class)
+        suspend fun translate(to: Locale, query: String, context: List<String>): String {
 
             var language = to.language
             var country = to.country
@@ -132,10 +139,10 @@ interface Translator {
 
             // FileLog.d("[Trans] use provider ${translator.javaClass.simpleName}, toLang: $toLang, query: $query")
 
-            val result =  translator.doTranslate("auto", language, query).also {
-
-                to.transDb.save(query, it)
-
+            val result = translator.doTranslate("auto", language, query, context).also {
+                if (context.isEmpty()) {
+                    to.transDb.save(query, it)
+                }
             }
 
             if (language == "zh") {

@@ -1173,6 +1173,18 @@ object NaConfig {
             ConfigItem.configTypeString,
             ""
         )
+    val llmTranslationPrompt =
+        addConfig(
+            "LLMTranslationPrompt",
+            ConfigItem.configTypeString,
+            ""
+        )
+    val llmUseContext =
+        addConfig(
+            "LLMUseContext",
+            ConfigItem.configTypeBool,
+            false
+        )
     val llmTemperature =
         addConfig(
             "LLMTemperature",

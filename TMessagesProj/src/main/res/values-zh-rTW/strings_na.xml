@@ -264,11 +264,15 @@
     <string name="LLMApiKeys">LLM API 金鑰</string>
     <string name="LLMModelName">模型名稱</string>
     <string name="LLMSystemPrompt">系統提示詞</string>
+    <string name="LLMTranslationPrompt">翻譯提示詞</string>
+    <string name="LLMUseContext">使用近期訊息作為上下文</string>
+    <string name="LLMUseContextNotice">使用此前最多五條訊息消除歧義。</string>
     <string name="LLMTemperature">溫度參數</string>
     <string name="LLMApiKeyNotice">輸入您的 API 金鑰。可以用逗號分隔多個金鑰以實現輪換。</string>
     <string name="LLMApiUrlNotice">輸入 API 基礎網址（例如：https://api.openai.com/v1）</string>
     <string name="LLMModelNameNotice">輸入模型名稱（例如：gpt-4o-mini）</string>
-    <string name="LLMSystemPromptNotice">自訂翻譯系統提示詞。留空則使用預設提示詞。</string>
+    <string name="LLMSystemPromptNotice">自訂系統指令。留空則使用安全預設值。</string>
+    <string name="LLMTranslationPromptNotice">支援 @toLang 和 @text 佔位符；留空則使用預設提示詞。</string>
     <string name="LLMApiFormat">API 格式</string>
     <string name="LLMApiFormatOpenAIChat">OpenAI (Chat)</string>
     <string name="LLMApiFormatOpenAIResponse">OpenAI (Response)</string>
