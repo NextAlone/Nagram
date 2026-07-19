@@ -7620,12 +7620,10 @@ public class MessageObject {
             captionSummarized = false;
             captionTranslated = false;
         }
-        if (captionTranslated = translated) {
-            // Official Translate
-            text = messageOwner.translatedText.text;
-            entities = messageOwner.translatedText.entities;
-        } else if (messageOwner.translated) {
+        if (messageOwner.translated && messageOwner.translatedMessage != null && !messageOwner.translatedMessage.isEmpty()) {
             // NekoX Translate
+            captionSummarized = false;
+            captionTranslated = true;
             text = messageOwner.translatedMessage;
             // keep the entities as is
         }
