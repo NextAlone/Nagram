@@ -12884,11 +12884,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         return isArchive() || rightSlidingDialogContainer.isOpenned ? INavigationLayout.BackButtonState.BACK : INavigationLayout.BackButtonState.MENU;
     }
 
-    @Override
-    public boolean isSwipeBackEnabled(MotionEvent event) {
-        return !(initialDialogsType == DIALOGS_TYPE_FORWARD && viewPages[0].selectedType != filterTabsView.getFirstTabId());
-    }
-
     public void setShowSearch(String query, int i) {
         if (!searching) {
             initialSearchType = i;
