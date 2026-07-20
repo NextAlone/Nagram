@@ -1002,6 +1002,9 @@ public class VideoPlayer implements Player.Listener, VideoListener, AnalyticsLis
     }
 
     public static VideoUri getQualityForPlayer(ArrayList<Quality> qualities) {
+        final Quality preferred = getDefaultSavedQuality(qualities);
+        if (preferred != null) return preferred.getDownloadUri();
+
         for (final Quality q : qualities) {
             for (final VideoUri v : q.uris) {
                 if (v.original && v.isCached())

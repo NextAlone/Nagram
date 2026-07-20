@@ -1219,7 +1219,7 @@ object NaConfig {
         addConfig(
             "CustomDialogsMenu",
             ConfigItem.configTypeInt,
-            0
+            59
         )
     val customDialogsMenuTheme =
         addConfig(
@@ -1438,7 +1438,7 @@ object NaConfig {
                 }
                 if (o.type == ConfigItem.configTypeBoolLinkInt) {
                     o as ConfigItemKeyLinked
-                    o.changedFromKeyLinked(preferences.getInt(o.keyLinked.key, 0))
+                    o.changedFromKeyLinked(o.keyLinked.Int())
                 }
             }
             configLoaded =
