@@ -13973,8 +13973,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
             }
         }
-        boolean noMainTabs = NaConfig.INSTANCE.getMainTabsStyle().Int() == MainTabsStyle.DISABLE.getValue() || NaConfig.INSTANCE.getCustomDialogsMenuSettings().Bool();
-        if (getUserConfig().showCallsTab || noMainTabs) {
+        boolean needsSettingsFallback = NaConfig.INSTANCE.getMainTabsStyle().Int() == MainTabsStyle.DISABLE.getValue()
+                && !NaConfig.INSTANCE.getSidebarSettingsActivity().Bool();
+        if (NaConfig.INSTANCE.getCustomDialogsMenuSettings().Bool() || needsSettingsFallback) {
             io.add(R.drawable.msg_settings_old, getString(R.string.Settings), () -> {
                 presentFragment(new SettingsActivity());
             });
