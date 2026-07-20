@@ -1300,6 +1300,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val disableAvatarBlur =
+        addConfig(
+            "DisableAvatarBlur",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,
