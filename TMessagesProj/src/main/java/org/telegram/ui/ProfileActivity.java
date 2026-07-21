@@ -1314,9 +1314,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 hasColorById = false;
                 if (AndroidUtilities.computePerceivedBrightness(getThemedColor(Theme.key_actionBarDefault)) > .8f) {
                     emojiColor = Color.WHITE; // getThemedColor(Theme.key_windowBackgroundWhiteBlueText);
-                    int mul = NaConfig.INSTANCE.getDisableProfileAvatarBlur().Bool() ? 2 : 1;
-                    // btnColor = Color.WHITE; // Theme.multAlpha(getThemedColor(Theme.key_windowBackgroundWhiteBlueText), .75f);
-                    btnColor = Theme.multAlpha(getThemedColor(Theme.key_windowBackgroundWhiteBlueText), .15f * mul);
+                    btnColor = Color.WHITE; // Theme.multAlpha(getThemedColor(Theme.key_windowBackgroundWhiteBlueText), .75f);
+                    if (NaConfig.INSTANCE.getDisableProfileAvatarBlur().Bool()) {
+                        btnColor = Theme.multAlpha(getThemedColor(Theme.key_windowBackgroundWhiteBlueText), .3f);
+                    }
                 } else if (AndroidUtilities.computePerceivedBrightness(getThemedColor(Theme.key_actionBarDefault)) < .2f) {
                     emojiColor = Theme.multAlpha(Theme.adaptHSV(getThemedColor(Theme.key_actionBarDefault), +0.02f, +0.25f), .5f);
                     btnColor = Theme.multAlpha(Theme.adaptHSV(getThemedColor(Theme.key_actionBarDefault), +0.02f, +0.25f), .35f);
