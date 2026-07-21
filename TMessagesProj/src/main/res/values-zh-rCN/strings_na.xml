@@ -100,6 +100,7 @@
     <string name="HideFilterMuteAll">隐藏文件夹中的\"全部取消静音\"</string>
     <string name="UseLocalQuoteColor">本地名称颜色</string>
     <string name="ShowSquareAvatar">显示方形头像</string>
+    <string name="DisableProfileAvatarBlur">禁用资料页大头像按钮背景模糊</string>
     <string name="DisableCustomWallpaperUser">禁用私聊的自定义背景</string>
     <string name="DisableCustomWallpaperChannel">禁用频道的自定义背景</string>
     <string name="CopyPhotoAsSticker">复制图片但是贴纸</string>

@@ -152,7 +152,7 @@ public class ProfileGalleryBlurView extends View {
     }
 
     private void swap(int from, int to, int clear) {
-        if (NaConfig.INSTANCE.getDisableAvatarBlur().Bool()) {
+        if (NaConfig.INSTANCE.getDisableProfileAvatarBlur().Bool()) {
             return;
         }
         synchronized (lock) {
@@ -430,7 +430,7 @@ public class ProfileGalleryBlurView extends View {
     }
 
     public void draw(Canvas canvas, ProfileActivity.AvatarImageView avatarImageView, float width, float height, boolean translate, float fraction, float alpha) {
-        if (view == null || !view.isAttachedToWindow() || view.getVisibility() == GONE || NaConfig.INSTANCE.getDisableAvatarBlur().Bool()) {
+        if (view == null || !view.isAttachedToWindow() || view.getVisibility() == GONE || NaConfig.INSTANCE.getDisableProfileAvatarBlur().Bool()) {
             return;
         }
 
