@@ -59,6 +59,8 @@
     <string name="QuickToggleAnonymous">Szybkie przełączanie anonimowe</string>
     <string name="QuickToggleAnonymousNotice">Jeśli jesteś właścicielem grupy</string>
     <string name="RealHideTimeForSticker">Prawdziwy czas ukrycia naklejek</string>
+    <string name="ResetSettings">Resetuj ustawienia</string>
+    <string name="ResetSettingsAlert">Czy na pewno chcesz zresetować wszystkie ustawienia-N?</string>
     <string name="HideTitle">Ukryj tytuł</string>
     <string name="IgnoreFolderCount">Ignoruj liczbę folderów</string>
     <string name="SendWithoutMarkdown">Wyślij bez markdown</string>

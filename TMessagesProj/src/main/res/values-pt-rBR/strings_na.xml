@@ -59,6 +59,8 @@
     <string name="QuickToggleAnonymous">Alternador rápido anônimo</string>
     <string name="QuickToggleAnonymousNotice">Se você é o proprietário do grupo</string>
     <string name="RealHideTimeForSticker">Ocultar tempo real para adesivos</string>
+    <string name="ResetSettings">Redefinir configurações</string>
+    <string name="ResetSettingsAlert">Tem certeza de que deseja redefinir todas as N-Configurações?</string>
     <string name="HideTitle">Ocultar o título</string>
     <string name="IgnoreFolderCount">Ignorar contador de pastas</string>
     <string name="SendWithoutMarkdown">Enviar sem markdown</string>

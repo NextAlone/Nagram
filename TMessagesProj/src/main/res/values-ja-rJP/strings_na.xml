@@ -59,6 +59,8 @@
     <string name="QuickToggleAnonymous">クイック匿名の切り替え</string>
     <string name="QuickToggleAnonymousNotice">あなたがグループの所有者である場合</string>
     <string name="RealHideTimeForSticker">ステッカーをリアルタイムに隠す</string>
+    <string name="ResetSettings">設定をリセット</string>
+    <string name="ResetSettingsAlert">「N-設定」をリセットしますか？</string>
     <string name="HideTitle">タイトルを隠す</string>
     <string name="IgnoreFolderCount">フォルダ数を無視</string>
     <string name="SendWithoutMarkdown">マークダウンなしで送信</string>

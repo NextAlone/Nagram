@@ -59,6 +59,8 @@
     <string name="QuickToggleAnonymous">Быстрое переключение анонимности</string>
     <string name="QuickToggleAnonymousNotice">Если вы владелец группы.</string>
     <string name="RealHideTimeForSticker">Скрыть время для стикеров</string>
+    <string name="ResetSettings">Сброс настроек</string>
+    <string name="ResetSettingsAlert">Вы уверены, что хотите сбросить все «Настройки N»?</string>
     <string name="HideTitle">Скрыть заголовок</string>
     <string name="IgnoreFolderCount">Игнорировать количество папок</string>
     <string name="SendWithoutMarkdown">Отправить без разметки</string>

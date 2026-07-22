@@ -59,6 +59,8 @@
     <string name="QuickToggleAnonymous">Quick toggle anonymous</string>
     <string name="QuickToggleAnonymousNotice">If you\'re owner of the group</string>
     <string name="RealHideTimeForSticker">Real hide time for stickers</string>
+    <string name="ResetSettings">Reset Settings</string>
+    <string name="ResetSettingsAlert">Are you sure you want to reset all N-Settings?</string>
     <string name="HideTitle">Hide Title</string>
     <string name="IgnoreFolderCount">Ignore Folder Count</string>
     <string name="SendWithoutMarkdown">Send without markdown</string>

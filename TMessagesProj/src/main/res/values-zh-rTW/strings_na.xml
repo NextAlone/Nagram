@@ -59,6 +59,8 @@
     <string name="QuickToggleAnonymous">快速切換匿名發言</string>
     <string name="QuickToggleAnonymousNotice">如果你是頻道的持有者則可以使用頻道匿名發言</string>
     <string name="RealHideTimeForSticker">真正的隱藏貼圖傳送時間</string>
+    <string name="ResetSettings">重置設定</string>
+    <string name="ResetSettingsAlert">您確定要重置所有 N-設定 嗎？</string>
     <string name="HideTitle">隱藏標題和頭像</string>
     <string name="IgnoreFolderCount">忽略資料夾標籤上的未讀計數</string>
     <string name="SendWithoutMarkdown">禁用 Markdown</string>

@@ -40,6 +40,7 @@ import java.util.function.Function;
 
 import kotlin.text.StringsKt;
 import tw.nekomimi.nekogram.DatacenterActivity;
+import tw.nekomimi.nekogram.helpers.AppRestartHelper;
 import tw.nekomimi.nekogram.helpers.CloudSettingsHelper;
 import tw.nekomimi.nekogram.helpers.PasscodeHelper;
 import tw.nekomimi.nekogram.utils.AlertUtil;
@@ -72,6 +73,7 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
     private int settingsRow;
     private int importSettingsRow;
     private int exportSettingsRow;
+    private int resetSettingsRow;
     private int settings2Row;
 
     @Override
@@ -114,6 +116,18 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
         }  else if (position == importSettingsRow) {
             DocumentSelectActivity activity = getDocumentSelectActivity(getParentActivity());
             presentFragment(activity);
+        } else if (position == resetSettingsRow) {
+            AlertUtil.showConfirm(getParentActivity(),
+                    LocaleController.getString(R.string.ResetSettingsAlert),
+                    R.drawable.msg_reset,
+                    LocaleController.getString(R.string.Reset),
+                    true,
+                    () -> {
+                        ApplicationLoader.applicationContext.getSharedPreferences("nekocloud", Activity.MODE_PRIVATE).edit().clear().commit();
+                        ApplicationLoader.applicationContext.getSharedPreferences("nekox_config", Activity.MODE_PRIVATE).edit().clear().commit();
+                        ApplicationLoader.applicationContext.getSharedPreferences("nkmrcfg", Activity.MODE_PRIVATE).edit().clear().commit();
+                        AppRestartHelper.triggerRebirth(getParentActivity(), new Intent(getParentActivity(), LaunchActivity.class));
+                    });
         } else if (position == exportSettingsRow) {
             backupSettings();
         }
@@ -163,6 +177,7 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
         settingsRow = addRow("settings");
         importSettingsRow = addRow("importSettings");
         exportSettingsRow = addRow("exportSettings");
+        resetSettingsRow = addRow("resetSettings");
         settings2Row = addRow();
     }
 
