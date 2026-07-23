@@ -5,7 +5,6 @@ import static tw.nekomimi.nekogram.utils.UpdateUtil.channelUsernameTips;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.View;
 
@@ -15,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,7 +27,6 @@ import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.DocumentSelectActivity;
-import org.telegram.ui.LaunchActivity;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -40,6 +37,7 @@ import java.util.function.Function;
 
 import kotlin.text.StringsKt;
 import tw.nekomimi.nekogram.DatacenterActivity;
+import tw.nekomimi.nekogram.helpers.AppRestartHelper;
 import tw.nekomimi.nekogram.helpers.CloudSettingsHelper;
 import tw.nekomimi.nekogram.helpers.PasscodeHelper;
 import tw.nekomimi.nekogram.utils.AlertUtil;
@@ -72,6 +70,7 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
     private int settingsRow;
     private int importSettingsRow;
     private int exportSettingsRow;
+    private int resetSettingsRow;
     private int settings2Row;
 
     @Override
@@ -114,6 +113,18 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
         }  else if (position == importSettingsRow) {
             DocumentSelectActivity activity = getDocumentSelectActivity(getParentActivity());
             presentFragment(activity);
+        } else if (position == resetSettingsRow) {
+            AlertUtil.showConfirm(getParentActivity(),
+                    LocaleController.getString(R.string.ResetSettingsAlert),
+                    R.drawable.msg_reset,
+                    LocaleController.getString(R.string.Reset),
+                    true,
+                    () -> {
+                        ApplicationLoader.applicationContext.getSharedPreferences("nekocloud", Activity.MODE_PRIVATE).edit().clear().commit();
+                        ApplicationLoader.applicationContext.getSharedPreferences("nekox_config", Activity.MODE_PRIVATE).edit().clear().commit();
+                        ApplicationLoader.applicationContext.getSharedPreferences("nkmrcfg", Activity.MODE_PRIVATE).edit().clear().commit();
+                        AppRestartHelper.triggerRebirth();
+                    });
         } else if (position == exportSettingsRow) {
             backupSettings();
         }
@@ -163,6 +174,7 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
         settingsRow = addRow("settings");
         importSettingsRow = addRow("importSettings");
         exportSettingsRow = addRow("exportSettings");
+        resetSettingsRow = addRow("resetSettings");
         settings2Row = addRow();
     }
 
@@ -193,6 +205,8 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
                         textCell.setText(LocaleController.getString(R.string.ImportSettings), divider);
                     } else if (position == exportSettingsRow) {
                         textCell.setText(LocaleController.getString(R.string.BackupSettings), divider);
+                    } else if (position == resetSettingsRow) {
+                        textCell.setText(LocaleController.getString(R.string.ResetSettings), divider);
                     }
                     break;
                 }
@@ -398,7 +412,7 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
             AlertDialog restart = new AlertDialog(context, 0);
             restart.setTitle(LocaleController.getString(R.string.NekoX));
             restart.setMessage(LocaleController.getString(R.string.RestartAppToTakeEffect));
-            restart.setPositiveButton(LocaleController.getString(R.string.OK), (__, ___) -> ProcessPhoenix.triggerRebirth(context, new Intent(context, LaunchActivity.class)));
+            restart.setPositiveButton(LocaleController.getString(R.string.OK), (__, ___) -> AppRestartHelper.triggerRebirth());
             restart.show();
         } catch (Exception e) {
             AlertUtil.showSimpleAlert(context, e);

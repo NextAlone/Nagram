@@ -59,6 +59,8 @@
     <string name="QuickToggleAnonymous">Attiva/disattiva velocemente anonimo</string>
     <string name="QuickToggleAnonymousNotice">Se sei proprietario del gruppo</string>
     <string name="RealHideTimeForSticker">Tempo di nascondersi reale per gli adesivi</string>
+    <string name="ResetSettings">Ripristina le Impostazioni</string>
+    <string name="ResetSettingsAlert">Sei sicuro di voler ripristinare tutte le impostazioni?</string>
     <string name="HideTitle">Nascondi Titolo</string>
     <string name="IgnoreFolderCount">Ignora Conteggio Cartelle</string>
     <string name="SendWithoutMarkdown">Invia senza markdown</string>

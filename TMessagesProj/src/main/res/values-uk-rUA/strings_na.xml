@@ -59,6 +59,8 @@
     <string name="QuickToggleAnonymous">Швидкий перемикач анонімного режиму</string>
     <string name="QuickToggleAnonymousNotice">Якщо ви власник групи</string>
     <string name="RealHideTimeForSticker">Реальний час приховування для наліпок</string>
+    <string name="ResetSettings">Скидання налаштувань</string>
+    <string name="ResetSettingsAlert">Ви дійсно бажаєте скинути всі N-Налаштування?</string>
     <string name="HideTitle">Приховати заголовок</string>
     <string name="IgnoreFolderCount">Ігнорувати кількість папок</string>
     <string name="SendWithoutMarkdown">Відправити без markdown</string>

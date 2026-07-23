@@ -537,6 +537,11 @@
             android:taskAffinity="${applicationId}.voip_feedback"
             android:excludeFromRecents="true"
             android:theme="@style/Theme.TMessages.TransparentWithAlerts"/>
+        <activity
+            android:name="tw.nekomimi.nekogram.helpers.AppRestartHelper"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:process=":nagram"
+            android:exported="false" />
 
         <receiver
             android:name=".AutoMessageHeardReceiver"

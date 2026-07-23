@@ -378,7 +378,6 @@ dependencies {
     implementation "cn.hutool:hutool-core:5.8.42"
     implementation "cn.hutool:hutool-crypto:5.8.42"
     implementation 'cn.hutool:hutool-http:5.8.42'
-    implementation "com.jakewharton:process-phoenix:3.0.0"
     // openpgp
     implementation project(":openpgp-api")
 

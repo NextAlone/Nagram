@@ -59,6 +59,8 @@
     <string name="QuickToggleAnonymous">Anonimlere hızlı geçiş</string>
     <string name="QuickToggleAnonymousNotice">Grubun sahibiyseniz</string>
     <string name="RealHideTimeForSticker">Çıkartmalar için gerçek saklanma süresi</string>
+    <string name="ResetSettings">Ayarları Sıfırla</string>
+    <string name="ResetSettingsAlert">Tüm N-Ayarlarını sıfırlamak istediğinizden emin misiniz?</string>
     <string name="HideTitle">Başlığı Gizle</string>
     <string name="IgnoreFolderCount">Klasör Sayısını Yoksay</string>
     <string name="SendWithoutMarkdown">İşaretlemeden gönder</string>

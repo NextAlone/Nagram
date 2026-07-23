@@ -59,6 +59,8 @@
     <string name="QuickToggleAnonymous">快速切换匿名发言</string>
     <string name="QuickToggleAnonymousNotice">如果你是群组的所有者的话</string>
     <string name="RealHideTimeForSticker">真正的隐藏贴纸发送时间</string>
+    <string name="ResetSettings">重置设置</string>
+    <string name="ResetSettingsAlert">您确定要重置所有 N-设置 吗？</string>
     <string name="HideTitle">隐藏标题和头像</string>
     <string name="IgnoreFolderCount">忽略文件夹标签上的未读计数</string>
     <string name="SendWithoutMarkdown">禁用 Markdown</string>

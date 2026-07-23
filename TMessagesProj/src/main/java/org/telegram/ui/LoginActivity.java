@@ -105,7 +105,6 @@ import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.ProductDetails;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.QueryProductDetailsParams;
-import com.jakewharton.processphoenix.ProcessPhoenix;
 //import com.google.android.gms.auth.api.signin.GoogleSignIn;
 //import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 //import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -229,6 +228,7 @@ import kotlin.Unit;
 import tw.nekomimi.nekogram.BackButtonMenuRecent;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.helpers.AppRestartHelper;
 import tw.nekomimi.nekogram.helpers.PasscodeHelper;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.ui.EditTextAutoFill;
@@ -10672,7 +10672,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             restart.setTitle(LocaleController.getString(R.string.NekoX));
             restart.setMessage(LocaleController.getString(R.string.RestartAppToTakeEffect));
             restart.setPositiveButton(LocaleController.getString(R.string.OK), (__, ___) -> {
-                ProcessPhoenix.triggerRebirth(getContext(), new Intent(getContext(), LaunchActivity.class));
+                AppRestartHelper.triggerRebirth();
             });
             restart.show();
             return Unit.INSTANCE;
