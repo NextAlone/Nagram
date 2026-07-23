@@ -9,12 +9,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Process;
 
+import org.telegram.messenger.ApplicationLoader;
+import org.telegram.ui.LaunchActivity;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public final class AppRestartHelper extends Activity {
     private static final String KEY_RESTART_INTENTS = "nagram_restart_intents";
     private static final String KEY_MAIN_PROCESS_PID = "nagram_main_process_pid";
+
+    public static void triggerRebirth() {
+        Context context = ApplicationLoader.applicationContext;
+        triggerRebirth(context, new Intent(context, LaunchActivity.class));
+    }
 
     public static void triggerRebirth(Context context, Intent... nextIntents) {
         nextIntents[0].addFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK);

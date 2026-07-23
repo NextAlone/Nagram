@@ -2,7 +2,6 @@ package tw.nekomimi.nekogram.helpers;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Handler;
@@ -16,8 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.core.graphics.ColorUtils;
-
-import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import org.json.JSONException;
 import org.telegram.messenger.AndroidUtilities;
@@ -36,7 +33,6 @@ import org.telegram.ui.Components.CheckBoxSquare;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.ScaleStateListAnimator;
 import org.telegram.ui.Components.TextViewSwitcher;
-import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.Stories.recorder.ButtonWithCounterView;
 
 import java.util.Calendar;
@@ -153,7 +149,7 @@ public class CloudSettingsHelper {
                     restart.setTitle(LocaleController.getString(R.string.NekoX));
                     restart.setMessage(LocaleController.getString(R.string.RestartAppToTakeEffect));
                     restart.setPositiveButton(LocaleController.getString(R.string.OK), (__, ___) -> {
-                        ProcessPhoenix.triggerRebirth(context, new Intent(context, LaunchActivity.class));
+                        AppRestartHelper.triggerRebirth();
                     });
                     restart.show();
                 }

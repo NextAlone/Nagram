@@ -7,7 +7,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -37,9 +36,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.Keep;
@@ -65,12 +61,12 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.Forum.ForumUtilities;
 import org.telegram.ui.Components.Premium.boosts.BoostRepository;
-import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PaymentFormActivity;
 
 import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.NekoConfig;
+import tw.nekomimi.nekogram.helpers.AppRestartHelper;
 
 @SuppressWarnings("FieldCanBeLocal")
 @Deprecated // use Bulletin instead
@@ -558,7 +554,7 @@ public class UndoView extends FrameLayout {
             undoImageView.setVisibility(GONE);
 
             undoTextView.setText(LocaleController.getString("ApplyTheme", R.string.ApplyTheme));
-            currentCancelRunnable = () -> ProcessPhoenix.triggerRebirth(getContext(), new Intent(getContext(), LaunchActivity.class));
+            currentCancelRunnable = AppRestartHelper::triggerRebirth;
 
         } else if (isTooltipAction()) {
             CharSequence infoText = "";
