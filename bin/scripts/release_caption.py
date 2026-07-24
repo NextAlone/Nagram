@@ -39,10 +39,10 @@ def render_test_caption(
     commit_sha: str = "",
     repository_url: str = "",
 ) -> str:
-    subject = (
-        commit_message.replace("\r", "").strip().partition("\n")[0]
-        or "No commit metadata."
-    )
+    normalized_message = commit_message.replace("\r", "").strip()
+    subject, separator, detail = normalized_message.partition("\n")
+    subject = subject or "No commit metadata."
+    detail = detail.strip() if separator else ""
     match = SUBJECT_RE.match(subject)
     if match:
         group = GROUPS.get(match.group("type").lower(), "📌 <b>Other</b>")
@@ -67,12 +67,27 @@ def render_test_caption(
     else:
         prefix = "• "
 
-    def assemble(text: str) -> str:
-        return f"{header}\n\n{group}\n{prefix}{escape(text)}"
+    def assemble(subject_text: str, detail_text: str = "") -> str:
+        rendered = f"{header}\n\n{group}\n{prefix}{escape(subject_text)}"
+        if detail_text:
+            rendered += f"\n\n💬 <b>Detail</b>\n{escape(detail_text)}"
+        return rendered
 
-    rendered = assemble(subject)
+    rendered = assemble(subject, detail)
     if len(rendered) <= CAPTION_BUDGET:
         return rendered
+
+    low, high = 0, len(detail)
+    while low < high:
+        mid = (low + high + 1) // 2
+        if len(assemble(subject, detail[:mid].rstrip() + "…")) <= CAPTION_BUDGET:
+            low = mid
+        else:
+            high = mid - 1
+    if low:
+        return assemble(subject, detail[:low].rstrip() + "…")
+    if len(assemble(subject)) <= CAPTION_BUDGET:
+        return assemble(subject)
 
     low, high = 0, len(subject)
     while low < high:
