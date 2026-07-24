@@ -45969,42 +45969,61 @@ public class ChatActivity extends BaseFragment implements
         if (checkSlowMode(chatActivityEnterView.getSendButton())) {
             return;
         }
-        if (selectedObject != null) {
-            MessageObject replyTo = isLongClick ? selectedObject : getThreadMessage();
-            if (selectedObject.type == 0 || selectedObject.isAnimatedEmoji() || getMessageCaption(selectedObject,
-             selectedObjectGroup) != null) {
-                CharSequence caption = getMessageCaption(selectedObject, selectedObjectGroup);
-                if (caption == null) {
-                    caption = getMessageContent(selectedObject, 0, false);
-                }
-                if (!TextUtils.isEmpty(caption)) {
-                    StringBuilder toSend = new StringBuilder();
-                    for (int i = 0; i < caption.length(); i++) {
-                        char c = caption.charAt(i);
-                        if (c == '我') {
-                            toSend.append('你');
-                        } else if (c == '你') {
-                            toSend.append('我');
-                        } else if (c == '咱') {
-                            toSend.append('您');
-                        } else if (c == '您') {
-                            toSend.append('咱');
-                        } else {
-                            toSend.append(c);
-                        }
-                    }
-                    caption = toSend.toString();
-                    SendMessagesHelper.getInstance(currentAccount)
-                            .sendMessage(caption.toString(), dialog_id, replyTo,
-                                    getThreadMessage(), null,
-                                    false, selectedObject.messageOwner.entities, null, null,
-                                    true, 0, null, false);
-                }
-            } else if ((selectedObject.isSticker() || selectedObject.isAnimatedSticker()) && selectedObject.getDocument() != null) {
-                SendMessagesHelper.getInstance(currentAccount)
-                        .sendSticker(selectedObject.getDocument(), null, dialog_id, replyTo, getThreadMessage(), null
-                        , null, null, true, 0, 0, false, null, quickReplyShortcut, getQuickReplyId(), 0, getSendMonoForumPeerId(), getSendMessageSuggestionParams());
+        if (selectedObject == null) {
+            return;
+        }
+
+        final MessageObject message = selectedObject;
+        final MessageObject.GroupedMessages groupedMessages = selectedObjectGroup;
+        if (!NekoConfig.repeatConfirm.Bool()) {
+            doInvertReplyMessage(isLongClick, message, groupedMessages);
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+        builder.setTitle(LocaleController.getString(R.string.InvertReply));
+        builder.setMessage(LocaleController.getString(R.string.AreYouSure));
+        builder.setPositiveButton(LocaleController.getString(R.string.OK), (dialogInterface, i) ->
+                doInvertReplyMessage(isLongClick, message, groupedMessages));
+        builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
+        showDialog(builder.create());
+    }
+
+    private void doInvertReplyMessage(boolean isLongClick, MessageObject message, MessageObject.GroupedMessages groupedMessages) {
+        MessageObject replyTo = isLongClick ? message : getThreadMessage();
+        if (message.type == 0 || message.isAnimatedEmoji() || getMessageCaption(message, groupedMessages) != null) {
+            CharSequence caption = getMessageCaption(message, groupedMessages);
+            if (caption == null) {
+                caption = getMessageContent(message, 0, false);
             }
+            if (!TextUtils.isEmpty(caption)) {
+                StringBuilder toSend = new StringBuilder();
+                for (int i = 0; i < caption.length(); i++) {
+                    char c = caption.charAt(i);
+                    if (c == '我') {
+                        toSend.append('你');
+                    } else if (c == '你') {
+                        toSend.append('我');
+                    } else if (c == '咱') {
+                        toSend.append('您');
+                    } else if (c == '您') {
+                        toSend.append('咱');
+                    } else {
+                        toSend.append(c);
+                    }
+                }
+                caption = toSend.toString();
+                SendMessagesHelper.getInstance(currentAccount)
+                        .sendMessage(caption.toString(), dialog_id, replyTo,
+                                getThreadMessage(), null,
+                                false, message.messageOwner.entities, null, null,
+                                true, 0, null, false);
+            }
+        } else if ((message.isSticker() || message.isAnimatedSticker()) && message.getDocument() != null) {
+            SendMessagesHelper.getInstance(currentAccount)
+                    .sendSticker(message.getDocument(), null, dialog_id, replyTo, getThreadMessage(), null,
+                            null, null, true, 0, 0, false, null, quickReplyShortcut, getQuickReplyId(), 0,
+                            getSendMonoForumPeerId(), getSendMessageSuggestionParams());
         }
     }
 
