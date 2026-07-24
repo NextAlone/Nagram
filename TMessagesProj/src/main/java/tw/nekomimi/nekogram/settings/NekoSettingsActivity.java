@@ -45,6 +45,7 @@ import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.GsonUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
+import xyz.nextalone.nagram.NkmrConfig;
 import xyz.nextalone.nagram.network.NetworkLogActivity;
 
 public class NekoSettingsActivity extends BaseNekoSettingsActivity {
@@ -122,7 +123,7 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
                     () -> {
                         ApplicationLoader.applicationContext.getSharedPreferences("nekocloud", Activity.MODE_PRIVATE).edit().clear().commit();
                         ApplicationLoader.applicationContext.getSharedPreferences("nekox_config", Activity.MODE_PRIVATE).edit().clear().commit();
-                        ApplicationLoader.applicationContext.getSharedPreferences("nkmrcfg", Activity.MODE_PRIVATE).edit().clear().commit();
+                        NkmrConfig.clear();
                         AppRestartHelper.triggerRebirth();
                     });
         } else if (position == exportSettingsRow) {
@@ -452,5 +453,6 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
             }
             editor.commit();
         }
+        NkmrConfig.compact();
     }
 }
