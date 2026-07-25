@@ -1500,7 +1500,9 @@ public class ItemOptions {
             (int) (offsetY = (Y + this.translateY))
         );
 
-        installHoverReleaseListener();
+        if (hoverReleaseEnabled) {
+            installHoverReleaseListener();
+        }
 
         if (followScrim) {
             installFollowListeners();
@@ -1804,6 +1806,13 @@ public class ItemOptions {
     private View.OnTouchListener hoverReleaseListener;
     private View hoveredItem;
     private final int[] hoverLoc = new int[2];
+    private boolean hoverReleaseEnabled = true;
+
+    public ItemOptions disableHoverRelease() {
+        hoverReleaseEnabled = false;
+        clearHoverListener();
+        return this;
+    }
 
     private void installHoverReleaseListener() {
         if (scrimView == null) return;

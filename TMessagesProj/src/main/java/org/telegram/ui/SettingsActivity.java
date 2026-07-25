@@ -58,6 +58,7 @@ import androidx.annotation.Nullable;
 import androidx.collection.LongSparseArray;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.common.collect.Lists;
@@ -96,6 +97,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Cells.CollapseTextCell;
 import org.telegram.ui.Cells.SettingsSearchCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
@@ -161,6 +163,8 @@ import xyz.nextalone.nagram.ui.ItemOptionsPatch;
 public class SettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, ImageUpdater.ImageUpdaterDelegate, MainTabsActivity.TabFragmentDelegate, FactorAnimator.Target {
 
     private static final int ANIMATOR_ID_SEARCH_PAGE_VISIBLE = 0;
+    private static final int ACCOUNT_COLLAPSE_ID = -1000;
+    private static final int COLLAPSED_ACCOUNT_COUNT = 5;
 
     private final BoolAnimator animatorSearchPageVisible = new BoolAnimator(ANIMATOR_ID_SEARCH_PAGE_VISIBLE,
             this, CubicBezierInterpolator.EASE_OUT_QUINT, 350);
@@ -357,6 +361,12 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         listView = new UniversalRecyclerView(this, this::fillItems, this::onClick, this::onLongClick);
         listView.adapter.setApplyBackground(false);
         listView.setSections();
+        if (listView.getItemAnimator() != null) {
+            listView.getItemAnimator().setAddDuration(120);
+            listView.getItemAnimator().setRemoveDuration(120);
+            listView.getItemAnimator().setMoveDuration(220);
+            ((DefaultItemAnimator) listView.getItemAnimator()).setDelayAnimations(true);
+        }
         listView.setPadding(0, AndroidUtilities.statusBarHeight + dp(12), 0, AndroidUtilities.navigationBarHeight + additionNavigationBarHeight);
         listView.setClipToPadding(false);
         listView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -632,7 +642,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    private ArrayList<Integer> accountNumbers = new ArrayList<>();
+    private final ArrayList<Integer> accountNumbers = new ArrayList<>();
+
     private void fillItems(ArrayList<UItem> items, UniversalAdapter adapter) {
         if (searchItem.isSearchFieldVisible2()) {
             items.add(UItem.asSpace(ActionBar.getCurrentActionBarHeight()));
@@ -702,10 +713,22 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
         if (accountNumbers.size() > 0) {
             items.add(UItem.asHeader(getString(R.string.SettingsAccounts)));
-            for (int i = 0; i < accountNumbers.size(); ++i) {
+            final boolean accountsCollapsed = MainTabsActivity.isAccountListCollapsed();
+            final int accountsCount = accountsCollapsed
+                    ? Math.min(COLLAPSED_ACCOUNT_COUNT, accountNumbers.size())
+                    : accountNumbers.size();
+            for (int i = 0; i < accountsCount; ++i) {
                 items.add(AccountCell.Factory.of(i, accountNumbers.get(i)));
             }
-            items.add(UItem.asShadow(null));
+            if (accountNumbers.size() > COLLAPSED_ACCOUNT_COUNT) {
+                items.add(UItem.asShadowCollapseButton(
+                                ACCOUNT_COLLAPSE_ID,
+                                getString(accountsCollapsed ? R.string.ShowMore : R.string.ShowLess))
+                        .setCollapsed(accountsCollapsed)
+                        .onBind(view -> ((CollapseTextCell) view).setCentered(true)));
+            } else {
+                items.add(UItem.asShadow(null));
+            }
         }
 
         items.add(SettingCell.Factory.of(100, 0xFF1BA4ED, 0xFF1488E1, R.drawable.msg_settings, getString(R.string.N_Config)));
@@ -817,6 +840,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             if (LaunchActivity.instance != null) {
                 LaunchActivity.instance.switchToAccount(account, true);
             }
+            return;
+        } else if (item.id == ACCOUNT_COLLAPSE_ID) {
+            MainTabsActivity.setAccountListCollapsed(!MainTabsActivity.isAccountListCollapsed());
+            listView.adapter.update(true);
             return;
         } else if (item.instanceOf(SettingsSearchCell.Factory.class)) {
             if (item.object instanceof ProfileActivity.SearchAdapter.SearchResult) {
