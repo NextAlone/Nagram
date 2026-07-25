@@ -1,8 +1,14 @@
+import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
-import unittest
 
-from release_caption import CAPTION_BUDGET, read_gradle_property, render_test_caption
+from release_caption import (
+    CAPTION_BUDGET,
+    is_changelog_ignored,
+    read_apk_version,
+    read_gradle_property,
+    render_test_caption,
+)
 
 
 class ReleaseCaptionTest(unittest.TestCase):
@@ -10,13 +16,14 @@ class ReleaseCaptionTest(unittest.TestCase):
         caption = render_test_caption(
             "feat(ci): improve <test> notification",
             "12.9.0",
-            "6966",
+            "1241",
             "abcdef123456",
             "https://github.com/NextAlone/Nagram",
         )
 
         self.assertIn(
-            "🧪 <b>Nagram Test</b> <code>12.9.0</code> <i>(6966)</i>", caption
+            "🧪 <b>Nagram</b> <code>12.9.0</code> <i>(1241)</i> · <b>Test Version</b>",
+            caption,
         )
         self.assertIn("✨ <b>Features</b>", caption)
         self.assertIn(
@@ -34,6 +41,22 @@ class ReleaseCaptionTest(unittest.TestCase):
         self.assertLessEqual(len(caption), CAPTION_BUDGET)
         self.assertTrue(caption.endswith("…"))
 
+    def test_omits_commit_marked_ignore_from_changelog(self):
+        commit_message = "chore: regenerate artifacts\n\ninternal only [ignore]"
+        caption = render_test_caption(
+            commit_message,
+            "12.9.0",
+            "1241",
+            "abcdef123456",
+            "https://github.com/NextAlone/Nagram",
+        )
+
+        self.assertTrue(is_changelog_ignored(commit_message))
+        self.assertEqual(
+            "🧪 <b>Nagram</b> <code>12.9.0</code> <i>(1241)</i> · <b>Test Version</b>",
+            caption,
+        )
+
     def test_reads_gradle_property(self):
         with TemporaryDirectory() as directory:
             path = Path(directory) / "gradle.properties"
@@ -41,6 +64,14 @@ class ReleaseCaptionTest(unittest.TestCase):
 
             self.assertEqual("12.9.0", read_gradle_property("APP_VERSION_NAME", path))
             self.assertEqual("Unknown", read_gradle_property("APP_VERSION_CODE", path))
+
+    def test_reads_actual_nagram_version_from_apk_filename(self):
+        path = Path("Nagram-v12.9.0(1241)-arm64-v8a.apk")
+
+        self.assertEqual(("12.9.0", 1241), read_apk_version(path))
+
+        with self.assertRaisesRegex(ValueError, "Cannot read version"):
+            read_apk_version(Path("app.apk"))
 
 
 if __name__ == "__main__":

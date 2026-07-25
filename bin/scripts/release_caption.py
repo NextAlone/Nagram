@@ -1,8 +1,9 @@
+import re
 from html import escape
 from pathlib import Path
-import re
 
 CAPTION_BUDGET = 900
+CHANGELOG_IGNORE_MARKER = "[ignore]"
 
 GROUPS = {
     "feat": "✨ <b>Features</b>",
@@ -21,6 +22,11 @@ GROUPS = {
     "merge": "🔀 <b>Merge</b>",
 }
 SUBJECT_RE = re.compile(r"^(?P<type>[A-Za-z]+)(?:\([^)]*\))?!?:\s*.+$")
+APK_VERSION_RE = re.compile(r"-v(?P<name>.+)\((?P<code>\d+)\)-[^/]+\.apk$")
+
+
+def is_changelog_ignored(commit_message: str) -> bool:
+    return CHANGELOG_IGNORE_MARKER in commit_message
 
 
 def read_gradle_property(key: str, path: Path = Path("gradle.properties")) -> str:
@@ -32,6 +38,13 @@ def read_gradle_property(key: str, path: Path = Path("gradle.properties")) -> st
     return "Unknown"
 
 
+def read_apk_version(path: Path) -> tuple[str, int]:
+    match = APK_VERSION_RE.search(path.name)
+    if match is None:
+        raise ValueError(f"Cannot read version from APK filename: {path.name}")
+    return match.group("name"), int(match.group("code"))
+
+
 def render_test_caption(
     commit_message: str,
     version_name: str,
@@ -40,6 +53,13 @@ def render_test_caption(
     repository_url: str = "",
 ) -> str:
     normalized_message = commit_message.replace("\r", "").strip()
+    header = (
+        f"🧪 <b>Nagram</b> <code>{escape(version_name)}</code> "
+        f"<i>({escape(version_code)})</i> · <b>Test Version</b>"
+    )
+    if is_changelog_ignored(normalized_message):
+        return header
+
     subject, separator, detail = normalized_message.partition("\n")
     subject = subject or "No commit metadata."
     detail = detail.strip() if separator else ""
@@ -50,10 +70,6 @@ def render_test_caption(
         group = GROUPS["merge"]
     else:
         group = "📌 <b>Other</b>"
-    header = (
-        f"🧪 <b>Nagram Test</b> <code>{escape(version_name)}</code> "
-        f"<i>({escape(version_code)})</i>"
-    )
 
     commit_sha = commit_sha.strip()
     repository_url = repository_url.rstrip("/")

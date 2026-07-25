@@ -61,22 +61,24 @@ public class UpdateHelper extends BaseRemoteHelper {
     }
 
     private Update getShouldUpdateVersion(List<JSONObject> responses) {
-        long maxVersion = BuildConfig.VERSION_CODE;
+        long currentVersion = BuildConfig.VERSION_CODE;
         long currentTimestamp = BuildConfig.BUILD_TIMESTAMP;
         Update ref = null;
         for (var string : responses) {
             try {
-                int version_code = string.getInt("version_code");
+                int versionCode = string.getInt("version_code");
                 long timestamp = string.getLong("timestamp");
-                if (version_code > maxVersion || timestamp > currentTimestamp || updateAlways) {
+                if (versionCode > currentVersion
+                        || (versionCode == currentVersion && timestamp > currentTimestamp)
+                        || updateAlways) {
                     if (updateAlways) {
                         updateAlways = false;
                     }
                     ref = new Update(
                             string.getBoolean("can_not_skip"),
                             string.getString("version"),
-                            string.getInt("version_code"),
-                            string.getLong("timestamp"),
+                            versionCode,
+                            timestamp,
                             string.getInt("sticker"),
                             string.getInt("message"),
                             jsonToMap(string.getJSONObject("gcm")),
