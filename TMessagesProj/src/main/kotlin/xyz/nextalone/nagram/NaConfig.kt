@@ -1301,6 +1301,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val extendedFeatureUnlockedToken =
+        addConfig(
+            "ExtendedFeatureUnlockedToken",
+            ConfigItem.configTypeString,
+            ""
+        )
 
     private fun addConfig(
         k: String,

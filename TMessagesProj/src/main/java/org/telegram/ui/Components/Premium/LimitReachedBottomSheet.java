@@ -1786,7 +1786,7 @@ public class LimitReachedBottomSheet extends BottomSheetWithRecyclerListView imp
             if (type == TYPE_FOLDERS) {
                 currentValue = MessagesController.getInstance(currentAccount).dialogFilters.size() - 1;
             } else if (type == TYPE_ACCOUNTS) {
-                currentValue = UserConfig.getActivatedAccountsCount();
+                currentValue = Math.min(UserConfig.getActivatedAccountsCount(), UserConfig.getMaxAccountCount());
             } else if (type == TYPE_PIN_DIALOGS) {
                 int pinnedCount = 0;
                 ArrayList<TLRPC.Dialog> dialogs = MessagesController.getInstance(currentAccount).getDialogs(0);
@@ -2452,7 +2452,7 @@ public class LimitReachedBottomSheet extends BottomSheetWithRecyclerListView imp
             limitParams.descriptionStrLocked = LocaleController.formatString("LimitReachedFileSizeLocked", R.string.LimitReachedFileSizeLocked, "2 GB");
         } else if (type == TYPE_ACCOUNTS) {
             limitParams.defaultLimit = UserConfig.MAX_ACCOUNT_DEFAULT_COUNT;
-            limitParams.premiumLimit = UserConfig.MAX_ACCOUNT_COUNT;
+            limitParams.premiumLimit = UserConfig.MAX_ACCOUNT_PREMIUM_COUNT;
             limitParams.icon = R.drawable.msg_limit_accounts;
             limitParams.descriptionStr = LocaleController.formatString("LimitReachedAccounts", R.string.LimitReachedAccounts, limitParams.defaultLimit, limitParams.premiumLimit);
             limitParams.descriptionStrPremium = LocaleController.formatString("LimitReachedAccountsPremium", R.string.LimitReachedAccountsPremium, limitParams.premiumLimit);

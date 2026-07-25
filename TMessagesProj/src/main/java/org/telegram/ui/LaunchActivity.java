@@ -260,6 +260,7 @@ import kotlin.text.StringsKt;
 import tw.nekomimi.nekogram.helpers.SettingsHelper;
 import tw.nekomimi.nekogram.helpers.remote.ChatExtraButtonsHelper;
 import tw.nekomimi.nekogram.helpers.remote.EmojiHelper;
+import tw.nekomimi.nekogram.helpers.remote.ExtendedHelper;
 import tw.nekomimi.nekogram.helpers.remote.InlineBotRulesHelper;
 import tw.nekomimi.nekogram.helpers.remote.PagePreviewRulesHelper;
 import tw.nekomimi.nekogram.helpers.remote.PeerColorHelper;
@@ -794,6 +795,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             PagePreviewRulesHelper.getInstance().checkPagePreviewRules();
             ChatExtraButtonsHelper.getInstance().checkChatExtraButtons();
             InlineBotRulesHelper.getInstance().checkInlineBotRules();
+            ExtendedHelper.getInstance().checkExtended();
         });
         BackupAgent.requestBackup();
 
