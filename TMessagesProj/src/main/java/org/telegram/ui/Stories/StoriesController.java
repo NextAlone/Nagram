@@ -1394,6 +1394,7 @@ public class StoriesController {
     }
 
     public boolean hasLiveStory(long dialogId) {
+        if (NaConfig.INSTANCE.getDisableStories().Bool()) return false;
         TL_stories.PeerStories userStories = allStoriesMap.get(dialogId);
         if (userStories == null) {
             userStories = getStoriesFromFullPeer(dialogId);

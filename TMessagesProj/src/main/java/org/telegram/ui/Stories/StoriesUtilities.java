@@ -165,6 +165,10 @@ public class StoriesUtilities {
             unreadState = state = params.forceState;
         }
 
+        if (NaConfig.INSTANCE.getDisableStories().Bool()) {
+            unreadState = state = STATE_EMPTY;
+        }
+
         if (params.currentState != state) {
             if (params.currentState == STATE_PROGRESS) {
                 animated = true;
