@@ -35145,11 +35145,18 @@ public class ChatActivity extends BaseFragment implements
                 sendGreatOrGreat(true);
                 return 2;
             }
+            case nkbtn_sharemessage:
             case OPTION_SHARE: {
-                if (SystemAiServiceHelper.INSTANCE.isSystemAiAvailable(getContext()) && selectedObject != null && selectedObject.isPhoto()) {
-                    Uri uri = MessageHelper.INSTANCE.getUriToMessage(selectedObject);
-                    if (uri != null) {
-                        if (SystemAiServiceHelper.INSTANCE.startSystemAiService(getContext(), uri)) {
+                if (SystemAiServiceHelper.INSTANCE.isSystemAiAvailable(getContext()) && selectedObject != null) {
+                    if (selectedObject.isPhoto()) {
+                        Uri uri = MessageHelper.INSTANCE.getUriToMessage(selectedObject);
+                        if (uri != null) {
+                            if (SystemAiServiceHelper.INSTANCE.startSystemAiService(getContext(), uri)) {
+                                return 2;
+                            }
+                        }
+                    } else if (selectedObject.messageOwner != null && !TextUtils.isEmpty(selectedObject.messageOwner.message)) {
+                        if (SystemAiServiceHelper.INSTANCE.startSystemAiService(getContext(), selectedObject.messageOwner.message)) {
                             return 2;
                         }
                     }

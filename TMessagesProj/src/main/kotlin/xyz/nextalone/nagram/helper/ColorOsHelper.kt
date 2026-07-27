@@ -40,6 +40,25 @@ object ColorOsHelper {
             Log.e("ColorOsHelper", "Failed to start ColorOS AI service", e)
         }
     }
+    fun startColorOsAiService(context: Context, text: String): Boolean {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return false;
+        }
+        try {
+            val intent = Intent().apply {
+                `package` = "com.heytap.speechassist"
+                action = Intent.ACTION_PROCESS_TEXT
+                type = "text/plain"
+                putExtra("open_with_zoomwindow", true)
+                putExtra("android.intent.extra.PROCESS_TEXT", text)
+            }
+            context.startActivity(intent)
+            return true
+        } catch (e: Exception) {
+            Log.e("ColorOsHelper", "Failed to start ColorOS AI service", e)
+        }
+        return false
+    }
     fun startColorOsAiService(context: Context, uri: Uri): Boolean {
         try {
             val intent = Intent().apply {

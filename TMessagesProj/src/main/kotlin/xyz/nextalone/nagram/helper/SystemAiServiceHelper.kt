@@ -38,6 +38,12 @@ object SystemAiServiceHelper {
             ColorOsHelper.startColorOsAiService(view, selectedText)
         }
     }
+    fun startSystemAiService(context: Context, text: String): Boolean {
+        if (ColorOsHelper.isColorOS) {
+            return ColorOsHelper.startColorOsAiService(context, text)
+        }
+        return false
+    }
     fun startSystemAiService(context: Context, uri: Uri): Boolean {
         if (ColorOsHelper.isColorOS) {
             return ColorOsHelper.startColorOsAiService(context, uri)
