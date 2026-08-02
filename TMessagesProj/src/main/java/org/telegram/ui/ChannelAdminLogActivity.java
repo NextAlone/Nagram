@@ -640,6 +640,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
 
                     if (chatAdapter != null) {
                         chatAdapter.notifyDataSetChanged();
+                        chatListView.post(() -> checkScrollForLoad(true));
                     }
 
                     if (searchItem != null) {
