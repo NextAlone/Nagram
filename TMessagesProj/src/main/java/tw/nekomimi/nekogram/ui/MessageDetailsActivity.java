@@ -24,10 +24,16 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.google.gson.TypeAdapter;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -57,12 +63,14 @@ import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.ProfileActivity;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import tw.nekomimi.nekogram.ui.MessageDetailsActivity.MessageDetailItem.ItemType;
 
@@ -80,11 +88,100 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
 
     public static final Gson gson = new GsonBuilder()
             .registerTypeHierarchyAdapter(byte[].class, new ByteArrayToBase64TypeAdapter())
+            .registerTypeAdapterFactory(new ClassNameTypeAdapterFactory())
             .setExclusionStrategies(new CustomExclusionStrategy()).create();
     public static final Gson prettyGson = new GsonBuilder()
             .registerTypeHierarchyAdapter(byte[].class, new ByteArrayToBase64TypeAdapter())
+            .registerTypeAdapterFactory(new ClassNameTypeAdapterFactory())
             .setPrettyPrinting()
             .setExclusionStrategies(new CustomExclusionStrategy()).create();
+
+    /**
+     * 为每个序列化出的 JSON 对象追加 "_" 字段，值为实例的完整类名
+     * （org.telegram.tgnet.TLRPC$... 简写为 TLRPC$...，org.telegram.tgnet.tl.xxx 简写为 tl.xxx）；
+     * 反序列化时读取该字段以还原为对应的具体类型。
+     */
+    private static class ClassNameTypeAdapterFactory implements TypeAdapterFactory {
+
+        private static final String CLASS_NAME_FIELD = "_";
+        private static final String TGNET_PACKAGE = "org.telegram.tgnet.";
+
+        private static String shortenClassName(String name) {
+            if (name.startsWith(TGNET_PACKAGE)) {
+                String shortName = name.substring(TGNET_PACKAGE.length());
+                if (shortName.startsWith("TLRPC$") || shortName.startsWith("tl.")) {
+                    return shortName;
+                }
+            }
+            return name;
+        }
+
+        private static String restoreClassName(String name) {
+            return name.startsWith("TLRPC$") || name.startsWith("tl.") ? TGNET_PACKAGE + name : name;
+        }
+
+        @Override
+        public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+            Class<? super T> rawType = type.getRawType();
+            if (rawType.isPrimitive() || rawType.isArray() || rawType.isEnum()
+                    || CharSequence.class.isAssignableFrom(rawType)
+                    || Number.class.isAssignableFrom(rawType)
+                    || Boolean.class.isAssignableFrom(rawType)
+                    || Character.class.isAssignableFrom(rawType)
+                    || Iterable.class.isAssignableFrom(rawType)
+                    || Map.class.isAssignableFrom(rawType)
+                    || JsonElement.class.isAssignableFrom(rawType)) {
+                return null;
+            }
+            TypeAdapter<T> delegate = gson.getDelegateAdapter(this, type);
+            TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+            return new TypeAdapter<T>() {
+                @Override
+                public void write(JsonWriter out, T value) throws IOException {
+                    if (value == null) {
+                        out.nullValue();
+                        return;
+                    }
+                    JsonElement tree = delegate.toJsonTree(value);
+                    if (tree.isJsonObject()) {
+                        JsonObject source = tree.getAsJsonObject();
+                        JsonObject result = new JsonObject();
+                        result.add(CLASS_NAME_FIELD, new JsonPrimitive(shortenClassName(value.getClass().getName())));
+                        for (Map.Entry<String, JsonElement> entry : source.entrySet()) {
+                            if (!CLASS_NAME_FIELD.equals(entry.getKey())) {
+                                result.add(entry.getKey(), entry.getValue());
+                            }
+                        }
+                        tree = result;
+                    }
+                    elementAdapter.write(out, tree);
+                }
+
+                @SuppressWarnings("unchecked")
+                @Override
+                public T read(JsonReader in) throws IOException {
+                    JsonElement tree = elementAdapter.read(in);
+                    if (tree.isJsonObject()) {
+                        JsonObject object = tree.getAsJsonObject();
+                        JsonElement className = object.remove(CLASS_NAME_FIELD);
+                        if (className != null && className.isJsonPrimitive()) {
+                            try {
+                                Class<?> clazz = Class.forName(restoreClassName(className.getAsString()));
+                                if (rawType.isAssignableFrom(clazz) && clazz != rawType) {
+                                    TypeAdapter<?> concrete = gson.getDelegateAdapter(
+                                            ClassNameTypeAdapterFactory.this, TypeToken.get(clazz));
+                                    return (T) concrete.fromJsonTree(object);
+                                }
+                            } catch (ClassNotFoundException ignore) {
+                            }
+                        }
+                        return delegate.fromJsonTree(object);
+                    }
+                    return delegate.fromJsonTree(tree);
+                }
+            };
+        }
+    }
 
     private static class ByteArrayToBase64TypeAdapter implements JsonSerializer<byte[]>, JsonDeserializer<byte[]> {
         public byte[] deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
