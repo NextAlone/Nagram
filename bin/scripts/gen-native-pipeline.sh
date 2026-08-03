@@ -12,9 +12,7 @@ NEED_NATIVE_V7A=0
 NEED_NATIVE_V8A=0
 
 if [ ! -d "TMessagesProj/jni/ffmpeg/build" ] \
-   || [ -z "$(ls -A TMessagesProj/jni/ffmpeg/build 2>/dev/null)" ] \
-   || [ ! -d "TMessagesProj/jni/libvpx/build" ] \
-   || [ -z "$(ls -A TMessagesProj/jni/libvpx/build 2>/dev/null)" ]; then
+   || [ -z "$(ls -A TMessagesProj/jni/ffmpeg/build 2>/dev/null)" ]; then
   NEED_FFMPEG=1
 fi
 
@@ -38,7 +36,7 @@ fi
 >&2 echo "  LIBVPX_KEY    = ${LIBVPX_KEY}"
 >&2 echo "  BORINGSSL_KEY = ${BORINGSSL_KEY}"
 >&2 echo "  NATIVE_KEY    = ${NATIVE_KEY}"
->&2 echo "  ffmpeg/libvpx need build: $NEED_FFMPEG"
+>&2 echo "  ffmpeg/libvpx/dav1d need build: $NEED_FFMPEG"
 >&2 echo "  boringssl     need build: $NEED_BORINGSSL"
 >&2 echo "  native v7a    need build: $NEED_NATIVE_V7A"
 >&2 echo "  native v8a    need build: $NEED_NATIVE_V8A"
@@ -68,11 +66,11 @@ ffmpeg:
     - key: "ffmpeg-libvpx-${FFMPEG_KEY}-${LIBVPX_KEY}"
       paths:
         - TMessagesProj/jni/ffmpeg/build/
-        - TMessagesProj/jni/libvpx/build/
   script:
     - sed -i -E 's#https://github\.com/[^/]+/#https://gitlab.com/xtao-labs/#g' .gitmodules
     - git submodule sync
     - ./run init libs libvpx
+    - ./run init libs dav1d
     - ./run init libs ffmpeg
 
 YAML
@@ -119,7 +117,6 @@ cat <<YAML
     - key: "ffmpeg-libvpx-${FFMPEG_KEY}-${LIBVPX_KEY}"
       paths:
         - TMessagesProj/jni/ffmpeg/build/
-        - TMessagesProj/jni/libvpx/build/
       policy: pull
     - key: "boringssl-${BORINGSSL_KEY}"
       paths:
@@ -127,7 +124,7 @@ cat <<YAML
       policy: pull
   script:
     - |
-      for sm in TMessagesProj/jni/ffmpeg TMessagesProj/jni/libvpx TMessagesProj/jni/boringssl; do
+      for sm in TMessagesProj/jni/third_party/ffmpeg TMessagesProj/jni/third_party/libvpx TMessagesProj/jni/third_party/dav1d TMessagesProj/jni/boringssl; do
         if [ -d "\$sm" ] && [ ! -d "\$sm/.git" ] && [ ! -f "\$sm/.git" ]; then
           mv "\$sm" "\${sm}_artifacts_backup"
         fi
@@ -136,7 +133,7 @@ cat <<YAML
     - git submodule sync
     - git submodule update --init --force 'TMessagesProj/jni/*'
     - |
-      for sm in TMessagesProj/jni/ffmpeg TMessagesProj/jni/libvpx TMessagesProj/jni/boringssl; do
+      for sm in TMessagesProj/jni/third_party/ffmpeg TMessagesProj/jni/third_party/libvpx TMessagesProj/jni/third_party/dav1d TMessagesProj/jni/boringssl; do
         if [ -d "\${sm}_artifacts_backup" ]; then
           cp -rn "\${sm}_artifacts_backup"/. "\$sm"/
           rm -rf "\${sm}_artifacts_backup"

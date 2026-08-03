@@ -2,14 +2,12 @@
 
 source "bin/init/env.sh"
 
-yasm --version || exit 1
+cd TMessagesProj/jni/third_party || exit 1
+git submodule update --init libvpx || exit 1
 
-cd TMessagesProj/jni || exit 1
-git submodule update --init libvpx
-
-cd libvpx
+cd libvpx || exit 1
 git reset --hard
 git clean -fdx
 cd ..
 
-./build_libvpx_clang.sh || exit 1
+./build_libvpx.sh || exit 1

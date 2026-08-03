@@ -19894,6 +19894,12 @@ public class MessagesController extends BaseController implements NotificationCe
                 final boolean isDialogCreated = false;
                 MessageObject obj = new MessageObject(currentAccount, convertedMessage, usersDict, chatsDict, isDialogCreated, isDialogCreated);
 
+                if (MessagesStorage.isValidKeyboardToSave(convertedMessage)) {
+                    getMessagesStorage().getStorageQueue().postRunnable(() -> {
+                        getMediaDataController().putBotKeyboard(MessagesStorage.TopicKey.of(dialogId, 0), convertedMessage);
+                    });
+                }
+
                 if (ephemeralMessages == null) {
                     ephemeralMessages = new LongSparseArray<>();
                 }

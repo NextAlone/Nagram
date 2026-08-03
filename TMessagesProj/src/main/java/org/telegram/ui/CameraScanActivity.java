@@ -8,7 +8,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -95,7 +94,6 @@ import org.telegram.ui.Components.URLSpanNoUnderline;
 
 import java.util.ArrayList;
 
-@TargetApi(18)
 public class CameraScanActivity extends BaseFragment {
 
     private TextView titleTextView;
@@ -344,9 +342,7 @@ public class CameraScanActivity extends BaseFragment {
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
         destroy(false, null);
-        if (getParentActivity() != null) {
-            getParentActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-        }
+        AndroidUtilities.unlockOrientation(getParentActivity());
         /*if (visionQrReader != null) {
             visionQrReader.release();
         }*/
@@ -838,9 +834,7 @@ public class CameraScanActivity extends BaseFragment {
             });
         }
 
-        if (getParentActivity() != null) {
-            getParentActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
+        AndroidUtilities.lockOrientation(getParentActivity(), ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         fragmentView.setKeepScreenOn(true);
 
         return fragmentView;
@@ -1010,9 +1004,9 @@ public class CameraScanActivity extends BaseFragment {
         if (normalBounds == null) {
             normalBounds = new RectF();
         }
-        int width = Math.max(AndroidUtilities.displaySize.x, fragmentView.getWidth()),
-                height = Math.max(AndroidUtilities.displaySize.y, fragmentView.getHeight()),
-                side = (int) (Math.min(width, height) / 1.5f);
+        int width = fragmentView.getWidth(),
+            height = fragmentView.getHeight(),
+            side = (int) (Math.min(width, height) / 1.5f);
         normalBounds.set(
                 (width - side) / 2f / (float) width,
                 (height - side) / 2f / (float) height,

@@ -7,6 +7,8 @@ import android.view.View;
 
 import android.util.SparseArray;
 
+import androidx.annotation.Nullable;
+
 import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 
@@ -123,6 +125,21 @@ public final class Choreographer60FpsContent implements Choreographer.FrameCallb
         addFrameCallback(callback, TARGET_FPS);
     }
 
+    public void addFrameCallbackOnce(Runnable callback, int fps) {
+        checkMainThread();
+        if (callback == null) {
+            return;
+        }
+        fps = Math.max(1, Math.min(fps, TARGET_FPS));
+        removeFrameCallbackOnce(callback); // remove from any existing group first
+        CallbackGroup group = getOrCreateGroup(fps);
+        if (group.runnableCallbacksOnce == null) {
+            group.runnableCallbacksOnce = new ReferenceList<>();
+        }
+        group.runnableCallbacksOnce.add(callback);
+    }
+
+
     /**
      * Subscribes a persistent Runnable callback at the given fps.
      *
@@ -168,6 +185,19 @@ public final class Choreographer60FpsContent implements Choreographer.FrameCallb
         for (int i = 0; i < mGroups.size(); i++) {
             CallbackGroup group = mGroups.valueAt(i);
             if (group.runnableCallbacks.remove(callback)) {
+                return;
+            }
+        }
+    }
+
+    public void removeFrameCallbackOnce(Runnable callback) {
+        checkMainThread();
+        if (callback == null) {
+            return;
+        }
+        for (int i = 0; i < mGroups.size(); i++) {
+            CallbackGroup group = mGroups.valueAt(i);
+            if (group.runnableCallbacksOnce != null && group.runnableCallbacksOnce.remove(callback)) {
                 return;
             }
         }
@@ -232,6 +262,14 @@ public final class Choreographer60FpsContent implements Choreographer.FrameCallb
                 }
             }
             if (fire) {
+                if (group.runnableCallbacksOnce != null) {
+                    ReferenceList<Runnable> referenceList = group.runnableCallbacksOnce;
+                    group.runnableCallbacksOnce = null;
+                    for (Runnable runnable : referenceList) {
+                        runnable.run();
+                    }
+                }
+
                 for (FrameCallback cb : group.callbacks) {
                     cb.doFrame(frameTimeNanos);
                 }
@@ -304,6 +342,8 @@ public final class Choreographer60FpsContent implements Choreographer.FrameCallb
 
         final ReferenceList<FrameCallback> callbacks = new ReferenceList<>();
         final ReferenceList<Runnable> runnableCallbacks = new ReferenceList<>();
+        @Nullable
+        ReferenceList<Runnable> runnableCallbacksOnce;
 
         CallbackGroup(long intervalNs, int stride) {
             this.intervalNs = intervalNs;

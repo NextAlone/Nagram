@@ -8,7 +8,7 @@ apply plugin: "io.sentry.android.gradle"
 apply plugin: "io.objectbox"
 
 def verName = APP_VERSION_NAME
-def verCode = 1242
+def verCode = 1243
 
 
 def officialVer = APP_VERSION_NAME

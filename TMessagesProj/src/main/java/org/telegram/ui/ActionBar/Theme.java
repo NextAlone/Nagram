@@ -73,8 +73,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
-import androidx.collection.IntSet;
-import androidx.collection.MutableIntSet;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.math.MathUtils;
 
@@ -9522,7 +9520,7 @@ public class Theme {
         d.setColorFilter(new ColorMatrixColorFilter(colorMatrix));
         d.draw(new Canvas(bitmap));
         d.setColorFilter(wasColorFilter);
-        Utilities.blurBitmap(bitmap, 3, 1, bitmap.getWidth(), bitmap.getHeight(), bitmap.getRowBytes());
+        Utilities.blurBitmap(bitmap, 3);
         return blurredBitmap = bitmap;
     }
 
@@ -10781,7 +10779,9 @@ public class Theme {
     }
 
     public static Paint fillingPaint(int color) {
-        PAINT_FILLING.setColor(color);
+        if (PAINT_FILLING.getColor() != color) {
+            PAINT_FILLING.setColor(color);
+        }
         return PAINT_FILLING;
     }
 

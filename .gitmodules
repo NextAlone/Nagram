@@ -2,11 +2,15 @@
 	path = TMessagesProj/jni/boringssl
 	url = https://github.com/google/boringssl
 	ignore = dirty
-[submodule "TMessagesProj/jni/libvpx"]
-	path = TMessagesProj/jni/libvpx
-	url = https://github.com/webmproject/libvpx
+[submodule "TMessagesProj/jni/third_party/libvpx"]
+	path = TMessagesProj/jni/third_party/libvpx
+	url = https://github.com/webmproject/libvpx.git
 	ignore = dirty
-[submodule "TMessagesProj/jni/ffmpeg"]
-	path = TMessagesProj/jni/ffmpeg
-	url = https://github.com/FFmpeg/FFmpeg
+[submodule "TMessagesProj/jni/third_party/dav1d"]
+	path = TMessagesProj/jni/third_party/dav1d
+	url = https://github.com/videolan/dav1d.git
+	ignore = dirty
+[submodule "TMessagesProj/jni/third_party/ffmpeg"]
+	path = TMessagesProj/jni/third_party/ffmpeg
+	url = https://github.com/FFmpeg/FFmpeg.git
 	ignore = dirty

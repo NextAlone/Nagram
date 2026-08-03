@@ -22,16 +22,16 @@ jobs:
       - name: Fetch Status
         run: |
           sed -i 's/\/\///g' settings.gradle
-          git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
-          git submodule status TMessagesProj/jni/libvpx > libvpx_status
+          git submodule status TMessagesProj/jni/third_party/ffmpeg > ffmpeg_status
+          git submodule status TMessagesProj/jni/third_party/dav1d > dav1d_status
+          git submodule status TMessagesProj/jni/third_party/libvpx > libvpx_status
       - name: FFmpeg Cache
         id: cache
         uses: actions/cache@v4
         with:
           path: |
             TMessagesProj/jni/ffmpeg/build
-            TMessagesProj/jni/libvpx/build
-          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh', 'TMessagesProj/jni/patches/ffmpeg/*') }}
+          key: ${{ hashFiles('ffmpeg_status', 'dav1d_status', 'libvpx_status', 'TMessagesProj/jni/third_party/build_*.sh') }}
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
         if: steps.cache.outputs.cache-hit != 'true'
@@ -57,6 +57,7 @@ jobs:
         run: |
           ./run init action ffmpeg
           ./run init libs libvpx
+          ./run init libs dav1d
           ./run init libs ffmpeg
   boringssl:
     name: Native Build (BoringSSL)
@@ -112,8 +113,9 @@ jobs:
       - name: Fetch Status
         run: |
           sed -i 's/\/\///g' settings.gradle
-          git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
-          git submodule status TMessagesProj/jni/libvpx > libvpx_status
+          git submodule status TMessagesProj/jni/third_party/ffmpeg > ffmpeg_status
+          git submodule status TMessagesProj/jni/third_party/dav1d > dav1d_status
+          git submodule status TMessagesProj/jni/third_party/libvpx > libvpx_status
           git submodule status TMessagesProj/jni/boringssl > boringssl_status
       - name: Native Cache
         id: cache
@@ -132,8 +134,7 @@ jobs:
         with:
           path: |
             TMessagesProj/jni/ffmpeg/build
-            TMessagesProj/jni/libvpx/build
-          key: ${{ hashFiles('ffmpeg_status', 'libvpx_status', 'TMessagesProj/jni/*ffmpeg*.sh', 'TMessagesProj/jni/*libvpx*.sh', 'TMessagesProj/jni/patches/ffmpeg/*') }}
+          key: ${{ hashFiles('ffmpeg_status', 'dav1d_status', 'libvpx_status', 'TMessagesProj/jni/third_party/build_*.sh') }}
       - name: BoringSSL Cache
         uses: actions/cache@v4
         if: steps.cache.outputs.cache-hit != 'true'
@@ -189,7 +190,9 @@ jobs:
       - name: Fetch Status
         run: |
           sed -i 's/\/\///g' settings.gradle
-          git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
+          git submodule status TMessagesProj/jni/third_party/ffmpeg > ffmpeg_status
+          git submodule status TMessagesProj/jni/third_party/dav1d >> ffmpeg_status
+          git submodule status TMessagesProj/jni/third_party/libvpx >> ffmpeg_status
           git submodule status TMessagesProj/jni/boringssl > boringssl_status
       - name: Native Cache (armeabi-v7a)
         uses: actions/cache@v4

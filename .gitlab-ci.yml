@@ -29,11 +29,10 @@ default:
   git submodule sync
   git submodule update --init --force 'TMessagesProj/jni/*'
 
-  git submodule status TMessagesProj/jni/ffmpeg > ffmpeg_status
-  git submodule status TMessagesProj/jni/libvpx >> ffmpeg_status
-  cat TMessagesProj/jni/*ffmpeg*.sh >> ffmpeg_status
-  cat TMessagesProj/jni/*libvpx*.sh >> ffmpeg_status
-  cat TMessagesProj/jni/patches/ffmpeg/* >> ffmpeg_status
+  git submodule status TMessagesProj/jni/third_party/ffmpeg > ffmpeg_status
+  git submodule status TMessagesProj/jni/third_party/libvpx >> ffmpeg_status
+  git submodule status TMessagesProj/jni/third_party/dav1d >> ffmpeg_status
+  cat TMessagesProj/jni/third_party/build_*.sh >> ffmpeg_status
   cp ffmpeg_status libvpx_status
 
   git submodule status TMessagesProj/jni/boringssl > boringssl_status
@@ -82,7 +81,6 @@ cache-probe:
     - key: "ffmpeg-libvpx-${FFMPEG_KEY}-${LIBVPX_KEY}"
       paths:
         - TMessagesProj/jni/ffmpeg/build/
-        - TMessagesProj/jni/libvpx/build/
       policy: pull
     - key: "boringssl-${BORINGSSL_KEY}"
       paths:
