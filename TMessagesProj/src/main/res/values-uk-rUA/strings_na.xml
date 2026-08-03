@@ -78,7 +78,7 @@
     <string name="NotificationIcon">Іконка сповіщення</string>
     <string name="Official">Офіційний</string>
     <string name="Nekogram">Nekogram</string>
-    <string name="HalloWeen">HalloWeen</string>
+    <string name="HalloWeen">Гелловін</string>
     <string name="ShowOnlineStatus">Відображати онлайн-статус</string>
     <string name="ShowOnlineStatusNotice">Показувати онлайн-статус інших людей поруч із фотографією профілю в групах</string>
     <string name="ShowRecentOnlineStatus">Показати останній онлайн статус</string>
@@ -102,6 +102,7 @@
     <string name="HideFilterMuteAll">Сховати фільтр вимкнути всі</string>
     <string name="UseLocalQuoteColor">Використовувати колір локальної лапки</string>
     <string name="ShowSquareAvatar">Показати квадратний аватар</string>
+    <string name="DisableProfileAvatarBlur">Вимкнути розмиття аватара профілю</string>
     <string name="DisableCustomWallpaperUser">Вимкнути користувацькі шпалери</string>
     <string name="DisableCustomWallpaperChannel">Вимкнути користувацькі шпалери каналу</string>
     <string name="CopyPhotoAsSticker">Копіювати фото як наліпку</string>
@@ -221,7 +222,7 @@
     <string name="NavigationAnimationSpring">Анімація вежі навігації</string>
     <string name="ForceEdgeToEdge">Примусово до ребра</string>
     <string name="ForceEdgeToEdgeDesc">Може викликати нерегулярність макету сторінок, перекриття вмісту та відмову при натисканні дій.</string>
-    <string name="TabStyle">Tab Style</string>
+    <string name="TabStyle">Стиль вкладок</string>
     <string name="TabStylePure">Чистий</string>
     <string name="TabStylePills">Пігулки</string>
     <string name="ChatActivityBottomStyle">Нижній стиль</string>
@@ -239,7 +240,7 @@
     <string name="DeepLApiKeyNotice">Ключ автентифікації для офіційного API DeepL Pro</string>
     <string name="DeepLFreeApiKey">Безкоштовний API ключ DeepL</string>
     <string name="DeepLFreeApiKeyNotice">Ключ автентифікації для офіційного DeepL Free API</string>
-    <string name="SummarizeText">Summarize</string>
+    <string name="SummarizeText">Підсумувати</string>
     <string name="SummarizeTextButton">Підсумувати кнопку тексту</string>
     <string name="SummarizeTextButtonDisable">Вимкнено</string>
     <string name="SummarizeTextButtonAlways">Завжди</string>
@@ -266,31 +267,36 @@
     <string name="LLMApiKeys">Ключі LLM API</string>
     <string name="LLMModelName">Назва моделі</string>
     <string name="LLMSystemPrompt">Системний запит</string>
+    <string name="LLMTranslationPrompt">Запит на переклад</string>
+    <string name="LLMUseContext">Використовувати останні повідомлення як контекст</string>
+    <string name="LLMUseContextNotice">Для вирішення неоднозначності використовуйте до 5-ти попередніх повідомлень.</string>
     <string name="LLMTemperature">Температура</string>
     <string name="LLMApiKeyNotice">Введіть свій ключ API. Ви можете розділити кілька ключів комами для обертання.</string>
     <string name="LLMApiUrlNotice">Введіть URL бази API (напр., https://api.openai.com/v1)</string>
     <string name="LLMModelNameNotice">Введіть назву моделі (напр., gpt-4o-mini)</string>
     <string name="LLMSystemPromptNotice">Додатково для перекладу системи залиште порожнім, щоб використовувати значення за замовчуванням.</string>
-    <string name="LLMApiFormat">API Format</string>
+    <string name="LLMTranslationPromptNotice">Використовуйте @toLang та @text наповнювачі; залиште порожнім для типового використання.</string>
+    <string name="LLMApiFormat">Формат API</string>
     <string name="LLMApiFormatOpenAIChat">OpenAI (чат)</string>
     <string name="LLMApiFormatOpenAIResponse">OpenAI (відповідь)</string>
     <string name="LLMApiFormatAnthropic">Антропний ефект</string>
     <string name="LLMApiFormatCustom">Користувацька</string>
     <string name="LLMApiFormatOpenAIChatDesc">POST {baseUrl}/chat/completions — Формат API стандартних кторів чату OpenAI. Сумісно з більшістю провайдерів, сумісних з OpenAI-сумісними.</string>
     <string name="LLMApiFormatOpenAIResponseDesc">POST {baseUrl}/ відповіді - формат OpenAI відповідає на API. Використовує вхідні + інструкції полів.</string>
-    <string name="LLMApiFormatAnthropicDesc">POST {baseUrl}/messages — Anthropic Messages API format. Uses x-api-key header and system field.</string>
+    <string name="LLMApiFormatAnthropicDesc">POST {baseUrl}/messages — формат Anthropic Messages API. Використовує заголовок x-api-key та поле system.</string>
     <string name="LLMApiFormatCustomDesc">POST до точного API URL як налаштований - шлях до кінцевої точки. Тіло запиту використовує формат OpenAI чату.</string>
     <string name="LLMFetchModels">Отримати доступні моделі</string>
-    <string name="LLMFetchingModels">Fetching models…</string>
+    <string name="LLMFetchingModels">Отримання моделей…</string>
     <string name="LLMSelectModel">Виберіть модель</string>
     <string name="LLMNoModelsFound">Не знайдено моделей. Перевірте ключ API та URL.</string>
     <string name="LLMConfigSummary">Натисніть, щоб налаштувати LLM перекладач</string>
     <string name="LLMTestConnection">Перевірка підключення</string>
     <string name="LLMTestSuccess">Підключення успішне!</string>
     <string name="LLMTestFailed">Помилка з’єднання: %s</string>
-    <string name="LLMTesting">Testing…</string>
+    <string name="LLMTesting">Тестування…</string>
     <string name="MainTabsStyle">Головний стиль вкладок</string>
     <string name="MainTabsStyleTextFree">Немає тексту</string>
+    <string name="HideTabBarPermissionWarnings">Приховувати попередження про дозвіл на панелі вкладок</string>
     <string name="ShowRecentChatsOnTabLongPress">Показувати недавні чати на вкладці чату у довгому натисканні</string>
     <string name="CustomIpStrategy">Власна стратегія Ip</string>
     <string name="CustomIpStrategyIPV4">Тільки IPV4</string>
@@ -325,9 +331,9 @@
     <string name="InlineBotRulesView">Переглянути правило</string>
     <string name="InlineBotRulesUsernameHint">Ім\'я бота (без @)</string>
     <string name="InlineBotRulesRegexHint">Один регулярний вираз на рядок</string>
-    <string name="InlineBotRulesUsernameLabel">Bot username</string>
+    <string name="InlineBotRulesUsernameLabel">Ім’я користувача бота</string>
     <string name="InlineBotRulesRegexLabel">Правила регулярного виразу</string>
-    <string name="InlineBotRulesEditDescription">Each line is a separate regular expression. URLs that match any of them will be sent to the corresponding inline bot. You can test patterns at <![CDATA[<a href="https://regex101.com">regex101.com</a>]]>.</string>
+    <string name="InlineBotRulesEditDescription">Кожен рядок — це окремий регулярний вираз. URL-адреси, що відповідають будь-якому з них, будуть надіслані відповідному боту. Ви можете протестувати шаблони на <![CDATA[<a href="https://regex101.com">regex101.com</a>]]>.</string>
     <string name="InlineBotRulesUsernameRequired">Потрібне ім\'я користувача бота</string>
     <string name="InlineBotRulesRegexRequired">Потрібно принаймні один регулярний вираз</string>
     <string name="InlineBotRulesSaveError">Не вдалося зберегти правило. Перевірте синтаксис регулярного виводу.</string>

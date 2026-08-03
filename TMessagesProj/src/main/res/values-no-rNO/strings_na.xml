@@ -59,6 +59,8 @@
     <string name="QuickToggleAnonymous">Hurtigveksle anonym</string>
     <string name="QuickToggleAnonymousNotice">Hvis du er eier av gruppen</string>
     <string name="RealHideTimeForSticker">Sannsynlig tid for klistremerker</string>
+    <string name="ResetSettings">Tilbakestill innstillinger</string>
+    <string name="ResetSettingsAlert">Er du sikker på at du vil tilbakestille alle N-innstillinger?</string>
     <string name="HideTitle">Skjul tittel</string>
     <string name="IgnoreFolderCount">Ignorer mappetelling</string>
     <string name="SendWithoutMarkdown">Send uten markdown</string>
@@ -100,6 +102,7 @@
     <string name="HideFilterMuteAll">Skjul demping av filtre</string>
     <string name="UseLocalQuoteColor">Bruk lokal sitattfarge</string>
     <string name="ShowSquareAvatar">Vis firkantet profilbilde</string>
+    <string name="DisableProfileAvatarBlur">Deaktivere profilbilde blur</string>
     <string name="DisableCustomWallpaperUser">Deaktivere brukerdefinert bakgrunn</string>
     <string name="DisableCustomWallpaperChannel">Deaktiver kanaltilpasset bakgrunnsbilde</string>
     <string name="CopyPhotoAsSticker">Kopier Bilde som klistremerke</string>
@@ -264,11 +267,15 @@
     <string name="LLMApiKeys">LLM API-nøkler</string>
     <string name="LLMModelName">Modell navn</string>
     <string name="LLMSystemPrompt">System prompt</string>
+    <string name="LLMTranslationPrompt">Ledetekst for oversettelse</string>
+    <string name="LLMUseContext">Bruk siste meldinger som kontekst</string>
+    <string name="LLMUseContextNotice">Bruk opptil fem tidligere meldinger for å løse uklarhet.</string>
     <string name="LLMTemperature">Temperatur</string>
     <string name="LLMApiKeyNotice">Skriv inn API-nøkkel. Du kan skille flere nøkler med komma for rotasjon.</string>
     <string name="LLMApiUrlNotice">Angi API base URL (f.eks.https://api.openai.com/v1)</string>
     <string name="LLMModelNameNotice">Angi modellnavnet (f.eks., gpt-4o-mini)</string>
-    <string name="LLMSystemPromptNotice">Egendefinert system ledetekst for oversettelse. La stå tom for å bruke standard.</string>
+    <string name="LLMSystemPromptNotice">Egendefinert system instruksjoner. La stå tom for å bruke sikker standard.</string>
+    <string name="LLMTranslationPromptNotice">Bruk @toLang og @text placeholders; la stå tom for å bruke standard.</string>
     <string name="LLMApiFormat">API Format</string>
     <string name="LLMApiFormatOpenAIChat">OpenAI (chat)</string>
     <string name="LLMApiFormatOpenAIResponse">OpenAI (svar)</string>
@@ -289,6 +296,7 @@
     <string name="LLMTesting">Tester…</string>
     <string name="MainTabsStyle">Hovedsidemerker stil</string>
     <string name="MainTabsStyleTextFree">Ingen tekst</string>
+    <string name="HideTabBarPermissionWarnings">Skjul tillatelsesadvarsler for fanelinjen</string>
     <string name="ShowRecentChatsOnTabLongPress">Vis nylige sludringer på chat fanens lang-trykk</string>
     <string name="CustomIpStrategy">Egendefinert Ip strategi</string>
     <string name="CustomIpStrategyIPV4">Kun IPV4</string>

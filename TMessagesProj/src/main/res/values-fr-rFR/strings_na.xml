@@ -59,6 +59,8 @@
     <string name="QuickToggleAnonymous">Activer/désactiver rapidement l\'anonymat</string>
     <string name="QuickToggleAnonymousNotice">Si vous êtes propriétaire du groupe</string>
     <string name="RealHideTimeForSticker">Temps réel pour cacher les autocollants</string>
+    <string name="ResetSettings">Réinitialiser les paramètres</string>
+    <string name="ResetSettingsAlert">Êtes-vous sûr de vouloir réinitialiser tous les N-Paramètres?</string>
     <string name="HideTitle">Cacher le titre</string>
     <string name="IgnoreFolderCount">Ignorer le nombre de dossiers</string>
     <string name="SendWithoutMarkdown">Envoyer sans marquage</string>
@@ -100,6 +102,7 @@
     <string name="HideFilterMuteAll">Masquer le filtre en mode muet</string>
     <string name="UseLocalQuoteColor">Utiliser la couleur locale du guillemet</string>
     <string name="ShowSquareAvatar">Afficher l\'avatar carré</string>
+    <string name="DisableProfileAvatarBlur">Désactiver le flou d\'avatar de profil</string>
     <string name="DisableCustomWallpaperUser">Désactiver le fond d\'écran personnalisé de l\'utilisateur</string>
     <string name="DisableCustomWallpaperChannel">Désactiver le fond d\'écran personnalisé pour les canaux</string>
     <string name="CopyPhotoAsSticker">Copier la photo en tant qu\'autocollant</string>
@@ -264,11 +267,15 @@
     <string name="LLMApiKeys">Clés API LLM</string>
     <string name="LLMModelName">Nom du modèle</string>
     <string name="LLMSystemPrompt">Message du système</string>
+    <string name="LLMTranslationPrompt">Demande de traduction</string>
+    <string name="LLMUseContext">Utiliser les messages récents comme contexte</string>
+    <string name="LLMUseContextNotice">Utilisez jusqu\'à cinq messages précédents pour résoudre l\'ambiguïté.</string>
     <string name="LLMTemperature">Température</string>
     <string name="LLMApiKeyNotice">Entrez votre clé API. Vous pouvez séparer plusieurs clés avec des virgules pour la rotation.</string>
     <string name="LLMApiUrlNotice">Entrez l\'URL de base de l\'API (par exemple, https://api.openai.com/v1)</string>
     <string name="LLMModelNameNotice">Entrez le nom du modèle (par exemple, gpt-4o-mini)</string>
-    <string name="LLMSystemPromptNotice">Message système personnalisé pour la traduction. Laisser vide pour utiliser la valeur par défaut.</string>
+    <string name="LLMSystemPromptNotice">Instructions système personnalisées. Laissez vide pour utiliser la configuration par défaut de sécurité.</string>
+    <string name="LLMTranslationPromptNotice">Utilisez les marqueurs @toLang et @text ; laissez vide pour utiliser la valeur par défaut.</string>
     <string name="LLMApiFormat">API Format</string>
     <string name="LLMApiFormatOpenAIChat">OpenAI (Chat)</string>
     <string name="LLMApiFormatOpenAIResponse">OpenAI (Réponse)</string>
@@ -289,6 +296,7 @@
     <string name="LLMTesting">Test de…</string>
     <string name="MainTabsStyle">Style des onglets principaux</string>
     <string name="MainTabsStyleTextFree">Pas de texte</string>
+    <string name="HideTabBarPermissionWarnings">Masquer les avertissements de permission de la barre d\'onglets</string>
     <string name="ShowRecentChatsOnTabLongPress">Afficher les discussions récentes lors d\'un appui long sur l\'onglet de discussion</string>
     <string name="CustomIpStrategy">Stratégie Ip personnalisée</string>
     <string name="CustomIpStrategyIPV4">IPV4 Uniquement</string>

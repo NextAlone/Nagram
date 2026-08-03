@@ -59,6 +59,8 @@
     <string name="QuickToggleAnonymous">Nhanh chóng chuyển sang nói chuyện ẩn danh</string>
     <string name="QuickToggleAnonymousNotice">Nếu bạn là chủ sở hữu của nhóm</string>
     <string name="RealHideTimeForSticker">Thời gian gửi nhãn dán thực sự ẩn</string>
+    <string name="ResetSettings">Reset Settings</string>
+    <string name="ResetSettingsAlert">Are you sure you want to reset all N-Settings?</string>
     <string name="HideTitle">Ẩn tiêu đề và hình đại diện</string>
     <string name="IgnoreFolderCount">Bỏ qua số lượng chưa đọc trên nhãn thư mục</string>
     <string name="SendWithoutMarkdown">Tắt đánh dấu</string>
@@ -100,6 +102,7 @@
     <string name="HideFilterMuteAll">\"Bật tiếng tất cả\" trong các thư mục ẩn</string>
     <string name="UseLocalQuoteColor">Màu tên cục bộ</string>
     <string name="ShowSquareAvatar">Hiển thị hình đại diện vuông</string>
+    <string name="DisableProfileAvatarBlur">Disable Profile Avatar Blur</string>
     <string name="DisableCustomWallpaperUser">Tắt nền tùy chỉnh cho tin nhắn riêng tư</string>
     <string name="DisableCustomWallpaperChannel">Tắt nền tùy chỉnh cho kênh</string>
     <string name="CopyPhotoAsSticker">Sao chép hình ảnh nhưng có nhãn dán</string>
@@ -264,11 +267,15 @@
     <string name="LLMApiKeys">LLM API Keys</string>
     <string name="LLMModelName">Model Name</string>
     <string name="LLMSystemPrompt">System Prompt</string>
+    <string name="LLMTranslationPrompt">Translation Prompt</string>
+    <string name="LLMUseContext">Use Recent Messages as Context</string>
+    <string name="LLMUseContextNotice">Use up to five earlier messages to resolve ambiguity.</string>
     <string name="LLMTemperature">Temperature</string>
     <string name="LLMApiKeyNotice">Enter your API key. You can separate multiple keys with commas for rotation.</string>
     <string name="LLMApiUrlNotice">Enter the API base URL (e.g., https://api.openai.com/v1)</string>
     <string name="LLMModelNameNotice">Enter the model name (e.g., gpt-4o-mini)</string>
-    <string name="LLMSystemPromptNotice">Custom system prompt for translation. Leave empty to use default.</string>
+    <string name="LLMSystemPromptNotice">Custom system instructions. Leave empty to use the safe default.</string>
+    <string name="LLMTranslationPromptNotice">Use @toLang and @text placeholders; leave empty to use the default.</string>
     <string name="LLMApiFormat">API Format</string>
     <string name="LLMApiFormatOpenAIChat">OpenAI (Chat)</string>
     <string name="LLMApiFormatOpenAIResponse">OpenAI (Response)</string>
@@ -289,6 +296,7 @@
     <string name="LLMTesting">Testing…</string>
     <string name="MainTabsStyle">Main tabs style</string>
     <string name="MainTabsStyleTextFree">No text</string>
+    <string name="HideTabBarPermissionWarnings">Hide tab bar permission warnings</string>
     <string name="ShowRecentChatsOnTabLongPress">Show recent chats on chat tab long-press</string>
     <string name="CustomIpStrategy">Custom Ip Strategy</string>
     <string name="CustomIpStrategyIPV4">IPV4 Only</string>

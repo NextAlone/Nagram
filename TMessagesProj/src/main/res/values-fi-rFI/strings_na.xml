@@ -59,6 +59,8 @@
     <string name="QuickToggleAnonymous">Nopea vaihtaminen anonyymi</string>
     <string name="QuickToggleAnonymousNotice">Jos olet ryhmän omistaja</string>
     <string name="RealHideTimeForSticker">Todellinen piilottaa aika tarroille</string>
+    <string name="ResetSettings">Nollaa Asetukset</string>
+    <string name="ResetSettingsAlert">Oletko varma, että haluat palauttaa kaikki N-asetukset?</string>
     <string name="HideTitle">Piilota Otsikko</string>
     <string name="IgnoreFolderCount">Ohita Kansion Määrä</string>
     <string name="SendWithoutMarkdown">Lähetä ilman merkintää</string>
@@ -100,6 +102,7 @@
     <string name="HideFilterMuteAll">Piilota suodatin mykistää kaikki</string>
     <string name="UseLocalQuoteColor">Käytä paikallista tarjouksen väriä</string>
     <string name="ShowSquareAvatar">Näytä neliön profiilikuva</string>
+    <string name="DisableProfileAvatarBlur">Poista Profiilin Avatar Blur Käytöstä</string>
     <string name="DisableCustomWallpaperUser">Poista käyttäjän oma taustakuva käytöstä</string>
     <string name="DisableCustomWallpaperChannel">Poista kanavien mukautettu taustakuva käytöstä</string>
     <string name="CopyPhotoAsSticker">Kopioi Kuva Tarraksi</string>
@@ -264,11 +267,15 @@
     <string name="LLMApiKeys">LLM API -avaimet</string>
     <string name="LLMModelName">Mallin Nimi</string>
     <string name="LLMSystemPrompt">Järjestelmän Nopeus</string>
+    <string name="LLMTranslationPrompt">Nopea Käännös</string>
+    <string name="LLMUseContext">Käytä viimeisimpiä viestejä kontekstina</string>
+    <string name="LLMUseContextNotice">Käytä jopa viittä aikaisempaa viestiä epäselvyyksien ratkaisemiseksi.</string>
     <string name="LLMTemperature">Lämpötila</string>
     <string name="LLMApiKeyNotice">Syötä API-avain. Voit erottaa useita avaimia pilkuilla kiertoa varten.</string>
     <string name="LLMApiUrlNotice">Syötä API base URL (esim. https://api.openai.com/v1)</string>
     <string name="LLMModelNameNotice">Anna mallin nimi (esim. gpt-4o-mini)</string>
-    <string name="LLMSystemPromptNotice">Mukautettu järjestelmäkehotus käännökseen. Jätä tyhjäksi käyttääksesi oletusta.</string>
+    <string name="LLMSystemPromptNotice">Mukautetut järjestelmäohjeet. Jätä tyhjäksi käyttääksesi turvallista oletusasetusta.</string>
+    <string name="LLMTranslationPromptNotice">Käytä @toLang ja @text paikkamerkkejä; jätä tyhjäksi käyttääksesi oletusta.</string>
     <string name="LLMApiFormat">API Format</string>
     <string name="LLMApiFormatOpenAIChat">OpenAI (Chat)</string>
     <string name="LLMApiFormatOpenAIResponse">OpenAI (vastaus)</string>
@@ -289,6 +296,7 @@
     <string name="LLMTesting">Testataan…</string>
     <string name="MainTabsStyle">Päävälilehtien tyyli</string>
     <string name="MainTabsStyleTextFree">Ei tekstiä</string>
+    <string name="HideTabBarPermissionWarnings">Piilota välilehti oikeudet varoitukset</string>
     <string name="ShowRecentChatsOnTabLongPress">Näytä viimeaikaiset keskustelut chat-välilehdessä pitkään</string>
     <string name="CustomIpStrategy">Mukautettu IP-strategia</string>
     <string name="CustomIpStrategyIPV4">Vain IPV4</string>

@@ -59,6 +59,8 @@
     <string name="QuickToggleAnonymous">Rychlé přepnutí anonymních</string>
     <string name="QuickToggleAnonymousNotice">Pokud jste vlastníkem skupiny</string>
     <string name="RealHideTimeForSticker">Skutečný čas skrytí samolepek</string>
+    <string name="ResetSettings">Obnovit nastavení</string>
+    <string name="ResetSettingsAlert">Jste si jisti, že chcete obnovit všechna nastavení N-?</string>
     <string name="HideTitle">Skrýt název</string>
     <string name="IgnoreFolderCount">Ignorovat počet složek</string>
     <string name="SendWithoutMarkdown">Odeslat bez markdown</string>
@@ -100,6 +102,7 @@
     <string name="HideFilterMuteAll">Skrýt ztlumit vše</string>
     <string name="UseLocalQuoteColor">Použít místní barvu citací</string>
     <string name="ShowSquareAvatar">Zobrazit čtvereční avatar</string>
+    <string name="DisableProfileAvatarBlur">Zakázat rozostření profilu</string>
     <string name="DisableCustomWallpaperUser">Zakázat uživatelskou vlastní tapetu</string>
     <string name="DisableCustomWallpaperChannel">Zakázat vlastní tapetu kanálu</string>
     <string name="CopyPhotoAsSticker">Kopírovat fotku jako nálepku</string>
@@ -264,11 +267,15 @@
     <string name="LLMApiKeys">API klíče LLM</string>
     <string name="LLMModelName">Název modelu</string>
     <string name="LLMSystemPrompt">Systémová výzva</string>
+    <string name="LLMTranslationPrompt">Překladový požadavek</string>
+    <string name="LLMUseContext">Použít poslední zprávy jako kontext</string>
+    <string name="LLMUseContextNotice">Pro vyřešení nejednoznačnosti použijte až pět dřívějších zpráv.</string>
     <string name="LLMTemperature">Teplota</string>
     <string name="LLMApiKeyNotice">Zadejte svůj API klíč. Můžete oddělit více klíčů čárkou.</string>
     <string name="LLMApiUrlNotice">Zadejte základní URL API (např. https://api.openai.com/v1)</string>
     <string name="LLMModelNameNotice">Zadejte název modelu (např. gpt-4o-mini)</string>
-    <string name="LLMSystemPromptNotice">Vlastní systémová výzva k překladu. Nechte prázdné pro použití výchozího nastavení.</string>
+    <string name="LLMSystemPromptNotice">Vlastní systémové pokyny. Nechte prázdné pro použití bezpečného výchozího nastavení.</string>
+    <string name="LLMTranslationPromptNotice">Použijte @toLang a @text placeholders; nechte prázdné pro použití výchozí.</string>
     <string name="LLMApiFormat">API Format</string>
     <string name="LLMApiFormatOpenAIChat">OpenAI (Chat)</string>
     <string name="LLMApiFormatOpenAIResponse">OpenAI (odpověď)</string>
@@ -289,6 +296,7 @@
     <string name="LLMTesting">Testování…</string>
     <string name="MainTabsStyle">Styl hlavních panelů</string>
     <string name="MainTabsStyleTextFree">Žádný text</string>
+    <string name="HideTabBarPermissionWarnings">Skrýt upozornění oprávnění v panelu karet</string>
     <string name="ShowRecentChatsOnTabLongPress">Zobrazit nedávné chaty na kartě chatu dlouhým stiskem</string>
     <string name="CustomIpStrategy">Vlastní Ip strategie</string>
     <string name="CustomIpStrategyIPV4">Pouze IPV4</string>

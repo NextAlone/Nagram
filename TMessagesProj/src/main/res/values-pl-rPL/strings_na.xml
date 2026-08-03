@@ -102,6 +102,7 @@
     <string name="HideFilterMuteAll">Ukryj wyciszenie filtru</string>
     <string name="UseLocalQuoteColor">Użyj lokalnego koloru cytatu</string>
     <string name="ShowSquareAvatar">Pokaż kwadratowy awatar</string>
+    <string name="DisableProfileAvatarBlur">Wyłącz rozmycie awatara profilu</string>
     <string name="DisableCustomWallpaperUser">Wyłącz własną tapetę użytkownika</string>
     <string name="DisableCustomWallpaperChannel">Wyłącz własną tapetę kanału</string>
     <string name="CopyPhotoAsSticker">Skopiuj zdjęcie jako naklejkę</string>
@@ -266,11 +267,15 @@
     <string name="LLMApiKeys">Klucze API LLM</string>
     <string name="LLMModelName">Nazwa modelu</string>
     <string name="LLMSystemPrompt">Monit systemowy</string>
+    <string name="LLMTranslationPrompt">Powiadomienie o tłumaczeniu</string>
+    <string name="LLMUseContext">Użyj ostatnich wiadomości jako kontekstu</string>
+    <string name="LLMUseContextNotice">Użyj do pięciu wcześniejszych wiadomości, aby rozwiązać niejasność.</string>
     <string name="LLMTemperature">Temperatura</string>
     <string name="LLMApiKeyNotice">Wprowadź swój klucz API. Możesz oddzielić wiele kluczy przecinkami do obrotu.</string>
     <string name="LLMApiUrlNotice">Wprowadź bazowy adres URL API (np. https://api.openai.com/v1)</string>
     <string name="LLMModelNameNotice">Wprowadź nazwę modelu (np. gpt-4o-mini)</string>
     <string name="LLMSystemPromptNotice">Własny monit systemowy do tłumaczenia. Pozostaw puste, aby użyć domyślnego.</string>
+    <string name="LLMTranslationPromptNotice">Użyj @toLang i @text placeholders; pozostaw puste, aby użyć domyślnych.</string>
     <string name="LLMApiFormat">API Format</string>
     <string name="LLMApiFormatOpenAIChat">OpenAI (Chat)</string>
     <string name="LLMApiFormatOpenAIResponse">OpenAI (odpowiedź)</string>
@@ -291,6 +296,7 @@
     <string name="LLMTesting">Testowanie…</string>
     <string name="MainTabsStyle">Styl zakładek głównych</string>
     <string name="MainTabsStyleTextFree">Brak tekstu</string>
+    <string name="HideTabBarPermissionWarnings">Ukryj ostrzeżenia o uprawnieniach paska kart</string>
     <string name="ShowRecentChatsOnTabLongPress">Pokaż ostatnie czaty przy długie naciśnięcie karty czatu</string>
     <string name="CustomIpStrategy">Niestandardowa strategia IP</string>
     <string name="CustomIpStrategyIPV4">Tylko IPV4</string>

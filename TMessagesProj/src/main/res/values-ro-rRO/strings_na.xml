@@ -59,6 +59,8 @@
     <string name="QuickToggleAnonymous">Comutare rapidă anonimă</string>
     <string name="QuickToggleAnonymousNotice">Dacă sunteți proprietarul grupului</string>
     <string name="RealHideTimeForSticker">Timp real ascuns pentru stickere</string>
+    <string name="ResetSettings">Resetare setări</string>
+    <string name="ResetSettingsAlert">Sunteţi sigur că doriţi să resetaţi toate setările N-?</string>
     <string name="HideTitle">Ascunde titlul</string>
     <string name="IgnoreFolderCount">Ignoră numărul de dosare</string>
     <string name="SendWithoutMarkdown">Trimite fără marcaj</string>
@@ -100,6 +102,7 @@
     <string name="HideFilterMuteAll">Ascunde filtrele mute toate</string>
     <string name="UseLocalQuoteColor">Folosește culoarea ofertei locale</string>
     <string name="ShowSquareAvatar">Arată avatarul pătrat</string>
+    <string name="DisableProfileAvatarBlur">Dezactivează Blur Avatar de profil</string>
     <string name="DisableCustomWallpaperUser">Dezactivează imaginea de fundal personalizată a utilizatorului</string>
     <string name="DisableCustomWallpaperChannel">Dezactivează fundal personalizat pentru canale</string>
     <string name="CopyPhotoAsSticker">Copiază fotografia ca Sticker</string>
@@ -264,11 +267,15 @@
     <string name="LLMApiKeys">Chei API LLM</string>
     <string name="LLMModelName">Nume model</string>
     <string name="LLMSystemPrompt">Solicitare sistem</string>
+    <string name="LLMTranslationPrompt">Solicitare traducere</string>
+    <string name="LLMUseContext">Utilizați mesajele recente ca context</string>
+    <string name="LLMUseContextNotice">Utilizați până la cinci mesaje anterioare pentru a rezolva ambiguitatea.</string>
     <string name="LLMTemperature">Temperatură</string>
     <string name="LLMApiKeyNotice">Introduceți cheia API. Puteți separa mai multe chei cu virgula pentru rotație.</string>
     <string name="LLMApiUrlNotice">Introduceți URL-ul de bază API (de exemplu, https://api.openai.com/v1)</string>
     <string name="LLMModelNameNotice">Introduceți numele modelului (de ex. gpt-4o-min)</string>
-    <string name="LLMSystemPromptNotice">Personalizați sistemul pentru traducere. Lăsați gol pentru a utiliza setările implicite.</string>
+    <string name="LLMSystemPromptNotice">Instrucțiuni personalizate de sistem. Lăsați gol pentru a utiliza setările implicite de siguranță.</string>
+    <string name="LLMTranslationPromptNotice">Utilizați substituenți @toLang și @text; lăsați gol pentru a utiliza setările implicite.</string>
     <string name="LLMApiFormat">API Format</string>
     <string name="LLMApiFormatOpenAIChat">OpenAI (Chat)</string>
     <string name="LLMApiFormatOpenAIResponse">OpenAI (Responză)</string>
@@ -289,6 +296,7 @@
     <string name="LLMTesting">Testare…</string>
     <string name="MainTabsStyle">Stil filă principală</string>
     <string name="MainTabsStyleTextFree">Nici un text</string>
+    <string name="HideTabBarPermissionWarnings">Ascunde avertismentele permisiunilor barei de file</string>
     <string name="ShowRecentChatsOnTabLongPress">Arată conversații recente în tab-ul de chat apăsare lungă</string>
     <string name="CustomIpStrategy">Strategie particularizată de Ip</string>
     <string name="CustomIpStrategyIPV4">Numai IPV4</string>

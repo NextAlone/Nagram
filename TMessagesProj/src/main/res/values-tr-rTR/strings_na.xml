@@ -102,6 +102,7 @@
     <string name="HideFilterMuteAll">Filtreyi gizle, tümünü kapat</string>
     <string name="UseLocalQuoteColor">Yerel alıntı rengini kullan</string>
     <string name="ShowSquareAvatar">Kare avatarı göster</string>
+    <string name="DisableProfileAvatarBlur">Disable Profile Avatar Blur</string>
     <string name="DisableCustomWallpaperUser">Kullanıcı özel duvar kağıdını devre dışı bırak</string>
     <string name="DisableCustomWallpaperChannel">Kanal özel duvar kağıdını devre dışı bırak</string>
     <string name="CopyPhotoAsSticker">Fotoğrafı Etiket Olarak Kopyala</string>
@@ -266,11 +267,15 @@
     <string name="LLMApiKeys">LLM API Keys</string>
     <string name="LLMModelName">Model Name</string>
     <string name="LLMSystemPrompt">System Prompt</string>
+    <string name="LLMTranslationPrompt">Translation Prompt</string>
+    <string name="LLMUseContext">Use Recent Messages as Context</string>
+    <string name="LLMUseContextNotice">Use up to five earlier messages to resolve ambiguity.</string>
     <string name="LLMTemperature">Temperature</string>
     <string name="LLMApiKeyNotice">Enter your API key. You can separate multiple keys with commas for rotation.</string>
     <string name="LLMApiUrlNotice">Enter the API base URL (e.g., https://api.openai.com/v1)</string>
     <string name="LLMModelNameNotice">Enter the model name (e.g., gpt-4o-mini)</string>
     <string name="LLMSystemPromptNotice">Custom system prompt for translation. Leave empty to use default.</string>
+    <string name="LLMTranslationPromptNotice">Use @toLang and @text placeholders; leave empty to use the default.</string>
     <string name="LLMApiFormat">API Format</string>
     <string name="LLMApiFormatOpenAIChat">OpenAI (Chat)</string>
     <string name="LLMApiFormatOpenAIResponse">OpenAI (Response)</string>
@@ -291,6 +296,7 @@
     <string name="LLMTesting">Testing…</string>
     <string name="MainTabsStyle">Main tabs style</string>
     <string name="MainTabsStyleTextFree">No text</string>
+    <string name="HideTabBarPermissionWarnings">Hide tab bar permission warnings</string>
     <string name="ShowRecentChatsOnTabLongPress">Show recent chats on chat tab long-press</string>
     <string name="CustomIpStrategy">Custom Ip Strategy</string>
     <string name="CustomIpStrategyIPV4">IPV4 Only</string>

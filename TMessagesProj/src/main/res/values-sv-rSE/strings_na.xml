@@ -59,6 +59,8 @@
     <string name="QuickToggleAnonymous">Snabbväxla anonym</string>
     <string name="QuickToggleAnonymousNotice">Om du är ägare till gruppen</string>
     <string name="RealHideTimeForSticker">Verklig gömtid för klistermärken</string>
+    <string name="ResetSettings">Återställ inställningar</string>
+    <string name="ResetSettingsAlert">Är du säker på att du vill återställa alla N-inställningar?</string>
     <string name="HideTitle">Dölj titel</string>
     <string name="IgnoreFolderCount">Ignorera antal mappar</string>
     <string name="SendWithoutMarkdown">Skicka utan markdown</string>
@@ -100,6 +102,7 @@
     <string name="HideFilterMuteAll">Dölj filtrera stänga av alla</string>
     <string name="UseLocalQuoteColor">Använd lokal offertfärg</string>
     <string name="ShowSquareAvatar">Visa fyrkantig avatar</string>
+    <string name="DisableProfileAvatarBlur">Inaktivera profilavatar oskärpa</string>
     <string name="DisableCustomWallpaperUser">Inaktivera användaranpassad bakgrundsbild</string>
     <string name="DisableCustomWallpaperChannel">Inaktivera kanalanpassad bakgrundsbild</string>
     <string name="CopyPhotoAsSticker">Kopiera foto som klistermärke</string>
@@ -264,11 +267,15 @@
     <string name="LLMApiKeys">LLM API-nycklar</string>
     <string name="LLMModelName">Modellens namn</string>
     <string name="LLMSystemPrompt">Systemets prompt</string>
+    <string name="LLMTranslationPrompt">Översättning Fråga</string>
+    <string name="LLMUseContext">Använd senaste meddelanden som kontext</string>
+    <string name="LLMUseContextNotice">Använd upp till fem tidigare meddelanden för att lösa tvetydighet.</string>
     <string name="LLMTemperature">Temperatur</string>
     <string name="LLMApiKeyNotice">Ange din API-nyckel. Du kan separera flera nycklar med kommatecken för rotation.</string>
     <string name="LLMApiUrlNotice">Ange API-bas-URL (t.ex., https://api.openai.com/v1)</string>
     <string name="LLMModelNameNotice">Ange modellnamnet (t.ex. gpt-4o-mini)</string>
-    <string name="LLMSystemPromptNotice">Anpassad systemfråga för översättning. Lämna tomt för att använda standard.</string>
+    <string name="LLMSystemPromptNotice">Anpassade systeminstruktioner. Lämna tomt för att använda den säkra standardinställningen.</string>
+    <string name="LLMTranslationPromptNotice">Använd @toLang och @text platshållare; lämna tomt för att använda standardinställningen.</string>
     <string name="LLMApiFormat">API Format</string>
     <string name="LLMApiFormatOpenAIChat">OpenAI (Chatt)</string>
     <string name="LLMApiFormatOpenAIResponse">OpenAI (Svar)</string>
@@ -289,6 +296,7 @@
     <string name="LLMTesting">Testar…</string>
     <string name="MainTabsStyle">Stil på huvudflikar</string>
     <string name="MainTabsStyleTextFree">Ingen text</string>
+    <string name="HideTabBarPermissionWarnings">Dölj behörighetsvarningar för flikfältet</string>
     <string name="ShowRecentChatsOnTabLongPress">Visa senaste chattar på chattfliken långtryck</string>
     <string name="CustomIpStrategy">Anpassad Ip strategi</string>
     <string name="CustomIpStrategyIPV4">Endast IPV4</string>

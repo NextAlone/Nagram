@@ -102,6 +102,7 @@
     <string name="HideFilterMuteAll">フィルターミュートをすべて隠す</string>
     <string name="UseLocalQuoteColor">ローカルクオートカラーを使用する</string>
     <string name="ShowSquareAvatar">四角いアバターを表示</string>
+    <string name="DisableProfileAvatarBlur">プロフィールアバターのぼかしを無効にする</string>
     <string name="DisableCustomWallpaperUser">ユーザーのカスタム壁紙を無効にする</string>
     <string name="DisableCustomWallpaperChannel">チャンネルのカスタム壁紙を無効にする</string>
     <string name="CopyPhotoAsSticker">写真をステッカーとしてコピー</string>
@@ -266,11 +267,15 @@
     <string name="LLMApiKeys">LLM API キー</string>
     <string name="LLMModelName">モデル名</string>
     <string name="LLMSystemPrompt">システムのプロンプト表示</string>
+    <string name="LLMTranslationPrompt">翻訳の促し</string>
+    <string name="LLMUseContext">最近のメッセージをコンテキストとして使用</string>
+    <string name="LLMUseContextNotice">Use up to five earlier messages to resolve ambiguity.</string>
     <string name="LLMTemperature">温度</string>
     <string name="LLMApiKeyNotice">APIキーを入力します。複数のキーをコンマで区切って回転できます。</string>
     <string name="LLMApiUrlNotice">API ベース URL を入力してください。(例: https://api.openai.com/v1)</string>
     <string name="LLMModelNameNotice">モデル名を入力してください（例：gpt-4o-mini）</string>
     <string name="LLMSystemPromptNotice">翻訳のためのカスタムシステムプロンプト。デフォルトを使用するには空のままにします。</string>
+    <string name="LLMTranslationPromptNotice">\@toLang と @text プレースホルダを使用します。空白のままにするとデフォルトを使用します。</string>
     <string name="LLMApiFormat">API Format</string>
     <string name="LLMApiFormatOpenAIChat">OpenAI (チャット)</string>
     <string name="LLMApiFormatOpenAIResponse">OpenAI (レスポンス)</string>
@@ -291,6 +296,7 @@
     <string name="LLMTesting">Testing…</string>
     <string name="MainTabsStyle">メインタブのスタイル</string>
     <string name="MainTabsStyleTextFree">テキストがありません</string>
+    <string name="HideTabBarPermissionWarnings">タブバーの権限警告を非表示</string>
     <string name="ShowRecentChatsOnTabLongPress">チャットタブの長押しで最近のチャットを表示</string>
     <string name="CustomIpStrategy">カスタムIp戦略</string>
     <string name="CustomIpStrategyIPV4">IPV4のみ</string>

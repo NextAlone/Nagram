@@ -102,6 +102,7 @@
     <string name="HideFilterMuteAll">Скрыть фильтр «Отключить все»</string>
     <string name="UseLocalQuoteColor">Локальный цвет цитаты</string>
     <string name="ShowSquareAvatar">Квадратные аватары</string>
+    <string name="DisableProfileAvatarBlur">Отключить размытие аватара</string>
     <string name="DisableCustomWallpaperUser">Отключить пользовательские обои</string>
     <string name="DisableCustomWallpaperChannel">Отключить пользовательские обои каналов</string>
     <string name="CopyPhotoAsSticker">Копировать фото как стикер</string>
@@ -266,11 +267,15 @@
     <string name="LLMApiKeys">LLM API ключи</string>
     <string name="LLMModelName">Название модели</string>
     <string name="LLMSystemPrompt">Системная подсказка</string>
+    <string name="LLMTranslationPrompt">Запрос перевода</string>
+    <string name="LLMUseContext">Использовать последние сообщения как контекст</string>
+    <string name="LLMUseContextNotice">Используйте до пяти предыдущих сообщений для устранения двусмысленности.</string>
     <string name="LLMTemperature">Температура</string>
     <string name="LLMApiKeyNotice">Введите ваш ключ API. Вы можете разделить несколько клавиш запятыми для вращения.</string>
     <string name="LLMApiUrlNotice">Введите базовый URL API (например, https://api.openai.com/v1)</string>
     <string name="LLMModelNameNotice">Введите имя модели (например, gpt-4o-mini)</string>
     <string name="LLMSystemPromptNotice">Пользовательская системная подсказка для перевода. Оставьте пустым для использования по умолчанию.</string>
+    <string name="LLMTranslationPromptNotice">Используйте поля @toLang и @text; оставьте пустым, чтобы использовать значения по умолчанию.</string>
     <string name="LLMApiFormat">API Format</string>
     <string name="LLMApiFormatOpenAIChat">OpenAI (чат)</string>
     <string name="LLMApiFormatOpenAIResponse">OpenAI (Ответ)</string>
@@ -291,6 +296,7 @@
     <string name="LLMTesting">Тестирование…</string>
     <string name="MainTabsStyle">Стиль основных вкладок</string>
     <string name="MainTabsStyleTextFree">Нет текста</string>
+    <string name="HideTabBarPermissionWarnings">Скрыть предупреждения о разрешениях панели вкладок</string>
     <string name="ShowRecentChatsOnTabLongPress">Показывать недавние чаты на вкладке чата долгое нажатие</string>
     <string name="CustomIpStrategy">Пользовательская стратегия Ip</string>
     <string name="CustomIpStrategyIPV4">Только IPV4</string>

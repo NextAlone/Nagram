@@ -102,6 +102,7 @@
     <string name="HideFilterMuteAll">隱藏文件夾中的\"全部取消靜音\</string>
     <string name="UseLocalQuoteColor">本地名稱顏色</string>
     <string name="ShowSquareAvatar">顯示方形頭像</string>
+    <string name="DisableProfileAvatarBlur">Disable Profile Avatar Blur</string>
     <string name="DisableCustomWallpaperUser">禁用私聊的自定義背景</string>
     <string name="DisableCustomWallpaperChannel">禁用頻道的自定義背景</string>
     <string name="CopyPhotoAsSticker">復製圖片但是貼紙</string>

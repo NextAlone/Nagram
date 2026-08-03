@@ -102,6 +102,7 @@
     <string name="HideFilterMuteAll">Ocultar el filtro silenciar todo</string>
     <string name="UseLocalQuoteColor">Usar color local de citado</string>
     <string name="ShowSquareAvatar">Mostrar avatar cuadrado</string>
+    <string name="DisableProfileAvatarBlur">Desactivar perfil Avatar Blur</string>
     <string name="DisableCustomWallpaperUser">Desactivar fondo de pantalla personalizado del usuario</string>
     <string name="DisableCustomWallpaperChannel">Desactivar fondo de pantalla personalizado del canal</string>
     <string name="CopyPhotoAsSticker">Copiar foto como sticker</string>
@@ -266,11 +267,15 @@
     <string name="LLMApiKeys">Llaves API LLM</string>
     <string name="LLMModelName">Nombre del modelo</string>
     <string name="LLMSystemPrompt">Prompt del sistema</string>
+    <string name="LLMTranslationPrompt">Prompt de traducción</string>
+    <string name="LLMUseContext">Usar mensajes recientes como contexto</string>
+    <string name="LLMUseContextNotice">Use hasta cinco mensajes anteriores para resolver la ambigüedad.</string>
     <string name="LLMTemperature">Temperatura</string>
     <string name="LLMApiKeyNotice">Introduzca su clave API. Puede separar varias claves con comas para rotación.</string>
     <string name="LLMApiUrlNotice">Introduzca la URL base de API (por ejemplo, https://api.openai.com/v1)</string>
     <string name="LLMModelNameNotice">Introduzca el nombre del modelo (por ejemplo, gpt-4o-mini)</string>
     <string name="LLMSystemPromptNotice">Pedido personalizado del sistema de traducción. Dejar vacío para usar el valor predeterminado.</string>
+    <string name="LLMTranslationPromptNotice">Usar marcadores de posición @toLang y @texto; dejar vacío para usar el valor predeterminado.</string>
     <string name="LLMApiFormat">API Format</string>
     <string name="LLMApiFormatOpenAIChat">OpenAI (chat)</string>
     <string name="LLMApiFormatOpenAIResponse">OpenAI (respuesta)</string>
@@ -291,6 +296,7 @@
     <string name="LLMTesting">Testing…</string>
     <string name="MainTabsStyle">Estilo de pestañas principales</string>
     <string name="MainTabsStyleTextFree">Sin texto</string>
+    <string name="HideTabBarPermissionWarnings">Ocultar aviso de permiso de la barra de pestañas</string>
     <string name="ShowRecentChatsOnTabLongPress">Mostrar chats recientes al pulsar la pestaña de chat</string>
     <string name="CustomIpStrategy">Estrategia Ip personalizada</string>
     <string name="CustomIpStrategyIPV4">Sólo IPV4</string>

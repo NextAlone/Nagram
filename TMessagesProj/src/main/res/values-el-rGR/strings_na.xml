@@ -59,6 +59,8 @@
     <string name="QuickToggleAnonymous">Γρήγορη εναλλαγή ανώνυμων</string>
     <string name="QuickToggleAnonymousNotice">Αν είστε ιδιοκτήτης της ομάδας</string>
     <string name="RealHideTimeForSticker">Πραγματικός χρόνος απόκρυψης αυτοκόλλητων</string>
+    <string name="ResetSettings">Επαναφορά Ρυθμίσεων</string>
+    <string name="ResetSettingsAlert">Είστε βέβαιοι ότι θέλετε να επαναφέρετε όλες τις N-ρυθμίσεις?</string>
     <string name="HideTitle">Απόκρυψη Τίτλου</string>
     <string name="IgnoreFolderCount">Παράβλεψη Καταμέτρησης Φακέλων</string>
     <string name="SendWithoutMarkdown">Αποστολή χωρίς markdown</string>
@@ -100,6 +102,7 @@
     <string name="HideFilterMuteAll">Απόκρυψη φίλτρου σίγασης όλων</string>
     <string name="UseLocalQuoteColor">Χρήση χρώματος τοπικής προσφοράς</string>
     <string name="ShowSquareAvatar">Προβολή τετράγωνου avatar</string>
+    <string name="DisableProfileAvatarBlur">Απενεργοποίηση Θόλωσης Avatar Προφίλ</string>
     <string name="DisableCustomWallpaperUser">Απενεργ/ση προσαρμοσμένης ταπετσαρίας χρήστη</string>
     <string name="DisableCustomWallpaperChannel">Απενεργ/ση προσαρμοσμένης ταπετσαρίας καναλιών</string>
     <string name="CopyPhotoAsSticker">Αντιγραφή Φωτογραφίας Ως Αυτοκόλλητο</string>
@@ -264,11 +267,15 @@
     <string name="LLMApiKeys">Κλειδιά API LLM</string>
     <string name="LLMModelName">Όνομα Μοντέλου</string>
     <string name="LLMSystemPrompt">Προτροπή Συστήματος</string>
+    <string name="LLMTranslationPrompt">Προτροπή Μετάφρασης</string>
+    <string name="LLMUseContext">Χρήση πρόσφατων μηνυμάτων ως πλαίσιο</string>
+    <string name="LLMUseContextNotice">Χρησιμοποιήστε έως και πέντε προηγούμενα μηνύματα για να επιλύσετε ασάφεια.</string>
     <string name="LLMTemperature">Θερμοκρασία</string>
     <string name="LLMApiKeyNotice">Εισάγετε το κλειδί API σας. Μπορείτε να διαχωρίσετε πολλά κλειδιά με κόμματα για περιστροφή.</string>
     <string name="LLMApiUrlNotice">Εισάγετε το βασικό URL API (π.χ., https://api.openai.com/v1)</string>
     <string name="LLMModelNameNotice">Εισάγετε το όνομα του μοντέλου (π.χ. gpt-4o-mini)</string>
-    <string name="LLMSystemPromptNotice">Προτροπή προσαρμοσμένου συστήματος για τη μετάφραση. Αφήστε κενό για να χρησιμοποιήσετε την προεπιλογή.</string>
+    <string name="LLMSystemPromptNotice">Προσαρμοσμένες οδηγίες συστήματος. Αφήστε κενό για να χρησιμοποιήσετε την ασφαλή προεπιλογή.</string>
+    <string name="LLMTranslationPromptNotice">Χρησιμοποιήστε @toLang και @text placeholders; αφήστε κενό για να χρησιμοποιήσετε την προεπιλογή.</string>
     <string name="LLMApiFormat">API Format</string>
     <string name="LLMApiFormatOpenAIChat">OpenAI (Συνομιλία)</string>
     <string name="LLMApiFormatOpenAIResponse">OpenAI (Απάντηση)</string>
@@ -289,6 +296,7 @@
     <string name="LLMTesting">Δοκιμή…</string>
     <string name="MainTabsStyle">Κύρια στυλ καρτελών</string>
     <string name="MainTabsStyleTextFree">Χωρίς κείμενο</string>
+    <string name="HideTabBarPermissionWarnings">Απόκρυψη προειδοποιήσεων στη γραμμή καρτελών</string>
     <string name="ShowRecentChatsOnTabLongPress">Εμφάνιση πρόσφατων συνομιλιών στην καρτέλα συνομιλίας παρατεταμένο πάτημα</string>
     <string name="CustomIpStrategy">Προσαρμοσμένη Στρατηγική IP</string>
     <string name="CustomIpStrategyIPV4">Μόνο IPV4</string>

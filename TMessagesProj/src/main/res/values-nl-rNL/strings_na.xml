@@ -59,6 +59,8 @@
     <string name="QuickToggleAnonymous">Snel schakelen anoniem</string>
     <string name="QuickToggleAnonymousNotice">Als je eigenaar van de groep bent</string>
     <string name="RealHideTimeForSticker">Tijd echte verbergen voor stickers</string>
+    <string name="ResetSettings">Instellingen opnieuw instellen</string>
+    <string name="ResetSettingsAlert">Weet u zeker dat u alle N-instellingen wilt herstellen?</string>
     <string name="HideTitle">Titel verbergen</string>
     <string name="IgnoreFolderCount">Negeer maptelling</string>
     <string name="SendWithoutMarkdown">Stuur zonder markdown</string>
@@ -100,6 +102,7 @@
     <string name="HideFilterMuteAll">Verberg filter dempen alles</string>
     <string name="UseLocalQuoteColor">Lokale aanhalingstekenkleur gebruiken</string>
     <string name="ShowSquareAvatar">Toon vierkante avatar</string>
+    <string name="DisableProfileAvatarBlur">Profiel Avatar Vervagen Uitschakelen</string>
     <string name="DisableCustomWallpaperUser">Aangepaste achtergrond door gebruiker uitschakelen</string>
     <string name="DisableCustomWallpaperChannel">Kanaal aangepaste achtergrond uitschakelen</string>
     <string name="CopyPhotoAsSticker">Kopieer foto als sticker</string>
@@ -264,11 +267,15 @@
     <string name="LLMApiKeys">LLM API-sleutels</string>
     <string name="LLMModelName">Model naam</string>
     <string name="LLMSystemPrompt">Systeem Vragen</string>
+    <string name="LLMTranslationPrompt">Prompt van vertaling</string>
+    <string name="LLMUseContext">Recente berichten als context gebruiken</string>
+    <string name="LLMUseContextNotice">Gebruik maximaal vijf eerdere berichten om dubbelzinnigheid op te lossen.</string>
     <string name="LLMTemperature">Temperatuur</string>
     <string name="LLMApiKeyNotice">Voer uw API-sleutel in. U kunt meerdere sleutels scheiden met komma\'s voor rotatie.</string>
     <string name="LLMApiUrlNotice">Voer de API base URL in (bijv. https://api.openai.com/v1)</string>
     <string name="LLMModelNameNotice">Voer de naam van het model in (bijv. gpt-4o-mini)</string>
-    <string name="LLMSystemPromptNotice">Aangepaste systeemprompt voor vertaling. Laat leeg om standaard te gebruiken.</string>
+    <string name="LLMSystemPromptNotice">Aangepaste systeeminstructies. Laat leeg om de veilige standaard te gebruiken.</string>
+    <string name="LLMTranslationPromptNotice">Gebruik @toLang en @text placeholders; laat leeg om de standaard te gebruiken.</string>
     <string name="LLMApiFormat">API Format</string>
     <string name="LLMApiFormatOpenAIChat">OpenAI (Chat)</string>
     <string name="LLMApiFormatOpenAIResponse">OpenAI (antwoord)</string>
@@ -289,6 +296,7 @@
     <string name="LLMTesting">Testing…</string>
     <string name="MainTabsStyle">Stijl hoofdtabs</string>
     <string name="MainTabsStyleTextFree">Geen tekst</string>
+    <string name="HideTabBarPermissionWarnings">Verberg tab balk permissie waarschuwingen</string>
     <string name="ShowRecentChatsOnTabLongPress">Recente chats weergeven op het tabblad chat lang indrukken</string>
     <string name="CustomIpStrategy">Aangepaste Ip Strategie</string>
     <string name="CustomIpStrategyIPV4">Alleen IPV4</string>

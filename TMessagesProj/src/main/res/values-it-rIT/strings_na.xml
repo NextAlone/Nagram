@@ -102,6 +102,7 @@
     <string name="HideFilterMuteAll">Nascondi filtro silenziato tutto</string>
     <string name="UseLocalQuoteColor">Usa colore preventivo locale</string>
     <string name="ShowSquareAvatar">Mostra avatar quadrato</string>
+    <string name="DisableProfileAvatarBlur">Disabilita Sfocatura Avatar Profilo</string>
     <string name="DisableCustomWallpaperUser">Disabilita sfondo personalizzato utente</string>
     <string name="DisableCustomWallpaperChannel">Disabilita sfondo personalizzato canale</string>
     <string name="CopyPhotoAsSticker">Copia Foto Come Adesivo</string>
@@ -266,11 +267,15 @@
     <string name="LLMApiKeys">Chiavi API LLM</string>
     <string name="LLMModelName">Nome Modello</string>
     <string name="LLMSystemPrompt">Prompt Di Sistema</string>
+    <string name="LLMTranslationPrompt">Richiesta Di Traduzione</string>
+    <string name="LLMUseContext">Usa messaggi recenti come contesto</string>
+    <string name="LLMUseContextNotice">Utilizzare fino a cinque messaggi precedenti per risolvere l\'ambiguità.</string>
     <string name="LLMTemperature">Temperatura</string>
     <string name="LLMApiKeyNotice">Inserisci la tua chiave API. Puoi separare più chiavi con virgole per la rotazione.</string>
     <string name="LLMApiUrlNotice">Inserisci l\'URL di base API (ad esempio, https://api.openai.com/v1)</string>
     <string name="LLMModelNameNotice">Inserisci il nome del modello (es. gpt-4o-mini)</string>
     <string name="LLMSystemPromptNotice">Richiesta di traduzione personalizzata di sistema. Lasciare vuoto per usare il valore predefinito.</string>
+    <string name="LLMTranslationPromptNotice">Usa i segnaposto @toLang e @text; lascia vuoto per usare il valore predefinito.</string>
     <string name="LLMApiFormat">Formato API</string>
     <string name="LLMApiFormatOpenAIChat">OpenAI (chat)</string>
     <string name="LLMApiFormatOpenAIResponse">OpenAI (Risposta)</string>
@@ -291,6 +296,7 @@
     <string name="LLMTesting">Test…</string>
     <string name="MainTabsStyle">Stile schede principali</string>
     <string name="MainTabsStyleTextFree">Nessun testo</string>
+    <string name="HideTabBarPermissionWarnings">Nascondi avvisi sui permessi della barra delle schede</string>
     <string name="ShowRecentChatsOnTabLongPress">Mostra le chat recenti nella scheda chat a lungo pressione</string>
     <string name="CustomIpStrategy">Strategia IP Personalizzata</string>
     <string name="CustomIpStrategyIPV4">Solo IPV4</string>

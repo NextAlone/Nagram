@@ -102,6 +102,7 @@
     <string name="HideFilterMuteAll">Ocultar silenciamento do filtro</string>
     <string name="UseLocalQuoteColor">Usar cor de cotação local</string>
     <string name="ShowSquareAvatar">Mostrar avatar quadrado</string>
+    <string name="DisableProfileAvatarBlur">Desabilitar perfil de desfoque</string>
     <string name="DisableCustomWallpaperUser">Desativar plano de fundo personalizado do usuário</string>
     <string name="DisableCustomWallpaperChannel">Desabilitar plano de fundo personalizado do canal</string>
     <string name="CopyPhotoAsSticker">Copiar Foto como Adesivo</string>
@@ -266,11 +267,15 @@
     <string name="LLMApiKeys">Chaves LM API</string>
     <string name="LLMModelName">Nome do Modelo</string>
     <string name="LLMSystemPrompt">Solicitação de Sistema</string>
+    <string name="LLMTranslationPrompt">Solicitação de tradução</string>
+    <string name="LLMUseContext">Usar Mensagens Recentes como Contexto</string>
+    <string name="LLMUseContextNotice">Use até cinco mensagens anteriores para resolver a ambiguidade.</string>
     <string name="LLMTemperature">Temperatura</string>
     <string name="LLMApiKeyNotice">Digite sua chave de API. Você pode separar várias chaves com vírgulas para rotacionamento.</string>
     <string name="LLMApiUrlNotice">Digite a URL base da API (por exemplo, https://api.openai.com/v1)</string>
     <string name="LLMModelNameNotice">Digite o nome do modelo (por exemplo, gpt-4o-mini)</string>
     <string name="LLMSystemPromptNotice">Custom system prompt para tradução. Deixe em branco para usar o padrão.</string>
+    <string name="LLMTranslationPromptNotice">Use @toLang e @text placeholders; deixe em branco para usar o padrão.</string>
     <string name="LLMApiFormat">API Format</string>
     <string name="LLMApiFormatOpenAIChat">OpenAI (Chat)</string>
     <string name="LLMApiFormatOpenAIResponse">OpenAI (resposta)</string>
@@ -291,6 +296,7 @@
     <string name="LLMTesting">Testando…</string>
     <string name="MainTabsStyle">Estilo das abas principais</string>
     <string name="MainTabsStyleTextFree">Nenhum texto</string>
+    <string name="HideTabBarPermissionWarnings">Ocultar avisos de permissão da barra de abas</string>
     <string name="ShowRecentChatsOnTabLongPress">Mostrar bate-papos recentes na aba do chat</string>
     <string name="CustomIpStrategy">Estratégia de Ip Personalizada</string>
     <string name="CustomIpStrategyIPV4">Apenas IPV4</string>
