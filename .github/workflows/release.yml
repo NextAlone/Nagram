@@ -191,8 +191,6 @@ jobs:
         run: |
           sed -i 's/\/\///g' settings.gradle
           git submodule status TMessagesProj/jni/third_party/ffmpeg > ffmpeg_status
-          git submodule status TMessagesProj/jni/third_party/dav1d >> ffmpeg_status
-          git submodule status TMessagesProj/jni/third_party/libvpx >> ffmpeg_status
           git submodule status TMessagesProj/jni/boringssl > boringssl_status
       - name: Native Cache (armeabi-v7a)
         uses: actions/cache@v4
@@ -208,7 +206,7 @@ jobs:
           key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-arm64-v8a
       - name: Configure Gradle
         run: |
-          sed -i "s/2000000000000/$(date +%s%3N)/g" gradle.properties
+          sed -i "s/2000000000000/$(date +%s%N | cut -c1-13)/g" gradle.properties
           echo "sdk.dir=${ANDROID_HOME}" >> local.properties
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
