@@ -7756,11 +7756,19 @@ public class ChatActivityEnterView extends FrameLayout implements
 
         isInInput = use;
 
-        if (duration == 0 && botButton != null) {
+        boolean animated = duration != 0;
+        if (botButton != null) {
             if (use) {
-                botButton.setVisibility(View.GONE);
-            } else if (checkBotButton()) {
-                updateBotButton(true);
+                AndroidUtilities.updateViewVisibilityAnimated(botButton, false, 1f, true, animated);
+            } else {
+                updateBotButton(animated);
+            }
+        }
+        if (giftButton != null) {
+            if (use) {
+                AndroidUtilities.updateViewVisibilityAnimated(giftButton, false, 1f, true, animated);
+            } else {
+                updateGiftButton(animated);
             }
         }
 
@@ -7950,19 +7958,6 @@ public class ChatActivityEnterView extends FrameLayout implements
                             ObjectAnimator.ofFloat(attachButton, View.SCALE_Y, 1.0f)
                     );
                     attachIconAnimator.setDuration(150);
-                }
-                if (checkBotButton()) {
-                    botButton.setAlpha(0f);
-                    botButton.setScaleX(0);
-                    botButton.setScaleY(0);
-
-                    botIconAnimator = new AnimatorSet();
-                    botIconAnimator.playTogether(
-                            ObjectAnimator.ofFloat(botButton, View.ALPHA, 1.0f),
-                            ObjectAnimator.ofFloat(botButton, View.SCALE_X, 1.0f),
-                            ObjectAnimator.ofFloat(botButton, View.SCALE_Y, 1.0f)
-                    );
-                    botIconAnimator.setDuration(150);
                 }
             }
 
@@ -9575,11 +9570,6 @@ public class ChatActivityEnterView extends FrameLayout implements
                             scheduledButton.setTranslationX(0);
                         }
                     }
-                    if (NekoConfig.useChatAttachMediaMenu.Bool() && checkBotButton()) {
-                        animators.add(ObjectAnimator.ofFloat(botButton, View.SCALE_X, 1f));
-                        animators.add(ObjectAnimator.ofFloat(botButton, View.SCALE_Y, 1f));
-                        animators.add(ObjectAnimator.ofFloat(botButton, View.ALPHA, 1f));
-                    }
                     runningAnimation2.playTogether(animators);
                     runningAnimation2.setDuration(100);
                     runningAnimation2.addListener(new AnimatorListenerAdapter() {
@@ -9587,10 +9577,6 @@ public class ChatActivityEnterView extends FrameLayout implements
                         public void onAnimationEnd(Animator animation) {
                             if (animation.equals(runningAnimation2)) {
                                 runningAnimation2 = null;
-                            }
-                            if (NekoConfig.useChatAttachMediaMenu.Bool() && checkBotButton()) {
-                                updateBotButton(true);
-                                updateFieldRight(1);
                             }
                         }
 
