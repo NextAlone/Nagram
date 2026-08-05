@@ -7706,20 +7706,42 @@ public class MessagesController extends BaseController implements NotificationCe
 
     public boolean isAdmin(long chatId, long uid) {
         if (chatId == uid) return true;
-        final TLObject participant = getParticipant(chatId, uid);
-        return participant instanceof TLRPC.TL_channelParticipantAdmin
-                || participant instanceof TLRPC.TL_channelParticipantCreator
-                || participant instanceof TLRPC.TL_chatParticipantAdmin
-                || participant instanceof TLRPC.TL_chatParticipantCreator;
+        final LongSparseArray<TLRPC.ChannelParticipant> array = channelAdmins.get(chatId);
+        if (array == null) {
+            final TLRPC.ChatFull chatFull = getChatFull(chatId);
+            if (chatFull != null && chatFull.participants != null) {
+                for (int i = 0; i < chatFull.participants.participants.size(); ++i) {
+                    final TLRPC.ChatParticipant p = chatFull.participants.participants.get(i);
+                    if (p.user_id == uid) {
+                        return p instanceof TLRPC.TL_chatParticipantAdmin || p instanceof TLRPC.TL_chatParticipantCreator;
+                    }
+                }
+            }
+            return false;
+        }
+        final TLRPC.ChannelParticipant participant = array.get(uid);
+        return participant instanceof TLRPC.TL_channelParticipantAdmin || participant instanceof TLRPC.TL_channelParticipantCreator;
     }
 
     public boolean isOwner(long chatId, long uid) {
         if (chatId == uid) return true;
         final TLRPC.Chat chat = getChat(chatId);
         if (getUserConfig().getClientUserId() == uid && chat != null && chat.creator) return true;
-        final TLObject participant = getParticipant(chatId, uid);
-        return participant instanceof TLRPC.TL_channelParticipantCreator
-                || participant instanceof TLRPC.TL_chatParticipantCreator;
+        final LongSparseArray<TLRPC.ChannelParticipant> array = channelAdmins.get(chatId);
+        if (array == null) {
+            final TLRPC.ChatFull chatFull = getChatFull(chatId);
+            if (chatFull != null && chatFull.participants != null) {
+                for (int i = 0; i < chatFull.participants.participants.size(); ++i) {
+                    final TLRPC.ChatParticipant p = chatFull.participants.participants.get(i);
+                    if (p.user_id == uid) {
+                        return p instanceof TLRPC.TL_chatParticipantCreator;
+                    }
+                }
+            }
+            return false;
+        }
+        final TLRPC.ChannelParticipant participant = array.get(uid);
+        return participant instanceof TLRPC.TL_channelParticipantCreator;
     }
 
     public boolean isChannelAdminsLoaded(long chatId) {
