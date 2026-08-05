@@ -640,6 +640,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
 
                     if (chatAdapter != null) {
                         chatAdapter.notifyDataSetChanged();
+                        // na: fix admin log pagination after collapsed deletions- #73
+                        if (chatListView != null) chatListView.post(() -> checkScrollForLoad(true));
                     }
 
                     if (searchItem != null) {
