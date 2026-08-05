@@ -276,21 +276,28 @@ object MessageHelper {
     }
 
     @JvmStatic
-    fun getMessagePlainText(messageObject: MessageObject): String {
-        val message: String = if (messageObject.isPoll) {
-            val poll = (messageObject.messageOwner.media as TL_messageMediaPoll).poll
-            val pollText = StringBuilder(poll.question.text).append("\n")
-            for (answer in poll.answers) {
-                pollText.append("\n\uD83D\uDD18 ")
-                pollText.append(answer.text.text)
+    fun getMessagePlainText(messageObject: MessageObject): String? {
+        return try {
+            if (messageObject.isPoll) {
+                val media = messageObject.messageOwner.media as? TL_messageMediaPoll
+                val poll = media?.poll
+                if (poll == null) {
+                    null
+                } else {
+                    val pollText = StringBuilder(poll.question?.text ?: "").append("\n")
+                    for (answer in poll.answers) {
+                        pollText.append("\n\uD83D\uDD18 ").append(answer.text?.text ?: continue)
+                    }
+                    pollText.toString()
+                }
+            } else if (messageObject.isVoiceTranscriptionOpen) {
+                messageObject.messageOwner.voiceTranscription
+            } else {
+                messageObject.messageOwner.message
             }
-            pollText.toString()
-        } else if (messageObject.isVoiceTranscriptionOpen) {
-            messageObject.messageOwner.voiceTranscription
-        } else {
-            messageObject.messageOwner.message
+        } catch (e: Throwable) {
+            null
         }
-        return message
     }
 
     private fun formatTime(timestamp: Int): String {

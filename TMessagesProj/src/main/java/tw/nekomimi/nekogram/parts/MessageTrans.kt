@@ -31,7 +31,7 @@ private fun translationContext(message: MessageObject, timeline: List<MessageObj
         .drop(index + 1)
         .filter { it.messageOwner.id != 0 && !it.isDateObject && !it.isSponsored }
         .take(5)
-        .mapNotNull { MessageHelper.getMessagePlainText(it).takeIf(String::isNotBlank) }
+        .mapNotNull { MessageHelper.getMessagePlainText(it)?.takeIf { text -> text.isNotBlank() } }
         .toList()
         .asReversed()
 }

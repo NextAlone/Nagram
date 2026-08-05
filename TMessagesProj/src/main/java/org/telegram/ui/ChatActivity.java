@@ -39093,19 +39093,22 @@ public class ChatActivity extends BaseFragment implements
                 if (DialogConfig.isAutoTranslateEnable(dialog_id, getTopicId()) && LanguageDetector.hasSupport()) {
                     final var messageObject = messageCell.getMessageObject();
                     if (MessageHelper.isMessageObjectAutoTranslatable(messageObject)) {
-                        LanguageDetector.detectLanguage(
-                                MessageHelper.getMessagePlainText(messageObject),
-                                (String lang) -> {
-                                    if (!isLanguageRestricted(lang)) {
-                                        ArrayList<MessageObject> fmessages = new ArrayList<>(Arrays.asList(messageObject));
-                                        MessageTransKt.translateMessages(ChatActivity.this, fmessages, true);
-                                    }
-                                },
-                                (Exception e) -> {
-                                    FileLog.e("mlkit: failed to detect language in message");
-                                    e.printStackTrace();
-                                    messageObject.translating = false;
-                                });
+                        final String plainText = MessageHelper.getMessagePlainText(messageObject);
+                        if (plainText != null) {
+                            LanguageDetector.detectLanguage(
+                                    plainText,
+                                    (String lang) -> {
+                                        if (!isLanguageRestricted(lang)) {
+                                            ArrayList<MessageObject> fmessages = new ArrayList<>(Arrays.asList(messageObject));
+                                            MessageTransKt.translateMessages(ChatActivity.this, fmessages, true);
+                                        }
+                                    },
+                                    (Exception e) -> {
+                                        FileLog.e("mlkit: failed to detect language in message");
+                                        e.printStackTrace();
+                                        messageObject.translating = false;
+                                    });
+                        }
                     }
                 }
                 // na: unread count
