@@ -27,6 +27,7 @@ public class AnalyticsHelper {
             options.setAttachAnrThreadDump(true);
             options.setRelease(BuildConfig.APPLICATION_ID + "@" + BuildConfig.VERSION_NAME + "+" + BuildConfig.VERSION_CODE);
             options.setTag("buildTimestamp", BuildConfig.BUILD_TIMESTAMP + "");
+            options.setTombstoneEnabled(true);
             options.setReportHistoricalTombstones(true);
             options.setBeforeScreenshotCaptureCallback((event, hint, debounce) -> {
                 // always capture crashed events
