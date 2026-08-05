@@ -100,6 +100,9 @@ jlong getCurrentAuthKeyId(JNIEnv *env, jclass c, jint instanceNum) {
 }
 
 jint isTestBackend(JNIEnv *env, jclass c, jint instanceNum) {
+    if (instanceNum < 0) {
+        return 0;
+    }
     return ConnectionsManager::getInstance(instanceNum).isTestBackend() ? 1 : 0;
 }
 

@@ -141,15 +141,18 @@ std::vector<ConnectionsManager*> ConnectionsManager::_instances = std::vector<Co
 ConnectionsManager& ConnectionsManager::getInstance(int32_t instanceNum) {
     static std::mutex _new_mutex;
 
-    if (instanceNum >= _instances.capacity()) {
+    std::lock_guard<std::mutex> lock(_new_mutex);
+
+    if (instanceNum < 0) {
+        instanceNum = 0;
+    }
+
+    if (instanceNum >= static_cast<int32_t>(_instances.size())) {
         _instances.resize(instanceNum + 10, nullptr);
     }
 
-    if(_instances[instanceNum] == nullptr) {
-        _new_mutex.lock();
-        if(_instances[instanceNum] == nullptr)
-            _instances[instanceNum] = new ConnectionsManager(instanceNum);
-        _new_mutex.unlock();
+    if (_instances[instanceNum] == nullptr) {
+        _instances[instanceNum] = new ConnectionsManager(instanceNum);
     }
     return *_instances[instanceNum];
 }
