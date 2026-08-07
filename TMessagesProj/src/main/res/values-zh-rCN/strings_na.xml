@@ -222,6 +222,8 @@
     <string name="NavigationAnimationSpring">页面切换弹簧动画</string>
     <string name="ForceEdgeToEdge">强制无边框显示</string>
     <string name="ForceEdgeToEdgeDesc">可能导致页面布局异常、内容重叠及点击失效</string>
+    <string name="UseSystemPhotoPicker">系统照片选择器兼容模式</string>
+    <string name="UseSystemPhotoPickerDesc">在 Android 13 及以上版本中，发送相册附件时使用系统照片选择器，无需授予完整的照片和视频访问权限。</string>
     <string name="TabStyle">文件夹标签样式</string>
     <string name="TabStylePure">纯净</string>
     <string name="TabStylePills">药丸</string>

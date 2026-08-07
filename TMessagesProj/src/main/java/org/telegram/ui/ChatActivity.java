@@ -1743,6 +1743,7 @@ public class ChatActivity extends BaseFragment implements
     private final static int attach_photo = 0;
     private final static int attach_gallery = 1;
     private final static int attach_video = 2;
+    public static final int REQUEST_CODE_SYSTEM_PHOTO_PICKER = 122;
 
     private final static int text_bold = 50;
     private final static int text_italic = 51;
@@ -20470,32 +20471,14 @@ public class ChatActivity extends BaseFragment implements
             if (photoInfo.path != null) {
                 path = photoInfo.path;
             } else if (photoInfo.uri != null) {
-//                path = AndroidUtilities.getPath(photoInfo.uri);
-                if (path == null) {
-                    try {
-                        final File file = AndroidUtilities.generatePicturePath(isSecretChat, "");
-                        InputStream in = ApplicationLoader.applicationContext.getContentResolver().openInputStream(photoInfo.uri);
-                        FileOutputStream fos = new FileOutputStream(file);
-                        byte[] buffer = new byte[8 * 1024];
-                        int lengthRead;
-                        while ((lengthRead = in.read(buffer)) > 0) {
-                            fos.write(buffer, 0, lengthRead);
-                            fos.flush();
-                        }
-                        in.close();
-                        fos.close();
-                        path = file.getAbsolutePath();
-                    } catch (Exception e) {
-                        FileLog.e(e);
-                        continue;
-                    }
-                }
+                path = MediaController.copyFileToCache(photoInfo.uri, photoInfo.isVideo ? "mp4" : "jpg");
             }
             if (path == null) {
                 continue;
             }
             Pair<Integer, Integer> orientation = AndroidUtilities.getImageOrientation(path);
             MediaController.PhotoEntry entry = new MediaController.PhotoEntry(0, 0, 0, path, orientation.first, photoInfo.isVideo, 0, 0, 0).setOrientation(orientation);
+            entry.canDeleteAfter = photoInfo.uri != null;
             if (a == photoPathes.size() - 1 && caption != null) {
                 entry.caption = caption;
             }
@@ -20503,6 +20486,47 @@ public class ChatActivity extends BaseFragment implements
         }
 
         return entries;
+    }
+
+    private void processSystemPhotoPickerResult(Intent data) {
+        if (data == null) {
+            showAttachmentError();
+            return;
+        }
+        ArrayList<Uri> uris = new ArrayList<>();
+        ClipData clipData = data.getClipData();
+        if (clipData != null) {
+            for (int i = 0; i < clipData.getItemCount(); i++) {
+                Uri uri = clipData.getItemAt(i).getUri();
+                if (uri != null && !AndroidUtilities.isInternalUri(uri) && !uris.contains(uri)) {
+                    uris.add(uri);
+                }
+            }
+        }
+        Uri dataUri = data.getData();
+        if (dataUri != null && !AndroidUtilities.isInternalUri(dataUri) && !uris.contains(dataUri)) {
+            uris.add(dataUri);
+        }
+        if (uris.isEmpty()) {
+            showAttachmentError();
+            return;
+        }
+        ArrayList<SendMessagesHelper.SendingMediaInfo> media = new ArrayList<>(uris.size());
+        for (Uri uri : uris) {
+            SendMessagesHelper.SendingMediaInfo info = new SendMessagesHelper.SendingMediaInfo();
+            info.uri = uri;
+            String mimeType = null;
+            try {
+                mimeType = ApplicationLoader.applicationContext.getContentResolver().getType(uri);
+            } catch (Exception e) {
+                FileLog.e(e);
+            }
+            info.isVideo = mimeType != null && mimeType.startsWith("video/");
+            media.add(info);
+        }
+        if (!openPhotosEditor(media, null)) {
+            showAttachmentError();
+        }
     }
 
     public boolean openPhotosEditor(ArrayList<SendMessagesHelper.SendingMediaInfo> photoPathes, CharSequence caption) {
@@ -21124,6 +21148,8 @@ public class ChatActivity extends BaseFragment implements
                     }
                 }
                 afterMessageSend();
+            } else if (requestCode == REQUEST_CODE_SYSTEM_PHOTO_PICKER) {
+                processSystemPhotoPickerResult(data);
             } else if (requestCode == 21) {
                 if (data == null) {
                     showAttachmentError();

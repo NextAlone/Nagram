@@ -982,6 +982,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val useSystemPhotoPicker =
+        addConfig(
+            "UseSystemPhotoPicker",
+            ConfigItem.configTypeBool,
+            false
+        )
     var tabStyle =
         addConfig(
             "TabStyle",

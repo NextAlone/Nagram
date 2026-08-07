@@ -2765,6 +2765,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     if (!photosEnabled && !videosEnabled) {
                         showLayout(restrictedLayout = new ChatAttachRestrictedLayout(1, this, getContext(), resourcesProvider));
                     }
+                    if ((photosEnabled || videosEnabled) && NaConfig.INSTANCE.getUseSystemPhotoPicker().Bool() && photoLayout.openSystemPhotoPicker()) {
+                        return;
+                    }
                     showLayout(photoLayout);
                 } else if (num == 3) {
                     if (!musicEnabled && checkCanRemoveRestrictionsByBoosts()) {
