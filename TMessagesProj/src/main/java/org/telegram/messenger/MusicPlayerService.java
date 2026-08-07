@@ -49,6 +49,8 @@ import org.telegram.ui.LaunchActivity;
 
 import java.io.File;
 
+import xyz.nextalone.nagram.helper.LyricsHelper;
+
 public class MusicPlayerService extends Service implements NotificationCenter.NotificationCenterDelegate {
 
     public static final String NOTIFY_PREVIOUS = "org.telegram.android.musicplayer.previous";
@@ -383,6 +385,7 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
         Notification notification;
         Bitmap albumArt = null;
         Bitmap fullAlbumArt = null;
+        String lyrics = null;
         long duration = (long) (messageObject.getDuration() * 1000);
         if (messageObject.isMusic()) {
             String artworkUrl = messageObject.getArtworkUrl(true);
@@ -390,6 +393,7 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
 
             albumArt = audioInfo != null ? audioInfo.getSmallCover() : null;
             fullAlbumArt = audioInfo != null ? audioInfo.getCover() : null;
+            lyrics = audioInfo != null ? audioInfo.getLyrics() : null;
 
             loadingFilePath = null;
             imageReceiver.setImageBitmap((BitmapDrawable) null);
@@ -403,6 +407,10 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
             } else {
                 loadingFilePath = FileLoader.getInstance(UserConfig.selectedAccount).getPathToAttach(messageObject.getDocument()).getAbsolutePath();
             }
+            if (!TextUtils.isEmpty(lyrics)) {
+                lyrics = lyrics.replace("\\n", "\n");
+            }
+            lyrics = !TextUtils.isEmpty(lyrics) ? lyrics : LyricsHelper.getLyrics(artworkUrl);
         } else if (messageObject.isVoice() || messageObject.isRoundVideo()) {
             long senderId = messageObject.getSenderId();
             if (messageObject.isFromUser()) {
@@ -538,6 +546,9 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
                     .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, audioInfo != null && messageObject.isMusic() ? audioInfo.getAlbum() : null);
             if (fullAlbumArt != null && !fullAlbumArt.isRecycled()) {
                 meta.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, fullAlbumArt);
+            }
+            if (!TextUtils.isEmpty(lyrics)) {
+                meta.putString(LyricsHelper.OPLUS_LYRIC_INFO_KEY, LyricsHelper.getLyricsInfo(contentTitle, contentText, lyrics));
             }
 
             mediaSession.setMetadata(meta.build());

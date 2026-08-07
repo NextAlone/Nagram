@@ -91,6 +91,7 @@ import java.util.zip.GZIPInputStream;
 
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
+import xyz.nextalone.nagram.helper.LyricsHelper;
 
 /**
  * image filter types
@@ -452,6 +453,7 @@ public class ImageLoader {
                 if (array.length() > 0) {
                     JSONObject media = array.getJSONObject(0);
                     String artworkUrl100 = media.getString("artworkUrl100");
+                    LyricsHelper.saveLyrics(location, media);
                     if (small) {
                         return artworkUrl100;
                     } else {
