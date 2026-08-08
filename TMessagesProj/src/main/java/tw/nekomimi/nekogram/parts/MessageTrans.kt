@@ -29,7 +29,10 @@ private fun translationContext(message: MessageObject, timeline: List<MessageObj
 
     return timeline.asSequence()
         .drop(index + 1)
-        .filter { it.messageOwner.id != 0 && !it.isDateObject && !it.isSponsored }
+        .filter {
+            it.messageOwner.id != 0 && !it.isDateObject && !it.isSponsored &&
+                MessageHelper.isMessageObjectAutoTranslatable(it)
+        }
         .take(5)
         .mapNotNull { MessageHelper.getMessagePlainText(it)?.takeIf { text -> text.isNotBlank() } }
         .toList()
