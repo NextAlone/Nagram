@@ -220,9 +220,12 @@ public class LyricsView extends View {
         float offset = Math.max(0, Math.min(scrollOffset, getMaxScrollOffset()));
         int startLine = (int) Math.max(0, Math.floor(offset / lineHeight) - 1);
         int endLine = (int) Math.min(lines.size() - 1, Math.ceil((offset + h) / lineHeight) + 1);
-        // Reserve space on the right for the expand button so the longest line never overlaps it.
-        // The button is 28dp wide at the container's right edge (12dp margin), so reserve 46dp.
-        int maxTextWidth = w - AndroidUtilities.dp(24) - AndroidUtilities.dp(46);
+        // The text area is the view width minus its padding; the container reserves the right
+        // padding for the expand button, so this stays in sync with the actual layout instead
+        // of duplicating layout-specific numbers here.
+        int paddingLeft = getPaddingLeft();
+        int paddingRight = getPaddingRight();
+        int contentWidth = w - paddingLeft - paddingRight;
         for (int i = startLine; i <= endLine; i++) {
             LyricsHelper.LyricsLine line = lines.get(i);
             if (TextUtils.isEmpty(line.text)) {
@@ -230,7 +233,7 @@ public class LyricsView extends View {
             }
             boolean isCurrent = isSynced && i == currentIndex;
             Paint paint = isCurrent ? highlightPaint : textPaint;
-            String text = ellipsize(line.text, paint, maxTextWidth);
+            String text = ellipsize(line.text, paint, contentWidth);
             if (text.isEmpty()) {
                 continue;
             }
@@ -238,7 +241,9 @@ public class LyricsView extends View {
             paint.getFontMetrics(fontMetrics);
             float baseline = lineCenterY - (fontMetrics.ascent + fontMetrics.descent) / 2f;
             float textWidth = paint.measureText(text);
-            canvas.drawText(text, (w - textWidth) / 2f, baseline, paint);
+            // Center within the padded content area.
+            float centerX = paddingLeft + (contentWidth - textWidth) / 2f;
+            canvas.drawText(text, centerX, baseline, paint);
         }
     }
 

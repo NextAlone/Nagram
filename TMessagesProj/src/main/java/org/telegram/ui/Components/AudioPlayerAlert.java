@@ -166,9 +166,15 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     private boolean lyricsLoadCompleted;
     private boolean lyricsLoadPending;
 
-    // The lyrics area sits below the seekbar/right-side time controls (which end at y=122),
-    // so the container starts at 124.
+    // The lyrics area sits below the right-side time controls. Those end at y = 122 (the playback
+    // speed button: top 86 + height 36); the container starts 2dp below that edge. If the
+    // time-controls layout changes, LYRICS_AREA_TOP must be kept below their new bottom edge.
     private static final int LYRICS_AREA_TOP = 124;
+    // Size of the expand/collapse arrow button, shared between the button layout and the right
+    // padding reserved for it on the lyrics view, so they cannot drift apart.
+    private static final int LYRICS_EXPAND_BUTTON_SIZE_DP = 28;
+    // Extra clearance between the button and the lyric text.
+    private static final int LYRICS_EXPAND_BUTTON_GAP_DP = 6;
     // Original positions of the player control bar (top / height) and the player's base height
     // (111 + 66 + 2 = 179). When the lyrics area is hidden the player returns exactly to these.
     private static final int BOTTOM_VIEW_TOP = 111;
@@ -878,6 +884,9 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         lyricsView = new LyricsView(context);
         lyricsView.setColors(getThemedColor(Theme.key_player_time), getThemedColor(Theme.key_player_button));
         lyricsView.setOnLyricsClickListener(this::toggleLyricsExpanded);
+        // Reserve the right edge for the expand button; LyricsView.onDraw derives its text
+        // bounds from this padding, so the drawing logic stays in sync with the layout.
+        lyricsView.setPadding(0, 0, dp(LYRICS_EXPAND_BUTTON_SIZE_DP + LYRICS_EXPAND_BUTTON_GAP_DP), 0);
         lyricsContainer.addView(lyricsView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.FILL));
 
         lyricsExpandButton = new TextView(context);
@@ -886,7 +895,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         lyricsExpandButton.setTextColor(getThemedColor(Theme.key_player_button));
         lyricsExpandButton.setGravity(Gravity.CENTER);
         lyricsExpandButton.setOnClickListener(v -> toggleLyricsExpanded());
-        lyricsContainer.addView(lyricsExpandButton, LayoutHelper.createFrame(28, 28, Gravity.TOP | Gravity.RIGHT));
+        lyricsContainer.addView(lyricsExpandButton, LayoutHelper.createFrame(LYRICS_EXPAND_BUTTON_SIZE_DP, LYRICS_EXPAND_BUTTON_SIZE_DP, Gravity.TOP | Gravity.RIGHT));
 
         buttons[0] = repeatButton = new ActionBarMenuItem(context, null, 0, 0, false, resourcesProvider);
         repeatButton.setLongClickEnabled(false);
@@ -2409,6 +2418,11 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                 return;
             }
         }
+        // Track the message whose lyrics are being loaded *before* starting the task: the
+        // early-return above relies on this field, so setting it only in the completion
+        // callback would let repeated calls for the same message all pass the check and
+        // start duplicate background loads.
+        lyricsLoadForMessage = messageObject;
         final int loadId = ++lyricsLoadId;
         lyricsLoadPending = true;
         // Capture cheap snapshots on the UI thread (AudioInfo reference / file path);
@@ -2432,9 +2446,15 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             try {
                 // Prefer the file itself (memory/disk cache keyed by file identity); only fall
                 // back to the in-memory AudioInfo when the file is not on disk (e.g. streaming).
-                // Passing an AudioInfo that belongs to a different track would cache wrong lyrics.
+                // When the file is available and MediaController already parsed its AudioInfo
+                // (it does so from the current track's fully loaded file), reuse it instead of
+                // re-reading the metadata from disk.
                 if (file != null && file.exists()) {
-                    data = LyricsHelper.loadLyrics(file);
+                    if (audioInfo != null) {
+                        data = LyricsHelper.loadLyrics(file, audioInfo);
+                    } else {
+                        data = LyricsHelper.loadLyrics(file);
+                    }
                 } else if (audioInfo != null && !TextUtils.isEmpty(audioInfo.getLyrics())) {
                     data = LyricsHelper.LyricsData.fromRawText(audioInfo.getLyrics());
                 }
@@ -2443,13 +2463,16 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             }
             final LyricsHelper.LyricsData result = data;
             AndroidUtilities.runOnUIThread(() -> {
-                // Race guard: if loadId changed the user already switched tracks, drop stale results
+                // Race guard: if loadId changed the user already switched tracks, drop stale results.
+                // Only clear the pending flag when this task still owns it (a newer load for a
+                // different message has its own pending flag to manage).
                 if (lyricsLoadId != loadId || lyricsView == null || lyricsContainer == null) {
-                    lyricsLoadPending = false;
+                    if (messageObject == lyricsLoadForMessage) {
+                        lyricsLoadPending = false;
+                    }
                     return;
                 }
                 lyricsLoadPending = false;
-                lyricsLoadForMessage = messageObject;
                 // Completion signal: MediaController only parses AudioInfo from a fully loaded file
                 // (and resets it to null on track switch / while downloading). Marking the load
                 // "done" while the file is still partially downloaded would lock lyrics out
