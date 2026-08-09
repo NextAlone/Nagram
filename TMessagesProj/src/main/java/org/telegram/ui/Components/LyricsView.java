@@ -61,8 +61,6 @@ public class LyricsView extends View {
     private long lastTouchTime;
     private boolean dragging;
     private float dragStartOffset;
-    /** True once we handed the gesture back to the BottomSheet (pull-to-dismiss from the top). */
-    private boolean handedOffToSheet;
 
     public LyricsView(Context context) {
         super(context);
@@ -192,9 +190,10 @@ public class LyricsView extends View {
             scrollAnimator.cancel();
             scrollAnimator = null;
         }
+        final float clamped = Math.max(0, Math.min(target, getMaxScrollOffset()));
         final float from = scrollOffset;
-        if (Math.abs(target - from) < 1f) {
-            scrollOffset = target;
+        if (Math.abs(clamped - from) < 1f) {
+            scrollOffset = clamped;
             return;
         }
         scrollAnimator = ValueAnimator.ofFloat(0f, 1f);
@@ -202,7 +201,7 @@ public class LyricsView extends View {
         scrollAnimator.setInterpolator(new DecelerateInterpolator());
         scrollAnimator.addUpdateListener(a -> {
             float t = (float) a.getAnimatedValue();
-            scrollOffset = from + (target - from) * t;
+            scrollOffset = from + (clamped - from) * t;
             invalidate();
         });
         scrollAnimator.start();
@@ -262,23 +261,14 @@ public class LyricsView extends View {
                 lastTouchY = event.getY();
                 lastTouchTime = System.currentTimeMillis();
                 dragging = false;
-                handedOffToSheet = false;
                 dragStartOffset = scrollOffset;
                 return true;
             case MotionEvent.ACTION_MOVE: {
                 float dy = event.getY() - lastTouchY;
-                if (!dragging && !handedOffToSheet && Math.abs(dy) > AndroidUtilities.dp(4)) {
-                    if (dy > 0 && scrollOffset <= 0) {
-                        // Pulling down while the lyrics are already at the very top
-                        // (or fully visible with nothing to scroll):
-                        // hand the gesture to the BottomSheet so the usual pull-to-dismiss works.
-                        handedOffToSheet = true;
-                        getParent().requestDisallowInterceptTouchEvent(false);
-                        return false;
-                    }
+                if (!dragging && Math.abs(dy) > AndroidUtilities.dp(4)) {
                     dragging = true;
-                    // Grab the parent's gesture only once an actual drag starts,
-                    // so the BottomSheet pull-to-dismiss still works from this area.
+                    // Grab the parent's gesture only once an actual drag starts, so taps on the
+                    // lyrics area (expand/collapse) still pass through as clicks.
                     getParent().requestDisallowInterceptTouchEvent(true);
                     if (scrollAnimator != null) {
                         scrollAnimator.cancel();
@@ -291,10 +281,6 @@ public class LyricsView extends View {
                     invalidate();
                     return true;
                 }
-                if (handedOffToSheet) {
-                    // The BottomSheet is now in charge of this gesture.
-                    return false;
-                }
                 return true;
             }
             case MotionEvent.ACTION_UP:
@@ -304,7 +290,7 @@ public class LyricsView extends View {
                     getParent().requestDisallowInterceptTouchEvent(false);
                 }
                 dragging = false;
-                boolean isClick = !wasDragging && !handedOffToSheet
+                boolean isClick = !wasDragging
                         && System.currentTimeMillis() - lastTouchTime < 400
                         && Math.abs(event.getX() - lastTouchX) < AndroidUtilities.dp(12)
                         && Math.abs(event.getY() - lastTouchY) < AndroidUtilities.dp(12);
@@ -312,10 +298,9 @@ public class LyricsView extends View {
                     if (onLyricsClickListener != null) {
                         onLyricsClickListener.run();
                     }
-                    handedOffToSheet = false;
                     return true;
                 }
-                if (!handedOffToSheet && isSynced && currentIndex >= 0) {
+                if (isSynced && currentIndex >= 0) {
                     int h = getMeasuredHeight();
                     targetOffset = currentIndex * lineHeight - (h - lineHeight) / 2f;
                     if (targetOffset < 0) {
@@ -323,7 +308,6 @@ public class LyricsView extends View {
                     }
                     animateScrollTo(targetOffset);
                 }
-                handedOffToSheet = false;
                 return true;
             }
         }
