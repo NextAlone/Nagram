@@ -83,7 +83,6 @@ import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.LyricsHelper;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
@@ -128,6 +127,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.helper.LyricsHelper;
+import xyz.nextalone.nagram.ui.LyricsView;
 
 public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate, DownloadController.FileDownloadProgressListener {
 
@@ -161,10 +162,6 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     /** Collapsed height in px; adapts to the number of lyric lines of the current track. */
     private int lyricsCollapsedHeight;
     private ValueAnimator lyricsHeightAnimator;
-    private int lyricsLoadId;
-    private MessageObject lyricsLoadForMessage;
-    private boolean lyricsLoadCompleted;
-    private boolean lyricsLoadPending;
 
     // The lyrics area sits below the right-side time controls. Those end at y = 122 (the playback
     // speed button: top 86 + height 36); the container starts 2dp below that edge. If the
@@ -2215,13 +2212,6 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     @Override
     public void dismiss() {
         super.dismiss();
-        // Drop any in-flight lyrics parse results and stop the height animation.
-        lyricsLoadId++;
-        lyricsLoadPending = false;
-        if (lyricsHeightAnimator != null) {
-            lyricsHeightAnimator.cancel();
-            lyricsHeightAnimator = null;
-        }
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidReset);
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
         NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidStart);
@@ -2410,100 +2400,49 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         if (lyricsView == null || lyricsContainer == null) {
             return;
         }
-        // updateTitle fires on every play-state change (start / pause / resume / reset), so the
-        // same track can re-enter here. Skip when we already have a definitive answer, or when a
-        // load for this very message is still in flight.
-        if (messageObject != null && messageObject == lyricsLoadForMessage) {
-            if (lyricsLoadCompleted || lyricsLoadPending) {
-                return;
-            }
+        if (messageObject == null) {
+            return;
         }
-        // Track the message whose lyrics are being loaded *before* starting the task: the
-        // early-return above relies on this field, so setting it only in the completion
-        // callback would let repeated calls for the same message all pass the check and
-        // start duplicate background loads.
-        lyricsLoadForMessage = messageObject;
-        final int loadId = ++lyricsLoadId;
-        lyricsLoadPending = true;
-        // Capture cheap snapshots on the UI thread (AudioInfo reference / file path);
-        // do the actual parsing on a background thread to avoid disk IO on the UI thread.
         final AudioInfo audioInfo = MediaController.getInstance().getAudioInfo();
-        final File file;
+        LyricsHelper.LyricsData data = null;
         try {
-            if (messageObject != null && messageObject.getDocument() != null) {
-                file = FileLoader.getInstance(messageObject.currentAccount).getPathToMessage(messageObject.messageOwner);
-            } else {
-                file = null;
+            String lyrics;
+            String artworkUrl = messageObject.getArtworkUrl(true);
+            lyrics = audioInfo != null ? audioInfo.getLyrics() : null;
+            if (!TextUtils.isEmpty(lyrics)) {
+                lyrics = lyrics.replace("\\n", "\n");
+            }
+            lyrics = !TextUtils.isEmpty(lyrics) ? lyrics : LyricsHelper.getLyrics(artworkUrl);
+            if (!TextUtils.isEmpty(lyrics)) {
+                data = LyricsHelper.fromRawText(lyrics);
             }
         } catch (Exception e) {
             FileLog.e(e);
-            lyricsLoadPending = false;
-            return;
         }
-        final int progressSec = messageObject != null ? messageObject.audioProgressSec : 0;
-        Utilities.globalQueue.postRunnable(() -> {
-            LyricsHelper.LyricsData data = null;
-            try {
-                // Prefer the file itself (memory/disk cache keyed by file identity); only fall
-                // back to the in-memory AudioInfo when the file is not on disk (e.g. streaming).
-                // When the file is available and MediaController already parsed its AudioInfo
-                // (it does so from the current track's fully loaded file), reuse it instead of
-                // re-reading the metadata from disk.
-                if (file != null && file.exists()) {
-                    if (audioInfo != null) {
-                        data = LyricsHelper.loadLyrics(file, audioInfo);
-                    } else {
-                        data = LyricsHelper.loadLyrics(file);
-                    }
-                } else if (audioInfo != null && !TextUtils.isEmpty(audioInfo.getLyrics())) {
-                    data = LyricsHelper.LyricsData.fromRawText(audioInfo.getLyrics());
-                }
-            } catch (Exception e) {
-                FileLog.e(e);
+        if (data == null || data.lines == null || data.lines.isEmpty()) {
+            if (lyricsContainer.getVisibility() != View.GONE) {
+                setLyricsExpanded(false, false);
+                lyricsContainerHeight = 0;
+                applyLyricsHeight();
+                lyricsContainer.setVisibility(View.GONE);
             }
-            final LyricsHelper.LyricsData result = data;
-            AndroidUtilities.runOnUIThread(() -> {
-                // Race guard: if loadId changed the user already switched tracks, drop stale results.
-                // Only clear the pending flag when this task still owns it (a newer load for a
-                // different message has its own pending flag to manage).
-                if (lyricsLoadId != loadId || lyricsView == null || lyricsContainer == null) {
-                    if (messageObject == lyricsLoadForMessage) {
-                        lyricsLoadPending = false;
-                    }
-                    return;
-                }
-                lyricsLoadPending = false;
-                // Completion signal: MediaController only parses AudioInfo from a fully loaded file
-                // (and resets it to null on track switch / while downloading). Marking the load
-                // "done" while the file is still partially downloaded would lock lyrics out
-                // forever, because this method is never retried once completed.
-                lyricsLoadCompleted = audioInfo != null;
-                if (result == null || result.lines == null || result.lines.isEmpty()) {
-                    if (lyricsContainer.getVisibility() != View.GONE) {
-                        setLyricsExpanded(false, false);
-                        lyricsContainerHeight = 0;
-                        applyLyricsHeight();
-                        lyricsContainer.setVisibility(View.GONE);
-                    }
-                } else {
-                    // Re-apply themed colors so the lyrics follow a theme switch (this runs on
-                    // every track change / play state change, which also covers theme changes).
-                    lyricsView.setColors(getThemedColor(Theme.key_player_time), getThemedColor(Theme.key_player_button));
-                    lyricsView.setLyrics(result);
-                    lyricsCollapsedHeight = getAdaptiveLyricsHeight(result.lines.size(), LYRICS_COLLAPSED_HEIGHT_DP);
-                    if (lyricsContainer.getVisibility() == View.GONE) {
-                        lyricsContainer.setVisibility(View.VISIBLE);
-                        lyricsContainerHeight = lyricsCollapsedHeight;
-                        applyLyricsHeight();
-                    } else if (!lyricsExpanded && lyricsContainerHeight != lyricsCollapsedHeight) {
-                        // Track changed to one with fewer/more lines while collapsed: refit quietly.
-                        lyricsContainerHeight = lyricsCollapsedHeight;
-                        applyLyricsHeight();
-                    }
-                    lyricsView.setProgress(progressSec);
-                }
-            });
-        });
+        } else {
+            // Re-apply themed colors so the lyrics follow a theme switch (this runs on
+            // every track change / play state change, which also covers theme changes).
+            lyricsView.setColors(getThemedColor(Theme.key_player_time), getThemedColor(Theme.key_player_button));
+            lyricsView.setLyrics(data);
+            lyricsCollapsedHeight = getAdaptiveLyricsHeight(data.lines.size(), LYRICS_COLLAPSED_HEIGHT_DP);
+            if (lyricsContainer.getVisibility() == View.GONE) {
+                lyricsContainer.setVisibility(View.VISIBLE);
+                lyricsContainerHeight = lyricsCollapsedHeight;
+                applyLyricsHeight();
+            } else if (!lyricsExpanded && lyricsContainerHeight != lyricsCollapsedHeight) {
+                // Track changed to one with fewer/more lines while collapsed: refit quietly.
+                lyricsContainerHeight = lyricsCollapsedHeight;
+                applyLyricsHeight();
+            }
+            lyricsView.setProgress(lastTime);
+        }
     }
 
     private void toggleLyricsExpanded() {

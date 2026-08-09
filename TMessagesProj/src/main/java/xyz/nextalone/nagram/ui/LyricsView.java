@@ -10,31 +10,33 @@
  * - supports touch drag to browse and tap to expand/collapse.
  */
 
-package org.telegram.ui.Components;
+package xyz.nextalone.nagram.ui;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.LyricsHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import xyz.nextalone.nagram.helper.LyricsHelper;
 
 public class LyricsView extends View {
 
     /** Line height used both for drawing and for computing the adaptive container height. */
     public static final float LINE_HEIGHT_DP = 30;
 
-    private final Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint highlightPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+    private final TextPaint highlightPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
     private final Paint.FontMetrics fontMetrics = new Paint.FontMetrics();
 
     private final Typeface normalTypeface;
@@ -232,7 +234,7 @@ public class LyricsView extends View {
                 continue;
             }
             boolean isCurrent = isSynced && i == currentIndex;
-            Paint paint = isCurrent ? highlightPaint : textPaint;
+            TextPaint paint = isCurrent ? highlightPaint : textPaint;
             String text = ellipsize(line.text, paint, contentWidth);
             if (text.isEmpty()) {
                 continue;
@@ -247,7 +249,7 @@ public class LyricsView extends View {
         }
     }
 
-    private static String ellipsize(String text, Paint paint, int maxWidth) {
+    private static String ellipsize(String text, TextPaint paint, int maxWidth) {
         if (maxWidth <= 0) {
             return "";
         }
