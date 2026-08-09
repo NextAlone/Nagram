@@ -164,6 +164,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     private int lyricsLoadId;
     private MessageObject lyricsLoadForMessage;
     private boolean lyricsLoadCompleted;
+    private boolean lyricsLoadPending;
 
     // The lyrics area sits below the seekbar/right-side time controls (which end at y=122),
     // so the container starts at 124.
@@ -2207,6 +2208,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         super.dismiss();
         // Drop any in-flight lyrics parse results and stop the height animation.
         lyricsLoadId++;
+        lyricsLoadPending = false;
         if (lyricsHeightAnimator != null) {
             lyricsHeightAnimator.cancel();
             lyricsHeightAnimator = null;
@@ -2399,13 +2401,16 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         if (lyricsView == null || lyricsContainer == null) {
             return;
         }
-        // The same track is loaded on playStateChanged (pause/resume) too; skip re-parsing
-        // when we already finished loading this message. If we could not inspect any source
-        // (file not downloaded yet, no AudioInfo) keep retrying so lyrics appear once ready.
-        if (messageObject != null && messageObject == lyricsLoadForMessage && lyricsLoadCompleted) {
-            return;
+        // updateTitle fires on every play-state change (start / pause / resume / reset), so the
+        // same track can re-enter here. Skip when we already have a definitive answer, or when a
+        // load for this very message is still in flight.
+        if (messageObject != null && messageObject == lyricsLoadForMessage) {
+            if (lyricsLoadCompleted || lyricsLoadPending) {
+                return;
+            }
         }
         final int loadId = ++lyricsLoadId;
+        lyricsLoadPending = true;
         // Capture cheap snapshots on the UI thread (AudioInfo reference / file path);
         // do the actual parsing on a background thread to avoid disk IO on the UI thread.
         final AudioInfo audioInfo = MediaController.getInstance().getAudioInfo();
@@ -2418,6 +2423,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             }
         } catch (Exception e) {
             FileLog.e(e);
+            lyricsLoadPending = false;
             return;
         }
         final int progressSec = messageObject != null ? messageObject.audioProgressSec : 0;
@@ -2439,12 +2445,16 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             AndroidUtilities.runOnUIThread(() -> {
                 // Race guard: if loadId changed the user already switched tracks, drop stale results
                 if (lyricsLoadId != loadId || lyricsView == null || lyricsContainer == null) {
+                    lyricsLoadPending = false;
                     return;
                 }
+                lyricsLoadPending = false;
                 lyricsLoadForMessage = messageObject;
-                // Only "complete" the load when we actually had a source to inspect; otherwise
-                // (e.g. file not downloaded yet) leave it incomplete so the next updateTitle retries.
-                lyricsLoadCompleted = audioInfo != null || (file != null && file.exists());
+                // Completion signal: MediaController only parses AudioInfo from a fully loaded file
+                // (and resets it to null on track switch / while downloading). Marking the load
+                // "done" while the file is still partially downloaded would lock lyrics out
+                // forever, because this method is never retried once completed.
+                lyricsLoadCompleted = audioInfo != null;
                 if (result == null || result.lines == null || result.lines.isEmpty()) {
                     if (lyricsContainer.getVisibility() != View.GONE) {
                         setLyricsExpanded(false, false);
