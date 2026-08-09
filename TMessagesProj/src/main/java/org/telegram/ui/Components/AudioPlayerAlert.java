@@ -127,6 +127,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.helper.LyricsHelper;
+import xyz.nextalone.nagram.ui.LyricsView;
 
 public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate, DownloadController.FileDownloadProgressListener {
 
@@ -151,6 +153,34 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     private TextView emptySubtitleTextView;
 
     private FrameLayout playerLayout;
+    private FrameLayout bottomView;
+    private FrameLayout lyricsContainer;
+    private LyricsView lyricsView;
+    private TextView lyricsExpandButton;
+    private boolean lyricsExpanded;
+    private int lyricsContainerHeight;
+    /** Collapsed height in px; adapts to the number of lyric lines of the current track. */
+    private int lyricsCollapsedHeight;
+    private ValueAnimator lyricsHeightAnimator;
+
+    // The lyrics area sits below the right-side time controls. Those end at y = 122 (the playback
+    // speed button: top 86 + height 36); the container starts 2dp below that edge. If the
+    // time-controls layout changes, LYRICS_AREA_TOP must be kept below their new bottom edge.
+    private static final int LYRICS_AREA_TOP = 124;
+    // Size of the expand/collapse arrow button, shared between the button layout and the right
+    // padding reserved for it on the lyrics view, so they cannot drift apart.
+    private static final int LYRICS_EXPAND_BUTTON_SIZE_DP = 28;
+    // Extra clearance between the button and the lyric text.
+    private static final int LYRICS_EXPAND_BUTTON_GAP_DP = 6;
+    // Original positions of the player control bar (top / height) and the player's base height
+    // (111 + 66 + 2 = 179). When the lyrics area is hidden the player returns exactly to these.
+    private static final int BOTTOM_VIEW_TOP = 111;
+    private static final int BOTTOM_VIEW_HEIGHT = 66;
+    private static final int PLAYER_SLACK = 2;
+    private static final int LYRICS_COLLAPSED_HEIGHT_DP = 96;
+    private static final int LYRICS_EXPANDED_HEIGHT_DP = 260;
+    private static final int LYRICS_MIN_HEIGHT_DP = 44;
+
     private ButtonWithCounterView saveToProfileButton;
     private ButtonWithCounterView unsaveFromProfileButton;
     private ItemTouchHelper itemTouchHelper;
@@ -753,7 +783,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         });
         updatePlaybackButton(false);
 
-        FrameLayout bottomView = new FrameLayout(context) {
+        bottomView = new FrameLayout(context) {
             @Override
             protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
                 if (buttons == null || buttons.length == 0) {
@@ -841,6 +871,28 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         }
 
         playerLayout.addView(bottomView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 66, Gravity.TOP | Gravity.LEFT, 0, 111, 0, 0));
+
+        lyricsCollapsedHeight = dp(LYRICS_COLLAPSED_HEIGHT_DP);
+        lyricsContainer = new FrameLayout(context);
+        lyricsContainer.setVisibility(View.GONE);
+        lyricsContainer.setClipChildren(true);
+        playerLayout.addView(lyricsContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 0, Gravity.TOP | Gravity.LEFT, 12, LYRICS_AREA_TOP, 12, 0));
+
+        lyricsView = new LyricsView(context);
+        lyricsView.setColors(getThemedColor(Theme.key_player_time), getThemedColor(Theme.key_player_button));
+        lyricsView.setOnLyricsClickListener(this::toggleLyricsExpanded);
+        // Reserve the right edge for the expand button; LyricsView.onDraw derives its text
+        // bounds from this padding, so the drawing logic stays in sync with the layout.
+        lyricsView.setPadding(0, 0, dp(LYRICS_EXPAND_BUTTON_SIZE_DP + LYRICS_EXPAND_BUTTON_GAP_DP), 0);
+        lyricsContainer.addView(lyricsView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.FILL));
+
+        lyricsExpandButton = new TextView(context);
+        lyricsExpandButton.setText("▾");
+        lyricsExpandButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
+        lyricsExpandButton.setTextColor(getThemedColor(Theme.key_player_button));
+        lyricsExpandButton.setGravity(Gravity.CENTER);
+        lyricsExpandButton.setOnClickListener(v -> toggleLyricsExpanded());
+        lyricsContainer.addView(lyricsExpandButton, LayoutHelper.createFrame(LYRICS_EXPAND_BUTTON_SIZE_DP, LYRICS_EXPAND_BUTTON_SIZE_DP, Gravity.TOP | Gravity.RIGHT));
 
         buttons[0] = repeatButton = new ActionBarMenuItem(context, null, 0, 0, false, resourcesProvider);
         repeatButton.setLongClickEnabled(false);
@@ -2304,6 +2356,9 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                 lastTime = newTime;
                 timeTextView.setText(AndroidUtilities.formatShortDuration(newTime));
             }
+            if (lyricsContainer != null && lyricsContainer.getVisibility() == View.VISIBLE && lyricsView != null) {
+                lyricsView.setProgress(newTime);
+            }
             seekBarView.updateTimestamps(messageObject, null);
         }
     }
@@ -2336,6 +2391,133 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         }
     }
 
+    private int getAdaptiveLyricsHeight(int lineCount, int maxDp) {
+        int contentDp = (int) (lineCount * LyricsView.LINE_HEIGHT_DP) + 10;
+        return dp(Math.max(LYRICS_MIN_HEIGHT_DP, Math.min(maxDp, contentDp)));
+    }
+
+    private void loadLyricsForMessage(MessageObject messageObject) {
+        if (lyricsView == null || lyricsContainer == null) {
+            return;
+        }
+        if (messageObject == null) {
+            return;
+        }
+        final AudioInfo audioInfo = MediaController.getInstance().getAudioInfo();
+        LyricsHelper.LyricsData data = null;
+        try {
+            String lyrics;
+            String artworkUrl = messageObject.getArtworkUrl(true);
+            lyrics = audioInfo != null ? audioInfo.getLyrics() : null;
+            if (!TextUtils.isEmpty(lyrics)) {
+                lyrics = lyrics.replace("\\n", "\n");
+            }
+            lyrics = !TextUtils.isEmpty(lyrics) ? lyrics : LyricsHelper.getLyrics(artworkUrl);
+            if (!TextUtils.isEmpty(lyrics)) {
+                data = LyricsHelper.fromRawText(lyrics);
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+        if (data == null || data.lines == null || data.lines.isEmpty()) {
+            if (lyricsContainer.getVisibility() != View.GONE) {
+                setLyricsExpanded(false, false);
+                lyricsContainerHeight = 0;
+                applyLyricsHeight();
+                lyricsContainer.setVisibility(View.GONE);
+            }
+        } else {
+            // Re-apply themed colors so the lyrics follow a theme switch (this runs on
+            // every track change / play state change, which also covers theme changes).
+            lyricsView.setColors(getThemedColor(Theme.key_player_time), getThemedColor(Theme.key_player_button));
+            lyricsView.setLyrics(data);
+            lyricsCollapsedHeight = getAdaptiveLyricsHeight(data.lines.size(), LYRICS_COLLAPSED_HEIGHT_DP);
+            if (lyricsContainer.getVisibility() == View.GONE) {
+                lyricsContainer.setVisibility(View.VISIBLE);
+                lyricsContainerHeight = lyricsCollapsedHeight;
+                applyLyricsHeight();
+            } else if (!lyricsExpanded && lyricsContainerHeight != lyricsCollapsedHeight) {
+                // Track changed to one with fewer/more lines while collapsed: refit quietly.
+                lyricsContainerHeight = lyricsCollapsedHeight;
+                applyLyricsHeight();
+            }
+            lyricsView.setProgress(lastTime);
+        }
+    }
+
+    private void toggleLyricsExpanded() {
+        setLyricsExpanded(!lyricsExpanded, true);
+    }
+
+    private void setLyricsExpanded(boolean expanded, boolean animated) {
+        if (lyricsContainer == null || lyricsContainer.getVisibility() != View.VISIBLE) {
+            lyricsExpanded = false;
+            return;
+        }
+        if (lyricsExpanded == expanded) {
+            return;
+        }
+        lyricsExpanded = expanded;
+        int lineCount = lyricsView != null ? lyricsView.getLineCount() : 0;
+        final int target = expanded
+                ? getAdaptiveLyricsHeight(lineCount, LYRICS_EXPANDED_HEIGHT_DP)
+                : lyricsCollapsedHeight;
+        final int from = lyricsContainerHeight;
+        if (lyricsExpandButton != null) {
+            lyricsExpandButton.setText(expanded ? "▴" : "▾");
+        }
+        if (lyricsHeightAnimator != null) {
+            lyricsHeightAnimator.cancel();
+            lyricsHeightAnimator = null;
+        }
+        if (animated) {
+            lyricsHeightAnimator = ValueAnimator.ofInt(from, target);
+            lyricsHeightAnimator.setDuration(220);
+            lyricsHeightAnimator.addUpdateListener(a -> {
+                lyricsContainerHeight = (int) (Integer) a.getAnimatedValue();
+                applyLyricsHeight();
+            });
+            lyricsHeightAnimator.start();
+        } else {
+            lyricsContainerHeight = target;
+            applyLyricsHeight();
+        }
+    }
+
+    private void applyLyricsHeight() {
+        if (lyricsContainer == null || bottomView == null) {
+            return;
+        }
+        boolean lyricsActive = lyricsContainerHeight > 0;
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) lyricsContainer.getLayoutParams();
+        lp.height = lyricsContainerHeight;
+        lyricsContainer.setLayoutParams(lp);
+
+        FrameLayout.LayoutParams blp = (FrameLayout.LayoutParams) bottomView.getLayoutParams();
+        // The control bar stays at its original position (111) while the lyrics area is hidden,
+        // and is pushed below the lyrics area (124 + height) only while it is shown.
+        blp.topMargin = lyricsActive ? dp(LYRICS_AREA_TOP) + lyricsContainerHeight : dp(BOTTOM_VIEW_TOP);
+        bottomView.setLayoutParams(blp);
+
+        updatePlayerHeight();
+    }
+
+    private void updatePlayerHeight() {
+        if (playerLayout == null || playerShadow == null) {
+            return;
+        }
+        boolean lyricsActive = lyricsContainerHeight > 0;
+        int bottomTop = lyricsActive ? dp(LYRICS_AREA_TOP) + lyricsContainerHeight : dp(BOTTOM_VIEW_TOP);
+        int h = bottomTop + dp(BOTTOM_VIEW_HEIGHT + PLAYER_SLACK + (!isMyList() && !noforwards ? 52 : 0));
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) playerLayout.getLayoutParams();
+        layoutParams.height = h;
+        playerLayout.setLayoutParams(layoutParams);
+
+        layoutParams = (FrameLayout.LayoutParams) playerShadow.getLayoutParams();
+        layoutParams.bottomMargin = h;
+        playerShadow.setLayoutParams(layoutParams);
+    }
+
     private void updateTitle(boolean shutdown) {
         MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
         if (messageObject == null && shutdown || messageObject != null && !(messageObject.isMusic() || messageObject.isVoice())) {
@@ -2361,14 +2543,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             ) && !NaConfig.INSTANCE.getForceCopy().Bool();
             if (noforwards != this.noforwards) {
                 this.noforwards = noforwards;
-
-                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) playerLayout.getLayoutParams();
-                layoutParams.height = dp(179 + (!noforwards && !isMyList() ? 52 : 0));
-                playerLayout.setLayoutParams(layoutParams);
-
-                layoutParams = (FrameLayout.LayoutParams) playerShadow.getLayoutParams();
-                layoutParams.bottomMargin = dp(179 + (!isMyList() && !noforwards ? 52 : 0));
-                playerShadow.setLayoutParams(layoutParams);
+                updatePlayerHeight();
             }
             if (noforwards) {
                 optionsButton.hideSubItem(1);
@@ -2386,6 +2561,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             optionsButton.setSubItemShown(7, isMyList());
 
             checkIfMusicDownloaded(messageObject);
+            loadLyricsForMessage(messageObject);
             updateProgress(messageObject, !sameMessageObject);
             updateCover(messageObject, !sameMessageObject);
 
