@@ -1579,11 +1579,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         return overlayPasscodeViews.isEmpty() && this.passcodeDialog != null ? passcodeView == this.passcodeDialog.passcodeView : overlayPasscodeViews.get(overlayPasscodeViews.size() - 1) == passcodeView;
     }
 
-    private boolean handleIntent(Intent intent, boolean isNew, boolean restore, boolean fromPassword) {
-        return handleIntent(intent, isNew, restore, fromPassword, null, true, false);
-    }
-
-    private TLRPC.User resolveLinkUserOrShowError(int account, long userId) {
+    public static TLRPC.User resolveLinkUserOrShowError(int account, long userId) {
         TLRPC.User user = MessagesController.getInstance(account).getUser(userId);
         if (user == null) {
             user = MessagesStorage.getInstance(account).getUserSync(userId);
@@ -1595,6 +1591,10 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             BulletinFactory.global().createErrorBulletin(LocaleController.getString(R.string.NoUsernameFound2)).show();
         }
         return user;
+    }
+
+    private boolean handleIntent(Intent intent, boolean isNew, boolean restore, boolean fromPassword) {
+        return handleIntent(intent, isNew, restore, fromPassword, null, true, false);
     }
 
     @SuppressLint("Range")
@@ -2273,7 +2273,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                                                 try {
                                                     long userId = Utilities.parseLong(StringsKt.substringAfter(path, "@id", "0"));
                                                     if (userId != 0) {
-                                                        push_user_id = userId;
+                                                        open_user_id = userId;
                                                     }
                                                 } catch (Exception e) {
                                                     FileLog.e(e);
@@ -2751,12 +2751,16 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                                             open_settings = 1;
                                         }
                                     } else if (url.startsWith("tg:user") || url.startsWith("tg://user")) {
-                                        url = url.replace("tg:user", "tg://telegram.org").replace("tg://user", "tg://telegram.org");
-                                        data = Uri.parse(url);
-
                                         try {
-                                            open_user_id = Long.parseLong(data.getQueryParameter("id"));
-                                        } catch (NumberFormatException ignore) {}
+                                            url = url.replace("tg:user", "tg://telegram.org").replace("tg://user", "tg://telegram.org");
+                                            data = Uri.parse(url);
+                                            long userId = Utilities.parseLong(data.getQueryParameter("id"));
+                                            if (userId != 0) {
+                                                open_user_id = userId;
+                                            }
+                                        } catch (Exception e) {
+                                            FileLog.e(e);
+                                        }
                                     } else if (url.startsWith("tg:upgrade") || url.startsWith("tg://upgrade") || url.startsWith("tg:update") || url.startsWith("tg://update")) {
                                         boolean updateAlways = false;
                                         try {
@@ -3144,7 +3148,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     } else {
                         VoIPPendingCall.startOrSchedule(this, push_user_id, videoCallUser, AccountInstance.getInstance(intentAccount[0]));
                     }
-                } else if (resolveLinkUserOrShowError(intentAccount[0], push_user_id) != null) {
+                } else {
                     Bundle args = new Bundle();
                     args.putLong("user_id", push_user_id);
                     if (push_msg_id != 0) {
