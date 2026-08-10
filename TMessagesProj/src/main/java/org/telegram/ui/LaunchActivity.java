@@ -1566,6 +1566,20 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         return overlayPasscodeViews.isEmpty() && this.passcodeDialog != null ? passcodeView == this.passcodeDialog.passcodeView : overlayPasscodeViews.get(overlayPasscodeViews.size() - 1) == passcodeView;
     }
 
+    public static TLRPC.User resolveLinkUserOrShowError(int account, long userId) {
+        TLRPC.User user = MessagesController.getInstance(account).getUser(userId);
+        if (user == null) {
+            user = MessagesStorage.getInstance(account).getUserSync(userId);
+            if (user != null) {
+                MessagesController.getInstance(account).putUser(user, true);
+            }
+        }
+        if (user == null) {
+            BulletinFactory.global().createErrorBulletin(LocaleController.getString(R.string.NoUsernameFound2)).show();
+        }
+        return user;
+    }
+
     private boolean handleIntent(Intent intent, boolean isNew, boolean restore, boolean fromPassword) {
         return handleIntent(intent, isNew, restore, fromPassword, null, true, false);
     }
@@ -1624,6 +1638,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         int open_widget_edit = -1;
         int open_widget_edit_type = -1;
         int open_new_dialog = 0;
+        long open_user_id = 0;
         long dialogId = 0;
         boolean showDialogsList = false;
         boolean showPlayer = false;
@@ -2245,7 +2260,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                                                 try {
                                                     long userId = Utilities.parseLong(StringsKt.substringAfter(path, "@id", "0"));
                                                     if (userId != 0) {
-                                                        push_user_id = userId;
+                                                        open_user_id = userId;
                                                     }
                                                 } catch (Exception e) {
                                                     FileLog.e(e);
@@ -2728,7 +2743,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                                             data = Uri.parse(url);
                                             long userId = Utilities.parseLong(data.getQueryParameter("id"));
                                             if (userId != 0) {
-                                                push_user_id = userId;
+                                                open_user_id = userId;
                                             }
                                         } catch (Exception e) {
                                             FileLog.e(e);
@@ -3129,6 +3144,23 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     if (mainFragmentsStack.isEmpty() || MessagesController.getInstance(intentAccount[0]).checkCanOpenChat(args, mainFragmentsStack.get(mainFragmentsStack.size() - 1))) {
                         ChatActivity fragment = new ChatActivity(args);
                         if (getActionBarLayout().presentFragment(new INavigationLayout.NavigationParams(fragment).setNoAnimation(true))) {
+                            pushOpened = true;
+                            LaunchActivity.dismissAllWeb();
+                        }
+                    }
+                }
+            } else if (open_user_id != 0) {
+                TLRPC.User user = resolveLinkUserOrShowError(intentAccount[0], open_user_id);
+                if (user != null) {
+                    BaseFragment lastFragment = actionBarLayout.getLastFragment();
+                    if (lastFragment != null) {
+                        MessagesController.getInstance(intentAccount[0]).openChatOrProfileWith(user, null, lastFragment, 0, false);
+                        pushOpened = true;
+                        LaunchActivity.dismissAllWeb();
+                    } else {
+                        Bundle args = new Bundle();
+                        args.putLong("user_id", open_user_id);
+                        if (getActionBarLayout().presentFragment(new INavigationLayout.NavigationParams(new ProfileActivity(args)).setNoAnimation(true))) {
                             pushOpened = true;
                             LaunchActivity.dismissAllWeb();
                         }
