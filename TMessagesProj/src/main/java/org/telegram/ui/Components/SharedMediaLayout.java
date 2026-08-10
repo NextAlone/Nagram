@@ -3245,7 +3245,8 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 } else if (mediaPage.selectedType == TAB_PHOTOVIDEO && view instanceof SharedPhotoVideoCell2) {
                     final SharedPhotoVideoCell2 cell = (SharedPhotoVideoCell2) view;
                     final MessageObject messageObject = cell.getMessageObject();
-                    if (messageObject != null && messageObject.isSensitive()) {
+                    final boolean showSensitiveAlert = profileActivity == null || !MessagesController.getInstance(profileActivity.getCurrentAccount()).showSensitiveContent();
+                    if (messageObject != null && messageObject.isSensitive() && showSensitiveAlert) {
                         if (profileActivity == null) return;
                         final int currentAccount = profileActivity.getCurrentAccount();
                         final MessagesController messagesController = MessagesController.getInstance(currentAccount);
