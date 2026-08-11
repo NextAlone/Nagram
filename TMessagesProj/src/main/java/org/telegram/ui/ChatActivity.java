@@ -25435,6 +25435,8 @@ public class ChatActivity extends BaseFragment implements
                 break;
             }
 
+            a++;
+
             final MessageObject messageObject;
             final int padding;
             if (view instanceof ChatMessageCell) {
@@ -25466,8 +25468,6 @@ public class ChatActivity extends BaseFragment implements
                 }
                 groupId = msgGroupId;
             }
-
-            a++;
         }
 
         return Math.max(0, b - t);
