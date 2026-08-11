@@ -1,15 +1,12 @@
 package tw.nekomimi.nekogram.transtale.source
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import io.ktor.http.ContentType
 import org.json.JSONArray
-import org.telegram.messenger.FileLog
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import tw.nekomimi.nekogram.transtale.Translator
 import xyz.nextalone.nagram.network.NetworkRequestBuilder
-import java.net.URLEncoder
-import java.util.*
+import java.util.Arrays
 
 object MicrosoftTranslator : Translator {
 
@@ -22,45 +19,44 @@ object MicrosoftTranslator : Translator {
             "fa", "pl", "pt", "pa", "otq", "ro", "ru", "sm", "sr", "sk", "sl",
             "es", "sw", "sv", "ty", "ta", "te", "th", "to", "tr", "uk", "ur",
             "vi", "cy", "yua")
-    private var useCN = false
 
     override suspend fun doTranslate(from: String, to: String, query: String): String {
         if (to !in targetLanguages) {
             throw UnsupportedOperationException(LocaleController.getString(R.string.TranslateApiUnsupported))
         }
 
-        return withContext(Dispatchers.IO) {
-            val encodedQuery = URLEncoder.encode(query, "UTF-8")
-            val param = "fromLang=auto-detect&text=$encodedQuery&to=$to"
-            val response = request(param)
-            val jsonObject = JSONArray(response).getJSONObject(0)
-            if (!jsonObject.has("translations")) {
-                throw Exception(response)
-            }
-            val array = jsonObject.getJSONArray("translations")
-            array.getJSONObject(0).getString("text")
+        val source = JSONArray()
+        for (s in query.split("\n")) {
+            source.put(s)
         }
-    }
 
-    private fun request(param: String): String {
-        val baseUrl = "https://" + (if (useCN) "cn" else "www") + ".bing.com/ttranslatev3"
-
-        val httpResponse = NetworkRequestBuilder.post(baseUrl) {
-            header("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 10_0 like Mac OS X) AppleWebKit/602.1.38 (KHTML, like Gecko) Version/10.0 Mobile/14A5297c Safari/602.1")
-            setBody(param)
+        val response = NetworkRequestBuilder.post("https://edge.microsoft.com/translate/translatetext") {
+            contentType(ContentType.Application.Json)
+            parameter("from", "")
+            parameter("to", to)
+            parameter("isEnterpriseClient", "false")
+            setBody(source.toString())
         }.execute()
 
-        if (httpResponse.statusCode == 302 || httpResponse.statusCode == 301) {
-            useCN = !useCN
-            FileLog.e("Move to " + if (useCN) "cn" else "www")
-            return request(param)
+        if (response.statusCode != 200) {
+            error("HTTP ${response.statusCode} : ${response.body}")
         }
 
-        if (httpResponse.statusCode != 200) {
-            FileLog.e("HTTP ${httpResponse.statusCode} : ${httpResponse.body}")
+        val target = JSONArray(response.body)
+        val result = StringBuilder()
+        for (i in 0 until target.length()) {
+            val obj = target.getJSONObject(i)
+            val tra = obj.getJSONArray("translations")
+            if (tra.length() >= 1) {
+                val traObj = tra.getJSONObject(0)
+                val text = traObj.getString("text")
+                result.append(text)
+                if (i != target.length() - 1) {
+                    result.append("\n")
+                }
+            }
         }
 
-        return httpResponse.body
+        return result.toString()
     }
-
 }

@@ -1,56 +1,51 @@
 package tw.nekomimi.nekogram.transtale.source
 
-import cn.hutool.core.util.StrUtil
 import io.ktor.http.ContentType
-import org.json.JSONObject
+import org.json.JSONArray
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
-import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.transtale.Translator
 import xyz.nextalone.nagram.network.NetworkRequestBuilder
 
-object GoogleCloudTranslator : Translator {
+object GoogleCloud2Translator : Translator {
 
     override suspend fun doTranslate(from: String, to: String, query: String): String {
 
         if (to !in targetLanguages) {
-
             throw UnsupportedOperationException(LocaleController.getString(R.string.TranslateApiUnsupported))
-
         }
 
-        if (StrUtil.isBlank(NekoConfig.googleCloudTranslateKey.String())) error("Missing Cloud Translate Key")
+        val srclang = from.ifEmpty { "auto" }
+        val content = query.replace("\n", "<br h=114514>")
 
-        val jsonBody = JSONObject().apply {
-            put("q", query)
-            put("target", to)
-            put("format", "text")
-            if (from != "auto") put("source", from)
+        val jsonBody = JSONArray().apply {
+            put(JSONArray().apply {
+                put(JSONArray().apply { put(content) })
+                put(srclang)
+                put(to)
+            })
+            put("wt_lib")
         }
 
-        val response = NetworkRequestBuilder.post("https://translation.googleapis.com/language/translate/v2") {
-            header("X-Goog-Api-Key", NekoConfig.googleCloudTranslateKey.String())
-            contentType(ContentType.Application.Json)
+        val response = NetworkRequestBuilder.post("https://translate-pa.googleapis.com/v1/translateHtml") {
+            header("X-Goog-Api-Key", "AIzaSyATBXajvzQLTDHEQbcpq0Ihe0vWDHmO520")
+            contentType(ContentType.parse("application/json+protobuf"))
             setBody(jsonBody.toString())
         }.execute()
 
         if (response.statusCode != 200) {
-
             error("HTTP ${response.statusCode} : ${response.body}")
-
         }
 
-        var respObj = JSONObject(response.body)
-
-        if (respObj.isNull("data")) error(respObj.toString(4))
-
-        respObj = respObj.getJSONObject("data")
-
-        val respArr = respObj.getJSONArray("translations")
+        val respArr = JSONArray(response.body)
 
         if (respArr.length() == 0) error("Empty translation result")
 
-        return respArr.getJSONObject(0).getString("translatedText")
+        val innerArr = respArr.getJSONArray(0)
+
+        if (innerArr.length() == 0) error("Empty translation result")
+
+        return innerArr.getString(0).replace("<br h=114514>", "\n")
 
     }
 

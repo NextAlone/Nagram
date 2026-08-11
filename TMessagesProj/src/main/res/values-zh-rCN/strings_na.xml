@@ -346,4 +346,5 @@
     <string name="TabletModeSmall">小平板</string>
     <string name="TabletModeBig">大平板</string>
     <string name="ShowRecentForwardTab">转发时显示最近会话</string>
+    <string name="ProviderVolcengineTranslate">火山引擎</string>
 </resources>

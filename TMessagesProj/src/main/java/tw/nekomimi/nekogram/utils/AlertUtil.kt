@@ -242,10 +242,10 @@ object AlertUtil {
                 arrayOf(
                     LocaleController.getString(R.string.ProviderGoogleTranslate),
                     LocaleController.getString(R.string.ProviderGoogleTranslateCN),
-                    LocaleController.getString(R.string.ProviderYandexTranslate),
+                    LocaleController.getString(R.string.ProviderGoogleTranslate) + " 2",
                     LocaleController.getString(R.string.ProviderLingocloud),
                     LocaleController.getString(R.string.ProviderMicrosoftTranslator),
-                    LocaleController.getString(R.string.ProviderYouDao),
+                    LocaleController.getString(R.string.ProviderVolcengineTranslate),
                     LocaleController.getString(R.string.ProviderDeepLxTranslate),
                     LocaleController.getString(R.string.ProviderTelegramAPI),
                     LocaleController.getString(R.string.ProviderTranSmartTranslate),

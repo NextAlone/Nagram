@@ -400,15 +400,15 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                     PopupBuilder builder = new PopupBuilder(view);
 
                     builder.setItems(new String[]{
-                            LocaleController.getString("ProviderGoogleTranslate", R.string.ProviderGoogleTranslate),
-                            LocaleController.getString("ProviderGoogleTranslateCN", R.string.ProviderGoogleTranslateCN),
-                            LocaleController.getString("ProviderYandexTranslate", R.string.ProviderYandexTranslate),
-                            LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud),
-                            LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderMicrosoftTranslator),
-                            LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderYouDao),
+                            LocaleController.getString(R.string.ProviderGoogleTranslate),
+                            LocaleController.getString(R.string.ProviderGoogleTranslateCN),
+                            LocaleController.getString(R.string.ProviderGoogleTranslate) + " 2",
+                            LocaleController.getString(R.string.ProviderLingocloud),
+                            LocaleController.getString(R.string.ProviderMicrosoftTranslator),
+                            LocaleController.getString(R.string.ProviderVolcengineTranslate),
                             LocaleController.getString(R.string.ProviderDeepLxTranslate),
-                            LocaleController.getString("ProviderTelegramAPI", R.string.ProviderTelegramAPI),
-                            LocaleController.getString("ProviderTranSmartTranslate", R.string.ProviderTranSmartTranslate),
+                            LocaleController.getString(R.string.ProviderTelegramAPI),
+                            LocaleController.getString(R.string.ProviderTranSmartTranslate),
                             LocaleController.getString(R.string.ProviderLLMTranslate),
                             LocaleController.getString(R.string.ProviderDeepLTranslate),
                             LocaleController.getString(R.string.ProviderDeepLFreeTranslate),
@@ -691,31 +691,31 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                             String value;
                             switch (NekoConfig.translationProvider.Int()) {
                                 case Translator.providerGoogle:
-                                    value = LocaleController.getString("ProviderGoogleTranslate", R.string.ProviderGoogleTranslate);
+                                    value = LocaleController.getString(R.string.ProviderGoogleTranslate);
                                     break;
                                 case Translator.providerGoogleCN:
-                                    value = LocaleController.getString("ProviderGoogleTranslateCN", R.string.ProviderGoogleTranslateCN);
+                                    value = LocaleController.getString(R.string.ProviderGoogleTranslateCN);
                                     break;
-                                case Translator.providerYandex:
-                                    value = LocaleController.getString("ProviderYandexTranslate", R.string.ProviderYandexTranslate);
+                                case Translator.providerGoogle2:
+                                    value = LocaleController.getString(R.string.ProviderGoogleTranslate) + " 2";
                                     break;
                                 case Translator.providerLingo:
-                                    value = LocaleController.getString("ProviderLingocloud", R.string.ProviderLingocloud);
+                                    value = LocaleController.getString(R.string.ProviderLingocloud);
                                     break;
                                 case Translator.providerMicrosoft:
-                                    value = LocaleController.getString("ProviderMicrosoftTranslator", R.string.ProviderMicrosoftTranslator);
+                                    value = LocaleController.getString(R.string.ProviderMicrosoftTranslator);
                                     break;
-                                case Translator.providerYouDao:
-                                    value = LocaleController.getString("ProviderYouDao", R.string.ProviderYouDao);
+                                case Translator.providerVolcengine:
+                                    value = LocaleController.getString(R.string.ProviderVolcengineTranslate);
                                     break;
                                 case Translator.providerDeepL:
                                     value = LocaleController.getString(R.string.ProviderDeepLxTranslate);
                                     break;
                                 case Translator.providerTelegram:
-                                    value = LocaleController.getString("ProviderTelegramAPI", R.string.ProviderTelegramAPI);
+                                    value = LocaleController.getString(R.string.ProviderTelegramAPI);
                                     break;
                                 case Translator.providerTranSmart:
-                                    value = LocaleController.getString("ProviderTranSmartTranslate", R.string.ProviderTranSmartTranslate);
+                                    value = LocaleController.getString(R.string.ProviderTranSmartTranslate);
                                     break;
                                 case Translator.providerLLM:
                                     value = LocaleController.getString(R.string.ProviderLLMTranslate);
