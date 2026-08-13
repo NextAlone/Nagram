@@ -1313,6 +1313,12 @@ object NaConfig {
             ConfigItem.configTypeString,
             ""
         )
+    val disableAiEditor =
+        addConfig(
+            "DisableAiEditor",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,
