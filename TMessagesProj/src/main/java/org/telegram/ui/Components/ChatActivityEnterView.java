@@ -2885,9 +2885,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                     .show();
                 return;
             }
-            if (messageEditText == null || NaConfig.INSTANCE.getDisableAiFeatures().Bool()) {
-                return;
-            }
+            if (messageEditText == null) return;
             new AIEditorAlert(getContext(), resourcesProvider)
                 .setText(messageEditText.getText())
                 .setOnUse(text -> {
@@ -6587,7 +6585,7 @@ public class ChatActivityEnterView extends FrameLayout implements
 
     private boolean shownAiButton;
     private void showAiButton(boolean show_) {
-        final boolean show = !NaConfig.INSTANCE.getDisableAiFeatures().Bool() && (show_ || richDraftActive) && parentFragment != null && !parentFragment.isSecretChat();
+        final boolean show = (show_ || richDraftActive) && parentFragment != null && !parentFragment.isSecretChat() && !NaConfig.INSTANCE.getDisableAiEditor().Bool();
 
         if (shownAiButton == show) return;
         if (show) {

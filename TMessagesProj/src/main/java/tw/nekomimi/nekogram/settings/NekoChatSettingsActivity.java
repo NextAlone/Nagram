@@ -129,7 +129,6 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
             null, null,
             (input) -> input.isEmpty() ? (String) NaConfig.INSTANCE.getDefaultMonoLanguage().defaultValue : input));
     private final AbstractConfigCell disableGlobalSearchRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableGlobalSearch()));
-    private final AbstractConfigCell disableAiFeaturesRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableAiFeatures()));
 //    private final AbstractConfigCell mapPreviewRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.mapPreviewProvider,
 //            new String[]{
 //                    LocaleController.getString("MapPreviewProviderTelegram", R.string.MapPreviewProviderTelegram),

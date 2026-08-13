@@ -49,7 +49,6 @@
     <string name="AutoInsertGIFCaption">Auto insert caption before GIF send</string>
     <string name="DefaultMonoLanguage">Custom default code language</string>
     <string name="DisableGlobalSearch">Disable Global Search</string>
-    <string name="DisableAiFeatures">Disable AI Features</string>
     <string name="InputMessageId">Input Message Id</string>
     <string name="ToTheMessage">To the message</string>
     <string name="HideOriginAfterTranslation">Hide origin after translation</string>
@@ -349,4 +348,5 @@
     <string name="TabletModeBig">Big Tablet</string>
     <string name="ShowRecentForwardTab">Show recent chats tab when forwarding</string>
     <string name="ProviderVolcengineTranslate">Volcengine Translate</string>
+    <string name="DisableAiEditor">Disable Ai Editor</string>
 </resources>

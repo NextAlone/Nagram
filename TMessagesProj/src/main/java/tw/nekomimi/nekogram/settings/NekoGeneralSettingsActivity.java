@@ -110,14 +110,15 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
     private final AbstractConfigCell autoTranslateRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getAutoTranslate(), LocaleController.getString("AutoTranslateAbout")));
     private final AbstractConfigCell dividerTranslation = cellGroup.appendCell(new ConfigCellDivider());
 
-    private final AbstractConfigCell headerSummarize = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.SummarizeText)));
+    private final AbstractConfigCell headerAiTools = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.PremiumPreviewAIEditor)));
     private final AbstractConfigCell summarizeTextButtonRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NaConfig.INSTANCE.getSummarizeTextButton(),
             new String[]{
                     LocaleController.getString(R.string.Default),
                     LocaleController.getString(R.string.SummarizeTextButtonDisable),
                     LocaleController.getString(R.string.SummarizeTextButtonAlways),
             }, null));
-    private final AbstractConfigCell dividerSummarize = cellGroup.appendCell(new ConfigCellDivider());
+    private final AbstractConfigCell disableAiEditorRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableAiEditor()));
+    private final AbstractConfigCell dividerAiTools = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell headerMap = cellGroup.appendCell(new ConfigCellHeader("Map"));
     private final AbstractConfigCell useOSMDroidMapRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useOSMDroidMap));

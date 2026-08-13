@@ -347,4 +347,5 @@
     <string name="TabletModeBig">大平板</string>
     <string name="ShowRecentForwardTab">转发时显示最近会话</string>
     <string name="ProviderVolcengineTranslate">火山引擎</string>
+    <string name="DisableAiEditor">禁用 AI 编辑器</string>
 </resources>
