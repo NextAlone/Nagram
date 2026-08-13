@@ -983,6 +983,12 @@ public class TranslateController extends BaseController {
         @Nullable String language,
         Utilities.Callback<TLRPC.TL_textWithEntities> callback
     ) {
+
+        if (NaConfig.INSTANCE.getDisableAiFeatures().Bool()) {
+            callback.run(null);
+            return;
+        }
+
         final int id = Objects.hash(message.getDialogId(), message.getId(), language != null ? 1 : 0);
         if (loadingSummarizations.contains(id)) return;
 

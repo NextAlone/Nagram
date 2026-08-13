@@ -49,6 +49,7 @@
     <string name="AutoInsertGIFCaption">Auto insert caption before GIF send</string>
     <string name="DefaultMonoLanguage">Custom default code language</string>
     <string name="DisableGlobalSearch">Disable Global Search</string>
+    <string name="DisableAiFeatures">Disable AI Features</string>
     <string name="InputMessageId">Input Message Id</string>
     <string name="ToTheMessage">To the message</string>
     <string name="HideOriginAfterTranslation">Hide origin after translation</string>

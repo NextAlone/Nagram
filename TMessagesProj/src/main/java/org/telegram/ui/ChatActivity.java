@@ -40528,6 +40528,9 @@ public class ChatActivity extends BaseFragment implements
         @Override
         public void didPressSummarize(ChatMessageCell cell, boolean byReply) {
             final MessageObject msg = cell.getMessageObject();
+            if (NaConfig.INSTANCE.getDisableAiFeatures().Bool()) {
+                return;
+            }
             msg.messageOwner.summarizedOpen = !msg.messageOwner.summarizedOpen;
             final boolean opened = msg.messageOwner.summarizedOpen;
             msg.updateTranslation(true);

@@ -3082,7 +3082,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         aiButton.setContentDescription(getString(R.string.AIEditor));
         ScaleStateListAnimator.apply(aiButton);
         aiButton.setOnClickListener(v -> {
-            if (commentTextView == null) return;
+            if (commentTextView == null || NaConfig.INSTANCE.getDisableAiFeatures().Bool()) {
+                return;
+            }
             MessagesController.getGlobalMainSettings().edit().putInt("aihintshown", 3).apply();
             new AIEditorAlert(getContext(), resourcesProvider)
                 .setText(commentTextView.getText())
@@ -3497,7 +3499,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         topAiButton.setContentDescription(getString(R.string.AIEditor));
         ScaleStateListAnimator.apply(topAiButton);
         topAiButton.setOnClickListener(v -> {
-            if (topCommentTextView == null) return;
+            if (topCommentTextView == null || NaConfig.INSTANCE.getDisableAiFeatures().Bool()) {
+                return;
+            }
             MessagesController.getGlobalMainSettings().edit().putInt("aihintshown", 3).apply();
             new AIEditorAlert(getContext(), resourcesProvider)
                 .setText(topCommentTextView.getText())
@@ -6482,7 +6486,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
     private boolean shownAiButton;
     private void showAiButton(boolean show_) {
-        final boolean show = show_ && (baseFragment instanceof ChatActivity && !((ChatActivity) baseFragment).isSecretChat());
+        final boolean show = show_ && !NaConfig.INSTANCE.getDisableAiFeatures().Bool() && (baseFragment instanceof ChatActivity && !((ChatActivity) baseFragment).isSecretChat());
 
         if (shownAiButton == show) return;
         if (show) {

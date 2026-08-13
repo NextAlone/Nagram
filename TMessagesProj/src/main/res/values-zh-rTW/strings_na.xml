@@ -49,6 +49,7 @@
     <string name="AutoInsertGIFCaption">在 GIF 傳送時自動插入草稿</string>
     <string name="DefaultMonoLanguage">自訂預設語法高亮語言</string>
     <string name="DisableGlobalSearch">禁用全域性搜尋</string>
+    <string name="DisableAiFeatures">停用 AI 功能</string>
     <string name="InputMessageId">輸入訊息 ID</string>
     <string name="ToTheMessage">回到訊息</string>
     <string name="HideOriginAfterTranslation">翻譯後隱藏原文</string>
