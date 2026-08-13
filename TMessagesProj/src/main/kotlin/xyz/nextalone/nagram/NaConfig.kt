@@ -1319,6 +1319,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val strokeOnViews =
+        addConfig(
+            "StrokeOnViews",
+            ConfigItem.configTypeBool,
+            true
+        )
 
     private fun addConfig(
         k: String,
