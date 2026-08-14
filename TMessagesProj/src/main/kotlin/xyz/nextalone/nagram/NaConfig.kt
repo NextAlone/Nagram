@@ -1319,11 +1319,11 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
-    val strokeOnViews =
+    val disableGlareEffects =
         addConfig(
-            "StrokeOnViews",
+            "DisableGlareEffects",
             ConfigItem.configTypeBool,
-            true
+            false
         )
 
     private fun addConfig(

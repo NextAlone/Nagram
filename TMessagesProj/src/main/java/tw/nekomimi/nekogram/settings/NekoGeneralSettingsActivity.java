@@ -206,7 +206,6 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
     private final AbstractConfigCell typefaceRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.typeface));
     private final AbstractConfigCell transparentStatusBarRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.transparentStatusBar));
     private final AbstractConfigCell appBarShadowRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableAppBarShadow));
-    private final AbstractConfigCell strokeOnViewsRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getStrokeOnViews()));
     private final AbstractConfigCell newYearRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.newYear));
     private final AbstractConfigCell alwaysShowDownloadIconRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getAlwaysShowDownloadIcon()));
     private final AbstractConfigCell actionBarDecorationRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.actionBarDecoration, new String[]{
@@ -315,6 +314,11 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
     private final AbstractConfigCell win32Row = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableAutoDownloadingWin32Executable));
     private final AbstractConfigCell archiveRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableAutoDownloadingArchive));
     private final AbstractConfigCell dividerAutoDownload = cellGroup.appendCell(new ConfigCellDivider());
+
+    // blur
+    private final AbstractConfigCell headerBlur = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.LiteOptionsBlur2)));
+    private final AbstractConfigCell disableGlareEffectsRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableGlareEffects()));
+    private final AbstractConfigCell dividerBlur = cellGroup.appendCell(new ConfigCellDivider());
 
     private ChatBlurAlphaSeekBar chatBlurAlphaSeekbar;
 
