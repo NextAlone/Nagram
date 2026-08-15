@@ -304,8 +304,9 @@ dependencies {
         exclude group: 'androidx.recyclerview', module: "recyclerview"
     }
 
-    implementation 'androidx.car.app:app:1.4.0'
-    implementation 'androidx.car.app:app-projected:1.4.0'
+    implementation 'androidx.car.app:app:1.7.0'
+    implementation "androidx.media:media:1.7.0"
+    implementation "androidx.lifecycle:lifecycle-runtime:2.7.0"
     implementation 'org.nanohttpd:nanohttpd:2.3.1'
 
     compileOnly 'org.checkerframework:checker-qual:2.5.2'
