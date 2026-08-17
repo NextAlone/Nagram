@@ -4,6 +4,7 @@ import static org.telegram.messenger.AndroidUtilities.dp;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -13,12 +14,21 @@ import android.view.Gravity;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.R;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.Components.AnimatedTextView;
+import org.telegram.ui.Components.ColoredImageSpan;
+
+import java.util.Objects;
 
 public class TimeStringHelper {
+    public static SpannableStringBuilder forwardsSpan;
+    public static Drawable forwardsDrawable;
+
     public static CharSequence getColoredAdminString(View parent, TextPaint namePaint, SpannableStringBuilder sb) {
         SpannableString spannableString = new SpannableString("\u200B");
         spannableString.setSpan(new adminStringSpan(parent, namePaint, sb), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -39,6 +49,14 @@ public class TimeStringHelper {
             adminString.setText("");
             adminString.setGravity(Gravity.CENTER);
             setText(sb, false);
+
+            if (forwardsDrawable == null) {
+                forwardsDrawable = Objects.requireNonNull(ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.drawable.forwards_solar)).mutate();
+            }
+            if (forwardsSpan == null) {
+                forwardsSpan = new SpannableStringBuilder("\u200B");
+                forwardsSpan.setSpan(new ColoredImageSpan(forwardsDrawable, ColoredImageSpan.ALIGN_CENTER), 0, 1, 0);
+            }
         }
 
         public void setText(SpannableStringBuilder sb, boolean animated) {
