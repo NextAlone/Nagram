@@ -18628,9 +18628,6 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             viewsTextWidth = (int) Math.ceil(Theme.chat_timePaint.measureText(currentViewsString));
             float drawableWidth = Theme.chat_msgInViewsDrawable.getIntrinsicWidth() * (Theme.chat_timePaint.getTextSize() - dp(2)) / Theme.chat_msgInViewsDrawable.getIntrinsicHeight();
             timeWidth += viewsTextWidth + drawableWidth + dp(10);
-        } else {
-            currentViewsString = null;
-            viewsTextWidth = 0;
         }
         if (messageObject.messageOwner.forwards > 0) {
             currentForwardsString = String.format("%s", LocaleController.formatShortNumber(Math.max(1, messageObject.messageOwner.forwards), null));
@@ -24645,13 +24642,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (transitionParams.animateBackgroundBoundsInner) {
                 forwardsX += animationOffsetX;
             }
-            Drawable forwardsDrawable = TimeStringHelper.forwardsDrawable;
-            if (forwardsDrawable == null) {
-                try {
-                    TimeStringHelper.forwardsDrawable = ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.drawable.forwards_solar).mutate();
-                    forwardsDrawable = TimeStringHelper.forwardsDrawable;
-                } catch (Exception ignore) {}
-            }
+            Drawable forwardsDrawable = TimeStringHelper.getForwardsDrawable();
             float fw = 0;
             if (forwardsDrawable != null) {
                 int color = Theme.chat_timePaint.getColor();
