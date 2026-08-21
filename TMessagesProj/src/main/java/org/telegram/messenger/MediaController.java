@@ -517,7 +517,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         public int ttl;
         public long effectId;
         @Nullable
-        public Boolean highQuality;
+        public Boolean highQuality = NaConfig.INSTANCE.getAlwaysSendinHD().Bool();
         public boolean isHighQuality() {
             if (highQuality == null)
                 return SharedConfig.photoHighQualityDefault;
@@ -551,7 +551,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             savedFilterState = null;
             stickers = null;
             cropState = null;
-            highQuality = null;
+            highQuality = NaConfig.INSTANCE.getAlwaysSendinHD().Bool();
         }
 
         public void copyFrom(MediaEditState state) {

@@ -1319,6 +1319,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val alwaysSendinHD =
+        addConfig(
+            "AlwaysSendinHD",
+            ConfigItem.configTypeBool,
+            true
+        )
 
     private fun addConfig(
         k: String,
