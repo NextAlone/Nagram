@@ -1762,6 +1762,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private int viewsTextWidth;
     private String currentViewsString;
 
+    private StaticLayout forwardsLayout;
+    private int forwardsTextWidth;
+    private String currentForwardsString;
+
     private StaticLayout repliesLayout;
     private int repliesTextWidth;
     private String currentRepliesString;
@@ -13925,6 +13929,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 viewsLayout = null;
             }
 
+            if (currentForwardsString != null) {
+                forwardsLayout = new StaticLayout(currentForwardsString, Theme.chat_timePaint, forwardsTextWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            } else {
+                forwardsLayout = null;
+            }
+
             if (currentRepliesString != null && !currentMessageObject.scheduled) {
                 repliesLayout = new StaticLayout(currentRepliesString, Theme.chat_timePaint, repliesTextWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             } else {
@@ -18618,6 +18628,15 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             viewsTextWidth = (int) Math.ceil(Theme.chat_timePaint.measureText(currentViewsString));
             float drawableWidth = Theme.chat_msgInViewsDrawable.getIntrinsicWidth() * (Theme.chat_timePaint.getTextSize() - dp(2)) / Theme.chat_msgInViewsDrawable.getIntrinsicHeight();
             timeWidth += viewsTextWidth + drawableWidth + dp(10);
+        }
+        if (messageObject.messageOwner.forwards > 0) {
+            currentForwardsString = String.format("%s", LocaleController.formatShortNumber(Math.max(1, messageObject.messageOwner.forwards), null));
+            forwardsTextWidth = (int) Math.ceil(Theme.chat_timePaint.measureText(currentForwardsString));
+            float drawableWidth = TimeStringHelper.forwardsDrawable != null ? (TimeStringHelper.forwardsDrawable.getIntrinsicWidth() * (Theme.chat_timePaint.getTextSize() - dp(2)) / Math.max(1f, TimeStringHelper.forwardsDrawable.getIntrinsicHeight())) : 0;
+            timeWidth += forwardsTextWidth + drawableWidth + dp(10);
+        } else {
+            currentForwardsString = null;
+            forwardsTextWidth = 0;
         }
         if (messageObject.type == MessageObject.TYPE_EXTENDED_MEDIA_PREVIEW) {
             String str = formatString(R.string.PaymentCheckoutPay, LocaleController.getInstance().formatCurrencyString(messageObject.messageOwner.media.total_amount, messageObject.messageOwner.media.currency).toUpperCase(Locale.ROOT));
@@ -24609,6 +24628,47 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
             transitionParams.lastTimeXViews = viewsX;
         }
+        // Forwards count start
+        if (forwardsLayout != null) {
+            float forwardsX = (transitionParams.shouldAnimateTimeX ? this.timeX : timeX) + offsetX;
+            if (!(isRoundVideo && transitionParams.animateDrawBackground)) {
+                if (transitionParams.shouldAnimateTimeX) {
+                    forwardsX = transitionParams.animateFromTimeXViews * (1f - transitionParams.animateChangeProgress) + forwardsX * transitionParams.animateChangeProgress;
+                }
+            }
+            if (currentMessagesGroup != null && currentMessagesGroup.transitionParams.backgroundChangeBounds) {
+                forwardsX += currentMessagesGroup.transitionParams.offsetRight;
+            }
+            if (transitionParams.animateBackgroundBoundsInner) {
+                forwardsX += animationOffsetX;
+            }
+            Drawable forwardsDrawable = TimeStringHelper.getForwardsDrawable();
+            float fw = 0;
+            if (forwardsDrawable != null) {
+                int color = Theme.chat_timePaint.getColor();
+                forwardsDrawable.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
+                fw = setDrawableBounds(forwardsDrawable, forwardsX, timeY + dp(1.5f), Theme.chat_timePaint.getTextSize() - dp(2));
+                if (useScale) {
+                    canvas.save();
+                    float cx = forwardsX + (forwardsDrawable.getIntrinsicWidth() + dp(3) + forwardsTextWidth) / 2f;
+                    canvas.scale(scale, scale, cx, forwardsDrawable.getBounds().centerY());
+                }
+                forwardsDrawable.setAlpha((int) (255 * alpha));
+                forwardsDrawable.draw(canvas);
+                forwardsDrawable.setAlpha(255);
+                forwardsDrawable.setColorFilter(null);
+            }
+
+            canvas.save();
+            canvas.translate(forwardsX + fw + dp(3), timeY);
+            SpoilerEffect.layoutDrawMaybe(forwardsLayout, canvas);
+            canvas.restore();
+            if (useScale && forwardsDrawable != null) {
+                canvas.restore();
+            }
+            offsetX += forwardsTextWidth + fw + dp(10);
+        }
+        // Forwards count end
         if (isPinned || transitionParams.animatePinned) {
             float pinnedX = (transitionParams.shouldAnimateTimeX ? this.timeX : timeX) + offsetX;
             boolean inAnimation = transitionParams.animatePinned && isPinned;

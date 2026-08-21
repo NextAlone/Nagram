@@ -1319,6 +1319,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val disableGlareEffects =
+        addConfig(
+            "DisableGlareEffects",
+            ConfigItem.configTypeBool,
+            false
+        )
     val alwaysSendinHD =
         addConfig(
             "AlwaysSendinHD",
