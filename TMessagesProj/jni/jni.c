@@ -14,7 +14,6 @@
 
 int registerNativeTgNetFunctions(JavaVM *vm, JNIEnv *env);
 int videoOnJNILoad(JavaVM *vm, JNIEnv *env);
-int imageOnJNILoad(JavaVM *vm, JNIEnv *env);
 int tgvoipOnJNILoad(JavaVM *vm, JNIEnv *env);
 
 jint JNI_OnLoad(JavaVM *vm, void *reserved) {
@@ -27,10 +26,6 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
 
     if (verifySign(env) != JNI_OK) {
         return JNI_ERR;
-    }
-
-    if (imageOnJNILoad(vm, env) != JNI_TRUE) {
-        return -1;
     }
 
     if (videoOnJNILoad(vm, env) != JNI_TRUE) {

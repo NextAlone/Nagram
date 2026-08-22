@@ -82,6 +82,7 @@ import org.telegram.tgnet.tl.TL_stars;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.MessageDrawable;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -1335,7 +1336,7 @@ public class PeerColorActivity extends BaseFragment implements NotificationCente
 
     private Theme.ResourcesProvider parentResourcesProvider;
     private final SparseIntArray currentColors = new SparseIntArray();
-    private final Theme.MessageDrawable msgInDrawable, msgInDrawableSelected;
+    private final MessageDrawable msgInDrawable, msgInDrawableSelected;
 
     public void updateThemeColors() {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", Activity.MODE_PRIVATE);
@@ -1448,8 +1449,8 @@ public class PeerColorActivity extends BaseFragment implements NotificationCente
                 return isDark;
             }
         };
-        msgInDrawable = new Theme.MessageDrawable(Theme.MessageDrawable.TYPE_TEXT, false, false, resourceProvider);
-        msgInDrawableSelected = new Theme.MessageDrawable(Theme.MessageDrawable.TYPE_TEXT, false, true, resourceProvider);
+        msgInDrawable = new MessageDrawable(MessageDrawable.TYPE_TEXT, false, false, resourceProvider);
+        msgInDrawableSelected = new MessageDrawable(MessageDrawable.TYPE_TEXT, false, true, resourceProvider);
     }
 
     @Override
@@ -1642,10 +1643,10 @@ public class PeerColorActivity extends BaseFragment implements NotificationCente
         }
         sunDrawable.beginApplyLayerColors();
         int color = Theme.getColor(Theme.key_chats_menuName);
-        sunDrawable.setLayerColor("Sunny.**", color);
-        sunDrawable.setLayerColor("Path 6.**", color);
-        sunDrawable.setLayerColor("Path.**", color);
-        sunDrawable.setLayerColor("Path 5.**", color);
+        sunDrawable.setLayerColor("Sunny", color);
+        sunDrawable.setLayerColor("Path 6", color);
+        sunDrawable.setLayerColor("Path", color);
+        sunDrawable.setLayerColor("Path 5", color);
         sunDrawable.commitApplyLayerColors();
 
         dayNightItem = new ImageView(context);
@@ -2145,9 +2146,6 @@ public class PeerColorActivity extends BaseFragment implements NotificationCente
                 }
             }
             setContentDescription(button);
-            if (isChannelOrGroup && lock == null) {
-                button = TextCell.applyNewSpan(button);
-            }
             buttonText = new Text(button, 16);
             updateColors();
         }

@@ -33,7 +33,6 @@ import com.google.zxing.RGBLuminanceSource
 import com.google.zxing.WriterException
 import com.google.zxing.common.GlobalHistogramBinarizer
 import com.google.zxing.qrcode.QRCodeReader
-import com.google.zxing.qrcode.QRCodeWriter
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import org.telegram.messenger.AndroidUtilities
 import org.telegram.messenger.ApplicationLoader
@@ -43,6 +42,7 @@ import org.telegram.messenger.LocaleController
 import org.telegram.messenger.NotificationCenter
 import org.telegram.messenger.R
 import org.telegram.messenger.SharedConfig
+import org.telegram.messenger.TelegramQRCodeWriter
 import org.telegram.messenger.browser.Browser
 import tw.nekomimi.nekogram.ui.BottomBuilder
 import tw.nekomimi.nekogram.utils.AlertUtil.showToast
@@ -231,7 +231,7 @@ object ProxyUtil {
         return try {
             val hints = HashMap<EncodeHintType, Any>()
             hints[EncodeHintType.ERROR_CORRECTION] = ErrorCorrectionLevel.M
-            QRCodeWriter().encode(text, BarcodeFormat.QR_CODE, size, size, hints, null, null, icon)
+            TelegramQRCodeWriter().encode(text, BarcodeFormat.QR_CODE, size, size, hints, null, null, icon)
         } catch (e: WriterException) {
             FileLog.e(e);
             Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)

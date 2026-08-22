@@ -106,8 +106,6 @@ public class NativeLoader {
         return folder;
     }
 
-    private static native void init(String path, boolean enable);
-
     public static boolean loaded() {
         return nativeLoaded;
     }

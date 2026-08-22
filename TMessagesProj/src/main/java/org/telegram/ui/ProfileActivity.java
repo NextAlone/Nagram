@@ -120,7 +120,12 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSmoothScrollerCustom;
+
+import org.telegram.ui.Components.ScrimOptions;
+import org.telegram.ui.Components.blur3.drawable.color.impl.BlurredBackgroundProviderImpl;
+import org.telegram.ui.Components.blur3.source.BlurredBackgroundSourceBitmap;
+import org.telegram.ui.Components.blur3.utils.Blur3Utils;
+import org.telegram.ui.recyclerview.LinearSmoothScrollerCustom;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -347,6 +352,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import me.vkryl.android.animator.BoolAnimator;
+import me.vkryl.core.reference.ReferenceList;
 
 import java.util.concurrent.atomic.AtomicReference;
 import cn.hutool.core.thread.ThreadUtil;
@@ -2165,6 +2171,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             iBlur3SourceGlass = null;
             iBlur3FactoryLiquidGlass = new BlurredBackgroundDrawableViewFactory(iBlur3SourceColor);
         }
+
+        scrimBlur3Factory.setLinkedViewsRef(new ReferenceList<>());
     }
 
     @Override
@@ -3397,6 +3405,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             private final ArrayList<View> sortedChildren = new ArrayList<>();
             private final Comparator<View> viewComparator = (view, view2) -> (int) (view.getY() - view2.getY());
 
+            @Override
+            protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+                super.onSizeChanged(w, h, oldw, oldh);
+                Blur3Utils.checkBitmapSourceMatrixScale(scrimBlur3SourceBitmap, fragmentView);
+                scrimBlur3Factory.invalidateAllLinkedViews();
+            }
 
             @Override
             protected void dispatchDraw(Canvas canvas) {
@@ -3598,6 +3612,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         viewPositionWatcher = new ViewPositionWatcher(fragmentView);
         iBlur3FactoryLiquidGlass.setSourceRootView(viewPositionWatcher, (ViewGroup) fragmentView);
+        scrimBlur3Factory.setSourceRootView(viewPositionWatcher, (ViewGroup) fragmentView);
 
         FrameLayout frameLayout = (FrameLayout) fragmentView;
 
@@ -4152,12 +4167,25 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             editItem.setContentDescription(LocaleController.getString(R.string.Edit));
         }
         otherItem = menu.addItem(10, R.drawable.ic_ab_other, resourcesProvider);
+
+        otherItem.setSubMenuDelegate(new ActionBarMenuItem.ActionBarSubMenuItemDelegate() {
+            @Override
+            public void onShowSubMenu() {
+                updateScrimSourceBitmap();
+            }
+
+            @Override
+            public void onHideSubMenu() {
+
+            }
+        });
         ttlIconView = new ImageView(context);
         ttlIconView.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_actionBarDefaultIcon), PorterDuff.Mode.MULTIPLY));
         AndroidUtilities.updateViewVisibilityAnimated(ttlIconView, false, 0.8f, false);
         ttlIconView.setImageResource(R.drawable.msg_mini_autodelete_timer);
         otherItem.addView(ttlIconView, LayoutHelper.createFrame(12, 12, Gravity.CENTER_VERTICAL | Gravity.LEFT, 8, 2, 0, 0));
         otherItem.setContentDescription(LocaleController.getString(R.string.AccDescrMoreOptions));
+        otherItem.setBlurredBackgroundFactory(scrimBlur3Factory, BlurredBackgroundProviderImpl.messageMenuBackground(resourceProvider));
 
         int scrollTo;
         int scrollToPosition = 0;
@@ -11301,7 +11329,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     sharedMediaRow = rowCount++;
                 } else if (lastSectionRow == -1 && needSendMessage) {
                     sendMessageRow = rowCount++;
-                    reportRow = rowCount++;
+                    // reportRow = rowCount++;
                     lastSectionRow = rowCount++;
                 }
             }
@@ -12915,6 +12943,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
         if (isPeerNoForwards()) {
             otherItem.hideSubItem(gallery_menu_save);
+        }
+
+        if (userId != 0 && !isBot && !myProfile) {
+            otherItem.addSubItem(report, R.drawable.msg_report, LocaleController.getString(R.string.ReportBot)).setColors(getThemedColor(Theme.key_text_RedRegular), getThemedColor(Theme.key_text_RedRegular));
         }
 
         if (selfUser && !myProfile) {
@@ -17619,11 +17651,23 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     /* Blur */
 
+    private void updateScrimSourceBitmap() {
+        ScrimOptions.makeGlobalBlurBitmaps((bitmapBg, bitmapOptions) -> {
+            scrimBlur3SourceBitmap.setBitmap(bitmapOptions);
+            Blur3Utils.checkBitmapSourceMatrixScale(scrimBlur3SourceBitmap, fragmentView);
+            scrimBlur3Factory.invalidateAllLinkedViews();
+        });
+    }
+
     private final @Nullable DownscaleScrollableNoiseSuppressor scrollableViewNoiseSuppressor;
     // private final @Nullable BlurredBackgroundSourceRenderNode iBlur3SourceGlassFrosted;
     private final @Nullable BlurredBackgroundSourceRenderNode iBlur3SourceGlass;
     private final @NonNull BlurredBackgroundSourceColor iBlur3SourceColor;
     private final @NonNull BlurredBackgroundDrawableViewFactory iBlur3FactoryLiquidGlass;
+
+    private final BlurredBackgroundSourceBitmap scrimBlur3SourceBitmap = new BlurredBackgroundSourceBitmap();
+    private final BlurredBackgroundDrawableViewFactory scrimBlur3Factory = new BlurredBackgroundDrawableViewFactory(scrimBlur3SourceBitmap);
+
     private ViewPositionWatcher viewPositionWatcher;
 
     private IBlur3Capture iBlur3Capture;

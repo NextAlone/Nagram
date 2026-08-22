@@ -90,6 +90,7 @@ import org.telegram.ui.Components.VerticalPositionAutoAnimator;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.PaymentFormActivity;
+import org.telegram.ui.ReportBottomSheet;
 import org.telegram.ui.Stars.StarsController;
 import org.telegram.ui.Stories.DarkThemeResourceProvider;
 import org.telegram.ui.web.BotWebViewContainer;
@@ -1026,6 +1027,7 @@ public class BotWebViewAttachedSheet implements NotificationCenter.NotificationC
         otherItem.addSubItem(R.id.menu_tos_bot, R.drawable.menu_intro, LocaleController.getString(R.string.BotWebViewToS));
         otherItem.addSubItem(R.id.menu_privacy, R.drawable.menu_privacy_policy, LocaleController.getString(R.string.BotPrivacyPolicy));
         otherItem.hideSubItem(R.id.menu_privacy);
+        otherItem.addSubItem(R.id.menu_report_bot, R.drawable.msg_report, LocaleController.getString(R.string.BotWebViewReportBot));
         if (currentBot != null && (currentBot.show_in_side_menu || currentBot.show_in_attach_menu)) {
             otherItem.addSubItem(R.id.menu_delete_bot, R.drawable.msg_delete, LocaleController.getString(R.string.BotWebViewDeleteBot));
         }
@@ -1085,6 +1087,8 @@ public class BotWebViewAttachedSheet implements NotificationCenter.NotificationC
                     final String username = UserObject.getPublicUsername(bot);
                     final String link = "https://"+MessagesController.getInstance(currentAccount).linkPrefix+"/"+username+"?profile";
                     new ShareAlert(getContext(), null, link, false, link, false, AndroidUtilities.computePerceivedBrightness(actionBarColor) > .721f ? null : new DarkThemeResourceProvider()).show();
+                } else if (id == R.id.menu_report_bot) {
+                    ReportBottomSheet.openChat(currentAccount, getContext(), BulletinFactory.of(Bulletin.BulletinWindow.make(getContext()), resourcesProvider), botId);
                 }
             }
         });
@@ -1274,12 +1278,14 @@ public class BotWebViewAttachedSheet implements NotificationCenter.NotificationC
     private void loadFromResponse(boolean fromTab) {
         if (requestProps == null) return;
         final long pollTimeout = Math.max(0, POLL_PERIOD - (System.currentTimeMillis() - requestProps.responseTime));
+        boolean sameOrigin = false;
         String url = null;
         fullsize = null;
         if (requestProps.response instanceof TLRPC.TL_webViewResultUrl) {
             TLRPC.TL_webViewResultUrl resultUrl = (TLRPC.TL_webViewResultUrl) requestProps.response;
             queryId = resultUrl.query_id;
             url = resultUrl.url;
+            sameOrigin = resultUrl.same_origin;
             fullsize = resultUrl.fullsize;
         } else if (requestProps.response instanceof TLRPC.TL_appWebViewResultUrl) { // deprecated
             TLRPC.TL_appWebViewResultUrl result = (TLRPC.TL_appWebViewResultUrl) requestProps.response;
@@ -1289,6 +1295,9 @@ public class BotWebViewAttachedSheet implements NotificationCenter.NotificationC
             TLRPC.TL_simpleWebViewResultUrl resultUrl = (TLRPC.TL_simpleWebViewResultUrl) requestProps.response;
             queryId = 0;
             url = resultUrl.url;
+        }
+        if (sameOrigin) {
+            webViewContainer.setTrustedOrigin(url);
         }
         if (url != null && !fromTab) {
             MediaDataController.getInstance(currentAccount).increaseWebappRating(requestProps.botId);
