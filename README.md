@@ -7,9 +7,18 @@ Nagram is a third-party Telegram client based on [NekoX](https://github.com/Neko
 - Releases: <https://github.com/NextAlone/Nagram/releases>
 - Issues here: <https://github.com/NextAlone/Nagram/issues>
 
+## Branding
+
+Nagram's source code is licensed under GPLv3. The Nagram name and project
+identity belong to [@NextAlone](https://github.com/NextAlone); the Nagram
+application icon artwork is copyright © MaitungTM. These are separate brand
+assets. Modified, forked, and third-party distributions must use distinct
+branding and replace the Nagram brand assets. See [BRANDING.md](BRANDING.md)
+for the complete policy.
+
 ## Additional feature over Nagram
 
-1. Nice icon (thanks to MaitungTM)
+1. Nice icon (copyright © MaitungTM)
 2. Combine message
 3. Editable text style 
 4. Forced copy
@@ -228,4 +237,3 @@ Is Nagram not in your language, or the translation is incorrect or incomplete? G
 - [Nullgram](https://github.com/qwq233/Nullgram)
 - [TeleTux](https://github.com/TeleTux/TeleTux)
 - [OwlGram](https://github.com/OwlGramDev/OwlGram)
-
