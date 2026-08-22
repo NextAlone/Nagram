@@ -222,6 +222,8 @@
     <string name="NavigationAnimationSpring">Анимация источника навигации</string>
     <string name="ForceEdgeToEdge">Принудительно к краю</string>
     <string name="ForceEdgeToEdgeDesc">Может привести к неправильным разметкам страниц, дублированию контента и сбою действий кликов.</string>
+    <string name="UseSystemPhotoPicker">Совместимость с выбором фото системы</string>
+    <string name="UseSystemPhotoPickerDesc">На Android 13 и более поздней версии, используйте системный выбор для вложений галереи без запроса полного доступа к фото и видео.</string>
     <string name="TabStyle">Tab Style</string>
     <string name="TabStylePure">Чистый</string>
     <string name="TabStylePills">Таблетки</string>
@@ -344,4 +346,7 @@
     <string name="TabletModeSmall">Маленький планшет</string>
     <string name="TabletModeBig">Большой планшет</string>
     <string name="ShowRecentForwardTab">Показывать вкладку чатов при пересылке</string>
+    <string name="ProviderVolcengineTranslate">Перевод Volcengine</string>
+    <string name="DisableAiEditor">Отключить Ai Editor</string>
+    <string name="DisableGlareEffects">Отключить эффекты Glare</string>
 </resources>

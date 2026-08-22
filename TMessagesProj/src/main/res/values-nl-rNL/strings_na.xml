@@ -222,6 +222,8 @@
     <string name="NavigationAnimationSpring">Navigatie veeranimatie</string>
     <string name="ForceEdgeToEdge">Forceer rand tot rand</string>
     <string name="ForceEdgeToEdgeDesc">Kan resulteren in pagina-lay-out onregelmatigheden, overlapping van inhoud en falen van klik acties.</string>
+    <string name="UseSystemPhotoPicker">Compatibiliteit systeem fotokiezer</string>
+    <string name="UseSystemPhotoPickerDesc">Gebruik op Android 13 en later de systeem fotokiezer voor bijlagen in de galerij zonder om volledige toegang tot foto en video te vragen.</string>
     <string name="TabStyle">Tab Style</string>
     <string name="TabStylePure">Puur</string>
     <string name="TabStylePills">Pillen</string>
@@ -344,4 +346,7 @@
     <string name="TabletModeSmall">Kleine tablet</string>
     <string name="TabletModeBig">Grote tablet</string>
     <string name="ShowRecentForwardTab">Toon het tabblad recente chats bij doorsturen</string>
+    <string name="ProviderVolcengineTranslate">Volcengine vertalen</string>
+    <string name="DisableAiEditor">Ai editor uitschakelen</string>
+    <string name="DisableGlareEffects">Reflectie-effecten uitschakelen</string>
 </resources>

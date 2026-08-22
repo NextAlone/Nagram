@@ -222,6 +222,8 @@
     <string name="NavigationAnimationSpring">Navigointijousen animaatio</string>
     <string name="ForceEdgeToEdge">Pakota reuna reunaan</string>
     <string name="ForceEdgeToEdgeDesc">Voi johtaa sivujen ulkoasun epäsäännöllisyyksiin, sisällön päällekkäisyyteen ja napsautuksen epäonnistumiseen.</string>
+    <string name="UseSystemPhotoPicker">Järjestelmän valokuvanvalitsimen yhteensopivuus</string>
+    <string name="UseSystemPhotoPickerDesc">Android-laitteessa 13 ja myöhemmin, käytä järjestelmän valokuvien kerääjää gallerian liitteisiin pyytämättä täydellistä valokuvien ja videoiden käyttöoikeutta.</string>
     <string name="TabStyle">Tab Style</string>
     <string name="TabStylePure">Puhdas</string>
     <string name="TabStylePills">Pillereitä</string>
@@ -344,4 +346,7 @@
     <string name="TabletModeSmall">Pieni Tabletti</string>
     <string name="TabletModeBig">Iso Tabletti</string>
     <string name="ShowRecentForwardTab">Näytä viimeaikaiset chatit välilehdessä</string>
+    <string name="ProviderVolcengineTranslate">Volcengine Käännä</string>
+    <string name="DisableAiEditor">Poista Ai Editori Käytöstä</string>
+    <string name="DisableGlareEffects">Poista häikäisytehosteet käytöstä</string>
 </resources>

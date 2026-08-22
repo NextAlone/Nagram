@@ -222,6 +222,8 @@
     <string name="NavigationAnimationSpring">Animație primăvară de navigare</string>
     <string name="ForceEdgeToEdge">Forțează marginea la margine</string>
     <string name="ForceEdgeToEdgeDesc">Poate duce la nereguli în aspectul paginii, la suprapunerea conținutului și la acțiuni eșuate pentru click.</string>
+    <string name="UseSystemPhotoPicker">Compatibilitate selector poze de sistem</string>
+    <string name="UseSystemPhotoPickerDesc">Pe Android 13 și mai târziu, utilizați selectorul de fotografii de sistem pentru fișierele atașate galerie fără a solicita o fotografie completă și acces video.</string>
     <string name="TabStyle">Tab Style</string>
     <string name="TabStylePure">Pur</string>
     <string name="TabStylePills">Comprimate</string>
@@ -344,4 +346,7 @@
     <string name="TabletModeSmall">Tabletă mică</string>
     <string name="TabletModeBig">Tabletă mare</string>
     <string name="ShowRecentForwardTab">Arată fila conversații recente în timpul redirecționării</string>
+    <string name="ProviderVolcengineTranslate">Traducere Volcengine</string>
+    <string name="DisableAiEditor">Dezactivează Editorul Ai</string>
+    <string name="DisableGlareEffects">Dezactivează efectele Glare</string>
 </resources>

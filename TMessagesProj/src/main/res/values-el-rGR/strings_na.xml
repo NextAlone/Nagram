@@ -222,6 +222,8 @@
     <string name="NavigationAnimationSpring">Εφέ ελατηρίου πλοήγησης</string>
     <string name="ForceEdgeToEdge">Εξαναγκασμός ακμής στην άκρη</string>
     <string name="ForceEdgeToEdgeDesc">Μπορεί να έχει ως αποτέλεσμα παρατυπίες στη διάταξη της σελίδας, επικάλυψη περιεχομένου, και αποτυχία των ενεργειών κλικ</string>
+    <string name="UseSystemPhotoPicker">Συμβατότητα επιλογέα φωτογραφιών συστήματος</string>
+    <string name="UseSystemPhotoPickerDesc">Στο Android 13 και αργότερα, χρησιμοποιήστε τον επιλογέα φωτογραφιών συστήματος για συνημμένα γκαλερί χωρίς να ζητήσετε πλήρη πρόσβαση σε φωτογραφίες και βίντεο.</string>
     <string name="TabStyle">Tab Style</string>
     <string name="TabStylePure">Καθαρό</string>
     <string name="TabStylePills">Χάπια</string>
@@ -344,4 +346,7 @@
     <string name="TabletModeSmall">Μικρό Δισκίο</string>
     <string name="TabletModeBig">Μεγάλη Δισκία</string>
     <string name="ShowRecentForwardTab">Εμφάνιση πρόσφατης καρτέλας συνομιλιών κατά την προώθηση</string>
+    <string name="ProviderVolcengineTranslate">Μετάφραση Volcengine</string>
+    <string name="DisableAiEditor">Απενεργοποίηση Επεξεργαστή Ai</string>
+    <string name="DisableGlareEffects">Απενεργοποίηση εφέ λάμψης</string>
 </resources>

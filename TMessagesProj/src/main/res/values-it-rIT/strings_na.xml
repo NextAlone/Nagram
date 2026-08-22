@@ -222,6 +222,8 @@
     <string name="NavigationAnimationSpring">Animazione primavera navigazione</string>
     <string name="ForceEdgeToEdge">Forza bordo al bordo</string>
     <string name="ForceEdgeToEdgeDesc">Può causare irregolarità nel layout della pagina, sovrapposizione di contenuti e fallimento delle azioni di clic.</string>
+    <string name="UseSystemPhotoPicker">Compatibilità foto di sistema</string>
+    <string name="UseSystemPhotoPickerDesc">Su Android 13 e successivamente, utilizzare il selettore di foto di sistema per gli allegati galleria senza richiedere l\'accesso completo di foto e video.</string>
     <string name="TabStyle">Stile pannelli</string>
     <string name="TabStylePure">Puro</string>
     <string name="TabStylePills">Pillole</string>
@@ -344,4 +346,7 @@
     <string name="TabletModeSmall">Tavoletta Piccola</string>
     <string name="TabletModeBig">Tablet Grande</string>
     <string name="ShowRecentForwardTab">Mostra la scheda delle chat recenti durante l\'inoltro</string>
+    <string name="ProviderVolcengineTranslate">Volcengine Traduci</string>
+    <string name="DisableAiEditor">Disabilita Editor Ai</string>
+    <string name="DisableGlareEffects">Disabilita effetti riflesso</string>
 </resources>

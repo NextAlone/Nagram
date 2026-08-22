@@ -222,6 +222,8 @@
     <string name="NavigationAnimationSpring">Animation du ressort de navigation</string>
     <string name="ForceEdgeToEdge">Forcer l\'arête à l\'arête</string>
     <string name="ForceEdgeToEdgeDesc">Peut entraîner des irrégularités de mise en page, des chevauchements de contenu et un échec des actions de clic.</string>
+    <string name="UseSystemPhotoPicker">Compatibilité avec le sélecteur de photos du système</string>
+    <string name="UseSystemPhotoPickerDesc">Sur Android 13 et plus tard, utilisez le sélecteur de photos système pour les pièces jointes de la galerie sans demander un accès complet aux photos et aux vidéos.</string>
     <string name="TabStyle">Tab Style</string>
     <string name="TabStylePure">Pur</string>
     <string name="TabStylePills">pilules</string>
@@ -344,4 +346,7 @@
     <string name="TabletModeSmall">Petite tablette</string>
     <string name="TabletModeBig">Grande tablette</string>
     <string name="ShowRecentForwardTab">Afficher l\'onglet des discussions récentes lors de la redirection</string>
+    <string name="ProviderVolcengineTranslate">Traduction Volcengine</string>
+    <string name="DisableAiEditor">Désactiver Ai Editor</string>
+    <string name="DisableGlareEffects">Désactiver les effets de reflets</string>
 </resources>

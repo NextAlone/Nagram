@@ -222,6 +222,8 @@
     <string name="NavigationAnimationSpring">حركة ربيع التنقل</string>
     <string name="ForceEdgeToEdge">إجبار الحافة على الحافة</string>
     <string name="ForceEdgeToEdgeDesc">قد يؤدي إلى حدوث مخالفات في تخطيط الصفحات، وتداخل المحتوى، وفشل إجراءات النقر.</string>
+    <string name="UseSystemPhotoPicker">توافق منتقي صور النظام</string>
+    <string name="UseSystemPhotoPickerDesc">على أندرويد 13 وما بعده، استخدم منتقي صور النظام لمرفقات معرض الصور دون طلب الوصول إلى الصور والفيديو.</string>
     <string name="TabStyle">Tab Style</string>
     <string name="TabStylePure">بحتة</string>
     <string name="TabStylePills">حبوب</string>
@@ -344,4 +346,7 @@
     <string name="TabletModeSmall">لوحي صغير</string>
     <string name="TabletModeBig">لوحي كبير</string>
     <string name="ShowRecentForwardTab">إظهار علامة تبويب المحادثة الأخيرة عند إعادة التوجيه</string>
+    <string name="ProviderVolcengineTranslate">ترجمة المحرك الفوليكي</string>
+    <string name="DisableAiEditor">تعطيل محرر Ai</string>
+    <string name="DisableGlareEffects">تعطيل تأثيرات الزلازل</string>
 </resources>

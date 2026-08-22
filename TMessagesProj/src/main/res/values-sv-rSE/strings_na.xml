@@ -222,6 +222,8 @@
     <string name="NavigationAnimationSpring">Navigeringens fjäderanimering</string>
     <string name="ForceEdgeToEdge">Tvinga kant till kant</string>
     <string name="ForceEdgeToEdgeDesc">Kan resultera i sidan layout oegentligheter, innehåll överlappning, och fel i klickåtgärder.</string>
+    <string name="UseSystemPhotoPicker">Kompatibilitet för systemfotopickare</string>
+    <string name="UseSystemPhotoPickerDesc">På Android 13 och senare, använda systemet foto plockare för galleri bilagor utan att begära full foto och video tillgång.</string>
     <string name="TabStyle">Tab Style</string>
     <string name="TabStylePure">Ren</string>
     <string name="TabStylePills">Piller</string>
@@ -344,4 +346,7 @@
     <string name="TabletModeSmall">Liten surfplatta</string>
     <string name="TabletModeBig">Stor surfplatta</string>
     <string name="ShowRecentForwardTab">Visa fliken senaste chattar vid vidarebefordran</string>
+    <string name="ProviderVolcengineTranslate">Volcengine Översätt</string>
+    <string name="DisableAiEditor">Inaktivera Ai Editor</string>
+    <string name="DisableGlareEffects">Inaktivera bländningseffekter</string>
 </resources>

@@ -222,6 +222,8 @@
     <string name="NavigationAnimationSpring">Animacja źródła nawigacji</string>
     <string name="ForceEdgeToEdge">Wymuś krawędź do krawędzi</string>
     <string name="ForceEdgeToEdgeDesc">Może skutkować nieprawidłowościami układu strony, nakładaniem się treści i błędem akcji kliknięcia.</string>
+    <string name="UseSystemPhotoPicker">Systemowa kompatybilność selektora zdjęć</string>
+    <string name="UseSystemPhotoPickerDesc">Na Androidzie 13 i później użyj systemowego selektora zdjęć do załączników galerii bez żądania pełnego dostępu do zdjęć i wideo.</string>
     <string name="TabStyle">Tab Style</string>
     <string name="TabStylePure">Czysty</string>
     <string name="TabStylePills">O masie liniowej nitki pojedynczej mniejszej niż 125 decyteksów (o numerze metrycznym przekraczającym 14, ale nieprzekraczającym 43, dla nitki pojedynczej)</string>
@@ -344,4 +346,7 @@
     <string name="TabletModeSmall">Mała tabletka</string>
     <string name="TabletModeBig">Duża tabletka</string>
     <string name="ShowRecentForwardTab">Pokaż zakładkę ostatnich czatów podczas przekazywania</string>
+    <string name="ProviderVolcengineTranslate">Tłumacz Volcengine</string>
+    <string name="DisableAiEditor">Wyłącz edytor Ai</string>
+    <string name="DisableGlareEffects">Wyłącz efekty glare</string>
 </resources>
