@@ -1037,6 +1037,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     private boolean pipAvailable;
 
     private final Rect insets = new Rect();
+    private int bottomNavigationBarInset;
     private boolean padImageForHorizontalInsets;
 
     public boolean doneButtonPressed;
@@ -3204,7 +3205,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     continue;
                 }
                 if (child == aspectRatioFrameLayout) {
-                    int heightSpec = MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.y + (isStatusBarVisible() ? AndroidUtilities.statusBarHeight : 0), MeasureSpec.EXACTLY);
+                    int heightSpec = MeasureSpec.makeMeasureSpec(getMeasuredHeight(), MeasureSpec.EXACTLY);
                     child.measure(widthMeasureSpec, heightSpec);
                 } else if (child == paintingOverlay) {
                     int width;
@@ -4895,12 +4896,15 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         windowView.addView(containerView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
         ViewCompat.setOnApplyWindowInsetsListener(containerView, (v, newInsetsCompat) -> {
             final Rect oldInsets = new Rect(insets);
+            final int oldBottomNavigationBarInset = bottomNavigationBarInset;
             final Insets r = AndroidUtilities.getDefaultWindowInsets(newInsetsCompat, false);
+            final Insets tappableInsets = newInsetsCompat.getInsetsIgnoringVisibility(WindowInsetsCompat.Type.tappableElement());
 
             insets.set(r.left, r.top, r.right, r.bottom);
+            bottomNavigationBarInset = Math.min(r.bottom, tappableInsets.bottom);
 
             int newTopInset = insets.top;
-            if (!oldInsets.equals(insets)) {
+            if (!oldInsets.equals(insets) || oldBottomNavigationBarInset != bottomNavigationBarInset) {
                 if (animationInProgress == 1 || animationInProgress == 3) {
                     animatingImageView.setTranslationX(animatingImageView.getTranslationX() - getLeftInset());
                     animationValues[0][2] = animatingImageView.getTranslationX();
@@ -4917,7 +4921,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 navigationBarLayoutParams.bottomMargin = -navigationBarHeight / 2;
                 navigationBar.setLayoutParams(navigationBarLayoutParams);
             }
-            containerView.setPadding(r.left, 0, r.right, 0);
+            containerView.setPadding(r.left, 0, r.right, r.bottom - bottomNavigationBarInset);
             if (actionBar != null) {
                 AndroidUtilities.cancelRunOnUIThread(updateContainerFlagsRunnable);
                 if (isVisible && animationInProgress == 0) {
@@ -19281,13 +19285,20 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
     private int getContainerViewHeight(boolean trueHeight, int mode) {
         int height;
-        if (trueHeight || inBubbleMode) {
+        boolean fullscreenVideo = !trueHeight && mode == EDIT_MODE_NONE && sendPhotoType != SELECT_TYPE_AVATAR && AndroidUtilities.displaySize.x > AndroidUtilities.displaySize.y && aspectRatioFrameLayout != null && aspectRatioFrameLayout.getVisibility() == View.VISIBLE;
+        if (trueHeight || inBubbleMode || fullscreenVideo) {
             height = containerView.getMeasuredHeight();
+            if (!fullscreenVideo) {
+                height -= containerView.getPaddingBottom();
+            }
         } else {
             height = AndroidUtilities.displaySize.y;
             height += AndroidUtilities.navigationBarHeight - insets.bottom;
             if ((mode == EDIT_MODE_NONE || mode == EDIT_MODE_STICKER_MASK || mode == EDIT_MODE_COVER) && sendPhotoType != SELECT_TYPE_AVATAR && isStatusBarVisible()) {
                 height += AndroidUtilities.statusBarHeight;
+            }
+            if (containerView.getMeasuredHeight() > 0) {
+                height = Math.min(height, containerView.getMeasuredHeight());
             }
 //            if (mode == EDIT_MODE_NONE && sendPhotoType == 2) {
 //                height += AndroidUtilities.navigationBarHeight;
@@ -20284,8 +20295,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             centerImageTransform.preRotate(currentRotation);
             if (currentEditMode == EDIT_MODE_PAINT && photoPaintView != null) {
                 int trueH = getContainerViewHeight(true, 0);
+                int h = trueH;
                 trueH -= photoPaintView.getEmojiPadding(Math.abs(AndroidUtilities.displaySize.y + AndroidUtilities.statusBarHeight - trueH) < dp(20));
-                int h = getContainerViewHeight(false, 0);
                 canvas.translate(0, (trueH - h) / 2f * (1f - photoPaintView.adjustPanLayoutHelperProgress()));
                 centerImageTransform.preTranslate(0, (trueH - h) / 2f * (1f - photoPaintView.adjustPanLayoutHelperProgress()));
             }
@@ -22652,8 +22663,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             }
             if (currentEditMode == EDIT_MODE_PAINT && photoPaintView != null) {
                 int trueH = getContainerViewHeight(true, 0);
+                int h = trueH;
                 trueH -= photoPaintView.getEmojiPadding(Math.abs(AndroidUtilities.displaySize.y + AndroidUtilities.statusBarHeight - trueH) < dp(20));
-                int h = getContainerViewHeight(false, 0);
                 canvas.translate(0, (trueH - h) / 2f * (1f - photoPaintView.adjustPanLayoutHelperProgress()));
                 if (allowCrossfade) {
                     imageBoundsMatrix.preTranslate(0, (trueH - h) / 2f * (1f - photoPaintView.adjustPanLayoutHelperProgress()));
@@ -24045,7 +24056,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
             setMeasuredDimension(widthSize, heightSize);
 
-            int bottomInsets = insets.bottom;
+            int bottomInsets = bottomNavigationBarInset;
             heightSize -= bottomInsets;
             widthSize -= getPaddingLeft() + getPaddingRight();
             heightSize -= getPaddingBottom();
