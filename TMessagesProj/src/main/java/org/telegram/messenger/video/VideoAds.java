@@ -70,6 +70,7 @@ import org.telegram.ui.PremiumPreviewFragment;
 import org.telegram.ui.ReportBottomSheet;
 import org.telegram.ui.RevenueSharingAdsInfoBottomSheet;
 import org.telegram.ui.Stories.DarkThemeResourceProvider;
+import tw.nekomimi.nekogram.NekoConfig;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -182,7 +183,7 @@ public class VideoAds {
     private void load() {
         if (loading || loaded) return;
 
-        if (UserConfig.getInstance(currentAccount).isPremium() && MessagesController.getInstance(currentAccount).isSponsoredDisabled()) {
+        if (NekoConfig.hideSponsoredMessage.Bool() || UserConfig.getInstance(currentAccount).isPremium() && MessagesController.getInstance(currentAccount).isSponsoredDisabled()) {
             return;
         }
 
