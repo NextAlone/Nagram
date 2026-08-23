@@ -1,6 +1,6 @@
 [submodule "TMessagesProj/jni/boringssl"]
 	path = TMessagesProj/jni/boringssl
-	url = https://github.com/google/boringssl
+	url = https://github.com/google/boringssl.git
 	ignore = dirty
 [submodule "TMessagesProj/jni/third_party/libvpx"]
 	path = TMessagesProj/jni/third_party/libvpx

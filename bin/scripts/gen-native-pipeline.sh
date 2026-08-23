@@ -67,7 +67,7 @@ ffmpeg:
       paths:
         - TMessagesProj/jni/ffmpeg/build/
   script:
-    - sed -i -E 's#https://github\.com/[^/]+/#https://gitlab.com/xtao-labs/#g' .gitmodules
+    - sed -i -E 's#https://github\.com/[^/]+/#https://gitlab.com/xtao-labs/mirrors/#g' .gitmodules
     - git submodule sync
     - ./run init libs libvpx
     - ./run init libs dav1d
@@ -85,7 +85,7 @@ boringssl:
       paths:
         - TMessagesProj/jni/boringssl/build/
   script:
-    - sed -i -E 's#https://github\.com/[^/]+/#https://gitlab.com/xtao-labs/#g' .gitmodules
+    - sed -i -E 's#https://github\.com/[^/]+/#https://gitlab.com/xtao-labs/mirrors/#g' .gitmodules
     - git submodule sync
     - ./run init libs boringssl
 
@@ -129,9 +129,9 @@ cat <<YAML
           mv "\$sm" "\${sm}_artifacts_backup"
         fi
       done
-    - sed -i -E 's#https://github\.com/[^/]+/#https://gitlab.com/xtao-labs/#g' .gitmodules
+    - sed -i -E 's#https://github\.com/[^/]+/#https://gitlab.com/xtao-labs/mirrors/#g' .gitmodules
     - git submodule sync
-    - git submodule update --init --force 'TMessagesProj/jni/*'
+    - git submodule update --init --force
     - |
       for sm in TMessagesProj/jni/third_party/ffmpeg TMessagesProj/jni/third_party/libvpx TMessagesProj/jni/third_party/dav1d TMessagesProj/jni/boringssl; do
         if [ -d "\${sm}_artifacts_backup" ]; then

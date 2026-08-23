@@ -25,9 +25,9 @@ default:
     - echo "ndk.dir=${ANDROID_HOME}/ndk/27.2.12479018" >> local.properties
 
 .fetch-status: &fetch-status |
-  sed -i -E 's#https://github\.com/[^/]+/#https://gitlab.com/xtao-labs/#g' .gitmodules
+  sed -i -E 's#https://github\.com/[^/]+/#https://gitlab.com/xtao-labs/mirrors/#g' .gitmodules
   git submodule sync
-  git submodule update --init --force 'TMessagesProj/jni/*'
+  git submodule update --init --force
 
   git submodule status TMessagesProj/jni/third_party/ffmpeg > ffmpeg_status
   git submodule status TMessagesProj/jni/third_party/libvpx >> ffmpeg_status
@@ -123,6 +123,8 @@ native-pipeline:
 build:
   stage: build
   image: registry.gitlab.com/xtao-labs/android-ndk:35-jdk17.0.19_10-ndk27.2.12479018-cmake3.22.1-ci
+  before_script:
+    - git config --global --add safe.directory $CI_PROJECT_DIR
   needs:
     - job: fingerprint
       artifacts: true
@@ -142,6 +144,8 @@ build:
         - TMessagesProj/src/main/libs/arm64-v8a/
       policy: pull
   script:
+    - sed -i -E 's#https://github\.com/[^/]+/#https://gitlab.com/xtao-labs/mirrors/#g' .gitmodules
+    - git submodule update --init 'TMessagesProj/lib/*'
     - sed -i "s/2000000000000/$(date +%s%N | cut -c1-13)/g" gradle.properties
     - export GRADLE_USER_HOME="$CI_PROJECT_DIR/.gradle-cache"
     - export LOCAL_PROPERTIES="${LOCAL_PROPERTIES}"
