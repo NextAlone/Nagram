@@ -23,6 +23,7 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextSettingsCell;
@@ -49,9 +50,16 @@ import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.GsonUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
 import xyz.nextalone.nagram.NkmrConfig;
+import xyz.nextalone.nagram.NaConfig;
 import xyz.nextalone.nagram.network.NetworkLogActivity;
 
 public class NekoSettingsActivity extends BaseNekoSettingsActivity {
+
+    public static BaseFragment create() {
+        return NaConfig.INSTANCE.getUltraToggle().Bool()
+                ? new UltraToggleSettingsActivity()
+                : new NekoSettingsActivity();
+    }
 
     private static final Set<String> EXCLUDED_NKMR_CONFIG_KEYS = new HashSet<>(Arrays.asList(
             "ExtendedFeatureUnlockedToken",
@@ -59,6 +67,7 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
     ));
 
     private int categoriesRow;
+    private int ultraToggleRow;
     private int generalRow;
     private int accountRow;
     private int chatRow;
@@ -95,7 +104,14 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
 
     @Override
     protected void onItemClick(View view, int position, float x, float y) {
-        if (position == generalRow) {
+        if (position == ultraToggleRow) {
+            boolean enabled = !NaConfig.INSTANCE.getUltraToggle().Bool();
+            NaConfig.INSTANCE.getUltraToggle().setConfigBool(enabled);
+            listAdapter.notifyItemChanged(position);
+            if (enabled) presentFragment(new UltraToggleSettingsActivity());
+        } else if (NaConfig.INSTANCE.getUltraToggle().Bool() && position > categoriesRow && position < categories2Row) {
+            presentFragment(new UltraToggleSettingsActivity());
+        } else if (position == generalRow) {
             presentFragment(new NekoGeneralSettingsActivity());
         } else if (position == accountRow) {
             presentFragment(new NekoAccountSettingsActivity());
@@ -159,6 +175,7 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
         super.updateRows();
 
         categoriesRow = addRow("categories");
+        ultraToggleRow = addRow("ultraToggle");
         generalRow = addRow("general");
         accountRow = addRow("account");
         chatRow = addRow("chat");
@@ -198,7 +215,10 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
             switch (holder.getItemViewType()) {
                 case TYPE_SETTINGS: {
                     TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
-                    if (position == channelRow) {
+                    if (position == ultraToggleRow) {
+                        textCell.setTextAndValue(LocaleController.getString(R.string.UltraToggle),
+                                NaConfig.INSTANCE.getUltraToggle().Bool() ? LocaleController.getString(R.string.Enable) : LocaleController.getString(R.string.Disable), divider);
+                    } else if (position == channelRow) {
                         textCell.setTextAndValue(LocaleController.getString(R.string.OfficialChannel), "@" + channelUsername, divider);
                     } else if (position == channelTipsRow) {
                         textCell.setTextAndValue(LocaleController.getString(R.string.TipsChannel), "@" + channelUsernameTips, divider);
@@ -256,6 +276,8 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
                 return TYPE_SHADOW;
             } else if (position == categoriesRow || position == aboutRow || position == settingsRow) {
                 return TYPE_HEADER;
+            } else if (position == ultraToggleRow) {
+                return TYPE_SETTINGS;
             } else if (position > categoriesRow && position < categories2Row) {
                 return TYPE_TEXT;
             } else if (position >= channelRow && position < about2Row) {

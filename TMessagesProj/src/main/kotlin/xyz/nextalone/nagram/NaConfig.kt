@@ -24,6 +24,11 @@ object NaConfig {
     private val configs =
         ArrayList<ConfigItem>()
 
+    val ultraToggle = addConfig("UltraToggle", ConfigItem.configTypeBool, false)
+
+    @JvmStatic
+    fun allConfigs(): List<ConfigItem> = configs.toList()
+
     // Configs
     val forceCopy =
         addConfig(

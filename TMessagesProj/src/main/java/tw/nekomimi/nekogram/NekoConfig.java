@@ -38,6 +38,10 @@ public class NekoConfig {
 
     private static boolean configLoaded = false;
     private static final ArrayList<ConfigItem> configs = new ArrayList<>();
+
+    public static ArrayList<ConfigItem> getAllConfigs() {
+        return new ArrayList<>(configs);
+    }
     public static final ArrayList<DatacenterInfo> datacenterInfos = new ArrayList<>(5);
 
     // Configs

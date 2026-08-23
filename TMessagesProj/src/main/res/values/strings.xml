@@ -6278,6 +6278,8 @@
     <string name="LiteOptionsSpoiler">Animated spoiler effect</string>
     <string name="LiteOptionsBlur2">Blur</string>
     <string name="LiteOptionsLiquidGlass">Liquid Glass</string>
+    <string name="UltraToggle">Ultratoggle</string>
+    <string name="UltraToggleInfo">All Nagram switches on one continuous page</string>
     <string name="LiteOptionsScale">Zoom animations</string>
     <string name="LiteOptionsThanos">Dust-effect deletion</string>
     <string name="LiteOptionsCalls">Animations in Calls</string>
@@ -6901,8 +6903,10 @@
     <string name="SortByReactions">Reactions First</string>
     <string name="SortByReposts">Reposts First</string>
     <string name="SortByTime">Newest First</string>
-    <string name="StoryViewsSortDescription">Choose the order for the  list of viewers.</string>
-    <string name="StoryReactionsSortDescription">Choose the order for the  list of reactions.</string>
+    <string name="StoryViewsSortDescription">Choose the order for the 
+list of viewers.</string>
+    <string name="StoryReactionsSortDescription">Choose the order for the 
+list of reactions.</string>
     <string name="NoContactsViewed">None of your contacts viewed this story.</string>
     <string name="Viewers">Viewers</string>
     <string name="StealthModeConfirmTitle">You are in Stealth Mode now</string>
