@@ -316,6 +316,12 @@ object NaConfig {
             ConfigItem.configTypeString,
             ""
         )
+    val showEditedIcon =
+        addConfig(
+            "ShowEditedIcon",
+            ConfigItem.configTypeBool,
+            false
+        )
     val disableProxyWhenVpnEnabled =
         addConfig(
             "DisableProxyWhenVpnEnabled",

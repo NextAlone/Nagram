@@ -1746,6 +1746,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     public int timeX;
     public int signWidth;
     private CharSequence currentTimeString;
+    private boolean drawEditedIcon;
     private boolean drawTime = true;
     private boolean forceNotDrawTime;
     private Paint drillHolePaint;
@@ -18593,6 +18594,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 }
             }
         }
+        drawEditedIcon = false;
         if (currentMessageObject.isWelcomeMessage()) {
             timeString = ""; // Long.toString(currentMessageObject.getId());
         } else if (currentMessageObject.notime || currentMessageObject.isSponsored() || currentMessageObject.isQuickReply() || currentMessageObject.isWelcomeMessage()) {
@@ -18604,10 +18606,18 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         } else if (currentMessageObject.isRepostPreview) {
             timeString = LocaleController.formatSmallDateChat(messageObject.messageOwner.date) + ", " + LocaleController.getInstance().getFormatterDay().format((long) (messageObject.messageOwner.date) * 1000);
         } else if (edited) {
-            String customStr = NaConfig.INSTANCE.getCustomEditedMessage().String();
-            timeString = AppGlobalConfig.getInstance(currentAccount).messagePrimaryEditedDate.get() ?
-                LocaleController.formatPmEditedDate(currentMessagesGroup != null ? currentMessagesGroup.getMaxEditDate() : messageObject.messageOwner.edit_date) :
-                ((customStr.equals("") ? getString(R.string.EditedMessage) : customStr) + " " + LocaleController.getInstance().getFormatterDay().format((long) (messageObject.messageOwner.date) * 1000));
+            drawEditedIcon = NaConfig.INSTANCE.getShowEditedIcon().Bool();
+            if (drawEditedIcon) {
+                long date = AppGlobalConfig.getInstance(currentAccount).messagePrimaryEditedDate.get() ?
+                        (currentMessagesGroup != null ? currentMessagesGroup.getMaxEditDate() : messageObject.messageOwner.edit_date) :
+                        messageObject.messageOwner.date;
+                timeString = LocaleController.getInstance().getFormatterDay().format(date * 1000);
+            } else {
+                String customStr = NaConfig.INSTANCE.getCustomEditedMessage().String();
+                timeString = AppGlobalConfig.getInstance(currentAccount).messagePrimaryEditedDate.get() ?
+                    LocaleController.formatPmEditedDate(currentMessagesGroup != null ? currentMessagesGroup.getMaxEditDate() : messageObject.messageOwner.edit_date) :
+                    ((customStr.equals("") ? getString(R.string.EditedMessage) : customStr) + " " + LocaleController.getInstance().getFormatterDay().format((long) (messageObject.messageOwner.date) * 1000));
+            }
         } else if (currentMessageObject.isSaved && currentMessageObject.messageOwner.fwd_from != null && (currentMessageObject.messageOwner.fwd_from.date != 0 || currentMessageObject.messageOwner.fwd_from.saved_date != 0)) {
             int date = currentMessageObject.messageOwner.fwd_from.saved_date;
             if (date == 0) {
@@ -18628,6 +18638,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
         if (messageObject.isAnyKindOfSticker() && NaConfig.INSTANCE.getRealHideTimeForSticker().Bool()) {
             timeString = "";
+            drawEditedIcon = false;
         }
         if (signString != null) {
             if (messageObject.messageOwner.via_business_bot_id != 0) {
@@ -18705,6 +18716,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
         if (isPinned) {
             timeWidth += Theme.chat_msgInPinnedDrawable.getIntrinsicWidth() + dp(3);
+        }
+        if (drawEditedIcon && Theme.chat_editDrawable != null) {
+            float drawableWidth = Theme.chat_editDrawable.getIntrinsicWidth() * Theme.chat_timePaint.getTextSize() / Theme.chat_editDrawable.getIntrinsicHeight();
+            timeWidth += drawableWidth + dp(3);
         }
         if (messageObject.scheduled) {
             if (messageObject.isSendError()) {
@@ -24280,7 +24295,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 reactionsLayoutInBubble.draw(canvas, transitionParams.animateChangeProgress, null);
             }
 
-            if (ChatObject.isChannel(currentChat) && !currentChat.megagroup || (currentMessageObject.messageOwner.flags & TLRPC.MESSAGE_FLAG_HAS_VIEWS) != 0 || repliesLayout != null || isPinned) {
+            if (ChatObject.isChannel(currentChat) && !currentChat.megagroup || (currentMessageObject.messageOwner.flags & TLRPC.MESSAGE_FLAG_HAS_VIEWS) != 0 || repliesLayout != null || isPinned || drawEditedIcon) {
                 additionalX += this.timeWidth - timeLayout.getLineWidth(0);
                 if (reactionsLayoutInBubble.isSmall && !reactionsLayoutInBubble.isEmpty) {
                     additionalX -= reactionsLayoutInBubble.width;
@@ -24351,7 +24366,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 reactionsLayoutInBubble.setScrimProgress(0, false);
                 reactionsLayoutInBubble.draw(canvas, transitionParams.animateChangeProgress, null);
             }
-            if (ChatObject.isChannel(currentChat) && !currentChat.megagroup || (currentMessageObject.messageOwner.flags & TLRPC.MESSAGE_FLAG_HAS_VIEWS) != 0 || (repliesLayout != null || transitionParams.animateReplies) || (isPinned || transitionParams.animatePinned)) {
+            if (ChatObject.isChannel(currentChat) && !currentChat.megagroup || (currentMessageObject.messageOwner.flags & TLRPC.MESSAGE_FLAG_HAS_VIEWS) != 0 || (repliesLayout != null || transitionParams.animateReplies) || (isPinned || transitionParams.animatePinned) || drawEditedIcon) {
                 additionalX += timeWidth - timeLayout.getLineWidth(0);
                 if (reactionsLayoutInBubble.isSmall && !reactionsLayoutInBubble.isEmpty) {
                     additionalX -= reactionsLayoutInBubble.width;
@@ -24953,7 +24968,27 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (useScale) {
                 canvas.restore();
             }
+            if (drawEditedIcon && isPinned) {
+                offsetX += w + dp(3);
+            }
             transitionParams.lastTimeXPinned = pinnedX;
+        }
+        if (drawEditedIcon && Theme.chat_editDrawable != null) {
+            float editedX = (transitionParams.shouldAnimateTimeX ? this.timeX : timeX) + offsetX;
+            if (currentMessagesGroup != null && currentMessagesGroup.transitionParams.backgroundChangeBounds) {
+                editedX += currentMessagesGroup.transitionParams.offsetRight;
+            }
+            if (transitionParams.animateBackgroundBoundsInner) {
+                editedX += animationOffsetX;
+            }
+            Drawable editedDrawable = Theme.chat_editDrawable;
+            editedDrawable.setColorFilter(new PorterDuffColorFilter(Theme.chat_timePaint.getColor(), PorterDuff.Mode.SRC_IN));
+            float iconHeight = Theme.chat_timePaint.getTextSize();
+            setDrawableBounds(editedDrawable, editedX, timeY, iconHeight);
+            editedDrawable.setAlpha((int) (255 * alpha));
+            editedDrawable.draw(canvas);
+            editedDrawable.setAlpha(255);
+            editedDrawable.setColorFilter(null);
         }
     }
 
