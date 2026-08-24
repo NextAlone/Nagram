@@ -157,7 +157,7 @@ public class CloudSettingsHelper {
             });
         });
 
-        ButtonWithCounterView deleteButton = new ButtonWithCounterView(context, false, resourcesProvider).setRound();
+        ButtonWithCounterView deleteButton = new ButtonWithCounterView(context, false, resourcesProvider);
         deleteButton.setText(LocaleController.getString(R.string.DeleteCloudBackup), false);
         deleteButton.setTextColor(Theme.getColor(Theme.key_dialogTextRed));
         linearLayout.addView(deleteButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, 16, 8, 16, 0));
