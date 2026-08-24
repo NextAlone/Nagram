@@ -70,11 +70,12 @@ import org.telegram.ui.PremiumPreviewFragment;
 import org.telegram.ui.ReportBottomSheet;
 import org.telegram.ui.RevenueSharingAdsInfoBottomSheet;
 import org.telegram.ui.Stories.DarkThemeResourceProvider;
-import tw.nekomimi.nekogram.NekoConfig;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+
+import tw.nekomimi.nekogram.NekoConfig;
 
 public class VideoAds {
 
@@ -183,7 +184,7 @@ public class VideoAds {
     private void load() {
         if (loading || loaded) return;
 
-        if (NekoConfig.hideSponsoredMessage.Bool() || UserConfig.getInstance(currentAccount).isPremium() && MessagesController.getInstance(currentAccount).isSponsoredDisabled()) {
+        if (UserConfig.getInstance(currentAccount).isPremium() && MessagesController.getInstance(currentAccount).isSponsoredDisabled()) {
             return;
         }
 
@@ -308,7 +309,7 @@ public class VideoAds {
         closeDrawable.setColor(Theme.getColor(Theme.key_featuredStickers_addButton, bulletinFactory.getResourcesProvider()));
         layout.buttonView.setImageDrawable(closeDrawable);
         layout.buttonView.setOnClickListener(v -> {
-            if (closeDrawable.isCrossAvailable()) {
+            if (NekoConfig.hideSponsoredMessage.Bool() || closeDrawable.isCrossAvailable()) {
                 if (bulletin != null) {
                     bulletin.hide();
                 }
