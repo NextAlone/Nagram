@@ -35,6 +35,7 @@ import org.telegram.ui.Components.ScaleStateListAnimator;
 import org.telegram.ui.Components.TextViewSwitcher;
 import org.telegram.ui.Stories.recorder.ButtonWithCounterView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicReference;
@@ -156,6 +157,26 @@ public class CloudSettingsHelper {
             });
         });
 
+        ButtonWithCounterView deleteButton = new ButtonWithCounterView(context, false, resourcesProvider).setRound();
+        deleteButton.setText(LocaleController.getString(R.string.DeleteCloudBackup), false);
+        deleteButton.setTextColor(Theme.getColor(Theme.key_dialogTextRed));
+        linearLayout.addView(deleteButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, 16, 8, 16, 0));
+        deleteButton.setOnClickListener(view -> {
+            syncedDate.setText(AndroidUtilities.replaceTags(LocaleController.formatString(R.string.CloudConfigSyncing)));
+            deleteCloudBackup((success, error) -> {
+                syncedDate.setText(formatSyncedDate());
+                if (!success) {
+                    if (error == null) {
+                        BulletinFactory.of(Bulletin.BulletinWindow.make(context), resourcesProvider).createSimpleBulletin(R.raw.info, LocaleController.getString(R.string.CloudConfigNoBackupToDelete)).show();
+                    } else {
+                        BulletinFactory.of(Bulletin.BulletinWindow.make(context), resourcesProvider).createSimpleBulletin(R.raw.error, LocaleController.getString(R.string.DeleteCloudBackupFailed), error).show();
+                    }
+                } else {
+                    BulletinFactory.of(Bulletin.BulletinWindow.make(context), resourcesProvider).createSimpleBulletin(R.raw.done, LocaleController.getString(R.string.DeleteCloudBackupSuccess)).show();
+                }
+            });
+        });
+
         MiniCheckBoxCell autoSyncCheck = new MiniCheckBoxCell(context, 8, resourcesProvider);
         autoSyncCheck.setTextAndValueAndCheck(LocaleController.getString("CloudConfigAutoSync", R.string.CloudConfigAutoSync), LocaleController.getString("CloudConfigAutoSyncDesc", R.string.CloudConfigAutoSyncDesc), autoSync);
         autoSyncCheck.setOnClickListener(view13 -> {
@@ -255,6 +276,40 @@ public class CloudSettingsHelper {
             } else {
                 callback.run(false, error);
             }
+        });
+    }
+
+    private void deleteCloudBackup(Utilities.Callback2<Boolean, String> callback) {
+        getCloudStorageHelper().getKeys((keys, error) -> {
+            if (error != null) {
+                callback.run(false, error);
+                return;
+            }
+            if (keys == null || keys.length == 0) {
+                callback.run(false, null);
+                return;
+            }
+
+            ArrayList<String> nekoKeys = new ArrayList<>();
+            for (String key : keys) {
+                if (key.startsWith("neko_settings")) {
+                    nekoKeys.add(key);
+                }
+            }
+
+            if (nekoKeys.isEmpty()) {
+                callback.run(false, null);
+                return;
+            }
+
+            getCloudStorageHelper().removeItems(nekoKeys.toArray(new String[0]), (res_, error_) -> {
+                if (error_ == null) {
+                    cloudSyncedDate.put(UserConfig.selectedAccount, -1L);
+                    callback.run(true, null);
+                } else {
+                    callback.run(false, error_);
+                }
+            });
         });
     }
 

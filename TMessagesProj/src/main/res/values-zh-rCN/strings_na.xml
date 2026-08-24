@@ -350,4 +350,8 @@
     <string name="DisableAiEditor">禁用 AI 编辑器</string>
     <string name="DisableGlareEffects">禁用炫光效果</string>
     <string name="ShowEditedIcon">显示图标而不是 \"已编辑\"</string>
+    <string name="DeleteCloudBackup">清除云数据</string>
+    <string name="DeleteCloudBackupFailed">云备份数据清除失败</string>
+    <string name="DeleteCloudBackupSuccess">云备份数据已清除</string>
+    <string name="CloudConfigNoBackupToDelete">没有数据可清除</string>
 </resources>
