@@ -102,12 +102,21 @@ public class CloudSettingsHelper {
         syncedDate.setOutAnimation(context, R.anim.alpha_out);
         syncedDate.setText(formatSyncedDate(), false);
 
+        ButtonWithCounterView restoreButton = new ButtonWithCounterView(context, false, resourcesProvider);
+        restoreButton.setText(LocaleController.getString(R.string.CloudConfigRestore), false);
+        restoreButton.setEnabled(false);
+        restoreButton.setClickable(false);
+
         var storageHelper = getCloudStorageHelper();
         storageHelper.getItem("neko_settings_updated_at", (res, error) -> {
             if (error == null && AndroidUtilities.isNumeric(res)) {
                 cloudSyncedDate.put(selectedAccount, Long.parseLong(res));
+                restoreButton.setEnabled(true);
+                restoreButton.setClickable(true);
             } else {
                 cloudSyncedDate.put(selectedAccount, -1L);
+                restoreButton.setEnabled(false);
+                restoreButton.setClickable(false);
             }
             syncedDate.setText(formatSyncedDate());
         });
@@ -129,13 +138,15 @@ public class CloudSettingsHelper {
                         BulletinFactory.of(Bulletin.BulletinWindow.make(context), resourcesProvider).createSimpleBulletin(R.raw.chats_infotip, LocaleController.getString("CloudConfigSyncFailed", R.string.CloudConfigSyncFailed), error).show();
                     }
                 }
+                boolean hasCloudData = cloudSyncedDate.get(selectedAccount, 0L) > 0;
+                restoreButton.setEnabled(hasCloudData);
+                restoreButton.setClickable(hasCloudData);
             });
         });
 
-        ButtonWithCounterView textView = new ButtonWithCounterView(context, false, resourcesProvider);
-        textView.setText(LocaleController.getString("CloudConfigRestore", R.string.CloudConfigRestore), false);
-        linearLayout.addView(textView, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, 16, 8, 16, 0));
-        textView.setOnClickListener(view -> {
+        linearLayout.addView(restoreButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, 16, 8, 16, 0));
+        restoreButton.setOnClickListener(view -> {
+            if (!restoreButton.isEnabled()) return;
             syncedDate.setText(AndroidUtilities.replaceTags(LocaleController.formatString("CloudConfigSyncing", R.string.CloudConfigSyncing)));
             restoreFromCloud((success, error) -> {
                 syncedDate.setText(formatSyncedDate());
@@ -173,6 +184,8 @@ public class CloudSettingsHelper {
                     }
                 } else {
                     BulletinFactory.of(Bulletin.BulletinWindow.make(context), resourcesProvider).createSimpleBulletin(R.raw.done, LocaleController.getString(R.string.DeleteCloudBackupSuccess)).show();
+                    restoreButton.setEnabled(false);
+                    restoreButton.setClickable(false);
                 }
             });
         });
