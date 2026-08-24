@@ -216,6 +216,7 @@ jobs:
       - name: Release Build
         run: |
           export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
+          export SENTRY_AUTH_TOKEN="${{ secrets.SENTRY_AUTH_TOKEN }}"
           ./gradlew TMessagesProj:assembleRelease --build-cache --no-configuration-cache
 
           APK=$(find TMessagesProj/build/outputs/apk -name '*arm64-v8a*.apk')

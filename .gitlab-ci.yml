@@ -149,6 +149,7 @@ build:
     - sed -i "s/2000000000000/$(date +%s%N | cut -c1-13)/g" gradle.properties
     - export GRADLE_USER_HOME="$CI_PROJECT_DIR/.gradle-cache"
     - export LOCAL_PROPERTIES="${LOCAL_PROPERTIES}"
+    - export SENTRY_AUTH_TOKEN="${SENTRY_AUTH_TOKEN}"
     - ./gradlew TMessagesProj:assembleRelease --build-cache --no-configuration-cache
     - APK=$(find TMessagesProj/build/outputs/apk -name '*arm64-v8a*.apk')
     - APK_DIR=$(dirname "$APK")

@@ -57,7 +57,6 @@ def alias = null
 def pwd = null
 def sentry_token = System.getenv("SENTRY_AUTH_TOKEN")
 def nagram_build_args = System.getenv("NAGRAM_BUILD_ARGS")
-def sentry_upload =  project.rootProject.file("sentry.properties").exists()
 def disableCMakeRelWithDebInfo = System.getenv("COMPILE_NATIVE") == null
 
 Properties properties
@@ -81,6 +80,8 @@ if (properties != null) {
 keystorePwd = keystorePwd ?: System.getenv("KEYSTORE_PASS")
 alias = alias ?: System.getenv("ALIAS_NAME")
 pwd = pwd ?: System.getenv("ALIAS_PASS")
+
+def sentry_upload = sentry_token != null && !sentry_token.isEmpty()
 
 def targetTask = ""
 if (!gradle.startParameter.taskNames.isEmpty()) {
@@ -423,7 +424,7 @@ sentry {
     debug = false
 
     // The slug of the Sentry organization to use for uploading proguard mappings/source contexts.
-    org = "pagermaid"
+    org = "teampgm"
 
     // The slug of the Sentry project to use for uploading proguard mappings/source contexts.
     projectName = "nagram"
