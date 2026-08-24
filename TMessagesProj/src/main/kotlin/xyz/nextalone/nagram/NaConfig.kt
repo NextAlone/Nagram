@@ -1343,6 +1343,12 @@ object NaConfig {
             ConfigItem.configTypeInt,
             75
         )
+    val disableGooeyAvatarAnimation =
+        addConfig(
+            "DisableGooeyAvatarAnimation",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,
