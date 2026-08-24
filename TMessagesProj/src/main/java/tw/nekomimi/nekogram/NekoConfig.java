@@ -48,7 +48,7 @@ public class NekoConfig {
     public static ConfigItem update_download_soucre = addConfig("update_download_soucre", configTypeInt, 0); // 0: Github 1: Channel 2:CDNDrive, removed
     public static ConfigItem useCustomEmoji = addConfig("useCustomEmoji", configTypeBool, false);
     public static ConfigItem repeatConfirm = addConfig("repeatConfirm", configTypeBool, false);
-    public static ConfigItem disableInstantCamera = addConfig("DisableInstantCamera", configTypeBool, false);
+    public static ConfigItem disableInstantCamera = addConfig("DisableInstantCamera", configTypeBool, true);
     public static ConfigItem showSeconds = addConfig("showSeconds", configTypeBool, false);
 
     public static ConfigItem enablePublicProxy = addConfig("enablePublicProxy", configTypeBool, true);
