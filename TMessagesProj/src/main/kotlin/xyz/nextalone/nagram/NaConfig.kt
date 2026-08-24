@@ -1331,6 +1331,18 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val liquidGlassAngle =
+        addConfig(
+            "LiquidGlassAngle",
+            ConfigItem.configTypeInt,
+            0
+    )
+    val liquidGlassIntensity =
+        addConfig(
+            "LiquidGlassIntensity",
+            ConfigItem.configTypeInt,
+            75
+        )
 
     private fun addConfig(
         k: String,

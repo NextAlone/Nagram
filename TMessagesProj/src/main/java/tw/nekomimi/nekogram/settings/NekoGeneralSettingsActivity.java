@@ -318,6 +318,8 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
     // blur
     private final AbstractConfigCell headerBlur = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.LiteOptionsBlur2)));
     private final AbstractConfigCell disableGlareEffectsRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableGlareEffects()));
+    private final AbstractConfigCell liquidGlassAngleRow = cellGroup.appendCell(new ConfigCellCustom("LiquidGlassAngle", ConfigCellCustom.CUSTOM_ITEM_LiquidGlassAngle, true));
+    private final AbstractConfigCell liquidGlassIntensityRow = cellGroup.appendCell(new ConfigCellCustom("LiquidGlassIntensity", ConfigCellCustom.CUSTOM_ITEM_LiquidGlassIntensity, true));
     private final AbstractConfigCell dividerBlur = cellGroup.appendCell(new ConfigCellDivider());
 
     private ChatBlurAlphaSeekBar chatBlurAlphaSeekbar;
@@ -763,6 +765,11 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                 view = chatBlurAlphaSeekbar = new ChatBlurAlphaSeekBar(mContext);
                 chatBlurAlphaSeekbar.setEnabled(NekoConfig.forceBlurInChat.Bool());
             }
+            if (viewType == ConfigCellCustom.CUSTOM_ITEM_LiquidGlassAngle) {
+                view = new LiquidGlassSeekBar(mContext, true);
+            } else if (viewType == ConfigCellCustom.CUSTOM_ITEM_LiquidGlassIntensity) {
+                view = new LiquidGlassSeekBar(mContext, false);
+            }
             if (view != null) {
                 return view;
             }
@@ -916,6 +923,52 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
             sizeBar.setAlpha(enabled ? 1.0f : 0.5f);
             textPaint.setAlpha((int) ((enabled ? 1.0f : 0.3f) * 255));
             this.invalidate();
+        }
+    }
+
+    private class LiquidGlassSeekBar extends FrameLayout {
+        private final SeekBarView bar;
+        private final TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+        private final boolean angle;
+
+        LiquidGlassSeekBar(Context context, boolean angle) {
+            super(context);
+            this.angle = angle;
+            setWillNotDraw(false);
+            textPaint.setTextSize(AndroidUtilities.dp(14));
+            bar = new SeekBarView(context);
+            bar.setReportChanges(true);
+            bar.setDelegate(new SeekBarView.SeekBarViewDelegate() {
+                @Override
+                public void onSeekBarDrag(boolean stop, float progress) {
+                    if (angle) {
+                        NaConfig.INSTANCE.getLiquidGlassAngle().setConfigInt(Math.round(progress * 360f));
+                    } else {
+                        NaConfig.INSTANCE.getLiquidGlassIntensity().setConfigInt(Math.round(progress * 150f));
+                    }
+                    invalidate();
+                }
+
+                @Override
+                public void onSeekBarPressed(boolean pressed) {}
+            });
+            addView(bar, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 38, Gravity.LEFT | Gravity.TOP, 12, 23, 52, 5));
+        }
+
+        @Override
+        protected void onDraw(Canvas canvas) {
+            textPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+            canvas.drawText(LocaleController.getString(angle ? R.string.LiquidGlassAngle : R.string.LiquidGlassIntensity), AndroidUtilities.dp(21), AndroidUtilities.dp(20), textPaint);
+            textPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
+            String value = angle ? NaConfig.INSTANCE.getLiquidGlassAngle().Int() + "°" : NaConfig.INSTANCE.getLiquidGlassIntensity().Int() + "%";
+            canvas.drawText(value, getMeasuredWidth() - AndroidUtilities.dp(47), AndroidUtilities.dp(47), textPaint);
+        }
+
+        @Override
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(66), MeasureSpec.EXACTLY));
+            float value = angle ? NaConfig.INSTANCE.getLiquidGlassAngle().Int() / 360f : NaConfig.INSTANCE.getLiquidGlassIntensity().Int() / 150f;
+            bar.setProgress(value);
         }
     }
 }
