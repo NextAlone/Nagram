@@ -10,6 +10,8 @@ import androidx.annotation.RequiresApi;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.R;
 
+import xyz.nextalone.nagram.NaConfig;
+
 @RequiresApi(api = 33)
 public class LiquidGlassEffect {
 
@@ -33,6 +35,7 @@ public class LiquidGlassEffect {
     private float radiusLeftBottom;
     private float thickness;
     private float intensity;
+    private float angle;
     private float index;
     private int foregroundColor;
 
@@ -64,6 +67,8 @@ public class LiquidGlassEffect {
             radiusRightBottom = height * (1.0f - a);
         }
 
+        float configuredIntensity = intensity * NaConfig.INSTANCE.getLiquidGlassIntensity().Int() / 75f;
+        float configuredAngle = (float) Math.toRadians(NaConfig.INSTANCE.getLiquidGlassAngle().Int());
         if (
             Math.abs(this.resolutionX - resolutionX) > 0.1f ||
             Math.abs(this.resolutionY - resolutionY) > 0.1f ||
@@ -76,7 +81,8 @@ public class LiquidGlassEffect {
             Math.abs(this.radiusRightBottom - radiusRightBottom) > 0.1f ||
             Math.abs(this.radiusLeftBottom - radiusLeftBottom) > 0.1f ||
             Math.abs(this.thickness - thickness) > 0.1f ||
-            Math.abs(this.intensity - intensity) > 0.1f ||
+            Math.abs(this.intensity - configuredIntensity) > 0.001f ||
+            Math.abs(this.angle - configuredAngle) > 0.001f ||
             Math.abs(this.index - index) > 0.1f ||
             this.foregroundColor != foregroundColor
         ) {
@@ -92,7 +98,8 @@ public class LiquidGlassEffect {
             shader.setFloatUniform("size", this.sizeX = sizeX, this.sizeY = sizeY);
             shader.setFloatUniform("radius", this.radiusRightBottom = radiusRightBottom, this.radiusRightTop = radiusRightTop, this.radiusLeftBottom = radiusLeftBottom, this.radiusLeftTop = radiusLeftTop);
             shader.setFloatUniform("thickness", this.thickness = thickness);
-            shader.setFloatUniform("refract_intensity", this.intensity = intensity);
+            shader.setFloatUniform("refract_intensity", this.intensity = configuredIntensity);
+            shader.setFloatUniform("refract_angle", this.angle = configuredAngle);
             shader.setFloatUniform("refract_index", this.index = index);
             shader.setFloatUniform("foreground_color_premultiplied", r, g, b, a);
             node.setRenderEffect(effect = RenderEffect.createRuntimeShaderEffect(shader, "img"));

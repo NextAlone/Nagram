@@ -7,6 +7,7 @@ uniform float4 radius;
 uniform float thickness;
 uniform float refract_index;
 uniform float refract_intensity;
+uniform float refract_angle;
 uniform float4 foreground_color_premultiplied;
 
 half sdfRect(half2 p, half4 r) {
@@ -33,7 +34,10 @@ half4 main(in float2 fragCoord) {
     half n_cos = max(thickness + sd, 0.0) / thickness;
     half n_cos2 = n_cos * n_cos;
     half n_sin = sqrt(1.0 - n_cos2);
-    half3 normal = normalize(half3((sdX - sd) * n_cos, (sdY - sd) * n_cos, n_sin));
+    half2 normal_xy = half2((sdX - sd) * n_cos, (sdY - sd) * n_cos);
+    half ca = cos(refract_angle), sa = sin(refract_angle);
+    normal_xy = half2(normal_xy.x * ca - normal_xy.y * sa, normal_xy.x * sa + normal_xy.y * ca);
+    half3 normal = normalize(half3(normal_xy, n_sin));
 
     half3 refract_vec = refract(half3(0.0, 0.0, -1.0), normal, 1.0 / refract_index);
     half h = sd < -thickness ? thickness : sqrt(sd * (-2.0 * thickness - sd));
