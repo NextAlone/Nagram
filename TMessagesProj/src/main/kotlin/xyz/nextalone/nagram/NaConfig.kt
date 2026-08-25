@@ -1349,6 +1349,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val showMiniSenderAvatar =
+        addConfig(
+            "ShowMiniSenderAvatar",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,
