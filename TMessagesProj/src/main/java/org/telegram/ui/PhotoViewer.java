@@ -21167,7 +21167,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             }
             float x = longPressX;
             int width = getContainerViewWidth();
-            if (total > 180 * 1000) {
+            if (total > 180 * 1000 && !NaConfig.INSTANCE.getForceVideoNewRewindMethod().Bool()) {
                 boolean forward;
                 if (x >= width / 3 * 2) {
                     forward = true;

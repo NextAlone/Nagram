@@ -357,4 +357,5 @@
     <string name="LiquidGlassAngle">液体玻璃角度</string>
     <string name="LiquidGlassIntensity">液体玻璃强度</string>
     <string name="DisableGooeyAvatarAnimation">禁用“Gooey”头像动画</string>
+    <string name="ForceVideoNewRewindMethod">强制所有视频使用新版快进方式</string>
 </resources>
