@@ -349,4 +349,12 @@
     <string name="ProviderVolcengineTranslate">Volcengine Translate</string>
     <string name="DisableAiEditor">Вимкнути редактор Ai</string>
     <string name="DisableGlareEffects">Вимкнути відблиски</string>
+    <string name="ShowEditedIcon">Показати значок замість \"відредаговано\"</string>
+    <string name="DeleteCloudBackup">Очистити дані хмари</string>
+    <string name="DeleteCloudBackupFailed">Не вдалося очистити дані із хмари</string>
+    <string name="DeleteCloudBackupSuccess">Дані в хмарі очищено</string>
+    <string name="CloudConfigNoBackupToDelete">Немає даних для очищення</string>
+    <string name="LiquidGlassAngle">Кут Liquid скла</string>
+    <string name="LiquidGlassIntensity">Інтенсивність Liquid скла</string>
+    <string name="DisableGooeyAvatarAnimation">Вимкніть анімацію аватару</string>
 </resources>

@@ -349,4 +349,12 @@
     <string name="ProviderVolcengineTranslate">Traduction Volcengine</string>
     <string name="DisableAiEditor">Désactiver Ai Editor</string>
     <string name="DisableGlareEffects">Désactiver les effets de reflets</string>
+    <string name="ShowEditedIcon">Afficher l\'icône au lieu de \"édité\"</string>
+    <string name="DeleteCloudBackup">Effacer les données du cloud</string>
+    <string name="DeleteCloudBackupFailed">Échec de l\'effacement des données du cloud</string>
+    <string name="DeleteCloudBackupSuccess">Données Cloud effacées</string>
+    <string name="CloudConfigNoBackupToDelete">Aucune donnée à effacer</string>
+    <string name="LiquidGlassAngle">Angle du verre liquide</string>
+    <string name="LiquidGlassIntensity">Intensité du verre liquide</string>
+    <string name="DisableGooeyAvatarAnimation">Désactiver l\'animation d\'avatar \"Gooey\"</string>
 </resources>

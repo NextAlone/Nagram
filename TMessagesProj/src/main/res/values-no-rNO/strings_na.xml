@@ -349,4 +349,12 @@
     <string name="ProviderVolcengineTranslate">Volcengine Oversett</string>
     <string name="DisableAiEditor">Deaktiver Ai Editor</string>
     <string name="DisableGlareEffects">Deaktiver Gjenstandseffekter</string>
+    <string name="ShowEditedIcon">Vis ikon i stedet for \"redigert\"</string>
+    <string name="DeleteCloudBackup">Slett Cloud-data</string>
+    <string name="DeleteCloudBackupFailed">Kunne ikke slette sky-data</string>
+    <string name="DeleteCloudBackupSuccess">Data fra skyen er fjernet</string>
+    <string name="CloudConfigNoBackupToDelete">Ingen data å rydde</string>
+    <string name="LiquidGlassAngle">Vinkel i flytende glass</string>
+    <string name="LiquidGlassIntensity">Flytende Glassintensitet</string>
+    <string name="DisableGooeyAvatarAnimation">Deaktiver \"Gooey\" avatar animasjon</string>
 </resources>

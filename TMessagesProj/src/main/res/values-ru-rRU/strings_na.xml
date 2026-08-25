@@ -349,4 +349,12 @@
     <string name="ProviderVolcengineTranslate">Перевод Volcengine</string>
     <string name="DisableAiEditor">Отключить Ai Editor</string>
     <string name="DisableGlareEffects">Отключить эффекты Glare</string>
+    <string name="ShowEditedIcon">Показывать значок вместо «отредактированных»</string>
+    <string name="DeleteCloudBackup">Очистить данные в облаке</string>
+    <string name="DeleteCloudBackupFailed">Не удалось удалить данные из облака</string>
+    <string name="DeleteCloudBackupSuccess">Облачные данные удалены</string>
+    <string name="CloudConfigNoBackupToDelete">Нет данных для очистки</string>
+    <string name="LiquidGlassAngle">Угол жидкого стекла</string>
+    <string name="LiquidGlassIntensity">Интенсивность Жидкого Стекла</string>
+    <string name="DisableGooeyAvatarAnimation">Отключить анимацию аватара \"Товары\"</string>
 </resources>

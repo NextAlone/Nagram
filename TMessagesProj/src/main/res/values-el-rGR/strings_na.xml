@@ -349,4 +349,12 @@
     <string name="ProviderVolcengineTranslate">Μετάφραση Volcengine</string>
     <string name="DisableAiEditor">Απενεργοποίηση Επεξεργαστή Ai</string>
     <string name="DisableGlareEffects">Απενεργοποίηση εφέ λάμψης</string>
+    <string name="ShowEditedIcon">Εμφάνιση εικονιδίου αντί για \"επεξεργασία \"</string>
+    <string name="DeleteCloudBackup">Εκκαθάριση δεδομένων cloud</string>
+    <string name="DeleteCloudBackupFailed">Αποτυχία καθαρισμού δεδομένων σύννεφου</string>
+    <string name="DeleteCloudBackupSuccess">Τα δεδομένα Cloud εκκαθαρίστηκαν</string>
+    <string name="CloudConfigNoBackupToDelete">Δεν υπάρχουν δεδομένα για εκκαθάριση</string>
+    <string name="LiquidGlassAngle">Υγρή γωνία γυαλιού</string>
+    <string name="LiquidGlassIntensity">Υγρή ένταση γυαλιού</string>
+    <string name="DisableGooeyAvatarAnimation">Απενεργοποίηση κίνησης avatar \"Gooey\"</string>
 </resources>

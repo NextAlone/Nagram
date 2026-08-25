@@ -349,4 +349,12 @@
     <string name="ProviderVolcengineTranslate">Volcengine Översätt</string>
     <string name="DisableAiEditor">Inaktivera Ai Editor</string>
     <string name="DisableGlareEffects">Inaktivera bländningseffekter</string>
+    <string name="ShowEditedIcon">Visa ikon istället för \"redigerad\"</string>
+    <string name="DeleteCloudBackup">Rensa molndata</string>
+    <string name="DeleteCloudBackupFailed">Det gick inte att rensa molndata</string>
+    <string name="DeleteCloudBackupSuccess">Molndata rensade</string>
+    <string name="CloudConfigNoBackupToDelete">Ingen data att rensa</string>
+    <string name="LiquidGlassAngle">Flytande glasvinkel</string>
+    <string name="LiquidGlassIntensity">Vätska glasintensitet</string>
+    <string name="DisableGooeyAvatarAnimation">Inaktivera \"Gooey\" avatar animation</string>
 </resources>

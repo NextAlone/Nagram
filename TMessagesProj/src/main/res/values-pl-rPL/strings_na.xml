@@ -349,4 +349,12 @@
     <string name="ProviderVolcengineTranslate">Tłumacz Volcengine</string>
     <string name="DisableAiEditor">Wyłącz edytor Ai</string>
     <string name="DisableGlareEffects">Wyłącz efekty glare</string>
+    <string name="ShowEditedIcon">Pokaż ikonę zamiast \"edytowane\"</string>
+    <string name="DeleteCloudBackup">Wyczyść dane w chmurze</string>
+    <string name="DeleteCloudBackupFailed">Nie udało się wyczyścić danych w chmurze</string>
+    <string name="DeleteCloudBackupSuccess">Dane w chmurze wyczyszczone</string>
+    <string name="CloudConfigNoBackupToDelete">Brak danych do wyczyszczenia</string>
+    <string name="LiquidGlassAngle">Płynny kąt szklany</string>
+    <string name="LiquidGlassIntensity">Płynne szkło o intensywności</string>
+    <string name="DisableGooeyAvatarAnimation">Wyłącz animację awatara \"Gooey\"</string>
 </resources>

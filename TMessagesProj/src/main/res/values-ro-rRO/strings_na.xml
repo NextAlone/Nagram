@@ -349,4 +349,12 @@
     <string name="ProviderVolcengineTranslate">Traducere Volcengine</string>
     <string name="DisableAiEditor">Dezactivează Editorul Ai</string>
     <string name="DisableGlareEffects">Dezactivează efectele Glare</string>
+    <string name="ShowEditedIcon">Arată pictograma în loc de \"editat\"</string>
+    <string name="DeleteCloudBackup">Ștergeți datele din cloud</string>
+    <string name="DeleteCloudBackupFailed">Ștergerea datelor din cloud a eșuat</string>
+    <string name="DeleteCloudBackupSuccess">Date Cloud șterse</string>
+    <string name="CloudConfigNoBackupToDelete">Nu există date de curățat</string>
+    <string name="LiquidGlassAngle">Unghiul lichid de sticlă</string>
+    <string name="LiquidGlassIntensity">Intensitatea sticlei lichide</string>
+    <string name="DisableGooeyAvatarAnimation">Dezactivați animația de avatar \"Gooey\"</string>
 </resources>

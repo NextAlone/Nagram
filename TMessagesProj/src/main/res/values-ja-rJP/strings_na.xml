@@ -349,4 +349,12 @@
     <string name="ProviderVolcengineTranslate">Volcengine翻訳</string>
     <string name="DisableAiEditor">Ai エディターを無効にする</string>
     <string name="DisableGlareEffects">グレア効果を無効にする</string>
+    <string name="ShowEditedIcon">「編集」の代わりにアイコンを表示する</string>
+    <string name="DeleteCloudBackup">クラウドデータをクリア</string>
+    <string name="DeleteCloudBackupFailed">クラウドデータの消去に失敗しました</string>
+    <string name="DeleteCloudBackupSuccess">クラウドデータを消去しました</string>
+    <string name="CloudConfigNoBackupToDelete">クリアするデータがありません</string>
+    <string name="LiquidGlassAngle">液体ガラスの角度</string>
+    <string name="LiquidGlassIntensity">液体ガラスの強度</string>
+    <string name="DisableGooeyAvatarAnimation">「Gooey」アバターアニメーションを無効にする</string>
 </resources>

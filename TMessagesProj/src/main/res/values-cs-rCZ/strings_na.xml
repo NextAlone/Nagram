@@ -349,4 +349,12 @@
     <string name="ProviderVolcengineTranslate">Volcengine překlad</string>
     <string name="DisableAiEditor">Zakázat Ai editor</string>
     <string name="DisableGlareEffects">Zakázat Glare efekty</string>
+    <string name="ShowEditedIcon">Zobrazit ikonu namísto \"upravených\"</string>
+    <string name="DeleteCloudBackup">Vymazat data z cloudu</string>
+    <string name="DeleteCloudBackupFailed">Vymazání dat v cloudu se nezdařilo</string>
+    <string name="DeleteCloudBackupSuccess">Data v cloudu vymazána</string>
+    <string name="CloudConfigNoBackupToDelete">Žádná data k vymazání</string>
+    <string name="LiquidGlassAngle">Úhel kapalného skla</string>
+    <string name="LiquidGlassIntensity">Intenzita tekutého skla</string>
+    <string name="DisableGooeyAvatarAnimation">Zakázat animaci avataru \"Gooey\"</string>
 </resources>

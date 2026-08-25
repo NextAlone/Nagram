@@ -349,4 +349,12 @@
     <string name="ProviderVolcengineTranslate">Volcengine Käännä</string>
     <string name="DisableAiEditor">Poista Ai Editori Käytöstä</string>
     <string name="DisableGlareEffects">Poista häikäisytehosteet käytöstä</string>
+    <string name="ShowEditedIcon">Näytä kuvake \"muokattu\" sijasta</string>
+    <string name="DeleteCloudBackup">Tyhjennä pilven tiedot</string>
+    <string name="DeleteCloudBackupFailed">Pilvitietojen tyhjentäminen epäonnistui</string>
+    <string name="DeleteCloudBackupSuccess">Pilven tiedot tyhjennetty</string>
+    <string name="CloudConfigNoBackupToDelete">Ei tyhjentäviä tietoja</string>
+    <string name="LiquidGlassAngle">Nestemäinen lasikulma</string>
+    <string name="LiquidGlassIntensity">Nestemäisen lasin voimakkuus</string>
+    <string name="DisableGooeyAvatarAnimation">Poista \"Gooey\" profiilianimaatio käytöstä</string>
 </resources>

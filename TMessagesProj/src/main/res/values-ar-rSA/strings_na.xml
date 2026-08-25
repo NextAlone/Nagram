@@ -349,4 +349,12 @@
     <string name="ProviderVolcengineTranslate">ترجمة المحرك الفوليكي</string>
     <string name="DisableAiEditor">تعطيل محرر Ai</string>
     <string name="DisableGlareEffects">تعطيل تأثيرات الزلازل</string>
+    <string name="ShowEditedIcon">إظهار الأيقونة بدلاً من \"تعديل\"</string>
+    <string name="DeleteCloudBackup">مسح بيانات السحابة</string>
+    <string name="DeleteCloudBackupFailed">فشل مسح بيانات السحابة</string>
+    <string name="DeleteCloudBackupSuccess">تم مسح البيانات السحابية</string>
+    <string name="CloudConfigNoBackupToDelete">لا توجد بيانات لمسحها</string>
+    <string name="LiquidGlassAngle">زاوية زجاجية سائلة</string>
+    <string name="LiquidGlassIntensity">كثافة الزجاج السائل</string>
+    <string name="DisableGooeyAvatarAnimation">تعطيل الصورة الرمزية \"جوي\"</string>
 </resources>
