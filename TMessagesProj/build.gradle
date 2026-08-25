@@ -23,7 +23,7 @@ idea {
 }
 
 def verName = APP_VERSION_NAME
-def verCode = 1246
+def verCode = 1247
 
 
 def officialVer = APP_VERSION_NAME
@@ -94,8 +94,8 @@ def nativeTarget = System.getenv("NATIVE_TARGET")
 if (nativeTarget == null) nativeTarget = ""
 
 android {
-    compileSdkVersion 35
-    buildToolsVersion '35.0.0'
+    compileSdkVersion 36
+    buildToolsVersion '36.0.0'
     ndkVersion rootProject.ext.ndkVersion // 27.2.12479018
 
     defaultConfig.applicationId = "xyz.nextalone.nagram"
@@ -167,7 +167,7 @@ android {
     defaultConfig {
         minSdkVersion 21
         //noinspection ExpiredTargetSdkVersion,OldTargetApi
-        targetSdkVersion 35
+        targetSdkVersion 36
 
         versionName verName
         versionCode verCode
@@ -191,7 +191,9 @@ android {
 
         externalNativeBuild {
             cmake {
+                version '3.22.1'
                 arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-21' //, '-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON'
+                targets 'tmessages.49'
             }
         }
     }
@@ -339,7 +341,7 @@ dependencies {
     implementation 'com.stripe:stripe-android:2.0.2'
     // add for auto translate
     implementation 'com.google.mlkit:language-id:17.0.6'
-    implementation 'com.android.billingclient:billing:7.1.1'
+    implementation 'com.android.billingclient:billing:8.0.0'
     implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'com.google.guava:guava:31.1-android'
     implementation 'com.google.android.play:integrity:1.3.0'
