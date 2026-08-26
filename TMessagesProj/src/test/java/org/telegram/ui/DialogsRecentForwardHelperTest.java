@@ -3,9 +3,11 @@ package org.telegram.ui;
 import org.junit.Test;
 import org.telegram.tgnet.TLRPC;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -23,7 +25,7 @@ public class DialogsRecentForwardHelperTest {
 
         assertEquals(
                 Arrays.asList(11L, -22L, 33L),
-                DialogsRecentForwardHelper.dialogIds(
+                idsInOrder(
                         DialogsRecentForwardHelper.buildRecentDialogs(
                                 Arrays.asList(11L, -22L, 0L, 11L, 33L),
                                 Arrays.asList(existingUser, existingChat),
@@ -69,5 +71,13 @@ public class DialogsRecentForwardHelperTest {
         assertTrue(DialogsActivity.isForwardPickerDialogsType(DialogsActivity.DIALOGS_TYPE_FORWARD));
         assertTrue(DialogsActivity.isForwardPickerDialogsType(DialogsActivity.DIALOGS_TYPE_FORWARD_RECENT));
         assertFalse(DialogsActivity.isForwardPickerDialogsType(DialogsActivity.DIALOGS_TYPE_DEFAULT));
+    }
+
+    private static List<Long> idsInOrder(List<TLRPC.Dialog> dialogs) {
+        List<Long> ids = new ArrayList<>();
+        for (TLRPC.Dialog dialog : dialogs) {
+            ids.add(dialog.id);
+        }
+        return ids;
     }
 }
