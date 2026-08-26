@@ -14,6 +14,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -92,6 +94,11 @@ public class PollCreateCheckCell extends FrameLayout {
         drawable.setDrawBorder(border);
         imageView.setBackground(drawable);
         imageView.setImageResource(iconResId);
+        imageView.setColorFilter(new PorterDuffColorFilter(
+                Theme.isCurrentThemeMonet(resourcesProvider)
+                        ? Theme.getColor(Theme.key_chats_actionIcon, resourcesProvider)
+                        : 0xFFFFFFFF,
+                PorterDuff.Mode.SRC_IN));
         checkBox.setChecked(checked, 0, animationsEnabled);
         multilineValueTextView.setText(value);
         checkBox.setContentDescription(text);

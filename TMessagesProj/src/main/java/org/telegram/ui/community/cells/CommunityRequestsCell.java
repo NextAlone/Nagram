@@ -3,6 +3,8 @@ package org.telegram.ui.community.cells;
 import static org.telegram.messenger.AndroidUtilities.dp;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -103,6 +105,11 @@ public class CommunityRequestsCell extends LinearLayout implements Theme.Colorab
         valueView.setBackground(mUnreadMode ? Theme.createRoundRectDrawable(dp(10.33f), Theme.getColor(Theme.key_chats_unreadCounter, resourcesProvider)) : null);
 
         iconBackground.setDrawBorder(resourcesProvider != null ? resourcesProvider.isDark() : Theme.isCurrentThemeDark());
+        iconView.setColorFilter(new PorterDuffColorFilter(
+                Theme.isCurrentThemeMonet(resourcesProvider)
+                        ? Theme.getColor(Theme.key_chats_actionIcon, resourcesProvider)
+                        : 0xFFFFFFFF,
+                PorterDuff.Mode.SRC_IN));
     }
 
     public void set(
