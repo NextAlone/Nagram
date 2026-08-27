@@ -2053,7 +2053,7 @@ public class ViewPagerFixed extends FrameLayout {
                             final float TAB_INTERNAL_PADDING = 12.5f;
                             final float add = additionalTabWidth / 2f;
                             final int y = height / 2 - dp(14);
-                            if (NekoConfig.tabStyleStroke.Bool()) {
+                            if (NaConfig.INSTANCE.getTabStyleStroke().Bool()) {
                                 selectorDrawable.setStroke(AndroidUtilities.dp(1), Theme.getColor(activeTextColorKey, resourcesProvider));
                                 selectorDrawable.setColor(ColorUtils.setAlphaComponent(Theme.getColor(tabLineColorKey, resourcesProvider), 50));
                             } else {
