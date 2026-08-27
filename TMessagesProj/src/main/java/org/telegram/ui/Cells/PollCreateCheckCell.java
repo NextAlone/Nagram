@@ -92,6 +92,7 @@ public class PollCreateCheckCell extends FrameLayout {
         drawable.setDrawBorder(border);
         imageView.setBackground(drawable);
         imageView.setImageResource(iconResId);
+        Theme.applyThemeMonetColor(imageView, resourcesProvider, false);
         checkBox.setChecked(checked, 0, animationsEnabled);
         multilineValueTextView.setText(value);
         checkBox.setContentDescription(text);
