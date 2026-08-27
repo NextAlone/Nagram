@@ -69,6 +69,7 @@ import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
 import android.util.StateSet;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -6561,6 +6562,13 @@ public class Theme {
 
     public static boolean isCurrentThemeMonet(ResourcesProvider resourcesProvider) {
         return resourcesProvider != null ? resourcesProvider.isMonet() : isCurrentThemeMonet();
+    }
+
+    public static void applyThemeMonetColor(ImageView view, ResourcesProvider resourcesProvider) {
+        if (!Theme.isCurrentThemeMonet(resourcesProvider)) {
+            return;
+        }
+        view.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon, resourcesProvider), PorterDuff.Mode.SRC_IN));
     }
 
     public static ThemeInfo getActiveTheme() {

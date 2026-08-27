@@ -1056,11 +1056,7 @@ public class DataUsage2Activity extends BaseFragment {
                 drawable.setColor(imageColorTop, imageColorBottom);
                 drawable.setDrawBorder(border);
                 imageView.setBackground(drawable);
-                imageView.setColorFilter(new PorterDuffColorFilter(
-                        Theme.isCurrentThemeMonet(resourcesProvider)
-                                ? Theme.getColor(Theme.key_chats_actionIcon, resourcesProvider)
-                                : 0xFFFFFFFF,
-                        PorterDuff.Mode.SRC_IN));
+                Theme.applyThemeMonetColor(imageView, resourcesProvider);
                 imageView.setImageResource(imageResId);
             }
 

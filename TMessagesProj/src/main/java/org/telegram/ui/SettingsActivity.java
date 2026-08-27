@@ -1221,11 +1221,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             subtitleView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText, resourcesProvider));
             valueView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText, resourcesProvider));
             iconBackground.setDrawBorder(resourcesProvider != null ? resourcesProvider.isDark() : Theme.isCurrentThemeDark());
-            iconView.setColorFilter(new PorterDuffColorFilter(
-                    Theme.isCurrentThemeMonet(resourcesProvider)
-                            ? Theme.getColor(Theme.key_chats_actionIcon, resourcesProvider)
-                            : Color.WHITE,
-                    PorterDuff.Mode.SRC_IN));
+            Theme.applyThemeMonetColor(iconView, resourcesProvider);
         }
 
         private boolean twoLines;
