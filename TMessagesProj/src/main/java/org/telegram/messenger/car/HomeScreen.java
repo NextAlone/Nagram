@@ -8,10 +8,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.content.Intent;
+import android.net.Uri;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.car.app.CarContext;
+import androidx.car.app.HostInfo;
 import androidx.car.app.Screen;
 import androidx.car.app.model.Action;
 import androidx.car.app.model.CarIcon;
@@ -46,6 +49,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.TelegramMediaSession;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
@@ -271,12 +275,60 @@ public class HomeScreen extends Screen
             senderBuilder.setName("").setKey("d" + dialogId);
         }
 
-        return new CarMessage.Builder()
+        CarMessage.Builder builder = new CarMessage.Builder()
                 .setBody(CarText.create(body))
                 .setReceivedTimeEpochMillis(((long) mo.messageOwner.date) * 1000L)
                 .setSender(senderBuilder.build())
-                .setRead(false)
-                .build();
+                .setRead(false);
+
+        attachVoiceNote(builder, mo, preview[0]);
+
+        return builder.build();
+    }
+
+    /**
+     * Offers a received voice note to the car as playable audio. Without this the host only
+     * gets the text body, which for a voice note is just a placeholder label.
+     */
+    private void attachVoiceNote(CarMessage.Builder builder, MessageObject mo, boolean previewAllowed) {
+        if (!mo.isVoice()) {
+            return;
+        }
+        boolean locked = AndroidUtilities.needShowPasscode() || SharedConfig.isWaitingForPasscodeEnter;
+        File file = FileLoader.getInstance(currentAccount).getPathToMessage(mo.messageOwner);
+        Uri uri = CarVoiceAttachment.resolveUri(
+                ApplicationLoader.applicationContext,
+                ApplicationLoader.getApplicationId() + ".provider",
+                file,
+                previewAllowed,
+                locked);
+        if (uri == null || !grantReadToHost(uri)) {
+            return;
+        }
+        builder.setMultimediaMimeType(CarVoiceAttachment.MIME_TYPE).setMultimediaUri(uri);
+    }
+
+    /**
+     * The car host reads the URI from its own process, so a FileProvider grant is required.
+     * CarMessage crosses Binder rather than travelling in an Intent, so the usual
+     * FLAG_GRANT_READ_URI_PERMISSION on an Intent does not apply and the grant has to be
+     * issued explicitly against the host package.
+     *
+     * @return whether the attachment may be offered; false means fall back to text only,
+     *         since an unreadable URI would surface as a broken control in the car.
+     */
+    private boolean grantReadToHost(Uri uri) {
+        try {
+            HostInfo host = getCarContext().getHostInfo();
+            if (host == null || TextUtils.isEmpty(host.getPackageName())) {
+                return false;
+            }
+            getCarContext().grantUriPermission(
+                    host.getPackageName(), uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            return true;
+        } catch (Throwable t) {
+            return false;
+        }
     }
 
     // ===== Music tab =====
