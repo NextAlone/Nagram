@@ -357,4 +357,5 @@
     <string name="LiquidGlassAngle">Кут Liquid скла</string>
     <string name="LiquidGlassIntensity">Інтенсивність Liquid скла</string>
     <string name="DisableGooeyAvatarAnimation">Вимкніть анімацію аватару</string>
+    <string name="TabStyleStroke">Контур індикатора вкладок</string>
 </resources>

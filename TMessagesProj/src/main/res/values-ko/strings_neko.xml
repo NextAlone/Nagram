@@ -109,4 +109,5 @@
     <string name="ProviderDeepLTranslate">DeepL 번역</string>
     <string name="ProviderMicrosoftTranslator">Microsoft 번역기</string>
     <string name="ProviderYouDao">YouDao 번역</string>
+    <string name="TabStyleStroke">탭 표시기 테두리</string>
 </resources>

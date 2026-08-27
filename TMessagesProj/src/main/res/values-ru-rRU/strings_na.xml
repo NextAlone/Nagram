@@ -357,4 +357,5 @@
     <string name="LiquidGlassAngle">Угол жидкого стекла</string>
     <string name="LiquidGlassIntensity">Интенсивность Жидкого Стекла</string>
     <string name="DisableGooeyAvatarAnimation">Отключить анимацию аватара \"Товары\"</string>
+    <string name="TabStyleStroke">Обводка индикатора вкладок</string>
 </resources>

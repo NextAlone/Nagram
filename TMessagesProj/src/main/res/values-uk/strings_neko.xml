@@ -148,4 +148,5 @@
     <string name="enhancedFileLoader">Підвищити швидкість завантаження</string>
     <string name="mapDriftingFixForGoogleMaps">Виправити дрейф Google Maps у Китаї</string>
     <string name="useOSMDroidMap">Використовувати карту OSMDroid</string>
+    <string name="TabStyleStroke">Контур індикатора вкладок</string>
 </resources>

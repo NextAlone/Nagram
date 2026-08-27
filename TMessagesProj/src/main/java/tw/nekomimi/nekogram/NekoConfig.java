@@ -141,6 +141,7 @@ public class NekoConfig {
     public static ConfigItem ccInputLang = addConfig("opencc_input_to_lang", configTypeString, "");
 
     public static ConfigItem tabsTitleType = addConfig("TabTitleType", configTypeInt, NekoXConfig.TITLE_TYPE_TEXT);
+    public static ConfigItem tabStyleStroke = addConfig("TabStyleStroke", configTypeBool, false);
     public static ConfigItem confirmAVMessage = addConfig("ConfirmAVMessage", configTypeBool, false);
     public static ConfigItem askBeforeCall = addConfig("AskBeforeCalling", configTypeBool, false);
     public static ConfigItem disableNumberRounding = addConfig("DisableNumberRounding", configTypeBool, false);

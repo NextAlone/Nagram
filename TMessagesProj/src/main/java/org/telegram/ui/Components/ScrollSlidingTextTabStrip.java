@@ -51,6 +51,8 @@ import org.telegram.ui.Stories.recorder.HintView2;
 
 import java.util.ArrayList;
 
+import tw.nekomimi.nekogram.NekoConfig;
+
 public class ScrollSlidingTextTabStrip extends HorizontalScrollView implements Theme.Colorable {
 
     public interface ScrollSlidingTabStripDelegate {
@@ -760,6 +762,11 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView implements T
                     getPaddingLeft() + (int) r - dp(4),
                     height - getPaddingBottom() - dp(4)
             );
+            if (NekoConfig.tabStyleStroke.Bool()) {
+                selectorDrawable.setStroke(AndroidUtilities.dp(1), processColor(Theme.getColor(activeTextColorKey, resourcesProvider)));
+            } else {
+                selectorDrawable.setStroke(0, 0);
+            }
             selectorDrawable.draw(canvas);
             selectorDrawable.setAlpha(wasAlpha);
 
