@@ -2064,7 +2064,7 @@ public class ViewPagerFixed extends FrameLayout {
                                 (int) (indicatorX - dp(TAB_INTERNAL_PADDING) - add), y,
                                 (int) (indicatorX + indicatorWidth + dp(TAB_INTERNAL_PADDING) + add),
                                 y + dp(28));
-                            selectorDrawable.setAlpha(NekoConfig.tabStyleStroke.Bool() ? 255 : 31);
+                            selectorDrawable.setAlpha(NaConfig.INSTANCE.getTabStyleStroke().Bool() ? 255 : 31);
                             selectorDrawable.draw(canvas);
                         } else {
                             selectorDrawable.setBounds(indicatorX, (int) (height - AndroidUtilities.dpr(4) + hideProgress * AndroidUtilities.dpr(4)), indicatorX + indicatorWidth, (int) (height + hideProgress * AndroidUtilities.dpr(4)));
