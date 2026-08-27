@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNull;
 import android.content.Context;
 import android.net.Uri;
 
+import androidx.core.content.FileProvider;
 import androidx.test.core.app.ApplicationProvider;
 
 import org.junit.Before;
@@ -18,6 +19,8 @@ import org.robolectric.annotation.Config;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.Map;
 
 /**
  * Covers the gating that decides whether a voice note is handed to the car as playable
@@ -32,7 +35,14 @@ public class CarVoiceAttachmentTest {
     private File voiceFile;
 
     @Before
-    public void setUp() throws IOException {
+    public void setUp() throws Exception {
+        // FileProvider memoises a PathStrategy per authority in a static map, and the
+        // strategy holds absolute roots. Robolectric hands each test method its own data
+        // directory, so a strategy cached by an earlier test points at a directory this one
+        // does not use, and getUriForFile then rejects a perfectly valid file. Production
+        // never sees this: there, the data directory is fixed for the process lifetime.
+        clearFileProviderCache();
+
         context = ApplicationProvider.getApplicationContext();
         authority = context.getPackageName() + ".provider";
         // provider_paths.xml maps cache-media to the cache directory's media/ subtree.
@@ -44,9 +54,16 @@ public class CarVoiceAttachmentTest {
 
     @Test
     public void resolvesUriForDownloadedVoiceNote() {
+        String state = "path=" + voiceFile.getAbsolutePath()
+                + " exists=" + voiceFile.exists()
+                + " length=" + voiceFile.length()
+                + " authority=" + authority
+                + " packageName=" + context.getPackageName()
+                + " cacheDir=" + context.getCacheDir();
+
         Uri uri = CarVoiceAttachment.resolveUri(context, authority, voiceFile, true, false);
 
-        assertNotNull(uri);
+        assertNotNull(state, uri);
         assertEquals("content", uri.getScheme());
         assertEquals(authority, uri.getAuthority());
     }
@@ -84,11 +101,37 @@ public class CarVoiceAttachmentTest {
     }
 
     @Test
-    public void returnsNullInsteadOfThrowingForUnservedPath() {
-        // Outside every path declared in provider_paths.xml, FileProvider throws; the
-        // message must still be delivered as text.
-        File outside = new File("/proc/version");
-        assertNull(CarVoiceAttachment.resolveUri(context, authority, outside, true, false));
+    public void returnsNullInsteadOfThrowingForUnservedPath() throws IOException {
+        // provider_paths.xml serves the cache directory's logs/ and media/ subtrees, not its
+        // root, so a real file sitting directly in it makes FileProvider throw. The message
+        // must still go out as text rather than the exception escaping.
+        File unserved = new File(context.getCacheDir(), "unserved.ogg");
+        writeBytes(unserved, 16);
+        assertEquals(true, unserved.exists());
+
+        assertNull(CarVoiceAttachment.resolveUri(context, authority, unserved, true, false));
+    }
+
+    @Test
+    public void disclosureIsAllowedOnlyWithPreviewsAndUnlocked() {
+        assertEquals(true, CarVoiceAttachment.isDisclosureAllowed(true, false));
+        assertEquals(false, CarVoiceAttachment.isDisclosureAllowed(false, false));
+        assertEquals(false, CarVoiceAttachment.isDisclosureAllowed(true, true));
+        assertEquals(false, CarVoiceAttachment.isDisclosureAllowed(false, true));
+    }
+
+    @Test
+    public void disclosureGateAgreesWithResolveUri() {
+        // The caller checks the gate separately to decide whether an absent file is worth
+        // downloading, so the two must not drift apart.
+        boolean[] flags = {true, false};
+        for (boolean preview : flags) {
+            for (boolean locked : flags) {
+                boolean allowed = CarVoiceAttachment.isDisclosureAllowed(preview, locked);
+                Uri uri = CarVoiceAttachment.resolveUri(context, authority, voiceFile, preview, locked);
+                assertEquals("preview=" + preview + " locked=" + locked, allowed, uri != null);
+            }
+        }
     }
 
     @Test
@@ -100,5 +143,11 @@ public class CarVoiceAttachmentTest {
         try (FileOutputStream out = new FileOutputStream(file)) {
             out.write(new byte[count]);
         }
+    }
+
+    private static void clearFileProviderCache() throws Exception {
+        Field cache = FileProvider.class.getDeclaredField("sCache");
+        cache.setAccessible(true);
+        ((Map<?, ?>) cache.get(null)).clear();
     }
 }

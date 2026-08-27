@@ -24,6 +24,17 @@ final class CarVoiceAttachment {
     }
 
     /**
+     * Whether the recording may be disclosed to the car at all.
+     *
+     * <p>Separate from {@link #resolveUri} so the caller can tell "not allowed" apart from
+     * "not downloaded yet": the second is worth fetching on demand, the first must not
+     * trigger any work.
+     */
+    static boolean isDisclosureAllowed(boolean previewAllowed, boolean locked) {
+        return previewAllowed && !locked;
+    }
+
+    /**
      * Resolves a {@code content://} URI for a voice note, or null when it must not or cannot
      * be attached.
      *
@@ -41,7 +52,7 @@ final class CarVoiceAttachment {
     @Nullable
     static Uri resolveUri(Context context, String authority, @Nullable File file,
                           boolean previewAllowed, boolean locked) {
-        if (!previewAllowed || locked) {
+        if (!isDisclosureAllowed(previewAllowed, locked)) {
             return null;
         }
         // Not downloaded yet, or a zero-length placeholder from an interrupted download.
