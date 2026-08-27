@@ -103,7 +103,7 @@ public class CommunityRequestsCell extends LinearLayout implements Theme.Colorab
         valueView.setBackground(mUnreadMode ? Theme.createRoundRectDrawable(dp(10.33f), Theme.getColor(Theme.key_chats_unreadCounter, resourcesProvider)) : null);
 
         iconBackground.setDrawBorder(resourcesProvider != null ? resourcesProvider.isDark() : Theme.isCurrentThemeDark());
-        Theme.applyThemeMonetColor(iconView, resourcesProvider);
+        Theme.applyThemeMonetColor(iconView, resourcesProvider, false);
     }
 
     public void set(

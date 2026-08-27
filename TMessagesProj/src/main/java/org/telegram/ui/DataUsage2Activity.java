@@ -1056,7 +1056,7 @@ public class DataUsage2Activity extends BaseFragment {
                 drawable.setColor(imageColorTop, imageColorBottom);
                 drawable.setDrawBorder(border);
                 imageView.setBackground(drawable);
-                Theme.applyThemeMonetColor(imageView, resourcesProvider);
+                Theme.applyThemeMonetColor(imageView, resourcesProvider, false);
                 imageView.setImageResource(imageResId);
             }
 

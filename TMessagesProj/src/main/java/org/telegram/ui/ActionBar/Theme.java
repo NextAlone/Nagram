@@ -6564,11 +6564,15 @@ public class Theme {
         return resourcesProvider != null ? resourcesProvider.isMonet() : isCurrentThemeMonet();
     }
 
-    public static void applyThemeMonetColor(ImageView view, ResourcesProvider resourcesProvider) {
-        if (!Theme.isCurrentThemeMonet(resourcesProvider)) {
+    public static void applyThemeMonetColor(ImageView view, ResourcesProvider resourcesProvider, boolean white) {
+        if (view == null) {
             return;
         }
-        view.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon, resourcesProvider), PorterDuff.Mode.SRC_IN));
+        if (Theme.isCurrentThemeMonet(resourcesProvider)) {
+            view.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chats_actionIcon, resourcesProvider), PorterDuff.Mode.SRC_IN));
+        } else if (white) {
+            view.setColorFilter(new PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN));
+        }
     }
 
     public static ThemeInfo getActiveTheme() {

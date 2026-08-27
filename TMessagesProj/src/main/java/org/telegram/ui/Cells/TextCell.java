@@ -626,7 +626,7 @@ public class TextCell extends FrameLayout {
         imageView.setPadding(dp(2), dp(2), dp(2), dp(2));
         imageView.setTranslationX(dp(LocaleController.isRTL ? 0 : -3));
         imageView.setImageResource(resId);
-        Theme.applyThemeMonetColor(imageView, resourcesProvider);
+        Theme.applyThemeMonetColor(imageView, resourcesProvider, true);
 
         final boolean border = resourcesProvider != null ? resourcesProvider.isDark() : Theme.isCurrentThemeDark();
         SettingsActivity.SettingCell.Background drawable = new SettingsActivity.SettingCell.Background();

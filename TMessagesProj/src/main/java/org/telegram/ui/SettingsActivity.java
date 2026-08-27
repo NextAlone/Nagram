@@ -1221,7 +1221,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             subtitleView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText, resourcesProvider));
             valueView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText, resourcesProvider));
             iconBackground.setDrawBorder(resourcesProvider != null ? resourcesProvider.isDark() : Theme.isCurrentThemeDark());
-            Theme.applyThemeMonetColor(iconView, resourcesProvider);
+            Theme.applyThemeMonetColor(iconView, resourcesProvider, false);
         }
 
         private boolean twoLines;
