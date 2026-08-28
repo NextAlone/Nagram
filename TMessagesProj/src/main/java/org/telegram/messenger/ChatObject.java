@@ -2571,9 +2571,9 @@ public class ChatObject {
     }
 
     public static MessagesController.PeerColor getPeerColorForAvatar(int currentAccount, TLRPC.Chat chat) {
-//        if (chat != null && chat.profile_color != null && chat.profile_color.color >= 0 && MessagesController.getInstance(currentAccount).profilePeerColors != null) {
-//            return MessagesController.getInstance(currentAccount).profilePeerColors.getColor(chat.profile_color.color);
-//        }
+        if (chat != null && chat.profile_color != null && chat.profile_color.color >= 0 && MessagesController.getInstance(currentAccount).profilePeerColors != null) {
+            return MessagesController.getInstance(currentAccount).profilePeerColors.getColor(chat.profile_color.color);
+        }
         return null;
     }
 
