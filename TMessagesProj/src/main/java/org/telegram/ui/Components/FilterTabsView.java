@@ -323,7 +323,7 @@ public class FilterTabsView extends FrameLayout {
 
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            int w = currentTab.getWidth(false) + FolderIconHelper.getPaddingTab() + additionalTabWidth;
+            int w = currentTab.getWidth(false) + dp(TAB_PADDING_WIDTH) + additionalTabWidth;
             setMeasuredDimension(w, MeasureSpec.getSize(heightMeasureSpec));
         }
 
@@ -1405,7 +1405,7 @@ public class FilterTabsView extends FrameLayout {
         Tab tab = new Tab(id, text(text, entities), emoticon, noanimate);
         tab.isDefault = isDefault;
         tab.isLocked = isLocked;
-        allTabsWidth += tab.getWidth(true) + FolderIconHelper.getPaddingTab();
+        allTabsWidth += tab.getWidth(true) + dp(TAB_PADDING_WIDTH);
         tabs.add(tab);
     }
 
@@ -1424,7 +1424,7 @@ public class FilterTabsView extends FrameLayout {
         Tab tab = new Tab(id, text, emoticon, noanimate);
         tab.isDefault = isDefault;
         tab.isLocked = isLocked;
-        allTabsWidth += tab.getWidth(true) + FolderIconHelper.getPaddingTab();
+        allTabsWidth += tab.getWidth(true) + dp(TAB_PADDING_WIDTH);
         tabs.add(tab);
     }
 
@@ -1513,7 +1513,7 @@ public class FilterTabsView extends FrameLayout {
             positionToWidth.put(a, tabWidth);
             positionToCount.put(a, tabs.get(a).counter);
             positionToX.put(a, xOffset + additionalTabWidth / 2);
-            xOffset += tabWidth + FolderIconHelper.getPaddingTab() + additionalTabWidth;
+            xOffset += tabWidth + dp(TAB_PADDING_WIDTH) + additionalTabWidth;
         }
     }
 
@@ -1864,7 +1864,7 @@ public class FilterTabsView extends FrameLayout {
                     defaultTab.setTitle(LocaleController.getString(R.string.FilterAllChats), null, false);
                 }
                 for (int b = 0; b < N; b++) {
-                    allTabsWidth += tabs.get(b).getWidth(true) + FolderIconHelper.getPaddingTab();
+                    allTabsWidth += tabs.get(b).getWidth(true) + dp(TAB_PADDING_WIDTH);
                 }
                 break;
             }
@@ -1900,7 +1900,7 @@ public class FilterTabsView extends FrameLayout {
                 defaultTab.setTitle(LocaleController.getString(R.string.FilterAllChats), null, false);
             }
             for (int b = 0, N = tabs.size(); b < N; b++) {
-                allTabsWidth += tabs.get(b).getWidth(true) + FolderIconHelper.getPaddingTab();
+                allTabsWidth += tabs.get(b).getWidth(true) + dp(TAB_PADDING_WIDTH);
             }
         }
     }

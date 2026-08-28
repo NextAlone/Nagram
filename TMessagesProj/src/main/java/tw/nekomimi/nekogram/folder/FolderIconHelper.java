@@ -122,13 +122,6 @@ public class FolderIconHelper {
         return result;
     }
 
-    public static int getPaddingTab() {
-        if (NekoConfig.tabsTitleType.Int() != NekoXConfig.TITLE_TYPE_ICON) {
-            return AndroidUtilities.dp(24);
-        }
-        return AndroidUtilities.dp(16);
-    }
-
     public static int getTabIcon(String emoji) {
         if (emoji != null) {
             var folderIcon = folderIcons.get(emoji);
