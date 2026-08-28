@@ -358,4 +358,5 @@
     <string name="LiquidGlassIntensity">液体玻璃强度</string>
     <string name="DisableGooeyAvatarAnimation">禁用“Gooey”头像动画</string>
     <string name="ForceVideoNewRewindMethod">强制所有视频使用新版快进方式</string>
+    <string name="TabStyleStroke">标签指示器描边</string>
 </resources>
