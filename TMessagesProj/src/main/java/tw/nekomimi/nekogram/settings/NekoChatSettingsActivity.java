@@ -58,6 +58,7 @@ import tw.nekomimi.nekogram.config.cell.ConfigCellTextCheck;
 import tw.nekomimi.nekogram.config.cell.ConfigCellTextDetail;
 import tw.nekomimi.nekogram.config.cell.ConfigCellTextInput;
 import tw.nekomimi.nekogram.helpers.remote.EmojiHelper;
+import tw.nekomimi.nekogram.settings.cell.InputAnimationStrengthSeekBar;
 import tw.nekomimi.nekogram.ui.PopupBuilder;
 import xyz.nextalone.nagram.NaConfig;
 import xyz.nextalone.nagram.helper.DoubleTap;
@@ -97,13 +98,11 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     private final AbstractConfigCell sendCommentAfterForwardRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.sendCommentAfterForward));
     private final AbstractConfigCell addCommaAfterMentionRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getAddCommaAfterMention()));
     private final AbstractConfigCell showRecentForwardTabRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowRecentForwardTab()));
-    private final AbstractConfigCell useChatAttachMediaMenuRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useChatAttachMediaMenu, LocaleController.getString("UseChatAttachEnterMenuNotice")));
     private final AbstractConfigCell disableLinkPreviewByDefaultRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableLinkPreviewByDefault, LocaleController.getString("DisableLinkPreviewByDefaultNotice")));
     private final AbstractConfigCell takeGIFasVideoRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.takeGIFasVideo));
     private final AbstractConfigCell showSmallGifRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowSmallGIF()));
     private final AbstractConfigCell showBottomActionsWhenSelectingRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showBottomActionsWhenSelecting));
     private final AbstractConfigCell labelChannelUserRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.labelChannelUser));
-    private final AbstractConfigCell hideSendAsChannelRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideSendAsChannel));
     private final AbstractConfigCell messageMenuRow = cellGroup.appendCell(new ConfigCellSelectBox("MessageMenu", null, null, () -> {
         if (getParentActivity() == null) return;
         showMessageMenuAlert();
@@ -168,7 +167,6 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
         }}));
     }));
     private final AbstractConfigCell disableZalgoSymbolsRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getZalgoFilter(), LocaleController.getString("ZalgoFilterNotice", R.string.ZalgoFilterNotice)));
-    private final AbstractConfigCell quickToggleAnonymousRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getQuickToggleAnonymous(), LocaleController.getString("QuickToggleAnonymousNotice", R.string.QuickToggleAnonymousNotice)));
     private final AbstractConfigCell showOnlineStatusRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowOnlineStatus(), LocaleController.getString("ShowOnlineStatusNotice", R.string.ShowOnlineStatusNotice)));
     private final AbstractConfigCell showRecentOnlineStatusRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowRecentOnlineStatus()));
     private final AbstractConfigCell disableCustomWallpaperUserRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableCustomWallpaperUser()));
@@ -271,6 +269,11 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     // Bottom Style
     private final AbstractConfigCell headerBottomStyleTag = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.ChatActivityBottomStyle)));
     private final AbstractConfigCell chatActivityNavbarTransparentRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getChatActivityNavbarTransparent()));
+    private final AbstractConfigCell inputTextAnimationsRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getInputTextAnimations()));
+    private final AbstractConfigCell inputAnimationStrengthRow = cellGroup.appendCell(new ConfigCellCustom("InputAnimationStrength", ConfigCellCustom.CUSTOM_ITEM_InputAnimationStrength, true));
+    private final AbstractConfigCell useChatAttachMediaMenuRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useChatAttachMediaMenu, LocaleController.getString(R.string.UseChatAttachEnterMenuNotice)));
+    private final AbstractConfigCell hideSendAsChannelRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideSendAsChannel));
+    private final AbstractConfigCell quickToggleAnonymousRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getQuickToggleAnonymous(), LocaleController.getString(R.string.QuickToggleAnonymousNotice)));
     private final AbstractConfigCell dividerBottomStyleTag  = cellGroup.appendCell(new ConfigCellDivider());
 
     private ActionBarMenuItem menuItem;
@@ -653,6 +656,9 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                     break;
                 case ConfigCellCustom.CUSTOM_ITEM_MessagesPreview:
                     view = new MessagesPreviewCell(mContext, parentLayout, currentAccount);
+                    break;
+                case ConfigCellCustom.CUSTOM_ITEM_InputAnimationStrength:
+                    view = new InputAnimationStrengthSeekBar(mContext);
                     break;
             }
             if (view != null) {

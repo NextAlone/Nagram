@@ -1355,6 +1355,8 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val inputTextAnimations = addConfig("InputTextAnimations", ConfigItem.configTypeBool, false)
+    val inputAnimationStrength = addConfig("InputAnimationStrength", ConfigItem.configTypeInt, 2)
     val forceVideoNewRewindMethod =
         addConfig(
             "ForceVideoNewRewindMethod",

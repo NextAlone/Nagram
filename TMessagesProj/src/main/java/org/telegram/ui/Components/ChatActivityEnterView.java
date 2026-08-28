@@ -2784,7 +2784,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                 .setPositiveButton(getString(R.string.Delete), (di, w) -> {
                     clearRichDraft();
                     if (messageEditText != null) {
-                        messageEditText.setText("");
+                        messageEditText.setTextWithoutInputAnimation("");
                     }
                 })
                 .makeRed(AlertDialog.BUTTON_POSITIVE)
@@ -7557,7 +7557,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(" d " + getString("PlainTextRestrictedHint", R.string.PlainTextRestrictedHint));
             spannableStringBuilder.setSpan(new ColoredImageSpan(R.drawable.msg_mini_lock3), 1, 2, 0);
             messageEditText.setHintText(spannableStringBuilder, animated);
-            messageEditText.setText(null);
+            messageEditText.setTextWithoutInputAnimation(null);
             messageEditText.setEnabled(false);
             messageEditText.setInputType(EditorInfo.IME_ACTION_NONE);
             return;
@@ -8286,7 +8286,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                 if (processSendingText(message, notify, scheduleDate, scheduleRepeatPeriod, payStars, internalParams)) {
                     if (delegate.hasForwardingMessages() || (scheduleDate != 0 && !isInScheduleMode()) || isInScheduleMode()) {
                         if (messageEditText != null) {
-                            messageEditText.setText("");
+                            messageEditText.setTextWithoutInputAnimation("");
                         }
                         if (delegate != null) {
                             delegate.onMessageSend(message, notify, scheduleDate, scheduleRepeatPeriod, payStars);
@@ -8297,7 +8297,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                             moveToSendStateRunnable = null;
                             hideTopView(true);
                             if (messageEditText != null) {
-                                messageEditText.setText("");
+                                messageEditText.setTextWithoutInputAnimation("");
                             }
                             if (delegate != null) {
                                 delegate.onMessageSend(message, notify, scheduleDate, scheduleRepeatPeriod, payStars);
@@ -11463,7 +11463,11 @@ public class ChatActivityEnterView extends FrameLayout implements
             return;
         }
         ignoreTextChange = ignoreChange;
-        messageEditText.setText(text);
+        if (TextUtils.isEmpty(text)) {
+            messageEditText.setTextWithoutInputAnimation(text);
+        } else {
+            messageEditText.setText(text);
+        }
         messageEditText.invalidateQuotes(true);
         messageEditText.setSelection(messageEditText.getText().length());
         ignoreTextChange = false;
@@ -11632,7 +11636,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             }
             editor.setOnCleared(() -> {
                 if (messageEditText != null) {
-                    messageEditText.setText("");
+                    messageEditText.setTextWithoutInputAnimation("");
                 }
             });
         }
@@ -11641,7 +11645,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         editor.animateFrom(parentFragment);
         editor.setOnSent(() -> {
             if (messageEditText != null) {
-                messageEditText.setText("");
+                messageEditText.setTextWithoutInputAnimation("");
             }
             checkSendButton(true);
         });
@@ -11657,12 +11661,12 @@ public class ChatActivityEnterView extends FrameLayout implements
         editor.animateFrom(parentFragment);
         editor.setOnCleared(() -> {
             if (messageEditText != null) {
-                messageEditText.setText("");
+                messageEditText.setTextWithoutInputAnimation("");
             }
         });
         editor.setOnSent(() -> {
             if (messageEditText != null) {
-                messageEditText.setText("");
+                messageEditText.setTextWithoutInputAnimation("");
             }
             checkSendButton(true);
         });
@@ -11839,12 +11843,12 @@ public class ChatActivityEnterView extends FrameLayout implements
         editor.animateFrom(parentFragment);
         editor.setOnCleared(() -> {
             if (messageEditText != null) {
-                messageEditText.setText("");
+                messageEditText.setTextWithoutInputAnimation("");
             }
         });
         editor.setOnSent(() -> {
             if (messageEditText != null) {
-                messageEditText.setText("");
+                messageEditText.setTextWithoutInputAnimation("");
             }
             checkSendButton(true);
         });
@@ -11875,7 +11879,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             payStars
         );
         sendButton.setEffect(effectId = 0);
-        messageEditText.setText("");
+        messageEditText.setTextWithoutInputAnimation("");
         clearRichDraft();
         if (delegate != null) {
             delegate.onMessageSend(null, notify, scheduleDate, scheduleRepeatPeriod, payStars);
@@ -13341,7 +13345,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                                             caption = "";
                                         }
                                         SendMessagesHelper.getInstance(currentAccount).sendSticker(document, query, dialog_id, caption, videoEditedInfo, replyingMessageObject, getThreadMessage(), storyItem, replyingQuote, null, notify, scheduleDate, scheduleRepeatPeriod, false, parent, parentFragment != null ? parentFragment.getMessageChatSendParams() : null, stars, getSendMonoForumPeerId(), getSendMessageSuggestionParams(), invertMedia);
-                                        messageEditText.setText("");
+                                        messageEditText.setTextWithoutInputAnimation("");
                                     } else {
                                         SendMessagesHelper.getInstance(currentAccount).sendSticker(document, query, dialog_id, entry != null ? entry.caption : null, videoEditedInfo, replyingMessageObject, getThreadMessage(), storyItem, replyingQuote, null, notify, scheduleDate, scheduleRepeatPeriod, false, parent, parentFragment != null ? parentFragment.getMessageChatSendParams() : null, stars, getSendMonoForumPeerId(), getSendMessageSuggestionParams(), invertMedia);
                                     }

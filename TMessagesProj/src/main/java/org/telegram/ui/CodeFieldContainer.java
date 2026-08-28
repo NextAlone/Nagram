@@ -77,6 +77,10 @@ public class CodeFieldContainer extends LinearLayout {
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
         if (child instanceof CodeNumberField) {
             CodeNumberField field = (CodeNumberField) child;
+            if (field.usesSharedInputAnimation()) {
+                child.setAlpha(1f);
+                return super.drawChild(canvas, child, drawingTime);
+            }
             canvas.save();
             float progress = ((CodeNumberField) child).enterAnimation;
             AndroidUtilities.rectTmp.set(child.getX(), child.getY(), child.getX() + child.getMeasuredWidth(), child.getY() + child.getMeasuredHeight());

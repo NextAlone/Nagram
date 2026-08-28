@@ -370,4 +370,11 @@
     <string name="UseSystemFontInTitle">Use System Font in Title</string>
     <string name="MaterialDesign3ChatHeader">Material Design 3 chat header</string>
     <string name="MaterialDesign3ChatHeaderDes">Remove top chat header background</string>
+    <string name="InputTextAnimations">Input animation and deletion particles</string>
+    <string name="InputAnimationStrength">Animation strength</string>
+    <string name="InputAnimationWeakest">Weakest</string>
+    <string name="InputAnimationWeak">Weak</string>
+    <string name="InputAnimationModerate">Moderate</string>
+    <string name="InputAnimationStrong">Strong</string>
+    <string name="InputAnimationStrongest">Strongest</string>
 </resources>

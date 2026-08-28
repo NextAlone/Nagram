@@ -169,6 +169,11 @@ public class CodeNumberField extends EditTextBoldCursor {
     }
 
     public void startExitAnimation() {
+        if (usesSharedInputAnimation()) {
+            if (exitAnimator != null) exitAnimator.cancel();
+            exitAnimation = 1f;
+            return;
+        }
         if (getMeasuredHeight() == 0 || getMeasuredWidth() == 0 || getLayout() == null) {
             return;
         }
@@ -202,6 +207,11 @@ public class CodeNumberField extends EditTextBoldCursor {
     }
 
     public void startEnterAnimation(boolean replace) {
+        if (usesSharedInputAnimation()) {
+            if (enterAnimator != null) enterAnimator.cancel();
+            enterAnimation = 1f;
+            return;
+        }
         replaceAnimation = replace;
         enterAnimation = 0f;
         enterAnimator = ValueAnimator.ofFloat(enterAnimation, 1f);
@@ -227,6 +237,18 @@ public class CodeNumberField extends EditTextBoldCursor {
         return super.requestFocus(direction, previouslyFocusedRect);
     }
 
+
+    public boolean usesSharedInputAnimation() {
+        return xyz.nextalone.nagram.NaConfig.INSTANCE.getInputTextAnimations().Bool()
+                && (getTransformationMethod() == null
+                || getTransformationMethod() instanceof android.text.method.SingleLineTransformationMethod);
+    }
+
+    @Override
+    public boolean animateInputWithoutFocus() {
+        // OTP entry advances focus and paste/autofill populates several cells at once.
+        return usesSharedInputAnimation();
+    }
 
     boolean pressed = false;
     float startX = 0;

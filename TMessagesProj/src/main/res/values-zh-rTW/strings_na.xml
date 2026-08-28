@@ -363,4 +363,11 @@
     <string name="MessagePreviewPollQuestion">程式碼怎麼樣？</string>
     <string name="MessagePreviewPollAnswerTerrible">很糟糕</string>
     <string name="MessagePreviewPollAnswerWorse">更糟糕</string>
+    <string name="InputTextAnimations">輸入動畫與刪除粒子效果</string>
+    <string name="InputAnimationStrength">動畫強度</string>
+    <string name="InputAnimationWeakest">最弱</string>
+    <string name="InputAnimationWeak">較弱</string>
+    <string name="InputAnimationModerate">適中</string>
+    <string name="InputAnimationStrong">較強</string>
+    <string name="InputAnimationStrongest">最強</string>
 </resources>

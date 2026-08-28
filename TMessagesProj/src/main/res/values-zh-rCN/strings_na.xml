@@ -365,4 +365,11 @@
     <string name="MessagePreviewPollQuestion">代码怎么样？</string>
     <string name="MessagePreviewPollAnswerTerrible">很糟糕</string>
     <string name="MessagePreviewPollAnswerWorse">更糟糕</string>
+    <string name="InputTextAnimations">输入动画与删除粒子效果</string>
+    <string name="InputAnimationStrength">动画强度</string>
+    <string name="InputAnimationWeakest">最弱</string>
+    <string name="InputAnimationWeak">较弱</string>
+    <string name="InputAnimationModerate">适中</string>
+    <string name="InputAnimationStrong">较强</string>
+    <string name="InputAnimationStrongest">最强</string>
 </resources>
