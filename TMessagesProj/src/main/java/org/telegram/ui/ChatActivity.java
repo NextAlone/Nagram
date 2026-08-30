@@ -41432,6 +41432,9 @@ public class ChatActivity extends BaseFragment implements
 
             final TL_keyboard.TL_inlineButtonTypeUrl buttonTypeUrl = TLKeyboardHelper.getType(button, TL_keyboard.TL_inlineButtonTypeUrl.class);
             final TL_keyboard.TL_inlineButtonTypeCopy buttonTypeCopy = TLKeyboardHelper.getType(button, TL_keyboard.TL_inlineButtonTypeCopy.class);
+            final TL_keyboard.TL_inlineButtonTypeSwitchInline buttonTypeSwitchInline = TLKeyboardHelper.getType(button, TL_keyboard.TL_inlineButtonTypeSwitchInline.class);
+            final TL_keyboard.TL_inlineButtonTypeCallback buttonTypeCallback = TLKeyboardHelper.getType(button, TL_keyboard.TL_inlineButtonTypeCallback.class);
+            final TL_keyboard.TL_inlineButtonTypeUserProfile buttonTypeUserProfile = TLKeyboardHelper.getType(button, TL_keyboard.TL_inlineButtonTypeUserProfile.class);
 
             if (getParentActivity() == null || bottomChannelButtonsLayout.getVisibility() == View.VISIBLE &&
                     buttonTypeUrl == null && buttonTypeCopy == null &&
@@ -41454,7 +41457,19 @@ public class ChatActivity extends BaseFragment implements
                     if (!NekoConfig.disableVibration.Bool())
                     cell.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
                 } catch (Exception ignore) {}
+                return true;
             }
+            Utilities.Callback<String> copyCallback = (text) -> {
+                AndroidUtilities.addToClipboard(text);
+                BulletinFactory.of(ChatActivity.this).createCopyBulletin(formatString(R.string.ExactTextCopied, text)).show();
+            };
+            ItemOptions.makeOptions(ChatActivity.this, cell, true)
+                .add(R.drawable.msg_copy, getString(R.string.Copy), () -> copyCallback.run(button.getText()))
+                .addIf(getParentActivity() != null && !TextUtils.isEmpty(button.getText()), R.drawable.msg_translate, getString(R.string.Translate), () -> Translator.translateShowAlert(getParentActivity(), button.getText()))
+                .addIf(buttonTypeSwitchInline != null, R.drawable.msg_copy, getString(R.string.CopyInlineQuery), () -> copyCallback.run(buttonTypeSwitchInline.query))
+                .addIf(buttonTypeCallback != null, R.drawable.msg_copy, getString(R.string.CopyCallback), () -> copyCallback.run(tw.nekomimi.nekogram.ui.MessageHelper.getTextOrBase64(buttonTypeCallback.data)))
+                .addIf(buttonTypeUserProfile != null, R.drawable.msg_copy, getString(R.string.CopyID), () -> copyCallback.run(String.valueOf(buttonTypeUserProfile.user_id)))
+                .show();
             return true;
         }
 

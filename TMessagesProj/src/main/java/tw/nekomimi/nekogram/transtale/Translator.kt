@@ -1,5 +1,6 @@
 package tw.nekomimi.nekogram.transtale
 
+import android.content.Context
 import android.view.View
 import cn.hutool.core.util.ArrayUtil
 import cn.hutool.core.util.StrUtil
@@ -7,14 +8,19 @@ import cn.hutool.http.HttpRequest
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import tw.nekomimi.nekogram.NekoConfig
-import tw.nekomimi.nekogram.ui.PopupBuilder
 import tw.nekomimi.nekogram.cc.CCConverter
 import tw.nekomimi.nekogram.cc.CCTarget
+import tw.nekomimi.nekogram.transtale.TranslateDb.Companion.currentTarget
 import tw.nekomimi.nekogram.transtale.source.*
+import tw.nekomimi.nekogram.ui.PopupBuilder
+import tw.nekomimi.nekogram.utils.AlertUtil.showCopyAlert
+import tw.nekomimi.nekogram.utils.AlertUtil.showProgress
+import tw.nekomimi.nekogram.utils.AlertUtil.showTransFailedDialog
 import tw.nekomimi.nekogram.utils.UIUtil
 import tw.nekomimi.nekogram.utils.receive
 import tw.nekomimi.nekogram.utils.receiveLazy
-import java.util.*
+import java.util.Arrays
+import java.util.Locale
 
 fun <T : HttpRequest> T.applyProxy(): T {
 //    SharedConfig.getActiveSocks5Proxy()?.let { setProxy(it) }
@@ -289,6 +295,33 @@ interface Translator {
 
             }
 
+        }
+
+        @JvmStatic
+        @JvmOverloads
+        fun translateShowAlert(ctx: Context, query: String, to: Locale = NekoConfig.translateToLang.String()?.code2Locale
+            ?: LocaleController.getInstance().currentLocale) {
+            val db = currentTarget()
+            if (db.contains(query)) {
+                showCopyAlert(ctx, db.query(query)!!)
+            } else {
+                val pro = showProgress(ctx)
+                pro.show()
+                translate(to, query, object : TranslateCallBack {
+                    override fun onSuccess(translation: String) {
+                        pro.dismiss()
+                        showCopyAlert(ctx, translation)
+                    }
+
+                    override fun onFailed(unsupported: Boolean, message: String) {
+                        pro.dismiss()
+                        showTransFailedDialog(ctx, unsupported, message) {
+                            pro.show()
+                            translate(to, query, this)
+                        }
+                    }
+                })
+            }
         }
 
         interface TranslateCallBack {
