@@ -1361,6 +1361,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val addCommaAfterMention =
+        addConfig(
+            "AddCommaAfterMention",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

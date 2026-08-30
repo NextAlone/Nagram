@@ -360,4 +360,5 @@
     <string name="DisableGooeyAvatarAnimation">Disable \"Gooey\" avatar animation</string>
     <string name="ForceVideoNewRewindMethod">Force video use new seek method</string>
     <string name="TabStyleStroke">Tab indicator outline</string>
+    <string name="AddCommaAfterMention">Add Comma after Mention</string>
 </resources>
