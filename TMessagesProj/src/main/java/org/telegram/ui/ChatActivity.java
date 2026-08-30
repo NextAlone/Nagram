@@ -7773,7 +7773,7 @@ public class ChatActivity extends BaseFragment implements
                         chatActivityEnterView.replaceWithText(start, len, "@" + UserObject.getPublicUsername(user) + " ", false);
                     } else {
                         String name = UserObject.getFirstName(user, false);
-                        Spannable spannable = new SpannableString("@" + name + " ");
+                        Spannable spannable = new SpannableString("@" + name + (NaConfig.INSTANCE.getAddCommaAfterMention().Bool() ? ", " : " "));
                         spannable.setSpan(new URLSpanUserMention("" + user.id, 3), 0, spannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         chatActivityEnterView.replaceWithText(start, len, spannable, false);
                     }
@@ -7939,7 +7939,7 @@ public class ChatActivity extends BaseFragment implements
                 TLRPC.User user = (TLRPC.User) object;
                 if (!(searchingForUser && searchContainer.getVisibility() == View.VISIBLE) && user != null) {
                     String name = UserObject.getFirstName(user, false);
-                    Spannable spannable = new SpannableString("@" + name + " ");
+                    Spannable spannable = new SpannableString("@" + name + (NaConfig.INSTANCE.getAddCommaAfterMention().Bool() ? ", " : " "));
                     spannable.setSpan(new URLSpanUserMention("" + user.id, 3), 0, spannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     chatActivityEnterView.replaceWithText(start, len, spannable, false);
                     return true;
