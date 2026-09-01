@@ -41033,7 +41033,7 @@ public class ChatActivity extends BaseFragment implements
                 }
                 String username = ChatObject.getPublicUsername(chat);
                 if (username != null) {
-                    sb.append("@").append(username).append(" ");
+                    sb.append("@").append(username).append(NaConfig.INSTANCE.getAddCommaAfterMention().Bool() ? ", " : " ");
                 } else {
                     return;
                 }
@@ -41059,10 +41059,10 @@ public class ChatActivity extends BaseFragment implements
                 }
                 String username = UserObject.getPublicUsername(user);
                 if (username != null) {
-                    sb.append("@").append(username).append(" ");
+                    sb.append("@").append(username).append(NaConfig.INSTANCE.getAddCommaAfterMention().Bool() ? ", " : " ");
                 } else {
                     String name = UserObject.getFirstName(user, false);
-                    Spannable spannable = new SpannableString(name + " ");
+                    Spannable spannable = new SpannableString(name + (NaConfig.INSTANCE.getAddCommaAfterMention().Bool() ? ", " : " "));
                     spannable.setSpan(new URLSpanUserMention("" + user.id, 3), 0, spannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     sb.append(spannable);
                 }
