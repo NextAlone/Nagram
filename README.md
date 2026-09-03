@@ -143,29 +143,34 @@ Build:
    git submodule update --init --recursive
    ```
 
-2. Build native dependencies:
+2. Disable signature check by removing the following lines in **TMessagesProj/jni/jni.c**:
+   ```c
+    if (verifySign(env) != JNI_OK) {
+        return JNI_ERR;
+    }
+   ```
+
+3. Build native dependencies:
    ```shell
    ./run init libs
    ```
 
-3. Build external libraries and native code: 
+4. Build external libraries and native code: 
    ```shell
    ./run libs native
    ```
 
-4. Fill out `TELEGRAM_APP_ID` and `TELEGRAM_APP_HASH` in **local.properties** (from [Telegram Developer](https://my.telegram.org/auth))
+5. Fill out `TELEGRAM_APP_ID` and `TELEGRAM_APP_HASH` in **local.properties** (from [Telegram Developer](https://my.telegram.org/auth))
 
-5. Replace **TMessagesProj/google-services.json** if you want FCM to work.
+6. Replace **TMessagesProj/google-services.json** if you want FCM to work.
 
-6. Replace **release.keystore** with yours and fill out `ALIAS_NAME`, `KEYSTORE_PASS` and `ALIAS_PASS` in **local.properties**.
+7. Replace **release.keystore** with yours and fill out `ALIAS_NAME`, `KEYSTORE_PASS` and `ALIAS_PASS` in **local.properties**.
 
-7. Build with Gradle:
+8. Build with Gradle:
 
    ```shell
    ./gradlew assemble<Release/Debug>
    ```
-
-8. Generate `TMessagesProj/jni/integrity/genuine.h` - https://github.com/brevent/genuine
 
 ----
 
