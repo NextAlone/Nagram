@@ -10824,9 +10824,9 @@ public class ChatActivity extends BaseFragment implements
         actionModeOtherItem.addSubItem(nkbtn_unpin, R.drawable.msg_unpin, LocaleController.getString("UnpinMessage", R.string.UnpinMessage));
         if (!noforward)
             actionModeOtherItem.addSubItem(nkbtn_savemessage, R.drawable.menu_saved, LocaleController.getString("AddToSavedMessages", R.string.AddToSavedMessages));
-        if (NekoConfig.showRepeat.Bool() && !noforward)
+        if (NekoConfig.showRepeat.Bool() && !noforward && !(NaConfig.INSTANCE.getDisableRepeatInChannel().Bool() && isChannel()))
             actionModeOtherItem.addSubItem(nkbtn_repeat, R.drawable.msg_repeat, LocaleController.getString("Repeat", R.string.Repeat));
-        if (NaConfig.INSTANCE.getShowRepeatAsCopy().Bool() || (NaConfig.INSTANCE.getAutoReplaceRepeat().Bool() && noforward)) {
+        if ((NaConfig.INSTANCE.getShowRepeatAsCopy().Bool() || (NaConfig.INSTANCE.getAutoReplaceRepeat().Bool() && noforward)) && !(NaConfig.INSTANCE.getDisableRepeatInChannel().Bool() && isChannel())) {
             actionModeOtherItem.addSubItem(nkbtn_repeatascopy, R.drawable.msg_repeat, LocaleController.getString("RepeatAsCopy", R.string.RepeatAsCopy));
         }
         if (NekoConfig.showMessageHide.Bool()) {
@@ -46305,10 +46305,6 @@ public class ChatActivity extends BaseFragment implements
         if (checkSlowMode(chatActivityEnterView.getSendButton())) {
             return;
         }
-        if (NaConfig.INSTANCE.getDisableRepeatInChannel().Bool() && isChannel()) {
-            BulletinFactory.of(this).createSimpleBulletin(R.raw.error, getString(R.string.DisableRepeatInChannelError)).show();
-            return;
-        }
         final ArrayList<MessageObject> messages = new ArrayList<>();
         if (selectedObject != null) {
             messages.add(selectedObject);
@@ -48518,12 +48514,12 @@ public class ChatActivity extends BaseFragment implements
                     }
                     boolean allowRepeat = currentUser != null
                             || (currentChat != null && ChatObject.canSendMessages(currentChat));
-                    if (allowRepeat && NekoConfig.showRepeat.Bool() && !noforward) {
+                    if (allowRepeat && NekoConfig.showRepeat.Bool() && !noforward && !(NaConfig.INSTANCE.getDisableRepeatInChannel().Bool() && isChannel())) {
                         items.add(LocaleController.getString(R.string.Repeat));
                         options.add(nkbtn_repeat);
                         icons.add(R.drawable.msg_repeat);
                     }
-                    if (allowRepeat && (NaConfig.INSTANCE.getShowRepeatAsCopy().Bool() || (NaConfig.INSTANCE.getAutoReplaceRepeat().Bool() && noforward))){
+                    if (allowRepeat && (NaConfig.INSTANCE.getShowRepeatAsCopy().Bool() || (NaConfig.INSTANCE.getAutoReplaceRepeat().Bool() && noforward)) && !(NaConfig.INSTANCE.getDisableRepeatInChannel().Bool() && isChannel())){
                         items.add(LocaleController.getString(R.string.RepeatAsCopy));
                         options.add(nkbtn_repeatascopy);
                         icons.add(R.drawable.msg_repeat);
