@@ -5,6 +5,7 @@ import static tw.nekomimi.nekogram.settings.BaseNekoSettingsActivity.PARTIAL;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.TextPaint;
 import android.text.TextUtils;
@@ -319,6 +320,8 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
         listAdapter = new ListAdapter(context);
 
         listView.setAdapter(listAdapter);
+        listView.setItemSelectorColorProvider(position ->
+                position == cellGroup.rows.indexOf(stickerSizeRow) ? Color.TRANSPARENT : null);
         // Fragment: Set OnClick Callbacks
         listView.setOnItemClickListener((view, position, x, y) -> {
             AbstractConfigCell a = cellGroup.rows.get(position);
