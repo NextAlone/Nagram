@@ -89,8 +89,6 @@ public class NekoXConfig {
                 return BuildConfig.APP_ID;
             case 1:
                 return BuildVars.OFFICAL_APP_ID;
-            case 2:
-                return BuildVars.TGX_APP_ID;
             default:
                 return customAppId;
         }
@@ -103,8 +101,6 @@ public class NekoXConfig {
                 return BuildConfig.APP_HASH;
             case 1:
                 return BuildVars.OFFICAL_APP_HASH;
-            case 2:
-                return BuildVars.TGX_APP_HASH;
             default:
                 return customAppHash;
         }

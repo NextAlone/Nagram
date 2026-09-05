@@ -10587,16 +10587,8 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             }
             return Unit.INSTANCE;
         });
-        builder.addRadioItem(LocaleController.getString(R.string.CustomApiTGX), NekoXConfig.customApi == 2, (cell) -> {
+        builder.addRadioItem(LocaleController.getString(R.string.CustomApiInput), NekoXConfig.customApi == 2, (cell) -> {
             targetApi.set(2);
-            builder.doRadioCheck(cell);
-            for (EditText input : inputs) {
-                input.setVisibility(View.GONE);
-            }
-            return Unit.INSTANCE;
-        });
-        builder.addRadioItem(LocaleController.getString(R.string.CustomApiInput), NekoXConfig.customApi > 2, (cell) -> {
-            targetApi.set(3);
             builder.doRadioCheck(cell);
             for (EditText input : inputs) {
                 input.setVisibility(View.VISIBLE);
@@ -10655,7 +10647,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         builder.addCancelButton();
         builder.addButton(LocaleController.getString(R.string.Set), (it) -> {
             int target = targetApi.get();
-            if (target > 2) {
+            if (target == 2) {
                 if (NekoXConfig.customAppId == 0) {
                     inputs[0].requestFocus();
                     AndroidUtilities.showKeyboard(inputs[0]);
