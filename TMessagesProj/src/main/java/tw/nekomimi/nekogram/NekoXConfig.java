@@ -55,7 +55,7 @@ public class NekoXConfig {
             6244360706L, // Sevtinge
             5382987111L,  // miaoqiqi
             387785790,    // waifucon
-            7837108843L,  // lutit
+            812417693,  // lutit
     };
 
     public static final int TITLE_TYPE_TEXT = 0;
