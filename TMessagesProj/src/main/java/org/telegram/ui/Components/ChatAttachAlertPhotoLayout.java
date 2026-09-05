@@ -3503,7 +3503,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 parentAlert.getPhotoPreviewLayout().invalidateGroupsView();
             }
         } else if (id == open_in) {
-            if (NaConfig.INSTANCE.getUseSystemPhotoPicker().Bool() && openSystemPhotoPicker()) {
+            if (openSystemPhotoPicker()) {
                 return;
             }
             try {
