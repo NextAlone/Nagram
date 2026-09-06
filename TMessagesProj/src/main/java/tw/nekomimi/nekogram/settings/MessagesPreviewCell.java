@@ -1,6 +1,3 @@
-/*
- * Adapted from the exteraGram message preview used by Materialgram.
- */
 package tw.nekomimi.nekogram.settings;
 
 import android.annotation.SuppressLint;
@@ -18,8 +15,9 @@ import android.widget.LinearLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
-import org.telegram.messenger.UserConfig;
+import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.Theme;
@@ -30,6 +28,7 @@ import org.telegram.ui.Components.MotionBackgroundDrawable;
 
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.helpers.TimeStringHelper;
+import tw.nekomimi.nekogram.utils.UpdateUtil;
 import xyz.nextalone.nagram.NaConfig;
 
 @SuppressLint("ViewConstructor")
@@ -59,7 +58,7 @@ public class MessagesPreviewCell extends LinearLayout {
         setPadding(0, AndroidUtilities.dp(11), 0, AndroidUtilities.dp(11));
 
         int date = (int) (System.currentTimeMillis() / 1000) - 3600;
-        TLRPC.TL_message text = createMessage(account, 42, date);
+        TLRPC.TL_message text = createMessage(42, date);
         String markedText = LocaleController.getString(R.string.MessagePreviewText);
         int spoilerStart = markedText.indexOf("||");
         int spoilerEnd = spoilerStart < 0 ? -1 : markedText.indexOf("||", spoilerStart + 2);
@@ -81,11 +80,11 @@ public class MessagesPreviewCell extends LinearLayout {
         text.forwards = 12;
         text.fwd_from = new TLRPC.TL_messageFwdHeader();
         text.fwd_from.flags = 32;
-        text.fwd_from.from_name = "Nagram";
+        text.fwd_from.from_name = "monk 🥺";
         text.fwd_from.date = date - 86400;
         messages[0] = new MessageObject(account, text, true, false);
 
-        TLRPC.TL_message pollMessage = createMessage(account, 43, date + 120);
+        TLRPC.TL_message pollMessage = createMessage(43, date + 120);
         pollMessage.flags |= TLRPC.MESSAGE_FLAG_HAS_MEDIA;
         TLRPC.TL_messageMediaPoll media = new TLRPC.TL_messageMediaPoll();
         media.poll = new TLRPC.TL_poll();
@@ -93,7 +92,7 @@ public class MessagesPreviewCell extends LinearLayout {
         media.poll.question.text = LocaleController.getString(R.string.MessagePreviewPollQuestion);
         media.results = new TLRPC.TL_pollResults();
         media.results.flags = 2 | 4;
-        media.results.total_voters = 10;
+        media.results.total_voters = 16;
         int[] answers = {R.string.MessagePreviewPollAnswerTerrible, R.string.MessagePreviewPollAnswerWorse};
         for (int i = 0; i < answers.length; i++) {
             TLRPC.TL_pollAnswer answer = new TLRPC.TL_pollAnswer();
@@ -103,7 +102,7 @@ public class MessagesPreviewCell extends LinearLayout {
             media.poll.answers.add(answer);
             TLRPC.TL_pollAnswerVoters voters = new TLRPC.TL_pollAnswerVoters();
             voters.option = answer.option;
-            voters.voters = i == 0 ? 7 : 3;
+            voters.voters = i == 0 ? 11 : 5;
             media.results.results.add(voters);
         }
         pollMessage.media = media;
@@ -112,6 +111,7 @@ public class MessagesPreviewCell extends LinearLayout {
         TimeStringHelper.getForwardsDrawable();
         for (int i = 0; i < cells.length; i++) {
             messages[i].customName = "Nagram";
+            messages[i].forceAvatar = true;
             cells[i] = new ChatMessageCell(context, account);
             cells[i].setDelegate(new ChatMessageCell.ChatMessageCellDelegate() {
                 @Override
@@ -124,16 +124,39 @@ public class MessagesPreviewCell extends LinearLayout {
             addView(cells[i], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
         }
         refreshMessages();
+        loadPreviewChannel(account);
     }
 
-    private static TLRPC.TL_message createMessage(int account, int id, int date) {
+    private void loadPreviewChannel(int account) {
+        MessagesController controller = MessagesController.getInstance(account);
+        TLObject cachedChannel = controller.getUserOrChat(UpdateUtil.channelUsername);
+        if (cachedChannel instanceof TLRPC.Chat) {
+            setPreviewChannel((TLRPC.Chat) cachedChannel);
+        }
+        controller.getUserNameResolver().resolve(UpdateUtil.channelUsername, peerId -> {
+            if (peerId != null && peerId < 0) {
+                TLRPC.Chat channel = controller.getChat(-peerId);
+                if (channel != null) {
+                    setPreviewChannel(channel);
+                }
+            }
+        });
+    }
+
+    private void setPreviewChannel(TLRPC.Chat channel) {
+        for (MessageObject message : messages) {
+            message.messageOwner.from_id.channel_id = channel.id;
+        }
+        refreshMessages();
+    }
+
+    private static TLRPC.TL_message createMessage(int id, int date) {
         TLRPC.TL_message message = new TLRPC.TL_message();
         message.id = id;
         message.date = date;
         message.dialog_id = 1;
         message.flags = TLRPC.MESSAGE_FLAG_HAS_FROM_ID;
-        message.from_id = new TLRPC.TL_peerUser();
-        message.from_id.user_id = UserConfig.getInstance(account).getClientUserId();
+        message.from_id = new TLRPC.TL_peerChannel();
         message.peer_id = new TLRPC.TL_peerUser();
         message.media = new TLRPC.TL_messageMediaEmpty();
         message.message = "";
