@@ -3620,7 +3620,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     if (self != null && self.first_name != null) title = self.first_name;
                 }
                 actionBar.centerTitle(false);
-                if (title.equals(getString(R.string.NekoX))) {
+                if (title.equals(getString(R.string.NekoX)) && !NekoConfig.typeface.Bool()) {
                     logoDrawable = context.getResources().getDrawable(R.drawable.nagram_logo_2).mutate();
                     logoDrawable.setBounds(0, dp(2), logoDrawable.getIntrinsicWidth(), dp(2) + logoDrawable.getIntrinsicHeight());
                     logoDrawable.setColorFilter(getThemedColor(Theme.key_telegram_color_dialogsLogo), PorterDuff.Mode.MULTIPLY);

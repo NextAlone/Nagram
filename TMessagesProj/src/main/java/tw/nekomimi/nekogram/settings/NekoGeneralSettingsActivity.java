@@ -478,6 +478,8 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                         MessagesController.getInstance(a).checkPromoInfo(true);
                     }
                 }
+            } else if (key.equals(NekoConfig.typeface.getKey())) {
+                tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (key.equals(NekoConfig.actionBarDecoration.getKey())) {
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (key.equals(NaConfig.INSTANCE.getNotificationIcon().getKey())) {
