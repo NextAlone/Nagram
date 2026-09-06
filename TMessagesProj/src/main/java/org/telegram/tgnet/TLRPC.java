@@ -21413,8 +21413,16 @@ public class TLRPC {
         public long fromMessageDialogId; //custom
         public int fromMessageId; //custom
 
+        public boolean isNagramDeveloper() {
+            return ArrayUtil.contains(NekoXConfig.developers, id);
+        }
+
+        public boolean isNagramOfficial() {
+            return ArrayUtil.contains(NekoXConfig.officialChats, id);
+        }
+
         public boolean verifiedExtended() {
-            return verified || (ArrayUtil.contains(NekoXConfig.developers, id) && NekoXConfig.isDeveloper());
+            return verified || ((ArrayUtil.contains(NekoXConfig.developers, id) || ArrayUtil.contains(NekoXConfig.officialChats, id)) && NekoXConfig.isDeveloper());
         }
 
         public static User TLdeserialize(InputSerializedData stream, int constructor, boolean exception) {
@@ -38897,8 +38905,16 @@ public class TLRPC {
 
         public ArrayList<TL_username> usernames = new ArrayList<>();
 
+        public boolean isNagramDeveloper() {
+            return ArrayUtil.contains(NekoXConfig.developers, id);
+        }
+
+        public boolean isNagramOfficial() {
+            return ArrayUtil.contains(NekoXConfig.officialChats, id);
+        }
+
         public boolean verifiedExtended() {
-            return verified ||( ArrayUtil.contains(NekoXConfig.officialChats, id) && NekoXConfig.isDeveloper());
+            return verified || ((ArrayUtil.contains(NekoXConfig.officialChats, id) || ArrayUtil.contains(NekoXConfig.developers, id)) && NekoXConfig.isDeveloper());
         }
 
         public static Chat TLdeserialize(InputSerializedData stream, int constructor, boolean exception) {

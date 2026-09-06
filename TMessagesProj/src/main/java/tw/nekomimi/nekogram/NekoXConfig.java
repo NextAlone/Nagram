@@ -229,4 +229,27 @@ public class NekoXConfig {
     public static String getChannelAlias(long channelID) {
         return preferences.getString(NekoConfig.channelAliasPrefix + channelID, null);
     }
+
+    public static void showVerifiedBulletin(org.telegram.ui.ActionBar.BaseFragment fragment, org.telegram.tgnet.TLRPC.User user, org.telegram.tgnet.TLRPC.Chat chat) {
+        if (fragment == null) return;
+        String name = "";
+        boolean isOfficial = false;
+        boolean isDev = false;
+        if (user != null) {
+            name = org.telegram.messenger.UserObject.getUserName(user);
+            isDev = user.isNagramDeveloper();
+        } else if (chat != null) {
+            name = chat.title;
+            isOfficial = chat.isNagramOfficial();
+        }
+        String text;
+        if (isOfficial) {
+            text = LocaleController.formatString("NagramOfficialResource", R.string.NagramOfficialResource, name);
+        } else if (isDev) {
+            text = LocaleController.formatString("NagramDevelopmentTeamMember", R.string.NagramDevelopmentTeamMember, name);
+        } else {
+            text = LocaleController.formatString("TelegramVerifiedAccount", R.string.TelegramVerifiedAccount, name);
+        }
+        org.telegram.ui.Components.BulletinFactory.of(fragment).createSimpleBulletin(R.raw.info, text).show();
+    }
 }

@@ -361,4 +361,7 @@
     <string name="ForceVideoNewRewindMethod">Force video use new seek method</string>
     <string name="TabStyleStroke">Tab indicator outline</string>
     <string name="AddCommaAfterMention">Add Comma after Mention</string>
+    <string name="NagramOfficialResource">%1$s is the official resource of Nagram.</string>
+    <string name="NagramDevelopmentTeamMember">%1$s is a member of the Nagram development team.</string>
+    <string name="TelegramVerifiedAccount">%1$s is verified as official by Telegram.</string>
 </resources>
