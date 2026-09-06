@@ -41,6 +41,10 @@ public class NekoXConfig {
             1500637449, // Nagram
             1645699549, // Nagram Updates
             2001739482, // Nagram Tips
+            1571726392, // exteraGram
+            1877362358, // exteraGram Forum
+            2331068091, // AyuGram Releases
+            1905581924, // AyuGram Chat
     };
 
     public static long[] developers = {
