@@ -1367,6 +1367,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val openPornInsteadOfSavedMessages =
+        addConfig(
+            "OpenPornInsteadOfSavedMessages",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

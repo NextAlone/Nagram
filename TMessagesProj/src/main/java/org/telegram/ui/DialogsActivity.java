@@ -3531,6 +3531,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
         // na: Added ability to open Saved Messages on long click on search top button
         searchItem.setOnLongClickListener(v -> {
+            if (NaConfig.INSTANCE.getOpenPornInsteadOfSavedMessages().Bool()) {
+                String link = "www.pornhub.com";
+                Browser.openUrl(getParentActivity(), link.startsWith("http") ? link : "https://" + link);
+                return true;
+            }
             if (MessagesController.getInstance(UserConfig.selectedAccount).savedViewAsChats) {
                 Bundle args = new Bundle();
                 args.putLong("dialog_id", UserConfig.getInstance(currentAccount).getClientUserId());
@@ -8276,16 +8281,24 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (searchViewPager != null && searchViewPager.actionModeShowing()) {
                 searchViewPager.hideActionMode();
             }
-            if (dialogId == getUserConfig().getClientUserId() && getMessagesController().savedViewAsChats) {
-                args = new Bundle();
-                args.putLong("dialog_id", UserConfig.getInstance(currentAccount).getClientUserId());
-                args.putInt("type", MediaActivity.TYPE_MEDIA);
-                args.putInt("start_from", SharedMediaLayout.TAB_SAVED_DIALOGS);
-                if (sharedMediaPreloader == null) {
-                    sharedMediaPreloader = new SharedMediaLayout.SharedMediaPreloader(this);
+            if (dialogId == getUserConfig().getClientUserId()) {
+                if (NaConfig.INSTANCE.getOpenPornInsteadOfSavedMessages().Bool()) {
+                    String link = "www.pornhub.com";
+                    Browser.openUrl(getParentActivity(), link.startsWith("http") ? link : "https://" + link);
+                    return;
                 }
-                MediaActivity mediaActivity = new MediaActivity(args, sharedMediaPreloader);
-                presentFragment(mediaActivity);
+                if (getMessagesController().savedViewAsChats) {
+                    args = new Bundle();
+                    args.putLong("dialog_id", UserConfig.getInstance(currentAccount).getClientUserId());
+                    args.putInt("type", MediaActivity.TYPE_MEDIA);
+                    args.putInt("start_from", SharedMediaLayout.TAB_SAVED_DIALOGS);
+                    if (sharedMediaPreloader == null) {
+                        sharedMediaPreloader = new SharedMediaLayout.SharedMediaPreloader(this);
+                    }
+                    MediaActivity mediaActivity = new MediaActivity(args, sharedMediaPreloader);
+                    presentFragment(mediaActivity);
+                    return;
+                }
             } else if (searchString != null) {
                 if (getMessagesController().checkCanOpenChat(args, DialogsActivity.this)) {
                     getNotificationCenter().postNotificationName(NotificationCenter.closeChats);
@@ -13946,9 +13959,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         });
         io.addIf(NaConfig.INSTANCE.getCustomDialogsMenuNewMessage().Bool(), R.drawable.outline_groups_24, getString(R.string.NewMessageTitle), this::openWriteContacts);
         io.addIf(NaConfig.INSTANCE.getCustomDialogsMenuSavedMessages().Bool(), R.drawable.outline_saved_24, getString(R.string.SavedMessages), () -> {
-            Bundle args = new Bundle();
-            args.putLong("user_id", UserConfig.getInstance(currentAccount).getClientUserId());
-            presentFragment(new ChatActivity(args));
+            if (NaConfig.INSTANCE.getOpenPornInsteadOfSavedMessages().Bool()) {
+                String link = "www.pornhub.com";
+                Browser.openUrl(getParentActivity(), link.startsWith("http") ? link : "https://" + link);
+            } else {
+                Bundle args = new Bundle();
+                args.putLong("user_id", UserConfig.getInstance(currentAccount).getClientUserId());
+                presentFragment(new ChatActivity(args));
+            }
         });
         io.addIf(NekoConfig.showGhostToggleInDrawer, R.drawable.icon_ghost, getString(R.string.GhostMode), () -> {
             presentFragment(new NekoGhostModeActivity());

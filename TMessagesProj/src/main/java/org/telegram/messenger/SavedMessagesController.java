@@ -12,10 +12,12 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.tl.TL_update;
+import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.LaunchActivity;
+import xyz.nextalone.nagram.NaConfig;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -1114,6 +1116,14 @@ public class SavedMessagesController {
         }
     }
     public static void openSavedMessages() {
+        if (NaConfig.INSTANCE.getOpenPornInsteadOfSavedMessages().Bool()) {
+            BaseFragment lastFragment = LaunchActivity.getLastFragment();
+            if (lastFragment != null) {
+                String link = "www.pornhub.com";
+                Browser.openUrl(lastFragment.getParentActivity(), link.startsWith("http") ? link : "https://" + link);
+            }
+            return;
+        }
         BaseFragment lastFragment = LaunchActivity.getLastFragment();
         if (lastFragment == null) {
             return;

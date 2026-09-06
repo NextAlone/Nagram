@@ -361,4 +361,5 @@
     <string name="ForceVideoNewRewindMethod">Force video use new seek method</string>
     <string name="TabStyleStroke">Tab indicator outline</string>
     <string name="AddCommaAfterMention">Add Comma after Mention</string>
+    <string name="OpenPornInsteadOfSavedMessages">Open porn instead of saved messages</string>
 </resources>

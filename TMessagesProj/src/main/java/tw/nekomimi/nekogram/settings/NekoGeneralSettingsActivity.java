@@ -269,6 +269,7 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
         }}));
     }));
     private final AbstractConfigCell sidebarSettingsActivityRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getSidebarSettingsActivity()));
+    private final AbstractConfigCell openPornInsteadOfSavedMessagesRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getOpenPornInsteadOfSavedMessages()));
     private final AbstractConfigCell divider5 = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell header6 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("PrivacyTitle")));
