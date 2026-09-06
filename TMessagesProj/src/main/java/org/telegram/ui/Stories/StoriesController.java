@@ -1075,6 +1075,7 @@ public class StoriesController {
     }
 
     public boolean hasSelfStories() {
+        if (NaConfig.INSTANCE.getDisableStories().Bool()) return false;
         long clientUserId = UserConfig.getInstance(currentAccount).clientUserId;
         TL_stories.PeerStories storyItem = allStoriesMap.get(clientUserId);
         if (storyItem != null && !storyItem.stories.isEmpty()) {
@@ -1342,6 +1343,7 @@ public class StoriesController {
     }
 
     public boolean hasUnreadStories(long dialogId) {
+        if (NaConfig.INSTANCE.getDisableStories().Bool()) return false;
         TL_stories.PeerStories userStories = allStoriesMap.get(dialogId);
         if (userStories == null) {
             userStories = getStoriesFromFullPeer(dialogId);
@@ -1368,6 +1370,7 @@ public class StoriesController {
     }
 
     public int hasUnreadStoriesLive(long dialogId) {
+        if (NaConfig.INSTANCE.getDisableStories().Bool()) return 0;
         TL_stories.PeerStories userStories = allStoriesMap.get(dialogId);
         if (userStories == null) {
             userStories = getStoriesFromFullPeer(dialogId);
@@ -1817,6 +1820,7 @@ public class StoriesController {
     }
 
     public boolean hasLoadingStories() {
+        if (NaConfig.INSTANCE.getDisableStories().Bool()) return false;
         return loadingDialogsStories.size() > 0;
     }
 

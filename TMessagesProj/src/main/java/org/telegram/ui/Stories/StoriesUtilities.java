@@ -121,6 +121,28 @@ public class StoriesUtilities {
     };
 
     public static void drawAvatarWithStory(long dialogId, Canvas canvas, ImageReceiver avatarImage, boolean hasStories, AvatarStoryParams params) {
+        if (NaConfig.INSTANCE.getDisableStories().Bool()) {
+            if (params.operation != null) {
+                params.operation.cancel();
+                params.operation = null;
+            }
+            params.currentState = STATE_EMPTY;
+            params.prevState = STATE_EMPTY;
+            params.progressToSate = 1f;
+            if (params.originalAvatarRect != null) {
+                avatarImage.setImageCoords(params.originalAvatarRect);
+            }
+            float scale = params.buttonBounce != null ? params.buttonBounce.getScale(0.08f) : 1f;
+            if (scale != 1f && params.originalAvatarRect != null) {
+                canvas.save();
+                canvas.scale(scale, scale, params.originalAvatarRect.centerX(), params.originalAvatarRect.centerY());
+                avatarImage.draw(canvas);
+                canvas.restore();
+            } else {
+                avatarImage.draw(canvas);
+            }
+            return;
+        }
         StoriesController storiesController = MessagesController.getInstance(UserConfig.selectedAccount).getStoriesController();
         boolean animated = params.animate;
         if (params.dialogId != dialogId) {
@@ -562,7 +584,7 @@ public class StoriesUtilities {
     }
 
     public static int getPredictiveUnreadState(StoriesController storiesController, long dialogId) {
-        if (dialogId == 0) {
+        if (dialogId == 0 || NaConfig.INSTANCE.getDisableStories().Bool()) {
             return STATE_EMPTY;
         }
         if (dialogId > 0) {
@@ -1309,7 +1331,9 @@ public class StoriesUtilities {
                 }
                 boolean hasStories;
 
-                if (isAvatarClickable(dialogId, chat, user)) {
+                if (NaConfig.INSTANCE.getDisableStories().Bool()) {
+                    hasStories = isAvatarClickable(dialogId, chat, user);
+                } else if (isAvatarClickable(dialogId, chat, user)) {
                     hasStories = true;
                 } else if (drawHiddenStoriesAsSegments) {
                     hasStories = storiesController.hasHiddenStories();
@@ -1392,6 +1416,13 @@ public class StoriesUtilities {
             if (onAvatarClick(view, dialogId)) {
                 return;
             }
+            if (NaConfig.INSTANCE.getDisableStories().Bool()) {
+                if (operation != null) {
+                    operation.cancel();
+                    operation = null;
+                }
+                return;
+            }
 
             int currentAccount = UserConfig.selectedAccount;
             MessagesController messagesController = MessagesController.getInstance(UserConfig.selectedAccount);
@@ -1408,14 +1439,14 @@ public class StoriesUtilities {
                 if (dialogId > 0) {
                     TLRPC.User user = messagesController.getUser(dialogId);
                     if (user != null && !user.stories_unavailable && user.stories_max_id != null && user.stories_max_id.max_id > 0) {
-                        UserStoriesLoadOperation operation = new UserStoriesLoadOperation();
+                        operation = new UserStoriesLoadOperation();
                         operation.load(dialogId, view, this);
                         return;
                     }
                 } else {
                     TLRPC.Chat chat = messagesController.getChat(-dialogId);
                     if (chat != null && !chat.stories_unavailable && chat.stories_max_id != null && chat.stories_max_id.max_id > 0) {
-                        UserStoriesLoadOperation operation = new UserStoriesLoadOperation();
+                        operation = new UserStoriesLoadOperation();
                         operation.load(dialogId, view, this);
                         return;
                     }
@@ -1424,6 +1455,9 @@ public class StoriesUtilities {
         }
 
         public void openStory(long dialogId, Runnable onDone) {
+            if (NaConfig.INSTANCE.getDisableStories().Bool()) {
+                return;
+            }
             BaseFragment fragment = LaunchActivity.getLastFragment();
             if (fragment != null && child != null) {
                 fragment.getOrCreateStoryViewer().doOnAnimationReady(onDone);
@@ -1479,6 +1513,13 @@ public class StoriesUtilities {
             TL_stories.TL_stories_getPeerStories req = new TL_stories.TL_stories_getPeerStories();
             req.peer = MessagesController.getInstance(currentAccount).getInputPeer(dialogId);
             reqId = ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+                if (canceled || NaConfig.INSTANCE.getDisableStories().Bool()) {
+                    MessagesController.getInstance(currentAccount).getStoriesController().setLoading(dialogId, false);
+                    if (view != null) {
+                        view.invalidate();
+                    }
+                    return;
+                }
                 boolean openned = false;
                 boolean finished = true;
                 if (response != null) {
@@ -1490,6 +1531,13 @@ public class StoriesUtilities {
                         MessagesController.getInstance(currentAccount).getStoriesController().putStories(dialogId, stories);
                         finished = false;
                         ensureStoryFileLoaded(stories, () -> {
+                            if (canceled || NaConfig.INSTANCE.getDisableStories().Bool() || params == null) {
+                                MessagesController.getInstance(currentAccount).getStoriesController().setLoading(dialogId, false);
+                                if (view != null) {
+                                    view.invalidate();
+                                }
+                                return;
+                            }
                             AndroidUtilities.runOnUIThread(() -> {
                                 view.invalidate();
                                 MessagesController.getInstance(currentAccount).getStoriesController().setLoading(dialogId, false);
