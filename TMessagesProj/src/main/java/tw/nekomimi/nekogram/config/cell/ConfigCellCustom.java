@@ -9,6 +9,7 @@ public class ConfigCellCustom extends AbstractConfigCell {
     public static final int CUSTOM_ITEM_EmojiSet = 996;
     public static final int CUSTOM_ITEM_LiquidGlassAngle = 995;
     public static final int CUSTOM_ITEM_LiquidGlassIntensity = 994;
+    public static final int CUSTOM_ITEM_MessagesPreview = 993;
 
     public final int type;
     public boolean enabled;

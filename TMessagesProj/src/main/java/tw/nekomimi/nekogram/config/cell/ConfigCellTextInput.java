@@ -27,6 +27,7 @@ public class ConfigCellTextInput extends AbstractConfigCell {
     public TextSettingsCell cell;
     private final Runnable onClickCustom;
     private final Function<String, String> inputChecker;
+    private final boolean rebuildOnChange;
 
     public ConfigCellTextInput(String customTitle, ConfigItem bind, String hint, Runnable customOnClick) {
         this(customTitle, bind, hint, customOnClick, null);
@@ -34,6 +35,10 @@ public class ConfigCellTextInput extends AbstractConfigCell {
 
     // default: customTitle=null customOnClick=null
     public ConfigCellTextInput(String customTitle, ConfigItem bind, String hint, Runnable customOnClick, Function<String, String> inputChecker) {
+        this(customTitle, bind, hint, customOnClick, inputChecker, true);
+    }
+
+    public ConfigCellTextInput(String customTitle, ConfigItem bind, String hint, Runnable customOnClick, Function<String, String> inputChecker, boolean rebuildOnChange) {
         this.bindConfig = bind;
         if (hint == null) {
             this.hint = "";
@@ -47,6 +52,7 @@ public class ConfigCellTextInput extends AbstractConfigCell {
         }
         this.onClickCustom = customOnClick;
         this.inputChecker = inputChecker;
+        this.rebuildOnChange = rebuildOnChange;
     }
 
     public int getType() {
@@ -119,7 +125,9 @@ public class ConfigCellTextInput extends AbstractConfigCell {
             //refresh
             cellGroup.listAdapter.notifyItemChanged(cellGroup.rows.indexOf(this));
             builder.getDismissRunnable().run();
-            cellGroup.thisFragment.getParentLayout().rebuildAllFragmentViews(false, false);
+            if (rebuildOnChange) {
+                cellGroup.thisFragment.getParentLayout().rebuildAllFragmentViews(false, false);
+            }
 
             cellGroup.runCallback(bindConfig.getKey(), newV);
         });
@@ -127,4 +135,3 @@ public class ConfigCellTextInput extends AbstractConfigCell {
         cellGroup.thisFragment.showDialog(builder.create());
     }
 }
-
