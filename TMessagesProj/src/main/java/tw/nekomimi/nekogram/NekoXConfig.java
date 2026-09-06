@@ -49,11 +49,17 @@ public class NekoXConfig {
             784901712, // NextAlone
             457896977, // Queally
             782954985, // MaiTungTM
-            5412523572L, //blxueya
-            676660002, // mrwangzhe
+            1711019015,  // Lagrio
+            554072292,  // NahidaBuer
+            5412523572L, // blxueya
+            676660002, // xtao
             1068402676, // Kitsune
             6244360706L, // Sevtinge
+            625965913,   // YuKongA
             5382987111L,  // miaoqiqi
+            5555116287L,  // Natu
+            387785790,    // waifucon
+            812417693,  // lutit
     };
 
     public static final int TITLE_TYPE_TEXT = 0;
