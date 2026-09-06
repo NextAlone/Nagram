@@ -1367,6 +1367,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val idDcType =
+        addConfig(
+            "IdDcType",
+            ConfigItem.configTypeInt,
+            1
+        )
 
     private fun addConfig(
         k: String,
@@ -1507,6 +1513,9 @@ object NaConfig {
                     o as ConfigItemKeyLinked
                     o.changedFromKeyLinked(o.keyLinked.Int())
                 }
+            }
+            if (!preferences.getBoolean("ShowIdAndDc", true)) {
+                idDcType.setConfigInt(0)
             }
             configLoaded =
                 true

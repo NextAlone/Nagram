@@ -36,6 +36,10 @@ public class NekoConfig {
     public static boolean showGhostToggleInDrawer;
     public static final String channelAliasPrefix = "channelAliasPrefix_";
 
+    public static final int ID_TYPE_HIDDEN = 0;
+    public static final int ID_TYPE_API = 1;
+    public static final int ID_TYPE_BOT_API = 2;
+
     private static boolean configLoaded = false;
     private static final ArrayList<ConfigItem> configs = new ArrayList<>();
     public static final ArrayList<DatacenterInfo> datacenterInfos = new ArrayList<>(5);

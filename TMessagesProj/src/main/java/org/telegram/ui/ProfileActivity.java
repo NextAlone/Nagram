@@ -3836,7 +3836,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 avatarContainer2.setPivotX(avatarContainer2.getMeasuredWidth() / 2f);
                 AndroidUtilities.updateViewVisibilityAnimated(avatarContainer2, !expanded, 0.95f, true);
 
-                if (Math.min(1f, extraHeight / AndroidUtilities.dp(88f)) > 0.85 && !searchMode && NekoConfig.showIdAndDc.Bool())
+                if (Math.min(1f, extraHeight / AndroidUtilities.dp(88f)) > 0.85 && !searchMode && NaConfig.INSTANCE.getIdDcType().Int() != 0)
                     idTextView.setVisibility(expanded ? INVISIBLE : VISIBLE);
 
                 callItem.setVisibility(expanded || !callItemVisible ? GONE : INVISIBLE);
@@ -9235,7 +9235,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 mediaCounterTextView.setTranslationY(onlineY);
                 updateCollectibleHint();
 
-                if (diff > 0.85 && !searchMode && NekoConfig.showIdAndDc.Bool()) {
+                if (diff > 0.85 && !searchMode && NaConfig.INSTANCE.getIdDcType().Int() != 0) {
                     idTextView.setVisibility(View.VISIBLE);
                 } else {
                     idTextView.setVisibility(View.GONE);
@@ -12136,12 +12136,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
 
             dc = user.photo != null && user.photo.dc_id != 0 ? user.photo.dc_id : (UserObject.isUserSelf(user) && getMessagesController().thisDc > 0) ? getMessagesController().thisDc : 0;
+            id = getId(true);
             if (dc != 0) {
-                idTextView.setText("ID: " + userId + ", DC: " + dc);
+                idTextView.setText("ID: " + id + ", DC: " + dc);
             } else {
-                idTextView.setText("ID: " + userId);
+                idTextView.setText("ID: " + id);
             }
-            id = userId;
             avatarImage.getImageReceiver().setVisible(!PhotoViewer.isShowingImage(photoBig) && (getLastStoryViewer() == null || getLastStoryViewer().transitionViewHolder.view != avatarImage), storyView != null);
         } else if (chatId != 0) {
             TLRPC.Chat chat = getMessagesController().getChat(chatId);
@@ -12456,18 +12456,21 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (dc == 0 && chat.photo != null && chat.photo.dc_id != 0) {
                 dc = chat.photo.dc_id;
             }
+            id = getId(true);
             if (dc != 0) {
-                idTextView.setText("ID: " + chatId + ", DC: " + dc);
+                idTextView.setText("ID: " + id + ", DC: " + dc);
             } else {
-                idTextView.setText("ID: " + chatId);
+                idTextView.setText("ID: " + id);
             }
         }
+        long idForLink = getId(false);
         if (id != 0) {
             long finalId = id;
+            long finalIdForLink = idForLink;
             int finalDc = dc;
             idTextView.setOnClickListener(v -> {
                 ItemOptions o = ItemOptions.makeOptions(this, v);
-                if (finalId == userId) {
+                if (userId != 0) {
                     ItemOptionsPatch.addTitle(o, finalId + "", ProfileDateHelper.getUserTime(finalId));
                 } else {
                     ItemOptionsPatch.addTitle(o, finalId + "", null);
@@ -12475,19 +12478,19 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 o.add(R.drawable.msg_copy, LocaleController.getString(R.string.Copy), () -> {
                     AlertUtil.copyAndAlert(finalId + "");
                 });
-                if (finalId == userId) {
+                if (userId != 0) {
                     o.add(R.drawable.profile_link, LocaleController.getString(R.string.CopyLink), () -> {
-                        AlertUtil.copyLinkAndAlert("tg://user?id=" + finalId);
+                        AlertUtil.copyLinkAndAlert("tg://user?id=" + finalIdForLink);
                     });
                     o.add(R.drawable.profile_link, LocaleController.getString(R.string.CopyLink) + " (Android)", () -> {
-                        AlertUtil.copyLinkAndAlert("tg://openmessage?user_id=" + finalId);
+                        AlertUtil.copyLinkAndAlert("tg://openmessage?user_id=" + finalIdForLink);
                     });
                     o.add(R.drawable.profile_link, LocaleController.getString(R.string.CopyLink) + " (IOS)", () -> {
-                        AlertUtil.copyLinkAndAlert("https://t.me/@id" + finalId);
+                        AlertUtil.copyLinkAndAlert("https://t.me/@id" + finalIdForLink);
                     });
                 } else {
                     o.add(R.drawable.profile_link, LocaleController.getString(R.string.CopyLink) + " (Android)", () -> {
-                        AlertUtil.copyLinkAndAlert("tg://openmessage?chat_id=" + finalId);
+                        AlertUtil.copyLinkAndAlert("tg://openmessage?chat_id=" + finalIdForLink);
                     });
                 }
                 if (finalDc != 0) {
@@ -12504,6 +12507,21 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
 
         needLayout(true);
+    }
+
+    private long getId(boolean styled) {
+        long id = userId != 0 ? userId : chatId != 0 ? chatId : 0;
+        if (styled && chatId != 0 && NaConfig.INSTANCE.getIdDcType().Int() == NekoConfig.ID_TYPE_BOT_API) {
+            TLRPC.Chat chat = getMessagesController().getChat(chatId);
+            if (chat != null) {
+                if (ChatObject.isChannel(chat)) {
+                    id = -1000000000000L - chat.id;
+                } else {
+                    id = -chat.id;
+                }
+            }
+        }
+        return id;
     }
 
     private CharSequence appendCommunityHiddenRow(CharSequence text) {
@@ -13288,7 +13306,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         nameTextView[1].setVisibility(View.VISIBLE);
         onlineTextView[1].setVisibility(View.VISIBLE);
         onlineTextView[3].setVisibility(View.VISIBLE);
-        if (Math.min(1f, extraHeight / AndroidUtilities.dp(88f)) > 0.85 && !searchMode && NekoConfig.showIdAndDc.Bool())
+        if (Math.min(1f, extraHeight / AndroidUtilities.dp(88f)) > 0.85 && !searchMode && NaConfig.INSTANCE.getIdDcType().Int() != 0)
             idTextView.setVisibility(View.VISIBLE);
 
         actionBar.onSearchFieldVisibilityChanged(searchTransitionProgress > 0.5f);
