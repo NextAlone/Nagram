@@ -94,7 +94,6 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     private final AbstractConfigCell dividerMessages = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell doubleTapActionRow = cellGroup.appendCell(new ConfigCellCustom("DoubleTapAction", CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
-    private final AbstractConfigCell disableReactionsWhenSelectingRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableReactionsWhenSelecting));
     private final AbstractConfigCell dividerDoubleTap = cellGroup.appendCell(new ConfigCellDivider());
 
     // Chats
@@ -247,6 +246,11 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     private final AbstractConfigCell dontSendGreetingStickerRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.dontSendGreetingSticker));
     private final AbstractConfigCell removeFavouriteStickersInRecentStickersRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getRemoveFavouriteStickersInRecentStickers()));
     private final AbstractConfigCell dividerSticker = cellGroup.appendCell(new ConfigCellDivider());
+
+    // Reaction
+    private final AbstractConfigCell headerReaction = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("ReactionSettings", R.string.ReactionSettings)));
+    private final AbstractConfigCell disableReactionsWhenSelectingRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableReactionsWhenSelecting));
+    private final AbstractConfigCell dividerReaction = cellGroup.appendCell(new ConfigCellDivider());
 
     // Operation Confirmatation
     private final AbstractConfigCell headerConfirms = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("ConfirmSettings")));
