@@ -73,7 +73,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     private final AbstractConfigCell divider0 = cellGroup.appendCell(new ConfigCellDivider());
 
     // Sticker Settings
-    private final AbstractConfigCell headerStickerOptions = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.StickerOptions)));
+    private final AbstractConfigCell headerStickerOptions = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.ChatSticker)));
     private final AbstractConfigCell hideTimeForStickerRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideTimeForSticker));
     private final AbstractConfigCell stickersOnlyShowReadRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getRealHideTimeForSticker()));
     private final AbstractConfigCell disablePremiumStickerAnimationRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disablePremiumStickerAnimation));
