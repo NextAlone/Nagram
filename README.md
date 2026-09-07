@@ -1,11 +1,11 @@
 # Nagram
 
-Nagram is a third-party Telegram client based on [NekoX](https://github.com/NekoX-Dev/NekoX) with some modifications.
+Nagram is a third-party Telegram client based on [NekoX](https://web.archive.org/web/20240306062834/https://github.com/NekoX-Dev/NekoX) with some modifications.
 
 - Official Site: <https://nextalone.xyz>
 - Telegram Update Channel: <https://t.me/nagram_channel>
 - Releases: <https://github.com/NextAlone/Nagram/releases>
-- Issues here: <https://github.com/NextAlone/Nagram/issues>
+- Issues here: <https://t.me/na_gram_reports/18>
 
 ## Branding
 
@@ -47,7 +47,7 @@ for the complete policy.
     - Proxy automatic switcher
     - Don't alert "Proxy unavailable" for non-current account
 - **Stickers**
-    - Custom [Emoji packs](https://github.com/NekoX-Dev/NekoX/wiki/emoji)
+    - Custom [Emoji packs](https://web.archive.org/web/20221126140435/https://github.com/NekoX-Dev/NekoX/wiki/emoji)
     - Add stickers without sticker pack
     - Sticker set list backup / restore / share
 - **Internationalization**
@@ -202,9 +202,14 @@ Then, use base64 to encode the above.
 - HELPER_BOT_TOKEN: from telegram [@Botfather](https://t.me/Botfather), such as `1111:abcd`
 - HELPER_BOT_TARGET: from telegram chat id, such as `777000`
 
-4. Run Release Build
+4. Disable signature check by removing the following lines in **TMessagesProj/jni/jni.c**:
+   ```c
+    if (verifySign(env) != JNI_OK) {
+        return JNI_ERR;
+    }
+   ```
 
-5. Generate `TMessagesProj/jni/integrity/genuine.h` - https://github.com/brevent/genuine
+5. Run Release Build
 
 ## FAQ
 
@@ -212,17 +217,13 @@ Then, use base64 to encode the above.
 
 Developed by different developers, read the feature list above to understand the differences.
 
-#### What is the noGcm version?
-
-Google Cloud Messaging, also known as gcm / fcm, message push service by google used by original Telegram android app, it requires your device to have Google Service Framework (non-free) installed.
-
 #### I've encountered a bug!
 
 First, make sure you have the latest version installed (check the channel).
 
-Then, if the issue appears in the official Telegram client too, please submit it to the officials, (be careful not to show NekoX in the description and screenshots, the official developers doesn't like us!).
+Then, if the issue appears in the official Telegram client too, please submit it to the officials, (be careful not to show custom clients in the description and screenshots).
 
-Then, submit it to our [group](https://t.me/nagram_group) with #bug.
+Then, submit it to our [bot](https://t.me/OrIssuesBot).
 
 If you experience a *crash*, you also need to click on the version number at the bottom of the settings and select "Enable Log" and send it to us.
 
@@ -236,7 +237,7 @@ Is Nagram not in your language, or the translation is incorrect or incomplete? G
 
 ## Thanks
 
-- [NekoX](https://github.com/NekoX-Dev/NekoX)
+- [NekoX](https://web.archive.org/web/20240306062834/https://github.com/NekoX-Dev/NekoX)
 - [Nekogram](https://gitlab.com/Nekogram/Nekogram)
 - [Pigeongram](https://gitlab.com/JasonKhew96/Nekogram)
 - [Nullgram](https://github.com/qwq233/Nullgram)
