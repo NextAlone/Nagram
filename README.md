@@ -5,7 +5,7 @@ Nagram is a third-party Telegram client based on [NekoX](https://web.archive.org
 - Official Site: <https://nextalone.xyz>
 - Telegram Update Channel: <https://t.me/nagram_channel>
 - Releases: <https://github.com/NextAlone/Nagram/releases>
-- Issues here: <https://github.com/NextAlone/Nagram/issues>
+- Issues here: <https://t.me/na_gram_reports/18>
 
 ## Branding
 
@@ -222,7 +222,7 @@ First, make sure you have the latest version installed (check the channel).
 
 Then, if the issue appears in the official Telegram client too, please submit it to the officials, (be careful not to show NekoX in the description and screenshots, the official developers doesn't like us!).
 
-Then, submit it to our [group](https://t.me/nagram_group) with #bug.
+Then, submit it to our [bot](https://t.me/OrIssuesBot).
 
 If you experience a *crash*, you also need to click on the version number at the bottom of the settings and select "Enable Log" and send it to us.
 
