@@ -12,6 +12,8 @@ import android.graphics.drawable.GradientDrawable;
 import android.view.MotionEvent;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
@@ -112,13 +114,18 @@ public class MessagesPreviewCell extends LinearLayout {
         for (int i = 0; i < cells.length; i++) {
             messages[i].customName = "Nagram";
             messages[i].forceAvatar = true;
-            cells[i] = new ChatMessageCell(context, account);
-            cells[i].setDelegate(new ChatMessageCell.ChatMessageCellDelegate() {
+            cells[i] = new ChatMessageCell(context, account) {
                 @Override
-                public boolean canPerformActions() {
-                    return false;
+                protected void dispatchDraw(@NonNull Canvas canvas) {
+                    if (getAvatarImage() != null && getAvatarImage().getImageHeight() != 0) {
+                        getAvatarImage().setImageCoords(getAvatarImage().getImageX(), getMeasuredHeight() - getAvatarImage().getImageHeight() - AndroidUtilities.dp(4), getAvatarImage().getImageWidth(), getAvatarImage().getImageHeight());
+                        getAvatarImage().setRoundRadius((int) (getAvatarImage().getImageHeight() / 2f));
+                        getAvatarImage().draw(canvas);
+                    }
+                    super.dispatchDraw(canvas);
                 }
-            });
+            };
+            cells[i].setDelegate(new ChatMessageCell.ChatMessageCellDelegate() {});
             cells[i].isChat = true;
             cells[i].setFullyDraw(true);
             addView(cells[i], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));

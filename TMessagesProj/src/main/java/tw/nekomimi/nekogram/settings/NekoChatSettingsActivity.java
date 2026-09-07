@@ -412,6 +412,8 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                 LocaleController.getInstance().recreateFormatters();
             } else if (key.equals(NaConfig.INSTANCE.getDisableBotOpenButton().getKey())) {
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+            } else if (key.equals(NekoConfig.hideTimeForSticker.getKey()) || key.equals(NaConfig.INSTANCE.getRealHideTimeForSticker().getKey())) {
+                if (stickerSizeCell != null) stickerSizeCell.invalidate();
             }
         };
 
