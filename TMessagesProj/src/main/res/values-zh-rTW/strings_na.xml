@@ -357,4 +357,9 @@
     <string name="LiquidGlassAngle">Liquid Glass angle</string>
     <string name="LiquidGlassIntensity">Liquid Glass intensity</string>
     <string name="DisableGooeyAvatarAnimation">Disable \"Gooey\" avatar animation</string>
+    <string name="NagramMessages">訊息</string>
+    <string name="MessagePreviewText">既然我想讓程式碼變得糟糕，那就靠||感覺寫程式||吧。</string>
+    <string name="MessagePreviewPollQuestion">程式碼怎麼樣？</string>
+    <string name="MessagePreviewPollAnswerTerrible">很糟糕</string>
+    <string name="MessagePreviewPollAnswerWorse">更糟糕</string>
 </resources>

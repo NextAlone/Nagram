@@ -359,4 +359,9 @@
     <string name="DisableGooeyAvatarAnimation">禁用“Gooey”头像动画</string>
     <string name="ForceVideoNewRewindMethod">强制所有视频使用新版快进方式</string>
     <string name="TabStyleStroke">标签指示器描边</string>
+    <string name="NagramMessages">消息</string>
+    <string name="MessagePreviewText">既然我想让代码变得糟糕，那就靠||感觉编程||吧。</string>
+    <string name="MessagePreviewPollQuestion">代码怎么样？</string>
+    <string name="MessagePreviewPollAnswerTerrible">很糟糕</string>
+    <string name="MessagePreviewPollAnswerWorse">更糟糕</string>
 </resources>

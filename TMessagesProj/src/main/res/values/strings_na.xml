@@ -361,4 +361,9 @@
     <string name="ForceVideoNewRewindMethod">Force video use new seek method</string>
     <string name="TabStyleStroke">Tab indicator outline</string>
     <string name="AddCommaAfterMention">Add Comma after Mention</string>
+    <string name="NagramMessages">Messages</string>
+    <string name="MessagePreviewText">since i want the code to be terrible i am ||vibe-coding||</string>
+    <string name="MessagePreviewPollQuestion">How is the code?</string>
+    <string name="MessagePreviewPollAnswerTerrible">Terrible</string>
+    <string name="MessagePreviewPollAnswerWorse">Even worse</string>
 </resources>
