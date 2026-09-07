@@ -1,6 +1,6 @@
 # Nagram
 
-Nagram is a third-party Telegram client based on [NekoX](https://github.com/NekoX-Dev/NekoX) with some modifications.
+Nagram is a third-party Telegram client based on [NekoX](https://web.archive.org/web/20240306062834/https://github.com/NekoX-Dev/NekoX) with some modifications.
 
 - Official Site: <https://nextalone.xyz>
 - Telegram Update Channel: <https://t.me/nagram_channel>
@@ -47,7 +47,7 @@ for the complete policy.
     - Proxy automatic switcher
     - Don't alert "Proxy unavailable" for non-current account
 - **Stickers**
-    - Custom [Emoji packs](https://github.com/NekoX-Dev/NekoX/wiki/emoji)
+    - Custom [Emoji packs](https://web.archive.org/web/20221126140435/https://github.com/NekoX-Dev/NekoX/wiki/emoji)
     - Add stickers without sticker pack
     - Sticker set list backup / restore / share
 - **Internationalization**
@@ -236,7 +236,7 @@ Is Nagram not in your language, or the translation is incorrect or incomplete? G
 
 ## Thanks
 
-- [NekoX](https://github.com/NekoX-Dev/NekoX)
+- [NekoX](https://web.archive.org/web/20240306062834/https://github.com/NekoX-Dev/NekoX)
 - [Nekogram](https://gitlab.com/Nekogram/Nekogram)
 - [Pigeongram](https://gitlab.com/JasonKhew96/Nekogram)
 - [Nullgram](https://github.com/qwq233/Nullgram)
