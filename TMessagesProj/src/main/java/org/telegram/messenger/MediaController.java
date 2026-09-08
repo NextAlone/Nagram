@@ -1696,6 +1696,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         cleanupPlayer(true, true);
         audioInfo = null;
         playMusicAgain = false;
+        forceLoopCurrentPlaylist = false;
         for (int a : SharedConfig.activeAccounts) {
             DownloadController.getInstance(a).cleanup();
         }
@@ -2879,10 +2880,6 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
     public boolean setPlaylist(ArrayList<MessageObject> messageObjects, MessageObject current, long mergeDialogId, boolean loadMusic, PlaylistGlobalSearchParams params) {
         if (playingMessageObject == current) {
-            int newIdx = playlist.indexOf(current);
-            if (newIdx >= 0) {
-                currentPlaylistNum = newIdx;
-            }
             return playMessage(current);
         }
         forceLoopCurrentPlaylist = !loadMusic;
@@ -2967,7 +2964,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     }
 
     public void playMessageAtIndex(int index) {
-        if (currentPlaylistNum < 0 || currentPlaylistNum >= playlist.size()) {
+        if (index < 0 || index >= playlist.size()) {
             return;
         }
         currentPlaylistNum = index;
@@ -2979,15 +2976,29 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         playMessage(messageObject);
     }
 
+    private void updateCurrentPlaylistNum(MessageObject messageObject) {
+        if (messageObject == null || !messageObject.isMusic()) {
+            return;
+        }
+        ArrayList<MessageObject> currentPlayList = SharedConfig.shuffleMusic ? shuffledPlaylist : playlist;
+        int index = currentPlayList.indexOf(messageObject);
+        if (index >= 0) {
+            currentPlaylistNum = index;
+        }
+    }
+
     private void playNextMessageWithoutOrder(boolean byStop) {
         ArrayList<MessageObject> currentPlayList = SharedConfig.shuffleMusic ? shuffledPlaylist : playlist;
 
-        if (byStop && (SharedConfig.repeatMode == 2 || SharedConfig.repeatMode == 1 && currentPlayList.size() == 1) && !forceLoopCurrentPlaylist) {
-            cleanupPlayer(false, false);
-            if (currentPlaylistNum < 0 || currentPlaylistNum >= currentPlayList.size()) {
-                return;
+        if (byStop && (SharedConfig.repeatMode == 2 || SharedConfig.repeatMode == 1 && currentPlayList.size() == 1)) {
+            MessageObject messageObject = playingMessageObject;
+            if (messageObject == null) {
+                if (currentPlaylistNum < 0 || currentPlaylistNum >= currentPlayList.size()) {
+                    return;
+                }
+                messageObject = currentPlayList.get(currentPlaylistNum);
             }
-            MessageObject messageObject = currentPlayList.get(currentPlaylistNum);
+            cleanupPlayer(false, false);
             messageObject.audioProgress = 0;
             messageObject.audioProgressSec = 0;
             playMessage(messageObject);
@@ -3653,6 +3664,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         if (messageObject == null) {
             return false;
         }
+        updateCurrentPlaylistNum(messageObject);
         isSilent = silent;
         checkVolumeBarUI();
         if ((audioPlayer != null || videoPlayer != null) && isSamePlayingMessage(messageObject)) {
