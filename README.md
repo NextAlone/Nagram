@@ -212,15 +212,11 @@ Then, use base64 to encode the above.
 
 Developed by different developers, read the feature list above to understand the differences.
 
-#### What is the noGcm version?
-
-Google Cloud Messaging, also known as gcm / fcm, message push service by google used by original Telegram android app, it requires your device to have Google Service Framework (non-free) installed.
-
 #### I've encountered a bug!
 
 First, make sure you have the latest version installed (check the channel).
 
-Then, if the issue appears in the official Telegram client too, please submit it to the officials, (be careful not to show NekoX in the description and screenshots, the official developers doesn't like us!).
+Then, if the issue appears in the official Telegram client too, please submit it to the officials, (be careful not to show custom clients in the description and screenshots).
 
 Then, submit it to our [bot](https://t.me/OrIssuesBot).
 
