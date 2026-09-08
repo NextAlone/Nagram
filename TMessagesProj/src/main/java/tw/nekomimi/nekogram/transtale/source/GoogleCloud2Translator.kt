@@ -1,5 +1,6 @@
 package tw.nekomimi.nekogram.transtale.source
 
+import cn.hutool.http.HtmlUtil
 import io.ktor.http.ContentType
 import org.json.JSONArray
 import org.telegram.messenger.LocaleController
@@ -45,7 +46,7 @@ object GoogleCloud2Translator : Translator {
 
         if (innerArr.length() == 0) error("Empty translation result")
 
-        return innerArr.getString(0).replace("<br h=114514>", "\n")
+        return HtmlUtil.unescape(innerArr.getString(0).replace("<br h=114514>", "\n"))
 
     }
 
