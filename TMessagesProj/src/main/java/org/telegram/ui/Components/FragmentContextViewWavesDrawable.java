@@ -49,13 +49,15 @@ public class FragmentContextViewWavesDrawable {
     Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     Path path = new Path();
 
+    private final LineBlobDrawable[] inu_bottomWaves = { new LineBlobDrawable(7), new LineBlobDrawable(8) };
+
     public FragmentContextViewWavesDrawable() {
         for (int i = 0; i < 4; i++) {
             states[i] = new WeavingState(i);
         }
     }
 
-    public void draw(float left, float top, float right, float bottom, Canvas canvas, FragmentContextView parentView, float progress) {
+    public void draw(float left, float top, float right, float bottom, Canvas canvas, FragmentContextView parentView, float progress, float radius) {
         boolean update;
         checkColors();
         if (parentView == null) {
@@ -154,12 +156,33 @@ public class FragmentContextViewWavesDrawable {
                 canvas.save();
 
                 canvas.clipPath(path);
-                canvas.drawRoundRect(left, top, right, bottom, dp(18), dp(18), paint);
+                canvas.drawRoundRect(left, top, right, bottom, radius, radius, paint);
                 canvas.restore();
             } else {
-                canvas.drawRoundRect(left, top, right, bottom, dp(18), dp(18), paint);
+                canvas.drawRoundRect(left, top, right, bottom, radius, radius, paint);
             }
         }
+    }
+
+    public boolean inu_drawBottomWaves(Canvas canvas, float left, float top, float right, float height, float alpha) {
+        if (currentState == null || !LiteMode.isEnabled(LiteMode.FLAG_CALLS_ANIMATIONS)) {
+            return false;
+        }
+        checkColors();
+        currentState.setToPaint(paint);
+        paint.setAlpha((int) (76 * alpha));
+
+        canvas.save();
+        canvas.translate(left, top);
+        canvas.scale(1f, -1f, 0, height / 2f);
+        for (LineBlobDrawable wave : inu_bottomWaves) {
+            wave.minRadius = 0;
+            wave.maxRadius = dp(3) + dp(9) * amplitude;
+            wave.update(amplitude, 0.7f);
+            wave.draw(0, -dp(6) * amplitude2, right - left, height, canvas, paint, 0, 1f);
+        }
+        canvas.restore();
+        return true;
     }
 
     float pressedProgress;

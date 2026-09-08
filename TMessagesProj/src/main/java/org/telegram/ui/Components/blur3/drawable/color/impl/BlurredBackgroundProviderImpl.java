@@ -14,6 +14,7 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.Theme;
+import desu.inugram.helpers.theme.NonIslandHelper;
 import org.telegram.ui.Components.blur3.drawable.color.BlurredBackgroundProvider;
 import org.telegram.ui.Components.blur3.drawable.color.BlurredBackgroundProviderBuilder;
 
@@ -157,7 +158,7 @@ public class BlurredBackgroundProviderImpl {
     }
 
     public static BlurredBackgroundProvider topPanelChatActivity(Theme.ResourcesProvider resourcesProvider) {
-        return new BlurredBackgroundProviderBuilder(resourcesProvider)
+        BlurredBackgroundProviderBuilder b = new BlurredBackgroundProviderBuilder(resourcesProvider)
                 .setBackgroundColor((r, isDark) -> {
                     if (!checkBlurEnabled(resourcesProvider)) {
                         return ColorUtils.setAlphaComponent(Theme.getColor(isDark ?
@@ -167,13 +168,15 @@ public class BlurredBackgroundProviderImpl {
                     final float alpha = LiteMode.isEnabled(LiteMode.FLAG_LIQUID_GLASS) ? 0.85f : 0.76f;
                     final int colorBg = Theme.getColor(Theme.key_chat_topPanelBackground, r);
                     return Theme.multAlpha(colorBg, alpha);
-                })
-                .setStrokeColorTop(0xFFFFFFFF, 0x20FFFFFF)
+                });
+        if (!NonIslandHelper.chatElements()) {
+            b.setStrokeColorTop(0xFFFFFFFF, 0x20FFFFFF)
                 .setStrokeColorBottom(0xFFFFFFFF, 0x14FFFFFF)
                 .setShadowColor(0x20000000, 0)
                 //.setShadowLayer(dpf2(10 / 3f), 0, dpf2(2 / 3f))
-                .setStrokeWidth(dpf2(0.55f), dpf2(0.55f))
-                .build();
+                .setStrokeWidth(dpf2(0.55f), dpf2(0.55f));
+        }
+        return b.build();
     }
 
     public static BlurredBackgroundProvider topPanelChatActivityTags(Theme.ResourcesProvider resourcesProvider) {

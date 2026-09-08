@@ -15,6 +15,15 @@ public class ChatActivityEnterViewAnimatedIconView extends RLottieImageView {
     private State currentState;
     private TransitState animatingState;
     private final int sizeDp;
+    public boolean inu_legacy = desu.inugram.helpers.theme.NonIslandHelper.chatElements();
+
+    private int inu_resource(TransitState state) {
+        if (inu_legacy) {
+            if (state == TransitState.VOICE_TO_VIDEO) return R.raw.inu_voice_to_video;
+            if (state == TransitState.VIDEO_TO_VOICE) return R.raw.inu_video_to_voice;
+        }
+        return state.resource;
+    }
 
     private final Map<TransitState, RLottieDrawable> stateMap = new HashMap<TransitState, RLottieDrawable>() {
         @Nullable
@@ -23,7 +32,7 @@ public class ChatActivityEnterViewAnimatedIconView extends RLottieImageView {
             RLottieDrawable obj = super.get(key);
             if (obj == null) {
                 TransitState state = (TransitState) key;
-                int res = state.resource;
+                int res = inu_resource(state);
                 RLottieDrawable rLottieDrawable = new RLottieDrawable(res, String.valueOf(res), AndroidUtilities.dp(sizeDp), AndroidUtilities.dp(sizeDp));
                 put(state, rLottieDrawable);
                 return rLottieDrawable;
@@ -57,7 +66,7 @@ public class ChatActivityEnterViewAnimatedIconView extends RLottieImageView {
                 RLottieDrawable drawable = stateMap.get(getAnyState(currentState));
                 drawable.stop();
 
-                drawable.setProgress(state == State.VOICE ? 0.5f : 0, false);
+                drawable.setProgress(!inu_legacy && state == State.VOICE ? 0.5f : 0, false);
                 setAnimation(drawable);
             }
         } else {
@@ -69,10 +78,10 @@ public class ChatActivityEnterViewAnimatedIconView extends RLottieImageView {
             animatingState = transitState;
             RLottieDrawable drawable = stateMap.get(transitState);
             drawable.stop();
-            if (transitState == TransitState.VIDEO_TO_VOICE) {
+            if (!inu_legacy && transitState == TransitState.VIDEO_TO_VOICE) {
                 drawable.setCustomEndFrame(30);
                 drawable.setProgress(0, false);
-            } else if (transitState == TransitState.VOICE_TO_VIDEO) {
+            } else if (!inu_legacy && transitState == TransitState.VOICE_TO_VIDEO) {
                 drawable.setCustomEndFrame(60);
                 drawable.setProgress(0.5f, false);
             } else {

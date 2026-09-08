@@ -763,6 +763,7 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
 
     private boolean glassMode;
     public void setGlassMode() {
+        if (desu.inugram.helpers.theme.NonIslandHelper.chatElements()) return;
         if (titleTextView != null) {
             titleTextView.setTextSizePx(dp(17.5f));
         }

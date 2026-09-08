@@ -451,6 +451,24 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView implements T
         backgroundDrawable.setCallback(this);
     }
 
+    public boolean inu_nonIsland;
+    public desu.inugram.ui.BlurBehindHelper inu_blurBehindHelper;
+    public void inu_makeNonIsland(desu.inugram.ui.BlurBehindHelper blurBehindHelper) {
+        inu_nonIsland = true;
+        inu_blurBehindHelper = blurBehindHelper;
+        setPadding(0, 0, 0, 0);
+        setClipToPadding(false);
+        tabsContainer.setPadding(0, 0, 0, 0);
+        backgroundDrawable.setRadius(0);
+        backgroundDrawable.setPadding(0);
+        float rad = AndroidUtilities.dpf2(3);
+        selectorDrawable.setCornerRadii(new float[]{rad, rad, rad, rad, 0, 0, 0, 0});
+        updateColors();
+        checkBoundsAndClipping();
+    }
+
+    public desu.inugram.ui.TabsPillDrawer inu_pill;
+
     public final Path clipPath = new Path();
     private final RectF prevRect = new RectF();
     private final RectF rect = new RectF();
@@ -459,6 +477,7 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView implements T
     private final AnimatedFloat open = new AnimatedFloat(this, 420, CubicBezierInterpolator.EASE_OUT_QUINT);
 
     private void checkBoundsAndClipping() {
+        if (inu_nonIsland) return;
         final float rectT = this.rectT.set(1f);
         rect.set(getPaddingLeft(), 0, getMeasuredWidth() - getPaddingRight(), getMeasuredHeight());
         rect.inset(dp(7), dp(7));
@@ -656,15 +675,29 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView implements T
             TextView tab = (TextView) tabsContainer.getChildAt(a);
             tab.setTextColor(processColor(Theme.getColor(currentPosition == a ? activeTextColorKey : unactiveTextColorKey, resourcesProvider)));
 //            tab.setBackground(Theme.createSelectorDrawable(Theme.multAlpha(processColor(Theme.getColor(activeTextColorKey, resourcesProvider)), .15f), 3));
-            tab.setBackground(
-                new InsetDrawable(
-                    Theme.createSelectorDrawable(Theme.multAlpha(processColor(Theme.getColor(activeTextColorKey, resourcesProvider)), .15f), Theme.RIPPLE_MASK_ROUNDRECT_6DP, dp(14)),
-                    dp(4), dp(4), dp(4), dp(4)
-                )
-            );
+            if (inu_nonIsland) {
+                tab.setBackground(
+                    new desu.inugram.ui.LabelRippleDrawable(
+                        tab,
+                        Theme.createSelectorDrawable(Theme.multAlpha(processColor(Theme.getColor(activeTextColorKey, resourcesProvider)), .15f), Theme.RIPPLE_MASK_ROUNDRECT_6DP, dp(16)),
+                        dp(12), dp(6)
+                    )
+                );
+            } else {
+                tab.setBackground(
+                    new InsetDrawable(
+                        Theme.createSelectorDrawable(Theme.multAlpha(processColor(Theme.getColor(activeTextColorKey, resourcesProvider)), .15f), Theme.RIPPLE_MASK_ROUNDRECT_6DP, dp(14)),
+                        dp(4), dp(4), dp(4), dp(4)
+                    )
+                );
+            }
         }
 //        selectorDrawable.setColor(processColor(Theme.getColor(tabLineColorKey, resourcesProvider)));
-        selectorDrawable.setColor(Theme.multAlpha(processColor(Theme.getColor(activeTextColorKey, resourcesProvider)), .15f));
+        if (inu_nonIsland) {
+            selectorDrawable.setColor(processColor(Theme.getColor(tabLineColorKey, resourcesProvider)));
+        } else {
+            selectorDrawable.setColor(Theme.multAlpha(processColor(Theme.getColor(activeTextColorKey, resourcesProvider)), .15f));
+        }
         invalidate();
     }
 
@@ -697,6 +730,20 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView implements T
 
     @Override
     protected void dispatchDraw(@NonNull Canvas canvas) {
+        if (inu_pill != null) {
+            inu_pill.drawBackgroundAndClip(canvas, processColor(Theme.getColor(Theme.key_windowBackgroundWhite, resourcesProvider)));
+            super.dispatchDraw(canvas);
+            canvas.restore();
+            return;
+        }
+        if (inu_nonIsland) {
+            canvas.save();
+            canvas.translate(getScrollX(), 0);
+            inu_blurBehindHelper.draw(canvas);
+            canvas.restore();
+            super.dispatchDraw(canvas);
+            return;
+        }
         canvas.save();
         if (backgroundDrawable != null) {
             if (rectT.set(1f) < 1) {
@@ -715,6 +762,7 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView implements T
 
     private boolean isOpen = true;
     public void setOpen(boolean open) {
+        if (inu_nonIsland || inu_pill != null) return;
         if (open == isOpen) return;
 
         isOpen = open;
@@ -740,7 +788,7 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView implements T
             final boolean result = super.drawChild(canvas, child, drawingTime);
 
             final int height = getMeasuredHeight();
-            float l = indicatorX + indicatorXAnimationDx;
+            float l = indicatorX + indicatorXAnimationDx + tabsContainer.getTranslationX();
             float r = l + indicatorWidth + indicatorWidthAnimationDx;
 
             final View current = tabsContainer.getChildAt(currentPosition);
@@ -756,12 +804,34 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView implements T
 //                (int) r,
 //                height
 //            );
-            selectorDrawable.setBounds(
-                    getPaddingLeft() + (int) l + dp(4),
-                    getPaddingTop() + dp(4),
-                    getPaddingLeft() + (int) r - dp(4),
-                    height - getPaddingBottom() - dp(4)
-            );
+            if (inu_pill != null) {
+                final float t = inu_pill.getDockedProgress();
+                final float centerX = getPaddingLeft() + l + (r - l) / 2f;
+                final float barHalf = Math.max(dp(24), inu_currentLabelWidth()) / 2f;
+                final float pillHalf = (r - l) / 2f - dp(4);
+                final float half = AndroidUtilities.lerp(pillHalf, barHalf, t);
+                final float dockExtra = t * dp(4);
+                final float top = AndroidUtilities.lerp(getPaddingTop() + dp(4), height - getPaddingBottom() - dp(3), t) + dockExtra;
+                final float bottom = AndroidUtilities.lerp(height - getPaddingBottom() - dp(4), height - getPaddingBottom(), t) + dockExtra;
+                final float topRad = AndroidUtilities.lerp(dp(14), dp(3), t);
+                final float botRad = AndroidUtilities.lerp(dp(14), 0, t);
+                selectorDrawable.setCornerRadii(new float[]{topRad, topRad, topRad, topRad, botRad, botRad, botRad, botRad});
+                selectorDrawable.setColor(androidx.core.graphics.ColorUtils.blendARGB(
+                    Theme.multAlpha(processColor(Theme.getColor(activeTextColorKey, resourcesProvider)), .15f),
+                    processColor(Theme.getColor(tabLineColorKey, resourcesProvider)),
+                    t
+                ));
+                selectorDrawable.setBounds((int) (centerX - half), (int) top, (int) (centerX + half), (int) bottom);
+            } else if (inu_nonIsland) {
+                desu.inugram.helpers.theme.NonIslandHelper.setMd3TabIndicatorBounds(selectorDrawable, getPaddingLeft() + l, r - l, height, 0f);
+            } else {
+                selectorDrawable.setBounds(
+                        getPaddingLeft() + (int) l + dp(4),
+                        getPaddingTop() + dp(4),
+                        getPaddingLeft() + (int) r - dp(4),
+                        height - getPaddingBottom() - dp(4)
+                );
+            }
             if (NaConfig.INSTANCE.getTabStyleStroke().Bool()) {
                 selectorDrawable.setStroke(AndroidUtilities.dp(1), processColor(Theme.getColor(activeTextColorKey, resourcesProvider)));
             } else {
@@ -942,8 +1012,38 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView implements T
         }
     }
 
+    private float inu_labelWidth(View child) {
+        if (child instanceof TextView) {
+            Layout layout = ((TextView) child).getLayout();
+            if (layout != null) return (float) Math.ceil(layout.getLineWidth(0));
+        }
+        return child != null ? child.getWidth() : 0;
+    }
+
+    private float inu_currentLabelWidth() {
+        final int count = tabsContainer.getChildCount();
+        if (count == 0) return 0;
+        final float center = indicatorX + indicatorWidth / 2f;
+        View prev = null;
+        for (int i = 0; i < count; i++) {
+            final View child = tabsContainer.getChildAt(i);
+            final float c = child.getLeft() + child.getWidth() / 2f;
+            if (center <= c) {
+                if (prev == null) return inu_labelWidth(child);
+                final float pc = prev.getLeft() + prev.getWidth() / 2f;
+                final float f = c == pc ? 1f : Math.max(0f, Math.min(1f, (center - pc) / (c - pc)));
+                return AndroidUtilities.lerp(inu_labelWidth(prev), inu_labelWidth(child), f);
+            }
+            prev = child;
+        }
+        return inu_labelWidth(tabsContainer.getChildAt(count - 1));
+    }
+
     private int getChildWidth(TextView child) {
         Layout layout = child.getLayout();
+        if (inu_nonIsland && layout != null) {
+            return (int) Math.ceil(layout.getLineWidth(0)) + dp(4);
+        }
 //        if (layout != null) {
 //            return (int) Math.ceil(layout.getLineWidth(0)) + dp(2);
 //        } else {

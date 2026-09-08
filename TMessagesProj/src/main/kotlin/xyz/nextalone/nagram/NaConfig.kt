@@ -1367,6 +1367,30 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val nonIslandFoldersBar =
+        addConfig(
+            "InuNonIslandFoldersBar",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val nonIslandSharedMediaTabs =
+        addConfig(
+            "InuNonIslandSharedMediaTabs",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val nonIslandGlobalSearch =
+        addConfig(
+            "InuNonIslandGlobalSearch",
+            ConfigItem.configTypeBool,
+            false
+        )
+    val nonIslandChatElements =
+        addConfig(
+            "InuNonIslandChatElements",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

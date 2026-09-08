@@ -1595,6 +1595,13 @@ public class ViewPagerFixed extends FrameLayout {
         ValueAnimator tabsAnimator;
         private float animationValue;
 
+        public boolean inu_md3Tabs;
+
+        public void inu_applyMd3Style() {
+            inu_md3Tabs = true;
+            desu.inugram.helpers.theme.NonIslandHelper.applyMd3TabsStyle(selectorDrawable, listView, Theme.getColor(selectorColorKey, resourcesProvider));
+        }
+
         public TabsView(Context context, boolean hasStableIds, int tabsSelectorType, Theme.ResourcesProvider resourcesProvider) {
             super(context);
             this.resourcesProvider = resourcesProvider;
@@ -2049,7 +2056,10 @@ public class ViewPagerFixed extends FrameLayout {
                             indicatorX = (int) AndroidUtilities.lerp(lastDrawnIndicatorX, indicatorX, indicatorProgress2);
                             indicatorWidth = (int) AndroidUtilities.lerp(lastDrawnIndicatorW, indicatorWidth, indicatorProgress2);
                         }
-                        if (selectorType == SELECTOR_TYPE_BUBBLE_STYLE) {
+                        if (inu_md3Tabs) {
+                            desu.inugram.helpers.theme.NonIslandHelper.setMd3TabIndicatorBounds(selectorDrawable, indicatorX, indicatorWidth, height, hideProgress);
+                            selectorDrawable.draw(canvas);
+                        } else if (selectorType == SELECTOR_TYPE_BUBBLE_STYLE) {
                             final float TAB_INTERNAL_PADDING = 12.5f;
                             final float add = additionalTabWidth / 2f;
                             final int y = height / 2 - dp(14);

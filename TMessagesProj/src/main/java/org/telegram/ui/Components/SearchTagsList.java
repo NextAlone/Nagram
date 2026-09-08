@@ -933,6 +933,9 @@ public class SearchTagsList extends FrameLayout implements NotificationCenter.No
                 canvas.clipPath(clipPath);
                 blurredDrawable.draw(canvas);
                 strokePaint.setColor((resourcesProvider != null ? resourcesProvider.isDark() : Theme.isCurrentThemeDark()) ? 0x28FFFFFF : 0xFFFFFFFF);
+                if (desu.inugram.helpers.theme.NonIslandHelper.chatElements() && !(resourcesProvider != null ? resourcesProvider.isDark() : Theme.isCurrentThemeDark())) {
+                    strokePaint.setColor(0x1E000000);
+                }
                 canvas.drawPath(clipPath, strokePaint);
                 canvas.restore();
             }

@@ -52,12 +52,12 @@ public class ChatActivityBlurredRoundButton extends FrameLayout implements Facto
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        backgroundDrawable.setBounds(0, 0, w, h);
+        if (backgroundDrawable != null) backgroundDrawable.setBounds(0, 0, w, h);
     }
 
     @Override
     public void draw(@NonNull Canvas canvas) {
-        backgroundDrawable.draw(canvas);
+        if (backgroundDrawable != null) backgroundDrawable.draw(canvas);
         super.draw(canvas);
     }
 
@@ -121,8 +121,10 @@ public class ChatActivityBlurredRoundButton extends FrameLayout implements Facto
     private BlurredBackgroundDrawable backgroundDrawable;
     public void setBlurredBackgroundDrawable(BlurredBackgroundDrawable drawable) {
         backgroundDrawable = drawable;
+        if (backgroundDrawable != null) {
         backgroundDrawable.setPadding(dp(CLICK_ZONE_MARGIN));
         backgroundDrawable.setRadius(dp(BUTTON_SIZE / 2f));
+        }
     }
 
     public void showLoading(boolean loading, boolean animated) {

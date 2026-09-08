@@ -36,9 +36,11 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.ui.ActionBar.ActionBarLayout;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import desu.inugram.helpers.theme.NonIslandHelper;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.NotificationsCheckCell;
@@ -253,6 +255,20 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                     LocaleController.getString(R.string.MainTabsStyleTextFree),
                     LocaleController.getString(R.string.Disable),
             }, null));
+    private final AbstractConfigCell nonIslandUiRow = cellGroup.appendCell(new ConfigCellSelectBox("InuNonIslandUI", null, null, () -> {
+        if (getParentActivity() == null) return;
+        AlertDialog dialog = showConfigMenuAlert(getParentActivity(), "InuNonIslandUI", new ArrayList<>() {{
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getNonIslandFoldersBar()));
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getNonIslandSharedMediaTabs()));
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getNonIslandGlobalSearch()));
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getNonIslandChatElements()));
+        }});
+        dialog.setOnDismissListener(d -> {
+            NonIslandHelper.syncChatInputRowHeight();
+            tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+        });
+        showDialog(dialog);
+    }));
     private final AbstractConfigCell hideTabBarPermissionWarningsRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getHideTabBarPermissionWarnings()));
     private final AbstractConfigCell showRecentChatsOnTabLongPressRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowRecentChatsOnTabLongPress()));
     private final AbstractConfigCell customDialogsMenuRow = cellGroup.appendCell(new ConfigCellSelectBox(NaConfig.INSTANCE.getCustomDialogsMenu().getKey(), null, null, () -> {

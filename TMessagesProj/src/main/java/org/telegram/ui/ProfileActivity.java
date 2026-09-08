@@ -1801,7 +1801,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (target == listView && sharedMediaLayoutAttached) {
                     RecyclerListView innerListView = sharedMediaLayout.getCurrentListView();
                     int top = sharedMediaLayout.getTop();
-                    if (top == 0) {
+                    if (top == -sharedMediaLayout.inu_dockOffset()) {
                         consumed[1] = dyUnconsumed;
                         innerListView.scrollBy(0, dyUnconsumed);
                     }
@@ -1838,7 +1838,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 int t = sharedMediaLayout.getTop();
                 if (dy < 0) {
                     boolean scrolledInner = false;
-                    if (t <= 0) {
+                    if (t <= -sharedMediaLayout.inu_dockOffset()) {
                         RecyclerListView innerListView = sharedMediaLayout.getCurrentListView();
                         if (innerListView != null) {
                             LinearLayoutManager linearLayoutManager = (LinearLayoutManager) innerListView.getLayoutManager();
@@ -5859,7 +5859,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 nameTextView[a].setTextColor(getThemedColor(Theme.key_actionBarDefaultTitle));
             }
             nameTextView[a].setPadding(0, AndroidUtilities.dp(6), 0, AndroidUtilities.dp(a == 0 ? 12 : 4));
-            nameTextView[a].setTextSizePx(dp(17.5f));
+            nameTextView[a].setTextSizePx(dp(desu.inugram.helpers.theme.NonIslandHelper.chatElements() ? 18 : 17.5f));
             nameTextView[a].setGravity(Gravity.LEFT);
             nameTextView[a].setTypeface(AndroidUtilities.bold());
             nameTextView[a].setLeftDrawableTopPadding(-AndroidUtilities.dp(1.3f));
@@ -5940,7 +5940,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
             onlineTextView[a].setEllipsizeByGradient(true);
             onlineTextView[a].setTextColor(applyPeerColor(getThemedColor(Theme.key_actionBarDefaultSubtitle), true, null));
-            onlineTextView[a].setTextSizePx(dp(13.5f));
+            onlineTextView[a].setTextSizePx(dp(desu.inugram.helpers.theme.NonIslandHelper.chatElements() ? 14 : 13.5f));
             onlineTextView[a].setGravity(Gravity.LEFT);
             onlineTextView[a].setAlpha(a == 0 ? 0.0f : 1.0f);
             onlineTextView[a].setPivotX(dp(8));
@@ -5985,7 +5985,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             protected TextView createTextView() {
                 TextView textView = new TextView(context);
                 textView.setTextColor(getThemedColor(Theme.key_player_actionBarSubtitle));
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, AndroidUtilities.dp(13.5f));
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, AndroidUtilities.dp(desu.inugram.helpers.theme.NonIslandHelper.chatElements() ? 14 : 13.5f));
                 textView.setSingleLine(true);
                 textView.setEllipsize(TextUtils.TruncateAt.END);
                 textView.setGravity(Gravity.LEFT);
@@ -6114,7 +6114,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (participantsMap != null && !usersEndReached && layoutManager.findLastVisibleItemPosition() > membersEndRow - 8) {
                     getChannelParticipants(false);
                 }
-                sharedMediaLayout.setPinnedToTop(sharedMediaLayout.getY() <= 0);
+                sharedMediaLayout.setPinnedToTop(sharedMediaLayout.getY() <= -sharedMediaLayout.inu_dockOffset());
                 updateBottomButtonY();
             }
         });
@@ -8463,7 +8463,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         boolean searchVisible = imageUpdater == null && actionBar.isSearchFieldVisible();
         if (sharedMediaRow != -1 && !searchVisible) {
             holder = (RecyclerListView.Holder) listView.findViewHolderForAdapterPosition(sharedMediaRow);
-            mediaHeaderVisible = holder != null && holder.itemView.getTop() <= 0;
+            mediaHeaderVisible = holder != null && holder.itemView.getTop() <= -sharedMediaLayout.inu_dockOffset();
         } else {
             mediaHeaderVisible = searchVisible;
         }
@@ -8698,8 +8698,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 continue;
             }
 
-            float nameX = lerp((prevAvatarTranslation - dp(109) + dp(48)), backwardInitialValues[12 + a * 2], backwardDiff);
-            float onlineX = lerp((prevAvatarTranslation - dp(109) + dp(48)), backwardInitialValues[12 + a * 2 + 1], backwardDiff);
+            float nameX = lerp((prevAvatarTranslation - dp(109) + dp(desu.inugram.helpers.theme.NonIslandHelper.chatElements() ? 54 : 48)), backwardInitialValues[12 + a * 2], backwardDiff);
+            float onlineX = lerp((prevAvatarTranslation - dp(109) + dp(desu.inugram.helpers.theme.NonIslandHelper.chatElements() ? 54 : 48)), backwardInitialValues[12 + a * 2 + 1], backwardDiff);
 
             nameTextView[a].setTranslationX(nameX);
             nameTextView[a].setTranslationY(nameY);
@@ -9065,9 +9065,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 float avY = (actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + ActionBar.getCurrentActionBarHeight() / 2.0f - 21 * AndroidUtilities.density + actionBar.getTranslationY();
 //                metaball.setVisibility(View.GONE);
 
-                nameTextView[0].setTranslationX((prevAvatarTranslation - dp(109) + dp(48)));
+                nameTextView[0].setTranslationX((prevAvatarTranslation - dp(109) + dp(desu.inugram.helpers.theme.NonIslandHelper.chatElements() ? 54 : 48)));
                 nameTextView[0].setTranslationY((float) Math.floor(avY) + AndroidUtilities.dp(1.3f));
-                onlineTextView[0].setTranslationX((prevAvatarTranslation - dp(109) + dp(48)));
+                onlineTextView[0].setTranslationX((prevAvatarTranslation - dp(109) + dp(desu.inugram.helpers.theme.NonIslandHelper.chatElements() ? 54 : 48)));
                 onlineTextView[0].setTranslationY((float) Math.floor(avY) + AndroidUtilities.dp(24));
                 nameTextView[0].setScaleX(1.0f);
                 nameTextView[0].setScaleY(1.0f);
@@ -9183,7 +9183,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 nameY = avatarBottom + dp(1.3f) + dp(7) * diff + titleAnimationsYDiff * (1f - avatarAnimationProgress);
                 onlineY = avatarBottom + dp(24) + (float) Math.floor(11 * AndroidUtilities.density) * diff;
                 idY = avatarBottom + dp(32) + (float) Math.floor(22 * AndroidUtilities.density) * diff;
-                final float minimizedX = openAnimationInProgress ? (prevAvatarTranslation - dp(109) + dp(48)) : -dpf2(42 + 4);
+                final float minimizedX = openAnimationInProgress ? (prevAvatarTranslation - dp(109) + dp(desu.inugram.helpers.theme.NonIslandHelper.chatElements() ? 54 : 48)) : -dpf2(42 + 4);
 
                 if (showStatusButton != null) {
                     showStatusButton.setAlpha((int) (0xFF * diff));
@@ -16185,10 +16185,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (animated) {
                 LinearSmoothScrollerCustom linearSmoothScroller = new LinearSmoothScrollerCustom(getContext(), LinearSmoothScrollerCustom.POSITION_TOP, .6f);
                 linearSmoothScroller.setTargetPosition(sharedMediaRow);
-                linearSmoothScroller.setOffset(-listView.getPaddingTop());
+                linearSmoothScroller.setOffset(-listView.getPaddingTop() - sharedMediaLayout.inu_dockOffset());
                 layoutManager.startSmoothScroll(linearSmoothScroller);
             } else {
-                layoutManager.scrollToPositionWithOffset(sharedMediaRow, -listView.getPaddingTop());
+                layoutManager.scrollToPositionWithOffset(sharedMediaRow, -listView.getPaddingTop() - sharedMediaLayout.inu_dockOffset());
             }
         }
     }

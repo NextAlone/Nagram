@@ -59,7 +59,7 @@ public class BotAdView extends FrameLayout {
         layout = new LinearLayout(context);
         layout.setOrientation(LinearLayout.HORIZONTAL);
         layout.setPadding(dp(16), dp(5), dp(8), dp(5));
-        ScaleStateListAnimator.apply(layout, .025f, 1.4f);
+        if (!desu.inugram.helpers.theme.NonIslandHelper.chatElements()) ScaleStateListAnimator.apply(layout, .025f, 1.4f);
         addView(layout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.FILL));
 
         setBackground(Theme.createRadSelectorDrawable(Theme.multAlpha(Theme.getColor(Theme.key_featuredStickers_addButton, resourcesProvider), .1f), 0, 0));

@@ -30,6 +30,7 @@ import org.telegram.ui.Components.chat.buttons.ChatActivityBlurredRoundButton;
 
 import java.util.HashSet;
 
+import desu.inugram.helpers.theme.NonIslandHelper;
 import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
 
@@ -136,13 +137,16 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
             }
 
             ScaleStateListAnimator.apply(button, .13f, 2f);
+            if (NonIslandHelper.chatElements()) {
+                button.setBlurredBackgroundDrawable(null);
+            }
             button.setVisibility(GONE);
             button.setOnClickListener(v -> {
                 if (onClickListeners[buttonId] != null) {
                     onClickListeners[buttonId].onClick(v);
                 }
             });
-            addView(button, LayoutHelper.createFrame(56, 56));
+            addView(button, LayoutHelper.createFrame(56, 56, Gravity.CENTER_VERTICAL | Gravity.LEFT));
 
             buttonHolders[buttonId] = new ButtonHolder(button, visibilityAnimator);
             checkButtonsPositionsAndVisibility();
@@ -153,10 +157,15 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
 
     private BlurredBackgroundDrawable containerDrawable;
     public void setupDrawableForContainer() {
+        final boolean flat = NonIslandHelper.chatElements();
+        if (flat) {
+            // flat full-width bar: no rounded clip so the ripple/background fills edge-to-edge
+            container.setOutlineProvider(ViewOutlineProviderImpl.boundsWithPaddingRoundRect(0, 0));
+        }
         containerDrawable = blurredBackgroundDrawableViewFactory.create(this)
             .setColorProvider(colorProvider)
-            .setRadius(dp(22))
-            .setPadding(dp(6));
+            .setRadius(dp(flat ? 0 : 22))
+            .setPadding(dp(flat ? 0 : 6));
     }
 
     public boolean isButtonVisible(final int buttonId) {
@@ -278,6 +287,11 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
                 continue;
             }
             paddingRight += holder.visibilityAnimator.getValue() ? dp(44 + 10) : 0;
+        }
+
+        if (NonIslandHelper.chatElements() && containerDrawable != null) {
+            // flat full-width bar (admin log): container fills the bar so it isn't click-through
+            paddingLeft = paddingRight = 0;
         }
 
         final MarginLayoutParams lp = (MarginLayoutParams) container.getLayoutParams();
@@ -414,10 +428,15 @@ public class ChatActivityChannelButtonsLayout extends FrameLayout implements Fac
     @Override
     protected boolean drawChild(@NonNull Canvas canvas, View child, long drawingTime) {
         if (child == container && containerDrawable != null) {
-            tmpRect.set(
-                totalWidthLeft + dp(1), 0,
-                getMeasuredWidth() - dp(1) - totalWidthRight,
-                getMeasuredHeight());
+            if (NonIslandHelper.chatElements()) {
+                // flat full-width bar, spanning bottom padding (nav bar inset) too
+                tmpRect.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
+            } else {
+                tmpRect.set(
+                    totalWidthLeft + dp(1), 0,
+                    getMeasuredWidth() - dp(1) - totalWidthRight,
+                    getMeasuredHeight());
+            }
 
             tmpRect.round(AndroidUtilities.rectTmp2);
             containerDrawable.setBounds(AndroidUtilities.rectTmp2);

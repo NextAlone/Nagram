@@ -71,6 +71,7 @@ import org.telegram.ui.TopicCreateFragment;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import desu.inugram.helpers.theme.NonIslandHelper;
 import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
 import me.vkryl.core.BitwiseUtils;
@@ -79,8 +80,8 @@ import me.vkryl.core.BitwiseUtils;
 public class TopicsTabsView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, FactorAnimator.Target {
     public static final int ANIMATOR_ID_TOPICS_VISIBILITY = 0;
 
-    public static final int TOP_TABS_HEIGHT = 36;
-    public static final int SIDE_TABS_WIDTH = 64;
+    public static int TOP_TABS_HEIGHT = 36;
+    public static int SIDE_TABS_WIDTH = 64;
 
     private final BoolAnimator animatorTopicsVisibility = new BoolAnimator(ANIMATOR_ID_TOPICS_VISIBILITY,
         this, CubicBezierInterpolator.EASE_OUT_QUINT, 380L, true);
@@ -123,11 +124,12 @@ public class TopicsTabsView extends FrameLayout implements NotificationCenter.No
         setClipToPadding(true);
         setWillNotDraw(false);
 
+        final int m = NonIslandHelper.chatElements() ? 0 : 7;
         topTabsContainer = new FrameLayout(context);
-        addView(topTabsContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, TOP_TABS_HEIGHT, Gravity.TOP | Gravity.FILL_HORIZONTAL, 7, 7, 7, 7));
+        addView(topTabsContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, TOP_TABS_HEIGHT, Gravity.TOP | Gravity.FILL_HORIZONTAL, m, m, m, m));
 
         sideTabsContainer = new FrameLayout(context);
-        addView(sideTabsContainer, LayoutHelper.createFrame(64, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.FILL_VERTICAL, 7, 7, 7, 7));
+        addView(sideTabsContainer, LayoutHelper.createFrame(64, LayoutHelper.MATCH_PARENT, Gravity.LEFT | Gravity.FILL_VERTICAL, m, m, m, m));
 
         topTabs = new UniversalRecyclerView(context, currentAccount, 0, this::fillHorizontalTabs, this::onTabClick, this::onTabLongClick, resourcesProvider) {
             private final GradientClip clip = new GradientClip();
@@ -140,7 +142,7 @@ public class TopicsTabsView extends FrameLayout implements NotificationCenter.No
             protected void dispatchDraw(Canvas canvas) {
                 final float clipAlphaL = animatedClipL.set(canScrollHorizontally(-1));
                 final float clipAlphaR = animatedClipR.set(canScrollHorizontally(1));
-                final boolean needClip = clipAlphaL > 0 || clipAlphaR > 0;
+                final boolean needClip = (clipAlphaL > 0 || clipAlphaR > 0) && !NonIslandHelper.chatElements();
                 if (needClip) {
                     canvas.saveLayerAlpha(0, 0, getWidth(), getHeight(), 0xFF, Canvas.ALL_SAVE_FLAG);
                 }
@@ -440,7 +442,7 @@ public class TopicsTabsView extends FrameLayout implements NotificationCenter.No
             sideMenuBackgroundDrawable.setBounds(
                     (int) (sideTabsContainer.getTranslationX()),
                     (int) sideMenuBackgroundMarginTop,
-                    (int) (sideTabsContainer.getTranslationX() + dp(7 + 7 + 64)),
+                    (int) (sideTabsContainer.getTranslationX() + dp(NonIslandHelper.chatElements() ? SIDE_TABS_WIDTH : (7 + 7 + 64))),
                     (int) (getMeasuredHeight() - sideMenuBackgroundMarginBottom));
             sideMenuBackgroundDrawable.draw(canvas);
         }
@@ -448,7 +450,7 @@ public class TopicsTabsView extends FrameLayout implements NotificationCenter.No
             topMenuBackgroundDrawable.setAlpha((int) (255 * topTabsContainer.getAlpha()));
             topMenuBackgroundDrawable.setBounds(
                     0, (int) topTabsContainer.getTranslationY(),
-                    getMeasuredWidth(), (int) (topTabsContainer.getTranslationY() + dp(TOP_TABS_HEIGHT + 7 + 7)));
+                    getMeasuredWidth(), (int) (topTabsContainer.getTranslationY() + dp(NonIslandHelper.chatElements() ? TOP_TABS_HEIGHT : (TOP_TABS_HEIGHT + 7 + 7))));
             topMenuBackgroundDrawable.draw(canvas);
         }
 
@@ -480,14 +482,14 @@ public class TopicsTabsView extends FrameLayout implements NotificationCenter.No
 
     public void setSideMenuBackgroundDrawable(BlurredBackgroundDrawable sideMenuBackgroundDrawable) {
         this.sideMenuBackgroundDrawable = sideMenuBackgroundDrawable;
-        this.sideMenuBackgroundDrawable.setRadius(dp(16));
-        this.sideMenuBackgroundDrawable.setPadding(dp(7));
+        this.sideMenuBackgroundDrawable.setRadius(NonIslandHelper.chatElements() ? 0 : dp(16));
+        this.sideMenuBackgroundDrawable.setPadding(NonIslandHelper.chatElements() ? 0 : dp(7));
     }
 
     public void setTopMenuBackgroundDrawable(BlurredBackgroundDrawable sideMenuBackgroundDrawable) {
         this.topMenuBackgroundDrawable = sideMenuBackgroundDrawable;
-        this.topMenuBackgroundDrawable.setRadius(dp(18));
-        this.topMenuBackgroundDrawable.setPadding(dp(7));
+        this.topMenuBackgroundDrawable.setRadius(NonIslandHelper.chatElements() ? 0 : dp(18));
+        this.topMenuBackgroundDrawable.setPadding(NonIslandHelper.chatElements() ? 0 : dp(7));
     }
 
 
@@ -578,9 +580,9 @@ public class TopicsTabsView extends FrameLayout implements NotificationCenter.No
         topTabsContainer.setAlpha(lerp(1.0f, 0f, sidemenuT));
         topTabsContainer.setVisibility(((1f - sidemenuT) * animatorTopicsVisibility.getFloatValue()) > 0 ? View.VISIBLE : View.GONE);
         if (topicBottom) {
-            topTabsContainer.setTranslationY(getMeasuredHeight() - dp(TOP_TABS_HEIGHT + 7 + 7) - sideMenuBackgroundMarginBottom + lerp(dp(TOP_TABS_HEIGHT + 7), 0, getTabsVisibility(Position.BOTTOM)));
+            topTabsContainer.setTranslationY(getMeasuredHeight() - dp(TOP_TABS_HEIGHT + (NonIslandHelper.chatElements() ? 0 : (7 + 7))) - sideMenuBackgroundMarginBottom + lerp(dp(TOP_TABS_HEIGHT + (NonIslandHelper.chatElements() ? 0 : 7)), 0, getTabsVisibility(Position.BOTTOM)));
         } else {
-            topTabsContainer.setTranslationY(sideMenuBackgroundMarginTop + lerp(-dp(TOP_TABS_HEIGHT + 7), 0, getTabsVisibility(Position.TOP)));
+            topTabsContainer.setTranslationY(sideMenuBackgroundMarginTop + lerp(-dp(TOP_TABS_HEIGHT + (NonIslandHelper.chatElements() ? 0 : 7)), 0, getTabsVisibility(Position.TOP)));
         }
     }
 

@@ -1071,7 +1071,7 @@ public class MediaActivity extends BaseFragment implements SharedMediaLayout.Sha
         if (sharedMediaLayout.getSearchOptionsItem() != null) {
             sharedMediaLayout.getSearchOptionsItem().setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_windowBackgroundWhiteBlackText), PorterDuff.Mode.SRC_IN));
         }
-        actionBar.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+        actionBar.setBackgroundColor(Theme.getColor(desu.inugram.helpers.theme.NonIslandHelper.sharedMediaTabs() ? Theme.key_actionBarDefault : Theme.key_windowBackgroundGray));
         actionBar.setItemsColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), false);
         actionBar.setItemsColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), true);
         actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_actionBarActionModeDefaultSelector), false);

@@ -1708,6 +1708,8 @@ public class RecyclerListView extends RecyclerView implements IBlur3Capture {
             selectorDrawable = Theme.createRadSelectorDrawable(color, selectorRadius, 0);
         } else if (selectorType == 9) {
             selectorDrawable = null;
+        } else if (selectorType == 42) {
+            selectorDrawable = Theme.createRadSelectorDrawable(color, selectorRadius, selectorRadius);
         } else if (topBottomSelectorRadius > 0) {
             selectorDrawable = Theme.createRadSelectorDrawable(color, topBottomSelectorRadius, topBottomSelectorRadius);
         } else if (selectorRadius > 0 && selectorType != Theme.RIPPLE_MASK_CIRCLE_20DP) {
@@ -2398,10 +2400,15 @@ public class RecyclerListView extends RecyclerView implements IBlur3Capture {
         selectorView = sel;
         if (selectorType == 8) {
             Theme.setMaskDrawableRad(selectorDrawable, selectorRadius, 0);
+        } else if (selectorType == 42) {
+            Theme.setMaskDrawableRad(selectorDrawable, selectorRadius, selectorRadius);
         } else if (topBottomSelectorRadius > 0 && getAdapter() != null) {
             Theme.setMaskDrawableRad(selectorDrawable, position == 0 ? topBottomSelectorRadius : 0, position == getAdapter().getItemCount() - 2 ? topBottomSelectorRadius : 0);
         }
         selectorRect.set(sel.getLeft(), sel.getTop(), sel.getRight(), sel.getBottom() - bottomPadding);
+        if (selectorType == 42) {
+            desu.inugram.helpers.theme.NonIslandHelper.adjustMd3TabSelectorRect(selectorRect);
+        }
 //        selectorRect.offset((int) sel.getTranslationX(), (int) sel.getTranslationY());
 
         final boolean enabled = sel.isEnabled();

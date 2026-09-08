@@ -31,6 +31,7 @@ import androidx.dynamicanimation.animation.FloatValueHolder;
 import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.dynamicanimation.animation.SpringForce;
 import org.telegram.ui.recyclerview.ChatListItemAnimator;
+import desu.inugram.helpers.theme.NonIslandHelper;
 
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
@@ -225,7 +226,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
         swipeContainer = new WebViewSwipeContainer(context) {
             @Override
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(heightMeasureSpec) - ActionBar.getCurrentActionBarHeight() - dp(84) + measureOffsetY, MeasureSpec.EXACTLY));
+                super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(heightMeasureSpec) - ActionBar.getCurrentActionBarHeight() - dp(NonIslandHelper.chatElements() ? 52 : 84) + measureOffsetY, MeasureSpec.EXACTLY));
             }
         };
         swipeContainer.addView(webViewContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
@@ -243,7 +244,7 @@ public class ChatAttachAlertBotWebViewLayout extends ChatAttachAlert.AttachAlert
         swipeContainer.setIsKeyboardVisible(obj -> parentAlert.sizeNotifierFrameLayout.getKeyboardHeight() >= dp(20));
 
         addView(swipeContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
-        addView(progressView = new WebProgressView(context, resourcesProvider), LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM, 0, 0, 0, 84));
+        addView(progressView = new WebProgressView(context, resourcesProvider), LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM, 0, 0, 0, NonIslandHelper.chatElements() ? 52 : 84));
 
         webViewContainer.setWebViewProgressListener(progress -> {
             progressView.setLoadProgressAnimated(progress);

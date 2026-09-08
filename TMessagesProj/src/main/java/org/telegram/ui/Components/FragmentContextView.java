@@ -310,6 +310,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         delegate = fragmentContextViewDelegate;
     }
 
+    public boolean inu_flat;
+
     public CapsuleBlobDrawable getCapsuleBlobDrawable() {
         return capsuleBlobDrawable;
     }
@@ -962,6 +964,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     private void showSpeedHint() {
+        if (desu.inugram.helpers.theme.NonIslandHelper.chatElements()) {
+            return;
+        }
         if (fragment != null && getParent() instanceof ViewGroup) {
             speedHintView = new HintView(getContext(), 6, true) {
                 @Override
@@ -1365,7 +1370,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             importingImageView.setVisibility(GONE);
             importingImageView.stopAnimation();
             Theme.getFragmentContextViewWavesDrawable().addParent(this);
-            capsuleBlobDrawable.start();
+            if (!inu_flat) capsuleBlobDrawable.start();
             invalidate();
 
             for (int i = 0; i < 2; i++) {
@@ -2653,9 +2658,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             float progress = topPadding / dp((getStyleHeight()));
 
             if (collapseTransition) {
-                Theme.getFragmentContextViewWavesDrawable().draw(0, 0 + extraHeight, getMeasuredWidth(), getMeasuredHeight(), canvas, null, Math.min(progress, (1f - collapseProgress)));
+                Theme.getFragmentContextViewWavesDrawable().draw(0, 0 + extraHeight, getMeasuredWidth(), getMeasuredHeight(), canvas, null, Math.min(progress, (1f - collapseProgress)), inu_flat ? 0 : dp(18));
             } else {
-                Theme.getFragmentContextViewWavesDrawable().draw(0, 0, getMeasuredWidth(), getMeasuredHeight(), canvas, this, progress);
+                Theme.getFragmentContextViewWavesDrawable().draw(0, 0, getMeasuredWidth(), getMeasuredHeight(), canvas, this, progress, inu_flat ? 0 : dp(18));
             }
             invalidate();
         }

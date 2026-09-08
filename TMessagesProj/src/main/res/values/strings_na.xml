@@ -366,4 +366,9 @@
     <string name="MessagePreviewPollQuestion">How is the code?</string>
     <string name="MessagePreviewPollAnswerTerrible">Terrible</string>
     <string name="MessagePreviewPollAnswerWorse">Even worse</string>
+    <string name="InuNonIslandUI">Classic UI</string>
+    <string name="InuNonIslandFoldersBar">Folders bar</string>
+    <string name="InuNonIslandSharedMediaTabs">Shared media tabs</string>
+    <string name="InuNonIslandGlobalSearch">Global search</string>
+    <string name="InuNonIslandChatElements">Chat elements</string>
 </resources>

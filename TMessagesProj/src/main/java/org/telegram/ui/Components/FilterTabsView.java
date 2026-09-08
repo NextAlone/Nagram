@@ -1179,6 +1179,9 @@ public class FilterTabsView extends FrameLayout {
         listView.setSelectorType(9);
         listView.setSelectorRadius(6);
         listView.setSelectorDrawableColor(Theme.getColor(selectorColorKey, resourcesProvider));
+        if (desu.inugram.helpers.theme.NonIslandHelper.foldersBar()) {
+            desu.inugram.helpers.theme.NonIslandHelper.applyMd3TabsStyle(selectorDrawable, listView, Theme.getColor(selectorColorKey, resourcesProvider));
+        }
         listView.setLayoutManager(layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false) {
 
             @Override
@@ -1644,15 +1647,20 @@ public class FilterTabsView extends FrameLayout {
 
             final float add = additionalTabWidth / 2f;
 
-            final int y = height / 2 - dp(14);
-            selectorDrawable.setBounds((int) (indicatorX - dp(TAB_INTERNAL_PADDING) - add), y, (int) (indicatorX + indicatorWidth + dp(TAB_INTERNAL_PADDING) + add), y + dp(28));
-            selectorDrawable.setAlpha(NaConfig.INSTANCE.getTabStyleStroke().Bool() ? 255 : 31);
+            if (desu.inugram.helpers.theme.NonIslandHelper.foldersBar()) {
+                desu.inugram.helpers.theme.NonIslandHelper.setMd3TabIndicatorBounds(selectorDrawable, indicatorX, indicatorWidth, height, 0f);
+            } else {
+                final int y = height / 2 - dp(14);
+                selectorDrawable.setBounds((int) (indicatorX - dp(TAB_INTERNAL_PADDING) - add), y, (int) (indicatorX + indicatorWidth + dp(TAB_INTERNAL_PADDING) + add), y + dp(28));
+                selectorDrawable.setAlpha(NaConfig.INSTANCE.getTabStyleStroke().Bool() ? 255 : 31);
+            }
             selectorDrawable.draw(canvas);
             canvas.restore();
         }
     }
 
     private final Path clipPath = new Path();
+    public desu.inugram.ui.BlurBehindHelper inu_blurHelper;
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -1664,6 +1672,11 @@ public class FilterTabsView extends FrameLayout {
 
     @Override
     protected void dispatchDraw(@NonNull Canvas canvas) {
+        if (inu_blurHelper != null) {
+            inu_blurHelper.draw(canvas);
+            super.dispatchDraw(canvas);
+            return;
+        }
         canvas.save();
         canvas.clipPath(clipPath);
         super.dispatchDraw(canvas);

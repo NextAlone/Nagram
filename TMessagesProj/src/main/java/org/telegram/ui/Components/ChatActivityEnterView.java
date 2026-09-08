@@ -2676,7 +2676,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             @Override
             protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
                 super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-                final int height = Math.max(dp(44), getMeasuredHeight());
+                final int height = Math.max(dp(DEFAULT_HEIGHT), getMeasuredHeight());
                 if (animatorInputFieldHeight.getFactor() > 0) {
                     animatorInputFieldHeight.animateTo(height);
                 } else {
@@ -2729,10 +2729,10 @@ public class ChatActivityEnterView extends FrameLayout implements
         };
         emojiButton.setContentDescription(getString(R.string.AccDescrEmojiButton));
         emojiButton.setFocusable(true);
-        int padding = dp(7.5f);
+        int padding = dp(inu_ICON_PADDING);
         emojiButton.setPadding(padding, padding, padding, padding);
         emojiButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_glass_defaultIcon), PorterDuff.Mode.SRC_IN));
-        emojiButton.setBackground(Theme.createInsetRoundRectDrawable(getThemedColor(Theme.key_listSelector), dp(19), dp(1), dp(3)));
+        emojiButton.setBackground(desu.inugram.helpers.theme.NonIslandHelper.createInputButtonSelector(getThemedColor(Theme.key_listSelector)));
         emojiButton.setOnClickListener(v -> {
             if (adjustPanLayoutHelper != null && adjustPanLayoutHelper.animationInProgress()) {
                 return;
@@ -2773,7 +2773,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         deleteRichDraftButton.setScaleType(ImageView.ScaleType.CENTER);
         deleteRichDraftButton.setImageResource(R.drawable.menu_delete_old);
         deleteRichDraftButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_glass_defaultIcon), PorterDuff.Mode.SRC_IN));
-        deleteRichDraftButton.setBackground(Theme.createInsetRoundRectDrawable(getThemedColor(Theme.key_listSelector), dp(19), dp(1), dp(3)));
+        deleteRichDraftButton.setBackground(desu.inugram.helpers.theme.NonIslandHelper.createInputButtonSelector(getThemedColor(Theme.key_listSelector)));
         deleteRichDraftButton.setVisibility(View.GONE);
         deleteRichDraftButton.setContentDescription(getString(R.string.ArticleDeleteDraft));
         deleteRichDraftButton.setOnClickListener(v -> {
@@ -3275,7 +3275,9 @@ public class ChatActivityEnterView extends FrameLayout implements
 
                     canvas.save();
                     canvas.scale(s, s, backgroundRect.centerX(), backgroundRect.centerY());
-                    canvas.drawRoundRect(backgroundRect, r, r, paint);
+                    if (!desu.inugram.helpers.theme.NonIslandHelper.chatElements()) {
+                        canvas.drawRoundRect(backgroundRect, r, r, paint);
+                    }
                     canvas.restore();
                 }
                 super.dispatchDraw(canvas);
@@ -3484,13 +3486,13 @@ public class ChatActivityEnterView extends FrameLayout implements
         cameraOutline = getResources().getDrawable(R.drawable.input_video).mutate();
         cameraOutline.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_glass_defaultIcon), PorterDuff.Mode.MULTIPLY));
 
-        audioVideoSendButton = new ChatActivityEnterViewAnimatedIconView(context, 24) {
+        audioVideoSendButton = new ChatActivityEnterViewAnimatedIconView(context, desu.inugram.helpers.theme.NonIslandHelper.chatElements() ? 32 : 24) {
             private final Rect tmpRectF = new Rect();
             @Override
             public void draw(@NonNull Canvas canvas) {
                 if (audioVideoButtonContainerForbidden && !NekoConfig.useChatAttachMediaMenu.Bool()) {
                     tmpRectF.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
-                    tmpRectF.inset(dp(7.5f), dp(7.5f));
+                    tmpRectF.inset(dp(inu_ICON_PADDING), dp(inu_ICON_PADDING));
                     Drawable d = getCurrentState() == State.VIDEO ? cameraOutline : micOutline;
                     d.setBounds(tmpRectF);
                     d.draw(canvas);
@@ -3502,7 +3504,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         audioVideoSendButton.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
 //        audioVideoSendButton.setFocusable(true);
 //        audioVideoSendButton.setAccessibilityDelegate(mediaMessageButtonsDelegate);
-        padding = dp(10f);
+        padding = dp(desu.inugram.helpers.theme.NonIslandHelper.chatElements() ? inu_ICON_PADDING : 10f);
         audioVideoSendButton.setPadding(padding, padding, padding, padding);
 
         if (Build.VERSION.SDK_INT >= 21 && NekoConfig.useChatAttachMediaMenu.Bool()) {
@@ -3537,7 +3539,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             }
         });
 
-        sendButton = new SendButton(context, isInScheduleMode() ? R.drawable.input_schedule : R.drawable.send_plane_24, resourcesProvider, true) {
+        sendButton = new SendButton(context, isInScheduleMode() ? R.drawable.input_schedule : desu.inugram.helpers.theme.NonIslandHelper.chatSendIcon(), resourcesProvider, !desu.inugram.helpers.theme.NonIslandHelper.chatElements()) {
             @Override
             public boolean isInScheduleMode() {
                 return ChatActivityEnterView.this.isInScheduleMode();
@@ -3545,7 +3547,7 @@ public class ChatActivityEnterView extends FrameLayout implements
 
             @Override
             public boolean isOpen() {
-                return messageSendPreview != null && messageSendPreview.isShowing() || super.isOpen();
+                return inu_isSendButtonLongPressed() || super.isOpen();
             }
 
             @Override
@@ -3555,7 +3557,7 @@ public class ChatActivityEnterView extends FrameLayout implements
 
             @Override
             public boolean shouldDrawBackground() {
-                return shouldDrawBackground;
+                return shouldDrawBackground || desu.inugram.helpers.theme.NonIslandHelper.chatElements() && inu_isSendButtonLongPressed();
             }
 
             @Override
@@ -3571,6 +3573,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         sendButton.setScaleY(0.1f);
         sendButton.setAlpha(0.0f);
         sendButtonContainer.addView(sendButton, LayoutHelper.createFrame(100, DEFAULT_HEIGHT, Gravity.RIGHT | Gravity.BOTTOM));
+        desu.inugram.helpers.theme.NonIslandHelper.applySendButtonRipple(sendButton, 100, getThemedColor(Theme.key_listSelector));
         sendButton.setOnClickListener(view -> {
             if ((messageSendPreview != null && messageSendPreview.isShowing()) || (runningAnimationAudio != null && runningAnimationAudio.isRunning()) || moveToSendStateRunnable != null) {
                 return;
@@ -4786,7 +4789,8 @@ public class ChatActivityEnterView extends FrameLayout implements
                 canvas.clipRect(0, separatorY, getMeasuredWidth(), getMeasuredHeight());
             }
             if (child == topView) {
-                canvas.clipRect(0, 0, getMeasuredWidth(), separatorY);
+                final float top = desu.inugram.helpers.theme.NonIslandHelper.chatElements() ? Integer.MIN_VALUE : 0;
+                canvas.clipRect(0, top, getMeasuredWidth(), separatorY);
             }
         }
         boolean result = super.drawChild(canvas, child, drawingTime);
@@ -5205,6 +5209,10 @@ public class ChatActivityEnterView extends FrameLayout implements
     }
 
     private ActionBarMenuSubItem actionScheduleButton;
+    private boolean inu_isSendButtonLongPressed() {
+        return messageSendPreview != null && messageSendPreview.isShowing() || sendPopupWindow != null && sendPopupWindow.isShowing();
+    }
+
     private boolean onSendLongClick(View view) {
         if (isInScheduleMode() || parentFragment != null && parentFragment.getChatMode() == ChatActivity.MODE_QUICK_REPLIES || animatorEphemeralMessageVisibility.getValue()) {
             return false;
@@ -6344,7 +6352,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         messageEditText.setMaxLines(6);
         messageEditText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         messageEditText.setGravity(Gravity.BOTTOM);
-        messageEditText.setPadding(0, dp(9), 0, dp(10));
+        messageEditText.setPadding(0, dp(inu_FIELD_PADDING_TOP), 0, dp(inu_FIELD_PADDING_BOTTOM));
         messageEditText.setBackgroundDrawable(null);
         messageEditText.setTextColor(getThemedColor(Theme.key_chat_messagePanelText));
         messageEditText.setLinkTextColor(getThemedColor(Theme.key_chat_messageLinkOut));
@@ -6360,7 +6368,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         richDraftPreview.setMaxHeight(dp(150));
         richDraftPreview.setMinHeight(dp(DEFAULT_HEIGHT + DEFAULT_HEIGHT));
         richDraftPreview.setVisibility(View.GONE);
-        richDraftPreview.setPadding(dp(8), dp(9), dp(8), dp(10));
+        richDraftPreview.setPadding(dp(8), dp(inu_FIELD_PADDING_TOP), dp(8), dp(inu_FIELD_PADDING_BOTTOM));
         richDraftPreview.setOnClickListener(v -> openRichEditor());
         messageEditTextContainer.addView(richDraftPreview, 2, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM, 52 - 8, 0, (isChat ? 50 : 2) - 8, 1.5f));
         messageEditText.setOnKeyListener(new OnKeyListener() {
@@ -7217,7 +7225,14 @@ public class ChatActivityEnterView extends FrameLayout implements
         }
     }
 
-    public static final int DEFAULT_HEIGHT = 44;
+    public static int DEFAULT_HEIGHT = 44;
+    public static int inu_FIELD_PADDING_TOP = 9;
+    public static int inu_FIELD_PADDING_BOTTOM = 10;
+    public static float inu_ICON_PADDING = 7.5f;
+
+    static {
+        desu.inugram.helpers.theme.NonIslandHelper.syncChatInputRowHeight();
+    }
 
     private boolean resizeForTopViewLastShow;
     private void resizeForTopView(boolean show) {
@@ -7227,11 +7242,11 @@ public class ChatActivityEnterView extends FrameLayout implements
 
         LayoutParams layoutParams = (LayoutParams) textFieldContainer.getLayoutParams();
         layoutParams.topMargin = (show ? topView.getLayoutParams().height : 0);
-        layoutParams.topMargin += dp(9); // for prevent clipping
+        layoutParams.topMargin += dp(desu.inugram.helpers.theme.NonIslandHelper.chatElements() ? 0 : 9); // for prevent clipping
         textFieldContainer.setLayoutParams(layoutParams);
 
         resizeForTopViewLastShow = show;
-        setMinimumHeight(dp(44) + (show ? topView.getLayoutParams().height : 0));
+        setMinimumHeight(dp(DEFAULT_HEIGHT) + (show ? topView.getLayoutParams().height : 0));
         if (stickersExpanded) {
             if (searchingType == 0) {
                 setStickersExpanded(false, true, false);
@@ -7327,7 +7342,7 @@ public class ChatActivityEnterView extends FrameLayout implements
 
         audioVideoButtonContainer.setAlpha(audioVideoButtonContainerForbidden ? 0.5f : 1.0f);
         audioVideoButtonContainer.invalidate();
-        audioVideoSendButton.setColorFilter(new PorterDuffColorFilter(audioVideoButtonContainerForbidden || NekoConfig.useChatAttachMediaMenu.Bool() ?
+        audioVideoSendButton.setColorFilter(new PorterDuffColorFilter(audioVideoButtonContainerForbidden || NekoConfig.useChatAttachMediaMenu.Bool() || desu.inugram.helpers.theme.NonIslandHelper.chatElements() ?
             getThemedColor(Theme.key_glass_defaultIcon) : Color.WHITE, PorterDuff.Mode.SRC_IN));
         audioVideoSendButton.invalidate();
         updateFieldHint(false);
@@ -9754,7 +9769,7 @@ public class ChatActivityEnterView extends FrameLayout implements
         slowModeButton.setVisibility(visible ? VISIBLE : GONE);
         int padding = visible ? dp(slowModeButton.isPremiumMode ? 26 : 16) : 0;
         if (messageEditText != null && messageEditText.getPaddingRight() != padding) {
-            messageEditText.setPadding(0, dp(9), padding, dp(10));
+            messageEditText.setPadding(0, dp(inu_FIELD_PADDING_TOP), padding, dp(inu_FIELD_PADDING_BOTTOM));
         }
     }
 
@@ -10218,8 +10233,8 @@ public class ChatActivityEnterView extends FrameLayout implements
 
                     FrameLayout.LayoutParams newLayoutParams = new FrameLayout.LayoutParams(parent.getMeasuredWidth() - (editingMessageObject == null ? Math.max(0, sendButton.width() - dp(DEFAULT_HEIGHT)) : 0), dp(DEFAULT_HEIGHT));
                     newLayoutParams.gravity = Gravity.BOTTOM;
-                    newLayoutParams.leftMargin = dp(7);
-                    newLayoutParams.rightMargin = dp(7);
+                    newLayoutParams.leftMargin = dp(desu.inugram.helpers.theme.NonIslandHelper.chatElements() ? 0 : 7);
+                    newLayoutParams.rightMargin = dp(desu.inugram.helpers.theme.NonIslandHelper.chatElements() ? 0 : 7);
                     sizeNotifierLayout.addView(recordedAudioPanel, newLayoutParams);
                     videoTimelineView.setVisibility(GONE);
                 } else {
@@ -11429,8 +11444,9 @@ public class ChatActivityEnterView extends FrameLayout implements
         emojiButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_glass_defaultIcon), PorterDuff.Mode.SRC_IN));
         emojiButton.setBackground(Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector)));
         deleteRichDraftButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_glass_defaultIcon), PorterDuff.Mode.SRC_IN));
-        deleteRichDraftButton.setBackground(Theme.createInsetRoundRectDrawable(getThemedColor(Theme.key_listSelector), dp(19), dp(1), dp(3)));
+        deleteRichDraftButton.setBackground(desu.inugram.helpers.theme.NonIslandHelper.createInputButtonSelector(getThemedColor(Theme.key_listSelector)));
         sendOutlineView.setColorFilter(getThemedColor(Theme.key_telegram_color), PorterDuff.Mode.SRC_IN);
+        desu.inugram.helpers.theme.NonIslandHelper.applySendButtonRipple(sendButton, 100, getThemedColor(Theme.key_listSelector));
     }
 
     private void updateRecordedDeleteIconColors() {
@@ -16214,10 +16230,12 @@ public class ChatActivityEnterView extends FrameLayout implements
             final float appear = this.appear.set(1);
             if (openProgress < 1) {
                 canvas.save();
+                if (!desu.inugram.helpers.theme.NonIslandHelper.chatElements()) {
                 canvas.translate(-dp(24) * (1f - appear), dp(24) * (1f - appear));
                 final float s = lerp(0.35f, 1.0f, appear);
                 canvas.scale(s, s, x + drawable.getIntrinsicWidth() / 2f, y + drawable.getIntrinsicHeight() / 2f);
                 canvas.rotate(60 * (1f - appear), x + drawable.getIntrinsicWidth() / 2f, y + drawable.getIntrinsicHeight() / 2f);
+                }
                 drawable.setBounds(x, y, x + drawable.getIntrinsicWidth(), y + drawable.getIntrinsicHeight());
                 drawable.setAlpha((int) (0xFF * (1.0f - priceProgress)));
                 drawable.draw(canvas);
@@ -16657,9 +16675,11 @@ public class ChatActivityEnterView extends FrameLayout implements
         final float visibility = animatorTopViewVisibility.getFloatValue();
 
         if (topView != null) {
-            final float y = getMeasuredHeight() - animatorInputFieldHeight.getFactor();
-
-            topView.setTranslationY(y - topView.getMeasuredHeight() * visibility);
+            final float topH = topView.getLayoutParams().height;
+            final float topMargin = visibility > 0 ? (topH + dp(desu.inugram.helpers.theme.NonIslandHelper.chatElements() ? 0 : 9)) : 0;
+            final float fieldDelta = animatorInputFieldHeight.getToFactor() - animatorInputFieldHeight.getFactor();
+            final float baseY = topMargin + textFieldContainer.getPaddingTop() + fieldDelta;
+            topView.setTranslationY(baseY - topH * visibility);
             topView.setVisibility(visibility > 0 ? VISIBLE : GONE);
         }
 

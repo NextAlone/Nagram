@@ -55,6 +55,7 @@ import org.telegram.ui.PhotoViewer;
 
 import java.util.ArrayList;
 
+import desu.inugram.helpers.theme.NonIslandHelper;
 import xyz.nextalone.nagram.NaConfig;
 
 public class MentionsContainerView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
@@ -939,8 +940,8 @@ public class MentionsContainerView extends FrameLayout implements NotificationCe
 
     public void setBackgroundDrawable(@NonNull BlurredBackgroundDrawable backgroundDrawable) {
         this.backgroundDrawable = backgroundDrawable;
-        this.backgroundDrawable.setRadius(dp(22));
-        this.backgroundDrawable.setPadding(dp(5));
+        this.backgroundDrawable.setRadius(dp(NonIslandHelper.chatElements() ? 0 : 22));
+        this.backgroundDrawable.setPadding(dp(NonIslandHelper.chatElements() ? 0 : 5));
 
         checkListViewPadding();
     }
@@ -977,9 +978,9 @@ public class MentionsContainerView extends FrameLayout implements NotificationCe
         if (backgroundDrawable != null) {
             backgroundDrawable.setBounds(
                 0,
-                (int) containerTop - dp(5),
+                (int) containerTop - dp(NonIslandHelper.chatElements() ? 0 : 5),
                 getMeasuredWidth(),
-                (int) containerBottom + dp(5)
+                (int) containerBottom + dp(NonIslandHelper.chatElements() ? 0 : 5)
             );
 
 
@@ -988,14 +989,14 @@ public class MentionsContainerView extends FrameLayout implements NotificationCe
             if (isGif()) {
                 clipBounds.inset(dp(2), dp(2));
                 clipPath.addRoundRect(clipBounds,
-                    dp(20),
-                    dp(20),
+                    dp(NonIslandHelper.chatElements() ? 0 : 20),
+                    dp(NonIslandHelper.chatElements() ? 0 : 20),
                     Path.Direction.CW
                 );
             } else {
                 clipPath.addRoundRect(clipBounds,
-                    dp(22),
-                    dp(22),
+                    dp(NonIslandHelper.chatElements() ? 0 : 22),
+                    dp(NonIslandHelper.chatElements() ? 0 : 22),
                     Path.Direction.CW
                 );
             }
@@ -1016,7 +1017,7 @@ public class MentionsContainerView extends FrameLayout implements NotificationCe
         }
 
         final boolean isGif = isGif();
-        if (backgroundDrawable == null) {
+        if (backgroundDrawable == null || NonIslandHelper.chatElements()) {
             listView.setPadding(0, 0, 0, 0);
         } else {
             listView.setPadding(dp(isGif ? 7 : 5), isGif ? dp(2) : 0, dp(isGif ? 7 : 5), isGif ? dp(2) : 0);

@@ -128,7 +128,9 @@ public class TranslateButton extends FrameLayout implements Theme.Colorable {
     @Override
     public void updateColors() {
         textView.setTextColor(Theme.getColor(Theme.key_chat_addContact, resourcesProvider));
-        textView.setBackground(Theme.createInsetRoundRectDrawable(Theme.getColor(Theme.key_chat_addContact, resourcesProvider) & 0x19ffffff, dp(15), dp(3)));
+        textView.setBackground(desu.inugram.helpers.theme.NonIslandHelper.chatElements()
+            ? Theme.createSelectorDrawable(Theme.getColor(Theme.key_chat_addContact, resourcesProvider) & 0x19ffffff, Theme.RIPPLE_MASK_ALL)
+            : Theme.createInsetRoundRectDrawable(Theme.getColor(Theme.key_chat_addContact, resourcesProvider) & 0x19ffffff, dp(15), dp(3)));
         menuView.setBackground(Theme.createCircleSelectorDrawable(Theme.getColor(Theme.key_listSelector, resourcesProvider), 0, 0));
         menuView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_topPanelClose, resourcesProvider), PorterDuff.Mode.MULTIPLY));
         translateDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_chat_addContact, resourcesProvider), PorterDuff.Mode.MULTIPLY));

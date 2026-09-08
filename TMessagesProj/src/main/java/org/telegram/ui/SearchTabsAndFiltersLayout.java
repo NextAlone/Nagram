@@ -15,6 +15,7 @@ import org.telegram.ui.Components.blur3.drawable.BlurredBackgroundDrawable;
 public class SearchTabsAndFiltersLayout extends FrameLayout implements Theme.Colorable {
     private final Path clipPath = new Path();
     private BlurredBackgroundDrawable blurredBackgroundDrawable;
+    public desu.inugram.ui.BlurBehindHelper inu_blurHelper;
 
     public SearchTabsAndFiltersLayout(@NonNull Context context) {
         super(context);
@@ -30,6 +31,11 @@ public class SearchTabsAndFiltersLayout extends FrameLayout implements Theme.Col
 
     @Override
     protected void dispatchDraw(@NonNull Canvas canvas) {
+        if (inu_blurHelper != null) {
+            inu_blurHelper.draw(canvas);
+            super.dispatchDraw(canvas);
+            return;
+        }
         canvas.save();
         canvas.clipPath(clipPath);
         super.dispatchDraw(canvas);

@@ -27,7 +27,7 @@ public class ChatSearchTabs extends FrameLayout {
     public float shownT;
     public void setShown(float shownT) {
         this.shownT = shownT;
-        if (tabs != null) {
+        if (tabs != null && !tabs.inu_md3Tabs) {
             tabs.setPivotX(tabs.getWidth() / 2f);
             tabs.setPivotY(0);
             tabs.setScaleX(lerp(0.8f, 1, shownT));

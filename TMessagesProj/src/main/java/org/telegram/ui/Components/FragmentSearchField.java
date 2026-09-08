@@ -66,6 +66,7 @@ public class FragmentSearchField extends FrameLayout implements FactorAnimator.T
     private boolean closeButtonForcedVisible;
     public final EditTextBoldCursor editText;
     private BlurredBackgroundDrawable blurredBackgroundDrawable;
+    public desu.inugram.ui.BlurBehindHelper inu_blurHelper;
 
     public FragmentSearchField(Context context, Theme.ResourcesProvider resourcesProvider) {
         super(context);
@@ -183,7 +184,8 @@ public class FragmentSearchField extends FrameLayout implements FactorAnimator.T
     @Override
     protected void dispatchDraw(@NonNull Canvas canvas) {
         canvas.save();
-        if (bg != null) {
+        if (inu_blurHelper != null) inu_blurHelper.draw(canvas);
+        if (inu_blurHelper == null && bg != null) {
             bg.setBounds(
                 getPaddingLeft(),
                 getPaddingTop(),
@@ -205,8 +207,10 @@ public class FragmentSearchField extends FrameLayout implements FactorAnimator.T
     }
 
     public void setupBlurredBackground(BlurredBackgroundDrawable drawable) {
-        drawable.setRadius(dp(20));
-        drawable.setPadding(dp(4));
+        if (drawable != null) {
+            drawable.setRadius(dp(20));
+            drawable.setPadding(dp(4));
+        }
         blurredBackgroundDrawable = drawable;
     }
 

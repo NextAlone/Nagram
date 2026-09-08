@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.blur3.drawable.BlurredBackgroundDrawable;
 
+import desu.inugram.helpers.theme.NonIslandHelper;
 import me.vkryl.android.animator.ListAnimator;
 
 public class ChatActivityTopPanelLayout extends AnimatedLinearLayout {
@@ -64,18 +65,18 @@ public class ChatActivityTopPanelLayout extends AnimatedLinearLayout {
 
     private void checkBoundsAndClipping() {
         final float bgHeight = getMetadata().getTotalHeight();
-        final float bgAlpha = getMetadata().getTotalVisibility();
+        final float bgAlpha = NonIslandHelper.chatElements() ? 1 : getMetadata().getTotalVisibility();
 
         clipRectF.set(getPaddingLeft(), getPaddingTop(), getMeasuredWidth() - getPaddingRight(), getPaddingTop() + bgHeight);
 
-        final float r = Math.min(dp(18), Math.min(clipRectF.width(), clipRectF.height()) / 2f);
+        final float r = NonIslandHelper.chatElements() ? 0 : Math.min(dp(18), Math.min(clipRectF.width(), clipRectF.height()) / 2f);
         clipPath.rewind();
         clipPath.addRoundRect(clipRectF, r, r, Path.Direction.CW);
 
         if (backgroundDrawable != null) {
             backgroundDrawable.setAlpha((int) (bgAlpha * 255));
             backgroundDrawable.setBounds(getPaddingLeft() - dp(7), 0, getMeasuredWidth() - getPaddingRight() + dp(7), getPaddingTop() + getPaddingBottom() + (int) bgHeight);
-            backgroundDrawable.setRadius(Math.min(dp(18), bgHeight / 2));
+            if (!NonIslandHelper.chatElements()) backgroundDrawable.setRadius(Math.min(dp(18), bgHeight / 2));
         }
     }
 
@@ -95,6 +96,9 @@ public class ChatActivityTopPanelLayout extends AnimatedLinearLayout {
     public void setCallFragmentContextView(FragmentContextView fragmentContextView) {
         callFragmentContextView = fragmentContextView;
         callFragmentContextView.getCapsuleBlobDrawable().setCallback(this);
+        if (NonIslandHelper.chatElements()) {
+            callFragmentContextView.inu_flat = true;
+        }
     }
 
     @Override
@@ -124,6 +128,14 @@ public class ChatActivityTopPanelLayout extends AnimatedLinearLayout {
                     }
 
                     if (callFragmentContextView == view || callFragmentContextView.getParent() == view) {
+                        if (NonIslandHelper.chatElements()) {
+                            if (Theme.getFragmentContextViewWavesDrawable().inu_drawBottomWaves(canvas, getPaddingLeft(), top, getMeasuredWidth() - getPaddingRight(), dp(36), alpha)) {
+                                invalidate();
+                            }
+                            callDrawn = true;
+                            continue;
+                        }
+
                         final CapsuleBlobDrawable capsuleBlobDrawable = callFragmentContextView.getCapsuleBlobDrawable();
 
                         final int p = capsuleBlobDrawable.getRequiredInset();
@@ -168,6 +180,15 @@ public class ChatActivityTopPanelLayout extends AnimatedLinearLayout {
         }
 
         super.dispatchDraw(canvas);
+        if (NonIslandHelper.chatElements() && getEntriesCount() > 0) {
+            // top divider
+            canvas.drawLine(0, getPaddingTop(), getWidth(), getPaddingTop(), Theme.dividerPaint);
+            final ListAnimator.Entry<?> entry = getEntry(0);
+            final int wasAlpha = Theme.dividerPaint.getAlpha();
+            Theme.dividerPaint.setAlpha((int) (entry.getVisibility() * Math.min(1, entry.getPosition())));
+            canvas.drawLine(0, getPaddingTop(), getWidth(), getPaddingTop(), Theme.dividerPaint);
+            Theme.dividerPaint.setAlpha(wasAlpha);
+        }
         canvas.restore();
     }
 }

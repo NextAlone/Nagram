@@ -78,6 +78,10 @@ public class ChatInputViewsContainer extends FrameLayout {
     private BlurredBackgroundDrawable underKeyboardBackgroundDrawable;
     public void setInputIslandBubbleDrawable(BlurredBackgroundDrawable drawable) {
         blurredBackgroundDrawable = drawable;
+        if (desu.inugram.helpers.theme.NonIslandHelper.chatElements()) {
+            blurredBackgroundDrawable.setStrokeWidth(0, 0);
+            return;
+        };
         blurredBackgroundDrawable.setPadding(dp(7));
         blurredBackgroundDrawable.setRadius(dp(INPUT_BUBBLE_RADIUS));
     }
@@ -85,7 +89,8 @@ public class ChatInputViewsContainer extends FrameLayout {
     public void setUnderKeyboardBackgroundDrawable(BlurredBackgroundDrawable drawable) {
         underKeyboardBackgroundDrawable = drawable;
         underKeyboardBackgroundDrawable.enableInAppKeyboardOptimization();
-        underKeyboardBackgroundDrawable.setRadius(dp(INPUT_KEYBOARD_RADIUS), dp(INPUT_KEYBOARD_RADIUS), 0, 0);
+        final int topRadius = desu.inugram.helpers.theme.NonIslandHelper.chatElements() ? 0 : dp(INPUT_KEYBOARD_RADIUS);
+        underKeyboardBackgroundDrawable.setRadius(topRadius, topRadius, 0, 0);
         underKeyboardBackgroundDrawable.setThickness(dp(32));
         underKeyboardBackgroundDrawable.setIntensity(0.4f);
     }
@@ -177,7 +182,8 @@ public class ChatInputViewsContainer extends FrameLayout {
                     rightBottomRadius = bottomRight == null ? 0 : bottomRight.getRadius();
                 }
             }
-            underKeyboardBackgroundDrawable.setRadius(dp(INPUT_KEYBOARD_RADIUS), dp(INPUT_KEYBOARD_RADIUS), rightBottomRadius, leftBottomRadius, true);
+            final int topRadius = desu.inugram.helpers.theme.NonIslandHelper.chatElements() ? 0 : dp(INPUT_KEYBOARD_RADIUS);
+            underKeyboardBackgroundDrawable.setRadius(topRadius, topRadius, rightBottomRadius, leftBottomRadius, true);
         }
     }
 
@@ -267,12 +273,27 @@ public class ChatInputViewsContainer extends FrameLayout {
         );
         tmpRect.inset(0, -dp(7));
         tmpRect.offset(0, blurTop + (int) bubbleInputTranlationY);
+        if (desu.inugram.helpers.theme.NonIslandHelper.chatElements()) {
+            tmpRect.top += dp(16);
+            tmpRect.bottom = getMeasuredHeight();
+            tmpRect.left = 0;
+            tmpRect.right = getMeasuredWidth();
+        }
 
-        blurredBackgroundDrawable.setBounds(tmpRect);
-        if (drawInputBackground)
-            blurredBackgroundDrawable.draw(canvas);
+        final boolean nonIsland = desu.inugram.helpers.theme.NonIslandHelper.chatElements();
+        final boolean hasBar = inputBubbleHeight > 0;
 
-        if (needDrawInAppKeyboard) {
+        if (!nonIsland || hasBar) {
+            blurredBackgroundDrawable.setBounds(tmpRect);
+            if (drawInputBackground)
+                blurredBackgroundDrawable.draw(canvas);
+        }
+
+        // in non-island mode the bubble bg also covers the under-keyboard area, but
+        // only when fully opaque — when the bar fades out (e.g. selection mode + open
+        // stickers panel) we need the under-keyboard bg as fallback.
+        final boolean bubbleCoversKeyboard = nonIsland && hasBar && blurredBackgroundDrawable.getAlpha() == 255;
+        if (needDrawInAppKeyboard && !bubbleCoversKeyboard) {
             underKeyboardBackgroundDrawable.draw(canvas);
         }
 

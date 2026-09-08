@@ -288,8 +288,8 @@ public class BotCommandsMenuContainer extends FrameLayout implements NestedScrol
 
     public void setBackgroundDrawable(@NonNull BlurredBackgroundDrawable backgroundDrawable) {
         this.backgroundDrawable = backgroundDrawable;
-        this.backgroundDrawable.setRadius(dp(22));
-        this.backgroundDrawable.setPadding(dp(5));
+        this.backgroundDrawable.setRadius(desu.inugram.helpers.theme.NonIslandHelper.chatElements() ? 0 : dp(22));
+        this.backgroundDrawable.setPadding(desu.inugram.helpers.theme.NonIslandHelper.chatElements() ? 0 : dp(5));
 
         listView.setOutlineProvider(backgroundDrawable.getViewOutlineProvider());
     }
