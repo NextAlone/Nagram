@@ -202,9 +202,14 @@ Then, use base64 to encode the above.
 - HELPER_BOT_TOKEN: from telegram [@Botfather](https://t.me/Botfather), such as `1111:abcd`
 - HELPER_BOT_TARGET: from telegram chat id, such as `777000`
 
-4. Run Release Build
+4. Disable signature check by removing the following lines in **TMessagesProj/jni/jni.c**:
+   ```c
+    if (verifySign(env) != JNI_OK) {
+        return JNI_ERR;
+    }
+   ```
 
-5. Generate `TMessagesProj/jni/integrity/genuine.h` - https://github.com/brevent/genuine
+5. Run Release Build
 
 ## FAQ
 
