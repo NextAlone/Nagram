@@ -411,6 +411,8 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                 MediaController.getInstance().recreateProximityWakeLock();
             } else if (key.equals(NekoConfig.showSeconds.getKey())) {
                 LocaleController.getInstance().recreateFormatters();
+            } else if (key.equals(NaConfig.INSTANCE.getShowEditedIcon().getKey())) {
+                updateRows();
             } else if (key.equals(NaConfig.INSTANCE.getDisableBotOpenButton().getKey())) {
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (key.equals(NekoConfig.hideTimeForSticker.getKey()) || key.equals(NaConfig.INSTANCE.getRealHideTimeForSticker().getKey())) {
@@ -667,6 +669,11 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     @Override
     protected void setCanNotChange() {
         super.setCanNotChange();
+
+        cellGroup.rows.remove(customEditedMessageRow);
+        if (!NaConfig.INSTANCE.getShowEditedIcon().Bool()) {
+            cellGroup.rows.add(cellGroup.rows.indexOf(showEditedIconRow) + 1, customEditedMessageRow);
+        }
 
         if (!NekoConfig.showRepeat.Bool() || NaConfig.INSTANCE.getShowRepeatAsCopy().Bool()){
             cellGroup.rows.remove(autoReplaceRepeatRow);
