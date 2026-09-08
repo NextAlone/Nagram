@@ -174,6 +174,7 @@ public class MessagesPreviewCell extends LinearLayout {
         return NekoConfig.showSeconds.getKey().equals(key)
                 || NaConfig.INSTANCE.getShowMessageID().getKey().equals(key)
                 || NaConfig.INSTANCE.getDateOfForwardedMsg().getKey().equals(key)
+                || NaConfig.INSTANCE.getShowForwardCount().getKey().equals(key)
                 || NaConfig.INSTANCE.getShowEditedIcon().getKey().equals(key)
                 || NaConfig.INSTANCE.getCustomEditedMessage().getKey().equals(key)
                 || NaConfig.INSTANCE.getShowVoteCountBeforeVote().getKey().equals(key)

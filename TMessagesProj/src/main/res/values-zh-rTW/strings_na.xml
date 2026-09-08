@@ -30,6 +30,7 @@
     <string name="PhotoCopied">圖片已複製到剪貼簿</string>
     <string name="ToTheBeginning">回到頂部</string>
     <string name="DateOfForwardedMsg">顯示轉發訊息日期</string>
+    <string name="ShowForwardCount">顯示轉發次數</string>
     <string name="ShowMessageID">顯示訊息 ID</string>
     <string name="ShowRPCError">顯示 RPC 錯誤</string>
     <string name="ShowServicesTime">顯示服務訊息時間</string>
