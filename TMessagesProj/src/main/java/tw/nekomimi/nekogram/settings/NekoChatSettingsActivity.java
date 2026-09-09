@@ -70,13 +70,9 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     // Sticker Size
     private final AbstractConfigCell header0 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("StickerSize")));
     private final AbstractConfigCell stickerSizeRow = cellGroup.appendCell(new ConfigCellCustom("StickerSize", ConfigCellCustom.CUSTOM_ITEM_StickerSize, true));
-    private final AbstractConfigCell divider0 = cellGroup.appendCell(new ConfigCellDivider());
-
-    // Sticker Settings
-    private final AbstractConfigCell headerStickerOptions = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.ChatSticker)));
     private final AbstractConfigCell hideTimeForStickerRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideTimeForSticker));
     private final AbstractConfigCell stickersOnlyShowReadRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getRealHideTimeForSticker()));
-    private final AbstractConfigCell dividerStickerOptions = cellGroup.appendCell(new ConfigCellDivider());
+    private final AbstractConfigCell divider0 = cellGroup.appendCell(new ConfigCellDivider());
 
     // Messages
     private final AbstractConfigCell headerMessages = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.NagramMessages)));
