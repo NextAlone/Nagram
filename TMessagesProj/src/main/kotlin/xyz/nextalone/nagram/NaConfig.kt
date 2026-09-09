@@ -1367,6 +1367,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val useSystemFontInTitle =
+        addConfig(
+            "UseSystemFontInTitle",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,
