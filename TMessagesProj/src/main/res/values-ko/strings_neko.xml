@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">네코그램 설정</string>
+    <string name="NekoSettings">N-Config</string>
     <string name="IPv6">IPv6를 통해 연결</string>
     <string name="MessageMenu">메세지 메뉴</string>
     <string name="HidePhone">내 번호 숨기기</string>

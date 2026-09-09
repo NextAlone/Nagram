@@ -92,7 +92,7 @@
     <string name="ShowForumAsNormalChat">Show forum as normal chat</string>
     <string name="DecorationNone">None</string>
     <string name="ChatDecoration">Chat Decoration</string>
-    <string name="NeedChangeNekoSettings">You need to change N-Settings</string>
+    <string name="NeedChangeNekoSettings">You need to change N-Config</string>
     <string name="DoNotUnarchiveBySwipe">Do not unarchive by swipe</string>
     <string name="DoNotShareMyPhoneNumber">Do not share my phone number</string>
     <string name="DefaultDeleteMenu">Default Delete Menu</string>

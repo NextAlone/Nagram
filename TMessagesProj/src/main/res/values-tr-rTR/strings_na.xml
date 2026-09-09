@@ -92,7 +92,7 @@
     <string name="ShowForumAsNormalChat">Forumu normal sohbet olarak göster</string>
     <string name="DecorationNone">Yok</string>
     <string name="ChatDecoration">Sohbet Dekorasyonu</string>
-    <string name="NeedChangeNekoSettings">N-Settings\'i değiştirmeniz gerekiyor</string>
+    <string name="NeedChangeNekoSettings">N-Config\'i değiştirmeniz gerekiyor</string>
     <string name="DoNotUnarchiveBySwipe">Kaydırarak arşivden çıkarmayın</string>
     <string name="DoNotShareMyPhoneNumber">Telefon numaramı paylaşma</string>
     <string name="DefaultDeleteMenu">Varsayılan Silme Menüsü</string>
