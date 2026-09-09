@@ -1379,6 +1379,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val materialDesign3ChatHeader =
+        addConfig(
+            "MaterialDesign3ChatHeader",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

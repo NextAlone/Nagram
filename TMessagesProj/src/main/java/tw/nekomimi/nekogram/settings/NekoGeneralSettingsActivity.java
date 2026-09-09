@@ -323,6 +323,7 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
     private final AbstractConfigCell disableGlareEffectsRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableGlareEffects()));
     private final AbstractConfigCell liquidGlassAngleRow = cellGroup.appendCell(new ConfigCellCustom("LiquidGlassAngle", ConfigCellCustom.CUSTOM_ITEM_LiquidGlassAngle, true));
     private final AbstractConfigCell liquidGlassIntensityRow = cellGroup.appendCell(new ConfigCellCustom("LiquidGlassIntensity", ConfigCellCustom.CUSTOM_ITEM_LiquidGlassIntensity, true));
+    private final AbstractConfigCell materialDesign3ChatHeaderRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getMaterialDesign3ChatHeader(), LocaleController.getString(R.string.MaterialDesign3ChatHeaderDes)));
     private final AbstractConfigCell dividerBlur = cellGroup.appendCell(new ConfigCellDivider());
 
     private ChatBlurAlphaSeekBar chatBlurAlphaSeekbar;
@@ -554,6 +555,8 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (key.equals(NaConfig.INSTANCE.getTabStyleStroke().getKey())) {
                 getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
+            } else if (key.equals(NaConfig.INSTANCE.getMaterialDesign3ChatHeader().getKey())) {
+                parentLayout.rebuildAllFragmentViews(false, false);
             }
         };
 
