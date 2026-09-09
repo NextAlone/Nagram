@@ -17,7 +17,7 @@ object GoogleCloud2Translator : Translator {
         }
 
         val srclang = from.ifEmpty { "auto" }
-        val content = query.replace("\n", "<br h=114514>")
+        val content = query.replace("\n", "<span class=\"notranslate\">\n</span>")
 
         val jsonBody = JSONArray().apply {
             put(JSONArray().apply {
@@ -46,7 +46,7 @@ object GoogleCloud2Translator : Translator {
 
         if (innerArr.length() == 0) error("Empty translation result")
 
-        return HtmlUtil.unescape(innerArr.getString(0).replace("<br h=114514>", "\n"))
+        return HtmlUtil.unescape(innerArr.getString(0).replace("<span class=\"notranslate\">\n</span>", "\n"))
 
     }
 
