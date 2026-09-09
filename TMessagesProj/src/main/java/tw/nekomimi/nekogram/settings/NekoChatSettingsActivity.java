@@ -80,6 +80,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     private final AbstractConfigCell showSeconds = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showSeconds));
     private final AbstractConfigCell showMessageIDRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowMessageID()));
     private final AbstractConfigCell dateOfForwardMsgRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDateOfForwardedMsg()));
+    private final AbstractConfigCell showForwardCountRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowForwardCount()));
     private final AbstractConfigCell showEditedIconRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowEditedIcon()));
     private final AbstractConfigCell customEditedMessageRow = cellGroup.appendCell(new ConfigCellTextInput(null, NaConfig.INSTANCE.getCustomEditedMessage(), "", null, null, false));
     private final AbstractConfigCell showVoteCountBeforeVoteRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowVoteCountBeforeVote()));
@@ -406,6 +407,8 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                 MediaController.getInstance().recreateProximityWakeLock();
             } else if (key.equals(NekoConfig.showSeconds.getKey())) {
                 LocaleController.getInstance().recreateFormatters();
+            } else if (key.equals(NaConfig.INSTANCE.getShowEditedIcon().getKey())) {
+                updateRows();
             } else if (key.equals(NaConfig.INSTANCE.getDisableBotOpenButton().getKey())) {
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (key.equals(NekoConfig.hideTimeForSticker.getKey()) || key.equals(NaConfig.INSTANCE.getRealHideTimeForSticker().getKey())) {
@@ -662,6 +665,11 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     @Override
     protected void setCanNotChange() {
         super.setCanNotChange();
+
+        cellGroup.rows.remove(customEditedMessageRow);
+        if (!NaConfig.INSTANCE.getShowEditedIcon().Bool()) {
+            cellGroup.rows.add(cellGroup.rows.indexOf(showEditedIconRow) + 1, customEditedMessageRow);
+        }
 
         if (!NekoConfig.showRepeat.Bool() || NaConfig.INSTANCE.getShowRepeatAsCopy().Bool()){
             cellGroup.rows.remove(autoReplaceRepeatRow);
