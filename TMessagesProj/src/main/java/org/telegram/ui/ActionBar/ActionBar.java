@@ -413,7 +413,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
             Drawable drawable = Theme.getCurrentHolidayDrawable();
             if (drawable != null) {
                 SimpleTextView titleView = child == titlesContainer ? titleTextView[0] : (SimpleTextView) child;
-                if (titleView != null && titleView.getVisibility() == View.VISIBLE && titleView.getText() instanceof String) {
+                if (titleView != null && titleView.getVisibility() == View.VISIBLE && titleView.getText() != null && titleView.getText().length() > 0) {
                     TextPaint textPaint = titleView.getTextPaint();
                     textPaint.getFontMetricsInt(fontMetricsInt);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
