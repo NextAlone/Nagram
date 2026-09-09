@@ -61,7 +61,7 @@
     <string name="QuickToggleAnonymousNotice">If you\'re owner of the group</string>
     <string name="RealHideTimeForSticker">Real hide time for stickers</string>
     <string name="ResetSettings">Reset Settings</string>
-    <string name="ResetSettingsAlert">Are you sure you want to reset all N-Settings?</string>
+    <string name="ResetSettingsAlert">Are you sure you want to reset all N-Config?</string>
     <string name="HideTitle">Hide Title</string>
     <string name="IgnoreFolderCount">Ignore Folder Count</string>
     <string name="SendWithoutMarkdown">Send without markdown</string>
@@ -93,7 +93,7 @@
     <string name="ShowForumAsNormalChat">Show forum as normal chat</string>
     <string name="DecorationNone">None</string>
     <string name="ChatDecoration">Chat Decoration</string>
-    <string name="NeedChangeNekoSettings">You need to change N-Settings</string>
+    <string name="NeedChangeNekoSettings">You need to change N-Config</string>
     <string name="DoNotUnarchiveBySwipe">Do not unarchive by swipe</string>
     <string name="DoNotShareMyPhoneNumber">Do not share my phone number</string>
     <string name="DefaultDeleteMenu">Default Delete Menu</string>

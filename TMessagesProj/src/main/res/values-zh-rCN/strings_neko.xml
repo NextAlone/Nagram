@@ -154,10 +154,10 @@
     <string name="DatacenterStatusAbout">检查 Telegram 的**数据中心**的状态。</string>
     <string name="DatacenterStatus">数据中心状态</string>
     <string name="enhancedFileLoader">加速上传和下载</string>
-    <string name="UnknownNekoSettingsOption">没有这样的喵设置选项。</string>
+    <string name="UnknownNekoSettingsOption">没有这样的N-设置选项。</string>
     <string name="PasscodeNeeded">您必须先启用锁定码</string>
     <string name="PasscodeNeko">锁定码</string>
-    <string name="PasscodeShowInSettings">在喵设置中显示</string>
+    <string name="PasscodeShowInSettings">在N-设置中显示</string>
     <string name="PasscodeShowInSettingsAbout">隐藏后，您**只能**通过链接打开此页面：</string>
     <string name="PasscodeSet">设置锁定码</string>
     <string name="PasscodeEdit">更改锁定码</string>
@@ -202,7 +202,7 @@
     <string name="ClearRecentChats">清除最近对话</string>
     <string name="ClearRecentChatAlert">您确定要清除您的最近对话吗？</string>
     <string name="CloudConfig">云设置</string>
-    <string name="CloudConfigDesc">保存喵设置到 Telegram 云。</string>
+    <string name="CloudConfigDesc">保存N-设置到 Telegram 云。</string>
     <string name="CloudConfigSyncDate">最后同步：%s，云端：%s</string>
     <string name="CloudConfigSyncDateNever">从未</string>
     <string name="CloudConfigSync">同步到云端</string>
@@ -211,7 +211,7 @@
     <string name="CloudConfigRestoreShort">恢复</string>
     <string name="CloudConfigSyncing">正在同步...</string>
     <string name="CloudConfigAutoSync">自动同步</string>
-    <string name="CloudConfigAutoSyncDesc">修改喵设置后自动同步到云端。</string>
+    <string name="CloudConfigAutoSyncDesc">修改N-设置后自动同步到云端。</string>
     <string name="CloudConfigSyncFailed">无法将设置同步到云端。</string>
     <string name="CloudConfigRestoreFailed">无法从云端恢复设置。</string>
     <string name="CopyCallback">复制回调数据</string>

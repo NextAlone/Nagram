@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">إعدادات نيكو</string>
+    <string name="NekoSettings">تكوين N-Config</string>
     <string name="IPv6">الاتصال من خلال IPv6</string>
     <string name="MessageMenu">قائمة الرسائل</string>
     <string name="HidePhone">إخفاء رقم هاتفي</string>

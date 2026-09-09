@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">Cài đặt Neko</string>
+    <string name="NekoSettings">Cấu hình-N</string>
     <string name="IPv6">Kết nối thông qua IPv6</string>
     <string name="MessageMenu">Menu tin nhắn</string>
     <string name="HidePhone">Ẩn số điện thoại của tôi</string>

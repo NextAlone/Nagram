@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">הגדרות Neko</string>
+    <string name="NekoSettings">N-Config</string>
     <string name="IPv6">מתחבר דרך IPv6</string>
     <string name="MessageMenu">תפריט הודעה</string>
     <string name="HidePhone">הסתר את מספר הטלפון שלי</string>

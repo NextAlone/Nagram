@@ -5,7 +5,7 @@
     <string name="HidePhone">Skjul mitt telefonnummer</string>
     <string name="MessageMenu">Meldingsmeny</string>
     <string name="IPv6">Tilkobling gjennom IPv6</string>
-    <string name="NekoSettings">Neko-innstillinger</string>
+    <string name="NekoSettings">N-konfigurasjon</string>
     <string name="UseMediaStreamInVoip">Bruk mediastrøm i VoIP</string>
     <string name="BotLogin">Bott-innlogging</string>
     <string name="Repeat">Gjenta</string>

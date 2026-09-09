@@ -32,7 +32,7 @@
     <string name="Valentine">ভালোবাসা দিবস</string>
     <string name="Fireworks">আতশবাজি</string>
     <string name="DeleteDownloadedFile">ডাউনলোড করা ফাইল ডিলিট করুন</string>
-    <string name="NekoSettings">নিকো সেটিংস</string>
+    <string name="NekoSettings">N-Config</string>
     <string name="IPv6">IPv6 দিয়ে সংযোগ দেয়া হচ্ছে</string>
     <string name="TestBackend">ব্যাক-এন্ড পরীক্ষা করুন</string>
     <string name="HideAllTab">\"All Chats\" ট্যাব লুকান</string>

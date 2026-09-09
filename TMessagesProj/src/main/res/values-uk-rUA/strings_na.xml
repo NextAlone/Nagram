@@ -92,7 +92,7 @@
     <string name="ShowForumAsNormalChat">Показувати форум як звичайний чат</string>
     <string name="DecorationNone">Без ефекту</string>
     <string name="ChatDecoration">Прикраса Чату</string>
-    <string name="NeedChangeNekoSettings">Необхідно змінити параметри N-Settings</string>
+    <string name="NeedChangeNekoSettings">Необхідно змінити параметри N-Config</string>
     <string name="DoNotUnarchiveBySwipe">Зробити не архівування свайпом</string>
     <string name="DoNotShareMyPhoneNumber">Не ділитися моїм номером телефону</string>
     <string name="DefaultDeleteMenu">Видалити меню за замовчуванням</string>

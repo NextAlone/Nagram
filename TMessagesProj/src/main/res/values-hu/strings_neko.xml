@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">Neko Beállítások</string>
+    <string name="NekoSettings">N-Config</string>
     <string name="MessageMenu">Üzenet menü</string>
     <string name="HidePhone">Telefonszámom elrejtése</string>
     <string name="Hide">Elrejt</string>

@@ -153,10 +153,10 @@
     <string name="enhancedFileLoader">加速上傳和下載</string>
     <string name="mapDriftingFixForGoogleMaps">Fix Google Maps drifting in China</string>
     <string name="useOSMDroidMap">Use OSMDroid Map</string>
-    <string name="UnknownNekoSettingsOption">沒有這樣的喵設定選項。</string>
+    <string name="UnknownNekoSettingsOption">沒有這樣的N-設定選項。</string>
     <string name="PasscodeNeeded">您必須先啟用鎖定碼</string>
     <string name="PasscodeNeko">鎖定碼</string>
-    <string name="PasscodeShowInSettings">在喵設定中顯示</string>
+    <string name="PasscodeShowInSettings">在N-設定中顯示</string>
     <string name="PasscodeShowInSettingsAbout">隱藏後，您**只能**透過連結開啟此頁面：</string>
     <string name="PasscodeSet">設定鎖定碼</string>
     <string name="PasscodeEdit">更改鎖定碼</string>

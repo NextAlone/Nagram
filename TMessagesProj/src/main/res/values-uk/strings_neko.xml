@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">Налаштування Neko</string>
+    <string name="NekoSettings">N-конфігурації</string>
     <string name="IPv6">Підключення через IPv6</string>
     <string name="MessageMenu">Меню повідомлень</string>
     <string name="HidePhone">Сховати мій номер телефону</string>
