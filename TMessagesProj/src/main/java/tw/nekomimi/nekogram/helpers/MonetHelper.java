@@ -80,6 +80,7 @@ public class MonetHelper {
         ids.put("n2_700", android.R.color.system_neutral2_700);
         ids.put("n2_800", android.R.color.system_neutral2_800);
         ids.put("n2_900", android.R.color.system_neutral2_900);
+        ids.put("n2_950", R.color.monet_neutral2_950);
         ids.put("n2_1000", android.R.color.system_neutral2_1000);
         ids.put("monetRedDark", R.color.monetRedDark);
         ids.put("monetRedLight", R.color.monetRedLight);
