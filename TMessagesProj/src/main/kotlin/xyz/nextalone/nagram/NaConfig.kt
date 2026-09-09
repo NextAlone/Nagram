@@ -1385,6 +1385,13 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val bypassFileSizeLimit =
+        addConfig(
+            "BypassFileSizeLimit",
+            ConfigItem.configTypeBool,
+            false
+        )
+
 
     private fun addConfig(
         k: String,

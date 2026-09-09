@@ -128,6 +128,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import top.qwq2333.nullgram.utils.StringUtils;
 import xyz.nextalone.nagram.NaConfig;
@@ -9995,8 +9996,91 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
 
             boolean isEncrypted = DialogObject.isEncryptedDialog(dialogId);
             boolean first = true;
-            if (paths != null) {
-                int count = paths.size();
+            boolean bypassLimit = NaConfig.INSTANCE.getBypassFileSizeLimit().Bool();
+            ArrayList<String> finalPaths = paths != null ? new ArrayList<>(paths) : null;
+            ArrayList<String> finalOriginalPaths = originalPaths != null ? new ArrayList<>(originalPaths) : null;
+            ArrayList<Uri> finalUris = uris != null ? new ArrayList<>(uris) : null;
+
+            if (bypassLimit) {
+                long maxPartSize = 1900L * 1024L * 1024L; // ~1.9 GB per part
+                if (finalPaths != null && finalOriginalPaths != null) {
+                    ArrayList<String> newPaths = new ArrayList<>();
+                    ArrayList<String> newOrigPaths = new ArrayList<>();
+                    for (int i = 0; i < finalPaths.size(); i++) {
+                        String p = finalPaths.get(i);
+                        String origP = finalOriginalPaths.get(i);
+                        File srcFile = p != null ? new File(p) : null;
+                        if (srcFile != null && srcFile.exists() && srcFile.length() > FileLoader.DEFAULT_MAX_FILE_SIZE) {
+                            ArrayList<File> parts = splitFileToZip(srcFile, maxPartSize);
+                            if (parts != null && !parts.isEmpty()) {
+                                for (File part : parts) {
+                                    newPaths.add(part.getAbsolutePath());
+                                    newOrigPaths.add(part.getAbsolutePath());
+                                }
+                                continue;
+                            }
+                        }
+                        newPaths.add(p);
+                        newOrigPaths.add(origP);
+                    }
+                    finalPaths = newPaths;
+                    finalOriginalPaths = newOrigPaths;
+                }
+
+                if (finalUris != null) {
+                    ArrayList<Uri> remainingUris = new ArrayList<>();
+                    if (finalPaths == null) {
+                        finalPaths = new ArrayList<>();
+                        finalOriginalPaths = new ArrayList<>();
+                    }
+                    for (int i = 0; i < finalUris.size(); i++) {
+                        Uri u = finalUris.get(i);
+                        long uriLen = 0;
+                        try {
+                            android.content.res.AssetFileDescriptor afd = ApplicationLoader.applicationContext.getContentResolver().openAssetFileDescriptor(u, "r", null);
+                            if (afd != null) {
+                                uriLen = afd.getLength();
+                                afd.close();
+                            }
+                        } catch (Exception ignored) {}
+                        if (uriLen <= 0) {
+                            try {
+                                android.database.Cursor cursor = ApplicationLoader.applicationContext.getContentResolver().query(u, new String[]{android.provider.OpenableColumns.SIZE}, null, null, null);
+                                if (cursor != null) {
+                                    int sizeIdx = cursor.getColumnIndex(android.provider.OpenableColumns.SIZE);
+                                    if (cursor.moveToFirst()) {
+                                        uriLen = cursor.getLong(sizeIdx);
+                                    }
+                                    cursor.close();
+                                }
+                            } catch (Exception ignored) {}
+                        }
+
+                        if (uriLen > FileLoader.DEFAULT_MAX_FILE_SIZE) {
+                            String copiedPath = MediaController.copyFileToCache(u, "tmp");
+                            if (copiedPath != null) {
+                                File srcFile = new File(copiedPath);
+                                ArrayList<File> parts = splitFileToZip(srcFile, maxPartSize);
+                                if (parts != null && !parts.isEmpty()) {
+                                    for (File part : parts) {
+                                        finalPaths.add(part.getAbsolutePath());
+                                        finalOriginalPaths.add(part.getAbsolutePath());
+                                    }
+                                    try {
+                                        srcFile.delete();
+                                    } catch (Exception ignored) {}
+                                    continue;
+                                }
+                            }
+                        }
+                        remainingUris.add(u);
+                    }
+                    finalUris = remainingUris.isEmpty() ? null : remainingUris;
+                }
+            }
+
+            if (finalPaths != null) {
+                int count = finalPaths.size();
                 for (int a = 0; a < count; a++) {
                     final String captionFinal = a == 0 ? caption : null;
                     if (!isEncrypted && count > 1 && mediaCount % 10 == 0 && pollSendParams == null) {
@@ -10008,20 +10092,20 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     }
                     mediaCount++;
                     long prevGroupId = groupId[0];
-                    error = prepareSendingDocumentInternal(accountInstance, paths.get(a), originalPaths.get(a), null, mime, dialogId, replyToMsg, replyToTopMsg, storyItem, quote, a == 0 ? captionEntities : null, editingMessageObject, groupId, !forcedPollDoNotSendFinal && (pollSendParams == null && mediaCount == 10 || a == count - 1), captionFinal, notify, scheduleDate, scheduleRepeatPeriod, docType, inputContent == null, sendMessageChatArguments, first ? effectId : 0, invertMedia, payStars, monoForumPeerId, suggestionParams, pollSendParams, pollSendIndexes!= null ? pollSendIndexes.get(a) : -1);
+                    error = prepareSendingDocumentInternal(accountInstance, finalPaths.get(a), finalOriginalPaths.get(a), null, mime, dialogId, replyToMsg, replyToTopMsg, storyItem, quote, a == 0 ? captionEntities : null, editingMessageObject, groupId, !forcedPollDoNotSendFinal && (pollSendParams == null && mediaCount == 10 || a == count - 1), captionFinal, notify, scheduleDate, scheduleRepeatPeriod, docType, inputContent == null, sendMessageChatArguments, first ? effectId : 0, invertMedia, payStars, monoForumPeerId, suggestionParams, pollSendParams, pollSendIndexes!= null ? pollSendIndexes.get(a) : -1);
                     first = false;
                     if (prevGroupId != groupId[0] || groupId[0] == -1) {
                         mediaCount = 1;
                     }
                 }
             }
-            if (uris != null) {
+            if (finalUris != null) {
                 groupId[0] = 0;
                 mediaCount = 0;
-                int count = uris.size();
-                for (int a = 0; a < uris.size(); a++) {
-                    final String captionFinal = a == 0 && (paths == null || paths.size() == 0) ? caption : null;
-                    final ArrayList<TLRPC.MessageEntity> captionEntitiesFinal = a == 0 && (paths == null || paths.size() == 0) ? captionEntities : null;
+                int count = finalUris.size();
+                for (int a = 0; a < count; a++) {
+                    final String captionFinal = a == 0 && (finalPaths == null || finalPaths.size() == 0) ? caption : null;
+                    final ArrayList<TLRPC.MessageEntity> captionEntitiesFinal = a == 0 && (finalPaths == null || finalPaths.size() == 0) ? captionEntities : null;
                     if (!isEncrypted && count > 1 && mediaCount % 10 == 0 && pollSendParams == null) {
                         if (groupId[0] != 0) {
                             finishGroup(accountInstance, groupId[0], scheduleDate);
@@ -10031,7 +10115,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     }
                     mediaCount++;
                     long prevGroupId = groupId[0];
-                    error = prepareSendingDocumentInternal(accountInstance, null, null, uris.get(a), mime, dialogId, replyToMsg, replyToTopMsg, storyItem, quote, captionEntitiesFinal, editingMessageObject, groupId, !forcedPollDoNotSendFinal && (pollSendParams == null && mediaCount == 10 || a == count - 1), captionFinal, notify, scheduleDate, scheduleRepeatPeriod, docType, inputContent == null, sendMessageChatArguments, first ? effectId : 0, invertMedia, payStars, monoForumPeerId, suggestionParams, pollSendParams, pollSendUriIndexes != null ? pollSendUriIndexes.get(a) : -1);
+                    error = prepareSendingDocumentInternal(accountInstance, null, null, finalUris.get(a), mime, dialogId, replyToMsg, replyToTopMsg, storyItem, quote, captionEntitiesFinal, editingMessageObject, groupId, !forcedPollDoNotSendFinal && (pollSendParams == null && mediaCount == 10 || a == count - 1), captionFinal, notify, scheduleDate, scheduleRepeatPeriod, docType, inputContent == null, sendMessageChatArguments, first ? effectId : 0, invertMedia, payStars, monoForumPeerId, suggestionParams, pollSendParams, pollSendUriIndexes != null ? pollSendUriIndexes.get(a) : -1);
                     first = false;
                     if (prevGroupId != groupId[0] || groupId[0] == -1) {
                         mediaCount = 1;
@@ -10043,6 +10127,76 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             }
             handleError(error, accountInstance);
         });
+    }
+
+    private static ArrayList<File> splitFileToZip(File srcFile, long maxPartSize) {
+        if (srcFile == null || !srcFile.exists() || srcFile.length() <= 0) {
+            return null;
+        }
+        ArrayList<File> result = new ArrayList<>();
+        File cacheDir = FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE);
+        if (cacheDir == null) {
+            cacheDir = ApplicationLoader.applicationContext.getCacheDir();
+        }
+        String fileName = srcFile.getName();
+        byte[] buffer = new byte[1024 * 128];
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(srcFile);
+            long totalLen = srcFile.length();
+            int partIndex = 1;
+            int totalParts = (int) Math.ceil((double) totalLen / maxPartSize);
+            if (totalParts < 1) {
+                totalParts = 1;
+            }
+            long remaining = totalLen;
+            while (remaining > 0) {
+                long currentPartSize = Math.min(remaining, maxPartSize);
+                String partName = String.format(Locale.US, "%s.part%03d.zip", fileName, partIndex);
+                File zipFile = new File(cacheDir, partName);
+                ZipOutputStream zos = null;
+                try {
+                    zos = new ZipOutputStream(new java.io.BufferedOutputStream(new FileOutputStream(zipFile)));
+                    zos.setLevel(java.util.zip.Deflater.NO_COMPRESSION);
+                    String entryName = String.format(Locale.US, "%s.part%03d", fileName, partIndex);
+                    ZipEntry entry = new ZipEntry(entryName);
+                    zos.putNextEntry(entry);
+                    long writtenForPart = 0;
+                    while (writtenForPart < currentPartSize) {
+                        int toRead = (int) Math.min(buffer.length, currentPartSize - writtenForPart);
+                        int read = fis.read(buffer, 0, toRead);
+                        if (read == -1) break;
+                        zos.write(buffer, 0, read);
+                        writtenForPart += read;
+                    }
+                    zos.closeEntry();
+                } finally {
+                    if (zos != null) {
+                        try {
+                            zos.close();
+                        } catch (Exception ignored) {}
+                    }
+                }
+                result.add(zipFile);
+                remaining -= currentPartSize;
+                partIndex++;
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+            for (File f : result) {
+                try {
+                    f.delete();
+                } catch (Exception ignored) {}
+            }
+            return null;
+        } finally {
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (Exception ignored) {}
+            }
+        }
+        return result;
     }
 
     private static void handleError(int error, AccountInstance accountInstance) {
