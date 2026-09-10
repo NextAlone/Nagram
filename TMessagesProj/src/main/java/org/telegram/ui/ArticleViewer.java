@@ -243,6 +243,7 @@ import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.parts.ArticleTransKt;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
+import xyz.nextalone.nagram.NaConfig;
 
 public class ArticleViewer extends IArticleViewer implements NotificationCenter.NotificationCenterDelegate {
 
@@ -1989,9 +1990,14 @@ public class ArticleViewer extends IArticleViewer implements NotificationCenter.
 
             int numBlocks = 0;
             int count = webPage.cached_page.blocks.size();
+            boolean firstBlock = true;
             for (int a = 0; a < count; a++) {
                 TL_iv.PageBlock block = webPage.cached_page.blocks.get(a);
-                if (a == 0) {
+                if (NaConfig.INSTANCE.getDisableInstantViewAiSummary().Bool() && isAiSummaryBlock(block)) {
+                    continue;
+                }
+                if (firstBlock) {
+                    firstBlock = false;
                     block.first = true;
                     if (block instanceof TL_iv.pageBlockCover) {
                         TL_iv.pageBlockCover pageBlockCover = (TL_iv.pageBlockCover) block;
@@ -3168,6 +3174,54 @@ public class ArticleViewer extends IArticleViewer implements NotificationCenter.
             return ((TL_iv.textPhone) richText).phone;
         }
         return null;
+    }
+
+    public static boolean isAiSummaryBlock(TL_iv.PageBlock block) {
+        if (block == null) {
+            return false;
+        }
+        if (block instanceof TL_pageBlockDetailsChild) {
+            TL_pageBlockDetailsChild child = (TL_pageBlockDetailsChild) block;
+            return isAiSummaryBlock(child.parent) || isAiSummaryBlock(child.block);
+        }
+        if (block instanceof TL_iv.pageBlockThinking) {
+            return true;
+        }
+        if (block instanceof TL_iv.pageBlockDetails) {
+            TL_iv.pageBlockDetails details = (TL_iv.pageBlockDetails) block;
+            if (details.blocks != null) {
+                for (int i = 0, size = details.blocks.size(); i < size; i++) {
+                    if (details.blocks.get(i) instanceof TL_iv.pageBlockThinking) {
+                        return true;
+                    }
+                }
+            }
+            if (details.title != null) {
+                CharSequence cs = getPlainText(details.title);
+                if (cs != null) {
+                    String title = cs.toString().trim().toLowerCase();
+                    if (title.contains("ai summary")
+                            || title.contains("ai 总结")
+                            || title.contains("ai总结")
+                            || title.contains("ai 摘要")
+                            || title.contains("ai摘要")
+                            || title.contains("пересказ")
+                            || title.contains("краткое содержание")
+                            || ((title.contains("ai") || title.contains("ia") || title.contains("ki")) && (title.contains("summar") || title.contains("recap") || title.contains("resum") || title.contains("zusammenfass") || title.contains("riassunt")))
+                            || title.equals("summary")) {
+                        return true;
+                    }
+                    try {
+                        String localized = LocaleController.getString("SummaryTitle", R.string.SummaryTitle);
+                        if (!TextUtils.isEmpty(localized) && title.contains(localized.trim().toLowerCase())) {
+                            return true;
+                        }
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     @Override
@@ -6684,6 +6738,9 @@ public class ArticleViewer extends IArticleViewer implements NotificationCenter.
         }
 
         private void addBlock(WebpageAdapter adapter, TL_iv.PageBlock block, int level, int listLevel, int position) {
+            if (NaConfig.INSTANCE.getDisableInstantViewAiSummary().Bool() && isAiSummaryBlock(block)) {
+                return;
+            }
             TL_iv.PageBlock originalBlock = block;
             if (block instanceof TL_pageBlockDetailsChild) {
                 TL_pageBlockDetailsChild blockDetailsChild = (TL_pageBlockDetailsChild) block;

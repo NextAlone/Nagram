@@ -349,6 +349,7 @@
     <string name="ShowRecentForwardTab">转发时显示最近会话</string>
     <string name="ProviderVolcengineTranslate">火山引擎</string>
     <string name="DisableAiEditor">禁用 AI 编辑器</string>
+    <string name="DisableInstantViewAiSummary">禁用即时预览 AI 总结</string>
     <string name="DisableGlareEffects">禁用炫光效果</string>
     <string name="ShowEditedIcon">显示图标而不是 \"已编辑\"</string>
     <string name="DeleteCloudBackup">清除云数据</string>

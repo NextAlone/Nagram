@@ -350,6 +350,7 @@
     <string name="ShowRecentForwardTab">Show recent chats tab when forwarding</string>
     <string name="ProviderVolcengineTranslate">Volcengine Translate</string>
     <string name="DisableAiEditor">Disable Ai Editor</string>
+    <string name="DisableInstantViewAiSummary">Disable AI summary in Instant View</string>
     <string name="DisableGlareEffects">Disable Glare effects</string>
     <string name="ShowEditedIcon">Show icon instead of \"edited\"</string>
     <string name="DeleteCloudBackup">Clear cloud data</string>

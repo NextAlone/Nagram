@@ -119,6 +119,7 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
                     LocaleController.getString(R.string.SummarizeTextButtonAlways),
             }, null));
     private final AbstractConfigCell disableAiEditorRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableAiEditor()));
+    private final AbstractConfigCell disableInstantViewAiSummaryRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableInstantViewAiSummary()));
     private final AbstractConfigCell dividerAiTools = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell headerMap = cellGroup.appendCell(new ConfigCellHeader("Map"));

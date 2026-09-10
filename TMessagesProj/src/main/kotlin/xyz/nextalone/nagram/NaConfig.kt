@@ -1331,6 +1331,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val disableInstantViewAiSummary =
+        addConfig(
+            "DisableInstantViewAiSummary",
+            ConfigItem.configTypeBool,
+            false
+        )
     val disableGlareEffects =
         addConfig(
             "DisableGlareEffects",
