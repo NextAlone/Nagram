@@ -64,7 +64,7 @@ fun MessageObject.translateFinished(locale: Locale): Int {
         messageOwner.translatedPoll = translatedPoll
     } else {
 
-        val text = db.query(messageOwner.message.takeIf { !it.isNullOrBlank() } ?: return 1)
+        val text = db.query(messageOwner.message.takeIf { !it.isNullOrBlank() } ?: return 1)?.takeIf { it.isNotBlank() }
                 ?: return 0
 
         messageOwner.translatedMessage =
@@ -144,9 +144,14 @@ fun ChatActivity.translateMessages(
                     }
                 }
                 else -> deferreds.add(async(transPool) {
-                    translateMessage(selectedObject, target, context, cancel, status)
+                    val success = translateMessage(selectedObject, target, context, cancel, status)
                     if (!cancel.get()) {
-                        selectedObject.messageOwner.translated = true
+                        if (success) {
+                            selectedObject.messageOwner.translated = true
+                        } else {
+                            selectedObject.messageOwner.translated = false
+                            selectedObject.messageOwner.translatedMessage = selectedObject.messageOwner.message
+                        }
                         next()
                         withContext(Dispatchers.Main) {
                             messageHelper.resetMessageContent(dialogId, selectedObject)
@@ -169,9 +174,9 @@ private suspend fun ChatActivity.translateMessage(
     context: List<String>,
     cancel: AtomicBoolean,
     status: AlertDialog?
-) {
+): Boolean {
     val db = TranslateDb.forLocale(target)
-    if (message.isPoll) {
+    return if (message.isPoll) {
         translatePoll(message, target, context, db, cancel, status)
     } else {
         translateText(message, target, context, db, cancel, status)
@@ -185,16 +190,16 @@ private suspend fun ChatActivity.translatePoll(
     db: TranslateDb,
     cancel: AtomicBoolean,
     status: AlertDialog?
-) {
+): Boolean {
     val pool = (message.messageOwner.media as TLRPC.TL_messageMediaPoll).poll
-    var question = if (context.isEmpty()) db.query(pool.question.text) else null
+    var question = if (context.isEmpty()) db.query(pool.question.text)?.takeIf { it.isNotBlank() } else null
     if (question == null) {
-        if (cancel.get()) return
+        if (cancel.get()) return false
         question = runCatching {
             Translator.translate(target, pool.question.text, context)
         }.getOrElse {
             handleError(target, it, cancel, status)
-            return
+            return false
         }
     }
 
@@ -204,15 +209,15 @@ private suspend fun ChatActivity.translatePoll(
         append(question)
     }
 
-    translatedPoll.answers.forEach {
-        var answer = if (context.isEmpty()) db.query(it.text.text) else null
+    for (it in translatedPoll.answers) {
+        var answer = if (context.isEmpty()) db.query(it.text.text)?.takeIf { it.isNotBlank() } else null
         if (answer == null) {
-            if (cancel.get()) return@forEach
+            if (cancel.get()) return false
             answer = runCatching {
                 Translator.translate(target, it.text.text, context)
             }.getOrElse { e ->
                 handleError(target, e, cancel, status)
-                return@forEach
+                return false
             }
         }
         it.text.text = buildString {
@@ -222,14 +227,14 @@ private suspend fun ChatActivity.translatePoll(
     }
 
     translatedPoll.solution?.let { solution ->
-        var translatedSolution = if (context.isEmpty()) db.query(solution.text) else null
+        var translatedSolution = if (context.isEmpty()) db.query(solution.text)?.takeIf { it.isNotBlank() } else null
         if (translatedSolution == null) {
-            if (cancel.get()) return
+            if (cancel.get()) return false
             translatedSolution = runCatching {
                 Translator.translate(target, solution.text, context)
             }.getOrElse {
                 handleError(target, it, cancel, status)
-                return
+                return false
             }
         }
         solution.text = buildString {
@@ -239,6 +244,7 @@ private suspend fun ChatActivity.translatePoll(
     }
 
     message.messageOwner.translatedPoll = translatedPoll
+    return true
 }
 
 private suspend fun ChatActivity.translateText(
@@ -248,21 +254,32 @@ private suspend fun ChatActivity.translateText(
     db: TranslateDb,
     cancel: AtomicBoolean,
     status: AlertDialog?
-) {
-    var text = if (context.isEmpty()) db.query(message.messageOwner.message) else null
+): Boolean {
+    val originalMessage = message.messageOwner?.message
+    if (originalMessage.isNullOrBlank()) {
+        return false
+    }
+    var text = if (context.isEmpty()) db.query(originalMessage)?.takeIf { it.isNotBlank() } else null
     if (text == null) {
         text = runCatching {
-            Translator.translate(target, message.messageOwner.message, context)
+            Translator.translate(target, originalMessage, context)
         }.getOrElse {
             handleError(target, it, cancel, status)
-            return
+            message.messageOwner.translatedMessage = originalMessage
+            return false
         }
     }
 
+    if (text.isBlank()) {
+        message.messageOwner.translatedMessage = originalMessage
+        return false
+    }
+
     message.messageOwner.translatedMessage = buildString {
-        if (!NaConfig.hideOriginAfterTranslation.Bool()) append(message.messageOwner.message + "\n\n--------\n\n")
+        if (!NaConfig.hideOriginAfterTranslation.Bool()) append(originalMessage + "\n\n--------\n\n")
         append(text)
     }
+    return true
 }
 
 private fun ChatActivity.handleError(
