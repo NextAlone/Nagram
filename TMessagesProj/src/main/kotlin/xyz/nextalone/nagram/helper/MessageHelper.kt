@@ -42,7 +42,6 @@ import org.telegram.tgnet.TLRPC.TL_messageEntityEmail
 import org.telegram.tgnet.TLRPC.TL_messageEntityHashtag
 import org.telegram.tgnet.TLRPC.TL_messageEntityMention
 import org.telegram.tgnet.TLRPC.TL_messageEntityPhone
-import org.telegram.tgnet.TLRPC.TL_messageEntitySpoiler
 import org.telegram.tgnet.TLRPC.TL_messageEntityUrl
 import org.telegram.tgnet.TLRPC.TL_messageMediaPoll
 import org.telegram.ui.ActionBar.Theme
@@ -132,7 +131,7 @@ object MessageHelper {
                     addFileToClipboard(file2, callback)
                 }
             }
-        } catch (ignored: java.lang.Exception) {
+        } catch (_: java.lang.Exception) {
         }
     }
 
@@ -167,10 +166,11 @@ object MessageHelper {
         }
     }
 
+    @JvmStatic
     fun zalgoFilter(
-        text: String
+        text: String?
     ): String {
-        return zalgoFilter(text as CharSequence).toString()
+        return zalgoFilter(text as CharSequence?).toString()
     }
 
     fun zalgoFilter(
