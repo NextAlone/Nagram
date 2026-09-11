@@ -283,9 +283,6 @@ class NetworkRequestBuilder(
                         responseBody = responseBodyBytes!!.toString(Charsets.UTF_8)
                     } else {
                         responseBody = response.bodyAsText()
-                        if (responseBody.length > 10000) {
-                            responseBody = responseBody.take(10000) + "\n... (truncated)"
-                        }
                     }
                 } catch (e: Exception) {
                     responseBody = "Unable to read response body: ${e.message}"
