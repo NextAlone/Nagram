@@ -6084,7 +6084,7 @@ public class MessageObject {
                         }
                     }
                 }
-            } else if (messageOwner.translated) {
+            } else if (messageOwner.translated && !TextUtils.isEmpty(messageOwner.translatedMessage)) {
                 messageText = messageOwner.translatedMessage;
             } else {
                 if (messageOwner.message != null) {
