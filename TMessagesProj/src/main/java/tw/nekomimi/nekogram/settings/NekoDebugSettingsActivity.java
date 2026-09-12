@@ -29,6 +29,7 @@ import org.telegram.ui.ProfileActivity;
 import java.util.ArrayList;
 
 import tw.nekomimi.nekogram.NekoXConfig;
+import tw.nekomimi.nekogram.helpers.AppRestartHelper;
 import tw.nekomimi.nekogram.config.CellGroup;
 import tw.nekomimi.nekogram.config.ConfigItem;
 import tw.nekomimi.nekogram.config.cell.AbstractConfigCell;
@@ -87,6 +88,8 @@ public class NekoDebugSettingsActivity extends BaseNekoXSettingsActivity {
             new AutoUpdateChannelConfigItem(),
             autoUpdateChannelOptions,
             null));
+
+    private final AbstractConfigCell restartAppRow = cellGroup.appendCell(new ConfigCellText("RestartApp", AppRestartHelper::triggerRebirth));
 
     private final AbstractConfigCell divider0 = cellGroup.appendCell(new ConfigCellDivider());
 
