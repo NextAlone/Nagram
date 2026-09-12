@@ -377,5 +377,5 @@
     <string name="InputAnimationModerate">Moderate</string>
     <string name="InputAnimationStrong">Strong</string>
     <string name="InputAnimationStrongest">Strongest</string>
-    <string name="Restart">Restart</string>
+    <string name="RestartApp">Restart App</string>
 </resources>
