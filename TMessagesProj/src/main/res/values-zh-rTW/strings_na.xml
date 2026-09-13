@@ -17,6 +17,8 @@
     <string name="NoiseSuppressAndVoiceEnhance">噪音抑制和語音增強</string>
     <string name="RepeatAsCopy">無引用復讀</string>
     <string name="DoubleTapAction">雙擊操作</string>
+    <string name="DoubleTapActionIncoming">收到的訊息</string>
+    <string name="DoubleTapActionOutgoing">傳送的訊息</string>
     <string name="SendReactions">表情回應</string>
     <string name="ShowReactions">顯示表情回應選單</string>
     <string name="CustomTitle">自訂標題</string>

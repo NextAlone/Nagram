@@ -88,7 +88,9 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     private final AbstractConfigCell showSpoilersDirectlyRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showSpoilersDirectly));
     private final AbstractConfigCell dividerMessages = cellGroup.appendCell(new ConfigCellDivider());
 
-    private final AbstractConfigCell doubleTapActionRow = cellGroup.appendCell(new ConfigCellCustom("DoubleTapAction", CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final AbstractConfigCell headerDoubleTap = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.DoubleTapAction)));
+    private final AbstractConfigCell doubleTapActionIncomingRow = cellGroup.appendCell(new ConfigCellCustom("DoubleTapActionIncoming", CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final AbstractConfigCell doubleTapActionOutgoingRow = cellGroup.appendCell(new ConfigCellCustom("DoubleTapActionOutgoing", CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final AbstractConfigCell dividerDoubleTap = cellGroup.appendCell(new ConfigCellDivider());
 
     // Chats
@@ -358,7 +360,8 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                         return Unit.INSTANCE;
                     });
                     builder.show();
-                } else if (position == cellGroup.rows.indexOf(doubleTapActionRow)) {
+                } else if (position == cellGroup.rows.indexOf(doubleTapActionIncomingRow) || position == cellGroup.rows.indexOf(doubleTapActionOutgoingRow)) {
+                    boolean outgoing = position == cellGroup.rows.indexOf(doubleTapActionOutgoingRow);
                     ArrayList<String> arrayList = new ArrayList<>();
                     ArrayList<Integer> types = new ArrayList<>();
                     arrayList.add(LocaleController.getString("Disable", R.string.Disable));
@@ -377,11 +380,13 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                     types.add(DoubleTap.DOUBLE_TAP_ACTION_REPEAT);
                     arrayList.add(LocaleController.getString("RepeatAsCopy", R.string.RepeatAsCopy));
                     types.add(DoubleTap.DOUBLE_TAP_ACTION_REPEAT_AS_COPY);
-                    arrayList.add(LocaleController.getString("Edit", R.string.Edit));
-                    types.add(DoubleTap.DOUBLE_TAP_ACTION_EDIT);
+                    if (outgoing) {
+                        arrayList.add(LocaleController.getString("Edit", R.string.Edit));
+                        types.add(DoubleTap.DOUBLE_TAP_ACTION_EDIT);
+                    }
                     PopupBuilder builder = new PopupBuilder(view);
                     builder.setItems(arrayList, (i, str) -> {
-                        NaConfig.INSTANCE.getDoubleTapAction().setConfigInt(types.get(i));
+                        (outgoing ? NaConfig.INSTANCE.getDoubleTapActionOutgoing() : NaConfig.INSTANCE.getDoubleTapActionIncoming()).setConfigInt(types.get(i));
                         listAdapter.notifyItemChanged(position);
                         return Unit.INSTANCE;
                     });
@@ -628,8 +633,10 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                         TextSettingsCell textCell = (TextSettingsCell) holder.itemView;
                         if (position == cellGroup.rows.indexOf(maxRecentStickerCountRow)) {
                             textCell.setTextAndValue(LocaleController.getString(R.string.maxRecentStickerCount), String.valueOf(NekoConfig.maxRecentStickerCount.Int()), divider);
-                        } else if (position == cellGroup.rows.indexOf(doubleTapActionRow)) {
-                            textCell.setTextAndValue(LocaleController.getString(R.string.DoubleTapAction), DoubleTap.doubleTapActionMap.get(NaConfig.INSTANCE.getDoubleTapAction().Int()), divider);
+                        } else if (position == cellGroup.rows.indexOf(doubleTapActionIncomingRow)) {
+                            textCell.setTextAndValue(LocaleController.getString(R.string.DoubleTapActionIncoming), DoubleTap.doubleTapActionMap.get(NaConfig.INSTANCE.getDoubleTapActionIncoming().Int()), divider);
+                        } else if (position == cellGroup.rows.indexOf(doubleTapActionOutgoingRow)) {
+                            textCell.setTextAndValue(LocaleController.getString(R.string.DoubleTapActionOutgoing), DoubleTap.doubleTapActionMap.get(NaConfig.INSTANCE.getDoubleTapActionOutgoing().Int()), divider);
                         }
                     } else if (view instanceof EmojiSetCell) {
                         EmojiSetCell v1 =  (EmojiSetCell) view;
