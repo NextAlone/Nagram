@@ -202,6 +202,7 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
     }));
     private final AbstractConfigCell mediaPreviewRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.mediaPreview));
     private final AbstractConfigCell showUserIconsInChatsListRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowUserIconsInChatsList()));
+    private final AbstractConfigCell searchLongClickRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getSearchLongClick(), LocaleController.getString(R.string.SearchLongClickDesc)));
     private final AbstractConfigCell divider4 = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell header5 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Appearance")));
@@ -556,6 +557,8 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
             } else if (key.equals(NaConfig.INSTANCE.getTabStyleStroke().getKey())) {
                 getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
             } else if (key.equals(NaConfig.INSTANCE.getMaterialDesign3ChatHeader().getKey())) {
+                parentLayout.rebuildAllFragmentViews(false, false);
+            } else if (key.equals(NaConfig.INSTANCE.getSearchLongClick().getKey())) {
                 parentLayout.rebuildAllFragmentViews(false, false);
             }
         };

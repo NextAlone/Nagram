@@ -3530,21 +3530,23 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
 
         // na: Added ability to open Saved Messages on long click on search top button
-        searchItem.setOnLongClickListener(v -> {
-            if (MessagesController.getInstance(UserConfig.selectedAccount).savedViewAsChats) {
-                Bundle args = new Bundle();
-                args.putLong("dialog_id", UserConfig.getInstance(currentAccount).getClientUserId());
-                args.putInt("type", MediaActivity.TYPE_MEDIA);
-                args.putInt("start_from", SharedMediaLayout.TAB_SAVED_DIALOGS);
-                MediaActivity mediaActivity = new MediaActivity(args, null);
-                presentFragment(mediaActivity);
-            } else {
-                Bundle args = new Bundle();
-                args.putLong("user_id", UserConfig.getInstance(currentAccount).getClientUserId());
-                presentFragment(new ChatActivity(args));
-            }
-            return true;
-        });
+        if (NaConfig.INSTANCE.getSearchLongClick().Bool()) {
+            searchItem.setOnLongClickListener(v -> {
+                if (MessagesController.getInstance(UserConfig.selectedAccount).savedViewAsChats) {
+                    Bundle args = new Bundle();
+                    args.putLong("dialog_id", UserConfig.getInstance(currentAccount).getClientUserId());
+                    args.putInt("type", MediaActivity.TYPE_MEDIA);
+                    args.putInt("start_from", SharedMediaLayout.TAB_SAVED_DIALOGS);
+                    MediaActivity mediaActivity = new MediaActivity(args, null);
+                    presentFragment(mediaActivity);
+                } else {
+                    Bundle args = new Bundle();
+                    args.putLong("user_id", UserConfig.getInstance(currentAccount).getClientUserId());
+                    presentFragment(new ChatActivity(args));
+                }
+                return true;
+            });
+        }
 
         searchItem.setSearchFieldHint(getString(R.string.Search));
         searchItem.setContentDescription(getString(R.string.Search));

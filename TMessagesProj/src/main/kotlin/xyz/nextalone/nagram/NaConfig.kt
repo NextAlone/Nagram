@@ -1394,6 +1394,13 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val searchLongClick =
+        addConfig(
+            "SearchLongClick",
+            ConfigItem.configTypeBool,
+            true
+        )
+
 
     private fun addConfig(
         k: String,
