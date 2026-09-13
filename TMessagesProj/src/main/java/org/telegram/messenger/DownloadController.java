@@ -1275,6 +1275,10 @@ public class DownloadController extends BaseController implements NotificationCe
         }
         removeLoadingFileObserver(observer);
 
+        if (fileName == null) {
+            return;
+        }
+
         ArrayList<WeakReference<FileDownloadProgressListener>> arrayList = loadingFileObservers.get(fileName);
         if (arrayList == null) {
             arrayList = new ArrayList<>();
