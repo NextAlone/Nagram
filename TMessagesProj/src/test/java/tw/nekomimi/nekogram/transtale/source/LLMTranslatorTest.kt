@@ -92,4 +92,36 @@ class LLMTranslatorTest {
         assertEquals("system", anthropic["system"]?.jsonPrimitive?.content)
         assertFalse("temperature" in anthropic)
     }
+
+    @Test
+    fun handlesGeminiModelParametersAndLegacyCompatibility() {
+        assertTrue(LLMTranslator.isGeminiLegacy("gemini-2.5-flash"))
+        assertTrue(LLMTranslator.isGeminiLegacy("gemini-2.0-flash"))
+        assertTrue(LLMTranslator.isGeminiLegacy("gemini-3-flash"))
+        assertTrue(LLMTranslator.isGeminiLegacy("gemini-3.1-pro"))
+        assertFalse(LLMTranslator.isGeminiLegacy("gemini-3.5"))
+        assertFalse(LLMTranslator.isGeminiLegacy("gemini-latest"))
+
+        assertTrue(LLMTranslator.supportsTemperature("gemini-2.5-flash"))
+        assertFalse(LLMTranslator.supportsTemperature("gemini-3.5"))
+        assertFalse(LLMTranslator.supportsTemperature("gpt-5"))
+        assertTrue(LLMTranslator.supportsTemperature("gpt-4.1-mini"))
+
+        assertEquals("none", LLMTranslator.getReasoningEffort("gemini-2.5-flash"))
+        assertEquals("minimal", LLMTranslator.getReasoningEffort("gemini-3.5"))
+        assertEquals("minimal", LLMTranslator.getReasoningEffort("gemini-flash-latest"))
+
+        val geminiLegacyChat = LLMTranslator.buildOpenAIChatRequestBody("gemini-2.5-flash", "system", "user", 0.7)
+        assertEquals("0.7", geminiLegacyChat["temperature"]?.jsonPrimitive?.content)
+        assertEquals("none", geminiLegacyChat["reasoning_effort"]?.jsonPrimitive?.content)
+
+        val gemini35Chat = LLMTranslator.buildOpenAIChatRequestBody("gemini-3.5-flash", "system", "user", 0.7)
+        assertFalse("temperature" in gemini35Chat)
+        assertEquals("minimal", gemini35Chat["reasoning_effort"]?.jsonPrimitive?.content)
+
+        val openRouterGoogle = LLMTranslator.buildOpenAIChatRequestBody(
+            "google/gemini-2.5-flash", "system", "user", 0.7, baseUrl = "https://openrouter.ai/api/v1"
+        )
+        assertEquals("none", openRouterGoogle["reasoning"]?.jsonObject?.get("effort")?.jsonPrimitive?.content)
+    }
 }

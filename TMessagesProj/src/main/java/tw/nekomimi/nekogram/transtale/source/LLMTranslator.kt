@@ -199,7 +199,7 @@ object LLMTranslator : Translator {
     private suspend fun doOpenAIChatTranslate(
         baseUrl: String, apiKey: String, model: String, systemPrompt: String, userPrompt: String, temperature: Double
     ): String {
-        val requestBody = buildOpenAIChatRequestBody(model, systemPrompt, userPrompt, temperature)
+        val requestBody = buildOpenAIChatRequestBody(model, systemPrompt, userPrompt, temperature, baseUrl)
 
         val response = NetworkRequestBuilder.post("$baseUrl/chat/completions") {
             header("Authorization", "Bearer $apiKey")
@@ -295,7 +295,7 @@ object LLMTranslator : Translator {
     private suspend fun doCustomTranslate(
         fullUrl: String, apiKey: String, model: String, systemPrompt: String, userPrompt: String, temperature: Double
     ): String {
-        val requestBody = buildOpenAIChatRequestBody(model, systemPrompt, userPrompt, temperature)
+        val requestBody = buildOpenAIChatRequestBody(model, systemPrompt, userPrompt, temperature, fullUrl)
 
         val response = NetworkRequestBuilder.post(fullUrl) {
             header("Authorization", "Bearer $apiKey")
@@ -320,11 +320,45 @@ object LLMTranslator : Translator {
 
     // --- Helpers ---
 
+    fun getBaseModelName(model: String?): String {
+        if (model.isNullOrBlank()) {
+            return ""
+        }
+        return model.trim().substringAfterLast('/')
+    }
+
+    fun isGemini3(model: String?): Boolean {
+        return getBaseModelName(model).lowercase().startsWith("gemini-3")
+    }
+
+    fun isGeminiLegacy(model: String?): Boolean {
+        val base = getBaseModelName(model).lowercase()
+        return base.startsWith("gemini-2") || base.startsWith("gemini-3-") || base.startsWith("gemini-3.1")
+    }
+
+    fun supportsTemperature(model: String?): Boolean {
+        val base = getBaseModelName(model).lowercase()
+        return !base.startsWith("gpt-5") && (!base.startsWith("gemini") || isGeminiLegacy(model))
+    }
+
+    fun getReasoningEffort(model: String?): String {
+        val base = getBaseModelName(model).lowercase()
+        return when {
+            base.startsWith("gpt-oss") -> "low"
+            base.startsWith("gpt-5.") -> "none"
+            base.startsWith("gpt-5") -> "minimal"
+            base.startsWith("gemini") && (base.endsWith("latest") || !isGeminiLegacy(model)) -> "minimal"
+            base.contains("gemma4") || base.contains("gemma-4") -> "minimal"
+            else -> "none"
+        }
+    }
+
     internal fun buildOpenAIChatRequestBody(
         model: String,
         systemPrompt: String,
         userPrompt: String,
-        temperature: Double
+        temperature: Double,
+        baseUrl: String? = null
     ) = buildJsonObject {
         put("model", model)
         put("messages", buildJsonArray {
@@ -337,7 +371,20 @@ object LLMTranslator : Translator {
                 put("content", userPrompt)
             })
         })
-        put("temperature", temperature)
+        if (supportsTemperature(model)) {
+            put("temperature", temperature)
+        }
+        val base = getBaseModelName(model).lowercase()
+        if (baseUrl?.contains("openrouter.ai") == true) {
+            val routerProvider = model.trim().substringBefore('/', "").lowercase()
+            if (routerProvider == "google") {
+                put("reasoning", buildJsonObject {
+                    put("effort", getReasoningEffort(model))
+                })
+            }
+        } else if (base.contains("gemini") && base.contains("flash")) {
+            put("reasoning_effort", getReasoningEffort(model))
+        }
     }
 
     internal fun buildOpenAIResponseRequestBody(
@@ -349,7 +396,9 @@ object LLMTranslator : Translator {
         put("model", model)
         put("instructions", systemPrompt)
         put("input", userPrompt)
-        put("temperature", temperature)
+        if (supportsTemperature(model)) {
+            put("temperature", temperature)
+        }
     }
 
     internal fun buildAnthropicRequestBody(
@@ -494,8 +543,13 @@ object LLMTranslator : Translator {
             val data = json["data"]?.jsonArray ?: json["models"]?.jsonArray ?: return emptyList()
 
             data.mapNotNull { element ->
-                element.jsonObject["id"]?.jsonPrimitive?.content
-            }.sorted()
+                val obj = element.jsonObject
+                var id = obj["id"]?.jsonPrimitive?.content ?: obj["name"]?.jsonPrimitive?.content ?: return@mapNotNull null
+                if (id.startsWith("models/")) {
+                    id = id.substring("models/".length)
+                }
+                id.ifEmpty { null }
+            }.distinct().sorted()
         } catch (e: Exception) {
             emptyList()
         }
