@@ -4959,7 +4959,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             @Override
             public boolean onItemClick(View view, int position) {
                 if (position == idAndDcRow) {
-                    AlertUtil.copyLinkAndAlert("tg://chat?id=" + getProfileId());
+                    AlertUtil.copyLinkAndAlert("tg://openmessage?" + (userId != 0 ? "user_id=" : "chat_id=") + getProfileId());
                     return true;
                 }
                 if (position == versionRow) {
