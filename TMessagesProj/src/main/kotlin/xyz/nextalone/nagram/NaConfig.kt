@@ -1431,6 +1431,25 @@ object NaConfig {
         return a
     }
 
+    private fun checkMigrate() {
+        // Split the legacy setting once, preserving independently saved choices.
+        if (preferences.contains("DoubleTapAction")) {
+            val legacyAction =
+                preferences.getInt("DoubleTapAction", DoubleTap.DOUBLE_TAP_ACTION_NONE)
+            val editor = preferences.edit()
+            if (!preferences.contains(doubleTapActionIncoming.key)) {
+                editor.putInt(
+                    doubleTapActionIncoming.key,
+                    if (legacyAction == DoubleTap.DOUBLE_TAP_ACTION_EDIT) DoubleTap.DOUBLE_TAP_ACTION_NONE else legacyAction
+                )
+            }
+            if (!preferences.contains(doubleTapActionOutgoing.key)) {
+                editor.putInt(doubleTapActionOutgoing.key, legacyAction)
+            }
+            editor.apply()
+        }
+    }
+
     fun loadConfig(
         force: Boolean
     ) {
@@ -1440,21 +1459,7 @@ object NaConfig {
             if (configLoaded && !force) {
                 return
             }
-            // Split the legacy setting once, preserving independently saved choices.
-            if (preferences.contains("DoubleTapAction")) {
-                val legacyAction = preferences.getInt("DoubleTapAction", DoubleTap.DOUBLE_TAP_ACTION_NONE)
-                val editor = preferences.edit()
-                if (!preferences.contains(doubleTapActionIncoming.key)) {
-                    editor.putInt(
-                        doubleTapActionIncoming.key,
-                        if (legacyAction == DoubleTap.DOUBLE_TAP_ACTION_EDIT) DoubleTap.DOUBLE_TAP_ACTION_NONE else legacyAction
-                    )
-                }
-                if (!preferences.contains(doubleTapActionOutgoing.key)) {
-                    editor.putInt(doubleTapActionOutgoing.key, legacyAction)
-                }
-                editor.apply()
-            }
+            checkMigrate()
             for (i in configs.indices) {
                 val o =
                     configs[i]

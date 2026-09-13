@@ -2056,7 +2056,7 @@ public class ChatActivity extends BaseFragment implements
                         (bottomChannelButtonsLayout == null || bottomChannelButtonsLayout.getVisibility() != View.VISIBLE) &&
                         (currentChat == null || ((!ChatObject.isNotInChat(currentChat) || isThreadChat()) && (!ChatObject.isChannel(currentChat) || ChatObject.canPost(currentChat) || currentChat.megagroup) && ChatObject.canSendMessages(currentChat)));
                 selectedObjectToEditCaption = null;
-                boolean allowEdit = message.canEditMessage(currentChat) && !chatActivityEnterView.hasAudioToSend() && message.getDialogId() != mergeDialogId;
+                boolean allowEdit = message.canEditMessage(currentChat) && !chatActivityEnterView.hasAudioToSend() && message.getDialogId() != mergeDialogId && message.type != MessageObject.TYPE_STORY && message.type != MessageObject.TYPE_POLL;
                 if (allowEdit && selectedObjectGroup != null) {
                     int captionsCount = 0;
                     for (int a = 0, N = selectedObjectGroup.messages.size(); a < N; a++) {
@@ -2090,7 +2090,7 @@ public class ChatActivity extends BaseFragment implements
                                 (!isThreadChat() || getMessageHelper().getMessageForRepeat(message, selectedObjectGroup) != null);
                         return allowRepeat && !message.isSponsored() && chatMode != MODE_SCHEDULED && !message.needDrawBluredPreview() && !message.isLiveLocation() && message.type != 16;
                     case DoubleTap.DOUBLE_TAP_ACTION_EDIT:
-                        return message.isOutOwner() && allowEdit;
+                        return allowEdit;
                 }
             }
             return false;
