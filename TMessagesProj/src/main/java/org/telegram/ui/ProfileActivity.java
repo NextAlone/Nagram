@@ -360,6 +360,7 @@ import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import tw.nekomimi.nekogram.BackButtonMenuRecent;
+import tw.nekomimi.nekogram.helpers.ProfileDateHelper;
 import tw.nekomimi.nekogram.helpers.SettingsHelper;
 import tw.nekomimi.nekogram.helpers.SettingsSearchResult;
 import tw.nekomimi.nekogram.settings.RegexFiltersSettingActivity;
@@ -4959,7 +4960,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             @Override
             public boolean onItemClick(View view, int position) {
                 if (position == idAndDcRow) {
-                    AlertUtil.copyLinkAndAlert("tg://openmessage?" + (userId != 0 ? "user_id=" : "chat_id=") + getProfileId());
+                    showProfileIdMenu(view);
                     return true;
                 }
                 if (position == versionRow) {
@@ -7645,6 +7646,22 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     private String getProfileId() {
         return Long.toString(userId != 0 ? userId : chatId);
+    }
+
+    private void showProfileIdMenu(View view) {
+        String profileId = getProfileId();
+        ItemOptions options = ItemOptions.makeOptions(this, view);
+        options.setScrimViewBackground(listView.getClipBackground(view));
+        if (userId != 0) {
+            options.addText(ProfileDateHelper.getUserTime(userId), 13, null, -1);
+        }
+        options.add(R.drawable.msg_copy, LocaleController.getString(R.string.Copy), () -> {
+            AlertUtil.copyAndAlert(profileId);
+        });
+        options.add(R.drawable.profile_link, LocaleController.getString(R.string.CopyLink), () -> {
+            AlertUtil.copyLinkAndAlert("https://t.me/@id" + profileId);
+        });
+        options.show();
     }
 
     private int getProfileDc() {

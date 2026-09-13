@@ -63,7 +63,7 @@ public class ProfileDateHelper {
                 long date2 = data2.getDate();
                 double date = (date1 + t * (date2 - date1)) * 1000.0;
                 long dateLong = Math.round(date);
-                return getUserTime("~", dateLong);
+                return getUserTime("≈", dateLong);
             }
         }
         if (userId <= 1000000) {
