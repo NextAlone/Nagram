@@ -6,6 +6,7 @@ import android.util.Base64
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import tw.nekomimi.nekogram.config.ConfigItem
+import xyz.nextalone.nagram.helper.DoubleTap
 import tw.nekomimi.nekogram.config.ConfigItemKeyLinked
 import java.io.ByteArrayInputStream
 import java.io.ObjectInputStream
@@ -139,9 +140,15 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
-    val doubleTapAction =
+    val doubleTapActionIncoming =
         addConfig(
-            "DoubleTapAction",
+            "DoubleTapActionIncoming",
+            ConfigItem.configTypeInt,
+            0
+        )
+    val doubleTapActionOutgoing =
+        addConfig(
+            "DoubleTapActionOutgoing",
             ConfigItem.configTypeInt,
             0
         )
@@ -1424,6 +1431,25 @@ object NaConfig {
         return a
     }
 
+    private fun checkMigrate() {
+        // Split the legacy setting once, preserving independently saved choices.
+        if (preferences.contains("DoubleTapAction")) {
+            val legacyAction =
+                preferences.getInt("DoubleTapAction", DoubleTap.DOUBLE_TAP_ACTION_NONE)
+            val editor = preferences.edit()
+            if (!preferences.contains(doubleTapActionIncoming.key)) {
+                editor.putInt(
+                    doubleTapActionIncoming.key,
+                    if (legacyAction == DoubleTap.DOUBLE_TAP_ACTION_EDIT) DoubleTap.DOUBLE_TAP_ACTION_NONE else legacyAction
+                )
+            }
+            if (!preferences.contains(doubleTapActionOutgoing.key)) {
+                editor.putInt(doubleTapActionOutgoing.key, legacyAction)
+            }
+            editor.apply()
+        }
+    }
+
     fun loadConfig(
         force: Boolean
     ) {
@@ -1433,6 +1459,7 @@ object NaConfig {
             if (configLoaded && !force) {
                 return
             }
+            checkMigrate()
             for (i in configs.indices) {
                 val o =
                     configs[i]

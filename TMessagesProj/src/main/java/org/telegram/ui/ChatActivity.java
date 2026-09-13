@@ -1809,14 +1809,19 @@ public class ChatActivity extends BaseFragment implements
 
     private final static int id_chat_compose_panel = 1000;
 
+    private int getDoubleTapAction(View view) {
+        return view instanceof ChatMessageCell ? DoubleTap.getAction(((ChatMessageCell) view).getMessageObject()) : DoubleTap.DOUBLE_TAP_ACTION_NONE;
+    }
+
     RecyclerListView.OnItemLongClickListenerExtended onItemLongClickListener = new RecyclerListView.OnItemLongClickListenerExtended() {
         @Override
         public boolean onItemClick(View view, int position, float x, float y) {
             if (isTryingTextSelection() || hasTextSelection() || inPreviewMode || isInsideContainer) {
                 return false;
             }
-            if((scrimPopupWindow != null && NaConfig.INSTANCE.getDoubleTapAction().Int()==DoubleTap.DOUBLE_TAP_ACTION_SHOW_REACTIONS))
+            if (scrimPopupWindow != null && getDoubleTapAction(view) == DoubleTap.DOUBLE_TAP_ACTION_SHOW_REACTIONS) {
                 return false;
+            }
             wasManualScroll = true;
             boolean result = true;
             boolean showMenu = true;
@@ -2011,11 +2016,12 @@ public class ChatActivity extends BaseFragment implements
 
         public boolean hasDoubleTap(View view, int position) {
             if (isQuickRepliesOrWelcomeMessagesMode()) return false;
+            final int doubleTapAction = getDoubleTapAction(view);
             boolean allowRepeat;
-            if (NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTap.DOUBLE_TAP_ACTION_NONE || !(view instanceof ChatMessageCell)) {
+            if (doubleTapAction == DoubleTap.DOUBLE_TAP_ACTION_NONE || !(view instanceof ChatMessageCell)) {
                 return false;
             }
-            if (NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTap.DOUBLE_TAP_ACTION_SEND_REACTIONS || NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTap.DOUBLE_TAP_ACTION_SHOW_REACTIONS) {
+            if (doubleTapAction == DoubleTap.DOUBLE_TAP_ACTION_SEND_REACTIONS || doubleTapAction == DoubleTap.DOUBLE_TAP_ACTION_SHOW_REACTIONS) {
                 String reactionStringSetting = getMediaDataController().getDoubleTapReaction();
                 TLRPC.TL_availableReaction reaction = getMediaDataController().getReactionsMap().get(reactionStringSetting);
                 if (reaction == null && (reactionStringSetting == null || !reactionStringSetting.startsWith("animated_"))) {
@@ -2049,7 +2055,8 @@ public class ChatActivity extends BaseFragment implements
                         (currentEncryptedChat != null || message.getId() >= 0) &&
                         (bottomChannelButtonsLayout == null || bottomChannelButtonsLayout.getVisibility() != View.VISIBLE) &&
                         (currentChat == null || ((!ChatObject.isNotInChat(currentChat) || isThreadChat()) && (!ChatObject.isChannel(currentChat) || ChatObject.canPost(currentChat) || currentChat.megagroup) && ChatObject.canSendMessages(currentChat)));
-                boolean allowEdit = message.canEditMessage(currentChat) && !chatActivityEnterView.hasAudioToSend() && message.getDialogId() != mergeDialogId;
+                selectedObjectToEditCaption = null;
+                boolean allowEdit = message.canEditMessage(currentChat) && !chatActivityEnterView.hasAudioToSend() && message.getDialogId() != mergeDialogId && message.type != MessageObject.TYPE_STORY && message.type != MessageObject.TYPE_POLL;
                 if (allowEdit && selectedObjectGroup != null) {
                     int captionsCount = 0;
                     for (int a = 0, N = selectedObjectGroup.messages.size(); a < N; a++) {
@@ -2063,7 +2070,7 @@ public class ChatActivity extends BaseFragment implements
                     }
                     allowEdit = captionsCount < 2;
                 }
-                switch (NaConfig.INSTANCE.getDoubleTapAction().Int()) {
+                switch (doubleTapAction) {
                     case DoubleTap.DOUBLE_TAP_ACTION_TRANSLATE:
                         MessageObject messageObject = getMessageForTranslate();
                         if (messageObject != null) {
@@ -2091,14 +2098,15 @@ public class ChatActivity extends BaseFragment implements
 
         @Override
         public void onDoubleTap(View view, int position, float x, float y) {
+            final int doubleTapAction = getDoubleTapAction(view);
             if ((selectedMessagesIds[0].size() + selectedMessagesIds[1].size()) > 0) {
                 BulletinFactory.of(ChatActivity.this).createSimpleBulletin(R.raw.error, getString(R.string.DisableDoubleTapWhenSelecting)).show();
                 return;
             }
-            if (NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTap.DOUBLE_TAP_ACTION_NONE || !(view instanceof ChatMessageCell) || getParentActivity() == null || isSecretChat() || isInScheduleMode() || isInPreviewMode() || isQuickRepliesOrWelcomeMessagesMode()) {
+            if (doubleTapAction == DoubleTap.DOUBLE_TAP_ACTION_NONE || !(view instanceof ChatMessageCell) || getParentActivity() == null || isSecretChat() || isInScheduleMode() || isInPreviewMode() || isQuickRepliesOrWelcomeMessagesMode()) {
                 return;
             }
-            if (NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTap.DOUBLE_TAP_ACTION_SEND_REACTIONS) {
+            if (doubleTapAction == DoubleTap.DOUBLE_TAP_ACTION_SEND_REACTIONS) {
                 if (getParentActivity() == null || isSecretChat() || isInScheduleMode() || isInPreviewMode() || isQuickRepliesOrWelcomeMessagesMode()) {
                     return;
                 }
@@ -2144,14 +2152,14 @@ public class ChatActivity extends BaseFragment implements
                     }
                     selectReaction(view, messageObject, null, null, x, y, ReactionsLayoutInBubble.VisibleReaction.fromEmojicon(reaction), true, false, false, false);
                 }
-            } else if (NaConfig.INSTANCE.getDoubleTapAction().Int() == DoubleTap.DOUBLE_TAP_ACTION_SHOW_REACTIONS) {
+            } else if (doubleTapAction == DoubleTap.DOUBLE_TAP_ACTION_SHOW_REACTIONS) {
                 createMenu(view, true, false, x, y, true, false, false, true);
             } else {
                 var cell = (ChatMessageCell) view;
                 var message = cell.getMessageObject();
                 selectedObject = message;
                 selectedObjectGroup = getValidGroupedMessage(message);
-                switch (NaConfig.INSTANCE.getDoubleTapAction().Int()) {
+                switch (doubleTapAction) {
                     case DoubleTap.DOUBLE_TAP_ACTION_TRANSLATE:
                         nkbtn_translate(selectedObject, selectedObjectGroup);
                         break;
@@ -2168,7 +2176,9 @@ public class ChatActivity extends BaseFragment implements
                         processSelectedOption(nkbtn_repeatascopy);
                         break;
                     case DoubleTap.DOUBLE_TAP_ACTION_EDIT:
-                        processSelectedOption(OPTION_EDIT);
+                        if (hasDoubleTap(view, position)) {
+                            processSelectedOption(OPTION_EDIT);
+                        }
                         break;
                 }
             }

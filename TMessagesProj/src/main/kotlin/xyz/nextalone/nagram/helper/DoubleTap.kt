@@ -1,7 +1,9 @@
 package xyz.nextalone.nagram.helper
 
 import org.telegram.messenger.LocaleController
+import org.telegram.messenger.MessageObject
 import org.telegram.messenger.R
+import xyz.nextalone.nagram.NaConfig
 
 object DoubleTap {
     @JvmField
@@ -25,6 +27,18 @@ object DoubleTap {
         7
     const val DOUBLE_TAP_ACTION_EDIT =
         8
+
+    @JvmStatic
+    fun getAction(message: MessageObject?): Int {
+        if (message == null) return DOUBLE_TAP_ACTION_NONE
+        val outgoing = message.isOutOwner
+        val action = if (outgoing) {
+            NaConfig.doubleTapActionOutgoing.Int()
+        } else {
+            NaConfig.doubleTapActionIncoming.Int()
+        }
+        return if (!outgoing && action == DOUBLE_TAP_ACTION_EDIT) DOUBLE_TAP_ACTION_NONE else action
+    }
 
     init {
         doubleTapActionMap[DOUBLE_TAP_ACTION_NONE] =
