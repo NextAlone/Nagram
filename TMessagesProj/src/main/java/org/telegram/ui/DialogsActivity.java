@@ -12944,7 +12944,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     public boolean getAllowGlobalSearch() {
-        return allowGlobalSearch;
+        // Privacy patch: never allow search to query Telegram's public/global
+        // directory. Search results are restricted to dialogs, contacts and
+        // chats the account already has locally, regardless of what any
+        // caller passes in the "allowGlobalSearch" fragment argument.
+        return false;
     }
 
     @Override

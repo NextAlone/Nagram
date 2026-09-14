@@ -1,0 +1,208 @@
+diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Adapters/SearchAdapterHelper.java b/TMessagesProj/src/main/java/org/telegram/ui/Adapters/SearchAdapterHelper.java
+index cd3aa505..5d9473c1 100644
+--- a/TMessagesProj/src/main/java/org/telegram/ui/Adapters/SearchAdapterHelper.java
++++ b/TMessagesProj/src/main/java/org/telegram/ui/Adapters/SearchAdapterHelper.java
+@@ -85,7 +85,10 @@ public class SearchAdapterHelper {
+     private String lastFoundChannel;
+ 
+     private boolean allResultsAreGlobal;
+-    private boolean allowGlobalResults = true;
++    // Privacy patch: default to local-only results (contacts / chats already
++    // present), never showing public/global directory matches, unless a
++    // caller explicitly re-enables it via setAllowGlobalResults(true).
++    private boolean allowGlobalResults = false;
+ 
+     private ArrayList<HashtagObject> hashtags;
+     private HashMap<String, HashtagObject> hashtagsByText;
+diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Components/DialogsChannelsAdapter.java b/TMessagesProj/src/main/java/org/telegram/ui/Components/DialogsChannelsAdapter.java
+index acda553f..844628ac 100644
+--- a/TMessagesProj/src/main/java/org/telegram/ui/Components/DialogsChannelsAdapter.java
++++ b/TMessagesProj/src/main/java/org/telegram/ui/Components/DialogsChannelsAdapter.java
+@@ -193,138 +193,45 @@ public class DialogsChannelsAdapter extends UniversalAdapter {
+     private int nextRate;
+     private int searchChannelsId;
+     public String query;
++    // Privacy patch: this used to (1) run TL_messages_searchGlobal with
++    // broadcasts_only=true, which searches message text across every public
++    // channel on Telegram, and (2) run TL_contacts_search with broadcasts=true,
++    // which queries Telegram's public channel directory for both channels you
++    // are not in (response.results) and Telegram's server-side channel
++    // recommendations (a discovery/suggestion feed of public channels).
++    // Both of those are "public" search against Telegram's servers.
++    //
++    // Replaced with a purely local filter over channels already joined
++    // (myChannels, populated by updateMyChannels() from this account's own
++    // dialog list) — no network request is sent, and only channels you are
++    // already a member of can ever appear.
+     private void searchMessages(boolean next) {
+-        loadingMessages = true;
++        loadingMessages = false;
++        loadingChannels = false;
+         final int searchId = ++searchChannelsId;
+-        TLRPC.TL_messages_searchGlobal req = new TLRPC.TL_messages_searchGlobal();
+-        req.broadcasts_only = true;
+-        if (folderId != 0) {
+-            req.flags |= 1;
+-            req.folder_id = folderId;
+-        }
+-        req.q = this.query;
+-        req.limit = 25;
+-        req.filter = new TLRPC.TL_inputMessagesFilterEmpty();
+-        if (next && !messages.isEmpty()) {
+-            MessageObject lastMessage = messages.get(messages.size() - 1);
+-            req.offset_rate = nextRate;
+-            req.offset_id = lastMessage.getId();
+-            if (lastMessage.messageOwner.peer_id == null) {
+-                req.offset_peer = new TLRPC.TL_inputPeerEmpty();
+-            } else {
+-                req.offset_peer = MessagesController.getInstance(currentAccount).getInputPeer(lastMessage.messageOwner.peer_id);
+-            }
+-        } else {
+-            req.offset_rate = 0;
+-            req.offset_id = 0;
+-            req.offset_peer = new TLRPC.TL_inputPeerEmpty();
+-        }
+-        AndroidUtilities.runOnUIThread(() -> {
+-            if (searchId != searchChannelsId || !TextUtils.equals(req.q, this.query)) return;
+-            ConnectionsManager.getInstance(currentAccount).sendRequest(req, (res, err) -> AndroidUtilities.runOnUIThread(() -> {
+-                if (searchId != searchChannelsId || !TextUtils.equals(req.q, this.query)) return;
+-                loadingMessages = false;
+-                if (!next) {
+-                    messages.clear();
+-                }
+-                if (res instanceof TLRPC.messages_Messages) {
+-                    TLRPC.messages_Messages response = (TLRPC.messages_Messages) res;
+-                    MessagesStorage.getInstance(currentAccount).putUsersAndChats(response.users, response.chats, true, true);
+-                    MessagesController.getInstance(currentAccount).putUsers(response.users, false);
+-                    MessagesController.getInstance(currentAccount).putChats(response.chats, false);
+-
+-                    for (TLRPC.Message message : response.messages) {
+-                        MessageObject messageObject = new MessageObject(currentAccount, message, false, true);
+-                        messageObject.setQuery(query);
+-                        messages.add(messageObject);
+-                    }
+-
+-                    hasMore = response instanceof TLRPC.TL_messages_messagesSlice;
+-                    allCount = Math.max(messages.size(), response.count);
+-                    nextRate = response.next_rate;
+-                }
+-                update(true);
+-            }));
+-        }, next ? 800 : 0);
+-
+-        if (!next) {
+-            loadingChannels = true;
+-            TLRPC.TL_contacts_search req2 = new TLRPC.TL_contacts_search();
+-            req2.limit = 20;
+-            req2.broadcasts = true;
+-            req2.q = this.query;
+-            ConnectionsManager.getInstance(currentAccount).sendRequestTyped(req2, AndroidUtilities::runOnUIThread, (res, err) -> {
+-                if (!TextUtils.equals(req2.q, this.query) || TextUtils.isEmpty(this.query)) return;
+-
+-                loadingChannels = false;
+-                TLRPC.TL_contacts_found response = null;
+-                if (res instanceof TLRPC.TL_contacts_found) {
+-                    response = (TLRPC.TL_contacts_found) res;
+-                    MessagesStorage.getInstance(currentAccount).putUsersAndChats(response.users, response.chats, true, true);
+-                    MessagesController.getInstance(currentAccount).putUsers(response.users, false);
+-                    MessagesController.getInstance(currentAccount).putChats(response.chats, false);
+-                }
+ 
+-                HashSet<Long> chatIds = new HashSet<>();
+-
+-                searchMyChannels.clear();
+-                if (response != null) {
+-                    for (TLRPC.Peer peer : response.my_results) {
+-                        if (!(peer instanceof TLRPC.TL_peerChannel)) continue;
+-                        TLRPC.Chat channel = MessagesController.getInstance(currentAccount).getChat(peer.channel_id);
+-                        if (channel == null) continue;
+-                        if (!ChatObject.isChannelAndNotMegaGroup(channel))
+-                            continue;
+-                        if (chatIds.contains(channel.id))
+-                            continue;
+-                        chatIds.add(channel.id);
+-                        searchMyChannels.add(channel);
+-                    }
+-                }
++        messages.clear();
++        hasMore = false;
++        allCount = 0;
++        nextRate = 0;
+ 
+-                searchRecommendedChannels.clear();
+-                String q = this.query.toLowerCase(), qT = AndroidUtilities.translitSafe(q);
+-                MessagesController.ChannelRecommendations recommendations = MessagesController.getInstance(currentAccount).getCachedChannelRecommendations(0);
+-                if (recommendations != null && !recommendations.chats.isEmpty()) {
+-                    for (TLObject obj : recommendations.chats) {
+-                        if (obj instanceof TLRPC.Chat) {
+-                            final TLRPC.Chat chat = (TLRPC.Chat) obj;
+-                            if (!ChatObject.isChannelAndNotMegaGroup(chat))
+-                                continue;
+-                            TLRPC.Chat localChat = MessagesController.getInstance(currentAccount).getChat(chat.id);
+-                            if (!(ChatObject.isNotInChat(chat) && (localChat == null || ChatObject.isNotInChat(localChat))))
+-                                continue;
+-                            String t = chat.title.toLowerCase(), tT = AndroidUtilities.translitSafe(t);
+-                            if (
+-                                t.startsWith(q) || t.contains(" " + q) ||
+-                                tT.startsWith(qT) || tT.contains(" " + qT)
+-                            ) {
+-                                if (chatIds.contains(chat.id))
+-                                    continue;
+-                                chatIds.add(chat.id);
+-                                searchRecommendedChannels.add(chat);
+-                            }
+-                        }
+-                    }
+-                }
++        searchRecommendedChannels.clear();
++        searchChannels.clear();
+ 
+-                searchChannels.clear();
+-                if (response != null) {
+-                    for (TLRPC.Peer peer : response.results) {
+-                        if (!(peer instanceof TLRPC.TL_peerChannel)) continue;
+-                        TLRPC.Chat channel = MessagesController.getInstance(currentAccount).getChat(peer.channel_id);
+-                        if (channel == null) continue;
+-                        if (!ChatObject.isChannelAndNotMegaGroup(channel))
+-                            continue;
+-                        if (chatIds.contains(channel.id))
+-                            continue;
+-                        chatIds.add(channel.id);
+-                        searchChannels.add(channel);
+-                    }
++        searchMyChannels.clear();
++        if (!TextUtils.isEmpty(this.query)) {
++            String q = this.query.toLowerCase(), qT = AndroidUtilities.translitSafe(q);
++            for (TLRPC.Chat channel : myChannels) {
++                if (channel == null || channel.title == null) continue;
++                String t = channel.title.toLowerCase(), tT = AndroidUtilities.translitSafe(t);
++                if (t.startsWith(q) || t.contains(" " + q) || tT.startsWith(qT) || tT.contains(" " + qT)) {
++                    searchMyChannels.add(channel);
+                 }
++            }
++        }
+ 
+-                update(true);
+-            });
++        if (searchId == searchChannelsId) {
++            update(true);
+         }
+     }
+ 
+diff --git a/TMessagesProj/src/main/java/org/telegram/ui/DialogsActivity.java b/TMessagesProj/src/main/java/org/telegram/ui/DialogsActivity.java
+index 9ec98717..ddb38708 100644
+--- a/TMessagesProj/src/main/java/org/telegram/ui/DialogsActivity.java
++++ b/TMessagesProj/src/main/java/org/telegram/ui/DialogsActivity.java
+@@ -12944,7 +12944,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
+     }
+ 
+     public boolean getAllowGlobalSearch() {
+-        return allowGlobalSearch;
++        // Privacy patch: never allow search to query Telegram's public/global
++        // directory. Search results are restricted to dialogs, contacts and
++        // chats the account already has locally, regardless of what any
++        // caller passes in the "allowGlobalSearch" fragment argument.
++        return false;
+     }
+ 
+     @Override

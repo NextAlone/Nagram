@@ -85,7 +85,10 @@ public class SearchAdapterHelper {
     private String lastFoundChannel;
 
     private boolean allResultsAreGlobal;
-    private boolean allowGlobalResults = true;
+    // Privacy patch: default to local-only results (contacts / chats already
+    // present), never showing public/global directory matches, unless a
+    // caller explicitly re-enables it via setAllowGlobalResults(true).
+    private boolean allowGlobalResults = false;
 
     private ArrayList<HashtagObject> hashtags;
     private HashMap<String, HashtagObject> hashtagsByText;
