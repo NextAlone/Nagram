@@ -402,13 +402,17 @@ public class ContactsController extends BaseController {
             AccountManager am = AccountManager.get(ApplicationLoader.applicationContext);
             if (getUserConfig().isClientActivated()) {
                 readContacts();
-                if (systemAccount == null && !NekoConfig.disableSystemAccount.Bool()) {
-                    try {
-                        TLRPC.User user = getUserConfig().getCurrentUser();
-                        systemAccount = new Account(formatName(user.first_name, user.last_name), BuildConfig.APPLICATION_ID);
-                        am.addAccountExplicitly(systemAccount, "", null);
-                    } catch (Exception e) {
-                        FileLog.e(e);
+                if (NekoConfig.disableSystemAccount.Bool()) {
+                    deleteUnknownAppAccounts();
+                } else {
+                    if (systemAccount == null) {
+                        try {
+                            TLRPC.User user = getUserConfig().getCurrentUser();
+                            systemAccount = new Account(formatName(user.first_name, user.last_name), BuildConfig.APPLICATION_ID);
+                            am.addAccountExplicitly(systemAccount, "", null);
+                        } catch (Exception e) {
+                            FileLog.e(e);
+                        }
                     }
                 }
             }
