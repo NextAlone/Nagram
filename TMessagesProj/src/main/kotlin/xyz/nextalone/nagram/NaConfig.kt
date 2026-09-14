@@ -1394,6 +1394,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val switchStyle =
+        addConfig(
+            "SwitchStyle",
+            ConfigItem.configTypeInt,
+            SwitchStyle.TELEGRAM.value
+        )
 
     private fun addConfig(
         k: String,

@@ -36,9 +36,24 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.BaseCell;
 
+import java.util.Collections;
+import java.util.Set;
+import java.util.WeakHashMap;
+
 import me.vkryl.android.animator.BoolAnimator;
 
+import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.SwitchStyle;
+
 public class Switch extends View {
+    private static final Set<Switch> attachedSwitches = Collections.newSetFromMap(new WeakHashMap<>());
+
+    public static void invalidateAll() {
+        for (Switch switchView : attachedSwitches) {
+            if (switchView != null) switchView.invalidate();
+        }
+    }
+
     private final BoolAnimator animatorIconVisibility = new BoolAnimator(this, CubicBezierInterpolator.EASE_OUT_QUINT, 380L, true);
 
     private RectF rectF;
@@ -261,12 +276,15 @@ public class Switch extends View {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         attachedToWindow = true;
+        attachedSwitches.add(this);
+        invalidate();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         attachedToWindow = false;
+        attachedSwitches.remove(this);
     }
 
     public void setOnCheckedChangeListener(OnCheckedChangeListener listener) {
@@ -377,13 +395,32 @@ public class Switch extends View {
             return;
         }
 
+        boolean modernStyle = NaConfig.INSTANCE.getSwitchStyle().Int() == SwitchStyle.MODERN.getValue();
         int width = AndroidUtilities.dp(31);
         int thumb = AndroidUtilities.dp(20);
         int x = (getMeasuredWidth() - width) / 2;
         float y = (getMeasuredHeight() - AndroidUtilities.dpf2(14)) / 2;
         int tx = x + AndroidUtilities.dp(7) + (int) (AndroidUtilities.dp(17) * progress);
         int ty = getMeasuredHeight() / 2;
-
+        float thumbX = tx;
+        float thumbY = ty;
+        float thumbRadius = AndroidUtilities.dp(8);
+        float trackRadius = AndroidUtilities.dpf2(7);
+        rectF.set(x, y, x + width, y + AndroidUtilities.dpf2(14));
+        if (modernStyle) {
+            float scale = Math.min(AndroidUtilities.dpf2(20), Math.min(getMeasuredHeight(), getMeasuredWidth() * 32f / 56f)) / 32f;
+            float trackWidth = 56 * scale;
+            float trackHeight = 32 * scale;
+            float left = (getMeasuredWidth() - trackWidth) / 2f;
+            float top = (getMeasuredHeight() - trackHeight) / 2f;
+            rectF.set(left, top, left + trackWidth, top + trackHeight);
+            trackRadius = trackHeight / 2f;
+            thumbRadius = 13 * scale;
+            thumbX = left + (16 + 24 * progress) * scale;
+            thumbY = getMeasuredHeight() / 2f;
+            tx = Math.round(thumbX);
+            ty = Math.round(thumbY);
+        }
 
         int color1;
         int color2;
@@ -445,9 +482,10 @@ public class Switch extends View {
             paint.setColor(color);
             paint2.setColor(color);
 
-            rectF.set(x, y, x + width, y + AndroidUtilities.dpf2(14));
-            canvasToDraw.drawRoundRect(rectF, AndroidUtilities.dpf2(7), AndroidUtilities.dpf2(7), paint);
-            canvasToDraw.drawCircle(tx, ty, AndroidUtilities.dpf2(10), paint);
+            canvasToDraw.drawRoundRect(rectF, trackRadius, trackRadius, paint);
+            if (!modernStyle) {
+                canvasToDraw.drawCircle(tx, ty, AndroidUtilities.dpf2(10), paint);
+            }
 
             if (a == 0 && rippleDrawable != null) {
                 rippleDrawable.setBounds(tx - AndroidUtilities.dp(18), ty - AndroidUtilities.dp(18), tx + AndroidUtilities.dp(18), ty + AndroidUtilities.dp(18));
@@ -494,7 +532,7 @@ public class Switch extends View {
             alpha = (int) (a1 + (a2 - a1) * colorProgress);
             paint.setColor(((alpha & 0xff) << 24) | ((red & 0xff) << 16) | ((green & 0xff) << 8) | (blue & 0xff));
 
-            canvasToDraw.drawCircle(tx, ty, AndroidUtilities.dp(8), paint);
+            canvasToDraw.drawCircle(modernStyle ? thumbX : tx, modernStyle ? thumbY : ty, thumbRadius, paint);
 
             if (a == 0) {
                 if (iconDrawable != null) {
@@ -511,7 +549,7 @@ public class Switch extends View {
                             canvas.restore();
                         }
                     }
-                } else if (drawIconType == 1) {
+                } else if (!modernStyle && drawIconType == 1) {
                     tx -= AndroidUtilities.dp(10.8f) - AndroidUtilities.dp(1.3f) * progress;
                     ty -= AndroidUtilities.dp(8.5f) - AndroidUtilities.dp(0.5f) * progress;
                     int startX2 = (int) AndroidUtilities.dpf2(4.6f) + tx;
@@ -535,7 +573,7 @@ public class Switch extends View {
                     endX = startX + AndroidUtilities.dp(7);
                     endY = startY - AndroidUtilities.dp(7);
                     canvasToDraw.drawLine(startX, startY, endX, endY, paint2);
-                } else if (drawIconType == 2 || iconAnimator != null) {
+                } else if (!modernStyle && (drawIconType == 2 || iconAnimator != null)) {
                     paint2.setAlpha((int) (255 * (1.0f - iconProgress)));
                     canvasToDraw.drawLine(tx, ty, tx, ty - AndroidUtilities.dp(5), paint2);
                     canvasToDraw.save();

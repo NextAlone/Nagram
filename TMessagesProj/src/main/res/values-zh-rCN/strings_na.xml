@@ -374,4 +374,7 @@
     <string name="InputAnimationModerate">适中</string>
     <string name="InputAnimationStrong">较强</string>
     <string name="InputAnimationStrongest">最强</string>
+    <string name="SwitchStyle">开关样式</string>
+    <string name="SwitchStyleTelegram">Telegram</string>
+    <string name="SwitchStyleModern">现代</string>
 </resources>
