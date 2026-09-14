@@ -300,6 +300,10 @@
     <string name="LLMTestSuccess">Connection successful!</string>
     <string name="LLMTestFailed">Connection failed: %s</string>
     <string name="LLMTesting">Testing…</string>
+    <string name="Controls">Controls</string>
+    <string name="SwitchStyle">Switch style</string>
+    <string name="SwitchStyleTelegram">Telegram</string>
+    <string name="SwitchStyleModern">Modern</string>
     <string name="MainTabsStyle">Main tabs style</string>
     <string name="MainTabsStyleTextFree">No text</string>
     <string name="HideTabBarPermissionWarnings">Hide tab bar permission warnings</string>

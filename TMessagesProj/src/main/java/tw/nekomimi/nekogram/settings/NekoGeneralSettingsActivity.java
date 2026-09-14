@@ -49,6 +49,7 @@ import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBarView;
+import org.telegram.ui.Components.Switch;
 import org.telegram.ui.Components.UndoView;
 
 import java.util.ArrayList;
@@ -272,6 +273,13 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
     private final AbstractConfigCell sidebarSettingsActivityRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getSidebarSettingsActivity()));
     private final AbstractConfigCell divider5 = cellGroup.appendCell(new ConfigCellDivider());
 
+    private final AbstractConfigCell headerControls = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.Controls)));
+    private final AbstractConfigCell switchStyleRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NaConfig.INSTANCE.getSwitchStyle(), new String[]{
+            LocaleController.getString(R.string.SwitchStyleTelegram),
+            LocaleController.getString(R.string.SwitchStyleModern)
+    }, null, false));
+    private final AbstractConfigCell dividerControls = cellGroup.appendCell(new ConfigCellDivider());
+
     private final AbstractConfigCell header6 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("PrivacyTitle")));
     private final AbstractConfigCell disableSystemAccountRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableSystemAccount));
     private final AbstractConfigCell doNotShareMyPhoneNumberRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDoNotShareMyPhoneNumber()));
@@ -466,6 +474,8 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                         ConnectionsManager.native_setIpStrategy(a, ConnectionsManager.getIpStrategy());
                     }
                 }
+            } else if (key.equals(NaConfig.INSTANCE.getSwitchStyle().getKey())) {
+                Switch.invalidateAll();
             } else if (key.equals(NekoConfig.inappCamera.getKey())) {
                 SharedConfig.setInappCamera((boolean) newValue);
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);

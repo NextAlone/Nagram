@@ -299,6 +299,10 @@
     <string name="LLMTestSuccess">連線成功！</string>
     <string name="LLMTestFailed">連線失敗：%s</string>
     <string name="LLMTesting">測試中…</string>
+    <string name="Controls">控制項</string>
+    <string name="SwitchStyle">開關樣式</string>
+    <string name="SwitchStyleTelegram">Telegram</string>
+    <string name="SwitchStyleModern">現代</string>
     <string name="MainTabsStyle">Main tabs style</string>
     <string name="MainTabsStyleTextFree">No text</string>
     <string name="HideTabBarPermissionWarnings">隱藏標籤列權限警告</string>

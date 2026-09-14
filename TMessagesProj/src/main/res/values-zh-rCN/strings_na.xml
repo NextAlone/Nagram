@@ -299,6 +299,10 @@
     <string name="LLMTestSuccess">连接成功！</string>
     <string name="LLMTestFailed">连接失败：%s</string>
     <string name="LLMTesting">测试中…</string>
+    <string name="Controls">控件</string>
+    <string name="SwitchStyle">开关样式</string>
+    <string name="SwitchStyleTelegram">Telegram</string>
+    <string name="SwitchStyleModern">现代</string>
     <string name="MainTabsStyle">主页底栏样式</string>
     <string name="MainTabsStyleTextFree">无字模式</string>
     <string name="HideTabBarPermissionWarnings">隐藏标签栏权限警告</string>
