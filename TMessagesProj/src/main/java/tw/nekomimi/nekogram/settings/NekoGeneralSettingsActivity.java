@@ -451,7 +451,7 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
         listView.setOnItemLongClickListener((view, position, x, y) -> {
             var holder = listView.findViewHolderForAdapterPosition(position);
             if (holder != null && listAdapter.isEnabled(holder)) {
-                createLongClickDialog(context, NekoGeneralSettingsActivity.this, "general", position);
+                createLongClickDialog(view, NekoGeneralSettingsActivity.this, "general", position);
                 return true;
             }
             return false;

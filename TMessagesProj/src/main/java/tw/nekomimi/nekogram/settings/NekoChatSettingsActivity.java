@@ -399,7 +399,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
         listView.setOnItemLongClickListener((view, position, x, y) -> {
             var holder = listView.findViewHolderForAdapterPosition(position);
             if (holder != null && listAdapter.isEnabled(holder)) {
-                createLongClickDialog(context, NekoChatSettingsActivity.this, "chat", position);
+                createLongClickDialog(view, NekoChatSettingsActivity.this, "chat", position);
                 return true;
             }
             return false;

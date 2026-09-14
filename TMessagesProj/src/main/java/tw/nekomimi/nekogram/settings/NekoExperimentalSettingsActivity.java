@@ -297,7 +297,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
         listView.setOnItemLongClickListener((view, position, x, y) -> {
             var holder = listView.findViewHolderForAdapterPosition(position);
             if (holder != null && listAdapter.isEnabled(holder)) {
-                createLongClickDialog(context, NekoExperimentalSettingsActivity.this, "experimental", position);
+                createLongClickDialog(view, NekoExperimentalSettingsActivity.this, "experimental", position);
                 return true;
             }
             return false;

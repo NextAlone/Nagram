@@ -28,6 +28,7 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.BlurredRecyclerView;
 import org.telegram.ui.Components.BulletinFactory;
+import org.telegram.ui.Components.ItemOptions;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UndoView;
@@ -179,31 +180,22 @@ public class BaseNekoXSettingsActivity extends BaseFragment {
         return position;
     }
 
-    protected void createLongClickDialog(Context context, BaseFragment fragment, String prefix,  int position) {
+    protected void createLongClickDialog(View view, BaseFragment fragment, String prefix, int position) {
         String key = getRowKey(position);
         String value = getRowValue(position);
-        ArrayList<CharSequence> itemsArray = new ArrayList<>();
-        itemsArray.add(LocaleController.getString(R.string.CopyLink));
+
+        ItemOptions options = ItemOptions.makeOptions(fragment, view);
+        options.add(R.drawable.msg_link2, LocaleController.getString(R.string.CopyLink), () -> {
+            AndroidUtilities.addToClipboard(String.format(Locale.getDefault(), BaseNekoSettingsActivity.settingsPrefix, getMessagesController().linkPrefix, prefix, key));
+            BulletinFactory.of(fragment).createCopyLinkBulletin().show();
+        });
         if (value != null) {
-            itemsArray.add(LocaleController.getString(R.string.BackupSettings));
+            options.add(R.drawable.msg_settings, LocaleController.getString(R.string.BackupSettings), () -> {
+                AndroidUtilities.addToClipboard(String.format(Locale.getDefault(), BaseNekoSettingsActivity.settingsPrefix + "&v=%s", getMessagesController().linkPrefix, prefix, key, value));
+                BulletinFactory.of(fragment).createCopyLinkBulletin().show();
+            });
         }
-        CharSequence[] items = itemsArray.toArray(new CharSequence[0]);
-        showDialog(new AlertDialog.Builder(context)
-                .setItems(
-                        items,
-                        (dialogInterface, i) -> {
-                            switch (i) {
-                                case 0:
-                                    AndroidUtilities.addToClipboard(String.format(Locale.getDefault(), BaseNekoSettingsActivity.settingsPrefix, getMessagesController().linkPrefix, prefix, key));
-                                    BulletinFactory.of(fragment).createCopyLinkBulletin().show();
-                                    break;
-                                case 1:
-                                    AndroidUtilities.addToClipboard(String.format(Locale.getDefault(), BaseNekoSettingsActivity.settingsPrefix + "&v=%s", getMessagesController().linkPrefix, prefix, key, value));
-                                    BulletinFactory.of(fragment).createCopyLinkBulletin().show();
-                                    break;
-                            }
-                        })
-                .create());
+        options.show();
     }
 
     public void importToRow(String key, String value, Runnable unknown) {

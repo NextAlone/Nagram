@@ -160,7 +160,7 @@ public class NekoAccountSettingsActivity extends BaseNekoXSettingsActivity {
         listView.setOnItemLongClickListener((view, position, x, y) -> {
             var holder = listView.findViewHolderForAdapterPosition(position);
             if (holder != null && listAdapter.isEnabled(holder)) {
-                createLongClickDialog(context, NekoAccountSettingsActivity.this, "account", position);
+                createLongClickDialog(view, NekoAccountSettingsActivity.this, "account", position);
                 return true;
             }
             return false;
