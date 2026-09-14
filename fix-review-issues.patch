@@ -1,0 +1,69 @@
+diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Adapters/SearchAdapterHelper.java b/TMessagesProj/src/main/java/org/telegram/ui/Adapters/SearchAdapterHelper.java
+index 5d9473c1..eec872fc 100644
+--- a/TMessagesProj/src/main/java/org/telegram/ui/Adapters/SearchAdapterHelper.java
++++ b/TMessagesProj/src/main/java/org/telegram/ui/Adapters/SearchAdapterHelper.java
+@@ -182,7 +182,14 @@ public class SearchAdapterHelper {
+             hasChanged = true;
+         }
+         if (allowUsername) {
+-            if (query.length() > 0) {
++            // Privacy patch: previously this always sent TL_contacts_search to
++            // Telegram's servers whenever there was a non-empty query, and only
++            // filtered out public-directory matches from the *response* based on
++            // allowGlobalResults. That meant the query text itself was still
++            // transmitted to Telegram's public search even when global results
++            // were supposed to be disabled. Now, when global results are
++            // disabled, the request is never sent at all.
++            if (query.length() > 0 && allowGlobalResults) {
+                 TLRPC.TL_contacts_search req = new TLRPC.TL_contacts_search();
+                 req.q = query;
+                 req.limit = 20;
+@@ -274,6 +281,9 @@ public class SearchAdapterHelper {
+                     }
+                 }));
+             } else {
++                // Reached either for an empty query, or when allowGlobalResults
++                // is false (public/global search disabled) — in both cases no
++                // server request is sent and any previous results are cleared.
+                 globalSearch.clear();
+                 globalSearchMap.clear();
+                 localServerSearch.clear();
+diff --git a/TMessagesProj/src/main/java/org/telegram/ui/Components/DialogsChannelsAdapter.java b/TMessagesProj/src/main/java/org/telegram/ui/Components/DialogsChannelsAdapter.java
+index 844628ac..b2c4b2da 100644
+--- a/TMessagesProj/src/main/java/org/telegram/ui/Components/DialogsChannelsAdapter.java
++++ b/TMessagesProj/src/main/java/org/telegram/ui/Components/DialogsChannelsAdapter.java
+@@ -60,6 +60,25 @@ public class DialogsChannelsAdapter extends UniversalAdapter {
+         update(false);
+     }
+ 
++    // Privacy patch: myChannels (below) is a curated shortlist used for the
++    // "your channels" quick-browse row when there's no query — it's
++    // deliberately limited to public channels and capped at 100 for that
++    // display. That makes it the wrong source for actual search: a joined
++    // private channel, or a public channel beyond the 100th, would silently
++    // never be findable. This method instead returns every broadcast channel
++    // the account is a member of, public or private, with no cap, purely
++    // from local dialog data (no network request).
++    private ArrayList<TLRPC.Chat> getAllJoinedChannelsForSearch() {
++        ArrayList<TLRPC.Chat> channels = new ArrayList<>();
++        ArrayList<TLRPC.Dialog> dialogs = MessagesController.getInstance(currentAccount).getAllDialogs();
++        for (TLRPC.Dialog d : dialogs) {
++            TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-d.id);
++            if (chat == null || !ChatObject.isChannelAndNotMegaGroup(chat) || ChatObject.isNotInChat(chat)) continue;
++            channels.add(chat);
++        }
++        return channels;
++    }
++
+     public void updateMyChannels() {
+         ArrayList<TLRPC.Chat> channels = new ArrayList<>();
+         ArrayList<TLRPC.Dialog> dialogs = MessagesController.getInstance(currentAccount).getAllDialogs();
+@@ -221,7 +240,7 @@ public class DialogsChannelsAdapter extends UniversalAdapter {
+         searchMyChannels.clear();
+         if (!TextUtils.isEmpty(this.query)) {
+             String q = this.query.toLowerCase(), qT = AndroidUtilities.translitSafe(q);
+-            for (TLRPC.Chat channel : myChannels) {
++            for (TLRPC.Chat channel : getAllJoinedChannelsForSearch()) {
+                 if (channel == null || channel.title == null) continue;
+                 String t = channel.title.toLowerCase(), tT = AndroidUtilities.translitSafe(t);
+                 if (t.startsWith(q) || t.contains(" " + q) || tT.startsWith(qT) || tT.contains(" " + qT)) {

@@ -182,7 +182,14 @@ public class SearchAdapterHelper {
             hasChanged = true;
         }
         if (allowUsername) {
-            if (query.length() > 0) {
+            // Privacy patch: previously this always sent TL_contacts_search to
+            // Telegram's servers whenever there was a non-empty query, and only
+            // filtered out public-directory matches from the *response* based on
+            // allowGlobalResults. That meant the query text itself was still
+            // transmitted to Telegram's public search even when global results
+            // were supposed to be disabled. Now, when global results are
+            // disabled, the request is never sent at all.
+            if (query.length() > 0 && allowGlobalResults) {
                 TLRPC.TL_contacts_search req = new TLRPC.TL_contacts_search();
                 req.q = query;
                 req.limit = 20;
@@ -274,6 +281,9 @@ public class SearchAdapterHelper {
                     }
                 }));
             } else {
+                // Reached either for an empty query, or when allowGlobalResults
+                // is false (public/global search disabled) — in both cases no
+                // server request is sent and any previous results are cleared.
                 globalSearch.clear();
                 globalSearchMap.clear();
                 localServerSearch.clear();

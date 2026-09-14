@@ -60,6 +60,25 @@ public class DialogsChannelsAdapter extends UniversalAdapter {
         update(false);
     }
 
+    // Privacy patch: myChannels (below) is a curated shortlist used for the
+    // "your channels" quick-browse row when there's no query — it's
+    // deliberately limited to public channels and capped at 100 for that
+    // display. That makes it the wrong source for actual search: a joined
+    // private channel, or a public channel beyond the 100th, would silently
+    // never be findable. This method instead returns every broadcast channel
+    // the account is a member of, public or private, with no cap, purely
+    // from local dialog data (no network request).
+    private ArrayList<TLRPC.Chat> getAllJoinedChannelsForSearch() {
+        ArrayList<TLRPC.Chat> channels = new ArrayList<>();
+        ArrayList<TLRPC.Dialog> dialogs = MessagesController.getInstance(currentAccount).getAllDialogs();
+        for (TLRPC.Dialog d : dialogs) {
+            TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-d.id);
+            if (chat == null || !ChatObject.isChannelAndNotMegaGroup(chat) || ChatObject.isNotInChat(chat)) continue;
+            channels.add(chat);
+        }
+        return channels;
+    }
+
     public void updateMyChannels() {
         ArrayList<TLRPC.Chat> channels = new ArrayList<>();
         ArrayList<TLRPC.Dialog> dialogs = MessagesController.getInstance(currentAccount).getAllDialogs();
@@ -221,7 +240,7 @@ public class DialogsChannelsAdapter extends UniversalAdapter {
         searchMyChannels.clear();
         if (!TextUtils.isEmpty(this.query)) {
             String q = this.query.toLowerCase(), qT = AndroidUtilities.translitSafe(q);
-            for (TLRPC.Chat channel : myChannels) {
+            for (TLRPC.Chat channel : getAllJoinedChannelsForSearch()) {
                 if (channel == null || channel.title == null) continue;
                 String t = channel.title.toLowerCase(), tT = AndroidUtilities.translitSafe(t);
                 if (t.startsWith(q) || t.contains(" " + q) || tT.startsWith(qT) || tT.contains(" " + qT)) {
