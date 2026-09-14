@@ -41,14 +41,16 @@ import java.util.Set;
 import java.util.WeakHashMap;
 
 import me.vkryl.android.animator.BoolAnimator;
+
 import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.SwitchStyle;
 
 public class Switch extends View {
     private static final Set<Switch> attachedSwitches = Collections.newSetFromMap(new WeakHashMap<>());
 
     public static void invalidateAll() {
         for (Switch switchView : attachedSwitches) {
-            switchView.invalidate();
+            if (switchView != null) switchView.invalidate();
         }
     }
 
@@ -393,8 +395,9 @@ public class Switch extends View {
             return;
         }
 
-        boolean modernStyle = NaConfig.INSTANCE.getSwitchStyle().Int() == NaConfig.SWITCH_STYLE_MODERN;
+        boolean modernStyle = NaConfig.INSTANCE.getSwitchStyle().Int() == SwitchStyle.MODERN.getValue();
         int width = AndroidUtilities.dp(31);
+        int thumb = AndroidUtilities.dp(20);
         int x = (getMeasuredWidth() - width) / 2;
         float y = (getMeasuredHeight() - AndroidUtilities.dpf2(14)) / 2;
         int tx = x + AndroidUtilities.dp(7) + (int) (AndroidUtilities.dp(17) * progress);

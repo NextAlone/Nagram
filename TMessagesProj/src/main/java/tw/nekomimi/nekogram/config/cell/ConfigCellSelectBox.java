@@ -26,18 +26,12 @@ public class ConfigCellSelectBox extends AbstractConfigCell {
     private final String[] selectList; // split by \n
     private final String title;
     private final Runnable onClickCustom;
-    private final boolean rebuildFragmentViews;
     private Context ctxCustom;
     private final String key;
 
     // default: customTitle=null customOnClick=null
     public ConfigCellSelectBox(String key, ConfigItem bind, Object selectList_s, Runnable customOnClick) {
-        this(key, bind, selectList_s, customOnClick, true);
-    }
-
-    public ConfigCellSelectBox(String key, ConfigItem bind, Object selectList_s, Runnable customOnClick, boolean rebuildFragmentViews) {
         this.bindConfig = bind;
-        this.rebuildFragmentViews = rebuildFragmentViews;
         String key1 = key;
         if (key == null) {
             key1 = bindConfig.getKey();
@@ -107,7 +101,7 @@ public class ConfigCellSelectBox extends AbstractConfigCell {
                 if (cellGroup.listAdapter != null)
                     cellGroup.listAdapter.notifyItemChanged(cellGroup.rows.indexOf(this));
                 builder.getDismissRunnable().run();
-                if (rebuildFragmentViews && cellGroup.thisFragment != null)
+                if (cellGroup.thisFragment != null)
                     cellGroup.thisFragment.getParentLayout().rebuildAllFragmentViews(false, false);
 
                 cellGroup.runCallback(bindConfig.getKey(), which);
@@ -142,7 +136,7 @@ public class ConfigCellSelectBox extends AbstractConfigCell {
 
             if (cellGroup.listAdapter != null)
                 cellGroup.listAdapter.notifyItemChanged(cellGroup.rows.indexOf(this));
-            if (rebuildFragmentViews && cellGroup.thisFragment != null)
+            if (cellGroup.thisFragment != null)
                 cellGroup.thisFragment.getParentLayout().rebuildAllFragmentViews(false, false);
 
             cellGroup.runCallback(bindConfig.getKey(), i);

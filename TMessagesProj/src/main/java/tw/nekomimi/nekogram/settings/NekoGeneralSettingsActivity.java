@@ -271,14 +271,11 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
         }}));
     }));
     private final AbstractConfigCell sidebarSettingsActivityRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getSidebarSettingsActivity()));
-    private final AbstractConfigCell divider5 = cellGroup.appendCell(new ConfigCellDivider());
-
-    private final AbstractConfigCell headerControls = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.Controls)));
     private final AbstractConfigCell switchStyleRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NaConfig.INSTANCE.getSwitchStyle(), new String[]{
             LocaleController.getString(R.string.SwitchStyleTelegram),
             LocaleController.getString(R.string.SwitchStyleModern)
-    }, null, false));
-    private final AbstractConfigCell dividerControls = cellGroup.appendCell(new ConfigCellDivider());
+    }, null));
+    private final AbstractConfigCell divider5 = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell header6 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("PrivacyTitle")));
     private final AbstractConfigCell disableSystemAccountRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableSystemAccount));

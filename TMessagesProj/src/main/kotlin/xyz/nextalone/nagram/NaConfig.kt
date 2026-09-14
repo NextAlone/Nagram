@@ -1211,14 +1211,6 @@ object NaConfig {
             ConfigItem.configTypeString,
             "0.7"
         )
-    const val SWITCH_STYLE_TELEGRAM = 0
-    const val SWITCH_STYLE_MODERN = 1
-    val switchStyle =
-        addConfig(
-            "SwitchStyle",
-            ConfigItem.configTypeInt,
-            SWITCH_STYLE_TELEGRAM
-        )
     val mainTabsStyle =
         addConfig(
             "MainTabsStyle",
@@ -1401,6 +1393,12 @@ object NaConfig {
             "MaterialDesign3ChatHeader",
             ConfigItem.configTypeBool,
             false
+        )
+    val switchStyle =
+        addConfig(
+            "SwitchStyle",
+            ConfigItem.configTypeInt,
+            SwitchStyle.TELEGRAM.value
         )
 
     private fun addConfig(
