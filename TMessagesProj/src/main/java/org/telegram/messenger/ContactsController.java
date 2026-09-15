@@ -402,6 +402,9 @@ public class ContactsController extends BaseController {
             AccountManager am = AccountManager.get(ApplicationLoader.applicationContext);
             if (getUserConfig().isClientActivated()) {
                 readContacts();
+                if (NekoConfig.disableSystemAccount.Bool()) {
+                    deleteUnknownAppAccounts();
+                }
                 if (systemAccount == null && !NekoConfig.disableSystemAccount.Bool()) {
                     try {
                         TLRPC.User user = getUserConfig().getCurrentUser();
