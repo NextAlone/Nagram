@@ -1259,6 +1259,9 @@ public class ItemTouchHelper extends RecyclerView.ItemDecoration
 
     public int checkHorizontalSwipe(ViewHolder viewHolder, int flags) {
         if (viewHolder != null && viewHolder.itemView instanceof DialogCell) {
+            if (((DialogCell) viewHolder.itemView).getFolderId() == 0 && NaConfig.INSTANCE.getDoNotArchiveBySwipe().Bool()) {
+                return 0;
+            }
             if (((DialogCell) viewHolder.itemView).getFolderId() == 1 && NaConfig.INSTANCE.getDoNotUnarchiveBySwipe().Bool()) {
                 return 0;
             }
