@@ -3522,11 +3522,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 getContactsController().loadGlobalPrivacySetting();
                 showItemOptions();
             });
-            optionsItem.setOnLongClickListener(v -> {
-                getContactsController().loadGlobalPrivacySetting();
-                showItemOptions();
-                return true;
-            });
+            optionsItem.setOnLongClickListener(this::openAccountSelector);
         }
 
         // na: Added ability to open Saved Messages on long click on search top button
