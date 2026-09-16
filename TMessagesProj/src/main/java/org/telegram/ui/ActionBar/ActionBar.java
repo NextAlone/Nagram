@@ -2258,6 +2258,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
         }
     }
 
+    public boolean doNotDrawGlassHeader;
     public boolean doNotDrawGlassMenu;
 
     @Override
@@ -2299,7 +2300,7 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
             }
 
             glassDrawable.setBounds(left, t, right, b);
-            if (!NaConfig.INSTANCE.getMaterialDesign3ChatHeader().Bool()) {
+            if (!doNotDrawGlassHeader) {
                 glassDrawable.draw(canvas);
             }
         }
