@@ -1400,6 +1400,12 @@ object NaConfig {
             ConfigItem.configTypeInt,
             SwitchStyle.TELEGRAM.value
         )
+    val disableChatListSwipeGesture =
+        addConfig(
+            "DisableChatListSwipeGesture",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,
