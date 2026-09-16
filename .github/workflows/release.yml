@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Fetch Status
         run: |
           sed -i 's/\/\///g' settings.gradle
@@ -27,25 +27,27 @@ jobs:
           git submodule status TMessagesProj/jni/third_party/libvpx > libvpx_status
       - name: FFmpeg Cache
         id: cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             TMessagesProj/jni/ffmpeg/build
           key: ${{ hashFiles('ffmpeg_status', 'dav1d_status', 'libvpx_status', 'TMessagesProj/jni/third_party/build_*.sh') }}
       - name: Set up Python 3.12
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         if: steps.cache.outputs.cache-hit != 'true'
         with:
           python-version: '3.12'
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v6
         if: steps.cache.outputs.cache-hit != 'true'
         with:
           java-version: '17'
           distribution: 'temurin'
       - name: Setup Android SDK Tools
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
         if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          packages: 'platform-tools'
       - name: Install NDK
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
@@ -64,27 +66,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Fetch Status
         run: |
           sed -i 's/\/\///g' settings.gradle
           git submodule status TMessagesProj/jni/boringssl > boringssl_status
       - name: BoringSSL Cache
         id: cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             TMessagesProj/jni/boringssl/build
           key: ${{ hashFiles('boringssl_status') }}
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v6
         if: steps.cache.outputs.cache-hit != 'true'
         with:
           java-version: '17'
           distribution: 'temurin'
       - name: Setup Android SDK Tools
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
         if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          packages: 'platform-tools'
       - name: Install NDK
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
@@ -109,7 +113,7 @@ jobs:
           - arm64-v8a
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Fetch Status
         run: |
           sed -i 's/\/\///g' settings.gradle
@@ -119,7 +123,7 @@ jobs:
           git submodule status TMessagesProj/jni/boringssl > boringssl_status
       - name: Native Cache
         id: cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             TMessagesProj/src/main/libs
@@ -129,28 +133,30 @@ jobs:
         run: |
           git submodule update --init
       - name: FFmpeg Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         if: steps.cache.outputs.cache-hit != 'true'
         with:
           path: |
             TMessagesProj/jni/ffmpeg/build
           key: ${{ hashFiles('ffmpeg_status', 'dav1d_status', 'libvpx_status', 'TMessagesProj/jni/third_party/build_*.sh') }}
       - name: BoringSSL Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         if: steps.cache.outputs.cache-hit != 'true'
         with:
           path: |
             TMessagesProj/jni/boringssl/build
           key: ${{ hashFiles('boringssl_status') }}
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v6
         if: steps.cache.outputs.cache-hit != 'true'
         with:
           java-version: '17'
           distribution: 'temurin'
       - name: Setup Android SDK Tools
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
         if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          packages: 'platform-tools'
       - name: Install NDK
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
@@ -174,14 +180,16 @@ jobs:
       - native
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v6
         with:
           java-version: '17'
           distribution: 'temurin'
       - name: Setup Android SDK Tools
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
+        with:
+          packages: 'platform-tools'
       - name: Install NDK
         run: |
           echo "y" | sdkmanager --install "ndk;27.2.12479018" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null
@@ -196,13 +204,13 @@ jobs:
           git submodule status TMessagesProj/jni/third_party/ffmpeg > ffmpeg_status
           git submodule status TMessagesProj/jni/boringssl > boringssl_status
       - name: Native Cache (armeabi-v7a)
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             TMessagesProj/src/main/libs
           key: ${{ hashFiles('TMessagesProj/jni/**', 'ffmpeg_status', 'boringssl_status') }}-armeabi-v7a
       - name: Native Cache (arm64-v8a)
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             TMessagesProj/src/main/libs
@@ -223,11 +231,11 @@ jobs:
           APK=$(dirname $APK)
           echo "APK=$APK" >> $GITHUB_ENV
       - name: Upload gradle.properties
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: gradle-properties
           path: gradle.properties
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: Release
           path: ${{ env.APK }}
@@ -239,21 +247,21 @@ jobs:
       - build
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Remove gradle.properties
         run: |
           rm -f gradle.properties
       - name: Download gradle.properties
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: gradle-properties
           path: .
       - name: Donwload Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: artifacts
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: 3.12
       - name: Send to Telegram
