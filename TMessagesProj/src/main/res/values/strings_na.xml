@@ -384,4 +384,5 @@
     <string name="SwitchStyleTelegram">Telegram</string>
     <string name="SwitchStyleModern">Modern</string>
     <string name="DisableChatListSwipeGesture">Disable chat list swipe gesture</string>
+    <string name="DisableUnreadCountBadge">Disable unread count badge</string>
 </resources>

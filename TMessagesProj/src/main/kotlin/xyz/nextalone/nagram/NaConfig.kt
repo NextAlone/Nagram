@@ -1406,6 +1406,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val disableUnreadCountBadge =
+        addConfig(
+            "DisableUnreadCountBadge",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

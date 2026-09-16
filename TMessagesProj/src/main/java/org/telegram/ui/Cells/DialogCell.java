@@ -2120,15 +2120,16 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 drawError = false;
             } else {
                 if (currentDialogFolderId != 0) {
-                    if (unreadCount + mentionCount > 0) {
-                        if (unreadCount > mentionCount) {
+                    int count = NaConfig.INSTANCE.getDisableUnreadCountBadge().Bool() ? 0 : unreadCount;
+                    if (count + mentionCount > 0) {
+                        if (count > mentionCount) {
                             drawCount = true;
                             drawMention = false;
-                            countString = String.format("%d", unreadCount + mentionCount);
+                            countString = String.format("%d", count + mentionCount);
                         } else {
                             drawCount = false;
                             drawMention = true;
-                            mentionString = String.format("%d", unreadCount + mentionCount);
+                            mentionString = String.format("%d", count + mentionCount);
                         }
                     } else {
                         drawCount = false;
@@ -2140,7 +2141,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                     if (clearingDialog) {
                         drawCount = false;
                         showChecks = false;
-                    } else if (unreadCount != 0) {
+                    } else if (unreadCount != 0 && !NaConfig.INSTANCE.getDisableUnreadCountBadge().Bool()) {
                         drawCount = true;
                         countString = String.format("%d", unreadCount);
                     } else if (markUnread) {
@@ -3637,7 +3638,8 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 }
             }
 
-            if (animated && (oldUnreadCount != unreadCount || oldMarkUnread != markUnread) && (!isDialogCell || (System.currentTimeMillis() - lastDialogChangedTime) > 100)) {
+            boolean unreadCountChanged = !NaConfig.INSTANCE.getDisableUnreadCountBadge().Bool() && oldUnreadCount != unreadCount;
+            if (animated && (unreadCountChanged || oldMarkUnread != markUnread) && (!isDialogCell || (System.currentTimeMillis() - lastDialogChangedTime) > 100)) {
                 if (countAnimator != null) {
                     countAnimator.cancel();
                 }
