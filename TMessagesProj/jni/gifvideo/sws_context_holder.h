@@ -2,8 +2,8 @@
 #define SWS_CONTEXT_HOLDER_H
 
 extern "C" {
-#include "ffmpeg/build/include/libswscale/swscale.h"
-#include "ffmpeg/build/include/libavutil/pixfmt.h"
+#include <libswscale/swscale.h>
+#include <libavutil/pixfmt.h>
 }
 
 struct SwsContextHolder {

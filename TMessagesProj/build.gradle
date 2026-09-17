@@ -7,23 +7,30 @@ apply plugin: "org.jetbrains.kotlin.plugin.serialization"
 apply plugin: "io.sentry.android.gradle"
 apply plugin: "io.objectbox"
 
-apply plugin: 'org.telegram.lottie-meta'
+apply plugin: 'org.telegram.build-plugin'
+apply plugin: 'org.telegram.build-app-plugin'
 apply plugin: 'idea'
 
 idea {
     module {
         excludeDirs += [
-                file('jni/third_party'),
-                file('jni/ffmpeg'),
+                file('jni/td'),
+                file('jni/third_party/boringssl'),
+                file('jni/third_party/dav1d'),
+                file('jni/third_party/ffmpeg'),
+                file('jni/third_party/libvpx'),
+                file('jni/third_party/libyuv'),
+                file('jni/third_party/openh264'),
+                file('jni/third_party/xiph'),
                 file('jni/tlottie'),
-                file('jni/boringssl'),
+                file('jni/voip/webrtc'),
                 file('jni/sqlite')
         ]
     }
 }
 
 def verName = APP_VERSION_NAME
-def verCode = 1248
+def verCode = 1249
 
 
 def officialVer = APP_VERSION_NAME
@@ -212,6 +219,11 @@ android {
         unitTests.includeAndroidResources = true
     }
 
+    androidResources {
+        noCompress += "pack"
+        localeFilters += ["zz"]
+    }
+
     signingConfigs {
         release {
             storeFile project.file("release.keystore")
@@ -227,7 +239,6 @@ android {
             debuggable true
             jniDebuggable true
             multiDexEnabled true
-            zipAlignEnabled true
             signingConfig signingConfigs.release
         }
 
@@ -237,7 +248,6 @@ android {
             minifyEnabled true
             shrinkResources true
             multiDexEnabled true
-            zipAlignEnabled true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             matchingFallbacks = ["release", "debug"]
             signingConfig signingConfigs.release
@@ -314,6 +324,7 @@ dependencies {
     implementation "androidx.sharetarget:sharetarget:1.2.0"
     implementation "androidx.interpolator:interpolator:1.0.0"
     implementation 'androidx.biometric:biometric:1.1.0'
+    implementation 'androidx.webkit:webkit:1.14.0'
 
     implementation ('com.google.android.gms:play-services-cast-framework:21.4.0') {
         exclude group: 'androidx.recyclerview', module: "recyclerview"
@@ -361,6 +372,12 @@ dependencies {
     implementation("io.noties.markwon:ext-latex:4.6.2") {
         exclude group: 'ru.noties', module: 'jlatexmath-android'
     }
+
+    api project(":TMessagesProj_Modules:media3:media-lib-exoplayer")
+    api project(":TMessagesProj_Modules:media3:media-lib-exoplayer-dash")
+    api project(":TMessagesProj_Modules:media3:media-lib-exoplayer-hls")
+    api project(":TMessagesProj_Modules:media3:media-lib-decoder-ffmpeg")
+    api project(":TMessagesProj_Modules:media3:media-lib-session")
     api project(':jlatexmath')
 
 //    implementation 'com.google.mlkit:translate:17.0.3'
@@ -369,9 +386,9 @@ dependencies {
 //        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0") {
 //            because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
 //        }
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0") {
-            because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
-        }
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0") {
+        because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
+    }
 //    }
     implementation ('com.google.android.recaptcha:recaptcha:18.7.1') {
         exclude group: "com.google.crypto.tink", module: "tink-android"
@@ -538,7 +555,7 @@ sentry {
         // as Gradle will resolve it to the latest version.
         //
         // Defaults to the latest published Sentry version.
-        sentryVersion = '8.53.0'
+        sentryVersion = '8.57.0'
     }
 
     // Disables or enables dependencies metadata reporting for Sentry.

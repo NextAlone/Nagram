@@ -4,9 +4,8 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
-import com.google.android.exoplayer2.util.Log;
-
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.R;
 
 import java.util.HashMap;
@@ -98,7 +97,7 @@ public class MonetHelper {
             int id = ids.getOrDefault(amoled && "n1_900".equals(color) ? "n1_1000" : color, 0);
             return ApplicationLoader.applicationContext.getColor(id);
         } catch (Exception e) {
-            Log.e("Theme", "Error loading color " + color);
+            FileLog.e("MonetHelper: Error loading color " + color);
             e.printStackTrace();
             return 0;
         }

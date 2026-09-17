@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
@@ -61,7 +60,6 @@ import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.AutoDeletePopupWrapper;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
-import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.EditTextEmoji;
 import org.telegram.ui.Components.FillLastLinearLayoutManager;
 import org.telegram.ui.Components.FragmentFloatingButton;
@@ -547,7 +545,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             avatarEditor.playAnimation();
         });
 
-        cameraDrawable = new RLottieDrawable(R.raw.camera, "" + R.raw.camera, dp(60), dp(60), false, null);
+        cameraDrawable = new RLottieDrawable(R.raw.camera, dp(60), dp(60), false, null);
 
         avatarEditor = new RLottieImageView(context) {
             @Override

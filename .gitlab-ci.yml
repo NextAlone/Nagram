@@ -1,7 +1,6 @@
 stages:
   - prepare
-  - probe
-  - native-build
+  - native
   - build
   - upload
 
@@ -23,26 +22,12 @@ default:
     - export ANDROID_HOME="${ANDROID_SDK_ROOT:-$ANDROID_HOME}"
     - echo "sdk.dir=${ANDROID_HOME}" > local.properties
     - echo "ndk.dir=${ANDROID_HOME}/ndk/27.2.12479018" >> local.properties
+    - git config --global --add safe.directory $CI_PROJECT_DIR
 
 .fetch-status: &fetch-status |
   sed -i -E 's#https://github\.com/[^/]+/#https://gitlab.com/xtao-labs/mirrors/#g' .gitmodules
   git submodule sync
   git submodule update --init --force
-
-  git submodule status TMessagesProj/jni/third_party/ffmpeg > ffmpeg_status
-  git submodule status TMessagesProj/jni/third_party/libvpx >> ffmpeg_status
-  git submodule status TMessagesProj/jni/third_party/dav1d >> ffmpeg_status
-  cat TMessagesProj/jni/third_party/build_*.sh >> ffmpeg_status
-  cp ffmpeg_status libvpx_status
-
-  git submodule status TMessagesProj/jni/boringssl > boringssl_status
-  cat TMessagesProj/jni/*boringssl*.sh >> boringssl_status
-  cat TMessagesProj/jni/patches/boringssl/* >> boringssl_status
-
-  find TMessagesProj/jni/ -maxdepth 2 -type f -exec cat {} + > native_status 2>/dev/null
-  cat ffmpeg_status boringssl_status >> native_status
-
-  cat gradle/wrapper/gradle-wrapper.properties > gradle_status
 
 fingerprint:
   stage: prepare
@@ -52,14 +37,10 @@ fingerprint:
     - apk add --no-cache git bash coreutils
   script:
     - *fetch-status
-    - export FFMPEG_KEY=$(sha256sum ffmpeg_status | cut -d' ' -f1)
-    - export LIBVPX_KEY=$(sha256sum libvpx_status | cut -d' ' -f1)
-    - export BORINGSSL_KEY=$(sha256sum boringssl_status | cut -d' ' -f1)
+    - find TMessagesProj/jni/ -maxdepth 2 -type f -exec cat {} + > native_status 2>/dev/null
+    - cat gradle/wrapper/gradle-wrapper.properties > gradle_status
     - export NATIVE_KEY=$(sha256sum native_status | cut -d' ' -f1)
     - export GRADLE_KEY=$(sha256sum gradle_status | cut -d' ' -f1)
-    - echo "FFMPEG_KEY=${FFMPEG_KEY}" >> fingerprint.env
-    - echo "LIBVPX_KEY=${LIBVPX_KEY}" >> fingerprint.env
-    - echo "BORINGSSL_KEY=${BORINGSSL_KEY}" >> fingerprint.env
     - echo "NATIVE_KEY=${NATIVE_KEY}" >> fingerprint.env
     - echo "GRADLE_KEY=${GRADLE_KEY}" >> fingerprint.env
     - cat fingerprint.env
@@ -68,84 +49,35 @@ fingerprint:
       dotenv: fingerprint.env
     expire_in: 1 day
 
-cache-probe:
-  stage: probe
-  tags:
-    - saas-linux-small-amd64
-  before_script:
-    - apk add --no-cache bash coreutils
-  needs:
-    - job: fingerprint
-      artifacts: true
+native:
+  stage: native
+  image: registry.gitlab.com/xtao-labs/android-ndk:35-jdk17.0.19_10-ndk27.2.12479018-cmake3.22.1-ci
   cache:
-    - key: "ffmpeg-libvpx-${FFMPEG_KEY}-${LIBVPX_KEY}"
-      paths:
-        - TMessagesProj/jni/ffmpeg/build/
-      policy: pull
-    - key: "boringssl-${BORINGSSL_KEY}"
-      paths:
-        - TMessagesProj/jni/boringssl/build/
-      policy: pull
-    - key: "native-armeabi-v7a-${NATIVE_KEY}"
-      paths:
-        - TMessagesProj/src/main/libs/armeabi-v7a/
-      policy: pull
     - key: "native-arm64-v8a-${NATIVE_KEY}"
       paths:
         - TMessagesProj/src/main/libs/arm64-v8a/
-      policy: pull
   script:
-    - bash bin/scripts/gen-native-pipeline.sh > native-pipeline.yml
-    - cat native-pipeline.yml
-  artifacts:
-    paths:
-      - native-pipeline.yml
-    expire_in: 1 day
-
-native-pipeline:
-  stage: native-build
-  needs:
-    - job: fingerprint
-      artifacts: true
-    - job: cache-probe
-      artifacts: true
-  variables:
-    PARENT_FFMPEG_KEY: "${FFMPEG_KEY}"
-    PARENT_LIBVPX_KEY: "${LIBVPX_KEY}"
-    PARENT_BORINGSSL_KEY: "${BORINGSSL_KEY}"
-    PARENT_NATIVE_KEY: "${NATIVE_KEY}"
-  trigger:
-    include:
-      - artifact: native-pipeline.yml
-        job: cache-probe
-    strategy: depend
+    - *fetch-status
+    - export NATIVE_TARGET="arm64-v8a"
+    - ./run libs native
 
 build:
   stage: build
   image: registry.gitlab.com/xtao-labs/android-ndk:35-jdk17.0.19_10-ndk27.2.12479018-cmake3.22.1-ci
-  before_script:
-    - git config --global --add safe.directory $CI_PROJECT_DIR
   needs:
     - job: fingerprint
       artifacts: true
-    - job: cache-probe
-      artifacts: true
-    - job: native-pipeline
+    - job: native
   cache:
     - key: "gradle-${GRADLE_KEY}"
       paths:
         - .gradle-cache/
-    - key: "native-armeabi-v7a-${NATIVE_KEY}"
-      paths:
-        - TMessagesProj/src/main/libs/armeabi-v7a/
-      policy: pull
     - key: "native-arm64-v8a-${NATIVE_KEY}"
       paths:
         - TMessagesProj/src/main/libs/arm64-v8a/
       policy: pull
   script:
-    - sed -i -E 's#https://github\.com/[^/]+/#https://gitlab.com/xtao-labs/mirrors/#g' .gitmodules
-    - git submodule update --init 'TMessagesProj/lib/*'
+    - *fetch-status
     - sed -i "s/2000000000000/$(date +%s%N | cut -c1-13)/g" gradle.properties
     - export GRADLE_USER_HOME="$CI_PROJECT_DIR/.gradle-cache"
     - export LOCAL_PROPERTIES="${LOCAL_PROPERTIES}"

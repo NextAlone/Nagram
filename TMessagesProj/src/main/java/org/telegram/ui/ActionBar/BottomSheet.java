@@ -60,6 +60,7 @@ import androidx.core.graphics.ColorUtils;
 import androidx.core.view.NestedScrollingParent;
 import androidx.core.view.NestedScrollingParentHelper;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AnimationNotificationsLocker;
@@ -94,7 +95,7 @@ public class BottomSheet extends Dialog implements BaseFragment.AttachedSheet {
     protected int currentAccount = UserConfig.selectedAccount;
     protected ViewGroup containerView;
 
-    public ContainerView container;
+    public final ContainerView container;
     protected boolean keyboardVisible;
     private int lastKeyboardHeight;
     protected int keyboardHeight;
@@ -1198,15 +1199,26 @@ public class BottomSheet extends Dialog implements BaseFragment.AttachedSheet {
     }
 
     public BottomSheet(Context context, boolean needFocus, boolean edgeToEdge, Theme.ResourcesProvider resourcesProvider) {
+        this(context, needFocus, edgeToEdge ? EdgeToEdge.V1 : EdgeToEdge.NONE, resourcesProvider);
+    }
+
+    public BottomSheet(Context context, boolean needFocus, EdgeToEdge edgeToEdge, Theme.ResourcesProvider resourcesProvider) {
         super(context, R.style.TransparentDialog);
         this.resourcesProvider = resourcesProvider;
         if (BuildConfig.DEBUG) {
             LeakDetector.getInstance().add(this);
         }
 
+        if (edgeToEdge == EdgeToEdge.V2) {
+            AndroidUtilities.enableEdgeToEdge(getWindow());
+            drawNavigationBar = false;
+            doNotOverlayNavigationBar = false;
+            drawDoubleNavigationBar = false;
+        }
+
         if (Build.VERSION.SDK_INT >= 30) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            if (edgeToEdge) {
+            if (edgeToEdge != EdgeToEdge.NONE) {
                 focusableSoftInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING;
             }
         } else {
@@ -1266,7 +1278,7 @@ public class BottomSheet extends Dialog implements BaseFragment.AttachedSheet {
         container.setClipToPadding(false);
         container.setBackground(backDrawable);
         focusable = needFocus;
-        if (!edgeToEdge) {
+        if (edgeToEdge == EdgeToEdge.NONE) {
             container.setFitsSystemWindows(true);
             container.setOnApplyWindowInsetsListener((v, insets) -> {
                 processLegacyContainerInsets(insets);
@@ -1284,6 +1296,10 @@ public class BottomSheet extends Dialog implements BaseFragment.AttachedSheet {
         }
 
         backDrawable.setAlpha(0);
+
+        if (edgeToEdge == EdgeToEdge.V2) {
+            ViewCompat.setOnApplyWindowInsetsListener(container, this::onApplyWindowInsetsToRoot);
+        }
     }
 
     protected void processLegacyContainerInsets(WindowInsets insets) {
@@ -2637,5 +2653,16 @@ public class BottomSheet extends Dialog implements BaseFragment.AttachedSheet {
     @Override
     public BulletinFactory getBulletinFactory() {
         return BulletinFactory.of(topBulletinContainer, resourcesProvider);
+    }
+
+    public enum EdgeToEdge {
+        NONE,
+        V1,
+        V2
+    }
+
+    @NonNull
+    protected WindowInsetsCompat onApplyWindowInsetsToRoot(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+        return insets;
     }
 }

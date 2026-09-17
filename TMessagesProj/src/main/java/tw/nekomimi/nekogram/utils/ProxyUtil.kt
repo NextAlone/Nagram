@@ -380,7 +380,7 @@ object ProxyUtil {
 
         } else if (!error) {
 
-            AlertUtil.showSimpleAlert(ctx, LocaleController.getString(R.string.ImportedProxies) + "\n\n" + proxies.joinToString("\n") { it.address })
+            AlertUtil.showSimpleAlert(ctx, LocaleController.getString(R.string.ImportedProxies) + "\n\n" + proxies.joinToString("\n") { it.settings.address })
 
         }
 

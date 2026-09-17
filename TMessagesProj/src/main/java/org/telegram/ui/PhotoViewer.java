@@ -126,6 +126,7 @@ import android.window.OnBackInvokedDispatcher;
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.OptIn;
 import androidx.annotation.RequiresApi;
 import androidx.collection.LongSparseArray;
 import androidx.core.content.ContextCompat;
@@ -139,19 +140,18 @@ import androidx.dynamicanimation.animation.DynamicAnimation;
 import androidx.dynamicanimation.animation.FloatValueHolder;
 import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.dynamicanimation.animation.SpringForce;
+import androidx.media3.common.util.UnstableApi;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import org.telegram.ui.recyclerview.LinearSmoothScrollerEnd;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.Format;
-import com.google.android.exoplayer2.PlaybackException;
-import com.google.android.exoplayer2.analytics.AnalyticsListener;
-import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
-import com.google.android.exoplayer2.video.VideoFrameMetadataListener;
-import com.google.android.exoplayer2.video.VideoSize;
+import androidx.media3.common.C;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.common.Format;
+import androidx.media3.exoplayer.analytics.AnalyticsListener;
+import androidx.media3.exoplayer.video.VideoFrameMetadataListener;
+import androidx.media3.common.VideoSize;
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.face.Face;
@@ -366,6 +366,7 @@ import xyz.nextalone.nagram.helper.MotionPhotoHelper;
 
 @SuppressLint("WrongConstant")
 @SuppressWarnings("unchecked")
+@OptIn(markerClass = UnstableApi.class)
 public class PhotoViewer implements NotificationCenter.NotificationCenterDelegate, GestureDetector2.OnGestureListener, GestureDetector2.OnDoubleTapListener, IPipSourceDelegate, FactorAnimator.Target {
 
     private static final int ANIMATOR_ID_POLL_ATTACH_BUTTONS_VISIBLE = 0;
@@ -10863,11 +10864,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity, resourcesProvider);
                     builder.setTitle(getString("AppName", R.string.AppName));
-                    String errorMessage = getString(R.string.CantPlayVideo);
-                    if (e instanceof PlaybackException) {
-                        errorMessage += "\n" + ((PlaybackException) e).getErrorCodeName();
-                    }
-                    builder.setMessage(errorMessage);
+                    builder.setMessage(getString(R.string.CantPlayVideo));
                     builder.setPositiveButton(getString("Open", R.string.Open), (dialog, which) -> {
                         try {
                             AndroidUtilities.openForView(currentMessageObject, parentActivity, resourcesProvider, true);

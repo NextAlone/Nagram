@@ -119,7 +119,7 @@ public class DatacenterActivity extends BaseNekoSettingsActivity implements Noti
         if (force) {
             listAdapter.notifyItemChanged(position);
         }
-        datacenterInfo.pingId = ConnectionsManager.getInstance(currentAccount).checkProxy("ping.neko", datacenterInfo.id, null, null, null, time -> AndroidUtilities.runOnUIThread(() -> {
+        datacenterInfo.pingId = ConnectionsManager.native_checkProxy(currentAccount, "ping.neko", datacenterInfo.id, "", "", "", time -> AndroidUtilities.runOnUIThread(() -> {
             datacenterInfo.availableCheckTime = SystemClock.elapsedRealtime();
             datacenterInfo.checking = false;
             if (time == -1) {
