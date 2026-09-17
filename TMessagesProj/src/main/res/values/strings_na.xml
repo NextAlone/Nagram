@@ -384,4 +384,6 @@
     <string name="SwitchStyleTelegram">Telegram</string>
     <string name="SwitchStyleModern">Modern</string>
     <string name="DisableChatListSwipeGesture">Disable chat list swipe gesture</string>
+    <string name="NagramOfficialResource">%1$s is the official resource of Nagram.</string>
+    <string name="NagramDevelopmentTeamMember">%1$s is a member of the Nagram development team.</string>
 </resources>

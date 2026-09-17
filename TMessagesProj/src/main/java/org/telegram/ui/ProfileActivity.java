@@ -12099,6 +12099,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         showDialog(premiumPreviewBottomSheet);
                     });
                 }
+                if (user != null && user.verifiedExtended()) {
+                    nameTextView[a].setRightDrawable2OnClick(v -> {
+                        tw.nekomimi.nekogram.NekoXConfig.showVerifiedBulletin(ProfileActivity.this, user, null);
+                    });
+                } else {
+                    nameTextView[a].setRightDrawable2OnClick(null);
+                }
             }
 
             if (userId == UserConfig.getInstance(currentAccount).clientUserId) {
@@ -12351,6 +12358,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     } else {
                         nameTextView[a].setRightDrawable(null);
                     }
+                }
+                if (chat != null && chat.verifiedExtended()) {
+                    final TLRPC.Chat finalChat = chat;
+                    nameTextView[a].setRightDrawable2OnClick(v -> {
+                        tw.nekomimi.nekogram.NekoXConfig.showVerifiedBulletin(ProfileActivity.this, null, finalChat);
+                    });
+                } else {
+                    nameTextView[a].setRightDrawable2OnClick(null);
                 }
                 if (chat.bot_verification_icon != 0) {
                     nameTextView[a].setLeftDrawableOutside(true);
