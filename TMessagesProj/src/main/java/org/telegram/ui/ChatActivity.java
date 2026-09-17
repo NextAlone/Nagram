@@ -20413,13 +20413,6 @@ public class ChatActivity extends BaseFragment implements
                 avatarContainer.setTitle(AndroidUtilities.removeRTL(AndroidUtilities.removeDiacritics(UserObject.getUserName(currentUser))), currentUser.scam, currentUser.fake, currentUser.verifiedExtended(), getMessagesController().isPremiumUser(currentUser), !MessagesController.isSupportUser(currentUser) ? currentUser.emoji_status : null, animated);
             }
         }
-        if ((currentChat != null && currentChat.verifiedExtended()) || (currentUser != null && currentUser.verifiedExtended())) {
-            avatarContainer.getTitleTextView().setRightDrawable2OnClick(v -> {
-                tw.nekomimi.nekogram.NekoXConfig.showVerifiedBulletin(ChatActivity.this, currentUser, currentChat);
-            });
-        } else {
-            avatarContainer.getTitleTextView().setRightDrawable2OnClick(null);
-        }
         setParentActivityTitle(avatarContainer.getTitleTextView().getText());
         updateTitleIcons();
     }
