@@ -17,6 +17,8 @@
     <string name="NoiseSuppressAndVoiceEnhance">Καταστολή Θορύβου Και Βελτίωση Φωνής</string>
     <string name="RepeatAsCopy">Επανάληψη ως Αντιγραφή</string>
     <string name="DoubleTapAction">Ενέργεια Διπλής Αφής</string>
+    <string name="DoubleTapActionIncoming">Ληφθέντα μηνύματα</string>
+    <string name="DoubleTapActionOutgoing">Απεσταλμένα μηνύματα</string>
     <string name="SendReactions">Αποστολή Αντιδράσεων</string>
     <string name="ShowReactions">Εμφάνιση Αντιδράσεων</string>
     <string name="CustomTitle">Προσαρμοσμένος Τίτλος</string>
@@ -30,6 +32,7 @@
     <string name="PhotoCopied">Η φωτογραφία αντιγράφηκε στο πρόχειρο</string>
     <string name="ToTheBeginning">Προς την αρχή</string>
     <string name="DateOfForwardedMsg">Εμφάνιση ημερομηνίας προώθησης μηνύματος</string>
+    <string name="ShowForwardCount">Εμφάνιση μπροστινής μέτρησης</string>
     <string name="ShowMessageID">Εμφάνιση αναγνωριστικού μηνύματος</string>
     <string name="ShowRPCError">Ανάδυση όλων των σφαλμάτων RPC</string>
     <string name="ShowServicesTime">Εμφάνιση χρονοσήμανσης στα μηνύματα υπηρεσίας</string>
@@ -60,7 +63,7 @@
     <string name="QuickToggleAnonymousNotice">Αν είστε ιδιοκτήτης της ομάδας</string>
     <string name="RealHideTimeForSticker">Πραγματικός χρόνος απόκρυψης αυτοκόλλητων</string>
     <string name="ResetSettings">Επαναφορά Ρυθμίσεων</string>
-    <string name="ResetSettingsAlert">Είστε βέβαιοι ότι θέλετε να επαναφέρετε όλες τις N-ρυθμίσεις?</string>
+    <string name="ResetSettingsAlert">Είστε βέβαιοι ότι θέλετε να επαναφέρετε όλα τα N-Config?</string>
     <string name="HideTitle">Απόκρυψη Τίτλου</string>
     <string name="IgnoreFolderCount">Παράβλεψη Καταμέτρησης Φακέλων</string>
     <string name="SendWithoutMarkdown">Αποστολή χωρίς markdown</string>
@@ -92,7 +95,7 @@
     <string name="ShowForumAsNormalChat">Εμφάνιση φόρουμ ως κανονική συνομιλία</string>
     <string name="DecorationNone">Κανένα</string>
     <string name="ChatDecoration">Διακόσμηση Συνομιλίας</string>
-    <string name="NeedChangeNekoSettings">Πρέπει να αλλάξετε τις ρυθμίσεις Ν</string>
+    <string name="NeedChangeNekoSettings">Πρέπει να αλλάξετε το N-Config</string>
     <string name="DoNotUnarchiveBySwipe">Να μην αποσυμπιεσθεί με σύρσιμο</string>
     <string name="DoNotShareMyPhoneNumber">Χωρίς κοινή χρήση αριθμού τηλεφώνου μου</string>
     <string name="DefaultDeleteMenu">Προεπιλεγμένο Διαγραφή Μενού</string>
@@ -357,4 +360,27 @@
     <string name="LiquidGlassAngle">Υγρή γωνία γυαλιού</string>
     <string name="LiquidGlassIntensity">Υγρή ένταση γυαλιού</string>
     <string name="DisableGooeyAvatarAnimation">Απενεργοποίηση κίνησης avatar \"Gooey\"</string>
+    <string name="ForceVideoNewRewindMethod">Εξαναγκασμός χρήσης νέας μεθόδου αναζήτησης βίντεο</string>
+    <string name="TabStyleStroke">Περίγραμμα ένδειξης καρτέλας</string>
+    <string name="AddCommaAfterMention">Προσθήκη Comma μετά την αναφορά</string>
+    <string name="NagramMessages">Μηνύματα</string>
+    <string name="MessagePreviewText">αφού θέλω ο κώδικας να είναι τρομερός είμαι ο ίδιος με την κωδικοποίηση ||vibe-coding||</string>
+    <string name="MessagePreviewPollQuestion">Πώς είναι ο κώδικας?</string>
+    <string name="MessagePreviewPollAnswerTerrible">Τρομερό</string>
+    <string name="MessagePreviewPollAnswerWorse">Ακόμη χειρότερα</string>
+    <string name="UseSystemFontInTitle">Χρήση γραμματοσειράς συστήματος στον τίτλο</string>
+    <string name="MaterialDesign3ChatHeader">Σχεδιασμός υλικού 3 κουβέντα κεφαλίδα</string>
+    <string name="MaterialDesign3ChatHeaderDes">Αφαίρεση φόντου κορυφαίας επικεφαλίδας συνομιλίας</string>
+    <string name="InputTextAnimations">Εφέ κίνησης εισόδου και σωματίδια διαγραφής</string>
+    <string name="InputAnimationStrength">Ένταση κίνησης</string>
+    <string name="InputAnimationWeakest">Ασθενέστερο</string>
+    <string name="InputAnimationWeak">Ασθενής</string>
+    <string name="InputAnimationModerate">Μέτρια</string>
+    <string name="InputAnimationStrong">Ισχυρός</string>
+    <string name="InputAnimationStrongest">Ισχυρότερο</string>
+    <string name="RestartApp">Επανεκκίνηση Εφαρμογής</string>
+    <string name="SwitchStyle">Εναλλαγή στυλ</string>
+    <string name="SwitchStyleTelegram">Telegram</string>
+    <string name="SwitchStyleModern">Μοντέρνο</string>
+    <string name="DisableChatListSwipeGesture">Απενεργοποίηση χειρονομίας σάρωσης λίστας συνομιλίας</string>
 </resources>

@@ -17,6 +17,8 @@
     <string name="NoiseSuppressAndVoiceEnhance">Заглушення шуму та посилення голосу</string>
     <string name="RepeatAsCopy">Повторити як копіювання</string>
     <string name="DoubleTapAction">Дія подвійного дотику</string>
+    <string name="DoubleTapActionIncoming">Отримані повідомлення</string>
+    <string name="DoubleTapActionOutgoing">Відправлені повідомлення</string>
     <string name="SendReactions">Надіслати відгуки</string>
     <string name="ShowReactions">Показати реакції</string>
     <string name="CustomTitle">Свій заголовок</string>
@@ -30,6 +32,7 @@
     <string name="PhotoCopied">Фото скопійовано до буфера обміну</string>
     <string name="ToTheBeginning">На початку</string>
     <string name="DateOfForwardedMsg">Показувати дату початку повідомлення</string>
+    <string name="ShowForwardCount">Показати кількість перемог</string>
     <string name="ShowMessageID">Показати ідентифікатор повідомлення</string>
     <string name="ShowRPCError">Транслювати всі помилки RPC</string>
     <string name="ShowServicesTime">Показувати час у службових повідомленнях</string>
@@ -357,4 +360,27 @@
     <string name="LiquidGlassAngle">Кут Liquid скла</string>
     <string name="LiquidGlassIntensity">Інтенсивність Liquid скла</string>
     <string name="DisableGooeyAvatarAnimation">Вимкніть анімацію аватару</string>
+    <string name="ForceVideoNewRewindMethod">Примусово використовувати новий метод пошуку відео</string>
+    <string name="TabStyleStroke">Контур табуляції</string>
+    <string name="AddCommaAfterMention">Додати комму після згадки</string>
+    <string name="NagramMessages">Повідомлення</string>
+    <string name="MessagePreviewText">оскільки я хочу щоб код був страшним, я ||vibe-coding||</string>
+    <string name="MessagePreviewPollQuestion">Як код?</string>
+    <string name="MessagePreviewPollAnswerTerrible">Жахливо</string>
+    <string name="MessagePreviewPollAnswerWorse">Ще гірше</string>
+    <string name="UseSystemFontInTitle">Використовувати системний шрифт у заголовку</string>
+    <string name="MaterialDesign3ChatHeader">Матеріал Дизайн 3 заголовка чату</string>
+    <string name="MaterialDesign3ChatHeaderDes">Видалити тло заголовка чату</string>
+    <string name="InputTextAnimations">Анімація вводу та видалення частинок</string>
+    <string name="InputAnimationStrength">Інтенсивність анімації</string>
+    <string name="InputAnimationWeakest">Найслабкіша</string>
+    <string name="InputAnimationWeak">Слабкий</string>
+    <string name="InputAnimationModerate">Помірний</string>
+    <string name="InputAnimationStrong">Сильний</string>
+    <string name="InputAnimationStrongest">Найсильніша</string>
+    <string name="RestartApp">Перезапустити програму</string>
+    <string name="SwitchStyle">Перемкнути стиль</string>
+    <string name="SwitchStyleTelegram">Телеграма</string>
+    <string name="SwitchStyleModern">Модерн</string>
+    <string name="DisableChatListSwipeGesture">Вимкнути жест в списку чату</string>
 </resources>

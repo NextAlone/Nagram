@@ -17,6 +17,8 @@
     <string name="NoiseSuppressAndVoiceEnhance">Geluid Onderdrukken en spraakversterkingen</string>
     <string name="RepeatAsCopy">Herhaal als kopie</string>
     <string name="DoubleTapAction">Dubbel Tik Actie</string>
+    <string name="DoubleTapActionIncoming">Ontvangen berichten</string>
+    <string name="DoubleTapActionOutgoing">Verzonden berichten</string>
     <string name="SendReactions">Verstuur reacties</string>
     <string name="ShowReactions">Toon reacties</string>
     <string name="CustomTitle">Aangepaste titel</string>
@@ -30,6 +32,7 @@
     <string name="PhotoCopied">Foto gekopieerd naar Klembord</string>
     <string name="ToTheBeginning">Aan het begin</string>
     <string name="DateOfForwardedMsg">Toon datum van doorgestuurd bericht</string>
+    <string name="ShowForwardCount">Toon aantal vooruit</string>
     <string name="ShowMessageID">Toon bericht-ID</string>
     <string name="ShowRPCError">Toast alle RPC fouten</string>
     <string name="ShowServicesTime">Tijdstempel weergeven in serviceberichten</string>
@@ -60,7 +63,7 @@
     <string name="QuickToggleAnonymousNotice">Als je eigenaar van de groep bent</string>
     <string name="RealHideTimeForSticker">Tijd echte verbergen voor stickers</string>
     <string name="ResetSettings">Instellingen opnieuw instellen</string>
-    <string name="ResetSettingsAlert">Weet u zeker dat u alle N-instellingen wilt herstellen?</string>
+    <string name="ResetSettingsAlert">Weet u zeker dat u alle N-Config?</string>
     <string name="HideTitle">Titel verbergen</string>
     <string name="IgnoreFolderCount">Negeer maptelling</string>
     <string name="SendWithoutMarkdown">Stuur zonder markdown</string>
@@ -92,7 +95,7 @@
     <string name="ShowForumAsNormalChat">Toon forum als normale chat</string>
     <string name="DecorationNone">geen</string>
     <string name="ChatDecoration">Chat Versiering</string>
-    <string name="NeedChangeNekoSettings">Je moet de N-instellingen wijzigen</string>
+    <string name="NeedChangeNekoSettings">U moet N-Config wijzigen</string>
     <string name="DoNotUnarchiveBySwipe">Dearchiveren niet door te vegen</string>
     <string name="DoNotShareMyPhoneNumber">Mijn telefoonnummer niet delen</string>
     <string name="DefaultDeleteMenu">Standaard menu verwijderen</string>
@@ -357,4 +360,27 @@
     <string name="LiquidGlassAngle">Vloeibaar glazen hoek</string>
     <string name="LiquidGlassIntensity">Vloeibare glazen intensiteit</string>
     <string name="DisableGooeyAvatarAnimation">Schakel \"Gooey\" avatar animatie uit</string>
+    <string name="ForceVideoNewRewindMethod">Forceer video gebruik nieuwe zoekmethode</string>
+    <string name="TabStyleStroke">Tabblad indicator omlijning</string>
+    <string name="AddCommaAfterMention">Comma na vermelding toevoegen</string>
+    <string name="NagramMessages">berichten</string>
+    <string name="MessagePreviewText">omdat ik wil dat de code vreselijk i is ben ||vibe-coding||</string>
+    <string name="MessagePreviewPollQuestion">Hoe is de code?</string>
+    <string name="MessagePreviewPollAnswerTerrible">Verschrikkelijk</string>
+    <string name="MessagePreviewPollAnswerWorse">Nog erger</string>
+    <string name="UseSystemFontInTitle">Gebruik systeemlettertype in titel</string>
+    <string name="MaterialDesign3ChatHeader">Materiaal Ontwerp 3 chat header</string>
+    <string name="MaterialDesign3ChatHeaderDes">Verwijder achtergrond: top chat koptekst</string>
+    <string name="InputTextAnimations">Invoer animatie en verwijder deeltjes</string>
+    <string name="InputAnimationStrength">Animatie sterkte</string>
+    <string name="InputAnimationWeakest">Zwakste</string>
+    <string name="InputAnimationWeak">Zwak</string>
+    <string name="InputAnimationModerate">Matig</string>
+    <string name="InputAnimationStrong">Sterk</string>
+    <string name="InputAnimationStrongest">Sterkste</string>
+    <string name="RestartApp">App herstarten</string>
+    <string name="SwitchStyle">Stijl wijzigen</string>
+    <string name="SwitchStyleTelegram">Telegram</string>
+    <string name="SwitchStyleModern">Vernieuwend</string>
+    <string name="DisableChatListSwipeGesture">Schakel chat lijst veeg gebaar uit</string>
 </resources>

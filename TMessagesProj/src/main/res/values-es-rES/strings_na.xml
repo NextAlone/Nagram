@@ -17,6 +17,8 @@
     <string name="NoiseSuppressAndVoiceEnhance">Supresión de ruido y mejora de voz</string>
     <string name="RepeatAsCopy">Repetir como copia</string>
     <string name="DoubleTapAction">Acción de doble toque</string>
+    <string name="DoubleTapActionIncoming">Mensajes recibidos</string>
+    <string name="DoubleTapActionOutgoing">Mensajes enviados</string>
     <string name="SendReactions">Enviar reacciones</string>
     <string name="ShowReactions">Mostrar reacciones</string>
     <string name="CustomTitle">Título personalizado</string>
@@ -30,6 +32,7 @@
     <string name="PhotoCopied">Foto copiada al portapapeles</string>
     <string name="ToTheBeginning">Al principio</string>
     <string name="DateOfForwardedMsg">Mostrar la fecha del mensaje reenviado</string>
+    <string name="ShowForwardCount">Mostrar contador de avance</string>
     <string name="ShowMessageID">Mostrar la ID del mensaje</string>
     <string name="ShowRPCError">Motrar todos los errores RPC</string>
     <string name="ShowServicesTime">Mostrar marca de tiempo en los mensajes del servicio</string>
@@ -60,7 +63,7 @@
     <string name="QuickToggleAnonymousNotice">Si eres el dueño del grupo</string>
     <string name="RealHideTimeForSticker">Tiempo de ocultación real para stickers</string>
     <string name="ResetSettings">Restablecer Ajustes</string>
-    <string name="ResetSettingsAlert">¿Está seguro de que desea restablecer todos los N-Ajustes?</string>
+    <string name="ResetSettingsAlert">¿Está seguro de que desea restablecer toda la N-Config?</string>
     <string name="HideTitle">Ocultar el título</string>
     <string name="IgnoreFolderCount">Ignorar contador de carpetas</string>
     <string name="SendWithoutMarkdown">Enviar sin markdown</string>
@@ -92,7 +95,7 @@
     <string name="ShowForumAsNormalChat">Mostrar el foro como un chat normal</string>
     <string name="DecorationNone">Ninguna</string>
     <string name="ChatDecoration">Decoración del chat</string>
-    <string name="NeedChangeNekoSettings">Necesitas cambiar las preferencias de na</string>
+    <string name="NeedChangeNekoSettings">Necesitas cambiar N-Config</string>
     <string name="DoNotUnarchiveBySwipe">No desarchivar al deslizar</string>
     <string name="DoNotShareMyPhoneNumber">No compartir mi número de teléfono</string>
     <string name="DefaultDeleteMenu">Menú de eliminación predeterminado</string>
@@ -357,4 +360,27 @@
     <string name="LiquidGlassAngle">Ángulo de cristal líquido</string>
     <string name="LiquidGlassIntensity">Intensidad del vidrio líquido</string>
     <string name="DisableGooeyAvatarAnimation">Desactivar animación de avatar \"Gooey\"</string>
+    <string name="ForceVideoNewRewindMethod">Forzar el video usando el nuevo método de búsqueda</string>
+    <string name="TabStyleStroke">Esquema del indicador de pestaña</string>
+    <string name="AddCommaAfterMention">Añadir coma después de Mención</string>
+    <string name="NagramMessages">Mensajes</string>
+    <string name="MessagePreviewText">ya que quiero que el código sea terrible estoy ||vibe-coding||</string>
+    <string name="MessagePreviewPollQuestion">¿Cómo es el código?</string>
+    <string name="MessagePreviewPollAnswerTerrible">Terrible</string>
+    <string name="MessagePreviewPollAnswerWorse">Aún peor</string>
+    <string name="UseSystemFontInTitle">Usar fuente del sistema en el título</string>
+    <string name="MaterialDesign3ChatHeader">Encabezado de chat de Material Design 3</string>
+    <string name="MaterialDesign3ChatHeaderDes">Eliminar fondo superior de cabecera de chat</string>
+    <string name="InputTextAnimations">Partículas de animación y eliminación de entrada</string>
+    <string name="InputAnimationStrength">Intensidad de animación</string>
+    <string name="InputAnimationWeakest">Más débil</string>
+    <string name="InputAnimationWeak">Débil</string>
+    <string name="InputAnimationModerate">Moderado</string>
+    <string name="InputAnimationStrong">Fuerte</string>
+    <string name="InputAnimationStrongest">Más fuerte</string>
+    <string name="RestartApp">Reiniciar App</string>
+    <string name="SwitchStyle">Cambiar estilo</string>
+    <string name="SwitchStyleTelegram">Telegram</string>
+    <string name="SwitchStyleModern">Moderna</string>
+    <string name="DisableChatListSwipeGesture">Desactivar gesto de deslizamiento de la lista de chat</string>
 </resources>

@@ -17,6 +17,8 @@
     <string name="NoiseSuppressAndVoiceEnhance">Potlačit šum a zesílit hlas</string>
     <string name="RepeatAsCopy">Opakovat jako kopírování</string>
     <string name="DoubleTapAction">Akce dvojím poklepáním</string>
+    <string name="DoubleTapActionIncoming">Přijaté zprávy</string>
+    <string name="DoubleTapActionOutgoing">Odeslané zprávy</string>
     <string name="SendReactions">Odeslat reakce</string>
     <string name="ShowReactions">Zobrazit reakce</string>
     <string name="CustomTitle">Vlastní titulek</string>
@@ -30,6 +32,7 @@
     <string name="PhotoCopied">Fotka zkopírována do schránky</string>
     <string name="ToTheBeginning">Na začátku</string>
     <string name="DateOfForwardedMsg">Zobrazit datum odeslání zprávy</string>
+    <string name="ShowForwardCount">Zobrazit počet vpřed</string>
     <string name="ShowMessageID">Zobrazit ID zprávy</string>
     <string name="ShowRPCError">Toast všechny RPC chyby</string>
     <string name="ShowServicesTime">Zobrazit časové razítko ve zprávách služby</string>
@@ -60,7 +63,7 @@
     <string name="QuickToggleAnonymousNotice">Pokud jste vlastníkem skupiny</string>
     <string name="RealHideTimeForSticker">Skutečný čas skrytí samolepek</string>
     <string name="ResetSettings">Obnovit nastavení</string>
-    <string name="ResetSettingsAlert">Jste si jisti, že chcete obnovit všechna nastavení N-?</string>
+    <string name="ResetSettingsAlert">Jste si jisti, že chcete resetovat všechny N-Config?</string>
     <string name="HideTitle">Skrýt název</string>
     <string name="IgnoreFolderCount">Ignorovat počet složek</string>
     <string name="SendWithoutMarkdown">Odeslat bez markdown</string>
@@ -92,7 +95,7 @@
     <string name="ShowForumAsNormalChat">Zobrazit fórum jako normální chat</string>
     <string name="DecorationNone">Nic</string>
     <string name="ChatDecoration">Dekorace chatu</string>
-    <string name="NeedChangeNekoSettings">Je třeba změnit N nastavení</string>
+    <string name="NeedChangeNekoSettings">Je třeba změnit nastavení N-</string>
     <string name="DoNotUnarchiveBySwipe">Neodarchivovat tažením prstu</string>
     <string name="DoNotShareMyPhoneNumber">Nesdílejte mé telefonní číslo</string>
     <string name="DefaultDeleteMenu">Výchozí nabídka odstranění</string>
@@ -357,4 +360,27 @@
     <string name="LiquidGlassAngle">Úhel kapalného skla</string>
     <string name="LiquidGlassIntensity">Intenzita tekutého skla</string>
     <string name="DisableGooeyAvatarAnimation">Zakázat animaci avataru \"Gooey\"</string>
+    <string name="ForceVideoNewRewindMethod">Vynutit použití nového způsobu hledání videa</string>
+    <string name="TabStyleStroke">Obrys záložky</string>
+    <string name="AddCommaAfterMention">Přidat komentář po zmínce</string>
+    <string name="NagramMessages">Zprávy</string>
+    <string name="MessagePreviewText">protože chci, aby kód byl strašný i já ||vibe-kódování||</string>
+    <string name="MessagePreviewPollQuestion">Jak je kód?</string>
+    <string name="MessagePreviewPollAnswerTerrible">Terribilní</string>
+    <string name="MessagePreviewPollAnswerWorse">Ještě horší</string>
+    <string name="UseSystemFontInTitle">Použít systémové písmo v názvu</string>
+    <string name="MaterialDesign3ChatHeader">Materiál Design 3 záhlaví chatu</string>
+    <string name="MaterialDesign3ChatHeaderDes">Odstranit pozadí záhlaví horního chatu</string>
+    <string name="InputTextAnimations">Vstupní animace a odstranění částic</string>
+    <string name="InputAnimationStrength">Síla animace</string>
+    <string name="InputAnimationWeakest">Nejslabší</string>
+    <string name="InputAnimationWeak">Slabé</string>
+    <string name="InputAnimationModerate">Mírný</string>
+    <string name="InputAnimationStrong">Silný</string>
+    <string name="InputAnimationStrongest">Nejsilnější</string>
+    <string name="RestartApp">Restartovat aplikaci</string>
+    <string name="SwitchStyle">Přepnout styl</string>
+    <string name="SwitchStyleTelegram">Telegram</string>
+    <string name="SwitchStyleModern">Moderní</string>
+    <string name="DisableChatListSwipeGesture">Zakázat gesto přejetím chatu</string>
 </resources>

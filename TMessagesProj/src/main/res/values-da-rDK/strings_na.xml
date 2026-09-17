@@ -17,6 +17,8 @@
     <string name="NoiseSuppressAndVoiceEnhance">Støj Undertryk Og Stemme Forbedre</string>
     <string name="RepeatAsCopy">Gentag som kopi</string>
     <string name="DoubleTapAction">Dobbelttryk Handling</string>
+    <string name="DoubleTapActionIncoming">Modtagne beskeder</string>
+    <string name="DoubleTapActionOutgoing">Sendte beskeder</string>
     <string name="SendReactions">Send Reaktioner</string>
     <string name="ShowReactions">Vis Reaktioner</string>
     <string name="CustomTitle">Brugerdefineret Titel</string>
@@ -30,6 +32,7 @@
     <string name="PhotoCopied">Foto kopieret til udklipsholder</string>
     <string name="ToTheBeginning">Til begyndelsen</string>
     <string name="DateOfForwardedMsg">Vis dato for fremadrettet besked</string>
+    <string name="ShowForwardCount">Vis fremadgående antal</string>
     <string name="ShowMessageID">Vis besked ID</string>
     <string name="ShowRPCError">Toast alle RPC fejl</string>
     <string name="ShowServicesTime">Vis tidsstempel i servicemeddelelser</string>
@@ -60,7 +63,7 @@
     <string name="QuickToggleAnonymousNotice">Hvis du ejer af gruppen</string>
     <string name="RealHideTimeForSticker">Rigtig skjul tid for klistermærker</string>
     <string name="ResetSettings">Nulstil Indstillinger</string>
-    <string name="ResetSettingsAlert">Er du sikker på, at du vil nulstille alle N-indstillinger?</string>
+    <string name="ResetSettingsAlert">Er du sikker på, at du vil nulstille alle N-konfigurationer?</string>
     <string name="HideTitle">Skjul Titel</string>
     <string name="IgnoreFolderCount">Ignorer Mappe Antal</string>
     <string name="SendWithoutMarkdown">Send uden markdown</string>
@@ -92,7 +95,7 @@
     <string name="ShowForumAsNormalChat">Vis forum som normal chat</string>
     <string name="DecorationNone">Ingen</string>
     <string name="ChatDecoration">Chat Dekoration</string>
-    <string name="NeedChangeNekoSettings">Du skal ændre N-Indstillinger</string>
+    <string name="NeedChangeNekoSettings">Du skal ændre N-Config</string>
     <string name="DoNotUnarchiveBySwipe">Fjern ikke arkivering ved at stryge</string>
     <string name="DoNotShareMyPhoneNumber">Del ikke mit telefonnummer</string>
     <string name="DefaultDeleteMenu">Standard Slet Menu</string>
@@ -357,4 +360,27 @@
     <string name="LiquidGlassAngle">Flydende glasvinkel</string>
     <string name="LiquidGlassIntensity">Flydende glasintensitet</string>
     <string name="DisableGooeyAvatarAnimation">Deaktivér \"Gooey\" avatar animation</string>
+    <string name="ForceVideoNewRewindMethod">Gennemtving video bruge ny søgemetode</string>
+    <string name="TabStyleStroke">Fanebladsindikator skitse</string>
+    <string name="AddCommaAfterMention">Tilføj komma efter omtale</string>
+    <string name="NagramMessages">Beskeder</string>
+    <string name="MessagePreviewText">da jeg vil have koden til at være forfærdelig jeg am ||vibe-coding||</string>
+    <string name="MessagePreviewPollQuestion">Hvordan er koden?</string>
+    <string name="MessagePreviewPollAnswerTerrible">Frygt</string>
+    <string name="MessagePreviewPollAnswerWorse">Endnu værre</string>
+    <string name="UseSystemFontInTitle">Brug systemskrifttype i titel</string>
+    <string name="MaterialDesign3ChatHeader">Materiale Design 3 chat header</string>
+    <string name="MaterialDesign3ChatHeaderDes">Fjern top chat header baggrund</string>
+    <string name="InputTextAnimations">Input animation og sletning partikler</string>
+    <string name="InputAnimationStrength">Animation styrke</string>
+    <string name="InputAnimationWeakest">Svageste</string>
+    <string name="InputAnimationWeak">Svag</string>
+    <string name="InputAnimationModerate">Moderat</string>
+    <string name="InputAnimationStrong">Stærk</string>
+    <string name="InputAnimationStrongest">Stærkest</string>
+    <string name="RestartApp">Genstart App</string>
+    <string name="SwitchStyle">Skift stil</string>
+    <string name="SwitchStyleTelegram">Telegram</string>
+    <string name="SwitchStyleModern">Moderne</string>
+    <string name="DisableChatListSwipeGesture">Deaktivér chatliste strygebevægelse</string>
 </resources>

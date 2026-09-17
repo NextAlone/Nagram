@@ -17,6 +17,8 @@
     <string name="NoiseSuppressAndVoiceEnhance">قمع الضوضاء وتعزيز الصوت</string>
     <string name="RepeatAsCopy">كرر كنسخة</string>
     <string name="DoubleTapAction">إجراء النقر المزدوج</string>
+    <string name="DoubleTapActionIncoming">الرسائل المستلمة</string>
+    <string name="DoubleTapActionOutgoing">الرسائل المرسلة</string>
     <string name="SendReactions">إرسال ردود الفعل</string>
     <string name="ShowReactions">إظهار ردود الفعل</string>
     <string name="CustomTitle">عنوان مخصص</string>
@@ -30,6 +32,7 @@
     <string name="PhotoCopied">تم نسخ الصورة إلى الحافظة</string>
     <string name="ToTheBeginning">حتى البداية</string>
     <string name="DateOfForwardedMsg">إظهار تاريخ الرسالة الأمامية</string>
+    <string name="ShowForwardCount">إظهار العد إلى الأمام</string>
     <string name="ShowMessageID">إظهار معرف الرسالة</string>
     <string name="ShowRPCError">اخذ جميع أخطاء RPC</string>
     <string name="ShowServicesTime">إظهار الطابع الزمني في رسائل الخدمة</string>
@@ -60,7 +63,7 @@
     <string name="QuickToggleAnonymousNotice">إذا كنت مالك المجموعة</string>
     <string name="RealHideTimeForSticker">وقت الإخفاء الحقيقي للملصقات</string>
     <string name="ResetSettings">إعادة تعيين الإعدادات</string>
-    <string name="ResetSettingsAlert">هل أنت متأكد من أنك تريد إعادة تعيين كافة الإعدادات N-إعدادات؟</string>
+    <string name="ResetSettingsAlert">هل أنت متأكد من أنك تريد إعادة تعيين جميع N-Config؟</string>
     <string name="HideTitle">إخفاء العنوان</string>
     <string name="IgnoreFolderCount">تجاهل عدد المجلدات</string>
     <string name="SendWithoutMarkdown">إرسال بدون علامة للأسفل</string>
@@ -92,7 +95,7 @@
     <string name="ShowForumAsNormalChat">إظهار المنتدى كمحادثة عادية</string>
     <string name="DecorationNone">لا</string>
     <string name="ChatDecoration">زخرفة الدردشة</string>
-    <string name="NeedChangeNekoSettings">تحتاج إلى تغيير الإعدادات N-إعدادات</string>
+    <string name="NeedChangeNekoSettings">تحتاج إلى تغيير N-Config</string>
     <string name="DoNotUnarchiveBySwipe">لا تقم بإلغاء الأرشيف بالسحب</string>
     <string name="DoNotShareMyPhoneNumber">لا تشارك رقم هاتفي</string>
     <string name="DefaultDeleteMenu">حذف القائمة الافتراضية</string>
@@ -357,4 +360,27 @@
     <string name="LiquidGlassAngle">زاوية زجاجية سائلة</string>
     <string name="LiquidGlassIntensity">كثافة الزجاج السائل</string>
     <string name="DisableGooeyAvatarAnimation">تعطيل الصورة الرمزية \"جوي\"</string>
+    <string name="ForceVideoNewRewindMethod">إجبار الفيديو على استخدام طريقة البحث الجديدة</string>
+    <string name="TabStyleStroke">مخطط مؤشر التبويب</string>
+    <string name="AddCommaAfterMention">إضافة فاصلة بعد الإشارة</string>
+    <string name="NagramMessages">الرسائل</string>
+    <string name="MessagePreviewText">بما أنني تريد أن تكون التعليمات البرمجية رهيبة  ||vibe-coding||</string>
+    <string name="MessagePreviewPollQuestion">كيف هي التعليمات البرمجية؟</string>
+    <string name="MessagePreviewPollAnswerTerrible">رهيبة</string>
+    <string name="MessagePreviewPollAnswerWorse">أسوأ من ذلك</string>
+    <string name="UseSystemFontInTitle">استخدام خط النظام في العنوان</string>
+    <string name="MaterialDesign3ChatHeader">تصميم المادة 3 ترويسة الدردشة</string>
+    <string name="MaterialDesign3ChatHeaderDes">إزالة خلفية رأس المحادثة العليا</string>
+    <string name="InputTextAnimations">إدخال الرسوم المتحركة وحذف الجسيمات</string>
+    <string name="InputAnimationStrength">قوة الرسوم المتحركة</string>
+    <string name="InputAnimationWeakest">أضعف</string>
+    <string name="InputAnimationWeak">ضعيف</string>
+    <string name="InputAnimationModerate">الاعتدال</string>
+    <string name="InputAnimationStrong">قوي</string>
+    <string name="InputAnimationStrongest">الأقوى</string>
+    <string name="RestartApp">إعادة تشغيل التطبيق</string>
+    <string name="SwitchStyle">تبديل النمط</string>
+    <string name="SwitchStyleTelegram">تيليجرام</string>
+    <string name="SwitchStyleModern">حديث</string>
+    <string name="DisableChatListSwipeGesture">تعطيل إيماءة تمرير قائمة الدردشة</string>
 </resources>

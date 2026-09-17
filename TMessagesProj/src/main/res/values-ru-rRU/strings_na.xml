@@ -17,6 +17,8 @@
     <string name="NoiseSuppressAndVoiceEnhance">Подавление шума и улучшение голоса</string>
     <string name="RepeatAsCopy">Повторить как копию</string>
     <string name="DoubleTapAction">Действие при двойном нажатии</string>
+    <string name="DoubleTapActionIncoming">Полученные сообщения</string>
+    <string name="DoubleTapActionOutgoing">Отправленные сообщения</string>
     <string name="SendReactions">Отправить реакцию</string>
     <string name="ShowReactions">Показать реакции</string>
     <string name="CustomTitle">Пользовательский заголовок</string>
@@ -30,6 +32,7 @@
     <string name="PhotoCopied">Фото скопировано в буфер обмена</string>
     <string name="ToTheBeginning">К началу</string>
     <string name="DateOfForwardedMsg">Показывать дату пересылки сообщения</string>
+    <string name="ShowForwardCount">Показывать количество вперед</string>
     <string name="ShowMessageID">Показывать ID сообщения</string>
     <string name="ShowRPCError">Показывать все ошибки RPC</string>
     <string name="ShowServicesTime">Показывать временную метку в сервисных сообщениях</string>
@@ -60,7 +63,7 @@
     <string name="QuickToggleAnonymousNotice">Если вы владелец группы.</string>
     <string name="RealHideTimeForSticker">Скрыть время для стикеров</string>
     <string name="ResetSettings">Сброс настроек</string>
-    <string name="ResetSettingsAlert">Вы уверены, что хотите сбросить все «Настройки N»?</string>
+    <string name="ResetSettingsAlert">Вы уверены, что хотите сбросить все N-Конфигурации?</string>
     <string name="HideTitle">Скрыть заголовок</string>
     <string name="IgnoreFolderCount">Игнорировать количество папок</string>
     <string name="SendWithoutMarkdown">Отправить без разметки</string>
@@ -92,7 +95,7 @@
     <string name="ShowForumAsNormalChat">Показывать форум как обычный чат</string>
     <string name="DecorationNone">Не выбрано</string>
     <string name="ChatDecoration">Оформление чата</string>
-    <string name="NeedChangeNekoSettings">Вам нужно изменить настройки N</string>
+    <string name="NeedChangeNekoSettings">Вам нужно изменить N-Config</string>
     <string name="DoNotUnarchiveBySwipe">Не разархивировать смахиванием</string>
     <string name="DoNotShareMyPhoneNumber">Не показывать мой номер телефона </string>
     <string name="DefaultDeleteMenu">Меню удаления по умолчанию</string>
@@ -357,4 +360,27 @@
     <string name="LiquidGlassAngle">Угол жидкого стекла</string>
     <string name="LiquidGlassIntensity">Интенсивность Жидкого Стекла</string>
     <string name="DisableGooeyAvatarAnimation">Отключить анимацию аватара \"Товары\"</string>
+    <string name="ForceVideoNewRewindMethod">Принудительно использовать новый метод поиска видео</string>
+    <string name="TabStyleStroke">Сводка индикатора вкладки</string>
+    <string name="AddCommaAfterMention">Добавить запятую после упоминания</string>
+    <string name="NagramMessages">Сообщения</string>
+    <string name="MessagePreviewText">так как я хочу, чтобы код был ужасным и я буду ||vibe-coding||</string>
+    <string name="MessagePreviewPollQuestion">Как этот код?</string>
+    <string name="MessagePreviewPollAnswerTerrible">Ужасный</string>
+    <string name="MessagePreviewPollAnswerWorse">Еще хуже</string>
+    <string name="UseSystemFontInTitle">Использовать системный шрифт в заголовке</string>
+    <string name="MaterialDesign3ChatHeader">Чат Material Design 3 заголовок</string>
+    <string name="MaterialDesign3ChatHeaderDes">Удалить фон заголовка чата</string>
+    <string name="InputTextAnimations">Входные частицы анимации и удаления</string>
+    <string name="InputAnimationStrength">Сила анимации</string>
+    <string name="InputAnimationWeakest">Слабый</string>
+    <string name="InputAnimationWeak">Слабая</string>
+    <string name="InputAnimationModerate">Модерировать</string>
+    <string name="InputAnimationStrong">Крепкий</string>
+    <string name="InputAnimationStrongest">Сильнейший</string>
+    <string name="RestartApp">Перезапустить приложение</string>
+    <string name="SwitchStyle">Переключить стиль</string>
+    <string name="SwitchStyleTelegram">Телеграмма</string>
+    <string name="SwitchStyleModern">Современный</string>
+    <string name="DisableChatListSwipeGesture">Отключить жест в списке чатов</string>
 </resources>

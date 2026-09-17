@@ -17,6 +17,8 @@
     <string name="NoiseSuppressAndVoiceEnhance">Suprimarea zgomotului şi Îmbunătăţirea vocii</string>
     <string name="RepeatAsCopy">Repetă ca Copie</string>
     <string name="DoubleTapAction">Acțiune dublă la atingere</string>
+    <string name="DoubleTapActionIncoming">Mesaje primite</string>
+    <string name="DoubleTapActionOutgoing">Mesaje trimise</string>
     <string name="SendReactions">Trimite reactii</string>
     <string name="ShowReactions">Arată reacțiile</string>
     <string name="CustomTitle">Titlu personalizat</string>
@@ -30,6 +32,7 @@
     <string name="PhotoCopied">Fotografie copiată în clipboard</string>
     <string name="ToTheBeginning">La început</string>
     <string name="DateOfForwardedMsg">Arată data mesajului înainte</string>
+    <string name="ShowForwardCount">Arată numărul de înainte</string>
     <string name="ShowMessageID">Arată ID-ul mesajului</string>
     <string name="ShowRPCError">Continuă toate erorile RPC</string>
     <string name="ShowServicesTime">Arată marcajul temporal în mesajele serviciului</string>
@@ -60,7 +63,7 @@
     <string name="QuickToggleAnonymousNotice">Dacă sunteți proprietarul grupului</string>
     <string name="RealHideTimeForSticker">Timp real ascuns pentru stickere</string>
     <string name="ResetSettings">Resetare setări</string>
-    <string name="ResetSettingsAlert">Sunteţi sigur că doriţi să resetaţi toate setările N-?</string>
+    <string name="ResetSettingsAlert">Sunteţi sigur că doriţi să resetaţi toate N-Configurile?</string>
     <string name="HideTitle">Ascunde titlul</string>
     <string name="IgnoreFolderCount">Ignoră numărul de dosare</string>
     <string name="SendWithoutMarkdown">Trimite fără marcaj</string>
@@ -92,7 +95,7 @@
     <string name="ShowForumAsNormalChat">Arată forumul ca chat normal</string>
     <string name="DecorationNone">Niciunul</string>
     <string name="ChatDecoration">Decorație Chat</string>
-    <string name="NeedChangeNekoSettings">Trebuie să modificați N-Setări</string>
+    <string name="NeedChangeNekoSettings">Trebuie să schimbați N-Config</string>
     <string name="DoNotUnarchiveBySwipe">Nu dezarhiva prin glisare</string>
     <string name="DoNotShareMyPhoneNumber">Nu partajați numărul meu de telefon</string>
     <string name="DefaultDeleteMenu">Meniul de ștergere implicit</string>
@@ -357,4 +360,27 @@
     <string name="LiquidGlassAngle">Unghiul lichid de sticlă</string>
     <string name="LiquidGlassIntensity">Intensitatea sticlei lichide</string>
     <string name="DisableGooeyAvatarAnimation">Dezactivați animația de avatar \"Gooey\"</string>
+    <string name="ForceVideoNewRewindMethod">Forțează folosirea noii metode de căutare</string>
+    <string name="TabStyleStroke">Conturul indicatorului filei</string>
+    <string name="AddCommaAfterMention">Adaugă virgulă după mențiune</string>
+    <string name="NagramMessages">Mesaje</string>
+    <string name="MessagePreviewText">pentru că i se dorește ca codul să fie teribil de ||bun augur||</string>
+    <string name="MessagePreviewPollQuestion">Cum este codul?</string>
+    <string name="MessagePreviewPollAnswerTerrible">Terribil</string>
+    <string name="MessagePreviewPollAnswerWorse">Și mai rău</string>
+    <string name="UseSystemFontInTitle">Folosește fontul sistemului în titlu</string>
+    <string name="MaterialDesign3ChatHeader">Antet chat Design 3</string>
+    <string name="MaterialDesign3ChatHeaderDes">Elimină fundal antet chat de sus</string>
+    <string name="InputTextAnimations">Introducere animaţie şi particule de ştergere</string>
+    <string name="InputAnimationStrength">Tăria animaţiei</string>
+    <string name="InputAnimationWeakest">Cele mai slabe</string>
+    <string name="InputAnimationWeak">Slabă</string>
+    <string name="InputAnimationModerate">Moderează</string>
+    <string name="InputAnimationStrong">Puternic</string>
+    <string name="InputAnimationStrongest">Puternic</string>
+    <string name="RestartApp">Reporniți aplicația</string>
+    <string name="SwitchStyle">Stil comutator</string>
+    <string name="SwitchStyleTelegram">Telegramă</string>
+    <string name="SwitchStyleModern">Modern</string>
+    <string name="DisableChatListSwipeGesture">Dezactivează gestul de glisare a listei de chat</string>
 </resources>

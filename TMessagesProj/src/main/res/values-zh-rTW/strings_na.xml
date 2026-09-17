@@ -360,11 +360,17 @@
     <string name="LiquidGlassAngle">Liquid Glass angle</string>
     <string name="LiquidGlassIntensity">Liquid Glass intensity</string>
     <string name="DisableGooeyAvatarAnimation">Disable \"Gooey\" avatar animation</string>
+    <string name="ForceVideoNewRewindMethod">Force video use new seek method</string>
+    <string name="TabStyleStroke">Tab indicator outline</string>
+    <string name="AddCommaAfterMention">Add Comma after Mention</string>
     <string name="NagramMessages">訊息</string>
     <string name="MessagePreviewText">既然我想讓程式碼變得糟糕，那就靠||感覺寫程式||吧。</string>
     <string name="MessagePreviewPollQuestion">程式碼怎麼樣？</string>
     <string name="MessagePreviewPollAnswerTerrible">很糟糕</string>
     <string name="MessagePreviewPollAnswerWorse">更糟糕</string>
+    <string name="UseSystemFontInTitle">Use System Font in Title</string>
+    <string name="MaterialDesign3ChatHeader">Material Design 3 chat header</string>
+    <string name="MaterialDesign3ChatHeaderDes">Remove top chat header background</string>
     <string name="InputTextAnimations">輸入動畫與刪除粒子效果</string>
     <string name="InputAnimationStrength">動畫強度</string>
     <string name="InputAnimationWeakest">最弱</string>
@@ -372,7 +378,9 @@
     <string name="InputAnimationModerate">適中</string>
     <string name="InputAnimationStrong">較強</string>
     <string name="InputAnimationStrongest">最強</string>
+    <string name="RestartApp">Restart App</string>
     <string name="SwitchStyle">開關樣式</string>
     <string name="SwitchStyleTelegram">Telegram</string>
     <string name="SwitchStyleModern">現代</string>
+    <string name="DisableChatListSwipeGesture">Disable chat list swipe gesture</string>
 </resources>

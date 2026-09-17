@@ -17,6 +17,8 @@
     <string name="NoiseSuppressAndVoiceEnhance">Suprimir ruído e melhorar voz</string>
     <string name="RepeatAsCopy">Repetir como cópia</string>
     <string name="DoubleTapAction">Ação de Toque Duplo</string>
+    <string name="DoubleTapActionIncoming">Mensagens recebidas</string>
+    <string name="DoubleTapActionOutgoing">Mensagens enviadas</string>
     <string name="SendReactions">Enviar Reações</string>
     <string name="ShowReactions">Mostrar reações</string>
     <string name="CustomTitle">Título Personalizado</string>
@@ -30,6 +32,7 @@
     <string name="PhotoCopied">Foto copiada para Área de Transferência</string>
     <string name="ToTheBeginning">Até o início</string>
     <string name="DateOfForwardedMsg">Mostrar data da mensagem de encaminhamento</string>
+    <string name="ShowForwardCount">Mostrar contagem de encaminhamento</string>
     <string name="ShowMessageID">Mostrar ID de mensagem</string>
     <string name="ShowRPCError">Toast todos os erros de RPC</string>
     <string name="ShowServicesTime">Mostrar timestamp nas mensagens de serviço</string>
@@ -357,4 +360,27 @@
     <string name="LiquidGlassAngle">Ângulo de Vidro Líquido</string>
     <string name="LiquidGlassIntensity">Intensidade de Vidro Líquido</string>
     <string name="DisableGooeyAvatarAnimation">Desativar animação do avatar \"Gooey\"</string>
+    <string name="ForceVideoNewRewindMethod">Forçar vídeo a usar novo método de busca</string>
+    <string name="TabStyleStroke">Indicador de guia</string>
+    <string name="AddCommaAfterMention">Adicionar vírgula após menção</string>
+    <string name="NagramMessages">mensagens</string>
+    <string name="MessagePreviewText">já que eu quero que o código seja horrível eu estou esperando para ||programar vibe||</string>
+    <string name="MessagePreviewPollQuestion">Como está o código?</string>
+    <string name="MessagePreviewPollAnswerTerrible">Terrível</string>
+    <string name="MessagePreviewPollAnswerWorse">Pior ainda</string>
+    <string name="UseSystemFontInTitle">Usar fonte do sistema no título</string>
+    <string name="MaterialDesign3ChatHeader">Cabeçalho do Material Design 3</string>
+    <string name="MaterialDesign3ChatHeaderDes">Remover fundo do cabeçalho do chat</string>
+    <string name="InputTextAnimations">Animação e exclusão de entrada</string>
+    <string name="InputAnimationStrength">Força da animação</string>
+    <string name="InputAnimationWeakest">Fraca</string>
+    <string name="InputAnimationWeak">Fraco</string>
+    <string name="InputAnimationModerate">Moderado</string>
+    <string name="InputAnimationStrong">Forte</string>
+    <string name="InputAnimationStrongest">Forte</string>
+    <string name="RestartApp">Reiniciar aplicativo</string>
+    <string name="SwitchStyle">Mudar estilo</string>
+    <string name="SwitchStyleTelegram">Telegram</string>
+    <string name="SwitchStyleModern">Moderno</string>
+    <string name="DisableChatListSwipeGesture">Desativar gesto de deslizar lista de bate-papo</string>
 </resources>

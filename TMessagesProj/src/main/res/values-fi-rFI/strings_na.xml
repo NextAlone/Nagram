@@ -17,6 +17,8 @@
     <string name="NoiseSuppressAndVoiceEnhance">Melunvaimennus Ja Äänen Parantaminen</string>
     <string name="RepeatAsCopy">Toista kopiona</string>
     <string name="DoubleTapAction">Kaksoisnapautuksen Toiminto</string>
+    <string name="DoubleTapActionIncoming">Vastaanotetut viestit</string>
+    <string name="DoubleTapActionOutgoing">Lähetetyt viestit</string>
     <string name="SendReactions">Lähetä Reaktioita</string>
     <string name="ShowReactions">Näytä Reaktiot</string>
     <string name="CustomTitle">Oma Otsikko</string>
@@ -30,6 +32,7 @@
     <string name="PhotoCopied">Kuva kopioitu leikepöydälle</string>
     <string name="ToTheBeginning">Alkuun asti</string>
     <string name="DateOfForwardedMsg">Näytä lähettävän viestin päivämäärä</string>
+    <string name="ShowForwardCount">Näytä eteenpäin laskettu määrä</string>
     <string name="ShowMessageID">Näytä viestin tunnus</string>
     <string name="ShowRPCError">Toast kaikki RPC virheet</string>
     <string name="ShowServicesTime">Näytä aikaleima palveluviesteissä</string>
@@ -60,7 +63,7 @@
     <string name="QuickToggleAnonymousNotice">Jos olet ryhmän omistaja</string>
     <string name="RealHideTimeForSticker">Todellinen piilottaa aika tarroille</string>
     <string name="ResetSettings">Nollaa Asetukset</string>
-    <string name="ResetSettingsAlert">Oletko varma, että haluat palauttaa kaikki N-asetukset?</string>
+    <string name="ResetSettingsAlert">Oletko varma, että haluat palauttaa kaikki N-Config -asetukset?</string>
     <string name="HideTitle">Piilota Otsikko</string>
     <string name="IgnoreFolderCount">Ohita Kansion Määrä</string>
     <string name="SendWithoutMarkdown">Lähetä ilman merkintää</string>
@@ -92,7 +95,7 @@
     <string name="ShowForumAsNormalChat">Näytä foorumi normaalina keskusteluna</string>
     <string name="DecorationNone">Ei Mitään</string>
     <string name="ChatDecoration">Keskustelun Koristelu</string>
-    <string name="NeedChangeNekoSettings">Sinun täytyy muuttaa N-asetuksia</string>
+    <string name="NeedChangeNekoSettings">Sinun täytyy vaihtaa N-Config</string>
     <string name="DoNotUnarchiveBySwipe">Älä poista arkistoa pyyhkäisemällä</string>
     <string name="DoNotShareMyPhoneNumber">Älä jaa puhelinnumeroani</string>
     <string name="DefaultDeleteMenu">Poista Oletusvalikko</string>
@@ -357,4 +360,27 @@
     <string name="LiquidGlassAngle">Nestemäinen lasikulma</string>
     <string name="LiquidGlassIntensity">Nestemäisen lasin voimakkuus</string>
     <string name="DisableGooeyAvatarAnimation">Poista \"Gooey\" profiilianimaatio käytöstä</string>
+    <string name="ForceVideoNewRewindMethod">Pakota video käyttämään uutta hakutapaa</string>
+    <string name="TabStyleStroke">Välilehden ilmaisin ääriviivat</string>
+    <string name="AddCommaAfterMention">Lisää pilkku maininnan jälkeen</string>
+    <string name="NagramMessages">Viestit</string>
+    <string name="MessagePreviewText">koska I want the code to be terrible i am ||vibe-coding||</string>
+    <string name="MessagePreviewPollQuestion">Miten koodi on?</string>
+    <string name="MessagePreviewPollAnswerTerrible">Kauhea</string>
+    <string name="MessagePreviewPollAnswerWorse">Vielä pahempaa</string>
+    <string name="UseSystemFontInTitle">Käytä järjestelmän kirjasinta otsikossa</string>
+    <string name="MaterialDesign3ChatHeader">Materiaalin suunnittelu 3 chatin otsikko</string>
+    <string name="MaterialDesign3ChatHeaderDes">Poista yläotsikon otsikkotausta</string>
+    <string name="InputTextAnimations">Syötä animaatio ja poisto hiukkasia</string>
+    <string name="InputAnimationStrength">Animaation voimakkuus</string>
+    <string name="InputAnimationWeakest">Huonoin</string>
+    <string name="InputAnimationWeak">Heikko</string>
+    <string name="InputAnimationModerate">Kohtalainen</string>
+    <string name="InputAnimationStrong">Vahva</string>
+    <string name="InputAnimationStrongest">Vahvin</string>
+    <string name="RestartApp">Käynnistä Sovellus Uudelleen</string>
+    <string name="SwitchStyle">Vaihda tyyliä</string>
+    <string name="SwitchStyleTelegram">Telegram</string>
+    <string name="SwitchStyleModern">Moderni</string>
+    <string name="DisableChatListSwipeGesture">Poista chat-listan pyyhkäisy ele käytöstä</string>
 </resources>

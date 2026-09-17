@@ -17,6 +17,8 @@
     <string name="NoiseSuppressAndVoiceEnhance">Ljuddämpning och röstförstärkning</string>
     <string name="RepeatAsCopy">Upprepa som kopia</string>
     <string name="DoubleTapAction">Åtgärd för dubbeltryck</string>
+    <string name="DoubleTapActionIncoming">Mottagna meddelanden</string>
+    <string name="DoubleTapActionOutgoing">Skickade meddelanden</string>
     <string name="SendReactions">Skicka reaktioner</string>
     <string name="ShowReactions">Visa reaktioner</string>
     <string name="CustomTitle">Anpassad titel</string>
@@ -30,6 +32,7 @@
     <string name="PhotoCopied">Foto kopierat till Urklipp</string>
     <string name="ToTheBeginning">Till början</string>
     <string name="DateOfForwardedMsg">Visa datum för vidarebefordran</string>
+    <string name="ShowForwardCount">Visa räknare framåt</string>
     <string name="ShowMessageID">Visa meddelande-ID</string>
     <string name="ShowRPCError">Toast alla RPC-fel</string>
     <string name="ShowServicesTime">Visa tidsstämpel i servicemeddelanden</string>
@@ -60,7 +63,7 @@
     <string name="QuickToggleAnonymousNotice">Om du är ägare till gruppen</string>
     <string name="RealHideTimeForSticker">Verklig gömtid för klistermärken</string>
     <string name="ResetSettings">Återställ inställningar</string>
-    <string name="ResetSettingsAlert">Är du säker på att du vill återställa alla N-inställningar?</string>
+    <string name="ResetSettingsAlert">Är du säker på att du vill återställa alla N-Config?</string>
     <string name="HideTitle">Dölj titel</string>
     <string name="IgnoreFolderCount">Ignorera antal mappar</string>
     <string name="SendWithoutMarkdown">Skicka utan markdown</string>
@@ -92,7 +95,7 @@
     <string name="ShowForumAsNormalChat">Visa forumet som normal chatt</string>
     <string name="DecorationNone">Ingen</string>
     <string name="ChatDecoration">Chatt dekoration</string>
-    <string name="NeedChangeNekoSettings">Du måste ändra N-inställningar</string>
+    <string name="NeedChangeNekoSettings">Du måste ändra N-Config</string>
     <string name="DoNotUnarchiveBySwipe">Avarkivera inte genom att svepa</string>
     <string name="DoNotShareMyPhoneNumber">Dela inte mitt telefonnummer</string>
     <string name="DefaultDeleteMenu">Standard ta bort meny</string>
@@ -357,4 +360,27 @@
     <string name="LiquidGlassAngle">Flytande glasvinkel</string>
     <string name="LiquidGlassIntensity">Vätska glasintensitet</string>
     <string name="DisableGooeyAvatarAnimation">Inaktivera \"Gooey\" avatar animation</string>
+    <string name="ForceVideoNewRewindMethod">Tvinga användning av video ny sökmetod</string>
+    <string name="TabStyleStroke">Fliken indikator kontur</string>
+    <string name="AddCommaAfterMention">Lägg till kommatecken efter omnämnande</string>
+    <string name="NagramMessages">Meddelanden</string>
+    <string name="MessagePreviewText">eftersom jag vill att koden ska vara fruktansvärt jag är ||vibe-coding||</string>
+    <string name="MessagePreviewPollQuestion">Hur är koden?</string>
+    <string name="MessagePreviewPollAnswerTerrible">Förskräcklig</string>
+    <string name="MessagePreviewPollAnswerWorse">Ännu värre</string>
+    <string name="UseSystemFontInTitle">Använd systemtypsnitt i titeln</string>
+    <string name="MaterialDesign3ChatHeader">Material Design 3 chatthuvud</string>
+    <string name="MaterialDesign3ChatHeaderDes">Ta bort bakgrund på chatthuvudet</string>
+    <string name="InputTextAnimations">Inmatning animering och borttagning partiklar</string>
+    <string name="InputAnimationStrength">Animering styrka</string>
+    <string name="InputAnimationWeakest">Svagast</string>
+    <string name="InputAnimationWeak">Svag</string>
+    <string name="InputAnimationModerate">Måttlig</string>
+    <string name="InputAnimationStrong">Stark</string>
+    <string name="InputAnimationStrongest">Starkast</string>
+    <string name="RestartApp">Starta om app</string>
+    <string name="SwitchStyle">Byt stil</string>
+    <string name="SwitchStyleTelegram">Telegram</string>
+    <string name="SwitchStyleModern">Modern</string>
+    <string name="DisableChatListSwipeGesture">Inaktivera snabblista svep gest</string>
 </resources>

@@ -17,6 +17,8 @@
     <string name="NoiseSuppressAndVoiceEnhance">ノイズ抑制と音声強化</string>
     <string name="RepeatAsCopy">コピーとして繰り返す</string>
     <string name="DoubleTapAction">ダブルタップアクション</string>
+    <string name="DoubleTapActionIncoming">受信したメッセージ</string>
+    <string name="DoubleTapActionOutgoing">送信済みメッセージ</string>
     <string name="SendReactions">リアクションを送信</string>
     <string name="ShowReactions">リアクションの表示</string>
     <string name="CustomTitle">カスタムタイトル</string>
@@ -30,6 +32,7 @@
     <string name="PhotoCopied">写真をクリップボードにコピーしました</string>
     <string name="ToTheBeginning">冒頭へ</string>
     <string name="DateOfForwardedMsg">メッセージの日付を表示</string>
+    <string name="ShowForwardCount">前方カウントを表示</string>
     <string name="ShowMessageID">メッセージIDを表示</string>
     <string name="ShowRPCError">すべてのRPCエラーに乾杯する</string>
     <string name="ShowServicesTime">サービスメッセージにタイムスタンプを表示</string>
@@ -60,7 +63,7 @@
     <string name="QuickToggleAnonymousNotice">あなたがグループの所有者である場合</string>
     <string name="RealHideTimeForSticker">ステッカーをリアルタイムに隠す</string>
     <string name="ResetSettings">設定をリセット</string>
-    <string name="ResetSettingsAlert">「N-設定」をリセットしますか？</string>
+    <string name="ResetSettingsAlert">N-Configをすべてリセットしてもよろしいですか？</string>
     <string name="HideTitle">タイトルを隠す</string>
     <string name="IgnoreFolderCount">フォルダ数を無視</string>
     <string name="SendWithoutMarkdown">マークダウンなしで送信</string>
@@ -92,7 +95,7 @@
     <string name="ShowForumAsNormalChat">通常のチャットとしてフォーラムを表示</string>
     <string name="DecorationNone">なし</string>
     <string name="ChatDecoration">別荘外観をチャットする</string>
-    <string name="NeedChangeNekoSettings">N 設定を変更する必要があります</string>
+    <string name="NeedChangeNekoSettings">N-Config を変更する必要があります</string>
     <string name="DoNotUnarchiveBySwipe">スワイプでアーカイブを解除しない</string>
     <string name="DoNotShareMyPhoneNumber">自分の電話番号を共有しない</string>
     <string name="DefaultDeleteMenu">デフォルトの削除メニュー</string>
@@ -357,4 +360,27 @@
     <string name="LiquidGlassAngle">液体ガラスの角度</string>
     <string name="LiquidGlassIntensity">液体ガラスの強度</string>
     <string name="DisableGooeyAvatarAnimation">「Gooey」アバターアニメーションを無効にする</string>
+    <string name="ForceVideoNewRewindMethod">ビデオで新しいシークメソッドを使用する</string>
+    <string name="TabStyleStroke">タブの外形</string>
+    <string name="AddCommaAfterMention">メンションの後にカンマを追加</string>
+    <string name="NagramMessages">メッセージ</string>
+    <string name="MessagePreviewText">コードをひどくしたいので、私は ||vibe-coding||</string>
+    <string name="MessagePreviewPollQuestion">コードはどうですか？</string>
+    <string name="MessagePreviewPollAnswerTerrible">ひどいです</string>
+    <string name="MessagePreviewPollAnswerWorse">さらに悪い</string>
+    <string name="UseSystemFontInTitle">タイトルにシステムフォントを使用</string>
+    <string name="MaterialDesign3ChatHeader">Material Design 3 チャットヘッダー</string>
+    <string name="MaterialDesign3ChatHeaderDes">トップチャットヘッダーの背景を削除</string>
+    <string name="InputTextAnimations">アニメーションと削除パーティクルを入力</string>
+    <string name="InputAnimationStrength">アニメーションの強さ</string>
+    <string name="InputAnimationWeakest">最も弱い</string>
+    <string name="InputAnimationWeak">弱い</string>
+    <string name="InputAnimationModerate">モデレート</string>
+    <string name="InputAnimationStrong">強い</string>
+    <string name="InputAnimationStrongest">最も強い</string>
+    <string name="RestartApp">アプリを再起動</string>
+    <string name="SwitchStyle">スタイルを切り替える</string>
+    <string name="SwitchStyleTelegram">Telegram</string>
+    <string name="SwitchStyleModern">モダンな</string>
+    <string name="DisableChatListSwipeGesture">チャットリストのスワイプジェスチャーを無効にする</string>
 </resources>
