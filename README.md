@@ -150,23 +150,18 @@ Build:
     }
    ```
 
-3. Build native dependencies:
-   ```shell
-   ./run init libs
-   ```
-
-4. Build external libraries and native code: 
+3. Build external libraries and native code: 
    ```shell
    ./run libs native
    ```
 
-5. Fill out `TELEGRAM_APP_ID` and `TELEGRAM_APP_HASH` in **local.properties** (from [Telegram Developer](https://my.telegram.org/auth))
+4. Fill out `TELEGRAM_APP_ID` and `TELEGRAM_APP_HASH` in **local.properties** (from [Telegram Developer](https://my.telegram.org/auth))
 
-6. Replace **TMessagesProj/google-services.json** if you want FCM to work.
+5. Replace **TMessagesProj/google-services.json** if you want FCM to work.
 
-7. Replace **release.keystore** with yours and fill out `ALIAS_NAME`, `KEYSTORE_PASS` and `ALIAS_PASS` in **local.properties**.
+6. Replace **release.keystore** with yours and fill out `ALIAS_NAME`, `KEYSTORE_PASS` and `ALIAS_PASS` in **local.properties**.
 
-8. Build with Gradle:
+7. Build with Gradle:
 
    ```shell
    ./gradlew assemble<Release/Debug>
