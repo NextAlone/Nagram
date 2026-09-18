@@ -265,6 +265,7 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
             add(new ConfigCellTextCheck(NaConfig.INSTANCE.getCustomDialogsMenuNewGroup()));
             add(new ConfigCellTextCheck(NaConfig.INSTANCE.getCustomDialogsMenuNewMessage()));
             add(new ConfigCellTextCheck(NaConfig.INSTANCE.getCustomDialogsMenuSavedMessages()));
+            add(new ConfigCellTextCheck(NaConfig.INSTANCE.getCustomDialogsMenuMyProfile()));
             add(new ConfigCellTextCheck(NaConfig.INSTANCE.getCustomDialogsMenuSettings()));
             add(new ConfigCellTextCheck(NaConfig.INSTANCE.getCustomDialogsMenuProxy()));
             add(new ConfigCellTextCheck(NaConfig.INSTANCE.getCustomDialogsMenuAccount()));

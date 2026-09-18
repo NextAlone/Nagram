@@ -1296,6 +1296,13 @@ object NaConfig {
             6,
             false
         )
+    val customDialogsMenuMyProfile =
+        addConfig(
+            "MyProfile",
+            customDialogsMenu,
+            7,
+            false
+        )
     val sidebarSettingsActivity =
         addConfig(
             "SidebarSettingsActivity",

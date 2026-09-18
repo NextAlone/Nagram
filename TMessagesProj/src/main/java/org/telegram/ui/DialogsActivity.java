@@ -13983,6 +13983,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
             }
         }
+        io.addIf(NaConfig.INSTANCE.getCustomDialogsMenuMyProfile().Bool(), R.drawable.msg_openprofile, getString(R.string.MyProfile), () -> {
+            Bundle args = new Bundle();
+            args.putLong("user_id", getUserConfig().getClientUserId());
+            presentFragment(new ProfileActivity(args));
+        });
         boolean noMainTabs = (NaConfig.INSTANCE.getMainTabsStyle().Int() == MainTabsStyle.DISABLE.getValue() || getUserConfig().showCallsTab) && !NaConfig.INSTANCE.getSidebarSettingsActivity().Bool();
         if (NaConfig.INSTANCE.getCustomDialogsMenuSettings().Bool() || noMainTabs) {
             io.add(R.drawable.msg_settings_old, getString(R.string.Settings), () -> {
