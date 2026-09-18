@@ -5,6 +5,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.register
 import org.telegram.tasks.localization.GenerateLocalizationUtilsJavaTask
+import org.telegram.tasks.localization.GenerateNamespaceLocalizationUtilsJavaTask
 
 class TelegramBuildPlugin : Plugin<Project> {
 
@@ -35,6 +36,33 @@ class TelegramBuildPlugin : Plugin<Project> {
             variant.sources.java?.addGeneratedSourceDirectory(
                 task,
                 GenerateLocalizationUtilsJavaTask::javaOutputDir
+            )
+
+            val namespaceTask = project.tasks.register<GenerateNamespaceLocalizationUtilsJavaTask>(
+                "generate${suffix}NamespaceLocalizationUtilsJava"
+            ) {
+                defaultLocalizationFiles.from(
+                    project.fileTree("src/main/res") {
+                        include("values/strings_*.xml")
+                    }
+                )
+
+                localizationFiles.from(
+                    project.fileTree("src/main/res") {
+                        include("values-*/strings_*.xml")
+                    }
+                )
+
+                javaOutputDir.set(
+                    project.layout.buildDirectory.dir(
+                        "generated/generateNamespaceLocalizationUtilsJava/${variant.name}"
+                    )
+                )
+            }
+
+            variant.sources.java?.addGeneratedSourceDirectory(
+                namespaceTask,
+                GenerateNamespaceLocalizationUtilsJavaTask::javaOutputDir
             )
         }
     }

@@ -10,6 +10,7 @@ import org.gradle.kotlin.dsl.register
 import org.telegram.tasks.EmojiPackTask
 import org.telegram.tasks.GenerateStringResourceIdsAssetTask
 import org.telegram.tasks.GenerateLottieMetadataAssetFileTask
+import org.telegram.tasks.TelegramNamespaceStringsTask
 import org.telegram.tasks.TelegramStringsTask
 
 class TelegramBuildAppPlugin : Plugin<Project> {
@@ -98,6 +99,42 @@ class TelegramBuildAppPlugin : Plugin<Project> {
                     }
                 }
             }
+        }
+
+        androidComponents.onVariants { variant ->
+            val suffix = variant.name.replaceFirstChar { it.uppercase() }
+            val namespaceTask = project.tasks.register<TelegramNamespaceStringsTask>(
+                "generate${suffix}NamespaceStrings"
+            ) {
+                stringsXml.from(
+                    telegramModule.fileTree("src/main/res/values") {
+                        include("strings_*.xml")
+                    },
+                    project.fileTree("src/main/res/values") {
+                        include("strings_*.xml")
+                    }
+                )
+
+                localizationFiles.from(
+                    telegramModule.fileTree("src/main/res") {
+                        include("values-*/strings_*.xml")
+                    },
+                    project.fileTree("src/main/res") {
+                        include("values-*/strings_*.xml")
+                    }
+                )
+
+                assetsOutputDir.set(
+                    project.layout.buildDirectory.dir(
+                        "generated/namespaceStrings/${variant.name}/assets"
+                    )
+                )
+            }
+
+            variant.sources.assets?.addGeneratedSourceDirectory(
+                namespaceTask,
+                TelegramNamespaceStringsTask::assetsOutputDir
+            )
         }
 
         androidComponents.onVariants { variant ->
