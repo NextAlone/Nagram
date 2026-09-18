@@ -57,9 +57,15 @@ native:
       paths:
         - TMessagesProj/src/main/libs/arm64-v8a/
   script:
+    - |
+      if [[ -d TMessagesProj/src/main/libs/arm64-v8a ]]; then
+        exit 10
+      fi
     - *fetch-status
     - export NATIVE_TARGET="arm64-v8a"
     - ./run libs native
+  allow_failure:
+    exit_codes: 10
 
 build:
   stage: build
