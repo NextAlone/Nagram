@@ -156,13 +156,17 @@ public class AyuFilter {
     private static LongSparseArray<HashMap<Integer, Boolean>> filteredCache;
 
     public static void rebuildCache() {
-        filterModels = getRegexFilters();
-
-        for (var filter : filterModels) {
+        ArrayList<FilterModel> loaded = getRegexFilters();
+        ArrayList<FilterModel> ready = new ArrayList<>(loaded.size());
+        for (var filter : loaded) {
+            if (filter.regex == null) {
+                continue;
+            }
             filter.buildPattern();
+            ready.add(filter);
         }
-
         filteredCache = new LongSparseArray<>();
+        filterModels = ready;
     }
 
     private static boolean isFiltered(CharSequence text, long dialogId) {
