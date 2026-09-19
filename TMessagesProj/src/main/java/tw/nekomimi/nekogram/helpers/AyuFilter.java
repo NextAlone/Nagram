@@ -158,15 +158,20 @@ public class AyuFilter {
     public static void rebuildCache() {
         ArrayList<FilterModel> loaded = getRegexFilters();
         ArrayList<FilterModel> ready = new ArrayList<>(loaded.size());
+
         for (var filter : loaded) {
-            if (filter.regex == null) {
+            if (filter == null || filter.regex == null) {
                 continue;
             }
-            filter.buildPattern();
-            ready.add(filter);
+            try {
+                filter.buildPattern();
+                ready.add(filter);
+            } catch (Exception ignored) {
+            }
         }
-        filteredCache = new LongSparseArray<>();
+
         filterModels = ready;
+        filteredCache = new LongSparseArray<>();
     }
 
     private static boolean isFiltered(CharSequence text, long dialogId) {
