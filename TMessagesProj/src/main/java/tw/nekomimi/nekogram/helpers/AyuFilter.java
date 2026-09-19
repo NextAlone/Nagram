@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import xyz.nextalone.nagram.NaConfig;
 
@@ -36,7 +37,7 @@ public class AyuFilter {
 
         FilterModel[] arr = new Gson().fromJson(str, FilterModel[].class);
 
-        return new ArrayList<>(Arrays.asList(arr));
+        return new ArrayList<>(Arrays.stream(arr).filter(f -> f != null && f.regex != null).collect(Collectors.toList()));
     }
 
     public static void addFilter(String text, boolean caseInsensitive) {
@@ -156,12 +157,21 @@ public class AyuFilter {
     private static LongSparseArray<HashMap<Integer, Boolean>> filteredCache;
 
     public static void rebuildCache() {
-        filterModels = getRegexFilters();
+        ArrayList<FilterModel> loaded = getRegexFilters();
+        ArrayList<FilterModel> ready = new ArrayList<>(loaded.size());
 
-        for (var filter : filterModels) {
-            filter.buildPattern();
+        for (var filter : loaded) {
+            if (filter == null || filter.regex == null) {
+                continue;
+            }
+            try {
+                filter.buildPattern();
+                ready.add(filter);
+            } catch (Exception ignored) {
+            }
         }
 
+        filterModels = ready;
         filteredCache = new LongSparseArray<>();
     }
 
