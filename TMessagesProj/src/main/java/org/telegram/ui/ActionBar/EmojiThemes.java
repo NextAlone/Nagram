@@ -376,7 +376,7 @@ public class EmojiThemes {
         }
 
         if (themeInfo == null) {
-            return currentColors;
+            return new SparseIntArray();
         }
 
         SparseIntArray currentColorsNoAccent;
