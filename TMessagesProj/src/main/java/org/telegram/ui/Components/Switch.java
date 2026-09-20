@@ -549,7 +549,7 @@ public class Switch extends View {
                             canvas.restore();
                         }
                     }
-                } else if (!modernStyle && drawIconType == 1) {
+                } else if (drawIconType == 1) {
                     tx -= AndroidUtilities.dp(10.8f) - AndroidUtilities.dp(1.3f) * progress;
                     ty -= AndroidUtilities.dp(8.5f) - AndroidUtilities.dp(0.5f) * progress;
                     int startX2 = (int) AndroidUtilities.dpf2(4.6f) + tx;
@@ -573,7 +573,7 @@ public class Switch extends View {
                     endX = startX + AndroidUtilities.dp(7);
                     endY = startY - AndroidUtilities.dp(7);
                     canvasToDraw.drawLine(startX, startY, endX, endY, paint2);
-                } else if (!modernStyle && (drawIconType == 2 || iconAnimator != null)) {
+                } else if (drawIconType == 2 || iconAnimator != null) {
                     paint2.setAlpha((int) (255 * (1.0f - iconProgress)));
                     canvasToDraw.drawLine(tx, ty, tx, ty - AndroidUtilities.dp(5), paint2);
                     canvasToDraw.save();
