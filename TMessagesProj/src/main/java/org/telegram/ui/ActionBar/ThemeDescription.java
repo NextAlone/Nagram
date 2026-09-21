@@ -502,6 +502,9 @@ public class ThemeDescription {
     }
 
     private void processViewColor(View child, int color) {
+        if (child == null) {
+            return;
+        }
         for (int b = 0; b < listClasses.length; b++) {
             if (listClasses[b].isInstance(child)) {
                 child.invalidate();
