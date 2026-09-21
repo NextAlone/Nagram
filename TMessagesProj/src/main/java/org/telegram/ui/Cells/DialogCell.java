@@ -501,6 +501,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
 
     public ImageReceiver avatarGroupSenderImage = new ImageReceiver(this);
     private AvatarDrawable avatarGroupSenderDrawable = new AvatarDrawable();
+    private boolean senderAvatarIconRtl;
 
     private boolean animatingArchiveAvatar;
     private float animatingArchiveAvatarProgress;
@@ -2659,10 +2660,22 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             int showUserIconsW = dp(18) + dp(4); // 4 => padding
             messageNameLeft += showUserIconsW;
 
+            senderAvatarIconRtl = false;
+            if (!LocaleController.isRTL && messageNameString != null && messageNameString.length() > 0) {
+                char firstChar = messageNameString.charAt(0);
+                byte directionality = Character.getDirectionality(firstChar);
+                senderAvatarIconRtl = directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT
+                        || directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC
+                        || directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_EMBEDDING
+                        || directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_OVERRIDE;
+            }
+
             if (!SharedConfig.useThreeLinesLayout || hasTags()) {
                 messageLeft += showUserIconsW;
                 messageWidth -= showUserIconsW;
             }
+        } else {
+            senderAvatarIconRtl = false;
         }
 
         if (checkMessage) {
@@ -4744,6 +4757,9 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 if (SharedConfig.useThreeLinesLayout) {
                     cTop = messageNameTop;
                     cLeft = messageNameLeft - showUserIconsW;
+                    if (senderAvatarIconRtl) {
+                        cLeft = getMeasuredWidth() - (messageNameLeft - showUserIconsW) - dp(18);
+                    }
                 } else {
                     cTop = messageTop;
                     if (hasTags() || isForumCell()) {
@@ -4751,6 +4767,9 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                     }
 
                     cLeft = messageLeft - showUserIconsW;
+                    if (senderAvatarIconRtl) {
+                        cLeft = getMeasuredWidth() - (messageLeft - showUserIconsW) - dp(18);
+                    }
                 }
                 cTop += dp(1.7f);
 
