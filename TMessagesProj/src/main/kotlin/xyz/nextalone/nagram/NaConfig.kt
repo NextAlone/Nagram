@@ -1413,7 +1413,6 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
-
     val hideCocoonAISummary =
         addConfig(
             "HideCocoonAISummary",
