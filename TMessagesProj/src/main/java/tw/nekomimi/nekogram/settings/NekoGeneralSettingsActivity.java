@@ -566,6 +566,8 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                 getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
             } else if (key.equals(NaConfig.INSTANCE.getMaterialDesign3ChatHeader().getKey())) {
                 parentLayout.rebuildAllFragmentViews(false, false);
+            } else if (key.equals(NaConfig.INSTANCE.getHideCocoonAISummary().getKey())) {
+                tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             }
         };
 
