@@ -239,6 +239,7 @@ import cn.hutool.core.util.StrUtil;
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.parts.ArticleTransKt;
 import tw.nekomimi.nekogram.transtale.TranslateDb;
+import xyz.nextalone.nagram.NaConfig;
 
 public class ArticleViewer extends IArticleViewer implements NotificationCenter.NotificationCenterDelegate {
 
@@ -12396,6 +12397,8 @@ public class ArticleViewer extends IArticleViewer implements NotificationCenter.
         private int textX;
         private int textY;
 
+        private boolean isCocoon = false;
+
         private TL_iv.pageBlockBlockquote currentBlock;
 
         public BlockBlockquoteCell(Context context, IArticleViewer parent, WebpageAdapter adapter) {
@@ -12433,7 +12436,28 @@ public class ArticleViewer extends IArticleViewer implements NotificationCenter.
 
         public void setBlock(TL_iv.pageBlockBlockquote block) {
             currentBlock = block;
+            if (NaConfig.INSTANCE.getHideCocoonAISummary().Bool())
+                isCocoon = (checkIsCocoonSummary(block.text) || checkIsCocoonSummary(block.caption));
+            if (isCocoon) setVisibility(View.GONE);
             requestLayout();
+        }
+
+        private static boolean checkIsCocoonSummary(TL_iv.RichText text) {
+            if (text == null) return false;
+            if (text instanceof TL_iv.textPlain) {
+                if (((TL_iv.textPlain) text).text.endsWith("Cocoon AI Summary"))
+                    return true;
+            }
+            if (text.text != null && text.text instanceof TL_iv.RichText) {
+                checkIsCocoonSummary(text.text);
+            }
+            if (text.texts != null) {
+                for (TL_iv.RichText t : text.texts) {
+                    if (checkIsCocoonSummary(t))
+                        return true;
+                }
+            }
+            return false;
         }
 
         @Override
@@ -12448,7 +12472,7 @@ public class ArticleViewer extends IArticleViewer implements NotificationCenter.
 
             textY = dp(parent.pady());
 
-            if (currentBlock != null) {
+            if (currentBlock != null && !isCocoon) {
                 int textWidth = width - dp(2 * parent.padx() + 14);
                 if (currentBlock.level > 0) {
                     textWidth -= dp(14 * currentBlock.level);
