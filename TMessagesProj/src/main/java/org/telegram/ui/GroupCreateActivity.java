@@ -1574,7 +1574,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
 
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
-            if (holder.getItemViewType() == 0) return false;
+            if (holder.getItemViewType() == 0 || holder.getItemViewType() == 3) return false;
             if (ignoreUsers != null && holder.itemView instanceof GroupCreateUserCell) {
                 GroupCreateUserCell cell = (GroupCreateUserCell) holder.itemView;
                 Object object = cell.getObject();
