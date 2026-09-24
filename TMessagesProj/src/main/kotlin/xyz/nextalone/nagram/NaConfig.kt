@@ -957,7 +957,7 @@ object NaConfig {
         addConfig(
             "PlayerDecoder",
             ConfigItem.configTypeInt,
-            0
+            2
         )
     val showUserIconsInChatsList =
         addConfig(

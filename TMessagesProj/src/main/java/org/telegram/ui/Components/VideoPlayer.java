@@ -234,13 +234,13 @@ public class VideoPlayer implements Player.Listener, VideoListener, AnalyticsLis
 
     private int getPlayerExtensionRendererMode() {
         switch (NaConfig.INSTANCE.getPlayerDecoder().Int()) {
+            case 0:
+                return DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER;
             case 1:
                 return DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF;
             case 2:
-                return DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON;
-            case 0:
             default:
-                return DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER;
+                return DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON;
         }
     }
 
@@ -269,6 +269,7 @@ public class VideoPlayer implements Player.Listener, VideoListener, AnalyticsLis
                 factory = new DefaultRenderersFactory(ApplicationLoader.applicationContext);
             }
             factory.setExtensionRendererMode(getPlayerExtensionRendererMode());
+            // factory.setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER);
             ExoPlayer.Builder builder = new ExoPlayer.Builder(ApplicationLoader.applicationContext).setRenderersFactory(factory)
                     .setTrackSelector(trackSelector)
                     .setLoadControl(loadControl);

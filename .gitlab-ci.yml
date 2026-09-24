@@ -1,6 +1,5 @@
 stages:
   - prepare
-  - native
   - build
   - upload
 
@@ -26,6 +25,7 @@ default:
 
 .fetch-status: &fetch-status |
   sed -i -E 's#https://github\.com/[^/]+/#https://gitlab.com/xtao-labs/mirrors/#g' .gitmodules
+  sed -i 's|https://chromium\.googlesource\.com/libyuv/libyuv|https://gitlab.com/xtao-labs/mirrors/libyuv.git|g' .gitmodules
   git submodule sync
   git submodule update --init --force
 
@@ -49,31 +49,12 @@ fingerprint:
       dotenv: fingerprint.env
     expire_in: 1 day
 
-native:
-  stage: native
-  image: registry.gitlab.com/xtao-labs/android-ndk:35-jdk17.0.19_10-ndk27.2.12479018-cmake3.22.1-ci
-  cache:
-    - key: "native-arm64-v8a-${NATIVE_KEY}"
-      paths:
-        - TMessagesProj/src/main/libs/arm64-v8a/
-  script:
-    - |
-      if [[ -d TMessagesProj/src/main/libs/arm64-v8a ]]; then
-        exit 10
-      fi
-    - *fetch-status
-    - export NATIVE_TARGET="arm64-v8a"
-    - ./run libs native
-  allow_failure:
-    exit_codes: 10
-
 build:
   stage: build
   image: registry.gitlab.com/xtao-labs/android-ndk:35-jdk17.0.19_10-ndk27.2.12479018-cmake3.22.1-ci
   needs:
     - job: fingerprint
       artifacts: true
-    - job: native
   cache:
     - key: "gradle-${GRADLE_KEY}"
       paths:
@@ -81,9 +62,13 @@ build:
     - key: "native-arm64-v8a-${NATIVE_KEY}"
       paths:
         - TMessagesProj/src/main/libs/arm64-v8a/
-      policy: pull
   script:
     - *fetch-status
+    - |
+      if [[ ! -d TMessagesProj/src/main/libs/arm64-v8a ]]; then
+        export NATIVE_TARGET="arm64-v8a"
+        ./run libs native
+      fi
     - sed -i "s/2000000000000/$(date +%s%N | cut -c1-13)/g" gradle.properties
     - export GRADLE_USER_HOME="$CI_PROJECT_DIR/.gradle-cache"
     - export LOCAL_PROPERTIES="${LOCAL_PROPERTIES}"

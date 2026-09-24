@@ -14,23 +14,24 @@ apply plugin: 'idea'
 idea {
     module {
         excludeDirs += [
-                file('jni/td'),
-                file('jni/third_party/boringssl'),
-                file('jni/third_party/dav1d'),
-                file('jni/third_party/ffmpeg'),
-                file('jni/third_party/libvpx'),
-                file('jni/third_party/libyuv'),
-                file('jni/third_party/openh264'),
-                file('jni/third_party/xiph'),
-                file('jni/tlottie'),
-                file('jni/voip/webrtc'),
-                file('jni/sqlite')
+            file('jni/td'),
+            file('jni/third_party/absl'),
+            file('jni/third_party/boringssl'),
+            file('jni/third_party/dav1d'),
+            file('jni/third_party/ffmpeg'),
+            file('jni/third_party/libvpx'),
+            file('jni/third_party/libyuv'),
+            file('jni/third_party/openh264'),
+            file('jni/third_party/xiph'),
+            file('jni/tlottie'),
+            file('jni/voip/webrtc'),
+            file('jni/sqlite')
         ]
     }
 }
 
 def verName = APP_VERSION_NAME
-def verCode = 1249
+def verCode = 1250
 
 
 def officialVer = APP_VERSION_NAME
@@ -558,7 +559,7 @@ sentry {
         // as Gradle will resolve it to the latest version.
         //
         // Defaults to the latest published Sentry version.
-        sentryVersion = '8.57.0'
+        sentryVersion = '8.58.0'
     }
 
     // Disables or enables dependencies metadata reporting for Sentry.
