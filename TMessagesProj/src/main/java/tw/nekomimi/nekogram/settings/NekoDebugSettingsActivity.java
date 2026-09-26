@@ -58,6 +58,15 @@ public class NekoDebugSettingsActivity extends BaseNekoXSettingsActivity {
             },
             AndroidUtilities.getBuildVersionInfo()));
 
+    // 语言
+    private final AbstractConfigCell languageInfoRow = cellGroup.appendCell(new ConfigCellTextDetail(
+            new LanguageInfoConfigItem(),
+            (view, position) -> {
+                AndroidUtilities.addToClipboard(LanguageInfoConfigItem.getLanguageInfo());
+                AlertUtil.showToast(LocaleController.getString(R.string.TextCopied));
+            },
+            LanguageInfoConfigItem.getLanguageInfo()));
+
     // 启用/关闭日志
     private final AbstractConfigCell logsEnabledRow = cellGroup.appendCell(new ConfigCellTextCheck(
             new LogsEnabledConfigItem(),
@@ -231,12 +240,26 @@ public class NekoDebugSettingsActivity extends BaseNekoXSettingsActivity {
 
     private static class VersionInfoConfigItem extends ConfigItem {
         VersionInfoConfigItem() {
-            super("VersionInfo", configTypeString, "");
+            super("Info", configTypeString, "");
             value = AndroidUtilities.getBuildVersionInfo();
         }
 
         @Override
         public void saveConfig() {}
+    }
+
+    private static class LanguageInfoConfigItem extends ConfigItem {
+        LanguageInfoConfigItem() {
+            super("Language", configTypeString, "");
+            value = getLanguageInfo();
+        }
+
+        @Override
+        public void saveConfig() {}
+
+        public static String getLanguageInfo() {
+            return LocaleController.getLocaleStringIso639();
+        }
     }
 
     private static class LogsEnabledConfigItem extends ConfigItem {

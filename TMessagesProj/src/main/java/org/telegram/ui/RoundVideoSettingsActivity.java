@@ -42,7 +42,7 @@ public class RoundVideoSettingsActivity extends BaseFragment {
     private static final int ROW_COMPOSITION_HEADER = 7;
     private static final int ROW_COMPOSITION = 8;
     private static final int ROW_COMPOSITION_INFO = 9;
-    private static final int ROW_COUNT = BuildConfig.DEBUG_PRIVATE_VERSION ? 10 : 7;
+    private static final int ROW_COUNT = BuildConfig.DEBUG ? 10 : 7;
 
     private static final int[] BITRATES = {
             750_000,
@@ -125,7 +125,7 @@ public class RoundVideoSettingsActivity extends BaseFragment {
             );
         } else if (position == ROW_BITRATE) {
             CharSequence[] labels = new CharSequence[BITRATES.length];
-            for (int i = 0; i < (BITRATES.length - (BuildConfig.DEBUG_PRIVATE_VERSION ? 0 : 1)); i++) {
+            for (int i = 0; i < (BITRATES.length - (BuildConfig.DEBUG ? 0 : 1)); i++) {
                 labels[i] = formatBitrate(BITRATES[i]);
             }
             showChoice(

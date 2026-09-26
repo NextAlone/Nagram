@@ -4664,6 +4664,18 @@ public class LocaleController {
     private @NonNull Localization localizationExternal = Localization.EMPTY;
     private int localizationExternalSize;
 
+    private void checkNagramLocalizationInternal(Localization.Builder builder, Locale currentLocale) {
+        for (String asset : new String[] {
+                NamespaceLocalizationUtils.getLocalizationAssetNa(currentLocale),
+                NamespaceLocalizationUtils.getLocalizationAssetNeko(currentLocale),
+                NamespaceLocalizationUtils.getLocalizationAssetNekox(currentLocale)
+        }) {
+            if (asset != null) {
+                builder.addResLocalization(ApplicationLoader.applicationContext, asset);
+            }
+        }
+    }
+
     private void checkLocalizationInternal() {
         Locale currentLocale = this.currentLocale;
         boolean localeChanged = !Objects.equals(localizationInternalLastLocale, currentLocale);
@@ -4675,9 +4687,10 @@ public class LocaleController {
                 localeChanged = !Objects.equals(localizationInternalLastLocale, currentLocale);
                 if (localeChanged || localizationInternal == null) {
                     if (localizationInternalDefault == null) {
-                        localizationInternalDefault = new Localization.Builder()
-                            .addResLocalization(ApplicationLoader.applicationContext, LocalizationUtils.DEFAULT_LOCALIZATION)
-                            .build();
+                        var localizationInternalDefaultBuilder = new Localization.Builder()
+                            .addResLocalization(ApplicationLoader.applicationContext, LocalizationUtils.DEFAULT_LOCALIZATION);
+                        checkNagramLocalizationInternal(localizationInternalDefaultBuilder, Locale.ENGLISH);
+                        localizationInternalDefault = localizationInternalDefaultBuilder.build();
                     }
 
                     final String assetPath = LocalizationUtils.getLocalizationAsset(currentLocale);
@@ -4691,15 +4704,7 @@ public class LocaleController {
                     }
 
                     Localization.Builder builder = new Localization.Builder().addLocalization(localizationInternal);
-                    for (String asset : new String[] {
-                        NamespaceLocalizationUtils.getLocalizationAssetNa(currentLocale),
-                        NamespaceLocalizationUtils.getLocalizationAssetNeko(currentLocale),
-                        NamespaceLocalizationUtils.getLocalizationAssetNekox(currentLocale)
-                    }) {
-                        if (asset != null) {
-                            builder.addResLocalization(ApplicationLoader.applicationContext, asset);
-                        }
-                    }
+                    checkNagramLocalizationInternal(builder, currentLocale);
                     localizationInternal = builder.build();
 
                     localizationInternalLastLocale = currentLocale;

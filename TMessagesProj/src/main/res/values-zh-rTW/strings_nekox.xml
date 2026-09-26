@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoX" translatable="false">Nagram</string>
     <string name="Locked">已鎖定</string>
     <string name="AccDescrChatAttachEnterMenu">聊天輸入選單</string>
     <string name="ChatAttachEnterMenuRecordVideo">錄製影片</string>
