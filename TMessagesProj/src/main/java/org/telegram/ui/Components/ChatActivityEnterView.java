@@ -669,6 +669,7 @@ public class ChatActivityEnterView extends FrameLayout implements
     private RLottieImageView recordDeleteImageView;
     protected RecordedAudioPlayerView audioTimelineView;
     private long millisecondsRecorded;
+    private boolean roundVideoUiFrameClockActive;
     @Nullable
     private SlideTextView slideText;
     @Nullable
@@ -1021,6 +1022,8 @@ public class ChatActivityEnterView extends FrameLayout implements
         boolean playing;
         RLottieDrawable drawable;
         private boolean enterAnimation;
+        private boolean externalFrameClock;
+        private long externalBlinkStartMs = -1L;
 
         @Override
         protected void onAttachedToWindow() {
@@ -1071,9 +1074,31 @@ public class ChatActivityEnterView extends FrameLayout implements
         public void resetAlpha() {
             alpha = 1.0f;
             lastUpdateTime = System.currentTimeMillis();
+            externalBlinkStartMs = -1L;
             isIncr = false;
             playing = false;
             drawable.stop();
+            invalidate();
+        }
+
+        void setExternalFrameClock(boolean enabled) {
+            externalFrameClock = enabled;
+            lastUpdateTime = System.currentTimeMillis();
+            externalBlinkStartMs = -1L;
+            invalidate();
+        }
+
+        void onExternalFrame(long durationMs) {
+            if (!externalFrameClock) return;
+            if (enterAnimation || externalBlinkStartMs < 0L) {
+                externalBlinkStartMs = durationMs;
+                alpha = 1f;
+            } else if (!playing) {
+                long phaseMs = Math.max(0L, durationMs - externalBlinkStartMs) % 1200L;
+                alpha = phaseMs < 600L
+                        ? 1f - phaseMs / 600f
+                        : (phaseMs - 600L) / 600f;
+            }
             invalidate();
         }
 
@@ -1090,32 +1115,35 @@ public class ChatActivityEnterView extends FrameLayout implements
             }
             redDotPaint.setAlpha((int) (255 * alpha));
 
-            long dt = (System.currentTimeMillis() - lastUpdateTime);
-            if (enterAnimation) {
-                alpha = 1;
-            } else {
-                if (!isIncr && !playing) {
-                    alpha -= dt / 600.0f;
-                    if (alpha <= 0) {
-                        alpha = 0;
-                        isIncr = true;
-                    }
+            if (!externalFrameClock) {
+                long now = System.currentTimeMillis();
+                long dt = now - lastUpdateTime;
+                if (enterAnimation) {
+                    alpha = 1;
                 } else {
-                    alpha += dt / 600.0f;
-                    if (alpha >= 1) {
-                        alpha = 1;
-                        isIncr = false;
+                    if (!isIncr && !playing) {
+                        alpha -= dt / 600.0f;
+                        if (alpha <= 0) {
+                            alpha = 0;
+                            isIncr = true;
+                        }
+                    } else {
+                        alpha += dt / 600.0f;
+                        if (alpha >= 1) {
+                            alpha = 1;
+                            isIncr = false;
+                        }
                     }
                 }
+                lastUpdateTime = now;
             }
-            lastUpdateTime = System.currentTimeMillis();
             if (playing) {
                 drawable.draw(canvas);
             }
             if (!playing || !drawable.hasBitmap()) {
                 canvas.drawCircle(this.getMeasuredWidth() >> 1, this.getMeasuredHeight() >> 1, dp(5), redDotPaint);
             }
-            invalidate();
+            if (!externalFrameClock) invalidate();
         }
 
         public void playDeleteAnimation() {
@@ -2619,41 +2647,6 @@ public class ChatActivityEnterView extends FrameLayout implements
         this(context, parent, fragment, isChat, null);
     }
 
-    private NotificationCenter.ObserversGroup observersGroup;
-
-    private void addObservers() {
-        removeObservers();
-        observersGroup = NotificationCenter.getInstance(currentAccount)
-            .createWeakObserversGroup(this)
-            .addGlobal(NotificationCenter.emojiLoaded)
-            .add(NotificationCenter.recordStarted)
-            .add(NotificationCenter.recordPaused)
-            .add(NotificationCenter.recordResumed)
-            .add(NotificationCenter.recordStartError)
-            .add(NotificationCenter.recordStopped)
-            .add(NotificationCenter.recordProgressChanged)
-            .add(NotificationCenter.closeChats)
-            .add(NotificationCenter.audioDidSent)
-                .add(NotificationCenter.beforeAudioDidSent)
-            .add(NotificationCenter.audioRouteChanged)
-            .add(NotificationCenter.messagePlayingProgressDidChanged)
-            .add(NotificationCenter.featuredStickersDidLoad)
-            .add(NotificationCenter.messageReceivedByServer2)
-            .add(NotificationCenter.sendingMessagesChanged)
-            .add(NotificationCenter.audioRecordTooShort)
-            .add(NotificationCenter.updateBotMenuButton)
-            .add(NotificationCenter.didUpdatePremiumGiftFieldIcon)
-            .add(NotificationCenter.currentUserPremiumStatusChanged);
-    }
-
-    private void removeObservers() {
-        if (observersGroup != null) {
-            observersGroup.removeAllObservers();
-            observersGroup = null;
-        }
-    }
-
-
     @SuppressLint("ClickableViewAccessibility")
     public ChatActivityEnterView(Activity context, SizeNotifierFrameLayout parent, ChatActivity fragment, final boolean isChat, Theme.ResourcesProvider resourcesProvider) {
         super(context);
@@ -2668,7 +2661,25 @@ public class ChatActivityEnterView extends FrameLayout implements
         setWillNotDraw(false);
         setClipChildren(false);
 
-        addObservers();
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.recordStarted);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.recordPaused);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.recordResumed);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.recordStartError);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.recordStopped);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.recordProgressChanged);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.closeChats);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.audioDidSent);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.beforeAudioDidSent);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.audioRouteChanged);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.featuredStickersDidLoad);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.messageReceivedByServer2);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.sendingMessagesChanged);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.audioRecordTooShort);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.updateBotMenuButton);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.didUpdatePremiumGiftFieldIcon);
+        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.currentUserPremiumStatusChanged);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
 
         parentActivity = context;
         parentFragment = fragment;
@@ -7272,7 +7283,25 @@ public class ChatActivityEnterView extends FrameLayout implements
             MediaDataController.getInstance(currentAccount).setDraftVoiceRegion(dialog_id, parentFragment != null && parentFragment.isTopic ? parentFragment.getTopicId() : 0, audioTimelineView == null ? 0.0f : audioTimelineView.getAudioLeft(), audioTimelineView == null ? 1.0f : audioTimelineView.getAudioRight());
         }
         destroyed = true;
-        removeObservers();
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.recordStarted);
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.recordPaused);
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.recordResumed);
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.recordStartError);
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.recordStopped);
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.recordProgressChanged);
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.closeChats);
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.audioDidSent);
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.beforeAudioDidSent);
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.audioRouteChanged);
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.featuredStickersDidLoad);
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.messageReceivedByServer2);
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.sendingMessagesChanged);
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.audioRecordTooShort);
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.updateBotMenuButton);
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.didUpdatePremiumGiftFieldIcon);
+        NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.currentUserPremiumStatusChanged);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
         if (emojiView != null) {
             emojiView.onDestroy();
         }
@@ -7427,10 +7456,36 @@ public class ChatActivityEnterView extends FrameLayout implements
         dialog_id = id;
         if (currentAccount != account) {
             notificationsLocker.unlock();
-            removeObservers();
+            NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.recordStarted);
+            NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.recordPaused);
+            NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.recordResumed);
+            NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.recordStartError);
+            NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.recordStopped);
+            NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.recordProgressChanged);
+            NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.closeChats);
+            NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.audioDidSent);
+            NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.beforeAudioDidSent);
+            NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.audioRouteChanged);
+            NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
+            NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.featuredStickersDidLoad);
+            NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.messageReceivedByServer2);
+            NotificationCenter.getInstance(currentAccount).removeObserver(this, NotificationCenter.sendingMessagesChanged);
             currentAccount = account;
             accountInstance = AccountInstance.getInstance(currentAccount);
-            addObservers();
+            NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.recordStarted);
+            NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.recordPaused);
+            NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.recordResumed);
+            NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.recordStartError);
+            NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.recordStopped);
+            NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.recordProgressChanged);
+            NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.closeChats);
+            NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.audioDidSent);
+            NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.beforeAudioDidSent);
+            NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.audioRouteChanged);
+            NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
+            NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.featuredStickersDidLoad);
+            NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.messageReceivedByServer2);
+            NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.sendingMessagesChanged);
         }
 
         sendPlainEnabled = true;
@@ -11475,6 +11530,31 @@ public class ChatActivityEnterView extends FrameLayout implements
         messageEditText.setSelection(start, messageEditText.length());
     }
 
+    /** Synchronizes the video timeline with an external trim control. */
+    public void setVideoTimelineTrim(float start, float end) {
+        if (videoTimelineView != null) {
+            videoTimelineView.setTrimProgress(start, end);
+        }
+    }
+
+    /** Selects camera-preview-driven animation ticks for the new round-video recorder. */
+    public void setRoundVideoUiFrameClockActive(boolean active) {
+        if (roundVideoUiFrameClockActive == active) return;
+        roundVideoUiFrameClockActive = active;
+        if (recordTimerView != null) recordTimerView.setExternalFrameClock(active);
+        if (recordDot != null) recordDot.setExternalFrameClock(active);
+        if (slideText != null) slideText.setExternalFrameClock(active);
+    }
+
+    /** Advances recording UI on the frame consumed by the camera preview TextureView. */
+    public void onRoundVideoUiFrame(long durationMs) {
+        if (!roundVideoUiFrameClockActive) return;
+        millisecondsRecorded = durationMs;
+        if (recordTimerView != null) recordTimerView.onExternalFrame(durationMs);
+        if (recordDot != null) recordDot.onExternalFrame(durationMs);
+        if (slideText != null) slideText.onExternalFrame();
+    }
+
     public int getCursorPosition() {
         if (messageEditText == null) {
             return 0;
@@ -15049,7 +15129,18 @@ public class ChatActivityEnterView extends FrameLayout implements
         StaticLayout cancelLayout;
 
         private boolean pressed;
+        private boolean externalFrameClock;
         public Rect cancelRect = new Rect();
+
+        void setExternalFrameClock(boolean enabled) {
+            externalFrameClock = enabled;
+            lastUpdateTime = System.currentTimeMillis();
+            invalidate();
+        }
+
+        void onExternalFrame() {
+            if (externalFrameClock && cancelToProgress != 1f) invalidate();
+        }
 
         Drawable selectableBackground;
         private int lastSize;
@@ -15275,7 +15366,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                 setPressed(false);
             }
 
-            if (cancelToProgress != 1) {
+            if (cancelToProgress != 1 && !externalFrameClock) {
                 invalidate();
             }
         }
@@ -15302,6 +15393,9 @@ public class ChatActivityEnterView extends FrameLayout implements
         long startTime;
         long stopTime;
         long lastSendTypingTime;
+        long externalElapsedMs;
+        long lastDrawRealtimeMs;
+        boolean externalFrameClock;
 
         SpannableStringBuilder replaceIn = new SpannableStringBuilder();
         SpannableStringBuilder replaceOut = new SpannableStringBuilder();
@@ -15323,7 +15417,20 @@ public class ChatActivityEnterView extends FrameLayout implements
         public void start(long milliseconds) {
             isRunning = true;
             startTime = System.currentTimeMillis() - milliseconds;
+            externalElapsedMs = milliseconds;
             lastSendTypingTime = startTime;
+            invalidate();
+        }
+
+        void setExternalFrameClock(boolean enabled) {
+            externalFrameClock = enabled;
+            lastDrawRealtimeMs = SystemClock.elapsedRealtime();
+            invalidate();
+        }
+
+        void onExternalFrame(long durationMs) {
+            if (!externalFrameClock) return;
+            externalElapsedMs = durationMs;
             invalidate();
         }
 
@@ -15348,7 +15455,9 @@ public class ChatActivityEnterView extends FrameLayout implements
                 textPaint.setColor(getThemedColor(Theme.key_chat_recordTime));
             }
             long currentTimeMillis = System.currentTimeMillis();
-            long t = isRunning ? (currentTimeMillis - startTime) : stopTime - startTime;
+            long t = isRunning
+                    ? externalFrameClock ? externalElapsedMs : currentTimeMillis - startTime
+                    : stopTime - startTime;
             long time = t / 1000;
             int ms = (int) (t % 1000L) / 10;
 
@@ -15436,8 +15545,13 @@ public class ChatActivityEnterView extends FrameLayout implements
                 }
             }
 
+            long drawRealtimeMs = SystemClock.elapsedRealtime();
+            long drawDeltaMs = lastDrawRealtimeMs == 0L
+                    ? 16L
+                    : Math.min(50L, drawRealtimeMs - lastDrawRealtimeMs);
+            lastDrawRealtimeMs = drawRealtimeMs;
             if (replaceTransition != 0) {
-                replaceTransition -= 0.15f;
+                replaceTransition -= drawDeltaMs / 116f;
                 if (replaceTransition < 0f) {
                     replaceTransition = 0f;
                 }
@@ -15482,7 +15596,7 @@ public class ChatActivityEnterView extends FrameLayout implements
 
             oldString = newString;
 
-            if (isRunning || replaceTransition != 0) {
+            if ((isRunning || replaceTransition != 0) && !externalFrameClock) {
                 invalidate();
             }
         }
@@ -15500,6 +15614,8 @@ public class ChatActivityEnterView extends FrameLayout implements
         public void reset() {
             isRunning = false;
             stopTime = startTime = 0;
+            externalElapsedMs = 0;
+            lastDrawRealtimeMs = 0;
             stoppedInternal = false;
         }
     }

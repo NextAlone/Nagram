@@ -119,7 +119,7 @@ public class MessagesStorage extends BaseController {
     private static SparseArray<MessagesStorage> Instance = new SparseArray();
     private static final Object lockObject = new Object();
 
-    public final static int LAST_DB_VERSION = 178;
+    public final static int LAST_DB_VERSION = 179;
     private boolean databaseMigrationInProgress;
     public boolean showClearDatabaseAlert;
 

@@ -366,7 +366,6 @@ import xyz.nextalone.nagram.helper.MotionPhotoHelper;
 
 @SuppressLint("WrongConstant")
 @SuppressWarnings("unchecked")
-@OptIn(markerClass = UnstableApi.class)
 public class PhotoViewer implements NotificationCenter.NotificationCenterDelegate, GestureDetector2.OnGestureListener, GestureDetector2.OnDoubleTapListener, IPipSourceDelegate, FactorAnimator.Target {
 
     private static final int ANIMATOR_ID_POLL_ATTACH_BUTTONS_VISIBLE = 0;
