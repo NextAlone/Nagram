@@ -85,7 +85,6 @@ import org.telegram.ui.Components.glass.GlassTabView;
 import org.telegram.ui.Stories.recorder.HintView2;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
@@ -680,16 +679,7 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
                 accountNumbers.add(a);
             }
         }
-        Collections.sort(accountNumbers, (o1, o2) -> {
-            long l1 = UserConfig.getInstance(o1).loginTime;
-            long l2 = UserConfig.getInstance(o2).loginTime;
-            if (l1 > l2) {
-                return 1;
-            } else if (l1 < l2) {
-                return -1;
-            }
-            return 0;
-        });
+        UserConfig.sortAccounts(accountNumbers);
 
         if (UserConfig.getActivatedAccountsCount() < UserConfig.MAX_ACCOUNT_COUNT) {
             o.add(R.drawable.msg_addbot, getString(R.string.AddAccount), () -> {

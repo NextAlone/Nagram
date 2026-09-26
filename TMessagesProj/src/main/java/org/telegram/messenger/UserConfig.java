@@ -21,6 +21,8 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.tgnet.tl.TL_account;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.helpers.remote.ExtendedHelper;
@@ -112,6 +114,33 @@ public class UserConfig extends BaseController {
             }
         }
         return count;
+    }
+
+    // loginTime doubles as the account display order.
+    public static void sortAccounts(List<Integer> accounts) {
+        Collections.sort(accounts, (o1, o2) -> Integer.compare(getInstance(o1).loginTime, getInstance(o2).loginTime));
+    }
+
+    // Reassigns the loginTime values already held by these accounts to match the new order,
+    // so accounts outside the list keep their relative positions.
+    public static void applyAccountsOrder(List<Integer> accounts) {
+        final int[] times = new int[accounts.size()];
+        for (int i = 0; i < times.length; ++i) {
+            times[i] = getInstance(accounts.get(i)).loginTime;
+        }
+        Arrays.sort(times);
+        for (int i = 1; i < times.length; ++i) {
+            if (times[i] <= times[i - 1]) {
+                times[i] = times[i - 1] + 1;
+            }
+        }
+        for (int i = 0; i < times.length; ++i) {
+            final UserConfig config = getInstance(accounts.get(i));
+            if (config.loginTime != times[i]) {
+                config.loginTime = times[i];
+                config.saveConfig(false);
+            }
+        }
     }
 
     public UserConfig(int instance) {

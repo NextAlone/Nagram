@@ -143,7 +143,6 @@ import org.telegram.ui.bots.SetupEmojiStatusSheet;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Locale;
 import java.util.Set;
 
@@ -359,6 +358,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         listView = new UniversalRecyclerView(this, this::fillItems, this::onClick, this::onLongClick);
         listView.adapter.setApplyBackground(false);
         listView.setSections();
+        listView.listenReorder(this::whenReordered);
+        listView.allowReorder(true);
         if (listView.getItemAnimator() != null) {
             listView.getItemAnimator().setAddDuration(120);
             listView.getItemAnimator().setRemoveDuration(120);
@@ -641,8 +642,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     }
 
     private final ArrayList<Integer> accountNumbers = new ArrayList<>();
+    private int accountsOrderId = -1;
 
     private void fillItems(ArrayList<UItem> items, UniversalAdapter adapter) {
+        accountsOrderId = -1;
         if (searchItem.isSearchFieldVisible2()) {
             items.add(UItem.asSpace(ActionBar.getCurrentActionBarHeight()));
             search.fillItems(items);
@@ -658,16 +661,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 accountNumbers.add(a);
             }
         }
-        Collections.sort(accountNumbers, (o1, o2) -> {
-            long l1 = UserConfig.getInstance(o1).loginTime;
-            long l2 = UserConfig.getInstance(o2).loginTime;
-            if (l1 > l2) {
-                return 1;
-            } else if (l1 < l2) {
-                return -1;
-            }
-            return 0;
-        });
+        UserConfig.sortAccounts(accountNumbers);
 
         final Set<String> suggestions = getMessagesController().pendingSuggestions;
         if (suggestions.contains("PREMIUM_GRACE")) {
@@ -715,9 +709,11 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             final int accountsCount = accountsCollapsed
                     ? Math.min(COLLAPSED_ACCOUNT_COUNT, accountNumbers.size())
                     : accountNumbers.size();
+            accountsOrderId = adapter.reorderSectionStart();
             for (int i = 0; i < accountsCount; ++i) {
                 items.add(AccountCell.Factory.of(i, accountNumbers.get(i)));
             }
+            adapter.reorderSectionEnd();
             if (accountNumbers.size() > COLLAPSED_ACCOUNT_COUNT) {
                 items.add(UItem.asShadowCollapseButton(
                                 ACCOUNT_COLLAPSE_ID,
@@ -817,6 +813,17 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         } else {
             presentFragment(fragment);
         }
+    }
+
+    private void whenReordered(int id, ArrayList<UItem> items) {
+        if (id != accountsOrderId) return;
+        final ArrayList<Integer> accounts = new ArrayList<>();
+        for (UItem item : items) {
+            if (item.instanceOf(AccountCell.Factory.class)) {
+                accounts.add(item.intValue);
+            }
+        }
+        UserConfig.applyAccountsOrder(accounts);
     }
 
     private void onClick(UItem item, View view, int position, float x, float y) {

@@ -49,7 +49,6 @@ import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import javax.crypto.Cipher;
@@ -209,16 +208,7 @@ public class WearAuthSheet {
                 accountNumbers.add(a);
             }
         }
-        Collections.sort(accountNumbers, (o1, o2) -> {
-            long l1 = UserConfig.getInstance(o1).loginTime;
-            long l2 = UserConfig.getInstance(o2).loginTime;
-            if (l1 > l2) {
-                return 1;
-            } else if (l1 < l2) {
-                return -1;
-            }
-            return 0;
-        });
+        UserConfig.sortAccounts(accountNumbers);
         if (accountNumbers.isEmpty())
             return;
 

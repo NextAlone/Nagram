@@ -68,7 +68,6 @@ import org.telegram.ui.Components.UniversalRecyclerView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Objects;
 
 import tw.nekomimi.nekogram.helpers.PasscodeHelper;
@@ -309,16 +308,7 @@ public class UserInfoActivity extends UniversalFragment implements NotificationC
                 accountNumbers.add(a);
             }
         }
-        Collections.sort(accountNumbers, (o1, o2) -> {
-            long l1 = UserConfig.getInstance(o1).loginTime;
-            long l2 = UserConfig.getInstance(o2).loginTime;
-            if (l1 > l2) {
-                return 1;
-            } else if (l1 < l2) {
-                return -1;
-            }
-            return 0;
-        });
+        UserConfig.sortAccounts(accountNumbers);
     }
 
     @Keep
