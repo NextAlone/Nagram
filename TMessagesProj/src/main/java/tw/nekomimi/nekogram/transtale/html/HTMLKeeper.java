@@ -25,7 +25,7 @@ import android.text.util.Linkify;
 
 import androidx.core.text.HtmlCompat;
 
-import org.apache.commons.text.StringEscapeUtils;
+import cn.hutool.http.HtmlUtil;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.tgnet.TLRPC;
@@ -85,7 +85,7 @@ public class HTMLKeeper {
                 }
             }
 
-            out.append(StringEscapeUtils.escapeHtml4(text.subSequence(i, next).toString()));
+            out.append(HtmlUtil.escape(text.subSequence(i, next).toString()));
 
             lastActiveSpans = currentActiveSpans;
         }
@@ -111,14 +111,14 @@ public class HTMLKeeper {
         } else if (span instanceof StrikethroughSpan) {
             out.append("<s>");
         } else if (span instanceof URLSpan) {
-            out.append("<a href=\"").append(StringEscapeUtils.escapeHtml4(((URLSpan) span).getURL())).append("\">");
+            out.append("<a href=\"").append(HtmlUtil.escape(((URLSpan) span).getURL())).append("\">");
         } else if (span instanceof ForegroundColorSpan) {
             out.append("<q>");
         } else if (span instanceof BlockquoteSpan) {
             out.append("<blockquote>");
         } else if (span instanceof PreSpan) {
             String language = ((PreSpan) span).language;
-            out.append("<tg-pre language=\"").append(StringEscapeUtils.escapeHtml4(language != null ? language : "")).append("\">");
+            out.append("<tg-pre language=\"").append(HtmlUtil.escape(language != null ? language : "")).append("\">");
         }
     }
 
@@ -233,7 +233,7 @@ public class HTMLKeeper {
         if (!includeLink) {
             html_result = PATTERN_A_HREF.matcher(html_result).replaceAll("<a>");
             html_result = PATTERN_SPAN_COLOR_TO_Q.matcher(html_result).replaceAll("<q>$1</q>");
-            html_result = StringEscapeUtils.unescapeHtml4(html_result);
+            html_result = HtmlUtil.unescape(html_result);
         } else {
             html_result = html_result.replace("&#8233;", "\u2029");
         }

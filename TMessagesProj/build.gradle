@@ -408,7 +408,6 @@ dependencies {
     implementation "androidx.browser:browser:1.8.0"
     implementation "androidx.viewpager:viewpager:1.0.0"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0"
-    implementation 'org.apache.commons:commons-text:1.15.0'
     // map
     implementation "org.maplibre.gl:android-sdk:11.13.5"
 
