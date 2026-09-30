@@ -148,5 +148,5 @@
     <string name="disablePremiumStickerAnimation">غیرفعال کردن انیمیشن استیکرهای پرمیوم</string>
     <string name="enhancedFileLoader">بهبود سرعت دانلود</string>
     <string name="useOSMDroidMap">بکارگیری نقشه OSMDroid</string>
-    <string name="mapDriftingFixForGoogleMaps">رفع بگایی نقشه گوگل در چین</string>
+    <string name="mapDriftingFixForGoogleMaps">رفع انحراف نقشه گوگل در چین</string>
 </resources>
