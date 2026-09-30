@@ -20,7 +20,11 @@ public class CustomElementHandler implements HTMLTagAttributesHandler.TagHandler
     private static class BlockquoteMarker {
     }
 
-    private record PreMarker(String language) {
+    private static class PreMarker {
+        final String language;
+        PreMarker(String language) {
+            this.language = language;
+        }
     }
 
     @Override

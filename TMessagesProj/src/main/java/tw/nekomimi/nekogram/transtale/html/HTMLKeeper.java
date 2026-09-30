@@ -162,7 +162,7 @@ public class HTMLKeeper {
         ArrayList<TLRPC.MessageEntity> entitiesForNewLogic = new ArrayList<>();
 
         for (TLRPC.MessageEntity entity : entities) {
-            if (entity instanceof TLRPC.TL_messageEntityBlockquote || entity instanceof TLRPC.TL_messageEntityPre pre && pre.offset + pre.length == text.length()) { // TODO: Handle Pre Entities that are not at the end
+            if (entity instanceof TLRPC.TL_messageEntityBlockquote || entity instanceof TLRPC.TL_messageEntityPre && ((TLRPC.TL_messageEntityPre) entity).offset + ((TLRPC.TL_messageEntityPre) entity).length == text.length()) { // TODO: Handle Pre Entities that are not at the end
                 entitiesForNewLogic.add(entity);
             } else {
                 entitiesForOldLogic.add(entity);
@@ -273,7 +273,8 @@ public class HTMLKeeper {
             int start = htmlParsed.getSpanStart(mSpan);
             int end = htmlParsed.getSpanEnd(mSpan);
             TLRPC.MessageEntity entity = null;
-            if (mSpan instanceof URLSpan urlSpan) {
+            if (mSpan instanceof URLSpan) {
+                URLSpan urlSpan = (URLSpan) mSpan;
                 if (copyEntities != null) {
                     for (int i = 0; i < copyEntities.size(); i++) {
                         TLRPC.MessageEntity old_entity = copyEntities.get(i);
@@ -324,12 +325,13 @@ public class HTMLKeeper {
                     entity = new TLRPC.TL_messageEntityTextUrl();
                     entity.url = urlSpan.getURL();
                 }
-            } else if (mSpan instanceof StyleSpan styleSpan) {
-                entity = switch (styleSpan.getStyle()) {
-                    case TextStyleSpan.FLAG_STYLE_BOLD -> new TLRPC.TL_messageEntityBold();
-                    case TextStyleSpan.FLAG_STYLE_ITALIC -> new TLRPC.TL_messageEntityItalic();
-                    default -> null;
-                };
+            } else if (mSpan instanceof StyleSpan) {
+                int style = ((StyleSpan) mSpan).getStyle();
+                if (style == TextStyleSpan.FLAG_STYLE_BOLD) {
+                    entity = new TLRPC.TL_messageEntityBold();
+                } else if (style == TextStyleSpan.FLAG_STYLE_ITALIC) {
+                    entity = new TLRPC.TL_messageEntityItalic();
+                }
             } else if (mSpan instanceof TypefaceSpan) {
                 entity = new TLRPC.TL_messageEntityCode();
             } else if (mSpan instanceof UnderlineSpan) {
@@ -344,9 +346,9 @@ public class HTMLKeeper {
                 entity.language = ((PreSpan) mSpan).language;
             } else if (mSpan instanceof ForegroundColorSpan) {
                 entity = new TLRPC.TL_messageEntitySpoiler();
-            } else if (mSpan instanceof AnimatedEmojiSpan animatedEmojiSpan) {
+            } else if (mSpan instanceof AnimatedEmojiSpan) {
                 TLRPC.TL_messageEntityCustomEmoji customEmoji = new TLRPC.TL_messageEntityCustomEmoji();
-                customEmoji.document_id = animatedEmojiSpan.documentId;
+                customEmoji.document_id = ((AnimatedEmojiSpan) mSpan).documentId;
                 entity = customEmoji;
             }
             if (entity != null) {
@@ -461,7 +463,20 @@ public class HTMLKeeper {
         }
     }
 
-    private record HTMLTagPosition(int start, int end, String tag) {
+    private static class HTMLTagPosition {
+        private final int start;
+        private final int end;
+        private final String tag;
+
+        HTMLTagPosition(int start, int end, String tag) {
+            this.start = start;
+            this.end = end;
+            this.tag = tag;
+        }
+
+        int start() { return start; }
+        int end() { return end; }
+        String tag() { return tag; }
     }
 
     private static class HTMLTagStack {
