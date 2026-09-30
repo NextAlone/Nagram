@@ -85,6 +85,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import tw.nekomimi.nekogram.transtale.html.HTMLKeeper;
+import xyz.nextalone.nagram.NaConfig;
+
 public class TranslateAlert2 extends BottomSheet implements NotificationCenter.NotificationCenterDelegate {
 
     private Integer reqId;
@@ -467,10 +470,33 @@ public class TranslateAlert2 extends BottomSheet implements NotificationCenter.N
         }
         final String toLng = _toLng;
 
-        alternativeTranslate(text, fromLng, toLng, (res, rateLimit) -> {
+        final boolean useKeepFormatting = NaConfig.INSTANCE.getKeepFormatting().Bool() && reqMessageEntities != null && !reqMessageEntities.isEmpty();
+        final String textToTranslate;
+        if (useKeepFormatting) {
+            textToTranslate = HTMLKeeper.entitiesToHtml(text, reqMessageEntities, false);
+        } else {
+            textToTranslate = text;
+        }
+
+        TLRPC.TL_textWithEntities textWithEntities = new TLRPC.TL_textWithEntities();
+        textWithEntities.text = text;
+        if (reqMessageEntities != null) {
+            textWithEntities.entities = reqMessageEntities;
+        }
+
+        alternativeTranslate(textToTranslate, fromLng, toLng, (res, rateLimit) -> {
             if (res != null) {
                 firstTranslation = false;
-                textView.setText(preprocessText(res));
+                if (useKeepFormatting) {
+                    TLRPC.TL_textWithEntities translatedWithEntities = HTMLKeeper.htmlToEntities(res, reqMessageEntities, false);
+                    TLRPC.TL_textWithEntities processed = preprocess(textWithEntities, translatedWithEntities);
+                    CharSequence translated = SpannableStringBuilder.valueOf(processed.text);
+                    MessageObject.addEntitiesToText(translated, processed.entities, false, true, false, false);
+                    translated = preprocessText(translated);
+                    textView.setText(translated);
+                } else {
+                    textView.setText(preprocessText(res));
+                }
                 adapter.updateMainView(textViewContainer);
             } else {
                 if (isDismissed()) return;
