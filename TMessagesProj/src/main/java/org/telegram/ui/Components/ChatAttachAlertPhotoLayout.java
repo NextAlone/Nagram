@@ -2514,7 +2514,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         } else {
             if (Build.VERSION.SDK_INT >= 23) {
                 if (noCameraPermissions = (fragment.getParentActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
-                    if (request) {
+                    if (request && !NekoConfig.disableInstantCamera.Bool() && !NaConfig.INSTANCE.getHideInstantCamera().Bool()) {
                         try {
                             ArrayList<String> permissons = new ArrayList<>();
                             permissons.add(Manifest.permission.CAMERA);
@@ -3988,7 +3988,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     }
 
     public void setCheckCameraWhenShown(boolean checkCameraWhenShown) {
-        this.checkCameraWhenShown = checkCameraWhenShown && !NekoConfig.disableInstantCamera.Bool() && !NaConfig.INSTANCE.getHideInstantCamera().Bool();
+        this.checkCameraWhenShown = checkCameraWhenShown;
     }
 
     @Override
@@ -4204,7 +4204,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
 
     @Override
     public void onOpenAnimationEnd() {
-        checkCamera(parentAlert != null && parentAlert.baseFragment instanceof ChatActivity && !NekoConfig.disableInstantCamera.Bool() && !NaConfig.INSTANCE.getHideInstantCamera().Bool());
+        checkCamera(parentAlert != null && parentAlert.baseFragment instanceof ChatActivity);
     }
 
     @Override
