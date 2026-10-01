@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import xyz.nextalone.nagram.helper.ColorOsHelper;
 import xyz.nextalone.nagram.ui.Components.InputTextAnimation;
 
 public class EditTextEffects extends EditText {
@@ -316,7 +317,8 @@ public class EditTextEffects extends EditText {
                 !Build.MANUFACTURER.toLowerCase().contains("honor") &&
                 !Build.MANUFACTURER.toLowerCase().contains("huawei") &&
                 !Build.MANUFACTURER.toLowerCase().contains("alps") &&
-                !Build.MANUFACTURER.toLowerCase().contains("vivo")
+                !Build.MANUFACTURER.toLowerCase().contains("vivo") &&
+                !ColorOsHelper.INSTANCE.isColorOS()
             ) && (
                 Build.MODEL == null ||
                 !Build.MODEL.toLowerCase().contains("mediapad")
