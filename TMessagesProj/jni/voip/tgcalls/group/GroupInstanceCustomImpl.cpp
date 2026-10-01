@@ -3420,6 +3420,14 @@ public:
         if (!_sharedVideoInformation) {
             return;
         }
+        if (videoInformation.ssrcGroups.empty()) {
+            return;
+        }
+        for (const auto &group : videoInformation.ssrcGroups) {
+            if (group.ssrcs.empty()) {
+                return;
+            }
+        }
         if (_incomingVideoChannels.find(VideoChannelId(videoInformation.endpointId)) != _incomingVideoChannels.end()) {
             return;
         }

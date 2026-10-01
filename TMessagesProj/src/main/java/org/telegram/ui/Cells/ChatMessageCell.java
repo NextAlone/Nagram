@@ -18613,16 +18613,21 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             timeString = LocaleController.formatSmallDateChat(messageObject.messageOwner.date) + ", " + LocaleController.getInstance().getFormatterDay().format((long) (messageObject.messageOwner.date) * 1000);
         } else if (edited) {
             drawEditedIcon = NaConfig.INSTANCE.getShowEditedIcon().Bool();
-            if (drawEditedIcon) {
-                long date = AppGlobalConfig.getInstance(currentAccount).messagePrimaryEditedDate.get() ?
-                        (currentMessagesGroup != null ? currentMessagesGroup.getMaxEditDate() : messageObject.messageOwner.edit_date) :
-                        messageObject.messageOwner.date;
-                timeString = LocaleController.getInstance().getFormatterDay().format(date * 1000);
+            if (AppGlobalConfig.getInstance(currentAccount).messagePrimaryEditedDate.get()) {
+                int editDate = currentMessagesGroup != null ? currentMessagesGroup.getMaxEditDate() : messageObject.messageOwner.edit_date;
+                if (editDate == 0 && currentMessageObject.isEditing()) {
+                    editDate = ConnectionsManager.getInstance(currentAccount).getCurrentTime();
+                }
+                timeString = drawEditedIcon
+                        ? LocaleController.getInstance().getFormatterDay().format((long) editDate * 1000)
+                        : LocaleController.formatPmEditedDate(editDate);
             } else {
-                String customStr = NaConfig.INSTANCE.getCustomEditedMessage().String();
-                timeString = AppGlobalConfig.getInstance(currentAccount).messagePrimaryEditedDate.get() ?
-                    LocaleController.formatPmEditedDate(currentMessagesGroup != null ? currentMessagesGroup.getMaxEditDate() : messageObject.messageOwner.edit_date) :
-                    ((customStr.equals("") ? getString(R.string.EditedMessage) : customStr) + " " + LocaleController.getInstance().getFormatterDay().format((long) (messageObject.messageOwner.date) * 1000));
+                if (drawEditedIcon) {
+                    timeString = LocaleController.getInstance().getFormatterDay().format((long) (messageObject.messageOwner.date) * 1000);
+                } else {
+                    String customStr = NaConfig.INSTANCE.getCustomEditedMessage().String();
+                    timeString = (customStr.isEmpty() ? getString(R.string.EditedMessage) : customStr) + " " + LocaleController.getInstance().getFormatterDay().format((long) (messageObject.messageOwner.date) * 1000);
+                }
             }
         } else if (currentMessageObject.isSaved && currentMessageObject.messageOwner.fwd_from != null && (currentMessageObject.messageOwner.fwd_from.date != 0 || currentMessageObject.messageOwner.fwd_from.saved_date != 0)) {
             int date = currentMessageObject.messageOwner.fwd_from.saved_date;
