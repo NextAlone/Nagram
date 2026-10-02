@@ -72,7 +72,6 @@ import org.telegram.ui.Components.QRCodeBottomSheet;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SlideChooseView;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -171,12 +170,10 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 addView(shareImageView, LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.TOP, 8, 8, 8 + 48, 0));
             }
             shareImageView.setOnClickListener(v -> {
-                StringBuilder params = new StringBuilder();
-                String url = currentInfo.settings.getLink();
-                if (params.length() == 0) {
+                String link = currentInfo.settings.getLink();
+                if (TextUtils.isEmpty(link)) {
                     return;
                 }
-                String link = url + params;
                 QRCodeBottomSheet alert = new QRCodeBottomSheet(context, LocaleController.getString(R.string.ShareQrCode), link,
                     LocaleController.getString(R.string.QRCodeLinkHelpProxy), true);
                 Bitmap icon = SvgHelper.getBitmap(AndroidUtilities.readRes(R.raw.qr_dog), AndroidUtilities.dp(60), AndroidUtilities.dp(60), false);
