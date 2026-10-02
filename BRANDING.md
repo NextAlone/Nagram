@@ -23,8 +23,7 @@ the Nagram project.
 
 ## Rules for modified and third-party distributions
 
-Unless prior written permission has been obtained from the applicable rights
-holder, a modified, forked, or third-party distribution must:
+A modified, forked, or third-party distribution must:
 
 1. remove or replace the Nagram name, logos, and application icons used as
    product branding;
@@ -70,10 +69,3 @@ materials remain subject to their respective rights and licenses.
 Verbatim redistribution of an official, unmodified Nagram release must not be
 presented as the distributor's own product and remains subject to all
 applicable licenses and laws.
-
-## Permission and questions
-
-Requests for written brand permission or questions about a specific asset may
-be submitted through the official Nagram issue tracker:
-
-<https://github.com/NextAlone/Nagram/issues>
