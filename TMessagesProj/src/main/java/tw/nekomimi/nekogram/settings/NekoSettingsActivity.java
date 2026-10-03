@@ -54,8 +54,7 @@ import xyz.nextalone.nagram.network.NetworkLogActivity;
 public class NekoSettingsActivity extends BaseNekoSettingsActivity {
 
     private static final Set<String> EXCLUDED_NKMR_CONFIG_KEYS = new HashSet<>(Arrays.asList(
-            "ExtendedFeatureUnlockedToken",
-            "ShowHiddenFeature"
+            "ExtendedFeatureUnlockedToken"
     ));
 
     private int categoriesRow;
