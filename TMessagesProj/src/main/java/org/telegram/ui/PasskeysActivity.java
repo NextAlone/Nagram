@@ -52,7 +52,8 @@ import org.telegram.ui.Stories.recorder.ButtonWithCounterView;
 
 import java.util.ArrayList;
 
-@RequiresApi(api = 28)
+import tw.nekomimi.nekogram.passkey.PasskeyQr;
+
 public class PasskeysActivity extends BaseFragment {
 
     private UniversalRecyclerView listView;
@@ -99,15 +100,18 @@ public class PasskeysActivity extends BaseFragment {
             final TL_account.Passkey passkey = passkeys.get(i);
             items.add(PasskeyCell.Factory.of(passkey, this::openMenu));
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            if (passkeys.size() + 1 <= getMessagesController().config.passkeysAccountPasskeysMax.get()) {
-                addPasskeyRow = items.size();
+        if (passkeys.size() + 1 <= getMessagesController().config.passkeysAccountPasskeysMax.get()) {
+            addPasskeyRow = items.size();
+            items.add(UItem.asButton(-3, R.drawable.msg_qrcode, getString(R.string.CreatePassQR)).accent());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                 items.add(UItem.asButton(-1, R.drawable.menu_passkey_add, getString(R.string.PasskeyAdd)).accent());
             }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             items.add(UItem.asButton(-2, R.drawable.menu_settings, getString(R.string.Settings)).accent());
         }
-        items.add(UItem.asShadow(AndroidUtilities.replaceArrows(AndroidUtilities.replaceSingleTag(getString(R.string.PasskeyInfo), () -> {
-            showLearnSheet(getContext(), currentAccount, resourceProvider, Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE && passkeys.size() + 1 <= getMessagesController().config.passkeysAccountPasskeysMax.get());
+        items.add(UItem.asShadow(AndroidUtilities.replaceArrows(AndroidUtilities.replaceSingleTag(getString(R.string.PassQRAbout) + "\n\n" + getString(R.string.PasskeyInfo), () -> {
+            showLearnSheet(getContext(), currentAccount, resourceProvider, passkeys.size() + 1 <= getMessagesController().config.passkeysAccountPasskeysMax.get());
         }), true)));
     }
 
@@ -156,8 +160,8 @@ public class PasskeysActivity extends BaseFragment {
     }
 
     private void onItemClick(UItem item, View view, int position, float x, float y) {
-        if (item.id == -1) {
-            PasskeysController.create(getContext(), currentAccount, (passkey, error) -> {
+        if (item.id == -1 || item.id == -3) {
+            Utilities.Callback2<TL_account.Passkey, String> done = (passkey, error) -> {
                 if (error != null) {
                     if ("CANCELLED".equalsIgnoreCase(error))
                         return;
@@ -174,8 +178,11 @@ public class PasskeysActivity extends BaseFragment {
                     MessagesController.getInstance(currentAccount).removeSuggestion(0, "SETUP_PASSKEY");
                     added(passkey);
                 }
-            });
+            };
+            if (item.id == -1 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) PasskeysController.create(getContext(), currentAccount, done);
+            if (item.id == -3) PasskeyQr.create(getContext(), currentAccount, done);
         } else if (item.id == -2) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) return;
             PasskeysController.openSettings(getParentActivity());
         } else if (item.object != null) {
             openMenu(view);
@@ -250,13 +257,13 @@ public class PasskeysActivity extends BaseFragment {
             } else {
                 imageBackgroundView.setBackground(Theme.createRoundRectDrawable(dp(4), Theme.multAlpha(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider), 0.04f)));
                 imageView.setColorFilter(new PorterDuffColorFilter(Theme.multAlpha(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider), 0.3f), PorterDuff.Mode.SRC_IN));
-                imageView.setImageResource(R.drawable.msg2_permissions);
+                imageView.setImageResource(PasskeyQr.isKnownPassQR(passkey.id) ? R.drawable.msg_qrcode : R.drawable.msg2_permissions);
                 imageView.setScaleX(0.666f);
                 imageView.setScaleY(0.666f);
                 imageView.setAnimatedEmojiDrawable(null);
             }
             if (TextUtils.isEmpty(passkey.name)) {
-                titleView.setText(getString(R.string.PasskeyUnknown));
+                titleView.setText(getString(PasskeyQr.isKnownPassQR(passkey.id) ? R.string.PassQR : R.string.PasskeyUnknown));
             } else {
                 titleView.setText(passkey.name);
             }
@@ -350,7 +357,7 @@ public class PasskeysActivity extends BaseFragment {
         button.setOnClickListener(v -> {
             if (button.isLoading()) return;
             button.setLoading(true);
-            PasskeysController.create(context, currentAccount, (passkey, error) -> {
+            PasskeyQr.create(context, currentAccount, (passkey, error) -> {
                 button.setLoading(false);
                 if ("CANCELLED".equalsIgnoreCase(error))
                     return;

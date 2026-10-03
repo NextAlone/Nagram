@@ -436,6 +436,8 @@ dependencies {
     implementation 'org.unifiedpush.android:connector:3.1.2'
     // add for copy webm and tgs to gif
     implementation "com.airbnb.android:lottie:6.4.1"
+    // add for passkeys
+    implementation "co.nstant.in:cbor:0.9"
 }
 
 apply plugin: "com.google.gms.google-services"

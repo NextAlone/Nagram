@@ -170,6 +170,10 @@ public class CameraScanActivity extends BaseFragment {
             return false;
         }
 
+        default boolean validateQr(String text) {
+            return true;
+        }
+
         default String getSubtitleText() {
             return null;
         }
@@ -1446,6 +1450,10 @@ public class CameraScanActivity extends BaseFragment {
                 return null;
             }
             if (any) return new QrResult(text, bounds);
+            if (delegate != null && !delegate.validateQr(text)) {
+                onNoQrFound();
+                return null;
+            }
             if (needGalleryButton) {
                 Uri uri = Uri.parse(text);
                 String path = uri.getPath().replace("/", "");

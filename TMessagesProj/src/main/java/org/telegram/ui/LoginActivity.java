@@ -230,6 +230,7 @@ import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.helpers.AppRestartHelper;
 import tw.nekomimi.nekogram.helpers.PasscodeHelper;
+import tw.nekomimi.nekogram.passkey.LoginQrScanner;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.ui.EditTextAutoFill;
 import tw.nekomimi.nekogram.utils.AlertUtil;
@@ -424,6 +425,7 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
     private static final int menu_custom_dc = 7;
     private static final int menu_qr_login = 8;
     private static final int menu_passkey_login = 9;
+    private static final int menu_passkey_qr = 10;
 
     TLRPC.TL_auth_exportLoginToken exportLoginTokenRequest = null;
     AlertDialog exportLoginTokenProgress = null;
@@ -810,6 +812,8 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
             menu.addSubItem(menu_passkey_login, R.drawable.menu_passkey_add, getString(R.string.Passkey))
                     .setContentDescription(LocaleController.getString(R.string.Passkey));
         }
+        menu.addSubItem(menu_passkey_qr, R.drawable.msg_qrcode, LocaleController.getString(R.string.PassQR))
+                .setContentDescription(LocaleController.getString(R.string.PassQR));
         menu.addSubItem(menu_custom_api, R.drawable.baseline_vpn_key_24, LocaleController.getString(R.string.CustomApi))
                 .setContentDescription(LocaleController.getString(R.string.CustomApi));
         menu.addSubItem(menu_custom_dc, R.drawable.msg_retry, LocaleController.getString(R.string.CustomBackend))
@@ -833,6 +837,36 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
                 if (phoneView != null) {
                     phoneView.requestPasskey(true, true);
                 }
+            } else if (id == menu_passkey_qr) {
+                LoginQrScanner.showScanner(this, (authorization, err) -> {
+                    if ("CANCELLED".equals(err)) return;
+                    if (authorization instanceof TLRPC.TL_auth_authorization) {
+                        onAuthSuccess((TLRPC.TL_auth_authorization) authorization);
+                        return;
+                    }
+                    if (err != null && err.contains("SESSION_PASSWORD_NEEDED")) {
+                        var req = new TL_account.getPassword();
+                        ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+                            showDoneButton(false, true);
+                            if (error == null) {
+                                var password = (TL_account.Password) response;
+                                if (!TwoStepVerificationActivity.canHandleCurrentPassword(password, true)) {
+                                    AlertsCreator.showUpdateAppAlert(getParentActivity(), getString(R.string.UpdateAppAlert), true);
+                                    return;
+                                }
+                                var bundle = new Bundle();
+                                var data = new SerializedData(password.getObjectSize());
+                                password.serializeToStream(data);
+                                bundle.putString("password", Utilities.bytesToHex(data.toByteArray()));
+                                setPage(VIEW_PASSWORD, true, bundle, false);
+                            } else {
+                                needShowAlert(getString(R.string.RestorePasswordNoEmailTitle), error.text);
+                            }
+                        }), ConnectionsManager.RequestFlagFailOnServerErrors | ConnectionsManager.RequestFlagWithoutLogin);
+                    } else {
+                        BulletinFactory.of(slideViewsContainer, null).showForError(err);
+                    }
+                });
             } else if (id == menu_custom_dc) {
                 PhoneView phoneView = (PhoneView)views[VIEW_PHONE_INPUT];
                 if (phoneView.testBackendCheckBox != null) {
