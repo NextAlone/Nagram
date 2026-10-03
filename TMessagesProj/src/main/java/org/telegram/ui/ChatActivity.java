@@ -19751,9 +19751,9 @@ public class ChatActivity extends BaseFragment implements
                                     } else if ((messageObject.getDocumentName().toLowerCase().endsWith(".nekox.json"))) {
                                         // TODO wtf
                                         return 21;
-                                    } else if ((messageObject.getDocumentName().toLowerCase().endsWith(".nekox-stickers.json"))) {
+                                    } else if (xyz.nextalone.nagram.helper.BackupFileHelper.isStickersFile(messageObject.getDocumentName())) {
                                         return 22;
-                                    } else if ((messageObject.getDocumentName().toLowerCase().endsWith(".nekox-settings.json"))) {
+                                    } else if (xyz.nextalone.nagram.helper.BackupFileHelper.isSettingsFile(messageObject.getDocumentName())) {
                                         return 23;
                                     } else if (!messageObject.isNewGif() && mime.endsWith("/mp4") || mime.endsWith("/png") || mime.endsWith("/jpg") || mime.endsWith("/jpeg")) {
                                         return 6;
@@ -34515,7 +34515,7 @@ public class ChatActivity extends BaseFragment implements
                                 R.drawable.menu_secret, LocaleController.getString("Import", R.string.Import),
                                 false, () -> {});
 
-                    } else if (locFile.getName().toLowerCase().endsWith(".nekox-stickers.json")) {
+                    } else if (xyz.nextalone.nagram.helper.BackupFileHelper.isStickersFile(locFile.getName())) {
 
                         File finalLocFile = locFile;
                         AlertUtil.showConfirm(getParentActivity(),
@@ -34525,7 +34525,7 @@ public class ChatActivity extends BaseFragment implements
                                     presentFragment(new StickersActivity(finalLocFile));
                                 });
 
-                    } else if (locFile.getName().toLowerCase().endsWith(".nekox-settings.json")) {
+                    } else if (xyz.nextalone.nagram.helper.BackupFileHelper.isSettingsFile(locFile.getName())) {
 
                         File finalLocFile = locFile;
 
@@ -42936,14 +42936,14 @@ public class ChatActivity extends BaseFragment implements
                             LocaleController.getString("ImportProxyList", R.string.ImportProxyList),
                             R.drawable.menu_secret, LocaleController.getString("Import", R.string.Import),
                             false, () -> {});
-                } else if (message.getDocumentName().toLowerCase().endsWith(".nekox-stickers.json")) {
+                } else if (xyz.nextalone.nagram.helper.BackupFileHelper.isStickersFile(message.getDocumentName())) {
                     File finalLocFile = locFile;
                     AlertUtil.showConfirm(getParentActivity(),
                             LocaleController.getString("ImportStickersList", R.string.ImportStickersList),
                             R.drawable.msg_sticker, LocaleController.getString("Import", R.string.Import), false, () -> {
                                 presentFragment(new StickersActivity(finalLocFile));
                             });
-                } else if (message.getDocumentName().toLowerCase().endsWith(".nekox-settings.json")) {
+                } else if (xyz.nextalone.nagram.helper.BackupFileHelper.isSettingsFile(message.getDocumentName())) {
                     File finalLocFile = locFile;
                     NekoSettingsActivity.importSettings(getParentActivity(), finalLocFile);
                 } else {

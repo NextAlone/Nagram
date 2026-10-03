@@ -47,7 +47,7 @@
     <string name="TransToLang">Переклад на мову</string>
     <string name="TransInputToLang">Переклад із мови</string>
     <string name="More">Більше</string>
-    <string name="NekoXUpdatesChannel">Канал оновлень NekoX</string>
+    <string name="NekoXUpdatesChannel">Канал оновлень Nagram</string>
     <string name="ShowIdAndDc">Показати ID / DC в профілі</string>
     <string name="UseDefaultTheme">Використовувати стандартну тему *</string>
     <string name="NightMode">Нічний режим</string>
@@ -87,7 +87,7 @@
     <string name="SortByUnmuted">Сортувати за ввімк. звуком</string>
     <string name="SortByUser">Сортувати за користувачем</string>
     <string name="SortByContacts">Сортувати за контактами</string>
-    <string name="NekoXPushService">Push-сервіс NekoX</string>
+    <string name="NekoXPushService">Push-сервіс Nagram</string>
     <string name="EnablePushAlert">Будь ласка, ввімкніть Push-сервіс NekoX</string>
     <string name="DisablePushAlert">Будь ласка, вимкніть Push-сервіс NekoX</string>
     <string name="DisableUndo">Вимкнути скасування</string>

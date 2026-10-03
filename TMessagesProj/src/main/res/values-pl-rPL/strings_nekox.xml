@@ -47,7 +47,7 @@
     <string name="TransToLang">Język tłumaczenia wiadomości</string>
     <string name="TransInputToLang">Język tłum. w polu wprowadzania</string>
     <string name="More">Więcej</string>
-    <string name="NekoXUpdatesChannel">Kanał aktualizacji NekoX</string>
+    <string name="NekoXUpdatesChannel">Kanał aktualizacji Nagram</string>
     <string name="ShowIdAndDc">Pokaż ID / DC w profilu</string>
     <string name="UseDefaultTheme">Użyj domyślnego motywu *</string>
     <string name="NightMode">Tryb nocny</string>
@@ -87,7 +87,7 @@
     <string name="SortByUnmuted">Sortuj według niewyciszonych</string>
     <string name="SortByUser">Sortuj według użytkownika</string>
     <string name="SortByContacts">Sortuj według kontaktów</string>
-    <string name="NekoXPushService">Usługa Push NekoX</string>
+    <string name="NekoXPushService">Usługa Push Nagram</string>
     <string name="EnablePushAlert">Proszę włączyć „Usługa Push NekoX”</string>
     <string name="DisablePushAlert">Proszę wyłączyć „Usługa Push NekoX”</string>
     <string name="DisableUndo">Wyłącz dymek przywracania usuniętego czatu</string>

@@ -105,7 +105,7 @@ public class ApplicationLoader extends Application {
         } catch (Throwable ignore) {
         }
         Thread.currentThread().setUncaughtExceptionHandler((thread, error) -> {
-            Log.e("nekox", "from " + thread.toString(), error);
+            Log.e("nagram", "from " + thread.toString(), error);
             AnalyticsHelper.captureException(error);
         });
     }

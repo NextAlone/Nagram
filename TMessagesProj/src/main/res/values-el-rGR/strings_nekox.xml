@@ -23,7 +23,7 @@
     <string name="CheckUpdate">Έλεγχος ενημέρωσης</string>
     <string name="UpdateAvailable">Διαθέσιμη νέα ενημέρωση</string>
     <string name="Install">Εγκατάσταση</string>
-    <string name="NekoXUpdatesChannel">Κανάλι ενημερώσεων NekoX</string>
+    <string name="NekoXUpdatesChannel">Κανάλι ενημερώσεων Nagram</string>
     <string name="CustomBackendProduction">Επίσημο Κέντρο Δεδομένων Παραγωγής</string>
     <string name="UpdateDownloaded">Μόλις έγινε λήψη μιας ενημέρωσης.</string>
     <string name="GoogleCloudTransKeyNotice">Εάν ρυθμίσετε ένα κλειδί Google Cloud Trans, θα καλείται το API της μετάφρασης cloud αντί να υποβάλλετε μια ψεύτικη φόρμα στην έκδοση web κατά τη μετάφραση (ταχύτερη, σταθερότερη και εξοικονόμηση κίνησης).</string>
@@ -129,7 +129,7 @@
     <string name="DisableSystemAccount">Απενεργ/ση Λογ/σμού Συστήματος</string>
     <string name="PGPImportPrivate">Εισαγωγή ιδιωτικού κλειδιού</string>
     <string name="SortByContacts">Ταξινόμηση κατά επαφές</string>
-    <string name="NekoXPushService">Υπηρεσία NekoX Push</string>
+    <string name="NekoXPushService">Υπηρεσία Nagram Push</string>
     <string name="MinApi23Required">Συγγνώμη, χρειάζεστε τουλάχιστον Android 6 (επίπεδο API 23).</string>
     <string name="TransSite">Πλατφόρμα Μετάφρασης</string>
     <string name="OpenKayChain">Πελάτης OpenPGP</string>

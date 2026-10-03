@@ -47,7 +47,7 @@
     <string name="TransToLang">Dịch ngôn ngữ được chọn</string>
     <string name="TransInputToLang">Dịch ngôn ngữ đầu vào được chọn</string>
     <string name="More">Thêm</string>
-    <string name="NekoXUpdatesChannel">Kênh cập nhật NekoX</string>
+    <string name="NekoXUpdatesChannel">Kênh cập nhật Nagram</string>
     <string name="ShowIdAndDc">Hiển thị ID / DC trong hồ sơ</string>
     <string name="UseDefaultTheme">Sử dụng chủ đề mặc định *</string>
     <string name="NightMode">Chế độ ban đêm</string>
@@ -87,7 +87,7 @@
     <string name="SortByUnmuted">Sắp xếp theo Bật thông báo</string>
     <string name="SortByUser">Sắp xếp theo Người dùng</string>
     <string name="SortByContacts">Sắp xếp theo Danh bạ</string>
-    <string name="NekoXPushService">Dịch vụ NekoX Push</string>
+    <string name="NekoXPushService">Dịch vụ Nagram Push</string>
     <string name="EnablePushAlert">Vui lòng kích hoạt \"Dịch vụ NekoX Push\"</string>
     <string name="DisablePushAlert">Vui lòng tắt \"Dịch vụ NekoX Push\"</string>
     <string name="DisableUndo">Tắt hoàn tác</string>

@@ -651,7 +651,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
     public void processStickersFile(File file, boolean exitOnFail) {
 
-        if (!file.isFile() || !file.getName().endsWith("nekox-stickers.json")) {
+        if (!file.isFile() || !xyz.nextalone.nagram.helper.BackupFileHelper.isStickersFile(file.getName())) {
 
             showError("not a stickers file", exitOnFail);
 
@@ -758,7 +758,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
             JsonObject exportObj = StickersUtil.exportStickers(currentAccount, exportSets, exportArchived);
 
-            File cacheFile = new File(EnvUtil.getShareCachePath(), new Date().toLocaleString() + ".nekox-stickers.json");
+            File cacheFile = new File(EnvUtil.getShareCachePath(), new Date().toLocaleString() + xyz.nextalone.nagram.helper.BackupFileHelper.STICKERS_SUFFIX);
 
             StringWriter stringWriter = new StringWriter();
             JsonWriter jsonWriter = new JsonWriter(stringWriter);
@@ -1138,7 +1138,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
 
                         JsonObject exportObj = StickersUtil.exportStickers(stickerSetList);
 
-                        File cacheFile = new File(EnvUtil.getShareCachePath(), new Date().toLocaleString() + ".nekox-stickers.json");
+                        File cacheFile = new File(EnvUtil.getShareCachePath(), new Date().toLocaleString() + xyz.nextalone.nagram.helper.BackupFileHelper.STICKERS_SUFFIX);
 
                         StringWriter stringWriter = new StringWriter();
                         JsonWriter jsonWriter = new JsonWriter(stringWriter);

@@ -270,7 +270,7 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
     private void backupSettings() {
         try {
             DateFormat formatter = DateFormat.getDateTimeInstance();
-            File cacheFile = new File(EnvUtil.getShareCachePath(), formatter.format(new Date()) + ".nekox-settings.json");
+            File cacheFile = new File(EnvUtil.getShareCachePath(), formatter.format(new Date()) + xyz.nextalone.nagram.helper.BackupFileHelper.SETTINGS_SUFFIX);
             FileUtil.writeUtf8String(backupSettingsJson(), cacheFile);
             ShareUtil.shareFile(getParentActivity(), cacheFile);
         } catch (JSONException e) {

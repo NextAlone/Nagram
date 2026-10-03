@@ -1538,6 +1538,8 @@ public class Theme {
                 return getString(R.string.ThemeDay);
             } else if ("Night".equals(name)) {
                 return getString(R.string.ThemeNight);
+            } else if ("NekoX".equals(name)) {
+                return getString(R.string.NekoX);
             }
             return info != null ? info.title : name;
         }

@@ -47,7 +47,7 @@
     <string name="TransToLang">زبان ترجمه مقصد</string>
     <string name="TransInputToLang">زبان ترجمه پیام ورودی</string>
     <string name="More">بیشتر</string>
-    <string name="NekoXUpdatesChannel">کانال بروزرسانی NekoX</string>
+    <string name="NekoXUpdatesChannel">کانال بروزرسانی Nagram</string>
     <string name="ShowIdAndDc">نمایش ID / DC در پروفایل کاربر</string>
     <string name="UseDefaultTheme">استفاده از تم پیشفرض *</string>
     <string name="NightMode">حالت شب</string>
@@ -87,7 +87,7 @@
     <string name="SortByUnmuted">ترتیب بر اساس صدا دار</string>
     <string name="SortByUser">ترتیب بر اساس کاربر</string>
     <string name="SortByContacts">ترتیب بر اساس مخاطبین</string>
-    <string name="NekoXPushService">خدمات ارسال اعلان NekoX</string>
+    <string name="NekoXPushService">خدمات ارسال اعلان Nagram</string>
     <string name="EnablePushAlert">لطفا خدمات ارسال اعلان NekoX را فعال کنید</string>
     <string name="DisablePushAlert">لطفا خدمات ارسال اعلان NekoX را غیرفعال کنید</string>
     <string name="DisableUndo">غیرفعال کردن واگرد</string>

@@ -47,7 +47,7 @@
     <string name="TransToLang">Lingua di destinazione della traduzione</string>
     <string name="TransInputToLang">Lingua di destinazione dell\'inserimento della traduzione</string>
     <string name="More">Altro</string>
-    <string name="NekoXUpdatesChannel">Canale Aggiornamenti NekoX</string>
+    <string name="NekoXUpdatesChannel">Canale Aggiornamenti Nagram</string>
     <string name="ShowIdAndDc">Mostra ID / DC nel profilo</string>
     <string name="UseDefaultTheme">Usa tema predefinito *</string>
     <string name="NightMode">Modalità Notte</string>
@@ -87,7 +87,7 @@
     <string name="SortByUnmuted">Ordina per Non Silenziata</string>
     <string name="SortByUser">Ordina per Utente</string>
     <string name="SortByContacts">Ordina per Contatti</string>
-    <string name="NekoXPushService">Servizio Push NekoX</string>
+    <string name="NekoXPushService">Servizio Push Nagram</string>
     <string name="EnablePushAlert">Attiva \"Servizio Push NekoX\"</string>
     <string name="DisablePushAlert">Disattiva \"Servizio Push NekoX\"</string>
     <string name="DisableUndo">Disabilita Annulla</string>

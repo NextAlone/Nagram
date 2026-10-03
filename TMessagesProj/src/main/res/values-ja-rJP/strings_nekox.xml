@@ -47,7 +47,7 @@
     <string name="TransToLang">翻訳対象言語</string>
     <string name="TransInputToLang">翻訳入力対象言語</string>
     <string name="More">もっと見る</string>
-    <string name="NekoXUpdatesChannel">NekoX アップデートチャンネル</string>
+    <string name="NekoXUpdatesChannel">Nagram アップデートチャンネル</string>
     <string name="ShowIdAndDc">プロファイルにID / DCを表示</string>
     <string name="UseDefaultTheme">デフォルトテーマを使用 *</string>
     <string name="NightMode">夜間モード</string>
@@ -87,7 +87,7 @@
     <string name="SortByUnmuted">ミュートなしで並べ替え</string>
     <string name="SortByUser">ユーザーで並べ替え</string>
     <string name="SortByContacts">連絡先で並べ替え</string>
-    <string name="NekoXPushService">NekoX プッシュサービス</string>
+    <string name="NekoXPushService">Nagram プッシュサービス</string>
     <string name="EnablePushAlert">\"NekoX プッシュサービス\"を有効にしてください</string>
     <string name="DisablePushAlert">\"NekoX プッシュサービス\"を無効にしてください</string>
     <string name="DisableUndo">取り消しを無効にする</string>

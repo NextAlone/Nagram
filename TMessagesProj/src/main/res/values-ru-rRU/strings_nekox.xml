@@ -47,7 +47,7 @@
     <string name="TransToLang">Язык перевода</string>
     <string name="TransInputToLang">Переводить с</string>
     <string name="More">Ещё</string>
-    <string name="NekoXUpdatesChannel">Канал обновлений NekoX</string>
+    <string name="NekoXUpdatesChannel">Канал обновлений Nagram</string>
     <string name="ShowIdAndDc">Отображать ID и DC в профиле</string>
     <string name="UseDefaultTheme">Использовать тему по умолчанию *</string>
     <string name="NightMode">Ночной режим</string>
@@ -87,7 +87,7 @@
     <string name="SortByUnmuted">Сначала со звуком</string>
     <string name="SortByUser">Сначала личные</string>
     <string name="SortByContacts">Сначала контакты</string>
-    <string name="NekoXPushService">Сервис уведомлений NekoX</string>
+    <string name="NekoXPushService">Сервис уведомлений Nagram</string>
     <string name="EnablePushAlert">Включите сервис уведомлений</string>
     <string name="DisablePushAlert">Отключите сервис уведомлений</string>
     <string name="DisableUndo">Скрыть отмену действий</string>

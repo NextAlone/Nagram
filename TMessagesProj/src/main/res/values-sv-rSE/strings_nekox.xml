@@ -12,7 +12,7 @@
     <string name="GoogleCloudTransKey">Google Cloud Translate-nyckel</string>
     <string name="FilterNameBots">Bottar</string>
     <string name="SortMenu">Dialog-sorterings Inställningar</string>
-    <string name="NekoXUpdatesChannel">NekoX Uppdateringskanal</string>
+    <string name="NekoXUpdatesChannel">Nagram Uppdateringskanal</string>
     <string name="FilterNameContactsDescription">Endast meddelanden från sparade användare</string>
     <string name="FilterNameGroupsDescription">Endast meddelanden från gruppchattar</string>
     <string name="FilterNameUnreadDescription">Bara olästa meddelanden</string>
@@ -124,7 +124,7 @@
     <string name="ProxyRemarks">Anmärkningar</string>
     <string name="VmessAlterId">Alternativ ID</string>
     <string name="VmessRequestHost">Begär Värd / QUIC Säkerhet</string>
-    <string name="NekoXPushService">NekoX Push Service</string>
+    <string name="NekoXPushService">Nagram Push Service</string>
     <string name="EditProxy">Redigera Proxy</string>
     <string name="VmessHeadType">Rubrik Typ</string>
     <string name="VmessPath">Stig / QUIC Nyckel</string>

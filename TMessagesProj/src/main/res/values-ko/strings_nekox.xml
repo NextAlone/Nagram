@@ -47,7 +47,7 @@
     <string name="TransToLang">번역할 언어</string>
     <string name="TransInputToLang">번역 입력할 언어</string>
     <string name="More">더 보기</string>
-    <string name="NekoXUpdatesChannel">NekoX 업데이트 채널</string>
+    <string name="NekoXUpdatesChannel">Nagram 업데이트 채널</string>
     <string name="ShowIdAndDc">프로필에 ID / DC 표시</string>
     <string name="UseDefaultTheme">기본 테마 사용 *</string>
     <string name="NightMode">야간 모드</string>
@@ -87,7 +87,7 @@
     <string name="SortByUnmuted">음소거 되지 않은 순서로 정렬</string>
     <string name="SortByUser">사용자 순서로 정렬</string>
     <string name="SortByContacts">연락처 순서로 정렬</string>
-    <string name="NekoXPushService">NekoX 푸시 서비스</string>
+    <string name="NekoXPushService">Nagram 푸시 서비스</string>
     <string name="EnablePushAlert">\"NekoX Push Service\" 를 활성화 하십시오</string>
     <string name="DisablePushAlert">\"NekoX Push Service\" 를 비활성화 하십시오</string>
     <string name="DisableUndo">실행 취소</string>

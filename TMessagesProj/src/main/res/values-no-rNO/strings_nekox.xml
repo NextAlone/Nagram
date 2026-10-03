@@ -58,7 +58,7 @@
     <string name="DisableUndo">Skru av angring</string>
     <string name="DisablePushAlert">Skru av NekoX-dyttingstjenesten</string>
     <string name="EnablePushAlert">Skru på NekoX-dyttingstjenesten</string>
-    <string name="NekoXPushService">NekoX-dyttingstjeneste</string>
+    <string name="NekoXPushService">Nagram-dyttingstjeneste</string>
     <string name="SortByContacts">Sorter etter kontakter</string>
     <string name="SortByUser">Sorter etter bruker</string>
     <string name="SortByUnread">Sorter etter ulest</string>
@@ -101,7 +101,7 @@
     <string name="ProxyTypeVmess">VMess-mellomtjener</string>
     <string name="BlockedListEmpty">Du har ikke blokkert noen :)</string>
     <string name="FilterNameUnmutedDescription">Kun meldinger fra uforstummede sludringer</string>
-    <string name="NekoXUpdatesChannel">NekoX-oppdateringskanal</string>
+    <string name="NekoXUpdatesChannel">Nagram-oppdateringskanal</string>
     <string name="ImportStickersList">Importer klistremerker</string>
     <string name="TapToDisable">Trykk for å skru av. Du trenger ikke disse.</string>
     <string name="ExportStickers">Eksporter klistremerker</string>

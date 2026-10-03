@@ -47,7 +47,7 @@
     <string name="TransToLang">Tujuan bahasa yang ingin di terjemahkan</string>
     <string name="TransInputToLang">Asal bahasa yang ingin di terjemahkan</string>
     <string name="More">Lainnya</string>
-    <string name="NekoXUpdatesChannel">Kanal Pembaruan NekoX</string>
+    <string name="NekoXUpdatesChannel">Kanal Pembaruan Nagram</string>
     <string name="ShowIdAndDc">Tampilkan ID / DC pada profil</string>
     <string name="UseDefaultTheme">Gunakan tema standar *</string>
     <string name="NightMode">Mode Malam</string>
@@ -87,7 +87,7 @@
     <string name="SortByUnmuted">Urutkan sesuai pesan yang bersuara</string>
     <string name="SortByUser">Urutkan sesuai nama pengguna</string>
     <string name="SortByContacts">Urutkan sesuai nama pada kontak</string>
-    <string name="NekoXPushService">Layanan Push NekoX</string>
+    <string name="NekoXPushService">Layanan Push Nagram</string>
     <string name="EnablePushAlert">Mohon hidupkan \"Layanan Push NekoX\"</string>
     <string name="DisablePushAlert">Mohon matikan \"Layanan Push NekoX\"</string>
     <string name="DisableUndo">Matikan konfirmasi pembatalan ketika menghapus sebuah pesan</string>

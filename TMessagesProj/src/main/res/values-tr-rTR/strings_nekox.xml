@@ -47,7 +47,7 @@
     <string name="TransToLang">Çeviri Hedef Dili</string>
     <string name="TransInputToLang">Çeviri Girişi Hedef Dili</string>
     <string name="More">Daha</string>
-    <string name="NekoXUpdatesChannel">NekoX Güncellemeleri Kanalı</string>
+    <string name="NekoXUpdatesChannel">Nagram Güncellemeleri Kanalı</string>
     <string name="ShowIdAndDc">Profilde ID / DC Değerlerini Göster</string>
     <string name="UseDefaultTheme">Varsayılan Temayı Kullan *</string>
     <string name="NightMode">Gece Modu</string>
@@ -87,7 +87,7 @@
     <string name="SortByUnmuted">Seslilere Göre Sırala</string>
     <string name="SortByUser">Kullanıcıya Göre Sırala</string>
     <string name="SortByContacts">Kişilere Göre Sırala</string>
-    <string name="NekoXPushService">NekoX Bildirim Hizmeti</string>
+    <string name="NekoXPushService">Nagram Bildirim Hizmeti</string>
     <string name="EnablePushAlert">Lütfen \"NekoX Bildirim Hizmeti\"ni etkinleştirin</string>
     <string name="DisablePushAlert">Lütfen \"NekoX Bildirim Hizmeti\"ni devre dışı bırakın</string>
     <string name="DisableUndo">Geri Almayı Devre Dışı Bırak</string>

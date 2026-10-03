@@ -384,7 +384,7 @@ public class MessageHelper extends BaseController {
             }
             cursor.dispose();
         } catch (SQLiteException sqLiteException) {
-            FileLog.e("NekoX, ignoreBlocked, SQLiteException when read last message from unblocked user", sqLiteException);
+            FileLog.e("Nagram, ignoreBlocked, SQLiteException when read last message from unblocked user", sqLiteException);
             return null;
         }
         return ret;
