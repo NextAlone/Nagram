@@ -312,9 +312,18 @@ public class VoIPGroupNotification {
             builder.setStyle(notificationStyle);
         }
 
-        Notification notification = builder.build();
-
-        nm.notify(VoIPService.ID_INCOMING_CALL_PRENOTIFICATION, notification);
+        try {
+            nm.notify(VoIPService.ID_INCOMING_CALL_PRENOTIFICATION, builder.build());
+        } catch (IllegalArgumentException e) {
+            // the system drops fullScreenIntent when the app is not allowed to use it and then rejects CallStyle
+            FileLog.e(e);
+            builder.setStyle(null);
+            builder.setContentText(personName);
+            builder.setLargeIcon(avatar);
+            builder.addAction(R.drawable.ic_call_end_white_24dp, endTitle, endPendingIntent);
+            builder.addAction(R.drawable.call, answerTitle, answerPendingIntent);
+            nm.notify(VoIPService.ID_INCOMING_CALL_PRENOTIFICATION, builder.build());
+        }
         VoIPPreNotificationService.startRinging(context, account, dialogId);
 
         if (missRunnable != null) {
