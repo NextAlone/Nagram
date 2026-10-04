@@ -1,5 +1,8 @@
 package tw.nekomimi.nekogram.settings;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -37,8 +40,9 @@ import xyz.nextalone.nagram.NaConfig;
 public class MessagesPreviewCell extends LinearLayout {
 
     private final INavigationLayout parentLayout;
-    private final ChatMessageCell[] cells = new ChatMessageCell[2];
-    private final MessageObject[] messages = new MessageObject[2];
+    private final TLRPC.TL_messageMediaWebPage webPageMedia;
+    private final ChatMessageCell[] cells = new ChatMessageCell[3];
+    private final MessageObject[] messages = new MessageObject[3];
     private final Runnable refreshRunnable = this::refreshMessages;
     private final SharedPreferences.OnSharedPreferenceChangeListener preferencesListener = (preferences, key) -> {
         if (isPreviewSetting(key)) {
@@ -51,6 +55,13 @@ public class MessagesPreviewCell extends LinearLayout {
     private Drawable oldBackgroundDrawable;
     private BackgroundGradientDrawable.Disposable backgroundGradientDisposable;
     private BackgroundGradientDrawable.Disposable oldBackgroundGradientDisposable;
+    private final ValueAnimator heightAnimator = new ValueAnimator();
+    // 内容变化导致的高度过渡：>= 0 时使用该高度参与测量，让列表逐帧平滑重新布局
+    private int animatingHeight = -1;
+    private int currentHeight;
+    private int naturalHeight;
+    private int targetHeight = -1;
+    private boolean animateNextMeasure;
 
     public MessagesPreviewCell(Context context, INavigationLayout parentLayout, int account) {
         super(context);
@@ -110,6 +121,28 @@ public class MessagesPreviewCell extends LinearLayout {
         pollMessage.media = media;
         messages[1] = new MessageObject(account, pollMessage, true, false);
 
+        TLRPC.TL_message linkMessage = createMessage(44, date + 240);
+        String url = "https://nagram.app";
+        String appName = LocaleController.getString(R.string.NekoX);
+        linkMessage.message = url;
+        TLRPC.TL_messageEntityUrl urlEntity = new TLRPC.TL_messageEntityUrl();
+        urlEntity.offset = 0;
+        urlEntity.length = linkMessage.message.length();
+        linkMessage.entities.add(urlEntity);
+        linkMessage.flags |= TLRPC.MESSAGE_FLAG_HAS_ENTITIES;
+
+        var webPage = new TLRPC.TL_webPage();
+        webPage.description = "Hello " + appName;
+        webPage.display_url = url;
+        webPage.site_name = appName;
+        webPage.title = appName + " App";
+        webPage.type = "article";
+        webPage.url = url;
+        webPageMedia = new TLRPC.TL_messageMediaWebPage();
+        webPageMedia.webpage = webPage;
+
+        messages[2] = new MessageObject(account, linkMessage, true, false);
+
         TimeStringHelper.getForwardsDrawable();
         for (int i = 0; i < cells.length; i++) {
             messages[i].customName = "Nagram";
@@ -130,6 +163,23 @@ public class MessagesPreviewCell extends LinearLayout {
             cells[i].setFullyDraw(true);
             addView(cells[i], LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT));
         }
+
+        heightAnimator.setDuration(200);
+        heightAnimator.setInterpolator(AndroidUtilities.decelerateInterpolator);
+        heightAnimator.addUpdateListener(animation -> {
+            animatingHeight = Math.round((float) animation.getAnimatedValue());
+            requestLayout();
+            invalidate();
+        });
+        heightAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                animatingHeight = -1;
+                requestLayout();
+                invalidate();
+            }
+        });
+
         refreshMessages();
         loadPreviewChannel(account);
     }
@@ -178,13 +228,21 @@ public class MessagesPreviewCell extends LinearLayout {
                 || NaConfig.INSTANCE.getShowEditedIcon().getKey().equals(key)
                 || NaConfig.INSTANCE.getCustomEditedMessage().getKey().equals(key)
                 || NaConfig.INSTANCE.getShowVoteCountBeforeVote().getKey().equals(key)
-                || NekoConfig.showSpoilersDirectly.getKey().equals(key);
+                || NekoConfig.showSpoilersDirectly.getKey().equals(key)
+                || NaConfig.INSTANCE.getGlobalDisableLinkPreviews().getKey().equals(key);
     }
 
     public void refreshMessages() {
         if (showSeconds == null || showSeconds != NekoConfig.showSeconds.Bool()) {
             showSeconds = NekoConfig.showSeconds.Bool();
             LocaleController.getInstance().recreateFormatters();
+        }
+        if (NaConfig.INSTANCE.getGlobalDisableLinkPreviews().Bool()) {
+            messages[2].messageOwner.flags &= ~TLRPC.MESSAGE_FLAG_HAS_MEDIA;
+            messages[2].messageOwner.media = new TLRPC.TL_messageMediaEmpty();
+        } else {
+            messages[2].messageOwner.flags |= TLRPC.MESSAGE_FLAG_HAS_MEDIA;
+            messages[2].messageOwner.media = webPageMedia;
         }
         for (int i = 0; i < cells.length; i++) {
             messages[i].isSpoilersRevealed = NekoConfig.showSpoilersDirectly.Bool();
@@ -193,8 +251,44 @@ public class MessagesPreviewCell extends LinearLayout {
             cells[i].setMessageObject(messages[i], null, false, false, false);
             cells[i].requestLayout();
         }
+        // 下一次测量时按新内容计算高度，若与当前高度不同则做过渡动画
+        animateNextMeasure = true;
         requestLayout();
         invalidate();
+    }
+
+    private void startHeightAnimation(int from, int to) {
+        heightAnimator.cancel();
+        heightAnimator.setFloatValues(from, to);
+        targetHeight = to;
+        animatingHeight = from;
+        heightAnimator.start();
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        naturalHeight = getMeasuredHeight();
+        if (animatingHeight >= 0) {
+            // 动画进行中，若内容再次变化则从当前动画高度继续过渡到新的自然高度
+            setMeasuredDimension(getMeasuredWidth(), animatingHeight);
+            if (animateNextMeasure) {
+                animateNextMeasure = false;
+                if (naturalHeight != targetHeight) {
+                    startHeightAnimation(animatingHeight, naturalHeight);
+                }
+            }
+            return;
+        }
+        if (animateNextMeasure) {
+            animateNextMeasure = false;
+            if (currentHeight > 0 && currentHeight != naturalHeight) {
+                startHeightAnimation(currentHeight, naturalHeight);
+                setMeasuredDimension(getMeasuredWidth(), currentHeight);
+                return;
+            }
+        }
+        currentHeight = naturalHeight;
     }
 
     @Override
@@ -289,6 +383,8 @@ public class MessagesPreviewCell extends LinearLayout {
     protected void onDetachedFromWindow() {
         NekoConfig.preferences.unregisterOnSharedPreferenceChangeListener(preferencesListener);
         removeCallbacks(refreshRunnable);
+        heightAnimator.cancel();
+        animatingHeight = -1;
         if (backgroundGradientDisposable != null) {
             backgroundGradientDisposable.dispose();
             backgroundGradientDisposable = null;

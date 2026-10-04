@@ -2289,6 +2289,7 @@ public class ChatActivity extends BaseFragment implements
 
         @Override
         public int getDisableLinkPreviewStatus() {
+            if (NaConfig.INSTANCE.getGlobalDisableLinkPreviews().Bool()) return 0;
             return disableLinkPreview ? 2 : 1;
         }
 
@@ -14845,7 +14846,7 @@ public class ChatActivity extends BaseFragment implements
         }
     }
 
-        private boolean disableLinkPreview = NekoConfig.disableLinkPreviewByDefault.Bool();
+        private boolean disableLinkPreview = NekoConfig.disableLinkPreviewByDefault.Bool() || NaConfig.INSTANCE.getGlobalDisableLinkPreviews().Bool();
 
     public void searchLinks(final CharSequence charSequence, final boolean force) {
         if (currentEncryptedChat != null && getMessagesController().secretWebpagePreview == 0 || editingMessageObject != null && (!editingMessageObject.isWebpage() || editingMessageObject.messageOwner.media.webpage instanceof TLRPC.TL_webPagePending)) {
