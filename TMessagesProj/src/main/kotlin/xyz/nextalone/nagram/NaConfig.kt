@@ -1413,9 +1413,9 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
-    val disableLinkPreviews =
+    val globalDisableLinkPreviews =
         addConfig(
-            "DisableLinkPreviews",
+            "GlobalDisableLinkPreviews",
             ConfigItem.configTypeBool,
             false
         )

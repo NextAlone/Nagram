@@ -384,6 +384,5 @@
     <string name="SwitchStyleTelegram">Telegram</string>
     <string name="SwitchStyleModern">Modern</string>
     <string name="DisableChatListSwipeGesture">Disable chat list swipe gesture</string>
-    <string name="DisableLinkPreviews">Disable link previews</string>
-    <string name="MessagePreviewLinkText" translatable="false">https://danbooru.donmai.us</string>
+    <string name="GlobalDisableLinkPreviews">Global disable link previews</string>
 </resources>
