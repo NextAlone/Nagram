@@ -14851,7 +14851,7 @@ public class ChatActivity extends BaseFragment implements
         if (currentEncryptedChat != null && getMessagesController().secretWebpagePreview == 0 || editingMessageObject != null && (!editingMessageObject.isWebpage() || editingMessageObject.messageOwner.media.webpage instanceof TLRPC.TL_webPagePending)) {
             return;
         }
-        if (disableLinkPreview) return;
+        if (disableLinkPreview || NaConfig.INSTANCE.getDisableLinkPreviews().Bool()) return;
         if (currentChat != null && !ChatObject.canSendEmbed(currentChat)) {
             if (foundWebPage != null) {
                 foundWebPage = null;

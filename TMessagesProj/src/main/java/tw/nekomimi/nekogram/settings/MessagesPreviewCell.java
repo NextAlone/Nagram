@@ -32,13 +32,16 @@ import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.helpers.TimeStringHelper;
 import tw.nekomimi.nekogram.utils.UpdateUtil;
 import xyz.nextalone.nagram.NaConfig;
+import org.telegram.ui.Components.poll.WebPageLoader;
 
 @SuppressLint("ViewConstructor")
 public class MessagesPreviewCell extends LinearLayout {
 
     private final INavigationLayout parentLayout;
-    private final ChatMessageCell[] cells = new ChatMessageCell[2];
-    private final MessageObject[] messages = new MessageObject[2];
+    private final int account;
+    private final WebPageLoader webPageLoader;
+    private final ChatMessageCell[] cells = new ChatMessageCell[3];
+    private final MessageObject[] messages = new MessageObject[3];
     private final Runnable refreshRunnable = this::refreshMessages;
     private final SharedPreferences.OnSharedPreferenceChangeListener preferencesListener = (preferences, key) -> {
         if (isPreviewSetting(key)) {
@@ -55,6 +58,8 @@ public class MessagesPreviewCell extends LinearLayout {
     public MessagesPreviewCell(Context context, INavigationLayout parentLayout, int account) {
         super(context);
         this.parentLayout = parentLayout;
+        this.account = account;
+        this.webPageLoader = new WebPageLoader(account);
         setWillNotDraw(false);
         setOrientation(VERTICAL);
         setPadding(0, AndroidUtilities.dp(11), 0, AndroidUtilities.dp(11));
@@ -110,6 +115,19 @@ public class MessagesPreviewCell extends LinearLayout {
         pollMessage.media = media;
         messages[1] = new MessageObject(account, pollMessage, true, false);
 
+        TLRPC.TL_message linkMessage = createMessage(44, date + 240);
+        linkMessage.message = LocaleController.getString(R.string.MessagePreviewLinkText);
+        TLRPC.TL_messageEntityUrl urlEntity = new TLRPC.TL_messageEntityUrl();
+        urlEntity.offset = 0;
+        urlEntity.length = linkMessage.message.length();
+        linkMessage.entities.add(urlEntity);
+        linkMessage.flags |= TLRPC.MESSAGE_FLAG_HAS_ENTITIES | TLRPC.MESSAGE_FLAG_FWD;
+        linkMessage.fwd_from = new TLRPC.TL_messageFwdHeader();
+        linkMessage.fwd_from.flags = 32;
+        linkMessage.fwd_from.from_name = "Waifucon";
+        linkMessage.fwd_from.date = date - 86400;
+        messages[2] = new MessageObject(account, linkMessage, true, false);
+
         TimeStringHelper.getForwardsDrawable();
         for (int i = 0; i < cells.length; i++) {
             messages[i].customName = "Nagram";
@@ -132,6 +150,7 @@ public class MessagesPreviewCell extends LinearLayout {
         }
         refreshMessages();
         loadPreviewChannel(account);
+        if (!NaConfig.INSTANCE.getDisableLinkPreviews().Bool()) loadLinkPreview();
     }
 
     private void loadPreviewChannel(int account) {
@@ -146,6 +165,15 @@ public class MessagesPreviewCell extends LinearLayout {
                 if (channel != null) {
                     setPreviewChannel(channel);
                 }
+            }
+        });
+    }
+
+    private void loadLinkPreview() {
+        String url = LocaleController.getString(R.string.MessagePreviewLinkText);
+        webPageLoader.get(url, (webPage, error) -> {
+            if (webPage instanceof TLRPC.TL_webPage) {
+                refreshMessages();
             }
         });
     }
@@ -178,13 +206,31 @@ public class MessagesPreviewCell extends LinearLayout {
                 || NaConfig.INSTANCE.getShowEditedIcon().getKey().equals(key)
                 || NaConfig.INSTANCE.getCustomEditedMessage().getKey().equals(key)
                 || NaConfig.INSTANCE.getShowVoteCountBeforeVote().getKey().equals(key)
-                || NekoConfig.showSpoilersDirectly.getKey().equals(key);
+                || NekoConfig.showSpoilersDirectly.getKey().equals(key)
+                || NaConfig.INSTANCE.getDisableLinkPreviews().getKey().equals(key);
     }
 
     public void refreshMessages() {
         if (showSeconds == null || showSeconds != NekoConfig.showSeconds.Bool()) {
             showSeconds = NekoConfig.showSeconds.Bool();
             LocaleController.getInstance().recreateFormatters();
+        }
+        if (NaConfig.INSTANCE.getDisableLinkPreviews().Bool()) {
+            messages[2].messageOwner.flags &= ~TLRPC.MESSAGE_FLAG_HAS_MEDIA;
+            messages[2].messageOwner.media = new TLRPC.TL_messageMediaEmpty();
+        } else {
+            String url = LocaleController.getString(R.string.MessagePreviewLinkText);
+            TLRPC.WebPage webPage = webPageLoader.getWebPage(url);
+            if (webPage instanceof TLRPC.TL_webPage) {
+                TLRPC.TL_messageMediaWebPage webPageMedia = new TLRPC.TL_messageMediaWebPage();
+                webPageMedia.webpage = webPage;
+                messages[2].messageOwner.flags |= TLRPC.MESSAGE_FLAG_HAS_MEDIA;
+                messages[2].messageOwner.media = webPageMedia;
+            } else {
+                messages[2].messageOwner.flags &= ~TLRPC.MESSAGE_FLAG_HAS_MEDIA;
+                messages[2].messageOwner.media = new TLRPC.TL_messageMediaEmpty();
+                loadLinkPreview();
+            }
         }
         for (int i = 0; i < cells.length; i++) {
             messages[i].isSpoilersRevealed = NekoConfig.showSpoilersDirectly.Bool();

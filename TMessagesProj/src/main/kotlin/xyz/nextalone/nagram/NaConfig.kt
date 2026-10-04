@@ -1413,6 +1413,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val disableLinkPreviews =
+        addConfig(
+            "DisableLinkPreviews",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,
