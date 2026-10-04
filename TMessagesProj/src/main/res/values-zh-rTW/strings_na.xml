@@ -383,4 +383,7 @@
     <string name="SwitchStyleTelegram">Telegram</string>
     <string name="SwitchStyleModern">現代</string>
     <string name="DisableChatListSwipeGesture">Disable chat list swipe gesture</string>
+    <string name="RegistrationDateApproximately">約 %s</string>
+    <string name="RegistrationDateOlder">早於 %s</string>
+    <string name="RegistrationDateNewer">晚於 %s</string>
 </resources>

@@ -384,4 +384,7 @@
     <string name="SwitchStyleModern">现代</string>
     <string name="DisableChatListSwipeGesture">禁用主页聊天列表滑动手势</string>
     <string name="GlobalDisableLinkPreviews">全局禁用链接预览</string>
+    <string name="RegistrationDateApproximately">约 %s</string>
+    <string name="RegistrationDateOlder">早于 %s</string>
+    <string name="RegistrationDateNewer">晚于 %s</string>
 </resources>

@@ -9,8 +9,10 @@ import org.telegram.messenger.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class ProfileDateHelper {
     private static String JSON_FILE = "id_date.json";
@@ -40,9 +42,13 @@ public class ProfileDateHelper {
         }
     }
 
-    public static String getUserTime(String prefix, long date) {
-        String st = LocaleController.formatString("formatDateAtTime", R.string.formatDateAtTime, LocaleController.getInstance().getFormatterYear().format(new Date(date)), LocaleController.getInstance().getFormatterDay().format(new Date(date)));
-        return prefix + " " + st;
+    public static String getUserTime(String key, int stringRes, long date) {
+        Locale locale = LocaleController.getInstance().getCurrentLocale();
+        if (locale == null) {
+            locale = Locale.getDefault();
+        }
+        String st = new SimpleDateFormat("yyyy-MM", locale).format(new Date(date));
+        return LocaleController.formatString(key, stringRes, st);
     }
 
     public static String getUserTime(Long userId) {
@@ -50,7 +56,7 @@ public class ProfileDateHelper {
             loadData();
         }
         if (profileDateDataList.isEmpty()) {
-            return "unknown";
+            return LocaleController.getString(R.string.ErrorOccurred);
         }
         for (int i = 1; i < profileDateDataList.size(); i++){
             ProfileDateData data1 = profileDateDataList.get(i - 1);
@@ -63,13 +69,15 @@ public class ProfileDateHelper {
                 long date2 = data2.getDate();
                 double date = (date1 + t * (date2 - date1)) * 1000.0;
                 long dateLong = Math.round(date);
-                return getUserTime("~", dateLong);
+                return getUserTime("RegistrationDateApproximately", R.string.RegistrationDateApproximately, dateLong);
             }
         }
-        if (userId <= 1000000) {
-            return getUserTime("=", profileDateDataList.get(0).getDate() * 1000L);
+        ProfileDateData first = profileDateDataList.get(0);
+        if (userId < first.getId()) {
+            return getUserTime("RegistrationDateOlder", R.string.RegistrationDateOlder, first.getDate() * 1000);
         }
-        return getUserTime(">", profileDateDataList.get(profileDateDataList.size() - 1).getDate() * 1000L);
+        ProfileDateData last = profileDateDataList.get(profileDateDataList.size() - 1);
+        return getUserTime("RegistrationDateNewer", R.string.RegistrationDateNewer, last.getDate() * 1000);
     }
 
     public static class ProfileDateData {

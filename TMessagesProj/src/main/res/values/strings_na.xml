@@ -385,4 +385,7 @@
     <string name="SwitchStyleModern">Modern</string>
     <string name="DisableChatListSwipeGesture">Disable chat list swipe gesture</string>
     <string name="GlobalDisableLinkPreviews">Global disable link previews</string>
+    <string name="RegistrationDateApproximately">Approximately %s</string>
+    <string name="RegistrationDateOlder">Older than %s</string>
+    <string name="RegistrationDateNewer">Newer than %s</string>
 </resources>
