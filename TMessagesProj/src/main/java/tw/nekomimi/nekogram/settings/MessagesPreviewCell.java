@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.FileLoader;
+import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
@@ -116,8 +118,20 @@ public class MessagesPreviewCell extends LinearLayout {
             messages[i].forceAvatar = true;
             cells[i] = new ChatMessageCell(context, account) {
                 @Override
+                public void onAttachedToWindow() {
+                    super.onAttachedToWindow();
+                    if (getAvatarImage() != null) {
+                        getAvatarImage().setParentView(this);
+                        getAvatarImage().setInvalidateAll(true);
+                        getAvatarImage().setAllowLoadingOnAttachedOnly(false);
+                    }
+                }
+
+                @Override
                 protected void dispatchDraw(@NonNull Canvas canvas) {
                     if (getAvatarImage() != null && getAvatarImage().getImageHeight() != 0) {
+                        getAvatarImage().setParentView(this);
+                        getAvatarImage().setInvalidateAll(true);
                         getAvatarImage().setImageCoords(getAvatarImage().getImageX(), getMeasuredHeight() - getAvatarImage().getImageHeight() - AndroidUtilities.dp(4), getAvatarImage().getImageWidth(), getAvatarImage().getImageHeight());
                         getAvatarImage().setRoundRadius((int) (getAvatarImage().getImageHeight() / 2f));
                         getAvatarImage().draw(canvas);
@@ -125,6 +139,14 @@ public class MessagesPreviewCell extends LinearLayout {
                     super.dispatchDraw(canvas);
                 }
             };
+            if (cells[i].getAvatarImage() != null) {
+                cells[i].getAvatarImage().setParentView(cells[i]);
+                cells[i].getAvatarImage().setInvalidateAll(true);
+                cells[i].getAvatarImage().setAllowLoadingOnAttachedOnly(false);
+                cells[i].getAvatarImage().setDelegate((imageReceiver, set, thumb, memCache) -> {
+                    invalidate();
+                });
+            }
             cells[i].setDelegate(new ChatMessageCell.ChatMessageCellDelegate() {});
             cells[i].isChat = true;
             cells[i].setFullyDraw(true);
@@ -151,6 +173,9 @@ public class MessagesPreviewCell extends LinearLayout {
     }
 
     private void setPreviewChannel(TLRPC.Chat channel) {
+        if (channel.photo != null) {
+            FileLoader.getInstance(messages[0].currentAccount).loadFile(ImageLocation.getForChat(messages[0].currentAccount, channel, ImageLocation.TYPE_SMALL), channel, null, 1, 1);
+        }
         for (MessageObject message : messages) {
             message.messageOwner.from_id.channel_id = channel.id;
         }
@@ -191,6 +216,14 @@ public class MessagesPreviewCell extends LinearLayout {
             messages[i].resetLayout();
             messages[i].forceUpdate = true;
             cells[i].setMessageObject(messages[i], null, false, false, false);
+            if (cells[i].getAvatarImage() != null) {
+                cells[i].getAvatarImage().setParentView(cells[i]);
+                cells[i].getAvatarImage().setInvalidateAll(true);
+                cells[i].getAvatarImage().setAllowLoadingOnAttachedOnly(false);
+                cells[i].getAvatarImage().setDelegate((imageReceiver, set, thumb, memCache) -> {
+                    invalidate();
+                });
+            }
             cells[i].requestLayout();
         }
         requestLayout();
