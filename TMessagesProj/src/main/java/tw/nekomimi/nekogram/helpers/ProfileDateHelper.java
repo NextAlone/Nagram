@@ -67,9 +67,9 @@ public class ProfileDateHelper {
             }
         }
         if (userId <= 1000000) {
-            return getUserTime("=", 1380326400000L);
+            return getUserTime("=", profileDateDataList.get(0).getDate() * 1000L);
         }
-        return getUserTime(">", 1711889200000L);
+        return getUserTime(">", profileDateDataList.get(profileDateDataList.size() - 1).getDate() * 1000L);
     }
 
     public static class ProfileDateData {
