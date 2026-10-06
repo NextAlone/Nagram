@@ -5,9 +5,11 @@ from tempfile import TemporaryDirectory
 from release_caption import (
     CAPTION_BUDGET,
     is_changelog_ignored,
+    linkify_prs,
     read_apk_version,
     read_gradle_property,
     render_test_caption,
+    visible_length,
 )
 
 
@@ -38,7 +40,7 @@ class ReleaseCaptionTest(unittest.TestCase):
 
         self.assertIn("🔀 <b>Merge</b>", merge_caption)
         self.assertIn("📌 <b>Other</b>", caption)
-        self.assertLessEqual(len(caption), CAPTION_BUDGET)
+        self.assertLessEqual(visible_length(caption), CAPTION_BUDGET)
         self.assertTrue(caption.endswith("…"))
 
     def test_omits_commit_marked_ignore_from_changelog(self):
@@ -73,6 +75,39 @@ class ReleaseCaptionTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Cannot read version"):
             read_apk_version(Path("app.apk"))
 
+
+    def test_linkifies_parenthesized_pr_ref_in_subject(self):
+        caption = render_test_caption(
+            "feat: add configurable switch style (#156)",
+            "12.9.0",
+            "1241",
+            "abcdef123456",
+            "https://github.com/NextAlone/Nagram",
+        )
+
+        self.assertIn(
+            '(<a href="https://github.com/NextAlone/Nagram/pull/156">#156</a>)',
+            caption,
+        )
+
+
+    def test_linkifies_pr_ref_in_detail_body(self):
+        caption = render_test_caption(
+            "fix(AyuFilter): NPE when rebuilding regex filter cache\n\nSee (#173) for more context.",
+            "12.9.0",
+            "1241",
+            "abcdef123456",
+            "https://github.com/NextAlone/Nagram",
+        )
+
+        self.assertIn(
+            '(<a href="https://github.com/NextAlone/Nagram/pull/173">#173</a>)',
+            caption,
+        )
+
+    def test_no_link_when_repository_url_missing(self):
+        result = linkify_prs("fix (#99)", "")
+        self.assertEqual("fix (#99)", result)
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,6 +1,13 @@
 import re
-from html import escape
+from html import escape, unescape
 from pathlib import Path
+
+_TAG_RE = re.compile(r"<[^>]+>")
+
+
+def visible_length(html_text: str) -> int:
+    """Return the number of characters Telegram displays (tags stripped, entities decoded)."""
+    return len(unescape(_TAG_RE.sub("", html_text)))
 
 CAPTION_BUDGET = 900
 CHANGELOG_IGNORE_MARKER = "[ignore]"
@@ -23,7 +30,20 @@ GROUPS = {
 }
 SUBJECT_RE = re.compile(r"^(?P<type>[A-Za-z]+)(?:\([^)]*\))?!?:\s*.+$")
 APK_VERSION_RE = re.compile(r"-v(?P<name>.+)\((?P<code>\d+)\)-[^/]+\.apk$")
+PR_REF_RE = re.compile(r"\(#(\d+)\)")
 
+
+def linkify_prs(text: str, repository_url: str) -> str:
+    """Replace parenthesized PR references (e.g. PR 123 written as "(#123)") with HTML anchor links."""
+    if not repository_url:
+        return text
+
+    def replace(m: re.Match) -> str:
+        number = m.group(1)
+        link = f'<a href="{escape(repository_url)}/pull/{number}">#{number}</a>'
+        return f"({link})"
+
+    return PR_REF_RE.sub(replace, text)
 
 def is_changelog_ignored(commit_message: str) -> bool:
     return CHANGELOG_IGNORE_MARKER in commit_message
@@ -84,31 +104,37 @@ def render_test_caption(
         prefix = "• "
 
     def assemble(subject_text: str, detail_text: str = "") -> str:
-        rendered = f"{header}\n\n{group}\n{prefix}{escape(subject_text)}"
+        rendered = (
+            f"{header}\n\n{group}\n"
+            f"{prefix}{linkify_prs(escape(subject_text), repository_url)}"
+        )
         if detail_text:
-            rendered += f"\n\n💬 <b>Detail</b>\n{escape(detail_text)}"
+            rendered += (
+                f"\n\n💬 <b>Detail</b>\n"
+                f"{linkify_prs(escape(detail_text), repository_url)}"
+            )
         return rendered
 
     rendered = assemble(subject, detail)
-    if len(rendered) <= CAPTION_BUDGET:
+    if visible_length(rendered) <= CAPTION_BUDGET:
         return rendered
 
     low, high = 0, len(detail)
     while low < high:
         mid = (low + high + 1) // 2
-        if len(assemble(subject, detail[:mid].rstrip() + "…")) <= CAPTION_BUDGET:
+        if visible_length(assemble(subject, detail[:mid].rstrip() + "…")) <= CAPTION_BUDGET:
             low = mid
         else:
             high = mid - 1
     if low:
         return assemble(subject, detail[:low].rstrip() + "…")
-    if len(assemble(subject)) <= CAPTION_BUDGET:
+    if visible_length(assemble(subject)) <= CAPTION_BUDGET:
         return assemble(subject)
 
     low, high = 0, len(subject)
     while low < high:
         mid = (low + high + 1) // 2
-        if len(assemble(subject[:mid].rstrip() + "…")) <= CAPTION_BUDGET:
+        if visible_length(assemble(subject[:mid].rstrip() + "…")) <= CAPTION_BUDGET:
             low = mid
         else:
             high = mid - 1
