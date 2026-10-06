@@ -9,6 +9,7 @@ from pyrogram import Client, enums
 from pyrogram.types import InputMediaDocument, Message
 from release_caption import (
     is_changelog_ignored,
+    linkify_prs,
     read_apk_version,
     render_test_caption,
 )
@@ -38,9 +39,6 @@ def get_thumb() -> str:
 def get_caption() -> str:
     with open(artifacts_path / "caption.txt", "r", encoding="utf-8") as f:
         commit_message = f.read()
-    if not test_version:
-        return "" if is_changelog_ignored(commit_message) else commit_message
-    version_name, version_code = get_version()
     repository_url = "/".join(
         part.strip("/")
         for part in (
@@ -49,6 +47,11 @@ def get_caption() -> str:
         )
         if part
     )
+    if not test_version:
+        if is_changelog_ignored(commit_message):
+            return ""
+        return linkify_prs(commit_message, repository_url)
+    version_name, version_code = get_version()
     return render_test_caption(
         commit_message,
         version_name,
@@ -70,8 +73,7 @@ def get_document() -> list["InputMediaDocument"]:
                 )
             )
     documents[-1].caption = get_caption()
-    if test_version:
-        documents[-1].parse_mode = enums.ParseMode.HTML
+    documents[-1].parse_mode = enums.ParseMode.HTML
     return documents
 
 
