@@ -9,6 +9,7 @@ from release_caption import (
     read_apk_version,
     read_gradle_property,
     render_test_caption,
+    visible_length,
 )
 
 
@@ -39,7 +40,7 @@ class ReleaseCaptionTest(unittest.TestCase):
 
         self.assertIn("🔀 <b>Merge</b>", merge_caption)
         self.assertIn("📌 <b>Other</b>", caption)
-        self.assertLessEqual(len(caption), CAPTION_BUDGET)
+        self.assertLessEqual(visible_length(caption), CAPTION_BUDGET)
         self.assertTrue(caption.endswith("…"))
 
     def test_omits_commit_marked_ignore_from_changelog(self):

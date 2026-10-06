@@ -1,6 +1,13 @@
 import re
-from html import escape
+from html import escape, unescape
 from pathlib import Path
+
+_TAG_RE = re.compile(r"<[^>]+>")
+
+
+def visible_length(html_text: str) -> int:
+    """Return the number of characters Telegram displays (tags stripped, entities decoded)."""
+    return len(unescape(_TAG_RE.sub("", html_text)))
 
 CAPTION_BUDGET = 900
 CHANGELOG_IGNORE_MARKER = "[ignore]"
@@ -109,25 +116,25 @@ def render_test_caption(
         return rendered
 
     rendered = assemble(subject, detail)
-    if len(rendered) <= CAPTION_BUDGET:
+    if visible_length(rendered) <= CAPTION_BUDGET:
         return rendered
 
     low, high = 0, len(detail)
     while low < high:
         mid = (low + high + 1) // 2
-        if len(assemble(subject, detail[:mid].rstrip() + "…")) <= CAPTION_BUDGET:
+        if visible_length(assemble(subject, detail[:mid].rstrip() + "…")) <= CAPTION_BUDGET:
             low = mid
         else:
             high = mid - 1
     if low:
         return assemble(subject, detail[:low].rstrip() + "…")
-    if len(assemble(subject)) <= CAPTION_BUDGET:
+    if visible_length(assemble(subject)) <= CAPTION_BUDGET:
         return assemble(subject)
 
     low, high = 0, len(subject)
     while low < high:
         mid = (low + high + 1) // 2
-        if len(assemble(subject[:mid].rstrip() + "…")) <= CAPTION_BUDGET:
+        if visible_length(assemble(subject[:mid].rstrip() + "…")) <= CAPTION_BUDGET:
             low = mid
         else:
             high = mid - 1

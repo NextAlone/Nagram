@@ -1,6 +1,7 @@
 import contextlib
 import json
 import os
+from html import escape
 from pathlib import Path
 from sys import argv
 from typing import Iterable, Union
@@ -50,7 +51,7 @@ def get_caption() -> str:
     if not test_version:
         if is_changelog_ignored(commit_message):
             return ""
-        return linkify_prs(commit_message, repository_url)
+        return linkify_prs(escape(commit_message), repository_url)
     version_name, version_code = get_version()
     return render_test_caption(
         commit_message,
