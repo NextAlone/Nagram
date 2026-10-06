@@ -11902,6 +11902,9 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             selectedCompression = compressionsCount;
         }
         boolean needCompress = false;
+        if (NaConfig.INSTANCE.getAlwaysSendVideosInHD().Bool()) {
+            videoEditedInfo.compressQuality = Math.max(0, compressionsCount - 1);
+        }
         if (new File(videoPath).length() < 1024L * 1024L * 1000L) {
             if (selectedCompression != compressionsCount || Math.max(videoEditedInfo.originalWidth, videoEditedInfo.originalHeight) > 1280) {
                 needCompress = true;
