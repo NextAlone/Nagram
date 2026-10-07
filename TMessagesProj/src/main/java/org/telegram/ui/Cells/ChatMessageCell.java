@@ -19074,17 +19074,29 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             } else if (NekoConfig.labelChannelUser.Bool() && isMegagroup && currentChat != null && currentMessageObject.isSenderChannel()) {
                 final String channelStr = NaConfig.INSTANCE.getCustomChannelLabel().String();
                 adminString = new SpannableStringBuilder();
-                if (NekoConfig.channelAlias.Bool()) {
-                    String aliasName = NekoXConfig.getChannelAlias(currentMessageObject.messageOwner.from_id.channel_id);
-                    if (aliasName != null) {
-                        adminString.append(aliasName + " ★");
+                if (NaConfig.INSTANCE.getShowChannelIcon().Bool()) {
+                    Drawable d = TimeStringHelper.getChannelDrawable();
+                    if (d != null) {
+                        ColoredImageSpan span = new ColoredImageSpan(d, ColoredImageSpan.ALIGN_CENTER);
+                        span.setSize((int) Math.ceil(Theme.chat_adminPaint.getTextSize()));
+                        adminString.append(" ");
+                        adminString.setSpan(span, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+                }
+                if (!NaConfig.INSTANCE.getShowChannelIcon().Bool()) {
+                    if (NekoConfig.channelAlias.Bool()) {
+                        String aliasName = NekoXConfig.getChannelAlias(currentMessageObject.messageOwner.from_id.channel_id);
+                        if (aliasName != null) {
+                            adminString.append(aliasName + " ★");
+                        } else {
+                            adminString.append(channelStr);
+                        }
                     } else {
                         adminString.append(channelStr);
                     }
-                } else {
-                    adminString.append(channelStr);
                 }
-                adminWidth = (int) Math.ceil(Theme.chat_adminPaint.measureText(adminString.toString()));
+                StaticLayout staticLayout = new StaticLayout(adminString, Theme.chat_adminPaint, dp(300), Layout.Alignment.ALIGN_NORMAL, 0f, 0f, false);
+                adminWidth = (int) Math.ceil(staticLayout.getLineWidth(0));
                 nameWidth -= adminWidth;
             } else {
                 adminString = null;

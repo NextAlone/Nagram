@@ -11,11 +11,19 @@ import java.util.Objects;
 
 public class TimeStringHelper {
     public static Drawable forwardsDrawable;
+    public static Drawable channelDrawable;
 
     public static Drawable getForwardsDrawable() {
         if (forwardsDrawable == null) {
             forwardsDrawable = Objects.requireNonNull(ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.drawable.forwards_solar)).mutate();
         }
         return forwardsDrawable;
+    }
+
+    public static Drawable getChannelDrawable() {
+        if (channelDrawable == null) {
+            channelDrawable = Objects.requireNonNull(ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.drawable.menu_broadcast)).mutate();
+        }
+        return channelDrawable;
     }
 }

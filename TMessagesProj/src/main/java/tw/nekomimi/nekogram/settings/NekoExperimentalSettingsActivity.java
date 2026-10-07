@@ -72,6 +72,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
 //    private final AbstractConfigCell useCustomEmojiRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.useCustomEmoji));
     private final AbstractConfigCell localQuoteColorRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getUseLocalQuoteColor()));
     private final AbstractConfigCell channelAliasRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.channelAlias));
+    private final AbstractConfigCell showChannelIconRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowChannelIcon()));
     private final AbstractConfigCell externalGhostModeRow = cellGroup.appendCell(new ConfigCellText("GhostMode", () -> {
         presentFragment(new NekoGhostModeActivity());
     }));
@@ -336,6 +337,8 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (key.equals(NaConfig.INSTANCE.getDisableStories().getKey())) {
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+            } else if (key.equals(NaConfig.INSTANCE.getShowChannelIcon().getKey())) {
+                updateRows();
             }
         };
 
@@ -545,6 +548,11 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
     @Override
     protected void setCanNotChange() {
         super.setCanNotChange();
+
+        cellGroup.rows.remove(customCustomChannelLabelRow);
+        if (!NaConfig.INSTANCE.getShowChannelIcon().Bool()) {
+            cellGroup.rows.add(cellGroup.rows.indexOf(showChannelIconRow) + 1, customCustomChannelLabelRow);
+        }
 
         if (!NaConfig.INSTANCE.getShowHiddenFeature().Bool()) {
             cellGroup.rows.remove(localPremiumRow);

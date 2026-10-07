@@ -389,4 +389,5 @@
     <string name="RegistrationDateOlder">Older than %s</string>
     <string name="RegistrationDateNewer">Newer than %s</string>
     <string name="AlwaysSendVideosInHD">Always send videos in HD</string>
+    <string name="ShowChannelIcon">Show icon instead of channel alias</string>
 </resources>
