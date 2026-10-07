@@ -388,4 +388,5 @@
     <string name="RegistrationDateApproximately">Approximately %s</string>
     <string name="RegistrationDateOlder">Older than %s</string>
     <string name="RegistrationDateNewer">Newer than %s</string>
+    <string name="AlwaysSendVideosInHD">Always send videos in HD</string>
 </resources>

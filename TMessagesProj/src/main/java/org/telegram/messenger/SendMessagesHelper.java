@@ -11898,7 +11898,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
 
         int selectedCompression = Math.round(DownloadController.getInstance(UserConfig.selectedAccount).getMaxVideoBitrate() / (100f / compressionsCount));
 
-        if (selectedCompression > compressionsCount) {
+        if (NaConfig.INSTANCE.getAlwaysSendVideosInHD().Bool() || selectedCompression > compressionsCount) {
             selectedCompression = compressionsCount;
         }
         boolean needCompress = false;
