@@ -1061,8 +1061,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             counterView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
             counterView.setTypeface(AndroidUtilities.bold());
             counterView.setGravity(Gravity.CENTER);
-            counterView.setTextColor(Theme.getColor(Theme.key_chats_unreadCounterText, resourcesProvider));
-            counterView.setBackground(Theme.createRoundRectDrawable(dp(10), Theme.getColor(Theme.key_chats_unreadCounter, resourcesProvider)));
+            counterView.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText, resourcesProvider));
+            counterView.setBackground(Theme.createRoundRectDrawable(dp(10), Theme.getColor(Theme.key_featuredStickers_addButton, resourcesProvider)));
 
             arrowView = new ImageView(context);
             arrowView.setImageResource(R.drawable.msg_arrowright);
