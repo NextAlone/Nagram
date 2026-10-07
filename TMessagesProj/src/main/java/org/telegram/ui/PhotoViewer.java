@@ -22108,8 +22108,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     }
 
     private int selectCompression() {
-        if (NaConfig.INSTANCE.getAlwaysSendVideosInHD().Bool()) {
-            return Math.max(0, compressionsCount - 1);
+        if (NaConfig.INSTANCE.getAlwaysSendVideosInHD().Bool() && compressionsCount > 1) {
+            return compressionsCount - 1;
         }
         //1GB
         if (originalSize > 1024L * 1024L * 1000L) {
