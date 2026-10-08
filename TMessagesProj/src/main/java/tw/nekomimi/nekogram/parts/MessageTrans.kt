@@ -40,69 +40,88 @@ private fun translationContext(message: MessageObject, timeline: List<MessageObj
         .asReversed()
 }
 
+private fun getCachedOrNull(
+    db: TranslateDb,
+    source: TLRPC.TL_textWithEntities?,
+    separator: String
+): TLRPC.TL_textWithEntities? {
+    if (source == null || source.text.isNullOrBlank()) return null
+    val originalText = source.text
+    val useKeepFormatting = NaConfig.keepFormatting.Bool() && !source.entities.isNullOrEmpty()
+    val queryText = if (useKeepFormatting) {
+        HTMLKeeper.entitiesToHtml(originalText, source.entities, false)
+    } else {
+        originalText
+    }
+    val cached = db.query(queryText)?.takeIf { it.isNotBlank() } ?: return null
+
+    val result = TLRPC.TL_textWithEntities()
+    if (useKeepFormatting) {
+        val parsed = HTMLKeeper.htmlToEntities(cached, source.entities, false)
+        if (NaConfig.hideOriginAfterTranslation.Bool()) {
+            result.text = parsed.text
+            result.entities = parsed.entities ?: ArrayList()
+        } else {
+            val combined = ArrayList<TLRPC.MessageEntity>()
+            if (source.entities != null) {
+                combined.addAll(source.entities)
+            }
+            val shift = originalText.length + separator.length
+            if (parsed.entities != null) {
+                for (entity in parsed.entities) {
+                    entity.offset += shift
+                    combined.add(entity)
+                }
+            }
+            result.text = "$originalText$separator${parsed.text}"
+            result.entities = combined
+        }
+    } else {
+        if (NaConfig.hideOriginAfterTranslation.Bool()) {
+            result.text = cached
+            result.entities = ArrayList()
+        } else {
+            result.text = "$originalText$separator$cached"
+            result.entities = if (source.entities != null) ArrayList(source.entities) else ArrayList()
+        }
+    }
+    return result
+}
+
 fun MessageObject.translateFinished(locale: Locale): Int {
 
     val db = TranslateDb.forLocale(locale)
 
-    translating = false
-
     if (isPoll) {
-        val pool = (messageOwner.media as TLRPC.TL_messageMediaPoll).poll
-        val question = db.query(pool.question.text) ?: return 0
-        val translatedPoll = TranslateController.PollText.fromMessage(this)
+        val media = messageOwner.media as? TLRPC.TL_messageMediaPoll ?: return 1
+        val pool = media.poll ?: return 1
+        val translatedPoll = TranslateController.PollText.fromMessage(this) ?: return 0
 
-        translatedPoll.question.text =
-            "${if (!NaConfig.hideOriginAfterTranslation.Bool()) translatedPoll.question.text + " | " else ""}$question"
-        translatedPoll.answers.forEach {
-            val answer = db.query(it.text.text) ?: return 0
-            it.text.text += " | $answer"
+        val questionResult = getCachedOrNull(db, pool.question, " | ") ?: return 0
+        translatedPoll.question = questionResult
+
+        for (answer in translatedPoll.answers) {
+            val answerResult = getCachedOrNull(db, answer.text, " | ") ?: return 0
+            answer.text = answerResult
         }
+
         if (translatedPoll.solution != null) {
-            val solution = db.query(translatedPoll.solution.text) ?: return 0
-            translatedPoll.solution.text =
-                "${if (!NaConfig.hideOriginAfterTranslation.Bool()) translatedPoll.solution.text + " | " else ""}$solution"
+            val solutionResult = getCachedOrNull(db, translatedPoll.solution, " | ") ?: return 0
+            translatedPoll.solution = solutionResult
         }
         messageOwner.translatedPoll = translatedPoll
+        return 2
     } else {
         val originalMessage = messageOwner.message.takeIf { !it.isNullOrBlank() } ?: return 1
-        val useKeepFormatting = NaConfig.keepFormatting.Bool() && !messageOwner.entities.isNullOrEmpty()
-        val queryText = if (useKeepFormatting) {
-            HTMLKeeper.entitiesToHtml(originalMessage, messageOwner.entities, false)
-        } else {
-            originalMessage
+        val source = TLRPC.TL_textWithEntities().apply {
+            text = originalMessage
+            entities = messageOwner.entities
         }
-
-        val cached = db.query(queryText)?.takeIf { it.isNotBlank() } ?: return 0
-
-        if (useKeepFormatting) {
-            val parsed = HTMLKeeper.htmlToEntities(cached, messageOwner.entities, false)
-            if (NaConfig.hideOriginAfterTranslation.Bool()) {
-                messageOwner.translatedMessage = parsed.text
-                messageOwner.translatedEntities = parsed.entities
-            } else {
-                val combined = ArrayList<TLRPC.MessageEntity>()
-                if (messageOwner.entities != null) {
-                    combined.addAll(messageOwner.entities)
-                }
-                val shift = originalMessage.length + 12
-                if (parsed.entities != null) {
-                    for (entity in parsed.entities) {
-                        entity.offset += shift
-                        combined.add(entity)
-                    }
-                }
-                messageOwner.translatedMessage = "$originalMessage\n\n--------\n\n${parsed.text}"
-                messageOwner.translatedEntities = combined
-            }
-        } else {
-            messageOwner.translatedEntities = null
-            messageOwner.translatedMessage =
-                "${if (!NaConfig.hideOriginAfterTranslation.Bool()) originalMessage + "\n\n--------\n\n" else ""}$cached"
-        }
+        val cached = getCachedOrNull(db, source, "\n\n--------\n\n") ?: return 0
+        messageOwner.translatedMessage = cached.text
+        messageOwner.translatedEntities = if (cached.entities.isNullOrEmpty()) null else cached.entities
+        return 2
     }
-
-    return 2
-
 }
 
 @JvmName("translateMessages")
@@ -131,6 +150,7 @@ fun ChatActivity.translateMessages(
             it.messageOwner.translated = false
             it.messageOwner.translatedMessage = null
             it.messageOwner.translatedEntities = null
+            it.messageOwner.translatedPoll = null
             messageHelper.resetMessageContent(dialogId, it)
             it.translating = false
         }
@@ -163,41 +183,53 @@ fun ChatActivity.translateMessages(
 
     val timeline = this.messages.toList()
     GlobalScope.launch(Dispatchers.IO) {
-        messages.forEach { selectedObject ->
-            val context = translationContext(selectedObject, timeline)
-            when (if (context.isEmpty()) selectedObject.translateFinished(target) else 0) {
-                1 -> next()
-                2 -> {
-                    next()
-                    withContext(Dispatchers.Main) {
-                        selectedObject.messageOwner.translated = true
-                        messageHelper.resetMessageContent(dialogId, selectedObject)
+        try {
+            messages.forEach { selectedObject ->
+                val context = translationContext(selectedObject, timeline)
+                when (if (context.isEmpty()) selectedObject.translateFinished(target) else 0) {
+                    1 -> {
+                        selectedObject.translating = false
+                        next()
                     }
-                }
-                else -> deferreds.add(async(transPool) {
-                    val success = translateMessage(selectedObject, target, context, cancel, status)
-                    if (!cancel.get()) {
-                        if (success) {
-                            selectedObject.messageOwner.translated = true
-                        } else {
-                            selectedObject.messageOwner.translated = false
-                            selectedObject.messageOwner.translatedMessage = selectedObject.messageOwner.message
-                            selectedObject.messageOwner.translatedEntities = null
-                        }
+                    2 -> {
+                        selectedObject.translating = false
                         next()
                         withContext(Dispatchers.Main) {
+                            selectedObject.messageOwner.translated = true
                             messageHelper.resetMessageContent(dialogId, selectedObject)
                         }
                     }
-                })
+                    else -> deferreds.add(async(transPool) {
+                        try {
+                            val success = translateMessage(selectedObject, target, context, cancel, status)
+                            if (!cancel.get()) {
+                                if (success) {
+                                    selectedObject.messageOwner.translated = true
+                                } else {
+                                    selectedObject.messageOwner.translated = false
+                                    selectedObject.messageOwner.translatedMessage = selectedObject.messageOwner.message
+                                    selectedObject.messageOwner.translatedEntities = null
+                                    selectedObject.messageOwner.translatedPoll = null
+                                }
+                                next()
+                                withContext(Dispatchers.Main) {
+                                    messageHelper.resetMessageContent(dialogId, selectedObject)
+                                }
+                            }
+                        } finally {
+                            selectedObject.translating = false
+                        }
+                    })
+                }
             }
-        }
 
-        deferreds.awaitAll()
-        transPool.cancel()
-        UIUtil.runOnUIThread { if (!cancel.get()) status?.uDismiss() }
+            deferreds.awaitAll()
+        } finally {
+            messages.forEach { it.translating = false }
+            transPool.cancel()
+            UIUtil.runOnUIThread { if (!cancel.get()) status?.uDismiss() }
+        }
     }
-    messages.forEach { it.translating = false }
 }
 
 private suspend fun ChatActivity.translateMessage(
@@ -215,6 +247,72 @@ private suspend fun ChatActivity.translateMessage(
     }
 }
 
+private suspend fun ChatActivity.translateTextWithEntities(
+    target: Locale,
+    source: TLRPC.TL_textWithEntities?,
+    context: List<String>,
+    db: TranslateDb,
+    cancel: AtomicBoolean,
+    status: AlertDialog?,
+    separator: String
+): TLRPC.TL_textWithEntities? {
+    if (source == null || source.text.isNullOrBlank()) return null
+    if (cancel.get()) return null
+
+    val originalText = source.text
+    val useKeepFormatting = NaConfig.keepFormatting.Bool() && !source.entities.isNullOrEmpty()
+    val queryText = if (useKeepFormatting) {
+        HTMLKeeper.entitiesToHtml(originalText, source.entities, false)
+    } else {
+        originalText
+    }
+
+    var text = if (context.isEmpty()) db.query(queryText)?.takeIf { it.isNotBlank() } else null
+    if (text == null) {
+        if (cancel.get()) return null
+        text = runCatching {
+            Translator.translate(target, queryText, context)
+        }.getOrElse {
+            handleError(target, it, cancel, status)
+            return null
+        }
+    }
+
+    if (text.isBlank() || cancel.get()) return null
+
+    val result = TLRPC.TL_textWithEntities()
+    if (useKeepFormatting) {
+        val parsed = HTMLKeeper.htmlToEntities(text, source.entities, false)
+        if (NaConfig.hideOriginAfterTranslation.Bool()) {
+            result.text = parsed.text
+            result.entities = parsed.entities ?: ArrayList()
+        } else {
+            val combined = ArrayList<TLRPC.MessageEntity>()
+            if (source.entities != null) {
+                combined.addAll(source.entities)
+            }
+            val shift = originalText.length + separator.length
+            if (parsed.entities != null) {
+                for (entity in parsed.entities) {
+                    entity.offset += shift
+                    combined.add(entity)
+                }
+            }
+            result.text = "$originalText$separator${parsed.text}"
+            result.entities = combined
+        }
+    } else {
+        if (NaConfig.hideOriginAfterTranslation.Bool()) {
+            result.text = text
+            result.entities = ArrayList()
+        } else {
+            result.text = "$originalText$separator$text"
+            result.entities = if (source.entities != null) ArrayList(source.entities) else ArrayList()
+        }
+    }
+    return result
+}
+
 private suspend fun ChatActivity.translatePoll(
     message: MessageObject,
     target: Locale,
@@ -223,56 +321,45 @@ private suspend fun ChatActivity.translatePoll(
     cancel: AtomicBoolean,
     status: AlertDialog?
 ): Boolean {
-    val pool = (message.messageOwner.media as TLRPC.TL_messageMediaPoll).poll
-    var question = if (context.isEmpty()) db.query(pool.question.text)?.takeIf { it.isNotBlank() } else null
-    if (question == null) {
-        if (cancel.get()) return false
-        question = runCatching {
-            Translator.translate(target, pool.question.text, context)
-        }.getOrElse {
-            handleError(target, it, cancel, status)
-            return false
-        }
-    }
+    val media = message.messageOwner.media as? TLRPC.TL_messageMediaPoll ?: return false
+    val pool = media.poll ?: return false
+    val translatedPoll = TranslateController.PollText.fromMessage(message) ?: return false
 
-    val translatedPoll = TranslateController.PollText.fromMessage(message)
-    translatedPoll.question.text = buildString {
-        if (!NaConfig.hideOriginAfterTranslation.Bool()) append(pool.question.text + " | ")
-        append(question)
-    }
+    val questionResult = translateTextWithEntities(
+        target = target,
+        source = pool.question,
+        context = context,
+        db = db,
+        cancel = cancel,
+        status = status,
+        separator = " | "
+    ) ?: return false
+    translatedPoll.question = questionResult
 
-    for (it in translatedPoll.answers) {
-        var answer = if (context.isEmpty()) db.query(it.text.text)?.takeIf { it.isNotBlank() } else null
-        if (answer == null) {
-            if (cancel.get()) return false
-            answer = runCatching {
-                Translator.translate(target, it.text.text, context)
-            }.getOrElse { e ->
-                handleError(target, e, cancel, status)
-                return false
-            }
-        }
-        it.text.text = buildString {
-            if (!NaConfig.hideOriginAfterTranslation.Bool()) append(it.text.text + " | ")
-            append(answer)
-        }
+    for (answer in translatedPoll.answers) {
+        val answerResult = translateTextWithEntities(
+            target = target,
+            source = answer.text,
+            context = context,
+            db = db,
+            cancel = cancel,
+            status = status,
+            separator = " | "
+        ) ?: return false
+        answer.text = answerResult
     }
 
     translatedPoll.solution?.let { solution ->
-        var translatedSolution = if (context.isEmpty()) db.query(solution.text)?.takeIf { it.isNotBlank() } else null
-        if (translatedSolution == null) {
-            if (cancel.get()) return false
-            translatedSolution = runCatching {
-                Translator.translate(target, solution.text, context)
-            }.getOrElse {
-                handleError(target, it, cancel, status)
-                return false
-            }
-        }
-        solution.text = buildString {
-            if (!NaConfig.hideOriginAfterTranslation.Bool()) append(solution.text + " | ")
-            append(translatedSolution)
-        }
+        val solutionResult = translateTextWithEntities(
+            target = target,
+            source = solution,
+            context = context,
+            db = db,
+            cancel = cancel,
+            status = status,
+            separator = " | "
+        ) ?: return false
+        translatedPoll.solution = solutionResult
     }
 
     message.messageOwner.translatedPoll = translatedPoll
@@ -291,60 +378,30 @@ private suspend fun ChatActivity.translateText(
     if (originalMessage.isNullOrBlank()) {
         return false
     }
-    val useKeepFormatting = NaConfig.keepFormatting.Bool() &&
-        !message.messageOwner.entities.isNullOrEmpty()
 
-    val queryText = if (useKeepFormatting) {
-        HTMLKeeper.entitiesToHtml(originalMessage, message.messageOwner.entities, false)
-    } else {
-        originalMessage
+    val source = TLRPC.TL_textWithEntities().apply {
+        text = originalMessage
+        entities = message.messageOwner.entities
     }
 
-    var text = if (context.isEmpty()) db.query(queryText)?.takeIf { it.isNotBlank() } else null
-    if (text == null) {
-        text = runCatching {
-            Translator.translate(target, queryText, context)
-        }.getOrElse {
-            handleError(target, it, cancel, status)
-            message.messageOwner.translatedMessage = originalMessage
-            message.messageOwner.translatedEntities = null
-            return false
-        }
-    }
+    val result = translateTextWithEntities(
+        target = target,
+        source = source,
+        context = context,
+        db = db,
+        cancel = cancel,
+        status = status,
+        separator = "\n\n--------\n\n"
+    )
 
-    if (text.isBlank()) {
+    if (result == null) {
         message.messageOwner.translatedMessage = originalMessage
         message.messageOwner.translatedEntities = null
         return false
     }
 
-    if (useKeepFormatting) {
-        val parsed = HTMLKeeper.htmlToEntities(text, message.messageOwner.entities, false)
-        if (NaConfig.hideOriginAfterTranslation.Bool()) {
-            message.messageOwner.translatedMessage = parsed.text
-            message.messageOwner.translatedEntities = parsed.entities
-        } else {
-            val combined = ArrayList<TLRPC.MessageEntity>()
-            if (message.messageOwner.entities != null) {
-                combined.addAll(message.messageOwner.entities)
-            }
-            val shift = originalMessage.length + 12
-            if (parsed.entities != null) {
-                for (entity in parsed.entities) {
-                    entity.offset += shift
-                    combined.add(entity)
-                }
-            }
-            message.messageOwner.translatedMessage = "$originalMessage\n\n--------\n\n${parsed.text}"
-            message.messageOwner.translatedEntities = combined
-        }
-    } else {
-        message.messageOwner.translatedEntities = null
-        message.messageOwner.translatedMessage = buildString {
-            if (!NaConfig.hideOriginAfterTranslation.Bool()) append(originalMessage + "\n\n--------\n\n")
-            append(text)
-        }
-    }
+    message.messageOwner.translatedMessage = result.text
+    message.messageOwner.translatedEntities = if (result.entities.isNullOrEmpty()) null else result.entities
     return true
 }
 
