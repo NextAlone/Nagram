@@ -276,7 +276,7 @@ import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
 import tw.nekomimi.nekogram.utils.AlertUtil;
-//import tw.nekomimi.nekogram.utils.MonetHelper;
+import tw.nekomimi.nekogram.helpers.MonetHelper;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 import tw.nekomimi.nekogram.utils.UpdateUtil;
@@ -753,6 +753,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            MonetHelper.registerReceiver(this);
             getWindow().getDecorView().addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
                         @Override
                         public void onViewAttachedToWindow(View v) {
@@ -7040,6 +7041,9 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         isActive = false;
         activeInstanceCount--;
         unregisterReceiver(batteryReceiver);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            MonetHelper.unregisterReceiver(this);
+        }
 
         if (activeInstanceCount == 0) {
             onDestroyStaticResources();
