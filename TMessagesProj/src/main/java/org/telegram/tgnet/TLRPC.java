@@ -57568,6 +57568,9 @@ public class TLRPC {
         public boolean translated; // custom
         public boolean hide; // custom
 
+        // Nagram Customs
+        public ArrayList<MessageEntity> translatedEntities; // custom
+
         private static Message fromConstructor(int constructor) {
             switch (constructor) {
                 case 0x1d86f70e:

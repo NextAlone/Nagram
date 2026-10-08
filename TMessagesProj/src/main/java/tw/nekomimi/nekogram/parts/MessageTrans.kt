@@ -10,6 +10,7 @@ import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.transtale.TranslateDb
 import tw.nekomimi.nekogram.transtale.Translator
 import tw.nekomimi.nekogram.transtale.code2Locale
+import tw.nekomimi.nekogram.transtale.html.HTMLKeeper
 import tw.nekomimi.nekogram.utils.AlertUtil
 import tw.nekomimi.nekogram.utils.UIUtil
 import tw.nekomimi.nekogram.utils.uDismiss
@@ -63,13 +64,41 @@ fun MessageObject.translateFinished(locale: Locale): Int {
         }
         messageOwner.translatedPoll = translatedPoll
     } else {
+        val originalMessage = messageOwner.message.takeIf { !it.isNullOrBlank() } ?: return 1
+        val useKeepFormatting = NaConfig.keepFormatting.Bool() && !messageOwner.entities.isNullOrEmpty()
+        val queryText = if (useKeepFormatting) {
+            HTMLKeeper.entitiesToHtml(originalMessage, messageOwner.entities, false)
+        } else {
+            originalMessage
+        }
 
-        val text = db.query(messageOwner.message.takeIf { !it.isNullOrBlank() } ?: return 1)?.takeIf { it.isNotBlank() }
-                ?: return 0
+        val cached = db.query(queryText)?.takeIf { it.isNotBlank() } ?: return 0
 
-        messageOwner.translatedMessage =
-            "${if (!NaConfig.hideOriginAfterTranslation.Bool()) messageOwner.message + "\n\n--------\n\n" else ""}$text"
-
+        if (useKeepFormatting) {
+            val parsed = HTMLKeeper.htmlToEntities(cached, messageOwner.entities, false)
+            if (NaConfig.hideOriginAfterTranslation.Bool()) {
+                messageOwner.translatedMessage = parsed.text
+                messageOwner.translatedEntities = parsed.entities
+            } else {
+                val combined = ArrayList<TLRPC.MessageEntity>()
+                if (messageOwner.entities != null) {
+                    combined.addAll(messageOwner.entities)
+                }
+                val shift = originalMessage.length + 12
+                if (parsed.entities != null) {
+                    for (entity in parsed.entities) {
+                        entity.offset += shift
+                        combined.add(entity)
+                    }
+                }
+                messageOwner.translatedMessage = "$originalMessage\n\n--------\n\n${parsed.text}"
+                messageOwner.translatedEntities = combined
+            }
+        } else {
+            messageOwner.translatedEntities = null
+            messageOwner.translatedMessage =
+                "${if (!NaConfig.hideOriginAfterTranslation.Bool()) originalMessage + "\n\n--------\n\n" else ""}$cached"
+        }
     }
 
     return 2
@@ -100,6 +129,8 @@ fun ChatActivity.translateMessages(
     if (messages.all { it.messageOwner.translated }) {
         messages.forEach {
             it.messageOwner.translated = false
+            it.messageOwner.translatedMessage = null
+            it.messageOwner.translatedEntities = null
             messageHelper.resetMessageContent(dialogId, it)
             it.translating = false
         }
@@ -151,6 +182,7 @@ fun ChatActivity.translateMessages(
                         } else {
                             selectedObject.messageOwner.translated = false
                             selectedObject.messageOwner.translatedMessage = selectedObject.messageOwner.message
+                            selectedObject.messageOwner.translatedEntities = null
                         }
                         next()
                         withContext(Dispatchers.Main) {
@@ -259,25 +291,59 @@ private suspend fun ChatActivity.translateText(
     if (originalMessage.isNullOrBlank()) {
         return false
     }
-    var text = if (context.isEmpty()) db.query(originalMessage)?.takeIf { it.isNotBlank() } else null
+    val useKeepFormatting = NaConfig.keepFormatting.Bool() &&
+        !message.messageOwner.entities.isNullOrEmpty()
+
+    val queryText = if (useKeepFormatting) {
+        HTMLKeeper.entitiesToHtml(originalMessage, message.messageOwner.entities, false)
+    } else {
+        originalMessage
+    }
+
+    var text = if (context.isEmpty()) db.query(queryText)?.takeIf { it.isNotBlank() } else null
     if (text == null) {
         text = runCatching {
-            Translator.translate(target, originalMessage, context)
+            Translator.translate(target, queryText, context)
         }.getOrElse {
             handleError(target, it, cancel, status)
             message.messageOwner.translatedMessage = originalMessage
+            message.messageOwner.translatedEntities = null
             return false
         }
     }
 
     if (text.isBlank()) {
         message.messageOwner.translatedMessage = originalMessage
+        message.messageOwner.translatedEntities = null
         return false
     }
 
-    message.messageOwner.translatedMessage = buildString {
-        if (!NaConfig.hideOriginAfterTranslation.Bool()) append(originalMessage + "\n\n--------\n\n")
-        append(text)
+    if (useKeepFormatting) {
+        val parsed = HTMLKeeper.htmlToEntities(text, message.messageOwner.entities, false)
+        if (NaConfig.hideOriginAfterTranslation.Bool()) {
+            message.messageOwner.translatedMessage = parsed.text
+            message.messageOwner.translatedEntities = parsed.entities
+        } else {
+            val combined = ArrayList<TLRPC.MessageEntity>()
+            if (message.messageOwner.entities != null) {
+                combined.addAll(message.messageOwner.entities)
+            }
+            val shift = originalMessage.length + 12
+            if (parsed.entities != null) {
+                for (entity in parsed.entities) {
+                    entity.offset += shift
+                    combined.add(entity)
+                }
+            }
+            message.messageOwner.translatedMessage = "$originalMessage\n\n--------\n\n${parsed.text}"
+            message.messageOwner.translatedEntities = combined
+        }
+    } else {
+        message.messageOwner.translatedEntities = null
+        message.messageOwner.translatedMessage = buildString {
+            if (!NaConfig.hideOriginAfterTranslation.Bool()) append(originalMessage + "\n\n--------\n\n")
+            append(text)
+        }
     }
     return true
 }

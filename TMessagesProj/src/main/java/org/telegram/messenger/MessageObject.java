@@ -7663,7 +7663,9 @@ public class MessageObject {
             captionSummarized = false;
             captionTranslated = true;
             text = messageOwner.translatedMessage;
-            // keep the entities as is
+            if (messageOwner.translatedEntities != null) {
+                entities = messageOwner.translatedEntities;
+            }
         }
         if (!isMediaEmpty() && !(getMedia(messageOwner) instanceof TLRPC.TL_messageMediaGame) && !TextUtils.isEmpty(text)) {
             caption = Emoji.replaceEmoji(text, Theme.chat_msgTextPaint.getFontMetricsInt(), false);
@@ -7996,6 +7998,9 @@ public class MessageObject {
 
     public ArrayList<TLRPC.MessageEntity> getEntities() {
         if (messageOwner == null) return null;
+        if (messageOwner.translated && messageOwner.translatedEntities != null) {
+            return messageOwner.translatedEntities;
+        }
         if (summarized) {
             if (translated && messageOwner.translatedSummaryText != null) {
                 return messageOwner.translatedSummaryText.entities;
