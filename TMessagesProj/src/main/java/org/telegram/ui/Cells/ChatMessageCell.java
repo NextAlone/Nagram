@@ -19072,19 +19072,33 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 if (isAdmin || isOwner) adminWidth += dp(12);
                 nameWidth -= adminWidth;
             } else if (NekoConfig.labelChannelUser.Bool() && isMegagroup && currentChat != null && currentMessageObject.isSenderChannel()) {
-                final String channelStr = NaConfig.INSTANCE.getCustomChannelLabel().String();
                 adminString = new SpannableStringBuilder();
+                String aliasName = null;
                 if (NekoConfig.channelAlias.Bool()) {
-                    String aliasName = NekoXConfig.getChannelAlias(currentMessageObject.messageOwner.from_id.channel_id);
+                    aliasName = NekoXConfig.getChannelAlias(currentMessageObject.messageOwner.from_id.channel_id);
                     if (aliasName != null) {
-                        adminString.append(aliasName + " ★");
-                    } else {
-                        adminString.append(channelStr);
+                        adminString.append(aliasName + " ");
+                    }
+                }
+                if (NaConfig.INSTANCE.getShowChannelIcon().Bool()) {
+                    Drawable d = TimeStringHelper.getChannelDrawable();
+                    if (d != null) {
+                        ColoredImageSpan span = new ColoredImageSpan(d, ColoredImageSpan.ALIGN_CENTER);
+                        span.setSize((int) Math.ceil(Theme.chat_adminPaint.getTextSize()));
+                        adminString.append(" ");
+                        var length = adminString.length();
+                        adminString.setSpan(span, length - 1, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     }
                 } else {
-                    adminString.append(channelStr);
+                    if (aliasName != null) {
+                        adminString.append("★");
+                    } else {
+                        final String channelStr = NaConfig.INSTANCE.getCustomChannelLabel().String();
+                        adminString.append(channelStr);
+                    }
                 }
-                adminWidth = (int) Math.ceil(Theme.chat_adminPaint.measureText(adminString.toString()));
+                StaticLayout staticLayout = new StaticLayout(adminString, Theme.chat_adminPaint, dp(300), Layout.Alignment.ALIGN_NORMAL, 0f, 0f, false);
+                adminWidth = (int) Math.ceil(staticLayout.getLineWidth(0));
                 nameWidth -= adminWidth;
             } else {
                 adminString = null;
