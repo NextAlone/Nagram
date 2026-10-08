@@ -7,8 +7,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
+import androidx.collection.LongSparseArray;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonElement;
@@ -17,15 +19,22 @@ import com.google.gson.JsonPrimitive;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.browser.Browser;
+import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.Components.BulletinFactory;
+import org.telegram.ui.Components.ShareAlert;
 import org.telegram.ui.DocumentSelectActivity;
 
 import java.io.File;
@@ -47,7 +56,6 @@ import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.GsonUtil;
-import tw.nekomimi.nekogram.utils.ShareUtil;
 import xyz.nextalone.nagram.NkmrConfig;
 import xyz.nextalone.nagram.network.NetworkLogActivity;
 
@@ -272,11 +280,51 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
             DateFormat formatter = DateFormat.getDateTimeInstance();
             File cacheFile = new File(EnvUtil.getShareCachePath(), formatter.format(new Date()) + xyz.nextalone.nagram.helper.BackupFileHelper.SETTINGS_SUFFIX);
             FileUtil.writeUtf8String(backupSettingsJson(), cacheFile);
-            ShareUtil.shareFile(getParentActivity(), cacheFile);
-        } catch (JSONException e) {
+            ShareAlert shareAlert = new ShareAlert(getParentActivity(), null, null, false, null, false) {
+                @Override
+                protected void onSend(LongSparseArray<TLRPC.Dialog> dids, int count, TLRPC.TL_forumTopic topic, boolean showToast) {
+                    for (int a = 0; a < dids.size(); a++) {
+                        long did = dids.keyAt(a);
+                        TLRPC.Dialog dialog = dids.valueAt(a);
+                        TLRPC.TL_forumTopic t = selectedDialogTopics != null ? selectedDialogTopics.get(dialog) : topic;
+                        boolean isMonoForum = getMessagesController().isMonoForum(did);
+                        MessageObject replyTopMsg = t != null && !isMonoForum && t.topicStartMessage != null ? new MessageObject(currentAccount, t.topicStartMessage, false, false) : null;
+                        if (replyTopMsg != null) {
+                            replyTopMsg.isTopicMainMessage = true;
+                        }
+                        SendMessagesHelper.prepareSendingDocument(
+                                getAccountInstance(),
+                                cacheFile.getAbsolutePath(),
+                                cacheFile.getAbsolutePath(),
+                                null,
+                                null,
+                                "application/json",
+                                did,
+                                replyTopMsg,
+                                replyTopMsg,
+                                null,
+                                null,
+                                null,
+                                true,
+                                0,
+                                null,
+                                null,
+                                false
+                        );
+                    }
+                    if (!showToast) return;
+                    AndroidUtilities.runOnUIThread(() -> {
+                        FrameLayout container = fragmentView instanceof FrameLayout ? (FrameLayout) fragmentView : null;
+                        if (container != null) {
+                            BulletinFactory.createInviteSentBulletin(getParentActivity(), container, dids.size(), dids.size() == 1 ? dids.valueAt(0).id : 0, count, getThemedColor(Theme.key_undo_background), getThemedColor(Theme.key_undo_infoColor)).show();
+                        }
+                    }, 250);
+                }
+            };
+            showDialog(shareAlert);
+        } catch (Exception e) {
             AlertUtil.showSimpleAlert(getParentActivity(), e);
         }
-
     }
 
     public static String backupSettingsJson() throws JSONException {
