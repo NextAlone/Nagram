@@ -276,7 +276,7 @@ import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
 import tw.nekomimi.nekogram.utils.AlertUtil;
-//import tw.nekomimi.nekogram.utils.MonetHelper;
+import tw.nekomimi.nekogram.helpers.MonetHelper;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 import tw.nekomimi.nekogram.utils.UpdateUtil;
@@ -431,6 +431,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     protected void onCreate(Bundle savedInstanceState) {
         isActive = true;
         activeInstanceCount++;
+        MonetHelper.registerReceiver(this);
         if (BuildVars.DEBUG_VERSION) {
             StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder(StrictMode.getVmPolicy())
                 .detectLeakedClosableObjects()
@@ -7040,6 +7041,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         isActive = false;
         activeInstanceCount--;
         unregisterReceiver(batteryReceiver);
+        MonetHelper.unregisterReceiver(this);
 
         if (activeInstanceCount == 0) {
             onDestroyStaticResources();
