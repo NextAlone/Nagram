@@ -390,4 +390,5 @@
     <string name="RegistrationDateNewer">Newer than %s</string>
     <string name="AlwaysSendVideosInHD">Always send videos in HD</string>
     <string name="ShowChannelIcon">Show icon instead of channel alias</string>
+    <string name="HideSideShareButton">Hide side share button</string>
 </resources>

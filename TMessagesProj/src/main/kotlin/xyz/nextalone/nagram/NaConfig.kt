@@ -1431,6 +1431,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val hideSideShareButton =
+        addConfig(
+            "HideSideShareButton",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

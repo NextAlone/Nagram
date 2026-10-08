@@ -87,6 +87,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     private final AbstractConfigCell showVoteCountBeforeVoteRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowVoteCountBeforeVote()));
     private final AbstractConfigCell showSpoilersDirectlyRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showSpoilersDirectly));
     private final AbstractConfigCell disableLinkPreviewsRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getGlobalDisableLinkPreviews()));
+    private final AbstractConfigCell hideSideShareButtonRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getHideSideShareButton()));
     private final AbstractConfigCell dividerMessages = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell headerDoubleTap = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.DoubleTapAction)));
