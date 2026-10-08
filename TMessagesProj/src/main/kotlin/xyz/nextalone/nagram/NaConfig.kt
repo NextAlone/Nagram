@@ -1425,6 +1425,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val showChannelIcon =
+        addConfig(
+            "ShowChannelIcon",
+            ConfigItem.configTypeBool,
+            false
+        )
     val hideSideShareButton =
         addConfig(
             "HideSideShareButton",
