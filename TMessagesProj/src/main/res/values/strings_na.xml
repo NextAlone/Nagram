@@ -394,4 +394,5 @@
     <string name="AskBeforeSendingSticker">Ask before sending sticker</string>
     <string name="ConfirmSendSticker">Confirm sending sticker</string>
     <string name="ConfirmSendStickerText">Do you want to send this sticker?</string>
+    <string name="KeepFormatting">Keep formatting</string>
 </resources>

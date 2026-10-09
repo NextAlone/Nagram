@@ -1443,6 +1443,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val keepFormatting =
+        addConfig(
+            "KeepFormatting",
+            ConfigItem.configTypeBool,
+            true
+        )
 
     private fun addConfig(
         k: String,

@@ -82,6 +82,10 @@ public class MessageHelper extends BaseController {
         TLRPC.Message message = messageObject.messageOwner;
 
         MessageObject obj = new MessageObject(currentAccount, message, true, true);
+        // NekoX: the new object is rebuilt from scratch, so the locally produced translation
+        // state has to be carried over and re-applied, otherwise updateTranslation() inside the
+        // constructor would drop the translation again.
+        obj.applyLocalTranslationState(messageObject);
 
         ArrayList<MessageObject> arrayList = new ArrayList<>();
         arrayList.add(obj);
@@ -92,6 +96,7 @@ public class MessageHelper extends BaseController {
         ArrayList<MessageObject> arrayList = new ArrayList<>();
         for (MessageObject messageObject : messageObjects) {
             MessageObject obj = new MessageObject(currentAccount, messageObject.messageOwner, true, true);
+            obj.applyLocalTranslationState(messageObject);
             arrayList.add(obj);
         }
         getNotificationCenter().postNotificationName(NotificationCenter.replaceMessagesObjects, dialog_id, arrayList, false);

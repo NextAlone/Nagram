@@ -6852,7 +6852,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 lastPostAuthor != messageObject.messageOwner.post_author ||
                 wasPinned != isPinned ||
                 newReply != lastReplyMessage ||
-                messageObject.messageOwner.translated != lastTranslated;
+                messageObject.translated != lastTranslated;
         boolean groupChanged = groupedMessages != currentMessagesGroup;
         boolean pollChanged = false;
 
@@ -6939,8 +6939,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             messageChanged = true;
         }
         boolean transChanged = false;
-        if (lastTranslated != messageObject.messageOwner.translated) {
-            lastTranslated = messageObject.messageOwner.translated;
+        if (lastTranslated != messageObject.translated) {
+            lastTranslated = messageObject.translated;
             transChanged = true;
         }
         if (messageChanged || dataChanged || groupChanged || pollChanged || widthChanged && messageObject.isPoll() || isPhotoDataChanged(messageObject) || pinnedBottom != bottomNear || pinnedTop != topNear || transChanged) {
@@ -6998,7 +6998,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             photoImage.setInvalidateAll(false);
             linkPreviewY = 0;
             factCheckY = 0;
-            lastTranslated = messageObject.messageOwner.translated;
+            lastTranslated = messageObject.translated;
             lastSendState = messageObject.messageOwner.send_state;
             lastDeleteDate = messageObject.messageOwner.destroyTime;
             lastViewsCount = messageObject.messageOwner.views;
@@ -11529,7 +11529,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             total_voters = 0;
             subtitle = getString(media.todo.others_can_complete && messageObject.getDialogId() != UserConfig.getInstance(currentAccount).getClientUserId() ? R.string.MessageGroupTodoList : R.string.MessageTodoList);
         }
-        if (messageObject.messageOwner != null && messageObject.messageOwner.translated && messageObject.messageOwner.translatedPoll != null && messageObject.messageOwner.translatedPoll.question != null) {
+        if (messageObject.messageOwner != null && messageObject.translated && messageObject.messageOwner.translatedPoll != null && messageObject.messageOwner.translatedPoll.question != null) {
             title = messageObject.messageOwner.translatedPoll.question;
         }
 
@@ -11733,7 +11733,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             for (int a = 0, N = answers.size(); a < N; a++) {
                 TLRPC.PollAnswer pollAnswer = answers.get(a);
                 boolean translated = false;
-                if (currentMessageObject.messageOwner != null && currentMessageObject.messageOwner.translated && currentMessageObject.messageOwner.translatedPoll != null) {
+                if (currentMessageObject.messageOwner != null && currentMessageObject.translated && currentMessageObject.messageOwner.translatedPoll != null) {
                     for (TLRPC.PollAnswer translatedPollAnswer : currentMessageObject.messageOwner.translatedPoll.answers) {
                         if (Arrays.equals(translatedPollAnswer.option, pollAnswer.option)) {
                             translated = true;
@@ -16932,7 +16932,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         final boolean translating = translateController.isTranslating(currentMessageObject);
         final boolean shouldTranslate = currentMessageObject != null && TranslateController.isTranslatable(currentMessageObject) && translateController.isTranslatingDialog(currentMessageObject.getDialogId());
         final boolean shouldSummarize = currentMessageObject != null && currentMessageObject.messageOwner.summarizedOpen;
-        final boolean isFinal = shouldTranslate == (currentMessageObject != null && currentMessageObject.messageOwner.translated) && shouldSummarize == (currentMessageObject != null && currentMessageObject.summarized);
+        final boolean isFinal = shouldTranslate == (currentMessageObject != null && currentMessageObject.translated) && shouldSummarize == (currentMessageObject != null && currentMessageObject.summarized);
         if (origin == !isFinal) {
             if (translationLoadingFloat == null) {
                 translationLoadingFloat = new AnimatedFloat(this, 350, CubicBezierInterpolator.EASE_OUT_QUINT);
@@ -18644,7 +18644,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         if (NaConfig.INSTANCE.getShowMessageID().Bool() && messageObject.messageOwner != null && (isChat || isMegagroup || ChatObject.isChannel(currentChat))) {
             timeString = timeString + " | " + messageObject.messageOwner.id;
         }
-        if (messageObject.messageOwner != null && messageObject.messageOwner.translated) {
+        if (messageObject.messageOwner != null && messageObject.translated) {
             timeString = timeString + " | " + LocaleController.getString(R.string.Translate);
         }
         if (messageObject.isAnyKindOfSticker() && NaConfig.INSTANCE.getRealHideTimeForSticker().Bool()) {
@@ -28803,7 +28803,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             lastDrawingExpandedQuotes = getPrimaryMessageObject() != null ? getPrimaryMessageObject().expandedQuotes : null;
             lastDrawingExpandedExplanation = currentMessageObject != null && currentMessageObject.expandedExplanation;
 
-            lastDrawnTranslated = currentMessageObject != null && currentMessageObject.messageOwner.translated;
+            lastDrawnTranslated = currentMessageObject != null && currentMessageObject.translated;
             lastDrawnTitleLayout = titleLayout;
         }
 
@@ -29273,7 +29273,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 changed = true;
             }
 
-            final boolean translated = currentMessageObject != null && currentMessageObject.messageOwner.translated;
+            final boolean translated = currentMessageObject != null && currentMessageObject.translated;
             if (translated != lastDrawnTranslated) {
                 if (titleLayout != null && lastDrawnTitleLayout != null) {
                     animateTitleLayout = lastDrawnTitleLayout;
