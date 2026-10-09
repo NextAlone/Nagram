@@ -391,4 +391,7 @@
     <string name="AlwaysSendVideosInHD">Always send videos in HD</string>
     <string name="ShowChannelIcon">Show icon instead of channel alias</string>
     <string name="HideSideShareButton">Hide side share button</string>
+    <string name="AskBeforeSendingSticker">Ask before sending sticker</string>
+    <string name="ConfirmSendSticker">Confirm sending sticker</string>
+    <string name="ConfirmSendStickerText">Do you want to send this sticker?</string>
 </resources>

@@ -13723,7 +13723,21 @@ public class ChatActivityEnterView extends FrameLayout implements
                     MediaDataController.getInstance(currentAccount).addRecentSticker(MediaDataController.TYPE_IMAGE, parent, sticker, (int) (System.currentTimeMillis() / 1000), false);
                 };
                 if (!showConfirmAlert(runnable)) {
-                    runnable.run();
+                    if (NaConfig.INSTANCE.getAskBeforeSendingSticker().Bool()) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity != null ? parentActivity : getContext(), resourcesProvider);
+                        builder.setTitle(LocaleController.getString(R.string.ConfirmSendSticker));
+                        builder.setMessage(LocaleController.getString(R.string.ConfirmSendStickerText));
+                        builder.setPositiveButton(LocaleController.getString(R.string.OK), (dialogInterface, i) -> runnable.run());
+                        builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
+                        if (parentFragment != null) {
+                            parentFragment.showDialog(builder.create());
+                        }
+                        if (parentFragment == null) {
+                            builder.show();
+                        }
+                    } else {
+                        runnable.run();
+                    }
                 }
             });
         }
