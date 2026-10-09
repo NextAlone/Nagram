@@ -13735,8 +13735,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                         if (parentFragment == null) {
                             builder.show();
                         }
-                    }
-                    if (!NaConfig.INSTANCE.getAskBeforeSendingSticker().Bool()) {
+                    } else {
                         runnable.run();
                     }
                 }
