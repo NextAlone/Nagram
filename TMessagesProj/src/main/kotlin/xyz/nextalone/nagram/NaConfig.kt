@@ -1437,6 +1437,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val askBeforeSendingSticker =
+        addConfig(
+            "AskBeforeSendingSticker",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,
