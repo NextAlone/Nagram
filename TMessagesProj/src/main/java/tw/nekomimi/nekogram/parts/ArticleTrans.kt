@@ -1,11 +1,14 @@
 package tw.nekomimi.nekogram.parts
 
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.telegram.tgnet.tl.TL_iv
 import org.telegram.ui.ActionBar.AlertDialog
@@ -77,10 +80,16 @@ private class ArticleProgress(private val status: AlertDialog) {
         status.uUpdate("0 / $all")
     }
 
-    /** Marks one block as done and refreshes the paint every [PAINT_REFRESH_INTERVAL] blocks. */
-    fun tick(refreshPaint: () -> Unit) {
+    /**
+     * Marks one block as done and refreshes the paint every [PAINT_REFRESH_INTERVAL] blocks.
+     *
+     * [mayTouchViewer] is false once the job was canceled or the viewer torn down, in which case
+     * no UI work is scheduled at all.
+     */
+    fun tick(mayTouchViewer: Boolean, refreshPaint: () -> Unit) {
         val current = done.incrementAndGet()
         val all = total.get()
+        if (!mayTouchViewer) return
         if (current % PAINT_REFRESH_INTERVAL == 0) {
             UIUtil.runOnUIThread(Runnable { refreshPaint() })
         }
@@ -126,12 +135,21 @@ fun ArticleViewer.doTransLATE() {
             } else {
                 UIUtil.runOnUIThread { finishArticleTrans(status, cancel) }
             }
+        } catch (e: CancellationException) {
+            // The viewer was destroyed or the job was canceled: no UI work on the viewer from
+            // here on, but the progress dialog still belongs to the activity and must go away.
+            UIUtil.runOnUIThread { status.dismiss() }
+            throw e
         } catch (e: Exception) {
             if (!cancel.get()) {
                 UIUtil.runOnUIThread { showArticleTransFailed(status, e) }
             }
         } finally {
-            UIUtil.runOnUIThread(Runnable { updatePaintSize() })
+            // Only touch the viewer while the scope is still active: after a cancellation the
+            // window may already be gone and updatePaintSize() would work on torn down pages.
+            if (currentCoroutineContext().isActive && !cancel.get()) {
+                UIUtil.runOnUIThread(Runnable { updatePaintSize() })
+            }
         }
     }
 }
@@ -164,13 +182,18 @@ private suspend fun ArticleViewer.translateArticleText(
     progress: ArticleProgress
 ): Boolean {
     if (TranslateDb.currentTarget().contains(text)) {
-        progress.tick { updatePaintSize() }
+        progress.tick(currentCoroutineContext().isActive && !cancel.get()) { updatePaintSize() }
         return true
     }
     if (cancel.get()) return false
 
-    val translated = runCatching { Translator.translate(text) }.getOrNull()
-    progress.tick { updatePaintSize() }
+    val translated = runCatching { Translator.translate(text) }
+        .getOrElse {
+            // Cancellation is not a provider failure: propagate it so no error UI is shown.
+            if (it is CancellationException) throw it
+            null
+        }
+    progress.tick(currentCoroutineContext().isActive && !cancel.get()) { updatePaintSize() }
     if (translated == null) {
         if (!cancel.get()) {
             failures.incrementAndGet()

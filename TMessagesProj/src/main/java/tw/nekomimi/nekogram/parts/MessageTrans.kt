@@ -8,6 +8,8 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.telegram.messenger.MessageObject
@@ -173,7 +175,8 @@ private suspend fun ChatActivity.translateOne(
         reportError(target, listOf(message), e, cancel, status)
     } finally {
         progress.tick()
-        if (!cancel.get()) {
+        // The chat may be gone by now: a canceled job must not touch the message list.
+        if (currentCoroutineContext().isActive && !cancel.get()) {
             withContext(Dispatchers.Main) { messageHelper.resetMessageContent(dialogId, message) }
         }
     }
@@ -206,6 +209,8 @@ private suspend fun ChatActivity.translateText(
     val translated = runCatching {
         Translator.translate(target, MessageTransText.queryTextOf(source), context)
     }.getOrElse {
+        // Scope cancellation is not a provider failure: let it propagate so no dialog is shown.
+        if (it is CancellationException) throw it
         reportError(target, listOf(message), it, cancel, status)
         return false
     }
@@ -237,6 +242,8 @@ private suspend fun ChatActivity.translatePoll(
     val translated = runCatching {
         MessageTransPoll.translate(pollText, target, context, db)
     }.getOrElse {
+        // Scope cancellation is not a provider failure: let it propagate so no dialog is shown.
+        if (it is CancellationException) throw it
         reportError(target, listOf(message), it, cancel, status)
         return false
     }
