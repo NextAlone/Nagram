@@ -1,7 +1,6 @@
 package tw.nekomimi.nekogram.parts
 
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -86,19 +85,15 @@ fun ChatActivity.translateMessages(
 
     messages.forEach { it.translating = true }
 
-    val cancel = AtomicBoolean()
-    val status = showProgressDialog(autoTranslate, cancel)
+    // Auto translation starts one job per incoming message, so the cancel flag, the progress
+    // label and the bounded dispatcher are per chat and shared by every job of this dialog.
+    val cancel = cancellationFlag()
+    val status = progressDialog(autoTranslate)
     val timeline = this.messages.toList()
-    val progress = ProgressCounter(messages.size, status)
-    // Translations are blocking network calls, so Dispatchers.IO is the right pool; the parallelism
-    // view keeps at most TRANSLATION_PARALLELISM requests in flight at once.
-    val transDispatcher = Dispatchers.IO.limitedParallelism(TRANSLATION_PARALLELISM, "MessageTrans")
-
-    // Scoped to this chat: pending translations are dropped when the user leaves the dialog
-    // instead of outliving it the way GlobalScope would.
-    val scope = newTranslationScope(transDispatcher)
+    val scope = translationScope()
 
     scope.launch {
+        val progress = ProgressCounter(messages.size, status)
         try {
             messages.map { message ->
                 async { translateOne(message, target, timeline, cancel, status, progress) }
@@ -110,26 +105,67 @@ fun ChatActivity.translateMessages(
     }
 }
 
-/**
- * NekoX: scope of the translation job currently running per chat. Canceled through
- * [cancelTranslations] so that no work outlives the dialog.
- */
-private val transScopes = WeakHashMap<ChatActivity, CoroutineScope>()
-
-/** Starts (or replaces) the translation job scope of this chat. */
-private fun ChatActivity.newTranslationScope(dispatcher: CoroutineDispatcher): CoroutineScope {
-    val scope = CoroutineScope(SupervisorJob() + dispatcher)
-    synchronized(transScopes) {
-        transScopes[this]?.cancel()
-        transScopes[this] = scope
-    }
-    return scope
+/** Per chat translation state, shared by every job because auto translation runs one per message. */
+private class TransState {
+    val cancel = AtomicBoolean()
+    val dispatcher = Dispatchers.IO.limitedParallelism(TRANSLATION_PARALLELISM, "MessageTrans")
+    var scope: CoroutineScope? = null
+    var status: AlertDialog? = null
 }
 
-/** Cancels an in-flight translation job of this chat, if any. */
+private val transStates = WeakHashMap<ChatActivity, TransState>()
+
+/** Returns (and lazily creates) the translation state of this chat. */
+private fun ChatActivity.translationState(): TransState {
+    synchronized(transStates) {
+        transStates[this]?.let { return it }
+        val state = TransState()
+        transStates[this] = state
+        return state
+    }
+}
+
+/** Cancellation flag of this chat; setting it aborts every running translation of it. */
+private fun ChatActivity.cancellationFlag(): AtomicBoolean = translationState().cancel
+
+/** Progress dialog of a manual translation. Auto translation shows none, so [autoTranslate] skips it. */
+private fun ChatActivity.progressDialog(autoTranslate: Boolean): AlertDialog? {
+    if (autoTranslate) return null
+    val state = translationState()
+    synchronized(state) {
+        if (state.status?.isShowing != true) {
+            state.status = AlertUtil.showProgress(parentActivity).apply {
+                setOnCancelListener { cancelTranslations() }
+                show()
+            }
+        }
+        return state.status
+    }
+}
+
+/**
+ * Scope shared by every translation job of this chat.
+ *
+ * It is created once and reused on purpose: auto translation calls [translateMessages] once per
+ * incoming message, so a fresh scope per call would cancel the jobs of the previous messages.
+ */
+private fun ChatActivity.translationScope(): CoroutineScope {
+    val state = translationState()
+    synchronized(transStates) {
+        state.scope?.takeIf { it.isActive }?.let { return it }
+        val scope = CoroutineScope(SupervisorJob() + state.dispatcher)
+        state.scope = scope
+        return scope
+    }
+}
+
+/** Cancels the in-flight translation jobs of this chat, if any. */
 fun ChatActivity.cancelTranslations() {
-    synchronized(transScopes) {
-        transScopes.remove(this)?.cancel()
+    synchronized(transStates) {
+        transStates.remove(this)?.let { state ->
+            state.cancel.set(true)
+            state.scope?.cancel()
+        }
     }
 }
 
@@ -142,14 +178,6 @@ private class ProgressCounter(private val total: Int, private val status: AlertD
         if (status != null && total > 1) {
             status.uUpdate("${total - left} / $total")
         }
-    }
-}
-
-private fun ChatActivity.showProgressDialog(autoTranslate: Boolean, cancel: AtomicBoolean): AlertDialog? {
-    if (autoTranslate) return null
-    return AlertUtil.showProgress(parentActivity).apply {
-        setOnCancelListener { cancel.set(true) }
-        show()
     }
 }
 
