@@ -265,7 +265,7 @@ object MessageHelper {
 
     @JvmStatic
     fun isMessageObjectAutoTranslatable(messageObject: MessageObject): Boolean {
-        if (messageObject.messageOwner.translated || messageObject.translating || messageObject.isOutOwner) {
+        if (messageObject.translated || messageObject.translating || messageObject.isOutOwner) {
             return false
         }
         return if (messageObject.isPoll) {

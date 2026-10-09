@@ -6187,6 +6187,7 @@ public class ArticleViewer extends IArticleViewer implements NotificationCenter.
     }
 
     public void destroyArticleViewer() {
+        ArticleTransKt.cancelArticleTranslations(this);
         if (parentActivity == null || windowView == null) {
             return;
         }

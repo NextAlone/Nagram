@@ -3597,6 +3597,7 @@ public class ChatActivity extends BaseFragment implements
     @Override
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
+        MessageTransKt.cancelTranslations(this);
         if (messageMetricsView != null) {
             messageMetricsView.finish();
         }
@@ -27943,7 +27944,7 @@ public class ChatActivity extends BaseFragment implements
         }
         String string = results.solution;
         ArrayList<TLRPC.MessageEntity> entities = results.solution_entities;
-        if (messageObject != null && messageObject.messageOwner != null && messageObject.messageOwner.translated && messageObject.messageOwner.translatedPoll != null && messageObject.messageOwner.translatedPoll.solution != null) {
+        if (messageObject != null && messageObject.translated && messageObject.messageOwner.translatedPoll != null && messageObject.messageOwner.translatedPoll.solution != null) {
             string = messageObject.messageOwner.translatedPoll.solution.text;
             entities = messageObject.messageOwner.translatedPoll.solution.entities;
         }
@@ -35417,7 +35418,7 @@ public class ChatActivity extends BaseFragment implements
     private int processSelectedOptionLongClick(View view, int option) {
         switch (option) {
             case nkbtn_translate: {
-                if (selectedObject.messageOwner.translated) {
+                if (selectedObject.translated) {
                     return 0;
                 }
 
@@ -48592,9 +48593,9 @@ public class ChatActivity extends BaseFragment implements
                         if (messageObject != null || docsWithMessages) {
                             boolean td;
                             if (messageObject != null) {
-                                td = messageObject.messageOwner.translated;
+                                td = messageObject.translated;
                             } else {
-                                td = selectedObjectGroup.messages.get(0).messageOwner.translated;
+                                td = selectedObjectGroup.messages.get(0).translated;
                             }
                             items.add(td ? LocaleController.getString(R.string.UndoTranslate) : LocaleController.getString(R.string.Translate));
                             options.add(nkbtn_translate);
@@ -48821,9 +48822,9 @@ public class ChatActivity extends BaseFragment implements
                     if (messageObject != null || docsWithMessages) {
                         boolean td;
                         if (messageObject != null) {
-                            td = messageObject.messageOwner.translated;
+                            td = messageObject.translated;
                         } else {
-                            td = selectedObjectGroup.messages.get(0).messageOwner.translated;
+                            td = selectedObjectGroup.messages.get(0).translated;
                         }
                         items.add(td ? LocaleController.getString(R.string.UndoTranslate) : LocaleController.getString(R.string.Translate));
                         options.add(nkbtn_translate);

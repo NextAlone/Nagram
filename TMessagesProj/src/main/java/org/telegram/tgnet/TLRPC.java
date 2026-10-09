@@ -57564,8 +57564,6 @@ public class TLRPC {
         public boolean welcomeTemplateFirst; // custom
 
         // NekoX Customs
-        public String translatedMessage; //custom
-        public boolean translated; // custom
         public boolean hide; // custom
 
         private static Message fromConstructor(int constructor) {
