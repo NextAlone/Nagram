@@ -13449,7 +13449,21 @@ public class ChatActivityEnterView extends FrameLayout implements
                             }
                         };
                         if (!showConfirmAlert(runnable)) {
-                            runnable.run();
+                            if (NaConfig.INSTANCE.getAskBeforeSendingGIF().Bool()) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity != null ? parentActivity : getContext(), resourcesProvider);
+                                builder.setTitle(LocaleController.getString(R.string.ConfirmSendGIF));
+                                builder.setMessage(LocaleController.getString(R.string.ConfirmSendGIFText));
+                                builder.setPositiveButton(LocaleController.getString(R.string.OK), (dialogInterface, i) -> runnable.run());
+                                builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
+                                if (parentFragment != null) {
+                                    parentFragment.showDialog(builder.create());
+                                }
+                                if (parentFragment == null) {
+                                    builder.show();
+                                }
+                            } else {
+                                runnable.run();
+                            }
                         }
                     });
                 }
