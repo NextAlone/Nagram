@@ -126,7 +126,8 @@ jobs:
   upload:
     name: Upload debug
     if: github.event.inputs.upload != 'y'
-    runs-on: ubuntu-latest
+    # The channel-publish action runs a Bot API server built on this system.
+    runs-on: ubuntu-24.04
     needs:
       - build
     steps:
@@ -148,15 +149,50 @@ jobs:
         uses: actions/setup-python@v7
         with:
           python-version: 3.12
-      - name: Send to Telegram
+      - name: Prepare channel post
+        id: post
+        env:
+          BOT_TOKEN: ${{ secrets.NAGRAM_CHANNEL_BOT_TOKEN }}
+          CHAT_ID: ${{ vars.NAGRAM_CHANNEL_ASSETS_CHAT_ID }}
+          COMMITS: ${{ toJSON(github.event.commits) }}
         run: |
-          # send release via telegram bot api
-          export mini64=$(find artifacts -name "*arm64-v8a.apk")
-          export mini32=$(find artifacts -name "*armeabi-v7a.apk")
-
-          echo $mini64
-          echo $mini32
-
+          if [ -z "$BOT_TOKEN" ] || [ -z "$CHAT_ID" ]; then
+            echo "::notice::NAGRAM_CHANNEL_BOT_TOKEN or NAGRAM_CHANNEL_ASSETS_CHAT_ID is not set, nothing is posted to the channel."
+            exit 0
+          fi
+          mkdir "$RUNNER_TEMP/channel"
+          find artifacts \( -name '*arm64-v8a.apk' -o -name '*armeabi-v7a.apk' \) \
+            -exec cp {} "$RUNNER_TEMP/channel/" \;
+          ls -l "$RUNNER_TEMP/channel"
+          python bin/scripts/apk_version.py "$RUNNER_TEMP"/channel/*arm64-v8a.apk > "$RUNNER_TEMP/apk-version"
+          cat "$RUNNER_TEMP/apk-version" >> "$GITHUB_OUTPUT"
+          # The commits of the push, shown grouped by their kind.
+          printf '%s\n' "$COMMITS" > "$RUNNER_TEMP/channel-commits.json"
+          echo "chat=$CHAT_ID" >> "$GITHUB_OUTPUT"
+      # The in-app updater reads the APKs and their JSON from the metadata
+      # channel, whatever is posted to the channels below.
+      - name: Update metadata
+        env:
+          HELPER_BOT_TOKEN: ${{ secrets.HELPER_BOT_TOKEN }}
+        run: |
           python -m pip install -r bin/scripts/requirements.txt
-          git log -1 --pretty=format:"%s%n%n%b" > artifacts/caption.txt
-          python bin/scripts/upload.py ${{ secrets.HELPER_BOT_TOKEN }} ${{ secrets.HELPER_BOT_TARGET }} test
+          python bin/scripts/upload.py "$HELPER_BOT_TOKEN"
+      - name: Post to channel
+        if: steps.post.outputs.chat != ''
+        uses: NextAlone/NagramActionRelated/channel-publish@2b74e4cd4e3c89fcc9d50095c039e467c674661f
+        with:
+          bot-token: ${{ secrets.NAGRAM_CHANNEL_BOT_TOKEN }}
+          api-id: ${{ secrets.NAGRAM_API_ID }}
+          api-hash: ${{ secrets.NAGRAM_API_HASH }}
+          chat-id: ${{ steps.post.outputs.chat }}
+          directory: ${{ runner.temp }}/channel
+          kind: test
+          title: Nagram
+          version: ${{ steps.post.outputs.version }}
+          build: ${{ steps.post.outputs.build }}
+          hashtags: android test
+          commits-file: ${{ runner.temp }}/channel-commits.json
+          files: |
+            *arm64-v8a.apk | arm64-v8a · 大多数设备
+            *armeabi-v7a.apk | armeabi-v7a · 旧设备
+          buttons: Commit=${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}

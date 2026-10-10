@@ -194,8 +194,10 @@ Then, use base64 to encode the above.
 3. Add Repo Action Secrets
 
 - LOCAL_PROPERTIES: from step 2
-- HELPER_BOT_TOKEN: from telegram [@Botfather](https://t.me/Botfather), such as `1111:abcd`
-- HELPER_BOT_TARGET: from telegram chat id, such as `777000`
+- HELPER_BOT_TOKEN: from telegram [@Botfather](https://t.me/Botfather), such as `1111:abcd`; the bot that keeps the in-app update metadata
+- NAGRAM_CHANNEL_BOT_TOKEN, NAGRAM_API_ID, NAGRAM_API_HASH: the bot that posts the builds to the channels, and the Telegram API credentials its Bot API server runs with
+
+   The channels are repository variables: NAGRAM_CHANNEL_ASSETS_CHAT_ID gets every build, NAGRAM_CHANNEL_CHAT_ID gets a copy of the releases. Nothing is posted while the token or the channels are not set. A release needs its notes in `docs/releases/<version code>.md`, with optional English notes in `<version code>.en.md`.
 
 4. Disable signature check by removing the following lines in **TMessagesProj/jni/jni.c**:
    ```c

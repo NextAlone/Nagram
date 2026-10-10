@@ -1,26 +1,17 @@
-import contextlib
 import json
-import os
-from html import escape
 from pathlib import Path
 from sys import argv
 from typing import Iterable, Union
 
-from pyrogram import Client, enums
+from apk_version import read_apk_version
+from pyrogram import Client
 from pyrogram.types import InputMediaDocument, Message
-from release_caption import (
-    is_changelog_ignored,
-    linkify_prs,
-    read_apk_version,
-    render_test_caption,
-)
 
 api_id = 11535358
 api_hash = "33d372962fadb01df47e6ceed4e33cd6"
 metadata_channel = -1001471208507
 metadata_channel_msg_id = 46
 artifacts_path = Path("artifacts")
-test_version = len(argv) > 3 and argv[3] == "test"
 
 
 def find_apk(abi: str) -> Path:
@@ -37,31 +28,6 @@ def get_thumb() -> str:
     return "TMessagesProj/src/main/" + "ic_launcher_nagram_round_blue-playstore.png"
 
 
-def get_caption() -> str:
-    with open(artifacts_path / "caption.txt", "r", encoding="utf-8") as f:
-        commit_message = f.read()
-    repository_url = "/".join(
-        part.strip("/")
-        for part in (
-            os.environ.get("GITHUB_SERVER_URL", ""),
-            os.environ.get("GITHUB_REPOSITORY", ""),
-        )
-        if part
-    )
-    if not test_version:
-        if is_changelog_ignored(commit_message):
-            return ""
-        return linkify_prs(escape(commit_message), repository_url)
-    version_name, version_code = get_version()
-    return render_test_caption(
-        commit_message,
-        version_name,
-        str(version_code),
-        os.environ.get("GITHUB_SHA", ""),
-        repository_url,
-    )
-
-
 def get_document() -> list["InputMediaDocument"]:
     documents = []
     abis = ["arm64-v8a", "armeabi-v7a"]
@@ -73,8 +39,6 @@ def get_document() -> list["InputMediaDocument"]:
                     thumb=get_thumb(),
                 )
             )
-    documents[-1].caption = get_caption()
-    documents[-1].parse_mode = enums.ParseMode.HTML
     return documents
 
 
@@ -104,24 +68,13 @@ def retry(func):
     return wrapper
 
 
+# The in-app updater reads one document message per ABI from the metadata
+# channel itself, so the APKs are sent there apart from the channel posts.
 @retry
-async def send_to_channel(client: "Client", cid: str):
-    with contextlib.suppress(ValueError):
-        cid = int(cid)
+async def send_to_metadata_channel(client: "Client"):
     return await client.send_media_group(
-        cid,
-        media=get_document(),
-    )
-
-
-@retry
-async def forward_to_channel(client: "Client", msg: list["Message"]):
-    cid = msg[0].chat.id
-    msg_ids = [m.id for m in msg]
-    return await client.forward_messages(
         metadata_channel,
-        cid,
-        msg_ids,
+        media=get_document(),
     )
 
 
@@ -160,11 +113,9 @@ def get_client(bot_token: str):
 async def main():
     timestamp = get_timestamp()
     bot_token = argv[1]
-    chat_id = argv[2]
     client = get_client(bot_token)
     await client.start()
-    msg = await send_to_channel(client, chat_id)
-    msg = await forward_to_channel(client, msg)
+    msg = await send_to_metadata_channel(client)
     await edit_metadata_msg(client, msg, timestamp)
     await client.log_out()
 

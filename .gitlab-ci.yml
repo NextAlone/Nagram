@@ -1,7 +1,6 @@
 stages:
   - prepare
   - build
-  - upload
 
 workflow:
   rules:
@@ -85,23 +84,3 @@ build:
       - artifacts/Release/
       - artifacts/gradle.properties
     expire_in: 1 week
-
-upload:
-  stage: upload
-  image: python:3.12-slim
-  tags:
-    - saas-linux-small-amd64
-  before_script:
-    - apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
-  needs:
-    - job: build
-      artifacts: true
-  script:
-    - cp artifacts/gradle.properties gradle.properties
-    - export mini64=$(find artifacts -name "*arm64-v8a.apk")
-    - export mini32=$(find artifacts -name "*armeabi-v7a.apk")
-    - echo $mini64
-    - echo $mini32
-    - pip install --no-cache-dir -r bin/scripts/requirements.txt
-    - git log -1 --pretty=format:"%s%n%n%b" > artifacts/caption.txt
-    - python bin/scripts/upload.py "${HELPER_BOT_TOKEN}" "${HELPER_BOT_TARGET}" test
