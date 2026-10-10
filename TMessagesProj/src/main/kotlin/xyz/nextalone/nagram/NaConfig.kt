@@ -1449,6 +1449,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             true
         )
+    val askBeforeSendingGIF =
+        addConfig(
+            "AskBeforeSendingGIF",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

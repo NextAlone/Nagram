@@ -395,4 +395,7 @@
     <string name="ConfirmSendSticker">Confirm sending sticker</string>
     <string name="ConfirmSendStickerText">Do you want to send this sticker?</string>
     <string name="KeepFormatting">Keep formatting</string>
+    <string name="AskBeforeSendingGIF">Ask before sending GIF</string>
+    <string name="ConfirmSendGIF">Confirm sending GIF</string>
+    <string name="ConfirmSendGIFText">Do you want to send this GIF?</string>
 </resources>
