@@ -181,6 +181,17 @@ private class ProgressCounter(private val total: Int, private val status: AlertD
     }
 }
 
+private fun shouldSkipTranslation(message: String?): Boolean {
+    if (message.isNullOrBlank()) return false
+    val pattern = Regex("^(https?://|ftp://|@|#|/).*")
+    for (line in message.trim().split(Regex("\\s+"))) {
+        if (line.isNotEmpty() && !line.matches(pattern)) {
+            return false
+        }
+    }
+    return true
+}
+
 private suspend fun ChatActivity.translateOne(
     message: MessageObject,
     target: Locale,
@@ -190,6 +201,10 @@ private suspend fun ChatActivity.translateOne(
     progress: ProgressCounter
 ) {
     try {
+        val text = message.messageOwner?.message
+        if (text != null && shouldSkipTranslation(text)) {
+            return
+        }
         val context = translationContext(message, timeline)
         val db = TranslateDb.forLocale(target)
         if (message.isPoll) {
