@@ -398,4 +398,5 @@
     <string name="AskBeforeSendingGIF">Ask before sending GIF</string>
     <string name="ConfirmSendGIF">Confirm sending GIF</string>
     <string name="ConfirmSendGIFText">Do you want to send this GIF?</string>
+    <string name="AdaptMonetIcons">Adapt colorful icons to Monet themes</string>
 </resources>

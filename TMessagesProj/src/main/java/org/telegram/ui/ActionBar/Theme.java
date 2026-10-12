@@ -154,6 +154,7 @@ import java.util.concurrent.CountDownLatch;
 
 import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.helpers.MonetHelper;
+import xyz.nextalone.nagram.NaConfig;
 
 public class Theme {
 
@@ -6559,11 +6560,11 @@ public class Theme {
     }
 
     public static boolean isCurrentThemeMonet() {
-        return currentTheme.isMonet();
+        return currentTheme.isMonet() && NaConfig.INSTANCE.getAdaptMonetIcons().Bool();
     }
 
     public static boolean isCurrentThemeMonet(ResourcesProvider resourcesProvider) {
-        return resourcesProvider != null ? resourcesProvider.isMonet() : isCurrentThemeMonet();
+        return (resourcesProvider != null ? resourcesProvider.isMonet() : isCurrentThemeMonet()) && NaConfig.INSTANCE.getAdaptMonetIcons().Bool();
     }
 
     public static void applyThemeMonetColor(ImageView view, ResourcesProvider resourcesProvider, boolean white) {

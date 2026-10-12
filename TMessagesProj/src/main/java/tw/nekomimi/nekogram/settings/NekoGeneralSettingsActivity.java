@@ -236,6 +236,7 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
             LocaleController.getString("Nagram", R.string.NekoX),
             LocaleController.getString("Nekogram", R.string.Nekogram)
     }, null));
+    private final AbstractConfigCell adaptMonetIconsRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getAdaptMonetIcons()));
     private final AbstractConfigCell tabletModeRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.tabletMode, new String[]{
             LocaleController.getString(R.string.TabletModeDefault),
             LocaleController.getString(R.string.TabletModeBig),
@@ -565,6 +566,8 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
             } else if (key.equals(NaConfig.INSTANCE.getTabStyleStroke().getKey())) {
                 getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
             } else if (key.equals(NaConfig.INSTANCE.getMaterialDesign3ChatHeader().getKey())) {
+                parentLayout.rebuildAllFragmentViews(false, false);
+            } else if (key.equals(NaConfig.INSTANCE.getAdaptMonetIcons().getKey())) {
                 parentLayout.rebuildAllFragmentViews(false, false);
             }
         };
