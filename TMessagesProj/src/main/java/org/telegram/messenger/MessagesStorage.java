@@ -6725,7 +6725,7 @@ public class MessagesStorage extends BaseController {
                 community = getChat(user.linked_community_id);
                 chatsDict.put(user.linked_community_id, community);
             }
-            return community != null && community.collapsed_in_dialogs;
+            return ChatObject.isCommunityCollapsedInDialogs(community);
         }
         return false;
     }
@@ -6737,7 +6737,7 @@ public class MessagesStorage extends BaseController {
                 community = getChat(chat.linked_community_id);
                 chatsDict.put(chat.linked_community_id, community);
             }
-            return community != null && community.collapsed_in_dialogs;
+            return ChatObject.isCommunityCollapsedInDialogs(community);
         }
         return false;
     }

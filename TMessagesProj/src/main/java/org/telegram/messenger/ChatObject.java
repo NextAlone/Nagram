@@ -44,6 +44,7 @@ import me.vkryl.core.BitwiseUtils;
 
 import tw.nekomimi.nekogram.DialogConfig;
 import tw.nekomimi.nekogram.helpers.remote.PeerColorHelper;
+import xyz.nextalone.nagram.NaConfig;
 
 public class ChatObject {
 
@@ -2022,6 +2023,10 @@ public class ChatObject {
     }
 
 
+    public static boolean isCommunityCollapsedInDialogs(TLRPC.Chat community) {
+        return community != null && community.collapsed_in_dialogs && !NaConfig.INSTANCE.getDisableCommunityChatGrouping().Bool();
+    }
+
     public static boolean isCollapsedInCommunity(int currentAccount, long dialogId) {
         if (dialogId > 0) {
             return isUserCollapsedInCommunity(currentAccount, MessagesController.getInstance(currentAccount).getUser(dialogId));
@@ -2035,7 +2040,7 @@ public class ChatObject {
             return false;
         }
         final TLRPC.Chat community = chats.get(chat.linked_community_id);
-        return community != null && community.collapsed_in_dialogs;
+        return isCommunityCollapsedInDialogs(community);
     }
 
     public static boolean isChatCollapsedInCommunity(int currentAccount, TLRPC.Chat chat) {
@@ -2044,7 +2049,7 @@ public class ChatObject {
         }
 
         final TLRPC.Chat community = MessagesController.getInstance(currentAccount).getChat(chat.linked_community_id);
-        return community != null && community.collapsed_in_dialogs;
+        return isCommunityCollapsedInDialogs(community);
     }
 
     public static boolean isUserCollapsedInCommunity(LongSparseArray<TLRPC.Chat> chats, TLRPC.User user) {
@@ -2052,7 +2057,7 @@ public class ChatObject {
             return false;
         }
         final TLRPC.Chat community = chats.get(user.linked_community_id);
-        return community != null && community.collapsed_in_dialogs;
+        return isCommunityCollapsedInDialogs(community);
     }
 
     public static boolean isUserCollapsedInCommunity(int currentAccount, TLRPC.User user) {
@@ -2061,7 +2066,7 @@ public class ChatObject {
         }
 
         final TLRPC.Chat community = MessagesController.getInstance(currentAccount).getChat(user.linked_community_id);
-        return community != null && community.collapsed_in_dialogs;
+        return isCommunityCollapsedInDialogs(community);
     }
 
     public static boolean isCommunity(TLRPC.Chat chat) {

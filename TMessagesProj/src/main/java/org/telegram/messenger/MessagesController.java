@@ -15303,6 +15303,16 @@ public class MessagesController extends BaseController implements NotificationCe
         });
     }
 
+    public void onCommunityChatGroupingChanged() {
+        getMessagesStorage().getStorageQueue().postRunnable(() -> {
+            getMessagesStorage().resetAllUnreadCounters(false);
+            AndroidUtilities.runOnUIThread(() -> {
+                sortDialogs(null);
+                getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload, true);
+            });
+        });
+    }
+
     public int toggleCommunityCollapsedInDialogs(long communityId, boolean collapsed) {
         final TL_communities.TL_communities_toggleCommunityCollapsedInDialogs req = new TL_communities.TL_communities_toggleCommunityCollapsedInDialogs();
         req.community = getInputChannel(communityId);
@@ -22528,7 +22538,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 long dialogId = d.id;
                 if (isCommunity) {
                     TLRPC.Chat community = getChat(-dialogId);
-                    if (community != null && !community.collapsed_in_dialogs) {
+                    if (community != null && !ChatObject.isCommunityCollapsedInDialogs(community)) {
                         continue;
                     }
                 }
@@ -22597,7 +22607,7 @@ public class MessagesController extends BaseController implements NotificationCe
             if (d instanceof TLRPC.TL_dialogCommunity) {
                 final long communityId = d.community_id;
                 final TLRPC.Chat community = getChat(communityId);
-                if (community != null && !community.collapsed_in_dialogs || dialogsCommunityFoundCommunities.get(communityId) != null) {
+                if (community != null && !ChatObject.isCommunityCollapsedInDialogs(community) || dialogsCommunityFoundCommunities.get(communityId) != null) {
                     allDialogs.remove(a);
                     a--;
                     N--;
@@ -22741,7 +22751,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         long dialogId = d.id;
                         if (isCommunity) {
                             TLRPC.Chat community = getChat(-dialogId);
-                            if (community != null && !community.collapsed_in_dialogs) {
+                            if (community != null && !ChatObject.isCommunityCollapsedInDialogs(community)) {
                                 continue;
                             }
                         }
@@ -22857,7 +22867,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 }
             } else if (d instanceof TLRPC.TL_dialogCommunity) {
                 TLRPC.Chat chat = getChat(-d.id);
-                if (chat == null || !chat.collapsed_in_dialogs) {
+                if (!ChatObject.isCommunityCollapsedInDialogs(chat)) {
                     continue;
                 }
                 dialogsForward.add(d);

@@ -204,6 +204,7 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
     }));
     private final AbstractConfigCell mediaPreviewRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.mediaPreview));
     private final AbstractConfigCell showUserIconsInChatsListRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowUserIconsInChatsList()));
+    private final AbstractConfigCell disableCommunityChatGroupingRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableCommunityChatGrouping()));
     private final AbstractConfigCell divider4 = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell header5 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Appearance")));
@@ -487,6 +488,12 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                 for (int a : SharedConfig.activeAccounts) {
                     if (UserConfig.getInstance(a).isClientActivated()) {
                         MessagesController.getInstance(a).checkPromoInfo(true);
+                    }
+                }
+            } else if (key.equals(NaConfig.INSTANCE.getDisableCommunityChatGrouping().getKey())) {
+                for (int a : SharedConfig.activeAccounts) {
+                    if (UserConfig.getInstance(a).isClientActivated()) {
+                        MessagesController.getInstance(a).onCommunityChatGroupingChanged();
                     }
                 }
             } else if (key.equals(NekoConfig.actionBarDecoration.getKey())) {

@@ -383,4 +383,5 @@
     <string name="SwitchStyleTelegram">Telegram</string>
     <string name="SwitchStyleModern">モダンな</string>
     <string name="DisableChatListSwipeGesture">チャットリストのスワイプジェスチャーを無効にする</string>
+    <string name="DisableCommunityChatGrouping">コミュニティチャットのグループ表示を無効化</string>
 </resources>

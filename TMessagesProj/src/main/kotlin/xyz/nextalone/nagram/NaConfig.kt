@@ -1455,6 +1455,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val disableCommunityChatGrouping =
+        addConfig(
+            "DisableCommunityChatGrouping",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

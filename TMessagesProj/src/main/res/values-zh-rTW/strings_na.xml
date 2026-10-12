@@ -386,4 +386,5 @@
     <string name="RegistrationDateApproximately">約 %s</string>
     <string name="RegistrationDateOlder">早於 %s</string>
     <string name="RegistrationDateNewer">晚於 %s</string>
+    <string name="DisableCommunityChatGrouping">停用社群聊天合併顯示</string>
 </resources>
