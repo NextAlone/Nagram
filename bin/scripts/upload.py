@@ -1,4 +1,5 @@
 import json
+from contextlib import suppress
 from pathlib import Path
 from sys import argv
 from typing import Iterable, Union
@@ -28,6 +29,14 @@ def get_thumb() -> str:
     return "TMessagesProj/src/main/" + "ic_launcher_nagram_round_blue-playstore.png"
 
 
+def get_caption() -> str:
+    caption_file = artifacts_path / "caption.txt"
+    if not caption_file.is_file():
+        return ""
+    with open(caption_file, "r", encoding="utf-8") as f:
+        return "Test version, " + f.read().strip()
+
+
 def get_document() -> list["InputMediaDocument"]:
     documents = []
     abis = ["arm64-v8a", "armeabi-v7a"]
@@ -39,6 +48,9 @@ def get_document() -> list["InputMediaDocument"]:
                     thumb=get_thumb(),
                 )
             )
+    caption = get_caption()
+    if caption and documents:
+        documents[-1].caption = caption
     return documents
 
 
@@ -78,6 +90,29 @@ async def send_to_metadata_channel(client: "Client"):
     )
 
 
+# The GitLab branch posts to its own channel, and the metadata channel only
+# gets a copy of it, forwarded from there.
+@retry
+async def send_to_channel(client: "Client", cid: str):
+    with suppress(ValueError):
+        cid = int(cid)
+    return await client.send_media_group(
+        cid,
+        media=get_document(),
+    )
+
+
+@retry
+async def forward_to_channel(client: "Client", msg: list["Message"]):
+    cid = msg[0].chat.id
+    msg_ids = [m.id for m in msg]
+    return await client.forward_messages(
+        metadata_channel,
+        cid,
+        msg_ids,
+    )
+
+
 @retry
 async def edit_metadata_msg(
     client: "Client", msg: Union["Message", Iterable["Message"]], timestamp: int
@@ -113,9 +148,14 @@ def get_client(bot_token: str):
 async def main():
     timestamp = get_timestamp()
     bot_token = argv[1]
+    chat_id = argv[2] if len(argv) > 2 else None
     client = get_client(bot_token)
     await client.start()
-    msg = await send_to_metadata_channel(client)
+    if chat_id:
+        msg = await send_to_channel(client, chat_id)
+        msg = await forward_to_channel(client, msg)
+    else:
+        msg = await send_to_metadata_channel(client)
     await edit_metadata_msg(client, msg, timestamp)
     await client.log_out()
 

@@ -200,6 +200,8 @@ Then, use base64 to encode the above.
 
    The channels are repository variables: NAGRAM_CHANNEL_ASSETS_CHAT_ID gets every build, NAGRAM_CHANNEL_CHAT_ID gets a copy of the releases. Nothing is posted while the token or the channels are not set. A release needs its notes in `docs/releases/<version code>.md`, with optional English notes in `<version code>.en.md`.
 
+   The GitLab pipeline posts to its own channel instead, with the HELPER_BOT_TARGET CI/CD variable holding the chat id, such as `-1001234567890`.
+
 4. Disable signature check by removing the following lines in **TMessagesProj/jni/jni.c**:
    ```c
     if (verifySign(env) != JNI_OK) {
