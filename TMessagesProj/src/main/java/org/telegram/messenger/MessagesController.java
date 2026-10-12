@@ -11460,14 +11460,14 @@ public class MessagesController extends BaseController implements NotificationCe
             boolean isEncryptedChat = DialogObject.isEncryptedDialog(key);
             ConcurrentHashMap<Integer, ArrayList<PrintingUser>> threads = dialogEntry.getValue();
 
+            LongSparseArray<CharSequence> newPrintingStrings = new LongSparseArray<>();
+            LongSparseArray<Integer> newPrintingStringsTypes = new LongSparseArray<>();
+            newStrings.put(key, newPrintingStrings);
+            newTypes.put(key, newPrintingStringsTypes);
+
             for (HashMap.Entry<Integer, ArrayList<PrintingUser>> threadEntry : threads.entrySet()) {
                 Integer threadId = threadEntry.getKey();
                 ArrayList<PrintingUser> arr = threadEntry.getValue();
-
-                LongSparseArray<CharSequence> newPrintingStrings = new LongSparseArray<>();
-                LongSparseArray<Integer> newPrintingStringsTypes = new LongSparseArray<>();
-                newStrings.put(key, newPrintingStrings);
-                newTypes.put(key, newPrintingStringsTypes);
 
                 if (NekoConfig.ignoreBlocked.Bool()) {
                     arr = arr.stream().filter(it -> getMessagesController().blockePeers.indexOfKey(it.userId) == -1).collect(Collectors.toCollection(ArrayList::new));
