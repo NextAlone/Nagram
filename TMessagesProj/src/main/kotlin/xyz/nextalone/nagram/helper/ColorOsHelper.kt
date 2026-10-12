@@ -18,7 +18,7 @@ object ColorOsHelper {
         if (!isColorOS) {
             return false
         }
-        if (colorOSVersion != 15 && colorOSVersion != 16) {
+        if (colorOSVersion < 15) {
             return false
         }
         return true
