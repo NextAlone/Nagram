@@ -387,4 +387,8 @@
     <string name="RegistrationDateOlder">早於 %s</string>
     <string name="RegistrationDateNewer">晚於 %s</string>
     <string name="DisableCommunityChatGrouping">停用社群聊天合併顯示</string>
+    <string name="CommunityAvatarTapAction">點擊社群頭像行為</string>
+    <string name="CommunityAvatarTapActionCommunity">一律開啟社群</string>
+    <string name="CommunityAvatarTapActionChat">一律進入聊天</string>
+    <string name="CommunityAvatarTapActionArrow">僅點擊頭像右下角箭頭時開啟社群頁面</string>
 </resources>

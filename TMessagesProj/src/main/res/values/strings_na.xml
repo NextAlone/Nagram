@@ -398,5 +398,9 @@
     <string name="AskBeforeSendingGIF">Ask before sending GIF</string>
     <string name="ConfirmSendGIF">Confirm sending GIF</string>
     <string name="ConfirmSendGIFText">Do you want to send this GIF?</string>
-    <string name="DisableCommunityChatGrouping">Disable community chat grouping</string>
+    <string name="DisableCommunityChatGrouping">Disable Community Chat Grouping</string>
+    <string name="CommunityAvatarTapAction">Community Avatar Tap Action</string>
+    <string name="CommunityAvatarTapActionCommunity">Always Open Community</string>
+    <string name="CommunityAvatarTapActionChat">Always Open Chat</string>
+    <string name="CommunityAvatarTapActionArrow">Open Community Only with the Bottom-Right Arrow</string>
 </resources>

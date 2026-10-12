@@ -388,4 +388,8 @@
     <string name="RegistrationDateOlder">早于 %s</string>
     <string name="RegistrationDateNewer">晚于 %s</string>
     <string name="DisableCommunityChatGrouping">禁用社区会话合并展示</string>
+    <string name="CommunityAvatarTapAction">点击社区头像行为</string>
+    <string name="CommunityAvatarTapActionCommunity">始终打开社区</string>
+    <string name="CommunityAvatarTapActionChat">始终进入聊天</string>
+    <string name="CommunityAvatarTapActionArrow">仅在点击头像右下角箭头时打开社区页</string>
 </resources>

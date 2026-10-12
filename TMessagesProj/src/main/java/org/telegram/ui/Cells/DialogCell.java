@@ -211,15 +211,52 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
     public boolean isSavedDialogCell;
     public DialogCellTags tags;
 
+    private static final int COMMUNITY_AVATAR_TAP_CHAT = 0;
+    private static final int COMMUNITY_AVATAR_TAP_COMMUNITY = 1;
+    private static final int COMMUNITY_AVATAR_TAP_ARROW = 2;
+    private boolean communityArrowTouched;
+
+    private boolean usesCommunityAvatarSettings() {
+        return isDialogCell && parentFragment != null;
+    }
+
+    private boolean opensCommunityFromAvatar() {
+        if (NaConfig.INSTANCE.getDisableCommunityChatGrouping().Bool()) {
+            return false;
+        }
+        if (!usesCommunityAvatarSettings()) {
+            return true;
+        }
+        final int action = NaConfig.INSTANCE.getCommunityAvatarTapAction().Int();
+        return action == COMMUNITY_AVATAR_TAP_COMMUNITY || action == COMMUNITY_AVATAR_TAP_ARROW && communityArrowTouched;
+    }
+
+    private boolean drawsCommunityArrow() {
+        if (NaConfig.INSTANCE.getDisableCommunityChatGrouping().Bool()) {
+            return false;
+        }
+        return !usesCommunityAvatarSettings() || NaConfig.INSTANCE.getCommunityAvatarTapAction().Int() != COMMUNITY_AVATAR_TAP_CHAT;
+    }
+
     public final StoriesUtilities.AvatarStoryParams storyParams = new StoriesUtilities.AvatarStoryParams(false) {
         @Override
+        public boolean checkOnTouchEvent(MotionEvent event, View view) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                final float ccx = originalAvatarRect.centerX() + dp(20.33f);
+                final float ccy = originalAvatarRect.centerY() + dp(19);
+                communityArrowTouched = Math.abs(event.getX() - ccx) <= dp(10) && Math.abs(event.getY() - ccy) <= dp(10);
+            }
+            return super.checkOnTouchEvent(event, view);
+        }
+
+        @Override
         public boolean isAvatarClickable(long dialogId, TLRPC.Chat chat, TLRPC.User user) {
-            return (chat != null && chat.linked_community_id != 0 || user != null && user.linked_community_id != 0) && !insideCommunityList;
+            return (chat != null && chat.linked_community_id != 0 || user != null && user.linked_community_id != 0) && !insideCommunityList && opensCommunityFromAvatar();
         }
 
         @Override
         public boolean onAvatarClick(View view, long dialogId) {
-            if (parentFragment != null && !insideCommunityList) {
+            if (parentFragment != null && !insideCommunityList && opensCommunityFromAvatar()) {
                 if (dialogId > 0) {
                     final TLRPC.User user = MessagesController.getInstance(currentAccount).getUser(dialogId);
                     if (user != null && user.linked_community_id != 0) {
@@ -4897,7 +4934,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 storyParams.forceState = s;
             }
 
-            if (!insideCommunityList && (chat != null && chat.linked_community_id != 0 || user != null && user.linked_community_id != 0) && !drawCommunityAvatar && isDialogCell && !isDialogFolder()) {
+            if (!insideCommunityList && (chat != null && chat.linked_community_id != 0 || user != null && user.linked_community_id != 0) && !drawCommunityAvatar && isDialogCell && !isDialogFolder() && drawsCommunityArrow()) {
                 final float ccx = storyParams.originalAvatarRect.centerX() + dp(20.33f);
                 final float ccy = storyParams.originalAvatarRect.centerY() + dp(19);
                 if (communityArrowDrawable == null) {

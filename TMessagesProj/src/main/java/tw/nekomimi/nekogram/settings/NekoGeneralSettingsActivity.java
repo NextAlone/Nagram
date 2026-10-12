@@ -205,6 +205,12 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
     private final AbstractConfigCell mediaPreviewRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.mediaPreview));
     private final AbstractConfigCell showUserIconsInChatsListRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowUserIconsInChatsList()));
     private final AbstractConfigCell disableCommunityChatGroupingRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableCommunityChatGrouping()));
+    private final AbstractConfigCell communityAvatarTapActionRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NaConfig.INSTANCE.getCommunityAvatarTapAction(),
+            new String[]{
+                    LocaleController.getString(R.string.CommunityAvatarTapActionChat),
+                    LocaleController.getString(R.string.CommunityAvatarTapActionCommunity),
+                    LocaleController.getString(R.string.CommunityAvatarTapActionArrow),
+            }, null));
     private final AbstractConfigCell divider4 = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell header5 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Appearance")));

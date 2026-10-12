@@ -384,4 +384,8 @@
     <string name="SwitchStyleModern">モダンな</string>
     <string name="DisableChatListSwipeGesture">チャットリストのスワイプジェスチャーを無効にする</string>
     <string name="DisableCommunityChatGrouping">コミュニティチャットのグループ表示を無効化</string>
+    <string name="CommunityAvatarTapAction">コミュニティのアバターをタップしたとき</string>
+    <string name="CommunityAvatarTapActionCommunity">常にコミュニティを開く</string>
+    <string name="CommunityAvatarTapActionChat">常にチャットを開く</string>
+    <string name="CommunityAvatarTapActionArrow">右下の矢印をタップした場合のみコミュニティを開く</string>
 </resources>

@@ -1461,6 +1461,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val communityAvatarTapAction =
+        addConfig(
+            "CommunityAvatarTapAction",
+            ConfigItem.configTypeInt,
+            1
+        )
 
     private fun addConfig(
         k: String,
