@@ -186,6 +186,7 @@ import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.R;
+import org.telegram.messenger.RichMessageLayout;
 import org.telegram.messenger.SecretChatHelper;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
@@ -40805,9 +40806,44 @@ public class ChatActivity extends BaseFragment implements
             if (cell == null || document == null || getParentLayout() == null || !canSaveRichDocument(cell)) {
                 return;
             }
-            ItemOptions.makeOptions(ChatActivity.this, cell)
-                .add(R.drawable.msg_download, getString(R.string.SaveToDownloads), () -> saveRichDocument(cell, document))
-                .setDrawScrim(false)
+            File richDocFile = FileLoader.getInstance(currentAccount).getPathToAttach(document, true);
+            final boolean richDocExists = NekoConfig.showDeleteDownloadedFile.Bool() && richDocFile != null && richDocFile.exists();
+            ItemOptions options = ItemOptions.makeOptions(ChatActivity.this, cell)
+                .add(R.drawable.msg_download, getString(R.string.SaveToDownloads), () -> saveRichDocument(cell, document));
+            if (richDocExists) {
+                options.add(R.drawable.msg_clear, getString(R.string.DeleteDownloadedFile), () -> {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                    builder.setTitle(LocaleController.getString("DeleteDownloadedFile"));
+                    builder.setMessage(LocaleController.getString("DeleteDownloadedFileConfirm"));
+                    builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
+                        if (richDocFile.getAbsolutePath().startsWith(EnvUtil.getTelegramPath().getAbsolutePath())) {
+                            try {
+                                richDocFile.delete();
+                            } catch (Exception ignore) {
+                                richDocFile.deleteOnExit();
+                            }
+                            FileLoader.getInstance(currentAccount).cancelLoadFile(document);
+                            if (cell.getMessageObject() != null && cell.getMessageObject().richLayout != null) {
+                                for (int bi = 0; bi < cell.getMessageObject().richLayout.blocks.size(); bi++) {
+                                    RichMessageLayout.RichBlock richBlock = cell.getMessageObject().richLayout.blocks.get(bi);
+                                    if (richBlock instanceof RichMessageLayout.RichDocumentBlock) {
+                                        RichMessageLayout.RichDocumentBlock docBlock = (RichMessageLayout.RichDocumentBlock) richBlock;
+                                        if (docBlock.block != null && docBlock.block.document_id == document.id) {
+                                            docBlock.updateButtonState(true);
+                                        }
+                                    }
+                                }
+                            }
+                            Toast.makeText(getParentActivity(), LocaleController.getString("DeleteDownloadedFileSucceed"), Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getParentActivity(), LocaleController.getString("DeleteDownloadedFileExternal"), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    builder.setNegativeButton(LocaleController.getString("Cancel"), (dialog, which) -> {});
+                    builder.show();
+                });
+            }
+            options.setDrawScrim(false)
                 .show();
         }
 
