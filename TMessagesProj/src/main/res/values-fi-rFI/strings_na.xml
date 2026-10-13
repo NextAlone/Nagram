@@ -383,4 +383,23 @@
     <string name="SwitchStyleTelegram">Telegram</string>
     <string name="SwitchStyleModern">Moderni</string>
     <string name="DisableChatListSwipeGesture">Poista chat-listan pyyhkäisy ele käytöstä</string>
+    <string name="GlobalDisableLinkPreviews">Poista linkkien esikatselut käytöstä</string>
+    <string name="RegistrationDateApproximately">Noin %s</string>
+    <string name="RegistrationDateOlder">Vanhemmat kuin %s</string>
+    <string name="RegistrationDateNewer">Enemmän kuin %s</string>
+    <string name="AlwaysSendVideosInHD">Lähetä aina videoita HD</string>
+    <string name="ShowChannelIcon">Näytä kuvake kanavan alias sijasta</string>
+    <string name="HideSideShareButton">Piilota sivujako-painike</string>
+    <string name="AskBeforeSendingSticker">Kysy ennen tarran lähettämistä</string>
+    <string name="ConfirmSendSticker">Vahvista lähettävä tarra</string>
+    <string name="ConfirmSendStickerText">Haluatko lähettää tämän tarran?</string>
+    <string name="KeepFormatting">Jatka alustusta</string>
+    <string name="AskBeforeSendingGIF">Kysy ennen GIF-lähetystä</string>
+    <string name="ConfirmSendGIF">Vahvista GIF:n lähetys</string>
+    <string name="ConfirmSendGIFText">Haluatko lähettää tämän GIF?</string>
+    <string name="DisableCommunityChatGrouping">Poista Yhteisön Keskustelujen Ryhmittely</string>
+    <string name="CommunityAvatarTapAction">Yhteisön Avatar Napautuksen Toiminto</string>
+    <string name="CommunityAvatarTapActionCommunity">Avaa Aina</string>
+    <string name="CommunityAvatarTapActionChat">Avaa Keskustelu Aina</string>
+    <string name="CommunityAvatarTapActionArrow">Avaa yhteisö vain alaoikeanpuoleisella nuolella</string>
 </resources>

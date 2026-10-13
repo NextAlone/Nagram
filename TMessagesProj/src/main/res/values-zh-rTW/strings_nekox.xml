@@ -196,7 +196,6 @@
     <string name="StorageResetInfo">該應用程式的所有資料將被永久刪除 (並先嘗試登出所有帳號)。</string>
     <string name="FCTitle">關於本應用之更新</string>
     <string name="FCInfo">要跟隨我們的公告與更新頻道嗎 ？?</string>
-    <string name="OpenCC" translatable="false">OpenCC</string>
     <string name="CCTitle">OpenCC (簡繁轉換)</string>
     <string name="CCTarget">目標</string>
     <string name="CCNo">無</string>
@@ -281,4 +280,22 @@
     <string name="InteractionSettings">互動</string>
     <string name="localPremium">本地大會員</string>
     <string name="nekoxPremiumGiftRemoved">大會員在 NekoX 中被刪除。</string>
+    <string name="ReactionSettings">Reaction</string>
+    <string name="doubleTapAndReactions">Double tap</string>
+    <string name="doubleTapShowReactionsMenu">Show reactions menu</string>
+    <string name="doubleTapSendReaction">Send reaction</string>
+    <string name="doubleTapDisable">Disable</string>
+    <string name="disableReactionsWhenSelecting">Hide reactions while selecting</string>
+    <string name="UpgradeGroup">Upgrade Group</string>
+    <string name="AccDescrShowKeyboard">Show keyboard</string>
+    <string name="ConvertGroupAlertWarning">Warning</string>
+    <string name="ConvertGroupAlert">This action is irreversible. It is not possible to downgrade a supergroup to a regular group.</string>
+    <string name="SharedPhotosAndVideos">Photos and videos</string>
+    <string name="StickersAndMasks">Stickers and Masks</string>
+    <string name="UnofficialApp">unofficial app</string>
+    <string name="FileUploadLimit">File size shouldn\'t be greater than %1$s</string>
+    <string name="NoFilesInfo">This folder is empty.</string>
+    <string name="SearchRecentFiles">Search Recent Files</string>
+    <string name="NoFilesFoundInfo">There are no matches with **%1$s** in current directory.</string>
+    <string name="EmojiUseDefault">Use system default emoji</string>
 </resources>

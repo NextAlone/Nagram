@@ -383,4 +383,23 @@
     <string name="SwitchStyleTelegram">Telegram</string>
     <string name="SwitchStyleModern">Moderne</string>
     <string name="DisableChatListSwipeGesture">Deaktivér chatliste strygebevægelse</string>
+    <string name="GlobalDisableLinkPreviews">Global deaktiver link forhåndsvisninger</string>
+    <string name="RegistrationDateApproximately">Cirka %s</string>
+    <string name="RegistrationDateOlder">Ældre end %s</string>
+    <string name="RegistrationDateNewer">Nyere end %s</string>
+    <string name="AlwaysSendVideosInHD">Send altid videoer i HD</string>
+    <string name="ShowChannelIcon">Vis ikon i stedet for kanalalias</string>
+    <string name="HideSideShareButton">Skjul side share knap</string>
+    <string name="AskBeforeSendingSticker">Spørg før afsendelse af klistermærke</string>
+    <string name="ConfirmSendSticker">Bekræft afsendelse af klistermærke</string>
+    <string name="ConfirmSendStickerText">Vil du sende dette klistermærke?</string>
+    <string name="KeepFormatting">Behold formatering</string>
+    <string name="AskBeforeSendingGIF">Spørg før du sender GIF</string>
+    <string name="ConfirmSendGIF">Bekræft afsendelse af GIF</string>
+    <string name="ConfirmSendGIFText">Vil du sende denne GIF?</string>
+    <string name="DisableCommunityChatGrouping">Deaktivér Community Chat Gruppering</string>
+    <string name="CommunityAvatarTapAction">Tap Handling På Community Avatar</string>
+    <string name="CommunityAvatarTapActionCommunity">Åbn Altid Fællesskab</string>
+    <string name="CommunityAvatarTapActionChat">Åbn Altid Chat</string>
+    <string name="CommunityAvatarTapActionArrow">Åbn kun fællesskabet med pil nederst til højre</string>
 </resources>

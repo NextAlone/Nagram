@@ -383,4 +383,23 @@
     <string name="SwitchStyleTelegram">Telegram</string>
     <string name="SwitchStyleModern">Moderno</string>
     <string name="DisableChatListSwipeGesture">Desativar gesto de deslizar lista de bate-papo</string>
+    <string name="GlobalDisableLinkPreviews">Pré-visualizações de links desativadas globais</string>
+    <string name="RegistrationDateApproximately">Aproximadamente %s</string>
+    <string name="RegistrationDateOlder">Mais antigo que %s</string>
+    <string name="RegistrationDateNewer">Mais recente que %s</string>
+    <string name="AlwaysSendVideosInHD">Sempre enviar vídeos em HD</string>
+    <string name="ShowChannelIcon">Mostrar ícone em vez do pseudônimo do canal</string>
+    <string name="HideSideShareButton">Ocultar botão lateral de compartilhamento</string>
+    <string name="AskBeforeSendingSticker">Perguntar antes de enviar sticker</string>
+    <string name="ConfirmSendSticker">Confirmar envio de sticker</string>
+    <string name="ConfirmSendStickerText">Você quer enviar este sticker?</string>
+    <string name="KeepFormatting">Continuar formatando</string>
+    <string name="AskBeforeSendingGIF">Perguntar antes de enviar GIF</string>
+    <string name="ConfirmSendGIF">Confirmar envio de GIF</string>
+    <string name="ConfirmSendGIFText">Você quer enviar este GIF?</string>
+    <string name="DisableCommunityChatGrouping">Desativar agrupamento de bate-papo da comunidade</string>
+    <string name="CommunityAvatarTapAction">Ação de toque em Avatar da Comunidade</string>
+    <string name="CommunityAvatarTapActionCommunity">Sempre Abrir Comunidade</string>
+    <string name="CommunityAvatarTapActionChat">Sempre Abrir Chat</string>
+    <string name="CommunityAvatarTapActionArrow">Abrir comunidade apenas com a seta inferior direita</string>
 </resources>

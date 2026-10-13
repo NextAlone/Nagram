@@ -383,4 +383,23 @@
     <string name="SwitchStyleTelegram">Telegram</string>
     <string name="SwitchStyleModern">Nowoczesny</string>
     <string name="DisableChatListSwipeGesture">Wyłącz gesty przeciągania listy czatów</string>
+    <string name="GlobalDisableLinkPreviews">Globalne wyłącz podgląd linków</string>
+    <string name="RegistrationDateApproximately">Około %s</string>
+    <string name="RegistrationDateOlder">Starsze niż %s</string>
+    <string name="RegistrationDateNewer">Nowsze niż %s</string>
+    <string name="AlwaysSendVideosInHD">Zawsze wysyłaj filmy w HD</string>
+    <string name="ShowChannelIcon">Pokaż ikonę zamiast aliasu kanału</string>
+    <string name="HideSideShareButton">Ukryj boczny przycisk udostępniania</string>
+    <string name="AskBeforeSendingSticker">Zapytaj przed wysłaniem naklejki</string>
+    <string name="ConfirmSendSticker">Potwierdź wysyłanie naklejki</string>
+    <string name="ConfirmSendStickerText">Czy chcesz wysłać tę naklejkę?</string>
+    <string name="KeepFormatting">Zachowaj formatowanie</string>
+    <string name="AskBeforeSendingGIF">Zapytaj przed wysłaniem GIF</string>
+    <string name="ConfirmSendGIF">Potwierdź wysyłanie GIF</string>
+    <string name="ConfirmSendGIFText">Czy chcesz wysłać ten GIF?</string>
+    <string name="DisableCommunityChatGrouping">Wyłącz grupowanie czatów społecznościowych</string>
+    <string name="CommunityAvatarTapAction">Akcja dotknięcia awatara społeczności</string>
+    <string name="CommunityAvatarTapActionCommunity">Zawsze otwieraj społeczność</string>
+    <string name="CommunityAvatarTapActionChat">Zawsze otwieraj czat</string>
+    <string name="CommunityAvatarTapActionArrow">Otwórz społeczność tylko za pomocą dolnej prawej strzałki</string>
 </resources>

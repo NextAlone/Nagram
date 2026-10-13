@@ -383,4 +383,23 @@
     <string name="SwitchStyleTelegram">Telegramm</string>
     <string name="SwitchStyleModern">Modern</string>
     <string name="DisableChatListSwipeGesture">Wischgeste der Chat-Liste deaktivieren</string>
+    <string name="GlobalDisableLinkPreviews">Globale Link-Vorschau deaktivieren</string>
+    <string name="RegistrationDateApproximately">Ungefähr %s</string>
+    <string name="RegistrationDateOlder">Älter als %s</string>
+    <string name="RegistrationDateNewer">Neuere als %s</string>
+    <string name="AlwaysSendVideosInHD">Videos immer in HD senden</string>
+    <string name="ShowChannelIcon">Symbol statt Kanal-Alias anzeigen</string>
+    <string name="HideSideShareButton">Seiten-Freigabe-Button ausblenden</string>
+    <string name="AskBeforeSendingSticker">Vor dem Senden des Aufklebers fragen</string>
+    <string name="ConfirmSendSticker">Senden des Aufklebers bestätigen</string>
+    <string name="ConfirmSendStickerText">Möchten Sie diesen Aufkleber senden?</string>
+    <string name="KeepFormatting">Formatierung beibehalten</string>
+    <string name="AskBeforeSendingGIF">Vor dem Senden von GIF fragen</string>
+    <string name="ConfirmSendGIF">Senden von GIF bestätigen</string>
+    <string name="ConfirmSendGIFText">Möchten Sie dieses GIF senden?</string>
+    <string name="DisableCommunityChatGrouping">Community-Chat-Gruppierung deaktivieren</string>
+    <string name="CommunityAvatarTapAction">Community-Avatar Tipp-Aktion</string>
+    <string name="CommunityAvatarTapActionCommunity">Community immer öffnen</string>
+    <string name="CommunityAvatarTapActionChat">Chat immer öffnen</string>
+    <string name="CommunityAvatarTapActionArrow">Community nur mit dem Pfeil unten rechts öffnen</string>
 </resources>

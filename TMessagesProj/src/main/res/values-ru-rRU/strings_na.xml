@@ -383,4 +383,23 @@
     <string name="SwitchStyleTelegram">Телеграмма</string>
     <string name="SwitchStyleModern">Современный</string>
     <string name="DisableChatListSwipeGesture">Отключить жест в списке чатов</string>
+    <string name="GlobalDisableLinkPreviews">Предпросмотр выкл. ссылок в мире</string>
+    <string name="RegistrationDateApproximately">Приблизительно %s</string>
+    <string name="RegistrationDateOlder">Старше, чем %s</string>
+    <string name="RegistrationDateNewer">Новее, чем %s</string>
+    <string name="AlwaysSendVideosInHD">Всегда отправлять видео в HD</string>
+    <string name="ShowChannelIcon">Показывать иконку вместо псевдонима канала</string>
+    <string name="HideSideShareButton">Скрыть боковую кнопку</string>
+    <string name="AskBeforeSendingSticker">Спрашивать перед отправкой стикера</string>
+    <string name="ConfirmSendSticker">Подтвердите отправку стикера</string>
+    <string name="ConfirmSendStickerText">Вы хотите отправить этот стикер?</string>
+    <string name="KeepFormatting">Сохранить форматирование</string>
+    <string name="AskBeforeSendingGIF">Спрашивать перед отправкой GIF</string>
+    <string name="ConfirmSendGIF">Подтвердите отправку GIF</string>
+    <string name="ConfirmSendGIFText">Вы хотите отправить этот GIF?</string>
+    <string name="DisableCommunityChatGrouping">Отключить группировку групповых чатов</string>
+    <string name="CommunityAvatarTapAction">Нажмите на Аватар сообщества</string>
+    <string name="CommunityAvatarTapActionCommunity">Всегда открывать сообщество</string>
+    <string name="CommunityAvatarTapActionChat">Всегда открывать чат</string>
+    <string name="CommunityAvatarTapActionArrow">Открыть сообщество только с помощью нижней правой стрелки</string>
 </resources>

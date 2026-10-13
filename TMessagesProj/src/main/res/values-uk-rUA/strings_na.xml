@@ -383,4 +383,23 @@
     <string name="SwitchStyleTelegram">Телеграма</string>
     <string name="SwitchStyleModern">Модерн</string>
     <string name="DisableChatListSwipeGesture">Вимкнути жест в списку чату</string>
+    <string name="GlobalDisableLinkPreviews">Глобальне подання посилань</string>
+    <string name="RegistrationDateApproximately">Приблизно %s</string>
+    <string name="RegistrationDateOlder">Older than %s</string>
+    <string name="RegistrationDateNewer">Newer than %s</string>
+    <string name="AlwaysSendVideosInHD">Завжди надсилати відео в HD</string>
+    <string name="ShowChannelIcon">Показувати значок замість псевдоніма каналу</string>
+    <string name="HideSideShareButton">Приховати кнопку Поділитися з боком</string>
+    <string name="AskBeforeSendingSticker">Запитати перед надсиланням наклейки</string>
+    <string name="ConfirmSendSticker">Підтвердіть відправку стікерів</string>
+    <string name="ConfirmSendStickerText">Бажаєте відправити цю наклейку?</string>
+    <string name="KeepFormatting">Зберігати форматування</string>
+    <string name="AskBeforeSendingGIF">Запитати перед надсиланням GIF</string>
+    <string name="ConfirmSendGIF">Підтвердити надсилання GIF</string>
+    <string name="ConfirmSendGIFText">Ви хочете надіслати цей GIF?</string>
+    <string name="DisableCommunityChatGrouping">Вимкнути групування чатів спільноти</string>
+    <string name="CommunityAvatarTapAction">Дія під час дотику спільноти</string>
+    <string name="CommunityAvatarTapActionCommunity">Завжди відкривати спільноту</string>
+    <string name="CommunityAvatarTapActionChat">Завжди відкривати чат</string>
+    <string name="CommunityAvatarTapActionArrow">Відкрити Спільноту лише з правою стрілою внизу</string>
 </resources>

@@ -383,4 +383,23 @@
     <string name="SwitchStyleTelegram">Telegram</string>
     <string name="SwitchStyleModern">Moderní</string>
     <string name="DisableChatListSwipeGesture">Zakázat gesto přejetím chatu</string>
+    <string name="GlobalDisableLinkPreviews">Globální zakázat náhledy odkazů</string>
+    <string name="RegistrationDateApproximately">Přibližně %s</string>
+    <string name="RegistrationDateOlder">Starší než %s</string>
+    <string name="RegistrationDateNewer">Novější než %s</string>
+    <string name="AlwaysSendVideosInHD">Vždy posílat videa v HD</string>
+    <string name="ShowChannelIcon">Zobrazit ikonu namísto aliasu kanálu</string>
+    <string name="HideSideShareButton">Skrýt tlačítko bočního sdílení</string>
+    <string name="AskBeforeSendingSticker">Zeptat se před odesláním samolepky</string>
+    <string name="ConfirmSendSticker">Potvrdit odeslání nálepky</string>
+    <string name="ConfirmSendStickerText">Chcete tuto samolepku odeslat?</string>
+    <string name="KeepFormatting">Pokračovat ve formátování</string>
+    <string name="AskBeforeSendingGIF">Zeptat se před odesláním GIF</string>
+    <string name="ConfirmSendGIF">Potvrdit odesílání GIF</string>
+    <string name="ConfirmSendGIFText">Chcete odeslat tento GIF?</string>
+    <string name="DisableCommunityChatGrouping">Zakázat skupinování komunitních konverzací</string>
+    <string name="CommunityAvatarTapAction">Akce klepnutí na Avatar komunity</string>
+    <string name="CommunityAvatarTapActionCommunity">Vždy otevřít komunitu</string>
+    <string name="CommunityAvatarTapActionChat">Vždy otevřít chat</string>
+    <string name="CommunityAvatarTapActionArrow">Otevřít komunitu pouze pomocí šipky vpravo dole</string>
 </resources>

@@ -383,4 +383,23 @@
     <string name="SwitchStyleTelegram">Telegram</string>
     <string name="SwitchStyleModern">Moderne</string>
     <string name="DisableChatListSwipeGesture">Deaktiver sludreliste swipe bevegelse</string>
+    <string name="GlobalDisableLinkPreviews">Global deaktiver link forhåndsvisninger</string>
+    <string name="RegistrationDateApproximately">Ca %s</string>
+    <string name="RegistrationDateOlder">Eldre enn %s</string>
+    <string name="RegistrationDateNewer">Nyere enn %s</string>
+    <string name="AlwaysSendVideosInHD">Alltid send videoer i HD</string>
+    <string name="ShowChannelIcon">Vis ikon i stedet for kanalalias</string>
+    <string name="HideSideShareButton">Skjul knapp for deling av siden</string>
+    <string name="AskBeforeSendingSticker">Spør før sender klistremerke</string>
+    <string name="ConfirmSendSticker">Bekreft sending av klistremerke</string>
+    <string name="ConfirmSendStickerText">Vil du sende dette klistremerket?</string>
+    <string name="KeepFormatting">Behold formatering</string>
+    <string name="AskBeforeSendingGIF">Spør før du sender GIF</string>
+    <string name="ConfirmSendGIF">Bekreft sending av GIF</string>
+    <string name="ConfirmSendGIFText">Vil du sende denne GIF-en?</string>
+    <string name="DisableCommunityChatGrouping">Deaktiver felleskaps gruppering</string>
+    <string name="CommunityAvatarTapAction">Handling for samfunns profilbilde</string>
+    <string name="CommunityAvatarTapActionCommunity">Alltid åpne fellesskap</string>
+    <string name="CommunityAvatarTapActionChat">Alltid åpne chat</string>
+    <string name="CommunityAvatarTapActionArrow">Åpne samfunnet, kun med nederste høyre pil</string>
 </resources>

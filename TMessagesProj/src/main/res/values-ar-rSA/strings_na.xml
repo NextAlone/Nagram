@@ -383,4 +383,23 @@
     <string name="SwitchStyleTelegram">تيليجرام</string>
     <string name="SwitchStyleModern">حديث</string>
     <string name="DisableChatListSwipeGesture">تعطيل إيماءة تمرير قائمة الدردشة</string>
+    <string name="GlobalDisableLinkPreviews">تعطيل عالمية معاينات الرابط</string>
+    <string name="RegistrationDateApproximately">تقريبًا %s</string>
+    <string name="RegistrationDateOlder">أقدم من %s</string>
+    <string name="RegistrationDateNewer">الأحدث من %s</string>
+    <string name="AlwaysSendVideosInHD">إرسال مقاطع الفيديو دائما في HD</string>
+    <string name="ShowChannelIcon">إظهار الرمز بدلاً من الاسم المستعار للقناة</string>
+    <string name="HideSideShareButton">إخفاء زر المشاركة الجانبية</string>
+    <string name="AskBeforeSendingSticker">السؤال قبل إرسال الملصق</string>
+    <string name="ConfirmSendSticker">تأكيد إرسال ملصق</string>
+    <string name="ConfirmSendStickerText">هل تريد إرسال هذا الملصق؟</string>
+    <string name="KeepFormatting">الحفاظ على التنسيق</string>
+    <string name="AskBeforeSendingGIF">السؤال قبل إرسال GIF</string>
+    <string name="ConfirmSendGIF">تأكيد إرسال GIF</string>
+    <string name="ConfirmSendGIFText">هل تريد إرسال GIF؟</string>
+    <string name="DisableCommunityChatGrouping">تعطيل تجميع دردشة المجتمع</string>
+    <string name="CommunityAvatarTapAction">إجراء الضغط على الصورة الرمزية للمجتمع</string>
+    <string name="CommunityAvatarTapActionCommunity">المجتمع مفتوح دائمًا</string>
+    <string name="CommunityAvatarTapActionChat">فتح الدردشة دائمًا</string>
+    <string name="CommunityAvatarTapActionArrow">فتح المجتمع فقط مع السهم أسفل اليمين</string>
 </resources>

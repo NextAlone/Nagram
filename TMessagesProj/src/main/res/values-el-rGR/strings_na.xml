@@ -383,4 +383,23 @@
     <string name="SwitchStyleTelegram">Telegram</string>
     <string name="SwitchStyleModern">Μοντέρνο</string>
     <string name="DisableChatListSwipeGesture">Απενεργοποίηση χειρονομίας σάρωσης λίστας συνομιλίας</string>
+    <string name="GlobalDisableLinkPreviews">Καθολική απενεργοποίηση προεπισκοπήσεων συνδέσμων</string>
+    <string name="RegistrationDateApproximately">Περίπου %s</string>
+    <string name="RegistrationDateOlder">Παλαιότερα από %s</string>
+    <string name="RegistrationDateNewer">Νεότερο από %s</string>
+    <string name="AlwaysSendVideosInHD">Πάντα αποστολή βίντεο σε HD</string>
+    <string name="ShowChannelIcon">Εμφάνιση εικονιδίου αντί για ψευδώνυμο καναλιού</string>
+    <string name="HideSideShareButton">Απόκρυψη πλευρικού κουμπιού κοινοποίησης</string>
+    <string name="AskBeforeSendingSticker">Ερώτηση πριν την αποστολή αυτοκόλλητου</string>
+    <string name="ConfirmSendSticker">Επιβεβαίωση αποστολής αυτοκόλλητου</string>
+    <string name="ConfirmSendStickerText">Θέλετε να στείλετε αυτό το αυτοκόλλητο?</string>
+    <string name="KeepFormatting">Διατήρηση μορφοποίησης</string>
+    <string name="AskBeforeSendingGIF">Ερώτηση πριν την αποστολή του GIF</string>
+    <string name="ConfirmSendGIF">Επιβεβαίωση αποστολής GIF</string>
+    <string name="ConfirmSendGIFText">Θέλετε να στείλετε αυτό το GIF?</string>
+    <string name="DisableCommunityChatGrouping">Απενεργοποίηση Κοινοτικής Συνομιλίας</string>
+    <string name="CommunityAvatarTapAction">Ενέργεια Αβατάρ Κοινότητας</string>
+    <string name="CommunityAvatarTapActionCommunity">Πάντα Άνοιγμα Κοινότητας</string>
+    <string name="CommunityAvatarTapActionChat">Άνοιγμα Συνομιλίας Πάντα</string>
+    <string name="CommunityAvatarTapActionArrow">Άνοιγμα Κοινότητας μόνο με το Βέλος Κάτω Δεξιάς</string>
 </resources>

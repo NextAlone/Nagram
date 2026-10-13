@@ -383,4 +383,23 @@
     <string name="SwitchStyleTelegram">Telegramă</string>
     <string name="SwitchStyleModern">Modern</string>
     <string name="DisableChatListSwipeGesture">Dezactivează gestul de glisare a listei de chat</string>
+    <string name="GlobalDisableLinkPreviews">Previzualizări globale link-uri dezactivate</string>
+    <string name="RegistrationDateApproximately">Aproximativ %s</string>
+    <string name="RegistrationDateOlder">Mai vechi decât %s</string>
+    <string name="RegistrationDateNewer">Mai nou decât %s</string>
+    <string name="AlwaysSendVideosInHD">Trimite întotdeauna videoclipuri în HD</string>
+    <string name="ShowChannelIcon">Arată pictograma în locul aliasului canalului</string>
+    <string name="HideSideShareButton">Ascunde butonul de partajare lateral</string>
+    <string name="AskBeforeSendingSticker">Întreabă înainte de a trimite sticker</string>
+    <string name="ConfirmSendSticker">Confirmă trimiterea autocolantului</string>
+    <string name="ConfirmSendStickerText">Vrei să trimiți acest sticker?</string>
+    <string name="KeepFormatting">Continuă formatarea</string>
+    <string name="AskBeforeSendingGIF">Întreabă înainte de a trimite GIF</string>
+    <string name="ConfirmSendGIF">Confirmă trimiterea GIF</string>
+    <string name="ConfirmSendGIFText">Vrei să trimiți acest GIF?</string>
+    <string name="DisableCommunityChatGrouping">Dezactivează gruparea Chat în Comunitate</string>
+    <string name="CommunityAvatarTapAction">Acțiunea de atingere a avatarului comunitar</string>
+    <string name="CommunityAvatarTapActionCommunity">Deschideți mereu comunitatea</string>
+    <string name="CommunityAvatarTapActionChat">Deschideți mereu Chat</string>
+    <string name="CommunityAvatarTapActionArrow">Deschide comunitatea doar cu săgeata de jos</string>
 </resources>

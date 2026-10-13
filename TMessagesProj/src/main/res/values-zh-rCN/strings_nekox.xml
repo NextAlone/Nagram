@@ -47,7 +47,7 @@
     <string name="TransToLang">目标翻译语言</string>
     <string name="TransInputToLang">输入翻译目标语言</string>
     <string name="More">更多</string>
-    <string name="NekoXUpdatesChannel">Nagram 更新频道</string>
+    <string name="NekoXUpdatesChannel">Nagram更新频道</string>
     <string name="ShowIdAndDc">在个人资料中显示 ID/ DC</string>
     <string name="UseDefaultTheme">使用默认主题 *</string>
     <string name="NightMode">夜间模式</string>
@@ -87,7 +87,7 @@
     <string name="SortByUnmuted">允许通知优先排序</string>
     <string name="SortByUser">用户优先排序</string>
     <string name="SortByContacts">联系人优先排序</string>
-    <string name="NekoXPushService">Nagram 通知服务</string>
+    <string name="NekoXPushService">Nagram推送服务</string>
     <string name="EnablePushAlert">请启用 \"Nagram 通知服务\"</string>
     <string name="DisablePushAlert">请禁用 \"Nagram 通知服务\"</string>
     <string name="DisableUndo">禁用五秒内后悔</string>
@@ -181,6 +181,7 @@
     <string name="PGPImport">导入公钥</string>
     <string name="PGPImportPrivate">导入私钥</string>
     <string name="ShareMyKey">分享我的公钥</string>
+    <string name="ShareMessages">分享</string>
     <string name="DisableVibration">禁用振动</string>
     <string name="IgnoreContentRestrictions">忽略内容限制</string>
     <string name="IgnoreContentRestrictionsNotice">忽略本地消息的 Android 限制。 这可能会在将来被服务器禁止，您需要自己评估此选项的本地合法性。</string>
@@ -214,19 +215,16 @@
     <string name="TextReplace">替换</string>
     <string name="ReplaceRegex">正则表达式</string>
     <string name="DisableTrending">禁用趋势推荐</string>
-    <string name="HideDeviceInfo">隐藏设备型号</string>
-    <string name="HideDeviceInfoOff">设备型号将在登录后的应用第二次启动时上载。</string>
-    <string name="HideDeviceInfoOn">您可以稍后在设置中进行更改此。</string>
-    <string name="ArchiveFiles">压缩文件</string>
-    <string name="Win32ExecutableFiles">Win32 可执行文件</string>
     <string name="AutoDownload">自动下载</string>
-    <string name="SetPinnedSuffix">(置顶)</string>
-    <string name="UnpinSticker">取消置顶</string>
-    <string name="PinSticker">置顶</string>
-    <string name="EnableStickerPinTip">此功能仍在开发中，云同步可能无法正常工作。</string>
+    <string name="Win32ExecutableFiles">Win32 可执行文件</string>
+    <string name="ArchiveFiles">压缩文件</string>
+    <string name="EnableStickerPin">启用贴纸集置顶</string>
     <string name="EnableStickerPinAbout">固定贴纸并在添加新贴纸时与云同步。
 \n与 \"禁用收藏夹和最近\" 配对。</string>
-    <string name="EnableStickerPin">启用贴纸集置顶</string>
+    <string name="EnableStickerPinTip">此功能仍在开发中，云同步可能无法正常工作。</string>
+    <string name="PinSticker">置顶</string>
+    <string name="UnpinSticker">取消置顶</string>
+    <string name="SetPinnedSuffix">(置顶)</string>
     <string name="AppLinkFDroid">F-Droid</string>
     <string name="UsePersiancalendar">使用伊朗历</string>
     <string name="UsePersiancalendarInfo">用太阳回历显示日期</string>
@@ -235,21 +233,22 @@
     <string name="ProxyInfoWS">WebSocket 中继设置</string>
     <string name="WsPayload">负载</string>
     <string name="AutoLockImmediately">立即</string>
-    <string name="ImportSettings">导入设置</string>
     <string name="BackupSettings">备份设置</string>
+    <string name="ImportSettings">导入设置</string>
     <string name="ImportSettingsAlert">确定要覆盖设置吗？从未知来源导入设置可能导致PIN被覆盖从而导致应用被锁定。</string>
-    <string name="AutoCheckUpdateRc">候选版</string>
-    <string name="AutoCheckUpdateStable">稳定版</string>
-    <string name="AutoCheckUpdateSwitch">自动更新</string>
-    <string name="AutoCheckUpdateOFF">关闭</string>
-    <string name="VersionUpdateNoUpdate">无更新。</string>
-    <string name="VersionUpdateNotNow">以后再说</string>
-    <string name="VersionUpdateIgnore">忽略</string>
-    <string name="VersionUpdateConfirm">更新</string>
+    <string name="nekoXPaymentRemovedToast">支付功能已被移除。</string>
+    <string name="VersionUpdateTitle">新版本可用</string>
     <string name="VersionUpdateVariantNotMatch">版本自动检测失败，
 \n请手动从GitHub下载。</string>
-    <string name="VersionUpdateTitle">新版本可用</string>
-    <string name="nekoXPaymentRemovedToast">支付功能已被移除。</string>
+    <string name="VersionUpdateConfirm">更新</string>
+    <string name="VersionUpdateIgnore">忽略</string>
+    <string name="VersionUpdateNotNow">以后再说</string>
+    <string name="VersionUpdateNoUpdate">无更新。</string>
+    <string name="AutoCheckUpdateOFF">关闭</string>
+    <string name="AutoCheckUpdateSwitch">自动更新</string>
+    <string name="AutoCheckUpdateStable">稳定版</string>
+    <string name="AutoCheckUpdateRc">候选版</string>
+    <string name="AutoCheckUpdatePreview">预览版(不稳定)</string>
     <string name="unreadBadgeOnBackButton">聊天窗口返回按钮上显示未读数</string>
     <string name="customPublicProxyIP">设置公共代理的 IP</string>
     <string name="customPublicProxyIPNotice">在某些地区，指定公共代理 CDN (例如 Cloudflare) 的 IP 可以加快访问速度。</string>
@@ -265,18 +264,16 @@
 \n使用头像作为背景
 \n使用大只头像作为背景</string>
     <string name="hideSponsoredMessage">隐藏赞助消息</string>
+    <string name="rememberAllBackMessages">记住已点击的回复</string>
     <string name="DisableInstantCamera">禁用相机即时预览</string>
     <string name="showSeconds">以秒为单位显示时间戳</string>
-    <string name="rememberAllBackMessages">记住已点击的回复</string>
-    <string name="ShareMessages">分享</string>
-    <string name="AutoCheckUpdatePreview">预览版(不稳定)</string>
     <string name="AppUpdateNekoX">更新 Nagram</string>
     <string name="NekoXUpdateTranslationHint">长按以翻译更新日志</string>
-    <string name="channelAlias">频道别名</string>
-    <string name="labelChannelUser">标记频道匿名身份别名</string>
-    <string name="setChannelAliasName">标记别名</string>
-    <string name="channelAliasDetails">需启用标记频道匿名身份别名。</string>
     <string name="Name">输入别名</string>
+    <string name="channelAlias">频道别名</string>
+    <string name="channelAliasDetails">需启用标记频道匿名身份别名。</string>
+    <string name="setChannelAliasName">标记别名</string>
+    <string name="labelChannelUser">标记频道匿名身份别名</string>
     <string name="labelChannelUserDetails">以频道匿名身份发言的用户将标记为“频道”。</string>
     <string name="StickerSettings">贴纸</string>
     <string name="ConfirmSettings">操作确认</string>
@@ -289,4 +286,16 @@
     <string name="doubleTapSendReaction">发送默认回应</string>
     <string name="doubleTapDisable">禁用</string>
     <string name="disableReactionsWhenSelecting">选择消息时隐藏回应菜单</string>
+    <string name="UpgradeGroup">升级群组</string>
+    <string name="AccDescrShowKeyboard">显示键盘</string>
+    <string name="ConvertGroupAlertWarning">警告</string>
+    <string name="ConvertGroupAlert">此操作是不可逆的。无法将超级群组降级为常规群组。</string>
+    <string name="SharedPhotosAndVideos">照片和视频</string>
+    <string name="StickersAndMasks">贴纸和面具</string>
+    <string name="UnofficialApp">非官方应用</string>
+    <string name="FileUploadLimit">文件大小不应大于 %1$s</string>
+    <string name="NoFilesInfo">此文件夹为空。</string>
+    <string name="SearchRecentFiles">搜索最近的文件</string>
+    <string name="NoFilesFoundInfo">当前目录中没有匹配的 **%1$s**。</string>
+    <string name="EmojiUseDefault">使用系统默认表情</string>
 </resources>

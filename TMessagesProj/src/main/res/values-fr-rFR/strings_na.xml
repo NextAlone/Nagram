@@ -383,4 +383,23 @@
     <string name="SwitchStyleTelegram">Télégramme</string>
     <string name="SwitchStyleModern">Moderne</string>
     <string name="DisableChatListSwipeGesture">Désactiver le mouvement de balayage de la liste de chat</string>
+    <string name="GlobalDisableLinkPreviews">Aperçus globaux des liens de désactivation</string>
+    <string name="RegistrationDateApproximately">Environ %s</string>
+    <string name="RegistrationDateOlder">Plus ancien que %s</string>
+    <string name="RegistrationDateNewer">Plus récent que %s</string>
+    <string name="AlwaysSendVideosInHD">Toujours envoyer des vidéos en HD</string>
+    <string name="ShowChannelIcon">Afficher l\'icône au lieu de l\'alias du canal</string>
+    <string name="HideSideShareButton">Masquer le bouton de partage latéral</string>
+    <string name="AskBeforeSendingSticker">Demander avant d\'envoyer un autocollant</string>
+    <string name="ConfirmSendSticker">Confirmer l\'envoi de l\'autocollant</string>
+    <string name="ConfirmSendStickerText">Voulez-vous envoyer cet autocollant ?</string>
+    <string name="KeepFormatting">Continuer à mettre en forme</string>
+    <string name="AskBeforeSendingGIF">Demander avant d\'envoyer le GIF</string>
+    <string name="ConfirmSendGIF">Confirmer l\'envoi du GIF</string>
+    <string name="ConfirmSendGIFText">Voulez-vous envoyer ce GIF ?</string>
+    <string name="DisableCommunityChatGrouping">Désactiver le groupement de discussion de la communauté</string>
+    <string name="CommunityAvatarTapAction">Action des avatars de la communauté</string>
+    <string name="CommunityAvatarTapActionCommunity">Toujours ouvrir la communauté</string>
+    <string name="CommunityAvatarTapActionChat">Toujours ouvrir le chat</string>
+    <string name="CommunityAvatarTapActionArrow">Ouvrir la communauté uniquement avec la flèche en bas à droite</string>
 </resources>

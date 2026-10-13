@@ -383,4 +383,23 @@
     <string name="SwitchStyleTelegram">Telegram</string>
     <string name="SwitchStyleModern">Vernieuwend</string>
     <string name="DisableChatListSwipeGesture">Schakel chat lijst veeg gebaar uit</string>
+    <string name="GlobalDisableLinkPreviews">Globaal linkvoorbeelden uitschakelen</string>
+    <string name="RegistrationDateApproximately">Ongeveer %s</string>
+    <string name="RegistrationDateOlder">Ouder dan %s</string>
+    <string name="RegistrationDateNewer">Nieuwer dan %s</string>
+    <string name="AlwaysSendVideosInHD">Altijd video\'s in HD verzenden</string>
+    <string name="ShowChannelIcon">Pictogram weergeven in plaats van kanaalalias</string>
+    <string name="HideSideShareButton">Verberg knop voor delen</string>
+    <string name="AskBeforeSendingSticker">Vraag voor het verzenden van sticker</string>
+    <string name="ConfirmSendSticker">Bevestig het verzenden van sticker</string>
+    <string name="ConfirmSendStickerText">Wil je deze sticker versturen?</string>
+    <string name="KeepFormatting">Blijf formatteren</string>
+    <string name="AskBeforeSendingGIF">Vraag voordat GIF wordt verzonden</string>
+    <string name="ConfirmSendGIF">Bevestig verzenden GIF</string>
+    <string name="ConfirmSendGIFText">Wil je deze GIF versturen?</string>
+    <string name="DisableCommunityChatGrouping">Community chat-groep uitschakelen</string>
+    <string name="CommunityAvatarTapAction">Gemeenschap Avatar Tap Actie</string>
+    <string name="CommunityAvatarTapActionCommunity">Open altijd de community</string>
+    <string name="CommunityAvatarTapActionChat">Chat altijd openen</string>
+    <string name="CommunityAvatarTapActionArrow">Open een gemeenschap alleen met een pijl onder rechts</string>
 </resources>
