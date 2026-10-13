@@ -153,6 +153,7 @@ Build:
 
 3. Build external libraries and native code: 
    ```shell
+   ./run init libs
    ./run libs native
    ```
 

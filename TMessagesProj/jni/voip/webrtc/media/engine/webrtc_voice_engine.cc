@@ -76,7 +76,7 @@
 #include "rtc_base/time_utils.h"
 #include "rtc_base/trace_event.h"
 #include "system_wrappers/include/metrics.h"
-#include "../../../tgcalls/group/GroupInstanceCustomImpl.h"
+#include <tgcalls/tgcalls/group/GroupInstanceCustomImpl.h>
 
 #if WEBRTC_ENABLE_PROTOBUF
 #ifdef WEBRTC_ANDROID_PLATFORM_BUILD

@@ -67,6 +67,7 @@ build:
     - |
       if [[ ! -d TMessagesProj/src/main/libs/arm64-v8a ]]; then
         export NATIVE_TARGET="arm64-v8a"
+        ./run init libs
         ./run libs native
       fi
     - sed -i "s/2000000000000/$(date +%s%N | cut -c1-13)/g" gradle.properties

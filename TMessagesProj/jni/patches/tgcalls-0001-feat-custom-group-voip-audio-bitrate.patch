@@ -1,0 +1,136 @@
+From dc462d144d80d4ae79646cbc06c94c800c3c6d70 Mon Sep 17 00:00:00 2001
+From: xtaodada <xtao@xtao.de>
+Date: Tue, 13 Oct 2026 21:37:49 +0800
+Subject: [PATCH] feat: custom group voip audio bitrate
+
+---
+ tgcalls/group/GroupInstanceCustomImpl.cpp | 47 ++++++++++++++---------
+ tgcalls/group/GroupInstanceCustomImpl.h   |  1 +
+ 2 files changed, 30 insertions(+), 18 deletions(-)
+
+diff --git a/tgcalls/group/GroupInstanceCustomImpl.cpp b/tgcalls/group/GroupInstanceCustomImpl.cpp
+index f06bec4..d1e487d 100644
+--- a/tgcalls/group/GroupInstanceCustomImpl.cpp
++++ b/tgcalls/group/GroupInstanceCustomImpl.cpp
+@@ -1335,6 +1335,8 @@ GroupLevelValue mappedAudioLevel(GroupLevelValue const &value) {
+ 
+ } // namespace
+ 
++int GroupInstanceCustomImpl::customAudioBitrate = 0;
++
+ class GroupInstanceCustomInternal : public sigslot::has_slots<>, public std::enable_shared_from_this<GroupInstanceCustomInternal> {
+ public:
+     GroupInstanceCustomInternal(GroupInstanceDescriptor &&descriptor, std::shared_ptr<Threads> threads) :
+@@ -1375,8 +1377,11 @@ public:
+     _initialOutputDeviceId(std::move(descriptor.initialOutputDeviceId)),
+     _missingPacketBuffer(50),
+     _onMutedSpeechActivityDetected(std::move(descriptor.onMutedSpeechActivityDetected)) {
++        RTC_LOG(LS_INFO) << "Init GroupInstanceCustomImpl with audio bitrate " << _outgoingAudioBitrateKbit << "kbps";
+         assert(_threads->getMediaThread()->IsCurrent());
+ 
++        GroupInstanceCustomImpl::customAudioBitrate = _outgoingAudioBitrateKbit * 1000;
++
+         _threads->getWorkerThread()->BlockingCall([this] {
+             _workerThreadSafery = webrtc::PendingTaskSafetyFlag::Create();
+         });
+@@ -1402,6 +1407,9 @@ public:
+     }
+ 
+     ~GroupInstanceCustomInternal() {
++        RTC_LOG(LS_WARNING) << "~GroupInstanceCustomInternal, reset customAudioBitrate to zero";
++        GroupInstanceCustomImpl::customAudioBitrate = 0;
++
+         _incomingAudioChannels.clear();
+         _incomingVideoChannels.clear();
+         _serverBandwidthProbingVideoSsrc.reset();
+@@ -1429,16 +1437,18 @@ public:
+ 
+         const auto weak = std::weak_ptr<GroupInstanceCustomInternal>(shared_from_this());
+ 
+-        webrtc::field_trial::InitFieldTrialsFromString(
+-            "WebRTC-DataChannel-Dcsctp/Enabled/"
+-            "WebRTC-Audio-Allocation/min:32kbps,max:32kbps/"
+-            "WebRTC-Audio-OpusMinPacketLossRate/Enabled-1/"
+-            "WebRTC-TaskQueuePacer/Enabled/"
+-            "WebRTC-VP8ConferenceTemporalLayers/1/"
+-            "WebRTC-Audio-MinimizeResamplingOnMobile/Enabled/"
+-            "WebRTC-BweLossExperiment/Enabled/"
+-            "WebRTC-Video-DiscardPacketsWithUnknownSsrc/Enabled/"
+-        );
++        std::stringstream stringStream;
++        stringStream << "WebRTC-DataChannel-Dcsctp/Enabled/"
++            "WebRTC-Audio-Allocation/min:" << _outgoingAudioBitrateKbit << "kbps,max:" << _outgoingAudioBitrateKbit << "kbps/"
++                     << "WebRTC-Audio-OpusMinPacketLossRate/Enabled-1/"
++                     << "WebRTC-TaskQueuePacer/Enabled/"
++                     << "WebRTC-VP8ConferenceTemporalLayers/1/"
++                     << "WebRTC-Audio-MinimizeResamplingOnMobile/Enabled/"
++                     << "WebRTC-BweLossExperiment/Enabled/"
++                     << "WebRTC-Video-DiscardPacketsWithUnknownSsrc/Enabled/";
++
++        auto webrtcInitStr = stringStream.str();
++        webrtc::field_trial::InitFieldTrialsFromString(webrtcInitStr.c_str());
+ 
+         bool takeAudioLevelFromNetwork = _e2eEncryptDecrypt == nullptr;
+ 
+@@ -1949,6 +1959,7 @@ public:
+ 
+         cricket::AudioOptions audioOptions;
+         if (_disableOutgoingAudioProcessing || _videoContentType == VideoContentType::Screencast) {
++            RTC_LOG(LS_ERROR) << "outgoing audio processing disabled";
+             audioOptions.echo_cancellation = false;
+             audioOptions.noise_suppression = false;
+             audioOptions.auto_gain_control = false;
+@@ -1969,10 +1980,10 @@ public:
+             _outgoingAudioChannel->SetRtpTransport(_rtpTransport);
+         });
+ 
+-        const uint8_t opusMinBitrateKbps = _outgoingAudioBitrateKbit;
+-        const uint8_t opusMaxBitrateKbps = _outgoingAudioBitrateKbit;
+-        const uint8_t opusStartBitrateKbps = _outgoingAudioBitrateKbit;
+-        const uint8_t opusPTimeMs = 120;
++        int opusMinBitrateKbps = _outgoingAudioBitrateKbit;
++        int opusMaxBitrateKbps = _outgoingAudioBitrateKbit;
++        int opusStartBitrateKbps = _outgoingAudioBitrateKbit;
++        const uint8_t opusPTimeMs = _outgoingAudioBitrateKbit == 32 ? 120 : 10;
+ 
+         cricket::AudioCodec opusCodec = cricket::CreateAudioCodec(111, "opus", 48000, 2);
+         opusCodec.AddFeedbackParam(cricket::FeedbackParam(cricket::kRtcpFbParamTransportCc));
+@@ -2446,11 +2457,11 @@ public:
+                 preferences.max_bitrate_bps = std::max(preferences.min_bitrate_bps, (1020 + 32) * 1000);
+             }
+         } else {
+-            preferences.min_bitrate_bps = 32000;
++            preferences.min_bitrate_bps = _outgoingAudioBitrateKbit * 1024;
+             if (resetStartBitrate) {
+-                preferences.start_bitrate_bps = 32000;
++                preferences.start_bitrate_bps = _outgoingAudioBitrateKbit * 1024;
+             }
+-            preferences.max_bitrate_bps = 32000;
++            preferences.max_bitrate_bps = _outgoingAudioBitrateKbit * 1024;
+         }
+ 
+         settings.min_bitrate_bps = preferences.min_bitrate_bps;
+@@ -2843,7 +2854,7 @@ public:
+             _connectionMode = connectionMode;
+             _isUnifiedBroadcast = isUnifiedBroadcast;
+             onConnectionModeUpdated(previousMode, keepBroadcastIfWasEnabled);
+-            
++
+             GroupNetworkState effectiveNetworkState = _effectiveNetworkState;
+             effectiveNetworkState.connectionMode = _connectionMode;
+ 
+diff --git a/tgcalls/group/GroupInstanceCustomImpl.h b/tgcalls/group/GroupInstanceCustomImpl.h
+index b42ef71..836071e 100644
+--- a/tgcalls/group/GroupInstanceCustomImpl.h
++++ b/tgcalls/group/GroupInstanceCustomImpl.h
+@@ -19,6 +19,7 @@ class Threads;
+ 
+ class GroupInstanceCustomImpl final : public GroupInstanceInterface {
+ public:
++    static int customAudioBitrate;
+     explicit GroupInstanceCustomImpl(GroupInstanceDescriptor &&descriptor);
+     ~GroupInstanceCustomImpl();
+ 
+-- 
+2.54.0.windows.1
+

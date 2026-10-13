@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 35
+    compileSdkVersion 36
 
     defaultConfig {
         // API-Version . minor
-        minSdkVersion 21
-        targetSdkVersion 35
+        minSdkVersion 23
+        targetSdkVersion 36
     }
 
     lint {

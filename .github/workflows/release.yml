@@ -59,6 +59,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           export NATIVE_TARGET="${{ matrix.flavor }}"
+          ./run init libs
           ./run libs native
   build:
     name: Gradle Build

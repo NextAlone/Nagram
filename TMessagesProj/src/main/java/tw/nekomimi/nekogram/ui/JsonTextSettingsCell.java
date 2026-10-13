@@ -11,13 +11,13 @@ import android.view.MenuItem;
 import android.view.View;
 
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.CodeHighlighting;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Components.EmojiTextView;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.utils.code.highlight.CodeHighlighting;
 
 public class JsonTextSettingsCell extends TextDetailSettingsCell {
 

@@ -30,7 +30,11 @@
     @android.webkit.JavascriptInterface <methods>;
 }
 
-## https://developers.google.com/ml-kit/known-issues#android_issues
+-keep class org.telegram.utils.code.highlight.PrismaHighlighter {
+    private static native <methods>;
+}
+
+# https://developers.google.com/ml-kit/known-issues#android_issues
 -keep class com.google.mlkit.nl.languageid.internal.LanguageIdentificationJni { *; }
 
 # Huawei Services

@@ -55,7 +55,12 @@ public final class TelegramQRCodeWriter {
     private int imageBlockX;
     private int sideQuadSize;
 
-    private int imageSize;
+  private int imageSize;
+  private Drawable centerDrawable;
+
+  public void setCenterDrawable(Drawable drawable) {
+    centerDrawable = drawable;
+  }
 
     public Bitmap encode(String contents, BarcodeFormat format, int width, int height, Map<EncodeHintType, ?> hints, Bitmap bitmap, Context context) throws WriterException {
         return encode(contents, format, width, height, hints, bitmap, context, null);
@@ -217,16 +222,21 @@ public final class TelegramQRCodeWriter {
             }
         }
 
-        Bitmap icon;
-        if (iconF != null) {
-            icon = iconF.apply(imageSize);
-            canvas.drawBitmap(icon, imageX, imageX, null);
-            icon.recycle();
-        } else {
-            Drawable drawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.mipmap.ic_launcher_nagram);
-            drawable.setBounds(imageX, imageX, imageX + imageSize, imageX + imageSize);
-            drawable.draw(canvas);
-        }
+    if (centerDrawable != null) {
+      centerDrawable.setBounds(imageX, imageX, imageX + imageSize, imageX + imageSize);
+      centerDrawable.draw(canvas);
+    } else {
+      Bitmap icon;
+      if (iconF != null) {
+        icon = iconF.apply(imageSize);
+        canvas.drawBitmap(icon, imageX, imageX, null);
+        icon.recycle();
+      } else {
+        Drawable drawable = ApplicationLoader.applicationContext.getResources().getDrawable(R.mipmap.ic_launcher_nagram);
+        drawable.setBounds(imageX, imageX, imageX + imageSize, imageX + imageSize);
+        drawable.draw(canvas);
+      }
+    }
 
         canvas.setBitmap(null);
 

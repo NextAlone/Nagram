@@ -1012,7 +1012,7 @@ public class EditTextBoldCursor extends EditTextEffects {
                     rect.top = rect.centerY() - cursorSize / 2;
                     rect.bottom = rect.top + cursorSize;
                     gradientDrawable.setBounds(rect);
-                    gradientDrawable.draw(canvas);
+                    drawCursor(canvas, gradientDrawable);
                     canvas.restore();
                 }
             } catch (Throwable exception) {
@@ -1050,7 +1050,7 @@ public class EditTextBoldCursor extends EditTextEffects {
                     rect.top = rect.centerY() - cursorSize / 2;
                     rect.bottom = rect.top + cursorSize;
                     gradientDrawable.setBounds(rect);
-                    gradientDrawable.draw(canvas);
+                    drawCursor(canvas, gradientDrawable);
                     canvas.restore();
                     cursorDrawn = false;
                 } catch (Throwable exception) {
@@ -1129,6 +1129,10 @@ public class EditTextBoldCursor extends EditTextEffects {
             errorLayout.draw(canvas);
             canvas.restore();
         }*/
+    }
+
+    protected void drawCursor(Canvas canvas, GradientDrawable drawable) {
+        drawable.draw(canvas);
     }
 
     public void setWindowView(View view) {
