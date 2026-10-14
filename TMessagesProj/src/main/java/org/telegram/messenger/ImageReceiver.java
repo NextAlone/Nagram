@@ -2550,8 +2550,14 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     }
 
     public void setRoundRadius(int[] value) {
-        if (NaConfig.INSTANCE.getShowSquareAvatar().Bool()) {
+        int corners = NaConfig.INSTANCE.getAvatarCorners().Int();
+        if (corners == 0) {
             java.util.Arrays.fill(value, 0);
+        } else if (corners < 100) {
+            float factor = corners / 100.0f;
+            for (int a = 0; a < value.length; a++) {
+                value[a] = Math.round(value[a] * factor);
+            }
         }
 
         boolean changed = false;
