@@ -200,6 +200,7 @@ public class NekoXConfig {
 
     public static int getNotificationColor() {
         int color = 0;
+        if (NaConfig.INSTANCE.getUseSystemNotificationColor().Bool()) return color;
         Configuration configuration = ApplicationLoader.applicationContext.getResources().getConfiguration();
         boolean isDark = (configuration.uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
         if (isDark) {

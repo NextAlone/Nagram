@@ -132,6 +132,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
     private final AbstractConfigCell useSystemAiServiceRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getUseSystemAiService(), LocaleController.getString(R.string.UseSystemAiServiceDesc)));
     private final AbstractConfigCell fixUrlPagePreviewRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getFixUrlPagePreview()));
     private final AbstractConfigCell forceVideoNewRewindMethodRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getForceVideoNewRewindMethod()));
+    private final AbstractConfigCell useSystemNotificationColorRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getUseSystemNotificationColor()));
     private final AbstractConfigCell divider1 = cellGroup.appendCell(new ConfigCellDivider());
 
     // fixUrlAutoInlineBot
@@ -339,6 +340,8 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (key.equals(NaConfig.INSTANCE.getShowChannelIcon().getKey())) {
                 updateRows();
+            } else if (key.equals(NaConfig.INSTANCE.getUseSystemNotificationColor().getKey())) {
+                tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             }
         };
 

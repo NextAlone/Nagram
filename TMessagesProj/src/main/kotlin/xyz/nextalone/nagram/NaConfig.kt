@@ -1467,6 +1467,12 @@ object NaConfig {
             ConfigItem.configTypeInt,
             1
         )
+    val useSystemNotificationColor =
+        addConfig(
+            "UseSystemNotificationColor",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,
