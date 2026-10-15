@@ -598,8 +598,12 @@ public class AvatarDrawable extends Drawable {
             if (roundRadius > 0) {
                 AndroidUtilities.rectTmp.set(0, 0, size, size);
                 canvas.drawRoundRect(AndroidUtilities.rectTmp, roundRadius, roundRadius, backgroundPaint);
-            } else if (NaConfig.INSTANCE.getShowSquareAvatar().Bool()) {
+            } else if (NaConfig.INSTANCE.getAvatarCorners().Int() == 0) {
                 canvas.drawRect(0f, 0f, size, size, backgroundPaint);
+            } else if (NaConfig.INSTANCE.getAvatarCorners().Int() < 100) {
+                float rad = (size / 2.0f) * (NaConfig.INSTANCE.getAvatarCorners().Int() / 100.0f);
+                AndroidUtilities.rectTmp.set(0, 0, size, size);
+                canvas.drawRoundRect(AndroidUtilities.rectTmp, rad, rad, backgroundPaint);
             } else {
                 canvas.drawCircle(size / 2.0f, size / 2.0f, size / 2.0f, backgroundPaint);
             }

@@ -255,7 +255,8 @@ public class MessagesPreviewCell extends LinearLayout {
                 || NaConfig.INSTANCE.getShowVoteCountBeforeVote().getKey().equals(key)
                 || NekoConfig.showSpoilersDirectly.getKey().equals(key)
                 || NaConfig.INSTANCE.getGlobalDisableLinkPreviews().getKey().equals(key)
-                || NaConfig.INSTANCE.getHideSideShareButton().getKey().equals(key);
+                || NaConfig.INSTANCE.getHideSideShareButton().getKey().equals(key)
+                || NaConfig.INSTANCE.getAvatarCorners().getKey().equals(key);
     }
 
     public void refreshMessages() {

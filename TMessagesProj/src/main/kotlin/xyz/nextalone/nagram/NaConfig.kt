@@ -514,12 +514,6 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
-    val showSquareAvatar =
-        addConfig(
-            "ShowSquareAvatar",
-            ConfigItem.configTypeBool,
-            false
-        )
     val disableCustomWallpaperUser =
         addConfig(
             "DisableCustomWallpaperUser",
@@ -1473,6 +1467,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val avatarCorners =
+        addConfig(
+            "AvatarCorners",
+            ConfigItem.configTypeInt,
+            100
+        )
 
     private fun addConfig(
         k: String,
@@ -1525,6 +1525,22 @@ object NaConfig {
             if (!preferences.contains(doubleTapActionOutgoing.key)) {
                 editor.putInt(doubleTapActionOutgoing.key, legacyAction)
             }
+            editor.apply()
+        }
+        if (preferences.contains("ShowSquareAvatar")) {
+            val legacySquare = try {
+                preferences.getBoolean("ShowSquareAvatar", false)
+            } catch (e: Exception) {
+                false
+            }
+            val editor = preferences.edit()
+            if (!preferences.contains(avatarCorners.key)) {
+                editor.putInt(
+                    avatarCorners.key,
+                    if (legacySquare) 0 else 100
+                )
+            }
+            editor.remove("ShowSquareAvatar")
             editor.apply()
         }
     }
