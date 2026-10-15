@@ -935,7 +935,7 @@ public class ProfileStoriesView extends View implements NotificationCenter.Notif
     }
 
     private void drawArcs(Canvas canvas, StoryCircle A, StoryCircle B, StoryCircle C, Paint paint) {
-        if (NaConfig.INSTANCE.getShowSquareAvatar().Bool()) {
+        if (NaConfig.INSTANCE.getAvatarCorners().Int() != 100) {
             return;
         }
 
