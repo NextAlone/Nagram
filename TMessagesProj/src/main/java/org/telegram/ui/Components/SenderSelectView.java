@@ -58,7 +58,8 @@ public class SenderSelectView extends View {
     private void updateColors() {
         backgroundPaint.setColor(Theme.getColor(Theme.key_chat_messagePanelVoiceBackground));
         menuPaint.setColor(Theme.getColor(Theme.key_chat_messagePanelVoicePressed));
-        int value = NaConfig.INSTANCE.getShowSquareAvatar().Bool() ? 0 : 18;
+        int corners = NaConfig.INSTANCE.getAvatarCorners().Int();
+        int value = corners == 100 ? 18 : Math.round(18 * (corners / 100.0f));
         selectorDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(value), Color.TRANSPARENT, Theme.multAlpha(Theme.getColor(Theme.key_windowBackgroundWhite), 0.2f));
         selectorDrawable.setCallback(this);
     }
@@ -96,15 +97,31 @@ public class SenderSelectView extends View {
         }
         canvas.scale(sc, sc, getWidth() / 2f, getHeight() / 2f);
 
+        int corners = NaConfig.INSTANCE.getAvatarCorners().Int();
+        if (avatarImage != null) {
+            int size = Math.min(getWidth(), getHeight());
+            if (size > 0) {
+                if (corners == 0) {
+                    avatarImage.setRoundRadius(0);
+                } else if (corners < 100) {
+                    avatarImage.setRoundRadius(size / 2);
+                }
+            }
+        }
+
         super.onDraw(canvas);
 
         avatarImage.draw(canvas);
 
         int alpha = (int) (menuProgress * 0xFF);
         backgroundPaint.setAlpha(alpha);
-        if (NaConfig.INSTANCE.getShowSquareAvatar().Bool()) {
+        if (corners == 0) {
             AndroidUtilities.rectTmp.set(0, 0, getWidth(), getHeight());
             canvas.drawRoundRect(AndroidUtilities.rectTmp, 0, 0, backgroundPaint);
+        } else if (corners < 100) {
+            float rad = (Math.min(getWidth(), getHeight()) / 2f) * (corners / 100.0f);
+            AndroidUtilities.rectTmp.set(0, 0, getWidth(), getHeight());
+            canvas.drawRoundRect(AndroidUtilities.rectTmp, rad, rad, backgroundPaint);
         } else {
             canvas.drawCircle(getWidth() / 2f, getHeight() / 2f, Math.min(getWidth(), getHeight()) / 2f, backgroundPaint);
         }

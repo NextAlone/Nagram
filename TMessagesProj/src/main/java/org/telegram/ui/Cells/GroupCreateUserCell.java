@@ -567,9 +567,15 @@ public class GroupCreateUserCell extends FrameLayout {
             paint.setColor(Theme.getColor(Theme.key_checkboxSquareBackground, resourcesProvider));
             float cx = avatarImageView.getLeft() + avatarImageView.getMeasuredWidth() / 2;
             float cy = avatarImageView.getTop() + avatarImageView.getMeasuredHeight() / 2;
-            if (NaConfig.INSTANCE.getShowSquareAvatar().Bool()) {
+            int corners = NaConfig.INSTANCE.getAvatarCorners().Int();
+            if (corners == 0) {
                 float dp = AndroidUtilities.dp(18) + AndroidUtilities.dp(4) * checkProgress;
                 canvas.drawRect(cx - dp, cy - dp, cx + dp, cy + dp, paint);
+            } else if (corners < 100) {
+                float dp = AndroidUtilities.dp(18) + AndroidUtilities.dp(4) * checkProgress;
+                float rad = dp * (corners / 100.0f);
+                AndroidUtilities.rectTmp.set(cx - dp, cy - dp, cx + dp, cy + dp);
+                canvas.drawRoundRect(AndroidUtilities.rectTmp, rad, rad, paint);
             } else {
                 canvas.drawCircle(cx, cy, AndroidUtilities.dp(18) + AndroidUtilities.dp(4) * checkProgress, paint);
             }

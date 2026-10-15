@@ -438,7 +438,21 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         ScaleStateListAnimator.apply(avatarContainer);
 
         avatarDrawable = new AvatarDrawable();
-        avatarView = new BackupImageView(context);
+        avatarView = new BackupImageView(context) {
+            @Override
+            protected void onDraw(Canvas canvas) {
+                int corners = NaConfig.INSTANCE.getAvatarCorners().Int();
+                int size = Math.min(getWidth(), getHeight());
+                if (size > 0) {
+                    if (corners == 0) {
+                        getImageReceiver().setRoundRadius(0);
+                    } else if (corners < 100) {
+                        getImageReceiver().setRoundRadius(size / 2);
+                    }
+                }
+                super.onDraw(canvas);
+            }
+        };
         avatarView.setRoundRadius(dp(90));
         avatarContainer.addView(avatarView, LayoutHelper.createFrame(90, 90, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 15, 0, 0));
 
@@ -453,7 +467,16 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             protected void onDraw(Canvas canvas) {
                 if (avatarView != null && avatarView.getImageReceiver().hasNotThumb()) {
                     paint.setAlpha((int) (0x55 * avatarView.getImageReceiver().getCurrentAlpha()));
-                    canvas.drawCircle(getMeasuredWidth() / 2.0f, getMeasuredHeight() / 2.0f, getMeasuredWidth() / 2.0f, paint);
+                    int corners = NaConfig.INSTANCE.getAvatarCorners().Int();
+                    if (corners == 0) {
+                        canvas.drawRect(0, 0, getMeasuredWidth(), getMeasuredHeight(), paint);
+                    } else if (corners < 100) {
+                        float rad = (getMeasuredWidth() / 2.0f) * (corners / 100.0f);
+                        AndroidUtilities.rectTmp.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                        canvas.drawRoundRect(AndroidUtilities.rectTmp, rad, rad, paint);
+                    } else {
+                        canvas.drawCircle(getMeasuredWidth() / 2.0f, getMeasuredHeight() / 2.0f, getMeasuredWidth() / 2.0f, paint);
+                    }
                 }
                 super.onDraw(canvas);
             }
