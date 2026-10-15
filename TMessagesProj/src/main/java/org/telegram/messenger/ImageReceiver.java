@@ -2549,14 +2549,18 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         setRoundRadius(new int[]{tl, tr, br, bl});
     }
 
-    public void setRoundRadius(int[] value) {
+    public void setRoundRadius(int[] value_) {
+        int[] value = value_;
         int corners = NaConfig.INSTANCE.getAvatarCorners().Int();
-        if (corners == 0) {
-            java.util.Arrays.fill(value, 0);
-        } else if (corners < 100) {
-            float factor = corners / 100.0f;
-            for (int a = 0; a < value.length; a++) {
-                value[a] = Math.round(value[a] * factor);
+        if (corners < 100) {
+            value = new int[value_.length];
+            if (corners == 0) {
+                Arrays.fill(value, 0);
+            } else {
+                float factor = corners / 100.0f;
+                for (int a = 0; a < value_.length; a++) {
+                    value[a] = Math.round(value_[a] * factor);
+                }
             }
         }
 
