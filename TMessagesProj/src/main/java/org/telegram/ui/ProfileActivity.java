@@ -1126,6 +1126,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             ImageReceiver imageReceiver = animatedEmojiDrawable != null ? animatedEmojiDrawable.getImageReceiver() : this.imageReceiver;
 
             int r = /*isMetaballWorking && !hasStories ? roundRadiusCollapse : */roundRadiusExpand;
+            int corners = NaConfig.INSTANCE.getAvatarCorners().Int();
+            if (corners < 100) {
+                r = corners == 0 ? 0 : Math.round(r * (corners / 100.0f));
+            }
             if (r > 0) {
                 clipPath.rewind();
                 AndroidUtilities.rectTmp.set(inset, inset, thisWidth - inset, thisHeight - inset);
@@ -5723,7 +5727,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             protected void onDraw(Canvas canvas) {
                 if (avatarImage != null && avatarImage.getImageReceiver().hasNotThumb()) {
                     paint.setAlpha((int) (0x55 * avatarImage.getImageReceiver().getCurrentAlpha()));
-                    canvas.drawCircle(getMeasuredWidth() / 2.0f, getMeasuredHeight() / 2.0f, getMeasuredWidth() / 2.0f, paint);
+                    int corners = NaConfig.INSTANCE.getAvatarCorners().Int();
+                    if (corners == 0) {
+                        canvas.drawRect(0, 0, getMeasuredWidth(), getMeasuredHeight(), paint);
+                    } else if (corners < 100) {
+                        float rad = (getMeasuredWidth() / 2.0f) * (corners / 100.0f);
+                        AndroidUtilities.rectTmp.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                        canvas.drawRoundRect(AndroidUtilities.rectTmp, rad, rad, paint);
+                    } else {
+                        canvas.drawCircle(getMeasuredWidth() / 2.0f, getMeasuredHeight() / 2.0f, getMeasuredWidth() / 2.0f, paint);
+                    }
                 }
                 super.onDraw(canvas);
             }
