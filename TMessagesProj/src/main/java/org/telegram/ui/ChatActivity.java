@@ -40938,7 +40938,8 @@ public class ChatActivity extends BaseFragment implements
             if (cell == null || document == null || getParentLayout() == null || !canSaveRichDocument(cell)) {
                 return;
             }
-            File richDocFile = FileLoader.getInstance(currentAccount).getPathToAttach(document, true);
+            File file = FileLoader.getInstance(currentAccount).getPathToAttach(document, true);
+            final File richDocFile = (file != null && file.exists()) ? file : FileLoader.getInstance(currentAccount).getPathToAttach(document, false);
             final boolean richDocExists = NekoConfig.showDeleteDownloadedFile.Bool() && richDocFile != null && richDocFile.exists();
             ItemOptions options = ItemOptions.makeOptions(ChatActivity.this, cell)
                 .add(R.drawable.msg_download, getString(R.string.SaveToDownloads), () -> saveRichDocument(cell, document));
@@ -40953,6 +40954,14 @@ public class ChatActivity extends BaseFragment implements
                                 richDocFile.delete();
                             } catch (Exception ignore) {
                                 richDocFile.deleteOnExit();
+                            }
+                            File fallbackRichDocFile = FileLoader.getInstance(currentAccount).getPathToAttach(document, false);
+                            if (fallbackRichDocFile != null && fallbackRichDocFile.exists() && fallbackRichDocFile.getAbsolutePath().startsWith(EnvUtil.getTelegramPath().getAbsolutePath())) {
+                                try {
+                                    fallbackRichDocFile.delete();
+                                } catch (Exception ignore) {
+                                    fallbackRichDocFile.deleteOnExit();
+                                }
                             }
                             FileLoader.getInstance(currentAccount).cancelLoadFile(document);
                             if (cell.getMessageObject() != null && cell.getMessageObject().richLayout != null) {
