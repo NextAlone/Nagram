@@ -97,13 +97,26 @@ public class SenderSelectView extends View {
         }
         canvas.scale(sc, sc, getWidth() / 2f, getHeight() / 2f);
 
+        int corners = NaConfig.INSTANCE.getAvatarCorners().Int();
+        if (avatarImage != null) {
+            int size = Math.min(getWidth(), getHeight());
+            if (size > 0) {
+                if (corners == 0) {
+                    avatarImage.setRoundRadius(0);
+                } else if (corners < 100) {
+                    avatarImage.setRoundRadius(size / 2);
+                } else {
+                    avatarImage.setRoundRadius(size / 2);
+                }
+            }
+        }
+
         super.onDraw(canvas);
 
         avatarImage.draw(canvas);
 
         int alpha = (int) (menuProgress * 0xFF);
         backgroundPaint.setAlpha(alpha);
-        int corners = NaConfig.INSTANCE.getAvatarCorners().Int();
         if (corners == 0) {
             AndroidUtilities.rectTmp.set(0, 0, getWidth(), getHeight());
             canvas.drawRoundRect(AndroidUtilities.rectTmp, 0, 0, backgroundPaint);

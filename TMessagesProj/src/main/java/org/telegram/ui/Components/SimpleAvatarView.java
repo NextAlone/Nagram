@@ -84,6 +84,19 @@ public class SimpleAvatarView extends View {
         }
         canvas.restore();
 
+        if (avatarImage != null) {
+            int size = Math.min(getWidth(), getHeight());
+            if (size > 0) {
+                if (corners == 0) {
+                    avatarImage.setRoundRadius(0);
+                } else if (corners < 100) {
+                    avatarImage.setRoundRadius(size / 2);
+                } else {
+                    avatarImage.setRoundRadius(size / 2);
+                }
+            }
+        }
+
         if (!isAvatarHidden) {
             float pad = selectPaint.getStrokeWidth() * 2.5f * selectProgress;
             avatarImage.setImageCoords(pad, pad, getWidth() - pad * 2, getHeight() - pad * 2);
