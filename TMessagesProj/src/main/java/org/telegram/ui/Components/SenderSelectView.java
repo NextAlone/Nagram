@@ -105,8 +105,6 @@ public class SenderSelectView extends View {
                     avatarImage.setRoundRadius(0);
                 } else if (corners < 100) {
                     avatarImage.setRoundRadius(size / 2);
-                } else {
-                    avatarImage.setRoundRadius(size / 2);
                 }
             }
         }

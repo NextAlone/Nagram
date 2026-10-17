@@ -448,8 +448,6 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         getImageReceiver().setRoundRadius(0);
                     } else if (corners < 100) {
                         getImageReceiver().setRoundRadius(size / 2);
-                    } else {
-                        getImageReceiver().setRoundRadius(size / 2);
                     }
                 }
                 super.onDraw(canvas);
