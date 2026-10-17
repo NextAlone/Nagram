@@ -16651,10 +16651,14 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
     private Paint botButtonPaint;
 
+    private final ReadAloudBar readAloudBar = new ReadAloudBar();
+    private final Runnable readAloudTick = this::invalidateOutbounds;
+
     private void drawBotButtons(Canvas canvas, ArrayList<BotButton> botButtons, int alpha) {
         if (SizeNotifierFrameLayout.drawingBlur) {
             return;
         }
+        final boolean readAloud = readAloudBar.update(currentMessageObject, botButtons);
         final int widthForButtons = getWidthForButtons();
         int addX;
         if (currentMessageObject != null && currentMessageObject.isOutOwner()) {
@@ -16729,11 +16733,20 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 }
             }
 
+            if (readAloud && readAloudBar.handles(button)) {
+                readAloudBar.draw(canvas, rect, button, (TextPaint) getThemedPaint(Theme.key_paint_chatBotButton), resourcesProvider, drawProgress);
+                continue;
+            }
             if (button.draw(canvas, rect, drawProgress, hasInvoicePreview && hasInvoicePrice, resourcesProvider)) {
                 invalidate = true;
             }
         }
         canvas.restore();
+
+        removeCallbacks(readAloudTick);
+        if (readAloud && readAloudBar.isMoving()) {
+            postDelayed(readAloudTick, 100);
+        }
 
         if (invalidate) {
             invalidateOutbounds();
