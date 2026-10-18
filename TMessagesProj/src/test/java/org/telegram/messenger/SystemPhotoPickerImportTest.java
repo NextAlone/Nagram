@@ -85,6 +85,12 @@ public class SystemPhotoPickerImportTest {
         return job;
     }
 
+    private SystemPhotoPickerImport limitedJob(long sizeLimit) {
+        SystemPhotoPickerImport job = new SystemPhotoPickerImport(ContentResolver.wrap(provider), cacheRoot, sizeLimit);
+        imports.add(job);
+        return job;
+    }
+
     private Uri media(String mime, String name, byte[] bytes) throws IOException {
         Uri uri = Uri.parse("content://cloud.test/" + provider.items.size());
         File original = new File(sources, "original-" + provider.items.size());
@@ -193,6 +199,72 @@ public class SystemPhotoPickerImportTest {
         provider.items.get(uri).offset = 2;
         provider.items.get(uri).length = 3;
         assertArrayEquals(new byte[]{1, 2, 3}, Files.readAllBytes(new File(job().copy(uri).path).toPath()));
+    }
+
+    @Test public void rejectsKnownOversizedAssetBeforeOpeningInput() throws Exception {
+        Uri uri = media("video/mp4", null, new byte[33]);
+        provider.items.get(uri).length = 33;
+        try { limitedJob(32).copy(uri); fail("Oversized asset must be rejected"); } catch (IOException expected) { }
+        assertFalse(provider.items.get(uri).inputOpened);
+        assertEquals(0, cache.list().length);
+        assertEquals(33, provider.items.get(uri).source.length());
+    }
+
+    @Test public void acceptsContentExactlyAtSizeLimit() throws Exception {
+        byte[] bytes = new byte[64 * 1024];
+        Arrays.fill(bytes, (byte) 7);
+        Uri uri = media("video/mp4", null, bytes);
+        File copy = new File(limitedJob(bytes.length).copy(uri).path);
+        assertArrayEquals(bytes, Files.readAllBytes(copy.toPath()));
+    }
+
+    @Test public void defaultLimitRejectsAssetsAboveTelegramMaximum() throws Exception {
+        Uri uri = media("video/mp4", null, new byte[]{9});
+        provider.items.get(uri).length = FileLoader.DEFAULT_MAX_FILE_SIZE_PREMIUM + 1;
+        try { job(ContentResolver.wrap(provider)).copy(uri); fail("Hard limit must apply to the public constructor"); } catch (IOException expected) { }
+        assertFalse(provider.items.get(uri).inputOpened);
+        assertEquals(0, cache.list().length);
+        assertArrayEquals(new byte[]{9}, Files.readAllBytes(provider.items.get(uri).source.toPath()));
+    }
+
+    @Test public void unknownLengthUnboundedStreamStopsBeforeWritingBeyondLimit() throws Exception {
+        checkUnboundedStreamLimit(AssetFileDescriptor.UNKNOWN_LENGTH);
+    }
+
+    @Test public void misleadingDeclaredLengthCannotBypassStreamLimit() throws Exception {
+        checkUnboundedStreamLimit(1);
+    }
+
+    private void checkUnboundedStreamLimit(long declaredLength) throws Exception {
+        Uri uri = unboundedMedia(declaredLength);
+        Item item = provider.items.get(uri);
+        try { limitedJob(64 * 1024).copy(uri); fail("Unbounded stream must be rejected"); } catch (IOException expected) { }
+        assertEquals(3 * 32 * 1024, item.bytesRead);
+        assertEquals(64 * 1024, item.cachedBytesOnClose);
+        assertEquals(0, item.closed.getCount());
+        assertEquals(0, cache.list().length);
+        assertArrayEquals(new byte[]{9}, Files.readAllBytes(item.source.toPath()));
+    }
+
+    private Uri unboundedMedia(long declaredLength) throws IOException {
+        Uri uri = media("video/mp4", null, new byte[]{9});
+        Item item = provider.items.get(uri);
+        item.generatedStream = true;
+        item.length = declaredLength;
+        item.observeCache = cache;
+        return uri;
+    }
+
+    @Test public void oversizedBatchCleansOwnedCopiesAndKeepsUnrelatedFiles() throws Exception {
+        File unrelated = new File(cache, "unrelated.png");
+        Files.write(unrelated.toPath(), new byte[]{9});
+        Uri good = media("image/png", null, new byte[]{1});
+        Uri bad = unboundedMedia(AssetFileDescriptor.UNKNOWN_LENGTH);
+        try { limitedJob(64 * 1024).load(new ArrayList<>(Arrays.asList(good, bad))); fail(); } catch (IOException expected) { }
+        assertEquals(1, cache.list().length);
+        assertArrayEquals(new byte[]{9}, Files.readAllBytes(unrelated.toPath()));
+        assertEquals(2, sources.list().length);
+        assertEquals(0, provider.items.get(bad).closed.getCount());
     }
 
     @Test public void batchFailureCleansEarlierCopiesAndPartialFile() throws Exception {
@@ -312,8 +384,10 @@ public class SystemPhotoPickerImportTest {
     static class Item {
         final String mime, name;
         final File source;
-        boolean blockOpen, blockRead, failRead;
+        boolean blockOpen, blockRead, failRead, generatedStream, inputOpened;
         long offset, length = AssetFileDescriptor.UNKNOWN_LENGTH;
+        long bytesRead, cachedBytesOnClose;
+        File observeCache;
         final CountDownLatch reading = new CountDownLatch(1), unblock = new CountDownLatch(1), closed = new CountDownLatch(1), providerCancellation = new CountDownLatch(1);
         Item(String mime, String name, File source) { this.mime = mime; this.name = name; this.source = source; }
     }
@@ -344,12 +418,23 @@ public class SystemPhotoPickerImportTest {
             }
             ParcelFileDescriptor fd = ParcelFileDescriptor.open(item.source, ParcelFileDescriptor.MODE_READ_ONLY);
             return new AssetFileDescriptor(fd, item.offset, item.length) {
+                @Override public long getLength() {
+                    return item.generatedStream ? item.length : super.getLength();
+                }
                 @Override public java.io.FileInputStream createInputStream() throws IOException {
-                    if (!(item.blockRead || item.failRead)) return super.createInputStream();
+                    item.inputOpened = true;
+                    if (!(item.blockRead || item.failRead || item.generatedStream)) return super.createInputStream();
                     // A provider-backed read that only exits when its stream is closed.
                     return new ParcelFileDescriptor.AutoCloseInputStream(fd) {
                         int count;
                         @Override public int read(byte[] bytes) throws IOException {
+                            if (item.generatedStream) {
+                                // Fail fast on an unbounded copy regression instead of filling the test disk.
+                                if (item.bytesRead >= 128 * 1024) throw new AssertionError("Unbounded provider was not stopped");
+                                Arrays.fill(bytes, (byte) 7);
+                                item.bytesRead += bytes.length;
+                                return bytes.length;
+                            }
                             if (count++ == 0) { bytes[0] = 1; return 1; }
                             if (item.failRead) throw new IOException("Cloud download failed");
                             item.reading.countDown();
@@ -357,6 +442,11 @@ public class SystemPhotoPickerImportTest {
                             throw new IOException("Cloud stream closed");
                         }
                         @Override public void close() throws IOException {
+                            if (item.observeCache != null) {
+                                for (File file : item.observeCache.listFiles()) {
+                                    item.cachedBytesOnClose = Math.max(item.cachedBytesOnClose, file.length());
+                                }
+                            }
                             item.closed.countDown(); item.unblock.countDown(); super.close();
                         }
                     };

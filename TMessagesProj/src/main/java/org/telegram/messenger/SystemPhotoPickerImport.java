@@ -23,6 +23,7 @@ public final class SystemPhotoPickerImport implements AutoCloseable {
     private final ContentResolver resolver;
     private final File cacheRoot;
     private final File directory;
+    private final long sizeLimit;
     private final CancellationSignal cancellation = new CancellationSignal();
     private final ArrayList<File> files = new ArrayList<>();
     private Closeable activeInput;
@@ -30,9 +31,15 @@ public final class SystemPhotoPickerImport implements AutoCloseable {
     private boolean released;
 
     public SystemPhotoPickerImport(ContentResolver resolver, File cacheRoot) {
+        this(resolver, cacheRoot, FileLoader.DEFAULT_MAX_FILE_SIZE_PREMIUM);
+    }
+
+    SystemPhotoPickerImport(ContentResolver resolver, File cacheRoot, long sizeLimit) {
+        if (sizeLimit <= 0) throw new IllegalArgumentException("Invalid picker size limit");
         this.resolver = resolver;
         this.cacheRoot = cacheRoot;
         this.directory = new File(cacheRoot, "sharing");
+        this.sizeLimit = Math.min(sizeLimit, FileLoader.DEFAULT_MAX_FILE_SIZE_PREMIUM);
     }
 
     public ArrayList<MediaController.PhotoEntry> load(ArrayList<Uri> uris) throws IOException {
@@ -96,13 +103,18 @@ public final class SystemPhotoPickerImport implements AutoCloseable {
                 if (AndroidUtilities.isInternalUri(asset.getParcelFileDescriptor().getFd())) {
                     throw new IOException("Internal picker descriptor");
                 }
+                if (asset.getLength() > sizeLimit) throw new IOException("Picker content exceeds size limit");
                 try (InputStream input = asset.createInputStream(); FileOutputStream output = openOutput(file)) {
                     activate(input);
                     byte[] buffer = new byte[32 * 1024];
+                    long copiedBytes = 0;
                     int count;
                     while ((count = input.read(buffer)) != -1) {
                         cancellation.throwIfCanceled();
+                        // Provider lengths can be unknown or inaccurate. Bound every write without overflow.
+                        if (count > sizeLimit - copiedBytes) throw new IOException("Picker content exceeds size limit");
                         output.write(buffer, 0, count);
+                        copiedBytes += count;
                     }
                 }
             }
