@@ -21,6 +21,7 @@ import java.util.Locale;
 /** Owns copies until the picker result is handed to the editor. One worker per import. */
 public final class SystemPhotoPickerImport implements AutoCloseable {
     private final ContentResolver resolver;
+    private final File cacheRoot;
     private final File directory;
     private final CancellationSignal cancellation = new CancellationSignal();
     private final ArrayList<File> files = new ArrayList<>();
@@ -28,9 +29,10 @@ public final class SystemPhotoPickerImport implements AutoCloseable {
     private boolean cancelled;
     private boolean released;
 
-    public SystemPhotoPickerImport(ContentResolver resolver, File directory) {
+    public SystemPhotoPickerImport(ContentResolver resolver, File cacheRoot) {
         this.resolver = resolver;
-        this.directory = directory;
+        this.cacheRoot = cacheRoot;
+        this.directory = new File(cacheRoot, "sharing");
     }
 
     public ArrayList<MediaController.PhotoEntry> load(ArrayList<Uri> uris) throws IOException {
@@ -78,9 +80,12 @@ public final class SystemPhotoPickerImport implements AutoCloseable {
         synchronized (this) {
             cancellation.throwIfCanceled();
             if (cancelled || released) throw new OperationCanceledException();
-            if (!directory.isDirectory() && !directory.mkdirs()) throw new IOException("Cannot create picker cache");
-            if (AndroidUtilities.isInternalUri(Uri.fromFile(directory))) throw new IOException("Invalid picker cache");
-            file = File.createTempFile("picker_", "." + extension, directory);
+            // This is our trusted cache, not an incoming URI. Reject an escaping sharing symlink.
+            File root = cacheRoot.getCanonicalFile();
+            File target = directory.getCanonicalFile();
+            if (!root.equals(target.getParentFile())) throw new IOException("Picker directory outside cache");
+            if (!target.isDirectory() && !target.mkdirs()) throw new IOException("Cannot create picker cache");
+            file = File.createTempFile("picker_", "." + extension, target);
             files.add(file);
         }
         boolean copied = false;

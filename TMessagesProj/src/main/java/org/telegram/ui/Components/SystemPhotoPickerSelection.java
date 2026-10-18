@@ -12,6 +12,8 @@ public final class SystemPhotoPickerSelection {
     private final ArrayList<MediaController.PhotoEntry> entries;
     private final HashMap<Object, Object> selected = new HashMap<>();
     private final ArrayList<Object> order = new ArrayList<>();
+    private boolean sendAttempted;
+    private boolean queued;
 
     public SystemPhotoPickerSelection(ArrayList<MediaController.PhotoEntry> entries) {
         this.entries = entries;
@@ -34,6 +36,23 @@ public final class SystemPhotoPickerSelection {
 
     public HashMap<Object, Object> selected() { return selected; }
     public ArrayList<Object> order() { return order; }
+
+    public boolean beginSend() {
+        if (sendAttempted || order.isEmpty()) return false;
+        sendAttempted = true;
+        return true;
+    }
+
+    public void markQueued() { queued = true; }
+    public boolean isQueued() { return queued; }
+
+    /** Once queued, Telegram owns the paths, including upload/conversion and retry. */
+    public void cleanup() {
+        if (queued) return;
+        for (MediaController.PhotoEntry entry : entries) {
+            if (entry.canDeleteAfter) entry.deleteAll();
+        }
+    }
 
     public ArrayList<MediaController.PhotoEntry> prepareSend(int currentIndex, VideoEditedInfo currentEdit,
             boolean commonCaption, CharSequence caption, ArrayList<TLRPC.MessageEntity> entities) {

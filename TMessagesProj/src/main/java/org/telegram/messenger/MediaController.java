@@ -6026,8 +6026,6 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         FileOutputStream output = null;
         int totalLen = 0;
         File f = null;
-        boolean copied = false;
-        boolean fileCreated = false;
         try {
             String name = FileLoader.fixFileName(getFileName(uri));
             if (name == null) {
@@ -6054,8 +6052,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     }
                 }
                 count++;
-            } while (!f.createNewFile());
-            fileCreated = true;
+            } while (f.exists());
             inputStream = ApplicationLoader.applicationContext.getContentResolver().openInputStream(uri);
             if (inputStream instanceof FileInputStream) {
                 FileInputStream fileInputStream = (FileInputStream) inputStream;
@@ -6079,7 +6076,6 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     return null;
                 }
             }
-            copied = true;
             return f.getAbsolutePath();
         } catch (Exception e) {
             FileLog.e(e);
@@ -6098,7 +6094,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             } catch (Exception e2) {
                 FileLog.e(e2);
             }
-            if (!copied && fileCreated) {
+            if (sizeLimit > 0 && totalLen > sizeLimit) {
                 f.delete();
             }
         }

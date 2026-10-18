@@ -20703,7 +20703,7 @@ public class ChatActivity extends BaseFragment implements
         final long pickerDialogId = dialog_id;
         final long pickerThreadMessageId = threadMessageId;
         final SystemPhotoPickerImport importer = systemPhotoPickerImport = new SystemPhotoPickerImport(
-                ApplicationLoader.applicationContext.getContentResolver(), AndroidUtilities.getSharingDirectory());
+                ApplicationLoader.applicationContext.getContentResolver(), FileLoader.getDirectory(FileLoader.MEDIA_DIR_CACHE));
         final AlertDialog progress = systemPhotoPickerProgress = new AlertDialog(getParentActivity(), AlertDialog.ALERT_TYPE_SPINNER, themeDelegate);
         progress.setCanceledOnTouchOutside(false);
         progress.setOnCancelListener(dialog -> importer.close());
@@ -20744,24 +20744,15 @@ public class ChatActivity extends BaseFragment implements
         }, "system-photo-picker").start();
     }
 
-    private static void deletePickerEntries(ArrayList<MediaController.PhotoEntry> entries) {
-        for (MediaController.PhotoEntry entry : entries) {
-            if (entry.canDeleteAfter) {
-                entry.deleteAll();
-            }
-        }
-    }
-
     private boolean openSystemPhotosEditor(ArrayList<MediaController.PhotoEntry> entries, CharSequence caption) {
         if (entries.isEmpty() || getParentActivity() == null) return false;
         final PhotoViewer viewer = PhotoViewer.getInstance();
         if (viewer.isVisibleOrAnimating()) return false;
         final SystemPhotoPickerSelection selection = new SystemPhotoPickerSelection(entries);
-        final boolean[] sent = {false};
         final Runnable restoreLimits = viewer.useTemporarySelectionLimits(entries.size(), true);
         final Runnable cleanup = () -> {
             restoreLimits.run();
-            if (!sent[0]) deletePickerEntries(entries);
+            selection.cleanup();
         };
         boolean opened = false;
         try {
@@ -20772,18 +20763,25 @@ public class ChatActivity extends BaseFragment implements
 
                 @Override
                 public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo, boolean notify, int scheduleDate, int scheduleRepeatPeriod, boolean forceDocument) {
-                    if (sent[0] || selection.order().isEmpty()) return;
-                    CharSequence[] commonCaption = {viewer.captionForAllMedia};
-                    ArrayList<TLRPC.MessageEntity> entities = viewer.hasCaptionForAllMedia
-                            ? getMediaDataController().getEntities(commonCaption, false) : null;
-                    ArrayList<MediaController.PhotoEntry> toSend = selection.prepareSend(index, videoEditedInfo,
-                            viewer.hasCaptionForAllMedia, commonCaption[0], entities);
-                    if (toSend.isEmpty()) return;
-                    for (MediaController.PhotoEntry entry : entries) {
-                        if (!toSend.contains(entry)) entry.deleteAll();
+                    if (!selection.beginSend()) return;
+                    try {
+                        CharSequence[] commonCaption = {viewer.captionForAllMedia};
+                        ArrayList<TLRPC.MessageEntity> entities = viewer.hasCaptionForAllMedia
+                                ? getMediaDataController().getEntities(commonCaption, false) : null;
+                        ArrayList<MediaController.PhotoEntry> toSend = selection.prepareSend(index, videoEditedInfo,
+                                viewer.hasCaptionForAllMedia, commonCaption[0], entities);
+                        if (toSend.isEmpty()) return;
+                        for (MediaController.PhotoEntry entry : entries) {
+                            if (!toSend.contains(entry)) entry.deleteAll();
+                        }
+                        sendPhotosGroup(toSend, notify, scheduleDate, forceDocument, selection::markQueued);
+                    } catch (Exception e) {
+                        FileLog.e(e);
+                        if (!selection.isQueued()) {
+                            selection.cleanup();
+                            showAttachmentError();
+                        }
                     }
-                    sent[0] = true;
-                    sendPhotosGroup(toSend, notify, scheduleDate, forceDocument);
                 }
 
                 @Override
@@ -20870,6 +20868,10 @@ public class ChatActivity extends BaseFragment implements
         return true;
     }
     private void sendPhotosGroup(ArrayList<MediaController.PhotoEntry> entries, boolean notify, int scheduleDate, boolean forceDocument) {
+        sendPhotosGroup(entries, notify, scheduleDate, forceDocument, null);
+    }
+
+    private void sendPhotosGroup(ArrayList<MediaController.PhotoEntry> entries, boolean notify, int scheduleDate, boolean forceDocument, Runnable onQueued) {
         if (!entries.isEmpty()) {
             ArrayList<SendMessagesHelper.SendingMediaInfo> photos = new ArrayList<>();
             for (MediaController.PhotoEntry entry : entries) {
@@ -20898,10 +20900,16 @@ public class ChatActivity extends BaseFragment implements
                 info.hasMediaSpoilers = entry.hasSpoiler;
                 info.highQuality = entry.isHighQuality();
                 photos.add(info);
-                entry.reset();
+                if (onQueued == null) entry.reset();
             }
             fillEditingMediaWithCaption(photos.get(0).caption, photos.get(0).entities);
-            SendMessagesHelper.prepareSendingMedia(getAccountInstance(), photos, dialog_id, replyingMessageObject, getThreadMessage(), null, replyingQuote, forceDocument, true, null, notify, scheduleDate, 0, chatMode, photos.get(0).updateStickersOrder, null, getMessageChatSendParams(), 0, false, 0, getSendMonoForumPeerId(), messageSuggestionParams);
+            boolean queued = SendMessagesHelper.prepareSendingMedia(getAccountInstance(), photos, dialog_id, replyingMessageObject, getThreadMessage(), null, replyingQuote, forceDocument, true, null, notify, scheduleDate, 0, chatMode, photos.get(0).updateStickersOrder, null, getMessageChatSendParams(), 0, false, 0, getSendMonoForumPeerId(), messageSuggestionParams);
+            if (onQueued != null) {
+                if (!queued) throw new IllegalStateException("Media send queue rejected picker files");
+                // Transfer ownership before UI bookkeeping that can itself fail.
+                onQueued.run();
+                for (MediaController.PhotoEntry entry : entries) entry.reset();
+            }
             afterMessageSend();
             if (chatActivityEnterView != null) {
                 chatActivityEnterView.setFieldText("");

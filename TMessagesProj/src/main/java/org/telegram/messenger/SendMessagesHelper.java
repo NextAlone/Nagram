@@ -10726,20 +10726,21 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         return bmOptions.outWidth < 800 && bmOptions.outHeight < 800;
     }
 
+    /** Returns queue acceptance only. Media preparation and network sending remain asynchronous. */
     @UiThread
-    public static void prepareSendingMedia(AccountInstance accountInstance, ArrayList<SendingMediaInfo> media, long dialogId, MessageObject replyToMsg, MessageObject replyToTopMsg, TL_stories.StoryItem storyItem, ChatActivity.ReplyQuote quote, boolean forceDocument, boolean groupMedia, MessageObject editingMessageObject, boolean notify, int scheduleDate, int scheduleRepeatPeriod, int mode, boolean updateStikcersOrder, InputContentInfoCompat inputContent, SendMessageChatArguments sendMessageChatArguments, long effectId, boolean invertMedia, long payStars, long monoForumPeerId, MessageSuggestionParams suggestionParams) {
-        prepareSendingMedia(accountInstance, media, dialogId, replyToMsg, replyToTopMsg, storyItem, quote, forceDocument, groupMedia, editingMessageObject, null, notify, scheduleDate, scheduleRepeatPeriod, mode, updateStikcersOrder, inputContent, sendMessageChatArguments, effectId, invertMedia, payStars, monoForumPeerId, suggestionParams);
+    public static boolean prepareSendingMedia(AccountInstance accountInstance, ArrayList<SendingMediaInfo> media, long dialogId, MessageObject replyToMsg, MessageObject replyToTopMsg, TL_stories.StoryItem storyItem, ChatActivity.ReplyQuote quote, boolean forceDocument, boolean groupMedia, MessageObject editingMessageObject, boolean notify, int scheduleDate, int scheduleRepeatPeriod, int mode, boolean updateStikcersOrder, InputContentInfoCompat inputContent, SendMessageChatArguments sendMessageChatArguments, long effectId, boolean invertMedia, long payStars, long monoForumPeerId, MessageSuggestionParams suggestionParams) {
+        return prepareSendingMedia(accountInstance, media, dialogId, replyToMsg, replyToTopMsg, storyItem, quote, forceDocument, groupMedia, editingMessageObject, null, notify, scheduleDate, scheduleRepeatPeriod, mode, updateStikcersOrder, inputContent, sendMessageChatArguments, effectId, invertMedia, payStars, monoForumPeerId, suggestionParams);
     }
 
     @UiThread
-    public static void prepareSendingMedia(AccountInstance accountInstance, ArrayList<SendingMediaInfo> media, long dialogId, MessageObject replyToMsg, MessageObject replyToTopMsg, TL_stories.StoryItem storyItem, ChatActivity.ReplyQuote quote, boolean forceDocument, boolean groupMedia, MessageObject editingMessageObject, TLRPC.TL_inputPollAnswer pollToAddOptionMessageObject, boolean notify, int scheduleDate, int scheduleRepeatPeriod, int mode, boolean updateStikcersOrder, InputContentInfoCompat inputContent, SendMessageChatArguments sendMessageChatArguments, long effectId, boolean invertMedia, long payStars, long monoForumPeerId, MessageSuggestionParams suggestionParams) {
-        prepareSendingMedia(accountInstance, media, dialogId, replyToMsg, replyToTopMsg, storyItem, quote, forceDocument, groupMedia, editingMessageObject, pollToAddOptionMessageObject, notify, scheduleDate, scheduleRepeatPeriod, mode, updateStikcersOrder, inputContent, sendMessageChatArguments, effectId, invertMedia, payStars, monoForumPeerId, suggestionParams, null, false);
+    public static boolean prepareSendingMedia(AccountInstance accountInstance, ArrayList<SendingMediaInfo> media, long dialogId, MessageObject replyToMsg, MessageObject replyToTopMsg, TL_stories.StoryItem storyItem, ChatActivity.ReplyQuote quote, boolean forceDocument, boolean groupMedia, MessageObject editingMessageObject, TLRPC.TL_inputPollAnswer pollToAddOptionMessageObject, boolean notify, int scheduleDate, int scheduleRepeatPeriod, int mode, boolean updateStikcersOrder, InputContentInfoCompat inputContent, SendMessageChatArguments sendMessageChatArguments, long effectId, boolean invertMedia, long payStars, long monoForumPeerId, MessageSuggestionParams suggestionParams) {
+        return prepareSendingMedia(accountInstance, media, dialogId, replyToMsg, replyToTopMsg, storyItem, quote, forceDocument, groupMedia, editingMessageObject, pollToAddOptionMessageObject, notify, scheduleDate, scheduleRepeatPeriod, mode, updateStikcersOrder, inputContent, sendMessageChatArguments, effectId, invertMedia, payStars, monoForumPeerId, suggestionParams, null, false);
     }
 
     @UiThread
-    public static void prepareSendingMedia(AccountInstance accountInstance, ArrayList<SendingMediaInfo> media, long dialogId, MessageObject replyToMsg, MessageObject replyToTopMsg, TL_stories.StoryItem storyItem, ChatActivity.ReplyQuote quote, boolean forceDocument, boolean groupMedia, MessageObject editingMessageObject, TLRPC.TL_inputPollAnswer pollToAddOptionMessageObject, boolean notify, int scheduleDate, int scheduleRepeatPeriod, int mode, boolean updateStikcersOrder, InputContentInfoCompat inputContent, SendMessageChatArguments sendMessageChatArguments, long effectId, boolean invertMedia, long payStars, long monoForumPeerId, MessageSuggestionParams suggestionParams, PollSendParams pollSendParams, boolean forcedPollDoNotSendFinal) {
+    public static boolean prepareSendingMedia(AccountInstance accountInstance, ArrayList<SendingMediaInfo> media, long dialogId, MessageObject replyToMsg, MessageObject replyToTopMsg, TL_stories.StoryItem storyItem, ChatActivity.ReplyQuote quote, boolean forceDocument, boolean groupMedia, MessageObject editingMessageObject, TLRPC.TL_inputPollAnswer pollToAddOptionMessageObject, boolean notify, int scheduleDate, int scheduleRepeatPeriod, int mode, boolean updateStikcersOrder, InputContentInfoCompat inputContent, SendMessageChatArguments sendMessageChatArguments, long effectId, boolean invertMedia, long payStars, long monoForumPeerId, MessageSuggestionParams suggestionParams, PollSendParams pollSendParams, boolean forcedPollDoNotSendFinal) {
         if (media.isEmpty()) {
-            return;
+            return false;
         }
         for (int a = 0, N = media.size(); a < N; a++) {
             if (media.get(a).ttl > 0) {
@@ -10750,7 +10751,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         final long forcedPollGroupId = pollSendParams != null ? pollSendParams.groupId : 0;
         final boolean forceDisableCheckSentMedia = forcedPollGroupId != 0;
         final boolean groupMediaFinal = groupMedia;
-        mediaSendQueue.postRunnable(() -> {
+        return mediaSendQueue.postRunnable(() -> {
             long beginTime = System.currentTimeMillis();
             HashMap<SendingMediaInfo, MediaSendPrepareWorker> workers;
             int count = media.size();

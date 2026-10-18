@@ -46,6 +46,7 @@ import java.util.concurrent.TimeUnit;
 })
 public class SystemPhotoPickerImportTest {
     private File cache;
+    private File cacheRoot;
     private File sources;
     private MediaProvider provider;
     private final ArrayList<SystemPhotoPickerImport> imports = new ArrayList<>();
@@ -53,7 +54,10 @@ public class SystemPhotoPickerImportTest {
     @Before public void setUp() throws Exception {
         ApplicationLoader.applicationContext = RuntimeEnvironment.getApplication();
         ShadowUtilities.internalDescriptor = false;
-        cache = Files.createTempDirectory("picker-copies").toFile();
+        ShadowUtilities.internalUri = false;
+        cacheRoot = Files.createTempDirectory("picker-copies").toFile();
+        cache = new File(cacheRoot, "sharing");
+        assertTrue(cache.mkdir());
         sources = Files.createTempDirectory("picker-originals").toFile();
         provider = new MediaProvider();
         ProviderInfo info = new ProviderInfo();
@@ -68,6 +72,7 @@ public class SystemPhotoPickerImportTest {
             for (File file : directory.listFiles()) file.delete();
             directory.delete();
         }
+        cacheRoot.delete();
     }
 
     private SystemPhotoPickerImport job() {
@@ -75,7 +80,7 @@ public class SystemPhotoPickerImportTest {
     }
 
     private SystemPhotoPickerImport job(ContentResolver resolver) {
-        SystemPhotoPickerImport job = new SystemPhotoPickerImport(resolver, cache);
+        SystemPhotoPickerImport job = new SystemPhotoPickerImport(resolver, cacheRoot);
         imports.add(job);
         return job;
     }
@@ -86,6 +91,68 @@ public class SystemPhotoPickerImportTest {
         Files.write(original.toPath(), bytes);
         provider.items.put(uri, new Item(mime, name, original));
         return uri;
+    }
+
+    @Test public void createsSharingDirectoryInsideTrustedCacheWithoutUriValidation() throws Exception {
+        assertTrue(cache.delete());
+        File copy = new File(job().copy(media("image/png", null, new byte[]{1, 2})).path);
+        assertEquals(cache.getCanonicalFile(), copy.getCanonicalFile().getParentFile());
+        assertEquals(cacheRoot.getCanonicalFile(), copy.getCanonicalFile().getParentFile().getParentFile());
+    }
+
+    @Test public void rejectsSharingSymlinkOutsideCacheWithoutTouchingTarget() throws Exception {
+        File outside = Files.createTempDirectory("picker-outside").toFile();
+        File original = new File(outside, "original.png");
+        Files.write(original.toPath(), new byte[]{9});
+        assertTrue(cache.delete());
+        Files.createSymbolicLink(cache.toPath(), outside.toPath());
+        try {
+            try { job().copy(media("image/png", null, new byte[]{1})); fail(); } catch (IOException expected) { }
+            assertEquals(0, provider.opens);
+            assertEquals(1, outside.list().length);
+            assertArrayEquals(new byte[]{9}, Files.readAllBytes(original.toPath()));
+        } finally {
+            Files.delete(cache.toPath());
+            assertTrue(cache.mkdir());
+            original.delete();
+            outside.delete();
+        }
+    }
+
+    @Test public void invalidCacheDirectoryDoesNotRemoveExistingFile() throws Exception {
+        assertTrue(cache.delete());
+        Files.write(cache.toPath(), new byte[]{9});
+        try {
+            try { job().copy(media("image/png", null, new byte[]{1})); fail(); } catch (IOException expected) { }
+            assertArrayEquals(new byte[]{9}, Files.readAllBytes(cache.toPath()));
+            assertEquals(0, provider.opens);
+        } finally {
+            assertTrue(cache.delete());
+            assertTrue(cache.mkdir());
+        }
+    }
+
+    @Test public void onlyOwnedFilesAreRemovedOnCancelOrFailure() throws Exception {
+        File unrelated = new File(cache, "unrelated.png");
+        Files.write(unrelated.toPath(), new byte[]{9});
+        Uri good = media("image/png", null, new byte[]{1});
+        SystemPhotoPickerImport cancelled = job();
+        cancelled.copy(good);
+        cancelled.close();
+        Uri bad = media("image/png", null, new byte[]{2});
+        provider.items.get(bad).failRead = true;
+        try { job(ContentResolver.wrap(provider)).load(new ArrayList<>(Arrays.asList(good, bad))); fail(); } catch (IOException expected) { }
+        assertEquals(1, cache.list().length);
+        assertArrayEquals(new byte[]{9}, Files.readAllBytes(unrelated.toPath()));
+    }
+
+    @Test public void stillRejectsIncomingInternalAndNonContentUris() throws Exception {
+        Uri uri = media("image/png", null, new byte[]{1});
+        ShadowUtilities.internalUri = true;
+        try { job().copy(uri); fail(); } catch (IOException expected) { }
+        try { job().copy(Uri.fromFile(provider.items.get(uri).source)); fail(); } catch (IOException expected) { }
+        assertEquals(0, provider.opens);
+        assertEquals(0, cache.list().length);
     }
 
     @Test public void preservesAllRequestedFormatsAndBytesForUnnamedUris() throws Exception {
@@ -303,8 +370,12 @@ public class SystemPhotoPickerImportTest {
 
     @Implements(AndroidUtilities.class) public static class ShadowUtilities {
         static boolean internalDescriptor;
+        static boolean internalUri;
         @Implementation protected static void __staticInitializer__() { }
-        @Implementation protected static boolean isInternalUri(Uri uri) { return false; }
+        @Implementation protected static boolean isInternalUri(Uri uri) {
+            if ("file".equals(uri.getScheme())) throw new AssertionError("Trusted cache must not use incoming-URI validation");
+            return internalUri;
+        }
         @Implementation protected static boolean isInternalUri(int fd) { return internalDescriptor; }
         @Implementation protected static Pair<Integer, Integer> getImageOrientation(String path) { return new Pair<>(90, 0); }
     }
