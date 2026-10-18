@@ -1130,10 +1130,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (corners < 100) {
                 r = corners == 0 ? 0 : Math.round(r * (corners / 100.0f));
             }
-            if (r > 0) {
+            if (corners < 100 || r > 0) {
                 clipPath.rewind();
                 AndroidUtilities.rectTmp.set(inset, inset, thisWidth - inset, thisHeight - inset);
-                clipPath.addRoundRect(AndroidUtilities.rectTmp, r, r, Path.Direction.CW);
+                if (r > 0) {
+                    clipPath.addRoundRect(AndroidUtilities.rectTmp, r, r, Path.Direction.CW);
+                } else {
+                    clipPath.addRect(AndroidUtilities.rectTmp, Path.Direction.CW);
+                }
                 canvas.clipPath(clipPath);
             }
 
