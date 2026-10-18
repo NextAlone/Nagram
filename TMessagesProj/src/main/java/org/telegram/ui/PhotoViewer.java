@@ -3066,6 +3066,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         }
         default void onReleasePlayerBeforeClose(int currentIndex) {};
         default long getDialogId() { return 0; }
+        default boolean canSendSelectedMedia() { return true; }
         default boolean canSchedule() { return false; }
         default boolean canSetTimer() { return false; }
 
@@ -8254,6 +8255,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     }
 
     private void sendPressed(boolean notify, int scheduleDate, int scheduleRepeatPeriod, boolean replace, boolean forceDocument, boolean confirmed) {
+        if (placeProvider != null && !placeProvider.canSendSelectedMedia()) return;
         if (isCaptionOpen()) {
             return;
         }
@@ -17409,6 +17411,20 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     public void setMaxSelectedPhotos(int value, boolean order) {
         maxSelectedPhotos = value;
         allowOrder = order;
+    }
+
+    /** Restore the previous caller's limits on close or a failed picker open. UI thread only. */
+    public Runnable useTemporarySelectionLimits(int value, boolean order) {
+        final int previousMax = maxSelectedPhotos;
+        final boolean previousOrder = allowOrder;
+        final boolean[] restored = {false};
+        setMaxSelectedPhotos(value, order);
+        return () -> {
+            if (!restored[0]) {
+                restored[0] = true;
+                setMaxSelectedPhotos(previousMax, previousOrder);
+            }
+        };
     }
 
     public void checkCurrentImageVisibility() {

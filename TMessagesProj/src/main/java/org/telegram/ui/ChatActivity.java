@@ -176,6 +176,7 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LiteMode;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
+import org.telegram.messenger.SystemPhotoPickerImport;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.SendMessageChatArguments;
 import org.telegram.messenger.MessageObject;
@@ -3609,12 +3610,18 @@ public class ChatActivity extends BaseFragment implements
     @Override
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        if (systemPhotoPickerCancelled != null) {
-            systemPhotoPickerCancelled.set(true);
+        if (systemPhotoPickerImport != null) {
+            systemPhotoPickerImport.close();
         }
         if (systemPhotoPickerProgress != null) {
             systemPhotoPickerProgress.dismiss();
             systemPhotoPickerProgress = null;
+        }
+        if (systemPhotoPickerEditorCleanup != null) {
+            Runnable cleanup = systemPhotoPickerEditorCleanup;
+            PhotoViewer.getInstance().closePhoto(false, true);
+            cleanup.run();
+            systemPhotoPickerEditorCleanup = null;
         }
         MessageTransKt.cancelTranslations(this);
         if (messageMetricsView != null) {
@@ -17579,7 +17586,8 @@ public class ChatActivity extends BaseFragment implements
 
     private AlertDialog progressDialog;
     private AlertDialog systemPhotoPickerProgress;
-    private AtomicBoolean systemPhotoPickerCancelled;
+    private SystemPhotoPickerImport systemPhotoPickerImport;
+    private Runnable systemPhotoPickerEditorCleanup;
     private int nextScrollToMessageId;
     private int nextScrollFromMessageId;
     private boolean nextScrollSelect;
@@ -20635,15 +20643,8 @@ public class ChatActivity extends BaseFragment implements
     }
 
     public static ArrayList<MediaController.PhotoEntry> createEntriesFromMedia(ArrayList<SendMessagesHelper.SendingMediaInfo> photoPathes, boolean isSecretChat, CharSequence caption) {
-        return createEntriesFromMedia(photoPathes, isSecretChat, caption, null);
-    }
-
-    private static ArrayList<MediaController.PhotoEntry> createEntriesFromMedia(ArrayList<SendMessagesHelper.SendingMediaInfo> photoPathes, boolean isSecretChat, CharSequence caption, AtomicBoolean cancelled) {
         final ArrayList<MediaController.PhotoEntry> entries = new ArrayList<>();
         for (int a = 0; a < photoPathes.size(); ++a) {
-            if (cancelled != null && cancelled.get()) {
-                break;
-            }
             SendMessagesHelper.SendingMediaInfo photoInfo = photoPathes.get(a);
             String path = null;
             if (photoInfo.path != null) {
@@ -20654,24 +20655,13 @@ public class ChatActivity extends BaseFragment implements
             if (path == null) {
                 continue;
             }
-            try {
-                if (photoInfo.uri != null && new File(path).length() == 0) {
-                    new File(path).delete();
-                    continue;
-                }
-                Pair<Integer, Integer> orientation = photoInfo.isVideo ? new Pair<>(0, 0) : AndroidUtilities.getImageOrientation(path);
-                MediaController.PhotoEntry entry = new MediaController.PhotoEntry(0, a, 0, path, orientation.first, photoInfo.isVideo, 0, 0, 0).setOrientation(orientation);
-                entry.canDeleteAfter = photoInfo.uri != null;
-                if (a == photoPathes.size() - 1 && caption != null) {
-                    entry.caption = caption;
-                }
-                entries.add(entry);
-            } catch (Exception e) {
-                FileLog.e(e);
-                if (photoInfo.uri != null) {
-                    new File(path).delete();
-                }
+            Pair<Integer, Integer> orientation = AndroidUtilities.getImageOrientation(path);
+            MediaController.PhotoEntry entry = new MediaController.PhotoEntry(0, 0, 0, path, orientation.first, photoInfo.isVideo, 0, 0, 0).setOrientation(orientation);
+            entry.canDeleteAfter = photoInfo.uri != null;
+            if (a == photoPathes.size() - 1 && caption != null) {
+                entry.caption = caption;
             }
+            entries.add(entry);
         }
 
         return entries;
@@ -20703,59 +20693,53 @@ public class ChatActivity extends BaseFragment implements
         if (getParentActivity() == null || isFinished) {
             return;
         }
-        if (systemPhotoPickerCancelled != null) {
-            systemPhotoPickerCancelled.set(true);
+        if (systemPhotoPickerImport != null) {
+            systemPhotoPickerImport.close();
         }
         if (systemPhotoPickerProgress != null) {
             systemPhotoPickerProgress.dismiss();
         }
         final CharSequence caption = chatActivityEnterView.getFieldText() == null ? null : new SpannableStringBuilder(chatActivityEnterView.getFieldText());
-        final boolean secretChat = isSecretChat();
         final long pickerDialogId = dialog_id;
         final long pickerThreadMessageId = threadMessageId;
-        final AtomicBoolean cancelled = systemPhotoPickerCancelled = new AtomicBoolean();
+        final SystemPhotoPickerImport importer = systemPhotoPickerImport = new SystemPhotoPickerImport(
+                ApplicationLoader.applicationContext.getContentResolver(), AndroidUtilities.getSharingDirectory());
         final AlertDialog progress = systemPhotoPickerProgress = new AlertDialog(getParentActivity(), AlertDialog.ALERT_TYPE_SPINNER, themeDelegate);
         progress.setCanceledOnTouchOutside(false);
-        progress.setOnCancelListener(dialog -> cancelled.set(true));
+        progress.setOnCancelListener(dialog -> importer.close());
         progress.showDelayed(300);
-        // CloudMediaProvider may download the original while opening/reading its URI.
         new Thread(() -> {
-            ArrayList<SendMessagesHelper.SendingMediaInfo> media = new ArrayList<>(uris.size());
-            for (Uri uri : uris) {
-                if (cancelled.get()) {
-                    break;
-                }
-                SendMessagesHelper.SendingMediaInfo info = new SendMessagesHelper.SendingMediaInfo();
-                info.uri = uri;
-                try {
-                    String mimeType = ApplicationLoader.applicationContext.getContentResolver().getType(uri);
-                    if (mimeType == null || !(mimeType.startsWith("image/") || mimeType.startsWith("video/"))) {
-                        break;
-                    }
-                    info.isVideo = mimeType.startsWith("video/");
-                } catch (Exception e) {
-                    FileLog.e(e);
-                    break;
-                }
-                media.add(info);
+            ArrayList<MediaController.PhotoEntry> loaded = new ArrayList<>();
+            boolean failed = false;
+            try {
+                loaded = importer.load(uris);
+            } catch (Exception e) {
+                failed = true;
+                if (!importer.isCancelled()) FileLog.e(e);
             }
-            final ArrayList<MediaController.PhotoEntry> entries = createEntriesFromMedia(media, secretChat, caption, cancelled);
+            final ArrayList<MediaController.PhotoEntry> entries = loaded;
+            final boolean importFailed = failed;
             AndroidUtilities.runOnUIThread(() -> {
                 progress.dismiss();
                 if (systemPhotoPickerProgress == progress) {
                     systemPhotoPickerProgress = null;
-                    systemPhotoPickerCancelled = null;
+                    systemPhotoPickerImport = null;
                 }
-                if (cancelled.get() || isFinished || getParentActivity() == null
+                if (importer.isCancelled() || isFinished || getParentActivity() == null
                         || dialog_id != pickerDialogId || threadMessageId != pickerThreadMessageId) {
-                    deletePickerEntries(entries);
+                    importer.close();
                     return;
                 }
-                // Never silently send only part of a selection after a cloud download fails.
-                if (entries.size() != uris.size() || !openPhotosEditorEntries(entries, caption, true)) {
-                    deletePickerEntries(entries);
-                    showAttachmentError();
+                try {
+                    if (!importFailed && entries.size() == uris.size() && openSystemPhotosEditor(entries, caption)) {
+                        importer.release();
+                        return;
+                    }
+                } catch (Exception e) {
+                    FileLog.e(e);
                 }
+                importer.close();
+                showAttachmentError();
             });
         }, "system-photo-picker").start();
     }
@@ -20768,25 +20752,86 @@ public class ChatActivity extends BaseFragment implements
         }
     }
 
-    public boolean openPhotosEditor(ArrayList<SendMessagesHelper.SendingMediaInfo> photoPathes, CharSequence caption) {
-        return openPhotosEditorEntries(createEntriesFromMedia(photoPathes, isSecretChat(), caption), caption, false);
+    private boolean openSystemPhotosEditor(ArrayList<MediaController.PhotoEntry> entries, CharSequence caption) {
+        if (entries.isEmpty() || getParentActivity() == null) return false;
+        final PhotoViewer viewer = PhotoViewer.getInstance();
+        if (viewer.isVisibleOrAnimating()) return false;
+        final SystemPhotoPickerSelection selection = new SystemPhotoPickerSelection(entries);
+        final boolean[] sent = {false};
+        final Runnable restoreLimits = viewer.useTemporarySelectionLimits(entries.size(), true);
+        final Runnable cleanup = () -> {
+            restoreLimits.run();
+            if (!sent[0]) deletePickerEntries(entries);
+        };
+        boolean opened = false;
+        try {
+            viewer.setParentActivity(this, themeDelegate);
+            opened = viewer.openPhotoForSelect(new ArrayList<>(entries), entries.size() - 1, 0, false, new PhotoViewer.EmptyPhotoViewerProvider() {
+                @Override
+                public boolean canSendSelectedMedia() { return !selection.order().isEmpty(); }
+
+                @Override
+                public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo, boolean notify, int scheduleDate, int scheduleRepeatPeriod, boolean forceDocument) {
+                    if (sent[0] || selection.order().isEmpty()) return;
+                    CharSequence[] commonCaption = {viewer.captionForAllMedia};
+                    ArrayList<TLRPC.MessageEntity> entities = viewer.hasCaptionForAllMedia
+                            ? getMediaDataController().getEntities(commonCaption, false) : null;
+                    ArrayList<MediaController.PhotoEntry> toSend = selection.prepareSend(index, videoEditedInfo,
+                            viewer.hasCaptionForAllMedia, commonCaption[0], entities);
+                    if (toSend.isEmpty()) return;
+                    for (MediaController.PhotoEntry entry : entries) {
+                        if (!toSend.contains(entry)) entry.deleteAll();
+                    }
+                    sent[0] = true;
+                    sendPhotosGroup(toSend, notify, scheduleDate, forceDocument);
+                }
+
+                @Override
+                public int setPhotoChecked(int index, VideoEditedInfo ignoredCurrentVideoEdit) { return selection.toggle(index); }
+                @Override
+                public boolean isPhotoChecked(int index) { return selection.selected().containsKey(index); }
+                @Override
+                public int getSelectedCount() { return selection.selected().size(); }
+                @Override
+                public ArrayList<Object> getSelectedPhotosOrder() { return selection.order(); }
+                @Override
+                public HashMap<Object, Object> getSelectedPhotos() { return selection.selected(); }
+                @Override
+                public int getPhotoIndex(int index) { return selection.order().indexOf(index); }
+                @Override
+                public boolean canCaptureMorePhotos() { return false; }
+                @Override
+                public boolean canScrollAway() { return false; }
+                @Override
+                public void onClose() {
+                    cleanup.run();
+                    if (systemPhotoPickerEditorCleanup == cleanup) systemPhotoPickerEditorCleanup = null;
+                }
+            }, this);
+            if (opened) {
+                systemPhotoPickerEditorCleanup = cleanup;
+                if (caption != null) viewer.setCaption(caption);
+            }
+            return opened;
+        } catch (Exception e) {
+            opened = false;
+            viewer.closePhoto(false, true);
+            throw e;
+        } finally {
+            if (!opened) cleanup.run();
+        }
     }
 
-    private boolean openPhotosEditorEntries(ArrayList<MediaController.PhotoEntry> entries, CharSequence caption, boolean fromSystemPicker) {
+    public boolean openPhotosEditor(ArrayList<SendMessagesHelper.SendingMediaInfo> photoPathes, CharSequence caption) {
+        final ArrayList<MediaController.PhotoEntry> entries = createEntriesFromMedia(photoPathes,isSecretChat(), caption);
         if (entries.isEmpty()) {
             return false;
         }
         if (getParentActivity() != null) {
-            final HashMap<Object, Object> selected = new HashMap<>();
-            final ArrayList<Object> order = new ArrayList<>();
-            for (int i = 0; i < entries.size(); i++) {
-                selected.put(i, entries.get(i));
-                order.add(i);
-            }
-            final boolean[] sent = {false};
+            final boolean[] checked = new boolean[entries.size()];
+            Arrays.fill(checked, true);
             PhotoViewer.getInstance().setParentActivity(this, themeDelegate);
-            PhotoViewer.getInstance().setMaxSelectedPhotos(entries.size(), true);
-            return PhotoViewer.getInstance().openPhotoForSelect(new ArrayList<>(entries), entries.size() - 1, 0, false, new PhotoViewer.EmptyPhotoViewerProvider() {
+            PhotoViewer.getInstance().openPhotoForSelect(new ArrayList<>(entries), entries.size() - 1, 0, false, new PhotoViewer.EmptyPhotoViewerProvider() {
                 @Override
                 public ImageReceiver.BitmapHolder getThumbForPhoto(MessageObject messageObject, TLRPC.FileLocation fileLocation, int index) {
                     return null;
@@ -20794,74 +20839,22 @@ public class ChatActivity extends BaseFragment implements
 
                 @Override
                 public void sendButtonPressed(int index, VideoEditedInfo videoEditedInfo, boolean notify, int scheduleDate, int scheduleRepeatPeriod, boolean forceDocument) {
-                    entries.get(index).editedInfo = videoEditedInfo;
-                    if (order.isEmpty()) {
-                        selected.put(index, entries.get(index));
-                        order.add(index);
-                    }
-                    ArrayList<MediaController.PhotoEntry> toSend = new ArrayList<>();
-                    for (Object key : order) {
-                        toSend.add((MediaController.PhotoEntry) selected.get(key));
-                    }
-                    if (fromSystemPicker) {
-                        for (MediaController.PhotoEntry entry : entries) {
-                            if (!toSend.contains(entry)) {
-                                entry.deleteAll();
-                            }
+                    for (int i = entries.size() - 1; i >= 0; --i) {
+                        if (!checked[i]) {
+                            entries.remove(i);
                         }
                     }
-                    sent[0] = true;
-                    sendPhotosGroup(toSend, notify, scheduleDate, forceDocument);
+                    sendPhotosGroup(entries, notify, scheduleDate, forceDocument);
                 }
 
                 @Override
                 public int setPhotoChecked(int index, VideoEditedInfo videoEditedInfo) {
-                    entries.get(index).editedInfo = videoEditedInfo;
-                    int position = order.indexOf(index);
-                    if (selected.remove(index) != null) {
-                        order.remove(position);
-                        return position;
-                    }
-                    selected.put(index, entries.get(index));
-                    order.add(index);
-                    return order.size() - 1;
+                    return index;
                 }
 
                 @Override
                 public boolean isPhotoChecked(int index) {
-                    return selected.containsKey(index);
-                }
-
-                @Override
-                public int getSelectedCount() {
-                    return selected.size();
-                }
-
-                @Override
-                public ArrayList<Object> getSelectedPhotosOrder() {
-                    return order;
-                }
-
-                @Override
-                public HashMap<Object, Object> getSelectedPhotos() {
-                    return selected;
-                }
-
-                @Override
-                public int getPhotoIndex(int index) {
-                    return order.indexOf(index);
-                }
-
-                @Override
-                public boolean canCaptureMorePhotos() {
-                    return false;
-                }
-
-                @Override
-                public void willHidePhotoViewer() {
-                    if (fromSystemPicker && !sent[0]) {
-                        deletePickerEntries(entries);
-                    }
+                    return checked[index];
                 }
 
                 @Override

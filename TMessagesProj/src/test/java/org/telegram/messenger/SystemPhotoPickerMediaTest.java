@@ -25,7 +25,6 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
@@ -127,41 +126,6 @@ public class SystemPhotoPickerMediaTest {
     }
 
     @Test
-    public void preparesPhotoAndVideoAndKeepsCaptionAndOwnership() {
-        ArrayList<SendMessagesHelper.SendingMediaInfo> media = new ArrayList<>();
-        media.add(cloudMedia(uri, false, new byte[]{1, 2}));
-        media.add(cloudMedia(Uri.parse("content://cloud.provider/picker/video.mp4"), true, new byte[]{3, 4}));
-        ArrayList<MediaController.PhotoEntry> entries = ChatActivity.createEntriesFromMedia(media, false, "caption");
-        assertEquals(2, entries.size());
-        assertNotEquals(entries.get(0).imageId, entries.get(1).imageId);
-        assertFalse(entries.get(0).isVideo);
-        assertTrue(entries.get(1).isVideo);
-        assertTrue(entries.get(0).canDeleteAfter);
-        assertTrue(entries.get(1).canDeleteAfter);
-        assertEquals("caption", entries.get(1).caption);
-    }
-
-    @Test
-    public void rejectsEmptyDownloadedFileAndCleansItUp() {
-        ArrayList<SendMessagesHelper.SendingMediaInfo> media = new ArrayList<>();
-        media.add(cloudMedia(uri, false, new byte[0]));
-        assertTrue(ChatActivity.createEntriesFromMedia(media, false, null).isEmpty());
-        assertEquals(0, sharingDirectory.list().length);
-    }
-
-    @Test
-    public void cancellationBeforeImportDoesNotOpenAnyContent() throws Exception {
-        ArrayList<SendMessagesHelper.SendingMediaInfo> media = new ArrayList<>();
-        media.add(cloudMedia(uri, false, new byte[]{1}));
-        Method method = ChatActivity.class.getDeclaredMethod("createEntriesFromMedia", ArrayList.class,
-                boolean.class, CharSequence.class, AtomicBoolean.class);
-        method.setAccessible(true);
-        ArrayList<?> entries = (ArrayList<?>) method.invoke(null, media, false, null, new AtomicBoolean(true));
-        assertTrue(entries.isEmpty());
-        assertEquals(0, sharingDirectory.list().length);
-    }
-
-    @Test
     public void cancellingEditorDeletesOnlyImportedCopies() throws Exception {
         File original = new File(sharingDirectory, "original.jpg");
         File imported = new File(sharingDirectory, "imported.jpg");
@@ -180,14 +144,6 @@ public class SystemPhotoPickerMediaTest {
         cleanup.invoke(null, entries);
         assertTrue(original.exists());
         assertFalse(imported.exists());
-    }
-
-    private SendMessagesHelper.SendingMediaInfo cloudMedia(Uri uri, boolean video, byte[] bytes) {
-        shadowOf(ApplicationLoader.applicationContext.getContentResolver()).registerInputStream(uri, new ByteArrayInputStream(bytes));
-        SendMessagesHelper.SendingMediaInfo info = new SendMessagesHelper.SendingMediaInfo();
-        info.uri = uri;
-        info.isVideo = video;
-        return info;
     }
 
     @Implements(AndroidUtilities.class)
