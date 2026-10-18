@@ -67,12 +67,16 @@ public class SimpleAvatarView extends View {
 
         canvas.save();
         float scale = 0.9f + selectProgress * 0.1f;
-        canvas.scale(scale, scale);
+        int corners = NaConfig.INSTANCE.getAvatarCorners().Int();
+        if (corners < 100) {
+            canvas.scale(scale, scale, getWidth() / 2f, getHeight() / 2f);
+        } else {
+            canvas.scale(scale, scale);
+        }
         selectPaint.setColor(Theme.getColor(Theme.key_dialogTextBlue));
         selectPaint.setAlpha((int) (Color.alpha(selectPaint.getColor()) * selectProgress));
         float stroke = selectPaint.getStrokeWidth();
         AndroidUtilities.rectTmp.set(stroke, stroke, getWidth() - stroke, getHeight() - stroke);
-        int corners = NaConfig.INSTANCE.getAvatarCorners().Int();
         if (corners == 0) {
             final float w = selectPaint.getStrokeWidth();
             canvas.drawRect(w, w, getWidth() - w, getHeight() - w, selectPaint);
@@ -85,7 +89,8 @@ public class SimpleAvatarView extends View {
         canvas.restore();
 
         if (avatarImage != null) {
-            int size = Math.min(getWidth(), getHeight());
+            float pad = !isAvatarHidden ? selectPaint.getStrokeWidth() * 2.5f * selectProgress : 0;
+            int size = Math.max(0, Math.min(getWidth() - Math.round(pad * 2), getHeight() - Math.round(pad * 2)));
             if (size > 0) {
                 if (corners == 0) {
                     avatarImage.setRoundRadius(0);
