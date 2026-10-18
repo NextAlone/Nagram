@@ -80,6 +80,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     private final AbstractConfigCell headerMessages = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.NagramMessages)));
     private final AbstractConfigCell messagesPreviewRow = cellGroup.appendCell(new ConfigCellCustom("MessagePreview", ConfigCellCustom.CUSTOM_ITEM_MessagesPreview, false));
     private final AbstractConfigCell avatarCornersRow = cellGroup.appendCell(new ConfigCellCustom("AvatarCorners", ConfigCellCustom.CUSTOM_ITEM_AvatarCorners, true));
+    private final AbstractConfigCell useAvatarCornersForForumsRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getUseAvatarCornersForForums()));
     private final AbstractConfigCell showSeconds = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showSeconds));
     private final AbstractConfigCell showMessageIDRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowMessageID()));
     private final AbstractConfigCell dateOfForwardMsgRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDateOfForwardedMsg()));
@@ -429,7 +430,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (key.equals(NekoConfig.hideTimeForSticker.getKey()) || key.equals(NaConfig.INSTANCE.getRealHideTimeForSticker().getKey())) {
                 if (stickerSizeCell != null) stickerSizeCell.invalidate();
-            } else if (key.equals(NaConfig.INSTANCE.getAvatarCorners().getKey())) {
+            } else if (key.equals(NaConfig.INSTANCE.getAvatarCorners().getKey()) || key.equals(NaConfig.INSTANCE.getUseAvatarCornersForForums().getKey())) {
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             }
         };

@@ -904,8 +904,10 @@ public class ProfileStoriesView extends View implements NotificationCenter.Notif
     private void drawArc(Canvas canvas, RectF oval, float startAngle, float sweepAngle, boolean useCenter, Paint paint) {
         boolean isForum = ChatObject.isForum(UserConfig.selectedAccount, dialogId);
         int corners = NaConfig.INSTANCE.getAvatarCorners().Int();
-        if (isForum || corners < 100) {
-            float r = isForum ? oval.height() * 0.32f : (oval.height() / 2f) * (corners / 100.0f);
+        boolean applyCorners = isForum ? NaConfig.INSTANCE.getUseAvatarCornersForForums().Bool() : corners < 100;
+        if (isForum || applyCorners) {
+            float baseRadius = isForum ? oval.height() * 0.32f : (oval.height() / 2f);
+            float r = applyCorners && corners < 100 ? baseRadius * (corners / 100.0f) : baseRadius;
             if (Math.abs(sweepAngle) == 360) {
                 if (r == 0) {
                     canvas.drawRect(oval, paint);

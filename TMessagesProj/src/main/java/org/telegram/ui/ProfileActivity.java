@@ -970,6 +970,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         ProfileGalleryView avatarsViewPager;
         public boolean hasStories;
+        public boolean isForum;
         private float progressToInsets = 1f;
 
         public void setAvatarsViewPager(ProfileGalleryView avatarsViewPager) {
@@ -1127,10 +1128,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
             int r = /*isMetaballWorking && !hasStories ? roundRadiusCollapse : */roundRadiusExpand;
             int corners = NaConfig.INSTANCE.getAvatarCorners().Int();
-            if (corners < 100) {
+            boolean applyCorners = !isForum || NaConfig.INSTANCE.getUseAvatarCornersForForums().Bool();
+            if (corners < 100 && applyCorners) {
                 r = corners == 0 ? 0 : Math.round(r * (corners / 100.0f));
             }
-            if (corners < 100 || r > 0) {
+            if ((corners < 100 && applyCorners) || r > 0) {
                 clipPath.rewind();
                 AndroidUtilities.rectTmp.set(inset, inset, thisWidth - inset, thisHeight - inset);
                 if (r > 0) {
@@ -5667,6 +5669,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
             }
         };
+        avatarImage.isForum = !isTopic && ChatObject.isForum(currentChat);
         avatarImage.createBlurEffect(getActionsExtraHeight());
         avatarImage.getImageReceiver().setAllowDecodeSingleFrame(true);
         avatarImage.setRoundRadiusForExpand(getSmallAvatarRoundRadius());

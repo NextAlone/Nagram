@@ -3338,6 +3338,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
             }
             drawMonoforumAvatar = false;
             drawCommunityAvatar = false;
+            avatarImage.isForum = false;
             avatarImage.setRoundRadius(dp(26));
             drawUnmute = false;
         } else {
@@ -3812,6 +3813,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 avatarRadius = dp(28);
             }
 
+            avatarImage.isForum = chat != null && (chat.forum || chat.monoforum);
             avatarImage.setRoundRadius(avatarRadius);
         }
         if (!isTopic && (getMeasuredWidth() != 0 || getMeasuredHeight() != 0)) {

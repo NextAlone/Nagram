@@ -1473,6 +1473,12 @@ object NaConfig {
             ConfigItem.configTypeInt,
             100
         )
+    val useAvatarCornersForForums =
+        addConfig(
+            "UseAvatarCornersForForums",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

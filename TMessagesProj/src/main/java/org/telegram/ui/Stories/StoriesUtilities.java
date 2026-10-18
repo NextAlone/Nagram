@@ -669,10 +669,18 @@ public class StoriesUtilities {
     private static final RectF forumRect = new RectF();
 
     private static void drawCircleInternal(Canvas canvas, View view, AvatarStoryParams params, Paint paint, boolean isForum) {
-        if (isForum) {
+        int corners = NaConfig.INSTANCE.getAvatarCorners().Int();
+        boolean applyCorners = isForum ? NaConfig.INSTANCE.getUseAvatarCornersForForums().Bool() : corners < 100;
+        if (isForum || applyCorners) {
             forumRect.set(rectTmp);
             forumRect.inset(dp(0.5f), dp(0.5f));
-            canvas.drawRoundRect(forumRect, dp(18), dp(18), paint);
+            float baseRadius = isForum ? dp(18) : (forumRect.width() / 2f);
+            float r = applyCorners && corners < 100 ? baseRadius * (corners / 100.0f) : baseRadius;
+            if (r == 0) {
+                canvas.drawRect(forumRect, paint);
+            } else {
+                canvas.drawRoundRect(forumRect, r, r, paint);
+            }
             return;
         }
         if (params.progressToArc == 0) {
@@ -688,14 +696,21 @@ public class StoriesUtilities {
     private static final Path forumSegmentPath = new Path();
 
     private static void drawSegment(Canvas canvas, RectF rectTmp, Paint paint, float startAngle, float endAngle, AvatarStoryParams params, boolean isForum) {
-        if (isForum) {
-            float r = rectTmp.height() * 0.32f;
+        int corners = NaConfig.INSTANCE.getAvatarCorners().Int();
+        boolean applyCorners = isForum ? NaConfig.INSTANCE.getUseAvatarCornersForForums().Bool() : corners < 100;
+        if (isForum || applyCorners) {
+            float baseRadius = isForum ? rectTmp.height() * 0.32f : (rectTmp.height() / 2f);
+            float r = applyCorners && corners < 100 ? baseRadius * (corners / 100.0f) : baseRadius;
             float rotateAngle = (((int)(startAngle)) / 90) * 90 + 90;
             float pathAngleStart = -199 + rotateAngle;
             float percentFrom = (startAngle - pathAngleStart) / 360;
             float percentTo = (endAngle - pathAngleStart) / 360;
             forumRoundRectPath.rewind();
-            forumRoundRectPath.addRoundRect(rectTmp, r, r, Path.Direction.CW);
+            if (r == 0) {
+                forumRoundRectPath.addRect(rectTmp, Path.Direction.CW);
+            } else {
+                forumRoundRectPath.addRoundRect(rectTmp, r, r, Path.Direction.CW);
+            }
 
             forumRoundRectMatrix.reset();
             forumRoundRectMatrix.postRotate(rotateAngle, rectTmp.centerX(), rectTmp.centerY());

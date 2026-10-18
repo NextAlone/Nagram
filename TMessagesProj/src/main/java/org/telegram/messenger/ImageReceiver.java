@@ -329,6 +329,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     private int[] emptyRoundRadius;
     private boolean isRoundRect = true;
     private Object mark;
+    public boolean isForum;
 
     private Paint roundPaint;
     private final RectF roundRect = new RectF();
@@ -2552,7 +2553,8 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     public void setRoundRadius(int[] value_) {
         int[] value = value_;
         int corners = NaConfig.INSTANCE.getAvatarCorners().Int();
-        if (corners < 100) {
+        boolean applyCorners = !isForum || NaConfig.INSTANCE.getUseAvatarCornersForForums().Bool();
+        if (corners < 100 && applyCorners) {
             value = new int[value_.length];
             if (corners == 0) {
                 Arrays.fill(value, 0);
