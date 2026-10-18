@@ -1001,6 +1001,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val openSystemPhotoPickerDirectly =
+        addConfig(
+            "OpenSystemPhotoPickerDirectly",
+            ConfigItem.configTypeBool,
+            false
+        )
     val useSystemPhotoPicker =
         addConfig(
             "UseSystemPhotoPicker",

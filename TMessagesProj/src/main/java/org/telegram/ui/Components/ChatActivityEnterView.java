@@ -357,6 +357,8 @@ public class ChatActivityEnterView extends FrameLayout implements
 
         void didPressAttachButton();
 
+        default boolean didLongPressAttachButton() { return false; }
+
         default void didPressStreamingStop() {}
 
         default void didPressSuggestionButton() {}
@@ -2891,6 +2893,12 @@ public class ChatActivityEnterView extends FrameLayout implements
                     return;
                 }
                 delegate.didPressAttachButton();
+            });
+            attachButton.setOnLongClickListener(v -> {
+                if (isInInput || adjustPanLayoutHelper != null && adjustPanLayoutHelper.animationInProgress() || attachLayoutPaddingAlpha == 0f) {
+                    return false;
+                }
+                return delegate != null && delegate.didLongPressAttachButton();
             });
             attachButton.setContentDescription(getString(R.string.AccDescrAttachButton));
             updateFieldRight(1);

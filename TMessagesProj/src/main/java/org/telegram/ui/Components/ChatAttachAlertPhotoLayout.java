@@ -1561,7 +1561,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         } catch (Exception ignore) {}
     }
 
-    boolean openSystemPhotoPicker() {
+    public boolean openSystemPhotoPicker() {
         if (Build.VERSION.SDK_INT < 33 || !photoEnabled && !videoEnabled) {
             return false;
         }
@@ -1570,10 +1570,10 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             return false;
         }
         Activity activity = fragment != null ? fragment.getParentActivity() : null;
-        if (!canUseSystemPhotoPicker(activity)) {
-            return false;
-        }
         try {
+            if (!canUseSystemPhotoPicker(activity)) {
+                return false;
+            }
             Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
             if (photoEnabled != videoEnabled) {
                 intent.setType(photoEnabled ? "image/*" : "video/*");
@@ -1584,7 +1584,9 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 intent.putExtra(MediaStore.EXTRA_PICK_IMAGES_MAX, max);
             }
             fragment.startActivityForResult(intent, ChatActivity.REQUEST_CODE_SYSTEM_PHOTO_PICKER);
-            parentAlert.dismiss(true);
+            if (parentAlert.isShowing()) {
+                parentAlert.dismiss(true);
+            }
             return true;
         } catch (Exception e) {
             FileLog.e(e);

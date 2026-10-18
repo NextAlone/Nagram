@@ -403,4 +403,6 @@
     <string name="CommunityAvatarTapActionCommunity">Always Open Community</string>
     <string name="CommunityAvatarTapActionChat">Always Open Chat</string>
     <string name="CommunityAvatarTapActionArrow">Open Community Only with the Bottom-Right Arrow</string>
+    <string name="OpenSystemPhotoPickerDirectly">Open system photo picker directly</string>
+    <string name="OpenSystemPhotoPickerDirectlyDesc">On Android 13 and later, tap the paperclip to select photos and videos in the system picker, then edit them in Telegram. Long-press the paperclip for the attachment menu. Special send modes use the attachment menu.</string>
 </resources>
