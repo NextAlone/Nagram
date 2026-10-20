@@ -725,48 +725,6 @@ public class LocaleController {
         languages.add(localeInfo);
         languagesDict.put(localeInfo.shortName, localeInfo);
 
-        localeInfo = new LocaleInfo();
-        localeInfo.name = "简体中文";
-        localeInfo.nameEnglish = "Simplified Chinese";
-        localeInfo.shortName = "moecn";
-        localeInfo.baseLangCode = "zh_hans_raw";
-        localeInfo.isRtl = false;
-        localeInfo.pathToFile = "unofficial";
-        localeInfo.pluralLangCode = "zh_cn";
-        localeInfo.builtIn = true;
-        languages.add(localeInfo);
-        languagesDict.put(localeInfo.getKey(), localeInfo);
-        languagesDict.put("zh_cn", localeInfo);
-        languagesDict.put("zh_sg", localeInfo);
-
-        localeInfo = new LocaleInfo();
-        localeInfo.name = "正體中文";
-        localeInfo.nameEnglish = "Chinese (zh-Hant-TW)";
-        localeInfo.shortName = "taiwan";
-        localeInfo.baseLangCode = "zh_hant_raw";
-        localeInfo.isRtl = false;
-        localeInfo.pathToFile = "unofficial";
-        localeInfo.pluralLangCode = "zh_tw";
-        localeInfo.builtIn = true;
-        languages.add(localeInfo);
-        languagesDict.put(localeInfo.getKey(), localeInfo);
-        languagesDict.put("zh_tw", localeInfo);
-        languagesDict.put("zh_hk", localeInfo);
-        languagesDict.put("zh_mo", localeInfo);
-
-        localeInfo = new LocaleInfo();
-        localeInfo.name = "日本語";
-        localeInfo.nameEnglish = "Japanese";
-        localeInfo.shortName = "ja_raw";
-        localeInfo.baseLangCode = null;
-        localeInfo.isRtl = false;
-        localeInfo.pathToFile = "unofficial";
-        localeInfo.pluralLangCode = "ja";
-        localeInfo.builtIn = true;
-        languages.add(localeInfo);
-        languagesDict.put(localeInfo.getKey(), localeInfo);
-        languagesDict.put("ja", localeInfo);
-
         loadOtherLanguages();
         if (remoteLanguages.isEmpty()) {
             AndroidUtilities.runOnUIThread(() -> loadRemoteLanguages(UserConfig.selectedAccount));
@@ -1412,7 +1370,6 @@ public class LocaleController {
                 saveOtherLanguages();
             }
         }
-        new Thread(() -> loadPrebuiltLocaleFile(localeInfo), "LocaleFileLoader").start();
         boolean isLoadingRemote = false;
         if ((localeInfo.isRemote() || localeInfo.isUnofficial()) && (force || !pathToFile.exists() || hasBase && !pathToBaseFile.exists())) {
             if (BuildVars.LOGS_ENABLED) {
@@ -3427,47 +3384,6 @@ public class LocaleController {
             }
         }
         return 0;
-    }
-
-    private static String[] prebuilt;
-
-    private void loadPrebuiltLocaleFile(LocaleInfo localeInfo) {
-
-        if (prebuilt == null) {
-
-            try {
-                AssetManager assets = ApplicationLoader.applicationContext.getAssets();
-                prebuilt = assets.list("languages");
-            } catch (IOException e) {
-                FileLog.e(e);
-                return;
-            }
-
-        }
-
-        if (prebuilt == null) {
-
-            FileLog.w("empty prebuilt languages list");
-
-            return;
-
-        }
-
-        File pathToFile = localeInfo.getPathToFile();
-        File pathToBaseFile = localeInfo.getPathToBaseFile();
-
-        if ((pathToFile != null && !pathToFile.isFile()) || (pathToBaseFile != null && !pathToBaseFile.isFile())) {
-            try {
-                if (pathToBaseFile != null && !pathToBaseFile.isFile() && ArrayUtils.contains(prebuilt, pathToBaseFile.getName())) {
-                    FileUtil.saveAsset("languages/" + pathToBaseFile.getName(), pathToBaseFile);
-                }
-                if (pathToFile != null && !pathToFile.isFile() && ArrayUtils.contains(prebuilt, pathToFile.getName())) {
-                    FileUtil.saveAsset("languages/" + pathToFile.getName(), pathToFile);
-                }
-            } catch (Exception e) {
-                FileLog.e(e);
-            }
-        }
     }
 
     public String getTranslitString(String src) {
