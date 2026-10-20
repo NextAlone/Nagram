@@ -104,7 +104,6 @@
     <string name="DisableSendReadStories">Xem tin tức một cách bí mật</string>
     <string name="HideFilterMuteAll">\"Bật tiếng tất cả\" trong các thư mục ẩn</string>
     <string name="UseLocalQuoteColor">Màu tên cục bộ</string>
-    <string name="ShowSquareAvatar">Hiển thị hình đại diện vuông</string>
     <string name="DisableProfileAvatarBlur">Disable Profile Avatar Blur</string>
     <string name="DisableCustomWallpaperUser">Tắt nền tùy chỉnh cho tin nhắn riêng tư</string>
     <string name="DisableCustomWallpaperChannel">Tắt nền tùy chỉnh cho kênh</string>
