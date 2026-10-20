@@ -56,7 +56,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.helper.AvatarCornersHelper;
 
 public class ProfileStoriesView extends View implements NotificationCenter.NotificationCenterDelegate {
 
@@ -903,8 +903,8 @@ public class ProfileStoriesView extends View implements NotificationCenter.Notif
 
     private void drawArc(Canvas canvas, RectF oval, float startAngle, float sweepAngle, boolean useCenter, Paint paint) {
         boolean isForum = ChatObject.isForum(UserConfig.selectedAccount, dialogId);
-        if (isForum) {
-            float r = oval.height() * 0.32f;
+        if (isForum || AvatarCornersHelper.isCustom()) {
+            float r = isForum ? oval.height() * 0.32f : AvatarCornersHelper.radius(oval.height());
             if (Math.abs(sweepAngle) == 360) {
                 canvas.drawRoundRect(oval, r, r, paint);
                 return;
@@ -935,10 +935,6 @@ public class ProfileStoriesView extends View implements NotificationCenter.Notif
     }
 
     private void drawArcs(Canvas canvas, StoryCircle A, StoryCircle B, StoryCircle C, Paint paint) {
-        if (NaConfig.INSTANCE.getShowSquareAvatar().Bool()) {
-            return;
-        }
-
         if (A == null && C == null) {
             drawArc(canvas, B.borderRect, 0, 360, false, paint);
         } else if (A != null && C != null) {

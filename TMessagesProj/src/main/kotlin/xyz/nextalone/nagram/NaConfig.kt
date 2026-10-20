@@ -6,6 +6,7 @@ import android.util.Base64
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import tw.nekomimi.nekogram.config.ConfigItem
+import xyz.nextalone.nagram.helper.AvatarCornersHelper
 import xyz.nextalone.nagram.helper.DoubleTap
 import tw.nekomimi.nekogram.config.ConfigItemKeyLinked
 import java.io.ByteArrayInputStream
@@ -514,11 +515,11 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
-    val showSquareAvatar =
+    val avatarCorners =
         addConfig(
-            "ShowSquareAvatar",
-            ConfigItem.configTypeBool,
-            false
+            "AvatarCorners",
+            ConfigItem.configTypeInt,
+            AvatarCornersHelper.DEFAULT_PERCENT
         )
     val disableCustomWallpaperUser =
         addConfig(
@@ -1519,6 +1520,16 @@ object NaConfig {
             if (!preferences.contains(doubleTapActionOutgoing.key)) {
                 editor.putInt(doubleTapActionOutgoing.key, legacyAction)
             }
+            editor.apply()
+        }
+        // The square avatar switch became the 0% end of the avatar corners slider.
+        if (preferences.contains("ShowSquareAvatar")) {
+            val legacySquare = preferences.getBoolean("ShowSquareAvatar", false)
+            val editor = preferences.edit()
+            if (legacySquare && !preferences.contains(avatarCorners.key)) {
+                editor.putInt(avatarCorners.key, 0)
+            }
+            editor.remove("ShowSquareAvatar")
             editor.apply()
         }
     }

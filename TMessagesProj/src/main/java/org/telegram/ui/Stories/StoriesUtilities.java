@@ -69,6 +69,7 @@ import java.util.Collections;
 
 import tw.nekomimi.nekogram.NekoConfig;
 import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.helper.AvatarCornersHelper;
 
 public class StoriesUtilities {
 
@@ -675,6 +676,11 @@ public class StoriesUtilities {
             canvas.drawRoundRect(forumRect, dp(18), dp(18), paint);
             return;
         }
+        if (params.progressToArc == 0 && AvatarCornersHelper.isCustom()) {
+            final float r = AvatarCornersHelper.radius(rectTmp.height());
+            canvas.drawRoundRect(rectTmp, r, r, paint);
+            return;
+        }
         if (params.progressToArc == 0) {
             canvas.drawCircle(rectTmp.centerX(), rectTmp.centerY(), rectTmp.width() / 2f, paint);
         } else {
@@ -688,8 +694,9 @@ public class StoriesUtilities {
     private static final Path forumSegmentPath = new Path();
 
     private static void drawSegment(Canvas canvas, RectF rectTmp, Paint paint, float startAngle, float endAngle, AvatarStoryParams params, boolean isForum) {
-        if (isForum) {
-            float r = rectTmp.height() * 0.32f;
+        final boolean customCorners = !isForum && !params.useArcProgress && AvatarCornersHelper.isCustom();
+        if (isForum || customCorners) {
+            float r = isForum ? rectTmp.height() * 0.32f : AvatarCornersHelper.radius(rectTmp.height());
             float rotateAngle = (((int)(startAngle)) / 90) * 90 + 90;
             float pathAngleStart = -199 + rotateAngle;
             float percentFrom = (startAngle - pathAngleStart) / 360;

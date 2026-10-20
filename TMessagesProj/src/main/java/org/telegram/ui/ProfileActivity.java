@@ -380,6 +380,7 @@ import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.helper.AvatarCornersHelper;
 import xyz.nextalone.nagram.helper.MessageHelper;
 import xyz.nextalone.nagram.ui.ItemOptionsPatch;
 
@@ -1100,7 +1101,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         @Override
         public void setRoundRadius(int value) {
             super.setRoundRadius(value);
-            foregroundImageReceiver.setRoundRadius(value);
+            // Nagram: gallery photos carry no peer, so mirror the avatar corners applied to the base image
+            foregroundImageReceiver.setRoundRadius(getImageReceiver().getRoundRadius());
         }
 
         @Override
@@ -1125,6 +1127,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
             int r = /*isMetaballWorking && !hasStories ? roundRadiusCollapse : */roundRadiusExpand;
             if (r > 0) {
+                // Nagram: follow the avatar corners applied by the image receiver
+                r = Math.min(r, this.imageReceiver.getRoundRadius()[0]);
                 clipPath.rewind();
                 AndroidUtilities.rectTmp.set(inset, inset, thisWidth - inset, thisHeight - inset);
                 clipPath.addRoundRect(AndroidUtilities.rectTmp, r, r, Path.Direction.CW);
@@ -5719,7 +5723,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             protected void onDraw(Canvas canvas) {
                 if (avatarImage != null && avatarImage.getImageReceiver().hasNotThumb()) {
                     paint.setAlpha((int) (0x55 * avatarImage.getImageReceiver().getCurrentAlpha()));
-                    canvas.drawCircle(getMeasuredWidth() / 2.0f, getMeasuredHeight() / 2.0f, getMeasuredWidth() / 2.0f, paint);
+                    if (AvatarCornersHelper.isCustom()) {
+                        final float radius = AvatarCornersHelper.radius(getMeasuredWidth());
+                        AndroidUtilities.rectTmp.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                        canvas.drawRoundRect(AndroidUtilities.rectTmp, radius, radius, paint);
+                    } else {
+                        canvas.drawCircle(getMeasuredWidth() / 2.0f, getMeasuredHeight() / 2.0f, getMeasuredWidth() / 2.0f, paint);
+                    }
                 }
                 super.onDraw(canvas);
             }

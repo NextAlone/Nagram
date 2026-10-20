@@ -24,7 +24,7 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.Theme;
 
-import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.helper.AvatarCornersHelper;
 
 public class SenderSelectView extends View {
     private final static float SPRING_MULTIPLIER = 100f;
@@ -58,8 +58,7 @@ public class SenderSelectView extends View {
     private void updateColors() {
         backgroundPaint.setColor(Theme.getColor(Theme.key_chat_messagePanelVoiceBackground));
         menuPaint.setColor(Theme.getColor(Theme.key_chat_messagePanelVoicePressed));
-        int value = NaConfig.INSTANCE.getShowSquareAvatar().Bool() ? 0 : 18;
-        selectorDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(value), Color.TRANSPARENT, Theme.multAlpha(Theme.getColor(Theme.key_windowBackgroundWhite), 0.2f));
+        selectorDrawable = Theme.createSimpleSelectorRoundRectDrawable(AvatarCornersHelper.scale(AndroidUtilities.dp(18)), Color.TRANSPARENT, Theme.multAlpha(Theme.getColor(Theme.key_windowBackgroundWhite), 0.2f));
         selectorDrawable.setCallback(this);
     }
 
@@ -102,9 +101,10 @@ public class SenderSelectView extends View {
 
         int alpha = (int) (menuProgress * 0xFF);
         backgroundPaint.setAlpha(alpha);
-        if (NaConfig.INSTANCE.getShowSquareAvatar().Bool()) {
+        if (AvatarCornersHelper.isCustom()) {
+            final float radius = AvatarCornersHelper.radius(Math.min(getWidth(), getHeight()));
             AndroidUtilities.rectTmp.set(0, 0, getWidth(), getHeight());
-            canvas.drawRoundRect(AndroidUtilities.rectTmp, 0, 0, backgroundPaint);
+            canvas.drawRoundRect(AndroidUtilities.rectTmp, radius, radius, backgroundPaint);
         } else {
             canvas.drawCircle(getWidth() / 2f, getHeight() / 2f, Math.min(getWidth(), getHeight()) / 2f, backgroundPaint);
         }

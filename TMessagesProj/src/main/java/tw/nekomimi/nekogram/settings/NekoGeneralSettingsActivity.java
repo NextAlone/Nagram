@@ -72,6 +72,7 @@ import tw.nekomimi.nekogram.config.CellGroup;
 import tw.nekomimi.nekogram.config.cell.AbstractConfigCell;
 import tw.nekomimi.nekogram.config.cell.*;
 import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.helper.AvatarCornersHelper;
 
 @SuppressLint("RtlHardcoded")
 public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
@@ -80,7 +81,7 @@ public class NekoGeneralSettingsActivity extends BaseNekoXSettingsActivity {
 
     private final CellGroup a = cellGroup = new CellGroup(this);
 
-    private final AbstractConfigCell showSquareAvatarRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getShowSquareAvatar()));
+    private final AbstractConfigCell avatarCornersRow = cellGroup.appendCell(new ConfigCellCustom("AvatarCorners", ConfigCellCustom.CUSTOM_ITEM_AvatarCorners, true));
     private final AbstractConfigCell disableProfileAvatarBlurRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableProfileAvatarBlur()));
     private final AbstractConfigCell disableGooeyAvatarAnimationRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getDisableGooeyAvatarAnimation()));
     private final AbstractConfigCell hidePhoneRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hidePhone));
@@ -801,6 +802,8 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                 view = new LiquidGlassSeekBar(mContext, true);
             } else if (viewType == ConfigCellCustom.CUSTOM_ITEM_LiquidGlassIntensity) {
                 view = new LiquidGlassSeekBar(mContext, false);
+            } else if (viewType == ConfigCellCustom.CUSTOM_ITEM_AvatarCorners) {
+                view = new AvatarCornersSeekBar(mContext);
             }
             if (view != null) {
                 return view;
@@ -1001,6 +1004,50 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
             super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(66), MeasureSpec.EXACTLY));
             float value = angle ? NaConfig.INSTANCE.getLiquidGlassAngle().Int() / 360f : NaConfig.INSTANCE.getLiquidGlassIntensity().Int() / 150f;
             bar.setProgress(value);
+        }
+    }
+
+    private class AvatarCornersSeekBar extends FrameLayout {
+        private final SeekBarView bar;
+        private final TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
+
+        AvatarCornersSeekBar(Context context) {
+            super(context);
+            setWillNotDraw(false);
+            textPaint.setTextSize(AndroidUtilities.dp(14));
+            bar = new SeekBarView(context);
+            bar.setReportChanges(true);
+            bar.setDelegate(new SeekBarView.SeekBarViewDelegate() {
+                @Override
+                public void onSeekBarDrag(boolean stop, float progress) {
+                    int value = Math.round(progress * AvatarCornersHelper.DEFAULT_PERCENT);
+                    if (value != NaConfig.INSTANCE.getAvatarCorners().Int()) {
+                        NaConfig.INSTANCE.getAvatarCorners().setConfigInt(value);
+                        invalidate();
+                    }
+                    if (stop) {
+                        tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+                    }
+                }
+
+                @Override
+                public void onSeekBarPressed(boolean pressed) {}
+            });
+            addView(bar, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 38, Gravity.LEFT | Gravity.TOP, 12, 23, 52, 5));
+        }
+
+        @Override
+        protected void onDraw(Canvas canvas) {
+            textPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+            canvas.drawText(LocaleController.getString(R.string.AvatarCorners), AndroidUtilities.dp(21), AndroidUtilities.dp(20), textPaint);
+            textPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
+            canvas.drawText(NaConfig.INSTANCE.getAvatarCorners().Int() + "%", getMeasuredWidth() - AndroidUtilities.dp(47), AndroidUtilities.dp(47), textPaint);
+        }
+
+        @Override
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(66), MeasureSpec.EXACTLY));
+            bar.setProgress(NaConfig.INSTANCE.getAvatarCorners().Int() / (float) AvatarCornersHelper.DEFAULT_PERCENT);
         }
     }
 }

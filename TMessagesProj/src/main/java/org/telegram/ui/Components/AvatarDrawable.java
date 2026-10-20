@@ -42,7 +42,7 @@ import org.telegram.ui.ActionBar.Theme;
 
 import java.util.ArrayList;
 
-import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.helper.AvatarCornersHelper;
 
 public class AvatarDrawable extends Drawable {
 
@@ -598,8 +598,10 @@ public class AvatarDrawable extends Drawable {
             if (roundRadius > 0) {
                 AndroidUtilities.rectTmp.set(0, 0, size, size);
                 canvas.drawRoundRect(AndroidUtilities.rectTmp, roundRadius, roundRadius, backgroundPaint);
-            } else if (NaConfig.INSTANCE.getShowSquareAvatar().Bool()) {
-                canvas.drawRect(0f, 0f, size, size, backgroundPaint);
+            } else if (AvatarCornersHelper.isCustom()) {
+                final float radius = AvatarCornersHelper.radius(size);
+                AndroidUtilities.rectTmp.set(0, 0, size, size);
+                canvas.drawRoundRect(AndroidUtilities.rectTmp, radius, radius, backgroundPaint);
             } else {
                 canvas.drawCircle(size / 2.0f, size / 2.0f, size / 2.0f, backgroundPaint);
             }

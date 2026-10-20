@@ -104,7 +104,6 @@
     <string name="DisableSendReadStories">Désactiver Envoyer des histoires en lecture</string>
     <string name="HideFilterMuteAll">Masquer le filtre en mode muet</string>
     <string name="UseLocalQuoteColor">Utiliser la couleur locale du guillemet</string>
-    <string name="ShowSquareAvatar">Afficher l\'avatar carré</string>
     <string name="DisableProfileAvatarBlur">Désactiver le flou d\'avatar de profil</string>
     <string name="DisableCustomWallpaperUser">Désactiver le fond d\'écran personnalisé de l\'utilisateur</string>
     <string name="DisableCustomWallpaperChannel">Désactiver le fond d\'écran personnalisé pour les canaux</string>
