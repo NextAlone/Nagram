@@ -35,7 +35,7 @@ idea {
 }
 
 def verName = APP_VERSION_NAME
-def verCode = 1255
+def verCode = 1256
 
 
 def officialVer = APP_VERSION_NAME
@@ -558,7 +558,7 @@ sentry {
         // as Gradle will resolve it to the latest version.
         //
         // Defaults to the latest published Sentry version.
-        sentryVersion = '8.58.0'
+        sentryVersion = '8.61.0'
     }
 
     // Disables or enables dependencies metadata reporting for Sentry.

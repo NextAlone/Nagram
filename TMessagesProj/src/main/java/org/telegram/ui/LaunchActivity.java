@@ -6408,7 +6408,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         } else {
             boolean notify = dialogsFragment == null || dialogsFragment.notify || _notify;
             int scheduleDate = _scheduleDate != 0 ? _scheduleDate : dialogsFragment == null ? 0 : dialogsFragment.scheduleDate;
-            boolean forceDocument = dialogsFragment == null ? false : dialogsFragment.forceDocument;
+            final boolean forceDocument = dialogsFragment != null && dialogsFragment.forceDocument;
             final ChatActivity fragment;
             if (dids.size() <= 1) {
                 final long did = dids.get(0).dialogId;
