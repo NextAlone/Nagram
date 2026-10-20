@@ -104,7 +104,6 @@
     <string name="DisableSendReadStories">既読記事の送信を無効にする</string>
     <string name="HideFilterMuteAll">フィルターミュートをすべて隠す</string>
     <string name="UseLocalQuoteColor">ローカルクオートカラーを使用する</string>
-    <string name="ShowSquareAvatar">四角いアバターを表示</string>
     <string name="DisableProfileAvatarBlur">プロフィールアバターのぼかしを無効にする</string>
     <string name="DisableCustomWallpaperUser">ユーザーのカスタム壁紙を無効にする</string>
     <string name="DisableCustomWallpaperChannel">チャンネルのカスタム壁紙を無効にする</string>
@@ -402,4 +401,6 @@
     <string name="CommunityAvatarTapActionCommunity">常にコミュニティを開く</string>
     <string name="CommunityAvatarTapActionChat">常にチャットを開く</string>
     <string name="CommunityAvatarTapActionArrow">右下の矢印をタップした場合のみコミュニティを開く</string>
+    <string name="UseSystemNotificationColor">システム通知の色を使用</string>
+    <string name="AvatarCorners">アバターの角</string>
 </resources>

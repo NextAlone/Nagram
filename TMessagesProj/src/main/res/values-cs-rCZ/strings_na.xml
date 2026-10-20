@@ -104,7 +104,6 @@
     <string name="DisableSendReadStories">Zakázat odesílání příběhů pro čtení</string>
     <string name="HideFilterMuteAll">Skrýt ztlumit vše</string>
     <string name="UseLocalQuoteColor">Použít místní barvu citací</string>
-    <string name="ShowSquareAvatar">Zobrazit čtvereční avatar</string>
     <string name="DisableProfileAvatarBlur">Zakázat rozostření profilu</string>
     <string name="DisableCustomWallpaperUser">Zakázat uživatelskou vlastní tapetu</string>
     <string name="DisableCustomWallpaperChannel">Zakázat vlastní tapetu kanálu</string>
@@ -402,4 +401,6 @@
     <string name="CommunityAvatarTapActionCommunity">Vždy otevřít komunitu</string>
     <string name="CommunityAvatarTapActionChat">Vždy otevřít chat</string>
     <string name="CommunityAvatarTapActionArrow">Otevřít komunitu pouze pomocí šipky vpravo dole</string>
+    <string name="UseSystemNotificationColor">Použít barvu systémových oznámení</string>
+    <string name="AvatarCorners">Avatar rohy</string>
 </resources>

@@ -104,7 +104,6 @@
     <string name="DisableSendReadStories">偷偷看動態</string>
     <string name="HideFilterMuteAll">隱藏文件夾中的\"全部取消靜音\</string>
     <string name="UseLocalQuoteColor">本地名稱顏色</string>
-    <string name="ShowSquareAvatar">顯示方形頭像</string>
     <string name="DisableProfileAvatarBlur">Disable Profile Avatar Blur</string>
     <string name="DisableCustomWallpaperUser">禁用私聊的自定義背景</string>
     <string name="DisableCustomWallpaperChannel">禁用頻道的自定義背景</string>
@@ -402,4 +401,6 @@
     <string name="CommunityAvatarTapActionCommunity">一律開啟社群</string>
     <string name="CommunityAvatarTapActionChat">一律進入聊天</string>
     <string name="CommunityAvatarTapActionArrow">僅點擊頭像右下角箭頭時開啟社群頁面</string>
+    <string name="UseSystemNotificationColor">Use system notification color</string>
+    <string name="AvatarCorners">Avatar corners</string>
 </resources>

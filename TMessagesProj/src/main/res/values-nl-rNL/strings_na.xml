@@ -104,7 +104,6 @@
     <string name="DisableSendReadStories">Leesverhalen verzenden uitschakelen</string>
     <string name="HideFilterMuteAll">Verberg filter dempen alles</string>
     <string name="UseLocalQuoteColor">Lokale aanhalingstekenkleur gebruiken</string>
-    <string name="ShowSquareAvatar">Toon vierkante avatar</string>
     <string name="DisableProfileAvatarBlur">Profiel Avatar Vervagen Uitschakelen</string>
     <string name="DisableCustomWallpaperUser">Aangepaste achtergrond door gebruiker uitschakelen</string>
     <string name="DisableCustomWallpaperChannel">Kanaal aangepaste achtergrond uitschakelen</string>
@@ -402,4 +401,6 @@
     <string name="CommunityAvatarTapActionCommunity">Open altijd de community</string>
     <string name="CommunityAvatarTapActionChat">Chat altijd openen</string>
     <string name="CommunityAvatarTapActionArrow">Open een gemeenschap alleen met een pijl onder rechts</string>
+    <string name="UseSystemNotificationColor">Gebruik systeem notificatie kleur</string>
+    <string name="AvatarCorners">Avatar hoeken</string>
 </resources>

@@ -104,7 +104,6 @@
     <string name="DisableSendReadStories">Désactiver Envoyer des histoires en lecture</string>
     <string name="HideFilterMuteAll">Masquer le filtre en mode muet</string>
     <string name="UseLocalQuoteColor">Utiliser la couleur locale du guillemet</string>
-    <string name="ShowSquareAvatar">Afficher l\'avatar carré</string>
     <string name="DisableProfileAvatarBlur">Désactiver le flou d\'avatar de profil</string>
     <string name="DisableCustomWallpaperUser">Désactiver le fond d\'écran personnalisé de l\'utilisateur</string>
     <string name="DisableCustomWallpaperChannel">Désactiver le fond d\'écran personnalisé pour les canaux</string>
@@ -402,4 +401,6 @@
     <string name="CommunityAvatarTapActionCommunity">Toujours ouvrir la communauté</string>
     <string name="CommunityAvatarTapActionChat">Toujours ouvrir le chat</string>
     <string name="CommunityAvatarTapActionArrow">Ouvrir la communauté uniquement avec la flèche en bas à droite</string>
+    <string name="UseSystemNotificationColor">Utiliser la couleur de notification du système</string>
+    <string name="AvatarCorners">Coins de l\'avatar</string>
 </resources>

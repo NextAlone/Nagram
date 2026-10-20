@@ -104,7 +104,6 @@
     <string name="DisableSendReadStories">Dezactivează povestirile citite</string>
     <string name="HideFilterMuteAll">Ascunde filtrele mute toate</string>
     <string name="UseLocalQuoteColor">Folosește culoarea ofertei locale</string>
-    <string name="ShowSquareAvatar">Arată avatarul pătrat</string>
     <string name="DisableProfileAvatarBlur">Dezactivează Blur Avatar de profil</string>
     <string name="DisableCustomWallpaperUser">Dezactivează imaginea de fundal personalizată a utilizatorului</string>
     <string name="DisableCustomWallpaperChannel">Dezactivează fundal personalizat pentru canale</string>
@@ -402,4 +401,6 @@
     <string name="CommunityAvatarTapActionCommunity">Deschideți mereu comunitatea</string>
     <string name="CommunityAvatarTapActionChat">Deschideți mereu Chat</string>
     <string name="CommunityAvatarTapActionArrow">Deschide comunitatea doar cu săgeata de jos</string>
+    <string name="UseSystemNotificationColor">Folosește culoarea notificării sistemului</string>
+    <string name="AvatarCorners">Colţuri Avatar</string>
 </resources>

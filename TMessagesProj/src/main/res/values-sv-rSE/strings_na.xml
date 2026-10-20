@@ -104,7 +104,6 @@
     <string name="DisableSendReadStories">Inaktivera Skicka Lästa Berättelser</string>
     <string name="HideFilterMuteAll">Dölj filtrera stänga av alla</string>
     <string name="UseLocalQuoteColor">Använd lokal offertfärg</string>
-    <string name="ShowSquareAvatar">Visa fyrkantig avatar</string>
     <string name="DisableProfileAvatarBlur">Inaktivera profilavatar oskärpa</string>
     <string name="DisableCustomWallpaperUser">Inaktivera användaranpassad bakgrundsbild</string>
     <string name="DisableCustomWallpaperChannel">Inaktivera kanalanpassad bakgrundsbild</string>
@@ -402,4 +401,6 @@
     <string name="CommunityAvatarTapActionCommunity">Öppna alltid Community</string>
     <string name="CommunityAvatarTapActionChat">Öppna alltid chatt</string>
     <string name="CommunityAvatarTapActionArrow">Öppna gemenskap endast med den nedre högra pilen</string>
+    <string name="UseSystemNotificationColor">Använd systemets aviseringsfärg</string>
+    <string name="AvatarCorners">Avatar hörn</string>
 </resources>

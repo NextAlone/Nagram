@@ -104,7 +104,6 @@
     <string name="DisableSendReadStories">Disable Send Read Stories</string>
     <string name="HideFilterMuteAll">Hide filter mute all</string>
     <string name="UseLocalQuoteColor">Use local quote color</string>
-    <string name="ShowSquareAvatar">Show square avatar</string>
     <string name="DisableProfileAvatarBlur">Disable Profile Avatar Blur</string>
     <string name="DisableCustomWallpaperUser">Disable user custom wallpaper</string>
     <string name="DisableCustomWallpaperChannel">Disable channel custom wallpaper</string>
@@ -402,4 +401,6 @@
     <string name="CommunityAvatarTapActionCommunity">Always Open Community</string>
     <string name="CommunityAvatarTapActionChat">Always Open Chat</string>
     <string name="CommunityAvatarTapActionArrow">Open Community Only with the Bottom-Right Arrow</string>
+    <string name="UseSystemNotificationColor">Use system notification color</string>
+    <string name="AvatarCorners">Avatar corners</string>
 </resources>

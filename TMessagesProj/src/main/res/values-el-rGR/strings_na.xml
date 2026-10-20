@@ -104,7 +104,6 @@
     <string name="DisableSendReadStories">Απενεργ/ση Αποστολής Ανάγνωσης Ιστοριών</string>
     <string name="HideFilterMuteAll">Απόκρυψη φίλτρου σίγασης όλων</string>
     <string name="UseLocalQuoteColor">Χρήση χρώματος τοπικής προσφοράς</string>
-    <string name="ShowSquareAvatar">Προβολή τετράγωνου avatar</string>
     <string name="DisableProfileAvatarBlur">Απενεργοποίηση Θόλωσης Avatar Προφίλ</string>
     <string name="DisableCustomWallpaperUser">Απενεργ/ση προσαρμοσμένης ταπετσαρίας χρήστη</string>
     <string name="DisableCustomWallpaperChannel">Απενεργ/ση προσαρμοσμένης ταπετσαρίας καναλιών</string>
@@ -402,4 +401,6 @@
     <string name="CommunityAvatarTapActionCommunity">Πάντα Άνοιγμα Κοινότητας</string>
     <string name="CommunityAvatarTapActionChat">Άνοιγμα Συνομιλίας Πάντα</string>
     <string name="CommunityAvatarTapActionArrow">Άνοιγμα Κοινότητας μόνο με το Βέλος Κάτω Δεξιάς</string>
+    <string name="UseSystemNotificationColor">Χρήση χρώματος ειδοποίησης συστήματος</string>
+    <string name="AvatarCorners">Γωνίες άβαταρ</string>
 </resources>

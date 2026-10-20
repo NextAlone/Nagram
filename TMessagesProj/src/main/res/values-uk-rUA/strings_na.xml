@@ -104,7 +104,6 @@
     <string name="DisableSendReadStories">Вимкнути надсилання історій читання</string>
     <string name="HideFilterMuteAll">Сховати фільтр вимкнути всі</string>
     <string name="UseLocalQuoteColor">Використовувати колір локальної лапки</string>
-    <string name="ShowSquareAvatar">Показати квадратний аватар</string>
     <string name="DisableProfileAvatarBlur">Вимкнути розмиття аватара профілю</string>
     <string name="DisableCustomWallpaperUser">Вимкнути користувацькі шпалери</string>
     <string name="DisableCustomWallpaperChannel">Вимкнути користувацькі шпалери каналу</string>
@@ -402,4 +401,6 @@
     <string name="CommunityAvatarTapActionCommunity">Завжди відкривати спільноту</string>
     <string name="CommunityAvatarTapActionChat">Завжди відкривати чат</string>
     <string name="CommunityAvatarTapActionArrow">Відкрити Спільноту лише з правою стрілою внизу</string>
+    <string name="UseSystemNotificationColor">Використовувати системний колір сповіщень</string>
+    <string name="AvatarCorners">Аватар кути</string>
 </resources>

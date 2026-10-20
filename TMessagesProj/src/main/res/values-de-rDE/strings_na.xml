@@ -104,7 +104,6 @@
     <string name="DisableSendReadStories">Lesestatus von Stories nicht senden</string>
     <string name="HideFilterMuteAll">Filter \"Stumm\" ausblenden</string>
     <string name="UseLocalQuoteColor">Lokale Zitatfarbe verwenden</string>
-    <string name="ShowSquareAvatar">Quadratischen Avatar anzeigen</string>
     <string name="DisableProfileAvatarBlur">Profil-Avatar Unschärfe deaktivieren</string>
     <string name="DisableCustomWallpaperUser">Benutzerdefiniertes Hintergrundbild deaktivieren</string>
     <string name="DisableCustomWallpaperChannel">Deaktiviere Channel-Hintergrund</string>
@@ -402,4 +401,6 @@
     <string name="CommunityAvatarTapActionCommunity">Community immer öffnen</string>
     <string name="CommunityAvatarTapActionChat">Chat immer öffnen</string>
     <string name="CommunityAvatarTapActionArrow">Community nur mit dem Pfeil unten rechts öffnen</string>
+    <string name="UseSystemNotificationColor">System-Benachrichtigungsfarbe verwenden</string>
+    <string name="AvatarCorners">Avatar-Ecken</string>
 </resources>

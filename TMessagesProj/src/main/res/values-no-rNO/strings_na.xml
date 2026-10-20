@@ -104,7 +104,6 @@
     <string name="DisableSendReadStories">Deaktiver Send Les Historier</string>
     <string name="HideFilterMuteAll">Skjul demping av filtre</string>
     <string name="UseLocalQuoteColor">Bruk lokal sitattfarge</string>
-    <string name="ShowSquareAvatar">Vis firkantet profilbilde</string>
     <string name="DisableProfileAvatarBlur">Deaktivere profilbilde blur</string>
     <string name="DisableCustomWallpaperUser">Deaktivere brukerdefinert bakgrunn</string>
     <string name="DisableCustomWallpaperChannel">Deaktiver kanaltilpasset bakgrunnsbilde</string>
@@ -402,4 +401,6 @@
     <string name="CommunityAvatarTapActionCommunity">Alltid åpne fellesskap</string>
     <string name="CommunityAvatarTapActionChat">Alltid åpne chat</string>
     <string name="CommunityAvatarTapActionArrow">Åpne samfunnet, kun med nederste høyre pil</string>
+    <string name="UseSystemNotificationColor">Bruk farge for systemvarsling</string>
+    <string name="AvatarCorners">Avatar hjørner</string>
 </resources>

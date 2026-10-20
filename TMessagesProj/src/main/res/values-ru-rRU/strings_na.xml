@@ -104,7 +104,6 @@
     <string name="DisableSendReadStories">Отключить отправку прочтения историй</string>
     <string name="HideFilterMuteAll">Скрыть фильтр «Отключить все»</string>
     <string name="UseLocalQuoteColor">Локальный цвет цитаты</string>
-    <string name="ShowSquareAvatar">Квадратные аватары</string>
     <string name="DisableProfileAvatarBlur">Отключить размытие аватара</string>
     <string name="DisableCustomWallpaperUser">Отключить пользовательские обои</string>
     <string name="DisableCustomWallpaperChannel">Отключить пользовательские обои каналов</string>
@@ -402,4 +401,6 @@
     <string name="CommunityAvatarTapActionCommunity">Всегда открывать сообщество</string>
     <string name="CommunityAvatarTapActionChat">Всегда открывать чат</string>
     <string name="CommunityAvatarTapActionArrow">Открыть сообщество только с помощью нижней правой стрелки</string>
+    <string name="UseSystemNotificationColor">Использовать цвет уведомлений системы</string>
+    <string name="AvatarCorners">Углы аватара</string>
 </resources>

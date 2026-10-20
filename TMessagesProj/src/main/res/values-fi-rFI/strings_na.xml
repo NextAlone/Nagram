@@ -104,7 +104,6 @@
     <string name="DisableSendReadStories">Poista Lähetä Lukutarinat Käytöstä</string>
     <string name="HideFilterMuteAll">Piilota suodatin mykistää kaikki</string>
     <string name="UseLocalQuoteColor">Käytä paikallista tarjouksen väriä</string>
-    <string name="ShowSquareAvatar">Näytä neliön profiilikuva</string>
     <string name="DisableProfileAvatarBlur">Poista Profiilin Avatar Blur Käytöstä</string>
     <string name="DisableCustomWallpaperUser">Poista käyttäjän oma taustakuva käytöstä</string>
     <string name="DisableCustomWallpaperChannel">Poista kanavien mukautettu taustakuva käytöstä</string>
@@ -402,4 +401,6 @@
     <string name="CommunityAvatarTapActionCommunity">Avaa Aina</string>
     <string name="CommunityAvatarTapActionChat">Avaa Keskustelu Aina</string>
     <string name="CommunityAvatarTapActionArrow">Avaa yhteisö vain alaoikeanpuoleisella nuolella</string>
+    <string name="UseSystemNotificationColor">Käytä järjestelmän ilmoitusväriä</string>
+    <string name="AvatarCorners">Hahmon kulmat</string>
 </resources>

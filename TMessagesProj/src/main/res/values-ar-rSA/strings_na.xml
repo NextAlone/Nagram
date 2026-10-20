@@ -104,7 +104,6 @@
     <string name="DisableSendReadStories">تعطيل إرسال القصص المقروءة</string>
     <string name="HideFilterMuteAll">إخفاء الفلتر كتم الكل</string>
     <string name="UseLocalQuoteColor">استخدام لون الاقتباس المحلي</string>
-    <string name="ShowSquareAvatar">إظهار الصورة الرمزية المربعة</string>
     <string name="DisableProfileAvatarBlur">تعطيل الصورة الرمزية للوضع</string>
     <string name="DisableCustomWallpaperUser">تعطيل خلفية المستخدم المخصصة</string>
     <string name="DisableCustomWallpaperChannel">تعطيل خلفية القناة المخصصة</string>
@@ -402,4 +401,6 @@
     <string name="CommunityAvatarTapActionCommunity">المجتمع مفتوح دائمًا</string>
     <string name="CommunityAvatarTapActionChat">فتح الدردشة دائمًا</string>
     <string name="CommunityAvatarTapActionArrow">فتح المجتمع فقط مع السهم أسفل اليمين</string>
+    <string name="UseSystemNotificationColor">استخدام لون إشعار النظام</string>
+    <string name="AvatarCorners">زوايا الصورة الرمزية</string>
 </resources>
