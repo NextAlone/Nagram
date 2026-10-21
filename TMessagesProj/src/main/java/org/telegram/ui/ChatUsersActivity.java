@@ -94,6 +94,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.helper.MemberAdminActions;
+
 public class ChatUsersActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
 
     private static final int VIEW_TYPE_INNER_CHECK = 13;
@@ -1961,6 +1964,12 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     }
                 })
                 .addIf(ChatObject.canBlockUsers(currentChat) && canEditAdmin, R.drawable.msg_remove, isChannel ? getString("ChannelRemoveUser", R.string.ChannelRemoveUser) : getString("KickFromGroup", R.string.KickFromGroup), true, () -> {
+                    // na: remove through the ban-or-delete panel so the member's messages can go too
+                    final TLRPC.ChannelParticipant naChannelParticipant = participant instanceof TLRPC.ChannelParticipant ? (TLRPC.ChannelParticipant) participant : null;
+                    if (NaConfig.INSTANCE.getDeleteMessagesWhenRemovingMembers().Bool() && naChannelParticipant != null && MemberAdminActions.canRemoveWithPanel(currentAccount, currentChat, user, naChannelParticipant)) {
+                        MemberAdminActions.openBanOrDelete(this, currentChat, user, naChannelParticipant, true, () -> removeParticipants(peerId));
+                        return;
+                    }
                     getMessagesController().deleteParticipantFromChat(chatId, user);
                     removeParticipants(peerId);
                     if (currentChat != null && user != null && BulletinFactory.canShowBulletin(this)) {

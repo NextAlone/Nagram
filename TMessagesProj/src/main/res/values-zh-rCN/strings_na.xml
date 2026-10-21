@@ -403,4 +403,8 @@
     <string name="CommunityAvatarTapActionArrow">仅在点击头像右下角箭头时打开社区页</string>
     <string name="UseSystemNotificationColor">通知图标使用系统主题颜色</string>
     <string name="AvatarCorners">头像圆角</string>
+    <string name="AdminActionsOnAvatarLongPress">长按头像显示管理操作</string>
+    <string name="AdminActionsOnMentionLongPress">长按用户名显示管理操作</string>
+    <string name="DeleteMessagesWhenRemovingMembers">移除成员时可删除其消息</string>
+    <string name="BanOrDeleteMessages">封禁或删除消息</string>
 </resources>

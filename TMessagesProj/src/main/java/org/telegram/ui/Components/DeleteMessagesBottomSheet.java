@@ -65,6 +65,8 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
     private int topicId;
     private int mode;
     private Runnable onDelete;
+    // na: admin actions without selected messages (MemberAdminActions)
+    private Runnable naOnBanned;
 
     private boolean restrict = false;
 
@@ -512,6 +514,11 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
         actionBar.setTitle(getTitle());
     }
 
+    // na: runs after a ban (not a restriction) was applied
+    public void setNaOnBanned(Runnable onBanned) {
+        naOnBanned = onBanned;
+    }
+
     @Override
     protected void onContainerLayout(int l, int t, int r, int b) {
         super.onContainerLayout(l, t, r, b);
@@ -647,6 +654,15 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
             });
         }
 
+        // na: with no selected messages, name the member instead of "Delete 0 messages"
+        if (messageCount[0] == 0 && messages != null && messages.isEmpty() && deleteAll.totalCount == 1) {
+            final TLObject userOrChat = deleteAll.first();
+            if (userOrChat instanceof TLRPC.User) {
+                return UserObject.getUserName((TLRPC.User) userOrChat);
+            } else if (userOrChat instanceof TLRPC.Chat) {
+                return ((TLRPC.Chat) userOrChat).title;
+            }
+        }
         return LocaleController.formatPluralString("DeleteOptionsTitle", messageCount[0]);
     }
 
@@ -1321,6 +1337,12 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
             }
         });
 
+        // na: with no selected messages, report the member's recent messages before their history is deleted
+        if (messages.isEmpty() && report.selectedCount > 0) {
+            naReportRecentMessages(this::performDeleteHistory);
+            return;
+        }
+
         report.forEachSelected((participant, i) -> {
             final ArrayList<Integer> ids = messages.stream()
                     .filter(msg -> msg.messageOwner.peer_id != null && msg.messageOwner.peer_id.chat_id != -mergeDialogId)
@@ -1355,6 +1377,43 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
         });
 
 
+        performDeleteHistory();
+    }
+
+    // na: channels.reportSpam needs message ids; without selected messages, report the member's
+    // most recent ones and only then continue, so the history deletion cannot remove them first.
+    private void naReportRecentMessages(Runnable whenDone) {
+        final int[] pending = new int[]{report.selectedCount};
+        report.forEachSelected((participant, i) -> {
+            final TLRPC.TL_messages_search req = new TLRPC.TL_messages_search();
+            req.peer = MessagesController.getInputPeer(inChat);
+            req.q = "";
+            req.from_id = MessagesController.getInputPeer(participant);
+            req.flags |= 1;
+            req.filter = new TLRPC.TL_inputMessagesFilterEmpty();
+            req.limit = 100;
+            ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+                if (response instanceof TLRPC.messages_Messages) {
+                    final ArrayList<Integer> ids = new ArrayList<>();
+                    for (TLRPC.Message message : ((TLRPC.messages_Messages) response).messages) {
+                        ids.add(message.id);
+                    }
+                    if (!ids.isEmpty()) {
+                        TLRPC.TL_channels_reportSpam reportReq = new TLRPC.TL_channels_reportSpam();
+                        reportReq.channel = MessagesController.getInputChannel(inChat);
+                        reportReq.participant = MessagesController.getInputPeer(participant);
+                        reportReq.id = ids;
+                        ConnectionsManager.getInstance(currentAccount).sendRequest(reportReq, null);
+                    }
+                }
+                if (--pending[0] == 0) {
+                    whenDone.run();
+                }
+            }));
+        });
+    }
+
+    private void performDeleteHistory() {
         if (isSingleUsersMode) {
             deleteAll.forEach((participant, i) -> {
                 if (restrictUserDeleteAllMessages) {
@@ -1494,12 +1553,23 @@ public class DeleteMessagesBottomSheet extends BottomSheetWithRecyclerListView {
 
         final boolean isReactions = isReactionOnlyMode && !restrictUserDeleteAllMessages;
         int icon = banOrRestrict.selectedCount > 0 ? R.raw.ic_admin : R.raw.contact_check;
-        if (TextUtils.isEmpty(subtitle)) {
+        // na: with no selected messages, only claim a deletion when one was requested
+        final boolean naDeletesNothing = messages.isEmpty() && !(isSingleUsersMode
+                ? restrictUserDeleteAllMessages || restrictUserDeleteAllReactions
+                : deleteAll.selectedCount > 0 || deleteAllReactions.selectedCount > 0);
+        if (naDeletesNothing) {
+            if (!TextUtils.isEmpty(subtitle)) {
+                BulletinFactory.of(getBaseFragment()).createSimpleBulletin(icon, subtitle).show();
+            }
+        } else if (TextUtils.isEmpty(subtitle)) {
             BulletinFactory.of(getBaseFragment()).createSimpleBulletin(icon, getString(isReactions ? R.string.ReactionsDeleted : R.string.MessagesDeleted)).show();
         } else {
             BulletinFactory.of(getBaseFragment()).createSimpleBulletin(icon, getString(isReactions ? R.string.ReactionsDeleted : R.string.MessagesDeleted), subtitle).show();
         }
 
         performDelete();
+        if (naOnBanned != null && !restrict && banOrRestrict.selectedCount > 0) {
+            naOnBanned.run();
+        }
     }
 }

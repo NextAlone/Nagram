@@ -381,6 +381,7 @@ import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
 import tw.nekomimi.nekogram.utils.UIUtil;
 import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.helper.MemberAdminActions;
 import xyz.nextalone.nagram.helper.MessageHelper;
 import xyz.nextalone.nagram.ui.ItemOptionsPatch;
 
@@ -10922,6 +10923,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private void kickUser(long uid, TLRPC.ChatParticipant participant) {
         if (uid != 0) {
             TLRPC.User user = getMessagesController().getUser(uid);
+            // na: remove through the ban-or-delete panel so the member's messages can go too
+            final TLRPC.ChannelParticipant naChannelParticipant = participant instanceof TLRPC.TL_chatChannelParticipant ? ((TLRPC.TL_chatChannelParticipant) participant).channelParticipant : null;
+            if (NaConfig.INSTANCE.getDeleteMessagesWhenRemovingMembers().Bool() && naChannelParticipant != null && MemberAdminActions.canRemoveWithPanel(currentAccount, currentChat, user, naChannelParticipant)) {
+                MemberAdminActions.openBanOrDelete(this, currentChat, user, naChannelParticipant, true, () -> {
+                    if (chatInfo != null && chatInfo.participants != null && chatInfo.participants.participants.remove(participant)) {
+                        updateListAnimated(true);
+                    }
+                });
+                return;
+            }
             getMessagesController().deleteParticipantFromChat(chatId, user);
             if (currentChat != null && user != null && BulletinFactory.canShowBulletin(this)) {
                 BulletinFactory.createRemoveFromChatBulletin(this, user, currentChat.title).show();

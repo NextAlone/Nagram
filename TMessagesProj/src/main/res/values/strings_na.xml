@@ -404,4 +404,8 @@
     <string name="CommunityAvatarTapActionChat">Always Open Chat</string>
     <string name="CommunityAvatarTapActionArrow">Open Community Only with the Bottom-Right Arrow</string>
     <string name="UseSystemNotificationColor">Use system notification color</string>
+    <string name="AdminActionsOnAvatarLongPress">Admin Actions on Avatar Long Press</string>
+    <string name="AdminActionsOnMentionLongPress">Admin Actions on Mention Long Press</string>
+    <string name="DeleteMessagesWhenRemovingMembers">Delete Messages When Removing Members</string>
+    <string name="BanOrDeleteMessages">Ban or Delete Messages</string>
 </resources>

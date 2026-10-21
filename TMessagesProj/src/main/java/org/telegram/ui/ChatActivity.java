@@ -401,6 +401,7 @@ import tw.nekomimi.nekogram.utils.PGPUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.TelegramUtil;
 import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.helper.MemberAdminActions;
 import xyz.nextalone.nagram.helper.DoubleTap;
 import xyz.nextalone.nagram.helper.MessageHelper;
 import xyz.nextalone.nagram.helper.MessageMenuCompact;
@@ -37900,7 +37901,9 @@ public class ChatActivity extends BaseFragment implements
             }
         } else if (url instanceof URLSpanUserMention) {
             TLRPC.User user = getMessagesController().getUser(Utilities.parseLong(((URLSpanUserMention) url).getURL()));
-            if (user != null) {
+            if (longPress && naShowMentionAdminActions(cell, user)) {
+                // na: admin actions on mention long press
+            } else if (user != null) {
                 MessagesController.getInstance(currentAccount).openChatOrProfileWith(user, null, ChatActivity.this, 0, false);
             }
             if (longPress && cell != null) {
@@ -41161,7 +41164,11 @@ public class ChatActivity extends BaseFragment implements
             if (isAvatarPreviewerEnabled()) {
                 final boolean enableMention = currentChat != null && (bottomChannelButtonsLayout == null || bottomChannelButtonsLayout.getVisibility() != View.VISIBLE) && (bottomOverlay == null || bottomOverlay.getVisibility() != View.VISIBLE);
                 final boolean enableSearchMessages = currentChat != null && (threadMessageId == 0 || isTopic) && (!ChatObject.isChannel(currentChat) || currentChat.megagroup);
-                final AvatarPreviewer.MenuItem[] menuItems = new AvatarPreviewer.MenuItem[2 + (enableMention ? 1 : 0) + (enableSearchMessages ? 1 : 0)];
+                // na: admin actions on avatar long press
+                final boolean naAvatarAdminActions = NaConfig.INSTANCE.getAdminActionsOnAvatarLongPress().Bool();
+                final boolean naChangePermissions = naAvatarAdminActions && MemberAdminActions.canChangePermissions(currentAccount, currentChat, user);
+                final boolean naBanOrDelete = naAvatarAdminActions && MemberAdminActions.canBanOrDelete(currentAccount, currentChat, user);
+                final AvatarPreviewer.MenuItem[] menuItems = new AvatarPreviewer.MenuItem[2 + (enableMention ? 1 : 0) + (enableSearchMessages ? 1 : 0) + (naChangePermissions ? 1 : 0) + (naBanOrDelete ? 1 : 0)];
                 int a = 0;
                 menuItems[a++] = AvatarPreviewer.MenuItem.OPEN_PROFILE;
                 menuItems[a++] = AvatarPreviewer.MenuItem.SEND_MESSAGE;
@@ -41170,6 +41177,12 @@ public class ChatActivity extends BaseFragment implements
                 }
                 if (enableSearchMessages) {
                     menuItems[a++] = AvatarPreviewer.MenuItem.SEARCH_MESSAGES;
+                }
+                if (naChangePermissions) {
+                    menuItems[a++] = AvatarPreviewer.MenuItem.CHANGE_PERMISSIONS;
+                }
+                if (naBanOrDelete) {
+                    menuItems[a++] = AvatarPreviewer.MenuItem.BAN_OR_DELETE_MESSAGES;
                 }
                 final TLRPC.UserFull userFull = getMessagesController().getUserFull(user.id);
                 AvatarPreviewer.Data data;
@@ -41196,6 +41209,12 @@ public class ChatActivity extends BaseFragment implements
                             case SEARCH_MESSAGES:
                                 openSearchWithUser(user);
                                 break;
+                            case CHANGE_PERMISSIONS:
+                                naOpenChangePermissions(user);
+                                break;
+                            case BAN_OR_DELETE_MESSAGES:
+                                MemberAdminActions.openBanOrDelete(ChatActivity.this, currentChat, user);
+                                break;
                         }
                     });
                     return true;
@@ -41212,6 +41231,12 @@ public class ChatActivity extends BaseFragment implements
                         })
                         .addIf(enableSearchMessages, R.drawable.msg_search, getString(R.string.AvatarPreviewSearchMessages), () -> {
                             openSearchWithUser(user);
+                        })
+                        .addIf(naChangePermissions, R.drawable.msg_permissions, getString(R.string.ChangePermissions), () -> {
+                            naOpenChangePermissions(user);
+                        })
+                        .addIf(naBanOrDelete, R.drawable.msg_block, getString(R.string.BanOrDeleteMessages), () -> {
+                            MemberAdminActions.openBanOrDelete(ChatActivity.this, currentChat, user);
                         })
                         .setDrawScrim(false)
                         .setGravity(Gravity.LEFT)
@@ -44702,6 +44727,47 @@ public class ChatActivity extends BaseFragment implements
             }
         });
         presentFragment(fragment);
+    }
+
+    // na: admin actions on a member without one of their messages; the participant is fetched on
+    // demand because chatInfo.participants is partial for supergroups
+    private void naOpenChangePermissions(TLRPC.User user) {
+        MemberAdminActions.loadParticipant(this, currentChat, user, participant -> {
+            if (!MemberAdminActions.canEditPermissionsOf(participant)) {
+                MemberAdminActions.showCannotEditPermissions(this);
+                return;
+            }
+            selectedParticipant = MemberAdminActions.wrapParticipant(currentAccount, user, participant);
+            doAdminActions(1);
+        });
+    }
+
+    // na: admin actions on mention long press; returns false to keep the upstream behavior
+    private boolean naShowMentionAdminActions(ChatMessageCell cell, TLRPC.User user) {
+        if (cell == null || user == null || !NaConfig.INSTANCE.getAdminActionsOnMentionLongPress().Bool()) {
+            return false;
+        }
+        final boolean changePermissions = MemberAdminActions.canChangePermissions(currentAccount, currentChat, user);
+        final boolean banOrDelete = MemberAdminActions.canBanOrDelete(currentAccount, currentChat, user);
+        if (!changePermissions && !banOrDelete) {
+            return false;
+        }
+        ItemOptions.makeOptions(this, cell)
+            .add(R.drawable.msg_openprofile, getString(R.string.OpenProfile), () -> {
+                getMessagesController().openChatOrProfileWith(user, null, ChatActivity.this, 0, false);
+            })
+            .addIf(changePermissions, R.drawable.msg_permissions, getString(R.string.ChangePermissions), () -> {
+                naOpenChangePermissions(user);
+            })
+            .addIf(banOrDelete, R.drawable.msg_block, getString(R.string.BanOrDeleteMessages), () -> {
+                MemberAdminActions.openBanOrDelete(ChatActivity.this, currentChat, user);
+            })
+            .setDrawScrim(false)
+            .setGravity(Gravity.LEFT)
+            .forceBottom(true)
+            .translate(0, -dp(48))
+            .show();
+        return true;
     }
 
     private void doAdminActions(int action) {

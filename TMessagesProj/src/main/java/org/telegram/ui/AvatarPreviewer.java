@@ -186,7 +186,10 @@ public class AvatarPreviewer {
         OPEN_GROUP("OpenGroup2", R.string.OpenGroup2, R.drawable.msg_discussion),
         SEND_MESSAGE("SendMessage", R.string.SendMessage, R.drawable.msg_discussion),
         MENTION("Mention", R.string.Mention, R.drawable.msg_mention),
-        SEARCH_MESSAGES("AvatarPreviewSearchMessages", R.string.AvatarPreviewSearchMessages, R.drawable.msg_search);
+        SEARCH_MESSAGES("AvatarPreviewSearchMessages", R.string.AvatarPreviewSearchMessages, R.drawable.msg_search),
+        // na: admin actions on avatar long press
+        CHANGE_PERMISSIONS("ChangePermissions", R.string.ChangePermissions, R.drawable.msg_permissions),
+        BAN_OR_DELETE_MESSAGES("BanOrDeleteMessages", R.string.BanOrDeleteMessages, R.drawable.msg_block);
 
         private final String labelKey;
         private final int labelResId;

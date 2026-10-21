@@ -403,4 +403,8 @@
     <string name="CommunityAvatarTapActionArrow">右下の矢印をタップした場合のみコミュニティを開く</string>
     <string name="UseSystemNotificationColor">システム通知の色を使用</string>
     <string name="AvatarCorners">アバターの角</string>
+    <string name="AdminActionsOnAvatarLongPress">アバターの長押しで管理操作を表示</string>
+    <string name="AdminActionsOnMentionLongPress">メンションの長押しで管理操作を表示</string>
+    <string name="DeleteMessagesWhenRemovingMembers">メンバーの削除時にメッセージも削除可能にする</string>
+    <string name="BanOrDeleteMessages">BANまたはメッセージを削除</string>
 </resources>
