@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
 
+find_program(CCACHE ccache)
+if (CCACHE)
+    set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE})
+    set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE})
+endif()
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)

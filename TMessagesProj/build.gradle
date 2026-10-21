@@ -69,7 +69,6 @@ def alias = null
 def pwd = null
 def sentry_token = System.getenv("SENTRY_AUTH_TOKEN")
 def nagram_build_args = System.getenv("NAGRAM_BUILD_ARGS")
-def disableCMakeRelWithDebInfo = System.getenv("COMPILE_NATIVE") == null
 
 Properties properties
 def base64 = System.getenv("LOCAL_PROPERTIES")
@@ -94,6 +93,36 @@ alias = alias ?: System.getenv("ALIAS_NAME")
 pwd = pwd ?: System.getenv("ALIAS_PASS")
 
 def sentry_upload = sentry_token != null && !sentry_token.isEmpty()
+
+// tgcalls stays a pristine submodule; Nagram's changes to it are the patches in jni/patches,
+// applied in place before CMake configures. Patches that are already applied are skipped.
+def tgcallsDir = file("jni/tgcalls")
+def tgcallsPatches = fileTree("jni/patches") { include "tgcalls-*.patch" }
+def patchTgcalls = tasks.register("patchTgcalls") {
+    inputs.files(tgcallsPatches)
+    doLast {
+        if (!new File(tgcallsDir, ".git").exists()) {
+            throw new GradleException("${tgcallsDir} is not checked out, run: git submodule update --init --recursive")
+        }
+        def gitApply = { List<String> args ->
+            def process = (["git", "-C", tgcallsDir.path, "apply"] + args).execute()
+            def out = new StringBuilder()
+            def err = new StringBuilder()
+            process.waitForProcessOutput(out, err)
+            [process.exitValue(), err.toString()]
+        }
+        tgcallsPatches.files.sort().each { patch ->
+            if (gitApply(["--check", "--reverse", patch.path])[0] == 0) {
+                return
+            }
+            def (code, err) = gitApply([patch.path])
+            if (code != 0) {
+                throw new GradleException("Cannot apply ${patch.name} to ${tgcallsDir}, reset it with: " +
+                        "git submodule update --init --force TMessagesProj/jni/tgcalls\n${err}")
+            }
+        }
+    }
+}
 
 def targetTask = ""
 if (!gradle.startParameter.taskNames.isEmpty()) {
@@ -122,17 +151,11 @@ android {
             java {
                 srcDirs "src/main/java"
             }
-            jniLibs {
-                srcDir "src/main/libs"
-            }
         }
 
         release {
             java {
                 srcDirs "src/main/java"
-            }
-            jniLibs {
-                srcDir "src/main/libs"
             }
         }
     }
@@ -273,10 +296,6 @@ android {
             excludes += ['/fabric/**', '/META-INF/*.version', '/META-INF/*.kotlin_module', '/META-INF/native-image/**', '/builddef.lst', '/*.txt', '/DebugProbesKt.bin', '/okhttp3/internal/publicsuffix/NOTICE']
             excludes += ["META-INF/INDEX.LIST"]  // hutool
         }
-
-        def lib = "libtmessages.*.so"
-        pickFirst "lib/armeabi-v7a/$lib"
-        pickFirst "lib/arm64-v8a/$lib"
     }
 
     buildFeatures {
@@ -284,18 +303,9 @@ android {
     }
 
     tasks.configureEach { task ->
-        if (((task.name.endsWith("Ndk") || task.name.startsWith("generateJsonModel") || task.name.startsWith("externalNativeBuild"))) && !task.name.contains("Debug")) {
-            task.enabled = false
+        if (task.name.startsWith("configureCMake")) {
+            task.dependsOn(patchTgcalls)
         }
-        if (task.name.contains("uploadCrashlyticsMappingFile")) {
-            enabled = false
-        }
-        if (disableCMakeRelWithDebInfo && task.name.contains("CMakeRelWithDebInfo")) {
-            enabled = false
-        }
-    }
-
-    tasks.configureEach { task ->
         if (task.name.startsWith("uploadCrashlyticsMappingFile")) {
             task.enabled = false
         } else if (task.name.contains("Crashlytics") && task.name.contains("NoGcm")) {
