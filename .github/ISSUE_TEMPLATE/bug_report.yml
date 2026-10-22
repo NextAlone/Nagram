@@ -53,12 +53,12 @@ body:
       label: Version requirement
       options:
         - label: I am using latest debug CI version of Nagram and enable verbose log/我正在使用最新 CI 调试版本且启用详细日志
-          required: true
+          required: false
   - type: textarea
     id: logs
     attributes:
       label: Logs
-      description: For usage issues, please provide the log. Without log, the issue will be closed. /使用问题请提供日志；无日志提交会被关闭。
+      description: If applicable, please provide the log (especially for crashes or usage issues). /若适用，请提供日志（特别是崩溃或使用问题）。
       placeholder: Upload logs by clicking the bar on the bottom. 
     validations:
-      required: true
+      required: false

@@ -3,3 +3,6 @@ contact_links:
   - name: channel
     url: https://t.me/nagram_channel
     about: Our Telegram Channel
+  - name: reports
+    url: https://t.me/na_gram_reports/18
+    about: Our Telegram Issue / Bug Report Topic
