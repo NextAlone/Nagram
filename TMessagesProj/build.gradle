@@ -1,6 +1,8 @@
 import io.sentry.android.gradle.extensions.InstrumentationFeature
 import io.sentry.android.gradle.instrumentation.logcat.LogcatLevel
 
+import java.nio.file.Paths
+
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 apply plugin: "org.jetbrains.kotlin.plugin.serialization"
@@ -9,6 +11,7 @@ apply plugin: "io.objectbox"
 
 apply plugin: 'org.telegram.build-plugin'
 apply plugin: 'org.telegram.build-app-plugin'
+apply plugin: 'xyz.nagram.auto-patch-plugin'
 apply plugin: 'idea'
 
 idea {
@@ -94,36 +97,6 @@ pwd = pwd ?: System.getenv("ALIAS_PASS")
 
 def sentry_upload = sentry_token != null && !sentry_token.isEmpty()
 
-// tgcalls stays a pristine submodule; Nagram's changes to it are the patches in jni/patches,
-// applied in place before CMake configures. Patches that are already applied are skipped.
-def tgcallsDir = file("jni/tgcalls")
-def tgcallsPatches = fileTree("jni/patches") { include "tgcalls-*.patch" }
-def patchTgcalls = tasks.register("patchTgcalls") {
-    inputs.files(tgcallsPatches)
-    doLast {
-        if (!new File(tgcallsDir, ".git").exists()) {
-            throw new GradleException("${tgcallsDir} is not checked out, run: git submodule update --init --recursive")
-        }
-        def gitApply = { List<String> args ->
-            def process = (["git", "-C", tgcallsDir.path, "apply"] + args).execute()
-            def out = new StringBuilder()
-            def err = new StringBuilder()
-            process.waitForProcessOutput(out, err)
-            [process.exitValue(), err.toString()]
-        }
-        tgcallsPatches.files.sort().each { patch ->
-            if (gitApply(["--check", "--reverse", patch.path])[0] == 0) {
-                return
-            }
-            def (code, err) = gitApply([patch.path])
-            if (code != 0) {
-                throw new GradleException("Cannot apply ${patch.name} to ${tgcallsDir}, reset it with: " +
-                        "git submodule update --init --force TMessagesProj/jni/tgcalls\n${err}")
-            }
-        }
-    }
-}
-
 def targetTask = ""
 if (!gradle.startParameter.taskNames.isEmpty()) {
     if (gradle.startParameter.taskNames.size == 1) {
@@ -133,6 +106,8 @@ if (!gradle.startParameter.taskNames.isEmpty()) {
 
 def nativeTarget = System.getenv("NATIVE_TARGET")
 if (nativeTarget == null) nativeTarget = ""
+
+def isWindows = System.getProperties().getProperty("os.name").toUpperCase().indexOf("WINDOWS") != -1
 
 android {
     compileSdkVersion 36
@@ -207,8 +182,8 @@ android {
         versionName verName
         versionCode verCode
 
-        def appId = "11535358"
-        def appHash = "33d372962fadb01df47e6ceed4e33cd6"
+        def appId = "0"
+        def appHash = ""
 
         //obtain your own keys at https://core.telegram.org/api/obtaining_api_id
 
@@ -228,6 +203,16 @@ android {
             cmake {
                 version '3.22.1'
                 arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-21' //, '-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON'
+                System.getenv('PATH').split(File.pathSeparator).any { path ->
+                    var file = Paths.get("${path}${File.separator}ccache${if (isWindows) ".exe" else ""}").toFile()
+                    if (file.exists()) {
+                        println("Using ccache ${file.getAbsolutePath()} isWindows ${isWindows}")
+                        arguments += "-DCMAKE_C_COMPILER_LAUNCHER=${file.getAbsolutePath()}"
+                        arguments += "-DCMAKE_CXX_COMPILER_LAUNCHER=${file.getAbsolutePath()}"
+                        arguments += "-DANDROID_CCACHE=${file.getAbsolutePath()}"
+                        return true
+                    }
+                }
                 targets 'tmessages.49'
             }
         }
@@ -303,9 +288,6 @@ android {
     }
 
     tasks.configureEach { task ->
-        if (task.name.startsWith("configureCMake")) {
-            task.dependsOn(patchTgcalls)
-        }
         if (task.name.startsWith("uploadCrashlyticsMappingFile")) {
             task.enabled = false
         } else if (task.name.contains("Crashlytics") && task.name.contains("NoGcm")) {

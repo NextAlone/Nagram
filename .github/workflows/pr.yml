@@ -11,15 +11,16 @@ jobs:
   build:
     name: Gradle Build
     runs-on: ubuntu-latest
+    env:
+      CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
+      CCACHE_NOHASHDIR: "true"
+      CCACHE_MAXSIZE: "5G"
+      CCACHE_HARDLINK: "true"
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-      - name: Fetch Status
-        run: |
-          sed -i 's/\/\///g' settings.gradle
-      - name: Checkout Library
-        run: |
-          git submodule update --init
+        with:
+          submodules: 'true'
       - name: Set up JDK 17
         uses: actions/setup-java@v6
         with:
@@ -32,8 +33,9 @@ jobs:
       - name: Set up ccache
         uses: hendrikmuhs/ccache-action@v1
         with:
+          append-timestamp: false
           key: native-${{ github.job }}
-          max-size: 2G
+          max-size: 5G
       - name: Install NDK
         run: |
           echo "y" | sdkmanager --install "ndk;27.2.12479018" --sdk_root=${ANDROID_SDK_ROOT} &> /dev/null

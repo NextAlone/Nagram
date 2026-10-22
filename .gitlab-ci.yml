@@ -36,7 +36,6 @@ fingerprint:
   before_script:
     - apk add --no-cache git bash coreutils
   script:
-    - *fetch-status
     - cat gradle/wrapper/gradle-wrapper.properties > gradle_status
     - export GRADLE_KEY=$(sha256sum gradle_status | cut -d' ' -f1)
     - echo "GRADLE_KEY=${GRADLE_KEY}" >> fingerprint.env
