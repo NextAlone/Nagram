@@ -29,6 +29,13 @@ default:
   git submodule sync
   git submodule update --init --force
 
+.setup-ccache: &setup-ccache |
+  export CCACHE_DIR="$CI_PROJECT_DIR/.ccache"
+  export CCACHE_COMPILERCHECK="%compiler% -dumpmachine; %compiler% -dumpversion"
+  export CCACHE_NOHASHDIR="true"
+  export CCACHE_MAXSIZE="5G"
+  export CCACHE_HARDLINK="true"
+
 fingerprint:
   stage: prepare
   tags:
@@ -47,7 +54,7 @@ fingerprint:
 
 build:
   stage: build
-  image: registry.gitlab.com/xtao-labs/android-ndk:35-jdk17.0.19_10-ndk27.2.12479018-cmake3.22.1-ci
+  image: registry.gitlab.com/xtao-labs/android-ndk:36-jdk17.0.20_8-ndk27.2.12479018-cmake3.22.1-ci
   needs:
     - job: fingerprint
       artifacts: true
@@ -60,9 +67,9 @@ build:
         - .ccache/
   script:
     - *fetch-status
+    - *setup-ccache
     # Only the arm64-v8a APK is published, so build native code for that ABI alone.
     - export NATIVE_TARGET="arm64-v8a"
-    - export CCACHE_DIR="$CI_PROJECT_DIR/.ccache"
     - sed -i "s/2000000000000/$(date +%s%N | cut -c1-13)/g" gradle.properties
     - export GRADLE_USER_HOME="$CI_PROJECT_DIR/.gradle-cache"
     - export LOCAL_PROPERTIES="${LOCAL_PROPERTIES}"
