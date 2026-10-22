@@ -14,8 +14,8 @@ import androidx.core.net.toUri
 
 
 object NaConfig {
-    const val TAG =
-        "NextAlone"
+    val TAG =
+        NaConfig::class.java.simpleName
     val preferences: SharedPreferences =
         NkmrConfig.preferences
     val sync =
