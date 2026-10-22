@@ -110,31 +110,22 @@ MTProto protocol manuals: <https://core.telegram.org/mtproto>
 
 ## Compilation Guide
 
-**NOTE: For Windows users, please consider using a Linux VM (such as WSL2) or dual booting.**
+**NOTE: For Windows users, please consider purchasing a Mac.**
 
 Environment:
 
-- Linux distribution based on Debian or Arch Linux, or macOS
+- macOS
 
 - Native tools: `gcc` `go` `make` `cmake` `ninja` `yasm`
   
   ```shell
-  # for Debian based distribution
-  sudo apt install gcc golang make cmake ninja-build yasm
-  # for Arch Linux based distribution
-  sudo pacman -S base-devel go ninja cmake yasm
   # for macOS
   xcode-select --install # install developer tools (will open confirm dialog)
   brew install go cmake ninja yasm # install other tools by homebrew
   ```
 - Android SDK: `build-tools;33.0.0` `platforms;android-33` `ndk;27.2.12479018` `cmake;3.18.1` `cmake;3.22.1` (the default location is **$HOME/Android/SDK**, otherwise you need to specify **$ANDROID_HOME** for it)
 
-  It is recommended to use [Android Studio](https://developer.android.com/studio) to install, but you can also use `sdkmanager` command on distributions based on Debian:
-
-  ```shell
-  sudo apt install sdkmanager
-  sdkmanager --sdk_root $HOME/Android/SDK --install "build-tools;33.0.0" "platforms;android-33" "ndk;27.2.12479018" "cmake;3.18.1" "cmake;3.22.1"
-  ```
+  It is recommended to use [Android Studio](https://developer.android.com/studio) to install.
 
 Build: 
 
