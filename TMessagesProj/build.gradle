@@ -184,14 +184,14 @@ android {
         versionName verName
         versionCode verCode
 
-        def appId = "11535358"
-        def appHash = "33d372962fadb01df47e6ceed4e33cd6"
+        def appId = null
+        def appHash = null
 
         //obtain your own keys at https://core.telegram.org/api/obtaining_api_id
 
         if (properties != null) {
-            appId = properties.getProperty("TELEGRAM_APP_ID") ?: System.getenv("TELEGRAM_APP_ID") ?: appId
-            appHash = properties.getProperty("TELEGRAM_APP_HASH") ?: System.getenv("TELEGRAM_APP_HASH") ?: appHash
+            appId = properties.getProperty("TELEGRAM_APP_ID") ?: System.getenv("TELEGRAM_APP_ID")
+            appHash = properties.getProperty("TELEGRAM_APP_HASH") ?: System.getenv("TELEGRAM_APP_HASH")
         }
 
         buildConfigField "String", "BUILD_VERSION_STRING", "\"" + verName + "\""
