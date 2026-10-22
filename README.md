@@ -116,17 +116,11 @@ Environment:
 
 - Linux distribution based on Debian or Arch Linux, or macOS
 
-- Native tools: `gcc` `go` `make` `cmake` `ninja` `yasm`
-  
-  ```shell
-  # for Debian based distribution
-  sudo apt install gcc golang make cmake ninja-build yasm
-  # for Arch Linux based distribution
-  sudo pacman -S base-devel go ninja cmake yasm
-  # for macOS
-  xcode-select --install # install developer tools (will open confirm dialog)
-  brew install go cmake ninja yasm # install other tools by homebrew
-  ```
+- Optional: `ccache` in `PATH` speeds up rebuilding the native code.
+
+  The third-party native libraries (FFmpeg, BoringSSL, libvpx, ...) are committed prebuilt under
+  **TMessagesProj/jni/prebuild/lib**; the `build_*.sh` scripts there, and the tools they need
+  (`go`, `yasm`, `make`, ...), are only for regenerating them.
 - Android SDK: `build-tools;33.0.0` `platforms;android-33` `ndk;27.2.12479018` `cmake;3.18.1` `cmake;3.22.1` (the default location is **$HOME/Android/SDK**, otherwise you need to specify **$ANDROID_HOME** for it)
 
   It is recommended to use [Android Studio](https://developer.android.com/studio) to install, but you can also use `sdkmanager` command on distributions based on Debian:
@@ -144,6 +138,9 @@ Build:
    git submodule update --init --recursive
    ```
 
+   The build applies **TMessagesProj/jni/patches** to `tgcalls` itself. When an update moves the `tgcalls`
+   submodule, add `--force` so the patched files are reset before the new commit is checked out.
+
 2. Disable signature check by removing the following lines in **TMessagesProj/jni/jni.c**:
    ```c
     if (verifySign(env) != JNI_OK) {
@@ -151,19 +148,13 @@ Build:
     }
    ```
 
-3. Build external libraries and native code: 
-   ```shell
-   ./run init libs
-   ./run libs native
-   ```
+3. Fill out `TELEGRAM_APP_ID` and `TELEGRAM_APP_HASH` in **local.properties** (from [Telegram Developer](https://my.telegram.org/auth))
 
-4. Fill out `TELEGRAM_APP_ID` and `TELEGRAM_APP_HASH` in **local.properties** (from [Telegram Developer](https://my.telegram.org/auth))
+4. Replace **TMessagesProj/google-services.json** if you want FCM to work.
 
-5. Replace **TMessagesProj/google-services.json** if you want FCM to work.
+5. Replace **release.keystore** with yours and fill out `ALIAS_NAME`, `KEYSTORE_PASS` and `ALIAS_PASS` in **local.properties**.
 
-6. Replace **release.keystore** with yours and fill out `ALIAS_NAME`, `KEYSTORE_PASS` and `ALIAS_PASS` in **local.properties**.
-
-7. Build with Gradle:
+6. Build with Gradle (the native code is compiled as part of the build):
 
    ```shell
    ./gradlew assemble<Release/Debug>

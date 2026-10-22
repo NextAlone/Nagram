@@ -13,6 +13,10 @@ gradlePlugin {
             id = "org.telegram.build-app-plugin"
             implementationClass = "org.telegram.plugin.TelegramBuildAppPlugin"
         }
+        register("NagramPatchPlugin") {
+            id = "xyz.nagram.auto-patch-plugin"
+            implementationClass = "xyz.nagram.plugin.NagramPatchPlugin"
+        }
         register("testGenerator") {
             id = "test-generator"
             implementationClass = "com.example.TestGeneratorPlugin"

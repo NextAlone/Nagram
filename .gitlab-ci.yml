@@ -29,6 +29,13 @@ default:
   git submodule sync
   git submodule update --init --force
 
+.setup-ccache: &setup-ccache |
+  export CCACHE_DIR="$CI_PROJECT_DIR/.ccache"
+  export CCACHE_COMPILERCHECK="%compiler% -dumpmachine; %compiler% -dumpversion"
+  export CCACHE_NOHASHDIR="true"
+  export CCACHE_MAXSIZE="5G"
+  export CCACHE_HARDLINK="true"
+
 fingerprint:
   stage: prepare
   tags:
@@ -36,12 +43,8 @@ fingerprint:
   before_script:
     - apk add --no-cache git bash coreutils
   script:
-    - *fetch-status
-    - find TMessagesProj/jni/ -maxdepth 2 -type f -exec cat {} + > native_status 2>/dev/null
     - cat gradle/wrapper/gradle-wrapper.properties > gradle_status
-    - export NATIVE_KEY=$(sha256sum native_status | cut -d' ' -f1)
     - export GRADLE_KEY=$(sha256sum gradle_status | cut -d' ' -f1)
-    - echo "NATIVE_KEY=${NATIVE_KEY}" >> fingerprint.env
     - echo "GRADLE_KEY=${GRADLE_KEY}" >> fingerprint.env
     - cat fingerprint.env
   artifacts:
@@ -51,7 +54,7 @@ fingerprint:
 
 build:
   stage: build
-  image: registry.gitlab.com/xtao-labs/android-ndk:35-jdk17.0.19_10-ndk27.2.12479018-cmake3.22.1-ci
+  image: registry.gitlab.com/xtao-labs/android-ndk:36-jdk17.0.20_8-ndk27.2.12479018-cmake3.22.1-ci
   needs:
     - job: fingerprint
       artifacts: true
@@ -59,17 +62,14 @@ build:
     - key: "gradle-${GRADLE_KEY}"
       paths:
         - .gradle-cache/
-    - key: "native-arm64-v8a-${NATIVE_KEY}"
+    - key: "ccache-arm64-v8a"
       paths:
-        - TMessagesProj/src/main/libs/arm64-v8a/
+        - .ccache/
   script:
     - *fetch-status
-    - |
-      if [[ ! -d TMessagesProj/src/main/libs/arm64-v8a ]]; then
-        export NATIVE_TARGET="arm64-v8a"
-        ./run init libs
-        ./run libs native
-      fi
+    - *setup-ccache
+    # Only the arm64-v8a APK is published, so build native code for that ABI alone.
+    - export NATIVE_TARGET="arm64-v8a"
     - sed -i "s/2000000000000/$(date +%s%N | cut -c1-13)/g" gradle.properties
     - export GRADLE_USER_HOME="$CI_PROJECT_DIR/.gradle-cache"
     - export LOCAL_PROPERTIES="${LOCAL_PROPERTIES}"
