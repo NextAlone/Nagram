@@ -30,8 +30,10 @@ A modified, forked, or third-party distribution must:
 2. use a clearly distinct application name and icon;
 3. remove Nagram brand assets from launcher icon selectors, manifests, release
    packages, app-store listings, screenshots, repository avatars, and other
-   promotional material; and
-4. not imply affiliation with, endorsement by, or official status from the
+   promotional material;
+4. not use Nagram's Telegram API credentials (APP ID and APP hash) and instead
+   obtain and use its own API keys, and
+5. not imply affiliation with, endorsement by, or official status from the
    Nagram project.
 
 Accurate and non-confusing textual statements such as "based on Nagram" are
