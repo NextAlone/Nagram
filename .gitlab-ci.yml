@@ -26,8 +26,7 @@ default:
 .fetch-status: &fetch-status |
   sed -i -E 's#https://github\.com/[^/]+/#https://gitlab.com/xtao-labs/mirrors/#g' .gitmodules
   sed -i 's|https://chromium\.googlesource\.com/libyuv/libyuv|https://gitlab.com/xtao-labs/mirrors/libyuv.git|g' .gitmodules
-  git submodule sync
-  git submodule update --init --force
+  bash bin/scripts/submodule.sh
 
 .setup-ccache: &setup-ccache |
   export CCACHE_DIR="$CI_PROJECT_DIR/.ccache"
@@ -43,8 +42,12 @@ fingerprint:
   before_script:
     - apk add --no-cache git bash coreutils
   script:
+    - git ls-tree -r HEAD | grep '^160000' > native_status
+    - cat native_status
     - cat gradle/wrapper/gradle-wrapper.properties > gradle_status
+    - export NATIVE_KEY=$(sha256sum native_status | cut -d' ' -f1)
     - export GRADLE_KEY=$(sha256sum gradle_status | cut -d' ' -f1)
+    - echo "NATIVE_KEY=${NATIVE_KEY}" >> fingerprint.env
     - echo "GRADLE_KEY=${GRADLE_KEY}" >> fingerprint.env
     - cat fingerprint.env
   artifacts:
@@ -65,6 +68,9 @@ build:
     - key: "ccache-arm64-v8a"
       paths:
         - .ccache/
+    - key: "native-submodules-${NATIVE_KEY}"
+      paths:
+        - submodules.tar.gz
   script:
     - *fetch-status
     - *setup-ccache
