@@ -38,7 +38,7 @@ idea {
 }
 
 def verName = APP_VERSION_NAME
-def verCode = 1256
+def verCode = 1257
 
 
 def officialVer = APP_VERSION_NAME
@@ -202,7 +202,7 @@ android {
         externalNativeBuild {
             cmake {
                 version '3.22.1'
-                arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-21' //, '-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON'
+                arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-23' //, '-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON'
                 System.getenv('PATH').split(File.pathSeparator).any { path ->
                     var file = Paths.get("${path}${File.separator}ccache${if (isWindows) ".exe" else ""}").toFile()
                     if (file.exists()) {

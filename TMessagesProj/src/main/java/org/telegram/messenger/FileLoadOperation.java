@@ -51,7 +51,6 @@ public class FileLoadOperation {
     private boolean forceSmallChunk;
     private boolean useDownloadByteBudget;
     private int downloadConnectionsCount = 2;
-    private boolean isAudioDocument;
     private boolean paceDocumentRequests;
     private DownloadRequestPacer downloadRequestPacer;
     private final Runnable pacedDownloadRequest = () -> {
@@ -422,8 +421,6 @@ public class FileLoadOperation {
     }
 
     public FileLoadOperation(TLRPC.Document documentLocation, Object parent) {
-        isAudioDocument = MessageObject.isVoiceDocument(documentLocation) || MessageObject.isMusicDocument(documentLocation) ||
-                (documentLocation != null && documentLocation.mime_type != null && documentLocation.mime_type.startsWith("audio/"));
         paceDocumentRequests = documentLocation != null && !MessageObject.isAnyKindOfStickerOrEmoji(documentLocation) &&
                 !"application/x-tgwallpattern".equals(documentLocation.mime_type);
         updateParams();
@@ -845,6 +842,24 @@ public class FileLoadOperation {
         return start(stream, streamOffset, streamPriority);
     }
 
+    // Snapshot the policy for this operation, including its connection pool.
+    // Streams use it too, like TDLib, which shares one downloader between streaming and downloads.
+    private void updateDownloadByteBudget() {
+        useDownloadByteBudget = !MessagesController.getInstance(currentAccount).downloadImprovementKillswitch &&
+                totalBytesCount > 0 && key == null && !encryptFile && !isPreloadVideoOperation && preloadPrefixSize == 0;
+        if (useDownloadByteBudget) {
+            boolean premium = UserConfig.getInstance(currentAccount).isPremium();
+            downloadConnectionsCount = premium ? ConnectionsManager.DownloadConnectionsCount : 2;
+            int byteBudget = (premium ? 16 : 2) * 1024 * 1024;
+            currentMaxDownloadRequests = byteBudget / currentDownloadChunkSize;
+        }
+    }
+
+    // Same branch of start() that picks the regular chunk size.
+    private boolean canUseDownloadByteBudget() {
+        return currentDownloadChunkSize != 0 && !forceSmallChunk && !isStory && !isStream;
+    }
+
     public boolean start(final FileLoadOperationStream stream, final long streamOffset, final boolean streamPriority) {
         startTime = System.currentTimeMillis();
         updateParams();
@@ -865,17 +880,7 @@ public class FileLoadOperation {
                 boolean bigChunk = totalBytesCount >= bigFileSizeFrom;
                 currentDownloadChunkSize = bigChunk ? downloadChunkSizeBig : downloadChunkSize;
                 currentMaxDownloadRequests = bigChunk ? maxDownloadRequestsBig : maxDownloadRequests;
-                // Keep special download paths on their existing scheduling policy.
-                // Snapshot the policy for this operation, including its connection pool.
-                useDownloadByteBudget = !MessagesController.getInstance(currentAccount).downloadImprovementKillswitch &&
-                        totalBytesCount > 0 && key == null && !encryptFile && !isAudioDocument && stream == null &&
-                        !isPreloadVideoOperation && !supportsPreloading && preloadPrefixSize == 0;
-                if (useDownloadByteBudget) {
-                    boolean premium = UserConfig.getInstance(currentAccount).isPremium();
-                    downloadConnectionsCount = premium ? ConnectionsManager.DownloadConnectionsCount : 2;
-                    int byteBudget = (premium ? 16 : 2) * 1024 * 1024;
-                    currentMaxDownloadRequests = byteBudget / currentDownloadChunkSize;
-                }
+                updateDownloadByteBudget();
             }
         }
         final boolean alreadyStarted = state != stateIdle;
@@ -1343,6 +1348,9 @@ public class FileLoadOperation {
         if (!value && isPreloadVideoOperation) {
             if (state == stateFinished) {
                 isPreloadVideoOperation = value;
+                if (canUseDownloadByteBudget()) {
+                    updateDownloadByteBudget();
+                }
                 state = stateIdle;
                 preloadFinished = false;
                 start();
@@ -1351,6 +1359,9 @@ public class FileLoadOperation {
                     requestedBytesCount = 0;
                     clearOperation(null, true, true);
                     isPreloadVideoOperation = value;
+                    if (canUseDownloadByteBudget()) {
+                        updateDownloadByteBudget();
+                    }
                     startDownloadRequest(-1);
                 });
             } else {
