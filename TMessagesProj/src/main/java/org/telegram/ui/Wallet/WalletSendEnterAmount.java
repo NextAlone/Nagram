@@ -97,6 +97,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import xyz.nextalone.nagram.helper.MessageHelper;
+
 public class WalletSendEnterAmount extends UniversalFragment implements NotificationCenter.NotificationCenterDelegate {
 
     public static class AmountInputView extends FrameLayout {
@@ -983,6 +985,7 @@ public class WalletSendEnterAmount extends UniversalFragment implements Notifica
         otherItem.setContentDescription(getString(R.string.AccDescrMoreOptions));
         otherItem.addSubItem(2, R.drawable.msg_addbot, getString(R.string.WalletDepositFunds));
         otherItem.addSubItem(3, R.drawable.menu_comments, getString(R.string.WalletAddComment));
+        otherItem.addSubItem(100, R.drawable.menu_info, getString(R.string.Info));
         actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -992,6 +995,8 @@ public class WalletSendEnterAmount extends UniversalFragment implements Notifica
                     WalletActivity.openWalletQRAlert(getContext(), currentAccount, getResourceProvider());
                 } else if (id == 3) {
                     openAddCommentAlert();
+                } else if (id == 100) {
+                    MessageHelper.INSTANCE.openWalletInExplorer(getContext(), currentAccount, recipientAddress);
                 }
             }
         });

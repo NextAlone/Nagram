@@ -31,9 +31,11 @@ import org.telegram.messenger.LocaleController
 import org.telegram.messenger.MediaController
 import org.telegram.messenger.MediaDataController
 import org.telegram.messenger.MessageObject
+import org.telegram.messenger.MessagesController
 import org.telegram.messenger.R
 import org.telegram.messenger.UserConfig
 import org.telegram.messenger.Utilities
+import org.telegram.messenger.browser.Browser
 import org.telegram.tgnet.TLRPC.Chat
 import org.telegram.tgnet.TLRPC.TL_messageEntityBankCard
 import org.telegram.tgnet.TLRPC.TL_messageEntityBotCommand
@@ -614,5 +616,18 @@ object MessageHelper {
             Log.e("GifEncoder", "Error creating GIF: $e")
             false
         }
+    }
+
+    fun openWalletInExplorer(context: Context?, currentAccount: Int, address: String?) {
+        if (context == null || TextUtils.isEmpty(address)) {
+            return
+        }
+        var baseUrl = MessagesController.getInstance(currentAccount).tonBlockchainExplorerUrl
+        if (TextUtils.isEmpty(baseUrl)) {
+            baseUrl = "https://gram.org/"
+        } else if (!baseUrl.endsWith("/")) {
+            baseUrl += "/";
+        }
+        Browser.openUrl(context, baseUrl + "address/" + Uri.encode(address))
     }
 }
