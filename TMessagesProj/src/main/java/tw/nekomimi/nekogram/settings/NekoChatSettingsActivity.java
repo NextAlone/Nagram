@@ -75,6 +75,11 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     private final AbstractConfigCell stickersOnlyShowReadRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getRealHideTimeForSticker()));
     private final AbstractConfigCell divider0 = cellGroup.appendCell(new ConfigCellDivider());
 
+    // Sticker Shape
+    private final AbstractConfigCell headerStickerShape = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("StickerShape", R.string.StickerShape)));
+    private final AbstractConfigCell stickerShapeRow = cellGroup.appendCell(new ConfigCellCustom("StickerShape", ConfigCellCustom.CUSTOM_ITEM_StickerShape, false));
+    private final AbstractConfigCell dividerStickerShape = cellGroup.appendCell(new ConfigCellDivider());
+
     // Messages
     private final AbstractConfigCell headerMessages = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.NagramMessages)));
     private final AbstractConfigCell messagesPreviewRow = cellGroup.appendCell(new ConfigCellCustom("MessagePreview", ConfigCellCustom.CUSTOM_ITEM_MessagesPreview, false));
@@ -289,6 +294,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
 
     private ActionBarMenuItem menuItem;
     private StickerSizeCell stickerSizeCell;
+    private StickerShapeCell stickerShapeCell;
     private EmojiSetCell emojiSetCell;
 
     public NekoChatSettingsActivity() {
@@ -336,7 +342,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
 
         listView.setAdapter(listAdapter);
         listView.setItemSelectorColorProvider(position ->
-                position == cellGroup.rows.indexOf(stickerSizeRow) || position == cellGroup.rows.indexOf(messagesPreviewRow) ? Color.TRANSPARENT : null);
+                position == cellGroup.rows.indexOf(stickerSizeRow) || position == cellGroup.rows.indexOf(messagesPreviewRow) || position == cellGroup.rows.indexOf(stickerShapeRow) ? Color.TRANSPARENT : null);
         // Fragment: Set OnClick Callbacks
         listView.setOnItemClickListener((view, position, x, y) -> {
             AbstractConfigCell a = cellGroup.rows.get(position);
@@ -356,6 +362,9 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                     }
                 }
             } else if (a instanceof ConfigCellCustom) { // Custom onclick
+                if (position == cellGroup.rows.indexOf(stickerShapeRow)) {
+                    return;
+                }
                 if (position == cellGroup.rows.indexOf(maxRecentStickerCountRow)) {
                     final int[] counts = {20, 30, 40, 50, 80, 100, 120, 150, 180, 200};
                     List<String> types = Arrays.stream(counts)
@@ -430,6 +439,9 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (key.equals(NekoConfig.hideTimeForSticker.getKey()) || key.equals(NaConfig.INSTANCE.getRealHideTimeForSticker().getKey())) {
                 if (stickerSizeCell != null) stickerSizeCell.invalidate();
+            } else if (key.equals(NaConfig.INSTANCE.getStickerShape().getKey())) {
+                if (stickerSizeCell != null) stickerSizeCell.invalidate();
+                if (stickerShapeCell != null) stickerShapeCell.updateSelection();
             }
         };
 
@@ -460,7 +472,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     @Override
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> themeDescriptions = new ArrayList<>();
-        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{EmptyCell.class, TextSettingsCell.class, TextCheckCell.class, HeaderCell.class, TextDetailSettingsCell.class, NotificationsCheckCell.class}, null, null, null, Theme.key_windowBackgroundWhite));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{EmptyCell.class, TextSettingsCell.class, TextCheckCell.class, HeaderCell.class, TextDetailSettingsCell.class, NotificationsCheckCell.class, StickerShapeCell.class}, null, null, null, Theme.key_windowBackgroundWhite));
         themeDescriptions.add(new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray));
 
         themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_avatar_backgroundActionBarBlue));
@@ -647,6 +659,8 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                         } else if (position == cellGroup.rows.indexOf(doubleTapActionOutgoingRow)) {
                             textCell.setTextAndValue(LocaleController.getString(R.string.DoubleTapActionOutgoing), DoubleTap.doubleTapActionMap.get(NaConfig.INSTANCE.getDoubleTapActionOutgoing().Int()), divider);
                         }
+                    } else if (view instanceof StickerShapeCell) {
+                        ((StickerShapeCell) view).updateSelection();
                     } else if (view instanceof EmojiSetCell) {
                         EmojiSetCell v1 =  (EmojiSetCell) view;
                         v1.setData(EmojiHelper.getInstance().getCurrentEmojiPackInfo(), false, divider);
@@ -666,6 +680,13 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
             switch (viewType) {
                 case ConfigCellCustom.CUSTOM_ITEM_StickerSize:
                     view = stickerSizeCell = new StickerSizeCell(mContext);
+                    break;
+                case ConfigCellCustom.CUSTOM_ITEM_StickerShape:
+                    view = stickerShapeCell = new StickerShapeCell(mContext, () -> {
+                        if (stickerSizeCell != null) {
+                            stickerSizeCell.invalidate();
+                        }
+                    });
                     break;
                 case ConfigCellCustom.CUSTOM_ITEM_EmojiSet:
                     view = emojiSetCell = new EmojiSetCell(mContext, false);
