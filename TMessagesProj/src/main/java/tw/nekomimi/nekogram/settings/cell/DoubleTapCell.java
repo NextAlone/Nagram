@@ -1,4 +1,4 @@
-package tw.nekomimi.nekogram.settings;
+package tw.nekomimi.nekogram.settings.cell;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

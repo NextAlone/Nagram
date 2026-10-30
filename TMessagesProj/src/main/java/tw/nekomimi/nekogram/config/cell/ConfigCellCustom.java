@@ -26,6 +26,10 @@ public class ConfigCellCustom extends AbstractConfigCell {
         this(key, null, type, enabled);
     }
 
+    public ConfigCellCustom(ConfigItem bindConfig, int type, boolean enabled) {
+        this(bindConfig.getKey(), bindConfig, type, enabled);
+    }
+
     public ConfigCellCustom(String key, ConfigItem bindConfig, int type, boolean enabled) {
         this.key = key;
         this.bindConfig = bindConfig;
@@ -55,5 +59,10 @@ public class ConfigCellCustom extends AbstractConfigCell {
 
     public void onBindViewHolder(RecyclerView.ViewHolder holder) {
         // Not Used
+    }
+
+    public void runCallback(Object newValue) {
+        if (bindConfig == null || cellGroup == null) return;
+        cellGroup.runCallback(bindConfig.getKey(), newValue);
     }
 }

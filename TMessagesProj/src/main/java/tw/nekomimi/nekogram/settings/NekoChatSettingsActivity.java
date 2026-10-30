@@ -58,6 +58,7 @@ import tw.nekomimi.nekogram.config.cell.ConfigCellTextCheck;
 import tw.nekomimi.nekogram.config.cell.ConfigCellTextDetail;
 import tw.nekomimi.nekogram.config.cell.ConfigCellTextInput;
 import tw.nekomimi.nekogram.helpers.remote.EmojiHelper;
+import tw.nekomimi.nekogram.settings.cell.DoubleTapCell;
 import tw.nekomimi.nekogram.settings.cell.InputAnimationStrengthSeekBar;
 import tw.nekomimi.nekogram.settings.cell.StickerShapeCell;
 import tw.nekomimi.nekogram.ui.PopupBuilder;
@@ -98,8 +99,8 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
 
     private final AbstractConfigCell headerDoubleTap = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.DoubleTapAction)));
     private final AbstractConfigCell doubleTapPreviewRow = cellGroup.appendCell(new ConfigCellCustom("DoubleTapAction", ConfigCellCustom.CUSTOM_ITEM_DoubleTap, false));
-    private final AbstractConfigCell doubleTapActionIncomingRow = cellGroup.appendCell(new ConfigCellCustom("DoubleTapActionIncoming", CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
-    private final AbstractConfigCell doubleTapActionOutgoingRow = cellGroup.appendCell(new ConfigCellCustom("DoubleTapActionOutgoing", CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final AbstractConfigCell doubleTapActionIncomingRow = cellGroup.appendCell(new ConfigCellCustom(NaConfig.INSTANCE.getDoubleTapActionIncoming(), CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final AbstractConfigCell doubleTapActionOutgoingRow = cellGroup.appendCell(new ConfigCellCustom(NaConfig.INSTANCE.getDoubleTapActionOutgoing(), CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final AbstractConfigCell dividerDoubleTap = cellGroup.appendCell(new ConfigCellDivider());
 
     // Chats
@@ -407,11 +408,10 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                     }
                     PopupBuilder builder = new PopupBuilder(view);
                     builder.setItems(arrayList, (i, str) -> {
-                        (outgoing ? NaConfig.INSTANCE.getDoubleTapActionOutgoing() : NaConfig.INSTANCE.getDoubleTapActionIncoming()).setConfigInt(types.get(i));
+                        int newValue = types.get(i);
+                        ((ConfigCellCustom) a).getBindConfig().setConfigInt(newValue);
+                        ((ConfigCellCustom) a).runCallback(newValue);
                         listAdapter.notifyItemChanged(position);
-                        if (doubleTapCell != null) {
-                            doubleTapCell.updateIcons(outgoing ? 2 : 1, true);
-                        }
                         return Unit.INSTANCE;
                     });
                     builder.show();
@@ -466,9 +466,6 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
         super.onResume();
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
-        }
-        if (doubleTapCell != null) {
-            doubleTapCell.updateIcons(0, false);
         }
     }
 
