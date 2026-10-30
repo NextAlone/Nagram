@@ -448,6 +448,7 @@ public class ChatActivity extends BaseFragment implements
     private final static int nkheaderbtn_to_the_message = 2034;
     private final static int nkheaderbtn_hide_title = 2029;
     private final static int nkheaderbtn_reload_messages = 2035;
+    private final static int nkheaderbtn_my_tag = 2036;
 
     // shared with actionbar
     public final static int nkbtn_translate = 2008;
@@ -562,6 +563,10 @@ public class ChatActivity extends BaseFragment implements
     private ActionBarMenuItem.Item toTheMessage;
     private ActionBarMenuItem.Item hideTitleItem;
     private ActionBarMenuItem.Item reloadMessagesItem;
+    private String myTagRankCache;
+    private boolean myTagRankLoaded;
+    private boolean myTagRankLoading;
+    private boolean myTagRankPendingShow;
     private ClippingImageView animatingImageView;
     private ThanosEffect chatListThanosEffect;
     private ChatListViewPaddingsAnimator chatListViewPaddingsAnimator;
@@ -4701,6 +4706,7 @@ public class ChatActivity extends BaseFragment implements
                 @Override
                 public void onShowSubMenu() {
                     updateScrimSourceBitmap();
+                    loadMyTagRank();
                 }
 
                 @Override
@@ -4851,6 +4857,12 @@ public class ChatActivity extends BaseFragment implements
                     draw = R.drawable.msg_channel;
                 }
                 headerItem.lazilyAddSubItem(nkheaderbtn_linked_chat, draw, text);
+            }
+
+            if (currentChat != null) {
+                // "Set my tag" is only offered while the admins allow members to edit their own tag.
+                headerItem.lazilyAddSubItem(nkheaderbtn_my_tag, R.drawable.menu_tag_edit, LocaleController.getString(R.string.SetMyTag));
+                updateMyTagItemVisibility();
             }
 
             if (currentUser != null && currentUser.id != UserObject.VERIFY && currentUser.id != UserObject.REPLY_BOT) {
@@ -23192,6 +23204,7 @@ public class ChatActivity extends BaseFragment implements
             if (headerItem != null) {
                 headerItem.setSubItemShown(open_direct, ChatObject.isChannel(currentChat) && !ChatObject.isMonoForum(currentChat) && currentChat.linked_monoforum_id != 0 && (isBottomOverlayHidden() || ChatObject.canManageMonoForum(currentAccount, -currentChat.linked_monoforum_id)));
             }
+            updateMyTagItemVisibility();
         } else if (id == NotificationCenter.didReceiveNewMessages) {
             FileLog.d("ChatActivity didReceiveNewMessages start");
             long did = (Long) args[0];
@@ -23798,6 +23811,7 @@ public class ChatActivity extends BaseFragment implements
                 long prevLinkedChatId = chatInfo != null ? chatInfo.linked_chat_id : 0;
                 chatInfo = chatFull;
                 gotChatInfo();
+                updateMyTagItemVisibility();
                 if (ChatObject.isBoostSupported(currentChat) && !ChatObject.isMonoForum(currentChat) /*chatMode != MODE_SUGGESTIONS*/) {
                     getMessagesController().getBoostsController().getBoostsStats(dialog_id, boostsStatus -> {
                         if (boostsStatus == null) {
@@ -46357,6 +46371,8 @@ public class ChatActivity extends BaseFragment implements
         } else if (id == nkbtn_greatOrPoor) {
             sendGreatOrGreat(false);
             clearSelectionMode();
+        } else if (id == nkheaderbtn_my_tag) {
+            openMyTagEditor();
         } else if (id == nkheaderbtn_hide_title) {
             if (avatarContainer != null) {
                 avatarContainer.setTitle("");
@@ -46395,6 +46411,95 @@ public class ChatActivity extends BaseFragment implements
             getMessagesStorage().deleteDialog(dialog_id, 2);
             presentFragment(ChatActivity.of(dialog_id), true);
         }
+    }
+
+    private boolean canSetMyTag() {
+        if (currentChat == null || ChatObject.isMonoForum(currentChat) || ChatObject.isNotInChat(currentChat)) {
+            return false;
+        }
+        if (ChatObject.isChannel(currentChat) && !currentChat.megagroup) {
+            return false;
+        }
+        return ChatObject.canManageMyTag(currentChat);
+    }
+
+    private void updateMyTagItemVisibility() {
+        if (headerItem != null && headerItem.hasSubItem(nkheaderbtn_my_tag)) {
+            headerItem.setSubItemShown(nkheaderbtn_my_tag, canSetMyTag());
+        }
+    }
+
+    private String getMyTagRankFromCache() {
+        // getAdminRank() scans both the loaded admin list and the chat participants,
+        // which is where the self member tag is stored after it has been edited.
+        final String rank = getMessagesController().getAdminRank(currentChat.id, getUserConfig().getClientUserId());
+        if (rank == null) {
+            return "";
+        }
+        // The fallback labels of an admin without a custom tag are not real tags.
+        if (rank.equals(LocaleController.getString(R.string.ChatTagOwner)) || rank.equals(LocaleController.getString(R.string.ChatTagAdmin))) {
+            return "";
+        }
+        return rank;
+    }
+
+    private void loadMyTagRank() {
+        if (myTagRankLoading || currentChat == null || !ChatObject.isChannel(currentChat) || !canSetMyTag()) {
+            return;
+        }
+        final TLRPC.User self = getUserConfig().getCurrentUser();
+        if (self == null) {
+            return;
+        }
+        myTagRankLoading = true;
+        getMessagesController().getChannelParticipant(currentChat, self, participant -> {
+            myTagRankLoading = false;
+            if (participant != null) {
+                myTagRankCache = participant.rank == null ? "" : participant.rank;
+                myTagRankLoaded = true;
+            }
+            if (myTagRankPendingShow) {
+                myTagRankPendingShow = false;
+                if (getParentActivity() != null) {
+                    showMyTagSheet(myTagRankLoaded ? myTagRankCache : getMyTagRankFromCache());
+                }
+            }
+        });
+    }
+
+    private void showMyTagSheet(String rank) {
+        TagEditCell.showSheet(getContext(), currentAccount, dialog_id, getUserConfig().getCurrentUser(), rank, currentChat.admin_rights != null, currentChat.creator, getResourceProvider());
+    }
+
+    private void openMyTagEditor() {
+        if (!canSetMyTag() || getParentActivity() == null) {
+            return;
+        }
+        // The self participant is not always part of the cached participant lists,
+        // so fetch it (when the menu did not do it already) to show the current tag.
+        if (ChatObject.isChannel(currentChat) && !myTagRankLoaded) {
+            if (myTagRankLoading) {
+                // The menu is already fetching it; show the sheet when it arrives.
+                myTagRankPendingShow = true;
+                return;
+            }
+            final TLRPC.User self = getUserConfig().getCurrentUser();
+            if (self != null) {
+                myTagRankLoading = true;
+                getMessagesController().getChannelParticipant(currentChat, self, participant -> {
+                    myTagRankLoading = false;
+                    if (participant != null) {
+                        myTagRankCache = participant.rank == null ? "" : participant.rank;
+                        myTagRankLoaded = true;
+                    }
+                    if (getParentActivity() != null) {
+                        showMyTagSheet(myTagRankLoaded ? myTagRankCache : getMyTagRankFromCache());
+                    }
+                });
+                return;
+            }
+        }
+        showMyTagSheet(myTagRankLoaded ? myTagRankCache : getMyTagRankFromCache());
     }
 
     private void nkbtn_onclick(int id) {

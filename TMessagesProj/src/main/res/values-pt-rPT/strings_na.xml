@@ -403,4 +403,5 @@
     <string name="CommunityAvatarTapActionArrow">Abrir comunidade apenas com a seta inferior direita</string>
     <string name="UseSystemNotificationColor">Usar cor de notificação do sistema</string>
     <string name="AvatarCorners">Cantos do avatar</string>
+    <string name="SetMyTag">Definir a minha etiqueta</string>
 </resources>

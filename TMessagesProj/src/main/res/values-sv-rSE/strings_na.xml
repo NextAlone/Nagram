@@ -403,4 +403,5 @@
     <string name="CommunityAvatarTapActionArrow">Öppna gemenskap endast med den nedre högra pilen</string>
     <string name="UseSystemNotificationColor">Använd systemets aviseringsfärg</string>
     <string name="AvatarCorners">Avatar hörn</string>
+    <string name="SetMyTag">Ange min tagg</string>
 </resources>

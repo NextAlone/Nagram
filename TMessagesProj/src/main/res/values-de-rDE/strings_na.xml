@@ -403,4 +403,5 @@
     <string name="CommunityAvatarTapActionArrow">Community nur mit dem Pfeil unten rechts öffnen</string>
     <string name="UseSystemNotificationColor">System-Benachrichtigungsfarbe verwenden</string>
     <string name="AvatarCorners">Avatar-Ecken</string>
+    <string name="SetMyTag">Meinen Tag festlegen</string>
 </resources>

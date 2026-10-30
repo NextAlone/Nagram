@@ -403,4 +403,5 @@
     <string name="CommunityAvatarTapActionArrow">Open Community Only with the Bottom-Right Arrow</string>
     <string name="UseSystemNotificationColor">Use system notification color</string>
     <string name="AvatarCorners">Avatar corners</string>
+    <string name="SetMyTag">Atur tag saya</string>
 </resources>

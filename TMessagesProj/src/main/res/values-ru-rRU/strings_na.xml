@@ -403,4 +403,5 @@
     <string name="CommunityAvatarTapActionArrow">Открыть сообщество только с помощью нижней правой стрелки</string>
     <string name="UseSystemNotificationColor">Использовать цвет уведомлений системы</string>
     <string name="AvatarCorners">Углы аватара</string>
+    <string name="SetMyTag">Установить свой тег</string>
 </resources>

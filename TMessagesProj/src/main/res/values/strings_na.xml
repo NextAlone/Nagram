@@ -411,4 +411,5 @@
     <string name="StickerShape">Sticker Shape</string>
     <string name="StickerShapeRounded">Rounded</string>
     <string name="StickerShapeRoundedMsg">Message</string>
+    <string name="SetMyTag">Set My Tag</string>
 </resources>

@@ -403,4 +403,5 @@
     <string name="CommunityAvatarTapActionArrow">فتح المجتمع فقط مع السهم أسفل اليمين</string>
     <string name="UseSystemNotificationColor">استخدام لون إشعار النظام</string>
     <string name="AvatarCorners">زوايا الصورة الرمزية</string>
+    <string name="SetMyTag">تعيين وسمي</string>
 </resources>

@@ -407,4 +407,5 @@
     <string name="AdminActionsOnMentionLongPress">メンションの長押しで管理操作を表示</string>
     <string name="DeleteMessagesWhenRemovingMembers">メンバーの削除時にメッセージも削除可能にする</string>
     <string name="BanOrDeleteMessages">BANまたはメッセージを削除</string>
+    <string name="SetMyTag">自分のタグを設定</string>
 </resources>

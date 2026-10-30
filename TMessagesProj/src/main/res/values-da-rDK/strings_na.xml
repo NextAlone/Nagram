@@ -403,4 +403,5 @@
     <string name="CommunityAvatarTapActionArrow">Åbn kun fællesskabet med pil nederst til højre</string>
     <string name="UseSystemNotificationColor">Brug systemnotifikationsfarve</string>
     <string name="AvatarCorners">Avatar hjørner</string>
+    <string name="SetMyTag">Indstil mit tag</string>
 </resources>

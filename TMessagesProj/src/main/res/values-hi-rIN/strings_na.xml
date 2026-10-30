@@ -223,4 +223,5 @@
     <string name="TabStylePills">Pills</string>
     <string name="ChatActivityBottomStyle">Bottom Style</string>
     <string name="ChatActivityNavbarTransparent">Chat navbar fully transparent</string>
+    <string name="SetMyTag">मेरा टैग सेट करें</string>
 </resources>

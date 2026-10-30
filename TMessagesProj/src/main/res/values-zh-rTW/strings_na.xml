@@ -407,4 +407,5 @@
     <string name="AdminActionsOnMentionLongPress">長按使用者名稱顯示管理操作</string>
     <string name="DeleteMessagesWhenRemovingMembers">移除成員時可刪除其訊息</string>
     <string name="BanOrDeleteMessages">封鎖或刪除訊息</string>
+    <string name="SetMyTag">設定我的標籤</string>
 </resources>
