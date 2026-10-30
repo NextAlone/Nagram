@@ -58,6 +58,7 @@ import tw.nekomimi.nekogram.config.cell.ConfigCellTextCheck;
 import tw.nekomimi.nekogram.config.cell.ConfigCellTextDetail;
 import tw.nekomimi.nekogram.config.cell.ConfigCellTextInput;
 import tw.nekomimi.nekogram.helpers.remote.EmojiHelper;
+import tw.nekomimi.nekogram.settings.cell.DoubleTapCell;
 import tw.nekomimi.nekogram.settings.cell.InputAnimationStrengthSeekBar;
 import tw.nekomimi.nekogram.settings.cell.StickerShapeCell;
 import tw.nekomimi.nekogram.ui.PopupBuilder;
@@ -97,8 +98,9 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     private final AbstractConfigCell dividerMessages = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell headerDoubleTap = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString(R.string.DoubleTapAction)));
-    private final AbstractConfigCell doubleTapActionIncomingRow = cellGroup.appendCell(new ConfigCellCustom("DoubleTapActionIncoming", CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
-    private final AbstractConfigCell doubleTapActionOutgoingRow = cellGroup.appendCell(new ConfigCellCustom("DoubleTapActionOutgoing", CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final AbstractConfigCell doubleTapPreviewRow = cellGroup.appendCell(new ConfigCellCustom("DoubleTapAction", ConfigCellCustom.CUSTOM_ITEM_DoubleTap, false));
+    private final AbstractConfigCell doubleTapActionIncomingRow = cellGroup.appendCell(new ConfigCellCustom(NaConfig.INSTANCE.getDoubleTapActionIncoming(), CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
+    private final AbstractConfigCell doubleTapActionOutgoingRow = cellGroup.appendCell(new ConfigCellCustom(NaConfig.INSTANCE.getDoubleTapActionOutgoing(), CellGroup.ITEM_TYPE_TEXT_SETTINGS_CELL, true));
     private final AbstractConfigCell dividerDoubleTap = cellGroup.appendCell(new ConfigCellDivider());
 
     // Chats
@@ -297,6 +299,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     private StickerSizeCell stickerSizeCell;
     private StickerShapeCell stickerShapeCell;
     private EmojiSetCell emojiSetCell;
+    private DoubleTapCell doubleTapCell;
 
     public NekoChatSettingsActivity() {
         updateRows();
@@ -405,7 +408,9 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                     }
                     PopupBuilder builder = new PopupBuilder(view);
                     builder.setItems(arrayList, (i, str) -> {
-                        (outgoing ? NaConfig.INSTANCE.getDoubleTapActionOutgoing() : NaConfig.INSTANCE.getDoubleTapActionIncoming()).setConfigInt(types.get(i));
+                        int newValue = types.get(i);
+                        ((ConfigCellCustom) a).getBindConfig().setConfigInt(newValue);
+                        ((ConfigCellCustom) a).runCallback(newValue);
                         listAdapter.notifyItemChanged(position);
                         return Unit.INSTANCE;
                     });
@@ -443,6 +448,10 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
             } else if (key.equals(NaConfig.INSTANCE.getStickerShape().getKey())) {
                 if (stickerSizeCell != null) stickerSizeCell.invalidate();
                 if (stickerShapeCell != null) stickerShapeCell.updateSelection();
+            } else if (key.equals(NaConfig.INSTANCE.getDoubleTapActionIncoming().getKey())) {
+                if (doubleTapCell != null) doubleTapCell.updateIcons(1, true);
+            } else if (key.equals(NaConfig.INSTANCE.getDoubleTapActionOutgoing().getKey())) {
+                if (doubleTapCell != null) doubleTapCell.updateIcons(2, true);
             }
         };
 
@@ -473,7 +482,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
     @Override
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> themeDescriptions = new ArrayList<>();
-        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{EmptyCell.class, TextSettingsCell.class, TextCheckCell.class, HeaderCell.class, TextDetailSettingsCell.class, NotificationsCheckCell.class, StickerShapeCell.class}, null, null, null, Theme.key_windowBackgroundWhite));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{EmptyCell.class, TextSettingsCell.class, TextCheckCell.class, HeaderCell.class, TextDetailSettingsCell.class, NotificationsCheckCell.class, StickerShapeCell.class, DoubleTapCell.class}, null, null, null, Theme.key_windowBackgroundWhite));
         themeDescriptions.add(new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray));
 
         themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_avatar_backgroundActionBarBlue));
@@ -692,6 +701,9 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                             createLongClickDialog(stickerShapeCell, NekoChatSettingsActivity.this, "chat", cellGroup.rows.indexOf(stickerShapeRow));
                         }
                     });
+                    break;
+                case ConfigCellCustom.CUSTOM_ITEM_DoubleTap:
+                    view = doubleTapCell = new DoubleTapCell(mContext);
                     break;
                 case ConfigCellCustom.CUSTOM_ITEM_EmojiSet:
                     view = emojiSetCell = new EmojiSetCell(mContext, false);
