@@ -150,6 +150,8 @@ public class BaseNekoXSettingsActivity extends BaseFragment {
             return ((ConfigCellTextInput) row).getBindConfig();
         } else if (row instanceof ConfigCellAutoTextCheck) {
             return ((ConfigCellAutoTextCheck) row).getBindConfig();
+        } else if (row instanceof ConfigCellCustom) {
+            return ((ConfigCellCustom) row).getBindConfig();
         }
         return null;
     }

@@ -1,4 +1,4 @@
-package tw.nekomimi.nekogram.settings;
+package tw.nekomimi.nekogram.settings.cell;
 
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
@@ -33,11 +33,7 @@ public class StickerShapeCell extends LinearLayout {
     private final StickerShape[] stickerShape = new StickerShape[3];
     private final Runnable onShapeChanged;
 
-    public StickerShapeCell(Context context) {
-        this(context, null);
-    }
-
-    public StickerShapeCell(Context context, Runnable onShapeChanged) {
+    public StickerShapeCell(Context context, Runnable onShapeChanged, Runnable longClickListener) {
         super(context);
         this.onShapeChanged = onShapeChanged;
         setOrientation(HORIZONTAL);
@@ -59,6 +55,13 @@ public class StickerShapeCell extends LinearLayout {
                 if (this.onShapeChanged != null) {
                     this.onShapeChanged.run();
                 }
+            });
+            stickerShape[i].setOnLongClickListener(v -> {
+                if (longClickListener != null) {
+                    longClickListener.run();
+                    return true;
+                }
+                return false;
             });
         }
     }

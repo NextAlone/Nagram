@@ -59,6 +59,7 @@ import tw.nekomimi.nekogram.config.cell.ConfigCellTextDetail;
 import tw.nekomimi.nekogram.config.cell.ConfigCellTextInput;
 import tw.nekomimi.nekogram.helpers.remote.EmojiHelper;
 import tw.nekomimi.nekogram.settings.cell.InputAnimationStrengthSeekBar;
+import tw.nekomimi.nekogram.settings.cell.StickerShapeCell;
 import tw.nekomimi.nekogram.ui.PopupBuilder;
 import xyz.nextalone.nagram.NaConfig;
 import xyz.nextalone.nagram.helper.DoubleTap;
@@ -77,7 +78,7 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
 
     // Sticker Shape
     private final AbstractConfigCell headerStickerShape = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("StickerShape", R.string.StickerShape)));
-    private final AbstractConfigCell stickerShapeRow = cellGroup.appendCell(new ConfigCellCustom("StickerShape", ConfigCellCustom.CUSTOM_ITEM_StickerShape, false));
+    private final AbstractConfigCell stickerShapeRow = cellGroup.appendCell(new ConfigCellCustom("StickerShape", NaConfig.INSTANCE.getStickerShape(), ConfigCellCustom.CUSTOM_ITEM_StickerShape, true));
     private final AbstractConfigCell dividerStickerShape = cellGroup.appendCell(new ConfigCellDivider());
 
     // Messages
@@ -685,6 +686,10 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                     view = stickerShapeCell = new StickerShapeCell(mContext, () -> {
                         if (stickerSizeCell != null) {
                             stickerSizeCell.invalidate();
+                        }
+                    }, () -> {
+                        if (stickerShapeCell != null) {
+                            createLongClickDialog(stickerShapeCell, NekoChatSettingsActivity.this, "chat", cellGroup.rows.indexOf(stickerShapeRow));
                         }
                     });
                     break;
