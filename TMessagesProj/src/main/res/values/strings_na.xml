@@ -408,4 +408,7 @@
     <string name="AdminActionsOnMentionLongPress">Admin Actions on Mention Long Press</string>
     <string name="DeleteMessagesWhenRemovingMembers">Delete Messages When Removing Members</string>
     <string name="BanOrDeleteMessages">Ban or Delete Messages</string>
+    <string name="StickerShape">Sticker Shape</string>
+    <string name="StickerShapeRounded">Rounded</string>
+    <string name="StickerShapeRoundedMsg">Message</string>
 </resources>

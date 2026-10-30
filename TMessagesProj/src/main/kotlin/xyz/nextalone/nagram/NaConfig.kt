@@ -1491,6 +1491,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val stickerShape =
+        addConfig(
+            "StickerShape",
+            ConfigItem.configTypeInt,
+            0
+        )
 
     private fun addConfig(
         k: String,

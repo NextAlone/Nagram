@@ -9841,7 +9841,20 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     availableTimeWidth = photoWidth - dp(14);
                     backgroundWidth = photoWidth + dp(12);
 
-                    photoImage.setRoundRadius(0);
+                    int stickerShape = NaConfig.INSTANCE.getStickerShape().Int();
+                    if (stickerShape == 1) {
+                        photoImage.setRoundRadius(dp(6));
+                    } else if (stickerShape == 2) {
+                        int bubble = dp(SharedConfig.bubbleRadius);
+                        int small = bubble / 3;
+                        if (messageObject.isOutOwner()) {
+                            photoImage.setRoundRadius(bubble, bubble, small, bubble);
+                        } else {
+                            photoImage.setRoundRadius(bubble, bubble, bubble, small);
+                        }
+                    } else {
+                        photoImage.setRoundRadius(0);
+                    }
                     canChangeRadius = false;
                     if (!messageObject.isOutOwner() && MessageObject.isPremiumSticker(messageObject.getDocument())) {
                         flipImage = true;
