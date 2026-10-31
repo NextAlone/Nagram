@@ -179,6 +179,7 @@ import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.ui.SharedMediaLayoutPatch;
 
 @SuppressWarnings("unchecked")
 public class SharedMediaLayout extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, DialogCell.DialogCellDelegate {
@@ -10988,6 +10989,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
 
         @Override
         public int getItemCount() {
+            SharedMediaLayoutPatch.ensureSelfParticipant(delegate.getCurrentChat(), chatInfo, sortedUsers, profileActivity == null ? UserConfig.selectedAccount : profileActivity.getCurrentAccount(), this);
             if (chatInfo != null && chatInfo.participants.participants.isEmpty()) {
                 return 1;
             }
