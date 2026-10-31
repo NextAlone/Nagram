@@ -403,5 +403,4 @@
     <string name="CommunityAvatarTapActionArrow">Avaa yhteisö vain alaoikeanpuoleisella nuolella</string>
     <string name="UseSystemNotificationColor">Käytä järjestelmän ilmoitusväriä</string>
     <string name="AvatarCorners">Hahmon kulmat</string>
-    <string name="SetMyTag">Aseta tunnisteeni</string>
 </resources>

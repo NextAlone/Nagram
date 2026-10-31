@@ -403,5 +403,4 @@
     <string name="CommunityAvatarTapActionArrow">Ouvrir la communauté uniquement avec la flèche en bas à droite</string>
     <string name="UseSystemNotificationColor">Utiliser la couleur de notification du système</string>
     <string name="AvatarCorners">Coins de l\'avatar</string>
-    <string name="SetMyTag">Définir mon étiquette</string>
 </resources>
