@@ -1497,6 +1497,12 @@ object NaConfig {
             ConfigItem.configTypeInt,
             0
         )
+    val removeMessageTail =
+        addConfig(
+            "RemoveMessageTail",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

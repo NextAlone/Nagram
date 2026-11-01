@@ -53,6 +53,7 @@ public class MessagesPreviewCell extends LinearLayout {
         }
     };
     private Boolean showSeconds;
+    private Boolean removeMessageTail;
     private Drawable backgroundDrawable;
     private Drawable oldBackgroundDrawable;
     private BackgroundGradientDrawable.Disposable backgroundGradientDisposable;
@@ -255,13 +256,18 @@ public class MessagesPreviewCell extends LinearLayout {
                 || NaConfig.INSTANCE.getShowVoteCountBeforeVote().getKey().equals(key)
                 || NekoConfig.showSpoilersDirectly.getKey().equals(key)
                 || NaConfig.INSTANCE.getGlobalDisableLinkPreviews().getKey().equals(key)
-                || NaConfig.INSTANCE.getHideSideShareButton().getKey().equals(key);
+                || NaConfig.INSTANCE.getHideSideShareButton().getKey().equals(key)
+                || NaConfig.INSTANCE.getRemoveMessageTail().getKey().equals(key);
     }
 
     public void refreshMessages() {
         if (showSeconds == null || showSeconds != NekoConfig.showSeconds.Bool()) {
             showSeconds = NekoConfig.showSeconds.Bool();
             LocaleController.getInstance().recreateFormatters();
+        }
+        if (removeMessageTail == null || removeMessageTail != NaConfig.INSTANCE.getRemoveMessageTail().Bool()) {
+            removeMessageTail = NaConfig.INSTANCE.getRemoveMessageTail().Bool();
+            Theme.reloadAllResources(getContext());
         }
         if (NaConfig.INSTANCE.getGlobalDisableLinkPreviews().Bool()) {
             messages[2].messageOwner.flags &= ~TLRPC.MESSAGE_FLAG_HAS_MEDIA;

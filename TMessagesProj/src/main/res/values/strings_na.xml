@@ -412,4 +412,5 @@
     <string name="StickerShapeRounded">Rounded</string>
     <string name="StickerShapeRoundedMsg">Message</string>
     <string name="ActionBar">Action Bar</string>
+    <string name="RemoveMessageTail">Remove message tail</string>
 </resources>

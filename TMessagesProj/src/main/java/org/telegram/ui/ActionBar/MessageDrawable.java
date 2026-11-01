@@ -25,6 +25,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.Components.MotionBackgroundDrawable;
 import org.telegram.ui.Components.blur3.utils.NinePatchBuilder;
+import xyz.nextalone.nagram.NaConfig;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -678,12 +679,16 @@ public class MessageDrawable extends Drawable {
         if (rad > heightHalf) {
             rad = heightHalf;
         }
+        boolean noTail = NaConfig.INSTANCE.getRemoveMessageTail().Bool();
         if (isOut) {
             // LEFT-BOTTOM <- RIGHT-BOTTOM
             if (drawFullBubble || currentType == TYPE_PREVIEW || customPaint || drawFullBottom) {
                 int radToUse = botButtonsBottom ? nearRad : rad;
                 if (currentType == TYPE_MEDIA) {
                     path.moveTo(bounds.right - dp(8) - radToUse, bounds.bottom - padding);
+                } else if (noTail) {
+                    int radToUseRight = isBottomNear || botButtonsBottom ? nearRad : rad;
+                    path.moveTo(bounds.right - dp(8) - radToUseRight, bounds.bottom - padding);
                 } else {
                     path.moveTo(bounds.right - dp(2.6f), bounds.bottom - padding);
                 }
@@ -734,9 +739,16 @@ public class MessageDrawable extends Drawable {
                 }
             } else {
                 if (drawFullBubble || currentType == TYPE_PREVIEW || customPaint || drawFullBottom) {
-                    path.lineTo(bounds.right - dp(8), bounds.bottom - padding - smallRad - dp(3));
-                    rect.set(bounds.right - dp(8), bounds.bottom - padding - smallRad * 2 - dp(9), bounds.right - dp(7) + smallRad * 2, bounds.bottom - padding - dp(1));
-                    path.arcTo(rect, 180, -83, false);
+                    if (noTail) {
+                        int radToUse = isBottomNear || botButtonsBottom ? nearRad : rad;
+                        path.lineTo(bounds.right - dp(8), bounds.bottom - padding - radToUse);
+                        rect.set(bounds.right - dp(8) - radToUse * 2, bounds.bottom - padding - radToUse * 2, bounds.right - dp(8), bounds.bottom - padding);
+                        path.arcTo(rect, 0, 90, false);
+                    } else {
+                        path.lineTo(bounds.right - dp(8), bounds.bottom - padding - smallRad - dp(3));
+                        rect.set(bounds.right - dp(8), bounds.bottom - padding - smallRad * 2 - dp(9), bounds.right - dp(7) + smallRad * 2, bounds.bottom - padding - dp(1));
+                        path.arcTo(rect, 180, -83, false);
+                    }
                 } else {
                     path.lineTo(bounds.right - dp(8), top - topY + currentBackgroundHeight);
                 }
@@ -747,6 +759,9 @@ public class MessageDrawable extends Drawable {
 
                 if (currentType == TYPE_MEDIA) {
                     path.moveTo(bounds.left + dp(8) + radToUse, bounds.bottom - padding);
+                } else if (noTail) {
+                    int radToUseLeft = isBottomNear || botButtonsBottom ? nearRad : rad;
+                    path.moveTo(bounds.left + dp(8) + radToUseLeft, bounds.bottom - padding);
                 } else {
                     path.moveTo(bounds.left + dp(2.6f), bounds.bottom - padding);
                 }
@@ -791,9 +806,16 @@ public class MessageDrawable extends Drawable {
                 }
             } else {
                 if (drawFullBubble || currentType == TYPE_PREVIEW || customPaint || drawFullBottom) {
-                    path.lineTo(bounds.left + dp(8), bounds.bottom - padding - smallRad - dp(3));
-                    rect.set(bounds.left + dp(7) - smallRad * 2, bounds.bottom - padding - smallRad * 2 - dp(9), bounds.left + dp(8), bounds.bottom - padding - dp(1));
-                    path.arcTo(rect, 0, 83, false);
+                    if (noTail) {
+                        int radToUse = isBottomNear || botButtonsBottom ? nearRad : rad;
+                        path.lineTo(bounds.left + dp(8), bounds.bottom - padding - radToUse);
+                        rect.set(bounds.left + dp(8), bounds.bottom - padding - radToUse * 2, bounds.left + dp(8) + radToUse * 2, bounds.bottom - padding);
+                        path.arcTo(rect, 180, -90, false);
+                    } else {
+                        path.lineTo(bounds.left + dp(8), bounds.bottom - padding - smallRad - dp(3));
+                        rect.set(bounds.left + dp(7) - smallRad * 2, bounds.bottom - padding - smallRad * 2 - dp(9), bounds.left + dp(8), bounds.bottom - padding - dp(1));
+                        path.arcTo(rect, 0, 83, false);
+                    }
                 } else {
                     path.lineTo(bounds.left + dp(8), top - topY + currentBackgroundHeight);
                 }
