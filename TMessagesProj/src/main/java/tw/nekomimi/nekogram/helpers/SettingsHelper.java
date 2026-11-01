@@ -140,7 +140,7 @@ public class SettingsHelper {
                     continue;
                 }
                 int guid = uid + i;
-                String title = LocaleController.getString(key);
+                String title = LocaleController.nullable(LocaleController.getString(key));
                 if (title == null || title.isEmpty()) {
                     continue;
                 }
