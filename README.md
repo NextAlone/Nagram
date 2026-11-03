@@ -142,20 +142,13 @@ Build:
    The build applies **TMessagesProj/jni/patches** to `tgcalls` itself. When an update moves the `tgcalls`
    submodule, add `--force` so the patched files are reset before the new commit is checked out.
 
-2. Disable signature check by removing the following lines in **TMessagesProj/jni/jni.c**:
-   ```c
-    if (verifySign(env) != JNI_OK) {
-        return JNI_ERR;
-    }
-   ```
+2. Fill out `TELEGRAM_APP_ID` and `TELEGRAM_APP_HASH` in **local.properties** (from [Telegram Developer](https://my.telegram.org/auth))
 
-3. Fill out `TELEGRAM_APP_ID` and `TELEGRAM_APP_HASH` in **local.properties** (from [Telegram Developer](https://my.telegram.org/auth))
+3. Replace **TMessagesProj/google-services.json** if you want FCM to work.
 
-4. Replace **TMessagesProj/google-services.json** if you want FCM to work.
+4. Replace **release.keystore** with yours and fill out `ALIAS_NAME`, `KEYSTORE_PASS` and `ALIAS_PASS` in **local.properties**.
 
-5. Replace **release.keystore** with yours and fill out `ALIAS_NAME`, `KEYSTORE_PASS` and `ALIAS_PASS` in **local.properties**.
-
-6. Build with Gradle (the native code is compiled as part of the build):
+5. Build with Gradle (the native code is compiled as part of the build):
 
    ```shell
    ./gradlew assemble<Release/Debug>
@@ -195,14 +188,7 @@ Then, use base64 to encode the above.
 
    The GitLab pipeline posts to its own channel instead, with the HELPER_BOT_TARGET CI/CD variable holding the chat id, such as `-1001234567890`.
 
-4. Disable signature check by removing the following lines in **TMessagesProj/jni/jni.c**:
-   ```c
-    if (verifySign(env) != JNI_OK) {
-        return JNI_ERR;
-    }
-   ```
-
-5. Run Release Build
+4. Run Release Build
 
 ## FAQ
 
