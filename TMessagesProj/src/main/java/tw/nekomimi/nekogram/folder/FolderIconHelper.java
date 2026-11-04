@@ -104,7 +104,7 @@ public class FolderIconHelper {
     }
 
     public static int getIconWidth() {
-        return AndroidUtilities.dp(21);
+        return AndroidUtilities.dp(28);
     }
 
     public static int getPadding() {
