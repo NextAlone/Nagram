@@ -59,6 +59,7 @@ import java.util.List;
 
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
+import xyz.nextalone.nagram.helper.DrawerHelper;
 import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.ui.PopupBuilder;
@@ -170,6 +171,7 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
     private final AbstractConfigCell centerActionBarTitleRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getCenterActionBarTitle()));
     private final AbstractConfigCell useSystemFontInTitleRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getUseSystemFontInTitle()));
     private final AbstractConfigCell alwaysShowDownloadIconRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getAlwaysShowDownloadIcon()));
+    private final AbstractConfigCell classicDrawerRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getClassicDrawer()));
     private final AbstractConfigCell actionBarDecorationRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.actionBarDecoration, new String[]{
             LocaleController.getString("DependsOnDate", R.string.DependsOnDate),
             LocaleController.getString("Snowflakes", R.string.Snowflakes),
@@ -617,6 +619,16 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                 }
             } else if (key.equals(NaConfig.INSTANCE.getSidebarSettingsActivity().getKey())) {
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+            } else if (key.equals(NaConfig.INSTANCE.getClassicDrawer().getKey())) {
+                if (actionBarPreviewCell != null) {
+                    actionBarPreviewCell.updatePreview();
+                }
+                if ((Boolean) newValue) {
+                    DrawerHelper.ensureSetup(parentLayout);
+                } else {
+                    DrawerHelper.teardown(parentLayout);
+                }
+                parentLayout.rebuildAllFragmentViews(false, false);
             } else if (key.equals(NaConfig.INSTANCE.getTabStyleStroke().getKey())) {
                 getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
             } else if (key.equals(NekoConfig.hideAllTab.getKey())) {

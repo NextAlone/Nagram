@@ -30,6 +30,7 @@ import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
+import org.telegram.ui.ActionBar.MenuDrawable;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AnimatedEmojiDrawable;
 import org.telegram.ui.Components.LayoutHelper;
@@ -67,6 +68,7 @@ public class ActionBarPreviewCell extends FrameLayout implements NotificationCen
                         || key.equals(NaConfig.INSTANCE.getCustomTitle().getKey())
                         || key.equals(NaConfig.INSTANCE.getCustomTitleUserName().getKey())
                         || key.equals(NaConfig.INSTANCE.getAlwaysShowDownloadIcon().getKey())
+                        || key.equals(NaConfig.INSTANCE.getClassicDrawer().getKey())
                         || key.equals(NekoConfig.actionBarDecoration.getKey())
                         || key.equals(NekoConfig.newYear.getKey())
                         || key.equals(NekoConfig.disableAppBarShadow.getKey())
@@ -117,6 +119,7 @@ public class ActionBarPreviewCell extends FrameLayout implements NotificationCen
                 Theme.dialogs_holidayDrawable = null;
             }
         }
+        updateDrawer();
         updateTitle();
         updateCentered(NaConfig.INSTANCE.getCenterActionBarTitle().Bool());
         updateShadow();
@@ -131,6 +134,22 @@ public class ActionBarPreviewCell extends FrameLayout implements NotificationCen
             }
         }
         invalidate();
+    }
+
+    public void updateDrawer() {
+        if (actionBar == null) {
+            return;
+        }
+        if (NaConfig.INSTANCE.getClassicDrawer().Bool()) {
+            Drawable currentDrawable = actionBar.getBackButtonDrawable();
+            if (!(currentDrawable instanceof MenuDrawable)) {
+                MenuDrawable menuDrawable = new MenuDrawable();
+                menuDrawable.setRoundCap();
+                actionBar.setBackButtonDrawable(menuDrawable);
+            }
+        } else {
+            actionBar.setBackButtonDrawable(null);
+        }
     }
 
     public void updateDownloadsIcon(boolean show) {

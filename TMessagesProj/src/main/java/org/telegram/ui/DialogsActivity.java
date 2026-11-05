@@ -288,6 +288,7 @@ import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.UpdateUtil;
 import xyz.nextalone.nagram.MainTabsStyle;
 import xyz.nextalone.nagram.NaConfig;
+import xyz.nextalone.nagram.helper.DrawerHelper;
 
 import me.vkryl.android.animator.BoolAnimator;
 import me.vkryl.android.animator.FactorAnimator;
@@ -3598,6 +3599,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         } else {
             if (searchString != null || folderId != 0 || communityId != 0) {
                 actionBar.setBackButtonDrawable(backDrawable = new BackDrawable(false));
+            } else if (NaConfig.INSTANCE.getClassicDrawer().Bool()) {
+                DrawerHelper.ensureSetup(parentLayout);
+                MenuDrawable menuDrawable = new MenuDrawable();
+                menuDrawable.setRoundCap();
+                actionBar.setBackButtonDrawable(menuDrawable);
+                actionBar.setBackButtonContentDescription(LocaleController.getString(R.string.AccDescrOpenMenu));
+                DrawerHelper.refreshMenuButton(menuDrawable, false);
             }
             if (folderId != 0) {
                 actionBar.setTitle(getString(R.string.ArchivedChats));
@@ -3991,6 +3999,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     return;
                 }
                 if (id == -1) {
+                    if (NaConfig.INSTANCE.getClassicDrawer().Bool() && !onlySelect && !actionBar.isActionModeShowed() && folderId == 0 && communityId == 0 && searchString == null && DrawerHelper.toggleDrawer(parentLayout)) {
+                        return;
+                    }
                     if (rightSlidingDialogContainer != null && rightSlidingDialogContainer.hasFragment()) {
                         if (actionBar.isActionModeShowed()) {
                             if (searchViewPager != null && searchViewPager.getVisibility() == View.VISIBLE && searchViewPager.actionModeShowing()) {
@@ -7444,6 +7455,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     @Override
     public boolean onBackPressed(boolean invoked) {
+        if (parentLayout != null && parentLayout.getDrawerLayoutContainer() != null && parentLayout.getDrawerLayoutContainer().drawer != null && parentLayout.getDrawerLayoutContainer().drawer.isDrawerVisible()) {
+            if (invoked) {
+                parentLayout.getDrawerLayoutContainer().drawer.closeDrawer(false);
+            }
+            return false;
+        }
         if (hasShownSheet()) {
             if (invoked) closeSheet();
             return false;
@@ -11880,6 +11897,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         return communityId != 0;
     }
 
+    public boolean isAllChatsTab() {
+        return !onlySelect && folderId == 0 && communityId == 0 && searchString == null && !searchIsShowed &&
+            (actionBar == null || !actionBar.isActionModeShowed()) &&
+            (rightSlidingDialogContainer == null || !rightSlidingDialogContainer.hasFragment()) &&
+            (filterTabsView == null || filterTabsView.getVisibility() != View.VISIBLE || filterTabsView.isEmpty() || filterTabsView.currentTabIsDefault());
+    }
+
     public int getType() {
         return initialDialogsType;
     }
@@ -14366,7 +14390,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         final float factor1 = 1f - animatorSearchVisible.getFloatValue();
         final float factor2 = 1f - getRightSlidingProgress();
         final float factor3 = 1f - animatorDoneButtonVisible.getFloatValue();
-        final float factor = Math.max(progressToActionMode, factor1 * factor2 * factor3);
+        final float factor;
+        if (NaConfig.INSTANCE.getClassicDrawer().Bool() && actionBar.getBackButtonDrawable() instanceof MenuDrawable) {
+            factor = (1f - progressToActionMode) * factor1 * factor2 * factor3;
+        } else {
+            factor = Math.max(progressToActionMode, factor1 * factor2 * factor3);
+        }
         FragmentFloatingButton.setAnimatedVisibility(actionBar.getBackButton(), factor);
     }
 

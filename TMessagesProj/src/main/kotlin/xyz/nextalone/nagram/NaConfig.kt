@@ -1497,6 +1497,12 @@ object NaConfig {
             ConfigItem.configTypeInt,
             0
         )
+    val classicDrawer =
+        addConfig(
+            "ClassicDrawer",
+            ConfigItem.configTypeBool,
+            false
+        )
 
     private fun addConfig(
         k: String,

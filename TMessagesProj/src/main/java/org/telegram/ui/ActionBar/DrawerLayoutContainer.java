@@ -25,12 +25,19 @@ import androidx.core.view.WindowInsetsCompat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
+import xyz.nextalone.nagram.ui.drawer.DrawerSwipeController;
 
 public class DrawerLayoutContainer extends FrameLayout {
 
     private INavigationLayout parentActionBarLayout;
     private ActionBarLayout actionBarLayout;
     private boolean inLayout;
+
+    public DrawerSwipeController drawer;
+
+    public boolean superDrawChild(@NonNull Canvas canvas, View child, long drawingTime) {
+        return super.drawChild(canvas, child, drawingTime);
+    }
 
     public DrawerLayoutContainer(Context context) {
         super(context);
@@ -52,12 +59,19 @@ public class DrawerLayoutContainer extends FrameLayout {
     }
 
     public boolean onTouchEvent(MotionEvent ev) {
+        if (drawer != null) return drawer.onTouchEvent(ev);
         return false;
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return parentActionBarLayout.checkTransitionAnimation();
+        return parentActionBarLayout.checkTransitionAnimation() || onTouchEvent(ev);
+    }
+
+    @Override
+    public void requestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+        if (drawer != null) drawer.onParentDisallowIntercept();
+        super.requestDisallowInterceptTouchEvent(disallowIntercept);
     }
 
     @Override
@@ -73,7 +87,11 @@ public class DrawerLayoutContainer extends FrameLayout {
 
             final LayoutParams lp = (LayoutParams) child.getLayoutParams();
             try {
-                child.layout(lp.leftMargin, lp.topMargin + getPaddingTop(), lp.leftMargin + child.getMeasuredWidth(), lp.topMargin + child.getMeasuredHeight() + getPaddingTop());
+                if (drawer != null && drawer.isDrawerChild(child)) {
+                    child.layout(-child.getMeasuredWidth(), lp.topMargin + getPaddingTop(), 0, lp.topMargin + child.getMeasuredHeight() + getPaddingTop());
+                } else {
+                    child.layout(lp.leftMargin, lp.topMargin + getPaddingTop(), lp.leftMargin + child.getMeasuredWidth(), lp.topMargin + child.getMeasuredHeight() + getPaddingTop());
+                }
             } catch (Exception e) {
                 FileLog.e(e);
                 if (BuildVars.DEBUG_VERSION) {
@@ -119,7 +137,12 @@ public class DrawerLayoutContainer extends FrameLayout {
 
             final LayoutParams lp = (LayoutParams) child.getLayoutParams();
 
-            final int contentWidthSpec = MeasureSpec.makeMeasureSpec(widthSize - lp.leftMargin - lp.rightMargin, MeasureSpec.EXACTLY);
+            final int contentWidthSpec;
+            if (drawer != null && drawer.isDrawerChild(child)) {
+                contentWidthSpec = MeasureSpec.makeMeasureSpec(lp.width > 0 ? lp.width : widthSize - lp.leftMargin - lp.rightMargin, MeasureSpec.EXACTLY);
+            } else {
+                contentWidthSpec = MeasureSpec.makeMeasureSpec(widthSize - lp.leftMargin - lp.rightMargin, MeasureSpec.EXACTLY);
+            }
             final int contentHeightSpec;
             if (lp.height > 0) {
                 contentHeightSpec = MeasureSpec.makeMeasureSpec(lp.height, MeasureSpec.EXACTLY);
@@ -135,6 +158,14 @@ public class DrawerLayoutContainer extends FrameLayout {
             }
             child.measure(contentWidthSpec, contentHeightSpec);
         }
+    }
+
+    @Override
+    protected boolean drawChild(@NonNull Canvas canvas, View child, long drawingTime) {
+        if (drawer != null) {
+            return drawer.drawChild(canvas, child, drawingTime);
+        }
+        return super.drawChild(canvas, child, drawingTime);
     }
 
     @Override
