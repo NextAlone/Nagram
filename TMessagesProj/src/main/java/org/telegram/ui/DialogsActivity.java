@@ -13008,7 +13008,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (StoryRecorder.isVisible() || (getLastStoryViewer() != null && getLastStoryViewer().isFullyVisible())) {
             animated = false;
         }
-        boolean onlySelfStories = !isArchive() && getStoriesController().hasOnlySelfStories();
+        // na: a community opened as a single chat has no stories row; own stories overlapped its action bar (A0048)
+        boolean onlySelfStories = !isArchive() && communityId == 0 && getStoriesController().hasOnlySelfStories();
         boolean newVisibility;
         if (communityId != 0) {
             newVisibility = false;
