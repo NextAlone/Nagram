@@ -736,6 +736,14 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
             NaConfig.INSTANCE.getAutoReplaceRepeat().setConfigBool(false);
         }
 
+        if (!NaConfig.INSTANCE.getAdvancedMode().Bool()) {
+            cellGroup.rows.remove(customEditedMessageRow);
+            cellGroup.rows.remove(defaultMonoLanguageRow);
+            cellGroup.rows.remove(disablePreviewVideoSoundShortcutRow);
+            cellGroup.rows.remove(customGreatRow);
+            cellGroup.rows.remove(customPoorRow);
+        }
+
         addRowsToMap();
     }
 

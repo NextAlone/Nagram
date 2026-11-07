@@ -1,8 +1,10 @@
 package xyz.nextalone.nagram
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Base64
+import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import tw.nekomimi.nekogram.config.ConfigItem
@@ -26,6 +28,12 @@ object NaConfig {
         ArrayList<ConfigItem>()
 
     // Configs
+    val advancedMode =
+        addConfig(
+            "AdvancedMode",
+            ConfigItem.configTypeBool,
+            false
+        )
     val forceCopy =
         addConfig(
             "ForceCopy",
@@ -1550,6 +1558,37 @@ object NaConfig {
                 editor.putInt(doubleTapActionOutgoing.key, legacyAction)
             }
             editor.apply()
+        }
+
+        if (!preferences.contains(advancedMode.key)) {
+            val isLogsEnabled = try {
+                ApplicationLoader.applicationContext
+                    .getSharedPreferences("systemConfig", Context.MODE_PRIVATE)
+                    .getBoolean("logsEnabled", false)
+            } catch (e: Exception) {
+                false
+            }
+            val hasCustomAdvancedOption = isLogsEnabled ||
+                    preferences.contains(disableSecondAddress.key) ||
+                    preferences.contains(showRPCError.key) ||
+                    preferences.contains(customArtworkApi.key) ||
+                    preferences.contains(fakeHighPerformanceDevice.key) ||
+                    preferences.contains(enhancedVideoBitrate.key) ||
+                    preferences.contains(openUrlOutBotWebViewRegex.key) ||
+                    preferences.contains(forceVideoNewRewindMethod.key) ||
+                    preferences.contains(enablePanguOnSending.key) ||
+                    preferences.contains(customIpStrategy.key) ||
+                    preferences.contains(liquidGlassAngle.key) ||
+                    preferences.contains(customEditedMessage.key) ||
+                    preferences.contains(defaultMonoLanguage.key) ||
+                    preferences.contains(disablePreviewVideoSoundShortcut.key) ||
+                    preferences.contains(customGreat.key) ||
+                    preferences.contains(CustomPoor.key)
+
+            if (hasCustomAdvancedOption) {
+                advancedMode.value = true
+                preferences.edit().putBoolean(advancedMode.key, true).apply()
+            }
         }
     }
 

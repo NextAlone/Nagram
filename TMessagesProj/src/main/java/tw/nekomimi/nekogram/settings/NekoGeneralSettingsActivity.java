@@ -919,6 +919,18 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
             cellGroup.rows.add(insertIndex, googleCloudTranslateKeyRow);
         }
 
+        if (!NaConfig.INSTANCE.getAdvancedMode().Bool()) {
+            cellGroup.rows.remove(customIpStrategyRow);
+            cellGroup.rows.remove(pgpAppRow);
+            cellGroup.rows.remove(keyRow);
+            cellGroup.rows.remove(header3);
+            cellGroup.rows.remove(divider3);
+            cellGroup.rows.remove(sentryAnalyticsRow);
+            cellGroup.rows.remove(pushServiceTypeUnifiedGatewayRow);
+            cellGroup.rows.remove(liquidGlassAngleRow);
+            cellGroup.rows.remove(liquidGlassIntensityRow);
+        }
+
         addRowsToMap();
     }
 

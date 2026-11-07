@@ -594,6 +594,16 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
             NaConfig.INSTANCE.getDisableSendReadStories().setConfigBool(false);
         }
 
+        if (!NaConfig.INSTANCE.getAdvancedMode().Bool()) {
+            cellGroup.rows.remove(showRPCErrorRow);
+            cellGroup.rows.remove(customArtworkApiRow);
+            cellGroup.rows.remove(openUrlOutBotWebViewRegexRow);
+            cellGroup.rows.remove(disableSecondAddressRow);
+            cellGroup.rows.remove(forceVideoNewRewindMethodRow);
+            cellGroup.rows.remove(enhancedVideoBitrateRow);
+            cellGroup.rows.remove(fakeHighPerformanceDeviceRow);
+        }
+
         addRowsToMap();
     }
 }

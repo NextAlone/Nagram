@@ -48,6 +48,7 @@ import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.GsonUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
+import xyz.nextalone.nagram.NaConfig;
 import xyz.nextalone.nagram.NkmrConfig;
 import xyz.nextalone.nagram.network.NetworkLogActivity;
 
@@ -59,6 +60,7 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
     ));
 
     private int categoriesRow;
+    private int advancedModeRow;
     private int generalRow;
     private int accountRow;
     private int chatRow;
@@ -95,7 +97,12 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
 
     @Override
     protected void onItemClick(View view, int position, float x, float y) {
-        if (position == generalRow) {
+        if (position == advancedModeRow) {
+            NaConfig.INSTANCE.getAdvancedMode().toggleConfigBool();
+            if (view instanceof TextCell) {
+                ((TextCell) view).setChecked(NaConfig.INSTANCE.getAdvancedMode().Bool());
+            }
+        } else if (position == generalRow) {
             presentFragment(new NekoGeneralSettingsActivity());
         } else if (position == accountRow) {
             presentFragment(new NekoAccountSettingsActivity());
@@ -159,6 +166,7 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
         super.updateRows();
 
         categoriesRow = addRow("categories");
+        advancedModeRow = addRow("advancedMode");
         generalRow = addRow("general");
         accountRow = addRow("account");
         chatRow = addRow("chat");
@@ -232,7 +240,9 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
                 }
                 case TYPE_TEXT: {
                     TextCell textCell = (TextCell) holder.itemView;
-                    if (position == generalRow) {
+                    if (position == advancedModeRow) {
+                        textCell.setTextAndCheckAndIcon(LocaleController.getString("AdvancedMode", R.string.AdvancedMode), NaConfig.INSTANCE.getAdvancedMode().Bool(), R.drawable.baseline_science_24, divider);
+                    } else if (position == generalRow) {
                         textCell.setTextAndIcon(LocaleController.getString(R.string.General), R.drawable.msg_media, divider);
                     } else if (position == accountRow) {
                         textCell.setTextAndIcon(LocaleController.getString(R.string.Account), R.drawable.msg_contacts, divider);
