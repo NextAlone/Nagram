@@ -602,6 +602,11 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
             cellGroup.rows.remove(forceVideoNewRewindMethodRow);
             cellGroup.rows.remove(enhancedVideoBitrateRow);
             cellGroup.rows.remove(fakeHighPerformanceDeviceRow);
+            cellGroup.rows.remove(header4);
+            cellGroup.rows.remove(enablePanguOnSendingRow);
+            cellGroup.rows.remove(enablePanguOnEditingRow);
+            cellGroup.rows.remove(enablePanguOnReceivingRow);
+            cellGroup.rows.remove(divider3);
         }
 
         addRowsToMap();
