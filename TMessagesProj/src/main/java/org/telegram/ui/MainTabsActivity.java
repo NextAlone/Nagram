@@ -245,6 +245,9 @@ public class MainTabsActivity extends ViewPagerActivity implements NotificationC
         Bulletin.Delegate delegate = new Bulletin.Delegate() {
             @Override
             public int getBottomOffset(int tag) {
+                if (NaConfig.INSTANCE.getMainTabsStyle().Int() == MainTabsStyle.DISABLE.getValue()) {
+                    return navigationBarHeight;
+                }
                 return navigationBarHeight + dp(DialogsActivity.MAIN_TABS_HEIGHT + DialogsActivity.MAIN_TABS_MARGIN);
             }
         };

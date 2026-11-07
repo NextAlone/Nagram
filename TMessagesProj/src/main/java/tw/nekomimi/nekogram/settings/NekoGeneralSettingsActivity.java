@@ -615,7 +615,8 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                 if (actionBarPreviewCell != null) {
                     actionBarPreviewCell.updateDownloadsIcon((Boolean) newValue);
                 }
-            } else if (key.equals(NaConfig.INSTANCE.getSidebarSettingsActivity().getKey())) {
+            } else if (key.equals(NaConfig.INSTANCE.getSidebarSettingsActivity().getKey())
+                    || key.equals(NaConfig.INSTANCE.getMainTabsStyle().getKey())) {
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (key.equals(NaConfig.INSTANCE.getTabStyleStroke().getKey())) {
                 getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
