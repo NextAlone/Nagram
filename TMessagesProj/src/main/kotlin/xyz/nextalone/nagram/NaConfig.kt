@@ -1,10 +1,8 @@
 package xyz.nextalone.nagram
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Base64
-import org.telegram.messenger.ApplicationLoader
 import org.telegram.messenger.LocaleController
 import org.telegram.messenger.R
 import tw.nekomimi.nekogram.config.ConfigItem
@@ -1561,14 +1559,7 @@ object NaConfig {
         }
 
         if (!preferences.contains(advancedMode.key)) {
-            val isLogsEnabled = try {
-                ApplicationLoader.applicationContext
-                    .getSharedPreferences("systemConfig", Context.MODE_PRIVATE)
-                    .getBoolean("logsEnabled", false)
-            } catch (e: Exception) {
-                false
-            }
-            val hasCustomAdvancedOption = isLogsEnabled ||
+            val hasCustomAdvancedOption =
                     preferences.contains(disableSecondAddress.key) ||
                     preferences.contains(showRPCError.key) ||
                     preferences.contains(customArtworkApi.key) ||
