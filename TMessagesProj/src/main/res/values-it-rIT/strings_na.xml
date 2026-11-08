@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">Disabilita Le Storie Di Invio</string>
     <string name="HideFilterMuteAll">Nascondi filtro silenziato tutto</string>
     <string name="UseLocalQuoteColor">Usa colore preventivo locale</string>
+    <string name="ShowSquareAvatar">Mostra avatar quadrato</string>
     <string name="DisableProfileAvatarBlur">Disabilita Sfocatura Avatar Profilo</string>
     <string name="DisableCustomWallpaperUser">Disabilita sfondo personalizzato utente</string>
     <string name="DisableCustomWallpaperChannel">Disabilita sfondo personalizzato canale</string>
@@ -402,5 +403,12 @@
     <string name="CommunityAvatarTapActionChat">Apri Sempre La Chat</string>
     <string name="CommunityAvatarTapActionArrow">Apri solo la comunità con la freccia in basso a destra</string>
     <string name="UseSystemNotificationColor">Usa colore notifica di sistema</string>
-    <string name="AvatarCorners">Angoli avatar</string>
+    <string name="AdminActionsOnAvatarLongPress">Azioni dell\'amministratore sulla pressione prolungata dell\'Avatar</string>
+    <string name="AdminActionsOnMentionLongPress">Azioni Amministratore sulla Menzione Pressione Lunga</string>
+    <string name="DeleteMessagesWhenRemovingMembers">Elimina Messaggi Durante La Rimozione Dei Membri</string>
+    <string name="BanOrDeleteMessages">Bandisci o cancella messaggi</string>
+    <string name="StickerShape">Forma Adesivo</string>
+    <string name="StickerShapeRounded">Arrotondato</string>
+    <string name="StickerShapeRoundedMsg">Messaggio</string>
+    <string name="ActionBar">Barra Azioni</string>
 </resources>

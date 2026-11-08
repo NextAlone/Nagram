@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">Deaktivér Send Læsehistorier</string>
     <string name="HideFilterMuteAll">Skjul filter mute alle</string>
     <string name="UseLocalQuoteColor">Brug lokal tilbudsfarve</string>
+    <string name="ShowSquareAvatar">Vis firkantet avatar</string>
     <string name="DisableProfileAvatarBlur">Deaktivér Profil Avatar Blur</string>
     <string name="DisableCustomWallpaperUser">Deaktivér brugerdefineret baggrund</string>
     <string name="DisableCustomWallpaperChannel">Deaktivér kanal brugerdefineret baggrund</string>
@@ -402,5 +403,12 @@
     <string name="CommunityAvatarTapActionChat">Åbn Altid Chat</string>
     <string name="CommunityAvatarTapActionArrow">Åbn kun fællesskabet med pil nederst til højre</string>
     <string name="UseSystemNotificationColor">Brug systemnotifikationsfarve</string>
-    <string name="AvatarCorners">Avatar hjørner</string>
+    <string name="AdminActionsOnAvatarLongPress">Admin-handlinger på Avatar Langt Tryk</string>
+    <string name="AdminActionsOnMentionLongPress">Admin-handlinger ved omtale Langt tryk</string>
+    <string name="DeleteMessagesWhenRemovingMembers">Slet Beskeder Ved Fjernelse Af Medlemmer</string>
+    <string name="BanOrDeleteMessages">Bandlys eller slet beskeder</string>
+    <string name="StickerShape">Klistermærke Form</string>
+    <string name="StickerShapeRounded">Aundet</string>
+    <string name="StickerShapeRoundedMsg">Besked</string>
+    <string name="ActionBar">Handlings Bjælke</string>
 </resources>

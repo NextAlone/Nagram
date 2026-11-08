@@ -219,10 +219,10 @@
     <string name="Win32ExecutableFiles">Win32実行ファイル</string>
     <string name="ArchiveFiles">アーカイブファイル</string>
     <string name="EnableStickerPin">固定ステッカーを有効にする</string>
-    <string name="EnableStickerPinAbout">Pin Stickers and sync with cloud even when adding new stickers.\nPaired with Disable Favorite and Recent.</string>
+    <string name="EnableStickerPinAbout">ステッカーを固定して、新しいステッカーを追加した場合でもクラウドと同期できるようにします。\n「お気に入り」と「最近使用した項目」を無効にする機能と組み合わせて使用​​します。</string>
     <string name="EnableStickerPinTip">この機能は開発中です。クラウドとの同期が機能しない場合があります。</string>
     <string name="PinSticker">ピン</string>
-    <string name="UnpinSticker">Unpin</string>
+    <string name="UnpinSticker">固定を解除</string>
     <string name="SetPinnedSuffix">(ピン留め)</string>
     <string name="AppLinkFDroid">F-Droid</string>
     <string name="UsePersiancalendar">ペルシャのカレンダーを使う</string>
@@ -259,7 +259,7 @@
     <string name="useCustomEmojiInvalid">vaild 絵文字の ZIP-file ではありません。</string>
     <string name="repeatConfirm">繰り返す前に確認する</string>
     <string name="repeatConfirmText">繰り返しますか？</string>
-    <string name="valuesLargeAvatarInDrawer">Telegram Default\nAvatar as background\nBig avatar as background</string>
+    <string name="valuesLargeAvatarInDrawer">Telegramのデフォルト\nアバターを背景として使用\n大きなアバターを背景として使用</string>
     <string name="hideSponsoredMessage">僅用於中文</string>
     <string name="rememberAllBackMessages">すべてのクリックされた返信を記憶する</string>
     <string name="DisableInstantCamera">インスタントカメラを無効にする</string>

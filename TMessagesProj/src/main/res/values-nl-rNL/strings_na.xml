@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">Leesverhalen verzenden uitschakelen</string>
     <string name="HideFilterMuteAll">Verberg filter dempen alles</string>
     <string name="UseLocalQuoteColor">Lokale aanhalingstekenkleur gebruiken</string>
+    <string name="ShowSquareAvatar">Toon vierkante avatar</string>
     <string name="DisableProfileAvatarBlur">Profiel Avatar Vervagen Uitschakelen</string>
     <string name="DisableCustomWallpaperUser">Aangepaste achtergrond door gebruiker uitschakelen</string>
     <string name="DisableCustomWallpaperChannel">Kanaal aangepaste achtergrond uitschakelen</string>
@@ -402,5 +403,12 @@
     <string name="CommunityAvatarTapActionChat">Chat altijd openen</string>
     <string name="CommunityAvatarTapActionArrow">Open een gemeenschap alleen met een pijl onder rechts</string>
     <string name="UseSystemNotificationColor">Gebruik systeem notificatie kleur</string>
-    <string name="AvatarCorners">Avatar hoeken</string>
+    <string name="AdminActionsOnAvatarLongPress">Admin acties met lang indrukken van Avatar</string>
+    <string name="AdminActionsOnMentionLongPress">Admin acties bij vermelding lang indrukken</string>
+    <string name="DeleteMessagesWhenRemovingMembers">Berichten verwijderen bij verwijderen leden</string>
+    <string name="BanOrDeleteMessages">Blokkeer of verwijder berichten</string>
+    <string name="StickerShape">Sticker Vorm</string>
+    <string name="StickerShapeRounded">Afgerond</string>
+    <string name="StickerShapeRoundedMsg">bericht</string>
+    <string name="ActionBar">Actie Balk</string>
 </resources>

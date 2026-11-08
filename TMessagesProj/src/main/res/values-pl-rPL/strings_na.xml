@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">Wyłącz wysyłanie przeczytanych artykułów</string>
     <string name="HideFilterMuteAll">Ukryj wyciszenie filtru</string>
     <string name="UseLocalQuoteColor">Użyj lokalnego koloru cytatu</string>
+    <string name="ShowSquareAvatar">Pokaż kwadratowy awatar</string>
     <string name="DisableProfileAvatarBlur">Wyłącz rozmycie awatara profilu</string>
     <string name="DisableCustomWallpaperUser">Wyłącz własną tapetę użytkownika</string>
     <string name="DisableCustomWallpaperChannel">Wyłącz własną tapetę kanału</string>
@@ -402,5 +403,12 @@
     <string name="CommunityAvatarTapActionChat">Zawsze otwieraj czat</string>
     <string name="CommunityAvatarTapActionArrow">Otwórz społeczność tylko za pomocą dolnej prawej strzałki</string>
     <string name="UseSystemNotificationColor">Użyj systemowego koloru powiadomień</string>
-    <string name="AvatarCorners">Narożniki awatara</string>
+    <string name="AdminActionsOnAvatarLongPress">Akcje administratora przy długim naciśnięciu awatara</string>
+    <string name="AdminActionsOnMentionLongPress">Akcje administratora przy długim naciśnięciu wspomnienia</string>
+    <string name="DeleteMessagesWhenRemovingMembers">Usuń wiadomości podczas usuwania członków</string>
+    <string name="BanOrDeleteMessages">Zablokuj lub usuń wiadomości</string>
+    <string name="StickerShape">Kształt naklejki</string>
+    <string name="StickerShapeRounded">Zaokrąglone</string>
+    <string name="StickerShapeRoundedMsg">Wiadomość</string>
+    <string name="ActionBar">Pasek akcji</string>
 </resources>

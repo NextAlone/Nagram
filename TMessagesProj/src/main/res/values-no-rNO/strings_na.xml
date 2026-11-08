@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">Deaktiver Send Les Historier</string>
     <string name="HideFilterMuteAll">Skjul demping av filtre</string>
     <string name="UseLocalQuoteColor">Bruk lokal sitattfarge</string>
+    <string name="ShowSquareAvatar">Vis firkantet profilbilde</string>
     <string name="DisableProfileAvatarBlur">Deaktivere profilbilde blur</string>
     <string name="DisableCustomWallpaperUser">Deaktivere brukerdefinert bakgrunn</string>
     <string name="DisableCustomWallpaperChannel">Deaktiver kanaltilpasset bakgrunnsbilde</string>
@@ -402,5 +403,12 @@
     <string name="CommunityAvatarTapActionChat">Alltid åpne chat</string>
     <string name="CommunityAvatarTapActionArrow">Åpne samfunnet, kun med nederste høyre pil</string>
     <string name="UseSystemNotificationColor">Bruk farge for systemvarsling</string>
-    <string name="AvatarCorners">Avatar hjørner</string>
+    <string name="AdminActionsOnAvatarLongPress">Adminhandlinger på Avatar Lang Trykk</string>
+    <string name="AdminActionsOnMentionLongPress">Adminhandlinger på referansen langt trykk</string>
+    <string name="DeleteMessagesWhenRemovingMembers">Slett meldinger når medlemmer blir fjernet</string>
+    <string name="BanOrDeleteMessages">Utesteng eller slett meldinger</string>
+    <string name="StickerShape">Klistremerke form</string>
+    <string name="StickerShapeRounded">Avrundet</string>
+    <string name="StickerShapeRoundedMsg">Melding</string>
+    <string name="ActionBar">Handlingslinje</string>
 </resources>

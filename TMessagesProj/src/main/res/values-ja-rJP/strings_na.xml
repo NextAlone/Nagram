@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">既読記事の送信を無効にする</string>
     <string name="HideFilterMuteAll">フィルターミュートをすべて隠す</string>
     <string name="UseLocalQuoteColor">ローカルクオートカラーを使用する</string>
+    <string name="ShowSquareAvatar">四角いアバターを表示</string>
     <string name="DisableProfileAvatarBlur">プロフィールアバターのぼかしを無効にする</string>
     <string name="DisableCustomWallpaperUser">ユーザーのカスタム壁紙を無効にする</string>
     <string name="DisableCustomWallpaperChannel">チャンネルのカスタム壁紙を無効にする</string>
@@ -402,9 +403,12 @@
     <string name="CommunityAvatarTapActionChat">常にチャットを開く</string>
     <string name="CommunityAvatarTapActionArrow">右下の矢印をタップした場合のみコミュニティを開く</string>
     <string name="UseSystemNotificationColor">システム通知の色を使用</string>
-    <string name="AvatarCorners">アバターの角</string>
     <string name="AdminActionsOnAvatarLongPress">アバターの長押しで管理操作を表示</string>
     <string name="AdminActionsOnMentionLongPress">メンションの長押しで管理操作を表示</string>
     <string name="DeleteMessagesWhenRemovingMembers">メンバーの削除時にメッセージも削除可能にする</string>
     <string name="BanOrDeleteMessages">BANまたはメッセージを削除</string>
+    <string name="StickerShape">ステッカー形状</string>
+    <string name="StickerShapeRounded">四捨五入済み</string>
+    <string name="StickerShapeRoundedMsg">メッセージ</string>
+    <string name="ActionBar">アクションバー</string>
 </resources>

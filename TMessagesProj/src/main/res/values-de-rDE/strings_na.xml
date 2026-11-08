@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">Lesestatus von Stories nicht senden</string>
     <string name="HideFilterMuteAll">Filter \"Stumm\" ausblenden</string>
     <string name="UseLocalQuoteColor">Lokale Zitatfarbe verwenden</string>
+    <string name="ShowSquareAvatar">Quadratischen Avatar anzeigen</string>
     <string name="DisableProfileAvatarBlur">Profil-Avatar Unschärfe deaktivieren</string>
     <string name="DisableCustomWallpaperUser">Benutzerdefiniertes Hintergrundbild deaktivieren</string>
     <string name="DisableCustomWallpaperChannel">Deaktiviere Channel-Hintergrund</string>
@@ -402,5 +403,12 @@
     <string name="CommunityAvatarTapActionChat">Chat immer öffnen</string>
     <string name="CommunityAvatarTapActionArrow">Community nur mit dem Pfeil unten rechts öffnen</string>
     <string name="UseSystemNotificationColor">System-Benachrichtigungsfarbe verwenden</string>
-    <string name="AvatarCorners">Avatar-Ecken</string>
+    <string name="AdminActionsOnAvatarLongPress">Admin-Aktionen auf Avatar Lang drücken</string>
+    <string name="AdminActionsOnMentionLongPress">Admin-Aktionen beim langen Drücken von Erwähnungen</string>
+    <string name="DeleteMessagesWhenRemovingMembers">Nachrichten beim Entfernen von Mitgliedern löschen</string>
+    <string name="BanOrDeleteMessages">Nachrichten sperren oder löschen</string>
+    <string name="StickerShape">Sticker Form</string>
+    <string name="StickerShapeRounded">Abgerundet</string>
+    <string name="StickerShapeRoundedMsg">Nachricht</string>
+    <string name="ActionBar">Aktionsleiste</string>
 </resources>
