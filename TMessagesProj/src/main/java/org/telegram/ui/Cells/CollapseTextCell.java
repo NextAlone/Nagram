@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeBind;
 import org.telegram.ui.Components.AnimatedTextView;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
@@ -33,7 +34,7 @@ public class CollapseTextCell extends FrameLayout {
         this.resourcesProvider = resourcesProvider;
 
         textView = new AnimatedTextView(context);
-        textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider));
+        ThemeBind.textColor(textView, Theme.key_windowBackgroundWhiteBlackText, resourcesProvider);
         textView.setTextSize(dp(14));
         textView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
         textView.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
@@ -42,7 +43,7 @@ public class CollapseTextCell extends FrameLayout {
 
         collapsedArrow = new View(context);
         Drawable drawable = getContext().getResources().getDrawable(R.drawable.arrow_more).mutate();
-        drawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider), PorterDuff.Mode.MULTIPLY));
+        ThemeBind.drawableColorFilter(this, drawable, Theme.key_windowBackgroundWhiteBlackText, resourcesProvider, PorterDuff.Mode.MULTIPLY);
         collapsedArrow.setBackground(drawable);
         addView(collapsedArrow, LayoutHelper.createFrameRelatively(14, 14, Gravity.START | Gravity.CENTER_VERTICAL, 21, 1, 0, 3));
     }
@@ -61,7 +62,7 @@ public class CollapseTextCell extends FrameLayout {
 
     public void setColor(int colorKey) {
         int color = Theme.getColor(colorKey, resourcesProvider);
-        textView.setTextColor(color);
+        ThemeBind.textColor(textView, colorKey, resourcesProvider);
         collapsedArrow.getBackground().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
     }
 

@@ -65,7 +65,19 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import tw.nekomimi.nekogram.NekoConfig;
 
-public class SharedLinkCell extends FrameLayout {
+public class SharedLinkCell extends FrameLayout implements Theme.Colorable {
+
+    @Override
+    public void updateColors() {
+        try {
+            if (titleTextPaint != null) {
+                titleTextPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText, resourcesProvider));
+                invalidate();
+            }
+        } catch (Exception e) {
+            FileLog.e(e);
+        }
+    }
     private final static int SPOILER_TYPE_LINK = 0,
             SPOILER_TYPE_DESCRIPTION = 1,
             SPOILER_TYPE_DESCRIPTION2 = 2;

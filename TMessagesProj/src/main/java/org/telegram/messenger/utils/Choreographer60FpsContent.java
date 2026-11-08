@@ -12,9 +12,6 @@ import androidx.annotation.Nullable;
 import org.telegram.messenger.BuildConfig;
 import org.telegram.messenger.BuildVars;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 import me.vkryl.core.reference.ReferenceList;
 
 /**
@@ -55,9 +52,6 @@ public final class Choreographer60FpsContent implements Choreographer.FrameCallb
 
     private final Choreographer mChoreographer = Choreographer.getInstance();
 
-    /** One-shot callbacks — fired once on the next frame, then cleared. */
-    private final Set<FrameCallback> mOneShot = new LinkedHashSet<>();
-
     /**
      * Persistent callback groups keyed by fps.
      * All callbacks in the same group share one fixed schedule and always fire together,
@@ -88,15 +82,6 @@ public final class Choreographer60FpsContent implements Choreographer.FrameCallb
          * @param frameTimeNanos frame start time in {@link System#nanoTime()} domain, ns
          */
         void doFrame(long frameTimeNanos);
-    }
-
-    /**
-     * Schedules a one-shot callback for the next ~60 fps frame.
-     * Removed automatically after it fires.
-     */
-    public void post(FrameCallback callback) {
-        checkMainThread();
-        mOneShot.add(callback);
     }
 
     public void postInvalidateDrawable(Drawable drawable) {
@@ -270,11 +255,6 @@ public final class Choreographer60FpsContent implements Choreographer.FrameCallb
             }
         }
 
-        // One-shot callbacks.
-        for (FrameCallback cb : mOneShot) {
-            cb.doFrame(frameTimeNanos);
-        }
-
         // View / drawable invalidations.
         for (View view : mViewsToInvalidate) {
             view.invalidate();
@@ -284,7 +264,6 @@ public final class Choreographer60FpsContent implements Choreographer.FrameCallb
         }
         mViewsToInvalidate.clear();
         mDrawablesToInvalidate.clear();
-        mOneShot.clear();
 
         // Legacy 30fps drawables.
         if (mCounter % 2 == 0) {

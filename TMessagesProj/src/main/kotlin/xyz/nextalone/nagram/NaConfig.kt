@@ -601,12 +601,6 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
-    val centerActionBarTitle =
-        addConfig(
-            "CenterActionBarTitle",
-            ConfigItem.configTypeBool,
-            false
-        )
     val showQuickReplyInBotCommands =
         addConfig(
             "ShowQuickReplyInBotCommands",

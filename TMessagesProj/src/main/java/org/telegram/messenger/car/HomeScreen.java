@@ -98,12 +98,12 @@ public class HomeScreen extends Screen
 
     @Override
     public void onResume(@NonNull LifecycleOwner owner) {
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.pushMessagesUpdated);
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.notificationsCountUpdated);
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.activeAccountChanged);
+        NotificationCenter.getGlobalInstance().addWeakObserver(this, NotificationCenter.pushMessagesUpdated);
+        NotificationCenter.getGlobalInstance().addWeakObserver(this, NotificationCenter.notificationsCountUpdated);
+        NotificationCenter.getGlobalInstance().addWeakObserver(this, NotificationCenter.activeAccountChanged);
         // fileLoaded is posted per account, not globally, so it has to be observed on the
         // current account's center and moved whenever that account changes.
-        NotificationCenter.getInstance(currentAccount).addObserver(this, NotificationCenter.fileLoaded);
+        NotificationCenter.getInstance(currentAccount).addWeakObserver(this, NotificationCenter.fileLoaded);
     }
 
     @Override

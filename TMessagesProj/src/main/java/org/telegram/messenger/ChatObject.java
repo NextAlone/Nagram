@@ -2656,4 +2656,9 @@ public class ChatObject {
         }
         return SharedConfig.forceForumTabs || chat != null && chat.forum_tabs;
     }
+
+    /** The topics in a panel that slides in from the right: a forum's own choice, apart from its tabs; always in direct messages. */
+    public static boolean isSidebarEnabled(TLRPC.Chat chat) {
+        return chat != null && (chat.forum && chat.forum_sidebar || chat.monoforum);
+    }
 }

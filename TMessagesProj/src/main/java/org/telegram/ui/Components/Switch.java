@@ -45,7 +45,14 @@ import me.vkryl.android.animator.BoolAnimator;
 import xyz.nextalone.nagram.NaConfig;
 import xyz.nextalone.nagram.SwitchStyle;
 
-public class Switch extends View {
+public class Switch extends View implements Theme.Colorable {
+
+    @Override
+    public void updateColors() {
+        colorSet = 0; // the ripple color is re-read from the theme on the next press
+    }
+    private final BoolAnimator animatorIconVisibility = new BoolAnimator(this, CubicBezierInterpolator.EASE_OUT_QUINT, 380L, true);
+
     private static final Set<Switch> attachedSwitches = Collections.newSetFromMap(new WeakHashMap<>());
 
     public static void invalidateAll() {
@@ -53,8 +60,6 @@ public class Switch extends View {
             if (switchView != null) switchView.invalidate();
         }
     }
-
-    private final BoolAnimator animatorIconVisibility = new BoolAnimator(this, CubicBezierInterpolator.EASE_OUT_QUINT, 380L, true);
 
     private RectF rectF;
 

@@ -22,7 +22,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.blur3.BlurredBackgroundDrawableViewFactory;
 import org.telegram.ui.Components.blur3.drawable.BlurredBackgroundDrawable;
 import org.telegram.ui.Components.blur3.drawable.color.impl.BlurredBackgroundProviderImpl;
-import org.telegram.ui.Components.blur3.source.BlurredBackgroundSourceColor;
+import org.telegram.utils.glass.source.GlassSourceColor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +38,7 @@ public class FilterTabsPreviewCell extends FrameLayout implements NotificationCe
     private final int counterSeed;
     private final FilterTabsView filterTabsView;
     private final Map<Integer, Integer> idsWithCounters = new HashMap<>();
-    private final BlurredBackgroundSourceColor blurredBackgroundSourceColor;
+    private final GlassSourceColor blurredBackgroundSourceColor;
 
     private final Runnable refreshRunnable = this::refreshPreview;
 
@@ -84,7 +84,7 @@ public class FilterTabsPreviewCell extends FrameLayout implements NotificationCe
         setWillNotDraw(false);
         setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
 
-        blurredBackgroundSourceColor = new BlurredBackgroundSourceColor();
+        blurredBackgroundSourceColor = new GlassSourceColor();
         blurredBackgroundSourceColor.setColor(Theme.getColor(Theme.key_windowBackgroundWhite));
         BlurredBackgroundDrawableViewFactory blurredBackgroundDrawableViewFactory = new BlurredBackgroundDrawableViewFactory(blurredBackgroundSourceColor);
 

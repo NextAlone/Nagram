@@ -53,7 +53,7 @@ public class FileLog {
     private OutputStreamWriter streamWriter = null;
     private FastDateFormat dateFormat = null;
     private FastDateFormat fileDateFormat = null;
-    private DispatchQueue logQueue = null;
+    private DispatchQueue2 logQueue = null;
 
     private File currentFile = null;
     private File networkFile = null;
@@ -344,7 +344,7 @@ public class FileLog {
             e.printStackTrace();
         }
         try {
-            logQueue = new DispatchQueue("logQueue");
+            logQueue = new DispatchQueue2("logQueue");
             currentFile.createNewFile();
             FileOutputStream stream = new FileOutputStream(currentFile);
             streamWriter = new OutputStreamWriter(stream);
