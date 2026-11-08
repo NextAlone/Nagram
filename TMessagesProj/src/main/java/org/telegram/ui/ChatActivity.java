@@ -9669,6 +9669,7 @@ public class ChatActivity extends BaseFragment implements
                 .setMultilineText(true)
                 .setDuration(2000);
 
+        timeHint.setGlass(glassBackgroundDrawableFactory);
         timeHint.setText(MessageHelper.INSTANCE.getTimeHintText(cell.getMessageObject()));
         timeHint.setMaxWidthPx(contentView.getMeasuredWidth());
         contentView.addView(timeHint, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 120, Gravity.TOP | Gravity.FILL_HORIZONTAL, 16, 0, 16, 0));
