@@ -27,12 +27,12 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
-import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.SimpleActionBarMenu;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeBind;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -199,7 +199,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
 
         if (blockedUsersActivity) {
 
-            ActionBarMenu menu = actionBar.createMenu();
+            SimpleActionBarMenu menu = simpleActionBar.createMenu();
 
             ActionBarMenuItem otherItem = menu.addItem(0, R.drawable.ic_ab_other);
             otherItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", R.string.AccDescrMoreOptions));

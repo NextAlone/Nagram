@@ -8725,13 +8725,6 @@ public class LoginActivity extends BaseFragment implements NotificationCenter.No
         backButtonFilterColor = applyColorFilter(backButtonView, Theme.getColor(Theme.key_windowBackgroundWhiteBlackText), backButtonFilterColor, PorterDuff.Mode.SRC_ATOP);
         backButtonSelectorColor = applySelectorBackground(backButtonView, Theme.getColor(Theme.key_listSelector), backButtonSelectorColor, Theme.RIPPLE_MASK_CIRCLE_20DP);
 
-        final int proxyColor = Theme.getColor(Theme.key_windowBackgroundWhiteBlackText);
-        if (proxyColor != proxyDrawableColor || proxyDrawable.getColorFilter() == null) {
-            proxyDrawable.setColorFilter(new PorterDuffColorFilter(proxyColor, PorterDuff.Mode.SRC_IN));
-            proxyDrawableColor = proxyColor;
-        }
-        proxyButtonSelectorColor = applySelectorBackground(proxyButtonView, Theme.getColor(Theme.key_listSelector), proxyButtonSelectorColor, Theme.RIPPLE_MASK_CIRCLE_20DP);
-
         radialProgressView.setProgressColor(Theme.getColor(Theme.key_chats_actionBackground));
 
         floatingButton.updateColors();

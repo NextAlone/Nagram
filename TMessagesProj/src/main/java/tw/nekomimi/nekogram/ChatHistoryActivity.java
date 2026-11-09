@@ -211,6 +211,11 @@ public class ChatHistoryActivity extends BaseFragment {
         // Create main layout
         FrameLayout frameLayout = new FrameLayout(context) {
             @Override
+            protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+                super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(heightMeasureSpec), View.MeasureSpec.EXACTLY));
+            }
+
+            @Override
             protected void dispatchDraw(@NonNull Canvas canvas) {
                 super.dispatchDraw(canvas);
                 glassEngine.invalidate();
@@ -219,6 +224,8 @@ public class ChatHistoryActivity extends BaseFragment {
         ThemeBind.backgroundColor(frameLayout, Theme.key_windowBackgroundGray, getResourceProvider());
 
         viewPager = new ViewPagerFixed(context);
+        // 与 CachedMediaLayout 一致：页面列表滚动时不要取消 pager 的横滑手势
+        viewPager.setAllowDisallowInterceptTouch(false);
         viewPager.setAdapter(new CategoryPagerAdapter());
         frameLayout.addView(viewPager, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.FILL));
 
@@ -559,32 +566,9 @@ public class ChatHistoryActivity extends BaseFragment {
 
     private void refreshAllPages() {
         if (viewPager != null) {
-            // Clear all cached views to prevent old content from showing
-            clearViewPagerCache();
-
-            // Force refresh all pages by recreating the adapter
-            viewPager.setAdapter(new CategoryPagerAdapter());
-        }
-    }
-
-    private void clearViewPagerCache() {
-        if (viewPager != null) {
-            try {
-                // Force ViewPager to clear its view cache
-                viewPager.removeAllViews();
-
-                // Request layout to ensure proper refresh
-                viewPager.requestLayout();
-
-                // Small delay to ensure views are properly cleared
-                viewPager.post(() -> {
-                    if (viewPager != null) {
-                        viewPager.invalidate();
-                    }
-                });
-            } catch (Exception e) {
-                // Ignore any exceptions during cache clearing
-            }
+            // 与 CachedMediaLayout 一致：原地重建当前页并刷新 tabs，避免 removeAllViews + setAdapter
+            // 造成的页面/标签状态不同步（会导致页面无法左右滑动、tab 不可滚动）
+            viewPager.rebuild(false);
         }
     }
 
@@ -593,6 +577,17 @@ public class ChatHistoryActivity extends BaseFragment {
         @Override
         public int getItemCount() {
             return ChatCategory.values().length;
+        }
+
+        @Override
+        public int getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            // 每个分类使用独立的 viewType，保证页面视图缓存与分类一一对应
+            return position;
         }
 
         @Override
@@ -606,7 +601,7 @@ public class ChatHistoryActivity extends BaseFragment {
             if (context == null) return new View(getParentActivity());
 
             // Create RecyclerView for this category
-            RecyclerListView listView = new RecyclerListView(context);
+            PageListView listView = new PageListView(context);
             listView.setClipToPadding(false);
             listView.setSections();
             listView.setSectionsDrawBackground(true);
@@ -636,6 +631,18 @@ public class ChatHistoryActivity extends BaseFragment {
                 // Scroll to top
                 listView.scrollToPosition(0);
             }
+        }
+    }
+
+    // 与 DataUsage2Activity / CachedMediaLayout 的页面列表一致：高度强制为 EXACTLY
+    private static class PageListView extends RecyclerListView {
+        public PageListView(Context context) {
+            super(context);
+        }
+
+        @Override
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(heightMeasureSpec), View.MeasureSpec.EXACTLY));
         }
     }
 
