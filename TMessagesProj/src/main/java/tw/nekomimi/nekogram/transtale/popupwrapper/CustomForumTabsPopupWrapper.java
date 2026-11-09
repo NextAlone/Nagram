@@ -17,8 +17,9 @@ public class CustomForumTabsPopupWrapper {
     public ActionBarPopupWindow.ActionBarPopupWindowLayout windowLayout;
     private final long dialogId;
     private final ActionBarMenuSubItem defaultItem;
-    private final ActionBarMenuSubItem enableItem;
-    private final ActionBarMenuSubItem disableItem;
+    private final ActionBarMenuSubItem tabsItem;
+    private final ActionBarMenuSubItem listItem;
+    private final ActionBarMenuSubItem sidebarItem;
 
     public CustomForumTabsPopupWrapper(BaseFragment fragment, PopupSwipeBackLayout swipeBackLayout, long dialogId, Theme.ResourcesProvider resourcesProvider) {
         Context context = fragment.getParentActivity();
@@ -39,27 +40,34 @@ public class CustomForumTabsPopupWrapper {
         });
         defaultItem.setAlpha(1.0f);
 
-        enableItem = ActionBarMenuItem.addItem(windowLayout, 0, LocaleController.getString(R.string.TopicsLayoutTabs), true, resourcesProvider);
-        enableItem.setChecked(DialogConfig.hasCustomForumTabsConfig(dialogId) && DialogConfig.isCustomForumTabsEnable(dialogId));
-        enableItem.setOnClickListener(view -> {
-            DialogConfig.setCustomForumTabsEnable(dialogId, true);
+        tabsItem = ActionBarMenuItem.addItem(windowLayout, 0, LocaleController.getString(R.string.TopicsLayoutTabs), true, resourcesProvider);
+        tabsItem.setOnClickListener(view -> {
+            DialogConfig.setCustomForumTabsMode(dialogId, DialogConfig.FORUM_LAYOUT_TABS);
             updateItems();
         });
-        enableItem.setAlpha(1.0f);
+        tabsItem.setAlpha(1.0f);
 
-        disableItem = ActionBarMenuItem.addItem(windowLayout, 0, LocaleController.getString(R.string.TopicsLayoutList), true, resourcesProvider);
-        disableItem.setChecked(DialogConfig.hasCustomForumTabsConfig(dialogId) && !DialogConfig.isCustomForumTabsEnable(dialogId));
-        disableItem.setOnClickListener(view -> {
-            DialogConfig.setCustomForumTabsEnable(dialogId, false);
+        listItem = ActionBarMenuItem.addItem(windowLayout, 0, LocaleController.getString(R.string.TopicsLayoutList), true, resourcesProvider);
+        listItem.setOnClickListener(view -> {
+            DialogConfig.setCustomForumTabsMode(dialogId, DialogConfig.FORUM_LAYOUT_LIST);
             updateItems();
         });
-        disableItem.setAlpha(1.0f);
+        listItem.setAlpha(1.0f);
+
+        sidebarItem = ActionBarMenuItem.addItem(windowLayout, 0, LocaleController.getString(R.string.TopicsSidebar), true, resourcesProvider);
+        sidebarItem.setOnClickListener(view -> {
+            DialogConfig.setCustomForumTabsMode(dialogId, DialogConfig.FORUM_LAYOUT_SIDEBAR);
+            updateItems();
+        });
+        sidebarItem.setAlpha(1.0f);
         updateItems();
     }
 
     public void updateItems() {
-        defaultItem.setChecked(!DialogConfig.hasCustomForumTabsConfig(dialogId));
-        enableItem.setChecked(DialogConfig.hasCustomForumTabsConfig(dialogId) && DialogConfig.isCustomForumTabsEnable(dialogId));
-        disableItem.setChecked(DialogConfig.hasCustomForumTabsConfig(dialogId) && !DialogConfig.isCustomForumTabsEnable(dialogId));
+        final int mode = DialogConfig.getCustomForumTabsMode(dialogId);
+        defaultItem.setChecked(mode == DialogConfig.FORUM_LAYOUT_DEFAULT);
+        tabsItem.setChecked(mode == DialogConfig.FORUM_LAYOUT_TABS);
+        listItem.setChecked(mode == DialogConfig.FORUM_LAYOUT_LIST);
+        sidebarItem.setChecked(mode == DialogConfig.FORUM_LAYOUT_SIDEBAR);
     }
 }

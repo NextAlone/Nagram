@@ -2651,14 +2651,23 @@ public class ChatObject {
     }
 
     public static boolean areTabsEnabled(TLRPC.Chat chat) {
-        if (chat != null && DialogConfig.hasCustomForumTabsConfig(-chat.id)) {
-            return DialogConfig.isCustomForumTabsEnable(-chat.id);
+        if (chat != null) {
+            final int forumLayout = DialogConfig.getCustomForumTabsMode(-chat.id);
+            if (forumLayout != DialogConfig.FORUM_LAYOUT_DEFAULT) {
+                return forumLayout == DialogConfig.FORUM_LAYOUT_TABS || forumLayout == DialogConfig.FORUM_LAYOUT_SIDEBAR;
+            }
         }
         return SharedConfig.forceForumTabs || chat != null && chat.forum_tabs;
     }
 
     /** The topics in a panel that slides in from the right: a forum's own choice, apart from its tabs; always in direct messages. */
     public static boolean isSidebarEnabled(TLRPC.Chat chat) {
+        if (chat != null) {
+            final int forumLayout = DialogConfig.getCustomForumTabsMode(-chat.id);
+            if (forumLayout != DialogConfig.FORUM_LAYOUT_DEFAULT) {
+                return forumLayout == DialogConfig.FORUM_LAYOUT_SIDEBAR;
+            }
+        }
         return chat != null && (chat.forum && chat.forum_sidebar || chat.monoforum);
     }
 }
