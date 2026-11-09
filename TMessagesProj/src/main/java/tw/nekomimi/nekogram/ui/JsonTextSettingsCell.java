@@ -14,6 +14,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeBind;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Components.EmojiTextView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -43,7 +44,7 @@ public class JsonTextSettingsCell extends TextDetailSettingsCell {
         super(context);
 
         jsonTextView = new EmojiTextView(context);
-        jsonTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
+        ThemeBind.textColor(jsonTextView, Theme.key_windowBackgroundWhiteGrayText2);
         jsonTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
         jsonTextView.setGravity(LocaleController.isRTL ? Gravity.RIGHT : Gravity.LEFT);
         jsonTextView.setLines(0);

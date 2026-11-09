@@ -29,8 +29,8 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.SimpleActionBarMenu;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
@@ -126,7 +126,7 @@ public class InlineBotRulesEditActivity extends BaseNekoSettingsActivity {
     public View createView(Context context) {
         View root = super.createView(context);
 
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+        simpleActionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
                 if (id == -1) {
@@ -140,7 +140,7 @@ public class InlineBotRulesEditActivity extends BaseNekoSettingsActivity {
         });
 
         if (!isReadOnly()) {
-            ActionBarMenu menu = actionBar.createMenu();
+            SimpleActionBarMenu menu = simpleActionBar.createMenu();
             doneButton = menu.addItemWithWidth(done_button, R.drawable.ic_ab_done, AndroidUtilities.dp(56));
             doneButton.setContentDescription(LocaleController.getString(R.string.Done));
             if (!isCreate()) {

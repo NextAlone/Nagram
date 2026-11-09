@@ -3,6 +3,8 @@ package tw.nekomimi.nekogram;
 import static org.telegram.messenger.LocaleController.getString;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,23 +30,25 @@ import org.telegram.messenger.R;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
-import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
-import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.SimpleActionBarMenuItem;
+import org.telegram.ui.ActionBar.SimpleActionBarMenu;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeBind;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
-import org.telegram.ui.Components.BlurredRecyclerView;
 import org.telegram.ui.Components.BulletinFactory;
+import org.telegram.ui.Components.ItemOptions;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.ShareAlert;
-import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.ViewPagerFixed;
+import org.telegram.ui.Components.blur3.drawable.color.impl.BlurredBackgroundProviderImpl;
+import org.telegram.ui.Components.blur3.utils.Blur3Utils;
 import org.telegram.ui.ChatActivity;
+import org.telegram.utils.glass.BaseFragmentSimpleGlass;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -71,6 +76,10 @@ public class ChatHistoryActivity extends BaseFragment {
     // UI Components
     private ViewPagerFixed viewPager;
     private ViewPagerFixed.TabsView tabsView;
+    private FrameLayout tabsContainer;
+    private View listTopOverlay;
+    private int insetTop;
+    private int insetBottom;
 
     // Data
     private final ArrayList<HistoryItem> allHistoryItems = new ArrayList<>();
@@ -148,26 +157,30 @@ public class ChatHistoryActivity extends BaseFragment {
 
 
     @Override
+    protected boolean useSimpleActionBar() {
+        return true;
+    }
+
+    @Override
     public View createView(Context context) {
-        // Setup ActionBar
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setAllowOverlayTitle(true);
+        // Setup SimpleActionBar
+        simpleActionBar.setBackButtonImage(R.drawable.ic_ab_back);
         updateTitle();
 
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+        simpleActionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
                 if (id == -1) {
                     finishFragment();
-                } else if (id == 2) {
-                    showOptionsMenu();
+                } else if (id == 1) {
+                    showClearHistoryDialog();
                 }
             }
         });
 
         // Create menu (clear existing menu first)
-        actionBar.createMenu().clearItems();
-        ActionBarMenu menu = actionBar.createMenu();
+        SimpleActionBarMenu menu = simpleActionBar.createMenu();
+        menu.clearItems();
 
         // Add search button
         searchItem = menu.addItem(3, R.drawable.msg_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
@@ -192,14 +205,56 @@ public class ChatHistoryActivity extends BaseFragment {
         });
 
         // Add options button (settings icon for menu)
-        menu.addItem(2, R.drawable.msg_settings);
+        SimpleActionBarMenuItem optionsItem = menu.addItem(2, R.drawable.msg_settings);
+        optionsItem.addSubItem(1, R.drawable.msg_delete, getString(R.string.ClearRecentChats));
 
         // Create main layout
-        fragmentView = new SizeNotifierFrameLayout(context);
-        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+        FrameLayout frameLayout = new FrameLayout(context) {
+            @Override
+            protected void dispatchDraw(@NonNull Canvas canvas) {
+                super.dispatchDraw(canvas);
+                glassEngine.invalidate();
+            }
+        };
+        ThemeBind.backgroundColor(frameLayout, Theme.key_windowBackgroundGray, getResourceProvider());
 
-        // Create ViewPager with tabs
-        createViewPager(context, (SizeNotifierFrameLayout) fragmentView);
+        viewPager = new ViewPagerFixed(context);
+        viewPager.setAdapter(new CategoryPagerAdapter());
+        frameLayout.addView(viewPager, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.FILL));
+
+        tabsContainer = new FrameLayout(context);
+        tabsView = viewPager.createTabsView(true, ViewPagerFixed.SELECTOR_TYPE_BUBBLE_STYLE);
+
+        listTopOverlay = new View(context);
+        frameLayout.addView(listTopOverlay, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 0, Gravity.TOP));
+        listTopOverlay.getLayoutParams().height = insetTop + ActionBar.getCurrentActionBarHeight() + AndroidUtilities.dp(44);
+
+        tabsContainer.setTranslationY(BaseFragmentSimpleGlass.getPillGlassTop(insetTop) - AndroidUtilities.dp(9.66f));
+        tabsContainer.addView(tabsView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 36 + 6 + 6));
+        tabsContainer.setPadding(AndroidUtilities.dp(4), AndroidUtilities.dp(4), AndroidUtilities.dp(4), AndroidUtilities.dp(4));
+        tabsContainer.setBackground(getBaseSimpleGlass().factory
+                .create(tabsContainer)
+                .setColorProvider(BlurredBackgroundProviderImpl.simpleActionBar(getResourceProvider()))
+                .setPadding(AndroidUtilities.dp(9.66f))
+                .setRadius(AndroidUtilities.dp(18))
+        );
+
+        getBaseSimpleGlass().setViews(frameLayout, viewPager, simpleActionBar, getResourceProvider());
+        getBaseSimpleGlass().setCapture((canvas, position) -> {
+            for (int a = 0, N = viewPager.getChildCount(); a < N; a++) {
+                final View v = viewPager.getChildAt(a);
+                if (v instanceof RecyclerListView) {
+                    final RecyclerListView listView = (RecyclerListView) v;
+                    Blur3Utils.captureRelativeParent(listView, canvas, position, listView, frameLayout);
+                }
+            }
+        });
+        getBaseSimpleGlass().setClipView(null);
+        frameLayout.addView(tabsContainer, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP, -4, 0, -4, 0));
+        listTopOverlay.setBackground(getBaseSimpleGlass().createActionBarFadeDrawable(listTopOverlay));
+        simpleActionBar.setBackground(null);
+
+        fragmentView = frameLayout;
 
         // Mark as initialized
         hasBeenInitialized = true;
@@ -212,33 +267,24 @@ public class ChatHistoryActivity extends BaseFragment {
         return fragmentView;
     }
 
-    private void createViewPager(Context context, SizeNotifierFrameLayout fragmentView) {
-        // Create ViewPager
-        viewPager = new ViewPagerFixed(context);
-        viewPager.setAdapter(new CategoryPagerAdapter());
+    @Override
+    public void onInsets(int left, int top, int right, int bottom) {
+        insetTop = top;
+        insetBottom = bottom;
 
-        // Create tabs
-        tabsView = viewPager.createTabsView(true, 3);
-        tabsView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+        if (tabsContainer == null || listTopOverlay == null || viewPager == null) {
+            return;
+        }
 
-        // Add tabs and viewpager to main view
-        fragmentView.addView(tabsView,
-                LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.TOP));
-        fragmentView.addView(viewPager,
-                LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP, 0, 48, 0, 0));
+        tabsContainer.setTranslationY(BaseFragmentSimpleGlass.getPillGlassTop(insetTop) - AndroidUtilities.dp(9.66f));
+        ViewGroup.LayoutParams layoutParams = listTopOverlay.getLayoutParams();
+        layoutParams.height = insetTop + ActionBar.getCurrentActionBarHeight() + AndroidUtilities.dp(44);
 
-        // Update tabs
-        updateTabs();
-    }
-
-    private void updateTabs() {
-        if (tabsView != null) {
-            tabsView.removeTabs();
-            for (int i = 0; i < ChatCategory.values().length; i++) {
-                ChatCategory category = ChatCategory.values()[i];
-                tabsView.addTab(i, getTabTitle(category));
+        for (int a = 0, N = viewPager.getChildCount(); a < N; a++) {
+            final View v = viewPager.getChildAt(a);
+            if (v instanceof RecyclerListView) {
+                BaseFragmentSimpleGlass.setListViewParams((RecyclerListView) v, insetTop, insetBottom, ActionBar.getCurrentActionBarHeight() + AndroidUtilities.dp(42), 0);
             }
-            tabsView.finishAddingTabs();
         }
     }
 
@@ -357,16 +403,16 @@ public class ChatHistoryActivity extends BaseFragment {
             filteredHistoryItems.clear();
             filteredHistoryItems.addAll(allHistoryItems);
         }
-
-        // Update tabs after loading data
-        updateTabs();
     }
 
     private void updateTitle() {
+        if (simpleActionBar == null) {
+            return;
+        }
         if (isSearchMode) {
-            actionBar.setTitle(getString(R.string.Search));
+            simpleActionBar.setTitle(getString(R.string.Search));
         } else {
-            actionBar.setTitle(getString(R.string.RecentChats));
+            simpleActionBar.setTitle(getString(R.string.RecentChats));
         }
     }
 
@@ -424,48 +470,6 @@ public class ChatHistoryActivity extends BaseFragment {
         return !TextUtils.isEmpty(username) && username.toLowerCase().contains(query);
     }
 
-    private void showOptionsMenu() {
-        // Create popup menu items
-        ArrayList<String> items = new ArrayList<>();
-        ArrayList<Integer> icons = new ArrayList<>();
-        ArrayList<Runnable> actions = new ArrayList<>();
-
-        // Add clear history option
-        items.add(getString(R.string.ClearRecentChats));
-        icons.add(R.drawable.msg_delete);
-        actions.add(this::showClearHistoryDialog);
-
-        // Create and show popup
-        ActionBarPopupWindow.ActionBarPopupWindowLayout popupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getParentActivity());
-        ActionBarPopupWindow popupWindow = new ActionBarPopupWindow(popupLayout, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT);
-
-        for (int i = 0; i < items.size(); i++) {
-            ActionBarMenuSubItem subItem = new ActionBarMenuSubItem(getParentActivity(), i == 0, i == items.size() - 1);
-            subItem.setTextAndIcon(items.get(i), icons.get(i));
-            final int index = i;
-            subItem.setOnClickListener(v -> {
-                popupWindow.dismiss();
-                actions.get(index).run();
-            });
-            popupLayout.addView(subItem);
-        }
-        popupWindow.setPauseNotifications(true);
-        popupWindow.setDismissAnimationDuration(220);
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setClippingEnabled(true);
-        popupWindow.setAnimationStyle(R.style.PopupContextAnimation);
-        popupWindow.setFocusable(true);
-        popupLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), View.MeasureSpec.AT_MOST));
-        popupWindow.setInputMethodMode(ActionBarPopupWindow.INPUT_METHOD_NOT_NEEDED);
-        popupWindow.getContentView().setFocusableInTouchMode(true);
-
-        // Show popup at the right position
-        View anchor = actionBar.createMenu().getChildAt(actionBar.createMenu().getChildCount() - 1);
-        if (anchor != null) {
-            popupWindow.showAsDropDown(anchor, -popupLayout.getMeasuredWidth() + AndroidUtilities.dp(14), -AndroidUtilities.dp(18));
-        }
-    }
-
     private void showClearHistoryDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
         builder.setTitle(getString(R.string.ClearRecentChats));
@@ -517,8 +521,8 @@ public class ChatHistoryActivity extends BaseFragment {
             // If search mode was opened with empty query, exit search mode on return and close search UI
             if (isSearchMode && android.text.TextUtils.isEmpty(searchQuery)) {
                 try {
-                    if (actionBar != null && actionBar.isSearchFieldVisible()) {
-                        actionBar.closeSearchField(false);
+                    if (simpleActionBar != null && simpleActionBar.isSearchFieldVisible()) {
+                        simpleActionBar.closeSearchField(false);
                     }
                 } catch (Exception ignore) {
                 }
@@ -541,8 +545,8 @@ public class ChatHistoryActivity extends BaseFragment {
         if (isSearchMode) {
             if (invoked) {
                 try {
-                    if (actionBar != null && actionBar.isSearchFieldVisible()) {
-                        actionBar.closeSearchField(false);
+                    if (simpleActionBar != null && simpleActionBar.isSearchFieldVisible()) {
+                        simpleActionBar.closeSearchField(false);
                     }
                 } catch (Exception ignore) {
                 }
@@ -560,7 +564,6 @@ public class ChatHistoryActivity extends BaseFragment {
 
             // Force refresh all pages by recreating the adapter
             viewPager.setAdapter(new CategoryPagerAdapter());
-            updateTabs();
         }
     }
 
@@ -602,60 +605,36 @@ public class ChatHistoryActivity extends BaseFragment {
             Context context = getContext();
             if (context == null) return new View(getParentActivity());
 
-            // Create a container to ensure proper isolation between pages
-            FrameLayout container = new FrameLayout(context) {
-                @Override
-                protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-                    // Ensure container fills the entire available space
-                    setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(heightMeasureSpec));
-                }
-            };
-            container.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-
             // Create RecyclerView for this category
-            BlurredRecyclerView listView = new BlurredRecyclerView(context);
+            RecyclerListView listView = new RecyclerListView(context);
+            listView.setClipToPadding(false);
+            listView.setSections();
+            listView.setSectionsDrawBackground(true);
             listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
             listView.setVerticalScrollBarEnabled(false);
+            glassEngine.addScrolledView(listView);
+            BaseFragmentSimpleGlass.setListViewParams(listView, insetTop, insetBottom, ActionBar.getCurrentActionBarHeight() + AndroidUtilities.dp(42), 0);
 
-            // Add RecyclerView to container
-            container.addView(listView, new FrameLayout.LayoutParams(
-                    FrameLayout.LayoutParams.MATCH_PARENT,
-                    FrameLayout.LayoutParams.MATCH_PARENT
-            ));
-
-            return container;
+            return listView;
         }
 
         @Override
         public void bindView(View view, int position, int viewType) {
-            if (view instanceof FrameLayout) {
-                FrameLayout container = (FrameLayout) view;
+            if (view instanceof RecyclerListView) {
+                RecyclerListView listView = (RecyclerListView) view;
 
-                // Find the RecyclerView inside the container
-                BlurredRecyclerView listView = null;
-                for (int i = 0; i < container.getChildCount(); i++) {
-                    View child = container.getChildAt(i);
-                    if (child instanceof BlurredRecyclerView) {
-                        listView = (BlurredRecyclerView) child;
-                        break;
-                    }
-                }
+                // Clear any existing adapter to prevent data mixing
+                listView.setAdapter(null);
 
-                if (listView != null) {
-                    // Clear any existing adapter to prevent data mixing
-                    listView.setAdapter(null);
+                // Create fresh adapter with current data
+                CategoryListAdapter adapter = new CategoryListAdapter(position);
+                listView.setAdapter(adapter);
 
-                    // Create fresh adapter with current data
-                    CategoryListAdapter adapter = new CategoryListAdapter(position);
-                    listView.setAdapter(adapter);
+                // Set click listener
+                listView.setOnItemClickListener(adapter::onItemClick);
 
-                    // Set click listener
-                    listView.setOnItemClickListener(adapter::onItemClick);
-
-                    // Scroll to top
-                    listView.scrollToPosition(0);
-                }
+                // Scroll to top
+                listView.scrollToPosition(0);
             }
         }
     }
@@ -764,8 +743,8 @@ public class ChatHistoryActivity extends BaseFragment {
         // If user is in search mode with empty query, close search UI and exit search before navigating
         if (isSearchMode && TextUtils.isEmpty(searchQuery)) {
             try {
-                if (actionBar != null && actionBar.isSearchFieldVisible()) {
-                    actionBar.closeSearchField(false);
+                if (simpleActionBar != null && simpleActionBar.isSearchFieldVisible()) {
+                    simpleActionBar.closeSearchField(false);
                 }
             } catch (Exception ignore) {
             }
@@ -820,78 +799,13 @@ public class ChatHistoryActivity extends BaseFragment {
         final boolean finalHasUsername = hasUsername;
         final boolean finalCanOpen = canOpen;
 
-        // Create popup layout
-        ActionBarPopupWindow.ActionBarPopupWindowLayout popupLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getContext());
-        popupLayout.setFitItems(true);
-
-        // Create and show popup window
-        ActionBarPopupWindow popupWindow = new ActionBarPopupWindow(popupLayout, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT);
-
-        // Add Open option
-        ActionBarMenuSubItem openItem = ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_openin, getString(R.string.Open), false, getResourceProvider());
-        openItem.setVisibility(finalCanOpen);
-        if (!finalCanOpen) {
-            openItem.setColors(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
-        }
-        openItem.setOnClickListener(v -> {
-            popupWindow.dismiss();
-            if (finalCanOpen) {
-                openChat(item);
-            }
-        });
-
-        // Add Share option
-        ActionBarMenuSubItem shareItem = ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_share, getString(R.string.ShareFile), false, getResourceProvider());
-        shareItem.setVisibility(finalHasUsername);
-        if (!finalHasUsername) {
-            shareItem.setColors(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
-        }
-        shareItem.setOnClickListener(v -> {
-            popupWindow.dismiss();
-            if (finalHasUsername) {
-                shareChat(finalUsername);
-            }
-        });
-
-        // Add Copy option
-        ActionBarMenuSubItem copyItem = ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_copy, getString(R.string.Copy), false, getResourceProvider());
-        copyItem.setVisibility(finalHasUsername);
-        if (!finalHasUsername) {
-            copyItem.setColors(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3), Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
-        }
-        copyItem.setOnClickListener(v -> {
-            popupWindow.dismiss();
-            if (finalHasUsername) {
-                copyUsername(finalUsername);
-            }
-        });
-
-        // Add Delete option (always available)
-        ActionBarMenuSubItem deleteItem = ActionBarMenuItem.addItem(popupLayout, R.drawable.msg_delete, getString(R.string.Delete), false, getResourceProvider());
-        deleteItem.setOnClickListener(v -> {
-            popupWindow.dismiss();
-            showDeleteChatDialog(item);
-        });
-        popupWindow.setPauseNotifications(true);
-        popupWindow.setDismissAnimationDuration(220);
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setClippingEnabled(true);
-        popupWindow.setAnimationStyle(R.style.PopupContextAnimation);
-        popupWindow.setFocusable(true);
-        popupLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), View.MeasureSpec.AT_MOST),
-                View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), View.MeasureSpec.AT_MOST));
-        popupWindow.setInputMethodMode(ActionBarPopupWindow.INPUT_METHOD_NOT_NEEDED);
-        popupWindow.setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED);
-        popupWindow.getContentView().setFocusableInTouchMode(true);
-
-        // Calculate position
-        int[] location = new int[2];
-        anchorView.getLocationInWindow(location);
-        int popupX = location[0] + anchorView.getWidth() - popupLayout.getMeasuredWidth();
-        int popupY = location[1];
-
-        popupWindow.showAtLocation(anchorView, android.view.Gravity.LEFT | android.view.Gravity.TOP, popupX, popupY);
-        popupWindow.dimBehind();
+        ItemOptions options = ItemOptions.makeOptions(this, anchorView);
+        options.addIf(finalCanOpen, R.drawable.msg_openin, getString(R.string.Open), () -> openChat(item));
+        options.addIf(finalHasUsername, R.drawable.msg_share, getString(R.string.ShareFile), () -> shareChat(finalUsername));
+        options.addIf(finalHasUsername, R.drawable.msg_copy, getString(R.string.Copy), () -> copyUsername(finalUsername));
+        options.addGap();
+        options.add(R.drawable.msg_delete, getString(R.string.Delete), true, () -> showDeleteChatDialog(item));
+        options.show();
     }
 
     private void shareChat(String username) {
@@ -972,7 +886,7 @@ public class ChatHistoryActivity extends BaseFragment {
             addView(avatarImageView, LayoutHelper.createFrame(50, 50, Gravity.LEFT | Gravity.CENTER_VERTICAL, 16, 0, 0, 0));
 
             nameTextView = new TextView(context);
-            nameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+            ThemeBind.textColor(nameTextView, Theme.key_windowBackgroundWhiteBlackText);
             nameTextView.setTextSize(16);
             nameTextView.setLines(1);
             nameTextView.setMaxLines(1);
@@ -983,7 +897,7 @@ public class ChatHistoryActivity extends BaseFragment {
             addView(nameTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 82, 10, 64, 0));
 
             usernameTextView = new TextView(context);
-            usernameTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
+            ThemeBind.textColor(usernameTextView, Theme.key_windowBackgroundWhiteGrayText3);
             usernameTextView.setTextSize(14);
             usernameTextView.setLines(1);
             usernameTextView.setMaxLines(1);
@@ -993,9 +907,12 @@ public class ChatHistoryActivity extends BaseFragment {
             addView(usernameTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.LEFT | Gravity.TOP, 82, 36, 64, 0));
 
             // Add options button (three dots)
-            ActionBarMenuItem optionsButton = new ActionBarMenuItem(context, null, 0, Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
-            optionsButton.setIcon(R.drawable.ic_ab_other);
-            optionsButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector), 1));
+            ImageView optionsButton = new ImageView(context);
+            optionsButton.setFocusable(false);
+            ThemeBind.selectorBackground(optionsButton, Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)), null, ThemeBind.of(Theme.key_listSelector));
+            optionsButton.setImageResource(R.drawable.ic_ab_other);
+            ThemeBind.colorFilter(optionsButton, Theme.key_stickers_menu, PorterDuff.Mode.MULTIPLY);
+            optionsButton.setScaleType(ImageView.ScaleType.CENTER);
             optionsButton.setOnClickListener(v -> {
                 if (currentItem != null) {
                     showChatOptionsMenu(currentItem, v);
@@ -1003,7 +920,7 @@ public class ChatHistoryActivity extends BaseFragment {
             });
             addView(optionsButton, LayoutHelper.createFrame(48, 48, Gravity.RIGHT | Gravity.CENTER_VERTICAL, 0, 0, 8, 0));
 
-            setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+            ThemeBind.backgroundColor(this, Theme.key_windowBackgroundWhite);
         }
 
         @Override
@@ -1139,18 +1056,18 @@ public class ChatHistoryActivity extends BaseFragment {
             super(context);
 
             titleTextView = new TextView(context);
-            titleTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
+            ThemeBind.textColor(titleTextView, Theme.key_windowBackgroundWhiteGrayText3);
             titleTextView.setTextSize(17);
             titleTextView.setGravity(Gravity.CENTER);
             addView(titleTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 32, 48, 32, 0));
 
             descriptionTextView = new TextView(context);
-            descriptionTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
+            ThemeBind.textColor(descriptionTextView, Theme.key_windowBackgroundWhiteGrayText3);
             descriptionTextView.setTextSize(15);
             descriptionTextView.setGravity(Gravity.CENTER);
             addView(descriptionTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 32, 80, 32, 48));
 
-            setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+            ThemeBind.backgroundColor(this, Theme.key_windowBackgroundWhite);
         }
 
         @Override
@@ -1177,5 +1094,10 @@ public class ChatHistoryActivity extends BaseFragment {
                 descriptionTextView.setVisibility(VISIBLE);
             }
         }
+    }
+
+    @Override
+    public boolean isSupportEdgeToEdge() {
+        return true;
     }
 }

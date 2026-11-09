@@ -22,6 +22,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.browser.Browser;
+import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.TextCell;
@@ -86,9 +87,18 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
     public View createView(Context context) {
         View fragmentView = super.createView(context);
 
-        actionBar.createMenu()
-                .addItem(0, R.drawable.cloud_sync)
-                .setOnClickListener(v -> CloudSettingsHelper.getInstance().showDialog(NekoSettingsActivity.this));
+        var syncItem = simpleActionBar.createMenu().addItem(0, R.drawable.cloud_sync);
+        syncItem.setContentDescription(LocaleController.getString(R.string.CloudConfig));
+        simpleActionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+            @Override
+            public void onItemClick(int id) {
+                if (id == -1) {
+                    finishFragment();
+                } else if (id == 0) {
+                    CloudSettingsHelper.getInstance().showDialog(NekoSettingsActivity.this);
+                }
+            }
+        });
 
         return fragmentView;
     }

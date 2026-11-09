@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,7 +48,9 @@ import org.telegram.messenger.R;
 import org.telegram.tgnet.TLRPC;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.SimpleActionBar;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeBind;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.HeaderCell;
@@ -295,14 +298,15 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
 
     @SuppressLint({"NewApi", "RtlHardcoded"})
     @Override
-    public View createView(Context context) {
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setTitle(LocaleController.getString(R.string.MessageDetails));
+    protected boolean useSimpleActionBar() {
+        return true;
+    }
 
-        if (AndroidUtilities.isTablet()) {
-            actionBar.setOccupyStatusBar(false);
-        }
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+    @Override
+    public SimpleActionBar createSimpleActionBar(Context context) {
+        simpleActionBar = super.createSimpleActionBar(context);
+        simpleActionBar.setTitle(LocaleController.getString(R.string.MessageDetails));
+        simpleActionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
                 if (id == -1) {
@@ -310,14 +314,28 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                 }
             }
         });
+        simpleActionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        return simpleActionBar;
+    }
 
+    @Override
+    public View createView(Context context) {
+        setHasOwnBackground(true);
         listAdapter = new ListAdapter(context);
 
-        fragmentView = new FrameLayout(context);
-        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+        fragmentView = new FrameLayout(context) {
+            @Override
+            protected void dispatchDraw(Canvas canvas) {
+                super.dispatchDraw(canvas);
+                glassEngine.invalidate();
+            }
+        };
+        ThemeBind.backgroundColor(fragmentView, Theme.key_windowBackgroundGray, getResourceProvider());
         FrameLayout frameLayout = (FrameLayout) fragmentView;
 
         listView = new RecyclerListView(context);
+        listView.setSections();
+        listView.setSectionsDrawBackground(true);
         listView.setVerticalScrollBarEnabled(false);
         listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
@@ -408,13 +426,17 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
             }
             return false;
         });
-        listView.setSections(true);
 
         copyTooltip = new UndoView(context);
         copyTooltip.setInfoText(LocaleController.getString(R.string.TextCopied));
         frameLayout.addView(copyTooltip, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 8, 0, 8, 8));
 
         return fragmentView;
+    }
+
+    @Override
+    protected RecyclerListView getListViewForSimpleGlass() {
+        return listView;
     }
 
     @Override
@@ -461,14 +483,6 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
         ArrayList<ThemeDescription> themeDescriptions = new ArrayList<>();
         themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{EmptyCell.class, TextSettingsCell.class, TextCheckCell.class, HeaderCell.class, TextDetailSettingsCell.class, NotificationsCheckCell.class}, null, null, null, Theme.key_windowBackgroundWhite));
         themeDescriptions.add(new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray));
-
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_avatar_backgroundActionBarBlue));
-        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_LISTGLOWCOLOR, null, null, null, null, Theme.key_avatar_backgroundActionBarBlue));
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_avatar_actionBarIconBlue));
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, null, null, null, null, Theme.key_actionBarDefaultTitle));
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_avatar_actionBarSelectorBlue));
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, null, null, null, null, Theme.key_actionBarDefaultSubmenuBackground));
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, null, null, null, null, Theme.key_actionBarDefaultSubmenuItem));
 
         themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector));
 
@@ -764,7 +778,6 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                 case MessageDetailItem.ItemType.VIEW_TYPE_EXPORT:
                     TextSettingsCell exportCell = (TextSettingsCell) holder.itemView;
                     exportCell.setText(LocaleController.getString(R.string.ExportAsJson), false);
-                    exportCell.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText));
                     break;
                     
                 case MessageDetailItem.ItemType.VIEW_TYPE_INFO:
@@ -802,12 +815,12 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                     
                 case MessageDetailItem.ItemType.VIEW_TYPE_DETAIL:
                     view = new TextDetailSettingsCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    ThemeBind.backgroundColor(view, Theme.key_windowBackgroundWhite, getResourceProvider());
                     break;
                     
                 case MessageDetailItem.ItemType.VIEW_TYPE_INFO:
                     JsonTextSettingsCell jsonCellNew = new JsonTextSettingsCell(mContext);
-                    jsonCellNew.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    ThemeBind.backgroundColor(jsonCellNew, Theme.key_windowBackgroundWhite, getResourceProvider());
                     jsonCellNew.setFullJsonProvider(new JsonTextSettingsCell.FullJsonProvider() {
                         @Override
                         public String getFullJson() {
@@ -828,8 +841,10 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                     break;
                     
                 case MessageDetailItem.ItemType.VIEW_TYPE_EXPORT:
-                    view = new TextSettingsCell(mContext);
-                    view.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                    TextSettingsCell exportCell = new TextSettingsCell(mContext);
+                    ThemeBind.backgroundColor(exportCell, Theme.key_windowBackgroundWhite, getResourceProvider());
+                    ThemeBind.textColor(exportCell.getTextView(), Theme.key_windowBackgroundWhiteBlueText, getResourceProvider());
+                    view = exportCell;
                     break;
             }
             view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
@@ -843,5 +858,10 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
             }
             return MessageDetailItem.ItemType.VIEW_TYPE_DIVIDER;
         }
+    }
+
+    @Override
+    public boolean isSupportEdgeToEdge() {
+        return true;
     }
 }

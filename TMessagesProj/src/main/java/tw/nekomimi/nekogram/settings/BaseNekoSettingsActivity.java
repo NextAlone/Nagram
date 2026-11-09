@@ -3,15 +3,13 @@ package tw.nekomimi.nekogram.settings;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
-import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,9 +18,10 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.SimpleActionBar;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeBind;
 import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Cells.CreationTextCell;
 import org.telegram.ui.Cells.HeaderCell;
@@ -36,16 +35,13 @@ import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextRadioCell;
 import org.telegram.ui.Cells.TextSettingsCell;
-import org.telegram.ui.Components.BlurredRecyclerView;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.FlickerLoadingView;
 import org.telegram.ui.Components.ItemOptions;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -72,7 +68,7 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
     public static final int TYPE_CHECKBOX2 = 17;
 
 
-    protected BlurredRecyclerView listView;
+    protected RecyclerListView listView;
     protected BaseListAdapter listAdapter;
     protected LinearLayoutManager layoutManager;
     protected Theme.ResourcesProvider resourcesProvider;
@@ -93,21 +89,42 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
     }
 
     @Override
-    public View createView(Context context) {
-        fragmentView = new BlurContentView(context);
-        fragmentView.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundGray));
-        SizeNotifierFrameLayout frameLayout = (SizeNotifierFrameLayout) fragmentView;
+    protected boolean useSimpleActionBar() {
+        return true;
+    }
 
-        actionBar.setDrawBlurBackground(frameLayout);
-
-        listView = new BlurredRecyclerView(context);
-        listView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+    @Override
+    public SimpleActionBar createSimpleActionBar(Context context) {
+        simpleActionBar = super.createSimpleActionBar(context);
+        simpleActionBar.setTitle(getActionBarTitle());
+        simpleActionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                frameLayout.invalidateBlur();
+            public void onItemClick(int id) {
+                if (id == -1) {
+                    finishFragment();
+                }
             }
         });
-        listView.additionalClipBottom = AndroidUtilities.dp(200);
+        simpleActionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        return simpleActionBar;
+    }
+
+    @Override
+    public View createView(Context context) {
+        setHasOwnBackground(true);
+        fragmentView = new FrameLayout(context) {
+            @Override
+            protected void dispatchDraw(@NonNull Canvas canvas) {
+                super.dispatchDraw(canvas);
+                glassEngine.invalidate();
+            }
+        };
+        ThemeBind.backgroundColor(fragmentView, Theme.key_windowBackgroundGray, getResourceProvider());
+        FrameLayout frameLayout = (FrameLayout) fragmentView;
+
+        listView = new RecyclerListView(context);
+        listView.setSections();
+        listView.setSectionsDrawBackground(true);
         listView.setLayoutManager(layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         listView.setVerticalScrollBarEnabled(false);
         //noinspection ConstantConditions
@@ -116,7 +133,6 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
 
         listAdapter = createAdapter(context);
 
-        listView.setSections(true);
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this::onItemClick);
         listView.setOnItemLongClickListener((view, position, x, y) -> {
@@ -137,47 +153,12 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
             return false;
         });
 
-        actionBar.setAdaptiveBackground(listView);
         return fragmentView;
     }
 
-    // @Override
-    protected void setParentLayout(ActionBarLayout layout) {
-        if (layout != null && !hasWhiteActionBar()) {
-            resourcesProvider = layout.getLastFragment().getResourceProvider();
-        }
-        super.setParentLayout(layout);
-    }
-
     @Override
-    public ActionBar createActionBar(Context context) {
-        ActionBar actionBar;
-        if (!hasWhiteActionBar()) {
-            actionBar = super.createActionBar(context);
-        } else {
-            actionBar = new ActionBar(context);
-            actionBar.setBackgroundColor(getThemedColor(Theme.key_windowBackgroundWhite));
-            actionBar.setItemsColor(getThemedColor(Theme.key_windowBackgroundWhiteBlackText), false);
-            actionBar.setItemsBackgroundColor(getThemedColor(Theme.key_actionBarActionModeDefaultSelector), true);
-            actionBar.setItemsBackgroundColor(getThemedColor(Theme.key_actionBarWhiteSelector), false);
-            actionBar.setItemsColor(getThemedColor(Theme.key_actionBarActionModeDefaultIcon), true);
-            actionBar.setTitleColor(getThemedColor(Theme.key_windowBackgroundWhiteBlackText));
-            actionBar.setCastShadows(false);
-        }
-        actionBar.setTitle(getActionBarTitle());
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
-            @Override
-            public void onItemClick(int id) {
-                if (id == -1) {
-                    finishFragment();
-                }
-            }
-        });
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        if (AndroidUtilities.isTablet()) {
-            actionBar.setOccupyStatusBar(false);
-        }
-        return actionBar;
+    protected RecyclerListView getListViewForSimpleGlass() {
+        return listView;
     }
 
     protected String getKey() {
@@ -198,41 +179,6 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
         BulletinFactory.of(this).createErrorBulletin(LocaleController.formatString(R.string.RestartAppToTakeEffect)).show();
     }
 
-    private class BlurContentView extends SizeNotifierFrameLayout {
-
-        public BlurContentView(Context context) {
-            super(context);
-            needBlur = hasWhiteActionBar();
-            blurBehindViews.add(this);
-        }
-
-        @Override
-        protected void drawList(Canvas blurCanvas, boolean top, ArrayList<IViewWithInvalidateCallback> views) {
-            for (int j = 0; j < listView.getChildCount(); j++) {
-                View child = listView.getChildAt(j);
-                if (child.getY() < listView.blurTopPadding + AndroidUtilities.dp(100)) {
-                    int restore = blurCanvas.save();
-                    blurCanvas.translate(getX() + child.getX(), getY() + listView.getY() + child.getY());
-                    child.draw(blurCanvas);
-                    blurCanvas.restoreToCount(restore);
-                }
-            }
-        }
-
-        public Paint blurScrimPaint = new Paint();
-        Rect rectTmp = new Rect();
-
-        @Override
-        protected void dispatchDraw(Canvas canvas) {
-            super.dispatchDraw(canvas);
-            if (hasWhiteActionBar() && listView.canScrollVertically(-1)) {
-                rectTmp.set(0, 0, getMeasuredWidth(), 1);
-                blurScrimPaint.setColor(getThemedColor(Theme.key_divider));
-                drawBlurRect(canvas, getY(), rectTmp, blurScrimPaint, true);
-            }
-        }
-    }
-
     @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onResume() {
@@ -240,10 +186,6 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }
-    }
-
-    protected boolean hasWhiteActionBar() {
-        return true;
     }
 
     protected CharSequence getSpannedString(int id, String url) {
@@ -257,13 +199,6 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
             builder.setSpan(new URLSpanNoUnderline(url), index1, index2 - 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         return builder;
-    }
-
-    @Override
-    public boolean isLightStatusBar() {
-        if (!hasWhiteActionBar()) return super.isLightStatusBar();
-        int color = getThemedColor(Theme.key_windowBackgroundWhite);
-        return ColorUtils.calculateLuminance(color) > 0.7f;
     }
 
     protected int addRow() {
@@ -413,10 +348,5 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
     @Override
     public boolean isSupportEdgeToEdge() {
         return true;
-    }
-    @Override
-    public void onInsets(int left, int top, int right, int bottom) {
-        listView.setPadding(0, 0, 0, bottom);
-        listView.setClipToPadding(false);
     }
 }
