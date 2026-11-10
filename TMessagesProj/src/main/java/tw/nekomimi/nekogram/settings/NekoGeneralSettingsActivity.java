@@ -73,6 +73,7 @@ import tw.nekomimi.nekogram.config.CellGroup;
 import tw.nekomimi.nekogram.config.cell.AbstractConfigCell;
 import tw.nekomimi.nekogram.config.cell.*;
 import tw.nekomimi.nekogram.settings.cell.ActionBarPreviewCell;
+import tw.nekomimi.nekogram.settings.cell.AvatarCornersPreviewCell;
 import xyz.nextalone.nagram.NaConfig;
 import xyz.nextalone.nagram.helper.AvatarCornersHelper;
 
@@ -350,6 +351,7 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
     private ChatBlurAlphaSeekBar chatBlurAlphaSeekbar;
     private FilterTabsPreviewCell filterTabsPreviewCell;
     private ActionBarPreviewCell actionBarPreviewCell;
+    private AvatarCornersPreviewCell avatarCornersPreviewCell;
 
     public NekoGeneralSettingsActivity() {
         updateRows();
@@ -722,7 +724,7 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
     @Override
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> themeDescriptions = new ArrayList<>();
-        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{EmptyCell.class, TextSettingsCell.class, TextCheckCell.class, HeaderCell.class, TextDetailSettingsCell.class, NotificationsCheckCell.class, FilterTabsPreviewCell.class, ActionBarPreviewCell.class}, null, null, null, Theme.key_windowBackgroundWhite));
+        themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{EmptyCell.class, TextSettingsCell.class, TextCheckCell.class, HeaderCell.class, TextDetailSettingsCell.class, NotificationsCheckCell.class, FilterTabsPreviewCell.class, ActionBarPreviewCell.class, AvatarCornersPreviewCell.class}, null, null, null, Theme.key_windowBackgroundWhite));
         themeDescriptions.add(new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundGray));
 
         themeDescriptions.add(new ThemeDescription(listView, ThemeDescription.FLAG_SELECTOR, null, null, null, null, Theme.key_listSelector));
@@ -825,6 +827,8 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                         ((FilterTabsPreviewCell) holder.itemView).updateTabs(false);
                     } else if (holder.itemView instanceof ActionBarPreviewCell) {
                         ((ActionBarPreviewCell) holder.itemView).updatePreview();
+                    } else if (holder.itemView instanceof AvatarCornersPreviewCell) {
+                        ((AvatarCornersPreviewCell) holder.itemView).updatePreview();
                     }
                 } else {
                     // Default binds
@@ -852,7 +856,9 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
             } else if (viewType == ConfigCellCustom.CUSTOM_ITEM_LiquidGlassIntensity) {
                 view = new LiquidGlassSeekBar(mContext, false);
             } else if (viewType == ConfigCellCustom.CUSTOM_ITEM_AvatarCorners) {
-                view = new AvatarCornersSeekBar(mContext);
+                view = avatarCornersPreviewCell = new AvatarCornersPreviewCell(mContext, currentAccount, () -> {
+                    tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+                });
             }
             if (view != null) {
                 return view;
@@ -1053,50 +1059,6 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
             super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(66), MeasureSpec.EXACTLY));
             float value = angle ? NaConfig.INSTANCE.getLiquidGlassAngle().Int() / 360f : NaConfig.INSTANCE.getLiquidGlassIntensity().Int() / 150f;
             bar.setProgress(value);
-        }
-    }
-
-    private class AvatarCornersSeekBar extends FrameLayout {
-        private final SeekBarView bar;
-        private final TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-
-        AvatarCornersSeekBar(Context context) {
-            super(context);
-            setWillNotDraw(false);
-            textPaint.setTextSize(AndroidUtilities.dp(14));
-            bar = new SeekBarView(context);
-            bar.setReportChanges(true);
-            bar.setDelegate(new SeekBarView.SeekBarViewDelegate() {
-                @Override
-                public void onSeekBarDrag(boolean stop, float progress) {
-                    int value = Math.round(progress * AvatarCornersHelper.DEFAULT_PERCENT);
-                    if (value != NaConfig.INSTANCE.getAvatarCorners().Int()) {
-                        NaConfig.INSTANCE.getAvatarCorners().setConfigInt(value);
-                        invalidate();
-                    }
-                    if (stop) {
-                        tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
-                    }
-                }
-
-                @Override
-                public void onSeekBarPressed(boolean pressed) {}
-            });
-            addView(bar, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 38, Gravity.LEFT | Gravity.TOP, 12, 23, 52, 5));
-        }
-
-        @Override
-        protected void onDraw(Canvas canvas) {
-            textPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-            canvas.drawText(LocaleController.getString(R.string.AvatarCorners), AndroidUtilities.dp(21), AndroidUtilities.dp(20), textPaint);
-            textPaint.setColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
-            canvas.drawText(NaConfig.INSTANCE.getAvatarCorners().Int() + "%", getMeasuredWidth() - AndroidUtilities.dp(47), AndroidUtilities.dp(47), textPaint);
-        }
-
-        @Override
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(66), MeasureSpec.EXACTLY));
-            bar.setProgress(NaConfig.INSTANCE.getAvatarCorners().Int() / (float) AvatarCornersHelper.DEFAULT_PERCENT);
         }
     }
 }
