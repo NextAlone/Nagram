@@ -5031,6 +5031,26 @@ public class MediaDataController extends BaseController {
     private static RectF bitmapRect;
     private static Path roundPath;
 
+    private volatile String lastShortcutsSignature;
+
+    private String getShortcutsSignature(ArrayList<TLRPC.TL_topPeer> hintsFinal, int maxShortcuts) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(currentAccount).append('|')
+                .append(maxShortcuts).append('|')
+                .append(SharedConfig.directShare).append('|');
+        for (int a = 0; a < hintsFinal.size(); a++) {
+            long peerId = MessageObject.getPeerId(hintsFinal.get(a).peer);
+            TLRPC.User user = DialogObject.isUserDialog(peerId) ? getMessagesController().getUser(peerId) : null;
+            TLRPC.Chat chat = user == null ? getMessagesController().getChat(-peerId) : null;
+            long photoId = user != null ? (user.photo != null ? user.photo.photo_id : 0)
+                    : (chat != null && chat.photo != null ? chat.photo.photo_id : 0);
+            String name = user != null ? ContactsController.formatName(user.first_name, user.last_name)
+                    : (chat != null && chat.title != null ? chat.title : "");
+            sb.append(peerId).append(':').append(photoId).append(':').append(name).append(';');
+        }
+        return sb.toString();
+    }
+
     public void buildShortcuts() {
         if (Build.VERSION.SDK_INT < 23) {
             return;
@@ -5049,6 +5069,7 @@ public class MediaDataController extends BaseController {
             }
         }
         DialogConfig.modifyShareTarget(hintsFinal);
+        final String shortcutsSignature = getShortcutsSignature(hintsFinal, maxShortcuts);
         boolean recreateShortcuts = Build.VERSION.SDK_INT >= 30;
         Utilities.globalQueue.postRunnable(() -> {
             try {
@@ -5062,6 +5083,16 @@ public class MediaDataController extends BaseController {
                 ArrayList<String> shortcutsToDelete = new ArrayList<>();
 
                 if (recreateShortcuts) {
+                    // Recreating every shortcut with a bitmap icon is expensive for the system:
+                    // each push makes ShortcutService write a new <currentTimeMillis>.png
+                    // (see ShortcutService.openIconFileForWrite), so doing this on every hint
+                    // update leaves thousands of stale icon files in
+                    // /data/system_ce/0/shortcut_service/bitmaps/<pkg>/.
+                    // Skip the whole cycle when the shortcut set has not changed.
+                    if (shortcutsSignature.equals(lastShortcutsSignature)) {
+                        return;
+                    }
+                    lastShortcutsSignature = shortcutsSignature;
                     ShortcutManagerCompat.removeAllDynamicShortcuts(ApplicationLoader.applicationContext);
                 } else {
                     List<ShortcutInfoCompat> currentShortcuts = ShortcutManagerCompat.getDynamicShortcuts(ApplicationLoader.applicationContext);
