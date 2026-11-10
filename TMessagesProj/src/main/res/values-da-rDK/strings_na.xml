@@ -143,7 +143,6 @@
     <string name="SendMp4DocumentAsVideo">Send mp4-dokument som video</string>
     <string name="StickersChooseShortNameForStickerPack">Vælg et kort navn til din pakke.</string>
     <string name="StickersCopyStickerSet">Kopiér Klistermærke Set</string>
-    <string name="DisableChannelMuteButton">Deaktivér kanal mute knap</string>
     <string name="DisablePreviewVideoSoundShortcut">Deaktivér forhåndsvisning af videolyd genvej</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Deaktivér lydstyrkeknapper for at aktivere forhåndsvisning af videolyd</string>
     <string name="DisableAutoWebLogin">Deaktivér auto weblogin</string>

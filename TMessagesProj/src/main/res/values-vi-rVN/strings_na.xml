@@ -143,7 +143,6 @@
     <string name="SendMp4DocumentAsVideo">Video MP4 có thể được xem trước khi gửi dưới dạng tệp</string>
     <string name="StickersChooseShortNameForStickerPack">Chọn một tên ngắn cho gói của bạn.</string>
     <string name="StickersCopyStickerSet">Sao chép toàn bộ gói nhãn dán</string>
-    <string name="DisableChannelMuteButton">Tắt nút tắt tiếng trên trang trò chuyện của kênh</string>
     <string name="DisablePreviewVideoSoundShortcut">Tắt phím tắt âm lượng video xem trước</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Tắt phím âm lượng để bật nhanh âm thanh của video xem trước</string>
     <string name="DisableAutoWebLogin">Tắt đăng nhập tự động cho các trang web</string>

@@ -143,7 +143,6 @@
     <string name="SendMp4DocumentAsVideo">Wyślij dokument mp4 jako film</string>
     <string name="StickersChooseShortNameForStickerPack">Wybierz krótką nazwę dla paczki.</string>
     <string name="StickersCopyStickerSet">Kopiuj zestaw naklejek</string>
-    <string name="DisableChannelMuteButton">Wyłącz przycisk wyciszenia kanału</string>
     <string name="DisablePreviewVideoSoundShortcut">Wyłącz podgląd skrótu dźwięku wideo</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Wyłącz przyciski głośności, aby włączyć podgląd dźwięku wideo</string>
     <string name="DisableAutoWebLogin">Wyłącz automatyczne logowanie</string>

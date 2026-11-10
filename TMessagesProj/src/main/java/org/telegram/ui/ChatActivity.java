@@ -411,6 +411,7 @@ import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.PGPUtil;
 import tw.nekomimi.nekogram.utils.ProxyUtil;
 import tw.nekomimi.nekogram.utils.TelegramUtil;
+import xyz.nextalone.nagram.ChannelBottomButton;
 import xyz.nextalone.nagram.NaConfig;
 import xyz.nextalone.nagram.helper.MemberAdminActions;
 import xyz.nextalone.nagram.helper.DoubleTap;
@@ -1405,6 +1406,7 @@ public class ChatActivity extends BaseFragment implements
     public final static int OPTION_COPY_PHOTO_AS_STICKER = 151;
 
     private boolean isChannelBottomMuteView = false;
+    private boolean isChannelBottomDiscussionView = false;
 
     private final static int[] allowedNotificationsDuringChatListAnimations = new int[]{
             NotificationCenter.messagesRead,
@@ -9084,6 +9086,8 @@ public class ChatActivity extends BaseFragment implements
                                 getNotificationCenter().postNotificationName(NotificationCenter.peerSettingsDidLoad, dialog_id);
                             }
                         }
+                    } else if (isChannelBottomDiscussionView && showsChannelDiscussionButton()) {
+                        openChannelDiscussion();
                     } else {
                         toggleMute(true);
                     }
@@ -11215,11 +11219,32 @@ public class ChatActivity extends BaseFragment implements
     }
 
     private boolean isBottomOverlayHidden() {
-        // na: DisableChannelMuteButton
-        return NaConfig.INSTANCE.getDisableChannelMuteButton().Bool() &&
+        // na: ChannelBottomButton
+        return NaConfig.INSTANCE.getChannelBottomButton().Int() == ChannelBottomButton.HIDDEN.getValue() &&
                 chatMode == MODE_DEFAULT && !isReport() && currentChat != null &&
                 ChatObject.isChannel(currentChat) && ChatObject.isInChat(currentChat) &&
                 currentChat.broadcast && !ChatObject.canWriteToChat(currentChat);
+    }
+
+    // na: ChannelBottomButton - the bottom button opens the linked discussion instead of toggling mute;
+    // channels without a discussion group keep the mute button
+    private boolean showsChannelDiscussionButton() {
+        return NaConfig.INSTANCE.getChannelBottomButton().Int() == ChannelBottomButton.DISCUSSION.getValue() &&
+                chatMode == MODE_DEFAULT && !isReport() && currentChat != null &&
+                ChatObject.isChannelAndNotMegaGroup(currentChat) && ChatObject.isInChat(currentChat) &&
+                chatInfo != null && chatInfo.linked_chat_id != 0;
+    }
+
+    private void openChannelDiscussion() {
+        if (chatInfo == null || chatInfo.linked_chat_id == 0) {
+            return;
+        }
+        Bundle args = new Bundle();
+        args.putLong("chat_id", chatInfo.linked_chat_id);
+        if (!getMessagesController().checkCanOpenChat(args, ChatActivity.this)) {
+            return;
+        }
+        presentFragment(new ChatActivity(args));
     }
 
     @Override
@@ -29539,6 +29564,7 @@ public class ChatActivity extends BaseFragment implements
         boolean forceVisible = false;
         boolean forceNoBottom = false;
         boolean tempMuteView = false;
+        boolean showChannelDiscussionButton = false;
         boolean showGiftButton = false;
         boolean showSuggestButton = false;
         boolean showSearchButton = chatMode == MODE_DEFAULT && ChatObject.isChannelOrGiga(currentChat);
@@ -29658,7 +29684,7 @@ public class ChatActivity extends BaseFragment implements
                         } else {
                             bottomOverlayChatText.setText(LocaleController.getString(ChatObject.isChannelAndNotMegaGroup(currentChat) ? R.string.ChannelJoinNoCaps : R.string.GroupJoinNoCaps));
                             bottomOverlayChatText.setEnabled(true);
-                            showGiftButton = chatInfo != null && chatInfo.stargifts_available;
+                            showGiftButton = chatInfo != null && chatInfo.stargifts_available && !NaConfig.INSTANCE.getHideChannelGiftButton().Bool();
                             showSuggestButton = currentChat.broadcast_messages_allowed && currentChat.linked_monoforum_id != 0;
                             accentTextButton = true;
                         }
@@ -29670,16 +29696,23 @@ public class ChatActivity extends BaseFragment implements
                     bottomOverlayChatText.setTextInfo(LocaleController.getString(R.string.ForumReplyToMessagesInTopic));
                     bottomOverlayChatText.setEnabled(false);
                 } else if (!isThreadChat()) {
-                    tempMuteView = true;
-                    if (!getMessagesController().isDialogMuted(dialog_id, getTopicId())) {
-                        bottomOverlayChatText.setText(LocaleController.getString(R.string.ChannelMuteNoCaps), false);
+                    if (showsChannelDiscussionButton()) {
+                        // na: ChannelBottomButton
+                        showChannelDiscussionButton = true;
+                        bottomOverlayChatText.setText(LocaleController.getString(R.string.Discussion), false);
                         bottomOverlayChatText.setEnabled(true);
                     } else {
-                        bottomOverlayChatText.setText(LocaleController.getString(R.string.ChannelUnmuteNoCaps), true);
-                        bottomOverlayChatText.setEnabled(true);
+                        tempMuteView = true;
+                        if (!getMessagesController().isDialogMuted(dialog_id, getTopicId())) {
+                            bottomOverlayChatText.setText(LocaleController.getString(R.string.ChannelMuteNoCaps), false);
+                            bottomOverlayChatText.setEnabled(true);
+                        } else {
+                            bottomOverlayChatText.setText(LocaleController.getString(R.string.ChannelUnmuteNoCaps), true);
+                            bottomOverlayChatText.setEnabled(true);
+                        }
                     }
                     showBottomOverlayProgress(false, bottomOverlayProgress.getTag() != null);
-                    showGiftButton = chatInfo != null && chatInfo.stargifts_available;
+                    showGiftButton = chatInfo != null && chatInfo.stargifts_available && !NaConfig.INSTANCE.getHideChannelGiftButton().Bool();
                     showSuggestButton = currentChat.broadcast_messages_allowed && currentChat.linked_monoforum_id != 0;
                 } else if (forumTopic != null && forumTopic.closed) {
                     if (!ChatObject.canManageTopic(currentAccount, currentChat, forumTopic)) {
@@ -29756,6 +29789,7 @@ public class ChatActivity extends BaseFragment implements
         }
 
         isChannelBottomMuteView = tempMuteView;
+        isChannelBottomDiscussionView = showChannelDiscussionButton;
 
         if (currentChat != null && currentChat.gigagroup && !isReport() && chatMode == 0) {
             showGigaGroupButton = true;
@@ -48340,13 +48374,16 @@ public class ChatActivity extends BaseFragment implements
         }
 
         if (chatInfo != null) {
-            final boolean giftUpdate = (chatInfo.stargifts_available)
+            final boolean giftUpdate = (chatInfo.stargifts_available && !NaConfig.INSTANCE.getHideChannelGiftButton().Bool())
                 != (bottomChannelButtonsLayout != null && bottomChannelButtonsLayout.isButtonVisible(ChatActivityChannelButtonsLayout.BUTTON_GIFT));
 
             final boolean suggestUpdate = (currentChat != null && currentChat.broadcast_messages_allowed && currentChat.linked_monoforum_id != 0)
                 != (bottomChannelButtonsLayout != null && bottomChannelButtonsLayout.isButtonVisible(ChatActivityChannelButtonsLayout.BUTTON_DIRECT));
 
-            if (giftUpdate || suggestUpdate) {
+            // na: ChannelBottomButton - the discussion button depends on linked_chat_id from the full chat
+            final boolean discussionUpdate = showsChannelDiscussionButton() != isChannelBottomDiscussionView;
+
+            if (giftUpdate || suggestUpdate || discussionUpdate) {
                 updateBottomOverlay(true);
             }
         }

@@ -142,7 +142,6 @@
     <string name="SendMp4DocumentAsVideo">Send mp4 document as video</string>
     <string name="StickersChooseShortNameForStickerPack">Choose a short name for your pack.</string>
     <string name="StickersCopyStickerSet">Copy Sticker Set</string>
-    <string name="DisableChannelMuteButton">Disable channel mute button</string>
     <string name="DisablePreviewVideoSoundShortcut">Disable preview video sound shortcut</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Disable volume keys to enable preview video sound</string>
     <string name="DisableAutoWebLogin">Disable auto web login</string>
@@ -412,4 +411,6 @@
     <string name="StickerShapeRoundedMsg">Message</string>
     <string name="ActionBar">Action Bar</string>
     <string name="UserRestrictedBy">Restricted by %1$s</string>
+    <string name="ChannelBottomButton">Channel bottom button</string>
+    <string name="HideChannelGiftButton">Hide channel gift button</string>
 </resources>

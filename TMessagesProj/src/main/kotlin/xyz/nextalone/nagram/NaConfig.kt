@@ -655,9 +655,15 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
-    val disableChannelMuteButton =
+    val channelBottomButton =
         addConfig(
-            "DisableChannelMuteButton",
+            "ChannelBottomButton",
+            ConfigItem.configTypeInt,
+            ChannelBottomButton.MUTE.value
+        )
+    val hideChannelGiftButton =
+        addConfig(
+            "HideChannelGiftButton",
             ConfigItem.configTypeBool,
             false
         )
@@ -1543,6 +1549,17 @@ object NaConfig {
             if (!preferences.contains(doubleTapActionOutgoing.key)) {
                 editor.putInt(doubleTapActionOutgoing.key, legacyAction)
             }
+            editor.apply()
+        }
+        // Fold the legacy channel mute switch into the channel bottom button choice.
+        if (preferences.contains("DisableChannelMuteButton")) {
+            val editor = preferences.edit()
+            if (!preferences.contains(channelBottomButton.key) &&
+                preferences.getBoolean("DisableChannelMuteButton", false)
+            ) {
+                editor.putInt(channelBottomButton.key, ChannelBottomButton.HIDDEN.value)
+            }
+            editor.remove("DisableChannelMuteButton")
             editor.apply()
         }
     }

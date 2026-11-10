@@ -143,7 +143,6 @@
     <string name="SendMp4DocumentAsVideo">Poslat dokument mp4 jako video</string>
     <string name="StickersChooseShortNameForStickerPack">Choose a short name for your pack.</string>
     <string name="StickersCopyStickerSet">Copy Sticker Set</string>
-    <string name="DisableChannelMuteButton">Zakázat tlačítko ztlumit kanál</string>
     <string name="DisablePreviewVideoSoundShortcut">Zakázat zástupce zvuku videa</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Zakázat tlačítka hlasitosti pro zapnutí náhledu zvuku videa</string>
     <string name="DisableAutoWebLogin">Zakázat automatické přihlášení k webu</string>

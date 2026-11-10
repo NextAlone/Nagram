@@ -143,7 +143,6 @@
     <string name="SendMp4DocumentAsVideo">mp4 Dokument als Video senden</string>
     <string name="StickersChooseShortNameForStickerPack">Wähle einen kurzen Namen für dein Paket.</string>
     <string name="StickersCopyStickerSet">Sticker-Set kopieren</string>
-    <string name="DisableChannelMuteButton">Kanal-Stumm-Schalter deaktivieren</string>
     <string name="DisablePreviewVideoSoundShortcut">Vorschau Video Ton Verknüpfung deaktivieren</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Lautstärketasten deaktivieren, um Videovorschau zu aktivieren</string>
     <string name="DisableAutoWebLogin">Auto-Web-Login deaktivieren</string>

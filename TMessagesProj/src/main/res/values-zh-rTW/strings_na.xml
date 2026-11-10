@@ -143,7 +143,6 @@
     <string name="SendMp4DocumentAsVideo">MP4 視頻作為文件發送時可預覽</string>
     <string name="StickersChooseShortNameForStickerPack">為您的包選擇一個簡短的名稱</string>
     <string name="StickersCopyStickerSet">復製整個貼紙包</string>
-    <string name="DisableChannelMuteButton">禁用頻道聊天頁面的靜音按鈕</string>
     <string name="DisablePreviewVideoSoundShortcut">禁用預覽視頻音量快捷鍵</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">禁用音量鍵快捷開啟預覽視頻的聲音</string>
     <string name="DisableAutoWebLogin">禁用官方網頁自動登錄</string>
@@ -412,4 +411,6 @@
     <string name="StickerShapeRoundedMsg">Message</string>
     <string name="ActionBar">Action Bar</string>
     <string name="UserRestrictedBy">由 %1$s 限制</string>
+    <string name="ChannelBottomButton">頻道底欄按鈕</string>
+    <string name="HideChannelGiftButton">隱藏頻道禮物按鈕</string>
 </resources>

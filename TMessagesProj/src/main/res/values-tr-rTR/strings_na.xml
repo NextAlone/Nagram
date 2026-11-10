@@ -143,7 +143,6 @@
     <string name="SendMp4DocumentAsVideo">Mp4 belgesini video olarak gönder</string>
     <string name="StickersChooseShortNameForStickerPack">Paketiniz için kısa bir ad seçin.</string>
     <string name="StickersCopyStickerSet">Çıkartma Setini Kopyala</string>
-    <string name="DisableChannelMuteButton">Kanal sesini kapatma düğmesini devre dışı bırak</string>
     <string name="DisablePreviewVideoSoundShortcut">Önizleme videosu ses kısayolunu devre dışı bırak</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Önizleme video sesini etkinleştirmek için ses seviyesi tuşlarını devre dışı bırakın</string>
     <string name="DisableAutoWebLogin">Disable auto web login</string>

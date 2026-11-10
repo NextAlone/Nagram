@@ -143,7 +143,6 @@
     <string name="SendMp4DocumentAsVideo">إرسال مستند mp4 كفيديو</string>
     <string name="StickersChooseShortNameForStickerPack">اختر اسما قصيرا لحزمتك.</string>
     <string name="StickersCopyStickerSet">نسخ مجموعة الملصقات</string>
-    <string name="DisableChannelMuteButton">تعطيل زر كتم القناة</string>
     <string name="DisablePreviewVideoSoundShortcut">تعطيل إختصار صوت معاينة الفيديو</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">تعطيل مفاتيح الصوت لتمكين معاينة صوت الفيديو</string>
     <string name="DisableAutoWebLogin">تعطيل تسجيل الدخول التلقائي</string>

@@ -143,7 +143,6 @@
     <string name="SendMp4DocumentAsVideo">Отправлять MP4 без сжатия как видео</string>
     <string name="StickersChooseShortNameForStickerPack">Выберите короткое имя для своего набора.</string>
     <string name="StickersCopyStickerSet">Копировать набор стикеров</string>
-    <string name="DisableChannelMuteButton">Отключить кнопку выключения звука каналов</string>
     <string name="DisablePreviewVideoSoundShortcut">Отключить звук видео превью</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Не включать звук кнопками громкости при предпросмотре видео.</string>
     <string name="DisableAutoWebLogin">Отключить автоматический вход при переходе в веб версию</string>

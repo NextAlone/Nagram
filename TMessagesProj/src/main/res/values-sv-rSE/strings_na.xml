@@ -143,7 +143,6 @@
     <string name="SendMp4DocumentAsVideo">Skicka mp4-dokument som video</string>
     <string name="StickersChooseShortNameForStickerPack">Välj ett kort namn för ditt paket.</string>
     <string name="StickersCopyStickerSet">Kopiera klistermärke set</string>
-    <string name="DisableChannelMuteButton">Inaktivera kanalavstängningsknapp</string>
     <string name="DisablePreviewVideoSoundShortcut">Inaktivera förhandsgranskning av videoljudgenväg</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Inaktivera volymknappar för att förhandsgranska videoljud</string>
     <string name="DisableAutoWebLogin">Inaktivera automatisk webbinloggning</string>

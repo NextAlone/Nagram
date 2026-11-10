@@ -143,7 +143,6 @@
     <string name="SendMp4DocumentAsVideo">Lähetä mp4-asiakirja videona</string>
     <string name="StickersChooseShortNameForStickerPack">Choose a short name for your pack.</string>
     <string name="StickersCopyStickerSet">Copy Sticker Set</string>
-    <string name="DisableChannelMuteButton">Poista kanavan mykistyspainike käytöstä</string>
     <string name="DisablePreviewVideoSoundShortcut">Poista esikatseluvideon pikakuvake käytöstä</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">Poista äänenvoimakkuusnäppäimet käytöstä, jos haluat ottaa esikatsella videon ääntä</string>
     <string name="DisableAutoWebLogin">Poista automaattinen web kirjautuminen käytöstä</string>
