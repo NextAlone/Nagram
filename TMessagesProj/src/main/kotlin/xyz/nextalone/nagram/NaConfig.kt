@@ -667,6 +667,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val ignoreBlockedReplies =
+        addConfig(
+            "IgnoreBlockedReplies",
+            ConfigItem.configTypeBool,
+            false
+        )
     val disablePreviewVideoSoundShortcut =
         addConfig(
             "DisablePreviewVideoSoundShortcut",

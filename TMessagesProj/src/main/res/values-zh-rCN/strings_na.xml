@@ -413,4 +413,5 @@
     <string name="UserRestrictedBy">由 %1$s 限制</string>
     <string name="ChannelBottomButton">频道底栏按钮</string>
     <string name="HideChannelGiftButton">隐藏频道礼物按钮</string>
+    <string name="IgnoreBlockedReplies">同时隐藏回复被拉黑用户的消息</string>
 </resources>

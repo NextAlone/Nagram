@@ -413,4 +413,5 @@
     <string name="UserRestrictedBy">由 %1$s 限制</string>
     <string name="ChannelBottomButton">頻道底欄按鈕</string>
     <string name="HideChannelGiftButton">隱藏頻道禮物按鈕</string>
+    <string name="IgnoreBlockedReplies">同時隱藏回覆已封鎖使用者的訊息</string>
 </resources>

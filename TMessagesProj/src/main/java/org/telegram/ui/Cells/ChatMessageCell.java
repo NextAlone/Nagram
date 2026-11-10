@@ -1854,8 +1854,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     // NekoX
     private boolean needHideMessage() {
         return currentMessageObject.messageOwner.hide ||
-                MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(currentMessageObject.getFromChatId()) >= 0 &&
-                        NekoConfig.ignoreBlocked.Bool() && !(getParent() != null && getParent().getClass().getName().contains("ChannelAdminLogActivity"));
+                (MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(currentMessageObject.getFromChatId()) >= 0 &&
+                        NekoConfig.ignoreBlocked.Bool() || xyz.nextalone.nagram.helper.MessageHelper.isReplyToBlockedPeer(currentAccount, currentMessageObject)) &&
+                        !(getParent() != null && getParent().getClass().getName().contains("ChannelAdminLogActivity"));
     }
 
     public ChatMessageCell(Context context, int currentAccount) {

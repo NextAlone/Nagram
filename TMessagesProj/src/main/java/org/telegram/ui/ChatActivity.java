@@ -25207,6 +25207,7 @@ public class ChatActivity extends BaseFragment implements
                             }
                         }
                     }
+                    hideLoadedRepliesToBlockedPeers(replyMessageOwners);
                 }
                 updateVisibleRows();
             } else if (waitingForReplies.size() != 0 && ChatObject.isChannel(currentChat) && !currentChat.megagroup && chatInfo != null && did == -chatInfo.linked_chat_id) {
@@ -27090,6 +27091,31 @@ public class ChatActivity extends BaseFragment implements
                     }
                 }
             }, 1000);
+        }
+    }
+
+    // na: a reply target can load after the reply is shown; re-bind those rows so replies to
+    // blocked users switch to the hidden view type
+    private void hideLoadedRepliesToBlockedPeers(LongSparseArray<SparseArray<ArrayList<MessageObject>>> replyMessageOwners) {
+        if (chatAdapter == null || !NekoConfig.ignoreBlocked.Bool() || !NaConfig.INSTANCE.getIgnoreBlockedReplies().Bool()) {
+            return;
+        }
+        final ArrayList<MessageObject> shownMessages = chatAdapter.getMessages();
+        for (int a = 0, N = replyMessageOwners.size(); a < N; a++) {
+            SparseArray<ArrayList<MessageObject>> sparseArray = replyMessageOwners.valueAt(a);
+            for (int c = 0, N3 = sparseArray.size(); c < N3; c++) {
+                ArrayList<MessageObject> owners = sparseArray.valueAt(c);
+                for (int b = 0, N2 = owners.size(); b < N2; b++) {
+                    MessageObject owner = owners.get(b);
+                    if (!MessageHelper.isReplyToBlockedPeer(currentAccount, owner)) {
+                        continue;
+                    }
+                    int index = shownMessages.indexOf(owner);
+                    if (index >= 0) {
+                        chatAdapter.notifyItemChanged(chatAdapter.messagesStartRow + index);
+                    }
+                }
+            }
         }
     }
 
@@ -40317,6 +40343,9 @@ public class ChatActivity extends BaseFragment implements
                 if (NekoConfig.ignoreBlocked.Bool() && msg != null && MessagesController.getInstance(currentAccount).blockePeers.indexOfKey(msg.getFromChatId()) >= 0) {
                     return -1000;
                 }
+                if (MessageHelper.isReplyToBlockedPeer(currentAccount, msg)) {
+                    return -1000;
+                }
                 // --- NaGram hook
 
                 return msg.contentType;
@@ -46622,6 +46651,8 @@ public class ChatActivity extends BaseFragment implements
             for (int i = 0; i < messages.size(); i++) {
                 int msgId = messages.get(i).getId();
                 if (NekoConfig.ignoreBlocked.Bool() && getMessagesController().blockePeers.indexOfKey(messages.get(i).getSenderId()) >= 0)
+                    continue;
+                if (MessageHelper.isReplyToBlockedPeer(currentAccount, messages.get(i)))
                     continue;
                 if (NaConfig.INSTANCE.getRegexFiltersEnabled().Bool() && AyuFilter.isFiltered(messages.get(i), null)) {
                     continue;

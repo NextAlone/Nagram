@@ -115,6 +115,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
     private final AbstractConfigCell hideProxySponsorChannelRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideProxySponsorChannel));
     private final AbstractConfigCell hideSponsoredMessageRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideSponsoredMessage));
     private final AbstractConfigCell ignoreBlockedRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.ignoreBlocked, LocaleController.getString("IgnoreBlockedAbout")));
+    private final AbstractConfigCell ignoreBlockedRepliesRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getIgnoreBlockedReplies()));
     private final AbstractConfigCell regexFiltersEnabledRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getRegexFiltersEnabled()));
     private final AbstractConfigCell regexFiltersEnableInChatsRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getRegexFiltersEnableInChats()));
     private final AbstractConfigCell disableChatActionRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableChatAction));
@@ -338,6 +339,9 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
             } else if (key.equals(NaConfig.INSTANCE.getDisableStories().getKey())) {
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
+            } else if (key.equals(NekoConfig.ignoreBlocked.getKey())) {
+                ((ConfigCellTextCheck) ignoreBlockedRepliesRow).setEnabled((boolean) newValue);
+                listAdapter.notifyItemChanged(cellGroup.rows.indexOf(ignoreBlockedRepliesRow));
             } else if (key.equals(NaConfig.INSTANCE.getShowChannelIcon().getKey())) {
                 updateRows();
             } else if (key.equals(NaConfig.INSTANCE.getUseSystemNotificationColor().getKey())) {
@@ -544,6 +548,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
     protected void setCanNotChange() {
         super.setCanNotChange();
 
+        ((ConfigCellTextCheck) ignoreBlockedRepliesRow).setEnabled(NekoConfig.ignoreBlocked.Bool());
         cellGroup.rows.remove(customCustomChannelLabelRow);
         if (!NaConfig.INSTANCE.getShowChannelIcon().Bool()) {
             cellGroup.rows.add(cellGroup.rows.indexOf(showChannelIconRow) + 1, customCustomChannelLabelRow);
@@ -563,6 +568,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
             cellGroup.rows.remove(disableFlagSecureRow);
             cellGroup.rows.remove(hideSponsoredMessageRow);
             cellGroup.rows.remove(ignoreBlockedRow);
+            cellGroup.rows.remove(ignoreBlockedRepliesRow);
             cellGroup.rows.remove(regexFiltersEnabledRow);
             cellGroup.rows.remove(regexFiltersEnableInChatsRow);
             cellGroup.rows.remove(disableChatActionRow);
@@ -580,6 +586,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
             NekoXConfig.disableFlagSecure = false;
             NekoConfig.hideSponsoredMessage.setConfigBool(false);
             NekoConfig.ignoreBlocked.setConfigBool(false);
+            NaConfig.INSTANCE.getIgnoreBlockedReplies().setConfigBool(false);
             NaConfig.INSTANCE.getRegexFiltersEnabled().setConfigBool(false);
             NekoConfig.disableChatAction.setConfigBool(false);
             NekoConfig.disableChoosingSticker.setConfigBool(false);

@@ -413,4 +413,5 @@
     <string name="UserRestrictedBy">%1$s によって制限</string>
     <string name="ChannelBottomButton">チャンネル下部のボタン</string>
     <string name="HideChannelGiftButton">チャンネルのギフトボタンを非表示</string>
+    <string name="IgnoreBlockedReplies">ブロックしたユーザーへの返信も非表示</string>
 </resources>
