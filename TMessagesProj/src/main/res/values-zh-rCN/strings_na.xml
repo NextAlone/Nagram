@@ -411,4 +411,5 @@
     <string name="StickerShapeRounded">圆角</string>
     <string name="StickerShapeRoundedMsg">留言</string>
     <string name="ActionBar">操作栏</string>
+    <string name="UserRestrictedBy">由 %1$s 限制</string>
 </resources>

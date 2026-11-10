@@ -411,4 +411,5 @@
     <string name="StickerShapeRounded">四捨五入済み</string>
     <string name="StickerShapeRoundedMsg">メッセージ</string>
     <string name="ActionBar">アクションバー</string>
+    <string name="UserRestrictedBy">%1$s によって制限</string>
 </resources>

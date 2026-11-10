@@ -3544,7 +3544,14 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     }
                     if (object != null) {
                         if (type == TYPE_KICKED) {
-                            userCell.setData(object, null, formatUserPermissions(bannedRights), position != lastRow - 1);
+                            String status = formatUserPermissions(bannedRights);
+                            // na: show which admin set the restriction
+                            TLRPC.User restrictedBy = kickedBy != 0 ? getMessagesController().getUser(kickedBy) : null;
+                            if (restrictedBy != null) {
+                                String operator = LocaleController.formatString(R.string.UserRestrictedBy, UserObject.getUserName(restrictedBy));
+                                status = TextUtils.isEmpty(status) ? operator : operator + " · " + status;
+                            }
+                            userCell.setData(object, null, status, position != lastRow - 1);
                         } else if (type == TYPE_BANNED) {
                             String role = null;
                             if (banned) {
