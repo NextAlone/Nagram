@@ -139,11 +139,6 @@ public class DatacenterActivity extends BaseNekoSettingsActivity implements Noti
     }
 
     @Override
-    protected boolean hasWhiteActionBar() {
-        return false;
-    }
-
-    @Override
     public void didReceivedNotification(int id, int account, Object... args) {
         if (id == NotificationCenter.proxyCheckDone) {
             if (listAdapter != null && args.length > 1) {

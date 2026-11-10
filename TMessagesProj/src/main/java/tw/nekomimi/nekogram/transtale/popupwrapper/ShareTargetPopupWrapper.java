@@ -49,7 +49,7 @@ public class ShareTargetPopupWrapper {
         defaultItem.setAlpha(1.0f);
 
         enableItem = ActionBarMenuItem.addItem(windowLayout, 0, LocaleController.getString(R.string.Enable), true, resourcesProvider);
-        enableItem.setChecked(DialogConfig.hasCustomForumTabsConfig(dialogId) && DialogConfig.isCustomForumTabsEnable(dialogId));
+        enableItem.setChecked(DialogConfig.hasShareTargetConfig(dialogId) && DialogConfig.isShareTargetEnable(dialogId));
         enableItem.setOnClickListener(view -> {
             DialogConfig.setShareTargetEnable(dialogId, true);
             SharedConfig.rebuildDirectShare();
@@ -58,7 +58,7 @@ public class ShareTargetPopupWrapper {
         enableItem.setAlpha(1.0f);
 
         disableItem = ActionBarMenuItem.addItem(windowLayout, 0, LocaleController.getString(R.string.Disable), true, resourcesProvider);
-        disableItem.setChecked(DialogConfig.hasCustomForumTabsConfig(dialogId) && !DialogConfig.isCustomForumTabsEnable(dialogId));
+        disableItem.setChecked(DialogConfig.hasShareTargetConfig(dialogId) && !DialogConfig.isShareTargetEnable(dialogId));
         disableItem.setOnClickListener(view -> {
             DialogConfig.setShareTargetEnable(dialogId, false);
             SharedConfig.rebuildDirectShare();

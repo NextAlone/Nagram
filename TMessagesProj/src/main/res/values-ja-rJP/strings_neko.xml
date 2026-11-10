@@ -136,7 +136,7 @@
     <string name="SaveToDownloadCount_few">%1$d ファイルをダウンロードに保存しています</string>
     <string name="SaveToDownloadCount_many">%1$d ファイルをダウンロードに保存しています</string>
     <string name="SaveToDownloadCount_other">%1$d ファイルをダウンロードに保存しています</string>
-    <string name="NekoGeneralNotification">Notification</string>
+    <string name="NekoGeneralNotification">通知</string>
     <string name="disableNotificationBubbles">通知でバブルを無効にする</string>
     <string name="reactions">メニュー内のリアクション</string>
     <string name="doubleTapSendReactions">ダブルタップ時にリアクションを送信 (デフォルト)</string>
@@ -159,7 +159,7 @@
     <string name="useOSMDroidMap">OSMDroid マップを使用</string>
     <string name="UnknownNekoSettingsOption">N-Config オプションはありません。</string>
     <string name="PasscodeNeeded">最初にパスコードロックを有効にする必要があります</string>
-    <string name="PasscodeNeko">Passcode</string>
+    <string name="PasscodeNeko">パスコード</string>
     <string name="PasscodeShowInSettings">N-Config に表示</string>
     <string name="PasscodeShowInSettingsAbout">非表示になったら、このページのみリンクで開くことができます：</string>
     <string name="PasscodeSet">パスコードを設定</string>
@@ -180,12 +180,12 @@
     <string name="BrokenMLKit">オプションが利用できません</string>
     <string name="BrokenMLKitDetail">Google MLKitの言語識別子がこのデバイスで何らかの形で壊れています。</string>
     <string name="RestrictionReason">制限の理由</string>
-    <string name="InvalidCustomEmojiTypeface">Invalid font file.</string>
+    <string name="InvalidCustomEmojiTypeface">無効なフォントファイルです。</string>
     <string name="DownloadEmojiSet">%s をダウンロード</string>
     <string name="EmojiSets">絵文字セット</string>
     <string name="MyEmojiSets">マイ絵文字セット</string>
     <string name="InstalledEmojiSet">インストール済み</string>
-    <string name="InstallingEmojiSet">Installing…</string>
+    <string name="InstallingEmojiSet">インストール中…</string>
     <string name="UpdateEmojiSet">%sを更新</string>
     <string name="EmojiSetHint">これは絵文字の外観にのみ影響します。他のユーザーは自分の好みに基づいて表示されます。</string>
     <string name="CustomEmojiSetHint">内部ストレージから絵文字セットをインポートして選択します。</string>
@@ -227,13 +227,13 @@
     <string name="ExportSession">セッションをエクスポート</string>
     <string name="SessionQR">セッションQR</string>
     <string name="CreateSessionQR">セッションQRを作成</string>
-    <string name="PassQR">Passkey QR</string>
-    <string name="CreatePassQR">Create Passkey QR</string>
+    <string name="PassQR">パスキーQR</string>
+    <string name="CreatePassQR">パスキーQRを作成</string>
     <string name="PassQRNewPassword">このQRコードをパスワードで保護</string>
     <string name="ConfirmNewPassword">パスワードの確認</string>
     <string name="PassQRAbout">パスキーを暗号化されたQRコードとして保存します。スキャンして別の端末にログインできます。</string>
     <string name="PassQREncryption">Nagramでスキャンしてログインします。</string>
-    <string name="InvalidPassQr">Invalid Passkey QR</string>
+    <string name="InvalidPassQr">無効なパスキーQR</string>
     <string name="PassQRPasswordTooShort">パスワードは8文字以上でなければなりません</string>
     <string name="PassQRPasswordWarning">セキュリティ上の警告：このパスワードはキーを保護する唯一のものです。弱いパスワードはオフラインで割れる可能性があります。大文字、小文字、数字、記号を混ぜてください。</string>
 </resources>

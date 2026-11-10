@@ -37,24 +37,46 @@ public class DialogConfig {
         preferences.edit().remove(getAutoTranslateKey(dialogId, topicId)).apply();
     }
 
+    public static final int FORUM_LAYOUT_DEFAULT = 0;
+    public static final int FORUM_LAYOUT_TABS = 1;
+    public static final int FORUM_LAYOUT_LIST = 2;
+    public static final int FORUM_LAYOUT_SIDEBAR = 3;
+
     public static String getCustomForumTabsKey(long dialogId) {
         return "customForumTabs_" + dialogId;
     }
 
-    public static boolean isCustomForumTabsEnable(long dialogId) {
-        return preferences.getBoolean(getCustomForumTabsKey(dialogId), false);
+    private static String getCustomForumTabsModeKey(long dialogId) {
+        return "customForumTabsMode_" + dialogId;
     }
 
-    public static boolean hasCustomForumTabsConfig(long dialogId) {
-        return preferences.contains(getCustomForumTabsKey(dialogId));
+    public static int getCustomForumTabsMode(long dialogId) {
+        final String key = getCustomForumTabsModeKey(dialogId);
+        if (preferences.contains(key)) {
+            return preferences.getInt(key, FORUM_LAYOUT_DEFAULT);
+        }
+        // migrate the old boolean config: true meant tabs, false meant list
+        final String oldKey = getCustomForumTabsKey(dialogId);
+        if (preferences.contains(oldKey)) {
+            final int mode = preferences.getBoolean(oldKey, false) ? FORUM_LAYOUT_TABS : FORUM_LAYOUT_LIST;
+            preferences.edit().putInt(key, mode).remove(oldKey).apply();
+            return mode;
+        }
+        return FORUM_LAYOUT_DEFAULT;
     }
 
-    public static void setCustomForumTabsEnable(long dialogId, boolean enable) {
-        preferences.edit().putBoolean(getCustomForumTabsKey(dialogId), enable).apply();
+    public static void setCustomForumTabsMode(long dialogId, int mode) {
+        final SharedPreferences.Editor editor = preferences.edit().remove(getCustomForumTabsKey(dialogId));
+        if (mode == FORUM_LAYOUT_DEFAULT) {
+            editor.remove(getCustomForumTabsModeKey(dialogId));
+        } else {
+            editor.putInt(getCustomForumTabsModeKey(dialogId), mode);
+        }
+        editor.apply();
     }
 
     public static void removeCustomForumTabsConfig(long dialogId) {
-        preferences.edit().remove(getCustomForumTabsKey(dialogId)).apply();
+        preferences.edit().remove(getCustomForumTabsModeKey(dialogId)).remove(getCustomForumTabsKey(dialogId)).apply();
     }
 
     public static String getShareTargetKey(long dialogId) {

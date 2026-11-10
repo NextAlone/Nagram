@@ -36,6 +36,7 @@ import org.telegram.messenger.R
 import org.telegram.messenger.UserConfig
 import org.telegram.messenger.Utilities
 import org.telegram.messenger.browser.Browser
+import org.telegram.tgnet.TLRPC
 import org.telegram.tgnet.TLRPC.Chat
 import org.telegram.tgnet.TLRPC.TL_messageEntityBankCard
 import org.telegram.tgnet.TLRPC.TL_messageEntityBotCommand
@@ -50,6 +51,7 @@ import org.telegram.ui.ActionBar.Theme
 import org.telegram.ui.ChatActivity
 import org.telegram.ui.Components.ColoredImageSpan
 
+import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.utils.UIUtil.runOnIoDispatcher
 import xyz.nextalone.nagram.NaConfig
 
@@ -152,6 +154,24 @@ object MessageHelper {
         } catch (e: Exception) {
             FileLog.e(e)
         }
+    }
+
+    // na: hide replies to blocked users, one level only; own messages always stay visible
+    @JvmStatic
+    fun isReplyToBlockedPeer(currentAccount: Int, obj: MessageObject?): Boolean {
+        if (obj?.messageOwner == null || obj.isOut || !NekoConfig.ignoreBlocked.Bool() || !NaConfig.ignoreBlockedReplies.Bool()) {
+            return false
+        }
+        val blockedPeers = MessagesController.getInstance(currentAccount).blockePeers
+        val reply = obj.replyMessageObject
+        if (reply?.messageOwner != null && reply.messageOwner !is TLRPC.TL_messageEmpty) {
+            val replyFrom = reply.fromChatId
+            if (replyFrom != 0L && blockedPeers.indexOfKey(replyFrom) >= 0) {
+                return true
+            }
+        }
+        val replyFromPeer = obj.messageOwner.reply_to?.reply_from?.from_id ?: return false
+        return blockedPeers.indexOfKey(MessageObject.getPeerId(replyFromPeer)) >= 0
     }
 
     @JvmStatic

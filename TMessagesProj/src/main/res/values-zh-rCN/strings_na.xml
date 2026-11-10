@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">偷偷看动态</string>
     <string name="HideFilterMuteAll">隐藏文件夹中的\"全部取消静音\"</string>
     <string name="UseLocalQuoteColor">本地名称颜色</string>
+    <string name="ShowSquareAvatar">显示方形头像</string>
     <string name="DisableProfileAvatarBlur">禁用资料页大头像按钮背景模糊</string>
     <string name="DisableCustomWallpaperUser">禁用私聊的自定义背景</string>
     <string name="DisableCustomWallpaperChannel">禁用频道的自定义背景</string>
@@ -142,7 +143,6 @@
     <string name="SendMp4DocumentAsVideo">MP4 视频作为文件发送时可预览</string>
     <string name="StickersChooseShortNameForStickerPack">为您的包选择一个简短的名称。</string>
     <string name="StickersCopyStickerSet">复制整个贴纸包</string>
-    <string name="DisableChannelMuteButton">禁用频道聊天页面的静音按钮</string>
     <string name="DisablePreviewVideoSoundShortcut">禁用预览视频音量快捷键</string>
     <string name="DisablePreviewVideoSoundShortcutNotice">禁用音量键快捷开启预览视频的声音</string>
     <string name="DisableAutoWebLogin">禁用官方网页自动登录</string>
@@ -402,9 +402,16 @@
     <string name="CommunityAvatarTapActionChat">始终进入聊天</string>
     <string name="CommunityAvatarTapActionArrow">仅在点击头像右下角箭头时打开社区页</string>
     <string name="UseSystemNotificationColor">通知图标使用系统主题颜色</string>
-    <string name="AvatarCorners">头像圆角</string>
     <string name="AdminActionsOnAvatarLongPress">长按头像显示管理操作</string>
     <string name="AdminActionsOnMentionLongPress">长按用户名显示管理操作</string>
     <string name="DeleteMessagesWhenRemovingMembers">移除成员时可删除其消息</string>
     <string name="BanOrDeleteMessages">封禁或删除消息</string>
+    <string name="StickerShape">貼圖形状</string>
+    <string name="StickerShapeRounded">圆角</string>
+    <string name="StickerShapeRoundedMsg">留言</string>
+    <string name="ActionBar">操作栏</string>
+    <string name="UserRestrictedBy">由 %1$s 限制</string>
+    <string name="ChannelBottomButton">频道底栏按钮</string>
+    <string name="HideChannelGiftButton">隐藏频道礼物按钮</string>
+    <string name="IgnoreBlockedReplies">同时隐藏回复被拉黑用户的消息</string>
 </resources>

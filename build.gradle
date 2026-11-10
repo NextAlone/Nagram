@@ -7,13 +7,13 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.13.2'
-        classpath 'com.google.gms:google-services:4.3.15'
+        classpath 'com.google.gms:google-services:4.5.0'
 //        classpath 'com.huawei.agconnect:agcp:1.9.1.301'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.0'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:3.0.8'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.0"
 
         //noinspection GradleDependency
-        classpath "io.sentry:sentry-android-gradle-plugin:6.24.0"
+        classpath "io.sentry:sentry-android-gradle-plugin:6.26.0"
         // db
         classpath "io.objectbox:objectbox-gradle-plugin:5.4.2"
         // json

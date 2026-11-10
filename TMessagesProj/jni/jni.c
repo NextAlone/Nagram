@@ -11,6 +11,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <time.h>
+#include "twidget/twidget-bridge.h"
 #include "integrity.h"
 
 int registerNativeTgNetFunctions(JavaVM *vm, JNIEnv *env);
@@ -43,6 +44,11 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     }
 
     tgvoipOnJNILoad(vm, env);
+
+    // Widget registration failure must not block the rest of the client library.
+    if (!registerTwidgetNatives(env) && (*env)->ExceptionCheck(env)) {
+        (*env)->ExceptionClear(env);
+    }
 
 	return JNI_VERSION_1_6;
 }

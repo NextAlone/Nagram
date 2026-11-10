@@ -62,8 +62,7 @@ public class ActionBarPreviewCell extends FrameLayout implements NotificationCen
 
     private boolean isPreviewSetting(String key) {
         return key != null && (
-                key.equals(NaConfig.INSTANCE.getCenterActionBarTitle().getKey())
-                        || key.equals(NaConfig.INSTANCE.getUseSystemFontInTitle().getKey())
+                key.equals(NaConfig.INSTANCE.getUseSystemFontInTitle().getKey())
                         || key.equals(NaConfig.INSTANCE.getCustomTitle().getKey())
                         || key.equals(NaConfig.INSTANCE.getCustomTitleUserName().getKey())
                         || key.equals(NaConfig.INSTANCE.getAlwaysShowDownloadIcon().getKey())
@@ -118,7 +117,6 @@ public class ActionBarPreviewCell extends FrameLayout implements NotificationCen
             }
         }
         updateTitle();
-        updateCentered(NaConfig.INSTANCE.getCenterActionBarTitle().Bool());
         updateShadow();
         updateDownloadsIcon(NaConfig.INSTANCE.getAlwaysShowDownloadIcon().Bool());
         if (actionBar != null) {
@@ -136,13 +134,6 @@ public class ActionBarPreviewCell extends FrameLayout implements NotificationCen
     public void updateDownloadsIcon(boolean show) {
         if (downloadsItem != null) {
             downloadsItem.setVisibility(show ? View.VISIBLE : View.GONE);
-        }
-    }
-
-    public void updateCentered(boolean center) {
-        if (actionBar != null) {
-            actionBar.centerTitle(center);
-            actionBar.requestLayout();
         }
     }
 

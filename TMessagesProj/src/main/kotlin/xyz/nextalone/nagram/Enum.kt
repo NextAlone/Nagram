@@ -18,6 +18,12 @@ enum class MainTabsStyle(val value: Int) {
     DISABLE(2)
 }
 
+enum class ChannelBottomButton(val value: Int) {
+    MUTE(0),
+    DISCUSSION(1),
+    HIDDEN(2)
+}
+
 enum class SwitchStyle(val value: Int) {
     TELEGRAM(0),
     MODERN(1)

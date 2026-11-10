@@ -21,6 +21,8 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 
+import java.util.HashMap;
+
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ILocationServiceProvider;
 import org.telegram.messenger.PushListenerController;
@@ -29,6 +31,8 @@ import org.telegram.messenger.PushListenerController;
 public class GoogleLocationProvider implements ILocationServiceProvider {
     private FusedLocationProviderClient locationProviderClient;
     private SettingsClient settingsClient;
+    // the client removes updates by the callback instance, so keep the one registered for each listener
+    private final HashMap<ILocationListener, LocationCallback> callbacks = new HashMap<>();
 
     @Override
     public void init(Context context) {
@@ -52,23 +56,27 @@ public class GoogleLocationProvider implements ILocationServiceProvider {
     }
 
     @Override
-    public void requestLocationUpdates(ILocationRequest request, ILocationListener locationListener) {
-        locationProviderClient.requestLocationUpdates(((GoogleLocationRequest) request).request, new LocationCallback() {
+    public synchronized void requestLocationUpdates(ILocationRequest request, ILocationListener locationListener) {
+        final LocationCallback oldCallback = callbacks.remove(locationListener);
+        if (oldCallback != null) {
+            locationProviderClient.removeLocationUpdates(oldCallback);
+        }
+        final LocationCallback callback = new LocationCallback() {
             @Override
             public void onLocationResult(@NonNull LocationResult locationResult) {
                 locationListener.onLocationChanged(locationResult.getLastLocation());
             }
-        }, Looper.getMainLooper());
+        };
+        callbacks.put(locationListener, callback);
+        locationProviderClient.requestLocationUpdates(((GoogleLocationRequest) request).request, callback, Looper.getMainLooper());
     }
 
     @Override
-    public void removeLocationUpdates(ILocationListener locationListener) {
-        locationProviderClient.removeLocationUpdates(new LocationCallback() {
-            @Override
-            public void onLocationResult(@NonNull LocationResult locationResult) {
-                locationListener.onLocationChanged(locationResult.getLastLocation());
-            }
-        });
+    public synchronized void removeLocationUpdates(ILocationListener locationListener) {
+        final LocationCallback callback = callbacks.remove(locationListener);
+        if (callback != null) {
+            locationProviderClient.removeLocationUpdates(callback);
+        }
     }
 
     @Override

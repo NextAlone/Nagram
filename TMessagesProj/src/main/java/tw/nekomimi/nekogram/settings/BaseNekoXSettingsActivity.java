@@ -19,14 +19,15 @@ import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.SimpleActionBar;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeBind;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextDetailSettingsCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
-import org.telegram.ui.Components.BlurredRecyclerView;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.ItemOptions;
 import org.telegram.ui.Components.LayoutHelper;
@@ -45,7 +46,7 @@ import tw.nekomimi.nekogram.config.cell.*;
 public class BaseNekoXSettingsActivity extends BaseFragment {
     protected RecyclerListView.SelectionAdapter listAdapter;
     protected CellGroup cellGroup;
-    protected BlurredRecyclerView listView;
+    protected RecyclerListView listView;
     protected LinearLayoutManager layoutManager;
     protected UndoView tooltip;
     protected HashMap<String, Integer> rowMap = new HashMap<>(20);
@@ -53,13 +54,15 @@ public class BaseNekoXSettingsActivity extends BaseFragment {
     protected HashMap<Integer, ConfigItem> rowConfigMapReverse = new HashMap<>(20);
 
     @Override
-    public View createView(Context context) {
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setTitle(getTitle());
-        if (AndroidUtilities.isTablet()) {
-            actionBar.setOccupyStatusBar(false);
-        }
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+    protected boolean useSimpleActionBar() {
+        return true;
+    }
+
+    @Override
+    public SimpleActionBar createSimpleActionBar(Context context) {
+        simpleActionBar = super.createSimpleActionBar(context);
+        simpleActionBar.setTitle(getTitle());
+        simpleActionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
                 if (id == -1) {
@@ -67,22 +70,38 @@ public class BaseNekoXSettingsActivity extends BaseFragment {
                 }
             }
         });
+        simpleActionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        return simpleActionBar;
+    }
 
-        fragmentView = new FrameLayout(context);
-        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+    @Override
+    public View createView(Context context) {
+        setHasOwnBackground(true);
+        fragmentView = new FrameLayout(context) {
+            @Override
+            protected void dispatchDraw(@NonNull android.graphics.Canvas canvas) {
+                super.dispatchDraw(canvas);
+                glassEngine.invalidate();
+            }
+        };
+        ThemeBind.backgroundColor(fragmentView, Theme.key_windowBackgroundGray, getResourceProvider());
         FrameLayout frameLayout = (FrameLayout) fragmentView;
 
-        listView = new BlurredRecyclerView(context);
-        listView.setSections(true);
+        listView = new RecyclerListView(context);
+        listView.setSections();
+        listView.setSectionsDrawBackground(true);
         listView.setVerticalScrollBarEnabled(false);
         listView.setLayoutManager(layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP | Gravity.LEFT));
 
-        actionBar.setAdaptiveBackground(listView);
-
         tooltip = new UndoView(context);
         frameLayout.addView(tooltip, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.BOTTOM | Gravity.LEFT, 8, 0, 8, 8));
         return fragmentView;
+    }
+
+    @Override
+    protected RecyclerListView getListViewForSimpleGlass() {
+        return listView;
     }
 
     protected void updateRows() {
@@ -382,8 +401,6 @@ public class BaseNekoXSettingsActivity extends BaseFragment {
     }
     @Override
     public void onInsets(int left, int top, int right, int bottom) {
-        listView.setPadding(0, 0, 0, bottom);
-        listView.setClipToPadding(false);
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) tooltip.getLayoutParams();
         layoutParams.setMargins(AndroidUtilities.dp(8), 0, AndroidUtilities.dp(8), AndroidUtilities.dp(8) + bottom);
         tooltip.setLayoutParams(layoutParams);

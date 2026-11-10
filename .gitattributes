@@ -1,0 +1,9 @@
+# The widget bundles are verified by SHA-256 against
+# TMessagesProj/src/main/assets/WidgetSandbox/manifest.txt. Git must hand out the
+# committed bytes unchanged on every platform: with core.autocrlf=true, Windows
+# rewrites their LF into CRLF and WidgetSandboxResources rejects the bundle
+# ("Bundle checksum mismatch"). The .qbc files are bytecode and stay binary.
+TMessagesProj/src/main/assets/WidgetSandbox/** text eol=lf
+TMessagesProj/src/main/assets/WidgetSandbox/**/*.qbc binary
+TMessagesProj/jni/twidget/widget-sandbox/packages/desktop/WidgetJS/** text eol=lf
+TMessagesProj/jni/twidget/widget-sandbox/packages/desktop/WidgetJS/**/*.qbc binary

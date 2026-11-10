@@ -83,6 +83,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.INavigationLayout;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeBind;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.CubicBezierInterpolator;
@@ -93,6 +94,7 @@ import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.Components.URLSpanNoUnderline;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class CameraScanActivity extends BaseFragment {
 
@@ -363,7 +365,12 @@ public class CameraScanActivity extends BaseFragment {
             actionBar.setItemsColor(0xffffffff, false);
             actionBar.setItemsBackgroundColor(0xffffffff, false);
             actionBar.setTitleColor(0xffffffff);
+        } else if (currentType == TYPE_MRZ) {
+            ThemeBind.actionBarItemsColor(actionBar, Theme.key_windowBackgroundWhiteGrayText2, false);
+            ThemeBind.actionBarItemsBackgroundColor(actionBar, Theme.key_actionBarWhiteSelector, false);
+            ThemeBind.actionBarTitleColor(actionBar, Theme.key_actionBarDefaultTitle);
         } else {
+            // overwritten with fixed white below (camera backdrop): no theme binding
             actionBar.setItemsColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2), false);
             actionBar.setItemsBackgroundColor(Theme.getColor(Theme.key_actionBarWhiteSelector), false);
             actionBar.setTitleColor(Theme.getColor(Theme.key_actionBarDefaultTitle));
@@ -566,8 +573,8 @@ public class CameraScanActivity extends BaseFragment {
         }
 
         if (currentType == TYPE_MRZ) {
-            actionBar.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
-            fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+            ThemeBind.backgroundColor(actionBar, Theme.key_windowBackgroundWhite);
+            ThemeBind.backgroundColor(fragmentView, Theme.key_windowBackgroundWhite);
         } else {
             actionBar.setBackgroundDrawable(null);
             actionBar.setAddToContainer(false);
@@ -671,7 +678,11 @@ public class CameraScanActivity extends BaseFragment {
         viewGroup.addView(titleTextView);
 
         descriptionText = new TextView(context);
-        descriptionText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6));
+        if (currentType == TYPE_QR_WEB_BOT) {
+            descriptionText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText6)); // overwritten with fixed white below
+        } else {
+            ThemeBind.textColor(descriptionText, Theme.key_windowBackgroundWhiteGrayText6);
+        }
         descriptionText.setGravity(Gravity.CENTER_HORIZONTAL);
         descriptionText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         viewGroup.addView(descriptionText);
@@ -684,7 +695,7 @@ public class CameraScanActivity extends BaseFragment {
         if (currentType == TYPE_MRZ) {
             titleTextView.setText(LocaleController.getString(R.string.PassportScanPassport));
             descriptionText.setText(LocaleController.getString(R.string.PassportScanPassportInfo));
-            titleTextView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+            ThemeBind.textColor(titleTextView, Theme.key_windowBackgroundWhiteBlackText);
             recognizedMrzView.setTypeface(Typeface.MONOSPACE);
         } else {
             if (needGalleryButton) {
@@ -1502,11 +1513,7 @@ public class CameraScanActivity extends BaseFragment {
             return themeDescriptions;
         }
 
-        themeDescriptions.add(new ThemeDescription(fragmentView, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite));
 
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_BACKGROUND, null, null, null, null, Theme.key_windowBackgroundWhite));
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText2));
-        themeDescriptions.add(new ThemeDescription(actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_actionBarWhiteSelector));
 
         themeDescriptions.add(new ThemeDescription(titleTextView, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteBlackText));
         themeDescriptions.add(new ThemeDescription(descriptionText, ThemeDescription.FLAG_AB_SELECTORCOLOR, null, null, null, null, Theme.key_windowBackgroundWhiteGrayText6));
