@@ -414,4 +414,5 @@
     <string name="ChannelBottomButton">Channel bottom button</string>
     <string name="HideChannelGiftButton">Hide channel gift button</string>
     <string name="IgnoreBlockedReplies">Also hide replies to blocked users</string>
+    <string name="RemoveMessageTail">Remove message tail</string>
 </resources>
