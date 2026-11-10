@@ -104,7 +104,6 @@
     <string name="DisableSendReadStories">Okuma Hikayelerini Göndermeyi Devre Dışı Bırak</string>
     <string name="HideFilterMuteAll">Filtreyi gizle, tümünü kapat</string>
     <string name="UseLocalQuoteColor">Yerel alıntı rengini kullan</string>
-    <string name="ShowSquareAvatar">Kare avatarı göster</string>
     <string name="DisableProfileAvatarBlur">Disable Profile Avatar Blur</string>
     <string name="DisableCustomWallpaperUser">Kullanıcı özel duvar kağıdını devre dışı bırak</string>
     <string name="DisableCustomWallpaperChannel">Kanal özel duvar kağıdını devre dışı bırak</string>

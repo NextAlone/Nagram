@@ -104,7 +104,6 @@
     <string name="DisableSendReadStories">Deaktiver Send Les Historier</string>
     <string name="HideFilterMuteAll">Skjul demping av filtre</string>
     <string name="UseLocalQuoteColor">Bruk lokal sitattfarge</string>
-    <string name="ShowSquareAvatar">Vis firkantet profilbilde</string>
     <string name="DisableProfileAvatarBlur">Deaktivere profilbilde blur</string>
     <string name="DisableCustomWallpaperUser">Deaktivere brukerdefinert bakgrunn</string>
     <string name="DisableCustomWallpaperChannel">Deaktiver kanaltilpasset bakgrunnsbilde</string>

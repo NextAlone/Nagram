@@ -17,6 +17,7 @@ public class ConfigCellCustom extends AbstractConfigCell {
     public static final int CUSTOM_ITEM_StickerShape = 990;
     public static final int CUSTOM_ITEM_DoubleTap = 989;
     public static final int CUSTOM_ITEM_ActionBarPreview = 988;
+    public static final int CUSTOM_ITEM_AvatarCorners = 987;
 
     public final int type;
     public boolean enabled;
