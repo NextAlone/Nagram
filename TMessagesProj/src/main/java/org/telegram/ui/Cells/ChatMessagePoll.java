@@ -95,6 +95,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import me.vkryl.core.BitwiseUtils;
+import xyz.nextalone.nagram.NaConfig;
 class ChatMessagePoll {
 
     private final ChatMessageCell cell;
@@ -445,7 +446,23 @@ class ChatMessagePoll {
                         }
                     }
                 }
-                CharSequence answerText = new SpannableStringBuilder(pollAnswer.text.text);
+
+                boolean forceShowVote = NaConfig.INSTANCE.getShowVoteCountBeforeVote().Bool() && !(cell.pollVoted || cell.pollClosed || cell.pollResultsPreview);
+                String text = pollAnswer.text.text;
+
+                if (forceShowVote && media.results != null && media.results.total_voters > 0 && media.results.results != null) {
+                    for (int b = 0, N2 = media.results.results.size(); b < N2; b++) {
+                        TLRPC.PollAnswerVoters ans = media.results.results.get(b);
+                        if (Arrays.equals(pollAnswer.option, ans.option)) {
+                            int voters = ans.voters;
+                            float percent = voters * 100f / media.results.total_voters;
+                            text = String.format("%s - (%d - %d%%)", text, voters, Math.round(percent));
+                            break;
+                        }
+                    }
+                }
+
+                CharSequence answerText = new SpannableStringBuilder(text);
                 answerText = Emoji.replaceEmoji(answerText, Theme.chat_audioTitlePaint.getFontMetricsInt(), false, null, DynamicDrawableSpan.ALIGN_BOTTOM, 1.0f, emojisCount);
                 if (pollAnswer.text.entities != null) {
                     answerText = MessageObject.replaceAnimatedEmoji(answerText, pollAnswer.text.entities, Theme.chat_audioPerformerPaint.getFontMetricsInt(), true, 1.2f, emojisCount);
