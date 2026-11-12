@@ -2561,11 +2561,11 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
 
     public void setRoundRadius(int[] value) {
         System.arraycopy(value, 0, requestedRoundRadius, 0, requestedRoundRadius.length);
-        if (circleAvatar && AvatarCornersHelper.isCustom() && imageW > 0 && imageH > 0) {
+        if (circleAvatar && AvatarCornersHelper.isCustom()) {
             // Capping keeps a getRoundRadius() -> setRoundRadius() round trip stable.
-            final int cap = Math.round(AvatarCornersHelper.radius(Math.min(imageW, imageH)));
+            final int cap = imageW > 0 && imageH > 0 ? Math.round(AvatarCornersHelper.radius(Math.min(imageW, imageH))) : Integer.MAX_VALUE;
             for (int a = 0; a < avatarRoundRadius.length; a++) {
-                avatarRoundRadius[a] = Math.min(value[a], cap);
+                avatarRoundRadius[a] = Math.min(AvatarCornersHelper.scale(value[a]), cap);
             }
             value = avatarRoundRadius;
         }
