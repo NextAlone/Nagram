@@ -95,7 +95,9 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import me.vkryl.core.BitwiseUtils;
+
 import xyz.nextalone.nagram.NaConfig;
+
 class ChatMessagePoll {
 
     private final ChatMessageCell cell;
