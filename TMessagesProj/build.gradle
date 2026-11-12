@@ -38,7 +38,7 @@ idea {
 }
 
 def verName = APP_VERSION_NAME
-def verCode = 1259
+def verCode = 1260
 
 
 def officialVer = APP_VERSION_NAME
@@ -213,7 +213,7 @@ android {
                         return true
                     }
                 }
-                targets 'tmessages.49'
+                targets 'tmessages.49', 'twidget'
             }
         }
     }
@@ -284,6 +284,7 @@ android {
     }
 
     buildFeatures {
+        aidl true
         buildConfig true
     }
 

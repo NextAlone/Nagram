@@ -83,6 +83,8 @@ fi
 echo "[submodule] 未检测到 $ARCHIVE_NAME, 开始拉取 submodule..."
 git submodule sync
 git submodule update --init --force --depth 1
+sed -i -E 's#https://github\.com/[^/]+/#https://gitlab.com/xtao-labs/mirrors/#g' TMessagesProj/jni/twidget/widget-sandbox/.gitmodules
+git submodule update --init --force --depth 1 --recursive TMessagesProj/jni/twidget/widget-sandbox
 
 echo "[submodule] 打包 submodule -> $ARCHIVE_NAME"
 # tar 在文件读取期间被修改时返回 1, 这里只关心压缩包是否生成成功
