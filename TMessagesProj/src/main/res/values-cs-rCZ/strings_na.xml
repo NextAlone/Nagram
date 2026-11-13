@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">Zakázat odesílání příběhů pro čtení</string>
     <string name="HideFilterMuteAll">Skrýt ztlumit vše</string>
     <string name="UseLocalQuoteColor">Použít místní barvu citací</string>
+    <string name="AvatarCorners">Avatar rohy</string>
     <string name="DisableProfileAvatarBlur">Zakázat rozostření profilu</string>
     <string name="DisableCustomWallpaperUser">Zakázat uživatelskou vlastní tapetu</string>
     <string name="DisableCustomWallpaperChannel">Zakázat vlastní tapetu kanálu</string>
@@ -130,7 +131,6 @@
     <string name="DisableClickCommandToSendHint">Aby se zabránilo náhodnému dotyku</string>
     <string name="DisableDialogsFloatingButton">Zakázat plovoucí tlačítko dialogů</string>
     <string name="DisableFlagSecure">Zakázat zabezpečení vlajky</string>
-    <string name="CenterActionBarTitle">Vycentrovat název na panelu akcí</string>
     <string name="ShowQuickReplyInBotCommands">Zobrazit příkazy rychlé odpovědi v Bot</string>
     <string name="PushServiceType">Typ služby Push</string>
     <string name="PushServiceTypeInApp">V aplikaci</string>
@@ -409,4 +409,9 @@
     <string name="StickerShapeRounded">Zaobleno</string>
     <string name="StickerShapeRoundedMsg">Zpráva</string>
     <string name="ActionBar">Panel akcí</string>
+    <string name="UserRestrictedBy">Omezeno %1$s</string>
+    <string name="ChannelBottomButton">Tlačítko dolní části kanálu</string>
+    <string name="HideChannelGiftButton">Skrýt dárkové tlačítko kanálu</string>
+    <string name="IgnoreBlockedReplies">Také skrýt odpovědi pro blokované uživatele</string>
+    <string name="RemoveMessageTail">Odstranit konec zprávy</string>
 </resources>

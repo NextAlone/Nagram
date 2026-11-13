@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">تعطيل إرسال القصص المقروءة</string>
     <string name="HideFilterMuteAll">إخفاء الفلتر كتم الكل</string>
     <string name="UseLocalQuoteColor">استخدام لون الاقتباس المحلي</string>
+    <string name="AvatarCorners">زوايا الصورة الرمزية</string>
     <string name="DisableProfileAvatarBlur">تعطيل الصورة الرمزية للوضع</string>
     <string name="DisableCustomWallpaperUser">تعطيل خلفية المستخدم المخصصة</string>
     <string name="DisableCustomWallpaperChannel">تعطيل خلفية القناة المخصصة</string>
@@ -130,7 +131,6 @@
     <string name="DisableClickCommandToSendHint">لمنع اللمس العرضي</string>
     <string name="DisableDialogsFloatingButton">تعطيل مربعات الحوار الزر العائم</string>
     <string name="DisableFlagSecure">تعطيل العلم الآمن</string>
-    <string name="CenterActionBarTitle">عنوان المركز في شريط العمل</string>
     <string name="ShowQuickReplyInBotCommands">إظهار الرد السريع في أوامر بوت</string>
     <string name="PushServiceType">نوع خدمة الدفع</string>
     <string name="PushServiceTypeInApp">في التطبيق</string>
@@ -409,4 +409,9 @@
     <string name="StickerShapeRounded">دوار</string>
     <string name="StickerShapeRoundedMsg">رسالة</string>
     <string name="ActionBar">شريط العمل</string>
+    <string name="UserRestrictedBy">مقيدة من قبل %1$s</string>
+    <string name="ChannelBottomButton">زر القناة السفلي</string>
+    <string name="HideChannelGiftButton">إخفاء زر هدية القناة</string>
+    <string name="IgnoreBlockedReplies">أيضا إخفاء الردود على المستخدمين المحظورين</string>
+    <string name="RemoveMessageTail">إزالة ذيل الرسالة</string>
 </resources>

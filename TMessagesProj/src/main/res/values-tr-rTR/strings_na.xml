@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">Okuma Hikayelerini Göndermeyi Devre Dışı Bırak</string>
     <string name="HideFilterMuteAll">Filtreyi gizle, tümünü kapat</string>
     <string name="UseLocalQuoteColor">Yerel alıntı rengini kullan</string>
+    <string name="AvatarCorners">Avatar corners</string>
     <string name="DisableProfileAvatarBlur">Disable Profile Avatar Blur</string>
     <string name="DisableCustomWallpaperUser">Kullanıcı özel duvar kağıdını devre dışı bırak</string>
     <string name="DisableCustomWallpaperChannel">Kanal özel duvar kağıdını devre dışı bırak</string>
@@ -130,7 +131,6 @@
     <string name="DisableClickCommandToSendHint">Yanlışlıkla dokunmayı önlemek için</string>
     <string name="DisableDialogsFloatingButton">İletişim Kutuları Kayan Düğmesini Devre Dışı Bırak</string>
     <string name="DisableFlagSecure">Güvenli İşaretlemeyi Devre Dışı Bırak</string>
-    <string name="CenterActionBarTitle">Başlığı işlem çubuğunda ortalayın</string>
     <string name="ShowQuickReplyInBotCommands">Bot Komutlarında Hızlı Yanıtı Göster</string>
     <string name="PushServiceType">Push Hizmet Türü</string>
     <string name="PushServiceTypeInApp">Uygulama İçi</string>
@@ -409,4 +409,9 @@
     <string name="StickerShapeRounded">Rounded</string>
     <string name="StickerShapeRoundedMsg">Message</string>
     <string name="ActionBar">Action Bar</string>
+    <string name="UserRestrictedBy">Restricted by %1$s</string>
+    <string name="ChannelBottomButton">Channel bottom button</string>
+    <string name="HideChannelGiftButton">Hide channel gift button</string>
+    <string name="IgnoreBlockedReplies">Also hide replies to blocked users</string>
+    <string name="RemoveMessageTail">Remove message tail</string>
 </resources>

@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">Leesverhalen verzenden uitschakelen</string>
     <string name="HideFilterMuteAll">Verberg filter dempen alles</string>
     <string name="UseLocalQuoteColor">Lokale aanhalingstekenkleur gebruiken</string>
+    <string name="AvatarCorners">Avatar hoeken</string>
     <string name="DisableProfileAvatarBlur">Profiel Avatar Vervagen Uitschakelen</string>
     <string name="DisableCustomWallpaperUser">Aangepaste achtergrond door gebruiker uitschakelen</string>
     <string name="DisableCustomWallpaperChannel">Kanaal aangepaste achtergrond uitschakelen</string>
@@ -130,7 +131,6 @@
     <string name="DisableClickCommandToSendHint">Ongewenste aanraking voorkomen</string>
     <string name="DisableDialogsFloatingButton">Zwevende knop dialoogknop uitschakelen</string>
     <string name="DisableFlagSecure">Vlaggenbeveiliging uitschakelen</string>
-    <string name="CenterActionBarTitle">Centreer titel in actiebalk</string>
     <string name="ShowQuickReplyInBotCommands">Toon Snel Antwoord In Bot Commando\'s</string>
     <string name="PushServiceType">Push Service Type</string>
     <string name="PushServiceTypeInApp">In de App</string>
@@ -409,4 +409,9 @@
     <string name="StickerShapeRounded">Afgerond</string>
     <string name="StickerShapeRoundedMsg">bericht</string>
     <string name="ActionBar">Actie Balk</string>
+    <string name="UserRestrictedBy">Beperkt door %1$s</string>
+    <string name="ChannelBottomButton">Kanaal onderste knop</string>
+    <string name="HideChannelGiftButton">Verberg kanaal cadeau knop</string>
+    <string name="IgnoreBlockedReplies">Verbergen van reacties op geblokkeerde gebruikers</string>
+    <string name="RemoveMessageTail">Verwijder bericht staart</string>
 </resources>

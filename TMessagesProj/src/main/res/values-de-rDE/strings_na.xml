@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">Lesestatus von Stories nicht senden</string>
     <string name="HideFilterMuteAll">Filter \"Stumm\" ausblenden</string>
     <string name="UseLocalQuoteColor">Lokale Zitatfarbe verwenden</string>
+    <string name="AvatarCorners">Avatar-Ecken</string>
     <string name="DisableProfileAvatarBlur">Profil-Avatar Unschärfe deaktivieren</string>
     <string name="DisableCustomWallpaperUser">Benutzerdefiniertes Hintergrundbild deaktivieren</string>
     <string name="DisableCustomWallpaperChannel">Deaktiviere Channel-Hintergrund</string>
@@ -130,7 +131,6 @@
     <string name="DisableClickCommandToSendHint">Um zufällige Berührung zu verhindern</string>
     <string name="DisableDialogsFloatingButton">Schwebende Dialoge deaktivieren</string>
     <string name="DisableFlagSecure">\"Flag Secure\" deaktivieren</string>
-    <string name="CenterActionBarTitle">Titel in Aktionsleiste zentrieren</string>
     <string name="ShowQuickReplyInBotCommands">Schnellantwort in Bot-Befehlen anzeigen</string>
     <string name="PushServiceType">Push-Service-Typ</string>
     <string name="PushServiceTypeInApp">In App</string>
@@ -409,4 +409,9 @@
     <string name="StickerShapeRounded">Abgerundet</string>
     <string name="StickerShapeRoundedMsg">Nachricht</string>
     <string name="ActionBar">Aktionsleiste</string>
+    <string name="UserRestrictedBy">Eingeschränkt von %1$s</string>
+    <string name="ChannelBottomButton">Kanal-Button unten</string>
+    <string name="HideChannelGiftButton">Geschenkschaltfläche ausblenden</string>
+    <string name="IgnoreBlockedReplies">Auch Antworten an gesperrte Benutzer ausblenden</string>
+    <string name="RemoveMessageTail">Nachrichtentail entfernen</string>
 </resources>

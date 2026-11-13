@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">Désactiver Envoyer des histoires en lecture</string>
     <string name="HideFilterMuteAll">Masquer le filtre en mode muet</string>
     <string name="UseLocalQuoteColor">Utiliser la couleur locale du guillemet</string>
+    <string name="AvatarCorners">Coins de l\'avatar</string>
     <string name="DisableProfileAvatarBlur">Désactiver le flou d\'avatar de profil</string>
     <string name="DisableCustomWallpaperUser">Désactiver le fond d\'écran personnalisé de l\'utilisateur</string>
     <string name="DisableCustomWallpaperChannel">Désactiver le fond d\'écran personnalisé pour les canaux</string>
@@ -130,7 +131,6 @@
     <string name="DisableClickCommandToSendHint">Pour éviter un toucher accidentel</string>
     <string name="DisableDialogsFloatingButton">Désactiver le bouton flottant des boîtes de dialogue</string>
     <string name="DisableFlagSecure">Désactiver Flag Secure</string>
-    <string name="CenterActionBarTitle">Centrer le titre dans la barre d\'action</string>
     <string name="ShowQuickReplyInBotCommands">Afficher la réponse rapide dans les commandes du bot</string>
     <string name="PushServiceType">Type de service push</string>
     <string name="PushServiceTypeInApp">Dans l\'application</string>
@@ -409,4 +409,9 @@
     <string name="StickerShapeRounded">Arrondi</string>
     <string name="StickerShapeRoundedMsg">Message</string>
     <string name="ActionBar">Barre d\'action</string>
+    <string name="UserRestrictedBy">Restreint par %1$s</string>
+    <string name="ChannelBottomButton">Bouton du bas du canal</string>
+    <string name="HideChannelGiftButton">Masquer le bouton cadeau de la chaîne</string>
+    <string name="IgnoreBlockedReplies">Masquer également les réponses aux utilisateurs bloqués</string>
+    <string name="RemoveMessageTail">Supprimer la queue du message</string>
 </resources>

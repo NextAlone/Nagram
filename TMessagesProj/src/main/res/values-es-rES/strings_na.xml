@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">Deshabilitar envío de lectura de historias</string>
     <string name="HideFilterMuteAll">Ocultar el filtro silenciar todo</string>
     <string name="UseLocalQuoteColor">Usar color local de citado</string>
+    <string name="AvatarCorners">Esquinas de avatar</string>
     <string name="DisableProfileAvatarBlur">Desactivar perfil Avatar Blur</string>
     <string name="DisableCustomWallpaperUser">Desactivar fondo de pantalla personalizado del usuario</string>
     <string name="DisableCustomWallpaperChannel">Desactivar fondo de pantalla personalizado del canal</string>
@@ -130,7 +131,6 @@
     <string name="DisableClickCommandToSendHint">Para prevenir toques accidentales</string>
     <string name="DisableDialogsFloatingButton">Deshabilitar botón flotante de diálogos</string>
     <string name="DisableFlagSecure">Deshabilitar Flag Secure</string>
-    <string name="CenterActionBarTitle">Centrar el título en la barra de acción</string>
     <string name="ShowQuickReplyInBotCommands">Mostrar respuestas rápidas en comandos del bot</string>
     <string name="PushServiceType">Tipo de servicio Push</string>
     <string name="PushServiceTypeInApp">En la App</string>
@@ -409,4 +409,9 @@
     <string name="StickerShapeRounded">Redondeado</string>
     <string name="StickerShapeRoundedMsg">Mensaje</string>
     <string name="ActionBar">Barra de acción</string>
+    <string name="UserRestrictedBy">Restringido por %1$s</string>
+    <string name="ChannelBottomButton">Botón inferior del canal</string>
+    <string name="HideChannelGiftButton">Ocultar botón de regalo del canal</string>
+    <string name="IgnoreBlockedReplies">También ocultar respuestas a usuarios bloqueados</string>
+    <string name="RemoveMessageTail">Eliminar cola del mensaje</string>
 </resources>

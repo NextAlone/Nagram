@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">Inaktivera Skicka Lästa Berättelser</string>
     <string name="HideFilterMuteAll">Dölj filtrera stänga av alla</string>
     <string name="UseLocalQuoteColor">Använd lokal offertfärg</string>
+    <string name="AvatarCorners">Avatar hörn</string>
     <string name="DisableProfileAvatarBlur">Inaktivera profilavatar oskärpa</string>
     <string name="DisableCustomWallpaperUser">Inaktivera användaranpassad bakgrundsbild</string>
     <string name="DisableCustomWallpaperChannel">Inaktivera kanalanpassad bakgrundsbild</string>
@@ -130,7 +131,6 @@
     <string name="DisableClickCommandToSendHint">För att förhindra oavsiktligt tryck</string>
     <string name="DisableDialogsFloatingButton">Inaktivera dialoger flytande knapp</string>
     <string name="DisableFlagSecure">Inaktivera flagga säkert</string>
-    <string name="CenterActionBarTitle">Centrera titel i åtgärdsfältet</string>
     <string name="ShowQuickReplyInBotCommands">Visa snabbsvar i botkommandon</string>
     <string name="PushServiceType">Typ av push-tjänst</string>
     <string name="PushServiceTypeInApp">I appen</string>
@@ -409,4 +409,9 @@
     <string name="StickerShapeRounded">Avrundad</string>
     <string name="StickerShapeRoundedMsg">Meddelande</string>
     <string name="ActionBar">Åtgärd fält</string>
+    <string name="UserRestrictedBy">Begränsad av %1$s</string>
+    <string name="ChannelBottomButton">Kanal bottenknapp</string>
+    <string name="HideChannelGiftButton">Dölj kanal presentknapp</string>
+    <string name="IgnoreBlockedReplies">Dölj också svar till blockerade användare</string>
+    <string name="RemoveMessageTail">Ta bort meddelande svans</string>
 </resources>

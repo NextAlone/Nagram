@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">Dezactivează povestirile citite</string>
     <string name="HideFilterMuteAll">Ascunde filtrele mute toate</string>
     <string name="UseLocalQuoteColor">Folosește culoarea ofertei locale</string>
+    <string name="AvatarCorners">Colţuri Avatar</string>
     <string name="DisableProfileAvatarBlur">Dezactivează Blur Avatar de profil</string>
     <string name="DisableCustomWallpaperUser">Dezactivează imaginea de fundal personalizată a utilizatorului</string>
     <string name="DisableCustomWallpaperChannel">Dezactivează fundal personalizat pentru canale</string>
@@ -130,7 +131,6 @@
     <string name="DisableClickCommandToSendHint">Pentru a preveni atingerea accidentală</string>
     <string name="DisableDialogsFloatingButton">Dezactivează dialogul cu butonul plutitor</string>
     <string name="DisableFlagSecure">Dezactivează Steagul Securizat</string>
-    <string name="CenterActionBarTitle">Titlul centrului în bara de acțiune</string>
     <string name="ShowQuickReplyInBotCommands">Arată Rapid În Bot Comenzi</string>
     <string name="PushServiceType">Tip serviciu Push</string>
     <string name="PushServiceTypeInApp">În aplicație</string>
@@ -409,4 +409,9 @@
     <string name="StickerShapeRounded">Rotunjit</string>
     <string name="StickerShapeRoundedMsg">Mesaj</string>
     <string name="ActionBar">Bară de acțiune</string>
+    <string name="UserRestrictedBy">Limitat de %1$s</string>
+    <string name="ChannelBottomButton">Butonul de jos canal</string>
+    <string name="HideChannelGiftButton">Ascunde butonul cadou al canalului</string>
+    <string name="IgnoreBlockedReplies">Ascunde și răspunsurile către utilizatorii blocați</string>
+    <string name="RemoveMessageTail">Elimină coada mesajelor</string>
 </resources>

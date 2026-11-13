@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">Απενεργ/ση Αποστολής Ανάγνωσης Ιστοριών</string>
     <string name="HideFilterMuteAll">Απόκρυψη φίλτρου σίγασης όλων</string>
     <string name="UseLocalQuoteColor">Χρήση χρώματος τοπικής προσφοράς</string>
+    <string name="AvatarCorners">Γωνίες άβαταρ</string>
     <string name="DisableProfileAvatarBlur">Απενεργοποίηση Θόλωσης Avatar Προφίλ</string>
     <string name="DisableCustomWallpaperUser">Απενεργ/ση προσαρμοσμένης ταπετσαρίας χρήστη</string>
     <string name="DisableCustomWallpaperChannel">Απενεργ/ση προσαρμοσμένης ταπετσαρίας καναλιών</string>
@@ -130,7 +131,6 @@
     <string name="DisableClickCommandToSendHint">Για την πρόληψη ακούσιας αφής</string>
     <string name="DisableDialogsFloatingButton">Απενεργ/ση Πλωτού Κουμπιού Διαλόγων</string>
     <string name="DisableFlagSecure">Απενεργ/ση Flag Secure</string>
-    <string name="CenterActionBarTitle">Κεντράρισμα τίτλου στη γραμμή ενεργειών</string>
     <string name="ShowQuickReplyInBotCommands">Εμφάνιση Γρήγορης Απάντησης Στις Εντολές Bot</string>
     <string name="PushServiceType">Τύπος Υπηρεσίας Push</string>
     <string name="PushServiceTypeInApp">Στην Εφαρμογή</string>
@@ -409,4 +409,9 @@
     <string name="StickerShapeRounded">Στρογγυλεμένο</string>
     <string name="StickerShapeRoundedMsg">Μήνυμα</string>
     <string name="ActionBar">Μπάρα Ενεργειών</string>
+    <string name="UserRestrictedBy">Περιορίζεται από %1$s</string>
+    <string name="ChannelBottomButton">Κάτω πλήκτρο καναλιού</string>
+    <string name="HideChannelGiftButton">Απόκρυψη κουμπιού δώρου καναλιού</string>
+    <string name="IgnoreBlockedReplies">Επίσης απόκρυψη απαντήσεων στους αποκλεισμένους χρήστες</string>
+    <string name="RemoveMessageTail">Αφαίρεση ουράς μηνυμάτων</string>
 </resources>

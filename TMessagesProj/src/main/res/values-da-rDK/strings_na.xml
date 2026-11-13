@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">Deaktivér Send Læsehistorier</string>
     <string name="HideFilterMuteAll">Skjul filter mute alle</string>
     <string name="UseLocalQuoteColor">Brug lokal tilbudsfarve</string>
+    <string name="AvatarCorners">Avatar hjørner</string>
     <string name="DisableProfileAvatarBlur">Deaktivér Profil Avatar Blur</string>
     <string name="DisableCustomWallpaperUser">Deaktivér brugerdefineret baggrund</string>
     <string name="DisableCustomWallpaperChannel">Deaktivér kanal brugerdefineret baggrund</string>
@@ -130,7 +131,6 @@
     <string name="DisableClickCommandToSendHint">For at forhindre utilsigtet berøring</string>
     <string name="DisableDialogsFloatingButton">Deaktivér Dialoger Flydende Knap</string>
     <string name="DisableFlagSecure">Deaktivér Flag Sikker</string>
-    <string name="CenterActionBarTitle">Centrér titel i handlingsbjælken</string>
     <string name="ShowQuickReplyInBotCommands">Vis Hurtigt Svar I Bot Kommandoer</string>
     <string name="PushServiceType">Push Service Type</string>
     <string name="PushServiceTypeInApp">I App</string>
@@ -409,4 +409,9 @@
     <string name="StickerShapeRounded">Aundet</string>
     <string name="StickerShapeRoundedMsg">Besked</string>
     <string name="ActionBar">Handlings Bjælke</string>
+    <string name="UserRestrictedBy">Begrænset af %1$s</string>
+    <string name="ChannelBottomButton">Kanal nederste knap</string>
+    <string name="HideChannelGiftButton">Skjul kanal gaveknap</string>
+    <string name="IgnoreBlockedReplies">Skjul også svar til blokerede brugere</string>
+    <string name="RemoveMessageTail">Fjern besked hale</string>
 </resources>

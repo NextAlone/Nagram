@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">Вимкнути надсилання історій читання</string>
     <string name="HideFilterMuteAll">Сховати фільтр вимкнути всі</string>
     <string name="UseLocalQuoteColor">Використовувати колір локальної лапки</string>
+    <string name="AvatarCorners">Аватар кути</string>
     <string name="DisableProfileAvatarBlur">Вимкнути розмиття аватара профілю</string>
     <string name="DisableCustomWallpaperUser">Вимкнути користувацькі шпалери</string>
     <string name="DisableCustomWallpaperChannel">Вимкнути користувацькі шпалери каналу</string>
@@ -130,7 +131,6 @@
     <string name="DisableClickCommandToSendHint">Щоб запобігти випадковому дотику</string>
     <string name="DisableDialogsFloatingButton">Вимкнути плаваючу кнопку діалогу</string>
     <string name="DisableFlagSecure">Вимкнути захист прапора</string>
-    <string name="CenterActionBarTitle">Центрувати заголовок в панелі дій</string>
     <string name="ShowQuickReplyInBotCommands">Показати швидку відповідь у командах Bot</string>
     <string name="PushServiceType">Тип Служба push</string>
     <string name="PushServiceTypeInApp">В додатку</string>
@@ -409,4 +409,9 @@
     <string name="StickerShapeRounded">Округлі</string>
     <string name="StickerShapeRoundedMsg">Повідомлення</string>
     <string name="ActionBar">Смуга подій</string>
+    <string name="UserRestrictedBy">Restricted by %1$s</string>
+    <string name="ChannelBottomButton">Кнопка нижнього каналу</string>
+    <string name="HideChannelGiftButton">Приховати кнопку подарунку каналу</string>
+    <string name="IgnoreBlockedReplies">Також приховувати відповіді для заблокованих користувачів</string>
+    <string name="RemoveMessageTail">Видалити хвіст повідомлення</string>
 </resources>

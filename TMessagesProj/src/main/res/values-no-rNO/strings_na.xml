@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">Deaktiver Send Les Historier</string>
     <string name="HideFilterMuteAll">Skjul demping av filtre</string>
     <string name="UseLocalQuoteColor">Bruk lokal sitattfarge</string>
+    <string name="AvatarCorners">Avatar hjørner</string>
     <string name="DisableProfileAvatarBlur">Deaktivere profilbilde blur</string>
     <string name="DisableCustomWallpaperUser">Deaktivere brukerdefinert bakgrunn</string>
     <string name="DisableCustomWallpaperChannel">Deaktiver kanaltilpasset bakgrunnsbilde</string>
@@ -130,7 +131,6 @@
     <string name="DisableClickCommandToSendHint">Å forhindre utilsiktet berøring</string>
     <string name="DisableDialogsFloatingButton">Deaktiver dialoger med flytende knapp</string>
     <string name="DisableFlagSecure">Deaktiver Flag sikker</string>
-    <string name="CenterActionBarTitle">Sentertittel i handlingslinjen</string>
     <string name="ShowQuickReplyInBotCommands">Vis hurtigsvar i bot-kommandoer</string>
     <string name="PushServiceType">Push tjenestetype</string>
     <string name="PushServiceTypeInApp">I App</string>
@@ -409,4 +409,9 @@
     <string name="StickerShapeRounded">Avrundet</string>
     <string name="StickerShapeRoundedMsg">Melding</string>
     <string name="ActionBar">Handlingslinje</string>
+    <string name="UserRestrictedBy">Begrenset av %1$s</string>
+    <string name="ChannelBottomButton">Kanal bunnknapp</string>
+    <string name="HideChannelGiftButton">Skjul knappen for kanal</string>
+    <string name="IgnoreBlockedReplies">Skjul også svar til blokkerte brukere</string>
+    <string name="RemoveMessageTail">Fjern meldings-hale</string>
 </resources>

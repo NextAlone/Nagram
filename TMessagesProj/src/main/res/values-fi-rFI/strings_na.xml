@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">Poista Lähetä Lukutarinat Käytöstä</string>
     <string name="HideFilterMuteAll">Piilota suodatin mykistää kaikki</string>
     <string name="UseLocalQuoteColor">Käytä paikallista tarjouksen väriä</string>
+    <string name="AvatarCorners">Hahmon kulmat</string>
     <string name="DisableProfileAvatarBlur">Poista Profiilin Avatar Blur Käytöstä</string>
     <string name="DisableCustomWallpaperUser">Poista käyttäjän oma taustakuva käytöstä</string>
     <string name="DisableCustomWallpaperChannel">Poista kanavien mukautettu taustakuva käytöstä</string>
@@ -130,7 +131,6 @@
     <string name="DisableClickCommandToSendHint">Estä vahingossa kosketus</string>
     <string name="DisableDialogsFloatingButton">Poista Dialogien Kelluva Painike Käytöstä</string>
     <string name="DisableFlagSecure">Poista Lipun Turvallisuus Käytöstä</string>
-    <string name="CenterActionBarTitle">Keskitä otsikko toimintopalkille</string>
     <string name="ShowQuickReplyInBotCommands">Näytä Nopea Vastaus Botin Komennoissa</string>
     <string name="PushServiceType">Push Service Type</string>
     <string name="PushServiceTypeInApp">Sovelluksessa</string>
@@ -409,4 +409,9 @@
     <string name="StickerShapeRounded">Pyöristetty</string>
     <string name="StickerShapeRoundedMsg">Viesti</string>
     <string name="ActionBar">Toiminto Palkki</string>
+    <string name="UserRestrictedBy">Rajoitettu %1$s</string>
+    <string name="ChannelBottomButton">Kanavan alapainike</string>
+    <string name="HideChannelGiftButton">Piilota kanava lahjapainike</string>
+    <string name="IgnoreBlockedReplies">Piilota myös vastaukset estetyille käyttäjille</string>
+    <string name="RemoveMessageTail">Poista viesti häneltä</string>
 </resources>

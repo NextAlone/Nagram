@@ -131,7 +131,6 @@
     <string name="DisableClickCommandToSendHint">妈妈再也不用担心我会误触啦</string>
     <string name="DisableDialogsFloatingButton">禁用主页浮动按钮</string>
     <string name="DisableFlagSecure">Disable Flag Secure</string>
-    <string name="CenterActionBarTitle">标题居中</string>
     <string name="ShowQuickReplyInBotCommands">在输入框中显示快速回复按钮</string>
     <string name="PushServiceType">通知推送服务</string>
     <string name="PushServiceTypeInApp">内置</string>
@@ -414,4 +413,5 @@
     <string name="ChannelBottomButton">频道底栏按钮</string>
     <string name="HideChannelGiftButton">隐藏频道礼物按钮</string>
     <string name="IgnoreBlockedReplies">同时隐藏回复被拉黑用户的消息</string>
+    <string name="RemoveMessageTail">删除消息底部小尾巴</string>
 </resources>

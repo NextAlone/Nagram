@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">Xem tin tức một cách bí mật</string>
     <string name="HideFilterMuteAll">\"Bật tiếng tất cả\" trong các thư mục ẩn</string>
     <string name="UseLocalQuoteColor">Màu tên cục bộ</string>
+    <string name="AvatarCorners">Avatar corners</string>
     <string name="DisableProfileAvatarBlur">Disable Profile Avatar Blur</string>
     <string name="DisableCustomWallpaperUser">Tắt nền tùy chỉnh cho tin nhắn riêng tư</string>
     <string name="DisableCustomWallpaperChannel">Tắt nền tùy chỉnh cho kênh</string>
@@ -130,7 +131,6 @@
     <string name="DisableClickCommandToSendHint">Không còn phải lo lắng con vô tình chạm vào nó nữa</string>
     <string name="DisableDialogsFloatingButton">Vô hiệu hóa nút nổi trang chủ</string>
     <string name="DisableFlagSecure">Tắt Flag Secure</string>
-    <string name="CenterActionBarTitle">Tiêu đề được căn giữa</string>
     <string name="ShowQuickReplyInBotCommands">Hiển thị nút trả lời nhanh trong hộp nhập</string>
     <string name="PushServiceType">Dịch vụ đẩy thông báo</string>
     <string name="PushServiceTypeInApp">Trong ứng dụng</string>
@@ -409,4 +409,9 @@
     <string name="StickerShapeRounded">Rounded</string>
     <string name="StickerShapeRoundedMsg">Message</string>
     <string name="ActionBar">Action Bar</string>
+    <string name="UserRestrictedBy">Restricted by %1$s</string>
+    <string name="ChannelBottomButton">Channel bottom button</string>
+    <string name="HideChannelGiftButton">Hide channel gift button</string>
+    <string name="IgnoreBlockedReplies">Also hide replies to blocked users</string>
+    <string name="RemoveMessageTail">Remove message tail</string>
 </resources>

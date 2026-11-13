@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">既読記事の送信を無効にする</string>
     <string name="HideFilterMuteAll">フィルターミュートをすべて隠す</string>
     <string name="UseLocalQuoteColor">ローカルクオートカラーを使用する</string>
+    <string name="AvatarCorners">アバターの角</string>
     <string name="DisableProfileAvatarBlur">プロフィールアバターのぼかしを無効にする</string>
     <string name="DisableCustomWallpaperUser">ユーザーのカスタム壁紙を無効にする</string>
     <string name="DisableCustomWallpaperChannel">チャンネルのカスタム壁紙を無効にする</string>
@@ -130,7 +131,6 @@
     <string name="DisableClickCommandToSendHint">偶発的なタッチを防ぐため</string>
     <string name="DisableDialogsFloatingButton">ダイアログのフローティングボタンを無効化</string>
     <string name="DisableFlagSecure">安全フラグを無効にする</string>
-    <string name="CenterActionBarTitle">アクションバーのタイトルを中心にする</string>
     <string name="ShowQuickReplyInBotCommands">Botコマンドでクイック返信を表示する</string>
     <string name="PushServiceType">プッシュ・サービス・タイプ</string>
     <string name="PushServiceTypeInApp">アプリ内</string>
@@ -413,4 +413,5 @@
     <string name="ChannelBottomButton">チャンネル下部のボタン</string>
     <string name="HideChannelGiftButton">チャンネルのギフトボタンを非表示</string>
     <string name="IgnoreBlockedReplies">ブロックしたユーザーへの返信も非表示</string>
+    <string name="RemoveMessageTail">メッセージのテールを削除</string>
 </resources>

@@ -104,6 +104,7 @@
     <string name="DisableSendReadStories">Отключить отправку прочтения историй</string>
     <string name="HideFilterMuteAll">Скрыть фильтр «Отключить все»</string>
     <string name="UseLocalQuoteColor">Локальный цвет цитаты</string>
+    <string name="AvatarCorners">Углы аватара</string>
     <string name="DisableProfileAvatarBlur">Отключить размытие аватара</string>
     <string name="DisableCustomWallpaperUser">Отключить пользовательские обои</string>
     <string name="DisableCustomWallpaperChannel">Отключить пользовательские обои каналов</string>
@@ -130,7 +131,6 @@
     <string name="DisableClickCommandToSendHint">Чтобы предотвратить случайное нажатие.</string>
     <string name="DisableDialogsFloatingButton">Отключить плавающую кнопку</string>
     <string name="DisableFlagSecure">Отключить флаг безопасности</string>
-    <string name="CenterActionBarTitle">Заголовок по центру</string>
     <string name="ShowQuickReplyInBotCommands">Показывать быстрый ответ в командах бота</string>
     <string name="PushServiceType">Тип сервиса уведомлений</string>
     <string name="PushServiceTypeInApp">В приложении</string>
@@ -409,4 +409,9 @@
     <string name="StickerShapeRounded">Скругленный</string>
     <string name="StickerShapeRoundedMsg">Сообщение</string>
     <string name="ActionBar">Панель действий</string>
+    <string name="UserRestrictedBy">Ограничено %1$s</string>
+    <string name="ChannelBottomButton">Кнопка внизу канала</string>
+    <string name="HideChannelGiftButton">Скрыть кнопку подарка канала</string>
+    <string name="IgnoreBlockedReplies">Также скрыть ответы заблокированным пользователям</string>
+    <string name="RemoveMessageTail">Удалить хвост сообщения</string>
 </resources>
