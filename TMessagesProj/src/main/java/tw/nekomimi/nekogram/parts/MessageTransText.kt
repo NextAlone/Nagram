@@ -2,7 +2,8 @@ package tw.nekomimi.nekogram.parts
 
 import org.telegram.tgnet.TLRPC
 import tw.nekomimi.nekogram.transtale.TranslateDb
-import tw.nekomimi.nekogram.transtale.html.HTMLKeeper
+import tw.nekomimi.nekogram.transtale.Translator
+import tw.nekomimi.nekogram.transtale.html.TranslationEntities
 import xyz.nextalone.nagram.NaConfig
 
 /**
@@ -20,6 +21,9 @@ internal object MessageTransText {
     /** Separator placed between the original text and its translation. */
     fun separatorFor(isPoll: Boolean) = if (isPoll) POLL_SEPARATOR else MESSAGE_SEPARATOR
 
+    /** Rich text format of the translator currently selected by the user. */
+    private fun currentFormat() = Translator.currentTranslator().format
+
     /**
      * Converts [source] into the string that is sent to the translation provider.
      *
@@ -27,12 +31,18 @@ internal object MessageTransText {
      * keeps the bold/italic/code/... markup, otherwise the raw text is used.
      */
     fun queryTextOf(source: TLRPC.TL_textWithEntities): String {
-        val text = source.text
         if (!NaConfig.keepFormatting.Bool() || source.entities.isNullOrEmpty()) {
-            return text
+            return source.text
         }
-        return HTMLKeeper.entitiesToHtml(text, source.entities, false)
+        return TranslationEntities.encode(source, currentFormat())
     }
+
+    /**
+     * Merges [translated] back into [source] and returns the new rich text, decoding the entities
+     * with the format of the current translator.
+     */
+    fun merge(source: TLRPC.TL_textWithEntities, translated: String, separator: String): TLRPC.TL_textWithEntities =
+        merge(source, translated, separator, currentFormat())
 
     /**
      * Merges [translated] back into [source] and returns the new rich text.
@@ -40,8 +50,13 @@ internal object MessageTransText {
      * Depending on `hideOriginAfterTranslation` the original text is either dropped or kept as
      * a prefix; entities of the translated part are shifted accordingly.
      */
-    fun merge(source: TLRPC.TL_textWithEntities, translated: String, separator: String): TLRPC.TL_textWithEntities {
-        val parsed = parseEntities(translated, source)
+    fun merge(
+        source: TLRPC.TL_textWithEntities,
+        translated: String,
+        separator: String,
+        format: TranslationEntities.Format
+    ): TLRPC.TL_textWithEntities {
+        val parsed = parseEntities(translated, source, format)
         val result = TLRPC.TL_textWithEntities()
 
         if (NaConfig.hideOriginAfterTranslation.Bool()) {
@@ -62,19 +77,49 @@ internal object MessageTransText {
         return result
     }
 
-    /** Same as [merge] but only consults the cache, returning null on a cache miss. */
+    /**
+     * Same as [merge] but only consults the cache, returning null on a cache miss.
+     *
+     * A cache key is produced by encoding [source] with a given format, and the provider (hence the
+     * format) may have changed since an entry was stored, so every format is tried. The matching
+     * entry is then decoded with the very format that produced its key.
+     */
     fun mergeCached(source: TLRPC.TL_textWithEntities, db: TranslateDb, separator: String): TLRPC.TL_textWithEntities? {
-        val cached = db.query(queryTextOf(source))?.takeIf { it.isNotBlank() } ?: return null
-        return merge(source, cached, separator)
+        for (format in cacheFormats(source)) {
+            val key = TranslationEntities.encode(source, format)
+            val cached = db.query(key)?.takeIf { it.isNotBlank() } ?: continue
+            return merge(source, cached, separator, format)
+        }
+        return null
     }
 
-    private fun parseEntities(translated: String, source: TLRPC.TL_textWithEntities): TLRPC.TL_textWithEntities {
+    /**
+     * The formats to probe when reading the cache, the current one first so the most likely key is
+     * queried before the others.
+     */
+    private fun cacheFormats(source: TLRPC.TL_textWithEntities): List<TranslationEntities.Format> {
+        // Without rich entities every format collapses to the raw text, so one lookup is enough.
+        if (source.entities.isNullOrEmpty()) {
+            return listOf(TranslationEntities.Format.NO_HTML)
+        }
+        val current = currentFormat()
+        return buildList {
+            add(current)
+            TranslationEntities.Format.values().forEach { if (it != current) add(it) }
+        }
+    }
+
+    private fun parseEntities(
+        translated: String,
+        source: TLRPC.TL_textWithEntities,
+        format: TranslationEntities.Format
+    ): TLRPC.TL_textWithEntities {
         if (!NaConfig.keepFormatting.Bool() || source.entities.isNullOrEmpty()) {
             return TLRPC.TL_textWithEntities().also {
                 it.text = translated
                 it.entities = ArrayList()
             }
         }
-        return HTMLKeeper.htmlToEntities(translated, source.entities, false)
+        return TranslationEntities.decode(source, translated, format)
     }
 }

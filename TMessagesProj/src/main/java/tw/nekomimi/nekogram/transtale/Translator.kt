@@ -11,6 +11,7 @@ import tw.nekomimi.nekogram.NekoConfig
 import tw.nekomimi.nekogram.cc.CCConverter
 import tw.nekomimi.nekogram.cc.CCTarget
 import tw.nekomimi.nekogram.transtale.TranslateDb.Companion.currentTarget
+import tw.nekomimi.nekogram.transtale.html.TranslationEntities
 import tw.nekomimi.nekogram.transtale.source.*
 import tw.nekomimi.nekogram.ui.PopupBuilder
 import tw.nekomimi.nekogram.utils.AlertUtil.showCopyAlert
@@ -69,6 +70,16 @@ val String.transDbByCode by receive<String, TranslateDb> { code2Locale.transDb }
 
 interface Translator {
 
+    /**
+     * Rich text format used to encode a message before it is sent to the provider.
+     *
+     * A provider that drops HTML attributes cannot keep the `id` markers of
+     * [TranslationEntities.Format.ID] and should override this with
+     * [TranslationEntities.Format.BARE]. The default keeps the historical behaviour.
+     */
+    val format: TranslationEntities.Format
+        get() = TranslationEntities.Format.ID
+
     suspend fun doTranslate(from: String, to: String, query: String): String
 
     suspend fun doTranslate(from: String, to: String, query: String, context: List<String>): String {
@@ -94,6 +105,22 @@ interface Translator {
         const val providerLLM = 10
         const val providerDeepLOfficial = 11
         const val providerDeepLFree = 12
+
+        /** The translator selected by the current [NekoConfig.translationProvider] setting. */
+        fun currentTranslator(): Translator = when (NekoConfig.translationProvider.Int()) {
+            providerGoogle, providerGoogleCN -> GoogleAppTranslator
+            providerGoogle2 -> GoogleCloud2Translator
+            providerLingo -> LingoTranslator
+            providerMicrosoft -> MicrosoftTranslator
+            providerVolcengine -> VolcengineTranslator
+            providerDeepL -> DeepLXTranslator
+            providerDeepLOfficial -> DeepLTranslator
+            providerDeepLFree -> DeepLFreeTranslator
+            providerTelegram -> TelegramAPITranslator
+            providerTranSmart -> TranSmartTranslator
+            providerLLM -> LLMTranslator
+            else -> throw IllegalArgumentException()
+        }
 
         @Throws(Exception::class)
         suspend fun translate(to: Locale, query: String): String = translate(to, query, emptyList())
@@ -127,20 +154,7 @@ interface Translator {
                 providerTelegram -> language = TelegramAPITranslator.convertLanguageCode(language, country)
 
             }
-            val translator = when (provider) {
-                providerGoogle, providerGoogleCN -> GoogleAppTranslator
-                providerGoogle2 -> GoogleCloud2Translator
-                providerLingo -> LingoTranslator
-                providerMicrosoft -> MicrosoftTranslator
-                providerVolcengine -> VolcengineTranslator
-                providerDeepL -> DeepLXTranslator
-                providerDeepLOfficial -> DeepLTranslator
-                providerDeepLFree -> DeepLFreeTranslator
-                providerTelegram -> TelegramAPITranslator
-                providerTranSmart -> TranSmartTranslator
-                providerLLM -> LLMTranslator
-                else -> throw IllegalArgumentException()
-            }
+            val translator = currentTranslator()
 
             // FileLog.d("[Trans] use provider ${translator.javaClass.simpleName}, toLang: $toLang, query: $query")
 
