@@ -1625,7 +1625,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
             }
         }
         if (user == null) {
-            BulletinFactory.global().createErrorBulletin(LocaleController.getString(R.string.NoUsernameFound2)).show();
+            BulletinFactory.global().createErrorBulletin(AndroidUtilities.replaceTags(LocaleController.getString(R.string.UserWithIDNotFound))).show();
         }
         return user;
     }
