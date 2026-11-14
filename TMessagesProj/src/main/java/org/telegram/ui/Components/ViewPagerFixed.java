@@ -2221,7 +2221,10 @@ public class ViewPagerFixed extends FrameLayout {
             animatingIndicatorProgress = progress;
             listView.invalidateViews();
             invalidate();
-            scrollToChild(currentPosition);
+            // At progress 1 the selected tab is nextPosition (the pager resets with
+            // selectTab(0, current, 1f)); scrolling to currentPosition there would pull the
+            // strip back to the first tab and push the selected one off screen.
+            scrollToChild(progress >= 1.0f ? nextPosition : currentPosition);
 
             if (progress >= 1.0f) {
                 manualScrollingToPosition = -1;

@@ -569,6 +569,11 @@ public class ChatHistoryActivity extends BaseFragment {
             // 与 CachedMediaLayout 一致：原地重建当前页并刷新 tabs，避免 removeAllViews + setAdapter
             // 造成的页面/标签状态不同步（会导致页面无法左右滑动、tab 不可滚动）
             viewPager.rebuild(false);
+            // Rebuilt titles carry new counts and widths while the tab strip keeps its scroll
+            // offset, which can push the selected tab past the edge; bring it back into view.
+            if (tabsView != null) {
+                tabsView.getTabsContainer().scrollToPosition(tabsView.getCurrentPosition());
+            }
         }
     }
 
@@ -608,6 +613,9 @@ public class ChatHistoryActivity extends BaseFragment {
             listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
             listView.setVerticalScrollBarEnabled(false);
             glassEngine.addScrolledView(listView);
+            // Pages beyond the first are created after onInsets; without layout params here the
+            // negative top margin from setListViewParams is dropped and the list starts lower.
+            listView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
             BaseFragmentSimpleGlass.setListViewParams(listView, insetTop, insetBottom, ActionBar.getCurrentActionBarHeight() + AndroidUtilities.dp(42), 0);
 
             return listView;
