@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generated from the Nagram Desktop launcher icon SVGs. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+  <group android:translateX="18" android:translateY="18" android:scaleX="0.140625" android:scaleY="0.140625">
+    <path android:pathData="M-129.000,-129.000L30.691,-129.000L406.244,641.000L-129.000,641.000Z" android:fillColor="#FFEA4335"/>
+    <path android:pathData="M106.715,-129.000L641.000,-129.000L641.000,641.000L482.268,641.000Z" android:fillColor="#FF1A73E8"/>
+    <group android:translateX="11104" android:translateY="3882.42">
+      <path android:pathData="M-10761.785-3370.419l-117.435-240.774,62.557-30.509,132.315,271.283Z" android:fillColor="#FF34A853"/>
+    </group>
+    <group android:translateX="11196.7" android:translateY="6942.42">
+      <path android:pathData="M-10971.75-6671.27h0L-11104-6942.419h77.438l130.19,266.928-.162.079-12.821-26.288-62.395,30.431Z" android:fillColor="#FFFBBC04"/>
+    </group>
+    <path android:pathData="M29.776,-129.000L107.214,-129.000L170.131,0.500L92.693,0.500Z" android:fillColor="#FFFBBC04"/>
+    <path android:pathData="M342.215,511.500L419.650,511.500L482.567,641.000L405.132,641.000Z" android:fillColor="#FF34A853"/>
+  </group>
+</vector>

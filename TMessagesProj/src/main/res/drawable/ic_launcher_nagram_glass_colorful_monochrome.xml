@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generated from Telegram/Telegram-iOS/NagramColorful.icon in Nagram-ios. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="1746"
+    android:viewportHeight="1746">
+    <group
+        android:translateX="361"
+        android:translateY="361">
+        <group
+            android:pivotX="512"
+            android:pivotY="512"
+            android:scaleX="1.2"
+            android:scaleY="1.2">
+            <path
+                android:fillColor="#FFFFFFFF"
+                android:pathData="M296.461 374.651C285.913 361.05 279.659 344.613 278.499 327.44V315.61C279.687 298.004 286.203 281.176 297.181 267.361C308.159 253.545 323.08 243.396 339.962 238.261C356.844 233.125 374.889 233.247 391.701 238.609C408.512 243.971 423.295 254.32 434.086 268.282L452.439 292.028V576.462L296.461 374.651Z" />
+            <path
+                android:fillColor="#FFFFFFFF"
+                android:pathData="M589.691 754.045L571.462 730.46V446.025L727.316 647.675C738.341 661.892 744.662 679.191 745.402 697.167V704.431C744.671 722.258 738.474 739.428 727.653 753.614C716.831 767.799 701.909 778.313 684.909 783.73C667.909 789.146 649.655 789.203 632.622 783.893C615.589 778.583 600.601 768.162 589.691 754.045Z" />
+            <path
+                android:fillColor="#FFFFFFFF"
+                android:pathData="M571.462 699.89C571.462 747.922 610.4 786.86 658.432 786.86C706.463 786.86 745.401 747.922 745.401 699.89V324.11C745.401 276.078 706.463 237.14 658.432 237.14C610.4 237.14 571.462 276.078 571.462 324.11V699.89Z" />
+            <path
+                android:fillColor="#FFFFFFFF"
+                android:pathData="M435.309 269.865C405.936 231.861 351.316 224.864 313.312 254.237C275.308 283.61 268.312 338.229 297.685 376.234L589.69 754.045C619.063 792.049 673.683 799.046 711.687 769.673C749.691 740.3 756.688 685.68 727.314 647.676L435.309 269.865Z" />
+            <path
+                android:fillColor="#FFFFFFFF"
+                android:pathData="M452.438 324.11C452.438 276.078 413.5 237.14 365.468 237.14C317.437 237.14 278.499 276.078 278.499 324.11V699.894C278.499 747.926 317.437 786.864 365.468 786.864C413.5 786.864 452.438 747.926 452.438 699.894V324.11Z" />
+        </group>
+    </group>
+</vector>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generated from Telegram/Telegram-iOS/NagramClassic.icon in Nagram-ios. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="1746"
+    android:viewportHeight="1746">
+    <group
+        android:translateX="361"
+        android:translateY="361">
+        <group
+            android:pivotX="512"
+            android:pivotY="512"
+            android:scaleX="1.2"
+            android:scaleY="1.2">
+            <path
+                android:fillColor="#FFFFFFFF"
+                android:pathData="M452.439 324.111C452.439 276.079 413.501 237.141 365.469 237.141C317.438 237.141 278.5 276.079 278.5 324.111V699.895C278.5 747.927 317.438 786.865 365.469 786.865C413.501 786.865 452.439 747.927 452.439 699.895V324.111Z" />
+            <path
+                android:fillColor="#FFFFFFFF"
+                android:pathData="M571.462 699.89C571.462 747.922 610.4 786.86 658.432 786.86C706.463 786.86 745.401 747.922 745.401 699.89V324.11C745.401 276.078 706.463 237.14 658.432 237.14C610.4 237.14 571.462 276.078 571.462 324.11V699.89Z" />
+            <path
+                android:fillColor="#FFFFFFFF"
+                android:pathData="M435.309 269.866C405.936 231.862 351.316 224.865 313.312 254.238C275.308 283.611 268.312 338.23 297.685 376.235L589.69 754.046C619.063 792.05 673.683 799.047 711.687 769.674C749.691 740.301 756.688 685.681 727.314 647.677L435.309 269.866Z" />
+        </group>
+    </group>
+</vector>

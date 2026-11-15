@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generated from the Nagram Desktop launcher icon SVGs. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+  <group android:translateX="18" android:translateY="18" android:scaleX="0.140625" android:scaleY="0.140625">
+    <group android:translateX="11196" android:translateY="9503.25">
+      <path android:pathData="M-10907.278-9118.045a39.6,39.6,0,0,1-23.669-50.755l66.968-183.988a39.6,39.6,0,0,1,50.755-23.669,39.6,39.6,0,0,1,23.666,50.755l-66.965,183.988a39.62,39.62,0,0,1-37.216,26.067A39.515,39.515,0,0,1-10907.278-9118.045Zm-159.512,0a39.6,39.6,0,0,1-23.666-50.755l66.965-183.988a39.6,39.6,0,0,1,50.755-23.669,39.6,39.6,0,0,1,23.669,50.755l-66.968,183.988a39.616,39.616,0,0,1-37.215,26.067A39.524,39.524,0,0,1-11066.79-9118.045Zm101.184-95,35.562-97.711,15.419,31.609-35.564,97.711Z">
+            <aapt:attr name="android:fillColor">
+              <gradient android:type="linear" android:startX="-11010.9" android:startY="-9340.15" android:endX="-10871.5" android:endY="-9136.44">
+                  <item android:offset="0" android:color="#FFFFCC0F"/>
+                  <item android:offset="1" android:color="#FFFFA51F"/>
+              </gradient>
+            </aapt:attr>
+      </path>
+    </group>
+  </group>
+</vector>

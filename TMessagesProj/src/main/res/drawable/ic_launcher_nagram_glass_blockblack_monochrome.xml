@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generated from Telegram/Telegram-iOS/NagramBlockBlack.icon in Nagram-ios. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="1746"
+    android:viewportHeight="1746">
+    <group
+        android:translateX="361"
+        android:translateY="361">
+        <group
+            android:pivotX="512"
+            android:pivotY="512"
+            android:scaleX="1.18"
+            android:scaleY="1.18">
+            <path
+                android:fillColor="#FFFFFFFF"
+                android:pathData="M452.493 277.075C470.437 283.607 485.051 296.998 493.122 314.305C501.192 331.611 502.056 351.415 495.525 369.359L373.766 703.889C367.235 721.833 353.843 736.448 336.537 744.518C319.23 752.588 299.427 753.453 281.483 746.922C263.539 740.391 248.924 726.999 240.854 709.692C232.784 692.386 231.919 672.582 238.45 654.638L360.21 320.108C366.741 302.164 380.132 287.549 397.439 279.479C414.745 271.409 434.549 270.544 452.493 277.075Z" />
+            <path
+                android:fillColor="#FFFFFFFF"
+                android:pathData="M742.516 277.075C760.46 283.607 775.074 296.998 783.145 314.305C791.215 331.611 792.079 351.415 785.548 369.359L663.789 703.889C657.258 721.833 643.866 736.448 626.56 744.518C609.253 752.588 589.45 753.453 571.506 746.922C553.562 740.391 538.947 726.999 530.877 709.692C522.807 692.386 521.942 672.582 528.473 654.638L650.233 320.108C656.764 302.164 670.155 287.549 687.462 279.479C704.768 271.409 724.572 270.544 742.516 277.075Z" />
+            <path
+                android:fillColor="#FFFFFFFF"
+                android:pathData="M558.148 453.998L493.485 631.658L465.448 574.183L530.115 396.523L558.148 453.998Z" />
+        </group>
+    </group>
+</vector>

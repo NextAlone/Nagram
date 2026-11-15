@@ -20,12 +20,14 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.DataSetObserver;
 import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.Shader;
 import android.graphics.SurfaceTexture;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -49,6 +51,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -73,7 +76,6 @@ import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeBind;
-import org.telegram.ui.ActionBar.ThemeColors;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.BottomPagesView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -670,6 +672,21 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
             return bm;
         };
 
+        private Bitmap createLogoBitmap(int size) {
+            // Full-bleed 108dp icon bitmap with the visible 72dp in the middle.
+            Drawable drawable = ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.mipmap.ic_launcher_nagram_glass_blue_background);
+            Bitmap layer = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+            int bleed = size / 4;
+            drawable.setBounds(-bleed, -bleed, size + bleed, size + bleed);
+            drawable.draw(new Canvas(layer));
+            Bitmap bm = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+            paint.setShader(new BitmapShader(layer, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP));
+            new Canvas(bm).drawCircle(size / 2f, size / 2f, size / 2f, paint);
+            layer.recycle();
+            return bm;
+        }
+
         public EGLThread(SurfaceTexture surface) {
             super("EGLThread");
             surfaceTexture = surface;
@@ -792,16 +809,9 @@ public class IntroActivity extends BaseFragment implements NotificationCenter.No
             loadTexture(R.drawable.intro_powerful_star, 18);
             loadTexture(R.drawable.intro_private_door, 19);
             loadTexture(R.drawable.intro_private_screw, 20);
-            loadTexture(R.drawable.intro_tg_plane, 21);
-            loadTexture(v -> {
-                Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-                paint.setColor(ThemeColors.TELEGRAM_COLOR); // It's logo color, it should not be colored by the theme
-                int size = dp(ICON_HEIGHT_DP);
-                Bitmap bm = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
-                Canvas c = new Canvas(bm);
-                c.drawCircle(size / 2f, size / 2f, size / 2f, paint);
-                return bm;
-            }, 22);
+            // Nagram: the sphere shows the glass Nagram icon, so the Telegram plane is left empty.
+            loadTexture(v -> Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888), 21);
+            loadTexture(v -> createLogoBitmap(dp(ICON_HEIGHT_DP)), 22);
             loadTexture(telegramMaskProvider, 23);
 
             updateTelegramTextures();

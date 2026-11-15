@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generated from the Nagram Desktop launcher icon SVGs. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+  <group android:translateX="18" android:translateY="18" android:scaleX="0.140625" android:scaleY="0.140625">
+    <group android:translateX="336.269" android:translateY="366.93">
+      <group android:rotation="180">
+        <path android:pathData="M15.784,58.257,78.34,27.746,144.1,162.565,81.54,193.076Z" android:fillColor="#FFFFFFFF"/>
+      </group>
+    </group>
+    <group android:translateX="192.418" android:translateY="126.24">
+      <group android:rotation="20">
+        <path android:pathData="M36,0A36,36,0,0,1,72,36V214a36,36,0,0,1-72,0V36A36,36,0,0,1,36,0Z" android:fillColor="#FFFFFFFF"/>
+      </group>
+    </group>
+    <group android:translateX="337.43" android:translateY="126.24">
+      <group android:rotation="20">
+        <path android:pathData="M36,0A36,36,0,0,1,72,36V214a36,36,0,0,1-72,0V36A36,36,0,0,1,36,0Z" android:fillColor="#FFFFFFFF"/>
+      </group>
+    </group>
+    <group android:translateX="9528.52" android:translateY="3980.81">
+      <path android:pathData="M-9242.765-3607.338a36,36,0,0,1-21.517-46.141l27.916-76.7,43.877,89.962-4.135,11.361a36.02,36.02,0,0,1-33.831,23.7A35.91,35.91,0,0,1-9242.765-3607.338Z" android:fillColor="#FFFFFFFF"/>
+    </group>
+    <group android:translateX="9468.84" android:translateY="3980.81">
+      <path android:pathData="M-9292.726-3809.774l3.992-10.969a36,36,0,0,1,46.142-21.516,36,36,0,0,1,21.517,46.141l-27.773,76.3Z" android:fillColor="#FFFFFFFF"/>
+    </group>
+    <group android:translateX="279.073" android:translateY="315.845">
+      <group android:rotation="180">
+        <path android:pathData="M6.331,105.056,39.424,14.135l7.618,15.618L13.949,120.674Z" android:fillColor="#FFFFFFFF"/>
+      </group>
+    </group>
+  </group>
+</vector>

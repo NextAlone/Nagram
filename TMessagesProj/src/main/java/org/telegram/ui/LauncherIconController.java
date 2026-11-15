@@ -14,7 +14,13 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.R;
 
 public class LauncherIconController {
+    // Removed icons whose aliases stay in the manifest (showing the default icon) for migration.
+    private static final String[] REMOVED_ICON_KEYS = {"NeonIcon", "PremiumIcon"};
+
     public static void tryFixLauncherIconIfNeeded() {
+        if (migrateRemovedIcons()) {
+            return;
+        }
         for (LauncherIcon icon : LauncherIcon.values()) {
             if (isEnabled(icon)) {
                 return;
@@ -22,6 +28,25 @@ public class LauncherIconController {
         }
 
         setIcon(LauncherIcon.DEFAULT);
+    }
+
+    private static boolean migrateRemovedIcons() {
+        Context ctx = ApplicationLoader.applicationContext;
+        PackageManager pm = ctx.getPackageManager();
+        boolean migrated = false;
+        for (String key : REMOVED_ICON_KEYS) {
+            ComponentName component = new ComponentName(ctx.getPackageName(), "org.telegram.messenger." + key);
+            if (pm.getComponentEnabledSetting(component) != PackageManager.COMPONENT_ENABLED_STATE_ENABLED) {
+                continue;
+            }
+            if (!migrated) {
+                // Enable the default icon before disabling the old alias so a launcher entry always exists.
+                setIcon(LauncherIcon.DEFAULT);
+                migrated = true;
+            }
+            pm.setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+        }
+        return migrated;
     }
 
     public static boolean isEnabled(LauncherIcon icon) {
@@ -87,17 +112,28 @@ public class LauncherIconController {
     }
 
     public enum LauncherIcon {
-        // DEFAULT keeps the manifest splash theme (animated Nagram icon).
-        DEFAULT("DefaultIcon", R.mipmap.ic_launcher_nagram, R.mipmap.icon_background_nagram, R.string.AppIconDefault, Resources.ID_NULL),
-        GOOGLE("GoogleIcon", R.mipmap.icon_background_google, R.mipmap.icon_foreground_google, R.string.AppIconGoogle, R.style.Theme_Nagram_Splash_Google),
-        COLORFUL("ColorfulIcon", R.mipmap.icon_background_colorful, R.mipmap.icon_foreground_colorful, R.string.AppIconColorful, R.style.Theme_Nagram_Splash_Colorful),
-        DARKGREEN("DarkGreenIcon", R.mipmap.icon_background_darkgreen, R.mipmap.icon_foreground_darkgreen, R.string.AppIconDarkGreen, R.style.Theme_Nagram_Splash_DarkGreen),
-        NEON("NeonIcon", R.mipmap.icon_background_neon, R.mipmap.icon_foreground_neon, R.string.AppIconNeon, R.style.Theme_Nagram_Splash_Neon),
-        NIELLO("NielloIcon", R.drawable.ic_launcher_nagram_round_niello_background, R.drawable.ic_launcher_nagram_round_niello_foreground, R.string.AppIconNiello, R.style.Theme_Nagram_Splash_Niello),
-        BLUE("BlueIcon", R.color.nagram_block_round_background, R.drawable.ic_launcher_nagram_block_round_foreground, R.string.AppIconBlue, R.style.Theme_Nagram_Splash_Blue),
-        DARKBLUE("DarkBlueIcon", R.color.nagram_round_blue_background, R.drawable.ic_launcher_nagram_round_blue_foreground, R.string.AppIconDarkBlue, R.style.Theme_Nagram_Splash_DarkBlue),
-        BLURBLUE("BlurBlueIcon", R.drawable.ic_launcher_nagram_blue_background, R.drawable.ic_launcher_nagram_blue_foreground, R.string.AppIconBlurBlue, R.style.Theme_Nagram_Splash_BlurBlue),
-        NOX("PremiumIcon", R.drawable.icon_3_background_sa, R.mipmap.icon_3_foreground_sa, R.string.AppIconPremium, R.style.Theme_Nagram_Splash_Telegram);
+        // Flat icons from the Nagram Desktop SVGs. DEFAULT keeps the manifest splash theme (animated Nagram icon).
+        DEFAULT("DefaultIcon", R.drawable.ic_launcher_nagram_background, R.drawable.ic_launcher_nagram_foreground, R.string.AppIconDefault, Resources.ID_NULL),
+        BLURBLUE("BlurBlueIcon", R.drawable.ic_launcher_nagram_blurblue_background, R.drawable.ic_launcher_nagram_blurblue_foreground, R.string.AppIconBlurBlue, R.style.Theme_Nagram_Splash_BlurBlue),
+        GOOGLE("GoogleIcon", R.drawable.ic_launcher_nagram_google_background, R.drawable.ic_launcher_nagram_google_foreground, R.string.AppIconGoogle, R.style.Theme_Nagram_Splash_Google),
+        COLORFUL("ColorfulIcon", R.drawable.ic_launcher_nagram_colorful_background, R.drawable.ic_launcher_nagram_colorful_foreground, R.string.AppIconColorful, R.style.Theme_Nagram_Splash_Colorful),
+        NIELLO("NielloIcon", R.drawable.ic_launcher_nagram_niello_background, R.drawable.ic_launcher_nagram_niello_foreground, R.string.AppIconNiello, R.style.Theme_Nagram_Splash_Niello),
+        BLUE("BlueIcon", R.drawable.ic_launcher_nagram_blue_background, R.drawable.ic_launcher_nagram_blue_foreground, R.string.AppIconBlue, R.style.Theme_Nagram_Splash_Blue),
+        DARKBLUE("DarkBlueIcon", R.drawable.ic_launcher_nagram_darkblue_background, R.drawable.ic_launcher_nagram_darkblue_foreground, R.string.AppIconDarkBlue, R.style.Theme_Nagram_Splash_DarkBlue),
+        OUTLINE("OutlineIcon", R.drawable.ic_launcher_nagram_outline_background, R.drawable.ic_launcher_nagram_outline_foreground, R.string.AppIconOutline, Resources.ID_NULL),
+        BLOCKGOOGLE("BlockGoogleIcon", R.drawable.ic_launcher_nagram_blockgoogle_background, R.drawable.ic_launcher_nagram_blockgoogle_foreground, R.string.AppIconBlockGoogle, R.style.Theme_Nagram_Splash_Google),
+        // Glass icons rendered from the iOS Icon Composer sources ship as a single full-bleed layer, so they
+        // have no separate foreground (Resources.ID_NULL).
+        GLASS_DEFAULT("GlassDefaultIcon", R.mipmap.ic_launcher_nagram_glass_classic_background, Resources.ID_NULL, R.string.AppIconGlassDefault, Resources.ID_NULL),
+        GLASS_BLURBLUE("GlassBlurBlueIcon", R.mipmap.ic_launcher_nagram_glass_blue_background, Resources.ID_NULL, R.string.AppIconGlassBlurBlue, R.style.Theme_Nagram_Splash_BlurBlue),
+        GLASS_GOOGLE("GlassGoogleIcon", R.mipmap.ic_launcher_nagram_glass_colorful_background, Resources.ID_NULL, R.string.AppIconGlassGoogle, R.style.Theme_Nagram_Splash_Google),
+        GLASS_DARKGREEN("DarkGreenIcon", R.mipmap.ic_launcher_nagram_glass_cyan_background, Resources.ID_NULL, R.string.AppIconGlassDarkGreen, R.style.Theme_Nagram_Splash_DarkGreen),
+        GLASS_NIELLO("GlassNielloIcon", R.mipmap.ic_launcher_nagram_glass_niello_background, Resources.ID_NULL, R.string.AppIconGlassNiello, R.style.Theme_Nagram_Splash_Niello),
+        GLASS_BLUE("GlassBlueIcon", R.mipmap.ic_launcher_nagram_glass_block_background, Resources.ID_NULL, R.string.AppIconGlassBlue, R.style.Theme_Nagram_Splash_Blue),
+        GLASS_DARKBLUE("GlassDarkBlueIcon", R.mipmap.ic_launcher_nagram_glass_blockblue_background, Resources.ID_NULL, R.string.AppIconGlassDarkBlue, R.style.Theme_Nagram_Splash_DarkBlue),
+        BLACK("BlackIcon", R.mipmap.ic_launcher_nagram_glass_black_background, Resources.ID_NULL, R.string.AppIconBlack, Resources.ID_NULL),
+        BLOCKBLACK("BlockBlackIcon", R.mipmap.ic_launcher_nagram_glass_blockblack_background, Resources.ID_NULL, R.string.AppIconBlockBlack, Resources.ID_NULL),
+        BLOCKPURPLE("BlockPurpleIcon", R.mipmap.ic_launcher_nagram_glass_blockpurple_background, Resources.ID_NULL, R.string.AppIconBlockPurple, Resources.ID_NULL);
 
         public final String key;
         public final int background;
@@ -126,10 +162,6 @@ public class LauncherIconController {
             this.title = title;
             this.premium = premium;
             this.splashTheme = splashTheme;
-        }
-
-        public boolean isNekoX() {
-            return this == DEFAULT;
         }
     }
 }

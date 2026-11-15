@@ -3,6 +3,7 @@ package org.telegram.ui.Cells;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -82,7 +83,6 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
                 holderView.bind(icon);
                 ThemeBind.selectorBackground(holderView.iconView, Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(ICONS_ROUND_RADIUS), Color.TRANSPARENT, Theme.getColor(Theme.key_listSelector), Color.BLACK), null, ThemeBind.of(Theme.key_listSelector));
                 holderView.iconView.setForeground(icon.foreground);
-                holderView.iconView.setIsNekoXIcon(icon.isNekoX());
             }
 
             @Override
@@ -310,7 +310,6 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
     }
 
     public static class AdaptiveIconImageView extends ImageView {
-        private boolean isNekoXIcon = false;
         private Drawable foreground;
         private Path path = new Path();
         private int outerPadding = AndroidUtilities.dp(5);
@@ -321,12 +320,8 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
         }
 
         public void setForeground(int res) {
-            foreground = ContextCompat.getDrawable(getContext(), res);
+            foreground = res == Resources.ID_NULL ? null : ContextCompat.getDrawable(getContext(), res);
             invalidate();
-        }
-
-        public void setIsNekoXIcon(boolean value) {
-            this.isNekoXIcon = value;
         }
 
         @Override
@@ -351,12 +346,13 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
         public void draw(Canvas canvas) {
             canvas.save();
             canvas.clipPath(path);
-            if (!this.isNekoXIcon)
-                canvas.scale(1f + backgroundOuterPadding / (float) getWidth(), 1f + backgroundOuterPadding / (float) getHeight(), getWidth() / 2f, getHeight() / 2f);
+            // A single-layer icon is laid out like a foreground layer, so its glyph matches layered icons.
+            int padding = foreground != null ? backgroundOuterPadding : outerPadding * 2;
+            canvas.scale(1f + padding / (float) getWidth(), 1f + padding / (float) getHeight(), getWidth() / 2f, getHeight() / 2f);
             super.draw(canvas);
             canvas.restore();
 
-            if (foreground != null && !this.isNekoXIcon) {
+            if (foreground != null) {
                 foreground.setBounds(-outerPadding, -outerPadding, getWidth() + outerPadding, getHeight() + outerPadding);
                 foreground.draw(canvas);
             }

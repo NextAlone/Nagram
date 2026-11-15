@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generated from the Nagram Desktop launcher icon SVGs. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+  <group android:translateX="18" android:translateY="18" android:scaleX="0.140625" android:scaleY="0.140625">
+    <group android:translateX="336.269" android:translateY="366.93">
+      <group android:rotation="180">
+        <path android:pathData="M15.784,58.257,78.34,27.746,144.1,162.565,81.54,193.076Z" android:fillColor="#FF34A853"/>
+      </group>
+    </group>
+    <group android:translateX="336.269" android:translateY="366.93">
+      <group android:rotation="180">
+        <path android:pathData="M78.34,27.746,15.784,58.257,81.54,193.076,144.1,162.565,78.34,27.746M87.549,1,170.84,171.774,72.332,219.819-10.959,49.049Z" android:fillColor="#FFF9F9F9"/>
+      </group>
+    </group>
+    <group android:translateX="192.418" android:translateY="126.24">
+      <group android:rotation="20">
+        <path android:pathData="M36,0A36,36,0,0,1,72,36V214a36,36,0,0,1-72,0V36A36,36,0,0,1,36,0Z">
+              <aapt:attr name="android:fillColor">
+                <gradient android:type="linear" android:startX="20.448" android:startY="4" android:endX="11.88" android:endY="44.75">
+                    <item android:offset="0" android:color="#FFFBBC04"/>
+                    <item android:offset="1" android:color="#FFEA4335"/>
+                </gradient>
+              </aapt:attr>
+        </path>
+      </group>
+    </group>
+    <group android:translateX="192.418" android:translateY="126.24">
+      <group android:rotation="20">
+        <path android:pathData="M36,0A36,36,0,0,0,0,36V214a36,36,0,0,0,72,0V36A36,36,0,0,0,36,0m0-20A56.063,56.063,0,0,1,92,36V214a56,56,0,0,1-112,0V36A56.063,56.063,0,0,1,36-20Z" android:fillColor="#FFF9F9F9"/>
+      </group>
+    </group>
+    <group android:translateX="337.43" android:translateY="126.24">
+      <group android:rotation="20">
+        <path android:pathData="M36,0A36,36,0,0,1,72,36V214a36,36,0,0,1-72,0V36A36,36,0,0,1,36,0Z">
+              <aapt:attr name="android:fillColor">
+                <gradient android:type="linear" android:startX="54.792" android:startY="193.5" android:endX="30.96" android:endY="221.25">
+                    <item android:offset="0" android:color="#FF1A73E8"/>
+                    <item android:offset="1" android:color="#FF34A853"/>
+                </gradient>
+              </aapt:attr>
+        </path>
+      </group>
+    </group>
+    <group android:translateX="337.43" android:translateY="126.24">
+      <group android:rotation="20">
+        <path android:pathData="M36,0A36,36,0,0,0,0,36V214a36,36,0,0,0,72,0V36A36,36,0,0,0,36,0m0-20A56.063,56.063,0,0,1,92,36V214a56,56,0,0,1-112,0V36A56.063,56.063,0,0,1,36-20Z" android:fillColor="#FFF9F9F9"/>
+      </group>
+    </group>
+    <group android:translateX="9528.52" android:translateY="3980.81">
+      <path android:pathData="M-9242.765-3607.338a36,36,0,0,1-21.517-46.141l27.916-76.7,43.877,89.962-4.135,11.361a36.02,36.02,0,0,1-33.831,23.7A35.91,35.91,0,0,1-9242.765-3607.338Z" android:fillColor="#FF34A853"/>
+    </group>
+    <group android:translateX="9468.84" android:translateY="3980.81">
+      <path android:pathData="M-9292.726-3809.774l3.992-10.969a36,36,0,0,1,46.142-21.516,36,36,0,0,1,21.517,46.141l-27.773,76.3Z" android:fillColor="#FFFBBC04"/>
+    </group>
+    <group android:translateX="279.073" android:translateY="315.845">
+      <group android:rotation="180">
+        <path android:pathData="M6.331,105.056,39.424,14.135l7.618,15.618L13.949,120.674Z" android:fillColor="#FFFBBC04"/>
+      </group>
+    </group>
+  </group>
+</vector>

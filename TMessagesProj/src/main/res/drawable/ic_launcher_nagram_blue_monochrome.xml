@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generated from the Nagram Desktop launcher icon SVGs. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+  <group android:translateX="18" android:translateY="18" android:scaleX="0.140625" android:scaleY="0.140625">
+    <group android:translateX="281.382" android:translateY="321.812">
+      <group android:rotation="180">
+        <path android:pathData="M0,97.711,35.564,0,50.981,31.611,15.418,129.322Z" android:fillColor="#FFFFFFFF"/>
+      </group>
+    </group>
+    <group android:translateX="186.062" android:translateY="113.25">
+      <group android:rotation="20">
+        <path android:pathData="M39.6,0A39.6,39.6,0,0,1,79.2,39.6V235.4a39.6,39.6,0,0,1-79.2,0V39.6A39.6,39.6,0,0,1,39.6,0Z" android:fillColor="#FFFFFFFF"/>
+      </group>
+    </group>
+    <group android:translateX="345.571" android:translateY="113.25">
+      <group android:rotation="20">
+        <path android:pathData="M39.6,0A39.6,39.6,0,0,1,79.2,39.6V235.4a39.6,39.6,0,0,1-79.2,0V39.6A39.6,39.6,0,0,1,39.6,0Z" android:fillColor="#FFFFFFFF"/>
+      </group>
+    </group>
+  </group>
+</vector>
