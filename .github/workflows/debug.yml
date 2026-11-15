@@ -125,7 +125,7 @@ jobs:
           python bin/scripts/upload.py "$HELPER_BOT_TOKEN"
       - name: Post to channel
         if: steps.post.outputs.chat != ''
-        uses: NextAlone/NagramActionRelated/channel-publish@2b74e4cd4e3c89fcc9d50095c039e467c674661f
+        uses: NextAlone/NagramActionRelated/channel-publish@f6be16850f0f7eddbc0fa3db6561bd3abde0a8ea
         with:
           bot-token: ${{ secrets.NAGRAM_CHANNEL_BOT_TOKEN }}
           api-id: ${{ secrets.NAGRAM_API_ID }}
@@ -141,4 +141,4 @@ jobs:
           files: |
             *arm64-v8a.apk | arm64-v8a · 大多数设备
             *armeabi-v7a.apk | armeabi-v7a · 旧设备
-          buttons: Commit=${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}
+          buttons: success:Commit=${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }} | danger:问题反馈=https://t.me/OrIssuesBot
