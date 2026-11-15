@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Per launcher icon splash themes, applied via SplashScreen.setSplashScreenTheme().
+     Each icon reuses the default N animation recolored to the icon palette, drawn on the
+     icon background color. The parent resolves per configuration, so night mode inherits
+     values-night-v31. -->
+<resources>
+    <style name="Theme.Nagram.Splash.Google" parent="Theme.TMessages.Start">
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_nagram_animated_google</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">#FFFFFF</item>
+    </style>
+
+    <style name="Theme.Nagram.Splash.Colorful" parent="Theme.TMessages.Start">
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_nagram_animated_colorful</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">#FFFFFF</item>
+    </style>
+
+    <style name="Theme.Nagram.Splash.DarkGreen" parent="Theme.TMessages.Start">
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_nagram_animated_darkgreen</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">#019267</item>
+    </style>
+
+    <style name="Theme.Nagram.Splash.Neon" parent="Theme.TMessages.Start">
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_nagram_animated_neon</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">#2E3134</item>
+    </style>
+
+    <style name="Theme.Nagram.Splash.Niello" parent="Theme.TMessages.Start">
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_nagram_animated_niello</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">#2E3134</item>
+    </style>
+
+    <style name="Theme.Nagram.Splash.Blue" parent="Theme.TMessages.Start">
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_nagram_animated_blue</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">#FFFFFF</item>
+    </style>
+
+    <style name="Theme.Nagram.Splash.DarkBlue" parent="Theme.TMessages.Start">
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_nagram_animated_darkblue</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">#0095FF</item>
+    </style>
+
+    <style name="Theme.Nagram.Splash.BlurBlue" parent="Theme.TMessages.Start">
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_nagram_animated_blurblue</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">#008AFF</item>
+    </style>
+
+    <style name="Theme.Nagram.Splash.Telegram" parent="Theme.TMessages.Start">
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/tg_splash_320</item>
+    </style>
+</resources>
