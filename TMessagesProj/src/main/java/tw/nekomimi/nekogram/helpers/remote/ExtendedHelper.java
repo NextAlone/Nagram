@@ -102,15 +102,17 @@ public class ExtendedHelper extends BaseRemoteHelper {
         return tokenMd5 != null && data.equalsIgnoreCase(tokenMd5);
     }
 
-    public boolean hasExtended() {
+    public boolean hasExtended(boolean request) {
         String token = NaConfig.INSTANCE.getExtendedFeatureUnlockedToken().String();
         if (hasExtended(token)) {
             return true;
         }
-        token = getClip();
-        if (hasExtended(token)) {
-            NaConfig.INSTANCE.getExtendedFeatureUnlockedToken().setConfigString(token);
-            return true;
+        if (request) {
+            token = getClip();
+            if (hasExtended(token)) {
+                NaConfig.INSTANCE.getExtendedFeatureUnlockedToken().setConfigString(token);
+                return true;
+            }
         }
         return false;
     }

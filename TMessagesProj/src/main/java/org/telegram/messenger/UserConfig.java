@@ -176,7 +176,7 @@ public class UserConfig extends BaseController {
         if (getActivatedAccountsCount() < getMaxAccountCount()) {
             return availableAccount;
         }
-        if (ExtendedHelper.getInstance().hasExtended()) {
+        if (ExtendedHelper.getInstance().hasExtended(true)) {
             return availableAccount;
         }
         return -1;
