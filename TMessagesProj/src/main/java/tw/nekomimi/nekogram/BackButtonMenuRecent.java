@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Path;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -18,6 +19,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ImageLocation;
@@ -28,16 +32,24 @@ import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC;
+import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.MenuOverlayHost;
+import org.telegram.ui.ActionBar.SimpleActionBarMenuOverlay;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.blur3.BlurredBackgroundDrawableViewFactory;
+import org.telegram.ui.Components.blur3.drawable.BlurredBackgroundDrawable;
+import org.telegram.ui.Components.blur3.drawable.color.BlurredBackgroundColorProvider;
 import org.telegram.ui.ProfileActivity;
 import org.telegram.ui.TopicsFragment;
+import org.telegram.utils.glass.source.GlassSourceCrossfade;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -51,6 +63,175 @@ public class BackButtonMenuRecent {
     private static final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekorecentdialogs", Context.MODE_PRIVATE);
     private static final SparseArray<LinkedList<Long>> recentDialogs = new SparseArray<>();
 
+    /**
+     * The recent chats in the menu overlay of the screen, growing out of the glass of the back button as the menus of
+     * the header's buttons. Null when the screen has no overlay or there are no recent chats to show.
+     *
+     * @param glassFactory the glass of the menu, as the header's menus; null without glass
+     * @param glassSource the glass going over to the frosted one as the menu opens; null without a crossfade
+     */
+    @Nullable
+    public static SimpleActionBarMenuOverlay showInOverlay(int currentAccount, BaseFragment fragment, View backButton,
+                                                           @Nullable BlurredBackgroundDrawableViewFactory glassFactory,
+                                                           @Nullable GlassSourceCrossfade glassSource,
+                                                           @Nullable BlurredBackgroundColorProvider glassColors,
+                                                           @Nullable Runnable onClosed) {
+        if (fragment == null || backButton == null) {
+            return null;
+        }
+        final Context context = fragment.getParentActivity();
+        final ActionBar actionBar = fragment.getActionBar();
+        if (context == null || actionBar == null) {
+            return null;
+        }
+        final List<Long> dialogs = getDialogsToShow(fragment.getCurrentAccount());
+        if (dialogs.isEmpty()) {
+            return null;
+        }
+        final SimpleActionBarMenuOverlay overlay = fragment.getSimpleMenuOverlay();
+        if (overlay == null) {
+            return null;
+        }
+        final RecentChatsMenuHost host = new RecentChatsMenuHost(actionBar, backButton, glassFactory, glassSource, glassColors, fragment.getResourceProvider(), overlay);
+        final ActionBarPopupWindow.ActionBarPopupWindowLayout layout = buildLayout(context, fragment, currentAccount, dialogs,
+                () -> overlay.close(true));
+        overlay.open(host, layout);
+        overlay.setOnClosed(onClosed);
+        return overlay;
+    }
+
+    /**
+     * The back button as the host of the menu: the menu grows out of its glass, the overlay draws the button
+     * inside the growing menu.
+     */
+    private static class RecentChatsMenuHost implements MenuOverlayHost {
+        private final ActionBar actionBar;
+        private final View backButton;
+        @Nullable
+        private final BlurredBackgroundDrawableViewFactory glassFactory;
+        @Nullable
+        private final GlassSourceCrossfade glassSource;
+        @Nullable
+        private final BlurredBackgroundColorProvider glassColors;
+        @Nullable
+        private final Theme.ResourcesProvider resourcesProvider;
+        private final SimpleActionBarMenuOverlay overlay;
+
+        private boolean shown;
+        private float buttonAlpha = 1f;
+
+        RecentChatsMenuHost(ActionBar actionBar, View backButton,
+                            @Nullable BlurredBackgroundDrawableViewFactory glassFactory,
+                            @Nullable GlassSourceCrossfade glassSource,
+                            @Nullable BlurredBackgroundColorProvider glassColors,
+                            @Nullable Theme.ResourcesProvider resourcesProvider,
+                            SimpleActionBarMenuOverlay overlay) {
+            this.actionBar = actionBar;
+            this.backButton = backButton;
+            this.glassFactory = glassFactory;
+            this.glassSource = glassSource;
+            this.glassColors = glassColors;
+            this.resourcesProvider = resourcesProvider;
+            this.overlay = overlay;
+        }
+
+        @Nullable
+        @Override
+        public BlurredBackgroundDrawable createMenuGlass(View owner) {
+            if (glassFactory == null) {
+                return null;
+            }
+            return glassFactory.create(owner).setColorProvider(glassColors).setRadius(AndroidUtilities.dp(23)).setPadding(AndroidUtilities.dp(6));
+        }
+
+        @Nullable
+        @Override
+        public BlurredBackgroundColorProvider getMenuGlassColorProvider() {
+            return glassColors;
+        }
+
+        @Override
+        public int getButtonsGlassBackgroundColor() {
+            return glassColors != null ? glassColors.getBackgroundColor() : 0;
+        }
+
+        @Nullable
+        @Override
+        public BlurredBackgroundColorProvider getButtonsGlassColorProvider() {
+            return glassColors;
+        }
+
+        @Override
+        public boolean hasMenuGlassStroke() {
+            return true;
+        }
+
+        @Override
+        public void setMenuGlassFrostedProgress(float progress) {
+            if (glassSource != null) {
+                glassSource.setProgress(progress);
+            }
+        }
+
+        /**
+         * The glass of the back button as it is drawn by the bar: its pill has a padding for the shadow, so the visible
+         * shape is {@code s} inside it, round by its half. The menu starts from exactly that, not a pixel bigger.
+         */
+        @Override
+        public boolean getMenuItemGlassRect(ActionBarMenuItem item, RectF out) {
+            final int s = AndroidUtilities.dp(46);
+            final int p = AndroidUtilities.dp(6);
+            final int top = actionBar.getHeight() - actionBar.getExtraHeight() - (ActionBar.getCurrentActionBarHeight() + s) / 2;
+            out.set(p, top, p + s, top + s);
+            return true;
+        }
+
+        @Override
+        public View getMenuView() {
+            return backButton;
+        }
+
+        @NonNull
+        @Override
+        public View getMenuHostView() {
+            return actionBar;
+        }
+
+        @Override
+        public void setMenuOverlay(@Nullable SimpleActionBarMenuOverlay overlay, @Nullable ActionBarMenuItem item) {
+            final boolean shown = overlay != null;
+            if (this.shown == shown) {
+                return;
+            }
+            this.shown = shown;
+            // the overlay draws the button inside the growing menu, the bar keeps its place meanwhile
+            if (shown) {
+                buttonAlpha = backButton.getAlpha();
+                backButton.setAlpha(0f);
+            } else {
+                backButton.setAlpha(buttonAlpha);
+            }
+        }
+
+        @Nullable
+        @Override
+        public SimpleActionBarMenuOverlay getOpenMenuOverlay() {
+            return shown ? overlay : null;
+        }
+
+        @Nullable
+        @Override
+        public Theme.ResourcesProvider getMenuResourcesProvider() {
+            return resourcesProvider;
+        }
+
+        /** As the menus of the menu items: the menu starts a little above the button. */
+        @Override
+        public int getMenuRise() {
+            return actionBar.getMenuRise();
+        }
+    }
+
     public static ActionBarPopupWindow show(int currentAccount, BaseFragment fragment, View backButton) {
         if (fragment == null) {
             return null;
@@ -60,14 +241,51 @@ public class BackButtonMenuRecent {
         if (context == null || fragmentView == null) {
             return null;
         }
-        List<Long> dialogs = getRecentDialogs(fragment.getCurrentAccount());
+        final List<Long> dialogs = getDialogsToShow(fragment.getCurrentAccount());
         if (dialogs.isEmpty()) {
             return null;
         }
-        if (dialogs.size() > MAX_RECENT_DIALOGS) {
-            dialogs = dialogs.subList(0, MAX_RECENT_DIALOGS);
-        }
 
+        final AtomicReference<ActionBarPopupWindow> scrimPopupWindowRef = new AtomicReference<>();
+        final ActionBarPopupWindow.ActionBarPopupWindowLayout layout = buildLayout(context, fragment, currentAccount, dialogs, () -> {
+            final ActionBarPopupWindow window = scrimPopupWindowRef.getAndSet(null);
+            if (window != null) {
+                window.dismiss();
+            }
+        });
+
+        Rect backgroundPaddings = new Rect();
+        Drawable shadowDrawable = context.getResources().getDrawable(R.drawable.popup_fixed_alert2).mutate();
+        shadowDrawable.getPadding(backgroundPaddings);
+
+        ActionBarPopupWindow scrimPopupWindow = new ActionBarPopupWindow(layout, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT);
+        scrimPopupWindowRef.set(scrimPopupWindow);
+        scrimPopupWindow.setPauseNotifications(true);
+        scrimPopupWindow.setDismissAnimationDuration(220);
+        scrimPopupWindow.setOutsideTouchable(true);
+        scrimPopupWindow.setClippingEnabled(true);
+        scrimPopupWindow.setAnimationStyle(R.style.PopupContextAnimation);
+        scrimPopupWindow.setFocusable(true);
+        layout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), View.MeasureSpec.AT_MOST));
+        scrimPopupWindow.setInputMethodMode(ActionBarPopupWindow.INPUT_METHOD_NOT_NEEDED);
+        scrimPopupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED);
+        scrimPopupWindow.getContentView().setFocusableInTouchMode(true);
+
+        int popupX = AndroidUtilities.dp(8) - backgroundPaddings.left;
+        if (AndroidUtilities.isTablet()) {
+            int[] location = new int[2];
+            fragmentView.getLocationInWindow(location);
+            popupX += location[0];
+        }
+        int popupY = backButton.getBottom() - backgroundPaddings.top - AndroidUtilities.dp(8);
+        scrimPopupWindow.showAtLocation(fragmentView, Gravity.LEFT | Gravity.BOTTOM, popupX, popupY);
+        scrimPopupWindow.dimBehind();
+        return scrimPopupWindow;
+    }
+
+    /** The rows of the recent chats in a menu layout; {@code closeMenu} closes the menu they are shown in. */
+    private static ActionBarPopupWindow.ActionBarPopupWindowLayout buildLayout(Context context, BaseFragment fragment, int currentAccount, List<Long> dialogs, Runnable closeMenu) {
+        final Theme.ResourcesProvider resourcesProvider = fragment.getResourceProvider();
         ActionBarPopupWindow.ActionBarPopupWindowLayout layout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(context) {
             final Path path = new Path();
 
@@ -83,18 +301,13 @@ public class BackButtonMenuRecent {
                 return draw;
             }
         };
-        Rect backgroundPaddings = new Rect();
-        Drawable shadowDrawable = fragment.getParentActivity().getResources().getDrawable(R.drawable.popup_fixed_alert2).mutate();
-        shadowDrawable.getPadding(backgroundPaddings);
-        layout.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
-
-        AtomicReference<ActionBarPopupWindow> scrimPopupWindowRef = new AtomicReference<>();
+        layout.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground, resourcesProvider));
+        layout.setFitItems(true);
 
         FrameLayout headerView = new FrameLayout(context);
-        headerView.setBackgroundColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuBackground));
 
         TextView titleTextView = new TextView(context);
-        titleTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue));
+        titleTextView.setTextColor(Theme.getColor(Theme.key_dialogTextBlue, resourcesProvider));
         titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
         titleTextView.setText(LocaleController.getString(R.string.RecentChats));
         titleTextView.setTypeface(AndroidUtilities.getTypeface(AndroidUtilities.TYPEFACE_ROBOTO_MEDIUM));
@@ -102,17 +315,15 @@ public class BackButtonMenuRecent {
 
         ImageView clearImageView = new ImageView(context);
         clearImageView.setScaleType(ImageView.ScaleType.CENTER);
-        clearImageView.setColorFilter(Theme.getColor(Theme.key_actionBarDefaultSubmenuItemIcon));
+        clearImageView.setColorFilter(Theme.getColor(Theme.key_actionBarDefaultSubmenuItemIcon, resourcesProvider));
         clearImageView.setImageResource(R.drawable.msg_close);
-        clearImageView.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)));
+        clearImageView.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector, resourcesProvider)));
         clearImageView.setOnClickListener(e2 -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            AlertDialog.Builder builder = new AlertDialog.Builder(context, resourcesProvider);
             builder.setTitle(LocaleController.getString(R.string.ClearRecentChats));
             builder.setMessage(LocaleController.getString(R.string.ClearRecentChatAlert));
             builder.setPositiveButton(LocaleController.getString(R.string.ClearButton).toUpperCase(), (dialogInterface, i) -> {
-                if (scrimPopupWindowRef.get() != null) {
-                    scrimPopupWindowRef.getAndSet(null).dismiss();
-                }
+                closeMenu.run();
                 clearRecentDialogs(currentAccount);
             });
             builder.setNegativeButton(LocaleController.getString(R.string.Cancel), null);
@@ -146,7 +357,7 @@ public class BackButtonMenuRecent {
             TextView titleView = new TextView(context);
             titleView.setLines(1);
             titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-            titleView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem));
+            titleView.setTextColor(Theme.getColor(Theme.key_actionBarDefaultSubmenuItem, resourcesProvider));
             titleView.setEllipsize(TextUtils.TruncateAt.END);
             cell.addView(titleView, LayoutHelper.createFrameRelatively(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.START | Gravity.CENTER_VERTICAL, 59, 0, 12, 0));
 
@@ -182,11 +393,9 @@ public class BackButtonMenuRecent {
                 titleView.setText(name);
             }
 
-            cell.setBackground(Theme.getSelectorDrawable(Theme.getColor(Theme.key_listSelector), false));
+            cell.setBackground(Theme.getSelectorDrawable(Theme.getColor(Theme.key_listSelector, resourcesProvider), false));
             cell.setOnClickListener(e2 -> {
-                if (scrimPopupWindowRef.get() != null) {
-                    scrimPopupWindowRef.getAndSet(null).dismiss();
-                }
+                closeMenu.run();
                 Bundle bundle = new Bundle();
                 if (dialogId < 0) {
                     bundle.putLong("chat_id", -dialogId);
@@ -201,9 +410,7 @@ public class BackButtonMenuRecent {
                 }
             });
             cell.setOnLongClickListener(e2 -> {
-                if (scrimPopupWindowRef.get() != null) {
-                    scrimPopupWindowRef.getAndSet(null).dismiss();
-                }
+                closeMenu.run();
                 Bundle bundle = new Bundle();
                 if (dialogId < 0) {
                     bundle.putLong("chat_id", -dialogId);
@@ -215,31 +422,15 @@ public class BackButtonMenuRecent {
             });
             layout.addView(cell, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48));
         }
+        return layout;
+    }
 
-        ActionBarPopupWindow scrimPopupWindow = new ActionBarPopupWindow(layout, LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT);
-        scrimPopupWindowRef.set(scrimPopupWindow);
-        scrimPopupWindow.setPauseNotifications(true);
-        scrimPopupWindow.setDismissAnimationDuration(220);
-        scrimPopupWindow.setOutsideTouchable(true);
-        scrimPopupWindow.setClippingEnabled(true);
-        scrimPopupWindow.setAnimationStyle(R.style.PopupContextAnimation);
-        scrimPopupWindow.setFocusable(true);
-        layout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000), View.MeasureSpec.AT_MOST));
-        scrimPopupWindow.setInputMethodMode(ActionBarPopupWindow.INPUT_METHOD_NOT_NEEDED);
-        scrimPopupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_UNSPECIFIED);
-        scrimPopupWindow.getContentView().setFocusableInTouchMode(true);
-        layout.setFitItems(true);
-
-        int popupX = AndroidUtilities.dp(8) - backgroundPaddings.left;
-        if (AndroidUtilities.isTablet()) {
-            int[] location = new int[2];
-            fragmentView.getLocationInWindow(location);
-            popupX += location[0];
+    private static List<Long> getDialogsToShow(int currentAccount) {
+        List<Long> dialogs = getRecentDialogs(currentAccount);
+        if (dialogs.size() > MAX_RECENT_DIALOGS) {
+            dialogs = dialogs.subList(0, MAX_RECENT_DIALOGS);
         }
-        int popupY = backButton.getBottom() - backgroundPaddings.top - AndroidUtilities.dp(8);
-        scrimPopupWindow.showAtLocation(fragmentView, Gravity.LEFT | Gravity.BOTTOM, popupX, popupY);
-        scrimPopupWindow.dimBehind();
-        return scrimPopupWindow;
+        return dialogs;
     }
 
     public static LinkedList<Long> getRecentDialogs(int currentAccount) {

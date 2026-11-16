@@ -1184,6 +1184,11 @@ public class ChatActivity extends BaseFragment implements
     private int scrimPopupX, scrimPopupY;
     private ActionBarMenuSubItem[] scrimPopupWindowItems;
     private ActionBarMenuSubItem menuDeleteItem;
+    // the recent chats of the back button open in the menu overlay, on the glass of the header
+    private BlurredBackgroundDrawableViewFactory recentChatsMenuGlassFactory;
+    private GlassSourceCrossfade recentChatsMenuGlassSource;
+    private BlurredBackgroundColorProvider recentChatsMenuGlassColors;
+    private SimpleActionBarMenuOverlay recentChatsMenuOverlay;
     private final Runnable updateDeleteItemRunnable = new Runnable() {
         @Override
         public void run() {
@@ -2822,9 +2827,37 @@ public class ChatActivity extends BaseFragment implements
             menuFactory.setSourceRootView(viewPositionWatcher, parentView);
             menuFactory.setLinkedViewsRef(glassAttachedViews);
             actionBar.setMenuGlass(menuFactory, menuSource);
+            // the recent chats of the back button grow out of its glass on the same glass
+            recentChatsMenuGlassFactory = menuFactory;
+            recentChatsMenuGlassSource = menuSource;
         }
+        recentChatsMenuGlassColors = BlurredBackgroundProviderImpl.topPanelChatActivity(themeDelegate);
         actionBar.setMenuRise(dp(8));
         headerItem.setSubMenuOverlayProvider(this::getSimpleMenuOverlay);
+    }
+
+    /** The recent chats are shown in the menu overlay: the list waits under it, the hints step aside. */
+    private void onRecentChatsMenuShown() {
+        chatListView.stopScroll();
+        chatLayoutManager.setCanScrollVertically(false);
+        hideHints(false);
+        if (topUndoView != null) {
+            topUndoView.hide(true, 1);
+        }
+        if (undoView != null) {
+            undoView.hide(true, 1);
+        }
+        if (chatActivityEnterView != null && chatActivityEnterView.getEditField() != null) {
+            chatActivityEnterView.getEditField().setAllowDrawCursor(false);
+        }
+    }
+
+    private void onRecentChatsMenuClosed() {
+        recentChatsMenuOverlay = null;
+        chatLayoutManager.setCanScrollVertically(true);
+        if (chatActivityEnterView != null && chatActivityEnterView.getEditField() != null) {
+            chatActivityEnterView.getEditField().setAllowDrawCursor(true);
+        }
     }
 
     public boolean isInsideContainer;
@@ -4396,8 +4429,38 @@ public class ChatActivity extends BaseFragment implements
         });
         View backButton = actionBar.getBackButton();
         backButton.setOnTouchListener(new LongPressListenerWithMovingGesture() {
+            private boolean menuOpened;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (menuOpened) {
+                    // the rest of the gesture belongs to the menu that has just opened: no click on release
+                    final int action = event.getActionMasked();
+                    if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
+                        menuOpened = false;
+                        v.setPressed(false);
+                        v.setSelected(false);
+                    }
+                    return true;
+                }
+                return super.onTouch(v, event);
+            }
+
             @Override
             public void onLongPress() {
+                // the recent chats open in the overlay of the screen and grow out of the glass of the back button
+                final SimpleActionBarMenuOverlay overlay = BackButtonMenuRecent.showInOverlay(
+                        currentAccount, ChatActivity.this, backButton,
+                        recentChatsMenuGlassFactory != null ? recentChatsMenuGlassFactory : glassBackgroundDrawableFactory,
+                        recentChatsMenuGlassSource,
+                        recentChatsMenuGlassColors != null ? recentChatsMenuGlassColors : BlurredBackgroundProviderImpl.topPanelChatActivity(themeDelegate),
+                        ChatActivity.this::onRecentChatsMenuClosed);
+                if (overlay != null) {
+                    menuOpened = true;
+                    recentChatsMenuOverlay = overlay;
+                    onRecentChatsMenuShown();
+                    return;
+                }
                 scrimPopupWindow = BackButtonMenuRecent.show(currentAccount, ChatActivity.this, backButton);
                 if (scrimPopupWindow != null) {
                     setSubmenu(scrimPopupWindow);
@@ -36868,6 +36931,11 @@ public class ChatActivity extends BaseFragment implements
         // the chat's menu is opened over the topics panel: it closes first
         if (actionBar != null && actionBar.getOpenMenuOverlay() != null) {
             if (invoked) actionBar.closeMenuOverlay(true);
+            return false;
+        }
+        // the recent chats of the back button are shown in the overlay of the screen
+        if (recentChatsMenuOverlay != null && recentChatsMenuOverlay.isOpened()) {
+            if (invoked) recentChatsMenuOverlay.close(true);
             return false;
         }
         if (topicsPanel != null && topicsPanel.isOpen()) {
