@@ -85,7 +85,6 @@ import tw.nekomimi.nekogram.helpers.CloudStorageHelper;
 import tw.nekomimi.nekogram.helpers.UserHelper;
 import tw.nekomimi.nekogram.utils.VibrateUtil;
 import tw.nekomimi.nekogram.ui.MessageHelper;
-import xyz.nextalone.nagram.NaConfig;
 
 public abstract class BaseFragment {
 
@@ -1661,7 +1660,7 @@ public abstract class BaseFragment {
     @Deprecated
     public boolean isSupportEdgeToEdge() {
         // warn: overridden method must return a constant
-        return NaConfig.INSTANCE.getForceEdgeToEdge().Bool();
+        return false;
     }
 
     public boolean drawEdgeNavigationBar() {
