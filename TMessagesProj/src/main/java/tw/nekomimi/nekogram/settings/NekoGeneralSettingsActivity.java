@@ -445,6 +445,7 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                             LocaleController.getString(R.string.ProviderGoogleTranslate),
                             LocaleController.getString(R.string.ProviderGoogleTranslateCN),
                             LocaleController.getString(R.string.ProviderGoogleTranslate) + " 2",
+                            LocaleController.getString(R.string.ProviderYandexTranslate),
                             LocaleController.getString(R.string.ProviderLingocloud),
                             LocaleController.getString(R.string.ProviderMicrosoftTranslator),
                             LocaleController.getString(R.string.ProviderVolcengineTranslate),
@@ -455,7 +456,7 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                             LocaleController.getString(R.string.ProviderDeepLTranslate),
                             LocaleController.getString(R.string.ProviderDeepLFreeTranslate),
                     }, (i, __) -> {
-                        NekoConfig.translationProvider.setConfigInt(i + 1);
+                        NekoConfig.translationProvider.setConfigInt(Translator.getProviders()[i]);
                         updateRows();
                         listAdapter.notifyItemChanged(position);
                         return Unit.INSTANCE;
@@ -780,6 +781,9 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                                     break;
                                 case Translator.providerGoogle2:
                                     value = LocaleController.getString(R.string.ProviderGoogleTranslate) + " 2";
+                                    break;
+                                case Translator.providerYandex:
+                                    value = LocaleController.getString(R.string.ProviderYandexTranslate);
                                     break;
                                 case Translator.providerLingo:
                                     value = LocaleController.getString(R.string.ProviderLingocloud);
