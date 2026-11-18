@@ -423,4 +423,7 @@
     <string name="HideChannelGiftButton">Hide channel gift button</string>
     <string name="IgnoreBlockedReplies">Also hide replies to blocked users</string>
     <string name="RemoveMessageTail">Remove message tail</string>
+    <string name="IdDcDisplayStyle">ID / DC display style</string>
+    <string name="IdDcDisplayStyleHeader">Header</string>
+    <string name="IdDcDisplayStyleRow">Row</string>
 </resources>

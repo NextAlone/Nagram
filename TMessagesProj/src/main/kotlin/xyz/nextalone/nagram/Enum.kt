@@ -29,6 +29,11 @@ enum class SwitchStyle(val value: Int) {
     MODERN(1)
 }
 
+enum class IdDcDisplayStyle(val value: Int) {
+    HEADER(0),
+    ROW(1)
+}
+
 enum class StickerShape(val value: Int) {
     DEFAULT(0),
     ROUNDED(1),

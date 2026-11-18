@@ -74,6 +74,7 @@ import tw.nekomimi.nekogram.config.cell.AbstractConfigCell;
 import tw.nekomimi.nekogram.config.cell.*;
 import tw.nekomimi.nekogram.settings.cell.ActionBarPreviewCell;
 import tw.nekomimi.nekogram.settings.cell.AvatarCornersPreviewCell;
+import xyz.nextalone.nagram.IdDcDisplayStyle;
 import xyz.nextalone.nagram.NaConfig;
 import xyz.nextalone.nagram.helper.AvatarCornersHelper;
 
@@ -313,6 +314,10 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
     private final AbstractConfigCell useSystemUnlockRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getUseSystemUnlock()));
     private final AbstractConfigCell disableUndoRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableUndo));
     private final AbstractConfigCell showIdAndDcRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.showIdAndDc));
+    private final AbstractConfigCell idDcDisplayStyleRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NaConfig.INSTANCE.getIdDcDisplayStyle(), new String[]{
+            LocaleController.getString(R.string.IdDcDisplayStyleHeader),
+            LocaleController.getString(R.string.IdDcDisplayStyleRow)
+    }, null));
     private final AbstractConfigCell inappCameraRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.inappCamera));
     private final AbstractConfigCell autoPauseVideoRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.autoPauseVideo, LocaleController.getString("AutoPauseVideoAbout")));
     private final AbstractConfigCell disableNumberRoundingRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disableNumberRounding, "4.8K -> 4777"));
@@ -499,6 +504,8 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                 }
             } else if (key.equals(NaConfig.INSTANCE.getSwitchStyle().getKey())) {
                 Switch.invalidateAll();
+            } else if (key.equals(NekoConfig.showIdAndDc.getKey())) {
+                updateRows();
             } else if (key.equals(NekoConfig.inappCamera.getKey())) {
                 SharedConfig.setInappCamera((boolean) newValue);
                 tooltip.showWithAction(0, UndoView.ACTION_NEED_RESATRT, null, null);
@@ -916,6 +923,14 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
         } else if (isGoogleCloudProvider) {
             int insertIndex = cellGroup.rows.indexOf(translateInputToLangRow) + 1;
             cellGroup.rows.add(insertIndex, googleCloudTranslateKeyRow);
+        }
+
+        cellGroup.rows.remove(idDcDisplayStyleRow);
+        if (NekoConfig.showIdAndDc.Bool()) {
+            int insertIndex = cellGroup.rows.indexOf(showIdAndDcRow);
+            if (insertIndex != -1) {
+                cellGroup.rows.add(insertIndex + 1, idDcDisplayStyleRow);
+            }
         }
 
         addRowsToMap();

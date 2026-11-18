@@ -1504,6 +1504,12 @@ object NaConfig {
             ConfigItem.configTypeBool,
             false
         )
+    val idDcDisplayStyle =
+        addConfig(
+            "IdDcDisplayStyle",
+            ConfigItem.configTypeInt,
+            IdDcDisplayStyle.HEADER.value
+        )
 
     private fun addConfig(
         k: String,
