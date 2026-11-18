@@ -105,11 +105,30 @@ interface Translator {
         const val providerLLM = 10
         const val providerDeepLOfficial = 11
         const val providerDeepLFree = 12
+        const val providerYandex = 13
+
+        @JvmStatic
+        val providers = intArrayOf(
+            providerGoogle,
+            providerGoogleCN,
+            providerGoogle2,
+            providerYandex,
+            providerLingo,
+            providerMicrosoft,
+            providerVolcengine,
+            providerDeepL,
+            providerTelegram,
+            providerTranSmart,
+            providerLLM,
+            providerDeepLOfficial,
+            providerDeepLFree
+        )
 
         /** The translator selected by the current [NekoConfig.translationProvider] setting. */
         fun currentTranslator(): Translator = when (NekoConfig.translationProvider.Int()) {
             providerGoogle, providerGoogleCN -> GoogleAppTranslator
             providerGoogle2 -> GoogleCloud2Translator
+            providerYandex -> YandexTranslator
             providerLingo -> LingoTranslator
             providerMicrosoft -> MicrosoftTranslator
             providerVolcengine -> VolcengineTranslator
