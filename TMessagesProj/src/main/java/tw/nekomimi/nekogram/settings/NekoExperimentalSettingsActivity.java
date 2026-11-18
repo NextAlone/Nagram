@@ -261,6 +261,14 @@ public class NekoExperimentalSettingsActivity extends BaseNekoXSettingsActivity 
                     }));
                 } else if (position == cellGroup.rows.indexOf(customAudioBitrateRow)) {
                     PopupBuilder builder = new PopupBuilder(view);
+                    int currentBitrate = NekoConfig.customAudioBitrate.Int();
+                    int selected = 0;
+                    if (currentBitrate == 64) selected = 1;
+                    if (currentBitrate == 128) selected = 2;
+                    if (currentBitrate == 192) selected = 3;
+                    if (currentBitrate == 256) selected = 4;
+                    if (currentBitrate == 320) selected = 5;
+                    builder.setSelectedItem(selected);
                     builder.setItems(new String[]{
                             "32 (" + LocaleController.getString("Default", R.string.Default) + ")",
                             "64",

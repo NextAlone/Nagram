@@ -16,6 +16,9 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.BulletinFactory;
 
+import kotlin.Unit;
+import tw.nekomimi.nekogram.ui.PopupBuilder;
+
 import tw.nekomimi.nekogram.config.CellGroup;
 import tw.nekomimi.nekogram.config.ConfigItem;
 import tw.nekomimi.nekogram.config.cell.AbstractConfigCell;
@@ -270,15 +273,26 @@ public class NekoLLMSettingsActivity extends BaseNekoXSettingsActivity {
                         return;
                     }
 
-                    AlertDialog.Builder modelBuilder = new AlertDialog.Builder(context);
+                    PopupBuilder modelBuilder = new PopupBuilder(context);
                     modelBuilder.setTitle(LocaleController.getString("LLMSelectModel", R.string.LLMSelectModel));
                     String[] modelArray = models.toArray(new String[0]);
-                    modelBuilder.setItems(modelArray, (dialog, which) -> {
-                        ConfigItem modelConfig = getModelConfigForProvider(provider);
+                    ConfigItem modelConfig = getModelConfigForProvider(provider);
+                    String currentModel = modelConfig.String();
+                    int selected = -1;
+                    for (int i = 0; i < modelArray.length; i++) {
+                        if (modelArray[i].equals(currentModel)) {
+                            selected = i;
+                            break;
+                        }
+                    }
+                    if (selected >= 0) {
+                        modelBuilder.setSelectedItem(selected);
+                    }
+                    modelBuilder.setItems(modelArray, (which, text) -> {
                         modelConfig.setConfigString(modelArray[which]);
                         listAdapter.notifyItemChanged(cellGroup.rows.indexOf(llmModelRow));
+                        return Unit.INSTANCE;
                     });
-                    modelBuilder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
                     modelBuilder.show();
                 });
             } catch (Exception e) {

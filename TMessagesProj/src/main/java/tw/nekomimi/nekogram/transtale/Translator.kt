@@ -205,6 +205,7 @@ interface Translator {
         fun showTargetLangSelect(anchor: View, input: Boolean = false, full: Boolean = false, callback: (Locale) -> Unit) {
 
             val builder = PopupBuilder(anchor)
+            builder.setTitle(LocaleController.getString(if (input) R.string.TransInputToLang else R.string.TransToLang))
 
             var locales = (if (full) availableLocaleList
                     .filter { it.variant.isBlank() } else LocaleController.getInstance()
@@ -277,6 +278,7 @@ interface Translator {
         fun showCCTargetSelect(anchor: View, input: Boolean = true, callback: (String) -> Unit) {
 
             val builder = PopupBuilder(anchor)
+            builder.setTitle(LocaleController.getString(R.string.OpenCC))
 
             builder.setItems(arrayOf(
                     if (!input) LocaleController.getString(R.string.CCNo) else null,

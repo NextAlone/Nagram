@@ -387,6 +387,12 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                             .mapToObj(String::valueOf)
                             .collect(Collectors.toList());
                     PopupBuilder builder = new PopupBuilder(view);
+                    builder.setTitle(LocaleController.getString("maxRecentStickerCount", R.string.maxRecentStickerCount));
+                    int currentCount = NekoConfig.maxRecentStickerCount.Int();
+                    int selected = types.indexOf(String.valueOf(currentCount));
+                    if (selected >= 0) {
+                        builder.setSelectedItem(selected);
+                    }
                     builder.setItems(types, (i, str) -> {
                         NekoConfig.maxRecentStickerCount.setConfigInt(Integer.parseInt(str.toString()));
                         listAdapter.notifyItemChanged(position);
@@ -418,6 +424,12 @@ public class NekoChatSettingsActivity extends BaseNekoXSettingsActivity implemen
                         types.add(DoubleTap.DOUBLE_TAP_ACTION_EDIT);
                     }
                     PopupBuilder builder = new PopupBuilder(view);
+                    builder.setTitle(outgoing ? LocaleController.getString("DoubleTapActionOutgoing", R.string.DoubleTapActionOutgoing) : LocaleController.getString("DoubleTapActionIncoming", R.string.DoubleTapActionIncoming));
+                    int currentValue = ((ConfigCellCustom) a).getBindConfig().Int();
+                    int selected = types.indexOf(currentValue);
+                    if (selected >= 0) {
+                        builder.setSelectedItem(selected);
+                    }
                     builder.setItems(arrayList, (i, str) -> {
                         int newValue = types.get(i);
                         ((ConfigCellCustom) a).getBindConfig().setConfigInt(newValue);
