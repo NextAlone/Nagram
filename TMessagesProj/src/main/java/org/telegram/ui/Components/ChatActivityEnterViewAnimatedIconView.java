@@ -2,6 +2,7 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 
 import androidx.annotation.Nullable;
@@ -59,6 +60,12 @@ public class ChatActivityEnterViewAnimatedIconView extends RLottieImageView {
                 stopAnimation();
                 // 设置静态图标
                 setImageResource(R.drawable.ic_ab_other);
+                // setImageResource 替换了 drawable，之前设置的颜色过滤器不会自动应用到新的 drawable 上
+                final ColorFilter colorFilter = getColorFilter();
+                final Drawable iconDrawable = getDrawable();
+                if (colorFilter != null && iconDrawable != null) {
+                    iconDrawable.mutate().setColorFilter(colorFilter);
+                }
             } else {
                 RLottieDrawable drawable = stateMap.get(getAnyState(currentState));
                 drawable.stop();

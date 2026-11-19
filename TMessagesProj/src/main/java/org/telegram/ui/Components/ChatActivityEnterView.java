@@ -3597,8 +3597,8 @@ public class ChatActivityEnterView extends FrameLayout implements
         padding = dp(10f);
         audioVideoSendButton.setPadding(padding, padding, padding, padding);
 
-        if (Build.VERSION.SDK_INT >= 21 && NekoConfig.useChatAttachMediaMenu.Bool()) {
-            audioVideoSendButton.setBackground(Theme.createSelectorDrawable(Theme.getColor(Theme.key_listSelector)));
+        if (NekoConfig.useChatAttachMediaMenu.Bool()) {
+            ThemeBind.selectorBackground(audioVideoSendButton, Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector)), null, ThemeBind.of(Theme.key_listSelector), resourcesProvider);
         }
 
         audioVideoButtonContainer.addView(audioVideoSendButton, LayoutHelper.createFrame(DEFAULT_HEIGHT, DEFAULT_HEIGHT));
@@ -11579,7 +11579,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             botKeyboardView.updateColors();
         }
         // emojiButton / deleteRichDraftButton / sendOutlineView icon colors are ThemeBind bindings
-        final int audioVideoColor = audioVideoButtonContainerForbidden ? getThemedColor(Theme.key_glass_defaultIcon) : Color.WHITE;
+        final int audioVideoColor = audioVideoButtonContainerForbidden || NekoConfig.useChatAttachMediaMenu.Bool() ? getThemedColor(Theme.key_glass_defaultIcon) : Color.WHITE;
         if (audioVideoSendButton != null && (!audioVideoColorApplied || audioVideoColor != lastAudioVideoColor)) {
             audioVideoColorApplied = true;
             lastAudioVideoColor = audioVideoColor;
