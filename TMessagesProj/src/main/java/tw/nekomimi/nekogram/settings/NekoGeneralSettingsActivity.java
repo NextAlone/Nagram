@@ -403,6 +403,7 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                 }
                 if (position == cellGroup.rows.indexOf(pgpAppRow)) {
                     PopupBuilder builder = new PopupBuilder(view);
+                    builder.setTitle(LocaleController.getString("OpenPGPApp", R.string.OpenPGPApp));
 
                     builder.addSubItem(0, LocaleController.getString("None", R.string.None));
 
@@ -427,6 +428,11 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                         }
                     }
 
+                    int selectedPgp = appsMap.indexOf(NekoConfig.openPGPApp.String());
+                    if (selectedPgp >= 0) {
+                        builder.setSelectedItem(selectedPgp);
+                    }
+
                     builder.setDelegate((i) -> {
                         NekoConfig.openPGPApp.setConfigString(appsMap.get(i));
                         NekoConfig.openPGPKeyId.setConfigLong(0L);
@@ -440,6 +446,19 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                 } else if (position == cellGroup.rows.indexOf(translationProviderRow)) {
                     if (!((ConfigCellCustom) a).enabled) return;
                     PopupBuilder builder = new PopupBuilder(view);
+                    builder.setTitle(LocaleController.getString("TranslationProvider", R.string.TranslationProvider));
+                    int currentProvider = NekoConfig.translationProvider.Int();
+                    int[] providers = Translator.getProviders();
+                    int selected = -1;
+                    for (int i = 0; i < providers.length; i++) {
+                        if (providers[i] == currentProvider) {
+                            selected = i;
+                            break;
+                        }
+                    }
+                    if (selected >= 0) {
+                        builder.setSelectedItem(selected);
+                    }
 
                     builder.setItems(new String[]{
                             LocaleController.getString(R.string.ProviderGoogleTranslate),

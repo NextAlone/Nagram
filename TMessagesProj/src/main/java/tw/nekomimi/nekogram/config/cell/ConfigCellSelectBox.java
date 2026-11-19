@@ -77,42 +77,7 @@ public class ConfigCellSelectBox extends AbstractConfigCell {
 
     public void onClickWithDialog(Context ctx) {
         ctxCustom = ctx;
-        Context context = ctxCustom != null ? ctxCustom : cellGroup.thisFragment.getParentActivity();
-        if (context == null)
-            return;
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context); //TODO Replace with pop-up menu
-        builder.setTitle(LocaleController.getString(bindConfig.getKey()));
-        final LinearLayout linearLayout = new LinearLayout(context);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        builder.setView(linearLayout);
-
-        for (int i = 0; i < selectList.length; i++) {
-            RadioColorCell cell = new RadioColorCell(context);
-            cell.setPadding(AndroidUtilities.dp(4), 0, AndroidUtilities.dp(4), 0);
-            cell.setTag(i);
-            cell.setCheckColor(Theme.getColor(Theme.key_radioBackground), Theme.getColor(Theme.key_dialogRadioBackgroundChecked));
-            cell.setTextAndValue(selectList[i], bindConfig.Int() == i);
-            linearLayout.addView(cell);
-            cell.setOnClickListener(v -> {
-                Integer which = (Integer) v.getTag();
-                bindConfig.setConfigInt(which);
-
-                if (cellGroup.listAdapter != null)
-                    cellGroup.listAdapter.notifyItemChanged(cellGroup.rows.indexOf(this));
-                builder.getDismissRunnable().run();
-                if (cellGroup.thisFragment != null)
-                    cellGroup.thisFragment.getParentLayout().rebuildAllFragmentViews(false, false);
-
-                cellGroup.runCallback(bindConfig.getKey(), which);
-            });
-        }
-        builder.setNegativeButton(LocaleController.getString("Cancel", R.string.Cancel), null);
-        if (ctxCustom == null) {
-            cellGroup.thisFragment.showDialog(builder.create());
-        } else {
-            builder.show();
-        }
+        onClick(null);
     }
 
     public void onClick(View view) {
@@ -129,22 +94,28 @@ public class ConfigCellSelectBox extends AbstractConfigCell {
             return;
         }
 
-        PopupBuilder builder = new PopupBuilder(view);
+        PopupBuilder builder = view != null ? new PopupBuilder(view) : new PopupBuilder(context);
+        builder.setTitle(this.title);
+        if (bindConfig != null) {
+            builder.setSelectedItem(this.bindConfig.Int());
+        }
 
         builder.setItems(this.selectList, (i, __) -> {
-            bindConfig.setConfigInt(i);
+            if (bindConfig != null) {
+                bindConfig.setConfigInt(i);
+            }
 
             if (cellGroup.listAdapter != null)
                 cellGroup.listAdapter.notifyItemChanged(cellGroup.rows.indexOf(this));
             if (cellGroup.thisFragment != null)
                 cellGroup.thisFragment.getParentLayout().rebuildAllFragmentViews(false, false);
 
-            cellGroup.runCallback(bindConfig.getKey(), i);
+            if (bindConfig != null) {
+                cellGroup.runCallback(bindConfig.getKey(), i);
+            }
 
             return Unit.INSTANCE;
         });
         builder.show();
-
-
     }
 }

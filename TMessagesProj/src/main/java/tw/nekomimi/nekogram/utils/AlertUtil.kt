@@ -236,6 +236,12 @@ object AlertUtil {
             val view = reference.get().getButton(AlertDialog.BUTTON_NEUTRAL)
 
             val popup = PopupBuilder(view, true)
+            popup.setTitle(LocaleController.getString(R.string.ChangeTranslateProvider))
+            val currentProvider = NekoConfig.translationProvider.Int()
+            val selected = Translator.providers.indexOf(currentProvider)
+            if (selected >= 0) {
+                popup.setSelectedItem(selected)
+            }
 
             val items = LinkedList<String>()
 
