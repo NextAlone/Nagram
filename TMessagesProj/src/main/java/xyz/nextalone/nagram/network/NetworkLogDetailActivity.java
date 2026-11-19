@@ -1,6 +1,7 @@
 package xyz.nextalone.nagram.network;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -20,10 +21,12 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.SimpleActionBar;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeBind;
 import org.telegram.ui.Cells.ShadowSectionCell;
-import org.telegram.ui.Components.BlurredRecyclerView;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.RecyclerListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +36,7 @@ import tw.nekomimi.nekogram.database.NetworkLogItem;
 public class NetworkLogDetailActivity extends BaseFragment {
 
     private NetworkLogItem logItem;
-    private BlurredRecyclerView listView;
+    private RecyclerListView listView;
     private DetailAdapter adapter;
 
     public NetworkLogDetailActivity(NetworkLogItem item) {
@@ -47,10 +50,16 @@ public class NetworkLogDetailActivity extends BaseFragment {
     }
 
     @Override
-    public View createView(Context context) {
-        actionBar.setTitle(LocaleController.getString(R.string.NetworkLog));
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+    protected boolean useSimpleActionBar() {
+        return true;
+    }
+
+    @Override
+    public SimpleActionBar createSimpleActionBar(Context context) {
+        simpleActionBar = super.createSimpleActionBar(context);
+        simpleActionBar.setTitle(LocaleController.getString(R.string.NetworkLog));
+        simpleActionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        simpleActionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
                 if (id == -1) {
@@ -58,24 +67,41 @@ public class NetworkLogDetailActivity extends BaseFragment {
                 }
             }
         });
+        return simpleActionBar;
+    }
 
-        fragmentView = new FrameLayout(context);
-        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+    @Override
+    public View createView(Context context) {
+        setHasOwnBackground(true);
 
-        listView = new BlurredRecyclerView(context);
+        fragmentView = new FrameLayout(context) {
+            @Override
+            protected void dispatchDraw(@NonNull Canvas canvas) {
+                super.dispatchDraw(canvas);
+                glassEngine.invalidate();
+            }
+        };
+        ThemeBind.backgroundColor(fragmentView, Theme.key_windowBackgroundGray, getResourceProvider());
+
+        listView = new RecyclerListView(context);
+        listView.setSections();
+        listView.setSectionsDrawBackground(true);
         listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         listView.setVerticalScrollBarEnabled(false);
         listView.setHasFixedSize(false);
         listView.setNestedScrollingEnabled(true);
-        listView.setSections(true);
 
         adapter = new DetailAdapter(context);
         listView.setAdapter(adapter);
-        listView.setClipToPadding(false);
 
         ((FrameLayout) fragmentView).addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.TOP));
 
         return fragmentView;
+    }
+
+    @Override
+    protected RecyclerListView getListViewForSimpleGlass() {
+        return listView;
     }
 
     private class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailViewHolder> {
@@ -201,7 +227,7 @@ public class NetworkLogDetailActivity extends BaseFragment {
             public InfoView(Context context) {
                 super(context);
                 setOrientation(VERTICAL);
-                setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                ThemeBind.backgroundColor(this, Theme.key_windowBackgroundWhite, getResourceProvider());
                 setPadding(AndroidUtilities.dp(16), AndroidUtilities.dp(16), AndroidUtilities.dp(16), AndroidUtilities.dp(16));
             }
 
@@ -224,7 +250,7 @@ public class NetworkLogDetailActivity extends BaseFragment {
                 labelView.setText(titleRes);
                 labelView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 labelView.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-                labelView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
+                ThemeBind.textColor(labelView, Theme.key_windowBackgroundWhiteValueText, getResourceProvider());
                 row.addView(labelView);
 
                 TextView valueView = new TextView(getContext());
@@ -241,10 +267,10 @@ public class NetworkLogDetailActivity extends BaseFragment {
                     if (logItem.statusCode > 0) {
                         valueView.setTextColor(NetworkLoggingInterceptor.getStatusCodeColor(logItem.statusCode));
                     } else {
-                        valueView.setTextColor(Theme.getColor(Theme.key_text_RedBold));
+                        ThemeBind.textColor(valueView, Theme.key_text_RedBold, getResourceProvider());
                     }
                 } else {
-                    valueView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                    ThemeBind.textColor(valueView, Theme.key_windowBackgroundWhiteBlackText, getResourceProvider());
                 }
 
                 row.addView(valueView);
@@ -260,13 +286,13 @@ public class NetworkLogDetailActivity extends BaseFragment {
                 labelView.setText("URL");
                 labelView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 labelView.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-                labelView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteValueText));
+                ThemeBind.textColor(labelView, Theme.key_windowBackgroundWhiteValueText, getResourceProvider());
                 row.addView(labelView);
 
                 TextView urlView = new TextView(getContext());
                 urlView.setText(url);
                 urlView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-                urlView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                ThemeBind.textColor(urlView, Theme.key_windowBackgroundWhiteBlackText, getResourceProvider());
                 urlView.setTextIsSelectable(true);
                 LinearLayout.LayoutParams urlParams = new LinearLayout.LayoutParams(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT);
                 urlParams.topMargin = AndroidUtilities.dp(4);
@@ -284,25 +310,25 @@ public class NetworkLogDetailActivity extends BaseFragment {
             public ContentView(Context context, boolean isError) {
                 super(context);
                 setOrientation(VERTICAL);
-                setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+                ThemeBind.backgroundColor(this, Theme.key_windowBackgroundWhite, getResourceProvider());
                 setPadding(AndroidUtilities.dp(16), AndroidUtilities.dp(16), AndroidUtilities.dp(16), AndroidUtilities.dp(16));
 
                 titleView = new TextView(context);
                 titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
                 titleView.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
                 if (isError) {
-                    titleView.setTextColor(Theme.getColor(Theme.key_text_RedBold));
+                    ThemeBind.textColor(titleView, Theme.key_text_RedBold, getResourceProvider());
                 } else {
-                    titleView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+                    ThemeBind.textColor(titleView, Theme.key_windowBackgroundWhiteBlackText, getResourceProvider());
                 }
                 addView(titleView);
 
                 contentView = new TextView(context);
                 contentView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
                 if (isError) {
-                    contentView.setTextColor(Theme.getColor(Theme.key_text_RedBold));
+                    ThemeBind.textColor(contentView, Theme.key_text_RedBold, getResourceProvider());
                 } else {
-                    contentView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
+                    ThemeBind.textColor(contentView, Theme.key_windowBackgroundWhiteGrayText2, getResourceProvider());
                 }
                 contentView.setTextIsSelectable(true);
                 LinearLayout.LayoutParams contentParams = new LinearLayout.LayoutParams(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT);
@@ -321,5 +347,10 @@ public class NetworkLogDetailActivity extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public boolean isSupportEdgeToEdge() {
+        return true;
     }
 }

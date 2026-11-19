@@ -1,6 +1,7 @@
 package xyz.nextalone.nagram.network;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
@@ -8,6 +9,7 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -15,12 +17,13 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.SimpleActionBar;
+import org.telegram.ui.ActionBar.SimpleActionBarMenu;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.BlurredRecyclerView;
+import org.telegram.ui.ActionBar.ThemeBind;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
@@ -36,7 +39,6 @@ public class NetworkLogActivity extends BaseFragment {
     private LinearLayoutManager layoutManager;
     private TextView emptyView;
     private ProgressBar progressBar;
-    private ActionBarMenuItem clearMenuItem;
     private ActionBarMenuItem searchItem;
 
     private List<NetworkLogItem> allLogs = new ArrayList<>();
@@ -53,12 +55,16 @@ public class NetworkLogActivity extends BaseFragment {
     }
 
     @Override
-    public View createView(Context context) {
-        actionBar.setTitle(LocaleController.getString(R.string.NetworkLog));
-        actionBar.setBackButtonImage(R.drawable.ic_ab_back);
-        actionBar.setAllowOverlayTitle(true);
+    protected boolean useSimpleActionBar() {
+        return true;
+    }
 
-        actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+    @Override
+    public SimpleActionBar createSimpleActionBar(Context context) {
+        simpleActionBar = super.createSimpleActionBar(context);
+        simpleActionBar.setTitle(LocaleController.getString(R.string.NetworkLog));
+        simpleActionBar.setBackButtonImage(R.drawable.ic_ab_back);
+        simpleActionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
                 if (id == -1) {
@@ -67,11 +73,19 @@ public class NetworkLogActivity extends BaseFragment {
                     } else {
                         finishFragment();
                     }
+                } else if (id == 1) {
+                    showClearConfirmDialog();
                 }
             }
         });
+        return simpleActionBar;
+    }
 
-        ActionBarMenu menu = actionBar.createMenu();
+    @Override
+    public View createView(Context context) {
+        setHasOwnBackground(true);
+
+        SimpleActionBarMenu menu = simpleActionBar.createMenu();
         menu.clearItems();
 
         searchItem = menu.addItem(2, R.drawable.msg_search).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
@@ -95,20 +109,26 @@ public class NetworkLogActivity extends BaseFragment {
         });
         searchItem.setSearchFieldHint(LocaleController.getString(R.string.SearchLogs));
 
-        clearMenuItem = menu.addItem(1, R.drawable.menu_delete_old);
+        ActionBarMenuItem clearMenuItem = menu.addItem(1, R.drawable.menu_delete_old);
         clearMenuItem.setContentDescription(LocaleController.getString(R.string.ClearHistory));
-        clearMenuItem.setOnClickListener(v -> showClearConfirmDialog());
 
-        fragmentView = new FrameLayout(context);
-        fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
+        fragmentView = new FrameLayout(context) {
+            @Override
+            protected void dispatchDraw(@NonNull Canvas canvas) {
+                super.dispatchDraw(canvas);
+                glassEngine.invalidate();
+            }
+        };
+        ThemeBind.backgroundColor(fragmentView, Theme.key_windowBackgroundGray, getResourceProvider());
 
-        listView = new BlurredRecyclerView(context);
+        listView = new RecyclerListView(context);
+        listView.setSections();
+        listView.setSectionsDrawBackground(true);
         listView.setLayoutManager(layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         listView.setVerticalScrollBarEnabled(true);
         listView.setItemAnimator(new DefaultItemAnimator());
         listView.setHasFixedSize(false);
         listView.setNestedScrollingEnabled(true);
-        listView.setSections(true);
 
         adapter = new NetworkLogAdapter(context, this);
         listView.setAdapter(adapter);
@@ -119,7 +139,7 @@ public class NetworkLogActivity extends BaseFragment {
         emptyView = new TextView(context);
         emptyView.setText(LocaleController.getString(R.string.NoNetworkLogs));
         emptyView.setTextSize(16);
-        emptyView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText2));
+        ThemeBind.textColor(emptyView, Theme.key_windowBackgroundWhiteGrayText2, getResourceProvider());
         emptyView.setGravity(Gravity.CENTER);
         emptyView.setVisibility(View.GONE);
         ((FrameLayout) fragmentView).addView(emptyView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT, Gravity.CENTER));
@@ -130,6 +150,11 @@ public class NetworkLogActivity extends BaseFragment {
 
         loadLogs();
         return fragmentView;
+    }
+
+    @Override
+    protected RecyclerListView getListViewForSimpleGlass() {
+        return listView;
     }
 
     @Override
@@ -221,8 +246,8 @@ public class NetworkLogActivity extends BaseFragment {
         if (isSearchMode) {
             if (invoked) {
                 try {
-                    if (actionBar != null && actionBar.isSearchFieldVisible()) {
-                        actionBar.closeSearchField(false);
+                    if (simpleActionBar != null && simpleActionBar.isSearchFieldVisible()) {
+                        simpleActionBar.closeSearchField(false);
                     }
                 } catch (Exception ignore) {
                 }
@@ -231,5 +256,10 @@ public class NetworkLogActivity extends BaseFragment {
             return false;
         }
         return super.onBackPressed(invoked);
+    }
+
+    @Override
+    public boolean isSupportEdgeToEdge() {
+        return true;
     }
 }

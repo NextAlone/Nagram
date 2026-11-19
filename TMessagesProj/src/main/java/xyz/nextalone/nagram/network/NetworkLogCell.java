@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeBind;
 import org.telegram.ui.Components.LayoutHelper;
 
 import tw.nekomimi.nekogram.database.NetworkLogItem;
@@ -40,7 +41,7 @@ public class NetworkLogCell extends FrameLayout {
         super(context);
 
         dividerPaint = new Paint();
-        dividerPaint.setColor(Theme.getColor(Theme.key_divider));
+        ThemeBind.custom(this, 100, Theme.key_divider, null, () -> dividerPaint.getColor(), dividerPaint::setColor);
 
         setWillNotDraw(false);
         setupLayout();
@@ -50,7 +51,7 @@ public class NetworkLogCell extends FrameLayout {
         LinearLayout mainLayout = new LinearLayout(getContext());
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.setPadding(padding, smallPadding, padding, smallPadding);
-        mainLayout.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundWhite));
+        ThemeBind.backgroundColor(mainLayout, Theme.key_windowBackgroundWhite);
 
         LinearLayout topRow = new LinearLayout(getContext());
         topRow.setOrientation(LinearLayout.HORIZONTAL);
@@ -58,7 +59,7 @@ public class NetworkLogCell extends FrameLayout {
 
         timestampText = new TextView(getContext());
         timestampText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-        timestampText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
+        ThemeBind.textColor(timestampText, Theme.key_windowBackgroundWhiteGrayText3);
         topRow.addView(timestampText);
 
         methodText = new TextView(getContext());
@@ -75,7 +76,7 @@ public class NetworkLogCell extends FrameLayout {
 
         responseTimeText = new TextView(getContext());
         responseTimeText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
-        responseTimeText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
+        ThemeBind.textColor(responseTimeText, Theme.key_windowBackgroundWhiteGrayText3);
         responseTimeText.setPadding(AndroidUtilities.dp(8), 0, 0, 0);
         topRow.addView(responseTimeText);
 
@@ -83,14 +84,14 @@ public class NetworkLogCell extends FrameLayout {
 
         urlText = new TextView(getContext());
         urlText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        urlText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+        ThemeBind.textColor(urlText, Theme.key_windowBackgroundWhiteBlackText);
         urlText.setMaxLines(2);
         urlText.setEllipsize(TextUtils.TruncateAt.END);
         urlText.setPadding(0, AndroidUtilities.dp(4), 0, 0);
         mainLayout.addView(urlText);
 
         divider = new View(getContext());
-        divider.setBackgroundColor(Theme.getColor(Theme.key_divider));
+        ThemeBind.backgroundColor(divider, Theme.key_divider);
         LinearLayout.LayoutParams dividerParams = new LinearLayout.LayoutParams(LayoutHelper.MATCH_PARENT, 1);
         dividerParams.topMargin = AndroidUtilities.dp(8);
         mainLayout.addView(divider, dividerParams);
@@ -113,7 +114,7 @@ public class NetworkLogCell extends FrameLayout {
             statusText.setBackground(null);
         } else {
             statusText.setText(" -- ");
-            statusText.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteGrayText3));
+            ThemeBind.textColor(statusText, Theme.key_windowBackgroundWhiteGrayText3);
         }
 
         responseTimeText.setText(NetworkLoggingInterceptor.formatResponseTime(item.responseTime));
