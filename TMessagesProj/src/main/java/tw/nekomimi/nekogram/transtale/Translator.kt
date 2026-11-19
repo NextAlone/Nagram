@@ -203,7 +203,17 @@ interface Translator {
         @JvmStatic
         @JvmOverloads
         fun showTargetLangSelect(anchor: View, input: Boolean = false, full: Boolean = false, callback: (Locale) -> Unit) {
+            showTargetLangSelect(anchor, input, full, null, callback)
+        }
 
+        @JvmStatic
+        fun showTargetLangSelect(
+            anchor: View,
+            input: Boolean,
+            full: Boolean,
+            targetLocale: Locale?,
+            callback: (Locale) -> Unit
+        ) {
             val builder = PopupBuilder(anchor)
             builder.setTitle(LocaleController.getString(if (input) R.string.TransInputToLang else R.string.TransToLang))
 
@@ -217,60 +227,67 @@ interface Translator {
                     .toTypedArray()
 
             val currLocale = LocaleController.getInstance().currentLocale
+            val defLang = if (!input) currLocale else Locale.ENGLISH
 
             for (i in locales.indices) {
-
-                val defLang = if (!input) currLocale else Locale.ENGLISH
-
                 if (locales[i] == defLang) {
-
                     locales = ArrayUtil.remove(locales, i)
                     locales = ArrayUtil.insert(locales, 0, defLang)
-
                     break
-
                 }
-
             }
 
             val localeNames = arrayOfNulls<String>(if (full) locales.size else locales.size + 1)
 
             for (i in locales.indices) {
-
                 localeNames[i] = if (!full && i == 0) {
-
                     LocaleController.getString(R.string.Default) + " ( " + locales[i].getDisplayName(currLocale) + " )"
-
                 } else {
-
                     locales[i].getDisplayName(currLocale)
-
                 }
-
             }
 
             if (!full) {
-
                 localeNames[localeNames.size - 1] = LocaleController.getString(R.string.More)
-
             }
 
-            builder.setItems(localeNames.filterIsInstance<CharSequence>().toTypedArray()) { index: Int, _ ->
-
-                if (index == locales.size) {
-
-                    showTargetLangSelect(anchor, input, true, callback)
-
+            val selectedLocale: Locale? = targetLocale ?: run {
+                val code = if (input) {
+                    NekoConfig.translateInputLang.String()
                 } else {
-
-                    callback(locales[index])
-
+                    NekoConfig.translateToLang.String()
                 }
+                if (code.isNullOrBlank()) {
+                    defLang
+                } else {
+                    code.code2Locale
+                }
+            }
 
+            val selectedIndex = if (selectedLocale == null ||
+                (selectedLocale.language == defLang.language &&
+                (selectedLocale.country.isNullOrEmpty() || defLang.country.isNullOrEmpty() || selectedLocale.country == defLang.country))) {
+                0
+            } else {
+                val idx = locales.indexOfFirst {
+                    it.language == selectedLocale.language &&
+                    (it.country.isNullOrEmpty() || selectedLocale.country.isNullOrEmpty() || it.country == selectedLocale.country)
+                }
+                if (idx >= 0) idx else 0
+            }
+
+            builder.setSelectedItem(selectedIndex)
+
+            val effectiveTargetLocale = selectedLocale
+            builder.setItems(localeNames.filterIsInstance<CharSequence>().toTypedArray()) { index: Int, _ ->
+                if (index == locales.size) {
+                    showTargetLangSelect(anchor, input, true, effectiveTargetLocale, callback)
+                } else {
+                    callback(locales[index])
+                }
             }
 
             builder.show()
-
         }
 
         @JvmStatic

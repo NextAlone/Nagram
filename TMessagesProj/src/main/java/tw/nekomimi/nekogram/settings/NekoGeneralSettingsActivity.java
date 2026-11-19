@@ -484,7 +484,11 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                 } else if (position == cellGroup.rows.indexOf(translateToLangRow) || position == cellGroup.rows.indexOf(translateInputToLangRow)) {
                     Translator.showTargetLangSelect(view, position == cellGroup.rows.indexOf(translateInputToLangRow), (locale) -> {
                         if (position == cellGroup.rows.indexOf(translateToLangRow)) {
-                            NekoConfig.translateToLang.setConfigString(TranslatorKt.getLocale2code(locale));
+                            if (locale.equals(LocaleController.getInstance().currentLocale)) {
+                                NekoConfig.translateToLang.setConfigString("");
+                            } else {
+                                NekoConfig.translateToLang.setConfigString(TranslatorKt.getLocale2code(locale));
+                            }
                         } else {
                             NekoConfig.translateInputLang.setConfigString(TranslatorKt.getLocale2code(locale));
                         }
