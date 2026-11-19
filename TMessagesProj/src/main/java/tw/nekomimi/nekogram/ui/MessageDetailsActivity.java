@@ -82,6 +82,9 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
     private RecyclerListView listView;
     private ListAdapter listAdapter;
     private final MessageObject messageObject;
+    private final TLRPC.Chat chat;
+    private final TLRPC.User user;
+    private final List<JsonSection> jsonSections = new ArrayList<>();
     private TLRPC.Chat fromChat;
     private TLRPC.User fromUser;
     private String filePath;
@@ -213,8 +216,43 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
         }
     }
 
+    private static class JsonSection {
+        final String title;
+        final Object source;
+
+        JsonSection(String title, Object source) {
+            this.title = title;
+            this.source = source;
+        }
+    }
+
+    private void addJsonSection(String title, Object source) {
+        if (source != null) {
+            jsonSections.add(new JsonSection(title, source));
+        }
+    }
+
+    public MessageDetailsActivity(TLRPC.Chat chat, TLRPC.ChatFull chatInfo) {
+        this.messageObject = null;
+        this.chat = chat;
+        this.user = null;
+        addJsonSection("Chat JSON", chat);
+        addJsonSection("Chat Full JSON", chatInfo);
+    }
+
+    public MessageDetailsActivity(TLRPC.User user, TLRPC.UserFull userInfo) {
+        this.messageObject = null;
+        this.chat = null;
+        this.user = user;
+        addJsonSection("User JSON", user);
+        addJsonSection("User Full JSON", userInfo);
+    }
+
     public MessageDetailsActivity(MessageObject messageObject) {
         this.messageObject = messageObject;
+        this.chat = null;
+        this.user = null;
+        addJsonSection("JSON", messageObject.messageOwner);
         if (messageObject.messageOwner.peer_id != null && messageObject.messageOwner.peer_id.channel_id != 0) {
             fromChat = getMessagesController().getChat(messageObject.messageOwner.peer_id.channel_id);
         } else if (messageObject.messageOwner.peer_id != null && messageObject.messageOwner.peer_id.chat_id != 0) {
@@ -261,15 +299,15 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                 fwdBuilder.append(messageObject.messageOwner.fwd_from.from_name);
             } else {
                 if (messageObject.messageOwner.fwd_from.from_id.channel_id != 0) {
-                    TLRPC.Chat chat = getMessagesController().getChat(messageObject.messageOwner.fwd_from.from_id.channel_id);
-                    fwdBuilder.append(chat.title);
+                    TLRPC.Chat fwdChat = getMessagesController().getChat(messageObject.messageOwner.fwd_from.from_id.channel_id);
+                    fwdBuilder.append(fwdChat.title);
                     fwdBuilder.append("\n");
-                    if (!TextUtils.isEmpty(chat.username)) {
+                    if (!TextUtils.isEmpty(fwdChat.username)) {
                         fwdBuilder.append("@");
-                        fwdBuilder.append(chat.username);
+                        fwdBuilder.append(fwdChat.username);
                         fwdBuilder.append("\n");
                     }
-                    fwdBuilder.append(chat.id);
+                    fwdBuilder.append(fwdChat.id);
                 } else if (messageObject.messageOwner.fwd_from.from_id.user_id != 0) {
                     TLRPC.User user = getMessagesController().getUser(messageObject.messageOwner.fwd_from.from_id.channel_id);
                     if(user!=null){
@@ -289,6 +327,10 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
         }
     }
 
+    private String getActionBarTitle() {
+        return LocaleController.getString(R.string.MessageDetails);
+    }
+
     @Override
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
@@ -305,7 +347,7 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
     @Override
     public SimpleActionBar createSimpleActionBar(Context context) {
         simpleActionBar = super.createSimpleActionBar(context);
-        simpleActionBar.setTitle(LocaleController.getString(R.string.MessageDetails));
+        simpleActionBar.setTitle(getActionBarTitle());
         simpleActionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -346,11 +388,12 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
             
             switch (item.viewType) {
                 case ItemType.VIEW_TYPE_EXPORT:
-                    final TLRPC.Message exportMessage = messageObject.messageOwner;
+                    if (item.jsonSection < 0 || item.jsonSection >= jsonSections.size()) return;
+                    final Object exportObject = jsonSections.get(item.jsonSection).source;
                     org.telegram.messenger.Utilities.globalQueue.postRunnable(() -> {
                         String exported;
                         try {
-                            exported = gson.toJson(exportMessage);
+                            exported = gson.toJson(exportObject);
                         } catch (Throwable e) {
                             FileLog.e(e);
                             exported = "";
@@ -539,6 +582,7 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
         boolean multilineDetail;
         boolean isFirstChunk;
         boolean isLastChunk;
+        int jsonSection = -1;
 
         public MessageDetailItem(String title, CharSequence value, boolean showDivider, ActionType actionType) {
             this.viewType = ItemType.VIEW_TYPE_DETAIL;
@@ -569,10 +613,18 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
         private final Context mContext;
         private final List<MessageDetailItem> items = new ArrayList<>();
         private final java.util.HashMap<String, SpannableString> highlightedChunks = new java.util.HashMap<>();
-        private String fullJsonText = "";
+        private final List<String> fullJsonTexts = new ArrayList<>();
 
         public java.util.HashMap<String, SpannableString> getHighlightedChunks() {
             return highlightedChunks;
+        }
+
+        public String getSectionJson(int section) {
+            if (section >= 0 && section < fullJsonTexts.size()) {
+                String json = fullJsonTexts.get(section);
+                return json == null ? "" : json;
+            }
+            return "";
         }
 
         public ListAdapter(Context context) {
@@ -582,6 +634,108 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
 
         public void buildItems() {
             items.clear();
+            fullJsonTexts.clear();
+            for (int i = 0; i < jsonSections.size(); i++) {
+                fullJsonTexts.add("");
+            }
+            if (chat != null) {
+                buildChatItems();
+            } else if (user != null) {
+                buildUserItems();
+            } else {
+                buildMessageItems();
+            }
+            addJsonItems();
+        }
+
+        private void buildChatItems() {
+            items.add(new MessageDetailItem("ID", String.valueOf(chat.id), true, ActionType.NONE));
+            if (!TextUtils.isEmpty(chat.title)) {
+                items.add(new MessageDetailItem("Title", chat.title, true, ActionType.NONE));
+            }
+            if (!TextUtils.isEmpty(chat.username)) {
+                items.add(new MessageDetailItem("Username", "@" + chat.username, true, ActionType.NONE));
+            }
+            String type;
+            if (chat.monoforum) {
+                type = "Monoforum";
+            } else if (chat.gigagroup) {
+                type = "Gigagroup";
+            } else if (chat.broadcast) {
+                type = "Channel";
+            } else if (chat.megagroup) {
+                type = "Supergroup";
+            } else {
+                type = "Group";
+            }
+            items.add(new MessageDetailItem("Type", type, true, ActionType.NONE));
+            if (chat.participants_count > 0) {
+                items.add(new MessageDetailItem(chat.broadcast ? "Subscribers" : "Members", String.valueOf(chat.participants_count), true, ActionType.NONE));
+            }
+            if (chat.date != 0) {
+                items.add(new MessageDetailItem("Date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(new Date(chat.date * 1000L)), true, ActionType.NONE));
+            }
+            if (chat.creator) {
+                items.add(new MessageDetailItem("Owner", "Yes", true, ActionType.NONE));
+            }
+            if (chat.verified) {
+                items.add(new MessageDetailItem("Verified", "Yes", true, ActionType.NONE));
+            }
+            if (chat.restricted) {
+                items.add(new MessageDetailItem("Restricted", "Yes", true, ActionType.NONE));
+            }
+            if (chat.scam) {
+                items.add(new MessageDetailItem("Scam", "Yes", true, ActionType.NONE));
+            }
+            if (chat.fake) {
+                items.add(new MessageDetailItem("Fake", "Yes", true, ActionType.NONE));
+            }
+            if (chat.noforwards) {
+                items.add(new MessageDetailItem("Restrict Saving Content", "Yes", true, ActionType.NONE));
+            }
+            if (chat.forum) {
+                items.add(new MessageDetailItem("Forum", "Yes", true, ActionType.NONE));
+            }
+            if (chat.access_hash != 0) {
+                items.add(new MessageDetailItem("Access Hash", String.valueOf(chat.access_hash), true, ActionType.NONE));
+            }
+            items.add(new MessageDetailItem());
+        }
+
+        private void buildUserItems() {
+            items.add(new MessageDetailItem("ID", String.valueOf(user.id), true, ActionType.NONE));
+            String name = ContactsController.formatName(user.first_name, user.last_name);
+            if (!TextUtils.isEmpty(name)) {
+                items.add(new MessageDetailItem("Name", name, true, ActionType.NONE));
+            }
+            if (!TextUtils.isEmpty(user.username)) {
+                items.add(new MessageDetailItem("Username", "@" + user.username, true, ActionType.NONE));
+            }
+            if (user.bot) {
+                items.add(new MessageDetailItem("Bot", "Yes", true, ActionType.NONE));
+            }
+            if (user.verified) {
+                items.add(new MessageDetailItem("Verified", "Yes", true, ActionType.NONE));
+            }
+            if (user.deleted) {
+                items.add(new MessageDetailItem("Deleted", "Yes", true, ActionType.NONE));
+            }
+            if (user.restricted) {
+                items.add(new MessageDetailItem("Restricted", "Yes", true, ActionType.NONE));
+            }
+            if (user.scam) {
+                items.add(new MessageDetailItem("Scam", "Yes", true, ActionType.NONE));
+            }
+            if (user.fake) {
+                items.add(new MessageDetailItem("Fake", "Yes", true, ActionType.NONE));
+            }
+            if (user.access_hash != 0) {
+                items.add(new MessageDetailItem("Access Hash", String.valueOf(user.access_hash), true, ActionType.NONE));
+            }
+            items.add(new MessageDetailItem());
+        }
+
+        private void buildMessageItems() {
             items.add(new MessageDetailItem("ID", String.valueOf(messageObject.messageOwner.id), true, ActionType.NONE));
             
             if (messageObject.scheduled) {
@@ -652,58 +806,70 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
             }
             
             items.add(new MessageDetailItem());
-
-            MessageDetailItem jsonPlaceholder = new MessageDetailItem(ItemType.VIEW_TYPE_INFO, "JSON", "", true);
-            jsonPlaceholder.isFirstChunk = true;
-            jsonPlaceholder.isLastChunk = true;
-            items.add(jsonPlaceholder);
-            jsonItemIndex = items.size() - 1;
-
-            items.add(new MessageDetailItem(ItemType.VIEW_TYPE_EXPORT));
-
-            items.add(new MessageDetailItem());
-
-            final int placeholderIndex = jsonItemIndex;
-            final TLRPC.Message message = messageObject.messageOwner;
-            org.telegram.messenger.Utilities.globalQueue.postRunnable(() -> {
-                String jsonText;
-                try {
-                    jsonText = prettyGson.toJson(message);
-                } catch (Throwable e) {
-                    FileLog.e(e);
-                    jsonText = "";
-                }
-                final String finalJson = jsonText == null ? "" : jsonText;
-                final List<String> chunks = splitJsonIntoChunks(finalJson, JSON_CHUNK_SIZE, JSON_CHUNK_THRESHOLD);
-                AndroidUtilities.runOnUIThread(() -> {
-                    if (listAdapter == null || listAdapter != this) return;
-                    if (placeholderIndex < 0 || placeholderIndex >= items.size()) return;
-                    MessageDetailItem current = items.get(placeholderIndex);
-                    if (current.viewType != ItemType.VIEW_TYPE_INFO) return;
-
-                    fullJsonText = finalJson;
-
-                    items.remove(placeholderIndex);
-                    if (chunks.isEmpty()) {
-                        notifyItemRemoved(placeholderIndex);
-                        return;
-                    }
-                    int insertCount = chunks.size();
-                    for (int i = 0; i < insertCount; i++) {
-                        MessageDetailItem chunkItem = new MessageDetailItem(ItemType.VIEW_TYPE_INFO, i == 0 ? "JSON" : null, chunks.get(i), true);
-                        chunkItem.isFirstChunk = (i == 0);
-                        chunkItem.isLastChunk = (i == insertCount - 1);
-                        items.add(placeholderIndex + i, chunkItem);
-                    }
-                    notifyItemChanged(placeholderIndex);
-                    if (insertCount != 1) {
-                        notifyItemRangeInserted(placeholderIndex + 1, insertCount - 1);
-                    }
-                });
-            });
         }
 
-        private int jsonItemIndex = -1;
+        private void addJsonItems() {
+            final boolean multiple = jsonSections.size() > 1;
+            for (int s = 0; s < jsonSections.size(); s++) {
+                final JsonSection section = jsonSections.get(s);
+                final int sectionIndex = s;
+
+                final MessageDetailItem jsonPlaceholder = new MessageDetailItem(ItemType.VIEW_TYPE_INFO, section.title, "", true);
+                jsonPlaceholder.isFirstChunk = true;
+                jsonPlaceholder.isLastChunk = true;
+                jsonPlaceholder.jsonSection = sectionIndex;
+                items.add(jsonPlaceholder);
+
+                MessageDetailItem exportItem = new MessageDetailItem(ItemType.VIEW_TYPE_EXPORT);
+                exportItem.jsonSection = sectionIndex;
+                exportItem.title = multiple
+                        ? LocaleController.getString(R.string.ExportAsJson) + " · " + section.title
+                        : LocaleController.getString(R.string.ExportAsJson);
+                items.add(exportItem);
+
+                items.add(new MessageDetailItem());
+
+                org.telegram.messenger.Utilities.globalQueue.postRunnable(() -> {
+                    String jsonText;
+                    try {
+                        jsonText = prettyGson.toJson(section.source);
+                    } catch (Throwable e) {
+                        FileLog.e(e);
+                        jsonText = "";
+                    }
+                    final String finalJson = jsonText == null ? "" : jsonText;
+                    final List<String> chunks = splitJsonIntoChunks(finalJson, JSON_CHUNK_SIZE, JSON_CHUNK_THRESHOLD);
+                    AndroidUtilities.runOnUIThread(() -> {
+                        if (listAdapter == null || listAdapter != this) return;
+                        final int placeholderIndex = items.indexOf(jsonPlaceholder);
+                        if (placeholderIndex < 0) return;
+
+                        if (sectionIndex >= 0 && sectionIndex < fullJsonTexts.size()) {
+                            fullJsonTexts.set(sectionIndex, finalJson);
+                        }
+
+                        items.remove(placeholderIndex);
+                        if (chunks.isEmpty()) {
+                            notifyItemRemoved(placeholderIndex);
+                            return;
+                        }
+                        int insertCount = chunks.size();
+                        for (int i = 0; i < insertCount; i++) {
+                            MessageDetailItem chunkItem = new MessageDetailItem(ItemType.VIEW_TYPE_INFO, i == 0 ? section.title : null, chunks.get(i), true);
+                            chunkItem.isFirstChunk = (i == 0);
+                            chunkItem.isLastChunk = (i == insertCount - 1);
+                            chunkItem.jsonSection = sectionIndex;
+                            items.add(placeholderIndex + i, chunkItem);
+                        }
+                        notifyItemChanged(placeholderIndex);
+                        if (insertCount != 1) {
+                            notifyItemRangeInserted(placeholderIndex + 1, insertCount - 1);
+                        }
+                    });
+                });
+            }
+        }
+
         private static final int JSON_CHUNK_SIZE = 4000;
         private static final int JSON_CHUNK_THRESHOLD = 12000;
 
@@ -737,10 +903,6 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                 }
             }
             return result;
-        }
-
-        public String getFullJsonText() {
-            return fullJsonText;
         }
 
         public MessageDetailItem getItemAtPosition(int position) {
@@ -777,11 +939,28 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                     
                 case MessageDetailItem.ItemType.VIEW_TYPE_EXPORT:
                     TextSettingsCell exportCell = (TextSettingsCell) holder.itemView;
-                    exportCell.setText(LocaleController.getString(R.string.ExportAsJson), false);
+                    exportCell.setText(item.title != null ? item.title : LocaleController.getString(R.string.ExportAsJson), false);
                     break;
                     
                 case MessageDetailItem.ItemType.VIEW_TYPE_INFO:
                     JsonTextSettingsCell jsonCell = (JsonTextSettingsCell) holder.itemView;
+                    final int jsonSection = item.jsonSection;
+                    jsonCell.setFullJsonProvider(new JsonTextSettingsCell.FullJsonProvider() {
+                        @Override
+                        public String getFullJson() {
+                            return getSectionJson(jsonSection);
+                        }
+
+                        @Override
+                        public void onFullJsonCopied() {
+                            try {
+                                BulletinFactory.of(MessageDetailsActivity.this)
+                                        .createCopyBulletin(LocaleController.formatString(R.string.TextCopied))
+                                        .show();
+                            } catch (Throwable ignored) {
+                            }
+                        }
+                    });
                     boolean jsonHasNextDivider = item.isLastChunk &&
                             (position + 1 < items.size()) &&
                             items.get(position + 1).viewType != MessageDetailItem.ItemType.VIEW_TYPE_DIVIDER;
@@ -821,22 +1000,6 @@ public class MessageDetailsActivity extends BaseFragment implements Notification
                 case MessageDetailItem.ItemType.VIEW_TYPE_INFO:
                     JsonTextSettingsCell jsonCellNew = new JsonTextSettingsCell(mContext);
                     ThemeBind.backgroundColor(jsonCellNew, Theme.key_windowBackgroundWhite, getResourceProvider());
-                    jsonCellNew.setFullJsonProvider(new JsonTextSettingsCell.FullJsonProvider() {
-                        @Override
-                        public String getFullJson() {
-                            return fullJsonText;
-                        }
-
-                        @Override
-                        public void onFullJsonCopied() {
-                            try {
-                                BulletinFactory.of(MessageDetailsActivity.this)
-                                        .createCopyBulletin(LocaleController.formatString(R.string.TextCopied))
-                                        .show();
-                            } catch (Throwable ignored) {
-                            }
-                        }
-                    });
                     view = jsonCellNew;
                     break;
                     

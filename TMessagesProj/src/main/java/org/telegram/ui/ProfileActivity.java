@@ -383,6 +383,7 @@ import tw.nekomimi.nekogram.NekoConfig;
 import tw.nekomimi.nekogram.NekoXConfig;
 import tw.nekomimi.nekogram.parts.DialogTransKt;
 import tw.nekomimi.nekogram.settings.NekoSettingsActivity;
+import tw.nekomimi.nekogram.ui.MessageDetailsActivity;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
@@ -667,6 +668,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private final static int clear_cache = 104;
     private final static int add_to_folder = 105;
     private final static int open_direct = 106;
+    private final static int chat_details_json = 107;
 
     private Rect rect = new Rect();
 
@@ -3112,6 +3114,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 } else if (id == open_direct) {
                     if (currentChat == null) return;
                     presentFragment(ChatActivity.of(-currentChat.linked_monoforum_id));
+                } else if (id == chat_details_json) {
+                    if (currentChat != null) {
+                        presentFragment(new MessageDetailsActivity(currentChat, chatInfo));
+                    } else if (userId != 0) {
+                        TLRPC.User user = getMessagesController().getUser(userId);
+                        if (user != null) {
+                            presentFragment(new MessageDetailsActivity(user, userInfo));
+                        }
+                    }
                 }
             }
         });
@@ -13186,6 +13197,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 otherItem.addSubItem(add_to_folder, R.drawable.msg_folders, LocaleController.getString(R.string.FilterAddTo));
             }
             otherItem.addSubItem(clear_cache, R.drawable.msg_delete, LocaleController.getString(R.string.ClearCache));
+            if (currentChat != null || userId != 0) {
+                otherItem.addSubItem(chat_details_json, R.drawable.msg_info, LocaleController.getString(R.string.Info));
+            }
         }
         if (!isPulledDown) {
             otherItem.hideSubItem(gallery_menu_save);
