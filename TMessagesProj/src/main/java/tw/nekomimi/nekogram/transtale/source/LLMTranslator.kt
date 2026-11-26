@@ -473,32 +473,37 @@ object LLMTranslator : Translator {
             providerUrls[provider]?.removeSuffix("/") ?: return emptyList()
         }
 
-        var url = "$baseUrl/models"
-        if (provider == PROVIDER_GEMINI) {
-            url = "$url?key=${apiKey}"
-        }
+        // The key setting may hold several comma-separated keys; listing needs only one.
+        val key = apiKey.split(",").map { it.trim() }.firstOrNull { it.isNotEmpty() }
+            ?: return emptyList()
 
         return try {
-            val response = NetworkRequestBuilder.get(url) {
-                if (provider != PROVIDER_GEMINI) {
-                    header("Authorization", "Bearer $apiKey")
-                }
+            // Gemini's OpenAI-compatible endpoint only accepts Bearer auth; a `?key=` query is ignored there.
+            val response = NetworkRequestBuilder.get("$baseUrl/models") {
+                header("Authorization", "Bearer $key")
             }.execute()
 
             if (response.status().value !in 200..299) {
                 return emptyList()
             }
 
-            val body = response.body
-            val json = Json.parseToJsonElement(body).jsonObject
-            val data = json["data"]?.jsonArray ?: json["models"]?.jsonArray ?: return emptyList()
-
-            data.mapNotNull { element ->
-                element.jsonObject["id"]?.jsonPrimitive?.content
-            }.sorted()
+            parseModelIds(provider, response.body)
         } catch (e: Exception) {
             emptyList()
         }
+    }
+
+    /**
+     * Gemini's OpenAI-compatible list returns ids like `models/gemini-2.5-flash`,
+     * while its chat examples use the bare id, so the prefix is dropped.
+     */
+    internal fun parseModelIds(provider: Int, body: String): List<String> {
+        val json = Json.parseToJsonElement(body).jsonObject
+        val data = json["data"]?.jsonArray ?: json["models"]?.jsonArray ?: return emptyList()
+        return data.mapNotNull { element ->
+            val id = element.jsonObject["id"]?.jsonPrimitive?.content ?: return@mapNotNull null
+            if (provider == PROVIDER_GEMINI) id.removePrefix("models/") else id
+        }.distinct().sorted()
     }
 
     fun fetchModelsBlocking(provider: Int, apiKey: String, customBaseUrl: String? = null): List<String> {

@@ -92,4 +92,19 @@ class LLMTranslatorTest {
         assertEquals("system", anthropic["system"]?.jsonPrimitive?.content)
         assertFalse("temperature" in anthropic)
     }
+
+    @Test
+    fun parsesModelIdsAndStripsGeminiPrefix() {
+        val gemini = """{"object":"list","data":[{"id":"models/gemini-2.5-flash","object":"model"},{"id":"models/gemini-2.0-flash","object":"model"}]}"""
+        assertEquals(
+            listOf("gemini-2.0-flash", "gemini-2.5-flash"),
+            LLMTranslator.parseModelIds(LLMTranslator.PROVIDER_GEMINI, gemini)
+        )
+        val openai = """{"object":"list","data":[{"id":"gpt-4.1-mini"},{"id":"models/x"}]}"""
+        assertEquals(
+            listOf("gpt-4.1-mini", "models/x"),
+            LLMTranslator.parseModelIds(LLMTranslator.PROVIDER_OPENAI, openai)
+        )
+        assertEquals(emptyList<String>(), LLMTranslator.parseModelIds(LLMTranslator.PROVIDER_GEMINI, "{}"))
+    }
 }
