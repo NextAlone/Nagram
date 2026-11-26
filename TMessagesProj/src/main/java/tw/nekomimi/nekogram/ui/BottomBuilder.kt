@@ -12,6 +12,7 @@ import org.telegram.messenger.R
 import org.telegram.ui.ActionBar.BottomSheet
 import org.telegram.ui.ActionBar.Theme
 import org.telegram.ui.ActionBar.Theme.key_dialogTextRed
+import org.telegram.ui.Cells.CheckBoxCell
 import org.telegram.ui.Cells.HeaderCell
 import org.telegram.ui.Cells.RadioButtonCell
 import org.telegram.ui.Cells.TextCell
@@ -91,6 +92,21 @@ class BottomBuilder(val ctx: Context, val needFocus: Boolean = true, val bgColor
             bottomMargin = AndroidUtilities.dp(8F)
         })
         return headerCell
+    }
+
+    @JvmOverloads
+    fun addCheckBoxItem(text: String, value: Boolean, valueText: String = "", listener: ((cell: CheckBoxCell, isChecked: Boolean) -> Unit)? = null): CheckBoxCell {
+        val checkBoxCell = CheckBoxCell(ctx, CheckBoxCell.TYPE_CHECK_BOX_DEFAULT, 21, null)
+        checkBoxCell.setBackgroundDrawable(Theme.getSelectorDrawable(false))
+        checkBoxCell.minimumHeight = AndroidUtilities.dp(50F)
+        checkBoxCell.setText(text, valueText, value, true)
+        rootView.addView(checkBoxCell, LayoutHelper.createLinear(-1, -2))
+        checkBoxCell.setOnClickListener {
+            val target = !checkBoxCell.isChecked
+            checkBoxCell.setChecked(target, true)
+            listener?.invoke(checkBoxCell, target)
+        }
+        return checkBoxCell
     }
 
     @JvmOverloads
