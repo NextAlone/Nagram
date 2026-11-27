@@ -46993,82 +46993,14 @@ public class ChatActivity extends BaseFragment implements
                 break;
             }
             case nkbtn_deldlcache: {
-                final MessageObject so = selectedObject;
-                final boolean isDownloading = TelegramUtil.messageObjectIsDownloading(getMessageType(so));
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
-                builder.setTitle(LocaleController.getString("DeleteDownloadedFile"));
-                builder.setMessage(LocaleController.getString("DeleteDownloadedFileConfirm"));
-                builder.setPositiveButton(LocaleController.getString("OK", R.string.OK), (dialogInterface, i) -> {
-                    if (Build.VERSION.SDK_INT >= 23 && (Build.VERSION.SDK_INT <= 28 || BuildVars.NO_SCOPED_STORAGE) && getParentActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        getParentActivity().requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 4);
-                        return;
-                    }
-                    ChatMessageCell messageCell = null;
-                    int count = chatListView.getChildCount();
-                    for (int a = 0; a < count; a++) {
-                        View child = chatListView.getChildAt(a);
-                        if (child instanceof ChatMessageCell) {
-                            ChatMessageCell cell = (ChatMessageCell) child;
-                            if (cell.getMessageObject() == so) {
-                                messageCell = cell;
-                                break;
-                            }
-                        }
-                    }
-                    String path = so.messageOwner.attachPath;
-                    if (path != null && path.length() > 0) {
-                        File temp = new File(path);
-                        if (!temp.exists()) {
-                            path = null;
-                        }
-                    }
-                    if (path == null || path.length() == 0) {
-                        path = FileLoader.getInstance(currentAccount).getPathToMessage(so.messageOwner).toString();
-                    }
-
-                    File file = new File(path);
-                    FileLoader.getInstance(currentAccount).cancelLoadFile(so.getDocument());
-                    so.loadedFileSize = 0;
-
-                    if (isDownloading) {
-                        // Download unfinished catalog is not the same
-                        String cacheFilePath = AndroidUtilities.getCacheDir().getAbsolutePath();
-                        cacheFilePath += "/" + TelegramUtil.getFileNameWithoutEx(file.getName());
-                        List<String> suffix = Arrays.asList(".pt", ".temp");
-                        for (int ii = 0; ii < suffix.size(); ii++) {
-                            file = new File(cacheFilePath + suffix.get(ii));
-                            try {
-                                file.delete();
-                                so.mediaExists = false;
-                            } catch (Exception ignore) {
-                                file.deleteOnExit();
-                            }
-                        }
-                    } else {
-                        if (path.startsWith(EnvUtil.getTelegramPath().getAbsolutePath())) {
-                            try {
-                                file.delete();
-                                so.mediaExists = false;
-                            } catch (Exception ignore) {
-                                file.deleteOnExit();
-                            }
-                        } else {
-                            Toast.makeText(getParentActivity(), LocaleController.getString("DeleteDownloadedFileExternal"), Toast.LENGTH_LONG).show();
-                            return;
-                        }
-                    }
-
-                    if (messageCell != null) {
-//                        checkAutoDownloadMessage(so);
-                        messageCell.updateButtonState(false, true, false);
-                    }
-
-                    Toast.makeText(getParentActivity(), LocaleController.getString("DeleteDownloadedFileSucceed"), Toast.LENGTH_LONG).show();
-                });
-                builder.setNegativeButton(LocaleController.getString("Cancel"), (dialog, which) -> {
-                });
-                builder.show();
+                if (Build.VERSION.SDK_INT >= 23 && (Build.VERSION.SDK_INT <= 28 || BuildVars.NO_SCOPED_STORAGE) && getParentActivity() != null && getParentActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    getParentActivity().requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 4);
+                    return;
+                }
+                List<MessageObject> targets = selectedObjectGroup != null
+                        ? new ArrayList<>(selectedObjectGroup.messages)
+                        : Collections.singletonList(selectedObject);
+                TelegramUtil.clearMessageCaches(ChatActivity.this, targets);
                 break;
             }
             case nkbtn_savemessage: {
@@ -49641,7 +49573,7 @@ public class ChatActivity extends BaseFragment implements
                 if (chatMode != MODE_SCHEDULED) {
                     boolean allowViewHistory = currentChat != null && chatMode == 0 && !currentChat.broadcast && !(threadMessageObjects != null && threadMessageObjects.contains(message));
 
-                    if (NekoConfig.showDeleteDownloadedFile.Bool() && TelegramUtil.messageObjectIsFile(type, selectedObject)) {
+                    if (NekoConfig.showDeleteDownloadedFile.Bool() && TelegramUtil.hasCachedFile(selectedObject, selectedObjectGroup)) {
                         items.add(LocaleController.getString(R.string.DeleteDownloadedFile));
                         options.add(nkbtn_deldlcache);
                         icons.add(R.drawable.msg_clear);
@@ -49937,6 +49869,11 @@ public class ChatActivity extends BaseFragment implements
                         options.add(nkbtn_PGPImport);
                         icons.add(R.drawable.baseline_vpn_key_24);
                     }
+                }
+                if (NekoConfig.showDeleteDownloadedFile.Bool() && TelegramUtil.hasCachedFile(selectedObject, selectedObjectGroup)) {
+                    items.add(LocaleController.getString(R.string.DeleteDownloadedFile));
+                    options.add(nkbtn_deldlcache);
+                    icons.add(R.drawable.msg_clear);
                 }
                 if (NekoConfig.showMessageDetails.Bool()) {
                     items.add(LocaleController.getString(R.string.MessageDetails));
