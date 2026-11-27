@@ -63,6 +63,7 @@ public class CloudSettingsHelper {
 
     private long localSyncedDate = preferences.getLong("updated_at", -1);
     private boolean autoSync = preferences.getBoolean("auto_sync", false);
+    private boolean backupThemeData = preferences.getBoolean("backup_theme_data", true);
 
     public static final SharedPreferences.OnSharedPreferenceChangeListener listener = (preferences, key) -> {
         CloudSettingsHelper.getInstance().doAutoSync();
@@ -190,6 +191,16 @@ public class CloudSettingsHelper {
             });
         });
 
+        MiniCheckBoxCell backupThemeCheck = new MiniCheckBoxCell(context, 8, resourcesProvider);
+        backupThemeCheck.setTextAndValueAndCheck(LocaleController.getString(R.string.BackupThemeData), null, backupThemeData);
+        backupThemeCheck.setOnClickListener(v -> {
+            backupThemeData = !backupThemeData;
+            preferences.edit().putBoolean("backup_theme_data", backupThemeData).apply();
+            backupThemeCheck.setChecked(backupThemeData);
+            doAutoSync();
+        });
+        linearLayout.addView(backupThemeCheck, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, 8, 8, 8, 0));
+
         MiniCheckBoxCell autoSyncCheck = new MiniCheckBoxCell(context, 8, resourcesProvider);
         autoSyncCheck.setTextAndValueAndCheck(LocaleController.getString("CloudConfigAutoSync", R.string.CloudConfigAutoSync), LocaleController.getString("CloudConfigAutoSyncDesc", R.string.CloudConfigAutoSyncDesc), autoSync);
         autoSyncCheck.setOnClickListener(view13 -> {
@@ -215,7 +226,7 @@ public class CloudSettingsHelper {
 
     private void syncToCloud(Utilities.Callback2<Boolean, String> callback) {
         try {
-            String setting = NekoSettingsActivity.backupSettingsJson(0);
+            String setting = NekoSettingsActivity.backupSettingsJson(0, backupThemeData);
             // 分块存储
             int chunkSize = 4000;  // 每个分块的最大长度
             int numChunks = (int) Math.ceil((double) setting.length() / chunkSize);  // 计算总分块数
@@ -397,7 +408,12 @@ public class CloudSettingsHelper {
 
         public void setTextAndValueAndCheck(String text, String value, boolean checked) {
             textView.setText(text);
-            valueTextView.setText(value);
+            if (TextUtils.isEmpty(value)) {
+                valueTextView.setVisibility(GONE);
+            } else {
+                valueTextView.setVisibility(VISIBLE);
+                valueTextView.setText(value);
+            }
             checkBox.setChecked(checked, false);
         }
 

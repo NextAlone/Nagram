@@ -24,6 +24,7 @@ import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextSettingsCell;
@@ -39,17 +40,20 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
+import kotlin.Unit;
 import kotlin.text.StringsKt;
 import tw.nekomimi.nekogram.DatacenterActivity;
 import tw.nekomimi.nekogram.helpers.AppRestartHelper;
 import tw.nekomimi.nekogram.helpers.CloudSettingsHelper;
 import tw.nekomimi.nekogram.helpers.PasscodeHelper;
+import tw.nekomimi.nekogram.ui.BottomBuilder;
 import tw.nekomimi.nekogram.utils.AlertUtil;
 import tw.nekomimi.nekogram.utils.EnvUtil;
 import tw.nekomimi.nekogram.utils.FileUtil;
 import tw.nekomimi.nekogram.utils.GsonUtil;
 import tw.nekomimi.nekogram.utils.ShareUtil;
 import xyz.nextalone.nagram.NkmrConfig;
+import xyz.nextalone.nagram.helper.BackupFileHelper;
 import xyz.nextalone.nagram.network.NetworkLogActivity;
 
 public class NekoSettingsActivity extends BaseNekoSettingsActivity {
@@ -278,22 +282,49 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
     }
 
     private void backupSettings() {
+        Activity parentActivity = getParentActivity();
+        if (parentActivity == null) {
+            return;
+        }
+        BottomBuilder builder = new BottomBuilder(parentActivity);
+        builder.addTitle(LocaleController.getString(R.string.BackupSettings), true);
+
+        CheckBoxCell backupThemeCell = builder.addCheckBoxItem(
+                LocaleController.getString(R.string.BackupThemeData),
+                true,
+                "",
+                null
+        );
+
+        builder.addCancelButton();
+        builder.addOkButton((it) -> {
+            exportSettings(backupThemeCell.isChecked());
+            return Unit.INSTANCE;
+        });
+
+        builder.show();
+    }
+
+    private void exportSettings(boolean backupThemeData) {
         try {
             DateFormat formatter = DateFormat.getDateTimeInstance();
-            File cacheFile = new File(EnvUtil.getShareCachePath(), formatter.format(new Date()) + xyz.nextalone.nagram.helper.BackupFileHelper.SETTINGS_SUFFIX);
-            FileUtil.writeUtf8String(backupSettingsJson(), cacheFile);
+            File cacheFile = new File(EnvUtil.getShareCachePath(), formatter.format(new Date()) + BackupFileHelper.SETTINGS_SUFFIX);
+            FileUtil.writeUtf8String(backupSettingsJson(4, backupThemeData), cacheFile);
             ShareUtil.shareFile(getParentActivity(), cacheFile);
         } catch (JSONException e) {
             AlertUtil.showSimpleAlert(getParentActivity(), e);
         }
-
     }
 
     public static String backupSettingsJson() throws JSONException {
-        return backupSettingsJson(4);
+        return backupSettingsJson(4, true);
     }
 
     public static String backupSettingsJson(int indentSpaces) throws JSONException {
+        return backupSettingsJson(indentSpaces, true);
+    }
+
+    public static String backupSettingsJson(int indentSpaces, boolean backupThemeData) throws JSONException {
 
         JSONObject configJson = new JSONObject();
 
@@ -349,28 +380,32 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
         mainconfig.add("disableVoiceAudioEffects");
         mainconfig.add("chatSwipeAction");
 
-        mainconfig.add("theme");
-        mainconfig.add("selectedAutoNightType");
-        mainconfig.add("autoNightScheduleByLocation");
-        mainconfig.add("autoNightBrighnessThreshold");
-        mainconfig.add("autoNightDayStartTime");
-        mainconfig.add("autoNightDayEndTime");
-        mainconfig.add("autoNightSunriseTime");
-        mainconfig.add("autoNightCityName");
-        mainconfig.add("autoNightSunsetTime");
-        mainconfig.add("autoNightLocationLatitude3");
-        mainconfig.add("autoNightLocationLongitude3");
-        mainconfig.add("autoNightLastSunCheckDay");
+        if (backupThemeData) {
+            mainconfig.add("theme");
+            mainconfig.add("selectedAutoNightType");
+            mainconfig.add("autoNightScheduleByLocation");
+            mainconfig.add("autoNightBrighnessThreshold");
+            mainconfig.add("autoNightDayStartTime");
+            mainconfig.add("autoNightDayEndTime");
+            mainconfig.add("autoNightSunriseTime");
+            mainconfig.add("autoNightCityName");
+            mainconfig.add("autoNightSunsetTime");
+            mainconfig.add("autoNightLocationLatitude3");
+            mainconfig.add("autoNightLocationLongitude3");
+            mainconfig.add("autoNightLastSunCheckDay");
+        }
 
         mainconfig.add("lang_code");
 
         spToJSON("mainconfig", configJson, mainconfig::contains);
-        spToJSON("themeconfig", configJson, null);
+        if (backupThemeData) {
+            spToJSON("themeconfig", configJson, null);
+        }
 
         spToJSON("nkmrcfg", configJson, key -> shouldTransferPreference("nkmrcfg", key));
         spToJSON("nekodialogconfig", configJson, null);
 
-        return indentSpaces > 0 ? configJson.toString(indentSpaces): configJson.toString();
+        return indentSpaces > 0 ? configJson.toString(indentSpaces) : configJson.toString();
     }
 
     private static void spToJSON(String sp, JSONObject object, Function<String, Boolean> filter) throws JSONException {
