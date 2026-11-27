@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -48,6 +49,17 @@ public class DoubleTapCell extends LinearLayout {
     private final Paint[] circleOutlinePaint = new Paint[2];
     private final FrameLayout preview;
     private final RectF rect = new RectF();
+    private final Runnable refreshRunnable = this::invalidate;
+    private final SharedPreferences.OnSharedPreferenceChangeListener preferencesListener = (preferences, key) -> {
+        if (isPreviewSetting(key)) {
+            removeCallbacks(refreshRunnable);
+            post(refreshRunnable);
+        }
+    };
+
+    private boolean isPreviewSetting(String key) {
+        return key != null && key.equals(NaConfig.INSTANCE.getRemoveMessageTail().getKey());
+    }
 
     public DoubleTapCell(final Context context) {
         super(context);
@@ -336,8 +348,17 @@ public class DoubleTapCell extends LinearLayout {
     }
 
     @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        NaConfig.INSTANCE.getPreferences().registerOnSharedPreferenceChangeListener(preferencesListener);
+        invalidate();
+    }
+
+    @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        NaConfig.INSTANCE.getPreferences().unregisterOnSharedPreferenceChangeListener(preferencesListener);
+        removeCallbacks(refreshRunnable);
         for (int i = 0; i < 4; i++) {
             if (circleAnimator[i] != null) {
                 circleAnimator[i].cancel();
