@@ -184,8 +184,6 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
     private final AbstractConfigCell headerFolder = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Folder")));
     private final AbstractConfigCell filterTabsPreviewRow = cellGroup.appendCell(new ConfigCellCustom("Folder", ConfigCellCustom.CUSTOM_ITEM_FilterTabsPreview, false));
     private final AbstractConfigCell hideAllTabRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.hideAllTab, LocaleController.getString("HideAllTabAbout")));
-    private final AbstractConfigCell openArchiveOnPullRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.openArchiveOnPull));
-    private final AbstractConfigCell disablePullDownSearchRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disablePullDownSearch));
     private final AbstractConfigCell ignoreMutedCountRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.ignoreMutedCount));
     private final AbstractConfigCell ignoreFolderCountRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getIgnoreFolderCount()));
     private final AbstractConfigCell tabsTitleTypeRow = cellGroup.appendCell(new ConfigCellSelectBox(null, NekoConfig.tabsTitleType,
@@ -201,7 +199,6 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                     LocaleController.getString(R.string.TabStylePure),
                     LocaleController.getString(R.string.TabStylePills),
             }, null));
-    private final AbstractConfigCell hideFilterMuteAllRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getHideFilterMuteAll()));
     private final AbstractConfigCell dividerFolder = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell header_notification = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("NekoGeneralNotification")));
@@ -234,6 +231,9 @@ private final AbstractConfigCell defaultHlsVideoQualityRow = cellGroup.appendCel
                     LocaleController.getString(R.string.CommunityAvatarTapActionCommunity),
                     LocaleController.getString(R.string.CommunityAvatarTapActionArrow),
             }, null));
+    private final AbstractConfigCell openArchiveOnPullRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.openArchiveOnPull));
+    private final AbstractConfigCell disablePullDownSearchRow = cellGroup.appendCell(new ConfigCellTextCheck(NekoConfig.disablePullDownSearch));
+    private final AbstractConfigCell hideFilterMuteAllRow = cellGroup.appendCell(new ConfigCellTextCheck(NaConfig.INSTANCE.getHideFilterMuteAll()));
     private final AbstractConfigCell divider4 = cellGroup.appendCell(new ConfigCellDivider());
 
     private final AbstractConfigCell header5 = cellGroup.appendCell(new ConfigCellHeader(LocaleController.getString("Appearance")));
